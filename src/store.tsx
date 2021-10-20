@@ -15,6 +15,7 @@ console.log(nodes, edges);
 // const positionedNodes = positionNodes(nodes, edges);
 // console.log(positionedNodes);
 
+// be clear on the different models I need to preserve
 const useStore = create<State>((set, get) => ({
   recentGraphs: [] as GraphRF[],
 
