@@ -1,0 +1,10 @@
+lint:
+  image: node:12
+  stage: test
+  script:
+    - npm install
+    - npm lint
+  only:
+    refs:
+      - main
+      - merge_requests
