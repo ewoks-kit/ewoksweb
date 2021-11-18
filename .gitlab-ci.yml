@@ -1,9 +1,10 @@
 lint:
   image: "docker-registry.esrf.fr/dau/ewoks:node_12"
   stage: test
-  script:
+  before_script:
     - npm install
-    - npm lint
+  script:
+    - npm run lint
   only:
     refs:
       - main
