@@ -16,7 +16,6 @@ import type {
 } from '../types';
 import axios from 'axios';
 import { rfToEwoks } from '../utils';
-import { toEwoksNodes } from '../utils/toEwoksNodes';
 
 export default function FormDialog(props) {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -46,7 +45,6 @@ export default function FormDialog(props) {
 
   useEffect(() => {
     console.log(elementToEdit);
-    setIsOpen(open);
     setElement(elementToEdit);
     if (action === 'cloneGraph') {
       setNewName(elementToEdit.label);
@@ -64,7 +62,6 @@ export default function FormDialog(props) {
   const handleSave = () => {
     // get the selected element (graph or Node) give a new name before saving
     // fire a POST
-    console.log(newName, action);
     if (newName !== '' && action === 'cloneGraph') {
       const el = element as GraphRF;
       axios // if await is used const response =
@@ -91,20 +88,17 @@ export default function FormDialog(props) {
         });
     } else if (['cloneTask', 'newTask'].includes(action)) {
       // or newTask
-      console.log('Save the task!', element);
       const elem = element as Task;
       axios // if await is used const response =
         .post(`http://localhost:5000/tasks`, {
           ...elem,
         })
         .then(async (res) => {
-          console.log(res);
           props.setOpenSaveDialog(false);
           const tasks = await axios.get('http://localhost:5000/tasks');
           setTasks(tasks.data as Task[]);
         })
         .catch((error) => {
-          console.log(error.message + error.response.data);
           setOpenSnackbar({
             open: true,
             text: error.response.data,
@@ -237,7 +231,7 @@ export default function FormDialog(props) {
         />
         {action !== 'cloneGraph' &&
           fields.map((field) => (
-            <Tooltip title={field.tip || ''}>
+            <Tooltip title={field.tip || ''} key={field.id}>
               <TextField
                 margin="dense"
                 id={field.id}

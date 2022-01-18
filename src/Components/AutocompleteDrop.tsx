@@ -9,42 +9,9 @@ function AutocompleteDrop(props) {
   const [options, setOptions] = useState([]);
   const [value] = React.useState(options[0]);
   const [open, setOpen] = useState(false);
-  const allWorkflows = useStore((state) => state.allWorkflows);
   const setAllWorkflows = useStore((state) => state.setAllWorkflows);
   const loading = open && options.length === 0;
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-
-  // useEffect(() => {
-  //   // let active = true;
-  //   // if (!loading) {
-  //   //   return undefined;
-  //   // }
-  //   // if (allWorkflows.length === 0) { // TODO: not get all the time...
-  //   // (async () => {
-  //   //   const workF: { title: string }[] = await getWorkflows();
-  //   //   // .catch((error) => {
-  //   //   //   console.log(error);
-  //   //   // });
-  //   //   if (workF && workF.length > 0) {
-  //   //     setAllWorkflows(workF);
-  //   //     if (active) {
-  //   //       setOptions([...workF]);
-  //   //     }
-  //   //   } else {
-  //   //     setOpenSnackbar({
-  //   //       open: true,
-  //   //       text: 'Something went wrong when contacting the server!',
-  //   //       severity: 'error',
-  //   //     });
-  //   //   }
-  //   // })();
-  //   // } else {
-  //   //   setOptions(allWorkflows);
-  //   // }
-  //   // return () => {
-  //   //   active = false;
-  //   // };
-  // }, [loading, allWorkflows, setAllWorkflows, setOpenSnackbar]);
 
   useEffect(() => {
     if (!open) {

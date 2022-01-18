@@ -61,7 +61,7 @@ const nodeTypes = {
   method: DataNode,
   ppfmethod: DataNode,
   graphInput: DataNode,
-  graphOutput: DataNode,
+  graphOutput: DataNode, // DataNode,
   class: DataNode,
 };
 
@@ -210,6 +210,7 @@ function Canvas() {
   };
 
   const onEdgeUpdate = (oldEdge, newConnection) => {
+    console.log(oldEdge, newConnection);
     let elements = [];
     // TODO: shouldnt need the following debug why graphRF is not
     // updated inside this function

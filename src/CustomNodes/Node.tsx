@@ -56,7 +56,7 @@ const Node: React.FC<NodeProps> = ({
   image,
   comment,
 }: NodeProps) => {
-  // console.log(type, isGraph);
+  console.log(type, isGraph);
   // calculate the border if input/output/graph
   let border = '';
   if (type === 'input') {
@@ -96,7 +96,7 @@ const Node: React.FC<NodeProps> = ({
             position={Position.Right}
             id="sr"
             style={{ ...contentStyle.handle, ...contentStyle.handleSource }}
-            isValidConnection={(connection) => isValidOutput(connection)}
+            // isValidConnection={(connection) => isValidOutput(connection)}
             isConnectable
             onConnect={(params) => console.log('handle sr onConnect', params)}
           >
@@ -130,7 +130,7 @@ const Node: React.FC<NodeProps> = ({
                   ...contentStyle.handleSource,
                   ...contentStyle.handleUpDown,
                 }}
-                isValidConnection={(connection) => isValidOutput(connection)}
+                // isValidConnection={(connection) => isValidOutput(connection)}
                 isConnectable
                 onConnect={(params) =>
                   console.log('handle st onConnect', params)
@@ -154,7 +154,7 @@ const Node: React.FC<NodeProps> = ({
                   ...contentStyle.handleSource,
                   ...contentStyle.handleUpDown,
                 }}
-                isValidConnection={(connection) => isValidOutput(connection)}
+                // isValidConnection={(connection) => isValidOutput(connection)}
                 isConnectable
                 onConnect={(params) =>
                   console.log('handle sb onConnect', params)
@@ -171,7 +171,7 @@ const Node: React.FC<NodeProps> = ({
           draggable="false"
           onDragStart={(event) => onDragStart(event)}
           src={iconsObj[image] || orange1}
-          alt="orangeImage"
+          alt="Image"
         />
         {/* {type !== 'graphOutput' && type !== 'graphInput' && <span style={style.contentWrapper}>{type}</span>} */}
         {!isGraph && type !== 'graphInput' && (
@@ -203,7 +203,7 @@ const Node: React.FC<NodeProps> = ({
                   ...contentStyle.handleTarget,
                   ...contentStyle.handleUpDown,
                 }}
-                isValidConnection={(connection) => isValidOutput(connection)}
+                // isValidConnection={(connection) => isValidOutput(connection)}
                 isConnectable
                 onConnect={(params) =>
                   console.log('handle tb onConnect', params)

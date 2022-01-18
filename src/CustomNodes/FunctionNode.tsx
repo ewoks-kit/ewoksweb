@@ -11,6 +11,7 @@ const isValidOutput = () => {
 };
 
 function FunctionNode(all) {
+  console.log(all);
   return (
     <Node
       isGraph
@@ -36,10 +37,10 @@ function FunctionNode(all) {
               {/* remove the rest of the input {input.label} for now */}
               {input.label.slice(0, input.label.indexOf(':'))}
               <Handle
-                key={input.label.slice(0, input.label.indexOf(':'))}
+                key={input.label}
                 type="target"
                 position={Position.Left}
-                id={input.label.slice(0, input.label.indexOf(':'))}
+                id={input.label}
                 style={{
                   ...style.handle,
                   ...style.left,
@@ -50,10 +51,10 @@ function FunctionNode(all) {
                 }
               />
               <Handle
-                key={input.label.slice(0, input.label.indexOf(':')) + 'right'}
+                key={input.label + 'right'}
                 type="target"
                 position={Position.Right}
-                id={input.label.slice(0, input.label.indexOf(':')) + 'right'}
+                id={input.label + 'right'}
                 style={{
                   ...style.handle,
                   ...style.right,
@@ -72,10 +73,10 @@ function FunctionNode(all) {
               {/* remove the rest of the output {output.label} for now */}
               {output.label.slice(0, output.label.indexOf(':'))}
               <Handle
-                key={output.label.slice(0, output.label.indexOf(':'))}
+                key={output.label}
                 type="source"
                 position={Position.Right}
-                id={output.label.slice(0, output.label.indexOf(':'))}
+                id={output.label}
                 style={{
                   ...style.handle,
                   ...style.right,
@@ -84,10 +85,10 @@ function FunctionNode(all) {
                 isValidConnection={() => isValidOutput()}
               />
               <Handle
-                key={output.label.slice(0, output.label.indexOf(':')) + 'left'}
+                key={output.label + 'left'}
                 type="source"
                 position={Position.Left}
-                id={output.label.slice(0, output.label.indexOf(':')) + 'left'}
+                id={output.label + 'left'}
                 style={{
                   ...style.handle,
                   ...style.left,

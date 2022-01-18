@@ -14,7 +14,7 @@ export const contentStyle = {
   right: { right: '-8px' },
   textRight: { textAlign: 'right' },
   handle: {
-    ZIndex: '1000', // Uncomment
+    zIndex: 1000, // Uncomment
     widht: '20px', // Does not work
     height: '20px',
     margin: 'auto',
