@@ -31,20 +31,20 @@ export default function GetFromServer() {
   const getFromServer = async (isSubgraph) => {
     console.log(workflowValue);
     if (workflowValue) {
-      // setGettingFromServer(true);
+      setGettingFromServer(true);
       const response = await axios.get(
         // `http://mxbes2-1707:38280/ewoks/workflow/${workflowValue}`
         `http://localhost:5000/workflow/${workflowValue}`
       );
       if (response.data) {
-        // setGettingFromServer(false);
+        setGettingFromServer(false);
         if (isSubgraph === 'subgraph') {
           setSubGraph(response.data as GraphEwoks);
         } else {
           setWorkingGraph(response.data as GraphEwoks);
         }
       } else {
-        // setGettingFromServer(false);
+        setGettingFromServer(false);
         setOpenSnackbar({
           open: true,
           text: 'Could not locate the requested workflow! Maybe it is deleted!',

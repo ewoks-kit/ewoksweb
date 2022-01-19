@@ -54,6 +54,5 @@ export function inNodesLinks(graph) {
       }
     });
   }
-  // console.log('inNod', inputs);
   return inputs;
 }

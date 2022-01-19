@@ -1,10 +1,12 @@
 import type { GraphDetails } from '../types';
 
+// Calculate the ewoks input_nodes and output_nodes within the graph
+// from the nodes of the graphRF model with types graphInput, graphOutput
 export function calcGraphInputsOutputs(graph): GraphDetails {
-  // console.log(graph);
   const graph_links = [...graph.links];
   const input_nodes = [];
   const output_nodes = [];
+
   graph.nodes.forEach((nod) => {
     if (nod.task_type === 'graphInput') {
       // find those nodes this INPUT node is connected to

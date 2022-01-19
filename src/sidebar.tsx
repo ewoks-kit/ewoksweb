@@ -38,6 +38,7 @@ import IconMenu from './Components/IconMenu';
 import Drawer from './Components/Drawer';
 import axios from 'axios';
 import Tooltip from '@material-ui/core/Tooltip';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
 import type {
   EwoksRFNode,
@@ -108,6 +109,10 @@ export default function Sidebar(props) {
   const [inputsComplete, setInputsComplete] = React.useState<boolean>(false);
   const [moreHandles, setMoreHandles] = React.useState<boolean>(true);
   const [mapAllData, setMapAllData] = React.useState<boolean>(false);
+  const [conditionsAsLabel, setconditionsAsLabel] = React.useState<boolean>(
+    false
+  );
+  const [mappingAsLabel, setMappingAsLabel] = React.useState<boolean>(false);
   const [nodeType, setNodeType] = React.useState('');
   const [linkType, setLinkType] = React.useState('');
   const [arrowType, setArrowType] = React.useState('');
@@ -244,6 +249,38 @@ export default function Sidebar(props) {
         label: event.target.value,
       });
     }
+  };
+
+  const useConditions = () => {
+    console.log(element);
+    const el = element as EwoksRFLink;
+    const newLabel =
+      el.data.conditions.length > 0
+        ? el.data.conditions
+            .map((con) => con.source_output + ': ' + con.value)
+            .join(', ')
+        : '';
+    setLabel(newLabel);
+    setElement({
+      ...element,
+      label: newLabel,
+    });
+  };
+
+  const useMapping = () => {
+    console.log(element);
+    const el = element as EwoksRFLink;
+    const newLabel =
+      el.data.data_mapping.length > 0
+        ? el.data.data_mapping
+            .map((con) => con.target_input + '->' + con.source_output)
+            .join(', ')
+        : '';
+    setLabel(newLabel);
+    setElement({
+      ...element,
+      label: newLabel,
+    });
   };
 
   const commentChanged = (event) => {
@@ -824,6 +861,40 @@ export default function Sidebar(props) {
               <>
                 <div>
                   <Box>
+                    <Tooltip title="Use conditions or data-mapping as label">
+                      <span>
+                        <Button
+                          style={{ margin: '8px' }}
+                          variant="contained"
+                          color="primary"
+                          onClick={useConditions}
+                          size="small"
+                        >
+                          conditions
+                        </Button>
+                        <Button
+                          style={{ margin: '8px' }}
+                          variant="contained"
+                          color="primary"
+                          onClick={useMapping}
+                          size="small"
+                        >
+                          mapping
+                        </Button>
+                        {/* <b>conditions</b>
+                        <Checkbox
+                          checked={conditionsAsLabel}
+                          onChange={mapAllDataChanged}
+                          inputProps={{ 'aria-label': 'controlled' }}
+                        /> */}
+                        {/* <b>mapping</b>
+                        <Checkbox
+                          checked={mapAllData}
+                          onChange={mapAllDataChanged}
+                          inputProps={{ 'aria-label': 'controlled' }}
+                        /> */}
+                      </span>
+                    </Tooltip>
                     {/* if text size big use a text area
                     <TextareaAutosize
                       aria-label="empty textarea"
@@ -899,7 +970,7 @@ export default function Sidebar(props) {
                   <InputLabel id="linkTypeLabel">Link type</InputLabel>
                   <Select
                     labelId="linkTypeLabel"
-                    value={linkType ? linkType : 'internal'}
+                    value={linkType ? linkType : 'default'}
                     label="Link type"
                     onChange={linkTypeChanged}
                   >
@@ -915,7 +986,7 @@ export default function Sidebar(props) {
                 <FormControl variant="filled" fullWidth>
                   <InputLabel id="ArrowHeadType">Arrow Head Type</InputLabel>
                   <Select
-                    value={arrowType ? arrowType : 'internal'}
+                    value={arrowType ? arrowType : 'arrowclosed'}
                     label="Arrow head"
                     onChange={arrowTypeChanged}
                   >

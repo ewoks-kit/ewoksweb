@@ -155,12 +155,14 @@ export function toRFEwoksLinks(
               : 'arrowclosed',
           // labelStyle: uiProps && uiProps.labelStyle ? uiProps.labelStyle : {},
           animated: uiProps && uiProps.animated ? uiProps.animated : false,
-          style: { stroke: '#96a5f9', strokeWidth: '2.5' },
+          style: { stroke: '#96a5f9', strokeWidth: '3' },
           labelBgStyle: {
-            fill: '#fff',
+            fill: 'rgb(223, 226, 247)',
             color: 'rgb(50, 130, 219)',
             fillOpacity: 1,
+            // border: '5px solid red'
           },
+          // labelShowBg: false,
           labelBgPadding: [8, 4],
           labelBgBorderRadius: 4,
           labelStyle: { fill: 'blue', fontWeight: 500, fontSize: 14 },

@@ -32,8 +32,9 @@ function CustomTableCell({ index, row, name, onChange, type, typeOfValues }) {
   const [boolVal, setBoolVal] = React.useState(true);
 
   useEffect(() => {
+    console.log(row);
     setBoolVal(row.value !== null ? row.value.toString() : 'null');
-  }, [row.value]);
+  }, [row.value, row]);
 
   const onChangeBool = (e, row, index) => {
     const event = {

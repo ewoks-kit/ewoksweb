@@ -259,6 +259,7 @@ const useStore = create<State>((set, get) => ({
   selectedElement: {} as EwoksRFNode | EwoksRFLink | GraphDetails,
 
   setSelectedElement: (element, from) => {
+    console.log(element);
     const wg = get().workingGraph.graph.id;
     const { graph, nodes, links } = get().graphRF;
 

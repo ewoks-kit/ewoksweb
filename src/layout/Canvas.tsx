@@ -104,7 +104,7 @@ function Canvas() {
   }, [selectedElement, selectedElement.id, updateNodeInternals]);
 
   const onElementClick = (event: MouseEvent, element: Node | Edge) => {
-    // console.log(isEdge(element), isNode(element), elements, graphRF.nodes);
+    console.log(element);
     const graphElement: EwoksRFNode | EwoksRFLink = elements.find(
       (el) => el.id === element.id
     );
@@ -214,7 +214,6 @@ function Canvas() {
     let elements = [];
     // TODO: shouldnt need the following debug why graphRF is not
     // updated inside this function
-    // Uncomment
     setElements((els) => {
       elements = els;
       return els;
@@ -226,7 +225,12 @@ function Canvas() {
     const newGraph = {
       graph: { ...graphRF.graph },
       nodes: elements.filter((el) => el.position), // [...graphRF.nodes],
-      links: [...graphRF.links.filter((lin) => lin.id !== oldEdge.id), link], // addEdge(params, graphRF.links),
+      links: [
+        ...elements
+          .filter((el) => el.source)
+          .filter((lin) => lin.id !== oldEdge.id),
+        link,
+      ], // addEdge(params, graphRF.links),
     };
 
     setGraphRF(newGraph as GraphRF);

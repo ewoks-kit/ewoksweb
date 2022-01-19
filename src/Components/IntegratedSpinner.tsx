@@ -30,28 +30,38 @@ export default function IntegratedSpinner({
   const classes = useStyles();
 
   // TODO: synd with the real time the call makes using getting
-  // React.useEffect(() => {
-  //   console.log('getting', getting);
-  //   setLoading(getting);
+  React.useEffect(() => {
+    console.log('getting', getting);
+    if (getting) {
+      console.log('gettingIn', getting);
+      timer.current = window.setTimeout(() => {
+        // setSuccess(false);
+        setLoading(false);
+      }, 2000);
+    }
+    // setLoading(getting);
 
-  //   // return () => {
-  //   //   clearTimeout(timer.current);
-  //   // };
-  // }, [getting]);
+    // return () => {
+    //   clearTimeout(timer.current);
+    // };
+  }, [getting]);
 
   const handleButtonClick = () => {
     if (!loading) {
+      console.log('getting1', getting);
       const runAction = action ? action() : null;
       setSuccess(false);
       setLoading(true);
       timer.current = window.setTimeout(() => {
+        console.log('getting2', getting);
         setSuccess(true);
         setLoading(false);
-      }, 2000);
+      }, 1500);
       timer.current = window.setTimeout(() => {
+        console.log('getting3', getting);
         setSuccess(false);
         setLoading(false);
-      }, 5000);
+      }, 3000);
     }
   };
 

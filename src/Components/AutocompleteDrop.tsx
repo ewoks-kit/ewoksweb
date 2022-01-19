@@ -7,7 +7,8 @@ import useStore from '../store';
 
 function AutocompleteDrop(props) {
   const [options, setOptions] = useState([]);
-  const [value] = React.useState(options[0]);
+  const [value, setValue] = React.useState(options[0]);
+  // options[0].slice(-5) === '.json' ? options[0].slice(0, -5) : options[0]
   const [open, setOpen] = useState(false);
   const setAllWorkflows = useStore((state) => state.setAllWorkflows);
   const loading = open && options.length === 0;
@@ -16,21 +17,30 @@ function AutocompleteDrop(props) {
   useEffect(() => {
     if (!open) {
       setOptions([]);
+    } else {
     }
   }, [open]);
 
   const setInputValue = (newInputValue) => {
     props.setInputValue(newInputValue);
+    // setValue(newInputValue);
   };
 
-  const temp = async () => {
+  const openDropdown = async () => {
     setOpen(true);
     let active = true;
     const workF: { title: string }[] = await getWorkflows();
+    const workFNames = workF.map((wor) => {
+      console.log(wor.title);
+      return wor.title.endsWith('.json')
+        ? { title: wor.title.slice(0, -5) }
+        : wor;
+    });
     if (workF && workF.length > 0) {
-      setAllWorkflows(workF);
+      console.log(workF);
+      setAllWorkflows(workFNames);
       if (active) {
-        setOptions([...workF]);
+        setOptions([...workFNames]);
       }
     } else {
       setOpenSnackbar({
@@ -49,7 +59,7 @@ function AutocompleteDrop(props) {
       id="async-autocomplete-drop"
       open={open}
       onOpen={() => {
-        temp();
+        openDropdown();
         // setOpen(true);
       }}
       onClose={() => {

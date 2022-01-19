@@ -11,6 +11,8 @@ export function outNodesLinks(graph) {
       // console.log(outNod);
       // if we need position to control showing in-out as nodes in th graph
       // if (outNod.uiProps && outNod.uiProps.position) {
+      const nodeSource = graph.nodes.find((no) => no.id === outNod.node);
+
       if (!outNodesInputed.includes(outNod.id)) {
         const temPosition = (outNod.uiProps && outNod.uiProps.position) || {
           x: 1250,
@@ -37,7 +39,7 @@ export function outNodesLinks(graph) {
         startEnd: true,
         source: outNod.node,
         target: outNod.id,
-        sub_source: outNod.sub_node,
+        sub_source: nodeSource.task_type !== 'graph' ? '' : outNod.sub_node,
         conditions:
           outNod.link_attributes && outNod.link_attributes.conditions
             ? outNod.link_attributes.conditions
