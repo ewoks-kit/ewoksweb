@@ -31,13 +31,11 @@ function AutocompleteDrop(props) {
     let active = true;
     const workF: { title: string }[] = await getWorkflows();
     const workFNames = workF.map((wor) => {
-      console.log(wor.title);
       return wor.title.endsWith('.json')
         ? { title: wor.title.slice(0, -5) }
         : wor;
     });
     if (workF && workF.length > 0) {
-      console.log(workF);
       setAllWorkflows(workFNames);
       if (active) {
         setOptions([...workFNames]);

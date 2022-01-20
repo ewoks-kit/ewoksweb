@@ -1,9 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -61,15 +59,10 @@ export default function CustomNode(props) {
     <Card className={classes.root}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div style={{ width: '100%', textAlign: 'center' }}>
-          {/* <Avatar
-            className={classes.large}
-            src={props.image}
-            aria-label="recipe"
-          /> */}
           <img src={orange2} alt="orangeImage" />
-          {/* <span style={{ 'word-wrap': 'break-word' }}>
+          <span style={{ 'word-wrap': 'break-word' }}>
             ACTGATCGAGCTGAAGCGCAGTGCGATGCTTCGATGATGCTGACGATGCTACGATGCGAGCATCTACGATCAGTC
-          </span> */}
+          </span>
           <Typography gutterBottom component="h2">
             {props.name}
           </Typography>

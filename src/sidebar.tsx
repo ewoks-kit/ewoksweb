@@ -613,7 +613,7 @@ export default function Sidebar(props) {
         <AccordionDetails>
           <form className={classes.root} noValidate autoComplete="off">
             {/* {'id' in selectedElement ? ( */}
-            {'input_nodes' in selectedElement ? (
+            {'input_nodes' in selectedElement && (
               <>
                 <div>
                   <b>Id:</b> {graphRF.graph.id}
@@ -650,11 +650,12 @@ export default function Sidebar(props) {
                   )}
                 </div>
               </>
-            ) : (
-              <div>
-                <b>Id:</b> {props.element.id}
-              </div>
             )}
+            {/* : (
+              <div>
+                 <b>Id:</b> {props.element.id}
+               </div>
+             )} */}
             {'source' in selectedElement && (
               <>
                 <div className={classes.root}>
@@ -791,7 +792,7 @@ export default function Sidebar(props) {
             {'position' in selectedElement && (
               <>
                 <IconButton
-                  style={{ padding: '1px' }}
+                  style={{ padding: '0px' }}
                   aria-label="edit"
                   onClick={() => {
                     setEditProps(!editProps);
@@ -861,40 +862,31 @@ export default function Sidebar(props) {
               <>
                 <div>
                   <Box>
-                    <Tooltip title="Use conditions or data-mapping as label">
-                      <span>
-                        <Button
-                          style={{ margin: '8px' }}
-                          variant="contained"
-                          color="primary"
-                          onClick={useConditions}
-                          size="small"
-                        >
-                          conditions
-                        </Button>
-                        <Button
-                          style={{ margin: '8px' }}
-                          variant="contained"
-                          color="primary"
-                          onClick={useMapping}
-                          size="small"
-                        >
-                          mapping
-                        </Button>
-                        {/* <b>conditions</b>
-                        <Checkbox
-                          checked={conditionsAsLabel}
-                          onChange={mapAllDataChanged}
-                          inputProps={{ 'aria-label': 'controlled' }}
-                        /> */}
-                        {/* <b>mapping</b>
-                        <Checkbox
-                          checked={mapAllData}
-                          onChange={mapAllDataChanged}
-                          inputProps={{ 'aria-label': 'controlled' }}
-                        /> */}
-                      </span>
-                    </Tooltip>
+                    {Object.keys(selectedElement).includes('source') && (
+                      <Tooltip title="Use conditions or data-mapping as label">
+                        <span>
+                          <Button
+                            style={{ margin: '8px' }}
+                            variant="contained"
+                            color="primary"
+                            onClick={useConditions}
+                            size="small"
+                          >
+                            conditions
+                          </Button>
+                          <Button
+                            style={{ margin: '8px' }}
+                            variant="contained"
+                            color="primary"
+                            onClick={useMapping}
+                            size="small"
+                          >
+                            mapping
+                          </Button>
+                        </span>
+                      </Tooltip>
+                    )}
+
                     {/* if text size big use a text area
                     <TextareaAutosize
                       aria-label="empty textarea"

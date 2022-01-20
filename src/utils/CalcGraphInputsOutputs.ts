@@ -6,6 +6,7 @@ export function calcGraphInputsOutputs(graph): GraphDetails {
   const graph_links = [...graph.links];
   const input_nodes = [];
   const output_nodes = [];
+  const notes = [];
 
   graph.nodes.forEach((nod) => {
     if (nod.task_type === 'graphInput') {
@@ -147,6 +148,10 @@ export function calcGraphInputsOutputs(graph): GraphDetails {
           });
         }
       });
+    } else if (nod.task_type === 'note') {
+      // add to uiprops this note
+      // console.log(nod, notes);
+      // notes.push({ ...nod });
     }
   });
   return {

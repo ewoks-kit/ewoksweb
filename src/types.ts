@@ -1,5 +1,5 @@
 import type { Color } from '@material-ui/lab';
-import type { Node, Edge, Position } from 'react-flow-renderer';
+import type { Node, Edge, Position, NodeTypesType } from 'react-flow-renderer';
 
 export interface GraphNodes {
   id: string;
@@ -9,7 +9,7 @@ export interface GraphNodes {
 }
 
 export interface GraphDetails {
-  id: string;
+  id?: string;
   label?: string;
   input_nodes?: Array<GraphNodes>;
   output_nodes?: Array<GraphNodes>;
@@ -127,6 +127,14 @@ export interface UiProps {
   arrowHeadTypeanimated?: string;
   sourceHandle?: string;
   targetHandle?: string;
+  notes?: Note[];
+}
+
+export interface Note {
+  id?: string;
+  label?: string;
+  comment: string;
+  position: CanvasPosition;
 }
 
 export interface CanvasPosition {
@@ -180,7 +188,7 @@ export interface outputsInputsSub {
 }
 
 export interface EwoksRFNode {
-  id: string;
+  id?: string;
   label?: string;
   task_type?: string;
   type?: string;

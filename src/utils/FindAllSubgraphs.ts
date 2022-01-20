@@ -2,6 +2,7 @@ import { getSubgraphs } from '../utils';
 // import { validateEwoksGraph } from './EwoksValidator';
 
 export async function findAllSubgraphs(graphToSearch, recentGraphs) {
+  console.log(graphToSearch);
   let subsToGet = [graphToSearch];
   const newNodeSubgraphs = [];
 
@@ -13,6 +14,7 @@ export async function findAllSubgraphs(graphToSearch, recentGraphs) {
     // eslint-disable-next-line no-await-in-loop
     const allGraphSubs = await getSubgraphs(subsToGet[0], thisCallRecent);
     // store them as ewoksGraphs for later transforming to RFGraphs
+    // .map((gra) => gra !== null)
     if (allGraphSubs.includes(null)) {
       subsToGet.shift();
     } else {

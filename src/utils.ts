@@ -48,6 +48,7 @@ export async function getSubgraphs(
   recentGraphs: GraphRF[]
 ) {
   // TODO: need to load first layer subgraphs with failsave if some not found
+  // Locate all subgraph nodes in the given graph
   const nodes: EwoksRFNode[] = [...graph.nodes];
   const existingNodeSubgraphs = nodes.filter(
     (nod) => nod.task_type === 'graph'
@@ -65,6 +66,7 @@ export async function getSubgraphs(
         notInRecent.push(graph.task_identifier);
       }
     });
+    // For those that are not in recent get them from the server
     results = await axios
       .all(
         notInRecent.map((id: string) =>
@@ -74,7 +76,9 @@ export async function getSubgraphs(
       .then(
         axios.spread((...res) => {
           // all requests are now complete in an array
-          return res.map((result) => result.data) as GraphEwoks[];
+          console.log(res);
+          const resCln = res.filter((result) => result.data !== null);
+          return resCln.map((result) => result.data) as GraphEwoks[];
         })
       );
     // Uncomment
@@ -83,6 +87,7 @@ export async function getSubgraphs(
     //   console.log('AXIOS ERROR', id, error);
     // });
   }
+  console.log(results);
   return results ? results : [];
 }
 

@@ -11,8 +11,9 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import useStore from '../store';
-import CustomNode from '../CustomNodes/CustomNode';
+// import CustomNode from '../CustomNodes/CustomNode';
 import FunctionNode from '../CustomNodes/FunctionNode';
+import NoteNode from '../CustomNodes/NoteNode';
 import DataNode from '../CustomNodes/DataNode';
 import type { GraphRF, EwoksRFNode, EwoksRFLink } from '../types';
 
@@ -56,12 +57,12 @@ const getLinksIds = (links) => {
 };
 
 const nodeTypes = {
-  special: CustomNode,
+  note: NoteNode,
   graph: FunctionNode,
   method: DataNode,
   ppfmethod: DataNode,
   graphInput: DataNode,
-  graphOutput: DataNode, // DataNode,
+  graphOutput: DataNode,
   class: DataNode,
 };
 
