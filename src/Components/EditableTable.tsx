@@ -71,6 +71,7 @@ function EditableTable(props) {
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
+    console.log(defaultValues);
     const tOfIn = defaultValues.map((val) =>
       val.value === 'true' || val.value === 'false'
         ? 'boolean'
@@ -80,7 +81,9 @@ function EditableTable(props) {
         ? 'null'
         : typeof val.value === 'object'
         ? 'dict'
-        : typeof val.value
+        : typeof val.value === 'number'
+        ? 'number'
+        : 'string'
     );
     setTypeOfInputs(tOfIn);
     setRows(
@@ -150,7 +153,7 @@ function EditableTable(props) {
   };
 
   const onChange = (e, row, index) => {
-    // console.log(typeOfInputs, e, row, index);
+    console.log(typeOfInputs, e.target.name, e.target.value, row, index);
     if (
       ['string', 'bool', 'number', 'boolean', 'null'].includes(typeOfInputs[0])
     ) {
