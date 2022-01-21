@@ -95,7 +95,7 @@ const Node: React.FC<NodeProps> = ({
       role="button"
       tabIndex={0}
     >
-      <Tooltip title={comment}>
+      <Tooltip title={comment} arrow>
         <span style={{ maxWidth: '120px' }} className="icons">
           {!isGraph && type !== 'graphOutput' && (
             <Handle

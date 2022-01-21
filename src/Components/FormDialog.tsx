@@ -46,6 +46,7 @@ export default function FormDialog(props) {
   useEffect(() => {
     console.log(elementToEdit);
     setElement(elementToEdit);
+    setIsOpen(open);
     if (action === 'cloneGraph') {
       setNewName(elementToEdit.label);
     } else {
@@ -231,7 +232,7 @@ export default function FormDialog(props) {
         />
         {action !== 'cloneGraph' &&
           fields.map((field) => (
-            <Tooltip title={field.tip || ''} key={field.id}>
+            <Tooltip title={field.tip || ''} key={field.id} arrow>
               <TextField
                 margin="dense"
                 id={field.id}

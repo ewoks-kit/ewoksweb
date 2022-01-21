@@ -83,7 +83,7 @@ export default function IconMenu(props) {
         open={openSaveDialog}
         setOpenSaveDialog={setOpenSaveDialog}
       />
-      <Tooltip title="Clone or create task/workflow">
+      <Tooltip title="Clone or create task/workflow" arrow>
         <Button
           style={{ margin: '8px' }}
           variant="contained"

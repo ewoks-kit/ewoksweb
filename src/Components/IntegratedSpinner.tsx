@@ -66,7 +66,7 @@ export default function IntegratedSpinner({
   };
 
   return (
-    <Tooltip title={tooltip || ''}>
+    <Tooltip title={tooltip || ''} arrow>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Box sx={{ m: 1, position: 'relative' }}>
           <Fab

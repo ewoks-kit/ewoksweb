@@ -549,6 +549,37 @@ export default function Sidebar(props) {
 
   return (
     <aside className="dndflow">
+      {/* Break Accordion with all tasks 553-619 */}
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<OpenInBrowser />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Add Dusk Nodes</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+            malesuada lacus ex, sit amet blandit leo lobortis eget.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<OpenInBrowser />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Add Ewoks Nodes</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+            malesuada lacus ex, sit amet blandit leo lobortis eget.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
       <Accordion
         onChange={(e, expanded) => {
           if (expanded) {
@@ -561,7 +592,7 @@ export default function Sidebar(props) {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>Add Nodes</Typography>
+          <Typography>Add Other Nodes</Typography>
         </AccordionSummary>
         <AccordionDetails style={{ flexWrap: 'wrap' }}>
           {tasks.map((elem) => (
@@ -579,7 +610,7 @@ export default function Sidebar(props) {
               }
               draggable
             >
-              <Tooltip title={elem.task_identifier}>
+              <Tooltip title={elem.task_identifier} arrow>
                 <img
                   src={
                     Object.keys(iconsObj).includes(elem.icon)
@@ -605,7 +636,7 @@ export default function Sidebar(props) {
             }
             draggable
           >
-            <Tooltip title="add note">
+            <Tooltip title="add note" arrow>
               <TextsmsIcon fontSize="large" />
             </Tooltip>
           </span>
@@ -616,6 +647,8 @@ export default function Sidebar(props) {
           </Upload>
         </AccordionDetails>
       </Accordion>
+      {/* Break Accordion with all editing 621-948 and this to subComponents
+      for graph-node-link */}
       <Accordion>
         <AccordionSummary
           expandIcon={<OpenInBrowser />}
@@ -884,7 +917,10 @@ export default function Sidebar(props) {
                 <div>
                   <Box>
                     {Object.keys(selectedElement).includes('source') && (
-                      <Tooltip title="Use conditions or data-mapping as label">
+                      <Tooltip
+                        title="Use conditions or data-mapping as label"
+                        arrow
+                      >
                         <span>
                           <Button
                             style={{ margin: '8px' }}
@@ -941,6 +977,7 @@ export default function Sidebar(props) {
           </form>
         </AccordionDetails>
       </Accordion>
+      {/* Break Accordion with all styling 950-1031 */}
       <Accordion>
         <AccordionSummary
           expandIcon={<OpenInBrowser />}

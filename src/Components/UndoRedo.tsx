@@ -2,7 +2,7 @@ import React from 'react';
 import RedoIcon from '@material-ui/icons/Redo';
 import UndoIcon from '@material-ui/icons/Undo';
 import useStore from '../store';
-import { Fab, IconButton } from '@material-ui/core';
+import { Fab, IconButton, Tooltip } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 
 const useStyles = DashboardStyle;
@@ -23,28 +23,32 @@ export default function UndoRedo() {
 
   return (
     <>
-      <IconButton color="inherit">
-        <Fab
-          className={classes.openFileButton}
-          color="primary"
-          size="small"
-          component="span"
-          aria-label="add"
-        >
-          <UndoIcon onClick={undo} />
-        </Fab>
-      </IconButton>
-      <IconButton color="inherit">
-        <Fab
-          className={classes.openFileButton}
-          color="primary"
-          size="small"
-          component="span"
-          aria-label="add"
-        >
-          <RedoIcon onClick={redo} />
-        </Fab>
-      </IconButton>
+      <Tooltip title="undo" arrow>
+        <IconButton color="inherit">
+          <Fab
+            className={classes.openFileButton}
+            color="primary"
+            size="small"
+            component="span"
+            aria-label="add"
+          >
+            <UndoIcon onClick={undo} />
+          </Fab>
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="redo" arrow>
+        <IconButton color="inherit">
+          <Fab
+            className={classes.openFileButton}
+            color="primary"
+            size="small"
+            component="span"
+            aria-label="add"
+          >
+            <RedoIcon onClick={redo} />
+          </Fab>
+        </IconButton>
+      </Tooltip>
     </>
   );
 }

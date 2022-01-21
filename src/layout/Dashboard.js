@@ -206,17 +206,19 @@ export default function Dashboard() {
             <MenuIcon />
           </IconButton>
           <SubgraphsStack />
-          <IconButton color="inherit">
-            <Fab
-              className={classes.openFileButton}
-              color="primary"
-              size="small"
-              component="span"
-              aria-label="add"
-            >
-              <FiberNew onClick={newGraph} />
-            </Fab>
-          </IconButton>
+          <Tooltip title="Start a new workflow" arrow>
+            <IconButton color="inherit">
+              <Fab
+                className={classes.openFileButton}
+                color="primary"
+                size="small"
+                component="span"
+                aria-label="add"
+              >
+                <FiberNew onClick={newGraph} />
+              </Fab>
+            </IconButton>
+          </Tooltip>
           <UndoRedo />
           {/* <FormControl variant="standard" className={classes.formControl}>
             <InputLabel
@@ -238,7 +240,7 @@ export default function Dashboard() {
               ))}
             </Select>
           </FormControl> */}
-          <Tooltip title="Save to Disk">
+          <Tooltip title="Save to Disk" arrow>
             <IconButton color="inherit">
               <Fab
                 className={classes.openFileButton}
@@ -251,7 +253,7 @@ export default function Dashboard() {
               </Fab>
             </IconButton>
           </Tooltip>
-          <Tooltip title="Load from Disk">
+          <Tooltip title="Load from Disk" arrow>
             <IconButton color="inherit">
               <Upload>
                 <AddIcon onClick={loadFromDisk} />
@@ -270,7 +272,7 @@ export default function Dashboard() {
             <SendIcon />
           </IntegratedSpinner>
           <div className={classes.verticalRule} />
-          <Tooltip title="Manage tasks and workflows">
+          <Tooltip title="Manage tasks and workflows" arrow>
             <IconButton color="inherit">
               <Fab
                 className={classes.openFileButton}
