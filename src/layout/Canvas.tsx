@@ -171,6 +171,8 @@ function Canvas() {
             ? getnodesIds('In', graphRF.nodes)
             : task_type === 'graphOutput'
             ? getnodesIds('Out', graphRF.nodes)
+            : task_type === 'note'
+            ? getnodesIds('Note', graphRF.nodes)
             : getnodesIds(task_identifier || 'Node', graphRF.nodes),
         label: task_identifier,
         task_type,

@@ -209,7 +209,7 @@ const useStore = create<State>((set, get) => ({
 
     // 4. Calculate the new graph given the subgraphs
     let grfNodes = toRFEwoksNodes(workingGraph, newNodeSubgraphs, get().tasks);
-
+    console.log(grfNodes, workingGraph);
     // test notes
     const notes =
       (workingGraph.graph.uiProps &&
@@ -221,8 +221,8 @@ const useStore = create<State>((set, get) => ({
               comment: note.comment,
             },
             id: note.id,
-            task_type: note.label,
-            task_identifier: note.label,
+            task_type: 'note',
+            task_identifier: note.id,
             type: 'note',
             position: note.position,
           };
@@ -230,22 +230,8 @@ const useStore = create<State>((set, get) => ({
       ([] as EwoksRFNode[]);
 
     grfNodes = [...grfNodes, ...notes];
+    console.log(notes, grfNodes);
 
-    //   {
-    //   data: {
-    //     label: 'label',
-    //     comment: 'comment very big to see how it wraps and behaves',
-    //   },
-    //   id: '123',
-    //   task_type: 'note',
-    //   task_identifier: 'note',
-    //   type: 'note',
-    //   position: {
-    //     x: 150,
-    //     y: 200,
-    //   },
-    // }
-    console.log(grfNodes);
     const graph = {
       graph: workingGraph.graph,
       nodes: grfNodes,

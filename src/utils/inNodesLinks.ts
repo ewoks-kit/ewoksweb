@@ -1,4 +1,5 @@
-// calc the input nodes and links that need to be added to the graph from the input_nodes
+// calc the input nodes and links that need to be added to the graph from
+// the input_nodes
 export function inNodesLinks(graph) {
   const inputs = { nodes: [], links: [] };
   if (

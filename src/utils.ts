@@ -5,6 +5,7 @@ import axios from 'axios';
 import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
+import { calcNoteNodes } from './utils/calcNoteNodes';
 
 // const { GraphDagre } = dagre.graphlib;
 // const NODE_SIZE = { width: 270, height: 36 };
@@ -77,6 +78,8 @@ export async function getSubgraphs(
         axios.spread((...res) => {
           // all requests are now complete in an array
           console.log(res);
+          // if there is a null means the subgraph was not found
+          // and it should show up in red
           const resCln = res.filter((result) => result.data !== null);
           return resCln.map((result) => result.data) as GraphEwoks[];
         })
@@ -94,6 +97,8 @@ export async function getSubgraphs(
 export function rfToEwoks(tempGraph): GraphEwoks {
   // calculate input_nodes-output_nodes nodes from graphInput-graphOutput
   const graph = calcGraphInputsOutputs(tempGraph);
+  const noteNodes = calcNoteNodes(tempGraph);
+  graph.uiProps.notes = noteNodes;
   return {
     graph,
     nodes: toEwoksNodes(tempGraph.nodes),

@@ -37,6 +37,7 @@ export default function GetFromServer() {
         `http://localhost:5000/workflow/${workflowValue}`
       );
       if (response.data) {
+        console.log(response.data);
         setGettingFromServer(false);
         if (isSubgraph === 'subgraph') {
           setSubGraph(response.data as GraphEwoks);

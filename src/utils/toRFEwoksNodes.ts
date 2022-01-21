@@ -8,7 +8,6 @@ export function toRFEwoksNodes(
   newNodeSubgraphs,
   tasks
 ): EwoksRFNode[] {
-  // console.log('calc nodes:', tempGraph, newNodeSubgraphs);
   // Find input and output nodes of the graph
   const inputsAl = inputsAll(tempGraph);
 
@@ -19,7 +18,7 @@ export function toRFEwoksNodes(
 
   const inNodeLinks = inNodesLinks(tempGraph);
   const outNodeLinks = outNodesLinks(tempGraph);
-
+  console.log(tempGraph, newNodeSubgraphs, inNodeLinks, outNodeLinks);
   const inOutTempGraph = { ...tempGraph };
   if (inNodeLinks.nodes.length > 0) {
     inOutTempGraph.nodes = [...inOutTempGraph.nodes, ...inNodeLinks.nodes];
@@ -40,6 +39,7 @@ export function toRFEwoksNodes(
         task_generator,
         uiProps,
       }) => {
+        console.log(task_identifier);
         // calculate if node input and/or output or internal
         const isInput = inputsAl && inputsAl.includes(id);
         const isOutput = outputsAll && outputsAll.includes(id);

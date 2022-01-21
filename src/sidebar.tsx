@@ -38,7 +38,8 @@ import IconMenu from './Components/IconMenu';
 import Drawer from './Components/Drawer';
 import axios from 'axios';
 import Tooltip from '@material-ui/core/Tooltip';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+// import TextSnippetIcon from '@material-ui/icons/TextSnippet';
+import TextsmsIcon from '@material-ui/icons/Textsms';
 
 import type {
   EwoksRFNode,
@@ -91,6 +92,8 @@ const iconsObj = {
   AggregateColumns,
   Correlations,
   CreateClass,
+  // TextSnippetIcon,
+  TextsmsIcon,
 };
 
 export default function Sidebar(props) {
@@ -588,6 +591,24 @@ export default function Sidebar(props) {
               </Tooltip>
             </span>
           ))}
+          <span
+            role="button"
+            tabIndex={0}
+            key="addNote"
+            className="dndnode"
+            onDragStart={(event) =>
+              onDragStart(event, {
+                task_identifier: 'note',
+                task_type: 'note',
+                icon: iconsObj['TextsmsIcon'],
+              })
+            }
+            draggable
+          >
+            <Tooltip title="add note">
+              <TextsmsIcon fontSize="large" />
+            </Tooltip>
+          </span>
           <Upload>
             <span role="button" tabIndex={0} onClick={insertGraph}>
               <AddIcon />G
@@ -651,11 +672,11 @@ export default function Sidebar(props) {
                 </div>
               </>
             )}
-            {/* : (
-              <div>
-                 <b>Id:</b> {props.element.id}
-               </div>
-             )} */}
+            {/* : ( */}
+            <div>
+              <b>Id:</b> {props.element.id}
+            </div>
+            {/* )} */}
             {'source' in selectedElement && (
               <>
                 <div className={classes.root}>

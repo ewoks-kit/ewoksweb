@@ -20,10 +20,14 @@ const NoteNode = (args) => {
   const [edit, setEdit] = React.useState(false);
   const graphRF = useStore((state) => state.graphRF);
   const setGraphRF = useStore((state) => state.setGraphRF);
+  const selectedElement = useStore((state) => state.selectedElement);
 
   useEffect(() => {
     setComment(args.data.comment);
-  }, [args.data.comment]);
+    if (selectedElement.type !== 'note') {
+      setEdit(false);
+    }
+  }, [args.data.comment, selectedElement.type]);
 
   console.log(args.data.label, args.data.comment);
   const customTitle = {
@@ -57,10 +61,10 @@ const NoteNode = (args) => {
             comment: comment,
           },
           id: args.id,
-          task_type: args.data.label,
-          task_identifier: args.data.label,
+          task_type: 'note',
+          task_identifier: args.id,
           type: 'note',
-          position: { x: args.xPos, y: args.Ypos },
+          position: { x: args.xPos, y: args.yPos },
         },
       ],
     });
@@ -76,6 +80,14 @@ const NoteNode = (args) => {
           padding: '10px',
         } as React.CSSProperties
       }
+      // id="choice"
+      // onMouseOver={() => console.log('onMouseOver')}
+      onFocus={() => {
+        console.log('onFocus');
+        setEdit(true);
+      }}
+      role="button"
+      tabIndex={0}
     >
       <span style={{ maxWidth: '120px' }} className="icons">
         {args.data.label.length > 0 && (
@@ -96,8 +108,8 @@ const NoteNode = (args) => {
         ) : (
           <div style={{ wordWrap: 'break-word' }}>{comment}</div>
         )}
-
-        {!edit ? (
+        {edit && <SaveIcon onClick={save} color="primary" />}
+        {/* {!edit ? (
           <IconButton
             style={{ padding: '0px' }}
             aria-label="edit"
@@ -113,7 +125,7 @@ const NoteNode = (args) => {
 
             <UndoIcon onClick={cancel} />
           </>
-        )}
+        )} */}
       </span>
     </div>
   );

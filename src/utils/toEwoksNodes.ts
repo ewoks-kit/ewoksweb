@@ -4,7 +4,7 @@ import type { EwoksNode, EwoksRFNode } from '../types';
 export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
   // TODO: when input-arrow fake nodes exist remove them to get an Ewoks description
   const tempNodes: EwoksRFNode[] = [...nodes].filter(
-    (nod) => !['graphInput', 'graphOutput'].includes(nod.task_type)
+    (nod) => !['graphInput', 'graphOutput', 'note'].includes(nod.task_type)
   );
   return tempNodes.map(
     ({
