@@ -29,7 +29,6 @@ const NoteNode = (args) => {
     }
   }, [args.data.comment, selectedElement.type]);
 
-  console.log(args.data.label, args.data.comment);
   const customTitle = {
     ...style.title,
     wordWrap: 'break-word',

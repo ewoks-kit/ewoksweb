@@ -99,8 +99,8 @@ export default function Dashboard() {
         setOpenSnackbar({
           open: true,
           text:
-            'Please insert a new label to be also used as an id for the new workflow and then save!',
-          severity: 'warning',
+            'In the "Edit Graph" Please insert a new label to be also used as an id for the new workflow and then save!',
+          severity: 'error',
         });
         setGettingFromServer(false);
         return;

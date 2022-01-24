@@ -11,6 +11,7 @@ import { rfToEwoks } from '../utils';
 import useStore from '../store';
 import ReactJson from 'react-json-view';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import { Input } from '@material-ui/core';
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -28,6 +29,7 @@ export default function DraggableDialog(props) {
   const [graph, setGraph] = React.useState({});
   const [isOpen, setIsOpen] = React.useState(false);
   const [title, setTitle] = React.useState('');
+  const [name, setName] = React.useState('');
   const [callbackProps, setCallbackProps] = React.useState({});
   const graphRF = useStore((state) => state.graphRF);
 
@@ -52,7 +54,8 @@ export default function DraggableDialog(props) {
 
   const handleSave = () => {
     setIsOpen(false);
-    props.setValue(graph, callbackProps);
+    console.log(name, graph, callbackProps);
+    props.setValue(name, graph, callbackProps);
   };
 
   const handleChange = (
@@ -92,10 +95,16 @@ export default function DraggableDialog(props) {
               <ToggleButton value="rf">RF Graph</ToggleButton>
             </ToggleButtonGroup>
           )}
-
+          Name:
+          <Input
+            value={name}
+            name={'name'}
+            onChange={(e) => setName(e.target.value)}
+            // className={classes.input}
+          />
           <ReactJson
             src={graph}
-            name="Ewoks graph"
+            name="value"
             theme="monokai"
             collapsed
             collapseStringsAfterLength={30}

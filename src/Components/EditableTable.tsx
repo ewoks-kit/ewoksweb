@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import DoneIcon from '@material-ui/icons/DoneAllTwoTone';
 import RevertIcon from '@material-ui/icons/NotInterestedOutlined';
-import { MenuItem, Select } from '@material-ui/core';
+import { FormControl, MenuItem, Select } from '@material-ui/core';
 import CustomTableCell from './CustomTableCell';
 import DraggableDialog from './DraggableDialog';
 
@@ -59,6 +59,7 @@ function EditableTable(props) {
   const [typeOfInputs, setTypeOfInputs] = React.useState([]);
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const [dialogContent, setDialogContent] = React.useState({});
+  const [disableSelectType, setDisableSelectType] = React.useState(false);
 
   const { defaultValues } = props;
   const { headers } = props;
@@ -107,7 +108,11 @@ function EditableTable(props) {
   };
 
   const onToggleEditMode = (id, index, command) => {
-    // console.log(props, id, rows, props.defaultValues, command, typeOfInputs);
+    console.log(props, id, rows, props.defaultValues, command, typeOfInputs);
+    if (command === 'edit') {
+      setDisableSelectType(true);
+      console.log('disable');
+    }
     if (command === 'edit' && ['list', 'dict'].includes(typeOfInputs[index])) {
       let initialValue: string | [] | {} = '';
 
@@ -148,6 +153,8 @@ function EditableTable(props) {
       });
     });
     if (command === 'done') {
+      console.log('enable');
+      setDisableSelectType(false);
       props.valuesChanged(rows);
     }
   };
@@ -209,10 +216,11 @@ function EditableTable(props) {
 
     setRows(newRows);
     props.valuesChanged(newRows);
+    setDisableSelectType(false);
   };
 
   const changedTypeOfInputs = (e, row, index) => {
-    // console.log(e.target.value, row, props, index);
+    console.log(e.target.value, row, props, index);
     if (e.target.value === 'null') {
       const newRows = rows.map((rowe) => {
         if (rowe.id === row.id) {
@@ -226,13 +234,16 @@ function EditableTable(props) {
     const tOfI = [...typeOfInputs];
     tOfI[index] = e.target.value;
     setTypeOfInputs(tOfI);
+    // onToggleEditMode(row.id, 0, 'edit');
   };
 
-  const setRowValue = (val, callbackProps) => {
-    // console.log(val, callbackProps);
+  const setRowValue = (name, val, callbackProps) => {
+    console.log(name, val, callbackProps);
     const newRows = callbackProps.rows.map((row) => {
       if (row.id === callbackProps.id) {
-        return { ...row, value: val };
+        return name !== ''
+          ? { ...row, name: name, value: val }
+          : { ...row, value: val };
       }
       return row;
     });
@@ -264,26 +275,28 @@ function EditableTable(props) {
               {headers[0] !== 'Source' && headers[1] !== 'Node_Id' && (
                 <TableRow key={`${row.id}-type`}>
                   <TableCell align="left" className={classes.tableCell}>
-                    Change type
+                    {/* Change type */}
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={
-                        typeOfInputs[index] !== 'boolean'
-                          ? typeOfInputs[index]
-                          : 'bool'
-                      }
-                      label="Task type"
-                      onChange={(e) => changedTypeOfInputs(e, row, index)}
-                    >
-                      {typesOfInputs.map((tex) => (
-                        <MenuItem key={tex} value={tex}>
-                          {tex}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                    <FormControl disabled={disableSelectType}>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={
+                          typeOfInputs[index] !== 'boolean'
+                            ? typeOfInputs[index]
+                            : 'bool'
+                        }
+                        label="Task type"
+                        onChange={(e) => changedTypeOfInputs(e, row, index)}
+                      >
+                        {typesOfInputs.map((tex) => (
+                          <MenuItem key={tex} value={tex}>
+                            {tex}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </TableCell>
                 </TableRow>
               )}

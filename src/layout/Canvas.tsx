@@ -44,17 +44,16 @@ const getnodesIds = (text: string, nodes: EwoksRFNode[]) => {
   while (nodes.map((nod) => nod.id).includes(`${text}_${id}`)) {
     id++;
   }
-  // nodesIds.add(`${text}_${id}`);
   return `${text}_${id}`;
 };
-const getLinksIds = (links) => {
-  let id = 0;
-  while (links.map((link) => link.id).includes(id)) {
-    id++;
-  }
-  // linksIds.add(id);
-  return `link_${id}`;
-};
+// const getLinksIds = (links, name) => {
+//   let id = 0;
+//   while (links.map((link) => link.id).includes(id)) {
+//     id++;
+//   }
+//   // linksIds.add(id);
+//   return `link_${id}`;
+// };
 
 const nodeTypes = {
   note: NoteNode,
@@ -273,7 +272,7 @@ function Canvas() {
             targetTask.task_type === 'graph' ? params.targetHandle : '',
         },
         id: `${params.source}:${params.sourceHandle}->${params.target}:${params.targetHandle}`,
-        label: getLinksIds(workingGraph.links),
+        label: `${params.source.slice(0, 6)}->${params.target.slice(0, 6)}`,
         source: params.source,
         target: params.target,
         sourceHandle: params.sourceHandle,
@@ -283,7 +282,7 @@ function Canvas() {
         arrowHeadType: 'arrowclosed',
         style: { stroke: '#96a5f9', strokeWidth: '2.5' },
         labelBgStyle: {
-          fill: '#fff',
+          fill: 'rgb(223, 226, 247)',
           color: 'rgb(50, 130, 219)',
           fillOpacity: 1,
         },
@@ -425,6 +424,8 @@ function Canvas() {
         ],
         links: graphRF.links,
       };
+
+      setSelectedElement(RFEwoksNode); // ? test if after drag the selected node should be set
 
       setGraphRF(newGraph as GraphRF);
       setUndoRedo({ action: 'Dragged a Node', graph: newGraph });

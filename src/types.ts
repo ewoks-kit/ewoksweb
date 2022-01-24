@@ -42,6 +42,8 @@ export interface State {
   initializedTask: Task;
   tasks: Array<Task>;
   setTasks: (tasks: Array<Task>) => void;
+  taskCategories: Array<string>;
+  setTaskCategories: (tasks: Array<string>) => void;
   openDraggableDialog: DialogParams;
   setOpenDraggableDialog: (params: DialogParams) => void;
   openSnackbar: SnackbarParams;

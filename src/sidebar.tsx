@@ -141,16 +141,19 @@ export default function Sidebar(props) {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const tasks = useStore((state) => state.tasks);
   const setTasks = useStore((state) => state.setTasks);
+  const taskCategories = useStore((state) => state.taskCategories);
+  const setTaskCategories = useStore((state) => state.setTaskCategories);
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const [dialogContent, setDialogContent] = React.useState({});
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
   const [editProps, setEditProps] = React.useState<boolean>(false);
   const initializedGraph = useStore((state) => state.initializedGraph);
+  const setUndoRedo = useStore((state) => state.setUndoRedo);
 
   useEffect(() => {
     setElement(selectedElement);
-
+    console.log(taskCategories);
     if ('position' in selectedElement) {
       // setElementN(selectedElement);
       setNodeType(selectedElement.data.type);
@@ -196,6 +199,7 @@ export default function Sidebar(props) {
     graphRF.graph.output_nodes,
     graphRF.graph.label,
     graphRF.graph.uiProps,
+    taskCategories,
   ]);
 
   const taskProperties = [
@@ -429,7 +433,7 @@ export default function Sidebar(props) {
 
   const deleteElement = async () => {
     // TODO: if node deleted all associated links should be deleted with warning?
-    let newGraph = {};
+    let newGraph = {} as GraphRF;
     const elN = element as EwoksRFNode; // is this the way???
     const elL = element as EwoksRFLink;
     const elD = element as GraphDetails;
@@ -443,11 +447,19 @@ export default function Sidebar(props) {
         nodes: graphRF.nodes.filter((nod) => nod.id !== element.id),
         links: nodesLinks,
       };
+      setUndoRedo({
+        action: 'Node deleted',
+        graph: newGraph,
+      });
     } else if (elL.source) {
       newGraph = {
         ...graphRF,
         links: graphRF.links.filter((link) => link.id !== elL.id),
       };
+      setUndoRedo({
+        action: 'Link deleted',
+        graph: newGraph,
+      });
     }
 
     if (elD.input_nodes) {
@@ -543,43 +555,16 @@ export default function Sidebar(props) {
   };
 
   const getTasks = async () => {
-    const tasks = await axios.get('http://localhost:5000/tasks');
-    setTasks(tasks.data as Task[]);
+    const tasksData = await axios.get('http://localhost:5000/tasks');
+    const tasks = tasksData.data as Task[];
+    setTasks(tasks);
+    console.log(taskCategories);
+    setTaskCategories(tasks.map((tas) => tas.category));
   };
 
   return (
     <aside className="dndflow">
       {/* Break Accordion with all tasks 553-619 */}
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<OpenInBrowser />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>Add Dusk Nodes</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<OpenInBrowser />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>Add Ewoks Nodes</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
       <Accordion
         onChange={(e, expanded) => {
           if (expanded) {
@@ -592,10 +577,79 @@ export default function Sidebar(props) {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>Add Other Nodes</Typography>
+          <Typography>Add Nodes</Typography>
         </AccordionSummary>
         <AccordionDetails style={{ flexWrap: 'wrap' }}>
-          {tasks.map((elem) => (
+          {taskCategories.map((categoryName) => (
+            <Accordion key={categoryName}>
+              <AccordionSummary
+                expandIcon={<OpenInBrowser />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography>{categoryName}</Typography>
+              </AccordionSummary>
+              <AccordionDetails style={{ flexWrap: 'wrap' }}>
+                {tasks
+                  .filter((nod) => nod.category === categoryName)
+                  .map((elem) => (
+                    <span
+                      role="button"
+                      tabIndex={0}
+                      key={elem.task_identifier}
+                      className="dndnode"
+                      onDragStart={(event1) =>
+                        onDragStart(event1, {
+                          task_identifier: elem.task_identifier,
+                          task_type: elem.task_type,
+                          icon: elem.icon,
+                        })
+                      }
+                      draggable
+                    >
+                      <Tooltip title={elem.task_identifier} arrow>
+                        <img
+                          src={
+                            Object.keys(iconsObj).includes(elem.icon)
+                              ? iconsObj[elem.icon]
+                              : iconsObj['orange1']
+                          }
+                          alt=""
+                        />
+                      </Tooltip>
+                    </span>
+                  ))}
+                {categoryName === 'ewokscore' && (
+                  <>
+                    <span
+                      role="button"
+                      tabIndex={0}
+                      key="addNote"
+                      className="dndnode"
+                      onDragStart={(event) =>
+                        onDragStart(event, {
+                          task_identifier: 'note',
+                          task_type: 'note',
+                          icon: iconsObj['TextsmsIcon'],
+                        })
+                      }
+                      draggable
+                    >
+                      <Tooltip title="add note" arrow>
+                        <TextsmsIcon fontSize="large" />
+                      </Tooltip>
+                    </span>
+                    <Upload>
+                      <span role="button" tabIndex={0} onClick={insertGraph}>
+                        <AddIcon />G
+                      </span>
+                    </Upload>
+                  </>
+                )}
+              </AccordionDetails>
+            </Accordion>
+          ))}
+          {/* {tasks.map((elem) => (
             <span
               role="button"
               tabIndex={0}
@@ -621,30 +675,7 @@ export default function Sidebar(props) {
                 />
               </Tooltip>
             </span>
-          ))}
-          <span
-            role="button"
-            tabIndex={0}
-            key="addNote"
-            className="dndnode"
-            onDragStart={(event) =>
-              onDragStart(event, {
-                task_identifier: 'note',
-                task_type: 'note',
-                icon: iconsObj['TextsmsIcon'],
-              })
-            }
-            draggable
-          >
-            <Tooltip title="add note" arrow>
-              <TextsmsIcon fontSize="large" />
-            </Tooltip>
-          </span>
-          <Upload>
-            <span role="button" tabIndex={0} onClick={insertGraph}>
-              <AddIcon />G
-            </span>
-          </Upload>
+          ))} */}
         </AccordionDetails>
       </Accordion>
       {/* Break Accordion with all editing 621-948 and this to subComponents

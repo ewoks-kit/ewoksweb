@@ -83,6 +83,14 @@ const useStore = create<State>((set, get) => ({
     }));
   },
 
+  taskCategories: ['Est', 'Dusk'],
+  setTaskCategories: (taskCategories) => {
+    set((state) => ({
+      ...state,
+      taskCategories: [...new Set(taskCategories)],
+    }));
+  },
+
   openDraggableDialog: { open: false, content: {} },
 
   setOpenDraggableDialog: ({ open, content }) => {
