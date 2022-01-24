@@ -28,8 +28,8 @@ const initializedTask = {
 
 const initializedGraph = {
   graph: {
-    id: 'new_graph000',
-    label: 'new_graph000',
+    id: 'newGraph',
+    label: 'newGraph',
     input_nodes: [],
     output_nodes: [],
     uiProps: {},
@@ -156,8 +156,8 @@ const useStore = create<State>((set, get) => ({
   // stack has to hold label and id of graph
   subgraphsStack: [
     {
-      id: 'new_graph000',
-      label: 'new_graph000',
+      id: 'newGraph',
+      label: 'newGraph',
     },
   ] as stackGraph[],
 

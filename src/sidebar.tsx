@@ -264,7 +264,7 @@ export default function Sidebar(props) {
     const newLabel =
       el.data.conditions.length > 0
         ? el.data.conditions
-            .map((con) => con.source_output + ': ' + con.value)
+            .map((con) => con.source_output + ': ' + JSON.stringify(con.value))
             .join(', ')
         : '';
     setLabel(newLabel);
@@ -280,7 +280,7 @@ export default function Sidebar(props) {
     const newLabel =
       el.data.data_mapping.length > 0
         ? el.data.data_mapping
-            .map((con) => con.target_input + '->' + con.source_output)
+            .map((con) => `${con.source_output}->${con.target_input}`)
             .join(', ')
         : '';
     setLabel(newLabel);

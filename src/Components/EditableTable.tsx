@@ -98,9 +98,11 @@ function EditableTable(props) {
 
   const classes = useStyles();
 
-  const showEditableDialog = ({ title, graph, callbackProps }) => {
+  const showEditableDialog = ({ name, title, graph, callbackProps }) => {
+    console.log(name);
     setOpenDialog(true);
     setDialogContent({
+      id: name,
       title,
       object: graph,
       callbackProps,
@@ -134,6 +136,7 @@ function EditableTable(props) {
       }
 
       showEditableDialog({
+        name: id,
         title: typeOfInputs[index] === 'list' ? 'Edit list' : 'Edit dict',
         graph: initialValue,
         callbackProps: { rows, id },

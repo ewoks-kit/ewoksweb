@@ -91,11 +91,11 @@ export default function Dashboard() {
   };
 
   const saveToServer = async () => {
-    // if id: new_graph000 request label update and the POST with id=label
+    // if id: newGraph request label update and the POST with id=label
     // else PUT and replace existing on server
     setGettingFromServer(true);
-    if (graphRF.graph.id === 'new_graph000') {
-      if (graphRF.graph.label === 'new_graph000') {
+    if (graphRF.graph.id === 'newGraph') {
+      if (graphRF.graph.label === 'newGraph') {
         setOpenSnackbar({
           open: true,
           text:

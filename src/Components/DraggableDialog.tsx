@@ -11,7 +11,7 @@ import { rfToEwoks } from '../utils';
 import useStore from '../store';
 import ReactJson from 'react-json-view';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import { Input } from '@material-ui/core';
+import { Box, Input, TextField } from '@material-ui/core';
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -42,6 +42,7 @@ export default function DraggableDialog(props) {
     setIsOpen(open || false);
     setTitle((content && content.title) || '');
     setCallbackProps(content.callbackProps);
+    setName(content.id || '');
   }, [open, content]);
 
   // const handleClickOpen = () => {
@@ -95,13 +96,14 @@ export default function DraggableDialog(props) {
               <ToggleButton value="rf">RF Graph</ToggleButton>
             </ToggleButtonGroup>
           )}
-          Name:
-          <Input
-            value={name}
-            name={'name'}
-            onChange={(e) => setName(e.target.value)}
-            // className={classes.input}
-          />
+          <Box component="form">
+            <TextField
+              label="Name"
+              variant="standard"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Box>
           <ReactJson
             src={graph}
             name="value"
