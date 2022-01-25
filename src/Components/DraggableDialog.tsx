@@ -38,6 +38,7 @@ export default function DraggableDialog(props) {
   const { open, content } = props;
 
   useEffect(() => {
+    console.log(content, open);
     setGraph((content && content.object) || {});
     setIsOpen(open || false);
     setTitle((content && content.title) || '');
@@ -96,14 +97,16 @@ export default function DraggableDialog(props) {
               <ToggleButton value="rf">RF Graph</ToggleButton>
             </ToggleButtonGroup>
           )}
-          <Box component="form">
+          {/* <Box component="form"> */}
+          <div style={{ marginBottom: '10px' }}>
             <TextField
               label="Name"
-              variant="standard"
+              variant="filled"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-          </Box>
+          </div>
+          {/* </Box> */}
           <ReactJson
             src={graph}
             name="value"

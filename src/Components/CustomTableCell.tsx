@@ -67,11 +67,11 @@ function CustomTableCell({ index, row, name, onChange, type, typeOfValues }) {
             collapsed
             collapseStringsAfterLength={30}
             groupArraysAfterLength={15}
-            onEdit={(edit) => onChange(edit, row, index)}
-            onAdd={(add) => onChange(add, row, index)}
+            // onEdit={(edit) => onChange(edit, row, index)}
+            // onAdd={(add) => onChange(add, row, index)}
             defaultValue="object"
-            onDelete={(del) => onChange(del, row, index)}
-            onSelect={(sel) => onChange(sel, row, index)}
+            // onDelete={(del) => onChange(del, row, index)}
+            // onSelect={(sel) => onChange(sel, row, index)}
             quotesOnKeys={false}
             style={{ backgroundColor: 'rgb(59, 77, 172)' }}
             displayDataTypes

@@ -29,6 +29,7 @@ import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import EditableTable from './Components/EditableTable';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import Upload from './Components/Upload';
+import AddNodes from './Components/AddNodes';
 import AddIcon from '@material-ui/icons/Add';
 import DraggableDialog from './Components/DraggableDialog';
 import DenseTable from './Components/DenseTable';
@@ -565,6 +566,7 @@ export default function Sidebar(props) {
   return (
     <aside className="dndflow">
       {/* Break Accordion with all tasks 553-619 */}
+      <AddNodes />
       <Accordion
         onChange={(e, expanded) => {
           if (expanded) {
