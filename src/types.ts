@@ -207,7 +207,8 @@ export interface EwoksRFNode {
     icon?: string;
     comment?: string;
     moreHandles?: boolean;
-    map_all_data?: boolean; // not exists in nodes Typescript resolve...
+    map_all_data?: boolean; // TODO: not exists in nodes Typescript resolve...
+    // on_error?: boolean; // TODO: not exists in nodes Typescript resolve...
   };
   sourcePosition?: string;
   targetPosition?: string;
