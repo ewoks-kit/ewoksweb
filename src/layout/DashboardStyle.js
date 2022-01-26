@@ -107,6 +107,11 @@ const DashboardStyle = makeStyles((theme) => ({
     height: 920,
     padding_top: 45,
   },
+
+  detailsLabels: {
+    margin: '8px 0px',
+    wordBreak: 'break-word',
+  },
 }));
 
 export default DashboardStyle;

@@ -150,7 +150,7 @@ export function toRFEwoksLinks(
               : '',
           type: uiProps && uiProps.type ? uiProps.type : '',
           arrowHeadType:
-            uiProps && uiProps.arrowHeadTypeanimated
+            uiProps && uiProps.arrowHeadType
               ? uiProps.arrowHeadType
               : 'arrowclosed',
           // labelStyle: uiProps && uiProps.labelStyle ? uiProps.labelStyle : {},

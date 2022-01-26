@@ -11,47 +11,18 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import useStore from '../store';
 import type { EwoksRFLink, EwoksRFNode } from '../types';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      '& > *': {
-        margin: theme.spacing(1, 0),
-        wordBreak: 'break-word',
-        // width: '25ch',
-      },
-    },
-
-    iconBut: {
-      padding: '2px',
-    },
-
-    formInfo: {
-      width: '200px',
-      wordWrap: 'break-word',
-      wordBreak: 'break-all',
-    },
-  })
-);
-
 export default function EditElementStyle(propsIn) {
-  const classes = useStyles();
-
   const { props } = propsIn;
   const { element } = props;
   const { setElement } = propsIn;
-  console.log(props);
 
   const selectedElement = useStore<EwoksRFNode | EwoksRFLink>(
     (state) => state.selectedElement
   );
   const setSelectedElement = useStore((state) => state.setSelectedElement);
-  // const [element, setElement] = React.useState<EwoksRFNode | EwoksRFLink>(
-  //   {} as EwoksRFNode | EwoksRFLink
-  // );
 
   const [nodeType, setNodeType] = React.useState('');
   const [linkType, setLinkType] = React.useState('');
@@ -59,19 +30,17 @@ export default function EditElementStyle(propsIn) {
   const [animated, setAnimated] = React.useState<boolean>(false);
 
   useEffect(() => {
-    // setElement(selectedElement);
     console.log(element);
     if ('position' in element) {
-      console.log('is a node');
+      console.log('TODO: handle styling for nodes');
     } else if ('source' in element) {
-      console.log('is a link');
       setLinkType(element.type);
       setArrowType(element.arrowHeadType);
       setAnimated(element.animated);
     } else {
-      console.log('is a graph');
+      console.log('TODO: handle styling for graph');
     }
-  }, [element.id, element, setElement]);
+  }, [element.id, element]);
 
   const nodeTypeChanged = (event) => {
     setNodeType(event.target.value);
@@ -94,20 +63,6 @@ export default function EditElementStyle(propsIn) {
     setElement({
       ...element,
       arrowHeadType: event.target.value,
-    });
-  };
-
-  const defaultInputsChanged = (table) => {
-    // setDefaultInputs(table);
-    setElement({
-      ...element,
-      default_inputs: table.map((dval) => {
-        return {
-          id: dval.name,
-          name: dval.name,
-          value: dval.value,
-        };
-      }),
     });
   };
 
@@ -136,7 +91,7 @@ export default function EditElementStyle(propsIn) {
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <form className={classes.root} noValidate autoComplete="off">
+        <form noValidate autoComplete="off">
           {'position' in selectedElement && (
             <FormControl variant="filled" fullWidth>
               <InputLabel>Node type</InputLabel>

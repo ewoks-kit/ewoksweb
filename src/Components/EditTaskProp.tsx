@@ -12,16 +12,6 @@ const useStyles = makeStyles((theme: Theme) =>
         // width: '25ch',
       },
     },
-
-    iconBut: {
-      padding: '2px',
-    },
-
-    formInfo: {
-      width: '200px',
-      wordWrap: 'break-word',
-      wordBreak: 'break-all',
-    },
   })
 );
 
