@@ -5,7 +5,6 @@ import AddNodes from './Components/AddNodes';
 import EditElement from './Components/EditElement';
 import EditElementStyle from './Components/EditElementStyle';
 import DraggableDialog from './Components/DraggableDialog';
-import SaveIcon from '@material-ui/icons/Save';
 import IconMenu from './Components/IconMenu';
 import Drawer from './Components/Drawer';
 import axios from 'axios';
@@ -52,15 +51,9 @@ export default function Sidebar(props) {
     });
   };
 
-  const saveElement = () => {
-    // TODO: if in save some links dont have active source-target should be deleted?
-    setSelectedElement(element, 'fromSaveElement');
-  };
-
   const deleteElement = async () => {
-    // TODO: if node deleted all associated links should be deleted with warning?
     let newGraph = {} as GraphRF;
-    const elN = element as EwoksRFNode; // is this the way???
+    const elN = element as EwoksRFNode; // TODO: is this the way typescript warning???
     const elL = element as EwoksRFLink;
     const elD = element as GraphDetails;
     if (elN.position) {
@@ -88,7 +81,7 @@ export default function Sidebar(props) {
       });
     }
 
-    if (elD.input_nodes) {
+    if (elD.input_nodes && elD.id !== 'newGraph') {
       await axios
         .delete(`http://localhost:5000/workflow/${elD.id}`)
         .then(() => {
@@ -109,7 +102,7 @@ export default function Sidebar(props) {
       setSelectedElement({} as GraphDetails);
       setSubgraphsStack({ id: 'initialiase', label: '' });
       setRecentGraphs({} as GraphRF, true);
-    } else {
+    } else if (!elD.input_nodes) {
       if (workingGraph.graph.id === graphRF.graph.id) {
         setGraphRF(newGraph as GraphRF);
       } else {
@@ -119,6 +112,12 @@ export default function Sidebar(props) {
           severity: 'success',
         });
       }
+    } else {
+      setOpenSnackbar({
+        open: true,
+        text: 'Cannot delete!',
+        severity: 'error',
+      });
     }
   };
 
@@ -148,16 +147,6 @@ export default function Sidebar(props) {
       />
       <Button
         style={{ margin: '8px' }}
-        variant="contained"
-        color="primary"
-        onClick={saveElement}
-        size="small"
-      >
-        <SaveIcon />
-      </Button>
-      {/* {!('input_nodes' in selectedElement) && ( */}
-      <Button
-        style={{ margin: '8px' }}
         variant="outlined"
         color="secondary"
         onClick={deleteElement}
@@ -165,7 +154,6 @@ export default function Sidebar(props) {
       >
         Delete
       </Button>
-      {/* )} */}
       {!('source' in selectedElement) && (
         <IconMenu handleShowEwoksGraph={showEwoksGraph} />
       )}

@@ -8,15 +8,12 @@ import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import SaveIcon from '@material-ui/icons/Save';
 import FiberNew from '@material-ui/icons/FiberNew';
 import Sidebar from '../sidebar';
 import useStore from '../store';
 import Canvas from './Canvas';
-import Upload from '../Components/Upload';
 import UndoRedo from '../Components/UndoRedo';
 import GetFromServer from '../Components/GetFromServer';
-import AddIcon from '@material-ui/icons/Add';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { Fab, IconButton } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -30,32 +27,23 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DashboardStyle from './DashboardStyle';
 import SendIcon from '@material-ui/icons/Send';
 import IntegratedSpinner from '../Components/IntegratedSpinner';
+import SaveGetFromDisk from '../Components/SaveGetFromDisk';
+// import MyDrawer from './MyDrawer';
+// import SaveToServer from '../Components/SaveToServer';
 
 const useStyles = DashboardStyle;
-
-function download(content, fileName, contentType) {
-  const a = document.createElement('a');
-  const file = new Blob([content], { type: contentType });
-  a.href = URL.createObjectURL(file);
-  a.download = fileName;
-  a.click();
-}
 
 export default function Dashboard() {
   const classes = useStyles();
 
-  const inputFile = React.useRef(null);
-
   const graphRF = useStore((state) => state.graphRF);
   const selectedElement = useStore((state) => state.selectedElement);
   const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
-  const [selectedGraph, setSelectedGraph] = React.useState('');
   const [open, setOpen] = React.useState(true);
   const [openSettings, setOpenSettings] = React.useState(false);
   const recentGraphs = useStore((state) => state.recentGraphs);
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
-  const setSubGraph = useStore((state) => state.setSubGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const initializedGraph = useStore((state) => state.initializedGraph);
   const [gettingFromServer, setGettingFromServer] = React.useState(false);
@@ -76,19 +64,6 @@ export default function Dashboard() {
   // const selectedGraphChange = (event) => {
   //   setSelectedGraph(event.target.value);
   // };
-
-  const loadFromDisk = (val) => {
-    // TODO: possible race situation with setting pgraphOrSubgraph
-    setGraphOrSubgraph(true);
-  };
-
-  const saveToDisk = (event) => {
-    download(
-      JSON.stringify(rfToEwoks(graphRF), null, 2),
-      `${graphRF.graph.label}.json`,
-      'text/plain'
-    );
-  };
 
   const saveToServer = async () => {
     // if id: newGraph request label update and the POST with id=label
@@ -240,27 +215,10 @@ export default function Dashboard() {
               ))}
             </Select>
           </FormControl> */}
-          <Tooltip title="Save to Disk" arrow>
-            <IconButton color="inherit">
-              <Fab
-                className={classes.openFileButton}
-                color="primary"
-                size="small"
-                component="span"
-                aria-label="add"
-              >
-                <SaveIcon onClick={saveToDisk} />
-              </Fab>
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Load from Disk" arrow>
-            <IconButton color="inherit">
-              <Upload>
-                <AddIcon onClick={loadFromDisk} />
-              </Upload>
-            </IconButton>
-          </Tooltip>
+          {/* Break SaveLoadFromDisk */}
+          <SaveGetFromDisk />
           <div className={classes.verticalRule} />
+          {/* <SaveToServer /> */}
           <IntegratedSpinner tooltip="Save Workflow">
             <CloudUploadIcon onClick={saveToServer} />
           </IntegratedSpinner>
@@ -291,6 +249,8 @@ export default function Dashboard() {
           />
         </Toolbar>
       </AppBar>
+      {/* Break Drawer */}
+      {/* <MyDrawer /> */}
       <Drawer
         variant="permanent"
         classes={{

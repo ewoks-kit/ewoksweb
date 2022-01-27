@@ -37,6 +37,9 @@ export function toRFEwoksNodes(
         default_inputs,
         inputs_complete,
         task_generator,
+        // need to put
+        task_icon,
+        task_category,
         uiProps,
       }) => {
         console.log(task_identifier);
@@ -77,6 +80,12 @@ export function toRFEwoksNodes(
             };
 
         if (task_type !== 'graph') {
+          console.log(
+            task_identifier,
+            task_generator,
+            task_category,
+            task_icon
+          );
           return {
             id: id.toString(),
             task_type,
@@ -84,6 +93,8 @@ export function toRFEwoksNodes(
             type: task_type, // need it for visualizing dataNodes
             inputs_complete: inputs_complete ? inputs_complete : false,
             task_generator: task_generator ? task_generator : '',
+            task_icon: task_icon || '',
+            task_category: task_category || '',
             default_inputs: default_inputs ? default_inputs : [],
             optional_input_names: tempTask.optional_input_names,
             output_names: tempTask.output_names,

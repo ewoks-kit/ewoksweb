@@ -4,8 +4,13 @@ import type { DataMapping, EwoksRFLink, Inputs } from '../types';
 import { Checkbox, IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
+import DashboardStyle from '../layout/DashboardStyle';
+
+const useStyles = DashboardStyle;
 
 export default function LinkDetails(propsIn) {
+  const classes = useStyles();
+
   const { props } = propsIn;
   const { element } = props;
   const { on_error } = (element.data && element.data.on_error) || false;
@@ -124,19 +129,19 @@ export default function LinkDetails(propsIn) {
 
   return (
     <>
-      <div className="detailsLabels">
+      <div className={classes.detailsLabels}>
         <b>Source:</b> {props.element.source}
       </div>
-      <div className="detailsLabels">
+      <div className={classes.detailsLabels}>
         <b>Target:</b> {props.element.target}
       </div>
       {props.element.sub_target && (
-        <div className="detailsLabels">
+        <div className={classes.detailsLabels}>
           <b>Sub_target:</b> {props.element.data.sub_target}
         </div>
       )}
       {props.element.sub_target_attributes && (
-        <div className="detailsLabels">
+        <div className={classes.detailsLabels}>
           <b>Sub_target_attributes:</b>
           {props.element.data.sub_target_attributes}
         </div>

@@ -150,7 +150,6 @@ function Canvas() {
         y: event.clientY - reactFlowBounds.top,
       });
 
-      // TODO change now that we get them from server
       let tempTask = tasks.find(
         (tas) => tas.task_identifier === task_identifier
       );
@@ -244,7 +243,7 @@ function Canvas() {
   // setElements((els) => updateEdge(oldEdge, newConnection, els));
 
   const onConnect = (params: Edge) => {
-    // IF is a link between pre-existing nodes:
+    // If it is a link between pre-existing nodes:
     // add links_required_output_names and links_optional_output_names from target
     // links_input_names from source node
 

@@ -55,11 +55,19 @@ export default function IconMenu(props) {
       setElementToEdit(initializedTask as Task);
     } else if (action === 'cloneTask') {
       if ('position' in element) {
+        // TODO: if the task does not exist in the tasks?
+        // Populate the form with the element detals
         const task = tasks.find(
           (tas) => tas.task_identifier === element.task_identifier
         );
         console.log(task);
-        setElementToEdit(task || initializedTask);
+        setElementToEdit(
+          task || {
+            ...initializedTask,
+            task_identifier: element.task_identifier,
+            task_type: element.task_type,
+          }
+        );
       } else {
         setOpenSnackbar({
           open: true,

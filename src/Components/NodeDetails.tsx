@@ -6,8 +6,13 @@ import EditableTable from './EditableTable';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import { Box, Checkbox, IconButton } from '@material-ui/core';
 import EditTaskProp from './EditTaskProp';
+import DashboardStyle from '../layout/DashboardStyle';
+
+const useStyles = DashboardStyle;
 
 export default function NodeDetails(propsIn) {
+  const classes = useStyles();
+
   const { props } = propsIn;
   const { element } = props;
 
@@ -18,20 +23,13 @@ export default function NodeDetails(propsIn) {
   const [inputsComplete, setInputsComplete] = React.useState<boolean>(false);
   const [moreHandles, setMoreHandles] = React.useState<boolean>(true);
 
-  const taskProperties = [
+  const NonEditabletaskProperties = [
+    { id: 'task_icon', label: 'Icon', value: props.element.task_icon },
     {
-      id: 'task_identifier',
-      label: 'Identifier',
-      value: props.element.task_identifier,
+      id: 'task_category',
+      label: 'Category',
+      value: props.element.task_category,
     },
-    { id: 'task_type', label: 'Type', value: props.element.task_type },
-    {
-      id: 'task_generator',
-      label: 'Generator',
-      value: props.element.task_generator,
-    },
-    { id: 'task_icon', label: 'Icon', value: props.element.icon },
-    { id: 'task_category', label: 'Category', value: props.element.categoty },
     {
       id: 'optional_input_names',
       label: 'Optional Inputs',
@@ -49,6 +47,20 @@ export default function NodeDetails(propsIn) {
     },
   ];
 
+  const taskProperties = [
+    {
+      id: 'task_identifier',
+      label: 'Identifier',
+      value: props.element.task_identifier,
+    },
+    { id: 'task_type', label: 'Type', value: props.element.task_type },
+    {
+      id: 'task_generator',
+      label: 'Generator',
+      value: props.element.task_generator,
+    },
+  ];
+
   useEffect(() => {
     console.log(element);
     setInputsComplete(!!element.inputs_complete);
@@ -57,7 +69,7 @@ export default function NodeDetails(propsIn) {
   }, [element.id, element]);
 
   const propChanged = (propKeyValue) => {
-    // setTaskIdentifier(event.target.value);
+    console.log(element, propKeyValue);
     setSelectedElement({
       ...element,
       ...propKeyValue,
@@ -78,8 +90,6 @@ export default function NodeDetails(propsIn) {
   };
 
   const defaultInputsChanged = (table) => {
-    // setDefaultInputs(table);
-    // TODO: here setSelectedElement is not needed examine...
     setSelectedElement({
       ...element,
       default_inputs: table.map((dval) => {
@@ -116,15 +126,6 @@ export default function NodeDetails(propsIn) {
 
   return (
     <>
-      <IconButton
-        style={{ padding: '0px' }}
-        aria-label="edit"
-        onClick={() => {
-          setEditProps(!editProps);
-        }}
-      >
-        <EditIcon />
-      </IconButton>
       <Box>
         {taskProperties.map(({ id, label, value }) => (
           <EditTaskProp
@@ -136,6 +137,20 @@ export default function NodeDetails(propsIn) {
             editProps={editProps}
           />
         ))}
+        {NonEditabletaskProperties.map(({ id, label, value }) => (
+          <div key={id} className={classes.detailsLabels}>
+            <b>{label}</b> {value}
+          </div>
+        ))}
+        <IconButton
+          style={{ padding: '0px' }}
+          aria-label="edit"
+          onClick={() => {
+            setEditProps(!editProps);
+          }}
+        >
+          <EditIcon />
+        </IconButton>
         <div>
           <hr />
           <b>Default Values </b>

@@ -36,7 +36,7 @@ function EditElement(propsIn) {
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <form className="detailsLabels" noValidate autoComplete="off">
+        <form noValidate autoComplete="off">
           {'input_nodes' in element && (
             <GraphLabelComment
               props={{
