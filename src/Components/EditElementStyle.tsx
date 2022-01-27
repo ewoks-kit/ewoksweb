@@ -17,7 +17,6 @@ import type { EwoksRFLink, EwoksRFNode } from '../types';
 export default function EditElementStyle(propsIn) {
   const { props } = propsIn;
   const { element } = props;
-  const { setElement } = propsIn;
 
   const selectedElement = useStore<EwoksRFNode | EwoksRFLink>(
     (state) => state.selectedElement
@@ -44,7 +43,7 @@ export default function EditElementStyle(propsIn) {
 
   const nodeTypeChanged = (event) => {
     setNodeType(event.target.value);
-    setElement({
+    setSelectedElement({
       ...element,
       data: { ...element.data, type: event.target.value },
     });
@@ -52,7 +51,7 @@ export default function EditElementStyle(propsIn) {
 
   const linkTypeChanged = (event) => {
     setLinkType(event.target.value);
-    setElement({
+    setSelectedElement({
       ...element,
       type: event.target.value,
     });
@@ -60,7 +59,7 @@ export default function EditElementStyle(propsIn) {
 
   const arrowTypeChanged = (event) => {
     setArrowType(event.target.value);
-    setElement({
+    setSelectedElement({
       ...element,
       arrowHeadType: event.target.value,
     });
@@ -68,7 +67,7 @@ export default function EditElementStyle(propsIn) {
 
   const animatedChanged = (event) => {
     setAnimated(event.target.checked);
-    setElement({
+    setSelectedElement({
       ...element,
       animated: event.target.checked,
     });

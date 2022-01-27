@@ -10,7 +10,6 @@ import EditTaskProp from './EditTaskProp';
 export default function NodeDetails(propsIn) {
   const { props } = propsIn;
   const { element } = props;
-  const { setElement } = propsIn;
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
@@ -59,7 +58,7 @@ export default function NodeDetails(propsIn) {
 
   const propChanged = (propKeyValue) => {
     // setTaskIdentifier(event.target.value);
-    setElement({
+    setSelectedElement({
       ...element,
       ...propKeyValue,
     });
@@ -81,7 +80,7 @@ export default function NodeDetails(propsIn) {
   const defaultInputsChanged = (table) => {
     // setDefaultInputs(table);
     // TODO: here setSelectedElement is not needed examine...
-    setElement({
+    setSelectedElement({
       ...element,
       default_inputs: table.map((dval) => {
         return {
@@ -95,7 +94,7 @@ export default function NodeDetails(propsIn) {
 
   const inputsCompleteChanged = (event) => {
     setInputsComplete(event.target.checked);
-    setElement({
+    setSelectedElement({
       ...element,
       inputs_complete: event.target.checked,
     });
@@ -103,7 +102,7 @@ export default function NodeDetails(propsIn) {
 
   const moreHandlesChanged = (event) => {
     setMoreHandles(event.target.checked);
-    setElement({
+    setSelectedElement({
       ...(element as EwoksRFNode),
       data: { ...element.data, moreHandles: event.target.checked },
     });

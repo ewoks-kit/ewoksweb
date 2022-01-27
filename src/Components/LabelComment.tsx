@@ -1,0 +1,151 @@
+import React, { useEffect } from 'react';
+import useStore from '../store';
+import type { EwoksRFLink, EwoksRFNode, Inputs } from '../types';
+import { Box, Button, TextField, Tooltip } from '@material-ui/core';
+import DashboardStyle from '../layout/DashboardStyle';
+
+const useStyles = DashboardStyle;
+
+export default function LabelComment(propsIn) {
+  const classes = useStyles();
+
+  const { props } = propsIn;
+  const { element } = props;
+
+  const [comment, setComment] = React.useState('');
+  const [label, setLabel] = React.useState('');
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
+
+  useEffect(() => {
+    if ('position' in element) {
+      setLabel(
+        // TODO: Remove conditional when graphs structure is final
+        element.label ? element.label : element.data.label
+      );
+      setComment(element.data.comment);
+    } else if ('source' in element) {
+      setLabel(element.label);
+      setComment(element.data && element.data.comment);
+    }
+  }, [element]);
+
+  const useConditions = () => {
+    console.log(element);
+    const el = element as EwoksRFLink;
+    const newLabel =
+      el.data.conditions.length > 0
+        ? el.data.conditions
+            .map((con) => con.source_output + ': ' + JSON.stringify(con.value))
+            .join(', ')
+        : '';
+    setLabel(newLabel);
+    setSelectedElement({
+      ...element,
+      label: newLabel,
+    });
+  };
+
+  const useMapping = () => {
+    console.log(element);
+    const el = element as EwoksRFLink;
+    const newLabel =
+      el.data.data_mapping.length > 0
+        ? el.data.data_mapping
+            .map((con) => `${con.source_output}->${con.target_input}`)
+            .join(', ')
+        : '';
+    setLabel(newLabel);
+    setSelectedElement({
+      ...element,
+      label: newLabel,
+    });
+  };
+
+  const labelChanged = (event) => {
+    console.log('label changed:', event.target.value);
+    setLabel(event.target.value);
+    if ('position' in element) {
+      const el = element;
+      setSelectedElement({
+        ...el,
+        label: event.target.value,
+        data: { ...element.data, label: event.target.value },
+      });
+    } else {
+      setSelectedElement({
+        ...element,
+        label: event.target.value,
+      });
+    }
+  };
+
+  const commentChanged = (event) => {
+    console.log('comment changed:', event.target.value);
+    setComment(event.target.value);
+    const el = element;
+    setSelectedElement({
+      ...el,
+      data: { ...element.data, comment: event.target.value },
+    });
+  };
+
+  return (
+    <>
+      <div className={classes.detailsLabels}>
+        <Box>
+          {Object.keys(element).includes('source') && (
+            <Tooltip title="Use conditions or data-mapping as label" arrow>
+              <span>
+                <Button
+                  style={{ margin: '8px' }}
+                  variant="contained"
+                  color="primary"
+                  onClick={useConditions}
+                  size="small"
+                >
+                  conditions
+                </Button>
+                <Button
+                  style={{ margin: '8px' }}
+                  variant="contained"
+                  color="primary"
+                  onClick={useMapping}
+                  size="small"
+                >
+                  mapping
+                </Button>
+              </span>
+            </Tooltip>
+          )}
+
+          {/* if text size big use a text area
+          <TextareaAutosize
+            aria-label="empty textarea"
+            placeholder="Empty"
+            style={{ width: 200 }}
+            value={label || ''}
+            onChange={labelChanged}
+          /> */}
+          <TextField
+            id="outlined-basic"
+            label="Label"
+            variant="outlined"
+            value={label || ''}
+            onChange={labelChanged}
+          />
+        </Box>
+      </div>
+      <div>
+        <Box>
+          <TextField
+            id="outlined-basic"
+            label="Comment"
+            variant="outlined"
+            value={comment || ''}
+            onChange={commentChanged}
+          />
+        </Box>
+      </div>
+    </>
+  );
+}

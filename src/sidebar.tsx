@@ -34,6 +34,7 @@ export default function Sidebar(props) {
   const setUndoRedo = useStore((state) => state.setUndoRedo);
 
   useEffect(() => {
+    console.log(selectedElement);
     setElement(selectedElement);
   }, [selectedElement.id, selectedElement]);
 
