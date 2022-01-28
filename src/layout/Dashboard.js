@@ -14,7 +14,6 @@ import useStore from '../store';
 import Canvas from './Canvas';
 import UndoRedo from '../Components/UndoRedo';
 import GetFromServer from '../Components/GetFromServer';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { Fab, IconButton } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { rfToEwoks } from '../utils';
@@ -29,24 +28,26 @@ import SendIcon from '@material-ui/icons/Send';
 import IntegratedSpinner from '../Components/IntegratedSpinner';
 import SaveGetFromDisk from '../Components/SaveGetFromDisk';
 // import MyDrawer from './MyDrawer';
-// import SaveToServer from '../Components/SaveToServer';
+import SaveToServer from '../Components/SaveToServer';
 
 const useStyles = DashboardStyle;
 
 export default function Dashboard() {
   const classes = useStyles();
 
+  const undoF = React.useRef(null);
+  const redoF = React.useRef(null);
+  const saveToServerF = React.useRef(null);
+
   const graphRF = useStore((state) => state.graphRF);
   const selectedElement = useStore((state) => state.selectedElement);
-  const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
   const [open, setOpen] = React.useState(true);
   const [openSettings, setOpenSettings] = React.useState(false);
   const recentGraphs = useStore((state) => state.recentGraphs);
-  const setRecentGraphs = useStore((state) => state.setRecentGraphs);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const initializedGraph = useStore((state) => state.initializedGraph);
-  const [gettingFromServer, setGettingFromServer] = React.useState(false);
+  const gettingFromServer = useStore((state) => state.gettingFromServer);
 
   const handleOpenSettings = () => {
     setOpenSettings(!openSettings);
@@ -60,53 +61,6 @@ export default function Dashboard() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
-  // const selectedGraphChange = (event) => {
-  //   setSelectedGraph(event.target.value);
-  // };
-
-  const saveToServer = async () => {
-    // if id: newGraph request label update and the POST with id=label
-    // else PUT and replace existing on server
-    setGettingFromServer(true);
-    if (graphRF.graph.id === 'newGraph') {
-      if (graphRF.graph.label === 'newGraph') {
-        setOpenSnackbar({
-          open: true,
-          text:
-            'In the "Edit Graph" Please insert a new label to be also used as an id for the new workflow and then save!',
-          severity: 'error',
-        });
-        setGettingFromServer(false);
-        return;
-      }
-      const newIdGraph = {
-        graph: { ...graphRF.graph, id: graphRF.graph.label },
-        nodes: graphRF.nodes,
-        links: graphRF.links,
-      };
-      const response = await axios
-        .post(`http://localhost:5000/workflows`, rfToEwoks(newIdGraph))
-        .then((res) => {
-          setGettingFromServer(false);
-          setWorkingGraph(res.data);
-          setRecentGraphs({}, true);
-        });
-    } else if (graphRF.graph.id) {
-      const response = await axios
-        .put(
-          `http://localhost:5000/workflow/${graphRF.graph.id}`,
-          rfToEwoks(graphRF)
-        )
-        .then((res) => setGettingFromServer(false));
-    } else {
-      setOpenSnackbar({
-        open: true,
-        text: 'No graph exists to save!',
-        severity: 'warning',
-      });
-    }
-  };
 
   const executeWorkflow = async () => {
     // console.log('execute workflow', recentGraphs, graphRF);
@@ -136,22 +90,31 @@ export default function Dashboard() {
     }
   };
 
-  const newGraph = (event) => {
-    // Name of graph unique and used in recentGraphs, graphRF, subgraphsStack
-    // setGraphRF(initializedGraph);
+  const newGraph = () => {
     setWorkingGraph(initializedGraph);
   };
 
   const handleKeyDown = (event) => {
-    //
     const charCode = String.fromCharCode(event.which).toLowerCase();
+
     if ((event.ctrlKey || event.metaKey) && charCode === 's') {
       event.preventDefault();
-      saveToServer();
+      saveToServerF.current();
+    } else if ((event.ctrlKey || event.metaKey) && charCode === 'z') {
+      event.preventDefault();
+      undoF.current();
+    } else if ((event.ctrlKey || event.metaKey) && charCode === 'y') {
+      event.preventDefault();
+      redoF.current();
+    } else if (
+      (event.ctrlKey || event.metaKey) &&
+      event.shiftKey &&
+      charCode === 'n'
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+      newGraph();
     }
-    // else if ((event.ctrlKey || event.metaKey) && charCode === 'c') {
-    //   console.log('CTRL+C Pressed');
-    // }
   };
 
   return (
@@ -194,34 +157,11 @@ export default function Dashboard() {
               </Fab>
             </IconButton>
           </Tooltip>
-          <UndoRedo />
-          {/* <FormControl variant="standard" className={classes.formControl}>
-            <InputLabel
-              id="demo-simple-select-filled-label"
-              style={{ color: 'white' }}
-            >
-              Recent Files
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-filled-label"
-              id="demo-simple-select-filled"
-              value={selectedGraph}
-              onChange={selectedGraphChange}
-            >
-              {recentGraphs.map((gr, index) => (
-                <MenuItem value={gr.graph.label} key={gr.graph.id}>
-                  <em>{gr.graph.label}</em>
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl> */}
-          {/* Break SaveLoadFromDisk */}
+          <UndoRedo undoF={undoF} redoF={redoF} />
+          {/* <RecentFiles /> */}
           <SaveGetFromDisk />
           <div className={classes.verticalRule} />
-          {/* <SaveToServer /> */}
-          <IntegratedSpinner tooltip="Save Workflow">
-            <CloudUploadIcon onClick={saveToServer} />
-          </IntegratedSpinner>
+          <SaveToServer saveToServerF={saveToServerF} />
           <GetFromServer />
           <IntegratedSpinner
             tooltip="Execute Workflow"
@@ -249,7 +189,6 @@ export default function Dashboard() {
           />
         </Toolbar>
       </AppBar>
-      {/* Break Drawer */}
       {/* <MyDrawer /> */}
       <Drawer
         variant="permanent"

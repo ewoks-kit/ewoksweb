@@ -6,23 +6,16 @@ import { rfToEwoks } from '../utils';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import type { GraphEwoks, GraphRF } from '../types';
 
-export default function SaveToServer() {
-  const [gettingFromServer, setGettingFromServer] = React.useState(false);
+export default function SaveToServer({ saveToServerF }) {
+  const setGettingFromServer = useStore((state) => state.setGettingFromServer);
   const graphRF = useStore((state) => state.graphRF);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
-  const handleKeyDown = (event) => {
-    const charCode = String.fromCharCode(event.which).toLowerCase();
-    if ((event.ctrlKey || event.metaKey) && charCode === 's') {
-      event.preventDefault();
-      saveToServer();
-    }
-    // else if ((event.ctrlKey || event.metaKey) && charCode === 'c') {
-    //   console.log('CTRL+C Pressed');
-    // }
-  };
+  React.useEffect(() => {
+    saveToServerF.current = saveToServer;
+  });
 
   const saveToServer = async () => {
     // if id: newGraph request label update and the POST with id=label

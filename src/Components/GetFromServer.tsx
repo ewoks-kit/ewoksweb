@@ -19,6 +19,9 @@ export default function GetFromServer() {
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const [gettingFromServer, setGettingFromServer] = React.useState(false);
+  // TODO replace with the following brakes the round spinner
+  // const gettingFromServer = useStore((state) => state.gettingFromServer);
+  // const setGettingFromServer = useStore((state) => state.setGettingFromServer);
 
   const getSubgraphFromServer = () => {
     getFromServer('subgraph');

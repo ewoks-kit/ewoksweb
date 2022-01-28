@@ -34,6 +34,8 @@ export interface DialogParams {
 }
 
 export interface State {
+  gettingFromServer: Boolean;
+  setGettingFromServer: (val: Boolean) => void;
   undoRedo: Array<Action>;
   setUndoRedo: (action: Action) => void;
   undoIndex: number;

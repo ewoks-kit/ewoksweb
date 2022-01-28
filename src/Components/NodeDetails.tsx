@@ -90,32 +90,41 @@ export default function NodeDetails(propsIn) {
   };
 
   const defaultInputsChanged = (table) => {
-    setSelectedElement({
-      ...element,
-      default_inputs: table.map((dval) => {
-        return {
-          id: dval.name,
-          name: dval.name,
-          value: dval.value,
-        };
-      }),
-    });
+    setSelectedElement(
+      {
+        ...element,
+        default_inputs: table.map((dval) => {
+          return {
+            id: dval.name,
+            name: dval.name,
+            value: dval.value,
+          };
+        }),
+      },
+      'fromSaveElement'
+    );
   };
 
   const inputsCompleteChanged = (event) => {
     setInputsComplete(event.target.checked);
-    setSelectedElement({
-      ...element,
-      inputs_complete: event.target.checked,
-    });
+    setSelectedElement(
+      {
+        ...element,
+        inputs_complete: event.target.checked,
+      },
+      'fromSaveElement'
+    );
   };
 
   const moreHandlesChanged = (event) => {
     setMoreHandles(event.target.checked);
-    setSelectedElement({
-      ...(element as EwoksRFNode),
-      data: { ...element.data, moreHandles: event.target.checked },
-    });
+    setSelectedElement(
+      {
+        ...(element as EwoksRFNode),
+        data: { ...element.data, moreHandles: event.target.checked },
+      },
+      'fromSaveElement'
+    );
     // Remove when refresh is resolved
     setOpenSnackbar({
       open: true,

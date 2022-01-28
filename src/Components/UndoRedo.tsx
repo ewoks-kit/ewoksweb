@@ -7,19 +7,25 @@ import DashboardStyle from '../layout/DashboardStyle';
 
 const useStyles = DashboardStyle;
 
-export default function UndoRedo() {
+export default function UndoRedo({ undoF, redoF }) {
   const classes = useStyles();
 
   const undoIndex = useStore((state) => state.undoIndex);
   const setUndoIndex = useStore((state) => state.setUndoIndex);
 
   const undo = () => {
+    console.log('UNDO');
     setUndoIndex(undoIndex - 1);
   };
 
-  const redo = (event) => {
+  const redo = () => {
     setUndoIndex(undoIndex + 1);
   };
+
+  React.useEffect(() => {
+    undoF.current = undo;
+    redoF.current = redo;
+  });
 
   return (
     <>

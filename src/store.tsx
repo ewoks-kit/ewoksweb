@@ -39,11 +39,20 @@ const initializedGraph = {
 } as GraphRF;
 
 const useStore = create<State>((set, get) => ({
+  gettingFromServer: false,
+
+  setGettingFromServer: (val: Boolean) => {
+    set((state) => ({
+      ...state,
+      gettingFromServer: val,
+    }));
+  },
+
   undoRedo: [] as Action[],
 
   setUndoRedo: (action: Action) => {
     console.log(action, get().undoIndex, get().undoRedo);
-    // check the size of the history-array  not more than 10
+    // TODO: check the size of the history-array  not more than 10
     // when undo and the then edit the steps above the current step are erased
     set((state) => ({
       ...state,
@@ -62,6 +71,10 @@ const useStore = create<State>((set, get) => ({
         undoIndex: index,
         graphRF: get().undoRedo[index].graph,
       }));
+      // TODO: after setting the new GraphRF the selected element needs
+      // to be updated to see the change in the sidebar again on undo-redo
+      // if node search on get().undoRedo[index].graph.nodes the selected
+      // and update it. The same for links and graph details
     } else {
       get().setOpenSnackbar({
         open: true,
@@ -286,7 +299,7 @@ const useStore = create<State>((set, get) => ({
   selectedElement: {} as EwoksRFNode | EwoksRFLink | GraphDetails,
 
   setSelectedElement: (element, from) => {
-    console.log(element);
+    console.log(element, from);
     const wg = get().workingGraph.graph.id;
     const { graph, nodes, links } = get().graphRF;
 

@@ -18,7 +18,7 @@ export function toRFEwoksNodes(
 
   const inNodeLinks = inNodesLinks(tempGraph);
   const outNodeLinks = outNodesLinks(tempGraph);
-  console.log(tempGraph, newNodeSubgraphs, inNodeLinks, outNodeLinks);
+  // console.log(tempGraph, newNodeSubgraphs, inNodeLinks, outNodeLinks);
   const inOutTempGraph = { ...tempGraph };
   if (inNodeLinks.nodes.length > 0) {
     inOutTempGraph.nodes = [...inOutTempGraph.nodes, ...inNodeLinks.nodes];
@@ -42,7 +42,7 @@ export function toRFEwoksNodes(
         task_category,
         uiProps,
       }) => {
-        console.log(task_identifier);
+        // console.log(task_identifier);
         // calculate if node input and/or output or internal
         const isInput = inputsAl && inputsAl.includes(id);
         const isOutput = outputsAll && outputsAll.includes(id);
@@ -80,12 +80,12 @@ export function toRFEwoksNodes(
             };
 
         if (task_type !== 'graph') {
-          console.log(
-            task_identifier,
-            task_generator,
-            task_category,
-            task_icon
-          );
+          // console.log(
+          //   task_identifier,
+          //   task_generator,
+          //   task_category,
+          //   task_icon
+          // );
           return {
             id: id.toString(),
             task_type,

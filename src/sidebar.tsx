@@ -115,7 +115,7 @@ export default function Sidebar(props) {
     } else {
       setOpenSnackbar({
         open: true,
-        text: 'Cannot delete!',
+        text: 'Nothing to delete!',
         severity: 'error',
       });
     }
