@@ -42,14 +42,17 @@ export default function LinkDetails(propsIn) {
 
   const mapAllDataChanged = (event) => {
     setMapAllData(event.target.checked);
-    setElement({
-      ...(element as EwoksRFLink),
-      data: { ...element.data, map_all_data: event.target.checked },
-    });
-    setSelectedElement({
-      ...(element as EwoksRFLink),
-      data: { ...element.data, map_all_data: event.target.checked },
-    });
+    // setElement({
+    //   ...(element as EwoksRFLink),
+    //   data: { ...element.data, map_all_data: event.target.checked },
+    // });
+    setSelectedElement(
+      {
+        ...(element as EwoksRFLink),
+        data: { ...element.data, map_all_data: event.target.checked },
+      },
+      'fromSaveElement'
+    );
   };
 
   const addDataMapping = () => {
@@ -58,13 +61,16 @@ export default function LinkDetails(propsIn) {
     if (elMap && elMap[elMap.length - 1] && elMap[elMap.length - 1].id === '') {
       console.log('should not ADD mapping');
     } else {
-      setSelectedElement({
-        ...el,
-        data: {
-          ...el.data,
-          data_mapping: [...elMap, { id: '', name: '', value: '' }],
+      setSelectedElement(
+        {
+          ...el,
+          data: {
+            ...el.data,
+            data_mapping: [...elMap, { id: '', name: '', value: '' }],
+          },
         },
-      });
+        'fromSaveElement'
+      );
     }
   };
 
@@ -75,24 +81,30 @@ export default function LinkDetails(propsIn) {
         target_input: row.value,
       };
     });
-    setSelectedElement({
-      ...(element as EwoksRFLink),
-      data: {
-        ...element.data,
-        data_mapping: dmap,
-        label: dmap
-          .map((el) => `${el.source_output}->${el.target_input}`)
-          .join(', '),
+    setSelectedElement(
+      {
+        ...(element as EwoksRFLink),
+        data: {
+          ...element.data,
+          data_mapping: dmap,
+          label: dmap
+            .map((el) => `${el.source_output}->${el.target_input}`)
+            .join(', '),
+        },
       },
-    });
+      'fromSaveElement'
+    );
   };
 
   const onErrorChanged = (event) => {
     setOnError(event.target.checked);
-    setSelectedElement({
-      ...(element as EwoksRFLink),
-      data: { ...element.data, on_error: event.target.checked },
-    });
+    setSelectedElement(
+      {
+        ...(element as EwoksRFLink),
+        data: { ...element.data, on_error: event.target.checked },
+      },
+      'fromSaveElement'
+    );
   };
 
   const addConditions = () => {
@@ -101,30 +113,36 @@ export default function LinkDetails(propsIn) {
     if (elCon && elCon[elCon.length - 1] && elCon[elCon.length - 1].id === '') {
       console.log('should not ADD condition');
     } else {
-      setSelectedElement({
-        ...el,
-        data: {
-          ...element.data,
-          on_error: false,
-          conditions: [...elCon, { id: '', name: '', value: '' }],
+      setSelectedElement(
+        {
+          ...el,
+          data: {
+            ...element.data,
+            on_error: false,
+            conditions: [...elCon, { id: '', name: '', value: '' }],
+          },
         },
-      });
+        'fromSaveElement'
+      );
     }
   };
 
   const conditionsValuesChanged = (table) => {
-    setSelectedElement({
-      ...element,
-      data: {
-        ...element.data,
-        conditions: table.map((con1) => {
-          return {
-            source_output: con1.name,
-            value: con1.value,
-          };
-        }),
+    setSelectedElement(
+      {
+        ...element,
+        data: {
+          ...element.data,
+          conditions: table.map((con1) => {
+            return {
+              source_output: con1.name,
+              value: con1.value,
+            };
+          }),
+        },
       },
-    });
+      'fromSaveElement'
+    );
   };
 
   return (

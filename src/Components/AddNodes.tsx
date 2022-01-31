@@ -19,6 +19,7 @@ import CreateClass from '../images/CreateClass.svg';
 import TextsmsIcon from '@material-ui/icons/Textsms';
 import Upload from './Upload';
 import AddIcon from '@material-ui/icons/Add';
+import configData from '../configData.json';
 
 const onDragStart = (event, { task_identifier, task_type, icon }) => {
   event.dataTransfer.setData('task_identifier', task_identifier);
@@ -48,7 +49,7 @@ function AddNodes(props) {
   const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
 
   const getTasks = async () => {
-    const tasksData = await axios.get('http://localhost:5000/tasks');
+    const tasksData = await axios.get(`${configData.serverUrl}/tasks`);
     const tasks = tasksData.data as Task[];
     setTasks(tasks);
     console.log(taskCategories);
@@ -57,6 +58,11 @@ function AddNodes(props) {
 
   const insertGraph = () => {
     setGraphOrSubgraph(false);
+  };
+
+  const onRigthClick = (event) => {
+    event.preventDefault();
+    console.log('rightclick', tasks);
   };
 
   return (
@@ -103,6 +109,12 @@ function AddNodes(props) {
                     draggable
                   >
                     <Tooltip title={elem.task_identifier} arrow>
+                      {/* TODO: for deleting task and clone in dialog? */}
+                      {/* <span
+                        onContextMenu={onRigthClick}
+                        role="button"
+                        tabIndex={0}
+                      > */}
                       <img
                         src={
                           Object.keys(iconsObj).includes(elem.icon)
@@ -111,6 +123,7 @@ function AddNodes(props) {
                         }
                         alt=""
                       />
+                      {/* </span> */}
                     </Tooltip>
                   </span>
                 ))}

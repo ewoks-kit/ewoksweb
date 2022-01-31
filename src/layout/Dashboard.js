@@ -29,6 +29,7 @@ import IntegratedSpinner from '../Components/IntegratedSpinner';
 import SaveGetFromDisk from '../Components/SaveGetFromDisk';
 // import MyDrawer from './MyDrawer';
 import SaveToServer from '../Components/SaveToServer';
+import configData from '../configData.json';
 
 const useStyles = DashboardStyle;
 
@@ -66,7 +67,7 @@ export default function Dashboard() {
     // console.log('execute workflow', recentGraphs, graphRF);
     if (recentGraphs.length > 0) {
       await axios
-        .post(`http://localhost:5000/workflow/execute`, rfToEwoks(graphRF))
+        .post(`${configData.serverUrl}/workflow/execute`, rfToEwoks(graphRF))
         .then((res) =>
           setOpenSnackbar({
             open: true,

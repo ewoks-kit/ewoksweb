@@ -15,6 +15,8 @@ import { toRFEwoksNodes } from './utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from './utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './utils/FindAllSubgraphs';
 import axios from 'axios';
+import configData from './configData.json';
+import { config } from 'node:process';
 
 const initializedTask = {
   task_identifier: '',
@@ -53,10 +55,15 @@ const useStore = create<State>((set, get) => ({
   setUndoRedo: (action: Action) => {
     console.log(action, get().undoIndex, get().undoRedo);
     // TODO: check the size of the history-array  not more than 10
-    // when undo and the then edit the steps above the current step are erased
+    // when undo and then edit the steps above the current step are deleted
     set((state) => ({
       ...state,
-      undoRedo: [...get().undoRedo.slice(0, get().undoIndex + 1), action],
+      undoRedo: [
+        ...get()
+          .undoRedo.slice(-20)
+          .slice(0, get().undoIndex + 1),
+        action,
+      ],
       undoIndex: get().undoIndex + 1,
     }));
   },
@@ -71,10 +78,28 @@ const useStore = create<State>((set, get) => ({
         undoIndex: index,
         graphRF: get().undoRedo[index].graph,
       }));
-      // TODO: after setting the new GraphRF the selected element needs
+      // After setting the new GraphRF the selected element needs
       // to be updated to see the change in the sidebar again on undo-redo
-      // if node search on get().undoRedo[index].graph.nodes the selected
-      // and update it. The same for links and graph details
+      let selEl = get().selectedElement;
+      if (selEl.id) {
+        if ('position' in selEl) {
+          selEl = get().undoRedo[index].graph.nodes.find(
+            (nod) => nod.id === selEl.id
+          );
+          if (selEl) {
+            get().setSelectedElement(selEl);
+          }
+        } else if ('source' in selEl) {
+          selEl = get().undoRedo[index].graph.links.find(
+            (lin) => lin.id === selEl.id
+          );
+          if (selEl) {
+            get().setSelectedElement(selEl);
+          }
+        } else if ('output_nodes' in selEl) {
+          get().setSelectedElement(get().undoRedo[index].graph.graph);
+        }
+      }
     } else {
       get().setOpenSnackbar({
         open: true,
@@ -204,7 +229,7 @@ const useStore = create<State>((set, get) => ({
     // 1. if it is a new graph opening initialize
     // TODO: remove initialise or id: 0. Send clear messages
     if (get().tasks.length === 0) {
-      const tasks = await axios.get('http://localhost:5000/tasks');
+      const tasks = await axios.get(`${configData.serverUrl}/tasks`);
       get().setTasks(tasks.data as Task[]);
     }
     get().setSelectedElement({} as EwoksRFNode | EwoksRFLink);

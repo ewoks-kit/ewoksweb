@@ -23,7 +23,7 @@ export default function NodeDetails(propsIn) {
   const [inputsComplete, setInputsComplete] = React.useState<boolean>(false);
   const [moreHandles, setMoreHandles] = React.useState<boolean>(true);
 
-  const NonEditabletaskProperties = [
+  const NonEditableTaskProperties = [
     { id: 'task_icon', label: 'Icon', value: props.element.task_icon },
     {
       id: 'task_category',
@@ -82,10 +82,13 @@ export default function NodeDetails(propsIn) {
     if (elIn && elIn[elIn.length - 1] && elIn[elIn.length - 1].id === '') {
       console.log('should not ADD default');
     } else {
-      setSelectedElement({
-        ...element,
-        default_inputs: [...elIn, { id: '', name: '', value: '' }],
-      });
+      setSelectedElement(
+        {
+          ...element,
+          default_inputs: [...elIn, { id: '', name: '', value: '' }],
+        },
+        'fromSaveElement'
+      );
     }
   };
 
@@ -146,7 +149,7 @@ export default function NodeDetails(propsIn) {
             editProps={editProps}
           />
         ))}
-        {NonEditabletaskProperties.map(({ id, label, value }) => (
+        {NonEditableTaskProperties.map(({ id, label, value }) => (
           <div key={id} className={classes.detailsLabels}>
             <b>{label}</b> {value}
           </div>

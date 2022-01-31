@@ -39,10 +39,13 @@ export default function LabelComment(propsIn) {
             .join(', ')
         : '';
     setLabel(newLabel);
-    setSelectedElement({
-      ...element,
-      label: newLabel,
-    });
+    setSelectedElement(
+      {
+        ...element,
+        label: newLabel,
+      },
+      'fromSaveElement'
+    );
   };
 
   const useMapping = () => {
@@ -55,10 +58,13 @@ export default function LabelComment(propsIn) {
             .join(', ')
         : '';
     setLabel(newLabel);
-    setSelectedElement({
-      ...element,
-      label: newLabel,
-    });
+    setSelectedElement(
+      {
+        ...element,
+        label: newLabel,
+      },
+      'fromSaveElement'
+    );
   };
 
   const labelChanged = (event) => {
@@ -66,16 +72,22 @@ export default function LabelComment(propsIn) {
     setLabel(event.target.value);
     if ('position' in element) {
       const el = element;
-      setSelectedElement({
-        ...el,
-        label: event.target.value,
-        data: { ...element.data, label: event.target.value },
-      });
+      setSelectedElement(
+        {
+          ...el,
+          label: event.target.value,
+          data: { ...element.data, label: event.target.value },
+        },
+        'fromSaveElement'
+      );
     } else {
-      setSelectedElement({
-        ...element,
-        label: event.target.value,
-      });
+      setSelectedElement(
+        {
+          ...element,
+          label: event.target.value,
+        },
+        'fromSaveElement'
+      );
     }
   };
 
@@ -83,10 +95,13 @@ export default function LabelComment(propsIn) {
     console.log('comment changed:', event.target.value);
     setComment(event.target.value);
     const el = element;
-    setSelectedElement({
-      ...el,
-      data: { ...element.data, comment: event.target.value },
-    });
+    setSelectedElement(
+      {
+        ...el,
+        data: { ...element.data, comment: event.target.value },
+      },
+      'fromSaveElement'
+    );
   };
 
   return (

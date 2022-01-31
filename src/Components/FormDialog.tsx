@@ -16,6 +16,7 @@ import type {
 } from '../types';
 import axios from 'axios';
 import { rfToEwoks } from '../utils';
+import configData from '../configData.json';
 
 export default function FormDialog(props) {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -67,7 +68,7 @@ export default function FormDialog(props) {
       const el = element as GraphRF;
       axios // if await is used const response =
         .post(
-          `http://localhost:5000/workflows`,
+          `${configData.serverUrl}/workflows`,
           rfToEwoks({
             ...el,
             graph: { ...el.graph, id: newName, label: newName },
@@ -91,12 +92,12 @@ export default function FormDialog(props) {
       // or newTask
       const elem = element as Task;
       axios // if await is used const response =
-        .post(`http://localhost:5000/tasks`, {
+        .post(`${configData.serverUrl}/tasks`, {
           ...elem,
         })
         .then(async (res) => {
           props.setOpenSaveDialog(false);
-          const tasks = await axios.get('http://localhost:5000/tasks');
+          const tasks = await axios.get(`${configData.serverUrl}/tasks`);
           setTasks(tasks.data as Task[]);
         })
         .catch((error) => {

@@ -12,7 +12,8 @@ function EditTaskProp({ id, label, value, propChanged, editProps }) {
   const [editProp, setEditProp] = React.useState(false);
   const [taskProp, setTaskProp] = React.useState('');
 
-  console.log(id, label, value, propChanged, editProps);
+  // console.log(id, label, value, propChanged, editProps);
+
   useEffect(() => {
     setTaskProp(value);
     if (!editProps) {

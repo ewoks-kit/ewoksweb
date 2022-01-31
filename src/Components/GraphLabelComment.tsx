@@ -27,25 +27,34 @@ export default function GraphLabelComment(propsIn) {
     setLabel(event.target.value);
     if ('position' in element) {
       const el = element;
-      setSelectedElement({
-        ...el,
-        label: event.target.value,
-        data: { ...element.data, label: event.target.value },
-      });
+      setSelectedElement(
+        {
+          ...el,
+          label: event.target.value,
+          data: { ...element.data, label: event.target.value },
+        },
+        'fromSaveElement'
+      );
     } else {
-      setSelectedElement({
-        ...element,
-        label: event.target.value,
-      });
+      setSelectedElement(
+        {
+          ...element,
+          label: event.target.value,
+        },
+        'fromSaveElement'
+      );
     }
   };
 
   const graphCommentChanged = (event) => {
     setComment(event.target.value);
-    setSelectedElement({
-      ...element,
-      uiProps: { ...element.uiProps, comment: event.target.value },
-    });
+    setSelectedElement(
+      {
+        ...element,
+        uiProps: { ...element.uiProps, comment: event.target.value },
+      },
+      'fromSaveElement'
+    );
   };
 
   return (
@@ -53,9 +62,9 @@ export default function GraphLabelComment(propsIn) {
       <div>
         <b>Id:</b> {graphRF.graph.id}
       </div>
-      <div>
+      {/* <div>
         <b>Label:</b> {graphRF.graph.label}
-      </div>
+      </div> */}
       <div className={classes.detailsLabels}>
         <TextField
           id="outlined-basic"

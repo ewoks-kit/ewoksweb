@@ -8,6 +8,7 @@ import DraggableDialog from './Components/DraggableDialog';
 import IconMenu from './Components/IconMenu';
 import Drawer from './Components/Drawer';
 import axios from 'axios';
+import configData from './configData.json';
 
 import type { EwoksRFNode, EwoksRFLink, GraphDetails, GraphRF } from './types';
 import { rfToEwoks } from './utils';
@@ -83,7 +84,7 @@ export default function Sidebar(props) {
 
     if (elD.input_nodes && elD.id !== 'newGraph') {
       await axios
-        .delete(`http://localhost:5000/workflow/${elD.id}`)
+        .delete(`${configData.serverUrl}/workflow/${elD.id}`)
         .then(() => {
           setOpenSnackbar({
             open: true,

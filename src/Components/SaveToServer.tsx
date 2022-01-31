@@ -5,6 +5,7 @@ import axios from 'axios';
 import { rfToEwoks } from '../utils';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import type { GraphEwoks, GraphRF } from '../types';
+import configData from '../configData.json';
 
 export default function SaveToServer({ saveToServerF }) {
   const setGettingFromServer = useStore((state) => state.setGettingFromServer);
@@ -18,7 +19,35 @@ export default function SaveToServer({ saveToServerF }) {
   });
 
   const saveToServer = async () => {
-    // if id: newGraph request label update and the POST with id=label
+    // Remove empty lines if any in DataMapping, Conditions, DefaultValues
+    // before attempting to save
+    const graphRFCurrated = { ...graphRF };
+    for (const nod of graphRFCurrated.nodes) {
+      if (
+        nod.default_inputs &&
+        nod.default_inputs.length > 1 &&
+        nod.default_inputs[nod.default_inputs.length - 1].id === ''
+      ) {
+        nod.default_inputs.pop();
+      }
+    }
+    for (const lin of graphRFCurrated.links) {
+      if (
+        lin.data.conditions &&
+        lin.data.conditions.length > 1 &&
+        lin.data.conditions[lin.data.conditions.length - 1].id === ''
+      ) {
+        lin.data.conditions.pop();
+      }
+      if (
+        lin.data.data_mapping &&
+        lin.data.data_mapping.length > 1 &&
+        lin.data.data_mapping[lin.data.data_mapping.length - 1].id === ''
+      ) {
+        lin.data.data_mapping.pop();
+      }
+    }
+    // if id: "newGraph" request label update and then POST with id=label
     // else PUT and replace existing on server
     setGettingFromServer(true);
     if (graphRF.graph.id === 'newGraph') {
@@ -38,7 +67,7 @@ export default function SaveToServer({ saveToServerF }) {
         links: graphRF.links,
       };
       await axios
-        .post(`http://localhost:5000/workflows`, rfToEwoks(newIdGraph))
+        .post(`${configData.serverUrl}/workflows`, rfToEwoks(newIdGraph))
         .then((res) => {
           setGettingFromServer(false);
           setWorkingGraph(res.data as GraphEwoks);
@@ -47,7 +76,7 @@ export default function SaveToServer({ saveToServerF }) {
     } else if (graphRF.graph.id) {
       await axios
         .put(
-          `http://localhost:5000/workflow/${graphRF.graph.id}`,
+          `${configData.serverUrl}/workflow/${graphRF.graph.id}`,
           rfToEwoks(graphRF)
         )
         .then((res) => setGettingFromServer(false));

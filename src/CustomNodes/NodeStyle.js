@@ -59,7 +59,7 @@ export const style = {
   },
   title: {
     position: 'relative',
-    padding: '8px 3px',
+    padding: '8px 8px',
     flexGrow: 1,
     backgroundColor: '#ee1',
     // zIndex: '-2',

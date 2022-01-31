@@ -57,6 +57,7 @@ const Node: React.FC<NodeProps> = ({
   image,
   comment,
 }: NodeProps) => {
+  console.log(type);
   // calculate the border if input/output/graph
   let border = '';
   if (type === 'input') {
@@ -74,6 +75,12 @@ const Node: React.FC<NodeProps> = ({
     wordWrap: 'break-word',
     borderRadius: '0px',
   };
+
+  const displayNode = {
+    maxWidth: '120px',
+    display: ['graphInput', 'graphOutput'].includes(type) ? 'flex' : 'inline',
+  };
+
   if (color) {
     customTitle.backgroundColor = color;
     customTitle.borderRadius = '10px';
@@ -95,7 +102,7 @@ const Node: React.FC<NodeProps> = ({
       tabIndex={0}
     >
       <Tooltip title={comment} arrow>
-        <span style={{ maxWidth: '120px' }} className="icons">
+        <span style={displayNode} className="icons">
           {!isGraph && type !== 'graphOutput' && (
             <Handle
               type="source"
@@ -173,6 +180,7 @@ const Node: React.FC<NodeProps> = ({
           <div style={customTitle as React.CSSProperties}>{label}</div>
           {/* <div style={{ wordWrap: 'break-word' }}>{comment}</div> */}
           <img
+            style={{ padding: '2px' }}
             role="presentation"
             draggable="false"
             onDragStart={(event) => onDragStart(event)}
