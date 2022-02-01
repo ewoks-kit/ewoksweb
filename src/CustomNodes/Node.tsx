@@ -46,44 +46,53 @@ const isValidOutput = (connection) => {
   return true;
 };
 
+// The basic Node component
 const Node: React.FC<NodeProps> = ({
   moreHandles,
+  withImage,
+  withLabel,
   isGraph,
   type,
   label,
   selected,
   color,
+  colorBorder,
   content,
   image,
   comment,
 }: NodeProps) => {
   console.log(type);
-  // calculate the border if input/output/graph
-  let border = '';
-  if (type === 'input') {
-    border = '4px solid rgb(62, 80, 180)';
-  } else if (type === 'output') {
-    border = '4px solid rgb(50, 130, 219)';
-  } else if (type === 'input_output') {
-    border = '4px solid rgb(200, 130, 219)';
-  } else if (isGraph) {
-    // type === 'graph'
-    border = '4px solid rgb(150, 165, 249)';
-  }
+  // TODO: calculate the border
+  const border = colorBorder ? `4px solid ${colorBorder}` : '';
+  // if (type === 'input') {
+  //   border = '4px solid rgb(62, 80, 180)';
+  // } else if (type === 'output') {
+  //   border = '4px solid rgb(50, 130, 219)';
+  // } else if (type === 'input_output') {
+  //   border = '4px solid rgb(200, 130, 219)';
+  // } else if (isGraph) {
+  //   // type === 'graph'
+  //   border = '4px solid rgb(150, 165, 249)';
+  // }
   const customTitle = {
     ...style.title,
     wordWrap: 'break-word',
     borderRadius: '0px',
+    margin: '4px',
+    padding: '2px',
   };
 
   const displayNode = {
+    textAlign: 'center' as const,
     maxWidth: '120px',
+    // minWidth: '120px', // for standard width
+    // maxHeight: '200px',
     display: ['graphInput', 'graphOutput'].includes(type) ? 'flex' : 'inline',
   };
 
   if (color) {
     customTitle.backgroundColor = color;
-    customTitle.borderRadius = '10px';
+    customTitle.borderRadius = '10px 10px 3px 3px';
   }
 
   return (
@@ -138,7 +147,7 @@ const Node: React.FC<NodeProps> = ({
                   position={Position.Top}
                   id="st"
                   style={{
-                    right: 20,
+                    right: 10,
                     left: 'auto',
                     ...contentStyle.handleSource,
                     ...contentStyle.handleUpDown,
@@ -162,7 +171,7 @@ const Node: React.FC<NodeProps> = ({
                   position={Position.Bottom}
                   id="sb"
                   style={{
-                    right: 20,
+                    right: 10,
                     left: 'auto',
                     ...contentStyle.handleSource,
                     ...contentStyle.handleUpDown,
@@ -177,16 +186,21 @@ const Node: React.FC<NodeProps> = ({
                 </Handle>
               </div>
             )}
-          <div style={customTitle as React.CSSProperties}>{label}</div>
+          {withLabel && (
+            <div style={customTitle as React.CSSProperties}>{label}</div>
+          )}
+
           {/* <div style={{ wordWrap: 'break-word' }}>{comment}</div> */}
-          <img
-            style={{ padding: '2px' }}
-            role="presentation"
-            draggable="false"
-            onDragStart={(event) => onDragStart(event)}
-            src={iconsObj[image] || orange1}
-            alt="Image"
-          />
+          {withImage && (
+            <img
+              style={{ padding: '2px' }}
+              role="presentation"
+              draggable="false"
+              onDragStart={(event) => onDragStart(event)}
+              src={iconsObj[image] || orange1}
+              alt="Image"
+            />
+          )}
           {/* {type !== 'graphOutput' && type !== 'graphInput' && <span style={style.contentWrapper}>{type}</span>} */}
           {!isGraph && type !== 'graphInput' && (
             <Handle
@@ -247,9 +261,7 @@ const Node: React.FC<NodeProps> = ({
                 </Handle>
               </>
             )}
-          {type !== 'graphOutput' && type !== 'graphInput' && (
-            <span style={style.contentWrapper}>{content}</span>
-          )}
+          {isGraph && <span style={style.contentWrapper}>{content}</span>}
         </span>
       </Tooltip>
     </div>

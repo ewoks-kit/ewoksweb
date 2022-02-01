@@ -10,26 +10,29 @@ const isValidOutput = () => {
   return true; // R.last(R.split('__', connection.target)) === type;
 };
 
-function FunctionNode(all) {
-  console.log(all);
+function FunctionNode(fnod) {
+  console.log(fnod);
   return (
     <Node
       isGraph
       moreHandles={false}
-      type={all.data.type}
+      withImage={fnod.data.withImage}
+      withLabel={fnod.data.withLabel}
+      colorBorder={fnod.data.colorBorder}
+      type={fnod.data.type}
       label={
-        all.label ? all.label : all.data.label
-        // ? all.label.slice(0, all.label.indexOf(':'))
-        // : all.data.label.slice(0, all.data.label.indexOf(':'))
+        fnod.label ? fnod.label : fnod.data.label
+        // ? fnod.label.slice(0, fnod.label.indexOf(':'))
+        // : fnod.data.label.slice(0, fnod.data.label.indexOf(':'))
       }
-      selected={all.selected}
-      color={all.data.exists ? '#ced3ee' : 'red'}
-      image={all.data.icon}
-      comment={all.data.comment}
+      selected={fnod.selected}
+      color={fnod.data.exists ? '#ced3ee' : 'red'}
+      image={fnod.data.icon}
+      comment={fnod.data.comment}
       content={
         <>
           {/* <div style={style.contentHeader}>Inputs</div> */}
-          {all.data.inputs.map((input: { label: string }) => (
+          {fnod.data.inputs.map((input: { label: string }) => (
             <div
               key={input.label}
               style={{ ...style.io, ...style.textLeft } as React.CSSProperties}
@@ -65,7 +68,7 @@ function FunctionNode(all) {
             </div>
           ))}
           {/* <div style={style.contentHeader}>Outputs</div> */}
-          {all.data.outputs.map((output: { label: string }) => (
+          {fnod.data.outputs.map((output: { label: string }) => (
             <div
               key={output.label}
               style={{ ...style.io, ...style.textRight } as React.CSSProperties}

@@ -7,6 +7,7 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import type { GraphEwoks, GraphRF } from '../types';
 import configData from '../configData.json';
 
+// DOC: Save to server button with its spinner
 export default function SaveToServer({ saveToServerF }) {
   const setGettingFromServer = useStore((state) => state.setGettingFromServer);
   const graphRF = useStore((state) => state.graphRF);
@@ -19,7 +20,7 @@ export default function SaveToServer({ saveToServerF }) {
   });
 
   const saveToServer = async () => {
-    // Remove empty lines if any in DataMapping, Conditions, DefaultValues
+    // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     // before attempting to save
     const graphRFCurrated = { ...graphRF };
     for (const nod of graphRFCurrated.nodes) {
@@ -47,7 +48,7 @@ export default function SaveToServer({ saveToServerF }) {
         lin.data.data_mapping.pop();
       }
     }
-    // if id: "newGraph" request label update and then POST with id=label
+    // DOC: If id: "newGraph" request label update and then POST with id=label
     // else PUT and replace existing on server
     setGettingFromServer(true);
     if (graphRF.graph.id === 'newGraph') {

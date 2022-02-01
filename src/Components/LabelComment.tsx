@@ -1,11 +1,18 @@
 import React, { useEffect } from 'react';
 import useStore from '../store';
 import type { EwoksRFLink, EwoksRFNode, Inputs } from '../types';
-import { Box, Button, TextField, Tooltip } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  TextareaAutosize,
+  TextField,
+  Tooltip,
+} from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 
 const useStyles = DashboardStyle;
 
+// DOC: the label and comment for nodes-links when selected
 export default function LabelComment(propsIn) {
   const classes = useStyles();
 
@@ -132,21 +139,13 @@ export default function LabelComment(propsIn) {
               </span>
             </Tooltip>
           )}
-
-          {/* if text size big use a text area
-          <TextareaAutosize
-            aria-label="empty textarea"
-            placeholder="Empty"
-            style={{ width: 200 }}
-            value={label || ''}
-            onChange={labelChanged}
-          /> */}
           <TextField
             id="outlined-basic"
             label="Label"
             variant="outlined"
             value={label || ''}
             onChange={labelChanged}
+            multiline
           />
         </Box>
       </div>
@@ -158,6 +157,7 @@ export default function LabelComment(propsIn) {
             variant="outlined"
             value={comment || ''}
             onChange={commentChanged}
+            multiline
           />
         </Box>
       </div>

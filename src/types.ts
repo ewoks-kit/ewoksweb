@@ -78,12 +78,15 @@ export interface Action {
 }
 
 export interface NodeProps {
+  withImage?: boolean;
+  withLabel?: boolean;
   moreHandles: boolean;
   isGraph: boolean;
   type: string;
   label: string;
   selected: boolean;
   color?: string;
+  colorBorder?: string;
   content: React.ReactNode;
   image?: string;
   comment?: string;
@@ -209,6 +212,9 @@ export interface EwoksRFNode {
     icon?: string;
     comment?: string;
     moreHandles?: boolean;
+    withImage?: boolean;
+    withLabel?: boolean;
+    colorBorder?: string;
     map_all_data?: boolean; // TODO: not exists in nodes Typescript resolve...
     // on_error?: boolean; // TODO: not exists in nodes Typescript resolve...
   };

@@ -14,6 +14,9 @@ const DataNode = (args) => {
       image={args.data.icon}
       comment={args.data.comment}
       moreHandles={args.data.moreHandles}
+      withImage={'withImage' in args.data ? args.data.withImage : true}
+      withLabel={'withLabel' in args.data ? args.data.withLabel : true}
+      colorBorder={'colorBorder' in args.data ? args.data.colorBorder : ''}
       content={<div style={{ ...style.io } as React.CSSProperties} />}
     />
   );

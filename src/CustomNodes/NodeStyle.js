@@ -41,7 +41,7 @@ export const contentStyle = {
 
 export const style = {
   icons: {
-    maxWidth: '120px',
+    maxWidth: '100px',
   },
 
   body: {
@@ -51,7 +51,7 @@ export const style = {
     transition: 'all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
     boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
     border: '2px solid #bbb',
-    borderRadius: '15px',
+    borderRadius: '15px', // TODO: radius to 50 to create a cycle like orange
     fontSize: '10pt',
   },
   selected: {

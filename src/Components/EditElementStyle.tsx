@@ -27,11 +27,17 @@ export default function EditElementStyle(propsIn) {
   const [linkType, setLinkType] = React.useState('');
   const [arrowType, setArrowType] = React.useState('');
   const [animated, setAnimated] = React.useState<boolean>(false);
+  const [withImage, setWithImage] = React.useState<boolean>(false);
+  const [withLabel, setWithLabel] = React.useState<boolean>(false);
+  const [colorBorder, setColorBorder] = React.useState<string>('');
 
   useEffect(() => {
     console.log(element);
     if ('position' in element) {
       console.log('TODO: handle styling for nodes');
+      setWithImage(element.data.withImage);
+      setWithLabel(element.data.withLabel);
+      setColorBorder(element.data.colorBorder);
     } else if ('source' in element) {
       setLinkType(element.type);
       setArrowType(element.arrowHeadType);
@@ -62,6 +68,33 @@ export default function EditElementStyle(propsIn) {
     setSelectedElement({
       ...element,
       arrowHeadType: event.target.value,
+    });
+  };
+
+  const withImageChanged = (event) => {
+    console.log(element, event.target.checked);
+    setWithImage(event.target.checked);
+    setSelectedElement({
+      ...element,
+      data: { ...element.data, withImage: event.target.checked },
+    });
+  };
+
+  const withLabelChanged = (event) => {
+    console.log(element, event.target.checked);
+    setWithLabel(event.target.checked);
+    setSelectedElement({
+      ...element,
+      data: { ...element.data, withLabel: event.target.checked },
+    });
+  };
+
+  const colorBorderChanged = (event) => {
+    console.log(element, event.target.value);
+    setColorBorder(event.target.value);
+    setSelectedElement({
+      ...element,
+      data: { ...element.data, colorBorder: event.target.value },
     });
   };
 
@@ -106,6 +139,47 @@ export default function EditElementStyle(propsIn) {
                   </MenuItem>
                 ))}
               </Select>
+              <div>
+                <label htmlFor="withImage">With Image</label>
+                <Checkbox
+                  name="withImage"
+                  checked={
+                    withImage === undefined
+                      ? true
+                      : withImage === false
+                      ? false
+                      : true
+                  }
+                  onChange={withImageChanged}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                />
+              </div>
+              <div>
+                <label htmlFor="withLabel">With Label</label>
+                <Checkbox
+                  name="withLabel"
+                  checked={
+                    withLabel === undefined
+                      ? true
+                      : withLabel === false
+                      ? false
+                      : true
+                  }
+                  onChange={withLabelChanged}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                />
+              </div>
+              <div>
+                <label htmlFor="head">Color</label>
+                <input
+                  type="color"
+                  id="head"
+                  name="head"
+                  value={colorBorder}
+                  onChange={colorBorderChanged}
+                  style={{ margin: '10px' }}
+                />
+              </div>
             </FormControl>
           )}
           {'source' in selectedElement && (

@@ -15,7 +15,16 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
       inputs_complete,
       task_generator,
       default_inputs,
-      data: { label, type, icon, comment, moreHandles },
+      data: {
+        label,
+        type,
+        icon,
+        comment,
+        moreHandles,
+        withImage,
+        withLabel,
+        colorBorder,
+      },
       position,
     }) => {
       if (task_type !== 'graph') {
@@ -41,7 +50,17 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
                     : dIn.value,
               };
             }),
-          uiProps: { label, type, icon, comment, position, moreHandles },
+          uiProps: {
+            label,
+            type,
+            icon,
+            comment,
+            position,
+            moreHandles,
+            withImage,
+            withLabel,
+            colorBorder,
+          },
         };
       }
       // graphs separately only if a transformation is needed???

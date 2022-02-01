@@ -116,6 +116,12 @@ export function toRFEwoksNodes(
                 uiProps && 'moreHandles' in uiProps
                   ? uiProps.moreHandles
                   : false,
+              withImage:
+                uiProps && 'withImage' in uiProps ? uiProps.withImage : true,
+              withLabel:
+                uiProps && 'withLabel' in uiProps ? uiProps.withLabel : true,
+              colorBorder:
+                uiProps && 'colorBorder' in uiProps ? uiProps.colorBorder : '',
             },
             position:
               uiProps && uiProps.position
@@ -181,6 +187,12 @@ export function toRFEwoksNodes(
             comment: uiProps && uiProps.comment ? uiProps.comment : '',
             moreHandles:
               uiProps && 'moreHandles' in uiProps ? uiProps.moreHandles : false,
+            withImage:
+              uiProps && 'withImage' in uiProps ? uiProps.withImage : true,
+            withLabel:
+              uiProps && 'withLabel' in uiProps ? uiProps.withLabel : true,
+            colorBorder:
+              uiProps && 'colorBorder' in uiProps ? uiProps.colorBorder : '',
           },
           // inputs: inputsFlow, // for connecting graphically to different input
           position: uiProps.position,

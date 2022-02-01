@@ -5,6 +5,7 @@ import DashboardStyle from '../layout/DashboardStyle';
 
 const useStyles = DashboardStyle;
 
+// DOC: the label and the comment when the graph is the selectedElement
 export default function GraphLabelComment(propsIn) {
   const classes = useStyles();
 
@@ -83,7 +84,8 @@ export default function GraphLabelComment(propsIn) {
           onChange={graphCommentChanged}
         />
       </div>
-      {/* <div>
+      {/* DOC: if the inputs and outputs of the graph are needed
+      <div>
       <b>Inputs </b>
       {graphInputs.length > 0 && <DenseTable data={graphInputs} />}
     </div>
