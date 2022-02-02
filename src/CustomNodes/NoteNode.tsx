@@ -36,6 +36,7 @@ const NoteNode = (args) => {
     // color: 'red',
     backgroundColor: '#ced3ee',
     textAlign: 'center',
+    padding: '1px',
   };
 
   const commentChanged = (event) => {

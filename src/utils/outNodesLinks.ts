@@ -31,6 +31,9 @@ export function outNodesLinks(graph) {
             type: 'output',
             position: temPosition,
             icon: 'graphOutput',
+            withImage: outNod.uiProps.withImage,
+            withLabel: outNod.uiProps.withLabel,
+            colorBorder: outNod.uiProps.colorBorder,
           },
         });
         outNodesInputed.push(outNod.id);
@@ -51,6 +54,9 @@ export function outNodesLinks(graph) {
               : '',
           type: (outNod.uiProps && outNod.uiProps.linkStyle) || 'default',
           arrowHeadType: 'arrowclosed',
+          withImage: outNod.uiProps.withImage,
+          withLabel: outNod.uiProps.withLabel,
+          colorBorder: outNod.uiProps.colorBorder,
         },
       });
       // }

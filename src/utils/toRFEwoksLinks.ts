@@ -155,7 +155,13 @@ export function toRFEwoksLinks(
               : 'arrowclosed',
           // labelStyle: uiProps && uiProps.labelStyle ? uiProps.labelStyle : {},
           animated: uiProps && uiProps.animated ? uiProps.animated : false,
-          style: { stroke: '#96a5f9', strokeWidth: '3' },
+          style: {
+            stroke:
+              uiProps && uiProps.style && uiProps.style.stroke
+                ? uiProps.style.stroke
+                : '#96a5f9',
+            strokeWidth: '3',
+          },
           labelBgStyle: {
             fill: 'rgb(223, 226, 247)',
             color: 'rgb(50, 130, 219)',

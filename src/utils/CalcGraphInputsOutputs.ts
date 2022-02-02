@@ -52,6 +52,9 @@ export function calcGraphInputsOutputs(graph): GraphDetails {
               linkStyle:
                 (graph_links[link_index] && graph_links[link_index].type) ||
                 'default',
+              withImage: nod.data.withImage,
+              withLabel: nod.data.withLabel,
+              colorBorder: nod.data.colorBorder,
             },
           });
         } else {
@@ -74,6 +77,9 @@ export function calcGraphInputsOutputs(graph): GraphDetails {
               linkStyle:
                 (graph_links[link_index] && graph_links[link_index].type) ||
                 'default',
+              withImage: nod.data.withImage,
+              withLabel: nod.data.withLabel,
+              colorBorder: nod.data.colorBorder,
             },
           });
         }
@@ -121,6 +127,9 @@ export function calcGraphInputsOutputs(graph): GraphDetails {
               linkStyle:
                 (graph_links[link_index] && graph_links[link_index].type) ||
                 'default',
+              withImage: nod.data.withImage,
+              withLabel: nod.data.withLabel,
+              colorBorder: nod.data.colorBorder,
             },
           });
           graph_links.splice(link_index, 1);
@@ -144,6 +153,9 @@ export function calcGraphInputsOutputs(graph): GraphDetails {
               linkStyle:
                 (graph_links[link_index] && graph_links[link_index].type) ||
                 'default',
+              withImage: nod.data.withImage,
+              withLabel: nod.data.withLabel,
+              colorBorder: nod.data.colorBorder,
             },
           });
         }

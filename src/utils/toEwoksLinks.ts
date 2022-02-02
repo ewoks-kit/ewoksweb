@@ -26,6 +26,7 @@ export function toEwoksLinks(links): EwoksLink[] {
       type,
       arrowHeadType,
       labelStyle,
+      style,
       animated,
     }) => ({
       source,
@@ -67,6 +68,7 @@ export function toEwoksLinks(links): EwoksLink[] {
         type,
         arrowHeadType,
         labelStyle,
+        style,
         animated,
         sourceHandle,
         targetHandle,

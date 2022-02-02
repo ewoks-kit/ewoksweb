@@ -63,7 +63,9 @@ const Node: React.FC<NodeProps> = ({
 }: NodeProps) => {
   console.log(type);
   // TODO: calculate the border
-  const border = colorBorder ? `4px solid ${colorBorder}` : '';
+  const border = colorBorder
+    ? `4px solid ${colorBorder}`
+    : '2px solid rgb(233, 235, 247)';
   // if (type === 'input') {
   //   border = '4px solid rgb(62, 80, 180)';
   // } else if (type === 'output') {
@@ -188,6 +190,11 @@ const Node: React.FC<NodeProps> = ({
             )}
           {withLabel && (
             <div style={customTitle as React.CSSProperties}>{label}</div>
+          )}
+          {!withLabel && !withImage && (
+            <div style={customTitle as React.CSSProperties}>
+              {label.slice(0, 1)}
+            </div>
           )}
 
           {/* <div style={{ wordWrap: 'break-word' }}>{comment}</div> */}

@@ -135,6 +135,13 @@ export interface UiProps {
   sourceHandle?: string;
   targetHandle?: string;
   notes?: Note[];
+  colorLink?: string;
+  style?: LinkStyle;
+}
+
+export interface LinkStyle {
+  stroke: string;
+  strokeWidth: string;
 }
 
 export interface Note {
@@ -242,8 +249,10 @@ export interface EwoksRFLink {
     map_all_data?: boolean;
     sub_target?: string;
     sub_source?: string;
+    colorLine?: string;
   };
   labelStyle;
+  style;
   subtarget?: string;
   subsource?: string;
   uiProps?: UiProps;

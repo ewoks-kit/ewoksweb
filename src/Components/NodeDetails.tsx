@@ -22,6 +22,8 @@ export default function NodeDetails(propsIn) {
   const [defaultInputs, setDefaultInputs] = React.useState<Inputs[]>([]);
   const [inputsComplete, setInputsComplete] = React.useState<boolean>(false);
   const [moreHandles, setMoreHandles] = React.useState<boolean>(true);
+  const setGraphRF = useStore((state) => state.setGraphRF);
+  const initializedGraph = useStore((state) => state.initializedGraph);
 
   const NonEditableTaskProperties = [
     { id: 'task_icon', label: 'Icon', value: props.element.task_icon },
@@ -126,7 +128,7 @@ export default function NodeDetails(propsIn) {
         ...(element as EwoksRFNode),
         data: { ...element.data, moreHandles: event.target.checked },
       },
-      'fromSaveElement'
+      'fromSaveElement1'
     );
     // Remove when refresh is resolved
     setOpenSnackbar({
