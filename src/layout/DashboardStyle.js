@@ -16,6 +16,10 @@ const DashboardStyle = makeStyles((theme) => ({
     backgroundColor: '#7685dd',
   },
 
+  sidebarForm: {
+    minWidth: '230px',
+  },
+
   canvasView: {
     'z-index': 2000,
   },

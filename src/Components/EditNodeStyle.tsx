@@ -7,16 +7,16 @@ import {
   Select,
 } from '@material-ui/core';
 import useStore from '../store';
-import type { EwoksRFLink, EwoksRFNode } from '../types';
+import DashboardStyle from '../layout/DashboardStyle';
+
+const useStyles = DashboardStyle;
 
 export default function EditNodeStyle(propsIn) {
-  console.log(propsIn);
+  const classes = useStyles();
+
   const { props } = propsIn;
   const { element } = props;
 
-  const selectedElement = useStore<EwoksRFNode | EwoksRFLink>(
-    (state) => state.selectedElement
-  );
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   const [nodeType, setNodeType] = React.useState('');
@@ -81,8 +81,8 @@ export default function EditNodeStyle(propsIn) {
   };
 
   return (
-    <FormControl variant="filled" fullWidth>
-      <InputLabel>Node type</InputLabel>
+    <FormControl variant="filled" fullWidth className={classes.sidebarForm}>
+      {/* <InputLabel>Node type</InputLabel>
       <Select
         id="demo-simple-select"
         value={nodeType ? nodeType : 'internal'}
@@ -94,7 +94,7 @@ export default function EditNodeStyle(propsIn) {
             {tex}
           </MenuItem>
         ))}
-      </Select>
+      </Select> */}
       <div>
         <label htmlFor="withImage">With Image</label>
         <Checkbox

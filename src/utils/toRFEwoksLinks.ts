@@ -2,7 +2,7 @@ import type { EwoksRFLink, GraphEwoks, Task } from '../types';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 
-// from GrapfEwoks get EwoksRFLink
+// from GraphEwoks get EwoksRFLinks
 export function toRFEwoksLinks(
   tempGraph: GraphEwoks, // TODO : GraphEwoks
   newNodeSubgraphs,

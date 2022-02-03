@@ -64,9 +64,6 @@ function EditableTable(props) {
   const { defaultValues } = props;
   const { headers } = props;
 
-  // TODO: only the first one???
-  // const val = defaultValues[0].value;
-
   const typesOfInputs = ['bool', 'number', 'string', 'list', 'dict', 'null'];
   // console.log(defaultValues, val, rows, props, typeOfInputs);
 
@@ -169,15 +166,9 @@ function EditableTable(props) {
     ) {
       let { value } = e.target;
       const { name } = e.target;
-      // const inType = typeOfInputs[index];
 
       if (name === 'value') {
-        value =
-          typeOfInputs[index] === 'number'
-            ? Number(value)
-            : // : typeOfInputs[index] === 'bool'
-              // ? !!value
-              value;
+        value = typeOfInputs[index] === 'number' ? Number(value) : value;
       }
 
       const { id } = row;
@@ -211,8 +202,6 @@ function EditableTable(props) {
   };
 
   const onRevert = (id) => {
-    // let newRows = [];
-
     const newRows = rows.filter((row) => {
       return row.id !== id;
     });
@@ -237,7 +226,6 @@ function EditableTable(props) {
     const tOfI = [...typeOfInputs];
     tOfI[index] = e.target.value;
     setTypeOfInputs(tOfI);
-    // onToggleEditMode(row.id, 0, 'edit');
   };
 
   const setRowValue = (name, val, callbackProps) => {
@@ -278,7 +266,7 @@ function EditableTable(props) {
               {headers[0] !== 'Source' && headers[1] !== 'Node_Id' && (
                 <TableRow key={`${row.id}-type`}>
                   <TableCell align="left" className={classes.tableCell}>
-                    {/* Change type */}
+                    Type
                   </TableCell>
                   <TableCell align="left" className={classes.tableCell}>
                     <FormControl disabled={disableSelectType}>

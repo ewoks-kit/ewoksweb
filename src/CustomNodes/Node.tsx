@@ -17,7 +17,8 @@ import CreateClass from '../images/CreateClass.svg';
 import { Handle, Position } from 'react-flow-renderer';
 import type { NodeProps } from '../types';
 import { contentStyle, style } from './NodeStyle';
-import { Tooltip } from '@material-ui/core';
+import Tooltip, { TooltipProps } from '@material-ui/core/Tooltip';
+import { styled } from '@material-ui/core/styles';
 
 const iconsObj = {
   left,
@@ -34,17 +35,13 @@ const iconsObj = {
   Correlations,
   CreateClass,
 };
-// const randomProperty = function (obj) {
-//   const keys = Object.keys(obj);
-//   return obj[keys[Math.trunc(keys.length * Math.random())]];
-// };
 
 const onDragStart = (e) => {
   e.preventDefault();
 };
-const isValidOutput = (connection) => {
-  return true;
-};
+// const isValidOutput = (connection) => {
+//   return true;
+// };
 
 // The basic Node component
 const Node: React.FC<NodeProps> = ({
@@ -61,21 +58,15 @@ const Node: React.FC<NodeProps> = ({
   image,
   comment,
 }: NodeProps) => {
-  console.log(type);
-  // TODO: calculate the border
+  const theCom = (
+    <span>
+      <b>{label}</b>:<div>{comment}</div>
+    </span>
+  );
   const border = colorBorder
     ? `4px solid ${colorBorder}`
     : '2px solid rgb(233, 235, 247)';
-  // if (type === 'input') {
-  //   border = '4px solid rgb(62, 80, 180)';
-  // } else if (type === 'output') {
-  //   border = '4px solid rgb(50, 130, 219)';
-  // } else if (type === 'input_output') {
-  //   border = '4px solid rgb(200, 130, 219)';
-  // } else if (isGraph) {
-  //   // type === 'graph'
-  //   border = '4px solid rgb(150, 165, 249)';
-  // }
+
   const customTitle = {
     ...style.title,
     wordWrap: 'break-word',
@@ -112,7 +103,7 @@ const Node: React.FC<NodeProps> = ({
       role="button"
       tabIndex={0}
     >
-      <Tooltip title={comment} arrow>
+      <Tooltip title={theCom} arrow>
         <span style={displayNode} className="icons">
           {!isGraph && type !== 'graphOutput' && (
             <Handle
@@ -144,6 +135,7 @@ const Node: React.FC<NodeProps> = ({
                 role="button"
                 tabIndex={0}
               >
+                {/* TODO: break the handles */}
                 <Handle
                   type="source"
                   position={Position.Top}
@@ -154,20 +146,8 @@ const Node: React.FC<NodeProps> = ({
                     ...contentStyle.handleSource,
                     ...contentStyle.handleUpDown,
                   }}
-                  // isValidConnection={(connection) => isValidOutput(connection)}
                   isConnectable
-                  onConnect={(params) =>
-                    console.log('handle st onConnect', params)
-                  }
-                >
-                  {/* <img
-                role="presentation"
-                draggable="false"
-                onDragStart={(event) => onDragStart(event)}
-                src={iconsObj['up']}
-                alt=""
-              /> */}
-                </Handle>
+                ></Handle>
                 <Handle
                   type="source"
                   position={Position.Bottom}
@@ -178,11 +158,7 @@ const Node: React.FC<NodeProps> = ({
                     ...contentStyle.handleSource,
                     ...contentStyle.handleUpDown,
                   }}
-                  // isValidConnection={(connection) => isValidOutput(connection)}
                   isConnectable
-                  onConnect={(params) =>
-                    console.log('handle sb onConnect', params)
-                  }
                 >
                   {/* <img src={iconsObj['down']} alt="" /> */}
                 </Handle>
@@ -219,7 +195,6 @@ const Node: React.FC<NodeProps> = ({
                 ...contentStyle.handleTarget,
               }}
               isConnectable
-              onConnect={(params) => console.log('handle tl onConnect', params)}
             >
               {/* <img src={iconsObj['right']} alt="" /> */}
             </Handle>
@@ -238,11 +213,7 @@ const Node: React.FC<NodeProps> = ({
                     ...contentStyle.handleTarget,
                     ...contentStyle.handleUpDown,
                   }}
-                  // isValidConnection={(connection) => isValidOutput(connection)}
                   isConnectable
-                  onConnect={(params) =>
-                    console.log('handle tb onConnect', params)
-                  }
                 >
                   {/* <Tooltip title="Delete">
                   <IconButton>in</IconButton>
@@ -258,11 +229,11 @@ const Node: React.FC<NodeProps> = ({
                     ...contentStyle.handleTarget,
                     ...contentStyle.handleUpDown,
                   }}
-                  isValidConnection={(connection) => isValidOutput(connection)}
+                  // isValidConnection={(connection) => isValidOutput(connection)}
                   isConnectable
-                  onConnect={(params) =>
-                    console.log('handle tt onConnect', params)
-                  }
+                  // onConnect={(params) =>
+                  //   console.log('handle tt onConnect', params)
+                  // }
                 >
                   {/* <img src={iconsObj['down']} alt="" /> */}
                 </Handle>

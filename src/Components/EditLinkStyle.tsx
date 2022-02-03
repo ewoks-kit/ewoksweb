@@ -7,15 +7,16 @@ import {
   Select,
 } from '@material-ui/core';
 import useStore from '../store';
-import type { EwoksRFLink, EwoksRFNode } from '../types';
+import DashboardStyle from '../layout/DashboardStyle';
+
+const useStyles = DashboardStyle;
 
 export default function EditLinkStyle(propsIn) {
+  const classes = useStyles();
+
   const { props } = propsIn;
   const { element } = props;
 
-  const selectedElement = useStore<EwoksRFNode | EwoksRFLink>(
-    (state) => state.selectedElement
-  );
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   const [linkType, setLinkType] = React.useState('');
@@ -83,7 +84,7 @@ export default function EditLinkStyle(propsIn) {
 
   return (
     <>
-      <FormControl variant="filled" fullWidth>
+      <FormControl variant="filled" fullWidth className={classes.sidebarForm}>
         <InputLabel id="linkTypeLabel">Link type</InputLabel>
         <Select
           labelId="linkTypeLabel"

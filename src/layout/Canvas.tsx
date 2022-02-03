@@ -495,12 +495,6 @@ function Canvas() {
             <Controls />
             <Background />
           </ReactFlow>
-          {/* <Popover
-              anchor={elementClicked || null}
-              onClose={() => (null)}
-              nodeData={elementClicked || null}
-              onBottom={true}
-            /> */}
         </div>
       </ReactFlowProvider>
     </div>
