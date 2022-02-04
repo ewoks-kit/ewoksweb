@@ -1,13 +1,8 @@
 import React, { useEffect } from 'react';
-import {
-  Checkbox,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-} from '@material-ui/core';
+import { Checkbox, FormControl } from '@material-ui/core';
 import useStore from '../store';
 import DashboardStyle from '../layout/DashboardStyle';
+import type { EwoksRFNode } from '../types';
 
 const useStyles = DashboardStyle;
 
@@ -23,6 +18,9 @@ export default function EditNodeStyle(propsIn) {
   const [withImage, setWithImage] = React.useState<boolean>(false);
   const [withLabel, setWithLabel] = React.useState<boolean>(false);
   const [colorBorder, setColorBorder] = React.useState<string>('');
+  const [moreHandles, setMoreHandles] = React.useState<boolean>(true);
+
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   useEffect(() => {
     console.log(element);
@@ -30,6 +28,7 @@ export default function EditNodeStyle(propsIn) {
       setWithImage(element.data.withImage);
       setWithLabel(element.data.withLabel);
       setColorBorder(element.data.colorBorder);
+      setMoreHandles(!!element.data.moreHandles);
     }
   }, [element.id, element]);
 
@@ -80,6 +79,23 @@ export default function EditNodeStyle(propsIn) {
     );
   };
 
+  const moreHandlesChanged = (event) => {
+    setMoreHandles(event.target.checked);
+    setSelectedElement(
+      {
+        ...(element as EwoksRFNode),
+        data: { ...element.data, moreHandles: event.target.checked },
+      },
+      'fromSaveElement1'
+    );
+    // TODO: Remove when refresh is resolved
+    setOpenSnackbar({
+      open: true,
+      text: `Please save and reload the graph before using the new handles`,
+      severity: 'warning',
+    });
+  };
+
   return (
     <FormControl variant="filled" fullWidth className={classes.sidebarForm}>
       {/* <InputLabel>Node type</InputLabel>
@@ -95,6 +111,19 @@ export default function EditNodeStyle(propsIn) {
           </MenuItem>
         ))}
       </Select> */}
+      {!['graphInput', 'graphOutput', 'graph'].includes(element.task_type) && (
+        <div>
+          <div>
+            <label htmlFor="moreHandles">More handles</label>
+            <Checkbox
+              name="moreHandles"
+              checked={moreHandles}
+              onChange={moreHandlesChanged}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </div>
+        </div>
+      )}
       <div>
         <label htmlFor="withImage">With Image</label>
         <Checkbox

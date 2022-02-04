@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import useStore from '../store';
-import type { EwoksRFNode, Inputs } from '../types';
+import type { DataMapping, EwoksRFNode, Inputs } from '../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import EditIcon from '@material-ui/icons/EditOutlined';
@@ -21,9 +21,11 @@ export default function NodeDetails(propsIn) {
   const [editProps, setEditProps] = React.useState<boolean>(false);
   const [defaultInputs, setDefaultInputs] = React.useState<Inputs[]>([]);
   const [inputsComplete, setInputsComplete] = React.useState<boolean>(false);
-  const [moreHandles, setMoreHandles] = React.useState<boolean>(true);
-  const setGraphRF = useStore((state) => state.setGraphRF);
-  const initializedGraph = useStore((state) => state.initializedGraph);
+  const [defaultErrorNode, setDefaultErrorNode] = React.useState<boolean>(
+    false
+  );
+  const [dataMapping, setDataMapping] = React.useState<DataMapping[]>([]);
+  const [mapAllData, setMapAllData] = React.useState<boolean>(false);
 
   const NonEditableTaskProperties = [
     { id: 'task_icon', label: 'Icon', value: props.element.task_icon },
@@ -66,7 +68,9 @@ export default function NodeDetails(propsIn) {
   useEffect(() => {
     console.log(element);
     setInputsComplete(!!element.inputs_complete);
-    setMoreHandles(!!element.data.moreHandles);
+    setDefaultErrorNode(!!element.default_error_node?.on_error);
+    setDataMapping(element.default_error_node?.data_mapping || false);
+    setMapAllData(element.default_error_node?.map_all_data || false);
     setDefaultInputs(element.default_inputs ? element.default_inputs : []);
   }, [element.id, element]);
 
@@ -121,21 +125,75 @@ export default function NodeDetails(propsIn) {
     );
   };
 
-  const moreHandlesChanged = (event) => {
-    setMoreHandles(event.target.checked);
+  const defaulErrortNodeChanged = (event) => {
+    setDefaultErrorNode(event.target.checked);
+    setSelectedElement(
+      {
+        ...element,
+        default_error_node: {
+          ...element.default_error_node,
+          on_error: event.target.checked,
+        },
+      },
+      'fromSaveElement'
+    );
+  };
+
+  const addDataMapping = () => {
+    const el = element as EwoksRFNode;
+    const elMap = el.default_error_node.data_mapping || [];
+    if (elMap && elMap[elMap.length - 1] && elMap[elMap.length - 1].id === '') {
+      console.log('should not ADD mapping');
+    } else {
+      setSelectedElement(
+        {
+          ...el,
+          default_error_node: {
+            ...el.default_error_node,
+            data_mapping: [...elMap, { id: '', name: '', value: '' }],
+          },
+        },
+        'fromSaveElement'
+      );
+    }
+  };
+
+  const dataMappingValuesChanged = (table) => {
+    const dmap: DataMapping[] = table.map((row) => {
+      return {
+        source_output: row.name,
+        target_input: row.value,
+      };
+    });
     setSelectedElement(
       {
         ...(element as EwoksRFNode),
-        data: { ...element.data, moreHandles: event.target.checked },
+        default_error_node: {
+          ...element.default_error_node,
+          data_mapping: dmap,
+          label: dmap
+            .map((el) => `${el.source_output}->${el.target_input}`)
+            .join(', '),
+        },
       },
-      'fromSaveElement1'
+      'fromSaveElement'
     );
-    // Remove when refresh is resolved
-    setOpenSnackbar({
-      open: true,
-      text: `Please save and reload the graph before using the new handles`,
-      severity: 'warning',
-    });
+  };
+
+  const mapAllDataChanged = (event) => {
+    console.log(event.target.checked);
+    setMapAllData(event.target.checked);
+
+    setSelectedElement(
+      {
+        ...element,
+        default_error_node: {
+          ...element.default_error_node,
+          map_all_data: event.target.checked,
+        },
+      },
+      'fromSaveElement'
+    );
   };
 
   return (
@@ -194,18 +252,53 @@ export default function NodeDetails(propsIn) {
             inputProps={{ 'aria-label': 'controlled' }}
           />
         </div>
-        {!['graphInput', 'graphOutput', 'graph'].includes(
-          element.task_type
-        ) && (
+        <div>
+          <b>Default Error Node</b>
+          <Checkbox
+            checked={defaultErrorNode}
+            onChange={defaulErrortNodeChanged}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
+        </div>
+        {defaultErrorNode && (
           <div>
-            <div>
-              <b>More handles</b>
-              <Checkbox
-                checked={moreHandles}
-                onChange={moreHandlesChanged}
-                inputProps={{ 'aria-label': 'controlled' }}
+            <b>Map all Data</b>
+            <Checkbox
+              checked={mapAllData}
+              onChange={mapAllDataChanged}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </div>
+        )}
+        {defaultErrorNode && !mapAllData && (
+          <div>
+            <hr />
+            <b>Data Mapping </b>
+            <IconButton
+              style={{ padding: '1px' }}
+              aria-label="delete"
+              onClick={() => addDataMapping()}
+            >
+              <AddCircleOutlineIcon />
+            </IconButton>
+            {dataMapping.length > 0 && (
+              <EditableTable
+                headers={['Source', 'Target']}
+                defaultValues={dataMapping}
+                valuesChanged={dataMappingValuesChanged}
+                typeOfValues={[
+                  {
+                    type: 'input',
+                    values: [],
+                  },
+                  {
+                    type: 'input',
+                    values: [],
+                  },
+                ]}
               />
-            </div>
+            )}
+            <hr />
           </div>
         )}
       </Box>

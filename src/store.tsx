@@ -477,6 +477,11 @@ const useStore = create<State>((set, get) => ({
         position: { x: 100, y: 500 },
         default_inputs: [],
         inputs_complete: false,
+        default_error_node: {
+          on_error: false,
+          map_all_data: true,
+          data_mapping: [],
+        },
         data: {
           exists: true,
           label: subToAdd.graph.label,

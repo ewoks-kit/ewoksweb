@@ -171,6 +171,12 @@ export interface Conditions {
   name?: string;
 }
 
+export interface DefaultErrorNode {
+  on_error?: boolean;
+  map_all_data?: boolean;
+  data_mapping?: DataMapping[];
+}
+
 export interface EwoksNode {
   id: string;
   label?: string;
@@ -179,6 +185,7 @@ export interface EwoksNode {
   default_inputs?: Inputs[];
   inputs_complete?: boolean;
   task_generator?: string;
+  default_error_node?: DefaultErrorNode;
   uiProps?: UiProps;
 }
 
@@ -210,6 +217,7 @@ export interface EwoksRFNode {
   default_inputs?: Inputs[];
   inputs_complete?: boolean;
   task_generator?: string;
+  default_error_node?: DefaultErrorNode;
   data?: {
     exists?: boolean;
     label?: string;

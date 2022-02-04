@@ -36,6 +36,7 @@ export function toRFEwoksNodes(
         label,
         default_inputs,
         inputs_complete,
+        default_error_node,
         task_generator,
         // need to put
         task_icon,
@@ -92,6 +93,11 @@ export function toRFEwoksNodes(
             task_identifier,
             type: task_type, // need it for visualizing dataNodes
             inputs_complete: inputs_complete ? inputs_complete : false,
+            default_error_node: default_error_node || {
+              on_error: false,
+              map_all_data: true,
+              data_mapping: [],
+            },
             task_generator: task_generator ? task_generator : '',
             task_icon: task_icon || '',
             task_category: task_category || '',
@@ -173,6 +179,11 @@ export function toRFEwoksNodes(
           task_identifier,
           type: task_type,
           inputs_complete: inputs_complete ? inputs_complete : false,
+          default_error_node: default_error_node || {
+            on_error: false,
+            map_all_data: true,
+            data_mapping: [],
+          },
           task_generator: task_generator ? task_generator : '',
           default_inputs: default_inputs ? default_inputs : [],
           label,

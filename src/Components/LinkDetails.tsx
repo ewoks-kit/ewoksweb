@@ -42,10 +42,7 @@ export default function LinkDetails(propsIn) {
 
   const mapAllDataChanged = (event) => {
     setMapAllData(event.target.checked);
-    // setElement({
-    //   ...(element as EwoksRFLink),
-    //   data: { ...element.data, map_all_data: event.target.checked },
-    // });
+
     setSelectedElement(
       {
         ...(element as EwoksRFLink),

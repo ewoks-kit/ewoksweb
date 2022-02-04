@@ -180,6 +180,11 @@ function Canvas() {
         position,
         default_inputs: [],
         inputs_complete: false,
+        default_error_node: {
+          on_error: false,
+          map_all_data: true,
+          data_mapping: [],
+        },
         optional_input_names: tempTask.optional_input_names,
         output_names: tempTask.output_names,
         required_input_names: tempTask.required_input_names,
