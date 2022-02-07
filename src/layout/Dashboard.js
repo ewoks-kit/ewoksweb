@@ -49,6 +49,8 @@ export default function Dashboard() {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const initializedGraph = useStore((state) => state.initializedGraph);
   const gettingFromServer = useStore((state) => state.gettingFromServer);
+  const isExecuted = useStore((state) => state.isExecuted);
+  const setIsExecuted = useStore((state) => state.setIsExecuted);
 
   const handleOpenSettings = () => {
     setOpenSettings(!openSettings);
@@ -66,6 +68,7 @@ export default function Dashboard() {
   const executeWorkflow = async () => {
     // console.log('execute workflow', recentGraphs, graphRF);
     if (recentGraphs.length > 0) {
+      setIsExecuted(true);
       await axios
         .post(`${configData.serverUrl}/workflow/execute`, rfToEwoks(graphRF))
         .then((res) =>

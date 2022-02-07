@@ -19,6 +19,8 @@ import type { NodeProps } from '../types';
 import { contentStyle, style } from './NodeStyle';
 import Tooltip, { TooltipProps } from '@material-ui/core/Tooltip';
 import { styled } from '@material-ui/core/styles';
+import IntegratedSpinner from '../Components/IntegratedSpinner';
+import SendIcon from '@material-ui/icons/Send';
 
 const iconsObj = {
   left,
@@ -42,6 +44,11 @@ const onDragStart = (e) => {
 // const isValidOutput = (connection) => {
 //   return true;
 // };
+
+const executing = true;
+const getFromServer = async () => {
+  console.log('executing');
+};
 
 // The basic Node component
 const Node: React.FC<NodeProps> = ({
@@ -172,7 +179,13 @@ const Node: React.FC<NodeProps> = ({
               {label.slice(0, 1)}
             </div>
           )}
-
+          <IntegratedSpinner
+            getting={executing}
+            tooltip="Open and edit Workflow"
+            action={getFromServer}
+          >
+            <SendIcon />
+          </IntegratedSpinner>
           {/* <div style={{ wordWrap: 'break-word' }}>{comment}</div> */}
           {withImage && (
             <img

@@ -34,8 +34,10 @@ export interface DialogParams {
 }
 
 export interface State {
-  gettingFromServer: Boolean;
-  setGettingFromServer: (val: Boolean) => void;
+  isExecuted: boolean;
+  setIsExecuted: (val: boolean) => void;
+  gettingFromServer: boolean;
+  setGettingFromServer: (val: boolean) => void;
   undoRedo: Array<Action>;
   setUndoRedo: (action: Action) => void;
   undoIndex: number;
@@ -55,8 +57,8 @@ export interface State {
   setAllWorkflows: (workflows: Array<{ title: string }>) => void;
   recentGraphs?: Array<GraphRF>;
   setRecentGraphs?: (graphRF: GraphRF, reset?: boolean) => void;
-  graphOrSubgraph?: Boolean;
-  setGraphOrSubgraph: (isItGraph: Boolean) => void;
+  graphOrSubgraph?: boolean;
+  setGraphOrSubgraph: (isItGraph: boolean) => void;
   subgraphsStack?: Array<stackGraph>;
   setSubgraphsStack?: (graphRF: stackGraph) => void;
   graphRF: GraphRF;

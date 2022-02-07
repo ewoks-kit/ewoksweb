@@ -21,7 +21,7 @@ export default function SaveToServer({ saveToServerF }) {
 
   const saveToServer = async () => {
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
-    // before attempting to save
+    // and Nodes DataMapping before attempting to save
     const graphRFCurrated = { ...graphRF };
     for (const nod of graphRFCurrated.nodes) {
       if (
@@ -30,6 +30,16 @@ export default function SaveToServer({ saveToServerF }) {
         nod.default_inputs[nod.default_inputs.length - 1].id === ''
       ) {
         nod.default_inputs.pop();
+      }
+      if (
+        nod.default_error_attributes &&
+        nod.default_error_attributes.data_mapping &&
+        nod.default_error_attributes.data_mapping.length > 1 &&
+        nod.default_error_attributes.data_mapping[
+          nod.default_error_attributes.data_mapping.length - 1
+        ].id === ''
+      ) {
+        nod.default_error_attributes.data_mapping.pop();
       }
     }
     for (const lin of graphRFCurrated.links) {

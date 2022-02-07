@@ -41,9 +41,18 @@ const initializedGraph = {
 } as GraphRF;
 
 const useStore = create<State>((set, get) => ({
+  isExecuted: false,
+
+  setIsExecuted: (val: boolean) => {
+    set((state) => ({
+      ...state,
+      isExecuting: val,
+    }));
+  },
+
   gettingFromServer: false,
 
-  setGettingFromServer: (val: Boolean) => {
+  setGettingFromServer: (val: boolean) => {
     set((state) => ({
       ...state,
       gettingFromServer: val,
@@ -182,9 +191,9 @@ const useStore = create<State>((set, get) => ({
     }
   },
 
-  graphOrSubgraph: true as Boolean,
+  graphOrSubgraph: true as boolean,
 
-  setGraphOrSubgraph: (isItGraph: Boolean) => {
+  setGraphOrSubgraph: (isItGraph: boolean) => {
     set((state) => ({
       ...state,
       graphOrSubgraph: isItGraph,

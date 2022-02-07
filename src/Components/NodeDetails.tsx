@@ -257,6 +257,7 @@ export default function NodeDetails(propsIn) {
             inputProps={{ 'aria-label': 'controlled' }}
           />
         </div>
+        <hr />
         <div>
           <b>Default Error Node</b>
           <Checkbox
@@ -277,7 +278,6 @@ export default function NodeDetails(propsIn) {
         )}
         {defaultErrorNode && !mapAllData && (
           <div>
-            <hr />
             <b>Data Mapping </b>
             <IconButton
               style={{ padding: '1px' }}
