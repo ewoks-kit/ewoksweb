@@ -37,6 +37,7 @@ export function toRFEwoksNodes(
         default_inputs,
         inputs_complete,
         default_error_node,
+        default_error_attributes,
         task_generator,
         // need to put
         task_icon,
@@ -93,8 +94,8 @@ export function toRFEwoksNodes(
             task_identifier,
             type: task_type, // need it for visualizing dataNodes
             inputs_complete: inputs_complete ? inputs_complete : false,
-            default_error_node: default_error_node || {
-              on_error: false,
+            default_error_node: default_error_node || false,
+            default_error_attributes: default_error_attributes || {
               map_all_data: true,
               data_mapping: [],
             },
@@ -179,8 +180,8 @@ export function toRFEwoksNodes(
           task_identifier,
           type: task_type,
           inputs_complete: inputs_complete ? inputs_complete : false,
-          default_error_node: default_error_node || {
-            on_error: false,
+          default_error_node: default_error_node || false,
+          default_error_attributes: default_error_attributes || {
             map_all_data: true,
             data_mapping: [],
           },

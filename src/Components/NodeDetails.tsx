@@ -1,6 +1,11 @@
 import React, { useEffect } from 'react';
 import useStore from '../store';
-import type { DataMapping, EwoksRFNode, Inputs } from '../types';
+import type {
+  DataMapping,
+  DefaultErrorAttributes,
+  EwoksRFNode,
+  Inputs,
+} from '../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import EditIcon from '@material-ui/icons/EditOutlined';
@@ -24,6 +29,11 @@ export default function NodeDetails(propsIn) {
   const [defaultErrorNode, setDefaultErrorNode] = React.useState<boolean>(
     false
   );
+
+  // const [
+  //   defaultErrorAttributes,
+  //   setDefaultErrorAttributes,
+  // ] = React.useState<DefaultErrorAttributes>({});
   const [dataMapping, setDataMapping] = React.useState<DataMapping[]>([]);
   const [mapAllData, setMapAllData] = React.useState<boolean>(false);
 
@@ -68,9 +78,10 @@ export default function NodeDetails(propsIn) {
   useEffect(() => {
     console.log(element);
     setInputsComplete(!!element.inputs_complete);
-    setDefaultErrorNode(!!element.default_error_node?.on_error);
-    setDataMapping(element.default_error_node?.data_mapping || false);
-    setMapAllData(element.default_error_node?.map_all_data || false);
+    setDefaultErrorNode(!!element.default_error_node);
+    // setDefaultErrorAttributes(element.default_error_attributes);
+    setDataMapping(element.default_error_attributes?.data_mapping);
+    setMapAllData(element.default_error_attributes?.map_all_data || false);
     setDefaultInputs(element.default_inputs ? element.default_inputs : []);
   }, [element.id, element]);
 
@@ -130,10 +141,7 @@ export default function NodeDetails(propsIn) {
     setSelectedElement(
       {
         ...element,
-        default_error_node: {
-          ...element.default_error_node,
-          on_error: event.target.checked,
-        },
+        default_error_node: event.target.checked,
       },
       'fromSaveElement'
     );
@@ -141,15 +149,15 @@ export default function NodeDetails(propsIn) {
 
   const addDataMapping = () => {
     const el = element as EwoksRFNode;
-    const elMap = el.default_error_node.data_mapping || [];
+    const elMap = el.default_error_attributes.data_mapping || [];
     if (elMap && elMap[elMap.length - 1] && elMap[elMap.length - 1].id === '') {
       console.log('should not ADD mapping');
     } else {
       setSelectedElement(
         {
           ...el,
-          default_error_node: {
-            ...el.default_error_node,
+          default_error_attributes: {
+            ...el.default_error_attributes,
             data_mapping: [...elMap, { id: '', name: '', value: '' }],
           },
         },
@@ -168,12 +176,9 @@ export default function NodeDetails(propsIn) {
     setSelectedElement(
       {
         ...(element as EwoksRFNode),
-        default_error_node: {
-          ...element.default_error_node,
+        default_error_attributes: {
+          ...element.default_error_attributes,
           data_mapping: dmap,
-          label: dmap
-            .map((el) => `${el.source_output}->${el.target_input}`)
-            .join(', '),
         },
       },
       'fromSaveElement'
@@ -187,8 +192,8 @@ export default function NodeDetails(propsIn) {
     setSelectedElement(
       {
         ...element,
-        default_error_node: {
-          ...element.default_error_node,
+        default_error_attributes: {
+          ...element.default_error_attributes,
           map_all_data: event.target.checked,
         },
       },

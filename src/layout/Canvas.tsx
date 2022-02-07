@@ -16,6 +16,7 @@ import FunctionNode from '../CustomNodes/FunctionNode';
 import NoteNode from '../CustomNodes/NoteNode';
 import DataNode from '../CustomNodes/DataNode';
 import type { GraphRF, EwoksRFNode, EwoksRFLink } from '../types';
+import Popover from '../Components/Popover';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -91,6 +92,8 @@ function Canvas() {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const updateNodeInternals = useUpdateNodeInternals();
 
+  const [stepDetails, setStepDetails] = useState(null);
+
   useEffect(() => {
     // console.log('rerender Canvas', graphRF, recentGraphs.length);
     setElements([...graphRF.nodes, ...graphRF.links]);
@@ -103,11 +106,16 @@ function Canvas() {
     }
   }, [selectedElement, selectedElement.id, updateNodeInternals]);
 
-  const onElementClick = (event: MouseEvent, element: Node | Edge) => {
-    console.log(element);
+  const onElementClick = (event, element: Node | Edge) => {
     const graphElement: EwoksRFNode | EwoksRFLink = elements.find(
       (el) => el.id === element.id
     );
+
+    if ('position' in element) {
+      console.log(element, event);
+      setStepDetails({ evt: event.currentTarget, element });
+    }
+
     setSelectedElement(graphElement);
   };
 
@@ -200,9 +208,9 @@ function Canvas() {
         graph: graphRF.graph,
         nodes: [...graphRF.nodes, newNode],
         links: graphRF.links,
-      };
+      } as GraphRF;
       // setElements((els) => addEdge(params, els));
-      setGraphRF(newGraph as GraphRF);
+      setGraphRF(newGraph);
       setUndoRedo({ action: 'Added a Node', graph: newGraph });
       // need to also save it in recentGraphs if we leave and come back to the graph?
       setRecentGraphs(newGraph as GraphRF);
@@ -479,7 +487,12 @@ function Canvas() {
           <ReactFlow
             snapToGrid
             elements={elements}
-            onElementClick={onElementClick}
+            // onElementClick={onElementClick}
+            onElementClick={(evt, node) => {
+              onElementClick(evt, node);
+              if (node.type !== 'smoothstep')
+                setStepDetails({ evt: evt.currentTarget, node });
+            }}
             onLoad={onLoad}
             onDrop={onDrop}
             onConnect={onConnect}
@@ -500,6 +513,12 @@ function Canvas() {
             <Controls />
             <Background />
           </ReactFlow>
+          {/* <Popover
+            anchor={stepDetails?.evt || null}
+            onClose={() => setStepDetails(null)}
+            nodeData={stepDetails?.node || null}
+            // onBottom={true}
+          /> */}
         </div>
       </ReactFlowProvider>
     </div>

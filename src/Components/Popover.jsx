@@ -44,8 +44,9 @@ function Popover({ anchor, onClose, nodeData }) {
   if (!nodeData) {
     return <div />;
   }
-  const { data } = nodeData;
-  const notReachedValue = data.data.potentialTarget - data.data.target;
+  console.log(anchor, onClose, nodeData);
+
+  const notReachedValue = nodeData.position.x;
 
   return (
     <MuiPopover
@@ -72,22 +73,22 @@ function Popover({ anchor, onClose, nodeData }) {
         }}
       >
         <Box>
-          <Typography variant="h6" title={data.contentName}>
-            {data.name}
+          <Typography variant="h6" title={nodeData.data.label}>
+            {nodeData.data.label}
           </Typography>
         </Box>
-        {typeof data.date === 'object' && (
+        {/* {typeof data.date === 'object' && (
           <Box mb={1}>
             <Typography variant="body1">
               From {data.date.from} to {data.date.to}
             </Typography>
           </Box>
-        )}
-        {typeof data.date === 'string' && (
+        )} */}
+        {/* {typeof data.date === 'string' && (
           <Box mb={1}>
             <Typography variant="body1">{data.date}</Typography>
           </Box>
-        )}
+        )} */}
         <Box mb={1}>
           <Grid container>
             <Grid item xs={4}>
@@ -97,9 +98,7 @@ function Popover({ anchor, onClose, nodeData }) {
               >
                 Potential target
               </Typography>
-              <Typography variant="body1">
-                {data.data.potentialTarget}
-              </Typography>
+              <Typography variant="body1">{nodeData.data.label}</Typography>
             </Grid>
             <Grid item xs={4} style={{ textAlign: 'center' }}>
               <Typography
@@ -108,9 +107,9 @@ function Popover({ anchor, onClose, nodeData }) {
               >
                 Target
               </Typography>
-              <Typography variant="body1">{data.data.target}</Typography>
+              {/* <Typography variant="body1">{data.data.target}</Typography> */}
             </Grid>
-            <Grid item xs={4} style={{ textAlign: 'right' }}>
+            {/* <Grid item xs={4} style={{ textAlign: 'right' }}>
               <Typography
                 variant="body1"
                 style={{ fontWeight: 'bold', fontSize: '11px' }}
@@ -120,13 +119,13 @@ function Popover({ anchor, onClose, nodeData }) {
               <Typography variant="body1">
                 {data.data.percentOK.value} %
               </Typography>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Box>
         <Box mt={2}>
           <Typography variant="body1">Details</Typography>
         </Box>
-        <TableContainer style={{ marginTop: 10 }}>
+        {/* <TableContainer style={{ marginTop: 10 }}>
           <Table size="small">
             <TableBody>
               {data.data.analytics.map(({ value, label, color }, index) => (
@@ -168,7 +167,7 @@ function Popover({ anchor, onClose, nodeData }) {
               </TableRow>
             </TableBody>
           </Table>
-        </TableContainer>
+        </TableContainer> */}
       </Paper>
     </MuiPopover>
   );
