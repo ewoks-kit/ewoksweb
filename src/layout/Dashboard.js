@@ -29,6 +29,7 @@ import IntegratedSpinner from '../Components/IntegratedSpinner';
 import SaveGetFromDisk from '../Components/SaveGetFromDisk';
 // import MyDrawer from './MyDrawer';
 import SaveToServer from '../Components/SaveToServer';
+import ClearIcon from '@material-ui/icons/Clear';
 import configData from '../configData.json';
 
 const useStyles = DashboardStyle;
@@ -67,24 +68,25 @@ export default function Dashboard() {
 
   const executeWorkflow = async () => {
     // console.log('execute workflow', recentGraphs, graphRF);
+    console.log(isExecuted);
     if (recentGraphs.length > 0) {
-      setIsExecuted(true);
-      await axios
-        .post(`${configData.serverUrl}/workflow/execute`, rfToEwoks(graphRF))
-        .then((res) =>
-          setOpenSnackbar({
-            open: true,
-            text: res,
-            severity: 'warning',
-          })
-        )
-        .catch((error) =>
-          setOpenSnackbar({
-            open: true,
-            text: error,
-            severity: 'warning',
-          })
-        );
+      setIsExecuted(!isExecuted);
+      // await axios
+      //   .post(`${configData.serverUrl}/workflow/execute`, rfToEwoks(graphRF))
+      //   .then((res) =>
+      //     setOpenSnackbar({
+      //       open: true,
+      //       text: res,
+      //       severity: 'warning',
+      //     })
+      //   )
+      //   .catch((error) =>
+      //     setOpenSnackbar({
+      //       open: true,
+      //       text: error,
+      //       severity: 'warning',
+      //     })
+      //   );
     } else {
       setOpenSnackbar({
         open: true,
@@ -168,10 +170,10 @@ export default function Dashboard() {
           <SaveToServer saveToServerF={saveToServerF} />
           <GetFromServer />
           <IntegratedSpinner
-            tooltip="Execute Workflow"
+            tooltip="Execute Workflow and exit Execution mode"
             action={executeWorkflow}
           >
-            <SendIcon />
+            {isExecuted ? <ClearIcon /> : <SendIcon />}
           </IntegratedSpinner>
           <div className={classes.verticalRule} />
           <Tooltip title="Manage tasks and workflows" arrow>

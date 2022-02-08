@@ -41,12 +41,26 @@ const initializedGraph = {
 } as GraphRF;
 
 const useStore = create<State>((set, get) => ({
+  executingEvents: [],
+
+  setExecutingEvents: (execEvent) => {
+    console.log(execEvent);
+  },
+  // takes the UI in execution state where:
+  // 1. editing graphs is deactivated
+  // 2. execute spins until execution ends
+  // 3. execution state is released on users request only not on execution-finish
+  // 4. it can be replayed and examined by the user with:
+  //    a. replay button and
+  //    b. numbers on links revealing how execution was performed
+
   isExecuted: false,
 
   setIsExecuted: (val: boolean) => {
+    console.log(val, get().isExecuted);
     set((state) => ({
       ...state,
-      isExecuting: val,
+      isExecuted: val,
     }));
   },
 

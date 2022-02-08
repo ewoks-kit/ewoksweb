@@ -33,7 +33,43 @@ export interface DialogParams {
   content: any; // {title: string; graph: }
 }
 
+// I need the EVENTS=[{nodeId, start/end, values: {}}] somewhere and the
+// execGraphRF = a graph upon graphRF structure that builds the execution-timeline
+// this line has what happened and when = state is in execGraphRF
+// Not play it from the beggining to view the state in a specific time-instanse
+// for a time-instanse we need
+// 1. what nodes were being executing and
+// 2. the results until now for the executed
+// 3. the way things happened in a timely manner?
+
+// to draw them on links we need to know where it came from? Not possible for complex graphs
+// so draw them on node input/output
+// stop for one is not the start of another which can wait for other inputs!
+// so draw on link on each side the events in a timely manner.
+
+export interface ExecutingEvent {
+  id: string;
+  nodeId: string;
+  name: string; // start/stop
+  values: {}; // all values entering or exiting a node
+}
+
+export interface ExecutingState {
+  executingNodes: [string];
+  // executed: [{linkId, outEventIds, inEventIds}....] for each link
+  executed: [LinkExecutionHistory];
+  eventId: string;
+}
+
+export interface LinkExecutionHistory {
+  linkId: string;
+  fromEventIds: [string];
+  toEventIds: [string];
+}
+
 export interface State {
+  executingEvents: Array<ExecutingEvent>;
+  setExecutingEvents: (execEvent: ExecutingEvent) => void;
   isExecuted: boolean;
   setIsExecuted: (val: boolean) => void;
   gettingFromServer: boolean;

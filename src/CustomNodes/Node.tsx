@@ -20,7 +20,9 @@ import { contentStyle, style } from './NodeStyle';
 import Tooltip, { TooltipProps } from '@material-ui/core/Tooltip';
 import { styled } from '@material-ui/core/styles';
 import IntegratedSpinner from '../Components/IntegratedSpinner';
+import ExecuteSpinner from '../Components/ExecuteSpinner';
 import SendIcon from '@material-ui/icons/Send';
+import useStore from '../store';
 
 const iconsObj = {
   left,
@@ -94,6 +96,7 @@ const Node: React.FC<NodeProps> = ({
     customTitle.backgroundColor = color;
     customTitle.borderRadius = '10px 10px 3px 3px';
   }
+  const isExecuted = useStore((state) => state.isExecuted);
 
   return (
     <div
@@ -179,15 +182,48 @@ const Node: React.FC<NodeProps> = ({
               {label.slice(0, 1)}
             </div>
           )}
-          <IntegratedSpinner
-            getting={executing}
-            tooltip="Open and edit Workflow"
-            action={getFromServer}
-          >
-            <SendIcon />
-          </IntegratedSpinner>
+          {isExecuted &&
+            !withImage &&
+            type !== 'graphOutput' &&
+            type !== 'graphInput' && (
+              <IntegratedSpinner
+                getting={executing}
+                tooltip="Open and edit Workflow"
+                action={getFromServer}
+              >
+                <SendIcon />
+              </IntegratedSpinner>
+            )}
           {/* <div style={{ wordWrap: 'break-word' }}>{comment}</div> */}
-          {withImage && (
+          {withImage &&
+            type !== 'graphOutput' &&
+            type !== 'graphInput' &&
+            (isExecuted ? (
+              <ExecuteSpinner
+                getting={executing}
+                tooltip="Open and edit Workflow"
+                action={getFromServer}
+              >
+                <img
+                  style={{ padding: '2px' }}
+                  role="presentation"
+                  draggable="false"
+                  onDragStart={(event) => onDragStart(event)}
+                  src={iconsObj[image] || orange1}
+                  alt="Image"
+                />
+              </ExecuteSpinner>
+            ) : (
+              <img
+                style={{ padding: '2px' }}
+                role="presentation"
+                draggable="false"
+                onDragStart={(event) => onDragStart(event)}
+                src={iconsObj[image] || orange1}
+                alt="Image"
+              />
+            ))}
+          {withImage && (type === 'graphOutput' || type === 'graphInput') && (
             <img
               style={{ padding: '2px' }}
               role="presentation"

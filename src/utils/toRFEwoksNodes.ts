@@ -123,6 +123,7 @@ export function toRFEwoksNodes(
                 uiProps && 'moreHandles' in uiProps
                   ? uiProps.moreHandles
                   : false,
+              executing: false,
               withImage:
                 uiProps && 'withImage' in uiProps ? uiProps.withImage : true,
               withLabel:
@@ -199,6 +200,7 @@ export function toRFEwoksNodes(
             comment: uiProps && uiProps.comment ? uiProps.comment : '',
             moreHandles:
               uiProps && 'moreHandles' in uiProps ? uiProps.moreHandles : false,
+            executing: false,
             withImage:
               uiProps && 'withImage' in uiProps ? uiProps.withImage : true,
             withLabel:

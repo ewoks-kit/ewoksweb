@@ -4,44 +4,34 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
 import CheckIcon from '@material-ui/icons/Check';
 import { makeStyles } from '@material-ui/core/styles';
-import Tooltip from '@material-ui/core/Tooltip';
 import useStore from '../store';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
   top: {
     animationDuration: '550ms',
     // animation: 'animation-61bdi0 1.4s linear infinite',
     position: 'absolute',
-    left: 0,
+    left: 60,
   },
   openFileButton: {
-    backgroundColor: '#96a5f9',
+    // backgroundColor: '#96a5f9',
+    width: '62px',
+    height: '62px',
   },
 }));
 
-export default function IntegratedSpinner({
-  children,
-  tooltip,
-  action,
-  getting,
-}) {
+export default function ExecuteSpinner({ children, tooltip, action, getting }) {
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
-
   const isExecuted = useStore((state) => state.isExecuted);
   const setIsExecuted = useStore((state) => state.setIsExecuted);
-
   const timer = React.useRef<number>();
   const classes = useStyles();
 
   // TODO: synd with the real time the call makes using getting
   React.useEffect(() => {
     // console.log('getting', getting);
-    // if (isExecuted) {
-    //   setLoading(true);
-    // } else if (!isExecuted) {
-    //   setLoading(false);
-    // }
     if (getting) {
       // console.log('gettingIn', getting);
       timer.current = window.setTimeout(() => {
@@ -57,15 +47,6 @@ export default function IntegratedSpinner({
   }, [getting]);
 
   const handleButtonClick = () => {
-    console.log(isExecuted, loading);
-    // setIsExecuted(!isExecuted);
-    // if (isExecuted) {
-    //   setLoading(true);
-    //   return;
-    // } else if (!isExecuted) {
-    //   setLoading(false);
-    //   return;
-    // }
     if (!loading) {
       // console.log('getting1', getting);
       const runAction = action ? action() : null;
@@ -85,37 +66,37 @@ export default function IntegratedSpinner({
   };
 
   return (
-    <Tooltip title={tooltip || ''} arrow>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Box sx={{ m: 1, position: 'relative' }}>
-          <Fab
-            className={classes.openFileButton}
-            color="primary"
-            size="small"
-            onClick={handleButtonClick}
-            component="span"
-            aria-label="add"
-          >
-            {success ? <CheckIcon /> : loading ? '...' : children}
-          </Fab>
-          {loading && (
-            <CircularProgress
-              size={46}
-              className={classes.top}
-              thickness={4}
-              // {...props}
-              value={100}
-              style={{
-                color: 'white',
-                position: 'absolute',
-                top: -4,
-                left: -4,
-                zIndex: 1,
-              }}
-            />
-          )}
-        </Box>
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ m: 1, position: 'relative' }}>
+        <Fab
+          className={classes.openFileButton}
+          // color="primary"
+          size="large"
+          onClick={handleButtonClick}
+          component="span"
+          aria-label="add"
+        >
+          {success ? <CheckIcon /> : loading ? '...' : children}
+        </Fab>
+        {loading && (
+          <CircularProgress
+            size={66}
+            className={classes.top}
+            thickness={4}
+            // {...props}
+            value={100}
+            style={{
+              color: 'white',
+              position: 'absolute',
+              top: -3,
+              left: -3,
+              // top: -4,
+              // left: 18,
+              zIndex: 1,
+            }}
+          />
+        )}
       </Box>
-    </Tooltip>
+    </Box>
   );
 }
