@@ -42,7 +42,7 @@ export interface DialogParams {
 // 2. the results until now for the executed
 // 3. the way things happened in a timely manner?
 
-// to draw them on links we need to know where it came from? Not possible for complex graphs
+// to draw them on links we need to know where it came from? Not possible
 // so draw them on node input/output
 // stop for one is not the start of another which can wait for other inputs!
 // so draw on link on each side the events in a timely manner.
@@ -50,21 +50,21 @@ export interface DialogParams {
 export interface ExecutingEvent {
   id: string;
   nodeId: string;
-  name: string; // start/stop
+  event_type: string; // start/stop/progress events
   values: {}; // all values entering or exiting a node
 }
 
 export interface ExecutingState {
   executingNodes: [string];
-  // executed: [{linkId, outEventIds, inEventIds}....] for each link
-  executed: [LinkExecutionHistory];
-  eventId: string;
+  executed: [NodeExecutionHistory];
+  eventId: string; // the point on the timeline of events is the unique id in this entity
 }
 
-export interface LinkExecutionHistory {
-  linkId: string;
-  fromEventIds: [string];
-  toEventIds: [string];
+// For visuaization
+export interface NodeExecutionHistory {
+  id: string; // the unique number on the graph 1,2,3
+  eventId: string; // find the event for that time-point
+  // the ExecutingState can be found through the eventId again
 }
 
 export interface State {

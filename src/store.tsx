@@ -17,6 +17,7 @@ import { findAllSubgraphs } from './utils/FindAllSubgraphs';
 import axios from 'axios';
 import configData from './configData.json';
 import { config } from 'node:process';
+import React from 'react';
 
 const initializedTask = {
   task_identifier: '',
@@ -41,14 +42,33 @@ const initializedGraph = {
 } as GraphRF;
 
 const useStore = create<State>((set, get) => ({
-  executingEvents: [],
+  executingEvents: [
+    {
+      id: '1',
+      nodeId: 'Prepare test set grid data', //'EstTask_0',
+      event_type: 'start',
+      values: { a: 1, b: 2 },
+    },
+    {
+      id: '2',
+      nodeId: 'Prepare test set grid data', //'EstTask_0',
+      event_type: 'stop',
+      values: { a: 1, b: 2, c: 3 },
+    },
+    {
+      id: '3',
+      nodeId: 'EstTask_0', //'EstTask_0',
+      event_type: 'start',
+      values: { a: 1, b: 2, c: 3, d: 4 },
+    },
+  ],
 
   setExecutingEvents: (execEvent) => {
     console.log(execEvent);
   },
   // takes the UI in execution state where:
   // 1. editing graphs is deactivated
-  // 2. execute spins until execution ends
+  // 2. execute spins and then the delete button with red color appears
   // 3. execution state is released on users request only not on execution-finish
   // 4. it can be replayed and examined by the user with:
   //    a. replay button and
@@ -58,8 +78,66 @@ const useStore = create<State>((set, get) => ({
 
   setIsExecuted: (val: boolean) => {
     console.log(val, get().isExecuted);
+
+    let tempPos = get().graphRF.nodes.find(
+      (nod) => nod.id === get().executingEvents[0].nodeId
+    ).position;
+
+    if (get().executingEvents[0].event_type === 'start')
+      tempPos = { x: tempPos.x - 30, y: tempPos.y };
+    else tempPos = { x: tempPos.x + 90, y: tempPos.y };
+
+    window.setTimeout(() => {
+      set((state) => ({
+        ...state,
+        // only foe testing set graphRF
+        graphRF: {
+          ...get().graphRF,
+          nodes: [
+            ...get().graphRF.nodes,
+            {
+              data: {
+                label: '2',
+                nodeId: 'EstTask',
+                event_type: 'stop',
+                values: { a: 1, b: 2 },
+              },
+              id: '1',
+              task_type: 'executionSteps',
+              task_identifier: '1',
+              type: 'executionSteps',
+              // calculate position based on nodeId -> node position + start or stop
+              position: { x: tempPos.x + 150, y: tempPos.y },
+            },
+          ],
+        },
+        isExecuted: val,
+      }));
+    }, 3000);
+
     set((state) => ({
       ...state,
+      // only foe testing set graphRF
+      graphRF: {
+        ...get().graphRF,
+        nodes: [
+          ...get().graphRF.nodes,
+          {
+            data: {
+              label: '1',
+              nodeId: 'EstTask_0',
+              event_type: 'start',
+              values: { a: 1, b: 2 },
+            },
+            id: '1',
+            task_type: 'executionSteps',
+            task_identifier: '1',
+            type: 'executionSteps',
+            // calculate position based on nodeId -> node position + start or stop
+            position: tempPos,
+          },
+        ],
+      },
       isExecuted: val,
     }));
   },

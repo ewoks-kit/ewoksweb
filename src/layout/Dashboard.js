@@ -71,6 +71,7 @@ export default function Dashboard() {
     console.log(isExecuted);
     if (recentGraphs.length > 0) {
       setIsExecuted(!isExecuted);
+
       // await axios
       //   .post(`${configData.serverUrl}/workflow/execute`, rfToEwoks(graphRF))
       //   .then((res) =>
@@ -173,7 +174,7 @@ export default function Dashboard() {
             tooltip="Execute Workflow and exit Execution mode"
             action={executeWorkflow}
           >
-            {isExecuted ? <ClearIcon /> : <SendIcon />}
+            {isExecuted ? <ClearIcon color="secondary" /> : <SendIcon />}
           </IntegratedSpinner>
           <div className={classes.verticalRule} />
           <Tooltip title="Manage tasks and workflows" arrow>

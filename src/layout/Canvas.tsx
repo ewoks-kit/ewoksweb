@@ -14,6 +14,7 @@ import useStore from '../store';
 // import CustomNode from '../CustomNodes/CustomNode';
 import FunctionNode from '../CustomNodes/FunctionNode';
 import NoteNode from '../CustomNodes/NoteNode';
+import ExecutionStepsNode from '../CustomNodes/ExecutionStepsNode';
 import DataNode from '../CustomNodes/DataNode';
 import type { GraphRF, EwoksRFNode, EwoksRFLink } from '../types';
 import Popover from '../Components/Popover';
@@ -57,6 +58,7 @@ const getnodesIds = (text: string, nodes: EwoksRFNode[]) => {
 // };
 
 const nodeTypes = {
+  executionSteps: ExecutionStepsNode,
   note: NoteNode,
   graph: FunctionNode,
   method: DataNode,
