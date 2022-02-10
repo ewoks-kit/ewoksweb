@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import useStore from './store';
-import { Button } from '@material-ui/core';
+import { Box, Button } from '@material-ui/core';
 import AddNodes from './Components/AddNodes';
 import EditElement from './Components/EditElement';
 import EditElementStyle from './Components/EditElementStyle';
@@ -9,11 +9,17 @@ import IconMenu from './Components/IconMenu';
 import Drawer from './Components/Drawer';
 import axios from 'axios';
 import configData from './configData.json';
+import ExecutionDetails from './Components/ExecutionDetails';
+import DashboardStyle from './layout/DashboardStyle';
 
 import type { EwoksRFNode, EwoksRFLink, GraphDetails, GraphRF } from './types';
 import { rfToEwoks } from './utils';
 
+const useStyles = DashboardStyle;
+
 export default function Sidebar(props) {
+  const classes = useStyles();
+
   const selectedElement = useStore<EwoksRFNode | EwoksRFLink>(
     (state) => state.selectedElement
   );
@@ -32,6 +38,7 @@ export default function Sidebar(props) {
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
   const initializedGraph = useStore((state) => state.initializedGraph);
   const setUndoRedo = useStore((state) => state.setUndoRedo);
+  const isExecuted = useStore((state) => state.isExecuted);
 
   useEffect(() => {
     console.log(selectedElement);
@@ -133,36 +140,49 @@ export default function Sidebar(props) {
 
   return (
     <aside className="dndflow">
-      <AddNodes />
-      <EditElement
-        props={{
-          ...props,
-        }}
-        setElement={setElement}
-      />
-      <EditElementStyle
-        props={{
-          ...props,
-        }}
-        setElement={setElement}
-      />
-      <Button
-        style={{ margin: '8px' }}
-        variant="outlined"
-        color="secondary"
-        onClick={deleteElement}
-        size="small"
-      >
-        Delete
-      </Button>
-      {!('source' in selectedElement) && (
-        <IconMenu handleShowEwoksGraph={showEwoksGraph} />
+      {isExecuted ? (
+        <div className={classes.executionSide}>
+          <ExecutionDetails
+            props={{
+              ...props,
+            }}
+            setElement={setElement}
+          />
+        </div>
+      ) : (
+        <>
+          <AddNodes />
+          <EditElement
+            props={{
+              ...props,
+            }}
+            setElement={setElement}
+          />
+          <EditElementStyle
+            props={{
+              ...props,
+            }}
+            setElement={setElement}
+          />
+          <Button
+            style={{ margin: '8px' }}
+            variant="outlined"
+            color="secondary"
+            onClick={deleteElement}
+            size="small"
+          >
+            Delete
+          </Button>
+          {!('source' in selectedElement) && (
+            <IconMenu handleShowEwoksGraph={showEwoksGraph} />
+          )}
+          <DraggableDialog
+            open={openDialog}
+            content={dialogContent}
+            setValue={defaultInputsChanged}
+          />
+        </>
       )}
-      <DraggableDialog
-        open={openDialog}
-        content={dialogContent}
-        setValue={defaultInputsChanged}
-      />
       <Drawer />
     </aside>
   );

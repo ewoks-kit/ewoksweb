@@ -4,7 +4,7 @@ import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
 
 const DataNode = (args) => {
-  console.log(args);
+  // console.log(args);
   return (
     <Node
       isGraph={false}
@@ -19,6 +19,7 @@ const DataNode = (args) => {
       withLabel={'withLabel' in args.data ? args.data.withLabel : true}
       colorBorder={'colorBorder' in args.data ? args.data.colorBorder : ''}
       content={<div style={{ ...style.io } as React.CSSProperties} />}
+      executing={args.data.executing}
     />
   );
 };

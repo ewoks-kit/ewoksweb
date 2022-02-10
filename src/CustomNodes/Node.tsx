@@ -47,7 +47,7 @@ const onDragStart = (e) => {
 //   return true;
 // };
 
-const executing = true;
+// const executing = true;
 const getFromServer = async () => {
   console.log('executing');
 };
@@ -66,6 +66,7 @@ const Node: React.FC<NodeProps> = ({
   content,
   image,
   comment,
+  executing,
 }: NodeProps) => {
   const theCom = (
     <span>
@@ -97,6 +98,7 @@ const Node: React.FC<NodeProps> = ({
     customTitle.borderRadius = '10px 10px 3px 3px';
   }
   const isExecuted = useStore((state) => state.isExecuted);
+  // const [executing, setExecuting] = React.useState(false);
 
   return (
     <div

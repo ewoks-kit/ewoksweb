@@ -52,6 +52,8 @@ export interface ExecutingEvent {
   nodeId: string;
   event_type: string; // start/stop/progress events
   values: {}; // all values entering or exiting a node
+  // for now put static executing here
+  executing?: Array<string>;
 }
 
 export interface ExecutingState {
@@ -68,6 +70,8 @@ export interface NodeExecutionHistory {
 }
 
 export interface State {
+  currentExecutionEvent: number;
+  setCurrentExecutionEvent: (index: number) => void;
   executingEvents: Array<ExecutingEvent>;
   setExecutingEvents: (execEvent: ExecutingEvent) => void;
   isExecuted: boolean;
@@ -128,6 +132,7 @@ export interface NodeProps {
   content: React.ReactNode;
   image?: string;
   comment?: string;
+  executing?: boolean;
 }
 
 export interface Task {

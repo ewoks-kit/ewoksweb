@@ -119,6 +119,11 @@ const DashboardStyle = makeStyles((theme) => ({
     margin: '8px 0px',
     wordBreak: 'break-word',
   },
+
+  executionSide: {
+    margin: '8px 5px',
+    wordBreak: 'break-word',
+  },
 }));
 
 export default DashboardStyle;

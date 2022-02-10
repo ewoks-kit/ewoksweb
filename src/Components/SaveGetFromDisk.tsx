@@ -22,6 +22,7 @@ export default function SaveGetFromDisk() {
 
   const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
   const graphRF = useStore((state) => state.graphRF);
+  const isExecuted = useStore((state) => state.isExecuted);
 
   const loadFromDisk = (val) => {
     // TODO: possible race situation with setting pgraphOrSubgraph
@@ -46,13 +47,14 @@ export default function SaveGetFromDisk() {
             size="small"
             component="span"
             aria-label="add"
+            disabled={isExecuted}
           >
             <SaveIcon onClick={saveToDisk} />
           </Fab>
         </IconButton>
       </Tooltip>
       <Tooltip title="Load from Disk" arrow>
-        <IconButton color="inherit">
+        <IconButton color="inherit" disabled={isExecuted}>
           <Upload>
             <AddIcon onClick={loadFromDisk} />
           </Upload>

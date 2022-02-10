@@ -41,31 +41,111 @@ const initializedGraph = {
   links: [],
 } as GraphRF;
 
+const prep = 'Prepare test set grid data';
+const read = 'Read and set grid data';
+
 const useStore = create<State>((set, get) => ({
+  currentExecutionEvent: 0,
+
+  setCurrentExecutionEvent: (indexOfEvent) => {
+    console.log(indexOfEvent);
+    set((state) => ({
+      ...state,
+      currentExecutionEvent: indexOfEvent,
+    }));
+  },
+
   executingEvents: [
     {
       id: '1',
-      nodeId: 'Prepare test set grid data', //'EstTask_0',
+      nodeId: prep,
       event_type: 'start',
       values: { a: 1, b: 2 },
+      executing: [prep],
     },
     {
       id: '2',
-      nodeId: 'Prepare test set grid data', //'EstTask_0',
+      nodeId: prep,
       event_type: 'stop',
       values: { a: 1, b: 2, c: 3 },
+      executing: [''],
     },
     {
       id: '3',
-      nodeId: 'EstTask_0', //'EstTask_0',
+      nodeId: 'EstTask_1',
       event_type: 'start',
       values: { a: 1, b: 2, c: 3, d: 4 },
+      executing: ['EstTask_1'],
+    },
+    {
+      id: '4',
+      nodeId: 'CommonPrepareExperiment',
+      event_type: 'start',
+      values: { a: 1, b: 2 },
+      executing: ['CommonPrepareExperiment', 'EstTask_1'],
+    },
+    {
+      id: '5',
+      nodeId: 'EstTask_1',
+      event_type: 'stop',
+      values: { a: 1, b: 2, c: 3, d: 4 },
+      executing: ['CommonPrepareExperiment'],
+    },
+    {
+      id: '6',
+      nodeId: 'EstTask_0',
+      event_type: 'start',
+      values: { a: 1, b: 2, c: 3, d: 4 },
+      executing: ['EstTask_0', 'CommonPrepareExperiment'],
+    },
+    {
+      id: '7',
+      nodeId: 'CommonPrepareExperiment',
+      event_type: 'stop',
+      values: { a: 1, b: 2 },
+      executing: ['EstTask_0'],
+    },
+    {
+      id: '8',
+      nodeId: read,
+      event_type: 'start',
+      values: { a: 1, b: 2, c: 3, d: 4 },
+      executing: ['EstTask_0', read],
+    },
+    {
+      id: '9',
+      nodeId: 'EstTask_0',
+      event_type: 'stop',
+      values: { a: 1, b: 2, c: 3, d: 4 },
+      executing: [read],
+    },
+    {
+      id: '10',
+      nodeId: read,
+      event_type: 'stop',
+      values: { a: 1, b: 2, c: 3, d: 4 },
+      executing: [''],
+    },
+    {
+      id: '11',
+      nodeId: prep,
+      event_type: 'start',
+      values: { a: 1, b: 2 },
+      executing: [prep],
+    },
+    {
+      id: '12',
+      nodeId: prep,
+      event_type: 'stop',
+      values: { a: 1, b: 2, c: 3 },
+      executing: [''],
     },
   ],
 
   setExecutingEvents: (execEvent) => {
     console.log(execEvent);
   },
+
   // takes the UI in execution state where:
   // 1. editing graphs is deactivated
   // 2. execute spins and then the delete button with red color appears
@@ -73,73 +153,107 @@ const useStore = create<State>((set, get) => ({
   // 4. it can be replayed and examined by the user with:
   //    a. replay button and
   //    b. numbers on links revealing how execution was performed
-
   isExecuted: false,
 
   setIsExecuted: (val: boolean) => {
     console.log(val, get().isExecuted);
 
-    let tempPos = get().graphRF.nodes.find(
-      (nod) => nod.id === get().executingEvents[0].nodeId
-    ).position;
+    set((state) => ({
+      ...state,
+      isExecuted: val,
+    }));
 
-    if (get().executingEvents[0].event_type === 'start')
-      tempPos = { x: tempPos.x - 30, y: tempPos.y };
-    else tempPos = { x: tempPos.x + 90, y: tempPos.y };
-
-    window.setTimeout(() => {
+    if (!val) {
       set((state) => ({
         ...state,
         // only foe testing set graphRF
         graphRF: {
           ...get().graphRF,
-          nodes: [
-            ...get().graphRF.nodes,
-            {
-              data: {
-                label: '2',
-                nodeId: 'EstTask',
-                event_type: 'stop',
-                values: { a: 1, b: 2 },
-              },
-              id: '1',
-              task_type: 'executionSteps',
-              task_identifier: '1',
-              type: 'executionSteps',
-              // calculate position based on nodeId -> node position + start or stop
-              position: { x: tempPos.x + 150, y: tempPos.y },
-            },
-          ],
+          nodes: get().graphRF.nodes.filter(
+            (nod) => nod.type !== 'executionSteps'
+          ),
         },
-        isExecuted: val,
       }));
-    }, 3000);
+    } else {
+      const array = get().executingEvents;
 
-    set((state) => ({
-      ...state,
-      // only foe testing set graphRF
-      graphRF: {
-        ...get().graphRF,
-        nodes: [
-          ...get().graphRF.nodes,
-          {
-            data: {
-              label: '1',
-              nodeId: 'EstTask_0',
-              event_type: 'start',
-              values: { a: 1, b: 2 },
+      for (let i = 0; i < array.length; i++) {
+        const el = get().executingEvents[i];
+        let tempPos = { x: 100, y: 100 };
+        setTimeout(function () {
+          const tempNode = get().graphRF.nodes.find(
+            (nod) => nod.id === el.nodeId
+          );
+          tempPos = tempNode.position;
+          const withLabel = tempNode.data.withLabel;
+
+          if (el.event_type === 'start')
+            tempPos = { x: tempPos.x - 30, y: tempPos.y + 30 };
+          else if (withLabel)
+            tempPos = { x: tempPos.x + 140, y: tempPos.y + 30 };
+          else tempPos = { x: tempPos.x + 95, y: tempPos.y + 30 };
+
+          const sameEls =
+            i > 0
+              ? get()
+                  .executingEvents.slice(0, i - 1)
+                  .reverse()
+                  .filter(
+                    (elem) =>
+                      elem.nodeId === el.nodeId &&
+                      elem.event_type === el.event_type
+                  )
+              : [];
+
+          const tempLabel =
+            sameEls.length > 0 ? sameEls.map((elem) => elem.id).join(',') : '';
+
+          let execNodes = [];
+
+          if (el.executing.length > 0) {
+            execNodes = [
+              ...get()
+                .graphRF.nodes.filter((nod) => !el.executing.includes(nod.id))
+                .map((no) => {
+                  return { ...no, data: { ...no.data, executing: false } };
+                }),
+              ...get()
+                .graphRF.nodes.filter((nod) => el.executing.includes(nod.id))
+                .map((no) => {
+                  return { ...no, data: { ...no.data, executing: true } };
+                }),
+            ];
+          }
+
+          set((state) => ({
+            ...state,
+            // only foe testing set graphRF
+            graphRF: {
+              ...get().graphRF,
+              nodes: [
+                ...execNodes,
+                {
+                  data: {
+                    label: `${tempLabel},${el.id}`,
+                    nodeId: el.nodeId,
+                    event_type: el.event_type,
+                    values: { a: 1, b: 2 },
+                  },
+                  id: el.id,
+                  task_type: 'executionSteps',
+                  task_identifier: el.id,
+                  type: 'executionSteps',
+                  // calculate position based on nodeId -> node position + start or stop
+                  position: tempPos,
+                },
+              ],
             },
-            id: '1',
-            task_type: 'executionSteps',
-            task_identifier: '1',
-            type: 'executionSteps',
-            // calculate position based on nodeId -> node position + start or stop
-            position: tempPos,
-          },
-        ],
-      },
-      isExecuted: val,
-    }));
+          }));
+
+          console.log(array[i].nodeId);
+        }, Number(array[i].id) * 1500);
+      }
+    }
   },
 
   gettingFromServer: false,

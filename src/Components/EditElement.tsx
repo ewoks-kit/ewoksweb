@@ -45,9 +45,6 @@ function EditElement(propsIn) {
               setElement={setElement}
             />
           )}
-          {/* <div>
-            <b>Id:</b> {props.element.id}
-          </div> */}
           {'source' in element && (
             <LinkDetails
               props={{

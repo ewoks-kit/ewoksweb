@@ -10,6 +10,7 @@ const useStyles = DashboardStyle;
 export default function UndoRedo({ undoF, redoF }) {
   const classes = useStyles();
 
+  const isExecuted = useStore((state) => state.isExecuted);
   const undoIndex = useStore((state) => state.undoIndex);
   const setUndoIndex = useStore((state) => state.setUndoIndex);
 
@@ -37,6 +38,7 @@ export default function UndoRedo({ undoF, redoF }) {
             size="small"
             component="span"
             aria-label="add"
+            disabled={isExecuted}
           >
             <UndoIcon onClick={undo} />
           </Fab>
@@ -50,6 +52,7 @@ export default function UndoRedo({ undoF, redoF }) {
             size="small"
             component="span"
             aria-label="add"
+            disabled={isExecuted}
           >
             <RedoIcon onClick={redo} />
           </Fab>

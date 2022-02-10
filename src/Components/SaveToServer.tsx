@@ -14,6 +14,7 @@ export default function SaveToServer({ saveToServerF }) {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const isExecuted = useStore((state) => state.isExecuted);
 
   React.useEffect(() => {
     saveToServerF.current = saveToServer;

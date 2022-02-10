@@ -11,7 +11,7 @@ const isValidOutput = () => {
 };
 
 function FunctionNode(fnod) {
-  console.log(fnod);
+  // console.log(fnod);
   return (
     <Node
       isGraph
@@ -29,6 +29,7 @@ function FunctionNode(fnod) {
       color={fnod.data.exists ? '#ced3ee' : 'red'}
       image={fnod.data.icon}
       comment={fnod.data.comment}
+      executing={fnod.data.executing}
       content={
         <>
           {/* <div style={style.contentHeader}>Inputs</div> */}

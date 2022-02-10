@@ -159,6 +159,7 @@ export default function Dashboard() {
                 size="small"
                 component="span"
                 aria-label="add"
+                disabled={isExecuted}
               >
                 <FiberNew onClick={newGraph} />
               </Fab>

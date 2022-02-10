@@ -31,39 +31,11 @@ export default function ExecuteSpinner({ children, tooltip, action, getting }) {
 
   // TODO: synd with the real time the call makes using getting
   React.useEffect(() => {
-    // console.log('getting', getting);
+    console.log('getting', getting);
     if (getting) {
-      // console.log('gettingIn', getting);
-      timer.current = window.setTimeout(() => {
-        // setSuccess(false);
-        setLoading(false);
-      }, 2000);
-    }
-    // setLoading(getting);
-
-    // return () => {
-    //   clearTimeout(timer.current);
-    // };
-  }, [getting]);
-
-  const handleButtonClick = () => {
-    if (!loading) {
-      // console.log('getting1', getting);
-      const runAction = action ? action() : null;
-      setSuccess(false);
       setLoading(true);
-      timer.current = window.setTimeout(() => {
-        // console.log('getting2', getting);
-        setSuccess(true);
-        setLoading(false);
-      }, 1500);
-      timer.current = window.setTimeout(() => {
-        // console.log('getting3', getting);
-        setSuccess(false);
-        setLoading(false);
-      }, 3000);
-    }
-  };
+    } else setLoading(false);
+  }, [getting]);
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -72,7 +44,6 @@ export default function ExecuteSpinner({ children, tooltip, action, getting }) {
           className={classes.openFileButton}
           // color="primary"
           size="large"
-          onClick={handleButtonClick}
           component="span"
           aria-label="add"
         >

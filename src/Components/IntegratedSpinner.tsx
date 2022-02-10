@@ -29,19 +29,12 @@ export default function IntegratedSpinner({
   const [success, setSuccess] = React.useState(false);
 
   const isExecuted = useStore((state) => state.isExecuted);
-  const setIsExecuted = useStore((state) => state.setIsExecuted);
 
   const timer = React.useRef<number>();
   const classes = useStyles();
 
   // TODO: synd with the real time the call makes using getting
   React.useEffect(() => {
-    // console.log('getting', getting);
-    // if (isExecuted) {
-    //   setLoading(true);
-    // } else if (!isExecuted) {
-    //   setLoading(false);
-    // }
     if (getting) {
       // console.log('gettingIn', getting);
       timer.current = window.setTimeout(() => {
@@ -58,14 +51,6 @@ export default function IntegratedSpinner({
 
   const handleButtonClick = () => {
     console.log(isExecuted, loading);
-    // setIsExecuted(!isExecuted);
-    // if (isExecuted) {
-    //   setLoading(true);
-    //   return;
-    // } else if (!isExecuted) {
-    //   setLoading(false);
-    //   return;
-    // }
     if (!loading) {
       // console.log('getting1', getting);
       const runAction = action ? action() : null;
@@ -95,6 +80,13 @@ export default function IntegratedSpinner({
             onClick={handleButtonClick}
             component="span"
             aria-label="add"
+            disabled={
+              loading
+                ? true
+                : tooltip === 'Execute Workflow and exit Execution mode'
+                ? false
+                : isExecuted
+            }
           >
             {success ? <CheckIcon /> : loading ? '...' : children}
           </Fab>
