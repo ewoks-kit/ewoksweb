@@ -31,8 +31,11 @@ import SaveGetFromDisk from '../Components/SaveGetFromDisk';
 import SaveToServer from '../Components/SaveToServer';
 import ClearIcon from '@material-ui/icons/Clear';
 import configData from '../configData.json';
+import io from 'socket.io-client';
 
 const useStyles = DashboardStyle;
+
+export const socket = io('http://localhost:5000/');
 
 export default function Dashboard() {
   const classes = useStyles();
@@ -69,9 +72,10 @@ export default function Dashboard() {
   const executeWorkflow = async () => {
     // console.log('execute workflow', recentGraphs, graphRF);
     console.log(isExecuted);
-    if (recentGraphs.length > 0) {
-      setIsExecuted(!isExecuted);
-
+    setIsExecuted(!isExecuted);
+    if (recentGraphs.length > 0 && !isExecuted) {
+      socket.emit('Execute Graph', graphRF);
+      socket.on('Executing', (data) => console.log(data));
       // await axios
       //   .post(`${configData.serverUrl}/workflow/execute`, rfToEwoks(graphRF))
       //   .then((res) =>

@@ -210,6 +210,7 @@ const useStore = create<State>((set, get) => ({
 
           let execNodes = [];
 
+          // calculate the executing ones and add the executing param.
           if (el.executing.length > 0) {
             execNodes = [
               ...get()
@@ -225,13 +226,22 @@ const useStore = create<State>((set, get) => ({
             ];
           }
 
+          // if execution goes back to the same node it needs to delete the previous
+          // ExecutionStepNode with the old number before putting the new node
+
           set((state) => ({
             ...state,
             // only foe testing set graphRF
             graphRF: {
               ...get().graphRF,
               nodes: [
-                ...execNodes,
+                ...execNodes.filter(
+                  (nod) =>
+                    !(
+                      nod.data.nodeId === el.nodeId &&
+                      nod.data.event_type === el.event_type
+                    )
+                ),
                 {
                   data: {
                     label: `${tempLabel},${el.id}`,

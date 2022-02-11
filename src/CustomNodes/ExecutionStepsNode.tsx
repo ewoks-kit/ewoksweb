@@ -2,7 +2,7 @@ import { style } from './NodeStyle';
 import useStore from '../store';
 
 const ExecutionStepsNode = (args) => {
-  console.log(args);
+  // console.log(args);
   // useEffect(() => {
   // }, [args.data.comment, selectedElement.type]);
 
@@ -14,6 +14,8 @@ const ExecutionStepsNode = (args) => {
     backgroundColor: '#ced3ee',
     textAlign: 'center',
     padding: '1px',
+    color: 'red',
+    fontSize: '1.2em',
   };
 
   const setCurrentExecutionEvent = useStore(
