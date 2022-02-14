@@ -114,7 +114,7 @@ function Canvas() {
     );
 
     if ('position' in element) {
-      console.log(element, event);
+      console.log(element);
       setStepDetails({ evt: event.currentTarget, element });
     }
 

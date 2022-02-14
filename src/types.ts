@@ -111,7 +111,7 @@ export interface State {
   subGraph: GraphRF;
   setSubGraph: (graph: GraphEwoks) => Promise<GraphRF>;
   workingGraph: GraphRF;
-  setWorkingGraph: (graph: GraphEwoks) => Promise<GraphRF>;
+  setWorkingGraph: (graph: GraphRF) => Promise<GraphRF>;
 }
 
 export interface Action {

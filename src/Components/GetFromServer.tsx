@@ -46,7 +46,7 @@ export default function GetFromServer() {
         if (isSubgraph === 'subgraph') {
           setSubGraph(response.data as GraphEwoks);
         } else {
-          setWorkingGraph(response.data as GraphEwoks);
+          setWorkingGraph(response.data as GraphRF);
         }
       } else {
         setGettingFromServer(false);

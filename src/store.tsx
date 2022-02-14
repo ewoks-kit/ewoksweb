@@ -48,7 +48,7 @@ const useStore = create<State>((set, get) => ({
   currentExecutionEvent: 0,
 
   setCurrentExecutionEvent: (indexOfEvent) => {
-    console.log(indexOfEvent);
+    console.log(indexOfEvent, get().executingEvents);
     set((state) => ({
       ...state,
       currentExecutionEvent: indexOfEvent,
@@ -56,94 +56,171 @@ const useStore = create<State>((set, get) => ({
   },
 
   executingEvents: [
-    {
-      id: '1',
-      nodeId: prep,
-      event_type: 'start',
-      values: { a: 1, b: 2 },
-      executing: [prep],
-    },
-    {
-      id: '2',
-      nodeId: prep,
-      event_type: 'stop',
-      values: { a: 1, b: 2, c: 3 },
-      executing: [''],
-    },
-    {
-      id: '3',
-      nodeId: 'EstTask_1',
-      event_type: 'start',
-      values: { a: 1, b: 2, c: 3, d: 4 },
-      executing: ['EstTask_1'],
-    },
-    {
-      id: '4',
-      nodeId: 'CommonPrepareExperiment',
-      event_type: 'start',
-      values: { a: 1, b: 2 },
-      executing: ['CommonPrepareExperiment', 'EstTask_1'],
-    },
-    {
-      id: '5',
-      nodeId: 'EstTask_1',
-      event_type: 'stop',
-      values: { a: 1, b: 2, c: 3, d: 4 },
-      executing: ['CommonPrepareExperiment'],
-    },
-    {
-      id: '6',
-      nodeId: 'EstTask_0',
-      event_type: 'start',
-      values: { a: 1, b: 2, c: 3, d: 4 },
-      executing: ['EstTask_0', 'CommonPrepareExperiment'],
-    },
-    {
-      id: '7',
-      nodeId: 'CommonPrepareExperiment',
-      event_type: 'stop',
-      values: { a: 1, b: 2 },
-      executing: ['EstTask_0'],
-    },
-    {
-      id: '8',
-      nodeId: read,
-      event_type: 'start',
-      values: { a: 1, b: 2, c: 3, d: 4 },
-      executing: ['EstTask_0', read],
-    },
-    {
-      id: '9',
-      nodeId: 'EstTask_0',
-      event_type: 'stop',
-      values: { a: 1, b: 2, c: 3, d: 4 },
-      executing: [read],
-    },
-    {
-      id: '10',
-      nodeId: read,
-      event_type: 'stop',
-      values: { a: 1, b: 2, c: 3, d: 4 },
-      executing: [''],
-    },
-    {
-      id: '11',
-      nodeId: prep,
-      event_type: 'start',
-      values: { a: 1, b: 2 },
-      executing: [prep],
-    },
-    {
-      id: '12',
-      nodeId: prep,
-      event_type: 'stop',
-      values: { a: 1, b: 2, c: 3 },
-      executing: [''],
-    },
+    // {
+    //   id: '1',
+    //   nodeId: prep,
+    //   event_type: 'start',
+    //   values: { a: 1, b: 2 },
+    //   executing: [prep],
+    // },
+    // {
+    //   id: '2',
+    //   nodeId: prep,
+    //   event_type: 'stop',
+    //   values: { a: 1, b: 2, c: 3 },
+    //   executing: [''],
+    // },
+    // {
+    //   id: '3',
+    //   nodeId: 'EstTask_1',
+    //   event_type: 'start',
+    //   values: { a: 1, b: 2, c: 3, d: 4 },
+    //   executing: ['EstTask_1'],
+    // },
+    // {
+    //   id: '4',
+    //   nodeId: 'CommonPrepareExperiment',
+    //   event_type: 'start',
+    //   values: { a: 1, b: 2 },
+    //   executing: ['CommonPrepareExperiment', 'EstTask_1'],
+    // },
+    // {
+    //   id: '5',
+    //   nodeId: 'EstTask_1',
+    //   event_type: 'stop',
+    //   values: { a: 1, b: 2, c: 3, d: 4 },
+    //   executing: ['CommonPrepareExperiment'],
+    // },
+    // {
+    //   id: '6',
+    //   nodeId: 'EstTask_0',
+    //   event_type: 'start',
+    //   values: { a: 1, b: 2, c: 3, d: 4 },
+    //   executing: ['EstTask_0', 'CommonPrepareExperiment'],
+    // },
+    // {
+    //   id: '7',
+    //   nodeId: 'CommonPrepareExperiment',
+    //   event_type: 'stop',
+    //   values: { a: 1, b: 2 },
+    //   executing: ['EstTask_0'],
+    // },
+    // {
+    //   id: '8',
+    //   nodeId: read,
+    //   event_type: 'start',
+    //   values: { a: 1, b: 2, c: 3, d: 4 },
+    //   executing: ['EstTask_0', read],
+    // },
+    // {
+    //   id: '9',
+    //   nodeId: 'EstTask_0',
+    //   event_type: 'stop',
+    //   values: { a: 1, b: 2, c: 3, d: 4 },
+    //   executing: [read],
+    // },
+    // {
+    //   id: '10',
+    //   nodeId: read,
+    //   event_type: 'stop',
+    //   values: { a: 1, b: 2, c: 3, d: 4 },
+    //   executing: [''],
+    // },
+    // {
+    //   id: '11',
+    //   nodeId: prep,
+    //   event_type: 'start',
+    //   values: { a: 1, b: 2 },
+    //   executing: [prep],
+    // },
+    // {
+    //   id: '12',
+    //   nodeId: prep,
+    //   event_type: 'stop',
+    //   values: { a: 1, b: 2, c: 3 },
+    //   executing: [''],
+    // },
   ],
 
   setExecutingEvents: (execEvent) => {
-    console.log(execEvent);
+    console.log(execEvent, get().executingEvents);
+
+    let tempPos = { x: 100, y: 100 };
+
+    const tempNode = get().graphRF.nodes.find(
+      (nod) => nod.id === execEvent.nodeId
+    );
+
+    tempPos = tempNode.position;
+
+    const withLabel = tempNode.data.withLabel;
+
+    if (execEvent.event_type === 'start')
+      tempPos = { x: tempPos.x - 30, y: tempPos.y + 30 };
+    else if (withLabel) tempPos = { x: tempPos.x + 140, y: tempPos.y + 30 };
+    else tempPos = { x: tempPos.x + 95, y: tempPos.y + 30 };
+
+    // if there are other nodes for the same position we need to to join them with comma
+    const sameEls = [...get().executingEvents]
+      .reverse()
+      .filter(
+        (elem) =>
+          elem.nodeId === execEvent.nodeId &&
+          elem.event_type === execEvent.event_type
+      );
+    console.log(get().executingEvents, sameEls);
+    const tempLabel =
+      sameEls.length > 0 ? sameEls.map((elem) => elem.id).join(',') : '';
+
+    let execNodes = [];
+    // calculate the executing ones and add the executing param.
+    if (execEvent.executing.length > 0) {
+      execNodes = [
+        ...get()
+          .graphRF.nodes.filter((nod) => !execEvent.executing.includes(nod.id))
+          .map((no) => {
+            return { ...no, data: { ...no.data, executing: false } };
+          }),
+        ...get()
+          .graphRF.nodes.filter((nod) => execEvent.executing.includes(nod.id))
+          .map((no) => {
+            return { ...no, data: { ...no.data, executing: true } };
+          }),
+      ];
+    }
+    // if execution goes back to the same node it needs to delete the previous
+    // ExecutionStepNode with the old number before putting the new node
+    set((state) => ({
+      ...state,
+      // only foe testing set graphRF
+      graphRF: {
+        ...get().graphRF,
+        nodes: [
+          ...execNodes.filter(
+            (nod) =>
+              !(
+                nod.data.nodeId === execEvent.nodeId &&
+                nod.data.event_type === execEvent.event_type
+              )
+          ),
+          {
+            data: {
+              label: `${tempLabel},${execEvent.id}`,
+              nodeId: execEvent.nodeId,
+              event_type: execEvent.event_type,
+              values: { a: 1, b: 2 },
+            },
+            id: execEvent.id,
+            task_type: 'executionSteps',
+            task_identifier: execEvent.id,
+            type: 'executionSteps',
+            // calculate position based on nodeId -> node position + start or stop
+            position: tempPos,
+          },
+        ],
+      },
+      executingEvents: [...get().executingEvents, execEvent],
+    }));
   },
 
   // takes the UI in execution state where:
@@ -163,106 +240,22 @@ const useStore = create<State>((set, get) => ({
       isExecuted: val,
     }));
 
+    // when execution stops by user the execution nodes are excluded
     if (!val) {
       set((state) => ({
         ...state,
-        // only foe testing set graphRF
+        // only for testing set graphRF
         graphRF: {
           ...get().graphRF,
           nodes: get().graphRF.nodes.filter(
             (nod) => nod.type !== 'executionSteps'
           ),
         },
+        executingEvents: [],
       }));
+      // when execution starts
     } else {
-      const array = get().executingEvents;
-
-      for (let i = 0; i < array.length; i++) {
-        const el = get().executingEvents[i];
-        let tempPos = { x: 100, y: 100 };
-        setTimeout(function () {
-          const tempNode = get().graphRF.nodes.find(
-            (nod) => nod.id === el.nodeId
-          );
-          tempPos = tempNode.position;
-          const withLabel = tempNode.data.withLabel;
-
-          if (el.event_type === 'start')
-            tempPos = { x: tempPos.x - 30, y: tempPos.y + 30 };
-          else if (withLabel)
-            tempPos = { x: tempPos.x + 140, y: tempPos.y + 30 };
-          else tempPos = { x: tempPos.x + 95, y: tempPos.y + 30 };
-
-          const sameEls =
-            i > 0
-              ? get()
-                  .executingEvents.slice(0, i - 1)
-                  .reverse()
-                  .filter(
-                    (elem) =>
-                      elem.nodeId === el.nodeId &&
-                      elem.event_type === el.event_type
-                  )
-              : [];
-
-          const tempLabel =
-            sameEls.length > 0 ? sameEls.map((elem) => elem.id).join(',') : '';
-
-          let execNodes = [];
-
-          // calculate the executing ones and add the executing param.
-          if (el.executing.length > 0) {
-            execNodes = [
-              ...get()
-                .graphRF.nodes.filter((nod) => !el.executing.includes(nod.id))
-                .map((no) => {
-                  return { ...no, data: { ...no.data, executing: false } };
-                }),
-              ...get()
-                .graphRF.nodes.filter((nod) => el.executing.includes(nod.id))
-                .map((no) => {
-                  return { ...no, data: { ...no.data, executing: true } };
-                }),
-            ];
-          }
-
-          // if execution goes back to the same node it needs to delete the previous
-          // ExecutionStepNode with the old number before putting the new node
-
-          set((state) => ({
-            ...state,
-            // only foe testing set graphRF
-            graphRF: {
-              ...get().graphRF,
-              nodes: [
-                ...execNodes.filter(
-                  (nod) =>
-                    !(
-                      nod.data.nodeId === el.nodeId &&
-                      nod.data.event_type === el.event_type
-                    )
-                ),
-                {
-                  data: {
-                    label: `${tempLabel},${el.id}`,
-                    nodeId: el.nodeId,
-                    event_type: el.event_type,
-                    values: { a: 1, b: 2 },
-                  },
-                  id: el.id,
-                  task_type: 'executionSteps',
-                  task_identifier: el.id,
-                  type: 'executionSteps',
-                  // calculate position based on nodeId -> node position + start or stop
-                  position: tempPos,
-                },
-              ],
-            },
-          }));
-
-          console.log(array[i].nodeId);
-        }, Number(array[i].id) * 1500);
-      }
+      // when execution starts
     }
   },
 
@@ -450,7 +443,7 @@ const useStore = create<State>((set, get) => ({
 
   workingGraph: initializedGraph,
 
-  setWorkingGraph: async (workingGraph: GraphEwoks): Promise<GraphRF> => {
+  setWorkingGraph: async (workingGraph: GraphRF): Promise<GraphRF> => {
     // 1. if it is a new graph opening initialize
     // TODO: remove initialise or id: 0. Send clear messages
     if (get().tasks.length === 0) {

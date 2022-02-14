@@ -4,7 +4,7 @@ import { outNodesLinks } from './outNodesLinks';
 
 // from GraphEwoks get EwoksRFLinks
 export function toRFEwoksLinks(
-  tempGraph: GraphEwoks, // TODO : GraphEwoks
+  tempGraph, // TODO : GraphEwoks
   newNodeSubgraphs,
   tasks
 ): EwoksRFLink[] {

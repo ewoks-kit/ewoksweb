@@ -76,7 +76,7 @@ export default function FormDialog(props) {
         )
         .then((res) => {
           props.setOpenSaveDialog(false);
-          setWorkingGraph(res.data as GraphEwoks);
+          setWorkingGraph(res.data as GraphRF);
           setRecentGraphs({} as GraphRF, true);
         })
         .catch(() => {

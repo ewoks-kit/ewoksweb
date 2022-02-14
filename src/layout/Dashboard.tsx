@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -32,6 +32,7 @@ import SaveToServer from '../Components/SaveToServer';
 import ClearIcon from '@material-ui/icons/Clear';
 import configData from '../configData.json';
 import io from 'socket.io-client';
+import type { ExecutingEvent } from '../types';
 
 const useStyles = DashboardStyle;
 
@@ -55,6 +56,15 @@ export default function Dashboard() {
   const gettingFromServer = useStore((state) => state.gettingFromServer);
   const isExecuted = useStore((state) => state.isExecuted);
   const setIsExecuted = useStore((state) => state.setIsExecuted);
+  const setExecutingEvents = useStore((state) => state.setExecutingEvents);
+
+  useEffect(() => {
+    console.log('Executing');
+    socket.on('Executing', (data) =>
+      setExecutingEvents(data as ExecutingEvent)
+    );
+    // socket.on('Executing1', (data) => console.log('Executing1', data));
+  }, [setExecutingEvents]);
 
   const handleOpenSettings = () => {
     setOpenSettings(!openSettings);
@@ -75,7 +85,7 @@ export default function Dashboard() {
     setIsExecuted(!isExecuted);
     if (recentGraphs.length > 0 && !isExecuted) {
       socket.emit('Execute Graph', graphRF);
-      socket.on('Executing', (data) => console.log(data));
+      // socket.on('Executing', (data) => console.log(data));
       // await axios
       //   .post(`${configData.serverUrl}/workflow/execute`, rfToEwoks(graphRF))
       //   .then((res) =>
@@ -176,6 +186,7 @@ export default function Dashboard() {
           <SaveToServer saveToServerF={saveToServerF} />
           <GetFromServer />
           <IntegratedSpinner
+            getting={false}
             tooltip="Execute Workflow and exit Execution mode"
             action={executeWorkflow}
           >
@@ -222,7 +233,7 @@ export default function Dashboard() {
         <div className={classes.toolbar} />
 
         <Paper className={fixedHeightPaper}>
-          {gettingFromServer ? <LinearSpinner getting /> : <Canvas />}
+          {gettingFromServer ? <LinearSpinner /> : <Canvas />}
         </Paper>
       </main>
       <Drawer />

@@ -82,7 +82,7 @@ export default function SaveToServer({ saveToServerF }) {
         .post(`${configData.serverUrl}/workflows`, rfToEwoks(newIdGraph))
         .then((res) => {
           setGettingFromServer(false);
-          setWorkingGraph(res.data as GraphEwoks);
+          setWorkingGraph(res.data as GraphRF);
           setRecentGraphs({} as GraphRF, true);
         });
     } else if (graphRF.graph.id) {
