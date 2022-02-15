@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders hello world', () => {
+test('renders one div element', () => {
   render(<App />);
-  const linkElement = screen.getByText('Hello World');
-  expect(linkElement).toBeInTheDocument();
+  const divElements = screen.getAllByRole('div');
+  expect(divElements).toHaveLength(1);
 });

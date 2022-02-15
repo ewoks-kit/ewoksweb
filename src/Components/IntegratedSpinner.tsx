@@ -19,6 +19,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// functionality: create the round spin effect changing from loading state
+// to success and then to the wait state using the image passed as children.
 export default function IntegratedSpinner({
   children,
   tooltip,
