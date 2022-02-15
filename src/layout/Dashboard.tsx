@@ -16,8 +16,6 @@ import UndoRedo from '../Components/UndoRedo';
 import GetFromServer from '../Components/GetFromServer';
 import { Fab, IconButton } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { rfToEwoks } from '../utils';
-import axios from 'axios';
 import SimpleSnackbar from '../Components/Snackbar';
 import TemporaryDrawer from '../Components/Drawer';
 import SubgraphsStack from '../Components/SubgraphsStack';
@@ -27,10 +25,8 @@ import DashboardStyle from './DashboardStyle';
 import SendIcon from '@material-ui/icons/Send';
 import IntegratedSpinner from '../Components/IntegratedSpinner';
 import SaveGetFromDisk from '../Components/SaveGetFromDisk';
-// import MyDrawer from './MyDrawer';
 import SaveToServer from '../Components/SaveToServer';
 import ClearIcon from '@material-ui/icons/Clear';
-import configData from '../configData.json';
 import io from 'socket.io-client';
 import type { ExecutingEvent } from '../types';
 
@@ -82,12 +78,12 @@ export default function Dashboard() {
   const executeWorkflow = async () => {
     // console.log('execute workflow', recentGraphs, graphRF);
     console.log(isExecuted);
-    setIsExecuted(!isExecuted);
+    // setIsExecuted(!isExecuted);
     if (recentGraphs.length > 0 && !isExecuted) {
       socket.emit('Execute Graph', graphRF);
-      // socket.on('Executing', (data) => console.log(data));
+      socket.on('Executing', (data) => console.log(data));
       // await axios
-      //   .post(`${configData.serverUrl}/workflow/execute`, rfToEwoks(graphRF))
+      //   .post(`http://localhost:5000/workflow/execute`, rfToEwoks(graphRF))
       //   .then((res) =>
       //     setOpenSnackbar({
       //       open: true,
@@ -102,6 +98,10 @@ export default function Dashboard() {
       //       severity: 'warning',
       //     })
       //   );
+      setIsExecuted(true);
+    } else if (isExecuted) {
+      setIsExecuted(false);
+      return;
     } else {
       setOpenSnackbar({
         open: true,
@@ -212,7 +212,6 @@ export default function Dashboard() {
           />
         </Toolbar>
       </AppBar>
-      {/* <MyDrawer /> */}
       <Drawer
         variant="permanent"
         classes={{

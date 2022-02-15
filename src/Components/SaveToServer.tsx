@@ -5,7 +5,6 @@ import axios from 'axios';
 import { rfToEwoks } from '../utils';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import type { GraphEwoks, GraphRF } from '../types';
-import configData from '../configData.json';
 
 // DOC: Save to server button with its spinner
 export default function SaveToServer({ saveToServerF }) {
@@ -79,7 +78,7 @@ export default function SaveToServer({ saveToServerF }) {
         links: graphRF.links,
       };
       await axios
-        .post(`${configData.serverUrl}/workflows`, rfToEwoks(newIdGraph))
+        .post(`http://localhost:5000/workflows`, rfToEwoks(newIdGraph))
         .then((res) => {
           setGettingFromServer(false);
           setWorkingGraph(res.data as GraphRF);
@@ -88,7 +87,7 @@ export default function SaveToServer({ saveToServerF }) {
     } else if (graphRF.graph.id) {
       await axios
         .put(
-          `${configData.serverUrl}/workflow/${graphRF.graph.id}`,
+          `http://localhost:5000/workflow/${graphRF.graph.id}`,
           rfToEwoks(graphRF)
         )
         .then((res) => setGettingFromServer(false));

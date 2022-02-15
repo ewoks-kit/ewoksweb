@@ -8,7 +8,6 @@ import FormControl from '@material-ui/core/FormControl';
 import AutocompleteDrop from '../Components/AutocompleteDrop';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import type { GraphEwoks, GraphRF } from '../types';
-import configData from '../configData.json';
 
 const useStyles = DashboardStyle;
 
@@ -38,7 +37,7 @@ export default function GetFromServer() {
       setGettingFromServer(true);
       const response = await axios.get(
         // `http://mxbes2-1707:38280/ewoks/workflow/${workflowValue}`
-        `${configData.serverUrl}/workflow/${workflowValue}`
+        `http://localhost:5000/workflow/${workflowValue}`
       );
       if (response.data) {
         console.log(response.data);

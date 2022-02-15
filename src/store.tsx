@@ -15,9 +15,6 @@ import { toRFEwoksNodes } from './utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from './utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './utils/FindAllSubgraphs';
 import axios from 'axios';
-import configData from './configData.json';
-import { config } from 'node:process';
-import React from 'react';
 
 const initializedTask = {
   task_identifier: '',
@@ -41,9 +38,6 @@ const initializedGraph = {
   links: [],
 } as GraphRF;
 
-const prep = 'Prepare test set grid data';
-const read = 'Read and set grid data';
-
 const useStore = create<State>((set, get) => ({
   currentExecutionEvent: 0,
 
@@ -55,92 +49,7 @@ const useStore = create<State>((set, get) => ({
     }));
   },
 
-  executingEvents: [
-    // {
-    //   id: '1',
-    //   nodeId: prep,
-    //   event_type: 'start',
-    //   values: { a: 1, b: 2 },
-    //   executing: [prep],
-    // },
-    // {
-    //   id: '2',
-    //   nodeId: prep,
-    //   event_type: 'stop',
-    //   values: { a: 1, b: 2, c: 3 },
-    //   executing: [''],
-    // },
-    // {
-    //   id: '3',
-    //   nodeId: 'EstTask_1',
-    //   event_type: 'start',
-    //   values: { a: 1, b: 2, c: 3, d: 4 },
-    //   executing: ['EstTask_1'],
-    // },
-    // {
-    //   id: '4',
-    //   nodeId: 'CommonPrepareExperiment',
-    //   event_type: 'start',
-    //   values: { a: 1, b: 2 },
-    //   executing: ['CommonPrepareExperiment', 'EstTask_1'],
-    // },
-    // {
-    //   id: '5',
-    //   nodeId: 'EstTask_1',
-    //   event_type: 'stop',
-    //   values: { a: 1, b: 2, c: 3, d: 4 },
-    //   executing: ['CommonPrepareExperiment'],
-    // },
-    // {
-    //   id: '6',
-    //   nodeId: 'EstTask_0',
-    //   event_type: 'start',
-    //   values: { a: 1, b: 2, c: 3, d: 4 },
-    //   executing: ['EstTask_0', 'CommonPrepareExperiment'],
-    // },
-    // {
-    //   id: '7',
-    //   nodeId: 'CommonPrepareExperiment',
-    //   event_type: 'stop',
-    //   values: { a: 1, b: 2 },
-    //   executing: ['EstTask_0'],
-    // },
-    // {
-    //   id: '8',
-    //   nodeId: read,
-    //   event_type: 'start',
-    //   values: { a: 1, b: 2, c: 3, d: 4 },
-    //   executing: ['EstTask_0', read],
-    // },
-    // {
-    //   id: '9',
-    //   nodeId: 'EstTask_0',
-    //   event_type: 'stop',
-    //   values: { a: 1, b: 2, c: 3, d: 4 },
-    //   executing: [read],
-    // },
-    // {
-    //   id: '10',
-    //   nodeId: read,
-    //   event_type: 'stop',
-    //   values: { a: 1, b: 2, c: 3, d: 4 },
-    //   executing: [''],
-    // },
-    // {
-    //   id: '11',
-    //   nodeId: prep,
-    //   event_type: 'start',
-    //   values: { a: 1, b: 2 },
-    //   executing: [prep],
-    // },
-    // {
-    //   id: '12',
-    //   nodeId: prep,
-    //   event_type: 'stop',
-    //   values: { a: 1, b: 2, c: 3 },
-    //   executing: [''],
-    // },
-  ],
+  executingEvents: [],
 
   setExecutingEvents: (execEvent) => {
     console.log(execEvent, get().executingEvents);
@@ -233,7 +142,16 @@ const useStore = create<State>((set, get) => ({
   isExecuted: false,
 
   setIsExecuted: (val: boolean) => {
-    console.log(val, get().isExecuted);
+    console.log(val, get().isExecuted, get().workingGraph);
+
+    // if (get().workingGraph.graph.id === 'newGraph') {
+    //   get().setOpenSnackbar({
+    //     open: true,
+    //     text: 'No more back or forth!',
+    //     severity: 'warning',
+    //   });
+    //   return;
+    // }
 
     set((state) => ({
       ...state,
@@ -447,7 +365,7 @@ const useStore = create<State>((set, get) => ({
     // 1. if it is a new graph opening initialize
     // TODO: remove initialise or id: 0. Send clear messages
     if (get().tasks.length === 0) {
-      const tasks = await axios.get(`${configData.serverUrl}/tasks`);
+      const tasks = await axios.get(`http://localhost:5000/tasks`);
       get().setTasks(tasks.data as Task[]);
     }
     get().setSelectedElement({} as EwoksRFNode | EwoksRFLink);

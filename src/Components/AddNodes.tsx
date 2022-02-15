@@ -19,7 +19,6 @@ import CreateClass from '../images/CreateClass.svg';
 import TextsmsIcon from '@material-ui/icons/Textsms';
 import Upload from './Upload';
 import AddIcon from '@material-ui/icons/Add';
-import configData from '../configData.json';
 
 const onDragStart = (event, { task_identifier, task_type, icon }) => {
   event.dataTransfer.setData('task_identifier', task_identifier);
@@ -49,7 +48,7 @@ function AddNodes(props) {
   const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
 
   const getTasks = async () => {
-    const tasksData = await axios.get(`${configData.serverUrl}/tasks`);
+    const tasksData = await axios.get(`http://localhost:5000/tasks`);
     const tasks = tasksData.data as Task[];
     setTasks(tasks);
     console.log(taskCategories);

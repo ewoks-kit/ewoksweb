@@ -14,8 +14,7 @@ import configData from './configData.json';
 export const ewoksNetwork = {};
 
 export async function getWorkflows(): Promise<{ title: string }[]> {
-  // const workflows = await axios.get('http://mxbes2-1707:38280/ewoks/workflows');
-  // return workflows.data.workflows.map((work) => {
+  console.log(process.env);
   const workflows = await axios
     .get(`${configData.serverUrl}/workflows`)
     .catch((error) => console.log(error));
@@ -49,8 +48,6 @@ export async function getSubgraphs(
   graph: GraphEwoks | GraphRF,
   recentGraphs: GraphRF[]
 ) {
-  // TODO: need to load first layer subgraphs with failsave if some not found
-  // Locate all subgraph nodes in the given graph
   const nodes: EwoksRFNode[] = [...graph.nodes];
   const existingNodeSubgraphs = nodes.filter(
     (nod) => nod.task_type === 'graph'

@@ -72,44 +72,61 @@ export interface NodeExecutionHistory {
 export interface State {
   currentExecutionEvent: number;
   setCurrentExecutionEvent: (index: number) => void;
+
   executingEvents: Array<ExecutingEvent>;
   setExecutingEvents: (execEvent: ExecutingEvent) => void;
+
   isExecuted: boolean;
   setIsExecuted: (val: boolean) => void;
+
   gettingFromServer: boolean;
   setGettingFromServer: (val: boolean) => void;
+
   undoRedo: Array<Action>;
   setUndoRedo: (action: Action) => void;
+
   undoIndex: number;
   setUndoIndex: (index: number) => void;
+
   initializedGraph: GraphRF;
   initializedTask: Task;
+
   tasks: Array<Task>;
   setTasks: (tasks: Array<Task>) => void;
+
   taskCategories: Array<string>;
   setTaskCategories: (tasks: Array<string>) => void;
+
   openDraggableDialog: DialogParams;
   setOpenDraggableDialog: (params: DialogParams) => void;
+
   openSnackbar: SnackbarParams;
   setOpenSnackbar: (params: SnackbarParams) => void;
-  // updateNeeded: any;
+
   allWorkflows: Array<{ title: string }>;
   setAllWorkflows: (workflows: Array<{ title: string }>) => void;
+
   recentGraphs?: Array<GraphRF>;
   setRecentGraphs?: (graphRF: GraphRF, reset?: boolean) => void;
+
   graphOrSubgraph?: boolean;
   setGraphOrSubgraph: (isItGraph: boolean) => void;
+
   subgraphsStack?: Array<stackGraph>;
   setSubgraphsStack?: (graphRF: stackGraph) => void;
+
   graphRF: GraphRF;
   setGraphRF: (graphRF: GraphRF) => void;
+
   selectedElement: EwoksRFNode | EwoksRFLink;
   setSelectedElement: (
     element: EwoksRFNode | EwoksRFLink,
     from?: string
   ) => void;
+
   subGraph: GraphRF;
   setSubGraph: (graph: GraphEwoks) => Promise<GraphRF>;
+
   workingGraph: GraphRF;
   setWorkingGraph: (graph: GraphRF) => Promise<GraphRF>;
 }
