@@ -11,7 +11,7 @@ const isValidOutput = () => {
 };
 
 function FunctionNode(fnod) {
-  // console.log(fnod);
+  console.log(fnod);
   return (
     <Node
       isGraph
@@ -44,7 +44,7 @@ function FunctionNode(fnod) {
                 key={input.label}
                 type="target"
                 position={Position.Left}
-                id={input.label}
+                id={input.label.slice(0, input.label.indexOf(':'))}
                 style={{
                   ...style.handle,
                   ...style.left,
@@ -58,7 +58,7 @@ function FunctionNode(fnod) {
                 key={input.label + 'right'}
                 type="target"
                 position={Position.Right}
-                id={input.label + 'right'}
+                id={input.label.slice(0, input.label.indexOf(':')) + 'right'}
                 style={{
                   ...style.handle,
                   ...style.right,
@@ -80,7 +80,7 @@ function FunctionNode(fnod) {
                 key={output.label}
                 type="source"
                 position={Position.Right}
-                id={output.label}
+                id={output.label.slice(0, output.label.indexOf(':'))}
                 style={{
                   ...style.handle,
                   ...style.right,
@@ -92,7 +92,7 @@ function FunctionNode(fnod) {
                 key={output.label + 'left'}
                 type="source"
                 position={Position.Left}
-                id={output.label + 'left'}
+                id={output.label.slice(0, output.label.indexOf(':')) + 'left'}
                 style={{
                   ...style.handle,
                   ...style.left,

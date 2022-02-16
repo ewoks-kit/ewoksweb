@@ -263,6 +263,7 @@ function Canvas() {
     // links_input_names from source node
 
     // ELSE IF there is a new node we need to find input and outputs
+    console.log(params);
     if (workingGraph.graph.id === graphRF.graph.id) {
       const sourceTask = graphRF.nodes.find((nod) => nod.id === params.source);
       const targetTask = graphRF.nodes.find((nod) => nod.id === params.target);
