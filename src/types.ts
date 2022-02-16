@@ -69,9 +69,20 @@ export interface NodeExecutionHistory {
   // the ExecutingState can be found through the eventId again
 }
 
+export interface ExecutionState {
+  currentExecutionEvent?: number;
+  setCurrentExecutionEvent?: (index: number) => void;
+
+  // executingEvents: Array<ExecutingEvent>;
+  // setExecutingEvents: (execEvent: ExecutingEvent) => void;
+
+  // isExecuted: boolean;
+  // setIsExecuted: (val: boolean) => void;
+}
+
 export interface State {
-  currentExecutionEvent: number;
-  setCurrentExecutionEvent: (index: number) => void;
+  currentExecutionEvent?: number;
+  setCurrentExecutionEvent?: (index: number) => void;
 
   executingEvents: Array<ExecutingEvent>;
   setExecutingEvents: (execEvent: ExecutingEvent) => void;

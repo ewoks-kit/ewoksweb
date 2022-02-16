@@ -5,6 +5,7 @@ import ReactJson from 'react-json-view';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import IntegratedSpinner from './IntegratedSpinner';
+// import state from '../store/state';
 
 const useStyles = DashboardStyle;
 
@@ -20,9 +21,12 @@ export default function ExecutionDetails(propsIn) {
   // const { setElement } = propsIn;
 
   const graphRF = useStore((state) => state.graphRF);
+
   const currentExecutionEvent = useStore(
     (state) => state.currentExecutionEvent
   );
+
+  // const currentExecutionEvent = state((state) => state.currentExecutionEvent);
 
   const executingEvents = useStore((state) => state.executingEvents);
 

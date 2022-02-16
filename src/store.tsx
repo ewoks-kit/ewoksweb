@@ -39,15 +39,15 @@ const initializedGraph = {
 } as GraphRF;
 
 const useStore = create<State>((set, get) => ({
-  currentExecutionEvent: 0,
+  // currentExecutionEvent: 0,
 
-  setCurrentExecutionEvent: (indexOfEvent) => {
-    console.log(indexOfEvent, get().executingEvents);
-    set((state) => ({
-      ...state,
-      currentExecutionEvent: indexOfEvent,
-    }));
-  },
+  // setCurrentExecutionEvent: (indexOfEvent) => {
+  //   console.log(indexOfEvent, get().executingEvents);
+  //   set((state) => ({
+  //     ...state,
+  //     currentExecutionEvent: indexOfEvent,
+  //   }));
+  // },
 
   executingEvents: [],
 
