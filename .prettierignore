@@ -1,2 +1,4 @@
 /build/
 /package-lock.json
+/src/notes.js
+.gitlab-ci.yml
