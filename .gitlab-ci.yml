@@ -1,0 +1,11 @@
+lint:
+  image: "docker-registry.esrf.fr/dau/ewoks:node_12"
+  stage: test
+  before_script:
+    - npm install
+  script:
+    - npm run lint
+  only:
+    refs:
+      - main
+      - merge_requests
