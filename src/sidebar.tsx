@@ -10,6 +10,7 @@ import Drawer from './Components/Drawer';
 import axios from 'axios';
 import ExecutionDetails from './Components/ExecutionDetails';
 import DashboardStyle from './layout/DashboardStyle';
+import state from './store/state';
 
 import type { EwoksRFNode, EwoksRFLink, GraphDetails, GraphRF } from './types';
 import { rfToEwoks } from './utils';
@@ -36,7 +37,7 @@ export default function Sidebar(props) {
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
   const initializedGraph = useStore((state) => state.initializedGraph);
-  const setUndoRedo = useStore((state) => state.setUndoRedo);
+  const setUndoRedo = state((state) => state.setUndoRedo);
   const isExecuted = useStore((state) => state.isExecuted);
 
   useEffect(() => {

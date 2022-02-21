@@ -18,6 +18,7 @@ import ExecutionStepsNode from '../CustomNodes/ExecutionStepsNode';
 import DataNode from '../CustomNodes/DataNode';
 import type { GraphRF, EwoksRFNode, EwoksRFLink } from '../types';
 import Popover from '../Components/Popover';
+import state from '../store/state';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

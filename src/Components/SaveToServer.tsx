@@ -5,10 +5,15 @@ import axios from 'axios';
 import { rfToEwoks } from '../utils';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import type { GraphEwoks, GraphRF } from '../types';
+import state from '../store/state';
 
+console.log(state, useStore);
 // DOC: Save to server button with its spinner
 export default function SaveToServer({ saveToServerF }) {
-  const setGettingFromServer = useStore((state) => state.setGettingFromServer);
+  const setGettingFromServer = state((st) => st.setGettingFromServer);
+  // const setGettingFromServer = useStore((state) => {
+  //   return state.setGettingFromServer;
+  // });
   const graphRF = useStore((state) => state.graphRF);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);

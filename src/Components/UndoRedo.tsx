@@ -4,6 +4,7 @@ import UndoIcon from '@material-ui/icons/Undo';
 import useStore from '../store';
 import { Fab, IconButton, Tooltip } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
+import state from '../store/state';
 
 const useStyles = DashboardStyle;
 

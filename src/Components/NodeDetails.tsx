@@ -12,6 +12,7 @@ import EditIcon from '@material-ui/icons/EditOutlined';
 import { Box, Checkbox, IconButton } from '@material-ui/core';
 import EditTaskProp from './EditTaskProp';
 import DashboardStyle from '../layout/DashboardStyle';
+import state from '../store/state';
 
 const useStyles = DashboardStyle;
 
@@ -21,7 +22,6 @@ export default function NodeDetails(propsIn) {
   const { props } = propsIn;
   const { element } = props;
 
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const [editProps, setEditProps] = React.useState<boolean>(false);
   const [defaultInputs, setDefaultInputs] = React.useState<Inputs[]>([]);

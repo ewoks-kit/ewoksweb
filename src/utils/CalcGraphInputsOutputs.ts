@@ -52,8 +52,8 @@ export function calcGraphInputsOutputs(graph): GraphDetails {
               linkStyle:
                 (graph_links[link_index] && graph_links[link_index].type) ||
                 'default',
-              withImage: nod.data.withImage,
-              withLabel: nod.data.withLabel,
+              withImage: nod.data.withImage || true,
+              withLabel: nod.data.withLabel || true,
               colorBorder: nod.data.colorBorder,
             },
           });
@@ -77,8 +77,8 @@ export function calcGraphInputsOutputs(graph): GraphDetails {
               linkStyle:
                 (graph_links[link_index] && graph_links[link_index].type) ||
                 'default',
-              withImage: nod.data.withImage,
-              withLabel: nod.data.withLabel,
+              withImage: nod.data.withImage || true,
+              withLabel: nod.data.withLabel || true,
               colorBorder: nod.data.colorBorder,
             },
           });
@@ -127,8 +127,8 @@ export function calcGraphInputsOutputs(graph): GraphDetails {
               linkStyle:
                 (graph_links[link_index] && graph_links[link_index].type) ||
                 'default',
-              withImage: nod.data.withImage,
-              withLabel: nod.data.withLabel,
+              withImage: nod.data.withImage || true,
+              withLabel: nod.data.withLabel || true,
               colorBorder: nod.data.colorBorder,
             },
           });
@@ -153,8 +153,8 @@ export function calcGraphInputsOutputs(graph): GraphDetails {
               linkStyle:
                 (graph_links[link_index] && graph_links[link_index].type) ||
                 'default',
-              withImage: nod.data.withImage,
-              withLabel: nod.data.withLabel,
+              withImage: nod.data.withImage || true,
+              withLabel: nod.data.withLabel || true,
               colorBorder: nod.data.colorBorder,
             },
           });

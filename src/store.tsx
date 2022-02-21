@@ -365,6 +365,13 @@ const useStore = create<State>((set, get) => ({
     // 1. if it is a new graph opening initialize
     // TODO: remove initialise or id: 0. Send clear messages
     if (get().tasks.length === 0) {
+      // try {
+      //   const tasks = await axios.get(`http://localhost:5000/tasks`);
+      // } catch((error) {
+      //   console.error("The Promise is rejected!", error);
+      // } finally {
+      //   get().setTasks(tasks.data as Task[]);
+      // }
       const tasks = await axios.get(`http://localhost:5000/tasks`);
       get().setTasks(tasks.data as Task[]);
     }
