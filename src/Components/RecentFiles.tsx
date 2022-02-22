@@ -1,14 +1,15 @@
 import React from 'react';
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
-import useStore from '../store';
+
 import DashboardStyle from '../layout/DashboardStyle';
+import state from '../store/state';
 
 const useStyles = DashboardStyle;
 
 export default function RecentFiles() {
   const classes = useStyles();
 
-  const recentGraphs = useStore((state) => state.recentGraphs);
+  const recentGraphs = state((state) => state.recentGraphs);
   const [selectedGraph, setSelectedGraph] = React.useState(true);
 
   const selectedGraphChange = (event) => {

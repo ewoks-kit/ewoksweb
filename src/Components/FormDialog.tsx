@@ -6,7 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import useStore from '../store';
+
 import type {
   EwoksRFLink,
   EwoksRFNode,
@@ -16,6 +16,7 @@ import type {
 } from '../types';
 import axios from 'axios';
 import { rfToEwoks } from '../utils';
+import state from '../store/state';
 
 export default function FormDialog(props) {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -30,16 +31,16 @@ export default function FormDialog(props) {
     [] as string[]
   );
   const [outputNames, setOutputNames] = React.useState([] as string[]);
-  const selectedElement = useStore<EwoksRFNode | EwoksRFLink>(
+  const selectedElement = state<EwoksRFNode | EwoksRFLink>(
     (state) => state.selectedElement
   );
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
-  const setRecentGraphs = useStore((state) => state.setRecentGraphs);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const setWorkingGraph = state((state) => state.setWorkingGraph);
+  const setRecentGraphs = state((state) => state.setRecentGraphs);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const [element, setElement] = React.useState<Task | GraphRF>(
     {} as Task | GraphRF
   );
-  const setTasks = useStore((state) => state.setTasks);
+  const setTasks = state((state) => state.setTasks);
 
   const { open, action, elementToEdit } = props;
 

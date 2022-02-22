@@ -4,8 +4,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
 import CheckIcon from '@material-ui/icons/Check';
 import { makeStyles } from '@material-ui/core/styles';
-import useStore from '../store';
+
 import Tooltip from '@material-ui/core/Tooltip';
+import state from '../store/state';
 
 const useStyles = makeStyles((theme) => ({
   top: {
@@ -24,8 +25,8 @@ const useStyles = makeStyles((theme) => ({
 export default function ExecuteSpinner({ children, tooltip, action, getting }) {
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
-  const isExecuted = useStore((state) => state.isExecuted);
-  const setIsExecuted = useStore((state) => state.setIsExecuted);
+  const isExecuted = state((state) => state.isExecuted);
+  const setIsExecuted = state((state) => state.setIsExecuted);
   const timer = React.useRef<number>();
   const classes = useStyles();
 

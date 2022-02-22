@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import useStore from '../store';
+
 import { TextField } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
+import state from '../store/state';
 
 const useStyles = DashboardStyle;
 
@@ -13,10 +14,10 @@ export default function GraphLabelComment(propsIn) {
   const { element } = props;
   // const { setElement } = propsIn;
 
-  const graphRF = useStore((state) => state.graphRF);
+  const graphRF = state((state) => state.graphRF);
   const [label, setLabel] = React.useState('');
   const [comment, setComment] = React.useState('');
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const setSelectedElement = state((state) => state.setSelectedElement);
 
   useEffect(() => {
     console.log(element);

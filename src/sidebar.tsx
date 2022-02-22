@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import useStore from './store';
 import { Box, Button } from '@material-ui/core';
 import AddNodes from './Components/AddNodes';
 import EditElement from './Components/EditElement';
@@ -20,25 +19,25 @@ const useStyles = DashboardStyle;
 export default function Sidebar(props) {
   const classes = useStyles();
 
-  const selectedElement = useStore<EwoksRFNode | EwoksRFLink>(
+  const selectedElement = state<EwoksRFNode | EwoksRFLink>(
     (state) => state.selectedElement
   );
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const setSelectedElement = state((state) => state.setSelectedElement);
 
   const [element, setElement] = React.useState<EwoksRFNode | EwoksRFLink>(
     {} as EwoksRFNode | EwoksRFLink
   );
-  const graphRF = useStore((state) => state.graphRF);
-  const setGraphRF = useStore((state) => state.setGraphRF);
-  const workingGraph = useStore((state) => state.workingGraph);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const graphRF = state((state) => state.graphRF);
+  const setGraphRF = state((state) => state.setGraphRF);
+  const workingGraph = state((state) => state.workingGraph);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const [dialogContent, setDialogContent] = React.useState({});
-  const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
-  const setRecentGraphs = useStore((state) => state.setRecentGraphs);
-  const initializedGraph = useStore((state) => state.initializedGraph);
+  const setSubgraphsStack = state((state) => state.setSubgraphsStack);
+  const setRecentGraphs = state((state) => state.setRecentGraphs);
+  const initializedGraph = state((state) => state.initializedGraph);
   const setUndoRedo = state((state) => state.setUndoRedo);
-  const isExecuted = useStore((state) => state.isExecuted);
+  const isExecuted = state((state) => state.isExecuted);
 
   useEffect(() => {
     console.log(selectedElement);

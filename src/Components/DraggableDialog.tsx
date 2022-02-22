@@ -8,10 +8,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper, { PaperProps } from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
 import { rfToEwoks } from '../utils';
-import useStore from '../store';
+
 import ReactJson from 'react-json-view';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import { Box, Input, TextField } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
+import state from '../store/state';
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -31,7 +32,7 @@ export default function DraggableDialog(props) {
   const [title, setTitle] = React.useState('');
   const [name, setName] = React.useState('');
   const [callbackProps, setCallbackProps] = React.useState({});
-  const graphRF = useStore((state) => state.graphRF);
+  const graphRF = state((state) => state.graphRF);
 
   const [selection, setSelection] = React.useState('ewoks');
 

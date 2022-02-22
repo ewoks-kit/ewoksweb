@@ -1,18 +1,68 @@
 import create from 'zustand';
-import type { State } from '../types';
+import type { GraphRF, State } from '../types';
 
-import execution from './execution';
+import currentExecutionEvent from './currentExecutionEvent';
 import gettingFromServer from './gettingFromServer';
 import undoRedo from './undoRedo';
 import selectedElement from './selectedElement';
 import workingGraph from './workingGraph';
+import graphRF from './graphRF';
+import allWorkflows from './allWorkflows';
+import executingEvents from './executingEvents';
+import graphOrSubgraph from './graphOrSubgraph';
+import isExecuted from './isExecuted';
+import openDraggableDialog from './openDraggableDialog';
+import openSnackbar from './openSnackbar';
+import recentGraphs from './recentGraphs';
+import subGraph from './subGraph';
+import subgraphsStack from './subgraphsStack';
+import taskCategories from './taskCategories';
+import tasks from './tasks';
+import undoIndex from './undoIndex';
+
+const initializedTask = {
+  task_identifier: '',
+  task_type: '',
+  icon: '',
+  category: '',
+  optional_input_names: [],
+  output_names: [],
+  required_input_names: [],
+};
+
+const initializedGraph = {
+  graph: {
+    id: 'newGraph',
+    label: 'newGraph',
+    input_nodes: [],
+    output_nodes: [],
+    uiProps: {},
+  },
+  nodes: [],
+  links: [],
+} as GraphRF;
 
 const state = create<State>((set, get) => ({
-  ...execution(set, get),
+  ...allWorkflows(set, get),
+  ...currentExecutionEvent(set, get),
+  ...executingEvents(set, get),
   ...gettingFromServer(set, get),
+  ...graphOrSubgraph(set, get),
+  ...graphRF(set, get),
+  ...isExecuted(set, get),
+  ...openDraggableDialog(set, get),
+  ...openSnackbar(set, get),
+  ...recentGraphs(set, get),
+  ...subGraph(set, get),
+  ...subgraphsStack(set, get),
+  ...taskCategories(set, get),
+  ...tasks(set, get),
+  ...undoIndex(set, get),
   ...undoRedo(set, get),
   ...selectedElement(set, get),
   ...workingGraph(set, get),
+  initializedTask,
+  initializedGraph,
 }));
 
 export default state;

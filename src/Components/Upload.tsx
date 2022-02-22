@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Fab } from '@material-ui/core';
-import useStore from '../store';
+
 import { validateEwoksGraph } from '../utils/EwoksValidator';
+import state from '../store/state';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -36,14 +37,14 @@ function Upload(props) {
   const classes = useStyles();
 
   // const [selectedFile, setSelectedFile] = useState();
-  const graphRF = useStore((state) => state.graphRF);
-  const graphOrSubgraph = useStore<Boolean>((state) => state.graphOrSubgraph);
+  const graphRF = state((state) => state.graphRF);
+  const graphOrSubgraph = state<Boolean>((state) => state.graphOrSubgraph);
 
-  const workingGraph = useStore((state) => state.workingGraph);
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
-  const setSubGraph = useStore((state) => state.setSubGraph);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const isExecuted = useStore((state) => state.isExecuted);
+  const workingGraph = state((state) => state.workingGraph);
+  const setWorkingGraph = state((state) => state.setWorkingGraph);
+  const setSubGraph = state((state) => state.setSubGraph);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const isExecuted = state((state) => state.isExecuted);
 
   const fileNameChanged = async (event) => {
     // console.log(event.target.files[0], recentGraphs, graphRF, subgraphsStack);

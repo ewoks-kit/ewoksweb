@@ -4,7 +4,6 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import Typography from '@material-ui/core/Typography';
-import useStore from '../store';
 import LinkDetails from './LinkDetails';
 import NodeDetails from './NodeDetails';
 import LabelComment from './LabelComment';

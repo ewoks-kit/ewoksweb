@@ -3,7 +3,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import Typography from '@material-ui/core/Typography';
-import useStore from '../store';
+
 import axios from 'axios';
 import type { Task } from '../types';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -19,6 +19,7 @@ import CreateClass from '../images/CreateClass.svg';
 import TextsmsIcon from '@material-ui/icons/Textsms';
 import Upload from './Upload';
 import AddIcon from '@material-ui/icons/Add';
+import state from '../store/state';
 
 const onDragStart = (event, { task_identifier, task_type, icon }) => {
   event.dataTransfer.setData('task_identifier', task_identifier);
@@ -40,16 +41,16 @@ const iconsObj = {
   TextsmsIcon,
 };
 
-// Hosts the node images and categories from where
+// Hosts the node images and categories
 // drag and drop to canvas
-// right-click and view-delete?
+// TODO: right-click and view-delete?
 // insert subgraph from disk?
 function AddNodes(props) {
-  const taskCategories = useStore((state) => state.taskCategories);
-  const setTaskCategories = useStore((state) => state.setTaskCategories);
-  const tasks = useStore((state) => state.tasks);
-  const setTasks = useStore((state) => state.setTasks);
-  const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
+  const taskCategories = state((state) => state.taskCategories);
+  const setTaskCategories = state((state) => state.setTaskCategories);
+  const tasks = state((state) => state.tasks);
+  const setTasks = state((state) => state.setTasks);
+  const setGraphOrSubgraph = state((state) => state.setGraphOrSubgraph);
 
   const getTasks = async () => {
     const tasksData = await axios.get(`http://localhost:5000/tasks`);

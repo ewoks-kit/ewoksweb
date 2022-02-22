@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import useStore from '../store';
+
 import type { DataMapping, EwoksRFLink, Inputs } from '../types';
 import { Checkbox, IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import DashboardStyle from '../layout/DashboardStyle';
+import state from '../store/state';
 
 const useStyles = DashboardStyle;
 
@@ -17,8 +18,8 @@ export default function LinkDetails(propsIn) {
   const { map_all_data } = (element.data && element.data.map_all_data) || false;
   const { setElement } = propsIn;
 
-  const graphRF = useStore((state) => state.graphRF);
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const graphRF = state((state) => state.graphRF);
+  const setSelectedElement = state((state) => state.setSelectedElement);
   const [mapAllData, setMapAllData] = React.useState<boolean>(false);
   const [elementL, setElementL] = React.useState<EwoksRFLink>(
     {} as EwoksRFLink

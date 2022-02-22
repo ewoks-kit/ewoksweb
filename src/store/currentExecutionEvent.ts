@@ -1,4 +1,4 @@
-const execution = (set, get) => ({
+const currentExecutionEvent = (set, get) => ({
   currentExecutionEvent: 0,
 
   setCurrentExecutionEvent: (indexOfEvent) => {
@@ -10,4 +10,4 @@ const execution = (set, get) => ({
   },
 });
 
-export default execution;
+export default currentExecutionEvent;

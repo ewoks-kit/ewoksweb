@@ -25,7 +25,7 @@ export interface Graph {
 export interface SnackbarParams {
   open: boolean;
   text: string;
-  severity: Color;
+  severity: string;
 }
 
 export interface DialogParams {

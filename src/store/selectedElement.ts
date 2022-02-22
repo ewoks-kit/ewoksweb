@@ -5,9 +5,10 @@ const selectedElement = (set, get) => ({
   selectedElement: {} as EwoksRFNode | EwoksRFLink | GraphDetails,
 
   setSelectedElement: (element, from) => {
-    console.log(element, from, state);
-    const wg = state.workingGraph.graph.id;
-    const { graph, nodes, links } = get().graphRF;
+    const prevState = get((prev) => prev);
+    console.log(element, from, prevState);
+    const wg = prevState.workingGraph.graph.id;
+    const { graph, nodes, links } = prevState.graphRF;
 
     if (wg === '0' || wg === graph.id) {
       let tempGraph = {} as GraphRF;
@@ -18,7 +19,7 @@ const selectedElement = (set, get) => ({
           links,
         };
         if (from === 'fromSaveElement') {
-          get().setUndoRedo({
+          prevState.setUndoRedo({
             action: 'Node details changed',
             graph: tempGraph,
           });
@@ -31,7 +32,7 @@ const selectedElement = (set, get) => ({
           links: [...links.filter((link) => link.id !== element.id), element],
         };
         if (from === 'fromSaveElement') {
-          get().setUndoRedo({
+          prevState.setUndoRedo({
             action: 'Link details changed',
             graph: tempGraph,
           });
@@ -45,7 +46,7 @@ const selectedElement = (set, get) => ({
         };
 
         if (from === 'fromSaveElement') {
-          get().setUndoRedo({
+          prevState.setUndoRedo({
             action: 'Graph details changed',
             graph: tempGraph,
           });

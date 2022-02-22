@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { Checkbox, FormControl } from '@material-ui/core';
-import useStore from '../store';
+
 import DashboardStyle from '../layout/DashboardStyle';
 import type { EwoksRFNode } from '../types';
+import state from '../store/state';
 
 const useStyles = DashboardStyle;
 
@@ -12,7 +13,7 @@ export default function EditNodeStyle(propsIn) {
   const { props } = propsIn;
   const { element } = props;
 
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const setSelectedElement = state((state) => state.setSelectedElement);
 
   const [nodeType, setNodeType] = React.useState('');
   const [withImage, setWithImage] = React.useState<boolean>(false);
@@ -20,7 +21,7 @@ export default function EditNodeStyle(propsIn) {
   const [colorBorder, setColorBorder] = React.useState<string>('');
   const [moreHandles, setMoreHandles] = React.useState<boolean>(true);
 
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
   useEffect(() => {
     console.log(element);

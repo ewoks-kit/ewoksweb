@@ -6,7 +6,8 @@ import EditIcon from '@material-ui/icons/EditOutlined';
 import { style } from './NodeStyle';
 import SaveIcon from '@material-ui/icons/Save';
 import UndoIcon from '@material-ui/icons/Undo';
-import useStore from '../store';
+
+import state from '../store/state';
 
 const onDragStart = (e) => {
   e.preventDefault();
@@ -18,9 +19,9 @@ const isValidOutput = (connection) => {
 const NoteNode = (args) => {
   const [comment, setComment] = React.useState('');
   const [edit, setEdit] = React.useState(false);
-  const graphRF = useStore((state) => state.graphRF);
-  const setGraphRF = useStore((state) => state.setGraphRF);
-  const selectedElement = useStore((state) => state.selectedElement);
+  const graphRF = state((state) => state.graphRF);
+  const setGraphRF = state((state) => state.setGraphRF);
+  const selectedElement = state((state) => state.selectedElement);
 
   useEffect(() => {
     setComment(args.data.comment);

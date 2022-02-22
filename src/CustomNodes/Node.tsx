@@ -22,7 +22,8 @@ import { styled } from '@material-ui/core/styles';
 import IntegratedSpinner from '../Components/IntegratedSpinner';
 import ExecuteSpinner from '../Components/ExecuteSpinner';
 import SendIcon from '@material-ui/icons/Send';
-import useStore from '../store';
+
+import state from '../store/state';
 
 const iconsObj = {
   left,
@@ -97,7 +98,7 @@ const Node: React.FC<NodeProps> = ({
     customTitle.backgroundColor = color;
     customTitle.borderRadius = '10px 10px 3px 3px';
   }
-  const isExecuted = useStore((state) => state.isExecuted);
+  const isExecuted = state((state) => state.isExecuted);
   // const [executing, setExecuting] = React.useState(false);
 
   return (

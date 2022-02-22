@@ -6,8 +6,9 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core';
-import useStore from '../store';
+
 import DashboardStyle from '../layout/DashboardStyle';
+import state from '../store/state';
 
 const useStyles = DashboardStyle;
 
@@ -17,7 +18,7 @@ export default function EditLinkStyle(propsIn) {
   const { props } = propsIn;
   const { element } = props;
 
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const setSelectedElement = state((state) => state.setSelectedElement);
 
   const [linkType, setLinkType] = React.useState('');
   const [arrowType, setArrowType] = React.useState('');

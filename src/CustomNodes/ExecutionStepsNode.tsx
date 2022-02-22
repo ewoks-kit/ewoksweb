@@ -1,5 +1,6 @@
 import { style } from './NodeStyle';
-import useStore from '../store';
+
+import state from '../store/state';
 
 const ExecutionStepsNode = (args) => {
   // console.log(args);
@@ -18,7 +19,7 @@ const ExecutionStepsNode = (args) => {
     fontSize: '1.2em',
   };
 
-  const setCurrentExecutionEvent = useStore(
+  const setCurrentExecutionEvent = state(
     (state) => state.setCurrentExecutionEvent
   );
 

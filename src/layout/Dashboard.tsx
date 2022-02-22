@@ -10,7 +10,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import FiberNew from '@material-ui/icons/FiberNew';
 import Sidebar from '../sidebar';
-import useStore from '../store';
+
 import Canvas from './Canvas';
 import UndoRedo from '../Components/UndoRedo';
 import GetFromServer from '../Components/GetFromServer';
@@ -29,6 +29,7 @@ import SaveToServer from '../Components/SaveToServer';
 import ClearIcon from '@material-ui/icons/Clear';
 import io from 'socket.io-client';
 import type { ExecutingEvent } from '../types';
+import state from '../store/state';
 
 const useStyles = DashboardStyle;
 
@@ -41,18 +42,18 @@ export default function Dashboard() {
   const redoF = React.useRef(null);
   const saveToServerF = React.useRef(null);
 
-  const graphRF = useStore((state) => state.graphRF);
-  const selectedElement = useStore((state) => state.selectedElement);
+  const graphRF = state((state) => state.graphRF);
+  const selectedElement = state((state) => state.selectedElement);
   const [open, setOpen] = React.useState(true);
   const [openSettings, setOpenSettings] = React.useState(false);
-  const recentGraphs = useStore((state) => state.recentGraphs);
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const initializedGraph = useStore((state) => state.initializedGraph);
-  const gettingFromServer = useStore((state) => state.gettingFromServer);
-  const isExecuted = useStore((state) => state.isExecuted);
-  const setIsExecuted = useStore((state) => state.setIsExecuted);
-  const setExecutingEvents = useStore((state) => state.setExecutingEvents);
+  const recentGraphs = state((state) => state.recentGraphs);
+  const setWorkingGraph = state((state) => state.setWorkingGraph);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const initializedGraph = state((state) => state.initializedGraph);
+  const gettingFromServer = state((state) => state.gettingFromServer);
+  const isExecuted = state((state) => state.isExecuted);
+  const setIsExecuted = state((state) => state.setIsExecuted);
+  const setExecutingEvents = state((state) => state.setExecutingEvents);
 
   useEffect(() => {
     console.log('Executing');

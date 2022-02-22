@@ -3,15 +3,16 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
-import useStore from '../store';
+
 import type { EwoksRFLink, EwoksRFNode } from '../types';
 import EditNodeStyle from './EditNodeStyle';
 import EditLinkStyle from './EditLinkStyle';
+import state from '../store/state';
 
 export default function EditElementStyle(propsIn) {
   const { props } = propsIn;
 
-  const selectedElement = useStore<EwoksRFNode | EwoksRFLink>(
+  const selectedElement = state<EwoksRFNode | EwoksRFLink>(
     (state) => state.selectedElement
   );
 

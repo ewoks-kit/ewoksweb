@@ -5,8 +5,9 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { FormControl, Grid, Paper, styled } from '@material-ui/core';
 import ReactJson from 'react-json-view';
-import useStore from '../store';
+
 import AutocompleteDrop from './AutocompleteDrop';
+import state from '../store/state';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -54,7 +55,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
-  const graphRF = useStore((state) => state.graphRF);
+  const graphRF = state((state) => state.graphRF);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);

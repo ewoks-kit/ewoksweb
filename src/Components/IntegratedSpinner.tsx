@@ -5,7 +5,8 @@ import Fab from '@material-ui/core/Fab';
 import CheckIcon from '@material-ui/icons/Check';
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
-import useStore from '../store';
+
+import state from '../store/state';
 
 const useStyles = makeStyles((theme) => ({
   top: {
@@ -30,7 +31,7 @@ export default function IntegratedSpinner({
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
 
-  const isExecuted = useStore((state) => state.isExecuted);
+  const isExecuted = state((state) => state.isExecuted);
 
   const timer = React.useRef<number>();
   const classes = useStyles();

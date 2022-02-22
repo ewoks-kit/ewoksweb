@@ -1,18 +1,19 @@
 import Typography from '@material-ui/core/Typography';
 import DashboardStyle from '../layout/DashboardStyle';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import useStore from '../store';
+
 import Link from '@material-ui/core/Link';
+import state from '../store/state';
 
 const useStyles = DashboardStyle;
 
 export default function SubgraphsStack() {
   const classes = useStyles();
 
-  const recentGraphs = useStore((state) => state.recentGraphs);
-  const setGraphRF = useStore((state) => state.setGraphRF);
-  const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
-  const subgraphsStack = useStore((state) => {
+  const recentGraphs = state((state) => state.recentGraphs);
+  const setGraphRF = state((state) => state.setGraphRF);
+  const setSubgraphsStack = state((state) => state.setSubgraphsStack);
+  const subgraphsStack = state((state) => {
     return state.subgraphsStack;
   });
 

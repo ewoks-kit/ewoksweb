@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import useStore from '../store';
+
 import type {
   DataMapping,
   DefaultErrorAttributes,
@@ -22,7 +22,7 @@ export default function NodeDetails(propsIn) {
   const { props } = propsIn;
   const { element } = props;
 
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const setSelectedElement = state((state) => state.setSelectedElement);
   const [editProps, setEditProps] = React.useState<boolean>(false);
   const [defaultInputs, setDefaultInputs] = React.useState<Inputs[]>([]);
   const [inputsComplete, setInputsComplete] = React.useState<boolean>(false);

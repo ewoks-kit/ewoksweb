@@ -10,7 +10,7 @@ import ReactFlow, {
   useUpdateNodeInternals,
 } from 'react-flow-renderer';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import useStore from '../store';
+
 // import CustomNode from '../CustomNodes/CustomNode';
 import FunctionNode from '../CustomNodes/FunctionNode';
 import NoteNode from '../CustomNodes/NoteNode';
@@ -78,21 +78,21 @@ function Canvas() {
   const [elements, setElements] = useState([]);
 
   const reactFlowWrapper = useRef(null);
-  const graphRF = useStore((state) => state.graphRF);
-  const setGraphRF = useStore((state) => state.setGraphRF);
-  const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
-  const setRecentGraphs = useStore((state) => state.setRecentGraphs);
-  const setUndoRedo = useStore((state) => state.setUndoRedo);
-  const selectedElement = useStore((state) => state.selectedElement);
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
-  const tasks = useStore((state) => state.tasks);
+  const graphRF = state((state) => state.graphRF);
+  const setGraphRF = state((state) => state.setGraphRF);
+  const setSubgraphsStack = state((state) => state.setSubgraphsStack);
+  const setRecentGraphs = state((state) => state.setRecentGraphs);
+  const setUndoRedo = state((state) => state.setUndoRedo);
+  const selectedElement = state((state) => state.selectedElement);
+  const setSelectedElement = state((state) => state.setSelectedElement);
+  const tasks = state((state) => state.tasks);
 
   const [selectedElements, setSelectedElements] = React.useState([]);
 
-  // const updateNeeded = useStore((state) => state.updateNeeded);
-  const recentGraphs = useStore((state) => state.recentGraphs);
-  const workingGraph = useStore((state) => state.workingGraph);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  // const updateNeeded = state((state) => state.updateNeeded);
+  const recentGraphs = state((state) => state.recentGraphs);
+  const workingGraph = state((state) => state.workingGraph);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const updateNodeInternals = useUpdateNodeInternals();
 
   const [stepDetails, setStepDetails] = useState(null);

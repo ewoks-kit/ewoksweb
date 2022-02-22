@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import useStore from '../store';
+
 import DashboardStyle from '../layout/DashboardStyle';
 import ReactJson from 'react-json-view';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
@@ -20,14 +20,12 @@ export default function ExecutionDetails(propsIn) {
   const { element } = props;
   // const { setElement } = propsIn;
 
-  const graphRF = useStore((state) => state.graphRF);
+  const graphRF = state((state) => state.graphRF);
 
-  const currentExecutionEvent = useStore(
-    (state) => state.currentExecutionEvent
-  );
+  const currentExecutionEvent = state((state) => state.currentExecutionEvent);
   // const currentExecutionEvent = state((state) => state.currentExecutionEvent);
 
-  const executingEvents = useStore((state) => state.executingEvents);
+  const executingEvents = state((state) => state.executingEvents);
 
   useEffect(() => {
     console.log(element);

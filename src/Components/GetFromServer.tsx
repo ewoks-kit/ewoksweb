@@ -1,5 +1,5 @@
 import React from 'react';
-import useStore from '../store';
+
 import axios from 'axios';
 import DashboardStyle from '../layout/DashboardStyle';
 import IntegratedSpinner from '../Components/IntegratedSpinner';
@@ -8,6 +8,7 @@ import FormControl from '@material-ui/core/FormControl';
 import AutocompleteDrop from '../Components/AutocompleteDrop';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import type { GraphEwoks, GraphRF } from '../types';
+import state from '../store/state';
 
 const useStyles = DashboardStyle;
 
@@ -15,13 +16,13 @@ export default function GetFromServer() {
   const classes = useStyles();
 
   const [workflowValue, setWorkflowValue] = React.useState('');
-  const setSubGraph = useStore((state) => state.setSubGraph);
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const setSubGraph = state((state) => state.setSubGraph);
+  const setWorkingGraph = state((state) => state.setWorkingGraph);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const [gettingFromServer, setGettingFromServer] = React.useState(false);
   // TODO replace with the following brakes the round spinner
-  // const gettingFromServer = useStore((state) => state.gettingFromServer);
-  // const setGettingFromServer = useStore((state) => state.setGettingFromServer);
+  // const gettingFromServer = state((state) => state.gettingFromServer);
+  // const setGettingFromServer = state((state) => state.setGettingFromServer);
 
   const getSubgraphFromServer = () => {
     getFromServer('subgraph');

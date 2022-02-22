@@ -1,5 +1,5 @@
 import React from 'react';
-import useStore from '../store';
+
 import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -17,6 +17,7 @@ import type {
   GraphRF,
   Task,
 } from '../types';
+import state from '../store/state';
 
 export default function IconMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -26,14 +27,14 @@ export default function IconMenu(props) {
     {} as EwoksRFNode | GraphRF
   );
   const [doAction, setDoAction] = React.useState<string>('');
-  const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
+  const selectedElement = state<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
   );
-  const initializedTask = useStore((state) => state.initializedTask);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const initializedTask = state((state) => state.initializedTask);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
-  const graphRF = useStore((state) => state.graphRF);
-  const tasks = useStore((state) => state.tasks);
+  const graphRF = state((state) => state.graphRF);
+  const tasks = state((state) => state.tasks);
   const { handleShowEwoksGraph } = props;
 
   // const cloneToCanvas = () => {

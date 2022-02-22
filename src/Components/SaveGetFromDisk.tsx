@@ -5,7 +5,8 @@ import SaveIcon from '@material-ui/icons/Save';
 import Upload from '../Components/Upload';
 import AddIcon from '@material-ui/icons/Add';
 import { rfToEwoks } from '../utils';
-import useStore from '../store';
+
+import state from '../store/state';
 
 const useStyles = DashboardStyle;
 
@@ -20,9 +21,9 @@ function download(content, fileName, contentType) {
 export default function SaveGetFromDisk() {
   const classes = useStyles();
 
-  const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
-  const graphRF = useStore((state) => state.graphRF);
-  const isExecuted = useStore((state) => state.isExecuted);
+  const setGraphOrSubgraph = state((state) => state.setGraphOrSubgraph);
+  const graphRF = state((state) => state.graphRF);
+  const isExecuted = state((state) => state.isExecuted);
 
   const loadFromDisk = (val) => {
     // TODO: possible race situation with setting pgraphOrSubgraph

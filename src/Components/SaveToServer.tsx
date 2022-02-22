@@ -1,24 +1,24 @@
 import React from 'react';
 import IntegratedSpinner from './IntegratedSpinner';
-import useStore from '../store';
+
 import axios from 'axios';
 import { rfToEwoks } from '../utils';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import type { GraphEwoks, GraphRF } from '../types';
 import state from '../store/state';
 
-console.log(state, useStore);
+console.log(state, state);
 // DOC: Save to server button with its spinner
 export default function SaveToServer({ saveToServerF }) {
   const setGettingFromServer = state((st) => st.setGettingFromServer);
-  // const setGettingFromServer = useStore((state) => {
+  // const setGettingFromServer = state((state) => {
   //   return state.setGettingFromServer;
   // });
-  const graphRF = useStore((state) => state.graphRF);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const setRecentGraphs = useStore((state) => state.setRecentGraphs);
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
-  const isExecuted = useStore((state) => state.isExecuted);
+  const graphRF = state((state) => state.graphRF);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const setRecentGraphs = state((state) => state.setRecentGraphs);
+  const setWorkingGraph = state((state) => state.setWorkingGraph);
+  const isExecuted = state((state) => state.isExecuted);
 
   React.useEffect(() => {
     saveToServerF.current = saveToServer;
