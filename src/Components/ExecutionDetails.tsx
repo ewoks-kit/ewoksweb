@@ -28,7 +28,7 @@ export default function ExecutionDetails(propsIn) {
   const executingEvents = state((state) => state.executingEvents);
 
   useEffect(() => {
-    console.log(element);
+    //console.log(element);
   }, [element.id, element]);
 
   return (

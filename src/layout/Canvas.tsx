@@ -98,7 +98,7 @@ function Canvas() {
   const [stepDetails, setStepDetails] = useState(null);
 
   useEffect(() => {
-    // console.log('rerender Canvas', graphRF, recentGraphs.length);
+    // //console.log('rerender Canvas', graphRF, recentGraphs.length);
     setElements([...graphRF.nodes, ...graphRF.links]);
   }, [graphRF, graphRF.graph.id, recentGraphs.length]);
 
@@ -115,7 +115,7 @@ function Canvas() {
     );
 
     if ('position' in element) {
-      console.log(element);
+      //console.log(element);
       setStepDetails({ evt: event.currentTarget, element });
     }
 
@@ -227,7 +227,7 @@ function Canvas() {
   };
 
   const onEdgeUpdate = (oldEdge, newConnection) => {
-    console.log(oldEdge, newConnection);
+    //console.log(oldEdge, newConnection);
     let elements = [];
     // TODO: shouldnt need the following debug why graphRF is not
     // updated inside this function
@@ -264,7 +264,7 @@ function Canvas() {
     // links_input_names from source node
 
     // ELSE IF there is a new node we need to find input and outputs
-    console.log(params);
+    //console.log(params);
     if (workingGraph.graph.id === graphRF.graph.id) {
       const sourceTask = graphRF.nodes.find((nod) => nod.id === params.source);
       const targetTask = graphRF.nodes.find((nod) => nod.id === params.target);
@@ -374,7 +374,7 @@ function Canvas() {
 
   // const onNodeMouseMove = (event, node) => {
   //   event.preventDefault();
-  //   console.log(event, node);
+  //   //console.log(event, node);
   // };
 
   const onSelectionDragStop = (event, selectedElements) => {
@@ -416,12 +416,12 @@ function Canvas() {
 
   const onSelectionDrag = (event) => {
     event.preventDefault();
-    // console.log(event, selectedElements);
+    // //console.log(event, selectedElements);
   };
 
   // const onNodeDrag = (event, node) => {
   //   event.preventDefault();
-  //   console.log(event, node);
+  //   //console.log(event, node);
   // };
 
   const onNodeDragStop = (event, node) => {

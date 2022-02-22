@@ -162,7 +162,7 @@ export function calcGraphInputsOutputs(graph): GraphDetails {
       });
     } else if (nod.task_type === 'note') {
       // add to uiprops this note
-      // console.log(nod, notes);
+      // //console.log(nod, notes);
       // notes.push({ ...nod });
     }
   });

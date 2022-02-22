@@ -11,15 +11,15 @@ export interface GraphNodes {
 export interface GraphDetails {
   id?: string;
   label?: string;
-  input_nodes?: Array<GraphNodes>;
-  output_nodes?: Array<GraphNodes>;
+  input_nodes?: GraphNodes[];
+  output_nodes?: GraphNodes[];
   uiProps?: UiProps;
 }
 
 export interface Graph {
   graph?: GraphDetails;
-  nodes: Array<EwoksNode>;
-  links: Array<EwoksLink>;
+  nodes: EwoksNode[];
+  links: EwoksLink[];
 }
 
 export interface SnackbarParams {
@@ -53,7 +53,7 @@ export interface ExecutingEvent {
   event_type: string; // start/stop/progress events
   values: {}; // all values entering or exiting a node
   // for now put static executing here
-  executing?: Array<string>;
+  executing?: string[];
 }
 
 export interface ExecutingState {
@@ -73,7 +73,7 @@ export interface ExecutionState {
   currentExecutionEvent?: number;
   setCurrentExecutionEvent?: (index: number) => void;
 
-  // executingEvents: Array<ExecutingEvent>;
+  // executingEvents: ExecutingEvent[];
   // setExecutingEvents: (execEvent: ExecutingEvent) => void;
 
   // isExecuted: boolean;
@@ -84,7 +84,7 @@ export interface State {
   currentExecutionEvent?: number;
   setCurrentExecutionEvent?: (index: number) => void;
 
-  executingEvents?: Array<ExecutingEvent>;
+  executingEvents?: ExecutingEvent[];
   setExecutingEvents?: (execEvent: ExecutingEvent) => void;
 
   isExecuted?: boolean;
@@ -93,7 +93,7 @@ export interface State {
   gettingFromServer?: boolean;
   setGettingFromServer?: (val: boolean) => void;
 
-  undoRedo?: Array<Action>;
+  undoRedo?: Action[];
   setUndoRedo?: (action: Action) => void;
 
   undoIndex?: number;
@@ -102,11 +102,11 @@ export interface State {
   initializedGraph?: GraphRF;
   initializedTask?: Task;
 
-  tasks?: Array<Task>;
-  setTasks?: (tasks: Array<Task>) => void;
+  tasks?: Task[];
+  setTasks?: (tasks: Task[]) => void;
 
-  taskCategories?: Array<string>;
-  setTaskCategories?: (tasks: Array<string>) => void;
+  taskCategories?: string[];
+  setTaskCategories?: (tasks: string[]) => void;
 
   openDraggableDialog?: DialogParams;
   setOpenDraggableDialog?: (params: DialogParams) => void;
@@ -114,16 +114,16 @@ export interface State {
   openSnackbar?: SnackbarParams;
   setOpenSnackbar?: (params: SnackbarParams) => void;
 
-  allWorkflows?: Array<{ title: string }>;
-  setAllWorkflows?: (workflows: Array<{ title: string }>) => void;
+  allWorkflows?: { title: string }[];
+  setAllWorkflows?: (workflows: { title: string }[]) => void;
 
-  recentGraphs?: Array<GraphRF>;
+  recentGraphs?: GraphRF[];
   setRecentGraphs?: (graphRF: GraphRF, reset?: boolean) => void;
 
   graphOrSubgraph?: boolean;
   setGraphOrSubgraph?: (isItGraph: boolean) => void;
 
-  subgraphsStack?: Array<stackGraph>;
+  subgraphsStack?: stackGraph[];
   setSubgraphsStack?: (graphRF: stackGraph) => void;
 
   graphRF?: GraphRF;
@@ -169,9 +169,9 @@ export interface Task {
   default_inputs?: Inputs[];
   inputs_complete?: boolean;
   task_generator?: string;
-  optional_input_names?: Array<string>;
-  output_names?: Array<string>;
-  required_input_names?: Array<string>;
+  optional_input_names?: string[];
+  output_names?: string[];
+  required_input_names?: string[];
   icon?: string;
   category?: string;
   uiProps?: UiProps;
@@ -184,9 +184,9 @@ export interface Inputs {
 }
 
 export interface nodeInputsOutputs {
-  optional_input_names?: Array<string>;
-  output_names?: Array<string>;
-  required_input_names?: Array<string>;
+  optional_input_names?: string[];
+  output_names?: string[];
+  required_input_names?: string[];
 }
 
 export interface stackGraph {
@@ -308,9 +308,9 @@ export interface EwoksRFNode {
   sourcePosition?: string;
   targetPosition?: string;
   position?: CanvasPosition;
-  optional_input_names?: Array<string>;
-  output_names?: Array<string>;
-  required_input_names?: Array<string>;
+  optional_input_names?: string[];
+  output_names?: string[];
+  required_input_names?: string[];
   uiProps?: UiProps;
 }
 
@@ -383,12 +383,12 @@ export interface RFNode {
 
 export interface GraphRF {
   graph?: GraphDetails;
-  nodes: Array<EwoksRFNode>;
-  links: Array<EwoksRFLink>;
+  nodes: EwoksRFNode[];
+  links: EwoksRFLink[];
 }
 
 export interface GraphEwoks {
   graph?: GraphDetails;
-  nodes: Array<EwoksNode>;
-  links: Array<EwoksLink>;
+  nodes: EwoksNode[];
+  links: EwoksLink[];
 }

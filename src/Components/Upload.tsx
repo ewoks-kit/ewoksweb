@@ -27,7 +27,7 @@ function isJsonString(str) {
   try {
     JSON.parse(str);
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return false;
   }
   return true;
@@ -47,7 +47,7 @@ function Upload(props) {
   const isExecuted = state((state) => state.isExecuted);
 
   const fileNameChanged = async (event) => {
-    // console.log(event.target.files[0], recentGraphs, graphRF, subgraphsStack);
+    // //console.log(event.target.files[0], recentGraphs, graphRF, subgraphsStack);
 
     if (workingGraph.graph.id === graphRF.graph.id) {
       const reader = showFile(event);

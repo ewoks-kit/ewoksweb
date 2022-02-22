@@ -30,10 +30,11 @@ import ClearIcon from '@material-ui/icons/Clear';
 import io from 'socket.io-client';
 import type { ExecutingEvent } from '../types';
 import state from '../store/state';
+import configData from '../configData.json';
 
 const useStyles = DashboardStyle;
 
-export const socket = io('http://localhost:5000/');
+export const socket = io(configData.serverUrl);
 
 export default function Dashboard() {
   const classes = useStyles();
@@ -56,11 +57,11 @@ export default function Dashboard() {
   const setExecutingEvents = state((state) => state.setExecutingEvents);
 
   useEffect(() => {
-    console.log('Executing');
+    //console.log('Executing');
     socket.on('Executing', (data) =>
       setExecutingEvents(data as ExecutingEvent)
     );
-    // socket.on('Executing1', (data) => console.log('Executing1', data));
+    // socket.on('Executing1', (data) => //console.log('Executing1', data));
   }, [setExecutingEvents]);
 
   const handleOpenSettings = () => {
@@ -77,8 +78,8 @@ export default function Dashboard() {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   const executeWorkflow = async () => {
-    // console.log('execute workflow', recentGraphs, graphRF);
-    console.log(isExecuted);
+    // //console.log('execute workflow', recentGraphs, graphRF);
+    //console.log(isExecuted);
     // setIsExecuted(!isExecuted);
     if (recentGraphs.length > 0 && !isExecuted) {
       socket.emit('Execute Graph', graphRF);

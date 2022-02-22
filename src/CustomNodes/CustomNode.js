@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CustomNode(props) {
-  // console.log(props);
+  // //console.log(props);
   const classes = useStyles();
   const [id, setId] = React.useState(props.id);
   const [state, setState] = React.useState({

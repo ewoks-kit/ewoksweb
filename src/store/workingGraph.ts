@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from '../utils/FindAllSubgraphs';
+import configData from '../configData.json';
 
 const initializedGraph = {
   graph: {
@@ -24,13 +25,13 @@ const workingGraph = (set, get) => ({
     // TODO: remove initialise or id: 0. Send clear messages
     if (get().tasks.length === 0) {
       // try {
-      //   const tasks = await axios.get(`http://localhost:5000/tasks`);
+      //   const tasks = await axios.get(`${configData.serverUrl}/tasks`);
       // } catch((error) {
       //   console.error("The Promise is rejected!", error);
       // } finally {
       //   get().setTasks(tasks.data as Task[]);
       // }
-      const tasks = await axios.get(`http://localhost:5000/tasks`);
+      const tasks = await axios.get(`${configData.serverUrl}/tasks`);
       get().setTasks(tasks.data as Task[]);
     }
     get().setSelectedElement({} as EwoksRFNode | EwoksRFLink);
@@ -56,7 +57,7 @@ const workingGraph = (set, get) => ({
 
     // 4. Calculate the new graph given the subgraphs
     let grfNodes = toRFEwoksNodes(workingGraph, newNodeSubgraphs, get().tasks);
-    console.log(grfNodes, workingGraph);
+    //console.log(grfNodes, workingGraph);
     // test notes
     const notes =
       (workingGraph.graph.uiProps &&
@@ -77,7 +78,7 @@ const workingGraph = (set, get) => ({
       ([] as EwoksRFNode[]);
 
     grfNodes = [...grfNodes, ...notes];
-    console.log(notes, grfNodes);
+    //console.log(notes, grfNodes);
 
     const graph = {
       graph: workingGraph.graph,

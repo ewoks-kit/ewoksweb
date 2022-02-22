@@ -58,10 +58,10 @@ export default function EditLinkStyle(propsIn) {
   };
 
   const colorLineChanged = (event) => {
-    console.log(element, event.target.value, {
-      ...element,
-      style: { ...element.style, stroke: event.target.value },
-    });
+    // console.log(element, event.target.value, {
+    //   ...element,
+    //   style: { ...element.style, stroke: event.target.value },
+    // });
     setColorLine(event.target.value);
     setSelectedElement(
       {

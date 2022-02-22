@@ -50,7 +50,7 @@ const onDragStart = (e) => {
 
 // const executing = true;
 const getFromServer = async () => {
-  console.log('executing');
+  //console.log('executing');
 };
 
 // The basic Node component
@@ -82,7 +82,7 @@ const Node: React.FC<NodeProps> = ({
     ...style.title,
     wordWrap: 'break-word',
     borderRadius: '0px',
-    margin: '4px',
+    margin: '2px',
     padding: '2px',
   };
 
@@ -284,7 +284,7 @@ const Node: React.FC<NodeProps> = ({
                   // isValidConnection={(connection) => isValidOutput(connection)}
                   isConnectable
                   // onConnect={(params) =>
-                  //   console.log('handle tt onConnect', params)
+                  //   //console.log('handle tt onConnect', params)
                   // }
                 >
                   {/* <img src={iconsObj['down']} alt="" /> */}

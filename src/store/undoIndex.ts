@@ -3,7 +3,7 @@ const undoIndex = (set, get) => ({
 
   setUndoIndex: (index) => {
     const prevState = get((prev) => prev);
-    console.log(index, prevState.undoIndex, prevState.undoRedo);
+    //console.log(index, prevState.undoIndex, prevState.undoRedo);
     if (index >= 0 && prevState.undoRedo.length > index) {
       set((state) => ({
         ...state,

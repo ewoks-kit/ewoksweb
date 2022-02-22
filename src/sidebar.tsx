@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Button } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import AddNodes from './Components/AddNodes';
 import EditElement from './Components/EditElement';
 import EditElementStyle from './Components/EditElementStyle';
@@ -10,6 +10,7 @@ import axios from 'axios';
 import ExecutionDetails from './Components/ExecutionDetails';
 import DashboardStyle from './layout/DashboardStyle';
 import state from './store/state';
+import configData from './configData.json';
 
 import type { EwoksRFNode, EwoksRFLink, GraphDetails, GraphRF } from './types';
 import { rfToEwoks } from './utils';
@@ -40,7 +41,7 @@ export default function Sidebar(props) {
   const isExecuted = state((state) => state.isExecuted);
 
   useEffect(() => {
-    console.log(selectedElement);
+    //console.log(selectedElement);
     setElement(selectedElement);
   }, [selectedElement.id, selectedElement]);
 
@@ -90,7 +91,7 @@ export default function Sidebar(props) {
 
     if (elD.input_nodes && elD.id !== 'newGraph') {
       await axios
-        .delete(`http://localhost:5000/workflow/${elD.id}`)
+        .delete(`${configData.serverUrl}/workflow/${elD.id}`)
         .then(() => {
           setOpenSnackbar({
             open: true,

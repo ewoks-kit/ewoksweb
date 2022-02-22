@@ -3,7 +3,7 @@ import { style } from './NodeStyle';
 import state from '../store/state';
 
 const ExecutionStepsNode = (args) => {
-  // console.log(args);
+  // //console.log(args);
   // useEffect(() => {
   // }, [args.data.comment, selectedElement.type]);
 
@@ -25,7 +25,7 @@ const ExecutionStepsNode = (args) => {
 
   const goToEvent = (val) => {
     // update graphRF on store
-    console.log(args.id, val);
+    //console.log(args.id, val);
     setCurrentExecutionEvent(val);
   };
 

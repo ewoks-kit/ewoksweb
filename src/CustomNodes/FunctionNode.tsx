@@ -11,7 +11,7 @@ const isValidOutput = () => {
 };
 
 function FunctionNode(fnod) {
-  console.log(fnod);
+  //console.log(fnod);
   return (
     <Node
       isGraph

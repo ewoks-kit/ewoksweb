@@ -76,7 +76,7 @@ export default function NodeDetails(propsIn) {
   ];
 
   useEffect(() => {
-    console.log(element);
+    //console.log(element);
     setInputsComplete(!!element.inputs_complete);
     setDefaultErrorNode(!!element.default_error_node);
     // setDefaultErrorAttributes(element.default_error_attributes);
@@ -86,7 +86,7 @@ export default function NodeDetails(propsIn) {
   }, [element.id, element]);
 
   const propChanged = (propKeyValue) => {
-    console.log(element, propKeyValue);
+    //console.log(element, propKeyValue);
     setSelectedElement({
       ...element,
       ...propKeyValue,
@@ -97,7 +97,7 @@ export default function NodeDetails(propsIn) {
     const el = element as EwoksRFNode;
     const elIn = el.default_inputs;
     if (elIn && elIn[elIn.length - 1] && elIn[elIn.length - 1].id === '') {
-      console.log('should not ADD default');
+      //console.log('should not ADD default');
     } else {
       setSelectedElement(
         {
@@ -151,7 +151,7 @@ export default function NodeDetails(propsIn) {
     const el = element as EwoksRFNode;
     const elMap = el.default_error_attributes.data_mapping || [];
     if (elMap && elMap[elMap.length - 1] && elMap[elMap.length - 1].id === '') {
-      console.log('should not ADD mapping');
+      //console.log('should not ADD mapping');
     } else {
       setSelectedElement(
         {
@@ -186,7 +186,7 @@ export default function NodeDetails(propsIn) {
   };
 
   const mapAllDataChanged = (event) => {
-    console.log(event.target.checked);
+    //console.log(event.target.checked);
     setMapAllData(event.target.checked);
 
     setSelectedElement(

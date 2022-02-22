@@ -9,7 +9,7 @@ const recentGraphs = (set, get) => ({
       rec =
         get().recentGraphs.length > 0
           ? get().recentGraphs.filter((gr) => {
-              // console.log('GRR:', gr, newGraph);
+              // //console.log('GRR:', gr, newGraph);
               return gr.graph.id !== newGraph.graph.id;
             })
           : [];

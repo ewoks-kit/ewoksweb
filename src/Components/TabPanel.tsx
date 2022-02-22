@@ -36,7 +36,7 @@ function TabPanel(props: TabPanelProps) {
 }
 
 const setInputValue = () => {
-  // console.log(val, value);
+  // //console.log(val, value);
 };
 
 function a11yProps(index: number) {

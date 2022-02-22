@@ -9,6 +9,7 @@ import AutocompleteDrop from '../Components/AutocompleteDrop';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import type { GraphEwoks, GraphRF } from '../types';
 import state from '../store/state';
+import configData from '../configData.json';
 
 const useStyles = DashboardStyle;
 
@@ -33,15 +34,15 @@ export default function GetFromServer() {
   };
 
   const getFromServer = async (isSubgraph) => {
-    console.log(workflowValue);
+    //console.log(workflowValue);
     if (workflowValue) {
       setGettingFromServer(true);
       const response = await axios.get(
         // `http://mxbes2-1707:38280/ewoks/workflow/${workflowValue}`
-        `http://localhost:5000/workflow/${workflowValue}`
+        `${configData.serverUrl}/workflow/${workflowValue}`
       );
       if (response.data) {
-        console.log(response.data);
+        //console.log(response.data);
         setGettingFromServer(false);
         if (isSubgraph === 'subgraph') {
           setSubGraph(response.data as GraphEwoks);

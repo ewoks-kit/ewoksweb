@@ -5,7 +5,7 @@ const executingEvents = (set, get) => ({
 
   setExecutingEvents: (execEvent) => {
     const prevState = get((prev) => prev);
-    console.log(execEvent, prevState.executingEvents);
+    //console.log(execEvent, prevState.executingEvents);
 
     let tempPos = { x: 100, y: 100 };
 
@@ -30,7 +30,7 @@ const executingEvents = (set, get) => ({
           elem.nodeId === execEvent.nodeId &&
           elem.event_type === execEvent.event_type
       );
-    console.log(prevState.executingEvents, sameEls);
+    //console.log(prevState.executingEvents, sameEls);
     const tempLabel =
       sameEls.length > 0 ? sameEls.map((elem) => elem.id).join(',') : '';
 

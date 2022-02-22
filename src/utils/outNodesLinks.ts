@@ -8,7 +8,7 @@ export function outNodesLinks(graph) {
   ) {
     const outNodesInputed = [];
     graph.graph.output_nodes.forEach((outNod) => {
-      // console.log(outNod);
+      // //console.log(outNod);
       // if we need position to control showing in-out as nodes in th graph
       // if (outNod.uiProps && outNod.uiProps.position) {
       const nodeSource = graph.nodes.find((no) => no.id === outNod.node);

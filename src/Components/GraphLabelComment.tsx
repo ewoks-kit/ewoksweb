@@ -20,7 +20,7 @@ export default function GraphLabelComment(propsIn) {
   const setSelectedElement = state((state) => state.setSelectedElement);
 
   useEffect(() => {
-    console.log(element);
+    //console.log(element);
     setLabel(element.label);
     setComment(element.uiProps && element.uiProps.comment);
   }, [element.id, element]);

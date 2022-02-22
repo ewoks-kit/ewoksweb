@@ -16,7 +16,7 @@ export default function UndoRedo({ undoF, redoF }) {
   const setUndoIndex = state((state) => state.setUndoIndex);
 
   const undo = () => {
-    console.log('UNDO');
+    //console.log('UNDO');
     setUndoIndex(undoIndex - 1);
   };
 

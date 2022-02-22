@@ -1,35 +1,25 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-// import type {
-//   Graph,
-//   EwoksNode,
-//   EwoksRFNode,
-//   EwoksLink,
-//   EwoksRFLink,
-//   GraphEwoks,
-//   RFNode,
-//   nodeInputsOutputs,
-//   GraphRF,
-// } from '../types';
-
 function assertLog(statement, severity = 'info') {
   // severity can be error, warning, info
   if (severity === 'error') {
+    /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
     console.error(statement);
   } else if (severity === 'warning') {
+    /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
     console.warn(statement);
   } else {
-    console.log(statement);
+    /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
+    console.warn(statement);
   }
 }
 
 function isJsonString(str) {
-  try {
-    JSON.parse(str);
-  } catch (error) {
-    console.log(error);
-    return false;
-  }
-  return true;
+  // try {
+  return JSON.parse(str);
+  // } catch (error) {
+  //   // console.log(error);
+  //   return false;
+  // }
+  // return true;
 }
 
 function includes(entity: {}, label: string, properties: string[]) {
@@ -48,7 +38,7 @@ function includes(entity: {}, label: string, properties: string[]) {
 
 export function validateEwoksGraph(graph) {
   const result = [];
-  // console.log(graph);
+  // //console.log(graph);
   result.push(isJsonString(JSON.stringify(graph)));
   // graph structure
   result.push(
@@ -110,6 +100,6 @@ export function validateEwoksGraph(graph) {
 
   // if subgraphs exist look for the whole tree if it exists and warn
 
-  // console.log(result);
+  // //console.log(result);
   return { result: !result.includes(false), logs: {} };
 }

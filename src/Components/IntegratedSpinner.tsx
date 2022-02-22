@@ -39,7 +39,7 @@ export default function IntegratedSpinner({
   // TODO: synd with the real time the call makes using getting
   React.useEffect(() => {
     if (getting) {
-      // console.log('gettingIn', getting);
+      // //console.log('gettingIn', getting);
       timer.current = window.setTimeout(() => {
         // setSuccess(false);
         setLoading(false);
@@ -53,19 +53,19 @@ export default function IntegratedSpinner({
   }, [getting]);
 
   const handleButtonClick = () => {
-    console.log(isExecuted, loading);
+    //console.log(isExecuted, loading);
     if (!loading) {
-      // console.log('getting1', getting);
+      // //console.log('getting1', getting);
       const runAction = action ? action() : null;
       setSuccess(false);
       setLoading(true);
       timer.current = window.setTimeout(() => {
-        // console.log('getting2', getting);
+        // //console.log('getting2', getting);
         setSuccess(true);
         setLoading(false);
       }, 1500);
       timer.current = window.setTimeout(() => {
-        // console.log('getting3', getting);
+        // //console.log('getting3', getting);
         setSuccess(false);
         setLoading(false);
       }, 3000);

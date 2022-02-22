@@ -38,7 +38,7 @@ export default function IconMenu(props) {
   const { handleShowEwoksGraph } = props;
 
   // const cloneToCanvas = () => {
-  //   console.log('clone the graphRF initializing the id and the label', graphRF);
+  //   //console.log('clone the graphRF initializing the id and the label', graphRF);
   // };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -50,7 +50,7 @@ export default function IconMenu(props) {
   };
 
   const action = (action, element) => {
-    console.log(action, element, tasks);
+    //console.log(action, element, tasks);
     setDoAction(action);
     if (action === 'newTask') {
       setElementToEdit(initializedTask as Task);
@@ -61,7 +61,7 @@ export default function IconMenu(props) {
         const task = tasks.find(
           (tas) => tas.task_identifier === element.task_identifier
         );
-        console.log(task);
+        //console.log(task);
         setElementToEdit(
           task || {
             ...initializedTask,

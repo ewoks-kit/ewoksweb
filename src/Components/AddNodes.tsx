@@ -20,6 +20,7 @@ import TextsmsIcon from '@material-ui/icons/Textsms';
 import Upload from './Upload';
 import AddIcon from '@material-ui/icons/Add';
 import state from '../store/state';
+import configData from '../configData.json';
 
 const onDragStart = (event, { task_identifier, task_type, icon }) => {
   event.dataTransfer.setData('task_identifier', task_identifier);
@@ -41,11 +42,16 @@ const iconsObj = {
   TextsmsIcon,
 };
 
+const onRigthClick = (event) => {
+  event.preventDefault();
+  //console.log('rightclick', tasks);
+};
+
 // Hosts the node images and categories
 // drag and drop to canvas
 // TODO: right-click and view-delete?
 // insert subgraph from disk?
-function AddNodes(props) {
+function AddNodes() {
   const taskCategories = state((state) => state.taskCategories);
   const setTaskCategories = state((state) => state.setTaskCategories);
   const tasks = state((state) => state.tasks);
@@ -53,20 +59,14 @@ function AddNodes(props) {
   const setGraphOrSubgraph = state((state) => state.setGraphOrSubgraph);
 
   const getTasks = async () => {
-    const tasksData = await axios.get(`http://localhost:5000/tasks`);
+    const tasksData = await axios.get(`${configData.serverUrl}/tasks`);
     const tasks = tasksData.data as Task[];
     setTasks(tasks);
-    console.log(taskCategories);
     setTaskCategories(tasks.map((tas) => tas.category));
   };
 
   const insertGraph = () => {
     setGraphOrSubgraph(false);
-  };
-
-  const onRigthClick = (event) => {
-    event.preventDefault();
-    console.log('rightclick', tasks);
   };
 
   return (

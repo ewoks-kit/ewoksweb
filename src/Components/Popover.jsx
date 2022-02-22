@@ -44,7 +44,7 @@ function Popover({ anchor, onClose, nodeData }) {
   if (!nodeData) {
     return <div />;
   }
-  console.log(anchor, onClose, nodeData);
+  //console.log(anchor, onClose, nodeData);
 
   const notReachedValue = nodeData.position.x;
 

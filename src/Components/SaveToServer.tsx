@@ -6,8 +6,9 @@ import { rfToEwoks } from '../utils';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import type { GraphEwoks, GraphRF } from '../types';
 import state from '../store/state';
+import configData from '../configData.json';
 
-console.log(state, state);
+//console.log(state, state);
 // DOC: Save to server button with its spinner
 export default function SaveToServer({ saveToServerF }) {
   const setGettingFromServer = state((st) => st.setGettingFromServer);
@@ -83,7 +84,7 @@ export default function SaveToServer({ saveToServerF }) {
         links: graphRF.links,
       };
       await axios
-        .post(`http://localhost:5000/workflows`, rfToEwoks(newIdGraph))
+        .post(`${configData.serverUrl}/workflows`, rfToEwoks(newIdGraph))
         .then((res) => {
           setGettingFromServer(false);
           setWorkingGraph(res.data as GraphRF);
@@ -92,7 +93,7 @@ export default function SaveToServer({ saveToServerF }) {
     } else if (graphRF.graph.id) {
       await axios
         .put(
-          `http://localhost:5000/workflow/${graphRF.graph.id}`,
+          `${configData.serverUrl}/workflow/${graphRF.graph.id}`,
           rfToEwoks(graphRF)
         )
         .then((res) => setGettingFromServer(false));

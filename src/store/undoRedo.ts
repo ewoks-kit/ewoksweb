@@ -4,7 +4,7 @@ const undoRedo = (set, get) => ({
   undoRedo: [] as Action[],
 
   setUndoRedo: (action: Action) => {
-    console.log(action, get().undoIndex, get().undoRedo);
+    //console.log(action, get().undoIndex, get().undoRedo);
     // TODO: check the size of the history-array  not more than 10
     // when undo and then edit the steps above the current step are deleted
     set((state) => ({
@@ -22,7 +22,7 @@ const undoRedo = (set, get) => ({
   undoIndex: 0 as number,
 
   setUndoIndex: (index) => {
-    console.log(index, get().undoIndex, get().undoRedo);
+    //console.log(index, get().undoIndex, get().undoRedo);
     if (index >= 0 && get().undoRedo.length > index) {
       set((state) => ({
         ...state,

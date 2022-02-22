@@ -17,6 +17,7 @@ import type {
 import axios from 'axios';
 import { rfToEwoks } from '../utils';
 import state from '../store/state';
+import configData from '../configData.json';
 
 export default function FormDialog(props) {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -45,7 +46,7 @@ export default function FormDialog(props) {
   const { open, action, elementToEdit } = props;
 
   useEffect(() => {
-    console.log(elementToEdit);
+    //console.log(elementToEdit);
     setElement(elementToEdit);
     setIsOpen(open);
     if (action === 'cloneGraph') {
@@ -68,7 +69,7 @@ export default function FormDialog(props) {
       const el = element as GraphRF;
       axios // if await is used const response =
         .post(
-          `http://localhost:5000/workflows`,
+          `${configData.serverUrl}/workflows`,
           rfToEwoks({
             ...el,
             graph: { ...el.graph, id: newName, label: newName },
@@ -92,12 +93,12 @@ export default function FormDialog(props) {
       // or newTask
       const elem = element as Task;
       axios // if await is used const response =
-        .post(`http://localhost:5000/tasks`, {
+        .post(`${configData.serverUrl}/tasks`, {
           ...elem,
         })
         .then(async (res) => {
           props.setOpenSaveDialog(false);
-          const tasks = await axios.get(`http://localhost:5000/tasks`);
+          const tasks = await axios.get(`${configData.serverUrl}/tasks`);
           setTasks(tasks.data as Task[]);
         })
         .catch((error) => {

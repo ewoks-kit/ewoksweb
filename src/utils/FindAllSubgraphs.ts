@@ -2,7 +2,7 @@ import { getSubgraphs } from '../utils';
 // import { validateEwoksGraph } from './EwoksValidator';
 
 export async function findAllSubgraphs(graphToSearch, recentGraphs) {
-  console.log(graphToSearch);
+  //console.log(graphToSearch);
   let subsToGet = [graphToSearch];
   const newNodeSubgraphs = [];
 
@@ -28,11 +28,11 @@ export async function findAllSubgraphs(graphToSearch, recentGraphs) {
       subsToGet = [...subsToGet, ...allGraphSubs];
       // validate the next graph to search for subgraphs
       // if (subsToGet.length > 0 && validateEwoksGraph(subsToGet[0])) {
-      //   console.log('validated:', subsToGet[0].graph.id);
+      //   //console.log('validated:', subsToGet[0].graph.id);
       // } else if (subsToGet.length === 0) {
-      //   console.log('Finished ok');
+      //   //console.log('Finished ok');
       // } else {
-      //   console.log('NOT validated');
+      //   //console.log('NOT validated');
       // }
     }
   }
