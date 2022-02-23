@@ -3,7 +3,7 @@ const isExecuted = (set, get) => ({
 
   setIsExecuted: (val: boolean) => {
     const prevState = get((prev) => prev);
-    //console.log(val, prevState);
+    // console.log(val, prevState);
 
     set((state) => ({
       ...state,

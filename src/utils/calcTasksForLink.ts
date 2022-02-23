@@ -10,65 +10,16 @@ export function calcTasksForLink(
 ): Task[] {
   const sourceTmp = tempGraph.nodes.find((nod) => nod.id === source);
   const targetTmp = tempGraph.nodes.find((nod) => nod.id === target);
-  // TODO? if undefined source or/and target node does not exist
 
   let sourceTask = {} as Task;
   let targetTask = {} as Task;
 
   if (sourceTmp) {
-    if (sourceTmp.task_type !== 'graph') {
-      // TODO: if a task find it in tasks. IF NOT THERE?
-      sourceTask = tasks.find(
-        (tas) => tas.task_identifier === sourceTmp.task_identifier
-      );
-    } else {
-      // TODO following line exuiProps.commentamine
-      // if node=subgraph calculate inputs-outputs from subgraph.graph
-      const subgraphNodeSource = newNodeSubgraphs.find(
-        (subGr) => subGr.graph.id === sourceTmp.task_identifier
-      );
-
-      const outputs = [];
-
-      if (subgraphNodeSource) {
-        subgraphNodeSource.graph.output_nodes.forEach((out) =>
-          outputs.push(out.id)
-        );
-      }
-      sourceTask = {
-        task_type: sourceTmp.task_type,
-        task_identifier: sourceTmp.task_identifier,
-        output_names: outputs,
-      };
-    }
+    sourceTask = calcTask('source', sourceTmp, tasks, newNodeSubgraphs);
   }
 
   if (targetTmp) {
-    if (targetTmp.task_type !== 'graph') {
-      // TODO: if a task find it in tasks. IF NOT THERE? add a default?
-      targetTask = tasks.find(
-        (tas) => tas.task_identifier === targetTmp.task_identifier
-      );
-    } else {
-      // TODO following line examine
-      const subgraphNodeTarget = newNodeSubgraphs.find(
-        (subGr) => subGr.graph.id === targetTmp.task_identifier
-      );
-      // if subgraphNodeTarget undefined = not fount
-      const inputs = [];
-      if (subgraphNodeTarget) {
-        subgraphNodeTarget.graph.input_nodes.forEach((inp) =>
-          inputs.push(inp.id)
-        );
-      }
-
-      targetTask = {
-        task_type: targetTmp.task_type,
-        task_identifier: targetTmp.task_identifier,
-        optional_input_names: inputs,
-        required_input_names: [],
-      };
-    }
+    sourceTask = calcTask('target', targetTmp, tasks, newNodeSubgraphs);
   }
 
   // if not found app does not break, put an empty skeleton
@@ -80,4 +31,40 @@ export function calcTasksForLink(
     required_input_names: [],
   };
   return [sourceTask, targetTask];
+}
+
+function calcTask(sourceOrTarget, node, tasks, newNodeSubgraphs) {
+  let task = {} as Task;
+
+  if (node.task_type !== 'graph') {
+    task = tasks.find((tas) => tas.task_identifier === node.task_identifier);
+  } else {
+    const subgraphNodeSource = newNodeSubgraphs.find(
+      (subGr) => subGr.graph.id === node.task_identifier
+    );
+
+    const outputsOrOutputs = [];
+
+    if (subgraphNodeSource) {
+      subgraphNodeSource.graph.output_nodes.forEach((out) =>
+        outputsOrOutputs.push(out.id)
+      );
+    }
+
+    if (sourceOrTarget === 'source') {
+      task = {
+        task_type: node.task_type,
+        task_identifier: node.task_identifier,
+        output_names: outputsOrOutputs,
+      };
+    } else if (sourceOrTarget === 'target') {
+      task = {
+        task_type: node.task_type,
+        task_identifier: node.task_identifier,
+        optional_input_names: outputsOrOutputs,
+        required_input_names: [],
+      };
+    }
+  }
+  return task;
 }

@@ -5,7 +5,7 @@ test('renders one button element', () => {
   render(
     <IntegratedSpinner
       tooltip="testing tooltip"
-      action={//console.log('testing')}
+      action={// console.log('testing')}
       getting={false}
     >
       <div>testing</div>

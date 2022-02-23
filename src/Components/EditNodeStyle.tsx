@@ -24,7 +24,7 @@ export default function EditNodeStyle(propsIn) {
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
   useEffect(() => {
-    //console.log(element);
+    // console.log(element);
     if ('position' in element) {
       setWithImage(element.data.withImage);
       setWithLabel(element.data.withLabel);
@@ -45,7 +45,7 @@ export default function EditNodeStyle(propsIn) {
   };
 
   const withImageChanged = (event) => {
-    //console.log(element, event.target.checked);
+    // console.log(element, event.target.checked);
     setWithImage(event.target.checked);
     setSelectedElement(
       {
@@ -57,7 +57,7 @@ export default function EditNodeStyle(propsIn) {
   };
 
   const withLabelChanged = (event) => {
-    //console.log(element, event.target.checked);
+    // console.log(element, event.target.checked);
     setWithLabel(event.target.checked);
     setSelectedElement(
       {
@@ -69,7 +69,7 @@ export default function EditNodeStyle(propsIn) {
   };
 
   const colorBorderChanged = (event) => {
-    //console.log(element, event.target.value);
+    // console.log(element, event.target.value);
     setColorBorder(event.target.value);
     setSelectedElement(
       {

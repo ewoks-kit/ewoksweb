@@ -34,7 +34,7 @@ export default function GetFromServer() {
   };
 
   const getFromServer = async (isSubgraph) => {
-    //console.log(workflowValue);
+    // console.log(workflowValue);
     if (workflowValue) {
       setGettingFromServer(true);
       const response = await axios.get(
@@ -42,7 +42,7 @@ export default function GetFromServer() {
         `${configData.serverUrl}/workflow/${workflowValue}`
       );
       if (response.data) {
-        //console.log(response.data);
+        // console.log(response.data);
         setGettingFromServer(false);
         if (isSubgraph === 'subgraph') {
           setSubGraph(response.data as GraphEwoks);

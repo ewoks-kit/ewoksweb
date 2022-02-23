@@ -41,7 +41,7 @@ export default function Sidebar(props) {
   const isExecuted = state((state) => state.isExecuted);
 
   useEffect(() => {
-    //console.log(selectedElement);
+    // console.log(selectedElement);
     setElement(selectedElement);
   }, [selectedElement.id, selectedElement]);
 

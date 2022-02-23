@@ -39,7 +39,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const createData = (pair) => {
-  // //console.log(pair, typeof pair.value);
+  // // console.log(pair, typeof pair.value);
   return pair.id && pair.value
     ? { ...pair, isEditMode: false }
     : {
@@ -65,11 +65,11 @@ function EditableTable(props) {
   const { headers } = props;
 
   const typesOfInputs = ['bool', 'number', 'string', 'list', 'dict', 'null'];
-  // //console.log(defaultValues, val, rows, props, typeOfInputs);
+  // // console.log(defaultValues, val, rows, props, typeOfInputs);
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
-    //console.log(defaultValues);
+    // console.log(defaultValues);
     const tOfIn = defaultValues.map((val) =>
       val.value === 'true' || val.value === 'false'
         ? 'boolean'
@@ -96,7 +96,7 @@ function EditableTable(props) {
   const classes = useStyles();
 
   const showEditableDialog = ({ name, title, graph, callbackProps }) => {
-    //console.log(name);
+    // console.log(name);
     setOpenDialog(true);
     setDialogContent({
       id: name,
@@ -107,10 +107,10 @@ function EditableTable(props) {
   };
 
   const onToggleEditMode = (id, index, command) => {
-    //console.log(props, id, rows, props.defaultValues, command, typeOfInputs);
+    // console.log(props, id, rows, props.defaultValues, command, typeOfInputs);
     if (command === 'edit') {
       setDisableSelectType(true);
-      //console.log('disable');
+      // console.log('disable');
     }
     if (command === 'edit' && ['list', 'dict'].includes(typeOfInputs[index])) {
       let initialValue: string | [] | {} = '';
@@ -153,14 +153,14 @@ function EditableTable(props) {
       });
     });
     if (command === 'done') {
-      //console.log('enable');
+      // console.log('enable');
       setDisableSelectType(false);
       props.valuesChanged(rows);
     }
   };
 
   const onChange = (e, row, index) => {
-    //console.log(typeOfInputs, e.target.name, e.target.value, row, index);
+    // console.log(typeOfInputs, e.target.name, e.target.value, row, index);
     if (
       ['string', 'bool', 'number', 'boolean', 'null'].includes(typeOfInputs[0])
     ) {
@@ -212,7 +212,7 @@ function EditableTable(props) {
   };
 
   const changedTypeOfInputs = (e, row, index) => {
-    //console.log(e.target.value, row, props, index);
+    // console.log(e.target.value, row, props, index);
     if (e.target.value === 'null') {
       const newRows = rows.map((rowe) => {
         if (rowe.id === row.id) {
@@ -229,7 +229,7 @@ function EditableTable(props) {
   };
 
   const setRowValue = (name, val, callbackProps) => {
-    //console.log(name, val, callbackProps);
+    // console.log(name, val, callbackProps);
     const newRows = callbackProps.rows.map((row) => {
       if (row.id === callbackProps.id) {
         return name !== ''

@@ -41,7 +41,7 @@ const NoteNode = (args) => {
   };
 
   const commentChanged = (event) => {
-    //console.log(args);
+    // console.log(args);
     setComment(event.target.value);
   };
 
@@ -82,9 +82,9 @@ const NoteNode = (args) => {
         } as React.CSSProperties
       }
       // id="choice"
-      // onMouseOver={() => //console.log('onMouseOver')}
+      // onMouseOver={() => // console.log('onMouseOver')}
       onFocus={() => {
-        //console.log('onFocus');
+        // console.log('onFocus');
         setEdit(true);
       }}
       role="button"

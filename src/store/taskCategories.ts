@@ -1,4 +1,4 @@
-const taskCategories = (set, get) => ({
+const taskCategories = (set) => ({
   taskCategories: ['Est', 'Dusk'],
   setTaskCategories: (taskCategories) => {
     set((state) => ({

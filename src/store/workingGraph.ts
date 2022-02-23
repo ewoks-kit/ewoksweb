@@ -57,7 +57,7 @@ const workingGraph = (set, get) => ({
 
     // 4. Calculate the new graph given the subgraphs
     let grfNodes = toRFEwoksNodes(workingGraph, newNodeSubgraphs, get().tasks);
-    //console.log(grfNodes, workingGraph);
+    // console.log(grfNodes, workingGraph);
     // test notes
     const notes =
       (workingGraph.graph.uiProps &&
@@ -78,7 +78,7 @@ const workingGraph = (set, get) => ({
       ([] as EwoksRFNode[]);
 
     grfNodes = [...grfNodes, ...notes];
-    //console.log(notes, grfNodes);
+    // console.log(notes, grfNodes);
 
     const graph = {
       graph: workingGraph.graph,

@@ -1,3 +1,5 @@
+import existsOrValue from './existsOrValue';
+
 // calc the input nodes and links that need to be added to the graph from
 // the input_nodes
 export function inNodesLinks(graph) {
@@ -11,17 +13,15 @@ export function inNodesLinks(graph) {
     graph.graph.input_nodes.forEach((inNod) => {
       const nodeTarget = graph.nodes.find((no) => no.id === inNod.node);
       if (nodeTarget) {
-        const temPosition = (inNod.uiProps && inNod.uiProps.position) || {
+        const temPosition = existsOrValue(inNod.uiProps, 'position', {
           x: 50,
           y: 50,
-        };
+        });
+
         if (!inNodesInputed.includes(inNod.id)) {
           inputs.nodes.push({
             id: inNod.id,
-            label:
-              inNod.uiProps && inNod.uiProps.label
-                ? inNod.uiProps.label
-                : inNod.id,
+            label: existsOrValue(inNod.uiProps, 'label', inNod.id),
             task_type: 'graphInput',
             task_identifier: 'Start-End',
             position: temPosition,
@@ -29,9 +29,9 @@ export function inNodesLinks(graph) {
               type: 'input',
               position: temPosition,
               icon: 'graphInput',
-              withImage: inNod.uiProps && inNod.uiProps.withImage,
-              withLabel: inNod.uiProps && inNod.uiProps.withLabel,
-              colorBorder: inNod.uiProps && inNod.uiProps.colorBorder,
+              withImage: existsOrValue(inNod.uiProps, 'withImage', true),
+              withLabel: existsOrValue(inNod.uiProps, 'withLabel', true),
+              colorBorder: existsOrValue(inNod.uiProps, 'colorBorder', ''),
             },
           });
           inNodesInputed.push(inNod.id);
@@ -42,20 +42,14 @@ export function inNodesLinks(graph) {
           source: inNod.id,
           target: inNod.node,
           sub_target: nodeTarget.task_type !== 'graph' ? '' : inNod.sub_node,
-          conditions:
-            inNod.link_attributes && inNod.link_attributes.conditions
-              ? inNod.link_attributes.conditions
-              : [],
+          conditions: existsOrValue(inNod.link_attributes, 'conditions', []),
           uiProps: {
-            label:
-              inNod.link_attributes && inNod.link_attributes.label
-                ? inNod.link_attributes.label
-                : '',
-            type: (inNod.uiProps && inNod.uiProps.linkStyle) || 'default',
+            label: existsOrValue(inNod.link_attributes, 'label', ''),
+            type: existsOrValue(inNod.uiProps, 'linkStyle', 'default'),
             arrowHeadType: 'arrowclosed',
-            withImage: inNod.uiProps && inNod.uiProps.withImage,
-            withLabel: inNod.uiProps && inNod.uiProps.withLabel,
-            colorLink: inNod.uiProps && inNod.uiProps.colorLink,
+            withImage: existsOrValue(inNod.uiProps, 'withImage', true),
+            withLabel: existsOrValue(inNod.uiProps, 'withLabel', true),
+            colorBorder: existsOrValue(inNod.uiProps, 'colorBorder', ''),
           },
         });
       }

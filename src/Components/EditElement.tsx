@@ -15,7 +15,7 @@ function EditElement(propsIn) {
   const { setElement } = propsIn;
 
   useEffect(() => {
-    //console.log(element.label);
+    // console.log(element.label);
   }, [element.id, element.label]);
 
   return (

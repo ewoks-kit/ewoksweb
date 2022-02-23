@@ -1,4 +1,4 @@
-const tasks = (set, get) => ({
+const tasks = (set) => ({
   tasks: [],
   setTasks: (tasks) => {
     set((state) => ({

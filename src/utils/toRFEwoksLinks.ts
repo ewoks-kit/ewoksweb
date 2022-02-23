@@ -2,6 +2,7 @@ import type { EwoksRFLink } from '../types';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import { calcTasksForLink } from './calcTasksForLink';
+import existsOrValue from './existsOrValue';
 
 // from GraphEwoks get EwoksRFLinks
 // tempGraph: the graph to transform its links
@@ -51,9 +52,9 @@ export function toRFEwoksLinks(
         return {
           // TODO? does not accept 2 links between the same nodes
           id: `${source as string}:${
-            (uiProps && (uiProps.sourceHandle as string)) || ''
+            existsOrValue(uiProps, 'sourceHandle', '') as string
           }->${target as string}:${
-            (uiProps && (uiProps.targetHandle as string)) || ''
+            existsOrValue(uiProps, 'targetHandle', '') as string
           }_${id++}`,
           label: calcLabel(uiProps, conditions, data_mapping),
           source: source.toString(),
@@ -62,9 +63,9 @@ export function toRFEwoksLinks(
           targetHandle: calcTargetHandle(uiProps, sub_target),
           sourceHandle: calcSourceHandle(uiProps, sub_source),
           type: (uiProps && uiProps.type) || '',
-          arrowHeadType: (uiProps && uiProps.arrowHeadType) || 'arrowclosed',
+          arrowHeadType: existsOrValue(uiProps, 'arrowHeadType', 'arrowclosed'),
           // labelStyle: uiProps && uiProps.labelStyle ? uiProps.labelStyle : {},
-          animated: (uiProps && uiProps.animated) || false,
+          animated: existsOrValue(uiProps, 'animated', false),
           style: {
             stroke:
               (uiProps && uiProps.style && uiProps.style.stroke) || '#96a5f9',
@@ -93,7 +94,7 @@ export function toRFEwoksLinks(
             conditions: conditions || [],
             map_all_data: !!map_all_data,
             on_error: on_error || false,
-            comment: (uiProps && uiProps.comment) || '',
+            comment: existsOrValue(uiProps, 'comment', ''),
           },
         };
       }

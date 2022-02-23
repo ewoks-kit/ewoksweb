@@ -44,7 +44,7 @@ const iconsObj = {
 
 const onRigthClick = (event) => {
   event.preventDefault();
-  //console.log('rightclick', tasks);
+  // console.log('rightclick', tasks);
 };
 
 // Hosts the node images and categories

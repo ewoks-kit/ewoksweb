@@ -6,7 +6,7 @@ const selectedElement = (set, get) => ({
 
   setSelectedElement: (element, from) => {
     const prevState = get((prev) => prev);
-    //console.log(element, from, prevState);
+    // console.log(element, from, prevState);
     const wg = prevState.workingGraph.graph.id;
     const { graph, nodes, links } = prevState.graphRF;
 

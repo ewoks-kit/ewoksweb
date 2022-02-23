@@ -38,7 +38,7 @@ export default function LabelComment(propsIn) {
   }, [element]);
 
   const useConditions = () => {
-    //console.log(element);
+    // console.log(element);
     const el = element as EwoksRFLink;
     const newLabel =
       el.data.conditions.length > 0
@@ -57,7 +57,7 @@ export default function LabelComment(propsIn) {
   };
 
   const useMapping = () => {
-    //console.log(element);
+    // console.log(element);
     const el = element as EwoksRFLink;
     const newLabel =
       el.data.data_mapping.length > 0
@@ -76,7 +76,7 @@ export default function LabelComment(propsIn) {
   };
 
   const labelChanged = (event) => {
-    //console.log('label changed:', event.target.value);
+    // console.log('label changed:', event.target.value);
     setLabel(event.target.value);
     if ('position' in element) {
       const el = element;
@@ -100,7 +100,7 @@ export default function LabelComment(propsIn) {
   };
 
   const commentChanged = (event) => {
-    //console.log('comment changed:', event.target.value);
+    // console.log('comment changed:', event.target.value);
     setComment(event.target.value);
     const el = element;
     setSelectedElement(

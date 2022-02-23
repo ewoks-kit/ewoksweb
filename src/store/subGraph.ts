@@ -3,6 +3,7 @@ import { createGraph } from '../utils';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from '../utils/FindAllSubgraphs';
+import existsOrValue from '../utils/existsOrValue';
 
 const subGraph = (set, get) => ({
   subGraph: {
@@ -66,21 +67,19 @@ const subGraph = (set, get) => ({
     if (subToAdd) {
       const inputsSub = subToAdd.graph.input_nodes.map((input) => {
         return {
-          label: `${
-            input.uiProps && input.uiProps.label
-              ? input.uiProps.label
-              : input.id
-          }: ${input.node} ${input.sub_node ? `  -> ${input.sub_node}` : ''}`,
+          label: calcLabel(input),
+          // `${
+          //   existsOrValue(input.uiProps, 'label', input.id) as string
+          // }: ${input.node} ${input.sub_node ? `  -> ${input.sub_node}` : ''}`,
           type: 'data ',
         };
       });
       const outputsSub = subToAdd.graph.output_nodes.map((output) => {
         return {
-          label: `${
-            output.uiProps && output.uiProps.label
-              ? output.uiProps.label
-              : output.id
-          }: ${output.node} ${output.sub_node ? ` -> ${output.sub_node}` : ''}`,
+          label: calcLabel(output),
+          // `${
+          //   existsOrValue(output.uiProps, 'label', output.id) as string
+          // }: ${output.node} ${output.sub_node ? ` -> ${output.sub_node}` : ''}`,
           type: 'data ',
         };
       });
@@ -141,5 +140,13 @@ const subGraph = (set, get) => ({
     return graph;
   },
 });
+
+function calcLabel(inputOutput): string {
+  return `${
+    existsOrValue(inputOutput.uiProps, 'label', inputOutput.id) as string
+  }: ${inputOutput.node as string} ${
+    inputOutput.sub_node ? ` -> ${inputOutput.sub_node as string}` : ''
+  }`;
+}
 
 export default subGraph;

@@ -46,7 +46,7 @@ export default function FormDialog(props) {
   const { open, action, elementToEdit } = props;
 
   useEffect(() => {
-    //console.log(elementToEdit);
+    // console.log(elementToEdit);
     setElement(elementToEdit);
     setIsOpen(open);
     if (action === 'cloneGraph') {

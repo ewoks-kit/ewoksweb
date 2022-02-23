@@ -27,12 +27,12 @@ const useStyles = makeStyles(() => ({
 function CustomTableCell({ index, row, name, onChange, type, typeOfValues }) {
   const classes = useStyles();
   const { isEditMode } = row;
-  // //console.log(index, row, name, onChange, type, typeOfValues);
+  // // console.log(index, row, name, onChange, type, typeOfValues);
 
   const [boolVal, setBoolVal] = React.useState(true);
 
   useEffect(() => {
-    // //console.log(row);
+    // // console.log(row);
     setBoolVal(row.value !== null ? row.value.toString() : 'null');
   }, [row.value, row]);
 

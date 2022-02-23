@@ -1,6 +1,7 @@
 import type { EwoksRFNode, GraphRF } from '../types';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
+import existsOrValue from './existsOrValue';
 
 // Accepts a GraphEwoks and returns an EwoksRFNode[]
 export function toRFEwoksNodes(
@@ -38,61 +39,13 @@ export function toRFEwoksNodes(
         default_error_node,
         default_error_attributes,
         task_generator,
-        // need to put
         task_icon,
         task_category,
         uiProps,
       }) => {
         const nodeType = calcNodeType(inputsAl, outputsAl, task_type, id);
 
-        // locate the task and add required+optional-inputs + outputs
-        const tempTask = calcTask(tasks, task_identifier, task_type);
-
-        if (task_type !== 'graph') {
-          return {
-            id: id.toString(),
-            task_type,
-            task_identifier,
-            type: task_type, // need it for visualizing dataNodes
-            inputs_complete: inputs_complete || false,
-            default_error_node: default_error_node || false,
-            default_error_attributes: default_error_attributes || {
-              map_all_data: true,
-              data_mapping: [],
-            },
-            task_generator: task_generator || '',
-            task_icon: task_icon || '',
-            task_category: task_category || '',
-            default_inputs: default_inputs || [],
-            optional_input_names: tempTask.optional_input_names,
-            output_names: tempTask.output_names,
-            required_input_names: tempTask.required_input_names,
-            label,
-            data: {
-              label: label ? label : task_identifier,
-              type: nodeType,
-              icon: (uiProps && uiProps.icon) || '',
-              comment: (uiProps && uiProps.comment) || '',
-              moreHandles: existsOrValue(uiProps, 'moreHandles', false),
-              executing: false,
-              withImage: existsOrValue(uiProps, 'withImage', true),
-              withLabel: existsOrValue(uiProps, 'withLabel', true),
-              colorBorder: existsOrValue(uiProps, 'colorBorder', ''),
-            },
-            position: existsOrValue(uiProps, 'position', { x: 100, y: 100 }),
-          };
-        }
-        // if node=subgraph calculate inputs-outputs from subgraph.graph
-        const subgraphNode: GraphRF = newNodeSubgraphs.find(
-          (subGr) => subGr.graph.id === task_identifier
-        );
-
-        const [inputsSub, outputsSub] = calcInOutForSubgraph(
-          uiProps,
-          subgraphNode
-        );
-
-        return {
+        const node: EwoksRFNode = {
           id: id.toString(),
           task_type,
           task_identifier,
@@ -104,26 +57,32 @@ export function toRFEwoksNodes(
             data_mapping: [],
           },
           task_generator: task_generator || '',
+          task_icon: task_icon || '',
           default_inputs: default_inputs || [],
           label,
           data: {
             label: label ? label : task_identifier,
             type: nodeType,
-            exists: subgraphNode && !!subgraphNode.graph.id,
-            inputs: inputsSub,
-            outputs: outputsSub,
-            // inputsFlow,
-            icon: (uiProps && uiProps.icon) || '',
-            comment: (uiProps && uiProps.comment) || '',
+            icon: existsOrValue(uiProps, 'icon', ''),
+            comment: existsOrValue(uiProps, 'comment', ''),
             moreHandles: existsOrValue(uiProps, 'moreHandles', false),
             executing: false,
             withImage: existsOrValue(uiProps, 'withImage', true),
             withLabel: existsOrValue(uiProps, 'withLabel', true),
             colorBorder: existsOrValue(uiProps, 'colorBorder', ''),
           },
-          // inputs: inputsFlow, // for connecting graphically to different input
-          position: uiProps.position,
+          position: existsOrValue(uiProps, 'position', { x: 100, y: 100 }),
         };
+
+        return addNodeProperties(
+          task_type,
+          newNodeSubgraphs,
+          task_identifier,
+          uiProps,
+          node,
+          tasks,
+          task_category
+        );
       }
     );
   }
@@ -184,10 +143,6 @@ function calcTask(tasks, task_identifier, task_type) {
   return tempTask;
 }
 
-function existsOrValue(uiProps, existsIn, value) {
-  return uiProps && existsIn in uiProps ? uiProps[existsIn] : value;
-}
-
 function calcInOutForSubgraph(uiProps, subgraphNode) {
   let inputsSub = [];
   let outputsSub = [];
@@ -222,4 +177,47 @@ function calcInOutForSubgraph(uiProps, subgraphNode) {
     outputsSub = [{ label: 'unknown_output', type: 'data' }];
   }
   return [inputsSub, outputsSub];
+}
+
+function addNodeProperties(
+  task_type,
+  newNodeSubgraphs,
+  task_identifier,
+  uiProps,
+  node,
+  tasks,
+  task_category
+) {
+  let tempNode = { ...node };
+  if (task_type === 'graph') {
+    // if node=subgraph calculate inputs-outputs from subgraph.graph
+    const subgraphNode: GraphRF = newNodeSubgraphs.find(
+      (subGr) => subGr.graph.id === task_identifier
+    );
+
+    const [inputsSub, outputsSub] = calcInOutForSubgraph(uiProps, subgraphNode);
+
+    tempNode = {
+      ...tempNode,
+      data: {
+        ...tempNode.data,
+        exists: subgraphNode && !!subgraphNode.graph.id,
+        inputs: inputsSub,
+        outputs: outputsSub,
+      },
+    };
+  } else {
+    // locate the task and add required+optional-inputs + outputs
+    const tempTask = calcTask(tasks, task_identifier, task_type);
+
+    tempNode = {
+      ...tempNode,
+      task_category: task_category || '',
+      optional_input_names: tempTask.optional_input_names,
+      output_names: tempTask.output_names,
+      required_input_names: tempTask.required_input_names,
+    };
+  }
+
+  return tempNode;
 }

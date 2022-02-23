@@ -38,7 +38,7 @@ function includes(entity: {}, label: string, properties: string[]) {
 
 export function validateEwoksGraph(graph) {
   const result = [];
-  // //console.log(graph);
+  // // console.log(graph);
   result.push(isJsonString(JSON.stringify(graph)));
   // graph structure
   result.push(
@@ -100,6 +100,6 @@ export function validateEwoksGraph(graph) {
 
   // if subgraphs exist look for the whole tree if it exists and warn
 
-  // //console.log(result);
+  // // console.log(result);
   return { result: !result.includes(false), logs: {} };
 }

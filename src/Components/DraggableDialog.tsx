@@ -39,7 +39,7 @@ export default function DraggableDialog(props) {
   const { open, content } = props;
 
   useEffect(() => {
-    //console.log(content, open);
+    // console.log(content, open);
     setGraph((content && content.object) || {});
     setIsOpen(open || false);
     setTitle((content && content.title) || '');
@@ -57,7 +57,7 @@ export default function DraggableDialog(props) {
 
   const handleSave = () => {
     setIsOpen(false);
-    //console.log(name, graph, callbackProps);
+    // console.log(name, graph, callbackProps);
     props.setValue(name, graph, callbackProps);
   };
 

@@ -14,9 +14,10 @@ import configData from './configData.json';
 export const ewoksNetwork = {};
 
 export async function getWorkflows(): Promise<{ title: string }[]> {
-  //console.log(process.env);
+  // console.log(process.env);
   const workflows = await axios
     .get(`${configData.serverUrl}/workflows`)
+    /* eslint-disable no-console */
     .catch((error) => console.log(error));
   //
   if (workflows && workflows.data) {
@@ -24,6 +25,7 @@ export async function getWorkflows(): Promise<{ title: string }[]> {
     return workf.map((work) => {
       return { title: work };
     });
+    /* eslint-disable no-else-return */
   } else {
     return [];
   }
@@ -75,7 +77,7 @@ export async function getSubgraphs(
       .then(
         axios.spread((...res) => {
           // all requests are now complete in an array
-          //console.log(res);
+          // console.log(res);
           // if there is a null means the subgraph was not found
           // and it should show up in red
           const resCln = res.filter((result) => result.data !== null);
@@ -85,10 +87,10 @@ export async function getSubgraphs(
     // Uncomment
     // .catch((error) => {
     //   // remove after handling the error
-    //   //console.log('AXIOS ERROR', id, error);
+    //   // console.log('AXIOS ERROR', id, error);
     // });
   }
-  //console.log(results);
+  // console.log(results);
   return results ? results : [];
 }
 

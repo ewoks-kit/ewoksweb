@@ -20,7 +20,7 @@ test('renders one button element', async () => {
   );
 
   const buttonElementsOpenedCategories = screen.getAllByRole('button');
-  //console.log(buttonElementsOpenedCategories);
+  // console.log(buttonElementsOpenedCategories);
   expect(buttonElementsOpenedCategories).toHaveLength(3);
 
   fireEvent(
@@ -32,7 +32,7 @@ test('renders one button element', async () => {
   );
 
   const buttonElementsOpenedCategoriesClick0 = screen.getAllByRole('button');
-  //console.log(buttonElementsOpenedCategoriesClick0);
+  // console.log(buttonElementsOpenedCategoriesClick0);
   expect(buttonElementsOpenedCategoriesClick0).toHaveLength(3);
 
   fireEvent(
@@ -44,7 +44,7 @@ test('renders one button element', async () => {
   );
 
   const buttonElementsOpenedCategoriesClick1 = screen.getAllByRole('button');
-  //console.log(buttonElementsOpenedCategoriesClick1);
+  // console.log(buttonElementsOpenedCategoriesClick1);
   expect(buttonElementsOpenedCategoriesClick1).toHaveLength(3);
 
   // fireEvent(

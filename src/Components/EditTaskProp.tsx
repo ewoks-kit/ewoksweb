@@ -12,7 +12,7 @@ function EditTaskProp({ id, label, value, propChanged, editProps }) {
   const [editProp, setEditProp] = React.useState(false);
   const [taskProp, setTaskProp] = React.useState('');
 
-  // //console.log(id, label, value, propChanged, editProps);
+  // // console.log(id, label, value, propChanged, editProps);
 
   useEffect(() => {
     setTaskProp(value);
@@ -22,7 +22,7 @@ function EditTaskProp({ id, label, value, propChanged, editProps }) {
   }, [value, editProps]);
 
   const onEditProp = () => {
-    // //console.log(selectedElement);
+    // // console.log(selectedElement);
     setEditProp(!editProp);
   };
 

@@ -36,26 +36,12 @@ export function toEwoksLinks(links): EwoksLink[] {
         if (con.source_output) {
           return {
             ...con,
-            value:
-              con.value === 'true'
-                ? true
-                : con.value === 'false'
-                ? false
-                : con.value === 'null'
-                ? null
-                : con.value,
+            value: calcConditionValue(con),
           };
         }
         return {
           source_output: con.id,
-          value:
-            con.value === 'true'
-              ? true
-              : con.value === 'false'
-              ? false
-              : con.value === 'null'
-              ? null
-              : con.value,
+          value: calcConditionValue(con),
         };
       }),
       on_error,
@@ -75,4 +61,14 @@ export function toEwoksLinks(links): EwoksLink[] {
       },
     })
   );
+}
+
+function calcConditionValue(condition) {
+  return condition.value === 'true'
+    ? true
+    : condition.value === 'false'
+    ? false
+    : condition.value === 'null'
+    ? null
+    : condition.value;
 }

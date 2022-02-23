@@ -29,7 +29,7 @@ export default function LinkDetails(propsIn) {
   const [conditions, setConditions] = React.useState<Inputs[]>([]);
 
   useEffect(() => {
-    //console.log(element);
+    // console.log(element);
     setElementL(element);
     if (element.data && element.data.data_mapping) {
       setDataMapping(element.data.data_mapping);
@@ -57,7 +57,7 @@ export default function LinkDetails(propsIn) {
     const el = element as EwoksRFLink;
     const elMap = el.data.data_mapping;
     if (elMap && elMap[elMap.length - 1] && elMap[elMap.length - 1].id === '') {
-      //console.log('should not ADD mapping');
+      // console.log('should not ADD mapping');
     } else {
       setSelectedElement(
         {
@@ -109,7 +109,7 @@ export default function LinkDetails(propsIn) {
     const el = element as EwoksRFLink;
     const elCon = el.data.conditions;
     if (elCon && elCon[elCon.length - 1] && elCon[elCon.length - 1].id === '') {
-      //console.log('should not ADD condition');
+      // console.log('should not ADD condition');
     } else {
       setSelectedElement(
         {

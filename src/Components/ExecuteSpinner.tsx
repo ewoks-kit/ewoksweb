@@ -32,7 +32,7 @@ export default function ExecuteSpinner({ children, tooltip, action, getting }) {
 
   // TODO: synd with the real time the call makes using getting
   React.useEffect(() => {
-    //console.log('getting', getting);
+    // console.log('getting', getting);
     if (getting) {
       setLoading(true);
     } else setLoading(false);

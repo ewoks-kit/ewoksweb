@@ -285,12 +285,15 @@ export interface EwoksRFNode {
   task_type?: string;
   type?: string;
   task_identifier?: string;
+  task_icon?: string;
+  task_category?: string;
   default_inputs?: Inputs[];
   inputs_complete?: boolean;
   task_generator?: string;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes;
   data?: {
+    executing?: boolean;
     exists?: boolean;
     label?: string;
     type?: string;

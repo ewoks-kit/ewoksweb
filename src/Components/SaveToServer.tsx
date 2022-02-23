@@ -8,7 +8,7 @@ import type { GraphEwoks, GraphRF } from '../types';
 import state from '../store/state';
 import configData from '../configData.json';
 
-//console.log(state, state);
+// console.log(state, state);
 // DOC: Save to server button with its spinner
 export default function SaveToServer({ saveToServerF }) {
   const setGettingFromServer = state((st) => st.setGettingFromServer);
