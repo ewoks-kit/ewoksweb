@@ -5,14 +5,14 @@ import existsOrValue from './existsOrValue';
 // from the nodes of the graphRF model with types graphInput, graphOutput
 export function calcGraphInputsOutputs(graph): GraphDetails {
   const graph_links = [...graph.links];
-  let input_nodes = [];
-  let output_nodes = [];
+  const input_nodes = [];
+  const output_nodes = [];
 
   graph.nodes.forEach((nod) => {
     if (nod.task_type === 'graphInput') {
-      input_nodes = calcInOutNodes('graphInput', graph, nod, graph_links);
+      input_nodes.push(calcInOutNodes('graphInput', graph, nod, graph_links));
     } else if (nod.task_type === 'graphOutput') {
-      output_nodes = calcInOutNodes('graphOutput', graph, nod, graph_links);
+      output_nodes.push(calcInOutNodes('graphOutput', graph, nod, graph_links));
     }
   });
   return {
@@ -25,7 +25,7 @@ export function calcGraphInputsOutputs(graph): GraphDetails {
 }
 
 function calcInOutNodes(inputOrOutput, graph, nod, graph_links) {
-  let nodes = [];
+  let node = {};
 
   let nodesNamesConnectedTo: string[] = [];
   if (inputOrOutput === 'graphInput') {
@@ -59,9 +59,8 @@ function calcInOutNodes(inputOrOutput, graph, nod, graph_links) {
     if (nodConnected.task_type === 'graph') {
       // find the link and get the sub_node it is connected to in the graph
       // TODO: find the correct output if a graph has two links to the same output
-      nodes = calcNodeProps(
+      node = calcNodeProps(
         true,
-        nodes,
         nod,
         nodConnected,
         graph_links,
@@ -72,9 +71,8 @@ function calcInOutNodes(inputOrOutput, graph, nod, graph_links) {
         graph_links.splice(link_index, 1);
       } // !!
     } else {
-      nodes = calcNodeProps(
+      node = calcNodeProps(
         false,
-        nodes,
         nod,
         nodConnected,
         graph_links,
@@ -83,20 +81,18 @@ function calcInOutNodes(inputOrOutput, graph, nod, graph_links) {
       );
     }
   });
-  return nodes;
+  return node;
 }
 
 function calcNodeProps(
   isGraph,
-  nodes,
   nod,
   nodConnected,
   graph_links,
   link_index,
   inputOrOutput
 ) {
-  const tempNodes = [...nodes];
-  tempNodes.push({
+  return {
     id: nod.id,
     node: nodConnected.id,
     sub_node: isGraph
@@ -122,6 +118,5 @@ function calcNodeProps(
       withLabel: nod.data.withLabel || true,
       colorBorder: nod.data.colorBorder,
     },
-  });
-  return tempNodes;
+  };
 }

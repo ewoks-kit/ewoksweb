@@ -111,7 +111,7 @@ const Node: React.FC<NodeProps> = ({
         } as React.CSSProperties
       }
       id="choice"
-      onMouseOver={() => console.log(label)}
+      // onMouseOver={() => console.log(label)}
       onFocus={() => console.log(label)}
       role="button"
       tabIndex={0}
