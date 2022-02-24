@@ -143,32 +143,42 @@ function calcTask(tasks, task_identifier, task_type) {
   return tempTask;
 }
 
-function calcInOutForSubgraph(uiProps, subgraphNode) {
+function calcInOutForSubgraph(subgraphNode) {
   let inputsSub = [];
   let outputsSub = [];
 
   if (subgraphNode && subgraphNode.graph.id) {
+    const allOutputsIds = subgraphNode.graph.output_nodes.map((nod) => nod.id);
+    const allInputsIds = subgraphNode.graph.input_nodes.map((nod) => nod.id);
+
     inputsSub = subgraphNode.graph.input_nodes.map((input) => {
+      allInputsIds.shift();
+
       return {
         id: input.id,
-        label: `${
-          (input.uiProps && (input.uiProps.label as string)) ||
-          (input.id as string)
-        }: ${input.node as string} ${
-          input.sub_node ? `  -> ${input.sub_node as string}` : ''
-        }`,
+        label: calcLabel(input, allInputsIds),
+        // `${
+        //   ('uiProps' in input && (input.uiProps.label as string)) ||
+        //   (input.id as string)
+        // }${allInputsIds.includes(input.id) ? '_' : ':'} ${
+        //   input.node as string
+        // } ${input.sub_node ? `  -> ${input.sub_node as string}` : ''}`,
         type: 'data ',
       };
     });
+
     outputsSub = subgraphNode.graph.output_nodes.map((output) => {
+      allOutputsIds.shift();
+
       return {
         id: output.id,
-        label: `${
-          (uiProps in output && (output.uiProps.label as string)) ||
-          (output.id as string)
-        }: ${output.node as string} ${
-          output.sub_node ? ` -> ${output.sub_node as string}` : ''
-        }`,
+        label: calcLabel(output, allOutputsIds),
+        // `${
+        //   ('uiProps' in output && (output.uiProps.label as string)) ||
+        //   (output.id as string)
+        // }${allOutputsIds.includes(output.id) ? '_' : ':'} ${
+        //   output.node as string
+        // } ${output.sub_node ? ` -> ${output.sub_node as string}` : ''}`,
         type: 'data ',
       };
     });
@@ -177,6 +187,15 @@ function calcInOutForSubgraph(uiProps, subgraphNode) {
     outputsSub = [{ label: 'unknown_output', type: 'data' }];
   }
   return [inputsSub, outputsSub];
+}
+
+function calcLabel(inOut, allInOutputsIds) {
+  return `${
+    ('uiProps' in inOut && (inOut.uiProps.label as string)) ||
+    (inOut.id as string)
+  }${allInOutputsIds.includes(inOut.id) ? '_' : ':'} ${inOut.node as string} ${
+    inOut.sub_node ? `  -> ${inOut.sub_node as string}` : ''
+  }`;
 }
 
 function addNodeProperties(
@@ -195,7 +214,7 @@ function addNodeProperties(
       (subGr) => subGr.graph.id === task_identifier
     );
 
-    const [inputsSub, outputsSub] = calcInOutForSubgraph(uiProps, subgraphNode);
+    const [inputsSub, outputsSub] = calcInOutForSubgraph(subgraphNode);
 
     tempNode = {
       ...tempNode,

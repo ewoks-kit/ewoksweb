@@ -65,17 +65,17 @@ export default function Sidebar(props) {
     const elL = element as EwoksRFLink;
     const elD = element as GraphDetails;
     if (elN.position) {
-      // find associated links to delete
       const nodesLinks = graphRF.links.filter(
         (link) => !(link.source === elN.id || link.target === elN.id)
       );
+
       newGraph = {
         ...graphRF,
         nodes: graphRF.nodes.filter((nod) => nod.id !== element.id),
         links: nodesLinks,
       };
       setUndoRedo({
-        action: 'Node deleted',
+        action: 'Removed a Node',
         graph: newGraph,
       });
     } else if (elL.source) {
@@ -84,7 +84,7 @@ export default function Sidebar(props) {
         links: graphRF.links.filter((link) => link.id !== elL.id),
       };
       setUndoRedo({
-        action: 'Link deleted',
+        action: 'Removed a Link',
         graph: newGraph,
       });
     }

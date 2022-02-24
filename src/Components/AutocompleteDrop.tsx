@@ -65,6 +65,7 @@ function AutocompleteDrop(props) {
         setOpen(false);
       }}
       // isOptionEqualToValue={(option, value) => option.title === value.title}
+      getOptionSelected={(option) => option.title}
       getOptionLabel={(option) => option.title}
       options={options}
       loading={loading}

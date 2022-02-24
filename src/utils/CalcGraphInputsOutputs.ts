@@ -5,14 +5,30 @@ import existsOrValue from './existsOrValue';
 // from the nodes of the graphRF model with types graphInput, graphOutput
 export function calcGraphInputsOutputs(graph): GraphDetails {
   const graph_links = [...graph.links];
-  const input_nodes = [];
-  const output_nodes = [];
+  let input_nodes = [];
+  let output_nodes = [];
 
   graph.nodes.forEach((nod) => {
     if (nod.task_type === 'graphInput') {
-      input_nodes.push(calcInOutNodes('graphInput', graph, nod, graph_links));
+      console.log(
+        input_nodes,
+        calcInOutNodes('graphInput', graph, nod, graph_links)
+      );
+      input_nodes = [
+        ...input_nodes,
+        ...calcInOutNodes('graphInput', graph, nod, graph_links),
+      ];
+      console.log(input_nodes);
     } else if (nod.task_type === 'graphOutput') {
-      output_nodes.push(calcInOutNodes('graphOutput', graph, nod, graph_links));
+      console.log(
+        output_nodes,
+        calcInOutNodes('graphOutput', graph, nod, graph_links)
+      );
+      output_nodes = [
+        ...output_nodes,
+        ...calcInOutNodes('graphOutput', graph, nod, graph_links),
+      ];
+      console.log(output_nodes);
     }
   });
   return {
@@ -25,7 +41,7 @@ export function calcGraphInputsOutputs(graph): GraphDetails {
 }
 
 function calcInOutNodes(inputOrOutput, graph, nod, graph_links) {
-  let node = {};
+  const nodes = [];
 
   let nodesNamesConnectedTo: string[] = [];
   if (inputOrOutput === 'graphInput') {
@@ -40,10 +56,14 @@ function calcInOutNodes(inputOrOutput, graph, nod, graph_links) {
       .map((link) => link.source); // !!
   }
 
+  console.log(nodesNamesConnectedTo);
+
   const nodeObjConnectedTo = [];
   for (const nodesNames of nodesNamesConnectedTo) {
     nodeObjConnectedTo.push(graph.nodes.find((node) => nodesNames === node.id));
   }
+
+  console.log(nodeObjConnectedTo);
 
   // iterate the nodes to create the new input_nodes
   nodeObjConnectedTo.forEach((nodConnected) => {
@@ -55,33 +75,38 @@ function calcInOutNodes(inputOrOutput, graph, nod, graph_links) {
         : graph_links.findIndex(
             (lin) => lin.source === nod.id && lin.target === nodConnected.id
           );
-
+    console.log(link_index);
     if (nodConnected.task_type === 'graph') {
       // find the link and get the sub_node it is connected to in the graph
       // TODO: find the correct output if a graph has two links to the same output
-      node = calcNodeProps(
-        true,
-        nod,
-        nodConnected,
-        graph_links,
-        link_index,
-        inputOrOutput
+      nodes.push(
+        calcNodeProps(
+          true,
+          nod,
+          nodConnected,
+          graph_links,
+          link_index,
+          inputOrOutput
+        )
       );
-      if (inputOrOutput === 'graphOutput') {
-        graph_links.splice(link_index, 1);
-      } // !!
+      // if (inputOrOutput === 'graphOutput') {
+      //   graph_links.splice(link_index, 1);
+      // } // !!
     } else {
-      node = calcNodeProps(
-        false,
-        nod,
-        nodConnected,
-        graph_links,
-        link_index,
-        inputOrOutput
+      nodes.push(
+        calcNodeProps(
+          false,
+          nod,
+          nodConnected,
+          graph_links,
+          link_index,
+          inputOrOutput
+        )
       );
     }
   });
-  return node;
+  console.log(nodes);
+  return nodes;
 }
 
 function calcNodeProps(

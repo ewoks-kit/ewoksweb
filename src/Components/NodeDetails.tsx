@@ -38,6 +38,7 @@ export default function NodeDetails(propsIn) {
   const [mapAllData, setMapAllData] = React.useState<boolean>(false);
 
   const NonEditableTaskProperties = [
+    { id: 'id', label: 'Id', value: props.element.id },
     { id: 'task_icon', label: 'Icon', value: props.element.task_icon },
     {
       id: 'task_category',

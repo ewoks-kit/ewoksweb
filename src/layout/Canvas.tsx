@@ -458,24 +458,30 @@ function Canvas() {
 
   const onElementsRemove = (elementsToRemove) => {
     let newGraph = {} as GraphRF;
-    // TODO: make it work for multiple delete
-    if (elementsToRemove[0].position) {
+    // TODO: make it work for multiple delete?
+    // TODO: same code as sidebar->deleteElement create a hook for delete?
+    const el = elementsToRemove[0];
+    if (el.position) {
+      const nodesLinks = graphRF.links.filter(
+        (link) => !(link.source === el.id || link.target === el.id)
+      );
+
       newGraph = {
         ...graphRF,
-        nodes: graphRF.nodes.filter((nod) => nod.id !== elementsToRemove[0].id),
+        nodes: graphRF.nodes.filter((nod) => nod.id !== el.id),
+        links: nodesLinks,
       };
       setUndoRedo({ action: 'Removed a Node', graph: newGraph });
-    } else if (elementsToRemove[0].source) {
+    } else if (el.source) {
       newGraph = {
         ...graphRF,
-        links: graphRF.links.filter(
-          (link) => link.id !== elementsToRemove[0].id
-        ),
+        links: graphRF.links.filter((link) => link.id !== el.id),
       };
       setUndoRedo({ action: 'Removed a Link', graph: newGraph });
     }
     setGraphRF(newGraph);
   };
+
   return (
     <div className={classes.root}>
       <ReactFlowProvider>
