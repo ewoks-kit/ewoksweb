@@ -335,6 +335,7 @@ export interface EwoksRFLink {
     colorLine?: string;
   };
   labelStyle;
+  labelBgStyle;
   style;
   subtarget?: string;
   subsource?: string;

@@ -31,7 +31,7 @@ export default function EditLinkStyle(propsIn) {
       setLinkType(element.type);
       setArrowType(element.arrowHeadType);
       setAnimated(element.animated);
-      setColorLine(element.data.colorLine);
+      setColorLine(element.style.stroke);
     }
   }, [element.id, element]);
 
@@ -67,6 +67,8 @@ export default function EditLinkStyle(propsIn) {
       {
         ...element,
         style: { ...element.style, stroke: event.target.value },
+        labelStyle: { ...element.labelStyle, fill: event.target.value },
+        labelBgStyle: { ...element.labelBgStyle, stroke: event.target.value },
       },
       'fromSaveElement'
     );

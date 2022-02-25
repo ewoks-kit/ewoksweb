@@ -75,12 +75,22 @@ export function toRFEwoksLinks(
             fill: 'rgb(223, 226, 247)',
             color: 'rgb(50, 130, 219)',
             fillOpacity: 1,
-            // border: '5px solid red'
+            strokeWidth: 3,
+            stroke:
+              (uiProps && uiProps.style && uiProps.style.stroke) ||
+              'rgb(60, 81, 202)',
           },
           // labelShowBg: false,
           labelBgPadding: [8, 4],
           labelBgBorderRadius: 4,
-          labelStyle: { fill: 'blue', fontWeight: 500, fontSize: 14 },
+          labelStyle: {
+            fill: `${
+              (uiProps && uiProps.style && uiProps.style.stroke) ||
+              'rgb(60, 81, 202)'
+            }`,
+            fontWeight: 500,
+            fontSize: 14,
+          },
           data: {
             // node optional_input_names are link's optional_output_names
             links_optional_output_names: targetTask.optional_input_names || [],

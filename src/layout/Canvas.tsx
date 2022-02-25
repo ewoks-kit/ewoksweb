@@ -8,6 +8,7 @@ import ReactFlow, {
   Edge,
   Background,
   useUpdateNodeInternals,
+  ControlButton,
 } from 'react-flow-renderer';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
@@ -72,7 +73,7 @@ const nodeTypes = {
 function Canvas() {
   const classes = useStyles();
 
-  const { fitView } = useZoomPanHelper();
+  // const { fitView, fitBounds } = useZoomPanHelper();
   const [rfInstance, setRfInstance] = useState(null);
   // const [disableDragging, setDisableDragging] = useState(false);
   const [elements, setElements] = useState([]);
@@ -98,16 +99,36 @@ function Canvas() {
   const [stepDetails, setStepDetails] = useState(null);
 
   useEffect(() => {
-    // // console.log('rerender Canvas', graphRF, recentGraphs.length);
     setElements([...graphRF.nodes, ...graphRF.links]);
-  }, [graphRF, graphRF.graph.id, recentGraphs.length]);
+  }, [graphRF]);
 
-  // Used to update custom node after adding Handles NOT WORKING
   useEffect(() => {
-    if ('position' in selectedElement) {
-      updateNodeInternals(selectedElement.id);
+    if (
+      rfInstance &&
+      elements.length > 0 &&
+      workingGraph.graph.id !== graphRF.graph.id
+    ) {
+      rfInstance.fitView();
     }
-  }, [selectedElement, selectedElement.id, updateNodeInternals]);
+  }, [rfInstance, elements, workingGraph.graph.id, graphRF.graph.id]);
+
+  // TODO: examine the usage
+  // useEffect(() => {
+  //   // fitView();
+  //   // fitBounds({ x: 0, y: 0, width: 1000, height: 1000 }, 300);
+  //   console.log('useEffect canvas', rfInstance);
+  //   if (rfInstance) {
+  //     rfInstance.fitView();
+  //   }
+  // }, [rfInstance]);
+
+  // TODO: examine the usage in add more handles without refreshing
+  // Used to update custom node after adding Handles NOT WORKING
+  // useEffect(() => {
+  //   if ('position' in selectedElement) {
+  //     updateNodeInternals(selectedElement.id);
+  //   }
+  // }, [selectedElement, selectedElement.id, updateNodeInternals]);
 
   const onElementClick = (event, element: Node | Edge) => {
     const graphElement: EwoksRFNode | EwoksRFLink = elements.find(
@@ -122,15 +143,16 @@ function Canvas() {
     setSelectedElement(graphElement);
   };
 
-  const onLoad = (reactFlowInstance) => setRfInstance(reactFlowInstance);
-
+  const onLoad = (reactFlowInstance) => {
+    console.log('onLoad');
+    setRfInstance(reactFlowInstance);
+    // if (rfInstance) {
+    //   rfInstance.fitView();
+    // }
+  };
   // const handlDisableDragging = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   setDisableDragging(event.target.checked);
   // };
-
-  useEffect(() => {
-    fitView();
-  }, [fitView]);
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -151,7 +173,7 @@ function Canvas() {
     }
 
     if (workingGraph.graph.id === graphRF.graph.id) {
-      // TODO: calculate optional_input_names, required_input_names, output_names
+      // TODO: calculate optional_input_names, required_input_names, output_names?
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       const task_identifier = event.dataTransfer.getData('task_identifier');
       const task_type = event.dataTransfer.getData('task_type');
@@ -495,7 +517,13 @@ function Canvas() {
           ref={reactFlowWrapper}
         >
           <ReactFlow
+            // defaultPosition={[-200, -200]}
+            minZoom={0.2}
             snapToGrid
+            // onPaneClick={(e) => console.log(e)}
+            // snapGrid={[150, 150]}
+            onMoveStart={(e) => console.log(e)}
+            onMoveEnd={(e) => console.log(e)}
             elements={elements}
             // onElementClick={onElementClick}
             onElementClick={(evt, node) => {
@@ -520,7 +548,17 @@ function Canvas() {
             onElementsRemove={onElementsRemove}
             deleteKeyCode="Delete"
           >
-            <Controls />
+            <Controls onFitView={() => console.log('ok')}>
+              <ControlButton
+                onClick={
+                  () => fitView({ padding: 0.2, includeHiddenNodes: true })
+                  // fitBounds({ x: 0, y: 0, width: 1000, height: 1000 }, 300)
+                }
+              >
+                act
+              </ControlButton>
+            </Controls>
+
             <Background />
           </ReactFlow>
           {/* <Popover

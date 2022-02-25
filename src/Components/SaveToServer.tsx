@@ -28,6 +28,7 @@ export default function SaveToServer({ saveToServerF }) {
   const saveToServer = async () => {
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     // and Nodes DataMapping before attempting to save
+    // TODO: is the following graphRFCurrated used? examine
     const graphRFCurrated = { ...graphRF };
     for (const nod of graphRFCurrated.nodes) {
       if (
@@ -66,7 +67,7 @@ export default function SaveToServer({ saveToServerF }) {
     }
     // DOC: If id: "newGraph" request label update and then POST with id=label
     // else PUT and replace existing on server
-    setGettingFromServer(true);
+    // setGettingFromServer(true);
     if (graphRF.graph.id === 'newGraph') {
       if (graphRF.graph.label === 'newGraph') {
         setOpenSnackbar({
@@ -89,14 +90,27 @@ export default function SaveToServer({ saveToServerF }) {
           setGettingFromServer(false);
           setWorkingGraph(res.data as GraphRF);
           setRecentGraphs({} as GraphRF, true);
+          setOpenSnackbar({
+            open: true,
+            text: 'Graph saved succesfully!',
+            severity: 'success',
+          });
         });
     } else if (graphRF.graph.id) {
+      console.log('putting the graph');
       await axios
         .put(
           `${configData.serverUrl}/workflow/${graphRF.graph.id}`,
           rfToEwoks(graphRF)
         )
-        .then((res) => setGettingFromServer(false));
+        .then((res) => {
+          // setGettingFromServer(false);
+          setOpenSnackbar({
+            open: true,
+            text: 'Graph saved succesfully!',
+            severity: 'success',
+          });
+        });
     } else {
       setOpenSnackbar({
         open: true,
