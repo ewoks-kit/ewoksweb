@@ -33,16 +33,16 @@ export default function EditNodeStyle(propsIn) {
     }
   }, [element.id, element]);
 
-  const nodeTypeChanged = (event) => {
-    setNodeType(event.target.value);
-    setSelectedElement(
-      {
-        ...element,
-        data: { ...element.data, type: event.target.value },
-      },
-      'fromSaveElement'
-    );
-  };
+  // const nodeTypeChanged = (event) => {
+  //   setNodeType(event.target.value);
+  //   setSelectedElement(
+  //     {
+  //       ...element,
+  //       data: { ...element.data, type: event.target.value },
+  //     },
+  //     'fromSaveElement'
+  //   );
+  // };
 
   const withImageChanged = (event) => {
     // console.log(element, event.target.checked);
@@ -87,7 +87,7 @@ export default function EditNodeStyle(propsIn) {
         ...(element as EwoksRFNode),
         data: { ...element.data, moreHandles: event.target.checked },
       },
-      'fromSaveElement1'
+      'fromSaveElement'
     );
     // TODO: Remove when refresh is resolved
     setOpenSnackbar({
@@ -112,7 +112,7 @@ export default function EditNodeStyle(propsIn) {
           </MenuItem>
         ))}
       </Select> */}
-      {!['graphInput', 'graphOutput', 'graph'].includes(element.task_type) && (
+      {!['graphInput', 'graphOutput'].includes(element.task_type) && (
         <div>
           <div>
             <label htmlFor="moreHandles">More handles</label>

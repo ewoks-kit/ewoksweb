@@ -11,10 +11,11 @@ const isValidOutput = () => {
 };
 
 function FunctionNode(fnod) {
+  console.log(fnod);
   return (
     <Node
       isGraph
-      moreHandles={false}
+      moreHandles={fnod.data.moreHandles}
       withImage={fnod.data.withImage}
       withLabel={fnod.data.withLabel}
       colorBorder={fnod.data.colorBorder}
@@ -35,7 +36,13 @@ function FunctionNode(fnod) {
           {fnod.data.inputs.map((input: { label: string }) => (
             <div
               key={input.label}
-              style={{ ...style.io, ...style.textLeft } as React.CSSProperties}
+              style={
+                {
+                  ...style.io,
+                  ...style.textLeft,
+                  ...(fnod.data.moreHandles ? style.borderInput : {}),
+                } as React.CSSProperties
+              }
             >
               {/* remove the rest of the input {input.label} for now */}
               {input.label.slice(0, input.label.indexOf(':'))}
@@ -53,25 +60,33 @@ function FunctionNode(fnod) {
                   () => isValidInput() // connection, input.type
                 }
               />
-              <Handle
-                key={input.label + 'right'}
-                type="target"
-                position={Position.Right}
-                id={input.label.slice(0, input.label.indexOf(':')) + 'right'}
-                style={{
-                  ...style.handle,
-                  ...style.right,
-                  ...style.handleTarget,
-                }}
-                isValidConnection={() => isValidOutput()}
-              />
+              {fnod.data.moreHandles && (
+                <Handle
+                  key={input.label + 'right'}
+                  type="target"
+                  position={Position.Right}
+                  id={input.label.slice(0, input.label.indexOf(':')) + 'right'}
+                  style={{
+                    ...style.handle,
+                    ...style.right,
+                    ...style.handleTarget,
+                  }}
+                  isValidConnection={() => isValidOutput()}
+                />
+              )}
             </div>
           ))}
           {/* <div style={style.contentHeader}>Outputs</div> */}
           {fnod.data.outputs.map((output: { label: string }) => (
             <div
               key={output.label}
-              style={{ ...style.io, ...style.textRight } as React.CSSProperties}
+              style={
+                {
+                  ...style.io,
+                  ...style.textRight,
+                  ...(fnod.data.moreHandles ? style.borderOutput : {}),
+                } as React.CSSProperties
+              }
             >
               {/* remove the rest of the output {output.label} for now */}
               {output.label.slice(0, output.label.indexOf(':'))}
@@ -87,18 +102,20 @@ function FunctionNode(fnod) {
                 }}
                 isValidConnection={() => isValidOutput()}
               />
-              <Handle
-                key={output.label + 'left'}
-                type="source"
-                position={Position.Left}
-                id={output.label.slice(0, output.label.indexOf(':')) + 'left'}
-                style={{
-                  ...style.handle,
-                  ...style.left,
-                  ...style.handleSource,
-                }}
-                isValidConnection={() => isValidOutput()}
-              />
+              {fnod.data.moreHandles && (
+                <Handle
+                  key={output.label + 'left'}
+                  type="source"
+                  position={Position.Left}
+                  id={output.label.slice(0, output.label.indexOf(':')) + 'left'}
+                  style={{
+                    ...style.handle,
+                    ...style.left,
+                    ...style.handleSource,
+                  }}
+                  isValidConnection={() => isValidOutput()}
+                />
+              )}
             </div>
           ))}
         </>

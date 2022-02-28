@@ -4,7 +4,6 @@ const undoRedo = (set, get) => ({
   undoRedo: [] as Action[],
 
   setUndoRedo: (action: Action) => {
-    // TODO: check the size of the history-array  not more than 10
     set((state) => ({
       ...state,
       undoRedo: [

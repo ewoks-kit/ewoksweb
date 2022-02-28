@@ -84,6 +84,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           icon,
           comment,
           position,
+          moreHandles,
           colorBorder,
           withImage,
           withLabel,

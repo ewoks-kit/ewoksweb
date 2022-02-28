@@ -78,6 +78,7 @@ const Node: React.FC<NodeProps> = ({
     ? `4px solid ${colorBorder}`
     : '2px solid rgb(233, 235, 247)';
 
+  // TODO: sometimes it does not fit in box in outputs...
   const customTitle = {
     ...style.title,
     wordWrap: 'break-word',

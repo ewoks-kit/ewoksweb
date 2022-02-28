@@ -9,7 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import FiberNew from '@material-ui/icons/FiberNew';
-import Sidebar from '../sidebar';
+import Sidebar from './sidebar';
 
 import Canvas from './Canvas';
 import UndoRedo from '../Components/UndoRedo';

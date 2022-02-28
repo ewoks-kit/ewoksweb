@@ -99,7 +99,8 @@ const subGraph = (set, get) => ({
         task_type: 'graph',
         task_identifier: subToAdd.graph.id,
         type: 'graph',
-        position: { x: 100, y: 500 },
+        // TODO: find the place to put it according to the graph inputted
+        position: { x: 300, y: 100 },
         default_inputs: [],
         inputs_complete: false,
         default_error_node: false,
@@ -116,6 +117,8 @@ const subGraph = (set, get) => ({
           icon: subToAdd.graph.uiProps && subToAdd.graph.uiProps.icon,
           inputs: inputsSub,
           outputs: outputsSub,
+          withImage: true,
+          withLabel: true,
           // icon: subToAdd.data.icon ? subToAdd.data.icon : '',
         },
         // data: { label: CustomNewNode(id, name, image) },

@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react';
 import { Button } from '@material-ui/core';
-import AddNodes from './Components/AddNodes';
-import EditElement from './Components/EditElement';
-import EditElementStyle from './Components/EditElementStyle';
-import DraggableDialog from './Components/DraggableDialog';
-import IconMenu from './Components/IconMenu';
-import Drawer from './Components/Drawer';
+import AddNodes from '../Components/AddNodes';
+import EditElement from '../Components/EditElement';
+import EditElementStyle from '../Components/EditElementStyle';
+import DraggableDialog from '../Components/DraggableDialog';
+import IconMenu from '../Components/IconMenu';
+import Drawer from '../Components/Drawer';
 import axios from 'axios';
-import ExecutionDetails from './Components/ExecutionDetails';
-import DashboardStyle from './layout/DashboardStyle';
-import state from './store/state';
-import configData from './configData.json';
+import ExecutionDetails from '../Components/ExecutionDetails';
+import DashboardStyle from './DashboardStyle';
+import state from '../store/state';
+import configData from '../configData.json';
 
-import type { EwoksRFNode, EwoksRFLink, GraphDetails, GraphRF } from './types';
-import { rfToEwoks } from './utils';
+import type { EwoksRFNode, EwoksRFLink, GraphDetails, GraphRF } from '../types';
+import { rfToEwoks } from '../utils';
 
 const useStyles = DashboardStyle;
 

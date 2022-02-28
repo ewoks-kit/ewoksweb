@@ -3,14 +3,15 @@ import React, { useEffect, useState, MouseEvent, useRef } from 'react';
 import ReactFlow, {
   ReactFlowProvider,
   Controls,
+  MiniMap,
   useZoomPanHelper,
   Node,
   Edge,
   Background,
   useUpdateNodeInternals,
-  ControlButton,
 } from 'react-flow-renderer';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { getBezierPath, getMarkerEnd } from 'react-flow-renderer';
 
 // import CustomNode from '../CustomNodes/CustomNode';
 import FunctionNode from '../CustomNodes/FunctionNode';
@@ -59,6 +60,61 @@ const getnodesIds = (text: string, nodes: EwoksRFNode[]) => {
 //   return `link_${id}`;
 // };
 
+function bendingText({
+  id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition,
+  style = {
+    stroke: '#cc0000',
+    strokeWidth: '3',
+    fill: 'rgb(223, 226, 246)',
+  },
+  label,
+  arrowHeadType,
+  markerEndId,
+  data,
+}) {
+  const edgePath = getBezierPath({
+    sourceX,
+    sourceY,
+    sourcePosition,
+    targetX,
+    targetY,
+    targetPosition,
+  });
+  const markerEnd = getMarkerEnd(arrowHeadType, markerEndId);
+
+  return (
+    <>
+      <path
+        id={id}
+        style={style}
+        className="react-flow__edge-path"
+        d={edgePath}
+        markerEnd={markerEnd}
+      />
+      <text style={{ color: 'red' }}>
+        <textPath
+          href={`#${id}`}
+          style={{ fontSize: '20px', fill: style.stroke }}
+          startOffset="50%"
+          textAnchor="middle"
+        >
+          {label}
+        </textPath>
+      </text>
+    </>
+  );
+}
+
+const edgeTypes = {
+  bendingText,
+};
+
 const nodeTypes = {
   executionSteps: ExecutionStepsNode,
   note: NoteNode,
@@ -99,6 +155,7 @@ function Canvas() {
   const [stepDetails, setStepDetails] = useState(null);
 
   useEffect(() => {
+    console.log(graphRF);
     setElements([...graphRF.nodes, ...graphRF.links]);
   }, [graphRF]);
 
@@ -135,8 +192,9 @@ function Canvas() {
       (el) => el.id === element.id
     );
 
+    console.log(element, graphElement);
+
     if ('position' in element) {
-      // console.log(element);
       setStepDetails({ evt: event.currentTarget, element });
     }
 
@@ -544,21 +602,47 @@ function Canvas() {
             onSelectionDrag={onSelectionDrag}
             // onNodeDrag={onNodeDrag}
             onNodeDragStop={onNodeDragStop}
+            edgeTypes={edgeTypes}
             nodeTypes={nodeTypes}
             onElementsRemove={onElementsRemove}
             deleteKeyCode="Delete"
           >
             <Controls onFitView={() => console.log('ok')}>
-              <ControlButton
+              {/* <ControlButton
                 onClick={
-                  () => fitView({ padding: 0.2, includeHiddenNodes: true })
-                  // fitBounds({ x: 0, y: 0, width: 1000, height: 1000 }, 300)
+                  () =>
+                    rfInstance.fitView({
+                      padding: 0.2,
+                      includeHiddenNodes: true,
+                    })
+                  rfInstance.fitBounds({ x: 0, y: 0, width: 1000, height: 1000 }, 300)
                 }
               >
                 act
-              </ControlButton>
+              </ControlButton> */}
             </Controls>
+            <MiniMap
+              nodeStrokeColor={(n): string => {
+                // "rgb(60, 81, 202)"
+                if (n.style?.background) return n.style.background as string;
+                if (['graphOutput', 'graphInput'].includes(n.type))
+                  return '#0041d0';
+                if (n.type === 'graph') return '#ff0072';
+                // if (n.type === 'default') return 'rgb(60, 81, 202)';
 
+                return 'rgb(60, 81, 202)';
+              }}
+              nodeColor={(n): string => {
+                if (n.style?.background) return n.style.background as string;
+                if (['graphOutput', 'graphInput'].includes(n.type))
+                  return 'rgb(223, 226, 247)';
+                if (n.type === 'graph') return '#ff0082';
+                // if (n.type === 'default') return 'rgb(60, 81, 202)';
+
+                return 'rgb(60, 81, 202)';
+              }}
+              nodeBorderRadius={2}
+            />
             <Background />
           </ReactFlow>
           {/* <Popover

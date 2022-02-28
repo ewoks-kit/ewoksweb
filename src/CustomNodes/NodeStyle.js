@@ -8,6 +8,13 @@ export const contentStyle = {
     position: 'relative',
     padding: '8px 16px',
     flexGrow: 1,
+    borderRadius: '15px',
+  },
+  borderInput: {
+    border: '1px solid rgb(230, 190, 118)',
+  },
+  borderOutput: {
+    border: '1px solid rgb(118, 133, 221)',
   },
   left: { left: '-8px' },
   textLeft: { textAlign: 'left' },

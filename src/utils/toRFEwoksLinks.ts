@@ -49,7 +49,12 @@ export function toRFEwoksLinks(
           tasks
         );
 
+        const color =
+          (uiProps && uiProps.style && uiProps.style.stroke) ||
+          'rgb(60, 81, 202)';
+
         return {
+          // type: 'bendingText',
           // TODO? does not accept 2 links between the same nodes
           id: `${source as string}:${
             existsOrValue(uiProps, 'sourceHandle', '') as string
@@ -73,21 +78,17 @@ export function toRFEwoksLinks(
           },
           labelBgStyle: {
             fill: 'rgb(223, 226, 247)',
-            color: 'rgb(50, 130, 219)',
+            // color: color,
             fillOpacity: 1,
             strokeWidth: 3,
-            stroke:
-              (uiProps && uiProps.style && uiProps.style.stroke) ||
-              'rgb(60, 81, 202)',
+            stroke: color,
           },
           // labelShowBg: false,
           labelBgPadding: [8, 4],
           labelBgBorderRadius: 4,
           labelStyle: {
-            fill: `${
-              (uiProps && uiProps.style && uiProps.style.stroke) ||
-              'rgb(60, 81, 202)'
-            }`,
+            color: color,
+            fill: color,
             fontWeight: 500,
             fontSize: 14,
           },
