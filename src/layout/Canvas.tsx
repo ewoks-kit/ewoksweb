@@ -294,11 +294,6 @@ function Canvas() {
   // setElements((els) => updateEdge(oldEdge, newConnection, els));
 
   const onConnect = (params: Edge) => {
-    // If it is a link between pre-existing nodes:
-    // add links_required_output_names and links_optional_output_names from target
-    // links_input_names from source node
-
-    // ELSE IF there is a new node we need to find input and outputs
     // console.log(params);
     if (workingGraph.graph.id === graphRF.graph.id) {
       const sourceTask = graphRF.nodes.find((nod) => nod.id === params.source);

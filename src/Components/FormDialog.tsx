@@ -80,14 +80,17 @@ export default function FormDialog(props) {
           props.setOpenSaveDialog(false);
           setWorkingGraph(res.data as GraphRF);
           setRecentGraphs({} as GraphRF, true);
-        })
-        .catch(() => {
-          // error
           setOpenSnackbar({
             open: true,
-            text: 'The name exists. Please retry with another name',
-            // TODO: replace by server error
-            severity: 'warning',
+            text: 'Graph saved succesfully!',
+            severity: 'success',
+          });
+        })
+        .catch((error) => {
+          setOpenSnackbar({
+            open: true,
+            text: error.response.data,
+            severity: 'error',
           });
         });
     } else if (['cloneTask', 'newTask'].includes(action)) {

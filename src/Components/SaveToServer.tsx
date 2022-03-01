@@ -77,8 +77,8 @@ export default function SaveToServer({ saveToServerF }) {
         setOpenSnackbar({
           open: true,
           text:
-            'In the "Edit Graph" Please insert a new label to be also used as an id for the new workflow and then save!',
-          severity: 'error',
+            'Please insert a new label to be also used as an id for the new workflow and then save!',
+          severity: 'warn',
         });
         setGettingFromServer(false);
         return;
