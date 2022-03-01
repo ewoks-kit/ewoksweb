@@ -234,7 +234,8 @@ export default function Dashboard() {
         <div className={classes.toolbar} />
 
         <Paper className={fixedHeightPaper}>
-          {gettingFromServer ? <LinearSpinner /> : <Canvas />}
+          {gettingFromServer && <LinearSpinner />}
+          <Canvas />
         </Paper>
       </main>
       <Drawer />

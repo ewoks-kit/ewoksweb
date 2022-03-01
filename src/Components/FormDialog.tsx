@@ -67,6 +67,7 @@ export default function FormDialog(props) {
     // fire a POST
     if (newName !== '' && action === 'cloneGraph') {
       const el = element as GraphRF;
+      // TODO: Post a new graph as in SaveToServer. Abstract POST
       axios // if await is used const response =
         .post(
           `${configData.serverUrl}/workflows`,
@@ -216,7 +217,8 @@ export default function FormDialog(props) {
   return (
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>
-        Give the new {action === 'cloneGraph' ? 'Workflow' : 'Task'} details
+        Give the new{' '}
+        {action === 'cloneGraph' ? 'Workflow name' : 'Task details'}
       </DialogTitle>
       <DialogContent>
         <DialogContentText>

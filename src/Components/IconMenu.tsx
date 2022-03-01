@@ -57,7 +57,7 @@ export default function IconMenu(props) {
     } else if (action === 'cloneTask') {
       if ('position' in element) {
         // TODO: if the task does not exist in the tasks?
-        // Populate the form with the element detals
+        // Populate the form with the element details
         const task = tasks.find(
           (tas) => tas.task_identifier === element.task_identifier
         );

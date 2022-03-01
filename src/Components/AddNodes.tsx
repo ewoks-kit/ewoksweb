@@ -50,7 +50,7 @@ const onRigthClick = (event) => {
 // Hosts the node images and categories
 // drag and drop to canvas
 // TODO: right-click and view-delete?
-// insert subgraph from disk?
+// TODO: insert subgraph from disk should exist here?
 function AddNodes() {
   const taskCategories = state((state) => state.taskCategories);
   const setTaskCategories = state((state) => state.setTaskCategories);

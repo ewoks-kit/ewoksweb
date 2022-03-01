@@ -53,6 +53,7 @@ const selectedElement = (set, get) => ({
           // get().setUndoIndex(get().undoIndex + 1);
         }
       }
+
       set((state) => ({
         ...state,
         graphRF: tempGraph,

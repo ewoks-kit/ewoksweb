@@ -55,7 +55,6 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
               };
             }),
           uiProps: {
-            label,
             type,
             icon,
             comment,

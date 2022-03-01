@@ -1,5 +1,11 @@
 /* eslint-disable unicorn/consistent-function-scoping */
-import React, { useEffect, useState, MouseEvent, useRef } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  CSSProperties,
+} from 'react';
 import ReactFlow, {
   ReactFlowProvider,
   Controls,
@@ -11,7 +17,7 @@ import ReactFlow, {
   useUpdateNodeInternals,
 } from 'react-flow-renderer';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { getBezierPath, getMarkerEnd } from 'react-flow-renderer';
+import bendingText from '../CustomEdges/BendingTextEdge';
 
 // import CustomNode from '../CustomNodes/CustomNode';
 import FunctionNode from '../CustomNodes/FunctionNode';
@@ -59,57 +65,6 @@ const getnodesIds = (text: string, nodes: EwoksRFNode[]) => {
 //   // linksIds.add(id);
 //   return `link_${id}`;
 // };
-
-function bendingText({
-  id,
-  sourceX,
-  sourceY,
-  targetX,
-  targetY,
-  sourcePosition,
-  targetPosition,
-  style = {
-    stroke: '#cc0000',
-    strokeWidth: '3',
-    fill: 'rgb(223, 226, 246)',
-  },
-  label,
-  arrowHeadType,
-  markerEndId,
-  data,
-}) {
-  const edgePath = getBezierPath({
-    sourceX,
-    sourceY,
-    sourcePosition,
-    targetX,
-    targetY,
-    targetPosition,
-  });
-  const markerEnd = getMarkerEnd(arrowHeadType, markerEndId);
-
-  return (
-    <>
-      <path
-        id={id}
-        style={style}
-        className="react-flow__edge-path"
-        d={edgePath}
-        markerEnd={markerEnd}
-      />
-      <text style={{ color: 'red' }}>
-        <textPath
-          href={`#${id}`}
-          style={{ fontSize: '20px', fill: style.stroke }}
-          startOffset="50%"
-          textAnchor="middle"
-        >
-          {label}
-        </textPath>
-      </text>
-    </>
-  );
-}
 
 const edgeTypes = {
   bendingText,
@@ -413,7 +368,7 @@ function Canvas() {
 
   const onRightClick = (event) => {
     event.preventDefault();
-    updateNodeInternals(selectedElement.id);
+    console.log('rightClick');
   };
 
   const onSelectionChange = (elements) => {
@@ -562,6 +517,17 @@ function Canvas() {
     setGraphRF(newGraph);
   };
 
+  const updateNode = useCallback(() => updateNodeInternals('1'), [
+    updateNodeInternals,
+  ]);
+
+  const buttonWrapperStyles: CSSProperties = {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+    zIndex: 10,
+  };
+
   return (
     <div className={classes.root}>
       <ReactFlowProvider>
@@ -607,6 +573,11 @@ function Canvas() {
             onElementsRemove={onElementsRemove}
             deleteKeyCode="Delete"
           >
+            <div style={buttonWrapperStyles}>
+              <button type="button" onClick={updateNode}>
+                update node internals
+              </button>
+            </div>
             <Controls onFitView={() => console.log('ok')}>
               {/* <ControlButton
                 onClick={

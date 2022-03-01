@@ -7,6 +7,7 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import type { GraphEwoks, GraphRF } from '../types';
 import state from '../store/state';
 import configData from '../configData.json';
+import FormDialog from './FormDialog';
 
 // console.log(state, state);
 // DOC: Save to server button with its spinner
@@ -19,6 +20,7 @@ export default function SaveToServer({ saveToServerF }) {
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const setRecentGraphs = state((state) => state.setRecentGraphs);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
+  const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
   const isExecuted = state((state) => state.isExecuted);
 
   React.useEffect(() => {
@@ -67,9 +69,11 @@ export default function SaveToServer({ saveToServerF }) {
     }
     // DOC: If id: "newGraph" request label update and then POST with id=label
     // else PUT and replace existing on server
-    // setGettingFromServer(true);
+    // TODO: following line creates issues on graph positionng examine
+    setGettingFromServer(true);
     if (graphRF.graph.id === 'newGraph') {
-      if (graphRF.graph.label === 'newGraph') {
+      setOpenSaveDialog(true);
+      if (!graphRF.graph.label || graphRF.graph.label === 'newGraph') {
         setOpenSnackbar({
           open: true,
           text:
@@ -95,7 +99,16 @@ export default function SaveToServer({ saveToServerF }) {
             text: 'Graph saved succesfully!',
             severity: 'success',
           });
-        });
+        })
+        .catch((
+          error // console.log(error.response)
+        ) =>
+          setOpenSnackbar({
+            open: true,
+            text: error.response.data,
+            severity: 'error',
+          })
+        );
     } else if (graphRF.graph.id) {
       console.log('putting the graph');
       await axios
@@ -104,7 +117,7 @@ export default function SaveToServer({ saveToServerF }) {
           rfToEwoks(graphRF)
         )
         .then((res) => {
-          // setGettingFromServer(false);
+          setGettingFromServer(false);
           setOpenSnackbar({
             open: true,
             text: 'Graph saved succesfully!',
@@ -121,12 +134,20 @@ export default function SaveToServer({ saveToServerF }) {
   };
 
   return (
-    <IntegratedSpinner
-      tooltip="Save Workflow"
-      action={() => null}
-      getting={false}
-    >
-      <CloudUploadIcon onClick={saveToServer} />
-    </IntegratedSpinner>
+    <>
+      <FormDialog
+        elementToEdit={graphRF}
+        action={'cloneGraph'}
+        open={openSaveDialog}
+        setOpenSaveDialog={setOpenSaveDialog}
+      />
+      <IntegratedSpinner
+        tooltip="Save Workflow"
+        action={() => null}
+        getting={false}
+      >
+        <CloudUploadIcon onClick={saveToServer} />
+      </IntegratedSpinner>
+    </>
   );
 }

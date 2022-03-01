@@ -59,7 +59,6 @@ export function toRFEwoksNodes(
           task_generator: task_generator || '',
           task_icon: task_icon || '',
           default_inputs: default_inputs || [],
-          label,
           data: {
             label: label ? label : task_identifier,
             type: nodeType,

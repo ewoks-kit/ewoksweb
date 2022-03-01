@@ -26,10 +26,8 @@ export default function LabelComment(propsIn) {
 
   useEffect(() => {
     if ('position' in element) {
-      setLabel(
-        // TODO: Remove conditional when graphs structure is final
-        element.label ? element.label : element.data.label
-      );
+      console.log(element);
+      setLabel(element.data.label);
       setComment(element.data.comment);
     } else if ('source' in element) {
       setLabel(element.label);
