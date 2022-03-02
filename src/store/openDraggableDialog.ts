@@ -1,4 +1,4 @@
-const openDraggableDialog = (set, get) => ({
+const openDraggableDialog = (set) => ({
   openDraggableDialog: { open: false, content: {} },
 
   setOpenDraggableDialog: ({ open, content }) => {

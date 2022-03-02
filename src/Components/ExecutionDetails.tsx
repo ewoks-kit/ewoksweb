@@ -1,23 +1,16 @@
-import React, { useEffect } from 'react';
-
-import DashboardStyle from '../layout/DashboardStyle';
 import ReactJson from 'react-json-view';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import IntegratedSpinner from './IntegratedSpinner';
 import state from '../store/state';
 
-const useStyles = DashboardStyle;
-
 const executeWorkflow = () => {
   // co;
 };
 
-export default function ExecutionDetails(propsIn) {
-  const classes = useStyles();
-
-  const { props } = propsIn;
-  const { element } = props;
+export default function ExecutionDetails() {
+  // const { props } = propsIn;
+  // const { element } = props;
   // const { setElement } = propsIn;
 
   const graphRF = state((state) => state.graphRF);
@@ -27,9 +20,7 @@ export default function ExecutionDetails(propsIn) {
 
   const executingEvents = state((state) => state.executingEvents);
 
-  useEffect(() => {
-    // console.log(element);
-  }, [element.id, element]);
+  // useEffect(() => {}, [element.id, element]);
 
   return (
     <>

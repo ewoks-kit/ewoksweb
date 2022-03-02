@@ -1,4 +1,4 @@
-const graphOrSubgraph = (set, get) => ({
+const graphOrSubgraph = (set) => ({
   graphOrSubgraph: true as boolean,
 
   setGraphOrSubgraph: (isItGraph: boolean) => {

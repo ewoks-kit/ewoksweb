@@ -3,7 +3,7 @@ import React, { memo } from 'react';
 import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
 
-const DataNode = (args) => {
+function DataNode(args) {
   // // console.log(args);
   return (
     <Node
@@ -22,6 +22,6 @@ const DataNode = (args) => {
       executing={args.data.executing}
     />
   );
-};
+}
 
 export default memo(DataNode);

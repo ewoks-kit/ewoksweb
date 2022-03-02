@@ -17,8 +17,7 @@ import CreateClass from '../images/CreateClass.svg';
 import { Handle, Position } from 'react-flow-renderer';
 import type { NodeProps } from '../types';
 import { contentStyle, style } from './NodeStyle';
-import Tooltip, { TooltipProps } from '@material-ui/core/Tooltip';
-import { styled } from '@material-ui/core/styles';
+import Tooltip from '@material-ui/core/Tooltip';
 import IntegratedSpinner from '../Components/IntegratedSpinner';
 import ExecuteSpinner from '../Components/ExecuteSpinner';
 import SendIcon from '@material-ui/icons/Send';
@@ -113,7 +112,7 @@ const Node: React.FC<NodeProps> = ({
       }
       id="choice"
       // onMouseOver={() => console.log(label)}
-      onFocus={() => console.log(label)}
+      // onFocus={() => console.log(label)}
       role="button"
       tabIndex={0}
     >
@@ -127,7 +126,7 @@ const Node: React.FC<NodeProps> = ({
               style={{ ...contentStyle.handle, ...contentStyle.handleSource }}
               // isValidConnection={(connection) => isValidOutput(connection)}
               isConnectable
-              onConnect={(params) => console.log('handle sr onConnect', params)}
+              // onConnect={(params) => console.log('handle sr onConnect', params)}
             >
               {/* <img
               role="presentation"
@@ -144,8 +143,8 @@ const Node: React.FC<NodeProps> = ({
             moreHandles && (
               <div
                 id="choice"
-                onMouseOver={() => console.log(label)}
-                onFocus={() => console.log(label)}
+                // onMouseOver={() => console.log(label)}
+                // onFocus={() => console.log(label)}
                 role="button"
                 tabIndex={0}
               >
@@ -161,7 +160,7 @@ const Node: React.FC<NodeProps> = ({
                     ...contentStyle.handleUpDown,
                   }}
                   isConnectable
-                ></Handle>
+                />
                 <Handle
                   type="source"
                   position={Position.Bottom}
@@ -214,7 +213,7 @@ const Node: React.FC<NodeProps> = ({
                   draggable="false"
                   onDragStart={(event) => onDragStart(event)}
                   src={iconsObj[image] || orange1}
-                  alt="Image"
+                  alt="icon"
                 />
               </ExecuteSpinner>
             ) : (
@@ -224,7 +223,7 @@ const Node: React.FC<NodeProps> = ({
                 draggable="false"
                 onDragStart={(event) => onDragStart(event)}
                 src={iconsObj[image] || orange1}
-                alt="Image"
+                alt="icon"
               />
             ))}
           {withImage && (type === 'graphOutput' || type === 'graphInput') && (
@@ -234,7 +233,7 @@ const Node: React.FC<NodeProps> = ({
               draggable="false"
               onDragStart={(event) => onDragStart(event)}
               src={iconsObj[image] || orange1}
-              alt="Image"
+              alt="icon"
             />
           )}
           {/* {type !== 'graphOutput' && type !== 'graphInput' && <span style={style.contentWrapper}>{type}</span>} */}

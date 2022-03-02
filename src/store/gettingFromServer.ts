@@ -1,4 +1,4 @@
-const gettingFromServer = (set, get) => ({
+const gettingFromServer = (set) => ({
   gettingFromServer: false,
 
   setGettingFromServer: (val: boolean) => {

@@ -1,4 +1,4 @@
-const allWorkflows = (set, get) => ({
+const allWorkflows = (set) => ({
   allWorkflows: [] as { title: string }[],
 
   setAllWorkflows: (workflows: [{ title: string }]) => {

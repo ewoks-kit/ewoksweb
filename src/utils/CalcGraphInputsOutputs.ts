@@ -10,25 +10,19 @@ export function calcGraphInputsOutputs(graph): GraphDetails {
 
   graph.nodes.forEach((nod) => {
     if (nod.task_type === 'graphInput') {
-      console.log(
-        input_nodes,
-        calcInOutNodes('graphInput', graph, nod, graph_links)
-      );
+      // console.log(
+      //   input_nodes,
+      //   calcInOutNodes('graphInput', graph, nod, graph_links)
+      // );
       input_nodes = [
         ...input_nodes,
         ...calcInOutNodes('graphInput', graph, nod, graph_links),
       ];
-      console.log(input_nodes);
     } else if (nod.task_type === 'graphOutput') {
-      console.log(
-        output_nodes,
-        calcInOutNodes('graphOutput', graph, nod, graph_links)
-      );
       output_nodes = [
         ...output_nodes,
         ...calcInOutNodes('graphOutput', graph, nod, graph_links),
       ];
-      console.log(output_nodes);
     }
   });
   return {
@@ -56,14 +50,14 @@ function calcInOutNodes(inputOrOutput, graph, nod, graph_links) {
       .map((link) => link.source); // !!
   }
 
-  console.log(nodesNamesConnectedTo);
+  // console.log(nodesNamesConnectedTo);
 
   const nodeObjConnectedTo = [];
   for (const nodesNames of nodesNamesConnectedTo) {
     nodeObjConnectedTo.push(graph.nodes.find((node) => nodesNames === node.id));
   }
 
-  console.log(nodeObjConnectedTo);
+  // console.log(nodeObjConnectedTo);
 
   // iterate the nodes to create the new input_nodes
   nodeObjConnectedTo.forEach((nodConnected) => {
@@ -75,7 +69,7 @@ function calcInOutNodes(inputOrOutput, graph, nod, graph_links) {
         : graph_links.findIndex(
             (lin) => lin.source === nod.id && lin.target === nodConnected.id
           );
-    console.log(link_index);
+    // console.log(link_index);
     if (nodConnected.task_type === 'graph') {
       // find the link and get the sub_node it is connected to in the graph
       // TODO: find the correct output if a graph has two links to the same output
@@ -105,7 +99,6 @@ function calcInOutNodes(inputOrOutput, graph, nod, graph_links) {
       );
     }
   });
-  console.log(nodes);
   return nodes;
 }
 

@@ -1,5 +1,4 @@
 import type { EwoksRFLink, EwoksRFNode, GraphDetails, GraphRF } from '../types';
-import state from './state';
 
 const selectedElement = (set, get) => ({
   selectedElement: {} as EwoksRFNode | EwoksRFLink | GraphDetails,

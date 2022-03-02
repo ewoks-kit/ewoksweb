@@ -1,4 +1,4 @@
-import { ExecutingEvent } from '../types';
+// import { ExecutingEvent } from '../types';
 
 const executingEvents = (set, get) => ({
   executingEvents: [],
@@ -15,12 +15,15 @@ const executingEvents = (set, get) => ({
 
     tempPos = tempNode.position;
 
-    const withLabel = tempNode.data.withLabel;
+    const { withLabel } = tempNode.data;
 
-    if (execEvent.event_type === 'start')
+    if (execEvent.event_type === 'start') {
       tempPos = { x: tempPos.x - 30, y: tempPos.y + 30 };
-    else if (withLabel) tempPos = { x: tempPos.x + 140, y: tempPos.y + 30 };
-    else tempPos = { x: tempPos.x + 95, y: tempPos.y + 30 };
+    } else if (withLabel) {
+      tempPos = { x: tempPos.x + 140, y: tempPos.y + 30 };
+    } else {
+      tempPos = { x: tempPos.x + 95, y: tempPos.y + 30 };
+    }
 
     // if there are other nodes for the same position we need to to join them with comma
     const sameEls = [...prevState.executingEvents]
@@ -31,7 +34,7 @@ const executingEvents = (set, get) => ({
           elem.event_type === execEvent.event_type
       );
     // console.log(prevState.executingEvents, sameEls);
-    const tempLabel =
+    const tempLabel: string =
       sameEls.length > 0 ? sameEls.map((elem) => elem.id).join(',') : '';
 
     let execNodes = [];
@@ -67,7 +70,7 @@ const executingEvents = (set, get) => ({
           ),
           {
             data: {
-              label: `${tempLabel},${execEvent.id}`,
+              label: `${tempLabel},${execEvent.id as string}`,
               nodeId: execEvent.nodeId,
               event_type: execEvent.event_type,
               values: { a: 1, b: 2 },

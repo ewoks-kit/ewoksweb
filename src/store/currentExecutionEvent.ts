@@ -1,4 +1,4 @@
-const currentExecutionEvent = (set, get) => ({
+const currentExecutionEvent = (set) => ({
   currentExecutionEvent: 0,
 
   setCurrentExecutionEvent: (indexOfEvent) => {

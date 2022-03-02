@@ -1,11 +1,6 @@
 import React, { useEffect } from 'react';
 
-import type {
-  DataMapping,
-  DefaultErrorAttributes,
-  EwoksRFNode,
-  Inputs,
-} from '../types';
+import type { DataMapping, EwoksRFNode, Inputs } from '../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import EditIcon from '@material-ui/icons/EditOutlined';
@@ -30,10 +25,6 @@ export default function NodeDetails(propsIn) {
     false
   );
 
-  // const [
-  //   defaultErrorAttributes,
-  //   setDefaultErrorAttributes,
-  // ] = React.useState<DefaultErrorAttributes>({});
   const [dataMapping, setDataMapping] = React.useState<DataMapping[]>([]);
   const [mapAllData, setMapAllData] = React.useState<boolean>(false);
 
@@ -203,111 +194,109 @@ export default function NodeDetails(propsIn) {
   };
 
   return (
-    <>
-      <Box>
-        {taskProperties.map(({ id, label, value }) => (
-          <EditTaskProp
-            key={id}
-            id={id}
-            label={label}
-            value={value}
-            propChanged={propChanged}
-            editProps={editProps}
-          />
-        ))}
-        {NonEditableTaskProperties.map(({ id, label, value }) => (
-          <div key={id} className={classes.detailsLabels}>
-            <b>{label}</b> {value}
-          </div>
-        ))}
+    <Box>
+      {taskProperties.map(({ id, label, value }) => (
+        <EditTaskProp
+          key={id}
+          id={id}
+          label={label}
+          value={value}
+          propChanged={propChanged}
+          editProps={editProps}
+        />
+      ))}
+      {NonEditableTaskProperties.map(({ id, label, value }) => (
+        <div key={id} className={classes.detailsLabels}>
+          <b>{label}</b> {value}
+        </div>
+      ))}
+      <IconButton
+        style={{ padding: '0px' }}
+        aria-label="edit"
+        onClick={() => {
+          setEditProps(!editProps);
+        }}
+      >
+        <EditIcon />
+      </IconButton>
+      <div>
+        <hr />
+        <b>Default Values </b>
+        {/* TODO: any kind of type is allowed: objects, arrays that need to be editable */}
         <IconButton
-          style={{ padding: '0px' }}
-          aria-label="edit"
-          onClick={() => {
-            setEditProps(!editProps);
-          }}
+          style={{ padding: '1px' }}
+          aria-label="delete"
+          onClick={() => addDefaultInputs()}
         >
-          <EditIcon />
+          <AddCircleOutlineIcon />
         </IconButton>
+        {defaultInputs.length > 0 && (
+          <EditableTable
+            headers={['Name', 'Value']}
+            defaultValues={defaultInputs}
+            valuesChanged={defaultInputsChanged}
+            typeOfValues={[{ type: 'input' }, { type: 'input' }]}
+          />
+        )}
+      </div>
+      <hr />
+      <div>
+        <b>Inputs-complete</b>
+        <Checkbox
+          checked={inputsComplete}
+          onChange={inputsCompleteChanged}
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
+      </div>
+      <hr />
+      <div>
+        <b>Default Error Node</b>
+        <Checkbox
+          checked={defaultErrorNode}
+          onChange={defaulErrortNodeChanged}
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
+      </div>
+      {defaultErrorNode && (
         <div>
-          <hr />
-          <b>Default Values </b>
-          {/* TODO: any kind of type is allowed: objects, arrays that need to be editable */}
+          <b>Map all Data</b>
+          <Checkbox
+            checked={mapAllData}
+            onChange={mapAllDataChanged}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
+        </div>
+      )}
+      {defaultErrorNode && !mapAllData && (
+        <div>
+          <b>Data Mapping </b>
           <IconButton
             style={{ padding: '1px' }}
             aria-label="delete"
-            onClick={() => addDefaultInputs()}
+            onClick={() => addDataMapping()}
           >
             <AddCircleOutlineIcon />
           </IconButton>
-          {defaultInputs.length > 0 && (
+          {dataMapping && dataMapping.length > 0 && (
             <EditableTable
-              headers={['Name', 'Value']}
-              defaultValues={defaultInputs}
-              valuesChanged={defaultInputsChanged}
-              typeOfValues={[{ type: 'input' }, { type: 'input' }]}
+              headers={['Source', 'Target']}
+              defaultValues={dataMapping}
+              valuesChanged={dataMappingValuesChanged}
+              typeOfValues={[
+                {
+                  type: 'input',
+                  values: [],
+                },
+                {
+                  type: 'input',
+                  values: [],
+                },
+              ]}
             />
           )}
+          <hr />
         </div>
-        <hr />
-        <div>
-          <b>Inputs-complete</b>
-          <Checkbox
-            checked={inputsComplete}
-            onChange={inputsCompleteChanged}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
-        </div>
-        <hr />
-        <div>
-          <b>Default Error Node</b>
-          <Checkbox
-            checked={defaultErrorNode}
-            onChange={defaulErrortNodeChanged}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
-        </div>
-        {defaultErrorNode && (
-          <div>
-            <b>Map all Data</b>
-            <Checkbox
-              checked={mapAllData}
-              onChange={mapAllDataChanged}
-              inputProps={{ 'aria-label': 'controlled' }}
-            />
-          </div>
-        )}
-        {defaultErrorNode && !mapAllData && (
-          <div>
-            <b>Data Mapping </b>
-            <IconButton
-              style={{ padding: '1px' }}
-              aria-label="delete"
-              onClick={() => addDataMapping()}
-            >
-              <AddCircleOutlineIcon />
-            </IconButton>
-            {dataMapping && dataMapping.length > 0 && (
-              <EditableTable
-                headers={['Source', 'Target']}
-                defaultValues={dataMapping}
-                valuesChanged={dataMappingValuesChanged}
-                typeOfValues={[
-                  {
-                    type: 'input',
-                    values: [],
-                  },
-                  {
-                    type: 'input',
-                    values: [],
-                  },
-                ]}
-              />
-            )}
-            <hr />
-          </div>
-        )}
-      </Box>
-    </>
+      )}
+    </Box>
   );
 }

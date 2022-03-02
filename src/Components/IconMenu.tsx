@@ -53,7 +53,7 @@ export default function IconMenu(props) {
     // console.log(action, element, tasks);
     setDoAction(action);
     if (action === 'newTask') {
-      setElementToEdit(initializedTask as Task);
+      setElementToEdit(initializedTask);
     } else if (action === 'cloneTask') {
       if ('position' in element) {
         // TODO: if the task does not exist in the tasks?
@@ -131,10 +131,10 @@ export default function IconMenu(props) {
                 <Cloud fontSize="small" />
               </ListItemIcon>
               <ListItemText>Clone Graph</ListItemText>
-              <Typography variant="body2" color="primary"></Typography>
+              <Typography variant="body2" color="primary" />
             </MenuItem>
             <MenuItem onClick={handleShowEwoksGraph}>
-              <ListItemIcon></ListItemIcon>
+              <ListItemIcon />
               <ListItemText>Graph in json</ListItemText>
             </MenuItem>
             {/* <Divider />

@@ -25,12 +25,12 @@ export default function SaveGetFromDisk() {
   const graphRF = state((state) => state.graphRF);
   const isExecuted = state((state) => state.isExecuted);
 
-  const loadFromDisk = (val) => {
+  const loadFromDisk = () => {
     // TODO: possible race situation with setting pgraphOrSubgraph
     setGraphOrSubgraph(true);
   };
 
-  const saveToDisk = (event) => {
+  const saveToDisk = () => {
     download(
       JSON.stringify(rfToEwoks(graphRF), null, 2),
       `${graphRF.graph.label}.json`,

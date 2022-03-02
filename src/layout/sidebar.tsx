@@ -112,7 +112,7 @@ export default function Sidebar(props) {
       setRecentGraphs({} as GraphRF, true);
     } else if (!elD.input_nodes) {
       if (workingGraph.graph.id === graphRF.graph.id) {
-        setGraphRF(newGraph as GraphRF);
+        setGraphRF(newGraph);
       } else {
         setOpenSnackbar({
           open: true,

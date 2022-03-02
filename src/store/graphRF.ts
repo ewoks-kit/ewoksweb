@@ -12,7 +12,7 @@ const initializedGraph = {
   links: [],
 } as GraphRF;
 
-const graphRF = (set, get) => ({
+const graphRF = (set) => ({
   graphRF: initializedGraph,
 
   setGraphRF: (graphRF) => {

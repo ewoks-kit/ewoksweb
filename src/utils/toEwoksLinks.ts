@@ -6,7 +6,6 @@ export function toEwoksLinks(links): EwoksLink[] {
   const tempLinks: EwoksRFLink[] = [...links].filter((link) => !link.startEnd);
   // if there are some startEnd links with conditions or any other link_attributes
   // then graph.input_nodes or graph.output_nodes needs update
-  console.log(tempLinks);
   return tempLinks.map(
     ({
       label,

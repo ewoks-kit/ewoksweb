@@ -16,9 +16,9 @@ const useStyles = makeStyles(() =>
 const showFile = async (e) => {
   e.preventDefault();
   const reader = new FileReader();
-  reader.addEventListener = async (e) => {
-    const text = e.target.result;
-  };
+  // reader.addEventListener = async (e) => {
+  //   const text = e.target.result;
+  // };
   reader.readAsText(e.target.files[0]);
   return reader;
 };
@@ -27,6 +27,7 @@ function isJsonString(str) {
   try {
     JSON.parse(str);
   } catch (error) {
+    /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
     console.warn(error);
     return false;
   }
@@ -52,17 +53,17 @@ function Upload(props) {
     if (workingGraph.graph.id === graphRF.graph.id) {
       const reader = showFile(event);
       const file = await reader.then((val) => val);
-      file.onloadend = async function () {
+      file.onloadend = async () => {
         if (isJsonString(file.result)) {
           const newGraph = JSON.parse(file.result as string);
-          let working = {};
+
           if (graphOrSubgraph) {
             const { result } = validateEwoksGraph(newGraph);
             if (result) {
-              working = await setWorkingGraph(newGraph);
+              await setWorkingGraph(newGraph);
             }
           } else {
-            working = await setSubGraph(newGraph);
+            await setSubGraph(newGraph);
           }
         } else {
           setOpenSnackbar({

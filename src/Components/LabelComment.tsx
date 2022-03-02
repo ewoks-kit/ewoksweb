@@ -1,13 +1,7 @@
 import React, { useEffect } from 'react';
 
-import type { EwoksRFLink, EwoksRFNode, Inputs } from '../types';
-import {
-  Box,
-  Button,
-  TextareaAutosize,
-  TextField,
-  Tooltip,
-} from '@material-ui/core';
+import type { EwoksRFLink } from '../types';
+import { Box, Button, TextField, Tooltip } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 
@@ -26,7 +20,6 @@ export default function LabelComment(propsIn) {
 
   useEffect(() => {
     if ('position' in element) {
-      console.log(element);
       setLabel(element.data.label);
       setComment(element.data.comment);
     } else if ('source' in element) {
@@ -36,12 +29,12 @@ export default function LabelComment(propsIn) {
   }, [element]);
 
   const useConditions = () => {
-    // console.log(element);
     const el = element as EwoksRFLink;
     const newLabel =
       el.data.conditions.length > 0
         ? el.data.conditions
-            .map((con) => con.source_output + ': ' + JSON.stringify(con.value))
+            // .map((con) => con.source_output + ': ' + JSON.stringify(con.value))
+            .map((con) => `${con.source_output}: ${JSON.stringify(con.value)}`)
             .join(', ')
         : '';
     setLabel(newLabel);
@@ -55,7 +48,6 @@ export default function LabelComment(propsIn) {
   };
 
   const useMapping = () => {
-    // console.log(element);
     const el = element as EwoksRFLink;
     const newLabel =
       el.data.data_mapping.length > 0

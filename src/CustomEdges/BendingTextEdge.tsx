@@ -16,7 +16,6 @@ function bendingText({
   label,
   arrowHeadType,
   markerEndId,
-  data,
 }) {
   const edgePath = getBezierPath({
     sourceX,
@@ -39,7 +38,7 @@ function bendingText({
       />
       <text style={{ color: 'red' }}>
         <textPath
-          href={`#${id}`}
+          href={`#${id as string}`}
           style={{ fontSize: '16px', fill: style.stroke }}
           startOffset="50%"
           textAnchor="middle" // TODO? make exact label place editable start, end

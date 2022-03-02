@@ -8,7 +8,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import state from '../store/state';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   top: {
     animationDuration: '550ms',
     // animation: 'animation-61bdi0 1.4s linear infinite',
@@ -53,7 +53,6 @@ export default function IntegratedSpinner({
   }, [getting]);
 
   const handleButtonClick = () => {
-    // console.log(isExecuted, loading);
     if (!loading) {
       // // console.log('getting1', getting);
       const runAction = action ? action() : null;

@@ -1,4 +1,4 @@
-const openSnackbar = (set, get) => ({
+const openSnackbar = (set) => ({
   openSnackbar: { open: false, text: '', severity: 'success' },
 
   setOpenSnackbar: (setOpen) => {

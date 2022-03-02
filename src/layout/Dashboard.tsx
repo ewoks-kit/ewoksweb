@@ -61,7 +61,9 @@ export default function Dashboard() {
     socket.on('Executing', (data) =>
       setExecutingEvents(data as ExecutingEvent)
     );
-    // socket.on('Executing1', (data) => // console.log('Executing1', data));
+    return () => {
+      socket.disconnect();
+    };
   }, [setExecutingEvents]);
 
   const handleOpenSettings = () => {

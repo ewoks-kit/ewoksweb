@@ -10,7 +10,6 @@ import ReactFlow, {
   ReactFlowProvider,
   Controls,
   MiniMap,
-  useZoomPanHelper,
   Node,
   Edge,
   Background,
@@ -25,7 +24,7 @@ import NoteNode from '../CustomNodes/NoteNode';
 import ExecutionStepsNode from '../CustomNodes/ExecutionStepsNode';
 import DataNode from '../CustomNodes/DataNode';
 import type { GraphRF, EwoksRFNode, EwoksRFLink } from '../types';
-import Popover from '../Components/Popover';
+// import Popover from '../Components/Popover';
 import state from '../store/state';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -95,7 +94,6 @@ function Canvas() {
   const setSubgraphsStack = state((state) => state.setSubgraphsStack);
   const setRecentGraphs = state((state) => state.setRecentGraphs);
   const setUndoRedo = state((state) => state.setUndoRedo);
-  const selectedElement = state((state) => state.selectedElement);
   const setSelectedElement = state((state) => state.setSelectedElement);
   const tasks = state((state) => state.tasks);
 
@@ -107,10 +105,10 @@ function Canvas() {
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const updateNodeInternals = useUpdateNodeInternals();
 
-  const [stepDetails, setStepDetails] = useState(null);
+  const [setStepDetails] = useState(null);
 
   useEffect(() => {
-    console.log(graphRF);
+    // console.log(graphRF);
     setElements([...graphRF.nodes, ...graphRF.links]);
   }, [graphRF]);
 
@@ -120,6 +118,7 @@ function Canvas() {
       elements.length > 0 &&
       workingGraph.graph.id !== graphRF.graph.id
     ) {
+      // console.log('fitView()');
       rfInstance.fitView();
     }
   }, [rfInstance, elements, workingGraph.graph.id, graphRF.graph.id]);
@@ -147,7 +146,7 @@ function Canvas() {
       (el) => el.id === element.id
     );
 
-    console.log(element, graphElement);
+    // console.log(element, graphElement);
 
     if ('position' in element) {
       setStepDetails({ evt: event.currentTarget, element });
@@ -157,7 +156,7 @@ function Canvas() {
   };
 
   const onLoad = (reactFlowInstance) => {
-    console.log('onLoad');
+    // console.log('onLoad');
     setRfInstance(reactFlowInstance);
     // if (rfInstance) {
     //   rfInstance.fitView();
@@ -251,7 +250,7 @@ function Canvas() {
       setGraphRF(newGraph);
       setUndoRedo({ action: 'Added a Node', graph: newGraph });
       // need to also save it in recentGraphs if we leave and come back to the graph?
-      setRecentGraphs(newGraph as GraphRF);
+      setRecentGraphs(newGraph);
     } else {
       setOpenSnackbar({
         open: true,
@@ -363,7 +362,7 @@ function Canvas() {
 
   const onRightClick = (event) => {
     event.preventDefault();
-    console.log('rightClick');
+    // console.log('rightClick');
   };
 
   const onSelectionChange = (elements) => {
@@ -462,7 +461,7 @@ function Canvas() {
         ...graphRF.nodes.find((nod) => nod.id === node.id),
       };
       RFEwoksNode.position = node.position;
-      const newGraph = {
+      const newGraph: GraphRF = {
         graph: graphRF.graph,
         nodes: [
           ...graphRF.nodes.filter((nod) => nod.id !== node.id),
@@ -473,7 +472,7 @@ function Canvas() {
 
       setSelectedElement(RFEwoksNode); // ? test if after drag the selected node should be set
 
-      setGraphRF(newGraph as GraphRF);
+      setGraphRF(newGraph);
       setUndoRedo({ action: 'Dragged a Node', graph: newGraph });
       // need to also save it in recentGraphs if we leave and come back to the graph?
       setRecentGraphs(newGraph);
@@ -490,7 +489,7 @@ function Canvas() {
     let newGraph = {} as GraphRF;
     // TODO: make it work for multiple delete?
     // TODO: same code as sidebar->deleteElement create a hook for delete?
-    const el = elementsToRemove[0];
+    const [el] = elementsToRemove;
     if (el.position) {
       const nodesLinks = graphRF.links.filter(
         (link) => !(link.source === el.id || link.target === el.id)
@@ -541,14 +540,15 @@ function Canvas() {
             snapToGrid
             // onPaneClick={(e) => console.log(e)}
             // snapGrid={[150, 150]}
-            onMoveStart={(e) => console.log(e)}
-            onMoveEnd={(e) => console.log(e)}
+            // onMoveStart={(e) => console.log(e)}
+            // onMoveEnd={(e) => console.log(e)}
             elements={elements}
             // onElementClick={onElementClick}
             onElementClick={(evt, node) => {
               onElementClick(evt, node);
-              if (node.type !== 'smoothstep')
+              if (node.type !== 'smoothstep') {
                 setStepDetails({ evt: evt.currentTarget, node });
+              }
             }}
             onLoad={onLoad}
             onDrop={onDrop}
@@ -573,7 +573,7 @@ function Canvas() {
                 update node internals
               </button>
             </div>
-            <Controls onFitView={() => console.log('ok')}>
+            <Controls>
               {/* <ControlButton
                 onClick={
                   () =>
@@ -590,19 +590,29 @@ function Canvas() {
             <MiniMap
               nodeStrokeColor={(n): string => {
                 // "rgb(60, 81, 202)"
-                if (n.style?.background) return n.style.background as string;
-                if (['graphOutput', 'graphInput'].includes(n.type))
+                if (n.style?.background) {
+                  return n.style.background as string;
+                }
+                if (['graphOutput', 'graphInput'].includes(n.type)) {
                   return '#0041d0';
-                if (n.type === 'graph') return '#ff0072';
+                }
+                if (n.type === 'graph') {
+                  return '#ff0072';
+                }
                 // if (n.type === 'default') return 'rgb(60, 81, 202)';
 
                 return 'rgb(60, 81, 202)';
               }}
               nodeColor={(n): string => {
-                if (n.style?.background) return n.style.background as string;
-                if (['graphOutput', 'graphInput'].includes(n.type))
+                if (n.style?.background) {
+                  return n.style.background as string;
+                }
+                if (['graphOutput', 'graphInput'].includes(n.type)) {
                   return 'rgb(223, 226, 247)';
-                if (n.type === 'graph') return '#ff0082';
+                }
+                if (n.type === 'graph') {
+                  return '#ff0082';
+                }
                 // if (n.type === 'default') return 'rgb(60, 81, 202)';
 
                 return 'rgb(60, 81, 202)';

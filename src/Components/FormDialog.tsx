@@ -7,13 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import type {
-  EwoksRFLink,
-  EwoksRFNode,
-  GraphEwoks,
-  GraphRF,
-  Task,
-} from '../types';
+import type { EwoksRFLink, EwoksRFNode, GraphRF, Task } from '../types';
 import axios from 'axios';
 import { rfToEwoks } from '../utils';
 import state from '../store/state';

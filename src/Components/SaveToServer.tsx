@@ -4,7 +4,7 @@ import IntegratedSpinner from './IntegratedSpinner';
 import axios from 'axios';
 import { rfToEwoks } from '../utils';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import type { GraphEwoks, GraphRF } from '../types';
+import type { GraphRF } from '../types';
 import state from '../store/state';
 import configData from '../configData.json';
 import FormDialog from './FormDialog';
@@ -21,7 +21,6 @@ export default function SaveToServer({ saveToServerF }) {
   const setRecentGraphs = state((state) => state.setRecentGraphs);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
-  const isExecuted = state((state) => state.isExecuted);
 
   React.useEffect(() => {
     saveToServerF.current = saveToServer;
@@ -110,13 +109,12 @@ export default function SaveToServer({ saveToServerF }) {
           })
         );
     } else if (graphRF.graph.id) {
-      console.log('putting the graph');
       await axios
         .put(
           `${configData.serverUrl}/workflow/${graphRF.graph.id}`,
           rfToEwoks(graphRF)
         )
-        .then((res) => {
+        .then(() => {
           setGettingFromServer(false);
           setOpenSnackbar({
             open: true,
@@ -137,7 +135,7 @@ export default function SaveToServer({ saveToServerF }) {
     <>
       <FormDialog
         elementToEdit={graphRF}
-        action={'cloneGraph'}
+        action="cloneGraph"
         open={openSaveDialog}
         setOpenSaveDialog={setOpenSaveDialog}
       />

@@ -16,7 +16,6 @@ export default function LinkDetails(propsIn) {
   const { element } = props;
   const { on_error } = (element.data && element.data.on_error) || false;
   const { map_all_data } = (element.data && element.data.map_all_data) || false;
-  const { setElement } = propsIn;
 
   const graphRF = state((state) => state.graphRF);
   const setSelectedElement = state((state) => state.setSelectedElement);
@@ -27,9 +26,9 @@ export default function LinkDetails(propsIn) {
   const [dataMapping, setDataMapping] = React.useState<DataMapping[]>([]);
   const [onError, setOnError] = React.useState<boolean>(false);
   const [conditions, setConditions] = React.useState<Inputs[]>([]);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
   useEffect(() => {
-    // console.log(element);
     setElementL(element);
     if (element.data && element.data.data_mapping) {
       setDataMapping(element.data.data_mapping);
@@ -57,7 +56,11 @@ export default function LinkDetails(propsIn) {
     const el = element as EwoksRFLink;
     const elMap = el.data.data_mapping;
     if (elMap && elMap[elMap.length - 1] && elMap[elMap.length - 1].id === '') {
-      // console.log('should not ADD mapping');
+      setOpenSnackbar({
+        open: true,
+        text: 'Cannot add another line!',
+        severity: 'warning',
+      });
     } else {
       setSelectedElement(
         {
@@ -109,7 +112,11 @@ export default function LinkDetails(propsIn) {
     const el = element as EwoksRFLink;
     const elCon = el.data.conditions;
     if (elCon && elCon[elCon.length - 1] && elCon[elCon.length - 1].id === '') {
-      // console.log('should not ADD condition');
+      setOpenSnackbar({
+        open: true,
+        text: 'Cannot add another line!',
+        severity: 'warning',
+      });
     } else {
       setSelectedElement(
         {

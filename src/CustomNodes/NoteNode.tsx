@@ -1,20 +1,10 @@
 /* eslint-disable react/function-component-definition */
 /* jshint sub:true*/
 import React, { useEffect } from 'react';
-import { IconButton, TextField } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/EditOutlined';
 import { style } from './NodeStyle';
 import SaveIcon from '@material-ui/icons/Save';
-import UndoIcon from '@material-ui/icons/Undo';
 
 import state from '../store/state';
-
-const onDragStart = (e) => {
-  e.preventDefault();
-};
-const isValidOutput = (connection) => {
-  return true;
-};
 
 const NoteNode = (args) => {
   const [comment, setComment] = React.useState('');
@@ -45,9 +35,9 @@ const NoteNode = (args) => {
     setComment(event.target.value);
   };
 
-  const cancel = () => {
-    setEdit(false);
-  };
+  // const cancel = () => {
+  //   setEdit(false);
+  // };
 
   const save = () => {
     // update graphRF on store
@@ -59,7 +49,7 @@ const NoteNode = (args) => {
         {
           data: {
             label: args.data.label,
-            comment: comment,
+            comment,
           },
           id: args.id,
           task_type: 'note',
