@@ -21,6 +21,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IntegratedSpinner from '../Components/IntegratedSpinner';
 import ExecuteSpinner from '../Components/ExecuteSpinner';
 import SendIcon from '@material-ui/icons/Send';
+import isValidLink from '../utils/IsValidLink';
 
 import state from '../store/state';
 
@@ -43,11 +44,7 @@ const iconsObj = {
 const onDragStart = (e) => {
   e.preventDefault();
 };
-// const isValidOutput = (connection) => {
-//   return true;
-// };
 
-// const executing = true;
 const getFromServer = async () => {
   // console.log('executing');
 };
@@ -73,6 +70,7 @@ const Node: React.FC<NodeProps> = ({
       <b>{label}</b>:<div>{comment}</div>
     </span>
   );
+
   const border = colorBorder
     ? `4px solid ${colorBorder}`
     : '2px solid rgb(233, 235, 247)';
@@ -99,7 +97,61 @@ const Node: React.FC<NodeProps> = ({
     customTitle.borderRadius = '10px 10px 3px 3px';
   }
   const isExecuted = state((state) => state.isExecuted);
-  // const [executing, setExecuting] = React.useState(false);
+  const graphRF = state((state) => state.graphRF);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+
+  const isValidConnection = (connection) => {
+    const valid = isValidLink(connection, graphRF);
+    if (!valid) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Cannot connect an input or an output with more than one node',
+        severity: 'warning',
+      });
+    }
+    return valid;
+  };
+  //   console.log(connection);
+  //   let isValid = true;
+  //   // from source and target see
+  //   const source = graphRF.nodes.find((nod) => nod.id === connection.source);
+  //   const target = graphRF.nodes.find((nod) => nod.id === connection.target);
+  //   console.log(source, target);
+  //   // if it is Input-Output
+  //   if (['graphOutput', 'graphInput'].includes(source.task_type)) {
+  //     // calc if other connections exist and allow connection
+  //     console.log('Source is inout');
+  //     const existingConnections = graphRF.links.filter(
+  //       (link) => link.source === source.id
+  //     );
+  //     console.log(existingConnections);
+  //     if (existingConnections.length > 1) {
+  //       console.log('already wrong');
+  //       isValid = false;
+  //     } else if (existingConnections.length === 1) {
+  //       console.log('cannot add another');
+  //       isValid = false;
+  //     }
+  //   }
+
+  //   if (['graphOutput', 'graphInput'].includes(target.task_type)) {
+  //     // calc if other connections exist and allow connection
+  //     console.log('target is inout');
+  //     const existingConnections = graphRF.links.filter(
+  //       (link) => link.target === target.id
+  //     );
+  //     console.log(existingConnections);
+  //     if (existingConnections.length > 1) {
+  //       console.log('already wrong');
+  //       isValid = false;
+  //     } else if (existingConnections.length === 1) {
+  //       console.log('cannot add another');
+  //       isValid = false;
+  //     }
+  //   }
+
+  //   return isValid;
+  // };
 
   return (
     <div
@@ -124,7 +176,7 @@ const Node: React.FC<NodeProps> = ({
               position={Position.Right}
               id="sr"
               style={{ ...contentStyle.handle, ...contentStyle.handleSource }}
-              // isValidConnection={(connection) => isValidOutput(connection)}
+              isValidConnection={isValidConnection}
               isConnectable
               // onConnect={(params) => console.log('handle sr onConnect', params)}
             >
@@ -160,6 +212,7 @@ const Node: React.FC<NodeProps> = ({
                     ...contentStyle.handleUpDown,
                   }}
                   isConnectable
+                  isValidConnection={isValidConnection}
                 />
                 <Handle
                   type="source"
@@ -172,6 +225,7 @@ const Node: React.FC<NodeProps> = ({
                     ...contentStyle.handleUpDown,
                   }}
                   isConnectable
+                  isValidConnection={isValidConnection}
                 >
                   {/* <img src={iconsObj['down']} alt="" /> */}
                 </Handle>
@@ -247,6 +301,7 @@ const Node: React.FC<NodeProps> = ({
                 ...contentStyle.handleTarget,
               }}
               isConnectable
+              isValidConnection={isValidConnection}
             >
               {/* <img src={iconsObj['right']} alt="" /> */}
             </Handle>
@@ -266,6 +321,7 @@ const Node: React.FC<NodeProps> = ({
                     ...contentStyle.handleUpDown,
                   }}
                   isConnectable
+                  isValidConnection={isValidConnection}
                 >
                   {/* <Tooltip title="Delete">
                   <IconButton>in</IconButton>
@@ -281,8 +337,8 @@ const Node: React.FC<NodeProps> = ({
                     ...contentStyle.handleTarget,
                     ...contentStyle.handleUpDown,
                   }}
-                  // isValidConnection={(connection) => isValidOutput(connection)}
                   isConnectable
+                  isValidConnection={isValidConnection}
                   // onConnect={(params) =>
                   //   // console.log('handle tt onConnect', params)
                   // }

@@ -10,9 +10,6 @@ export function outNodesLinks(graph) {
   ) {
     const outNodesInputed = [];
     graph.graph.output_nodes.forEach((outNod) => {
-      // // console.log(outNod);
-      // if we need position to control showing in-out as nodes in th graph
-      // if (outNod.uiProps && outNod.uiProps.position) {
       const nodeSource = graph.nodes.find((no) => no.id === outNod.node);
 
       if (!outNodesInputed.includes(outNod.id)) {
@@ -43,7 +40,11 @@ export function outNodesLinks(graph) {
         startEnd: true,
         source: outNod.node,
         target: outNod.id,
-        sub_source: nodeSource.task_type !== 'graph' ? '' : outNod.sub_node,
+        sub_source: !nodeSource
+          ? ''
+          : nodeSource.task_type !== 'graph'
+          ? ''
+          : outNod.sub_node,
         conditions: existsOrValue(outNod.link_attributes, 'conditions', []),
         uiProps: {
           label: existsOrValue(outNod.link_attributes, 'label', ''),

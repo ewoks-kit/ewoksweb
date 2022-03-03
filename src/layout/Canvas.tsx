@@ -105,7 +105,7 @@ function Canvas() {
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const updateNodeInternals = useUpdateNodeInternals();
 
-  const [setStepDetails] = useState(null);
+  const [stepDetails, setStepDetails] = useState(null);
 
   useEffect(() => {
     // console.log(graphRF);
@@ -568,11 +568,11 @@ function Canvas() {
             onElementsRemove={onElementsRemove}
             deleteKeyCode="Delete"
           >
-            <div style={buttonWrapperStyles}>
+            {/* <div style={buttonWrapperStyles}>
               <button type="button" onClick={updateNode}>
                 update node internals
               </button>
-            </div>
+            </div> */}
             <Controls>
               {/* <ControlButton
                 onClick={

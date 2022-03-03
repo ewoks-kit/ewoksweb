@@ -5,7 +5,7 @@ const selectedElement = (set, get) => ({
 
   setSelectedElement: (element, from) => {
     const prevState = get((prev) => prev);
-    // console.log(element, from, prevState);
+
     const wg = prevState.workingGraph.graph.id;
     const { graph, nodes, links } = prevState.graphRF;
 
@@ -22,7 +22,6 @@ const selectedElement = (set, get) => ({
             action: 'Node details changed',
             graph: tempGraph,
           });
-          // get().setUndoIndex(get().undoIndex + 1);
         }
       } else if ('source' in element) {
         tempGraph = {
@@ -35,7 +34,6 @@ const selectedElement = (set, get) => ({
             action: 'Link details changed',
             graph: tempGraph,
           });
-          // get().setUndoIndex(get().undoIndex + 1);
         }
       } else {
         tempGraph = {
@@ -49,7 +47,6 @@ const selectedElement = (set, get) => ({
             action: 'Graph details changed',
             graph: tempGraph,
           });
-          // get().setUndoIndex(get().undoIndex + 1);
         }
       }
 

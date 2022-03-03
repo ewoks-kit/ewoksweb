@@ -28,7 +28,7 @@ export default function EditNodeStyle(propsIn) {
     if ('position' in element) {
       setWithImage(element.data.withImage);
       setWithLabel(element.data.withLabel);
-      setColorBorder(element.data.colorBorder);
+      setColorBorder(element.data.colorBorder || '');
       setMoreHandles(!!element.data.moreHandles);
     }
   }, [element.id, element]);

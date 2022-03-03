@@ -3,6 +3,7 @@ import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import { calcTasksForLink } from './calcTasksForLink';
 import existsOrValue from './existsOrValue';
+import isValidLink from './IsValidLink';
 
 // from GraphEwoks get EwoksRFLinks
 // tempGraph: the graph to transform its links
@@ -15,17 +16,7 @@ export function toRFEwoksLinks(
   let id = 0;
 
   // calculate the links from inputs-outputs of the Ewoks graph
-  const inNodeLinks = inNodesLinks(tempGraph);
-  const outNodeLinks = outNodesLinks(tempGraph);
-
-  // acumulate all links inOutTempGraph
-  const inOutTempGraph = { ...tempGraph };
-  if (inNodeLinks.links.length > 0) {
-    inOutTempGraph.links = [...inOutTempGraph.links, ...inNodeLinks.links];
-  }
-  if (outNodeLinks.links.length > 0) {
-    inOutTempGraph.links = [...inOutTempGraph.links, ...outNodeLinks.links];
-  }
+  const inOutTempGraph = calcInOutLinks(tempGraph);
 
   if (inOutTempGraph.links) {
     return inOutTempGraph.links.map(
@@ -48,7 +39,9 @@ export function toRFEwoksLinks(
           newNodeSubgraphs,
           tasks
         );
-
+        console.log(source, target);
+        // const valid = isValidLink({ source, target }, graphRF);
+        // console.log(sourceTask, targetTask, valid);
         const color =
           (uiProps && uiProps.style && uiProps.style.stroke) ||
           'rgb(60, 81, 202)';
@@ -87,7 +80,7 @@ export function toRFEwoksLinks(
           labelBgPadding: [8, 4],
           labelBgBorderRadius: 4,
           labelStyle: {
-            color: color,
+            color,
             fill: color,
             fontWeight: 500,
             fontSize: 14,
@@ -144,4 +137,20 @@ function calcSourceHandle(uiProps, sub_source) {
     : sub_source
     ? sub_source
     : '';
+}
+
+function calcInOutLinks(tempGraph) {
+  // calculate the links from inputs-outputs of the Ewoks graph
+  const inNodeLinks = inNodesLinks(tempGraph);
+  const outNodeLinks = outNodesLinks(tempGraph);
+
+  // accumulate all links inOutTempGraph
+  const inOutTempGraph = { ...tempGraph };
+  if (inNodeLinks.links.length > 0) {
+    inOutTempGraph.links = [...inOutTempGraph.links, ...inNodeLinks.links];
+  }
+  if (outNodeLinks.links.length > 0) {
+    inOutTempGraph.links = [...inOutTempGraph.links, ...outNodeLinks.links];
+  }
+  return inOutTempGraph;
 }
