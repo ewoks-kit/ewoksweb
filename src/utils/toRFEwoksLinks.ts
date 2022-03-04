@@ -39,7 +39,7 @@ export function toRFEwoksLinks(
           newNodeSubgraphs,
           tasks
         );
-        console.log(source, target);
+        // console.log(source, target);
         // const valid = isValidLink({ source, target }, graphRF);
         // console.log(sourceTask, targetTask, valid);
         const color =

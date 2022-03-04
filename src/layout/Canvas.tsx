@@ -108,20 +108,27 @@ function Canvas() {
   const [stepDetails, setStepDetails] = useState(null);
 
   useEffect(() => {
-    // console.log(graphRF);
-    setElements([...graphRF.nodes, ...graphRF.links]);
-  }, [graphRF]);
-
-  useEffect(() => {
+    console.log(
+      'fitView()',
+      elements.length,
+      workingGraph.graph.id,
+      graphRF.graph.id
+    );
     if (
       rfInstance &&
       elements.length > 0 &&
       workingGraph.graph.id !== graphRF.graph.id
     ) {
-      // console.log('fitView()');
+      console.log('fitView()');
       rfInstance.fitView();
     }
-  }, [rfInstance, elements, workingGraph.graph.id, graphRF.graph.id]);
+  }); // [rfInstance, elements, workingGraph.graph.id, graphRF]
+
+  useEffect(() => {
+    // console.log(graphRF);
+    console.log('set elements on canvas', graphRF);
+    setElements([...graphRF.nodes, ...graphRF.links]);
+  }, [graphRF]);
 
   // TODO: examine the usage
   // useEffect(() => {
@@ -155,13 +162,11 @@ function Canvas() {
     setSelectedElement(graphElement);
   };
 
-  const onLoad = (reactFlowInstance) => {
-    // console.log('onLoad');
-    setRfInstance(reactFlowInstance);
-    // if (rfInstance) {
-    //   rfInstance.fitView();
-    // }
-  };
+  const onLoad = useCallback((instance) => {
+    console.log('onLoad');
+    instance.fitView();
+    setRfInstance(instance);
+  }, []);
   // const handlDisableDragging = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   setDisableDragging(event.target.checked);
   // };

@@ -21,17 +21,10 @@ export default function SubgraphsStack() {
     e.preventDefault();
     // // console.log(e.target.text, e.target.id, recentGraphs);
     setSubgraphsStack({ id: e.target.id, label: e.target.text });
+
     const subgraph = recentGraphs.find((gr) => gr.graph.id === e.target.id);
 
-    // if (!subgraph) { // Uncomment if-else or delete if not used
-    //   setGraphRF({
-    //     graph: subgraph.graph,
-    //     nodes: toRFEwoksNodes(subgraph, []),
-    //     links: toRFEwoksLinks(subgraph, []),
-    //   });
-    // } else {
     setGraphRF(subgraph);
-    // }
   };
 
   return (
