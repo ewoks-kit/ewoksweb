@@ -101,15 +101,15 @@ const Node: React.FC<NodeProps> = ({
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
   const isValidConnection = (connection) => {
-    const valid = isValidLink(connection, graphRF);
-    if (!valid) {
+    const { isValid, reason } = isValidLink(connection, graphRF);
+    if (!isValid) {
       setOpenSnackbar({
         open: true,
-        text: 'Cannot connect an input or an output with more than one node',
+        text: reason,
         severity: 'warning',
       });
     }
-    return valid;
+    return isValid;
   };
   //   console.log(connection);
   //   let isValid = true;

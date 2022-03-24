@@ -3,7 +3,6 @@ import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import { calcTasksForLink } from './calcTasksForLink';
 import existsOrValue from './existsOrValue';
-import isValidLink from './IsValidLink';
 
 // from GraphEwoks get EwoksRFLinks
 // tempGraph: the graph to transform its links
@@ -40,7 +39,6 @@ export function toRFEwoksLinks(
           tasks
         );
         // console.log(source, target);
-        // const valid = isValidLink({ source, target }, graphRF);
         // console.log(sourceTask, targetTask, valid);
         const color =
           (uiProps && uiProps.style && uiProps.style.stroke) ||

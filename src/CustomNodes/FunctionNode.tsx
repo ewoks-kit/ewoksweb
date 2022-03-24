@@ -2,16 +2,25 @@ import React, { memo } from 'react';
 import { Handle, Position } from 'react-flow-renderer';
 import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
-
-const isValidInput = () => {
-  return true;
-};
-const isValidOutput = () => {
-  return true; // R.last(R.split('__', connection.target)) === type;
-};
+import isValidLink from '../utils/IsValidLink';
+import state from '../store/state';
 
 function FunctionNode(fnod) {
-  // console.log(fnod);
+  const graphRF = state((state) => state.graphRF);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+
+  const isValidConnection = (connection) => {
+    const { isValid, reason } = isValidLink(connection, graphRF);
+    if (!isValid) {
+      setOpenSnackbar({
+        open: true,
+        text: reason,
+        severity: 'warning',
+      });
+    }
+    return isValid;
+  };
+
   return (
     <Node
       isGraph
@@ -56,13 +65,11 @@ function FunctionNode(fnod) {
                   ...style.left,
                   ...style.handleTarget,
                 }}
-                isValidConnection={
-                  () => isValidInput() // connection, input.type
-                }
+                isValidConnection={isValidConnection}
               />
               {fnod.data.moreHandles && (
                 <Handle
-                  key={`&{input.label} right`}
+                  key="&{input.label} right"
                   type="target"
                   position={Position.Right}
                   id={`${input.label.slice(0, input.label.indexOf(':'))} right`}
@@ -71,7 +78,7 @@ function FunctionNode(fnod) {
                     ...style.right,
                     ...style.handleTarget,
                   }}
-                  isValidConnection={() => isValidOutput()}
+                  isValidConnection={isValidConnection}
                 />
               )}
             </div>
@@ -100,7 +107,7 @@ function FunctionNode(fnod) {
                   ...style.right,
                   ...style.handleSource,
                 }}
-                isValidConnection={() => isValidOutput()}
+                isValidConnection={isValidConnection}
               />
               {fnod.data.moreHandles && (
                 <Handle
@@ -116,7 +123,7 @@ function FunctionNode(fnod) {
                     ...style.left,
                     ...style.handleSource,
                   }}
-                  isValidConnection={() => isValidOutput()}
+                  isValidConnection={isValidConnection}
                 />
               )}
             </div>
