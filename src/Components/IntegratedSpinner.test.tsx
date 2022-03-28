@@ -7,9 +7,7 @@ test('renders one button element', () => {
       tooltip="testing tooltip"
       action={// console.log('testing')}
       getting={false}
-    >
-      <div>testing</div>
-    </IntegratedSpinner>
+    />
   );
   const buttonElements = screen.getAllByRole('button');
   expect(buttonElements).toHaveLength(1);

@@ -6,18 +6,32 @@ import {
 } from '@testing-library/react';
 import AddNodes from './AddNodes';
 
-test('renders one button element', async () => {
+test('renders one button element named ¨Add Nodes¨', async () => {
   render(<AddNodes />);
-  const buttonElements = screen.getAllByRole('button');
-  expect(buttonElements).toHaveLength(1);
+  const buttonElement = screen.getByRole('button');
+  // console.log(buttonElements);
+  expect(buttonElement).toBeInTheDocument();
+
+  const addNodeButton = screen.getByRole('button', {
+    // eslint-disable-next-line require-unicode-regexp
+    name: /add nodes/i,
+  });
+  expect(addNodeButton).toBeInTheDocument();
 
   fireEvent(
-    buttonElements[0],
+    buttonElement,
     new MouseEvent('click', {
       bubbles: true,
       cancelable: true,
     })
   );
+
+  // const tooltipText = await screen.findByDisplayValue('ewokscore');
+  const ewoksCoreCategory = screen.getByRole('button', {
+    // eslint-disable-next-line require-unicode-regexp
+    name: /est/i,
+  });
+  expect(ewoksCoreCategory).toBeInTheDocument();
 
   const buttonElementsOpenedCategories = screen.getAllByRole('button');
   // console.log(buttonElementsOpenedCategories);
@@ -31,30 +45,14 @@ test('renders one button element', async () => {
     })
   );
 
-  const buttonElementsOpenedCategoriesClick0 = screen.getAllByRole('button');
-  // console.log(buttonElementsOpenedCategoriesClick0);
-  expect(buttonElementsOpenedCategoriesClick0).toHaveLength(3);
-
-  fireEvent(
-    buttonElementsOpenedCategoriesClick0[0],
-    new MouseEvent('click', {
-      bubbles: true,
-      cancelable: true,
-    })
-  );
-
-  const buttonElementsOpenedCategoriesClick1 = screen.getAllByRole('button');
-  // console.log(buttonElementsOpenedCategoriesClick1);
-  expect(buttonElementsOpenedCategoriesClick1).toHaveLength(3);
-
   // fireEvent(
-  //   buttonElements[0],
+  //   buttonElement,
   //   new MouseEvent('mouseover', {
   //     bubbles: true,
   //     cancelable: true,
   //   })
   // );
-  const tooltipText = await screen.findByDisplayValue('Est');
+  // const tooltipText = await screen.findByDisplayValue('Est');
 
-  expect(tooltipText).toBeInTheDocument();
+  // expect(tooltipText).toBeInTheDocument();
 });

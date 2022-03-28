@@ -71,7 +71,7 @@ function EditableTable(props) {
   useEffect(() => {
     // console.log(defaultValues);
     const tOfIn = defaultValues.map((val) =>
-      val.value === 'true' || val.value === 'false'
+      val.value === true || val.value === false
         ? 'boolean'
         : Array.isArray(val.value)
         ? 'list'
@@ -233,7 +233,7 @@ function EditableTable(props) {
     const newRows = callbackProps.rows.map((row) => {
       if (row.id === callbackProps.id) {
         return name !== ''
-          ? { ...row, name: name, value: val }
+          ? { ...row, name, value: val }
           : { ...row, value: val };
       }
       return row;
@@ -271,8 +271,8 @@ function EditableTable(props) {
                   <TableCell align="left" className={classes.tableCell}>
                     <FormControl disabled={disableSelectType}>
                       <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
+                        // labelId="demo-simple-select-label"
+                        // id="demo-simple-select"
                         value={
                           typeOfInputs[index] !== 'boolean'
                             ? typeOfInputs[index]

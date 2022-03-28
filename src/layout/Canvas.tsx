@@ -13,7 +13,7 @@ import ReactFlow, {
   Node,
   Edge,
   Background,
-  useUpdateNodeInternals,
+  // useUpdateNodeInternals,
 } from 'react-flow-renderer';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import bendingText from '../CustomEdges/BendingTextEdge';
@@ -103,7 +103,7 @@ function Canvas() {
   const recentGraphs = state((state) => state.recentGraphs);
   const workingGraph = state((state) => state.workingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const updateNodeInternals = useUpdateNodeInternals();
+  // const updateNodeInternals = useUpdateNodeInternals();
 
   const [stepDetails, setStepDetails] = useState(null);
 
@@ -516,9 +516,9 @@ function Canvas() {
     setGraphRF(newGraph);
   };
 
-  const updateNode = useCallback(() => updateNodeInternals('1'), [
-    updateNodeInternals,
-  ]);
+  // const updateNode = useCallback(() => updateNodeInternals('1'), [
+  //   updateNodeInternals,
+  // ]);
 
   const buttonWrapperStyles: CSSProperties = {
     position: 'absolute',
