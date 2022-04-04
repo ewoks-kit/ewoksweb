@@ -5,10 +5,9 @@ import Fab from '@material-ui/core/Fab';
 import CheckIcon from '@material-ui/icons/Check';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Tooltip from '@material-ui/core/Tooltip';
-import state from '../store/state';
+// import state from '../store/state';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   top: {
     animationDuration: '550ms',
     // animation: 'animation-61bdi0 1.4s linear infinite',
@@ -24,18 +23,21 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ExecuteSpinner({ children, tooltip, action, getting }) {
   const [loading, setLoading] = React.useState(false);
-  const [success, setSuccess] = React.useState(false);
-  const isExecuted = state((state) => state.isExecuted);
-  const setIsExecuted = state((state) => state.setIsExecuted);
-  const timer = React.useRef<number>();
+  const [success] = React.useState(false);
+  // const isExecuted = state((state) => state.isExecuted);
+  // const setIsExecuted = state((state) => state.setIsExecuted);
+  // const timer = React.useRef<number>();
   const classes = useStyles();
+  /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
+  console.warn(tooltip, action, getting);
 
   // TODO: synd with the real time the call makes using getting
   React.useEffect(() => {
-    // console.log('getting', getting);
     if (getting) {
       setLoading(true);
-    } else setLoading(false);
+    } else {
+      setLoading(false);
+    }
   }, [getting]);
 
   return (

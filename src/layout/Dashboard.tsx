@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -20,21 +20,19 @@ import SimpleSnackbar from '../Components/Snackbar';
 import TemporaryDrawer from '../Components/Drawer';
 import SubgraphsStack from '../Components/SubgraphsStack';
 import LinearSpinner from '../Components/LinearSpinner';
+import ExecuteWorkflow from '../Components/ExecuteWorkflow';
 import Tooltip from '@material-ui/core/Tooltip';
 import DashboardStyle from './DashboardStyle';
-import SendIcon from '@material-ui/icons/Send';
-import IntegratedSpinner from '../Components/IntegratedSpinner';
 import SaveGetFromDisk from '../Components/SaveGetFromDisk';
 import SaveToServer from '../Components/SaveToServer';
-import ClearIcon from '@material-ui/icons/Clear';
-import io from 'socket.io-client';
-import type { ExecutingEvent } from '../types';
+// import io from 'socket.io-client';
+// import type { ExecutingEvent } from '../types';
 import state from '../store/state';
-import configData from '../configData.json';
+// import configData from '../configData.json';
 
 const useStyles = DashboardStyle;
 
-export const socket = io(configData.serverUrl);
+// export const socket = io(configData.serverUrl);
 
 export default function Dashboard() {
   const classes = useStyles();
@@ -43,28 +41,24 @@ export default function Dashboard() {
   const redoF = React.useRef(null);
   const saveToServerF = React.useRef(null);
 
-  const graphRF = state((state) => state.graphRF);
   const selectedElement = state((state) => state.selectedElement);
   const [open, setOpen] = React.useState(true);
   const [openSettings, setOpenSettings] = React.useState(false);
-  const recentGraphs = state((state) => state.recentGraphs);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const initializedGraph = state((state) => state.initializedGraph);
   const gettingFromServer = state((state) => state.gettingFromServer);
   const isExecuted = state((state) => state.isExecuted);
-  const setIsExecuted = state((state) => state.setIsExecuted);
-  const setExecutingEvents = state((state) => state.setExecutingEvents);
+  // const setExecutingEvents = state((state) => state.setExecutingEvents);
 
-  useEffect(() => {
-    // console.log('Executing');
-    socket.on('Executing', (data) =>
-      setExecutingEvents(data as ExecutingEvent)
-    );
-    return () => {
-      socket.disconnect();
-    };
-  }, [setExecutingEvents]);
+  // useEffect(() => {
+  //   // console.log('Executing');
+  //   socket.on('Executing', (data) =>
+  //     setExecutingEvents(data as ExecutingEvent)
+  //   );
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, [setExecutingEvents]);
 
   const handleOpenSettings = () => {
     setOpenSettings(!openSettings);
@@ -78,42 +72,6 @@ export default function Dashboard() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
-  const executeWorkflow = async () => {
-    // // console.log('execute workflow', recentGraphs, graphRF);
-    // console.log(isExecuted);
-    // setIsExecuted(!isExecuted);
-    if (recentGraphs.length > 0 && !isExecuted) {
-      socket.emit('Execute Graph', graphRF);
-      socket.on('Executing', (data) => console.log(data));
-      // await axios
-      //   .post(`http://localhost:5000/workflow/execute`, rfToEwoks(graphRF))
-      //   .then((res) =>
-      //     setOpenSnackbar({
-      //       open: true,
-      //       text: res,
-      //       severity: 'warning',
-      //     })
-      //   )
-      //   .catch((error) =>
-      //     setOpenSnackbar({
-      //       open: true,
-      //       text: error,
-      //       severity: 'warning',
-      //     })
-      //   );
-      setIsExecuted(true);
-    } else if (isExecuted) {
-      setIsExecuted(false);
-      return;
-    } else {
-      setOpenSnackbar({
-        open: true,
-        text: 'Please open a workflow in the canvas to execute',
-        severity: 'warning',
-      });
-    }
-  };
 
   const newGraph = () => {
     setWorkingGraph(initializedGraph);
@@ -189,13 +147,7 @@ export default function Dashboard() {
           <div className={classes.verticalRule} />
           <SaveToServer saveToServerF={saveToServerF} />
           <GetFromServer />
-          <IntegratedSpinner
-            getting={false}
-            tooltip="Execute Workflow and exit Execution mode"
-            action={executeWorkflow}
-          >
-            {isExecuted ? <ClearIcon color="secondary" /> : <SendIcon />}
-          </IntegratedSpinner>
+          <ExecuteWorkflow />
           <div className={classes.verticalRule} />
           <Tooltip title="Manage tasks and workflows" arrow>
             <IconButton color="inherit">

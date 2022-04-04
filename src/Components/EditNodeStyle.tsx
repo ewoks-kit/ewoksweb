@@ -15,7 +15,7 @@ export default function EditNodeStyle(propsIn) {
 
   const setSelectedElement = state((state) => state.setSelectedElement);
 
-  const [nodeType, setNodeType] = React.useState('');
+  // const [nodeType, setNodeType] = React.useState('');
   const [withImage, setWithImage] = React.useState<boolean>(false);
   const [withLabel, setWithLabel] = React.useState<boolean>(false);
   const [colorBorder, setColorBorder] = React.useState<string>('');
@@ -129,9 +129,7 @@ export default function EditNodeStyle(propsIn) {
         <label htmlFor="withImage">With Image</label>
         <Checkbox
           name="withImage"
-          checked={
-            withImage === undefined ? true : withImage === false ? false : true
-          }
+          checked={withImage === undefined ? true : !!withImage}
           onChange={withImageChanged}
           inputProps={{ 'aria-label': 'controlled' }}
         />
@@ -140,9 +138,7 @@ export default function EditNodeStyle(propsIn) {
         <label htmlFor="withLabel">With Label</label>
         <Checkbox
           name="withLabel"
-          checked={
-            withLabel === undefined ? true : withLabel === false ? false : true
-          }
+          checked={withLabel === undefined ? true : !!withLabel}
           onChange={withLabelChanged}
           inputProps={{ 'aria-label': 'controlled' }}
         />
@@ -150,6 +146,7 @@ export default function EditNodeStyle(propsIn) {
       <div>
         <label htmlFor="head">Color</label>
         <input
+          aria-label="Color"
           type="color"
           id="head"
           name="head"

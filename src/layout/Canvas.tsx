@@ -4,7 +4,7 @@ import React, {
   useState,
   useCallback,
   useRef,
-  CSSProperties,
+  // CSSProperties,
 } from 'react';
 import ReactFlow, {
   ReactFlowProvider,
@@ -105,28 +105,26 @@ function Canvas() {
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   // const updateNodeInternals = useUpdateNodeInternals();
 
-  const [stepDetails, setStepDetails] = useState(null);
+  // const [stepDetails, setStepDetails] = useState(null);
 
   useEffect(() => {
-    console.log(
-      'fitView()',
-      elements.length,
-      workingGraph.graph.id,
-      graphRF.graph.id
-    );
+    // console.log(
+    //   'fitView()',
+    //   elements.length,
+    //   workingGraph.graph.id,
+    //   graphRF.graph.id
+    // );
     if (
       rfInstance &&
       elements.length > 0 &&
       workingGraph.graph.id !== graphRF.graph.id
     ) {
-      console.log('fitView()');
       rfInstance.fitView();
     }
   }); // [rfInstance, elements, workingGraph.graph.id, graphRF]
 
   useEffect(() => {
     // console.log(graphRF);
-    console.log('set elements on canvas', graphRF);
     setElements([...graphRF.nodes, ...graphRF.links]);
   }, [graphRF]);
 
@@ -155,15 +153,15 @@ function Canvas() {
 
     // console.log(element, graphElement);
 
-    if ('position' in element) {
-      setStepDetails({ evt: event.currentTarget, element });
-    }
+    // if ('position' in element) {
+    //   setStepDetails({ evt: event.currentTarget, element });
+    // }
 
     setSelectedElement(graphElement);
   };
 
   const onLoad = useCallback((instance) => {
-    console.log('onLoad');
+    // console.log('onLoad');
     instance.fitView();
     setRfInstance(instance);
   }, []);
@@ -520,12 +518,12 @@ function Canvas() {
   //   updateNodeInternals,
   // ]);
 
-  const buttonWrapperStyles: CSSProperties = {
-    position: 'absolute',
-    right: 10,
-    top: 10,
-    zIndex: 10,
-  };
+  // const buttonWrapperStyles: CSSProperties = {
+  //   position: 'absolute',
+  //   right: 10,
+  //   top: 10,
+  //   zIndex: 10,
+  // };
 
   return (
     <div className={classes.root}>
@@ -551,9 +549,9 @@ function Canvas() {
             // onElementClick={onElementClick}
             onElementClick={(evt, node) => {
               onElementClick(evt, node);
-              if (node.type !== 'smoothstep') {
-                setStepDetails({ evt: evt.currentTarget, node });
-              }
+              // if (node.type !== 'smoothstep') {
+              //   setStepDetails({ evt: evt.currentTarget, node });
+              // }
             }}
             onLoad={onLoad}
             onDrop={onDrop}

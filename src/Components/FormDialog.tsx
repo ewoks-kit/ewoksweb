@@ -56,56 +56,104 @@ export default function FormDialog(props) {
     }
   }, [open, action, elementToEdit]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     // get the selected element (graph or Node) give a new name before saving
     // fire a POST
     if (newName !== '' && action === 'cloneGraph') {
       const el = element as GraphRF;
       // TODO: Post a new graph as in SaveToServer. Abstract POST
-      axios // if await is used const response =
-        .post(
+      try {
+        const responseNew = await axios.post(
           `${configData.serverUrl}/workflows`,
           rfToEwoks({
             ...el,
             graph: { ...el.graph, id: newName, label: newName },
           })
-        )
-        .then((res) => {
-          props.setOpenSaveDialog(false);
-          setWorkingGraph(res.data as GraphRF);
-          setRecentGraphs({} as GraphRF, true);
-          setOpenSnackbar({
-            open: true,
-            text: 'Graph saved succesfully!',
-            severity: 'success',
-          });
-        })
-        .catch((error) => {
-          setOpenSnackbar({
-            open: true,
-            text: error.response.data,
-            severity: 'error',
-          });
+        );
+        props.setOpenSaveDialog(false);
+        setWorkingGraph(responseNew.data as GraphRF);
+        setRecentGraphs({} as GraphRF, true);
+        setOpenSnackbar({
+          open: true,
+          text: 'Graph saved succesfully!',
+          severity: 'success',
         });
+      } catch (error) {
+        setOpenSnackbar({
+          open: true,
+          text: error.response.data,
+          severity: 'error',
+        });
+      }
+      // axios
+      //   .post(
+      //     `${configData.serverUrl}/workflows`,
+      //     rfToEwoks({
+      //       ...el,
+      //       graph: { ...el.graph, id: newName, label: newName },
+      //     })
+      //   )
+      //   .then((res) => {
+      //     props.setOpenSaveDialog(false);
+      //     setWorkingGraph(res.data as GraphRF);
+      //     setRecentGraphs({} as GraphRF, true);
+      //     setOpenSnackbar({
+      //       open: true,
+      //       text: 'Graph saved succesfully!',
+      //       severity: 'success',
+      //     });
+      //   })
+      //   .catch((error) => {
+      //     setOpenSnackbar({
+      //       open: true,
+      //       text: error.response.data,
+      //       severity: 'error',
+      //     });
+      //   });
     } else if (['cloneTask', 'newTask'].includes(action)) {
       // or newTask
       const elem = element as Task;
-      axios // if await is used const response =
-        .post(`${configData.serverUrl}/tasks`, {
-          ...elem,
-        })
-        .then(async (res) => {
-          props.setOpenSaveDialog(false);
-          const tasks = await axios.get(`${configData.serverUrl}/tasks`);
-          setTasks(tasks.data as Task[]);
-        })
-        .catch((error) => {
-          setOpenSnackbar({
-            open: true,
-            text: error.response.data,
-            severity: 'warning',
-          });
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const responseClone = await axios.post(
+          `${configData.serverUrl}/tasks`,
+          {
+            ...elem,
+          }
+        );
+
+        setOpenSnackbar({
+          open: true,
+          text: 'Task saved successfuly',
+          severity: 'warning',
         });
+
+        props.setOpenSaveDialog(false);
+        const tasks = await axios.get(`${configData.serverUrl}/tasks`);
+        setTasks(tasks.data as Task[]);
+      } catch (error) {
+        setOpenSnackbar({
+          open: true,
+          text: error.response.data,
+          severity: 'warning',
+        });
+      }
+      // axios
+      //   .post(`${configData.serverUrl}/tasks`, {
+      //     ...elem,
+      //   })
+      //   .then(async () => {
+      //     props.setOpenSaveDialog(false);
+      //     const tasks = await axios.get(`${configData.serverUrl}/tasks`);
+      //     setTasks(tasks.data as Task[]);
+      //   })
+      //   .catch((error) => {
+      //     setOpenSnackbar({
+      //       open: true,
+      //       text: error.response.data,
+      //       severity: 'warning',
+      //     });
+      //   });
     }
   };
 
@@ -187,26 +235,26 @@ export default function FormDialog(props) {
   };
 
   const fields = [
-    { id: 'Task Type', value: taskType, change: taskTypeChanged },
-    { id: 'Category', value: category, change: categoryChanged },
-    { id: 'Icon', value: icon, change: iconChanged },
+    { id: 'Task Type', value: taskType, handleChange: taskTypeChanged },
+    { id: 'Category', value: category, handleChange: categoryChanged },
+    { id: 'Icon', value: icon, handleChange: iconChanged },
     {
       id: 'Optional Inputs',
       value: optionalInputNames,
-      change: optionalInputNamesChanged,
+      handleChange: optionalInputNamesChanged,
       tip: 'Give the optional inputs in comma separated values eg: op1,op2...',
     },
     {
       id: 'Required Inputs',
       value: requiredInputNames,
-      change: requiredInputNamesChanged,
+      handleChange: requiredInputNamesChanged,
       tip:
         'Give the required inputs in comma separated values eg: req1,req2...',
     },
     {
       id: 'Output Inputs',
       value: outputNames,
-      change: outputNamesChanged,
+      handleChange: outputNamesChanged,
       tip: 'Give the outputs in comma separated values eg: out1,out2...',
     },
   ];
@@ -241,7 +289,7 @@ export default function FormDialog(props) {
                 fullWidth
                 variant="standard"
                 value={field.value}
-                onChange={field.change}
+                onChange={field.handleChange}
               />
             </Tooltip>
           ))}

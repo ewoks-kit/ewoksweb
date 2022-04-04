@@ -45,6 +45,7 @@ function ExecutionStepsNode(args) {
             {args.data.label.length > 0 && (
               <div
                 onClick={() => goToEvent(val)}
+                onKeyUp={() => goToEvent(val)}
                 role="button"
                 tabIndex={0}
                 style={customTitle as React.CSSProperties}

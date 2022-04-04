@@ -221,7 +221,7 @@ export default function NodeDetails(propsIn) {
       </IconButton>
       <div>
         <hr />
-        <b>Default Values </b>
+        <b>Default Inputs </b>
         {/* TODO: any kind of type is allowed: objects, arrays that need to be editable */}
         <IconButton
           style={{ padding: '1px' }}

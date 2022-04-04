@@ -264,7 +264,7 @@ function EditableTable(props) {
           {rows.map((row, index) => (
             <React.Fragment key={row.id}>
               {headers[0] !== 'Source' && headers[1] !== 'Node_Id' && (
-                <TableRow key={`${row.id}-type`}>
+                <TableRow key={`${row.id as string}-type`}>
                   <TableCell align="left" className={classes.tableCell}>
                     Type
                   </TableCell>

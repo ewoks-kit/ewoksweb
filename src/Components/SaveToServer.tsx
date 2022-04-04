@@ -8,8 +8,8 @@ import type { GraphRF } from '../types';
 import state from '../store/state';
 import configData from '../configData.json';
 import FormDialog from './FormDialog';
+import curateGraph from '../utils/curateGraph';
 
-// console.log(state, state);
 // DOC: Save to server button with its spinner
 export default function SaveToServer({ saveToServerF }) {
   const setGettingFromServer = state((st) => st.setGettingFromServer);
@@ -29,43 +29,7 @@ export default function SaveToServer({ saveToServerF }) {
   const saveToServer = async () => {
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     // and Nodes DataMapping before attempting to save
-    // TODO: is the following graphRFCurrated used? examine
-    const graphRFCurrated = { ...graphRF };
-    for (const nod of graphRFCurrated.nodes) {
-      if (
-        nod.default_inputs &&
-        nod.default_inputs.length > 0 &&
-        nod.default_inputs[nod.default_inputs.length - 1].id === ''
-      ) {
-        nod.default_inputs.pop();
-      }
-      if (
-        nod.default_error_attributes &&
-        nod.default_error_attributes.data_mapping &&
-        nod.default_error_attributes.data_mapping.length > 0 &&
-        nod.default_error_attributes.data_mapping[
-          nod.default_error_attributes.data_mapping.length - 1
-        ].id === ''
-      ) {
-        nod.default_error_attributes.data_mapping.pop();
-      }
-    }
-    for (const lin of graphRFCurrated.links) {
-      if (
-        lin.data.conditions &&
-        lin.data.conditions.length > 0 &&
-        lin.data.conditions[lin.data.conditions.length - 1].id === ''
-      ) {
-        lin.data.conditions.pop();
-      }
-      if (
-        lin.data.data_mapping &&
-        lin.data.data_mapping.length > 0 &&
-        lin.data.data_mapping[lin.data.data_mapping.length - 1].id === ''
-      ) {
-        lin.data.data_mapping.pop();
-      }
-    }
+    const graphRFCurrated = curateGraph(graphRF);
     // DOC: If id: "newGraph" request label update and then POST with id=label
     // else PUT and replace existing on server
     // TODO: following line creates issues on graph positionng examine
@@ -84,8 +48,8 @@ export default function SaveToServer({ saveToServerF }) {
       }
       const newIdGraph = {
         graph: { ...graphRF.graph, id: graphRF.graph.label },
-        nodes: graphRF.nodes,
-        links: graphRF.links,
+        nodes: graphRFCurrated.nodes,
+        links: graphRFCurrated.links,
       };
       await axios
         .post(`${configData.serverUrl}/workflows`, rfToEwoks(newIdGraph))
@@ -112,7 +76,7 @@ export default function SaveToServer({ saveToServerF }) {
       await axios
         .put(
           `${configData.serverUrl}/workflow/${graphRF.graph.id}`,
-          rfToEwoks(graphRF)
+          rfToEwoks(graphRFCurrated)
         )
         .then(() => {
           setGettingFromServer(false);

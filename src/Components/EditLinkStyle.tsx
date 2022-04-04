@@ -26,7 +26,7 @@ export default function EditLinkStyle(propsIn) {
   const [colorLine, setColorLine] = React.useState<string>('');
 
   useEffect(() => {
-    console.log(element);
+    // console.log(element);
     if ('source' in element) {
       setLinkType(element.type);
       setArrowType(element.arrowHeadType);
@@ -130,6 +130,7 @@ export default function EditLinkStyle(propsIn) {
       <div>
         <label htmlFor="head">Color</label>
         <input
+          aria-label="Color"
           type="color"
           id="head"
           name="head"

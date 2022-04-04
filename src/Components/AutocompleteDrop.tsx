@@ -8,7 +8,7 @@ import state from '../store/state';
 
 function AutocompleteDrop(props) {
   const [options, setOptions] = useState([]);
-  const [value, setValue] = React.useState(options[0]);
+  const [value] = React.useState(options[0]);
   // options[0].slice(-5) === '.json' ? options[0].slice(0, -5) : options[0]
   const [open, setOpen] = useState(false);
   const setAllWorkflows = state((state) => state.setAllWorkflows);
@@ -18,8 +18,9 @@ function AutocompleteDrop(props) {
   useEffect(() => {
     if (!open) {
       setOptions([]);
-    } else {
     }
+    // else {
+    // }
   }, [open]);
 
   const setInputValue = (newInputValue) => {

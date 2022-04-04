@@ -4,14 +4,9 @@ import type { DataMapping, EwoksRFLink } from '../types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
-import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 
-const useStyles = DashboardStyle;
-
 export default function DataMappingComponent(propsIn) {
-  // const classes = useStyles();
-
   const { props } = propsIn;
   const { element } = props;
 
@@ -33,7 +28,7 @@ export default function DataMappingComponent(propsIn) {
   const addDataMapping = () => {
     const el = element as EwoksRFLink;
     const elMap = el.data.data_mapping;
-    console.log(el, elMap, dataMapping);
+    // console.log(el, elMap, dataMapping);
     if (elMap && elMap[elMap.length - 1] && elMap[elMap.length - 1].id === '') {
       setOpenSnackbar({
         open: true,

@@ -152,7 +152,12 @@ function AddNodes() {
                     </Tooltip>
                   </span>
                   <Upload>
-                    <span role="button" tabIndex={0} onClick={insertGraph}>
+                    <span
+                      role="button"
+                      tabIndex={0}
+                      onClick={insertGraph}
+                      onKeyPress={insertGraph}
+                    >
                       <AddIcon />G
                     </span>
                   </Upload>

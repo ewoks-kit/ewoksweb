@@ -53,6 +53,7 @@ function Upload(props) {
     if (workingGraph.graph.id === graphRF.graph.id) {
       const reader = showFile(event);
       const file = await reader.then((val) => val);
+      // eslint-disable-next-line require-atomic-updates
       file.onloadend = async () => {
         if (isJsonString(file.result)) {
           const newGraph = JSON.parse(file.result as string);

@@ -55,7 +55,9 @@ export default function IntegratedSpinner({
   const handleButtonClick = () => {
     if (!loading) {
       // // console.log('getting1', getting);
-      const runAction = action ? action() : null;
+      if (action) {
+        action();
+      }
       setSuccess(false);
       setLoading(true);
       timer.current = window.setTimeout(() => {

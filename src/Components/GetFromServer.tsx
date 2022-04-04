@@ -34,6 +34,7 @@ export default function GetFromServer() {
   };
 
   const getFromServer = async (isSubgraph) => {
+    // console.log(isSubgraph);
     if (workflowValue) {
       setGettingFromServer(true);
       const response = await axios.get(
