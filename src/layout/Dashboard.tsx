@@ -41,7 +41,7 @@ export default function Dashboard() {
   const redoF = React.useRef(null);
   const saveToServerF = React.useRef(null);
 
-  const selectedElement = state((state) => state.selectedElement);
+  // const selectedElement = state((state) => state.selectedElement);
   const [open, setOpen] = React.useState(true);
   const [openSettings, setOpenSettings] = React.useState(false);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
@@ -182,7 +182,7 @@ export default function Dashboard() {
         </div>
         <Divider />
         <Divider />
-        <Sidebar element={selectedElement} />
+        <Sidebar />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />

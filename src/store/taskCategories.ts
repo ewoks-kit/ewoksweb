@@ -1,5 +1,5 @@
 const taskCategories = (set) => ({
-  taskCategories: ['Est', 'Dusk'],
+  taskCategories: ['EwoksCore'],
   setTaskCategories: (taskCategories) => {
     set((state) => ({
       ...state,

@@ -6,8 +6,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import state from '../store/state';
 
-export default function DataMappingComponent(propsIn) {
-  const { props } = propsIn;
+export default function DataMappingComponent(props) {
   const { element } = props;
 
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);

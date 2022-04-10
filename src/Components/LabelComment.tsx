@@ -8,10 +8,9 @@ import state from '../store/state';
 const useStyles = DashboardStyle;
 
 // DOC: the label and comment for nodes-links when selected
-export default function LabelComment(propsIn) {
+export default function LabelComment(props) {
   const classes = useStyles();
 
-  const { props } = propsIn;
   const { element } = props;
 
   const [comment, setComment] = React.useState('');

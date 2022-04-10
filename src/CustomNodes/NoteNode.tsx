@@ -5,6 +5,7 @@ import { style } from './NodeStyle';
 import SaveIcon from '@material-ui/icons/Save';
 
 import state from '../store/state';
+import { TextField } from '@material-ui/core';
 
 const NoteNode = (args) => {
   const [comment, setComment] = React.useState('');

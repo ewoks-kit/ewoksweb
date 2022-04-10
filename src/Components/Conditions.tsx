@@ -6,8 +6,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import state from '../store/state';
 
-export default function Conditions(propsIn) {
-  const { props } = propsIn;
+export default function Conditions(props) {
   const { element } = props;
 
   const [conditions, setConditions] = React.useState<Inputs[]>([]);
@@ -25,6 +24,7 @@ export default function Conditions(propsIn) {
   const addConditions = () => {
     const el = element as EwoksRFLink;
     const elCon = el.data.conditions;
+    // check if an empty line already exists
     if (elCon && elCon[elCon.length - 1] && elCon[elCon.length - 1].id === '') {
       setOpenSnackbar({
         open: true,

@@ -1,58 +1,195 @@
-import {
-  findByDisplayValue,
-  fireEvent,
-  render,
-  screen,
-} from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import AddNodes from './AddNodes';
+import state from '../store/state';
 
-test('renders one button element named ¨Add Nodes¨', async () => {
-  render(<AddNodes />);
-  const buttonElement = screen.getByRole('button');
-  // console.log(buttonElements);
-  expect(buttonElement).toBeInTheDocument();
-
-  const addNodeButton = screen.getByRole('button', {
-    // eslint-disable-next-line require-unicode-regexp
-    name: /add nodes/i,
+describe('In the AddNodes test:', () => {
+  test('initially it renders one button element named ¨Add Nodes¨', async () => {
+    render(<AddNodes />);
+    const buttonAddNodes = screen.getByRole('button', { name: /Add Nodes/u });
+    expect(buttonAddNodes).toBeInTheDocument();
   });
-  expect(addNodeButton).toBeInTheDocument();
 
-  fireEvent(
-    buttonElement,
-    new MouseEvent('click', {
-      bubbles: true,
-      cancelable: true,
-    })
-  );
+  test('if AddNodes is clicked it reveals the initial category EwoksCore', async () => {
+    render(<AddNodes />);
+    const buttonAddNodes = screen.getByRole('button', { name: /Add Nodes/u });
 
-  // const tooltipText = await screen.findByDisplayValue('ewokscore');
-  const ewoksCoreCategory = screen.getByRole('button', {
-    // eslint-disable-next-line require-unicode-regexp
-    name: /est/i,
+    fireEvent(
+      buttonAddNodes,
+      new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+
+    const ewoksCoreCategory = screen.getByRole('button', {
+      name: /EwoksCore/u,
+    });
+    expect(ewoksCoreCategory).toBeInTheDocument();
+
+    const { taskCategories } = state.getState();
+    expect(taskCategories).toHaveLength(1);
+    expect(taskCategories).toEqual(expect.arrayContaining(['EwoksCore']));
+
+    const buttonAddNodesOpenedCategories = screen.getAllByRole('button');
+    expect(buttonAddNodesOpenedCategories).toHaveLength(2);
   });
-  expect(ewoksCoreCategory).toBeInTheDocument();
 
-  const buttonElementsOpenedCategories = screen.getAllByRole('button');
-  // console.log(buttonElementsOpenedCategories);
-  expect(buttonElementsOpenedCategories).toHaveLength(3);
+  test('if categories change and AddNodes is clicked it reveals the new categories', async () => {
+    render(<AddNodes />);
+    const buttonAddNodes = screen.getByRole('button', { name: /Add Nodes/u });
+    // const { taskCategories } = state.getState();
 
-  fireEvent(
-    buttonElementsOpenedCategories[0],
-    new MouseEvent('click', {
-      bubbles: true,
-      cancelable: true,
-    })
-  );
+    act(() => {
+      state.setState({ taskCategories: ['est', 'dusk'] });
+    });
 
-  // fireEvent(
-  //   buttonElement,
-  //   new MouseEvent('mouseover', {
-  //     bubbles: true,
-  //     cancelable: true,
-  //   })
-  // );
-  // const tooltipText = await screen.findByDisplayValue('Est');
+    fireEvent(
+      buttonAddNodes,
+      new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
 
-  // expect(tooltipText).toBeInTheDocument();
+    const ewoksCoreCategory = screen.getByRole('button', {
+      name: /est/u,
+    });
+    expect(ewoksCoreCategory).toBeInTheDocument();
+
+    const { taskCategories } = state.getState();
+    expect(taskCategories).toHaveLength(2);
+    expect(taskCategories).toEqual(expect.arrayContaining(['est', 'dusk']));
+
+    const buttonAddNodesOpenedCategories = screen.getAllByRole('button');
+    expect(buttonAddNodesOpenedCategories).toHaveLength(3);
+  });
+
+  test('if tasks added and category is clicked it reveals them', async () => {
+    render(<AddNodes />);
+    const buttonAddNodes = screen.getByRole('button', { name: /Add Nodes/u });
+
+    act(() => {
+      state.setState({
+        taskCategories: ['ewokscore'],
+        tasks: [
+          {
+            task_identifier: 'taskSkeleton',
+            task_type: 'ppfmethod',
+            icon: 'orange1',
+            category: 'ewokscore',
+            optional_input_names: [],
+            output_names: [],
+            required_input_names: [],
+          },
+        ],
+      });
+    });
+
+    fireEvent(
+      buttonAddNodes,
+      new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+
+    const { tasks } = state.getState();
+    const taskName = tasks[0].task_identifier;
+
+    const ewoksCoreCategory = screen.getByRole('button', {
+      name: /ewokscore/u,
+    });
+
+    fireEvent(
+      ewoksCoreCategory,
+      new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+
+    const ewoksCoreTask = screen.getByTitle(taskName);
+    expect(ewoksCoreTask).toBeVisible();
+
+    fireEvent(
+      ewoksCoreCategory,
+      new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+
+    const { taskCategories } = state.getState();
+    expect(taskCategories).toHaveLength(1);
+    expect(taskCategories).toEqual(expect.arrayContaining(['ewokscore']));
+
+    const buttonAddNodesOpenedCategories = screen.getAllByRole('button');
+    expect(buttonAddNodesOpenedCategories).toHaveLength(7);
+  });
+
+  test('if insertGraph is pressed setGraphOrSubgraph is set to false on state', async () => {
+    render(<AddNodes />);
+    const buttonAddNodes = screen.getByRole('button', { name: /Add Nodes/u });
+
+    act(() => {
+      state.setState({
+        graphOrSubgraph: true,
+        taskCategories: ['ewokscore'],
+        tasks: [
+          {
+            task_identifier: 'taskSkeleton',
+            task_type: 'ppfmethod',
+            icon: 'orange1',
+            category: 'ewokscore',
+            optional_input_names: [],
+            output_names: [],
+            required_input_names: [],
+          },
+        ],
+      });
+    });
+
+    fireEvent(
+      buttonAddNodes,
+      new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+
+    const ewoksCoreCategory = screen.getByRole('button', {
+      name: /ewokscore/u,
+    });
+    expect(ewoksCoreCategory).toBeInTheDocument();
+
+    fireEvent(
+      ewoksCoreCategory,
+      new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+
+    const { taskCategories } = state.getState();
+    expect(taskCategories).toHaveLength(1);
+    expect(taskCategories).toEqual(expect.arrayContaining(['ewokscore']));
+
+    const buttonAddNodesOpenedCategories = screen.getAllByRole('button');
+    expect(buttonAddNodesOpenedCategories).toHaveLength(7);
+
+    const addSubgraphButton = screen.getByRole('button', {
+      name: /G/u,
+    });
+    expect(addSubgraphButton).toBeInTheDocument();
+
+    fireEvent(
+      addSubgraphButton,
+      new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+
+    expect(state.getState().graphOrSubgraph).toBe(false);
+  });
 });

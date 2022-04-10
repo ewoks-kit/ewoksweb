@@ -17,7 +17,7 @@ import { rfToEwoks } from '../utils';
 
 const useStyles = DashboardStyle;
 
-export default function Sidebar(props) {
+export default function Sidebar() {
   const classes = useStyles();
 
   const selectedElement = state<EwoksRFNode | EwoksRFLink>(
@@ -43,7 +43,7 @@ export default function Sidebar(props) {
   useEffect(() => {
     // console.log(selectedElement);
     setElement(selectedElement);
-  }, [selectedElement.id, selectedElement]);
+  }, [selectedElement.id, selectedElement]); // TODO: examine are both needed?
 
   const defaultInputsChanged = (table) => {
     // setDefaultInputs(table);
@@ -143,27 +143,17 @@ export default function Sidebar(props) {
       {isExecuted ? (
         <div className={classes.executionSide}>
           <ExecutionDetails
-            props={{
-              ...props,
-            }}
-            setElement={setElement}
+          // props={{
+          //   selectedElement,
+          // }}
+          // setElement={setElement}
           />
         </div>
       ) : (
         <>
           <AddNodes />
-          <EditElement
-            props={{
-              ...props,
-            }}
-            setElement={setElement}
-          />
-          <EditElementStyle
-            props={{
-              ...props,
-            }}
-            setElement={setElement}
-          />
+          <EditElement element={selectedElement} />
+          <EditElementStyle />
           <Button
             style={{ margin: '8px' }}
             variant="outlined"
@@ -179,7 +169,7 @@ export default function Sidebar(props) {
           <DraggableDialog
             open={openDialog}
             content={dialogContent}
-            setValue={defaultInputsChanged}
+            setValue={defaultInputsChanged} // TODO: examine
           />
         </>
       )}

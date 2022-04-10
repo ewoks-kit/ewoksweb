@@ -12,10 +12,9 @@ import state from '../store/state';
 
 const useStyles = DashboardStyle;
 
-export default function EditLinkStyle(propsIn) {
+export default function EditLinkStyle(props) {
   const classes = useStyles();
 
-  const { props } = propsIn;
   const { element } = props;
 
   const setSelectedElement = state((state) => state.setSelectedElement);

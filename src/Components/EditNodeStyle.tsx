@@ -7,10 +7,9 @@ import state from '../store/state';
 
 const useStyles = DashboardStyle;
 
-export default function EditNodeStyle(propsIn) {
+export default function EditNodeStyle(props) {
   const classes = useStyles();
-
-  const { props } = propsIn;
+  // console.log(props);
   const { element } = props;
 
   const setSelectedElement = state((state) => state.setSelectedElement);

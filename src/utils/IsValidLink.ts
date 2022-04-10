@@ -9,7 +9,7 @@ export default function isValidLink(connection, graphRF) {
     (['graphOutput', 'graphInput'].includes(source.task_type) ||
       ['graphOutput', 'graphInput'].includes(target.task_type)) &&
     (graphRF.links.some((link) => link.source === source.id) ||
-      graphRF.links.filter((link) => link.target === target.id))
+      graphRF.links.some((link) => link.target === target.id))
   ) {
     isValid = false;
     reason = 'Cannot connect an input or an output with more than one node';

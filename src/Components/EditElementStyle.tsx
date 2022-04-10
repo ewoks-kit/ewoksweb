@@ -9,9 +9,7 @@ import EditNodeStyle from './EditNodeStyle';
 import EditLinkStyle from './EditLinkStyle';
 import state from '../store/state';
 
-export default function EditElementStyle(propsIn) {
-  const { props } = propsIn;
-
+export default function EditElementStyle() {
   const selectedElement = state<EwoksRFNode | EwoksRFLink>(
     (state) => state.selectedElement
   );
@@ -34,8 +32,12 @@ export default function EditElementStyle(propsIn) {
       </AccordionSummary>
       <AccordionDetails>
         <form noValidate autoComplete="off">
-          {'position' in selectedElement && <EditNodeStyle props={props} />}
-          {'source' in selectedElement && <EditLinkStyle props={props} />}
+          {'position' in selectedElement && (
+            <EditNodeStyle element={selectedElement} />
+          )}
+          {'source' in selectedElement && (
+            <EditLinkStyle element={selectedElement} />
+          )}
         </form>
       </AccordionDetails>
     </Accordion>

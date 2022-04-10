@@ -7,39 +7,36 @@ import state from '../store/state';
 const useStyles = DashboardStyle;
 
 // DOC: the label and the comment when the graph is the selectedElement
-export default function GraphLabelComment(propsIn) {
+export default function GraphLabelComment() {
   const classes = useStyles();
-
-  const { props } = propsIn;
-  const { element } = props;
-  // const { setElement } = propsIn;
 
   const graphRF = state((state) => state.graphRF);
   const [label, setLabel] = React.useState('');
   const [comment, setComment] = React.useState('');
   const setSelectedElement = state((state) => state.setSelectedElement);
+  const selectedElement = state((state) => state.selectedElement);
 
   useEffect(() => {
-    setLabel(element.label);
-    setComment(element.uiProps && element.uiProps.comment);
-  }, [element.id, element]);
+    setLabel(selectedElement.label);
+    setComment(selectedElement.uiProps && selectedElement.uiProps.comment);
+  }, [selectedElement.id, selectedElement]);
 
   const labelChanged = (event) => {
     setLabel(event.target.value);
-    if ('position' in element) {
-      const el = element;
+    if ('position' in selectedElement) {
+      const el = selectedElement;
       setSelectedElement(
         {
           ...el,
           label: event.target.value,
-          data: { ...element.data, label: event.target.value },
+          data: { ...selectedElement.data, label: event.target.value },
         },
         'fromSaveElement'
       );
     } else {
       setSelectedElement(
         {
-          ...element,
+          ...selectedElement,
           label: event.target.value,
         },
         'fromSaveElement'
@@ -51,8 +48,8 @@ export default function GraphLabelComment(propsIn) {
     setComment(event.target.value);
     setSelectedElement(
       {
-        ...element,
-        uiProps: { ...element.uiProps, comment: event.target.value },
+        ...selectedElement,
+        uiProps: { ...selectedElement.uiProps, comment: event.target.value },
       },
       'fromSaveElement'
     );

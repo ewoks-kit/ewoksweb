@@ -11,13 +11,19 @@ import state from '../store/state';
 
 const useStyles = DashboardStyle;
 
-export default function NodeDetails(propsIn) {
+// selectedNode details in sidebar
+// Test
+// unit: fake some TaskProperties and check the form
+//       click and edit some properties and check the node properties
+// integration: by setting a selected node and validating the form and chenge values to see
+//             the selected node change
+export default function NodeDetails(props) {
   const classes = useStyles();
 
-  const { props } = propsIn;
   const { element } = props;
 
   const setSelectedElement = state((state) => state.setSelectedElement);
+  // const selectedElement = state((state) => state.selectedElement);
   const [editProps, setEditProps] = React.useState<boolean>(false);
   const [defaultInputs, setDefaultInputs] = React.useState<Inputs[]>([]);
   const [inputsComplete, setInputsComplete] = React.useState<boolean>(false);

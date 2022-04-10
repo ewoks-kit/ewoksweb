@@ -9,15 +9,15 @@ import Conditions from './Conditions';
 
 const useStyles = DashboardStyle;
 
-export default function LinkDetails(propsIn) {
+export default function LinkDetails(props) {
   const classes = useStyles();
 
-  const { props } = propsIn;
   const { element } = props;
   const { on_error } = (element.data && element.data.on_error) || false;
   const { map_all_data } = (element.data && element.data.map_all_data) || false;
 
   const setSelectedElement = state((state) => state.setSelectedElement);
+
   const [mapAllData, setMapAllData] = React.useState<boolean>(false);
   const [elementL, setElementL] = React.useState<EwoksRFLink>(
     {} as EwoksRFLink
@@ -56,20 +56,20 @@ export default function LinkDetails(propsIn) {
   return (
     <>
       <div className={classes.detailsLabels}>
-        <b>Source:</b> {props.element.source}
+        <b>Source:</b> {element.source}
       </div>
       <div className={classes.detailsLabels}>
-        <b>Target:</b> {props.element.target}
+        <b>Target:</b> {element.target}
       </div>
-      {props.element.sub_target && (
+      {element.sub_target && (
         <div className={classes.detailsLabels}>
-          <b>Sub_target:</b> {props.element.data.sub_target}
+          <b>Sub_target:</b> {element.data.sub_target}
         </div>
       )}
-      {props.element.sub_target_attributes && (
+      {element.sub_target_attributes && (
         <div className={classes.detailsLabels}>
           <b>Sub_target_attributes:</b>
-          {props.element.data.sub_target_attributes}
+          {element.data.sub_target_attributes}
         </div>
       )}
       <div>
@@ -81,11 +81,7 @@ export default function LinkDetails(propsIn) {
         />
       </div>
       {!mapAllData && elementL.source && (
-        <DataMappingComponent
-          props={{
-            ...props,
-          }}
-        />
+        <DataMappingComponent element={element} />
       )}
       <div>
         <b>on_error</b>
@@ -95,13 +91,7 @@ export default function LinkDetails(propsIn) {
           inputProps={{ 'aria-label': 'controlled' }}
         />
       </div>
-      {!onError && elementL.source && (
-        <Conditions
-          props={{
-            ...props,
-          }}
-        />
-      )}
+      {!onError && elementL.source && <Conditions element={element} />}
 
       <hr />
     </>

@@ -56,7 +56,7 @@ function AutocompleteDrop(props) {
 
   return (
     <Autocomplete
-      id="async-autocomplete-drop"
+      data-testid="async-autocomplete-drop"
       open={open}
       onOpen={() => {
         openDropdown();

@@ -166,33 +166,6 @@ function AddNodes() {
             </AccordionDetails>
           </Accordion>
         ))}
-        {/* {tasks.map((elem) => (
-          <span
-            role="button"
-            tabIndex={0}
-            key={elem.task_identifier}
-            className="dndnode"
-            onDragStart={(event) =>
-              onDragStart(event, {
-                task_identifier: elem.task_identifier,
-                task_type: elem.task_type,
-                icon: elem.icon,
-              })
-            }
-            draggable
-          >
-            <Tooltip title={elem.task_identifier} arrow>
-              <img
-                src={
-                  Object.keys(iconsObj).includes(elem.icon)
-                    ? iconsObj[elem.icon]
-                    : iconsObj['orange1']
-                }
-                alt=""
-              />
-            </Tooltip>
-          </span>
-        ))} */}
       </AccordionDetails>
     </Accordion>
   );
