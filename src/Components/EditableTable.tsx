@@ -249,7 +249,7 @@ function EditableTable(props) {
         content={dialogContent}
         setValue={setRowValue}
       />
-      <Table className={classes.table} aria-label="caption table">
+      <Table className={classes.table} aria-label="editable table">
         <TableHead>
           <TableRow>
             <TableCell align="left" className={classes.tableCell}>

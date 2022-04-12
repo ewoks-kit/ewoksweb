@@ -77,20 +77,21 @@ export async function getSubgraphs(
       .then(
         axios.spread((...res) => {
           // all requests are now complete in an array
-          // console.log(res);
+          console.log(res);
           // if there is a null means the subgraph was not found
           // and it should show up in red
           const resCln = res.filter((result) => result.data !== null);
           return resCln.map((result) => result.data) as GraphEwoks[];
         })
-      );
-    // Uncomment
-    // .catch((error) => {
-    //   // remove after handling the error
-    //   // console.log('AXIOS ERROR', id, error);
-    // });
+      )
+      // Uncomment
+      .catch((error) => {
+        // remove after handling the error
+        console.log('AXIOS ERROR', id, error);
+        return [];
+      });
   }
-  // console.log(results);
+  console.log(results);
   return results ? results : [];
 }
 

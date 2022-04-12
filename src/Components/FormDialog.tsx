@@ -85,31 +85,6 @@ export default function FormDialog(props) {
           severity: 'error',
         });
       }
-      // axios
-      //   .post(
-      //     `${configData.serverUrl}/workflows`,
-      //     rfToEwoks({
-      //       ...el,
-      //       graph: { ...el.graph, id: newName, label: newName },
-      //     })
-      //   )
-      //   .then((res) => {
-      //     props.setOpenSaveDialog(false);
-      //     setWorkingGraph(res.data as GraphRF);
-      //     setRecentGraphs({} as GraphRF, true);
-      //     setOpenSnackbar({
-      //       open: true,
-      //       text: 'Graph saved succesfully!',
-      //       severity: 'success',
-      //     });
-      //   })
-      //   .catch((error) => {
-      //     setOpenSnackbar({
-      //       open: true,
-      //       text: error.response.data,
-      //       severity: 'error',
-      //     });
-      //   });
     } else if (['cloneTask', 'newTask'].includes(action)) {
       // or newTask
       const elem = element as Task;
@@ -125,11 +100,13 @@ export default function FormDialog(props) {
         setOpenSnackbar({
           open: true,
           text: 'Task saved successfuly',
-          severity: 'warning',
+          severity: 'success',
         });
 
         props.setOpenSaveDialog(false);
-        const tasks = await axios.get(`${configData.serverUrl}/tasks`);
+        const tasks = await axios.get(
+          `${configData.serverUrl}/tasks/descriptions`
+        );
         setTasks(tasks.data as Task[]);
       } catch (error) {
         setOpenSnackbar({
@@ -138,22 +115,6 @@ export default function FormDialog(props) {
           severity: 'warning',
         });
       }
-      // axios
-      //   .post(`${configData.serverUrl}/tasks`, {
-      //     ...elem,
-      //   })
-      //   .then(async () => {
-      //     props.setOpenSaveDialog(false);
-      //     const tasks = await axios.get(`${configData.serverUrl}/tasks`);
-      //     setTasks(tasks.data as Task[]);
-      //   })
-      //   .catch((error) => {
-      //     setOpenSnackbar({
-      //       open: true,
-      //       text: error.response.data,
-      //       severity: 'warning',
-      //     });
-      //   });
     }
   };
 

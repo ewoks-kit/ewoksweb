@@ -31,7 +31,9 @@ const workingGraph = (set, get) => ({
       // } finally {
       //   get().setTasks(tasks.data as Task[]);
       // }
-      const tasks = await axios.get(`${configData.serverUrl}/tasks`);
+      const tasks = await axios.get(
+        `${configData.serverUrl}/tasks/descriptions`
+      );
       get().setTasks(tasks.data as Task[]);
     }
     get().setSelectedElement({} as EwoksRFNode | EwoksRFLink);

@@ -14,6 +14,7 @@ import configData from '../configData.json';
 
 import type { EwoksRFNode, EwoksRFLink, GraphDetails, GraphRF } from '../types';
 import { rfToEwoks } from '../utils';
+import ConfirmDialog from '../Components/ConfirmDialog';
 
 const useStyles = DashboardStyle;
 
@@ -39,6 +40,7 @@ export default function Sidebar() {
   const initializedGraph = state((state) => state.initializedGraph);
   const setUndoRedo = state((state) => state.setUndoRedo);
   const isExecuted = state((state) => state.isExecuted);
+  const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
 
   useEffect(() => {
     // console.log(selectedElement);
@@ -90,26 +92,27 @@ export default function Sidebar() {
     }
 
     if (elD.input_nodes && elD.id !== 'newGraph') {
-      await axios
-        .delete(`${configData.serverUrl}/workflow/${elD.id}`)
-        .then(() => {
-          setOpenSnackbar({
-            open: true,
-            text: `Workflow ${elD.id} succesfully deleted!`,
-            severity: 'success',
-          });
-        })
-        .catch((error) => {
-          setOpenSnackbar({
-            open: true,
-            text: error.message,
-            severity: 'error',
-          });
-        });
-      setGraphRF(initializedGraph);
-      setSelectedElement({} as GraphDetails);
-      setSubgraphsStack({ id: 'initialiase', label: '' });
-      setRecentGraphs({} as GraphRF, true);
+      setOpenAgreeDialog(true);
+      // await axios
+      //   .delete(`${configData.serverUrl}/workflow/${elD.id}`)
+      //   .then(() => {
+      //     setOpenSnackbar({
+      //       open: true,
+      //       text: `Workflow ${elD.id} succesfully deleted!`,
+      //       severity: 'success',
+      //     });
+      //   })
+      //   .catch((error) => {
+      //     setOpenSnackbar({
+      //       open: true,
+      //       text: error.message,
+      //       severity: 'error',
+      //     });
+      //   });
+      // setGraphRF(initializedGraph);
+      // setSelectedElement({} as GraphDetails);
+      // setSubgraphsStack({ id: 'initialiase', label: '' });
+      // setRecentGraphs({} as GraphRF, true);
     } else if (!elD.input_nodes) {
       if (workingGraph.graph.id === graphRF.graph.id) {
         setGraphRF(newGraph);
@@ -136,6 +139,39 @@ export default function Sidebar() {
       object: rfToEwoks(graphRF),
       openFrom: 'sidebar',
     });
+  };
+
+  const agreeCallback = async () => {
+    setOpenAgreeDialog(false);
+    await axios
+      .delete(`${configData.serverUrl}/workflow/${element.id}`)
+      .then(() => {
+        setOpenSnackbar({
+          open: true,
+          text: `Workflow ${element.id} succesfully deleted!`,
+          severity: 'success',
+        });
+      })
+      .catch((error) => {
+        setOpenSnackbar({
+          open: true,
+          text: error.message,
+          severity: 'error',
+        });
+      });
+    setGraphRF(initializedGraph);
+    setSelectedElement({} as GraphDetails);
+    setSubgraphsStack({ id: 'initialiase', label: '' });
+    setRecentGraphs({} as GraphRF, true);
+    // setDialogContent({
+    //   title: 'Ewoks Graph',
+    //   object: rfToEwoks(graphRF),
+    //   openFrom: 'sidebar',
+    // });
+  };
+
+  const disAgreeCallback = () => {
+    setOpenAgreeDialog(false);
   };
 
   return (
@@ -170,6 +206,15 @@ export default function Sidebar() {
             open={openDialog}
             content={dialogContent}
             setValue={defaultInputsChanged} // TODO: examine
+          />
+          <ConfirmDialog
+            title={`Delete "${element.label}" workflow?`}
+            content={`You are about to delete "${element.label}" workflow.
+              Please make sure that it is not used as a subgraph in other workflows!
+              Do you agree to continue?`}
+            open={openAgreeDialog}
+            agreeCallback={agreeCallback}
+            disagreeCallback={disAgreeCallback}
           />
         </>
       )}

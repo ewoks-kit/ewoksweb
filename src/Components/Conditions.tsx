@@ -16,10 +16,10 @@ export default function Conditions(props) {
   const [elementL] = React.useState<EwoksRFLink>({} as EwoksRFLink);
 
   useEffect(() => {
-    if (element.data && element.data.conditions) {
+    if (element && element.data && element.data.conditions) {
       setConditions(element.data.conditions);
     }
-  }, [element.id, element]);
+  }, [element]); // TODO: is it needed element.id?
 
   const addConditions = () => {
     const el = element as EwoksRFLink;
@@ -69,8 +69,8 @@ export default function Conditions(props) {
       <b>Conditions </b>
       <IconButton
         style={{ padding: '1px' }}
-        aria-label="delete"
-        onClick={() => addConditions()}
+        aria-label="Add Condition"
+        onClick={addConditions}
       >
         <AddCircleOutlineIcon />
       </IconButton>

@@ -59,7 +59,9 @@ function AddNodes() {
   const setGraphOrSubgraph = state((state) => state.setGraphOrSubgraph);
 
   const getTasks = async () => {
-    const tasksData = await axios.get(`${configData.serverUrl}/tasks`);
+    const tasksData = await axios.get(
+      `${configData.serverUrl}/tasks/descriptions`
+    );
     const tasks = tasksData.data as Task[];
     setTasks(tasks);
     setTaskCategories(tasks.map((tas) => tas.category));

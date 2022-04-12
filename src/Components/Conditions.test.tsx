@@ -1,12 +1,166 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  queryByRole,
+  queryByText,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import Conditions from './Conditions';
 import state from '../store/state';
 
 describe('In the AddNodes test:', () => {
-  test('initially it renders one button element named ¨Add Nodes¨', async () => {
-    render(<Conditions props />);
-    const buttonAddNodes = screen.getByRole('button');
-    expect(buttonAddNodes).toBeInTheDocument();
+  test('initially it renders one button element', async () => {
+    render(
+      <Conditions
+        element={{ source: '1', target: '2', data: { conditions: [] } }}
+      />
+    );
+
+    const addConditions = jest.fn();
+
+    const conditionText = screen.getByText(/Conditions/u);
+    expect(conditionText).toBeInTheDocument();
+
+    const button = screen.getByRole('button', { name: /Add Condition/u });
+    expect(button).toBeInTheDocument();
+
+    const editableTable = await screen.queryByRole('table', {
+      name: /editable table/u,
+    });
+    expect(editableTable).not.toBeInTheDocument();
+
+    fireEvent(
+      button,
+      new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+    // TODO: fireEvent is not working!
+
+    // await waitFor(() => {
+    //   const editableTable1 = screen.queryByRole('table');
+    //   expect(editableTable1).toBeInTheDocument();
+    // });
+
+    // expect(addConditions).toHaveBeenCalledTimes(1);
+
+    // expect(editableTable).toBeInTheDocument();
+  });
+
+  test('renders correctly the table if conditions are present', async () => {
+    render(
+      <Conditions
+        element={{
+          source: '1',
+          target: '2',
+          data: { conditions: [{ id: '1', name: 'name1', value: '1' }] },
+        }}
+      />
+    );
+
+    const editableTable = screen.getByRole('table', {
+      name: /editable table/u,
+    });
+    expect(editableTable).toBeInTheDocument();
+
+    const sourceOutput = screen.getByText(/Source_output/u);
+    expect(sourceOutput).toBeInTheDocument();
+
+    const value = screen.getByText(/Value/u);
+    expect(value).toBeInTheDocument();
+
+    const cellType = screen.getByRole('cell', { name: /Type/u });
+    expect(cellType).toBeInTheDocument();
+
+    const tr = screen.getAllByRole('row');
+    expect(tr).toHaveLength(3);
+
+    const typeSelectionButton = screen.getByRole('button', { name: /string/u });
+    expect(typeSelectionButton).toBeInTheDocument();
+  });
+
+  test('renders correctly the type of the value to number', async () => {
+    render(
+      <Conditions
+        element={{
+          source: '1',
+          target: '2',
+          data: { conditions: [{ id: '1', name: 'name1', value: 1 }] },
+        }}
+      />
+    );
+
+    const typeSelectionButton = screen.getByRole('button', { name: /number/u });
+    expect(typeSelectionButton).toBeInTheDocument();
+  });
+
+  test('renders correctly the type of the value to list', async () => {
+    render(
+      <Conditions
+        element={{
+          source: '1',
+          target: '2',
+          data: { conditions: [{ id: '1', name: 'name1', value: [1] }] },
+        }}
+      />
+    );
+
+    const typeSelectionButton = screen.getByRole('button', { name: /list/u });
+    expect(typeSelectionButton).toBeInTheDocument();
+  });
+
+  test('renders correctly the type of the value to dict', async () => {
+    render(
+      <Conditions
+        element={{
+          source: '1',
+          target: '2',
+          data: {
+            conditions: [{ id: '1', name: 'name1', value: { name: 'name1' } }],
+          },
+        }}
+      />
+    );
+
+    const typeSelectionButton = screen.getByRole('button', { name: /dict/u });
+    expect(typeSelectionButton).toBeInTheDocument();
+  });
+
+  test('renders correctly the type of the value to bool', async () => {
+    render(
+      <Conditions
+        element={{
+          source: '1',
+          target: '2',
+          data: {
+            conditions: [{ id: '1', name: 'name1', value: true }],
+          },
+        }}
+      />
+    );
+
+    const typeSelectionButton = screen.getByRole('button', { name: /bool/u });
+    expect(typeSelectionButton).toBeInTheDocument();
+  });
+
+  test('renders correctly the type of the value to null', async () => {
+    render(
+      <Conditions
+        element={{
+          source: '1',
+          target: '2',
+          data: {
+            conditions: [{ id: '1', name: 'name1', value: null }],
+          },
+        }}
+      />
+    );
+
+    const typeSelectionButton = screen.getByRole('button', { name: /null/u });
+    expect(typeSelectionButton).toBeInTheDocument();
   });
 });
 
@@ -16,4 +170,3 @@ describe('In the AddNodes test:', () => {
 // a conditionsValuesChanged changes the selected link conditions
 
 // editableTable not in the document if no conditions in the selectedElement
-// an has number of lines as the number of conditions
