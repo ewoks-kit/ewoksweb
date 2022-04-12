@@ -93,26 +93,6 @@ export default function Sidebar() {
 
     if (elD.input_nodes && elD.id !== 'newGraph') {
       setOpenAgreeDialog(true);
-      // await axios
-      //   .delete(`${configData.serverUrl}/workflow/${elD.id}`)
-      //   .then(() => {
-      //     setOpenSnackbar({
-      //       open: true,
-      //       text: `Workflow ${elD.id} succesfully deleted!`,
-      //       severity: 'success',
-      //     });
-      //   })
-      //   .catch((error) => {
-      //     setOpenSnackbar({
-      //       open: true,
-      //       text: error.message,
-      //       severity: 'error',
-      //     });
-      //   });
-      // setGraphRF(initializedGraph);
-      // setSelectedElement({} as GraphDetails);
-      // setSubgraphsStack({ id: 'initialiase', label: '' });
-      // setRecentGraphs({} as GraphRF, true);
     } else if (!elD.input_nodes) {
       if (workingGraph.graph.id === graphRF.graph.id) {
         setGraphRF(newGraph);

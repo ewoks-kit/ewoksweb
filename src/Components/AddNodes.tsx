@@ -21,6 +21,10 @@ import Upload from './Upload';
 import AddIcon from '@material-ui/icons/Add';
 import state from '../store/state';
 import configData from '../configData.json';
+import React from 'react';
+import { Button } from '@material-ui/core';
+import ConfirmDialog from './ConfirmDialog';
+import FormDialog from './FormDialog';
 
 const onDragStart = (event, { task_identifier, task_type, icon }) => {
   event.dataTransfer.setData('task_identifier', task_identifier);
@@ -42,11 +46,6 @@ const iconsObj = {
   TextsmsIcon,
 };
 
-const onRigthClick = (event) => {
-  event.preventDefault();
-  // console.log('rightclick', tasks);
-};
-
 // Hosts the node images and categories
 // drag and drop to canvas
 // TODO: right-click and view-delete?
@@ -57,6 +56,12 @@ function AddNodes() {
   const tasks = state((state) => state.tasks);
   const setTasks = state((state) => state.setTasks);
   const setGraphOrSubgraph = state((state) => state.setGraphOrSubgraph);
+  const [clicked, setClicked] = React.useState('');
+  const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const [doAction, setDoAction] = React.useState<string>('');
+  const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
+  const [elementToEdit, setElementToEdit] = React.useState<Task>({});
 
   const getTasks = async () => {
     const tasksData = await axios.get(
@@ -69,6 +74,49 @@ function AddNodes() {
 
   const insertGraph = () => {
     setGraphOrSubgraph(false);
+  };
+
+  const clickTask = (elem) => {
+    setClicked(elem.task_identifier);
+  };
+
+  const deleteTask = () => {
+    setOpenAgreeDialog(true);
+  };
+
+  const agreeDeleteTask = async () => {
+    setOpenAgreeDialog(false);
+    await axios
+      .delete(`${configData.serverUrl}/task/${clicked}`)
+      .then(() => {
+        setOpenSnackbar({
+          open: true,
+          text: `Task was succesfully deleted!`,
+          severity: 'success',
+        });
+        getTasks();
+      })
+      .catch((error) => {
+        setOpenSnackbar({
+          open: true,
+          text: error.message,
+          severity: 'error',
+        });
+      });
+  };
+
+  const disAgreeDeleteTask = () => {
+    setOpenAgreeDialog(false);
+  };
+
+  const action = (action, element) => {
+    setDoAction(action);
+    if (action === 'cloneTask') {
+      const task = tasks.find((tas) => tas.task_identifier === element);
+      // console.log(task);
+      setElementToEdit(task);
+    }
+    setOpenSaveDialog(true);
   };
 
   return (
@@ -101,10 +149,14 @@ function AddNodes() {
                 .filter((nod) => nod.category === categoryName)
                 .map((elem) => (
                   <span
+                    // onContextMenu={() => clickTask(elem)}
+                    onClick={() => clickTask(elem)}
                     role="button"
                     tabIndex={0}
                     key={elem.task_identifier}
-                    className="dndnode"
+                    className={`dndnode ${
+                      clicked === elem.task_identifier ? 'clicked' : ''
+                    }`}
                     onDragStart={(event1) =>
                       onDragStart(event1, {
                         task_identifier: elem.task_identifier,
@@ -117,7 +169,7 @@ function AddNodes() {
                     <Tooltip title={elem.task_identifier} arrow>
                       {/* TODO: for deleting task and clone in dialog? */}
                       <span
-                        onContextMenu={onRigthClick}
+                        // onContextMenu={onRigthClick}
                         role="button"
                         tabIndex={0}
                       >
@@ -166,9 +218,50 @@ function AddNodes() {
                 </>
               )}
             </AccordionDetails>
+            {clicked &&
+              tasks.length > 0 &&
+              tasks.find((tas) => tas.task_identifier === clicked)?.category ===
+                categoryName && (
+                <>
+                  <Button
+                    style={{ margin: '8px' }}
+                    variant="outlined"
+                    color="secondary"
+                    onClick={deleteTask}
+                    size="small"
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    style={{ margin: '8px' }}
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => action('cloneTask', clicked)}
+                    // onClick={cloneTask}
+                    size="small"
+                  >
+                    Clone
+                  </Button>
+                </>
+              )}
           </Accordion>
         ))}
       </AccordionDetails>
+      <ConfirmDialog
+        title={`Delete "${clicked}" task?`}
+        content={`You are about to delete a task.
+              Please make sure that it is not used in any workflow!
+              Do you agree to continue?`}
+        open={openAgreeDialog}
+        agreeCallback={agreeDeleteTask}
+        disagreeCallback={disAgreeDeleteTask}
+      />
+      <FormDialog
+        elementToEdit={elementToEdit}
+        action={doAction}
+        open={openSaveDialog}
+        setOpenSaveDialog={setOpenSaveDialog}
+      />
     </Accordion>
   );
 }

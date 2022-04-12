@@ -6,7 +6,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
-import Cloud from '@material-ui/icons/Cloud';
+// import Cloud from '@material-ui/icons/Cloud';
+import AccountTreeIcon from '@material-ui/icons/AccountTree';
+import FiberNewIcon from '@material-ui/icons/FiberNew';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { Button, Menu, Tooltip } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import FormDialog from './FormDialog';
@@ -116,25 +119,27 @@ export default function IconMenu(props) {
           <MenuList>
             <MenuItem onClick={() => action('newTask', initializedTask)}>
               <ListItemIcon>
-                <Cloud fontSize="small" />
+                <FiberNewIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText>New Task</ListItemText>
             </MenuItem>
             <MenuItem onClick={() => action('cloneTask', selectedElement)}>
               <ListItemIcon>
-                <Cloud fontSize="small" />
+                <FileCopyIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText>Clone Task</ListItemText>
             </MenuItem>
             <MenuItem onClick={() => action('cloneGraph', graphRF)}>
               <ListItemIcon>
-                <Cloud fontSize="small" />
+                <FileCopyIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText>Clone Graph</ListItemText>
               <Typography variant="body2" color="primary" />
             </MenuItem>
             <MenuItem onClick={handleShowEwoksGraph}>
-              <ListItemIcon />
+              <ListItemIcon>
+                <AccountTreeIcon fontSize="small" />
+              </ListItemIcon>
               <ListItemText>Graph in json</ListItemText>
             </MenuItem>
             {/* <Divider />
