@@ -1,6 +1,6 @@
 {
   "name": "ewoks-web",
-  "homepage": ".",
+  "homepage": "./",
   "private": true,
   "version": "0.0.1",
   "description": "Visualizer for NetworkX task graphs",

@@ -135,6 +135,9 @@ export interface State {
     from?: string
   ) => void;
 
+  selectedTask?: Task;
+  setSelectedTask?: (task: Task) => void;
+
   subGraph?: GraphRF;
   setSubGraph?: (graph: GraphEwoks) => Promise<GraphRF>;
 

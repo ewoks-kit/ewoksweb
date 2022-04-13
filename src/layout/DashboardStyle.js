@@ -47,7 +47,7 @@ const DashboardStyle = makeStyles((theme) => ({
     height: '7vh',
   },
   appBar: {
-    height: '7vh',
+    // height: '7vh',
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,

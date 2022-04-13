@@ -91,10 +91,12 @@ function Canvas() {
   const reactFlowWrapper = useRef(null);
   const graphRF = state((state) => state.graphRF);
   const setGraphRF = state((state) => state.setGraphRF);
+  const subgraphsStack = state((state) => state.subgraphsStack);
   const setSubgraphsStack = state((state) => state.setSubgraphsStack);
   const setRecentGraphs = state((state) => state.setRecentGraphs);
   const setUndoRedo = state((state) => state.setUndoRedo);
   const setSelectedElement = state((state) => state.setSelectedElement);
+  const setSelectedTask = state((state) => state.setSelectedTask);
   const tasks = state((state) => state.tasks);
 
   const [selectedElements, setSelectedElements] = React.useState([]);
@@ -108,20 +110,31 @@ function Canvas() {
   // const [stepDetails, setStepDetails] = useState(null);
 
   useEffect(() => {
-    // console.log(
-    //   'fitView()',
-    //   elements.length,
-    //   workingGraph.graph.id,
-    //   graphRF.graph.id
-    // );
+    console.log(
+      elements.length,
+      workingGraph.graph.id,
+      graphRF.graph.id,
+      subgraphsStack
+    );
     if (
       rfInstance &&
       elements.length > 0 &&
       workingGraph.graph.id !== graphRF.graph.id
+      // (workingGraph.graph.id !== graphRF.graph.id || subgraphsStack.length > 1)
+      // graphRF.graph.id !==
+      //   (subgraphsStack.length > 0 &&
+      //     subgraphsStack[subgraphsStack.length - 1].id)
     ) {
+      console.log('fitView()');
       rfInstance.fitView();
     }
-  }); // [rfInstance, elements, workingGraph.graph.id, graphRF]
+  }); //, [
+  //   rfInstance,
+  //   elements,
+  //   workingGraph.graph.id,
+  //   graphRF.graph.id,
+  //   subgraphsStack,
+  // ]);
 
   useEffect(() => {
     // console.log(graphRF);
@@ -150,19 +163,12 @@ function Canvas() {
     const graphElement: EwoksRFNode | EwoksRFLink = elements.find(
       (el) => el.id === element.id
     );
-
-    // console.log(element, graphElement);
-
-    // if ('position' in element) {
-    //   setStepDetails({ evt: event.currentTarget, element });
-    // }
-
     setSelectedElement(graphElement);
   };
 
   const onLoad = useCallback((instance) => {
     // console.log('onLoad');
-    instance.fitView();
+    // instance.fitView();
     setRfInstance(instance);
   }, []);
   // const handlDisableDragging = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -365,7 +371,6 @@ function Canvas() {
 
   const onRightClick = (event) => {
     event.preventDefault();
-    // console.log('rightClick');
   };
 
   const onSelectionChange = (elements) => {
@@ -514,6 +519,10 @@ function Canvas() {
     setGraphRF(newGraph);
   };
 
+  const onClick = () => {
+    setSelectedTask({});
+  };
+
   // const updateNode = useCallback(() => updateNodeInternals('1'), [
   //   updateNodeInternals,
   // ]);
@@ -553,6 +562,7 @@ function Canvas() {
               //   setStepDetails({ evt: evt.currentTarget, node });
               // }
             }}
+            onClick={onClick}
             onLoad={onLoad}
             onDrop={onDrop}
             onConnect={onConnect}

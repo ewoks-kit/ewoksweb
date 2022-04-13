@@ -41,7 +41,7 @@ export default function SaveToServer({ saveToServerF }) {
           open: true,
           text:
             'Please insert a new label to be also used as an id for the new workflow and then save!',
-          severity: 'warn',
+          severity: 'warning',
         });
         setGettingFromServer(false);
         return;

@@ -5,6 +5,7 @@ import currentExecutionEvent from './currentExecutionEvent';
 import gettingFromServer from './gettingFromServer';
 import undoRedo from './undoRedo';
 import selectedElement from './selectedElement';
+import selectedTask from './selectedTask';
 import workingGraph from './workingGraph';
 import graphRF from './graphRF';
 import allWorkflows from './allWorkflows';
@@ -60,6 +61,7 @@ const state = create<State>((set, get) => ({
   ...undoIndex(set, get),
   ...undoRedo(set, get),
   ...selectedElement(set, get),
+  ...selectedTask(set),
   ...workingGraph(set, get),
   initializedTask,
   initializedGraph,
