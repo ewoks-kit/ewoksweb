@@ -13,6 +13,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "postbuild": "node postbuild.js",
     "test": "react-scripts test",
     "lint": "run-p lint:*",
     "lint:eslint": "eslint \"**/*.{ts,tsx,js,jsx}\" --max-warnings=0",
