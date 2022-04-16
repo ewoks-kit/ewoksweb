@@ -1,5 +1,5 @@
-import type { Color } from '@material-ui/lab';
-import type { Node, Edge, Position, NodeTypesType } from 'react-flow-renderer';
+// import type { Color } from '@material-ui/lab';
+import type { Position } from 'react-flow-renderer';
 
 export interface GraphNodes {
   id: string;
@@ -30,6 +30,7 @@ export interface SnackbarParams {
 
 export interface DialogParams {
   open: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content: any; // {title: string; graph: }
 }
 

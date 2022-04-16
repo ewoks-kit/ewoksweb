@@ -30,7 +30,7 @@ export default function RecentFiles() {
         value={selectedGraph}
         onChange={selectedGraphChange}
       >
-        {recentGraphs.map((gr, index) => (
+        {recentGraphs.map((gr) => (
           <MenuItem value={gr.graph.label} key={gr.graph.id}>
             <em>{gr.graph.label}</em>
           </MenuItem>

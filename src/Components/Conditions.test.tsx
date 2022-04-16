@@ -1,14 +1,6 @@
-import {
-  act,
-  fireEvent,
-  queryByRole,
-  queryByText,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import Conditions from './Conditions';
-import state from '../store/state';
+// import state from '../store/state';
 
 describe('In the AddNodes test:', () => {
   test('initially it renders one button element', async () => {
@@ -18,7 +10,7 @@ describe('In the AddNodes test:', () => {
       />
     );
 
-    const addConditions = jest.fn();
+    // const addConditions = jest.fn();
 
     const conditionText = screen.getByText(/Conditions/u);
     expect(conditionText).toBeInTheDocument();
@@ -26,7 +18,7 @@ describe('In the AddNodes test:', () => {
     const button = screen.getByRole('button', { name: /Add Condition/u });
     expect(button).toBeInTheDocument();
 
-    const editableTable = await screen.queryByRole('table', {
+    const editableTable = screen.queryByRole('table', {
       name: /editable table/u,
     });
     expect(editableTable).not.toBeInTheDocument();

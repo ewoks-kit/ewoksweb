@@ -16,7 +16,6 @@ describe('AutocompleteDrop should:', () => {
     render(<AutocompleteDrop />);
     const textbox = screen.getByRole('textbox', { name: /Workflows/u });
     expect(textbox).toBeInTheDocument();
-    console.log(textbox.outerHTML);
     act(() => {
       state.setState({
         allWorkflows: [],
@@ -32,7 +31,6 @@ describe('AutocompleteDrop should:', () => {
     });
 
     const input = within(autocomplete).getByRole('textbox');
-    console.log(input.outerHTML);
     expect((input as HTMLInputElement).value).toHaveValue('some_value');
 
     fireEvent(
@@ -58,10 +56,8 @@ describe('AutocompleteDrop should:', () => {
     // await waitFor(() => {});
     // // navigate to the first item in the autocomplete box
     fireEvent.keyDown(autocomplete, { key: 'ArrowDown' });
-    await waitFor(() => {});
     // select the first item
     fireEvent.keyDown(autocomplete, { key: 'Enter' });
-    await waitFor(() => {});
     // check the new value of the input field
     expect(input).toHaveValue('EnergyInterleavedMAD.json');
 
@@ -73,7 +69,7 @@ describe('AutocompleteDrop should:', () => {
       })
     );
 
-    const { openSnackbar } = state.getState();
+    // const { openSnackbar } = state.getState();
 
     // console.log(openSnackbar, autocomplete);
 
