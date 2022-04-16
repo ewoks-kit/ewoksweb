@@ -91,7 +91,6 @@ function Canvas() {
   const reactFlowWrapper = useRef(null);
   const graphRF = state((state) => state.graphRF);
   const setGraphRF = state((state) => state.setGraphRF);
-  const subgraphsStack = state((state) => state.subgraphsStack);
   const setSubgraphsStack = state((state) => state.setSubgraphsStack);
   const setRecentGraphs = state((state) => state.setRecentGraphs);
   const setUndoRedo = state((state) => state.setUndoRedo);
@@ -110,12 +109,12 @@ function Canvas() {
   // const [stepDetails, setStepDetails] = useState(null);
 
   useEffect(() => {
-    console.log(
-      elements.length,
-      workingGraph.graph.id,
-      graphRF.graph.id,
-      subgraphsStack
-    );
+    // console.log(
+    //   elements.length,
+    //   workingGraph.graph.id,
+    //   graphRF.graph.id,
+    //   subgraphsStack
+    // );
     if (
       rfInstance &&
       elements.length > 0 &&
@@ -125,10 +124,10 @@ function Canvas() {
       //   (subgraphsStack.length > 0 &&
       //     subgraphsStack[subgraphsStack.length - 1].id)
     ) {
-      console.log('fitView()');
+      // console.log('fitView()');
       rfInstance.fitView();
     }
-  }); //, [
+  }); // , [
   //   rfInstance,
   //   elements,
   //   workingGraph.graph.id,

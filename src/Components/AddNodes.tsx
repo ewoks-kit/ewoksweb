@@ -152,6 +152,7 @@ function AddNodes() {
                   <span
                     // onContextMenu={() => clickTask(elem)}
                     onClick={() => clickTask(elem)}
+                    aria-hidden="true"
                     role="button"
                     tabIndex={0}
                     key={elem.task_identifier}
@@ -256,9 +257,7 @@ function AddNodes() {
         ))}
       </AccordionDetails>
       <ConfirmDialog
-        title={`Delete "${
-          selectedTask && (selectedTask.task_identifier as string)
-        }" task?`}
+        title={`Delete "${selectedTask && selectedTask.task_identifier}" task?`}
         content={`You are about to delete a task.
               Please make sure that it is not used in any workflow!
               Do you agree to continue?`}
