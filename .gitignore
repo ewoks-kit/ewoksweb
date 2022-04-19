@@ -1,9 +1,22 @@
-node_modules/
-/build/
-/.env.*
-/src/data/directed.json
-
+# Byte / compiled / optimized
+*.py[cod]
+__pycache__/
+*.so
+/doc/_generated
 *.log
 npm-debug.log*
+
+# Distribution / packaging
+/build/
+/pybuild/
+/ewoksserver/static/
+/dist/
+*.egg-info/
+.eggs/
+
+# Others
+node_modules/
+/.env.*
 Thumbs.db
 .DS_Store
+/src/data/directed.json
