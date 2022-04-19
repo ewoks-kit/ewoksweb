@@ -36,6 +36,7 @@ export default function FormDialog(props) {
     {} as Task | GraphRF
   );
   const setTasks = state((state) => state.setTasks);
+  const tasks = state((state) => state.tasks);
 
   const { open, action, elementToEdit } = props;
 
@@ -58,63 +59,74 @@ export default function FormDialog(props) {
 
   const handleSave = async () => {
     // get the selected element (graph or Node) give a new name before saving
-    // fire a POST
     if (newName !== '' && action === 'cloneGraph') {
-      const el = element as GraphRF;
-      // TODO: Post a new graph as in SaveToServer. Abstract POST
-      try {
-        const responseNew = await axios.post(
-          `${configData.serverUrl}/workflows`,
-          rfToEwoks({
-            ...el,
-            graph: { ...el.graph, id: newName, label: newName },
-          })
-        );
-        props.setOpenSaveDialog(false);
-        setWorkingGraph(responseNew.data as GraphRF);
-        setRecentGraphs({} as GraphRF, true);
-        setOpenSnackbar({
-          open: true,
-          text: 'Graph saved succesfully!',
-          severity: 'success',
-        });
-      } catch (error) {
-        setOpenSnackbar({
-          open: true,
-          text: error.response.data,
-          severity: 'error',
-        });
-      }
+      saveGraph(element as GraphRF);
     } else if (['cloneTask', 'newTask'].includes(action)) {
-      // or newTask
-      const elem = element as Task;
-      try {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const responseClone = await axios.post(
-          `${configData.serverUrl}/tasks`,
-          {
-            ...elem,
-          }
-        );
+      saveTask(element as Task);
+    }
+  };
 
-        setOpenSnackbar({
-          open: true,
-          text: 'Task saved successfuly',
-          severity: 'success',
-        });
+  const saveTask = async (task) => {
+    // or newTask
+    // const elem = element as Task;
+    if (tasks.some((ts) => ts.task_identifier === task.task_identifier)) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Please rename the Task so as to be unique!',
+        severity: 'warning',
+      });
+      return;
+    }
+    // else {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const responseClone = await axios.post(`${configData.serverUrl}/tasks`, {
+        ...task,
+      });
+      setOpenSnackbar({
+        open: true,
+        text: 'Task saved successfuly',
+        severity: 'success',
+      });
+      props.setOpenSaveDialog(false);
+      const tasksNew = await axios.get(
+        `${configData.serverUrl}/tasks/descriptions`
+      );
+      setTasks(tasksNew.data as Task[]);
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: error.response.data,
+        severity: 'warning',
+      });
+    }
+    // }
+  };
 
-        props.setOpenSaveDialog(false);
-        const tasks = await axios.get(
-          `${configData.serverUrl}/tasks/descriptions`
-        );
-        setTasks(tasks.data as Task[]);
-      } catch (error) {
-        setOpenSnackbar({
-          open: true,
-          text: error.response.data,
-          severity: 'warning',
-        });
-      }
+  const saveGraph = async (graph) => {
+    // TODO: Post a new graph as in SaveToServer. Abstract POST
+    try {
+      const responseNew = await axios.post(
+        `${configData.serverUrl}/workflows`,
+        rfToEwoks({
+          ...graph,
+          graph: { ...graph.graph, id: newName, label: newName },
+        })
+      );
+      props.setOpenSaveDialog(false);
+      setWorkingGraph(responseNew.data as GraphRF);
+      setRecentGraphs({} as GraphRF, true);
+      setOpenSnackbar({
+        open: true,
+        text: 'Graph saved succesfully!',
+        severity: 'success',
+      });
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: error.response.data,
+        severity: 'error',
+      });
     }
   };
 
