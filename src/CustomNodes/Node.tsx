@@ -207,6 +207,9 @@ const Node: React.FC<NodeProps> = ({
                 getting={executing}
                 tooltip="Open and edit Workflow"
                 action={getFromServer}
+                onClick={() => {
+                  console.log('Starting Execution');
+                }}
               >
                 <SendIcon />
               </IntegratedSpinner>

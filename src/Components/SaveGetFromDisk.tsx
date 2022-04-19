@@ -49,15 +49,20 @@ export default function SaveGetFromDisk() {
             component="span"
             aria-label="add"
             disabled={isExecuted}
+            onClick={saveToDisk}
           >
-            <SaveIcon onClick={saveToDisk} />
+            <SaveIcon />
           </Fab>
         </IconButton>
       </Tooltip>
       <Tooltip title="Load from Disk" arrow>
-        <IconButton color="inherit" disabled={isExecuted}>
+        <IconButton
+          color="inherit"
+          disabled={isExecuted}
+          onClick={loadFromDisk}
+        >
           <Upload>
-            <AddIcon onClick={loadFromDisk} />
+            <AddIcon />
           </Upload>
         </IconButton>
       </Tooltip>

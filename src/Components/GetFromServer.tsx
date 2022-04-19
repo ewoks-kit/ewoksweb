@@ -74,6 +74,9 @@ export default function GetFromServer() {
         getting={gettingFromServer}
         tooltip="Open and edit Workflow"
         action={getFromServer}
+        onClick={() => {
+          console.log('Starting Execution');
+        }}
       >
         <CloudDownloadIcon />
       </IntegratedSpinner>
@@ -81,6 +84,9 @@ export default function GetFromServer() {
         getting={gettingFromServer}
         tooltip="Add workflow as subgraph"
         action={getSubgraphFromServer}
+        onClick={() => {
+          console.log('Starting Execution');
+        }}
       >
         <ArrowDownwardIcon />
       </IntegratedSpinner>

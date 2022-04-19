@@ -39,8 +39,9 @@ export default function UndoRedo({ undoF, redoF }) {
             component="span"
             aria-label="add"
             disabled={isExecuted}
+            onClick={undo}
           >
-            <UndoIcon onClick={undo} />
+            <UndoIcon />
           </Fab>
         </IconButton>
       </Tooltip>
@@ -53,8 +54,9 @@ export default function UndoRedo({ undoF, redoF }) {
             component="span"
             aria-label="add"
             disabled={isExecuted}
+            onClick={redo}
           >
-            <RedoIcon onClick={redo} />
+            <RedoIcon />
           </Fab>
         </IconButton>
       </Tooltip>

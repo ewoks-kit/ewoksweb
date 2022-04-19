@@ -10,6 +10,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import FiberNew from '@material-ui/icons/FiberNew';
 import Sidebar from './sidebar';
+import ReactFlow, { ReactFlowProvider } from 'react-flow-renderer';
 
 import Canvas from './Canvas';
 import UndoRedo from '../Components/UndoRedo';
@@ -136,8 +137,9 @@ export default function Dashboard() {
                 component="span"
                 aria-label="add"
                 disabled={isExecuted}
+                onClick={newGraph}
               >
-                <FiberNew onClick={newGraph} />
+                <FiberNew />
               </Fab>
             </IconButton>
           </Tooltip>
@@ -189,7 +191,9 @@ export default function Dashboard() {
 
         <Paper className={fixedHeightPaper}>
           {gettingFromServer && <LinearSpinner />}
-          <Canvas />
+          <ReactFlowProvider>
+            <Canvas />
+          </ReactFlowProvider>
         </Paper>
       </main>
       <Drawer />

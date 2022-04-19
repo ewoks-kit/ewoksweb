@@ -54,6 +54,9 @@ export default function ExecuteWorkflow() {
       getting={false}
       tooltip="Execute Workflow and exit Execution mode"
       action={executeWorkflow}
+      onClick={() => {
+        console.log('Starting Execution');
+      }}
     >
       {isExecuted ? <ClearIcon color="secondary" /> : <SendIcon />}
     </IntegratedSpinner>

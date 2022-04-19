@@ -7,12 +7,15 @@ import React, {
   // CSSProperties,
 } from 'react';
 import ReactFlow, {
-  ReactFlowProvider,
   Controls,
   MiniMap,
   Node,
   Edge,
   Background,
+  Connection,
+  useReactFlow,
+  applyNodeChanges,
+  applyEdgeChanges,
   // useUpdateNodeInternals,
 } from 'react-flow-renderer';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
@@ -86,7 +89,8 @@ function Canvas() {
   // const { fitView, fitBounds } = useZoomPanHelper();
   const [rfInstance, setRfInstance] = useState(null);
   // const [disableDragging, setDisableDragging] = useState(false);
-  const [elements, setElements] = useState([]);
+  const [nodes, setNodes] = useState([]);
+  const [edges, setEdges] = useState([]);
 
   const reactFlowWrapper = useRef(null);
   const graphRF = state((state) => state.graphRF);
@@ -108,71 +112,36 @@ function Canvas() {
 
   // const [stepDetails, setStepDetails] = useState(null);
 
+  const { fitView } = useReactFlow();
+  // TO EXAMINE:
+  // 1. when selecting a node-link selected fires the re-render
+  // since graphRF changes. We need to not rerender and fitView is activated
+  // 2. multi-selection is sometimes?? fires an onDrop event -> avoid it
   useEffect(() => {
-    // console.log(
-    //   elements.length,
-    //   workingGraph.graph.id,
-    //   graphRF.graph.id,
-    //   subgraphsStack
-    // );
-    if (
-      rfInstance &&
-      elements.length > 0 &&
-      workingGraph.graph.id !== graphRF.graph.id
-      // (workingGraph.graph.id !== graphRF.graph.id || subgraphsStack.length > 1)
-      // graphRF.graph.id !==
-      //   (subgraphsStack.length > 0 &&
-      //     subgraphsStack[subgraphsStack.length - 1].id)
-    ) {
-      // console.log('fitView()');
-      rfInstance.fitView();
-    }
-  }); // , [
-  //   rfInstance,
-  //   elements,
-  //   workingGraph.graph.id,
-  //   graphRF.graph.id,
-  //   subgraphsStack,
-  // ]);
+    console.log(graphRF);
+    setNodes(graphRF.nodes);
+    setEdges(graphRF.links);
+    // TODO: find a callback to remove the setTimeout
+    setTimeout(() => {
+      fitView();
+    }, 100);
+  }, [graphRF, fitView]);
 
-  useEffect(() => {
-    // console.log(graphRF);
-    setElements([...graphRF.nodes, ...graphRF.links]);
-  }, [graphRF]);
-
-  // TODO: examine the usage
-  // useEffect(() => {
-  //   // fitView();
-  //   // fitBounds({ x: 0, y: 0, width: 1000, height: 1000 }, 300);
-  //   console.log('useEffect canvas', rfInstance);
-  //   if (rfInstance) {
-  //     rfInstance.fitView();
-  //   }
-  // }, [rfInstance]);
-
-  // TODO: examine the usage in add more handles without refreshing
-  // Used to update custom node after adding Handles NOT WORKING
-  // useEffect(() => {
-  //   if ('position' in selectedElement) {
-  //     updateNodeInternals(selectedElement.id);
-  //   }
-  // }, [selectedElement, selectedElement.id, updateNodeInternals]);
-
-  const onElementClick = (event, element: Node | Edge) => {
-    const graphElement: EwoksRFNode | EwoksRFLink = elements.find(
-      (el) => el.id === element.id
-    );
+  const onNodeClick = (event, element?: Node) => {
+    console.log(element);
+    const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
     setSelectedElement(graphElement);
   };
 
-  const onLoad = useCallback((instance) => {
-    // console.log('onLoad');
-    // instance.fitView();
+  const onEdgeClick = (event, element?: Edge) => {
+    console.log(element);
+    const graphElement: EwoksRFLink = edges.find((el) => el.id === element.id);
+    setSelectedElement(graphElement);
+  };
+
+  const onInit = useCallback((instance) => {
     setRfInstance(instance);
   }, []);
-  // const handlDisableDragging = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setDisableDragging(event.target.checked);
-  // };
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -182,6 +151,7 @@ function Canvas() {
   const onDrop = (event) => {
     event.preventDefault();
     // TODO: examine how to prevent bug on dragging selection of multiple elements
+    console.log(selectedElements.length);
     if (selectedElements.length > 1) {
       return;
     }
@@ -248,13 +218,13 @@ function Canvas() {
           moreHandles: true,
         },
       };
-      // setElements((es) => [...es, newNode]);
+
       const newGraph = {
         graph: graphRF.graph,
         nodes: [...graphRF.nodes, newNode],
         links: graphRF.links,
       } as GraphRF;
-      // setElements((els) => addEdge(params, els));
+
       setGraphRF(newGraph);
       setUndoRedo({ action: 'Added a Node', graph: newGraph });
       // need to also save it in recentGraphs if we leave and come back to the graph?
@@ -269,23 +239,23 @@ function Canvas() {
   };
 
   const onEdgeUpdate = (oldEdge, newConnection) => {
-    // console.log(oldEdge, newConnection);
-    let elements = [];
+    console.log(oldEdge, newConnection);
+    // let elements = [];
     // TODO: shouldnt need the following debug why graphRF is not
     // updated inside this function
-    setElements((els) => {
-      elements = els;
-      return els;
-    });
+    // setElements((els) => {
+    //   elements = els;
+    //   return els;
+    // });
     const link = {
       ...oldEdge,
       ...newConnection,
     };
     const newGraph = {
       graph: { ...graphRF.graph },
-      nodes: elements.filter((el) => el.position), // [...graphRF.nodes],
+      nodes: nodes.filter((el) => el.position), // [...graphRF.nodes],
       links: [
-        ...elements
+        ...edges
           .filter((el) => el.source)
           .filter((lin) => lin.id !== oldEdge.id),
         link,
@@ -300,7 +270,20 @@ function Canvas() {
   };
   // setElements((els) => updateEdge(oldEdge, newConnection, els));
 
-  const onConnect = (params: Edge) => {
+  // TO EXAMINE: when are the following fire? Replace existing callbacks
+  const onNodesChange = useCallback((changes) => {
+    console.log(changes);
+    setNodes((ns) => applyNodeChanges(changes, ns));
+  }, []);
+
+  const onEdgesChange = useCallback((changes) => {
+    console.log(changes);
+    setEdges((es) => applyEdgeChanges(changes, es));
+  }, []);
+
+  // const onConnect = useCallback((connection) => setEdges((eds) => addEdge(connection, eds)));
+
+  const onConnect = (params: Connection) => {
     // console.log(params);
     if (workingGraph.graph.id === graphRF.graph.id) {
       const sourceTask = graphRF.nodes.find((nod) => nod.id === params.source);
@@ -373,11 +356,13 @@ function Canvas() {
   };
 
   const onSelectionChange = (elements) => {
-    if (!elements) {
+    console.log(elements);
+    if (elements.nodes.length === 0 && elements.edges.length === 0) {
       setSelectedElement(graphRF.graph);
+      console.log('iiibiuhi');
       setSelectedElements([]);
     } else if (elements.length > 1) {
-      setSelectedElements(elements);
+      setSelectedElements([...elements.nodes, ...elements.edges]);
     } else {
       setSelectedElements([]);
     }
@@ -450,10 +435,10 @@ function Canvas() {
     }
   };
 
-  const onSelectionDrag = (event) => {
-    event.preventDefault();
-    // // console.log(event, selectedElements);
-  };
+  // const onSelectionDrag = (event) => {
+  //   event.preventDefault();
+  //   // // console.log(event, selectedElements);
+  // };
 
   // const onNodeDrag = (event, node) => {
   //   event.preventDefault();
@@ -461,6 +446,7 @@ function Canvas() {
   // };
 
   const onNodeDragStop = (event, node) => {
+    console.log(node);
     event.preventDefault();
     if (workingGraph.graph.id === graphRF.graph.id) {
       // find RFEwoksNode and update its position and save grapRF
@@ -477,7 +463,7 @@ function Canvas() {
         links: graphRF.links,
       };
 
-      setSelectedElement(RFEwoksNode); // ? test if after drag the selected node should be set
+      // setSelectedElement(RFEwoksNode); // ? test if after drag the selected node should be set
 
       setGraphRF(newGraph);
       setUndoRedo({ action: 'Dragged a Node', graph: newGraph });
@@ -535,58 +521,63 @@ function Canvas() {
 
   return (
     <div className={classes.root}>
-      <ReactFlowProvider>
-        <div
-          className="reactflow-wrapper"
-          style={{
-            height: '100%',
-            width: '100%',
-            backgroundColor: '#e9ebf7',
+      <div
+        className="reactflow-wrapper"
+        style={{
+          height: '100%',
+          width: '100%',
+          backgroundColor: '#e9ebf7',
+        }}
+        ref={reactFlowWrapper}
+      >
+        <ReactFlow
+          fitView
+          connectOnClick
+          nodesDraggable
+          attributionPosition="bottom-right"
+          // defaultPosition={[-200, -200]}
+          minZoom={0.2}
+          snapToGrid
+          // onPaneClick={(e) => console.log(e)}
+          // snapGrid={[150, 150]}
+          // onMoveStart={(e) => console.log(e)}
+          // onMoveEnd={(e) => console.log(e)}
+          // elements={elements}
+          nodes={nodes}
+          edges={edges}
+          onNodeClick={(evt, node) => {
+            onNodeClick(evt, node);
           }}
-          ref={reactFlowWrapper}
+          onEdgeClick={(evt, node) => {
+            onEdgeClick(evt, node);
+          }}
+          onClick={onClick}
+          onInit={onInit}
+          onDrop={onDrop}
+          onConnect={onConnect}
+          onEdgeUpdate={onEdgeUpdate}
+          onDragOver={onDragOver}
+          onPaneContextMenu={onRightClick}
+          onNodeDoubleClick={onNodeDoubleClick}
+          onSelectionChange={onSelectionChange}
+          // onNodeMouseMove={onNodeMouseMove}
+          onSelectionDragStop={onSelectionDragStop}
+          // onSelectionDrag={onSelectionDrag}
+          // onNodeDrag={onNodeDrag}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onNodeDragStop={onNodeDragStop}
+          edgeTypes={edgeTypes}
+          nodeTypes={nodeTypes}
+          deleteKeyCode="Delete"
         >
-          <ReactFlow
-            // defaultPosition={[-200, -200]}
-            minZoom={0.2}
-            snapToGrid
-            // onPaneClick={(e) => console.log(e)}
-            // snapGrid={[150, 150]}
-            // onMoveStart={(e) => console.log(e)}
-            // onMoveEnd={(e) => console.log(e)}
-            elements={elements}
-            // onElementClick={onElementClick}
-            onElementClick={(evt, node) => {
-              onElementClick(evt, node);
-              // if (node.type !== 'smoothstep') {
-              //   setStepDetails({ evt: evt.currentTarget, node });
-              // }
-            }}
-            onClick={onClick}
-            onLoad={onLoad}
-            onDrop={onDrop}
-            onConnect={onConnect}
-            onEdgeUpdate={onEdgeUpdate}
-            onDragOver={onDragOver}
-            onPaneContextMenu={onRightClick}
-            onNodeDoubleClick={onNodeDoubleClick}
-            onSelectionChange={onSelectionChange}
-            // onNodeMouseMove={onNodeMouseMove}
-            onSelectionDragStop={onSelectionDragStop}
-            onSelectionDrag={onSelectionDrag}
-            // onNodeDrag={onNodeDrag}
-            onNodeDragStop={onNodeDragStop}
-            edgeTypes={edgeTypes}
-            nodeTypes={nodeTypes}
-            onElementsRemove={onElementsRemove}
-            deleteKeyCode="Delete"
-          >
-            {/* <div style={buttonWrapperStyles}>
+          {/* <div style={buttonWrapperStyles}>
               <button type="button" onClick={updateNode}>
                 update node internals
               </button>
             </div> */}
-            <Controls>
-              {/* <ControlButton
+          <Controls>
+            {/* <ControlButton
                 onClick={
                   () =>
                     rfInstance.fitView({
@@ -598,49 +589,48 @@ function Canvas() {
               >
                 act
               </ControlButton> */}
-            </Controls>
-            <MiniMap
-              nodeStrokeColor={(n): string => {
-                // "rgb(60, 81, 202)"
-                if (n.style?.background) {
-                  return n.style.background as string;
-                }
-                if (['graphOutput', 'graphInput'].includes(n.type)) {
-                  return '#0041d0';
-                }
-                if (n.type === 'graph') {
-                  return '#ff0072';
-                }
-                // if (n.type === 'default') return 'rgb(60, 81, 202)';
+          </Controls>
+          <MiniMap
+            nodeStrokeColor={(n): string => {
+              // "rgb(60, 81, 202)"
+              if (n.style?.background) {
+                return n.style.background as string;
+              }
+              if (['graphOutput', 'graphInput'].includes(n.type)) {
+                return '#0041d0';
+              }
+              if (n.type === 'graph') {
+                return '#ff0072';
+              }
+              // if (n.type === 'default') return 'rgb(60, 81, 202)';
 
-                return 'rgb(60, 81, 202)';
-              }}
-              nodeColor={(n): string => {
-                if (n.style?.background) {
-                  return n.style.background as string;
-                }
-                if (['graphOutput', 'graphInput'].includes(n.type)) {
-                  return 'rgb(223, 226, 247)';
-                }
-                if (n.type === 'graph') {
-                  return '#ff0082';
-                }
-                // if (n.type === 'default') return 'rgb(60, 81, 202)';
+              return 'rgb(60, 81, 202)';
+            }}
+            nodeColor={(n): string => {
+              if (n.style?.background) {
+                return n.style.background as string;
+              }
+              if (['graphOutput', 'graphInput'].includes(n.type)) {
+                return 'rgb(223, 226, 247)';
+              }
+              if (n.type === 'graph') {
+                return '#ff0082';
+              }
+              // if (n.type === 'default') return 'rgb(60, 81, 202)';
 
-                return 'rgb(60, 81, 202)';
-              }}
-              nodeBorderRadius={2}
-            />
-            <Background />
-          </ReactFlow>
-          {/* <Popover
+              return 'rgb(60, 81, 202)';
+            }}
+            nodeBorderRadius={2}
+          />
+          <Background />
+        </ReactFlow>
+        {/* <Popover
             anchor={stepDetails?.evt || null}
             onClose={() => setStepDetails(null)}
             nodeData={stepDetails?.node || null}
             // onBottom={true}
           /> */}
-        </div>
-      </ReactFlowProvider>
+      </div>
     </div>
   );
 }

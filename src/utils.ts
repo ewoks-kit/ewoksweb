@@ -77,7 +77,7 @@ export async function getSubgraphs(
       .then(
         axios.spread((...res) => {
           // all requests are now complete in an array
-          console.log(res);
+          // console.log(res);
           // if there is a null means the subgraph was not found
           // and it should show up in red
           const resCln = res.filter((result) => result.data !== null);
@@ -91,7 +91,7 @@ export async function getSubgraphs(
         return [];
       });
   }
-  console.log(results);
+  // console.log(results);
   return results ? results : [];
 }
 
