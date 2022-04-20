@@ -86,14 +86,15 @@ export default function EditNodeStyle(props) {
         ...(element as EwoksRFNode),
         data: { ...element.data, moreHandles: event.target.checked },
       },
-      'fromSaveElement'
+      'fromSaveElement',
+      true
     );
     // TODO: Remove when refresh is resolved
-    setOpenSnackbar({
-      open: true,
-      text: `Please save and reload the graph before using the new handles`,
-      severity: 'warning',
-    });
+    // setOpenSnackbar({
+    //   open: true,
+    //   text: `Please save and reload the graph before using the new handles`,
+    //   severity: 'warning',
+    // });
   };
 
   return (

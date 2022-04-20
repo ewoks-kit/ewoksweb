@@ -133,7 +133,8 @@ export interface State {
   selectedElement?: EwoksRFNode | EwoksRFLink;
   setSelectedElement?: (
     element: EwoksRFNode | EwoksRFLink,
-    from?: string
+    from?: string,
+    update?: boolean
   ) => void;
 
   selectedTask?: Task;

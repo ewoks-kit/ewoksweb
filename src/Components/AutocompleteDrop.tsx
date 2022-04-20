@@ -42,6 +42,12 @@ function AutocompleteDrop(props) {
       if (active) {
         setOptions([...workFNames]);
       }
+    } else if (workF.length === 0) {
+      setOpenSnackbar({
+        open: true,
+        text: 'It seems you have no workflows to work with!',
+        severity: 'error',
+      });
     } else {
       setOpenSnackbar({
         open: true,

@@ -3,7 +3,7 @@ import type { EwoksRFLink, EwoksRFNode, GraphDetails, GraphRF } from '../types';
 const selectedElement = (set, get) => ({
   selectedElement: {} as EwoksRFNode | EwoksRFLink | GraphDetails,
 
-  setSelectedElement: (element, from) => {
+  setSelectedElement: (element, from, update?) => {
     const prevState = get((prev) => prev);
 
     const wg = prevState.workingGraph.graph.id;

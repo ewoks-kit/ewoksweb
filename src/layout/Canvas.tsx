@@ -4,6 +4,7 @@ import React, {
   useState,
   useCallback,
   useRef,
+  CSSProperties,
   // CSSProperties,
 } from 'react';
 import ReactFlow, {
@@ -16,7 +17,7 @@ import ReactFlow, {
   useReactFlow,
   applyNodeChanges,
   applyEdgeChanges,
-  // useUpdateNodeInternals,
+  useUpdateNodeInternals,
 } from 'react-flow-renderer';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import bendingText from '../CustomEdges/BendingTextEdge';
@@ -29,6 +30,7 @@ import DataNode from '../CustomNodes/DataNode';
 import type { GraphRF, EwoksRFNode, EwoksRFLink } from '../types';
 // import Popover from '../Components/Popover';
 import state from '../store/state';
+import selectedElement from '../store/selectedElement';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,9 +51,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-// // const nodesIds = new Set();
-// const linksIds = new Set();
-
 const getnodesIds = (text: string, nodes: EwoksRFNode[]) => {
   let id = 0;
   while (nodes.map((nod) => nod.id).includes(`${text}_${id}`)) {
@@ -59,14 +58,6 @@ const getnodesIds = (text: string, nodes: EwoksRFNode[]) => {
   }
   return `${text}_${id}`;
 };
-// const getLinksIds = (links, name) => {
-//   let id = 0;
-//   while (links.map((link) => link.id).includes(id)) {
-//     id++;
-//   }
-//   // linksIds.add(id);
-//   return `link_${id}`;
-// };
 
 const edgeTypes = {
   bendingText,
@@ -86,29 +77,28 @@ const nodeTypes = {
 function Canvas() {
   const classes = useStyles();
 
-  // const { fitView, fitBounds } = useZoomPanHelper();
   const [rfInstance, setRfInstance] = useState(null);
-  // const [disableDragging, setDisableDragging] = useState(false);
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
+  const [prevGraphId, setPrevGraphId] = useState('');
+  const [selectedElements, setSelectedElements] = React.useState([]);
 
   const reactFlowWrapper = useRef(null);
+
   const graphRF = state((state) => state.graphRF);
   const setGraphRF = state((state) => state.setGraphRF);
   const setSubgraphsStack = state((state) => state.setSubgraphsStack);
+  const subgraphsStack = state((state) => state.subgraphsStack);
   const setRecentGraphs = state((state) => state.setRecentGraphs);
   const setUndoRedo = state((state) => state.setUndoRedo);
   const setSelectedElement = state((state) => state.setSelectedElement);
+  const selectedElement = state((state) => state.selectedElement);
   const setSelectedTask = state((state) => state.setSelectedTask);
   const tasks = state((state) => state.tasks);
-
-  const [selectedElements, setSelectedElements] = React.useState([]);
-
-  // const updateNeeded = state((state) => state.updateNeeded);
   const recentGraphs = state((state) => state.recentGraphs);
   const workingGraph = state((state) => state.workingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  // const updateNodeInternals = useUpdateNodeInternals();
+  const updateNodeInternals = useUpdateNodeInternals();
 
   // const [stepDetails, setStepDetails] = useState(null);
 
@@ -118,14 +108,45 @@ function Canvas() {
   // since graphRF changes. We need to not rerender and fitView is activated
   // 2. multi-selection is sometimes?? fires an onDrop event -> avoid it
   useEffect(() => {
-    console.log(graphRF);
+    console.log(graphRF.graph.id, subgraphsStack, prevGraphId);
+
     setNodes(graphRF.nodes);
     setEdges(graphRF.links);
-    // TODO: find a callback to remove the setTimeout
-    setTimeout(() => {
-      fitView();
-    }, 100);
-  }, [graphRF, fitView]);
+
+    if ('position' in selectedElement) {
+      console.log('updated node');
+      setTimeout(() => {
+        updateNodeInternals(selectedElement.id);
+      }, 2000);
+    }
+
+    if (prevGraphId !== graphRF.graph.id) {
+      setTimeout(() => {
+        fitView();
+      }, 100);
+    }
+    if (subgraphsStack[subgraphsStack.length - 1]) {
+      setPrevGraphId(subgraphsStack[subgraphsStack.length - 1].id);
+    }
+  }, [
+    graphRF,
+    fitView,
+    subgraphsStack,
+    prevGraphId,
+    selectedElement,
+    updateNodeInternals,
+  ]);
+
+  // TO EXAMINE: when are the following fire? Replace existing callbacks
+  const onNodesChange = useCallback((changes) => {
+    console.log(changes);
+    setNodes((ns) => applyNodeChanges(changes, ns));
+  }, []);
+
+  const onEdgesChange = useCallback((changes) => {
+    console.log(changes);
+    setEdges((es) => applyEdgeChanges(changes, es));
+  }, []);
 
   const onNodeClick = (event, element?: Node) => {
     console.log(element);
@@ -215,7 +236,7 @@ function Canvas() {
           label: task_identifier,
           type: 'internal',
           icon,
-          moreHandles: true,
+          moreHandles: false,
         },
       };
 
@@ -240,13 +261,6 @@ function Canvas() {
 
   const onEdgeUpdate = (oldEdge, newConnection) => {
     console.log(oldEdge, newConnection);
-    // let elements = [];
-    // TODO: shouldnt need the following debug why graphRF is not
-    // updated inside this function
-    // setElements((els) => {
-    //   elements = els;
-    //   return els;
-    // });
     const link = {
       ...oldEdge,
       ...newConnection,
@@ -259,29 +273,13 @@ function Canvas() {
           .filter((el) => el.source)
           .filter((lin) => lin.id !== oldEdge.id),
         link,
-      ], // addEdge(params, graphRF.links),
+      ],
     };
 
     setGraphRF(newGraph as GraphRF);
     setUndoRedo({ action: 'Updated a Link', graph: newGraph });
-    // need to also save it in recentGraphs if we leave and come back to the graph?
-
     setRecentGraphs(newGraph as GraphRF);
   };
-  // setElements((els) => updateEdge(oldEdge, newConnection, els));
-
-  // TO EXAMINE: when are the following fire? Replace existing callbacks
-  const onNodesChange = useCallback((changes) => {
-    console.log(changes);
-    setNodes((ns) => applyNodeChanges(changes, ns));
-  }, []);
-
-  const onEdgesChange = useCallback((changes) => {
-    console.log(changes);
-    setEdges((es) => applyEdgeChanges(changes, es));
-  }, []);
-
-  // const onConnect = useCallback((connection) => setEdges((eds) => addEdge(connection, eds)));
 
   const onConnect = (params: Connection) => {
     // console.log(params);
@@ -359,9 +357,10 @@ function Canvas() {
     console.log(elements);
     if (elements.nodes.length === 0 && elements.edges.length === 0) {
       setSelectedElement(graphRF.graph);
-      console.log('iiibiuhi');
+      console.log('elements empty');
       setSelectedElements([]);
-    } else if (elements.length > 1) {
+    } else if (elements.nodes.length > 0 || elements.edges.length > 0) {
+      console.log('elemtns have something');
       setSelectedElements([...elements.nodes, ...elements.edges]);
     } else {
       setSelectedElements([]);
@@ -392,11 +391,6 @@ function Canvas() {
       // TODO: need doubleClick on simple nodes?
     }
   };
-
-  // const onNodeMouseMove = (event, node) => {
-  //   event.preventDefault();
-  //   // console.log(event, node);
-  // };
 
   const onSelectionDragStop = (event, selectedElements) => {
     event.preventDefault();
@@ -438,11 +432,6 @@ function Canvas() {
   // const onSelectionDrag = (event) => {
   //   event.preventDefault();
   //   // // console.log(event, selectedElements);
-  // };
-
-  // const onNodeDrag = (event, node) => {
-  //   event.preventDefault();
-  //   // console.log(event, node);
   // };
 
   const onNodeDragStop = (event, node) => {
@@ -508,10 +497,7 @@ function Canvas() {
     setSelectedTask({});
   };
 
-  // const updateNode = useCallback(() => updateNodeInternals('1'), [
-  //   updateNodeInternals,
-  // ]);
-
+  // in case we need on canvas buttons
   // const buttonWrapperStyles: CSSProperties = {
   //   position: 'absolute',
   //   right: 10,
@@ -569,13 +555,14 @@ function Canvas() {
           onNodeDragStop={onNodeDragStop}
           edgeTypes={edgeTypes}
           nodeTypes={nodeTypes}
+          // onElementsRemove={onElementsRemove}
           deleteKeyCode="Delete"
         >
           {/* <div style={buttonWrapperStyles}>
-              <button type="button" onClick={updateNode}>
-                update node internals
-              </button>
-            </div> */}
+            <button type="button" onClick={updateNode}>
+              update node internals
+            </button>
+          </div> */}
           <Controls>
             {/* <ControlButton
                 onClick={
