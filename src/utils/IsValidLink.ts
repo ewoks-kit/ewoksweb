@@ -1,19 +1,27 @@
 export default function isValidLink(connection, graphRF) {
   let isValid = true;
   let reason = '';
-  // from source and target see
+
   const source = graphRF.nodes.find((nod) => nod.id === connection.source);
   const target = graphRF.nodes.find((nod) => nod.id === connection.target);
-  // if it is Input-Output
+
+  // check if there is already a link using this graph-input
   if (
-    (['graphOutput', 'graphInput'].includes(source.task_type) ||
-      ['graphOutput', 'graphInput'].includes(target.task_type)) &&
-    (graphRF.links.some((link) => link.source === source.id) ||
-      graphRF.links.some((link) => link.target === target.id))
+    ['graphInput'].includes(source.task_type) &&
+    graphRF.links.some((link) => link.source === source.id)
   ) {
     isValid = false;
-    reason = 'Cannot connect an input or an output with more than one node';
+    reason = 'Cannot connect an input with more than one node';
   }
+  // check if there is already a link using this graph-output
+  if (
+    ['graphOutput'].includes(target.task_type) &&
+    graphRF.links.some((link) => link.target === target.id)
+  ) {
+    isValid = false;
+    reason = 'Cannot connect an output with more than one node';
+  }
+
   // if two nodes are already connected
   if (
     graphRF.links.some(

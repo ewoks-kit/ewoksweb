@@ -129,7 +129,7 @@ export default function Dashboard() {
           </IconButton>
           <SubgraphsStack />
           <Tooltip title="Start a new workflow" arrow>
-            <IconButton color="inherit">
+            <IconButton color="inherit" onClick={newGraph}>
               <Fab
                 className={classes.openFileButton}
                 color="primary"
@@ -137,14 +137,12 @@ export default function Dashboard() {
                 component="span"
                 aria-label="add"
                 disabled={isExecuted}
-                onClick={newGraph}
               >
                 <FiberNew />
               </Fab>
             </IconButton>
           </Tooltip>
           <UndoRedo undoF={undoF} redoF={redoF} />
-          {/* <RecentFiles /> */}
           <SaveGetFromDisk />
           <div className={classes.verticalRule} />
           <SaveToServer saveToServerF={saveToServerF} />
@@ -152,7 +150,7 @@ export default function Dashboard() {
           <ExecuteWorkflow />
           <div className={classes.verticalRule} />
           <Tooltip title="Manage tasks and workflows" arrow>
-            <IconButton color="inherit">
+            <IconButton color="inherit" onClick={handleOpenSettings}>
               <Fab
                 className={classes.openFileButton}
                 color="primary"
@@ -160,7 +158,7 @@ export default function Dashboard() {
                 component="span"
                 aria-label="add"
               >
-                <SettingsIcon onClick={handleOpenSettings} />
+                <SettingsIcon />
               </Fab>
             </IconButton>
           </Tooltip>

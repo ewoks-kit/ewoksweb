@@ -106,22 +106,28 @@ function Canvas() {
   // TO EXAMINE:
   // 1. when selecting a node-link selected fires the re-render
   // since graphRF changes. We need to not rerender and fitView is activated
-  // 2. multi-selection is sometimes?? fires an onDrop event -> avoid it
+  // 2. multi-selection is sometimes?? firing an onDrop event -> avoid it
   useEffect(() => {
-    console.log(graphRF.graph.id, subgraphsStack, prevGraphId);
+    console.log(graphRF);
 
     setNodes(graphRF.nodes);
     setEdges(graphRF.links);
+  }, [graphRF]);
+
+  useEffect(() => {
+    console.log(graphRF, prevGraphId);
 
     if ('position' in selectedElement) {
       console.log('updated node');
       setTimeout(() => {
+        console.log('update internals');
         updateNodeInternals(selectedElement.id);
-      }, 2000);
+      }, 400);
     }
 
     if (prevGraphId !== graphRF.graph.id) {
       setTimeout(() => {
+        console.log('fitView');
         fitView();
       }, 100);
     }
@@ -137,16 +143,87 @@ function Canvas() {
     updateNodeInternals,
   ]);
 
-  // TO EXAMINE: when are the following fire? Replace existing callbacks
-  const onNodesChange = useCallback((changes) => {
-    console.log(changes);
-    setNodes((ns) => applyNodeChanges(changes, ns));
-  }, []);
+  const onElementsRemove = useCallback(
+    (elementsToRemove) => {
+      let newGraph = {} as GraphRF;
+      // TODO: make it work for multiple delete?
+      // TODO: same code as sidebar->deleteElement create a hook for delete?
+      const [el] = elementsToRemove;
+      if (el.position) {
+        const nodesLinks = graphRF.links.filter(
+          (link) => !(link.source === el.id || link.target === el.id)
+        );
 
-  const onEdgesChange = useCallback((changes) => {
-    console.log(changes);
-    setEdges((es) => applyEdgeChanges(changes, es));
-  }, []);
+        newGraph = {
+          ...graphRF,
+          nodes: graphRF.nodes.filter((nod) => nod.id !== el.id),
+          links: nodesLinks,
+        };
+        setUndoRedo({ action: 'Removed a Node', graph: newGraph });
+      } else if (el.source) {
+        newGraph = {
+          ...graphRF,
+          links: graphRF.links.filter((link) => link.id !== el.id),
+        };
+        setUndoRedo({ action: 'Removed a Link', graph: newGraph });
+      }
+      setGraphRF(newGraph);
+    },
+    [graphRF, setGraphRF, setUndoRedo]
+  );
+
+  // TO EXAMINE: when are the following fire? Replace existing callbacks
+  const onNodesChange = useCallback(
+    (changes) => {
+      const node = [...graphRF.nodes].find((el) => el.id === changes[0].id);
+      console.log(changes, node, graphRF.nodes);
+
+      // TODO: nodes are updated only on rf canvas and not on graphRF
+      // if we update graphRF we have a loop so we update on setSelectedElement
+      // where we set every other selected to false... SOLUTION
+      setNodes((ns) => {
+        console.log(ns, applyNodeChanges(changes, ns));
+
+        return applyNodeChanges(changes, ns);
+      });
+
+      if (changes[0].type === 'remove') {
+        console.log(node);
+        onElementsRemove([node]);
+      }
+    },
+    [onElementsRemove, graphRF.nodes]
+  );
+
+  const onEdgesChange = useCallback(
+    (changes) => {
+      console.log(changes);
+      const edgeToRemove = graphRF.links.find((el) => el.id === changes[0].id);
+      console.log(changes, edgeToRemove);
+      setNodes((ns) => applyNodeChanges(changes, ns));
+
+      if (changes[0].type === 'remove') {
+        console.log(edgeToRemove);
+        onElementsRemove([edgeToRemove]);
+      }
+      setEdges((es) => applyEdgeChanges(changes, es));
+    },
+    [onElementsRemove, graphRF.links]
+  );
+
+  const onSelectionChange = (elements) => {
+    console.log(elements);
+    if (elements.nodes.length === 0 && elements.edges.length === 0) {
+      setSelectedElement(graphRF.graph);
+      console.log('elements empty');
+      setSelectedElements([]);
+    } else if (elements.nodes.length > 0 || elements.edges.length > 0) {
+      console.log('elemtns have something');
+      setSelectedElements([...elements.nodes, ...elements.edges]);
+    } else {
+      setSelectedElements([]);
+    }
+  };
 
   const onNodeClick = (event, element?: Node) => {
     console.log(element);
@@ -173,9 +250,9 @@ function Canvas() {
     event.preventDefault();
     // TODO: examine how to prevent bug on dragging selection of multiple elements
     console.log(selectedElements.length);
-    if (selectedElements.length > 1) {
-      return;
-    }
+    // if (selectedElements.length > 1) {
+    //   return;
+    // }
     if (graphRF.graph.id === '0') {
       setSubgraphsStack({
         id: graphRF.graph.id,
@@ -353,20 +430,6 @@ function Canvas() {
     event.preventDefault();
   };
 
-  const onSelectionChange = (elements) => {
-    console.log(elements);
-    if (elements.nodes.length === 0 && elements.edges.length === 0) {
-      setSelectedElement(graphRF.graph);
-      console.log('elements empty');
-      setSelectedElements([]);
-    } else if (elements.nodes.length > 0 || elements.edges.length > 0) {
-      console.log('elemtns have something');
-      setSelectedElements([...elements.nodes, ...elements.edges]);
-    } else {
-      setSelectedElements([]);
-    }
-  };
-
   const onNodeDoubleClick = (event, node) => {
     event.preventDefault();
     const nodeTmp = graphRF.nodes.find((el) => el.id === node.id);
@@ -390,6 +453,16 @@ function Canvas() {
     } else {
       // TODO: need doubleClick on simple nodes?
     }
+  };
+
+  const onSelectionDragStart = (event, selectedElements) => {
+    event.preventDefault();
+    console.log(selectedElements, event);
+  };
+
+  const onSelectionDrag = (event, selectedElements) => {
+    console.log(selectedElements, event);
+    event.preventDefault();
   };
 
   const onSelectionDragStop = (event, selectedElements) => {
@@ -467,32 +540,6 @@ function Canvas() {
     }
   };
 
-  const onElementsRemove = (elementsToRemove) => {
-    let newGraph = {} as GraphRF;
-    // TODO: make it work for multiple delete?
-    // TODO: same code as sidebar->deleteElement create a hook for delete?
-    const [el] = elementsToRemove;
-    if (el.position) {
-      const nodesLinks = graphRF.links.filter(
-        (link) => !(link.source === el.id || link.target === el.id)
-      );
-
-      newGraph = {
-        ...graphRF,
-        nodes: graphRF.nodes.filter((nod) => nod.id !== el.id),
-        links: nodesLinks,
-      };
-      setUndoRedo({ action: 'Removed a Node', graph: newGraph });
-    } else if (el.source) {
-      newGraph = {
-        ...graphRF,
-        links: graphRF.links.filter((link) => link.id !== el.id),
-      };
-      setUndoRedo({ action: 'Removed a Link', graph: newGraph });
-    }
-    setGraphRF(newGraph);
-  };
-
   const onClick = () => {
     setSelectedTask({});
   };
@@ -548,7 +595,8 @@ function Canvas() {
           onSelectionChange={onSelectionChange}
           // onNodeMouseMove={onNodeMouseMove}
           onSelectionDragStop={onSelectionDragStop}
-          // onSelectionDrag={onSelectionDrag}
+          onSelectionDragStart={onSelectionDragStart}
+          onSelectionDrag={onSelectionDrag}
           // onNodeDrag={onNodeDrag}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
