@@ -1,12 +1,5 @@
 /* eslint-disable unicorn/consistent-function-scoping */
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  useRef,
-  CSSProperties,
-  // CSSProperties,
-} from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import ReactFlow, {
   Controls,
   MiniMap,
@@ -22,15 +15,12 @@ import ReactFlow, {
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import bendingText from '../CustomEdges/BendingTextEdge';
 
-// import CustomNode from '../CustomNodes/CustomNode';
 import FunctionNode from '../CustomNodes/FunctionNode';
 import NoteNode from '../CustomNodes/NoteNode';
 import ExecutionStepsNode from '../CustomNodes/ExecutionStepsNode';
 import DataNode from '../CustomNodes/DataNode';
 import type { GraphRF, EwoksRFNode, EwoksRFLink } from '../types';
-// import Popover from '../Components/Popover';
 import state from '../store/state';
-import selectedElement from '../store/selectedElement';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -81,7 +71,7 @@ function Canvas() {
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [prevGraphId, setPrevGraphId] = useState('');
-  const [selectedElements, setSelectedElements] = React.useState([]);
+  // const [selectedElements, setSelectedElements] = React.useState([]);
 
   const reactFlowWrapper = useRef(null);
 
@@ -103,31 +93,27 @@ function Canvas() {
   // const [stepDetails, setStepDetails] = useState(null);
 
   const { fitView } = useReactFlow();
-  // TO EXAMINE:
-  // 1. when selecting a node-link selected fires the re-render
-  // since graphRF changes. We need to not rerender and fitView is activated
-  // 2. multi-selection is sometimes?? firing an onDrop event -> avoid it
+  // TO EXAMINE: when selecting a node-link selected fires the re-render
+  // since graphRF changes. We need to not rerender
+  // Accosiated edges titles flicker when selecting a node and then select graph
   useEffect(() => {
-    console.log(graphRF);
+    // console.log(graphRF);
 
     setNodes(graphRF.nodes);
     setEdges(graphRF.links);
   }, [graphRF]);
 
   useEffect(() => {
-    console.log(graphRF, prevGraphId);
+    // console.log(graphRF, prevGraphId);
 
     if ('position' in selectedElement) {
-      console.log('updated node');
       setTimeout(() => {
-        console.log('update internals');
         updateNodeInternals(selectedElement.id);
       }, 400);
     }
 
     if (prevGraphId !== graphRF.graph.id) {
       setTimeout(() => {
-        console.log('fitView');
         fitView();
       }, 100);
     }
@@ -172,23 +158,20 @@ function Canvas() {
     [graphRF, setGraphRF, setUndoRedo]
   );
 
-  // TO EXAMINE: when are the following fire? Replace existing callbacks
   const onNodesChange = useCallback(
     (changes) => {
       const node = [...graphRF.nodes].find((el) => el.id === changes[0].id);
-      console.log(changes, node, graphRF.nodes);
+      // console.log(changes, node, graphRF.nodes);
 
       // TODO: nodes are updated only on rf canvas and not on graphRF
       // if we update graphRF we have a loop so we update on setSelectedElement
       // where we set every other selected to false... SOLUTION
       setNodes((ns) => {
-        console.log(ns, applyNodeChanges(changes, ns));
-
         return applyNodeChanges(changes, ns);
       });
 
       if (changes[0].type === 'remove') {
-        console.log(node);
+        // console.log(node);
         onElementsRemove([node]);
       }
     },
@@ -197,13 +180,11 @@ function Canvas() {
 
   const onEdgesChange = useCallback(
     (changes) => {
-      console.log(changes);
+      // console.log(changes);
       const edgeToRemove = graphRF.links.find((el) => el.id === changes[0].id);
-      console.log(changes, edgeToRemove);
       setNodes((ns) => applyNodeChanges(changes, ns));
 
       if (changes[0].type === 'remove') {
-        console.log(edgeToRemove);
         onElementsRemove([edgeToRemove]);
       }
       setEdges((es) => applyEdgeChanges(changes, es));
@@ -212,27 +193,24 @@ function Canvas() {
   );
 
   const onSelectionChange = (elements) => {
-    console.log(elements);
+    // console.log(elements);
     if (elements.nodes.length === 0 && elements.edges.length === 0) {
       setSelectedElement(graphRF.graph);
-      console.log('elements empty');
-      setSelectedElements([]);
-    } else if (elements.nodes.length > 0 || elements.edges.length > 0) {
-      console.log('elemtns have something');
-      setSelectedElements([...elements.nodes, ...elements.edges]);
-    } else {
-      setSelectedElements([]);
+      // setSelectedElements([]);
     }
+    // else if (elements.nodes.length > 0 || elements.edges.length > 0) {
+    //   setSelectedElements([...elements.nodes, ...elements.edges]);
+    // } else {
+    //   setSelectedElements([]);
+    // }
   };
 
   const onNodeClick = (event, element?: Node) => {
-    console.log(element);
     const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
     setSelectedElement(graphElement);
   };
 
   const onEdgeClick = (event, element?: Edge) => {
-    console.log(element);
     const graphElement: EwoksRFLink = edges.find((el) => el.id === element.id);
     setSelectedElement(graphElement);
   };
@@ -249,7 +227,6 @@ function Canvas() {
   const onDrop = (event) => {
     event.preventDefault();
     // TODO: examine how to prevent bug on dragging selection of multiple elements
-    console.log(selectedElements.length);
     // if (selectedElements.length > 1) {
     //   return;
     // }
@@ -337,7 +314,6 @@ function Canvas() {
   };
 
   const onEdgeUpdate = (oldEdge, newConnection) => {
-    console.log(oldEdge, newConnection);
     const link = {
       ...oldEdge,
       ...newConnection,
@@ -368,11 +344,11 @@ function Canvas() {
           on_error: false,
           comment: '',
           // node optional_input_names are link's optional_output_names
-          links_optional_output_names: targetTask.optional_input_names,
+          links_optional_output_names: targetTask.optional_input_names || [],
           // node required_input_names are link's required_output_names
-          links_required_output_names: targetTask.required_input_names,
+          links_required_output_names: targetTask.required_input_names || [],
           // node output_names are link's input_names
-          links_input_names: sourceTask.output_names,
+          links_input_names: sourceTask.output_names || [],
           conditions: [],
           data_mapping: [],
           map_all_data: false,
@@ -390,7 +366,7 @@ function Canvas() {
         targetHandle: params.targetHandle,
         type: 'default',
         animated: false,
-        arrowHeadType: 'arrowclosed',
+        markerEnd: { type: 'arrowclosed' },
         style: { stroke: '#96a5f9', strokeWidth: '2.5' },
         labelBgStyle: {
           fill: 'rgb(223, 226, 247)',
@@ -455,13 +431,13 @@ function Canvas() {
     }
   };
 
-  const onSelectionDragStart = (event, selectedElements) => {
+  const onSelectionDragStart = (event) => {
     event.preventDefault();
-    console.log(selectedElements, event);
+    // console.log(selectedElements, event);
   };
 
-  const onSelectionDrag = (event, selectedElements) => {
-    console.log(selectedElements, event);
+  const onSelectionDrag = (event) => {
+    // console.log(selectedElements, event);
     event.preventDefault();
   };
 
@@ -508,7 +484,7 @@ function Canvas() {
   // };
 
   const onNodeDragStop = (event, node) => {
-    console.log(node);
+    // console.log(node);
     event.preventDefault();
     if (workingGraph.graph.id === graphRF.graph.id) {
       // find RFEwoksNode and update its position and save grapRF
@@ -659,12 +635,6 @@ function Canvas() {
           />
           <Background />
         </ReactFlow>
-        {/* <Popover
-            anchor={stepDetails?.evt || null}
-            onClose={() => setStepDetails(null)}
-            nodeData={stepDetails?.node || null}
-            // onBottom={true}
-          /> */}
       </div>
     </div>
   );

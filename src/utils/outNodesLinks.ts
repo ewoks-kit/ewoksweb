@@ -49,7 +49,7 @@ export function outNodesLinks(graph) {
         uiProps: {
           label: existsOrValue(outNod.link_attributes, 'label', ''),
           type: existsOrValue(outNod.uiProps, 'linkStyle', 'default'),
-          arrowHeadType: 'arrowclosed',
+          markerEnd: { type: 'arrowclosed' },
           withImage: existsOrValue(outNod.uiProps, 'withImage', true),
           withLabel: existsOrValue(outNod.uiProps, 'withLabel', true),
           colorBorder: existsOrValue(outNod.uiProps, 'colorBorder', ''),

@@ -20,7 +20,7 @@ export default function EditLinkStyle(props) {
   const setSelectedElement = state((state) => state.setSelectedElement);
 
   const [linkType, setLinkType] = React.useState('');
-  const [arrowType, setArrowType] = React.useState('');
+  const [arrowType, setArrowType] = React.useState({ type: 'none' });
   const [animated, setAnimated] = React.useState<boolean>(false);
   const [colorLine, setColorLine] = React.useState<string>('');
 
@@ -28,7 +28,7 @@ export default function EditLinkStyle(props) {
     // console.log(element);
     if ('source' in element) {
       setLinkType(element.type);
-      setArrowType(element.arrowHeadType);
+      setArrowType(element.markerEnd);
       setAnimated(element.animated);
       setColorLine(element.style.stroke);
     }
@@ -50,17 +50,15 @@ export default function EditLinkStyle(props) {
     setSelectedElement(
       {
         ...element,
-        arrowHeadType: event.target.value,
+        markerEnd: {
+          type: event.target.value,
+        },
       },
       'fromSaveElement'
     );
   };
 
   const colorLineChanged = (event) => {
-    // console.log(element, event.target.value, {
-    //   ...element,
-    //   style: { ...element.style, stroke: event.target.value },
-    // });
     setColorLine(event.target.value);
     setSelectedElement(
       {
@@ -104,9 +102,9 @@ export default function EditLinkStyle(props) {
         </Select>
       </FormControl>
       <FormControl variant="filled" fullWidth>
-        <InputLabel id="ArrowHeadType">Arrow Head Type</InputLabel>
+        <InputLabel id="markerEnd">Arrow Head Type</InputLabel>
         <Select
-          value={arrowType ? arrowType : 'arrowclosed'}
+          value={(arrowType && arrowType.type) || 'arrowclosed'}
           label="Arrow head"
           onChange={arrowTypeChanged}
         >

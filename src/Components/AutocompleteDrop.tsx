@@ -37,24 +37,25 @@ function AutocompleteDrop(props) {
         ? { title: wor.title.slice(0, -5) }
         : wor;
     });
-    if (workF && workF.length > 0) {
-      setAllWorkflows(workFNames);
-      if (active) {
-        setOptions([...workFNames]);
-      }
-    } else if (workF.length === 0) {
+    if (workF.length === 0) {
       setOpenSnackbar({
         open: true,
         text: 'It seems you have no workflows to work with!',
         severity: 'error',
       });
-    } else {
+    } else if (workF[0].title === 'network error') {
       setOpenSnackbar({
         open: true,
         text: 'Something went wrong when contacting the server!',
         severity: 'error',
       });
+    } else if (workF && workF.length > 0) {
+      setAllWorkflows(workFNames);
+      if (active) {
+        setOptions([...workFNames]);
+      }
     }
+
     return () => {
       active = false;
     };

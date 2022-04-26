@@ -75,6 +75,7 @@ export default function GetFromServer() {
         tooltip="Open and edit Workflow"
         action={getFromServer}
         onClick={() => {
+          /* eslint-disable no-console */
           console.log('Getting from server');
         }}
       >
@@ -85,6 +86,7 @@ export default function GetFromServer() {
         tooltip="Add workflow as subgraph"
         action={getSubgraphFromServer}
         onClick={() => {
+          /* eslint-disable no-console */
           console.log('Getting subgraph from server');
         }}
       >

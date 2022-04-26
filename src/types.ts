@@ -206,7 +206,8 @@ export interface UiProps {
   comment?: string;
   position?: CanvasPosition;
   animated?: boolean;
-  arrowHeadType?: string;
+  markerEnd?: { type: string };
+  markerStart?: { type: string };
   arrowHeadTypeanimated?: string;
   sourceHandle?: string;
   targetHandle?: string;
@@ -346,7 +347,8 @@ export interface EwoksRFLink {
   subsource?: string;
   uiProps?: UiProps;
   type?: string;
-  arrowHeadType?: string;
+  markerEnd?: { type: string };
+  markerStart?: string;
   animated?: boolean;
   sourceHandle?: string;
   targetHandle?: string;

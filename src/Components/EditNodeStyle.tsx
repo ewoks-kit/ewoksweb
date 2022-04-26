@@ -20,10 +20,7 @@ export default function EditNodeStyle(props) {
   const [colorBorder, setColorBorder] = React.useState<string>('');
   const [moreHandles, setMoreHandles] = React.useState<boolean>(true);
 
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-
   useEffect(() => {
-    // console.log(element);
     if ('position' in element) {
       setWithImage(element.data.withImage);
       setWithLabel(element.data.withLabel);

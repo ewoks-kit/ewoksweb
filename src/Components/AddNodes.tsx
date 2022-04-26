@@ -114,7 +114,6 @@ function AddNodes() {
     setDoAction(action);
     if (action === 'cloneTask') {
       const task = tasks.find((tas) => tas.task_identifier === element);
-      // console.log(task);
       setElementToEdit(task);
     }
     setOpenSaveDialog(true);

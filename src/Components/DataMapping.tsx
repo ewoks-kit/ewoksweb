@@ -8,7 +8,7 @@ import state from '../store/state';
 
 export default function DataMappingComponent(props) {
   const { element } = props;
-
+  // console.log(props);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const setSelectedElement = state((state) => state.setSelectedElement);
   const [dataMapping, setDataMapping] = React.useState<DataMapping[]>([]);

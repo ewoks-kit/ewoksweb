@@ -213,7 +213,7 @@ export default function NodeDetails(props) {
       ))}
       {NonEditableTaskProperties.map(({ id, label, value }) => (
         <div key={id} className={classes.detailsLabels}>
-          <b>{label}</b> {value}
+          <b>{label}:</b> {typeof value === 'object' ? value.join(', ') : value}
         </div>
       ))}
       <IconButton

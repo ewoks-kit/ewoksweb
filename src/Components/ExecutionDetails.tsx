@@ -53,6 +53,7 @@ export default function ExecutionDetails() {
           tooltip="Execute Workflow and exit Execution mode"
           action={executeWorkflow}
           onClick={() => {
+            /* eslint-disable no-console */
             console.log('Starting Execution');
           }}
         >
@@ -63,6 +64,7 @@ export default function ExecutionDetails() {
           tooltip="Execute Workflow and exit Execution mode"
           action={executeWorkflow}
           onClick={() => {
+            /* eslint-disable no-console */
             console.log('Starting Execution');
           }}
         >

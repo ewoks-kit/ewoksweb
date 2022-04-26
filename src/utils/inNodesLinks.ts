@@ -46,7 +46,7 @@ export function inNodesLinks(graph) {
           uiProps: {
             label: existsOrValue(inNod.link_attributes, 'label', ''),
             type: existsOrValue(inNod.uiProps, 'linkStyle', 'default'),
-            arrowHeadType: 'arrowclosed',
+            markerEnd: { type: 'arrowclosed' },
             withImage: existsOrValue(inNod.uiProps, 'withImage', true),
             withLabel: existsOrValue(inNod.uiProps, 'withLabel', true),
             colorBorder: existsOrValue(inNod.uiProps, 'colorBorder', ''),

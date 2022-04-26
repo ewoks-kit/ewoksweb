@@ -66,7 +66,7 @@ const Node: React.FC<NodeProps> = ({
   comment,
   executing,
 }: NodeProps) => {
-  const theCom = (
+  const theCom = comment && (
     <span>
       <b>{label}</b>:<div>{comment}</div>
     </span>
@@ -208,6 +208,7 @@ const Node: React.FC<NodeProps> = ({
                 tooltip="Open and edit Workflow"
                 action={getFromServer}
                 onClick={() => {
+                  /* eslint-disable no-console */
                   console.log('Starting Execution');
                 }}
               >
