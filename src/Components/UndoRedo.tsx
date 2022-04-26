@@ -31,7 +31,7 @@ export default function UndoRedo({ undoF, redoF }) {
   return (
     <>
       <Tooltip title="undo" arrow>
-        <IconButton color="inherit">
+        <IconButton color="inherit" onClick={undo}>
           <Fab
             className={classes.openFileButton}
             color="primary"
@@ -40,12 +40,12 @@ export default function UndoRedo({ undoF, redoF }) {
             aria-label="add"
             disabled={isExecuted}
           >
-            <UndoIcon onClick={undo} />
+            <UndoIcon />
           </Fab>
         </IconButton>
       </Tooltip>
       <Tooltip title="redo" arrow>
-        <IconButton color="inherit">
+        <IconButton color="inherit" onClick={redo}>
           <Fab
             className={classes.openFileButton}
             color="primary"
@@ -54,7 +54,7 @@ export default function UndoRedo({ undoF, redoF }) {
             aria-label="add"
             disabled={isExecuted}
           >
-            <RedoIcon onClick={redo} />
+            <RedoIcon />
           </Fab>
         </IconButton>
       </Tooltip>

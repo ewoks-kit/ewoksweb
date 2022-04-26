@@ -15,20 +15,39 @@ export const ewoksNetwork = {};
 
 export async function getWorkflows(): Promise<{ title: string }[]> {
   // console.log(process.env);
+  let res = [];
   const workflows = await axios
     .get(`${configData.serverUrl}/workflows`)
-    /* eslint-disable no-console */
-    .catch((error) => console.log(error));
-  //
+    .catch((error) => {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        /* eslint-disable no-console */
+        console.log(
+          error.response.data,
+          error.response.status,
+          error.response.headers
+        );
+      } else if (error.request) {
+        // The request was made but no response was received
+        /* eslint-disable no-console */
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        /* eslint-disable no-console */
+        console.log('Error', error.message);
+      }
+      console.log(error.config, error.toJSON());
+      res = [{ title: 'network error' }];
+    });
+
   if (workflows && workflows.data) {
     const workf = workflows.data as string[];
-    return workf.map((work) => {
+    res = workf.map((work) => {
       return { title: work };
     });
-    /* eslint-disable no-else-return */
-  } else {
-    return [];
   }
+  return res;
 }
 
 const id = 'graph';
@@ -77,7 +96,7 @@ export async function getSubgraphs(
       .then(
         axios.spread((...res) => {
           // all requests are now complete in an array
-          console.log(res);
+          // console.log(res);
           // if there is a null means the subgraph was not found
           // and it should show up in red
           const resCln = res.filter((result) => result.data !== null);
@@ -91,7 +110,7 @@ export async function getSubgraphs(
         return [];
       });
   }
-  console.log(results);
+  // console.log(results);
   return results ? results : [];
 }
 

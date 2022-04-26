@@ -41,7 +41,7 @@ export default function SaveGetFromDisk() {
   return (
     <>
       <Tooltip title="Save to Disk" arrow>
-        <IconButton color="inherit">
+        <IconButton color="inherit" onClick={saveToDisk}>
           <Fab
             className={classes.openFileButton}
             color="primary"
@@ -50,14 +50,18 @@ export default function SaveGetFromDisk() {
             aria-label="add"
             disabled={isExecuted}
           >
-            <SaveIcon onClick={saveToDisk} />
+            <SaveIcon />
           </Fab>
         </IconButton>
       </Tooltip>
       <Tooltip title="Load from Disk" arrow>
-        <IconButton color="inherit" disabled={isExecuted}>
+        <IconButton
+          color="inherit"
+          disabled={isExecuted}
+          onClick={loadFromDisk}
+        >
           <Upload>
-            <AddIcon onClick={loadFromDisk} />
+            <AddIcon />
           </Upload>
         </IconButton>
       </Tooltip>

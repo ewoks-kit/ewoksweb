@@ -59,7 +59,9 @@ export function toRFEwoksLinks(
           targetHandle: calcTargetHandle(uiProps, sub_target),
           sourceHandle: calcSourceHandle(uiProps, sub_source),
           type: (uiProps && uiProps.type) || '',
-          arrowHeadType: existsOrValue(uiProps, 'arrowHeadType', 'arrowclosed'),
+          markerEnd: existsOrValue(uiProps, 'markerEnd', {
+            type: 'arrowclosed',
+          }),
           // labelStyle: uiProps && uiProps.labelStyle ? uiProps.labelStyle : {},
           animated: existsOrValue(uiProps, 'animated', false),
           style: {

@@ -59,6 +59,14 @@ export default function IconMenu(props) {
       setElementToEdit(initializedTask);
     } else if (action === 'cloneTask') {
       if ('position' in element) {
+        if (element.task_type === 'graph') {
+          setOpenSnackbar({
+            open: true,
+            text: 'Cannot clone a graph, please select a Task!',
+            severity: 'warning',
+          });
+          return;
+        }
         // TODO: if the task does not exist in the tasks?
         // Populate the form with the element details
         const task = tasks.find(
@@ -76,7 +84,7 @@ export default function IconMenu(props) {
         setOpenSnackbar({
           open: true,
           text: 'First select in the canvas a Task to clone',
-          severity: 'success',
+          severity: 'warning',
         });
         return;
       }

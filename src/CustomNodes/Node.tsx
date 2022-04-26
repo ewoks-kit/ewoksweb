@@ -58,7 +58,7 @@ const Node: React.FC<NodeProps> = ({
   isGraph,
   type,
   label,
-  selected,
+  // selected,
   color,
   colorBorder,
   content,
@@ -66,7 +66,7 @@ const Node: React.FC<NodeProps> = ({
   comment,
   executing,
 }: NodeProps) => {
-  const theCom = (
+  const theCom = comment && (
     <span>
       <b>{label}</b>:<div>{comment}</div>
     </span>
@@ -118,7 +118,7 @@ const Node: React.FC<NodeProps> = ({
       style={
         {
           ...style.body,
-          ...(selected ? style.selected : []),
+          // ...(selected ? style.selected : []),
           border,
         } as React.CSSProperties
       }
@@ -207,6 +207,10 @@ const Node: React.FC<NodeProps> = ({
                 getting={executing}
                 tooltip="Open and edit Workflow"
                 action={getFromServer}
+                onClick={() => {
+                  /* eslint-disable no-console */
+                  console.log('Starting Execution');
+                }}
               >
                 <SendIcon />
               </IntegratedSpinner>

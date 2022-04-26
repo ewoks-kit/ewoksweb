@@ -74,6 +74,10 @@ export default function GetFromServer() {
         getting={gettingFromServer}
         tooltip="Open and edit Workflow"
         action={getFromServer}
+        onClick={() => {
+          /* eslint-disable no-console */
+          console.log('Getting from server');
+        }}
       >
         <CloudDownloadIcon />
       </IntegratedSpinner>
@@ -81,6 +85,10 @@ export default function GetFromServer() {
         getting={gettingFromServer}
         tooltip="Add workflow as subgraph"
         action={getSubgraphFromServer}
+        onClick={() => {
+          /* eslint-disable no-console */
+          console.log('Getting subgraph from server');
+        }}
       >
         <ArrowDownwardIcon />
       </IntegratedSpinner>

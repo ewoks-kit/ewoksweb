@@ -1,30 +1,25 @@
 /* eslint-disable unicorn/consistent-function-scoping */
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  useRef,
-  // CSSProperties,
-} from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import ReactFlow, {
-  ReactFlowProvider,
   Controls,
   MiniMap,
   Node,
   Edge,
   Background,
-  // useUpdateNodeInternals,
+  Connection,
+  useReactFlow,
+  applyNodeChanges,
+  applyEdgeChanges,
+  useUpdateNodeInternals,
 } from 'react-flow-renderer';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import bendingText from '../CustomEdges/BendingTextEdge';
 
-// import CustomNode from '../CustomNodes/CustomNode';
 import FunctionNode from '../CustomNodes/FunctionNode';
 import NoteNode from '../CustomNodes/NoteNode';
 import ExecutionStepsNode from '../CustomNodes/ExecutionStepsNode';
 import DataNode from '../CustomNodes/DataNode';
 import type { GraphRF, EwoksRFNode, EwoksRFLink } from '../types';
-// import Popover from '../Components/Popover';
 import state from '../store/state';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -46,9 +41,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-// // const nodesIds = new Set();
-// const linksIds = new Set();
-
 const getnodesIds = (text: string, nodes: EwoksRFNode[]) => {
   let id = 0;
   while (nodes.map((nod) => nod.id).includes(`${text}_${id}`)) {
@@ -56,14 +48,6 @@ const getnodesIds = (text: string, nodes: EwoksRFNode[]) => {
   }
   return `${text}_${id}`;
 };
-// const getLinksIds = (links, name) => {
-//   let id = 0;
-//   while (links.map((link) => link.id).includes(id)) {
-//     id++;
-//   }
-//   // linksIds.add(id);
-//   return `link_${id}`;
-// };
 
 const edgeTypes = {
   bendingText,
@@ -83,96 +67,157 @@ const nodeTypes = {
 function Canvas() {
   const classes = useStyles();
 
-  // const { fitView, fitBounds } = useZoomPanHelper();
   const [rfInstance, setRfInstance] = useState(null);
-  // const [disableDragging, setDisableDragging] = useState(false);
-  const [elements, setElements] = useState([]);
+  const [nodes, setNodes] = useState([]);
+  const [edges, setEdges] = useState([]);
+  const [prevGraphId, setPrevGraphId] = useState('');
+  // const [selectedElements, setSelectedElements] = React.useState([]);
 
   const reactFlowWrapper = useRef(null);
+
   const graphRF = state((state) => state.graphRF);
   const setGraphRF = state((state) => state.setGraphRF);
   const setSubgraphsStack = state((state) => state.setSubgraphsStack);
+  const subgraphsStack = state((state) => state.subgraphsStack);
   const setRecentGraphs = state((state) => state.setRecentGraphs);
   const setUndoRedo = state((state) => state.setUndoRedo);
   const setSelectedElement = state((state) => state.setSelectedElement);
+  const selectedElement = state((state) => state.selectedElement);
   const setSelectedTask = state((state) => state.setSelectedTask);
   const tasks = state((state) => state.tasks);
-
-  const [selectedElements, setSelectedElements] = React.useState([]);
-
-  // const updateNeeded = state((state) => state.updateNeeded);
   const recentGraphs = state((state) => state.recentGraphs);
   const workingGraph = state((state) => state.workingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  // const updateNodeInternals = useUpdateNodeInternals();
+  const updateNodeInternals = useUpdateNodeInternals();
 
   // const [stepDetails, setStepDetails] = useState(null);
 
-  useEffect(() => {
-    // console.log(
-    //   elements.length,
-    //   workingGraph.graph.id,
-    //   graphRF.graph.id,
-    //   subgraphsStack
-    // );
-    if (
-      rfInstance &&
-      elements.length > 0 &&
-      workingGraph.graph.id !== graphRF.graph.id
-      // (workingGraph.graph.id !== graphRF.graph.id || subgraphsStack.length > 1)
-      // graphRF.graph.id !==
-      //   (subgraphsStack.length > 0 &&
-      //     subgraphsStack[subgraphsStack.length - 1].id)
-    ) {
-      // console.log('fitView()');
-      rfInstance.fitView();
-    }
-  }); // , [
-  //   rfInstance,
-  //   elements,
-  //   workingGraph.graph.id,
-  //   graphRF.graph.id,
-  //   subgraphsStack,
-  // ]);
-
+  const { fitView } = useReactFlow();
+  // TO EXAMINE: when selecting a node-link selected fires the re-render
+  // since graphRF changes. We need to not rerender
+  // Accosiated edges titles flicker when selecting a node and then select graph
   useEffect(() => {
     // console.log(graphRF);
-    setElements([...graphRF.nodes, ...graphRF.links]);
+
+    setNodes(graphRF.nodes);
+    setEdges(graphRF.links);
   }, [graphRF]);
 
-  // TODO: examine the usage
-  // useEffect(() => {
-  //   // fitView();
-  //   // fitBounds({ x: 0, y: 0, width: 1000, height: 1000 }, 300);
-  //   console.log('useEffect canvas', rfInstance);
-  //   if (rfInstance) {
-  //     rfInstance.fitView();
-  //   }
-  // }, [rfInstance]);
+  useEffect(() => {
+    // console.log(graphRF, prevGraphId);
 
-  // TODO: examine the usage in add more handles without refreshing
-  // Used to update custom node after adding Handles NOT WORKING
-  // useEffect(() => {
-  //   if ('position' in selectedElement) {
-  //     updateNodeInternals(selectedElement.id);
-  //   }
-  // }, [selectedElement, selectedElement.id, updateNodeInternals]);
+    if ('position' in selectedElement) {
+      setTimeout(() => {
+        updateNodeInternals(selectedElement.id);
+      }, 400);
+    }
 
-  const onElementClick = (event, element: Node | Edge) => {
-    const graphElement: EwoksRFNode | EwoksRFLink = elements.find(
-      (el) => el.id === element.id
-    );
+    if (prevGraphId !== graphRF.graph.id) {
+      setTimeout(() => {
+        fitView();
+      }, 100);
+    }
+    if (subgraphsStack[subgraphsStack.length - 1]) {
+      setPrevGraphId(subgraphsStack[subgraphsStack.length - 1].id);
+    }
+  }, [
+    graphRF,
+    fitView,
+    subgraphsStack,
+    prevGraphId,
+    selectedElement,
+    updateNodeInternals,
+  ]);
+
+  const onElementsRemove = useCallback(
+    (elementsToRemove) => {
+      let newGraph = {} as GraphRF;
+      // TODO: make it work for multiple delete?
+      // TODO: same code as sidebar->deleteElement create a hook for delete?
+      const [el] = elementsToRemove;
+      if (el.position) {
+        const nodesLinks = graphRF.links.filter(
+          (link) => !(link.source === el.id || link.target === el.id)
+        );
+
+        newGraph = {
+          ...graphRF,
+          nodes: graphRF.nodes.filter((nod) => nod.id !== el.id),
+          links: nodesLinks,
+        };
+        setUndoRedo({ action: 'Removed a Node', graph: newGraph });
+      } else if (el.source) {
+        newGraph = {
+          ...graphRF,
+          links: graphRF.links.filter((link) => link.id !== el.id),
+        };
+        setUndoRedo({ action: 'Removed a Link', graph: newGraph });
+      }
+      setGraphRF(newGraph);
+    },
+    [graphRF, setGraphRF, setUndoRedo]
+  );
+
+  const onNodesChange = useCallback(
+    (changes) => {
+      const node = [...graphRF.nodes].find((el) => el.id === changes[0].id);
+      // console.log(changes, node, graphRF.nodes);
+
+      // TODO: nodes are updated only on rf canvas and not on graphRF
+      // if we update graphRF we have a loop so we update on setSelectedElement
+      // where we set every other selected to false... SOLUTION
+      setNodes((ns) => {
+        return applyNodeChanges(changes, ns);
+      });
+
+      if (changes[0].type === 'remove') {
+        // console.log(node);
+        onElementsRemove([node]);
+      }
+    },
+    [onElementsRemove, graphRF.nodes]
+  );
+
+  const onEdgesChange = useCallback(
+    (changes) => {
+      // console.log(changes);
+      const edgeToRemove = graphRF.links.find((el) => el.id === changes[0].id);
+      setNodes((ns) => applyNodeChanges(changes, ns));
+
+      if (changes[0].type === 'remove') {
+        onElementsRemove([edgeToRemove]);
+      }
+      setEdges((es) => applyEdgeChanges(changes, es));
+    },
+    [onElementsRemove, graphRF.links]
+  );
+
+  const onSelectionChange = (elements) => {
+    // console.log(elements);
+    if (elements.nodes.length === 0 && elements.edges.length === 0) {
+      setSelectedElement(graphRF.graph);
+      // setSelectedElements([]);
+    }
+    // else if (elements.nodes.length > 0 || elements.edges.length > 0) {
+    //   setSelectedElements([...elements.nodes, ...elements.edges]);
+    // } else {
+    //   setSelectedElements([]);
+    // }
+  };
+
+  const onNodeClick = (event, element?: Node) => {
+    const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
     setSelectedElement(graphElement);
   };
 
-  const onLoad = useCallback((instance) => {
-    // console.log('onLoad');
-    // instance.fitView();
+  const onEdgeClick = (event, element?: Edge) => {
+    const graphElement: EwoksRFLink = edges.find((el) => el.id === element.id);
+    setSelectedElement(graphElement);
+  };
+
+  const onInit = useCallback((instance) => {
     setRfInstance(instance);
   }, []);
-  // const handlDisableDragging = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setDisableDragging(event.target.checked);
-  // };
 
   const onDragOver = (event) => {
     event.preventDefault();
@@ -182,9 +227,9 @@ function Canvas() {
   const onDrop = (event) => {
     event.preventDefault();
     // TODO: examine how to prevent bug on dragging selection of multiple elements
-    if (selectedElements.length > 1) {
-      return;
-    }
+    // if (selectedElements.length > 1) {
+    //   return;
+    // }
     if (graphRF.graph.id === '0') {
       setSubgraphsStack({
         id: graphRF.graph.id,
@@ -245,16 +290,16 @@ function Canvas() {
           label: task_identifier,
           type: 'internal',
           icon,
-          moreHandles: true,
+          moreHandles: false,
         },
       };
-      // setElements((es) => [...es, newNode]);
+
       const newGraph = {
         graph: graphRF.graph,
         nodes: [...graphRF.nodes, newNode],
         links: graphRF.links,
       } as GraphRF;
-      // setElements((els) => addEdge(params, els));
+
       setGraphRF(newGraph);
       setUndoRedo({ action: 'Added a Node', graph: newGraph });
       // need to also save it in recentGraphs if we leave and come back to the graph?
@@ -269,38 +314,27 @@ function Canvas() {
   };
 
   const onEdgeUpdate = (oldEdge, newConnection) => {
-    // console.log(oldEdge, newConnection);
-    let elements = [];
-    // TODO: shouldnt need the following debug why graphRF is not
-    // updated inside this function
-    setElements((els) => {
-      elements = els;
-      return els;
-    });
     const link = {
       ...oldEdge,
       ...newConnection,
     };
     const newGraph = {
       graph: { ...graphRF.graph },
-      nodes: elements.filter((el) => el.position), // [...graphRF.nodes],
+      nodes: nodes.filter((el) => el.position), // [...graphRF.nodes],
       links: [
-        ...elements
+        ...edges
           .filter((el) => el.source)
           .filter((lin) => lin.id !== oldEdge.id),
         link,
-      ], // addEdge(params, graphRF.links),
+      ],
     };
 
     setGraphRF(newGraph as GraphRF);
     setUndoRedo({ action: 'Updated a Link', graph: newGraph });
-    // need to also save it in recentGraphs if we leave and come back to the graph?
-
     setRecentGraphs(newGraph as GraphRF);
   };
-  // setElements((els) => updateEdge(oldEdge, newConnection, els));
 
-  const onConnect = (params: Edge) => {
+  const onConnect = (params: Connection) => {
     // console.log(params);
     if (workingGraph.graph.id === graphRF.graph.id) {
       const sourceTask = graphRF.nodes.find((nod) => nod.id === params.source);
@@ -310,11 +344,11 @@ function Canvas() {
           on_error: false,
           comment: '',
           // node optional_input_names are link's optional_output_names
-          links_optional_output_names: targetTask.optional_input_names,
+          links_optional_output_names: targetTask.optional_input_names || [],
           // node required_input_names are link's required_output_names
-          links_required_output_names: targetTask.required_input_names,
+          links_required_output_names: targetTask.required_input_names || [],
           // node output_names are link's input_names
-          links_input_names: sourceTask.output_names,
+          links_input_names: sourceTask.output_names || [],
           conditions: [],
           data_mapping: [],
           map_all_data: false,
@@ -332,7 +366,7 @@ function Canvas() {
         targetHandle: params.targetHandle,
         type: 'default',
         animated: false,
-        arrowHeadType: 'arrowclosed',
+        markerEnd: { type: 'arrowclosed' },
         style: { stroke: '#96a5f9', strokeWidth: '2.5' },
         labelBgStyle: {
           fill: 'rgb(223, 226, 247)',
@@ -372,17 +406,6 @@ function Canvas() {
     event.preventDefault();
   };
 
-  const onSelectionChange = (elements) => {
-    if (!elements) {
-      setSelectedElement(graphRF.graph);
-      setSelectedElements([]);
-    } else if (elements.length > 1) {
-      setSelectedElements(elements);
-    } else {
-      setSelectedElements([]);
-    }
-  };
-
   const onNodeDoubleClick = (event, node) => {
     event.preventDefault();
     const nodeTmp = graphRF.nodes.find((el) => el.id === node.id);
@@ -408,10 +431,15 @@ function Canvas() {
     }
   };
 
-  // const onNodeMouseMove = (event, node) => {
-  //   event.preventDefault();
-  //   // console.log(event, node);
-  // };
+  const onSelectionDragStart = (event) => {
+    event.preventDefault();
+    // console.log(selectedElements, event);
+  };
+
+  const onSelectionDrag = (event) => {
+    // console.log(selectedElements, event);
+    event.preventDefault();
+  };
 
   const onSelectionDragStop = (event, selectedElements) => {
     event.preventDefault();
@@ -450,17 +478,13 @@ function Canvas() {
     }
   };
 
-  const onSelectionDrag = (event) => {
-    event.preventDefault();
-    // // console.log(event, selectedElements);
-  };
-
-  // const onNodeDrag = (event, node) => {
+  // const onSelectionDrag = (event) => {
   //   event.preventDefault();
-  //   // console.log(event, node);
+  //   // // console.log(event, selectedElements);
   // };
 
   const onNodeDragStop = (event, node) => {
+    // console.log(node);
     event.preventDefault();
     if (workingGraph.graph.id === graphRF.graph.id) {
       // find RFEwoksNode and update its position and save grapRF
@@ -477,7 +501,7 @@ function Canvas() {
         links: graphRF.links,
       };
 
-      setSelectedElement(RFEwoksNode); // ? test if after drag the selected node should be set
+      // setSelectedElement(RFEwoksNode); // ? test if after drag the selected node should be set
 
       setGraphRF(newGraph);
       setUndoRedo({ action: 'Dragged a Node', graph: newGraph });
@@ -492,40 +516,11 @@ function Canvas() {
     }
   };
 
-  const onElementsRemove = (elementsToRemove) => {
-    let newGraph = {} as GraphRF;
-    // TODO: make it work for multiple delete?
-    // TODO: same code as sidebar->deleteElement create a hook for delete?
-    const [el] = elementsToRemove;
-    if (el.position) {
-      const nodesLinks = graphRF.links.filter(
-        (link) => !(link.source === el.id || link.target === el.id)
-      );
-
-      newGraph = {
-        ...graphRF,
-        nodes: graphRF.nodes.filter((nod) => nod.id !== el.id),
-        links: nodesLinks,
-      };
-      setUndoRedo({ action: 'Removed a Node', graph: newGraph });
-    } else if (el.source) {
-      newGraph = {
-        ...graphRF,
-        links: graphRF.links.filter((link) => link.id !== el.id),
-      };
-      setUndoRedo({ action: 'Removed a Link', graph: newGraph });
-    }
-    setGraphRF(newGraph);
-  };
-
   const onClick = () => {
     setSelectedTask({});
   };
 
-  // const updateNode = useCallback(() => updateNodeInternals('1'), [
-  //   updateNodeInternals,
-  // ]);
-
+  // in case we need on canvas buttons
   // const buttonWrapperStyles: CSSProperties = {
   //   position: 'absolute',
   //   right: 10,
@@ -535,58 +530,65 @@ function Canvas() {
 
   return (
     <div className={classes.root}>
-      <ReactFlowProvider>
-        <div
-          className="reactflow-wrapper"
-          style={{
-            height: '100%',
-            width: '100%',
-            backgroundColor: '#e9ebf7',
+      <div
+        className="reactflow-wrapper"
+        style={{
+          height: '100%',
+          width: '100%',
+          backgroundColor: '#e9ebf7',
+        }}
+        ref={reactFlowWrapper}
+      >
+        <ReactFlow
+          fitView
+          connectOnClick
+          nodesDraggable
+          attributionPosition="bottom-right"
+          // defaultPosition={[-200, -200]}
+          minZoom={0.2}
+          snapToGrid
+          // onPaneClick={(e) => console.log(e)}
+          // snapGrid={[150, 150]}
+          // onMoveStart={(e) => console.log(e)}
+          // onMoveEnd={(e) => console.log(e)}
+          // elements={elements}
+          nodes={nodes}
+          edges={edges}
+          onNodeClick={(evt, node) => {
+            onNodeClick(evt, node);
           }}
-          ref={reactFlowWrapper}
+          onEdgeClick={(evt, node) => {
+            onEdgeClick(evt, node);
+          }}
+          onClick={onClick}
+          onInit={onInit}
+          onDrop={onDrop}
+          onConnect={onConnect}
+          onEdgeUpdate={onEdgeUpdate}
+          onDragOver={onDragOver}
+          onPaneContextMenu={onRightClick}
+          onNodeDoubleClick={onNodeDoubleClick}
+          onSelectionChange={onSelectionChange}
+          // onNodeMouseMove={onNodeMouseMove}
+          onSelectionDragStop={onSelectionDragStop}
+          onSelectionDragStart={onSelectionDragStart}
+          onSelectionDrag={onSelectionDrag}
+          // onNodeDrag={onNodeDrag}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onNodeDragStop={onNodeDragStop}
+          edgeTypes={edgeTypes}
+          nodeTypes={nodeTypes}
+          // onElementsRemove={onElementsRemove}
+          deleteKeyCode="Delete"
         >
-          <ReactFlow
-            // defaultPosition={[-200, -200]}
-            minZoom={0.2}
-            snapToGrid
-            // onPaneClick={(e) => console.log(e)}
-            // snapGrid={[150, 150]}
-            // onMoveStart={(e) => console.log(e)}
-            // onMoveEnd={(e) => console.log(e)}
-            elements={elements}
-            // onElementClick={onElementClick}
-            onElementClick={(evt, node) => {
-              onElementClick(evt, node);
-              // if (node.type !== 'smoothstep') {
-              //   setStepDetails({ evt: evt.currentTarget, node });
-              // }
-            }}
-            onClick={onClick}
-            onLoad={onLoad}
-            onDrop={onDrop}
-            onConnect={onConnect}
-            onEdgeUpdate={onEdgeUpdate}
-            onDragOver={onDragOver}
-            onPaneContextMenu={onRightClick}
-            onNodeDoubleClick={onNodeDoubleClick}
-            onSelectionChange={onSelectionChange}
-            // onNodeMouseMove={onNodeMouseMove}
-            onSelectionDragStop={onSelectionDragStop}
-            onSelectionDrag={onSelectionDrag}
-            // onNodeDrag={onNodeDrag}
-            onNodeDragStop={onNodeDragStop}
-            edgeTypes={edgeTypes}
-            nodeTypes={nodeTypes}
-            onElementsRemove={onElementsRemove}
-            deleteKeyCode="Delete"
-          >
-            {/* <div style={buttonWrapperStyles}>
-              <button type="button" onClick={updateNode}>
-                update node internals
-              </button>
-            </div> */}
-            <Controls>
-              {/* <ControlButton
+          {/* <div style={buttonWrapperStyles}>
+            <button type="button" onClick={updateNode}>
+              update node internals
+            </button>
+          </div> */}
+          <Controls>
+            {/* <ControlButton
                 onClick={
                   () =>
                     rfInstance.fitView({
@@ -598,49 +600,42 @@ function Canvas() {
               >
                 act
               </ControlButton> */}
-            </Controls>
-            <MiniMap
-              nodeStrokeColor={(n): string => {
-                // "rgb(60, 81, 202)"
-                if (n.style?.background) {
-                  return n.style.background as string;
-                }
-                if (['graphOutput', 'graphInput'].includes(n.type)) {
-                  return '#0041d0';
-                }
-                if (n.type === 'graph') {
-                  return '#ff0072';
-                }
-                // if (n.type === 'default') return 'rgb(60, 81, 202)';
+          </Controls>
+          <MiniMap
+            nodeStrokeColor={(n): string => {
+              // "rgb(60, 81, 202)"
+              if (n.style?.background) {
+                return n.style.background as string;
+              }
+              if (['graphOutput', 'graphInput'].includes(n.type)) {
+                return '#0041d0';
+              }
+              if (n.type === 'graph') {
+                return '#ff0072';
+              }
+              // if (n.type === 'default') return 'rgb(60, 81, 202)';
 
-                return 'rgb(60, 81, 202)';
-              }}
-              nodeColor={(n): string => {
-                if (n.style?.background) {
-                  return n.style.background as string;
-                }
-                if (['graphOutput', 'graphInput'].includes(n.type)) {
-                  return 'rgb(223, 226, 247)';
-                }
-                if (n.type === 'graph') {
-                  return '#ff0082';
-                }
-                // if (n.type === 'default') return 'rgb(60, 81, 202)';
+              return 'rgb(60, 81, 202)';
+            }}
+            nodeColor={(n): string => {
+              if (n.style?.background) {
+                return n.style.background as string;
+              }
+              if (['graphOutput', 'graphInput'].includes(n.type)) {
+                return 'rgb(223, 226, 247)';
+              }
+              if (n.type === 'graph') {
+                return '#ff0082';
+              }
+              // if (n.type === 'default') return 'rgb(60, 81, 202)';
 
-                return 'rgb(60, 81, 202)';
-              }}
-              nodeBorderRadius={2}
-            />
-            <Background />
-          </ReactFlow>
-          {/* <Popover
-            anchor={stepDetails?.evt || null}
-            onClose={() => setStepDetails(null)}
-            nodeData={stepDetails?.node || null}
-            // onBottom={true}
-          /> */}
-        </div>
-      </ReactFlowProvider>
+              return 'rgb(60, 81, 202)';
+            }}
+            nodeBorderRadius={2}
+          />
+          <Background />
+        </ReactFlow>
+      </div>
     </div>
   );
 }

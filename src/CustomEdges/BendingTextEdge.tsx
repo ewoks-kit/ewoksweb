@@ -1,4 +1,4 @@
-import { getBezierPath, getMarkerEnd } from 'react-flow-renderer';
+import { getBezierPath } from 'react-flow-renderer';
 
 function bendingText({
   id,
@@ -14,8 +14,7 @@ function bendingText({
     fill: 'rgb(223, 226, 246)',
   },
   label,
-  arrowHeadType,
-  markerEndId,
+  markerEnd,
 }) {
   const edgePath = getBezierPath({
     sourceX,
@@ -25,7 +24,6 @@ function bendingText({
     targetY,
     targetPosition,
   });
-  const markerEnd = getMarkerEnd(arrowHeadType, markerEndId);
 
   return (
     <>

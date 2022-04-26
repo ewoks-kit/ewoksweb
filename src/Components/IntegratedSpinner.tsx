@@ -27,6 +27,7 @@ export default function IntegratedSpinner({
   tooltip,
   action,
   getting,
+  onClick,
 }) {
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
@@ -54,6 +55,7 @@ export default function IntegratedSpinner({
 
   const handleButtonClick = () => {
     if (!loading) {
+      onClick();
       // // console.log('getting1', getting);
       if (action) {
         action();

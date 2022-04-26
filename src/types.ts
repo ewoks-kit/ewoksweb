@@ -133,7 +133,8 @@ export interface State {
   selectedElement?: EwoksRFNode | EwoksRFLink;
   setSelectedElement?: (
     element: EwoksRFNode | EwoksRFLink,
-    from?: string
+    from?: string,
+    update?: boolean
   ) => void;
 
   selectedTask?: Task;
@@ -205,7 +206,8 @@ export interface UiProps {
   comment?: string;
   position?: CanvasPosition;
   animated?: boolean;
-  arrowHeadType?: string;
+  markerEnd?: { type: string };
+  markerStart?: { type: string };
   arrowHeadTypeanimated?: string;
   sourceHandle?: string;
   targetHandle?: string;
@@ -345,7 +347,8 @@ export interface EwoksRFLink {
   subsource?: string;
   uiProps?: UiProps;
   type?: string;
-  arrowHeadType?: string;
+  markerEnd?: { type: string };
+  markerStart?: string;
   animated?: boolean;
   sourceHandle?: string;
   targetHandle?: string;

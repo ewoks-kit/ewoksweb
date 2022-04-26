@@ -107,8 +107,9 @@ export default function SaveToServer({ saveToServerF }) {
         tooltip="Save Workflow"
         action={() => null}
         getting={false}
+        onClick={saveToServer}
       >
-        <CloudUploadIcon onClick={saveToServer} />
+        <CloudUploadIcon />
       </IntegratedSpinner>
     </>
   );

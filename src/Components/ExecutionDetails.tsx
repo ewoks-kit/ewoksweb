@@ -52,6 +52,10 @@ export default function ExecutionDetails() {
           getting={false}
           tooltip="Execute Workflow and exit Execution mode"
           action={executeWorkflow}
+          onClick={() => {
+            /* eslint-disable no-console */
+            console.log('Starting Execution');
+          }}
         >
           <PlayCircleOutlineIcon fontSize="large" />
         </IntegratedSpinner>
@@ -59,6 +63,10 @@ export default function ExecutionDetails() {
           getting={false}
           tooltip="Execute Workflow and exit Execution mode"
           action={executeWorkflow}
+          onClick={() => {
+            /* eslint-disable no-console */
+            console.log('Starting Execution');
+          }}
         >
           <PauseCircleOutlineIcon fontSize="large" />
         </IntegratedSpinner>

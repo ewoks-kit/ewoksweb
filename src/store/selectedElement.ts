@@ -8,13 +8,20 @@ const selectedElement = (set, get) => ({
 
     const wg = prevState.workingGraph.graph.id;
     const { graph, nodes, links } = prevState.graphRF;
+    // console.log(element, nodes, links);
 
     if (wg === '0' || wg === graph.id) {
       let tempGraph = {} as GraphRF;
       if ('position' in element) {
+        const allOtherNodes = nodes.filter((nod) => nod.id !== element.id);
         tempGraph = {
           graph,
-          nodes: [...nodes.filter((nod) => nod.id !== element.id), element],
+          nodes: [
+            ...allOtherNodes.map((nod) => {
+              return { ...nod, selected: false };
+            }),
+            element,
+          ],
           links,
         };
         if (from === 'fromSaveElement') {
