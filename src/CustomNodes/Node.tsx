@@ -45,7 +45,7 @@ const onDragStart = (e) => {
   e.preventDefault();
 };
 
-const getFromServer = () => {
+const execution = () => {
   // console.log('executing');
   return true;
 };
@@ -205,8 +205,8 @@ const Node: React.FC<NodeProps> = ({
             type !== 'graphInput' && (
               <IntegratedSpinner
                 getting={executing}
-                tooltip="Open and edit Workflow"
-                action={getFromServer}
+                tooltip="Execution"
+                action={execution}
                 onClick={() => {
                   /* eslint-disable no-console */
                   console.log('Starting Execution');
@@ -222,8 +222,8 @@ const Node: React.FC<NodeProps> = ({
             (isExecuted ? (
               <ExecuteSpinner
                 getting={executing}
-                tooltip="Open and edit Workflow"
-                action={getFromServer}
+                tooltip="Execution"
+                action={execution}
               >
                 <img
                   style={{ padding: '2px' }}

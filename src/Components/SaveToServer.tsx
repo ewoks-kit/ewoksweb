@@ -104,7 +104,7 @@ export default function SaveToServer({ saveToServerF }) {
         setOpenSaveDialog={setOpenSaveDialog}
       />
       <IntegratedSpinner
-        tooltip="Save Workflow"
+        tooltip="Save to Server"
         action={() => null}
         getting={false}
         onClick={saveToServer}

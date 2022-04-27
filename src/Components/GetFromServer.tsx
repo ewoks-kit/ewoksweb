@@ -72,7 +72,7 @@ export default function GetFromServer() {
       </FormControl>
       <IntegratedSpinner
         getting={gettingFromServer}
-        tooltip="Open and edit Workflow"
+        tooltip="Open from Server"
         action={getFromServer}
         onClick={() => {
           /* eslint-disable no-console */

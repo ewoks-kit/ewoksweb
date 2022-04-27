@@ -132,8 +132,8 @@ function calcNodeProps(
       label: nod.data.label,
       linkStyle:
         (graph_links[link_index] && graph_links[link_index].type) || 'default',
-      withImage: nod.data.withImage || true,
-      withLabel: nod.data.withLabel || true,
+      withImage: 'withImage' in nod.data ? nod.data.withImage : true,
+      withLabel: 'withLabel' in nod.data ? nod.data.withLabel : true,
       colorBorder: nod.data.colorBorder,
     },
   };

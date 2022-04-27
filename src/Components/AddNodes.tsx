@@ -179,11 +179,13 @@ function AddNodes() {
                       >
                         <img
                           src={
-                            Object.keys(iconsObj).includes(elem.icon)
-                              ? iconsObj[elem.icon]
-                              : iconsObj['orange1']
+                            iconsObj[elem.icon]
+                            // TODO: when no icon use a default or the text
+                            // Object.keys(iconsObj).includes(elem.icon)
+                            //   ? iconsObj[elem.icon]
+                            //   : iconsObj['orange1']
                           }
-                          alt=""
+                          alt={elem.task_identifier}
                         />
                       </span>
                     </Tooltip>
