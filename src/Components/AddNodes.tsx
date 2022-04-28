@@ -22,9 +22,13 @@ import AddIcon from '@material-ui/icons/Add';
 import state from '../store/state';
 import configData from '../configData.json';
 import React from 'react';
-import { Button } from '@material-ui/core';
+import { Button, IconButton } from '@material-ui/core';
 import ConfirmDialog from './ConfirmDialog';
 import FormDialog from './FormDialog';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/EditOutlined';
+import BookmarksIcon from '@material-ui/icons/Bookmarks';
+import { FiberNew } from '@material-ui/icons';
 
 const onDragStart = (event, { task_identifier, task_type, icon }) => {
   event.dataTransfer.setData('task_identifier', task_identifier);
@@ -50,7 +54,7 @@ const iconsObj = {
 // drag and drop to canvas
 // TODO: right-click and view-delete?
 // TODO: insert subgraph from disk should exist here?
-function AddNodes() {
+function AddNodes(props) {
   const taskCategories = state((state) => state.taskCategories);
   const setTaskCategories = state((state) => state.setTaskCategories);
   const tasks = state((state) => state.tasks);
@@ -63,6 +67,7 @@ function AddNodes() {
   const [doAction, setDoAction] = React.useState<string>('');
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
   const [elementToEdit, setElementToEdit] = React.useState<Task>({});
+  const initializedTask = state((state) => state.initializedTask);
 
   const getTasks = async () => {
     const tasksData = await axios.get(
@@ -112,9 +117,11 @@ function AddNodes() {
 
   const action = (action, element) => {
     setDoAction(action);
-    if (action === 'cloneTask') {
+    if (['cloneTask', 'editTask'].includes(action)) {
       const task = tasks.find((tas) => tas.task_identifier === element);
       setElementToEdit(task);
+    } else if (action === 'newTask') {
+      setElementToEdit(initializedTask);
     }
     setOpenSaveDialog(true);
   };
@@ -132,7 +139,7 @@ function AddNodes() {
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Typography>Add Nodes</Typography>
+        <Typography>{props.title}</Typography>
       </AccordionSummary>
       <AccordionDetails style={{ flexWrap: 'wrap' }}>
         {taskCategories.map((categoryName) => (
@@ -176,6 +183,10 @@ function AddNodes() {
                         // onContextMenu={onRigthClick}
                         role="button"
                         tabIndex={0}
+                        style={{
+                          overflow: 'hidden',
+                          overflowWrap: 'break-word',
+                        }}
                       >
                         <img
                           src={
@@ -207,20 +218,24 @@ function AddNodes() {
                     }
                     draggable
                   >
-                    <Tooltip title="add note" arrow>
-                      <TextsmsIcon fontSize="large" />
-                    </Tooltip>
+                    {props.title === 'Add Nodes' && (
+                      <Tooltip title="add note" arrow>
+                        <TextsmsIcon fontSize="large" />
+                      </Tooltip>
+                    )}
                   </span>
-                  <Upload>
-                    <span
-                      role="button"
-                      tabIndex={0}
-                      onClick={insertGraph}
-                      onKeyPress={insertGraph}
-                    >
-                      <AddIcon />G
-                    </span>
-                  </Upload>
+                  {props.title === 'Add Nodes' && (
+                    <Upload>
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        onClick={insertGraph}
+                        onKeyPress={insertGraph}
+                      >
+                        <AddIcon />G
+                      </span>
+                    </Upload>
+                  )}
                 </>
               )}
             </AccordionDetails>
@@ -231,26 +246,45 @@ function AddNodes() {
                 (tas) => tas.task_identifier === selectedTask.task_identifier
               )?.category === categoryName && (
                 <>
-                  <Button
-                    style={{ margin: '8px' }}
-                    variant="outlined"
-                    color="secondary"
+                  <IconButton
                     onClick={deleteTask}
-                    size="small"
+                    aria-label="delete"
+                    color="secondary"
                   >
-                    Delete
-                  </Button>
+                    <DeleteIcon />
+                  </IconButton>
+                  <IconButton
+                    style={{ padding: '1px' }}
+                    aria-label="edit"
+                    onClick={() =>
+                      action('editTask', selectedTask.task_identifier)
+                    }
+                    color="primary"
+                  >
+                    <EditIcon />
+                  </IconButton>
                   <Button
-                    style={{ margin: '8px' }}
+                    startIcon={<BookmarksIcon />}
+                    style={{ margin: '4px' }}
                     variant="outlined"
                     color="primary"
                     onClick={() =>
                       action('cloneTask', selectedTask.task_identifier)
                     }
-                    // onClick={cloneTask}
                     size="small"
                   >
                     Clone
+                  </Button>
+
+                  <Button
+                    // startIcon={<FiberNew />}
+                    style={{ margin: '4px' }}
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => action('newTask', initializedTask)}
+                    size="small"
+                  >
+                    New
                   </Button>
                 </>
               )}

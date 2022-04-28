@@ -167,7 +167,7 @@ export default function Sidebar() {
         </div>
       ) : (
         <>
-          <AddNodes />
+          <AddNodes title={'Add Nodes'} />
           <EditElement element={selectedElement} />
           <EditElementStyle />
           <Button

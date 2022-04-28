@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/cognitive-complexity */
 import React, { useEffect } from 'react';
 import { Button, Tooltip } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
@@ -63,12 +64,39 @@ export default function FormDialog(props) {
       saveGraph(element as GraphRF);
     } else if (['cloneTask', 'newTask'].includes(action)) {
       saveTask(element as Task);
+    } else if (['editTask'].includes(action)) {
+      putTask(element as Task);
     }
   };
 
+  const putTask = async (task) => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const responseClone = await axios.put(`${configData.serverUrl}/tasks`, {
+        ...task,
+      });
+
+      setOpenSnackbar({
+        open: true,
+        text: 'Task saved successfuly',
+        severity: 'success',
+      });
+      props.setOpenSaveDialog(false);
+      const tasksNew = await axios.get(
+        `${configData.serverUrl}/tasks/descriptions`
+      );
+      setTasks(tasksNew.data as Task[]);
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: error.response?.data?.message || 'something went wrong',
+        severity: 'warning',
+      });
+    }
+    // }
+  };
+
   const saveTask = async (task) => {
-    // or newTask
-    // const elem = element as Task;
     if (tasks.some((ts) => ts.task_identifier === task.task_identifier)) {
       setOpenSnackbar({
         open: true,
@@ -77,7 +105,6 @@ export default function FormDialog(props) {
       });
       return;
     }
-    // else {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const responseClone = await axios.post(`${configData.serverUrl}/tasks`, {
@@ -96,11 +123,10 @@ export default function FormDialog(props) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response.data,
+        text: error.response?.data?.message || 'something went wrong',
         severity: 'warning',
       });
     }
-    // }
   };
 
   const saveGraph = async (graph) => {
@@ -235,7 +261,7 @@ export default function FormDialog(props) {
   return (
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>
-        Give the new{' '}
+        {action === 'editTask' ? 'Edit the ' : 'Give the new '}
         {action === 'cloneGraph' ? 'Workflow name' : 'Task details'}
       </DialogTitle>
       <DialogContent>
@@ -251,6 +277,7 @@ export default function FormDialog(props) {
           variant="standard"
           value={newName}
           onChange={newNameChanged}
+          disabled={action === 'editTask'}
         />
         {action !== 'cloneGraph' &&
           fields.map((field) => (

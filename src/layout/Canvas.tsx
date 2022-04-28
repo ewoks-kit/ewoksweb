@@ -14,6 +14,7 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import bendingText from '../CustomEdges/BendingTextEdge';
+import getAround from '../CustomEdges/GetAroundEdge';
 
 import FunctionNode from '../CustomNodes/FunctionNode';
 import NoteNode from '../CustomNodes/NoteNode';
@@ -51,6 +52,7 @@ const getnodesIds = (text: string, nodes: EwoksRFNode[]) => {
 
 const edgeTypes = {
   bendingText,
+  getAround,
 };
 
 const nodeTypes = {

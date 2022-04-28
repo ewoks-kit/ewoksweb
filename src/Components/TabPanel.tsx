@@ -18,7 +18,7 @@ import ReactJson from 'react-json-view';
 import AutocompleteDrop from './AutocompleteDrop';
 import state from '../store/state';
 import axios from 'axios';
-import { PhotoCamera } from '@material-ui/icons';
+import { PhotoCamera, SubscriptionsOutlined } from '@material-ui/icons';
 import AddNodes from './AddNodes';
 import orange1 from '../images/orange1.png';
 import orange2 from '../images/orange2.png';
@@ -29,6 +29,12 @@ import graphInput from '../images/graphInput.svg';
 import graphOutput from '../images/graphOutput.svg';
 import Correlations from '../images/Correlations.svg';
 import CreateClass from '../images/CreateClass.svg';
+import configData from '../configData.json';
+import type { Task } from '../types';
+import ConfirmDialog from './ConfirmDialog';
+import DeleteIcon from '@material-ui/icons/Delete';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import EventNoteIcon from '@material-ui/icons/EventNote';
 
 const icons = [
   'orange1',
@@ -80,10 +86,6 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-const setInputValue = () => {
-  // // console.log(val, value);
-};
-
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
@@ -101,21 +103,28 @@ const Item = styled(Paper)(({ theme }) => ({
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
   const [fileToBeSent, setFileToBeSent] = React.useState('');
-  const graphRF = state((state) => state.graphRF);
   const [selectedIcon, setSelectedIcon] = React.useState('');
+  const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
+  const [workflowValue, setWorkflowValue] = React.useState({});
+
+  const tasks = state((state) => state.tasks);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+
+  const setInputValue = async (val) => {
+    console.log(val);
+
+    const response = await axios.get(`${configData.serverUrl}/workflow/${val}`);
+    setWorkflowValue(response.data);
+    console.log(response);
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  const onChangeFile = (file) => {
-    console.log(file, value);
-  };
-
   const uploadFile = (e) => {
     e.preventDefault();
     console.log(e, value);
-    const file = fileToBeSent;
     const formData = new FormData(e.target);
 
     // formData.append('file', file);
@@ -126,18 +135,83 @@ export default function BasicTabs() {
       .catch((error) => console.warn(error));
   };
 
-  const clickIcon = (elem) => {
-    setSelectedIcon(elem);
+  const clickIcon = (icon) => {
+    console.log('selected icon', icon, fileToBeSent);
+    setSelectedIcon(icon);
   };
 
-  const deleteIcon = (icon) => {
-    // TODO: see if it is selected for a task and warn on deletion
-    // if icon is deleted check that a task that includes it behaves correctly using text???
-    console.log(icon, value);
+  const deleteIcon = async (e) => {
+    const tasksData = await axios.get(
+      `${configData.serverUrl}/tasks/descriptions`
+    );
+
+    const allTasks = tasksData.data as Task[];
+
+    if (allTasks.map((task) => task.icon).includes(selectedIcon)) {
+      setOpenSnackbar({
+        open: true,
+        text: `Icon cannot be deleted since it is used in one or more Tasks!`,
+        severity: 'warning',
+      });
+    } else {
+      setOpenSnackbar({
+        open: true,
+        text: `Icon can be deleted since it is not used in any Task!`,
+        severity: 'success',
+      });
+      setOpenAgreeDialog(true);
+    }
+  };
+
+  // const getIcons = async () => {
+  //   const iconsData = await axios.get(
+  //     `${configData.serverUrl}/icons/descriptions`
+  //   );
+  //   const icons = iconsData.data as string[];
+  //   setIcons(icons);
+  // };
+
+  const agreeDeleteTask = async () => {
+    setOpenAgreeDialog(false);
+    await axios
+      .delete(`${configData.serverUrl}/icon/${selectedIcon}`)
+      .then(() => {
+        setOpenSnackbar({
+          open: true,
+          text: `Icon was succesfully deleted!`,
+          severity: 'success',
+        });
+        // getIcons();
+      })
+      .catch((error) => {
+        setOpenSnackbar({
+          open: true,
+          text: error.message,
+          severity: 'error',
+        });
+      });
+  };
+
+  const disAgreeDeleteTask = () => {
+    setOpenAgreeDialog(false);
+  };
+
+  const inputNew = (ne) => {
+    console.log(ne, fileToBeSent);
+    setFileToBeSent(ne.target.value);
   };
 
   return (
     <Box sx={{ width: '100%' }}>
+      <ConfirmDialog
+        title={`Delete "${selectedIcon}" icon?`}
+        content={`You are about to delete an icon.
+              After deletion it will not be available to be used in any Task description!
+              Do you agree to continue?`}
+        open={openAgreeDialog}
+        agreeCallback={agreeDeleteTask}
+        disagreeCallback={disAgreeDeleteTask}
+      />
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
@@ -159,11 +233,11 @@ export default function BasicTabs() {
             // justifyContent="flex-start"
             alignItems="center"
           >
-            <Grid item xs={12} sm={12} md={6} lg={2}>
+            {/* <Grid item xs={12} sm={12} md={6} lg={2}>
               <Item style={{ backgroundColor: 'rgb(248, 248, 249)' }}>
                 Folders
               </Item>
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} sm={12} md={6} lg={3}>
               <Item>
                 <FormControl
@@ -173,13 +247,13 @@ export default function BasicTabs() {
                   <AutocompleteDrop setInputValue={setInputValue} />
                 </FormControl>
               </Item>
-              <hr />
-              <Item>Files</Item>
+              {/* <hr />
+              <Item>Files</Item> */}
             </Grid>
             <Grid item xs={12} sm={12} md={12} lg={7}>
               <Item>
                 <ReactJson
-                  src={graphRF}
+                  src={workflowValue}
                   name="Ewoks graph"
                   theme="monokai"
                   collapsed
@@ -197,7 +271,29 @@ export default function BasicTabs() {
         </Box>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Tasks
+        <Grid
+          container
+          spacing={1}
+          direction="row"
+          // justifyContent="flex-start"
+          alignItems="center"
+        >
+          <Grid item xs={12} sm={8} md={8} lg={5} className="dndflow">
+            <AddNodes title={'Tasks'} />
+          </Grid>
+          <Grid item xs={12} sm={8} md={8} lg={2} className="dndflow">
+            <Button
+              startIcon={<EventNoteIcon />}
+              style={{ margin: '8px' }}
+              variant="outlined"
+              color="primary"
+              onClick={deleteIcon}
+              size="small"
+            >
+              Discover Tasks
+            </Button>
+          </Grid>
+        </Grid>
       </TabPanel>
       <TabPanel value={value} index={2}>
         <Box sx={{ flexGrow: 1 }}>
@@ -230,8 +326,12 @@ export default function BasicTabs() {
                           // onContextMenu={onRigthClick}
                           role="button"
                           tabIndex={0}
+                          style={{
+                            overflow: 'hidden',
+                            overflowWrap: 'break-word',
+                          }}
                         >
-                          <img src={iconsObj[ico]} alt="" />
+                          <img src={iconsObj[ico]} alt={ico} />
                         </span>
                       </Tooltip>
                     </span>
@@ -240,33 +340,35 @@ export default function BasicTabs() {
               </Item>
             </Grid>
 
-            <Grid item xs={12} sm={12} md={6} lg={2}>
+            <Grid item xs={12} sm={12} md={4} lg={3}>
               <Item style={{ backgroundColor: 'rgb(248, 248, 249)' }}>
-                <Button
-                  style={{ margin: '8px' }}
-                  variant="outlined"
-                  color="secondary"
-                  onClick={deleteIcon}
-                  size="small"
-                >
-                  Delete
-                </Button>
-                <Button
-                  style={{ margin: '8px' }}
-                  variant="outlined"
-                  color="primary"
-                  // onClick={() =>
-                  //   action('cloneTask', selectedTask.task_identifier)
-                  // }
-                  // onClick={cloneTask}
-                  size="small"
-                >
-                  Clone
-                </Button>
                 <form
                   onSubmit={uploadFile}
                   // enctype="multipart/form-data"
                 >
+                  <Button
+                    startIcon={<DeleteIcon />}
+                    style={{ margin: '8px' }}
+                    variant="outlined"
+                    color="secondary"
+                    onClick={deleteIcon}
+                    size="small"
+                    disabled={selectedIcon === ''}
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    startIcon={<CloudUploadIcon />}
+                    variant="outlined"
+                    type="submit"
+                    color="primary"
+                    size="small"
+                    disabled={fileToBeSent === ''}
+                  >
+                    Upload
+                  </Button>
+                  <hr />
+
                   <div>
                     <label htmlFor="image">Select an Icon to Upload</label>
                     <div>
@@ -276,18 +378,9 @@ export default function BasicTabs() {
                         name="file"
                         accept="image/*"
                         className="file-custom"
+                        onChange={inputNew}
                       />
                     </div>
-                  </div>
-
-                  <div>
-                    <Button
-                      variant="outlined"
-                      type="submit"
-                      className="btn btn-md btn-primary"
-                    >
-                      Upload Icon
-                    </Button>
                   </div>
                 </form>
               </Item>

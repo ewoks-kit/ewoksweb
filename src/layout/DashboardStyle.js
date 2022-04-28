@@ -14,6 +14,7 @@ const DashboardStyle = makeStyles((theme) => ({
   formControl: {
     minWidth: '220px',
     backgroundColor: '#7685dd',
+    borderRadius: '4px',
   },
 
   sidebarForm: {
