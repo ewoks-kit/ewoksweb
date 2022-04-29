@@ -28,6 +28,7 @@ export default function IntegratedSpinner({
   action,
   getting,
   onClick,
+  // callSuccess = false,
 }) {
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
@@ -54,6 +55,7 @@ export default function IntegratedSpinner({
   }, [getting]);
 
   const handleButtonClick = () => {
+    // console.log(loading, action);
     if (!loading) {
       onClick();
       // // console.log('getting1', getting);

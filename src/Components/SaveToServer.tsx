@@ -63,12 +63,10 @@ export default function SaveToServer({ saveToServerF }) {
             severity: 'success',
           });
         })
-        .catch((
-          error // console.log(error.response)
-        ) =>
+        .catch((error) =>
           setOpenSnackbar({
             open: true,
-            text: error.response.data,
+            text: error.response?.data || configData.savingError,
             severity: 'error',
           })
         );
@@ -84,6 +82,13 @@ export default function SaveToServer({ saveToServerF }) {
             open: true,
             text: 'Graph saved succesfully!',
             severity: 'success',
+          });
+        })
+        .catch((error) => {
+          setOpenSnackbar({
+            open: true,
+            text: error.response?.data || configData.savingError,
+            severity: 'error',
           });
         });
     } else {

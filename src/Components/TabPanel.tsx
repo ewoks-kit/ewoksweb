@@ -5,10 +5,9 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import {
   Button,
+  // Fab,
   FormControl,
   Grid,
-  IconButton,
-  Input,
   Paper,
   styled,
   Tooltip,
@@ -18,7 +17,6 @@ import ReactJson from 'react-json-view';
 import AutocompleteDrop from './AutocompleteDrop';
 import state from '../store/state';
 import axios from 'axios';
-import { PhotoCamera, SubscriptionsOutlined } from '@material-ui/icons';
 import AddNodes from './AddNodes';
 import orange1 from '../images/orange1.png';
 import orange2 from '../images/orange2.png';
@@ -35,6 +33,7 @@ import ConfirmDialog from './ConfirmDialog';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import EventNoteIcon from '@material-ui/icons/EventNote';
+// import AddIcon from '@material-ui/icons/Add';
 
 const icons = [
   'orange1',
@@ -107,28 +106,27 @@ export default function BasicTabs() {
   const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
   const [workflowValue, setWorkflowValue] = React.useState({});
 
-  const tasks = state((state) => state.tasks);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
-  const setInputValue = async (val) => {
-    console.log(val);
+  const setInputValue = async (val: string) => {
+    // console.log(val);
 
     const response = await axios.get(`${configData.serverUrl}/workflow/${val}`);
     setWorkflowValue(response.data);
-    console.log(response);
+    // console.log(response);
   };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  const uploadFile = (e) => {
-    e.preventDefault();
-    console.log(e, value);
-    const formData = new FormData(e.target);
+  const uploadFile = (event) => {
+    event.preventDefault();
+    console.log(event.target, value);
+    const formData = new FormData(event.target);
 
     // formData.append('file', file);
-
+    // TODO after server ready
     axios
       .post('/api/upload', formData)
       .then((res) => console.log(res))
@@ -140,26 +138,36 @@ export default function BasicTabs() {
     setSelectedIcon(icon);
   };
 
-  const deleteIcon = async (e) => {
-    const tasksData = await axios.get(
-      `${configData.serverUrl}/tasks/descriptions`
-    );
+  const deleteIcon = async () => {
+    try {
+      const tasksData = await axios.get(
+        `${configData.serverUrl}/tasks/descriptions`
+      );
 
-    const allTasks = tasksData.data as Task[];
+      const allTasks = tasksData.data as Task[];
 
-    if (allTasks.map((task) => task.icon).includes(selectedIcon)) {
+      if (allTasks.map((task) => task.icon).includes(selectedIcon)) {
+        setOpenSnackbar({
+          open: true,
+          text: `Icon cannot be deleted since it is used in one or more Tasks!`,
+          severity: 'warning',
+        });
+      } else {
+        setOpenSnackbar({
+          open: true,
+          text: `Icon can be deleted since it is not used in any Task!`,
+          severity: 'success',
+        });
+        setOpenAgreeDialog(true);
+      }
+    } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: `Icon cannot be deleted since it is used in one or more Tasks!`,
-        severity: 'warning',
+        text:
+          error.response?.data ||
+          'Error in deleting Task. Please check connectivity with the server!',
+        severity: 'error',
       });
-    } else {
-      setOpenSnackbar({
-        open: true,
-        text: `Icon can be deleted since it is not used in any Task!`,
-        severity: 'success',
-      });
-      setOpenAgreeDialog(true);
     }
   };
 
@@ -186,7 +194,7 @@ export default function BasicTabs() {
       .catch((error) => {
         setOpenSnackbar({
           open: true,
-          text: error.message,
+          text: error?.response?.data || 'Error in deleting Task',
           severity: 'error',
         });
       });
@@ -197,8 +205,31 @@ export default function BasicTabs() {
   };
 
   const inputNew = (ne) => {
-    console.log(ne, fileToBeSent);
-    setFileToBeSent(ne.target.value);
+    console.log(ne, ne.target.files[0].size, fileToBeSent);
+    if (ne.target.files[0].size < 1000) {
+      setOpenSnackbar({
+        open: true,
+        text: 'File ready to be uploadede as an icon',
+        severity: 'success',
+      });
+      setFileToBeSent(ne.target.value);
+    } else {
+      setFileToBeSent('');
+      setOpenSnackbar({
+        open: true,
+        text: 'Files more than 1Kb are not acceptable for icons',
+        severity: 'warning',
+      });
+    }
+  };
+
+  const discoverTasks = (event) => {
+    console.log(event, value);
+    setOpenSnackbar({
+      open: true,
+      text: 'A form for info regarding discovery',
+      severity: 'success',
+    });
   };
 
   return (
@@ -279,7 +310,7 @@ export default function BasicTabs() {
           alignItems="center"
         >
           <Grid item xs={12} sm={8} md={8} lg={5} className="dndflow">
-            <AddNodes title={'Tasks'} />
+            <AddNodes title="Tasks" />
           </Grid>
           <Grid item xs={12} sm={8} md={8} lg={2} className="dndflow">
             <Button
@@ -287,7 +318,7 @@ export default function BasicTabs() {
               style={{ margin: '8px' }}
               variant="outlined"
               color="primary"
-              onClick={deleteIcon}
+              onClick={discoverTasks}
               size="small"
             >
               Discover Tasks
@@ -370,17 +401,30 @@ export default function BasicTabs() {
                   <hr />
 
                   <div>
-                    <label htmlFor="image">Select an Icon to Upload</label>
-                    <div>
-                      <input
-                        type="file"
-                        id="image"
-                        name="file"
-                        accept="image/*"
-                        className="file-custom"
-                        onChange={inputNew}
-                      />
-                    </div>
+                    <label htmlFor="upload-icon">
+                      Select an Icon to Upload
+                      <div>
+                        <input
+                          // style={{ display: 'none' }}
+                          type="file"
+                          id="upload-icon"
+                          name="upload-icon"
+                          accept="image/*"
+                          onChange={inputNew}
+                          aria-label="Select Icon"
+                        />
+                        {/* <Fab
+                          color="secondary"
+                          size="small"
+                          component="span"
+                          aria-label="add"
+                          variant="extended"
+                        >
+                          <AddIcon /> Upload photo
+                        </Fab>
+                        {fileToBeSent} */}
+                      </div>
+                    </label>
                   </div>
                 </form>
               </Item>

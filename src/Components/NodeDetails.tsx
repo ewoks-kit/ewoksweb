@@ -76,7 +76,7 @@ export default function NodeDetails(props) {
   useEffect(() => {
     // console.log(element);
     setInputsComplete(!!element.inputs_complete);
-    setDefaultErrorNode(!!element.default_error_node);
+    setDefaultErrorNode(element.default_error_node || false);
     // setDefaultErrorAttributes(element.default_error_attributes);
     setDataMapping(element.default_error_attributes?.data_mapping);
     setMapAllData(element.default_error_attributes?.map_all_data || false);

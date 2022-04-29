@@ -1,31 +1,36 @@
-import { red } from '@material-ui/core/colors';
 import React from 'react';
 import { getMarkerEnd, getEdgeCenter } from 'react-flow-renderer';
 
-const bottomLeftCorner = (x, y, size) =>
-  `L ${x},${y - size}Q ${x},${y} ${x + size},${y}`;
-const leftBottomCorner = (x, y, size) =>
-  `L ${x + size},${y}Q ${x},${y} ${x},${y - size}`;
-const bottomRightCorner = (x, y, size) =>
+const bottomLeftCorner = (x: number, y: number, size: number) => {
+  console.log(x, y, size);
+  return `L ${x},${y - size}Q ${x},${y} ${x + size},${y}`;
+};
+const leftBottomCorner = (x: number, y: number, size: number) => {
+  console.log(x, y, size);
+  return `L ${x + size},${y}Q ${x},${y} ${x},${y - size}`;
+};
+const bottomRightCorner = (x: number, y: number, size: number) =>
   `L ${x},${y - size}Q ${x},${y} ${x - size},${y}`;
-const rightBottomCorner = (x, y, size) =>
-  `L ${x - size},${y}Q ${x},${y} ${x},${y - size}`;
-const leftTopCorner = (x, y, size) =>
+const rightBottomCorner = (x: number, y: number, size: number) => {
+  console.log(x, y, size);
+  return `L ${x - size},${y}Q ${x},${y} ${x},${y - size}`;
+};
+const leftTopCorner = (x: number, y: number, size: number) =>
   `L ${x + size},${y}Q ${x},${y} ${x},${y + size}`;
-const topLeftCorner = (x, y, size) =>
+const topLeftCorner = (x: number, y: number, size: number) =>
   `L ${x},${y + size}Q ${x},${y} ${x + size},${y}`;
-const topRightCorner = (x, y, size) =>
+const topRightCorner = (x: number, y: number, size: number) =>
   `L ${x},${y + size}Q ${x},${y} ${x - size},${y}`;
-const rightTopCorner = (x, y, size) =>
+const rightTopCorner = (x: number, y: number, size: number) =>
   `L ${x - size},${y}Q ${x},${y} ${x},${y + size}`;
 
 function getSmoothStepPath({
-  sourceX,
-  sourceY,
-  targetX,
-  targetY,
-  borderRadius = 30,
-  centerY = 50,
+  sourceX = 0,
+  sourceY = 0,
+  targetX = 0,
+  targetY = 0,
+  borderRadius = 4,
+  centerY = 100,
 }) {
   const [, _centerY, offsetX, offsetY] = getEdgeCenter({
     sourceX,
@@ -33,43 +38,66 @@ function getSmoothStepPath({
     targetX,
     targetY,
   });
-  console.log(_centerY, offsetX, offsetY);
+
   const cornerWidth = Math.min(borderRadius, Math.abs(targetX - sourceX));
   const cornerHeight = Math.min(borderRadius, Math.abs(targetY - sourceY));
   const cornerSize = Math.min(cornerWidth, cornerHeight, offsetX, offsetY);
   const cY = typeof centerY !== 'undefined' ? centerY : _centerY;
 
-  let firstCornerPath = null;
-  let secondCornerPath = null;
+  console.log(
+    'source',
+    sourceX,
+    sourceY,
+    'target',
+    targetX,
+    targetY,
+    'center',
+    _centerY,
+    offsetX,
+    offsetY,
+    'cornerWidth',
+    Math.min(borderRadius, Math.abs(targetX - sourceX)),
+    'cornerHeight',
+    Math.min(borderRadius, Math.abs(targetY - sourceY)),
+    'cornerSize',
+    Math.min(cornerWidth, cornerHeight, offsetX, offsetY)
+  );
+
+  let firstCornerPath = '';
+  let secondCornerPath = '';
 
   if (sourceX <= targetX) {
+    console.log('sourceX <= targetX', targetX);
     firstCornerPath =
       sourceY <= targetY
         ? bottomLeftCorner(sourceX, cY, cornerSize)
         : topLeftCorner(sourceX, cY, cornerSize);
     secondCornerPath =
       sourceY <= targetY
-        ? rightTopCorner(targetX, cY, cornerSize)
-        : rightBottomCorner(targetX, cY, cornerSize);
+        ? rightTopCorner(targetX + 10, cY + 120, cornerSize)
+        : rightBottomCorner(targetX + 120, cY, cornerSize);
   } else {
+    console.log('sourceX > targetX');
     firstCornerPath =
       sourceY < targetY
-        ? bottomRightCorner(sourceX, cY, cornerSize)
-        : topRightCorner(sourceX, cY, cornerSize);
+        ? bottomRightCorner(sourceX + 10, cY + 120, cornerSize)
+        : topRightCorner(sourceX, cY + 120, cornerSize);
     secondCornerPath =
       sourceY < targetY
-        ? leftTopCorner(targetX, cY, cornerSize)
-        : leftBottomCorner(targetX, cY, cornerSize);
+        ? leftTopCorner(targetX - 10, cY + 120, cornerSize)
+        : leftBottomCorner(targetX, cY + 50, cornerSize);
   }
 
   if (sourceY > targetY) {
-    const cornerX = Math.min(sourceX - 100, targetX - 100);
-    const firstStop = bottomRightCorner(sourceX, sourceY + 15, cornerSize);
-    const secondStop = leftBottomCorner(cornerX, sourceY + 15, cornerSize);
-    const thirdStop = topLeftCorner(cornerX, targetY - 15, cornerSize);
-    const fourthStop = rightTopCorner(targetX, targetY - 15, cornerSize);
+    console.log('sourceY > targetY');
+    const cornerX = Math.min(sourceX - 10, targetX - 10);
+    const firstStop = bottomRightCorner(sourceX + 10, sourceY + 90, cornerSize);
+    const secondStop = leftBottomCorner(cornerX - 10, sourceY + 90, cornerSize);
+    // const thirdStop = topLeftCorner(cornerX, targetY - 5, cornerSize);
+    // const fourthStop = rightTopCorner(targetX, targetY - 5, cornerSize);
 
-    return `M ${sourceX},${sourceY}${firstStop}${secondStop}${thirdStop}${fourthStop}L ${targetX},${targetY}`;
+    return `M ${sourceX},${sourceY}${firstStop}${secondStop}L ${targetX},${targetY}`;
+    // return `M ${sourceX},${sourceY}${firstStop}${secondStop}${thirdStop}${fourthStop}L ${targetX},${targetY}`;
   }
 
   return `M ${sourceX},${sourceY}${firstCornerPath}${secondCornerPath}L ${targetX},${targetY}`;
@@ -87,6 +115,18 @@ export default function getAround({
   arrowHeadType,
   markerEndId,
 }) {
+  console.log(
+    id,
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    sourcePosition,
+    targetPosition,
+    style,
+    arrowHeadType,
+    markerEndId
+  );
   const edgePath = getSmoothStepPath({
     sourceX,
     sourceY,
@@ -97,18 +137,16 @@ export default function getAround({
   });
 
   const markerEnd = getMarkerEnd(arrowHeadType, markerEndId);
-
+  console.log(markerEnd);
   return (
-    <>
-      <path
-        id={id}
-        style={style}
-        className="react-flow__edge-path"
-        d={edgePath}
-        markerEnd={markerEnd}
-        fill="none"
-        strokeWidth={1}
-      />
-    </>
+    <path
+      id={id}
+      style={style}
+      className="react-flow__edge-path"
+      d={edgePath}
+      markerEnd="arrow" // {markerEnd}
+      fill="none"
+      strokeWidth={1}
+    />
   );
 }

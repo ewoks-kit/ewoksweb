@@ -28,7 +28,6 @@ import FormDialog from './FormDialog';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import BookmarksIcon from '@material-ui/icons/Bookmarks';
-import { FiberNew } from '@material-ui/icons';
 
 const onDragStart = (event, { task_identifier, task_type, icon }) => {
   event.dataTransfer.setData('task_identifier', task_identifier);
@@ -70,12 +69,20 @@ function AddNodes(props) {
   const initializedTask = state((state) => state.initializedTask);
 
   const getTasks = async () => {
-    const tasksData = await axios.get(
-      `${configData.serverUrl}/tasks/descriptions`
-    );
-    const tasks = tasksData.data as Task[];
-    setTasks(tasks);
-    setTaskCategories(tasks.map((tas) => tas.category));
+    try {
+      const tasksData = await axios.get(
+        `${configData.serverUrl}/tasks/descriptions`
+      );
+      const tasks = tasksData.data as Task[];
+      setTasks(tasks);
+      setTaskCategories(tasks.map((tas) => tas.category));
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: error.response?.data || configData.retrieveTasksError,
+        severity: 'error',
+      });
+    }
   };
 
   const insertGraph = () => {

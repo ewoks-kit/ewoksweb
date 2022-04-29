@@ -1,3 +1,5 @@
 {
+  "savingError": "Error in saving. Please check connectivity with the server!",
+  "retrieveTasksError": "Error in retrieving Tasks. Please check connectivity with the server!",
   "serverUrl": "http://localhost:5000"
 }

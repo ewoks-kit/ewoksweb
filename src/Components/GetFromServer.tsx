@@ -21,6 +21,7 @@ export default function GetFromServer() {
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const [gettingFromServer, setGettingFromServer] = React.useState(false);
+  // const [callSuccess, setCallSuccess] = React.useState(false);
   // TODO replace with the following brakes the round spinner
   // const gettingFromServer = state((state) => state.gettingFromServer);
   // const setGettingFromServer = state((state) => state.setGettingFromServer);
@@ -37,23 +38,34 @@ export default function GetFromServer() {
     // console.log(isSubgraph);
     if (workflowValue) {
       setGettingFromServer(true);
-      const response = await axios.get(
-        // `http://mxbes2-1707:38280/ewoks/workflow/${workflowValue}`
-        `${configData.serverUrl}/workflow/${workflowValue}`
-      );
-      if (response.data) {
-        setGettingFromServer(false);
-        if (isSubgraph === 'subgraph') {
-          setSubGraph(response.data as GraphEwoks);
+      try {
+        const response = await axios.get(
+          `${configData.serverUrl}/workflow/${workflowValue}`
+        );
+        if (response.data) {
+          setGettingFromServer(false);
+          // setCallSuccess(true);
+          if (isSubgraph === 'subgraph') {
+            setSubGraph(response.data as GraphEwoks);
+          } else {
+            setWorkingGraph(response.data as GraphRF);
+          }
         } else {
-          setWorkingGraph(response.data as GraphRF);
+          setGettingFromServer(false);
+          setOpenSnackbar({
+            open: true,
+            text:
+              'Could not locate the requested workflow! Maybe it is deleted!',
+            severity: 'warning',
+          });
         }
-      } else {
-        setGettingFromServer(false);
+      } catch (error) {
         setOpenSnackbar({
           open: true,
-          text: 'Could not locate the requested workflow! Maybe it is deleted!',
-          severity: 'warning',
+          text:
+            error.response?.data ||
+            'Error in retrieving workflow. Please check connectivity with the server!',
+          severity: 'error',
         });
       }
     } else {
@@ -71,6 +83,7 @@ export default function GetFromServer() {
         <AutocompleteDrop setInputValue={setInputValue} />
       </FormControl>
       <IntegratedSpinner
+        // callSuccess={callSuccess}
         getting={gettingFromServer}
         tooltip="Open from Server"
         action={getFromServer}

@@ -210,6 +210,7 @@ function Canvas() {
   const onNodeClick = (event, element?: Node) => {
     const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
     setSelectedElement(graphElement);
+    // console.log(graphElement);
   };
 
   const onEdgeClick = (event, element?: Edge) => {
@@ -280,8 +281,8 @@ function Canvas() {
         position,
         default_inputs: [],
         inputs_complete: false,
-        default_error_node: {
-          on_error: false,
+        default_error_node: false,
+        default_error_attributes: {
           map_all_data: true,
           data_mapping: [],
         },

@@ -89,7 +89,7 @@ export default function FormDialog(props) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || 'something went wrong',
+        text: error.response?.data?.message || configData.savingError,
         severity: 'warning',
       });
     }
@@ -123,7 +123,7 @@ export default function FormDialog(props) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || 'something went wrong',
+        text: error.response?.data?.message || configData.savingError,
         severity: 'warning',
       });
     }
@@ -150,7 +150,7 @@ export default function FormDialog(props) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response.data,
+        text: error.response?.data || configData.savingError,
         severity: 'error',
       });
     }
