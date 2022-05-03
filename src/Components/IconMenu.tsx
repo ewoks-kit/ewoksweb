@@ -67,12 +67,11 @@ export default function IconMenu(props) {
           });
           return;
         }
-        // TODO: if the task does not exist in the tasks?
-        // Populate the form with the element details
+        // if the task does not exist in the tasks populate the form with the element details
         const task = tasks.find(
           (tas) => tas.task_identifier === element.task_identifier
         );
-        // console.log(task);
+
         setElementToEdit(
           task || {
             ...initializedTask,

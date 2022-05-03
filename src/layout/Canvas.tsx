@@ -73,7 +73,6 @@ function Canvas() {
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [prevGraphId, setPrevGraphId] = useState('');
-  // const [selectedElements, setSelectedElements] = React.useState([]);
 
   const reactFlowWrapper = useRef(null);
 
@@ -134,8 +133,6 @@ function Canvas() {
   const onElementsRemove = useCallback(
     (elementsToRemove) => {
       let newGraph = {} as GraphRF;
-      // TODO: make it work for multiple delete?
-      // TODO: same code as sidebar->deleteElement create a hook for delete?
       const [el] = elementsToRemove;
       if (el.position) {
         const nodesLinks = graphRF.links.filter(
@@ -168,6 +165,7 @@ function Canvas() {
       // TODO: nodes are updated only on rf canvas and not on graphRF
       // if we update graphRF we have a loop so we update on setSelectedElement
       // where we set every other selected to false... SOLUTION
+
       setNodes((ns) => {
         return applyNodeChanges(changes, ns);
       });
@@ -198,13 +196,7 @@ function Canvas() {
     // console.log(elements);
     if (elements.nodes.length === 0 && elements.edges.length === 0) {
       setSelectedElement(graphRF.graph);
-      // setSelectedElements([]);
     }
-    // else if (elements.nodes.length > 0 || elements.edges.length > 0) {
-    //   setSelectedElements([...elements.nodes, ...elements.edges]);
-    // } else {
-    //   setSelectedElements([]);
-    // }
   };
 
   const onNodeClick = (event, element?: Node) => {
@@ -229,10 +221,7 @@ function Canvas() {
 
   const onDrop = (event) => {
     event.preventDefault();
-    // TODO: examine how to prevent bug on dragging selection of multiple elements
-    // if (selectedElements.length > 1) {
-    //   return;
-    // }
+
     if (graphRF.graph.id === '0') {
       setSubgraphsStack({
         id: graphRF.graph.id,
@@ -241,7 +230,6 @@ function Canvas() {
     }
 
     if (workingGraph.graph.id === graphRF.graph.id) {
-      // TODO: calculate optional_input_names, required_input_names, output_names?
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       const task_identifier = event.dataTransfer.getData('task_identifier');
       const task_type = event.dataTransfer.getData('task_type');
@@ -355,7 +343,6 @@ function Canvas() {
           conditions: [],
           data_mapping: [],
           map_all_data: false,
-          // TODO: calculate if it is a graph
           sub_source:
             sourceTask.task_type === 'graph' ? params.sourceHandle : '',
           sub_target:
@@ -413,20 +400,21 @@ function Canvas() {
     event.preventDefault();
     const nodeTmp = graphRF.nodes.find((el) => el.id === node.id);
     if (nodeTmp.task_type === 'graph') {
-      // if type==graph get the subgraph from the recentGraphs (and if not from server?)
-      // TODO: clear the relation of task_identifier and the id of a subgraph...
-      // The same subgraph inserted twice in a superGraph must have its own id
-      // create a unique id for this graph
-
+      // if type==graph get the subgraph from the recentGraphs
       const subgraph = recentGraphs.find(
         (gr) => gr.graph.id === nodeTmp.task_identifier
       );
       if (subgraph && subgraph.graph.id) {
-        // TODO: if the subgraph does not exist on recent? Re-ask server and failsafe
         setGraphRF(subgraph);
         setSubgraphsStack({
           id: subgraph.graph.id,
           label: subgraph.graph.label,
+        });
+      } else {
+        setOpenSnackbar({
+          open: true,
+          text: 'Seems the specific subgraph cannot be located!',
+          severity: 'error',
         });
       }
     } else {
@@ -436,11 +424,9 @@ function Canvas() {
 
   const onSelectionDragStart = (event) => {
     event.preventDefault();
-    // console.log(selectedElements, event);
   };
 
   const onSelectionDrag = (event) => {
-    // console.log(selectedElements, event);
     event.preventDefault();
   };
 
@@ -483,7 +469,6 @@ function Canvas() {
 
   // const onSelectionDrag = (event) => {
   //   event.preventDefault();
-  //   // // console.log(event, selectedElements);
   // };
 
   const onNodeDragStop = (event, node) => {

@@ -49,10 +49,7 @@ const iconsObj = {
   TextsmsIcon,
 };
 
-// Hosts the node images and categories
-// drag and drop to canvas
-// TODO: right-click and view-delete?
-// TODO: insert subgraph from disk should exist here?
+// Hosts the node images and categories to drag and drop to canvas
 function AddNodes(props) {
   const taskCategories = state((state) => state.taskCategories);
   const setTaskCategories = state((state) => state.setTaskCategories);
@@ -185,7 +182,6 @@ function AddNodes(props) {
                     draggable
                   >
                     <Tooltip title={elem.task_identifier} arrow>
-                      {/* TODO: for deleting task and clone in dialog? */}
                       <span
                         // onContextMenu={onRigthClick}
                         role="button"

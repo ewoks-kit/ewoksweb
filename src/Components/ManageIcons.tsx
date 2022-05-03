@@ -17,11 +17,11 @@ import type { Task } from '../types';
 import state from '../store/state';
 import ConfirmDialog from './ConfirmDialog';
 
-// TODO: item is being used in ManageTasks too, abstract
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
-  // textAlign: 'center',
+  textAlign: 'center',
+  backgroundColor: 'rgb(246, 248, 249)',
   color: theme.palette.text.secondary,
 }));
 
@@ -97,8 +97,6 @@ export default function ManageIcons() {
     event.preventDefault();
     const formData = new FormData(event.target);
 
-    // formData.append('file', file);
-    // TODO after server ready
     try {
       await axios.post(`${configData.serverUrl}/icons`, formData);
     } catch (error) {
@@ -180,7 +178,7 @@ export default function ManageIcons() {
         alignItems="center"
       >
         <Grid item xs={12} sm={12} md={8} lg={6}>
-          <Item style={{ backgroundColor: 'rgb(246, 248, 249)' }}>
+          <Item>
             <span className="dndflow" style={{ display: 'flex' }}>
               {icons.map((ico) => (
                 <span
@@ -194,9 +192,7 @@ export default function ManageIcons() {
                   }`}
                 >
                   <Tooltip title={ico} arrow>
-                    {/* TODO: for deleting task and clone in dialog? */}
                     <span
-                      // onContextMenu={onRigthClick}
                       role="button"
                       tabIndex={0}
                       style={{
@@ -214,7 +210,7 @@ export default function ManageIcons() {
         </Grid>
 
         <Grid item xs={12} sm={12} md={4} lg={3}>
-          <Item style={{ backgroundColor: 'rgb(248, 248, 249)' }}>
+          <Item>
             <form
               onSubmit={uploadFile}
               // enctype="multipart/form-data"
@@ -255,16 +251,6 @@ export default function ManageIcons() {
                       onChange={inputNew}
                       aria-label="Select Icon"
                     />
-                    {/* <Fab
-                          color="secondary"
-                          size="small"
-                          component="span"
-                          aria-label="add"
-                          variant="extended"
-                        >
-                          <AddIcon /> Upload photo
-                        </Fab>
-                        {fileToBeSent} */}
                   </div>
                 </label>
               </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import { getEdgeCenter } from 'react-flow-renderer';
 
 // const bottomLeftCorner = (x: number, y: number, size: number) => {
@@ -113,8 +113,9 @@ export default function getAround({
   // sourcePosition,
   // targetPosition,
   style = {},
+  label,
   // arrowHeadType,
-  // markerEndId,
+  markerEnd,
 }) {
   // console.log(
   //   id,
@@ -136,18 +137,35 @@ export default function getAround({
     targetY,
     // targetPosition,
   });
+  const styles = {
+    // stroke: '#cc0000',
+    strokeWidth: '3',
+    // fill: 'rgb(223, 226, 246)',
+  };
 
   // const markerEnd = getMarkerEnd(arrowHeadType, markerEndId);
   // console.log(edgePath, markerEnd);
   return (
-    <path
-      id={id}
-      style={style}
-      className="react-flow__edge-path"
-      d={edgePath}
-      markerEnd="arrow" // {markerEnd}
-      fill="none"
-      strokeWidth={1}
-    />
+    <>
+      <path
+        id={id}
+        style={style}
+        className="react-flow__edge-path"
+        d={edgePath}
+        markerEnd={markerEnd}
+        fill="none"
+        strokeWidth={1}
+      />
+      <text style={{ color: 'red' }}>
+        <textPath
+          href={`#${id as string}`}
+          style={{ ...style, strokeWidth: '1', fontSize: '16px' }}
+          startOffset="50%"
+          textAnchor="middle" // TODO? make exact label place editable start, end
+        >
+          {/* {label} */}
+        </textPath>
+      </text>
+    </>
   );
 }

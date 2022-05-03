@@ -43,27 +43,12 @@ export default function Sidebar() {
   const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
 
   useEffect(() => {
-    // console.log(selectedElement);
     setElement(selectedElement);
-  }, [selectedElement.id, selectedElement]); // TODO: examine are both needed?
-
-  const defaultInputsChanged = (table) => {
-    // setDefaultInputs(table);
-    setElement({
-      ...element,
-      default_inputs: table.map((dval) => {
-        return {
-          id: dval.name,
-          name: dval.name,
-          value: dval.value,
-        };
-      }),
-    });
-  };
+  }, [selectedElement]);
 
   const deleteElement = async () => {
     let newGraph = {} as GraphRF;
-    const elN = element as EwoksRFNode; // TODO: is this the way typescript warning???
+    const elN = element as EwoksRFNode; // TODO: is this the way to avoid typescript warning???
     const elL = element as EwoksRFLink;
     const elD = element as GraphDetails;
     if (elN.position) {
@@ -182,11 +167,7 @@ export default function Sidebar() {
           {!('source' in selectedElement) && (
             <IconMenu handleShowEwoksGraph={showEwoksGraph} />
           )}
-          <DraggableDialog
-            open={openDialog}
-            content={dialogContent}
-            setValue={defaultInputsChanged} // TODO: examine
-          />
+          <DraggableDialog open={openDialog} content={dialogContent} />
           <ConfirmDialog
             title={`Delete "${element.label}" workflow?`}
             content={`You are about to delete "${element.label}" workflow.
