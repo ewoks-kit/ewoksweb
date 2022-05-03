@@ -30,7 +30,7 @@ function getSmoothStepPathC({
   targetX = 0,
   targetY = 0,
   borderRadius = 4,
-  centerY = 120,
+  // centerY = 120,
 }) {
   const [, _centerY, offsetX, offsetY] = getEdgeCenter({
     sourceX,
@@ -42,7 +42,7 @@ function getSmoothStepPathC({
   const cornerWidth = Math.min(borderRadius, Math.abs(targetX - sourceX));
   const cornerHeight = Math.min(borderRadius, Math.abs(targetY - sourceY));
   const cornerSize = Math.min(cornerWidth, cornerHeight, offsetX, offsetY);
-  const cY = typeof centerY !== 'undefined' ? centerY : _centerY;
+  const cY = _centerY;
 
   // console.log(
   //   'source',
@@ -81,11 +81,11 @@ function getSmoothStepPathC({
     // console.log('sourceX > targetX');
     firstCornerPath =
       sourceY < targetY
-        ? bottomRightCorner(sourceX + 10, cY + 100, cornerSize)
+        ? bottomRightCorner(sourceX + 10, cY + 20, cornerSize)
         : topRightCorner(sourceX + 10, cY + 10, cornerSize);
     secondCornerPath =
       sourceY < targetY
-        ? leftTopCorner(targetX - 10, cY + 100, cornerSize)
+        ? leftTopCorner(targetX - 10, cY + 20, cornerSize)
         : leftBottomCorner(targetX - 10, cY + 50, cornerSize);
   }
 
@@ -137,11 +137,6 @@ export default function getAround({
     targetY,
     // targetPosition,
   });
-  const styles = {
-    // stroke: '#cc0000',
-    strokeWidth: '3',
-    // fill: 'rgb(223, 226, 246)',
-  };
 
   // const markerEnd = getMarkerEnd(arrowHeadType, markerEndId);
   // console.log(edgePath, markerEnd);
@@ -163,7 +158,7 @@ export default function getAround({
           startOffset="50%"
           textAnchor="middle" // TODO? make exact label place editable start, end
         >
-          {/* {label} */}
+          {label}
         </textPath>
       </text>
     </>

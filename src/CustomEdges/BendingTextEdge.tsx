@@ -8,9 +8,9 @@ function bendingText({
   targetY,
   sourcePosition,
   targetPosition,
-  label,
+  label = '',
   markerEnd,
-  style,
+  style = {},
 }) {
   const edgePath = getBezierPath({
     sourceX,
@@ -40,7 +40,7 @@ function bendingText({
           // add side to text not supported yet
           // side:"right"
         >
-          {/* {label} */}
+          {label}
         </textPath>
       </text>
     </>
