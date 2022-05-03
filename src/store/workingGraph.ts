@@ -24,17 +24,19 @@ const workingGraph = (set, get) => ({
     // 1. if it is a new graph opening initialize
     // TODO: remove initialise or id: 0. Send clear messages
     if (get().tasks.length === 0) {
-      // try {
-      //   const tasks = await axios.get(`${configData.serverUrl}/tasks`);
-      // } catch((error) {
-      //   console.error("The Promise is rejected!", error);
-      // } finally {
-      //   get().setTasks(tasks.data as Task[]);
-      // }
-      const tasks = await axios.get(
-        `${configData.serverUrl}/tasks/descriptions`
-      );
-      get().setTasks(tasks.data as Task[]);
+      try {
+        const tasks = await axios.get(
+          `${configData.serverUrl}/tasks/descriptions`
+        );
+        get().setTasks(tasks.data as Task[]);
+      } catch (error) {
+        // console.error('The Promise is rejected!', error);
+        get().setOpenSnackbar({
+          open: true,
+          text: error.response?.data || configData.retrieveTasksError,
+          severity: 'error',
+        });
+      }
     }
     get().setSelectedElement({} as EwoksRFNode | EwoksRFLink);
     get().setSubgraphsStack({ id: 'initialiase', label: '' });

@@ -110,7 +110,7 @@ export default function DraggableDialog(props) {
           {/* </Box> */}
           <ReactJson
             src={graph}
-            name="value"
+            name="graph"
             theme="monokai"
             collapsed
             collapseStringsAfterLength={30}
@@ -118,7 +118,7 @@ export default function DraggableDialog(props) {
             enableClipboard={false}
             onEdit={(edit) => graphChanged(edit)}
             onAdd={(add) => graphChanged(add)}
-            defaultValue="value"
+            defaultValue="graph"
             onDelete={(del) => graphChanged(del)}
             onSelect={() => true}
             quotesOnKeys={false}

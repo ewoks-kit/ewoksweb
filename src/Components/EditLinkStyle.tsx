@@ -92,13 +92,18 @@ export default function EditLinkStyle(props) {
           label="Link type"
           onChange={linkTypeChanged}
         >
-          {['straight', 'smoothstep', 'step', 'default', 'bendingText'].map(
-            (text) => (
-              <MenuItem key={text} value={text}>
-                {text}
-              </MenuItem>
-            )
-          )}
+          {[
+            'straight',
+            'smoothstep',
+            'step',
+            'default',
+            'bendingText',
+            'getAround',
+          ].map((text) => (
+            <MenuItem key={text} value={text}>
+              {text}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
       <FormControl variant="filled" fullWidth>

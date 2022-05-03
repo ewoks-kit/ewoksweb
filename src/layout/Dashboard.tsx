@@ -149,7 +149,7 @@ export default function Dashboard() {
           <GetFromServer />
           <ExecuteWorkflow />
           <div className={classes.verticalRule} />
-          <Tooltip title="Manage tasks and workflows" arrow>
+          <Tooltip title="Manage tasks, icons and workflows" arrow>
             <IconButton color="inherit" onClick={handleOpenSettings}>
               <Fab
                 className={classes.openFileButton}

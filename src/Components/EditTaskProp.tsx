@@ -30,6 +30,12 @@ function EditTaskProp({ id, label, value, propChanged, editProps }) {
     propChanged({ [id]: event.target.value });
   };
 
+  const enterPressed = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      setEditProp(!editProp);
+    }
+  };
   return (
     <>
       <div className={classes.detailsLabels}>
@@ -56,6 +62,7 @@ function EditTaskProp({ id, label, value, propChanged, editProps }) {
           variant="outlined"
           value={taskProp || ''}
           onChange={taskPropChanged}
+          onKeyPress={enterPressed}
         />
       )}
     </>
