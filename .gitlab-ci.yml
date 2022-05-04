@@ -64,8 +64,8 @@ lint:
   extends: .style
   before_script:
     # - npx -y browserslist@latest --update-db
-    - npm install -y
-    # - npm update -y
+    # - npm install -y
+    - npm update -y --dev  # replaces the two commands above
   script:
     - npm run lint
 
@@ -74,8 +74,8 @@ build:
   stage: build
   before_script:
     # - npx -y browserslist@latest --update-db
-    - npm install -y
-    # - npm update -y
+    # - npm install -y
+    - npm update -y --dev  # replaces the two commands above
   script:
     - npm run build
     - python3 setup.py sdist
