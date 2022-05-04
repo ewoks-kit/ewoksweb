@@ -19,7 +19,7 @@ export default function Conditions(props) {
     if (element && element.data && element.data.conditions) {
       setConditions(element.data.conditions);
     }
-  }, [element]); // TODO: is it needed element.id?
+  }, [element]);
 
   const addConditions = () => {
     const el = element as EwoksRFLink;

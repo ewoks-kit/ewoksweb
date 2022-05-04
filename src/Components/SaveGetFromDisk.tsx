@@ -26,7 +26,6 @@ export default function SaveGetFromDisk() {
   const isExecuted = state((state) => state.isExecuted);
 
   const loadFromDisk = () => {
-    // TODO: possible race situation with setting pgraphOrSubgraph
     setGraphOrSubgraph(true);
   };
 

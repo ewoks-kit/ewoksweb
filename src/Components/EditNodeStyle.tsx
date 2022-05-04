@@ -86,12 +86,6 @@ export default function EditNodeStyle(props) {
       'fromSaveElement',
       true
     );
-    // TODO: Remove when refresh is resolved
-    // setOpenSnackbar({
-    //   open: true,
-    //   text: `Please save and reload the graph before using the new handles`,
-    //   severity: 'warning',
-    // });
   };
 
   return (

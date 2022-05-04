@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import { getEdgeCenter } from 'react-flow-renderer';
 
 // const bottomLeftCorner = (x: number, y: number, size: number) => {
@@ -30,7 +30,7 @@ function getSmoothStepPathC({
   targetX = 0,
   targetY = 0,
   borderRadius = 4,
-  centerY = 120,
+  // centerY = 120,
 }) {
   const [, _centerY, offsetX, offsetY] = getEdgeCenter({
     sourceX,
@@ -42,7 +42,7 @@ function getSmoothStepPathC({
   const cornerWidth = Math.min(borderRadius, Math.abs(targetX - sourceX));
   const cornerHeight = Math.min(borderRadius, Math.abs(targetY - sourceY));
   const cornerSize = Math.min(cornerWidth, cornerHeight, offsetX, offsetY);
-  const cY = typeof centerY !== 'undefined' ? centerY : _centerY;
+  const cY = _centerY;
 
   // console.log(
   //   'source',
@@ -81,11 +81,11 @@ function getSmoothStepPathC({
     // console.log('sourceX > targetX');
     firstCornerPath =
       sourceY < targetY
-        ? bottomRightCorner(sourceX + 10, cY + 100, cornerSize)
+        ? bottomRightCorner(sourceX + 10, cY + 20, cornerSize)
         : topRightCorner(sourceX + 10, cY + 10, cornerSize);
     secondCornerPath =
       sourceY < targetY
-        ? leftTopCorner(targetX - 10, cY + 100, cornerSize)
+        ? leftTopCorner(targetX - 10, cY + 20, cornerSize)
         : leftBottomCorner(targetX - 10, cY + 50, cornerSize);
   }
 
@@ -113,8 +113,9 @@ export default function getAround({
   // sourcePosition,
   // targetPosition,
   style = {},
+  label,
   // arrowHeadType,
-  // markerEndId,
+  markerEnd,
 }) {
   // console.log(
   //   id,
@@ -140,14 +141,26 @@ export default function getAround({
   // const markerEnd = getMarkerEnd(arrowHeadType, markerEndId);
   // console.log(edgePath, markerEnd);
   return (
-    <path
-      id={id}
-      style={style}
-      className="react-flow__edge-path"
-      d={edgePath}
-      markerEnd="arrow" // {markerEnd}
-      fill="none"
-      strokeWidth={1}
-    />
+    <>
+      <path
+        id={id}
+        style={style}
+        className="react-flow__edge-path"
+        d={edgePath}
+        markerEnd={markerEnd}
+        fill="none"
+        strokeWidth={1}
+      />
+      <text style={{ color: 'red' }}>
+        <textPath
+          href={`#${id as string}`}
+          style={{ ...style, strokeWidth: '1', fontSize: '16px' }}
+          startOffset="50%"
+          textAnchor="middle" // TODO? make exact label place editable start, end
+        >
+          {label}
+        </textPath>
+      </text>
+    </>
   );
 }

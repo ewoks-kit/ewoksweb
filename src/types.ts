@@ -9,7 +9,7 @@ export interface GraphNodes {
 }
 
 export interface GraphDetails {
-  id?: string;
+  id: string;
   label?: string;
   input_nodes?: GraphNodes[];
   output_nodes?: GraphNodes[];
@@ -393,7 +393,7 @@ export interface RFNode {
 }
 
 export interface GraphRF {
-  graph?: GraphDetails;
+  graph: GraphDetails;
   nodes: EwoksRFNode[];
   links: EwoksRFLink[];
 }

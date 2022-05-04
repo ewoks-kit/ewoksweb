@@ -49,18 +49,13 @@ const subGraph = (set, get) => ({
     let subToAdd = graph as GraphRF;
 
     if (prevState.recentGraphs.length === 0) {
-      // if there is no initial graph to drop-in the subgraph -> create one? TODO?
+      // if there is no initial graph to drop-in the subgraph -> create one
       subToAdd = createGraph();
       prevState.setSubgraphsStack({
         id: subToAdd.graph.id,
         label: subToAdd.graph.label,
       });
       prevState.setRecentGraphs(subToAdd);
-    } else {
-      // TODO: if not in the recentGraphs?
-      // subToAdd = prevState.recentGraphs.find(
-      //   (gr) => gr.graph.id === prevState.graphRF.graph.id
-      // );
     }
 
     let newNode = {} as EwoksRFNode;
@@ -92,10 +87,7 @@ const subGraph = (set, get) => ({
         sourcePosition: 'right',
         targetPosition: 'left',
         task_generator: '',
-        // TODO: ids should be unique to this graph only as a node for this subgraph
-        // human readable but automatically generated?
         id: graphId,
-        // TODO: can we upload a task too like a subgraph
         task_type: 'graph',
         task_identifier: subToAdd.graph.id,
         type: 'graph',
@@ -113,20 +105,16 @@ const subGraph = (set, get) => ({
           label: subToAdd.graph.label,
           type: 'internal',
           comment: '',
-          // TODO: icon needs to be in the task and graph JSON specification
           icon: subToAdd.graph.uiProps && subToAdd.graph.uiProps.icon,
           inputs: inputsSub,
           outputs: outputsSub,
           withImage: true,
           withLabel: true,
-          // icon: subToAdd.data.icon ? subToAdd.data.icon : '',
         },
-        // data: { label: CustomNewNode(id, name, image) },
       };
 
       prevState.setRecentGraphs(subToAdd);
     } else {
-      // Handle
       prevState.setOpenSnackbar({
         open: true,
         text: 'Couldnt locate the workingGraph in the recent!',
