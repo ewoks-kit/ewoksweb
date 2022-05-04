@@ -64,8 +64,8 @@ lint:
   extends: .style
   before_script:
     # - npx -y browserslist@latest --update-db
-    # - npm install -y
-    - npm update -y
+    - npm install -y
+    # - npm update -y
   script:
     - npm run lint
 
