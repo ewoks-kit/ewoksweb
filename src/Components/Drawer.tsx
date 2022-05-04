@@ -19,19 +19,19 @@ export default function TemporaryDrawer(props) {
     setState({ top: opSet, left: false, bottom: false, right: false });
   }, [props.openSettings]);
 
-  const toggleDrawer = (anchor: Anchor, open: boolean) => (
-    event: React.KeyboardEvent | React.MouseEvent
-  ) => {
-    if (
-      event.type === 'keydown' &&
-      ((event as React.KeyboardEvent).key === 'Tab' ||
-        (event as React.KeyboardEvent).key === 'Shift')
-    ) {
-      return;
-    }
-    props.handleOpenSettings();
-    setState({ ...state, [anchor]: open }); // left: open , for opening both-active 1
-  };
+  const toggleDrawer =
+    (anchor: Anchor, open: boolean) =>
+    (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === 'keydown' &&
+        ((event as React.KeyboardEvent).key === 'Tab' ||
+          (event as React.KeyboardEvent).key === 'Shift')
+      ) {
+        return;
+      }
+      props.handleOpenSettings();
+      setState({ ...state, [anchor]: open }); // left: open , for opening both-active 1
+    };
 
   const list = (anchor: Anchor) => (
     <Box

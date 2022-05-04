@@ -39,8 +39,7 @@ export default function SaveToServer({ saveToServerF }) {
       if (!graphRF.graph.label || graphRF.graph.label === 'newGraph') {
         setOpenSnackbar({
           open: true,
-          text:
-            'Please insert a new label to be also used as an id for the new workflow and then save!',
+          text: 'Please insert a new label to be also used as an id for the new workflow and then save!',
           severity: 'warning',
         });
         setGettingFromServer(false);

@@ -247,8 +247,7 @@ export default function FormDialog(props) {
       id: 'Required Inputs',
       value: requiredInputNames,
       handleChange: requiredInputNamesChanged,
-      tip:
-        'Give the required inputs in comma separated values eg: req1,req2...',
+      tip: 'Give the required inputs in comma separated values eg: req1,req2...',
     },
     {
       id: 'Output Inputs',

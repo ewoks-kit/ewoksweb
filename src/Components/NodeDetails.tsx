@@ -27,9 +27,8 @@ export default function NodeDetails(props) {
   const [editProps, setEditProps] = React.useState<boolean>(false);
   const [defaultInputs, setDefaultInputs] = React.useState<Inputs[]>([]);
   const [inputsComplete, setInputsComplete] = React.useState<boolean>(false);
-  const [defaultErrorNode, setDefaultErrorNode] = React.useState<boolean>(
-    false
-  );
+  const [defaultErrorNode, setDefaultErrorNode] =
+    React.useState<boolean>(false);
 
   const [dataMapping, setDataMapping] = React.useState<DataMapping[]>([]);
   const [mapAllData, setMapAllData] = React.useState<boolean>(false);

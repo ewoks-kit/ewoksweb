@@ -54,8 +54,7 @@ export default function GetFromServer() {
           setGettingFromServer(false);
           setOpenSnackbar({
             open: true,
-            text:
-              'Could not locate the requested workflow! Maybe it is deleted!',
+            text: 'Could not locate the requested workflow! Maybe it is deleted!',
             severity: 'warning',
           });
         }

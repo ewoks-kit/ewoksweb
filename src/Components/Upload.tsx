@@ -69,8 +69,7 @@ function Upload(props) {
         } else {
           setOpenSnackbar({
             open: true,
-            text:
-              'Error in JSON structure. Please correct input file and retry!',
+            text: 'Error in JSON structure. Please correct input file and retry!',
             severity: 'error',
           });
         }
