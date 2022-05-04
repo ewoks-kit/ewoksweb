@@ -70,9 +70,10 @@ function AddNodes(props) {
       const tasksData = await axios.get(
         `${configData.serverUrl}/tasks/descriptions`
       );
-      const tasks = tasksData.data as Task[];
-      setTasks(tasks);
-      setTaskCategories(tasks.map((tas) => tas.category));
+      const tasks = tasksData.data as { items: Task[] };
+      console.log(tasks);
+      setTasks(tasks.items);
+      setTaskCategories(tasks.items.map((tas) => tas.category));
     } catch (error) {
       setOpenSnackbar({
         open: true,

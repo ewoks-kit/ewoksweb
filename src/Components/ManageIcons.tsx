@@ -65,8 +65,8 @@ export default function ManageIcons() {
       const tasksData = await axios.get(
         `${configData.serverUrl}/tasks/descriptions`
       );
-
-      const allTasks = tasksData.data as Task[];
+      const tasks = tasksData.data as { items: Task[] };
+      const allTasks = tasks.items as Task[];
 
       if (allTasks.map((task) => task.icon).includes(selectedIcon)) {
         setOpenSnackbar({

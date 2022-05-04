@@ -25,10 +25,11 @@ const workingGraph = (set, get) => ({
     // TODO: remove initialise or id: 0. Send clear messages
     if (get().tasks.length === 0) {
       try {
-        const tasks = await axios.get(
+        const tasksData = await axios.get(
           `${configData.serverUrl}/tasks/descriptions`
         );
-        get().setTasks(tasks.data as Task[]);
+        const tasks = tasksData.data as { items: Task[] };
+        get().setTasks(tasks.items as Task[]);
       } catch (error) {
         // console.error('The Promise is rejected!', error);
         get().setOpenSnackbar({

@@ -85,7 +85,8 @@ export default function FormDialog(props) {
       const tasksNew = await axios.get(
         `${configData.serverUrl}/tasks/descriptions`
       );
-      setTasks(tasksNew.data as Task[]);
+      const tasks = tasksNew.data as { items: Task[] };
+      setTasks(tasks.items as Task[]);
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -119,7 +120,8 @@ export default function FormDialog(props) {
       const tasksNew = await axios.get(
         `${configData.serverUrl}/tasks/descriptions`
       );
-      setTasks(tasksNew.data as Task[]);
+      const tasks = tasksNew.data as { items: Task[] };
+      setTasks(tasks.items as Task[]);
     } catch (error) {
       setOpenSnackbar({
         open: true,
