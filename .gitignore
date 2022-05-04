@@ -5,6 +5,8 @@ __pycache__/
 /doc/_generated
 *.log
 npm-debug.log*
+package-lock.json
+node_modules/
 
 # Distribution / packaging
 /build/
@@ -15,7 +17,6 @@ npm-debug.log*
 .eggs/
 
 # Others
-node_modules/
 /.env.*
 Thumbs.db
 .DS_Store
