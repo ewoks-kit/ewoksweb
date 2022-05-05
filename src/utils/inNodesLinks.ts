@@ -43,10 +43,28 @@ export function inNodesLinks(graph) {
           target: inNod.node,
           sub_target: nodeTarget.task_type !== 'graph' ? '' : inNod.sub_node,
           conditions: existsOrValue(inNod.link_attributes, 'conditions', []),
+          data_mapping: existsOrValue(
+            inNod.link_attributes,
+            'data_mapping',
+            []
+          ),
+          on_error: existsOrValue(inNod.link_attributes, 'on_error', false),
+          map_all_data: existsOrValue(
+            inNod.link_attributes,
+            'map_all_data',
+            false
+          ),
           uiProps: {
             label: existsOrValue(inNod.link_attributes, 'label', ''),
+            comment: existsOrValue(inNod.link_attributes, 'comment', ''),
+            style: {
+              stroke: existsOrValue(inNod.uiProps?.style, 'stroke', ''),
+            },
             type: existsOrValue(inNod.uiProps, 'linkStyle', 'default'),
-            markerEnd: { type: 'arrowclosed' },
+            markerEnd: {
+              type: existsOrValue(inNod.uiProps?.markerEnd, 'type', 'none'),
+            },
+            animated: existsOrValue(inNod.uiProps, 'animated', false),
             withImage: existsOrValue(inNod.uiProps, 'withImage', true),
             withLabel: existsOrValue(inNod.uiProps, 'withLabel', true),
             colorBorder: existsOrValue(inNod.uiProps, 'colorBorder', ''),

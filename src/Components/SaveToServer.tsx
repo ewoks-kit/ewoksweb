@@ -66,7 +66,7 @@ export default function SaveToServer({ saveToServerF }) {
         .catch((error) =>
           setOpenSnackbar({
             open: true,
-            text: error.response?.data || configData.savingError,
+            text: error.response?.data?.message || configData.savingError,
             severity: 'error',
           })
         );
@@ -87,7 +87,7 @@ export default function SaveToServer({ saveToServerF }) {
         .catch((error) => {
           setOpenSnackbar({
             open: true,
-            text: error.response?.data || configData.savingError,
+            text: error.response?.data?.message || configData.savingError,
             severity: 'error',
           });
         });

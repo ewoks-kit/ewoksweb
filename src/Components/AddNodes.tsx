@@ -71,13 +71,12 @@ function AddNodes(props) {
         `${configData.serverUrl}/tasks/descriptions`
       );
       const tasks = tasksData.data as { items: Task[] };
-      console.log(tasks);
       setTasks(tasks.items);
       setTaskCategories(tasks.items.map((tas) => tas.category));
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data || configData.retrieveTasksError,
+        text: error.response?.data?.message || configData.retrieveTasksError,
         severity: 'error',
       });
     }
@@ -245,6 +244,7 @@ function AddNodes(props) {
             </AccordionDetails>
             {selectedTask &&
               selectedTask.task_identifier &&
+              categoryName !== 'ewokscore' &&
               tasks.length > 0 &&
               tasks.find(
                 (tas) => tas.task_identifier === selectedTask.task_identifier

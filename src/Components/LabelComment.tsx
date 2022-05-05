@@ -109,7 +109,7 @@ export default function LabelComment(props) {
             <Tooltip title="Use conditions or data-mapping as label" arrow>
               <span>
                 <Button
-                  style={{ margin: '8px' }}
+                  style={{ margin: '0px 8px 14px 18px' }}
                   variant="contained"
                   color="primary"
                   onClick={useConditions}
@@ -118,7 +118,7 @@ export default function LabelComment(props) {
                   conditions
                 </Button>
                 <Button
-                  style={{ margin: '8px' }}
+                  style={{ margin: '0px 8px 14px 8px' }}
                   variant="contained"
                   color="primary"
                   onClick={useMapping}

@@ -23,6 +23,37 @@ export default function isValidLink(connection, graphRF) {
   }
 
   // if two nodes are already connected
+  // TODO:have to take into account if one or both nodes that need connection are graphs
+  // if graph take into account the exact sourceHandle or targetHandle
+  // if not.a.graph dont take into account the Handlers
+  // console.log(source, target, connection);
+  // if (
+  //   graphRF.links.some(
+  //     (link) => source.type !== 'graph' && target.type !== 'graph'
+  //   )
+  //   // if (
+  //   //   graphRF.links.some((link) => {
+  //   //     if (source.type !== 'graph' && target.type !== 'graph') {
+  //   //       return (
+  //   //         link.source === connection.source && link.target === connection.target
+  //   //         // link.sourceHandle === connection.sourceHandle &&
+  //   //         // link.targetHandle === connection.targetHandle
+  //   //       );
+  //   //     } else if (source.type === 'graph' && target.type !== 'graph') {
+  //   //       return (
+  //   //         link.source === connection.source &&
+  //   //         link.target === connection.target &&
+  //   //         // link.sourceHandle === connection.sourceHandle &&
+  //   //         link.targetHandle === connection.targetHandle
+  //   //       );
+  //   //     }
+  //   //     return false;
+  //   //   })
+  // ) {
+  //   isValid = false;
+  //   reason = `Cannot re-connect two nodes. Use data mapping instead in order to
+  //     map different values on the same link!`;
+  // }
   if (
     graphRF.links.some(
       (link) =>
@@ -30,8 +61,8 @@ export default function isValidLink(connection, graphRF) {
     )
   ) {
     isValid = false;
-    reason =
-      'Cannot re-connect two nodes. Use data mapping instead to map different values on the same link!';
+    reason = `Cannot re-connect two nodes. Use data mapping instead in order to
+      map different values on the same link!`;
   }
 
   return { isValid, reason };

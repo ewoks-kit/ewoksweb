@@ -29,12 +29,12 @@ const workingGraph = (set, get) => ({
           `${configData.serverUrl}/tasks/descriptions`
         );
         const tasks = tasksData.data as { items: Task[] };
-        get().setTasks(tasks.items as Task[]);
+        get().setTasks(tasks.items);
       } catch (error) {
         // console.error('The Promise is rejected!', error);
         get().setOpenSnackbar({
           open: true,
-          text: error.response?.data || configData.retrieveTasksError,
+          text: error.response?.data?.message || configData.retrieveTasksError,
           severity: 'error',
         });
       }
