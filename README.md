@@ -15,7 +15,8 @@ npm start
 Build the package for deployment on pypi
 
 ```bash
-npm update
+npx -y browserslist@latest --update-db  # optional
+npm install
 npm run build
 python setup.py sdist
 ```
