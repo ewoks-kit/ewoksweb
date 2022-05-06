@@ -65,7 +65,6 @@ lint:
   before_script:
     # - npx -y browserslist@latest --update-db
     - npm install -y
-    # - npm update -y
   script:
     - npm run lint
 
@@ -75,7 +74,6 @@ build:
   before_script:
     # - npx -y browserslist@latest --update-db
     - npm install -y
-    # - npm update -y
   script:
     - npm run build
     - python3 setup.py sdist
