@@ -54,7 +54,6 @@ export default function isValidLink(connection, graphRF) {
             link.targetHandle === connection.targetHandle)
       ))
   ) {
-    console.log('1');
     isValid = false;
     reason = `Cannot re-connect two nodes. Use data mapping instead in order to
       map different values on the same link!`;
