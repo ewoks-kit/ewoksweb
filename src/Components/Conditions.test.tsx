@@ -2,14 +2,14 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import Conditions from './Conditions';
 // import state from '../store/state';
 
-describe('In the AddNodes test:', () => {
-  test('initially it renders one button element', async () => {
+describe('In the Conditions:', () => {
+  test('Initially it renders "Conditions" text and one button element', async () => {
     render(
       <Conditions
         element={{ source: '1', target: '2', data: { conditions: [] } }}
       />
     );
-
+    // not working
     // const addConditions = jest.fn();
 
     const conditionText = screen.getByText(/Conditions/u);
@@ -156,9 +156,8 @@ describe('In the AddNodes test:', () => {
   });
 });
 
+// TO TEST:
 // if addConditions is pressed on a selected link
 // a new line is added in conditions or not if last line empty
 
 // a conditionsValuesChanged changes the selected link conditions
-
-// editableTable not in the document if no conditions in the selectedElement

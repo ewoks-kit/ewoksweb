@@ -121,17 +121,22 @@ function calcNodeProps(
       : '',
     link_attributes: {
       label: existsOrValue(graph_links[link_index], 'label', ''),
-      conditions:
-        (graph_links[link_index] &&
-          graph_links[link_index].data &&
-          graph_links[link_index].data.conditions) ||
-        [],
+      comment: existsOrValue(graph_links[link_index]?.data, 'comment', ''),
+      conditions: graph_links[link_index]?.data?.conditions || [],
+      data_mapping: graph_links[link_index]?.data?.data_mapping || [],
+      map_all_data: graph_links[link_index]?.data?.map_all_data || false,
+      on_error: graph_links[link_index]?.data?.on_error || false,
     },
     uiProps: {
       position: nod.position,
       label: nod.data.label,
-      linkStyle:
-        (graph_links[link_index] && graph_links[link_index].type) || 'default',
+      linkStyle: graph_links[link_index]?.type || 'default',
+      style: {
+        stroke: graph_links[link_index]?.style?.stroke || '',
+        strokeWidth: '3',
+      },
+      markerEnd: { type: graph_links[link_index]?.markerEnd?.type || '' },
+      animated: graph_links[link_index]?.animated || false,
       withImage: 'withImage' in nod.data ? nod.data.withImage : true,
       withLabel: 'withLabel' in nod.data ? nod.data.withLabel : true,
       colorBorder: nod.data.colorBorder,

@@ -199,6 +199,7 @@ export interface stackGraph {
   label: string;
 }
 
+// TODO break to uiprops for links and nodes?
 export interface UiProps {
   label?: string;
   type?: string;

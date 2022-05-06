@@ -60,10 +60,11 @@ export default function GetFromServer() {
           });
         }
       } catch (error) {
+        // console.log(error.response);
         setOpenSnackbar({
           open: true,
           text:
-            error.response?.data ||
+            error.response?.data?.message ||
             'Error in retrieving workflow. Please check connectivity with the server!',
           severity: 'error',
         });

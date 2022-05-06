@@ -42,8 +42,9 @@ export async function getWorkflows(): Promise<{ title: string }[]> {
     });
 
   if (workflows && workflows.data) {
-    const workf = workflows.data as string[];
-    res = workf.map((work) => {
+    // console.log(workflows);
+    const workf = workflows.data as { identifiers: string[] };
+    res = workf.identifiers.map((work) => {
       return { title: work };
     });
   }

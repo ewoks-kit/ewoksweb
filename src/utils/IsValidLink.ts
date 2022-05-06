@@ -23,15 +23,40 @@ export default function isValidLink(connection, graphRF) {
   }
 
   // if two nodes are already connected
+  // TODO:have to take into account if one or both nodes that need connection are graphs
+  // if graph take into account the exact sourceHandle or targetHandle
+  // if not.a.graph dont take into account the Handlers
   if (
-    graphRF.links.some(
-      (link) =>
-        link.source === connection.source && link.target === connection.target
-    )
+    (source.type !== 'graph' &&
+      target.type !== 'graph' &&
+      graphRF.links.some(
+        (link) =>
+          link.source === connection.source && link.target === connection.target
+      )) ||
+    (source.type === 'graph' &&
+      target.type !== 'graph' &&
+      graphRF.links.some(
+        (link) =>
+          link.source === connection.source &&
+          link.target === connection.target &&
+          (link.sourceHandle.slice(0, -5) === connection.sourceHandle ||
+            link.sourceHandle === connection.sourceHandle.slice(0, -5) ||
+            link.sourceHandle === connection.sourceHandle)
+      )) ||
+    (source.type !== 'graph' &&
+      target.type === 'graph' &&
+      graphRF.links.some(
+        (link) =>
+          link.source === connection.source &&
+          link.target === connection.target &&
+          (link.targetHandle.slice(0, -6) === connection.targetHandle ||
+            link.targetHandle === connection.targetHandle.slice(0, -6) ||
+            link.targetHandle === connection.targetHandle)
+      ))
   ) {
     isValid = false;
-    reason =
-      'Cannot re-connect two nodes. Use data mapping instead to map different values on the same link!';
+    reason = `Cannot re-connect two nodes. Use data mapping instead in order to
+      map different values on the same link!`;
   }
 
   return { isValid, reason };

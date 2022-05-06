@@ -69,10 +69,9 @@ export default function FormDialog(props) {
     }
   };
 
-  const putTask = async (task) => {
+  const putTask = async (task: Task) => {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const responseClone = await axios.put(`${configData.serverUrl}/tasks`, {
+      await axios.put(`${configData.serverUrl}/task/${task.task_identifier}`, {
         ...task,
       });
 
@@ -85,7 +84,8 @@ export default function FormDialog(props) {
       const tasksNew = await axios.get(
         `${configData.serverUrl}/tasks/descriptions`
       );
-      setTasks(tasksNew.data as Task[]);
+      const tasks = tasksNew.data as { items: Task[] };
+      setTasks(tasks.items);
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -119,7 +119,8 @@ export default function FormDialog(props) {
       const tasksNew = await axios.get(
         `${configData.serverUrl}/tasks/descriptions`
       );
-      setTasks(tasksNew.data as Task[]);
+      const tasks = tasksNew.data as { items: Task[] };
+      setTasks(tasks.items);
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -150,7 +151,7 @@ export default function FormDialog(props) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data || configData.savingError,
+        text: error.response?.data?.message || configData.savingError,
         severity: 'error',
       });
     }

@@ -70,13 +70,13 @@ function AddNodes(props) {
       const tasksData = await axios.get(
         `${configData.serverUrl}/tasks/descriptions`
       );
-      const tasks = tasksData.data as Task[];
-      setTasks(tasks);
-      setTaskCategories(tasks.map((tas) => tas.category));
+      const tasks = tasksData.data as { items: Task[] };
+      setTasks(tasks.items);
+      setTaskCategories(tasks.items.map((tas) => tas.category));
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data || configData.retrieveTasksError,
+        text: error.response?.data?.message || configData.retrieveTasksError,
         severity: 'error',
       });
     }
@@ -244,6 +244,7 @@ function AddNodes(props) {
             </AccordionDetails>
             {selectedTask &&
               selectedTask.task_identifier &&
+              categoryName !== 'ewokscore' &&
               tasks.length > 0 &&
               tasks.find(
                 (tas) => tas.task_identifier === selectedTask.task_identifier

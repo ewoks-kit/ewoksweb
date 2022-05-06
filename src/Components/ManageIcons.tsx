@@ -65,8 +65,8 @@ export default function ManageIcons() {
       const tasksData = await axios.get(
         `${configData.serverUrl}/tasks/descriptions`
       );
-
-      const allTasks = tasksData.data as Task[];
+      const tasks = tasksData.data as { items: Task[] };
+      const allTasks = tasks.items;
 
       if (allTasks.map((task) => task.icon).includes(selectedIcon)) {
         setOpenSnackbar({
@@ -86,7 +86,7 @@ export default function ManageIcons() {
       setOpenSnackbar({
         open: true,
         text:
-          error.response?.data ||
+          error.response?.data?.message ||
           'Error in deleting Task. Please check connectivity with the server!',
         severity: 'error',
       });
@@ -102,7 +102,7 @@ export default function ManageIcons() {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data || configData.retrieveTasksError,
+        text: error.response?.data?.message || configData.retrieveTasksError,
         severity: 'error',
       });
     }

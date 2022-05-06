@@ -46,10 +46,24 @@ export function outNodesLinks(graph) {
           ? ''
           : outNod.sub_node,
         conditions: existsOrValue(outNod.link_attributes, 'conditions', []),
+        data_mapping: existsOrValue(outNod.link_attributes, 'data_mapping', []),
+        on_error: existsOrValue(outNod.link_attributes, 'on_error', false),
+        map_all_data: existsOrValue(
+          outNod.link_attributes,
+          'map_all_data',
+          false
+        ),
         uiProps: {
           label: existsOrValue(outNod.link_attributes, 'label', ''),
+          comment: existsOrValue(outNod.link_attributes, 'comment', ''),
+          style: {
+            stroke: existsOrValue(outNod.uiProps?.style, 'stroke', ''),
+          },
           type: existsOrValue(outNod.uiProps, 'linkStyle', 'default'),
-          markerEnd: { type: 'arrowclosed' },
+          markerEnd: {
+            type: existsOrValue(outNod.uiProps?.markerEnd, 'type', 'none'),
+          },
+          animated: existsOrValue(outNod.uiProps, 'animated', false),
           withImage: existsOrValue(outNod.uiProps, 'withImage', true),
           withLabel: existsOrValue(outNod.uiProps, 'withLabel', true),
           colorBorder: existsOrValue(outNod.uiProps, 'colorBorder', ''),
