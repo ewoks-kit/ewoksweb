@@ -26,40 +26,35 @@ export default function isValidLink(connection, graphRF) {
   // TODO:have to take into account if one or both nodes that need connection are graphs
   // if graph take into account the exact sourceHandle or targetHandle
   // if not.a.graph dont take into account the Handlers
-  // console.log(source, target, connection);
-  // if (
-  //   graphRF.links.some(
-  //     (link) => source.type !== 'graph' && target.type !== 'graph'
-  //   )
-  //   // if (
-  //   //   graphRF.links.some((link) => {
-  //   //     if (source.type !== 'graph' && target.type !== 'graph') {
-  //   //       return (
-  //   //         link.source === connection.source && link.target === connection.target
-  //   //         // link.sourceHandle === connection.sourceHandle &&
-  //   //         // link.targetHandle === connection.targetHandle
-  //   //       );
-  //   //     } else if (source.type === 'graph' && target.type !== 'graph') {
-  //   //       return (
-  //   //         link.source === connection.source &&
-  //   //         link.target === connection.target &&
-  //   //         // link.sourceHandle === connection.sourceHandle &&
-  //   //         link.targetHandle === connection.targetHandle
-  //   //       );
-  //   //     }
-  //   //     return false;
-  //   //   })
-  // ) {
-  //   isValid = false;
-  //   reason = `Cannot re-connect two nodes. Use data mapping instead in order to
-  //     map different values on the same link!`;
-  // }
   if (
-    graphRF.links.some(
-      (link) =>
-        link.source === connection.source && link.target === connection.target
-    )
+    (source.type !== 'graph' &&
+      target.type !== 'graph' &&
+      graphRF.links.some(
+        (link) =>
+          link.source === connection.source && link.target === connection.target
+      )) ||
+    (source.type === 'graph' &&
+      target.type !== 'graph' &&
+      graphRF.links.some(
+        (link) =>
+          link.source === connection.source &&
+          link.target === connection.target &&
+          (link.sourceHandle.slice(0, -5) === connection.sourceHandle ||
+            link.sourceHandle === connection.sourceHandle.slice(0, -5) ||
+            link.sourceHandle === connection.sourceHandle)
+      )) ||
+    (source.type !== 'graph' &&
+      target.type === 'graph' &&
+      graphRF.links.some(
+        (link) =>
+          link.source === connection.source &&
+          link.target === connection.target &&
+          (link.targetHandle.slice(0, -6) === connection.targetHandle ||
+            link.targetHandle === connection.targetHandle.slice(0, -6) ||
+            link.targetHandle === connection.targetHandle)
+      ))
   ) {
+    console.log('1');
     isValid = false;
     reason = `Cannot re-connect two nodes. Use data mapping instead in order to
       map different values on the same link!`;
