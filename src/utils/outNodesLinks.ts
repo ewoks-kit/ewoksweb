@@ -60,8 +60,13 @@ export function outNodesLinks(graph) {
             stroke: existsOrValue(outNod.uiProps?.style, 'stroke', ''),
           },
           type: existsOrValue(outNod.uiProps, 'linkStyle', 'default'),
-          markerEnd: {
-            type: existsOrValue(outNod.uiProps?.markerEnd, 'type', 'none'),
+          markerEnd: () => {
+            let type = {};
+            if (outNod.uiProps?.markerEnd?.type) {
+              type = { type: outNod.uiProps.markerEnd.type };
+            }
+            return type;
+            // type: existsOrValue(outNod.uiProps?.markerEnd, 'type', 'arrow'),
           },
           animated: existsOrValue(outNod.uiProps, 'animated', false),
           withImage: existsOrValue(outNod.uiProps, 'withImage', true),

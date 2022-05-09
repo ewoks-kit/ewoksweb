@@ -12,6 +12,7 @@ const subgraphsStack = (set, get) => ({
     let stack = [];
     const subStack = get().subgraphsStack;
     const exists: number = subStack.map((gr) => gr.id).indexOf(stackGraph.id);
+    // console.log(subStack, stackGraph, exists);
     if (stackGraph.id === 'initialiase') {
       stack = [];
     } else if (exists === -1) {

@@ -102,27 +102,30 @@ function Canvas() {
 
     setNodes(graphRF.nodes);
     setEdges(graphRF.links);
-  }, [graphRF]);
+  }, [graphRF.nodes, graphRF.links]);
 
   useEffect(() => {
-    // console.log(graphRF, prevGraphId);
+    console.log(prevGraphId);
 
     if ('position' in selectedElement) {
+      console.log('fires update');
       setTimeout(() => {
         updateNodeInternals(selectedElement.id);
       }, 400);
     }
 
     if (prevGraphId !== graphRF.graph.id) {
+      console.log('prev graph id');
       setTimeout(() => {
         fitView();
       }, 100);
     }
+
     if (subgraphsStack[subgraphsStack.length - 1]) {
       setPrevGraphId(subgraphsStack[subgraphsStack.length - 1].id);
     }
   }, [
-    graphRF,
+    graphRF.graph.id,
     fitView,
     subgraphsStack,
     prevGraphId,
@@ -132,6 +135,7 @@ function Canvas() {
 
   const onElementsRemove = useCallback(
     (elementsToRemove) => {
+      console.log(elementsToRemove);
       let newGraph = {} as GraphRF;
       const [el] = elementsToRemove;
       if (el.position) {
@@ -160,7 +164,7 @@ function Canvas() {
   const onNodesChange = useCallback(
     (changes) => {
       const node = [...graphRF.nodes].find((el) => el.id === changes[0].id);
-      // console.log(changes, node, graphRF.nodes);
+      console.log(changes, node, graphRF.nodes);
 
       // TODO: nodes are updated only on rf canvas and not on graphRF
       // if we update graphRF we have a loop so we update on setSelectedElement
@@ -180,9 +184,9 @@ function Canvas() {
 
   const onEdgesChange = useCallback(
     (changes) => {
-      // console.log(changes);
+      console.log(changes);
       const edgeToRemove = graphRF.links.find((el) => el.id === changes[0].id);
-      setNodes((ns) => applyNodeChanges(changes, ns));
+      // setNodes((ns) => applyNodeChanges(changes, ns));
 
       if (changes[0].type === 'remove') {
         onElementsRemove([edgeToRemove]);
@@ -193,7 +197,7 @@ function Canvas() {
   );
 
   const onSelectionChange = (elements) => {
-    // console.log(elements);
+    console.log(elements);
     if (elements.nodes.length === 0 && elements.edges.length === 0) {
       setSelectedElement(graphRF.graph);
     }
@@ -201,12 +205,15 @@ function Canvas() {
 
   const onNodeClick = (event, element?: Node) => {
     const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
+    console.log('onNodeClick', graphElement);
     setSelectedElement(graphElement);
     // console.log(graphElement);
   };
 
   const onEdgeClick = (event, element?: Edge) => {
+    console.log('onEdgeClick');
     const graphElement: EwoksRFLink = edges.find((el) => el.id === element.id);
+    console.log('onEdgeClick', graphElement);
     setSelectedElement(graphElement);
   };
 
@@ -330,6 +337,7 @@ function Canvas() {
     if (workingGraph.graph.id === graphRF.graph.id) {
       const sourceTask = graphRF.nodes.find((nod) => nod.id === params.source);
       const targetTask = graphRF.nodes.find((nod) => nod.id === params.target);
+      // TODO: take link out
       const link = {
         data: {
           on_error: false,
@@ -568,6 +576,7 @@ function Canvas() {
           edgeTypes={edgeTypes}
           nodeTypes={nodeTypes}
           // onElementsRemove={onElementsRemove}
+          // TODO: deleteKey does not work properly
           deleteKeyCode="Delete"
         >
           {/* <div style={buttonWrapperStyles}>

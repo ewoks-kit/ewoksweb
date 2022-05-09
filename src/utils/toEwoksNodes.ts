@@ -2,7 +2,6 @@ import type { EwoksNode, EwoksRFNode } from '../types';
 
 // EwoksRFNode --> EwoksNode for saving
 export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
-  // TODO: when input-arrow fake nodes exist remove them to get an Ewoks description
   const tempNodes: EwoksRFNode[] = [...nodes].filter(
     (nod) => !['graphInput', 'graphOutput', 'note'].includes(nod.task_type)
   );

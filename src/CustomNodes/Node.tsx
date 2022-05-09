@@ -66,10 +66,12 @@ const Node: React.FC<NodeProps> = ({
   comment,
   executing,
 }: NodeProps) => {
-  const theCom = comment && (
+  const theCom = comment ? (
     <span>
       <b>{label}</b>:<div>{comment}</div>
     </span>
+  ) : (
+    ''
   );
 
   const border = colorBorder

@@ -22,7 +22,6 @@ const workingGraph = (set, get) => ({
 
   setWorkingGraph: async (workingGraph: GraphRF): Promise<GraphRF> => {
     // 1. if it is a new graph opening initialize
-    // TODO: remove initialise or id: 0. Send clear messages
     if (get().tasks.length === 0) {
       try {
         const tasksData = await axios.get(

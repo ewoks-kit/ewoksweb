@@ -38,15 +38,11 @@ export function toRFEwoksLinks(
           newNodeSubgraphs,
           tasks
         );
-        // console.log(source, target);
-        // console.log(sourceTask, targetTask, valid);
         const color =
           (uiProps && uiProps.style && uiProps.style.stroke) ||
           'rgb(60, 81, 202)';
 
         return {
-          // type: 'bendingText',
-          // TODO? does not accept 2 links between the same nodes
           id: `${source as string}:${
             existsOrValue(uiProps, 'sourceHandle', '') as string
           }->${target as string}:${
@@ -124,11 +120,11 @@ function calcLabel(uiProps, conditions, data_mapping): string {
 }
 
 function calcTargetHandle(uiProps, sub_target) {
-  return uiProps && uiProps.targetHandle
+  return uiProps?.targetHandle
     ? uiProps.targetHandle
     : sub_target
     ? sub_target
-    : ''; // TODO remove this? when stable
+    : '';
 }
 
 function calcSourceHandle(uiProps, sub_source) {

@@ -23,7 +23,7 @@ export default function isValidLink(connection, graphRF) {
   }
 
   // if two nodes are already connected
-  // TODO:have to take into account if one or both nodes that need connection are graphs
+  // Take into account if one or both nodes that need connection are graphs
   // if graph take into account the exact sourceHandle or targetHandle
   // if not.a.graph dont take into account the Handlers
   if (

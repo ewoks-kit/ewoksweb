@@ -48,6 +48,7 @@ export default function Sidebar() {
 
   const deleteElement = async () => {
     let newGraph = {} as GraphRF;
+    console.log(element);
     const elN = element as EwoksRFNode; // TODO: is this the way to avoid typescript warning???
     const elL = element as EwoksRFLink;
     const elD = element as GraphDetails;
