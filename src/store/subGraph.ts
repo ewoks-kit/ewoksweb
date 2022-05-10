@@ -1,5 +1,4 @@
 import type { EwoksRFNode, GraphRF, GraphEwoks } from '../types';
-import { createGraph } from '../utils';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from '../utils/FindAllSubgraphs';
@@ -22,7 +21,7 @@ const subGraph = (set, get) => ({
       subGraph,
       prevState.recentGraphs
     );
-    console.log(subGraph, newNodeSubgraphs);
+    // console.log(subGraph, newNodeSubgraphs);
     // 3. Put the newNodeSubgraphs into recent in their graphRF form (sync)
     newNodeSubgraphs.forEach((gr) => {
       // calculate the rfNodes using the fetched subgraphs
@@ -50,9 +49,9 @@ const subGraph = (set, get) => ({
     // save the workingGraph in the recent graphs and add a new graph node to it
 
     const subToAdd = graph as GraphRF;
-    console.log(subToAdd);
+
+    // TODO: if there is no initial graph to drop-in the subgraph -> create one
     // if (prevState.recentGraphs.length === 0) {
-    //   // if there is no initial graph to drop-in the subgraph -> create one
     //   subToAdd = createGraph();
     //   prevState.setSubgraphsStack({
     //     id: subToAdd.graph.id,
