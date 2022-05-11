@@ -4,7 +4,6 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import Typography from '@material-ui/core/Typography';
 
-import axios from 'axios';
 import type { Task } from '../types';
 import Tooltip from '@material-ui/core/Tooltip';
 import orange1 from '../images/orange1.png';
@@ -28,6 +27,7 @@ import FormDialog from './FormDialog';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import BookmarksIcon from '@material-ui/icons/Bookmarks';
+import { getTaskDescription, deleteTask } from '../utils/api';
 
 const onDragStart = (event, { task_identifier, task_type, icon }) => {
   event.dataTransfer.setData('task_identifier', task_identifier);
@@ -66,10 +66,9 @@ function AddNodes(props) {
   const initializedTask = state((state) => state.initializedTask);
 
   const getTasks = async () => {
+    console.log('getTaskDescription');
     try {
-      const tasksData = await axios.get(
-        `${configData.serverUrl}/tasks/descriptions`
-      );
+      const tasksData = await getTaskDescription();
       const tasks = tasksData.data as { items: Task[] };
       setTasks(tasks.items);
       setTaskCategories(tasks.items.map((tas) => tas.category));
@@ -90,29 +89,46 @@ function AddNodes(props) {
     setSelectedTask(elem);
   };
 
-  const deleteTask = () => {
+  const deleteTaskDialog = () => {
     setOpenAgreeDialog(true);
   };
 
   const agreeDeleteTask = async () => {
     setOpenAgreeDialog(false);
-    await axios
-      .delete(`${configData.serverUrl}/task/${selectedTask.task_identifier}`)
-      .then(() => {
-        setOpenSnackbar({
-          open: true,
-          text: `Task was succesfully deleted!`,
-          severity: 'success',
-        });
-        getTasks();
-      })
-      .catch((error) => {
-        setOpenSnackbar({
-          open: true,
-          text: error.message,
-          severity: 'error',
-        });
+    try {
+      const taskDeleted = await deleteTask(
+        selectedTask.task_identifier as string
+      );
+      setOpenSnackbar({
+        open: true,
+        text: `Task was succesfully deleted!`,
+        severity: 'success',
       });
+      getTasks();
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: error.message,
+        severity: 'error',
+      });
+    }
+    // await axios
+    //   .delete(`${configData.serverUrl}/task/${selectedTask.task_identifier}`)
+    //   .then(() => {
+    //     setOpenSnackbar({
+    //       open: true,
+    //       text: `Task was succesfully deleted!`,
+    //       severity: 'success',
+    //     });
+    //     getTasks();
+    //   })
+    //   .catch((error) => {
+    //     setOpenSnackbar({
+    //       open: true,
+    //       text: error.message,
+    //       severity: 'error',
+    //     });
+    //   });
   };
 
   const disAgreeDeleteTask = () => {
@@ -251,7 +267,7 @@ function AddNodes(props) {
               )?.category === categoryName && (
                 <>
                   <IconButton
-                    onClick={deleteTask}
+                    onClick={deleteTaskDialog}
                     aria-label="delete"
                     color="secondary"
                   >

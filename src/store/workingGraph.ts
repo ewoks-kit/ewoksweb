@@ -1,9 +1,9 @@
 import type { EwoksRFLink, EwoksRFNode, GraphRF, Task } from '../types';
-import axios from 'axios';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from '../utils/FindAllSubgraphs';
 import configData from '../configData.json';
+import { getTaskDescription } from '../utils/api';
 
 const initializedGraph = {
   graph: {
@@ -24,9 +24,7 @@ const workingGraph = (set, get) => ({
     // 1. if it is a new graph opening initialize
     if (get().tasks.length === 0) {
       try {
-        const tasksData = await axios.get(
-          `${configData.serverUrl}/tasks/descriptions`
-        );
+        const tasksData = await getTaskDescription();
         const tasks = tasksData.data as { items: Task[] };
         get().setTasks(tasks.items);
       } catch (error) {

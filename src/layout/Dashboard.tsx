@@ -26,14 +26,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DashboardStyle from './DashboardStyle';
 import SaveGetFromDisk from '../Components/SaveGetFromDisk';
 import SaveToServer from '../Components/SaveToServer';
-// import io from 'socket.io-client';
-// import type { ExecutingEvent } from '../types';
 import state from '../store/state';
-// import configData from '../configData.json';
 
 const useStyles = DashboardStyle;
-
-// export const socket = io(configData.serverUrl);
 
 export default function Dashboard() {
   const classes = useStyles();
@@ -42,24 +37,12 @@ export default function Dashboard() {
   const redoF = React.useRef(null);
   const saveToServerF = React.useRef(null);
 
-  // const selectedElement = state((state) => state.selectedElement);
   const [open, setOpen] = React.useState(true);
   const [openSettings, setOpenSettings] = React.useState(false);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const initializedGraph = state((state) => state.initializedGraph);
   const gettingFromServer = state((state) => state.gettingFromServer);
   const isExecuted = state((state) => state.isExecuted);
-  // const setExecutingEvents = state((state) => state.setExecutingEvents);
-
-  // useEffect(() => {
-  //   // console.log('Executing');
-  //   socket.on('Executing', (data) =>
-  //     setExecutingEvents(data as ExecutingEvent)
-  //   );
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, [setExecutingEvents]);
 
   const handleOpenSettings = () => {
     setOpenSettings(!openSettings);

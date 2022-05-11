@@ -9,6 +9,8 @@ import state from '../store/state';
 import configData from '../configData.json';
 import FormDialog from './FormDialog';
 import curateGraph from '../utils/curateGraph';
+import { axiosRequest } from '../utils/api';
+import { postWorkflow } from '../utils/api';
 
 // DOC: Save to server button with its spinner
 export default function SaveToServer({ saveToServerF }) {
@@ -51,31 +53,28 @@ export default function SaveToServer({ saveToServerF }) {
         nodes: graphRFCurrated.nodes,
         links: graphRFCurrated.links,
       };
-      await axios
-        .post(`${configData.serverUrl}/workflows`, rfToEwoks(newIdGraph))
-        .then((res) => {
-          setGettingFromServer(false);
-          setWorkingGraph(res.data as GraphRF);
-          setRecentGraphs({} as GraphRF, true);
-          setOpenSnackbar({
-            open: true,
-            text: 'Graph saved succesfully!',
-            severity: 'success',
-          });
-        })
-        .catch((error) =>
-          setOpenSnackbar({
-            open: true,
-            text: error.response?.data?.message || configData.savingError,
-            severity: 'error',
-          })
-        );
+      console.log('axiosRequest post');
+      try {
+        const postResponse = await postWorkflow(rfToEwoks(newIdGraph));
+        setGettingFromServer(false);
+        setWorkingGraph(postResponse.data as GraphRF);
+        setRecentGraphs({} as GraphRF, true);
+        setOpenSnackbar({
+          open: true,
+          text: 'Graph saved succesfully!',
+          severity: 'success',
+        });
+      } catch (error) {
+        setOpenSnackbar({
+          open: true,
+          text: error.response?.data?.message || configData.savingError,
+          severity: 'error',
+        });
+      }
     } else if (graphRF.graph.id) {
-      await axios
-        .put(
-          `${configData.serverUrl}/workflow/${graphRF.graph.id}`,
-          rfToEwoks(graphRFCurrated)
-        )
+      console.log('axiosRequest put');
+      await axiosRequest
+        .put(`/workflow/${graphRF.graph.id}`, rfToEwoks(graphRFCurrated))
         .then(() => {
           setGettingFromServer(false);
           setOpenSnackbar({

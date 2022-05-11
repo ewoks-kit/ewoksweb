@@ -7,6 +7,7 @@ import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
 import { calcNoteNodes } from './utils/calcNoteNodes';
 import configData from './configData.json';
+import { getWorkflowDescription } from './utils/api';
 
 // const { GraphDagre } = dagre.graphlib;
 // const NODE_SIZE = { width: 270, height: 36 };
@@ -16,37 +17,36 @@ export const ewoksNetwork = {};
 export async function getWorkflows(): Promise<{ title: string }[]> {
   // console.log(process.env);
   let res = [];
-  const workflows = await axios
-    .get(`${configData.serverUrl}/workflows`)
-    .catch((error) => {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        /* eslint-disable no-console */
-        console.log(
-          error.response.data,
-          error.response.status,
-          error.response.headers
-        );
-      } else if (error.request) {
-        // The request was made but no response was received
-        /* eslint-disable no-console */
-        console.log(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        /* eslint-disable no-console */
-        console.log('Error', error.message);
-      }
-      console.log(error.config, error.toJSON());
-      res = [{ title: 'network error' }];
-    });
-
-  if (workflows && workflows.data) {
-    // console.log(workflows);
-    const workf = workflows.data as { identifiers: string[] };
-    res = workf.identifiers.map((work) => {
-      return { title: work };
-    });
+  try {
+    const workflows = await getWorkflowDescription();
+    if (workflows && workflows.data) {
+      // console.log(workflows);
+      const workf = workflows.data as { identifiers: string[] };
+      res = workf.identifiers.map((work) => {
+        return { title: work };
+      });
+    }
+  } catch (error) {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      /* eslint-disable no-console */
+      console.log(
+        error.response.data,
+        error.response.status,
+        error.response.headers
+      );
+    } else if (error.request) {
+      // The request was made but no response was received
+      /* eslint-disable no-console */
+      console.log(error.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      /* eslint-disable no-console */
+      console.log('Error', error.message);
+    }
+    console.log(error.config, error.toJSON());
+    res = [{ title: 'network error' }];
   }
   return res;
 }

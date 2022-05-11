@@ -16,6 +16,7 @@ import configData from '../configData.json';
 import type { Task } from '../types';
 import state from '../store/state';
 import ConfirmDialog from './ConfirmDialog';
+import { getTaskDescription } from '../utils/api';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -62,9 +63,7 @@ export default function ManageIcons() {
 
   const deleteIcon = async () => {
     try {
-      const tasksData = await axios.get(
-        `${configData.serverUrl}/tasks/descriptions`
-      );
+      const tasksData = await getTaskDescription();
       const tasks = tasksData.data as { items: Task[] };
       const allTasks = tasks.items;
 

@@ -13,6 +13,7 @@ import axios from 'axios';
 import { rfToEwoks } from '../utils';
 import state from '../store/state';
 import configData from '../configData.json';
+import { getTaskDescription, postWorkflow } from '../utils/api';
 
 export default function FormDialog(props) {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -81,9 +82,7 @@ export default function FormDialog(props) {
         severity: 'success',
       });
       props.setOpenSaveDialog(false);
-      const tasksNew = await axios.get(
-        `${configData.serverUrl}/tasks/descriptions`
-      );
+      const tasksNew = await getTaskDescription();
       const tasks = tasksNew.data as { items: Task[] };
       setTasks(tasks.items);
     } catch (error) {
@@ -116,9 +115,7 @@ export default function FormDialog(props) {
         severity: 'success',
       });
       props.setOpenSaveDialog(false);
-      const tasksNew = await axios.get(
-        `${configData.serverUrl}/tasks/descriptions`
-      );
+      const tasksNew = await getTaskDescription();
       const tasks = tasksNew.data as { items: Task[] };
       setTasks(tasks.items);
     } catch (error) {
@@ -131,10 +128,8 @@ export default function FormDialog(props) {
   };
 
   const saveGraph = async (graph) => {
-    // TODO: Post a new graph as in SaveToServer. Abstract POST
     try {
-      const responseNew = await axios.post(
-        `${configData.serverUrl}/workflows`,
+      const responseNew = await postWorkflow(
         rfToEwoks({
           ...graph,
           graph: { ...graph.graph, id: newName, label: newName },
