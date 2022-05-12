@@ -17,7 +17,7 @@ describe('In the DataMapping:', () => {
       />
     );
     // not working
-    const addDataMapping = jest.fn();
+    // const addDataMapping = jest.fn();
 
     const dataMappingText = screen.getByText(/Data Mapping/u);
     expect(dataMappingText).toBeInTheDocument();
@@ -129,6 +129,7 @@ describe('In the DataMapping:', () => {
     );
 
     const { graphRF } = state.getState();
+    /* eslint-disable no-console */
     console.log(graphRF.links[0].data);
 
     // expect(graphRF.links[0].data.data_mapping[0].source_output).toEqual(

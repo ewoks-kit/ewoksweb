@@ -66,7 +66,6 @@ function AddNodes(props) {
   const initializedTask = state((state) => state.initializedTask);
 
   const getTasks = async () => {
-    console.log('getTaskDescription');
     try {
       const tasksData = await getTaskDescription();
       const tasks = tasksData.data as { items: Task[] };
@@ -96,9 +95,7 @@ function AddNodes(props) {
   const agreeDeleteTask = async () => {
     setOpenAgreeDialog(false);
     try {
-      const taskDeleted = await deleteTask(
-        selectedTask.task_identifier as string
-      );
+      await deleteTask(selectedTask.task_identifier);
       setOpenSnackbar({
         open: true,
         text: `Task was succesfully deleted!`,
@@ -112,23 +109,6 @@ function AddNodes(props) {
         severity: 'error',
       });
     }
-    // await axios
-    //   .delete(`${configData.serverUrl}/task/${selectedTask.task_identifier}`)
-    //   .then(() => {
-    //     setOpenSnackbar({
-    //       open: true,
-    //       text: `Task was succesfully deleted!`,
-    //       severity: 'success',
-    //     });
-    //     getTasks();
-    //   })
-    //   .catch((error) => {
-    //     setOpenSnackbar({
-    //       open: true,
-    //       text: error.message,
-    //       severity: 'error',
-    //     });
-    //   });
   };
 
   const disAgreeDeleteTask = () => {

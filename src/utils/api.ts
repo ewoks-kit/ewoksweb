@@ -1,5 +1,6 @@
 import axios from 'axios';
 import configData from '../configData.json';
+import type { GraphEwoks, Task } from '../types';
 
 export const axiosRequest = axios.create({
   baseURL: configData.serverUrl,
@@ -16,13 +17,38 @@ export function deleteTask(id: string) {
   return axiosRequest.delete(`/task/${id}`);
 }
 
+// Post task
+export function postTask(task: Task) {
+  return axiosRequest.post(`/tasks`, task);
+}
+
+// Put task
+export function putTask(task: Task) {
+  return axiosRequest.post(`/task/${task.task_identifier}`, task);
+}
+
 // -------------Workflows
-// Get
+// Get /workflows
 export function getWorkflowDescription() {
   return axiosRequest.get(`/workflows`);
 }
 
+// Get workflow:id
+export function getWorkflow(id: string) {
+  return axiosRequest.get(`/workflow/${id}`);
+}
+
 // Post
-export function postWorkflow(workflow) {
+export function postWorkflow(workflow: GraphEwoks) {
   return axiosRequest.post(`/workflows`, workflow);
+}
+
+// Put
+export function putWorkflow(workflow: GraphEwoks) {
+  return axiosRequest.post(`/workflow/${workflow.graph.id}`, workflow);
+}
+
+// Delete
+export function deleteWorkflow(id: string) {
+  return axiosRequest.delete(`/workflow/${id}`);
 }

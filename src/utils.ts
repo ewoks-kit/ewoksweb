@@ -6,8 +6,7 @@ import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
 import { calcNoteNodes } from './utils/calcNoteNodes';
-import configData from './configData.json';
-import { getWorkflowDescription } from './utils/api';
+import { getWorkflowDescription, getWorkflow } from './utils/api';
 
 // const { GraphDagre } = dagre.graphlib;
 // const NODE_SIZE = { width: 270, height: 36 };
@@ -89,11 +88,7 @@ export async function getSubgraphs(
     });
     // For those that are not in recent get them from the server
     results = await axios
-      .all(
-        notInRecent.map((id: string) =>
-          axios.get(`${configData.serverUrl}/workflow/${id}`)
-        )
-      )
+      .all(notInRecent.map((id: string) => getWorkflow(id)))
       .then(
         axios.spread((...res) => {
           // all requests are now complete in an array

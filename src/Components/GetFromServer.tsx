@@ -1,6 +1,5 @@
 import React from 'react';
 
-import axios from 'axios';
 import DashboardStyle from '../layout/DashboardStyle';
 import IntegratedSpinner from '../Components/IntegratedSpinner';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
@@ -9,7 +8,7 @@ import AutocompleteDrop from '../Components/AutocompleteDrop';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import type { GraphEwoks, GraphRF } from '../types';
 import state from '../store/state';
-import configData from '../configData.json';
+import { getWorkflow } from '../utils/api';
 
 const useStyles = DashboardStyle;
 
@@ -39,9 +38,7 @@ export default function GetFromServer() {
     if (workflowValue) {
       setGettingFromServer(true);
       try {
-        const response = await axios.get(
-          `${configData.serverUrl}/workflow/${workflowValue}`
-        );
+        const response = await getWorkflow(workflowValue);
         if (response.data) {
           setGettingFromServer(false);
           // setCallSuccess(true);

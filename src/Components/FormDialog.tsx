@@ -9,11 +9,15 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import type { EwoksRFLink, EwoksRFNode, GraphRF, Task } from '../types';
-import axios from 'axios';
 import { rfToEwoks } from '../utils';
 import state from '../store/state';
 import configData from '../configData.json';
-import { getTaskDescription, postWorkflow } from '../utils/api';
+import {
+  getTaskDescription,
+  postWorkflow,
+  postTask,
+  putTask,
+} from '../utils/api';
 
 export default function FormDialog(props) {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -66,15 +70,13 @@ export default function FormDialog(props) {
     } else if (['cloneTask', 'newTask'].includes(action)) {
       saveTask(element as Task);
     } else if (['editTask'].includes(action)) {
-      putTask(element as Task);
+      puTask(element as Task);
     }
   };
 
-  const putTask = async (task: Task) => {
+  const puTask = async (task: Task) => {
     try {
-      await axios.put(`${configData.serverUrl}/task/${task.task_identifier}`, {
-        ...task,
-      });
+      await putTask(task);
 
       setOpenSnackbar({
         open: true,
@@ -105,10 +107,7 @@ export default function FormDialog(props) {
       return;
     }
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const responseClone = await axios.post(`${configData.serverUrl}/tasks`, {
-        ...task,
-      });
+      await postTask(task);
       setOpenSnackbar({
         open: true,
         text: 'Task saved successfuly',

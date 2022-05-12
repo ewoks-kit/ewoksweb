@@ -1,7 +1,5 @@
 import React from 'react';
 import IntegratedSpinner from './IntegratedSpinner';
-
-import axios from 'axios';
 import { rfToEwoks } from '../utils';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import type { GraphRF } from '../types';
@@ -9,8 +7,7 @@ import state from '../store/state';
 import configData from '../configData.json';
 import FormDialog from './FormDialog';
 import curateGraph from '../utils/curateGraph';
-import { axiosRequest } from '../utils/api';
-import { postWorkflow } from '../utils/api';
+import { postWorkflow, putWorkflow } from '../utils/api';
 
 // DOC: Save to server button with its spinner
 export default function SaveToServer({ saveToServerF }) {
@@ -53,7 +50,6 @@ export default function SaveToServer({ saveToServerF }) {
         nodes: graphRFCurrated.nodes,
         links: graphRFCurrated.links,
       };
-      console.log('axiosRequest post');
       try {
         const postResponse = await postWorkflow(rfToEwoks(newIdGraph));
         setGettingFromServer(false);
@@ -72,24 +68,21 @@ export default function SaveToServer({ saveToServerF }) {
         });
       }
     } else if (graphRF.graph.id) {
-      console.log('axiosRequest put');
-      await axiosRequest
-        .put(`/workflow/${graphRF.graph.id}`, rfToEwoks(graphRFCurrated))
-        .then(() => {
-          setGettingFromServer(false);
-          setOpenSnackbar({
-            open: true,
-            text: 'Graph saved succesfully!',
-            severity: 'success',
-          });
-        })
-        .catch((error) => {
-          setOpenSnackbar({
-            open: true,
-            text: error.response?.data?.message || configData.savingError,
-            severity: 'error',
-          });
+      try {
+        await putWorkflow(rfToEwoks(graphRFCurrated));
+        setGettingFromServer(false);
+        setOpenSnackbar({
+          open: true,
+          text: 'Graph saved succesfully!',
+          severity: 'success',
         });
+      } catch (error) {
+        setOpenSnackbar({
+          open: true,
+          text: error.response?.data?.message || configData.savingError,
+          severity: 'error',
+        });
+      }
     } else {
       setOpenSnackbar({
         open: true,

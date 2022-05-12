@@ -6,15 +6,14 @@ import EditElementStyle from '../Components/EditElementStyle';
 import DraggableDialog from '../Components/DraggableDialog';
 import IconMenu from '../Components/IconMenu';
 import Drawer from '../Components/Drawer';
-import axios from 'axios';
 import ExecutionDetails from '../Components/ExecutionDetails';
 import DashboardStyle from './DashboardStyle';
 import state from '../store/state';
-import configData from '../configData.json';
 
 import type { EwoksRFNode, EwoksRFLink, GraphDetails, GraphRF } from '../types';
 import { rfToEwoks } from '../utils';
 import ConfirmDialog from '../Components/ConfirmDialog';
+import { deleteWorkflow } from '../utils/api';
 
 const useStyles = DashboardStyle;
 
@@ -109,22 +108,21 @@ export default function Sidebar() {
 
   const agreeCallback = async () => {
     setOpenAgreeDialog(false);
-    await axios
-      .delete(`${configData.serverUrl}/workflow/${element.id}`)
-      .then(() => {
-        setOpenSnackbar({
-          open: true,
-          text: `Workflow ${element.id} succesfully deleted!`,
-          severity: 'success',
-        });
-      })
-      .catch((error) => {
-        setOpenSnackbar({
-          open: true,
-          text: error.message,
-          severity: 'error',
-        });
+    try {
+      await deleteWorkflow(element.id);
+      setOpenSnackbar({
+        open: true,
+        text: `Workflow ${element.id} succesfully deleted!`,
+        severity: 'success',
       });
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: error.message,
+        severity: 'error',
+      });
+    }
+
     setGraphRF(initializedGraph);
     setSelectedElement({} as GraphDetails);
     setSubgraphsStack({ id: 'initialiase', label: '' });
