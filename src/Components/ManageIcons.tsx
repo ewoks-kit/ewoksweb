@@ -52,7 +52,10 @@ const iconsObj = {
 
 export default function ManageIcons() {
   const [selectedIcon, setSelectedIcon] = React.useState('');
-  const [fileToBeSent, setFileToBeSent] = React.useState('');
+  const [fileToBeSent, setFileToBeSent] = React.useState({
+    file: File,
+    filename: '',
+  });
 
   const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
@@ -94,10 +97,14 @@ export default function ManageIcons() {
 
   const uploadFile = async (event) => {
     event.preventDefault();
-    const formData = new FormData(event.target);
+    console.log(event.target, fileToBeSent.file);
+    const data = new FormData();
+
+    data.append('file', (fileToBeSent.file as unknown) as File);
+    // data.append('filename', fileToBeSent.filename);
 
     try {
-      await axios.post(`${configData.serverUrl}/icons`, formData);
+      await axios.post(`${configData.serverUrl}/icons`, data);
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -108,15 +115,16 @@ export default function ManageIcons() {
   };
 
   const inputNew = (ne) => {
-    if (ne.target.files[0].size < 1000) {
+    if (ne.target.files[0].size < 10_000) {
       setOpenSnackbar({
         open: true,
         text: 'File ready to be uploadede as an icon',
         severity: 'success',
       });
-      setFileToBeSent(ne.target.value);
+      console.log(ne.target.value, ne.target.files[0]);
+      setFileToBeSent({ file: ne.target.files[0], filename: ne.target.value });
     } else {
-      setFileToBeSent('');
+      // setFileToBeSent('');
       setOpenSnackbar({
         open: true,
         text: 'Files more than 1Kb are not acceptable for icons',
@@ -231,7 +239,7 @@ export default function ManageIcons() {
                 type="submit"
                 color="primary"
                 size="small"
-                disabled={fileToBeSent === ''}
+                // disabled={fileToBeSent === ''}
               >
                 Upload
               </Button>
