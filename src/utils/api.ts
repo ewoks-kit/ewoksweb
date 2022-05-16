@@ -45,7 +45,7 @@ export function postWorkflow(workflow: GraphEwoks) {
 
 // Put
 export function putWorkflow(workflow: GraphEwoks) {
-  return axiosRequest.post(`/workflow/${workflow.graph.id}`, workflow);
+  return axiosRequest.put(`/workflow/${workflow.graph.id}`, workflow);
 }
 
 // Delete
