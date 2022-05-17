@@ -4,7 +4,15 @@ import type { DataMapping, EwoksRFNode, Inputs } from '../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import EditIcon from '@material-ui/icons/EditOutlined';
-import { Box, Checkbox, IconButton } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Checkbox,
+  IconButton,
+  styled,
+  Tooltip,
+  Typography,
+} from '@material-ui/core';
 import EditTaskProp from './EditTaskProp';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
@@ -199,6 +207,18 @@ export default function NodeDetails(props) {
     );
   };
 
+  const HtmlTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& `]: {
+      backgroundColor: '#f5f5f9',
+      color: 'rgba(0, 0, 0, 0.87)',
+      maxWidth: 220,
+      fontSize: theme.typography.pxToRem(12),
+      border: '1px solid #dadde9',
+    },
+  }));
+
   return (
     <Box>
       {taskProperties.map(({ id, label, value }) => (
@@ -227,7 +247,10 @@ export default function NodeDetails(props) {
       </IconButton>
       <div>
         <hr />
-        <b>Default Inputs </b>
+        <Tooltip title="The inputs ..." arrow>
+          <b>Default Inputs </b>
+        </Tooltip>
+
         <IconButton
           style={{ padding: '1px' }}
           aria-label="delete"
@@ -235,6 +258,7 @@ export default function NodeDetails(props) {
         >
           <AddCircleOutlineIcon />
         </IconButton>
+
         {defaultInputs.length > 0 && (
           <EditableTable
             headers={['Name', 'Value']}
@@ -245,13 +269,27 @@ export default function NodeDetails(props) {
         )}
       </div>
       <hr />
+      <HtmlTooltip
+        title={
+          <>
+            <a href="https://www.w3schools.com">Visit W3Schools</a>
+            <Typography color="inherit">Tooltip with HTML</Typography>
+            <em>And here's</em> <b>some</b> <u>amazing content</u>. It's very
+            engaging. Right?
+          </>
+        }
+      >
+        <Button>HTML</Button>
+      </HtmlTooltip>
       <div>
         <b>Inputs-complete</b>
-        <Checkbox
-          checked={inputsComplete}
-          onChange={inputsCompleteChanged}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
+        <Tooltip title="The inputs ..." arrow>
+          <Checkbox
+            checked={inputsComplete}
+            onChange={inputsCompleteChanged}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
+        </Tooltip>
       </div>
       <hr />
       <div>

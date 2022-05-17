@@ -167,12 +167,17 @@ export default function ManageIcons() {
   //   setIcons(icons);
   // };
 
-  const getIcon = async (id) => {
-    console.log(selectedIcon);
-    const iconsData: { data: { image: string } } = await axios.get(
-      `${configData.serverUrl}/icon_json/${id}`
-    );
+  const getIcon = async (id: string) => {
+    console.log(selectedIcon, id);
+    const iconsData = await axios.get(`${configData.serverUrl}/icon/${id}`);
     console.log(iconsData);
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(
+      iconsData.data as string,
+      'image/svg+xml'
+    );
+    console.log(doc.childNodes[1]);
+    setSelectedIcon((doc.childNodes[1] as unknown) as string);
   };
 
   const image =
@@ -259,6 +264,7 @@ export default function ManageIcons() {
 
               <div>
                 <img src={`data:image/svg+xml;utf8,${image}`} alt="image" />
+                <svg>{selectedIcon}</svg>
                 <label htmlFor="upload-icon">
                   Select an Icon to Upload
                   <div>
