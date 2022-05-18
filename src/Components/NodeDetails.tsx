@@ -208,7 +208,11 @@ export default function NodeDetails(props) {
   };
 
   const HtmlTooltip = styled(({ className, ...props }) => (
-    <Tooltip {...props} classes={{ popper: className }} />
+    <Tooltip
+      {...props}
+      classes={{ popper: className }}
+      disableInteractive={false}
+    />
   ))(({ theme }) => ({
     [`& `]: {
       backgroundColor: '#f5f5f9',
@@ -248,16 +252,17 @@ export default function NodeDetails(props) {
       <div>
         <hr />
         <Tooltip title="The inputs ..." arrow>
-          <b>Default Inputs </b>
+          <div>
+            <b>Default Inputs </b>
+            <IconButton
+              style={{ padding: '1px' }}
+              aria-label="delete"
+              onClick={() => addDefaultInputs()}
+            >
+              <AddCircleOutlineIcon />
+            </IconButton>
+          </div>
         </Tooltip>
-
-        <IconButton
-          style={{ padding: '1px' }}
-          aria-label="delete"
-          onClick={() => addDefaultInputs()}
-        >
-          <AddCircleOutlineIcon />
-        </IconButton>
 
         {defaultInputs.length > 0 && (
           <EditableTable

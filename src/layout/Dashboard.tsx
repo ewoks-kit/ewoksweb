@@ -27,6 +27,8 @@ import DashboardStyle from './DashboardStyle';
 import SaveGetFromDisk from '../Components/SaveGetFromDisk';
 import SaveToServer from '../Components/SaveToServer';
 import state from '../store/state';
+// import QuestionMarkIcon from '@material-ui/icons/QuestionMark';
+import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 
 const useStyles = DashboardStyle;
 
@@ -39,6 +41,7 @@ export default function Dashboard() {
 
   const [open, setOpen] = React.useState(true);
   const [openSettings, setOpenSettings] = React.useState(false);
+  const [openInfo, setOpenInfo] = React.useState(false);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const initializedGraph = state((state) => state.initializedGraph);
   const gettingFromServer = state((state) => state.gettingFromServer);
@@ -46,6 +49,12 @@ export default function Dashboard() {
 
   const handleOpenSettings = () => {
     setOpenSettings(!openSettings);
+    // setOpenInfo(false);
+  };
+
+  const handleOpenInfo = () => {
+    setOpenSettings(!openSettings);
+    setOpenInfo(true);
   };
 
   const handleDrawerOpen = () => {
@@ -145,9 +154,23 @@ export default function Dashboard() {
               </Fab>
             </IconButton>
           </Tooltip>
+          <Tooltip title="Manage tasks, icons and workflows" arrow>
+            <IconButton color="inherit" onClick={handleOpenInfo}>
+              <Fab
+                className={classes.openFileButton}
+                color="primary"
+                size="small"
+                component="span"
+                aria-label="add"
+              >
+                <NotListedLocationIcon />
+              </Fab>
+            </IconButton>
+          </Tooltip>
           <TemporaryDrawer
             handleOpenSettings={handleOpenSettings}
             openSettings={openSettings}
+            openInfo={openInfo}
           />
         </Toolbar>
       </AppBar>

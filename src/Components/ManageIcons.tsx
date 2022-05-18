@@ -97,7 +97,7 @@ export default function ManageIcons() {
 
   const uploadFile = async (event) => {
     event.preventDefault();
-    console.log(event.target, fileToBeSent.file);
+    // console.log(event.target, fileToBeSent.file);
     const data = new FormData();
 
     data.append('file', (fileToBeSent.file as unknown) as File);
@@ -121,7 +121,7 @@ export default function ManageIcons() {
         text: 'File ready to be uploadede as an icon',
         severity: 'success',
       });
-      console.log(ne.target.value, ne.target.files[0]);
+      // console.log(ne.target.value, ne.target.files[0]);
       getIcon('up.svg');
       setFileToBeSent({ file: ne.target.files[0], filename: ne.target.value });
     } else {
@@ -168,20 +168,20 @@ export default function ManageIcons() {
   // };
 
   const getIcon = async (id: string) => {
-    console.log(selectedIcon, id);
+    // console.log(selectedIcon, id);
     const iconsData = await axios.get(`${configData.serverUrl}/icon/${id}`);
-    console.log(iconsData);
+    // console.log(iconsData);
     const parser = new DOMParser();
     const doc = parser.parseFromString(
       iconsData.data as string,
       'image/svg+xml'
     );
-    console.log(doc.childNodes[1]);
+    // console.log(doc.childNodes[1]);
     setSelectedIcon((doc.childNodes[1] as unknown) as string);
   };
 
-  const image =
-    '<svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width="47.4" height="40.65" viewBox="21 18.5 158 135.5"><path d="M25,50 l150,0 0,100 -150,0 z" stroke-width="4" stroke="black" fill="rgb(128,224,255)" fill-opacity="1" ></path><path d="M25,50 L175,150 M25,150 L175,50" stroke-width="4" stroke="black" fill="black" ></path><g transform="translate(0,0)" stroke-width="4" stroke="black" fill="none" ><circle cx="100" cy="30" r="7.5" fill="black" ></circle><circle cx="70" cy="30" r="7.5" fill="black" ></circle><circle cx="130" cy="30" r="7.5" fill="black" ></circle></g></svg>';
+  // const image =
+  //   '<svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width="47.4" height="40.65" viewBox="21 18.5 158 135.5"><path d="M25,50 l150,0 0,100 -150,0 z" stroke-width="4" stroke="black" fill="rgb(128,224,255)" fill-opacity="1" ></path><path d="M25,50 L175,150 M25,150 L175,50" stroke-width="4" stroke="black" fill="black" ></path><g transform="translate(0,0)" stroke-width="4" stroke="black" fill="none" ><circle cx="100" cy="30" r="7.5" fill="black" ></circle><circle cx="70" cy="30" r="7.5" fill="black" ></circle><circle cx="130" cy="30" r="7.5" fill="black" ></circle></g></svg>';
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -263,7 +263,7 @@ export default function ManageIcons() {
               <hr />
 
               <div>
-                <img src={`data:image/svg+xml;utf8,${image}`} alt="image" />
+                {/* <img src={`data:image/svg+xml;utf8,${image}`} alt="image" /> */}
                 <svg>{selectedIcon}</svg>
                 <label htmlFor="upload-icon">
                   Select an Icon to Upload
