@@ -26,8 +26,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DashboardStyle from './DashboardStyle';
 import SaveGetFromDisk from '../Components/SaveGetFromDisk';
 import SaveToServer from '../Components/SaveToServer';
+import tooltipText from '../Components/TooltipText';
 import state from '../store/state';
-// import QuestionMarkIcon from '@material-ui/icons/QuestionMark';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 
 const useStyles = DashboardStyle;
@@ -126,7 +126,11 @@ export default function Dashboard() {
             <MenuIcon />
           </IconButton>
           <SubgraphsStack />
-          <Tooltip title="Start a new workflow" arrow>
+          <Tooltip
+            title={tooltipText('Start a new workflow')}
+            enterDelay={800}
+            arrow
+          >
             <IconButton color="inherit" onClick={newGraph}>
               <Fab
                 className={classes.openFileButton}
@@ -147,7 +151,11 @@ export default function Dashboard() {
           <GetFromServer />
           <ExecuteWorkflow />
           <div className={classes.verticalRule} />
-          <Tooltip title="Manage tasks, icons and workflows" arrow>
+          <Tooltip
+            title={tooltipText('Manage tasks, icons and workflows')}
+            enterDelay={800}
+            arrow
+          >
             <IconButton color="inherit" onClick={handleOpenSettings}>
               <Fab
                 className={classes.openFileButton}
@@ -160,7 +168,12 @@ export default function Dashboard() {
               </Fab>
             </IconButton>
           </Tooltip>
-          <Tooltip title="Manage tasks, icons and workflows" arrow>
+
+          <Tooltip
+            title={tooltipText('Guide for Ewoks UI')}
+            enterDelay={800}
+            arrow
+          >
             <IconButton color="inherit" onClick={handleOpenInfo}>
               <Fab
                 className={classes.openFileButton}

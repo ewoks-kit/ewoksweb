@@ -5,6 +5,7 @@ import Fab from '@material-ui/core/Fab';
 import CheckIcon from '@material-ui/icons/Check';
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
+import tooltipText from '../Components/TooltipText';
 
 import state from '../store/state';
 
@@ -78,7 +79,7 @@ export default function IntegratedSpinner({
   };
 
   return (
-    <Tooltip title={tooltip || ''} arrow>
+    <Tooltip title={tooltipText(tooltip) || ''} enterDelay={800} arrow>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Box sx={{ m: 1, position: 'relative' }}>
           <Fab

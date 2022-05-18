@@ -3,11 +3,12 @@ import React, { useEffect } from 'react';
 import type { DataMapping, EwoksRFNode, Inputs } from '../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
-import EditIcon from '@material-ui/icons/EditOutlined';
-import { Box, Checkbox, IconButton, Tooltip } from '@material-ui/core';
+// import EditIcon from '@material-ui/icons/EditOutlined'; DONT DELETE
+import { Box, Checkbox, IconButton } from '@material-ui/core';
 import EditTaskProp from './EditTaskProp';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
+import SidebarTooltip from './SidebarTooltip';
 
 const useStyles = DashboardStyle;
 
@@ -24,7 +25,7 @@ export default function NodeDetails(props) {
 
   const setSelectedElement = state((state) => state.setSelectedElement);
   // const selectedElement = state((state) => state.selectedElement);
-  const [editProps, setEditProps] = React.useState<boolean>(false);
+  // const [editProps, setEditProps] = React.useState<boolean>(false);
   const [defaultInputs, setDefaultInputs] = React.useState<Inputs[]>([]);
   const [inputsComplete, setInputsComplete] = React.useState<boolean>(false);
   const [defaultErrorNode, setDefaultErrorNode] = React.useState<boolean>(
@@ -35,8 +36,8 @@ export default function NodeDetails(props) {
   const [mapAllData, setMapAllData] = React.useState<boolean>(false);
 
   const NonEditableTaskProperties = [
-    { id: 'id', label: 'Id', value: props.element.id },
-    { id: 'task_icon', label: 'Icon', value: props.element.task_icon },
+    // { id: 'id', label: 'Id', value: props.element.id },
+    // { id: 'task_icon', label: 'Icon', value: props.element.task_icon },
     {
       id: 'task_category',
       label: 'Category',
@@ -198,22 +199,6 @@ export default function NodeDetails(props) {
     );
   };
 
-  // const HtmlTooltip = styled(({ className, ...props }) => (
-  //   <Tooltip
-  //     {...props}
-  //     classes={{ popper: className }}
-  //     disableInteractive={false}
-  //   />
-  // ))(({ theme }) => ({
-  //   [`& `]: {
-  //     backgroundColor: '#f5f5f9',
-  //     color: 'rgba(0, 0, 0, 0.87)',
-  //     maxWidth: 220,
-  //     fontSize: theme.typography.pxToRem(12),
-  //     border: '1px solid #dadde9',
-  //   },
-  // }));
-
   return (
     <Box>
       {taskProperties.map(({ id, label, value }) => (
@@ -223,7 +208,7 @@ export default function NodeDetails(props) {
           label={label}
           value={value}
           propChanged={propChanged}
-          editProps={editProps}
+          editProps={false} // editProps
         />
       ))}
       {NonEditableTaskProperties.map(({ id, label, value }) => (
@@ -231,7 +216,8 @@ export default function NodeDetails(props) {
           <b>{label}:</b> {typeof value === 'object' ? value.join(', ') : value}
         </div>
       ))}
-      <IconButton
+      {/* DONT DELETE: Use later if we need to edit node details in EditTaskProp */}
+      {/* <IconButton
         style={{ padding: '0px' }}
         aria-label="edit"
         onClick={() => {
@@ -239,10 +225,13 @@ export default function NodeDetails(props) {
         }}
       >
         <EditIcon />
-      </IconButton>
+      </IconButton> */}
       <div>
         <hr />
-        <Tooltip title="The inputs ..." arrow>
+        <SidebarTooltip
+          text={`Used to create an input when not provided
+                by the output of other connected nodes(tasks).`}
+        >
           <div>
             <b>Default Inputs </b>
             <IconButton
@@ -253,7 +242,7 @@ export default function NodeDetails(props) {
               <AddCircleOutlineIcon />
             </IconButton>
           </div>
-        </Tooltip>
+        </SidebarTooltip>
 
         {defaultInputs.length > 0 && (
           <EditableTable
@@ -265,37 +254,33 @@ export default function NodeDetails(props) {
         )}
       </div>
       <hr />
-      {/* <HtmlTooltip
-        title={
-          <>
-            <a href="https://www.w3schools.com">Visit W3Schools</a>
-            <Typography color="inherit">Tooltip with HTML</Typography>
-            <em>And here's</em> <b>some</b> <u>amazing content</u>. It's very
-            engaging. Right?
-          </>
-        }
+      <SidebarTooltip
+        text={`Set to True when the default input covers all required input
+        (used for method and script as the required inputs are unknown).`}
       >
-        <Button>HTML</Button>
-      </HtmlTooltip> */}
-      <div>
-        <b>Inputs-complete</b>
-        <Tooltip title="The inputs ..." arrow>
+        <div>
+          <b>Inputs-complete</b>
           <Checkbox
             checked={inputsComplete}
             onChange={inputsCompleteChanged}
             inputProps={{ 'aria-label': 'controlled' }}
           />
-        </Tooltip>
-      </div>
+        </div>
+      </SidebarTooltip>
       <hr />
-      <div>
-        <b>Default Error Node</b>
-        <Checkbox
-          checked={defaultErrorNode}
-          onChange={defaulErrortNodeChanged}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-      </div>
+      <SidebarTooltip
+        text={`When set to True all nodes without error handler
+        will be linked to this node. ONLY for one node in its graph`}
+      >
+        <div>
+          <b>Default Error Node</b>
+          <Checkbox
+            checked={defaultErrorNode}
+            onChange={defaulErrortNodeChanged}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
+        </div>
+      </SidebarTooltip>
       {defaultErrorNode && (
         <div>
           <b>Map all Data</b>

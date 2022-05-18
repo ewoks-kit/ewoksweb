@@ -4,6 +4,7 @@ import UndoIcon from '@material-ui/icons/Undo';
 
 import { Fab, IconButton, Tooltip } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
+import tooltipText from '../Components/TooltipText';
 import state from '../store/state';
 
 const useStyles = DashboardStyle;
@@ -30,7 +31,7 @@ export default function UndoRedo({ undoF, redoF }) {
 
   return (
     <>
-      <Tooltip title="undo" arrow>
+      <Tooltip title={tooltipText('Undo')} enterDelay={800} arrow>
         <IconButton color="inherit" onClick={undo}>
           <Fab
             className={classes.openFileButton}
@@ -44,7 +45,7 @@ export default function UndoRedo({ undoF, redoF }) {
           </Fab>
         </IconButton>
       </Tooltip>
-      <Tooltip title="redo" arrow>
+      <Tooltip title={tooltipText('Redo')} enterDelay={800} arrow>
         <IconButton color="inherit" onClick={redo}>
           <Fab
             className={classes.openFileButton}

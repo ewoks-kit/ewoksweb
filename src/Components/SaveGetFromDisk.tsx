@@ -4,6 +4,7 @@ import { Fab, IconButton } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import Upload from '../Components/Upload';
 import AddIcon from '@material-ui/icons/Add';
+import tooltipText from '../Components/TooltipText';
 import { rfToEwoks } from '../utils';
 
 import state from '../store/state';
@@ -39,7 +40,7 @@ export default function SaveGetFromDisk() {
 
   return (
     <>
-      <Tooltip title="Save to Disk" arrow>
+      <Tooltip title={tooltipText('Save to local disk')} enterDelay={800} arrow>
         <IconButton color="inherit" onClick={saveToDisk}>
           <Fab
             className={classes.openFileButton}
@@ -53,7 +54,11 @@ export default function SaveGetFromDisk() {
           </Fab>
         </IconButton>
       </Tooltip>
-      <Tooltip title="Load from Disk" arrow>
+      <Tooltip
+        title={tooltipText('Load from local disk')}
+        enterDelay={800}
+        arrow
+      >
         <IconButton
           color="inherit"
           disabled={isExecuted}

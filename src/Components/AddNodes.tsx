@@ -23,6 +23,7 @@ import configData from '../configData.json';
 import React from 'react';
 import { Button, IconButton } from '@material-ui/core';
 import ConfirmDialog from './ConfirmDialog';
+import SidebarTooltip from './SidebarTooltip';
 import FormDialog from './FormDialog';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/EditOutlined';
@@ -139,7 +140,12 @@ function AddNodes(props) {
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Typography>{props.title}</Typography>
+        <SidebarTooltip
+          text={`Drag and drop Tasks from their categories
+          to the canvas to create graphs.`}
+        >
+          <Typography>{props.title}</Typography>
+        </SidebarTooltip>
       </AccordionSummary>
       <AccordionDetails style={{ flexWrap: 'wrap' }}>
         {taskCategories.map((categoryName) => (

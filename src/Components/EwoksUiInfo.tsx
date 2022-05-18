@@ -19,6 +19,7 @@ export default function EwoksUiInfo() {
       details: `
       <section id="node-attributes">
 <h3>Node attributes<a class="headerlink" href="https://ewokscore.readthedocs.io/en/latest/definitions.html#node-attributes" title="Permalink to this headline">¶</a></h3>
+<NotListedLocationIcon></NotListedLocationIcon>
 <ul>
 <li><p><em>id</em>: node identifier unique to the graph</p></li>
 <li><p><em>label</em> (optional): non-unique label to be used when identifying a node for human consumption</p></li>
