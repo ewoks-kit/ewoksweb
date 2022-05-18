@@ -4,15 +4,7 @@ import type { DataMapping, EwoksRFNode, Inputs } from '../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import EditIcon from '@material-ui/icons/EditOutlined';
-import {
-  Box,
-  Button,
-  Checkbox,
-  IconButton,
-  styled,
-  Tooltip,
-  Typography,
-} from '@material-ui/core';
+import { Box, Checkbox, IconButton, Tooltip } from '@material-ui/core';
 import EditTaskProp from './EditTaskProp';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
@@ -82,7 +74,6 @@ export default function NodeDetails(props) {
   ];
 
   useEffect(() => {
-    // console.log(element);
     setInputsComplete(!!element.inputs_complete);
     setDefaultErrorNode(element.default_error_node || false);
     // setDefaultErrorAttributes(element.default_error_attributes);
@@ -207,21 +198,21 @@ export default function NodeDetails(props) {
     );
   };
 
-  const HtmlTooltip = styled(({ className, ...props }) => (
-    <Tooltip
-      {...props}
-      classes={{ popper: className }}
-      disableInteractive={false}
-    />
-  ))(({ theme }) => ({
-    [`& `]: {
-      backgroundColor: '#f5f5f9',
-      color: 'rgba(0, 0, 0, 0.87)',
-      maxWidth: 220,
-      fontSize: theme.typography.pxToRem(12),
-      border: '1px solid #dadde9',
-    },
-  }));
+  // const HtmlTooltip = styled(({ className, ...props }) => (
+  //   <Tooltip
+  //     {...props}
+  //     classes={{ popper: className }}
+  //     disableInteractive={false}
+  //   />
+  // ))(({ theme }) => ({
+  //   [`& `]: {
+  //     backgroundColor: '#f5f5f9',
+  //     color: 'rgba(0, 0, 0, 0.87)',
+  //     maxWidth: 220,
+  //     fontSize: theme.typography.pxToRem(12),
+  //     border: '1px solid #dadde9',
+  //   },
+  // }));
 
   return (
     <Box>
@@ -274,7 +265,7 @@ export default function NodeDetails(props) {
         )}
       </div>
       <hr />
-      <HtmlTooltip
+      {/* <HtmlTooltip
         title={
           <>
             <a href="https://www.w3schools.com">Visit W3Schools</a>
@@ -285,7 +276,7 @@ export default function NodeDetails(props) {
         }
       >
         <Button>HTML</Button>
-      </HtmlTooltip>
+      </HtmlTooltip> */}
       <div>
         <b>Inputs-complete</b>
         <Tooltip title="The inputs ..." arrow>

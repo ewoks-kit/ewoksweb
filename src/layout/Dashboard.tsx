@@ -40,6 +40,7 @@ export default function Dashboard() {
   const saveToServerF = React.useRef(null);
 
   const [open, setOpen] = React.useState(true);
+  const [openDrawers, setOpenDrawers] = React.useState(true);
   const [openSettings, setOpenSettings] = React.useState(false);
   const [openInfo, setOpenInfo] = React.useState(false);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
@@ -48,13 +49,18 @@ export default function Dashboard() {
   const isExecuted = state((state) => state.isExecuted);
 
   const handleOpenSettings = () => {
-    setOpenSettings(!openSettings);
-    // setOpenInfo(false);
+    setOpenInfo(false);
+    setOpenSettings(true);
+    setOpenDrawers(true);
+  };
+  const handleOpenDrawers = () => {
+    setOpenDrawers(!openDrawers);
   };
 
   const handleOpenInfo = () => {
-    setOpenSettings(!openSettings);
     setOpenInfo(true);
+    setOpenSettings(false);
+    setOpenDrawers(true);
   };
 
   const handleDrawerOpen = () => {
@@ -168,9 +174,10 @@ export default function Dashboard() {
             </IconButton>
           </Tooltip>
           <TemporaryDrawer
-            handleOpenSettings={handleOpenSettings}
-            openSettings={openSettings}
+            handleOpenDrawers={handleOpenDrawers}
+            openDrawers={openDrawers}
             openInfo={openInfo}
+            openSettings={openSettings}
           />
         </Toolbar>
       </AppBar>

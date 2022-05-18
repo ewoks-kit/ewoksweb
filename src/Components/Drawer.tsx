@@ -3,13 +3,7 @@ import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import TabPanel from './TabPanel';
-import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Typography,
-} from '@material-ui/core';
+import EwoksUiInfo from './EwoksUiInfo';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 // TODO: to decide if only top is needed and local state of the drawer
@@ -22,9 +16,14 @@ export default function TemporaryDrawer(props) {
   });
 
   useEffect(() => {
-    const opSet: boolean = props.openSettings;
-    setState({ top: opSet, left: false, bottom: false, right: false });
-  }, [props.openSettings]);
+    // console.log(props.openSettings, props.openInfo, props.openDrawers);
+    setState({
+      top: props.openDrawers && props.openSettings,
+      left: false,
+      bottom: props.openDrawers && props.openInfo,
+      right: false,
+    });
+  }, [props.openSettings, props.openInfo, props.openDrawers]);
 
   const toggleDrawer = (anchor: Anchor, open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent
@@ -36,7 +35,7 @@ export default function TemporaryDrawer(props) {
     ) {
       return;
     }
-    props.handleOpenSettings();
+    props.handleOpenDrawers();
     setState({ ...state, [anchor]: open }); // left: open , for opening both-active 1
   };
 
@@ -49,7 +48,8 @@ export default function TemporaryDrawer(props) {
     >
       {props.openInfo ? (
         <div className="infoAccordion">
-          <h2 style={{ color: '#5595ce' }}>Using Ewoks user Interface</h2>
+          <EwoksUiInfo />
+          {/* <h2 style={{ color: '#5595ce' }}>Using Ewoks user Interface</h2>
           <Accordion>
             <AccordionSummary
               expandIcon={<OpenInBrowser />}
@@ -113,17 +113,7 @@ export default function TemporaryDrawer(props) {
                 eget. fgbvfgbfgb
               </Typography>
             </AccordionDetails>
-          </Accordion>
-          {/* <ul>
-            <li>Create a graph</li>
-            <li>Nodes editing</li>
-            <li>Nodes style editing</li>
-            <li>Links editing</li>
-            <li>Links style editing</li>
-            <li>Clone Node, Graph</li>
-            <li>Manage Icons</li>
-            <li>Manage Tasks</li>
-          </ul> */}
+          </Accordion> */}
         </div>
       ) : (
         <TabPanel />
@@ -134,7 +124,7 @@ export default function TemporaryDrawer(props) {
 
   return (
     <div>
-      {(['left', 'top', 'right'] as const).map((anchor) => (
+      {(['left', 'top', 'right', 'bottom'] as const).map((anchor) => (
         <React.Fragment key={anchor}>
           {/* <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button> */}
           <Drawer
