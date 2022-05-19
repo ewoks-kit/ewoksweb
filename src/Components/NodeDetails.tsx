@@ -201,23 +201,30 @@ export default function NodeDetails(props) {
 
   return (
     <Box>
-      {taskProperties.map(({ id, label, value }) => (
-        <EditTaskProp
-          key={id}
-          id={id}
-          label={label}
-          value={value}
-          propChanged={propChanged}
-          editProps={false} // editProps
-        />
-      ))}
-      {NonEditableTaskProperties.map(({ id, label, value }) => (
-        <div key={id} className={classes.detailsLabels}>
-          <b>{label}:</b> {typeof value === 'object' ? value.join(', ') : value}
-        </div>
-      ))}
-      {/* DONT DELETE: Use later if we need to edit node details in EditTaskProp */}
-      {/* <IconButton
+      <SidebarTooltip
+        text={`These properties are being populated by the task the
+        specific node is based on. If you need to have them create a new Task
+        with the appropriete properties and use it.`}
+      >
+        <div>
+          {taskProperties.map(({ id, label, value }) => (
+            <EditTaskProp
+              key={id}
+              id={id}
+              label={label}
+              value={value}
+              propChanged={propChanged}
+              editProps={false} // editProps
+            />
+          ))}
+          {NonEditableTaskProperties.map(({ id, label, value }) => (
+            <div key={id} className={classes.detailsLabels}>
+              <b>{label}:</b>{' '}
+              {typeof value === 'object' ? value.join(', ') : value}
+            </div>
+          ))}
+          {/* DONT DELETE: Use later if we need to edit node details in EditTaskProp */}
+          {/* <IconButton
         style={{ padding: '0px' }}
         aria-label="edit"
         onClick={() => {
@@ -226,6 +233,8 @@ export default function NodeDetails(props) {
       >
         <EditIcon />
       </IconButton> */}
+        </div>
+      </SidebarTooltip>
       <div>
         <hr />
         <SidebarTooltip

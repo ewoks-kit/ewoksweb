@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 
 import type { EwoksRFLink } from '../types';
-import { Box, Button, TextField, Tooltip } from '@material-ui/core';
+import { Box, Button, TextField } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
+import SidebarTooltip from './SidebarTooltip';
 
 const useStyles = DashboardStyle;
 
@@ -106,11 +107,11 @@ export default function LabelComment(props) {
       <div className={classes.detailsLabels}>
         <Box>
           {Object.keys(element).includes('source') && (
-            <Tooltip title="Use conditions or data-mapping as label" arrow>
+            <SidebarTooltip text="Use Conditions or Data Mapping as label.">
               <span>
                 <Button
                   style={{ margin: '0px 8px 14px 18px' }}
-                  variant="contained"
+                  variant="outlined"
                   color="primary"
                   onClick={useConditions}
                   size="small"
@@ -119,7 +120,7 @@ export default function LabelComment(props) {
                 </Button>
                 <Button
                   style={{ margin: '0px 8px 14px 8px' }}
-                  variant="contained"
+                  variant="outlined"
                   color="primary"
                   onClick={useMapping}
                   size="small"
@@ -127,7 +128,7 @@ export default function LabelComment(props) {
                   mapping
                 </Button>
               </span>
-            </Tooltip>
+            </SidebarTooltip>
           )}
           <TextField
             id="outlined-basic"

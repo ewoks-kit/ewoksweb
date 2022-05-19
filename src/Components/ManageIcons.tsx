@@ -168,16 +168,18 @@ export default function ManageIcons() {
   // };
 
   const getIcon = async (id: string) => {
-    // console.log(selectedIcon, id);
+    /* eslint-disable no-console */
+    console.log(selectedIcon, id);
     const iconsData = await axios.get(`${configData.serverUrl}/icon/${id}`);
+    console.log(iconsData, selectedIcon, id);
     // console.log(iconsData);
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(
-      iconsData.data as string,
-      'image/svg+xml'
-    );
-    // console.log(doc.childNodes[1]);
-    setSelectedIcon((doc.childNodes[1] as unknown) as string);
+    // const parser = new DOMParser();
+    // const doc = parser.parseFromString(
+    //   iconsData.data as string,
+    //   'image/svg+xml'
+    // );
+    // // console.log(doc.childNodes[1]);
+    // setSelectedIcon((doc.childNodes[1] as unknown) as string);
   };
 
   // const image =

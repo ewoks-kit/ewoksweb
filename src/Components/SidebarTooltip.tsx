@@ -11,12 +11,12 @@ export default function SidebarTooltip(props) {
       <span
         style={{
           borderRadius: '5px',
-          border: '2px solid rgb(150, 165, 249)',
+          border: '3px solid rgb(150, 165, 249)',
           padding: '10px',
-          backgroundColor: 'grey', // 'rgb(63, 81, 181)',
-          color: 'white',
-          fontSize: '0.875rem',
-          fontWeight: 200,
+          backgroundColor: 'rgb(233, 235, 247)',
+          color: 'rgb(57, 65, 111)',
+          fontSize: '0.700rem',
+          fontWeight: 100,
           lineHeight: '1.13',
         }}
       >

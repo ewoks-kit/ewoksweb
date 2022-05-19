@@ -18,7 +18,7 @@ import GetFromServer from '../Components/GetFromServer';
 import { Fab, IconButton } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SimpleSnackbar from '../Components/Snackbar';
-import TemporaryDrawer from '../Components/Drawer';
+import SettingsInfoDrawer from '../Components/SettingsInfoDrawer';
 import SubgraphsStack from '../Components/SubgraphsStack';
 import LinearSpinner from '../Components/LinearSpinner';
 import ExecuteWorkflow from '../Components/ExecuteWorkflow';
@@ -186,7 +186,7 @@ export default function Dashboard() {
               </Fab>
             </IconButton>
           </Tooltip>
-          <TemporaryDrawer
+          <SettingsInfoDrawer
             handleOpenDrawers={handleOpenDrawers}
             openDrawers={openDrawers}
             openInfo={openInfo}
