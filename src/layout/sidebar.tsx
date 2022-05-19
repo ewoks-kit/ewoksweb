@@ -9,13 +9,27 @@ import SettingsInfoDrawer from '../Components/SettingsInfoDrawer';
 import ExecutionDetails from '../Components/ExecutionDetails';
 import DashboardStyle from './DashboardStyle';
 import state from '../store/state';
-
-import type { EwoksRFNode, EwoksRFLink, GraphDetails, GraphRF } from '../types';
+import { getIcons } from '../utils/api';
+import type {
+  EwoksRFNode,
+  EwoksRFLink,
+  GraphDetails,
+  GraphRF,
+  IconsNames,
+  Icons,
+} from '../types';
 import { rfToEwoks } from '../utils';
 import ConfirmDialog from '../Components/ConfirmDialog';
 import { deleteWorkflow } from '../utils/api';
+import type { AxiosResponse } from 'axios';
 
 const useStyles = DashboardStyle;
+
+const getIconsL = async () => {
+  const iconsData: IconsNames = await getIcons();
+  console.log(typeof iconsData.identifiers, iconsData.identifiers);
+  return iconsData.identifiers;
+};
 
 export default function Sidebar() {
   const classes = useStyles();
@@ -40,10 +54,16 @@ export default function Sidebar() {
   const setUndoRedo = state((state) => state.setUndoRedo);
   const isExecuted = state((state) => state.isExecuted);
   const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
+  const setAllIcons = state((state) => state.setAllIcons);
+  const allIcons = state((state) => state.allIcons);
 
   useEffect(() => {
     setElement(selectedElement);
-  }, [selectedElement]);
+    if (allIcons.length === 0) {
+      getIconsL();
+      // setAllIcons(getIconsL());
+    }
+  }, [selectedElement, allIcons.length, setAllIcons]);
 
   const deleteElement = async () => {
     let newGraph = {} as GraphRF;

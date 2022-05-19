@@ -115,6 +115,10 @@ export interface State {
   openSnackbar?: SnackbarParams;
   setOpenSnackbar?: (params: SnackbarParams) => void;
 
+  allIcons?: string[];
+  setAllIcons?: (icons: string[]) => void;
+  // { name: string; svgFile?: string; file?: File }[]
+
   allWorkflows?: { title: string }[];
   setAllWorkflows?: (workflows: { title: string }[]) => void;
 
@@ -403,4 +407,14 @@ export interface GraphEwoks {
   graph?: GraphDetails;
   nodes: EwoksNode[];
   links: EwoksLink[];
+}
+
+export interface IconsNames {
+  identifiers: [string];
+}
+
+export interface Icons {
+  name: string;
+  svgFile?: string;
+  file?: File;
 }

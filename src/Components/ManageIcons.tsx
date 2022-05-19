@@ -11,12 +11,12 @@ import Correlations from '../images/Correlations.svg';
 import CreateClass from '../images/CreateClass.svg';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import configData from '../configData.json';
 import type { Task } from '../types';
 import state from '../store/state';
 import ConfirmDialog from './ConfirmDialog';
-import { getTaskDescription } from '../utils/api';
+import { getTaskDescription, getIcon } from '../utils/api';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -102,7 +102,7 @@ export default function ManageIcons() {
 
     data.append('file', (fileToBeSent.file as unknown) as File);
     // data.append('filename', fileToBeSent.filename);
-
+    console.log(data, fileToBeSent.file);
     try {
       await axios.post(`${configData.serverUrl}/icons`, data);
     } catch (error) {
@@ -121,8 +121,8 @@ export default function ManageIcons() {
         text: 'File ready to be uploadede as an icon',
         severity: 'success',
       });
-      // console.log(ne.target.value, ne.target.files[0]);
-      getIcon('up.svg');
+      console.log(ne.target.value, ne.target.files[0]);
+      getIconL(ne.target.files[0].name as string);
       setFileToBeSent({ file: ne.target.files[0], filename: ne.target.value });
     } else {
       // setFileToBeSent('');
@@ -167,10 +167,10 @@ export default function ManageIcons() {
   //   setIcons(icons);
   // };
 
-  const getIcon = async (id: string) => {
+  const getIconL = async (id: string) => {
     /* eslint-disable no-console */
     console.log(selectedIcon, id);
-    const iconsData = await axios.get(`${configData.serverUrl}/icon/${id}`);
+    const iconsData: AxiosResponse<string> = await getIcon(id);
     console.log(iconsData, selectedIcon, id);
     // console.log(iconsData);
     // const parser = new DOMParser();
@@ -179,7 +179,7 @@ export default function ManageIcons() {
     //   'image/svg+xml'
     // );
     // // console.log(doc.childNodes[1]);
-    // setSelectedIcon((doc.childNodes[1] as unknown) as string);
+    setSelectedIcon(iconsData.data);
   };
 
   // const image =
@@ -265,8 +265,10 @@ export default function ManageIcons() {
               <hr />
 
               <div>
-                {/* <img src={`data:image/svg+xml;utf8,${image}`} alt="image" /> */}
-                <svg>{selectedIcon}</svg>
+                <img
+                  src={`data:image/svg+xml;utf8,${selectedIcon}`}
+                  alt="image"
+                />
                 <label htmlFor="upload-icon">
                   Select an Icon to Upload
                   <div>

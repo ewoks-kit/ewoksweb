@@ -9,6 +9,7 @@ import selectedTask from './selectedTask';
 import workingGraph from './workingGraph';
 import graphRF from './graphRF';
 import allWorkflows from './allWorkflows';
+import allIcons from './allIcons';
 import executingEvents from './executingEvents';
 import graphOrSubgraph from './graphOrSubgraph';
 import isExecuted from './isExecuted';
@@ -44,6 +45,7 @@ const initializedGraph = {
 } as GraphRF;
 
 const state = create<State>((set, get) => ({
+  ...allIcons(set),
   ...allWorkflows(set),
   ...currentExecutionEvent(set),
   ...executingEvents(set, get),

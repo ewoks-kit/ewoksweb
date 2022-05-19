@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import configData from '../configData.json';
-import type { GraphEwoks, Task } from '../types';
+import type { GraphEwoks, Task, IconsNames } from '../types';
 
 export const axiosRequest = axios.create({
   baseURL: configData.serverUrl,
@@ -51,4 +51,18 @@ export function putWorkflow(workflow: GraphEwoks) {
 // Delete
 export function deleteWorkflow(id: string) {
   return axiosRequest.delete(`/workflow/${id}`);
+}
+
+// --------------Icons
+// Get '/tasks/descriptions'
+export async function getIcons(): Promise<IconsNames> {
+  const result: AxiosResponse<IconsNames> = await axiosRequest.get(
+    `/icons/descriptions`
+  );
+  return result.data;
+}
+
+// Get icon:id
+export function getIcon(id: string): Promise<AxiosResponse<string>> {
+  return axiosRequest.get<string>(`/icon/${id}`);
 }
