@@ -54,15 +54,17 @@ export function deleteWorkflow(id: string) {
 }
 
 // --------------Icons
-// Get '/tasks/descriptions'
+// Get '/icons/descriptions'
 export async function getIcons(): Promise<IconsNames> {
-  const result: AxiosResponse<IconsNames> = await axiosRequest.get(
-    `/icons/descriptions`
-  );
+  const result: AxiosResponse<IconsNames> = await axiosRequest.get(`/icons`);
   return result.data;
 }
 
 // Get icon:id
 export function getIcon(id: string): Promise<AxiosResponse<string>> {
   return axiosRequest.get<string>(`/icon/${id}`);
+}
+
+export function getOtherIcon(id: string): Promise<AxiosResponse<Blob>> {
+  return axiosRequest.get(`/icon/${id}`);
 }

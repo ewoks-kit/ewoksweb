@@ -413,8 +413,7 @@ export interface IconsNames {
   identifiers: [string];
 }
 
-export interface Icons {
+export interface SvgIcons {
   name: string;
   svgFile?: string;
-  file?: File;
 }

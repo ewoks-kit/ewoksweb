@@ -9,19 +9,18 @@ import SettingsInfoDrawer from '../Components/SettingsInfoDrawer';
 import ExecutionDetails from '../Components/ExecutionDetails';
 import DashboardStyle from './DashboardStyle';
 import state from '../store/state';
-import { getIcons } from '../utils/api';
 import type {
   EwoksRFNode,
   EwoksRFLink,
   GraphDetails,
   GraphRF,
   IconsNames,
-  Icons,
+  SvgIcons,
 } from '../types';
 import { rfToEwoks } from '../utils';
 import ConfirmDialog from '../Components/ConfirmDialog';
-import { deleteWorkflow } from '../utils/api';
-import type { AxiosResponse } from 'axios';
+import { deleteWorkflow, getIcon, getIcons, getOtherIcon } from '../utils/api';
+import axios from 'axios';
 
 const useStyles = DashboardStyle;
 
@@ -56,14 +55,85 @@ export default function Sidebar() {
   const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
   const setAllIcons = state((state) => state.setAllIcons);
   const allIcons = state((state) => state.allIcons);
+  const setAllSvgIcons = state((state) => state.setAllIcons);
+  // const allIcons = state((state) => state.allIcons);
+  const [testImage, setTestImage] = React.useState<string>('');
 
   useEffect(() => {
     setElement(selectedElement);
-    if (allIcons.length === 0) {
-      getIconsL();
-      // setAllIcons(getIconsL());
-    }
-  }, [selectedElement, allIcons.length, setAllIcons]);
+
+    const fetchIcons = async () => {
+      const data = await getIcons();
+
+      // const tempPng = await
+      getOtherIcon('orange1.png').then((r) => {
+        // (TypeError): URL.createObjectURL: Argument 1 is not valid for any of the 1-argument overloads.
+        // console.log(URL.createObjectURL(r.data));
+
+        // const base64String = btoa(
+        //   String.fromCharCode(...new Uint8Array(r.data)) // needs arratBufferLike
+        // );
+
+        console.log(r);
+        const blo = r.data as Blob;
+        const fileReader = new FileReader();
+        // const arB = fileReader.readAsArrayBuffer(blo);
+
+        // return arB.arrayBuffer();
+      });
+      // .then((buffer) => {
+      //   // note this is already an ArrayBuffer
+      //   // there is no buffer.data here
+      //   const blob = new Blob([buffer]);
+      //   const url = URL.createObjectURL(blob);
+      //   console.log(url);
+      // });
+      // console.log(tempPng, typeof tempPng.data);
+      // const blobURL = tempPng.data.arrayBuffer();
+      // URL.createObjectURL(tempPng.data);
+      // setTestImage(blobURL);
+
+      // tempPng.arrayBuffer().then(function (buffer) {
+      //   const url = window.URL.createObjectURL(new Blob([buffer]));
+      //   const link = document.createElement('a');
+      //   link.href = url;
+      //   link.setAttribute('download', 'image.png'); //or any other extension
+      //   document.body.append(link);
+      //   link.click();
+      // });
+      // console.log(tempPng);
+
+      const icons = data.identifiers
+        // .map((str) => str.slice(6))
+        .filter((str) => {
+          return str.endsWith('svg');
+        });
+      console.log(typeof icons, icons, Array.isArray(icons), icons.length);
+      if (allIcons.length <= 1) {
+        setAllIcons(icons);
+        const results = await axios
+          .all(icons.map((id: string) => getIcon(id)))
+          .then(
+            axios.spread((...res) => {
+              console.log(res);
+              const resCln = res.filter((result) => result.data !== null);
+              return resCln.map((result) => result.data);
+            })
+          )
+          .catch((error) => {
+            // remove after handling the error
+            console.log('AXIOS ERROR', error);
+            return [];
+          });
+        console.log(results);
+        setAllSvgIcons(results);
+      }
+    };
+
+    fetchIcons().catch((error) => console.log(error));
+    // const icons = getIconsL();
+    // setAllIcons(icons);
+  }, [selectedElement, allIcons.length, setAllIcons, setAllSvgIcons]);
 
   const deleteElement = async () => {
     let newGraph = {} as GraphRF;
@@ -171,6 +241,7 @@ export default function Sidebar() {
         </div>
       ) : (
         <>
+          <img id="myImage" src="" alt="sdc"></img>
           <AddNodes title="Add Nodes" />
           <EditElement element={selectedElement} />
           <EditElementStyle />
