@@ -57,14 +57,14 @@ export default function Sidebar() {
   const allIcons = state((state) => state.allIcons);
   const setAllSvgIcons = state((state) => state.setAllIcons);
   // const allIcons = state((state) => state.allIcons);
-  const [testImage, setTestImage] = React.useState<string>('');
+  const [testImage, setTestImage] = React.useState<string>();
 
   useEffect(() => {
     setElement(selectedElement);
 
     const fetchIcons = async () => {
       const data = await getIcons();
-
+      console.log(data);
       // const tempPng = await
       getOtherIcon('orange1.png').then((r) => {
         // (TypeError): URL.createObjectURL: Argument 1 is not valid for any of the 1-argument overloads.
@@ -74,34 +74,19 @@ export default function Sidebar() {
         //   String.fromCharCode(...new Uint8Array(r.data)) // needs arratBufferLike
         // );
 
-        console.log(r);
-        const blo = r.data as Blob;
+        console.log(r, typeof r.data);
+        const blo = r.data;
+        const blob1 = new Blob([blo], { type: 'image/png' });
+        console.log(blob1);
         const fileReader = new FileReader();
-        // const arB = fileReader.readAsArrayBuffer(blo);
+        fileReader.readAsDataURL(blob1);
+        fileReader.addEventListener('load', handleReader);
 
-        // return arB.arrayBuffer();
+        function handleReader() {
+          console.log(fileReader.result);
+          setTestImage(fileReader.result as string);
+        }
       });
-      // .then((buffer) => {
-      //   // note this is already an ArrayBuffer
-      //   // there is no buffer.data here
-      //   const blob = new Blob([buffer]);
-      //   const url = URL.createObjectURL(blob);
-      //   console.log(url);
-      // });
-      // console.log(tempPng, typeof tempPng.data);
-      // const blobURL = tempPng.data.arrayBuffer();
-      // URL.createObjectURL(tempPng.data);
-      // setTestImage(blobURL);
-
-      // tempPng.arrayBuffer().then(function (buffer) {
-      //   const url = window.URL.createObjectURL(new Blob([buffer]));
-      //   const link = document.createElement('a');
-      //   link.href = url;
-      //   link.setAttribute('download', 'image.png'); //or any other extension
-      //   document.body.append(link);
-      //   link.click();
-      // });
-      // console.log(tempPng);
 
       const icons = data.identifiers
         // .map((str) => str.slice(6))
@@ -109,6 +94,7 @@ export default function Sidebar() {
           return str.endsWith('svg');
         });
       console.log(typeof icons, icons, Array.isArray(icons), icons.length);
+      // TODO: if icons wont be downloaded due to a server issue it enters a infinite loop of requests
       if (allIcons.length <= 1) {
         setAllIcons(icons);
         const results = await axios
@@ -133,7 +119,13 @@ export default function Sidebar() {
     fetchIcons().catch((error) => console.log(error));
     // const icons = getIconsL();
     // setAllIcons(icons);
-  }, [selectedElement, allIcons.length, setAllIcons, setAllSvgIcons]);
+  }, [
+    selectedElement,
+    allIcons.length,
+    setAllIcons,
+    setAllSvgIcons,
+    testImage,
+  ]);
 
   const deleteElement = async () => {
     let newGraph = {} as GraphRF;
@@ -241,7 +233,7 @@ export default function Sidebar() {
         </div>
       ) : (
         <>
-          <img id="myImage" src="" alt="sdc"></img>
+          {/* <img src={testImage} alt="sdc"></img> */}
           <AddNodes title="Add Nodes" />
           <EditElement element={selectedElement} />
           <EditElementStyle />

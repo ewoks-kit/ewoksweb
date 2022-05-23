@@ -65,6 +65,9 @@ export function getIcon(id: string): Promise<AxiosResponse<string>> {
   return axiosRequest.get<string>(`/icon/${id}`);
 }
 
-export function getOtherIcon(id: string): Promise<AxiosResponse<Blob>> {
-  return axiosRequest.get(`/icon/${id}`);
+export function getOtherIcon(id: string): Promise<AxiosResponse<string>> {
+  console.log(axiosRequest);
+  return axiosRequest.get(`${configData.serverUrl}/icon/${id}`, {
+    responseType: 'blob',
+  });
 }

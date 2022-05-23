@@ -4,11 +4,20 @@ import type { DataMapping, EwoksRFNode, Inputs } from '../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 // import EditIcon from '@material-ui/icons/EditOutlined'; DONT DELETE
-import { Box, Checkbox, IconButton } from '@material-ui/core';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Checkbox,
+  IconButton,
+  Typography,
+} from '@material-ui/core';
 import EditTaskProp from './EditTaskProp';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 import SidebarTooltip from './SidebarTooltip';
+import { OpenInBrowser } from '@material-ui/icons';
 
 const useStyles = DashboardStyle;
 
@@ -206,25 +215,34 @@ export default function NodeDetails(props) {
         specific node is based on. If you need to have them create a new Task
         with the appropriete properties and use it.`}
       >
-        <div>
-          {taskProperties.map(({ id, label, value }) => (
-            <EditTaskProp
-              key={id}
-              id={id}
-              label={label}
-              value={value}
-              propChanged={propChanged}
-              editProps={false} // editProps
-            />
-          ))}
-          {NonEditableTaskProperties.map(({ id, label, value }) => (
-            <div key={id} className={classes.detailsLabels}>
-              <b>{label}:</b>{' '}
-              {typeof value === 'object' ? value.join(', ') : value}
-            </div>
-          ))}
-          {/* DONT DELETE: Use later if we need to edit node details in EditTaskProp */}
-          {/* <IconButton
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<OpenInBrowser />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography>Node Info</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <div>
+              {taskProperties.map(({ id, label, value }) => (
+                <EditTaskProp
+                  key={id}
+                  id={id}
+                  label={label}
+                  value={value}
+                  propChanged={propChanged}
+                  editProps={false} // editProps
+                />
+              ))}
+              {NonEditableTaskProperties.map(({ id, label, value }) => (
+                <div key={id} className={classes.detailsLabels}>
+                  <b>{label}:</b>{' '}
+                  {typeof value === 'object' ? value.join(', ') : value}
+                </div>
+              ))}
+              {/* DONT DELETE: Use later if we need to edit node details in EditTaskProp */}
+              {/* <IconButton
         style={{ padding: '0px' }}
         aria-label="edit"
         onClick={() => {
@@ -233,7 +251,9 @@ export default function NodeDetails(props) {
       >
         <EditIcon />
       </IconButton> */}
-        </div>
+            </div>
+          </AccordionDetails>
+        </Accordion>
       </SidebarTooltip>
       <div>
         <hr />
