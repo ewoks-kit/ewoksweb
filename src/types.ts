@@ -115,8 +115,11 @@ export interface State {
   openSnackbar?: SnackbarParams;
   setOpenSnackbar?: (params: SnackbarParams) => void;
 
-  allIcons?: string[];
-  setAllIcons?: (icons: string[]) => void;
+  allIcons?: Icon[];
+  setAllIcons?: (icons: Icon[]) => void;
+
+  allIconNames?: string[];
+  setAllIconNames?: (icons: string[]) => void;
   // { name: string; svgFile?: string; file?: File }[]
 
   allWorkflows?: { title: string }[];
@@ -413,7 +416,8 @@ export interface IconsNames {
   identifiers: [string];
 }
 
-export interface SvgIcons {
+export interface Icon {
   name: string;
-  svgFile?: string;
+  type?: string;
+  image?: string;
 }

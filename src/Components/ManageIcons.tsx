@@ -59,6 +59,7 @@ export default function ManageIcons() {
 
   const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const allIcons = state((state) => state.allIcons);
 
   const clickIcon = (icon) => {
     setSelectedIcon(icon);
@@ -69,7 +70,7 @@ export default function ManageIcons() {
       const tasksData = await getTaskDescription();
       const tasks = tasksData.data as { items: Task[] };
       const allTasks = tasks.items;
-
+      console.log(allTasks, allIcons);
       if (allTasks.map((task) => task.icon).includes(selectedIcon)) {
         setOpenSnackbar({
           open: true,

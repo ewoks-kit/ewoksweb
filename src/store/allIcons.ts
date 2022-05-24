@@ -1,9 +1,9 @@
-// import type { Icons } from '../types';
+import type { Icon } from '../types';
 
 const allIcons = (set) => ({
   allIcons: [],
 
-  setAllIcons: (icons: [string]) => {
+  setAllIcons: (icons: [Icon]) => {
     console.log('set Icons names');
     set((state) => ({
       ...state,

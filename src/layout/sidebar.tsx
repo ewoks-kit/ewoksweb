@@ -15,12 +15,13 @@ import type {
   GraphDetails,
   GraphRF,
   IconsNames,
-  SvgIcons,
+  Icon,
 } from '../types';
 import { rfToEwoks } from '../utils';
 import ConfirmDialog from '../Components/ConfirmDialog';
 import { deleteWorkflow, getIcon, getIcons, getOtherIcon } from '../utils/api';
 import axios from 'axios';
+import path from 'path';
 
 const useStyles = DashboardStyle;
 
@@ -55,55 +56,92 @@ export default function Sidebar() {
   const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
   const setAllIcons = state((state) => state.setAllIcons);
   const allIcons = state((state) => state.allIcons);
-  const setAllSvgIcons = state((state) => state.setAllIcons);
-  // const allIcons = state((state) => state.allIcons);
+  const setAllIconNames = state((state) => state.setAllIconNames);
+  const allIconNames = state((state) => state.allIconNames);
   const [testImage, setTestImage] = React.useState<string>();
 
   useEffect(() => {
     setElement(selectedElement);
 
     const fetchIcons = async () => {
-      const data = await getIcons();
-      console.log(data);
-      // const tempPng = await
-      getOtherIcon('orange1.png').then((r) => {
-        // (TypeError): URL.createObjectURL: Argument 1 is not valid for any of the 1-argument overloads.
-        // console.log(URL.createObjectURL(r.data));
-
-        // const base64String = btoa(
-        //   String.fromCharCode(...new Uint8Array(r.data)) // needs arratBufferLike
-        // );
-
-        console.log(r, typeof r.data);
-        const blo = r.data;
-        const blob1 = new Blob([blo], { type: 'image/png' });
-        console.log(blob1);
-        const fileReader = new FileReader();
-        fileReader.readAsDataURL(blob1);
-        fileReader.addEventListener('load', handleReader);
-
-        function handleReader() {
-          console.log(fileReader.result);
-          setTestImage(fileReader.result as string);
-        }
-      });
-
-      const icons = data.identifiers
-        // .map((str) => str.slice(6))
-        .filter((str) => {
-          return str.endsWith('svg');
-        });
-      console.log(typeof icons, icons, Array.isArray(icons), icons.length);
-      // TODO: if icons wont be downloaded due to a server issue it enters a infinite loop of requests
       if (allIcons.length <= 1) {
-        setAllIcons(icons);
+        const data = await getIcons();
+        console.log(data);
+        // get the non svg image icons(png)
+        const iconsPng = data.identifiers
+          // .map((str) => str.slice(6))
+          .filter((str) => {
+            return !str.endsWith('svg');
+          });
+        const resultsPng = [];
+
+        await axios
+          .all(iconsPng.map((id: string) => getOtherIcon(id)))
+          .then(
+            axios.spread((...resPng) => {
+              console.log(resPng);
+              const resCln = resPng.filter((result) => result.data !== null);
+              return resCln.map((result) => {
+                const blobPng = new Blob([result.data], { type: 'image/png' });
+                const fileReader = new FileReader();
+                fileReader.readAsDataURL(blobPng);
+                // fileReader.addEventListener('load', handleReader);
+
+                // function handleReader() {
+                //   // resultsPng.push({ name: theId, image: fileReader.result });
+                // }
+                return result.data;
+              });
+            })
+          )
+          .catch((error) => {
+            // remove after handling the error
+            console.log('AXIOS ERROR', error);
+            return [];
+          });
+        console.log(resultsPng);
+
+        getOtherIcon('orange1.png').then((r) => {
+          console.log(r, typeof r.data);
+          const blo = r.data;
+          const blob1 = new Blob([blo], { type: 'image/png' });
+          console.log(blob1);
+          const fileReader = new FileReader();
+          fileReader.readAsDataURL(blob1);
+          fileReader.addEventListener('load', handleReader);
+
+          function handleReader() {
+            console.log(fileReader.result);
+            setTestImage(fileReader.result as string);
+          }
+        });
+
+        // get the svg icons
+        const iconsSvg = data.identifiers
+          // .map((str) => str.slice(6))
+          .filter((str) => {
+            return str.endsWith('svg');
+          });
+        console.log(typeof iconsSvg, iconsSvg, Array.isArray(iconsSvg));
+        // TODO: if icons wont be downloaded due to a server issue it enters a infinite loop of requests
+
+        setAllIconNames(iconsSvg);
         const results = await axios
-          .all(icons.map((id: string) => getIcon(id)))
+          .all(iconsSvg.map((id: string) => getIcon(id)))
           .then(
             axios.spread((...res) => {
-              console.log(res);
+              console.log(
+                path.basename(res[0].config.url),
+                path.extname(res[0].config.url)
+              );
               const resCln = res.filter((result) => result.data !== null);
-              return resCln.map((result) => result.data);
+              return resCln.map((result) => {
+                return {
+                  name: path.basename(result.config.url),
+                  image: result.data,
+                  type: path.extname(result.config.url),
+                };
+              });
             })
           )
           .catch((error) => {
@@ -112,7 +150,7 @@ export default function Sidebar() {
             return [];
           });
         console.log(results);
-        setAllSvgIcons(results);
+        setAllIcons(results);
       }
     };
 
@@ -123,7 +161,7 @@ export default function Sidebar() {
     selectedElement,
     allIcons.length,
     setAllIcons,
-    setAllSvgIcons,
+    setAllIconNames,
     testImage,
   ]);
 
@@ -233,7 +271,15 @@ export default function Sidebar() {
         </div>
       ) : (
         <>
-          {/* <img src={testImage} alt="sdc"></img> */}
+          <img src={testImage} alt="sdc"></img>
+          {allIcons &&
+            allIcons.length > 0 &&
+            allIcons.map((icon) => (
+              <img
+                src={`data:image/svg+xml;utf8,${icon.image}`}
+                alt={icon.name}
+              />
+            ))}
           <AddNodes title="Add Nodes" />
           <EditElement element={selectedElement} />
           <EditElementStyle />

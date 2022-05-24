@@ -21,7 +21,7 @@ export async function getWorkflows(): Promise<{ title: string }[]> {
     if (workflows && workflows.data) {
       // console.log(workflows);
       const workf = workflows.data as { identifiers: string[] };
-      res = workf.identifiers.map((work) => {
+      res = workf.identifiers.sort().map((work) => {
         return { title: work };
       });
     }
