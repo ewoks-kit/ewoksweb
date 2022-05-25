@@ -2,7 +2,7 @@
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Fab } from '@material-ui/core';
 
-import { validateEwoksGraph } from '../utils/EwoksValidator';
+// import { validateEwoksGraph } from '../utils/EwoksValidator';
 import state from '../store/state';
 
 const useStyles = makeStyles(() =>
