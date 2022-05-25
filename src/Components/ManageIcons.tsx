@@ -264,10 +264,10 @@ export default function ManageIcons() {
               <hr />
 
               <div>
-                <img
+                {/* <img
                   src={`data:image/svg+xml;utf8,${selectedIcon}`}
                   alt="missing"
-                />
+                /> */}
                 <label htmlFor="upload-icon">
                   Select an Icon to Upload
                   <div>

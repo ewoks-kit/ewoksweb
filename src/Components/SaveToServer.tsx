@@ -16,6 +16,7 @@ export default function SaveToServer({ saveToServerF }) {
   //   return state.setGettingFromServer;
   // });
   const graphRF = state((state) => state.graphRF);
+  const allWorkflows = state((state) => state.allWorkflows);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const setRecentGraphs = state((state) => state.setRecentGraphs);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
@@ -25,6 +26,10 @@ export default function SaveToServer({ saveToServerF }) {
     saveToServerF.current = saveToServer;
   });
 
+  const workflowExists = (id) => {
+    return allWorkflows.map((flow) => flow.title).includes(id);
+  };
+
   const saveToServer = async () => {
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     // and Nodes DataMapping before attempting to save
@@ -32,8 +37,9 @@ export default function SaveToServer({ saveToServerF }) {
     // DOC: If id: "newGraph" request label update and then POST with id=label
     // else PUT and replace existing on server
     // TODO: following line creates issues on graph positionng examine
+
     setGettingFromServer(true);
-    if (graphRF.graph.id === 'newGraph') {
+    if (graphRF.graph.id === 'newGraph' || !workflowExists(graphRF.graph.id)) {
       setOpenSaveDialog(true);
       if (!graphRF.graph.label || graphRF.graph.label === 'newGraph') {
         setOpenSnackbar({

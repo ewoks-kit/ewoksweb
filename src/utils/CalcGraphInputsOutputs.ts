@@ -23,7 +23,7 @@ export function calcGraphInputsOutputs(graph): GraphDetails {
   });
   return {
     id: graph.graph.id,
-    label: graph.graph.label,
+    label: graph.graph.label || graph.graph.id,
     input_nodes,
     output_nodes,
     uiProps: graph.graph.uiProps,
