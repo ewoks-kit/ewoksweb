@@ -59,7 +59,7 @@ export default function ManageIcons() {
 
   const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const allIcons = state((state) => state.allIcons);
+  // const allIcons = state((state) => state.allIcons);
 
   const clickIcon = (icon) => {
     setSelectedIcon(icon);
@@ -70,7 +70,7 @@ export default function ManageIcons() {
       const tasksData = await getTaskDescription();
       const tasks = tasksData.data as { items: Task[] };
       const allTasks = tasks.items;
-      console.log(allTasks, allIcons);
+
       if (allTasks.map((task) => task.icon).includes(selectedIcon)) {
         setOpenSnackbar({
           open: true,
@@ -103,7 +103,6 @@ export default function ManageIcons() {
 
     data.append('file', (fileToBeSent.file as unknown) as File);
     // data.append('filename', fileToBeSent.filename);
-    console.log(data, fileToBeSent.file);
     try {
       await axios.post(`${process.env.REACT_APP_SERVER_URL}/icons`, data);
     } catch (error) {
@@ -122,7 +121,6 @@ export default function ManageIcons() {
         text: 'File ready to be uploadede as an icon',
         severity: 'success',
       });
-      console.log(ne.target.value, ne.target.files[0]);
       getIconL(ne.target.files[0].name as string);
       setFileToBeSent({ file: ne.target.files[0], filename: ne.target.value });
     } else {
@@ -268,7 +266,7 @@ export default function ManageIcons() {
               <div>
                 <img
                   src={`data:image/svg+xml;utf8,${selectedIcon}`}
-                  alt="image"
+                  alt="missing"
                 />
                 <label htmlFor="upload-icon">
                   Select an Icon to Upload

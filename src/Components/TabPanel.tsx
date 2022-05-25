@@ -9,7 +9,6 @@ import ManageWorkflows from './ManageWorkflows';
 import ManageTasks from './ManageTasks';
 import { getIcons } from '../utils/api';
 import type { IconsNames } from '../types';
-import type { AxiosResponse } from 'axios';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -52,11 +51,10 @@ export default function BasicTabs() {
     newValue: number
   ) => {
     setValue(newValue);
-    console.log(newValue);
     if (newValue === 2) {
       const iconsTitles: IconsNames = await getIcons();
-      // const names: Ico = iconsTitles.data;
-      console.log(iconsTitles.identifiers);
+      /* eslint-disable no-console */
+      console.log(iconsTitles);
     }
   };
 

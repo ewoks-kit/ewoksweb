@@ -1,9 +1,8 @@
 import axios, { AxiosResponse } from 'axios';
-import configData from '../configData.json';
 import type { GraphEwoks, Task, IconsNames } from '../types';
 
 export const axiosRequest = axios.create({
-  baseURL: configData.serverUrl,
+  baseURL: process.env.REACT_APP_SERVER_URL,
 });
 
 // --------------Tasks
@@ -66,8 +65,7 @@ export function getIcon(id: string): Promise<AxiosResponse<string>> {
 }
 
 export function getOtherIcon(id: string): Promise<AxiosResponse<string>> {
-  console.log(axiosRequest);
-  return axiosRequest.get(`${configData.serverUrl}/icon/${id}`, {
+  return axiosRequest.get(`${process.env.REACT_APP_SERVER_URL}/icon/${id}`, {
     responseType: 'blob',
   });
 }

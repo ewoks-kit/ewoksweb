@@ -4,7 +4,6 @@ const allIconNames = (set) => ({
   allIconNames: [],
 
   setAllIconNames: (icons: [string]) => {
-    console.log('set Icons names');
     set((state) => ({
       ...state,
       allIconNames: icons,

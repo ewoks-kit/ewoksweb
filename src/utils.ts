@@ -21,9 +21,11 @@ export async function getWorkflows(): Promise<{ title: string }[]> {
     if (workflows && workflows.data) {
       // console.log(workflows);
       const workf = workflows.data as { identifiers: string[] };
-      res = workf.identifiers.sort().map((work) => {
-        return { title: work };
-      });
+      res = workf.identifiers
+        .sort((a, b) => a.localeCompare(b))
+        .map((work) => {
+          return { title: work };
+        });
     }
   } catch (error) {
     if (error.response) {
