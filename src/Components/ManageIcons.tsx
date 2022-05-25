@@ -105,7 +105,7 @@ export default function ManageIcons() {
     // data.append('filename', fileToBeSent.filename);
     console.log(data, fileToBeSent.file);
     try {
-      await axios.post(`${configData.serverUrl}/icons`, data);
+      await axios.post(`${process.env.REACT_APP_SERVER_URL}/icons`, data);
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -138,7 +138,7 @@ export default function ManageIcons() {
   const agreeDeleteIcon = async () => {
     setOpenAgreeDialog(false);
     await axios
-      .delete(`${configData.serverUrl}/icon/${selectedIcon}`)
+      .delete(`${process.env.REACT_APP_SERVER_URL}/icon/${selectedIcon}`)
       .then(() => {
         setOpenSnackbar({
           open: true,
@@ -162,7 +162,7 @@ export default function ManageIcons() {
 
   // const getIcons = async () => {
   //   const iconsData = await axios.get(
-  //     `${configData.serverUrl}/icons/descriptions`
+  //     `${process.env.REACT_APP_SERVER_URL}/icons/descriptions`
   //   );
   //   const icons = iconsData.data as string[];
   //   setIcons(icons);

@@ -15,7 +15,6 @@ import type {
   GraphDetails,
   GraphRF,
   IconsNames,
-  Icon,
 } from '../types';
 import { rfToEwoks } from '../utils';
 import ConfirmDialog from '../Components/ConfirmDialog';

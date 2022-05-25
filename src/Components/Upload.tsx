@@ -2,7 +2,7 @@
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Fab } from '@material-ui/core';
 
-import { validateEwoksGraph } from '../utils/EwoksValidator';
+// import { validateEwoksGraph } from '../utils/EwoksValidator';
 import state from '../store/state';
 
 const useStyles = makeStyles(() =>
@@ -59,10 +59,11 @@ function Upload(props) {
           const newGraph = JSON.parse(file.result as string);
 
           if (graphOrSubgraph) {
-            const { result } = validateEwoksGraph(newGraph);
-            if (result) {
-              await setWorkingGraph(newGraph);
-            }
+            // TODO validate from disk workflows but visualize them
+            // const { result } = validateEwoksGraph(newGraph);
+            // if (result) {
+            await setWorkingGraph(newGraph);
+            // }
           } else {
             await setSubGraph(newGraph);
           }

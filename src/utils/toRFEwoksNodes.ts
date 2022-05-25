@@ -66,12 +66,7 @@ export function toRFEwoksNodes(
           task_icon: task_icon || '',
           default_inputs: default_inputs || [],
           data: {
-            // Remains to also look at the uiProps for label before task_identifier
-            label: label
-              ? label
-              : uiProps.label
-              ? uiProps.label
-              : task_identifier,
+            label: label ? label : task_identifier,
             type: nodeType,
             icon: existsOrValue(uiProps, 'icon', ''),
             comment: existsOrValue(uiProps, 'comment', ''),
