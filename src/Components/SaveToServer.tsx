@@ -52,7 +52,10 @@ export default function SaveToServer({ saveToServerF }) {
         links: graphRFCurrated.links,
       };
       await axios
-        .post(`${configData.serverUrl}/workflows`, rfToEwoks(newIdGraph))
+        .post(
+          `${process.env.REACT_APP_SERVER_URL}/workflows`,
+          rfToEwoks(newIdGraph)
+        )
         .then((res) => {
           setGettingFromServer(false);
           setWorkingGraph(res.data as GraphRF);
@@ -73,7 +76,7 @@ export default function SaveToServer({ saveToServerF }) {
     } else if (graphRF.graph.id) {
       await axios
         .put(
-          `${configData.serverUrl}/workflow/${graphRF.graph.id}`,
+          `${process.env.REACT_APP_SERVER_URL}/workflow/${graphRF.graph.id}`,
           rfToEwoks(graphRFCurrated)
         )
         .then(() => {

@@ -3,11 +3,10 @@ import SendIcon from '@material-ui/icons/Send';
 import IntegratedSpinner from '../Components/IntegratedSpinner';
 import ClearIcon from '@material-ui/icons/Clear';
 import io from 'socket.io-client';
-import configData from '../configData.json';
 import { useEffect } from 'react';
 import type { ExecutingEvent } from '../types';
 
-export const socket = io(configData.serverUrl);
+export const socket = io(process.env.REACT_APP_SERVER_URL);
 
 export default function ExecuteWorkflow() {
   const graphRF = state((state) => state.graphRF);
@@ -32,7 +31,7 @@ export default function ExecuteWorkflow() {
     // console.log(socket);
     if (recentGraphs.length > 0 && !isExecuted) {
       // if (socket.disconnected) {
-      //   const socket = io(configData.serverUrl);
+      //   const socket = io(process.env.REACT_APP_SERVER_URL);
       // }
       socket.emit('Execute Graph', graphRF);
       // socket.on('Executing', (data) => console.log(data));

@@ -68,7 +68,7 @@ function AddNodes(props) {
   const getTasks = async () => {
     try {
       const tasksData = await axios.get(
-        `${configData.serverUrl}/tasks/descriptions`
+        `${process.env.REACT_APP_SERVER_URL}/tasks/descriptions`
       );
       const tasks = tasksData.data as { items: Task[] };
       setTasks(tasks.items);
@@ -97,7 +97,9 @@ function AddNodes(props) {
   const agreeDeleteTask = async () => {
     setOpenAgreeDialog(false);
     await axios
-      .delete(`${configData.serverUrl}/task/${selectedTask.task_identifier}`)
+      .delete(
+        `${process.env.REACT_APP_SERVER_URL}/task/${selectedTask.task_identifier}`
+      )
       .then(() => {
         setOpenSnackbar({
           open: true,

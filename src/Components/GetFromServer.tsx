@@ -9,7 +9,6 @@ import AutocompleteDrop from '../Components/AutocompleteDrop';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import type { GraphEwoks, GraphRF } from '../types';
 import state from '../store/state';
-import configData from '../configData.json';
 
 const useStyles = DashboardStyle;
 
@@ -40,7 +39,7 @@ export default function GetFromServer() {
       setGettingFromServer(true);
       try {
         const response = await axios.get(
-          `${configData.serverUrl}/workflow/${workflowValue}`
+          `${process.env.REACT_APP_SERVER_URL}/workflow/${workflowValue}`
         );
         if (response.data) {
           setGettingFromServer(false);

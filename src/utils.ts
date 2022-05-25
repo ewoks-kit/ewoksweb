@@ -6,7 +6,6 @@ import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
 import { calcNoteNodes } from './utils/calcNoteNodes';
-import configData from './configData.json';
 
 // const { GraphDagre } = dagre.graphlib;
 // const NODE_SIZE = { width: 270, height: 36 };
@@ -17,7 +16,7 @@ export async function getWorkflows(): Promise<{ title: string }[]> {
   // console.log(process.env);
   let res = [];
   const workflows = await axios
-    .get(`${configData.serverUrl}/workflows`)
+    .get(`${process.env.REACT_APP_SERVER_URL}/workflows`)
     .catch((error) => {
       if (error.response) {
         // The request was made and the server responded with a status code
@@ -91,7 +90,7 @@ export async function getSubgraphs(
     results = await axios
       .all(
         notInRecent.map((id: string) =>
-          axios.get(`${configData.serverUrl}/workflow/${id}`)
+          axios.get(`${process.env.REACT_APP_SERVER_URL}/workflow/${id}`)
         )
       )
       .then(

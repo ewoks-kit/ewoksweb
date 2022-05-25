@@ -10,7 +10,6 @@ import axios from 'axios';
 import ExecutionDetails from '../Components/ExecutionDetails';
 import DashboardStyle from './DashboardStyle';
 import state from '../store/state';
-import configData from '../configData.json';
 
 import type { EwoksRFNode, EwoksRFLink, GraphDetails, GraphRF } from '../types';
 import { rfToEwoks } from '../utils';
@@ -109,7 +108,7 @@ export default function Sidebar() {
   const agreeCallback = async () => {
     setOpenAgreeDialog(false);
     await axios
-      .delete(`${configData.serverUrl}/workflow/${element.id}`)
+      .delete(`${process.env.REACT_APP_SERVER_URL}/workflow/${element.id}`)
       .then(() => {
         setOpenSnackbar({
           open: true,
