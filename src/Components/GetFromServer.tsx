@@ -9,7 +9,6 @@ import AutocompleteDrop from '../Components/AutocompleteDrop';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import type { GraphEwoks, GraphRF } from '../types';
 import state from '../store/state';
-import configData from '../configData.json';
 
 const useStyles = DashboardStyle;
 

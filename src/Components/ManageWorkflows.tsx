@@ -2,7 +2,6 @@ import { Box, FormControl, Grid, Paper, styled } from '@material-ui/core';
 import AutocompleteDrop from './AutocompleteDrop';
 import ReactJson from 'react-json-view';
 import React from 'react';
-import configData from '../configData.json';
 import axios from 'axios';
 
 const Item = styled(Paper)(({ theme }) => ({

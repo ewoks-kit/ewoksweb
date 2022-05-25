@@ -3,7 +3,6 @@ import SendIcon from '@material-ui/icons/Send';
 import IntegratedSpinner from '../Components/IntegratedSpinner';
 import ClearIcon from '@material-ui/icons/Clear';
 import io from 'socket.io-client';
-import configData from '../configData.json';
 import { useEffect } from 'react';
 import type { ExecutingEvent } from '../types';
 

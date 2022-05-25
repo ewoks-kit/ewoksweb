@@ -26,10 +26,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DashboardStyle from './DashboardStyle';
 import SaveGetFromDisk from '../Components/SaveGetFromDisk';
 import SaveToServer from '../Components/SaveToServer';
-// import io from 'socket.io-client';
-// import type { ExecutingEvent } from '../types';
 import state from '../store/state';
-// import configData from '../configData.json';
 
 const useStyles = DashboardStyle;
 
