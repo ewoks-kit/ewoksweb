@@ -44,6 +44,21 @@ stages:
     refs:
       - main
 
+pages:
+  stage: deploy
+  extends: .base
+  before_script:
+    - npm install -y
+  script:
+    - npm run build
+    - rm -rf public
+    - mv build public
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+
 ### Required jobs ###
 
 flake8:
@@ -94,17 +109,3 @@ assets:
       - assets
     when: on_success
     expire_in: 2h
-
-pages:
-  stage: deploy
-  before_script:
-    - npm install -y
-  script:
-    - npm run build
-    - rm -rf public
-    - mv build public
-  artifacts:
-    paths:
-      - public
-  only:
-    - main
