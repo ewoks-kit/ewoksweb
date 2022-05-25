@@ -59,10 +59,11 @@ function Upload(props) {
           const newGraph = JSON.parse(file.result as string);
 
           if (graphOrSubgraph) {
-            const { result } = validateEwoksGraph(newGraph);
-            if (result) {
-              await setWorkingGraph(newGraph);
-            }
+            // TODO validate from disk workflows but visualize them
+            // const { result } = validateEwoksGraph(newGraph);
+            // if (result) {
+            await setWorkingGraph(newGraph);
+            // }
           } else {
             await setSubGraph(newGraph);
           }
