@@ -97,9 +97,10 @@ assets:
 
 pages:
   stage: deploy
+  before_script:
+    - npm install -y
   script:
-    - npm install
-    - npm build:pages
+    - npm run build
     - rm -rf public
     - mv build public
   artifacts:
