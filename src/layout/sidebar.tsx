@@ -109,7 +109,7 @@ export default function Sidebar() {
   const agreeCallback = async () => {
     setOpenAgreeDialog(false);
     await axios
-      .delete(`${configData.serverUrl}/workflow/${element.id}`)
+      .delete(`${process.env.REACT_APP_SERVER_URL}/workflow/${element.id}`)
       .then(() => {
         setOpenSnackbar({
           open: true,

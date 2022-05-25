@@ -40,7 +40,7 @@ export default function GetFromServer() {
       setGettingFromServer(true);
       try {
         const response = await axios.get(
-          `${configData.serverUrl}/workflow/${workflowValue}`
+          `${process.env.REACT_APP_SERVER_URL}/workflow/${workflowValue}`
         );
         if (response.data) {
           setGettingFromServer(false);

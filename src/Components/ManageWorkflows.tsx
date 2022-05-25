@@ -17,7 +17,9 @@ export default function ManageWorkflows() {
   const setInputValue = async (val: string) => {
     // console.log(val);
 
-    const response = await axios.get(`${configData.serverUrl}/workflow/${val}`);
+    const response = await axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/workflow/${val}`
+    );
     setWorkflowValue(response.data);
     // console.log(response);
   };

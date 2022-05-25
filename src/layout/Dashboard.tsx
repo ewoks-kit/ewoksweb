@@ -33,7 +33,7 @@ import state from '../store/state';
 
 const useStyles = DashboardStyle;
 
-// export const socket = io(configData.serverUrl);
+// export const socket = io(process.env.REACT_APP_SERVER_URL);
 
 export default function Dashboard() {
   const classes = useStyles();

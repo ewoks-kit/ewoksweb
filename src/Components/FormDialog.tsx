@@ -71,9 +71,12 @@ export default function FormDialog(props) {
 
   const putTask = async (task: Task) => {
     try {
-      await axios.put(`${configData.serverUrl}/task/${task.task_identifier}`, {
-        ...task,
-      });
+      await axios.put(
+        `${process.env.REACT_APP_SERVER_URL}/task/${task.task_identifier}`,
+        {
+          ...task,
+        }
+      );
 
       setOpenSnackbar({
         open: true,
@@ -82,7 +85,7 @@ export default function FormDialog(props) {
       });
       props.setOpenSaveDialog(false);
       const tasksNew = await axios.get(
-        `${configData.serverUrl}/tasks/descriptions`
+        `${process.env.REACT_APP_SERVER_URL}/tasks/descriptions`
       );
       const tasks = tasksNew.data as { items: Task[] };
       setTasks(tasks.items);
@@ -107,9 +110,12 @@ export default function FormDialog(props) {
     }
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const responseClone = await axios.post(`${configData.serverUrl}/tasks`, {
-        ...task,
-      });
+      const responseClone = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/tasks`,
+        {
+          ...task,
+        }
+      );
       setOpenSnackbar({
         open: true,
         text: 'Task saved successfuly',
@@ -117,7 +123,7 @@ export default function FormDialog(props) {
       });
       props.setOpenSaveDialog(false);
       const tasksNew = await axios.get(
-        `${configData.serverUrl}/tasks/descriptions`
+        `${process.env.REACT_APP_SERVER_URL}/tasks/descriptions`
       );
       const tasks = tasksNew.data as { items: Task[] };
       setTasks(tasks.items);
@@ -134,7 +140,7 @@ export default function FormDialog(props) {
     // TODO: Post a new graph as in SaveToServer. Abstract POST
     try {
       const responseNew = await axios.post(
-        `${configData.serverUrl}/workflows`,
+        `${process.env.REACT_APP_SERVER_URL}/workflows`,
         rfToEwoks({
           ...graph,
           graph: { ...graph.graph, id: newName, label: newName },

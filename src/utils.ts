@@ -17,7 +17,7 @@ export async function getWorkflows(): Promise<{ title: string }[]> {
   // console.log(process.env);
   let res = [];
   const workflows = await axios
-    .get(`${configData.serverUrl}/workflows`)
+    .get(`${process.env.REACT_APP_SERVER_URL}/workflows`)
     .catch((error) => {
       if (error.response) {
         // The request was made and the server responded with a status code
@@ -91,7 +91,7 @@ export async function getSubgraphs(
     results = await axios
       .all(
         notInRecent.map((id: string) =>
-          axios.get(`${configData.serverUrl}/workflow/${id}`)
+          axios.get(`${process.env.REACT_APP_SERVER_URL}/workflow/${id}`)
         )
       )
       .then(

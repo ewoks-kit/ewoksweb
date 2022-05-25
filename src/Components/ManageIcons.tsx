@@ -63,7 +63,7 @@ export default function ManageIcons() {
   const deleteIcon = async () => {
     try {
       const tasksData = await axios.get(
-        `${configData.serverUrl}/tasks/descriptions`
+        `${process.env.REACT_APP_SERVER_URL}/tasks/descriptions`
       );
       const tasks = tasksData.data as { items: Task[] };
       const allTasks = tasks.items;
@@ -98,7 +98,7 @@ export default function ManageIcons() {
     const formData = new FormData(event.target);
 
     try {
-      await axios.post(`${configData.serverUrl}/icons`, formData);
+      await axios.post(`${process.env.REACT_APP_SERVER_URL}/icons`, formData);
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -129,7 +129,7 @@ export default function ManageIcons() {
   const agreeDeleteIcon = async () => {
     setOpenAgreeDialog(false);
     await axios
-      .delete(`${configData.serverUrl}/icon/${selectedIcon}`)
+      .delete(`${process.env.REACT_APP_SERVER_URL}/icon/${selectedIcon}`)
       .then(() => {
         setOpenSnackbar({
           open: true,
@@ -153,7 +153,7 @@ export default function ManageIcons() {
 
   // const getIcons = async () => {
   //   const iconsData = await axios.get(
-  //     `${configData.serverUrl}/icons/descriptions`
+  //     `${process.env.REACT_APP_SERVER_URL}/icons/descriptions`
   //   );
   //   const icons = iconsData.data as string[];
   //   setIcons(icons);

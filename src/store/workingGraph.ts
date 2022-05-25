@@ -26,7 +26,7 @@ const workingGraph = (set, get) => ({
     if (get().tasks.length === 0) {
       try {
         const tasksData = await axios.get(
-          `${configData.serverUrl}/tasks/descriptions`
+          `${process.env.REACT_APP_SERVER_URL}/tasks/descriptions`
         );
         const tasks = tasksData.data as { items: Task[] };
         get().setTasks(tasks.items);
