@@ -58,7 +58,7 @@ const Node: React.FC<NodeProps> = ({
   isGraph,
   type,
   label,
-  // selected,
+  selected,
   color,
   colorBorder,
   content,
@@ -129,7 +129,7 @@ const Node: React.FC<NodeProps> = ({
       style={
         {
           ...style.body,
-          // ...(selected ? style.selected : []),
+          ...(selected ? style.selected : []),
           border,
         } as React.CSSProperties
       }

@@ -66,8 +66,6 @@ function EditableTable(props) {
 
   const typesOfInputs = ['bool', 'number', 'string', 'list', 'dict', 'null'];
   // // console.log(defaultValues, val, rows, props, typeOfInputs);
-
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
     // console.log(defaultValues);
     const tOfIn = defaultValues.map((val) =>

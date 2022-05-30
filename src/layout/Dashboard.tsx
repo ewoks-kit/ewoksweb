@@ -97,6 +97,11 @@ export default function Dashboard() {
       event.stopPropagation();
       newGraph();
     }
+    // else if ((event.ctrlKey || event.metaKey) && charCode === 'c') {
+    //   event.preventDefault();
+    //   event.stopPropagation();
+    //   // copy into the canvas?
+    // }
   };
 
   return (

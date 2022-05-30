@@ -293,6 +293,15 @@ export default function Sidebar() {
           >
             Delete
           </Button>
+          <Button
+            style={{ margin: '8px' }}
+            variant="outlined"
+            color="primary"
+            onClick={deleteElement}
+            size="small"
+          >
+            Clone
+          </Button>
           {!('source' in selectedElement) && (
             <IconMenu handleShowEwoksGraph={showEwoksGraph} />
           )}

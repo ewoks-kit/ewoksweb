@@ -397,8 +397,23 @@ function Canvas() {
     }
   };
 
-  const onRightClick = (event) => {
+  const onPaneContextMenu = (event) => {
     event.preventDefault();
+    setOpenSnackbar({
+      open: true,
+      text: 'Show some choises?',
+      severity: 'success',
+    });
+  };
+
+  const onNodeContextMenu = (event: React.MouseEvent, nodes: Node) => {
+    event.preventDefault();
+    // console.log(nodes);
+    setOpenSnackbar({
+      open: true,
+      text: nodes[0].id,
+      severity: 'success',
+    });
   };
 
   const onNodeDoubleClick = (event, node) => {
@@ -555,7 +570,10 @@ function Canvas() {
           onConnect={onConnect}
           onEdgeUpdate={onEdgeUpdate}
           onDragOver={onDragOver}
-          onPaneContextMenu={onRightClick}
+          onPaneContextMenu={onPaneContextMenu}
+          onNodeContextMenu={(evt, node) => {
+            onNodeContextMenu(evt, node);
+          }}
           onNodeDoubleClick={onNodeDoubleClick}
           // onSelectionChange={onSelectionChange}
           // onNodeMouseMove={onNodeMouseMove}
@@ -568,6 +586,7 @@ function Canvas() {
           onNodeDragStop={onNodeDragStop}
           edgeTypes={edgeTypes}
           nodeTypes={nodeTypes}
+          // elevateEdgesOnSelect
           // TODO: deleteKey does not work properly
           // deleteKeyCode="Delete"
         >

@@ -2,7 +2,11 @@ import type { GraphRF } from '../types';
 
 function curateGraph(graphRF): GraphRF {
   const graphRFCurrated = { ...graphRF };
+  // INFO: change the workflow id when the label is changed
+  // graphRFCurrated.graph.id = graphRFCurrated.graph.label;
+
   for (const nod of graphRFCurrated.nodes) {
+    // INFO: Remove empty lines in table for nodes and links
     if (
       nod.default_inputs &&
       nod.default_inputs.length > 0 &&
