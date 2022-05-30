@@ -6,6 +6,7 @@ import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 import DataMappingComponent from './DataMapping';
 import Conditions from './Conditions';
+import SidebarTooltip from './SidebarTooltip';
 
 const useStyles = DashboardStyle;
 
@@ -72,27 +73,53 @@ export default function LinkDetails(props) {
           {element.data.sub_target_attributes}
         </div>
       )}
-      <div>
-        <b>Map all Data</b>
-        <Checkbox
-          checked={mapAllData}
-          onChange={mapAllDataChanged}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-      </div>
+      <SidebarTooltip
+        text={`Setting this to True is equivalent to Data Mapping
+        being the identity mapping for all input names.
+        Cannot be used in combination with data_mapping.`}
+      >
+        <div>
+          <b>Map all Data</b>
+          <Checkbox
+            checked={mapAllData}
+            onChange={mapAllDataChanged}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
+        </div>
+      </SidebarTooltip>
       {!mapAllData && elementL.source && (
-        <DataMappingComponent element={element} />
+        <SidebarTooltip
+          text={`Describes the data transfer from source output to
+          target input arguments.`}
+        >
+          <div>
+            <DataMappingComponent element={element} />
+          </div>
+        </SidebarTooltip>
       )}
-      <div>
-        <b>on_error</b>
-        <Checkbox
-          checked={onError}
-          onChange={onErrorChanged}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-      </div>
-      {!onError && elementL.source && <Conditions element={element} />}
-
+      <SidebarTooltip
+        text={`A special condition where the task raises an exception.
+        Cannot be used in combination with conditions.`}
+      >
+        <div>
+          <b>on_error</b>
+          <Checkbox
+            checked={onError}
+            onChange={onErrorChanged}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
+        </div>
+      </SidebarTooltip>
+      {!onError && elementL.source && (
+        <SidebarTooltip
+          text={`Provides a list of expected values for source outputs.
+          [{"source_output": "result", "value": 10}]`}
+        >
+          <div>
+            <Conditions element={element} />
+          </div>
+        </SidebarTooltip>
+      )}
       <hr />
     </>
   );

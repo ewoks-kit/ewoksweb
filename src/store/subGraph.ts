@@ -1,9 +1,9 @@
 import type { EwoksRFNode, GraphRF, GraphEwoks } from '../types';
-import { createGraph } from '../utils';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from '../utils/FindAllSubgraphs';
 import existsOrValue from '../utils/existsOrValue';
+import { calcCoordinatesFirstNode } from '../utils/CalcCoordinatesFirstNode';
 
 const subGraph = (set, get) => ({
   subGraph: {
@@ -15,11 +15,13 @@ const subGraph = (set, get) => ({
   setSubGraph: async (subGraph: GraphEwoks) => {
     // 1. input the graphEwoks from server or file-system
     // 2. search for all subgraphs in it (async)
+
     const prevState = get((prev) => prev);
     const newNodeSubgraphs = await findAllSubgraphs(
       subGraph,
       prevState.recentGraphs
     );
+    // console.log(subGraph, newNodeSubgraphs);
     // 3. Put the newNodeSubgraphs into recent in their graphRF form (sync)
     newNodeSubgraphs.forEach((gr) => {
       // calculate the rfNodes using the fetched subgraphs
@@ -46,35 +48,29 @@ const subGraph = (set, get) => ({
     // Adding a subgraph to an existing workingGraph:
     // save the workingGraph in the recent graphs and add a new graph node to it
 
-    let subToAdd = graph as GraphRF;
+    const subToAdd = graph as GraphRF;
 
-    if (prevState.recentGraphs.length === 0) {
-      // if there is no initial graph to drop-in the subgraph -> create one
-      subToAdd = createGraph();
-      prevState.setSubgraphsStack({
-        id: subToAdd.graph.id,
-        label: subToAdd.graph.label,
-      });
-      prevState.setRecentGraphs(subToAdd);
-    }
+    // TODO: if there is no initial graph to drop-in the subgraph -> create one
+    // if (prevState.recentGraphs.length === 0) {
+    //   subToAdd = createGraph();
+    //   prevState.setSubgraphsStack({
+    //     id: subToAdd.graph.id,
+    //     label: subToAdd.graph.label,
+    //   });
+    //   prevState.setRecentGraphs(subToAdd);
+    // }
 
     let newNode = {} as EwoksRFNode;
     if (subToAdd) {
       const inputsSub = subToAdd.graph.input_nodes.map((input) => {
         return {
           label: calcLabel(input),
-          // `${
-          //   existsOrValue(input.uiProps, 'label', input.id) as string
-          // }: ${input.node} ${input.sub_node ? `  -> ${input.sub_node}` : ''}`,
           type: 'data ',
         };
       });
       const outputsSub = subToAdd.graph.output_nodes.map((output) => {
         return {
           label: calcLabel(output),
-          // `${
-          //   existsOrValue(output.uiProps, 'label', output.id) as string
-          // }: ${output.node} ${output.sub_node ? ` -> ${output.sub_node}` : ''}`,
           type: 'data ',
         };
       });
@@ -91,8 +87,7 @@ const subGraph = (set, get) => ({
         task_type: 'graph',
         task_identifier: subToAdd.graph.id,
         type: 'graph',
-        // TODO: find the place to put it according to the graph inputted
-        position: { x: 300, y: 100 },
+        position: calcCoordinatesFirstNode(prevState.graphRF.nodes),
         default_inputs: [],
         inputs_complete: false,
         default_error_node: false,

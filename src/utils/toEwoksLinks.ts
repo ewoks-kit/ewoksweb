@@ -2,10 +2,9 @@ import type { EwoksLink, EwoksRFLink } from '../types';
 
 // EwoksRFLinks --> EwoksLinks for saving
 export function toEwoksLinks(links): EwoksLink[] {
-  // TODO: when input-arrow fake nodes exist remove their links to get an Ewoks description
   const tempLinks: EwoksRFLink[] = [...links].filter((link) => !link.startEnd);
   // if there are some startEnd links with conditions or any other link_attributes
-  // then graph.input_nodes or graph.output_nodes needs update
+  // then graph.input_nodes and/or graph.output_nodes needs update
   return tempLinks.map(
     ({
       label,

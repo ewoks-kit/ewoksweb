@@ -94,7 +94,7 @@ function Canvas() {
   // const [stepDetails, setStepDetails] = useState(null);
 
   const { fitView } = useReactFlow();
-  // TO EXAMINE: when selecting a node-link selected fires the re-render
+  // TODO: when selecting a node-link selected fires the re-render
   // since graphRF changes. We need to not rerender
   // Accosiated edges titles flicker when selecting a node and then select graph
   useEffect(() => {
@@ -102,10 +102,10 @@ function Canvas() {
 
     setNodes(graphRF.nodes);
     setEdges(graphRF.links);
-  }, [graphRF]);
+  }, [graphRF.nodes, graphRF.links]);
 
   useEffect(() => {
-    // console.log(graphRF, prevGraphId);
+    // console.log(prevGraphId);
 
     if ('position' in selectedElement) {
       setTimeout(() => {
@@ -118,11 +118,12 @@ function Canvas() {
         fitView();
       }, 100);
     }
+
     if (subgraphsStack[subgraphsStack.length - 1]) {
       setPrevGraphId(subgraphsStack[subgraphsStack.length - 1].id);
     }
   }, [
-    graphRF,
+    graphRF.graph.id,
     fitView,
     subgraphsStack,
     prevGraphId,
@@ -160,7 +161,7 @@ function Canvas() {
   const onNodesChange = useCallback(
     (changes) => {
       const node = [...graphRF.nodes].find((el) => el.id === changes[0].id);
-      // console.log(changes, node, graphRF.nodes);
+      // console.log(changes);
 
       // TODO: nodes are updated only on rf canvas and not on graphRF
       // if we update graphRF we have a loop so we update on setSelectedElement
@@ -171,7 +172,6 @@ function Canvas() {
       });
 
       if (changes[0].type === 'remove') {
-        // console.log(node);
         onElementsRemove([node]);
       }
     },
@@ -182,7 +182,7 @@ function Canvas() {
     (changes) => {
       // console.log(changes);
       const edgeToRemove = graphRF.links.find((el) => el.id === changes[0].id);
-      setNodes((ns) => applyNodeChanges(changes, ns));
+      // setNodes((ns) => applyNodeChanges(changes, ns));
 
       if (changes[0].type === 'remove') {
         onElementsRemove([edgeToRemove]);
@@ -192,17 +192,20 @@ function Canvas() {
     [onElementsRemove, graphRF.links]
   );
 
-  const onSelectionChange = (elements) => {
-    // console.log(elements);
-    if (elements.nodes.length === 0 && elements.edges.length === 0) {
-      setSelectedElement(graphRF.graph);
-    }
+  // const onSelectionChange = (elements) => {
+  //   // console.log(elements);
+  //   // if (elements.nodes.length === 0 && elements.edges.length === 0) {
+  //   //   setSelectedElement(graphRF.graph);
+  //   // }
+  // };
+
+  const onPaneClick = () => {
+    setSelectedElement(graphRF.graph);
   };
 
   const onNodeClick = (event, element?: Node) => {
     const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
     setSelectedElement(graphElement);
-    // console.log(graphElement);
   };
 
   const onEdgeClick = (event, element?: Edge) => {
@@ -305,6 +308,7 @@ function Canvas() {
   };
 
   const onEdgeUpdate = (oldEdge, newConnection) => {
+    // console.log(oldEdge, newConnection);
     const link = {
       ...oldEdge,
       ...newConnection,
@@ -330,6 +334,7 @@ function Canvas() {
     if (workingGraph.graph.id === graphRF.graph.id) {
       const sourceTask = graphRF.nodes.find((nod) => nod.id === params.source);
       const targetTask = graphRF.nodes.find((nod) => nod.id === params.target);
+      // TODO: take link out
       const link = {
         data: {
           on_error: false,
@@ -392,8 +397,23 @@ function Canvas() {
     }
   };
 
-  const onRightClick = (event) => {
+  const onPaneContextMenu = (event) => {
     event.preventDefault();
+    setOpenSnackbar({
+      open: true,
+      text: 'Show some choises?',
+      severity: 'success',
+    });
+  };
+
+  const onNodeContextMenu = (event: React.MouseEvent, nodes: Node) => {
+    event.preventDefault();
+    // console.log(nodes);
+    setOpenSnackbar({
+      open: true,
+      text: nodes[0].id,
+      severity: 'success',
+    });
   };
 
   const onNodeDoubleClick = (event, node) => {
@@ -535,11 +555,6 @@ function Canvas() {
           // defaultPosition={[-200, -200]}
           minZoom={0.2}
           snapToGrid
-          // onPaneClick={(e) => console.log(e)}
-          // snapGrid={[150, 150]}
-          // onMoveStart={(e) => console.log(e)}
-          // onMoveEnd={(e) => console.log(e)}
-          // elements={elements}
           nodes={nodes}
           edges={edges}
           onNodeClick={(evt, node) => {
@@ -548,15 +563,19 @@ function Canvas() {
           onEdgeClick={(evt, node) => {
             onEdgeClick(evt, node);
           }}
+          onPaneClick={onPaneClick}
           onClick={onClick}
           onInit={onInit}
           onDrop={onDrop}
           onConnect={onConnect}
           onEdgeUpdate={onEdgeUpdate}
           onDragOver={onDragOver}
-          onPaneContextMenu={onRightClick}
+          onPaneContextMenu={onPaneContextMenu}
+          onNodeContextMenu={(evt, node) => {
+            onNodeContextMenu(evt, node);
+          }}
           onNodeDoubleClick={onNodeDoubleClick}
-          onSelectionChange={onSelectionChange}
+          // onSelectionChange={onSelectionChange}
           // onNodeMouseMove={onNodeMouseMove}
           onSelectionDragStop={onSelectionDragStop}
           onSelectionDragStart={onSelectionDragStart}
@@ -567,8 +586,9 @@ function Canvas() {
           onNodeDragStop={onNodeDragStop}
           edgeTypes={edgeTypes}
           nodeTypes={nodeTypes}
-          // onElementsRemove={onElementsRemove}
-          deleteKeyCode="Delete"
+          // elevateEdgesOnSelect
+          // TODO: deleteKey does not work properly
+          // deleteKeyCode="Delete"
         >
           {/* <div style={buttonWrapperStyles}>
             <button type="button" onClick={updateNode}>
@@ -613,7 +633,7 @@ function Canvas() {
                 return 'rgb(223, 226, 247)';
               }
               if (n.type === 'graph') {
-                return '#ff0082';
+                return 'rgba(244, 179, 131, 0.87)';
               }
               // if (n.type === 'default') return 'rgb(60, 81, 202)';
 

@@ -82,7 +82,7 @@ export default function IconMenu(props) {
       } else {
         setOpenSnackbar({
           open: true,
-          text: 'First select in the canvas a Task to clone',
+          text: 'First select in the canvas a Node to clone and Save as Task',
           severity: 'warning',
         });
         return;
@@ -134,7 +134,7 @@ export default function IconMenu(props) {
               <ListItemIcon>
                 <FileCopyIcon fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Clone Task</ListItemText>
+              <ListItemText>Clone as Task</ListItemText>
             </MenuItem>
             <MenuItem onClick={() => action('cloneGraph', graphRF)}>
               <ListItemIcon>

@@ -20,7 +20,7 @@ export default function EditLinkStyle(props) {
   const setSelectedElement = state((state) => state.setSelectedElement);
 
   const [linkType, setLinkType] = React.useState('');
-  const [arrowType, setArrowType] = React.useState({ type: 'none' });
+  const [arrowType, setArrowType] = React.useState({ type: 'arrow' });
   const [animated, setAnimated] = React.useState<boolean>(false);
   const [colorLine, setColorLine] = React.useState<string>('');
 
@@ -47,15 +47,20 @@ export default function EditLinkStyle(props) {
 
   const arrowTypeChanged = (event) => {
     setArrowType(event.target.value);
-    setSelectedElement(
-      {
-        ...element,
-        markerEnd: {
-          type: event.target.value,
-        },
-      },
-      'fromSaveElement'
-    );
+    // 'none' is not available anymore in reactFlow so we
+    // need to remove markerEnd if 'none' is selected in dropdown
+    if (event.target.value === 'none') {
+      if ('markerEnd' in element) {
+        /* eslint-disable @typescript-eslint/no-unused-vars */
+        const { markerEnd, ...restElement } = element;
+        setSelectedElement({ ...restElement }, 'fromSaveElement');
+      }
+    } else {
+      setSelectedElement(
+        { ...element, markerEnd: { type: event.target.value } },
+        'fromSaveElement'
+      );
+    }
   };
 
   const colorLineChanged = (event) => {
@@ -109,7 +114,7 @@ export default function EditLinkStyle(props) {
       <FormControl variant="filled" fullWidth>
         <InputLabel id="markerEnd">Arrow Head Type</InputLabel>
         <Select
-          value={(arrowType && arrowType.type) || 'arrowclosed'}
+          value={arrowType?.type || 'none'}
           label="Arrow head"
           onChange={arrowTypeChanged}
         >

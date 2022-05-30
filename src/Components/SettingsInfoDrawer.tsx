@@ -3,10 +3,11 @@ import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import TabPanel from './TabPanel';
+import EwoksUiInfo from './EwoksUiInfo';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 // TODO: to decide if only top is needed and local state of the drawer
-export default function TemporaryDrawer(props) {
+export default function SettingsInfoDrawer(props) {
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -15,9 +16,14 @@ export default function TemporaryDrawer(props) {
   });
 
   useEffect(() => {
-    const opSet: boolean = props.openSettings;
-    setState({ top: opSet, left: false, bottom: false, right: false });
-  }, [props.openSettings]);
+    // console.log(props.openSettings, props.openInfo, props.openDrawers);
+    setState({
+      top: props.openDrawers && props.openSettings,
+      left: false,
+      bottom: props.openDrawers && props.openInfo,
+      right: false,
+    });
+  }, [props.openSettings, props.openInfo, props.openDrawers]);
 
   const toggleDrawer = (anchor: Anchor, open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent
@@ -29,7 +35,7 @@ export default function TemporaryDrawer(props) {
     ) {
       return;
     }
-    props.handleOpenSettings();
+    props.handleOpenDrawers();
     setState({ ...state, [anchor]: open }); // left: open , for opening both-active 1
   };
 
@@ -40,17 +46,24 @@ export default function TemporaryDrawer(props) {
       // onClick={toggleDrawer(anchor, false)}
       // onKeyDown={toggleDrawer(anchor, false)}
     >
-      <TabPanel />
+      {props.openInfo ? (
+        <div className="infoAccordion">
+          <EwoksUiInfo />
+        </div>
+      ) : (
+        <TabPanel />
+      )}
       <Divider />
     </Box>
   );
 
   return (
     <div>
-      {(['left', 'top', 'right'] as const).map((anchor) => (
+      {(['left', 'top', 'right', 'bottom'] as const).map((anchor) => (
         <React.Fragment key={anchor}>
           {/* <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button> */}
           <Drawer
+            style={{ alignItems: 'center', display: 'flex' }}
             anchor={anchor}
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}

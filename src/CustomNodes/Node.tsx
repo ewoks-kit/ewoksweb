@@ -58,7 +58,7 @@ const Node: React.FC<NodeProps> = ({
   isGraph,
   type,
   label,
-  // selected,
+  selected,
   color,
   colorBorder,
   content,
@@ -66,10 +66,20 @@ const Node: React.FC<NodeProps> = ({
   comment,
   executing,
 }: NodeProps) => {
-  const theCom = comment && (
-    <span>
-      <b>{label}</b>:<div>{comment}</div>
+  const theCom = comment ? (
+    <span
+      style={{
+        padding: '1px',
+        color: 'white',
+        fontSize: '0.875rem',
+        fontWeight: 300,
+        lineHeight: '1.13',
+      }}
+    >
+      {comment}
     </span>
+  ) : (
+    ''
   );
 
   const border = colorBorder
@@ -119,7 +129,7 @@ const Node: React.FC<NodeProps> = ({
       style={
         {
           ...style.body,
-          // ...(selected ? style.selected : []),
+          ...(selected ? style.selected : []),
           border,
         } as React.CSSProperties
       }
@@ -129,7 +139,7 @@ const Node: React.FC<NodeProps> = ({
       role="button"
       tabIndex={0}
     >
-      <Tooltip title={theCom} arrow>
+      <Tooltip title={theCom} enterDelay={800} arrow>
         <span style={displayNode} className="icons">
           {!isGraph && type !== 'graphOutput' && (
             <Handle

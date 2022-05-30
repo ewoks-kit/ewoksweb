@@ -9,10 +9,15 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import type { EwoksRFLink, EwoksRFNode, GraphRF, Task } from '../types';
-import axios from 'axios';
 import { rfToEwoks } from '../utils';
 import state from '../store/state';
 import configData from '../configData.json';
+import {
+  getTaskDescription,
+  postWorkflow,
+  postTask,
+  putTask,
+} from '../utils/api';
 
 export default function FormDialog(props) {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -65,18 +70,13 @@ export default function FormDialog(props) {
     } else if (['cloneTask', 'newTask'].includes(action)) {
       saveTask(element as Task);
     } else if (['editTask'].includes(action)) {
-      putTask(element as Task);
+      puTask(element as Task);
     }
   };
 
-  const putTask = async (task: Task) => {
+  const puTask = async (task: Task) => {
     try {
-      await axios.put(
-        `${process.env.REACT_APP_SERVER_URL}/task/${task.task_identifier}`,
-        {
-          ...task,
-        }
-      );
+      await putTask(task);
 
       setOpenSnackbar({
         open: true,
@@ -84,9 +84,7 @@ export default function FormDialog(props) {
         severity: 'success',
       });
       props.setOpenSaveDialog(false);
-      const tasksNew = await axios.get(
-        `${process.env.REACT_APP_SERVER_URL}/tasks/descriptions`
-      );
+      const tasksNew = await getTaskDescription();
       const tasks = tasksNew.data as { items: Task[] };
       setTasks(tasks.items);
     } catch (error) {
@@ -109,22 +107,14 @@ export default function FormDialog(props) {
       return;
     }
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const responseClone = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/tasks`,
-        {
-          ...task,
-        }
-      );
+      await postTask(task);
       setOpenSnackbar({
         open: true,
         text: 'Task saved successfuly',
         severity: 'success',
       });
       props.setOpenSaveDialog(false);
-      const tasksNew = await axios.get(
-        `${process.env.REACT_APP_SERVER_URL}/tasks/descriptions`
-      );
+      const tasksNew = await getTaskDescription();
       const tasks = tasksNew.data as { items: Task[] };
       setTasks(tasks.items);
     } catch (error) {
@@ -137,10 +127,8 @@ export default function FormDialog(props) {
   };
 
   const saveGraph = async (graph) => {
-    // TODO: Post a new graph as in SaveToServer. Abstract POST
     try {
-      const responseNew = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/workflows`,
+      const responseNew = await postWorkflow(
         rfToEwoks({
           ...graph,
           graph: { ...graph.graph, id: newName, label: newName },

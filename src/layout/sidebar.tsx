@@ -5,17 +5,24 @@ import EditElement from '../Components/EditElement';
 import EditElementStyle from '../Components/EditElementStyle';
 import DraggableDialog from '../Components/DraggableDialog';
 import IconMenu from '../Components/IconMenu';
-import Drawer from '../Components/Drawer';
-import axios from 'axios';
+import SettingsInfoDrawer from '../Components/SettingsInfoDrawer';
 import ExecutionDetails from '../Components/ExecutionDetails';
 import DashboardStyle from './DashboardStyle';
 import state from '../store/state';
-
 import type { EwoksRFNode, EwoksRFLink, GraphDetails, GraphRF } from '../types';
 import { rfToEwoks } from '../utils';
 import ConfirmDialog from '../Components/ConfirmDialog';
+import { deleteWorkflow, getIcon, getIcons, getOtherIcon } from '../utils/api';
+import axios from 'axios';
+import path from 'path';
 
 const useStyles = DashboardStyle;
+
+// const getIconsL = async () => {
+//   const iconsData: IconsNames = await getIcons();
+//   console.log(typeof iconsData.identifiers, iconsData.identifiers);
+//   return iconsData.identifiers;
+// };
 
 export default function Sidebar() {
   const classes = useStyles();
@@ -40,13 +47,128 @@ export default function Sidebar() {
   const setUndoRedo = state((state) => state.setUndoRedo);
   const isExecuted = state((state) => state.isExecuted);
   const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
+  const setAllIcons = state((state) => state.setAllIcons);
+  const allIcons = state((state) => state.allIcons);
+  const setAllIconNames = state((state) => state.setAllIconNames);
+  // const allIconNames = state((state) => state.allIconNames);
+  // const [testImage, setTestImage] = React.useState<string>();
 
   useEffect(() => {
     setElement(selectedElement);
-  }, [selectedElement]);
+
+    const fetchIcons = async () => {
+      if (allIcons.length <= 1) {
+        const data = await getIcons();
+        // console.log(data);
+        // get the non svg image icons(png)
+        const iconsPng = data.identifiers
+          // .map((str) => str.slice(6))
+          .filter((str) => {
+            return !str.endsWith('svg');
+          });
+        // const resultsPng = [];
+
+        await axios
+          .all(iconsPng.map((id: string) => getOtherIcon(id)))
+          .then(
+            axios.spread((...resPng) => {
+              // console.log(resPng);
+              const resCln = resPng.filter((result) => result.data !== null);
+              return resCln.map((result) => {
+                const blobPng = new Blob([result.data], { type: 'image/png' });
+                const fileReader = new FileReader();
+                fileReader.readAsDataURL(blobPng);
+                // fileReader.addEventListener('load', handleReader);
+
+                // function handleReader() {
+                //   // resultsPng.push({ name: theId, image: fileReader.result });
+                // }
+                return result.data;
+              });
+            })
+          )
+          .catch((error) => {
+            // remove after handling the error
+            setOpenSnackbar({
+              open: true,
+              text: error.data,
+              severity: 'error',
+            });
+            return [];
+          });
+        // console.log(resultsPng);
+
+        // getOtherIcon('orange1.png').then((r) => {
+        //   // console.log(r, typeof r.data);
+        //   const blo = r.data;
+        //   const blob1 = new Blob([blo], { type: 'image/png' });
+        //   // console.log(blob1);
+        //   const fileReader = new FileReader();
+        //   fileReader.readAsDataURL(blob1);
+        //   fileReader.addEventListener('load', handleReader);
+
+        //   function handleReader() {
+        //     // console.log(fileReader.result);
+        //     setTestImage(fileReader.result as string);
+        //   }
+        // });
+
+        // get the svg icons
+        const iconsSvg = data.identifiers
+          // .map((str) => str.slice(6))
+          .filter((str) => {
+            return str.endsWith('svg');
+          });
+        // console.log(typeof iconsSvg, iconsSvg, Array.isArray(iconsSvg));
+        // TODO: if icons wont be downloaded due to a server issue it enters a infinite loop of requests
+
+        setAllIconNames(iconsSvg);
+        const results = await axios
+          .all(iconsSvg.map((id: string) => getIcon(id)))
+          .then(
+            axios.spread((...res) => {
+              const resCln = res.filter((result) => result.data !== null);
+              return resCln.map((result) => {
+                return {
+                  name: path.basename(result.config.url),
+                  image: result.data,
+                  type: path.extname(result.config.url),
+                };
+              });
+            })
+          )
+          .catch((error) => {
+            // remove after handling the error
+            setOpenSnackbar({
+              open: true,
+              text: error.data,
+              severity: 'warning',
+            });
+            return [];
+          });
+        // console.log(results);
+        setAllIcons(results);
+      }
+    };
+    // eslint-disable-next-line promise/prefer-await-to-callbacks
+    fetchIcons().catch((error) => {
+      /* eslint-disable no-console */
+      console.log(error);
+    });
+    // const icons = getIconsL();
+    // setAllIcons(icons);
+  }, [
+    selectedElement,
+    allIcons.length,
+    setAllIcons,
+    setAllIconNames,
+    // testImage,
+    setOpenSnackbar,
+  ]);
 
   const deleteElement = async () => {
     let newGraph = {} as GraphRF;
+    // console.log(element);
     const elN = element as EwoksRFNode; // TODO: is this the way to avoid typescript warning???
     const elL = element as EwoksRFLink;
     const elD = element as GraphDetails;
@@ -107,22 +229,21 @@ export default function Sidebar() {
 
   const agreeCallback = async () => {
     setOpenAgreeDialog(false);
-    await axios
-      .delete(`${process.env.REACT_APP_SERVER_URL}/workflow/${element.id}`)
-      .then(() => {
-        setOpenSnackbar({
-          open: true,
-          text: `Workflow ${element.id} succesfully deleted!`,
-          severity: 'success',
-        });
-      })
-      .catch((error) => {
-        setOpenSnackbar({
-          open: true,
-          text: error.message,
-          severity: 'error',
-        });
+    try {
+      await deleteWorkflow(element.id);
+      setOpenSnackbar({
+        open: true,
+        text: `Workflow ${element.id} succesfully deleted!`,
+        severity: 'success',
       });
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: error.message,
+        severity: 'error',
+      });
+    }
+
     setGraphRF(initializedGraph);
     setSelectedElement({} as GraphDetails);
     setSubgraphsStack({ id: 'initialiase', label: '' });
@@ -151,6 +272,15 @@ export default function Sidebar() {
         </div>
       ) : (
         <>
+          {/* <img src={testImage} alt="sdc"></img> */}
+          {/* {allIcons &&
+            allIcons.length > 0 &&
+            allIcons.map((icon) => (
+              <img
+                src={`data:image/svg+xml;utf8,${icon.image}`}
+                alt={icon.name}
+              />
+            ))} */}
           <AddNodes title="Add Nodes" />
           <EditElement element={selectedElement} />
           <EditElementStyle />
@@ -162,6 +292,15 @@ export default function Sidebar() {
             size="small"
           >
             Delete
+          </Button>
+          <Button
+            style={{ margin: '8px' }}
+            variant="outlined"
+            color="primary"
+            onClick={deleteElement}
+            size="small"
+          >
+            Clone
           </Button>
           {!('source' in selectedElement) && (
             <IconMenu handleShowEwoksGraph={showEwoksGraph} />
@@ -178,7 +317,7 @@ export default function Sidebar() {
           />
         </>
       )}
-      <Drawer />
+      <SettingsInfoDrawer />
     </aside>
   );
 }

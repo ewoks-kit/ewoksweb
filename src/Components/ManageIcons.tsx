@@ -11,11 +11,12 @@ import Correlations from '../images/Correlations.svg';
 import CreateClass from '../images/CreateClass.svg';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import configData from '../configData.json';
 import type { Task } from '../types';
 import state from '../store/state';
 import ConfirmDialog from './ConfirmDialog';
+import { getTaskDescription, getIcon } from '../utils/api';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -51,10 +52,14 @@ const iconsObj = {
 
 export default function ManageIcons() {
   const [selectedIcon, setSelectedIcon] = React.useState('');
-  const [fileToBeSent, setFileToBeSent] = React.useState('');
+  const [fileToBeSent, setFileToBeSent] = React.useState({
+    file: File,
+    filename: '',
+  });
 
   const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  // const allIcons = state((state) => state.allIcons);
 
   const clickIcon = (icon) => {
     setSelectedIcon(icon);
@@ -62,9 +67,7 @@ export default function ManageIcons() {
 
   const deleteIcon = async () => {
     try {
-      const tasksData = await axios.get(
-        `${process.env.REACT_APP_SERVER_URL}/tasks/descriptions`
-      );
+      const tasksData = await getTaskDescription();
       const tasks = tasksData.data as { items: Task[] };
       const allTasks = tasks.items;
 
@@ -95,10 +98,13 @@ export default function ManageIcons() {
 
   const uploadFile = async (event) => {
     event.preventDefault();
-    const formData = new FormData(event.target);
+    // console.log(event.target, fileToBeSent.file);
+    const data = new FormData();
 
+    data.append('file', (fileToBeSent.file as unknown) as File);
+    // data.append('filename', fileToBeSent.filename);
     try {
-      await axios.post(`${process.env.REACT_APP_SERVER_URL}/icons`, formData);
+      await axios.post(`${process.env.REACT_APP_SERVER_URL}/icons`, data);
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -109,15 +115,16 @@ export default function ManageIcons() {
   };
 
   const inputNew = (ne) => {
-    if (ne.target.files[0].size < 1000) {
+    if (ne.target.files[0].size < 10_000) {
       setOpenSnackbar({
         open: true,
         text: 'File ready to be uploadede as an icon',
         severity: 'success',
       });
-      setFileToBeSent(ne.target.value);
+      getIconL(ne.target.files[0].name as string);
+      setFileToBeSent({ file: ne.target.files[0], filename: ne.target.value });
     } else {
-      setFileToBeSent('');
+      // setFileToBeSent('');
       setOpenSnackbar({
         open: true,
         text: 'Files more than 1Kb are not acceptable for icons',
@@ -158,6 +165,24 @@ export default function ManageIcons() {
   //   const icons = iconsData.data as string[];
   //   setIcons(icons);
   // };
+
+  const getIconL = async (id: string) => {
+    /* eslint-disable no-console */
+    console.log(selectedIcon, id);
+    const iconsData: AxiosResponse<string> = await getIcon(id);
+    console.log(iconsData, selectedIcon, id);
+    // console.log(iconsData);
+    // const parser = new DOMParser();
+    // const doc = parser.parseFromString(
+    //   iconsData.data as string,
+    //   'image/svg+xml'
+    // );
+    // // console.log(doc.childNodes[1]);
+    setSelectedIcon(iconsData.data);
+  };
+
+  // const image =
+  //   '<svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width="47.4" height="40.65" viewBox="21 18.5 158 135.5"><path d="M25,50 l150,0 0,100 -150,0 z" stroke-width="4" stroke="black" fill="rgb(128,224,255)" fill-opacity="1" ></path><path d="M25,50 L175,150 M25,150 L175,50" stroke-width="4" stroke="black" fill="black" ></path><g transform="translate(0,0)" stroke-width="4" stroke="black" fill="none" ><circle cx="100" cy="30" r="7.5" fill="black" ></circle><circle cx="70" cy="30" r="7.5" fill="black" ></circle><circle cx="130" cy="30" r="7.5" fill="black" ></circle></g></svg>';
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -232,13 +257,17 @@ export default function ManageIcons() {
                 type="submit"
                 color="primary"
                 size="small"
-                disabled={fileToBeSent === ''}
+                // disabled={fileToBeSent === ''}
               >
                 Upload
               </Button>
               <hr />
 
               <div>
+                {/* <img
+                  src={`data:image/svg+xml;utf8,${selectedIcon}`}
+                  alt="missing"
+                /> */}
                 <label htmlFor="upload-icon">
                   Select an Icon to Upload
                   <div>

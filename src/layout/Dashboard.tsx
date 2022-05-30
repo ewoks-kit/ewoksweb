@@ -18,7 +18,7 @@ import GetFromServer from '../Components/GetFromServer';
 import { Fab, IconButton } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SimpleSnackbar from '../Components/Snackbar';
-import TemporaryDrawer from '../Components/Drawer';
+import SettingsInfoDrawer from '../Components/SettingsInfoDrawer';
 import SubgraphsStack from '../Components/SubgraphsStack';
 import LinearSpinner from '../Components/LinearSpinner';
 import ExecuteWorkflow from '../Components/ExecuteWorkflow';
@@ -26,11 +26,11 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DashboardStyle from './DashboardStyle';
 import SaveGetFromDisk from '../Components/SaveGetFromDisk';
 import SaveToServer from '../Components/SaveToServer';
+import tooltipText from '../Components/TooltipText';
 import state from '../store/state';
+import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 
 const useStyles = DashboardStyle;
-
-// export const socket = io(process.env.REACT_APP_SERVER_URL);
 
 export default function Dashboard() {
   const classes = useStyles();
@@ -39,27 +39,28 @@ export default function Dashboard() {
   const redoF = React.useRef(null);
   const saveToServerF = React.useRef(null);
 
-  // const selectedElement = state((state) => state.selectedElement);
   const [open, setOpen] = React.useState(true);
+  const [openDrawers, setOpenDrawers] = React.useState(true);
   const [openSettings, setOpenSettings] = React.useState(false);
+  const [openInfo, setOpenInfo] = React.useState(false);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const initializedGraph = state((state) => state.initializedGraph);
   const gettingFromServer = state((state) => state.gettingFromServer);
   const isExecuted = state((state) => state.isExecuted);
-  // const setExecutingEvents = state((state) => state.setExecutingEvents);
-
-  // useEffect(() => {
-  //   // console.log('Executing');
-  //   socket.on('Executing', (data) =>
-  //     setExecutingEvents(data as ExecutingEvent)
-  //   );
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, [setExecutingEvents]);
 
   const handleOpenSettings = () => {
-    setOpenSettings(!openSettings);
+    setOpenInfo(false);
+    setOpenSettings(true);
+    setOpenDrawers(true);
+  };
+  const handleOpenDrawers = () => {
+    setOpenDrawers(!openDrawers);
+  };
+
+  const handleOpenInfo = () => {
+    setOpenInfo(true);
+    setOpenSettings(false);
+    setOpenDrawers(true);
   };
 
   const handleDrawerOpen = () => {
@@ -96,6 +97,11 @@ export default function Dashboard() {
       event.stopPropagation();
       newGraph();
     }
+    // else if ((event.ctrlKey || event.metaKey) && charCode === 'c') {
+    //   event.preventDefault();
+    //   event.stopPropagation();
+    //   // copy into the canvas?
+    // }
   };
 
   return (
@@ -125,7 +131,11 @@ export default function Dashboard() {
             <MenuIcon />
           </IconButton>
           <SubgraphsStack />
-          <Tooltip title="Start a new workflow" arrow>
+          <Tooltip
+            title={tooltipText('Start a new workflow')}
+            enterDelay={800}
+            arrow
+          >
             <IconButton color="inherit" onClick={newGraph}>
               <Fab
                 className={classes.openFileButton}
@@ -146,7 +156,11 @@ export default function Dashboard() {
           <GetFromServer />
           <ExecuteWorkflow />
           <div className={classes.verticalRule} />
-          <Tooltip title="Manage tasks, icons and workflows" arrow>
+          <Tooltip
+            title={tooltipText('Manage tasks, icons and workflows')}
+            enterDelay={800}
+            arrow
+          >
             <IconButton color="inherit" onClick={handleOpenSettings}>
               <Fab
                 className={classes.openFileButton}
@@ -159,8 +173,28 @@ export default function Dashboard() {
               </Fab>
             </IconButton>
           </Tooltip>
-          <TemporaryDrawer
-            handleOpenSettings={handleOpenSettings}
+
+          <Tooltip
+            title={tooltipText('Guide for Ewoks UI')}
+            enterDelay={800}
+            arrow
+          >
+            <IconButton color="inherit" onClick={handleOpenInfo}>
+              <Fab
+                className={classes.openFileButton}
+                color="primary"
+                size="small"
+                component="span"
+                aria-label="add"
+              >
+                <NotListedLocationIcon />
+              </Fab>
+            </IconButton>
+          </Tooltip>
+          <SettingsInfoDrawer
+            handleOpenDrawers={handleOpenDrawers}
+            openDrawers={openDrawers}
+            openInfo={openInfo}
             openSettings={openSettings}
           />
         </Toolbar>

@@ -2,7 +2,7 @@ import { Box, FormControl, Grid, Paper, styled } from '@material-ui/core';
 import AutocompleteDrop from './AutocompleteDrop';
 import ReactJson from 'react-json-view';
 import React from 'react';
-import axios from 'axios';
+import { getWorkflow } from '../utils/api';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -14,13 +14,8 @@ export default function ManageWorkflows() {
   const [workflowValue, setWorkflowValue] = React.useState({});
 
   const setInputValue = async (val: string) => {
-    // console.log(val);
-
-    const response = await axios.get(
-      `${process.env.REACT_APP_SERVER_URL}/workflow/${val}`
-    );
+    const response = await getWorkflow(val);
     setWorkflowValue(response.data);
-    // console.log(response);
   };
 
   return (

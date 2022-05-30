@@ -75,7 +75,7 @@ export default function DataMappingComponent(props) {
       <b>Data Mapping </b>
       <IconButton
         style={{ padding: '1px' }}
-        aria-label="delete"
+        aria-label="dataMapping"
         onClick={() => addDataMapping()}
       >
         <AddCircleOutlineIcon />

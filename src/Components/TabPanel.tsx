@@ -7,6 +7,8 @@ import { Box } from '@material-ui/core';
 import ManageIcons from './ManageIcons';
 import ManageWorkflows from './ManageWorkflows';
 import ManageTasks from './ManageTasks';
+import { getIcons } from '../utils/api';
+import type { IconsNames } from '../types';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -44,8 +46,16 @@ function a11yProps(index: number) {
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = async (
+    event: React.SyntheticEvent,
+    newValue: number
+  ) => {
     setValue(newValue);
+    if (newValue === 2) {
+      const iconsTitles: IconsNames = await getIcons();
+      /* eslint-disable no-console */
+      console.log(iconsTitles);
+    }
   };
 
   return (

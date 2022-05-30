@@ -1,7 +1,5 @@
 import React from 'react';
 import IntegratedSpinner from './IntegratedSpinner';
-
-import axios from 'axios';
 import { rfToEwoks } from '../utils';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import type { GraphRF } from '../types';
@@ -9,6 +7,7 @@ import state from '../store/state';
 import configData from '../configData.json';
 import FormDialog from './FormDialog';
 import curateGraph from '../utils/curateGraph';
+import { postWorkflow, putWorkflow } from '../utils/api';
 
 // DOC: Save to server button with its spinner
 export default function SaveToServer({ saveToServerF }) {
@@ -17,6 +16,7 @@ export default function SaveToServer({ saveToServerF }) {
   //   return state.setGettingFromServer;
   // });
   const graphRF = state((state) => state.graphRF);
+  const allWorkflows = state((state) => state.allWorkflows);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const setRecentGraphs = state((state) => state.setRecentGraphs);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
@@ -26,6 +26,10 @@ export default function SaveToServer({ saveToServerF }) {
     saveToServerF.current = saveToServer;
   });
 
+  const workflowExists = (id) => {
+    return allWorkflows.map((flow) => flow.title).includes(id);
+  };
+
   const saveToServer = async () => {
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     // and Nodes DataMapping before attempting to save
@@ -33,8 +37,9 @@ export default function SaveToServer({ saveToServerF }) {
     // DOC: If id: "newGraph" request label update and then POST with id=label
     // else PUT and replace existing on server
     // TODO: following line creates issues on graph positionng examine
+
     setGettingFromServer(true);
-    if (graphRF.graph.id === 'newGraph') {
+    if (graphRF.graph.id === 'newGraph' || !workflowExists(graphRF.graph.id)) {
       setOpenSaveDialog(true);
       if (!graphRF.graph.label || graphRF.graph.label === 'newGraph') {
         setOpenSnackbar({
@@ -51,49 +56,39 @@ export default function SaveToServer({ saveToServerF }) {
         nodes: graphRFCurrated.nodes,
         links: graphRFCurrated.links,
       };
-      await axios
-        .post(
-          `${process.env.REACT_APP_SERVER_URL}/workflows`,
-          rfToEwoks(newIdGraph)
-        )
-        .then((res) => {
-          setGettingFromServer(false);
-          setWorkingGraph(res.data as GraphRF);
-          setRecentGraphs({} as GraphRF, true);
-          setOpenSnackbar({
-            open: true,
-            text: 'Graph saved succesfully!',
-            severity: 'success',
-          });
-        })
-        .catch((error) =>
-          setOpenSnackbar({
-            open: true,
-            text: error.response?.data?.message || configData.savingError,
-            severity: 'error',
-          })
-        );
-    } else if (graphRF.graph.id) {
-      await axios
-        .put(
-          `${process.env.REACT_APP_SERVER_URL}/workflow/${graphRF.graph.id}`,
-          rfToEwoks(graphRFCurrated)
-        )
-        .then(() => {
-          setGettingFromServer(false);
-          setOpenSnackbar({
-            open: true,
-            text: 'Graph saved succesfully!',
-            severity: 'success',
-          });
-        })
-        .catch((error) => {
-          setOpenSnackbar({
-            open: true,
-            text: error.response?.data?.message || configData.savingError,
-            severity: 'error',
-          });
+      try {
+        const postResponse = await postWorkflow(rfToEwoks(newIdGraph));
+        setGettingFromServer(false);
+        setWorkingGraph(postResponse.data as GraphRF);
+        setRecentGraphs({} as GraphRF, true);
+        setOpenSnackbar({
+          open: true,
+          text: 'Graph saved succesfully!',
+          severity: 'success',
         });
+      } catch (error) {
+        setOpenSnackbar({
+          open: true,
+          text: error.response?.data?.message || configData.savingError,
+          severity: 'error',
+        });
+      }
+    } else if (graphRF.graph.id) {
+      try {
+        await putWorkflow(rfToEwoks(graphRFCurrated));
+        setGettingFromServer(false);
+        setOpenSnackbar({
+          open: true,
+          text: 'Graph saved succesfully!',
+          severity: 'success',
+        });
+      } catch (error) {
+        setOpenSnackbar({
+          open: true,
+          text: error.response?.data?.message || configData.savingError,
+          severity: 'error',
+        });
+      }
     } else {
       setOpenSnackbar({
         open: true,
