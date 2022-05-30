@@ -66,6 +66,7 @@ function EditableTable(props) {
 
   const typesOfInputs = ['bool', 'number', 'string', 'list', 'dict', 'null'];
   // // console.log(defaultValues, val, rows, props, typeOfInputs);
+
   useEffect(() => {
     // console.log(defaultValues);
     const tOfIn = defaultValues.map((val) =>
