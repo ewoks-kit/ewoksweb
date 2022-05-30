@@ -77,7 +77,16 @@ export default function GetFromServer() {
 
   return (
     <>
-      <FormControl variant="standard" className={classes.formControl}>
+      <FormControl
+        variant="standard"
+        // TODO: remove if build problem is resolved
+        style={{
+          minWidth: '220px',
+          backgroundColor: '#7685dd',
+          borderRadius: '4px',
+        }}
+        className={classes.formControl}
+      >
         <AutocompleteDrop setInputValue={setInputValue} />
       </FormControl>
       <IntegratedSpinner
