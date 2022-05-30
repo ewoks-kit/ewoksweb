@@ -1,5 +1,6 @@
 /* eslint-disable react/function-component-definition */
 /* jshint sub:true*/
+/* eslint-disable sonarjs/cognitive-complexity */
 import React, { memo, useEffect, useState } from 'react';
 import orange1 from '../images/orange1.png';
 import orange2 from '../images/orange2.png';
@@ -23,9 +24,11 @@ import ExecuteSpinner from '../Components/ExecuteSpinner';
 import SendIcon from '@material-ui/icons/Send';
 import isValidLink from '../utils/IsValidLink';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
+import EditIcon from '@material-ui/icons/EditOutlined';
+import SaveIcon from '@material-ui/icons/Save';
 
 import state from '../store/state';
-import { Slider } from '@material-ui/core';
+import { IconButton, Slider, TextField } from '@material-ui/core';
 
 const iconsObj = {
   left,
@@ -108,10 +111,13 @@ const Node: React.FC<NodeProps> = ({
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const setSelectedElement = state((state) => state.setSelectedElement);
   const selectedElement = state((state) => state.selectedElement);
+  const [edit, setEdit] = React.useState(false);
+  const [labelLocal, setLabelLocal] = React.useState(label);
 
   useEffect(() => {
     setNodeSize(nodeWidth);
-  }, [nodeWidth]);
+    setLabelLocal(label);
+  }, [nodeWidth, label]);
 
   const displayNode = {
     textAlign: 'center' as const,
@@ -141,6 +147,10 @@ const Node: React.FC<NodeProps> = ({
       data: { ...selectedElement.data, nodeWidth: number },
     });
     setNodeSize(number);
+  };
+
+  const labelChanged = (event) => {
+    setLabelLocal(event.target.value);
   };
 
   return (
@@ -221,9 +231,20 @@ const Node: React.FC<NodeProps> = ({
                 </Handle>
               </div>
             )}
-          {withLabel && (
-            <div style={customTitle as React.CSSProperties}>{label}</div>
-          )}
+          {withLabel &&
+            (edit ? (
+              <TextField
+                id="standard-multiline-flexible"
+                label="edit node Label"
+                multiline
+                maxRows={4}
+                value={labelLocal}
+                onChange={labelChanged}
+                variant="standard"
+              />
+            ) : (
+              <div style={customTitle as React.CSSProperties}>{labelLocal}</div>
+            ))}
           {!withLabel && !withImage && (
             <div style={customTitle as React.CSSProperties}>
               {label.slice(0, 1)}
@@ -354,7 +375,43 @@ const Node: React.FC<NodeProps> = ({
                 // aria-label="Small"
                 // valueLabelDisplay="auto"
               />
-              <FileCopyIcon fontSize="small" color="primary" />
+              <IconButton
+                style={{ margin: '0px 2px' }}
+                aria-label="edit"
+                // onClick={() => {
+                //   setEditProps(!editProps);
+                // }}
+              >
+                <FileCopyIcon fontSize="small" color="primary" />
+              </IconButton>
+              {!edit ? (
+                <IconButton
+                  style={{ margin: '0px px' }}
+                  aria-label="edit"
+                  onClick={() => {
+                    setEdit(true);
+                  }}
+                >
+                  <EditIcon color="primary" />
+                </IconButton>
+              ) : (
+                <IconButton
+                  style={{ margin: '0px px' }}
+                  aria-label="edit"
+                  onClick={() => {
+                    setEdit(false);
+                    setSelectedElement({
+                      ...selectedElement,
+                      data: {
+                        ...selectedElement.data,
+                        label: labelLocal,
+                      },
+                    });
+                  }}
+                >
+                  <SaveIcon color="primary" />
+                </IconButton>
+              )}
             </>
           )}
         </span>

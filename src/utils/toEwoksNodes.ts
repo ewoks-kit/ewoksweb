@@ -70,6 +70,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
       // graphs separately only if a transformation is needed???
       return {
         id: id.toString(),
+        label,
         task_type,
         task_identifier,
         // type: task_type,
