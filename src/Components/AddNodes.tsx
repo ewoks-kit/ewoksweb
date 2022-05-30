@@ -20,7 +20,7 @@ import Upload from './Upload';
 import AddIcon from '@material-ui/icons/Add';
 import state from '../store/state';
 import configData from '../configData.json';
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Button, IconButton } from '@material-ui/core';
 import ConfirmDialog from './ConfirmDialog';
 import SidebarTooltip from './SidebarTooltip';
@@ -65,8 +65,10 @@ function AddNodes(props) {
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
   const [elementToEdit, setElementToEdit] = React.useState<Task>({});
   const initializedTask = state((state) => state.initializedTask);
+  const [expanded, setExpanded] = React.useState<boolean>(false);
+  const selectedElement = state((state) => state.selectedElement);
 
-  const getTasks = async () => {
+  const getTasks = useCallback(async () => {
     try {
       const tasksData = await getTaskDescription();
       const tasks = tasksData.data as { items: Task[] };
@@ -79,7 +81,14 @@ function AddNodes(props) {
         severity: 'error',
       });
     }
-  };
+  }, [setOpenSnackbar, setTaskCategories, setTasks]);
+
+  useEffect(() => {
+    setExpanded(!selectedElement.id);
+    if (tasks.length === 0) {
+      getTasks();
+    }
+  }, [selectedElement.id, tasks.length, getTasks]);
 
   const insertGraph = () => {
     setGraphOrSubgraph(false);
@@ -127,14 +136,16 @@ function AddNodes(props) {
     setOpenSaveDialog(true);
   };
 
+  const handleChange = (event: React.SyntheticEvent, newExpanded: boolean) => {
+    console.log(newExpanded, expanded);
+    if (newExpanded) {
+      getTasks();
+    }
+    setExpanded(newExpanded);
+  };
+
   return (
-    <Accordion
-      onChange={(e, expanded) => {
-        if (expanded) {
-          getTasks();
-        }
-      }}
-    >
+    <Accordion expanded={expanded} onChange={handleChange}>
       <AccordionSummary
         expandIcon={<OpenInBrowser />}
         aria-controls="panel1a-content"

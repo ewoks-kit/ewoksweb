@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -12,8 +12,18 @@ import GraphLabelComment from './GraphLabelComment';
 function EditElement(props) {
   const { element } = props;
 
+  const [expanded, setExpanded] = React.useState<boolean>(false);
+
+  useEffect(() => {
+    setExpanded(!!element.id);
+  }, [element.id]);
+
+  const handleChange = (event: React.SyntheticEvent, newExpanded: boolean) => {
+    setExpanded(newExpanded);
+  };
+
   return (
-    <Accordion>
+    <Accordion expanded={!!expanded} onChange={handleChange}>
       <AccordionSummary
         expandIcon={<OpenInBrowser />}
         aria-controls="panel1a-content"
