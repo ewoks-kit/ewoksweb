@@ -68,6 +68,7 @@ export function toRFEwoksNodes(
           data: {
             label: label ? label : task_identifier,
             type: nodeType,
+            nodeWidth: existsOrValue(uiProps, 'nodeWidth', 120),
             icon: existsOrValue(uiProps, 'icon', ''),
             comment: existsOrValue(uiProps, 'comment', ''),
             moreHandles: existsOrValue(uiProps, 'moreHandles', false),

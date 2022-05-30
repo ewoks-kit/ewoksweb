@@ -1,6 +1,6 @@
 /* eslint-disable react/function-component-definition */
 /* jshint sub:true*/
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import orange1 from '../images/orange1.png';
 import orange2 from '../images/orange2.png';
 import orange3 from '../images/orange3.png';
@@ -22,8 +22,10 @@ import IntegratedSpinner from '../Components/IntegratedSpinner';
 import ExecuteSpinner from '../Components/ExecuteSpinner';
 import SendIcon from '@material-ui/icons/Send';
 import isValidLink from '../utils/IsValidLink';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 import state from '../store/state';
+import { Slider } from '@material-ui/core';
 
 const iconsObj = {
   left,
@@ -65,6 +67,7 @@ const Node: React.FC<NodeProps> = ({
   image,
   comment,
   executing,
+  nodeWidth,
 }: NodeProps) => {
   const theCom = comment ? (
     <span
@@ -94,23 +97,31 @@ const Node: React.FC<NodeProps> = ({
     padding: '2px',
   };
 
+  if (color) {
+    customTitle.backgroundColor = color;
+    customTitle.borderRadius = '10px 10px 3px 3px';
+  }
+
+  const [nodeSize, setNodeSize] = useState(nodeWidth);
+  const isExecuted = state((state) => state.isExecuted);
+  const graphRF = state((state) => state.graphRF);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const setSelectedElement = state((state) => state.setSelectedElement);
+  const selectedElement = state((state) => state.selectedElement);
+
+  useEffect(() => {
+    setNodeSize(nodeWidth);
+  }, [nodeWidth]);
+
   const displayNode = {
     textAlign: 'center' as const,
-    maxWidth: '120px',
-    // minWidth: '120px', // for standard width
+    maxWidth: `${nodeSize}px`,
+    minWidth: '40px', // for standard width
     // maxHeight: '200px',
     display: ['graphInput', 'graphOutput'].includes(type) ? 'flex' : 'inline',
     margin: '2px',
     padding: '2px',
   };
-
-  if (color) {
-    customTitle.backgroundColor = color;
-    customTitle.borderRadius = '10px 10px 3px 3px';
-  }
-  const isExecuted = state((state) => state.isExecuted);
-  const graphRF = state((state) => state.graphRF);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
   const isValidConnection = (connection) => {
     const { isValid, reason } = isValidLink(connection, graphRF);
@@ -122,6 +133,14 @@ const Node: React.FC<NodeProps> = ({
       });
     }
     return isValid;
+  };
+
+  const changeNodeSize = (event, number) => {
+    setSelectedElement({
+      ...selectedElement,
+      data: { ...selectedElement.data, nodeWidth: number },
+    });
+    setNodeSize(number);
   };
 
   return (
@@ -323,6 +342,21 @@ const Node: React.FC<NodeProps> = ({
               </>
             )}
           {isGraph && <span style={style.contentWrapper}>{content}</span>}
+          {selected && type !== 'graphOutput' && type !== 'graphInput' && (
+            <>
+              <Slider
+                color="primary"
+                defaultValue={nodeSize}
+                value={nodeSize}
+                onChange={changeNodeSize}
+                min={40}
+                max={300}
+                // aria-label="Small"
+                // valueLabelDisplay="auto"
+              />
+              <FileCopyIcon fontSize="small" color="primary" />
+            </>
+          )}
         </span>
       </Tooltip>
     </div>

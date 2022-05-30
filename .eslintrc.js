@@ -27,7 +27,7 @@ module.exports = createConfig({
       'error',
       { allowedTerms: ['whitelist'] },
     ],
-    'sonarjs/cognitive-complexity': ['error', 23],
+    'sonarjs/cognitive-complexity': ['error', 24],
   },
   overrides: [
     {
