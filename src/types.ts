@@ -160,6 +160,7 @@ export interface Action {
 }
 
 export interface NodeProps {
+  nodeWidth?: number;
   withImage?: boolean;
   withLabel?: boolean;
   moreHandles: boolean;
@@ -307,6 +308,7 @@ export interface EwoksRFNode {
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes;
   data?: {
+    nodeWidth?: number;
     executing?: boolean;
     exists?: boolean;
     label?: string;

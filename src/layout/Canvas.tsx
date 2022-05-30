@@ -406,15 +406,15 @@ function Canvas() {
     });
   };
 
-  const onNodeContextMenu = (event: React.MouseEvent, nodes: Node) => {
-    event.preventDefault();
-    // console.log(nodes);
-    setOpenSnackbar({
-      open: true,
-      text: nodes[0].id,
-      severity: 'success',
-    });
-  };
+  // const onNodeContextMenu = (event: React.MouseEvent, nodes: Node) => {
+  //   event.preventDefault();
+  //   // console.log(nodes);
+  //   setOpenSnackbar({
+  //     open: true,
+  //     text: nodes[0].id,
+  //     severity: 'success',
+  //   });
+  // };
 
   const onNodeDoubleClick = (event, node) => {
     event.preventDefault();
@@ -571,9 +571,9 @@ function Canvas() {
           onEdgeUpdate={onEdgeUpdate}
           onDragOver={onDragOver}
           onPaneContextMenu={onPaneContextMenu}
-          onNodeContextMenu={(evt, node) => {
-            onNodeContextMenu(evt, node);
-          }}
+          // onNodeContextMenu={(evt, node) => {
+          //   onNodeContextMenu(evt, node);
+          // }}
           onNodeDoubleClick={onNodeDoubleClick}
           // onSelectionChange={onSelectionChange}
           // onNodeMouseMove={onNodeMouseMove}

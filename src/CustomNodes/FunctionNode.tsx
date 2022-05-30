@@ -26,6 +26,7 @@ function FunctionNode(fnod) {
       isGraph
       moreHandles={fnod.data.moreHandles}
       withImage={fnod.data.withImage}
+      nodeWidth={fnod.data.nodeWidth || 120}
       withLabel={fnod.data.withLabel}
       colorBorder={fnod.data.colorBorder}
       type={fnod.data.type}
