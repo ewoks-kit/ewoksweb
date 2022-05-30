@@ -137,7 +137,6 @@ function AddNodes(props) {
   };
 
   const handleChange = (event: React.SyntheticEvent, newExpanded: boolean) => {
-    console.log(newExpanded, expanded);
     if (newExpanded) {
       getTasks();
     }
