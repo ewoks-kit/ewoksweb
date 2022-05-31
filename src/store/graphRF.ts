@@ -1,9 +1,9 @@
 import type { GraphRF } from '../types';
 
-const initializedGraph = {
+const tutorialGraph = {
   graph: {
-    id: 'newGraph',
-    label: 'newGraph',
+    id: 'TutorialGraph',
+    label: 'TutorialGraph',
     input_nodes: [],
     output_nodes: [],
     uiProps: {},
@@ -13,7 +13,7 @@ const initializedGraph = {
 } as GraphRF;
 
 const graphRF = (set) => ({
-  graphRF: initializedGraph,
+  graphRF: tutorialGraph,
 
   setGraphRF: (graphRF) => {
     // If missing uiProps or other fill it here

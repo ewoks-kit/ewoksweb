@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -29,7 +29,12 @@ import SaveToServer from '../Components/SaveToServer';
 import tooltipText from '../Components/TooltipText';
 import state from '../store/state';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
+import FormDialog from '../Components/FormDialog';
 
+import { tutorial_Graph } from '../store/tutorialWorkflows/tutorial_Graph.js';
+import type { GraphRF } from '../types';
+
+const tutorial_GraphL = (tutorial_Graph as unknown) as GraphRF;
 const useStyles = DashboardStyle;
 
 export default function Dashboard() {
@@ -44,9 +49,22 @@ export default function Dashboard() {
   const [openSettings, setOpenSettings] = React.useState(false);
   const [openInfo, setOpenInfo] = React.useState(false);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
-  const initializedGraph = state((state) => state.initializedGraph);
   const gettingFromServer = state((state) => state.gettingFromServer);
   const isExecuted = state((state) => state.isExecuted);
+  const graphRF = state((state) => state.graphRF);
+  const selectedElement = state((state) => state.selectedElement);
+  const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
+
+  const newGraph = () => {
+    // setOpenSaveDialog(true);
+    setWorkingGraph(tutorial_GraphL);
+  };
+
+  useEffect(() => {
+    newGraph();
+    handleOpenSettings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleOpenSettings = () => {
     setOpenInfo(false);
@@ -72,10 +90,6 @@ export default function Dashboard() {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  const newGraph = () => {
-    setWorkingGraph(initializedGraph);
-  };
-
   const handleKeyDown = (event) => {
     const charCode = String.fromCharCode(event.which).toLowerCase();
 
@@ -96,12 +110,11 @@ export default function Dashboard() {
       event.preventDefault();
       event.stopPropagation();
       newGraph();
+    } else if ((event.ctrlKey || event.metaKey) && charCode === 'v') {
+      event.preventDefault();
+      event.stopPropagation();
+      console.log(selectedElement);
     }
-    // else if ((event.ctrlKey || event.metaKey) && charCode === 'c') {
-    //   event.preventDefault();
-    //   event.stopPropagation();
-    //   // copy into the canvas?
-    // }
   };
 
   return (
@@ -111,6 +124,12 @@ export default function Dashboard() {
       tabIndex={0}
       role="button"
     >
+      <FormDialog
+        elementToEdit={graphRF}
+        action="cloneGraph"
+        open={openSaveDialog}
+        setOpenSaveDialog={setOpenSaveDialog}
+      />
       <CssBaseline />
       <SimpleSnackbar />
       <AppBar

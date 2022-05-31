@@ -122,7 +122,7 @@ const Node: React.FC<NodeProps> = ({
   const displayNode = {
     textAlign: 'center' as const,
     maxWidth: `${nodeSize}px`,
-    minWidth: '40px', // for standard width
+    minWidth: '60px', // for standard width
     // maxHeight: '200px',
     display: ['graphInput', 'graphOutput'].includes(type) ? 'flex' : 'inline',
     margin: '2px',
@@ -151,6 +151,10 @@ const Node: React.FC<NodeProps> = ({
 
   const labelChanged = (event) => {
     setLabelLocal(event.target.value);
+  };
+
+  const copyNode = () => {
+    console.log(selectedElement);
   };
 
   return (
@@ -372,21 +376,22 @@ const Node: React.FC<NodeProps> = ({
                 onChange={changeNodeSize}
                 min={40}
                 max={300}
+                style={{ width: '90%' }}
                 // aria-label="Small"
                 // valueLabelDisplay="auto"
               />
               <IconButton
-                style={{ margin: '0px 2px' }}
+                style={{ margin: '0px 2px', padding: '0px' }}
                 aria-label="edit"
-                // onClick={() => {
-                //   setEditProps(!editProps);
-                // }}
+                onClick={() => {
+                  copyNode();
+                }}
               >
                 <FileCopyIcon fontSize="small" color="primary" />
               </IconButton>
               {!edit ? (
                 <IconButton
-                  style={{ margin: '0px px' }}
+                  style={{ margin: '0px 2px', padding: '0px' }}
                   aria-label="edit"
                   onClick={() => {
                     setEdit(true);

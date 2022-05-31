@@ -9,6 +9,7 @@ import ManageWorkflows from './ManageWorkflows';
 import ManageTasks from './ManageTasks';
 import { getIcons } from '../utils/api';
 import type { IconsNames } from '../types';
+import SignUp from '../layout/SignUp';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -43,7 +44,7 @@ function a11yProps(index: number) {
   };
 }
 
-export default function BasicTabs() {
+export default function BasicTabs(props) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = async (
@@ -58,33 +59,41 @@ export default function BasicTabs() {
     }
   };
 
+  const closeDialog = () => {
+    console.log(props);
+    props.closeDialog();
+  };
+
   return (
     <Box sx={{ width: '100%' }}>
-      Under Construction
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="Workflows" {...a11yProps(0)} />
-          <Tab label="Tasks" {...a11yProps(1)} />
-          <Tab label="Icons" {...a11yProps(2)} />
-          <Tab label="Settings" {...a11yProps(3)} />
+          <Tab label="Welcome" {...a11yProps(0)} />
+          <Tab label="Workflows" {...a11yProps(1)} />
+          <Tab label="Tasks" {...a11yProps(2)} />
+          <Tab label="Icons" {...a11yProps(3)} />
+          {/* <Tab label="Settings" {...a11yProps(4)} /> */}
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <ManageWorkflows />
+        <SignUp handleCloseDialog={closeDialog} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ManageTasks />
+        <ManageWorkflows />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <ManageIcons />
+        <ManageTasks />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Settings
+        <ManageIcons />
       </TabPanel>
+      {/* <TabPanel value={value} index={4}>
+        Settings
+      </TabPanel> */}
     </Box>
   );
 }
