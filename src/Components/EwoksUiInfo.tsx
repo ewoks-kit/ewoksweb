@@ -98,7 +98,7 @@ error handler links. The default is <cite>{“map_all_data”: True}</cite>. The
               <AccordionDetails>
                 <Typography>
                   {/* eslint-disable-next-line react/no-danger */}
-                  <div dangerouslySetInnerHTML={{ __html: details }} />
+                  <span dangerouslySetInnerHTML={{ __html: details }} />
                 </Typography>
               </AccordionDetails>
             </Accordion>

@@ -24,16 +24,16 @@ export default function SettingsInfoDrawer(props) {
     });
   }, [props.openSettings, props.openInfo, props.openDrawers]);
 
-  useEffect(() => {
-    toggleDrawer('top', true);
-    // setState({
-    //   top: true,
-    //   left: false,
-    //   bottom: false,
-    //   right: false,
-    // });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   toggleDrawer('top', true);
+  //   // setState({
+  //   //   top: true,
+  //   //   left: false,
+  //   //   bottom: false,
+  //   //   right: false,
+  //   // });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   const toggleDrawer = (anchor: Anchor, open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent
@@ -62,7 +62,7 @@ export default function SettingsInfoDrawer(props) {
           <EwoksUiInfo closeDialog={toggleDrawer('bottom', false)} />
         </div>
       ) : (
-        <TabPanel closeDialog={toggleDrawer('top', false)} />
+        <TabPanel />
       )}
       <Divider />
     </Box>

@@ -9,7 +9,6 @@ import ManageWorkflows from './ManageWorkflows';
 import ManageTasks from './ManageTasks';
 import { getIcons } from '../utils/api';
 import type { IconsNames } from '../types';
-import SignUp from '../layout/SignUp';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -44,7 +43,7 @@ function a11yProps(index: number) {
   };
 }
 
-export default function BasicTabs(props) {
+export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
 
   const handleChange = async (
@@ -59,11 +58,6 @@ export default function BasicTabs(props) {
     }
   };
 
-  const closeDialog = () => {
-    console.log(props);
-    props.closeDialog();
-  };
-
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -72,26 +66,22 @@ export default function BasicTabs(props) {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="Welcome" {...a11yProps(0)} />
-          <Tab label="Workflows" {...a11yProps(1)} />
-          <Tab label="Tasks" {...a11yProps(2)} />
-          <Tab label="Icons" {...a11yProps(3)} />
-          {/* <Tab label="Settings" {...a11yProps(4)} /> */}
+          <Tab label="Workflows" {...a11yProps(0)} />
+          <Tab label="Tasks" {...a11yProps(1)} />
+          <Tab label="Icons" {...a11yProps(2)} />
+          {/* <Tab label="Settings" {...a11yProps(3)} /> */}
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <SignUp handleCloseDialog={closeDialog} />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
         <ManageWorkflows />
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel value={value} index={1}>
         <ManageTasks />
       </TabPanel>
-      <TabPanel value={value} index={3}>
+      <TabPanel value={value} index={2}>
         <ManageIcons />
       </TabPanel>
-      {/* <TabPanel value={value} index={4}>
+      {/* <TabPanel value={value} index={3}>
         Settings
       </TabPanel> */}
     </Box>
