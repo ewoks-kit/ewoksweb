@@ -325,6 +325,7 @@ export interface EwoksRFNode {
     map_all_data?: boolean; // TODO: not exists in nodes Typescript resolve...
     // on_error?: boolean; // TODO: not exists in nodes Typescript resolve...
   };
+  selected?: boolean;
   sourcePosition?: string;
   targetPosition?: string;
   position?: CanvasPosition;

@@ -16,7 +16,7 @@ import graphOutput from '../images/graphOutput.svg';
 import Correlations from '../images/Correlations.svg';
 import CreateClass from '../images/CreateClass.svg';
 import { Handle, Position } from 'react-flow-renderer';
-import type { NodeProps } from '../types';
+import type { EwoksRFNode, NodeProps } from '../types';
 import { contentStyle, style } from './NodeStyle';
 import Tooltip from '@material-ui/core/Tooltip';
 import IntegratedSpinner from '../Components/IntegratedSpinner';
@@ -29,6 +29,7 @@ import SaveIcon from '@material-ui/icons/Save';
 
 import state from '../store/state';
 import { IconButton, Slider, TextField } from '@material-ui/core';
+import tooltipText from '../Components/TooltipText';
 
 const iconsObj = {
   left,
@@ -54,6 +55,11 @@ const execution = () => {
   // console.log('executing');
   return true;
 };
+
+const incr = 1;
+function increment() {
+  return incr + 1;
+}
 
 // The basic Node component
 const Node: React.FC<NodeProps> = ({
@@ -113,6 +119,7 @@ const Node: React.FC<NodeProps> = ({
   const selectedElement = state((state) => state.selectedElement);
   const [edit, setEdit] = React.useState(false);
   const [labelLocal, setLabelLocal] = React.useState(label);
+  const setGraphRF = state((state) => state.setGraphRF);
 
   useEffect(() => {
     setNodeSize(nodeWidth);
@@ -153,8 +160,24 @@ const Node: React.FC<NodeProps> = ({
     setLabelLocal(event.target.value);
   };
 
-  const copyNode = () => {
-    console.log(selectedElement);
+  // TODO: exists in sidebar abstract in a hook?
+  const cloneNode = () => {
+    const element = selectedElement as EwoksRFNode;
+    const newClone = {
+      ...element,
+      id: element.id + increment(),
+      selected: false,
+      position: {
+        x: element.position.x + 100,
+        y: element.position.y + 100,
+      },
+    };
+
+    setGraphRF({
+      ...graphRF,
+      nodes: [...graphRF.nodes, newClone],
+    });
+    setSelectedElement(newClone as EwoksRFNode);
   };
 
   return (
@@ -380,42 +403,64 @@ const Node: React.FC<NodeProps> = ({
                 // aria-label="Small"
                 // valueLabelDisplay="auto"
               />
-              <IconButton
-                style={{ margin: '0px 2px', padding: '0px' }}
-                aria-label="edit"
-                onClick={() => {
-                  copyNode();
-                }}
+              <Tooltip
+                title={tooltipText('Clone Node')}
+                enterDelay={800}
+                arrow
+                placement="top"
               >
-                <FileCopyIcon fontSize="small" color="primary" />
-              </IconButton>
-              {!edit ? (
                 <IconButton
                   style={{ margin: '0px 2px', padding: '0px' }}
                   aria-label="edit"
                   onClick={() => {
-                    setEdit(true);
+                    cloneNode();
                   }}
                 >
-                  <EditIcon color="primary" />
+                  <FileCopyIcon fontSize="small" color="primary" />
                 </IconButton>
-              ) : (
-                <IconButton
-                  style={{ margin: '0px px' }}
-                  aria-label="edit"
-                  onClick={() => {
-                    setEdit(false);
-                    setSelectedElement({
-                      ...selectedElement,
-                      data: {
-                        ...selectedElement.data,
-                        label: labelLocal,
-                      },
-                    });
-                  }}
+              </Tooltip>
+              {withLabel && !edit && (
+                <Tooltip
+                  title={tooltipText('Edit label')}
+                  enterDelay={800}
+                  arrow
+                  placement="top"
                 >
-                  <SaveIcon color="primary" />
-                </IconButton>
+                  <IconButton
+                    style={{ margin: '0px 2px', padding: '0px' }}
+                    aria-label="edit"
+                    onClick={() => {
+                      setEdit(true);
+                    }}
+                  >
+                    <EditIcon color="primary" />
+                  </IconButton>
+                </Tooltip>
+              )}
+              {withLabel && edit && (
+                <Tooltip
+                  title={tooltipText('Save new label')}
+                  enterDelay={800}
+                  arrow
+                  placement="top"
+                >
+                  <IconButton
+                    style={{ margin: '0px px' }}
+                    aria-label="edit"
+                    onClick={() => {
+                      setEdit(false);
+                      setSelectedElement({
+                        ...selectedElement,
+                        data: {
+                          ...selectedElement.data,
+                          label: labelLocal,
+                        },
+                      });
+                    }}
+                  >
+                    <SaveIcon color="primary" />
+                  </IconButton>
+                </Tooltip>
               )}
             </>
           )}

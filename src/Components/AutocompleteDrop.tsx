@@ -24,6 +24,7 @@ function AutocompleteDrop(props) {
   }, [open]);
 
   const setInputValue = (newInputValue) => {
+    console.log(newInputValue);
     props.setInputValue(newInputValue);
     // setValue(newInputValue);
   };

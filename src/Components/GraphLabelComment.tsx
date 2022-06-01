@@ -79,6 +79,7 @@ export default function GraphLabelComment() {
           variant="outlined"
           value={comment || ''}
           onChange={graphCommentChanged}
+          multiline
         />
       </div>
       {/* DOC: if the inputs and outputs of the graph are needed

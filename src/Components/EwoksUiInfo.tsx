@@ -4,9 +4,11 @@ import {
   AccordionDetails,
   AccordionSummary,
   Typography,
+  Grid,
 } from '@material-ui/core';
+import SignUp from '../layout/SignUp';
 
-export default function EwoksUiInfo() {
+export default function EwoksUiInfo(props) {
   const infoCategories = [
     {
       summary: 'Create a graph',
@@ -65,28 +67,44 @@ error handler links. The default is <cite>{“map_all_data”: True}</cite>. The
     { summary: 'other', details: 'Id' },
   ];
 
+  const closeDialog = () => {
+    console.log(props);
+    props.closeDialog();
+  };
+
   return (
     <div className="infoAccordion">
-      <h2 style={{ color: '#5595ce' }}>
-        Using Ewoks user Interface (Under Construction)
-      </h2>
-      {infoCategories.map(({ summary, details }) => (
-        <Accordion key={summary}>
-          <AccordionSummary
-            expandIcon={<OpenInBrowser />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            <Typography>{summary}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
-              {/* eslint-disable-next-line react/no-danger */}
-              <div dangerouslySetInnerHTML={{ __html: details }} />
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-      ))}
+      <Grid
+        container
+        spacing={5}
+        direction="row"
+        // justifyContent="flex-start"
+        alignItems="center"
+      >
+        <Grid item xs={12} sm={12} md={12} lg={7}>
+          <SignUp handleCloseDialog={closeDialog} />
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={5}>
+          <h2 style={{ color: '#3f51b5' }}>Using Ewoks-UI</h2>
+          {infoCategories.map(({ summary, details }) => (
+            <Accordion key={summary}>
+              <AccordionSummary
+                expandIcon={<OpenInBrowser />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography>{summary}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  {/* eslint-disable-next-line react/no-danger */}
+                  <div dangerouslySetInnerHTML={{ __html: details }} />
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          ))}
+        </Grid>
+      </Grid>
     </div>
   );
 }

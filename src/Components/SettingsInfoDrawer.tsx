@@ -59,7 +59,7 @@ export default function SettingsInfoDrawer(props) {
     >
       {props.openInfo ? (
         <div className="infoAccordion">
-          <EwoksUiInfo />
+          <EwoksUiInfo closeDialog={toggleDrawer('bottom', false)} />
         </div>
       ) : (
         <TabPanel closeDialog={toggleDrawer('top', false)} />

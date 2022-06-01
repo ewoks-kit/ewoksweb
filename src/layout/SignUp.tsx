@@ -36,7 +36,7 @@ export default function SignUp(props) {
         alignItems="center"
       >
         <Grid item xs={12} sm={12} md={12} lg={6}>
-          <Container component="main" maxWidth="sm">
+          <Container component="main" maxWidth="lg">
             <Box
               sx={{
                 marginTop: 8,
@@ -57,7 +57,8 @@ export default function SignUp(props) {
                   color="primary"
                   style={{ padding: '5px' }}
                 >
-                  Get started with the tutorial_Graph
+                  Get started with the tutorial_Graph where Ewoks-UI describes
+                  itself
                 </Typography>
 
                 <Fab
@@ -74,7 +75,7 @@ export default function SignUp(props) {
           </Container>
         </Grid>
 
-        <Grid item xs={12} sm={12} md={6} lg={3}>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
           <Container component="main" maxWidth="lg">
             <CssBaseline />
 

@@ -55,16 +55,20 @@ export default function Dashboard() {
   const selectedElement = state((state) => state.selectedElement);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
 
-  const newGraph = () => {
-    // setOpenSaveDialog(true);
+  const tutorial = () => {
     setWorkingGraph(tutorial_GraphL);
   };
 
   useEffect(() => {
-    newGraph();
-    handleOpenSettings();
+    tutorial();
+    handleOpenInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const newGraph = () => {
+    setOpenSaveDialog(true);
+    // setWorkingGraph(tutorial_GraphL);
+  };
 
   const handleOpenSettings = () => {
     setOpenInfo(false);
@@ -92,27 +96,18 @@ export default function Dashboard() {
 
   const handleKeyDown = (event) => {
     const charCode = String.fromCharCode(event.which).toLowerCase();
-
-    if ((event.ctrlKey || event.metaKey) && charCode === 's') {
-      event.preventDefault();
+    event.preventDefault();
+    event.stopPropagation();
+    const keys = event.ctrlKey || event.metaKey;
+    if (keys && charCode === 's') {
       saveToServerF.current();
-    } else if ((event.ctrlKey || event.metaKey) && charCode === 'z') {
-      event.preventDefault();
+    } else if (keys && charCode === 'z') {
       undoF.current();
-    } else if ((event.ctrlKey || event.metaKey) && charCode === 'y') {
-      event.preventDefault();
+    } else if (keys && charCode === 'y') {
       redoF.current();
-    } else if (
-      (event.ctrlKey || event.metaKey) &&
-      event.shiftKey &&
-      charCode === 'n'
-    ) {
-      event.preventDefault();
-      event.stopPropagation();
+    } else if (keys && event.shiftKey && charCode === 'n') {
       newGraph();
-    } else if ((event.ctrlKey || event.metaKey) && charCode === 'v') {
-      event.preventDefault();
-      event.stopPropagation();
+    } else if (keys && charCode === 'v') {
       console.log(selectedElement);
     }
   };

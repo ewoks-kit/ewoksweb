@@ -161,7 +161,7 @@ function Canvas() {
   const onNodesChange = useCallback(
     (changes) => {
       const node = [...graphRF.nodes].find((el) => el.id === changes[0].id);
-      // console.log(changes);
+      console.log(node);
 
       // TODO: nodes are updated only on rf canvas and not on graphRF
       // if we update graphRF we have a loop so we update on setSelectedElement
@@ -205,6 +205,7 @@ function Canvas() {
 
   const onNodeClick = (event, element?: Node) => {
     const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
+    console.log(graphElement);
     setSelectedElement(graphElement);
   };
 
