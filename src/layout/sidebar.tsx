@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@material-ui/core';
 import AddNodes from '../Components/AddNodes';
 import EditElement from '../Components/EditElement';
@@ -11,6 +11,7 @@ import DashboardStyle from './DashboardStyle';
 import state from '../store/state';
 import type { EwoksRFNode, EwoksRFLink, GraphDetails, GraphRF } from '../types';
 import { rfToEwoks } from '../utils';
+import { calcNewId } from '../utils/calcNewId';
 import ConfirmDialog from '../Components/ConfirmDialog';
 import { deleteWorkflow, getIcon, getIcons, getOtherIcon } from '../utils/api';
 import axios from 'axios';
@@ -22,6 +23,14 @@ const useStyles = DashboardStyle;
 //   const iconsData: IconsNames = await getIcons();
 //   console.log(typeof iconsData.identifiers, iconsData.identifiers);
 //   return iconsData.identifiers;
+// };
+
+// const increment = (nodeId: string, nodes: EwoksRFNode[]) => {
+//   let id = 0;
+//   while (nodes.map((nod) => nod.id).includes(`${nodeId}_${id}`)) {
+//     id++;
+//   }
+//   return `${nodeId}_${id}`;
 // };
 
 export default function Sidebar() {
@@ -39,14 +48,14 @@ export default function Sidebar() {
   const setGraphRF = state((state) => state.setGraphRF);
   const workingGraph = state((state) => state.workingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const [openDialog, setOpenDialog] = React.useState<boolean>(false);
-  const [dialogContent, setDialogContent] = React.useState({});
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [dialogContent, setDialogContent] = useState({});
   const setSubgraphsStack = state((state) => state.setSubgraphsStack);
   const setRecentGraphs = state((state) => state.setRecentGraphs);
   const initializedGraph = state((state) => state.initializedGraph);
   const setUndoRedo = state((state) => state.setUndoRedo);
   const isExecuted = state((state) => state.isExecuted);
-  const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
+  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const setAllIcons = state((state) => state.setAllIcons);
   const allIcons = state((state) => state.allIcons);
   const setAllIconNames = state((state) => state.setAllIconNames);
@@ -259,6 +268,31 @@ export default function Sidebar() {
     setOpenAgreeDialog(false);
   };
 
+  const cloneNode = () => {
+    if ('position' in selectedElement) {
+      const newClone = {
+        ...selectedElement,
+        id: selectedElement.id + calcNewId(selectedElement.id, graphRF.nodes),
+        selected: false,
+        position: {
+          x: selectedElement.position.x + 100,
+          y: selectedElement.position.y + 100,
+        },
+      };
+      setGraphRF({
+        ...graphRF,
+        nodes: [...graphRF.nodes, newClone],
+      });
+      setSelectedElement(newClone as EwoksRFNode);
+    } else {
+      setOpenSnackbar({
+        open: true,
+        text: 'Clone is for cloning nodes within the working workflow',
+        severity: 'warning',
+      });
+    }
+  };
+
   return (
     <aside className="dndflow">
       {isExecuted ? (
@@ -297,7 +331,7 @@ export default function Sidebar() {
             style={{ margin: '8px' }}
             variant="outlined"
             color="primary"
-            onClick={deleteElement}
+            onClick={cloneNode}
             size="small"
           >
             Clone

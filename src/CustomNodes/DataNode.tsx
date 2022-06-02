@@ -16,7 +16,7 @@ function DataNode(args) {
       comment={args.data.comment}
       moreHandles={args.data.moreHandles}
       withImage={'withImage' in args.data ? args.data.withImage : true}
-      nodeWidth={'nodeWidth' in args.data ? args.data.nodeWidth : 60}
+      nodeWidth={'nodeWidth' in args.data ? args.data.nodeWidth : 120}
       withLabel={'withLabel' in args.data ? args.data.withLabel : true}
       colorBorder={'colorBorder' in args.data ? args.data.colorBorder : ''}
       content={<div style={{ ...style.io } as React.CSSProperties} />}

@@ -22,6 +22,7 @@ import ExecutionStepsNode from '../CustomNodes/ExecutionStepsNode';
 import DataNode from '../CustomNodes/DataNode';
 import type { GraphRF, EwoksRFNode, EwoksRFLink } from '../types';
 import state from '../store/state';
+import { calcNewId } from '../utils/calcNewId';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -41,14 +42,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-const getnodesIds = (text: string, nodes: EwoksRFNode[]) => {
-  let id = 0;
-  while (nodes.map((nod) => nod.id).includes(`${text}_${id}`)) {
-    id++;
-  }
-  return `${text}_${id}`;
-};
 
 const edgeTypes = {
   bendingText,
@@ -161,7 +154,6 @@ function Canvas() {
   const onNodesChange = useCallback(
     (changes) => {
       const node = [...graphRF.nodes].find((el) => el.id === changes[0].id);
-      // console.log(changes);
 
       // TODO: nodes are updated only on rf canvas and not on graphRF
       // if we update graphRF we have a loop so we update on setSelectedElement
@@ -258,12 +250,12 @@ function Canvas() {
       const newNode = {
         id:
           task_type === 'graphInput'
-            ? getnodesIds('In', graphRF.nodes)
+            ? calcNewId('In', graphRF.nodes)
             : task_type === 'graphOutput'
-            ? getnodesIds('Out', graphRF.nodes)
+            ? calcNewId('Out', graphRF.nodes)
             : task_type === 'note'
-            ? getnodesIds('Note', graphRF.nodes)
-            : getnodesIds(task_identifier || 'Node', graphRF.nodes),
+            ? calcNewId('Note', graphRF.nodes)
+            : calcNewId(task_identifier || 'Node', graphRF.nodes),
         label: task_identifier,
         task_type,
         task_identifier,

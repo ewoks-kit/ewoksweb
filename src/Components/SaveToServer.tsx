@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import IntegratedSpinner from './IntegratedSpinner';
 import { rfToEwoks } from '../utils';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
@@ -22,7 +22,7 @@ export default function SaveToServer({ saveToServerF }) {
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     saveToServerF.current = saveToServer;
   });
 
@@ -42,13 +42,12 @@ export default function SaveToServer({ saveToServerF }) {
     if (graphRF.graph.id === 'newGraph' || !workflowExists(graphRF.graph.id)) {
       setOpenSaveDialog(true);
       if (!graphRF.graph.label || graphRF.graph.label === 'newGraph') {
+        setGettingFromServer(false);
         setOpenSnackbar({
           open: true,
-          text:
-            'Please insert a new label to be also used as an id for the new workflow and then save!',
+          text: 'Please insert a new name for the new workflow and then save!',
           severity: 'warning',
         });
-        setGettingFromServer(false);
         return;
       }
       const newIdGraph = {

@@ -2,8 +2,8 @@ import DashboardStyle from '../layout/DashboardStyle';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Fab, IconButton } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
+import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import Upload from '../Components/Upload';
-import AddIcon from '@material-ui/icons/Add';
 import tooltipText from '../Components/TooltipText';
 import { rfToEwoks } from '../utils';
 
@@ -65,7 +65,7 @@ export default function SaveGetFromDisk() {
           onClick={loadFromDisk}
         >
           <Upload>
-            <AddIcon />
+            <FolderOpenIcon />
           </Upload>
         </IconButton>
       </Tooltip>

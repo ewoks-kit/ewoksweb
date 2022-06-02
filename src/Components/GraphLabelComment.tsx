@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { TextField } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
+import type { GraphDetails } from '../types';
 
 const useStyles = DashboardStyle;
 
@@ -10,38 +11,39 @@ const useStyles = DashboardStyle;
 export default function GraphLabelComment() {
   const classes = useStyles();
 
-  const graphRF = state((state) => state.graphRF);
   const [label, setLabel] = React.useState('');
   const [comment, setComment] = React.useState('');
+  const [category, setCategory] = React.useState('');
   const setSelectedElement = state((state) => state.setSelectedElement);
   const selectedElement = state((state) => state.selectedElement);
 
   useEffect(() => {
-    setLabel(selectedElement.label);
-    setComment(selectedElement.uiProps && selectedElement.uiProps.comment);
+    const graphElement = selectedElement as GraphDetails;
+    setLabel(graphElement.label);
+    setCategory(graphElement.category);
+    setComment(graphElement.uiProps && graphElement.uiProps.comment);
   }, [selectedElement.id, selectedElement]);
+
+  const categoryChanged = (event) => {
+    setCategory(event.target.value);
+    setSelectedElement(
+      {
+        ...selectedElement,
+        category: event.target.value,
+      } as GraphDetails,
+      'fromSaveElement'
+    );
+  };
 
   const labelChanged = (event) => {
     setLabel(event.target.value);
-    if ('position' in selectedElement) {
-      const el = selectedElement;
-      setSelectedElement(
-        {
-          ...el,
-          label: event.target.value,
-          data: { ...selectedElement.data, label: event.target.value },
-        },
-        'fromSaveElement'
-      );
-    } else {
-      setSelectedElement(
-        {
-          ...selectedElement,
-          label: event.target.value,
-        },
-        'fromSaveElement'
-      );
-    }
+    setSelectedElement(
+      {
+        ...selectedElement,
+        label: event.target.value,
+      },
+      'fromSaveElement'
+    );
   };
 
   const graphCommentChanged = (event) => {
@@ -57,16 +59,16 @@ export default function GraphLabelComment() {
 
   return (
     <>
-      <div>
+      {/* <div>
         <b>Id:</b> {graphRF.graph.id}
-      </div>
+      </div> */}
       {/* <div>
         <b>Label:</b> {graphRF.graph.label}
       </div> */}
       <div className={classes.detailsLabels}>
         <TextField
           id="outlined-basic"
-          label="Label"
+          label="Name"
           variant="outlined"
           value={label || ''}
           onChange={labelChanged}
@@ -79,6 +81,16 @@ export default function GraphLabelComment() {
           variant="outlined"
           value={comment || ''}
           onChange={graphCommentChanged}
+          multiline
+        />
+      </div>
+      <div className={classes.detailsLabels}>
+        <TextField
+          id="outlined-basic"
+          label="Category"
+          variant="outlined"
+          value={category || ''}
+          onChange={categoryChanged}
         />
       </div>
       {/* DOC: if the inputs and outputs of the graph are needed

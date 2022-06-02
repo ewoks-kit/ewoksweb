@@ -16,7 +16,7 @@ import graphOutput from '../images/graphOutput.svg';
 import Correlations from '../images/Correlations.svg';
 import CreateClass from '../images/CreateClass.svg';
 import { Handle, Position } from 'react-flow-renderer';
-import type { NodeProps } from '../types';
+import type { EwoksRFNode, NodeProps } from '../types';
 import { contentStyle, style } from './NodeStyle';
 import Tooltip from '@material-ui/core/Tooltip';
 import IntegratedSpinner from '../Components/IntegratedSpinner';
@@ -26,9 +26,11 @@ import isValidLink from '../utils/IsValidLink';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import SaveIcon from '@material-ui/icons/Save';
+import { calcNewId } from '../utils/calcNewId';
 
 import state from '../store/state';
 import { IconButton, Slider, TextField } from '@material-ui/core';
+import tooltipText from '../Components/TooltipText';
 
 const iconsObj = {
   left,
@@ -113,6 +115,7 @@ const Node: React.FC<NodeProps> = ({
   const selectedElement = state((state) => state.selectedElement);
   const [edit, setEdit] = React.useState(false);
   const [labelLocal, setLabelLocal] = React.useState(label);
+  const setGraphRF = state((state) => state.setGraphRF);
 
   useEffect(() => {
     setNodeSize(nodeWidth);
@@ -122,7 +125,7 @@ const Node: React.FC<NodeProps> = ({
   const displayNode = {
     textAlign: 'center' as const,
     maxWidth: `${nodeSize}px`,
-    minWidth: '40px', // for standard width
+    minWidth: '60px', // for standard width
     // maxHeight: '200px',
     display: ['graphInput', 'graphOutput'].includes(type) ? 'flex' : 'inline',
     margin: '2px',
@@ -151,6 +154,26 @@ const Node: React.FC<NodeProps> = ({
 
   const labelChanged = (event) => {
     setLabelLocal(event.target.value);
+  };
+
+  // TODO: exists in sidebar abstract in a hook?
+  const cloneNode = () => {
+    const element = selectedElement as EwoksRFNode;
+    const newClone = {
+      ...element,
+      id: element.id + calcNewId(selectedElement.id, graphRF.nodes),
+      selected: false,
+      position: {
+        x: element.position.x + 100,
+        y: element.position.y + 100,
+      },
+    };
+
+    setGraphRF({
+      ...graphRF,
+      nodes: [...graphRF.nodes, newClone],
+    });
+    setSelectedElement(newClone as EwoksRFNode);
   };
 
   return (
@@ -372,45 +395,68 @@ const Node: React.FC<NodeProps> = ({
                 onChange={changeNodeSize}
                 min={40}
                 max={300}
+                style={{ width: '90%' }}
                 // aria-label="Small"
                 // valueLabelDisplay="auto"
               />
-              <IconButton
-                style={{ margin: '0px 2px' }}
-                aria-label="edit"
-                // onClick={() => {
-                //   setEditProps(!editProps);
-                // }}
+              <Tooltip
+                title={tooltipText('Clone Node')}
+                enterDelay={800}
+                arrow
+                placement="top"
               >
-                <FileCopyIcon fontSize="small" color="primary" />
-              </IconButton>
-              {!edit ? (
                 <IconButton
-                  style={{ margin: '0px px' }}
+                  style={{ margin: '0px 2px', padding: '0px' }}
                   aria-label="edit"
                   onClick={() => {
-                    setEdit(true);
+                    cloneNode();
                   }}
                 >
-                  <EditIcon color="primary" />
+                  <FileCopyIcon fontSize="small" color="primary" />
                 </IconButton>
-              ) : (
-                <IconButton
-                  style={{ margin: '0px px' }}
-                  aria-label="edit"
-                  onClick={() => {
-                    setEdit(false);
-                    setSelectedElement({
-                      ...selectedElement,
-                      data: {
-                        ...selectedElement.data,
-                        label: labelLocal,
-                      },
-                    });
-                  }}
+              </Tooltip>
+              {withLabel && !edit && (
+                <Tooltip
+                  title={tooltipText('Edit label')}
+                  enterDelay={800}
+                  arrow
+                  placement="top"
                 >
-                  <SaveIcon color="primary" />
-                </IconButton>
+                  <IconButton
+                    style={{ margin: '0px 2px', padding: '0px' }}
+                    aria-label="edit"
+                    onClick={() => {
+                      setEdit(true);
+                    }}
+                  >
+                    <EditIcon color="primary" />
+                  </IconButton>
+                </Tooltip>
+              )}
+              {withLabel && edit && (
+                <Tooltip
+                  title={tooltipText('Save new label')}
+                  enterDelay={800}
+                  arrow
+                  placement="top"
+                >
+                  <IconButton
+                    style={{ margin: '0px px' }}
+                    aria-label="edit"
+                    onClick={() => {
+                      setEdit(false);
+                      setSelectedElement({
+                        ...selectedElement,
+                        data: {
+                          ...selectedElement.data,
+                          label: labelLocal,
+                        },
+                      });
+                    }}
+                  >
+                    <SaveIcon color="primary" />
+                  </IconButton>
+                </Tooltip>
               )}
             </>
           )}

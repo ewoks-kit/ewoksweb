@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -9,6 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import FiberNew from '@material-ui/icons/FiberNew';
+import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import Sidebar from './sidebar';
 import { ReactFlowProvider } from 'react-flow-renderer';
 
@@ -29,7 +30,13 @@ import SaveToServer from '../Components/SaveToServer';
 import tooltipText from '../Components/TooltipText';
 import state from '../store/state';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
+import FormDialog from '../Components/FormDialog';
+import { calcNewId } from '../utils/calcNewId';
 
+import { tutorial_Graph } from '../store/tutorialWorkflows/tutorial_Graph.js';
+import type { EwoksRFNode, GraphRF } from '../types';
+
+const tutorial_GraphL = (tutorial_Graph as unknown) as GraphRF;
 const useStyles = DashboardStyle;
 
 export default function Dashboard() {
@@ -44,9 +51,33 @@ export default function Dashboard() {
   const [openSettings, setOpenSettings] = React.useState(false);
   const [openInfo, setOpenInfo] = React.useState(false);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
-  const initializedGraph = state((state) => state.initializedGraph);
   const gettingFromServer = state((state) => state.gettingFromServer);
   const isExecuted = state((state) => state.isExecuted);
+  const graphRF = state((state) => state.graphRF);
+  const selectedElement = state((state) => state.selectedElement);
+  const setGraphRF = state((state) => state.setGraphRF);
+  const setSelectedElement = state((state) => state.setSelectedElement);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
+
+  const tutorial = () => {
+    setWorkingGraph(tutorial_GraphL);
+  };
+
+  useEffect(() => {
+    tutorial();
+    handleOpenInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const newGraph = () => {
+    setOpenSaveDialog(true);
+    // setWorkingGraph(tutorial_GraphL);
+  };
+
+  const openGraph = () => {
+    handleOpenSettings();
+  };
 
   const handleOpenSettings = () => {
     setOpenInfo(false);
@@ -72,36 +103,52 @@ export default function Dashboard() {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  const newGraph = () => {
-    setWorkingGraph(initializedGraph);
-  };
-
   const handleKeyDown = (event) => {
     const charCode = String.fromCharCode(event.which).toLowerCase();
 
-    if ((event.ctrlKey || event.metaKey) && charCode === 's') {
+    const keys = event.ctrlKey || event.metaKey;
+    if (keys && charCode === 's') {
       event.preventDefault();
+      event.stopPropagation();
       saveToServerF.current();
-    } else if ((event.ctrlKey || event.metaKey) && charCode === 'z') {
+    } else if (keys && charCode === 'z') {
       event.preventDefault();
+      event.stopPropagation();
       undoF.current();
-    } else if ((event.ctrlKey || event.metaKey) && charCode === 'y') {
+    } else if (keys && charCode === 'y') {
       event.preventDefault();
+      event.stopPropagation();
       redoF.current();
-    } else if (
-      (event.ctrlKey || event.metaKey) &&
-      event.shiftKey &&
-      charCode === 'n'
-    ) {
+    } else if (keys && event.shiftKey && charCode === 'n') {
       event.preventDefault();
       event.stopPropagation();
       newGraph();
+    } else if (keys && charCode === 'v') {
+      event.preventDefault();
+      event.stopPropagation();
+      if ('position' in selectedElement) {
+        const newClone = {
+          ...selectedElement,
+          id: selectedElement.id + calcNewId(selectedElement.id, graphRF.nodes),
+          selected: false,
+          position: {
+            x: selectedElement.position.x + 100,
+            y: selectedElement.position.y + 100,
+          },
+        };
+        setGraphRF({
+          ...graphRF,
+          nodes: [...graphRF.nodes, newClone],
+        });
+        setSelectedElement(newClone as EwoksRFNode);
+      } else {
+        setOpenSnackbar({
+          open: true,
+          text: 'Clone is for cloning nodes within the working workflow',
+          severity: 'warning',
+        });
+      }
     }
-    // else if ((event.ctrlKey || event.metaKey) && charCode === 'c') {
-    //   event.preventDefault();
-    //   event.stopPropagation();
-    //   // copy into the canvas?
-    // }
   };
 
   return (
@@ -111,6 +158,12 @@ export default function Dashboard() {
       tabIndex={0}
       role="button"
     >
+      <FormDialog
+        elementToEdit={graphRF}
+        action="cloneGraph"
+        open={openSaveDialog}
+        setOpenSaveDialog={setOpenSaveDialog}
+      />
       <CssBaseline />
       <SimpleSnackbar />
       <AppBar
@@ -149,7 +202,27 @@ export default function Dashboard() {
               </Fab>
             </IconButton>
           </Tooltip>
+          <Tooltip
+            title={tooltipText('Open an existing workflow')}
+            enterDelay={800}
+            arrow
+          >
+            <IconButton color="inherit" onClick={openGraph}>
+              <Fab
+                className={classes.openFileButton}
+                color="primary"
+                size="small"
+                component="span"
+                aria-label="add"
+                disabled={isExecuted}
+              >
+                <ImportContactsIcon />
+              </Fab>
+            </IconButton>
+          </Tooltip>
+          <div className={classes.verticalRule} />
           <UndoRedo undoF={undoF} redoF={redoF} />
+          <div className={classes.verticalRule} />
           <SaveGetFromDisk />
           <div className={classes.verticalRule} />
           <SaveToServer saveToServerF={saveToServerF} />

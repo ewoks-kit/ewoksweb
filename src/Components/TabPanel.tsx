@@ -60,7 +60,6 @@ export default function BasicTabs() {
 
   return (
     <Box sx={{ width: '100%' }}>
-      Under Construction
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
@@ -70,7 +69,7 @@ export default function BasicTabs() {
           <Tab label="Workflows" {...a11yProps(0)} />
           <Tab label="Tasks" {...a11yProps(1)} />
           <Tab label="Icons" {...a11yProps(2)} />
-          <Tab label="Settings" {...a11yProps(3)} />
+          {/* <Tab label="Settings" {...a11yProps(3)} /> */}
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -82,9 +81,9 @@ export default function BasicTabs() {
       <TabPanel value={value} index={2}>
         <ManageIcons />
       </TabPanel>
-      <TabPanel value={value} index={3}>
+      {/* <TabPanel value={value} index={3}>
         Settings
-      </TabPanel>
+      </TabPanel> */}
     </Box>
   );
 }

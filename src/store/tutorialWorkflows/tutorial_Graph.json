@@ -1,0 +1,915 @@
+{
+  "links": [
+    {
+      "source": "taskSkeleton_8",
+      "target": "taskSkeleton_7",
+      "data_mapping": [],
+      "conditions": [],
+      "on_error": false,
+      "sub_target": "",
+      "sub_source": "",
+      "map_all_data": false,
+      "uiProps": {
+        "label": "",
+        "comment": "",
+        "type": "getAround",
+        "markerEnd": {
+          "type": "arrowclosed"
+        },
+        "labelBgStyle": {
+          "fill": "rgb(223, 226, 247)",
+          "fillOpacity": 1,
+          "strokeWidth": 3,
+          "stroke": "#96a5f9"
+        },
+        "labelStyle": {
+          "color": "#96a5f9",
+          "fill": "#96a5f9",
+          "fontWeight": 500,
+          "fontSize": 14
+        },
+        "style": {
+          "stroke": "#96a5f9",
+          "strokeWidth": "3"
+        },
+        "animated": false,
+        "sourceHandle": "sr",
+        "targetHandle": "tl"
+      }
+    },
+    {
+      "source": "taskSkeleton_7",
+      "target": "taskSkeleton_9",
+      "data_mapping": [],
+      "conditions": [],
+      "on_error": false,
+      "sub_target": "",
+      "sub_source": "",
+      "map_all_data": false,
+      "uiProps": {
+        "label": "",
+        "comment": "",
+        "type": "getAround",
+        "markerEnd": {
+          "type": "arrowclosed"
+        },
+        "labelBgStyle": {
+          "fill": "rgb(223, 226, 247)",
+          "fillOpacity": 1,
+          "strokeWidth": 3,
+          "stroke": "#96a5f9"
+        },
+        "labelStyle": {
+          "color": "#96a5f9",
+          "fill": "#96a5f9",
+          "fontWeight": 500,
+          "fontSize": 14
+        },
+        "style": {
+          "stroke": "#96a5f9",
+          "strokeWidth": "3"
+        },
+        "animated": false,
+        "sourceHandle": "sr",
+        "targetHandle": "tl"
+      }
+    },
+    {
+      "source": "taskSkeleton_1",
+      "target": "taskSkeleton_5",
+      "data_mapping": [],
+      "conditions": [],
+      "on_error": false,
+      "sub_target": "",
+      "sub_source": "",
+      "map_all_data": false,
+      "uiProps": {
+        "label": "and",
+        "comment": "",
+        "type": "default",
+        "markerEnd": {
+          "type": "arrowclosed"
+        },
+        "labelBgStyle": {
+          "fill": "rgb(223, 226, 247)",
+          "fillOpacity": 1,
+          "strokeWidth": 3,
+          "stroke": "#96a5f9"
+        },
+        "labelStyle": {
+          "color": "#96a5f9",
+          "fill": "#96a5f9",
+          "fontWeight": 500,
+          "fontSize": 14
+        },
+        "style": {
+          "stroke": "#96a5f9",
+          "strokeWidth": "3"
+        },
+        "animated": false,
+        "sourceHandle": "sr",
+        "targetHandle": "tl"
+      }
+    },
+    {
+      "source": "taskSkeleton_1",
+      "target": "taskSkeleton_13",
+      "data_mapping": [],
+      "conditions": [],
+      "on_error": false,
+      "sub_target": "",
+      "sub_source": "",
+      "map_all_data": false,
+      "uiProps": {
+        "label": "when ready",
+        "comment": "",
+        "type": "default",
+        "markerEnd": {
+          "type": "arrowclosed"
+        },
+        "labelBgStyle": {
+          "fill": "rgb(223, 226, 247)",
+          "fillOpacity": 1,
+          "strokeWidth": 3,
+          "stroke": "#96a5f9"
+        },
+        "labelStyle": {
+          "color": "#96a5f9",
+          "fill": "#96a5f9",
+          "fontWeight": 500,
+          "fontSize": 14
+        },
+        "style": {
+          "stroke": "#96a5f9",
+          "strokeWidth": "3"
+        },
+        "animated": false,
+        "sourceHandle": "sr",
+        "targetHandle": "tl"
+      }
+    },
+    {
+      "source": "taskSkeleton_15",
+      "target": "taskSkeleton_17",
+      "data_mapping": [],
+      "conditions": [
+        {
+          "source_output": "haveTasks",
+          "value": true
+        }
+      ],
+      "on_error": false,
+      "sub_target": "",
+      "sub_source": "",
+      "map_all_data": false,
+      "uiProps": {
+        "label": "if you do",
+        "comment": "",
+        "type": "default",
+        "markerEnd": {
+          "type": "arrowclosed"
+        },
+        "labelBgStyle": {
+          "fill": "rgb(223, 226, 247)",
+          "fillOpacity": 1,
+          "strokeWidth": 3,
+          "stroke": "#96a5f9"
+        },
+        "labelStyle": {
+          "color": "#96a5f9",
+          "fill": "#96a5f9",
+          "fontWeight": 500,
+          "fontSize": 14
+        },
+        "style": {
+          "stroke": "#96a5f9",
+          "strokeWidth": "3"
+        },
+        "animated": false,
+        "sourceHandle": "sr",
+        "targetHandle": "tl"
+      }
+    },
+    {
+      "source": "taskSkeleton_15",
+      "target": "taskSkeleton_18",
+      "data_mapping": [],
+      "conditions": [],
+      "on_error": false,
+      "sub_target": "",
+      "sub_source": "",
+      "map_all_data": false,
+      "uiProps": {
+        "label": "to Ewoks tasks",
+        "comment": "",
+        "type": "default",
+        "markerEnd": {
+          "type": "arrowclosed"
+        },
+        "labelBgStyle": {
+          "fill": "rgb(223, 226, 247)",
+          "fillOpacity": 1,
+          "strokeWidth": 3,
+          "stroke": "#96a5f9"
+        },
+        "labelStyle": {
+          "color": "#96a5f9",
+          "fill": "#96a5f9",
+          "fontWeight": 500,
+          "fontSize": 14
+        },
+        "style": {
+          "stroke": "#96a5f9",
+          "strokeWidth": "3"
+        },
+        "animated": false,
+        "sourceHandle": "sr",
+        "targetHandle": "tl"
+      }
+    },
+    {
+      "source": "taskSkeleton_15",
+      "target": "taskSkeleton_16",
+      "data_mapping": [],
+      "conditions": [
+        {
+          "source_output": "haveTasks",
+          "value": false
+        }
+      ],
+      "on_error": false,
+      "sub_target": "",
+      "sub_source": "",
+      "map_all_data": false,
+      "uiProps": {
+        "label": "if you dont (click me and see my conditions)",
+        "comment": "You can see in my conditions that a bool condition exists",
+        "type": "default",
+        "markerEnd": {
+          "type": "arrowclosed"
+        },
+        "labelBgStyle": {
+          "fill": "rgb(223, 226, 247)",
+          "fillOpacity": 1,
+          "strokeWidth": 3,
+          "stroke": "#96a5f9"
+        },
+        "labelStyle": {
+          "color": "#96a5f9",
+          "fill": "#96a5f9",
+          "fontWeight": 500,
+          "fontSize": 14
+        },
+        "style": {
+          "stroke": "#96a5f9",
+          "strokeWidth": "3"
+        },
+        "animated": false,
+        "sourceHandle": "sr",
+        "targetHandle": "tl"
+      }
+    },
+    {
+      "source": "taskSkeleton_0",
+      "target": "taskSkeleton_4",
+      "data_mapping": [],
+      "conditions": [],
+      "on_error": false,
+      "sub_target": "",
+      "sub_source": "",
+      "map_all_data": false,
+      "uiProps": {
+        "label": "then...",
+        "comment": "",
+        "type": "default",
+        "markerEnd": {
+          "type": ""
+        },
+        "labelBgStyle": {
+          "fill": "rgb(223, 226, 247)",
+          "fillOpacity": 1,
+          "strokeWidth": 3,
+          "stroke": "#96a5f9"
+        },
+        "labelStyle": {
+          "color": "#96a5f9",
+          "fill": "#96a5f9",
+          "fontWeight": 500,
+          "fontSize": 14
+        },
+        "style": {
+          "stroke": "#96a5f9",
+          "strokeWidth": "3"
+        },
+        "animated": false,
+        "sourceHandle": "sr",
+        "targetHandle": "tl"
+      }
+    },
+    {
+      "source": "taskSkeleton_4",
+      "target": "taskSkeleton_6",
+      "data_mapping": [],
+      "conditions": [],
+      "on_error": false,
+      "sub_target": "",
+      "sub_source": "",
+      "map_all_data": false,
+      "uiProps": {
+        "label": "ready to",
+        "comment": "",
+        "type": "default",
+        "labelBgStyle": {
+          "fill": "rgb(223, 226, 247)",
+          "fillOpacity": 1,
+          "strokeWidth": 3,
+          "stroke": "#96a5f9"
+        },
+        "labelStyle": {
+          "color": "#96a5f9",
+          "fill": "#96a5f9",
+          "fontWeight": 500,
+          "fontSize": 14
+        },
+        "style": {
+          "stroke": "#96a5f9",
+          "strokeWidth": "3"
+        },
+        "animated": false,
+        "sourceHandle": "sr",
+        "targetHandle": "tl"
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "taskSkeleton_4",
+      "label": "give a name and start drawing",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 204,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "",
+        "position": {
+          "x": 390,
+          "y": -885
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_3",
+      "label": "See the MAP of your graph below",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 216,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "",
+        "position": {
+          "x": 899.9999999999999,
+          "y": -315
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_8",
+      "label": "Press \"Add Nodes\" to drag-and-drop existing TASKS as NODES in your graph",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 242,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "",
+        "position": {
+          "x": -615,
+          "y": -1065
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_9",
+      "label": "Style NODES and LINKS",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 177,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "",
+        "position": {
+          "x": -600,
+          "y": -705
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_12",
+      "label": "LOAD and SAVE to your PC",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 120,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "",
+        "position": {
+          "x": 390,
+          "y": -1080
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_1",
+      "label": "Click in the dropdown above to select an existing Workflow",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 252,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "",
+        "position": {
+          "x": 540,
+          "y": -1080
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_13",
+      "label": "Click on the Cloud-up-arrow to save the workflow to the server",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 208,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "",
+        "position": {
+          "x": 870,
+          "y": -885
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_5",
+      "label": "Click on the Cloud-down-arrow to open it from the server",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 222,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "",
+        "position": {
+          "x": 900,
+          "y": -1035
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_7",
+      "label": "Inspect and EDIT details for the GRAPH, NODES and LINKS",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 226,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "",
+        "position": {
+          "x": -600,
+          "y": -870
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_0",
+      "label": "Press NEW above to start building your workflow",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 209,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "",
+        "position": {
+          "x": 59.999999999999986,
+          "y": -1080
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_6",
+      "label": "..doubleClick me to see HOW TO DRAW",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 186,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "",
+        "position": {
+          "x": 690,
+          "y": -735
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_10",
+      "label": "Hover over the buttons above to see their functionality",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 183,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "From the left you can see: the NEW for starting a new graph, the OPEN for opening an existing Graph, the UNDO-REDO buttons for changes in graph designing, the LOAD and SAVE to disk, the SAVE to server, the dropdown of all WORKFLOWS, the OPEN FROM SERVER for the selected workflow, the ADD WORKFLOW AS SUBGRAPH for inserting a graph into the existing, the EXECUTE workflow for running the current workflow",
+        "position": {
+          "x": -210,
+          "y": -1080
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_2",
+      "label": "FIT VIEW and ZOOM IN-OUT by scrolling or with the buttons on the left",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 206,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "Use mouse scrolling for ZOOM IN-OUT or the first two buttons on the left. The third button fits the whole graph into view and the last locks the graph so as no node can be dragged",
+        "position": {
+          "x": -585,
+          "y": -240
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_14",
+      "label": "Hover over each node to see its COMMENT",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 166,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "This comment is useful for keeping several information for the node and can be seen and edited on the left-side toolbar when you click on a Node, Link or on the canvas for the Graph",
+        "position": {
+          "x": -225,
+          "y": -840
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_19",
+      "label": "taskSkeleton",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 120,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "",
+        "position": {
+          "x": 630,
+          "y": -435
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_15",
+      "label": "You need to have your Tasks on the server",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 187,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "",
+        "position": {
+          "x": -390,
+          "y": -510
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_17",
+      "label": " start dragging them to canvas to create a graph",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 180,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "",
+        "position": {
+          "x": 29.999999999999993,
+          "y": -510
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_18",
+      "label": "DoubleClick me to see important existing Tasks within Ewoks",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 218,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "",
+        "position": {
+          "x": -45,
+          "y": -345
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_11",
+      "label": "Press OPEN to see, manage and select your worflows and their categories",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 209,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "",
+        "position": {
+          "x": 60,
+          "y": -915
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    },
+    {
+      "id": "taskSkeleton_16",
+      "label": "doubleClick to see how to add your Tasks",
+      "task_type": "ppfmethod",
+      "task_identifier": "taskSkeleton",
+      "inputs_complete": false,
+      "task_generator": "",
+      "default_error_node": false,
+      "default_error_attributes": {
+        "data_mapping": [],
+        "map_all_data": true
+      },
+      "default_inputs": [],
+      "uiProps": {
+        "nodeWidth": 217,
+        "type": "internal",
+        "icon": "orange1",
+        "comment": "",
+        "position": {
+          "x": -45,
+          "y": -675
+        },
+        "moreHandles": false,
+        "withImage": true,
+        "withLabel": true,
+        "colorBorder": ""
+      }
+    }
+  ],
+  "graph": {
+    "id": "tutorial_Graph",
+    "label": "tutorial_Graph",
+    "input_nodes": [],
+    "output_nodes": [],
+    "uiProps": {
+      "notes": []
+    }
+  }
+}

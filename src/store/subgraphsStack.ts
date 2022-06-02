@@ -3,8 +3,8 @@ import type { stackGraph } from '../types';
 const subgraphsStack = (set, get) => ({
   subgraphsStack: [
     {
-      id: 'newGraph',
-      label: 'newGraph',
+      id: 'tutorial_Graph',
+      label: 'tutorial_Graph',
     },
   ] as stackGraph[],
 

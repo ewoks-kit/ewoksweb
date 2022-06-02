@@ -9,6 +9,7 @@ import selectedTask from './selectedTask';
 import workingGraph from './workingGraph';
 import graphRF from './graphRF';
 import allWorkflows from './allWorkflows';
+import allCategories from './allCategories';
 import allIconNames from './allIconNames';
 import allIcons from './allIcons';
 import executingEvents from './executingEvents';
@@ -45,10 +46,23 @@ const initializedGraph = {
   links: [],
 } as GraphRF;
 
+const tutorial_Graph = {
+  graph: {
+    id: 'tutorial_Graph',
+    label: 'tutorial_Graph',
+    input_nodes: [],
+    output_nodes: [],
+    uiProps: {},
+  },
+  nodes: [],
+  links: [],
+} as GraphRF;
+
 const state = create<State>((set, get) => ({
   ...allIconNames(set),
   ...allIcons(set),
   ...allWorkflows(set),
+  ...allCategories(set),
   ...currentExecutionEvent(set),
   ...executingEvents(set, get),
   ...gettingFromServer(set),
@@ -69,6 +83,7 @@ const state = create<State>((set, get) => ({
   ...workingGraph(set, get),
   initializedTask,
   initializedGraph,
+  tutorial_Graph,
 }));
 
 export default state;

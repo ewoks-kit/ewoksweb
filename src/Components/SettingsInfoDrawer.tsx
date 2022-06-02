@@ -16,7 +16,6 @@ export default function SettingsInfoDrawer(props) {
   });
 
   useEffect(() => {
-    // console.log(props.openSettings, props.openInfo, props.openDrawers);
     setState({
       top: props.openDrawers && props.openSettings,
       left: false,
@@ -25,10 +24,22 @@ export default function SettingsInfoDrawer(props) {
     });
   }, [props.openSettings, props.openInfo, props.openDrawers]);
 
+  // useEffect(() => {
+  //   toggleDrawer('top', true);
+  //   // setState({
+  //   //   top: true,
+  //   //   left: false,
+  //   //   bottom: false,
+  //   //   right: false,
+  //   // });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
   const toggleDrawer = (anchor: Anchor, open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent
   ) => {
     if (
+      event &&
       event.type === 'keydown' &&
       ((event as React.KeyboardEvent).key === 'Tab' ||
         (event as React.KeyboardEvent).key === 'Shift')
@@ -48,7 +59,7 @@ export default function SettingsInfoDrawer(props) {
     >
       {props.openInfo ? (
         <div className="infoAccordion">
-          <EwoksUiInfo />
+          <EwoksUiInfo closeDialog={toggleDrawer('bottom', false)} />
         </div>
       ) : (
         <TabPanel />

@@ -38,6 +38,7 @@ export default function FormDialog(props) {
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setRecentGraphs = state((state) => state.setRecentGraphs);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const setGettingFromServer = state((st) => st.setGettingFromServer);
   const [element, setElement] = React.useState<Task | GraphRF>(
     {} as Task | GraphRF
   );
@@ -225,6 +226,7 @@ export default function FormDialog(props) {
 
   const handleClose = () => {
     props.setOpenSaveDialog(false);
+    setGettingFromServer(false);
     setNewName('');
   };
 
