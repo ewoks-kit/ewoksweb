@@ -26,6 +26,7 @@ import isValidLink from '../utils/IsValidLink';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import SaveIcon from '@material-ui/icons/Save';
+import { calcNewId } from '../utils/calcNewId';
 
 import state from '../store/state';
 import { IconButton, Slider, TextField } from '@material-ui/core';
@@ -55,11 +56,6 @@ const execution = () => {
   // console.log('executing');
   return true;
 };
-
-const incr = 1;
-function increment() {
-  return incr + 1;
-}
 
 // The basic Node component
 const Node: React.FC<NodeProps> = ({
@@ -165,7 +161,7 @@ const Node: React.FC<NodeProps> = ({
     const element = selectedElement as EwoksRFNode;
     const newClone = {
       ...element,
-      id: element.id + increment(),
+      id: element.id + calcNewId(selectedElement.id, graphRF.nodes),
       selected: false,
       position: {
         x: element.position.x + 100,

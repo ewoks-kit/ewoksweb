@@ -24,6 +24,7 @@ export function calcGraphInputsOutputs(graph): GraphDetails {
   return {
     id: graph.graph.id,
     label: graph.graph.label || graph.graph.id,
+    category: graph.graph.category || '',
     input_nodes,
     output_nodes,
     uiProps: graph.graph.uiProps,

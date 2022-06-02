@@ -11,6 +11,7 @@ export interface GraphNodes {
 export interface GraphDetails {
   id: string;
   label?: string;
+  category?: string;
   input_nodes?: GraphNodes[];
   output_nodes?: GraphNodes[];
   uiProps?: UiProps;
@@ -122,6 +123,9 @@ export interface State {
   allIconNames?: string[];
   setAllIconNames?: (icons: string[]) => void;
   // { name: string; svgFile?: string; file?: File }[]
+
+  allCategories?: { title: string }[];
+  setAllCategories?: (categories: { title: string }[]) => void;
 
   allWorkflows?: { title: string }[];
   setAllWorkflows?: (workflows: { title: string }[]) => void;
@@ -266,6 +270,7 @@ export interface DefaultErrorAttributes {
 export interface EwoksNode {
   id: string;
   label?: string;
+  category?: string;
   task_type?: string;
   task_identifier?: string;
   default_inputs?: Inputs[];
@@ -298,6 +303,7 @@ export interface outputsInputsSub {
 export interface EwoksRFNode {
   id?: string;
   label?: string;
+  category?: string;
   task_type?: string;
   type?: string;
   task_identifier?: string;

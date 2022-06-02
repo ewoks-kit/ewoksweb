@@ -48,7 +48,8 @@ export default function SignUp(props) {
               <Typography component="h1" variant="h5">
                 Welcome to the{' '}
                 <b style={{ color: 'rgb(63, 81, 181)' }}>Ewoks-UI</b> for
-                managing your Workflows
+                managing your Workflows. Get started with a graph where Ewoks-UI
+                describes itself
               </Typography>
               <IconButton color="inherit" onClick={props.handleCloseDialog}>
                 <Typography
@@ -57,8 +58,7 @@ export default function SignUp(props) {
                   color="primary"
                   style={{ padding: '5px' }}
                 >
-                  Get started with the tutorial_Graph where Ewoks-UI describes
-                  itself
+                  tutorial_Graph
                 </Typography>
 
                 <Fab

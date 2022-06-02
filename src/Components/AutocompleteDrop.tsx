@@ -12,6 +12,7 @@ function AutocompleteDrop(props) {
   // options[0].slice(-5) === '.json' ? options[0].slice(0, -5) : options[0]
   const [open, setOpen] = useState(false);
   const setAllWorkflows = state((state) => state.setAllWorkflows);
+  // const setAllCategories = state((state) => state.setAllCategories);
   const loading = open && options.length === 0;
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
@@ -24,7 +25,6 @@ function AutocompleteDrop(props) {
   }, [open]);
 
   const setInputValue = (newInputValue) => {
-    console.log(newInputValue);
     props.setInputValue(newInputValue);
     // setValue(newInputValue);
   };

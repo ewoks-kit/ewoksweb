@@ -5,8 +5,11 @@ import {
   AccordionSummary,
   Typography,
   Grid,
+  Fab,
+  IconButton,
 } from '@material-ui/core';
 import SignUp from '../layout/SignUp';
+import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 
 export default function EwoksUiInfo(props) {
   const infoCategories = [
@@ -68,7 +71,6 @@ error handler links. The default is <cite>{“map_all_data”: True}</cite>. The
   ];
 
   const closeDialog = () => {
-    console.log(props);
     props.closeDialog();
   };
 
@@ -85,7 +87,20 @@ error handler links. The default is <cite>{“map_all_data”: True}</cite>. The
           <SignUp handleCloseDialog={closeDialog} />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={5}>
-          <h2 style={{ color: '#3f51b5' }}>Using Ewoks-UI</h2>
+          <h2 style={{ color: '#3f51b5' }}>
+            <IconButton color="inherit">
+              <Fab
+                // className={classes.openFileButton}
+                color="primary"
+                size="small"
+                component="span"
+                aria-label="add"
+              >
+                <NotListedLocationIcon />
+              </Fab>
+            </IconButton>
+            Using Ewoks-UI
+          </h2>
           {infoCategories.map(({ summary, details }) => (
             <Accordion key={summary}>
               <AccordionSummary

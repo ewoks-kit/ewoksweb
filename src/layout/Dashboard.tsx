@@ -9,6 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import FiberNew from '@material-ui/icons/FiberNew';
+import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import Sidebar from './sidebar';
 import { ReactFlowProvider } from 'react-flow-renderer';
 
@@ -72,6 +73,10 @@ export default function Dashboard() {
   const newGraph = () => {
     setOpenSaveDialog(true);
     // setWorkingGraph(tutorial_GraphL);
+  };
+
+  const openGraph = () => {
+    handleOpenSettings();
   };
 
   const handleOpenSettings = () => {
@@ -197,7 +202,27 @@ export default function Dashboard() {
               </Fab>
             </IconButton>
           </Tooltip>
+          <Tooltip
+            title={tooltipText('Open an existing workflow')}
+            enterDelay={800}
+            arrow
+          >
+            <IconButton color="inherit" onClick={openGraph}>
+              <Fab
+                className={classes.openFileButton}
+                color="primary"
+                size="small"
+                component="span"
+                aria-label="add"
+                disabled={isExecuted}
+              >
+                <ImportContactsIcon />
+              </Fab>
+            </IconButton>
+          </Tooltip>
+          <div className={classes.verticalRule} />
           <UndoRedo undoF={undoF} redoF={redoF} />
+          <div className={classes.verticalRule} />
           <SaveGetFromDisk />
           <div className={classes.verticalRule} />
           <SaveToServer saveToServerF={saveToServerF} />

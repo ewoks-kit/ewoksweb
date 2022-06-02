@@ -27,11 +27,17 @@ export default function ManageWorkflows() {
         // justifyContent="flex-start"
         alignItems="center"
       >
-        {/* <Grid item xs={12} sm={12} md={6} lg={2}>
-              <Item style={{ backgroundColor: 'rgb(248, 248, 249)' }}>
-                Folders
-              </Item>
-            </Grid> */}
+        {/* <Grid item xs={12} sm={12} md={6} lg={3}>
+          <Item style={{ backgroundColor: 'rgb(248, 248, 249)' }}>
+            Categories
+            <FormControl
+              variant="standard"
+              style={{ width: '100%', minWidth: '260px' }}
+            >
+              <AutocompleteDrop setInputValue={setInputValue} />
+            </FormControl>
+          </Item>
+        </Grid> */}
         <Grid item xs={12} sm={12} md={6} lg={3}>
           <Item>
             <FormControl
@@ -40,11 +46,17 @@ export default function ManageWorkflows() {
             >
               <AutocompleteDrop setInputValue={setInputValue} />
             </FormControl>
+            <FormControl
+              variant="standard"
+              style={{ width: '100%', minWidth: '260px' }}
+            >
+              <AutocompleteDrop setInputValue={setInputValue} />
+            </FormControl>
           </Item>
           {/* <hr />
-              <Item>Files</Item> */}
+          <Item>Files</Item> */}
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={7}>
+        <Grid item xs={12} sm={12} md={12} lg={6}>
           <Item>
             <ReactJson
               src={workflowValue}
