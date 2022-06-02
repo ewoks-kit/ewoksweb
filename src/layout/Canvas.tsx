@@ -154,7 +154,7 @@ function Canvas() {
   const onNodesChange = useCallback(
     (changes) => {
       const node = [...graphRF.nodes].find((el) => el.id === changes[0].id);
-
+      // console.log(node);
       // TODO: nodes are updated only on rf canvas and not on graphRF
       // if we update graphRF we have a loop so we update on setSelectedElement
       // where we set every other selected to false... SOLUTION

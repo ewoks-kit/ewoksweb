@@ -87,7 +87,11 @@ export default function GetFromServer() {
         }}
         className={classes.formControl}
       >
-        <AutocompleteDrop setInputValue={setInputValue} />
+        <AutocompleteDrop
+          setInputValue={setInputValue}
+          placeholder="Workflows"
+          category=""
+        />
       </FormControl>
       <IntegratedSpinner
         // callSuccess={callSuccess}

@@ -59,6 +59,7 @@ export default function Dashboard() {
   const setSelectedElement = state((state) => state.setSelectedElement);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
+  const initializedGraph = state((state) => state.initializedGraph);
 
   const tutorial = () => {
     setWorkingGraph(tutorial_GraphL);
@@ -71,6 +72,7 @@ export default function Dashboard() {
   }, []);
 
   const newGraph = () => {
+    setGraphRF(initializedGraph);
     setOpenSaveDialog(true);
     // setWorkingGraph(tutorial_GraphL);
   };
@@ -129,7 +131,7 @@ export default function Dashboard() {
       if ('position' in selectedElement) {
         const newClone = {
           ...selectedElement,
-          id: selectedElement.id + calcNewId(selectedElement.id, graphRF.nodes),
+          id: calcNewId(selectedElement.id, graphRF.nodes),
           selected: false,
           position: {
             x: selectedElement.position.x + 100,

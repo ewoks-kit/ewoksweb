@@ -25,6 +25,7 @@ function AutocompleteDrop(props) {
   }, [open]);
 
   const setInputValue = (newInputValue) => {
+    // console.log('setInputValue', newInputValue, props);
     props.setInputValue(newInputValue);
     // setValue(newInputValue);
   };
@@ -32,6 +33,9 @@ function AutocompleteDrop(props) {
   const openDropdown = async () => {
     setOpen(true);
     let active = true;
+    // TODO: getWorkflows will fetch {label, category} not just label
+    // depending on props.placeholder will show categories of workflows
+    // after selecting a category workflows will be filtered fon this category
     const workF: { title: string }[] = await getWorkflows();
     const workFNames = workF.map((wor) => {
       return wor.title.endsWith('.json')
@@ -85,7 +89,7 @@ function AutocompleteDrop(props) {
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Workflows"
+          label={props.placeholder}
           InputProps={{
             ...params.InputProps,
             endAdornment: (

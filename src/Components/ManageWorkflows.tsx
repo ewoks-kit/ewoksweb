@@ -15,6 +15,7 @@ export default function ManageWorkflows() {
 
   const setInputValue = async (val: string) => {
     const response = await getWorkflow(val);
+    // console.log('setInputValue', val, response);
     setWorkflowValue(response.data);
   };
 
@@ -44,13 +45,21 @@ export default function ManageWorkflows() {
               variant="standard"
               style={{ width: '100%', minWidth: '260px' }}
             >
-              <AutocompleteDrop setInputValue={setInputValue} />
+              <AutocompleteDrop
+                setInputValue={setInputValue}
+                placeholder="Categories"
+                category=""
+              />
             </FormControl>
             <FormControl
               variant="standard"
               style={{ width: '100%', minWidth: '260px' }}
             >
-              <AutocompleteDrop setInputValue={setInputValue} />
+              <AutocompleteDrop
+                setInputValue={setInputValue}
+                placeholder="Workflows"
+                category=""
+              />
             </FormControl>
           </Item>
           {/* <hr />
