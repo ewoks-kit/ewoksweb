@@ -30,9 +30,10 @@ import tooltipText from '../Components/TooltipText';
 import state from '../store/state';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 import FormDialog from '../Components/FormDialog';
+import { calcNewId } from '../utils/calcNewId';
 
 import { tutorial_Graph } from '../store/tutorialWorkflows/tutorial_Graph.js';
-import type { GraphRF } from '../types';
+import type { EwoksRFNode, GraphRF } from '../types';
 
 const tutorial_GraphL = (tutorial_Graph as unknown) as GraphRF;
 const useStyles = DashboardStyle;
@@ -53,6 +54,9 @@ export default function Dashboard() {
   const isExecuted = state((state) => state.isExecuted);
   const graphRF = state((state) => state.graphRF);
   const selectedElement = state((state) => state.selectedElement);
+  const setGraphRF = state((state) => state.setGraphRF);
+  const setSelectedElement = state((state) => state.setSelectedElement);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
 
   const tutorial = () => {
@@ -96,19 +100,49 @@ export default function Dashboard() {
 
   const handleKeyDown = (event) => {
     const charCode = String.fromCharCode(event.which).toLowerCase();
-    event.preventDefault();
-    event.stopPropagation();
+
     const keys = event.ctrlKey || event.metaKey;
     if (keys && charCode === 's') {
+      event.preventDefault();
+      event.stopPropagation();
       saveToServerF.current();
     } else if (keys && charCode === 'z') {
+      event.preventDefault();
+      event.stopPropagation();
       undoF.current();
     } else if (keys && charCode === 'y') {
+      event.preventDefault();
+      event.stopPropagation();
       redoF.current();
     } else if (keys && event.shiftKey && charCode === 'n') {
+      event.preventDefault();
+      event.stopPropagation();
       newGraph();
     } else if (keys && charCode === 'v') {
-      console.log(selectedElement);
+      event.preventDefault();
+      event.stopPropagation();
+      if ('position' in selectedElement) {
+        const newClone = {
+          ...selectedElement,
+          id: selectedElement.id + calcNewId(selectedElement.id, graphRF.nodes),
+          selected: false,
+          position: {
+            x: selectedElement.position.x + 100,
+            y: selectedElement.position.y + 100,
+          },
+        };
+        setGraphRF({
+          ...graphRF,
+          nodes: [...graphRF.nodes, newClone],
+        });
+        setSelectedElement(newClone as EwoksRFNode);
+      } else {
+        setOpenSnackbar({
+          open: true,
+          text: 'Clone is for cloning nodes within the working workflow',
+          severity: 'warning',
+        });
+      }
     }
   };
 

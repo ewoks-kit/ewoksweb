@@ -11,6 +11,7 @@ import DashboardStyle from './DashboardStyle';
 import state from '../store/state';
 import type { EwoksRFNode, EwoksRFLink, GraphDetails, GraphRF } from '../types';
 import { rfToEwoks } from '../utils';
+import { calcNewId } from '../utils/calcNewId';
 import ConfirmDialog from '../Components/ConfirmDialog';
 import { deleteWorkflow, getIcon, getIcons, getOtherIcon } from '../utils/api';
 import axios from 'axios';
@@ -24,10 +25,13 @@ const useStyles = DashboardStyle;
 //   return iconsData.identifiers;
 // };
 
-const incr = 1;
-function increment() {
-  return incr + 1;
-}
+// const increment = (nodeId: string, nodes: EwoksRFNode[]) => {
+//   let id = 0;
+//   while (nodes.map((nod) => nod.id).includes(`${nodeId}_${id}`)) {
+//     id++;
+//   }
+//   return `${nodeId}_${id}`;
+// };
 
 export default function Sidebar() {
   const classes = useStyles();
@@ -268,7 +272,7 @@ export default function Sidebar() {
     if ('position' in selectedElement) {
       const newClone = {
         ...selectedElement,
-        id: selectedElement.id + increment(),
+        id: selectedElement.id + calcNewId(selectedElement.id, graphRF.nodes),
         selected: false,
         position: {
           x: selectedElement.position.x + 100,

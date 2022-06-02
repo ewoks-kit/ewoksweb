@@ -22,6 +22,7 @@ import ExecutionStepsNode from '../CustomNodes/ExecutionStepsNode';
 import DataNode from '../CustomNodes/DataNode';
 import type { GraphRF, EwoksRFNode, EwoksRFLink } from '../types';
 import state from '../store/state';
+import { calcNewId } from '../utils/calcNewId';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -259,12 +260,12 @@ function Canvas() {
       const newNode = {
         id:
           task_type === 'graphInput'
-            ? getnodesIds('In', graphRF.nodes)
+            ? calcNewId('In', graphRF.nodes)
             : task_type === 'graphOutput'
-            ? getnodesIds('Out', graphRF.nodes)
+            ? calcNewId('Out', graphRF.nodes)
             : task_type === 'note'
-            ? getnodesIds('Note', graphRF.nodes)
-            : getnodesIds(task_identifier || 'Node', graphRF.nodes),
+            ? calcNewId('Note', graphRF.nodes)
+            : calcNewId(task_identifier || 'Node', graphRF.nodes),
         label: task_identifier,
         task_type,
         task_identifier,
