@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Checkbox,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
+  Slider,
 } from '@material-ui/core';
 
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
+import type { EwoksRFLink } from '../types';
 
 const useStyles = DashboardStyle;
 
@@ -18,11 +20,14 @@ export default function EditLinkStyle(props) {
   const { element } = props;
 
   const setSelectedElement = state((state) => state.setSelectedElement);
+  const selectedElement = state((state) => state.selectedElement);
 
-  const [linkType, setLinkType] = React.useState('');
-  const [arrowType, setArrowType] = React.useState({ type: 'arrow' });
-  const [animated, setAnimated] = React.useState<boolean>(false);
-  const [colorLine, setColorLine] = React.useState<string>('');
+  const [linkType, setLinkType] = useState('');
+  const [arrowType, setArrowType] = useState({ type: 'arrow' });
+  const [animated, setAnimated] = useState<boolean>(false);
+  const [colorLine, setColorLine] = useState<string>('');
+  const [x, setX] = useState(80);
+  const [y, setY] = useState(80);
 
   useEffect(() => {
     // console.log(element);
@@ -87,6 +92,35 @@ export default function EditLinkStyle(props) {
     );
   };
 
+  const changeX = (event, number) => {
+    const elem = selectedElement as EwoksRFLink;
+    setSelectedElement({
+      ...elem,
+      data: {
+        ...elem.data,
+        getAroundProps: { ...elem.data.getAroundProps, x: number },
+      },
+    });
+    setX(number);
+  };
+
+  const changeY = (event, number) => {
+    const elem = selectedElement as EwoksRFLink;
+    setSelectedElement({
+      ...elem,
+      data: {
+        ...elem.data,
+        getAroundProps: { ...elem.data.getAroundProps, y: number },
+      },
+    });
+    setY(number);
+  };
+
+  // FOr brakpints in links MUST be nodes that will be minimal and:
+  // saved in link uiProps as a node with only position being important and type=breakpointNode
+  // the RF graph will have 2 links that will be clickable... if one changes
+  // label, comment or style what the other will do?
+  // AN SVG solution maybe better? A custom SVG link but no draggable breakpoints...
   return (
     <>
       <FormControl variant="filled" fullWidth className={classes.sidebarForm}>
@@ -146,6 +180,28 @@ export default function EditLinkStyle(props) {
           style={{ margin: '10px' }}
         />
       </div>
+      <Slider
+        color="primary"
+        defaultValue={x}
+        value={x}
+        onChange={changeX}
+        min={-200}
+        max={200}
+        style={{ width: '90%' }}
+        // aria-label="Small"
+        // valueLabelDisplay="auto"
+      />
+      <Slider
+        color="primary"
+        defaultValue={y}
+        value={y}
+        onChange={changeY}
+        min={-200}
+        max={200}
+        style={{ width: '90%' }}
+        // aria-label="Small"
+        // valueLabelDisplay="auto"
+      />
     </>
   );
 }

@@ -20,6 +20,7 @@ export function toEwoksLinks(links): EwoksLink[] {
         map_all_data,
         conditions,
         on_error,
+        getAroundProps,
       },
       type,
       markerEnd,
@@ -58,6 +59,7 @@ export function toEwoksLinks(links): EwoksLink[] {
         animated,
         sourceHandle,
         targetHandle,
+        getAroundProps,
       },
     })
   );

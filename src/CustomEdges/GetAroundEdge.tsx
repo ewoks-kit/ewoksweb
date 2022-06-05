@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 // import React from 'react';
 import { getEdgeCenter } from 'react-flow-renderer';
 
@@ -29,45 +30,27 @@ function getSmoothStepPathC({
   sourceY = 0,
   targetX = 0,
   targetY = 0,
-  borderRadius = 4,
+  // borderRadius = 4,
+  data,
   // centerY = 120,
 }) {
-  const [, _centerY, offsetX, offsetY] = getEdgeCenter({
+  const [, _centerY] = getEdgeCenter({
+    // offsetX, offsetY
     sourceX,
     sourceY,
     targetX,
     targetY,
   });
 
-  const cornerWidth = Math.min(borderRadius, Math.abs(targetX - sourceX));
-  const cornerHeight = Math.min(borderRadius, Math.abs(targetY - sourceY));
-  const cornerSize = Math.min(cornerWidth, cornerHeight, offsetX, offsetY);
+  // const cornerWidth = Math.min(borderRadius, Math.abs(targetX - sourceX));
+  // const cornerHeight = Math.min(borderRadius, Math.abs(targetY - sourceY));
+  const cornerSize = 0; // Math.min(cornerWidth, cornerHeight, offsetX, offsetY);
   const cY = _centerY;
-
-  // console.log(
-  //   'source',
-  //   sourceX,
-  //   sourceY,
-  //   'target',
-  //   targetX,
-  //   targetY,
-  //   'center',
-  //   _centerY,
-  //   offsetX,
-  //   offsetY,
-  //   'cornerWidth',
-  //   Math.min(borderRadius, Math.abs(targetX - sourceX)),
-  //   'cornerHeight',
-  //   Math.min(borderRadius, Math.abs(targetY - sourceY)),
-  //   'cornerSize',
-  //   Math.min(cornerWidth, cornerHeight, offsetX, offsetY)
-  // );
 
   let firstCornerPath = '';
   let secondCornerPath = '';
-
+  // console.log(data);
   if (sourceX <= targetX) {
-    // console.log('sourceX <= targetX', targetX);
     return `M ${sourceX},${sourceY}L ${targetX},${targetY}`;
     // firstCornerPath =
     //   sourceY <= targetY
@@ -81,19 +64,39 @@ function getSmoothStepPathC({
     // console.log('sourceX > targetX');
     firstCornerPath =
       sourceY < targetY
-        ? bottomRightCorner(sourceX + 10, cY + 20, cornerSize)
-        : topRightCorner(sourceX + 10, cY + 10, cornerSize);
+        ? bottomRightCorner(
+            sourceX + data.getAroundProps.x,
+            cY + data.getAroundProps.y,
+            cornerSize
+          )
+        : topRightCorner(sourceX + data.getAroundProps.x, cY + 120, cornerSize);
     secondCornerPath =
       sourceY < targetY
-        ? leftTopCorner(targetX - 10, cY + 20, cornerSize)
-        : leftBottomCorner(targetX - 10, cY + 50, cornerSize);
+        ? leftTopCorner(
+            targetX - data.getAroundProps.x,
+            cY + data.getAroundProps.y,
+            cornerSize
+          )
+        : leftBottomCorner(
+            targetX - data.getAroundProps.x,
+            cY + data.getAroundProps.y,
+            cornerSize
+          );
   }
 
-  if (sourceY > targetY) {
+  if (sourceY >= targetY) {
     // console.log('sourceY > targetY');
-    const cornerX = Math.min(sourceX - 10, targetX - 10);
-    const firstStop = bottomRightCorner(sourceX + 10, sourceY + 80, cornerSize);
-    const secondStop = leftBottomCorner(cornerX - 10, sourceY + 80, cornerSize);
+    const cornerX = Math.min(sourceX, targetX);
+    const firstStop = bottomRightCorner(
+      sourceX + data.getAroundProps.x,
+      sourceY + data.getAroundProps.y,
+      cornerSize
+    );
+    const secondStop = leftBottomCorner(
+      cornerX - data.getAroundProps.x,
+      sourceY + data.getAroundProps.y,
+      cornerSize
+    );
     // const thirdStop = topLeftCorner(cornerX, targetY - 5, cornerSize);
     // const fourthStop = rightTopCorner(targetX, targetY - 5, cornerSize);
 
@@ -116,25 +119,15 @@ export default function getAround({
   label,
   // arrowHeadType,
   markerEnd,
+  data,
 }) {
-  // console.log(
-  //   id,
-  //   sourceX,
-  //   sourceY,
-  //   targetX,
-  //   targetY,
-  //   sourcePosition,
-  //   targetPosition,
-  //   style,
-  //   arrowHeadType,
-  //   markerEndId
-  // );
   const edgePath = getSmoothStepPathC({
     sourceX,
     sourceY,
     // sourcePosition,
     targetX,
     targetY,
+    data,
     // targetPosition,
   });
 

@@ -192,6 +192,7 @@ function Canvas() {
   // };
 
   const onPaneClick = () => {
+    // console.log(graphRF);
     setSelectedElement(graphRF.graph);
   };
 

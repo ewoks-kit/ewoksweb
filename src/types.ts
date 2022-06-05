@@ -357,6 +357,7 @@ export interface EwoksRFLink {
     sub_target?: string;
     sub_source?: string;
     colorLine?: string;
+    getAroundProps?: { x?: number; y?: number };
   };
   labelStyle;
   labelBgStyle;

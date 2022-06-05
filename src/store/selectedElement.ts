@@ -33,7 +33,10 @@ const selectedElement = (set, get) => ({
       } else if ('source' in element) {
         tempGraph = {
           graph,
-          nodes,
+          // setting all node de-selected...
+          nodes: nodes.map((nod) => {
+            return { ...nod, selected: false };
+          }),
           links: [...links.filter((link) => link.id !== element.id), element],
         };
         if (from === 'fromSaveElement') {
