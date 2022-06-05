@@ -161,7 +161,7 @@ const Node: React.FC<NodeProps> = ({
     const element = selectedElement as EwoksRFNode;
     const newClone = {
       ...element,
-      id: element.id + calcNewId(selectedElement.id, graphRF.nodes),
+      id: calcNewId(selectedElement.id, graphRF.nodes),
       selected: false,
       position: {
         x: element.position.x + 100,

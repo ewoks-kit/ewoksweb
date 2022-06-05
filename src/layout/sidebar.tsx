@@ -272,7 +272,7 @@ export default function Sidebar() {
     if ('position' in selectedElement) {
       const newClone = {
         ...selectedElement,
-        id: selectedElement.id + calcNewId(selectedElement.id, graphRF.nodes),
+        id: calcNewId(selectedElement.id, graphRF.nodes),
         selected: false,
         position: {
           x: selectedElement.position.x + 100,
