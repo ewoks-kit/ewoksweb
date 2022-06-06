@@ -31,6 +31,7 @@ const selectedElement = (set, get) => ({
           });
         }
       } else if ('source' in element) {
+        console.log(element);
         tempGraph = {
           graph,
           // setting all node de-selected...
