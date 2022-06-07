@@ -192,7 +192,7 @@ function Canvas() {
   // };
 
   const onPaneClick = () => {
-    console.log(graphRF);
+    // console.log(graphRF);
     setSelectedElement(graphRF.graph);
   };
 
@@ -401,12 +401,12 @@ function Canvas() {
 
   const onNodeContextMenu = (event: React.MouseEvent, nodes: Node) => {
     event.preventDefault();
-    console.log(nodes);
-    // setOpenSnackbar({
-    //   open: true,
-    //   text: nodes[0].id,
-    //   severity: 'success',
-    // });
+    // console.log(nodes);
+    setOpenSnackbar({
+      open: true,
+      text: nodes.data.label || '',
+      severity: 'success',
+    });
   };
 
   const onNodeDoubleClick = (event, node) => {
@@ -433,7 +433,6 @@ function Canvas() {
     } else {
       // TODO: need doubleClick on simple nodes?
       nodeTmp.data['details'] = true;
-      console.log(nodeTmp);
       setSelectedElement({
         ...nodeTmp,
         data: { ...nodeTmp.data, details: true },

@@ -120,6 +120,7 @@ const Node: React.FC<NodeProps> = ({
   const [detailsL, setDetailsL] = React.useState(false);
 
   useEffect(() => {
+    // console.log(label, details);
     setNodeSize(nodeWidth);
     setLabelLocal(label);
     setDetailsL(details || false);
@@ -389,7 +390,7 @@ const Node: React.FC<NodeProps> = ({
               </>
             )}
           {isGraph && <span style={style.contentWrapper}>{content}</span>}
-          {selected && type !== 'graphOutput' && type !== 'graphInput' && (
+          {detailsL && type !== 'graphOutput' && type !== 'graphInput' && (
             <>
               <Slider
                 color="primary"

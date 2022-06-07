@@ -1,3 +1,5 @@
+import { red } from '@material-ui/core/colors';
+
 /* eslint-disable sonarjs/no-duplicate-string */
 export const tutorial_Graph = {
   links: [
@@ -14,6 +16,10 @@ export const tutorial_Graph = {
         label: '',
         comment: '',
         type: 'getAround',
+        markerStart: {
+          type: 'arrowclosed',
+          color: red,
+        },
         markerEnd: {
           type: 'arrowclosed',
         },
@@ -284,7 +290,7 @@ export const tutorial_Graph = {
         comment: '',
         type: 'default',
         markerEnd: {
-          type: '',
+          type: 'arrowclosed',
         },
         labelBgStyle: {
           fill: 'rgb(223, 226, 247)',

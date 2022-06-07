@@ -283,7 +283,7 @@
         "comment": "",
         "type": "default",
         "markerEnd": {
-          "type": ""
+          "type": "arrowclosed"
         },
         "labelBgStyle": {
           "fill": "rgb(223, 226, 247)",
