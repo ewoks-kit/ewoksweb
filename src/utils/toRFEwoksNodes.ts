@@ -76,6 +76,7 @@ export function toRFEwoksNodes(
             icon: existsOrValue(uiProps, 'icon', ''),
             comment: existsOrValue(uiProps, 'comment', ''),
             moreHandles: existsOrValue(uiProps, 'moreHandles', false),
+            details: existsOrValue(uiProps, 'details', false),
             executing: false,
             withImage: existsOrValue(uiProps, 'withImage', true),
             withLabel: existsOrValue(uiProps, 'withLabel', true),

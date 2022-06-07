@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Checkbox, FormControl } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Checkbox, FormControl, Slider } from '@material-ui/core';
 
 import DashboardStyle from '../layout/DashboardStyle';
 import type { EwoksRFNode } from '../types';
@@ -15,10 +15,12 @@ export default function EditNodeStyle(props) {
   const setSelectedElement = state((state) => state.setSelectedElement);
 
   // const [nodeType, setNodeType] = React.useState('');
-  const [withImage, setWithImage] = React.useState<boolean>(false);
-  const [withLabel, setWithLabel] = React.useState<boolean>(false);
-  const [colorBorder, setColorBorder] = React.useState<string>('');
-  const [moreHandles, setMoreHandles] = React.useState<boolean>(true);
+  const [withImage, setWithImage] = useState<boolean>(false);
+  const [withLabel, setWithLabel] = useState<boolean>(false);
+  const [colorBorder, setColorBorder] = useState<string>('');
+  const [moreHandles, setMoreHandles] = useState<boolean>(true);
+  const [nodeSize, setNodeSize] = useState<number>(30);
+  const selectedElement = state((state) => state.selectedElement);
 
   useEffect(() => {
     if ('position' in element) {
@@ -26,6 +28,7 @@ export default function EditNodeStyle(props) {
       setWithLabel(element.data.withLabel);
       setColorBorder(element.data.colorBorder || '');
       setMoreHandles(!!element.data.moreHandles);
+      setNodeSize(element.data.nodeWidth);
     }
   }, [element.id, element]);
 
@@ -81,11 +84,22 @@ export default function EditNodeStyle(props) {
     setSelectedElement(
       {
         ...(element as EwoksRFNode),
-        data: { ...element.data, moreHandles: event.target.checked },
+        data: {
+          ...element.data,
+          moreHandles: event.target.checked,
+        },
       },
       'fromSaveElement',
       true
     );
+  };
+
+  const changeNodeSize = (event, number) => {
+    setSelectedElement({
+      ...selectedElement,
+      data: { ...selectedElement.data, nodeWidth: number },
+    });
+    setNodeSize(number);
   };
 
   return (
@@ -146,6 +160,17 @@ export default function EditNodeStyle(props) {
           style={{ margin: '10px' }}
         />
       </div>
+      <Slider
+        color="primary"
+        defaultValue={nodeSize}
+        value={nodeSize}
+        onChange={changeNodeSize}
+        min={40}
+        max={300}
+        style={{ width: '90%' }}
+        // aria-label="Small"
+        // valueLabelDisplay="auto"
+      />
     </FormControl>
   );
 }

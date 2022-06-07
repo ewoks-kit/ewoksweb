@@ -73,6 +73,7 @@ const Node: React.FC<NodeProps> = ({
   comment,
   executing,
   nodeWidth,
+  details,
 }: NodeProps) => {
   const theCom = comment ? (
     <span
@@ -116,11 +117,13 @@ const Node: React.FC<NodeProps> = ({
   const [edit, setEdit] = React.useState(false);
   const [labelLocal, setLabelLocal] = React.useState(label);
   const setGraphRF = state((state) => state.setGraphRF);
+  const [detailsL, setDetailsL] = React.useState(false);
 
   useEffect(() => {
     setNodeSize(nodeWidth);
     setLabelLocal(label);
-  }, [nodeWidth, label]);
+    setDetailsL(details || false);
+  }, [nodeWidth, label, details, detailsL]);
 
   const displayNode = {
     textAlign: 'center' as const,

@@ -18,11 +18,13 @@ const selectedElement = (set, get) => ({
           graph,
           nodes: [
             ...allOtherNodes.map((nod) => {
-              return { ...nod, selected: false };
+              return { ...nod, selected: false, details: false };
             }),
             element,
           ],
-          links,
+          links: links.map((link) => {
+            return { ...link, selected: false };
+          }),
         };
         if (from === 'fromSaveElement') {
           prevState.setUndoRedo({
@@ -49,8 +51,12 @@ const selectedElement = (set, get) => ({
       } else {
         tempGraph = {
           graph: element,
-          nodes,
-          links,
+          nodes: nodes.map((nod) => {
+            return { ...nod, selected: false };
+          }),
+          links: links.map((link) => {
+            return { ...link, selected: false };
+          }),
         };
 
         if (from === 'fromSaveElement') {
