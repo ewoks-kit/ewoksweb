@@ -12,11 +12,20 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function ManageWorkflows() {
   const [workflowValue, setWorkflowValue] = React.useState({});
+  const [categoryValue, setCategoryValue] = React.useState('');
 
-  const setInputValue = async (val: string) => {
-    const response = await getWorkflow(val);
-    // console.log('setInputValue', val, response);
-    setWorkflowValue(response.data);
+  const setInputWorkflowValue = async (val: string) => {
+    if (val) {
+      const response = await getWorkflow(val);
+      // console.log('setInputWorkflowValue', val, response);
+      setWorkflowValue(response.data);
+    }
+  };
+
+  const setInputCategoryValue = async (val: string) => {
+    // filter according to the selected category
+    setCategoryValue(val);
+    console.log(categoryValue, val);
   };
 
   return (
@@ -35,7 +44,7 @@ export default function ManageWorkflows() {
               variant="standard"
               style={{ width: '100%', minWidth: '260px' }}
             >
-              <AutocompleteDrop setInputValue={setInputValue} />
+              <AutocompleteDrop setInputWorkflowValue={setInputWorkflowValue} />
             </FormControl>
           </Item>
         </Grid> */}
@@ -46,9 +55,9 @@ export default function ManageWorkflows() {
               style={{ width: '100%', minWidth: '260px' }}
             >
               <AutocompleteDrop
-                setInputValue={setInputValue}
+                setInputValue={setInputCategoryValue}
                 placeholder="Categories"
-                category=""
+                category={categoryValue}
               />
             </FormControl>
             <FormControl
@@ -56,9 +65,9 @@ export default function ManageWorkflows() {
               style={{ width: '100%', minWidth: '260px' }}
             >
               <AutocompleteDrop
-                setInputValue={setInputValue}
+                setInputValue={setInputWorkflowValue}
                 placeholder="Workflows"
-                category=""
+                category={categoryValue}
               />
             </FormControl>
           </Item>

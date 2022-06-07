@@ -127,8 +127,18 @@ export interface State {
   allCategories?: { title: string }[];
   setAllCategories?: (categories: { title: string }[]) => void;
 
-  allWorkflows?: { title: string }[];
-  setAllWorkflows?: (workflows: { title: string }[]) => void;
+  allWorkflows?: {
+    id?: string;
+    label?: string;
+    category?: string;
+  }[];
+  setAllWorkflows?: (
+    workflows: {
+      id?: string;
+      label?: string;
+      category?: string;
+    }[]
+  ) => void;
 
   recentGraphs?: GraphRF[];
   setRecentGraphs?: (graphRF: GraphRF, reset?: boolean) => void;

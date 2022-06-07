@@ -29,7 +29,7 @@ export function putTask(task: Task) {
 // -------------Workflows
 // Get /workflows
 export function getWorkflowDescription() {
-  return axiosRequest.get(`/workflows`);
+  return axiosRequest.get(`/workflows/descriptions`);
 }
 
 // Get workflow:id
