@@ -16,13 +16,10 @@ const selectedElement = (set, get) => ({
         const allOtherNodes = nodes.filter((nod) => nod.id !== element.id);
         tempGraph = {
           graph,
-          nodes: [
-            ...allOtherNodes.map((nod) => {
-              return { ...nod, selected: false };
-            }),
-            element,
-          ],
-          links,
+          nodes: [...initializeNodes(allOtherNodes), element],
+          links: links.map((link) => {
+            return { ...link, selected: false };
+          }),
         };
         if (from === 'fromSaveElement') {
           prevState.setUndoRedo({
@@ -31,12 +28,11 @@ const selectedElement = (set, get) => ({
           });
         }
       } else if ('source' in element) {
+        // console.log(element);
         tempGraph = {
           graph,
           // setting all node de-selected...
-          nodes: nodes.map((nod) => {
-            return { ...nod, selected: false };
-          }),
+          nodes: initializeNodes(nodes),
           links: [...links.filter((link) => link.id !== element.id), element],
         };
         if (from === 'fromSaveElement') {
@@ -48,8 +44,10 @@ const selectedElement = (set, get) => ({
       } else {
         tempGraph = {
           graph: element,
-          nodes,
-          links,
+          nodes: initializeNodes(nodes),
+          links: links.map((link) => {
+            return { ...link, selected: false };
+          }),
         };
 
         if (from === 'fromSaveElement') {
@@ -73,5 +71,15 @@ const selectedElement = (set, get) => ({
     }
   },
 });
+
+function initializeNodes(nodes) {
+  return nodes.map((nod) => {
+    return {
+      ...nod,
+      selected: false,
+      data: { ...nod.data, details: false },
+    };
+  });
+}
 
 export default selectedElement;

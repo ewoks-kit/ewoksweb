@@ -34,6 +34,7 @@ export default function EditLinkStyle(props) {
     if ('source' in element) {
       setLinkType(element.type);
       setArrowType(element.markerEnd);
+      // setArrowType(element.markerStart);
       setAnimated(element.animated);
       setColorLine(element.style.stroke);
     }
@@ -180,28 +181,37 @@ export default function EditLinkStyle(props) {
           style={{ margin: '10px' }}
         />
       </div>
-      <Slider
-        color="primary"
-        defaultValue={x}
-        value={x}
-        onChange={changeX}
-        min={-200}
-        max={200}
-        style={{ width: '90%' }}
-        // aria-label="Small"
-        // valueLabelDisplay="auto"
-      />
-      <Slider
-        color="primary"
-        defaultValue={y}
-        value={y}
-        onChange={changeY}
-        min={-200}
-        max={200}
-        style={{ width: '90%' }}
-        // aria-label="Small"
-        // valueLabelDisplay="auto"
-      />
+      {linkType === 'getAround' && (
+        <div>
+          Size of Link
+          <div>X</div>
+          <Slider
+            id="slideX"
+            color="primary"
+            defaultValue={x}
+            value={x}
+            onChange={changeX}
+            min={-200}
+            max={200}
+            style={{ width: '90%' }}
+            // aria-label="Small"
+            // valueLabelDisplay="auto"
+          />
+          <div>Y</div>
+          <Slider
+            id="slideY"
+            color="primary"
+            defaultValue={y}
+            value={y}
+            onChange={changeY}
+            min={-200}
+            max={200}
+            style={{ width: '90%' }}
+            // aria-label="Small"
+            // valueLabelDisplay="auto"
+          />
+        </div>
+      )}
     </>
   );
 }

@@ -4,7 +4,7 @@ import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
 
 function DataNode(args) {
-  // // console.log(args);
+  // console.log(args);
   return (
     <Node
       isGraph={false}
@@ -15,6 +15,7 @@ function DataNode(args) {
       image={args.data.icon}
       comment={args.data.comment}
       moreHandles={args.data.moreHandles}
+      details={args.data.details}
       withImage={'withImage' in args.data ? args.data.withImage : true}
       nodeWidth={'nodeWidth' in args.data ? args.data.nodeWidth : 120}
       withLabel={'withLabel' in args.data ? args.data.withLabel : true}

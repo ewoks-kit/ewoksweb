@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Checkbox, FormControl } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Checkbox, FormControl, Slider } from '@material-ui/core';
 
 import DashboardStyle from '../layout/DashboardStyle';
 import type { EwoksRFNode } from '../types';
@@ -15,10 +15,12 @@ export default function EditNodeStyle(props) {
   const setSelectedElement = state((state) => state.setSelectedElement);
 
   // const [nodeType, setNodeType] = React.useState('');
-  const [withImage, setWithImage] = React.useState<boolean>(false);
-  const [withLabel, setWithLabel] = React.useState<boolean>(false);
-  const [colorBorder, setColorBorder] = React.useState<string>('');
-  const [moreHandles, setMoreHandles] = React.useState<boolean>(true);
+  const [withImage, setWithImage] = useState<boolean>(false);
+  const [withLabel, setWithLabel] = useState<boolean>(false);
+  const [colorBorder, setColorBorder] = useState<string>('');
+  const [moreHandles, setMoreHandles] = useState<boolean>(true);
+  const [nodeSize, setNodeSize] = useState<number>(30);
+  const selectedElement = state((state) => state.selectedElement);
 
   useEffect(() => {
     if ('position' in element) {
@@ -26,6 +28,7 @@ export default function EditNodeStyle(props) {
       setWithLabel(element.data.withLabel);
       setColorBorder(element.data.colorBorder || '');
       setMoreHandles(!!element.data.moreHandles);
+      setNodeSize(element.data.nodeWidth);
     }
   }, [element.id, element]);
 
@@ -81,11 +84,22 @@ export default function EditNodeStyle(props) {
     setSelectedElement(
       {
         ...(element as EwoksRFNode),
-        data: { ...element.data, moreHandles: event.target.checked },
+        data: {
+          ...element.data,
+          moreHandles: event.target.checked,
+        },
       },
       'fromSaveElement',
       true
     );
+  };
+
+  const changeNodeSize = (event, number) => {
+    setSelectedElement({
+      ...selectedElement,
+      data: { ...selectedElement.data, nodeWidth: number },
+    });
+    setNodeSize(number);
   };
 
   return (
@@ -103,6 +117,22 @@ export default function EditNodeStyle(props) {
           </MenuItem>
         ))}
       </Select> */}
+      <div>
+        <label htmlFor="withImage">With Image</label>
+        <Checkbox
+          name="withImage"
+          checked={withImage === undefined ? true : !!withImage}
+          onChange={withImageChanged}
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
+        <label htmlFor="withLabel">With Label</label>
+        <Checkbox
+          name="withLabel"
+          checked={withLabel === undefined ? true : !!withLabel}
+          onChange={withLabelChanged}
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
+      </div>
       {!['graphInput', 'graphOutput'].includes(element.task_type) && (
         <div>
           <div>
@@ -117,24 +147,6 @@ export default function EditNodeStyle(props) {
         </div>
       )}
       <div>
-        <label htmlFor="withImage">With Image</label>
-        <Checkbox
-          name="withImage"
-          checked={withImage === undefined ? true : !!withImage}
-          onChange={withImageChanged}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-      </div>
-      <div>
-        <label htmlFor="withLabel">With Label</label>
-        <Checkbox
-          name="withLabel"
-          checked={withLabel === undefined ? true : !!withLabel}
-          onChange={withLabelChanged}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-      </div>
-      <div>
         <label htmlFor="head">Color</label>
         <input
           aria-label="Color"
@@ -144,6 +156,21 @@ export default function EditNodeStyle(props) {
           value={colorBorder}
           onChange={colorBorderChanged}
           style={{ margin: '10px' }}
+        />
+      </div>
+      <div>
+        <label htmlFor="nodeSize">Node Size</label>
+        <Slider
+          id="nodeSize"
+          color="primary"
+          defaultValue={nodeSize}
+          value={nodeSize}
+          onChange={changeNodeSize}
+          min={40}
+          max={300}
+          style={{ width: '90%' }}
+          // aria-label="Small"
+          // valueLabelDisplay="auto"
         />
       </div>
     </FormControl>

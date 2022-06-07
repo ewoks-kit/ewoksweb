@@ -179,6 +179,7 @@ export interface NodeProps {
   image?: string;
   comment?: string;
   executing?: boolean;
+  details?: boolean;
 }
 
 export interface Task {
@@ -325,6 +326,7 @@ export interface EwoksRFNode {
     icon?: string;
     comment?: string;
     moreHandles?: boolean;
+    details?: boolean;
     withImage?: boolean;
     withLabel?: boolean;
     colorBorder?: string;

@@ -399,15 +399,15 @@ function Canvas() {
     });
   };
 
-  // const onNodeContextMenu = (event: React.MouseEvent, nodes: Node) => {
-  //   event.preventDefault();
-  //   // console.log(nodes);
-  //   setOpenSnackbar({
-  //     open: true,
-  //     text: nodes[0].id,
-  //     severity: 'success',
-  //   });
-  // };
+  const onNodeContextMenu = (event: React.MouseEvent, nodes: Node) => {
+    event.preventDefault();
+    // console.log(nodes);
+    setOpenSnackbar({
+      open: true,
+      text: nodes.data.label || '',
+      severity: 'success',
+    });
+  };
 
   const onNodeDoubleClick = (event, node) => {
     event.preventDefault();
@@ -432,6 +432,11 @@ function Canvas() {
       }
     } else {
       // TODO: need doubleClick on simple nodes?
+      nodeTmp.data['details'] = true;
+      setSelectedElement({
+        ...nodeTmp,
+        data: { ...nodeTmp.data, details: true },
+      } as EwoksRFNode);
     }
   };
 
@@ -564,9 +569,9 @@ function Canvas() {
           onEdgeUpdate={onEdgeUpdate}
           onDragOver={onDragOver}
           onPaneContextMenu={onPaneContextMenu}
-          // onNodeContextMenu={(evt, node) => {
-          //   onNodeContextMenu(evt, node);
-          // }}
+          onNodeContextMenu={(evt, node) => {
+            onNodeContextMenu(evt, node);
+          }}
           onNodeDoubleClick={onNodeDoubleClick}
           // onSelectionChange={onSelectionChange}
           // onNodeMouseMove={onNodeMouseMove}
