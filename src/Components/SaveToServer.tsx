@@ -27,7 +27,7 @@ export default function SaveToServer({ saveToServerF }) {
   });
 
   const workflowExists = (id) => {
-    return allWorkflows.map((flow) => flow.title).includes(id);
+    return allWorkflows.map((flow) => flow.label).includes(id);
   };
 
   const saveToServer = async () => {

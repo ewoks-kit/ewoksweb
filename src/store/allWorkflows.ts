@@ -1,7 +1,19 @@
 const allWorkflows = (set) => ({
-  allWorkflows: [] as { title: string }[],
+  allWorkflows: [] as {
+    id?: string;
+    label?: string;
+    category?: string;
+  }[],
 
-  setAllWorkflows: (workflows: [{ title: string }]) => {
+  setAllWorkflows: (
+    workflows: [
+      {
+        id?: string;
+        label?: string;
+        category?: string;
+      }
+    ]
+  ) => {
     set((state) => ({
       ...state,
       allWorkflows: workflows,
