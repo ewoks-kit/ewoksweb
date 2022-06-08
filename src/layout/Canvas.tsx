@@ -347,7 +347,7 @@ function Canvas() {
             targetTask.task_type === 'graph' ? params.targetHandle : '',
         },
         id: `${params.source}:${params.sourceHandle}->${params.target}:${params.targetHandle}`,
-        label: `${params.source.slice(0, 6)}->${params.target.slice(0, 6)}`,
+        label: '->', // `${params.source.slice(0, 6)}->${params.target.slice(0, 6)}`,
         source: params.source,
         target: params.target,
         sourceHandle: params.sourceHandle,
@@ -534,8 +534,45 @@ function Canvas() {
   //   zIndex: 10,
   // };
 
+  const handleKeyDown = (event) => {
+    const charCode = String.fromCharCode(event.which).toLowerCase();
+
+    const keys = event.ctrlKey || event.metaKey;
+    if (keys && charCode === 'v') {
+      event.preventDefault();
+      event.stopPropagation();
+      if ('position' in selectedElement) {
+        const newClone = {
+          ...selectedElement,
+          id: calcNewId(selectedElement.id, graphRF.nodes),
+          selected: false,
+          position: {
+            x: selectedElement.position.x + 100,
+            y: selectedElement.position.y + 100,
+          },
+        };
+        setGraphRF({
+          ...graphRF,
+          nodes: [...graphRF.nodes, newClone],
+        });
+        setSelectedElement(newClone as EwoksRFNode);
+      } else {
+        setOpenSnackbar({
+          open: true,
+          text: 'Clone is for cloning nodes within the working workflow',
+          severity: 'warning',
+        });
+      }
+    }
+  };
+
   return (
-    <div className={classes.root}>
+    <div
+      className={classes.root}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+    >
       <div
         className="reactflow-wrapper"
         style={{
@@ -584,9 +621,7 @@ function Canvas() {
           onNodeDragStop={onNodeDragStop}
           edgeTypes={edgeTypes}
           nodeTypes={nodeTypes}
-          // elevateEdgesOnSelect
-          // TODO: deleteKey does not work properly
-          // deleteKeyCode="Delete"
+          deleteKeyCode="Delete"
         >
           {/* <div style={buttonWrapperStyles}>
             <button type="button" onClick={updateNode}>

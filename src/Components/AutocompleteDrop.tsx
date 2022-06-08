@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/cognitive-complexity */
 import { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -9,7 +10,6 @@ import state from '../store/state';
 function AutocompleteDrop(props) {
   const [options, setOptions] = useState([]);
   const [value] = useState(options[0]);
-  // options[0].slice(-5) === '.json' ? options[0].slice(0, -5) : options[0]
   const [open, setOpen] = useState(false);
   const setAllWorkflows = state((state) => state.setAllWorkflows);
   const setAllCategories = state((state) => state.setAllCategories);
@@ -26,12 +26,13 @@ function AutocompleteDrop(props) {
   }, [open]);
 
   const setInputValue = (newInputValue) => {
-    // console.log('setInputValue', newInputValue, props);
+    console.log(newInputValue);
     props.setInputValue(newInputValue);
     // setValue(newInputValue);
   };
 
   const openDropdown = async () => {
+    console.log(props, value);
     setOpen(true);
     let active = true;
     // TODO: getWorkflows will fetch {label, category} not just label
@@ -67,7 +68,9 @@ function AutocompleteDrop(props) {
       if (active) {
         setOptions(
           props.placeholder === 'Workflows'
-            ? filterworkfToCategories([...workF])
+            ? filterworkfToCategories([...workF]).map((workf) => {
+                return { ...workf, category: workf.category || 'NoCategory' };
+              })
             : [...categories, { title: 'All' }]
         );
       }
@@ -80,10 +83,10 @@ function AutocompleteDrop(props) {
 
   const filterworkfToCategories = (workFlowDescriptions) => {
     let workflowToShow = [];
-    console.log(props.category);
+    console.log(props, props.category, workFlowDescriptions);
     if (props.category === 'All' || props.category == '') {
       workflowToShow = workFlowDescriptions;
-    } else if (props.category != '') {
+    } else {
       workflowToShow = workFlowDescriptions.filter(
         (work) => work.category === props.category
       );
@@ -103,22 +106,36 @@ function AutocompleteDrop(props) {
         setOpen(false);
       }}
       // isOptionEqualToValue={(option, value) => option.label === value.label}
-      getOptionSelected={(option) =>
-        props.placeholder === 'Categories'
+      getOptionSelected={(option) => {
+        console.log(option);
+        return props.placeholder === 'Categories'
           ? option.title || ''
-          : option.label || ''
-      }
+          : option.label || '';
+      }}
       getOptionLabel={(option) => {
         // console.log(option);
         return props.placeholder === 'Workflows'
           ? option.label || ''
           : option.title || '';
       }}
-      options={options}
+      groupBy={(option) => {
+        console.log(option);
+        return option.category;
+      }}
+      options={
+        props.placeholder === 'Workflows'
+          ? options.sort((a, b) => -b.category.localeCompare(a.category))
+          : options
+      }
       loading={loading}
       value={value}
+      onChange={(event, newValue: string | null) => {
+        console.log(newValue);
+        setInputValue(newValue);
+      }}
       onInputChange={(event, newInputValue) => {
-        setInputValue(newInputValue);
+        console.log(newInputValue);
+        // setInputValue(newInputValue);
       }}
       renderInput={(params) => (
         <TextField

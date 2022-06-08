@@ -15,7 +15,7 @@ const useStyles = DashboardStyle;
 export default function GetFromServer() {
   const classes = useStyles();
 
-  const [workflowValue, setWorkflowValue] = React.useState('');
+  const [workflowId, setWorkflowId] = React.useState('');
   const setSubGraph = state((state) => state.setSubGraph);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
@@ -29,16 +29,18 @@ export default function GetFromServer() {
     getFromServer('subgraph');
   };
 
-  const setInputValue = (val) => {
-    setWorkflowValue(val);
+  const setInputValue = (workflowDetails) => {
+    console.log(workflowDetails);
+    if (workflowDetails && workflowDetails.id)
+      setWorkflowId(workflowDetails.id || '');
   };
 
   const getFromServer = async (isSubgraph) => {
     // console.log(isSubgraph);
-    if (workflowValue) {
+    if (workflowId) {
       setGettingFromServer(true);
       try {
-        const response = await getWorkflow(workflowValue);
+        const response = await getWorkflow(workflowId);
         if (response.data) {
           setGettingFromServer(false);
           // setCallSuccess(true);

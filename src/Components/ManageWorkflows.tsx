@@ -14,18 +14,18 @@ export default function ManageWorkflows() {
   const [workflowValue, setWorkflowValue] = React.useState({});
   const [categoryValue, setCategoryValue] = React.useState('');
 
-  const setInputWorkflowValue = async (val: string) => {
-    if (val) {
-      const response = await getWorkflow(val);
+  const setInputWorkflowValue = async (workflowDetails) => {
+    if (workflowDetails) {
+      const response = await getWorkflow(workflowDetails.id);
       // console.log('setInputWorkflowValue', val, response);
       setWorkflowValue(response.data);
     }
   };
 
-  const setInputCategoryValue = async (val: string) => {
+  const setInputCategoryValue = async (workflowDetails) => {
     // filter according to the selected category
-    setCategoryValue(val);
-    console.log(categoryValue, val);
+    setCategoryValue(workflowDetails.title);
+    console.log(categoryValue, workflowDetails);
   };
 
   return (
