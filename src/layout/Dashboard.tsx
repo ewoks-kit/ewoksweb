@@ -125,31 +125,6 @@ export default function Dashboard() {
       event.preventDefault();
       event.stopPropagation();
       newGraph();
-    } else if (keys && charCode === 'v') {
-      event.preventDefault();
-      event.stopPropagation();
-      if ('position' in selectedElement) {
-        const newClone = {
-          ...selectedElement,
-          id: calcNewId(selectedElement.id, graphRF.nodes),
-          selected: false,
-          position: {
-            x: selectedElement.position.x + 100,
-            y: selectedElement.position.y + 100,
-          },
-        };
-        setGraphRF({
-          ...graphRF,
-          nodes: [...graphRF.nodes, newClone],
-        });
-        setSelectedElement(newClone as EwoksRFNode);
-      } else {
-        setOpenSnackbar({
-          open: true,
-          text: 'Clone is for cloning nodes within the working workflow',
-          severity: 'warning',
-        });
-      }
     }
   };
 
