@@ -101,7 +101,7 @@ const workingGraph = (set, get) => ({
     });
     get().setSubgraphsStack({
       id: workingGraph.graph.id,
-      label: workingGraph.graph.label,
+      label: workingGraph.graph.label || workingGraph.graph.id,
     });
     set((state) => ({
       ...state,

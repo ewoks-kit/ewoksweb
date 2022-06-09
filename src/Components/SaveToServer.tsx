@@ -7,7 +7,7 @@ import state from '../store/state';
 import configData from '../configData.json';
 import FormDialog from './FormDialog';
 import curateGraph from '../utils/curateGraph';
-import { postWorkflow, putWorkflow } from '../utils/api';
+import { getWorkflowsIds, postWorkflow, putWorkflow } from '../utils/api';
 
 // DOC: Save to server button with its spinner
 export default function SaveToServer({ saveToServerF }) {
@@ -26,20 +26,20 @@ export default function SaveToServer({ saveToServerF }) {
     saveToServerF.current = saveToServer;
   });
 
-  const workflowExists = (id) => {
-    return allWorkflows.map((flow) => flow.label).includes(id);
+  const workflowExists = (id, workflowsIds) => {
+    console.log(id, allWorkflows);
+    return workflowsIds.includes(id);
   };
 
   const saveToServer = async () => {
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     // and Nodes DataMapping before attempting to save
     const graphRFCurrated = curateGraph(graphRF);
-    // DOC: If id: "newGraph" request label update and then POST with id=label
-    // else PUT and replace existing on server
-    // TODO: following line creates issues on graph positionng examine
-
+    // DOC: search if id exists. If notExists open dialog for new name.
+    // If exists
+    const workflowsIds = await getWorkflowsIds();
     setGettingFromServer(true);
-    if (graphRF.graph.id === 'newGraph' || !workflowExists(graphRF.graph.id)) {
+    if (!workflowExists(graphRF.graph.id, workflowsIds)) {
       setOpenSaveDialog(true);
       if (!graphRF.graph.label || graphRF.graph.label === 'newGraph') {
         setGettingFromServer(false);

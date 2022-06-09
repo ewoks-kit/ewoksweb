@@ -49,7 +49,8 @@ function Upload(props) {
 
   const fileNameChanged = async (event) => {
     // // console.log(event.target.files[0], recentGraphs, graphRF, subgraphsStack);
-
+    /* eslint-disable no-console */
+    console.log(workingGraph.graph.id, graphRF.graph.id);
     if (workingGraph.graph.id === graphRF.graph.id) {
       const reader = showFile(event);
       const file = await reader.then((val) => val);
