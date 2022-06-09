@@ -68,7 +68,7 @@ export function toRFEwoksNodes(
           data: {
             label: label
               ? label
-              : uiProps.label
+              : uiProps && uiProps.label
               ? uiProps.label
               : task_identifier,
             type: nodeType,
