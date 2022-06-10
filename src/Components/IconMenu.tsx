@@ -26,9 +26,7 @@ export default function IconMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
-  const [elementToEdit, setElementToEdit] = React.useState<Task | GraphRF>(
-    {} as EwoksRFNode | GraphRF
-  );
+  const [elementToEdit, setElementToEdit] = React.useState<Task | GraphRF>({});
   const [doAction, setDoAction] = React.useState<string>('');
   const selectedElement = state<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement

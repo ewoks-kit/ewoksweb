@@ -63,7 +63,7 @@ function Upload(props) {
             // TODO validate from disk workflows but visualize them
             // const { result } = validateEwoksGraph(newGraph);
             // if (result) {
-            await setWorkingGraph(newGraph);
+            await setWorkingGraph(newGraph, 'fromDisk');
             // }
           } else {
             await setSubGraph(newGraph);

@@ -20,7 +20,10 @@ const initializedGraph = {
 const workingGraph = (set, get) => ({
   workingGraph: initializedGraph,
 
-  setWorkingGraph: async (workingGraph: GraphRF): Promise<GraphRF> => {
+  setWorkingGraph: async (
+    workingGraph: GraphRF,
+    source: string
+  ): Promise<GraphRF> => {
     // 1. if it is a new graph opening initialize
     if (get().tasks.length === 0) {
       try {
@@ -83,7 +86,10 @@ const workingGraph = (set, get) => ({
     // console.log(notes, grfNodes);
 
     const graph = {
-      graph: workingGraph.graph,
+      graph: {
+        ...workingGraph.graph,
+        uiProps: { ...workingGraph.graph.uiProps, source },
+      },
       nodes: grfNodes,
       links: toRFEwoksLinks(workingGraph, newNodeSubgraphs, get().tasks),
     };

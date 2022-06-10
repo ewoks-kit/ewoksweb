@@ -25,7 +25,6 @@ export default function ManageWorkflows() {
   const setInputCategoryValue = async (workflowDetails) => {
     // filter according to the selected category
     setCategoryValue(workflowDetails.title);
-    console.log(categoryValue, workflowDetails);
   };
 
   return (

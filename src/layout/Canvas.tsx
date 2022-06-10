@@ -330,6 +330,7 @@ function Canvas() {
       // TODO: take link out
       const link = {
         data: {
+          getAroundProps: { x: 0, y: 0 },
           on_error: false,
           comment: '',
           // node optional_input_names are link's optional_output_names

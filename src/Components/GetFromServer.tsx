@@ -30,9 +30,9 @@ export default function GetFromServer() {
   };
 
   const setInputValue = (workflowDetails) => {
-    console.log(workflowDetails);
-    if (workflowDetails && workflowDetails.id)
+    if (workflowDetails && workflowDetails.id) {
       setWorkflowId(workflowDetails.id || '');
+    }
   };
 
   const getFromServer = async (isSubgraph) => {
@@ -47,7 +47,7 @@ export default function GetFromServer() {
           if (isSubgraph === 'subgraph') {
             setSubGraph(response.data as GraphEwoks);
           } else {
-            setWorkingGraph(response.data as GraphRF);
+            setWorkingGraph(response.data as GraphRF, 'fromServer'); // TODO: from env.specific-server
           }
         } else {
           setGettingFromServer(false);
