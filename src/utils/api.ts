@@ -34,7 +34,7 @@ export function getWorkflowDescription() {
 
 // Get /workflows only id
 export function getWorkflowsIds() {
-  return axiosRequest.get(`/workflows/descriptions`);
+  return axiosRequest.get(`/workflows`);
 }
 
 // Get workflow:id

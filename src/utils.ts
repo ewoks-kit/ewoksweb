@@ -25,7 +25,6 @@ export async function getWorkflows(): Promise<
   try {
     const workflows = await getWorkflowDescription();
     if (workflows && workflows.data) {
-      console.log(workflows.data);
       const workf = workflows.data as {
         items: {
           id?: string;
@@ -38,7 +37,6 @@ export async function getWorkflows(): Promise<
       // .map((work) => {
       //   return { ...work, title: work.label };
       // });
-      console.log(res);
     }
   } catch (error) {
     if (error.response) {
@@ -130,6 +128,11 @@ export function rfToEwoks(tempGraph): GraphEwoks {
   const graph = calcGraphInputsOutputs(tempGraph);
   const noteNodes = calcNoteNodes(tempGraph);
   graph.uiProps.notes = noteNodes;
+  console.log({
+    graph,
+    nodes: toEwoksNodes(tempGraph.nodes),
+    links: toEwoksLinks(tempGraph.links),
+  });
   return {
     graph,
     nodes: toEwoksNodes(tempGraph.nodes),

@@ -31,10 +31,9 @@ import tooltipText from '../Components/TooltipText';
 import state from '../store/state';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 import FormDialog from '../Components/FormDialog';
-import { calcNewId } from '../utils/calcNewId';
 
 import { tutorial_Graph } from '../store/tutorialWorkflows/tutorial_Graph.js';
-import type { EwoksRFNode, GraphRF } from '../types';
+import type { GraphRF } from '../types';
 
 const tutorial_GraphL = (tutorial_Graph as unknown) as GraphRF;
 const useStyles = DashboardStyle;
@@ -54,15 +53,11 @@ export default function Dashboard() {
   const gettingFromServer = state((state) => state.gettingFromServer);
   const isExecuted = state((state) => state.isExecuted);
   const graphRF = state((state) => state.graphRF);
-  const selectedElement = state((state) => state.selectedElement);
-  const setGraphRF = state((state) => state.setGraphRF);
-  const setSelectedElement = state((state) => state.setSelectedElement);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
   const initializedGraph = state((state) => state.initializedGraph);
 
   const tutorial = () => {
-    setWorkingGraph(tutorial_GraphL);
+    setWorkingGraph(tutorial_GraphL, 'tutorial');
   };
 
   useEffect(() => {
@@ -72,7 +67,7 @@ export default function Dashboard() {
   }, []);
 
   const newGraph = () => {
-    setGraphRF(initializedGraph);
+    setWorkingGraph(initializedGraph, 'fromUser');
     setOpenSaveDialog(true);
     // setWorkingGraph(tutorial_GraphL);
   };

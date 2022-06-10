@@ -1,6 +1,6 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 import React, { useEffect } from 'react';
-import { Button, Tooltip } from '@material-ui/core';
+import { Button, Checkbox, Tooltip } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -17,6 +17,7 @@ import {
   postWorkflow,
   postTask,
   putTask,
+  putWorkflow,
 } from '../utils/api';
 
 export default function FormDialog(props) {
@@ -32,6 +33,8 @@ export default function FormDialog(props) {
     [] as string[]
   );
   const [outputNames, setOutputNames] = React.useState([] as string[]);
+  const [overwrite, setOverwrite] = React.useState<boolean>(false);
+
   const selectedElement = state<EwoksRFNode | EwoksRFLink>(
     (state) => state.selectedElement
   );
@@ -47,11 +50,14 @@ export default function FormDialog(props) {
 
   const { open, action, elementToEdit } = props;
 
+  const isForGraph = ['cloneGraph', 'newGraph', 'newGraphOrOverwrite'].includes(
+    action
+  );
+
   useEffect(() => {
-    // console.log(elementToEdit);
     setElement(elementToEdit);
     setIsOpen(open);
-    if (action === 'cloneGraph') {
+    if (isForGraph) {
       setNewName(elementToEdit.label);
     } else {
       setNewName(elementToEdit.task_identifier);
@@ -62,11 +68,11 @@ export default function FormDialog(props) {
       setRequiredInputNames(elementToEdit.required_input_names);
       setOutputNames(elementToEdit.output_names);
     }
-  }, [open, action, elementToEdit]);
+  }, [open, action, elementToEdit, isForGraph]);
 
   const handleSave = async () => {
     // get the selected element (graph or Node) give a new name before saving
-    if (newName !== '' && action === 'cloneGraph') {
+    if (newName !== '' && isForGraph) {
       saveGraph(element as GraphRF);
     } else if (['cloneTask', 'newTask'].includes(action)) {
       saveTask(element as Task);
@@ -128,27 +134,48 @@ export default function FormDialog(props) {
   };
 
   const saveGraph = async (graph) => {
-    try {
-      const responseNew = await postWorkflow(
-        rfToEwoks({
-          ...graph,
-          graph: { ...graph.graph, id: newName, label: newName },
-        })
-      );
-      props.setOpenSaveDialog(false);
-      setWorkingGraph(responseNew.data as GraphRF);
-      setRecentGraphs({} as GraphRF, true);
-      setOpenSnackbar({
-        open: true,
-        text: 'Graph saved succesfully!',
-        severity: 'success',
-      });
-    } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: error.response?.data?.message || configData.savingError,
-        severity: 'error',
-      });
+    if (overwrite) {
+      // put
+      try {
+        await putWorkflow(rfToEwoks(graph));
+
+        setGettingFromServer(false);
+        setOpenSnackbar({
+          open: true,
+          text: 'Graph saved succesfully!',
+          severity: 'success',
+        });
+      } catch (error) {
+        setOpenSnackbar({
+          open: true,
+          text: error.response?.data?.message || configData.savingError,
+          severity: 'error',
+        });
+      }
+    } else {
+      try {
+        const responseNew = await postWorkflow(
+          rfToEwoks({
+            ...graph,
+            graph: { ...graph.graph, id: newName, label: newName },
+          })
+        );
+        const savedGraph = responseNew.data as GraphRF;
+        props.setOpenSaveDialog(false);
+        setWorkingGraph(savedGraph, 'fromServer');
+        setRecentGraphs({} as GraphRF, true);
+        setOpenSnackbar({
+          open: true,
+          text: 'Graph saved succesfully!',
+          severity: 'success',
+        });
+      } catch (error) {
+        setOpenSnackbar({
+          open: true,
+          text: error.response?.data?.message || configData.savingError,
+          severity: 'error',
+        });
+      }
     }
   };
 
@@ -255,16 +282,24 @@ export default function FormDialog(props) {
     },
   ];
 
+  const overwriteChanged = (event) => {
+    setOverwrite(event.target.checked);
+  };
+
   return (
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>
         {action === 'editTask' ? 'Edit the ' : 'Give the new '}
-        {action === 'cloneGraph' ? 'Workflow name' : 'Task details'}
+        {isForGraph ? 'Workflow name' : 'Task details'}
+        {action === 'newGraphOrOverwrite' &&
+          ` or select to overwrite the existing with id: ${
+            elementToEdit.graph.id as string
+          }`}
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
-          The {action === 'cloneGraph' ? 'Workflow' : 'Task'} will be saved to
-          file with the name-identifier you will provide.
+          The {isForGraph ? 'Workflow' : 'Task'} will be saved to file with the
+          name-identifier you will provide.
         </DialogContentText>
         <TextField
           margin="dense"
@@ -274,9 +309,19 @@ export default function FormDialog(props) {
           variant="standard"
           value={newName}
           onChange={newNameChanged}
-          disabled={action === 'editTask'}
+          disabled={action === 'editTask' || overwrite}
         />
-        {action !== 'cloneGraph' &&
+        {action === 'newGraphOrOverwrite' && (
+          <div>
+            <b>Overwrite existing workflow with the same ID</b>
+            <Checkbox
+              checked={overwrite}
+              onChange={overwriteChanged}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </div>
+        )}
+        {!isForGraph &&
           fields.map((field) => (
             <Tooltip title={field.tip || ''} key={field.id} arrow>
               <TextField
@@ -294,7 +339,7 @@ export default function FormDialog(props) {
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
         <Button onClick={handleSave}>
-          Save {action === 'cloneGraph' ? 'Workflow' : 'Task'}
+          Save {isForGraph ? 'Workflow' : 'Task'}
         </Button>
       </DialogActions>
     </Dialog>

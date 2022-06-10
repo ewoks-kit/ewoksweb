@@ -14,7 +14,7 @@ export interface GraphDetails {
   category?: string;
   input_nodes?: GraphNodes[];
   output_nodes?: GraphNodes[];
-  uiProps?: UiProps;
+  uiProps?: UiPropsGraph;
 }
 
 export interface Graph {
@@ -166,7 +166,7 @@ export interface State {
   setSubGraph?: (graph: GraphEwoks) => Promise<GraphRF>;
 
   workingGraph?: GraphRF;
-  setWorkingGraph?: (graph: GraphRF) => Promise<GraphRF>;
+  setWorkingGraph?: (graph: GraphRF, source?: string) => Promise<GraphRF>;
 }
 
 export interface Action {
@@ -223,6 +223,39 @@ export interface stackGraph {
   label: string;
 }
 
+export interface UiPropsNodes {
+  label?: string;
+  type?: string;
+  icon?: string;
+  comment?: string;
+  position?: CanvasPosition;
+  style?: LinkStyle;
+}
+
+export interface UiPropsLinks {
+  label?: string;
+  type?: string;
+  comment?: string;
+  animated?: boolean;
+  markerEnd?: { type: string };
+  markerStart?: { type: string };
+  arrowHeadTypeanimated?: string;
+  sourceHandle?: string;
+  targetHandle?: string;
+  colorLink?: string;
+  style?: LinkStyle;
+}
+
+export interface UiPropsGraph {
+  label?: string;
+  type?: string;
+  comment?: string;
+  notes?: Note[];
+  style?: LinkStyle;
+  source: string;
+  icon?: string;
+}
+
 // TODO break to uiprops for links and nodes?
 export interface UiProps {
   label?: string;
@@ -239,6 +272,7 @@ export interface UiProps {
   notes?: Note[];
   colorLink?: string;
   style?: LinkStyle;
+  source: string;
 }
 
 export interface LinkStyle {
@@ -289,7 +323,7 @@ export interface EwoksNode {
   task_generator?: string;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes;
-  uiProps?: UiProps;
+  uiProps?: UiPropsNodes;
 }
 
 export interface EwoksLink {
@@ -303,7 +337,7 @@ export interface EwoksLink {
   sub_target?: string;
   sub_source?: string;
   startEnd?: string;
-  uiProps?: UiProps;
+  uiProps?: UiPropsLinks;
 }
 
 export interface outputsInputsSub {
@@ -350,7 +384,7 @@ export interface EwoksRFNode {
   optional_input_names?: string[];
   output_names?: string[];
   required_input_names?: string[];
-  uiProps?: UiProps;
+  uiProps?: UiPropsNodes;
 }
 
 export interface EwoksRFLink {
@@ -376,7 +410,7 @@ export interface EwoksRFLink {
   style;
   subtarget?: string;
   subsource?: string;
-  uiProps?: UiProps;
+  uiProps?: UiPropsLinks;
   type?: string;
   markerEnd?: { type: string };
   markerStart?: string;
@@ -399,7 +433,7 @@ export interface RFLink {
   };
   subtarget?: string;
   subsource?: string;
-  uiProps?: UiProps;
+  uiProps?: UiPropsLinks;
 }
 
 export interface RFNode {

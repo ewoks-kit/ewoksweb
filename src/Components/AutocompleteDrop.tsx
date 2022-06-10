@@ -13,7 +13,6 @@ function AutocompleteDrop(props) {
   const [open, setOpen] = useState(false);
   const setAllWorkflows = state((state) => state.setAllWorkflows);
   const setAllCategories = state((state) => state.setAllCategories);
-  const allCategories = state((state) => state.allCategories);
   const loading = open && options.length === 0;
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
@@ -26,13 +25,11 @@ function AutocompleteDrop(props) {
   }, [open]);
 
   const setInputValue = (newInputValue) => {
-    console.log(newInputValue);
+    // console.log(newInputValue);
     props.setInputValue(newInputValue);
-    // setValue(newInputValue);
   };
 
   const openDropdown = async () => {
-    console.log(props, value);
     setOpen(true);
     let active = true;
     // TODO: getWorkflows will fetch {label, category} not just label
@@ -62,7 +59,6 @@ function AutocompleteDrop(props) {
         .map((wo) => {
           return { title: wo.category };
         });
-      console.log(categories);
       setAllCategories([...categories, { title: 'All' }]);
       setAllWorkflows(workF);
       if (active) {
@@ -83,8 +79,11 @@ function AutocompleteDrop(props) {
 
   const filterworkfToCategories = (workFlowDescriptions) => {
     let workflowToShow = [];
-    console.log(props, props.category, workFlowDescriptions);
-    if (props.category === 'All' || props.category == '') {
+    // console.log(props, props.category, workFlowDescriptions);
+    if (
+      props.category === 'All' ||
+      ['', null, undefined].includes(props.category)
+    ) {
       workflowToShow = workFlowDescriptions;
     } else {
       workflowToShow = workFlowDescriptions.filter(
@@ -107,19 +106,16 @@ function AutocompleteDrop(props) {
       }}
       // isOptionEqualToValue={(option, value) => option.label === value.label}
       getOptionSelected={(option) => {
-        console.log(option);
         return props.placeholder === 'Categories'
           ? option.title || ''
           : option.label || '';
       }}
       getOptionLabel={(option) => {
-        // console.log(option);
         return props.placeholder === 'Workflows'
           ? option.label || ''
           : option.title || '';
       }}
       groupBy={(option) => {
-        console.log(option);
         return option.category;
       }}
       options={
@@ -130,13 +126,12 @@ function AutocompleteDrop(props) {
       loading={loading}
       value={value}
       onChange={(event, newValue: string | null) => {
-        console.log(newValue);
         setInputValue(newValue);
       }}
-      onInputChange={(event, newInputValue) => {
-        console.log(newInputValue);
-        // setInputValue(newInputValue);
-      }}
+      // onInputChange={(event, newInputValue) => {
+      //   console.log(newInputValue);
+      //   // setInputValue(newInputValue);
+      // }}
       renderInput={(params) => (
         <TextField
           {...params}
