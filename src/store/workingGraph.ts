@@ -72,6 +72,7 @@ const workingGraph = (set, get) => ({
             data: {
               label: note.label,
               comment: note.comment,
+              nodeWidth: note.nodeWidth || 180,
             },
             id: note.id,
             task_type: 'note',

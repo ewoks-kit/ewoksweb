@@ -10,6 +10,7 @@ export function calcNoteNodes(graph: GraphRF): Note[] {
         label: noteNod.data.label,
         comment: noteNod.data.comment,
         position: noteNod.position,
+        nodeWidth: noteNod.data.nodeWidth,
       } as Note;
     });
 }
