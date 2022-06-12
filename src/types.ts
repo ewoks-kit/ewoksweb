@@ -285,6 +285,7 @@ export interface Note {
   label?: string;
   comment: string;
   position: CanvasPosition;
+  nodeWidth: number;
 }
 
 export interface CanvasPosition {

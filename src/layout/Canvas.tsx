@@ -400,15 +400,15 @@ function Canvas() {
     });
   };
 
-  const onNodeContextMenu = (event: React.MouseEvent, nodes: Node) => {
-    event.preventDefault();
-    // console.log(nodes);
-    setOpenSnackbar({
-      open: true,
-      text: nodes.data.label || '',
-      severity: 'success',
-    });
-  };
+  // const onNodeContextMenu = (event: React.MouseEvent, nodes: Node) => {
+  //   event.preventDefault();
+  //   // console.log(nodes);
+  //   setOpenSnackbar({
+  //     open: true,
+  //     text: nodes.data.label || '',
+  //     severity: 'success',
+  //   });
+  // };
 
   const onNodeDoubleClick = (event, node) => {
     event.preventDefault();
