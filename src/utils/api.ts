@@ -28,7 +28,7 @@ export function putTask(task: Task) {
 
 // -------------Workflows
 // Get /workflows
-export function getWorkflowDescription() {
+export function getWorkflowsDescriptions() {
   return axiosRequest.get(`/workflows/descriptions`);
 }
 
@@ -45,6 +45,11 @@ export function getWorkflow(id: string) {
 // Post
 export function postWorkflow(workflow: GraphEwoks) {
   return axiosRequest.post(`/workflows`, workflow);
+}
+
+// Post execute
+export function executeWorkflow(workflowId: string) {
+  return axiosRequest.post(`/execute/${workflowId}`, workflowId);
 }
 
 // Put

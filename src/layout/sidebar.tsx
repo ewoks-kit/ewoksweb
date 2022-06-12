@@ -68,7 +68,7 @@ export default function Sidebar() {
     const fetchIcons = async () => {
       if (allIcons.length <= 1) {
         const data = await getIcons();
-        // console.log(data);
+        console.log(allIcons.length, data);
         // get the non svg image icons(png)
         const iconsPng = data.identifiers
           // .map((str) => str.slice(6))
@@ -130,8 +130,8 @@ export default function Sidebar() {
           });
         // console.log(typeof iconsSvg, iconsSvg, Array.isArray(iconsSvg));
         // TODO: if icons wont be downloaded due to a server issue it enters a infinite loop of requests
-
-        setAllIconNames(iconsSvg);
+        console.log(iconsSvg);
+        setAllIconNames([...iconsSvg, ...iconsPng]);
         const results = await axios
           .all(iconsSvg.map((id: string) => getIcon(id)))
           .then(

@@ -607,9 +607,9 @@ function Canvas() {
           onEdgeUpdate={onEdgeUpdate}
           onDragOver={onDragOver}
           onPaneContextMenu={onPaneContextMenu}
-          onNodeContextMenu={(evt, node) => {
-            onNodeContextMenu(evt, node);
-          }}
+          // onNodeContextMenu={(evt, node) => {
+          //   onNodeContextMenu(evt, node);
+          // }}
           onNodeDoubleClick={onNodeDoubleClick}
           // onSelectionChange={onSelectionChange}
           // onNodeMouseMove={onNodeMouseMove}
