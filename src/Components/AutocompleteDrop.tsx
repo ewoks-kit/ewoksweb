@@ -54,13 +54,18 @@ function AutocompleteDrop(props) {
         severity: 'error',
       });
     } else if (workF && workF.length > 0) {
-      const categories = workF
-        .filter((wof) => wof.category)
-        .map((wo) => {
-          return { title: wo.category };
-        });
+      const categoriesSet = new Set(
+        workF.filter((wof) => wof.category).map((det) => det.category)
+      );
+
+      const categories = [...categoriesSet].map((cat) => {
+        return { title: cat };
+      });
+
       setAllCategories([...categories, { title: 'All' }]);
+
       setAllWorkflows(workF);
+
       if (active) {
         setOptions(
           props.placeholder === 'Workflows'

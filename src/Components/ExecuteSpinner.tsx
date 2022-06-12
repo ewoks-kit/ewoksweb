@@ -41,7 +41,8 @@ export default function ExecuteSpinner({ children, tooltip, action, getting }) {
   }, [getting]);
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+    <Box>
+      {/* sx={{ display: 'flex', alignItems: 'center' }} */}
       <Box sx={{ m: 1, position: 'relative' }}>
         <Fab
           className={classes.openFileButton}

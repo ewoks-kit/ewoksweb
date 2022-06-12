@@ -50,6 +50,7 @@ export default function SaveToServer({ saveToServerF }) {
           severity: 'success',
         });
       } catch (error) {
+        setGettingFromServer(false);
         setOpenSnackbar({
           open: true,
           text: error.response?.data?.message || configData.savingError,
@@ -60,6 +61,7 @@ export default function SaveToServer({ saveToServerF }) {
       setAction('newGraphOrOverwrite');
       setOpenSaveDialog(true);
     } else {
+      setGettingFromServer(false);
       setOpenSnackbar({
         open: true,
         text: 'No graph exists to save!',

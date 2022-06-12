@@ -1,6 +1,15 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 import React, { useEffect } from 'react';
-import { Button, Checkbox, Tooltip } from '@material-ui/core';
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
+  Tooltip,
+} from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -41,6 +50,7 @@ export default function FormDialog(props) {
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setRecentGraphs = state((state) => state.setRecentGraphs);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const allIconNames = state((state) => state.allIconNames);
   const setGettingFromServer = state((st) => st.setGettingFromServer);
   const [element, setElement] = React.useState<Task | GraphRF>(
     {} as Task | GraphRF
@@ -58,7 +68,7 @@ export default function FormDialog(props) {
     setElement(elementToEdit);
     setIsOpen(open);
     if (isForGraph) {
-      setNewName(elementToEdit.label);
+      setNewName(elementToEdit.label || '');
     } else {
       setNewName(elementToEdit.task_identifier);
       setTaskType(elementToEdit.task_type);
@@ -146,6 +156,7 @@ export default function FormDialog(props) {
           severity: 'success',
         });
       } catch (error) {
+        setGettingFromServer(false);
         setOpenSnackbar({
           open: true,
           text: error.response?.data?.message || configData.savingError,
@@ -160,6 +171,7 @@ export default function FormDialog(props) {
             graph: { ...graph.graph, id: newName, label: newName },
           })
         );
+        setGettingFromServer(false);
         const savedGraph = responseNew.data as GraphRF;
         props.setOpenSaveDialog(false);
         setWorkingGraph(savedGraph, 'fromServer');
@@ -170,6 +182,7 @@ export default function FormDialog(props) {
           severity: 'success',
         });
       } catch (error) {
+        setGettingFromServer(false);
         setOpenSnackbar({
           open: true,
           text: error.response?.data?.message || configData.savingError,
@@ -335,6 +348,28 @@ export default function FormDialog(props) {
               />
             </Tooltip>
           ))}
+        <FormControl>
+          <InputLabel id="demo-simple-select-helper-label">Age</InputLabel>
+          <Select
+            labelId="demo-simple-select-helper-label"
+            id="demo-simple-select-helper"
+            value={icon}
+            label="Icon"
+            onChange={iconChanged}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {allIconNames.map((iconName) => (
+              <MenuItem value={iconName} key={iconName}>
+                {iconName}
+              </MenuItem>
+            ))}
+          </Select>
+          <FormHelperText>
+            Select from the existing icons or upload a new one
+          </FormHelperText>
+        </FormControl>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>

@@ -59,7 +59,7 @@ export default function ManageIcons() {
 
   const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  // const allIcons = state((state) => state.allIcons);
+  const allIcons = state((state) => state.allIcons);
 
   const clickIcon = (icon) => {
     setSelectedIcon(icon);

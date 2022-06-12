@@ -6,7 +6,7 @@ import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
 import { calcNoteNodes } from './utils/calcNoteNodes';
-import { getWorkflowDescription, getWorkflow } from './utils/api';
+import { getWorkflowsDescriptions, getWorkflow } from './utils/api';
 
 // const { GraphDagre } = dagre.graphlib;
 // const NODE_SIZE = { width: 270, height: 36 };
@@ -23,7 +23,7 @@ export async function getWorkflows(): Promise<
   // console.log(process.env);
   let res = [];
   try {
-    const workflows = await getWorkflowDescription();
+    const workflows = await getWorkflowsDescriptions();
     if (workflows && workflows.data) {
       const workf = workflows.data as {
         items: {
@@ -128,11 +128,11 @@ export function rfToEwoks(tempGraph): GraphEwoks {
   const graph = calcGraphInputsOutputs(tempGraph);
   const noteNodes = calcNoteNodes(tempGraph);
   graph.uiProps.notes = noteNodes;
-  console.log({
-    graph,
-    nodes: toEwoksNodes(tempGraph.nodes),
-    links: toEwoksLinks(tempGraph.links),
-  });
+  // console.log({
+  //   graph,
+  //   nodes: toEwoksNodes(tempGraph.nodes),
+  //   links: toEwoksLinks(tempGraph.links),
+  // });
   return {
     graph,
     nodes: toEwoksNodes(tempGraph.nodes),
