@@ -45,8 +45,8 @@ export function toEwoksLinks(links): EwoksLink[] {
         };
       }),
       on_error,
-      sub_target,
-      sub_source,
+      sub_target: sub_target || null,
+      sub_source: sub_source || null,
       map_all_data,
       uiProps: {
         label,

@@ -98,17 +98,21 @@ export default function ManageIcons() {
 
   const uploadFile = async (event) => {
     event.preventDefault();
-    // console.log(event.target, fileToBeSent.file);
+    console.log(event.target, fileToBeSent);
     const data = new FormData();
 
     data.append('file', (fileToBeSent.file as unknown) as File);
     // data.append('filename', fileToBeSent.filename);
     try {
-      await axios.post(`${process.env.REACT_APP_SERVER_URL}/icons`, data);
+      await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/icons/${fileToBeSent.file.name}`,
+        data
+      );
     } catch (error) {
+      console.log(error);
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || configData.retrieveTasksError,
+        text: error.response?.data?.message,
         severity: 'error',
       });
     }
@@ -121,7 +125,7 @@ export default function ManageIcons() {
         text: 'File ready to be uploadede as an icon',
         severity: 'success',
       });
-      getIconL(ne.target.files[0].name as string);
+      // getIconL(ne.target.files[0].name as string);
       setFileToBeSent({ file: ne.target.files[0], filename: ne.target.value });
     } else {
       // setFileToBeSent('');

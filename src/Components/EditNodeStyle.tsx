@@ -117,23 +117,40 @@ export default function EditNodeStyle(props) {
           </MenuItem>
         ))}
       </Select> */}
-      <div>
-        <label htmlFor="withImage">With Image</label>
-        <Checkbox
-          name="withImage"
-          checked={withImage === undefined ? true : !!withImage}
-          onChange={withImageChanged}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-        <label htmlFor="withLabel">With Label</label>
-        <Checkbox
-          name="withLabel"
-          checked={withLabel === undefined ? true : !!withLabel}
-          onChange={withLabelChanged}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
-      </div>
-      {!['graphInput', 'graphOutput'].includes(element.task_type) && (
+      {element.task_type !== 'note' && (
+        <>
+          <div>
+            <label htmlFor="withImage">With Image</label>
+            <Checkbox
+              name="withImage"
+              checked={withImage === undefined ? true : !!withImage}
+              onChange={withImageChanged}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+            <label htmlFor="withLabel">With Label</label>
+            <Checkbox
+              name="withLabel"
+              checked={withLabel === undefined ? true : !!withLabel}
+              onChange={withLabelChanged}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="head">Color</label>
+            <input
+              aria-label="Color"
+              type="color"
+              id="head"
+              name="head"
+              value={colorBorder}
+              onChange={colorBorderChanged}
+              style={{ margin: '10px' }}
+            />
+          </div>
+        </>
+      )}
+      {!['graphInput', 'graphOutput', 'note'].includes(element.task_type) && (
         <div>
           <div>
             <label htmlFor="moreHandles">More handles</label>
@@ -146,18 +163,6 @@ export default function EditNodeStyle(props) {
           </div>
         </div>
       )}
-      <div>
-        <label htmlFor="head">Color</label>
-        <input
-          aria-label="Color"
-          type="color"
-          id="head"
-          name="head"
-          value={colorBorder}
-          onChange={colorBorderChanged}
-          style={{ margin: '10px' }}
-        />
-      </div>
       <div>
         <label htmlFor="nodeSize">Node Size</label>
         <Slider

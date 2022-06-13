@@ -36,9 +36,11 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           task_type,
           task_identifier,
           inputs_complete,
-          task_generator,
+          task_generator: task_generator || null,
           default_error_node,
-          default_error_attributes,
+          default_error_attributes: default_error_node
+            ? default_error_attributes
+            : null,
           default_inputs:
             default_inputs &&
             default_inputs.map((dIn) => {
@@ -75,10 +77,12 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         task_identifier,
         // type: task_type,
         inputs_complete,
-        task_generator,
+        task_generator: task_generator || null,
         default_inputs,
         default_error_node,
-        default_error_attributes,
+        ddefault_error_attributes: default_error_node
+          ? default_error_attributes
+          : null,
         uiProps: {
           label,
           type,

@@ -15,6 +15,10 @@ import graphInput from '../images/graphInput.svg';
 import graphOutput from '../images/graphOutput.svg';
 import Correlations from '../images/Correlations.svg';
 import CreateClass from '../images/CreateClass.svg';
+import right from '../images/right.svg';
+import left from '../images/left.svg';
+import up from '../images/up.svg';
+import down from '../images/down.svg';
 import TextsmsIcon from '@material-ui/icons/Textsms';
 import Upload from './Upload';
 import AddIcon from '@material-ui/icons/Add';
@@ -38,14 +42,30 @@ const onDragStart = (event, { task_identifier, task_type, icon }) => {
 };
 
 const iconsObj = {
-  orange1,
-  Continuize,
+  'left.svg': left,
+  left,
+  'right.svg': right,
+  right,
+  'up.svg': up,
+  up,
+  'down.svg': down,
+  down,
+  'graphInput.svg': graphInput,
   graphInput,
+  'graphOutput.svg': graphOutput,
   graphOutput,
+  orange1,
+  'Continuize.svg': Continuize,
+  Continuize,
+  'orange2.png': orange2,
   orange2,
+  'orange3.png': orange3,
   orange3,
+  'AggregateColumns.svg': AggregateColumns,
   AggregateColumns,
+  'Correlations.svg': Correlations,
   Correlations,
+  'CreateClass.svg': CreateClass,
   CreateClass,
   TextsmsIcon,
 };

@@ -33,18 +33,30 @@ import { IconButton, Slider, TextField } from '@material-ui/core';
 import tooltipText from '../Components/TooltipText';
 
 const iconsObj = {
+  'left.svg': left,
   left,
+  'right.svg': right,
   right,
+  'up.svg': up,
   up,
+  'down.svg': down,
   down,
+  'graphInput.svg': graphInput,
   graphInput,
+  'graphOutput.svg': graphOutput,
   graphOutput,
   orange1,
+  'Continuize.svg': Continuize,
   Continuize,
+  'orange2.png': orange2,
   orange2,
+  'orange3.png': orange3,
   orange3,
+  'AggregateColumns.svg': AggregateColumns,
   AggregateColumns,
+  'Correlations.svg': Correlations,
   Correlations,
+  'CreateClass.svg': CreateClass,
   CreateClass,
 };
 
@@ -75,6 +87,7 @@ const Node: React.FC<NodeProps> = ({
   nodeWidth,
   details,
 }: NodeProps) => {
+  // console.log(image);
   const theCom = comment ? (
     <span
       style={{

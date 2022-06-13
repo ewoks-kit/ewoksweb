@@ -12,7 +12,7 @@ const executingEvents = (set, get) => ({
     const tempNode = prevState.graphRF.nodes.find(
       (nod) => nod.id === execEvent.nodeId
     );
-
+    console.log(tempNode, execEvent.nodeId, prevState.graphRF.nodes);
     tempPos = tempNode.position;
 
     const { withLabel } = tempNode.data;
