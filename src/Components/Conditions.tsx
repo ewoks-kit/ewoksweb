@@ -38,7 +38,7 @@ export default function Conditions(props) {
           data: {
             ...element.data,
             on_error: false,
-            conditions: [...elCon, { id: '', name: '', value: '' }],
+            conditions: [...elCon, { id: '', name: '', value: false }],
           },
         },
         'fromSaveElement'
@@ -47,6 +47,7 @@ export default function Conditions(props) {
   };
 
   const conditionsValuesChanged = (table) => {
+    console.log(table);
     setSelectedElement(
       {
         ...element,

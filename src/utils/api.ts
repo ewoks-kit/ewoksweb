@@ -23,7 +23,7 @@ export function postTask(task: Task) {
 
 // Put task
 export function putTask(task: Task) {
-  return axiosRequest.post(`/task/${task.task_identifier}`, task);
+  return axiosRequest.put(`/task/${task.task_identifier}`, task);
 }
 
 // -------------Workflows

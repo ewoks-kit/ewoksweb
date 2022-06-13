@@ -23,13 +23,14 @@ export default function ExecuteWorkflow() {
     socket.on('Executing', (data) =>
       setExecutingEvents(data as ExecutingEvent)
     );
+    socket.on('ewoks', (data) => setExecutingEvents(data as ExecutingEvent));
     return () => {
       socket.disconnect();
     };
   }, [setExecutingEvents]);
 
   const execute = async () => {
-    // console.log(socket);
+    console.log(socket);
     if (recentGraphs.length > 0 && !isExecuted) {
       if (socket.disconnected) {
         const socket = io(process.env.REACT_APP_SERVER_URL);
@@ -41,7 +42,7 @@ export default function ExecuteWorkflow() {
       console.log(jobId);
     } else if (isExecuted) {
       setIsExecuted(false);
-      socket.disconnect();
+      // socket.disconnect();
     } else {
       setOpenSnackbar({
         open: true,

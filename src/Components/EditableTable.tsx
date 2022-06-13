@@ -68,9 +68,13 @@ function EditableTable(props) {
   // // console.log(defaultValues, val, rows, props, typeOfInputs);
 
   useEffect(() => {
-    // console.log(defaultValues);
+    console.log(defaultValues);
     const tOfIn = defaultValues.map((val) =>
-      val.value === true || val.value === false
+      val.value === true ||
+      val.value === false ||
+      // TODO: remove shortcut with booleans as strings
+      val.value === 'true' ||
+      val.value === 'false'
         ? 'boolean'
         : Array.isArray(val.value)
         ? 'list'
@@ -106,7 +110,7 @@ function EditableTable(props) {
   };
 
   const onToggleEditMode = (id, index, command) => {
-    // console.log(props, id, rows, props.defaultValues, command, typeOfInputs);
+    console.log(props, id, rows, props.defaultValues, command, typeOfInputs);
     if (command === 'edit') {
       setDisableSelectType(true);
       // console.log('disable');
@@ -152,8 +156,8 @@ function EditableTable(props) {
       });
     });
     if (command === 'done') {
-      // console.log('enable');
-      setDisableSelectType(false);
+      console.log('done', rows);
+      setDisableSelectType(true);
       props.valuesChanged(rows);
     }
   };
@@ -177,6 +181,7 @@ function EditableTable(props) {
         }
         return rowe;
       });
+      console.log(typeOfInputs, newRows);
       setRows(newRows);
     } else {
       const { updated_src } = e;

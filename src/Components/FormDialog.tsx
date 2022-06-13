@@ -82,7 +82,8 @@ export default function FormDialog(props) {
 
   const handleSave = async () => {
     // get the selected element (graph or Node) give a new name before saving
-    if (newName !== '' && isForGraph) {
+    console.log(action, element);
+    if (isForGraph) {
       saveGraph(element as GraphRF);
     } else if (['cloneTask', 'newTask'].includes(action)) {
       saveTask(element as Task);
@@ -296,6 +297,7 @@ export default function FormDialog(props) {
   ];
 
   const overwriteChanged = (event) => {
+    console.log(event.target.checked);
     setOverwrite(event.target.checked);
   };
 
@@ -348,28 +350,30 @@ export default function FormDialog(props) {
               />
             </Tooltip>
           ))}
-        <FormControl>
-          <InputLabel id="demo-simple-select-helper-label">Age</InputLabel>
-          <Select
-            labelId="demo-simple-select-helper-label"
-            id="demo-simple-select-helper"
-            value={icon}
-            label="Icon"
-            onChange={iconChanged}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {allIconNames.map((iconName) => (
-              <MenuItem value={iconName} key={iconName}>
-                {iconName}
+        {!isForGraph && (
+          <FormControl>
+            <InputLabel id="demo-simple-select-helper-label">Icon</InputLabel>
+            <Select
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              value={icon}
+              label="Icon"
+              onChange={iconChanged}
+            >
+              <MenuItem value="">
+                <em>None</em>
               </MenuItem>
-            ))}
-          </Select>
-          <FormHelperText>
-            Select from the existing icons or upload a new one
-          </FormHelperText>
-        </FormControl>
+              {allIconNames.map((iconName) => (
+                <MenuItem value={iconName} key={iconName}>
+                  {iconName}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>
+              Select from the existing icons or upload a new one
+            </FormHelperText>
+          </FormControl>
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
