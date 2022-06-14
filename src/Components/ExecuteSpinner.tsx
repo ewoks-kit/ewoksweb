@@ -24,8 +24,8 @@ const useStyles = makeStyles(() => ({
 export default function ExecuteSpinner({ children, tooltip, action, getting }) {
   const [loading, setLoading] = React.useState(false);
   const [success] = React.useState(false);
-  // const isExecuted = state((state) => state.isExecuted);
-  // const setIsExecuted = state((state) => state.setIsExecuted);
+  // const inExecutionMode = state((state) => state.inExecutionMode);
+  // const setInExecutionMode = state((state) => state.setInExecutionMode);
   // const timer = React.useRef<number>();
   const classes = useStyles();
   /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
@@ -41,7 +41,7 @@ export default function ExecuteSpinner({ children, tooltip, action, getting }) {
   }, [getting]);
 
   return (
-    <Box>
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
       {/* sx={{ display: 'flex', alignItems: 'center' }} */}
       <Box sx={{ m: 1, position: 'relative' }}>
         <Fab

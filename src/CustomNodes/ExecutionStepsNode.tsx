@@ -3,7 +3,7 @@ import { style } from './NodeStyle';
 import state from '../store/state';
 
 function ExecutionStepsNode(args) {
-  // // console.log(args);
+  console.log(args);
   // useEffect(() => {
   // }, [args.data.comment, selectedElement.type]);
 

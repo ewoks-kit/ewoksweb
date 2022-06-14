@@ -13,8 +13,9 @@ import allCategories from './allCategories';
 import allIconNames from './allIconNames';
 import allIcons from './allIcons';
 import executingEvents from './executingEvents';
+import executedEvents from './executedEvents';
 import graphOrSubgraph from './graphOrSubgraph';
-import isExecuted from './isExecuted';
+import inExecutionMode from './inExecutionMode';
 import openDraggableDialog from './openDraggableDialog';
 import openSnackbar from './openSnackbar';
 import recentGraphs from './recentGraphs';
@@ -64,11 +65,12 @@ const state = create<State>((set, get) => ({
   ...allWorkflows(set),
   ...allCategories(set),
   ...currentExecutionEvent(set),
+  ...executedEvents(set, get),
   ...executingEvents(set, get),
+  ...inExecutionMode(set, get),
   ...gettingFromServer(set),
   ...graphOrSubgraph(set),
   ...graphRF(set),
-  ...isExecuted(set, get),
   ...openDraggableDialog(set),
   ...openSnackbar(set),
   ...recentGraphs(set, get),

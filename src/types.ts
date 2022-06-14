@@ -71,26 +71,18 @@ export interface NodeExecutionHistory {
   // the ExecutingState can be found through the eventId again
 }
 
-export interface ExecutionState {
-  currentExecutionEvent?: number;
-  setCurrentExecutionEvent?: (index: number) => void;
-
-  // executingEvents: ExecutingEvent[];
-  // setExecutingEvents: (execEvent: ExecutingEvent) => void;
-
-  // isExecuted: boolean;
-  // setIsExecuted: (val: boolean) => void;
-}
-
 export interface State {
   currentExecutionEvent?: number;
   setCurrentExecutionEvent?: (index: number) => void;
 
+  executedEvents?: ExecutingEvent[];
+  setExecutedEvents?: (execEvent: ExecutingEvent) => void;
+
   executingEvents?: ExecutingEvent[];
   setExecutingEvents?: (execEvent: ExecutingEvent) => void;
 
-  isExecuted?: boolean;
-  setIsExecuted?: (val: boolean) => void;
+  inExecutionMode?: boolean;
+  setInExecutionMode?: (val: boolean) => void;
 
   gettingFromServer?: boolean;
   setGettingFromServer?: (val: boolean) => void;

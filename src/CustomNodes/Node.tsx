@@ -122,7 +122,7 @@ const Node: React.FC<NodeProps> = ({
   }
 
   const [nodeSize, setNodeSize] = useState(nodeWidth);
-  const isExecuted = state((state) => state.isExecuted);
+  const inExecutionMode = state((state) => state.inExecutionMode);
   const graphRF = state((state) => state.graphRF);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const setSelectedElement = state((state) => state.setSelectedElement);
@@ -290,7 +290,7 @@ const Node: React.FC<NodeProps> = ({
               {label.slice(0, 1)}
             </div>
           )}
-          {isExecuted &&
+          {inExecutionMode &&
             !withImage &&
             type !== 'graphOutput' &&
             type !== 'graphInput' && (
@@ -310,7 +310,7 @@ const Node: React.FC<NodeProps> = ({
           {withImage &&
             type !== 'graphOutput' &&
             type !== 'graphInput' &&
-            (isExecuted ? (
+            (inExecutionMode ? (
               <ExecuteSpinner
                 getting={executing}
                 tooltip="Execution"

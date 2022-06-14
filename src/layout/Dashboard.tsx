@@ -51,7 +51,7 @@ export default function Dashboard() {
   const [openInfo, setOpenInfo] = React.useState(false);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const gettingFromServer = state((state) => state.gettingFromServer);
-  const isExecuted = state((state) => state.isExecuted);
+  const inExecutionMode = state((state) => state.inExecutionMode);
   const graphRF = state((state) => state.graphRF);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
   const initializedGraph = state((state) => state.initializedGraph);
@@ -168,7 +168,7 @@ export default function Dashboard() {
                 size="small"
                 component="span"
                 aria-label="add"
-                disabled={isExecuted}
+                disabled={inExecutionMode}
               >
                 <FiberNew />
               </Fab>
@@ -186,7 +186,7 @@ export default function Dashboard() {
                 size="small"
                 component="span"
                 aria-label="add"
-                disabled={isExecuted}
+                disabled={inExecutionMode}
               >
                 <ImportContactsIcon />
               </Fab>

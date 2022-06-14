@@ -14,34 +14,36 @@ export default function ExecuteWorkflow() {
   const recentGraphs = state((state) => state.recentGraphs);
 
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const isExecuted = state((state) => state.isExecuted);
-  const setIsExecuted = state((state) => state.setIsExecuted);
+  const inExecutionMode = state((state) => state.inExecutionMode);
+  const setInExecutionMode = state((state) => state.setInExecutionMode);
   const setExecutingEvents = state((state) => state.setExecutingEvents);
+  const setExecutedEvents = state((state) => state.setExecutedEvents);
 
   useEffect(() => {
     // console.log('Executing');
-    socket.on('Executing', (data) =>
-      setExecutingEvents(data as ExecutingEvent)
-    );
-    socket.on('ewoks', (data) => setExecutingEvents(data as ExecutingEvent));
+    socket.on('Executing', (data) => {
+      setExecutingEvents(data as ExecutingEvent);
+      setExecutedEvents(data as ExecutingEvent);
+    });
+
     return () => {
       socket.disconnect();
     };
-  }, [setExecutingEvents]);
+  }, [setExecutingEvents, setExecutedEvents]);
 
   const execute = async () => {
     console.log(socket);
-    if (recentGraphs.length > 0 && !isExecuted) {
+    if (recentGraphs.length > 0 && !inExecutionMode) {
       if (socket.disconnected) {
         const socket = io(process.env.REACT_APP_SERVER_URL);
       }
       socket.emit('Execute Graph', graphRF);
       socket.on('Executing', (data) => console.log(data));
-      setIsExecuted(true);
-      const jobId = await executeWorkflow(graphRF.graph.id);
-      console.log(jobId);
-    } else if (isExecuted) {
-      setIsExecuted(false);
+      setInExecutionMode(true);
+      // const jobId = await executeWorkflow(graphRF.graph.id);
+      // console.log(jobId);
+    } else if (inExecutionMode) {
+      setInExecutionMode(false);
       // socket.disconnect();
     } else {
       setOpenSnackbar({
@@ -62,7 +64,7 @@ export default function ExecuteWorkflow() {
         console.log('Starting Execution');
       }}
     >
-      {isExecuted ? <ClearIcon color="secondary" /> : <SendIcon />}
+      {inExecutionMode ? <ClearIcon color="secondary" /> : <SendIcon />}
     </IntegratedSpinner>
   );
 }
