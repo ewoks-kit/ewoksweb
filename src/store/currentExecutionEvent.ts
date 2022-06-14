@@ -1,3 +1,4 @@
+// DOC: the number of the event we need to inspect on the sidebar
 const currentExecutionEvent = (set) => ({
   currentExecutionEvent: 0,
 

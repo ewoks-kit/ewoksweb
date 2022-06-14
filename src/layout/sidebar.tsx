@@ -54,7 +54,7 @@ export default function Sidebar() {
   const setRecentGraphs = state((state) => state.setRecentGraphs);
   const initializedGraph = state((state) => state.initializedGraph);
   const setUndoRedo = state((state) => state.setUndoRedo);
-  const isExecuted = state((state) => state.isExecuted);
+  const inExecutionMode = state((state) => state.inExecutionMode);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const setAllIcons = state((state) => state.setAllIcons);
   const allIcons = state((state) => state.allIcons);
@@ -295,7 +295,7 @@ export default function Sidebar() {
 
   return (
     <aside className="dndflow">
-      {isExecuted ? (
+      {inExecutionMode ? (
         <div className={classes.executionSide}>
           <ExecutionDetails
           // props={{

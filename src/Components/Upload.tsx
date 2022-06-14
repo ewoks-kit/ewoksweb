@@ -45,7 +45,7 @@ function Upload(props) {
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setSubGraph = state((state) => state.setSubGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const isExecuted = state((state) => state.isExecuted);
+  const inExecutionMode = state((state) => state.inExecutionMode);
 
   const fileNameChanged = async (event) => {
     // // console.log(event.target.files[0], recentGraphs, graphRF, subgraphsStack);
@@ -102,7 +102,7 @@ function Upload(props) {
           size="small"
           component="span"
           aria-label="add"
-          disabled={isExecuted}
+          disabled={inExecutionMode}
         >
           {props.children}
         </Fab>

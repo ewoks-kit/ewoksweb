@@ -12,7 +12,7 @@ const useStyles = DashboardStyle;
 export default function UndoRedo({ undoF, redoF }) {
   const classes = useStyles();
 
-  const isExecuted = state((state) => state.isExecuted);
+  const inExecutionMode = state((state) => state.inExecutionMode);
   const undoIndex = state((state) => state.undoIndex);
   const setUndoIndex = state((state) => state.setUndoIndex);
 
@@ -39,7 +39,7 @@ export default function UndoRedo({ undoF, redoF }) {
             size="small"
             component="span"
             aria-label="add"
-            disabled={isExecuted}
+            disabled={inExecutionMode}
           >
             <UndoIcon />
           </Fab>
@@ -53,7 +53,7 @@ export default function UndoRedo({ undoF, redoF }) {
             size="small"
             component="span"
             aria-label="add"
-            disabled={isExecuted}
+            disabled={inExecutionMode}
           >
             <RedoIcon />
           </Fab>

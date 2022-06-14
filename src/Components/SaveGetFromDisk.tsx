@@ -24,7 +24,7 @@ export default function SaveGetFromDisk() {
 
   const setGraphOrSubgraph = state((state) => state.setGraphOrSubgraph);
   const graphRF = state((state) => state.graphRF);
-  const isExecuted = state((state) => state.isExecuted);
+  const inExecutionMode = state((state) => state.inExecutionMode);
 
   const loadFromDisk = () => {
     setGraphOrSubgraph(true);
@@ -48,7 +48,7 @@ export default function SaveGetFromDisk() {
             size="small"
             component="span"
             aria-label="add"
-            disabled={isExecuted}
+            disabled={inExecutionMode}
           >
             <SaveIcon />
           </Fab>
@@ -61,7 +61,7 @@ export default function SaveGetFromDisk() {
       >
         <IconButton
           color="inherit"
-          disabled={isExecuted}
+          disabled={inExecutionMode}
           onClick={loadFromDisk}
         >
           <Upload>

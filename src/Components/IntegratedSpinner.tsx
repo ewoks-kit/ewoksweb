@@ -34,7 +34,7 @@ export default function IntegratedSpinner({
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
 
-  const isExecuted = state((state) => state.isExecuted);
+  const inExecutionMode = state((state) => state.inExecutionMode);
 
   const timer = React.useRef<number>();
   const classes = useStyles();
@@ -94,7 +94,7 @@ export default function IntegratedSpinner({
                 ? true
                 : tooltip === 'Execute Workflow and exit Execution mode'
                 ? false
-                : isExecuted
+                : inExecutionMode
             }
           >
             {success ? <CheckIcon /> : loading ? '...' : children}
