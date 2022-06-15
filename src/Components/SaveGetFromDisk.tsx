@@ -41,33 +41,37 @@ export default function SaveGetFromDisk() {
   return (
     <>
       <Tooltip title={tooltipText('Save to local disk')} enterDelay={800} arrow>
-        <IconButton color="inherit" onClick={saveToDisk}>
-          <Fab
-            className={classes.openFileButton}
-            color="primary"
-            size="small"
-            component="span"
-            aria-label="add"
-            disabled={inExecutionMode}
-          >
-            <SaveIcon />
-          </Fab>
-        </IconButton>
+        <span>
+          <IconButton color="inherit" onClick={saveToDisk}>
+            <Fab
+              className={classes.openFileButton}
+              color="primary"
+              size="small"
+              component="span"
+              aria-label="add"
+              disabled={inExecutionMode}
+            >
+              <SaveIcon />
+            </Fab>
+          </IconButton>
+        </span>
       </Tooltip>
       <Tooltip
         title={tooltipText('Load from local disk')}
         enterDelay={800}
         arrow
       >
-        <IconButton
-          color="inherit"
-          disabled={inExecutionMode}
-          onClick={loadFromDisk}
-        >
-          <Upload>
-            <FolderOpenIcon />
-          </Upload>
-        </IconButton>
+        <span>
+          <IconButton
+            color="inherit"
+            disabled={inExecutionMode}
+            onClick={loadFromDisk}
+          >
+            <Upload>
+              <FolderOpenIcon />
+            </Upload>
+          </IconButton>
+        </span>
       </Tooltip>
     </>
   );

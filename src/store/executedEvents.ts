@@ -4,15 +4,20 @@ const executedEvents = (set, get) => ({
   executedEvents: [],
 
   setExecutedEvents: (execEvent) => {
+    // Add all events to keep track of the order they came in
     const prevState = get((prev) => prev);
-    console.log(execEvent, prevState.executedEvents);
-    // For the event if type=end added to the executed events as history
-    if (execEvent.type === 'end') {
-      set((state) => ({
-        ...state,
-        executedEvents: [...prevState.executedEvents, execEvent],
-      }));
-    }
+    // console.log(execEvent, prevState.executedEvents);
+    // calculate the id of the event based on the order of arrival
+    const event = {
+      ...execEvent,
+      id: (prevState.executedEvents.length as number) + 1,
+    };
+    // send it to executing events to addapt
+    prevState.setExecutingEvents(event);
+    set((state) => ({
+      ...state,
+      executedEvents: [...prevState.executedEvents, event],
+    }));
   },
 });
 

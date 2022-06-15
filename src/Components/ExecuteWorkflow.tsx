@@ -20,9 +20,7 @@ export default function ExecuteWorkflow() {
   const setExecutedEvents = state((state) => state.setExecutedEvents);
 
   useEffect(() => {
-    // console.log('Executing');
     socket.on('Executing', (data) => {
-      setExecutingEvents(data as ExecutingEvent);
       setExecutedEvents(data as ExecutingEvent);
     });
 
@@ -32,16 +30,17 @@ export default function ExecuteWorkflow() {
   }, [setExecutingEvents, setExecutedEvents]);
 
   const execute = async () => {
-    console.log(socket);
     if (recentGraphs.length > 0 && !inExecutionMode) {
-      if (socket.disconnected) {
-        const socket = io(process.env.REACT_APP_SERVER_URL);
-      }
+      // if (socket.disconnected) {
+      //   socket = io(process.env.REACT_APP_SERVER_URL);
+      // }
       socket.emit('Execute Graph', graphRF);
+      /* eslint-disable no-console */
       socket.on('Executing', (data) => console.log(data));
       setInExecutionMode(true);
-      // const jobId = await executeWorkflow(graphRF.graph.id);
-      // console.log(jobId);
+      const jobId = await executeWorkflow(graphRF.graph.id);
+      /* eslint-disable no-console */
+      console.log(jobId);
     } else if (inExecutionMode) {
       setInExecutionMode(false);
       // socket.disconnect();

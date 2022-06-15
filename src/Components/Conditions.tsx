@@ -47,7 +47,6 @@ export default function Conditions(props) {
   };
 
   const conditionsValuesChanged = (table) => {
-    console.log(table);
     setSelectedElement(
       {
         ...element,

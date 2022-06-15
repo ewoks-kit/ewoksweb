@@ -50,12 +50,30 @@ export interface DialogParams {
 // so draw on link on each side the events in a timely manner.
 
 export interface ExecutingEvent {
-  id: string;
-  nodeId: string;
-  event_type: string; // start/stop/progress events
-  values: {}; // all values entering or exiting a node
-  // for now put static executing here
-  executing?: string[];
+  host_name?: string;
+  process_id?: string;
+  user_name?: string;
+  job_id?: string;
+  binding?: string;
+  context?: string;
+  workflow_id?: string;
+  type?: string;
+  time?: string;
+  error?: string;
+  error_message?: string;
+  error_traceback?: string;
+  node_id?: string;
+  task_id?: string;
+  progress?: string;
+  task_uri?: string;
+  input_uris?: [];
+  output_uris?: [];
+  id?: number;
+  // nodeId: string;
+  // event_type: string; // start/stop/progress events
+  // values: {}; // all values entering or exiting a node
+  // // for now put static executing here
+  // executing?: string[];
 }
 
 export interface ExecutingState {
