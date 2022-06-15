@@ -51,3 +51,7 @@ Start the server that serves the frontend
 ```bash
 ewoks-server
 ```
+
+## Documentation
+
+https://ewoksweb.readthedocs.io/
