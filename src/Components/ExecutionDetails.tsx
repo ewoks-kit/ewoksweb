@@ -16,9 +16,8 @@ export default function ExecutionDetails() {
   const graphRF = state((state) => state.graphRF);
 
   const currentExecutionEvent = state((state) => state.currentExecutionEvent);
-  // const currentExecutionEvent = state((state) => state.currentExecutionEvent);
 
-  const executingEvents = state((state) => state.executingEvents);
+  const executedEvents = state((state) => state.executedEvents);
 
   // useEffect(() => {}, [element.id, element]);
 
@@ -36,8 +35,8 @@ export default function ExecutionDetails() {
         {/* {graphOutputs.length > 0 && <DenseTable data={graphOutputs} />} */}
       </div>
       <ReactJson
-        src={executingEvents[currentExecutionEvent - 1]}
-        name="Ewoks graph"
+        src={executedEvents[currentExecutionEvent - 1]}
+        name="Event details"
         theme="monokai"
         collapsed
         collapseStringsAfterLength={30}

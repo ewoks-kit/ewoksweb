@@ -12,7 +12,6 @@ import CreateClass from '../images/CreateClass.svg';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import axios, { AxiosResponse } from 'axios';
-import configData from '../configData.json';
 import type { Task } from '../types';
 import state from '../store/state';
 import ConfirmDialog from './ConfirmDialog';
@@ -59,7 +58,7 @@ export default function ManageIcons() {
 
   const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const allIcons = state((state) => state.allIcons);
+  // const allIcons = state((state) => state.allIcons);
 
   const clickIcon = (icon) => {
     setSelectedIcon(icon);
@@ -98,7 +97,6 @@ export default function ManageIcons() {
 
   const uploadFile = async (event) => {
     event.preventDefault();
-    console.log(event.target, fileToBeSent);
     const data = new FormData();
 
     data.append('file', (fileToBeSent.file as unknown) as File);
@@ -109,7 +107,6 @@ export default function ManageIcons() {
         data
       );
     } catch (error) {
-      console.log(error);
       setOpenSnackbar({
         open: true,
         text: error.response?.data?.message,
@@ -125,13 +122,13 @@ export default function ManageIcons() {
         text: 'File ready to be uploadede as an icon',
         severity: 'success',
       });
-      // getIconL(ne.target.files[0].name as string);
+      getIconL(ne.target.files[0].name as string);
       setFileToBeSent({ file: ne.target.files[0], filename: ne.target.value });
     } else {
       // setFileToBeSent('');
       setOpenSnackbar({
         open: true,
-        text: 'Files more than 1Kb are not acceptable for icons',
+        text: 'Files more than 10Kb are not acceptable for icons',
         severity: 'warning',
       });
     }

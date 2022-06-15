@@ -83,7 +83,7 @@ const NoteNode = (args) => {
       role="button"
       tabIndex={0}
     >
-      <span style={{ maxWidth: `${nodeSize}px` }} className="icons">
+      <span style={{ maxWidth: `${nodeSize as string}px` }} className="icons">
         {args.data.label.length > 0 && (
           <div style={customTitle as React.CSSProperties}>
             {args.data.label}

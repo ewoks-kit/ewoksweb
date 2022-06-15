@@ -3,10 +3,6 @@ import { style } from './NodeStyle';
 import state from '../store/state';
 
 function ExecutionStepsNode(args) {
-  console.log(args);
-  // useEffect(() => {
-  // }, [args.data.comment, selectedElement.type]);
-
   const customTitle = {
     ...style.title,
     wordWrap: 'break-word',
@@ -24,8 +20,6 @@ function ExecutionStepsNode(args) {
   );
 
   const goToEvent = (val) => {
-    // update graphRF on store
-    // console.log(args.id, val);
     setCurrentExecutionEvent(val);
   };
 

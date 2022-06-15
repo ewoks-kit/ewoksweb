@@ -82,7 +82,6 @@ export default function FormDialog(props) {
 
   const handleSave = async () => {
     // get the selected element (graph or Node) give a new name before saving
-    console.log(action, element);
     if (isForGraph) {
       saveGraph(element as GraphRF);
     } else if (['cloneTask', 'newTask'].includes(action)) {
@@ -297,7 +296,6 @@ export default function FormDialog(props) {
   ];
 
   const overwriteChanged = (event) => {
-    console.log(event.target.checked);
     setOverwrite(event.target.checked);
   };
 
