@@ -114,7 +114,7 @@ const executingEvents = (set, get) => ({
         executingEvents: newExecutingEvents,
       }));
     } else if (execEvent.context === 'workflow') {
-      // Terminate the execution and exit executionMode
+      // TODO: Terminate the execution and exit executionMode
       // If tasks still exist in executing raise an error?
     }
   },

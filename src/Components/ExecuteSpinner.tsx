@@ -28,8 +28,6 @@ export default function ExecuteSpinner({ children, tooltip, action, getting }) {
   // const setInExecutionMode = state((state) => state.setInExecutionMode);
   // const timer = React.useRef<number>();
   const classes = useStyles();
-  /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
-  console.warn(tooltip, action, getting);
 
   // TODO: synd with the real time the call makes using getting
   React.useEffect(() => {

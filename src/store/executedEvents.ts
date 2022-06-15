@@ -6,7 +6,7 @@ const executedEvents = (set, get) => ({
   setExecutedEvents: (execEvent) => {
     // Add all events to keep track of the order they came in
     const prevState = get((prev) => prev);
-    // console.log(execEvent, prevState.executedEvents);
+    console.log(execEvent, prevState.executedEvents);
     // calculate the id of the event based on the order of arrival
     const event = {
       ...execEvent,
