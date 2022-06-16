@@ -49,7 +49,7 @@ export interface DialogParams {
 // stop for one is not the start of another which can wait for other inputs!
 // so draw on link on each side the events in a timely manner.
 
-export interface ExecutingEvent {
+export interface Event {
   host_name?: string;
   process_id?: string;
   user_name?: string;
@@ -93,11 +93,11 @@ export interface State {
   currentExecutionEvent?: number;
   setCurrentExecutionEvent?: (index: number) => void;
 
-  executedEvents?: ExecutingEvent[];
-  setExecutedEvents?: (execEvent: ExecutingEvent) => void;
+  executedEvents?: Event[];
+  setExecutedEvents?: (execEvent: Event) => void;
 
-  executingEvents?: ExecutingEvent[];
-  setExecutingEvents?: (execEvent: ExecutingEvent) => void;
+  executingEvents?: Event[];
+  setExecutingEvents?: (execEvent: Event) => void;
 
   inExecutionMode?: boolean;
   setInExecutionMode?: (val: boolean) => void;

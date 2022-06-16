@@ -1,9 +1,9 @@
-// import { ExecutingEvent } from '../types';
+import type { Event } from '../types';
 
 const executedEvents = (set, get) => ({
-  executedEvents: [],
+  executedEvents: [] as Event[],
 
-  setExecutedEvents: (execEvent) => {
+  setExecutedEvents: (execEvent: Event) => {
     // Add all events to keep track of the order they came in
     const prevState = get((prev) => prev);
     console.log(execEvent, prevState.executedEvents);

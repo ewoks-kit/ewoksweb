@@ -1,9 +1,9 @@
-// import { ExecutingEvent } from '../types';
+import type { Event } from '../types';
 
 const executingEvents = (set, get) => ({
-  executingEvents: [],
+  executingEvents: [] as Event[],
 
-  setExecutingEvents: (execEvent) => {
+  setExecutingEvents: (execEvent: Event) => {
     const prevState = get((prev) => prev);
     // console.log(execEvent, prevState.executingEvents);
 
@@ -97,7 +97,7 @@ const executingEvents = (set, get) => ({
             ),
             {
               data: {
-                label: `${tempLabel},${execEvent.id as string}`,
+                label: `${tempLabel},${(execEvent.id as unknown) as string}`,
                 node_id: execEvent.node_id,
                 type: execEvent.type,
                 values: { a: 1, b: 2 },

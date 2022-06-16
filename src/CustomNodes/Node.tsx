@@ -294,17 +294,20 @@ const Node: React.FC<NodeProps> = ({
             !withImage &&
             type !== 'graphOutput' &&
             type !== 'graphInput' && (
-              <IntegratedSpinner
+              <ExecuteSpinner
                 getting={executing}
                 tooltip="Execution"
                 action={execution}
-                onClick={() => {
-                  /* eslint-disable no-console */
-                  console.log('Starting Execution');
-                }}
               >
-                <SendIcon />
-              </IntegratedSpinner>
+                <img
+                  style={{ padding: '2px' }}
+                  role="presentation"
+                  draggable="false"
+                  onDragStart={(event) => onDragStart(event)}
+                  src={orange1}
+                  alt="icon"
+                />
+              </ExecuteSpinner>
             )}
           {/* <div style={{ wordWrap: 'break-word' }}>{comment}</div> */}
           {withImage &&

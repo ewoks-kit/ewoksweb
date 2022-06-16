@@ -1,6 +1,8 @@
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from '@material-ui/core';
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import Typography from '@material-ui/core/Typography';
 
@@ -24,7 +26,7 @@ import Upload from './Upload';
 import AddIcon from '@material-ui/icons/Add';
 import state from '../store/state';
 import configData from '../configData.json';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, IconButton } from '@material-ui/core';
 import ConfirmDialog from './ConfirmDialog';
 import SidebarTooltip from './SidebarTooltip';
@@ -79,13 +81,13 @@ function AddNodes(props) {
   const selectedTask = state((state) => state.selectedTask);
   const setSelectedTask = state((state) => state.setSelectedTask);
   const setGraphOrSubgraph = state((state) => state.setGraphOrSubgraph);
-  const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
+  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const [doAction, setDoAction] = React.useState<string>('');
-  const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
-  const [elementToEdit, setElementToEdit] = React.useState<Task>({});
+  const [doAction, setDoAction] = useState<string>('');
+  const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
+  const [elementToEdit, setElementToEdit] = useState<Task>({});
   const initializedTask = state((state) => state.initializedTask);
-  const [expanded, setExpanded] = React.useState<boolean>(false);
+  const [expanded, setExpanded] = useState<boolean>(false);
   const selectedElement = state((state) => state.selectedElement);
 
   const getTasks = useCallback(async () => {
