@@ -2,6 +2,8 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Button,
+  IconButton,
 } from '@material-ui/core';
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import Typography from '@material-ui/core/Typography';
@@ -27,7 +29,6 @@ import AddIcon from '@material-ui/icons/Add';
 import state from '../store/state';
 import configData from '../configData.json';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, IconButton } from '@material-ui/core';
 import ConfirmDialog from './ConfirmDialog';
 import SidebarTooltip from './SidebarTooltip';
 import FormDialog from './FormDialog';

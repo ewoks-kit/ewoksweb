@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactJson from 'react-json-view';
-import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
+// import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import IntegratedSpinner from './IntegratedSpinner';
@@ -11,24 +11,31 @@ import {
   AccordionDetails,
   Typography,
   Chip,
+  TextField,
+  Button,
 } from '@material-ui/core';
 import SidebarTooltip from './SidebarTooltip';
 import type { Event } from '../types';
+import DashboardStyle from '../layout/DashboardStyle';
+
+const useStyles = DashboardStyle;
 
 const executeJob = () => {
   // co;
 };
 
-const showSelected = (work) => {
-  Object.keys(work).forEach((key) => {
-    if (work[key] === null) {
-      delete work[key];
-    }
-  });
-  return work;
-};
+// const showSelected = (work) => {
+//   // console.log(work);
+//   Object.keys(work).forEach((key) => {
+//     if (work[key] === null) {
+//       delete work[key];
+//     }
+//   });
+//   return work;
+// };
 
 export default function ExecutionDetails() {
+  const classes = useStyles();
   // const { props } = propsIn;
   // const { element } = props;
   // const { setElement } = propsIn;
@@ -46,20 +53,24 @@ export default function ExecutionDetails() {
   const [selectedJob, setSelectedJob] = useState<Event>({});
   const [expandedJobs, setExpandedJobs] = useState<boolean>(false);
   const [expandedWorkflows, setExpandedWorkflows] = useState<boolean>(false);
+  const [workflowNameFilter, setWorkflowNameFilter] = useState<String>('');
 
   useEffect(() => {
+    setWorkflowNameFilter(graphRF.graph.label);
     const allJobs = executedEvents
       .filter((ev) => ev.context === 'job' && ev.type === 'start')
       .map((job) => {
+        let jobL = {};
         if (
-          executedEvents.find(
+          executedEvents.some(
             (jo) => jo.job_id === job.job_id && jo.type === 'end'
           )
         ) {
-          return { ...job, status: 'finished' };
+          jobL = { ...job, status: 'finished' };
         } else {
-          return { ...job, status: 'executing' };
+          jobL = { ...job, status: 'executing' };
         }
+        return jobL;
       });
 
     setJobs(allJobs);
@@ -67,19 +78,21 @@ export default function ExecutionDetails() {
     const allWorkflows = executedEvents
       .filter((ev) => ev.context === 'workflow' && ev.type === 'start')
       .map((work) => {
+        let workL = {};
         if (
-          executedEvents.find(
+          executedEvents.some(
             (wor) => wor.workflow_id === work.workflow_id && wor.type === 'end'
           )
         ) {
-          return { ...work, status: 'finished' };
+          workL = { ...work, status: 'finished' };
         } else {
-          return { ...work, status: 'executing' };
+          workL = { ...work, status: 'executing' };
         }
+        return workL;
       });
 
     setWorkflows(allWorkflows);
-  }, [executedEvents]);
+  }, [executedEvents, graphRF.graph.label]);
 
   const handleChangeJobs = (
     event: React.SyntheticEvent,
@@ -99,7 +112,7 @@ export default function ExecutionDetails() {
   };
 
   const workflowDetails = (work) => {
-    console.log(workflows, work);
+    // console.log(workflows, work);
     setSelectedWorkflow(work);
   };
 
@@ -113,12 +126,62 @@ export default function ExecutionDetails() {
         ev.workflow_id === selectedWorkflow.workflow_id &&
         ev.job_id === selectedWorkflow.job_id
     );
-    console.log(selectedWorkflow, events.length, executedEvents.length);
+    // console.log(selectedWorkflow, events.length, executedEvents.length);
     events.forEach((ev) => setExecutingEvents(ev));
+  };
+
+  const formatedDate = (job) => {
+    // console.log(workflows, jobs, job);
+    const dat = new Date(job.time);
+    return `${
+      job.workflow_id as string
+    } ${dat.getHours()}:${dat.getMinutes()} ${dat.getDay()}/${dat.getMonth()}/${dat.getFullYear()}`;
   };
 
   return (
     <>
+      <div className={classes.detailsLabels}>
+        <TextField
+          id="outlined-basic"
+          label="Workflow Name"
+          variant="outlined"
+          value={workflowNameFilter}
+        />
+      </div>
+      <div className={classes.detailsLabels}>
+        <TextField
+          id="date"
+          label="From"
+          type="date"
+          defaultValue={new Date().toString()}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+      </div>
+      <div className={classes.detailsLabels}>
+        <TextField
+          id="date"
+          label="To"
+          type="date"
+          defaultValue={new Date().toString()}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+      </div>
+      <Button
+        style={{ margin: '8px' }}
+        variant="outlined"
+        color="primary"
+        // onClick={console.log('filter')}
+        size="small"
+      >
+        Filter
+      </Button>
+      <hr />
       <Accordion expanded={expandedJobs} onChange={handleChangeJobs}>
         <AccordionSummary
           expandIcon={<OpenInBrowser />}
@@ -135,6 +198,7 @@ export default function ExecutionDetails() {
         <AccordionDetails style={{ flexWrap: 'wrap' }}>
           {jobs.map((job) => (
             <div
+              key={job.id}
               style={{
                 backgroundColor:
                   job.status === 'finished' ? '#b6beec' : 'rgb(255, 167, 1)',
@@ -150,7 +214,7 @@ export default function ExecutionDetails() {
                 }}
               >
                 <Chip
-                  label={`${job.job_id.slice(0, 28)}...`}
+                  label={formatedDate(job)} // `${job.job_id.slice(0, 28)}...`
                   onClick={() => jobDetails(job)}
                   style={{
                     paddingTop: '5px',
@@ -160,6 +224,25 @@ export default function ExecutionDetails() {
                   size="medium"
                   // variant="outlined"
                 />
+                {selectedJob.id === job.id && (
+                  <div style={{ display: 'flex', width: '98%' }}>
+                    <ReactJson
+                      src={job} // showSelected(job)
+                      name="Execution details"
+                      theme="monokai"
+                      collapsed
+                      collapseStringsAfterLength={15}
+                      groupArraysAfterLength={15}
+                      enableClipboard={false}
+                      quotesOnKeys={false}
+                      style={{
+                        backgroundColor: 'rgb(58, 77, 172)',
+                        margin: '7px',
+                      }}
+                      displayDataTypes={false}
+                    />
+                  </div>
+                )}
                 {selectedJob.id === job.id && (
                   <IntegratedSpinner
                     getting={false}
@@ -174,25 +257,6 @@ export default function ExecutionDetails() {
                   </IntegratedSpinner>
                 )}
               </div>
-              {selectedJob.id === job.id && (
-                <div style={{ display: 'flex', width: '98%' }}>
-                  <ReactJson
-                    src={showSelected(job)}
-                    name="Execution details"
-                    theme="monokai"
-                    collapsed
-                    collapseStringsAfterLength={15}
-                    groupArraysAfterLength={15}
-                    enableClipboard={false}
-                    quotesOnKeys={false}
-                    style={{
-                      backgroundColor: 'rgb(58, 77, 172)',
-                      margin: '7px',
-                    }}
-                    displayDataTypes={false}
-                  />
-                </div>
-              )}
             </div>
           ))}
         </AccordionDetails>
@@ -213,6 +277,7 @@ export default function ExecutionDetails() {
         <AccordionDetails style={{ flexWrap: 'wrap' }}>
           {workflows.map((work) => (
             <div
+              key={work.id}
               style={{
                 backgroundColor:
                   work.status === 'finished' ? '#b6beec' : 'rgb(255, 167, 1)',
@@ -228,7 +293,7 @@ export default function ExecutionDetails() {
                 }}
               >
                 <Chip
-                  label={work.workflow_id}
+                  label={formatedDate(work)}
                   onClick={() => workflowDetails(work)}
                   style={{
                     paddingTop: '5px',
@@ -238,24 +303,11 @@ export default function ExecutionDetails() {
                   size="medium"
                   // variant="outlined"
                 />
-                {selectedWorkflow.id === work.id && (
-                  <IntegratedSpinner
-                    getting={false}
-                    tooltip="Execute Workflow and exit Execution mode"
-                    action={executeWorkflow}
-                    onClick={() => {
-                      /* eslint-disable no-console */
-                      console.log('Starting Execution');
-                    }}
-                  >
-                    <PlayCircleOutlineIcon fontSize="large" />
-                  </IntegratedSpinner>
-                )}
               </div>
               {selectedWorkflow.id === work.id && (
                 <div style={{ display: 'flex', width: '98%' }}>
                   <ReactJson
-                    src={showSelected(work)}
+                    src={work}
                     name="Execution details"
                     theme="monokai"
                     collapsed
@@ -270,6 +322,19 @@ export default function ExecutionDetails() {
                     displayDataTypes={false}
                   />
                 </div>
+              )}
+              {selectedWorkflow.id === work.id && (
+                <IntegratedSpinner
+                  getting={false}
+                  tooltip="Execute Workflow and exit Execution mode"
+                  action={executeWorkflow}
+                  onClick={() => {
+                    /* eslint-disable no-console */
+                    console.log('Starting Execution');
+                  }}
+                >
+                  <PlayCircleOutlineIcon fontSize="large" />
+                </IntegratedSpinner>
               )}
             </div>
           ))}
@@ -287,7 +352,7 @@ export default function ExecutionDetails() {
         {/* {graphOutputs.length > 0 && <DenseTable data={graphOutputs} />} */}
       </div>
       <ReactJson
-        src={showSelected(executedEvents[currentExecutionEvent - 1])}
+        src={executedEvents[currentExecutionEvent - 1]}
         name="Event details"
         theme="monokai"
         collapsed
