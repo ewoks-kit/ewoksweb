@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function ExecuteSpinner({ children, tooltip, action, getting }) {
+export default function ExecuteSpinner(props) {
   const [loading, setLoading] = React.useState(false);
   const [success] = React.useState(false);
   // const inExecutionMode = state((state) => state.inExecutionMode);
@@ -31,12 +31,12 @@ export default function ExecuteSpinner({ children, tooltip, action, getting }) {
 
   // TODO: synd with the real time the call makes using getting
   React.useEffect(() => {
-    if (getting) {
+    if (props.getting) {
       setLoading(true);
     } else {
       setLoading(false);
     }
-  }, [getting]);
+  }, [props.getting]);
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -49,7 +49,7 @@ export default function ExecuteSpinner({ children, tooltip, action, getting }) {
           component="span"
           aria-label="add"
         >
-          {success ? <CheckIcon /> : loading ? '...' : children}
+          {success ? <CheckIcon /> : loading ? '...' : props.children}
         </Fab>
         {loading && (
           <CircularProgress

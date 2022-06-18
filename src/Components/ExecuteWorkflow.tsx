@@ -4,7 +4,7 @@ import IntegratedSpinner from '../Components/IntegratedSpinner';
 import ClearIcon from '@material-ui/icons/Clear';
 import io from 'socket.io-client';
 import { useEffect } from 'react';
-import type { ExecutingEvent } from '../types';
+import type { Event } from '../types';
 import { executeWorkflow } from '../utils/api';
 
 export const socket = io(process.env.REACT_APP_SERVER_URL);
@@ -21,7 +21,7 @@ export default function ExecuteWorkflow() {
 
   useEffect(() => {
     socket.on('Executing', (data) => {
-      setExecutedEvents(data as ExecutingEvent);
+      setExecutedEvents(data as Event);
     });
 
     return () => {

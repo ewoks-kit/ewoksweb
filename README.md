@@ -1,8 +1,7 @@
 # Ewoks-web
 
-Visualizer for [NetworkX](https://networkx.org/) task graphs in the
-[node-link](https://networkx.org/documentation/stable/reference/readwrite/generated/networkx.readwrite.json_graph.node_link_data.html#networkx.readwrite.json_graph.node_link_data)
-JSON format.
+Create, visualize and execute
+[ewoks](https://gitlab.esrf.fr/workflow/ewoks/ewoks) workflows in the web.
 
 # Demo
 
@@ -52,3 +51,7 @@ Start the server that serves the frontend
 ```bash
 ewoks-server
 ```
+
+## Documentation
+
+https://ewoksweb.readthedocs.io/

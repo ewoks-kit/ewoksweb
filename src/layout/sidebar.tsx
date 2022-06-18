@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@material-ui/core';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Button,
+  Typography,
+} from '@material-ui/core';
 import AddNodes from '../Components/AddNodes';
 import EditElement from '../Components/EditElement';
 import EditElementStyle from '../Components/EditElementStyle';
@@ -16,6 +22,8 @@ import ConfirmDialog from '../Components/ConfirmDialog';
 import { deleteWorkflow, getIcon, getIcons, getOtherIcon } from '../utils/api';
 import axios from 'axios';
 import path from 'path';
+import { OpenInBrowser } from '@material-ui/icons';
+import SidebarTooltip from '../Components/SidebarTooltip';
 
 const useStyles = DashboardStyle;
 
@@ -41,9 +49,13 @@ export default function Sidebar() {
   );
   const setSelectedElement = state((state) => state.setSelectedElement);
 
-  const [element, setElement] = React.useState<EwoksRFNode | EwoksRFLink>(
+  const [element, setElement] = useState<EwoksRFNode | EwoksRFLink>(
     {} as EwoksRFNode | EwoksRFLink
   );
+  const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
+    false
+  );
+
   const graphRF = state((state) => state.graphRF);
   const setGraphRF = state((state) => state.setGraphRF);
   const workingGraph = state((state) => state.workingGraph);
@@ -292,6 +304,13 @@ export default function Sidebar() {
     }
   };
 
+  const handleChangeExecutionDetails = (
+    event: React.SyntheticEvent,
+    expand: boolean
+  ) => {
+    setOpenExecutionDetails(expand);
+  };
+
   return (
     <aside className="dndflow">
       {inExecutionMode ? (
@@ -317,6 +336,33 @@ export default function Sidebar() {
           <AddNodes title="Add Nodes" />
           <EditElement element={selectedElement} />
           <EditElementStyle />
+          <Accordion
+            expanded={openExecutionDetails}
+            onChange={handleChangeExecutionDetails}
+          >
+            <AccordionSummary
+              expandIcon={<OpenInBrowser />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <SidebarTooltip
+                text={`Drag and drop Tasks from their categories
+          to the canvas to create graphs.`}
+              >
+                <Typography>Execution History</Typography>
+              </SidebarTooltip>
+            </AccordionSummary>
+            <AccordionDetails style={{ flexWrap: 'wrap' }}>
+              <div className={classes.executionSide}>
+                <ExecutionDetails
+                // props={{
+                //   selectedElement,
+                // }}
+                // setElement={setElement}
+                />
+              </div>
+            </AccordionDetails>
+          </Accordion>
           <Button
             style={{ margin: '8px' }}
             variant="outlined"

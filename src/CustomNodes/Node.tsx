@@ -19,9 +19,7 @@ import { Handle, Position } from 'react-flow-renderer';
 import type { EwoksRFNode, NodeProps } from '../types';
 import { contentStyle, style } from './NodeStyle';
 import Tooltip from '@material-ui/core/Tooltip';
-import IntegratedSpinner from '../Components/IntegratedSpinner';
 import ExecuteSpinner from '../Components/ExecuteSpinner';
-import SendIcon from '@material-ui/icons/Send';
 import isValidLink from '../utils/IsValidLink';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import EditIcon from '@material-ui/icons/EditOutlined';
@@ -294,17 +292,20 @@ const Node: React.FC<NodeProps> = ({
             !withImage &&
             type !== 'graphOutput' &&
             type !== 'graphInput' && (
-              <IntegratedSpinner
+              <ExecuteSpinner
                 getting={executing}
                 tooltip="Execution"
                 action={execution}
-                onClick={() => {
-                  /* eslint-disable no-console */
-                  console.log('Starting Execution');
-                }}
               >
-                <SendIcon />
-              </IntegratedSpinner>
+                <img
+                  style={{ padding: '2px' }}
+                  role="presentation"
+                  draggable="false"
+                  onDragStart={(event) => onDragStart(event)}
+                  src={orange1}
+                  alt="icon"
+                />
+              </ExecuteSpinner>
             )}
           {/* <div style={{ wordWrap: 'break-word' }}>{comment}</div> */}
           {withImage &&
