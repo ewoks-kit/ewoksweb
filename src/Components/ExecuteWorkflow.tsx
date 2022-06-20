@@ -36,11 +36,11 @@ export default function ExecuteWorkflow() {
       // }
       socket.emit('Execute Graph', graphRF);
       /* eslint-disable no-console */
-      socket.on('Executing', (data) => console.log(data));
+      // socket.on('Executing', (data) => console.log(data));
       setInExecutionMode(true);
       const jobId = await executeWorkflow(graphRF.graph.id);
       /* eslint-disable no-console */
-      console.log(jobId);
+      // console.log(jobId);
     } else if (inExecutionMode) {
       setInExecutionMode(false);
       // socket.disconnect();

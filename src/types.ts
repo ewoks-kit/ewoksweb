@@ -487,5 +487,5 @@ export interface IconsNames {
 export interface Icon {
   name: string;
   type?: string;
-  image?: string;
+  image?: { data_url?: string };
 }

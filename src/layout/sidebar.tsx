@@ -15,7 +15,13 @@ import SettingsInfoDrawer from '../Components/SettingsInfoDrawer';
 import ExecutionDetails from '../Components/ExecutionDetails';
 import DashboardStyle from './DashboardStyle';
 import state from '../store/state';
-import type { EwoksRFNode, EwoksRFLink, GraphDetails, GraphRF } from '../types';
+import type {
+  EwoksRFNode,
+  EwoksRFLink,
+  GraphDetails,
+  GraphRF,
+  Icon,
+} from '../types';
 import { rfToEwoks } from '../utils';
 import { calcNewId } from '../utils/calcNewId';
 import ConfirmDialog from '../Components/ConfirmDialog';
@@ -74,117 +80,123 @@ export default function Sidebar() {
   // const allIconNames = state((state) => state.allIconNames);
   // const [testImage, setTestImage] = React.useState<string>();
 
-  useEffect(() => {
-    setElement(selectedElement);
+  useEffect(
+    () => {
+      setElement(selectedElement);
 
-    const fetchIcons = async () => {
-      if (allIcons.length <= 1) {
-        const data = await getIcons();
-        // console.log(allIcons.length, data);
-        // get the non svg image icons(png)
-        const iconsPng = data.identifiers
-          // .map((str) => str.slice(6))
-          .filter((str) => {
-            return !str.endsWith('svg');
-          });
-        // const resultsPng = [];
-
-        await axios
-          .all(iconsPng.map((id: string) => getOtherIcon(id)))
-          .then(
-            axios.spread((...resPng) => {
-              // console.log(resPng);
-              const resCln = resPng.filter((result) => result.data !== null);
-              return resCln.map((result) => {
-                const blobPng = new Blob([result.data], { type: 'image/png' });
-                const fileReader = new FileReader();
-                fileReader.readAsDataURL(blobPng);
-                // fileReader.addEventListener('load', handleReader);
-
-                // function handleReader() {
-                //   // resultsPng.push({ name: theId, image: fileReader.result });
-                // }
-                return result.data;
-              });
-            })
-          )
-          .catch((error) => {
-            // remove after handling the error
-            setOpenSnackbar({
-              open: true,
-              text: error.data,
-              severity: 'error',
+      const fetchIcons = async () => {
+        if (allIcons.length <= 1) {
+          const data = await getIcons();
+          // console.log(allIcons.length, data);
+          // get the non svg image icons(png)
+          const iconsPng = data.identifiers
+            // .map((str) => str.slice(6))
+            .filter((str) => {
+              return !str.endsWith('svg');
             });
-            return [];
-          });
-        // console.log(resultsPng);
+          // const resultsPng = [];
 
-        // getOtherIcon('orange1.png').then((r) => {
-        //   // console.log(r, typeof r.data);
-        //   const blo = r.data;
-        //   const blob1 = new Blob([blo], { type: 'image/png' });
-        //   // console.log(blob1);
-        //   const fileReader = new FileReader();
-        //   fileReader.readAsDataURL(blob1);
-        //   fileReader.addEventListener('load', handleReader);
+          await axios
+            .all(iconsPng.map((id: string) => getOtherIcon(id)))
+            .then(
+              axios.spread((...resPng) => {
+                // console.log(resPng);
+                const resCln = resPng.filter((result) => result.data !== null);
+                return resCln.map((result) => {
+                  const blobPng = new Blob([result.data], {
+                    type: 'image/png',
+                  });
+                  const fileReader = new FileReader();
+                  fileReader.readAsDataURL(blobPng);
+                  // fileReader.addEventListener('load', handleReader);
 
-        //   function handleReader() {
-        //     // console.log(fileReader.result);
-        //     setTestImage(fileReader.result as string);
-        //   }
-        // });
-
-        // get the svg icons
-        const iconsSvg = data.identifiers
-          // .map((str) => str.slice(6))
-          .filter((str) => {
-            return str.endsWith('svg');
-          });
-        // console.log(typeof iconsSvg, iconsSvg, Array.isArray(iconsSvg));
-        // TODO: if icons wont be downloaded due to a server issue it enters a infinite loop of requests
-        setAllIconNames([...iconsSvg, ...iconsPng]);
-        const results = await axios
-          .all(iconsSvg.map((id: string) => getIcon(id)))
-          .then(
-            axios.spread((...res) => {
-              const resCln = res.filter((result) => result.data !== null);
-              return resCln.map((result) => {
-                return {
-                  name: path.basename(result.config.url),
-                  image: result.data,
-                  type: path.extname(result.config.url),
-                };
+                  // function handleReader() {
+                  //   // resultsPng.push({ name: theId, image: fileReader.result });
+                  // }
+                  return result.data;
+                });
+              })
+            )
+            .catch((error) => {
+              // remove after handling the error
+              setOpenSnackbar({
+                open: true,
+                text: error.data,
+                severity: 'error',
               });
-            })
-          )
-          .catch((error) => {
-            // remove after handling the error
-            setOpenSnackbar({
-              open: true,
-              text: error.data,
-              severity: 'warning',
+              return [];
             });
-            return [];
-          });
-        // console.log(results);
-        setAllIcons(results);
-      }
-    };
-    // eslint-disable-next-line promise/prefer-await-to-callbacks
-    fetchIcons().catch((error) => {
-      /* eslint-disable no-console */
-      console.log(error);
-    });
-    // const icons = getIconsL();
-    // setAllIcons(icons);
-  }, [
-    selectedElement,
-    allIcons.length,
-    setAllIcons,
-    setAllIconNames,
-    // testImage,
-    setOpenSnackbar,
-  ]);
+          // console.log(resultsPng);
+
+          // getOtherIcon('orange1.png').then((r) => {
+          //   // console.log(r, typeof r.data);
+          //   const blo = r.data;
+          //   const blob1 = new Blob([blo], { type: 'image/png' });
+          //   // console.log(blob1);
+          //   const fileReader = new FileReader();
+          //   fileReader.readAsDataURL(blob1);
+          //   fileReader.addEventListener('load', handleReader);
+
+          //   function handleReader() {
+          //     // console.log(fileReader.result);
+          //     setTestImage(fileReader.result as string);
+          //   }
+          // });
+
+          // get the svg icons
+          const iconsSvg = data.identifiers
+            // .map((str) => str.slice(6))
+            .filter((str) => {
+              return str.endsWith('svg');
+            });
+          // console.log(typeof iconsSvg, iconsSvg, Array.isArray(iconsSvg));
+
+          setAllIconNames([...iconsSvg, ...iconsPng]);
+          const results = await axios
+            .all(iconsSvg.map((id: string) => getIcon(id)))
+            .then(
+              axios.spread((...res) => {
+                const resCln = res.filter((result) => result.data !== null);
+                return resCln.map((result) => {
+                  return {
+                    name: path.basename(result.config.url),
+                    image: result.data,
+                    type: path.extname(result.config.url),
+                  };
+                });
+              })
+            )
+            .catch((error) => {
+              // remove after handling the error
+              setOpenSnackbar({
+                open: true,
+                text: error.data,
+                severity: 'warning',
+              });
+              return [];
+            });
+          // console.log(results);
+          setAllIcons(results as Icon[]);
+        }
+      };
+      // eslint-disable-next-line promise/prefer-await-to-callbacks
+      fetchIcons().catch((error) => {
+        /* eslint-disable no-console */
+        console.log(error);
+      });
+      // const icons = getIconsL();
+      // setAllIcons(icons);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      // selectedElement,
+      // allIcons.length,
+      // setAllIcons,
+      // setAllIconNames,
+      // // testImage,
+      // setOpenSnackbar,
+    ]
+  );
 
   const deleteElement = async () => {
     let newGraph = {} as GraphRF;

@@ -58,9 +58,10 @@ export default function ManageIcons() {
 
   const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  // const allIcons = state((state) => state.allIcons);
+  const allIcons = state((state) => state.allIcons);
 
   const clickIcon = (icon) => {
+    console.log(allIcons);
     setSelectedIcon(icon);
   };
 
@@ -103,7 +104,7 @@ export default function ManageIcons() {
     // data.append('filename', fileToBeSent.filename);
     try {
       await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/icons/${fileToBeSent.file.name}`,
+        `${process.env.REACT_APP_SERVER_URL}/icon/${fileToBeSent.file.name}`,
         data
       );
     } catch (error) {
@@ -122,7 +123,7 @@ export default function ManageIcons() {
         text: 'File ready to be uploadede as an icon',
         severity: 'success',
       });
-      getIconL(ne.target.files[0].name as string);
+      // getIconL(ne.target.files[0].name as string);
       setFileToBeSent({ file: ne.target.files[0], filename: ne.target.value });
     } else {
       // setFileToBeSent('');
@@ -206,6 +207,39 @@ export default function ManageIcons() {
         <Grid item xs={12} sm={12} md={8} lg={6}>
           <Item>
             <span className="dndflow" style={{ display: 'flex' }}>
+              <span>
+                {allIcons.map((icon) => (
+                  <span
+                    onClick={() => clickIcon(icon.name)}
+                    aria-hidden="true"
+                    role="button"
+                    tabIndex={0}
+                    key={icon.name}
+                    className={`dndnode ${
+                      selectedIcon && selectedIcon === icon.name
+                        ? 'selectedTask'
+                        : ''
+                    }`}
+                  >
+                    <Tooltip title={icon.name} arrow>
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        style={{
+                          overflow: 'hidden',
+                          overflowWrap: 'break-word',
+                        }}
+                      >
+                        <img
+                          src={icon.image.data_url}
+                          alt={icon.name}
+                          key={icon.name}
+                        />
+                      </span>
+                    </Tooltip>
+                  </span>
+                ))}
+              </span>
               {icons.map((ico) => (
                 <span
                   onClick={() => clickIcon(ico)}

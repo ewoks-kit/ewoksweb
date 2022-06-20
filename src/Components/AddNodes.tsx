@@ -90,6 +90,7 @@ function AddNodes(props) {
   const initializedTask = state((state) => state.initializedTask);
   const [expanded, setExpanded] = useState<boolean>(false);
   const selectedElement = state((state) => state.selectedElement);
+  const allIcons = state((state) => state.allIcons);
 
   const getTasks = useCallback(async () => {
     try {
@@ -166,6 +167,14 @@ function AddNodes(props) {
     setExpanded(newExpanded);
   };
 
+  const findImage = (img) => {
+    const imgIndex = allIcons.map((ico) => ico.name).indexOf(img);
+
+    return imgIndex !== -1
+      ? allIcons[imgIndex].image.data_url
+      : iconsObj[img] || orange2;
+  };
+
   return (
     <Accordion expanded={expanded} onChange={handleChange}>
       <AccordionSummary
@@ -227,13 +236,7 @@ function AddNodes(props) {
                         }}
                       >
                         <img
-                          src={
-                            iconsObj[elem.icon]
-                            // TODO: when no icon use a default or the text
-                            // Object.keys(iconsObj).includes(elem.icon)
-                            //   ? iconsObj[elem.icon]
-                            //   : iconsObj['orange1']
-                          }
+                          src={findImage(elem.icon)}
                           alt={elem.task_identifier}
                         />
                       </span>

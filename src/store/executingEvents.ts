@@ -12,14 +12,40 @@ const executingEvents = (set, get) => ({
       let newExecutingEvents = [];
       if (execEvent.type === 'start') {
         // add to executing events
+        console.log(
+          'START event',
+          execEvent.node_id,
+          [...prevState.executingEvents].length,
+          [...prevState.executedEvents]
+        );
         newExecutingEvents = [...prevState.executingEvents, execEvent];
-      } else if (execEvent.type === 'stop') {
+      } else if (execEvent.type === 'end') {
+        console.log(
+          'END event',
+          execEvent.node_id,
+          [...prevState.executingEvents].length,
+          [...prevState.executedEvents]
+        );
         // remove from executing events
         // TODO removing based on node_id may be wrong as
-        // there maybe more than one running in parallel
-        newExecutingEvents = [...prevState.executingEvents].filter(
-          (ev) => ev.node_id !== execEvent.node_id
+        // there maybe more than one running in parallel: will remove the first-in
+        const eventToRemove = [...prevState.executingEvents]
+          .map((ev) => ev.node_id)
+          .indexOf(execEvent.node_id);
+        console.log(
+          eventToRemove,
+          [...prevState.executingEvents],
+          execEvent.node_id
         );
+        if (eventToRemove > -1) {
+          newExecutingEvents = [...prevState.executingEvents];
+
+          newExecutingEvents.splice(eventToRemove, 1);
+        }
+        console.log(newExecutingEvents);
+        // newExecutingEvents = [...prevState.executingEvents].filter(
+        //   (ev) => ev.node_id !== execEvent.node_id
+        // );
       }
 
       // ----if (execEvent.context === 'node') {
