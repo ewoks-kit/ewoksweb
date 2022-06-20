@@ -27,7 +27,7 @@ export default function ExecuteWorkflow() {
     return () => {
       socket.disconnect();
     };
-  }, [setExecutingEvents, setExecutedEvents]);
+  }, [setExecutedEvents]);
 
   const execute = async () => {
     if (recentGraphs.length > 0 && !inExecutionMode) {
@@ -35,12 +35,8 @@ export default function ExecuteWorkflow() {
       //   socket = io(process.env.REACT_APP_SERVER_URL);
       // }
       socket.emit('Execute Graph', graphRF);
-      /* eslint-disable no-console */
-      // socket.on('Executing', (data) => console.log(data));
       setInExecutionMode(true);
-      const jobId = await executeWorkflow(graphRF.graph.id);
-      /* eslint-disable no-console */
-      // console.log(jobId);
+      await executeWorkflow(graphRF.graph.id);
     } else if (inExecutionMode) {
       setInExecutionMode(false);
       // socket.disconnect();

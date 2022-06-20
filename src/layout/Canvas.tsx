@@ -277,6 +277,7 @@ function Canvas() {
           type: 'internal',
           icon,
           moreHandles: false,
+          nodeWidth: 100,
         },
       };
 

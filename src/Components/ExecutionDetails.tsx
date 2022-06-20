@@ -34,6 +34,14 @@ const executeJob = () => {
 //   return work;
 // };
 
+const formatedDate = (job) => {
+  // console.log(workflows, jobs, job);
+  const dat = new Date(job.time);
+  return `${
+    job.workflow_id as string
+  } ${dat.getHours()}:${dat.getMinutes()} ${dat.getDay()}/${dat.getMonth()}/${dat.getFullYear()}`;
+};
+
 export default function ExecutionDetails() {
   const classes = useStyles();
   // const { props } = propsIn;
@@ -45,7 +53,8 @@ export default function ExecutionDetails() {
   const currentExecutionEvent = state((state) => state.currentExecutionEvent);
 
   const executedEvents = state((state) => state.executedEvents);
-  const setExecutingEvents = state((state) => state.setExecutingEvents);
+  const setExecutedEvents = state((state) => state.setExecutedEvents);
+  const setInExecutionMode = state((state) => state.setInExecutionMode);
 
   const [jobs, setJobs] = useState([]);
   const [workflows, setWorkflows] = useState([]);
@@ -54,6 +63,8 @@ export default function ExecutionDetails() {
   const [expandedJobs, setExpandedJobs] = useState<boolean>(false);
   const [expandedWorkflows, setExpandedWorkflows] = useState<boolean>(false);
   const [workflowNameFilter, setWorkflowNameFilter] = useState<String>('');
+  const [fromDateFilter, setFromDateFilter] = useState<String>('');
+  const [toDateFilter, setToDateFilter] = useState<String>('');
 
   useEffect(() => {
     setWorkflowNameFilter(graphRF.graph.label);
@@ -126,16 +137,9 @@ export default function ExecutionDetails() {
         ev.workflow_id === selectedWorkflow.workflow_id &&
         ev.job_id === selectedWorkflow.job_id
     );
-    // console.log(selectedWorkflow, events.length, executedEvents.length);
-    events.forEach((ev) => setExecutingEvents(ev));
-  };
-
-  const formatedDate = (job) => {
-    // console.log(workflows, jobs, job);
-    const dat = new Date(job.time);
-    return `${
-      job.workflow_id as string
-    } ${dat.getHours()}:${dat.getMinutes()} ${dat.getDay()}/${dat.getMonth()}/${dat.getFullYear()}`;
+    setInExecutionMode(true);
+    console.log(selectedWorkflow, events.length, executedEvents.length);
+    events.forEach((ev) => setExecutedEvents(ev));
   };
 
   return (
@@ -153,7 +157,8 @@ export default function ExecutionDetails() {
           id="date"
           label="From"
           type="date"
-          defaultValue={new Date().toString()}
+          value={fromDateFilter}
+          // defaultValue={new Date().toString()}
           InputLabelProps={{
             shrink: true,
           }}
@@ -165,7 +170,8 @@ export default function ExecutionDetails() {
           id="date"
           label="To"
           type="date"
-          defaultValue={new Date().toString()}
+          value={toDateFilter}
+          // defaultValue={new Date().toString()}
           InputLabelProps={{
             shrink: true,
           }}

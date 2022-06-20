@@ -24,7 +24,6 @@ const inExecutionMode = (set, get) => ({
         },
         executingEvents: [],
       }));
-      // when execution starts
     } else {
       // when execution starts
     }

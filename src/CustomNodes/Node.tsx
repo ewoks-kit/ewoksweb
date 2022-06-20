@@ -195,9 +195,7 @@ const Node: React.FC<NodeProps> = ({
 
   const findImage = (img) => {
     const imgIndex = allIcons.map((ico) => ico.name).indexOf(img);
-    console.log(img, imgIndex);
-    // ? allIcons[11].image.data_url
-    // : iconsObj[elem.icon]
+    // console.log(img, imgIndex);
 
     return imgIndex !== -1
       ? allIcons[imgIndex].image.data_url
@@ -346,7 +344,7 @@ const Node: React.FC<NodeProps> = ({
                 draggable="false"
                 onDragStart={(event) => onDragStart(event)}
                 src={findImage(image)}
-                alt={'taskIcon'}
+                alt="taskIcon"
               />
             ))}
           {withImage && (type === 'graphOutput' || type === 'graphInput') && (
