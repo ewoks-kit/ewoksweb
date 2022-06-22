@@ -12,9 +12,8 @@ const executingEvents = (set, get) => ({
   // executed and executing that must accept an array or a feed them using a loop
   // with setExecuting and setExecuted.
 
-  setExecutingEvents: (execEvent: Event) => {
+  setExecutingEvents: (execEvent: Event, live: boolean) => {
     const prevState = get((prev) => prev);
-    // console.log(execEvent, prevState.executingEvents);
 
     if (execEvent.context === 'node') {
       // Do the rest for nodes
@@ -86,12 +85,16 @@ const executingEvents = (set, get) => ({
       }
 
       // if there are other nodes for the same position we need to to join them with comma
-      const sameEls = [...prevState.executedEvents]
-        .reverse()
-        .filter(
-          (elem) =>
-            elem.node_id === execEvent.node_id && elem.type === execEvent.type
-        );
+      // only if live-execution else ignore
+      let sameEls = [];
+      if (live) {
+        sameEls = [...prevState.executedEvents]
+          .reverse()
+          .filter(
+            (elem) =>
+              elem.node_id === execEvent.node_id && elem.type === execEvent.type
+          );
+      }
 
       const tempLabel: string =
         sameEls.length > 0 ? sameEls.map((elem) => elem.id).join(',') : '';

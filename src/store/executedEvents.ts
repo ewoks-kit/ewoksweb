@@ -13,7 +13,7 @@ const executedEvents = (set, get) => ({
       id: (prevState.executedEvents.length as number) + 1,
     };
     // send it to executing events to addapt
-    prevState.setExecutingEvents(event);
+    prevState.setExecutingEvents(event, true);
     set((state) => ({
       ...state,
       executedEvents: [...prevState.executedEvents, event],

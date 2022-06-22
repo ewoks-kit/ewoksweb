@@ -84,7 +84,6 @@ const workingGraph = (set, get) => ({
       ([] as EwoksRFNode[]);
 
     grfNodes = [...grfNodes, ...notes];
-    // console.log(notes, grfNodes);
 
     const graph = {
       graph: {

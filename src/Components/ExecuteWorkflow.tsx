@@ -16,7 +16,6 @@ export default function ExecuteWorkflow() {
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const inExecutionMode = state((state) => state.inExecutionMode);
   const setInExecutionMode = state((state) => state.setInExecutionMode);
-  const setExecutingEvents = state((state) => state.setExecutingEvents);
   const setExecutedEvents = state((state) => state.setExecutedEvents);
 
   useEffect(() => {

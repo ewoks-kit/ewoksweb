@@ -77,13 +77,14 @@ export default function Sidebar() {
   const setAllIcons = state((state) => state.setAllIcons);
   const allIcons = state((state) => state.allIcons);
   const setAllIconNames = state((state) => state.setAllIconNames);
-  // const allIconNames = state((state) => state.allIconNames);
-  // const [testImage, setTestImage] = React.useState<string>();
 
+  useEffect(() => {
+    setElement(selectedElement);
+  }, [selectedElement]);
+
+  // TODO move fetch out to be used when refresh in icons is needed
   useEffect(
     () => {
-      setElement(selectedElement);
-
       const fetchIcons = async () => {
         if (allIcons.length <= 1) {
           const data = await getIcons();
@@ -184,18 +185,9 @@ export default function Sidebar() {
         /* eslint-disable no-console */
         console.log(error);
       });
-      // const icons = getIconsL();
-      // setAllIcons(icons);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      // selectedElement,
-      // allIcons.length,
-      // setAllIcons,
-      // setAllIconNames,
-      // // testImage,
-      // setOpenSnackbar,
-    ]
+    []
   );
 
   const deleteElement = async () => {
@@ -214,6 +206,7 @@ export default function Sidebar() {
         nodes: graphRF.nodes.filter((nod) => nod.id !== element.id),
         links: nodesLinks,
       };
+
       setUndoRedo({
         action: 'Removed a Node',
         graph: newGraph,
@@ -223,6 +216,7 @@ export default function Sidebar() {
         ...graphRF,
         links: graphRF.links.filter((link) => link.id !== elL.id),
       };
+
       setUndoRedo({
         action: 'Removed a Link',
         graph: newGraph,
@@ -327,24 +321,10 @@ export default function Sidebar() {
     <aside className="dndflow">
       {inExecutionMode ? (
         <div className={classes.executionSide}>
-          <ExecutionDetails
-          // props={{
-          //   selectedElement,
-          // }}
-          // setElement={setElement}
-          />
+          <ExecutionDetails />
         </div>
       ) : (
         <>
-          {/* <img src={testImage} alt="sdc"></img> */}
-          {/* {allIcons &&
-            allIcons.length > 0 &&
-            allIcons.map((icon) => (
-              <img
-                src={`data:image/svg+xml;utf8,${icon.image}`}
-                alt={icon.name}
-              />
-            ))} */}
           <AddNodes title="Add Nodes" />
           <EditElement element={selectedElement} />
           <EditElementStyle />
@@ -366,12 +346,7 @@ export default function Sidebar() {
             </AccordionSummary>
             <AccordionDetails style={{ flexWrap: 'wrap' }}>
               <div className={classes.executionSide}>
-                <ExecutionDetails
-                // props={{
-                //   selectedElement,
-                // }}
-                // setElement={setElement}
-                />
+                <ExecutionDetails />
               </div>
             </AccordionDetails>
           </Accordion>

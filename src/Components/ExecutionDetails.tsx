@@ -35,7 +35,6 @@ const executeJob = () => {
 // };
 
 const formatedDate = (job) => {
-  // console.log(workflows, jobs, job);
   const dat = new Date(job.time);
   return `${
     job.workflow_id as string
@@ -44,16 +43,13 @@ const formatedDate = (job) => {
 
 export default function ExecutionDetails() {
   const classes = useStyles();
-  // const { props } = propsIn;
-  // const { element } = props;
-  // const { setElement } = propsIn;
 
   const graphRF = state((state) => state.graphRF);
 
   const currentExecutionEvent = state((state) => state.currentExecutionEvent);
 
   const executedEvents = state((state) => state.executedEvents);
-  const setExecutedEvents = state((state) => state.setExecutedEvents);
+  const setExecutingEvents = state((state) => state.setExecutingEvents);
   const setInExecutionMode = state((state) => state.setInExecutionMode);
 
   const [jobs, setJobs] = useState([]);
@@ -67,7 +63,8 @@ export default function ExecutionDetails() {
   const [toDateFilter, setToDateFilter] = useState<String>('');
 
   useEffect(() => {
-    setWorkflowNameFilter(graphRF.graph.label);
+    // console.log(graphRF.graph.label); // TODO: it gets an undifined value on getFromServer
+    setWorkflowNameFilter(graphRF.graph.label || 'no_Graph');
     const allJobs = executedEvents
       .filter((ev) => ev.context === 'job' && ev.type === 'start')
       .map((job) => {
@@ -109,9 +106,6 @@ export default function ExecutionDetails() {
     event: React.SyntheticEvent,
     newExpanded: boolean
   ) => {
-    // if (newExpanded) {
-    //   getTasks();
-    // }
     setExpandedJobs(newExpanded);
   };
 
@@ -138,8 +132,15 @@ export default function ExecutionDetails() {
         ev.job_id === selectedWorkflow.job_id
     );
     setInExecutionMode(true);
-    console.log(selectedWorkflow, events.length, executedEvents.length);
-    events.forEach((ev) => setExecutedEvents(ev));
+    events.forEach((ev) => setExecutingEvents(ev, false));
+  };
+
+  const toDateChanged = (val) => {
+    setToDateFilter(val);
+  };
+
+  const fromDateChanged = (val) => {
+    setFromDateFilter(val);
   };
 
   return (
@@ -163,6 +164,7 @@ export default function ExecutionDetails() {
             shrink: true,
           }}
           variant="outlined"
+          onChange={fromDateChanged}
         />
       </div>
       <div className={classes.detailsLabels}>
@@ -176,6 +178,7 @@ export default function ExecutionDetails() {
             shrink: true,
           }}
           variant="outlined"
+          onChange={toDateChanged}
         />
       </div>
       <Button

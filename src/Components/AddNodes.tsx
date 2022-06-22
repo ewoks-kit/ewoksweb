@@ -57,6 +57,7 @@ const iconsObj = {
   graphInput,
   'graphOutput.svg': graphOutput,
   graphOutput,
+  'orange1.png': orange1,
   orange1,
   'Continuize.svg': Continuize,
   Continuize,
