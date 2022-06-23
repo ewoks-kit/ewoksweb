@@ -1,7 +1,7 @@
-# Ewoks-web
+# ewoksweb
 
-Create, visualize and execute
-[ewoks](https://gitlab.esrf.fr/workflow/ewoks/ewoks) workflows in the web.
+_ewoksweb_ is a frontend to create, visualize and execute
+[ewoks](https://ewoks.readthedocs.io/) workflows in the web.
 
 # Demo
 
