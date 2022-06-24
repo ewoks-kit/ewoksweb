@@ -344,7 +344,7 @@ export default function Sidebar() {
                 <Typography>Execution History</Typography>
               </SidebarTooltip>
             </AccordionSummary>
-            <AccordionDetails style={{ flexWrap: 'wrap' }}>
+            <AccordionDetails style={{ padding: '4px' }}>
               <div className={classes.executionSide}>
                 <ExecutionDetails />
               </div>

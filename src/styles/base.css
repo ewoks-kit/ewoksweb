@@ -93,3 +93,7 @@ abbr[title] {
   white-space: break-spaces;
   margin: 10px;
 }
+
+.MuiAccordionDetails-root {
+  padding: 4px;
+}

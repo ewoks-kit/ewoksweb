@@ -20,12 +20,7 @@ const executingEvents = (set, get) => ({
       let newExecutingEvents = [];
       if (execEvent.type === 'start') {
         // add to executing events
-        // console.log(
-        //   'START event',
-        //   execEvent.node_id,
-        //   [...prevState.executingEvents].length,
-        //   [...prevState.executedEvents]
-        // );
+        console.log(execEvent);
         newExecutingEvents = [...prevState.executingEvents, execEvent];
       } else if (execEvent.type === 'end') {
         // console.log(

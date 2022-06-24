@@ -41,7 +41,6 @@ export default function GetFromServer() {
       try {
         const response = await getWorkflow(workflowId);
         if (response.data) {
-          setGettingFromServer(false);
           // setCallSuccess(true);
           if (isSubgraph === 'subgraph') {
             setSubGraph(response.data as GraphEwoks);
@@ -49,7 +48,6 @@ export default function GetFromServer() {
             setWorkingGraph(response.data as GraphRF, 'fromServer');
           }
         } else {
-          setGettingFromServer(false);
           setOpenSnackbar({
             open: true,
             text:
@@ -65,6 +63,8 @@ export default function GetFromServer() {
             'Error in retrieving workflow. Please check connectivity with the server!',
           severity: 'error',
         });
+      } finally {
+        setGettingFromServer(false);
       }
     } else {
       setOpenSnackbar({

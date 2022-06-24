@@ -15,8 +15,9 @@ import {
   Button,
 } from '@material-ui/core';
 import SidebarTooltip from './SidebarTooltip';
-import type { Event } from '../types';
+import type { Event, GraphRF } from '../types';
 import DashboardStyle from '../layout/DashboardStyle';
+import { getWorkflow } from '../utils/api';
 
 const useStyles = DashboardStyle;
 
@@ -37,7 +38,7 @@ const executeJob = () => {
 const formatedDate = (job) => {
   const dat = new Date(job.time);
   return `${
-    job.workflow_id as string
+    job.workflow_id.slice(0, 20) as string
   } ${dat.getHours()}:${dat.getMinutes()} ${dat.getDay()}/${dat.getMonth()}/${dat.getFullYear()}`;
 };
 
@@ -45,6 +46,7 @@ export default function ExecutionDetails() {
   const classes = useStyles();
 
   const graphRF = state((state) => state.graphRF);
+  const setGraphRF = state((state) => state.setGraphRF);
 
   const currentExecutionEvent = state((state) => state.currentExecutionEvent);
 
@@ -61,6 +63,9 @@ export default function ExecutionDetails() {
   const [workflowNameFilter, setWorkflowNameFilter] = useState<String>('');
   const [fromDateFilter, setFromDateFilter] = useState<String>('');
   const [toDateFilter, setToDateFilter] = useState<String>('');
+  const [gettingFromServer, setGettingFromServer] = useState(false);
+  const setWorkingGraph = state((state) => state.setWorkingGraph);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
   useEffect(() => {
     // console.log(graphRF.graph.label); // TODO: it gets an undifined value on getFromServer
@@ -125,14 +130,67 @@ export default function ExecutionDetails() {
     setSelectedJob(job);
   };
 
-  const executeWorkflow = () => {
-    const events = executedEvents.filter(
-      (ev) =>
-        ev.workflow_id === selectedWorkflow.workflow_id &&
-        ev.job_id === selectedWorkflow.job_id
-    );
-    setInExecutionMode(true);
-    events.forEach((ev) => setExecutingEvents(ev, false));
+  const executeWorkflow = async () => {
+    const workflowId = selectedWorkflow.workflow_id;
+    // Replay execution on canvas needs to put the workflow on canvas with the events
+    // 1. Ask for saving the workflow that is on canvas
+    console.log(graphRF.graph.id, workflowId, selectedWorkflow);
+    if (graphRF.graph.id !== workflowId) {
+      console.log('save workflow with await');
+
+      // 2. Get the workflow from server if not on canvas
+      // TODO: dublicated code with getFromServer, abstract in store? hook?
+      setGettingFromServer(true);
+      try {
+        const response = await getWorkflow(workflowId);
+        if (response.data) {
+          console.log(response.data);
+          setWorkingGraph(response.data as GraphRF, 'fromServer');
+          // setGraphRF(response.data as GraphRF);
+
+          setTimeout(() => {
+            const events = executedEvents.filter(
+              (ev) =>
+                ev.workflow_id === selectedWorkflow.workflow_id &&
+                ev.job_id === selectedWorkflow.job_id
+            );
+            console.log(events);
+            setInExecutionMode(true);
+            // TODO: timeout is needed because executingEvents try to find
+            // the nodes before they are there from the server
+            // probably because setWorkingGraph changes the graphRF used in executingEvents
+            events.forEach((ev) => setExecutingEvents(ev, false));
+          }, 400);
+        } else {
+          setOpenSnackbar({
+            open: true,
+            text:
+              'Could not locate the requested workflow! Maybe it is deleted!',
+            severity: 'warning',
+          });
+        }
+      } catch (error) {
+        setOpenSnackbar({
+          open: true,
+          text:
+            error.response?.data?.message ||
+            'Error in retrieving workflow. Please check connectivity with the server!',
+          severity: 'error',
+        });
+      } finally {
+        setGettingFromServer(false);
+      }
+    } else {
+      const events = executedEvents.filter(
+        (ev) =>
+          ev.workflow_id === selectedWorkflow.workflow_id &&
+          ev.job_id === selectedWorkflow.job_id
+      );
+      console.log(events);
+      setInExecutionMode(true);
+      events.forEach((ev) => setExecutingEvents(ev, false));
+    }
+    // setGraphRF(selectedWorkflow);
   };
 
   const toDateChanged = (val) => {
@@ -145,53 +203,68 @@ export default function ExecutionDetails() {
 
   return (
     <>
-      <div className={classes.detailsLabels}>
-        <TextField
-          id="outlined-basic"
-          label="Workflow Name"
-          variant="outlined"
-          value={workflowNameFilter}
-        />
-      </div>
-      <div className={classes.detailsLabels}>
-        <TextField
-          id="date"
-          label="From"
-          type="date"
-          value={fromDateFilter}
-          // defaultValue={new Date().toString()}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-          onChange={fromDateChanged}
-        />
-      </div>
-      <div className={classes.detailsLabels}>
-        <TextField
-          id="date"
-          label="To"
-          type="date"
-          value={toDateFilter}
-          // defaultValue={new Date().toString()}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-          onChange={toDateChanged}
-        />
-      </div>
-      <Button
-        style={{ margin: '8px' }}
-        variant="outlined"
-        color="primary"
-        // onClick={console.log('filter')}
-        size="small"
-      >
-        Filter
-      </Button>
-      <hr />
       <Accordion expanded={expandedJobs} onChange={handleChangeJobs}>
+        <AccordionSummary
+          expandIcon={<OpenInBrowser />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <SidebarTooltip
+            text={`Drag and drop Tasks from their categories
+          to the canvas to create graphs.`}
+          >
+            <Typography>Filters</Typography>
+          </SidebarTooltip>
+        </AccordionSummary>
+        <AccordionDetails style={{ flexWrap: 'wrap' }}>
+          <div className={classes.detailsLabels}>
+            <TextField
+              id="outlined-basic"
+              label="Workflow Name"
+              variant="outlined"
+              value={workflowNameFilter}
+            />
+          </div>
+          <div className={classes.detailsLabels}>
+            <TextField
+              id="date"
+              label="From"
+              type="date"
+              value={fromDateFilter}
+              // defaultValue={new Date().toString()}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="outlined"
+              onChange={fromDateChanged}
+            />
+          </div>
+          <div className={classes.detailsLabels}>
+            <TextField
+              id="date"
+              label="To"
+              type="date"
+              value={toDateFilter}
+              // defaultValue={new Date().toString()}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="outlined"
+              onChange={toDateChanged}
+            />
+          </div>
+          <Button
+            style={{ margin: '8px' }}
+            variant="outlined"
+            color="primary"
+            // onClick={console.log('filter')}
+            size="small"
+          >
+            Filter
+          </Button>
+        </AccordionDetails>
+      </Accordion>
+      {/* <Accordion expanded={expandedJobs} onChange={handleChangeJobs}>
         <AccordionSummary
           expandIcon={<OpenInBrowser />}
           aria-controls="panel1a-content"
@@ -258,7 +331,7 @@ export default function ExecutionDetails() {
                     tooltip="Execute Workflow and exit Execution mode"
                     action={executeJob}
                     onClick={() => {
-                      /* eslint-disable no-console */
+
                       console.log('Starting Execution');
                     }}
                   >
@@ -269,7 +342,7 @@ export default function ExecutionDetails() {
             </div>
           ))}
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
       <Accordion expanded={expandedWorkflows} onChange={handleChangeWorkflows}>
         <AccordionSummary
           expandIcon={<OpenInBrowser />}
@@ -283,7 +356,7 @@ export default function ExecutionDetails() {
             <Typography>Workflows</Typography>
           </SidebarTooltip>
         </AccordionSummary>
-        <AccordionDetails style={{ flexWrap: 'wrap' }}>
+        <AccordionDetails>
           {workflows.map((work) => (
             <div
               key={work.id}
@@ -296,7 +369,7 @@ export default function ExecutionDetails() {
             >
               <div
                 style={{
-                  display: 'flex',
+                  display: 'block',
                   paddingTop: '5px',
                   paddingBottom: '5px',
                 }}
@@ -334,7 +407,7 @@ export default function ExecutionDetails() {
               )}
               {selectedWorkflow.id === work.id && (
                 <IntegratedSpinner
-                  getting={false}
+                  getting={gettingFromServer}
                   tooltip="Execute Workflow and exit Execution mode"
                   action={executeWorkflow}
                   onClick={() => {
@@ -349,29 +422,21 @@ export default function ExecutionDetails() {
           ))}
         </AccordionDetails>
       </Accordion>
-      <div>
-        <b>Id:</b> {graphRF.graph.id}
-      </div>
-      <div>
-        <b>Inputs </b>
-        {/* {graphInputs.length > 0 && <DenseTable data={graphInputs} />} */}
-      </div>
-      <div>
-        <b>Outputs </b>
-        {/* {graphOutputs.length > 0 && <DenseTable data={graphOutputs} />} */}
-      </div>
-      <ReactJson
-        src={executedEvents[currentExecutionEvent - 1]}
-        name="Event details"
-        theme="monokai"
-        collapsed
-        collapseStringsAfterLength={20}
-        groupArraysAfterLength={15}
-        enableClipboard={false}
-        quotesOnKeys={false}
-        style={{ backgroundColor: 'rgb(59, 77, 172)' }}
-        displayDataTypes={false}
-      />
+
+      {executedEvents[currentExecutionEvent - 1] && (
+        <ReactJson
+          src={executedEvents[currentExecutionEvent - 1]}
+          name="Event details"
+          theme="monokai"
+          collapsed
+          collapseStringsAfterLength={20}
+          groupArraysAfterLength={15}
+          enableClipboard={false}
+          quotesOnKeys={false}
+          style={{ backgroundColor: 'rgb(59, 77, 172)' }}
+          displayDataTypes={false}
+        />
+      )}
     </>
   );
 }
