@@ -36,7 +36,6 @@ export default function GetFromServer() {
   };
 
   const getFromServer = async (isSubgraph) => {
-    // console.log(isSubgraph);
     if (workflowId) {
       setGettingFromServer(true);
       try {
@@ -47,7 +46,7 @@ export default function GetFromServer() {
           if (isSubgraph === 'subgraph') {
             setSubGraph(response.data as GraphEwoks);
           } else {
-            setWorkingGraph(response.data as GraphRF, 'fromServer'); // TODO: from env.specific-server
+            setWorkingGraph(response.data as GraphRF, 'fromServer');
           }
         } else {
           setGettingFromServer(false);
@@ -59,7 +58,6 @@ export default function GetFromServer() {
           });
         }
       } catch (error) {
-        // console.log(error.response);
         setOpenSnackbar({
           open: true,
           text:

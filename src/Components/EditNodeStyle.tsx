@@ -19,7 +19,7 @@ export default function EditNodeStyle(props) {
   const [withLabel, setWithLabel] = useState<boolean>(false);
   const [colorBorder, setColorBorder] = useState<string>('');
   const [moreHandles, setMoreHandles] = useState<boolean>(true);
-  const [nodeSize, setNodeSize] = useState<number>(30);
+  const [nodeSize, setNodeSize] = useState<number>(100);
   const selectedElement = state((state) => state.selectedElement);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function EditNodeStyle(props) {
       setWithLabel(element.data.withLabel);
       setColorBorder(element.data.colorBorder || '');
       setMoreHandles(!!element.data.moreHandles);
-      setNodeSize(element.data.nodeWidth);
+      setNodeSize(element.data.nodeWidth || 100);
     }
   }, [element.id, element]);
 

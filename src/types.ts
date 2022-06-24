@@ -97,7 +97,7 @@ export interface State {
   setExecutedEvents?: (execEvent: Event) => void;
 
   executingEvents?: Event[];
-  setExecutingEvents?: (execEvent: Event) => void;
+  setExecutingEvents?: (execEvent: Event, live: boolean) => void;
 
   inExecutionMode?: boolean;
   setInExecutionMode?: (val: boolean) => void;
@@ -487,5 +487,5 @@ export interface IconsNames {
 export interface Icon {
   name: string;
   type?: string;
-  image?: string;
+  image?: { data_url?: string };
 }

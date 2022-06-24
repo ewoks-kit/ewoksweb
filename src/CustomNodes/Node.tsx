@@ -43,6 +43,7 @@ const iconsObj = {
   graphInput,
   'graphOutput.svg': graphOutput,
   graphOutput,
+  'orange1.png': orange1,
   orange1,
   'Continuize.svg': Continuize,
   Continuize,
@@ -129,9 +130,10 @@ const Node: React.FC<NodeProps> = ({
   const [labelLocal, setLabelLocal] = React.useState(label);
   const setGraphRF = state((state) => state.setGraphRF);
   const [detailsL, setDetailsL] = React.useState(false);
+  const allIcons = state((state) => state.allIcons);
 
   useEffect(() => {
-    // console.log(label, details);
+    // console.log(label, details, image);
     setNodeSize(nodeWidth);
     setLabelLocal(label);
     setDetailsL(details || false);
@@ -189,6 +191,15 @@ const Node: React.FC<NodeProps> = ({
       nodes: [...graphRF.nodes, newClone],
     });
     setSelectedElement(newClone as EwoksRFNode);
+  };
+
+  const findImage = (img) => {
+    const imgIndex = allIcons.map((ico) => ico.name).indexOf(img);
+    // console.log(img, imgIndex);
+
+    return imgIndex !== -1
+      ? allIcons[imgIndex].image.data_url
+      : iconsObj[img] || orange2;
   };
 
   return (
@@ -332,8 +343,8 @@ const Node: React.FC<NodeProps> = ({
                 role="presentation"
                 draggable="false"
                 onDragStart={(event) => onDragStart(event)}
-                src={iconsObj[image] || orange1}
-                alt="icon"
+                src={findImage(image)}
+                alt="taskIcon"
               />
             ))}
           {withImage && (type === 'graphOutput' || type === 'graphInput') && (

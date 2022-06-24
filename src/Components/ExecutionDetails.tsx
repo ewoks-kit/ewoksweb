@@ -34,11 +34,15 @@ const executeJob = () => {
 //   return work;
 // };
 
+const formatedDate = (job) => {
+  const dat = new Date(job.time);
+  return `${
+    job.workflow_id as string
+  } ${dat.getHours()}:${dat.getMinutes()} ${dat.getDay()}/${dat.getMonth()}/${dat.getFullYear()}`;
+};
+
 export default function ExecutionDetails() {
   const classes = useStyles();
-  // const { props } = propsIn;
-  // const { element } = props;
-  // const { setElement } = propsIn;
 
   const graphRF = state((state) => state.graphRF);
 
@@ -46,6 +50,7 @@ export default function ExecutionDetails() {
 
   const executedEvents = state((state) => state.executedEvents);
   const setExecutingEvents = state((state) => state.setExecutingEvents);
+  const setInExecutionMode = state((state) => state.setInExecutionMode);
 
   const [jobs, setJobs] = useState([]);
   const [workflows, setWorkflows] = useState([]);
@@ -54,9 +59,12 @@ export default function ExecutionDetails() {
   const [expandedJobs, setExpandedJobs] = useState<boolean>(false);
   const [expandedWorkflows, setExpandedWorkflows] = useState<boolean>(false);
   const [workflowNameFilter, setWorkflowNameFilter] = useState<String>('');
+  const [fromDateFilter, setFromDateFilter] = useState<String>('');
+  const [toDateFilter, setToDateFilter] = useState<String>('');
 
   useEffect(() => {
-    setWorkflowNameFilter(graphRF.graph.label);
+    // console.log(graphRF.graph.label); // TODO: it gets an undifined value on getFromServer
+    setWorkflowNameFilter(graphRF.graph.label || 'no_Graph');
     const allJobs = executedEvents
       .filter((ev) => ev.context === 'job' && ev.type === 'start')
       .map((job) => {
@@ -98,9 +106,6 @@ export default function ExecutionDetails() {
     event: React.SyntheticEvent,
     newExpanded: boolean
   ) => {
-    // if (newExpanded) {
-    //   getTasks();
-    // }
     setExpandedJobs(newExpanded);
   };
 
@@ -126,16 +131,16 @@ export default function ExecutionDetails() {
         ev.workflow_id === selectedWorkflow.workflow_id &&
         ev.job_id === selectedWorkflow.job_id
     );
-    // console.log(selectedWorkflow, events.length, executedEvents.length);
-    events.forEach((ev) => setExecutingEvents(ev));
+    setInExecutionMode(true);
+    events.forEach((ev) => setExecutingEvents(ev, false));
   };
 
-  const formatedDate = (job) => {
-    // console.log(workflows, jobs, job);
-    const dat = new Date(job.time);
-    return `${
-      job.workflow_id as string
-    } ${dat.getHours()}:${dat.getMinutes()} ${dat.getDay()}/${dat.getMonth()}/${dat.getFullYear()}`;
+  const toDateChanged = (val) => {
+    setToDateFilter(val);
+  };
+
+  const fromDateChanged = (val) => {
+    setFromDateFilter(val);
   };
 
   return (
@@ -153,11 +158,13 @@ export default function ExecutionDetails() {
           id="date"
           label="From"
           type="date"
-          defaultValue={new Date().toString()}
+          value={fromDateFilter}
+          // defaultValue={new Date().toString()}
           InputLabelProps={{
             shrink: true,
           }}
           variant="outlined"
+          onChange={fromDateChanged}
         />
       </div>
       <div className={classes.detailsLabels}>
@@ -165,11 +172,13 @@ export default function ExecutionDetails() {
           id="date"
           label="To"
           type="date"
-          defaultValue={new Date().toString()}
+          value={toDateFilter}
+          // defaultValue={new Date().toString()}
           InputLabelProps={{
             shrink: true,
           }}
           variant="outlined"
+          onChange={toDateChanged}
         />
       </div>
       <Button

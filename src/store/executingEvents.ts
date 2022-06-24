@@ -3,23 +3,57 @@ import type { Event } from '../types';
 const executingEvents = (set, get) => ({
   executingEvents: [] as Event[],
 
-  setExecutingEvents: (execEvent: Event) => {
+  // Executing events receive one event at a time and calculate the executing spinners
+
+  // If user selects to see an executing job then the executed and the executing
+  // have to be recalculated to get again in execution mode?
+  // If so the events must be replayed up to all the executed and reach the executing
+  // in current-time. For that they mush be feeded all together to
+  // executed and executing that must accept an array or a feed them using a loop
+  // with setExecuting and setExecuted.
+
+  setExecutingEvents: (execEvent: Event, live: boolean) => {
     const prevState = get((prev) => prev);
-    // console.log(execEvent, prevState.executingEvents);
 
     if (execEvent.context === 'node') {
       // Do the rest for nodes
       let newExecutingEvents = [];
       if (execEvent.type === 'start') {
         // add to executing events
+        // console.log(
+        //   'START event',
+        //   execEvent.node_id,
+        //   [...prevState.executingEvents].length,
+        //   [...prevState.executedEvents]
+        // );
         newExecutingEvents = [...prevState.executingEvents, execEvent];
-      } else if (execEvent.type === 'stop') {
+      } else if (execEvent.type === 'end') {
+        // console.log(
+        //   'END event',
+        //   execEvent.node_id,
+        //   [...prevState.executingEvents].length,
+        //   [...prevState.executedEvents]
+        // );
         // remove from executing events
         // TODO removing based on node_id may be wrong as
-        // there maybe more than one running in parallel
-        newExecutingEvents = [...prevState.executingEvents].filter(
-          (ev) => ev.node_id !== execEvent.node_id
-        );
+        // there maybe more than one running in parallel: will remove the first-in
+        const eventToRemove = [...prevState.executingEvents]
+          .map((ev) => ev.node_id)
+          .indexOf(execEvent.node_id);
+        // console.log(
+        //   eventToRemove,
+        //   [...prevState.executingEvents],
+        //   execEvent.node_id
+        // );
+        if (eventToRemove > -1) {
+          newExecutingEvents = [...prevState.executingEvents];
+
+          newExecutingEvents.splice(eventToRemove, 1);
+        }
+        // console.log(newExecutingEvents);
+        // newExecutingEvents = [...prevState.executingEvents].filter(
+        //   (ev) => ev.node_id !== execEvent.node_id
+        // );
       }
 
       // ----if (execEvent.context === 'node') {
@@ -51,12 +85,16 @@ const executingEvents = (set, get) => ({
       }
 
       // if there are other nodes for the same position we need to to join them with comma
-      const sameEls = [...prevState.executedEvents]
-        .reverse()
-        .filter(
-          (elem) =>
-            elem.node_id === execEvent.node_id && elem.type === execEvent.type
-        );
+      // only if live-execution else ignore
+      let sameEls = [];
+      if (live) {
+        sameEls = [...prevState.executedEvents]
+          .reverse()
+          .filter(
+            (elem) =>
+              elem.node_id === execEvent.node_id && elem.type === execEvent.type
+          );
+      }
 
       const tempLabel: string =
         sameEls.length > 0 ? sameEls.map((elem) => elem.id).join(',') : '';
@@ -82,37 +120,41 @@ const executingEvents = (set, get) => ({
       ];
       // if execution goes back to the same node it needs to delete the previous
       // ExecutionStepNode with the old number before putting the new node
-      set((state) => ({
-        ...state,
-        // only foe testing set graphRF
-        graphRF: {
-          ...prevState.graphRF,
-          nodes: [
-            ...execNodes.filter(
-              (nod) =>
-                !(
-                  nod.data.node_id === execEvent.node_id &&
-                  nod.data.type === execEvent.type
-                )
-            ),
-            {
-              data: {
-                label: `${tempLabel},${(execEvent.id as unknown) as string}`,
-                node_id: execEvent.node_id,
-                type: execEvent.type,
-                values: { a: 1, b: 2 },
+
+      // If not in execution dont affect the canvas
+      if (prevState.inExecutionMode) {
+        set((state) => ({
+          ...state,
+          // only foe testing set graphRF
+          graphRF: {
+            ...prevState.graphRF,
+            nodes: [
+              ...execNodes.filter(
+                (nod) =>
+                  !(
+                    nod.data.node_id === execEvent.node_id &&
+                    nod.data.type === execEvent.type
+                  )
+              ),
+              {
+                data: {
+                  label: `${tempLabel},${(execEvent.id as unknown) as string}`,
+                  node_id: execEvent.node_id,
+                  type: execEvent.type,
+                  values: { a: 1, b: 2 },
+                },
+                id: execEvent.time,
+                task_type: 'executionSteps',
+                task_identifier: execEvent.id,
+                type: 'executionSteps',
+                // calculate position based on node_id -> node position + start or stop
+                position: tempPos,
               },
-              id: execEvent.time,
-              task_type: 'executionSteps',
-              task_identifier: execEvent.id,
-              type: 'executionSteps',
-              // calculate position based on node_id -> node position + start or stop
-              position: tempPos,
-            },
-          ],
-        },
-        executingEvents: newExecutingEvents,
-      }));
+            ],
+          },
+          executingEvents: newExecutingEvents,
+        }));
+      }
     } else if (execEvent.context === 'workflow') {
       // TODO: Terminate the execution and exit executionMode
       // If tasks still exist in executing raise an error?
