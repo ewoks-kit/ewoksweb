@@ -26,6 +26,11 @@ export function putTask(task: Task) {
   return axiosRequest.put(`/task/${task.task_identifier}`, task);
 }
 
+// Discover tasks
+export function discoverTasks(moduleNames: string[]) {
+  return axiosRequest.post(`/tasks/discover`, { modules: moduleNames });
+}
+
 // -------------Workflows
 // Get /workflows
 export function getWorkflowsDescriptions() {
