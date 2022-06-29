@@ -216,7 +216,7 @@ export default function ExecutionDetails() {
             <Typography>Filters</Typography>
           </SidebarTooltip>
         </AccordionSummary>
-        <AccordionDetails style={{ flexWrap: 'wrap' }}>
+        <AccordionDetails style={{ flexDirection: 'column' }}>
           <div className={classes.detailsLabels}>
             <TextField
               id="outlined-basic"
@@ -356,7 +356,7 @@ export default function ExecutionDetails() {
             <Typography>Workflows</Typography>
           </SidebarTooltip>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails style={{ flexWrap: 'wrap', flexDirection: 'column' }}>
           {workflows.map((work) => (
             <div
               key={work.id}

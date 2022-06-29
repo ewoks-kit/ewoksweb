@@ -36,17 +36,6 @@ export default function ManageWorkflows() {
         // justifyContent="flex-start"
         alignItems="center"
       >
-        {/* <Grid item xs={12} sm={12} md={6} lg={3}>
-          <Item style={{ backgroundColor: 'rgb(248, 248, 249)' }}>
-            Categories
-            <FormControl
-              variant="standard"
-              style={{ width: '100%', minWidth: '260px' }}
-            >
-              <AutocompleteDrop setInputWorkflowValue={setInputWorkflowValue} />
-            </FormControl>
-          </Item>
-        </Grid> */}
         <Grid item xs={12} sm={12} md={6} lg={3}>
           <Item>
             <FormControl

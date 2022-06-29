@@ -9,6 +9,7 @@ import ManageWorkflows from './ManageWorkflows';
 import ManageTasks from './ManageTasks';
 import { getIcons } from '../utils/api';
 import type { IconsNames } from '../types';
+import ExecutionFilters from './ExecutionFilters';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -76,7 +77,8 @@ export default function BasicTabs() {
           <Tab label="Workflows" {...a11yProps(0)} />
           <Tab label="Tasks" {...a11yProps(1)} />
           <Tab label="Icons" {...a11yProps(2)} />
-          <Tab label="Settings" {...a11yProps(3)} />
+          <Tab label="Execution" {...a11yProps(3)} />
+          <Tab label="Settings" {...a11yProps(4)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -89,6 +91,9 @@ export default function BasicTabs() {
         <ManageIcons />
       </TabPanel>
       <TabPanel value={value} index={3}>
+        <ExecutionFilters />
+      </TabPanel>
+      <TabPanel value={value} index={4}>
         <Tooltip title="Input the server URL your EwoksWeb server is in." arrow>
           <TextField
             margin="dense"
