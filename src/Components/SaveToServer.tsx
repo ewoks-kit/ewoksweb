@@ -16,6 +16,7 @@ const workflowExists = (id, workflowsIds) => {
 export default function SaveToServer({ saveToServerF }) {
   const setGettingFromServer = state((st) => st.setGettingFromServer);
   const graphRF = state((state) => state.graphRF);
+  const workingGraph = state((state) => state.workingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
   const [action, setAction] = React.useState<string>('newGraph');
@@ -25,6 +26,7 @@ export default function SaveToServer({ saveToServerF }) {
   });
 
   const saveToServer = async () => {
+    console.log(workingGraph.graph.id, graphRF.graph.id);
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     // and Nodes DataMapping before attempting to save
     const graphRFCurrated = curateGraph(graphRF);
@@ -39,32 +41,41 @@ export default function SaveToServer({ saveToServerF }) {
     if (!exists) {
       setAction('newGraph');
       setOpenSaveDialog(true);
-    } else if (exists && graphRF.graph.uiProps.source === 'fromServer') {
-      try {
-        await putWorkflow(rfToEwoks(graphRFCurrated));
-
+    } else if (workingGraph.graph.id === graphRF.graph.id) {
+      if (exists && graphRF.graph.uiProps.source === 'fromServer') {
+        try {
+          await putWorkflow(rfToEwoks(graphRFCurrated));
+          setOpenSnackbar({
+            open: true,
+            text: 'Graph saved succesfully!',
+            severity: 'success',
+          });
+        } catch (error) {
+          setOpenSnackbar({
+            open: true,
+            text: error.response?.data?.message || configData.savingError,
+            severity: 'error',
+          });
+        } finally {
+          setGettingFromServer(false);
+        }
+      } else if (exists && graphRF.graph.uiProps.source !== 'fromServer') {
+        setAction('newGraphOrOverwrite');
+        setOpenSaveDialog(true);
+      } else {
         setGettingFromServer(false);
         setOpenSnackbar({
           open: true,
-          text: 'Graph saved succesfully!',
-          severity: 'success',
-        });
-      } catch (error) {
-        setGettingFromServer(false);
-        setOpenSnackbar({
-          open: true,
-          text: error.response?.data?.message || configData.savingError,
-          severity: 'error',
+          text: 'No graph exists to save!',
+          severity: 'warning',
         });
       }
-    } else if (exists && graphRF.graph.uiProps.source !== 'fromServer') {
-      setAction('newGraphOrOverwrite');
-      setOpenSaveDialog(true);
     } else {
       setGettingFromServer(false);
       setOpenSnackbar({
         open: true,
-        text: 'No graph exists to save!',
+        text:
+          'Cannot save any changes to subgraphs! Open it as the main graph to make changes.',
         severity: 'warning',
       });
     }

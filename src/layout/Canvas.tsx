@@ -481,7 +481,7 @@ function Canvas() {
       setOpenSnackbar({
         open: true,
         text: 'Any positional change in any subgraph wont be saved!',
-        severity: 'success',
+        severity: 'warning',
       });
     }
   };
@@ -518,7 +518,7 @@ function Canvas() {
       setOpenSnackbar({
         open: true,
         text: 'Any positional change in any subgraph wont be saved!',
-        severity: 'success',
+        severity: 'warning',
       });
     }
   };
