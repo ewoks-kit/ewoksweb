@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import type { EwoksRFLink } from '../types';
-import { Checkbox } from '@material-ui/core';
+import { Checkbox, Paper } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 import DataMappingComponent from './DataMapping';
@@ -73,53 +73,56 @@ export default function LinkDetails(props) {
           {element.data.sub_target_attributes}
         </div>
       )}
-      <SidebarTooltip
-        text={`Setting this to True is equivalent to Data Mapping
+      <Paper style={{ backgroundColor: '#e9ebf7', borderRadius: '10px' }}>
+        <SidebarTooltip
+          text={`Setting this to True is equivalent to Data Mapping
         being the identity mapping for all input names.
         Cannot be used in combination with data_mapping.`}
-      >
-        <div>
-          <b>Map all Data</b>
-          <Checkbox
-            checked={mapAllData}
-            onChange={mapAllDataChanged}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
-        </div>
-      </SidebarTooltip>
-      {!mapAllData && elementL.source && (
-        <SidebarTooltip
-          text={`Describes the data transfer from source output to
+        >
+          <div>
+            <b>Map all Data</b>
+            <Checkbox
+              checked={mapAllData}
+              onChange={mapAllDataChanged}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </div>
+        </SidebarTooltip>
+        {!mapAllData && elementL.source && (
+          <SidebarTooltip
+            text={`Describes the data transfer from source output to
           target input arguments.`}
-        >
-          <div>
-            <DataMappingComponent element={element} />
-          </div>
-        </SidebarTooltip>
-      )}
-      <SidebarTooltip
-        text={`A special condition where the task raises an exception.
-        Cannot be used in combination with conditions.`}
-      >
-        <div>
-          <b>on_error</b>
-          <Checkbox
-            checked={onError}
-            onChange={onErrorChanged}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
-        </div>
-      </SidebarTooltip>
-      {!onError && elementL.source && (
+          >
+            <div>
+              <DataMappingComponent element={element} />
+            </div>
+          </SidebarTooltip>
+        )}
+        <hr />
         <SidebarTooltip
-          text={`Provides a list of expected values for source outputs.
-          [{"source_output": "result", "value": 10}]`}
+          text={`A special condition where the task raises an exception.
+        Cannot be used in combination with conditions.`}
         >
           <div>
-            <Conditions element={element} />
+            <b>on_error</b>
+            <Checkbox
+              checked={onError}
+              onChange={onErrorChanged}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
           </div>
         </SidebarTooltip>
-      )}
+        {!onError && elementL.source && (
+          <SidebarTooltip
+            text={`Provides a list of expected values for source outputs.
+          [{"source_output": "result", "value": 10}]`}
+          >
+            <div>
+              <Conditions element={element} />
+            </div>
+          </SidebarTooltip>
+        )}
+      </Paper>
       <hr />
     </>
   );

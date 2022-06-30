@@ -11,6 +11,7 @@ import {
   Box,
   Checkbox,
   IconButton,
+  Paper,
   Typography,
 } from '@material-ui/core';
 import EditTaskProp from './EditTaskProp';
@@ -210,6 +211,103 @@ export default function NodeDetails(props) {
 
   return (
     <Box>
+      <Paper style={{ backgroundColor: '#e9ebf7', borderRadius: '10px' }}>
+        <div>
+          <SidebarTooltip
+            text={`Used to create an input when not provided
+                by the output of other connected nodes(tasks).`}
+          >
+            <div>
+              <b>Default Inputs </b>
+              <IconButton
+                style={{ padding: '1px' }}
+                aria-label="delete"
+                onClick={() => addDefaultInputs()}
+              >
+                <AddCircleOutlineIcon />
+              </IconButton>
+            </div>
+          </SidebarTooltip>
+
+          {defaultInputs.length > 0 && (
+            <EditableTable
+              headers={['Name', 'Value']}
+              defaultValues={defaultInputs}
+              valuesChanged={defaultInputsChanged}
+              typeOfValues={[{ type: 'input' }, { type: 'input' }]}
+            />
+          )}
+        </div>
+        <hr />
+        <SidebarTooltip
+          text={`Set to True when the default input covers all required input
+        (used for method and script as the required inputs are unknown).`}
+        >
+          <div>
+            <b>Inputs-complete</b>
+            <Checkbox
+              checked={inputsComplete}
+              onChange={inputsCompleteChanged}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </div>
+        </SidebarTooltip>
+        <hr />
+        <SidebarTooltip
+          text={`When set to True all nodes without error handler
+        will be linked to this node. ONLY for one node in its graph`}
+        >
+          <div>
+            <b>Default Error Node</b>
+            <Checkbox
+              checked={defaultErrorNode}
+              onChange={defaulErrortNodeChanged}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </div>
+        </SidebarTooltip>
+        {defaultErrorNode && (
+          <div>
+            <b>Map all Data</b>
+            <Checkbox
+              checked={mapAllData}
+              onChange={mapAllDataChanged}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </div>
+        )}
+        {defaultErrorNode && !mapAllData && (
+          <div>
+            <b>Data Mapping </b>
+            <IconButton
+              style={{ padding: '1px' }}
+              aria-label="delete"
+              onClick={() => addDataMapping()}
+            >
+              <AddCircleOutlineIcon />
+            </IconButton>
+            {dataMapping && dataMapping.length > 0 && (
+              <EditableTable
+                headers={['Source', 'Target']}
+                defaultValues={dataMapping}
+                valuesChanged={dataMappingValuesChanged}
+                typeOfValues={[
+                  {
+                    type: 'input',
+                    values: [],
+                  },
+                  {
+                    type: 'input',
+                    values: [],
+                  },
+                ]}
+              />
+            )}
+            <hr />
+          </div>
+        )}
+      </Paper>
+      <hr />
       <SidebarTooltip
         text={`These properties are being populated by the task the
         specific node is based on. If you need to have them create a new Task
@@ -255,101 +353,6 @@ export default function NodeDetails(props) {
           </AccordionDetails>
         </Accordion>
       </SidebarTooltip>
-      <div>
-        <hr />
-        <SidebarTooltip
-          text={`Used to create an input when not provided
-                by the output of other connected nodes(tasks).`}
-        >
-          <div>
-            <b>Default Inputs </b>
-            <IconButton
-              style={{ padding: '1px' }}
-              aria-label="delete"
-              onClick={() => addDefaultInputs()}
-            >
-              <AddCircleOutlineIcon />
-            </IconButton>
-          </div>
-        </SidebarTooltip>
-
-        {defaultInputs.length > 0 && (
-          <EditableTable
-            headers={['Name', 'Value']}
-            defaultValues={defaultInputs}
-            valuesChanged={defaultInputsChanged}
-            typeOfValues={[{ type: 'input' }, { type: 'input' }]}
-          />
-        )}
-      </div>
-      <hr />
-      <SidebarTooltip
-        text={`Set to True when the default input covers all required input
-        (used for method and script as the required inputs are unknown).`}
-      >
-        <div>
-          <b>Inputs-complete</b>
-          <Checkbox
-            checked={inputsComplete}
-            onChange={inputsCompleteChanged}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
-        </div>
-      </SidebarTooltip>
-      <hr />
-      <SidebarTooltip
-        text={`When set to True all nodes without error handler
-        will be linked to this node. ONLY for one node in its graph`}
-      >
-        <div>
-          <b>Default Error Node</b>
-          <Checkbox
-            checked={defaultErrorNode}
-            onChange={defaulErrortNodeChanged}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
-        </div>
-      </SidebarTooltip>
-      {defaultErrorNode && (
-        <div>
-          <b>Map all Data</b>
-          <Checkbox
-            checked={mapAllData}
-            onChange={mapAllDataChanged}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
-        </div>
-      )}
-      {defaultErrorNode && !mapAllData && (
-        <div>
-          <b>Data Mapping </b>
-          <IconButton
-            style={{ padding: '1px' }}
-            aria-label="delete"
-            onClick={() => addDataMapping()}
-          >
-            <AddCircleOutlineIcon />
-          </IconButton>
-          {dataMapping && dataMapping.length > 0 && (
-            <EditableTable
-              headers={['Source', 'Target']}
-              defaultValues={dataMapping}
-              valuesChanged={dataMappingValuesChanged}
-              typeOfValues={[
-                {
-                  type: 'input',
-                  values: [],
-                },
-                {
-                  type: 'input',
-                  values: [],
-                },
-              ]}
-            />
-          )}
-          <hr />
-        </div>
-      )}
     </Box>
   );
 }

@@ -49,6 +49,10 @@ export interface DialogParams {
 // stop for one is not the start of another which can wait for other inputs!
 // so draw on link on each side the events in a timely manner.
 
+export interface ExecutedWorkflowEvent extends Event {
+  status: string;
+}
+
 export interface Event {
   host_name?: string;
   process_id?: string;
@@ -69,11 +73,11 @@ export interface Event {
   input_uris?: [];
   output_uris?: [];
   id?: number;
-  // nodeId: string;
-  // event_type: string; // start/stop/progress events
-  // values: {}; // all values entering or exiting a node
-  // // for now put static executing here
-  // executing?: string[];
+  nodeId: string;
+  event_type: string; // start/stop/progress events
+  values: {}; // all values entering or exiting a node
+  // for now put static executing here
+  executing?: string[];
 }
 
 export interface ExecutingState {
@@ -98,6 +102,9 @@ export interface State {
 
   executingEvents?: Event[];
   setExecutingEvents?: (execEvent: Event, live: boolean) => void;
+
+  executedWorkflows?: Event[];
+  setExecutedWorkflows?: (execEvent: Event, live: boolean) => void;
 
   inExecutionMode?: boolean;
   setInExecutionMode?: (val: boolean) => void;

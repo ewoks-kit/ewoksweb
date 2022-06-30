@@ -24,6 +24,7 @@ import subgraphsStack from './subgraphsStack';
 import taskCategories from './taskCategories';
 import tasks from './tasks';
 import undoIndex from './undoIndex';
+import executedWorkflows from './executedWorkflows';
 
 const initializedTask = {
   task_identifier: '',
@@ -67,6 +68,7 @@ const state = create<State>((set, get) => ({
   ...currentExecutionEvent(set),
   ...executedEvents(set, get),
   ...executingEvents(set, get),
+  ...executedWorkflows(set, get),
   ...inExecutionMode(set, get),
   ...gettingFromServer(set),
   ...graphOrSubgraph(set),

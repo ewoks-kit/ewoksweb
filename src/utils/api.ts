@@ -67,6 +67,11 @@ export function deleteWorkflow(id: string) {
   return axiosRequest.delete(`/workflow/${id}`);
 }
 
+// Get executed workflows
+export function getExecutedWorkflows() {
+  return axiosRequest.get(`/workflows/executed`); // or /workflows?executed
+}
+
 // --------------Icons
 // Get '/icons/descriptions'
 export async function getIcons(): Promise<IconsNames> {
