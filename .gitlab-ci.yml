@@ -95,6 +95,11 @@ build:
   variables:
     ARTIFACTS_SOURCE: dist
     ARTIFACTS_DEST: sdist
+  artifacts:
+    paths:
+      - sdist/
+    when: on_success
+    expire_in: 2h
 
 assets:
   extends: .deploy
