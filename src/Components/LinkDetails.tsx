@@ -56,24 +56,17 @@ export default function LinkDetails(props) {
 
   return (
     <>
-      <div className={classes.detailsLabels}>
-        <b>Source:</b> {element.source}
-      </div>
-      <div className={classes.detailsLabels}>
-        <b>Target:</b> {element.target}
-      </div>
-      {element.sub_target && (
-        <div className={classes.detailsLabels}>
-          <b>Sub_target:</b> {element.data.sub_target}
-        </div>
-      )}
-      {element.sub_target_attributes && (
-        <div className={classes.detailsLabels}>
-          <b>Sub_target_attributes:</b>
-          {element.data.sub_target_attributes}
-        </div>
-      )}
-      <Paper style={{ backgroundColor: '#e9ebf7', borderRadius: '10px' }}>
+      <Paper
+        style={{
+          backgroundColor: '#e9ebf7',
+          borderRadius: '10px 0px 0px 10px',
+          minWidth: '273px',
+          border: '#96a5f9',
+          borderStyle: 'solid none solid solid',
+          padding: '4px',
+          marginBottom: '10px',
+        }}
+      >
         <SidebarTooltip
           text={`Setting this to True is equivalent to Data Mapping
         being the identity mapping for all input names.
@@ -98,7 +91,7 @@ export default function LinkDetails(props) {
             </div>
           </SidebarTooltip>
         )}
-        <hr />
+        <hr style={{ color: '#96a5f9' }} />
         <SidebarTooltip
           text={`A special condition where the task raises an exception.
         Cannot be used in combination with conditions.`}
@@ -123,7 +116,24 @@ export default function LinkDetails(props) {
           </SidebarTooltip>
         )}
       </Paper>
-      <hr />
+      {/* <hr /> */}
+      <div className={classes.detailsLabels}>
+        <b>Source:</b> {element.source}
+      </div>
+      <div className={classes.detailsLabels}>
+        <b>Target:</b> {element.target}
+      </div>
+      {element.sub_target && (
+        <div className={classes.detailsLabels}>
+          <b>Sub_target:</b> {element.data.sub_target}
+        </div>
+      )}
+      {element.sub_target_attributes && (
+        <div className={classes.detailsLabels}>
+          <b>Sub_target_attributes:</b>
+          {element.data.sub_target_attributes}
+        </div>
+      )}
     </>
   );
 }

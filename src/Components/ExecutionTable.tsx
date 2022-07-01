@@ -321,7 +321,7 @@ export default function EnhancedTable() {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper style={{ backgroundColor: 'grey', borderRadius: '10px' }}>
+      <Paper style={{ backgroundColor: '#eaedff', borderRadius: '10px' }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>

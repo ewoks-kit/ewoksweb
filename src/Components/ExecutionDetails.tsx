@@ -5,7 +5,7 @@ import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 // import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import IntegratedSpinner from './IntegratedSpinner';
 import state from '../store/state';
-import { Chip, Switch } from '@material-ui/core';
+import { Button, Chip, Switch } from '@material-ui/core';
 // import SidebarTooltip from './SidebarTooltip';
 import type { Event, GraphRF } from '../types';
 import DashboardStyle from '../layout/DashboardStyle';
@@ -39,9 +39,13 @@ export default function ExecutionDetails() {
   const [gettingFromServer, setGettingFromServer] = useState(false);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const [dense, setDense] = React.useState(false);
+  const [openDrawers, setOpenDrawers] = React.useState(true);
+  const [openSettings, setOpenSettings] = React.useState(false);
+  const [openInfo, setOpenInfo] = React.useState(false);
   const [expandedWorkflows, setExpandedWorkflows] = useState<boolean>(false);
   const [workflowNameFilter, setWorkflowNameFilter] = useState<String>('');
+  const openSettingsDrawer = state((state) => state.openSettingsDrawer);
+  const setOpenSettingsDrawer = state((state) => state.setOpenSettingsDrawer);
 
   useEffect(() => {
     // console.log(graphRF.graph.label); // TODO: it gets an undifined value on getFromServer
@@ -158,16 +162,20 @@ export default function ExecutionDetails() {
     // setGraphRF(selectedWorkflow);
   };
 
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
+  const handleChangeOpenExecutions = (event) => {
+    // console.log(event.target.checked);
+    setOpenSettingsDrawer('Executions');
   };
 
   return (
     <>
-      <FormControlLabel
+      {/* <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Open all Executions"
-      />
+        label="Open Executions"
+      /> */}
+      <Button onClick={handleChangeOpenExecutions} variant="outlined">
+        Open Executions
+      </Button>
       {workflows.map((work) => (
         <div
           key={work.id}

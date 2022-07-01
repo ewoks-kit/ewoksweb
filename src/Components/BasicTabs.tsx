@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
@@ -10,6 +10,7 @@ import ManageTasks from './ManageTasks';
 import { getIcons } from '../utils/api';
 import type { IconsNames } from '../types';
 import ExecutionTable from '../Components/ExecutionTable';
+import state from '../store/state';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -49,6 +50,24 @@ export default function BasicTabs() {
   const [serverUrl, setServerUrl] = React.useState(
     process.env.REACT_APP_SERVER_URL
   );
+  const openSettingsDrawer = state((state) => state.openSettingsDrawer);
+
+  useEffect(() => {
+    console.log(openSettingsDrawer);
+    setValue(
+      openSettingsDrawer === 'Workflows'
+        ? 0
+        : openSettingsDrawer === 'Tasks'
+        ? 1
+        : openSettingsDrawer === 'Icons'
+        ? 2
+        : openSettingsDrawer === 'Executions'
+        ? 3
+        : openSettingsDrawer === 'Settings'
+        ? 4
+        : 0
+    );
+  }, [openSettingsDrawer]);
 
   const handleChange = async (
     event: React.SyntheticEvent,
@@ -77,7 +96,7 @@ export default function BasicTabs() {
           <Tab label="Workflows" {...a11yProps(0)} />
           <Tab label="Tasks" {...a11yProps(1)} />
           <Tab label="Icons" {...a11yProps(2)} />
-          <Tab label="Execution" {...a11yProps(3)} />
+          <Tab label="Executions" {...a11yProps(3)} />
           <Tab label="Settings" {...a11yProps(4)} />
         </Tabs>
       </Box>

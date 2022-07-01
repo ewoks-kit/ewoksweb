@@ -211,7 +211,17 @@ export default function NodeDetails(props) {
 
   return (
     <Box>
-      <Paper style={{ backgroundColor: '#e9ebf7', borderRadius: '10px' }}>
+      <Paper
+        style={{
+          backgroundColor: '#e9ebf7',
+          borderRadius: '10px 0px 0px 10px',
+          minWidth: '273px',
+          border: '#96a5f9',
+          borderStyle: 'solid none solid solid',
+          padding: '4px',
+          marginBottom: '10px',
+        }}
+      >
         <div>
           <SidebarTooltip
             text={`Used to create an input when not provided
@@ -238,7 +248,7 @@ export default function NodeDetails(props) {
             />
           )}
         </div>
-        <hr />
+        <hr style={{ color: '#96a5f9' }} />
         <SidebarTooltip
           text={`Set to True when the default input covers all required input
         (used for method and script as the required inputs are unknown).`}
@@ -252,7 +262,7 @@ export default function NodeDetails(props) {
             />
           </div>
         </SidebarTooltip>
-        <hr />
+        <hr style={{ color: '#96a5f9' }} />
         <SidebarTooltip
           text={`When set to True all nodes without error handler
         will be linked to this node. ONLY for one node in its graph`}
@@ -303,11 +313,10 @@ export default function NodeDetails(props) {
                 ]}
               />
             )}
-            <hr />
           </div>
         )}
       </Paper>
-      <hr />
+
       <SidebarTooltip
         text={`These properties are being populated by the task the
         specific node is based on. If you need to have them create a new Task

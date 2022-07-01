@@ -11,7 +11,7 @@ import EditElement from '../Components/EditElement';
 import EditElementStyle from '../Components/EditElementStyle';
 import DraggableDialog from '../Components/DraggableDialog';
 import IconMenu from '../Components/IconMenu';
-import SettingsInfoDrawer from '../Components/SettingsInfoDrawer';
+// import SettingsInfoDrawer from '../Components/SettingsInfoDrawer';
 import ExecutionDetails from '../Components/ExecutionDetails';
 import DashboardStyle from './DashboardStyle';
 import state from '../store/state';
@@ -383,7 +383,7 @@ export default function Sidebar() {
           />
         </>
       )}
-      <SettingsInfoDrawer />
+      {/* <SettingsInfoDrawer /> */}
     </aside>
   );
 }

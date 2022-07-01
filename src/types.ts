@@ -131,6 +131,9 @@ export interface State {
   openDraggableDialog?: DialogParams;
   setOpenDraggableDialog?: (params: DialogParams) => void;
 
+  openSettingsDrawer?: string;
+  setOpenSettingsDrawer?: (params: string) => void;
+
   openSnackbar?: SnackbarParams;
   setOpenSnackbar?: (params: SnackbarParams) => void;
 

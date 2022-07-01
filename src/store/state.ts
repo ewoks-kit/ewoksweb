@@ -17,6 +17,7 @@ import executedEvents from './executedEvents';
 import graphOrSubgraph from './graphOrSubgraph';
 import inExecutionMode from './inExecutionMode';
 import openDraggableDialog from './openDraggableDialog';
+import openSettingsDrawer from './openSettingsDrawer';
 import openSnackbar from './openSnackbar';
 import recentGraphs from './recentGraphs';
 import subGraph from './subGraph';
@@ -74,6 +75,7 @@ const state = create<State>((set, get) => ({
   ...graphOrSubgraph(set),
   ...graphRF(set),
   ...openDraggableDialog(set),
+  ...openSettingsDrawer(set),
   ...openSnackbar(set),
   ...recentGraphs(set, get),
   ...subGraph(set, get),

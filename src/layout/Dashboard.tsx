@@ -55,6 +55,8 @@ export default function Dashboard() {
   const graphRF = state((state) => state.graphRF);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
   const initializedGraph = state((state) => state.initializedGraph);
+  const openSettingsDrawer = state((state) => state.openSettingsDrawer);
+  const setOpenSettingsDrawer = state((state) => state.setOpenSettingsDrawer);
 
   const tutorial = () => {
     setWorkingGraph(tutorial_GraphL, 'tutorial');
@@ -65,6 +67,16 @@ export default function Dashboard() {
     handleOpenInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    console.log(openSettingsDrawer);
+    if (openSettingsDrawer) {
+      setOpenInfo(false);
+      setOpenDrawers(true);
+      setOpenSettings(!!openSettingsDrawer);
+    }
+    setOpenSettingsDrawer('');
+  }, [openSettingsDrawer, setOpenSettingsDrawer]);
 
   const newGraph = () => {
     setWorkingGraph(initializedGraph, 'fromUser');

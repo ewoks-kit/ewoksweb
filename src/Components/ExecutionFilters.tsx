@@ -65,6 +65,16 @@ export default function ExecutionFilters() {
             category={categoryValue}
           />
         </FormControl>
+        <FormControl
+          variant="outlined"
+          style={{ width: '100%', minWidth: '200px', margin: '0px 8px' }}
+        >
+          <AutocompleteDrop
+            setInputValue={setInputCategoryValue}
+            placeholder="Status"
+            category={categoryValue}
+          />
+        </FormControl>
         {/* <AutocompleteDrop
           setInputValue={setInputValue}
           placeholder="Workflows"
