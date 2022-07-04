@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
 // import state from '../store/state';
-import { TextField, Button, FormControl } from '@material-ui/core';
+import {
+  TextField,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@material-ui/core';
 // import SidebarTooltip from './SidebarTooltip';
 // import type { Event, GraphRF } from '../types';
 import DashboardStyle from '../layout/DashboardStyle';
@@ -16,6 +23,7 @@ export default function ExecutionFilters() {
   const [toDateFilter, setToDateFilter] = useState<String>('');
   const [workflowId, setWorkflowId] = React.useState('');
   const [categoryValue, setCategoryValue] = React.useState('');
+  const [status, setStatus] = React.useState('');
 
   const toDateChanged = (val) => {
     console.log(val, workflowNameFilter);
@@ -56,7 +64,7 @@ export default function ExecutionFilters() {
           />
         </FormControl>
         <FormControl
-          variant="standard"
+          variant="outlined"
           style={{ width: '100%', minWidth: '200px', margin: '0px 8px' }}
         >
           <AutocompleteDrop
@@ -69,11 +77,21 @@ export default function ExecutionFilters() {
           variant="outlined"
           style={{ width: '100%', minWidth: '200px', margin: '0px 8px' }}
         >
-          <AutocompleteDrop
-            setInputValue={setInputCategoryValue}
-            placeholder="Status"
-            category={categoryValue}
-          />
+          <InputLabel id="demo-select-small">Status</InputLabel>
+          <Select
+            labelId="demo-select-small"
+            id="demo-select-small"
+            value={status}
+            label="Status"
+            // onChange={handleChange}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            <MenuItem value={10}>Ten</MenuItem>
+            <MenuItem value={20}>Twenty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem>
+          </Select>
         </FormControl>
         {/* <AutocompleteDrop
           setInputValue={setInputValue}

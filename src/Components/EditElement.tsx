@@ -43,10 +43,10 @@ function EditElement(props) {
           {'input_nodes' in element && <GraphLabelComment />}
           {'source' in element && <LinkDetails element={element} />}
           {'position' in element && <NodeDetails element={element} />}
-          {(Object.keys(element).includes('position') ||
+          {/* {(Object.keys(element).includes('position') ||
             Object.keys(element).includes('source')) && (
             <LabelComment element={element} />
-          )}
+          )} */}
         </form>
       </AccordionDetails>
     </Accordion>

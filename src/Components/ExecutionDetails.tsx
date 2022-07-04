@@ -9,8 +9,7 @@ import { Button, Chip, Switch } from '@material-ui/core';
 // import SidebarTooltip from './SidebarTooltip';
 import type { Event, GraphRF } from '../types';
 import DashboardStyle from '../layout/DashboardStyle';
-import { getWorkflow } from '../utils/api';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { getWorkflow, getExecutionEvents } from '../utils/api';
 
 const useStyles = DashboardStyle;
 
@@ -39,17 +38,16 @@ export default function ExecutionDetails() {
   const [gettingFromServer, setGettingFromServer] = useState(false);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const allWorkflows = state((state) => state.allWorkflows);
   const [openDrawers, setOpenDrawers] = React.useState(true);
   const [openSettings, setOpenSettings] = React.useState(false);
   const [openInfo, setOpenInfo] = React.useState(false);
   const [expandedWorkflows, setExpandedWorkflows] = useState<boolean>(false);
-  const [workflowNameFilter, setWorkflowNameFilter] = useState<String>('');
   const openSettingsDrawer = state((state) => state.openSettingsDrawer);
   const setOpenSettingsDrawer = state((state) => state.setOpenSettingsDrawer);
 
   useEffect(() => {
     // console.log(graphRF.graph.label); // TODO: it gets an undifined value on getFromServer
-    setWorkflowNameFilter(graphRF.graph.label || 'no_Graph');
     const allJobs = executedEvents
       .filter((ev) => ev.context === 'job' && ev.type === 'start')
       .map((job) => {
@@ -65,10 +63,11 @@ export default function ExecutionDetails() {
         }
         return jobL;
       });
+    console.log(allJobs);
 
     setJobs(allJobs);
 
-    const allWorkflows = executedEvents
+    const allWorkflowsL = executedEvents
       .filter((ev) => ev.context === 'workflow' && ev.type === 'start')
       .map((work) => {
         let workL = {};
@@ -84,7 +83,7 @@ export default function ExecutionDetails() {
         return workL;
       });
 
-    setWorkflows(allWorkflows);
+    setWorkflows(allWorkflowsL);
   }, [executedEvents, graphRF.graph.label]);
 
   const handleChangeWorkflows = (
@@ -97,6 +96,16 @@ export default function ExecutionDetails() {
   const workflowDetails = (work) => {
     // console.log(workflows, work);
     setSelectedWorkflow(work);
+  };
+
+  const formatedDate = (job) => {
+    console.log(allWorkflows);
+    const label = allWorkflows.find((work) => job.workflow_id === work.id)
+      .label;
+    const dat = new Date(job.time);
+    return `${
+      label ? label.slice(0, 20) : (job.workflow_id as string)
+    } ${dat.getHours()}:${dat.getMinutes()} ${dat.getDay()}/${dat.getMonth()}/${dat.getFullYear()}`;
   };
 
   const executeWorkflow = async () => {
@@ -162,9 +171,10 @@ export default function ExecutionDetails() {
     // setGraphRF(selectedWorkflow);
   };
 
-  const handleChangeOpenExecutions = (event) => {
+  const handleChangeOpenExecutions = async (event) => {
     // console.log(event.target.checked);
     setOpenSettingsDrawer('Executions');
+    // const response = await getExecutionEvents();
   };
 
   return (
@@ -173,9 +183,6 @@ export default function ExecutionDetails() {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Open Executions"
       /> */}
-      <Button onClick={handleChangeOpenExecutions} variant="outlined">
-        Open Executions
-      </Button>
       {workflows.map((work) => (
         <div
           key={work.id}
@@ -239,7 +246,13 @@ export default function ExecutionDetails() {
           )}
         </div>
       ))}
-
+      <Button
+        onClick={handleChangeOpenExecutions}
+        variant="outlined"
+        size="small"
+      >
+        All Executions
+      </Button>
       {executedEvents[currentExecutionEvent - 1] && (
         <ReactJson
           src={executedEvents[currentExecutionEvent - 1]}

@@ -1,9 +1,9 @@
-import type { ExecutedWorkflowEvent } from '../types';
+import type { ExecutedWorkflowEvents } from '../types';
 
 const executedWorkflows = (set, get) => ({
-  executedWorkflows: work1 as ExecutedWorkflowEvent[],
+  executedWorkflows: executedWork1 as ExecutedWorkflowEvents,
 
-  setExecutedWorkflows: (execWorkflow: ExecutedWorkflowEvent) => {
+  setExecutedWorkflows: (execWorkflow: ExecutedWorkflowEvents) => {
     // Add all events to keep track of the order they came in
     const prevState = get((prev) => prev);
     // calculate the id of the event based on the order of arrival
@@ -22,30 +22,9 @@ const executedWorkflows = (set, get) => ({
 
 export default executedWorkflows;
 
-const jobid = 'a288c821-ad38-4d70-b9ac-c598f3af395b';
-
+const jobid = 'a288c8-21ad384d70b9acc598f3af395b';
+const jobid2 = 'a288c8-21ad384d70b9acc598f3af395b-2';
 const work1 = [
-  // common
-  // host_name: 'lkoumouts',
-  // process_id: '7078',
-  // user_name: 'koumouts',
-  // job_id: jobid,
-  // binding: null,
-  // context: 'workflow',
-  // workflow_id: '11demoExecution',
-  // --node_id: null,
-  // --task_id: null,
-  // --progress: null,
-  // task_uri: null,
-
-  // not common
-  // type: 'start',
-  // time: '2022-06-29T10:07:21.092689+02:00',
-  // error: null,
-  // error_message: null,
-  // error_traceback: null,
-  // input_uris: null,
-  // output_uris: null,
   {
     host_name: 'lkoumouts',
     process_id: '7078',
@@ -53,7 +32,7 @@ const work1 = [
     job_id: jobid,
     binding: null,
     context: 'workflow',
-    workflow_id: '11demoExecution',
+    workflow_id: '11demoExecution', // which is the label
     type: 'start',
     time: '2022-06-29T10:07:21.092689+02:00',
     error: null,
@@ -90,7 +69,54 @@ const work1 = [
   },
 ];
 
-const executed = [work1, work1];
+const work2 = [
+  {
+    host_name: 'lkoumouts',
+    process_id: '7077',
+    user_name: 'koumouts',
+    job_id: jobid2,
+    binding: null,
+    context: 'workflow',
+    workflow_id: '11demoExecution2', // which is the label
+    type: 'start',
+    time: '2022-06-29T10:07:21.092689+02:00',
+    error: null,
+    error_message: null,
+    error_traceback: null,
+    node_id: null,
+    task_id: null,
+    progress: null,
+    task_uri: null,
+    input_uris: null,
+    output_uris: null,
+    id: 2,
+  },
+  {
+    host_name: 'lkoumouts',
+    process_id: '7077',
+    user_name: 'koumouts',
+    job_id: jobid2,
+    binding: null,
+    context: 'workflow',
+    workflow_id: '11demoExecution2',
+    type: 'end',
+    time: '2022-06-29T10:07:39.173454+02:00',
+    error: 'false',
+    error_message: null,
+    error_traceback: null,
+    node_id: null,
+    task_id: null,
+    progress: null,
+    task_uri: null,
+    input_uris: null,
+    output_uris: null,
+    id: 17,
+  },
+];
+
+const executedWork1 = { jobs: [work1, work2] };
+// if jobs in query parameters an array of arrays of 2 event objects
+// if events in query parameters an array of arrays of multiple event objects
 
 const eventsWork1 = [
   {

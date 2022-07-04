@@ -12,7 +12,7 @@ const useStyles = DashboardStyle;
 export default function LabelComment(props) {
   const classes = useStyles();
 
-  const { element } = props;
+  const { element, showComment } = props;
 
   const [comment, setComment] = React.useState('');
   const [label, setLabel] = React.useState('');
@@ -140,7 +140,7 @@ export default function LabelComment(props) {
           />
         </Box>
       </div>
-      <div>
+      <div style={{ display: showComment ? 'block' : 'none' }}>
         <Box>
           <TextField
             id="outlined-basic"

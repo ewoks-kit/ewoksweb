@@ -118,16 +118,28 @@ const headCells: readonly HeadCell[] = [
     label: 'workflow_id',
   },
   {
-    id: 'time',
+    id: 'job_id',
     numeric: false,
     disablePadding: true,
-    label: 'time',
+    label: 'job_id',
   },
   {
-    id: 'host_name',
+    id: 'start time',
     numeric: false,
     disablePadding: true,
-    label: 'host_name',
+    label: 'Started',
+  },
+  {
+    id: 'end time',
+    numeric: false,
+    disablePadding: true,
+    label: 'Ended',
+  },
+  {
+    id: 'Duration',
+    numeric: false,
+    disablePadding: true,
+    label: 'Duration',
   },
   {
     id: 'process_id',
@@ -142,10 +154,10 @@ const headCells: readonly HeadCell[] = [
     label: 'user_name',
   },
   {
-    id: 'name',
+    id: 'host_name',
     numeric: true,
     disablePadding: false,
-    label: 'name',
+    label: 'host_name',
   },
 ];
 
@@ -202,9 +214,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
               {headCell.label}
               {/* TODO: do I need the following text */}
               {orderBy === headCell.id ? (
-                <Box component="span">
-                  {order === 'desc' ? '--asc' : '--desc'}
-                </Box>
+                <Box component="span">{order === 'desc' ? ' ' : '  '}</Box>
               ) : null}
             </TableSortLabel>
           </TableCell>
@@ -249,6 +259,13 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
+const formatedTime = (time) => {
+  const dat = new Date(time);
+  console.log(time, dat, dat.getDay());
+  return `${dat.toTimeString().slice(0, 8)}
+    ${dat.toDateString()}`;
+};
+
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Data>('workflow_id');
@@ -269,7 +286,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = executedWorkflows.map((n) => n.workflow_id);
+      const newSelecteds = executedWorkflows.jobs.map((n) => n[0].job_id);
       setSelected(newSelecteds);
       return;
     }
@@ -311,19 +328,25 @@ export default function EnhancedTable() {
     setDense(event.target.checked);
   };
 
-  const isSelected = (name: string) => selected.includes(name);
+  const isSelected = (job_id: string) => selected.includes(job_id);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0
-      ? Math.max(0, (1 + page) * rowsPerPage - executedWorkflows.length)
+      ? Math.max(0, (1 + page) * rowsPerPage - executedWorkflows.jobs.length)
       : 0;
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper style={{ backgroundColor: '#eaedff', borderRadius: '10px' }}>
+      <Paper>
         <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer>
+        <hr style={{ color: '#dee3ff' }} />
+        <TableContainer
+          style={{
+            backgroundColor: 'rgb(222, 227, 255)',
+            borderRadius: '10px',
+          }}
+        >
           <Table aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
             <EnhancedTableHead
               numSelected={selected.length}
@@ -331,26 +354,28 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={executedWorkflows.length}
+              rowCount={executedWorkflows.jobs.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(executedWorkflows, getComparator(order, orderBy))
+              {stableSort(executedWorkflows.jobs, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
+                  console.log(row, index);
+                  const isItemSelected = isSelected(row[0].job_id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.label)}
+                      onClick={(event) => handleClick(event, row[0].job_id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.label}
+                      key={row[0].process_id}
                       selected={isItemSelected}
+                      style={{ whiteSpace: 'nowrap' }}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
@@ -362,15 +387,33 @@ export default function EnhancedTable() {
                         />
                       </TableCell>
                       <TableCell
-                        component="th"
+                        // component="th"
                         id={labelId}
-                        scope="row"
-                        padding="none"
+                        align="left"
+                        // scope="row"
+                        // padding="none"
                       >
-                        {row.workflow_id}
+                        {row[0].workflow_id}
                       </TableCell>
-                      <TableCell align="right">{row.process_id}</TableCell>
-                      <TableCell align="right">{row.user}</TableCell>
+                      <TableCell align="right">{row[0].job_id}</TableCell>
+                      <TableCell align="right">
+                        {formatedTime(row[0].time)}
+                      </TableCell>
+                      <TableCell align="right">
+                        {formatedTime(row[1].time)}
+                      </TableCell>
+                      {/* <TableCell align="right">
+                        {formatedTime(
+                          new Date(
+                            row[1].time.getTime() - row[0].time.getTime()
+                          )
+                        )}
+                      </TableCell> */}
+                      <TableCell align="right">{row[0].process_id}</TableCell>
+                      <TableCell align="right">{row[0].user_name}</TableCell>
+                      <TableCell align="right">{row[0].host_name}</TableCell>
+                      {/* <TableCell align="right">{row[0].input_uris}</TableCell>
+                      <TableCell align="right">{row[0].output_uris}</TableCell> */}
                     </TableRow>
                   );
                 })}
@@ -389,7 +432,7 @@ export default function EnhancedTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={executedWorkflows.length}
+          count={executedWorkflows.jobs.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

@@ -7,6 +7,7 @@ import state from '../store/state';
 import DataMappingComponent from './DataMapping';
 import Conditions from './Conditions';
 import SidebarTooltip from './SidebarTooltip';
+import LabelComment from './LabelComment';
 
 const useStyles = DashboardStyle;
 
@@ -24,6 +25,7 @@ export default function LinkDetails(props) {
     {} as EwoksRFLink
   );
   const [onError, setOnError] = React.useState<boolean>(false);
+  const [advanced, setAdvanced] = React.useState<boolean>(false);
 
   useEffect(() => {
     setElementL(element);
@@ -54,6 +56,11 @@ export default function LinkDetails(props) {
     );
   };
 
+  const advancedChanged = (event) => {
+    console.log(event.target.checked);
+    setAdvanced(event.target.checked);
+  };
+
   return (
     <>
       <Paper
@@ -67,6 +74,8 @@ export default function LinkDetails(props) {
           marginBottom: '10px',
         }}
       >
+        <LabelComment element={element} showComment={advanced} />
+        <hr style={{ color: '#96a5f9' }} />
         <SidebarTooltip
           text={`Setting this to True is equivalent to Data Mapping
         being the identity mapping for all input names.
@@ -115,25 +124,36 @@ export default function LinkDetails(props) {
             </div>
           </SidebarTooltip>
         )}
+        <hr style={{ color: '#96a5f9' }} />
+        <div>
+          <b>Advanced</b>
+          <Checkbox
+            checked={advanced}
+            onChange={advancedChanged}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
+        </div>
+        <div style={{ display: advanced ? 'block' : 'none' }}>
+          <div className={classes.detailsLabels}>
+            <b>Source:</b> {element.source}
+          </div>
+          <div className={classes.detailsLabels}>
+            <b>Target:</b> {element.target}
+          </div>
+          {element.sub_target && (
+            <div className={classes.detailsLabels}>
+              <b>Sub_target:</b> {element.data.sub_target}
+            </div>
+          )}
+          {element.sub_target_attributes && (
+            <div className={classes.detailsLabels}>
+              <b>Sub_target_attributes:</b>
+              {element.data.sub_target_attributes}
+            </div>
+          )}
+        </div>
       </Paper>
       {/* <hr /> */}
-      <div className={classes.detailsLabels}>
-        <b>Source:</b> {element.source}
-      </div>
-      <div className={classes.detailsLabels}>
-        <b>Target:</b> {element.target}
-      </div>
-      {element.sub_target && (
-        <div className={classes.detailsLabels}>
-          <b>Sub_target:</b> {element.data.sub_target}
-        </div>
-      )}
-      {element.sub_target_attributes && (
-        <div className={classes.detailsLabels}>
-          <b>Sub_target_attributes:</b>
-          {element.data.sub_target_attributes}
-        </div>
-      )}
     </>
   );
 }

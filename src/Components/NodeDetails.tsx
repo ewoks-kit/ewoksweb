@@ -19,6 +19,7 @@ import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 import SidebarTooltip from './SidebarTooltip';
 import { OpenInBrowser } from '@material-ui/icons';
+import LabelComment from './LabelComment';
 
 const useStyles = DashboardStyle;
 
@@ -38,6 +39,7 @@ export default function NodeDetails(props) {
   // const [editProps, setEditProps] = React.useState<boolean>(false);
   const [defaultInputs, setDefaultInputs] = React.useState<Inputs[]>([]);
   const [inputsComplete, setInputsComplete] = React.useState<boolean>(false);
+  const [advanced, setAdvanced] = React.useState<boolean>(false);
   const [defaultErrorNode, setDefaultErrorNode] = React.useState<boolean>(
     false
   );
@@ -144,6 +146,11 @@ export default function NodeDetails(props) {
     );
   };
 
+  const advancedChanged = (event) => {
+    console.log(event.target.checked);
+    setAdvanced(event.target.checked);
+  };
+
   const defaulErrortNodeChanged = (event) => {
     setDefaultErrorNode(event.target.checked);
     setSelectedElement(
@@ -194,7 +201,7 @@ export default function NodeDetails(props) {
   };
 
   const mapAllDataChanged = (event) => {
-    // console.log(event.target.checked);
+    // console.log(event.target.checked);import LabelComment from './LabelComment';
     setMapAllData(event.target.checked);
 
     setSelectedElement(
@@ -223,6 +230,7 @@ export default function NodeDetails(props) {
         }}
       >
         <div>
+          <LabelComment element={element} showComment={advanced} />
           <SidebarTooltip
             text={`Used to create an input when not provided
                 by the output of other connected nodes(tasks).`}
@@ -249,11 +257,19 @@ export default function NodeDetails(props) {
           )}
         </div>
         <hr style={{ color: '#96a5f9' }} />
+        <div>
+          <b>Advanced</b>
+          <Checkbox
+            checked={advanced}
+            onChange={advancedChanged}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
+        </div>
         <SidebarTooltip
           text={`Set to True when the default input covers all required input
         (used for method and script as the required inputs are unknown).`}
         >
-          <div>
+          <div style={{ display: advanced ? 'block' : 'none' }}>
             <b>Inputs-complete</b>
             <Checkbox
               checked={inputsComplete}
@@ -262,12 +278,14 @@ export default function NodeDetails(props) {
             />
           </div>
         </SidebarTooltip>
-        <hr style={{ color: '#96a5f9' }} />
+        <hr
+          style={{ color: '#96a5f9', display: advanced ? 'block' : 'none' }}
+        />
         <SidebarTooltip
           text={`When set to True all nodes without error handler
         will be linked to this node. ONLY for one node in its graph`}
         >
-          <div>
+          <div style={{ display: advanced ? 'block' : 'none' }}>
             <b>Default Error Node</b>
             <Checkbox
               checked={defaultErrorNode}
@@ -276,7 +294,7 @@ export default function NodeDetails(props) {
             />
           </div>
         </SidebarTooltip>
-        {defaultErrorNode && (
+        {defaultErrorNode && advanced && (
           <div>
             <b>Map all Data</b>
             <Checkbox
@@ -286,7 +304,7 @@ export default function NodeDetails(props) {
             />
           </div>
         )}
-        {defaultErrorNode && !mapAllData && (
+        {defaultErrorNode && !mapAllData && advanced && (
           <div>
             <b>Data Mapping </b>
             <IconButton
@@ -322,7 +340,7 @@ export default function NodeDetails(props) {
         specific node is based on. If you need to have them create a new Task
         with the appropriete properties and use it.`}
       >
-        <Accordion>
+        <Accordion style={{ display: advanced ? 'block' : 'none' }}>
           <AccordionSummary
             expandIcon={<OpenInBrowser />}
             aria-controls="panel1a-content"

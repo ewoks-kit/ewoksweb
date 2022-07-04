@@ -68,8 +68,8 @@ export function deleteWorkflow(id: string) {
 }
 
 // Get executed workflows
-export function getExecutedWorkflows() {
-  return axiosRequest.get(`/workflows/executed`); // or /workflows?executed
+export function getExecutionEvents() {
+  return axiosRequest.get(`/execution/events`); // or /workflows?executed
 }
 
 // --------------Icons
