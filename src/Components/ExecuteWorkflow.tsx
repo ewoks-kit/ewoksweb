@@ -33,7 +33,7 @@ export default function ExecuteWorkflow() {
       // if (socket.disconnected) {
       //   socket = io(process.env.REACT_APP_SERVER_URL);
       // }
-      socket.emit('Execute Graph', graphRF);
+      // socket.emit('Execute Graph', graphRF);
       setInExecutionMode(true);
       await executeWorkflow(graphRF.graph.id);
     } else if (inExecutionMode) {

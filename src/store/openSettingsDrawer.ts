@@ -1,5 +1,5 @@
 const openSettingsDrawer = (set) => ({
-  openSettingsDrawer: 'Workflows',
+  openSettingsDrawer: '',
 
   setOpenSettingsDrawer: (openTab) => {
     console.log(openTab);

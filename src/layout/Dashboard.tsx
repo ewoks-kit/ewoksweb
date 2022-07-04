@@ -63,19 +63,28 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
+    console.log(openDrawers);
     tutorial();
     handleOpenInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
+    console.log(openDrawers, openSettings);
+    if (!openDrawers) {
+      setOpenSettings(false);
+      setOpenSettingsDrawer('Workflows');
+    }
+  }, [openDrawers, openSettings, setOpenSettingsDrawer]);
+
+  useEffect(() => {
     console.log(openSettingsDrawer);
-    if (openSettingsDrawer) {
+    if (openSettingsDrawer === 'Executions') {
       setOpenInfo(false);
       setOpenDrawers(true);
-      setOpenSettings(!!openSettingsDrawer);
+      setOpenSettings(true);
     }
-    setOpenSettingsDrawer('');
+    // setOpenSettingsDrawer('');
   }, [openSettingsDrawer, setOpenSettingsDrawer]);
 
   const newGraph = () => {
