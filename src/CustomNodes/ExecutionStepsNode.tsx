@@ -7,11 +7,10 @@ function ExecutionStepsNode(args) {
     ...style.title,
     wordWrap: 'break-word',
     borderRadius: '25px',
-    // color: 'red',
     backgroundColor: '#ced3ee',
     textAlign: 'center',
     padding: '1px',
-    color: 'red',
+    color: '#4493dd', // TODO: red for failed events-workflows
     fontSize: '1.2em',
   };
 

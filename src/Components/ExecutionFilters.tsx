@@ -12,6 +12,8 @@ import {
 // import type { Event, GraphRF } from '../types';
 import DashboardStyle from '../layout/DashboardStyle';
 import AutocompleteDrop from '../Components/AutocompleteDrop';
+// import { DatePicker } from '@material-ui/lab/';
+// import DatePicker from '@material-ui/lab/Date';
 
 const useStyles = DashboardStyle;
 
@@ -26,7 +28,7 @@ export default function ExecutionFilters() {
   const [status, setStatus] = React.useState('');
 
   const toDateChanged = (val) => {
-    console.log(val, workflowNameFilter);
+    console.log(val.target.value, workflowNameFilter);
     setToDateFilter(val);
   };
 
@@ -47,7 +49,14 @@ export default function ExecutionFilters() {
 
   const setInputCategoryValue = async (workflowDetails) => {
     // filter according to the selected category
-    setCategoryValue(workflowDetails.title);
+    if (workflowDetails && workflowDetails.title) {
+      setCategoryValue(workflowDetails.title);
+    }
+  };
+
+  const statusChanged = (event) => {
+    console.log(event.target.value, workflowNameFilter);
+    setStatus(event.target.value);
   };
 
   return (
@@ -74,23 +83,15 @@ export default function ExecutionFilters() {
           />
         </FormControl>
         <FormControl
-          variant="outlined"
+          variant="filled"
           style={{ width: '100%', minWidth: '200px', margin: '0px 8px' }}
         >
           <InputLabel id="demo-select-small">Status</InputLabel>
-          <Select
-            labelId="demo-select-small"
-            id="demo-select-small"
-            value={status}
-            label="Status"
-            // onChange={handleChange}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+          <Select value={status} label="Status" onChange={statusChanged}>
+            <MenuItem value="">{/* <em>None</em> */}</MenuItem>
+            <MenuItem value="Success">Success</MenuItem>
+            <MenuItem value="Failed">Failed</MenuItem>
+            <MenuItem value="Executing">Executing</MenuItem>
           </Select>
         </FormControl>
         {/* <AutocompleteDrop
@@ -105,7 +106,7 @@ export default function ExecutionFilters() {
           label="From"
           type="date"
           value={fromDateFilter}
-          // defaultValue={new Date().toString()}
+          defaultValue={new Date().toString()}
           InputLabelProps={{
             shrink: true,
           }}

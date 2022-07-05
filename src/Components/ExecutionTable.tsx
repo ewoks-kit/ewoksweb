@@ -135,12 +135,12 @@ const headCells: readonly HeadCell[] = [
     disablePadding: true,
     label: 'Ended',
   },
-  {
-    id: 'Duration',
-    numeric: false,
-    disablePadding: true,
-    label: 'Duration',
-  },
+  // {
+  //   id: 'Duration',
+  //   numeric: false,
+  //   disablePadding: true,
+  //   label: 'Duration',
+  // },
   {
     id: 'process_id',
     numeric: false,
@@ -343,7 +343,7 @@ export default function EnhancedTable() {
         <hr style={{ color: '#dee3ff' }} />
         <TableContainer
           style={{
-            backgroundColor: 'rgb(222, 227, 255)',
+            backgroundColor: 'rgb(182, 186, 213)',
             borderRadius: '10px',
           }}
         >

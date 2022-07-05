@@ -139,7 +139,7 @@ function AutocompleteDrop(props) {
       }}
       renderInput={(params) => (
         <TextField
-          variant="outlined"
+          variant="filled"
           {...params}
           label={props.placeholder}
           InputProps={{
