@@ -93,6 +93,7 @@ function EditableTable(props) {
           })
         : []
     );
+    setDisableSelectType(false);
   }, [defaultValues]);
 
   const classes = useStyles();

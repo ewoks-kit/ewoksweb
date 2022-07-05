@@ -41,11 +41,17 @@ export default function GetFromServer() {
       try {
         const response = await getWorkflow(workflowId);
         if (response.data) {
+          const graph = response.data as GraphRF;
           // setCallSuccess(true);
+          setOpenSnackbar({
+            open: true,
+            text: `Workflow ${graph.graph.label} was downloaded succesfully`,
+            severity: 'success',
+          });
           if (isSubgraph === 'subgraph') {
             setSubGraph(response.data as GraphEwoks);
           } else {
-            setWorkingGraph(response.data as GraphRF, 'fromServer');
+            setWorkingGraph(graph, 'fromServer');
           }
         } else {
           setOpenSnackbar({

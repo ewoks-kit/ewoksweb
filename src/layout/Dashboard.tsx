@@ -64,7 +64,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     console.log(openDrawers);
-    tutorial();
+    // tutorial();
     handleOpenInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

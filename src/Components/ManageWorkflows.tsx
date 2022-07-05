@@ -3,6 +3,7 @@ import AutocompleteDrop from './AutocompleteDrop';
 import ReactJson from 'react-json-view';
 import React from 'react';
 import { getWorkflow } from '../utils/api';
+import GetFromServer from '../Components/GetFromServer';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -79,6 +80,7 @@ export default function ManageWorkflows() {
             />
           </Item>
         </Grid>
+        <GetFromServer />
       </Grid>
     </Box>
   );

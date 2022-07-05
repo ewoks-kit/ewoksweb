@@ -69,6 +69,7 @@ export default function FormDialog(props) {
     setIsOpen(open);
     if (isForGraph) {
       setNewName(elementToEdit.label || '');
+      setOverwrite(false);
     } else {
       setNewName(elementToEdit.task_identifier);
       setTaskType(elementToEdit.task_type);
@@ -162,6 +163,8 @@ export default function FormDialog(props) {
           text: error.response?.data?.message || configData.savingError,
           severity: 'error',
         });
+      } finally {
+        props.setOpenSaveDialog(false);
       }
     } else {
       try {

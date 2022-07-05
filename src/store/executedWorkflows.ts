@@ -32,7 +32,7 @@ const work1 = [
     job_id: jobid,
     binding: null,
     context: 'workflow',
-    workflow_id: '11demoExecution', // which is the label
+    workflow_id: 'SumListDemo', // which is the label
     type: 'start',
     time: '2022-06-29T10:07:21.092689+02:00',
     error: null,
@@ -53,7 +53,7 @@ const work1 = [
     job_id: jobid,
     binding: null,
     context: 'workflow',
-    workflow_id: '11demoExecution',
+    workflow_id: 'SumListDemo',
     type: 'end',
     time: '2022-06-29T10:07:39.173454+02:00',
     error: 'false',
@@ -77,7 +77,7 @@ const work2 = [
     job_id: jobid2,
     binding: null,
     context: 'workflow',
-    workflow_id: '11demoExecution2', // which is the label
+    workflow_id: 'SumDemo', // which is the label
     type: 'start',
     time: '2022-06-29T10:07:21.092689+02:00',
     error: null,
@@ -98,7 +98,7 @@ const work2 = [
     job_id: jobid2,
     binding: null,
     context: 'workflow',
-    workflow_id: '11demoExecution2',
+    workflow_id: 'SumDemo',
     type: 'end',
     time: '2022-06-29T10:07:39.173454+02:00',
     error: 'false',
@@ -126,7 +126,7 @@ const eventsWork1 = [
     job_id: jobid,
     binding: null,
     context: 'node',
-    workflow_id: '11demoExecution',
+    workflow_id: 'SumListDemo',
     type: 'start',
     time: '2022-06-29T10:07:21.097883+02:00',
     error: null,
