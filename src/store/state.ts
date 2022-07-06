@@ -1,5 +1,5 @@
 import create from 'zustand';
-import type { GraphRF, State } from '../types';
+import type { GraphEwoks, GraphRF, State } from '../types';
 
 import currentExecutionEvent from './currentExecutionEvent';
 import gettingFromServer from './gettingFromServer';
@@ -47,6 +47,15 @@ const initializedGraph = {
   },
   nodes: [],
   links: [],
+} as GraphEwoks;
+
+const initializedRFGraph = {
+  graph: {
+    id: 'newGraph',
+    label: 'newGraph',
+  },
+  nodes: [],
+  links: [],
 } as GraphRF;
 
 const tutorial_Graph = {
@@ -89,6 +98,7 @@ const state = create<State>((set, get) => ({
   ...workingGraph(set, get),
   initializedTask,
   initializedGraph,
+  initializedRFGraph,
   tutorial_Graph,
 }));
 

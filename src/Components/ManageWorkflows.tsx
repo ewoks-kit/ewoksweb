@@ -3,7 +3,9 @@ import AutocompleteDrop from './AutocompleteDrop';
 import ReactJson from 'react-json-view';
 import React from 'react';
 import { getWorkflow } from '../utils/api';
-import GetFromServer from '../Components/GetFromServer';
+import GetFromServerButtons from './GetFromServerButtons';
+import type { GraphEwoks } from '../types';
+import state from '../store/state';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -12,14 +14,17 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function ManageWorkflows() {
-  const [workflowValue, setWorkflowValue] = React.useState({});
+  const initializedGraph = state((state) => state.initializedGraph);
+  const [workflowValue, setWorkflowValue] = React.useState<GraphEwoks>(
+    initializedGraph
+  );
   const [categoryValue, setCategoryValue] = React.useState('');
 
   const setInputWorkflowValue = async (workflowDetails) => {
     if (workflowDetails) {
       const response = await getWorkflow(workflowDetails.id);
       // console.log('setInputWorkflowValue', val, response);
-      setWorkflowValue(response.data);
+      setWorkflowValue(response.data as GraphEwoks);
     }
   };
 
@@ -55,7 +60,7 @@ export default function ManageWorkflows() {
             </FormControl>
           </Item>
           <span style={{ display: 'flex' }}>
-            <GetFromServer onlyButtons />
+            <GetFromServerButtons workflowId={workflowValue.graph.id} />
           </span>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={6}>

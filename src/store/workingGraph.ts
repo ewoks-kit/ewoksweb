@@ -1,10 +1,17 @@
-import type { EwoksRFLink, EwoksRFNode, GraphRF, Task } from '../types';
+import type {
+  EwoksRFLink,
+  EwoksRFNode,
+  GraphEwoks,
+  GraphRF,
+  Task,
+} from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from '../utils/FindAllSubgraphs';
 import configData from '../configData.json';
 import { getTaskDescription } from '../utils/api';
 
+// TODO: use the initial graph from store
 const initializedGraph = {
   graph: {
     id: 'newGraph',
@@ -21,7 +28,7 @@ const workingGraph = (set, get) => ({
   workingGraph: initializedGraph,
 
   setWorkingGraph: async (
-    workingGraph: GraphRF,
+    workingGraph: GraphEwoks,
     source: string
   ): Promise<GraphRF> => {
     // 1. if it is a new graph opening initialize
@@ -41,7 +48,7 @@ const workingGraph = (set, get) => ({
     }
     get().setSelectedElement({} as EwoksRFNode | EwoksRFLink);
     get().setSubgraphsStack({ id: 'initialiase', label: '' });
-    get().setGraphRF(initializedGraph);
+    get().setGraphRF(get().initializedRFGraph);
     // Is the following needed as to not get existing graphs? Better an empty array?
     get().setRecentGraphs({} as GraphRF, true);
 

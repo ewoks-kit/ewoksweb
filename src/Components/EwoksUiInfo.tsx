@@ -12,7 +12,7 @@ import SignUp from '../layout/SignUp';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 import { getWorkflow } from '../utils/api';
 import state from '../store/state';
-import type { GraphRF } from '../types';
+import type { GraphEwoks } from '../types';
 
 export default function EwoksUiInfo(props) {
   const setWorkingGraph = state((state) => state.setWorkingGraph);
@@ -20,7 +20,7 @@ export default function EwoksUiInfo(props) {
   const closeDialog = async () => {
     props.closeDialog();
     const response = await getWorkflow('tutorial_Graph');
-    setWorkingGraph(response.data as GraphRF, 'fromServer');
+    setWorkingGraph(response.data as GraphEwoks, 'fromServer');
   };
 
   return (

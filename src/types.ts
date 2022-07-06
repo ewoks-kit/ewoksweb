@@ -54,7 +54,7 @@ export interface ExecutedWorkflowEvent extends Event {
 }
 
 export interface ExecutedWorkflowEvents {
-  jobs: Array<Event[]>;
+  jobs: Event[][];
 }
 
 // export interface ExecutedWorkflowPairs {
@@ -130,7 +130,8 @@ export interface State {
   setUndoIndex?: (index: number) => void;
 
   tutorial_Graph?: GraphRF;
-  initializedGraph?: GraphRF;
+  initializedGraph?: GraphEwoks;
+  initializedRFGraph?: GraphRF;
   initializedTask?: Task;
 
   tasks?: Task[];
@@ -197,7 +198,7 @@ export interface State {
   setSubGraph?: (graph: GraphEwoks) => Promise<GraphRF>;
 
   workingGraph?: GraphRF;
-  setWorkingGraph?: (graph: GraphRF, source?: string) => Promise<GraphRF>;
+  setWorkingGraph?: (graph: GraphEwoks, source?: string) => Promise<GraphRF>;
 }
 
 export interface Action {

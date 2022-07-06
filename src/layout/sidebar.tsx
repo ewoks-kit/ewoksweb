@@ -70,7 +70,7 @@ export default function Sidebar() {
   const [dialogContent, setDialogContent] = useState({});
   const setSubgraphsStack = state((state) => state.setSubgraphsStack);
   const setRecentGraphs = state((state) => state.setRecentGraphs);
-  const initializedGraph = state((state) => state.initializedGraph);
+  const initializedRFGraph = state((state) => state.initializedRFGraph);
   const setUndoRedo = state((state) => state.setUndoRedo);
   const inExecutionMode = state((state) => state.inExecutionMode);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
@@ -270,7 +270,7 @@ export default function Sidebar() {
       });
     }
 
-    setGraphRF(initializedGraph);
+    setGraphRF(initializedRFGraph);
     setSelectedElement({} as GraphDetails);
     setSubgraphsStack({ id: 'initialiase', label: '' });
     setRecentGraphs({} as GraphRF, true);

@@ -211,7 +211,7 @@ export default function Dashboard() {
           <SaveGetFromDisk />
           <div className={classes.verticalRule} />
           <SaveToServer saveToServerF={saveToServerF} />
-          <GetFromServer onlyButtons={false} />
+          <GetFromServer />
           <ExecuteWorkflow />
           <div className={classes.verticalRule} />
           <Tooltip

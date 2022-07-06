@@ -17,7 +17,13 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import type { EwoksRFLink, EwoksRFNode, GraphRF, Task } from '../types';
+import type {
+  EwoksRFLink,
+  EwoksRFNode,
+  GraphEwoks,
+  GraphRF,
+  Task,
+} from '../types';
 import { rfToEwoks } from '../utils';
 import state from '../store/state';
 import configData from '../configData.json';
@@ -175,7 +181,7 @@ export default function FormDialog(props) {
           })
         );
         setGettingFromServer(false);
-        const savedGraph = responseNew.data as GraphRF;
+        const savedGraph = responseNew.data as GraphEwoks;
         props.setOpenSaveDialog(false);
         setWorkingGraph(savedGraph, 'fromServer');
         setRecentGraphs({} as GraphRF, true);

@@ -1,4 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
+/* eslint-disable promise/prefer-await-to-then */
+/* eslint-disable promise/prefer-await-to-callbacks */
+import { useEffect, useState, useCallback } from 'react';
+import state from '../store/state';
 
 const useApi = (asyncFunction, immediate = true) => {
   const [status, setStatus] = useState('idle');

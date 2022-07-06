@@ -40,13 +40,13 @@ function EditElement(props) {
       </AccordionSummary>
       <AccordionDetails>
         <form noValidate autoComplete="off">
-          {'input_nodes' in element && <GraphLabelComment />}
-          {'source' in element && <LinkDetails element={element} />}
-          {'position' in element && <NodeDetails element={element} />}
-          {/* {(Object.keys(element).includes('position') ||
-            Object.keys(element).includes('source')) && (
-            <LabelComment element={element} />
-          )} */}
+          {'source' in element ? (
+            <LinkDetails element={element} />
+          ) : 'position' in element ? (
+            <NodeDetails element={element} />
+          ) : (
+            <GraphLabelComment />
+          )}
         </form>
       </AccordionDetails>
     </Accordion>

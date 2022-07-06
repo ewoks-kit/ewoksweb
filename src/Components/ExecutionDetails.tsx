@@ -8,7 +8,7 @@ import IntegratedSpinner from './IntegratedSpinner';
 import state from '../store/state';
 import { Button, Chip, Switch } from '@material-ui/core';
 // import SidebarTooltip from './SidebarTooltip';
-import type { Event, GraphRF } from '../types';
+import type { Event, GraphEwoks, GraphRF } from '../types';
 import DashboardStyle from '../layout/DashboardStyle';
 import { getWorkflow, getExecutionEvents } from '../utils/api';
 import useApi from '../hooks/useApi';
@@ -16,16 +16,8 @@ import useApi from '../hooks/useApi';
 const useStyles = DashboardStyle;
 
 // An async function for testing our hook.
-// Will be successful 50% of the time.
 const myFunction = () => {
   return new Promise((resolve, reject) => {
-    // try {
-    //   const result = await getWorkflow('11');
-    //   resolve(result);
-    // } catch (err) {
-    //   reject(new Error('something bad happened'));
-    // }
-
     getWorkflow('11')
       .then((response) => {
         resolve(response.data);
@@ -33,15 +25,6 @@ const myFunction = () => {
       .catch((error) => {
         reject(new Error('something bad happened'));
       });
-
-    // setTimeout(() => {
-    //   const rnd = Math.random() * 10;
-    //   if (rnd < 5) {
-    //     resolve('Submitted successfully 🙌');
-    //   } else {
-    //     reject(new Error('something bad happened'));
-    //   }
-    // }, 2000);
   });
 };
 
@@ -127,8 +110,7 @@ export default function ExecutionDetails() {
 
   const formatedDate = (job) => {
     console.log(allWorkflows);
-    const label = allWorkflows.find((work) => job.workflow_id === work.id)
-      .label;
+    const { label } = allWorkflows.find((work) => job.workflow_id === work.id);
     const dat = new Date(job.time);
     return `${
       label ? label.slice(0, 20) : (job.workflow_id as string)
@@ -150,7 +132,7 @@ export default function ExecutionDetails() {
         const response = await getWorkflow(workflowId);
         if (response.data) {
           console.log(response.data);
-          setWorkingGraph(response.data as GraphRF, 'fromServer');
+          setWorkingGraph(response.data as GraphEwoks, 'fromServer');
           // setGraphRF(response.data as GraphRF);
 
           setTimeout(() => {

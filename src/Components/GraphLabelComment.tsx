@@ -18,6 +18,7 @@ export default function GraphLabelComment() {
   const selectedElement = state((state) => state.selectedElement);
 
   useEffect(() => {
+    console.log(selectedElement);
     const graphElement = selectedElement as GraphDetails;
     setLabel(graphElement.label);
     setCategory(graphElement.category);
