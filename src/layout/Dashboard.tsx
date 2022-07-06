@@ -32,10 +32,8 @@ import state from '../store/state';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 import FormDialog from '../Components/FormDialog';
 
-import { tutorial_Graph } from '../store/tutorialWorkflows/tutorial_Graph.js';
 import type { GraphRF } from '../types';
 
-const tutorial_GraphL = (tutorial_Graph as unknown) as GraphRF;
 const useStyles = DashboardStyle;
 
 export default function Dashboard() {
@@ -58,13 +56,8 @@ export default function Dashboard() {
   const openSettingsDrawer = state((state) => state.openSettingsDrawer);
   const setOpenSettingsDrawer = state((state) => state.setOpenSettingsDrawer);
 
-  const tutorial = () => {
-    setWorkingGraph(tutorial_GraphL, 'tutorial');
-  };
-
   useEffect(() => {
     console.log(openDrawers);
-    // tutorial();
     handleOpenInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -90,7 +83,6 @@ export default function Dashboard() {
   const newGraph = () => {
     setWorkingGraph(initializedGraph, 'fromUser');
     setOpenSaveDialog(true);
-    // setWorkingGraph(tutorial_GraphL);
   };
 
   const openGraph = () => {
@@ -219,7 +211,7 @@ export default function Dashboard() {
           <SaveGetFromDisk />
           <div className={classes.verticalRule} />
           <SaveToServer saveToServerF={saveToServerF} />
-          <GetFromServer />
+          <GetFromServer onlyButtons={false} />
           <ExecuteWorkflow />
           <div className={classes.verticalRule} />
           <Tooltip

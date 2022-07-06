@@ -12,7 +12,7 @@ import { getWorkflow } from '../utils/api';
 
 const useStyles = DashboardStyle;
 
-export default function GetFromServer() {
+export default function GetFromServer(props) {
   const classes = useStyles();
 
   const [workflowId, setWorkflowId] = React.useState('');
@@ -83,22 +83,24 @@ export default function GetFromServer() {
 
   return (
     <>
-      <FormControl
-        variant="standard"
-        // TODO: remove if build problem is resolved
-        style={{
-          minWidth: '220px',
-          backgroundColor: '#7685dd',
-          borderRadius: '4px',
-        }}
-        className={classes.formControl}
-      >
-        <AutocompleteDrop
-          setInputValue={setInputValue}
-          placeholder="Workflows"
-          category=""
-        />
-      </FormControl>
+      {!props.onlyButtons && (
+        <FormControl
+          variant="standard"
+          // TODO: remove if build problem is resolved
+          style={{
+            minWidth: '220px',
+            backgroundColor: '#7685dd',
+            borderRadius: '4px',
+          }}
+          className={classes.formControl}
+        >
+          <AutocompleteDrop
+            setInputValue={setInputValue}
+            placeholder="Workflows"
+            category=""
+          />
+        </FormControl>
+      )}
       <IntegratedSpinner
         // callSuccess={callSuccess}
         getting={gettingFromServer}

@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/cognitive-complexity */
 import React, { useEffect, useState } from 'react';
 import ReactJson from 'react-json-view';
 // import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
@@ -10,14 +11,38 @@ import { Button, Chip, Switch } from '@material-ui/core';
 import type { Event, GraphRF } from '../types';
 import DashboardStyle from '../layout/DashboardStyle';
 import { getWorkflow, getExecutionEvents } from '../utils/api';
+import useApi from '../hooks/useApi';
 
 const useStyles = DashboardStyle;
 
-const formatedDate = (job) => {
-  const dat = new Date(job.time);
-  return `${
-    job.workflow_id.slice(0, 20) as string
-  } ${dat.getHours()}:${dat.getMinutes()} ${dat.getDay()}/${dat.getMonth()}/${dat.getFullYear()}`;
+// An async function for testing our hook.
+// Will be successful 50% of the time.
+const myFunction = () => {
+  return new Promise((resolve, reject) => {
+    // try {
+    //   const result = await getWorkflow('11');
+    //   resolve(result);
+    // } catch (err) {
+    //   reject(new Error('something bad happened'));
+    // }
+
+    getWorkflow('11')
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(new Error('something bad happened'));
+      });
+
+    // setTimeout(() => {
+    //   const rnd = Math.random() * 10;
+    //   if (rnd < 5) {
+    //     resolve('Submitted successfully 🙌');
+    //   } else {
+    //     reject(new Error('something bad happened'));
+    //   }
+    // }, 2000);
+  });
 };
 
 export default function ExecutionDetails() {
@@ -85,6 +110,8 @@ export default function ExecutionDetails() {
 
     setWorkflows(allWorkflowsL);
   }, [executedEvents, graphRF.graph.label]);
+
+  const { execute, status, value, error } = useApi(myFunction, false);
 
   const handleChangeWorkflows = (
     event: React.SyntheticEvent,
@@ -183,6 +210,16 @@ export default function ExecutionDetails() {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Open Executions"
       /> */}
+      {/* <div>
+        {status === 'idle' && (
+          <div>Start your journey by clicking a button</div>
+        )}
+        {status === 'success' && <div>{value.graph.id}</div>}
+        {status === 'error' && <div>{error.name}</div>}
+        <button onClick={execute} disabled={status === 'pending'} type="button">
+          {status !== 'pending' ? 'Click me' : 'Loading...'}
+        </button>
+      </div> */}
       {workflows.map((work) => (
         <div
           key={work.id}

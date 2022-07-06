@@ -2,8 +2,8 @@ import type { GraphRF } from '../types';
 
 const tutorialGraph = {
   graph: {
-    id: 'TutorialGraph',
-    label: 'TutorialGraph',
+    id: 'newGraph',
+    label: 'newGraph',
     input_nodes: [],
     output_nodes: [],
     uiProps: {},

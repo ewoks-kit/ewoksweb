@@ -1,12 +1,7 @@
 import type { stackGraph } from '../types';
 
 const subgraphsStack = (set, get) => ({
-  subgraphsStack: [
-    {
-      id: 'tutorial_Graph',
-      label: 'tutorial_Graph',
-    },
-  ] as stackGraph[],
+  subgraphsStack: [] as stackGraph[],
 
   setSubgraphsStack: (stackGraph: stackGraph) => {
     let stack = [];

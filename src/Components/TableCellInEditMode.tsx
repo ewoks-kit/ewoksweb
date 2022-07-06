@@ -32,7 +32,7 @@ function TableCellInEditMode(propsIn) {
   const [boolVal, setBoolVal] = React.useState(true);
 
   useEffect(() => {
-    // // console.log(row);
+    console.log(row);
     setBoolVal(row.value !== null ? row.value.toString() : 'null');
   }, [row.value, row]);
 

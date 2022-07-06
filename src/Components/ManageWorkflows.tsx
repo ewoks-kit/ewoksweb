@@ -39,20 +39,14 @@ export default function ManageWorkflows() {
       >
         <Grid item xs={12} sm={12} md={6} lg={3}>
           <Item>
-            <FormControl
-              variant="standard"
-              style={{ width: '100%', minWidth: '260px' }}
-            >
+            <FormControl variant="standard" style={{ width: '100%' }}>
               <AutocompleteDrop
                 setInputValue={setInputCategoryValue}
                 placeholder="Categories"
                 category={categoryValue}
               />
             </FormControl>
-            <FormControl
-              variant="standard"
-              style={{ width: '100%', minWidth: '260px' }}
-            >
+            <FormControl variant="standard" style={{ width: '100%' }}>
               <AutocompleteDrop
                 setInputValue={setInputWorkflowValue}
                 placeholder="Workflows"
@@ -60,8 +54,9 @@ export default function ManageWorkflows() {
               />
             </FormControl>
           </Item>
-          {/* <hr />
-          <Item>Files</Item> */}
+          <span style={{ display: 'flex' }}>
+            <GetFromServer onlyButtons />
+          </span>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={6}>
           <Item>
@@ -80,7 +75,6 @@ export default function ManageWorkflows() {
             />
           </Item>
         </Grid>
-        <GetFromServer />
       </Grid>
     </Box>
   );

@@ -86,6 +86,7 @@ function EditableTable(props) {
         : 'string'
     );
     setTypeOfInputs(tOfIn);
+    console.log(defaultValues, tOfIn);
     setRows(
       defaultValues
         ? defaultValues.map((pair) => {
