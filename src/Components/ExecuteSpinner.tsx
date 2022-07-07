@@ -21,27 +21,26 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function ExecuteSpinner({ children, tooltip, action, getting }) {
+export default function ExecuteSpinner(props) {
   const [loading, setLoading] = React.useState(false);
   const [success] = React.useState(false);
-  // const isExecuted = state((state) => state.isExecuted);
-  // const setIsExecuted = state((state) => state.setIsExecuted);
+  // const inExecutionMode = state((state) => state.inExecutionMode);
+  // const setInExecutionMode = state((state) => state.setInExecutionMode);
   // const timer = React.useRef<number>();
   const classes = useStyles();
-  /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
-  console.warn(tooltip, action, getting);
 
   // TODO: synd with the real time the call makes using getting
   React.useEffect(() => {
-    if (getting) {
+    if (props.getting) {
       setLoading(true);
     } else {
       setLoading(false);
     }
-  }, [getting]);
+  }, [props.getting]);
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      {/* sx={{ display: 'flex', alignItems: 'center' }} */}
       <Box sx={{ m: 1, position: 'relative' }}>
         <Fab
           className={classes.openFileButton}
@@ -50,7 +49,7 @@ export default function ExecuteSpinner({ children, tooltip, action, getting }) {
           component="span"
           aria-label="add"
         >
-          {success ? <CheckIcon /> : loading ? '...' : children}
+          {success ? <CheckIcon /> : loading ? '...' : props.children}
         </Fab>
         {loading && (
           <CircularProgress

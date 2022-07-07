@@ -88,3 +88,12 @@ abbr[title] {
 .react-flow__edge.selected .react-flow__edge-path {
   stroke: rgb(18, 88, 219);
 }
+
+.MuiChip-label {
+  white-space: break-spaces;
+  margin: 10px;
+}
+
+.MuiAccordionDetails-root {
+  padding: 4px;
+}

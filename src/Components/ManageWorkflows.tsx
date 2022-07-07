@@ -3,6 +3,9 @@ import AutocompleteDrop from './AutocompleteDrop';
 import ReactJson from 'react-json-view';
 import React from 'react';
 import { getWorkflow } from '../utils/api';
+import GetFromServerButtons from './GetFromServerButtons';
+import type { GraphEwoks } from '../types';
+import state from '../store/state';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -11,12 +14,23 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function ManageWorkflows() {
-  const [workflowValue, setWorkflowValue] = React.useState({});
+  const initializedGraph = state((state) => state.initializedGraph);
+  const [workflowValue, setWorkflowValue] = React.useState<GraphEwoks>(
+    initializedGraph
+  );
+  const [categoryValue, setCategoryValue] = React.useState('');
 
-  const setInputValue = async (val: string) => {
-    const response = await getWorkflow(val);
-    // console.log('setInputValue', val, response);
-    setWorkflowValue(response.data);
+  const setInputWorkflowValue = async (workflowDetails) => {
+    if (workflowDetails) {
+      const response = await getWorkflow(workflowDetails.id);
+      // console.log('setInputWorkflowValue', val, response);
+      setWorkflowValue(response.data as GraphEwoks);
+    }
+  };
+
+  const setInputCategoryValue = async (workflowDetails) => {
+    // filter according to the selected category
+    setCategoryValue(workflowDetails.title);
   };
 
   return (
@@ -28,42 +42,26 @@ export default function ManageWorkflows() {
         // justifyContent="flex-start"
         alignItems="center"
       >
-        {/* <Grid item xs={12} sm={12} md={6} lg={3}>
-          <Item style={{ backgroundColor: 'rgb(248, 248, 249)' }}>
-            Categories
-            <FormControl
-              variant="standard"
-              style={{ width: '100%', minWidth: '260px' }}
-            >
-              <AutocompleteDrop setInputValue={setInputValue} />
-            </FormControl>
-          </Item>
-        </Grid> */}
         <Grid item xs={12} sm={12} md={6} lg={3}>
           <Item>
-            <FormControl
-              variant="standard"
-              style={{ width: '100%', minWidth: '260px' }}
-            >
+            <FormControl variant="standard" style={{ width: '100%' }}>
               <AutocompleteDrop
-                setInputValue={setInputValue}
+                setInputValue={setInputCategoryValue}
                 placeholder="Categories"
-                category=""
+                category={categoryValue}
               />
             </FormControl>
-            <FormControl
-              variant="standard"
-              style={{ width: '100%', minWidth: '260px' }}
-            >
+            <FormControl variant="standard" style={{ width: '100%' }}>
               <AutocompleteDrop
-                setInputValue={setInputValue}
+                setInputValue={setInputWorkflowValue}
                 placeholder="Workflows"
-                category=""
+                category={categoryValue}
               />
             </FormControl>
           </Item>
-          {/* <hr />
-          <Item>Files</Item> */}
+          <span style={{ display: 'flex' }}>
+            <GetFromServerButtons workflowId={workflowValue.graph.id} />
+          </span>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={6}>
           <Item>

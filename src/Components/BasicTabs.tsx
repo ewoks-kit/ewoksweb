@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-import { Box } from '@material-ui/core';
+import { Box, TextField, Tooltip } from '@material-ui/core';
 
 import ManageIcons from './ManageIcons';
 import ManageWorkflows from './ManageWorkflows';
 import ManageTasks from './ManageTasks';
 import { getIcons } from '../utils/api';
 import type { IconsNames } from '../types';
+import ExecutionTable from '../Components/ExecutionTable';
+import state from '../store/state';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -45,6 +47,26 @@ function a11yProps(index: number) {
 
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
+  const [serverUrl, setServerUrl] = React.useState(
+    process.env.REACT_APP_SERVER_URL
+  );
+  const openSettingsDrawer = state((state) => state.openSettingsDrawer);
+
+  useEffect(() => {
+    setValue(
+      openSettingsDrawer === 'Workflows'
+        ? 0
+        : openSettingsDrawer === 'Tasks'
+        ? 1
+        : openSettingsDrawer === 'Icons'
+        ? 2
+        : openSettingsDrawer === 'Executions'
+        ? 3
+        : openSettingsDrawer === 'Settings'
+        ? 4
+        : 0
+    );
+  }, [openSettingsDrawer]);
 
   const handleChange = async (
     event: React.SyntheticEvent,
@@ -58,6 +80,10 @@ export default function BasicTabs() {
     }
   };
 
+  const serverUrlChanged = (event) => {
+    setServerUrl(event.target.value);
+  };
+
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -69,7 +95,8 @@ export default function BasicTabs() {
           <Tab label="Workflows" {...a11yProps(0)} />
           <Tab label="Tasks" {...a11yProps(1)} />
           <Tab label="Icons" {...a11yProps(2)} />
-          {/* <Tab label="Settings" {...a11yProps(3)} /> */}
+          <Tab label="Executions" {...a11yProps(3)} />
+          <Tab label="Settings" {...a11yProps(4)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -81,9 +108,22 @@ export default function BasicTabs() {
       <TabPanel value={value} index={2}>
         <ManageIcons />
       </TabPanel>
-      {/* <TabPanel value={value} index={3}>
-        Settings
-      </TabPanel> */}
+      <TabPanel value={value} index={3}>
+        <ExecutionTable />
+      </TabPanel>
+      <TabPanel value={value} index={4}>
+        <Tooltip title="Input the server URL your EwoksWeb server is in." arrow>
+          <TextField
+            margin="dense"
+            // id={field.id}
+            label="Server URL"
+            fullWidth
+            variant="standard"
+            value={serverUrl}
+            onChange={serverUrlChanged}
+          />
+        </Tooltip>
+      </TabPanel>
     </Box>
   );
 }

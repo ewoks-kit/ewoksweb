@@ -1,6 +1,10 @@
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Button,
+  IconButton,
+} from '@material-ui/core';
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import Typography from '@material-ui/core/Typography';
 
@@ -15,13 +19,16 @@ import graphInput from '../images/graphInput.svg';
 import graphOutput from '../images/graphOutput.svg';
 import Correlations from '../images/Correlations.svg';
 import CreateClass from '../images/CreateClass.svg';
+import right from '../images/right.svg';
+import left from '../images/left.svg';
+import up from '../images/up.svg';
+import down from '../images/down.svg';
 import TextsmsIcon from '@material-ui/icons/Textsms';
 import Upload from './Upload';
 import AddIcon from '@material-ui/icons/Add';
 import state from '../store/state';
 import configData from '../configData.json';
-import React, { useCallback, useEffect } from 'react';
-import { Button, IconButton } from '@material-ui/core';
+import React, { useCallback, useEffect, useState } from 'react';
 import ConfirmDialog from './ConfirmDialog';
 import SidebarTooltip from './SidebarTooltip';
 import FormDialog from './FormDialog';
@@ -38,14 +45,31 @@ const onDragStart = (event, { task_identifier, task_type, icon }) => {
 };
 
 const iconsObj = {
-  orange1,
-  Continuize,
+  'left.svg': left,
+  left,
+  'right.svg': right,
+  right,
+  'up.svg': up,
+  up,
+  'down.svg': down,
+  down,
+  'graphInput.svg': graphInput,
   graphInput,
+  'graphOutput.svg': graphOutput,
   graphOutput,
+  'orange1.png': orange1,
+  orange1,
+  'Continuize.svg': Continuize,
+  Continuize,
+  'orange2.png': orange2,
   orange2,
+  'orange3.png': orange3,
   orange3,
+  'AggregateColumns.svg': AggregateColumns,
   AggregateColumns,
+  'Correlations.svg': Correlations,
   Correlations,
+  'CreateClass.svg': CreateClass,
   CreateClass,
   TextsmsIcon,
 };
@@ -59,14 +83,15 @@ function AddNodes(props) {
   const selectedTask = state((state) => state.selectedTask);
   const setSelectedTask = state((state) => state.setSelectedTask);
   const setGraphOrSubgraph = state((state) => state.setGraphOrSubgraph);
-  const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
+  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const [doAction, setDoAction] = React.useState<string>('');
-  const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
-  const [elementToEdit, setElementToEdit] = React.useState<Task>({});
+  const [doAction, setDoAction] = useState<string>('');
+  const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
+  const [elementToEdit, setElementToEdit] = useState<Task>({});
   const initializedTask = state((state) => state.initializedTask);
-  const [expanded, setExpanded] = React.useState<boolean>(false);
+  const [expanded, setExpanded] = useState<boolean>(false);
   const selectedElement = state((state) => state.selectedElement);
+  const allIcons = state((state) => state.allIcons);
 
   const getTasks = useCallback(async () => {
     try {
@@ -143,6 +168,14 @@ function AddNodes(props) {
     setExpanded(newExpanded);
   };
 
+  const findImage = (img) => {
+    const imgIndex = allIcons.map((ico) => ico.name).indexOf(img);
+
+    return imgIndex !== -1
+      ? allIcons[imgIndex].image.data_url
+      : iconsObj[img] || orange2;
+  };
+
   return (
     <Accordion expanded={expanded} onChange={handleChange}>
       <AccordionSummary
@@ -204,13 +237,7 @@ function AddNodes(props) {
                         }}
                       >
                         <img
-                          src={
-                            iconsObj[elem.icon]
-                            // TODO: when no icon use a default or the text
-                            // Object.keys(iconsObj).includes(elem.icon)
-                            //   ? iconsObj[elem.icon]
-                            //   : iconsObj['orange1']
-                          }
+                          src={findImage(elem.icon)}
                           alt={elem.task_identifier}
                         />
                       </span>

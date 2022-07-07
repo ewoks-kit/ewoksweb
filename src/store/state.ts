@@ -1,5 +1,5 @@
 import create from 'zustand';
-import type { GraphRF, State } from '../types';
+import type { GraphEwoks, GraphRF, State } from '../types';
 
 import currentExecutionEvent from './currentExecutionEvent';
 import gettingFromServer from './gettingFromServer';
@@ -13,9 +13,11 @@ import allCategories from './allCategories';
 import allIconNames from './allIconNames';
 import allIcons from './allIcons';
 import executingEvents from './executingEvents';
+import executedEvents from './executedEvents';
 import graphOrSubgraph from './graphOrSubgraph';
-import isExecuted from './isExecuted';
+import inExecutionMode from './inExecutionMode';
 import openDraggableDialog from './openDraggableDialog';
+import openSettingsDrawer from './openSettingsDrawer';
 import openSnackbar from './openSnackbar';
 import recentGraphs from './recentGraphs';
 import subGraph from './subGraph';
@@ -23,6 +25,7 @@ import subgraphsStack from './subgraphsStack';
 import taskCategories from './taskCategories';
 import tasks from './tasks';
 import undoIndex from './undoIndex';
+import executedWorkflows from './executedWorkflows';
 
 const initializedTask = {
   task_identifier: '',
@@ -41,6 +44,15 @@ const initializedGraph = {
     input_nodes: [],
     output_nodes: [],
     uiProps: {},
+  },
+  nodes: [],
+  links: [],
+} as GraphEwoks;
+
+const initializedRFGraph = {
+  graph: {
+    id: 'newGraph',
+    label: 'newGraph',
   },
   nodes: [],
   links: [],
@@ -64,12 +76,15 @@ const state = create<State>((set, get) => ({
   ...allWorkflows(set),
   ...allCategories(set),
   ...currentExecutionEvent(set),
+  ...executedEvents(set, get),
   ...executingEvents(set, get),
+  ...executedWorkflows(set, get),
+  ...inExecutionMode(set, get),
   ...gettingFromServer(set),
   ...graphOrSubgraph(set),
   ...graphRF(set),
-  ...isExecuted(set, get),
   ...openDraggableDialog(set),
+  ...openSettingsDrawer(set),
   ...openSnackbar(set),
   ...recentGraphs(set, get),
   ...subGraph(set, get),
@@ -83,6 +98,7 @@ const state = create<State>((set, get) => ({
   ...workingGraph(set, get),
   initializedTask,
   initializedGraph,
+  initializedRFGraph,
   tutorial_Graph,
 }));
 

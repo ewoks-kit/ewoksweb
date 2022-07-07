@@ -1,25 +1,24 @@
 /* eslint-disable react/function-component-definition */
 /* jshint sub:true*/
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { style } from './NodeStyle';
 import SaveIcon from '@material-ui/icons/Save';
 
 import state from '../store/state';
-import { TextField } from '@material-ui/core';
+import { IconButton, Slider, TextField } from '@material-ui/core';
 
 const NoteNode = (args) => {
-  const [comment, setComment] = React.useState('');
-  const [edit, setEdit] = React.useState(false);
+  const [comment, setComment] = useState('');
   const graphRF = state((state) => state.graphRF);
   const setGraphRF = state((state) => state.setGraphRF);
   const selectedElement = state((state) => state.selectedElement);
+  const [nodeSize, setNodeSize] = useState(args.data.nodeWidth);
+  const setSelectedElement = state((state) => state.setSelectedElement);
 
   useEffect(() => {
     setComment(args.data.comment);
-    if (selectedElement.type !== 'note') {
-      setEdit(false);
-    }
-  }, [args.data.comment, selectedElement.type]);
+    setNodeSize(args.data.nodeWidth);
+  }, [args.data, selectedElement.type]);
 
   const customTitle = {
     ...style.title,
@@ -60,7 +59,14 @@ const NoteNode = (args) => {
         },
       ],
     });
-    setEdit(false);
+  };
+
+  const changeNodeSize = (event, number) => {
+    setSelectedElement({
+      ...selectedElement,
+      data: { ...selectedElement.data, nodeWidth: number },
+    });
+    setNodeSize(number);
   };
 
   return (
@@ -74,20 +80,16 @@ const NoteNode = (args) => {
       }
       // id="choice"
       // onMouseOver={() => // console.log('onMouseOver')}
-      onFocus={() => {
-        // console.log('onFocus');
-        setEdit(true);
-      }}
       role="button"
       tabIndex={0}
     >
-      <span style={{ maxWidth: '120px' }} className="icons">
+      <span style={{ maxWidth: `${nodeSize as string}px` }} className="icons">
         {args.data.label.length > 0 && (
           <div style={customTitle as React.CSSProperties}>
             {args.data.label}
           </div>
         )}
-        {edit ? (
+        {args.data.details ? (
           <TextField
             id="standard-multiline-flexible"
             label="edit comment"
@@ -100,7 +102,28 @@ const NoteNode = (args) => {
         ) : (
           <div style={{ wordWrap: 'break-word' }}>{comment}</div>
         )}
-        {edit && <SaveIcon onClick={save} color="primary" />}
+        {args.data.details && (
+          <>
+            <IconButton
+              style={{ margin: '0px 2px', padding: '0px' }}
+              aria-label="edit"
+              onClick={save}
+            >
+              <SaveIcon color="primary" />
+            </IconButton>
+            <Slider
+              color="primary"
+              defaultValue={nodeSize}
+              value={nodeSize}
+              onChange={changeNodeSize}
+              min={40}
+              max={300}
+              style={{ width: '90%' }}
+              // aria-label="Small"
+              // valueLabelDisplay="auto"
+            />
+          </>
+        )}
         {/* {!edit ? (
           <IconButton
             style={{ padding: '0px' }}

@@ -7,7 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 // import Cloud from '@material-ui/icons/Cloud';
-import AccountTreeIcon from '@material-ui/icons/AccountTree';
+// import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import FiberNewIcon from '@material-ui/icons/FiberNew';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { Button, Menu, Tooltip } from '@material-ui/core';
@@ -26,9 +26,7 @@ export default function IconMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
-  const [elementToEdit, setElementToEdit] = React.useState<Task | GraphRF>(
-    {} as EwoksRFNode | GraphRF
-  );
+  const [elementToEdit, setElementToEdit] = React.useState<Task | GraphRF>({});
   const [doAction, setDoAction] = React.useState<string>('');
   const selectedElement = state<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
@@ -144,10 +142,10 @@ export default function IconMenu(props) {
               <Typography variant="body2" color="primary" />
             </MenuItem>
             <MenuItem onClick={handleShowEwoksGraph}>
-              <ListItemIcon>
+              {/* <ListItemIcon>
                 <AccountTreeIcon fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Graph in json</ListItemText>
+              <ListItemText>Graph in json</ListItemText> */}
             </MenuItem>
             {/* <Divider />
             <MenuItem>

@@ -31,12 +31,7 @@ import tooltipText from '../Components/TooltipText';
 import state from '../store/state';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 import FormDialog from '../Components/FormDialog';
-import { calcNewId } from '../utils/calcNewId';
 
-import { tutorial_Graph } from '../store/tutorialWorkflows/tutorial_Graph.js';
-import type { EwoksRFNode, GraphRF } from '../types';
-
-const tutorial_GraphL = (tutorial_Graph as unknown) as GraphRF;
 const useStyles = DashboardStyle;
 
 export default function Dashboard() {
@@ -52,29 +47,39 @@ export default function Dashboard() {
   const [openInfo, setOpenInfo] = React.useState(false);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const gettingFromServer = state((state) => state.gettingFromServer);
-  const isExecuted = state((state) => state.isExecuted);
+  const inExecutionMode = state((state) => state.inExecutionMode);
   const graphRF = state((state) => state.graphRF);
-  const selectedElement = state((state) => state.selectedElement);
-  const setGraphRF = state((state) => state.setGraphRF);
-  const setSelectedElement = state((state) => state.setSelectedElement);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
   const initializedGraph = state((state) => state.initializedGraph);
-
-  const tutorial = () => {
-    setWorkingGraph(tutorial_GraphL);
-  };
+  const openSettingsDrawer = state((state) => state.openSettingsDrawer);
+  const setOpenSettingsDrawer = state((state) => state.setOpenSettingsDrawer);
 
   useEffect(() => {
-    tutorial();
+    // console.log(openDrawers);
     handleOpenInfo();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    // console.log(openDrawers, openSettings);
+    if (!openDrawers) {
+      setOpenSettings(false);
+      setOpenSettingsDrawer('Workflows');
+    }
+  }, [openDrawers, openSettings, setOpenSettingsDrawer]);
+
+  useEffect(() => {
+    // console.log(openSettingsDrawer);
+    if (openSettingsDrawer === 'Executions') {
+      setOpenInfo(false);
+      setOpenDrawers(true);
+      setOpenSettings(true);
+    }
+    // setOpenSettingsDrawer('');
+  }, [openSettingsDrawer, setOpenSettingsDrawer]);
+
   const newGraph = () => {
-    setGraphRF(initializedGraph);
+    setWorkingGraph(initializedGraph, 'fromUser');
     setOpenSaveDialog(true);
-    // setWorkingGraph(tutorial_GraphL);
   };
 
   const openGraph = () => {
@@ -125,31 +130,6 @@ export default function Dashboard() {
       event.preventDefault();
       event.stopPropagation();
       newGraph();
-    } else if (keys && charCode === 'v') {
-      event.preventDefault();
-      event.stopPropagation();
-      if ('position' in selectedElement) {
-        const newClone = {
-          ...selectedElement,
-          id: calcNewId(selectedElement.id, graphRF.nodes),
-          selected: false,
-          position: {
-            x: selectedElement.position.x + 100,
-            y: selectedElement.position.y + 100,
-          },
-        };
-        setGraphRF({
-          ...graphRF,
-          nodes: [...graphRF.nodes, newClone],
-        });
-        setSelectedElement(newClone as EwoksRFNode);
-      } else {
-        setOpenSnackbar({
-          open: true,
-          text: 'Clone is for cloning nodes within the working workflow',
-          severity: 'warning',
-        });
-      }
     }
   };
 
@@ -198,7 +178,7 @@ export default function Dashboard() {
                 size="small"
                 component="span"
                 aria-label="add"
-                disabled={isExecuted}
+                disabled={inExecutionMode}
               >
                 <FiberNew />
               </Fab>
@@ -216,7 +196,7 @@ export default function Dashboard() {
                 size="small"
                 component="span"
                 aria-label="add"
-                disabled={isExecuted}
+                disabled={inExecutionMode}
               >
                 <ImportContactsIcon />
               </Fab>

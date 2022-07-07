@@ -3,19 +3,14 @@ import { style } from './NodeStyle';
 import state from '../store/state';
 
 function ExecutionStepsNode(args) {
-  // // console.log(args);
-  // useEffect(() => {
-  // }, [args.data.comment, selectedElement.type]);
-
   const customTitle = {
     ...style.title,
     wordWrap: 'break-word',
     borderRadius: '25px',
-    // color: 'red',
     backgroundColor: '#ced3ee',
     textAlign: 'center',
     padding: '1px',
-    color: 'red',
+    color: '#4493dd', // TODO: red for failed events-workflows
     fontSize: '1.2em',
   };
 
@@ -24,8 +19,6 @@ function ExecutionStepsNode(args) {
   );
 
   const goToEvent = (val) => {
-    // update graphRF on store
-    // console.log(args.id, val);
     setCurrentExecutionEvent(val);
   };
 

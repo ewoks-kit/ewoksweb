@@ -154,7 +154,6 @@ function Canvas() {
   const onNodesChange = useCallback(
     (changes) => {
       const node = [...graphRF.nodes].find((el) => el.id === changes[0].id);
-      // console.log(node);
       // TODO: nodes are updated only on rf canvas and not on graphRF
       // if we update graphRF we have a loop so we update on setSelectedElement
       // where we set every other selected to false... SOLUTION
@@ -278,6 +277,7 @@ function Canvas() {
           type: 'internal',
           icon,
           moreHandles: false,
+          nodeWidth: 100,
         },
       };
 
@@ -330,6 +330,7 @@ function Canvas() {
       // TODO: take link out
       const link = {
         data: {
+          getAroundProps: { x: 0, y: 0 },
           on_error: false,
           comment: '',
           // node optional_input_names are link's optional_output_names
@@ -347,7 +348,7 @@ function Canvas() {
             targetTask.task_type === 'graph' ? params.targetHandle : '',
         },
         id: `${params.source}:${params.sourceHandle}->${params.target}:${params.targetHandle}`,
-        label: `${params.source.slice(0, 6)}->${params.target.slice(0, 6)}`,
+        label: '->', // `${params.source.slice(0, 6)}->${params.target.slice(0, 6)}`,
         source: params.source,
         target: params.target,
         sourceHandle: params.sourceHandle,
@@ -399,15 +400,15 @@ function Canvas() {
     });
   };
 
-  const onNodeContextMenu = (event: React.MouseEvent, nodes: Node) => {
-    event.preventDefault();
-    // console.log(nodes);
-    setOpenSnackbar({
-      open: true,
-      text: nodes.data.label || '',
-      severity: 'success',
-    });
-  };
+  // const onNodeContextMenu = (event: React.MouseEvent, nodes: Node) => {
+  //   event.preventDefault();
+  //   // console.log(nodes);
+  //   setOpenSnackbar({
+  //     open: true,
+  //     text: nodes.data.label || '',
+  //     severity: 'success',
+  //   });
+  // };
 
   const onNodeDoubleClick = (event, node) => {
     event.preventDefault();
@@ -480,7 +481,7 @@ function Canvas() {
       setOpenSnackbar({
         open: true,
         text: 'Any positional change in any subgraph wont be saved!',
-        severity: 'success',
+        severity: 'warning',
       });
     }
   };
@@ -517,7 +518,7 @@ function Canvas() {
       setOpenSnackbar({
         open: true,
         text: 'Any positional change in any subgraph wont be saved!',
-        severity: 'success',
+        severity: 'warning',
       });
     }
   };
@@ -534,8 +535,45 @@ function Canvas() {
   //   zIndex: 10,
   // };
 
+  const handleKeyDown = (event) => {
+    const charCode = String.fromCharCode(event.which).toLowerCase();
+
+    const keys = event.ctrlKey || event.metaKey;
+    if (keys && charCode === 'v') {
+      event.preventDefault();
+      event.stopPropagation();
+      if ('position' in selectedElement) {
+        const newClone = {
+          ...selectedElement,
+          id: calcNewId(selectedElement.id, graphRF.nodes),
+          selected: false,
+          position: {
+            x: selectedElement.position.x + 100,
+            y: selectedElement.position.y + 100,
+          },
+        };
+        setGraphRF({
+          ...graphRF,
+          nodes: [...graphRF.nodes, newClone],
+        });
+        setSelectedElement(newClone as EwoksRFNode);
+      } else {
+        setOpenSnackbar({
+          open: true,
+          text: 'Clone is for cloning nodes within the working workflow',
+          severity: 'warning',
+        });
+      }
+    }
+  };
+
   return (
-    <div className={classes.root}>
+    <div
+      className={classes.root}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+    >
       <div
         className="reactflow-wrapper"
         style={{
@@ -569,9 +607,9 @@ function Canvas() {
           onEdgeUpdate={onEdgeUpdate}
           onDragOver={onDragOver}
           onPaneContextMenu={onPaneContextMenu}
-          onNodeContextMenu={(evt, node) => {
-            onNodeContextMenu(evt, node);
-          }}
+          // onNodeContextMenu={(evt, node) => {
+          //   onNodeContextMenu(evt, node);
+          // }}
           onNodeDoubleClick={onNodeDoubleClick}
           // onSelectionChange={onSelectionChange}
           // onNodeMouseMove={onNodeMouseMove}
@@ -584,9 +622,7 @@ function Canvas() {
           onNodeDragStop={onNodeDragStop}
           edgeTypes={edgeTypes}
           nodeTypes={nodeTypes}
-          // elevateEdgesOnSelect
-          // TODO: deleteKey does not work properly
-          // deleteKeyCode="Delete"
+          deleteKeyCode="Delete"
         >
           {/* <div style={buttonWrapperStyles}>
             <button type="button" onClick={updateNode}>

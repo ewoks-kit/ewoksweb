@@ -38,7 +38,7 @@ export default function Conditions(props) {
           data: {
             ...element.data,
             on_error: false,
-            conditions: [...elCon, { id: '', name: '', value: '' }],
+            conditions: [...elCon, { id: '', name: '', value: false }],
           },
         },
         'fromSaveElement'

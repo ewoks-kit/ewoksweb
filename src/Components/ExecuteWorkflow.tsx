@@ -4,7 +4,8 @@ import IntegratedSpinner from '../Components/IntegratedSpinner';
 import ClearIcon from '@material-ui/icons/Clear';
 import io from 'socket.io-client';
 import { useEffect } from 'react';
-import type { ExecutingEvent } from '../types';
+import type { Event } from '../types';
+import { executeWorkflow } from '../utils/api';
 
 export const socket = io(process.env.REACT_APP_SERVER_URL);
 
@@ -13,31 +14,30 @@ export default function ExecuteWorkflow() {
   const recentGraphs = state((state) => state.recentGraphs);
 
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const isExecuted = state((state) => state.isExecuted);
-  const setIsExecuted = state((state) => state.setIsExecuted);
-  const setExecutingEvents = state((state) => state.setExecutingEvents);
+  const inExecutionMode = state((state) => state.inExecutionMode);
+  const setInExecutionMode = state((state) => state.setInExecutionMode);
+  const setExecutedEvents = state((state) => state.setExecutedEvents);
 
   useEffect(() => {
-    // console.log('Executing');
-    socket.on('Executing', (data) =>
-      setExecutingEvents(data as ExecutingEvent)
-    );
+    socket.on('Executing', (data) => {
+      setExecutedEvents(data as Event);
+    });
+
     return () => {
       socket.disconnect();
     };
-  }, [setExecutingEvents]);
+  }, [setExecutedEvents]);
 
-  const executeWorkflow = async () => {
-    // console.log(socket);
-    if (recentGraphs.length > 0 && !isExecuted) {
+  const execute = async () => {
+    if (recentGraphs.length > 0 && !inExecutionMode) {
       // if (socket.disconnected) {
-      //   const socket = io(process.env.REACT_APP_SERVER_URL);
+      //   socket = io(process.env.REACT_APP_SERVER_URL);
       // }
-      socket.emit('Execute Graph', graphRF);
-      // socket.on('Executing', (data) => console.log(data));
-      setIsExecuted(true);
-    } else if (isExecuted) {
-      setIsExecuted(false);
+      // socket.emit('Execute Graph', graphRF);
+      setInExecutionMode(true);
+      await executeWorkflow(graphRF.graph.id);
+    } else if (inExecutionMode) {
+      setInExecutionMode(false);
       // socket.disconnect();
     } else {
       setOpenSnackbar({
@@ -52,13 +52,13 @@ export default function ExecuteWorkflow() {
     <IntegratedSpinner
       getting={false}
       tooltip="Execute Workflow and exit Execution mode"
-      action={executeWorkflow}
+      action={execute}
       onClick={() => {
         /* eslint-disable no-console */
         console.log('Starting Execution');
       }}
     >
-      {isExecuted ? <ClearIcon color="secondary" /> : <SendIcon />}
+      {inExecutionMode ? <ClearIcon color="secondary" /> : <SendIcon />}
     </IntegratedSpinner>
   );
 }

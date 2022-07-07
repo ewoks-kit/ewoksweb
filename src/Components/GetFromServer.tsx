@@ -1,77 +1,20 @@
 import React from 'react';
 
 import DashboardStyle from '../layout/DashboardStyle';
-import IntegratedSpinner from '../Components/IntegratedSpinner';
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import FormControl from '@material-ui/core/FormControl';
 import AutocompleteDrop from '../Components/AutocompleteDrop';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import type { GraphEwoks, GraphRF } from '../types';
-import state from '../store/state';
-import { getWorkflow } from '../utils/api';
+import GetFromServerButtons from './GetFromServerButtons';
 
 const useStyles = DashboardStyle;
 
 export default function GetFromServer() {
   const classes = useStyles();
 
-  const [workflowValue, setWorkflowValue] = React.useState('');
-  const setSubGraph = state((state) => state.setSubGraph);
-  const setWorkingGraph = state((state) => state.setWorkingGraph);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const [gettingFromServer, setGettingFromServer] = React.useState(false);
-  // const [callSuccess, setCallSuccess] = React.useState(false);
-  // TODO replace with the following brakes the round spinner
-  // const gettingFromServer = state((state) => state.gettingFromServer);
-  // const setGettingFromServer = state((state) => state.setGettingFromServer);
+  const [workflowId, setWorkflowId] = React.useState('');
 
-  const getSubgraphFromServer = () => {
-    getFromServer('subgraph');
-  };
-
-  const setInputValue = (val) => {
-    setWorkflowValue(val);
-  };
-
-  const getFromServer = async (isSubgraph) => {
-    // console.log(isSubgraph);
-    if (workflowValue) {
-      setGettingFromServer(true);
-      try {
-        const response = await getWorkflow(workflowValue);
-        if (response.data) {
-          setGettingFromServer(false);
-          // setCallSuccess(true);
-          if (isSubgraph === 'subgraph') {
-            setSubGraph(response.data as GraphEwoks);
-          } else {
-            setWorkingGraph(response.data as GraphRF);
-          }
-        } else {
-          setGettingFromServer(false);
-          setOpenSnackbar({
-            open: true,
-            text:
-              'Could not locate the requested workflow! Maybe it is deleted!',
-            severity: 'warning',
-          });
-        }
-      } catch (error) {
-        // console.log(error.response);
-        setOpenSnackbar({
-          open: true,
-          text:
-            error.response?.data?.message ||
-            'Error in retrieving workflow. Please check connectivity with the server!',
-          severity: 'error',
-        });
-      }
-    } else {
-      setOpenSnackbar({
-        open: true,
-        text: 'Please select a graph to fetch and re-click!',
-        severity: 'warning',
-      });
+  const setInputValue = (workflowDetails) => {
+    if (workflowDetails && workflowDetails.id) {
+      setWorkflowId(workflowDetails.id || '');
     }
   };
 
@@ -93,29 +36,8 @@ export default function GetFromServer() {
           category=""
         />
       </FormControl>
-      <IntegratedSpinner
-        // callSuccess={callSuccess}
-        getting={gettingFromServer}
-        tooltip="Open from Server"
-        action={getFromServer}
-        onClick={() => {
-          /* eslint-disable no-console */
-          console.log('Getting from server');
-        }}
-      >
-        <CloudDownloadIcon />
-      </IntegratedSpinner>
-      <IntegratedSpinner
-        getting={gettingFromServer}
-        tooltip="Add workflow as subgraph"
-        action={getSubgraphFromServer}
-        onClick={() => {
-          /* eslint-disable no-console */
-          console.log('Getting subgraph from server');
-        }}
-      >
-        <ArrowDownwardIcon />
-      </IntegratedSpinner>
+
+      <GetFromServerButtons workflowId={workflowId} />
     </>
   );
 }

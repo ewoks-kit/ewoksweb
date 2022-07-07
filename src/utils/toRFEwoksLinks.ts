@@ -85,7 +85,10 @@ export function toRFEwoksLinks(
             fontSize: 14,
           },
           data: {
-            getAroundProps: uiProps.getAroundProps || { x: 0, y: 0 },
+            getAroundProps: (uiProps && uiProps.getAroundProps) || {
+              x: 0,
+              y: 0,
+            },
             // node optional_input_names are link's optional_output_names
             links_optional_output_names: targetTask.optional_input_names || [],
             // node required_input_names are link's required_output_names

@@ -37,8 +37,12 @@ describe('AutocompleteDrop should:', () => {
     act(() => {
       state.setState({
         allWorkflows: [
-          { title: 'EnergyInterleavedMAD.json' },
-          { title: 'MXPressA_dozor.json' },
+          {
+            id: 'EnergyInterleavedMAD',
+            label: 'EnergyInterleavedMAD',
+            category: 'Energy',
+          },
+          { id: 'MXPressA_dozor', label: 'MXPressA_dozor', category: 'MX' },
         ],
       });
     });

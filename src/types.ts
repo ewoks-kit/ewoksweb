@@ -14,7 +14,7 @@ export interface GraphDetails {
   category?: string;
   input_nodes?: GraphNodes[];
   output_nodes?: GraphNodes[];
-  uiProps?: UiProps;
+  uiProps?: UiPropsGraph;
 }
 
 export interface Graph {
@@ -49,8 +49,38 @@ export interface DialogParams {
 // stop for one is not the start of another which can wait for other inputs!
 // so draw on link on each side the events in a timely manner.
 
-export interface ExecutingEvent {
-  id: string;
+export interface ExecutedWorkflowEvent extends Event {
+  status: string;
+}
+
+export interface ExecutedWorkflowEvents {
+  jobs: Event[][];
+}
+
+// export interface ExecutedWorkflowPairs {
+//   [index: number]: ExecutedWorkflowPairEvents;
+// }
+
+export interface Event {
+  host_name?: string;
+  process_id?: string;
+  user_name?: string;
+  job_id?: string;
+  binding?: string;
+  context?: string;
+  workflow_id?: string;
+  type?: string;
+  time?: string;
+  error?: string;
+  error_message?: string;
+  error_traceback?: string;
+  node_id?: string;
+  task_id?: string;
+  progress?: string;
+  task_uri?: string;
+  input_uris?: [];
+  output_uris?: [];
+  id?: number;
   nodeId: string;
   event_type: string; // start/stop/progress events
   values: {}; // all values entering or exiting a node
@@ -71,26 +101,24 @@ export interface NodeExecutionHistory {
   // the ExecutingState can be found through the eventId again
 }
 
-export interface ExecutionState {
-  currentExecutionEvent?: number;
-  setCurrentExecutionEvent?: (index: number) => void;
-
-  // executingEvents: ExecutingEvent[];
-  // setExecutingEvents: (execEvent: ExecutingEvent) => void;
-
-  // isExecuted: boolean;
-  // setIsExecuted: (val: boolean) => void;
-}
-
 export interface State {
   currentExecutionEvent?: number;
   setCurrentExecutionEvent?: (index: number) => void;
 
-  executingEvents?: ExecutingEvent[];
-  setExecutingEvents?: (execEvent: ExecutingEvent) => void;
+  executedEvents?: Event[];
+  setExecutedEvents?: (execEvent: Event) => void;
 
-  isExecuted?: boolean;
-  setIsExecuted?: (val: boolean) => void;
+  executingEvents?: Event[];
+  setExecutingEvents?: (execEvent: Event, live: boolean) => void;
+
+  executedWorkflows?: ExecutedWorkflowEvents;
+  setExecutedWorkflows?: (
+    execEvent: ExecutedWorkflowEvents,
+    live: boolean
+  ) => void;
+
+  inExecutionMode?: boolean;
+  setInExecutionMode?: (val: boolean) => void;
 
   gettingFromServer?: boolean;
   setGettingFromServer?: (val: boolean) => void;
@@ -102,7 +130,8 @@ export interface State {
   setUndoIndex?: (index: number) => void;
 
   tutorial_Graph?: GraphRF;
-  initializedGraph?: GraphRF;
+  initializedGraph?: GraphEwoks;
+  initializedRFGraph?: GraphRF;
   initializedTask?: Task;
 
   tasks?: Task[];
@@ -113,6 +142,9 @@ export interface State {
 
   openDraggableDialog?: DialogParams;
   setOpenDraggableDialog?: (params: DialogParams) => void;
+
+  openSettingsDrawer?: string;
+  setOpenSettingsDrawer?: (params: string) => void;
 
   openSnackbar?: SnackbarParams;
   setOpenSnackbar?: (params: SnackbarParams) => void;
@@ -127,8 +159,18 @@ export interface State {
   allCategories?: { title: string }[];
   setAllCategories?: (categories: { title: string }[]) => void;
 
-  allWorkflows?: { title: string }[];
-  setAllWorkflows?: (workflows: { title: string }[]) => void;
+  allWorkflows?: {
+    id?: string;
+    label?: string;
+    category?: string;
+  }[];
+  setAllWorkflows?: (
+    workflows: {
+      id?: string;
+      label?: string;
+      category?: string;
+    }[]
+  ) => void;
 
   recentGraphs?: GraphRF[];
   setRecentGraphs?: (graphRF: GraphRF, reset?: boolean) => void;
@@ -156,7 +198,7 @@ export interface State {
   setSubGraph?: (graph: GraphEwoks) => Promise<GraphRF>;
 
   workingGraph?: GraphRF;
-  setWorkingGraph?: (graph: GraphRF) => Promise<GraphRF>;
+  setWorkingGraph?: (graph: GraphEwoks, source?: string) => Promise<GraphRF>;
 }
 
 export interface Action {
@@ -213,6 +255,39 @@ export interface stackGraph {
   label: string;
 }
 
+export interface UiPropsNodes {
+  label?: string;
+  type?: string;
+  icon?: string;
+  comment?: string;
+  position?: CanvasPosition;
+  style?: LinkStyle;
+}
+
+export interface UiPropsLinks {
+  label?: string;
+  type?: string;
+  comment?: string;
+  animated?: boolean;
+  markerEnd?: { type: string };
+  markerStart?: { type: string };
+  arrowHeadTypeanimated?: string;
+  sourceHandle?: string;
+  targetHandle?: string;
+  colorLink?: string;
+  style?: LinkStyle;
+}
+
+export interface UiPropsGraph {
+  label?: string;
+  type?: string;
+  comment?: string;
+  notes?: Note[];
+  style?: LinkStyle;
+  source: string;
+  icon?: string;
+}
+
 // TODO break to uiprops for links and nodes?
 export interface UiProps {
   label?: string;
@@ -229,6 +304,7 @@ export interface UiProps {
   notes?: Note[];
   colorLink?: string;
   style?: LinkStyle;
+  source: string;
 }
 
 export interface LinkStyle {
@@ -241,6 +317,7 @@ export interface Note {
   label?: string;
   comment: string;
   position: CanvasPosition;
+  nodeWidth: number;
 }
 
 export interface CanvasPosition {
@@ -279,7 +356,7 @@ export interface EwoksNode {
   task_generator?: string;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes;
-  uiProps?: UiProps;
+  uiProps?: UiPropsNodes;
 }
 
 export interface EwoksLink {
@@ -293,7 +370,7 @@ export interface EwoksLink {
   sub_target?: string;
   sub_source?: string;
   startEnd?: string;
-  uiProps?: UiProps;
+  uiProps?: UiPropsLinks;
 }
 
 export interface outputsInputsSub {
@@ -340,7 +417,7 @@ export interface EwoksRFNode {
   optional_input_names?: string[];
   output_names?: string[];
   required_input_names?: string[];
-  uiProps?: UiProps;
+  uiProps?: UiPropsNodes;
 }
 
 export interface EwoksRFLink {
@@ -366,7 +443,7 @@ export interface EwoksRFLink {
   style;
   subtarget?: string;
   subsource?: string;
-  uiProps?: UiProps;
+  uiProps?: UiPropsLinks;
   type?: string;
   markerEnd?: { type: string };
   markerStart?: string;
@@ -389,7 +466,7 @@ export interface RFLink {
   };
   subtarget?: string;
   subsource?: string;
-  uiProps?: UiProps;
+  uiProps?: UiPropsLinks;
 }
 
 export interface RFNode {
@@ -432,5 +509,5 @@ export interface IconsNames {
 export interface Icon {
   name: string;
   type?: string;
-  image?: string;
+  image?: { data_url?: string };
 }

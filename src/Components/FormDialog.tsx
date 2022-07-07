@@ -1,6 +1,15 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 import React, { useEffect } from 'react';
-import { Button, Tooltip } from '@material-ui/core';
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
+  Tooltip,
+} from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -8,7 +17,13 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import type { EwoksRFLink, EwoksRFNode, GraphRF, Task } from '../types';
+import type {
+  EwoksRFLink,
+  EwoksRFNode,
+  GraphEwoks,
+  GraphRF,
+  Task,
+} from '../types';
 import { rfToEwoks } from '../utils';
 import state from '../store/state';
 import configData from '../configData.json';
@@ -17,6 +32,7 @@ import {
   postWorkflow,
   postTask,
   putTask,
+  putWorkflow,
 } from '../utils/api';
 
 export default function FormDialog(props) {
@@ -32,12 +48,15 @@ export default function FormDialog(props) {
     [] as string[]
   );
   const [outputNames, setOutputNames] = React.useState([] as string[]);
+  const [overwrite, setOverwrite] = React.useState<boolean>(false);
+
   const selectedElement = state<EwoksRFNode | EwoksRFLink>(
     (state) => state.selectedElement
   );
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setRecentGraphs = state((state) => state.setRecentGraphs);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const allIconNames = state((state) => state.allIconNames);
   const setGettingFromServer = state((st) => st.setGettingFromServer);
   const [element, setElement] = React.useState<Task | GraphRF>(
     {} as Task | GraphRF
@@ -47,12 +66,16 @@ export default function FormDialog(props) {
 
   const { open, action, elementToEdit } = props;
 
+  const isForGraph = ['cloneGraph', 'newGraph', 'newGraphOrOverwrite'].includes(
+    action
+  );
+
   useEffect(() => {
-    // console.log(elementToEdit);
     setElement(elementToEdit);
     setIsOpen(open);
-    if (action === 'cloneGraph') {
-      setNewName(elementToEdit.label);
+    if (isForGraph) {
+      setNewName(elementToEdit.label || '');
+      setOverwrite(false);
     } else {
       setNewName(elementToEdit.task_identifier);
       setTaskType(elementToEdit.task_type);
@@ -62,11 +85,11 @@ export default function FormDialog(props) {
       setRequiredInputNames(elementToEdit.required_input_names);
       setOutputNames(elementToEdit.output_names);
     }
-  }, [open, action, elementToEdit]);
+  }, [open, action, elementToEdit, isForGraph]);
 
   const handleSave = async () => {
     // get the selected element (graph or Node) give a new name before saving
-    if (newName !== '' && action === 'cloneGraph') {
+    if (isForGraph) {
       saveGraph(element as GraphRF);
     } else if (['cloneTask', 'newTask'].includes(action)) {
       saveTask(element as Task);
@@ -128,27 +151,53 @@ export default function FormDialog(props) {
   };
 
   const saveGraph = async (graph) => {
-    try {
-      const responseNew = await postWorkflow(
-        rfToEwoks({
-          ...graph,
-          graph: { ...graph.graph, id: newName, label: newName },
-        })
-      );
-      props.setOpenSaveDialog(false);
-      setWorkingGraph(responseNew.data as GraphRF);
-      setRecentGraphs({} as GraphRF, true);
-      setOpenSnackbar({
-        open: true,
-        text: 'Graph saved succesfully!',
-        severity: 'success',
-      });
-    } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: error.response?.data?.message || configData.savingError,
-        severity: 'error',
-      });
+    if (overwrite) {
+      // put
+      try {
+        await putWorkflow(rfToEwoks(graph));
+
+        setGettingFromServer(false);
+        setOpenSnackbar({
+          open: true,
+          text: 'Graph saved succesfully!',
+          severity: 'success',
+        });
+      } catch (error) {
+        setGettingFromServer(false);
+        setOpenSnackbar({
+          open: true,
+          text: error.response?.data?.message || configData.savingError,
+          severity: 'error',
+        });
+      } finally {
+        props.setOpenSaveDialog(false);
+      }
+    } else {
+      try {
+        const responseNew = await postWorkflow(
+          rfToEwoks({
+            ...graph,
+            graph: { ...graph.graph, id: newName, label: newName },
+          })
+        );
+        setGettingFromServer(false);
+        const savedGraph = responseNew.data as GraphEwoks;
+        props.setOpenSaveDialog(false);
+        setWorkingGraph(savedGraph, 'fromServer');
+        setRecentGraphs({} as GraphRF, true);
+        setOpenSnackbar({
+          open: true,
+          text: 'Graph saved succesfully!',
+          severity: 'success',
+        });
+      } catch (error) {
+        setGettingFromServer(false);
+        setOpenSnackbar({
+          open: true,
+          text: error.response?.data?.message || configData.savingError,
+          severity: 'error',
+        });
+      }
     }
   };
 
@@ -233,7 +282,7 @@ export default function FormDialog(props) {
   const fields = [
     { id: 'Task Type', value: taskType, handleChange: taskTypeChanged },
     { id: 'Category', value: category, handleChange: categoryChanged },
-    { id: 'Icon', value: icon, handleChange: iconChanged },
+    // { id: 'Icon', value: icon, handleChange: iconChanged },
     {
       id: 'Optional Inputs',
       value: optionalInputNames,
@@ -255,16 +304,24 @@ export default function FormDialog(props) {
     },
   ];
 
+  const overwriteChanged = (event) => {
+    setOverwrite(event.target.checked);
+  };
+
   return (
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>
         {action === 'editTask' ? 'Edit the ' : 'Give the new '}
-        {action === 'cloneGraph' ? 'Workflow name' : 'Task details'}
+        {isForGraph ? 'Workflow name' : 'Task details'}
+        {action === 'newGraphOrOverwrite' &&
+          ` or select to overwrite the existing with id: ${
+            elementToEdit.graph.id as string
+          }`}
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
-          The {action === 'cloneGraph' ? 'Workflow' : 'Task'} will be saved to
-          file with the name-identifier you will provide.
+          The {isForGraph ? 'Workflow' : 'Task'} will be saved to file with the
+          name-identifier you will provide.
         </DialogContentText>
         <TextField
           margin="dense"
@@ -274,9 +331,19 @@ export default function FormDialog(props) {
           variant="standard"
           value={newName}
           onChange={newNameChanged}
-          disabled={action === 'editTask'}
+          disabled={action === 'editTask' || overwrite}
         />
-        {action !== 'cloneGraph' &&
+        {action === 'newGraphOrOverwrite' && (
+          <div>
+            <b>Overwrite existing workflow with the same ID</b>
+            <Checkbox
+              checked={overwrite}
+              onChange={overwriteChanged}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </div>
+        )}
+        {!isForGraph &&
           fields.map((field) => (
             <Tooltip title={field.tip || ''} key={field.id} arrow>
               <TextField
@@ -290,11 +357,35 @@ export default function FormDialog(props) {
               />
             </Tooltip>
           ))}
+        {!isForGraph && (
+          <FormControl>
+            <InputLabel id="demo-simple-select-helper-label">Icon</InputLabel>
+            <Select
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              value={icon}
+              label="Icon"
+              onChange={iconChanged}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {allIconNames.map((iconName) => (
+                <MenuItem value={iconName} key={iconName}>
+                  {iconName}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>
+              Select from the existing icons or upload a new one
+            </FormHelperText>
+          </FormControl>
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
         <Button onClick={handleSave}>
-          Save {action === 'cloneGraph' ? 'Workflow' : 'Task'}
+          Save {isForGraph ? 'Workflow' : 'Task'}
         </Button>
       </DialogActions>
     </Dialog>

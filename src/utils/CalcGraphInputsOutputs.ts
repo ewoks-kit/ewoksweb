@@ -106,8 +106,8 @@ function calcNodeProps(
       ? (graph_links[link_index] && inputOrOutput === 'graphOutput'
           ? graph_links[link_index].data.sub_source
           : graph_links[link_index].data.sub_target) || // !!
-        ''
-      : '',
+        null
+      : null,
     link_attributes: {
       label: existsOrValue(graph_links[link_index], 'label', ''),
       comment: existsOrValue(graph_links[link_index]?.data, 'comment', ''),

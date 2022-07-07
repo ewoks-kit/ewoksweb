@@ -121,6 +121,10 @@ const DashboardStyle = makeStyles((theme) => ({
     wordBreak: 'break-word',
   },
 
+  hasMarginSides: {
+    margin: 'inherit 8px',
+  },
+
   executionSide: {
     margin: '8px 5px',
     wordBreak: 'break-word',

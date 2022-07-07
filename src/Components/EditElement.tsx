@@ -6,7 +6,6 @@ import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import Typography from '@material-ui/core/Typography';
 import LinkDetails from './LinkDetails';
 import NodeDetails from './NodeDetails';
-import LabelComment from './LabelComment';
 import GraphLabelComment from './GraphLabelComment';
 
 function EditElement(props) {
@@ -40,12 +39,12 @@ function EditElement(props) {
       </AccordionSummary>
       <AccordionDetails>
         <form noValidate autoComplete="off">
-          {'input_nodes' in element && <GraphLabelComment />}
-          {'source' in element && <LinkDetails element={element} />}
-          {'position' in element && <NodeDetails element={element} />}
-          {(Object.keys(element).includes('position') ||
-            Object.keys(element).includes('source')) && (
-            <LabelComment element={element} />
+          {'source' in element ? (
+            <LinkDetails element={element} />
+          ) : 'position' in element ? (
+            <NodeDetails element={element} />
+          ) : (
+            <GraphLabelComment />
           )}
         </form>
       </AccordionDetails>

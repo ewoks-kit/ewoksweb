@@ -25,6 +25,7 @@ const useStyles = makeStyles(() => ({
     padding: '1px',
     minWidth: 160,
     maxWidth: 270,
+    wordBreak: 'break-all',
   },
   selectTableCell: {
     width: 28,
@@ -68,9 +69,12 @@ function EditableTable(props) {
   // // console.log(defaultValues, val, rows, props, typeOfInputs);
 
   useEffect(() => {
-    // console.log(defaultValues);
     const tOfIn = defaultValues.map((val) =>
-      val.value === true || val.value === false
+      val.value === true ||
+      val.value === false ||
+      // TODO: remove shortcut with booleans as strings
+      val.value === 'true' ||
+      val.value === 'false'
         ? 'boolean'
         : Array.isArray(val.value)
         ? 'list'
@@ -90,6 +94,7 @@ function EditableTable(props) {
           })
         : []
     );
+    setDisableSelectType(false);
   }, [defaultValues]);
 
   const classes = useStyles();
@@ -152,14 +157,12 @@ function EditableTable(props) {
       });
     });
     if (command === 'done') {
-      // console.log('enable');
-      setDisableSelectType(false);
+      setDisableSelectType(true);
       props.valuesChanged(rows);
     }
   };
 
   const onChange = (e, row, index) => {
-    // console.log(typeOfInputs, e.target.name, e.target.value, row, index);
     if (
       ['string', 'bool', 'number', 'boolean', 'null'].includes(typeOfInputs[0])
     ) {

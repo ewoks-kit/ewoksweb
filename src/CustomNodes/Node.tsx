@@ -19,9 +19,7 @@ import { Handle, Position } from 'react-flow-renderer';
 import type { EwoksRFNode, NodeProps } from '../types';
 import { contentStyle, style } from './NodeStyle';
 import Tooltip from '@material-ui/core/Tooltip';
-import IntegratedSpinner from '../Components/IntegratedSpinner';
 import ExecuteSpinner from '../Components/ExecuteSpinner';
-import SendIcon from '@material-ui/icons/Send';
 import isValidLink from '../utils/IsValidLink';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import EditIcon from '@material-ui/icons/EditOutlined';
@@ -33,18 +31,31 @@ import { IconButton, Slider, TextField } from '@material-ui/core';
 import tooltipText from '../Components/TooltipText';
 
 const iconsObj = {
+  'left.svg': left,
   left,
+  'right.svg': right,
   right,
+  'up.svg': up,
   up,
+  'down.svg': down,
   down,
+  'graphInput.svg': graphInput,
   graphInput,
+  'graphOutput.svg': graphOutput,
   graphOutput,
+  'orange1.png': orange1,
   orange1,
+  'Continuize.svg': Continuize,
   Continuize,
+  'orange2.png': orange2,
   orange2,
+  'orange3.png': orange3,
   orange3,
+  'AggregateColumns.svg': AggregateColumns,
   AggregateColumns,
+  'Correlations.svg': Correlations,
   Correlations,
+  'CreateClass.svg': CreateClass,
   CreateClass,
 };
 
@@ -75,6 +86,7 @@ const Node: React.FC<NodeProps> = ({
   nodeWidth,
   details,
 }: NodeProps) => {
+  // console.log(image);
   const theCom = comment ? (
     <span
       style={{
@@ -109,7 +121,7 @@ const Node: React.FC<NodeProps> = ({
   }
 
   const [nodeSize, setNodeSize] = useState(nodeWidth);
-  const isExecuted = state((state) => state.isExecuted);
+  const inExecutionMode = state((state) => state.inExecutionMode);
   const graphRF = state((state) => state.graphRF);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const setSelectedElement = state((state) => state.setSelectedElement);
@@ -118,9 +130,10 @@ const Node: React.FC<NodeProps> = ({
   const [labelLocal, setLabelLocal] = React.useState(label);
   const setGraphRF = state((state) => state.setGraphRF);
   const [detailsL, setDetailsL] = React.useState(false);
+  const allIcons = state((state) => state.allIcons);
 
   useEffect(() => {
-    // console.log(label, details);
+    // console.log(label, details, image);
     setNodeSize(nodeWidth);
     setLabelLocal(label);
     setDetailsL(details || false);
@@ -178,6 +191,15 @@ const Node: React.FC<NodeProps> = ({
       nodes: [...graphRF.nodes, newClone],
     });
     setSelectedElement(newClone as EwoksRFNode);
+  };
+
+  const findImage = (img) => {
+    const imgIndex = allIcons.map((ico) => ico.name).indexOf(img);
+    // console.log(img, imgIndex);
+
+    return imgIndex !== -1
+      ? allIcons[imgIndex].image.data_url
+      : iconsObj[img] || orange2;
   };
 
   return (
@@ -277,27 +299,30 @@ const Node: React.FC<NodeProps> = ({
               {label.slice(0, 1)}
             </div>
           )}
-          {isExecuted &&
+          {inExecutionMode &&
             !withImage &&
             type !== 'graphOutput' &&
             type !== 'graphInput' && (
-              <IntegratedSpinner
+              <ExecuteSpinner
                 getting={executing}
                 tooltip="Execution"
                 action={execution}
-                onClick={() => {
-                  /* eslint-disable no-console */
-                  console.log('Starting Execution');
-                }}
               >
-                <SendIcon />
-              </IntegratedSpinner>
+                <img
+                  style={{ padding: '2px' }}
+                  role="presentation"
+                  draggable="false"
+                  onDragStart={(event) => onDragStart(event)}
+                  src={orange1}
+                  alt="icon"
+                />
+              </ExecuteSpinner>
             )}
           {/* <div style={{ wordWrap: 'break-word' }}>{comment}</div> */}
           {withImage &&
             type !== 'graphOutput' &&
             type !== 'graphInput' &&
-            (isExecuted ? (
+            (inExecutionMode ? (
               <ExecuteSpinner
                 getting={executing}
                 tooltip="Execution"
@@ -318,8 +343,8 @@ const Node: React.FC<NodeProps> = ({
                 role="presentation"
                 draggable="false"
                 onDragStart={(event) => onDragStart(event)}
-                src={iconsObj[image] || orange1}
-                alt="icon"
+                src={findImage(image)}
+                alt="taskIcon"
               />
             ))}
           {withImage && (type === 'graphOutput' || type === 'graphInput') && (

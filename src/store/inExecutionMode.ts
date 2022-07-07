@@ -1,16 +1,17 @@
-const isExecuted = (set, get) => ({
-  isExecuted: false,
+// DOC: when UI in execution mode
+const inExecutionMode = (set, get) => ({
+  inExecutionMode: false,
 
-  setIsExecuted: (val: boolean) => {
+  setInExecutionMode: (val: boolean) => {
     const prevState = get((prev) => prev);
     // console.log(val, prevState);
 
     set((state) => ({
       ...state,
-      isExecuted: val,
+      inExecutionMode: val,
     }));
 
-    // when execution stops by user the execution nodes are excluded
+    // when execution stops by user the execution nodes are removed from the graph
     if (!val) {
       set((state) => ({
         ...state,
@@ -23,11 +24,10 @@ const isExecuted = (set, get) => ({
         },
         executingEvents: [],
       }));
-      // when execution starts
     } else {
       // when execution starts
     }
   },
 });
 
-export default isExecuted;
+export default inExecutionMode;

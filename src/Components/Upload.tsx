@@ -45,11 +45,12 @@ function Upload(props) {
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setSubGraph = state((state) => state.setSubGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const isExecuted = state((state) => state.isExecuted);
+  const inExecutionMode = state((state) => state.inExecutionMode);
 
   const fileNameChanged = async (event) => {
     // // console.log(event.target.files[0], recentGraphs, graphRF, subgraphsStack);
-
+    /* eslint-disable no-console */
+    console.log(workingGraph.graph.id, graphRF.graph.id);
     if (workingGraph.graph.id === graphRF.graph.id) {
       const reader = showFile(event);
       const file = await reader.then((val) => val);
@@ -62,7 +63,7 @@ function Upload(props) {
             // TODO validate from disk workflows but visualize them
             // const { result } = validateEwoksGraph(newGraph);
             // if (result) {
-            await setWorkingGraph(newGraph);
+            await setWorkingGraph(newGraph, 'fromDisk');
             // }
           } else {
             await setSubGraph(newGraph);
@@ -101,7 +102,7 @@ function Upload(props) {
           size="small"
           component="span"
           aria-label="add"
-          disabled={isExecuted}
+          disabled={inExecutionMode}
         >
           {props.children}
         </Fab>

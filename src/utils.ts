@@ -6,26 +6,37 @@ import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
 import { calcNoteNodes } from './utils/calcNoteNodes';
-import { getWorkflowDescription, getWorkflow } from './utils/api';
+import { getWorkflowsDescriptions, getWorkflow } from './utils/api';
 
 // const { GraphDagre } = dagre.graphlib;
 // const NODE_SIZE = { width: 270, height: 36 };
 
 export const ewoksNetwork = {};
 
-export async function getWorkflows(): Promise<{ title: string }[]> {
+export async function getWorkflows(): Promise<
+  {
+    id?: string;
+    label?: string;
+    category?: string;
+  }[]
+> {
   // console.log(process.env);
   let res = [];
   try {
-    const workflows = await getWorkflowDescription();
+    const workflows = await getWorkflowsDescriptions();
     if (workflows && workflows.data) {
-      // console.log(workflows);
-      const workf = workflows.data as { identifiers: string[] };
-      res = workf.identifiers
-        .sort((a, b) => a.localeCompare(b))
-        .map((work) => {
-          return { title: work };
-        });
+      const workf = workflows.data as {
+        items: {
+          id?: string;
+          label?: string;
+          category?: string;
+        }[];
+      };
+      res = workf.items;
+      // .sort((a, b) => a.localeCompare(b))
+      // .map((work) => {
+      //   return { ...work, title: work.label };
+      // });
     }
   } catch (error) {
     if (error.response) {
@@ -46,7 +57,7 @@ export async function getWorkflows(): Promise<{ title: string }[]> {
       /* eslint-disable no-console */
       console.log('Error', error.message);
     }
-    console.log(error.config, error.toJSON());
+    console.log(error.config);
     res = [{ title: 'network error' }];
   }
   return res;
@@ -117,6 +128,11 @@ export function rfToEwoks(tempGraph): GraphEwoks {
   const graph = calcGraphInputsOutputs(tempGraph);
   const noteNodes = calcNoteNodes(tempGraph);
   graph.uiProps.notes = noteNodes;
+  // console.log({
+  //   graph,
+  //   nodes: toEwoksNodes(tempGraph.nodes),
+  //   links: toEwoksLinks(tempGraph.links),
+  // });
   return {
     graph,
     nodes: toEwoksNodes(tempGraph.nodes),

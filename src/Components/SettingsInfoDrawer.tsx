@@ -2,13 +2,13 @@ import React, { useEffect } from 'react';
 import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
-import TabPanel from './TabPanel';
+import BasicTabs from './BasicTabs';
 import EwoksUiInfo from './EwoksUiInfo';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 // TODO: to decide if only top is needed and local state of the drawer
 export default function SettingsInfoDrawer(props) {
-  const [state, setState] = React.useState({
+  const [drawerPositions, setDrawerPositions] = React.useState({
     top: false,
     left: false,
     bottom: false,
@@ -16,7 +16,7 @@ export default function SettingsInfoDrawer(props) {
   });
 
   useEffect(() => {
-    setState({
+    setDrawerPositions({
       top: props.openDrawers && props.openSettings,
       left: false,
       bottom: props.openDrawers && props.openInfo,
@@ -47,7 +47,7 @@ export default function SettingsInfoDrawer(props) {
       return;
     }
     props.handleOpenDrawers();
-    setState({ ...state, [anchor]: open }); // left: open , for opening both-active 1
+    setDrawerPositions({ ...drawerPositions, [anchor]: open }); // left: open , for opening both-active 1
   };
 
   const list = (anchor: Anchor) => (
@@ -62,7 +62,7 @@ export default function SettingsInfoDrawer(props) {
           <EwoksUiInfo closeDialog={toggleDrawer('bottom', false)} />
         </div>
       ) : (
-        <TabPanel />
+        <BasicTabs />
       )}
       <Divider />
     </Box>
@@ -76,7 +76,7 @@ export default function SettingsInfoDrawer(props) {
           <Drawer
             style={{ alignItems: 'center', display: 'flex' }}
             anchor={anchor}
-            open={state[anchor]}
+            open={drawerPositions[anchor]}
             onClose={toggleDrawer(anchor, false)}
           >
             {list(anchor)}
