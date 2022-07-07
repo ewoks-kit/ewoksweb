@@ -28,7 +28,6 @@ export default function ManageTasks() {
   };
 
   const discover = async () => {
-    console.log(pythonModules, typeof pythonModules);
     try {
       await discoverTasks(pythonModules);
       setOpenSnackbar({

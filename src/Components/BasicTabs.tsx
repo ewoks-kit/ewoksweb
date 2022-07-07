@@ -53,7 +53,6 @@ export default function BasicTabs() {
   const openSettingsDrawer = state((state) => state.openSettingsDrawer);
 
   useEffect(() => {
-    console.log(openSettingsDrawer);
     setValue(
       openSettingsDrawer === 'Workflows'
         ? 0

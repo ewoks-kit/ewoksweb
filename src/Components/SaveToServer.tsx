@@ -26,7 +26,7 @@ export default function SaveToServer({ saveToServerF }) {
   });
 
   const saveToServer = async () => {
-    console.log(workingGraph.graph.id, graphRF.graph.id);
+    // console.log(workingGraph.graph.id, graphRF.graph.id);
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     // and Nodes DataMapping before attempting to save
     const graphRFCurrated = curateGraph(graphRF);

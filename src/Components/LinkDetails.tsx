@@ -57,7 +57,6 @@ export default function LinkDetails(props) {
   };
 
   const advancedChanged = (event) => {
-    console.log(event.target.checked);
     setAdvanced(event.target.checked);
   };
 

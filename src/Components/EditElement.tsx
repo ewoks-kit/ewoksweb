@@ -6,7 +6,6 @@ import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import Typography from '@material-ui/core/Typography';
 import LinkDetails from './LinkDetails';
 import NodeDetails from './NodeDetails';
-import LabelComment from './LabelComment';
 import GraphLabelComment from './GraphLabelComment';
 
 function EditElement(props) {

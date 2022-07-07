@@ -1,7 +1,6 @@
 /* eslint-disable promise/prefer-await-to-then */
 /* eslint-disable promise/prefer-await-to-callbacks */
 import { useEffect, useState, useCallback } from 'react';
-import state from '../store/state';
 
 const useApi = (asyncFunction, immediate = true) => {
   const [status, setStatus] = useState('idle');
@@ -19,7 +18,6 @@ const useApi = (asyncFunction, immediate = true) => {
 
     return asyncFunction()
       .then((response) => {
-        console.log(response);
         setValue(response);
         setStatus('success');
       })
@@ -37,7 +35,7 @@ const useApi = (asyncFunction, immediate = true) => {
       execute();
     }
   }, [execute, immediate]);
-  console.log(status, value, error);
+  // console.log(status, value, error);
   return { execute, status, value, error };
 };
 

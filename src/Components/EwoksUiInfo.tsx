@@ -72,13 +72,12 @@ export default function EwoksUiInfo(props) {
     </div>
   );
 }
+const UD = 'Under Development';
 
 const infoCategories = [
   {
     summary: 'Create a graph',
-    details: `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-  eget.`,
+    details: UD,
   },
   {
     summary: 'Nodes editing details',
@@ -123,10 +122,10 @@ error handler links. The default is <cite>{“map_all_data”: True}</cite>. The
 </section>
   `,
   },
-  { summary: 'Nodes style editing', details: 'Id' },
-  { summary: 'Links editing details', details: 'Id' },
-  { summary: 'Clone Node, Graph', details: 'Id' },
-  { summary: 'Manage Icons', details: 'Id' },
-  { summary: 'Manage Tasks', details: 'Id' },
-  { summary: 'other', details: 'Id' },
+  { summary: 'Nodes style editing', details: UD },
+  { summary: 'Links editing details', details: UD },
+  { summary: 'Clone Node, Graph', details: UD },
+  { summary: 'Manage Icons', details: UD },
+  { summary: 'Manage Tasks', details: UD },
+  { summary: 'other', details: UD },
 ];

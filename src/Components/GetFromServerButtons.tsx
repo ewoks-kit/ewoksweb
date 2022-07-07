@@ -1,26 +1,19 @@
-import React from 'react';
+import { useState } from 'react';
 
-import DashboardStyle from '../layout/DashboardStyle';
 import IntegratedSpinner from '../Components/IntegratedSpinner';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
-import FormControl from '@material-ui/core/FormControl';
-import AutocompleteDrop from '../Components/AutocompleteDrop';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import type { GraphEwoks, GraphRF } from '../types';
+import type { GraphEwoks } from '../types';
 import state from '../store/state';
 import { getWorkflow } from '../utils/api';
 
-const useStyles = DashboardStyle;
-
 export default function GetFromServerButtons(props) {
-  const classes = useStyles();
-
   const { workflowId } = props;
 
   const setSubGraph = state((state) => state.setSubGraph);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const [gettingFromServer, setGettingFromServer] = React.useState(false);
+  const [gettingFromServer, setGettingFromServer] = useState(false);
 
   const getSubgraphFromServer = () => {
     getFromServer('subgraph');

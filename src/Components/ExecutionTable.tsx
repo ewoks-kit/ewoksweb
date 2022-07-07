@@ -261,7 +261,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 
 const formatedTime = (time) => {
   const dat = new Date(time);
-  console.log(time, dat, dat.getDay());
+  // console.log(time, dat, dat.getDay());
   return `${dat.toTimeString().slice(0, 8)}
     ${dat.toDateString()}`;
 };
@@ -338,6 +338,7 @@ export default function EnhancedTable() {
 
   return (
     <Box sx={{ width: '100%' }}>
+      <h3>Under Development</h3>
       <Paper>
         <EnhancedTableToolbar numSelected={selected.length} />
         <hr style={{ color: '#dee3ff' }} />
@@ -362,7 +363,7 @@ export default function EnhancedTable() {
               {stableSort(executedWorkflows.jobs, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  console.log(row, index);
+                  // console.log(row, index);
                   const isItemSelected = isSelected(row[0].job_id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 

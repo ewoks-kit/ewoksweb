@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 // import state from '../store/state';
 import {
   TextField,
@@ -20,26 +20,27 @@ const useStyles = DashboardStyle;
 export default function ExecutionFilters() {
   const classes = useStyles();
 
-  const [workflowNameFilter, setWorkflowNameFilter] = useState<String>('');
+  // const [workflowNameFilter, setWorkflowNameFilter] = useState<String>('');
   const [fromDateFilter, setFromDateFilter] = useState<String>('');
   const [toDateFilter, setToDateFilter] = useState<String>('');
-  const [workflowId, setWorkflowId] = React.useState('');
-  const [categoryValue, setCategoryValue] = React.useState('');
-  const [status, setStatus] = React.useState('');
+  const [workflowId, setWorkflowId] = useState('');
+  const [categoryValue, setCategoryValue] = useState('');
+  const [status, setStatus] = useState('');
 
   const toDateChanged = (val) => {
-    console.log(val.target.value, workflowNameFilter);
+    // console.log(val.target.value, workflowNameFilter);
     setToDateFilter(val);
   };
 
   const fromDateChanged = (val) => {
-    console.log(val, workflowNameFilter);
+    /* eslint-disable no-console */
+    console.log(val, workflowId);
     setFromDateFilter(val);
   };
 
-  const workflowNameChanged = (val) => {
-    console.log(val, workflowNameFilter);
-  };
+  // const workflowNameChanged = (val) => {
+  //   console.log(val, workflowNameFilter);
+  // };
 
   const setInputValue = (workflowDetails) => {
     if (workflowDetails && workflowDetails.id) {
@@ -55,7 +56,7 @@ export default function ExecutionFilters() {
   };
 
   const statusChanged = (event) => {
-    console.log(event.target.value, workflowNameFilter);
+    // console.log(event.target.value, workflowNameFilter);
     setStatus(event.target.value);
   };
 

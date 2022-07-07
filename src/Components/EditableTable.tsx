@@ -25,6 +25,7 @@ const useStyles = makeStyles(() => ({
     padding: '1px',
     minWidth: 160,
     maxWidth: 270,
+    wordBreak: 'break-all',
   },
   selectTableCell: {
     width: 28,
@@ -86,7 +87,6 @@ function EditableTable(props) {
         : 'string'
     );
     setTypeOfInputs(tOfIn);
-    console.log(defaultValues, tOfIn);
     setRows(
       defaultValues
         ? defaultValues.map((pair) => {

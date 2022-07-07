@@ -25,7 +25,6 @@ function AutocompleteDrop(props) {
   }, [open]);
 
   const setInputValue = (newInputValue) => {
-    console.log(newInputValue);
     props.setInputValue(newInputValue);
   };
 
@@ -133,10 +132,10 @@ function AutocompleteDrop(props) {
       onChange={(event, newValue: string | null) => {
         setInputValue(newValue);
       }}
-      onInputChange={(event, newInputValue) => {
-        console.log(newInputValue);
-        // setInputValue(newInputValue);
-      }}
+      // onInputChange={(event, newInputValue) => {
+      //   console.log(newInputValue);
+      //   // setInputValue(newInputValue);
+      // }}
       renderInput={(params) => (
         <TextField
           variant="filled"

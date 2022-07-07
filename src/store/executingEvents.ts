@@ -13,6 +13,7 @@ const executingEvents = (set, get) => ({
   // with setExecuting and setExecuted.
 
   setExecutingEvents: (execEvent: Event, live: boolean) => {
+    // console.log(execEvent);
     const prevState = get((prev) => prev);
 
     if (execEvent.context === 'node') {
@@ -20,7 +21,6 @@ const executingEvents = (set, get) => ({
       let newExecutingEvents = [];
       if (execEvent.type === 'start') {
         // add to executing events
-        console.log(execEvent);
         newExecutingEvents = [...prevState.executingEvents, execEvent];
       } else if (execEvent.type === 'end') {
         // console.log(
@@ -74,7 +74,7 @@ const executingEvents = (set, get) => ({
       if (execEvent.type === 'start') {
         tempPos = { x: tempPos.x - 30, y: tempPos.y + 30 };
       } else if (withLabel) {
-        tempPos = { x: tempPos.x + 140, y: tempPos.y + 30 };
+        tempPos = { x: tempPos.x + 120, y: tempPos.y + 30 };
       } else {
         tempPos = { x: tempPos.x + 95, y: tempPos.y + 30 };
       }
@@ -87,7 +87,9 @@ const executingEvents = (set, get) => ({
           .reverse()
           .filter(
             (elem) =>
-              elem.node_id === execEvent.node_id && elem.type === execEvent.type
+              elem.node_id === execEvent.node_id &&
+              elem.type === execEvent.type &&
+              elem.job_id === execEvent.job_id
           );
       }
 

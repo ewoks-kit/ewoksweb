@@ -282,7 +282,7 @@ export default function FormDialog(props) {
   const fields = [
     { id: 'Task Type', value: taskType, handleChange: taskTypeChanged },
     { id: 'Category', value: category, handleChange: categoryChanged },
-    { id: 'Icon', value: icon, handleChange: iconChanged },
+    // { id: 'Icon', value: icon, handleChange: iconChanged },
     {
       id: 'Optional Inputs',
       value: optionalInputNames,

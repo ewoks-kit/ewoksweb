@@ -147,7 +147,6 @@ export default function NodeDetails(props) {
   };
 
   const advancedChanged = (event) => {
-    console.log(event.target.checked);
     setAdvanced(event.target.checked);
   };
 

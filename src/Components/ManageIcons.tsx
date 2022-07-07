@@ -292,7 +292,7 @@ export default function ManageIcons() {
                 type="submit"
                 color="primary"
                 size="small"
-                // disabled={fileToBeSent === ''}
+                disabled // {fileToBeSent === ''}
               >
                 Upload
               </Button>

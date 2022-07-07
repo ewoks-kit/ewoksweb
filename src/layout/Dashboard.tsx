@@ -32,8 +32,6 @@ import state from '../store/state';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 import FormDialog from '../Components/FormDialog';
 
-import type { GraphRF } from '../types';
-
 const useStyles = DashboardStyle;
 
 export default function Dashboard() {
@@ -57,13 +55,12 @@ export default function Dashboard() {
   const setOpenSettingsDrawer = state((state) => state.setOpenSettingsDrawer);
 
   useEffect(() => {
-    console.log(openDrawers);
+    // console.log(openDrawers);
     handleOpenInfo();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    console.log(openDrawers, openSettings);
+    // console.log(openDrawers, openSettings);
     if (!openDrawers) {
       setOpenSettings(false);
       setOpenSettingsDrawer('Workflows');
@@ -71,7 +68,7 @@ export default function Dashboard() {
   }, [openDrawers, openSettings, setOpenSettingsDrawer]);
 
   useEffect(() => {
-    console.log(openSettingsDrawer);
+    // console.log(openSettingsDrawer);
     if (openSettingsDrawer === 'Executions') {
       setOpenInfo(false);
       setOpenDrawers(true);
