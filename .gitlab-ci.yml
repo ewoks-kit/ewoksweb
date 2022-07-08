@@ -73,9 +73,9 @@ build:
   stage: build
   script:
     # - npx -y browserslist@latest --update-db
-    - python --version
-    - python -m pip install --upgrade pip
-    - python -m pip install --upgrade setuptools # TODO: before_script
+    - python3 --version
+    - python3 -m pip install --upgrade pip
+    - python3 -m pip install --upgrade setuptools # TODO: before_script
     - npm install -y
     - npm run build
     - python3 setup.py sdist
