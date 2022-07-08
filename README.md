@@ -52,6 +52,12 @@ Start the server that serves the frontend
 ewoks-server
 ```
 
+or for an installation with the system python
+
+```bash
+python3 -m ewoksserver.server
+```
+
 ## Documentation
 
 https://ewoksweb.readthedocs.io/
