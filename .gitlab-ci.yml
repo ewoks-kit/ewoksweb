@@ -94,10 +94,11 @@ pages:
   before_script:
     - npm install -y
   script:
-    - export REACT_APP_SERVER_URL=https://bosquet.silx.org/ewoks/
     - npm run build
     - rm -rf public
     - mv build public
+  variables:
+    REACT_APP_SERVER_URL: https://bosquet.silx.org/ewoks/
   artifacts:
     paths:
       - public
