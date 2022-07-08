@@ -44,21 +44,6 @@ stages:
     refs:
       - main
 
-pages:
-  stage: deploy
-  extends: .base
-  before_script:
-    - npm install -y
-  script:
-    - npm run build
-    - rm -rf public
-    - mv build public
-  artifacts:
-    paths:
-      - public
-  only:
-    - main
-
 ### Required jobs ###
 
 flake8:
@@ -86,10 +71,9 @@ lint:
 build:
   extends: .build
   stage: build
-  before_script:
+  script:
     # - npx -y browserslist@latest --update-db
     - npm install -y
-  script:
     - npm run build
     - python3 setup.py sdist
   variables:
@@ -100,6 +84,21 @@ build:
       - sdist/
     when: on_success
     expire_in: 2h
+
+pages:
+  stage: deploy
+  extends: .base
+  before_script:
+    - npm install -y
+  script:
+    - npm run build
+    - rm -rf public
+    - mv build public
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
 
 assets:
   extends: .deploy
