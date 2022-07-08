@@ -75,7 +75,7 @@ build:
     # - npx -y browserslist@latest --update-db
     - python3 --version
     - python3 -m pip install --upgrade pip
-    - python3 -m pip install --upgrade setuptools # TODO: before_script
+    - python3 -m pip install --upgrade setuptools
     - npm install -y
     - npm run build
     - python3 setup.py sdist
@@ -94,6 +94,7 @@ pages:
   before_script:
     - npm install -y
   script:
+    - export REACT_APP_SERVER_URL=https://bosquet.silx.org/ewoks/
     - npm run build
     - rm -rf public
     - mv build public
