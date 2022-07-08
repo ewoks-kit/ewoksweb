@@ -11,7 +11,7 @@ import { rfToEwoks } from '../utils';
 
 import ReactJson from 'react-json-view';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import { TextField } from '@material-ui/core';
+import { TextField, Tooltip } from '@material-ui/core';
 import state from '../store/state';
 
 function PaperComponent(props: PaperProps) {
@@ -74,7 +74,9 @@ export default function DraggableDialog(props) {
   const graphChanged = (edit) => {
     setGraph(edit.updated_src);
   };
-
+  // TODO: there is a error with react
+  // React does not recognize the `inputRef` prop on a DOM element.
+  // if not upgrade material fix it
   return (
     <Dialog
       open={isOpen}
@@ -98,16 +100,16 @@ export default function DraggableDialog(props) {
               <ToggleButton value="rf">RF Graph</ToggleButton>
             </ToggleButtonGroup>
           )}
-          {/* <Box component="form"> */}
           <div style={{ marginBottom: '10px' }}>
-            <TextField
-              label="Name"
-              variant="filled"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+            <Tooltip title="Input the name of parameter" arrow>
+              <TextField
+                label="Name"
+                variant="filled"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Tooltip>
           </div>
-          {/* </Box> */}
           <ReactJson
             src={graph}
             name="graph"
