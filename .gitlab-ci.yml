@@ -38,14 +38,14 @@ stages:
 flake8:
   extends: .style
   before_script:
-    - python -m pip install flake8
+    - python3 -m pip install flake8
   script:
     - flake8
 
 .black: # needs upgrade python 3.5 to 3.8
   extends: .style
   before_script:
-    - python -m pip install black
+    - python3 -m pip install black
   script:
     - LC_ALL=C.UTF-8 black --check --safe .
 
@@ -62,12 +62,12 @@ build:
   stage: build
   script:
     # - npx -y browserslist@latest --update-db
-    - python --version
-    - python -m pip install --upgrade pip
-    - python -m pip install --upgrade setuptools
+    - python3 --version
+    - python3 -m pip install --upgrade pip
+    - python3 -m pip install --upgrade setuptools
     - npm install -y
     - npm run build
-    - python setup.py sdist
+    - python3 setup.py sdist
     - mv dist sdist
   after_script:
     - ls -Rl sdist
