@@ -3,7 +3,7 @@ stages:
   - build
   - deploy
 
-### Jobs templates for each stage ###
+### Jobs templates ###
 
 .base:
   image: "docker-registry.esrf.fr/dau/ewoks:node_12"
@@ -22,15 +22,6 @@ stages:
 .build:
   stage: build
   extends: .base
-  before_script:
-    - rm -rf ${ARTIFACTS_DEST}
-  after_script:
-    - mv ${ARTIFACTS_SOURCE} ${ARTIFACTS_DEST}
-  artifacts:
-    paths:
-      - ${ARTIFACTS_DEST}/
-    when: on_success
-    expire_in: 2h
   only:
     refs:
       - main
@@ -38,8 +29,6 @@ stages:
 .deploy:
   stage: deploy
   extends: .base
-  tags:
-    - linux
   only:
     refs:
       - main
@@ -49,14 +38,14 @@ stages:
 flake8:
   extends: .style
   before_script:
-    - python3 -m pip install flake8
+    - python -m pip install flake8
   script:
     - flake8
 
 .black: # needs upgrade python 3.5 to 3.8
   extends: .style
   before_script:
-    - python3 -m pip install black
+    - python -m pip install black
   script:
     - LC_ALL=C.UTF-8 black --check --safe .
 
@@ -73,15 +62,15 @@ build:
   stage: build
   script:
     # - npx -y browserslist@latest --update-db
-    - python3 --version
-    - python3 -m pip install --upgrade pip
-    - python3 -m pip install --upgrade setuptools
+    - python --version
+    - python -m pip install --upgrade pip
+    - python -m pip install --upgrade setuptools
     - npm install -y
     - npm run build
-    - python3 setup.py sdist
-  variables:
-    ARTIFACTS_SOURCE: dist
-    ARTIFACTS_DEST: sdist
+    - python setup.py sdist
+    - mv dist sdist
+  after_script:
+    - ls -Rl sdist
   artifacts:
     paths:
       - sdist/
