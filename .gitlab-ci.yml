@@ -3,7 +3,7 @@ stages:
   - build
   - deploy
 
-### Jobs templates for each stage ###
+### Jobs templates ###
 
 .base:
   image: "docker-registry.esrf.fr/dau/ewoks:node_12"
@@ -22,15 +22,6 @@ stages:
 .build:
   stage: build
   extends: .base
-  before_script:
-    - rm -rf ${ARTIFACTS_DEST}
-  after_script:
-    - mv ${ARTIFACTS_SOURCE} ${ARTIFACTS_DEST}
-  artifacts:
-    paths:
-      - ${ARTIFACTS_DEST}/
-    when: on_success
-    expire_in: 2h
   only:
     refs:
       - main
@@ -38,8 +29,6 @@ stages:
 .deploy:
   stage: deploy
   extends: .base
-  tags:
-    - linux
   only:
     refs:
       - main
@@ -79,9 +68,9 @@ build:
     - npm install -y
     - npm run build
     - python3 setup.py sdist
-  variables:
-    ARTIFACTS_SOURCE: dist
-    ARTIFACTS_DEST: sdist
+    - mv dist sdist
+  after_script:
+    - ls -Rl sdist
   artifacts:
     paths:
       - sdist/
