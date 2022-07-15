@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 
 const targetSource = './build'; // Relative path to copy files from
-const targetDestination = './ewoksserver/static'; // Relative path to copy files to
+const targetDestination = './pysrc/ewoksserver/static'; // Relative path to copy files to
 
 /**
  * Remove directory recursively
