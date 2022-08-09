@@ -3,7 +3,7 @@ stages:
   - build
   - deploy
 
-### Jobs templates for each stage ###
+### Jobs templates ###
 
 .base:
   image: "docker-registry.esrf.fr/dau/ewoks:node_12"
@@ -22,15 +22,6 @@ stages:
 .build:
   stage: build
   extends: .base
-  before_script:
-    - rm -rf ${ARTIFACTS_DEST}
-  after_script:
-    - mv ${ARTIFACTS_SOURCE} ${ARTIFACTS_DEST}
-  artifacts:
-    paths:
-      - ${ARTIFACTS_DEST}/
-    when: on_success
-    expire_in: 2h
   only:
     refs:
       - main
@@ -38,26 +29,9 @@ stages:
 .deploy:
   stage: deploy
   extends: .base
-  tags:
-    - linux
   only:
     refs:
       - main
-
-pages:
-  stage: deploy
-  extends: .base
-  before_script:
-    - npm install -y
-  script:
-    - npm run build
-    - rm -rf public
-    - mv build public
-  artifacts:
-    paths:
-      - public
-  only:
-    - main
 
 ### Required jobs ###
 
@@ -86,15 +60,39 @@ lint:
 build:
   extends: .build
   stage: build
-  before_script:
+  script:
     # - npx -y browserslist@latest --update-db
+    - python3 --version
+    - python3 -m pip install --upgrade pip
+    - python3 -m pip install --upgrade setuptools
+    - npm install -y
+    - npm run build
+    - python3 setup.py sdist
+    - mv dist sdist
+  after_script:
+    - ls -Rl sdist
+  artifacts:
+    paths:
+      - sdist/
+    when: on_success
+    expire_in: 2h
+
+pages:
+  stage: deploy
+  extends: .base
+  before_script:
     - npm install -y
   script:
     - npm run build
-    - python3 setup.py sdist
+    - rm -rf public
+    - mv build public
   variables:
-    ARTIFACTS_SOURCE: dist
-    ARTIFACTS_DEST: sdist
+    REACT_APP_SERVER_URL: https://bosquet.silx.org/ewoks/
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
 
 assets:
   extends: .deploy

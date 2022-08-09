@@ -1,13 +1,13 @@
-# Ewoks-web
+# ewoksweb
 
-Create, visualize and execute
-[ewoks](https://gitlab.esrf.fr/workflow/ewoks/ewoks) workflows in the web.
+_ewoksweb_ is a frontend to create, visualize and execute
+[ewoks](https://ewoks.readthedocs.io/) workflows in the web.
 
-# Demo
+## Demo
 
 https://workflow.gitlab-pages.esrf.fr/ewoks/ewoksweb/
 
-# From source
+## From source
 
 Start the frontend
 
@@ -24,7 +24,7 @@ npm run build
 python setup.py sdist
 ```
 
-# From pypi
+## From pypi
 
 Install REST server only (`ewoksserver` is another package)
 
@@ -50,6 +50,12 @@ Start the server that serves the frontend
 
 ```bash
 ewoks-server
+```
+
+or for an installation with the system python
+
+```bash
+python3 -m ewoksserver.server
 ```
 
 ## Documentation
