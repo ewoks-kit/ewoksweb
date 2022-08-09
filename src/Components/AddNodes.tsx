@@ -244,7 +244,7 @@ function AddNodes(props) {
                     </Tooltip>
                   </span>
                 ))}
-              {categoryName === 'ewokscore' && (
+              {categoryName === 'General' && (
                 <>
                   <span
                     role="button"
@@ -283,7 +283,7 @@ function AddNodes(props) {
             </AccordionDetails>
             {selectedTask &&
               selectedTask.task_identifier &&
-              categoryName !== 'ewokscore' &&
+              categoryName !== 'General' &&
               tasks.length > 0 &&
               tasks.find(
                 (tas) => tas.task_identifier === selectedTask.task_identifier

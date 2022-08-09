@@ -1,19 +1,9 @@
-const allWorkflows = (set) => ({
-  allWorkflows: [] as {
-    id?: string;
-    label?: string;
-    category?: string;
-  }[],
+import type { workflowDescription } from '../types';
 
-  setAllWorkflows: (
-    workflows: [
-      {
-        id?: string;
-        label?: string;
-        category?: string;
-      }
-    ]
-  ) => {
+const allWorkflows = (set) => ({
+  allWorkflows: [] as workflowDescription[],
+
+  setAllWorkflows: (workflows: workflowDescription[]) => {
     set((state) => ({
       ...state,
       allWorkflows: workflows,

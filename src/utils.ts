@@ -1,6 +1,11 @@
 // @ts-ignore
 // import dagre from 'dagre';
-import type { EwoksRFNode, GraphEwoks, GraphRF } from './types';
+import type {
+  EwoksRFNode,
+  GraphEwoks,
+  GraphRF,
+  workflowDescription,
+} from './types';
 import axios from 'axios';
 import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
 import { toEwoksLinks } from './utils/toEwoksLinks';
@@ -13,24 +18,14 @@ import { getWorkflowsDescriptions, getWorkflow } from './utils/api';
 
 export const ewoksNetwork = {};
 
-export async function getWorkflows(): Promise<
-  {
-    id?: string;
-    label?: string;
-    category?: string;
-  }[]
-> {
+export async function getWorkflows(): Promise<workflowDescription[]> {
   // console.log(process.env);
   let res = [];
   try {
     const workflows = await getWorkflowsDescriptions();
     if (workflows && workflows.data) {
       const workf = workflows.data as {
-        items: {
-          id?: string;
-          label?: string;
-          category?: string;
-        }[];
+        items: workflowDescription[];
       };
       res = workf.items;
       // .sort((a, b) => a.localeCompare(b))
@@ -57,6 +52,7 @@ export async function getWorkflows(): Promise<
       /* eslint-disable no-console */
       console.log('Error', error.message);
     }
+    /* eslint-disable no-console */
     console.log(error.config);
     res = [{ title: 'network error' }];
   }

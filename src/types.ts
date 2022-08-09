@@ -511,3 +511,9 @@ export interface Icon {
   type?: string;
   image?: { data_url?: string };
 }
+
+export interface workflowDescription {
+  id: string;
+  label?: string;
+  category?: string;
+}

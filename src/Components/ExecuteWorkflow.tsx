@@ -35,7 +35,17 @@ export default function ExecuteWorkflow() {
       // }
       // socket.emit('Execute Graph', graphRF);
       setInExecutionMode(true);
-      await executeWorkflow(graphRF.graph.id);
+      try {
+        await executeWorkflow(graphRF.graph.id);
+      } catch (error) {
+        /* eslint-disable no-console */
+        console.log(error);
+        setOpenSnackbar({
+          open: true,
+          text: 'Execution could not start!',
+          severity: 'error',
+        });
+      }
     } else if (inExecutionMode) {
       setInExecutionMode(false);
       // socket.disconnect();
