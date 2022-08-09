@@ -81,6 +81,7 @@ export default function Conditions(props) {
           valuesChanged={conditionsValuesChanged}
           typeOfValues={[
             {
+              // TODO: examine if the following type is used anymore
               type: elementL.source
                 ? ['class'].includes(
                     graphRF &&

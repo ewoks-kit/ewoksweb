@@ -4,6 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getWorkflows } from '../utils';
+import type { workflowDescription } from '../types';
 
 import state from '../store/state';
 
@@ -34,11 +35,7 @@ function AutocompleteDrop(props) {
     // TODO: getWorkflows will fetch {label, category} not just label
     // depending on props.placeholder will show categories of workflows
     // after selecting a category workflows will be filtered fon this category
-    const workF: {
-      id?: string;
-      label?: string;
-      category?: string;
-    }[] = await getWorkflows();
+    const workF: workflowDescription[] = await getWorkflows();
 
     if (workF.length === 0) {
       setOpenSnackbar({
@@ -116,7 +113,7 @@ function AutocompleteDrop(props) {
       }}
       getOptionLabel={(option) => {
         return props.placeholder === 'Workflows'
-          ? option.label || ''
+          ? option.label || option.id || ''
           : option.title || '';
       }}
       groupBy={(option) => {

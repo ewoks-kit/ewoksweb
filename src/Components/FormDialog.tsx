@@ -279,25 +279,29 @@ export default function FormDialog(props) {
     setNewName('');
   };
 
+  const task_types = ['class', 'method', 'script', 'ppfmethod', 'ppfport'];
+  const optionalInputs = 'Optional Inputs';
+  const requiredInputs = 'Required Inputs';
+  const outputs = 'Outputs';
   const fields = [
     { id: 'Task Type', value: taskType, handleChange: taskTypeChanged },
     { id: 'Category', value: category, handleChange: categoryChanged },
     // { id: 'Icon', value: icon, handleChange: iconChanged },
     {
-      id: 'Optional Inputs',
+      id: optionalInputs,
       value: optionalInputNames,
       handleChange: optionalInputNamesChanged,
       tip: 'Give the optional inputs in comma separated values eg: op1,op2...',
     },
     {
-      id: 'Required Inputs',
+      id: requiredInputs,
       value: requiredInputNames,
       handleChange: requiredInputNamesChanged,
       tip:
         'Give the required inputs in comma separated values eg: req1,req2...',
     },
     {
-      id: 'Output Inputs',
+      id: outputs,
       value: outputNames,
       handleChange: outputNamesChanged,
       tip: 'Give the outputs in comma separated values eg: out1,out2...',
@@ -346,15 +350,50 @@ export default function FormDialog(props) {
         {!isForGraph &&
           fields.map((field) => (
             <Tooltip title={field.tip || ''} key={field.id} arrow>
-              <TextField
-                margin="dense"
-                id={field.id}
-                label={field.id}
-                fullWidth
-                variant="standard"
-                value={field.value}
-                onChange={field.handleChange}
-              />
+              {field.id === 'Task Type' ? (
+                <FormControl>
+                  <InputLabel id="demo-simple-select-helper-label">
+                    Task Type
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    value={field.value}
+                    label="Task Type"
+                    onChange={field.handleChange}
+                  >
+                    {task_types.map((type) => (
+                      <MenuItem value={type} key={type}>
+                        {type}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>
+                    Select from the existing icons or upload a new one
+                  </FormHelperText>
+                </FormControl>
+              ) : (
+                <TextField
+                  margin="dense"
+                  id={field.id}
+                  label={field.id}
+                  fullWidth
+                  variant="standard"
+                  // DOC: apply rules of Issue #7 on value and disabling fields
+                  value={
+                    ['method', 'script'].includes(taskType) &&
+                    field.id === outputs
+                      ? 'return_value'
+                      : field.value
+                  }
+                  onChange={field.handleChange}
+                  disabled={
+                    [optionalInputs, requiredInputs, outputs].includes(
+                      field.id
+                    ) && taskType !== 'class'
+                  }
+                />
+              )}
             </Tooltip>
           ))}
         {!isForGraph && (

@@ -43,6 +43,11 @@ export default function SaveToServer({ saveToServerF }) {
       setOpenSaveDialog(true);
     } else if (workingGraph.graph.id === graphRF.graph.id) {
       if (exists && graphRF.graph.uiProps.source === 'fromServer') {
+        // DOC: remove the 'fromServer' before saving as ewoksGraph
+        if (graphRFCurrated.graph.uiProps.source) {
+          delete graphRFCurrated.graph.uiProps.source;
+        }
+
         try {
           await putWorkflow(rfToEwoks(graphRFCurrated));
           setOpenSnackbar({
