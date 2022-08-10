@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import state from '../store/state';
 import {
   TextField,
@@ -12,6 +12,9 @@ import {
 // import type { Event, GraphRF } from '../types';
 import DashboardStyle from '../layout/DashboardStyle';
 import AutocompleteDrop from '../Components/AutocompleteDrop';
+import { getExecutionEvents } from '../utils/api';
+import state from '../store/state';
+import type { ExecutedWorkflowEvents } from '../types';
 // import { DatePicker } from '@material-ui/lab/';
 // import DatePicker from '@material-ui/lab/Date';
 
@@ -26,6 +29,12 @@ export default function ExecutionFilters() {
   const [workflowId, setWorkflowId] = useState('');
   const [categoryValue, setCategoryValue] = useState('');
   const [status, setStatus] = useState('');
+  const setExecutedWorkflows = state((state) => state.setExecutedWorkflows);
+
+  useEffect(() => {
+    console.log(new Date().toString());
+    // setFromDateFilter(new Date().toString());
+  }, []);
 
   const toDateChanged = (val) => {
     // console.log(val.target.value, workflowNameFilter);
@@ -45,6 +54,8 @@ export default function ExecutionFilters() {
   const setInputValue = (workflowDetails) => {
     if (workflowDetails && workflowDetails.id) {
       setWorkflowId(workflowDetails.id || '');
+    } else {
+      setWorkflowId('');
     }
   };
 
@@ -58,6 +69,25 @@ export default function ExecutionFilters() {
   const statusChanged = (event) => {
     // console.log(event.target.value, workflowNameFilter);
     setStatus(event.target.value);
+  };
+
+  const getEvents = async () => {
+    try {
+      const response = await getExecutionEvents({
+        workflow_id: workflowId,
+      });
+      if (response.data) {
+        console.log(response.data, workflowId);
+        setExecutedWorkflows(response.data as ExecutedWorkflowEvents, false);
+      } else {
+        console.log('no response data');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    // finally {
+
+    // }
   };
 
   return (
@@ -105,8 +135,8 @@ export default function ExecutionFilters() {
         <TextField
           id="date"
           label="From"
-          type="date"
-          value={fromDateFilter}
+          type="datetime-local"
+          // value={fromDateFilter}
           defaultValue={new Date().toString()}
           InputLabelProps={{
             shrink: true,
@@ -119,7 +149,7 @@ export default function ExecutionFilters() {
         <TextField
           id="date"
           label="To"
-          type="date"
+          type="datetime-local"
           value={toDateFilter}
           // defaultValue={new Date().toString()}
           InputLabelProps={{
@@ -133,7 +163,7 @@ export default function ExecutionFilters() {
         style={{ margin: '8px' }}
         variant="outlined"
         color="primary"
-        // onClick={console.log('filter')}
+        onClick={getEvents}
         size="small"
       >
         Filter

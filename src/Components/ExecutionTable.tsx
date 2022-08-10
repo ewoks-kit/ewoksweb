@@ -374,7 +374,7 @@ export default function EnhancedTable() {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row[0].process_id}
+                      key={row[0].job_id}
                       selected={isItemSelected}
                       style={{ whiteSpace: 'nowrap' }}
                     >
