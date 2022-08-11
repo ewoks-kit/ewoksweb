@@ -32,6 +32,7 @@ export default function ExecutionDetails() {
   const currentExecutionEvent = state((state) => state.currentExecutionEvent);
 
   const executedEvents = state((state) => state.executedEvents);
+  const watchedWorkflows = state((state) => state.watchedWorkflows);
   const setExecutingEvents = state((state) => state.setExecutingEvents);
   const setInExecutionMode = state((state) => state.setInExecutionMode);
 
@@ -82,9 +83,10 @@ export default function ExecutionDetails() {
         }
         return workL;
       });
-
-    setWorkflows(allWorkflowsL);
-  }, [executedEvents, graphRF.graph.label]);
+    const wjobs = watchedWorkflows.map((job) => job[0]);
+    console.log(allWorkflowsL, watchedWorkflows, wjobs);
+    setWorkflows([...allWorkflowsL, ...wjobs]);
+  }, [executedEvents, graphRF.graph.label, watchedWorkflows]);
 
   // TODO: Testing hooks with promises
   // const { execute, status, value, error } = useApi(useGetWorkflow, false);

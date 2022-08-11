@@ -1,15 +1,12 @@
-import type { ExecutedWorkflowEvents } from '../types';
+import type { Event } from '../types';
 
 // GET /execution/events gets events with filters for nodes, workflows etc
 // use this to fetch events for a workflow, a job etc
 //
 const executedWorkflows = (set, get) => ({
-  executedWorkflows: { jobs: [] } as ExecutedWorkflowEvents,
+  executedWorkflows: [] as Event[][],
 
-  setExecutedWorkflows: async (
-    execWorkflow: ExecutedWorkflowEvents,
-    live: boolean
-  ) => {
+  setExecutedWorkflows: async (execWorkflow: Event[][], live: boolean) => {
     console.log(execWorkflow);
     // Add all events to keep track of the order they came in
     const prevState = get((prev) => prev);

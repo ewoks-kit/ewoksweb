@@ -18,8 +18,10 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import ExecutionFilters from './ExecutionFilters';
 import state from '../store/state';
+import type { Event } from '../types';
 
 interface Data {
   host_name: number;
@@ -96,21 +98,6 @@ interface HeadCell {
 }
 
 const headCells: readonly HeadCell[] = [
-  // host_name: number;
-  // process_id: number;
-  // user_name: number;
-  // name: string;
-  // job_id: number;
-  // binding: string;
-  // workflow_id: string;
-  // time: string;
-  // error: string;
-  // error_message: string;
-  // error_traceback: string;
-  // task_uri: string;
-  // input_uris: string;
-  // output_uris: string;
-  // status: string;
   {
     id: 'workflow_id',
     numeric: false,
@@ -224,30 +211,57 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-interface EnhancedTableToolbarProps {
-  numSelected: number;
-}
+// interface EnhancedTableToolbarProps {
+//   selected: number;
+// }
 
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected } = props;
+function EnhancedTableToolbar(props) {
+  const { selected } = props;
+
+  const executedWorkflows = state((state) => state.executedWorkflows);
+  const setWatchedWorkflows = state((state) => state.setWatchedWorkflows);
+
+  const addToWatchedJobs = () => {
+    console.log('add to jobs to be viewed on the canvas', selected);
+    const watchedJobs = [] as Event[][];
+    const allExJobs = [...executedWorkflows];
+    selected.forEach((selectedjobid) => {
+      watchedJobs.push(
+        allExJobs.find((job) => job[0].job_id === selectedjobid)
+      );
+    });
+    console.log(watchedJobs);
+    setWatchedWorkflows(watchedJobs, false);
+  };
+
+  const removeJobs = () => {
+    console.log('remove jobs (delete to server) as unwanted', selected);
+  };
 
   return (
     <Toolbar>
-      {numSelected > 0 ? (
+      {selected.length > 0 ? (
         <Typography color="inherit" variant="subtitle1" component="div">
-          {numSelected} selected
+          {selected.length} selected
         </Typography>
       ) : (
         <Typography variant="h6" id="tableTitle" component="div">
           <ExecutionFilters />
         </Typography>
       )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+      {selected.length > 0 ? (
+        <>
+          <Tooltip title="open in editor">
+            <IconButton onClick={addToWatchedJobs}>
+              <RemoveRedEyeIcon color="primary" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete">
+            <IconButton onClick={removeJobs}>
+              <DeleteIcon color="primary" />
+            </IconButton>
+          </Tooltip>
+        </>
       ) : (
         <Tooltip title="Filter list">
           <IconButton>
@@ -286,7 +300,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = executedWorkflows.jobs.map((n) => n[0].job_id);
+      const newSelecteds = executedWorkflows.map((n) => n[0].job_id);
       setSelected(newSelecteds);
       return;
     }
@@ -296,7 +310,7 @@ export default function EnhancedTable() {
   const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected: readonly string[] = [];
-
+    console.log(selectedIndex, selected, name);
     if (selectedIndex === -1) {
       newSelected = [...selected, name];
     } else if (selectedIndex === 0) {
@@ -333,18 +347,17 @@ export default function EnhancedTable() {
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0
-      ? Math.max(0, (1 + page) * rowsPerPage - executedWorkflows.jobs.length)
+      ? Math.max(0, (1 + page) * rowsPerPage - executedWorkflows.length)
       : 0;
 
   return (
     <Box sx={{ width: '100%' }}>
-      <h3>Under Development</h3>
       <Paper>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar selected={selected} />
         <hr style={{ color: '#dee3ff' }} />
         <TableContainer
           style={{
-            backgroundColor: 'rgb(182, 186, 213)',
+            backgroundColor: 'rgb(227, 229, 244)', // rgb(182, 186, 213)
             borderRadius: '10px',
           }}
         >
@@ -355,12 +368,12 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={executedWorkflows.jobs.length}
+              rowCount={executedWorkflows.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(executedWorkflows.jobs, getComparator(order, orderBy))
+              {stableSort(executedWorkflows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   // console.log(row, index);
@@ -433,7 +446,7 @@ export default function EnhancedTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={executedWorkflows.jobs.length}
+          count={executedWorkflows.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

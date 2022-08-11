@@ -53,21 +53,9 @@ export interface ExecutedWorkflowEvent extends Event {
   status: string;
 }
 
-// export interface Job {
-//   jobs: Event[][];
-// }
-
-// export interface ExecutedJobs {
-//   jobs: Job[];
-// }
-
-export interface ExecutedWorkflowEvents {
+export interface ExecutedJobsResponse {
   jobs: Event[][];
 }
-
-// export interface ExecutedWorkflowPairs {
-//   [index: number]: ExecutedWorkflowPairEvents;
-// }
 
 export interface Event {
   host_name?: string;
@@ -119,11 +107,11 @@ export interface State {
   executingEvents?: Event[];
   setExecutingEvents?: (execEvent: Event, live: boolean) => void;
 
-  executedWorkflows?: ExecutedWorkflowEvents;
-  setExecutedWorkflows?: (
-    execEvent: ExecutedWorkflowEvents,
-    live?: boolean
-  ) => void;
+  executedWorkflows?: Event[][];
+  setExecutedWorkflows?: (execEvent: Event[][], live?: boolean) => void;
+
+  watchedWorkflows?: Event[][];
+  setWatchedWorkflows?: (execEvent: Event[][], live?: boolean) => void;
 
   inExecutionMode?: boolean;
   setInExecutionMode?: (val: boolean) => void;
