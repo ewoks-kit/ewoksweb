@@ -211,30 +211,38 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-// interface EnhancedTableToolbarProps {
-//   selected: number;
-// }
-
 function EnhancedTableToolbar(props) {
   const { selected } = props;
 
   const executedWorkflows = state((state) => state.executedWorkflows);
   const setWatchedWorkflows = state((state) => state.setWatchedWorkflows);
+  const watchedWorkflows = state((state) => state.watchedWorkflows);
 
   const addToWatchedJobs = () => {
-    console.log('add to jobs to be viewed on the canvas', selected);
     const watchedJobs = [] as Event[][];
     const allExJobs = [...executedWorkflows];
+    // DOC: from the jobs from server take the selected to watchedJobs
     selected.forEach((selectedjobid) => {
       watchedJobs.push(
         allExJobs.find((job) => job[0].job_id === selectedjobid)
       );
     });
-    console.log(watchedJobs);
-    setWatchedWorkflows(watchedJobs, false);
+
+    const newWatchedJobs: Event[][] = [];
+    const existingJobs = new Set(watchedWorkflows.map((job) => job[0].job_id));
+
+    // DOC: newWatchedJobs by exluding the ones already there
+    watchedJobs.forEach((job) => {
+      if (!existingJobs.has(job[0].job_id)) {
+        newWatchedJobs.push(job);
+      }
+    });
+    // DOC: set the watched in store with the existing and the new
+    setWatchedWorkflows([...watchedWorkflows, ...newWatchedJobs]);
   };
 
   const removeJobs = () => {
+    /* eslint-disable no-console */
     console.log('remove jobs (delete to server) as unwanted', selected);
   };
 
@@ -275,7 +283,6 @@ function EnhancedTableToolbar(props) {
 
 const formatedTime = (time) => {
   const dat = new Date(time);
-  // console.log(time, dat, dat.getDay());
   return `${dat.toTimeString().slice(0, 8)}
     ${dat.toDateString()}`;
 };
@@ -310,7 +317,7 @@ export default function EnhancedTable() {
   const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected: readonly string[] = [];
-    console.log(selectedIndex, selected, name);
+
     if (selectedIndex === -1) {
       newSelected = [...selected, name];
     } else if (selectedIndex === 0) {

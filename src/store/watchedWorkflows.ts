@@ -1,26 +1,15 @@
-import type { ExecutedJobsResponse, Event } from '../types';
+import type { Event } from '../types';
 
 // These are the workflows that can be examined on the canvas
-// They include executing-live and the selected workflows from the executed table
+// They include executing-live and the watched workflows from server
 
-const watchedWorkflows = (set, get) => ({
+const watchedWorkflows = (set) => ({
   watchedWorkflows: [] as Event[][],
 
-  setWatchedWorkflows: async (watchedWorkflows: Event[][], live: boolean) => {
-    console.log(watchedWorkflows);
-    // Add all events to keep track of the order they came in
-    const prevState = get((prev) => prev);
-
-    // calculate the id of the event based on the order of arrival
-    // const workflow = {
-    //   ...watchedWorkflow,
-    //   id: (prevState.executedEvents.length as number) + 1,
-    // };
-    // send it to executing events to addapt
-    // prevState.setExecutingWorkflows(workflow, true);
+  setWatchedWorkflows: async (watchedWorkflows: Event[][]) => {
     set((state) => ({
       ...state,
-      watchedWorkflows: watchedWorkflows,
+      watchedWorkflows,
     }));
   },
 });

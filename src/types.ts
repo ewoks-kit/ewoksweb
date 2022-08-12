@@ -111,7 +111,7 @@ export interface State {
   setExecutedWorkflows?: (execEvent: Event[][], live?: boolean) => void;
 
   watchedWorkflows?: Event[][];
-  setWatchedWorkflows?: (execEvent: Event[][], live?: boolean) => void;
+  setWatchedWorkflows?: (execEvent: Event[][]) => void;
 
   inExecutionMode?: boolean;
   setInExecutionMode?: (val: boolean) => void;

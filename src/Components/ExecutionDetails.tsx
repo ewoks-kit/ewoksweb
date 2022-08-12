@@ -5,10 +5,11 @@ import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 // import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import IntegratedSpinner from './IntegratedSpinner';
 import state from '../store/state';
-import { Button, Chip } from '@material-ui/core';
+import { Button, Chip, IconButton } from '@material-ui/core';
 // import SidebarTooltip from './SidebarTooltip';
 import type { Event, GraphEwoks } from '../types';
 import { getWorkflow } from '../utils/api';
+import DeleteIcon from '@material-ui/icons/Delete';
 // import useApi from '../hooks/useApi';
 // import useGetWorkflow from '../hooks/useApi';
 
@@ -33,10 +34,14 @@ export default function ExecutionDetails() {
 
   const executedEvents = state((state) => state.executedEvents);
   const watchedWorkflows = state((state) => state.watchedWorkflows);
+  const setWatchedWorkflows = state((state) => state.setWatchedWorkflows);
   const setExecutingEvents = state((state) => state.setExecutingEvents);
   const setInExecutionMode = state((state) => state.setInExecutionMode);
 
-  const [jobs, setJobs] = useState([]);
+  const [currentWatchedEvents, setCurrentWatchedEvents] = useState(
+    [] as Event[]
+  );
+  // const [jobs, setJobs] = useState([]);
   const [workflows, setWorkflows] = useState([]);
   const [selectedWorkflow, setSelectedWorkflow] = useState<Event>({} as Event);
   const [gettingFromServer, setGettingFromServer] = useState(false);
@@ -49,24 +54,24 @@ export default function ExecutionDetails() {
 
   useEffect(() => {
     // TODO: it gets an undifined value on getFromServer
-    const allJobs = executedEvents
-      .filter((ev) => ev.context === 'job' && ev.type === 'start')
-      .map((job) => {
-        let jobL = {};
-        if (
-          executedEvents.some(
-            (jo) => jo.job_id === job.job_id && jo.type === 'end'
-          )
-        ) {
-          jobL = { ...job, status: 'finished' };
-        } else {
-          jobL = { ...job, status: 'executing' };
-        }
-        return jobL;
-      });
-    // console.log(allJobs);
+    // const allJobs = executedEvents
+    //   .filter((ev) => ev.context === 'job' && ev.type === 'start')
+    //   .map((job) => {
+    //     let jobL = {};
+    //     if (
+    //       executedEvents.some(
+    //         (jo) => jo.job_id === job.job_id && jo.type === 'end'
+    //       )
+    //     ) {
+    //       jobL = { ...job, status: 'finished' };
+    //     } else {
+    //       jobL = { ...job, status: 'executing' };
+    //     }
+    //     return jobL;
+    //   });
+    // // console.log(allJobs);
 
-    setJobs(allJobs);
+    // setJobs(allJobs);
 
     const allWorkflowsL = executedEvents
       .filter((ev) => ev.context === 'workflow' && ev.type === 'start')
@@ -83,8 +88,10 @@ export default function ExecutionDetails() {
         }
         return workL;
       });
-    const wjobs = watchedWorkflows.map((job) => job[0]);
-    console.log(allWorkflowsL, watchedWorkflows, wjobs);
+    const wjobs = watchedWorkflows.map((job) => {
+      return { ...job[0], status: 'finished' };
+    });
+
     setWorkflows([...allWorkflowsL, ...wjobs]);
   }, [executedEvents, graphRF.graph.label, watchedWorkflows]);
 
@@ -100,7 +107,7 @@ export default function ExecutionDetails() {
 
   const workflowDetails = (work) => {
     /* eslint-disable no-console */
-    console.log(graphRF.graph.label, jobs);
+    console.log(graphRF.graph.label, workflows, work);
     setSelectedWorkflow(work);
   };
 
@@ -129,17 +136,10 @@ export default function ExecutionDetails() {
       try {
         const response = await getWorkflow(workflowId);
         if (response.data) {
-          // console.log(response.data);
           setWorkingGraph(response.data as GraphEwoks, 'fromServer');
-          // setGraphRF(response.data as GraphRF);
 
           setTimeout(() => {
-            const events = executedEvents.filter(
-              (ev) =>
-                ev.workflow_id === selectedWorkflow.workflow_id &&
-                ev.job_id === selectedWorkflow.job_id
-            );
-
+            const events = getEventsForJob();
             setInExecutionMode(true);
             // TODO: timeout is needed because executingEvents try to find
             // the nodes before they are there from the server
@@ -166,20 +166,51 @@ export default function ExecutionDetails() {
         setGettingFromServer(false);
       }
     } else {
-      const events = executedEvents.filter(
+      const events = getEventsForJob();
+      setInExecutionMode(true);
+      events.forEach((ev) => setExecutingEvents(ev, false));
+    }
+  };
+
+  const getEventsForJob = () => {
+    let events = [] as Event[];
+    const isInWatchedIndex = watchedWorkflows
+      .map((job) => job[0].job_id === selectedWorkflow.job_id)
+      .indexOf(true);
+    // console.log(isInWatchedIndex, selectedWorkflow.job_id, watchedWorkflows);
+    // Check if it is watched workflow from server or a live execution
+    if (isInWatchedIndex !== -1) {
+      console.log('it is part of the history');
+      events = watchedWorkflows[isInWatchedIndex].map((ev, index) => {
+        return { ...ev, id: index + 1 };
+      });
+      console.log(events);
+    } else {
+      events = executedEvents.filter(
         (ev) =>
           ev.workflow_id === selectedWorkflow.workflow_id &&
           ev.job_id === selectedWorkflow.job_id
       );
-      // console.log(events);
-      setInExecutionMode(true);
-      events.forEach((ev) => setExecutingEvents(ev, false));
     }
-    // setGraphRF(selectedWorkflow);
+    console.log(events);
+    setCurrentWatchedEvents(events);
+    return events;
   };
 
   const handleChangeOpenExecutions = async () => {
     setOpenSettingsDrawer('Executions');
+  };
+
+  const deleteWatchedJob = () => {
+    // setWorkflows(
+    //   workflows.filter((work) => work.job_id !== selectedWorkflow.job_id)
+    // );
+    console.log(watchedWorkflows, selectedWorkflow);
+    setWatchedWorkflows(
+      watchedWorkflows.filter(
+        (work) => work[0].job_id !== selectedWorkflow.job_id
+      )
+    );
   };
 
   return (
@@ -201,10 +232,10 @@ export default function ExecutionDetails() {
       </div> */}
       {workflows.map((work) => (
         <div
-          key={work.id}
+          key={work.time}
           style={{
             backgroundColor:
-              work.status === 'finished' ? '#b6beec' : 'rgb(255, 167, 1)',
+              work.status === 'finished' ? '#b6beec' : 'rgb(124, 163, 198)',
             borderRadius: '5px',
             margin: '2px',
           }}
@@ -228,7 +259,7 @@ export default function ExecutionDetails() {
               // variant="outlined"
             />
           </div>
-          {selectedWorkflow.id === work.id && (
+          {selectedWorkflow.time === work.time && (
             <div style={{ display: 'flex', width: '98%' }}>
               <ReactJson
                 src={work}
@@ -247,18 +278,27 @@ export default function ExecutionDetails() {
               />
             </div>
           )}
-          {selectedWorkflow.id === work.id && (
-            <IntegratedSpinner
-              getting={gettingFromServer}
-              tooltip="Execute Workflow and exit Execution mode"
-              action={executeWorkflow}
-              onClick={() => {
-                /* eslint-disable no-console */
-                console.log('Starting Execution');
-              }}
-            >
-              <PlayCircleOutlineIcon fontSize="large" />
-            </IntegratedSpinner>
+          {selectedWorkflow.time === work.time && (
+            <span style={{ display: 'flex' }}>
+              <IntegratedSpinner
+                getting={gettingFromServer}
+                tooltip="Execute Workflow and exit Execution mode"
+                action={executeWorkflow}
+                onClick={() => {
+                  /* eslint-disable no-console */
+                  console.log('Starting Execution');
+                }}
+              >
+                <PlayCircleOutlineIcon fontSize="large" />
+              </IntegratedSpinner>
+              <IconButton
+                onClick={deleteWatchedJob}
+                aria-label="delete"
+                color="primary"
+              >
+                <DeleteIcon />
+              </IconButton>
+            </span>
           )}
         </div>
       ))}
@@ -269,9 +309,9 @@ export default function ExecutionDetails() {
       >
         All Executions
       </Button>
-      {executedEvents[currentExecutionEvent - 1] && (
+      {currentWatchedEvents[currentExecutionEvent - 1] && (
         <ReactJson
-          src={executedEvents[currentExecutionEvent - 1]}
+          src={currentWatchedEvents[currentExecutionEvent - 1]}
           name="Event details"
           theme="monokai"
           collapsed

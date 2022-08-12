@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 // import state from '../store/state';
 import {
   TextField,
@@ -7,19 +7,13 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Checkbox,
-  FormGroup,
   FormControlLabel,
   Switch,
 } from '@material-ui/core';
-// import SidebarTooltip from './SidebarTooltip';
-import DashboardStyle from '../layout/DashboardStyle';
 import AutocompleteDrop from '../Components/AutocompleteDrop';
 import { getExecutionEvents } from '../utils/api';
 import state from '../store/state';
-import type { ExecutedJobsResponse, Event } from '../types';
-
-const useStyles = DashboardStyle;
+import type { ExecutedJobsResponse } from '../types';
 
 interface filterParams {
   workflow_id: string;
@@ -36,15 +30,13 @@ interface filterParams {
 }
 
 export default function ExecutionFilters() {
-  const classes = useStyles();
-
   // const [workflowNameFilter, setWorkflowNameFilter] = useState<String>('');
   const [fromDateFilter, setFromDateFilter] = useState<String>('');
   const [toDateFilter, setToDateFilter] = useState<String>('');
   const [workflowId, setWorkflowId] = useState('');
   const [categoryValue, setCategoryValue] = useState('');
   const [status, setStatus] = useState('');
-  const [error, setError] = useState<boolean>(false);
+  // const [error, setError] = useState<boolean>(false);
   const [context, setContext] = useState<string>('');
   const [nodeId, setNodeId] = useState<string>('');
   const [taskId, setTaskId] = useState<string>('');
@@ -54,19 +46,18 @@ export default function ExecutionFilters() {
   const [moreFilters, setMoreFilters] = useState<boolean>(false);
   const setExecutedWorkflows = state((state) => state.setExecutedWorkflows);
 
-  useEffect(() => {
-    console.log(new Date().toString());
-    // setFromDateFilter(new Date().toString());
-  }, []);
+  // useEffect(() => {
+  //   console.log(new Date().toString());
+  //   // setFromDateFilter(new Date().toString());
+  // }, []);
 
   const toDateChanged = (event) => {
-    console.log(event.target.value, workflowId);
-    // setToDateFilter(val);
+    // console.log(event.target.value, workflowId);
+    setToDateFilter(event.target.value);
   };
 
   const fromDateChanged = (event) => {
-    /* eslint-disable no-console */
-    console.log(event.target.value, workflowId);
+    // console.log(event.target.value, workflowId);
     setFromDateFilter(event.target.value);
   };
 
@@ -128,13 +119,12 @@ export default function ExecutionFilters() {
         filterParams.type = type;
       }
 
-      console.log(filterParams);
       const response = await getExecutionEvents(filterParams);
       if (response.data) {
-        console.log(response.data, workflowId);
         const execJobs = response.data as ExecutedJobsResponse;
-        setExecutedWorkflows(execJobs.jobs as Event[][], false);
+        setExecutedWorkflows(execJobs.jobs, false);
       } else {
+        /* eslint-disable no-console */
         console.log('no response data');
       }
     } catch (error) {
@@ -145,10 +135,10 @@ export default function ExecutionFilters() {
     // }
   };
 
-  const errorChanged = (event) => {
-    console.log(event.target.checked);
-    setError(event.target.checked);
-  };
+  // const errorChanged = (event) => {
+  //   console.log(event.target.checked);
+  //   setError(event.target.checked);
+  // };
 
   const moreFiltersChanged = (event) => {
     setMoreFilters(event.target.checked);
@@ -245,7 +235,7 @@ export default function ExecutionFilters() {
         <TextField
           id="date"
           label="To"
-          type="time"
+          type="date"
           // value={toDateFilter}
           defaultValue={new Date().toString()}
           InputLabelProps={{
@@ -258,24 +248,43 @@ export default function ExecutionFilters() {
 
       <div style={{ margin: '8px' }}>
         <FormControlLabel
-          value={error}
+          value={moreFilters}
           control={<Switch color="primary" onChange={moreFiltersChanged} />}
           label="More"
           labelPlacement="bottom"
         />
       </div>
-      <Button
-        style={{ margin: '8px' }}
-        variant="outlined"
-        color="primary"
-        onClick={getEvents}
-        size="small"
-      >
-        Filter
-      </Button>
 
       {moreFilters && (
         <>
+          <div style={{ margin: '8px' }}>
+            <TextField
+              id="date"
+              label="From time"
+              type="time"
+              // value={toDateFilter}
+              defaultValue={new Date().toString()}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="outlined"
+              onChange={toDateChanged}
+            />
+          </div>
+          <div style={{ margin: '8px' }}>
+            <TextField
+              id="date"
+              label="To time"
+              type="time"
+              // value={toDateFilter}
+              defaultValue={new Date().toString()}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="outlined"
+              onChange={toDateChanged}
+            />
+          </div>
           <div style={{ margin: '8px' }}>
             <TextField
               label="Context"
@@ -344,6 +353,15 @@ export default function ExecutionFilters() {
           </div>
         </>
       )}
+      <Button
+        style={{ margin: '8px' }}
+        variant="outlined"
+        color="primary"
+        onClick={getEvents}
+        size="small"
+      >
+        Filter
+      </Button>
     </div>
   );
 }

@@ -70,7 +70,7 @@ export function deleteWorkflow(id: string) {
 // Get executed workflows
 export function getExecutionEvents(queryParams) {
   const queryString = Object.keys(queryParams)
-    .map((key) => key + '=' + queryParams[key])
+    .map((key) => `${key}=${queryParams[key] as string}`)
     .join('&');
   return axiosRequest.get(`/execution/events?${queryString}`);
 }
