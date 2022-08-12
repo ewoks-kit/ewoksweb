@@ -9,7 +9,7 @@ const executedEvents = (set, get) => ({
     // calculate the id of the event based on the order of arrival
     const event = {
       ...execEvent,
-      id: (prevState.executedEvents.length as number) + 1,
+      id: prevState.executedEvents.length as number,
     };
     // send it to executing events to addapt
     prevState.setExecutingEvents(event, true);

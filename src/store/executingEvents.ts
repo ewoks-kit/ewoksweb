@@ -17,7 +17,6 @@ const executingEvents = (set, get) => ({
     const prevState = get((prev) => prev);
 
     if (execEvent.context === 'node') {
-      // Do the rest for nodes
       let newExecutingEvents = [];
       if (execEvent.type === 'start') {
         // add to executing events

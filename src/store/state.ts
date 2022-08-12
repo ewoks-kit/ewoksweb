@@ -26,6 +26,7 @@ import taskCategories from './taskCategories';
 import tasks from './tasks';
 import undoIndex from './undoIndex';
 import executedWorkflows from './executedWorkflows';
+import watchedWorkflows from './watchedWorkflows';
 
 const initializedTask = {
   task_identifier: '',
@@ -78,7 +79,8 @@ const state = create<State>((set, get) => ({
   ...currentExecutionEvent(set),
   ...executedEvents(set, get),
   ...executingEvents(set, get),
-  ...executedWorkflows(set, get),
+  ...executedWorkflows(set),
+  ...watchedWorkflows(set),
   ...inExecutionMode(set, get),
   ...gettingFromServer(set),
   ...graphOrSubgraph(set),
