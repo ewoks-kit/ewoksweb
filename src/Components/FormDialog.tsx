@@ -369,7 +369,7 @@ export default function FormDialog(props) {
                     ))}
                   </Select>
                   <FormHelperText>
-                    Select from the existing icons or upload a new one
+                    Select from the available types
                   </FormHelperText>
                 </FormControl>
               ) : (
