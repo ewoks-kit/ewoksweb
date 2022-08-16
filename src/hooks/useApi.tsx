@@ -2,7 +2,7 @@
 /* eslint-disable promise/prefer-await-to-callbacks */
 import { useEffect, useState, useCallback } from 'react';
 
-const useApi = (asyncFunction, immediate = true) => {
+const useApi = (asyncFunction, immediate = true, params = { id: '' }) => {
   const [status, setStatus] = useState('idle');
   const [value, setValue] = useState(null);
   const [error, setError] = useState(null);
@@ -16,7 +16,7 @@ const useApi = (asyncFunction, immediate = true) => {
     setValue(null);
     setError(null);
 
-    return asyncFunction()
+    return asyncFunction(params)
       .then((response) => {
         setValue(response);
         setStatus('success');
@@ -25,7 +25,7 @@ const useApi = (asyncFunction, immediate = true) => {
         setError(error);
         setStatus('error');
       });
-  }, [asyncFunction]);
+  }, [asyncFunction, params]);
 
   // Call execute if we want to fire it right away.
   // Otherwise execute can be called later, such as

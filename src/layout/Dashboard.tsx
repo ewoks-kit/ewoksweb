@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -31,6 +31,7 @@ import tooltipText from '../Components/TooltipText';
 import state from '../store/state';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 import FormDialog from '../Components/FormDialog';
+import ConfirmDialog from '../Components/ConfirmDialog';
 
 const useStyles = DashboardStyle;
 
@@ -53,6 +54,9 @@ export default function Dashboard() {
   const initializedGraph = state((state) => state.initializedGraph);
   const openSettingsDrawer = state((state) => state.openSettingsDrawer);
   const setOpenSettingsDrawer = state((state) => state.setOpenSettingsDrawer);
+  const canvasGraphChanged = state((state) => state.canvasGraphChanged);
+  const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
+  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
 
   useEffect(() => {
     // console.log(openDrawers);
@@ -76,6 +80,15 @@ export default function Dashboard() {
     }
     // setOpenSettingsDrawer('');
   }, [openSettingsDrawer, setOpenSettingsDrawer]);
+
+  const checkAndNewGraph = () => {
+    if (canvasGraphChanged) {
+      console.log('we need to ask about saving changes');
+      setOpenAgreeDialog(true);
+    } else {
+      newGraph();
+    }
+  };
 
   const newGraph = () => {
     setWorkingGraph(initializedGraph, 'fromUser');
@@ -133,6 +146,10 @@ export default function Dashboard() {
     }
   };
 
+  const disAgreeSaveWithout = () => {
+    setOpenAgreeDialog(false);
+  };
+
   return (
     <div
       className={classes.root}
@@ -140,6 +157,13 @@ export default function Dashboard() {
       tabIndex={0}
       role="button"
     >
+      <ConfirmDialog
+        title={`There are unsaved changes`}
+        content={`Continue without saving?`}
+        open={openAgreeDialog}
+        agreeCallback={newGraph}
+        disagreeCallback={disAgreeSaveWithout}
+      />
       <FormDialog
         elementToEdit={graphRF}
         action="cloneGraph"
@@ -171,7 +195,7 @@ export default function Dashboard() {
             enterDelay={800}
             arrow
           >
-            <IconButton color="inherit" onClick={newGraph}>
+            <IconButton color="inherit" onClick={checkAndNewGraph}>
               <Fab
                 className={classes.openFileButton}
                 color="primary"

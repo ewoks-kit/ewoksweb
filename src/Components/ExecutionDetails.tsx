@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/cognitive-complexity */
 import React, { useEffect, useState } from 'react';
 import ReactJson from 'react-json-view';
 // import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
@@ -10,22 +11,23 @@ import { Button, Chip, IconButton } from '@material-ui/core';
 import type { Event, GraphEwoks } from '../types';
 import { getWorkflow } from '../utils/api';
 import DeleteIcon from '@material-ui/icons/Delete';
-// import useApi from '../hooks/useApi';
-// import useGetWorkflow from '../hooks/useApi';
+import useApi from '../hooks/useApi';
+import useGetWorkflow from '../hooks/useApi';
 
 // TODO: Testing hooks with promises
 // An async function for testing our hook.
-// const myFunction = () => {
-//   return new Promise((resolve, reject) => {
-//     getWorkflow('11')
-//       .then((response) => {
-//         resolve(response.data);
-//       })
-//       .catch((error) => {
-//         reject(new Error('something bad happened'));
-//       });
-//   });
-// };
+const myFunction = (params) => {
+  return new Promise((resolve, reject) => {
+    console.log(params.id);
+    getWorkflow(params.id)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(new Error('something bad happened'));
+      });
+  });
+};
 
 export default function ExecutionDetails() {
   const graphRF = state((state) => state.graphRF);
@@ -96,7 +98,9 @@ export default function ExecutionDetails() {
   }, [executedEvents, graphRF.graph.label, watchedWorkflows]);
 
   // TODO: Testing hooks with promises
-  // const { execute, status, value, error } = useApi(useGetWorkflow, false);
+  const { execute, status, value, error } = useApi(myFunction, false, {
+    id: '11',
+  });
 
   // const handleChangeWorkflows = (
   //   event: React.SyntheticEvent,
@@ -220,7 +224,7 @@ export default function ExecutionDetails() {
         label="Open Executions"
       /> */}
       {/* TODO: Testing hooks with promises */}
-      {/* <div>
+      <div>
         {status === 'idle' && (
           <div>Start your journey by clicking a button</div>
         )}
@@ -229,7 +233,7 @@ export default function ExecutionDetails() {
         <button onClick={execute} disabled={status === 'pending'} type="button">
           {status !== 'pending' ? 'Click me' : 'Loading...'}
         </button>
-      </div> */}
+      </div>
       {workflows.map((work) => (
         <div
           key={work.time}

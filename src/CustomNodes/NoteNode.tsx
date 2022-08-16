@@ -41,6 +41,7 @@ const NoteNode = (args) => {
 
   const save = () => {
     // update graphRF on store
+    // TODO: If permenant put it in undo-redo
     setGraphRF({
       graph: graphRF.graph,
       links: graphRF.links,
