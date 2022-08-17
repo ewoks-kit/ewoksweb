@@ -57,6 +57,7 @@ export default function Dashboard() {
   const canvasGraphChanged = state((state) => state.canvasGraphChanged);
   const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
+  const undoIndex = state((state) => state.undoIndex);
 
   useEffect(() => {
     // console.log(openDrawers);
@@ -82,11 +83,12 @@ export default function Dashboard() {
   }, [openSettingsDrawer, setOpenSettingsDrawer]);
 
   const checkAndNewGraph = () => {
-    if (canvasGraphChanged) {
-      console.log('we need to ask about saving changes');
+    if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
     } else {
       newGraph();
+      setOpenAgreeDialog(false);
+      setCanvasGraphChanged(false);
     }
   };
 
@@ -158,8 +160,8 @@ export default function Dashboard() {
       role="button"
     >
       <ConfirmDialog
-        title={`There are unsaved changes`}
-        content={`Continue without saving?`}
+        title="There are unsaved changes"
+        content="Continue without saving?"
         open={openAgreeDialog}
         agreeCallback={newGraph}
         disagreeCallback={disAgreeSaveWithout}

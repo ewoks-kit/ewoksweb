@@ -19,20 +19,21 @@ export default function GetFromServerButtons(props) {
   const canvasGraphChanged = state((state) => state.canvasGraphChanged);
   const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
+  const undoIndex = state((state) => state.undoIndex);
 
   const getSubgraphFromServer = () => {
     getFromServer('subgraph');
   };
 
   const checkAndGetFromServer = (isSubgraph) => {
-    console.log(workflowId, graphRF.graph.id, canvasGraphChanged);
+    console.log(undoIndex);
     if (
       workflowId &&
       graphRF.graph.id &&
       graphRF.graph.id !== workflowId &&
-      canvasGraphChanged
+      canvasGraphChanged &&
+      undoIndex !== 0
     ) {
-      console.log('we need to ask about saving changes');
       setOpenAgreeDialog(true);
     } else {
       getFromServer(isSubgraph);
@@ -94,8 +95,8 @@ export default function GetFromServerButtons(props) {
   return (
     <>
       <ConfirmDialog
-        title={`There are unsaved changes`}
-        content={`Continue without saving?`}
+        title="There are unsaved changes"
+        content="Continue without saving?"
         open={openAgreeDialog}
         agreeCallback={getFromServer}
         disagreeCallback={disAgreeSaveWithout}

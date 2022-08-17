@@ -16,14 +16,12 @@ const graphRF = (set, get) => ({
   graphRF: tutorialGraph,
 
   setGraphRF: (graphRF, isChangeToCanvasGraph) => {
-    console.log(get().graphRF.graph.id, graphRF.graph.id);
-
     if (isChangeToCanvasGraph) {
-      console.log('isChangeToCanvasGraph');
       get().setCanvasGraphChanged(true);
     } else if (isChangeToCanvasGraph === false) {
       get().setCanvasGraphChanged(false);
     }
+
     // If missing uiProps or other fill it here
     if (!graphRF.graph.uiProps) {
       graphRF.graph.uiProps = {};
