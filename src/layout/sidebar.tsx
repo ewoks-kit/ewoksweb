@@ -50,14 +50,14 @@ const useStyles = DashboardStyle;
 export default function Sidebar() {
   const classes = useStyles();
 
-  const selectedElement = state<EwoksRFNode | EwoksRFLink>(
+  const selectedElement = state<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
   );
   const setSelectedElement = state((state) => state.setSelectedElement);
 
-  const [element, setElement] = useState<EwoksRFNode | EwoksRFLink>(
-    {} as EwoksRFNode | EwoksRFLink
-  );
+  const [element, setElement] = useState<
+    EwoksRFNode | EwoksRFLink | GraphDetails
+  >({});
   const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
     false
   );
