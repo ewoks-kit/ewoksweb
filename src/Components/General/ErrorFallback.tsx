@@ -1,0 +1,73 @@
+import type { ReactNode } from 'react';
+import { Button } from '@material-ui/core';
+import type { FallbackProps } from 'react-error-boundary';
+import React from 'react';
+
+function prepareReport(message: string, path: string | undefined): string {
+  return `Hi,
+
+  I encountered the following error in Braggy:
+
+  - ${message}
+
+  Here is some additional context:
+
+  - User agent: ${navigator.userAgent}
+  ${path ? `- Accessed path: ${path}` : ''}
+  - << Please provide as much information as possible (beamline, file or dataset accessed, etc.) >>
+
+  Thanks,
+  << Name >>`;
+}
+
+interface Props extends FallbackProps {
+  path?: string;
+  children?: ReactNode;
+}
+
+function ErrorFallback(props: Props) {
+  const { error, path, resetErrorBoundary, children } = props;
+
+  const sendReport = () => {
+    console.log('send email', path);
+  };
+
+  return (
+    <div role="alert" style={{ padding: '1.5rem' }}>
+      <p>Something went wrong:</p>
+      <pre style={{ color: 'var(--bs-danger)' }}>{error.message}</pre>
+      <p>
+        <Button
+          style={{ margin: '4px' }}
+          variant="outlined"
+          color="primary"
+          onClick={() => resetErrorBoundary()}
+        >
+          Try again
+        </Button>{' '}
+        <Button
+          // startIcon={<BookmarksIcon />}
+          style={{ margin: '4px' }}
+          variant="outlined"
+          color="primary"
+          onClick={sendReport}
+          size="small"
+        >
+          Report issue
+        </Button>
+        {/* <Button
+          variant="dark"
+          target="_blank"
+          href={`mailto:braggy@esrf.fr?subject=Error%20report&body=${encodeURIComponent(
+            prepareReport(error.message, path)
+          )}`}
+        >
+          Report issue
+        </Button> */}
+      </p>
+      {children}
+    </div>
+  );
+}
+
+export default ErrorFallback;

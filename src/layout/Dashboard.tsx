@@ -32,8 +32,29 @@ import state from '../store/state';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 import FormDialog from '../Components/FormDialog';
 import ConfirmDialog from '../Components/ConfirmDialog';
+// import { ErrorBoundary } from 'react-error-boundary';
+import ErrorBoundary from '../Components/General/ErrorBoundary';
+import ErrorFallback from '../Components/General/ErrorFallback';
 
 const useStyles = DashboardStyle;
+
+function BuggyCounter() {
+  const [counter, setCounter] = useState(0);
+
+  function handleClick() {
+    setCounter(counter + 1);
+    if (counter === 5) {
+      // Simulate a JS error
+      throw new Error('I crashed!');
+    }
+  }
+
+  return (
+    <button type="button" onClick={handleClick}>
+      {counter}
+    </button>
+  );
+}
 
 export default function Dashboard() {
   const classes = useStyles();
@@ -151,6 +172,8 @@ export default function Dashboard() {
   const disAgreeSaveWithout = () => {
     setOpenAgreeDialog(false);
   };
+
+  const path = '';
 
   return (
     <div
@@ -296,16 +319,60 @@ export default function Dashboard() {
         <Divider />
         <Sidebar />
       </Drawer>
+
       <main className={classes.content}>
         <div className={classes.toolbar} />
 
         <Paper className={fixedHeightPaper}>
           {gettingFromServer && <LinearSpinner />}
+
           <ReactFlowProvider>
-            <Canvas />
+            <ErrorBoundary
+            // FallbackComponent={(fallbackProps) => (
+            //   <ErrorFallback path={path} {...fallbackProps} />
+            // )}
+            // // resetKeys={[path]}
+            // onError={() => console.log(path)}
+            >
+              <div>
+                <p>
+                  <b>
+                    This is an example of error boundaries in React 16.
+                    <br />
+                    <br />
+                    Click on the numbers to increase the counters.
+                    <br />
+                    The counter is programmed to throw when it reaches 5. This
+                    simulates a JavaScript error in a component.
+                  </b>
+                </p>
+                <hr />
+                <ErrorBoundary>
+                  <p>
+                    These two counters are inside the same error boundary. If
+                    one crashes, the error boundary will replace both of them.
+                  </p>
+                  <BuggyCounter />
+                  <BuggyCounter />
+                </ErrorBoundary>
+                <hr />
+                <p>
+                  These two counters are each inside of their own error
+                  boundary. So if one crashes, the other is not affected.
+                </p>
+                <ErrorBoundary>
+                  <BuggyCounter />
+                </ErrorBoundary>
+                <ErrorBoundary>
+                  <BuggyCounter />
+                </ErrorBoundary>
+              </div>
+              <Canvas />
+            </ErrorBoundary>
           </ReactFlowProvider>
         </Paper>
       </main>
+
       <Drawer />
     </div>
   );
