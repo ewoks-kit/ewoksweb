@@ -178,7 +178,10 @@ export interface State {
   setSubgraphsStack?: (graphRF: stackGraph) => void;
 
   graphRF?: GraphRF;
-  setGraphRF?: (graphRF: GraphRF) => void;
+  setGraphRF?: (graphRF: GraphRF, isChangeToCanvasGraph?: boolean) => void;
+
+  canvasGraphChanged?: boolean;
+  setCanvasGraphChanged?: (isChanged: boolean) => void;
 
   selectedElement?: EwoksRFNode | EwoksRFLink;
   setSelectedElement?: (

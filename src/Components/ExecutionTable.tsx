@@ -42,10 +42,11 @@ interface Data {
 }
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
+  // console.log(a[0], b[0], orderBy);
+  if (b[0][orderBy] < a[0][orderBy]) {
     return -1;
   }
-  if (b[orderBy] > a[orderBy]) {
+  if (b[0][orderBy] > a[0][orderBy]) {
     return 1;
   }
   return 0;
@@ -68,6 +69,7 @@ type Order = 'asc' | 'desc';
 // }
 
 function getComparator(order, orderBy) {
+  // console.log(order, orderBy);
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
@@ -79,6 +81,7 @@ function stableSort<T>(
   array: readonly T[],
   comparator: (a: T, b: T) => number
 ) {
+  // console.log(array, comparator);
   const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -243,7 +246,7 @@ function EnhancedTableToolbar(props) {
 
   const removeJobs = () => {
     /* eslint-disable no-console */
-    console.log('remove jobs (delete to server) as unwanted', selected);
+    console.log('remove jobs (delete to server) as unwanted', selected); // TODO on server
   };
 
   return (
@@ -418,10 +421,10 @@ export default function EnhancedTable() {
                       </TableCell>
                       <TableCell align="right">{row[0].job_id}</TableCell>
                       <TableCell align="right">
-                        {formatedTime(row[0].time)}
+                        {formatedTime(row[0] && row[0].time)}
                       </TableCell>
                       <TableCell align="right">
-                        {formatedTime(row[1].time)}
+                        {formatedTime(row[1] && row[1].time)}
                       </TableCell>
                       {/* <TableCell align="right">
                         {formatedTime(

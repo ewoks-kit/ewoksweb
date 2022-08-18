@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import IntegratedSpinner from './IntegratedSpinner';
 import { rfToEwoks } from '../utils';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
@@ -15,11 +15,12 @@ const workflowExists = (id, workflowsIds) => {
 // DOC: Save to server button with its spinner
 export default function SaveToServer({ saveToServerF }) {
   const setGettingFromServer = state((st) => st.setGettingFromServer);
+  const setCanvasGraphChanged = state((st) => st.setCanvasGraphChanged);
   const graphRF = state((state) => state.graphRF);
   const workingGraph = state((state) => state.workingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
-  const [action, setAction] = React.useState<string>('newGraph');
+  const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
+  const [action, setAction] = useState<string>('newGraph');
 
   useEffect(() => {
     saveToServerF.current = saveToServer;
@@ -55,6 +56,7 @@ export default function SaveToServer({ saveToServerF }) {
             text: 'Graph saved succesfully!',
             severity: 'success',
           });
+          setCanvasGraphChanged(false);
         } catch (error) {
           setOpenSnackbar({
             open: true,

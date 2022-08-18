@@ -43,7 +43,7 @@ function useDeleteElement(element, graphRF) {
     // setOpenAgreeDialog(true);
   } else if (!elD.input_nodes) {
     if (workingGraph.graph.id === graphRF.graph.id) {
-      setGraphRF(newGraph);
+      setGraphRF(newGraph, true);
     } else {
       setOpenSnackbar({
         open: true,

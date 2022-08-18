@@ -53,6 +53,7 @@ export default function FormDialog(props) {
   const selectedElement = state<EwoksRFNode | EwoksRFLink>(
     (state) => state.selectedElement
   );
+  const setCanvasGraphChanged = state((st) => st.setCanvasGraphChanged);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setRecentGraphs = state((state) => state.setRecentGraphs);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
@@ -162,6 +163,7 @@ export default function FormDialog(props) {
           text: 'Graph saved succesfully!',
           severity: 'success',
         });
+        setCanvasGraphChanged(false);
       } catch (error) {
         setGettingFromServer(false);
         setOpenSnackbar({
@@ -369,7 +371,7 @@ export default function FormDialog(props) {
                     ))}
                   </Select>
                   <FormHelperText>
-                    Select from the existing icons or upload a new one
+                    Select from the available types
                   </FormHelperText>
                 </FormControl>
               ) : (

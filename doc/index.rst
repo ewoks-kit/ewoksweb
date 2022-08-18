@@ -8,6 +8,7 @@ ewoksweb has been developed by the `Software group <http://www.esrf.eu/Instrumen
 .. toctree::
     :maxdepth: 2
 
+    Intro what-why Ewoks environment
     create_graph
     manage_graph
     node_editing

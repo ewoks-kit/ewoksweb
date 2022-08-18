@@ -146,7 +146,7 @@ function Canvas() {
         };
         setUndoRedo({ action: 'Removed a Link', graph: newGraph });
       }
-      setGraphRF(newGraph);
+      setGraphRF(newGraph, true);
     },
     [graphRF, setGraphRF, setUndoRedo]
   );
@@ -287,7 +287,7 @@ function Canvas() {
         links: graphRF.links,
       } as GraphRF;
 
-      setGraphRF(newGraph);
+      setGraphRF(newGraph, true);
       setUndoRedo({ action: 'Added a Node', graph: newGraph });
       // need to also save it in recentGraphs if we leave and come back to the graph?
       setRecentGraphs(newGraph);
@@ -317,7 +317,7 @@ function Canvas() {
       ],
     };
 
-    setGraphRF(newGraph as GraphRF);
+    setGraphRF(newGraph as GraphRF, true);
     setUndoRedo({ action: 'Updated a Link', graph: newGraph });
     setRecentGraphs(newGraph as GraphRF);
   };
@@ -376,7 +376,7 @@ function Canvas() {
         links: [...graphRF.links, link], // addEdge(params, graphRF.links),
       };
       // setElements((els) => addEdge(params, els));
-      setGraphRF(newGraph as GraphRF);
+      setGraphRF(newGraph as GraphRF, true);
       // need to also save it in recentGraphs if we leave and come back to the graph?
       setRecentGraphs(newGraph as GraphRF);
 
@@ -471,7 +471,7 @@ function Canvas() {
         links: graphRF.links,
       };
 
-      setGraphRF(newGraph as GraphRF);
+      setGraphRF(newGraph as GraphRF, true);
       setUndoRedo({
         action: 'Dragged a selection',
         graph: newGraph as GraphRF,
@@ -510,7 +510,7 @@ function Canvas() {
 
       // setSelectedElement(RFEwoksNode); // ? test if after drag the selected node should be set
 
-      setGraphRF(newGraph);
+      setGraphRF(newGraph, true);
       setUndoRedo({ action: 'Dragged a Node', graph: newGraph });
       // need to also save it in recentGraphs if we leave and come back to the graph?
       setRecentGraphs(newGraph);
@@ -552,10 +552,13 @@ function Canvas() {
             y: selectedElement.position.y + 100,
           },
         };
-        setGraphRF({
-          ...graphRF,
-          nodes: [...graphRF.nodes, newClone],
-        });
+        setGraphRF(
+          {
+            ...graphRF,
+            nodes: [...graphRF.nodes, newClone],
+          },
+          true
+        );
         setSelectedElement(newClone as EwoksRFNode);
       } else {
         setOpenSnackbar({

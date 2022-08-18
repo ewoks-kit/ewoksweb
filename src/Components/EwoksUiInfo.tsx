@@ -16,11 +16,37 @@ import type { GraphEwoks } from '../types';
 
 export default function EwoksUiInfo(props) {
   const setWorkingGraph = state((state) => state.setWorkingGraph);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
   const closeDialog = async () => {
     props.closeDialog();
-    const response = await getWorkflow('tutorial_Graph');
-    setWorkingGraph(response.data as GraphEwoks, 'fromServer');
+    try {
+      const response = await getWorkflow('tutorial_Graph');
+      if (response.data) {
+        const graph = response.data as GraphEwoks;
+        // setCallSuccess(true);
+        setOpenSnackbar({
+          open: true,
+          text: `Workflow ${graph.graph.label} was downloaded succesfully`,
+          severity: 'success',
+        });
+        setWorkingGraph(response.data as GraphEwoks, 'fromServer');
+      } else {
+        setOpenSnackbar({
+          open: true,
+          text: 'Could not locate the requested workflow! Maybe it is deleted!',
+          severity: 'warning',
+        });
+      }
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text:
+          error.response?.data?.message ||
+          'Error in retrieving workflow. Please check connectivity with the server!',
+        severity: 'error',
+      });
+    }
   };
 
   return (

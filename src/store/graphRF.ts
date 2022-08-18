@@ -12,10 +12,16 @@ const tutorialGraph = {
   links: [],
 } as GraphRF;
 
-const graphRF = (set) => ({
+const graphRF = (set, get) => ({
   graphRF: tutorialGraph,
 
-  setGraphRF: (graphRF) => {
+  setGraphRF: (graphRF, isChangeToCanvasGraph) => {
+    if (isChangeToCanvasGraph) {
+      get().setCanvasGraphChanged(true);
+    } else if (isChangeToCanvasGraph === false) {
+      get().setCanvasGraphChanged(false);
+    }
+
     // If missing uiProps or other fill it here
     if (!graphRF.graph.uiProps) {
       graphRF.graph.uiProps = {};

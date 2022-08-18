@@ -27,6 +27,7 @@ import tasks from './tasks';
 import undoIndex from './undoIndex';
 import executedWorkflows from './executedWorkflows';
 import watchedWorkflows from './watchedWorkflows';
+import canvasGraphChanged from './canvasGraphChanged';
 
 const initializedTask = {
   task_identifier: '',
@@ -84,7 +85,8 @@ const state = create<State>((set, get) => ({
   ...inExecutionMode(set, get),
   ...gettingFromServer(set),
   ...graphOrSubgraph(set),
-  ...graphRF(set),
+  ...graphRF(set, get),
+  ...canvasGraphChanged(set),
   ...openDraggableDialog(set),
   ...openSettingsDrawer(set),
   ...openSnackbar(set),

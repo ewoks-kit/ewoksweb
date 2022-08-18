@@ -131,6 +131,7 @@ const Node: React.FC<NodeProps> = ({
   const setGraphRF = state((state) => state.setGraphRF);
   const [detailsL, setDetailsL] = React.useState(false);
   const allIcons = state((state) => state.allIcons);
+  const setUndoRedo = state((state) => state.setUndoRedo);
 
   useEffect(() => {
     // console.log(label, details, image);
@@ -186,10 +187,14 @@ const Node: React.FC<NodeProps> = ({
       },
     };
 
-    setGraphRF({
+    const newGraph = {
       ...graphRF,
       nodes: [...graphRF.nodes, newClone],
-    });
+    };
+
+    setGraphRF(newGraph, true);
+
+    setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
     setSelectedElement(newClone as EwoksRFNode);
   };
 

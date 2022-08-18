@@ -1,3 +1,4 @@
+// /* eslint-disable sonarjs/cognitive-complexity */
 import React, { useEffect, useState } from 'react';
 import ReactJson from 'react-json-view';
 // import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
@@ -12,12 +13,14 @@ import { getWorkflow } from '../utils/api';
 import DeleteIcon from '@material-ui/icons/Delete';
 // import useApi from '../hooks/useApi';
 // import useGetWorkflow from '../hooks/useApi';
+import ConfirmDialog from '../Components/ConfirmDialog';
 
 // TODO: Testing hooks with promises
 // An async function for testing our hook.
-// const myFunction = () => {
+// const myFunction = (params) => {
 //   return new Promise((resolve, reject) => {
-//     getWorkflow('11')
+//     console.log(params.id);
+//     getWorkflow(params.id)
 //       .then((response) => {
 //         resolve(response.data);
 //       })
@@ -51,6 +54,10 @@ export default function ExecutionDetails() {
   // const [expandedWorkflows, setExpandedWorkflows] = useState<boolean>(false);
   // const openSettingsDrawer = state((state) => state.openSettingsDrawer);
   const setOpenSettingsDrawer = state((state) => state.setOpenSettingsDrawer);
+  const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
+  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
+  const undoIndex = state((state) => state.undoIndex);
+  const canvasGraphChanged = state((state) => state.canvasGraphChanged);
 
   useEffect(() => {
     // TODO: it gets an undifined value on getFromServer
@@ -96,7 +103,9 @@ export default function ExecutionDetails() {
   }, [executedEvents, graphRF.graph.label, watchedWorkflows]);
 
   // TODO: Testing hooks with promises
-  // const { execute, status, value, error } = useApi(useGetWorkflow, false);
+  // const { execute, status, value, error } = useApi(myFunction, false, {
+  //   id: '11',
+  // });
 
   // const handleChangeWorkflows = (
   //   event: React.SyntheticEvent,
@@ -122,6 +131,16 @@ export default function ExecutionDetails() {
     } ${dat.getHours()}:${dat.getMinutes()} ${dat.getDate()}/${
       dat.getMonth() + 1
     }/${dat.getFullYear()}`;
+  };
+
+  const checkAndExecute = () => {
+    if (canvasGraphChanged && undoIndex !== 0) {
+      setOpenAgreeDialog(true);
+    } else {
+      executeWorkflow();
+      setOpenAgreeDialog(false);
+      setCanvasGraphChanged(false);
+    }
   };
 
   const executeWorkflow = async () => {
@@ -213,6 +232,10 @@ export default function ExecutionDetails() {
     );
   };
 
+  const disAgreeExecuteWithout = () => {
+    setOpenAgreeDialog(false);
+  };
+
   return (
     <>
       {/* <FormControlLabel
@@ -280,10 +303,17 @@ export default function ExecutionDetails() {
           )}
           {selectedWorkflow.time === work.time && (
             <span style={{ display: 'flex' }}>
+              <ConfirmDialog
+                title="There are unsaved changes"
+                content="Continue without saving?"
+                open={openAgreeDialog}
+                agreeCallback={executeWorkflow}
+                disagreeCallback={disAgreeExecuteWithout}
+              />
               <IntegratedSpinner
                 getting={gettingFromServer}
                 tooltip="Execute Workflow and exit Execution mode"
-                action={executeWorkflow}
+                action={checkAndExecute}
                 onClick={() => {
                   /* eslint-disable no-console */
                   console.log('Starting Execution');

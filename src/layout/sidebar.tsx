@@ -50,14 +50,14 @@ const useStyles = DashboardStyle;
 export default function Sidebar() {
   const classes = useStyles();
 
-  const selectedElement = state<EwoksRFNode | EwoksRFLink>(
+  const selectedElement = state<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
   );
   const setSelectedElement = state((state) => state.setSelectedElement);
 
-  const [element, setElement] = useState<EwoksRFNode | EwoksRFLink>(
-    {} as EwoksRFNode | EwoksRFLink
-  );
+  const [element, setElement] = useState<
+    EwoksRFNode | EwoksRFLink | GraphDetails
+  >({});
   const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
     false
   );
@@ -227,7 +227,7 @@ export default function Sidebar() {
       setOpenAgreeDialog(true);
     } else if (!elD.input_nodes) {
       if (workingGraph.graph.id === graphRF.graph.id) {
-        setGraphRF(newGraph);
+        setGraphRF(newGraph, true);
       } else {
         setOpenSnackbar({
           open: true,
@@ -296,10 +296,14 @@ export default function Sidebar() {
           y: selectedElement.position.y + 100,
         },
       };
-      setGraphRF({
+      const newGraph = {
         ...graphRF,
         nodes: [...graphRF.nodes, newClone],
-      });
+      };
+
+      setGraphRF(newGraph, true);
+
+      setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
       setSelectedElement(newClone as EwoksRFNode);
     } else {
       setOpenSnackbar({

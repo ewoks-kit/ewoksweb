@@ -6,6 +6,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import type { GraphEwoks } from '../types';
 import state from '../store/state';
 import { getWorkflow } from '../utils/api';
+import ConfirmDialog from './ConfirmDialog';
 
 export default function GetFromServerButtons(props) {
   const { workflowId } = props;
@@ -14,12 +15,36 @@ export default function GetFromServerButtons(props) {
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const [gettingFromServer, setGettingFromServer] = useState(false);
+  const graphRF = state((state) => state.graphRF);
+  const canvasGraphChanged = state((state) => state.canvasGraphChanged);
+  const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
+  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
+  const undoIndex = state((state) => state.undoIndex);
 
   const getSubgraphFromServer = () => {
     getFromServer('subgraph');
   };
 
+  const checkAndGetFromServer = (isSubgraph) => {
+    if (
+      workflowId &&
+      graphRF.graph.id &&
+      graphRF.graph.id !== workflowId &&
+      canvasGraphChanged &&
+      undoIndex !== 0
+    ) {
+      setOpenAgreeDialog(true);
+    } else {
+      getFromServer(isSubgraph);
+    }
+  };
+
+  const disAgreeSaveWithout = () => {
+    setOpenAgreeDialog(false);
+  };
+
   const getFromServer = async (isSubgraph) => {
+    setOpenAgreeDialog(false);
     if (workflowId) {
       setGettingFromServer(true);
       try {
@@ -32,6 +57,7 @@ export default function GetFromServerButtons(props) {
             text: `Workflow ${graph.graph.label} was downloaded succesfully`,
             severity: 'success',
           });
+          setCanvasGraphChanged(false);
           if (isSubgraph === 'subgraph') {
             setSubGraph(graph);
           } else {
@@ -67,11 +93,18 @@ export default function GetFromServerButtons(props) {
 
   return (
     <>
+      <ConfirmDialog
+        title="There are unsaved changes"
+        content="Continue without saving?"
+        open={openAgreeDialog}
+        agreeCallback={getFromServer}
+        disagreeCallback={disAgreeSaveWithout}
+      />
       <IntegratedSpinner
         // callSuccess={callSuccess}
         getting={gettingFromServer}
         tooltip="Open from Server"
-        action={getFromServer}
+        action={checkAndGetFromServer}
         onClick={() => {
           /* eslint-disable no-console */
           console.log('Getting from server');
