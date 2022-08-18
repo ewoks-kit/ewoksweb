@@ -2,7 +2,7 @@
 /* eslint-disable promise/prefer-await-to-callbacks */
 import { useEffect, useState, useCallback } from 'react';
 
-const useApi = (asyncFunction, immediate = true, params = { id: '' }) => {
+const useApi = (asyncFunction, immediate, params) => {
   const [status, setStatus] = useState('idle');
   const [value, setValue] = useState(null);
   const [error, setError] = useState(null);

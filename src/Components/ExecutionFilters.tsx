@@ -20,12 +20,14 @@ interface filterParams {
   status: string;
   starttime: string;
   endtime: string;
-  context: string;
+  // sets context filters out within the job array that is not practical
+  // context: string;
   node_id: string;
+  // TODO: filter jobs that include this task_id and give back all jobs' steps
   task_id: string;
   user_name: string;
   job_id: string;
-  type: string;
+  // type: string;
   error?: boolean;
 }
 
@@ -37,12 +39,12 @@ export default function ExecutionFilters() {
   const [categoryValue, setCategoryValue] = useState('');
   const [status, setStatus] = useState('');
   // const [error, setError] = useState<boolean>(false);
-  const [context, setContext] = useState<string>('');
+  // const [context, setContext] = useState<string>('');
   const [nodeId, setNodeId] = useState<string>('');
   const [taskId, setTaskId] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
   const [jobId, setJobId] = useState<string>('');
-  const [type, setType] = useState<string>('');
+  // const [type, setType] = useState<string>('');
   const [moreFilters, setMoreFilters] = useState<boolean>(false);
   const setExecutedWorkflows = state((state) => state.setExecutedWorkflows);
 
@@ -100,9 +102,9 @@ export default function ExecutionFilters() {
       if (toDateFilter) {
         filterParams.endtime = toDateFilter.toString();
       }
-      if (context) {
-        filterParams.context = context;
-      }
+      // if (context) {
+      //   filterParams.context = context;
+      // }
       if (nodeId) {
         filterParams.node_id = nodeId;
       }
@@ -115,9 +117,9 @@ export default function ExecutionFilters() {
       if (jobId) {
         filterParams.job_id = jobId;
       }
-      if (type) {
-        filterParams.type = type;
-      }
+      // if (type) {
+      //   filterParams.type = type;
+      // }
 
       const response = await getExecutionEvents(filterParams);
       if (response.data) {
@@ -144,9 +146,9 @@ export default function ExecutionFilters() {
     setMoreFilters(event.target.checked);
   };
 
-  const contextChanged = (event) => {
-    setContext(event.target.value);
-  };
+  // const contextChanged = (event) => {
+  //   setContext(event.target.value);
+  // };
 
   const nodeIdChanged = (event) => {
     setNodeId(event.target.value);
@@ -164,9 +166,9 @@ export default function ExecutionFilters() {
     setJobId(event.target.value);
   };
 
-  const typeChanged = (event) => {
-    setType(event.target.value);
-  };
+  // const typeChanged = (event) => {
+  //   setType(event.target.value);
+  // };
 
   return (
     <div
@@ -285,7 +287,7 @@ export default function ExecutionFilters() {
               onChange={toDateChanged}
             />
           </div>
-          <div style={{ margin: '8px' }}>
+          {/* <div style={{ margin: '8px' }}>
             <TextField
               label="Context"
               value={context}
@@ -295,7 +297,7 @@ export default function ExecutionFilters() {
               variant="outlined"
               onChange={contextChanged}
             />
-          </div>
+          </div> */}
           <div style={{ margin: '8px' }}>
             <TextField
               label="Node id"
@@ -340,7 +342,7 @@ export default function ExecutionFilters() {
               onChange={jobIdChanged}
             />
           </div>
-          <div style={{ margin: '8px' }}>
+          {/* <div style={{ margin: '8px' }}>
             <TextField
               label="Type"
               value={type}
@@ -350,7 +352,7 @@ export default function ExecutionFilters() {
               variant="outlined"
               onChange={typeChanged}
             />
-          </div>
+          </div> */}
         </>
       )}
       <Button

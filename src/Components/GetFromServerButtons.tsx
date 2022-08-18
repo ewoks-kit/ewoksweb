@@ -26,7 +26,6 @@ export default function GetFromServerButtons(props) {
   };
 
   const checkAndGetFromServer = (isSubgraph) => {
-    console.log(undoIndex);
     if (
       workflowId &&
       graphRF.graph.id &&

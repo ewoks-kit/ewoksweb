@@ -1,4 +1,4 @@
-/* eslint-disable sonarjs/cognitive-complexity */
+// /* eslint-disable sonarjs/cognitive-complexity */
 import React, { useEffect, useState } from 'react';
 import ReactJson from 'react-json-view';
 // import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
@@ -11,7 +11,7 @@ import { Button, Chip, IconButton } from '@material-ui/core';
 import type { Event, GraphEwoks } from '../types';
 import { getWorkflow } from '../utils/api';
 import DeleteIcon from '@material-ui/icons/Delete';
-import useApi from '../hooks/useApi';
+// import useApi from '../hooks/useApi';
 // import useGetWorkflow from '../hooks/useApi';
 import ConfirmDialog from '../Components/ConfirmDialog';
 
