@@ -56,6 +56,7 @@ export async function getWorkflows(): Promise<workflowDescription[]> {
     console.log(error.config);
     res = [{ title: 'network error' }];
   }
+  console.log(res);
   return res;
 }
 

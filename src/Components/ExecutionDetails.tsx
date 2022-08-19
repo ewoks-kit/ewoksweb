@@ -8,7 +8,7 @@ import IntegratedSpinner from './IntegratedSpinner';
 import state from '../store/state';
 import { Button, Chip, IconButton } from '@material-ui/core';
 // import SidebarTooltip from './SidebarTooltip';
-import type { Event, GraphEwoks } from '../types';
+import type { Event, GraphEwoks, workflowDescription } from '../types';
 import { getWorkflow } from '../utils/api';
 import DeleteIcon from '@material-ui/icons/Delete';
 // import useApi from '../hooks/useApi';
@@ -51,6 +51,7 @@ export default function ExecutionDetails() {
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const allWorkflows = state((state) => state.allWorkflows);
+  const setAllWorkflows = state((state) => state.setAllWorkflows);
   // const [expandedWorkflows, setExpandedWorkflows] = useState<boolean>(false);
   // const openSettingsDrawer = state((state) => state.openSettingsDrawer);
   const setOpenSettingsDrawer = state((state) => state.setOpenSettingsDrawer);
@@ -80,6 +81,7 @@ export default function ExecutionDetails() {
 
     // setJobs(allJobs);
 
+    // DOC: for those live executing search the executedEvents
     const allWorkflowsL = executedEvents
       .filter((ev) => ev.context === 'workflow' && ev.type === 'start')
       .map((work) => {
@@ -95,10 +97,12 @@ export default function ExecutionDetails() {
         }
         return workL;
       });
+
     const wjobs = watchedWorkflows.map((job) => {
-      return { ...job[0], status: 'finished' };
+      return { ...(job[0].workflow_id ? job[0] : job[1]), status: 'finished' };
     });
 
+    console.log(executedEvents, wjobs, [...allWorkflowsL, ...wjobs]);
     setWorkflows([...allWorkflowsL, ...wjobs]);
   }, [executedEvents, graphRF.graph.label, watchedWorkflows]);
 
@@ -121,11 +125,24 @@ export default function ExecutionDetails() {
   };
 
   const formatedDate = (job) => {
-    const { label } = (allWorkflows &&
-      allWorkflows.find((work) => job.workflow_id === work.id)) || {
+    console.log(
+      job,
+      allWorkflows.find((work) => job.workflow_id === work.id),
+      allWorkflows,
+      workflows
+    );
+
+    const allWorkF: workflowDescription[] = [
+      ...(allWorkflows as workflowDescription[]),
+    ];
+
+    const { label } = (allWorkF &&
+      allWorkF.find((work) => job.workflow_id === work.id)) || {
       label: '',
     };
     const dat = new Date(job.time);
+
+    console.log(label);
     return `${
       label ? label.slice(0, 20) : (job.workflow_id as string)
     } ${dat.getHours()}:${dat.getMinutes()} ${dat.getDate()}/${
@@ -218,6 +235,10 @@ export default function ExecutionDetails() {
 
   const handleChangeOpenExecutions = async () => {
     setOpenSettingsDrawer('Executions');
+  };
+
+  const handleChangeCleanExecutions = () => {
+    setWorkflows([]);
   };
 
   const deleteWatchedJob = () => {
@@ -333,11 +354,20 @@ export default function ExecutionDetails() {
         </div>
       ))}
       <Button
+        color="primary"
         onClick={handleChangeOpenExecutions}
         variant="outlined"
         size="small"
       >
         All Executions
+      </Button>
+      <Button
+        color="secondary"
+        onClick={handleChangeCleanExecutions}
+        variant="outlined"
+        size="small"
+      >
+        Clean all
       </Button>
       {currentWatchedEvents[currentExecutionEvent - 1] && (
         <ReactJson
