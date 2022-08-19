@@ -55,12 +55,10 @@ export function toRFEwoksLinks(
           targetHandle: calcTargetHandle(uiProps, sub_target),
           sourceHandle: calcSourceHandle(uiProps, sub_source),
           type: (uiProps && uiProps.type) || '',
-          markerEnd: existsOrValue(uiProps, 'markerEnd', {
-            type: 'arrow',
-          }),
-          markerStart: existsOrValue(uiProps, 'markerStart', {
-            type: 'arrow',
-          }),
+          markerEnd: existsOrValue(uiProps, 'markerEnd', ''),
+          // markerStart: existsOrValue(uiProps, 'markerStart', {
+          //   type: 'arrow',
+          // }),
           // labelStyle: uiProps && uiProps.labelStyle ? uiProps.labelStyle : {},
           animated: existsOrValue(uiProps, 'animated', false),
           style: {

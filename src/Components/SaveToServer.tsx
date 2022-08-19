@@ -30,7 +30,7 @@ export default function SaveToServer({ saveToServerF }) {
     // console.log(workingGraph.graph.id, graphRF.graph.id);
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     // and Nodes DataMapping before attempting to save
-    const graphRFCurrated = curateGraph(graphRF);
+    let graphRFCurrated = curateGraph(graphRF);
     // DOC: search if id exists.
     // 1. If notExists open dialog for NEW NAME.
     // 2. If exists and you took it from me UPDATE without asking
@@ -43,10 +43,15 @@ export default function SaveToServer({ saveToServerF }) {
       setAction('newGraph');
       setOpenSaveDialog(true);
     } else if (workingGraph.graph.id === graphRF.graph.id) {
-      if (exists && graphRF.graph.uiProps.source === 'fromServer') {
+      if (graphRF.graph.uiProps.source === 'fromServer') {
         // DOC: remove the 'fromServer' before saving as ewoksGraph
         if (graphRFCurrated.graph.uiProps.source) {
-          delete graphRFCurrated.graph.uiProps.source;
+          /* eslint-disable @typescript-eslint/no-unused-vars */
+          const { source, ...uiPropsNoSource } = graphRFCurrated.graph.uiProps;
+          graphRFCurrated = {
+            ...graphRFCurrated,
+            graph: { ...graphRFCurrated.graph, ...uiPropsNoSource },
+          };
         }
 
         try {
@@ -66,7 +71,7 @@ export default function SaveToServer({ saveToServerF }) {
         } finally {
           setGettingFromServer(false);
         }
-      } else if (exists && graphRF.graph.uiProps.source !== 'fromServer') {
+      } else if (graphRF.graph.uiProps.source !== 'fromServer') {
         setAction('newGraphOrOverwrite');
         setOpenSaveDialog(true);
       } else {

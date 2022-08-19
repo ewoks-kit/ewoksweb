@@ -32,6 +32,8 @@ import state from '../store/state';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 import FormDialog from '../Components/FormDialog';
 import ConfirmDialog from '../Components/ConfirmDialog';
+import { ErrorBoundary } from 'react-error-boundary';
+import ErrorFallback from '../Components/General/ErrorFallback';
 
 const useStyles = DashboardStyle;
 
@@ -296,16 +298,27 @@ export default function Dashboard() {
         <Divider />
         <Sidebar />
       </Drawer>
+
       <main className={classes.content}>
         <div className={classes.toolbar} />
 
         <Paper className={fixedHeightPaper}>
           {gettingFromServer && <LinearSpinner />}
+
           <ReactFlowProvider>
-            <Canvas />
+            <ErrorBoundary
+              FallbackComponent={(fallbackProps) => (
+                <ErrorFallback {...fallbackProps} />
+              )}
+              // resetKeys={[]}
+              // onError={() => console.log()}
+            >
+              <Canvas />
+            </ErrorBoundary>
           </ReactFlowProvider>
         </Paper>
       </main>
+
       <Drawer />
     </div>
   );
