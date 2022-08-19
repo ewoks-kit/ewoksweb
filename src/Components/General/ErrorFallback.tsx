@@ -3,7 +3,7 @@ import { Button } from '@material-ui/core';
 import type { FallbackProps } from 'react-error-boundary';
 import React from 'react';
 
-function prepareReport(message: string, path: string | undefined): string {
+function prepareReport(message: string): string {
   return `Hi,
 
   I encountered the following error in Braggy:
@@ -13,7 +13,6 @@ function prepareReport(message: string, path: string | undefined): string {
   Here is some additional context:
 
   - User agent: ${navigator.userAgent}
-  ${path ? `- Accessed path: ${path}` : ''}
   - << Please provide as much information as possible (beamline, file or dataset accessed, etc.) >>
 
   Thanks,
@@ -21,16 +20,12 @@ function prepareReport(message: string, path: string | undefined): string {
 }
 
 interface Props extends FallbackProps {
-  path?: string;
+  // path?: string;
   children?: ReactNode;
 }
 
 function ErrorFallback(props: Props) {
-  const { error, path, resetErrorBoundary, children } = props;
-
-  const sendReport = () => {
-    console.log('send email', path);
-  };
+  const { error, resetErrorBoundary, children } = props;
 
   return (
     <div role="alert" style={{ padding: '1.5rem' }}>
@@ -50,7 +45,11 @@ function ErrorFallback(props: Props) {
           style={{ margin: '4px' }}
           variant="outlined"
           color="primary"
-          onClick={sendReport}
+          target="_blank"
+          href={`mailto:braggy@esrf.fr?subject=Error%20report&body=${encodeURIComponent(
+            prepareReport(error.message)
+          )}`}
+          // onClick={sendReport}
           size="small"
         >
           Report issue

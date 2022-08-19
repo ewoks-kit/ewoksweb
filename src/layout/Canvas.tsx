@@ -323,12 +323,6 @@ function Canvas() {
   };
 
   const onConnect = (params: Connection) => {
-    console.log('clicked', params.source);
-    if (params.source === params.target) {
-      // Simulate a JS error
-      console.log('I crashed!');
-      throw new Error('I crashed!');
-    }
     // console.log(params);
     if (workingGraph.graph.id === graphRF.graph.id) {
       const sourceTask = graphRF.nodes.find((nod) => nod.id === params.source);
