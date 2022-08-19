@@ -124,7 +124,11 @@ function calcNodeProps(
         stroke: graph_links[link_index]?.style?.stroke || '',
         strokeWidth: '3',
       },
-      markerEnd: { type: graph_links[link_index]?.markerEnd?.type || '' },
+      markerEnd: () => {
+        return graph_links[link_index]?.markerEnd
+          ? { type: graph_links[link_index]?.markerEnd?.type }
+          : '';
+      },
       animated: graph_links[link_index]?.animated || false,
       withImage: 'withImage' in nod.data ? nod.data.withImage : true,
       withLabel: 'withLabel' in nod.data ? nod.data.withLabel : true,
