@@ -9,7 +9,6 @@ import curateGraph from '../utils/curateGraph';
 import { getWorkflowsIds, putWorkflow } from '../utils/api';
 
 const workflowExists = (id, workflowsIds) => {
-  console.log(id, workflowsIds);
   return workflowsIds.data.identifiers.includes(id);
 };
 
@@ -47,6 +46,7 @@ export default function SaveToServer({ saveToServerF }) {
       if (graphRF.graph.uiProps.source === 'fromServer') {
         // DOC: remove the 'fromServer' before saving as ewoksGraph
         if (graphRFCurrated.graph.uiProps.source) {
+          /* eslint-disable @typescript-eslint/no-unused-vars */
           const { source, ...uiPropsNoSource } = graphRFCurrated.graph.uiProps;
           graphRFCurrated = {
             ...graphRFCurrated,
