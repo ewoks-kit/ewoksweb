@@ -89,16 +89,18 @@ export default function EditNodeStyle(props) {
           moreHandles: event.target.checked,
         },
       },
-      'fromSaveElement',
-      true
+      'fromSaveElement'
     );
   };
 
   const changeNodeSize = (event, number) => {
-    setSelectedElement({
-      ...selectedElement,
-      data: { ...selectedElement.data, nodeWidth: number },
-    });
+    setSelectedElement(
+      {
+        ...selectedElement,
+        data: { ...selectedElement.data, nodeWidth: number },
+      },
+      'fromSaveElement'
+    );
     setNodeSize(number);
   };
 

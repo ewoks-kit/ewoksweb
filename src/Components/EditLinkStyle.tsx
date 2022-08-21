@@ -95,25 +95,31 @@ export default function EditLinkStyle(props) {
 
   const changeX = (event, number) => {
     const elem = selectedElement as EwoksRFLink;
-    setSelectedElement({
-      ...elem,
-      data: {
-        ...elem.data,
-        getAroundProps: { ...elem.data.getAroundProps, x: number },
+    setSelectedElement(
+      {
+        ...elem,
+        data: {
+          ...elem.data,
+          getAroundProps: { ...elem.data.getAroundProps, x: number },
+        },
       },
-    });
+      'fromSaveElement'
+    );
     setX(number);
   };
 
   const changeY = (event, number) => {
     const elem = selectedElement as EwoksRFLink;
-    setSelectedElement({
-      ...elem,
-      data: {
-        ...elem.data,
-        getAroundProps: { ...elem.data.getAroundProps, y: number },
+    setSelectedElement(
+      {
+        ...elem,
+        data: {
+          ...elem.data,
+          getAroundProps: { ...elem.data.getAroundProps, y: number },
+        },
       },
-    });
+      'fromSaveElement'
+    );
     setY(number);
   };
 

@@ -10,6 +10,8 @@ const selectedElement = (set, get) => ({
     const { graph, nodes, links } = prevState.graphRF;
     // console.log(element, nodes, links);
 
+    prevState.setCanvasGraphChanged(true);
+    console.log('selected element', prevState.undoIndex);
     if (wg === '0' || wg === graph.id) {
       let tempGraph = {} as GraphRF;
       if ('position' in element) {
