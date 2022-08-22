@@ -1,5 +1,5 @@
 Node editing
-===========
+============
 
 Nodes follow the task specification which can be found here (task-node spec)
 Node editing is hosted on the left-sidebar under the *Edit Node* tab.

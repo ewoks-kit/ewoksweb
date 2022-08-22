@@ -98,9 +98,10 @@ const executingEvents = (set, get) => ({
       let execNodes = [];
 
       // calculate the executing ones and add the executing param.
-      // Not a set beacause maybe it needs a complex id
+      // Not a set because maybe it needs a complex id
+      /* eslint-disable unicorn/prefer-set-has */
       const executingIds = newExecutingEvents.map((ev) => ev.node_id);
-      console.log(executingIds, tempLabel);
+      // console.log(executingIds, tempLabel);
 
       execNodes = [
         ...prevState.graphRF.nodes

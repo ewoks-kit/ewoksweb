@@ -1,5 +1,5 @@
 Create a Graph
-===========
+==============
 
 Graph is made up from nodes and links between the nodes.
 To add a node you need to drag-and-drop one *Task* from the *Add Node* section of the sidebar on the left.
