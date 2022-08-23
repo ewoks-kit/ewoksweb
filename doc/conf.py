@@ -6,7 +6,7 @@ release = "0.1"
 copyright = "2022, ESRF"
 author = "ESRF"
 
-extensions = ["sphinx.ext.autodoc", "sphinx.ext.autosummary", "sphinxcontrib.mermaid"]
+extensions = ["sphinx.ext.autodoc", "sphinx.ext.autosummary"]
 templates_path = []
 exclude_patterns = []
 

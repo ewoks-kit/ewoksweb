@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
@@ -31,16 +31,16 @@ export default function IntegratedSpinner({
   onClick,
   // callSuccess = false,
 }) {
-  const [loading, setLoading] = React.useState(false);
-  const [success, setSuccess] = React.useState(false);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const inExecutionMode = state((state) => state.inExecutionMode);
 
-  const timer = React.useRef<number>();
+  const timer = useRef<number>();
   const classes = useStyles();
 
   // TODO: synd with the real time the call makes using getting
-  React.useEffect(() => {
+  useEffect(() => {
     if (getting) {
       // // console.log('gettingIn', getting);
       timer.current = window.setTimeout(() => {

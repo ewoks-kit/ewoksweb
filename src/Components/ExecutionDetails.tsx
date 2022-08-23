@@ -8,7 +8,7 @@ import IntegratedSpinner from './IntegratedSpinner';
 import state from '../store/state';
 import { Button, Chip, IconButton } from '@material-ui/core';
 // import SidebarTooltip from './SidebarTooltip';
-import type { Event, GraphEwoks } from '../types';
+import type { Event, GraphEwoks, workflowDescription } from '../types';
 import { getWorkflow } from '../utils/api';
 import DeleteIcon from '@material-ui/icons/Delete';
 // import useApi from '../hooks/useApi';
@@ -51,6 +51,7 @@ export default function ExecutionDetails() {
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const allWorkflows = state((state) => state.allWorkflows);
+
   // const [expandedWorkflows, setExpandedWorkflows] = useState<boolean>(false);
   // const openSettingsDrawer = state((state) => state.openSettingsDrawer);
   const setOpenSettingsDrawer = state((state) => state.setOpenSettingsDrawer);
@@ -80,13 +81,17 @@ export default function ExecutionDetails() {
 
     // setJobs(allJobs);
 
+    // DOC: for those live executing search the executedEvents
     const allWorkflowsL = executedEvents
       .filter((ev) => ev.context === 'workflow' && ev.type === 'start')
       .map((work) => {
         let workL = {};
         if (
           executedEvents.some(
-            (wor) => wor.workflow_id === work.workflow_id && wor.type === 'end'
+            (wor) =>
+              wor.workflow_id === work.workflow_id &&
+              wor.context === 'workflow' &&
+              wor.type === 'end'
           )
         ) {
           workL = { ...work, status: 'finished' };
@@ -95,10 +100,12 @@ export default function ExecutionDetails() {
         }
         return workL;
       });
+
     const wjobs = watchedWorkflows.map((job) => {
-      return { ...job[0], status: 'finished' };
+      return { ...(job[0].workflow_id ? job[0] : job[1]), status: 'finished' };
     });
 
+    // console.log(executedEvents, wjobs, allWorkflowsL);
     setWorkflows([...allWorkflowsL, ...wjobs]);
   }, [executedEvents, graphRF.graph.label, watchedWorkflows]);
 
@@ -121,11 +128,24 @@ export default function ExecutionDetails() {
   };
 
   const formatedDate = (job) => {
-    const { label } = (allWorkflows &&
-      allWorkflows.find((work) => job.workflow_id === work.id)) || {
+    // console.log(
+    //   job,
+    //   allWorkflows.find((work) => job.workflow_id === work.id),
+    //   allWorkflows,
+    //   workflows
+    // );
+
+    const allWorkF: workflowDescription[] = [
+      ...(allWorkflows as workflowDescription[]),
+    ];
+
+    const { label } = (allWorkF &&
+      allWorkF.find((work) => job.workflow_id === work.id)) || {
       label: '',
     };
     const dat = new Date(job.time);
+
+    // console.log(label);
     return `${
       label ? label.slice(0, 20) : (job.workflow_id as string)
     } ${dat.getHours()}:${dat.getMinutes()} ${dat.getDate()}/${
@@ -145,6 +165,8 @@ export default function ExecutionDetails() {
 
   const executeWorkflow = async () => {
     const workflowId = selectedWorkflow.workflow_id;
+    console.log(selectedWorkflow, graphRF);
+    console.log(currentWatchedEvents);
     // Replay execution on canvas needs to put the workflow on canvas with the events
     // 1. Ask for saving the workflow that is on canvas
     // console.log(graphRF.graph.id, workflowId, selectedWorkflow);
@@ -185,9 +207,12 @@ export default function ExecutionDetails() {
         setGettingFromServer(false);
       }
     } else {
-      const events = getEventsForJob();
-      setInExecutionMode(true);
-      events.forEach((ev) => setExecutingEvents(ev, false));
+      console.log(currentWatchedEvents);
+      setTimeout(() => {
+        const eventsL = getEventsForJob();
+        setInExecutionMode(true);
+        eventsL.forEach((ev) => setExecutingEvents(ev, false));
+      }, 400);
     }
   };
 
@@ -218,6 +243,10 @@ export default function ExecutionDetails() {
 
   const handleChangeOpenExecutions = async () => {
     setOpenSettingsDrawer('Executions');
+  };
+
+  const handleChangeCleanExecutions = () => {
+    setWorkflows([]);
   };
 
   const deleteWatchedJob = () => {
@@ -333,11 +362,20 @@ export default function ExecutionDetails() {
         </div>
       ))}
       <Button
+        color="primary"
         onClick={handleChangeOpenExecutions}
         variant="outlined"
         size="small"
       >
         All Executions
+      </Button>
+      <Button
+        color="secondary"
+        onClick={handleChangeCleanExecutions}
+        variant="outlined"
+        size="small"
+      >
+        Clean all
       </Button>
       {currentWatchedEvents[currentExecutionEvent - 1] && (
         <ReactJson

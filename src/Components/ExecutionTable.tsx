@@ -417,7 +417,7 @@ export default function EnhancedTable() {
                         // scope="row"
                         // padding="none"
                       >
-                        {row[0].workflow_id}
+                        {row[0].workflow_id || row[1].workflow_id}
                       </TableCell>
                       <TableCell align="right">{row[0].job_id}</TableCell>
                       <TableCell align="right">
