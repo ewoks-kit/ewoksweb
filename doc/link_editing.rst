@@ -20,7 +20,7 @@ Each link has several attributes that follow the Ewokscore specification and are
 
  - ***Comment*** that allows the user to keep some notes of interest about the specific link.
  - The links Source and Target nodes with their Labes.
- -
+
 ## Link styling
 Links can be styled in the dropdown under Edit Link when a link is selected on the canvas. The link style attributed include:
 
