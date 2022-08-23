@@ -35,7 +35,6 @@ Documentation
 
     editor_basics
     create_graph
-    manage_graph
     node_editing
     link_editing
     execution
