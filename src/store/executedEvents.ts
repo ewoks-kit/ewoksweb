@@ -1,5 +1,7 @@
 import type { Event } from '../types';
 
+// DOC: All the events that came in during live executions. These events keep
+// pilling-up while the app is up front-back. When should that stop;
 const executedEvents = (set, get) => ({
   executedEvents: [] as Event[],
 
