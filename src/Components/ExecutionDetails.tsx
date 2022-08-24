@@ -38,9 +38,12 @@ export default function ExecutionDetails() {
   // DOC: events from the ongoing live executions
   const executedEvents = state((state) => state.executedEvents);
 
-  // DOC: the workflows that are visible in the sidebar
+  // DOC: the workflows from HISTORY that are visible on the execution tab
   const watchedWorkflows = state((state) => state.watchedWorkflows);
   const setWatchedWorkflows = state((state) => state.setWatchedWorkflows);
+
+  // DOC: all workflows live and from history on the execution tab
+  const [workflows, setWorkflows] = useState([]);
 
   // DOC: calculate the executing spinners for live execution
   const setExecutingEvents = state((state) => state.setExecutingEvents);
@@ -48,14 +51,18 @@ export default function ExecutionDetails() {
 
   const setInExecutionMode = state((state) => state.setInExecutionMode);
 
-  // DOC: the events that are each moment on the canvas NOT for live executing workflows
+  // DOC: the events that are each moment on the canvas NOT? for live executing workflows
   const [currentWatchedEvents, setCurrentWatchedEvents] = useState(
     [] as Event[]
   );
   // const [jobs, setJobs] = useState([]);
-  const [workflows, setWorkflows] = useState([]);
+
   const [selectedWorkflow, setSelectedWorkflow] = useState<Event>({} as Event);
-  const [gettingFromServer, setGettingFromServer] = useState(false);
+
+  // const [gettingFromServer, setGettingFromServer] = useState(false); TODO: Use the global...
+  const setGettingFromServer = state((state) => state.setGettingFromServer);
+  const gettingFromServer = state((state) => state.gettingFromServer);
+
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const allWorkflows = state((state) => state.allWorkflows);
@@ -67,10 +74,6 @@ export default function ExecutionDetails() {
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const undoIndex = state((state) => state.undoIndex);
   const canvasGraphChanged = state((state) => state.canvasGraphChanged);
-
-  useEffect(() => {
-    console.log(executingEvents, currentWatchedEvents);
-  }, [executingEvents, currentWatchedEvents]);
 
   useEffect(() => {
     // TODO: it gets an undifined value on getFromServer
@@ -117,9 +120,9 @@ export default function ExecutionDetails() {
       return { ...(job[0].workflow_id ? job[0] : job[1]), status: 'finished' };
     });
 
-    // console.log(executedEvents, wjobs, allWorkflowsL);
+    console.log(executedEvents, wjobs, allWorkflowsL);
     setWorkflows([...allWorkflowsL, ...wjobs]);
-  }, [executedEvents, graphRF.graph.label, watchedWorkflows]);
+  }, [executedEvents, watchedWorkflows]);
 
   // TODO: Testing hooks with promises
   // const { execute, status, value, error } = useApi(myFunction, false, {
@@ -133,20 +136,12 @@ export default function ExecutionDetails() {
   //   setExpandedWorkflows(newExpanded);
   // };
 
-  const workflowDetails = (work) => {
+  function workflowDetails(work) {
     /* eslint-disable no-console */
-    console.log(graphRF.graph.label, workflows, work, currentWatchedEvents);
     setSelectedWorkflow(work);
-  };
+  }
 
-  const formatedDate = (job) => {
-    // console.log(
-    //   job,
-    //   allWorkflows.find((work) => job.workflow_id === work.id),
-    //   allWorkflows,
-    //   workflows
-    // );
-
+  function formatedDate(job: Event) {
     const allWorkF: workflowDescription[] = [
       ...(allWorkflows as workflowDescription[]),
     ];
@@ -157,15 +152,14 @@ export default function ExecutionDetails() {
     };
     const dat = new Date(job.time);
 
-    // console.log(label);
     return `${
       label ? label.slice(0, 20) : (job.workflow_id as string)
     } ${dat.getHours()}:${dat.getMinutes()} ${dat.getDate()}/${
       dat.getMonth() + 1
     }/${dat.getFullYear()}`;
-  };
+  }
 
-  const checkAndExecute = () => {
+  function checkAndExecute() {
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
     } else {
@@ -173,32 +167,31 @@ export default function ExecutionDetails() {
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
     }
-  };
+  }
 
-  const executeWorkflow = async () => {
+  async function executeWorkflow() {
+    // DOC: need to differentiate between the live-executing, live-executed, jobs-from-server
+
     const workflowId = selectedWorkflow.workflow_id;
-    console.log(selectedWorkflow, graphRF);
-    console.log(currentWatchedEvents);
-    // Replay execution on canvas needs to put the workflow on canvas with the events
-    // 1. Ask for saving the workflow that is on canvas
-    // console.log(graphRF.graph.id, workflowId, selectedWorkflow);
+
+    // DOC: Replay execution on canvas needs to put the workflow on canvas with the events if not there
     if (graphRF.graph.id !== workflowId) {
-      // 2. Get the workflow from server if not on canvas
+      // DOC: Get the workflow from server if not on canvas
       // TODO: dublicated code with getFromServer, abstract in store? hook?
       setGettingFromServer(true);
       try {
         const response = await getWorkflow(workflowId);
         if (response.data) {
           setWorkingGraph(response.data as GraphEwoks, 'fromServer');
-          // TODO: clear timeout because there is a memory leak
+          // TODO: get read of timeout?
           setTimeout(() => {
+            // DOC:
             const events = getEventsForJob();
             setInExecutionMode(true);
             // TODO: timeout is needed because executingEvents try to find
             // the nodes before they are there from the server
             // probably because setWorkingGraph changes the graphRF used in executingEvents
             events.forEach((ev) => setExecutingEvents(ev, false));
-            console.log(currentWatchedEvents, events);
           }, 400);
         } else {
           setOpenSnackbar({
@@ -220,31 +213,27 @@ export default function ExecutionDetails() {
         setGettingFromServer(false);
       }
     } else {
-      console.log(currentWatchedEvents);
-      setTimeout(() => {
-        const eventsL = getEventsForJob();
-        console.log(eventsL);
-        setInExecutionMode(true);
-        eventsL.forEach((ev) => setExecutingEvents(ev, false));
-
-        console.log(currentWatchedEvents, eventsL);
-      }, 400);
+      // setTimeout(() => {
+      const eventsL = getEventsForJob();
+      console.log(eventsL);
+      setInExecutionMode(true);
+      eventsL.forEach((ev) => setExecutingEvents(ev, false));
+      // }, 400);
     }
-  };
+  }
 
-  const getEventsForJob = () => {
+  function getEventsForJob() {
     let events = [] as Event[];
     const isInWatchedIndex = watchedWorkflows
       .map((job) => job[0].job_id === selectedWorkflow.job_id)
       .indexOf(true);
-    // console.log(isInWatchedIndex, selectedWorkflow.job_id, watchedWorkflows);
+
     // Check if it is watched workflow from server or a live execution
     if (isInWatchedIndex !== -1) {
       console.log('it is part of the history');
       events = watchedWorkflows[isInWatchedIndex].map((ev, index) => {
         return { ...ev, id: index + 1 };
       });
-      console.log(events);
     } else {
       console.log('it is live executed');
       events = executedEvents.filter(
@@ -256,7 +245,7 @@ export default function ExecutionDetails() {
     console.log(events);
     setCurrentWatchedEvents(events);
     return events;
-  };
+  }
 
   const handleChangeOpenExecutions = async () => {
     setOpenSettingsDrawer('Executions');
@@ -267,10 +256,10 @@ export default function ExecutionDetails() {
   };
 
   const deleteWatchedJob = () => {
-    // setWorkflows(
-    //   workflows.filter((work) => work.job_id !== selectedWorkflow.job_id)
-    // );
-    console.log(watchedWorkflows, selectedWorkflow);
+    setWorkflows(
+      workflows.filter((work) => work.job_id !== selectedWorkflow.job_id)
+    );
+
     setWatchedWorkflows(
       watchedWorkflows.filter(
         (work) => work[0].job_id !== selectedWorkflow.job_id

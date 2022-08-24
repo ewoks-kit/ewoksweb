@@ -16,7 +16,7 @@ import { ReactFlowProvider } from 'react-flow-renderer';
 import Canvas from './Canvas';
 import UndoRedo from '../Components/UndoRedo';
 import GetFromServer from '../Components/GetFromServer';
-import { Fab, IconButton } from '@material-ui/core';
+import { Button, Fab, IconButton, Menu, MenuItem } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SimpleSnackbar from '../Components/Snackbar';
 import SettingsInfoDrawer from '../Components/SettingsInfoDrawer';
@@ -34,6 +34,7 @@ import FormDialog from '../Components/FormDialog';
 import ConfirmDialog from '../Components/ConfirmDialog';
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from '../Components/General/ErrorFallback';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 const useStyles = DashboardStyle;
 
@@ -60,6 +61,7 @@ export default function Dashboard() {
   const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const undoIndex = state((state) => state.undoIndex);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   useEffect(() => {
     // console.log(openDrawers);
@@ -154,6 +156,14 @@ export default function Dashboard() {
     setOpenAgreeDialog(false);
   };
 
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <div
       className={classes.root}
@@ -232,9 +242,6 @@ export default function Dashboard() {
           </Tooltip>
           <div className={classes.verticalRule} />
           <UndoRedo undoF={undoF} redoF={redoF} />
-          <div className={classes.verticalRule} />
-          <SaveGetFromDisk />
-          <div className={classes.verticalRule} />
           <SaveToServer saveToServerF={saveToServerF} />
           <GetFromServer />
           <ExecuteWorkflow />
@@ -256,6 +263,49 @@ export default function Dashboard() {
               </Fab>
             </IconButton>
           </Tooltip>
+
+          <div>
+            <Tooltip
+              title={tooltipText('Manage tasks, icons and workflows')}
+              enterDelay={800}
+              arrow
+            >
+              <IconButton color="inherit" onClick={handleClick}>
+                <Fab
+                  className={classes.openFileButton}
+                  color="primary"
+                  size="small"
+                  component="span"
+                  aria-label="add"
+                >
+                  <MoreVertIcon />
+                </Fab>
+              </IconButton>
+            </Tooltip>
+            {/* <Button
+              aria-controls="simple-menu"
+              aria-haspopup="true"
+              onClick={handleClick}
+            >
+              Open
+            </Button> */}
+
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleClose}>
+                <SaveGetFromDisk />
+                <SaveGetFromDisk />
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <GetFromServer />
+              </MenuItem>
+            </Menu>
+          </div>
 
           <Tooltip
             title={tooltipText('Guide for Ewoks UI')}

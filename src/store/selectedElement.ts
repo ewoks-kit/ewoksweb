@@ -5,6 +5,7 @@ const selectedElement = (set, get) => ({
 
   setSelectedElement: (element, from) => {
     const prevState = get((prev) => prev);
+    console.log(element, from);
 
     const wg = prevState.workingGraph.graph.id;
     const { graph, nodes, links } = prevState.graphRF;
@@ -48,7 +49,7 @@ const selectedElement = (set, get) => ({
           graph: element,
           nodes: initializeNodes(nodes),
           links: links.map((link) => {
-            return { ...link, selected: false };
+            return { ...link, selected: false }; // TODO: examine this after update
           }),
         };
 
