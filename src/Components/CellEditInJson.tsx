@@ -4,6 +4,10 @@ export default function CellEditInJson(propsIn) {
   const { props } = propsIn;
   const { row, name, type } = props;
 
+  const onChange = (edit, row) => {
+    console.log(edit, row, name);
+  };
+
   return (
     <ReactJson
       src={
@@ -18,11 +22,11 @@ export default function CellEditInJson(propsIn) {
       collapsed
       collapseStringsAfterLength={30}
       groupArraysAfterLength={15}
-      // onEdit={(edit) => onChange(edit, row, index)}
-      // onAdd={(add) => onChange(add, row, index)}
+      onEdit={(edit) => onChange(edit, row)}
+      onAdd={(add) => onChange(add, row)}
       defaultValue="object"
-      // onDelete={(del) => onChange(del, row, index)}
-      // onSelect={(sel) => onChange(sel, row, index)}
+      onDelete={(del) => onChange(del, row)}
+      onSelect={(sel) => onChange(sel, row)}
       quotesOnKeys={false}
       style={{ backgroundColor: 'rgb(59, 77, 172)' }}
       displayDataTypes

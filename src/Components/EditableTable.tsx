@@ -13,6 +13,7 @@ import RevertIcon from '@material-ui/icons/NotInterestedOutlined';
 import { FormControl, MenuItem, Select } from '@material-ui/core';
 import CustomTableCell from './CustomTableCell';
 import DraggableDialog from './DraggableDialog';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -24,7 +25,7 @@ const useStyles = makeStyles(() => ({
   table: {
     padding: '1px',
     minWidth: 160,
-    maxWidth: 270,
+    // maxWidth: 270,
     wordBreak: 'break-all',
   },
   selectTableCell: {
@@ -94,7 +95,7 @@ function EditableTable(props) {
           })
         : []
     );
-    setDisableSelectType(false);
+    // setDisableSelectType(false);
   }, [defaultValues]);
 
   const classes = useStyles();
@@ -110,12 +111,9 @@ function EditableTable(props) {
     });
   };
 
-  const onToggleEditMode = (id, index, command) => {
+  function onToggleEditMode(id, index, command) {
     // console.log(props, id, rows, props.defaultValues, command, typeOfInputs);
-    if (command === 'edit') {
-      setDisableSelectType(true);
-      // console.log('disable');
-    }
+
     if (command === 'edit' && ['list', 'dict'].includes(typeOfInputs[index])) {
       let initialValue: string | [] | {} = '';
 
@@ -159,8 +157,10 @@ function EditableTable(props) {
     if (command === 'done') {
       setDisableSelectType(true);
       props.valuesChanged(rows);
+    } else {
+      setDisableSelectType(true);
     }
-  };
+  }
 
   const onChange = (e, row, index) => {
     if (
@@ -203,7 +203,17 @@ function EditableTable(props) {
     }
   };
 
-  const onRevert = (id) => {
+  // const onRevert = (id) => {
+  //   const newRows = rows.filter((row) => {
+  //     return row.id !== id;
+  //   });
+
+  //   setRows(newRows);
+  //   props.valuesChanged(newRows);
+  //   setDisableSelectType(false);
+  // };
+
+  const onDelete = (id) => {
     const newRows = rows.filter((row) => {
       return row.id !== id;
     });
@@ -214,7 +224,7 @@ function EditableTable(props) {
   };
 
   const changedTypeOfInputs = (e, row, index) => {
-    // console.log(e.target.value, row, props, index);
+    console.log(e.target.value, row, props, index);
     if (e.target.value === 'null') {
       const newRows = rows.map((rowe) => {
         if (rowe.id === row.id) {
@@ -228,6 +238,15 @@ function EditableTable(props) {
     const tOfI = [...typeOfInputs];
     tOfI[index] = e.target.value;
     setTypeOfInputs(tOfI);
+    if (['dict', 'list'].includes(e.target.value)) {
+      console.log('should open dialog');
+      showEditableDialog({
+        name: row.id,
+        title: e.target.value === 'list' ? 'Edit list' : 'Edit dict',
+        graph: e.target.value === 'list' ? [] : {},
+        callbackProps: { rows, id: row.id },
+      });
+    }
   };
 
   const setRowValue = (name, val, callbackProps) => {
@@ -254,6 +273,11 @@ function EditableTable(props) {
       <Table className={classes.table} aria-label="editable table">
         <TableHead>
           <TableRow>
+            {headers[0] !== 'Source' && (
+              <TableCell align="left" className={classes.tableCell}>
+                Type
+              </TableCell>
+            )}
             <TableCell align="left" className={classes.tableCell}>
               <b>{headers[0]}</b>
             </TableCell>
@@ -265,12 +289,13 @@ function EditableTable(props) {
         <TableBody>
           {rows.map((row, index) => (
             <React.Fragment key={row.id}>
-              {headers[0] !== 'Source' && headers[1] !== 'Node_Id' && (
-                <TableRow key={`${row.id as string}-type`}>
-                  <TableCell align="left" className={classes.tableCell}>
-                    Type
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
+              <TableRow key={row.id}>
+                {headers[0] !== 'Source' && (
+                  <TableCell
+                    align="left"
+                    size="small"
+                    className={classes.tableCell}
+                  >
                     <FormControl disabled={disableSelectType}>
                       <Select
                         // labelId="demo-simple-select-label"
@@ -291,9 +316,7 @@ function EditableTable(props) {
                       </Select>
                     </FormControl>
                   </TableCell>
-                </TableRow>
-              )}
-              <TableRow key={row.id}>
+                )}
                 <CustomTableCell
                   {...{
                     index,
@@ -332,15 +355,15 @@ function EditableTable(props) {
                         aria-label="done"
                         onClick={() => onToggleEditMode(row.id, index, 'done')}
                       >
-                        <DoneIcon />
+                        <DoneIcon fontSize="small" />
                       </IconButton>
-                      <IconButton
+                      {/* <IconButton
                         style={{ padding: '1px' }}
                         aria-label="revert"
                         onClick={() => onRevert(row.id)}
                       >
-                        <RevertIcon />
-                      </IconButton>
+                        <RevertIcon fontSize="small" />
+                      </IconButton> */}
                     </>
                   ) : (
                     <span>
@@ -348,8 +371,16 @@ function EditableTable(props) {
                         style={{ padding: '1px' }}
                         aria-label="edit"
                         onClick={() => onToggleEditMode(row.id, index, 'edit')}
+                        color="primary"
                       >
-                        <EditIcon />
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                      <IconButton
+                        style={{ padding: '1px' }}
+                        onClick={() => onDelete(row.id)}
+                        aria-label="delete"
+                      >
+                        <DeleteIcon fontSize="small" />
                       </IconButton>
                     </span>
                   )}

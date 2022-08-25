@@ -5,7 +5,7 @@ import TableCellInEditMode from './TableCellInEditMode';
 
 const useStyles = makeStyles(() => ({
   tableCell: {
-    width: 120,
+    width: 70,
     height: 20,
     padding: '1px',
   },
@@ -17,9 +17,21 @@ const useStyles = makeStyles(() => ({
 }));
 
 function CustomTableCell({ index, row, name, onChange, type, typeOfValues }) {
+  const useStyles = makeStyles(() => ({
+    tableCell: {
+      width: name === 'value' ? '55%' : '25%',
+      height: 20,
+      padding: '1px',
+    },
+    input: {
+      width: 90,
+      height: 20,
+      padding: '1px',
+    },
+  }));
   const classes = useStyles();
   const { isEditMode } = row;
-  // console.log(index, row, name, onChange, type, typeOfValues);
+  console.log(index, row, name, onChange, type, typeOfValues);
 
   return (
     <TableCell align="left" className={classes.tableCell}>

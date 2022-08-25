@@ -5,6 +5,7 @@ import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import state from '../store/state';
+import SidebarTooltip from './SidebarTooltip';
 
 export default function Conditions(props) {
   const { element } = props;
@@ -66,7 +67,13 @@ export default function Conditions(props) {
 
   return (
     <div>
-      <b>Conditions </b>
+      <SidebarTooltip
+        text={`Provides a list of expected values for source outputs.
+          [{"source_output": "result", "value": 10}]`}
+      >
+        <b>Conditions </b>
+      </SidebarTooltip>
+
       <IconButton
         style={{ padding: '1px' }}
         aria-label="Add Condition"
@@ -76,7 +83,7 @@ export default function Conditions(props) {
       </IconButton>
       {conditions && conditions.length > 0 && (
         <EditableTable
-          headers={['Source_output', 'Value']}
+          headers={['Output', 'Value']}
           defaultValues={conditions}
           valuesChanged={conditionsValuesChanged}
           typeOfValues={[

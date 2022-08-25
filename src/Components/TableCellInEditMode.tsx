@@ -2,13 +2,16 @@ import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import {
+  FormControl,
   FormControlLabel,
   MenuItem,
   Radio,
   RadioGroup,
   Select,
+  TextField,
 } from '@material-ui/core';
 import CellEditInJson from './CellEditInJson';
+import { Autocomplete } from '@material-ui/lab';
 
 const useStyles = makeStyles(() => ({
   tableCell: {
@@ -27,7 +30,7 @@ function TableCellInEditMode(propsIn) {
   const { props } = propsIn;
   const { index, row, name, onChange, type, typeOfValues } = props;
   const classes = useStyles();
-  // console.log(index, row, name, onChange, type, typeOfValues);
+  console.log(index, row, name, onChange, type, typeOfValues);
 
   const [boolVal, setBoolVal] = React.useState(true);
 
@@ -49,43 +52,45 @@ function TableCellInEditMode(propsIn) {
   };
 
   return type === 'dict' || type === 'list' || type === 'object' ? (
-    <CellEditInJson props={{ row, name, type }} />
-  ) : // <ReactJson
-  //   src={
-  //     type === 'dict' && row[name] === ''
-  //       ? {}
-  //       : type === 'list' && row[name] === ''
-  //       ? []
-  //       : row[name]
-  //   }
-  //   name={name}
-  //   theme="monokai"
-  //   collapsed
-  //   collapseStringsAfterLength={30}
-  //   groupArraysAfterLength={15}
-  //   // onEdit={(edit) => onChange(edit, row, index)}
-  //   // onAdd={(add) => onChange(add, row, index)}
-  //   defaultValue="object"
-  //   // onDelete={(del) => onChange(del, row, index)}
-  //   // onSelect={(sel) => onChange(sel, row, index)}
-  //   quotesOnKeys={false}
-  //   style={{ backgroundColor: 'rgb(59, 77, 172)' }}
-  //   displayDataTypes
-  //   // defaultValue={object}
-  // />
-  type === 'select' ? (
-    <Select
-      name={name}
-      value={row[name]}
-      label="type"
-      onChange={(e) => onChange(e, row, index)}
-    >
-      {typeOfValues.values.map((tex) => (
-        <MenuItem key={tex} value={tex}>
-          {tex}
-        </MenuItem>
-      ))}
-    </Select>
+    // <CellEditInJson props={{ row, name, type }} />
+    <span></span>
+  ) : typeOfValues.type === 'select' ? (
+    <>
+      <FormControl
+        fullWidth
+        variant="outlined"
+        // className={classes.detailsLabels}
+      >
+        <Autocomplete
+          id="free-solo-demo"
+          freeSolo
+          options={typeOfValues.values}
+          value={row[name]}
+          // onChange={(event, newValue: string | null) => {}}
+          // onInputChange={(event, newInputValue) => {}}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Label"
+              margin="normal"
+              variant="outlined"
+            />
+          )}
+        />
+      </FormControl>
+      <Select
+        name={name}
+        value={row[name]}
+        label="type"
+        onChange={(e) => onChange(e, row, index)}
+      >
+        {typeOfValues.values.map((tex) => (
+          <MenuItem key={tex} value={tex}>
+            {tex}
+          </MenuItem>
+        ))}
+      </Select>
+    </>
   ) : type === 'bool' || type === 'boolean' ? (
     <RadioGroup
       aria-label="gender"

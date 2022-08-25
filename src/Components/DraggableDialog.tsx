@@ -112,7 +112,7 @@ export default function DraggableDialog(props) {
           </div>
           <ReactJson
             src={graph}
-            name="graph"
+            name="value"
             theme="monokai"
             collapsed
             collapseStringsAfterLength={30}
