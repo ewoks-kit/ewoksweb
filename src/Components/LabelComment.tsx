@@ -5,6 +5,7 @@ import { Box, Button, TextField } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 import SidebarTooltip from './SidebarTooltip';
+import { Autocomplete } from '@material-ui/lab';
 
 const useStyles = DashboardStyle;
 
@@ -16,6 +17,10 @@ export default function LabelComment(props) {
 
   const [comment, setComment] = React.useState('');
   const [label, setLabel] = React.useState('');
+  const [labelChoices, setLabelChoices] = React.useState([
+    'use mappings',
+    'use conditions',
+  ]);
   const setSelectedElement = state((state) => state.setSelectedElement);
 
   useEffect(() => {
@@ -23,8 +28,27 @@ export default function LabelComment(props) {
       setLabel(element.data.label);
       setComment(element.data.comment);
     } else if ('source' in element) {
-      setLabel(element.label);
-      setComment(element.data && element.data.comment);
+      const el = element as EwoksRFLink;
+      setLabel(el.label);
+      setComment(el.data && el.data.comment);
+
+      const mappings =
+        el.data.data_mapping.length > 0
+          ? el.data.data_mapping
+              .map((con) => `${con.source_output}->${con.target_input}`)
+              .join(', ')
+          : '';
+      const conditions =
+        el.data.conditions.length > 0
+          ? el.data.conditions
+              // .map((con) => con.source_output + ': ' + JSON.stringify(con.value))
+              .map(
+                (con) => `${con.source_output}: ${JSON.stringify(con.value)}`
+              )
+              .join(', ')
+          : '';
+
+      setLabelChoices(['free text', mappings, conditions]);
     }
   }, [element]);
 
@@ -102,14 +126,54 @@ export default function LabelComment(props) {
     );
   };
 
+  const top100Films = [
+    { title: 'The Shawshank Redemption', year: 1994 },
+    { title: 'The Godfather', year: 1972 },
+    { title: 'The Godfather: Part II', year: 1974 },
+    { title: 'The Dark Knight', year: 2008 },
+  ];
+
   return (
     <>
       <div className={classes.detailsLabels}>
         <Box>
-          {Object.keys(element).includes('source') && (
+          {Object.keys(element).includes('source') ? (
             <SidebarTooltip text="Use Conditions or Data Mapping as label.">
               <span>
-                <Button
+                <Autocomplete
+                  id="free-solo-demo"
+                  freeSolo
+                  options={labelChoices}
+                  onChange={(event, newValue: string | null) => {
+                    console.log(newValue);
+                    setSelectedElement(
+                      {
+                        ...element,
+                        label: newValue,
+                      },
+                      'fromSaveElement'
+                    );
+                  }}
+                  onInputChange={(event, newInputValue) => {
+                    console.log(newInputValue);
+                    setSelectedElement(
+                      {
+                        ...element,
+                        label: newInputValue,
+                      },
+                      'fromSaveElement'
+                    );
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Label"
+                      margin="normal"
+                      variant="outlined"
+                    />
+                  )}
+                />
+                {/* <Button
                   style={{ margin: '0px 8px 14px 18px' }}
                   variant="outlined"
                   color="primary"
@@ -126,18 +190,19 @@ export default function LabelComment(props) {
                   size="small"
                 >
                   mapping
-                </Button>
+                </Button> */}
               </span>
             </SidebarTooltip>
+          ) : (
+            <TextField
+              id="outlined-basic"
+              label="Label"
+              variant="outlined"
+              value={label || ''}
+              onChange={labelChanged}
+              multiline
+            />
           )}
-          <TextField
-            id="outlined-basic"
-            label="Label"
-            variant="outlined"
-            value={label || ''}
-            onChange={labelChanged}
-            multiline
-          />
         </Box>
       </div>
       <div style={{ display: showComment ? 'block' : 'none' }}>
