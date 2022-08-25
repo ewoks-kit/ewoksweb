@@ -41,57 +41,19 @@ export default function LabelComment(props) {
       const conditions =
         el.data.conditions.length > 0
           ? el.data.conditions
-              // .map((con) => con.source_output + ': ' + JSON.stringify(con.value))
               .map(
                 (con) => `${con.source_output}: ${JSON.stringify(con.value)}`
               )
               .join(', ')
           : '';
 
-      setLabelChoices(['free text', mappings, conditions]);
+      setLabelChoices([mappings, conditions, '...']);
     }
   }, [element]);
 
-  const useConditions = () => {
-    const el = element as EwoksRFLink;
-    const newLabel =
-      el.data.conditions.length > 0
-        ? el.data.conditions
-            // .map((con) => con.source_output + ': ' + JSON.stringify(con.value))
-            .map((con) => `${con.source_output}: ${JSON.stringify(con.value)}`)
-            .join(', ')
-        : '';
-    setLabel(newLabel);
-    setSelectedElement(
-      {
-        ...element,
-        label: newLabel,
-      },
-      'fromSaveElement'
-    );
-  };
-
-  const useMapping = () => {
-    const el = element as EwoksRFLink;
-    const newLabel =
-      el.data.data_mapping.length > 0
-        ? el.data.data_mapping
-            .map((con) => `${con.source_output}->${con.target_input}`)
-            .join(', ')
-        : '';
-    setLabel(newLabel);
-    setSelectedElement(
-      {
-        ...element,
-        label: newLabel,
-      },
-      'fromSaveElement'
-    );
-  };
-
   const labelChanged = (event) => {
-    // console.log('label changed:', event.target.value);
     setLabel(event.target.value);
+
     if ('position' in element) {
       const el = element;
       setSelectedElement(
@@ -126,72 +88,46 @@ export default function LabelComment(props) {
     );
   };
 
-  const top100Films = [
-    { title: 'The Shawshank Redemption', year: 1994 },
-    { title: 'The Godfather', year: 1972 },
-    { title: 'The Godfather: Part II', year: 1974 },
-    { title: 'The Dark Knight', year: 2008 },
-  ];
-
   return (
     <>
       <div className={classes.detailsLabels}>
         <Box>
           {Object.keys(element).includes('source') ? (
             <SidebarTooltip text="Use Conditions or Data Mapping as label.">
-              <span>
-                <Autocomplete
-                  id="free-solo-demo"
-                  freeSolo
-                  options={labelChoices}
-                  onChange={(event, newValue: string | null) => {
-                    console.log(newValue);
-                    setSelectedElement(
-                      {
-                        ...element,
-                        label: newValue,
-                      },
-                      'fromSaveElement'
-                    );
-                  }}
-                  onInputChange={(event, newInputValue) => {
-                    console.log(newInputValue);
-                    setSelectedElement(
-                      {
-                        ...element,
-                        label: newInputValue,
-                      },
-                      'fromSaveElement'
-                    );
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Label"
-                      margin="normal"
-                      variant="outlined"
-                    />
-                  )}
-                />
-                {/* <Button
-                  style={{ margin: '0px 8px 14px 18px' }}
-                  variant="outlined"
-                  color="primary"
-                  onClick={useConditions}
-                  size="small"
-                >
-                  conditions
-                </Button>
-                <Button
-                  style={{ margin: '0px 8px 14px 8px' }}
-                  variant="outlined"
-                  color="primary"
-                  onClick={useMapping}
-                  size="small"
-                >
-                  mapping
-                </Button> */}
-              </span>
+              <Autocomplete
+                id="free-solo-demo"
+                freeSolo
+                options={labelChoices}
+                value={label}
+                onChange={(event, newValue: string | null) => {
+                  console.log(newValue);
+                  setSelectedElement(
+                    {
+                      ...element,
+                      label: newValue,
+                    },
+                    'fromSaveElement'
+                  );
+                }}
+                onInputChange={(event, newInputValue) => {
+                  console.log(newInputValue);
+                  setSelectedElement(
+                    {
+                      ...element,
+                      label: newInputValue,
+                    },
+                    'fromSaveElement'
+                  );
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Label"
+                    margin="normal"
+                    variant="outlined"
+                  />
+                )}
+              />
             </SidebarTooltip>
           ) : (
             <TextField
