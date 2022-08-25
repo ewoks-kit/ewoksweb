@@ -1,7 +1,14 @@
 import React, { useEffect } from 'react';
 
 import type { EwoksRFLink } from '../types';
-import { Box, Button, TextField } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 import SidebarTooltip from './SidebarTooltip';
@@ -91,9 +98,13 @@ export default function LabelComment(props) {
   return (
     <>
       <div className={classes.detailsLabels}>
-        <Box>
-          {Object.keys(element).includes('source') ? (
-            <SidebarTooltip text="Use Conditions or Data Mapping as label.">
+        {Object.keys(element).includes('source') ? (
+          <SidebarTooltip text="Use Conditions or Data Mapping as label.">
+            <FormControl
+              fullWidth
+              variant="outlined"
+              className={classes.detailsLabels}
+            >
               <Autocomplete
                 id="free-solo-demo"
                 freeSolo
@@ -128,8 +139,14 @@ export default function LabelComment(props) {
                   />
                 )}
               />
-            </SidebarTooltip>
-          ) : (
+            </FormControl>
+          </SidebarTooltip>
+        ) : (
+          <FormControl
+            fullWidth
+            variant="outlined"
+            className={classes.detailsLabels}
+          >
             <TextField
               id="outlined-basic"
               label="Label"
@@ -138,12 +155,25 @@ export default function LabelComment(props) {
               onChange={labelChanged}
               multiline
             />
-          )}
-        </Box>
+          </FormControl>
+        )}
       </div>
       <div style={{ display: showComment ? 'block' : 'none' }}>
-        <Box>
-          <TextField
+        <FormControl
+          fullWidth
+          variant="outlined"
+          className={classes.detailsLabels}
+        >
+          <InputLabel htmlFor="outlined-comment">Comment</InputLabel>
+          <OutlinedInput
+            id="outlined-comment"
+            value={comment || ''}
+            onChange={commentChanged}
+            labelWidth={60}
+            multiline
+          />
+        </FormControl>
+        {/* <TextField
             id="outlined-basic"
             label="Comment"
             variant="outlined"
@@ -151,7 +181,7 @@ export default function LabelComment(props) {
             onChange={commentChanged}
             multiline
           />
-        </Box>
+        </Box> */}
       </div>
     </>
   );

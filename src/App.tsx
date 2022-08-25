@@ -1,5 +1,6 @@
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Dashboard from './layout/Dashboard';
+import 'react-reflex/styles.css';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

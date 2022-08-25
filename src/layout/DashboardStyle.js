@@ -57,7 +57,7 @@ const DashboardStyle = makeStyles((theme) => ({
   },
   appBarShift: {
     marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
+    // width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -117,7 +117,7 @@ const DashboardStyle = makeStyles((theme) => ({
   },
 
   detailsLabels: {
-    margin: '8px 0px',
+    padding: '8px 0px',
     wordBreak: 'break-word',
   },
 

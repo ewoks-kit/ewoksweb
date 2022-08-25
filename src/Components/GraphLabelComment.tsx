@@ -1,6 +1,12 @@
 import React, { useEffect } from 'react';
 
-import { TextField } from '@material-ui/core';
+import {
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 import type { GraphDetails } from '../types';
@@ -65,7 +71,46 @@ export default function GraphLabelComment() {
       {/* <div>
         <b>Label:</b> {graphRF.graph.label}
       </div> */}
-      <div className={classes.detailsLabels}>
+      <FormControl
+        fullWidth
+        variant="outlined"
+        className={classes.detailsLabels}
+      >
+        <InputLabel htmlFor="outlined-label">Label</InputLabel>
+        <OutlinedInput
+          id="outlined-label"
+          value={label || ''}
+          onChange={labelChanged}
+          labelWidth={60}
+        />
+      </FormControl>
+      <FormControl
+        fullWidth
+        variant="outlined"
+        className={classes.detailsLabels}
+      >
+        <InputLabel htmlFor="outlined-comment">Comment</InputLabel>
+        <OutlinedInput
+          id="outlined-comment"
+          value={comment || ''}
+          onChange={graphCommentChanged}
+          labelWidth={60}
+        />
+      </FormControl>
+      <FormControl
+        fullWidth
+        variant="outlined"
+        className={classes.detailsLabels}
+      >
+        <InputLabel htmlFor="outlined-category">Category</InputLabel>
+        <OutlinedInput
+          id="outlined-category"
+          value={category || ''}
+          onChange={categoryChanged}
+          labelWidth={60}
+        />
+      </FormControl>
+      {/* <div className={classes.detailsLabels}>
         <TextField
           id="outlined-basic"
           label="Name"
@@ -73,8 +118,8 @@ export default function GraphLabelComment() {
           value={label || ''}
           onChange={labelChanged}
         />
-      </div>
-      <div className={classes.detailsLabels}>
+      </div> */}
+      {/* <div className={classes.detailsLabels}>
         <TextField
           id="outlined-basic"
           label="Comment"
@@ -92,7 +137,7 @@ export default function GraphLabelComment() {
           value={category || ''}
           onChange={categoryChanged}
         />
-      </div>
+      </div> */}
       {/* DOC: if the inputs and outputs of the graph are needed
       <div>
       <b>Inputs </b>
