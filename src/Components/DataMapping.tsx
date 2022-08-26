@@ -17,7 +17,7 @@ export default function DataMappingComponent(props) {
     {} as EwoksRFLink
   );
   const graphRF = state((state) => state.graphRF);
-
+  console.log(props);
   useEffect(() => {
     setElementL(element);
     console.log(element);

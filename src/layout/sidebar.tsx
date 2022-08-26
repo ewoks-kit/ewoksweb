@@ -61,7 +61,7 @@ export default function Sidebar() {
   const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
     false
   );
-
+  console.log(selectedElement);
   const graphRF = state((state) => state.graphRF);
   const setGraphRF = state((state) => state.setGraphRF);
   const workingGraph = state((state) => state.workingGraph);

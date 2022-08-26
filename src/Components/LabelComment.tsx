@@ -136,6 +136,7 @@ export default function LabelComment(props) {
                     label="Label"
                     margin="normal"
                     variant="outlined"
+                    multiline
                   />
                 )}
               />

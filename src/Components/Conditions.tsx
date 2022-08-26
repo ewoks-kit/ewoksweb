@@ -89,17 +89,18 @@ export default function Conditions(props) {
           typeOfValues={[
             {
               // TODO: examine if the following type is used anymore
-              type: elementL.source
-                ? ['class'].includes(
-                    graphRF &&
-                      graphRF.nodes[0] &&
-                      graphRF.nodes.find((nod) => {
-                        return nod.id === elementL.source;
-                      }).task_type
-                  )
-                  ? 'select'
-                  : 'input'
-                : 'input',
+              type: 'select',
+              // elementL.source
+              //   ? ['class'].includes(
+              //       graphRF &&
+              //         graphRF.nodes[0] &&
+              //         graphRF.nodes.find((nod) => {
+              //           return nod.id === elementL.source;
+              //         }).task_type
+              //     )
+              //     ? 'select'
+              //     : 'input'
+              //   : 'input',
               values: props.element.data.links_input_names || [],
             },
             {

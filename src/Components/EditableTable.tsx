@@ -65,7 +65,7 @@ function EditableTable(props) {
 
   const { defaultValues } = props;
   const { headers } = props;
-
+  console.log(props);
   const typesOfInputs = ['bool', 'number', 'string', 'list', 'dict', 'null'];
   // // console.log(defaultValues, val, rows, props, typeOfInputs);
 
@@ -95,7 +95,7 @@ function EditableTable(props) {
           })
         : []
     );
-    // setDisableSelectType(false);
+    setDisableSelectType(true);
   }, [defaultValues]);
 
   const classes = useStyles();
@@ -158,11 +158,12 @@ function EditableTable(props) {
       setDisableSelectType(true);
       props.valuesChanged(rows);
     } else {
-      setDisableSelectType(true);
+      setDisableSelectType(false);
     }
   }
 
   const onChange = (e, row, index) => {
+    console.log(e, e.target.value, e.target.name, row, index);
     if (
       ['string', 'bool', 'number', 'boolean', 'null'].includes(typeOfInputs[0])
     ) {

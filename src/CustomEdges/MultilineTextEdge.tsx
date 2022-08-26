@@ -1,6 +1,6 @@
 import { getBezierPath, getEdgeCenter } from 'react-flow-renderer';
 
-function bendingText({
+function multilineText({
   id,
   sourceX,
   sourceY,
@@ -42,7 +42,7 @@ function bendingText({
     targetY,
   });
 
-  const foreignObjectSize = 100;
+  const foreignObjectSize = 120;
 
   return (
     <>
@@ -53,22 +53,28 @@ function bendingText({
         d={edgePath}
         markerEnd={markerEnd}
       />
-      <text>
-        <textPath
-          href={`#${id as string}`}
-          // style={{ fontSize: '16px' }}
-          startOffset="50%"
-          textAnchor="middle"
-          style={{ ...style, strokeWidth: '1', fontSize: '16px' }}
-          // TODO? make exact label place editable start, end, middle
-          // add side to text not supported yet
-          // side:"right"
+      <foreignObject
+        width={foreignObjectSize}
+        height={foreignObjectSize}
+        x={edgeCenterX - foreignObjectSize / 2}
+        y={edgeCenterY - foreignObjectSize / 2}
+        style={{ ...style, backgroundColor: 'blue' }}
+      >
+        <div
+          style={{
+            ...style,
+            backgroundColor: 'rgb(223, 226, 247)',
+            color: 'rgb(150, 165, 249)',
+            borderRadius: '10px',
+            borderStyle: 'solid',
+            borderColor: 'rgb(150, 165, 249)',
+          }}
         >
           {label}
-        </textPath>
-      </text>
+        </div>
+      </foreignObject>
     </>
   );
 }
 
-export default bendingText;
+export default multilineText;

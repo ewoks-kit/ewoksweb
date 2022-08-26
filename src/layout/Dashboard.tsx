@@ -34,6 +34,7 @@ import FormDialog from '../Components/FormDialog';
 import ConfirmDialog from '../Components/ConfirmDialog';
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from '../Components/General/ErrorFallback';
+import MenuPopover from '../Components/MenuPopover';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 
@@ -165,6 +166,16 @@ export default function Dashboard() {
     setAnchorEl(null);
   };
 
+  const handlePopoverOpen = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <>
       <div
@@ -244,6 +255,7 @@ export default function Dashboard() {
             </Tooltip>
             <div className={classes.verticalRule} />
             <UndoRedo undoF={undoF} redoF={redoF} />
+            <div className={classes.verticalRule} />
             <SaveToServer saveToServerF={saveToServerF} />
             <GetFromServer />
             <ExecuteWorkflow />
@@ -267,11 +279,7 @@ export default function Dashboard() {
             </Tooltip>
 
             <div>
-              <Tooltip
-                title={tooltipText('Manage tasks, icons and workflows')}
-                enterDelay={800}
-                arrow
-              >
+              <Tooltip title={tooltipText('More')} enterDelay={800} arrow>
                 <IconButton color="inherit" onClick={handleClick}>
                   <Fab
                     className={classes.openFileButton}
@@ -284,21 +292,7 @@ export default function Dashboard() {
                   </Fab>
                 </IconButton>
               </Tooltip>
-              <Menu
-                id="simple-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>
-                  <SaveGetFromDisk />
-                  <SaveGetFromDisk />
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <GetFromServer />
-                </MenuItem>
-              </Menu>
+              <MenuPopover anchorEl={anchorEl} handleClose={handleClose} />
             </div>
 
             <Tooltip

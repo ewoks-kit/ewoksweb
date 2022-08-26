@@ -14,6 +14,7 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import bendingText from '../CustomEdges/BendingTextEdge';
+import multilineText from '../CustomEdges/MultilineTextEdge';
 import getAround from '../CustomEdges/GetAroundEdge';
 
 import FunctionNode from '../CustomNodes/FunctionNode';
@@ -45,6 +46,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const edgeTypes = {
   bendingText,
+  multilineText,
   getAround,
 };
 

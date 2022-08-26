@@ -20,6 +20,7 @@ import state from '../store/state';
 import SidebarTooltip from './SidebarTooltip';
 import { OpenInBrowser } from '@material-ui/icons';
 import LabelComment from './LabelComment';
+import DefaultInputs from './DefaultInputs';
 
 const useStyles = DashboardStyle;
 
@@ -228,8 +229,11 @@ export default function NodeDetails(props) {
           marginBottom: '10px',
         }}
       >
-        <div>
-          <LabelComment element={element} showComment={advanced} />
+        <LabelComment element={element} showComment={advanced} />
+        <DefaultInputs element={element} />
+
+        {/* <div>
+
           <SidebarTooltip
             text={`Used to create an input when not provided
                 by the output of other connected nodes(tasks).`}
@@ -251,10 +255,13 @@ export default function NodeDetails(props) {
               headers={['Name', 'Value']}
               defaultValues={defaultInputs}
               valuesChanged={defaultInputsChanged}
-              typeOfValues={[{ type: 'input' }, { type: 'input' }]}
+              typeOfValues={[
+                { type: 'select', values: ['dummy1', 'dummy2'] },
+                { type: 'input' },
+              ]}
             />
           )}
-        </div>
+        </div> */}
         <hr style={{ color: '#96a5f9' }} />
         <div>
           <b>Advanced</b>

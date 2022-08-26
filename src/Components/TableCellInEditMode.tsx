@@ -52,9 +52,9 @@ function TableCellInEditMode(propsIn) {
   };
 
   return type === 'dict' || type === 'list' || type === 'object' ? (
-    // <CellEditInJson props={{ row, name, type }} />
-    <span></span>
-  ) : typeOfValues.type === 'select' ? (
+    <CellEditInJson props={{ row, name, type }} />
+  ) : // <span></span>
+  typeOfValues.type === 'select' ? (
     <>
       <FormControl
         fullWidth
@@ -66,7 +66,12 @@ function TableCellInEditMode(propsIn) {
           freeSolo
           options={typeOfValues.values}
           value={row[name]}
-          // onChange={(event, newValue: string | null) => {}}
+          onChange={(e, val) =>
+            onChange({ target: { value: val, name: name } }, row, index)
+          }
+          onInputChange={(e, val) =>
+            onChange({ target: { value: val, name: name } }, row, index)
+          }
           // onInputChange={(event, newInputValue) => {}}
           renderInput={(params) => (
             <TextField
@@ -78,7 +83,7 @@ function TableCellInEditMode(propsIn) {
           )}
         />
       </FormControl>
-      <Select
+      {/* <Select
         name={name}
         value={row[name]}
         label="type"
@@ -89,7 +94,7 @@ function TableCellInEditMode(propsIn) {
             {tex}
           </MenuItem>
         ))}
-      </Select>
+      </Select> */}
     </>
   ) : type === 'bool' || type === 'boolean' ? (
     <RadioGroup

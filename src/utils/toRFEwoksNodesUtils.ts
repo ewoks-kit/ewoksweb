@@ -40,7 +40,7 @@ export function calcNodeType(inputsAl, outputsAll, task_type, id) {
 // locate the task and add required+optional-inputs + outputs
 export function calcTask(tasks, task_identifier, task_type) {
   let tempTask = tasks.find((tas) => tas.task_identifier === task_identifier);
-
+  console.log(tasks, task_identifier, task_type);
   tempTask = tempTask
     ? tempTask // if you found the Task return it
     : task_type === 'graph' // if not found check if it is a graph
