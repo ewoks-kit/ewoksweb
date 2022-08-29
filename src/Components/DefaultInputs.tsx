@@ -78,8 +78,8 @@ export default function DefaultInputs(props) {
             {
               type: 'select',
               values: [
-                ...element.optional_input_names,
-                ...element.required_input_names,
+                ...(element.optional_input_names || []),
+                ...(element.required_input_names || []),
               ],
             },
             { type: 'input' },

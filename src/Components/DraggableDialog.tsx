@@ -33,6 +33,7 @@ export default function DraggableDialog(props) {
   const [name, setName] = React.useState('');
   const [callbackProps, setCallbackProps] = React.useState({});
   const graphRF = state((state) => state.graphRF);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
   const [selection, setSelection] = React.useState('ewoks');
 
@@ -56,9 +57,17 @@ export default function DraggableDialog(props) {
   };
 
   const handleSave = () => {
-    setIsOpen(false);
-    // console.log(name, graph, callbackProps);
-    props.setValue(name, graph, callbackProps);
+    if (name) {
+      setIsOpen(false);
+      // console.log(name, graph, callbackProps);
+      props.setValue(name, graph, callbackProps);
+    } else {
+      setOpenSnackbar({
+        open: true,
+        text: 'Please put a Name for the parameter!',
+        severity: 'warning',
+      });
+    }
   };
 
   const handleChange = (

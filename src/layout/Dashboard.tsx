@@ -47,15 +47,16 @@ export default function Dashboard() {
   const redoF = React.useRef(null);
   const saveToServerF = React.useRef(null);
 
-  const [open, setOpen] = React.useState(true);
-  const [openDrawers, setOpenDrawers] = React.useState(true);
-  const [openSettings, setOpenSettings] = React.useState(false);
-  const [openInfo, setOpenInfo] = React.useState(false);
+  const [open, setOpen] = useState(true);
+  const [openDrawers, setOpenDrawers] = useState(true);
+  const [openSettings, setOpenSettings] = useState(false);
+  const [openInfo, setOpenInfo] = useState(false);
+  const [workflowIdInTextbox, setWorkflowIdInTextbox] = useState('');
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const gettingFromServer = state((state) => state.gettingFromServer);
   const inExecutionMode = state((state) => state.inExecutionMode);
   const graphRF = state((state) => state.graphRF);
-  const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
+  const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
   const initializedGraph = state((state) => state.initializedGraph);
   const openSettingsDrawer = state((state) => state.openSettingsDrawer);
   const setOpenSettingsDrawer = state((state) => state.setOpenSettingsDrawer);
@@ -63,7 +64,7 @@ export default function Dashboard() {
   const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const undoIndex = state((state) => state.undoIndex);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
     // console.log(openDrawers);
@@ -176,6 +177,11 @@ export default function Dashboard() {
     setAnchorEl(null);
   };
 
+  function workflowIdInAutocomplete(id) {
+    console.log(id, anchorEl);
+    setWorkflowIdInTextbox(id);
+  }
+
   return (
     <>
       <div
@@ -257,7 +263,9 @@ export default function Dashboard() {
             <UndoRedo undoF={undoF} redoF={redoF} />
             <div className={classes.verticalRule} />
             <SaveToServer saveToServerF={saveToServerF} />
-            <GetFromServer />
+            <GetFromServer
+              workflowIdInAutocomplete={workflowIdInAutocomplete}
+            />
             <ExecuteWorkflow />
             <div className={classes.verticalRule} />
             <Tooltip
@@ -292,7 +300,11 @@ export default function Dashboard() {
                   </Fab>
                 </IconButton>
               </Tooltip>
-              <MenuPopover anchorEl={anchorEl} handleClose={handleClose} />
+              <MenuPopover
+                anchorEl={anchorEl}
+                handleClose={handleClose}
+                workflowIdInTextbox={workflowIdInTextbox}
+              />
             </div>
 
             <Tooltip

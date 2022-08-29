@@ -4,6 +4,7 @@ import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import SaveGetFromDisk from '../Components/SaveGetFromDisk';
+import GetFromServerButtons from './GetFromServerButtons';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -13,7 +14,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function MenuPopover({ anchorEl, handleClose }) {
+export default function MenuPopover({
+  anchorEl,
+  handleClose,
+  workflowIdInTextbox,
+}) {
   const classes = useStyles();
   // const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
   //   null
@@ -55,6 +60,10 @@ export default function MenuPopover({ anchorEl, handleClose }) {
         }}
       >
         <SaveGetFromDisk />
+        <GetFromServerButtons
+          workflowId={workflowIdInTextbox}
+          showButtons={[false, true]}
+        />
         {/* <Typography className={classes.typography}>
           The content of the Popover.
         </Typography> */}

@@ -62,7 +62,10 @@ export default function ManageWorkflows() {
             </FormControl>
           </Item>
           <span style={{ display: 'flex' }}>
-            <GetFromServerButtons workflowId={workflowValue.graph.id} />
+            <GetFromServerButtons
+              workflowId={workflowValue.graph.id}
+              showButtons={[true, true]}
+            />
           </span>
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={6}>

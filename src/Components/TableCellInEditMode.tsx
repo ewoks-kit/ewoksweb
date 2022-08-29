@@ -36,7 +36,11 @@ function TableCellInEditMode(propsIn) {
 
   useEffect(() => {
     // console.log(row);
-    setBoolVal(row.value !== null ? row.value.toString() : 'null');
+    setBoolVal(
+      row.value !== null && row.value !== undefined
+        ? row.value.toString()
+        : 'null'
+    );
   }, [row.value, row]);
 
   const onChangeBool = (e, row, index) => {
