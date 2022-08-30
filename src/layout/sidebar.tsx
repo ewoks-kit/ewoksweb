@@ -61,7 +61,6 @@ export default function Sidebar() {
   const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
     false
   );
-  console.log(selectedElement);
   const graphRF = state((state) => state.graphRF);
   const setGraphRF = state((state) => state.setGraphRF);
   const workingGraph = state((state) => state.workingGraph);
@@ -326,6 +325,7 @@ export default function Sidebar() {
       {inExecutionMode ? (
         <div className={classes.executionSide}>
           <ExecutionDetails />
+          <EditElement element={selectedElement} />
         </div>
       ) : (
         <>

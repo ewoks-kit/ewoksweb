@@ -3,6 +3,7 @@ import { style } from './NodeStyle';
 import state from '../store/state';
 
 function ExecutionStepsNode(args) {
+  // console.log(args);
   const customTitle = {
     ...style.title,
     wordWrap: 'break-word',

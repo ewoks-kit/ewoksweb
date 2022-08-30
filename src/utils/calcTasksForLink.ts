@@ -30,7 +30,7 @@ export function calcTasksForLink(
     optional_input_names: [],
     required_input_names: [],
   };
-  console.log(source, sourceTask, target, targetTask);
+
   return [sourceTask, targetTask];
 }
 

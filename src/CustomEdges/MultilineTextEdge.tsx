@@ -11,21 +11,20 @@ function multilineText({
   label = '',
   markerEnd,
   style = {},
-  labelBgStyle,
 }) {
-  console.log(
-    style,
-    id,
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
-    sourcePosition,
-    targetPosition,
-    label,
-    markerEnd,
-    labelBgStyle
-  );
+  // console.log(
+  //   style,
+  //   id,
+  //   sourceX,
+  //   sourceY,
+  //   targetX,
+  //   targetY,
+  //   sourcePosition,
+  //   targetPosition,
+  //   label,
+  //   markerEnd,
+  //   labelBgStyle
+  // );
   const edgePath = getBezierPath({
     sourceX,
     sourceY,

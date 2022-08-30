@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import FiberNew from '@material-ui/icons/FiberNew';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import Sidebar from './sidebar';
@@ -16,7 +12,7 @@ import { ReactFlowProvider } from 'react-flow-renderer';
 import Canvas from './Canvas';
 import UndoRedo from '../Components/UndoRedo';
 import GetFromServer from '../Components/GetFromServer';
-import { Button, Fab, IconButton, Menu, MenuItem } from '@material-ui/core';
+import { Fab, IconButton } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SimpleSnackbar from '../Components/Snackbar';
 import SettingsInfoDrawer from '../Components/SettingsInfoDrawer';
@@ -25,7 +21,6 @@ import LinearSpinner from '../Components/LinearSpinner';
 import ExecuteWorkflow from '../Components/ExecuteWorkflow';
 import Tooltip from '@material-ui/core/Tooltip';
 import DashboardStyle from './DashboardStyle';
-import SaveGetFromDisk from '../Components/SaveGetFromDisk';
 import SaveToServer from '../Components/SaveToServer';
 import tooltipText from '../Components/TooltipText';
 import state from '../store/state';
@@ -47,7 +42,6 @@ export default function Dashboard() {
   const redoF = React.useRef(null);
   const saveToServerF = React.useRef(null);
 
-  const [open, setOpen] = useState(true);
   const [openDrawers, setOpenDrawers] = useState(true);
   const [openSettings, setOpenSettings] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
@@ -123,13 +117,6 @@ export default function Dashboard() {
     setOpenDrawers(true);
   };
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-    // setEditing(!editing);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   const handleKeyDown = (event) => {
@@ -167,18 +154,7 @@ export default function Dashboard() {
     setAnchorEl(null);
   };
 
-  const handlePopoverOpen = (
-    event: React.MouseEvent<HTMLElement, MouseEvent>
-  ) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
-
   function workflowIdInAutocomplete(id) {
-    console.log(id, anchorEl);
     setWorkflowIdInTextbox(id);
   }
 
@@ -207,21 +183,9 @@ export default function Dashboard() {
         <SimpleSnackbar />
         <AppBar
           position="absolute"
-          className={clsx(classes.appBar, open && classes.appBarShift)}
+          className={clsx(classes.appBar, classes.appBarShift)}
         >
           <Toolbar className={classes.toolbar}>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              className={clsx(
-                classes.menuButton,
-                open && classes.menuButtonHidden
-              )}
-            >
-              <MenuIcon />
-            </IconButton>
             <SubgraphsStack />
             <Tooltip
               title={tooltipText('Start a new workflow')}
@@ -343,27 +307,10 @@ export default function Dashboard() {
       >
         <ReflexElement
           className="left-pane"
-          minSize={200}
+          minSize={100}
           maxSize={500}
           size={350}
         >
-          {/* <Drawer
-            variant="permanent"
-            classes={{
-              paper: clsx(
-                classes.drawerPaper,
-                !open && classes.drawerPaperClose
-              ),
-            }}
-            open={open}
-          >
-            <div className={classes.toolbarIcon}>
-              <IconButton onClick={handleDrawerClose}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </div>
-            <Divider />
-            <Divider /> */}
           <Sidebar />
           {/* </Drawer> */}
         </ReflexElement>
@@ -374,8 +321,8 @@ export default function Dashboard() {
           style={{
             display: 'flex',
             alignItems: 'center',
-            width: '0.225rem',
-            height: '950px',
+            width: '0.325rem',
+            height: '970px',
             backgroundColor: 'rgb(233, 235, 247)',
             borderRight: 'none !important',
             borderLeftColor: '#eee !important',

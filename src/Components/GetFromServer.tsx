@@ -10,7 +10,7 @@ const useStyles = DashboardStyle;
 export default function GetFromServer(props) {
   const classes = useStyles();
   const { workflowIdInAutocomplete } = props;
-  console.log(props);
+
   const [workflowId, setWorkflowId] = React.useState('');
 
   const setInputValue = (workflowDetails) => {

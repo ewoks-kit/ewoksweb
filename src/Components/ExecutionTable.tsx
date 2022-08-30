@@ -313,7 +313,6 @@ export default function EnhancedTable() {
   const [dense, setDense] = useState(true);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const executedWorkflows = state((state) => state.executedWorkflows);
-  const executedEvents = state((state) => state.executedEvents);
   const [open, setOpen] = useState(false);
   const [eventsForWorflow, setEventsForWorflow] = useState([]);
 
@@ -391,10 +390,14 @@ export default function EnhancedTable() {
       : 0;
 
   async function setOpenRow(job_id) {
-    if (expandRow === job_id || expandRow === '') {
+    if (expandRow === job_id) {
       setOpen(!open);
+    } else if (expandRow === '' || expandRow !== job_id) {
+      setOpen(true);
     }
+
     setExpandRow(job_id);
+
     try {
       const response = await getExecutionEvents({ job_id });
       if (response.data) {
@@ -407,8 +410,6 @@ export default function EnhancedTable() {
     } catch (error) {
       console.log(error);
     }
-
-    console.log(executedEvents, eventsForWorflow);
   }
 
   return (
@@ -546,6 +547,10 @@ export default function EnhancedTable() {
                                     <TableCell>error</TableCell>
                                     <TableCell>error_traceback</TableCell>
                                     <TableCell>error_message</TableCell>
+                                    <TableCell>node_id</TableCell>
+                                    <TableCell>task_id</TableCell>
+                                    <TableCell>task_uri</TableCell>
+                                    {/* <TableCell>id</TableCell> */}
                                   </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -582,6 +587,18 @@ export default function EnhancedTable() {
                                       <TableCell align="right">
                                         {ev.error_message}
                                       </TableCell>
+                                      <TableCell align="right">
+                                        {ev.node_id}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {ev.task_id}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {ev.task_uri}
+                                      </TableCell>
+                                      {/* <TableCell align="right">
+                                        {ev.id}
+                                      </TableCell> */}
                                     </TableRow>
                                   ))}
                                 </TableBody>

@@ -1,4 +1,4 @@
-import { getBezierPath, getEdgeCenter } from 'react-flow-renderer';
+import { getBezierPath } from 'react-flow-renderer';
 
 function bendingText({
   id,
@@ -11,21 +11,20 @@ function bendingText({
   label = '',
   markerEnd,
   style = {},
-  labelBgStyle,
 }) {
-  console.log(
-    style,
-    id,
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
-    sourcePosition,
-    targetPosition,
-    label,
-    markerEnd,
-    labelBgStyle
-  );
+  // console.log(
+  //   style,
+  //   id,
+  //   sourceX,
+  //   sourceY,
+  //   targetX,
+  //   targetY,
+  //   sourcePosition,
+  //   targetPosition,
+  //   label,
+  //   markerEnd,
+  //   labelBgStyle
+  // );
   const edgePath = getBezierPath({
     sourceX,
     sourceY,
@@ -34,15 +33,6 @@ function bendingText({
     targetY,
     targetPosition,
   });
-
-  const [edgeCenterX, edgeCenterY] = getEdgeCenter({
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
-  });
-
-  const foreignObjectSize = 100;
 
   return (
     <>

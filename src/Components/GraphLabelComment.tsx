@@ -1,12 +1,6 @@
 import React, { useEffect } from 'react';
 
-import {
-  FormControl,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  TextField,
-} from '@material-ui/core';
+import { FormControl, InputLabel, OutlinedInput } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 import type { GraphDetails } from '../types';

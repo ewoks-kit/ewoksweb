@@ -128,6 +128,7 @@ const DashboardStyle = makeStyles((theme) => ({
   executionSide: {
     margin: '8px 5px',
     wordBreak: 'break-word',
+    width: '98%',
   },
 }));
 

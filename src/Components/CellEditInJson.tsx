@@ -5,6 +5,7 @@ export default function CellEditInJson(propsIn) {
   const { row, name, type } = props;
 
   const onChange = (edit, row) => {
+    /* eslint-disable no-console */
     console.log(edit, row, name);
   };
 

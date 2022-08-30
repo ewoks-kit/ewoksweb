@@ -12,9 +12,7 @@ export default function Conditions(props) {
 
   const [conditions, setConditions] = React.useState<Inputs[]>([]);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const graphRF = state((state) => state.graphRF);
   const setSelectedElement = state((state) => state.setSelectedElement);
-  const [elementL] = React.useState<EwoksRFLink>({} as EwoksRFLink);
 
   useEffect(() => {
     if (element && element.data && element.data.conditions) {

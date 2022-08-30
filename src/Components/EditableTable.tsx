@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/cognitive-complexity */
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -9,11 +10,11 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import DoneIcon from '@material-ui/icons/DoneAllTwoTone';
-import RevertIcon from '@material-ui/icons/NotInterestedOutlined';
 import { FormControl, MenuItem, Select } from '@material-ui/core';
 import CustomTableCell from './CustomTableCell';
 import DraggableDialog from './DraggableDialog';
 import DeleteIcon from '@material-ui/icons/Delete';
+import state from '../store/state';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -62,10 +63,11 @@ function EditableTable(props) {
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const [dialogContent, setDialogContent] = React.useState({});
   const [disableSelectType, setDisableSelectType] = React.useState(false);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
   const { defaultValues } = props;
   const { headers } = props;
-  console.log(props);
+
   const typesOfInputs = ['bool', 'number', 'string', 'list', 'dict', 'null'];
   // // console.log(defaultValues, val, rows, props, typeOfInputs);
 
@@ -112,8 +114,6 @@ function EditableTable(props) {
   };
 
   function onToggleEditMode(id, index, command) {
-    // console.log(props, id, rows, props.defaultValues, command, typeOfInputs);
-
     if (command === 'edit' && ['list', 'dict'].includes(typeOfInputs[index])) {
       let initialValue: string | [] | {} = '';
 
@@ -141,29 +141,46 @@ function EditableTable(props) {
         callbackProps: { rows, id },
       });
     }
-    setRows(() => {
-      return rows.map((row) => {
-        if (row.id === id) {
-          return {
-            ...row,
-            id: row.name.replace(' ', '_'),
-            // value: row.value,
-            isEditMode: !row.isEditMode,
-          };
-        }
-        return row;
+
+    const oldRows = [...rows].filter((row, inde) => index !== inde);
+
+    if (
+      rows[index].name !== '' &&
+      oldRows.map((oldro) => oldro.name).includes(rows[index].name)
+    ) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Not allowed to assign the same property TWICE!',
+        severity: 'error',
       });
-    });
+      // setRows(oldRows);
+    } else {
+      setRows(() => {
+        return rows.map((row) => {
+          if (row.id === id) {
+            return {
+              ...row,
+              id: row.name.replace(' ', '_'),
+              // value: row.value,
+              isEditMode: !row.isEditMode,
+            };
+          }
+          return row;
+        });
+      });
+      if (command === 'done') {
+        props.valuesChanged(rows);
+      }
+    }
     if (command === 'done') {
       setDisableSelectType(true);
-      props.valuesChanged(rows);
     } else {
       setDisableSelectType(false);
     }
   }
 
   const onChange = (e, row, index) => {
-    console.log(e, e.target.value, e.target.name, row, index);
+    // console.log(e, e.target.value, e.target.name, row, index);
     if (
       ['string', 'bool', 'number', 'boolean', 'null'].includes(typeOfInputs[0])
     ) {
@@ -225,7 +242,7 @@ function EditableTable(props) {
   };
 
   const changedTypeOfInputs = (e, row, index) => {
-    console.log(e.target.value, row, props, index);
+    // console.log(e.target.value, row, props, index);
     if (e.target.value === 'null') {
       const newRows = rows.map((rowe) => {
         if (rowe.id === row.id) {
@@ -240,7 +257,6 @@ function EditableTable(props) {
     tOfI[index] = e.target.value;
     setTypeOfInputs(tOfI);
     if (['dict', 'list'].includes(e.target.value)) {
-      console.log('should open dialog');
       showEditableDialog({
         name: row.id,
         title: e.target.value === 'list' ? 'Edit list' : 'Edit dict',

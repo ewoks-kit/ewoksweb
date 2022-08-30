@@ -2,8 +2,6 @@ import React, { useEffect } from 'react';
 
 import type { EwoksRFLink } from '../types';
 import {
-  Box,
-  Button,
   FormControl,
   InputLabel,
   OutlinedInput,
@@ -111,7 +109,6 @@ export default function LabelComment(props) {
                 options={labelChoices}
                 value={label}
                 onChange={(event, newValue: string | null) => {
-                  console.log(newValue);
                   setSelectedElement(
                     {
                       ...element,
@@ -121,7 +118,6 @@ export default function LabelComment(props) {
                   );
                 }}
                 onInputChange={(event, newInputValue) => {
-                  console.log(newInputValue);
                   setSelectedElement(
                     {
                       ...element,

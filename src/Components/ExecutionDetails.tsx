@@ -47,7 +47,7 @@ export default function ExecutionDetails() {
 
   // DOC: calculate the executing spinners for live execution
   const setExecutingEvents = state((state) => state.setExecutingEvents);
-  const executingEvents = state((state) => state.executingEvents);
+  // const executingEvents = state((state) => state.executingEvents);
 
   const setInExecutionMode = state((state) => state.setInExecutionMode);
 
@@ -120,7 +120,6 @@ export default function ExecutionDetails() {
       return { ...(job[0].workflow_id ? job[0] : job[1]), status: 'finished' };
     });
 
-    console.log(executedEvents, wjobs, allWorkflowsL);
     setWorkflows([...allWorkflowsL, ...wjobs]);
   }, [executedEvents, watchedWorkflows]);
 
@@ -137,8 +136,11 @@ export default function ExecutionDetails() {
   // };
 
   function workflowDetails(work) {
-    /* eslint-disable no-console */
-    setSelectedWorkflow(work);
+    if (selectedWorkflow !== work) {
+      setSelectedWorkflow(work);
+    } else {
+      setSelectedWorkflow({} as Event);
+    }
   }
 
   function formatedDate(job: Event) {
@@ -153,7 +155,7 @@ export default function ExecutionDetails() {
     const dat = new Date(job.time);
 
     return `${
-      label ? label.slice(0, 20) : (job.workflow_id as string)
+      label ? label.slice(0, 20) : job.workflow_id
     } ${dat.getHours()}:${dat.getMinutes()} ${dat.getDate()}/${
       dat.getMonth() + 1
     }/${dat.getFullYear()}`;
@@ -215,7 +217,7 @@ export default function ExecutionDetails() {
     } else {
       // setTimeout(() => {
       const eventsL = getEventsForJob();
-      console.log(eventsL);
+
       setInExecutionMode(true);
       eventsL.forEach((ev) => setExecutingEvents(ev, false));
       // }, 400);
@@ -230,19 +232,19 @@ export default function ExecutionDetails() {
 
     // Check if it is watched workflow from server or a live execution
     if (isInWatchedIndex !== -1) {
-      console.log('it is part of the history');
+      // console.log('it is part of the history');
       events = watchedWorkflows[isInWatchedIndex].map((ev, index) => {
         return { ...ev, id: index + 1 };
       });
     } else {
-      console.log('it is live executed');
+      // console.log('it is live executed');
       events = executedEvents.filter(
         (ev) =>
           ev.workflow_id === selectedWorkflow.workflow_id &&
           ev.job_id === selectedWorkflow.job_id
       );
     }
-    console.log(events);
+    // console.log(events);
     setCurrentWatchedEvents(events);
     return events;
   }
@@ -296,6 +298,7 @@ export default function ExecutionDetails() {
               work.status === 'finished' ? '#b6beec' : 'rgb(124, 163, 198)',
             borderRadius: '5px',
             margin: '2px',
+            width: '98%',
           }}
         >
           <div
@@ -312,6 +315,7 @@ export default function ExecutionDetails() {
                 paddingTop: '5px',
                 paddingBottom: '5px',
                 backgroundColor: '#e9ebf7',
+                width: '98%',
               }}
               size="medium"
               // variant="outlined"
@@ -324,13 +328,14 @@ export default function ExecutionDetails() {
                 name="Execution details"
                 theme="monokai"
                 collapsed
-                collapseStringsAfterLength={15}
+                collapseStringsAfterLength={25}
                 groupArraysAfterLength={15}
                 enableClipboard={false}
                 quotesOnKeys={false}
                 style={{
                   backgroundColor: 'rgb(59, 77, 172)',
                   margin: '7px',
+                  width: '98%',
                 }}
                 displayDataTypes={false}
               />

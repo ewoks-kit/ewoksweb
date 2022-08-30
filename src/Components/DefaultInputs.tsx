@@ -1,17 +1,16 @@
 import React, { useEffect } from 'react';
 
-import type { DataMapping, EwoksRFNode, Inputs } from '../types';
+import type { EwoksRFNode, Inputs } from '../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import { IconButton } from '@material-ui/core';
 
 import state from '../store/state';
 import SidebarTooltip from './SidebarTooltip';
-import LabelComment from './LabelComment';
 
 export default function DefaultInputs(props) {
   const { element } = props;
-  console.log(props);
+
   const [defaultInputs, setDefaultInputs] = React.useState<Inputs[]>([]);
   const setSelectedElement = state((state) => state.setSelectedElement);
 
@@ -22,6 +21,7 @@ export default function DefaultInputs(props) {
   const addDefaultInputs = () => {
     const el = element as EwoksRFNode;
     const elIn = el.default_inputs;
+
     if (elIn && elIn[elIn.length - 1] && elIn[elIn.length - 1].id === '') {
       // console.log('should not ADD default');
     } else {

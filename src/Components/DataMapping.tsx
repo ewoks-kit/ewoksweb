@@ -9,7 +9,7 @@ import SidebarTooltip from './SidebarTooltip';
 
 export default function DataMappingComponent(props) {
   const { element } = props;
-  console.log(props);
+
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const setSelectedElement = state((state) => state.setSelectedElement);
   const [dataMapping, setDataMapping] = React.useState<DataMapping[]>([]);
@@ -17,10 +17,10 @@ export default function DataMappingComponent(props) {
     {} as EwoksRFLink
   );
   const graphRF = state((state) => state.graphRF);
-  console.log(props);
+
   useEffect(() => {
     setElementL(element);
-    console.log(element);
+
     if (element.data && element.data.data_mapping) {
       setDataMapping(element.data.data_mapping);
     }

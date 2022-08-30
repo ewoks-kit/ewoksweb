@@ -199,7 +199,15 @@ function Canvas() {
 
   const onNodeClick = (event, element?: Node) => {
     const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
-    setSelectedElement(graphElement);
+
+    if (
+      !(
+        graphElement.task_type === 'executionSteps' &&
+        graphElement.type === 'executionSteps'
+      )
+    ) {
+      setSelectedElement(graphElement);
+    }
   };
 
   const onEdgeClick = (event, element?: Edge) => {

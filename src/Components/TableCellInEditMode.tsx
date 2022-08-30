@@ -4,10 +4,8 @@ import Input from '@material-ui/core/Input';
 import {
   FormControl,
   FormControlLabel,
-  MenuItem,
   Radio,
   RadioGroup,
-  Select,
   TextField,
 } from '@material-ui/core';
 import CellEditInJson from './CellEditInJson';
@@ -30,7 +28,7 @@ function TableCellInEditMode(propsIn) {
   const { props } = propsIn;
   const { index, row, name, onChange, type, typeOfValues } = props;
   const classes = useStyles();
-  console.log(index, row, name, onChange, type, typeOfValues);
+  // console.log(index, row, name, onChange, type, typeOfValues);
 
   const [boolVal, setBoolVal] = React.useState(true);
 
@@ -71,10 +69,10 @@ function TableCellInEditMode(propsIn) {
           options={typeOfValues.values}
           value={row[name]}
           onChange={(e, val) =>
-            onChange({ target: { value: val, name: name } }, row, index)
+            onChange({ target: { value: val, name } }, row, index)
           }
           onInputChange={(e, val) =>
-            onChange({ target: { value: val, name: name } }, row, index)
+            onChange({ target: { value: val, name } }, row, index)
           }
           // onInputChange={(event, newInputValue) => {}}
           renderInput={(params) => (

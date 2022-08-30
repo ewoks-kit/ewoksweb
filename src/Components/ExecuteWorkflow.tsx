@@ -26,6 +26,7 @@ export default function ExecuteWorkflow() {
 
   useEffect(() => {
     socket.on('Executing', (data) => {
+      // console.log(data);
       setExecutedEvents(data as Event);
     });
 
@@ -35,6 +36,7 @@ export default function ExecuteWorkflow() {
   }, [setExecutedEvents]);
 
   const checkAndExecute = () => {
+    // console.log(canvasGraphChanged, undoIndex);
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
     } else {
