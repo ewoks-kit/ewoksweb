@@ -28,7 +28,7 @@ function TableCellInEditMode(propsIn) {
   const { props } = propsIn;
   const { index, row, name, onChange, type, typeOfValues } = props;
   const classes = useStyles();
-  // console.log(index, row, name, onChange, type, typeOfValues);
+  console.log(index, row, name, onChange, type, typeOfValues);
 
   const [boolVal, setBoolVal] = React.useState(true);
 
@@ -54,7 +54,8 @@ function TableCellInEditMode(propsIn) {
   };
 
   return type === 'dict' || type === 'list' || type === 'object' ? (
-    <CellEditInJson props={{ row, name, type }} />
+    // <CellEditInJson props={{ row, name, type, onChange }} />
+    <span>{JSON.stringify(row[name])}</span>
   ) : // <span></span>
   typeOfValues.type === 'select' ? (
     <>
@@ -78,7 +79,7 @@ function TableCellInEditMode(propsIn) {
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Label"
+              label={typeOfValues.type || 'name'}
               margin="normal"
               variant="outlined"
             />

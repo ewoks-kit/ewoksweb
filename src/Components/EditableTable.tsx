@@ -160,7 +160,7 @@ function EditableTable(props) {
           if (row.id === id) {
             return {
               ...row,
-              id: row.name.replace(' ', '_'),
+              id: row.name.replace(' ', '_') || '',
               // value: row.value,
               isEditMode: !row.isEditMode,
             };
@@ -169,7 +169,9 @@ function EditableTable(props) {
         });
       });
       if (command === 'done') {
+        console.log(rows);
         props.valuesChanged(rows);
+        setRows(rows);
       }
     }
     if (command === 'done') {
@@ -251,7 +253,7 @@ function EditableTable(props) {
         return rowe;
       });
       setRows(newRows);
-      props.valuesChanged(newRows);
+      // props.valuesChanged(newRows);
     }
     const tOfI = [...typeOfInputs];
     tOfI[index] = e.target.value;

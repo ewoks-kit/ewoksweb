@@ -49,13 +49,13 @@ export default function SignUp(props) {
               <Typography component="h1" variant="h5">
                 Welcome to the{' '}
                 <b style={{ color: 'rgb(63, 81, 181)' }}>Ewoks-UI</b> for
-                managing your Workflows. Get started with a graph where Ewoks-UI
-                describes itself
+                managing your Workflows. Select to Edit or Monitor or get
+                started with a graph where Ewoks-UI describes itself:
               </Typography>
 
               <IconButton
                 color="inherit"
-                onClick={props.handleCloseDialog || ''}
+                // onClick={props.handleCloseDialog || ''}
               >
                 <Typography
                   component="h1"
@@ -84,6 +84,29 @@ export default function SignUp(props) {
                   style={{ padding: '5px' }}
                 >
                   <Link to="/monitor-workflows">Monitor Workflows</Link>
+                </Typography>
+
+                <Fab
+                  // className={classes.openFileButton}
+                  color="primary"
+                  size="small"
+                  component="span"
+                  aria-label="add"
+                >
+                  <ArrowForwardIosIcon />
+                </Fab>
+              </IconButton>
+              <IconButton
+                color="inherit"
+                onClick={props.handleCloseDialog || ''}
+              >
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  color="primary"
+                  style={{ padding: '5px' }}
+                >
+                  <Link to="/edit-workflows">Tutorial Workflow</Link>
                 </Typography>
 
                 <Fab

@@ -8,11 +8,12 @@ import FiberNew from '@material-ui/icons/FiberNew';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import Sidebar from './sidebar';
 import { ReactFlowProvider } from 'react-flow-renderer';
+import { Link } from 'react-router-dom';
 
 import Canvas from './Canvas';
 import UndoRedo from '../Components/UndoRedo';
 import GetFromServer from '../Components/GetFromServer';
-import { Fab, IconButton } from '@material-ui/core';
+import { Fab, IconButton, Typography } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SimpleSnackbar from '../Components/Snackbar';
 import SettingsInfoDrawer from '../Components/SettingsInfoDrawer';
@@ -112,9 +113,9 @@ export default function Dashboard() {
   };
 
   const handleOpenInfo = () => {
-    setOpenInfo(true);
+    // setOpenInfo(true);
     setOpenSettings(false);
-    setOpenDrawers(true);
+    // setOpenDrawers(true);
   };
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -231,25 +232,6 @@ export default function Dashboard() {
               workflowIdInAutocomplete={workflowIdInAutocomplete}
             />
             <ExecuteWorkflow />
-            <div className={classes.verticalRule} />
-            <Tooltip
-              title={tooltipText('Manage tasks, icons and workflows')}
-              enterDelay={800}
-              arrow
-            >
-              <IconButton color="inherit" onClick={handleOpenSettings}>
-                <Fab
-                  className={classes.openFileButton}
-                  color="primary"
-                  size="small"
-                  component="span"
-                  aria-label="add"
-                >
-                  <SettingsIcon />
-                </Fab>
-              </IconButton>
-            </Tooltip>
-
             <div>
               <Tooltip title={tooltipText('More')} enterDelay={800} arrow>
                 <IconButton color="inherit" onClick={handleClick}>
@@ -270,13 +252,13 @@ export default function Dashboard() {
                 workflowIdInTextbox={workflowIdInTextbox}
               />
             </div>
-
+            <div className={classes.verticalRule} />
             <Tooltip
-              title={tooltipText('Guide for Ewoks UI')}
+              title={tooltipText('Manage tasks, icons and workflows')}
               enterDelay={800}
               arrow
             >
-              <IconButton color="inherit" onClick={handleOpenInfo}>
+              <IconButton color="inherit" onClick={handleOpenSettings}>
                 <Fab
                   className={classes.openFileButton}
                   color="primary"
@@ -284,8 +266,36 @@ export default function Dashboard() {
                   component="span"
                   aria-label="add"
                 >
-                  <NotListedLocationIcon />
+                  <SettingsIcon />
                 </Fab>
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip
+              title={tooltipText('Guide for Ewoks UI')}
+              enterDelay={800}
+              arrow
+            >
+              {/* onClick={handleOpenInfo} */}
+              <IconButton color="inherit">
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  color="primary"
+                  style={{ padding: '5px' }}
+                >
+                  <Link to="/">
+                    <Fab
+                      className={classes.openFileButton}
+                      color="primary"
+                      size="small"
+                      component="span"
+                      aria-label="add"
+                    >
+                      <NotListedLocationIcon />
+                    </Fab>
+                  </Link>
+                </Typography>
               </IconButton>
             </Tooltip>
             <SettingsInfoDrawer

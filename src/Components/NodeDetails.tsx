@@ -282,7 +282,10 @@ export default function NodeDetails(props) {
         specific node is based on. If you need to have them create a new Task
         with the appropriete properties and use it.`}
       >
-        <Accordion style={{ display: advanced ? 'block' : 'none' }}>
+        <Accordion
+          style={{ display: advanced ? 'block' : 'none' }}
+          id="Accordions-sidebar"
+        >
           <AccordionSummary
             expandIcon={<OpenInBrowser />}
             aria-controls="panel1a-content"

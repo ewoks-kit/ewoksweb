@@ -22,11 +22,14 @@ function EditElement(props) {
   };
 
   return (
-    <Accordion expanded={!!expanded} onChange={handleChange}>
+    <Accordion
+      expanded={!!expanded}
+      onChange={handleChange}
+      id="Accordions-sidebar"
+    >
       <AccordionSummary
         expandIcon={<OpenInBrowser />}
         aria-controls="panel1a-content"
-        id="panel1a-header"
       >
         <Typography>
           Edit{' '}

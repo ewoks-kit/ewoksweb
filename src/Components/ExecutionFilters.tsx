@@ -96,6 +96,9 @@ export default function ExecutionFilters() {
       if (status === 'Failed') {
         filterParams.error = true;
       }
+      // else {
+      //   filterParams.error = false;
+      // }
       if (fromDateFilter) {
         filterParams.starttime = fromDateFilter.toString();
       }
