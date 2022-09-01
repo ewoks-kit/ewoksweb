@@ -61,7 +61,6 @@ export default function Sidebar() {
   const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
     false
   );
-
   const graphRF = state((state) => state.graphRF);
   const setGraphRF = state((state) => state.setGraphRF);
   const workingGraph = state((state) => state.workingGraph);
@@ -326,6 +325,7 @@ export default function Sidebar() {
       {inExecutionMode ? (
         <div className={classes.executionSide}>
           <ExecutionDetails />
+          <EditElement element={selectedElement} />
         </div>
       ) : (
         <>
@@ -335,11 +335,12 @@ export default function Sidebar() {
           <Accordion
             expanded={openExecutionDetails}
             onChange={handleChangeExecutionDetails}
+            id="Accordions-sidebar"
           >
             <AccordionSummary
               expandIcon={<OpenInBrowser />}
               aria-controls="panel1a-content"
-              id="panel1a-header"
+              id="Accordions-sidebar"
             >
               <SidebarTooltip
                 text={`Drag and drop Tasks from their categories

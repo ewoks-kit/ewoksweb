@@ -12,6 +12,19 @@ function bendingText({
   markerEnd,
   style = {},
 }) {
+  // console.log(
+  //   style,
+  //   id,
+  //   sourceX,
+  //   sourceY,
+  //   targetX,
+  //   targetY,
+  //   sourcePosition,
+  //   targetPosition,
+  //   label,
+  //   markerEnd,
+  //   labelBgStyle
+  // );
   const edgePath = getBezierPath({
     sourceX,
     sourceY,
@@ -20,6 +33,7 @@ function bendingText({
     targetY,
     targetPosition,
   });
+
   return (
     <>
       <path

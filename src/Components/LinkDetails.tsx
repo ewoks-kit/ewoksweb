@@ -90,14 +90,9 @@ export default function LinkDetails(props) {
           </div>
         </SidebarTooltip>
         {!mapAllData && elementL.source && (
-          <SidebarTooltip
-            text={`Describes the data transfer from source output to
-          target input arguments.`}
-          >
-            <div>
-              <DataMappingComponent element={element} />
-            </div>
-          </SidebarTooltip>
+          <div>
+            <DataMappingComponent element={element} />
+          </div>
         )}
         <hr style={{ color: '#96a5f9' }} />
         <SidebarTooltip
@@ -114,14 +109,9 @@ export default function LinkDetails(props) {
           </div>
         </SidebarTooltip>
         {!onError && elementL.source && (
-          <SidebarTooltip
-            text={`Provides a list of expected values for source outputs.
-          [{"source_output": "result", "value": 10}]`}
-          >
-            <div>
-              <Conditions element={element} />
-            </div>
-          </SidebarTooltip>
+          <div>
+            <Conditions element={element} />
+          </div>
         )}
         <hr style={{ color: '#96a5f9' }} />
         <div>

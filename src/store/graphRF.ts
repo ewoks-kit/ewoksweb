@@ -16,7 +16,7 @@ const graphRF = (set, get) => ({
   graphRF: tutorialGraph,
 
   setGraphRF: (graphRF, isChangeToCanvasGraph) => {
-    if (isChangeToCanvasGraph) {
+    if (isChangeToCanvasGraph && !get().inExecutionMode) {
       get().setCanvasGraphChanged(true);
     } else if (isChangeToCanvasGraph === false) {
       get().setCanvasGraphChanged(false);

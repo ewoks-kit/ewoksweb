@@ -19,7 +19,9 @@ export default function EwoksUiInfo(props) {
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
   const closeDialog = async () => {
-    props.closeDialog();
+    if (props.closeDialog) {
+      props.closeDialog();
+    }
     try {
       const response = await getWorkflow('tutorial_Graph');
       if (response.data) {

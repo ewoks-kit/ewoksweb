@@ -144,6 +144,7 @@ export default function EditLinkStyle(props) {
             'step',
             'default',
             'bendingText',
+            'multilineText',
             'getAround',
           ].map((text) => (
             <MenuItem key={text} value={text}>

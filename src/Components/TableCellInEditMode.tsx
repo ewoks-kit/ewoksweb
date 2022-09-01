@@ -1,14 +1,20 @@
+/*
+  The cell within a table when the row is in edit mode.
+  Provides different input for any selected type (number, string, list etc)
+*/
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import {
+  FormControl,
   FormControlLabel,
-  MenuItem,
   Radio,
   RadioGroup,
-  Select,
+  TextField,
 } from '@material-ui/core';
-import CellEditInJson from './CellEditInJson';
+// Keep the following if edit on the table is needed
+// import CellEditInJson from './CellEditInJson';
+import { Autocomplete } from '@material-ui/lab';
 
 const useStyles = makeStyles(() => ({
   tableCell: {
@@ -33,7 +39,11 @@ function TableCellInEditMode(propsIn) {
 
   useEffect(() => {
     // console.log(row);
-    setBoolVal(row.value !== null ? row.value.toString() : 'null');
+    setBoolVal(
+      row.value !== null && row.value !== undefined
+        ? row.value.toString()
+        : 'null'
+    );
   }, [row.value, row]);
 
   const onChangeBool = (e, row, index) => {
@@ -49,43 +59,51 @@ function TableCellInEditMode(propsIn) {
   };
 
   return type === 'dict' || type === 'list' || type === 'object' ? (
-    <CellEditInJson props={{ row, name, type }} />
-  ) : // <ReactJson
-  //   src={
-  //     type === 'dict' && row[name] === ''
-  //       ? {}
-  //       : type === 'list' && row[name] === ''
-  //       ? []
-  //       : row[name]
-  //   }
-  //   name={name}
-  //   theme="monokai"
-  //   collapsed
-  //   collapseStringsAfterLength={30}
-  //   groupArraysAfterLength={15}
-  //   // onEdit={(edit) => onChange(edit, row, index)}
-  //   // onAdd={(add) => onChange(add, row, index)}
-  //   defaultValue="object"
-  //   // onDelete={(del) => onChange(del, row, index)}
-  //   // onSelect={(sel) => onChange(sel, row, index)}
-  //   quotesOnKeys={false}
-  //   style={{ backgroundColor: 'rgb(59, 77, 172)' }}
-  //   displayDataTypes
-  //   // defaultValue={object}
-  // />
-  type === 'select' ? (
-    <Select
-      name={name}
-      value={row[name]}
-      label="type"
-      onChange={(e) => onChange(e, row, index)}
-    >
-      {typeOfValues.values.map((tex) => (
-        <MenuItem key={tex} value={tex}>
-          {tex}
-        </MenuItem>
-      ))}
-    </Select>
+    // <CellEditInJson props={{ row, name, type, onChange }} />
+    <span>{JSON.stringify(row[name])}</span>
+  ) : // <span></span>
+  typeOfValues.type === 'select' ? (
+    <>
+      <FormControl
+        fullWidth
+        variant="outlined"
+        // className={classes.detailsLabels}
+      >
+        <Autocomplete
+          id="free-solo-demo"
+          freeSolo
+          options={typeOfValues.values}
+          value={row[name]}
+          onChange={(e, val) =>
+            onChange({ target: { value: val, name } }, row, index)
+          }
+          onInputChange={(e, val) =>
+            onChange({ target: { value: val, name } }, row, index)
+          }
+          // onInputChange={(event, newInputValue) => {}}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label={typeOfValues.type || 'name'}
+              margin="normal"
+              variant="outlined"
+            />
+          )}
+        />
+      </FormControl>
+      {/* <Select
+        name={name}
+        value={row[name]}
+        label="type"
+        onChange={(e) => onChange(e, row, index)}
+      >
+        {typeOfValues.values.map((tex) => (
+          <MenuItem key={tex} value={tex}>
+            {tex}
+          </MenuItem>
+        ))}
+      </Select> */}
+    </>
   ) : type === 'bool' || type === 'boolean' ? (
     <RadioGroup
       aria-label="gender"

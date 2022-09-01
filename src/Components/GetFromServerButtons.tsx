@@ -9,7 +9,7 @@ import { getWorkflow } from '../utils/api';
 import ConfirmDialog from './ConfirmDialog';
 
 export default function GetFromServerButtons(props) {
-  const { workflowId } = props;
+  const { workflowId, showButtons } = props;
 
   const setSubGraph = state((state) => state.setSubGraph);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
@@ -100,29 +100,33 @@ export default function GetFromServerButtons(props) {
         agreeCallback={getFromServer}
         disagreeCallback={disAgreeSaveWithout}
       />
-      <IntegratedSpinner
-        // callSuccess={callSuccess}
-        getting={gettingFromServer}
-        tooltip="Open from Server"
-        action={checkAndGetFromServer}
-        onClick={() => {
-          /* eslint-disable no-console */
-          console.log('Getting from server');
-        }}
-      >
-        <CloudDownloadIcon />
-      </IntegratedSpinner>
-      <IntegratedSpinner
-        getting={gettingFromServer}
-        tooltip="Add workflow as subgraph"
-        action={getSubgraphFromServer}
-        onClick={() => {
-          /* eslint-disable no-console */
-          console.log('Getting subgraph from server');
-        }}
-      >
-        <ArrowDownwardIcon />
-      </IntegratedSpinner>
+      {showButtons[0] && (
+        <IntegratedSpinner
+          // callSuccess={callSuccess}
+          getting={gettingFromServer}
+          tooltip="Open from Server"
+          action={checkAndGetFromServer}
+          onClick={() => {
+            /* eslint-disable no-console */
+            console.log('Getting from server');
+          }}
+        >
+          <CloudDownloadIcon />
+        </IntegratedSpinner>
+      )}
+      {showButtons[1] && (
+        <IntegratedSpinner
+          getting={gettingFromServer}
+          tooltip="Add workflow as subgraph"
+          action={getSubgraphFromServer}
+          onClick={() => {
+            /* eslint-disable no-console */
+            console.log('Getting subgraph from server');
+          }}
+        >
+          <ArrowDownwardIcon />
+        </IntegratedSpinner>
+      )}
     </>
   );
 }

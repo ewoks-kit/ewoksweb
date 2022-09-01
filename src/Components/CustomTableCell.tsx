@@ -3,23 +3,22 @@ import TableCell from '@material-ui/core/TableCell';
 
 import TableCellInEditMode from './TableCellInEditMode';
 
-const useStyles = makeStyles(() => ({
-  tableCell: {
-    width: 120,
-    height: 20,
-    padding: '1px',
-  },
-  input: {
-    width: 90,
-    height: 20,
-    padding: '1px',
-  },
-}));
-
 function CustomTableCell({ index, row, name, onChange, type, typeOfValues }) {
+  const useStyles = makeStyles(() => ({
+    tableCell: {
+      width: name === 'value' ? '50%' : '30%',
+      height: 20,
+      padding: '1px',
+    },
+    input: {
+      width: 90,
+      height: 20,
+      padding: '1px',
+    },
+  }));
   const classes = useStyles();
   const { isEditMode } = row;
-  // console.log(index, row, name, onChange, type, typeOfValues);
+  // console.log(index, row, name, type, typeOfValues);
 
   return (
     <TableCell align="left" className={classes.tableCell}>

@@ -48,7 +48,7 @@ const selectedElement = (set, get) => ({
           graph: element,
           nodes: initializeNodes(nodes),
           links: links.map((link) => {
-            return { ...link, selected: false };
+            return { ...link, selected: false }; // TODO: examine this after update
           }),
         };
 

@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable sonarjs/cognitive-complexity */
+import React, { useState } from 'react';
 import Box from '@material-ui/core/Box';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -21,7 +22,14 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import ExecutionFilters from './ExecutionFilters';
 import state from '../store/state';
-import type { Event } from '../types';
+import type { Event, ExecutedJobsResponse } from '../types';
+import { Link } from 'react-router-dom';
+import { Fab, makeStyles } from '@material-ui/core';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import Collapse from '@material-ui/core/Collapse';
+import { getExecutionEvents } from '../utils/api';
 
 interface Data {
   host_name: number;
@@ -101,6 +109,12 @@ interface HeadCell {
 }
 
 const headCells: readonly HeadCell[] = [
+  {
+    id: 'details',
+    numeric: false,
+    disablePadding: true,
+    label: 'details',
+  },
   {
     id: 'workflow_id',
     numeric: false,
@@ -291,13 +305,25 @@ const formatedTime = (time) => {
 };
 
 export default function EnhancedTable() {
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('workflow_id');
-  const [selected, setSelected] = React.useState<readonly string[]>([]);
-  const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [order, setOrder] = useState<Order>('asc');
+  const [orderBy, setOrderBy] = useState<keyof Data>('workflow_id');
+  const [selected, setSelected] = useState<readonly string[]>([]);
+  const [expandRow, setExpandRow] = useState<string>('');
+  const [page, setPage] = useState(0);
+  const [dense, setDense] = useState(true);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
   const executedWorkflows = state((state) => state.executedWorkflows);
+  const [open, setOpen] = useState(false);
+  const [eventsForWorflow, setEventsForWorflow] = useState([]);
+
+  const useRowStyles = makeStyles({
+    root: {
+      '& > *': {
+        borderBottom: 'unset',
+      },
+    },
+  });
+  const classes = useRowStyles();
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -318,8 +344,11 @@ export default function EnhancedTable() {
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
+    // console.log(event, name);
     const selectedIndex = selected.indexOf(name);
     let newSelected: readonly string[] = [];
+
+    // if (event.target)
 
     if (selectedIndex === -1) {
       newSelected = [...selected, name];
@@ -360,6 +389,30 @@ export default function EnhancedTable() {
       ? Math.max(0, (1 + page) * rowsPerPage - executedWorkflows.length)
       : 0;
 
+  async function setOpenRow(job_id) {
+    if (expandRow === job_id) {
+      setOpen(!open);
+    } else if (expandRow === '' || expandRow !== job_id) {
+      setOpen(true);
+    }
+
+    setExpandRow(job_id);
+
+    try {
+      const response = await getExecutionEvents({ job_id });
+      if (response.data) {
+        const execJobs = response.data as ExecutedJobsResponse;
+        setEventsForWorflow(execJobs.jobs[0]);
+      } else {
+        /* eslint-disable no-console */
+        console.log('no response data');
+      }
+    } catch (error) {
+      /* eslint-disable no-console */
+      console.log(error);
+    }
+  }
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper>
@@ -371,7 +424,11 @@ export default function EnhancedTable() {
             borderRadius: '10px',
           }}
         >
-          <Table aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
+          <Table
+            aria-labelledby="tableTitle"
+            size={dense ? 'small' : 'medium'}
+            stickyHeader
+          >
             <EnhancedTableHead
               numSelected={selected.length}
               order={order}
@@ -391,54 +448,167 @@ export default function EnhancedTable() {
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row[0].job_id)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row[0].job_id}
-                      selected={isItemSelected}
-                      style={{ whiteSpace: 'nowrap' }}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        // component="th"
-                        id={labelId}
-                        align="left"
-                        // scope="row"
-                        // padding="none"
+                    <React.Fragment key={row[0].job_id}>
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        // key={row[0].job_id}
+                        selected={isItemSelected}
+                        style={{ whiteSpace: 'nowrap' }}
+                        className={classes.root}
                       >
-                        {row[0].workflow_id || row[1].workflow_id}
-                      </TableCell>
-                      <TableCell align="right">{row[0].job_id}</TableCell>
-                      <TableCell align="right">
-                        {formatedTime(row[0] && row[0].time)}
-                      </TableCell>
-                      <TableCell align="right">
-                        {formatedTime(row[1] && row[1].time)}
-                      </TableCell>
-                      {/* <TableCell align="right">
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              'aria-labelledby': labelId,
+                            }}
+                            onClick={(event) =>
+                              handleClick(event, row[0].job_id)
+                            }
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <IconButton
+                            aria-label="expand row"
+                            size="small"
+                            onClick={() => setOpenRow(row[0].job_id)}
+                          >
+                            {open && expandRow === row[0].job_id ? (
+                              <KeyboardArrowUpIcon />
+                            ) : (
+                              <KeyboardArrowDownIcon />
+                            )}
+                          </IconButton>
+                        </TableCell>
+                        <TableCell
+                          // component="th"
+                          id={labelId}
+                          align="left"
+                          // scope="row"
+                          // padding="none"
+                        >
+                          {/* || row[1].workflow_id */}
+                          {row[1].workflow_id}
+                        </TableCell>
+                        <TableCell align="right">{row[0].job_id}</TableCell>
+                        <TableCell align="right">
+                          {formatedTime(row[0] && row[0].time)}
+                        </TableCell>
+                        <TableCell align="right">
+                          {formatedTime(row[1] && row[1].time)}
+                        </TableCell>
+                        {/* <TableCell align="right">
                         {formatedTime(
                           new Date(
                             row[1].time.getTime() - row[0].time.getTime()
                           )
                         )}
                       </TableCell> */}
-                      <TableCell align="right">{row[0].process_id}</TableCell>
-                      <TableCell align="right">{row[0].user_name}</TableCell>
-                      <TableCell align="right">{row[0].host_name}</TableCell>
-                      {/* <TableCell align="right">{row[0].input_uris}</TableCell>
+                        <TableCell align="right">{row[0].process_id}</TableCell>
+                        <TableCell align="right">{row[0].user_name}</TableCell>
+                        <TableCell align="right">{row[0].host_name}</TableCell>
+                        {/* <TableCell align="right">{row[0].input_uris}</TableCell>
                       <TableCell align="right">{row[0].output_uris}</TableCell> */}
-                    </TableRow>
+                      </TableRow>
+                      <TableRow className={classes.root}>
+                        <TableCell
+                          style={{ paddingBottom: 0, paddingTop: 0 }}
+                          colSpan={8}
+                        >
+                          <Collapse
+                            in={open && expandRow === row[0].job_id}
+                            timeout="auto"
+                            unmountOnExit
+                            style={{
+                              backgroundColor: 'white',
+                              borderRadius: '15px',
+                              border: '2px solid white',
+                            }}
+                          >
+                            <Box margin={1}>
+                              <Typography
+                                variant="h6"
+                                gutterBottom
+                                component="div"
+                              >
+                                Execution Events
+                              </Typography>
+                              <Table size="small" aria-label="purchases">
+                                <TableHead>
+                                  <TableRow>
+                                    <TableCell>Time</TableCell>
+                                    <TableCell>progress</TableCell>
+                                    <TableCell>outputs</TableCell>
+                                    <TableCell>inputs</TableCell>
+                                    <TableCell>type</TableCell>
+                                    <TableCell>error</TableCell>
+                                    <TableCell>error_traceback</TableCell>
+                                    <TableCell>error_message</TableCell>
+                                    <TableCell>node_id</TableCell>
+                                    <TableCell>task_id</TableCell>
+                                    <TableCell>task_uri</TableCell>
+                                    {/* <TableCell>id</TableCell> */}
+                                  </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                  {eventsForWorflow.map((ev) => (
+                                    <TableRow
+                                      key={ev.time}
+                                      style={{
+                                        borderRadius: '15px',
+                                        border: ev.error ? '2px solid red' : '',
+                                        backgroundColor: ev.error
+                                          ? 'rgb(227, 229, 244)'
+                                          : '',
+                                      }}
+                                    >
+                                      <TableCell component="th" scope="row">
+                                        {ev.time}
+                                      </TableCell>
+                                      <TableCell>{ev.progress}</TableCell>
+                                      <TableCell align="right">
+                                        {ev.output_uris}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {ev.input_uris}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {ev.type}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {ev.error && ev.error.toString()}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {ev.error_traceback}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {ev.error_message}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {ev.node_id}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {ev.task_id}
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        {ev.task_uri}
+                                      </TableCell>
+                                      {/* <TableCell align="right">
+                                        {ev.id}
+                                      </TableCell> */}
+                                    </TableRow>
+                                  ))}
+                                </TableBody>
+                              </Table>
+                            </Box>
+                          </Collapse>
+                        </TableCell>
+                      </TableRow>
+                    </React.Fragment>
                   );
                 })}
               {emptyRows > 0 && (
@@ -467,6 +637,26 @@ export default function EnhancedTable() {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
+      <IconButton color="inherit">
+        <Typography
+          component="h1"
+          variant="h5"
+          color="primary"
+          style={{ padding: '5px', alignSelf: 'right' }}
+        >
+          <Link to="/edit-workflows">Edit Workflows</Link>
+        </Typography>
+
+        <Fab
+          // className={classes.openFileButton}
+          color="primary"
+          size="small"
+          component="span"
+          aria-label="add"
+        >
+          <ArrowForwardIosIcon />
+        </Fab>
+      </IconButton>
     </Box>
   );
 }

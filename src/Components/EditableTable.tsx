@@ -1,3 +1,8 @@
+/* eslint-disable sonarjs/cognitive-complexity */
+/*
+  The table that is used to pass parameters for default-values, conditions and data-mapping.
+  Its cells can change depending on the kind of input and the parent-component params.
+*/
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -9,10 +14,11 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import DoneIcon from '@material-ui/icons/DoneAllTwoTone';
-import RevertIcon from '@material-ui/icons/NotInterestedOutlined';
 import { FormControl, MenuItem, Select } from '@material-ui/core';
 import CustomTableCell from './CustomTableCell';
 import DraggableDialog from './DraggableDialog';
+import DeleteIcon from '@material-ui/icons/Delete';
+import state from '../store/state';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -24,7 +30,7 @@ const useStyles = makeStyles(() => ({
   table: {
     padding: '1px',
     minWidth: 160,
-    maxWidth: 270,
+    // maxWidth: 270,
     wordBreak: 'break-all',
   },
   selectTableCell: {
@@ -61,6 +67,7 @@ function EditableTable(props) {
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const [dialogContent, setDialogContent] = React.useState({});
   const [disableSelectType, setDisableSelectType] = React.useState(false);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
   const { defaultValues } = props;
   const { headers } = props;
@@ -94,7 +101,7 @@ function EditableTable(props) {
           })
         : []
     );
-    setDisableSelectType(false);
+    setDisableSelectType(true);
   }, [defaultValues]);
 
   const classes = useStyles();
@@ -110,12 +117,7 @@ function EditableTable(props) {
     });
   };
 
-  const onToggleEditMode = (id, index, command) => {
-    // console.log(props, id, rows, props.defaultValues, command, typeOfInputs);
-    if (command === 'edit') {
-      setDisableSelectType(true);
-      // console.log('disable');
-    }
+  function onToggleEditMode(id, index, command) {
     if (command === 'edit' && ['list', 'dict'].includes(typeOfInputs[index])) {
       let initialValue: string | [] | {} = '';
 
@@ -143,26 +145,48 @@ function EditableTable(props) {
         callbackProps: { rows, id },
       });
     }
-    setRows(() => {
-      return rows.map((row) => {
-        if (row.id === id) {
-          return {
-            ...row,
-            id: row.name.replace(' ', '_'),
-            // value: row.value,
-            isEditMode: !row.isEditMode,
-          };
-        }
-        return row;
+
+    const oldRows = [...rows].filter((row, inde) => index !== inde);
+
+    if (
+      rows[index].name !== '' &&
+      oldRows.map((oldro) => oldro.name).includes(rows[index].name)
+    ) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Not allowed to assign the same property TWICE!',
+        severity: 'error',
       });
-    });
+      // setRows(oldRows);
+    } else {
+      setRows(() => {
+        return rows.map((row) => {
+          if (row.id === id) {
+            return {
+              ...row,
+              id: row.name.replace(' ', '_') || '',
+              // value: row.value,
+              isEditMode: !row.isEditMode,
+            };
+          }
+          return row;
+        });
+      });
+      if (command === 'done') {
+        // console.log(rows);
+        props.valuesChanged(rows);
+        setRows(rows);
+      }
+    }
     if (command === 'done') {
       setDisableSelectType(true);
-      props.valuesChanged(rows);
+    } else {
+      setDisableSelectType(false);
     }
-  };
+  }
 
   const onChange = (e, row, index) => {
+    // console.log(e, e.target.value, e.target.name, row, index);
     if (
       ['string', 'bool', 'number', 'boolean', 'null'].includes(typeOfInputs[0])
     ) {
@@ -203,7 +227,17 @@ function EditableTable(props) {
     }
   };
 
-  const onRevert = (id) => {
+  // const onRevert = (id) => {
+  //   const newRows = rows.filter((row) => {
+  //     return row.id !== id;
+  //   });
+
+  //   setRows(newRows);
+  //   props.valuesChanged(newRows);
+  //   setDisableSelectType(false);
+  // };
+
+  const onDelete = (id) => {
     const newRows = rows.filter((row) => {
       return row.id !== id;
     });
@@ -223,11 +257,19 @@ function EditableTable(props) {
         return rowe;
       });
       setRows(newRows);
-      props.valuesChanged(newRows);
+      // props.valuesChanged(newRows);
     }
     const tOfI = [...typeOfInputs];
     tOfI[index] = e.target.value;
     setTypeOfInputs(tOfI);
+    if (['dict', 'list'].includes(e.target.value)) {
+      showEditableDialog({
+        name: row.id,
+        title: e.target.value === 'list' ? 'Edit list' : 'Edit dict',
+        graph: e.target.value === 'list' ? [] : {},
+        callbackProps: { rows, id: row.id },
+      });
+    }
   };
 
   const setRowValue = (name, val, callbackProps) => {
@@ -254,6 +296,11 @@ function EditableTable(props) {
       <Table className={classes.table} aria-label="editable table">
         <TableHead>
           <TableRow>
+            {headers[0] !== 'Source' && (
+              <TableCell align="left" className={classes.tableCell}>
+                Type
+              </TableCell>
+            )}
             <TableCell align="left" className={classes.tableCell}>
               <b>{headers[0]}</b>
             </TableCell>
@@ -265,12 +312,13 @@ function EditableTable(props) {
         <TableBody>
           {rows.map((row, index) => (
             <React.Fragment key={row.id}>
-              {headers[0] !== 'Source' && headers[1] !== 'Node_Id' && (
-                <TableRow key={`${row.id as string}-type`}>
-                  <TableCell align="left" className={classes.tableCell}>
-                    Type
-                  </TableCell>
-                  <TableCell align="left" className={classes.tableCell}>
+              <TableRow key={row.id}>
+                {headers[0] !== 'Source' && (
+                  <TableCell
+                    align="left"
+                    size="small"
+                    className={classes.tableCell}
+                  >
                     <FormControl disabled={disableSelectType}>
                       <Select
                         // labelId="demo-simple-select-label"
@@ -291,9 +339,7 @@ function EditableTable(props) {
                       </Select>
                     </FormControl>
                   </TableCell>
-                </TableRow>
-              )}
-              <TableRow key={row.id}>
+                )}
                 <CustomTableCell
                   {...{
                     index,
@@ -332,15 +378,15 @@ function EditableTable(props) {
                         aria-label="done"
                         onClick={() => onToggleEditMode(row.id, index, 'done')}
                       >
-                        <DoneIcon />
+                        <DoneIcon fontSize="small" />
                       </IconButton>
-                      <IconButton
+                      {/* <IconButton
                         style={{ padding: '1px' }}
                         aria-label="revert"
                         onClick={() => onRevert(row.id)}
                       >
-                        <RevertIcon />
-                      </IconButton>
+                        <RevertIcon fontSize="small" />
+                      </IconButton> */}
                     </>
                   ) : (
                     <span>
@@ -348,8 +394,16 @@ function EditableTable(props) {
                         style={{ padding: '1px' }}
                         aria-label="edit"
                         onClick={() => onToggleEditMode(row.id, index, 'edit')}
+                        color="primary"
                       >
-                        <EditIcon />
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                      <IconButton
+                        style={{ padding: '1px' }}
+                        onClick={() => onDelete(row.id)}
+                        aria-label="delete"
+                      >
+                        <DeleteIcon fontSize="small" />
                       </IconButton>
                     </span>
                   )}

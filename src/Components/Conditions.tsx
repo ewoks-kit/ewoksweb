@@ -5,15 +5,14 @@ import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import state from '../store/state';
+import SidebarTooltip from './SidebarTooltip';
 
 export default function Conditions(props) {
   const { element } = props;
 
   const [conditions, setConditions] = React.useState<Inputs[]>([]);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const graphRF = state((state) => state.graphRF);
   const setSelectedElement = state((state) => state.setSelectedElement);
-  const [elementL] = React.useState<EwoksRFLink>({} as EwoksRFLink);
 
   useEffect(() => {
     if (element && element.data && element.data.conditions) {
@@ -66,7 +65,13 @@ export default function Conditions(props) {
 
   return (
     <div>
-      <b>Conditions </b>
+      <SidebarTooltip
+        text={`Provides a list of expected values for source outputs.
+          [{"source_output": "result", "value": 10}]`}
+      >
+        <b>Conditions </b>
+      </SidebarTooltip>
+
       <IconButton
         style={{ padding: '1px' }}
         aria-label="Add Condition"
@@ -76,23 +81,24 @@ export default function Conditions(props) {
       </IconButton>
       {conditions && conditions.length > 0 && (
         <EditableTable
-          headers={['Source_output', 'Value']}
+          headers={['Output', 'Value']}
           defaultValues={conditions}
           valuesChanged={conditionsValuesChanged}
           typeOfValues={[
             {
               // TODO: examine if the following type is used anymore
-              type: elementL.source
-                ? ['class'].includes(
-                    graphRF &&
-                      graphRF.nodes[0] &&
-                      graphRF.nodes.find((nod) => {
-                        return nod.id === elementL.source;
-                      }).task_type
-                  )
-                  ? 'select'
-                  : 'input'
-                : 'input',
+              type: 'select',
+              // elementL.source
+              //   ? ['class'].includes(
+              //       graphRF &&
+              //         graphRF.nodes[0] &&
+              //         graphRF.nodes.find((nod) => {
+              //           return nod.id === elementL.source;
+              //         }).task_type
+              //     )
+              //     ? 'select'
+              //     : 'input'
+              //   : 'input',
               values: props.element.data.links_input_names || [],
             },
             {

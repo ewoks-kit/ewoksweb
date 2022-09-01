@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import type { DataMapping, EwoksRFNode, Inputs } from '../types';
+import type { DataMapping, EwoksRFNode } from '../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 // import EditIcon from '@material-ui/icons/EditOutlined'; DONT DELETE
@@ -20,6 +20,7 @@ import state from '../store/state';
 import SidebarTooltip from './SidebarTooltip';
 import { OpenInBrowser } from '@material-ui/icons';
 import LabelComment from './LabelComment';
+import DefaultInputs from './DefaultInputs';
 
 const useStyles = DashboardStyle;
 
@@ -37,7 +38,6 @@ export default function NodeDetails(props) {
   const setSelectedElement = state((state) => state.setSelectedElement);
   // const selectedElement = state((state) => state.selectedElement);
   // const [editProps, setEditProps] = React.useState<boolean>(false);
-  const [defaultInputs, setDefaultInputs] = React.useState<Inputs[]>([]);
   const [inputsComplete, setInputsComplete] = React.useState<boolean>(false);
   const [advanced, setAdvanced] = React.useState<boolean>(false);
   const [defaultErrorNode, setDefaultErrorNode] = React.useState<boolean>(
@@ -92,7 +92,6 @@ export default function NodeDetails(props) {
     // setDefaultErrorAttributes(element.default_error_attributes);
     setDataMapping(element.default_error_attributes?.data_mapping);
     setMapAllData(element.default_error_attributes?.map_all_data || false);
-    setDefaultInputs(element.default_inputs ? element.default_inputs : []);
   }, [element.id, element]);
 
   const propChanged = (propKeyValue) => {
@@ -101,38 +100,6 @@ export default function NodeDetails(props) {
       ...element,
       ...propKeyValue,
     });
-  };
-
-  const addDefaultInputs = () => {
-    const el = element as EwoksRFNode;
-    const elIn = el.default_inputs;
-    if (elIn && elIn[elIn.length - 1] && elIn[elIn.length - 1].id === '') {
-      // console.log('should not ADD default');
-    } else {
-      setSelectedElement(
-        {
-          ...element,
-          default_inputs: [...elIn, { id: '', name: '', value: '' }],
-        },
-        'fromSaveElement'
-      );
-    }
-  };
-
-  const defaultInputsChanged = (table) => {
-    setSelectedElement(
-      {
-        ...element,
-        default_inputs: table.map((dval) => {
-          return {
-            id: dval.name,
-            name: dval.name,
-            value: dval.value,
-          };
-        }),
-      },
-      'fromSaveElement'
-    );
   };
 
   const inputsCompleteChanged = (event) => {
@@ -228,33 +195,9 @@ export default function NodeDetails(props) {
           marginBottom: '10px',
         }}
       >
-        <div>
-          <LabelComment element={element} showComment={advanced} />
-          <SidebarTooltip
-            text={`Used to create an input when not provided
-                by the output of other connected nodes(tasks).`}
-          >
-            <div>
-              <b>Default Inputs </b>
-              <IconButton
-                style={{ padding: '1px' }}
-                aria-label="delete"
-                onClick={() => addDefaultInputs()}
-              >
-                <AddCircleOutlineIcon />
-              </IconButton>
-            </div>
-          </SidebarTooltip>
+        <LabelComment element={element} showComment={advanced} />
+        <DefaultInputs element={element} />
 
-          {defaultInputs.length > 0 && (
-            <EditableTable
-              headers={['Name', 'Value']}
-              defaultValues={defaultInputs}
-              valuesChanged={defaultInputsChanged}
-              typeOfValues={[{ type: 'input' }, { type: 'input' }]}
-            />
-          )}
-        </div>
         <hr style={{ color: '#96a5f9' }} />
         <div>
           <b>Advanced</b>
@@ -339,7 +282,10 @@ export default function NodeDetails(props) {
         specific node is based on. If you need to have them create a new Task
         with the appropriete properties and use it.`}
       >
-        <Accordion style={{ display: advanced ? 'block' : 'none' }}>
+        <Accordion
+          style={{ display: advanced ? 'block' : 'none' }}
+          id="Accordions-sidebar"
+        >
           <AccordionSummary
             expandIcon={<OpenInBrowser />}
             aria-controls="panel1a-content"

@@ -1,10 +1,31 @@
 import type { EwoksNode, EwoksRFNode } from '../types';
 
+function cleanDefaultInputs(default_inputs) {
+  return (
+    (default_inputs &&
+      default_inputs.map((dIn) => {
+        return {
+          name: dIn.name,
+          value:
+            dIn.value === 'false'
+              ? false
+              : dIn.value === 'true'
+              ? true
+              : dIn.value === 'null'
+              ? null
+              : dIn.value,
+        };
+      })) ||
+    []
+  );
+}
+
 // EwoksRFNode --> EwoksNode for saving
 export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
   const tempNodes: EwoksRFNode[] = [...nodes].filter(
     (nod) => !['graphInput', 'graphOutput', 'note'].includes(nod.task_type)
   );
+
   return tempNodes.map(
     ({
       id,
@@ -41,21 +62,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           default_error_attributes: default_error_node
             ? default_error_attributes
             : null,
-          default_inputs:
-            default_inputs &&
-            default_inputs.map((dIn) => {
-              return {
-                name: dIn.name,
-                value:
-                  dIn.value === 'false'
-                    ? false
-                    : dIn.value === 'true'
-                    ? true
-                    : dIn.value === 'null'
-                    ? null
-                    : dIn.value,
-              };
-            }),
+          default_inputs: cleanDefaultInputs(default_inputs),
           uiProps: {
             nodeWidth,
             type,
@@ -78,7 +85,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         // type: task_type,
         inputs_complete,
         task_generator: task_generator || null,
-        default_inputs,
+        default_inputs: cleanDefaultInputs(default_inputs),
         default_error_node,
         ddefault_error_attributes: default_error_node
           ? default_error_attributes

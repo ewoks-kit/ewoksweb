@@ -7,14 +7,16 @@ import GetFromServerButtons from './GetFromServerButtons';
 
 const useStyles = DashboardStyle;
 
-export default function GetFromServer() {
+export default function GetFromServer(props) {
   const classes = useStyles();
+  const { workflowIdInAutocomplete } = props;
 
   const [workflowId, setWorkflowId] = React.useState('');
 
   const setInputValue = (workflowDetails) => {
     if (workflowDetails && workflowDetails.id) {
       setWorkflowId(workflowDetails.id || '');
+      workflowIdInAutocomplete(workflowDetails.id || '');
     }
   };
 
@@ -37,7 +39,10 @@ export default function GetFromServer() {
         />
       </FormControl>
 
-      <GetFromServerButtons workflowId={workflowId} />
+      <GetFromServerButtons
+        workflowId={workflowId}
+        showButtons={[true, false]}
+      />
     </>
   );
 }

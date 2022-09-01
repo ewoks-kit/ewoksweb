@@ -19,7 +19,7 @@ export function calcTasksForLink(
   }
 
   if (targetTmp) {
-    sourceTask = calcTask('target', targetTmp, tasks, newNodeSubgraphs);
+    targetTask = calcTask('target', targetTmp, tasks, newNodeSubgraphs);
   }
 
   // if not found app does not break, put an empty skeleton
@@ -30,6 +30,7 @@ export function calcTasksForLink(
     optional_input_names: [],
     required_input_names: [],
   };
+
   return [sourceTask, targetTask];
 }
 

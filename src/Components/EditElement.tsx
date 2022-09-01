@@ -22,11 +22,14 @@ function EditElement(props) {
   };
 
   return (
-    <Accordion expanded={!!expanded} onChange={handleChange}>
+    <Accordion
+      expanded={!!expanded}
+      onChange={handleChange}
+      id="Accordions-sidebar"
+    >
       <AccordionSummary
         expandIcon={<OpenInBrowser />}
         aria-controls="panel1a-content"
-        id="panel1a-header"
       >
         <Typography>
           Edit{' '}
@@ -37,8 +40,8 @@ function EditElement(props) {
             : 'Graph'}
         </Typography>
       </AccordionSummary>
-      <AccordionDetails>
-        <form noValidate autoComplete="off">
+      <AccordionDetails style={{ padding: '0px 0px 0px 10px' }}>
+        <form noValidate autoComplete="off" style={{ width: '100%' }}>
           {'source' in element ? (
             <LinkDetails element={element} />
           ) : 'position' in element ? (

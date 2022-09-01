@@ -119,6 +119,8 @@ const executingEvents = (set, get) => ({
       // ExecutionStepNode with the old number before putting the new node
 
       // If not in execution dont affect the canvas
+      // TODO: if not the specific job_id dont afect the canvas in case of viewing
+      // the same workflow_id but another job while some others are being executed
       if (prevState.inExecutionMode) {
         set((state) => ({
           ...state,
@@ -136,9 +138,7 @@ const executingEvents = (set, get) => ({
               {
                 data: {
                   label: `${tempLabel},${(execEvent.id as unknown) as string}`,
-                  node_id: execEvent.node_id,
-                  type: execEvent.type,
-                  values: { a: 1, b: 2 },
+                  event: execEvent,
                 },
                 id: execEvent.time,
                 task_type: 'executionSteps',

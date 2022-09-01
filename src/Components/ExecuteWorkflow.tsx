@@ -22,9 +22,11 @@ export default function ExecuteWorkflow() {
   const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const undoIndex = state((state) => state.undoIndex);
+  const setSelectedElement = state((state) => state.setSelectedElement);
 
   useEffect(() => {
     socket.on('Executing', (data) => {
+      // console.log(data);
       setExecutedEvents(data as Event);
     });
 
@@ -34,6 +36,7 @@ export default function ExecuteWorkflow() {
   }, [setExecutedEvents]);
 
   const checkAndExecute = () => {
+    // console.log(canvasGraphChanged, undoIndex);
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
     } else {
@@ -63,6 +66,9 @@ export default function ExecuteWorkflow() {
       }
     } else if (inExecutionMode) {
       setInExecutionMode(false);
+      // DOC: when exiting the execution to show the graph as selected
+      // and not a numbered execution node that the user might have clicked
+      setSelectedElement(graphRF.graph);
       // socket.disconnect();
     } else {
       setOpenSnackbar({

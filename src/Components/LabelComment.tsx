@@ -1,10 +1,16 @@
 import React, { useEffect } from 'react';
 
 import type { EwoksRFLink } from '../types';
-import { Box, Button, TextField } from '@material-ui/core';
+import {
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 import SidebarTooltip from './SidebarTooltip';
+import { Autocomplete } from '@material-ui/lab';
 
 const useStyles = DashboardStyle;
 
@@ -16,6 +22,10 @@ export default function LabelComment(props) {
 
   const [comment, setComment] = React.useState('');
   const [label, setLabel] = React.useState('');
+  const [labelChoices, setLabelChoices] = React.useState([
+    'use mappings',
+    'use conditions',
+  ]);
   const setSelectedElement = state((state) => state.setSelectedElement);
 
   useEffect(() => {
@@ -23,51 +33,32 @@ export default function LabelComment(props) {
       setLabel(element.data.label);
       setComment(element.data.comment);
     } else if ('source' in element) {
-      setLabel(element.label);
-      setComment(element.data && element.data.comment);
+      const el = element as EwoksRFLink;
+      setLabel(el.label);
+      setComment(el.data && el.data.comment);
+
+      const mappings =
+        el.data.data_mapping.length > 0
+          ? el.data.data_mapping
+              .map((con) => `${con.source_output}->${con.target_input}`)
+              .join(', ')
+          : '';
+      const conditions =
+        el.data.conditions.length > 0
+          ? el.data.conditions
+              .map(
+                (con) => `${con.source_output}: ${JSON.stringify(con.value)}`
+              )
+              .join(', ')
+          : '';
+
+      setLabelChoices([mappings, conditions, '...']);
     }
   }, [element]);
 
-  const useConditions = () => {
-    const el = element as EwoksRFLink;
-    const newLabel =
-      el.data.conditions.length > 0
-        ? el.data.conditions
-            // .map((con) => con.source_output + ': ' + JSON.stringify(con.value))
-            .map((con) => `${con.source_output}: ${JSON.stringify(con.value)}`)
-            .join(', ')
-        : '';
-    setLabel(newLabel);
-    setSelectedElement(
-      {
-        ...element,
-        label: newLabel,
-      },
-      'fromSaveElement'
-    );
-  };
-
-  const useMapping = () => {
-    const el = element as EwoksRFLink;
-    const newLabel =
-      el.data.data_mapping.length > 0
-        ? el.data.data_mapping
-            .map((con) => `${con.source_output}->${con.target_input}`)
-            .join(', ')
-        : '';
-    setLabel(newLabel);
-    setSelectedElement(
-      {
-        ...element,
-        label: newLabel,
-      },
-      'fromSaveElement'
-    );
-  };
-
   const labelChanged = (event) => {
-    // console.log('label changed:', event.target.value);
     setLabel(event.target.value);
+
     if ('position' in element) {
       const el = element;
       setSelectedElement(
@@ -105,44 +96,81 @@ export default function LabelComment(props) {
   return (
     <>
       <div className={classes.detailsLabels}>
-        <Box>
-          {Object.keys(element).includes('source') && (
-            <SidebarTooltip text="Use Conditions or Data Mapping as label.">
-              <span>
-                <Button
-                  style={{ margin: '0px 8px 14px 18px' }}
-                  variant="outlined"
-                  color="primary"
-                  onClick={useConditions}
-                  size="small"
-                >
-                  conditions
-                </Button>
-                <Button
-                  style={{ margin: '0px 8px 14px 8px' }}
-                  variant="outlined"
-                  color="primary"
-                  onClick={useMapping}
-                  size="small"
-                >
-                  mapping
-                </Button>
-              </span>
-            </SidebarTooltip>
-          )}
-          <TextField
-            id="outlined-basic"
-            label="Label"
+        {Object.keys(element).includes('source') ? (
+          <SidebarTooltip text="Use Conditions or Data Mapping as label.">
+            <FormControl
+              fullWidth
+              variant="outlined"
+              className={classes.detailsLabels}
+            >
+              <Autocomplete
+                id="free-solo-demo"
+                freeSolo
+                options={labelChoices}
+                value={label}
+                onChange={(event, newValue: string | null) => {
+                  setSelectedElement(
+                    {
+                      ...element,
+                      label: newValue,
+                    },
+                    'fromSaveElement'
+                  );
+                }}
+                onInputChange={(event, newInputValue) => {
+                  setSelectedElement(
+                    {
+                      ...element,
+                      label: newInputValue,
+                    },
+                    'fromSaveElement'
+                  );
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Label"
+                    margin="normal"
+                    variant="outlined"
+                    multiline
+                  />
+                )}
+              />
+            </FormControl>
+          </SidebarTooltip>
+        ) : (
+          <FormControl
+            fullWidth
             variant="outlined"
-            value={label || ''}
-            onChange={labelChanged}
-            multiline
-          />
-        </Box>
+            className={classes.detailsLabels}
+          >
+            <TextField
+              id="outlined-basic"
+              label="Label"
+              variant="outlined"
+              value={label || ''}
+              onChange={labelChanged}
+              multiline
+            />
+          </FormControl>
+        )}
       </div>
       <div style={{ display: showComment ? 'block' : 'none' }}>
-        <Box>
-          <TextField
+        <FormControl
+          fullWidth
+          variant="outlined"
+          className={classes.detailsLabels}
+        >
+          <InputLabel htmlFor="outlined-comment">Comment</InputLabel>
+          <OutlinedInput
+            id="outlined-comment"
+            value={comment || ''}
+            onChange={commentChanged}
+            labelWidth={60}
+            multiline
+          />
+        </FormControl>
+        {/* <TextField
             id="outlined-basic"
             label="Comment"
             variant="outlined"
@@ -150,7 +178,7 @@ export default function LabelComment(props) {
             onChange={commentChanged}
             multiline
           />
-        </Box>
+        </Box> */}
       </div>
     </>
   );

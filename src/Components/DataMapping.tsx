@@ -5,10 +5,11 @@ import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import state from '../store/state';
+import SidebarTooltip from './SidebarTooltip';
 
 export default function DataMappingComponent(props) {
   const { element } = props;
-  // console.log(props);
+
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const setSelectedElement = state((state) => state.setSelectedElement);
   const [dataMapping, setDataMapping] = React.useState<DataMapping[]>([]);
@@ -19,6 +20,7 @@ export default function DataMappingComponent(props) {
 
   useEffect(() => {
     setElementL(element);
+
     if (element.data && element.data.data_mapping) {
       setDataMapping(element.data.data_mapping);
     }
@@ -72,7 +74,13 @@ export default function DataMappingComponent(props) {
 
   return (
     <div>
-      <b>Data Mapping </b>
+      <SidebarTooltip
+        text={`Describes the data transfer from source output to
+          target input arguments.`}
+      >
+        <b>Data Mapping </b>
+      </SidebarTooltip>
+
       <IconButton
         style={{ padding: '1px' }}
         aria-label="dataMapping"

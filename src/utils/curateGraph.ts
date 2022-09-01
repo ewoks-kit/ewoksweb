@@ -7,6 +7,7 @@ function curateGraph(graphRF): GraphRF {
 
   for (const nod of graphRFCurrated.nodes) {
     // INFO: Remove empty lines in table for nodes and links
+    // TODO: removes only the last not all empty...
     if (
       nod.default_inputs &&
       nod.default_inputs.length > 0 &&
@@ -41,6 +42,7 @@ function curateGraph(graphRF): GraphRF {
       lin.data.data_mapping.pop();
     }
   }
+
   return graphRFCurrated;
 }
 

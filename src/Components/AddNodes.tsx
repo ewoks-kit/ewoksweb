@@ -177,11 +177,15 @@ function AddNodes(props) {
   };
 
   return (
-    <Accordion expanded={expanded} onChange={handleChange}>
+    <Accordion
+      expanded={expanded}
+      onChange={handleChange}
+      id="Accordions-sidebar"
+      // style={{ marginLeft: '5px', borderRadius: '15px 0px 0px 15px' }}
+    >
       <AccordionSummary
         expandIcon={<OpenInBrowser />}
         aria-controls="panel1a-content"
-        id="panel1a-header"
       >
         <SidebarTooltip
           text={`Drag and drop Tasks from their categories
@@ -192,11 +196,10 @@ function AddNodes(props) {
       </AccordionSummary>
       <AccordionDetails style={{ flexWrap: 'wrap' }}>
         {taskCategories.map((categoryName) => (
-          <Accordion key={categoryName}>
+          <Accordion key={categoryName} id="add-nodes-accordion">
             <AccordionSummary
               expandIcon={<OpenInBrowser />}
               aria-controls="panel1a-content"
-              id="panel1a-header"
             >
               <Typography>{categoryName}</Typography>
             </AccordionSummary>

@@ -35,7 +35,9 @@
     "react-error-boundary": "^3.1.4",
     "react-flow-renderer": "^10.1.0",
     "react-json-view": "latest",
+    "react-reflex": "^4.0.9",
     "react-rnd": "^10.3.4",
+    "react-router-dom": "^6.3.0",
     "react-use": "^17.3.1",
     "socket.io-client": "^4.4.1",
     "zustand": "^3.5.10"
