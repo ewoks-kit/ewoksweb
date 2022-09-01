@@ -344,7 +344,7 @@ export default function EnhancedTable() {
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    console.log(event, name);
+    // console.log(event, name);
     const selectedIndex = selected.indexOf(name);
     let newSelected: readonly string[] = [];
 
@@ -408,6 +408,7 @@ export default function EnhancedTable() {
         console.log('no response data');
       }
     } catch (error) {
+      /* eslint-disable no-console */
       console.log(error);
     }
   }

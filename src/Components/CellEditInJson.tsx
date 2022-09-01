@@ -2,7 +2,7 @@ import ReactJson from 'react-json-view';
 
 export default function CellEditInJson(propsIn) {
   const { props } = propsIn;
-  const { row, name, type, onChange } = props;
+  const { row, name, type } = props;
 
   const onChangeL = (edit, row) => {
     /* eslint-disable no-console */
