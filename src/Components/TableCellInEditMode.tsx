@@ -1,3 +1,7 @@
+/*
+  The cell within a table when the row is in edit mode.
+  Provides different input for any selected type (number, string, list etc)
+*/
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
@@ -8,7 +12,8 @@ import {
   RadioGroup,
   TextField,
 } from '@material-ui/core';
-import CellEditInJson from './CellEditInJson';
+// Keep the following if edit on the table is needed
+// import CellEditInJson from './CellEditInJson';
 import { Autocomplete } from '@material-ui/lab';
 
 const useStyles = makeStyles(() => ({
@@ -28,7 +33,7 @@ function TableCellInEditMode(propsIn) {
   const { props } = propsIn;
   const { index, row, name, onChange, type, typeOfValues } = props;
   const classes = useStyles();
-  console.log(index, row, name, onChange, type, typeOfValues);
+  // console.log(index, row, name, onChange, type, typeOfValues);
 
   const [boolVal, setBoolVal] = React.useState(true);
 

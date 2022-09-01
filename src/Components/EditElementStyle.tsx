@@ -15,34 +15,32 @@ export default function EditElementStyle() {
   );
 
   return (
-    <>
-      {('position' in selectedElement || 'source' in selectedElement) && (
-        <Accordion id="Accordions-sidebar">
-          <AccordionSummary
-            expandIcon={<OpenInBrowser />}
-            aria-controls="panel1a-content"
-          >
-            <Typography>
-              Styling{' '}
-              {'position' in selectedElement
-                ? 'Node'
-                : 'source' in selectedElement
-                ? 'Link'
-                : 'Graph'}
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <form noValidate autoComplete="off">
-              {'position' in selectedElement && (
-                <EditNodeStyle element={selectedElement} />
-              )}
-              {'source' in selectedElement && (
-                <EditLinkStyle element={selectedElement} />
-              )}
-            </form>
-          </AccordionDetails>
-        </Accordion>
-      )}
-    </>
+    ('position' in selectedElement || 'source' in selectedElement) && (
+      <Accordion id="Accordions-sidebar">
+        <AccordionSummary
+          expandIcon={<OpenInBrowser />}
+          aria-controls="panel1a-content"
+        >
+          <Typography>
+            Styling{' '}
+            {'position' in selectedElement
+              ? 'Node'
+              : 'source' in selectedElement
+              ? 'Link'
+              : 'Graph'}
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <form noValidate autoComplete="off">
+            {'position' in selectedElement && (
+              <EditNodeStyle element={selectedElement} />
+            )}
+            {'source' in selectedElement && (
+              <EditLinkStyle element={selectedElement} />
+            )}
+          </form>
+        </AccordionDetails>
+      </Accordion>
+    )
   );
 }

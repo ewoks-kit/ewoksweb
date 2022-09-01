@@ -1,9 +1,13 @@
+/*
+A kind of node to appear on the canvas carrying the number of the
+step that has been executed.
+*/
 import { style } from './NodeStyle';
 
 import state from '../store/state';
 
 function ExecutionStepsNode(args) {
-  console.log(args);
+  // console.log(args);
   const customTitle = {
     ...style.title,
     wordWrap: 'break-word',

@@ -1,4 +1,8 @@
 /* eslint-disable sonarjs/cognitive-complexity */
+/*
+  The table that is used to pass parameters for default-values, conditions and data-mapping.
+  Its cells can change depending on the kind of input and the parent-component params.
+*/
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -169,7 +173,7 @@ function EditableTable(props) {
         });
       });
       if (command === 'done') {
-        console.log(rows);
+        // console.log(rows);
         props.valuesChanged(rows);
         setRows(rows);
       }
