@@ -185,6 +185,7 @@ export default function Dashboard() {
         <AppBar
           position="absolute"
           className={clsx(classes.appBar, classes.appBarShift)}
+          style={{ height: '5%' }}
         >
           <Toolbar className={classes.toolbar}>
             <SubgraphsStack />
@@ -343,7 +344,7 @@ export default function Dashboard() {
           }}
         >
           {/* <ChevronLeftIcon /> */}
-          <hr />
+          {/* <hr /> */}
         </ReflexSplitter>
 
         <ReflexElement className="right-pane">
