@@ -5,7 +5,7 @@ const drawerWidth = 290;
 const DashboardStyle = makeStyles((theme) => ({
   verticalRule: {
     borderLeft: '1px solid #7685dd',
-    height: '6vh', // '50px',
+    height: '84%', // '50px',
     color: 'wight',
   },
   openFileButton: {
