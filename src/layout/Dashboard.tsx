@@ -185,7 +185,7 @@ export default function Dashboard() {
         <AppBar
           position="absolute"
           className={clsx(classes.appBar, classes.appBarShift)}
-          style={{ height: '5%' }}
+          style={{ height: '5%', minHeight: '64px' }}
         >
           <Toolbar className={classes.toolbar}>
             <SubgraphsStack />
@@ -333,7 +333,7 @@ export default function Dashboard() {
             display: 'flex',
             alignItems: 'center',
             width: '0.325rem',
-            height: '970px',
+            height: '100vh',
             backgroundColor: 'rgb(233, 235, 247)',
             borderRight: 'none !important',
             borderLeftColor: '#eee !important',
