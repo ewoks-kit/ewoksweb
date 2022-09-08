@@ -82,7 +82,7 @@ pages:
   extends: .base
   before_script:
     - apt-get update
-    - apt-get install -y nodejs npm
+    - apt-get upgrade
   script:
     - npm install
     - npm run build
