@@ -81,8 +81,8 @@ pages:
   stage: deploy
   extends: .base
   before_script:
-    - apt-get update
-    - apt-get upgrade
+    - apt-get update -y
+    - apt-get upgrade -y
   script:
     - npm install
     - npm run build
