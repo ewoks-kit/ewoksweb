@@ -9,7 +9,7 @@ npm-debug.log*
 # Distribution / packaging
 /build/
 /pybuild/
-/pysrc/ewoksserver/static/
+/pysrc/ewoksweb/static/
 /dist/
 *.egg-info/
 .eggs/
