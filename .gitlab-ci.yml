@@ -6,7 +6,7 @@ stages:
 ### Jobs templates ###
 
 .base:
-  image: "docker-registry.esrf.fr/dau/ewoks:node_12"
+  image: "docker-registry.esrf.fr/dau/ewoks:python_3.9_node_12"
   tags:
     - linux
   only:
@@ -42,7 +42,7 @@ flake8:
   script:
     - flake8
 
-.black: # needs upgrade python 3.5 to 3.8
+black:
   extends: .style
   before_script:
     - python3 -m pip install black
