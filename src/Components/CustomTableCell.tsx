@@ -2,36 +2,32 @@ import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 
 import TableCellInEditMode from './TableCellInEditMode';
+import type { CustomTableCellProps } from '../types';
 
-function CustomTableCell({ index, row, name, onChange, type, typeOfValues }) {
+// Used as an app-wide dialog when confirmation is needed. Open is a prop
+function CustomTableCell(props: CustomTableCellProps) {
+  const { index, row, name, type, typeOfValues } = props;
   const useStyles = makeStyles(() => ({
     tableCell: {
       width: name === 'value' ? '50%' : '30%',
       height: 20,
       padding: '1px',
     },
-    input: {
-      width: 90,
-      height: 20,
-      padding: '1px',
-    },
   }));
   const classes = useStyles();
   const { isEditMode } = row;
-  // console.log(index, row, name, type, typeOfValues);
+  console.log(index, row, name, type, typeOfValues);
 
   return (
     <TableCell align="left" className={classes.tableCell}>
       {/* In edit mode the type comes from sidebar in data-mapping and
       from the selected type here for conditions and default-values */}
       {isEditMode ? (
-        <TableCellInEditMode
-          props={{ index, row, name, onChange, type, typeOfValues }}
-        />
-      ) : typeof row[name] === 'object' ? (
+        <TableCellInEditMode props={props} />
+      ) : row[name] && typeof row[name] === 'object' ? (
         JSON.stringify(row[name])
       ) : (
-        row[name].toString()
+        (row[name] && row[name].toString()) || ''
       )}
     </TableCell>
   );

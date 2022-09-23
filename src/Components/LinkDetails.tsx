@@ -28,6 +28,7 @@ export default function LinkDetails(props) {
   const [advanced, setAdvanced] = React.useState<boolean>(false);
 
   useEffect(() => {
+    console.log(element);
     setElementL(element);
     setMapAllData(!!element.data.map_all_data || false);
     setOnError(!!element.data.on_error || false);

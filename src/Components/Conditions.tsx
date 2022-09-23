@@ -1,13 +1,17 @@
 import React, { useEffect } from 'react';
 
-import type { EwoksRFLink, Inputs } from '../types';
+import type { EditableTableRow, EwoksRFLink, Inputs } from '../types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import state from '../store/state';
 import SidebarTooltip from './SidebarTooltip';
 
-export default function Conditions(props) {
+interface ConditionsProps {
+  element: EwoksRFLink;
+}
+// DOC: The conditions for a link are being set in this component
+export default function Conditions(props: ConditionsProps) {
   const { element } = props;
 
   const [conditions, setConditions] = React.useState<Inputs[]>([]);
@@ -21,7 +25,7 @@ export default function Conditions(props) {
   }, [element]);
 
   const addConditions = () => {
-    const el = element as EwoksRFLink;
+    const el = element;
     const elCon = el.data.conditions;
     // check if an empty line already exists
     if (elCon && elCon[elCon.length - 1] && elCon[elCon.length - 1].id === '') {
@@ -45,7 +49,7 @@ export default function Conditions(props) {
     }
   };
 
-  const conditionsValuesChanged = (table) => {
+  const conditionsValuesChanged = (table: EditableTableRow[]) => {
     setSelectedElement(
       {
         ...element,
@@ -99,7 +103,7 @@ export default function Conditions(props) {
               //     ? 'select'
               //     : 'input'
               //   : 'input',
-              values: props.element.data.links_input_names || [],
+              values: element.data.links_input_names || [],
             },
             {
               type: 'input',

@@ -7,7 +7,11 @@ import EditableTable from './EditableTable';
 import state from '../store/state';
 import SidebarTooltip from './SidebarTooltip';
 
-export default function DataMappingComponent(props) {
+interface DataMappingProps {
+  element: EwoksRFLink;
+}
+
+export default function DataMappingComponent(props: DataMappingProps) {
   const { element } = props;
 
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
@@ -27,7 +31,8 @@ export default function DataMappingComponent(props) {
   }, [element.id, element]);
 
   const addDataMapping = () => {
-    const el = element as EwoksRFLink;
+    const el = element;
+    console.log(element);
     const elMap = el.data.data_mapping;
     // console.log(el, elMap, dataMapping);
     if (elMap && elMap[elMap.length - 1] && elMap[elMap.length - 1].id === '') {
@@ -59,7 +64,7 @@ export default function DataMappingComponent(props) {
     });
     setSelectedElement(
       {
-        ...(element as EwoksRFLink),
+        ...element,
         data: {
           ...element.data,
           data_mapping: dmap,

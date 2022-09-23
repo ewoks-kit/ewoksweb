@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react/no-unused-prop-types */
+import React, { ReactNode } from 'react';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
@@ -21,7 +22,14 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function ExecuteSpinner(props) {
+interface ExecuteSpinnerProps {
+  getting: boolean;
+  children: ReactNode;
+  tooltip?: string;
+  action?(): void;
+}
+
+export default function ExecuteSpinner(props: ExecuteSpinnerProps) {
   const [loading, setLoading] = React.useState(false);
   const [success] = React.useState(false);
   // const inExecutionMode = state((state) => state.inExecutionMode);

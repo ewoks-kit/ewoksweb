@@ -419,6 +419,23 @@ export interface EwoksRFNode {
   uiProps?: UiPropsNodes;
 }
 
+export interface EditableTableRow {
+  id: number;
+  name: string;
+  value: never; // string | number | null | undefined,
+  isEditMode: boolean;
+  type: string;
+}
+
+export interface CustomTableCellProps {
+  index: number;
+  row: EditableTableRow;
+  name: string;
+  type: string;
+  typeOfValues: string[];
+  onChange(e: never, row: EditableTableRow, index: number): void;
+}
+
 export interface EwoksRFLink {
   id?: string;
   source: string;
@@ -436,6 +453,9 @@ export interface EwoksRFLink {
     sub_source?: string;
     colorLine?: string;
     getAroundProps?: { x?: number; y?: number };
+    links_input_names?: string[];
+    links_required_output_names?: string[];
+    links_optional_output_names?: string[];
   };
   labelStyle;
   labelBgStyle;

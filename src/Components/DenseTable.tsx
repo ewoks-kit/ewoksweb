@@ -19,18 +19,9 @@ const useStyles = makeStyles(() => ({
     minWidth: 160,
     maxWidth: 270,
   },
-  selectTableCell: {
-    width: 28,
-    padding: '1px',
-  },
   tableCell: {
     // padding: '1px',
     width: 120,
-    height: 20,
-    padding: '1px',
-  },
-  input: {
-    width: 90,
     height: 20,
     padding: '1px',
   },

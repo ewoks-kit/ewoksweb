@@ -1,8 +1,15 @@
 import ReactJson from 'react-json-view';
 
-export default function CellEditInJson(propsIn) {
-  const { props } = propsIn;
-  const { row, name, type } = props;
+// TODO if needed
+// interface CellEditInJson {
+//   row,
+//   name,
+//   type
+// }
+
+export default function CellEditInJson({ row, name, type }) {
+  // const { props } = propsIn;
+  // const { row, name, type } = props;
 
   const onChangeL = (edit, row) => {
     /* eslint-disable no-console */

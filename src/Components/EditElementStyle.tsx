@@ -9,6 +9,7 @@ import EditNodeStyle from './EditNodeStyle';
 import EditLinkStyle from './EditLinkStyle';
 import state from '../store/state';
 
+// DOC: For eiting the style of nodes and links
 export default function EditElementStyle() {
   const selectedElement = state<EwoksRFNode | EwoksRFLink>(
     (state) => state.selectedElement

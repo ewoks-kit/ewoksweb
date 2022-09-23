@@ -6,8 +6,16 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-export default function ConfirmDialog(props) {
-  const { open, title, content, agreeCallback, disagreeCallback } = props;
+interface ConfirmDialogProps {
+  open: boolean;
+  title: string;
+  content: string;
+  agreeCallback(isSubgraph?: string): Promise<void> | void;
+  disagreeCallback(): void;
+}
+// Used as an app-wide dialog when confirmation is needed. Open is a prop
+export default function ConfirmDialog(props: ConfirmDialogProps) {
+  const { open, title, content } = props;
 
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -17,12 +25,12 @@ export default function ConfirmDialog(props) {
 
   const handleDisagree = () => {
     setIsOpen(false);
-    disagreeCallback();
+    props.disagreeCallback();
   };
 
   const handleAgree = () => {
     setIsOpen(false);
-    agreeCallback();
+    props.agreeCallback();
   };
 
   const handleClose = () => {

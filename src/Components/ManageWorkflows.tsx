@@ -36,7 +36,7 @@ export default function ManageWorkflows() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box>
       <Grid
         container
         spacing={1}

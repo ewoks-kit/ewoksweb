@@ -8,7 +8,14 @@ import type { workflowDescription } from '../types';
 
 import state from '../store/state';
 
-function AutocompleteDrop(props) {
+interface AutocompleteDropProps {
+  placeholder: string;
+  category: string;
+  setInputValue(input: string): void;
+}
+
+// A dropdown that can be an input as well
+function AutocompleteDrop(props: AutocompleteDropProps) {
   const [options, setOptions] = useState([]);
   const [value] = useState(options[0]);
   const [open, setOpen] = useState(false);

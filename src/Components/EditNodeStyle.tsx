@@ -7,7 +7,11 @@ import state from '../store/state';
 
 const useStyles = DashboardStyle;
 
-export default function EditNodeStyle(props) {
+interface EditNodeStyleProps {
+  element: EwoksRFNode;
+}
+// DOC: Edit the node style
+export default function EditNodeStyle(props: EditNodeStyleProps) {
   const classes = useStyles();
   // console.log(props);
   const { element } = props;
@@ -83,7 +87,7 @@ export default function EditNodeStyle(props) {
     setMoreHandles(event.target.checked);
     setSelectedElement(
       {
-        ...(element as EwoksRFNode),
+        ...element,
         data: {
           ...element.data,
           moreHandles: event.target.checked,

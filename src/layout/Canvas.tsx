@@ -12,7 +12,7 @@ import ReactFlow, {
   applyEdgeChanges,
   useUpdateNodeInternals,
 } from 'react-flow-renderer';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import bendingText from '../CustomEdges/BendingTextEdge';
 import multilineText from '../CustomEdges/MultilineTextEdge';
 import getAround from '../CustomEdges/GetAroundEdge';
@@ -25,21 +25,10 @@ import type { GraphRF, EwoksRFNode, EwoksRFLink } from '../types';
 import state from '../store/state';
 import { calcNewId } from '../utils/calcNewId';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {
       flexGrow: 1,
-    },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    hide: {
-      display: 'none',
     },
   })
 );
@@ -60,6 +49,16 @@ const nodeTypes = {
   graphOutput: DataNode,
   class: DataNode,
 };
+
+function trimLabel(label) {
+  console.log(label.length, label.split('.').pop());
+
+  if (label.length <= 20) {
+    return label;
+  }
+
+  return label.split('.').pop();
+}
 
 function Canvas() {
   const classes = useStyles();
@@ -88,7 +87,7 @@ function Canvas() {
 
   // const [stepDetails, setStepDetails] = useState(null);
 
-  const { fitView } = useReactFlow();
+  const { fitView, getZoom, zoomTo } = useReactFlow();
   // TODO: when selecting a node-link selected fires the re-render
   // since graphRF changes. We need to not rerender
   // Accosiated edges titles flicker when selecting a node and then select graph
@@ -108,18 +107,29 @@ function Canvas() {
       }, 400);
     }
 
-    if (prevGraphId !== graphRF.graph.id) {
-      setTimeout(() => {
-        fitView();
-      }, 100);
-    }
-
     if (subgraphsStack[subgraphsStack.length - 1]) {
       setPrevGraphId(subgraphsStack[subgraphsStack.length - 1].id);
+    }
+
+    if (prevGraphId !== graphRF.graph.id) {
+      // Todo: clear setTimeouts
+      const timer = setTimeout(() => {
+        console.log(getZoom(), graphRF.nodes.length);
+        if (graphRF.nodes.length > 0 && graphRF.nodes.length < 6) {
+          console.log('zoom 0.6');
+          zoomTo(0.6);
+        } else if (graphRF.nodes.length > 0) {
+          fitView();
+        }
+      }, 1000);
+      // return () => clearTimeout(timer);
     }
   }, [
     graphRF.graph.id,
     fitView,
+    getZoom,
+    zoomTo,
+    graphRF.nodes.length,
     subgraphsStack,
     prevGraphId,
     selectedElement,
@@ -266,7 +276,8 @@ function Canvas() {
             : task_type === 'note'
             ? calcNewId('Note', graphRF.nodes)
             : calcNewId(task_identifier || 'Node', graphRF.nodes),
-        label: task_identifier,
+        // TODO not dublicate label
+        label: trimLabel(task_identifier),
         task_type,
         task_identifier,
         type: task_type,
@@ -283,7 +294,7 @@ function Canvas() {
         output_names: tempTask.output_names,
         required_input_names: tempTask.required_input_names,
         data: {
-          label: task_identifier,
+          label: trimLabel(task_identifier),
           type: 'internal',
           icon,
           moreHandles: false,

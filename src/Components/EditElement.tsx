@@ -7,8 +7,13 @@ import Typography from '@material-ui/core/Typography';
 import LinkDetails from './LinkDetails';
 import NodeDetails from './NodeDetails';
 import GraphLabelComment from './GraphLabelComment';
+import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../types';
 
-function EditElement(props) {
+interface EditElementProps {
+  element: EwoksRFNode | EwoksRFLink | GraphDetails;
+}
+// DOC: Container for link-node-graph editing details
+function EditElement(props: EditElementProps) {
   const { element } = props;
 
   const [expanded, setExpanded] = React.useState<boolean>(false);
@@ -40,7 +45,7 @@ function EditElement(props) {
             : 'Graph'}
         </Typography>
       </AccordionSummary>
-      <AccordionDetails style={{ padding: '0px 5px 0px 10px' }}>
+      <AccordionDetails style={{ padding: '0px 0px 0px 10px' }}>
         <form noValidate autoComplete="off" style={{ width: '100%' }}>
           {'source' in element ? (
             <LinkDetails element={element} />

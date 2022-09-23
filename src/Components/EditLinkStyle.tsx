@@ -14,7 +14,11 @@ import type { EwoksRFLink } from '../types';
 
 const useStyles = DashboardStyle;
 
-export default function EditLinkStyle(props) {
+interface EditLinkStyleProps {
+  element: EwoksRFLink;
+}
+// DOC: Edit the link style
+export default function EditLinkStyle(props: EditLinkStyleProps) {
   const classes = useStyles();
 
   const { element } = props;
