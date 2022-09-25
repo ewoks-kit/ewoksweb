@@ -420,7 +420,7 @@ export default function EnhancedTable() {
         <hr style={{ color: '#dee3ff' }} />
         <TableContainer
           style={{
-            backgroundColor: 'rgb(227, 229, 244)', // rgb(182, 186, 213)
+            backgroundColor: 'rgb(227, 229, 245)', // rgb(182, 186, 213)
             borderRadius: '10px',
           }}
         >
@@ -443,7 +443,7 @@ export default function EnhancedTable() {
               {stableSort(executedWorkflows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  // console.log(row, index);
+                  console.log(row, index, row.slice(-1)[0].error);
                   const isItemSelected = isSelected(row[0].job_id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -454,10 +454,18 @@ export default function EnhancedTable() {
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        // key={row[0].job_id}
+                        key={row[0].job_id}
                         selected={isItemSelected}
-                        style={{ whiteSpace: 'nowrap' }}
                         className={classes.root}
+                        style={{
+                          whiteSpace: 'nowrap',
+                          borderRadius: '15px',
+                          // TODO border not working
+                          border: row.slice(-1)[0].error ? '2px solid red' : '',
+                          backgroundColor: row.slice(-1)[0].error
+                            ? 'rgb(227, 229, 144)'
+                            : '',
+                        }}
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
