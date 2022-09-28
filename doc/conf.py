@@ -6,11 +6,11 @@ release = "0.1"
 copyright = "2022, ESRF"
 author = "ESRF"
 
-extensions = ["sphinx.ext.autodoc", "sphinx.ext.autosummary"]
+extensions = ["sphinx.ext.autodoc", "sphinx.ext.autosummary", "sphinx.ext.viewcode"]
 templates_path = []
 exclude_patterns = []
 
-html_theme = "alabaster"
+html_theme = "classic"
 html_static_path = []
 
 autosummary_generate = True
