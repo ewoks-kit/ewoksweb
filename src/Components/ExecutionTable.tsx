@@ -206,7 +206,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
+            // align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -393,24 +393,23 @@ export default function EnhancedTable() {
     if (expandRow === job_id) {
       setOpen(!open);
     } else if (expandRow === '' || expandRow !== job_id) {
+      try {
+        const response = await getExecutionEvents({ job_id });
+        if (response.data) {
+          const execJobs = response.data as ExecutedJobsResponse;
+          setEventsForWorflow(execJobs.jobs[0]);
+        } else {
+          /* eslint-disable no-console */
+          console.log('no response data');
+        }
+      } catch (error) {
+        /* eslint-disable no-console */
+        console.log(error);
+      }
       setOpen(true);
     }
 
     setExpandRow(job_id);
-
-    try {
-      const response = await getExecutionEvents({ job_id });
-      if (response.data) {
-        const execJobs = response.data as ExecutedJobsResponse;
-        setEventsForWorflow(execJobs.jobs[0]);
-      } else {
-        /* eslint-disable no-console */
-        console.log('no response data');
-      }
-    } catch (error) {
-      /* eslint-disable no-console */
-      console.log(error);
-    }
   }
 
   return (
@@ -428,6 +427,7 @@ export default function EnhancedTable() {
             aria-labelledby="tableTitle"
             size={dense ? 'small' : 'medium'}
             stickyHeader
+            style={{ borderCollapse: 'collapse' }}
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -461,9 +461,11 @@ export default function EnhancedTable() {
                           whiteSpace: 'nowrap',
                           borderRadius: '15px',
                           // TODO border not working
-                          border: row.slice(-1)[0].error ? '2px solid red' : '',
+                          border: row.slice(-1)[0].error
+                            ? '2px solid #fa7faa'
+                            : '',
                           backgroundColor: row.slice(-1)[0].error
-                            ? 'rgb(227, 229, 144)'
+                            ? 'rgb(189, 193, 221)'
                             : '',
                         }}
                       >
@@ -500,7 +502,7 @@ export default function EnhancedTable() {
                           // padding="none"
                         >
                           {/* || row[1].workflow_id */}
-                          {row[1].workflow_id}
+                          {row[1]?.workflow_id}
                         </TableCell>
                         <TableCell align="right">{row[0].job_id}</TableCell>
                         <TableCell align="right">
@@ -524,7 +526,12 @@ export default function EnhancedTable() {
                       </TableRow>
                       <TableRow className={classes.root}>
                         <TableCell
-                          style={{ paddingBottom: 0, paddingTop: 0 }}
+                          style={{
+                            paddingBottom: 2,
+                            paddingTop: 2,
+                            paddingLeft: 2,
+                            margin: '5px',
+                          }}
                           colSpan={8}
                         >
                           <Collapse
@@ -535,6 +542,7 @@ export default function EnhancedTable() {
                               backgroundColor: 'white',
                               borderRadius: '15px',
                               border: '2px solid white',
+                              margin: '2px',
                             }}
                           >
                             <Box margin={1}>
@@ -591,16 +599,42 @@ export default function EnhancedTable() {
                                         {ev.error && ev.error.toString()}
                                       </TableCell>
                                       <TableCell align="right">
-                                        {ev.error_traceback}
+                                        <Tooltip title={ev.error_traceback}>
+                                          <p>
+                                            {ev.error &&
+                                              `${
+                                                ev.error_traceback?.slice(
+                                                  0,
+                                                  30
+                                                ) as string
+                                              }...`}
+                                          </p>
+                                        </Tooltip>
                                       </TableCell>
                                       <TableCell align="right">
                                         {ev.error_message}
                                       </TableCell>
                                       <TableCell align="right">
-                                        {ev.node_id}
+                                        <Tooltip title={ev.node_id}>
+                                          <p>
+                                            {ev.node_id?.slice(
+                                              (ev.node_id?.lastIndexOf(
+                                                '.'
+                                              ) as number) + 1
+                                            )}
+                                          </p>
+                                        </Tooltip>
                                       </TableCell>
                                       <TableCell align="right">
-                                        {ev.task_id}
+                                        <Tooltip title={ev.task_id}>
+                                          <p>
+                                            {ev.task_id?.slice(
+                                              (ev.task_id?.lastIndexOf(
+                                                '.'
+                                              ) as number) + 1
+                                            )}
+                                          </p>
+                                        </Tooltip>
                                       </TableCell>
                                       <TableCell align="right">
                                         {ev.task_uri}

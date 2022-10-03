@@ -33,6 +33,8 @@ interface filterParams {
 
 export default function ExecutionFilters() {
   // const [workflowNameFilter, setWorkflowNameFilter] = useState<String>('');
+  const [fromTimeFilter, setFromTimeFilter] = useState<String>('');
+  const [toTimeFilter, setToTimeFilter] = useState<String>('');
   const [fromDateFilter, setFromDateFilter] = useState<String>('');
   const [toDateFilter, setToDateFilter] = useState<String>('');
   const [workflowId, setWorkflowId] = useState('');
@@ -61,6 +63,16 @@ export default function ExecutionFilters() {
   const fromDateChanged = (event) => {
     // console.log(event.target.value, workflowId);
     setFromDateFilter(event.target.value);
+  };
+
+  const toTimeChanged = (event) => {
+    // console.log(event.target.value, workflowId);
+    setToTimeFilter(event.target.value);
+  };
+
+  const fromTimeChanged = (event) => {
+    // console.log(event.target.value, workflowId);
+    setFromTimeFilter(event.target.value);
   };
 
   // const workflowNameChanged = (val) => {
@@ -95,15 +107,20 @@ export default function ExecutionFilters() {
       }
       if (status === 'Failed') {
         filterParams.error = true;
+      } else if (status === 'Success') {
+        filterParams.error = false;
       }
-      // else {
-      //   filterParams.error = false;
-      // }
       if (fromDateFilter) {
         filterParams.starttime = fromDateFilter.toString();
       }
       if (toDateFilter) {
         filterParams.endtime = toDateFilter.toString();
+      }
+      if (fromTimeFilter && fromDateFilter) {
+        filterParams.starttime += ` ${fromTimeFilter.toString()}`;
+      }
+      if (toTimeFilter && toDateFilter) {
+        filterParams.endtime += ` ${toTimeFilter.toString()}`;
       }
       // if (context) {
       //   filterParams.context = context;
@@ -123,7 +140,7 @@ export default function ExecutionFilters() {
       // if (type) {
       //   filterParams.type = type;
       // }
-
+      console.log(filterParams);
       const response = await getExecutionEvents(filterParams);
       if (response.data) {
         const execJobs = response.data as ExecutedJobsResponse;
@@ -227,7 +244,7 @@ export default function ExecutionFilters() {
           id="date"
           label="From"
           type="date"
-          // value={fromDateFilter}
+          value={fromDateFilter}
           defaultValue={new Date().toString()}
           InputLabelProps={{
             shrink: true,
@@ -241,7 +258,7 @@ export default function ExecutionFilters() {
           id="date"
           label="To"
           type="date"
-          // value={toDateFilter}
+          value={toDateFilter}
           defaultValue={new Date().toString()}
           InputLabelProps={{
             shrink: true,
@@ -273,7 +290,7 @@ export default function ExecutionFilters() {
                 shrink: true,
               }}
               variant="outlined"
-              onChange={toDateChanged}
+              onChange={fromTimeChanged}
             />
           </div>
           <div style={{ margin: '8px' }}>
@@ -287,7 +304,7 @@ export default function ExecutionFilters() {
                 shrink: true,
               }}
               variant="outlined"
-              onChange={toDateChanged}
+              onChange={toTimeChanged}
             />
           </div>
           {/* <div style={{ margin: '8px' }}>
