@@ -19,6 +19,11 @@ import CustomTableCell from './CustomTableCell';
 import DraggableDialog from './DraggableDialog';
 import DeleteIcon from '@material-ui/icons/Delete';
 import state from '../store/state';
+import type {
+  CustomTableCellProps,
+  DataMapping,
+  EditableTableRow,
+} from '../types';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -61,8 +66,16 @@ const createData = (pair) => {
       };
 };
 
-function EditableTable(props) {
-  const [rows, setRows] = React.useState([]);
+interface EditableTableProps {
+  headers: string[];
+  defaultValues: DataMapping[];
+  typeOfValues: { type: string; values?: string[] }[];
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  valuesChanged(rows: EditableTableRow[]): void | DataMapping[];
+}
+// The table where lines can be added where type is selected and appropriete values are given to name and value...
+function EditableTable(props: EditableTableProps) {
+  const [rows, setRows] = React.useState([] as EditableTableRow[]);
   const [typeOfInputs, setTypeOfInputs] = React.useState([]);
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const [dialogContent, setDialogContent] = React.useState({});
@@ -159,19 +172,20 @@ function EditableTable(props) {
       });
       // setRows(oldRows);
     } else {
-      setRows(() => {
-        return rows.map((row) => {
-          if (row.id === id) {
-            return {
-              ...row,
-              id: row.name.replace(' ', '_') || '',
-              // value: row.value,
-              isEditMode: !row.isEditMode,
-            };
-          }
-          return row;
-        });
+      const newRows = rows.map((row) => {
+        if (row.id === id) {
+          return {
+            ...row,
+            id: row.name.replace(' ', '_') || '',
+            // value: row.value,
+            isEditMode: !row.isEditMode,
+          };
+        }
+        return row;
       });
+
+      setRows((newRows as unknown) as EditableTableRow[]);
+
       if (command === 'done') {
         // console.log(rows);
         props.valuesChanged(rows);
@@ -186,9 +200,11 @@ function EditableTable(props) {
   }
 
   const onChange = (e, row, index) => {
-    // console.log(e, e.target.value, e.target.name, row, index);
+    // console.log(e, e.target.value, e.target.name, row, index, typeOfInputs);
     if (
-      ['string', 'bool', 'number', 'boolean', 'null'].includes(typeOfInputs[0])
+      ['string', 'bool', 'number', 'boolean', 'null'].includes(
+        typeOfInputs[index]
+      )
     ) {
       let { value } = e.target;
       const { name } = e.target;
@@ -252,7 +268,7 @@ function EditableTable(props) {
     if (e.target.value === 'null') {
       const newRows = rows.map((rowe) => {
         if (rowe.id === row.id) {
-          return { ...rowe, value: e.target.value };
+          return { ...rowe, value: e.target.value as never };
         }
         return rowe;
       });
@@ -292,11 +308,12 @@ function EditableTable(props) {
         open={openDialog}
         content={dialogContent}
         setValue={setRowValue}
+        typeOfValues={props.typeOfValues[0]}
       />
       <Table className={classes.table} aria-label="editable table">
         <TableHead>
           <TableRow>
-            {headers[0] !== 'Source' && (
+            {!headers[0].startsWith('Source') && (
               <TableCell align="left" className={classes.tableCell}>
                 Type
               </TableCell>
@@ -313,7 +330,7 @@ function EditableTable(props) {
           {rows.map((row, index) => (
             <React.Fragment key={row.id}>
               <TableRow key={row.id}>
-                {headers[0] !== 'Source' && (
+                {!headers[0].startsWith('Source') && (
                   <TableCell
                     align="left"
                     size="small"
@@ -341,17 +358,17 @@ function EditableTable(props) {
                   </TableCell>
                 )}
                 <CustomTableCell
-                  {...{
+                  {...(({
                     index,
                     row,
                     name: 'name',
                     onChange,
                     type: '',
                     typeOfValues: props.typeOfValues && props.typeOfValues[0],
-                  }}
+                  } as unknown) as CustomTableCellProps)}
                 />
                 <CustomTableCell
-                  {...{
+                  {...(({
                     index,
                     row,
                     name: 'value',
@@ -359,15 +376,17 @@ function EditableTable(props) {
                     type: typeOfInputs[index],
                     typeOfValues: {
                       type:
-                        headers[0] === 'Source' || headers[1] === 'Node_Id'
+                        headers[0].startsWith('Source') ||
+                        headers[1] === 'Node_Id'
                           ? props.typeOfValues && props.typeOfValues[1].type
                           : typeOfInputs,
                       values:
-                        headers[0] === 'Source' || headers[1] === 'Node_Id'
+                        headers[0].startsWith('Source') ||
+                        headers[1] === 'Node_Id'
                           ? props.typeOfValues && props.typeOfValues[1].values
                           : '',
                     }, //
-                  }}
+                  } as unknown) as CustomTableCellProps)}
                 />
 
                 <TableCell className={classes.selectTableCell}>

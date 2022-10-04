@@ -87,6 +87,7 @@ export default function NodeDetails(props) {
   ];
 
   useEffect(() => {
+    // console.log(element);
     setInputsComplete(!!element.inputs_complete);
     setDefaultErrorNode(element.default_error_node || false);
     // setDefaultErrorAttributes(element.default_error_attributes);
@@ -95,7 +96,6 @@ export default function NodeDetails(props) {
   }, [element.id, element]);
 
   const propChanged = (propKeyValue) => {
-    // console.log(element, propKeyValue);
     setSelectedElement({
       ...element,
       ...propKeyValue,
@@ -248,6 +248,8 @@ export default function NodeDetails(props) {
         )}
         {defaultErrorNode && !mapAllData && advanced && (
           <div>
+            {/* TODO: Replace Data Mapping with the component to have dropdowns if not rarely used */}
+            {/* <DataMappingComponent element={element} /> */}
             <b>Data Mapping </b>
             <IconButton
               style={{ padding: '1px' }}
@@ -302,7 +304,7 @@ export default function NodeDetails(props) {
                   label={label}
                   value={value}
                   propChanged={propChanged}
-                  editProps={false} // editProps
+                  editProps // editProps
                 />
               ))}
               {NonEditableTaskProperties.map(({ id, label, value }) => (

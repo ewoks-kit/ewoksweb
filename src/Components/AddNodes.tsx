@@ -44,6 +44,7 @@ const onDragStart = (event, { task_identifier, task_type, icon }) => {
   event.dataTransfer.effectAllowed = 'move';
 };
 
+// TODO: to be removed but one for backup
 const iconsObj = {
   'left.svg': left,
   left,
@@ -74,8 +75,11 @@ const iconsObj = {
   TextsmsIcon,
 };
 
+interface AddNodesProps {
+  title: string;
+}
 // Hosts the node images and categories to drag and drop to canvas
-function AddNodes(props) {
+function AddNodes(props: AddNodesProps) {
   const taskCategories = state((state) => state.taskCategories);
   const setTaskCategories = state((state) => state.setTaskCategories);
   const tasks = state((state) => state.tasks);

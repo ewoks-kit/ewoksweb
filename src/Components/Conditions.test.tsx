@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import type { EwoksRFLink } from '../types';
 import Conditions from './Conditions';
 // import state from '../store/state';
 
@@ -6,7 +7,9 @@ describe('In the Conditions:', () => {
   test('Initially it renders "Conditions" text and one button element', async () => {
     render(
       <Conditions
-        element={{ source: '1', target: '2', data: { conditions: [] } }}
+        element={
+          { source: '1', target: '2', data: { conditions: [] } } as EwoksRFLink
+        }
       />
     );
     // not working
@@ -45,11 +48,13 @@ describe('In the Conditions:', () => {
   test('renders correctly the table if conditions are present', async () => {
     render(
       <Conditions
-        element={{
-          source: '1',
-          target: '2',
-          data: { conditions: [{ id: '1', name: 'name1', value: '1' }] },
-        }}
+        element={
+          {
+            source: '1',
+            target: '2',
+            data: { conditions: [{ id: '1', name: 'name1', value: '1' }] },
+          } as EwoksRFLink
+        }
       />
     );
 
@@ -77,11 +82,13 @@ describe('In the Conditions:', () => {
   test('renders correctly the type of the value to number', async () => {
     render(
       <Conditions
-        element={{
-          source: '1',
-          target: '2',
-          data: { conditions: [{ id: '1', name: 'name1', value: 1 }] },
-        }}
+        element={
+          {
+            source: '1',
+            target: '2',
+            data: { conditions: [{ id: '1', name: 'name1', value: '1' }] },
+          } as EwoksRFLink
+        }
       />
     );
 
@@ -92,11 +99,13 @@ describe('In the Conditions:', () => {
   test('renders correctly the type of the value to list', async () => {
     render(
       <Conditions
-        element={{
-          source: '1',
-          target: '2',
-          data: { conditions: [{ id: '1', name: 'name1', value: [1] }] },
-        }}
+        element={
+          {
+            source: '1',
+            target: '2',
+            data: { conditions: [{ id: '1', name: 'name1', value: '[1]' }] },
+          } as EwoksRFLink
+        }
       />
     );
 
@@ -107,13 +116,17 @@ describe('In the Conditions:', () => {
   test('renders correctly the type of the value to dict', async () => {
     render(
       <Conditions
-        element={{
-          source: '1',
-          target: '2',
-          data: {
-            conditions: [{ id: '1', name: 'name1', value: { name: 'name1' } }],
-          },
-        }}
+        element={
+          {
+            source: '1',
+            target: '2',
+            data: {
+              conditions: [
+                { id: '1', name: 'name1', value: "{ name: 'name1' }" },
+              ],
+            },
+          } as EwoksRFLink
+        }
       />
     );
 
@@ -124,13 +137,15 @@ describe('In the Conditions:', () => {
   test('renders correctly the type of the value to bool', async () => {
     render(
       <Conditions
-        element={{
-          source: '1',
-          target: '2',
-          data: {
-            conditions: [{ id: '1', name: 'name1', value: true }],
-          },
-        }}
+        element={
+          {
+            source: '1',
+            target: '2',
+            data: {
+              conditions: [{ id: '1', name: 'name1', value: true }],
+            },
+          } as EwoksRFLink
+        }
       />
     );
 
@@ -141,13 +156,15 @@ describe('In the Conditions:', () => {
   test('renders correctly the type of the value to null', async () => {
     render(
       <Conditions
-        element={{
-          source: '1',
-          target: '2',
-          data: {
-            conditions: [{ id: '1', name: 'name1', value: null }],
-          },
-        }}
+        element={
+          {
+            source: '1',
+            target: '2',
+            data: {
+              conditions: [{ id: '1', name: 'name1', value: null }],
+            },
+          } as EwoksRFLink
+        }
       />
     );
 

@@ -10,8 +10,12 @@ import Draggable from 'react-draggable';
 import { rfToEwoks } from '../utils';
 
 import ReactJson from 'react-json-view';
-import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import { TextField, Tooltip } from '@material-ui/core';
+import {
+  Autocomplete,
+  ToggleButton,
+  ToggleButtonGroup,
+} from '@material-ui/lab';
+import { FormControl, TextField, Tooltip } from '@material-ui/core';
 import state from '../store/state';
 
 function PaperComponent(props: PaperProps) {
@@ -28,24 +32,28 @@ function PaperComponent(props: PaperProps) {
 export default function DraggableDialog(props) {
   // { open, content }
   const [graph, setGraph] = React.useState({});
+  const [oldGraph, setOldGraph] = React.useState({});
   const [isOpen, setIsOpen] = React.useState(false);
   const [title, setTitle] = React.useState('');
   const [name, setName] = React.useState('');
+  const [oldName, setOldName] = React.useState('');
   const [callbackProps, setCallbackProps] = React.useState({});
   const graphRF = state((state) => state.graphRF);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
   const [selection, setSelection] = React.useState('ewoks');
 
-  const { open, content } = props;
+  const { open, content, typeOfValues } = props;
 
   useEffect(() => {
     // console.log(content, open);
     setGraph((content && content.object) || {});
+    setOldGraph((content && content.object) || {});
     setIsOpen(open || false);
     setTitle((content && content.title) || '');
     setCallbackProps(content.callbackProps);
     setName(content.id || '');
+    setOldName(content.id || '');
   }, [open, content]);
 
   // const handleClickOpen = () => {
@@ -54,6 +62,7 @@ export default function DraggableDialog(props) {
 
   const handleClose = () => {
     setIsOpen(false);
+    props.setValue(oldName, oldGraph, callbackProps);
   };
 
   const handleSave = () => {
@@ -110,14 +119,42 @@ export default function DraggableDialog(props) {
             </ToggleButtonGroup>
           )}
           <div style={{ marginBottom: '10px' }}>
-            <Tooltip title="Input the name of parameter" arrow>
+            <Tooltip
+              title="Input the name of parameter"
+              arrow
+              placement="top-start"
+            >
+              <FormControl
+                fullWidth
+                variant="outlined"
+                // className={classes.detailsLabels}
+              >
+                <Autocomplete
+                  id="free-solo-demo"
+                  freeSolo
+                  options={typeOfValues?.values || ['set a name']}
+                  value={name}
+                  onChange={(e, val) => setName(val)}
+                  onInputChange={(e, val) => setName(val)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={typeOfValues.type || 'name'}
+                      margin="normal"
+                      variant="outlined"
+                    />
+                  )}
+                />
+              </FormControl>
+            </Tooltip>
+            {/* <Tooltip title="Input the name of parameter" arrow>
               <TextField
                 label="Name"
                 variant="filled"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
-            </Tooltip>
+            </Tooltip> */}
           </div>
           <ReactJson
             src={graph}
@@ -129,7 +166,7 @@ export default function DraggableDialog(props) {
             enableClipboard={false}
             onEdit={(edit) => graphChanged(edit)}
             onAdd={(add) => graphChanged(add)}
-            defaultValue="graph"
+            defaultValue="value"
             onDelete={(del) => graphChanged(del)}
             onSelect={() => true}
             quotesOnKeys={false}

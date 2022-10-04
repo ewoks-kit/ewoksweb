@@ -14,6 +14,10 @@ import { getWorkflow } from '../utils/api';
 import state from '../store/state';
 import type { GraphEwoks } from '../types';
 
+// interface EwoksUiInfoProps {
+//   closeDialog(event?: React.KeyboardEvent | React.MouseEvent): void;
+// }
+// To be used?
 export default function EwoksUiInfo(props) {
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
@@ -60,10 +64,10 @@ export default function EwoksUiInfo(props) {
         // justifyContent="flex-start"
         alignItems="center"
       >
-        <Grid item xs={12} sm={12} md={12} lg={7}>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
           <SignUp handleCloseDialog={closeDialog} />
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={5}>
+        <Grid item xs={12} sm={12} md={12} lg={8}>
           <h2 style={{ color: '#3f51b5' }}>
             <IconButton color="inherit">
               <Fab

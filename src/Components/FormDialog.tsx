@@ -1,5 +1,5 @@
 /* eslint-disable sonarjs/cognitive-complexity */
-import React, { useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import {
   Button,
   Checkbox,
@@ -20,6 +20,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import type {
   EwoksRFLink,
   EwoksRFNode,
+  GraphDetails,
   GraphEwoks,
   GraphRF,
   Task,
@@ -35,7 +36,14 @@ import {
   putWorkflow,
 } from '../utils/api';
 
-export default function FormDialog(props) {
+interface FormDialogProps {
+  elementToEdit: Task | GraphRF;
+  action: string;
+  open: boolean;
+  setOpenSaveDialog: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function FormDialog(props: FormDialogProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [newName, setNewName] = React.useState('');
   const [taskType, setTaskType] = React.useState('');
@@ -75,16 +83,18 @@ export default function FormDialog(props) {
     setElement(elementToEdit);
     setIsOpen(open);
     if (isForGraph) {
-      setNewName(elementToEdit.label || '');
+      const elGraph = elementToEdit as GraphDetails;
+      setNewName(elGraph.label || '');
       setOverwrite(false);
     } else {
-      setNewName(elementToEdit.task_identifier);
-      setTaskType(elementToEdit.task_type);
-      setCategory(elementToEdit.category);
-      setIcon(elementToEdit.icon);
-      setOptionalInputNames(elementToEdit.optional_input_names);
-      setRequiredInputNames(elementToEdit.required_input_names);
-      setOutputNames(elementToEdit.output_names);
+      const elTask = elementToEdit as Task;
+      setNewName(elTask.task_identifier);
+      setTaskType(elTask.task_type);
+      setCategory(elTask.category);
+      setIcon(elTask.icon);
+      setOptionalInputNames(elTask.optional_input_names);
+      setRequiredInputNames(elTask.required_input_names);
+      setOutputNames(elTask.output_names);
     }
   }, [open, action, elementToEdit, isForGraph]);
 
@@ -320,9 +330,11 @@ export default function FormDialog(props) {
         {action === 'editTask' ? 'Edit the ' : 'Give the new '}
         {isForGraph ? 'Workflow name' : 'Task details'}
         {action === 'newGraphOrOverwrite' &&
-          ` or select to overwrite the existing with id: ${
-            elementToEdit.graph.id as string
-          }`}
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          ` or select to overwrite the existing with id: ${() => {
+            const elGraph = elementToEdit as GraphRF;
+            return elGraph.graph.id;
+          }}`}
       </DialogTitle>
       <DialogContent>
         <DialogContentText>

@@ -8,12 +8,19 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import DataMapping from './DataMapping';
 import state from '../store/state';
+import type { EwoksRFLink } from '../types';
 
 describe('In the DataMapping:', () => {
   test('Initially it renders "Data Mapping" text and one button element', async () => {
     render(
       <DataMapping
-        element={{ source: '1', target: '2', data: { data_mapping: [] } }}
+        element={
+          {
+            source: '1',
+            target: '2',
+            data: { data_mapping: [] },
+          } as EwoksRFLink
+        }
       />
     );
     // not working
@@ -58,16 +65,20 @@ describe('In the DataMapping:', () => {
   test('renders correctly the table if mappings are present', async () => {
     render(
       <DataMapping
-        element={{
-          source: '1',
-          target: '2',
-          data: {
-            data_mapping: [{ source_output: 'source', target_input: 'target' }],
-            links_input_names: [],
-            links_optional_output_names: [],
-            links_required_output_names: [],
-          },
-        }}
+        element={
+          {
+            source: '1',
+            target: '2',
+            data: {
+              data_mapping: [
+                { source_output: 'source', target_input: 'target' },
+              ],
+              links_input_names: [],
+              links_optional_output_names: [],
+              links_required_output_names: [],
+            },
+          } as EwoksRFLink
+        }
       />
     );
 
@@ -102,18 +113,20 @@ describe('In the DataMapping:', () => {
   test('a dataMappingValuesChanged changes the selected link conditions', async () => {
     render(
       <DataMapping
-        element={{
-          source: '1',
-          target: '2',
-          data: {
-            data_mapping: [
-              { source_output: 'source1', target_input: 'target1' },
-            ],
-            links_input_names: [],
-            links_optional_output_names: [],
-            links_required_output_names: [],
-          },
-        }}
+        element={
+          {
+            source: '1',
+            target: '2',
+            data: {
+              data_mapping: [
+                { source_output: 'source1', target_input: 'target1' },
+              ],
+              links_input_names: [],
+              links_optional_output_names: [],
+              links_required_output_names: [],
+            },
+          } as EwoksRFLink
+        }
       />
     );
 

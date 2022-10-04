@@ -17,11 +17,6 @@ import {
 import { Autocomplete } from '@material-ui/lab';
 
 const useStyles = makeStyles(() => ({
-  tableCell: {
-    width: 120,
-    height: 20,
-    padding: '1px',
-  },
   input: {
     width: 90,
     height: 20,
@@ -59,6 +54,7 @@ function TableCellInEditMode(propsIn) {
   };
 
   return type === 'dict' || type === 'list' || type === 'object' ? (
+    // TODO: examine if needed to edit in the cell?
     // <CellEditInJson props={{ row, name, type, onChange }} />
     <span>{JSON.stringify(row[name])}</span>
   ) : // <span></span>

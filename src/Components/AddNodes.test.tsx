@@ -4,13 +4,13 @@ import state from '../store/state';
 
 describe('In the AddNodes test:', () => {
   test('initially it renders one button element named ¨Add Nodes¨', async () => {
-    render(<AddNodes />);
+    render(<AddNodes title="Add Nodes" />);
     const buttonAddNodes = screen.getByRole('button', { name: /Add Nodes/u });
     expect(buttonAddNodes).toBeInTheDocument();
   });
 
   test('if AddNodes is clicked it reveals the initial category EwoksCore', async () => {
-    render(<AddNodes />);
+    render(<AddNodes title="Add Nodes" />);
     const buttonAddNodes = screen.getByRole('button', { name: /Add Nodes/u });
 
     fireEvent(
@@ -35,7 +35,7 @@ describe('In the AddNodes test:', () => {
   });
 
   test('if categories change and AddNodes is clicked it reveals the new categories', async () => {
-    render(<AddNodes />);
+    render(<AddNodes title="Add Nodes" />);
     const buttonAddNodes = screen.getByRole('button', { name: /Add Nodes/u });
     // const { taskCategories } = state.getState();
 
@@ -65,7 +65,7 @@ describe('In the AddNodes test:', () => {
   });
 
   test('if tasks added and category is clicked it reveals them', async () => {
-    render(<AddNodes />);
+    render(<AddNodes title="Add Nodes" />);
     const buttonAddNodes = screen.getByRole('button', { name: /Add Nodes/u });
 
     act(() => {
@@ -128,7 +128,7 @@ describe('In the AddNodes test:', () => {
   });
 
   test('if insertGraph is pressed setGraphOrSubgraph is set to false on state', async () => {
-    render(<AddNodes />);
+    render(<AddNodes title="Add Nodes" />);
     const buttonAddNodes = screen.getByRole('button', { name: /Add Nodes/u });
 
     act(() => {

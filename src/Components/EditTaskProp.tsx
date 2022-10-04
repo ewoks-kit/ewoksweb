@@ -5,7 +5,21 @@ import DashboardStyle from '../layout/DashboardStyle';
 
 const useStyles = DashboardStyle;
 
-function EditTaskProp({ id, label, value, propChanged, editProps }) {
+interface EditTaskProps {
+  id: string;
+  label: string;
+  value: string;
+  editProps: boolean;
+  propChanged(props: editableNodeProps): void;
+}
+interface editableNodeProps {
+  task_identifier?: string;
+  task_type?: string;
+  task_generator?: string;
+}
+// For editing Node properties related to the Task it is based on
+function EditTaskProp(props: EditTaskProps) {
+  const { id, label, value, editProps } = props;
   const classes = useStyles();
 
   const [editProp, setEditProp] = React.useState(false);
@@ -27,7 +41,7 @@ function EditTaskProp({ id, label, value, propChanged, editProps }) {
 
   const taskPropChanged = (event) => {
     setTaskProp(event.target.value);
-    propChanged({ [id]: event.target.value });
+    props.propChanged({ [id]: event.target.value });
   };
 
   const enterPressed = (e) => {

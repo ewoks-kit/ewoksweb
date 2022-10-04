@@ -6,7 +6,13 @@ import AutocompleteDrop from './AutocompleteDrop';
 // e2e open and check call for tasks
 describe('AutocompleteDrop should:', () => {
   test('initially render a label ¨Workflows¨', async (): Promise<void> => {
-    render(<AutocompleteDrop />);
+    render(
+      <AutocompleteDrop
+        setInputValue={() => {}}
+        placeholder="Categories"
+        category="demo"
+      />
+    );
     const textbox = screen.getByRole('textbox', { name: /Workflows/u });
     expect(textbox).toBeInTheDocument();
     act(() => {
