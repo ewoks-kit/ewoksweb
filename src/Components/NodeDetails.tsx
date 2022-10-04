@@ -21,7 +21,6 @@ import SidebarTooltip from './SidebarTooltip';
 import { OpenInBrowser } from '@material-ui/icons';
 import LabelComment from './LabelComment';
 import DefaultInputs from './DefaultInputs';
-import DataMappingComponent from './DataMapping';
 
 const useStyles = DashboardStyle;
 
@@ -88,7 +87,7 @@ export default function NodeDetails(props) {
   ];
 
   useEffect(() => {
-    console.log(element);
+    // console.log(element);
     setInputsComplete(!!element.inputs_complete);
     setDefaultErrorNode(element.default_error_node || false);
     // setDefaultErrorAttributes(element.default_error_attributes);
@@ -97,7 +96,6 @@ export default function NodeDetails(props) {
   }, [element.id, element]);
 
   const propChanged = (propKeyValue) => {
-    console.log(element, propKeyValue);
     setSelectedElement({
       ...element,
       ...propKeyValue,

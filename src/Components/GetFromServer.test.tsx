@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import GetFromServer from './GetFromServer';
 
 test('renders 4 buttons', () => {
-  render(<GetFromServer />);
+  render(<GetFromServer workflowIdInAutocomplete={() => {}} />);
 
   const buttonElements = screen.getAllByRole('button');
 

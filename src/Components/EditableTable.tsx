@@ -200,7 +200,7 @@ function EditableTable(props: EditableTableProps) {
   }
 
   const onChange = (e, row, index) => {
-    console.log(e, e.target.value, e.target.name, row, index, typeOfInputs);
+    // console.log(e, e.target.value, e.target.name, row, index, typeOfInputs);
     if (
       ['string', 'bool', 'number', 'boolean', 'null'].includes(
         typeOfInputs[index]

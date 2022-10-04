@@ -32,7 +32,7 @@ export default function DataMappingComponent(props: DataMappingProps) {
 
   const addDataMapping = () => {
     const el = element;
-    console.log(element);
+
     const elMap = el.data.data_mapping;
     // console.log(el, elMap, dataMapping);
     if (elMap && elMap[elMap.length - 1] && elMap[elMap.length - 1].id === '') {

@@ -46,7 +46,7 @@ export default function DraggableDialog(props) {
   const { open, content, typeOfValues } = props;
 
   useEffect(() => {
-    console.log(content, open);
+    // console.log(content, open);
     setGraph((content && content.object) || {});
     setOldGraph((content && content.object) || {});
     setIsOpen(open || false);
@@ -68,7 +68,7 @@ export default function DraggableDialog(props) {
   const handleSave = () => {
     if (name) {
       setIsOpen(false);
-      console.log(name, graph, callbackProps);
+      // console.log(name, graph, callbackProps);
       props.setValue(name, graph, callbackProps);
     } else {
       setOpenSnackbar({

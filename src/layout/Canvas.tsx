@@ -1,4 +1,5 @@
 /* eslint-disable unicorn/consistent-function-scoping */
+/* eslint-disable consistent-return */
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import ReactFlow, {
   Controls,
@@ -51,8 +52,6 @@ const nodeTypes = {
 };
 
 function trimLabel(label) {
-  console.log(label.length, label.split('.').pop());
-
   if (label.length <= 20) {
     return label;
   }
@@ -99,13 +98,16 @@ function Canvas() {
   }, [graphRF.nodes, graphRF.links]);
 
   useEffect(() => {
-    // console.log(prevGraphId);
-
     if ('position' in selectedElement) {
-      setTimeout(() => {
+      const timeoutPosition = setTimeout(() => {
         updateNodeInternals(selectedElement.id);
       }, 400);
+      return () => clearTimeout(timeoutPosition);
     }
+  }, [selectedElement, updateNodeInternals]);
+
+  useEffect(() => {
+    // console.log(prevGraphId);
 
     if (subgraphsStack[subgraphsStack.length - 1]) {
       setPrevGraphId(subgraphsStack[subgraphsStack.length - 1].id);
@@ -114,15 +116,15 @@ function Canvas() {
     if (prevGraphId !== graphRF.graph.id) {
       // Todo: clear setTimeouts
       const timer = setTimeout(() => {
-        console.log(getZoom(), graphRF.nodes.length);
+        // console.log(getZoom(), graphRF.nodes.length);
+        // DOC: Define a zoom level for small graphs to not show very-big nodes
         if (graphRF.nodes.length > 0 && graphRF.nodes.length < 6) {
-          console.log('zoom 0.6');
           zoomTo(0.6);
         } else if (graphRF.nodes.length > 0) {
           fitView();
         }
       }, 1000);
-      // return () => clearTimeout(timer);
+      return () => clearTimeout(timer);
     }
   }, [
     graphRF.graph.id,
@@ -132,8 +134,6 @@ function Canvas() {
     graphRF.nodes.length,
     subgraphsStack,
     prevGraphId,
-    selectedElement,
-    updateNodeInternals,
   ]);
 
   const onElementsRemove = useCallback(

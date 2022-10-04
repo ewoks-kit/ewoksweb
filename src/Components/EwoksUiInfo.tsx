@@ -64,10 +64,10 @@ export default function EwoksUiInfo(props) {
         // justifyContent="flex-start"
         alignItems="center"
       >
-        <Grid item xs={12} sm={12} md={12} lg={7}>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
           <SignUp handleCloseDialog={closeDialog} />
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={5}>
+        <Grid item xs={12} sm={12} md={12} lg={8}>
           <h2 style={{ color: '#3f51b5' }}>
             <IconButton color="inherit">
               <Fab

@@ -140,7 +140,7 @@ export default function ExecutionFilters() {
       // if (type) {
       //   filterParams.type = type;
       // }
-      console.log(filterParams);
+      // console.log(filterParams);
       const response = await getExecutionEvents(filterParams);
       if (response.data) {
         const execJobs = response.data as ExecutedJobsResponse;

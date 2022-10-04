@@ -6,7 +6,7 @@ import type { CustomTableCellProps } from '../types';
 
 // Used as an app-wide dialog when confirmation is needed. Open is a prop
 function CustomTableCell(props: CustomTableCellProps) {
-  const { index, row, name, type, typeOfValues } = props;
+  const { row, name } = props;
   const useStyles = makeStyles(() => ({
     tableCell: {
       width: name === 'value' ? '50%' : '30%',
@@ -16,7 +16,7 @@ function CustomTableCell(props: CustomTableCellProps) {
   }));
   const classes = useStyles();
   const { isEditMode } = row;
-  console.log(index, row, name, type, typeOfValues);
+  // console.log(index, row, name, type, typeOfValues);
 
   return (
     <TableCell align="left" className={classes.tableCell}>
