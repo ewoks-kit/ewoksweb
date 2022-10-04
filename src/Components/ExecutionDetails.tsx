@@ -165,6 +165,7 @@ export default function ExecutionDetails() {
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
     } else {
+      console.log('checkAndExecute - set currentWatchedEvents');
       executeWorkflow();
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
@@ -176,52 +177,52 @@ export default function ExecutionDetails() {
 
     const workflowId = selectedWorkflow.workflow_id;
 
-    // DOC: Replay execution on canvas needs to put the workflow on canvas with the events if not there
-    if (graphRF.graph.id !== workflowId) {
-      // DOC: Get the workflow from server if not on canvas
-      // TODO: dublicated code with getFromServer, abstract in store? hook?
-      setGettingFromServer(true);
-      try {
-        const response = await getWorkflow(workflowId);
-        if (response.data) {
-          setWorkingGraph(response.data as GraphEwoks, 'fromServer');
-          // TODO: get read of timeout?
-          setTimeout(() => {
-            // DOC:
-            const events = getEventsForJob();
-            setInExecutionMode(true);
-            // TODO: timeout is needed because executingEvents try to find
-            // the nodes before they are there from the server
-            // probably because setWorkingGraph changes the graphRF used in executingEvents
-            events.forEach((ev) => setExecutingEvents(ev, false));
-          }, 400);
-        } else {
-          setOpenSnackbar({
-            open: true,
-            text:
-              'Could not locate the requested workflow! Maybe it is deleted!',
-            severity: 'warning',
-          });
-        }
-      } catch (error) {
+    // DOC: Replay execution on canvas needs to put the workflow on canvas with
+    // the events if not there
+    // if (graphRF.graph.id !== workflowId) {
+    // DOC: Get the workflow from server if not on canvas
+    // TODO: dublicated code with getFromServer, abstract in store? hook?
+    setGettingFromServer(true);
+    try {
+      const response = await getWorkflow(workflowId);
+      if (response.data) {
+        setWorkingGraph(response.data as GraphEwoks, 'fromServer');
+        // TODO: get read of timeout?
+        setTimeout(() => {
+          // DOC:
+          const events = getEventsForJob();
+          setInExecutionMode(true);
+          // TODO: timeout is needed because executingEvents try to find
+          // the nodes before they are there from the server
+          // probably because setWorkingGraph changes the graphRF used in executingEvents
+          events.forEach((ev) => setExecutingEvents(ev, false));
+        }, 400);
+      } else {
         setOpenSnackbar({
           open: true,
-          text:
-            error.response?.data?.message ||
-            'Error in retrieving workflow. Please check connectivity with the server!',
-          severity: 'error',
+          text: 'Could not locate the requested workflow! Maybe it is deleted!',
+          severity: 'warning',
         });
-      } finally {
-        setGettingFromServer(false);
       }
-    } else {
-      // setTimeout(() => {
-      const eventsL = getEventsForJob();
-
-      setInExecutionMode(true);
-      eventsL.forEach((ev) => setExecutingEvents(ev, false));
-      // }, 400);
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text:
+          error.response?.data?.message ||
+          'Error in retrieving workflow. Please check connectivity with the server!',
+        severity: 'error',
+      });
+    } finally {
+      setGettingFromServer(false);
     }
+    // } else {
+    //   setTimeout(() => {
+    //     const eventsL = getEventsForJob();
+
+    //     setInExecutionMode(true);
+    //     eventsL.forEach((ev) => setExecutingEvents(ev, false));
+    //   }, 400);
+    // }
   }
 
   function getEventsForJob() {
@@ -244,7 +245,7 @@ export default function ExecutionDetails() {
           ev.job_id === selectedWorkflow.job_id
       );
     }
-    // console.log(events);
+    console.log(events);
     setCurrentWatchedEvents(events);
     return events;
   }
@@ -388,6 +389,10 @@ export default function ExecutionDetails() {
       >
         Clean all
       </Button>
+      <div>
+        Clicked Event{' '}
+        {currentWatchedEvents[currentExecutionEvent - 1]?.id || 'non'}
+      </div>
       {currentWatchedEvents[currentExecutionEvent - 1] && (
         <ReactJson
           src={currentWatchedEvents[currentExecutionEvent - 1]}

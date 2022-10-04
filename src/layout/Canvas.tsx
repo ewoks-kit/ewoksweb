@@ -114,6 +114,7 @@ function Canvas() {
     }
 
     if (prevGraphId !== graphRF.graph.id) {
+      console.log('prevgraph changed', graphRF.nodes.length);
       // Todo: clear setTimeouts
       const timer = setTimeout(() => {
         // console.log(getZoom(), graphRF.nodes.length);
@@ -121,10 +122,12 @@ function Canvas() {
         if (graphRF.nodes.length > 0 && graphRF.nodes.length < 6) {
           zoomTo(0.6);
         } else if (graphRF.nodes.length > 0) {
+          console.log('fitview');
           fitView();
         }
       }, 1000);
-      return () => clearTimeout(timer);
+
+      // return () => clearTimeout(timer);
     }
   }, [
     graphRF.graph.id,

@@ -679,25 +679,35 @@ export default function EnhancedTable() {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
-      <IconButton color="inherit">
+      <IconButton
+        color="inherit"
+        // onClick={props.handleCloseDialog || ''}
+      >
         <Typography
           component="h1"
           variant="h5"
           color="primary"
-          style={{ padding: '5px', alignSelf: 'right' }}
+          style={{ padding: '5px' }}
         >
-          <Link to="/edit-workflows">Edit Workflows</Link>
+          <Link
+            to="/edit-workflows"
+            style={{
+              textDecoration: 'none',
+              color: 'rgb(63, 81, 181)',
+            }}
+          >
+            Edit Workflows
+            <Fab
+              // className={classes.openFileButton}
+              color="primary"
+              size="small"
+              component="span"
+              aria-label="add"
+            >
+              <ArrowForwardIosIcon />
+            </Fab>
+          </Link>
         </Typography>
-
-        <Fab
-          // className={classes.openFileButton}
-          color="primary"
-          size="small"
-          component="span"
-          aria-label="add"
-        >
-          <ArrowForwardIosIcon />
-        </Fab>
       </IconButton>
     </Box>
   );

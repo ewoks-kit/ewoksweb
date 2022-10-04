@@ -28,10 +28,10 @@ import ImageListItem from '@material-ui/core/ImageListItem';
 //   // });
 // };
 
-const linkStyle = {
-  textDecoration: 'none',
-  color: 'rgb(63, 81, 181)',
-};
+// const linkStyle = {
+//   textDecoration: 'none',
+//   color: 'rgb(63, 81, 181)',
+// };
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -40,6 +40,10 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-around',
       overflow: 'hidden',
       backgroundColor: theme.palette.background.paper,
+    },
+    linkStyle: {
+      textDecoration: 'none',
+      color: 'rgb(63, 81, 181)',
     },
     imageList: {
       width: 600,
@@ -70,9 +74,9 @@ export default function SignUp(props) {
             }}
           >
             <Typography component="h1" variant="h5">
-              Welcome to the <b style={linkStyle}>Ewoks-UI</b> for managing your
-              Workflows. Select to Edit or Monitor or get started with a graph
-              where Ewoks-UI describes itself:
+              Welcome to the <b className={classes.linkStyle}>Ewoks-UI</b> for
+              managing your Workflows. Select to Edit or Monitor or get started
+              with a graph where Ewoks-UI describes itself:
             </Typography>
 
             <IconButton
@@ -85,7 +89,7 @@ export default function SignUp(props) {
                 color="primary"
                 style={{ padding: '5px' }}
               >
-                <Link to="/edit-workflows" style={linkStyle}>
+                <Link to="/edit-workflows" className={classes.linkStyle}>
                   Edit Workflows
                   <Fab
                     // className={classes.openFileButton}
@@ -106,7 +110,7 @@ export default function SignUp(props) {
                 color="primary"
                 style={{ padding: '5px' }}
               >
-                <Link to="/monitor-workflows" style={linkStyle}>
+                <Link to="/monitor-workflows" className={classes.linkStyle}>
                   Monitor Workflows
                   <Fab
                     // className={classes.openFileButton}
@@ -127,7 +131,7 @@ export default function SignUp(props) {
                 color="primary"
                 style={{ padding: '5px' }}
               >
-                <Link to="/edit-workflows" style={linkStyle}>
+                <Link to="/edit-workflows" className={classes.linkStyle}>
                   Tutorial Workflow
                   <Fab
                     // className={classes.openFileButton}
