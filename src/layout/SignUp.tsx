@@ -1,13 +1,13 @@
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+// import Avatar from '@material-ui/core/Avatar';
+// import Button from '@material-ui/core/Button';
+// import CssBaseline from '@material-ui/core/CssBaseline';
+// import TextField from '@material-ui/core/TextField';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import Checkbox from '@material-ui/core/Checkbox';
 // import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+// import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
@@ -19,14 +19,14 @@ import ImageList from '@material-ui/core/ImageList';
 import ImageListItem from '@material-ui/core/ImageListItem';
 // import itemData from './itemData';
 
-const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
-  // const data = new FormData(event.currentTarget);
-  // console.log({
-  //   email: data.get('email'),
-  //   password: data.get('password'),
-  // });
-};
+// const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+//   event.preventDefault();
+//   // const data = new FormData(event.currentTarget);
+//   // console.log({
+//   //   email: data.get('email'),
+//   //   password: data.get('password'),
+//   // });
+// };
 
 const linkStyle = {
   textDecoration: 'none',
@@ -147,7 +147,7 @@ export default function SignUp(props) {
       <Grid item xs={12} sm={12} md={12} lg={6}>
         <ImageList rowHeight={300} className={classes.imageList} cols={1}>
           <ImageListItem>
-            <img src={ewoksUI} alt="ewoks image" />
+            <img src={ewoksUI} />
           </ImageListItem>
         </ImageList>
         {/* <Box>
