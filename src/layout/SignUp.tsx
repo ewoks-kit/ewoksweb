@@ -147,7 +147,7 @@ export default function SignUp(props) {
       <Grid item xs={12} sm={12} md={12} lg={6}>
         <ImageList rowHeight={300} className={classes.imageList} cols={1}>
           <ImageListItem>
-            <img src={ewoksUI} />
+            <img src={ewoksUI} alt="" />
           </ImageListItem>
         </ImageList>
         {/* <Box>
