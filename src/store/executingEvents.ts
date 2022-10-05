@@ -27,9 +27,10 @@ const executingEvents = (set, get) => ({
         // remove from executing events
         // TODO removing based on node_id may be wrong as
         // there maybe more than one running in parallel: will remove the first-in
+        // used event.id to be examined?? Examine if the following for the end event are needed
         const eventToRemove = [...prevExecutingEvents]
-          .map((ev) => ev.node_id)
-          .indexOf(execEvent.node_id);
+          .map((ev) => ev.id)
+          .indexOf(execEvent.id);
 
         if (eventToRemove > -1) {
           newExecutingEvents = [...prevExecutingEvents];
@@ -43,6 +44,7 @@ const executingEvents = (set, get) => ({
         );
       }
 
+      // DOC: define the position of the event nodes
       let tempPos = { x: 100, y: 100 };
 
       const tempNode = prevState.graphRF.nodes.find(
@@ -62,6 +64,8 @@ const executingEvents = (set, get) => ({
 
       const { withLabel } = tempNode.data;
 
+      // TODO: calc the exact pos based on the nodes width which is
+      // available and adjustable now
       if (execEvent.type === 'start') {
         tempPos = { x: tempPos.x - 30, y: tempPos.y + 30 };
       } else if (withLabel) {
@@ -72,6 +76,7 @@ const executingEvents = (set, get) => ({
 
       // if there are other nodes for the same position we need to to join them with comma
       // only if live-execution else ignore
+      // TODO: test for not live maybe needed since events are fed one-by-one now
       let sameEls = [];
       if (live) {
         sameEls = [...prevState.executedEvents]
@@ -84,6 +89,7 @@ const executingEvents = (set, get) => ({
           );
       }
 
+      // DOC: calculate the numbers the label will contain
       const tempLabel: string =
         sameEls.length > 0 ? sameEls.map((elem) => elem.id).join(',') : '';
 

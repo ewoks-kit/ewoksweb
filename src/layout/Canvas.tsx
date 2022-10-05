@@ -107,14 +107,21 @@ function Canvas() {
   }, [selectedElement, updateNodeInternals]);
 
   useEffect(() => {
-    // console.log(prevGraphId);
-
     if (subgraphsStack[subgraphsStack.length - 1]) {
       setPrevGraphId(subgraphsStack[subgraphsStack.length - 1].id);
     }
+  }, [subgraphsStack]);
+
+  useEffect(() => {
+    // console.log(prevGraphId);
 
     if (prevGraphId !== graphRF.graph.id) {
-      console.log('prevgraph changed', graphRF.nodes.length);
+      console.log(
+        'prevgraph changed',
+        graphRF.nodes.length,
+        prevGraphId,
+        graphRF.graph.id
+      );
       // Todo: clear setTimeouts
       const timer = setTimeout(() => {
         // console.log(getZoom(), graphRF.nodes.length);
@@ -125,8 +132,10 @@ function Canvas() {
           console.log('fitview');
           fitView();
         }
-      }, 1000);
-
+        // DOC: the value of the delay is important to fitview even the execution
+        // that takes up to 4secs. Possibly rerender after the call to get the workflow??
+      }, 2000);
+      // DOC: if I clear the timeout for memory leaks the setTImeout never runs fitview???
       // return () => clearTimeout(timer);
     }
   }, [
@@ -135,7 +144,6 @@ function Canvas() {
     getZoom,
     zoomTo,
     graphRF.nodes.length,
-    subgraphsStack,
     prevGraphId,
   ]);
 

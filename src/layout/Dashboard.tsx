@@ -80,6 +80,10 @@ export default function Dashboard() {
       setOpenInfo(false);
       setOpenDrawers(true);
       setOpenSettings(true);
+    } else if (openSettingsDrawer === 'close') {
+      setOpenInfo(false);
+      setOpenDrawers(false);
+      setOpenSettings(false);
     }
     // setOpenSettingsDrawer('');
   }, [openSettingsDrawer, setOpenSettingsDrawer]);

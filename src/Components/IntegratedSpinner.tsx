@@ -50,9 +50,9 @@ export default function IntegratedSpinner({
     }
     // setLoading(getting);
 
-    // return () => {
-    //   clearTimeout(timer.current);
-    // };
+    return () => {
+      clearTimeout(timer.current);
+    };
   }, [getting]);
 
   const handleButtonClick = () => {
