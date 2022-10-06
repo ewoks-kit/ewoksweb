@@ -397,7 +397,7 @@ function EditableTable(props: EditableTableProps) {
                         aria-label="done"
                         onClick={() => onToggleEditMode(row.id, index, 'done')}
                       >
-                        <DoneIcon fontSize="small" />
+                        <DoneIcon fontSize="small" color="secondary" />
                       </IconButton>
                       {/* <IconButton
                         style={{ padding: '1px' }}

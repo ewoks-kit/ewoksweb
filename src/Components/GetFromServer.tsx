@@ -43,7 +43,7 @@ export default function GetFromServer(props: GetFromServerProps) {
 
       <GetFromServerButtons
         workflowId={workflowId}
-        showButtons={[true, false]}
+        showButtons={[false, false]}
       />
     </>
   );

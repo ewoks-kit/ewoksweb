@@ -1,16 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import type { EwoksRFLink } from '../types';
 import {
   FormControl,
+  IconButton,
   InputLabel,
   OutlinedInput,
   TextField,
+  Fab,
+  InputAdornment,
+  Grid,
 } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 import SidebarTooltip from './SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
+import useDebounce from '../hooks/useDebounce';
+import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = DashboardStyle;
 
@@ -20,15 +26,19 @@ export default function LabelComment(props) {
 
   const { element, showComment } = props;
 
-  const [comment, setComment] = React.useState('');
-  const [label, setLabel] = React.useState('');
-  const [labelChoices, setLabelChoices] = React.useState([
+  const [comment, setComment] = useState('');
+  const [label, setLabel] = useState('');
+  const [labelIsChanged, setLabelIsChanged] = useState(false);
+  const [labelChoices, setLabelChoices] = useState([
     'use mappings',
     'use conditions',
   ]);
   const setSelectedElement = state((state) => state.setSelectedElement);
 
+  const debouncedLabel = useDebounce(label, 1500);
+
   useEffect(() => {
+    console.log('rerender');
     if ('position' in element) {
       setLabel(element.data.label);
       setComment(element.data.comment);
@@ -58,26 +68,9 @@ export default function LabelComment(props) {
 
   const labelChanged = (event) => {
     setLabel(event.target.value);
+    setLabelIsChanged(true);
 
-    if ('position' in element) {
-      const el = element;
-      setSelectedElement(
-        {
-          ...el,
-          label: event.target.value,
-          data: { ...element.data, label: event.target.value },
-        },
-        'fromSaveElement'
-      );
-    } else {
-      setSelectedElement(
-        {
-          ...element,
-          label: event.target.value,
-        },
-        'fromSaveElement'
-      );
-    }
+    console.log(debouncedLabel);
   };
 
   const commentChanged = (event) => {
@@ -92,6 +85,30 @@ export default function LabelComment(props) {
       'fromSaveElement'
     );
   };
+
+  function save() {
+    setLabelIsChanged(false);
+    console.log('save', element);
+    if ('position' in element) {
+      const el = element;
+      setSelectedElement(
+        {
+          ...el,
+          label,
+          data: { ...element.data, label },
+        },
+        'fromSaveElement'
+      );
+    } else {
+      setSelectedElement(
+        {
+          ...element,
+          label,
+        },
+        'fromSaveElement'
+      );
+    }
+  }
 
   return (
     <>
@@ -144,14 +161,34 @@ export default function LabelComment(props) {
             variant="outlined"
             className={classes.detailsLabels}
           >
-            <TextField
-              id="outlined-basic"
-              label="Label"
-              variant="outlined"
-              value={label || ''}
-              onChange={labelChanged}
-              multiline
-            />
+            <Grid container spacing={1} alignItems="flex-end">
+              <Grid item>
+                <TextField
+                  id="outlined-basic"
+                  label="Label"
+                  variant="outlined"
+                  value={label || ''}
+                  onChange={labelChanged}
+                  multiline
+                />
+              </Grid>
+              {labelIsChanged && (
+                <Grid item>
+                  <IconButton color="inherit" onClick={save}>
+                    <Fab
+                      className={classes.openFileButton}
+                      color="primary"
+                      size="small"
+                      component="span"
+                      aria-label="add"
+                      // disabled={inExecutionMode}
+                    >
+                      <SaveIcon />
+                    </Fab>
+                  </IconButton>
+                </Grid>
+              )}
+            </Grid>
           </FormControl>
         )}
       </div>
