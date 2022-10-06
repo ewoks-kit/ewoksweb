@@ -50,9 +50,10 @@ export default function IntegratedSpinner({
     }
     // setLoading(getting);
 
-    return () => {
-      clearTimeout(timer.current);
-    };
+    // DOC: clearing the timeout breaks the wanted effect of the tick
+    // return () => {
+    //   clearTimeout(timer.current);
+    // };
   }, [getting]);
 
   const handleButtonClick = () => {

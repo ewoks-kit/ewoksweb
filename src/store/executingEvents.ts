@@ -9,8 +9,7 @@ const executingEvents = (set, get) => ({
   // If user selects to see an executing job then the executed and the executing
   // have to be recalculated to get again in execution mode
   // The events must be replayed up to all the executed and reach the executing
-  // in current-time. For that they are be feeded using a loop
-  // with setExecuting and setExecuted.
+  // in current-time. For that they are be feeded using a loop with setExecuting and setExecuted.
 
   setExecutingEvents: (execEvent: Event, live: boolean) => {
     // console.log(execEvent);
@@ -25,8 +24,6 @@ const executingEvents = (set, get) => ({
         newExecutingEvents = [...prevExecutingEvents, execEvent];
       } else if (execEvent.type === 'end') {
         // remove from executing events
-        // TODO removing based on node_id may be wrong as
-        // there maybe more than one running in parallel: will remove the first-in
         // used event.id to be examined?? Examine if the following for the end event are needed
         const eventToRemove = [...prevExecutingEvents]
           .map((ev) => ev.id)
@@ -61,7 +58,7 @@ const executingEvents = (set, get) => ({
       }
 
       tempPos = tempNode.position;
-
+      console.log(tempNode.data.nodeWidth);
       const { withLabel } = tempNode.data;
 
       // TODO: calc the exact pos based on the nodes width which is
@@ -69,7 +66,10 @@ const executingEvents = (set, get) => ({
       if (execEvent.type === 'start') {
         tempPos = { x: tempPos.x - 30, y: tempPos.y + 30 };
       } else if (withLabel) {
-        tempPos = { x: tempPos.x + 120, y: tempPos.y + 30 };
+        tempPos = {
+          x: tempPos.x + tempNode.data.nodeWidth + 15,
+          y: tempPos.y + 30,
+        };
       } else {
         tempPos = { x: tempPos.x + 95, y: tempPos.y + 30 };
       }
