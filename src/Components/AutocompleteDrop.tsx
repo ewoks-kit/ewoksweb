@@ -14,6 +14,8 @@ interface AutocompleteDropProps {
   setInputValue(input: string): void;
 }
 
+const openWorkflowPlaceholder = 'Open Workflow';
+
 // A dropdown that can be an input as well
 function AutocompleteDrop(props: AutocompleteDropProps) {
   const [options, setOptions] = useState([]);
@@ -71,7 +73,7 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
 
       if (active) {
         setOptions(
-          props.placeholder === 'Workflows'
+          props.placeholder === openWorkflowPlaceholder
             ? filterworkfToCategories([...workF]).map((workf) => {
                 return { ...workf, category: workf.category || 'NoCategory' };
               })
@@ -119,7 +121,7 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
           : option.label || '';
       }}
       getOptionLabel={(option) => {
-        return props.placeholder === 'Workflows'
+        return props.placeholder === openWorkflowPlaceholder
           ? option.label || option.id || ''
           : option.title || '';
       }}
@@ -127,7 +129,7 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
         return option.category;
       }}
       options={
-        props.placeholder === 'Workflows'
+        props.placeholder === openWorkflowPlaceholder
           ? options.sort((a, b) => -b.category.localeCompare(a.category))
           : options
       }

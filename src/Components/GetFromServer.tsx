@@ -36,11 +36,11 @@ export default function GetFromServer(props: GetFromServerProps) {
       >
         <AutocompleteDrop
           setInputValue={setInputValue}
-          placeholder="Workflows"
+          placeholder="Open Workflow"
           category=""
         />
       </FormControl>
-
+      {/* TODO remove buttons if not used here */}
       <GetFromServerButtons
         workflowId={workflowId}
         showButtons={[false, false]}

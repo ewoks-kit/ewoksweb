@@ -9,17 +9,17 @@ import tooltipText from '../Components/TooltipText';
 
 import state from '../store/state';
 
-const useStyles = makeStyles(() => ({
-  top: {
-    animationDuration: '550ms',
-    // animation: 'animation-61bdi0 1.4s linear infinite',
-    position: 'absolute',
-    left: 0,
-  },
-  openFileButton: {
-    backgroundColor: '#96a5f9',
-  },
-}));
+// const useStyles = makeStyles(() => ({
+//   top: {
+//     animationDuration: '550ms',
+//     // animation: 'animation-61bdi0 1.4s linear infinite',
+//     position: 'absolute',
+//     left: 0,
+//   },
+//   openFileButton: {
+//     backgroundColor: '#96a5f9',
+//   },
+// }));
 
 // functionality: create the round spin effect changing from loading state
 // to success and then to the wait state using the image passed as children.
@@ -31,12 +31,30 @@ export default function IntegratedSpinner({
   onClick,
   // callSuccess = false,
 }) {
+  const undoIndex = state((state) => state.undoIndex);
+
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const inExecutionMode = state((state) => state.inExecutionMode);
+  const canvasGraphChanged = state((state) => state.canvasGraphChanged);
 
   const timer = useRef<number>();
+
+  const useStyles = makeStyles(() => ({
+    top: {
+      animationDuration: '550ms',
+      // animation: 'animation-61bdi0 1.4s linear infinite',
+      position: 'absolute',
+      left: 0,
+    },
+    openFileButton: {
+      backgroundColor:
+        tooltip === 'Save to Server' && canvasGraphChanged && undoIndex !== 0
+          ? 'red'
+          : '#96a5f9',
+    },
+  }));
   const classes = useStyles();
 
   // TODO: synd with the real time the call makes using getting
@@ -85,7 +103,7 @@ export default function IntegratedSpinner({
         <Box sx={{ m: 1, position: 'relative' }}>
           <Fab
             className={classes.openFileButton}
-            color="primary"
+            color="secondary"
             size="small"
             onClick={handleButtonClick}
             component="span"

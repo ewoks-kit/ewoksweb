@@ -36,6 +36,7 @@ export default function ExecuteWorkflow() {
     };
   }, [setExecutedEvents]);
 
+  // TODO: check and execute same on ExecutionDetails... merge
   const checkAndExecute = () => {
     // console.log(canvasGraphChanged, undoIndex);
     if (canvasGraphChanged && undoIndex !== 0) {
