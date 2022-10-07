@@ -1,22 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { EwoksRFLink } from '../types';
-import {
-  FormControl,
-  IconButton,
-  InputLabel,
-  OutlinedInput,
-  TextField,
-  Fab,
-  InputAdornment,
-  Grid,
-} from '@material-ui/core';
+import { FormControl, TextField } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 import SidebarTooltip from './SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
 import useDebounce from '../hooks/useDebounce';
-import SaveIcon from '@material-ui/icons/Save';
+import TextButtonSave from './TextButtonSave';
 
 const useStyles = DashboardStyle;
 
@@ -27,6 +18,7 @@ export default function LabelComment(props) {
   const { element, showComment } = props;
 
   const [comment, setComment] = useState('');
+  const [commentIsChanged, setCommentIsChanged] = useState(false);
   const [label, setLabel] = useState('');
   const [labelIsChanged, setLabelIsChanged] = useState(false);
   const [labelChoices, setLabelChoices] = useState([
@@ -66,36 +58,16 @@ export default function LabelComment(props) {
     }
   }, [element]);
 
-  const labelChanged = (event) => {
-    setLabel(event.target.value);
-    setLabelIsChanged(true);
-
-    console.log(debouncedLabel);
-  };
-
-  const commentChanged = (event) => {
-    // console.log('comment changed:', event.target.value);
-    setComment(event.target.value);
-    const el = element;
-    setSelectedElement(
-      {
-        ...el,
-        data: { ...element.data, comment: event.target.value },
-      },
-      'fromSaveElement'
-    );
-  };
-
-  function save() {
+  function saveLabel(labelLocal) {
     setLabelIsChanged(false);
-    console.log('save', element);
+    console.log('save', element, labelLocal);
     if ('position' in element) {
       const el = element;
       setSelectedElement(
         {
           ...el,
-          label,
-          data: { ...element.data, label },
+          label: labelLocal,
+          data: { ...element.data, label: labelLocal },
         },
         'fromSaveElement'
       );
@@ -103,11 +75,22 @@ export default function LabelComment(props) {
       setSelectedElement(
         {
           ...element,
-          label,
+          label: labelLocal,
         },
         'fromSaveElement'
       );
     }
+  }
+
+  function saveComment(commentLocal) {
+    const el = element as EwoksRFLink;
+    setSelectedElement(
+      {
+        ...el,
+        data: { ...element.data, comment: commentLocal },
+      },
+      'fromSaveElement'
+    );
   }
 
   return (
@@ -156,66 +139,15 @@ export default function LabelComment(props) {
             </FormControl>
           </SidebarTooltip>
         ) : (
-          <FormControl
-            fullWidth
-            variant="outlined"
-            className={classes.detailsLabels}
-          >
-            <Grid container spacing={1} alignItems="flex-end">
-              <Grid item>
-                <TextField
-                  id="outlined-basic"
-                  label="Label"
-                  variant="outlined"
-                  value={label || ''}
-                  onChange={labelChanged}
-                  multiline
-                />
-              </Grid>
-              {labelIsChanged && (
-                <Grid item>
-                  <IconButton color="inherit" onClick={save}>
-                    <Fab
-                      className={classes.openFileButton}
-                      color="primary"
-                      size="small"
-                      component="span"
-                      aria-label="add"
-                      // disabled={inExecutionMode}
-                    >
-                      <SaveIcon />
-                    </Fab>
-                  </IconButton>
-                </Grid>
-              )}
-            </Grid>
-          </FormControl>
+          <TextButtonSave label="Label" value={label} valueSaved={saveLabel} />
         )}
       </div>
       <div style={{ display: showComment ? 'block' : 'none' }}>
-        <FormControl
-          fullWidth
-          variant="outlined"
-          className={classes.detailsLabels}
-        >
-          <InputLabel htmlFor="outlined-comment">Comment</InputLabel>
-          <OutlinedInput
-            id="outlined-comment"
-            value={comment || ''}
-            onChange={commentChanged}
-            labelWidth={60}
-            multiline
-          />
-        </FormControl>
-        {/* <TextField
-            id="outlined-basic"
-            label="Comment"
-            variant="outlined"
-            value={comment || ''}
-            onChange={commentChanged}
-            multiline
-          />
-        </Box> */}
+        <TextButtonSave
+          label="Comment"
+          value={comment}
+          valueSaved={saveComment}
+        />
       </div>
     </>
   );

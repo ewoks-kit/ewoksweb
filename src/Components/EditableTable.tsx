@@ -14,7 +14,7 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import DoneIcon from '@material-ui/icons/DoneAllTwoTone';
-import { FormControl, MenuItem, Select } from '@material-ui/core';
+import { Fab, FormControl, MenuItem, Select } from '@material-ui/core';
 import CustomTableCell from './CustomTableCell';
 import DraggableDialog from './DraggableDialog';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -24,6 +24,7 @@ import type {
   DataMapping,
   EditableTableRow,
 } from '../types';
+import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -393,11 +394,20 @@ function EditableTable(props: EditableTableProps) {
                   {row.isEditMode ? (
                     <>
                       <IconButton
-                        style={{ padding: '1px' }}
-                        aria-label="done"
+                        color="inherit"
                         onClick={() => onToggleEditMode(row.id, index, 'done')}
+                        style={{ padding: '1px' }}
+                        aria-label="edit"
                       >
-                        <DoneIcon fontSize="small" color="secondary" />
+                        <Fab
+                          // className={classes.openFileButton}
+                          color="primary"
+                          size="small"
+                          component="span"
+                          aria-label="add"
+                        >
+                          <SaveIcon fontSize="small" />
+                        </Fab>
                       </IconButton>
                       {/* <IconButton
                         style={{ padding: '1px' }}
