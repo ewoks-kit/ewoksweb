@@ -25,26 +25,13 @@ export default function GetFromServerButtons(props) {
     getFromServer('subgraph');
   };
 
-  const checkAndGetFromServer = (isSubgraph) => {
-    if (
-      workflowId &&
-      graphRF.graph.id &&
-      graphRF.graph.id !== workflowId &&
-      canvasGraphChanged &&
-      undoIndex !== 0
-    ) {
-      setOpenAgreeDialog(true);
-    } else {
-      getFromServer(isSubgraph);
-    }
-  };
-
   const disAgreeSaveWithout = () => {
     setOpenAgreeDialog(false);
   };
 
   const getFromServer = useCallback(
     async (isSubgraph) => {
+      console.log('get from server buttons');
       setOpenAgreeDialog(false);
       if (workflowId) {
         setGettingFromServer(true);
@@ -100,9 +87,24 @@ export default function GetFromServerButtons(props) {
     ]
   );
 
-  useEffect(() => {
-    getFromServer('');
-  }, [workflowId, getFromServer]);
+  const checkAndGetFromServer = useCallback((isSubgraph) => {
+    if (
+      workflowId &&
+      graphRF.graph.id &&
+      graphRF.graph.id !== workflowId &&
+      canvasGraphChanged &&
+      undoIndex !== 0
+    ) {
+      setOpenAgreeDialog(true);
+    } else {
+      getFromServer(isSubgraph);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // useEffect(() => {
+  //   getFromServer('');
+  // }, [workflowId, getFromServer]);
 
   return (
     <>

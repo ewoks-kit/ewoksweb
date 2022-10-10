@@ -269,12 +269,15 @@ export interface UiPropsLinks {
   comment?: string;
   animated?: boolean;
   markerEnd?: { type: string };
+  labelBgStyle?: string;
+  labelStyle?: string;
   markerStart?: { type: string };
   arrowHeadTypeanimated?: string;
   sourceHandle?: string;
   targetHandle?: string;
   colorLink?: string;
   style?: LinkStyle;
+  getAroundProps?: { x?: number; y?: number };
 }
 
 export interface UiPropsGraph {
