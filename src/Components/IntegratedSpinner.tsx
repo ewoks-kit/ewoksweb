@@ -9,19 +9,7 @@ import tooltipText from '../Components/TooltipText';
 
 import state from '../store/state';
 
-// const useStyles = makeStyles(() => ({
-//   top: {
-//     animationDuration: '550ms',
-//     // animation: 'animation-61bdi0 1.4s linear infinite',
-//     position: 'absolute',
-//     left: 0,
-//   },
-//   openFileButton: {
-//     backgroundColor: '#96a5f9',
-//   },
-// }));
-
-// functionality: create the round spin effect changing from loading state
+// DOC: create the round spin effect changing from loading state
 // to success and then to the wait state using the image passed as children.
 export default function IntegratedSpinner({
   children,
@@ -103,7 +91,7 @@ export default function IntegratedSpinner({
         <Box sx={{ m: 1, position: 'relative' }}>
           <Fab
             className={classes.openFileButton}
-            color="secondary"
+            color="primary"
             size="small"
             onClick={handleButtonClick}
             component="span"

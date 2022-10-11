@@ -52,8 +52,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 const createData = (pair) => {
-  // // console.log(pair, typeof pair.value);
-  return pair.id && pair.value
+  console.log(pair, pair.value, typeof pair.value);
+  return pair.id && (pair.value || pair.value === null || pair.value === false)
     ? { ...pair, isEditMode: false }
     : {
         id: Object.values(pair)[0],
@@ -63,6 +63,8 @@ const createData = (pair) => {
         type:
           pair.value === 'true' || pair.value === 'false'
             ? 'boolean'
+            : pair.value === null
+            ? 'null'
             : typeof pair.value,
       };
 };
@@ -108,6 +110,7 @@ function EditableTable(props: EditableTableProps) {
         : 'string'
     );
     setTypeOfInputs(tOfIn);
+    console.log(defaultValues);
     setRows(
       defaultValues
         ? defaultValues.map((pair) => {

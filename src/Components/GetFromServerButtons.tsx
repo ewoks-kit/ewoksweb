@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import IntegratedSpinner from '../Components/IntegratedSpinner';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
@@ -31,7 +31,7 @@ export default function GetFromServerButtons(props) {
 
   const getFromServer = useCallback(
     async (isSubgraph) => {
-      console.log('get from server buttons');
+      // console.log('get from server buttons');
       setOpenAgreeDialog(false);
       if (workflowId) {
         setGettingFromServer(true);

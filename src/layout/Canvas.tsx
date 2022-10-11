@@ -116,20 +116,20 @@ function Canvas() {
     // console.log(prevGraphId);
 
     if (prevGraphId !== graphRF.graph.id) {
-      console.log(
-        'prevgraph changed',
-        graphRF.nodes.length,
-        prevGraphId,
-        graphRF.graph.id
-      );
+      // console.log(
+      //   'prevgraph changed',
+      //   graphRF.nodes.length,
+      //   prevGraphId,
+      //   graphRF.graph.id
+      // );
       // Todo: clear setTimeouts
-      const timer = setTimeout(() => {
+      setTimeout(() => {
         // console.log(getZoom(), graphRF.nodes.length);
         // DOC: Define a zoom level for small graphs to not show very-big nodes
         if (graphRF.nodes.length > 0 && graphRF.nodes.length < 6) {
           zoomTo(0.6);
         } else if (graphRF.nodes.length > 0) {
-          console.log('fitview');
+          // console.log('fitview');
           fitView();
         }
         // DOC: the value of the delay is important to fitview even the execution

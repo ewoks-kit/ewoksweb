@@ -268,7 +268,7 @@ export interface UiPropsLinks {
   type?: string;
   comment?: string;
   animated?: boolean;
-  markerEnd?: { type: string };
+  markerEnd?: '' | { type: string };
   labelBgStyle?: string;
   labelStyle?: string;
   markerStart?: { type: string };
@@ -298,7 +298,7 @@ export interface UiProps {
   comment?: string;
   position?: CanvasPosition;
   animated?: boolean;
-  markerEnd?: { type: string };
+  markerEnd?: '' | { type: string };
   markerStart?: { type: string };
   arrowHeadTypeanimated?: string;
   sourceHandle?: string;
@@ -467,7 +467,7 @@ export interface EwoksRFLink {
   subsource?: string;
   uiProps?: UiPropsLinks;
   type?: string;
-  markerEnd?: { type: string };
+  markerEnd?: '' | { type: string };
   markerStart?: string;
   animated?: boolean;
   sourceHandle?: string;

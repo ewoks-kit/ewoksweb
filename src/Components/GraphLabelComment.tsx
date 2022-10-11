@@ -1,17 +1,10 @@
 import React, { useEffect } from 'react';
-
-import { FormControl, InputLabel, OutlinedInput } from '@material-ui/core';
-import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 import type { GraphDetails } from '../types';
 import TextButtonSave from './TextButtonSave';
 
-const useStyles = DashboardStyle;
-
 // DOC: the label and the comment when the graph is the selectedElement
 export default function GraphLabelComment() {
-  const classes = useStyles();
-
   const [label, setLabel] = React.useState('');
   const [comment, setComment] = React.useState('');
   const [category, setCategory] = React.useState('');
@@ -58,12 +51,6 @@ export default function GraphLabelComment() {
 
   return (
     <>
-      {/* <div>
-        <b>Id:</b> {graphRF.graph.id}
-      </div> */}
-      {/* <div>
-        <b>Label:</b> {graphRF.graph.label}
-      </div> */}
       <TextButtonSave label="Label" value={label} valueSaved={saveLabel} />
       <TextButtonSave
         label="Comment"

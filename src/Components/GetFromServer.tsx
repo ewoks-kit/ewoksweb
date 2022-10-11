@@ -3,11 +3,10 @@ import { useState } from 'react';
 import DashboardStyle from '../layout/DashboardStyle';
 import FormControl from '@material-ui/core/FormControl';
 import AutocompleteDrop from '../Components/AutocompleteDrop';
-// import GetFromServerButtons from './GetFromServerButtons';
-import useGetWorkflow from '../hooks/useGetWorkflow';
 import state from '../store/state';
 import type { GraphEwoks } from '../types';
 import { getWorkflow } from '../utils/api';
+import ConfirmDialog from './ConfirmDialog';
 
 const useStyles = DashboardStyle;
 
@@ -40,56 +39,70 @@ export default function GetFromServer(props: GetFromServerProps) {
       workflowDetails.id &&
       graphRF.graph.id &&
       graphRF.graph.id !== workflowId &&
-      canvasGraphChanged &&
-      undoIndex !== 0
+      (canvasGraphChanged || undoIndex !== 0)
     ) {
       setOpenAgreeDialog(true);
     } else {
-      if (workflowDetails && workflowDetails.id) {
-        // setGettingFromServer(true);
-        try {
-          const response = await getWorkflow(workflowDetails.id);
-          if (response.data) {
-            const graph = response.data as GraphEwoks;
-            // setCallSuccess(true);
-            setOpenSnackbar({
-              open: true,
-              text: `Workflow ${graph.graph.label} was downloaded succesfully`,
-              severity: 'success',
-            });
-            setCanvasGraphChanged(false);
-            setWorkingGraph(graph, 'fromServer');
-          } else {
-            setOpenSnackbar({
-              open: true,
-              text:
-                'Could not locate the requested workflow! Maybe it is deleted!',
-              severity: 'warning',
-            });
-          }
-        } catch (error) {
+      getFromServer(workflowDetails.id);
+    }
+  };
+
+  async function getFromServer(workflowIdparam) {
+    if (workflowIdparam) {
+      // setGettingFromServer(true);
+      try {
+        const response = await getWorkflow(workflowIdparam);
+        if (response.data) {
+          const graph = response.data as GraphEwoks;
+          // setCallSuccess(true);
+          setOpenSnackbar({
+            open: true,
+            text: `Workflow ${graph.graph.label} was downloaded succesfully`,
+            severity: 'success',
+          });
+          setCanvasGraphChanged(false);
+          setWorkingGraph(graph, 'fromServer');
+        } else {
           setOpenSnackbar({
             open: true,
             text:
-              error.response?.data?.message ||
-              'Error in retrieving workflow. Please check connectivity with the server!',
-            severity: 'error',
+              'Could not locate the requested workflow! Maybe it is deleted!',
+            severity: 'warning',
           });
-        } finally {
-          // setGettingFromServer(false);
         }
-      } else {
+      } catch (error) {
         setOpenSnackbar({
           open: true,
-          text: 'Please select a graph to fetch and re-click!',
-          severity: 'warning',
+          text:
+            error.response?.data?.message ||
+            'Error in retrieving workflow. Please check connectivity with the server!',
+          severity: 'error',
         });
+      } finally {
+        // setGettingFromServer(false);
       }
+    } else {
+      setOpenSnackbar({
+        open: true,
+        text: 'Please select a graph to fetch and re-click!',
+        severity: 'warning',
+      });
     }
+  }
+
+  const disAgreeSaveWithout = () => {
+    setOpenAgreeDialog(false);
   };
 
   return (
     <>
+      <ConfirmDialog
+        title="There are unsaved changes"
+        content="Continue without saving?"
+        open={openAgreeDialog}
+        agreeCallback={() => getFromServer(workflowId)}
+        disagreeCallback={disAgreeSaveWithout}
+      />
       <FormControl
         variant="standard"
         // TODO: remove if build problem is resolved

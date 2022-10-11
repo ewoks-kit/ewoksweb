@@ -19,7 +19,7 @@ export default function Conditions(props: ConditionsProps) {
   const setSelectedElement = state((state) => state.setSelectedElement);
 
   useEffect(() => {
-    if (element && element.data && element.data.conditions) {
+    if (element?.data?.conditions) {
       setConditions(element.data.conditions);
     }
   }, [element]);

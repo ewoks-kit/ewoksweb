@@ -6,7 +6,6 @@ import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 import SidebarTooltip from './SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
-import useDebounce from '../hooks/useDebounce';
 import TextButtonSave from './TextButtonSave';
 
 const useStyles = DashboardStyle;
@@ -18,19 +17,15 @@ export default function LabelComment(props) {
   const { element, showComment } = props;
 
   const [comment, setComment] = useState('');
-  const [commentIsChanged, setCommentIsChanged] = useState(false);
   const [label, setLabel] = useState('');
-  const [labelIsChanged, setLabelIsChanged] = useState(false);
   const [labelChoices, setLabelChoices] = useState([
     'use mappings',
     'use conditions',
   ]);
   const setSelectedElement = state((state) => state.setSelectedElement);
 
-  const debouncedLabel = useDebounce(label, 1500);
-
   useEffect(() => {
-    console.log('rerender');
+    // console.log('rerender');
     if ('position' in element) {
       setLabel(element.data.label);
       setComment(element.data.comment);
@@ -59,8 +54,7 @@ export default function LabelComment(props) {
   }, [element]);
 
   function saveLabel(labelLocal) {
-    setLabelIsChanged(false);
-    console.log('save', element, labelLocal);
+    // console.log('save', element, labelLocal);
     if ('position' in element) {
       const el = element;
       setSelectedElement(

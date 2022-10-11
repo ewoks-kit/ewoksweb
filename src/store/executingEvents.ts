@@ -1,5 +1,4 @@
-/* eslint-disable sonarjs/cognitive-complexity */
-import type { Event } from '../types';
+import type { Event, EwoksRFNode } from '../types';
 
 const executingEvents = (set, get) => ({
   executingEvents: [] as Event[],
@@ -34,7 +33,7 @@ const executingEvents = (set, get) => ({
 
           newExecutingEvents.splice(eventToRemove, 1);
         }
-        console.log(newExecutingEvents);
+        // console.log(newExecutingEvents);
 
         newExecutingEvents = [...prevExecutingEvents].filter(
           (ev) => ev.node_id !== execEvent.node_id
@@ -44,14 +43,14 @@ const executingEvents = (set, get) => ({
       // DOC: define the position of the event nodes
       let tempPos = { x: 100, y: 100 };
 
-      const tempNode = prevState.graphRF.nodes.find(
+      const tempNode: EwoksRFNode = prevState.graphRF.nodes.find(
         (nod) =>
           nod.id === execEvent.node_id &&
           nod.task_identifier === execEvent.task_id
       );
       // console.log(tempNode, execEvent, prevState.graphRF.nodes);
 
-      if ([null, undefined, ''].includes(tempNode)) {
+      if ([null, undefined].includes(tempNode)) {
         /* eslint-disable no-console */
         console.log('Node not found in current Graph');
         return;

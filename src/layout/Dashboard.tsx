@@ -251,11 +251,7 @@ export default function Dashboard() {
                   </Fab>
                 </IconButton>
               </Tooltip>
-              <MenuPopover
-                anchorEl={anchorEl}
-                handleClose={handleClose}
-                workflowIdInTextbox={workflowIdInTextbox}
-              />
+              <MenuPopover anchorEl={anchorEl} handleClose={handleClose} />
             </div>
             <div className={classes.verticalRule} />
             <Tooltip

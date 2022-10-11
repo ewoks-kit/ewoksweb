@@ -2,11 +2,7 @@ import Popover from '@material-ui/core/Popover';
 import SaveGetFromDisk from '../Components/SaveGetFromDisk';
 // import GetFromServerButtons from './GetFromServerButtons';
 
-export default function MenuPopover({
-  anchorEl,
-  handleClose,
-  workflowIdInTextbox,
-}) {
+export default function MenuPopover({ anchorEl, handleClose }) {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 

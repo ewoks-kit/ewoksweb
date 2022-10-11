@@ -24,7 +24,7 @@ function ExecutionStepsNode(args) {
   );
 
   const goToEvent = (val) => {
-    console.log(val, args);
+    // console.log(val, args);
     setCurrentExecutionEvent(val);
   };
 
