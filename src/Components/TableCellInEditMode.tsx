@@ -60,11 +60,7 @@ function TableCellInEditMode(propsIn) {
   ) : // <span></span>
   typeOfValues.type === 'select' ? (
     <>
-      <FormControl
-        fullWidth
-        variant="outlined"
-        // className={classes.detailsLabels}
-      >
+      <FormControl fullWidth variant="outlined">
         <Autocomplete
           id="free-solo-demo"
           freeSolo

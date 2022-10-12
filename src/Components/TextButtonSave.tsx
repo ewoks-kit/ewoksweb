@@ -40,18 +40,18 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
   }
 
   return (
-    <FormControl
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        alignContent: 'flex-start',
-      }}
-      fullWidth
-      variant="outlined"
-      className={classes.detailsLabels}
-    >
-      {/* <Grid container spacing={1} alignItems="flex-end">
+    <div className={classes.detailsLabels}>
+      <FormControl
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          alignContent: 'flex-start',
+        }}
+        fullWidth
+        variant="outlined"
+      >
+        {/* <Grid container spacing={1} alignItems="flex-end">
         <Grid
           item
           xs={12}
@@ -59,37 +59,38 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
           md={valueIsChanged ? 9 : 12}
           lg={valueIsChanged ? 10 : 12}
         > */}
-      <TextField
-        id="outlined-basic"
-        label={label}
-        variant="outlined"
-        value={valueLocal || ''}
-        style={{ width: valueIsChanged ? '80%' : '98%' }}
-        onChange={valueChanged}
-        multiline
-      />
-      {/* </Grid> */}
-      {valueIsChanged && (
-        // <Grid item xs={12} sm={12} md={3} lg={2}>
-        <IconButton
-          style={{ width: '20%', minWidth: '40px' }}
-          color="inherit"
-          onClick={() => valueSavedLocal(valueLocal)}
-        >
-          <Fab
-            className={classes.openFileButton}
-            color="primary"
-            size="small"
-            component="span"
-            aria-label="add"
-            // disabled={inExecutionMode}
+        <TextField
+          id="outlined-basic"
+          label={label}
+          variant="outlined"
+          value={valueLocal || ''}
+          style={{ width: valueIsChanged ? '80%' : '98%' }}
+          onChange={valueChanged}
+          multiline
+        />
+        {/* </Grid> */}
+        {valueIsChanged && (
+          // <Grid item xs={12} sm={12} md={3} lg={2}>
+          <IconButton
+            style={{ width: '20%', minWidth: '40px' }}
+            color="inherit"
+            onClick={() => valueSavedLocal(valueLocal)}
           >
-            <SaveIcon />
-          </Fab>
-        </IconButton>
-        // </Grid>
-      )}
-      {/* </Grid> */}
-    </FormControl>
+            <Fab
+              className={classes.openFileButton}
+              color="primary"
+              size="small"
+              component="span"
+              aria-label="add"
+              // disabled={inExecutionMode}
+            >
+              <SaveIcon />
+            </Fab>
+          </IconButton>
+          // </Grid>
+        )}
+        {/* </Grid> */}
+      </FormControl>
+    </div>
   );
 }

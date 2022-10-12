@@ -88,54 +88,49 @@ export default function LabelComment(props) {
   }
 
   return (
-    <>
-      <div className={classes.detailsLabels}>
-        {Object.keys(element).includes('source') ? (
-          <SidebarTooltip text="Use Conditions or Data Mapping as label.">
-            <FormControl
-              fullWidth
-              variant="outlined"
-              className={classes.detailsLabels}
-            >
-              <Autocomplete
-                id="free-solo-demo"
-                freeSolo
-                options={labelChoices}
-                value={label}
-                onChange={(event, newValue: string | null) => {
-                  setSelectedElement(
-                    {
-                      ...element,
-                      label: newValue,
-                    },
-                    'fromSaveElement'
-                  );
-                }}
-                onInputChange={(event, newInputValue) => {
-                  setSelectedElement(
-                    {
-                      ...element,
-                      label: newInputValue,
-                    },
-                    'fromSaveElement'
-                  );
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Label"
-                    margin="normal"
-                    variant="outlined"
-                    multiline
-                  />
-                )}
-              />
-            </FormControl>
-          </SidebarTooltip>
-        ) : (
-          <TextButtonSave label="Label" value={label} valueSaved={saveLabel} />
-        )}
-      </div>
+    <div className={classes.detailsLabels}>
+      {Object.keys(element).includes('source') ? (
+        <SidebarTooltip text="Use Conditions or Data Mapping as label.">
+          <FormControl fullWidth variant="outlined">
+            <Autocomplete
+              id="free-solo-demo"
+              freeSolo
+              options={labelChoices}
+              value={label}
+              onChange={(event, newValue: string | null) => {
+                setSelectedElement(
+                  {
+                    ...element,
+                    label: newValue,
+                  },
+                  'fromSaveElement'
+                );
+              }}
+              onInputChange={(event, newInputValue) => {
+                setSelectedElement(
+                  {
+                    ...element,
+                    label: newInputValue,
+                  },
+                  'fromSaveElement'
+                );
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Label"
+                  margin="normal"
+                  variant="outlined"
+                  multiline
+                />
+              )}
+            />
+          </FormControl>
+        </SidebarTooltip>
+      ) : (
+        <TextButtonSave label="Label" value={label} valueSaved={saveLabel} />
+      )}
+
       <div style={{ display: showComment ? 'block' : 'none' }}>
         <TextButtonSave
           label="Comment"
@@ -143,6 +138,6 @@ export default function LabelComment(props) {
           valueSaved={saveComment}
         />
       </div>
-    </>
+    </div>
   );
 }
