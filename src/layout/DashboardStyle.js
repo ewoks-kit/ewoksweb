@@ -21,10 +21,6 @@ const DashboardStyle = makeStyles((theme) => ({
     minWidth: '230px',
   },
 
-  canvasView: {
-    'z-index': 2000,
-  },
-
   root: {
     display: 'flex',
     // width: '100%',
@@ -63,36 +59,11 @@ const DashboardStyle = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: 'none',
-  },
+
   title: {
     flexGrow: 1,
   },
-  drawerPaper: {
-    height: '100vh',
-    position: 'relative',
-    // whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(13),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(13),
-    },
-  },
+
   appBarSpacer: theme.mixins.toolbar,
   content: {
     // width: '100%',
@@ -119,10 +90,6 @@ const DashboardStyle = makeStyles((theme) => ({
   detailsLabels: {
     padding: '8px 0px',
     wordBreak: 'break-word',
-  },
-
-  hasMarginSides: {
-    margin: 'inherit 8px',
   },
 
   executionSide: {

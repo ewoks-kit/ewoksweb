@@ -124,11 +124,7 @@ export default function DraggableDialog(props) {
               arrow
               placement="top-start"
             >
-              <FormControl
-                fullWidth
-                variant="outlined"
-                // className={classes.detailsLabels}
-              >
+              <FormControl fullWidth variant="outlined">
                 <Autocomplete
                   id="free-solo-demo"
                   freeSolo
