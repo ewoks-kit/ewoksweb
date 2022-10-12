@@ -7,7 +7,7 @@ import type { CustomTableCellProps } from '../types';
 // Used as an app-wide dialog when confirmation is needed. Open is a prop
 function CustomTableCell(props: CustomTableCellProps) {
   const { row, name } = props;
-  console.log(row, name);
+  // console.log(row, name);
   const useStyles = makeStyles(() => ({
     tableCell: {
       width: name === 'value' ? '50%' : '30%',

@@ -31,7 +31,7 @@ import ConfirmDialog from '../Components/ConfirmDialog';
 // };
 
 export default function ExecutionDetails() {
-  const graphRF = state((state) => state.graphRF);
+  // const graphRF = state((state) => state.graphRF);
 
   const currentExecutionEvent = state((state) => state.currentExecutionEvent);
 
@@ -121,7 +121,7 @@ export default function ExecutionDetails() {
     });
 
     setWorkflows([...allWorkflowsL, ...wjobs]);
-    console.log(executedEvents, watchedWorkflows);
+    // console.log(executedEvents, watchedWorkflows);
   }, [executedEvents, watchedWorkflows]);
 
   // TODO: Testing hooks with promises
@@ -137,7 +137,7 @@ export default function ExecutionDetails() {
   // };
 
   function workflowDetails(work) {
-    console.log(selectedWorkflow, work);
+    // console.log(selectedWorkflow, work);
     if (selectedWorkflow !== work) {
       setSelectedWorkflow(work);
     } else {
@@ -167,7 +167,7 @@ export default function ExecutionDetails() {
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
     } else {
-      console.log('checkAndExecute - set currentWatchedEvents');
+      // console.log('checkAndExecute - set currentWatchedEvents');
       executeWorkflow();
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
@@ -179,7 +179,7 @@ export default function ExecutionDetails() {
     setInExecutionMode(true);
 
     const workflowId = selectedWorkflow.workflow_id;
-    console.log(selectedWorkflow, workflows);
+    // console.log(selectedWorkflow, workflows);
     // DOC: Replay execution on canvas needs to put the workflow on canvas with
     // the events if not there
     // if (graphRF.graph.id !== workflowId) {
@@ -248,7 +248,7 @@ export default function ExecutionDetails() {
           ev.job_id === selectedWorkflow.job_id
       );
     }
-    console.log(events, selectedWorkflow, workflows);
+    // console.log(events, selectedWorkflow, workflows);
     setCurrentWatchedEvents(events);
     return events;
   }

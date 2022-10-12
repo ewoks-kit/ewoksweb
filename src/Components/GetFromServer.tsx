@@ -10,10 +10,10 @@ import ConfirmDialog from './ConfirmDialog';
 
 const useStyles = DashboardStyle;
 
-interface GetFromServerProps {
-  workflowIdInAutocomplete(id: string): void;
-}
-export default function GetFromServer(props: GetFromServerProps) {
+// interface GetFromServerProps {
+//   workflowIdInAutocomplete(id: string): void;
+// }
+export default function GetFromServer() {
   const classes = useStyles();
 
   const [workflowId, setWorkflowId] = useState('');
@@ -26,24 +26,30 @@ export default function GetFromServer(props: GetFromServerProps) {
   const undoIndex = state((state) => state.undoIndex);
 
   const setInputValue = async (workflowDetails) => {
-    console.log(workflowDetails);
+    // console.log(
+    //   workflowDetails,
+    //   canvasGraphChanged,
+    //   undoIndex,
+    //   graphRF.graph.id
+    // );
     if (workflowDetails && workflowDetails.id) {
       setWorkflowId(workflowDetails.id || '');
-      props.workflowIdInAutocomplete(workflowDetails.id || '');
+      // props.workflowIdInAutocomplete(workflowDetails.id || '');
     }
 
-    console.log('get from server');
     setOpenAgreeDialog(false);
     if (
       workflowDetails &&
       workflowDetails.id &&
       graphRF.graph.id &&
-      graphRF.graph.id !== workflowId &&
-      (canvasGraphChanged || undoIndex !== 0)
+      graphRF.graph.id !== workflowDetails.id
     ) {
-      setOpenAgreeDialog(true);
-    } else {
-      getFromServer(workflowDetails.id);
+      if (canvasGraphChanged && undoIndex !== 0) {
+        setOpenAgreeDialog(true);
+      } else {
+        // console.log('get from server');
+        getFromServer(workflowDetails.id);
+      }
     }
   };
 

@@ -13,7 +13,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/EditOutlined';
-import DoneIcon from '@material-ui/icons/DoneAllTwoTone';
 import { Fab, FormControl, MenuItem, Select } from '@material-ui/core';
 import CustomTableCell from './CustomTableCell';
 import DraggableDialog from './DraggableDialog';
@@ -52,7 +51,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const createData = (pair) => {
-  console.log(pair, pair.value, typeof pair.value);
+  // console.log(pair, pair.value, typeof pair.value);
   return pair.id && (pair.value || pair.value === null || pair.value === false)
     ? { ...pair, isEditMode: false }
     : {
@@ -110,7 +109,7 @@ function EditableTable(props: EditableTableProps) {
         : 'string'
     );
     setTypeOfInputs(tOfIn);
-    console.log(defaultValues);
+    // console.log(defaultValues);
     setRows(
       defaultValues
         ? defaultValues.map((pair) => {

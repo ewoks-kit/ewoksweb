@@ -39,12 +39,12 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   const [y, setY] = useState(80);
 
   useEffect(() => {
-    console.log(element);
     if ('source' in element) {
       setLinkType(element.type);
 
-      if (element.markerEnd === '') setArrowType({ type: 'none' });
-      else {
+      if (element.markerEnd === '') {
+        setArrowType({ type: 'none' });
+      } else {
         setArrowType(element.markerEnd);
       }
 
@@ -66,7 +66,6 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   };
 
   const arrowTypeChanged = (event) => {
-    console.log(event.target.value);
     setArrowType({ type: event.target.value });
     // 'none' is not available anymore in reactFlow so we
     // need to remove markerEnd if 'none' is selected in dropdown
@@ -143,7 +142,6 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   }
 
   function applyArrowTypeToAll() {
-    console.log(arrowType);
     const newGraph: GraphRF = {
       ...graphRF,
       links: graphRF.links.map((link) => {
