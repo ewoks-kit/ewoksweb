@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Button,
   Checkbox,
   FormControl,
   InputLabel,
@@ -10,7 +11,7 @@ import {
 
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
-import type { EwoksRFLink } from '../types';
+import type { EwoksRFLink, GraphRF } from '../types';
 
 const useStyles = DashboardStyle;
 
@@ -25,19 +26,28 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
 
   const setSelectedElement = state((state) => state.setSelectedElement);
   const selectedElement = state((state) => state.selectedElement);
+  const graphRF = state((state) => state.graphRF);
+  const setGraphRF = state((state) => state.setGraphRF);
 
   const [linkType, setLinkType] = useState('');
-  const [arrowType, setArrowType] = useState({ type: 'arrow' });
+  const [arrowType, setArrowType] = useState({
+    type: 'arrow',
+  });
   const [animated, setAnimated] = useState<boolean>(false);
   const [colorLine, setColorLine] = useState<string>('');
   const [x, setX] = useState(80);
   const [y, setY] = useState(80);
 
   useEffect(() => {
-    // console.log(element);
     if ('source' in element) {
       setLinkType(element.type);
-      setArrowType(element.markerEnd);
+
+      if (element.markerEnd === '') {
+        setArrowType({ type: 'none' });
+      } else {
+        setArrowType(element.markerEnd);
+      }
+
       // setArrowType(element.markerStart);
       setAnimated(element.animated);
       setColorLine(element.style.stroke);
@@ -56,15 +66,11 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   };
 
   const arrowTypeChanged = (event) => {
-    setArrowType(event.target.value);
+    setArrowType({ type: event.target.value });
     // 'none' is not available anymore in reactFlow so we
     // need to remove markerEnd if 'none' is selected in dropdown
     if (event.target.value === 'none') {
-      if ('markerEnd' in element) {
-        /* eslint-disable @typescript-eslint/no-unused-vars */
-        const { markerEnd, ...restElement } = element;
-        setSelectedElement({ ...restElement }, 'fromSaveElement');
-      }
+      setSelectedElement({ ...element, markerEnd: '' }, 'fromSaveElement');
     } else {
       setSelectedElement(
         { ...element, markerEnd: { type: event.target.value } },
@@ -127,6 +133,30 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
     setY(number);
   };
 
+  function applyLinkTypeToAll() {
+    const newGraph: GraphRF = {
+      ...graphRF,
+      links: graphRF.links.map((link) => ({ ...link, type: linkType })),
+    };
+    setGraphRF(newGraph, true);
+  }
+
+  function applyArrowTypeToAll() {
+    const newGraph: GraphRF = {
+      ...graphRF,
+      links: graphRF.links.map((link) => {
+        let linkFinal = {} as EwoksRFLink;
+        if (arrowType?.type && arrowType.type === 'none') {
+          linkFinal = { ...link, markerEnd: '' };
+        } else {
+          linkFinal = { ...link, markerEnd: { type: arrowType.type } };
+        }
+        return linkFinal;
+      }),
+    };
+    setGraphRF(newGraph, true);
+  }
+
   // FOr brakpints in links MUST be nodes that will be minimal and:
   // saved in link uiProps as a node with only position being important and type=breakpointNode
   // the RF graph will have 2 links that will be clickable... if one changes
@@ -134,7 +164,17 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   // AN SVG solution maybe better? A custom SVG link but no draggable breakpoints...
   return (
     <>
-      <FormControl variant="filled" fullWidth className={classes.sidebarForm}>
+      <FormControl
+        variant="filled"
+        fullWidth
+        className={classes.sidebarForm}
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          alignContent: 'flex-start',
+        }}
+      >
         <InputLabel id="linkTypeLabel">Link type</InputLabel>
         <Select
           labelId="linkTypeLabel"
@@ -156,9 +196,27 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
             </MenuItem>
           ))}
         </Select>
+        <Button
+          style={{ margin: '8px' }}
+          variant="outlined"
+          color="primary"
+          onClick={applyLinkTypeToAll}
+          size="small"
+        >
+          Apply to all
+        </Button>
       </FormControl>
-      <FormControl variant="filled" fullWidth>
-        <InputLabel id="markerEnd">Arrow Head Type</InputLabel>
+      <FormControl
+        variant="filled"
+        fullWidth
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          alignContent: 'flex-start',
+        }}
+      >
+        <InputLabel id="markerEnd">Arrow Head</InputLabel>
         <Select
           value={arrowType?.type || 'none'}
           label="Arrow head"
@@ -170,6 +228,15 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
             </MenuItem>
           ))}
         </Select>
+        <Button
+          style={{ margin: '8px' }}
+          variant="outlined"
+          color="primary"
+          onClick={applyArrowTypeToAll}
+          size="small"
+        >
+          Apply to all
+        </Button>
       </FormControl>
       <div>
         <label htmlFor="animated">Animated</label>

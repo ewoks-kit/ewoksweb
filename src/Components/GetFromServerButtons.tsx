@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import IntegratedSpinner from '../Components/IntegratedSpinner';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
@@ -25,7 +25,69 @@ export default function GetFromServerButtons(props) {
     getFromServer('subgraph');
   };
 
-  const checkAndGetFromServer = (isSubgraph) => {
+  const disAgreeSaveWithout = () => {
+    setOpenAgreeDialog(false);
+  };
+
+  const getFromServer = useCallback(
+    async (isSubgraph) => {
+      // console.log('get from server buttons');
+      setOpenAgreeDialog(false);
+      if (workflowId) {
+        setGettingFromServer(true);
+        try {
+          const response = await getWorkflow(workflowId);
+          if (response.data) {
+            const graph = response.data as GraphEwoks;
+            // setCallSuccess(true);
+            setOpenSnackbar({
+              open: true,
+              text: `Workflow ${graph.graph.label} was downloaded succesfully`,
+              severity: 'success',
+            });
+            setCanvasGraphChanged(false);
+            if (isSubgraph === 'subgraph') {
+              setSubGraph(graph);
+            } else {
+              setWorkingGraph(graph, 'fromServer');
+            }
+          } else {
+            setOpenSnackbar({
+              open: true,
+              text:
+                'Could not locate the requested workflow! Maybe it is deleted!',
+              severity: 'warning',
+            });
+          }
+        } catch (error) {
+          setOpenSnackbar({
+            open: true,
+            text:
+              error.response?.data?.message ||
+              'Error in retrieving workflow. Please check connectivity with the server!',
+            severity: 'error',
+          });
+        } finally {
+          setGettingFromServer(false);
+        }
+      } else {
+        setOpenSnackbar({
+          open: true,
+          text: 'Please select a graph to fetch and re-click!',
+          severity: 'warning',
+        });
+      }
+    },
+    [
+      setCanvasGraphChanged,
+      setOpenSnackbar,
+      setSubGraph,
+      setWorkingGraph,
+      workflowId,
+    ]
+  );
+
+  const checkAndGetFromServer = useCallback((isSubgraph) => {
     if (
       workflowId &&
       graphRF.graph.id &&
@@ -37,59 +99,12 @@ export default function GetFromServerButtons(props) {
     } else {
       getFromServer(isSubgraph);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const disAgreeSaveWithout = () => {
-    setOpenAgreeDialog(false);
-  };
-
-  const getFromServer = async (isSubgraph) => {
-    setOpenAgreeDialog(false);
-    if (workflowId) {
-      setGettingFromServer(true);
-      try {
-        const response = await getWorkflow(workflowId);
-        if (response.data) {
-          const graph = response.data as GraphEwoks;
-          // setCallSuccess(true);
-          setOpenSnackbar({
-            open: true,
-            text: `Workflow ${graph.graph.label} was downloaded succesfully`,
-            severity: 'success',
-          });
-          setCanvasGraphChanged(false);
-          if (isSubgraph === 'subgraph') {
-            setSubGraph(graph);
-          } else {
-            setWorkingGraph(graph, 'fromServer');
-          }
-        } else {
-          setOpenSnackbar({
-            open: true,
-            text:
-              'Could not locate the requested workflow! Maybe it is deleted!',
-            severity: 'warning',
-          });
-        }
-      } catch (error) {
-        setOpenSnackbar({
-          open: true,
-          text:
-            error.response?.data?.message ||
-            'Error in retrieving workflow. Please check connectivity with the server!',
-          severity: 'error',
-        });
-      } finally {
-        setGettingFromServer(false);
-      }
-    } else {
-      setOpenSnackbar({
-        open: true,
-        text: 'Please select a graph to fetch and re-click!',
-        severity: 'warning',
-      });
-    }
-  };
+  // useEffect(() => {
+  //   getFromServer('');
+  // }, [workflowId, getFromServer]);
 
   return (
     <>

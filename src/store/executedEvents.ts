@@ -13,7 +13,7 @@ const executedEvents = (set, get) => ({
       ...execEvent,
       id: prevState.executedEvents.length as number,
     };
-    // send it to executing events to addapt
+    // send it to executing events to adapt the canvas
     prevState.setExecutingEvents(event, true);
     set((state) => ({
       ...state,

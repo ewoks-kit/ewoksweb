@@ -1,16 +1,12 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { EwoksRFLink } from '../types';
-import {
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-  TextField,
-} from '@material-ui/core';
+import { FormControl, TextField } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 import SidebarTooltip from './SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
+import TextButtonSave from './TextButtonSave';
 
 const useStyles = DashboardStyle;
 
@@ -20,15 +16,16 @@ export default function LabelComment(props) {
 
   const { element, showComment } = props;
 
-  const [comment, setComment] = React.useState('');
-  const [label, setLabel] = React.useState('');
-  const [labelChoices, setLabelChoices] = React.useState([
+  const [comment, setComment] = useState('');
+  const [label, setLabel] = useState('');
+  const [labelChoices, setLabelChoices] = useState([
     'use mappings',
     'use conditions',
   ]);
   const setSelectedElement = state((state) => state.setSelectedElement);
 
   useEffect(() => {
+    // console.log('rerender');
     if ('position' in element) {
       setLabel(element.data.label);
       setComment(element.data.comment);
@@ -56,16 +53,15 @@ export default function LabelComment(props) {
     }
   }, [element]);
 
-  const labelChanged = (event) => {
-    setLabel(event.target.value);
-
+  function saveLabel(labelLocal) {
+    // console.log('save', element, labelLocal);
     if ('position' in element) {
       const el = element;
       setSelectedElement(
         {
           ...el,
-          label: event.target.value,
-          data: { ...element.data, label: event.target.value },
+          label: labelLocal,
+          data: { ...element.data, label: labelLocal },
         },
         'fromSaveElement'
       );
@@ -73,25 +69,23 @@ export default function LabelComment(props) {
       setSelectedElement(
         {
           ...element,
-          label: event.target.value,
+          label: labelLocal,
         },
         'fromSaveElement'
       );
     }
-  };
+  }
 
-  const commentChanged = (event) => {
-    // console.log('comment changed:', event.target.value);
-    setComment(event.target.value);
-    const el = element;
+  function saveComment(commentLocal) {
+    const el = element as EwoksRFLink;
     setSelectedElement(
       {
         ...el,
-        data: { ...element.data, comment: event.target.value },
+        data: { ...element.data, comment: commentLocal },
       },
       'fromSaveElement'
     );
-  };
+  }
 
   return (
     <>
@@ -139,46 +133,15 @@ export default function LabelComment(props) {
             </FormControl>
           </SidebarTooltip>
         ) : (
-          <FormControl
-            fullWidth
-            variant="outlined"
-            className={classes.detailsLabels}
-          >
-            <TextField
-              id="outlined-basic"
-              label="Label"
-              variant="outlined"
-              value={label || ''}
-              onChange={labelChanged}
-              multiline
-            />
-          </FormControl>
+          <TextButtonSave label="Label" value={label} valueSaved={saveLabel} />
         )}
       </div>
       <div style={{ display: showComment ? 'block' : 'none' }}>
-        <FormControl
-          fullWidth
-          variant="outlined"
-          className={classes.detailsLabels}
-        >
-          <InputLabel htmlFor="outlined-comment">Comment</InputLabel>
-          <OutlinedInput
-            id="outlined-comment"
-            value={comment || ''}
-            onChange={commentChanged}
-            labelWidth={60}
-            multiline
-          />
-        </FormControl>
-        {/* <TextField
-            id="outlined-basic"
-            label="Comment"
-            variant="outlined"
-            value={comment || ''}
-            onChange={commentChanged}
-            multiline
-          />
-        </Box> */}
+        <TextButtonSave
+          label="Comment"
+          value={comment}
+          valueSaved={saveComment}
+        />
       </div>
     </>
   );

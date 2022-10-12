@@ -56,7 +56,7 @@ export default function ManageWorkflows() {
             <FormControl variant="standard" style={{ width: '100%' }}>
               <AutocompleteDrop
                 setInputValue={setInputWorkflowValue}
-                placeholder="Workflows"
+                placeholder="Open Workflow"
                 category={categoryValue}
               />
             </FormControl>

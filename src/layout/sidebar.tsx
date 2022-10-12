@@ -322,39 +322,38 @@ export default function Sidebar() {
 
   return (
     <aside className="dndflow">
-      {inExecutionMode ? (
-        <div className={classes.executionSide}>
-          <ExecutionDetails />
-          <EditElement element={selectedElement} />
-        </div>
-      ) : (
+      {!inExecutionMode && (
         <>
           <AddNodes title="Add Nodes" />
           <EditElement element={selectedElement} />
           <EditElementStyle />
-          <Accordion
-            expanded={openExecutionDetails}
-            onChange={handleChangeExecutionDetails}
-            id="Accordions-sidebar"
-          >
-            <AccordionSummary
-              expandIcon={<OpenInBrowser />}
-              aria-controls="panel1a-content"
-              id="Accordions-sidebar"
-            >
-              <SidebarTooltip
-                text={`Drag and drop Tasks from their categories
+        </>
+      )}
+      <Accordion
+        expanded={openExecutionDetails}
+        onChange={handleChangeExecutionDetails}
+        id="Accordions-sidebar"
+      >
+        <AccordionSummary
+          expandIcon={<OpenInBrowser />}
+          aria-controls="panel1a-content"
+          id="Accordions-sidebar"
+        >
+          <SidebarTooltip
+            text={`Drag and drop Tasks from their categories
           to the canvas to create graphs.`}
-              >
-                <Typography>Execution History</Typography>
-              </SidebarTooltip>
-            </AccordionSummary>
-            <AccordionDetails style={{ flexWrap: 'wrap', padding: '4px' }}>
-              <div className={classes.executionSide}>
-                <ExecutionDetails />
-              </div>
-            </AccordionDetails>
-          </Accordion>
+          >
+            <Typography>Execution History</Typography>
+          </SidebarTooltip>
+        </AccordionSummary>
+        <AccordionDetails style={{ flexWrap: 'wrap', padding: '4px' }}>
+          <div className={classes.executionSide}>
+            <ExecutionDetails />
+          </div>
+        </AccordionDetails>
+      </Accordion>
+      {!inExecutionMode && (
+        <>
           <Button
             style={{ margin: '8px' }}
             variant="outlined"

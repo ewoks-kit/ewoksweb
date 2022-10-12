@@ -1,29 +1,114 @@
-import React from 'react';
+import { useState } from 'react';
 
 import DashboardStyle from '../layout/DashboardStyle';
 import FormControl from '@material-ui/core/FormControl';
 import AutocompleteDrop from '../Components/AutocompleteDrop';
-import GetFromServerButtons from './GetFromServerButtons';
+import state from '../store/state';
+import type { GraphEwoks } from '../types';
+import { getWorkflow } from '../utils/api';
+import ConfirmDialog from './ConfirmDialog';
 
 const useStyles = DashboardStyle;
 
-interface GetFromServerProps {
-  workflowIdInAutocomplete(id: string): void;
-}
-export default function GetFromServer(props: GetFromServerProps) {
+// interface GetFromServerProps {
+//   workflowIdInAutocomplete(id: string): void;
+// }
+export default function GetFromServer() {
   const classes = useStyles();
 
-  const [workflowId, setWorkflowId] = React.useState('');
+  const [workflowId, setWorkflowId] = useState('');
+  const setWorkingGraph = state((state) => state.setWorkingGraph);
+  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
+  const graphRF = state((state) => state.graphRF);
+  const canvasGraphChanged = state((state) => state.canvasGraphChanged);
+  const undoIndex = state((state) => state.undoIndex);
 
-  const setInputValue = (workflowDetails) => {
+  const setInputValue = async (workflowDetails) => {
+    // console.log(
+    //   workflowDetails,
+    //   canvasGraphChanged,
+    //   undoIndex,
+    //   graphRF.graph.id
+    // );
     if (workflowDetails && workflowDetails.id) {
       setWorkflowId(workflowDetails.id || '');
-      props.workflowIdInAutocomplete(workflowDetails.id || '');
+      // props.workflowIdInAutocomplete(workflowDetails.id || '');
     }
+
+    setOpenAgreeDialog(false);
+    if (
+      workflowDetails &&
+      workflowDetails.id &&
+      graphRF.graph.id &&
+      graphRF.graph.id !== workflowDetails.id
+    ) {
+      if (canvasGraphChanged && undoIndex !== 0) {
+        setOpenAgreeDialog(true);
+      } else {
+        // console.log('get from server');
+        getFromServer(workflowDetails.id);
+      }
+    }
+  };
+
+  async function getFromServer(workflowIdparam) {
+    if (workflowIdparam) {
+      // setGettingFromServer(true);
+      try {
+        const response = await getWorkflow(workflowIdparam);
+        if (response.data) {
+          const graph = response.data as GraphEwoks;
+          // setCallSuccess(true);
+          setOpenSnackbar({
+            open: true,
+            text: `Workflow ${graph.graph.label} was downloaded succesfully`,
+            severity: 'success',
+          });
+          setCanvasGraphChanged(false);
+          setWorkingGraph(graph, 'fromServer');
+        } else {
+          setOpenSnackbar({
+            open: true,
+            text:
+              'Could not locate the requested workflow! Maybe it is deleted!',
+            severity: 'warning',
+          });
+        }
+      } catch (error) {
+        setOpenSnackbar({
+          open: true,
+          text:
+            error.response?.data?.message ||
+            'Error in retrieving workflow. Please check connectivity with the server!',
+          severity: 'error',
+        });
+      } finally {
+        // setGettingFromServer(false);
+      }
+    } else {
+      setOpenSnackbar({
+        open: true,
+        text: 'Please select a graph to fetch and re-click!',
+        severity: 'warning',
+      });
+    }
+  }
+
+  const disAgreeSaveWithout = () => {
+    setOpenAgreeDialog(false);
   };
 
   return (
     <>
+      <ConfirmDialog
+        title="There are unsaved changes"
+        content="Continue without saving?"
+        open={openAgreeDialog}
+        agreeCallback={() => getFromServer(workflowId)}
+        disagreeCallback={disAgreeSaveWithout}
+      />
       <FormControl
         variant="standard"
         // TODO: remove if build problem is resolved
@@ -36,15 +121,15 @@ export default function GetFromServer(props: GetFromServerProps) {
       >
         <AutocompleteDrop
           setInputValue={setInputValue}
-          placeholder="Workflows"
+          placeholder="Open Workflow"
           category=""
         />
       </FormControl>
-
-      <GetFromServerButtons
+      {/* TODO remove buttons if not used here */}
+      {/* <GetFromServerButtons
         workflowId={workflowId}
-        showButtons={[true, false]}
-      />
+        showButtons={[false, false]}
+      /> */}
     </>
   );
 }

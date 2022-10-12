@@ -81,7 +81,7 @@ const state = create<State>((set, get) => ({
   ...executedEvents(set, get),
   ...executingEvents(set, get),
   ...executedWorkflows(set),
-  ...watchedWorkflows(set),
+  ...watchedWorkflows(set, get),
   ...inExecutionMode(set, get),
   ...gettingFromServer(set),
   ...graphOrSubgraph(set),

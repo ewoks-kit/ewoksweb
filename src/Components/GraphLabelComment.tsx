@@ -1,16 +1,10 @@
 import React, { useEffect } from 'react';
-
-import { FormControl, InputLabel, OutlinedInput } from '@material-ui/core';
-import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 import type { GraphDetails } from '../types';
-
-const useStyles = DashboardStyle;
+import TextButtonSave from './TextButtonSave';
 
 // DOC: the label and the comment when the graph is the selectedElement
 export default function GraphLabelComment() {
-  const classes = useStyles();
-
   const [label, setLabel] = React.useState('');
   const [comment, setComment] = React.useState('');
   const [category, setCategory] = React.useState('');
@@ -24,34 +18,32 @@ export default function GraphLabelComment() {
     setComment(graphElement.uiProps && graphElement.uiProps.comment);
   }, [selectedElement.id, selectedElement]);
 
-  const categoryChanged = (event) => {
-    setCategory(event.target.value);
+  const saveCategory = (category) => {
     setSelectedElement(
       {
         ...selectedElement,
-        category: event.target.value,
+        category,
       } as GraphDetails,
       'fromSaveElement'
     );
   };
 
-  const labelChanged = (event) => {
-    setLabel(event.target.value);
+  const saveLabel = (label) => {
+    // setLabel(event.target.value);
     setSelectedElement(
       {
         ...selectedElement,
-        label: event.target.value,
+        label,
       },
       'fromSaveElement'
     );
   };
 
-  const graphCommentChanged = (event) => {
-    setComment(event.target.value);
+  const saveComment = (comment) => {
     setSelectedElement(
       {
         ...selectedElement,
-        uiProps: { ...selectedElement.uiProps, comment: event.target.value },
+        uiProps: { ...selectedElement.uiProps, comment },
       },
       'fromSaveElement'
     );
@@ -59,79 +51,17 @@ export default function GraphLabelComment() {
 
   return (
     <>
-      {/* <div>
-        <b>Id:</b> {graphRF.graph.id}
-      </div> */}
-      {/* <div>
-        <b>Label:</b> {graphRF.graph.label}
-      </div> */}
-      <FormControl
-        fullWidth
-        variant="outlined"
-        className={classes.detailsLabels}
-      >
-        <InputLabel htmlFor="outlined-label">Label</InputLabel>
-        <OutlinedInput
-          id="outlined-label"
-          value={label || ''}
-          onChange={labelChanged}
-          labelWidth={60}
-        />
-      </FormControl>
-      <FormControl
-        fullWidth
-        variant="outlined"
-        className={classes.detailsLabels}
-      >
-        <InputLabel htmlFor="outlined-comment">Comment</InputLabel>
-        <OutlinedInput
-          id="outlined-comment"
-          value={comment || ''}
-          onChange={graphCommentChanged}
-          labelWidth={60}
-        />
-      </FormControl>
-      <FormControl
-        fullWidth
-        variant="outlined"
-        className={classes.detailsLabels}
-      >
-        <InputLabel htmlFor="outlined-category">Category</InputLabel>
-        <OutlinedInput
-          id="outlined-category"
-          value={category || ''}
-          onChange={categoryChanged}
-          labelWidth={60}
-        />
-      </FormControl>
-      {/* <div className={classes.detailsLabels}>
-        <TextField
-          id="outlined-basic"
-          label="Name"
-          variant="outlined"
-          value={label || ''}
-          onChange={labelChanged}
-        />
-      </div> */}
-      {/* <div className={classes.detailsLabels}>
-        <TextField
-          id="outlined-basic"
-          label="Comment"
-          variant="outlined"
-          value={comment || ''}
-          onChange={graphCommentChanged}
-          multiline
-        />
-      </div>
-      <div className={classes.detailsLabels}>
-        <TextField
-          id="outlined-basic"
-          label="Category"
-          variant="outlined"
-          value={category || ''}
-          onChange={categoryChanged}
-        />
-      </div> */}
+      <TextButtonSave label="Label" value={label} valueSaved={saveLabel} />
+      <TextButtonSave
+        label="Comment"
+        value={comment}
+        valueSaved={saveComment}
+      />
+      <TextButtonSave
+        label="Category"
+        value={category}
+        valueSaved={saveCategory}
+      />
       {/* DOC: if the inputs and outputs of the graph are needed
       <div>
       <b>Inputs </b>

@@ -28,40 +28,49 @@ export function toEwoksLinks(links): EwoksLink[] {
       labelStyle,
       style,
       animated,
-    }) => ({
-      source,
-      target,
-      data_mapping,
-      conditions: conditions.map((con) => {
-        if (con.source_output) {
+    }) => {
+      const link: EwoksLink = {
+        source,
+        target,
+        data_mapping,
+        conditions: conditions.map((con) => {
+          if (con.source_output) {
+            return {
+              ...con,
+              value: calcConditionValue(con),
+            };
+          }
           return {
-            ...con,
+            source_output: con.id,
             value: calcConditionValue(con),
           };
-        }
-        return {
-          source_output: con.id,
-          value: calcConditionValue(con),
-        };
-      }),
-      on_error,
-      sub_target: sub_target || null,
-      sub_source: sub_source || null,
-      map_all_data,
-      uiProps: {
-        label,
-        comment,
-        type,
-        markerEnd,
-        labelBgStyle,
-        labelStyle,
-        style,
-        animated,
-        sourceHandle,
-        targetHandle,
-        getAroundProps,
-      },
-    })
+        }),
+        on_error,
+        // sub_target: sub_target || null,
+        // sub_source: sub_source || null,
+        map_all_data,
+        uiProps: {
+          label,
+          comment,
+          type,
+          markerEnd,
+          labelBgStyle,
+          labelStyle,
+          style,
+          animated,
+          sourceHandle,
+          targetHandle,
+          getAroundProps,
+        },
+      };
+      if (sub_source) {
+        link.sub_source = sub_source;
+      }
+      if (sub_target) {
+        link.sub_target = sub_target;
+      }
+      return link;
+    }
   );
 }
 

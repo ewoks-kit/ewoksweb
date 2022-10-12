@@ -107,24 +107,36 @@ function Canvas() {
   }, [selectedElement, updateNodeInternals]);
 
   useEffect(() => {
-    // console.log(prevGraphId);
-
     if (subgraphsStack[subgraphsStack.length - 1]) {
       setPrevGraphId(subgraphsStack[subgraphsStack.length - 1].id);
     }
+  }, [subgraphsStack]);
+
+  useEffect(() => {
+    // console.log(prevGraphId);
 
     if (prevGraphId !== graphRF.graph.id) {
+      // console.log(
+      //   'prevgraph changed',
+      //   graphRF.nodes.length,
+      //   prevGraphId,
+      //   graphRF.graph.id
+      // );
       // Todo: clear setTimeouts
-      const timer = setTimeout(() => {
+      setTimeout(() => {
         // console.log(getZoom(), graphRF.nodes.length);
         // DOC: Define a zoom level for small graphs to not show very-big nodes
         if (graphRF.nodes.length > 0 && graphRF.nodes.length < 6) {
           zoomTo(0.6);
         } else if (graphRF.nodes.length > 0) {
+          // console.log('fitview');
           fitView();
         }
-      }, 1000);
-      return () => clearTimeout(timer);
+        // DOC: the value of the delay is important to fitview even the execution
+        // that takes up to 4secs. Possibly rerender after the call to get the workflow??
+      }, 2000);
+      // DOC: if I clear the timeout for memory leaks the setTImeout never runs fitview???
+      // return () => clearTimeout(timer);
     }
   }, [
     graphRF.graph.id,
@@ -132,7 +144,6 @@ function Canvas() {
     getZoom,
     zoomTo,
     graphRF.nodes.length,
-    subgraphsStack,
     prevGraphId,
   ]);
 

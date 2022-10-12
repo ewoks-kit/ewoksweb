@@ -31,7 +31,7 @@ import ConfirmDialog from '../Components/ConfirmDialog';
 // };
 
 export default function ExecutionDetails() {
-  const graphRF = state((state) => state.graphRF);
+  // const graphRF = state((state) => state.graphRF);
 
   const currentExecutionEvent = state((state) => state.currentExecutionEvent);
 
@@ -121,6 +121,7 @@ export default function ExecutionDetails() {
     });
 
     setWorkflows([...allWorkflowsL, ...wjobs]);
+    // console.log(executedEvents, watchedWorkflows);
   }, [executedEvents, watchedWorkflows]);
 
   // TODO: Testing hooks with promises
@@ -136,6 +137,7 @@ export default function ExecutionDetails() {
   // };
 
   function workflowDetails(work) {
+    // console.log(selectedWorkflow, work);
     if (selectedWorkflow !== work) {
       setSelectedWorkflow(work);
     } else {
@@ -165,6 +167,7 @@ export default function ExecutionDetails() {
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
     } else {
+      // console.log('checkAndExecute - set currentWatchedEvents');
       executeWorkflow();
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
@@ -173,55 +176,56 @@ export default function ExecutionDetails() {
 
   async function executeWorkflow() {
     // DOC: need to differentiate between the live-executing, live-executed, jobs-from-server
+    setInExecutionMode(true);
 
     const workflowId = selectedWorkflow.workflow_id;
+    // console.log(selectedWorkflow, workflows);
+    // DOC: Replay execution on canvas needs to put the workflow on canvas with
+    // the events if not there
+    // if (graphRF.graph.id !== workflowId) {
+    // DOC: Get the workflow from server if not on canvas
+    // TODO: dublicated code with getFromServer, abstract in store? hook?
+    setGettingFromServer(true);
+    try {
+      const response = await getWorkflow(workflowId);
+      if (response.data) {
+        setWorkingGraph(response.data as GraphEwoks, 'fromServer');
+        // TODO: get read of timeout?
+        setTimeout(() => {
+          // DOC:
+          const events = getEventsForJob();
 
-    // DOC: Replay execution on canvas needs to put the workflow on canvas with the events if not there
-    if (graphRF.graph.id !== workflowId) {
-      // DOC: Get the workflow from server if not on canvas
-      // TODO: dublicated code with getFromServer, abstract in store? hook?
-      setGettingFromServer(true);
-      try {
-        const response = await getWorkflow(workflowId);
-        if (response.data) {
-          setWorkingGraph(response.data as GraphEwoks, 'fromServer');
-          // TODO: get read of timeout?
-          setTimeout(() => {
-            // DOC:
-            const events = getEventsForJob();
-            setInExecutionMode(true);
-            // TODO: timeout is needed because executingEvents try to find
-            // the nodes before they are there from the server
-            // probably because setWorkingGraph changes the graphRF used in executingEvents
-            events.forEach((ev) => setExecutingEvents(ev, false));
-          }, 400);
-        } else {
-          setOpenSnackbar({
-            open: true,
-            text:
-              'Could not locate the requested workflow! Maybe it is deleted!',
-            severity: 'warning',
-          });
-        }
-      } catch (error) {
+          // TODO: timeout is needed because executingEvents try to find
+          // the nodes before they are there from the server
+          // probably because setWorkingGraph changes the graphRF used in executingEvents
+          events.forEach((ev) => setExecutingEvents(ev, false));
+        }, 400);
+      } else {
         setOpenSnackbar({
           open: true,
-          text:
-            error.response?.data?.message ||
-            'Error in retrieving workflow. Please check connectivity with the server!',
-          severity: 'error',
+          text: 'Could not locate the requested workflow! Maybe it is deleted!',
+          severity: 'warning',
         });
-      } finally {
-        setGettingFromServer(false);
       }
-    } else {
-      // setTimeout(() => {
-      const eventsL = getEventsForJob();
-
-      setInExecutionMode(true);
-      eventsL.forEach((ev) => setExecutingEvents(ev, false));
-      // }, 400);
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text:
+          error.response?.data?.message ||
+          'Error in retrieving workflow. Please check connectivity with the server!',
+        severity: 'error',
+      });
+    } finally {
+      setGettingFromServer(false);
     }
+    // } else {
+    //   setTimeout(() => {
+    //     const eventsL = getEventsForJob();
+
+    //     setInExecutionMode(true);
+    //     eventsL.forEach((ev) => setExecutingEvents(ev, false));
+    //   }, 400);
+    // }
   }
 
   function getEventsForJob() {
@@ -244,7 +248,7 @@ export default function ExecutionDetails() {
           ev.job_id === selectedWorkflow.job_id
       );
     }
-    // console.log(events);
+    // console.log(events, selectedWorkflow, workflows);
     setCurrentWatchedEvents(events);
     return events;
   }
@@ -321,7 +325,7 @@ export default function ExecutionDetails() {
               // variant="outlined"
             />
           </div>
-          {selectedWorkflow.time === work.time && (
+          {selectedWorkflow.job_id === work.job_id && (
             <div style={{ display: 'flex', width: '98%' }}>
               <ReactJson
                 src={work}
@@ -341,7 +345,7 @@ export default function ExecutionDetails() {
               />
             </div>
           )}
-          {selectedWorkflow.time === work.time && (
+          {selectedWorkflow.job_id === work.job_id && (
             <span style={{ display: 'flex' }}>
               <ConfirmDialog
                 title="There are unsaved changes"
@@ -388,6 +392,10 @@ export default function ExecutionDetails() {
       >
         Clean all
       </Button>
+      {/* <div>
+        Clicked Event{' '}
+        {currentWatchedEvents[currentExecutionEvent - 1]?.id || 'non'}
+      </div> */}
       {currentWatchedEvents[currentExecutionEvent - 1] && (
         <ReactJson
           src={currentWatchedEvents[currentExecutionEvent - 1]}

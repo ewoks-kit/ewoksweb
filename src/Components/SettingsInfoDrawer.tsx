@@ -6,6 +6,7 @@ import BasicTabs from './BasicTabs';
 import EwoksUiInfo from './EwoksUiInfo';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
+
 // TODO: to decide if only top is needed and local state of the drawer
 export default function SettingsInfoDrawer(props) {
   const [drawerPositions, setDrawerPositions] = React.useState({

@@ -25,6 +25,7 @@ export default function ExecuteWorkflow() {
   const setSelectedElement = state((state) => state.setSelectedElement);
 
   useEffect(() => {
+    // DOC: when execution begins it has to listen to incoming form the socket events
     socket.on('Executing', (data) => {
       // console.log(data);
       setExecutedEvents(data as Event);
@@ -35,6 +36,7 @@ export default function ExecuteWorkflow() {
     };
   }, [setExecutedEvents]);
 
+  // TODO: check and execute same on ExecutionDetails... merge
   const checkAndExecute = () => {
     // console.log(canvasGraphChanged, undoIndex);
     if (canvasGraphChanged && undoIndex !== 0) {

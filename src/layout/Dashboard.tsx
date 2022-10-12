@@ -46,7 +46,6 @@ export default function Dashboard() {
   const [openDrawers, setOpenDrawers] = useState(true);
   const [openSettings, setOpenSettings] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
-  const [workflowIdInTextbox, setWorkflowIdInTextbox] = useState('');
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const gettingFromServer = state((state) => state.gettingFromServer);
   const inExecutionMode = state((state) => state.inExecutionMode);
@@ -80,6 +79,10 @@ export default function Dashboard() {
       setOpenInfo(false);
       setOpenDrawers(true);
       setOpenSettings(true);
+    } else if (openSettingsDrawer === 'close') {
+      setOpenInfo(false);
+      setOpenDrawers(false);
+      setOpenSettings(false);
     }
     // setOpenSettingsDrawer('');
   }, [openSettingsDrawer, setOpenSettingsDrawer]);
@@ -155,10 +158,6 @@ export default function Dashboard() {
     setAnchorEl(null);
   };
 
-  function workflowIdInAutocomplete(id) {
-    setWorkflowIdInTextbox(id);
-  }
-
   return (
     <>
       <div
@@ -229,9 +228,7 @@ export default function Dashboard() {
             <UndoRedo undoF={undoF} redoF={redoF} />
             <div className={classes.verticalRule} />
             <SaveToServer saveToServerF={saveToServerF} />
-            <GetFromServer
-              workflowIdInAutocomplete={workflowIdInAutocomplete}
-            />
+            <GetFromServer />
             <ExecuteWorkflow />
             <div>
               <Tooltip title={tooltipText('More')} enterDelay={800} arrow>
@@ -247,11 +244,7 @@ export default function Dashboard() {
                   </Fab>
                 </IconButton>
               </Tooltip>
-              <MenuPopover
-                anchorEl={anchorEl}
-                handleClose={handleClose}
-                workflowIdInTextbox={workflowIdInTextbox}
-              />
+              <MenuPopover anchorEl={anchorEl} handleClose={handleClose} />
             </div>
             <div className={classes.verticalRule} />
             <Tooltip

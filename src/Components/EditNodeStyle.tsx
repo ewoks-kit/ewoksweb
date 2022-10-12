@@ -98,6 +98,7 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
   };
 
   const changeNodeSize = (event, number) => {
+    // console.log(number);
     setSelectedElement(
       {
         ...selectedElement,

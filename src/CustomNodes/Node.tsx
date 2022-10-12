@@ -142,8 +142,9 @@ const Node: React.FC<NodeProps> = ({
 
   const displayNode = {
     textAlign: 'center' as const,
-    maxWidth: `${nodeSize}px`,
+    width: `${nodeSize}px`,
     minWidth: '60px', // for standard width
+    maxWidth: '300px',
     // maxHeight: '200px',
     display: ['graphInput', 'graphOutput'].includes(type) ? 'flex' : 'inline',
     margin: '2px',

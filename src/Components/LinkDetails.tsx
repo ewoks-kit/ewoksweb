@@ -67,7 +67,7 @@ export default function LinkDetails(props) {
         style={{
           backgroundColor: '#e9ebf7',
           borderRadius: '10px 0px 0px 10px',
-          minWidth: '273px',
+          // minWidth: '200px',
           border: '#96a5f9',
           borderStyle: 'solid none solid solid',
           padding: '4px',
