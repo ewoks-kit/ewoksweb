@@ -29,65 +29,58 @@ export default function GetFromServerButtons(props) {
     setOpenAgreeDialog(false);
   };
 
-  const getFromServer = useCallback(
-    async (isSubgraph) => {
-      // console.log('get from server buttons');
-      setOpenAgreeDialog(false);
-      if (workflowId) {
-        setGettingFromServer(true);
-        try {
-          const response = await getWorkflow(workflowId);
-          if (response.data) {
-            const graph = response.data as GraphEwoks;
-            // setCallSuccess(true);
-            setOpenSnackbar({
-              open: true,
-              text: `Workflow ${graph.graph.label} was downloaded succesfully`,
-              severity: 'success',
-            });
-            setCanvasGraphChanged(false);
-            if (isSubgraph === 'subgraph') {
-              setSubGraph(graph);
-            } else {
-              setWorkingGraph(graph, 'fromServer');
-            }
+  const getFromServer = async (isSubgraph) => {
+    // console.log('get from server buttons');
+    setOpenAgreeDialog(false);
+    if (workflowId) {
+      setGettingFromServer(true);
+      try {
+        const response = await getWorkflow(workflowId);
+        if (response.data) {
+          const graph = response.data as GraphEwoks;
+          // setCallSuccess(true);
+          setOpenSnackbar({
+            open: true,
+            text: `Workflow ${graph.graph.label} was downloaded succesfully`,
+            severity: 'success',
+          });
+          setCanvasGraphChanged(false);
+          if (isSubgraph === 'subgraph') {
+            setSubGraph(graph);
           } else {
-            setOpenSnackbar({
-              open: true,
-              text:
-                'Could not locate the requested workflow! Maybe it is deleted!',
-              severity: 'warning',
-            });
+            setWorkingGraph(graph, 'fromServer');
           }
-        } catch (error) {
+        } else {
           setOpenSnackbar({
             open: true,
             text:
-              error.response?.data?.message ||
-              'Error in retrieving workflow. Please check connectivity with the server!',
-            severity: 'error',
+              'Could not locate the requested workflow! Maybe it is deleted!',
+            severity: 'warning',
           });
-        } finally {
-          setGettingFromServer(false);
         }
-      } else {
+      } catch (error) {
         setOpenSnackbar({
           open: true,
-          text: 'Please select a graph to fetch and re-click!',
-          severity: 'warning',
+          text:
+            error.response?.data?.message ||
+            'Error in retrieving workflow. Please check connectivity with the server!',
+          severity: 'error',
         });
+      } finally {
+        setGettingFromServer(false);
       }
-    },
-    [
-      setCanvasGraphChanged,
-      setOpenSnackbar,
-      setSubGraph,
-      setWorkingGraph,
-      workflowId,
-    ]
-  );
+    } else {
+      setOpenSnackbar({
+        open: true,
+        text: 'Please select a graph to fetch and re-click!',
+        severity: 'warning',
+      });
+    }
+  };
 
-  const checkAndGetFromServer = useCallback((isSubgraph) => {
+  const checkAndGetFromServer = (isSubgraph) => {
+    console.log(workflowId);
+
     if (
       workflowId &&
       graphRF.graph.id &&
@@ -100,11 +93,7 @@ export default function GetFromServerButtons(props) {
       getFromServer(isSubgraph);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // useEffect(() => {
-  //   getFromServer('');
-  // }, [workflowId, getFromServer]);
+  };
 
   return (
     <>

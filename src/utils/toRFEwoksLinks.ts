@@ -28,6 +28,7 @@ export function toRFEwoksLinks(
         on_error,
         conditions,
         map_all_data,
+        required,
         uiProps,
         startEnd,
       }) => {
@@ -94,6 +95,7 @@ export function toRFEwoksLinks(
             // node output_names are link's input_names
             links_input_names: sourceTask.output_names || [],
             data_mapping,
+            required: required || false,
             sub_target: sub_target || '',
             sub_source: sub_source || '',
             conditions: conditions || [],

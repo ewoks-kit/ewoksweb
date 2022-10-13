@@ -241,8 +241,20 @@ function AddNodes(props: AddNodesProps) {
                         style={{
                           overflow: 'hidden',
                           overflowWrap: 'break-word',
+                          position: 'relative',
+                          textAlign: 'center',
+                          color: 'black',
                         }}
                       >
+                        <span
+                          style={{
+                            position: 'absolute',
+                            bottom: '1px',
+                            left: '1px',
+                          }}
+                        >
+                          {elem.task_identifier.split('.').pop()}
+                        </span>
                         <img
                           src={findImage(elem.icon)}
                           alt={elem.task_identifier}

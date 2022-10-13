@@ -10,9 +10,6 @@ import ConfirmDialog from './ConfirmDialog';
 
 const useStyles = DashboardStyle;
 
-// interface GetFromServerProps {
-//   workflowIdInAutocomplete(id: string): void;
-// }
 export default function GetFromServer() {
   const classes = useStyles();
 
@@ -125,11 +122,6 @@ export default function GetFromServer() {
           category=""
         />
       </FormControl>
-      {/* TODO remove buttons if not used here */}
-      {/* <GetFromServerButtons
-        workflowId={workflowId}
-        showButtons={[false, false]}
-      /> */}
     </>
   );
 }

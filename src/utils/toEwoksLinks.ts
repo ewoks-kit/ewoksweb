@@ -18,6 +18,7 @@ export function toEwoksLinks(links): EwoksLink[] {
         sub_target,
         sub_source,
         map_all_data,
+        required,
         conditions,
         on_error,
         getAroundProps,
@@ -49,6 +50,7 @@ export function toEwoksLinks(links): EwoksLink[] {
         // sub_target: sub_target || null,
         // sub_source: sub_source || null,
         map_all_data,
+        required,
         uiProps: {
           label,
           comment,

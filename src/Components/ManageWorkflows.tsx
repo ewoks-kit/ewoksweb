@@ -22,6 +22,7 @@ export default function ManageWorkflows() {
 
   const setInputWorkflowValue = async (workflowDetails) => {
     if (workflowDetails) {
+      // TODO: error handling
       const response = await getWorkflow(workflowDetails.id);
       // console.log('setInputWorkflowValue', val, response);
       setWorkflowValue(response.data as GraphEwoks);
