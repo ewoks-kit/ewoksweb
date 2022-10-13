@@ -93,7 +93,6 @@ export default function LabelComment(props) {
   }
 
   function valueSavedLocal(val) {
-    console.log(val);
     setValueIsChanged(false);
     saveLabel(val);
   }
@@ -109,7 +108,9 @@ export default function LabelComment(props) {
   function valueChanged(event) {
     if (event.target.value !== 0) {
       setChanged(event);
-      if (event) setLabel(event.target.value);
+      if (event) {
+        setLabel(event.target.value);
+      }
     }
   }
 
