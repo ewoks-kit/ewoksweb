@@ -1,6 +1,5 @@
 import Popover from '@material-ui/core/Popover';
 import SaveGetFromDisk from '../Components/SaveGetFromDisk';
-// import GetFromServerButtons from './GetFromServerButtons';
 
 export default function MenuPopover({ anchorEl, handleClose }) {
   const open = Boolean(anchorEl);
@@ -23,10 +22,6 @@ export default function MenuPopover({ anchorEl, handleClose }) {
         }}
       >
         <SaveGetFromDisk />
-        {/* <GetFromServerButtons
-          workflowId={workflowIdInTextbox}
-          showButtons={[false, true]}
-        /> */}
       </Popover>
     </div>
   );

@@ -26,17 +26,17 @@ export default function LinkDetails(props) {
   );
   const [onError, setOnError] = React.useState<boolean>(false);
   const [advanced, setAdvanced] = React.useState<boolean>(false);
+  const [required, setRequired] = React.useState<boolean>(false);
 
   useEffect(() => {
     // console.log(element);
     setElementL(element);
     setMapAllData(!!element.data.map_all_data || false);
     setOnError(!!element.data.on_error || false);
+    setRequired(element.data.required);
   }, [element.id, element, on_error, map_all_data]);
 
   const mapAllDataChanged = (event) => {
-    setMapAllData(event.target.checked);
-
     setSelectedElement(
       {
         ...(element as EwoksRFLink),
@@ -47,7 +47,6 @@ export default function LinkDetails(props) {
   };
 
   const onErrorChanged = (event) => {
-    setOnError(event.target.checked);
     setSelectedElement(
       {
         ...(element as EwoksRFLink),
@@ -59,6 +58,16 @@ export default function LinkDetails(props) {
 
   const advancedChanged = (event) => {
     setAdvanced(event.target.checked);
+  };
+
+  const requiredChanged = (event) => {
+    setSelectedElement(
+      {
+        ...(element as EwoksRFLink),
+        data: { ...element.data, required: event.target.checked },
+      },
+      'fromSaveElement'
+    );
   };
 
   return (
@@ -124,6 +133,14 @@ export default function LinkDetails(props) {
           />
         </div>
         <div style={{ display: advanced ? 'block' : 'none' }}>
+          <div>
+            <b>Required</b>
+            <Checkbox
+              checked={required}
+              onChange={requiredChanged}
+              // inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </div>
           <div className={classes.detailsLabels}>
             <b>Source:</b> {element.source}
           </div>

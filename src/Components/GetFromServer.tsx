@@ -10,9 +10,6 @@ import ConfirmDialog from './ConfirmDialog';
 
 const useStyles = DashboardStyle;
 
-// interface GetFromServerProps {
-//   workflowIdInAutocomplete(id: string): void;
-// }
 export default function GetFromServer() {
   const classes = useStyles();
 
@@ -26,15 +23,8 @@ export default function GetFromServer() {
   const undoIndex = state((state) => state.undoIndex);
 
   const setInputValue = async (workflowDetails) => {
-    // console.log(
-    //   workflowDetails,
-    //   canvasGraphChanged,
-    //   undoIndex,
-    //   graphRF.graph.id
-    // );
     if (workflowDetails && workflowDetails.id) {
       setWorkflowId(workflowDetails.id || '');
-      // props.workflowIdInAutocomplete(workflowDetails.id || '');
     }
 
     setOpenAgreeDialog(false);
@@ -47,7 +37,6 @@ export default function GetFromServer() {
       if (canvasGraphChanged && undoIndex !== 0) {
         setOpenAgreeDialog(true);
       } else {
-        // console.log('get from server');
         getFromServer(workflowDetails.id);
       }
     }
@@ -60,7 +49,6 @@ export default function GetFromServer() {
         const response = await getWorkflow(workflowIdparam);
         if (response.data) {
           const graph = response.data as GraphEwoks;
-          // setCallSuccess(true);
           setOpenSnackbar({
             open: true,
             text: `Workflow ${graph.graph.label} was downloaded succesfully`,
@@ -111,7 +99,6 @@ export default function GetFromServer() {
       />
       <FormControl
         variant="standard"
-        // TODO: remove if build problem is resolved
         style={{
           minWidth: '220px',
           backgroundColor: '#7685dd',
@@ -125,11 +112,6 @@ export default function GetFromServer() {
           category=""
         />
       </FormControl>
-      {/* TODO remove buttons if not used here */}
-      {/* <GetFromServerButtons
-        workflowId={workflowId}
-        showButtons={[false, false]}
-      /> */}
     </>
   );
 }

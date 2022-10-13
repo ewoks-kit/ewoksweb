@@ -1,12 +1,14 @@
+/* eslint-disable sonarjs/cognitive-complexity */
 import { useEffect, useState } from 'react';
 
 import type { EwoksRFLink } from '../types';
-import { FormControl, TextField } from '@material-ui/core';
+import { FormControl, TextField, IconButton, Fab } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
 import SidebarTooltip from './SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
+import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = DashboardStyle;
 
@@ -22,7 +24,10 @@ export default function LabelComment(props) {
     'use mappings',
     'use conditions',
   ]);
+  const [valueIsChanged, setValueIsChanged] = useState(false);
+
   const setSelectedElement = state((state) => state.setSelectedElement);
+  const inExecutionMode = state((state) => state.inExecutionMode);
 
   useEffect(() => {
     // console.log('rerender');
@@ -87,34 +92,55 @@ export default function LabelComment(props) {
     );
   }
 
+  function valueSavedLocal(val) {
+    setValueIsChanged(false);
+    saveLabel(val);
+  }
+
+  function setChanged(event) {
+    if (event && label !== event.target.value) {
+      setValueIsChanged(true);
+    } else {
+      setValueIsChanged(false);
+    }
+  }
+
+  function valueChanged(event) {
+    if (event.target.value !== 0) {
+      setChanged(event);
+      if (event) {
+        setLabel(event.target.value);
+      }
+    }
+  }
+
+  function valueSelectedChanged(event) {
+    setChanged(event);
+    setLabel(event.target.textContent);
+  }
+
   return (
     <div className={classes.detailsLabels}>
       {Object.keys(element).includes('source') ? (
         <SidebarTooltip text="Use Conditions or Data Mapping as label.">
-          <FormControl fullWidth variant="outlined">
+          <FormControl
+            fullWidth
+            variant="outlined"
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              alignContent: 'flex-start',
+            }}
+          >
             <Autocomplete
               id="free-solo-demo"
               freeSolo
               options={labelChoices}
               value={label}
-              onChange={(event, newValue: string | null) => {
-                setSelectedElement(
-                  {
-                    ...element,
-                    label: newValue,
-                  },
-                  'fromSaveElement'
-                );
-              }}
-              onInputChange={(event, newInputValue) => {
-                setSelectedElement(
-                  {
-                    ...element,
-                    label: newInputValue,
-                  },
-                  'fromSaveElement'
-                );
-              }}
+              onChange={(event) => valueSelectedChanged(event)}
+              onInputChange={(event) => valueChanged(event)}
+              style={{ width: valueIsChanged ? '80%' : '98%' }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -125,6 +151,24 @@ export default function LabelComment(props) {
                 />
               )}
             />
+            {valueIsChanged && (
+              <IconButton
+                style={{ width: '20%', minWidth: '30px' }}
+                color="inherit"
+                onClick={() => valueSavedLocal(label)}
+              >
+                <Fab
+                  className={classes.openFileButton}
+                  color="primary"
+                  size="small"
+                  component="span"
+                  aria-label="add"
+                  disabled={inExecutionMode}
+                >
+                  <SaveIcon />
+                </Fab>
+              </IconButton>
+            )}
           </FormControl>
         </SidebarTooltip>
       ) : (

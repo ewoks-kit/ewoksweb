@@ -103,7 +103,6 @@ export default function NodeDetails(props) {
   };
 
   const inputsCompleteChanged = (event) => {
-    setInputsComplete(event.target.checked);
     setSelectedElement(
       {
         ...element,
@@ -118,7 +117,6 @@ export default function NodeDetails(props) {
   };
 
   const defaulErrortNodeChanged = (event) => {
-    setDefaultErrorNode(event.target.checked);
     setSelectedElement(
       {
         ...element,
@@ -167,9 +165,6 @@ export default function NodeDetails(props) {
   };
 
   const mapAllDataChanged = (event) => {
-    // console.log(event.target.checked);import LabelComment from './LabelComment';
-    setMapAllData(event.target.checked);
-
     setSelectedElement(
       {
         ...element,

@@ -366,6 +366,7 @@ export interface EwoksLink {
   source: string;
   target: string;
   map_all_data: boolean;
+  required: boolean;
   data_mapping?: DataMapping[];
   conditions?: Conditions[];
   on_error?: boolean;
@@ -452,6 +453,7 @@ export interface EwoksRFLink {
     conditions?: Conditions[];
     on_error?: boolean;
     map_all_data?: boolean;
+    required: boolean;
     sub_target?: string;
     sub_source?: string;
     colorLine?: string;
