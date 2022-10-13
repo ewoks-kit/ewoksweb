@@ -29,7 +29,7 @@ export default function LinkDetails(props) {
   const [required, setRequired] = React.useState<boolean>(false);
 
   useEffect(() => {
-    console.log(element);
+    // console.log(element);
     setElementL(element);
     setMapAllData(!!element.data.map_all_data || false);
     setOnError(!!element.data.on_error || false);
@@ -37,9 +37,6 @@ export default function LinkDetails(props) {
   }, [element.id, element, on_error, map_all_data]);
 
   const mapAllDataChanged = (event) => {
-    // TODO: set local and the global and rerender. Change only glabal?
-    // setMapAllData(event.target.checked);
-
     setSelectedElement(
       {
         ...(element as EwoksRFLink),
@@ -50,7 +47,6 @@ export default function LinkDetails(props) {
   };
 
   const onErrorChanged = (event) => {
-    // setOnError(event.target.checked);
     setSelectedElement(
       {
         ...(element as EwoksRFLink),
@@ -65,8 +61,6 @@ export default function LinkDetails(props) {
   };
 
   const requiredChanged = (event) => {
-    // console.log(event.target.checked, element.data.required);
-    // setRequired(event.target.checked);
     setSelectedElement(
       {
         ...(element as EwoksRFLink),

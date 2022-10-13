@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { FormControl, IconButton, TextField, Fab } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import SaveIcon from '@material-ui/icons/Save';
+import state from '../store/state';
+// import SidebarTooltip from './SidebarTooltip';
+// import { Autocomplete } from '@material-ui/lab';
 
 const useStyles = DashboardStyle;
 
@@ -19,6 +22,11 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
 
   const [valueLocal, setValueLocal] = useState(value);
   const [valueIsChanged, setValueIsChanged] = useState(false);
+  // const [labelChoices, setLabelChoices] = useState([
+  //   'use mappings',
+  //   'use conditions',
+  // ]);
+  const inExecutionMode = state((state) => state.inExecutionMode);
 
   useEffect(() => {
     setValueLocal(value);
@@ -51,14 +59,28 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
         fullWidth
         variant="outlined"
       >
-        {/* <Grid container spacing={1} alignItems="flex-end">
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={valueIsChanged ? 9 : 12}
-          lg={valueIsChanged ? 10 : 12}
-        > */}
+        {/* <SidebarTooltip text="Use Conditions or Data Mapping as label.">
+          <FormControl fullWidth variant="outlined">
+            <Autocomplete
+              id="free-solo-demo"
+              freeSolo
+              options={labelChoices}
+              value={valueLocal}
+              onChange={valueChanged}
+              // onInputChange={valueChanged}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label={label}
+                  margin="normal"
+                  variant="outlined"
+                  multiline
+                />
+              )}
+            />
+          </FormControl>
+        </SidebarTooltip> */}
+
         <TextField
           id="outlined-basic"
           label={label}
@@ -68,9 +90,8 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
           onChange={valueChanged}
           multiline
         />
-        {/* </Grid> */}
+
         {valueIsChanged && (
-          // <Grid item xs={12} sm={12} md={3} lg={2}>
           <IconButton
             style={{ width: '20%', minWidth: '40px' }}
             color="inherit"
@@ -82,14 +103,12 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
               size="small"
               component="span"
               aria-label="add"
-              // disabled={inExecutionMode}
+              disabled={inExecutionMode}
             >
               <SaveIcon />
             </Fab>
           </IconButton>
-          // </Grid>
         )}
-        {/* </Grid> */}
       </FormControl>
     </div>
   );

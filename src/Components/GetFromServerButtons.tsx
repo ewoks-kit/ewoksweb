@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import IntegratedSpinner from '../Components/IntegratedSpinner';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
@@ -79,8 +79,6 @@ export default function GetFromServerButtons(props) {
   };
 
   const checkAndGetFromServer = (isSubgraph) => {
-    console.log(workflowId);
-
     if (
       workflowId &&
       graphRF.graph.id &&
@@ -92,7 +90,6 @@ export default function GetFromServerButtons(props) {
     } else {
       getFromServer(isSubgraph);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
   return (
