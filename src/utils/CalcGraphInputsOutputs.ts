@@ -91,6 +91,10 @@ function calcInOutNodes(inputOrOutput, graph, nod, graph_links) {
   return nodes;
 }
 
+function calcMarkerEnd(graph_link) {
+  return graph_link?.markerEnd ? { type: graph_link?.markerEnd?.type } : '';
+}
+
 function calcNodeProps(
   isGraph,
   nod,
@@ -99,9 +103,12 @@ function calcNodeProps(
   link_index,
   inputOrOutput
 ) {
+  console.log(graph_links[link_index]);
   return {
     id: nod.id,
     node: nodConnected.id,
+    // IMPTODO: subnode must point to the internal of the graph
+    // or the input node "start" or "graphInput"? TALK Wout
     sub_node: isGraph
       ? (graph_links[link_index] && inputOrOutput === 'graphOutput'
           ? graph_links[link_index].data.sub_source
@@ -124,11 +131,7 @@ function calcNodeProps(
         stroke: graph_links[link_index]?.style?.stroke || '',
         strokeWidth: '3',
       },
-      markerEnd: () => {
-        return graph_links[link_index]?.markerEnd
-          ? { type: graph_links[link_index]?.markerEnd?.type }
-          : '';
-      },
+      markerEnd: calcMarkerEnd(graph_links[link_index]),
       animated: graph_links[link_index]?.animated || false,
       withImage: 'withImage' in nod.data ? nod.data.withImage : true,
       withLabel: 'withLabel' in nod.data ? nod.data.withLabel : true,

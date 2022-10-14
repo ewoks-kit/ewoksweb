@@ -1,5 +1,16 @@
 import existsOrValue from './existsOrValue';
 
+function calcMarkerEnd(inNod) {
+  let type = {};
+  if (inNod.uiProps?.markerEnd?.type) {
+    type = { type: inNod.uiProps.markerEnd.type };
+  } else {
+    type = '';
+  }
+  return type;
+}
+
+// TODO: when stable compare to inNodesLinks and merge if possible
 // calc the output nodes and links that need to be added to the graph from the output_nodes
 export function outNodesLinks(graph) {
   const outputs = { nodes: [], links: [] };
@@ -60,14 +71,7 @@ export function outNodesLinks(graph) {
             stroke: existsOrValue(outNod.uiProps?.style, 'stroke', ''),
           },
           type: existsOrValue(outNod.uiProps, 'linkStyle', 'default'),
-          markerEnd: () => {
-            let type = {};
-            if (outNod.uiProps?.markerEnd?.type) {
-              type = { type: outNod.uiProps.markerEnd.type };
-            }
-            return type;
-            // type: existsOrValue(outNod.uiProps?.markerEnd, 'type', 'arrow'),
-          },
+          markerEnd: calcMarkerEnd(outNod),
           animated: existsOrValue(outNod.uiProps, 'animated', false),
           withImage: existsOrValue(outNod.uiProps, 'withImage', true),
           withLabel: existsOrValue(outNod.uiProps, 'withLabel', true),

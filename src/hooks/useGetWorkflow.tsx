@@ -33,7 +33,7 @@ const useGetWorkflow = async (
             // } else {
             //   setWorkingGraph(graph, 'fromServer');
             // }
-            return resolve(graph);
+            // return resolve(graph);
           } else {
             setOpenSnackbar({
               open: true,
@@ -41,7 +41,9 @@ const useGetWorkflow = async (
                 'Could not locate the requested workflow! Maybe it is deleted!',
               severity: 'warning',
             });
-            return reject(new Error('something bad happened'));
+            // return reject(
+            //   new Error('Could not locate the requested workflow!')
+            // );
           }
         })
         .catch((error) => {
@@ -52,8 +54,10 @@ const useGetWorkflow = async (
               'Error in retrieving workflow. Please check connectivity with the server!',
             severity: 'error',
           });
-          return reject(new Error('something bad happened'));
+          // return reject(new Error('Could not locate the requested workflow!'));
         });
+    } else {
+      // return reject(new Error('Could not locate the requested workflow!'));
     }
   });
 };

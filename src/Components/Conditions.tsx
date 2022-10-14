@@ -90,19 +90,7 @@ export default function Conditions(props: ConditionsProps) {
           valuesChanged={conditionsValuesChanged}
           typeOfValues={[
             {
-              // TODO: examine if the following type is used anymore
               type: 'select',
-              // elementL.source
-              //   ? ['class'].includes(
-              //       graphRF &&
-              //         graphRF.nodes[0] &&
-              //         graphRF.nodes.find((nod) => {
-              //           return nod.id === elementL.source;
-              //         }).task_type
-              //     )
-              //     ? 'select'
-              //     : 'input'
-              //   : 'input',
               values: element.data.links_input_names || [],
             },
             {

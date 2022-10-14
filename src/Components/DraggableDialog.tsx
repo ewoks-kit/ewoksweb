@@ -92,9 +92,7 @@ export default function DraggableDialog(props) {
   const graphChanged = (edit) => {
     setGraph(edit.updated_src);
   };
-  // TODO: there is a error with react
-  // React does not recognize the `inputRef` prop on a DOM element.
-  // if not upgrade material fix it
+
   return (
     <Dialog
       open={isOpen}

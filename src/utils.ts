@@ -125,11 +125,11 @@ export function rfToEwoks(tempGraph): GraphEwoks {
   const graph = calcGraphInputsOutputs(tempGraph);
   const noteNodes = calcNoteNodes(tempGraph);
   graph.uiProps.notes = noteNodes;
-  // console.log({
-  //   graph,
-  //   nodes: toEwoksNodes(tempGraph.nodes),
-  //   links: toEwoksLinks(tempGraph.links),
-  // });
+  console.log({
+    graph,
+    nodes: toEwoksNodes(tempGraph.nodes),
+    links: toEwoksLinks(tempGraph.links),
+  });
   return {
     graph,
     nodes: toEwoksNodes(tempGraph.nodes),

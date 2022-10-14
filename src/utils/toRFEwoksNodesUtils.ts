@@ -1,6 +1,6 @@
-import type { GraphRF } from '../types';
+import type { GraphEwoks, GraphRF } from '../types';
 
-export function inputsAll(tempGraph) {
+export function inputsAll(tempGraph: GraphEwoks) {
   return (
     tempGraph.graph &&
     tempGraph.graph.input_nodes &&

@@ -100,7 +100,6 @@ export default function DataMappingComponent(props: DataMappingProps) {
           valuesChanged={dataMappingValuesChanged}
           typeOfValues={[
             {
-              // TODO: examine if the following type is used anymore
               type: elementL.source
                 ? ['class'].includes(
                     graphRF &&
