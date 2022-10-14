@@ -54,7 +54,7 @@ export default function LabelComment(props) {
               .join(', ')
           : '';
 
-      setLabelChoices([mappings, conditions, '...']);
+      setLabelChoices([mappings, conditions, 'text...']);
     }
   }, [element]);
 
@@ -106,7 +106,7 @@ export default function LabelComment(props) {
   }
 
   function valueChanged(event) {
-    if (event.target.value !== 0) {
+    if (event?.target.value !== 0) {
       setChanged(event);
       if (event) {
         setLabel(event.target.value);
