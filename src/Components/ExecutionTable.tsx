@@ -50,7 +50,7 @@ interface Data {
 }
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T | string) {
-  console.log(a, b, orderBy, a[0].time, b[0].time, a[0].time === b[0].time);
+  // console.log(a, b, orderBy, a[0].time, b[0].time, a[0].time === b[0].time);
 
   // TODO: compare time start-end
   if (['start time', 'end time'].includes(orderBy as string)) {
@@ -89,7 +89,7 @@ type Order = 'asc' | 'desc';
 // }
 
 function getComparator(order, orderBy) {
-  console.log(order, orderBy);
+  // console.log(order, orderBy);
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);

@@ -17,8 +17,6 @@ export function toRFEwoksLinks(
   // calculate the links from inputs-outputs of the Ewoks graph
   const inOutTempGraph = calcInOutLinks(tempGraph);
 
-  console.log(inOutTempGraph.links);
-
   if (inOutTempGraph.links) {
     return inOutTempGraph.links.map(
       ({

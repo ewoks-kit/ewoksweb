@@ -1,4 +1,6 @@
-export default function isValidLink(connection, graphRF) {
+import type { Connection } from 'react-flow-renderer';
+
+export default function isValidLink(connection: Connection, graphRF) {
   let isValid = true;
   let reason = '';
 
@@ -13,6 +15,22 @@ export default function isValidLink(connection, graphRF) {
     isValid = false;
     reason = 'Cannot connect an input with more than one node';
   }
+
+  // DOC: if connected with a graph take the targetHandle into account
+  if (
+    ['graphInput'].includes(source.task_type) &&
+    target.type === 'graph' &&
+    graphRF.links.some((link) => {
+      return (
+        link.target === target.id &&
+        link.targetHandle === connection.targetHandle
+      );
+    })
+  ) {
+    isValid = false;
+    reason = 'Cannot connect an input with an already connected node-handle';
+  }
+
   // check if there is already a link using this graph-output
   if (
     ['graphOutput'].includes(target.task_type) &&
@@ -20,6 +38,21 @@ export default function isValidLink(connection, graphRF) {
   ) {
     isValid = false;
     reason = 'Cannot connect an output with more than one node';
+  }
+
+  // DOC: if connected with a graph take the sourceHandle into account
+  if (
+    ['graphOutput'].includes(target.task_type) &&
+    source.type === 'graph' &&
+    graphRF.links.some((link) => {
+      return (
+        link.source === source.id &&
+        link.sourceHandle === connection.sourceHandle
+      );
+    })
+  ) {
+    isValid = false;
+    reason = 'Cannot connect an output with an already connected node-handle';
   }
 
   // if two nodes are already connected

@@ -67,7 +67,7 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
 
   const arrowTypeChanged = (event) => {
     setArrowType({ type: event.target.value });
-    console.log(element, event.target.value);
+    // console.log(element, event.target.value);
 
     // 'none' is not available anymore in reactFlow so we
     // need to remove markerEnd if 'none' is selected in dropdown

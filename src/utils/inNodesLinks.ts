@@ -13,7 +13,7 @@ function calcMarkerEnd(inNod) {
 // DOC: calc the input nodes and links that need to be added to the graph from
 // the input_nodes in the Ewoks json
 export function inNodesLinks(graph) {
-  console.log(graph.graph.input_nodes, graph.graph.output_nodes);
+  // console.log(graph.graph.input_nodes, graph.graph.output_nodes);
   const inputs = { nodes: [], links: [] };
   if (
     graph.graph &&

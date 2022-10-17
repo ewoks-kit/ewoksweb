@@ -7,6 +7,7 @@ import state from '../store/state';
 import type { GraphEwoks } from '../types';
 import { getWorkflow } from '../utils/api';
 import ConfirmDialog from './ConfirmDialog';
+import { validateEwoksGraph } from '../utils/EwoksValidator';
 
 const useStyles = DashboardStyle;
 
@@ -56,6 +57,7 @@ export default function GetFromServer() {
           });
           setCanvasGraphChanged(false);
           setWorkingGraph(graph, 'fromServer');
+          // validateEwoksGraph(graph);
         } else {
           setOpenSnackbar({
             open: true,

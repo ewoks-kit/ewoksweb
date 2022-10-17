@@ -15,7 +15,7 @@ import axios from 'axios';
 import type { Task } from '../types';
 import state from '../store/state';
 import ConfirmDialog from './ConfirmDialog';
-import { getTaskDescription } from '../utils/api';
+import { getTaskDescription, deleteTask } from '../utils/api';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -66,10 +66,14 @@ export default function ManageIcons() {
   };
 
   const deleteIcon = async () => {
+    console.log('delete icon');
+
     try {
       const tasksData = await getTaskDescription();
       const tasks = tasksData.data as { items: Task[] };
       const allTasks = tasks.items;
+
+      console.log(allTasks);
 
       if (allTasks.map((task) => task.icon).includes(selectedIcon)) {
         setOpenSnackbar({
@@ -292,7 +296,7 @@ export default function ManageIcons() {
                 type="submit"
                 color="primary"
                 size="small"
-                disabled // {fileToBeSent === ''}
+                disabled={fileToBeSent.filename === ''}
               >
                 Upload
               </Button>

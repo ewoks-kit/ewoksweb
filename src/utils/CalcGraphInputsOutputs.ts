@@ -103,7 +103,7 @@ function calcNodeProps(
   link_index,
   inputOrOutput
 ) {
-  console.log(graph_links[link_index]);
+  // console.log(graph_links[link_index]);
   return {
     id: nod.id,
     node: nodConnected.id,
