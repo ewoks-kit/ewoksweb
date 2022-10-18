@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/cognitive-complexity */
 import type { Connection } from 'react-flow-renderer';
 
 export default function isValidLink(connection: Connection, graphRF) {
@@ -7,52 +8,71 @@ export default function isValidLink(connection: Connection, graphRF) {
   const source = graphRF.nodes.find((nod) => nod.id === connection.source);
   const target = graphRF.nodes.find((nod) => nod.id === connection.target);
 
-  // check if there is already a link using this graph-input
-  if (
-    ['graphInput'].includes(source.task_type) &&
-    graphRF.links.some((link) => link.source === source.id)
-  ) {
-    isValid = false;
-    reason = 'Cannot connect an input with more than one node';
+  if (source.task_type === 'graphInput') {
+    // check if there is already a link using this graph-input
+    if (graphRF.links.some((link) => link.source === source.id)) {
+      isValid = false;
+      reason = 'Cannot connect an input with more than one node';
+    }
+
+    // DOC: if connected with a graph take the targetHandle into account
+    // else compare only the node id
+    if (target.type === 'graph') {
+      if (
+        graphRF.links.some((link) => {
+          return (
+            link.target === target.id &&
+            link.targetHandle === connection.targetHandle
+          );
+        })
+      ) {
+        isValid = false;
+        reason =
+          'Cannot connect an input with an already connected node-handle';
+      }
+    } else {
+      if (
+        graphRF.links.some((link) => {
+          return link.target === target.id;
+        })
+      ) {
+        isValid = false;
+        reason = 'Cannot connect an input with an already connected node';
+      }
+    }
   }
 
-  // DOC: if connected with a graph take the targetHandle into account
-  if (
-    ['graphInput'].includes(source.task_type) &&
-    target.type === 'graph' &&
-    graphRF.links.some((link) => {
-      return (
-        link.target === target.id &&
-        link.targetHandle === connection.targetHandle
-      );
-    })
-  ) {
-    isValid = false;
-    reason = 'Cannot connect an input with an already connected node-handle';
-  }
+  if (target.task_type === 'graphOutput') {
+    // DOC: check if there is already a link using this graph-output
+    if (graphRF.links.some((link) => link.target === target.id)) {
+      isValid = false;
+      reason = 'Cannot connect an output with more than one node';
+    }
 
-  // check if there is already a link using this graph-output
-  if (
-    ['graphOutput'].includes(target.task_type) &&
-    graphRF.links.some((link) => link.target === target.id)
-  ) {
-    isValid = false;
-    reason = 'Cannot connect an output with more than one node';
-  }
-
-  // DOC: if connected with a graph take the sourceHandle into account
-  if (
-    ['graphOutput'].includes(target.task_type) &&
-    source.type === 'graph' &&
-    graphRF.links.some((link) => {
-      return (
-        link.source === source.id &&
-        link.sourceHandle === connection.sourceHandle
-      );
-    })
-  ) {
-    isValid = false;
-    reason = 'Cannot connect an output with an already connected node-handle';
+    if (source.type === 'graph') {
+      // DOC: if connected with a graph take the sourceHandle into account
+      if (
+        graphRF.links.some((link) => {
+          return (
+            link.source === source.id &&
+            link.sourceHandle === connection.sourceHandle
+          );
+        })
+      ) {
+        isValid = false;
+        reason =
+          'Cannot connect an output with an already connected node-handle';
+      }
+    } else {
+      if (
+        graphRF.links.some((link) => {
+          return link.source === source.id;
+        })
+      ) {
+        isValid = false;
+        reason = 'Cannot connect an output with an already connected node';
+      }
+    }
   }
 
   // if two nodes are already connected

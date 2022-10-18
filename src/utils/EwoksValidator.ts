@@ -27,7 +27,7 @@ function includes(entity: {}, label: string, properties: string[]) {
   let result = true;
   properties.forEach((pr) => {
     if (Object.keys(entity).includes(pr)) {
-      assertLog(`${label} has a ${pr}`);
+      assertLog(`${label} has "${pr}"`);
     } else {
       assertLog(`${label} does not have a ${pr}`, 'error');
       result = false;
@@ -102,20 +102,20 @@ export function validateEwoksGraph(graph) {
     }
   });
 
-  graph.input_nodes.forEach((input, index) => {
-    if (input.sub_node) {
-      // The subgraph does not exist or has changed its input names remove link
-    }
-    if (!nodeIds.has(input.node)) {
-      assertLog(`${input.node} mentioned on an input-link does not exist`);
-      result.push(true);
-    } else {
-      result.push(false);
-      // console.error(
-      // `link ${index} ${link.source} ${link.target} has wrong source and/or target node id`
-      // );
-    }
-  });
+  // graph.input_nodes.forEach((input, index) => {
+  //   if (input.sub_node) {
+  //     // The subgraph does not exist or has changed its input names remove link
+  //   }
+  //   if (!nodeIds.has(input.node)) {
+  //     assertLog(`${input.node} mentioned on an input-link does not exist`);
+  //     result.push(true);
+  //   } else {
+  //     result.push(false);
+  //     // console.error(
+  //     // `link ${index} ${link.source} ${link.target} has wrong source and/or target node id`
+  //     // );
+  //   }
+  // });
 
   // if subgraphs exist look for the whole tree if it exists and warn
 

@@ -42,6 +42,7 @@ export function outNodesLinks(graph) {
             withImage: existsOrValue(outNod.uiProps, 'withImage', true),
             withLabel: existsOrValue(outNod.uiProps, 'withLabel', true),
             colorBorder: existsOrValue(outNod.uiProps, 'colorBorder', ''),
+            nodeWidth: existsOrValue(outNod.uiProps, 'nodeWidth', 50),
           },
         });
 
@@ -76,6 +77,7 @@ export function outNodesLinks(graph) {
           withImage: existsOrValue(outNod.uiProps, 'withImage', true),
           withLabel: existsOrValue(outNod.uiProps, 'withLabel', true),
           colorBorder: existsOrValue(outNod.uiProps, 'colorBorder', ''),
+          nodeWidth: existsOrValue(outNod.uiProps, 'nodeWidth', 50),
         },
       });
       // }

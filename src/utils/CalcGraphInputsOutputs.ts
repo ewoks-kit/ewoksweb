@@ -1,9 +1,9 @@
-import type { GraphDetails } from '../types';
+import type { GraphDetails, GraphRF } from '../types';
 import existsOrValue from './existsOrValue';
 
 // Calculate the ewoks input_nodes and output_nodes within the graph
 // from the nodes of the graphRF model with types graphInput, graphOutput
-export function calcGraphInputsOutputs(graph): GraphDetails {
+export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
   const graph_links = [...graph.links];
   let input_nodes = [];
   let output_nodes = [];
@@ -103,7 +103,7 @@ function calcNodeProps(
   link_index,
   inputOrOutput
 ) {
-  // console.log(graph_links[link_index]);
+  // console.log(nod);
   return {
     id: nod.id,
     node: nodConnected.id,
@@ -136,6 +136,7 @@ function calcNodeProps(
       withImage: 'withImage' in nod.data ? nod.data.withImage : true,
       withLabel: 'withLabel' in nod.data ? nod.data.withLabel : true,
       colorBorder: nod.data.colorBorder,
+      nodeWidth: nod.data.nodeWidth,
     },
   };
 }

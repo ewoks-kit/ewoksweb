@@ -43,7 +43,7 @@ export default function GetFromServer() {
     }
   };
 
-  async function getFromServer(workflowIdparam) {
+  async function getFromServer(workflowIdparam: string) {
     if (workflowIdparam) {
       // setGettingFromServer(true);
       try {
@@ -57,7 +57,7 @@ export default function GetFromServer() {
           });
           setCanvasGraphChanged(false);
           setWorkingGraph(graph, 'fromServer');
-          // validateEwoksGraph(graph);
+          validateEwoksGraph(graph);
         } else {
           setOpenSnackbar({
             open: true,
@@ -67,6 +67,7 @@ export default function GetFromServer() {
           });
         }
       } catch (error) {
+        // console.log(error);
         setOpenSnackbar({
           open: true,
           text:

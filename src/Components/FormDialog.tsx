@@ -109,7 +109,7 @@ export default function FormDialog(props: FormDialogProps) {
     }
   };
 
-  const puTask = async (task: Task) => {
+  async function puTask(task: Task) {
     try {
       await putTask(task);
 
@@ -130,9 +130,9 @@ export default function FormDialog(props: FormDialogProps) {
       });
     }
     // }
-  };
+  }
 
-  const saveTask = async (task) => {
+  async function saveTask(task: Task) {
     if (tasks.some((ts) => ts.task_identifier === task.task_identifier)) {
       setOpenSnackbar({
         open: true,
@@ -159,9 +159,9 @@ export default function FormDialog(props: FormDialogProps) {
         severity: 'warning',
       });
     }
-  };
+  }
 
-  const saveGraph = async (graph) => {
+  async function saveGraph(graph: GraphRF) {
     if (overwrite) {
       // put
       try {
@@ -211,9 +211,9 @@ export default function FormDialog(props: FormDialogProps) {
         });
       }
     }
-  };
+  }
 
-  const newNameChanged = (event) => {
+  function newNameChanged(event) {
     const val = event.target.value;
     setNewName(val);
     if ('graph' in selectedElement) {
@@ -228,18 +228,18 @@ export default function FormDialog(props: FormDialogProps) {
         task_identifier: val,
       });
     }
-  };
+  }
 
-  const taskTypeChanged = (event) => {
+  function taskTypeChanged(event) {
     const val = event.target.value;
     setTaskType(val);
     setElement({
       ...element,
       task_type: val,
     });
-  };
+  }
 
-  const categoryChanged = (event) => {
+  function categoryChanged(event) {
     const val = event.target.value;
     setCategory(val);
 
@@ -247,49 +247,49 @@ export default function FormDialog(props: FormDialogProps) {
       ...element,
       category: val,
     });
-  };
+  }
 
-  const iconChanged = (event) => {
+  function iconChanged(event) {
     const val = event.target.value;
     setIcon(val);
     setElement({
       ...element,
       icon: val,
     });
-  };
+  }
 
-  const optionalInputNamesChanged = (event) => {
+  function optionalInputNamesChanged(event) {
     const val = event.target.value;
     setOptionalInputNames(val.split(','));
     setElement({
       ...element,
       optional_input_names: val.split(','),
     });
-  };
+  }
 
-  const requiredInputNamesChanged = (event) => {
+  function requiredInputNamesChanged(event) {
     const val = event.target.value;
     setRequiredInputNames(val.split(','));
     setElement({
       ...element,
       required_input_names: val.split(','),
     });
-  };
+  }
 
-  const outputNamesChanged = (event) => {
+  function outputNamesChanged(event) {
     const val = event.target.value;
     setOutputNames(val.split(','));
     setElement({
       ...element,
       output_names: val.split(','),
     });
-  };
+  }
 
-  const handleClose = () => {
+  function handleClose() {
     props.setOpenSaveDialog(false);
     setGettingFromServer(false);
     setNewName('');
-  };
+  }
 
   const task_types = ['class', 'method', 'script', 'ppfmethod', 'ppfport'];
   const optionalInputs = 'Optional Inputs';
@@ -330,11 +330,9 @@ export default function FormDialog(props: FormDialogProps) {
         {action === 'editTask' ? 'Edit the ' : 'Give the new '}
         {isForGraph ? 'Workflow name' : 'Task details'}
         {action === 'newGraphOrOverwrite' &&
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          ` or select to overwrite the existing with id: ${() => {
-            const elGraph = elementToEdit as GraphRF;
-            return elGraph.graph.id;
-          }}`}
+          ` or select to overwrite the existing with id: ${
+            'graph' in elementToEdit ? elementToEdit.graph.id : ''
+          }`}
       </DialogTitle>
       <DialogContent>
         <DialogContentText>

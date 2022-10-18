@@ -48,7 +48,9 @@ const workingGraph = (set, get) => ({
     }
     get().setSelectedElement({} as EwoksRFNode | EwoksRFLink);
     get().setSubgraphsStack({ id: 'initialiase', label: '' });
-    get().setGraphRF(get().initializedRFGraph);
+
+    // TODO: examine if the following initialization is needed any more?
+    // get().setGraphRF(get().initializedRFGraph);
     // Is the following needed as to not get existing graphs? Better an empty array?
     get().setRecentGraphs({} as GraphRF, true);
 
@@ -69,8 +71,8 @@ const workingGraph = (set, get) => ({
 
     // 4. Calculate the new graph given the subgraphs
     let grfNodes = toRFEwoksNodes(workingGraph, newNodeSubgraphs, get().tasks);
-    // console.log(grfNodes, workingGraph);
-    // test notes
+
+    // 5. Calculate notes nodes
     const notes =
       (workingGraph.graph.uiProps &&
         workingGraph.graph.uiProps.notes &&
