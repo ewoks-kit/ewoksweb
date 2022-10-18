@@ -1,7 +1,7 @@
 import ReactJson from 'react-json-view';
 
 // TODO if needed
-// interface CellEditInJson {
+// interface CellEditInJsonProps {
 //   row,
 //   name,
 //   type

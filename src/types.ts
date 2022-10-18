@@ -5,7 +5,33 @@ export interface GraphNodes {
   id: string;
   node: string;
   sub_node?: string;
-  uiProps?: UiProps;
+  link_attributes?: InOutLinkAttributes;
+  uiProps?: InOutNodesUiProps;
+}
+
+// TODO: examine with ewoks if all the following are needed in an InOutLink
+export interface InOutLinkAttributes {
+  label: string;
+  comment: string;
+  conditions: Conditions;
+  data_mapping: DataMapping;
+  map_all_data: boolean;
+  on_error: boolean;
+}
+
+export interface InOutNodesUiProps {
+  label?: string;
+  position?: CanvasPosition;
+  linkStyle?: string;
+  style?: LinkStyle;
+  animated?: boolean;
+  markerEnd?: '' | { type: string };
+  // TODO: the following is not used for now
+  markerStart?: { type: string };
+  targetHandle?: string;
+  withImage?: boolean;
+  withLabel?: boolean;
+  colorBorder?: string;
 }
 
 export interface GraphDetails {
@@ -234,7 +260,6 @@ export interface Task {
   required_input_names?: string[];
   icon?: string;
   category?: string;
-  uiProps?: UiProps;
 }
 
 export interface Inputs {
@@ -272,7 +297,6 @@ export interface UiPropsLinks {
   labelBgStyle?: string;
   labelStyle?: string;
   markerStart?: { type: string };
-  arrowHeadTypeanimated?: string;
   sourceHandle?: string;
   targetHandle?: string;
   colorLink?: string;
@@ -288,25 +312,6 @@ export interface UiPropsGraph {
   style?: LinkStyle;
   source: string;
   icon?: string;
-}
-
-// TODO break to uiprops for links and nodes?
-export interface UiProps {
-  label?: string;
-  type?: string;
-  icon?: string;
-  comment?: string;
-  position?: CanvasPosition;
-  animated?: boolean;
-  markerEnd?: '' | { type: string };
-  markerStart?: { type: string };
-  arrowHeadTypeanimated?: string;
-  sourceHandle?: string;
-  targetHandle?: string;
-  notes?: Note[];
-  colorLink?: string;
-  style?: LinkStyle;
-  source: string;
 }
 
 export interface LinkStyle {
@@ -410,8 +415,7 @@ export interface EwoksRFNode {
     withImage?: boolean;
     withLabel?: boolean;
     colorBorder?: string;
-    map_all_data?: boolean; // TODO: not exists in nodes Typescript resolve...
-    // on_error?: boolean; // TODO: not exists in nodes Typescript resolve...
+    map_all_data?: boolean;
   };
   selected?: boolean;
   sourcePosition?: string;

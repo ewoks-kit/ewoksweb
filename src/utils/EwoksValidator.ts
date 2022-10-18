@@ -7,8 +7,8 @@ function assertLog(statement, severity = 'info') {
     /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
     console.warn(statement);
   } else {
-    /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
-    console.warn(statement);
+    /* eslint no-console: ["error", { allow: ["info", "warn", "error"] }] */
+    console.info(statement);
   }
 }
 
@@ -27,7 +27,7 @@ function includes(entity: {}, label: string, properties: string[]) {
   let result = true;
   properties.forEach((pr) => {
     if (Object.keys(entity).includes(pr)) {
-      assertLog(`${label} has a ${pr}`);
+      assertLog(`${label} has "${pr}"`);
     } else {
       assertLog(`${label} does not have a ${pr}`, 'error');
       result = false;
@@ -35,6 +35,8 @@ function includes(entity: {}, label: string, properties: string[]) {
   });
   return result;
 }
+
+function allLinksAreConnectedTo2Nodes() {}
 
 export function validateEwoksGraph(graph) {
   const result = [];
@@ -84,11 +86,13 @@ export function validateEwoksGraph(graph) {
     // console.error('At least one node id is not unique');
   }
 
+  console.log(nodeIds);
+
   graph.links.forEach((link, index) => {
-    if (link.source === link.target) {
-      result.push(false);
-      // console.error(`link ${index} has the same source-target`);
-    } else if (nodeIds.has(link.source) && nodeIds.has(link.target)) {
+    // DOC: links should have both ends attached to nodes or else delete link
+    // since it is not shown on the canvas
+    if (!nodeIds.has(link.source) || !nodeIds.has(link.target)) {
+      assertLog(`${link.source} does not exist`);
       result.push(true);
     } else {
       result.push(false);
@@ -97,6 +101,21 @@ export function validateEwoksGraph(graph) {
       // );
     }
   });
+
+  // graph.input_nodes.forEach((input, index) => {
+  //   if (input.sub_node) {
+  //     // The subgraph does not exist or has changed its input names remove link
+  //   }
+  //   if (!nodeIds.has(input.node)) {
+  //     assertLog(`${input.node} mentioned on an input-link does not exist`);
+  //     result.push(true);
+  //   } else {
+  //     result.push(false);
+  //     // console.error(
+  //     // `link ${index} ${link.source} ${link.target} has wrong source and/or target node id`
+  //     // );
+  //   }
+  // });
 
   // if subgraphs exist look for the whole tree if it exists and warn
 

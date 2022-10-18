@@ -25,6 +25,7 @@ import DataNode from '../CustomNodes/DataNode';
 import type { GraphRF, EwoksRFNode, EwoksRFLink } from '../types';
 import state from '../store/state';
 import { calcNewId } from '../utils/calcNewId';
+import isValidLink from '../utils/IsValidLink';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -332,26 +333,41 @@ function Canvas() {
     }
   };
 
-  const onEdgeUpdate = (oldEdge, newConnection) => {
-    // console.log(oldEdge, newConnection);
+  const onEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => {
+    // TODO: it is link: EwoksRFLink but not compatible with Edge?
     const link = {
       ...oldEdge,
       ...newConnection,
     };
-    const newGraph = {
-      graph: { ...graphRF.graph },
-      nodes: nodes.filter((el) => el.position), // [...graphRF.nodes],
-      links: [
-        ...edges
-          .filter((el) => el.source)
-          .filter((lin) => lin.id !== oldEdge.id),
-        link,
-      ],
-    };
 
-    setGraphRF(newGraph as GraphRF, true);
-    setUndoRedo({ action: 'Updated a Link', graph: newGraph });
-    setRecentGraphs(newGraph as GraphRF);
+    // DOC: if the new link is:
+    // 1. attached to a node-handle where there is already a link or
+    // 2. is attached to an input-output already connected to a node then
+    // edgeUpdate should not happen and a message informs it is not ewoks-compatible
+
+    const { isValid, reason } = isValidLink(newConnection, graphRF);
+    if (!isValid) {
+      setOpenSnackbar({
+        open: true,
+        text: reason,
+        severity: 'warning',
+      });
+    } else {
+      const newGraph = {
+        graph: { ...graphRF.graph },
+        nodes: nodes.filter((el) => el.position), // [...graphRF.nodes],
+        links: [
+          ...edges
+            .filter((el) => el.source)
+            .filter((lin) => lin.id !== oldEdge.id),
+          link,
+        ],
+      };
+
+      setGraphRF(newGraph as GraphRF, true);
+      setUndoRedo({ action: 'Updated a Link', graph: newGraph });
+      setRecentGraphs(newGraph as GraphRF);
+    }
   };
 
   const onConnect = (params: Connection) => {

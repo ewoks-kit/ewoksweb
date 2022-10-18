@@ -45,6 +45,9 @@ const useStyles = makeStyles((theme: Theme) =>
       textDecoration: 'none',
       color: 'rgb(63, 81, 181)',
     },
+    arrowForwardStyle: {
+      margin: '5px',
+    },
     imageList: {
       width: 600,
       height: 350,
@@ -78,7 +81,7 @@ export default function SignUp(props) {
               managing your Workflows. Select to Edit or Monitor or get started
               with a graph where Ewoks-UI describes itself:
             </Typography>
-
+            {/* TODO: repetitive iconButton abstract when stable */}
             <IconButton
               color="inherit"
               // onClick={props.handleCloseDialog || ''}
@@ -97,6 +100,7 @@ export default function SignUp(props) {
                     size="small"
                     component="span"
                     aria-label="add"
+                    className={classes.arrowForwardStyle}
                   >
                     <ArrowForwardIosIcon />
                   </Fab>
@@ -118,6 +122,7 @@ export default function SignUp(props) {
                     size="small"
                     component="span"
                     aria-label="add"
+                    className={classes.arrowForwardStyle}
                   >
                     <ArrowForwardIosIcon />
                   </Fab>
@@ -139,6 +144,7 @@ export default function SignUp(props) {
                     size="small"
                     component="span"
                     aria-label="add"
+                    className={classes.arrowForwardStyle}
                   >
                     <ArrowForwardIosIcon />
                   </Fab>

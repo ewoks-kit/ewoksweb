@@ -49,12 +49,24 @@ interface Data {
   status: string; // "finished"
 }
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  // console.log(a[0], b[0], orderBy);
-  if (b[0][orderBy] < a[0][orderBy]) {
+function descendingComparator<T>(a: T, b: T, orderBy: keyof T | string) {
+  // console.log(a, b, orderBy, a[0].time, b[0].time, a[0].time === b[0].time);
+
+  // TODO: compare time start-end
+  if (['start time', 'end time'].includes(orderBy as string)) {
+    if (b[0]['time'] < a[0]['time']) {
+      return -1;
+    }
+    if (b[0]['time'] > a[0]['time']) {
+      return 1;
+    }
+  }
+  // if orderBy === 'workflow_id' wont work because it is not included in a context: job
+  // use the context: workflow that has both => a[1] which is the workflow context
+  if (b[1][orderBy] < a[1][orderBy]) {
     return -1;
   }
-  if (b[0][orderBy] > a[0][orderBy]) {
+  if (b[1][orderBy] > a[1][orderBy]) {
     return 1;
   }
   return 0;
@@ -329,6 +341,7 @@ export default function EnhancedTable() {
     event: React.MouseEvent<unknown>,
     property: keyof Data
   ) => {
+    console.log(event, property);
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -509,7 +522,9 @@ export default function EnhancedTable() {
                           {formatedTime(row[0] && row[0].time)}
                         </TableCell>
                         <TableCell align="right">
-                          {formatedTime(row[1] && row[1].time)}
+                          {formatedTime(
+                            row[row.length - 1] && row[row.length - 1].time
+                          )}
                         </TableCell>
                         {/* <TableCell align="right">
                         {formatedTime(

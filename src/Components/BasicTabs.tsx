@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-import { Box, TextField, Tooltip } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 
 import ManageIcons from './ManageIcons';
 import ManageWorkflows from './ManageWorkflows';
@@ -47,9 +47,9 @@ function a11yProps(index: number) {
 
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
-  const [serverUrl, setServerUrl] = React.useState(
-    process.env.REACT_APP_SERVER_URL
-  );
+  // const [serverUrl, setServerUrl] = React.useState(
+  //   process.env.REACT_APP_SERVER_URL
+  // );
   const openSettingsDrawer = state((state) => state.openSettingsDrawer);
 
   useEffect(() => {
@@ -80,9 +80,9 @@ export default function BasicTabs() {
     }
   };
 
-  const serverUrlChanged = (event) => {
-    setServerUrl(event.target.value);
-  };
+  // const serverUrlChanged = (event) => {
+  //   setServerUrl(event.target.value);
+  // };
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -96,7 +96,7 @@ export default function BasicTabs() {
           <Tab label="Tasks" {...a11yProps(1)} />
           <Tab label="Icons" {...a11yProps(2)} />
           <Tab label="Executions" {...a11yProps(3)} />
-          <Tab label="Settings" {...a11yProps(4)} />
+          {/* <Tab label="Settings" {...a11yProps(4)} /> */}
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -111,7 +111,7 @@ export default function BasicTabs() {
       <TabPanel value={value} index={3}>
         <ExecutionTable />
       </TabPanel>
-      <TabPanel value={value} index={4}>
+      {/* <TabPanel value={value} index={4}>
         <Tooltip title="Input the server URL your EwoksWeb server is in." arrow>
           <TextField
             margin="dense"
@@ -123,7 +123,7 @@ export default function BasicTabs() {
             onChange={serverUrlChanged}
           />
         </Tooltip>
-      </TabPanel>
+      </TabPanel> */}
     </Box>
   );
 }

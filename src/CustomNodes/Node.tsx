@@ -152,6 +152,7 @@ const Node: React.FC<NodeProps> = ({
   };
 
   const isValidConnection = (connection) => {
+    // console.log(connection);
     const { isValid, reason } = isValidLink(connection, graphRF);
     if (!isValid) {
       setOpenSnackbar({

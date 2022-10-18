@@ -94,7 +94,6 @@ function EditableTable(props: EditableTableProps) {
     const tOfIn = defaultValues.map((val) =>
       val.value === true ||
       val.value === false ||
-      // TODO: remove shortcut with booleans as strings
       val.value === 'true' ||
       val.value === 'false'
         ? 'boolean'

@@ -1,34 +1,14 @@
 // /* eslint-disable sonarjs/cognitive-complexity */
 import React, { useEffect, useState } from 'react';
 import ReactJson from 'react-json-view';
-// import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
-// import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import IntegratedSpinner from './IntegratedSpinner';
 import state from '../store/state';
 import { Button, Chip, IconButton } from '@material-ui/core';
-// import SidebarTooltip from './SidebarTooltip';
 import type { Event, GraphEwoks, workflowDescription } from '../types';
 import { getWorkflow } from '../utils/api';
 import DeleteIcon from '@material-ui/icons/Delete';
-// import useApi from '../hooks/useApi';
-// import useGetWorkflow from '../hooks/useApi';
 import ConfirmDialog from '../Components/ConfirmDialog';
-
-// TODO: Testing hooks with promises
-// An async function for testing our hook.
-// const myFunction = (params) => {
-//   return new Promise((resolve, reject) => {
-//     console.log(params.id);
-//     getWorkflow(params.id)
-//       .then((response) => {
-//         resolve(response.data);
-//       })
-//       .catch((error) => {
-//         reject(new Error('something bad happened'));
-//       });
-//   });
-// };
 
 export default function ExecutionDetails() {
   // const graphRF = state((state) => state.graphRF);
@@ -76,26 +56,6 @@ export default function ExecutionDetails() {
   const canvasGraphChanged = state((state) => state.canvasGraphChanged);
 
   useEffect(() => {
-    // TODO: it gets an undifined value on getFromServer
-    // const allJobs = executedEvents
-    //   .filter((ev) => ev.context === 'job' && ev.type === 'start')
-    //   .map((job) => {
-    //     let jobL = {};
-    //     if (
-    //       executedEvents.some(
-    //         (jo) => jo.job_id === job.job_id && jo.type === 'end'
-    //       )
-    //     ) {
-    //       jobL = { ...job, status: 'finished' };
-    //     } else {
-    //       jobL = { ...job, status: 'executing' };
-    //     }
-    //     return jobL;
-    //   });
-    // // console.log(allJobs);
-
-    // setJobs(allJobs);
-
     // DOC: for those live executing search the executedEvents
     const allWorkflowsL = executedEvents
       .filter((ev) => ev.context === 'workflow' && ev.type === 'start')
@@ -123,18 +83,6 @@ export default function ExecutionDetails() {
     setWorkflows([...allWorkflowsL, ...wjobs]);
     // console.log(executedEvents, watchedWorkflows);
   }, [executedEvents, watchedWorkflows]);
-
-  // TODO: Testing hooks with promises
-  // const { execute, status, value, error } = useApi(myFunction, false, {
-  //   id: '11',
-  // });
-
-  // const handleChangeWorkflows = (
-  //   event: React.SyntheticEvent,
-  //   newExpanded: boolean
-  // ) => {
-  //   setExpandedWorkflows(newExpanded);
-  // };
 
   function workflowDetails(work) {
     // console.log(selectedWorkflow, work);
@@ -218,14 +166,6 @@ export default function ExecutionDetails() {
     } finally {
       setGettingFromServer(false);
     }
-    // } else {
-    //   setTimeout(() => {
-    //     const eventsL = getEventsForJob();
-
-    //     setInExecutionMode(true);
-    //     eventsL.forEach((ev) => setExecutingEvents(ev, false));
-    //   }, 400);
-    // }
   }
 
   function getEventsForJob() {
@@ -279,21 +219,6 @@ export default function ExecutionDetails() {
 
   return (
     <>
-      {/* <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Open Executions"
-      /> */}
-      {/* TODO: Testing hooks with promises */}
-      {/* <div>
-        {status === 'idle' && (
-          <div>Start your journey by clicking a button</div>
-        )}
-        {status === 'success' && <div>{value.graph.id}</div>}
-        {status === 'error' && <div>{error.name}</div>}
-        <button onClick={execute} disabled={status === 'pending'} type="button">
-          {status !== 'pending' ? 'Click me' : 'Loading...'}
-        </button>
-      </div> */}
       {workflows.map((work) => (
         <div
           key={work.time}

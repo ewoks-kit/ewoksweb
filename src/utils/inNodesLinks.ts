@@ -1,8 +1,20 @@
 import existsOrValue from './existsOrValue';
 
-// calc the input nodes and links that need to be added to the graph from
-// the input_nodes
+function calcMarkerEnd(inNod) {
+  let type = {};
+  if (inNod.uiProps?.markerEnd?.type) {
+    type = { type: inNod.uiProps.markerEnd.type };
+  } else {
+    type = '';
+  }
+  return type;
+}
+
+// TODO: merge with outNodesLinks if possible when stable
+// DOC: calc the input nodes and links that need to be added to the graph from
+// the input_nodes in the Ewoks json
 export function inNodesLinks(graph) {
+  // console.log(graph.graph.input_nodes, graph.graph.output_nodes);
   const inputs = { nodes: [], links: [] };
   if (
     graph.graph &&
@@ -32,6 +44,7 @@ export function inNodesLinks(graph) {
               withImage: existsOrValue(inNod.uiProps, 'withImage', true),
               withLabel: existsOrValue(inNod.uiProps, 'withLabel', true),
               colorBorder: existsOrValue(inNod.uiProps, 'colorBorder', ''),
+              nodeWidth: existsOrValue(inNod.uiProps, 'nodeWidth', 50),
             },
           });
           inNodesInputed.push(inNod.id);
@@ -61,18 +74,12 @@ export function inNodesLinks(graph) {
               stroke: existsOrValue(inNod.uiProps?.style, 'stroke', ''),
             },
             type: existsOrValue(inNod.uiProps, 'linkStyle', 'default'),
-            markerEnd: () => {
-              let type = {};
-              if (inNod.uiProps?.markerEnd?.type) {
-                type = { type: inNod.uiProps.markerEnd.type };
-              }
-              return type;
-              // type: existsOrValue(inNod.uiProps?.markerEnd, 'type', 'arrow'),
-            },
+            markerEnd: calcMarkerEnd(inNod),
             animated: existsOrValue(inNod.uiProps, 'animated', false),
             withImage: existsOrValue(inNod.uiProps, 'withImage', true),
             withLabel: existsOrValue(inNod.uiProps, 'withLabel', true),
             colorBorder: existsOrValue(inNod.uiProps, 'colorBorder', ''),
+            nodeWidth: existsOrValue(inNod.uiProps, 'nodeWidth', 50),
           },
         });
       }

@@ -10,6 +10,7 @@ function FunctionNode(fnod) {
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
   const isValidConnection = (connection) => {
+    // console.log(connection);
     const { isValid, reason } = isValidLink(connection, graphRF);
     if (!isValid) {
       setOpenSnackbar({

@@ -23,7 +23,7 @@ interface filterParams {
   // sets context filters out within the job array that is not practical
   // context: string;
   node_id: string;
-  // TODO: filter jobs that include this task_id and give back all jobs' steps
+  // TODO: filter jobs that include this task_id and give back all jobs' steps?
   task_id: string;
   user_name: string;
   job_id: string;

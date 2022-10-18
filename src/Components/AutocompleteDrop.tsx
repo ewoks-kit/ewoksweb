@@ -41,9 +41,9 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
   const openDropdown = async () => {
     setOpen(true);
     let active = true;
-    // TODO: getWorkflows will fetch {label, category} not just label
+    // DOC: getWorkflows will fetch {label, category} not just label
     // depending on props.placeholder will show categories of workflows
-    // after selecting a category workflows will be filtered fon this category
+    // after selecting a category workflows will be filtered for this category
     const workF: workflowDescription[] = await getWorkflows();
 
     if (workF.length === 0) {
