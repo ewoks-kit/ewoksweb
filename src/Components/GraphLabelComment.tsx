@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import state from '../store/state';
-import type { GraphDetails } from '../types';
+import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../types';
 import TextButtonSave from './TextButtonSave';
 
 // DOC: the label and the comment when the graph is the selectedElement
@@ -44,7 +44,7 @@ export default function GraphLabelComment() {
       {
         ...selectedElement,
         uiProps: { ...selectedElement.uiProps, comment },
-      },
+      } as EwoksRFNode | EwoksRFLink,
       'fromSaveElement'
     );
   };

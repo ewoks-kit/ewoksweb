@@ -11,7 +11,7 @@ import state from '../store/state';
 interface AutocompleteDropProps {
   placeholder: string;
   category: string;
-  setInputValue(input: string): void;
+  setInputValue(input: workflowDescription): void;
 }
 
 const openWorkflowPlaceholder = 'Open Workflow';
@@ -34,11 +34,11 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
     // }
   }, [open]);
 
-  const setInputValue = (newInputValue) => {
+  function setInputValue(newInputValue: workflowDescription) {
     props.setInputValue(newInputValue);
-  };
+  }
 
-  const openDropdown = async () => {
+  async function openDropdown() {
     setOpen(true);
     let active = true;
     // DOC: getWorkflows will fetch {label, category} not just label
@@ -85,9 +85,11 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
     return () => {
       active = false;
     };
-  };
+  }
 
-  const filterworkfToCategories = (workFlowDescriptions) => {
+  function filterworkfToCategories(
+    workFlowDescriptions: workflowDescription[]
+  ) {
     let workflowToShow = [];
     // console.log(props, props.category, workFlowDescriptions);
     if (
@@ -101,7 +103,7 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
       );
     }
     return workflowToShow;
-  };
+  }
 
   return (
     <Autocomplete
@@ -135,7 +137,7 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
       }
       loading={loading}
       value={value}
-      onChange={(event, newValue: string | null) => {
+      onChange={(event, newValue: workflowDescription | null) => {
         setInputValue(newValue);
       }}
       // onInputChange={(event, newInputValue) => {

@@ -1,4 +1,4 @@
-import type { GraphEwoks, Task } from '../types';
+import type { EwoksNode, GraphEwoks, Task } from '../types';
 
 // find the outputs-inputs from the connected nodes
 export function calcTasksForLink(
@@ -34,7 +34,12 @@ export function calcTasksForLink(
   return [sourceTask, targetTask];
 }
 
-function calcTask(sourceOrTarget, node, tasks, newNodeSubgraphs) {
+function calcTask(
+  sourceOrTarget: 'source' | 'target',
+  node: EwoksNode,
+  tasks: Task[],
+  newNodeSubgraphs: GraphEwoks[]
+) {
   let task = {} as Task;
 
   if (node.task_type !== 'graph') {

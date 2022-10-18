@@ -26,7 +26,7 @@ export default function SaveToServer({ saveToServerF }) {
     saveToServerF.current = saveToServer;
   });
 
-  const saveToServer = async () => {
+  async function saveToServer(): Promise<void> {
     // console.log(workingGraph.graph.id, graphRF.graph.input_nodes);
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     // and Nodes DataMapping before attempting to save
@@ -91,7 +91,7 @@ export default function SaveToServer({ saveToServerF }) {
         severity: 'warning',
       });
     }
-  };
+  }
 
   return (
     <>

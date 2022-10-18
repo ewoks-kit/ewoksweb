@@ -1,6 +1,6 @@
-import type { GraphEwoks, GraphRF } from '../types';
+import type { EwoksRFNode, GraphEwoks, GraphNodes, Task } from '../types';
 
-export function inputsAll(tempGraph: GraphEwoks) {
+export function inputsAll(tempGraph: GraphEwoks): string[] {
   return (
     tempGraph.graph &&
     tempGraph.graph.input_nodes &&
@@ -8,7 +8,7 @@ export function inputsAll(tempGraph: GraphEwoks) {
   );
 }
 
-export function outputsAll(tempGraph) {
+export function outputsAll(tempGraph: GraphEwoks): string[] {
   return (
     tempGraph.graph &&
     tempGraph.graph.output_nodes &&
@@ -17,7 +17,12 @@ export function outputsAll(tempGraph) {
 }
 
 // calculate if node input and/or output or internal
-export function calcNodeType(inputsAl, outputsAll, task_type, id) {
+export function calcNodeType(
+  inputsAl: string[],
+  outputsAll: string[],
+  task_type: string,
+  id: string
+): string {
   const isInput = inputsAl && inputsAl.includes(id);
   const isOutput = outputsAll && outputsAll.includes(id);
   let nodeType = '';
@@ -38,7 +43,11 @@ export function calcNodeType(inputsAl, outputsAll, task_type, id) {
 }
 
 // locate the task and add required+optional-inputs + outputs
-export function calcTask(tasks, task_identifier, task_type) {
+export function calcTask(
+  tasks: Task[],
+  task_identifier: string,
+  task_type: string
+): Task {
   let tempTask = tasks.find((tas) => tas.task_identifier === task_identifier);
 
   tempTask = tempTask
@@ -53,9 +62,17 @@ export function calcTask(tasks, task_identifier, task_type) {
   return tempTask;
 }
 
-export function calcInOutForSubgraph(subgraphNode) {
-  let inputsSub = [];
-  let outputsSub = [];
+interface calcInOutForSubgraphOutput {
+  id: string;
+  label: string;
+  type: string;
+}
+
+export function calcInOutForSubgraph(
+  subgraphNode: GraphEwoks
+): calcInOutForSubgraphOutput[][] {
+  let inputsSub: calcInOutForSubgraphOutput[] = [];
+  let outputsSub: calcInOutForSubgraphOutput[] = [];
 
   if (subgraphNode && subgraphNode.graph.id) {
     const allOutputsIds = subgraphNode.graph.output_nodes.map((nod) => nod.id);
@@ -81,34 +98,33 @@ export function calcInOutForSubgraph(subgraphNode) {
       };
     });
   } else {
-    inputsSub = [{ label: 'unknown_input', type: 'data' }];
-    outputsSub = [{ label: 'unknown_output', type: 'data' }];
+    inputsSub = [{ id: '', label: 'unknown_input', type: 'data' }];
+    outputsSub = [{ id: '', label: 'unknown_output', type: 'data' }];
   }
   return [inputsSub, outputsSub];
 }
 
-export function calcLabel(inOut, allInOutputsIds) {
-  return `${
-    ('uiProps' in inOut && (inOut.uiProps.label as string)) ||
-    (inOut.id as string)
-  }${allInOutputsIds.includes(inOut.id) ? '_' : ':'} ${inOut.node as string} ${
-    inOut.sub_node ? `  -> ${inOut.sub_node as string}` : ''
-  }`;
+export function calcLabel(
+  inOut: GraphNodes,
+  allInOutputsIds: string[]
+): string {
+  return `${('uiProps' in inOut && inOut.uiProps.label) || inOut.id}${
+    allInOutputsIds.includes(inOut.id) ? '_' : ':'
+  } ${inOut.node} ${inOut.sub_node ? `  -> ${inOut.sub_node}` : ''}`;
 }
 
 export function addNodeProperties(
-  task_type,
-  newNodeSubgraphs,
-  task_identifier,
-  uiProps,
-  node,
-  tasks,
-  task_category
-) {
+  task_type: string,
+  newNodeSubgraphs: GraphEwoks[],
+  task_identifier: string,
+  node: EwoksRFNode,
+  tasks: Task[],
+  task_category: string
+): EwoksRFNode {
   let tempNode = { ...node };
   if (task_type === 'graph') {
     // if node=subgraph calculate inputs-outputs from subgraph.graph
-    const subgraphNode: GraphRF = newNodeSubgraphs.find(
+    const subgraphNode: GraphEwoks = newNodeSubgraphs.find(
       (subGr) => subGr.graph.id === task_identifier
     );
 

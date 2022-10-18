@@ -1,6 +1,6 @@
 import type { GraphRF } from '../types';
 
-function curateGraph(graphRF): GraphRF {
+function curateGraph(graphRF: GraphRF): GraphRF {
   const graphRFCurrated = { ...graphRF };
   // INFO: change the workflow id when the label is changed
   // graphRFCurrated.graph.id = graphRFCurrated.graph.label;

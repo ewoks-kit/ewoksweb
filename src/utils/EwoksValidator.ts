@@ -1,3 +1,5 @@
+import type { GraphEwoks } from '../types';
+
 function assertLog(statement, severity = 'info') {
   // severity can be error, warning, info
   if (severity === 'error') {
@@ -36,9 +38,7 @@ function includes(entity: {}, label: string, properties: string[]) {
   return result;
 }
 
-function allLinksAreConnectedTo2Nodes() {}
-
-export function validateEwoksGraph(graph) {
+export function validateEwoksGraph(graph: GraphEwoks) {
   const result = [];
   // // console.log(graph);
   result.push(isJsonString(JSON.stringify(graph)));

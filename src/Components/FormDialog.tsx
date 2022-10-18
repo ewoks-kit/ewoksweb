@@ -58,7 +58,7 @@ export default function FormDialog(props: FormDialogProps) {
   const [outputNames, setOutputNames] = React.useState([] as string[]);
   const [overwrite, setOverwrite] = React.useState<boolean>(false);
 
-  const selectedElement = state<EwoksRFNode | EwoksRFLink>(
+  const selectedElement = state<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
   );
   const setCanvasGraphChanged = state((st) => st.setCanvasGraphChanged);

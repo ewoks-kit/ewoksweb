@@ -1,4 +1,4 @@
-import type { EwoksRFNode, GraphRF, GraphEwoks } from '../types';
+import type { EwoksRFNode, GraphRF, GraphEwoks, GraphNodes } from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from '../utils/FindAllSubgraphs';
@@ -12,12 +12,13 @@ const subGraph = (set, get) => ({
     links: [],
   } as GraphRF,
 
+  // DOC: takes a GraphEwoks and transform it to graphRF
   setSubGraph: async (subGraph: GraphEwoks) => {
     // 1. input the graphEwoks from server or file-system
     // 2. search for all subgraphs in it (async)
 
     const prevState = get((prev) => prev);
-    const newNodeSubgraphs = await findAllSubgraphs(
+    const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(
       subGraph,
       prevState.recentGraphs
     );
@@ -127,11 +128,11 @@ const subGraph = (set, get) => ({
   },
 });
 
-function calcLabel(inputOutput): string {
+function calcLabel(inputOutput: GraphNodes): string {
   return `${
     existsOrValue(inputOutput.uiProps, 'label', inputOutput.id) as string
-  }: ${inputOutput.node as string} ${
-    inputOutput.sub_node ? ` -> ${inputOutput.sub_node as string}` : ''
+  }: ${inputOutput.node} ${
+    inputOutput.sub_node ? ` -> ${inputOutput.sub_node}` : ''
   }`;
 }
 

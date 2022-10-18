@@ -78,7 +78,7 @@ export function createGraph() {
 export async function getSubgraphs(
   graph: GraphEwoks | GraphRF,
   recentGraphs: GraphRF[]
-) {
+): Promise<GraphEwoks[]> {
   const nodes: EwoksRFNode[] = [...graph.nodes];
   const existingNodeSubgraphs = nodes.filter(
     (nod) => nod.task_type === 'graph'
@@ -120,7 +120,7 @@ export async function getSubgraphs(
   return results ? results : [];
 }
 
-export function rfToEwoks(tempGraph): GraphEwoks {
+export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
   // calculate input_nodes-output_nodes nodes from graphInput-graphOutput
   const graph = calcGraphInputsOutputs(tempGraph);
   const noteNodes = calcNoteNodes(tempGraph);

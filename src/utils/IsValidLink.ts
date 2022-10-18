@@ -1,7 +1,11 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 import type { Connection } from 'react-flow-renderer';
+import type { GraphRF } from '../types';
 
-export default function isValidLink(connection: Connection, graphRF) {
+export default function isValidLink(
+  connection: Connection,
+  graphRF: GraphRF
+): { isValid: boolean; reason: string } {
   let isValid = true;
   let reason = '';
 

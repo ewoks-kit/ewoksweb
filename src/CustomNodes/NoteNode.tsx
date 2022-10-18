@@ -6,6 +6,7 @@ import SaveIcon from '@material-ui/icons/Save';
 
 import state from '../store/state';
 import { IconButton, Slider, TextField } from '@material-ui/core';
+import type { EwoksRFNode } from '../types';
 
 const NoteNode = (args) => {
   const [comment, setComment] = useState('');
@@ -18,7 +19,7 @@ const NoteNode = (args) => {
   useEffect(() => {
     setComment(args.data.comment);
     setNodeSize(args.data.nodeWidth);
-  }, [args.data, selectedElement.type]);
+  }, [args.data]); // selectedElement.type?
 
   const customTitle = {
     ...style.title,
@@ -63,9 +64,10 @@ const NoteNode = (args) => {
   };
 
   const changeNodeSize = (event, number) => {
+    const el = selectedElement as EwoksRFNode;
     setSelectedElement({
-      ...selectedElement,
-      data: { ...selectedElement.data, nodeWidth: number },
+      ...el,
+      data: { ...el.data, nodeWidth: number },
     });
     setNodeSize(number);
   };

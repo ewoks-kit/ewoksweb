@@ -1,3 +1,4 @@
+import type { EwoksLink, EwoksNode, GraphEwoks } from '../types';
 import existsOrValue from './existsOrValue';
 
 function calcMarkerEnd(inNod) {
@@ -11,8 +12,11 @@ function calcMarkerEnd(inNod) {
 }
 
 // TODO: when stable compare to inNodesLinks and merge if possible
-// calc the output nodes and links that need to be added to the graph from the output_nodes
-export function outNodesLinks(graph) {
+// DOC: calc the output nodes and links that need to be added to
+// the graph from the output_nodes
+export function outNodesLinks(
+  graph: GraphEwoks
+): { nodes: EwoksNode[]; links: EwoksLink[] } {
   const outputs = { nodes: [], links: [] };
   if (
     graph.graph &&
