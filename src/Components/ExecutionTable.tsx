@@ -1,4 +1,5 @@
 /* eslint-disable sonarjs/cognitive-complexity */
+// TODO: break apart when stable
 import React, { useState } from 'react';
 import Box from '@material-ui/core/Box';
 import Table from '@material-ui/core/Table';
@@ -49,11 +50,11 @@ interface Data {
   status: string; // "finished"
 }
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T | string) {
+function descendingComparator(a: Event[], b: Event[], orderBy: string) {
   // console.log(a, b, orderBy, a[0].time, b[0].time, a[0].time === b[0].time);
 
   // TODO: compare time start-end
-  if (['start time', 'end time'].includes(orderBy as string)) {
+  if (['start time', 'end time'].includes(orderBy)) {
     if (b[0]['time'] < a[0]['time']) {
       return -1;
     }
@@ -61,7 +62,7 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T | string) {
       return 1;
     }
   }
-  // if orderBy === 'workflow_id' wont work because it is not included in a context: job
+  // DOC: if orderBy === 'workflow_id' wont work because it is not included in a context: job
   // use the context: workflow that has both => a[1] which is the workflow context
   if (b[1][orderBy] < a[1][orderBy]) {
     return -1;
@@ -74,22 +75,10 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T | string) {
 
 type Order = 'asc' | 'desc';
 
-// TODO: replace with the Typescript version
-// // eslint-disable-next-line @typescript-eslint/no-explicit-any
-// function getComparator<Key extends keyof any>(
-//   order: Order,
-//   orderBy: Key
-// ): (
-//   a: { [key in Key]: number | string },
-//   b: { [key in Key]: number | string }
-// ) => number {
-//   return order === 'desc'
-//     ? (a, b) => descendingComparator(a, b, orderBy)
-//     : (a, b) => -descendingComparator(a, b, orderBy);
-// }
-
-function getComparator(order, orderBy) {
-  // console.log(order, orderBy);
+function getComparator(
+  order: Order,
+  orderBy: string
+): (a: Event[], b: Event[]) => number {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);

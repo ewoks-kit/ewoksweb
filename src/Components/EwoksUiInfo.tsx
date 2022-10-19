@@ -14,11 +14,11 @@ import { getWorkflow } from '../utils/api';
 import state from '../store/state';
 import type { GraphEwoks } from '../types';
 
-// interface EwoksUiInfoProps {
-//   closeDialog(event?: React.KeyboardEvent | React.MouseEvent): void;
-// }
-// To be used?
-export default function EwoksUiInfo(props) {
+interface EwoksUiInfoProps {
+  closeDialog?(event?: React.KeyboardEvent | React.MouseEvent): void;
+}
+
+export default function EwoksUiInfo(props: EwoksUiInfoProps) {
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 

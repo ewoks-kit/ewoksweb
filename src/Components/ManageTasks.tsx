@@ -19,15 +19,15 @@ export default function ManageTasks() {
   const [pythonModules, setPythonModules] = useState<string[]>([]);
   const [showDiscover, setShowDiscover] = useState<boolean>(false);
 
-  const discoverTasksChanged = (event) => {
+  function discoverTasksChanged(event) {
     setShowDiscover(event.target.checked);
-  };
+  }
 
-  const pythonModuleChanged = (event) => {
+  function pythonModuleChanged(event) {
     setPythonModules([event.target.value]);
-  };
+  }
 
-  const discover = async () => {
+  async function discover() {
     try {
       await discoverTasks(pythonModules);
       setOpenSnackbar({
@@ -42,7 +42,7 @@ export default function ManageTasks() {
         severity: 'warning',
       });
     }
-  };
+  }
 
   return (
     <Grid

@@ -4,7 +4,7 @@ import type {
   EwoksRFNode,
   GraphEwoks,
   GraphRF,
-  workflowDescription,
+  WorkflowDescription,
 } from './types';
 import axios from 'axios';
 import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
@@ -18,14 +18,14 @@ import { getWorkflowsDescriptions, getWorkflow } from './utils/api';
 
 export const ewoksNetwork = {};
 
-export async function getWorkflows(): Promise<workflowDescription[]> {
+export async function getWorkflows(): Promise<WorkflowDescription[]> {
   // console.log(process.env);
   let res = [];
   try {
     const workflows = await getWorkflowsDescriptions();
     if (workflows && workflows.data) {
       const workf = workflows.data as {
-        items: workflowDescription[];
+        items: WorkflowDescription[];
       };
       res = workf.items;
       // .sort((a, b) => a.localeCompare(b))

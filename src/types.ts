@@ -179,8 +179,8 @@ export interface State {
   setAllIconNames?: (icons: string[]) => void;
   // { name: string; svgFile?: string; file?: File }[]
 
-  allCategories?: { title: string }[];
-  setAllCategories?: (categories: { title: string }[]) => void;
+  allCategories?: { label: string }[];
+  setAllCategories?: (categories: { label: string }[]) => void;
 
   allWorkflows?: {
     id?: string;
@@ -468,8 +468,9 @@ export interface EwoksRFLink {
     conditions?: Conditions[];
     on_error?: boolean;
     map_all_data?: boolean;
-    required: boolean;
+    required?: boolean;
     sub_target?: string;
+    sub_target_attributes?: {};
     sub_source?: string;
     colorLine?: string;
     getAroundProps?: { x?: number; y?: number };
@@ -551,7 +552,7 @@ export interface Icon {
   image?: { data_url?: string };
 }
 
-export interface workflowDescription {
+export interface WorkflowDescription {
   id: string;
   label?: string;
   category?: string;

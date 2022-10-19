@@ -30,7 +30,7 @@ const useStyles = DashboardStyle;
 //       click and edit some properties and check the node properties
 // integration: by setting a selected node and validating the form and chenge values to see
 //             the selected node change
-export default function NodeDetails(props) {
+export default function NodeDetails(props: { element: EwoksRFNode }) {
   const classes = useStyles();
 
   const { element } = props;
@@ -95,12 +95,13 @@ export default function NodeDetails(props) {
     setMapAllData(element.default_error_attributes?.map_all_data || false);
   }, [element.id, element]);
 
-  const propChanged = (propKeyValue) => {
+  function propChanged(propKeyValue: {}) {
+    console.log(propKeyValue);
     setSelectedElement({
       ...element,
       ...propKeyValue,
     });
-  };
+  }
 
   const inputsCompleteChanged = (event) => {
     setSelectedElement(

@@ -17,15 +17,13 @@ interface editableNodeProps {
   task_type?: string;
   task_generator?: string;
 }
-// For editing Node properties related to the Task it is based on
+// DOC: For editing Node properties related to the Task it is based on
 function EditTaskProp(props: EditTaskProps) {
   const { id, label, value, editProps } = props;
   const classes = useStyles();
 
   const [editProp, setEditProp] = React.useState(false);
   const [taskProp, setTaskProp] = React.useState('');
-
-  // // console.log(id, label, value, propChanged, editProps);
 
   useEffect(() => {
     setTaskProp(value);
@@ -34,22 +32,22 @@ function EditTaskProp(props: EditTaskProps) {
     }
   }, [value, editProps]);
 
-  const onEditProp = () => {
-    // // console.log(selectedElement);
+  function onEditProp() {
     setEditProp(!editProp);
-  };
+  }
 
-  const taskPropChanged = (event) => {
+  function taskPropChanged(event) {
     setTaskProp(event.target.value);
     props.propChanged({ [id]: event.target.value });
-  };
+  }
 
-  const enterPressed = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
+  function enterPressed(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
       setEditProp(!editProp);
     }
-  };
+  }
+
   return (
     <>
       <div className={classes.detailsLabels}>

@@ -1,5 +1,5 @@
 import create from 'zustand';
-import type { GraphEwoks, GraphRF, State } from '../types';
+import type { GraphEwoks, GraphRF, State, Task } from '../types';
 
 import currentExecutionEvent from './currentExecutionEvent';
 import gettingFromServer from './gettingFromServer';
@@ -29,7 +29,7 @@ import executedWorkflows from './executedWorkflows';
 import watchedWorkflows from './watchedWorkflows';
 import canvasGraphChanged from './canvasGraphChanged';
 
-const initializedTask = {
+const initializedTask: Task = {
   task_identifier: '',
   task_type: '',
   icon: '',

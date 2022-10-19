@@ -4,7 +4,7 @@ import DashboardStyle from '../layout/DashboardStyle';
 import FormControl from '@material-ui/core/FormControl';
 import AutocompleteDrop from '../Components/AutocompleteDrop';
 import state from '../store/state';
-import type { GraphEwoks, workflowDescription } from '../types';
+import type { GraphEwoks, WorkflowDescription } from '../types';
 import { getWorkflow } from '../utils/api';
 import ConfirmDialog from './ConfirmDialog';
 import { validateEwoksGraph } from '../utils/EwoksValidator';
@@ -23,7 +23,7 @@ export default function GetFromServer() {
   const canvasGraphChanged = state((state) => state.canvasGraphChanged);
   const undoIndex = state((state) => state.undoIndex);
 
-  async function setInputValue(workflowDetails: workflowDescription) {
+  async function setInputValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails && workflowDetails.id) {
       setWorkflowId(workflowDetails.id || '');
     }

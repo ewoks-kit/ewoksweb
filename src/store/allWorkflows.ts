@@ -1,9 +1,9 @@
-import type { workflowDescription } from '../types';
+import type { WorkflowDescription } from '../types';
 
 const allWorkflows = (set) => ({
-  allWorkflows: [] as workflowDescription[],
+  allWorkflows: [] as WorkflowDescription[],
 
-  setAllWorkflows: (workflows: workflowDescription[]) => {
+  setAllWorkflows: (workflows: WorkflowDescription[]) => {
     set((state) => ({
       ...state,
       allWorkflows: workflows,

@@ -4,14 +4,14 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getWorkflows } from '../utils';
-import type { workflowDescription } from '../types';
+import type { WorkflowDescription } from '../types';
 
 import state from '../store/state';
 
 interface AutocompleteDropProps {
   placeholder: string;
   category: string;
-  setInputValue(input: workflowDescription): void;
+  setInputValue(input: WorkflowDescription): void;
 }
 
 const openWorkflowPlaceholder = 'Open Workflow';
@@ -34,7 +34,7 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
     // }
   }, [open]);
 
-  function setInputValue(newInputValue: workflowDescription) {
+  function setInputValue(newInputValue: WorkflowDescription) {
     props.setInputValue(newInputValue);
   }
 
@@ -44,7 +44,8 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
     // DOC: getWorkflows will fetch {label, category} not just label
     // depending on props.placeholder will show categories of workflows
     // after selecting a category workflows will be filtered for this category
-    const workF: workflowDescription[] = await getWorkflows();
+    // TODO: error handling with try catch
+    const workF: WorkflowDescription[] = await getWorkflows();
 
     if (workF.length === 0) {
       setOpenSnackbar({
@@ -64,10 +65,10 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
       );
 
       const categories = [...categoriesSet].map((cat) => {
-        return { title: cat };
+        return { label: cat };
       });
 
-      setAllCategories([...categories, { title: 'All' }]);
+      setAllCategories([...categories, { label: 'All' }]);
 
       setAllWorkflows(workF);
 
@@ -77,7 +78,7 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
             ? filterworkfToCategories([...workF]).map((workf) => {
                 return { ...workf, category: workf.category || 'NoCategory' };
               })
-            : [...categories, { title: 'All' }]
+            : [...categories, { label: 'All' }]
         );
       }
     }
@@ -88,17 +89,17 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
   }
 
   function filterworkfToCategories(
-    workFlowDescriptions: workflowDescription[]
+    WorkflowDescriptions: WorkflowDescription[]
   ) {
     let workflowToShow = [];
-    // console.log(props, props.category, workFlowDescriptions);
+    // console.log(props, props.category, WorkflowDescriptions);
     if (
       props.category === 'All' ||
       ['', null, undefined].includes(props.category)
     ) {
-      workflowToShow = workFlowDescriptions;
+      workflowToShow = WorkflowDescriptions;
     } else {
-      workflowToShow = workFlowDescriptions.filter(
+      workflowToShow = WorkflowDescriptions.filter(
         (work) => work.category === props.category
       );
     }
@@ -118,14 +119,12 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
       }}
       // isOptionEqualToValue={(option, value) => option.label === value.label}
       getOptionSelected={(option) => {
-        return props.placeholder === 'Categories'
-          ? option.title || ''
-          : option.label || '';
+        return option.label || '';
       }}
       getOptionLabel={(option) => {
         return props.placeholder === openWorkflowPlaceholder
           ? option.label || option.id || ''
-          : option.title || '';
+          : option.label || '';
       }}
       groupBy={(option) => {
         return option.category;
@@ -137,7 +136,7 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
       }
       loading={loading}
       value={value}
-      onChange={(event, newValue: workflowDescription | null) => {
+      onChange={(event, newValue: WorkflowDescription | null) => {
         setInputValue(newValue);
       }}
       // onInputChange={(event, newInputValue) => {

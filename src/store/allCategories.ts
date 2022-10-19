@@ -1,7 +1,7 @@
 const allCategories = (set) => ({
-  allCategories: [] as { title: string }[],
+  allCategories: [] as { label: string }[],
 
-  setAllCategories: (categories: [{ title: string }]) => {
+  setAllCategories: (categories: [{ label: string }]) => {
     // console.log(categories);
     set((state) => ({
       ...state,

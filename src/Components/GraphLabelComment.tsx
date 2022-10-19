@@ -18,7 +18,7 @@ export default function GraphLabelComment() {
     setComment(graphElement.uiProps && graphElement.uiProps.comment);
   }, [selectedElement.id, selectedElement]);
 
-  const saveCategory = (category) => {
+  function saveCategory(category) {
     setSelectedElement(
       {
         ...selectedElement,
@@ -26,9 +26,9 @@ export default function GraphLabelComment() {
       } as GraphDetails,
       'fromSaveElement'
     );
-  };
+  }
 
-  const saveLabel = (label) => {
+  function saveLabel(label: string) {
     // setLabel(event.target.value);
     setSelectedElement(
       {
@@ -37,9 +37,9 @@ export default function GraphLabelComment() {
       },
       'fromSaveElement'
     );
-  };
+  }
 
-  const saveComment = (comment) => {
+  function saveComment(comment: string) {
     setSelectedElement(
       {
         ...selectedElement,
@@ -47,7 +47,7 @@ export default function GraphLabelComment() {
       } as EwoksRFNode | EwoksRFLink,
       'fromSaveElement'
     );
-  };
+  }
 
   return (
     <>

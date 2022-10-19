@@ -98,7 +98,7 @@ export default function FormDialog(props: FormDialogProps) {
     }
   }, [open, action, elementToEdit, isForGraph]);
 
-  const handleSave = async () => {
+  async function handleSave() {
     // get the selected element (graph or Node) give a new name before saving
     if (isForGraph) {
       saveGraph(element as GraphRF);
@@ -107,7 +107,7 @@ export default function FormDialog(props: FormDialogProps) {
     } else if (['editTask'].includes(action)) {
       puTask(element as Task);
     }
-  };
+  }
 
   async function puTask(task: Task) {
     try {
