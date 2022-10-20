@@ -287,14 +287,17 @@ function AddNodes(props: AddNodesProps) {
                   </span>
                   {props.title === 'Add Nodes' && (
                     <Upload>
-                      <span
-                        role="button"
-                        tabIndex={0}
-                        onClick={insertGraph}
-                        onKeyPress={insertGraph}
-                      >
-                        <AddIcon />G
-                      </span>
+                      <Tooltip title="Add a subgraph from disk" arrow>
+                        <span
+                          role="button"
+                          tabIndex={0}
+                          onClick={insertGraph}
+                          onKeyPress={insertGraph}
+                          data-testid="addSubgraphFromDisk"
+                        >
+                          <AddIcon />G
+                        </span>
+                      </Tooltip>
                     </Upload>
                   )}
                 </>

@@ -16,13 +16,13 @@ export default function UndoRedo({ undoF, redoF }) {
   const undoIndex = state((state) => state.undoIndex);
   const setUndoIndex = state((state) => state.setUndoIndex);
 
-  const undo = () => {
+  function undo() {
     setUndoIndex(undoIndex - 1);
-  };
+  }
 
-  const redo = () => {
+  function redo() {
     setUndoIndex(undoIndex + 1);
-  };
+  }
 
   React.useEffect(() => {
     undoF.current = undo;

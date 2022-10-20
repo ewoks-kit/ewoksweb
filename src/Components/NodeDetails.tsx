@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import type { DataMapping, EwoksRFNode } from '../types';
+import type { DataMapping, EditableTableRow, EwoksRFNode } from '../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 // import EditIcon from '@material-ui/icons/EditOutlined'; DONT DELETE
@@ -103,7 +103,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
     });
   }
 
-  const inputsCompleteChanged = (event) => {
+  function inputsCompleteChanged(event) {
     setSelectedElement(
       {
         ...element,
@@ -111,13 +111,13 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
       },
       'fromSaveElement'
     );
-  };
+  }
 
-  const advancedChanged = (event) => {
+  function advancedChanged(event) {
     setAdvanced(event.target.checked);
-  };
+  }
 
-  const defaulErrortNodeChanged = (event) => {
+  function defaulErrortNodeChanged(event) {
     setSelectedElement(
       {
         ...element,
@@ -125,9 +125,9 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
       },
       'fromSaveElement'
     );
-  };
+  }
 
-  const addDataMapping = () => {
+  function addDataMapping() {
     const el = element as EwoksRFNode;
     const elMap = el.default_error_attributes.data_mapping || [];
     if (elMap && elMap[elMap.length - 1] && elMap[elMap.length - 1].id === '') {
@@ -144,13 +144,13 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
         'fromSaveElement'
       );
     }
-  };
+  }
 
-  const dataMappingValuesChanged = (table) => {
+  function dataMappingValuesChanged(table: EditableTableRow[]) {
     const dmap: DataMapping[] = table.map((row) => {
       return {
         source_output: row.name,
-        target_input: row.value,
+        target_input: row.value as string,
       };
     });
     setSelectedElement(
@@ -163,9 +163,9 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
       },
       'fromSaveElement'
     );
-  };
+  }
 
-  const mapAllDataChanged = (event) => {
+  function mapAllDataChanged(event) {
     setSelectedElement(
       {
         ...element,
@@ -176,7 +176,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
       },
       'fromSaveElement'
     );
-  };
+  }
 
   return (
     <Box>

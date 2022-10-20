@@ -8,9 +8,9 @@ import FormDialog from './FormDialog';
 import curateGraph from '../utils/curateGraph';
 import { getWorkflowsIds, putWorkflow } from '../utils/api';
 
-const workflowExists = (id, workflowsIds) => {
+function workflowExists(id, workflowsIds) {
   return workflowsIds.data.identifiers.includes(id);
-};
+}
 
 // DOC: Save to server button with its spinner
 export default function SaveToServer({ saveToServerF }) {
