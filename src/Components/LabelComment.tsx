@@ -40,7 +40,7 @@ export default function LabelComment(props: LabelCommentProps) {
       setLabel(element.data.label);
       setComment(element.data.comment);
     } else if ('source' in element) {
-      const el = element as EwoksRFLink;
+      const el = element;
       setLabel(el.label);
       setComment(el.data && el.data.comment);
 

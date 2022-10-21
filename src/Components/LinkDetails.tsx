@@ -39,7 +39,7 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
   const mapAllDataChanged = (event) => {
     setSelectedElement(
       {
-        ...(element as EwoksRFLink),
+        ...element,
         data: { ...element.data, map_all_data: event.target.checked },
       },
       'fromSaveElement'
@@ -49,7 +49,7 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
   function onErrorChanged(event) {
     setSelectedElement(
       {
-        ...(element as EwoksRFLink),
+        ...element,
         data: { ...element.data, on_error: event.target.checked },
       },
       'fromSaveElement'
@@ -63,7 +63,7 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
   const requiredChanged = (event) => {
     setSelectedElement(
       {
-        ...(element as EwoksRFLink),
+        ...element,
         data: { ...element.data, required: event.target.checked },
       },
       'fromSaveElement'

@@ -96,7 +96,6 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
   }, [element.id, element]);
 
   function propChanged(propKeyValue: {}) {
-    console.log(propKeyValue);
     setSelectedElement({
       ...element,
       ...propKeyValue,
@@ -128,7 +127,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
   }
 
   function addDataMapping() {
-    const el = element as EwoksRFNode;
+    const el = element;
     const elMap = el.default_error_attributes.data_mapping || [];
     if (elMap && elMap[elMap.length - 1] && elMap[elMap.length - 1].id === '') {
       // console.log('should not ADD mapping');
@@ -150,12 +149,12 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
     const dmap: DataMapping[] = table.map((row) => {
       return {
         source_output: row.name,
-        target_input: row.value as string,
+        target_input: row.value,
       };
     });
     setSelectedElement(
       {
-        ...(element as EwoksRFNode),
+        ...element,
         default_error_attributes: {
           ...element.default_error_attributes,
           data_mapping: dmap,

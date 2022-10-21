@@ -189,7 +189,6 @@ function EditableTable(props: EditableTableProps) {
       setRows((newRows as unknown) as EditableTableRow[]);
 
       if (command === 'done') {
-        console.log(rows);
         props.valuesChanged(rows);
         setRows(rows);
       }
