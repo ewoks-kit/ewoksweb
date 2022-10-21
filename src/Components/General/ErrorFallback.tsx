@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { Button } from '@material-ui/core';
 import type { FallbackProps } from 'react-error-boundary';
-import React from 'react';
 
 function prepareReport(message: string): string {
   return `Hi,

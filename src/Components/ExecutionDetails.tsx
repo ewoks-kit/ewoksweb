@@ -138,7 +138,7 @@ export default function ExecutionDetails() {
       const response = await getWorkflow(workflowId);
       if (response.data) {
         setWorkingGraph(response.data as GraphEwoks, 'fromServer');
-        // TODO: get read of timeout?
+        // TODO: get rid of timeout?
         setTimeout(() => {
           // DOC:
           const events = getEventsForJob();

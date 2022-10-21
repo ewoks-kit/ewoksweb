@@ -50,7 +50,7 @@ export function toRFEwoksLinks(
           (uiProps && uiProps.style && uiProps.style.stroke) ||
           'rgb(60, 81, 202)';
 
-        return {
+        const link: EwoksRFLink = {
           id: `${source}:${
             existsOrValue(uiProps, 'sourceHandle', '') as string
           }->${target}:${
@@ -59,7 +59,8 @@ export function toRFEwoksLinks(
           label: calcLabel(uiProps, conditions, data_mapping),
           source: source.toString(),
           target: target.toString(),
-          startEnd: startEnd || '',
+          // TODO: is the following used for inputs-outputs?
+          startEnd: startEnd || false,
           targetHandle: calcTargetHandle(uiProps, sub_target),
           sourceHandle: calcSourceHandle(uiProps, sub_source),
           type: (uiProps && uiProps.type) || '',
@@ -102,11 +103,14 @@ export function toRFEwoksLinks(
             sub_target: sub_target || '',
             sub_source: sub_source || '',
             conditions: conditions || [],
-            map_all_data: !!map_all_data,
+            // map_all_data: !!map_all_data,
             on_error: on_error || false,
             comment: existsOrValue(uiProps, 'comment', ''),
           },
         };
+        // DOC: if map_all_data is missing the default will be true
+        link.data.map_all_data = map_all_data ? map_all_data : true;
+        return link;
       }
     );
   }

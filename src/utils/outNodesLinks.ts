@@ -46,7 +46,7 @@ export function outNodesLinks(
             withImage: existsOrValue(outNod.uiProps, 'withImage', true),
             withLabel: existsOrValue(outNod.uiProps, 'withLabel', true),
             colorBorder: existsOrValue(outNod.uiProps, 'colorBorder', ''),
-            nodeWidth: existsOrValue(outNod.uiProps, 'nodeWidth', 50),
+            nodeWidth: existsOrValue(outNod.uiProps, 'nodeWidth', 110),
           },
         });
 
@@ -81,7 +81,7 @@ export function outNodesLinks(
           withImage: existsOrValue(outNod.uiProps, 'withImage', true),
           withLabel: existsOrValue(outNod.uiProps, 'withLabel', true),
           colorBorder: existsOrValue(outNod.uiProps, 'colorBorder', ''),
-          nodeWidth: existsOrValue(outNod.uiProps, 'nodeWidth', 50),
+          nodeWidth: existsOrValue(outNod.uiProps, 'nodeWidth', 110),
         },
       });
       // }

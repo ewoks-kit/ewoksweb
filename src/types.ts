@@ -478,9 +478,13 @@ export interface EwoksRFLink {
     links_required_output_names?: string[];
     links_optional_output_names?: string[];
   };
+  // TODO: see if used and give type to the following
   labelStyle;
   labelBgStyle;
+  labelBgPadding;
+  labelBgBorderRadius;
   style;
+  startEnd?: boolean;
   subtarget?: string;
   subsource?: string;
   uiProps?: UiPropsLinks;
