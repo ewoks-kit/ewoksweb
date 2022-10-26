@@ -50,6 +50,12 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
   const NonEditableTaskProperties = [
     // { id: 'id', label: 'Id', value: props.element.id },
     // { id: 'task_icon', label: 'Icon', value: props.element.task_icon },
+    { id: 'task_type', label: 'Type', value: props.element.task_type },
+    {
+      id: 'task_generator',
+      label: 'Generator',
+      value: props.element.task_generator,
+    },
     {
       id: 'task_category',
       label: 'Category',
@@ -72,18 +78,13 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
     },
   ];
 
-  const taskProperties = [
+  const editableTaskProperties = [
     {
       id: 'task_identifier',
       label: 'Identifier',
       value: props.element.task_identifier,
     },
-    { id: 'task_type', label: 'Type', value: props.element.task_type },
-    {
-      id: 'task_generator',
-      label: 'Generator',
-      value: props.element.task_generator,
-    },
+    { id: 'task_icon', label: 'Icon', value: props.element.task_icon },
   ];
 
   useEffect(() => {
@@ -96,6 +97,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
   }, [element.id, element]);
 
   function propChanged(propKeyValue: {}) {
+    console.log(propKeyValue);
     setSelectedElement({
       ...element,
       ...propKeyValue,
@@ -292,16 +294,24 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
           </AccordionSummary>
           <AccordionDetails>
             <div>
-              {taskProperties.map(({ id, label, value }) => (
-                <EditTaskProp
-                  key={id}
-                  id={id}
-                  label={label}
-                  value={value}
-                  propChanged={propChanged}
-                  editProps // editProps
-                />
-              ))}
+              {editableTaskProperties.map(({ id, label, value }) =>
+                ['ppfmethod', 'method', 'script'].includes(
+                  props.element.task_type
+                ) ? (
+                  <EditTaskProp
+                    key={id}
+                    id={id}
+                    label={label}
+                    value={value}
+                    propChanged={propChanged}
+                    editProps // editProps
+                  />
+                ) : (
+                  <div key={id} className={classes.detailsLabels}>
+                    <b>{label}:</b> {value}
+                  </div>
+                )
+              )}
               {NonEditableTaskProperties.map(({ id, label, value }) => (
                 <div key={id} className={classes.detailsLabels}>
                   <b>{label}:</b>{' '}

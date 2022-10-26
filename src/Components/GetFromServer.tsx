@@ -24,20 +24,18 @@ export default function GetFromServer() {
   const undoIndex = state((state) => state.undoIndex);
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
-    if (workflowDetails && workflowDetails.id) {
+    console.log(workflowDetails, graphRF);
+
+    if (workflowDetails?.id) {
       setWorkflowId(workflowDetails.id || '');
     }
 
     setOpenAgreeDialog(false);
-    if (
-      workflowDetails &&
-      workflowDetails.id &&
-      graphRF.graph.id &&
-      graphRF.graph.id !== workflowDetails.id
-    ) {
+    if (workflowDetails?.id && graphRF?.graph?.id !== workflowDetails.id) {
       if (canvasGraphChanged && undoIndex !== 0) {
         setOpenAgreeDialog(true);
       } else {
+        console.log(workflowDetails.id);
         getFromServer(workflowDetails.id);
       }
     }

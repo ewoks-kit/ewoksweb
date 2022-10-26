@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import { IconButton, TextField } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
+import TextButtonSave from './TextButtonSave';
 
 const useStyles = DashboardStyle;
 
@@ -36,9 +37,16 @@ function EditTaskProp(props: EditTaskProps) {
     setEditProp(!editProp);
   }
 
-  function taskPropChanged(event) {
-    setTaskProp(event.target.value);
-    props.propChanged({ [id]: event.target.value });
+  // function taskPropChanged(event) {
+  //   setTaskProp(event.target.value);
+  //   props.propChanged({ [id]: event.target.value });
+  // }
+
+  function taskPropChanged(taskP) {
+    console.log(taskP);
+
+    setTaskProp(taskP);
+    props.propChanged({ [id]: taskP });
   }
 
   function enterPressed(event) {
@@ -68,14 +76,13 @@ function EditTaskProp(props: EditTaskProps) {
         )}
       </div>
       {editProp && (
-        <TextField
-          id={id}
-          label={label}
-          variant="outlined"
-          value={taskProp || ''}
-          onChange={taskPropChanged}
-          onKeyPress={enterPressed}
-        />
+        <div>
+          <TextButtonSave
+            label="Identifier"
+            value={taskProp || ''}
+            valueSaved={(val) => taskPropChanged(val)}
+          />
+        </div>
       )}
     </>
   );

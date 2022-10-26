@@ -35,6 +35,7 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
   }, [open]);
 
   function setInputValue(newInputValue: WorkflowDescription) {
+    console.log(newInputValue);
     props.setInputValue(newInputValue);
   }
 
@@ -56,7 +57,8 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
     } else if (workF[0].label === 'network error') {
       setOpenSnackbar({
         open: true,
-        text: 'Something went wrong when contacting the server!',
+        text: `Something went wrong when contacting the server!
+          Error status: ${workF[0].category}`,
         severity: 'error',
       });
     } else if (workF && workF.length > 0) {

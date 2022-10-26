@@ -43,6 +43,7 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
   }
 
   function valueSavedLocal(val) {
+    console.log(val);
     setValueIsChanged(false);
     props.valueSaved(val);
   }
