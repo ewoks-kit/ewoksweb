@@ -135,7 +135,7 @@ function Canvas() {
         }
         // DOC: the value of the delay is important to fitview even the execution
         // that takes up to 4secs. Possibly rerender after the call to get the workflow??
-      }, 2000);
+      }, 1000);
       // DOC: if I clear the timeout for memory leaks the setTImeout never runs fitview???
       // return () => clearTimeout(timer);
     }

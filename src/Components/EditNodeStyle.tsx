@@ -4,6 +4,7 @@ import { Checkbox, FormControl, Slider } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import type { EwoksRFNode } from '../types';
 import state from '../store/state';
+import useDebounce from '../hooks/useDebounce';
 
 const useStyles = DashboardStyle;
 
@@ -24,7 +25,8 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
   const [colorBorder, setColorBorder] = useState<string>('');
   const [moreHandles, setMoreHandles] = useState<boolean>(true);
   const [nodeSize, setNodeSize] = useState<number>(100);
-  const selectedElement = state((state) => state.selectedElement);
+
+  const debouncedSearchTerm = useDebounce(nodeSize, 500);
 
   useEffect(() => {
     if ('position' in element) {
@@ -35,6 +37,28 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
       setNodeSize(element.data.nodeWidth || 100);
     }
   }, [element.id, element]);
+
+  useEffect(
+    () => {
+      if (debouncedSearchTerm) {
+        setElementNodeWidth(debouncedSearchTerm);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [debouncedSearchTerm] // Only call effect if debounced search term changes
+  );
+
+  function setElementNodeWidth(width) {
+    if (debouncedSearchTerm === width) {
+      setSelectedElement(
+        {
+          ...element,
+          data: { ...element.data, nodeWidth: width },
+        },
+        'fromSaveElement'
+      );
+    }
+  }
 
   // const nodeTypeChanged = (event) => {
   //   setNodeType(event.target.value);
@@ -48,7 +72,6 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
   // };
 
   const withImageChanged = (event) => {
-    // console.log(element, event.target.checked);
     setWithImage(event.target.checked);
     setSelectedElement(
       {
@@ -60,7 +83,6 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
   };
 
   const withLabelChanged = (event) => {
-    // console.log(element, event.target.checked);
     setWithLabel(event.target.checked);
     setSelectedElement(
       {
@@ -72,7 +94,6 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
   };
 
   const colorBorderChanged = (event) => {
-    // console.log(element, event.target.value);
     setColorBorder(event.target.value);
     setSelectedElement(
       {
@@ -98,16 +119,6 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
   };
 
   const changeNodeSize = (event, number) => {
-    // TODO: find a better way than declaring a const for type
-    const el: EwoksRFNode =
-      'task_identifier' in selectedElement && selectedElement;
-    setSelectedElement(
-      {
-        ...el,
-        data: { ...el.data, nodeWidth: number },
-      },
-      'fromSaveElement'
-    );
     setNodeSize(number);
   };
 
