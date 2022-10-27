@@ -5,7 +5,7 @@ import type { FallbackProps } from 'react-error-boundary';
 function prepareReport(message: string): string {
   return `Hi,
 
-  I encountered the following error in Braggy:
+  I encountered the following error in Ewoks-UI:
 
   - ${message}
 
@@ -46,7 +46,7 @@ function ErrorFallback(props: Props) {
           variant="outlined"
           color="primary"
           target="_blank"
-          href={`mailto:braggy@esrf.fr?subject=Error%20report&body=${encodeURIComponent(
+          href={`mailto:data-analysis@esrf.fr?subject=Error%20report&body=${encodeURIComponent(
             prepareReport(error.message)
           )}`}
           // onClick={sendReport}

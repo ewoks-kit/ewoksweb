@@ -445,7 +445,7 @@ function Canvas() {
     event.preventDefault();
     setOpenSnackbar({
       open: true,
-      text: 'Show some choises?',
+      text: 'Show some choices?',
       severity: 'success',
     });
   };
