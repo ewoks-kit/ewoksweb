@@ -49,7 +49,7 @@ export default function SaveGetFromDisk() {
               size="small"
               component="span"
               aria-label="add"
-              disabled={inExecutionMode}
+              // disabled={inExecutionMode}
             >
               <SaveIcon />
             </Fab>

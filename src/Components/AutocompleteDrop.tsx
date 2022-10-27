@@ -25,6 +25,7 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
   const setAllCategories = state((state) => state.setAllCategories);
   const loading = open && options.length === 0;
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const inExecutionMode = state((state) => state.inExecutionMode);
 
   useEffect(() => {
     if (!open) {
@@ -110,6 +111,7 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
 
   return (
     <Autocomplete
+      disabled={inExecutionMode}
       data-testid="async-autocomplete-drop"
       open={open}
       onOpen={() => {

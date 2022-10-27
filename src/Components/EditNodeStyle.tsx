@@ -26,7 +26,7 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
   const [moreHandles, setMoreHandles] = useState<boolean>(true);
   const [nodeSize, setNodeSize] = useState<number>(100);
 
-  const debouncedSearchTerm = useDebounce(nodeSize, 500);
+  const debouncedNodeWidth = useDebounce(nodeSize, 500);
 
   useEffect(() => {
     if ('position' in element) {
@@ -40,16 +40,16 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
 
   useEffect(
     () => {
-      if (debouncedSearchTerm) {
-        setElementNodeWidth(debouncedSearchTerm);
+      if (debouncedNodeWidth) {
+        setElementNodeWidth(debouncedNodeWidth);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [debouncedSearchTerm] // Only call effect if debounced search term changes
+    [debouncedNodeWidth] // Only call effect if debounced search term changes
   );
 
   function setElementNodeWidth(width) {
-    if (debouncedSearchTerm === width) {
+    if (debouncedNodeWidth !== element.data.nodeWidth) {
       setSelectedElement(
         {
           ...element,

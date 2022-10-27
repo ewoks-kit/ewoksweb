@@ -19,19 +19,17 @@ export default function GetFromServer() {
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
-  const graphRF = state((state) => state.graphRF);
   const canvasGraphChanged = state((state) => state.canvasGraphChanged);
   const undoIndex = state((state) => state.undoIndex);
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
-    // console.log(workflowDetails, graphRF);
-
     if (workflowDetails?.id) {
       setWorkflowId(workflowDetails.id || '');
     }
 
     setOpenAgreeDialog(false);
-    if (workflowDetails?.id && graphRF?.graph?.id !== workflowDetails.id) {
+
+    if (workflowDetails?.id) {
       if (canvasGraphChanged && undoIndex !== 0) {
         setOpenAgreeDialog(true);
       } else {
