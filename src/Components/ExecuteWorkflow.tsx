@@ -37,7 +37,7 @@ export default function ExecuteWorkflow() {
   }, [setExecutedEvents]);
 
   // TODO: check and execute same on ExecutionDetails... merge
-  const checkAndExecute = () => {
+  function checkAndExecute() {
     // console.log(canvasGraphChanged, undoIndex);
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
@@ -46,9 +46,9 @@ export default function ExecuteWorkflow() {
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
     }
-  };
+  }
 
-  const execute = async () => {
+  async function execute() {
     if (recentGraphs.length > 0 && !inExecutionMode) {
       // if (socket.disconnected) {
       //   socket = io(process.env.REACT_APP_SERVER_URL);
@@ -79,11 +79,11 @@ export default function ExecuteWorkflow() {
         severity: 'warning',
       });
     }
-  };
+  }
 
-  const disAgreeSaveWithout = () => {
+  function disAgreeSaveWithout() {
     setOpenAgreeDialog(false);
-  };
+  }
 
   return (
     <>

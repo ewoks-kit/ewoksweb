@@ -1,8 +1,12 @@
+import type { EwoksLink, EwoksNode, GraphEwoks, GraphNodes } from '../types';
 import existsOrValue from './existsOrValue';
 
-function calcMarkerEnd(inNod) {
-  let type = {};
-  if (inNod.uiProps?.markerEnd?.type) {
+function calcMarkerEnd(inNod: GraphNodes): '' | { type: string } {
+  let type: '' | { type: string };
+  if (
+    typeof inNod.uiProps?.markerEnd === 'object' &&
+    'type' in inNod.uiProps.markerEnd
+  ) {
     type = { type: inNod.uiProps.markerEnd.type };
   } else {
     type = '';
@@ -13,9 +17,14 @@ function calcMarkerEnd(inNod) {
 // TODO: merge with outNodesLinks if possible when stable
 // DOC: calc the input nodes and links that need to be added to the graph from
 // the input_nodes in the Ewoks json
-export function inNodesLinks(graph) {
+export function inNodesLinks(
+  graph: GraphEwoks
+): { nodes: EwoksNode[]; links: EwoksLink[] } {
   // console.log(graph.graph.input_nodes, graph.graph.output_nodes);
-  const inputs = { nodes: [], links: [] };
+  const inputs: { nodes: EwoksNode[]; links: EwoksLink[] } = {
+    nodes: [],
+    links: [],
+  };
   if (
     graph.graph &&
     graph.graph.input_nodes &&
@@ -36,7 +45,7 @@ export function inNodesLinks(graph) {
             label: existsOrValue(inNod.uiProps, 'label', inNod.id),
             task_type: 'graphInput',
             task_identifier: 'Start-End',
-            position: temPosition,
+            // position: temPosition,
             uiProps: {
               type: 'input',
               position: temPosition,
@@ -44,7 +53,7 @@ export function inNodesLinks(graph) {
               withImage: existsOrValue(inNod.uiProps, 'withImage', true),
               withLabel: existsOrValue(inNod.uiProps, 'withLabel', true),
               colorBorder: existsOrValue(inNod.uiProps, 'colorBorder', ''),
-              nodeWidth: existsOrValue(inNod.uiProps, 'nodeWidth', 50),
+              nodeWidth: existsOrValue(inNod.uiProps, 'nodeWidth', 110),
             },
           });
           inNodesInputed.push(inNod.id);
@@ -79,11 +88,12 @@ export function inNodesLinks(graph) {
             withImage: existsOrValue(inNod.uiProps, 'withImage', true),
             withLabel: existsOrValue(inNod.uiProps, 'withLabel', true),
             colorBorder: existsOrValue(inNod.uiProps, 'colorBorder', ''),
-            nodeWidth: existsOrValue(inNod.uiProps, 'nodeWidth', 50),
+            nodeWidth: existsOrValue(inNod.uiProps, 'nodeWidth', 110),
           },
         });
       }
     });
   }
+  // console.log(inputs);
   return inputs;
 }

@@ -4,7 +4,7 @@ import ReactJson from 'react-json-view';
 import React from 'react';
 import { getWorkflow } from '../utils/api';
 import GetFromServerButtons from './GetFromServerButtons';
-import type { GraphEwoks } from '../types';
+import type { GraphEwoks, WorkflowDescription } from '../types';
 import state from '../store/state';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -20,21 +20,23 @@ export default function ManageWorkflows() {
   );
   const [categoryValue, setCategoryValue] = React.useState('');
 
-  const setInputWorkflowValue = async (workflowDetails) => {
+  async function setInputWorkflowValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails) {
       // TODO: error handling
       const response = await getWorkflow(workflowDetails.id);
       // console.log('setInputWorkflowValue', val, response);
       setWorkflowValue(response.data as GraphEwoks);
     }
-  };
+  }
 
-  const setInputCategoryValue = async (workflowDetails) => {
-    // filter according to the selected category
-    if (workflowDetails && workflowDetails.title) {
-      setCategoryValue(workflowDetails.title);
+  async function setInputCategoryValue(workflowDetails: WorkflowDescription) {
+    // DOC: filter according to the selected category
+    if (workflowDetails && workflowDetails.label) {
+      setCategoryValue(workflowDetails.label);
+    } else {
+      setCategoryValue('');
     }
-  };
+  }
 
   return (
     <Box>

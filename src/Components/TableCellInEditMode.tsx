@@ -41,7 +41,7 @@ function TableCellInEditMode(propsIn) {
     );
   }, [row.value, row]);
 
-  const onChangeBool = (e, row, index) => {
+  function onChangeBool(e, row, index) {
     const event = {
       ...e,
       target: {
@@ -51,7 +51,7 @@ function TableCellInEditMode(propsIn) {
       },
     };
     onChange(event, row, index);
-  };
+  }
 
   return type === 'dict' || type === 'list' || type === 'object' ? (
     // TODO: examine if needed to edit in the cell?

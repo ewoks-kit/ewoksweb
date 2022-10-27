@@ -13,8 +13,8 @@ export interface GraphNodes {
 export interface InOutLinkAttributes {
   label: string;
   comment: string;
-  conditions: Conditions;
-  data_mapping: DataMapping;
+  conditions: Conditions[];
+  data_mapping: DataMapping[];
   map_all_data: boolean;
   on_error: boolean;
 }
@@ -32,6 +32,7 @@ export interface InOutNodesUiProps {
   withImage?: boolean;
   withLabel?: boolean;
   colorBorder?: string;
+  nodeWidth?: number;
 }
 
 export interface GraphDetails {
@@ -178,8 +179,8 @@ export interface State {
   setAllIconNames?: (icons: string[]) => void;
   // { name: string; svgFile?: string; file?: File }[]
 
-  allCategories?: { title: string }[];
-  setAllCategories?: (categories: { title: string }[]) => void;
+  allCategories?: { label: string }[];
+  setAllCategories?: (categories: { label: string }[]) => void;
 
   allWorkflows?: {
     id?: string;
@@ -209,9 +210,9 @@ export interface State {
   canvasGraphChanged?: boolean;
   setCanvasGraphChanged?: (isChanged: boolean) => void;
 
-  selectedElement?: EwoksRFNode | EwoksRFLink;
+  selectedElement?: EwoksRFNode | EwoksRFLink | GraphDetails;
   setSelectedElement?: (
-    element: EwoksRFNode | EwoksRFLink,
+    element: EwoksRFNode | EwoksRFLink | GraphDetails,
     from?: string,
     update?: boolean
   ) => void;
@@ -286,6 +287,12 @@ export interface UiPropsNodes {
   comment?: string;
   position?: CanvasPosition;
   style?: LinkStyle;
+  withImage: boolean;
+  withLabel: boolean;
+  colorBorder?: string;
+  nodeWidth?: number;
+  task_icon?: string;
+  task_category?: string;
 }
 
 export interface UiPropsLinks {
@@ -302,6 +309,10 @@ export interface UiPropsLinks {
   colorLink?: string;
   style?: LinkStyle;
   getAroundProps?: { x?: number; y?: number };
+  withImage?: boolean;
+  withLabel?: boolean;
+  colorBorder?: string;
+  nodeWidth?: number;
 }
 
 export interface UiPropsGraph {
@@ -315,8 +326,8 @@ export interface UiPropsGraph {
 }
 
 export interface LinkStyle {
-  stroke: string;
-  strokeWidth: string;
+  stroke?: string;
+  strokeWidth?: string;
 }
 
 export interface Note {
@@ -371,13 +382,13 @@ export interface EwoksLink {
   source: string;
   target: string;
   map_all_data: boolean;
-  required: boolean;
+  required?: boolean;
   data_mapping?: DataMapping[];
   conditions?: Conditions[];
   on_error?: boolean;
   sub_target?: string;
   sub_source?: string;
-  startEnd?: string;
+  startEnd?: boolean;
   uiProps?: UiPropsLinks;
 }
 
@@ -457,8 +468,9 @@ export interface EwoksRFLink {
     conditions?: Conditions[];
     on_error?: boolean;
     map_all_data?: boolean;
-    required: boolean;
+    required?: boolean;
     sub_target?: string;
+    sub_target_attributes?: {};
     sub_source?: string;
     colorLine?: string;
     getAroundProps?: { x?: number; y?: number };
@@ -466,9 +478,13 @@ export interface EwoksRFLink {
     links_required_output_names?: string[];
     links_optional_output_names?: string[];
   };
+  // TODO: see if used and give type to the following
   labelStyle;
   labelBgStyle;
+  labelBgPadding;
+  labelBgBorderRadius;
   style;
+  startEnd?: boolean;
   subtarget?: string;
   subsource?: string;
   uiProps?: UiPropsLinks;
@@ -519,15 +535,15 @@ export interface RFNode {
 }
 
 export interface GraphRF {
-  graph: GraphDetails;
-  nodes: EwoksRFNode[];
-  links: EwoksRFLink[];
+  graph?: GraphDetails;
+  nodes?: EwoksRFNode[];
+  links?: EwoksRFLink[];
 }
 
 export interface GraphEwoks {
   graph?: GraphDetails;
-  nodes: EwoksNode[];
-  links: EwoksLink[];
+  nodes?: EwoksNode[];
+  links?: EwoksLink[];
 }
 
 export interface IconsNames {
@@ -540,7 +556,7 @@ export interface Icon {
   image?: { data_url?: string };
 }
 
-export interface workflowDescription {
+export interface WorkflowDescription {
   id: string;
   label?: string;
   category?: string;

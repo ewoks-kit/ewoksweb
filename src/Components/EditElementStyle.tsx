@@ -4,14 +4,14 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 
-import type { EwoksRFLink, EwoksRFNode } from '../types';
+import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../types';
 import EditNodeStyle from './EditNodeStyle';
 import EditLinkStyle from './EditLinkStyle';
 import state from '../store/state';
 
 // DOC: For eiting the style of nodes and links
 export default function EditElementStyle() {
-  const selectedElement = state<EwoksRFNode | EwoksRFLink>(
+  const selectedElement = state<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
   );
 

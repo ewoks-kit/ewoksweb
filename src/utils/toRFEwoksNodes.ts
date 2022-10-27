@@ -1,4 +1,4 @@
-import type { EwoksRFNode } from '../types';
+import type { EwoksRFNode, GraphEwoks, Task } from '../types';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import existsOrValue from './existsOrValue';
@@ -11,9 +11,9 @@ import {
 
 // Accepts a GraphEwoks and returns an EwoksRFNode[]
 export function toRFEwoksNodes(
-  tempGraph,
-  newNodeSubgraphs,
-  tasks
+  tempGraph: GraphEwoks,
+  newNodeSubgraphs: GraphEwoks[],
+  tasks: Task[]
 ): EwoksRFNode[] {
   // Find input and output nodes of the graph
   const inputsAl = inputsAll(tempGraph);
@@ -45,8 +45,8 @@ export function toRFEwoksNodes(
         default_error_node,
         default_error_attributes,
         task_generator,
-        task_icon,
-        task_category,
+        // task_icon,
+        // task_category,
         uiProps,
       }) => {
         const nodeType = calcNodeType(inputsAl, outputsAl, task_type, id);
@@ -63,7 +63,7 @@ export function toRFEwoksNodes(
             data_mapping: [],
           },
           task_generator: task_generator || '',
-          task_icon: task_icon || '',
+          task_icon: uiProps.task_icon || '',
           default_inputs: default_inputs || [],
           data: {
             label: label
@@ -89,10 +89,9 @@ export function toRFEwoksNodes(
           task_type,
           newNodeSubgraphs,
           task_identifier,
-          uiProps,
           node,
           tasks,
-          task_category
+          uiProps.task_category
         );
       }
     );

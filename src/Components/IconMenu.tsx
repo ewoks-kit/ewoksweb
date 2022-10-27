@@ -42,15 +42,18 @@ export default function IconMenu(props) {
   //   // console.log('clone the graphRF initializing the id and the label', graphRF);
   // };
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
-  };
+  }
 
-  const handleClose = () => {
+  function handleClose() {
     setAnchorEl(null);
-  };
+  }
 
-  const action = (action, element) => {
+  function action(
+    action: string,
+    element: Task | EwoksRFNode | EwoksRFLink | GraphRF
+  ) {
     // console.log(action, element, tasks);
     setDoAction(action);
     if (action === 'newTask') {
@@ -90,7 +93,7 @@ export default function IconMenu(props) {
     }
 
     setOpenSaveDialog(true);
-  };
+  }
 
   return (
     <>

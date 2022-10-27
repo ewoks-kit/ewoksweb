@@ -8,9 +8,9 @@ import FormDialog from './FormDialog';
 import curateGraph from '../utils/curateGraph';
 import { getWorkflowsIds, putWorkflow } from '../utils/api';
 
-const workflowExists = (id, workflowsIds) => {
+function workflowExists(id, workflowsIds) {
   return workflowsIds.data.identifiers.includes(id);
-};
+}
 
 // DOC: Save to server button with its spinner
 export default function SaveToServer({ saveToServerF }) {
@@ -26,7 +26,7 @@ export default function SaveToServer({ saveToServerF }) {
     saveToServerF.current = saveToServer;
   });
 
-  const saveToServer = async () => {
+  async function saveToServer(): Promise<void> {
     // console.log(workingGraph.graph.id, graphRF.graph.input_nodes);
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     // and Nodes DataMapping before attempting to save
@@ -91,7 +91,7 @@ export default function SaveToServer({ saveToServerF }) {
         severity: 'warning',
       });
     }
-  };
+  }
 
   return (
     <>

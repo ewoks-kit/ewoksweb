@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import state from '../store/state';
-import type { GraphDetails } from '../types';
+import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../types';
 import TextButtonSave from './TextButtonSave';
 
 // DOC: the label and the comment when the graph is the selectedElement
@@ -18,7 +18,7 @@ export default function GraphLabelComment() {
     setComment(graphElement.uiProps && graphElement.uiProps.comment);
   }, [selectedElement.id, selectedElement]);
 
-  const saveCategory = (category) => {
+  function saveCategory(category) {
     setSelectedElement(
       {
         ...selectedElement,
@@ -26,9 +26,9 @@ export default function GraphLabelComment() {
       } as GraphDetails,
       'fromSaveElement'
     );
-  };
+  }
 
-  const saveLabel = (label) => {
+  function saveLabel(label: string) {
     // setLabel(event.target.value);
     setSelectedElement(
       {
@@ -37,17 +37,17 @@ export default function GraphLabelComment() {
       },
       'fromSaveElement'
     );
-  };
+  }
 
-  const saveComment = (comment) => {
+  function saveComment(comment: string) {
     setSelectedElement(
       {
         ...selectedElement,
         uiProps: { ...selectedElement.uiProps, comment },
-      },
+      } as EwoksRFNode | EwoksRFLink,
       'fromSaveElement'
     );
-  };
+  }
 
   return (
     <>

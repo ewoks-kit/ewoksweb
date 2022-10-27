@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import type { DataMapping, EwoksRFNode } from '../types';
+import type { DataMapping, EditableTableRow, EwoksRFNode } from '../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 // import EditIcon from '@material-ui/icons/EditOutlined'; DONT DELETE
@@ -30,7 +30,7 @@ const useStyles = DashboardStyle;
 //       click and edit some properties and check the node properties
 // integration: by setting a selected node and validating the form and chenge values to see
 //             the selected node change
-export default function NodeDetails(props) {
+export default function NodeDetails(props: { element: EwoksRFNode }) {
   const classes = useStyles();
 
   const { element } = props;
@@ -50,6 +50,12 @@ export default function NodeDetails(props) {
   const NonEditableTaskProperties = [
     // { id: 'id', label: 'Id', value: props.element.id },
     // { id: 'task_icon', label: 'Icon', value: props.element.task_icon },
+    { id: 'task_type', label: 'Type', value: props.element.task_type },
+    {
+      id: 'task_generator',
+      label: 'Generator',
+      value: props.element.task_generator,
+    },
     {
       id: 'task_category',
       label: 'Category',
@@ -72,18 +78,13 @@ export default function NodeDetails(props) {
     },
   ];
 
-  const taskProperties = [
+  const editableTaskProperties = [
     {
       id: 'task_identifier',
       label: 'Identifier',
       value: props.element.task_identifier,
     },
-    { id: 'task_type', label: 'Type', value: props.element.task_type },
-    {
-      id: 'task_generator',
-      label: 'Generator',
-      value: props.element.task_generator,
-    },
+    { id: 'task_icon', label: 'Icon', value: props.element.task_icon },
   ];
 
   useEffect(() => {
@@ -95,14 +96,15 @@ export default function NodeDetails(props) {
     setMapAllData(element.default_error_attributes?.map_all_data || false);
   }, [element.id, element]);
 
-  const propChanged = (propKeyValue) => {
+  function propChanged(propKeyValue: {}) {
+    // console.log(propKeyValue);
     setSelectedElement({
       ...element,
       ...propKeyValue,
     });
-  };
+  }
 
-  const inputsCompleteChanged = (event) => {
+  function inputsCompleteChanged(event) {
     setSelectedElement(
       {
         ...element,
@@ -110,13 +112,13 @@ export default function NodeDetails(props) {
       },
       'fromSaveElement'
     );
-  };
+  }
 
-  const advancedChanged = (event) => {
+  function advancedChanged(event) {
     setAdvanced(event.target.checked);
-  };
+  }
 
-  const defaulErrortNodeChanged = (event) => {
+  function defaulErrortNodeChanged(event) {
     setSelectedElement(
       {
         ...element,
@@ -124,10 +126,10 @@ export default function NodeDetails(props) {
       },
       'fromSaveElement'
     );
-  };
+  }
 
-  const addDataMapping = () => {
-    const el = element as EwoksRFNode;
+  function addDataMapping() {
+    const el = element;
     const elMap = el.default_error_attributes.data_mapping || [];
     if (elMap && elMap[elMap.length - 1] && elMap[elMap.length - 1].id === '') {
       // console.log('should not ADD mapping');
@@ -143,9 +145,9 @@ export default function NodeDetails(props) {
         'fromSaveElement'
       );
     }
-  };
+  }
 
-  const dataMappingValuesChanged = (table) => {
+  function dataMappingValuesChanged(table: EditableTableRow[]) {
     const dmap: DataMapping[] = table.map((row) => {
       return {
         source_output: row.name,
@@ -154,7 +156,7 @@ export default function NodeDetails(props) {
     });
     setSelectedElement(
       {
-        ...(element as EwoksRFNode),
+        ...element,
         default_error_attributes: {
           ...element.default_error_attributes,
           data_mapping: dmap,
@@ -162,9 +164,9 @@ export default function NodeDetails(props) {
       },
       'fromSaveElement'
     );
-  };
+  }
 
-  const mapAllDataChanged = (event) => {
+  function mapAllDataChanged(event) {
     setSelectedElement(
       {
         ...element,
@@ -175,7 +177,7 @@ export default function NodeDetails(props) {
       },
       'fromSaveElement'
     );
-  };
+  }
 
   return (
     <Box>
@@ -292,16 +294,24 @@ export default function NodeDetails(props) {
           </AccordionSummary>
           <AccordionDetails>
             <div>
-              {taskProperties.map(({ id, label, value }) => (
-                <EditTaskProp
-                  key={id}
-                  id={id}
-                  label={label}
-                  value={value}
-                  propChanged={propChanged}
-                  editProps // editProps
-                />
-              ))}
+              {editableTaskProperties.map(({ id, label, value }) =>
+                ['ppfmethod', 'method', 'script'].includes(
+                  props.element.task_type
+                ) ? (
+                  <EditTaskProp
+                    key={id}
+                    id={id}
+                    label={label}
+                    value={value}
+                    propChanged={propChanged}
+                    editProps // editProps
+                  />
+                ) : (
+                  <div key={id} className={classes.detailsLabels}>
+                    <b>{label}:</b> {value}
+                  </div>
+                )
+              )}
               {NonEditableTaskProperties.map(({ id, label, value }) => (
                 <div key={id} className={classes.detailsLabels}>
                   <b>{label}:</b>{' '}

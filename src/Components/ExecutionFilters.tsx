@@ -13,7 +13,7 @@ import {
 import AutocompleteDrop from '../Components/AutocompleteDrop';
 import { getExecutionEvents } from '../utils/api';
 import state from '../store/state';
-import type { ExecutedJobsResponse } from '../types';
+import type { ExecutedJobsResponse, WorkflowDescription } from '../types';
 
 interface filterParams {
   workflow_id: string;
@@ -79,27 +79,30 @@ export default function ExecutionFilters() {
   //   console.log(val, workflowNameFilter);
   // };
 
-  const setInputValue = (workflowDetails) => {
+  // TODO: same as in manageWorkflows for category and workflows
+  function setInputValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails && workflowDetails.id) {
       setWorkflowId(workflowDetails.id || '');
     } else {
       setWorkflowId('');
     }
-  };
+  }
 
-  const setInputCategoryValue = async (workflowDetails) => {
-    // filter according to the selected category
-    if (workflowDetails && workflowDetails.title) {
-      setCategoryValue(workflowDetails.title);
+  function setInputCategoryValue(workflowDetails: WorkflowDescription) {
+    // DOC: filter according to the selected category
+    if (workflowDetails && workflowDetails.label) {
+      setCategoryValue(workflowDetails.label);
+    } else {
+      setCategoryValue('');
     }
-  };
+  }
 
-  const statusChanged = (event) => {
+  function statusChanged(event) {
     // console.log(event.target.value, workflowNameFilter);
     setStatus(event.target.value);
-  };
+  }
 
-  const getEvents = async () => {
+  async function getEvents() {
     try {
       const filterParams = {} as filterParams;
       if (workflowId) {
@@ -155,36 +158,36 @@ export default function ExecutionFilters() {
     // finally {
 
     // }
-  };
+  }
 
   // const errorChanged = (event) => {
   //   console.log(event.target.checked);
   //   setError(event.target.checked);
   // };
 
-  const moreFiltersChanged = (event) => {
+  function moreFiltersChanged(event) {
     setMoreFilters(event.target.checked);
-  };
+  }
 
   // const contextChanged = (event) => {
   //   setContext(event.target.value);
   // };
 
-  const nodeIdChanged = (event) => {
+  function nodeIdChanged(event) {
     setNodeId(event.target.value);
-  };
+  }
 
-  const taskIdChanged = (event) => {
+  function taskIdChanged(event) {
     setTaskId(event.target.value);
-  };
+  }
 
-  const userNameChanged = (event) => {
+  function userNameChanged(event) {
     setUserName(event.target.value);
-  };
+  }
 
-  const jobIdChanged = (event) => {
+  function jobIdChanged(event) {
     setJobId(event.target.value);
-  };
+  }
 
   // const typeChanged = (event) => {
   //   setType(event.target.value);
@@ -215,7 +218,7 @@ export default function ExecutionFilters() {
       >
         <AutocompleteDrop
           setInputValue={setInputValue}
-          placeholder="Workflows"
+          placeholder="Open Workflow"
           category={categoryValue}
         />
       </FormControl>

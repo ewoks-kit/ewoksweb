@@ -4,7 +4,7 @@ import type {
   EwoksRFNode,
   GraphEwoks,
   GraphRF,
-  workflowDescription,
+  WorkflowDescription,
 } from './types';
 import axios from 'axios';
 import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
@@ -18,14 +18,14 @@ import { getWorkflowsDescriptions, getWorkflow } from './utils/api';
 
 export const ewoksNetwork = {};
 
-export async function getWorkflows(): Promise<workflowDescription[]> {
+export async function getWorkflows(): Promise<WorkflowDescription[]> {
   // console.log(process.env);
   let res = [];
   try {
     const workflows = await getWorkflowsDescriptions();
     if (workflows && workflows.data) {
       const workf = workflows.data as {
-        items: workflowDescription[];
+        items: WorkflowDescription[];
       };
       res = workf.items;
       // .sort((a, b) => a.localeCompare(b))
@@ -54,7 +54,7 @@ export async function getWorkflows(): Promise<workflowDescription[]> {
     }
     /* eslint-disable no-console */
     console.log(error.config);
-    res = [{ title: 'network error' }];
+    res = [{ label: 'network error', category: error.response.status }];
   }
   // console.log(res);
   return res;
@@ -78,7 +78,7 @@ export function createGraph() {
 export async function getSubgraphs(
   graph: GraphEwoks | GraphRF,
   recentGraphs: GraphRF[]
-) {
+): Promise<GraphEwoks[]> {
   const nodes: EwoksRFNode[] = [...graph.nodes];
   const existingNodeSubgraphs = nodes.filter(
     (nod) => nod.task_type === 'graph'
@@ -120,7 +120,7 @@ export async function getSubgraphs(
   return results ? results : [];
 }
 
-export function rfToEwoks(tempGraph): GraphEwoks {
+export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
   // calculate input_nodes-output_nodes nodes from graphInput-graphOutput
   const graph = calcGraphInputsOutputs(tempGraph);
   const noteNodes = calcNoteNodes(tempGraph);

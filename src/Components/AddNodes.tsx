@@ -123,8 +123,8 @@ function AddNodes(props: AddNodesProps) {
     setGraphOrSubgraph(false);
   };
 
-  const clickTask = (elem) => {
-    setSelectedTask(elem);
+  const clickTask = (task: Task) => {
+    setSelectedTask(task);
   };
 
   const deleteTaskDialog = () => {
@@ -154,7 +154,7 @@ function AddNodes(props: AddNodesProps) {
     setOpenAgreeDialog(false);
   };
 
-  const action = (action, element) => {
+  const action = (action: string, element: string | Task) => {
     setDoAction(action);
     if (['cloneTask', 'editTask'].includes(action)) {
       const task = tasks.find((tas) => tas.task_identifier === element);
@@ -172,7 +172,7 @@ function AddNodes(props: AddNodesProps) {
     setExpanded(newExpanded);
   };
 
-  const findImage = (img) => {
+  const findImage = (img: string) => {
     const imgIndex = allIcons.map((ico) => ico.name).indexOf(img);
 
     return imgIndex !== -1
@@ -287,14 +287,17 @@ function AddNodes(props: AddNodesProps) {
                   </span>
                   {props.title === 'Add Nodes' && (
                     <Upload>
-                      <span
-                        role="button"
-                        tabIndex={0}
-                        onClick={insertGraph}
-                        onKeyPress={insertGraph}
-                      >
-                        <AddIcon />G
-                      </span>
+                      <Tooltip title="Add a subgraph from disk" arrow>
+                        <span
+                          role="button"
+                          tabIndex={0}
+                          onClick={insertGraph}
+                          onKeyPress={insertGraph}
+                          data-testid="addSubgraphFromDisk"
+                        >
+                          <AddIcon />G
+                        </span>
+                      </Tooltip>
                     </Upload>
                   )}
                 </>

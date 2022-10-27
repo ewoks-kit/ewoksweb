@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { Button } from '@material-ui/core';
 import type { FallbackProps } from 'react-error-boundary';
-import React from 'react';
 
 function prepareReport(message: string): string {
   return `Hi,
@@ -26,6 +25,7 @@ interface Props extends FallbackProps {
 
 function ErrorFallback(props: Props) {
   const { error, resetErrorBoundary, children } = props;
+  // console.log(error, children);
 
   return (
     <div role="alert" style={{ padding: '1.5rem' }}>

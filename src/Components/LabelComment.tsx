@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 import { useEffect, useState } from 'react';
 
-import type { EwoksRFLink } from '../types';
+import type { EwoksRFLink, EwoksRFNode } from '../types';
 import { FormControl, TextField, IconButton, Fab } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import state from '../store/state';
@@ -12,8 +12,13 @@ import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = DashboardStyle;
 
+interface LabelCommentProps {
+  element: EwoksRFNode | EwoksRFLink;
+  showComment: boolean;
+}
+
 // DOC: the label and comment for nodes-links when selected
-export default function LabelComment(props) {
+export default function LabelComment(props: LabelCommentProps) {
   const classes = useStyles();
 
   const { element, showComment } = props;
@@ -35,7 +40,7 @@ export default function LabelComment(props) {
       setLabel(element.data.label);
       setComment(element.data.comment);
     } else if ('source' in element) {
-      const el = element as EwoksRFLink;
+      const el = element;
       setLabel(el.label);
       setComment(el.data && el.data.comment);
 
@@ -58,7 +63,7 @@ export default function LabelComment(props) {
     }
   }, [element]);
 
-  function saveLabel(labelLocal) {
+  function saveLabel(labelLocal: string) {
     // console.log('save', element, labelLocal);
     if ('position' in element) {
       const el = element;
@@ -81,7 +86,7 @@ export default function LabelComment(props) {
     }
   }
 
-  function saveComment(commentLocal) {
+  function saveComment(commentLocal: string) {
     const el = element as EwoksRFLink;
     setSelectedElement(
       {
@@ -92,7 +97,7 @@ export default function LabelComment(props) {
     );
   }
 
-  function valueSavedLocal(val) {
+  function valueSavedLocal(val: string) {
     setValueIsChanged(false);
     saveLabel(val);
   }

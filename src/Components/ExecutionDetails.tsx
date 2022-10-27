@@ -5,7 +5,7 @@ import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import IntegratedSpinner from './IntegratedSpinner';
 import state from '../store/state';
 import { Button, Chip, IconButton } from '@material-ui/core';
-import type { Event, GraphEwoks, workflowDescription } from '../types';
+import type { Event, GraphEwoks, WorkflowDescription } from '../types';
 import { getWorkflow } from '../utils/api';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ConfirmDialog from '../Components/ConfirmDialog';
@@ -94,8 +94,8 @@ export default function ExecutionDetails() {
   }
 
   function formatedDate(job: Event) {
-    const allWorkF: workflowDescription[] = [
-      ...(allWorkflows as workflowDescription[]),
+    const allWorkF: WorkflowDescription[] = [
+      ...(allWorkflows as WorkflowDescription[]),
     ];
 
     const { label } = (allWorkF &&
@@ -138,7 +138,7 @@ export default function ExecutionDetails() {
       const response = await getWorkflow(workflowId);
       if (response.data) {
         setWorkingGraph(response.data as GraphEwoks, 'fromServer');
-        // TODO: get read of timeout?
+        // TODO: get rid of timeout?
         setTimeout(() => {
           // DOC:
           const events = getEventsForJob();
@@ -193,15 +193,15 @@ export default function ExecutionDetails() {
     return events;
   }
 
-  const handleChangeOpenExecutions = async () => {
+  async function handleChangeOpenExecutions() {
     setOpenSettingsDrawer('Executions');
-  };
+  }
 
-  const handleChangeCleanExecutions = () => {
+  function handleChangeCleanExecutions() {
     setWorkflows([]);
-  };
+  }
 
-  const deleteWatchedJob = () => {
+  function deleteWatchedJob() {
     setWorkflows(
       workflows.filter((work) => work.job_id !== selectedWorkflow.job_id)
     );
@@ -211,11 +211,11 @@ export default function ExecutionDetails() {
         (work) => work[0].job_id !== selectedWorkflow.job_id
       )
     );
-  };
+  }
 
-  const disAgreeExecuteWithout = () => {
+  function disAgreeExecuteWithout() {
     setOpenAgreeDialog(false);
-  };
+  }
 
   return (
     <>

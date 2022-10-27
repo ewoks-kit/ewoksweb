@@ -58,7 +58,7 @@ export default function FormDialog(props: FormDialogProps) {
   const [outputNames, setOutputNames] = React.useState([] as string[]);
   const [overwrite, setOverwrite] = React.useState<boolean>(false);
 
-  const selectedElement = state<EwoksRFNode | EwoksRFLink>(
+  const selectedElement = state<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
   );
   const setCanvasGraphChanged = state((st) => st.setCanvasGraphChanged);
@@ -98,7 +98,7 @@ export default function FormDialog(props: FormDialogProps) {
     }
   }, [open, action, elementToEdit, isForGraph]);
 
-  const handleSave = async () => {
+  async function handleSave() {
     // get the selected element (graph or Node) give a new name before saving
     if (isForGraph) {
       saveGraph(element as GraphRF);
@@ -107,7 +107,7 @@ export default function FormDialog(props: FormDialogProps) {
     } else if (['editTask'].includes(action)) {
       puTask(element as Task);
     }
-  };
+  }
 
   async function puTask(task: Task) {
     try {

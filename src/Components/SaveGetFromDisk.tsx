@@ -26,17 +26,17 @@ export default function SaveGetFromDisk() {
   const graphRF = state((state) => state.graphRF);
   const inExecutionMode = state((state) => state.inExecutionMode);
 
-  const loadFromDisk = () => {
+  function loadFromDisk() {
     setGraphOrSubgraph(true);
-  };
+  }
 
-  const saveToDisk = () => {
+  function saveToDisk() {
     download(
       JSON.stringify(rfToEwoks(graphRF), null, 2),
       `${graphRF.graph.label}.json`,
       'text/plain'
     );
-  };
+  }
 
   return (
     <>

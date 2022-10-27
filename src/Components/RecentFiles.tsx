@@ -12,9 +12,9 @@ export default function RecentFiles() {
   const recentGraphs = state((state) => state.recentGraphs);
   const [selectedGraph, setSelectedGraph] = React.useState(true);
 
-  const selectedGraphChange = (event) => {
+  function selectedGraphChange(event) {
     setSelectedGraph(event.target.value);
-  };
+  }
 
   return (
     <FormControl variant="standard" className={classes.formControl}>

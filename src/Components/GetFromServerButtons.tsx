@@ -21,15 +21,15 @@ export default function GetFromServerButtons(props) {
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const undoIndex = state((state) => state.undoIndex);
 
-  const getSubgraphFromServer = () => {
+  function getSubgraphFromServer() {
     getFromServer('subgraph');
-  };
+  }
 
-  const disAgreeSaveWithout = () => {
+  function disAgreeSaveWithout() {
     setOpenAgreeDialog(false);
-  };
+  }
 
-  const getFromServer = async (isSubgraph) => {
+  async function getFromServer(isSubgraph: string) {
     // console.log('get from server buttons');
     setOpenAgreeDialog(false);
     if (workflowId) {
@@ -76,9 +76,9 @@ export default function GetFromServerButtons(props) {
         severity: 'warning',
       });
     }
-  };
+  }
 
-  const checkAndGetFromServer = (isSubgraph) => {
+  const checkAndGetFromServer = (isSubgraph: string) => {
     if (
       workflowId &&
       graphRF.graph.id &&

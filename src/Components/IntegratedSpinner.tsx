@@ -62,7 +62,7 @@ export default function IntegratedSpinner({
     // };
   }, [getting]);
 
-  const handleButtonClick = () => {
+  function handleButtonClick() {
     // console.log(loading, action);
     if (!loading) {
       onClick();
@@ -83,7 +83,7 @@ export default function IntegratedSpinner({
         setLoading(false);
       }, 3000);
     }
-  };
+  }
 
   return (
     <Tooltip title={tooltipText(tooltip) || ''} enterDelay={800} arrow>

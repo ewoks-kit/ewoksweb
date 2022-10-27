@@ -1,7 +1,14 @@
 import Popover from '@material-ui/core/Popover';
 import SaveGetFromDisk from '../Components/SaveGetFromDisk';
 
-export default function MenuPopover({ anchorEl, handleClose }) {
+interface MenuPopoverProps {
+  anchorEl: null | HTMLElement;
+  handleClose(): void;
+}
+export default function MenuPopover({
+  anchorEl,
+  handleClose,
+}: MenuPopoverProps) {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 

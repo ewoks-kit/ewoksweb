@@ -98,11 +98,13 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
   };
 
   const changeNodeSize = (event, number) => {
-    // console.log(number);
+    // TODO: find a better way than declaring a const for type
+    const el: EwoksRFNode =
+      'task_identifier' in selectedElement && selectedElement;
     setSelectedElement(
       {
-        ...selectedElement,
-        data: { ...selectedElement.data, nodeWidth: number },
+        ...el,
+        data: { ...el.data, nodeWidth: number },
       },
       'fromSaveElement'
     );

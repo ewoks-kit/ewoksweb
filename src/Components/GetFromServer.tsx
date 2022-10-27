@@ -4,7 +4,7 @@ import DashboardStyle from '../layout/DashboardStyle';
 import FormControl from '@material-ui/core/FormControl';
 import AutocompleteDrop from '../Components/AutocompleteDrop';
 import state from '../store/state';
-import type { GraphEwoks } from '../types';
+import type { GraphEwoks, WorkflowDescription } from '../types';
 import { getWorkflow } from '../utils/api';
 import ConfirmDialog from './ConfirmDialog';
 import { validateEwoksGraph } from '../utils/EwoksValidator';
@@ -23,25 +23,23 @@ export default function GetFromServer() {
   const canvasGraphChanged = state((state) => state.canvasGraphChanged);
   const undoIndex = state((state) => state.undoIndex);
 
-  const setInputValue = async (workflowDetails) => {
-    if (workflowDetails && workflowDetails.id) {
+  async function setInputValue(workflowDetails: WorkflowDescription) {
+    // console.log(workflowDetails, graphRF);
+
+    if (workflowDetails?.id) {
       setWorkflowId(workflowDetails.id || '');
     }
 
     setOpenAgreeDialog(false);
-    if (
-      workflowDetails &&
-      workflowDetails.id &&
-      graphRF.graph.id &&
-      graphRF.graph.id !== workflowDetails.id
-    ) {
+    if (workflowDetails?.id && graphRF?.graph?.id !== workflowDetails.id) {
       if (canvasGraphChanged && undoIndex !== 0) {
         setOpenAgreeDialog(true);
       } else {
+        // console.log(workflowDetails.id);
         getFromServer(workflowDetails.id);
       }
     }
-  };
+  }
 
   async function getFromServer(workflowIdparam: string) {
     if (workflowIdparam) {

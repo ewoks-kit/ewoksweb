@@ -4,6 +4,7 @@ import { Fab } from '@material-ui/core';
 
 // import { validateEwoksGraph } from '../utils/EwoksValidator';
 import state from '../store/state';
+import type { GraphRF } from '../types';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -13,9 +14,9 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const showFile = async (e) => {
+const showFile = async (e): Promise<FileReader> => {
   e.preventDefault();
-  const reader = new FileReader();
+  const reader: FileReader = new FileReader();
   // reader.addEventListener = async (e) => {
   //   const text = e.target.result;
   // };
@@ -23,7 +24,7 @@ const showFile = async (e) => {
   return reader;
 };
 
-function isJsonString(str) {
+function isJsonString(str: string): boolean {
   try {
     JSON.parse(str);
   } catch (error) {
@@ -38,16 +39,16 @@ function Upload(props) {
   const classes = useStyles();
 
   // const [selectedFile, setSelectedFile] = useState();
-  const graphRF = state((state) => state.graphRF);
+  const graphRF = state<GraphRF>((state) => state.graphRF);
   const graphOrSubgraph = state<Boolean>((state) => state.graphOrSubgraph);
 
-  const workingGraph = state((state) => state.workingGraph);
+  const workingGraph = state<GraphRF>((state) => state.workingGraph);
   const setWorkingGraph = state((state) => state.setWorkingGraph);
   const setSubGraph = state((state) => state.setSubGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const inExecutionMode = state((state) => state.inExecutionMode);
+  const inExecutionMode = state<boolean>((state) => state.inExecutionMode);
 
-  const fileNameChanged = async (event) => {
+  async function fileNameChanged(event) {
     // // console.log(event.target.files[0], recentGraphs, graphRF, subgraphsStack);
     /* eslint-disable no-console */
     console.log(workingGraph.graph.id, graphRF.graph.id);
@@ -56,7 +57,7 @@ function Upload(props) {
       const file = await reader.then((val) => val);
       // eslint-disable-next-line require-atomic-updates
       file.onloadend = async () => {
-        if (isJsonString(file.result)) {
+        if (isJsonString(file.result as string)) {
           const newGraph = JSON.parse(file.result as string);
 
           if (graphOrSubgraph) {
@@ -84,7 +85,7 @@ function Upload(props) {
         severity: 'success',
       });
     }
-  };
+  }
 
   return (
     <div>

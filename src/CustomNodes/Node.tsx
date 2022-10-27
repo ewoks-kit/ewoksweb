@@ -165,10 +165,11 @@ const Node: React.FC<NodeProps> = ({
   };
 
   const changeNodeSize = (event, number) => {
+    const element = selectedElement as EwoksRFNode;
     setSelectedElement({
       ...selectedElement,
-      data: { ...selectedElement.data, nodeWidth: number },
-    });
+      data: { ...element.data, nodeWidth: number },
+    } as EwoksRFNode);
     setNodeSize(number);
   };
 
@@ -208,6 +209,17 @@ const Node: React.FC<NodeProps> = ({
       ? allIcons[imgIndex].image.data_url
       : iconsObj[img] || orange2;
   };
+
+  function setSelEl() {
+    const el = selectedElement as EwoksRFNode;
+    setSelectedElement({
+      ...el,
+      data: {
+        ...el.data,
+        label: labelLocal,
+      },
+    });
+  }
 
   return (
     <div
@@ -481,13 +493,7 @@ const Node: React.FC<NodeProps> = ({
                     aria-label="edit"
                     onClick={() => {
                       setEdit(false);
-                      setSelectedElement({
-                        ...selectedElement,
-                        data: {
-                          ...selectedElement.data,
-                          label: labelLocal,
-                        },
-                      });
+                      setSelEl();
                     }}
                   >
                     <SaveIcon color="primary" />

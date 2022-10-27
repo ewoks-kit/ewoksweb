@@ -1,4 +1,6 @@
-export function calcCoordinatesFirstNode(nodes) {
+import type { EwoksRFNode } from '../types';
+
+export function calcCoordinatesFirstNode(nodes: EwoksRFNode[]) {
   let x = 500;
   let y = 500;
   for (const nod of nodes) {

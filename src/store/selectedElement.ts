@@ -3,7 +3,10 @@ import type { EwoksRFLink, EwoksRFNode, GraphDetails, GraphRF } from '../types';
 const selectedElement = (set, get) => ({
   selectedElement: {} as EwoksRFNode | EwoksRFLink | GraphDetails,
 
-  setSelectedElement: (element, from) => {
+  setSelectedElement: (
+    element: EwoksRFNode | EwoksRFLink | GraphDetails,
+    from: string
+  ) => {
     const prevState = get((prev) => prev);
 
     const wg = prevState.workingGraph.graph.id;
@@ -48,7 +51,7 @@ const selectedElement = (set, get) => ({
         }
       } else {
         tempGraph = {
-          graph: element,
+          graph: element as GraphDetails,
           nodes: initializeNodes(nodes),
           links: links.map((link) => {
             return { ...link, selected: false }; // TODO: examine this after update

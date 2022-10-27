@@ -11,12 +11,12 @@ import LabelComment from './LabelComment';
 
 const useStyles = DashboardStyle;
 
-export default function LinkDetails(props) {
+export default function LinkDetails(props: { element: EwoksRFLink }) {
   const classes = useStyles();
 
   const { element } = props;
-  const { on_error } = (element.data && element.data.on_error) || false;
-  const { map_all_data } = (element.data && element.data.map_all_data) || false;
+  const on_error: boolean = element?.data?.on_error || false;
+  const map_all_data: boolean = element?.data?.map_all_data || false;
 
   const setSelectedElement = state((state) => state.setSelectedElement);
 
@@ -39,22 +39,22 @@ export default function LinkDetails(props) {
   const mapAllDataChanged = (event) => {
     setSelectedElement(
       {
-        ...(element as EwoksRFLink),
+        ...element,
         data: { ...element.data, map_all_data: event.target.checked },
       },
       'fromSaveElement'
     );
   };
 
-  const onErrorChanged = (event) => {
+  function onErrorChanged(event) {
     setSelectedElement(
       {
-        ...(element as EwoksRFLink),
+        ...element,
         data: { ...element.data, on_error: event.target.checked },
       },
       'fromSaveElement'
     );
-  };
+  }
 
   const advancedChanged = (event) => {
     setAdvanced(event.target.checked);
@@ -63,7 +63,7 @@ export default function LinkDetails(props) {
   const requiredChanged = (event) => {
     setSelectedElement(
       {
-        ...(element as EwoksRFLink),
+        ...element,
         data: { ...element.data, required: event.target.checked },
       },
       'fromSaveElement'
@@ -147,12 +147,12 @@ export default function LinkDetails(props) {
           <div className={classes.detailsLabels}>
             <b>Target:</b> {element.target}
           </div>
-          {element.sub_target && (
+          {element.data.sub_target && (
             <div className={classes.detailsLabels}>
               <b>Sub_target:</b> {element.data.sub_target}
             </div>
           )}
-          {element.sub_target_attributes && (
+          {element.data.sub_target_attributes && (
             <div className={classes.detailsLabels}>
               <b>Sub_target_attributes:</b>
               {element.data.sub_target_attributes}

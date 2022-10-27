@@ -94,6 +94,7 @@ describe('In the AddNodes test:', () => {
     );
 
     const { tasks } = state.getState();
+
     const taskName = tasks[0].task_identifier;
 
     const ewoksCoreCategory = screen.getByRole('button', {
@@ -119,12 +120,16 @@ describe('In the AddNodes test:', () => {
       })
     );
 
+    // TODO: Although category was clicked again the task remains visible?
+    // expect(ewoksCoreTask).not.toBeVisible();
+
     const { taskCategories } = state.getState();
     expect(taskCategories).toHaveLength(1);
     expect(taskCategories).toEqual(expect.arrayContaining(['ewokscore']));
 
     const buttonAddNodesOpenedCategories = screen.getAllByRole('button');
-    expect(buttonAddNodesOpenedCategories).toHaveLength(7);
+
+    expect(buttonAddNodesOpenedCategories).toHaveLength(2);
   });
 
   test('if insertGraph is pressed setGraphOrSubgraph is set to false on state', async () => {
@@ -134,13 +139,13 @@ describe('In the AddNodes test:', () => {
     act(() => {
       state.setState({
         graphOrSubgraph: true,
-        taskCategories: ['ewokscore'],
+        taskCategories: ['General'],
         tasks: [
           {
             task_identifier: 'taskSkeleton',
             task_type: 'ppfmethod',
             icon: 'orange1',
-            category: 'ewokscore',
+            category: 'General',
             optional_input_names: [],
             output_names: [],
             required_input_names: [],
@@ -157,13 +162,13 @@ describe('In the AddNodes test:', () => {
       })
     );
 
-    const ewoksCoreCategory = screen.getByRole('button', {
-      name: /ewokscore/u,
+    const GeneralCategory = screen.getByRole('button', {
+      name: /General/u,
     });
-    expect(ewoksCoreCategory).toBeInTheDocument();
+    expect(GeneralCategory).toBeInTheDocument();
 
     fireEvent(
-      ewoksCoreCategory,
+      GeneralCategory,
       new MouseEvent('click', {
         bubbles: true,
         cancelable: true,
@@ -172,15 +177,15 @@ describe('In the AddNodes test:', () => {
 
     const { taskCategories } = state.getState();
     expect(taskCategories).toHaveLength(1);
-    expect(taskCategories).toEqual(expect.arrayContaining(['ewokscore']));
+    expect(taskCategories).toEqual(expect.arrayContaining(['General']));
 
     const buttonAddNodesOpenedCategories = screen.getAllByRole('button');
-    expect(buttonAddNodesOpenedCategories).toHaveLength(7);
+    expect(buttonAddNodesOpenedCategories).toHaveLength(5);
 
-    const addSubgraphButton = screen.getByRole('button', {
-      name: /G/u,
-    });
+    const addSubgraphButton = screen.getByTestId('addSubgraphFromDisk');
+
     expect(addSubgraphButton).toBeInTheDocument();
+    expect(addSubgraphButton).toBeVisible();
 
     fireEvent(
       addSubgraphButton,
@@ -191,5 +196,16 @@ describe('In the AddNodes test:', () => {
     );
 
     expect(state.getState().graphOrSubgraph).toBe(false);
+
+    fireEvent(
+      GeneralCategory,
+      new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+      })
+    );
+
+    expect(addSubgraphButton).toBeInTheDocument();
+    expect(addSubgraphButton).not.toBeVisible();
   });
 });

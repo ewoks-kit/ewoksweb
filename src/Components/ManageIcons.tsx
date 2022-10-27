@@ -60,12 +60,12 @@ export default function ManageIcons() {
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const allIcons = state((state) => state.allIcons);
 
-  const clickIcon = (icon) => {
+  function clickIcon(icon: string) {
     // console.log(allIcons);
     setSelectedIcon(icon);
-  };
+  }
 
-  const deleteIcon = async () => {
+  async function deleteIcon() {
     // console.log('delete icon');
 
     try {
@@ -98,9 +98,9 @@ export default function ManageIcons() {
         severity: 'error',
       });
     }
-  };
+  }
 
-  const uploadFile = async (event) => {
+  async function uploadFile(event) {
     event.preventDefault();
     const data = new FormData();
 
@@ -118,9 +118,10 @@ export default function ManageIcons() {
         severity: 'error',
       });
     }
-  };
+  }
 
-  const inputNew = (ne) => {
+  // TODO: Typescript
+  function inputNew(ne) {
     if (ne.target.files[0].size < 10_000) {
       setOpenSnackbar({
         open: true,
@@ -137,9 +138,9 @@ export default function ManageIcons() {
         severity: 'warning',
       });
     }
-  };
+  }
 
-  const agreeDeleteIcon = async () => {
+  async function agreeDeleteIcon() {
     setOpenAgreeDialog(false);
     await axios
       .delete(`${process.env.REACT_APP_SERVER_URL}/icon/${selectedIcon}`)
@@ -158,11 +159,11 @@ export default function ManageIcons() {
           severity: 'error',
         });
       });
-  };
+  }
 
-  const disAgreeDeleteIcon = () => {
+  function disAgreeDeleteIcon() {
     setOpenAgreeDialog(false);
-  };
+  }
 
   // const getIcons = async () => {
   //   const iconsData = await axios.get(

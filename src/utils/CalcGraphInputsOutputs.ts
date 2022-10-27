@@ -1,4 +1,10 @@
-import type { GraphDetails, GraphRF } from '../types';
+import type {
+  EwoksRFLink,
+  EwoksRFNode,
+  GraphDetails,
+  GraphNodes,
+  GraphRF,
+} from '../types';
 import existsOrValue from './existsOrValue';
 
 // Calculate the ewoks input_nodes and output_nodes within the graph
@@ -31,8 +37,13 @@ export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
   };
 }
 
-function calcInOutNodes(inputOrOutput, graph, nod, graph_links) {
-  const nodes = [];
+function calcInOutNodes(
+  inputOrOutput: string,
+  graph: GraphRF,
+  nod: EwoksRFNode,
+  graph_links: EwoksRFLink[]
+): GraphNodes[] {
+  const nodes: GraphNodes[] = [];
 
   let nodesNamesConnectedTo: string[] = [];
   if (inputOrOutput === 'graphInput') {
@@ -47,7 +58,7 @@ function calcInOutNodes(inputOrOutput, graph, nod, graph_links) {
       .map((link) => link.source); // !!
   }
 
-  const nodeObjConnectedTo = [];
+  const nodeObjConnectedTo: EwoksRFNode[] = [];
   for (const nodesNames of nodesNamesConnectedTo) {
     nodeObjConnectedTo.push(graph.nodes.find((node) => nodesNames === node.id));
   }
@@ -96,13 +107,13 @@ function calcMarkerEnd(graph_link) {
 }
 
 function calcNodeProps(
-  isGraph,
-  nod,
-  nodConnected,
-  graph_links,
-  link_index,
-  inputOrOutput
-) {
+  isGraph: boolean,
+  nod: EwoksRFNode,
+  nodConnected: EwoksRFNode,
+  graph_links: EwoksRFLink[],
+  link_index: number,
+  inputOrOutput: string
+): GraphNodes {
   // console.log(nod);
   return {
     id: nod.id,
