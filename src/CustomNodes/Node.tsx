@@ -27,7 +27,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import { calcNewId } from '../utils/calcNewId';
 
 import state from '../store/state';
-import { IconButton, Slider, TextField } from '@material-ui/core';
+import { IconButton, TextField } from '@material-ui/core';
 import tooltipText from '../Components/TooltipText';
 
 const iconsObj = {
@@ -164,14 +164,14 @@ const Node: React.FC<NodeProps> = ({
     return isValid;
   };
 
-  const changeNodeSize = (event, number) => {
-    const element = selectedElement as EwoksRFNode;
-    setSelectedElement({
-      ...selectedElement,
-      data: { ...element.data, nodeWidth: number },
-    } as EwoksRFNode);
-    setNodeSize(number);
-  };
+  // const changeNodeSize = (event, number) => {
+  //   const element = selectedElement as EwoksRFNode;
+  //   setSelectedElement({
+  //     ...selectedElement,
+  //     data: { ...element.data, nodeWidth: number },
+  //   } as EwoksRFNode);
+  //   setNodeSize(number);
+  // };
 
   const labelChanged = (event) => {
     setLabelLocal(event.target.value);
@@ -436,7 +436,7 @@ const Node: React.FC<NodeProps> = ({
           {isGraph && <span style={style.contentWrapper}>{content}</span>}
           {detailsL && type !== 'graphOutput' && type !== 'graphInput' && (
             <>
-              <Slider
+              {/* <Slider
                 color="primary"
                 defaultValue={nodeSize}
                 value={nodeSize}
@@ -446,7 +446,7 @@ const Node: React.FC<NodeProps> = ({
                 style={{ width: '90%' }}
                 // aria-label="Small"
                 // valueLabelDisplay="auto"
-              />
+              /> */}
               <Tooltip
                 title={tooltipText('Clone Node')}
                 enterDelay={800}
