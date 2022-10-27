@@ -193,7 +193,11 @@ export default function Dashboard() {
               enterDelay={800}
               arrow
             >
-              <IconButton color="inherit" onClick={checkAndNewGraph}>
+              <IconButton
+                color="inherit"
+                onClick={checkAndNewGraph}
+                disabled={inExecutionMode}
+              >
                 <Fab
                   className={classes.openFileButton}
                   color="primary"
@@ -211,7 +215,11 @@ export default function Dashboard() {
               enterDelay={800}
               arrow
             >
-              <IconButton color="inherit" onClick={openGraph}>
+              <IconButton
+                color="inherit"
+                onClick={openGraph}
+                disabled={inExecutionMode}
+              >
                 <Fab
                   className={classes.openFileButton}
                   color="primary"
