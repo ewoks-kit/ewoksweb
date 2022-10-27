@@ -11,10 +11,8 @@ const selectedElement = (set, get) => ({
 
     const wg = prevState.workingGraph.graph.id;
     const { graph, nodes, links } = prevState.graphRF;
-    // console.log(element, nodes, links);
     // TODO: handle the following as a select won't change the graph
     prevState.setCanvasGraphChanged(true);
-    // console.log('selected element', prevState.undoIndex);
     if (wg === '0' || wg === graph.id) {
       let tempGraph = {} as GraphRF;
       if ('position' in element) {
@@ -36,7 +34,6 @@ const selectedElement = (set, get) => ({
           });
         }
       } else if ('source' in element) {
-        // console.log(element);
         tempGraph = {
           graph,
           // setting all node de-selected...
