@@ -35,7 +35,7 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
   }, [open]);
 
   function setInputValue(newInputValue: WorkflowDescription) {
-    console.log(newInputValue);
+    // console.log(newInputValue);
     props.setInputValue(newInputValue);
   }
 

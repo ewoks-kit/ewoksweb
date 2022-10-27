@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import EditIcon from '@material-ui/icons/EditOutlined';
-import { IconButton, TextField } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import TextButtonSave from './TextButtonSave';
 
@@ -43,18 +43,19 @@ function EditTaskProp(props: EditTaskProps) {
   // }
 
   function taskPropChanged(taskP) {
-    console.log(taskP);
+    // console.log(taskP);
 
     setTaskProp(taskP);
     props.propChanged({ [id]: taskP });
   }
 
-  function enterPressed(event) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      setEditProp(!editProp);
-    }
-  }
+  // TODO: new textButton should it have a save on enter?
+  // function enterPressed(event) {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //     setEditProp(!editProp);
+  //   }
+  // }
 
   return (
     <>

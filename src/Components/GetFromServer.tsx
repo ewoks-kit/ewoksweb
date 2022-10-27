@@ -24,7 +24,7 @@ export default function GetFromServer() {
   const undoIndex = state((state) => state.undoIndex);
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
-    console.log(workflowDetails, graphRF);
+    // console.log(workflowDetails, graphRF);
 
     if (workflowDetails?.id) {
       setWorkflowId(workflowDetails.id || '');
@@ -35,7 +35,7 @@ export default function GetFromServer() {
       if (canvasGraphChanged && undoIndex !== 0) {
         setOpenAgreeDialog(true);
       } else {
-        console.log(workflowDetails.id);
+        // console.log(workflowDetails.id);
         getFromServer(workflowDetails.id);
       }
     }

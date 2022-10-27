@@ -391,9 +391,7 @@ function Canvas() {
           data_mapping: [],
           map_all_data:
             ['ppfmethod', 'ppfport'].includes(sourceTask.task_type) ||
-            ['ppfmethod', 'ppfport'].includes(targetTask.task_type)
-              ? true
-              : false,
+            ['ppfmethod', 'ppfport'].includes(targetTask.task_type),
           sub_source:
             sourceTask.task_type === 'graph' ? params.sourceHandle : '',
           sub_target:

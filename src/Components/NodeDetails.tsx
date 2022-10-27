@@ -97,7 +97,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
   }, [element.id, element]);
 
   function propChanged(propKeyValue: {}) {
-    console.log(propKeyValue);
+    // console.log(propKeyValue);
     setSelectedElement({
       ...element,
       ...propKeyValue,

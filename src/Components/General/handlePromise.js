@@ -1,3 +1,6 @@
+/* eslint-disable promise/prefer-await-to-then */
+/* eslint-disable promise/prefer-await-to-callbacks */
+/* eslint-disable consistent-return */
 // A function that wraps a Promise with a Suspense-compatible
 // interface.
 //
@@ -10,7 +13,7 @@ export function handlePromise(promise) {
   //    variable will update as the Promise moves from
   //    pending to success or error.
   let result;
-  let suspender = promise.then(
+  const suspender = promise.then(
     (res) => {
       // On success, update the status to "success"
       status = 'success';
