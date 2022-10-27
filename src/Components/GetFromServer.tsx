@@ -50,7 +50,7 @@ export default function GetFromServer() {
           const graph = response.data as GraphEwoks;
           setOpenSnackbar({
             open: true,
-            text: `Workflow ${graph.graph.label} was downloaded succesfully`,
+            text: `Workflow ${graph.graph.label} was downloaded successfully`,
             severity: 'success',
           });
           setCanvasGraphChanged(false);
