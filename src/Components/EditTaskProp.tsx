@@ -37,14 +37,7 @@ function EditTaskProp(props: EditTaskProps) {
     setEditProp(!editProp);
   }
 
-  // function taskPropChanged(event) {
-  //   setTaskProp(event.target.value);
-  //   props.propChanged({ [id]: event.target.value });
-  // }
-
   function taskPropChanged(taskP) {
-    // console.log(taskP);
-
     setTaskProp(taskP);
     props.propChanged({ [id]: taskP });
   }

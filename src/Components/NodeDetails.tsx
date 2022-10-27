@@ -88,20 +88,20 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
   ];
 
   useEffect(() => {
-    // console.log(element);
     setInputsComplete(!!element.inputs_complete);
     setDefaultErrorNode(element.default_error_node || false);
-    // setDefaultErrorAttributes(element.default_error_attributes);
     setDataMapping(element.default_error_attributes?.data_mapping);
     setMapAllData(element.default_error_attributes?.map_all_data || false);
   }, [element.id, element]);
 
   function propChanged(propKeyValue: {}) {
-    // console.log(propKeyValue);
-    setSelectedElement({
-      ...element,
-      ...propKeyValue,
-    });
+    setSelectedElement(
+      {
+        ...element,
+        ...propKeyValue,
+      },
+      'fromSaveElement'
+    );
   }
 
   function inputsCompleteChanged(event) {
@@ -293,7 +293,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
             <Typography>Node Info</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <div>
+            <div style={{ width: '100%' }}>
               {editableTaskProperties.map(({ id, label, value }) =>
                 ['ppfmethod', 'method', 'script'].includes(
                   props.element.task_type
