@@ -7,7 +7,7 @@
   "author": "European Synchrotron Radiation Facility",
   "license": "MIT",
   "engines": {
-    "node": "12.x",
+    "node": "16.18.0",
     "npm": "6.x"
   },
   "scripts": {
