@@ -1,6 +1,12 @@
+/* eslint-disable sonarjs/cognitive-complexity */
 import React, { useEffect } from 'react';
 
-import type { DataMapping, EditableTableRow, EwoksRFNode } from '../types';
+import type {
+  DataMapping,
+  EditableTableRow,
+  EwoksRFLink,
+  EwoksRFNode,
+} from '../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 // import EditIcon from '@material-ui/icons/EditOutlined'; DONT DELETE
@@ -35,6 +41,8 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
 
   const { element } = props;
 
+  const graphRF = state((state) => state.graphRF);
+  const setGraphRF = state((state) => state.setGraphRF);
   const setSelectedElement = state((state) => state.setSelectedElement);
   // const selectedElement = state((state) => state.selectedElement);
   // const [editProps, setEditProps] = React.useState<boolean>(false);
@@ -48,7 +56,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
   const [mapAllData, setMapAllData] = React.useState<boolean>(false);
 
   const NonEditableTaskProperties = [
-    // { id: 'id', label: 'Id', value: props.element.id },
+    { id: 'id', label: 'Id', value: props.element.id },
     // { id: 'task_icon', label: 'Icon', value: props.element.task_icon },
     { id: 'task_type', label: 'Type', value: props.element.task_type },
     {
@@ -95,13 +103,63 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
   }, [element.id, element]);
 
   function propChanged(propKeyValue: {}) {
-    setSelectedElement(
-      {
+    // DOC: if the task_identifier changes (ppfmethod, ppfport, script case) then the id
+    // of the node needs to change for a coherent json.
+    // All links to this node also change source and/or target!
+    if (Object.keys(propKeyValue)[0] === 'task_identifier') {
+      // find unique id based on new task_identifier
+      let uniqueId: string = Object.values(propKeyValue)[0] as string;
+      let id = 0;
+      while (graphRF.nodes.some((nod) => nod.id === uniqueId)) {
+        uniqueId += id++;
+      }
+
+      const newElement = {
         ...element,
         ...propKeyValue,
-      },
-      'fromSaveElement'
-    );
+        id: uniqueId,
+      };
+
+      const newLinks = graphRF.links.map((link) => {
+        let newLink: EwoksRFLink;
+        if (![link.source, link.target].includes(element.id)) {
+          newLink = link;
+        } else {
+          if (link.source === element.id) {
+            newLink = {
+              ...link,
+              source: uniqueId,
+            };
+          } else if (link.target === element.id) {
+            newLink = {
+              ...link,
+              target: uniqueId,
+            };
+          }
+        }
+        // console.log
+        return newLink;
+      });
+
+      setGraphRF({
+        graph: graphRF.graph,
+        links: newLinks,
+        nodes: [
+          ...graphRF.nodes.filter((nod) => nod.id !== element.id),
+          newElement,
+        ],
+      });
+
+      setSelectedElement(newElement, 'fromSaveElement');
+    } else {
+      setSelectedElement(
+        {
+          ...element,
+          ...propKeyValue,
+        },
+        'fromSaveElement'
+      );
+    }
   }
 
   function inputsCompleteChanged(event) {
