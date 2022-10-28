@@ -70,11 +70,10 @@ export function calcInOutForSubgraph(
   if (subgraphNode && subgraphNode.graph?.id) {
     const allOutputsIds = subgraphNode.graph.output_nodes.map((nod) => nod.id);
     const allInputsIds = subgraphNode.graph.input_nodes.map((nod) => nod.id);
-    console.log(subgraphNode);
 
     inputsSub = subgraphNode.graph.input_nodes.map((input) => {
       allInputsIds.shift();
-      console.log(input);
+
       return {
         id: input.id,
         label: calcLabel(input, allInputsIds),
@@ -122,14 +121,6 @@ export function addNodeProperties(
     // if node=subgraph calculate inputs-outputs from subgraph.graph
     const subgraphNode: GraphEwoks = newNodeSubgraphs.find(
       (subGr) => subGr.graph.id === task_identifier
-    );
-
-    console.log(
-      newNodeSubgraphs.map((gr) =>
-        gr.graph?.input_nodes.map((inp) => inp.uiProps)
-      ),
-      subgraphNode,
-      task_identifier
     );
 
     const [inputsSub, outputsSub] = calcInOutForSubgraph(subgraphNode);

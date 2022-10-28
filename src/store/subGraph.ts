@@ -50,7 +50,6 @@ const subGraph = (set, get) => ({
     // save the workingGraph in the recent graphs and add a new graph node to it
 
     const subToAdd = graph as GraphRF;
-    console.log(subToAdd);
     // TODO: if there is no initial graph to drop-in the subgraph -> create one
     // if (prevState.recentGraphs.length === 0) {
     //   subToAdd = createGraph();

@@ -49,7 +49,6 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
   );
 
   function setElementNodeWidth(width) {
-    console.log(element.data.nodeWidth, debouncedNodeWidth);
     if (debouncedNodeWidth !== element.data.nodeWidth) {
       setSelectedElement(
         {

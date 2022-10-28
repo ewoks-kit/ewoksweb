@@ -6,15 +6,12 @@ import SaveIcon from '@material-ui/icons/Save';
 
 import state from '../store/state';
 import { IconButton, TextField } from '@material-ui/core';
-import type { EwoksRFNode } from '../types';
 
 const NoteNode = (args) => {
   const [comment, setComment] = useState('');
   const graphRF = state((state) => state.graphRF);
   const setGraphRF = state((state) => state.setGraphRF);
-  const selectedElement = state((state) => state.selectedElement);
   const [nodeSize, setNodeSize] = useState(args.data.nodeWidth);
-  const setSelectedElement = state((state) => state.setSelectedElement);
 
   useEffect(() => {
     setComment(args.data.comment);
@@ -61,15 +58,6 @@ const NoteNode = (args) => {
         },
       ],
     });
-  };
-
-  const changeNodeSize = (event, number) => {
-    const el = selectedElement as EwoksRFNode;
-    setSelectedElement({
-      ...el,
-      data: { ...el.data, nodeWidth: number },
-    });
-    setNodeSize(number);
   };
 
   return (
