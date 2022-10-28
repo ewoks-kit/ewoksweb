@@ -1,19 +1,11 @@
 import type { EwoksRFNode, GraphEwoks, GraphNodes, Task } from '../types';
 
 export function inputsAll(tempGraph: GraphEwoks): string[] {
-  return (
-    tempGraph.graph &&
-    tempGraph.graph.input_nodes &&
-    tempGraph.graph.input_nodes.map((nod) => nod.node)
-  );
+  return tempGraph.graph?.input_nodes?.map((nod) => nod.node);
 }
 
 export function outputsAll(tempGraph: GraphEwoks): string[] {
-  return (
-    tempGraph.graph &&
-    tempGraph.graph.output_nodes &&
-    tempGraph.graph.output_nodes.map((nod) => nod.node)
-  );
+  return tempGraph.graph?.output_nodes?.map((nod) => nod.node);
 }
 
 // calculate if node input and/or output or internal
@@ -66,6 +58,7 @@ interface calcInOutForSubgraphOutput {
   id: string;
   label: string;
   type: string;
+  positionY?: number;
 }
 
 export function calcInOutForSubgraph(
@@ -74,17 +67,19 @@ export function calcInOutForSubgraph(
   let inputsSub: calcInOutForSubgraphOutput[] = [];
   let outputsSub: calcInOutForSubgraphOutput[] = [];
 
-  if (subgraphNode && subgraphNode.graph.id) {
+  if (subgraphNode && subgraphNode.graph?.id) {
     const allOutputsIds = subgraphNode.graph.output_nodes.map((nod) => nod.id);
     const allInputsIds = subgraphNode.graph.input_nodes.map((nod) => nod.id);
+    console.log(subgraphNode);
 
     inputsSub = subgraphNode.graph.input_nodes.map((input) => {
       allInputsIds.shift();
-
+      console.log(input);
       return {
         id: input.id,
         label: calcLabel(input, allInputsIds),
         type: 'data ',
+        positionY: input.uiProps?.position?.y || 100,
       };
     });
 
@@ -95,6 +90,7 @@ export function calcInOutForSubgraph(
         id: output.id,
         label: calcLabel(output, allOutputsIds),
         type: 'data ',
+        positionY: output.uiProps?.position?.y || 100,
       };
     });
   } else {
@@ -126,6 +122,14 @@ export function addNodeProperties(
     // if node=subgraph calculate inputs-outputs from subgraph.graph
     const subgraphNode: GraphEwoks = newNodeSubgraphs.find(
       (subGr) => subGr.graph.id === task_identifier
+    );
+
+    console.log(
+      newNodeSubgraphs.map((gr) =>
+        gr.graph?.input_nodes.map((inp) => inp.uiProps)
+      ),
+      subgraphNode,
+      task_identifier
     );
 
     const [inputsSub, outputsSub] = calcInOutForSubgraph(subgraphNode);

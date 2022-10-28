@@ -24,7 +24,7 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
   const [withLabel, setWithLabel] = useState<boolean>(false);
   const [colorBorder, setColorBorder] = useState<string>('');
   const [moreHandles, setMoreHandles] = useState<boolean>(true);
-  const [nodeSize, setNodeSize] = useState<number>(100);
+  const [nodeSize, setNodeSize] = useState<number>(element.data.nodeWidth);
 
   const debouncedNodeWidth = useDebounce(nodeSize, 500);
 
@@ -49,6 +49,7 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
   );
 
   function setElementNodeWidth(width) {
+    console.log(element.data.nodeWidth, debouncedNodeWidth);
     if (debouncedNodeWidth !== element.data.nodeWidth) {
       setSelectedElement(
         {

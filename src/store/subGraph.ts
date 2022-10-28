@@ -50,7 +50,7 @@ const subGraph = (set, get) => ({
     // save the workingGraph in the recent graphs and add a new graph node to it
 
     const subToAdd = graph as GraphRF;
-
+    console.log(subToAdd);
     // TODO: if there is no initial graph to drop-in the subgraph -> create one
     // if (prevState.recentGraphs.length === 0) {
     //   subToAdd = createGraph();
@@ -67,12 +67,14 @@ const subGraph = (set, get) => ({
         return {
           label: calcLabel(input),
           type: 'data ',
+          // positionY: input.uiProps.position.y,
         };
       });
       const outputsSub = subToAdd.graph.output_nodes.map((output) => {
         return {
           label: calcLabel(output),
           type: 'data ',
+          // positionY: output.uiProps.position.y,
         };
       });
       let id = 0;

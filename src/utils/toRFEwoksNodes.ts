@@ -15,6 +15,8 @@ export function toRFEwoksNodes(
   newNodeSubgraphs: GraphEwoks[],
   tasks: Task[]
 ): EwoksRFNode[] {
+  console.log(newNodeSubgraphs);
+
   // Find input and output nodes of the graph
   const inputsAl = inputsAll(tempGraph);
 

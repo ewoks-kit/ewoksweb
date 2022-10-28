@@ -59,6 +59,8 @@ const workingGraph = (set, get) => ({
       get().recentGraphs
     );
 
+    console.log(newNodeSubgraphs);
+
     // 3. Put the newNodeSubgraphs into recent in their graphRF form (sync)
     newNodeSubgraphs.forEach((gr) => {
       // calculate the rfNodes using the fetched subgraphs
@@ -71,6 +73,7 @@ const workingGraph = (set, get) => ({
 
     // 4. Calculate the new graph given the subgraphs
     let grfNodes = toRFEwoksNodes(workingGraph, newNodeSubgraphs, get().tasks);
+    console.log(grfNodes);
 
     // 5. Calculate notes nodes
     const notes =

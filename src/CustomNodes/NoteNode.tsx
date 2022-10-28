@@ -5,7 +5,7 @@ import { style } from './NodeStyle';
 import SaveIcon from '@material-ui/icons/Save';
 
 import state from '../store/state';
-import { IconButton, Slider, TextField } from '@material-ui/core';
+import { IconButton, TextField } from '@material-ui/core';
 import type { EwoksRFNode } from '../types';
 
 const NoteNode = (args) => {
@@ -106,26 +106,13 @@ const NoteNode = (args) => {
           <div style={{ wordWrap: 'break-word' }}>{comment}</div>
         )}
         {args.data.details && (
-          <>
-            <IconButton
-              style={{ margin: '0px 2px', padding: '0px' }}
-              aria-label="edit"
-              onClick={save}
-            >
-              <SaveIcon color="primary" />
-            </IconButton>
-            <Slider
-              color="primary"
-              defaultValue={nodeSize}
-              value={nodeSize}
-              onChange={changeNodeSize}
-              min={40}
-              max={300}
-              style={{ width: '90%' }}
-              // aria-label="Small"
-              // valueLabelDisplay="auto"
-            />
-          </>
+          <IconButton
+            style={{ margin: '0px 2px', padding: '0px' }}
+            aria-label="edit"
+            onClick={save}
+          >
+            <SaveIcon color="primary" />
+          </IconButton>
         )}
         {/* {!edit ? (
           <IconButton
