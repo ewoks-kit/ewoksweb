@@ -10,7 +10,6 @@ function FunctionNode(fnod) {
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
   const isValidConnection = (connection) => {
-    // console.log(connection);
     const { isValid, reason } = isValidLink(connection, graphRF);
     if (!isValid) {
       setOpenSnackbar({
@@ -44,92 +43,99 @@ function FunctionNode(fnod) {
       content={
         <>
           {/* <div style={style.contentHeader}>Inputs</div> */}
-          {fnod.data.inputs.map((input: { label: string }) => (
-            <div
-              key={input.label}
-              style={
-                {
-                  ...style.io,
-                  ...style.textLeft,
-                  ...(fnod.data.moreHandles ? style.borderInput : {}),
-                } as React.CSSProperties
-              }
-            >
-              {/* remove the rest of the input {input.label} for now */}
-              {input.label.slice(0, input.label.indexOf(':'))}
-              <Handle
+          {fnod.data.inputs
+            .sort((a, b) => a.positionY - b.positionY)
+            .map((input: { label: string }) => (
+              <div
                 key={input.label}
-                type="target"
-                position={Position.Left}
-                id={input.label.slice(0, input.label.indexOf(':'))}
-                style={{
-                  ...style.handle,
-                  ...style.left,
-                  ...style.handleTarget,
-                }}
-                isValidConnection={isValidConnection}
-              />
-              {fnod.data.moreHandles && (
+                style={
+                  {
+                    ...style.io,
+                    ...style.textLeft,
+                    ...(fnod.data.moreHandles ? style.borderInput : {}),
+                  } as React.CSSProperties
+                }
+              >
+                {/* remove the rest of the input {input.label} for now */}
+                {input.label.slice(0, input.label.indexOf(':'))}
                 <Handle
-                  key="&{input.label} right"
+                  key={input.label}
                   type="target"
-                  position={Position.Right}
-                  id={`${input.label.slice(0, input.label.indexOf(':'))} right`}
+                  position={Position.Left}
+                  id={input.label.slice(0, input.label.indexOf(':'))}
                   style={{
                     ...style.handle,
-                    ...style.right,
+                    ...style.left,
                     ...style.handleTarget,
                   }}
                   isValidConnection={isValidConnection}
                 />
-              )}
-            </div>
-          ))}
+                {fnod.data.moreHandles && (
+                  <Handle
+                    key="&{input.label} right"
+                    type="target"
+                    position={Position.Right}
+                    id={`${input.label.slice(
+                      0,
+                      input.label.indexOf(':')
+                    )} right`}
+                    style={{
+                      ...style.handle,
+                      ...style.right,
+                      ...style.handleTarget,
+                    }}
+                    isValidConnection={isValidConnection}
+                  />
+                )}
+              </div>
+            ))}
           {/* <div style={style.contentHeader}>Outputs</div> */}
-          {fnod.data.outputs.map((output: { label: string }) => (
-            <div
-              key={output.label}
-              style={
-                {
-                  ...style.io,
-                  ...style.textRight,
-                  ...(fnod.data.moreHandles ? style.borderOutput : {}),
-                } as React.CSSProperties
-              }
-            >
-              {/* remove the rest of the output {output.label} for now */}
-              {output.label.slice(0, output.label.indexOf(':'))}
-              <Handle
+          {fnod.data.outputs
+            .sort((a, b) => a.positionY - b.positionY)
+            .map((output: { label: string }) => (
+              <div
                 key={output.label}
-                type="source"
-                position={Position.Right}
-                id={output.label.slice(0, output.label.indexOf(':'))}
-                style={{
-                  ...style.handle,
-                  ...style.right,
-                  ...style.handleSource,
-                }}
-                isValidConnection={isValidConnection}
-              />
-              {fnod.data.moreHandles && (
+                style={
+                  {
+                    ...style.io,
+                    ...style.textRight,
+                    ...(fnod.data.moreHandles ? style.borderOutput : {}),
+                  } as React.CSSProperties
+                }
+              >
+                {/* remove the rest of the output {output.label} for now */}
+                {output.label.slice(0, output.label.indexOf(':'))}
                 <Handle
-                  key={`${output.label} left`}
+                  key={output.label}
                   type="source"
-                  position={Position.Left}
-                  id={`${output.label.slice(
-                    0,
-                    output.label.indexOf(':')
-                  )} left`}
+                  position={Position.Right}
+                  id={output.label.slice(0, output.label.indexOf(':'))}
                   style={{
                     ...style.handle,
-                    ...style.left,
+                    ...style.right,
                     ...style.handleSource,
                   }}
                   isValidConnection={isValidConnection}
                 />
-              )}
-            </div>
-          ))}
+                {fnod.data.moreHandles && (
+                  <Handle
+                    key={`${output.label} left`}
+                    type="source"
+                    position={Position.Left}
+                    id={`${output.label.slice(
+                      0,
+                      output.label.indexOf(':')
+                    )} left`}
+                    style={{
+                      ...style.handle,
+                      ...style.left,
+                      ...style.handleSource,
+                    }}
+                    isValidConnection={isValidConnection}
+                  />
+                )}
+              </div>
+            ))}
         </>
       }
     />

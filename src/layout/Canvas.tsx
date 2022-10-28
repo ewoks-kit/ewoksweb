@@ -398,7 +398,7 @@ function Canvas() {
             targetTask.task_type === 'graph' ? params.targetHandle : '',
         },
         id: `${params.source}:${params.sourceHandle}->${params.target}:${params.targetHandle}`,
-        label: '->', // `${params.source.slice(0, 6)}->${params.target.slice(0, 6)}`,
+        label: '', // `${params.source.slice(0, 6)}->${params.target.slice(0, 6)}`,
         source: params.source,
         target: params.target,
         sourceHandle: params.sourceHandle,

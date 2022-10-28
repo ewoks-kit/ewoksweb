@@ -86,7 +86,6 @@ const Node: React.FC<NodeProps> = ({
   nodeWidth,
   details,
 }: NodeProps) => {
-  // console.log(image);
   const theCom = comment ? (
     <span
       style={{
