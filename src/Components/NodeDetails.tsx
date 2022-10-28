@@ -92,7 +92,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
       label: 'Identifier',
       value: props.element.task_identifier,
     },
-    { id: 'task_icon', label: 'Icon', value: props.element.task_icon },
+    { id: 'node_icon', label: 'Icon', value: props.element.data.icon },
   ];
 
   useEffect(() => {
@@ -102,13 +102,17 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
     setMapAllData(element.default_error_attributes?.map_all_data || false);
   }, [element.id, element]);
 
-  function propChanged(propKeyValue: {}) {
+  function propChanged(propKeyValue: {
+    task_identifier?: string;
+    node_icon?: string;
+  }) {
     // DOC: if the task_identifier changes (ppfmethod, ppfport, script case) then the id
     // of the node needs to change for a coherent json.
     // All links to this node also change source and/or target!
     if (Object.keys(propKeyValue)[0] === 'task_identifier') {
-      // find unique id based on new task_identifier
-      let uniqueId: string = Object.values(propKeyValue)[0] as string;
+      // DOC: find unique id based on new task_identifier
+      // eslint-disable-next-line prefer-destructuring
+      let uniqueId = Object.values(propKeyValue)[0];
       let id = 0;
       while (graphRF.nodes.some((nod) => nod.id === uniqueId)) {
         uniqueId += id++;
@@ -151,11 +155,11 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
       });
 
       setSelectedElement(newElement, 'fromSaveElement');
-    } else {
+    } else if (Object.keys(propKeyValue)[0] === 'node_icon') {
       setSelectedElement(
         {
           ...element,
-          ...propKeyValue,
+          data: { ...element.data, icon: Object.values(propKeyValue)[0] },
         },
         'fromSaveElement'
       );

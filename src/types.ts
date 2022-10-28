@@ -291,6 +291,7 @@ export interface UiPropsNodes {
   withLabel: boolean;
   colorBorder?: string;
   nodeWidth?: number;
+  node_icon?: string;
   task_icon?: string;
   task_category?: string;
 }
@@ -413,6 +414,7 @@ export interface EwoksRFNode {
   default_error_attributes?: DefaultErrorAttributes;
   data?: {
     nodeWidth?: number;
+    node_icon?: string;
     executing?: boolean;
     exists?: boolean;
     label?: string;

@@ -51,12 +51,7 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
   return (
     <div className={classes.detailsLabels}>
       <FormControl
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          alignContent: 'flex-start',
-        }}
+        className={classes.formStyleFlex}
         fullWidth
         variant="outlined"
       >

@@ -17,10 +17,6 @@ const DashboardStyle = makeStyles((theme) => ({
     borderRadius: '4px',
   },
 
-  sidebarForm: {
-    minWidth: '230px',
-  },
-
   root: {
     display: 'flex',
     // width: '100%',
@@ -96,6 +92,17 @@ const DashboardStyle = makeStyles((theme) => ({
     margin: '8px 5px',
     wordBreak: 'break-word',
     width: '98%',
+  },
+
+  styleLinkDropdowns: {
+    minWidth: '150px',
+  },
+
+  formStyleFlex: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignContent: 'flex-start',
   },
 }));
 

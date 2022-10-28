@@ -39,6 +39,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
       default_error_attributes,
       data: {
         nodeWidth,
+        node_icon,
         label,
         type,
         icon,
@@ -65,6 +66,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           default_inputs: cleanDefaultInputs(default_inputs),
           uiProps: {
             nodeWidth,
+            node_icon,
             type,
             icon,
             comment,
