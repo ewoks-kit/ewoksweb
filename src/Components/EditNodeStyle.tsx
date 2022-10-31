@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Checkbox, FormControl, Slider } from '@material-ui/core';
-
-import DashboardStyle from '../layout/DashboardStyle';
 import type { EwoksRFNode } from '../types';
 import state from '../store/state';
 import useDebounce from '../hooks/useDebounce';
-
-const useStyles = DashboardStyle;
 
 interface EditNodeStyleProps {
   element: EwoksRFNode;
 }
 // DOC: Edit the node style
 export default function EditNodeStyle(props: EditNodeStyleProps) {
-  const classes = useStyles();
   // console.log(props);
   const { element } = props;
 
@@ -24,7 +19,7 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
   const [withLabel, setWithLabel] = useState<boolean>(false);
   const [colorBorder, setColorBorder] = useState<string>('');
   const [moreHandles, setMoreHandles] = useState<boolean>(true);
-  const [nodeSize, setNodeSize] = useState<number>(element.data.nodeWidth);
+  const [nodeSize, setNodeSize] = useState<number>(100);
 
   const debouncedNodeWidth = useDebounce(nodeSize, 500);
 
@@ -123,7 +118,7 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
   };
 
   return (
-    <FormControl variant="filled" fullWidth className={classes.sidebarForm}>
+    <FormControl variant="filled" fullWidth>
       {/* <InputLabel>Node type</InputLabel>
       <Select
         id="demo-simple-select"

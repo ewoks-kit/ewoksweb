@@ -131,12 +131,7 @@ export default function LabelComment(props: LabelCommentProps) {
           <FormControl
             fullWidth
             variant="outlined"
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              alignContent: 'flex-start',
-            }}
+            className={classes.formStyleFlex}
           >
             <Autocomplete
               id="free-solo-demo"

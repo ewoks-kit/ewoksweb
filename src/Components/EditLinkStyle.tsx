@@ -166,19 +166,10 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   // AN SVG solution maybe better? A custom SVG link but no draggable breakpoints...
   return (
     <>
-      <FormControl
-        variant="filled"
-        fullWidth
-        className={classes.sidebarForm}
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          alignContent: 'flex-start',
-        }}
-      >
+      <FormControl variant="filled" fullWidth className={classes.formStyleFlex}>
         <InputLabel id="linkTypeLabel">Link type</InputLabel>
         <Select
+          className={classes.styleLinkDropdowns}
           labelId="linkTypeLabel"
           value={linkType ? linkType : 'default'}
           label="Link type"
@@ -208,18 +199,10 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
           Apply to all
         </Button>
       </FormControl>
-      <FormControl
-        variant="filled"
-        fullWidth
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          alignContent: 'flex-start',
-        }}
-      >
+      <FormControl variant="filled" fullWidth className={classes.formStyleFlex}>
         <InputLabel id="markerEnd">Arrow Head</InputLabel>
         <Select
+          className={classes.styleLinkDropdowns}
           value={arrowType?.type || 'none'}
           label="Arrow head"
           onChange={arrowTypeChanged}

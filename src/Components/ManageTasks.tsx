@@ -21,6 +21,7 @@ export default function ManageTasks() {
   );
   const [pythonModules, setPythonModules] = useState<string[]>([]);
   const [showDiscover, setShowDiscover] = useState<boolean>(false);
+  const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
 
   function discoverTasksChanged(event) {
     setShowDiscover(event.target.checked);
@@ -47,6 +48,14 @@ export default function ManageTasks() {
     }
   }
 
+  function openDialogNew() {
+    setOpenSaveDialog(true);
+
+    setTimeout(() => {
+      setOpenSaveDialog(false);
+    }, 100);
+  }
+
   return (
     <Grid
       container
@@ -56,7 +65,7 @@ export default function ManageTasks() {
       alignItems="center"
     >
       <Grid item xs={12} sm={8} md={6} lg={5} className="dndflow">
-        <AddNodes title="Tasks" />
+        <AddNodes title="Tasks" openSaveDialogNewtask={openSaveDialog} />
       </Grid>
       <Grid item xs={12} sm={4} md={3} lg={2} className="dndflow">
         <FormGroup>
@@ -71,6 +80,16 @@ export default function ManageTasks() {
             label="Task Discovery"
           />
         </FormGroup>
+        <Button
+          // startIcon={<FiberNew />}
+          style={{ margin: '4px' }}
+          variant="outlined"
+          color="primary"
+          onClick={openDialogNew}
+          size="small"
+        >
+          New Task
+        </Button>
       </Grid>
       {showDiscover && (
         <Grid item xs={12} sm={4} md={3} lg={2} className="dndflow">
