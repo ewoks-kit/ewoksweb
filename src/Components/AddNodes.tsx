@@ -77,6 +77,7 @@ const iconsObj = {
 
 interface AddNodesProps {
   title: string;
+  openSaveDialogNewtask?: boolean;
 }
 // Hosts the node images and categories to drag and drop to canvas
 function AddNodes(props: AddNodesProps) {
@@ -118,6 +119,13 @@ function AddNodes(props: AddNodesProps) {
       getTasks();
     }
   }, [selectedElement.id, tasks.length, getTasks]);
+
+  useEffect(() => {
+    if (props.openSaveDialogNewtask) {
+      setOpenSaveDialog(true);
+      setDoAction('newTask');
+    }
+  }, [props.openSaveDialogNewtask]);
 
   const insertGraph = () => {
     setGraphOrSubgraph(false);
