@@ -9,7 +9,6 @@ import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import Sidebar from './sidebar';
 import { ReactFlowProvider } from 'react-flow-renderer';
 import { Link } from 'react-router-dom';
-
 import Canvas from './Canvas';
 import UndoRedo from '../Components/UndoRedo';
 import GetFromServer from '../Components/GetFromServer';
