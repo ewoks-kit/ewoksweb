@@ -159,11 +159,6 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
     setGraphRF(newGraph, true);
   }
 
-  // FOr brakpints in links MUST be nodes that will be minimal and:
-  // saved in link uiProps as a node with only position being important and type=breakpointNode
-  // the RF graph will have 2 links that will be clickable... if one changes
-  // label, comment or style what the other will do?
-  // AN SVG solution maybe better? A custom SVG link but no draggable breakpoints...
   return (
     <>
       <FormControl variant="filled" fullWidth className={classes.formStyleFlex}>

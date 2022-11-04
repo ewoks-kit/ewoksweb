@@ -91,15 +91,11 @@ export default function Dashboard() {
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
     } else {
-      newGraph();
+      // newGraph();
+      setOpenSaveDialog(true);
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
     }
-  };
-
-  const newGraph = () => {
-    setWorkingGraph(initializedGraph, 'fromUser');
-    setOpenSaveDialog(true);
   };
 
   const openGraph = () => {
@@ -123,7 +119,9 @@ export default function Dashboard() {
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  const handleKeyDown = (event) => {
+  function handleKeyDown(event) {
+    console.log(event);
+
     const charCode = String.fromCharCode(event.which).toLowerCase();
 
     const keys = event.ctrlKey || event.metaKey;
@@ -140,11 +138,13 @@ export default function Dashboard() {
       event.stopPropagation();
       redoF.current();
     } else if (keys && event.shiftKey && charCode === 'n') {
+      console.log('new');
+
       event.preventDefault();
       event.stopPropagation();
-      newGraph();
+      checkAndNewGraph();
     }
-  };
+  }
 
   const disAgreeSaveWithout = () => {
     setOpenAgreeDialog(false);
@@ -159,88 +159,133 @@ export default function Dashboard() {
   };
 
   return (
-    <>
-      <div
-        className={classes.root}
-        onKeyDown={handleKeyDown}
-        tabIndex={0}
-        role="button"
+    <div
+      className={classes.root}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="button"
+    >
+      <ConfirmDialog
+        title="There are unsaved changes"
+        content="Continue without saving?"
+        open={openAgreeDialog}
+        agreeCallback={checkAndNewGraph}
+        disagreeCallback={disAgreeSaveWithout}
+      />
+      <FormDialog
+        elementToEdit={graphRF}
+        action="cloneGraph"
+        open={openSaveDialog}
+        setOpenSaveDialog={setOpenSaveDialog}
+      />
+      <CssBaseline />
+      <SimpleSnackbar />
+      <AppBar
+        position="absolute"
+        className={clsx(classes.appBar, classes.appBarShift)}
+        style={{ height: '5%', minHeight: '64px' }}
       >
-        <ConfirmDialog
-          title="There are unsaved changes"
-          content="Continue without saving?"
-          open={openAgreeDialog}
-          agreeCallback={newGraph}
-          disagreeCallback={disAgreeSaveWithout}
-        />
-        <FormDialog
-          elementToEdit={graphRF}
-          action="cloneGraph"
-          open={openSaveDialog}
-          setOpenSaveDialog={setOpenSaveDialog}
-        />
-        <CssBaseline />
-        <SimpleSnackbar />
-        <AppBar
-          position="absolute"
-          className={clsx(classes.appBar, classes.appBarShift)}
-          style={{ height: '5%', minHeight: '64px' }}
-        >
-          <Toolbar className={classes.toolbar}>
-            <SubgraphsStack />
-            <Tooltip
-              title={tooltipText('Start a new workflow')}
-              enterDelay={800}
-              arrow
+        <Toolbar className={classes.toolbar}>
+          <SubgraphsStack />
+          <Tooltip
+            title={tooltipText('Start a new workflow')}
+            enterDelay={800}
+            arrow
+          >
+            <IconButton
+              color="inherit"
+              onClick={checkAndNewGraph}
+              disabled={inExecutionMode}
             >
-              <IconButton
-                color="inherit"
-                onClick={checkAndNewGraph}
+              <Fab
+                className={classes.openFileButton}
+                color="primary"
+                size="small"
+                component="span"
+                aria-label="add"
                 disabled={inExecutionMode}
               >
+                <FiberNew />
+              </Fab>
+            </IconButton>
+          </Tooltip>
+          <Tooltip
+            title={tooltipText('Open an existing workflow')}
+            enterDelay={800}
+            arrow
+          >
+            <IconButton
+              color="inherit"
+              onClick={openGraph}
+              disabled={inExecutionMode}
+            >
+              <Fab
+                className={classes.openFileButton}
+                color="primary"
+                size="small"
+                component="span"
+                aria-label="add"
+                disabled={inExecutionMode}
+              >
+                <ImportContactsIcon />
+              </Fab>
+            </IconButton>
+          </Tooltip>
+          <div className={classes.verticalRule} />
+          <UndoRedo undoF={undoF} redoF={redoF} />
+          <div className={classes.verticalRule} />
+          <SaveToServer saveToServerF={saveToServerF} />
+          <GetFromServer />
+          <ExecuteWorkflow />
+          <div>
+            <Tooltip title={tooltipText('More')} enterDelay={800} arrow>
+              <IconButton color="inherit" onClick={handleClick}>
                 <Fab
                   className={classes.openFileButton}
                   color="primary"
                   size="small"
                   component="span"
                   aria-label="add"
-                  disabled={inExecutionMode}
                 >
-                  <FiberNew />
+                  <MoreVertIcon />
                 </Fab>
               </IconButton>
             </Tooltip>
-            <Tooltip
-              title={tooltipText('Open an existing workflow')}
-              enterDelay={800}
-              arrow
-            >
-              <IconButton
-                color="inherit"
-                onClick={openGraph}
-                disabled={inExecutionMode}
+            <MenuPopover anchorEl={anchorEl} handleClose={handleClose} />
+          </div>
+          <div className={classes.verticalRule} />
+          <Tooltip
+            title={tooltipText('Manage tasks, icons and workflows')}
+            enterDelay={800}
+            arrow
+          >
+            <IconButton color="inherit" onClick={handleOpenSettings}>
+              <Fab
+                className={classes.openFileButton}
+                color="primary"
+                size="small"
+                component="span"
+                aria-label="add"
               >
-                <Fab
-                  className={classes.openFileButton}
-                  color="primary"
-                  size="small"
-                  component="span"
-                  aria-label="add"
-                  disabled={inExecutionMode}
-                >
-                  <ImportContactsIcon />
-                </Fab>
-              </IconButton>
-            </Tooltip>
-            <div className={classes.verticalRule} />
-            <UndoRedo undoF={undoF} redoF={redoF} />
-            <div className={classes.verticalRule} />
-            <SaveToServer saveToServerF={saveToServerF} />
-            <GetFromServer />
-            <ExecuteWorkflow />
-            <div>
-              <Tooltip title={tooltipText('More')} enterDelay={800} arrow>
-                <IconButton color="inherit" onClick={handleClick}>
+                <SettingsIcon />
+              </Fab>
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip
+            title={tooltipText('Guide for Ewoks UI')}
+            enterDelay={800}
+            arrow
+          >
+            {/* onClick={handleOpenInfo} */}
+            <IconButton color="inherit">
+              <Typography
+                component="h1"
+                variant="h5"
+                color="primary"
+                style={{ padding: '5px' }}
+              >
+                <Link to="/">
                   <Fab
                     className={classes.openFileButton}
                     color="primary"
@@ -248,67 +293,21 @@ export default function Dashboard() {
                     component="span"
                     aria-label="add"
                   >
-                    <MoreVertIcon />
+                    <NotListedLocationIcon />
                   </Fab>
-                </IconButton>
-              </Tooltip>
-              <MenuPopover anchorEl={anchorEl} handleClose={handleClose} />
-            </div>
-            <div className={classes.verticalRule} />
-            <Tooltip
-              title={tooltipText('Manage tasks, icons and workflows')}
-              enterDelay={800}
-              arrow
-            >
-              <IconButton color="inherit" onClick={handleOpenSettings}>
-                <Fab
-                  className={classes.openFileButton}
-                  color="primary"
-                  size="small"
-                  component="span"
-                  aria-label="add"
-                >
-                  <SettingsIcon />
-                </Fab>
-              </IconButton>
-            </Tooltip>
+                </Link>
+              </Typography>
+            </IconButton>
+          </Tooltip>
+          <SettingsInfoDrawer
+            handleOpenDrawers={handleOpenDrawers}
+            openDrawers={openDrawers}
+            openInfo={openInfo}
+            openSettings={openSettings}
+          />
+        </Toolbar>
+      </AppBar>
 
-            <Tooltip
-              title={tooltipText('Guide for Ewoks UI')}
-              enterDelay={800}
-              arrow
-            >
-              {/* onClick={handleOpenInfo} */}
-              <IconButton color="inherit">
-                <Typography
-                  component="h1"
-                  variant="h5"
-                  color="primary"
-                  style={{ padding: '5px' }}
-                >
-                  <Link to="/">
-                    <Fab
-                      className={classes.openFileButton}
-                      color="primary"
-                      size="small"
-                      component="span"
-                      aria-label="add"
-                    >
-                      <NotListedLocationIcon />
-                    </Fab>
-                  </Link>
-                </Typography>
-              </IconButton>
-            </Tooltip>
-            <SettingsInfoDrawer
-              handleOpenDrawers={handleOpenDrawers}
-              openDrawers={openDrawers}
-              openInfo={openInfo}
-              openSettings={openSettings}
-            />
-          </Toolbar>
-        </AppBar>
-      </div>
       <ReflexContainer
         orientation="vertical"
         style={{
@@ -373,6 +372,6 @@ export default function Dashboard() {
         {/* <Drawer /> */}
         {/* </div> */}
       </ReflexContainer>
-    </>
+    </div>
   );
 }
