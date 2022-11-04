@@ -60,6 +60,21 @@ const DashboardStyle = makeStyles((theme) => ({
     flexGrow: 1,
   },
 
+  icon: {
+    marginRight: theme.spacing(0.5),
+    width: 20,
+    height: 20,
+  },
+
+  isDisabled: {
+    color: 'grey',
+    cursor: 'default',
+    '&:hover': {
+      textDecoration: 'none',
+    },
+    color: 'red',
+  },
+
   appBarSpacer: theme.mixins.toolbar,
   content: {
     // width: '100%',

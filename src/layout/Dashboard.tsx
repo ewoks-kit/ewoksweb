@@ -46,12 +46,10 @@ export default function Dashboard() {
   const [openDrawers, setOpenDrawers] = useState(true);
   const [openSettings, setOpenSettings] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
-  const setWorkingGraph = state((state) => state.setWorkingGraph);
   const gettingFromServer = state((state) => state.gettingFromServer);
   const inExecutionMode = state((state) => state.inExecutionMode);
   const graphRF = state((state) => state.graphRF);
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
-  const initializedGraph = state((state) => state.initializedGraph);
   const openSettingsDrawer = state((state) => state.openSettingsDrawer);
   const setOpenSettingsDrawer = state((state) => state.setOpenSettingsDrawer);
   const canvasGraphChanged = state((state) => state.canvasGraphChanged);
@@ -91,7 +89,6 @@ export default function Dashboard() {
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
     } else {
-      // newGraph();
       setOpenSaveDialog(true);
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
@@ -120,8 +117,6 @@ export default function Dashboard() {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   function handleKeyDown(event) {
-    console.log(event);
-
     const charCode = String.fromCharCode(event.which).toLowerCase();
 
     const keys = event.ctrlKey || event.metaKey;
@@ -138,8 +133,6 @@ export default function Dashboard() {
       event.stopPropagation();
       redoF.current();
     } else if (keys && event.shiftKey && charCode === 'n') {
-      console.log('new');
-
       event.preventDefault();
       event.stopPropagation();
       checkAndNewGraph();
