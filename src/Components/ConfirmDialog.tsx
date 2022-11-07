@@ -13,7 +13,7 @@ interface ConfirmDialogProps {
   agreeCallback(isSubgraph?: string): Promise<void> | void;
   disagreeCallback(): void;
 }
-// Used as an app-wide dialog when confirmation is needed. Open is a prop
+// DOC: Used as an app-wide dialog when confirmation is needed. Open is a prop
 export default function ConfirmDialog(props: ConfirmDialogProps) {
   const { open, title, content } = props;
 

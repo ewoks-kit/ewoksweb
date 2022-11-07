@@ -51,8 +51,6 @@ interface Data {
 }
 
 function descendingComparator(a: Event[], b: Event[], orderBy: string) {
-  // console.log(a, b, orderBy, a[0].time, b[0].time, a[0].time === b[0].time);
-
   // TODO: compare time start-end
   if (['start time', 'end time'].includes(orderBy)) {
     if (b[0]['time'] < a[0]['time']) {
@@ -84,13 +82,10 @@ function getComparator(
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
 function stableSort<T>(
   array: readonly T[],
   comparator: (a: T, b: T) => number
 ) {
-  // console.log(array, comparator);
   const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -104,7 +99,7 @@ function stableSort<T>(
 
 interface HeadCell {
   disablePadding: boolean;
-  id: string; // keyof Data;
+  id: string;
   label: string;
   numeric: boolean;
 }
@@ -140,12 +135,6 @@ const headCells: readonly HeadCell[] = [
     disablePadding: true,
     label: 'Ended',
   },
-  // {
-  //   id: 'Duration',
-  //   numeric: false,
-  //   disablePadding: true,
-  //   label: 'Duration',
-  // },
   {
     id: 'process_id',
     numeric: false,
@@ -346,7 +335,6 @@ export default function EnhancedTable() {
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    // console.log(event, name);
     const selectedIndex = selected.indexOf(name);
     let newSelected: readonly string[] = [];
 
@@ -421,7 +409,7 @@ export default function EnhancedTable() {
         <hr style={{ color: '#dee3ff' }} />
         <TableContainer
           style={{
-            backgroundColor: 'rgb(227, 229, 245)', // rgb(182, 186, 213)
+            backgroundColor: 'rgb(227, 229, 245)',
             borderRadius: '10px',
           }}
         >
@@ -440,7 +428,7 @@ export default function EnhancedTable() {
               rowCount={executedWorkflows.length}
             />
             <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+              {/* TODO: if we don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
               {stableSort(executedWorkflows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -500,10 +488,7 @@ export default function EnhancedTable() {
                           // component="th"
                           id={labelId}
                           align="left"
-                          // scope="row"
-                          // padding="none"
                         >
-                          {/* || row[1].workflow_id */}
                           {row[1]?.workflow_id}
                         </TableCell>
                         <TableCell align="right">{row[0].job_id}</TableCell>
@@ -515,18 +500,9 @@ export default function EnhancedTable() {
                             row[row.length - 1] && row[row.length - 1].time
                           )}
                         </TableCell>
-                        {/* <TableCell align="right">
-                        {formatedTime(
-                          new Date(
-                            row[1].time.getTime() - row[0].time.getTime()
-                          )
-                        )}
-                      </TableCell> */}
                         <TableCell align="right">{row[0].process_id}</TableCell>
                         <TableCell align="right">{row[0].user_name}</TableCell>
                         <TableCell align="right">{row[0].host_name}</TableCell>
-                        {/* <TableCell align="right">{row[0].input_uris}</TableCell>
-                      <TableCell align="right">{row[0].output_uris}</TableCell> */}
                       </TableRow>
                       <TableRow className={classes.root}>
                         <TableCell
@@ -643,9 +619,6 @@ export default function EnhancedTable() {
                                       <TableCell align="right">
                                         {ev.task_uri}
                                       </TableCell>
-                                      {/* <TableCell align="right">
-                                        {ev.id}
-                                      </TableCell> */}
                                     </TableRow>
                                   ))}
                                 </TableBody>
@@ -683,10 +656,7 @@ export default function EnhancedTable() {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
-      <IconButton
-        color="inherit"
-        // onClick={props.handleCloseDialog || ''}
-      >
+      <IconButton color="inherit">
         <Typography
           component="h1"
           variant="h5"
@@ -701,13 +671,7 @@ export default function EnhancedTable() {
             }}
           >
             Edit Workflows
-            <Fab
-              // className={classes.openFileButton}
-              color="primary"
-              size="small"
-              component="span"
-              aria-label="add"
-            >
+            <Fab color="primary" size="small" component="span" aria-label="add">
               <ArrowForwardIosIcon />
             </Fab>
           </Link>

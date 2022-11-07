@@ -20,7 +20,6 @@ export default function SubgraphsStack() {
 
   const goToGraph = (e) => {
     e.preventDefault();
-    // // console.log(e.target.text, e.target.id, recentGraphs);
     setSubgraphsStack({ id: e.target.id, label: e.target.text });
 
     const subgraph = recentGraphs.find((gr) => gr.graph.id === e.target.id);

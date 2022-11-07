@@ -47,9 +47,6 @@ function a11yProps(index: number) {
 
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
-  // const [serverUrl, setServerUrl] = React.useState(
-  //   process.env.REACT_APP_SERVER_URL
-  // );
   const openSettingsDrawer = state((state) => state.openSettingsDrawer);
 
   useEffect(() => {
@@ -75,14 +72,8 @@ export default function BasicTabs() {
     setValue(newValue);
     if (newValue === 2) {
       const iconsTitles: IconsNames = await getIcons();
-      /* eslint-disable no-console */
-      console.log(iconsTitles);
     }
   };
-
-  // const serverUrlChanged = (event) => {
-  //   setServerUrl(event.target.value);
-  // };
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -111,19 +102,6 @@ export default function BasicTabs() {
       <TabPanel value={value} index={3}>
         <ExecutionTable />
       </TabPanel>
-      {/* <TabPanel value={value} index={4}>
-        <Tooltip title="Input the server URL your EwoksWeb server is in." arrow>
-          <TextField
-            margin="dense"
-            // id={field.id}
-            label="Server URL"
-            fullWidth
-            variant="standard"
-            value={serverUrl}
-            onChange={serverUrlChanged}
-          />
-        </Tooltip>
-      </TabPanel> */}
     </Box>
   );
 }

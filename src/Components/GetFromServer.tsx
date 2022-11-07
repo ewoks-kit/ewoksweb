@@ -33,7 +33,6 @@ export default function GetFromServer() {
       if (canvasGraphChanged && undoIndex !== 0) {
         setOpenAgreeDialog(true);
       } else {
-        // console.log(workflowDetails.id);
         getFromServer(workflowDetails.id);
       }
     }
@@ -41,7 +40,6 @@ export default function GetFromServer() {
 
   async function getFromServer(workflowIdparam: string) {
     if (workflowIdparam) {
-      // setGettingFromServer(true);
       try {
         const response = await getWorkflow(workflowIdparam);
         if (response.data) {
@@ -71,8 +69,6 @@ export default function GetFromServer() {
             'Error in retrieving workflow. Please check connectivity with the server!',
           severity: 'error',
         });
-      } finally {
-        // setGettingFromServer(false);
       }
     } else {
       setOpenSnackbar({

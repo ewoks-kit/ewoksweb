@@ -6,8 +6,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
-// import Cloud from '@material-ui/icons/Cloud';
-// import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import FiberNewIcon from '@material-ui/icons/FiberNew';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { Button, Menu, Tooltip } from '@material-ui/core';
@@ -38,10 +36,6 @@ export default function IconMenu(props) {
   const tasks = state((state) => state.tasks);
   const { handleShowEwoksGraph } = props;
 
-  // const cloneToCanvas = () => {
-  //   // console.log('clone the graphRF initializing the id and the label', graphRF);
-  // };
-
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
   }
@@ -68,7 +62,7 @@ export default function IconMenu(props) {
           });
           return;
         }
-        // if the task does not exist in the tasks populate the form with the element details
+        // DOC: if the task does not exist in the tasks populate the form with the element details
         const task = tasks.find(
           (tas) => tas.task_identifier === element.task_identifier
         );
@@ -144,19 +138,6 @@ export default function IconMenu(props) {
               <ListItemText>Clone Graph</ListItemText>
               <Typography variant="body2" color="primary" />
             </MenuItem>
-            <MenuItem onClick={handleShowEwoksGraph}>
-              {/* <ListItemIcon>
-                <AccountTreeIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>Graph in json</ListItemText> */}
-            </MenuItem>
-            {/* <Divider />
-            <MenuItem>
-              <ListItemIcon>
-                <Cloud fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>Web Clipboard?</ListItemText>
-            </MenuItem> */}
           </MenuList>
         </Paper>
       </Menu>

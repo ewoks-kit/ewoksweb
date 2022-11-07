@@ -29,7 +29,6 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
   const [required, setRequired] = React.useState<boolean>(false);
 
   useEffect(() => {
-    // console.log(element);
     setElementL(element);
     setMapAllData(!!element.data.map_all_data || false);
     setOnError(!!element.data.on_error || false);
@@ -76,7 +75,6 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
         style={{
           backgroundColor: '#e9ebf7',
           borderRadius: '10px 0px 0px 10px',
-          // minWidth: '200px',
           border: '#96a5f9',
           borderStyle: 'solid none solid solid',
           padding: '4px',
@@ -160,7 +158,6 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
           )}
         </div>
       </Paper>
-      {/* <hr /> */}
     </>
   );
 }

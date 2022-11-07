@@ -30,7 +30,6 @@ export default function GetFromServerButtons(props) {
   }
 
   async function getFromServer(isSubgraph: string) {
-    // console.log('get from server buttons');
     setOpenAgreeDialog(false);
     if (workflowId) {
       setGettingFromServer(true);
@@ -38,7 +37,6 @@ export default function GetFromServerButtons(props) {
         const response = await getWorkflow(workflowId);
         if (response.data) {
           const graph = response.data as GraphEwoks;
-          // setCallSuccess(true);
           setOpenSnackbar({
             open: true,
             text: `Workflow ${graph.graph.label} was downloaded succesfully`,
@@ -103,7 +101,6 @@ export default function GetFromServerButtons(props) {
       />
       {showButtons[0] && (
         <IntegratedSpinner
-          // callSuccess={callSuccess}
           getting={gettingFromServer}
           tooltip="Open from Server"
           action={checkAndGetFromServer}

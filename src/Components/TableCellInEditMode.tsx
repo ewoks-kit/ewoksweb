@@ -28,12 +28,10 @@ function TableCellInEditMode(propsIn) {
   const { props } = propsIn;
   const { index, row, name, onChange, type, typeOfValues } = props;
   const classes = useStyles();
-  // console.log(index, row, name, onChange, type, typeOfValues);
 
   const [boolVal, setBoolVal] = React.useState(true);
 
   useEffect(() => {
-    // console.log(row);
     setBoolVal(
       row.value !== null && row.value !== undefined
         ? row.value.toString()
@@ -72,7 +70,6 @@ function TableCellInEditMode(propsIn) {
           onInputChange={(e, val) =>
             onChange({ target: { value: val, name } }, row, index)
           }
-          // onInputChange={(event, newInputValue) => {}}
           renderInput={(params) => (
             <TextField
               {...params}

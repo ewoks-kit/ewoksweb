@@ -23,7 +23,6 @@ export default function DefaultInputs(props) {
     const elIn = el.default_inputs;
 
     if (elIn && elIn[elIn.length - 1] && elIn[elIn.length - 1].id === '') {
-      // console.log('should not ADD default');
     } else {
       setSelectedElement(
         {

@@ -317,10 +317,6 @@ export default function ExecutionDetails() {
       >
         Clean all
       </Button>
-      {/* <div>
-        Clicked Event{' '}
-        {currentWatchedEvents[currentExecutionEvent - 1]?.id || 'non'}
-      </div> */}
       {currentWatchedEvents[currentExecutionEvent - 1] && (
         <ReactJson
           src={currentWatchedEvents[currentExecutionEvent - 1]}

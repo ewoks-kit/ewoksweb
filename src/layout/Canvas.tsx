@@ -195,9 +195,7 @@ function Canvas() {
 
   const onEdgesChange = useCallback(
     (changes) => {
-      // console.log(changes);
       const edgeToRemove = graphRF.links.find((el) => el.id === changes[0].id);
-      // setNodes((ns) => applyNodeChanges(changes, ns));
 
       if (changes[0].type === 'remove') {
         onElementsRemove([edgeToRemove]);
@@ -206,13 +204,6 @@ function Canvas() {
     },
     [onElementsRemove, graphRF.links]
   );
-
-  // const onSelectionChange = (elements) => {
-  //   // console.log(elements);
-  //   // if (elements.nodes.length === 0 && elements.edges.length === 0) {
-  //   //   setSelectedElement(graphRF.graph);
-  //   // }
-  // };
 
   const onPaneClick = () => {
     // console.log(graphRF);
@@ -334,6 +325,8 @@ function Canvas() {
   };
 
   const onEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => {
+    console.log(oldEdge, newConnection);
+
     // TODO: it is link: EwoksRFLink but not compatible with Edge?
     const link = {
       ...oldEdge,

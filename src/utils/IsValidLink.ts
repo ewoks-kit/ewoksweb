@@ -1,4 +1,5 @@
 /* eslint-disable sonarjs/cognitive-complexity */
+/* eslint-disable sonarjs/no-identical-functions */
 import type { Connection } from 'react-flow-renderer';
 import type { GraphRF } from '../types';
 
@@ -83,6 +84,8 @@ export default function isValidLink(
   // Take into account if one or both nodes that need connection are graphs
   // if graph take into account the exact sourceHandle or targetHandle
   // if not.a.graph dont take into account the Handlers
+  // TODO: when changing the handle it is not applicable because the link already exists
+  // TODO: handle the graph-to-graph
   if (
     (source.type !== 'graph' &&
       target.type !== 'graph' &&
