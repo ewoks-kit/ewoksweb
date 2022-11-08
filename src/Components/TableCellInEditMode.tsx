@@ -12,7 +12,7 @@ import {
   RadioGroup,
   TextField,
 } from '@material-ui/core';
-// Keep the following if edit on the table is needed
+// TODO: Keep the following if edit on the table is needed
 // import CellEditInJson from './CellEditInJson';
 import { Autocomplete } from '@material-ui/lab';
 

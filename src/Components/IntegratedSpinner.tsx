@@ -12,15 +12,15 @@ import state from '../store/state';
 interface IntegratedSpinnerProps {
   children;
   tooltip: string;
-  action(isSubgraph?: string): void;
   getting: boolean;
+  action(isSubgraph?: string): void;
   onClick?(): void;
 }
 
 // DOC: create the round spin effect changing from loading state
 // to success and then to the wait state using the image passed as children.
 export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
-  const { children, tooltip, action, getting, onClick } = props;
+  const { children, tooltip, getting } = props;
 
   const undoIndex = state((state) => state.undoIndex);
 
@@ -63,10 +63,10 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
 
   function handleButtonClick() {
     if (!loading) {
-      onClick();
+      props.onClick();
 
-      if (action) {
-        action();
+      if (props.action) {
+        props.action();
       }
       setSuccess(false);
       setLoading(true);

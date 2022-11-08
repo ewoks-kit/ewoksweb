@@ -81,11 +81,9 @@ export default function ExecutionDetails() {
     });
 
     setWorkflows([...allWorkflowsL, ...wjobs]);
-    // console.log(executedEvents, watchedWorkflows);
   }, [executedEvents, watchedWorkflows]);
 
   function workflowDetails(work) {
-    // console.log(selectedWorkflow, work);
     if (selectedWorkflow !== work) {
       setSelectedWorkflow(work);
     } else {
@@ -115,7 +113,6 @@ export default function ExecutionDetails() {
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
     } else {
-      // console.log('checkAndExecute - set currentWatchedEvents');
       executeWorkflow();
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
@@ -127,7 +124,6 @@ export default function ExecutionDetails() {
     setInExecutionMode(true);
 
     const workflowId = selectedWorkflow.workflow_id;
-    // console.log(selectedWorkflow, workflows);
     // DOC: Replay execution on canvas needs to put the workflow on canvas with
     // the events if not there
     // if (graphRF.graph.id !== workflowId) {
@@ -176,19 +172,16 @@ export default function ExecutionDetails() {
 
     // Check if it is watched workflow from server or a live execution
     if (isInWatchedIndex !== -1) {
-      // console.log('it is part of the history');
       events = watchedWorkflows[isInWatchedIndex].map((ev, index) => {
         return { ...ev, id: index + 1 };
       });
     } else {
-      // console.log('it is live executed');
       events = executedEvents.filter(
         (ev) =>
           ev.workflow_id === selectedWorkflow.workflow_id &&
           ev.job_id === selectedWorkflow.job_id
       );
     }
-    // console.log(events, selectedWorkflow, workflows);
     setCurrentWatchedEvents(events);
     return events;
   }

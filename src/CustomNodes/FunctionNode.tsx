@@ -30,11 +30,7 @@ function FunctionNode(fnod) {
       withLabel={fnod.data.withLabel}
       colorBorder={fnod.data.colorBorder}
       type={fnod.data.type}
-      label={
-        fnod.label ? fnod.label : fnod.data.label
-        // ? fnod.label.slice(0, fnod.label.indexOf(':'))
-        // : fnod.data.label.slice(0, fnod.data.label.indexOf(':'))
-      }
+      label={fnod.label ? fnod.label : fnod.data.label}
       selected={fnod.selected}
       color={fnod.data.exists ? '#ced3ee' : 'red'}
       image={fnod.data.icon}
@@ -42,7 +38,6 @@ function FunctionNode(fnod) {
       executing={fnod.data.executing}
       content={
         <>
-          {/* <div style={style.contentHeader}>Inputs</div> */}
           {fnod.data.inputs
             .sort((a, b) => a.positionY - b.positionY)
             .map((input: { label: string }) => (
@@ -89,7 +84,6 @@ function FunctionNode(fnod) {
                 )}
               </div>
             ))}
-          {/* <div style={style.contentHeader}>Outputs</div> */}
           {fnod.data.outputs
             .sort((a, b) => a.positionY - b.positionY)
             .map((output: { label: string }) => (

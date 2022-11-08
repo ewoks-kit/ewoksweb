@@ -11,7 +11,6 @@ const executingEvents = (set, get) => ({
   // in current-time. For that they are be feeded using a loop with setExecuting and setExecuted.
 
   setExecutingEvents: (execEvent: Event, live: boolean) => {
-    // console.log(execEvent);
     const prevState = get((prev) => prev);
 
     const prevExecutingEvents = [...prevState.executingEvents];
@@ -33,7 +32,6 @@ const executingEvents = (set, get) => ({
 
           newExecutingEvents.splice(eventToRemove, 1);
         }
-        // console.log(newExecutingEvents);
 
         newExecutingEvents = [...prevExecutingEvents].filter(
           (ev) => ev.node_id !== execEvent.node_id
@@ -48,7 +46,6 @@ const executingEvents = (set, get) => ({
           nod.id === execEvent.node_id &&
           nod.task_identifier === execEvent.task_id
       );
-      // console.log(tempNode, execEvent, prevState.graphRF.nodes);
 
       if ([null, undefined].includes(tempNode)) {
         /* eslint-disable no-console */
@@ -57,7 +54,6 @@ const executingEvents = (set, get) => ({
       }
 
       tempPos = tempNode.position;
-      console.log(tempNode.data.nodeWidth);
       const { withLabel } = tempNode.data;
 
       // TODO: calc the exact pos based on the nodes width which is

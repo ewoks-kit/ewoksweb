@@ -29,13 +29,11 @@ const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
     padding: '1px',
-    // marginTop: theme.spacing(3),
     overflowX: 'auto',
   },
   table: {
     padding: '1px',
     minWidth: 160,
-    // maxWidth: 270,
     wordBreak: 'break-all',
   },
   selectTableCell: {
@@ -43,7 +41,6 @@ const useStyles = makeStyles(() => ({
     padding: '1px',
   },
   tableCell: {
-    // padding: '1px',
     width: 120,
     height: 20,
     padding: '1px',
@@ -51,7 +48,6 @@ const useStyles = makeStyles(() => ({
 }));
 
 const createData = (pair) => {
-  // console.log(pair, pair.value, typeof pair.value);
   return pair.id && (pair.value || pair.value === null || pair.value === false)
     ? { ...pair, isEditMode: false }
     : {
@@ -88,7 +84,6 @@ function EditableTable(props: EditableTableProps) {
   const { headers } = props;
 
   const typesOfInputs = ['bool', 'number', 'string', 'list', 'dict', 'null'];
-  // // console.log(defaultValues, val, rows, props, typeOfInputs);
 
   useEffect(() => {
     const tOfIn = defaultValues.map((val) =>
@@ -108,7 +103,6 @@ function EditableTable(props: EditableTableProps) {
         : 'string'
     );
     setTypeOfInputs(tOfIn);
-    // console.log(defaultValues);
     setRows(
       defaultValues
         ? defaultValues.map((pair) => {
@@ -122,7 +116,6 @@ function EditableTable(props: EditableTableProps) {
   const classes = useStyles();
 
   const showEditableDialog = ({ name, title, graph, callbackProps }) => {
-    // console.log(name);
     setOpenDialog(true);
     setDialogContent({
       id: name,
@@ -172,7 +165,6 @@ function EditableTable(props: EditableTableProps) {
         text: 'Not allowed to assign the same property TWICE!',
         severity: 'error',
       });
-      // setRows(oldRows);
     } else {
       const newRows = rows.map((row) => {
         if (row.id === id) {
@@ -201,7 +193,6 @@ function EditableTable(props: EditableTableProps) {
   }
 
   const onChange = (e, row, index) => {
-    // console.log(e, e.target.value, e.target.name, row, index, typeOfInputs);
     if (
       ['string', 'bool', 'number', 'boolean', 'null'].includes(
         typeOfInputs[index]
@@ -244,16 +235,6 @@ function EditableTable(props: EditableTableProps) {
     }
   };
 
-  // const onRevert = (id) => {
-  //   const newRows = rows.filter((row) => {
-  //     return row.id !== id;
-  //   });
-
-  //   setRows(newRows);
-  //   props.valuesChanged(newRows);
-  //   setDisableSelectType(false);
-  // };
-
   const onDelete = (id) => {
     const newRows = rows.filter((row) => {
       return row.id !== id;
@@ -265,7 +246,6 @@ function EditableTable(props: EditableTableProps) {
   };
 
   const changedTypeOfInputs = (e, row, index) => {
-    // console.log(e.target.value, row, props, index);
     if (e.target.value === 'null') {
       const newRows = rows.map((rowe) => {
         if (rowe.id === row.id) {
@@ -274,7 +254,6 @@ function EditableTable(props: EditableTableProps) {
         return rowe;
       });
       setRows(newRows);
-      // props.valuesChanged(newRows);
     }
     const tOfI = [...typeOfInputs];
     tOfI[index] = e.target.value;
@@ -290,7 +269,6 @@ function EditableTable(props: EditableTableProps) {
   };
 
   const setRowValue = (name, val, callbackProps) => {
-    // console.log(name, val, callbackProps);
     const newRows = callbackProps.rows.map((row) => {
       if (row.id === callbackProps.id) {
         return name !== ''
@@ -392,31 +370,22 @@ function EditableTable(props: EditableTableProps) {
 
                 <TableCell className={classes.selectTableCell}>
                   {row.isEditMode ? (
-                    <>
-                      <IconButton
-                        color="inherit"
-                        onClick={() => onToggleEditMode(row.id, index, 'done')}
-                        style={{ padding: '1px' }}
-                        aria-label="edit"
+                    <IconButton
+                      color="inherit"
+                      onClick={() => onToggleEditMode(row.id, index, 'done')}
+                      style={{ padding: '1px' }}
+                      aria-label="edit"
+                    >
+                      <Fab
+                        // className={classes.openFileButton}
+                        color="primary"
+                        size="small"
+                        component="span"
+                        aria-label="add"
                       >
-                        <Fab
-                          // className={classes.openFileButton}
-                          color="primary"
-                          size="small"
-                          component="span"
-                          aria-label="add"
-                        >
-                          <SaveIcon fontSize="small" />
-                        </Fab>
-                      </IconButton>
-                      {/* <IconButton
-                        style={{ padding: '1px' }}
-                        aria-label="revert"
-                        onClick={() => onRevert(row.id)}
-                      >
-                        <RevertIcon fontSize="small" />
-                      </IconButton> */}
-                    </>
+                        <SaveIcon fontSize="small" />
+                      </Fab>
+                    </IconButton>
                   ) : (
                     <span>
                       <IconButton

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { FormControl, IconButton, TextField, Fab } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
@@ -37,7 +37,6 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
   }
 
   function valueSavedLocal(val) {
-    // console.log(val);
     setValueIsChanged(false);
     props.valueSaved(val);
   }

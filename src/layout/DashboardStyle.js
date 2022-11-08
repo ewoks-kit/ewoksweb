@@ -5,7 +5,7 @@ const drawerWidth = 290;
 const DashboardStyle = makeStyles((theme) => ({
   verticalRule: {
     borderLeft: '1px solid #7685dd',
-    height: '84%', // '50px',
+    height: '84%',
     color: 'wight',
   },
   openFileButton: {
@@ -19,7 +19,6 @@ const DashboardStyle = makeStyles((theme) => ({
 
   root: {
     display: 'flex',
-    // width: '100%',
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
@@ -40,7 +39,6 @@ const DashboardStyle = makeStyles((theme) => ({
     height: '7vh',
   },
   appBar: {
-    // height: '7vh',
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -49,7 +47,6 @@ const DashboardStyle = makeStyles((theme) => ({
   },
   appBarShift: {
     marginLeft: drawerWidth,
-    // width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -77,11 +74,8 @@ const DashboardStyle = makeStyles((theme) => ({
 
   appBarSpacer: theme.mixins.toolbar,
   content: {
-    // width: '100%',
     flexGrow: 1,
-    // height: '100vh',
     overflow: 'auto',
-    // height: '98vh',
   },
   container: {
     paddingTop: theme.spacing(1),
@@ -95,7 +89,7 @@ const DashboardStyle = makeStyles((theme) => ({
   },
   fixedHeight: {
     height: '93vh',
-    padding_top: '7vh', // 45,
+    padding_top: '7vh',
   },
 
   detailsLabels: {

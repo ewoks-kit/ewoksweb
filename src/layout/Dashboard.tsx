@@ -58,12 +58,10 @@ export default function Dashboard() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
-    // console.log(openDrawers);
     handleOpenInfo();
   }, []);
 
   useEffect(() => {
-    // console.log(openDrawers, openSettings);
     if (!openDrawers) {
       setOpenSettings(false);
       setOpenSettingsDrawer('Workflows');
@@ -71,7 +69,6 @@ export default function Dashboard() {
   }, [openDrawers, openSettings, setOpenSettingsDrawer]);
 
   useEffect(() => {
-    // console.log(openSettingsDrawer);
     if (openSettingsDrawer === 'Executions') {
       setOpenInfo(false);
       setOpenDrawers(true);
@@ -81,7 +78,6 @@ export default function Dashboard() {
       setOpenDrawers(false);
       setOpenSettings(false);
     }
-    // setOpenSettingsDrawer('');
   }, [openSettingsDrawer, setOpenSettingsDrawer]);
 
   const checkAndNewGraph = () => {
@@ -108,9 +104,7 @@ export default function Dashboard() {
   };
 
   const handleOpenInfo = () => {
-    // setOpenInfo(true);
     setOpenSettings(false);
-    // setOpenDrawers(true);
   };
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -269,7 +263,6 @@ export default function Dashboard() {
             enterDelay={800}
             arrow
           >
-            {/* onClick={handleOpenInfo} */}
             <IconButton color="inherit">
               <Typography
                 component="h1"
@@ -315,10 +308,7 @@ export default function Dashboard() {
           size={350}
         >
           <Sidebar />
-          {/* </Drawer> */}
         </ReflexElement>
-
-        {/* <ReflexSplitter propagate /> */}
         <ReflexSplitter
           propagate
           style={{
@@ -332,13 +322,8 @@ export default function Dashboard() {
             color: '#777',
             cursor: 'col-resize',
             transition: 'none',
-            // display: activePanel ? undefined : 'none',
           }}
-        >
-          {/* <ChevronLeftIcon /> */}
-          {/* <hr /> */}
-        </ReflexSplitter>
-
+        />
         <ReflexElement className="right-pane">
           <main className={classes.content}>
             <div className={classes.toolbar} />
@@ -351,8 +336,6 @@ export default function Dashboard() {
                   FallbackComponent={(fallbackProps) => (
                     <ErrorFallback {...fallbackProps} />
                   )}
-                  // resetKeys={[]}
-                  // onError={() => console.log()}
                 >
                   <Canvas />
                 </ErrorBoundary>
@@ -360,9 +343,6 @@ export default function Dashboard() {
             </Paper>
           </main>
         </ReflexElement>
-
-        {/* <Drawer /> */}
-        {/* </div> */}
       </ReflexContainer>
     </div>
   );

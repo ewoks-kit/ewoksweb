@@ -15,17 +15,10 @@ function assertLog(statement, severity = 'info') {
 }
 
 function isJsonString(str) {
-  // try {
   return JSON.parse(str);
-  // } catch (error) {
-  //   // console.log(error);
-  //   return false;
-  // }
-  // return true;
 }
 
 function includes(entity: {}, label: string, properties: string[]) {
-  // console.info(entity, properties);
   let result = true;
   properties.forEach((pr) => {
     if (Object.keys(entity).includes(pr)) {
@@ -40,7 +33,7 @@ function includes(entity: {}, label: string, properties: string[]) {
 
 export function validateEwoksGraph(graph: GraphEwoks) {
   const result = [];
-  // // console.log(graph);
+
   result.push(isJsonString(JSON.stringify(graph)));
   // graph structure
   result.push(
@@ -53,17 +46,14 @@ export function validateEwoksGraph(graph: GraphEwoks) {
   result.push(
     includes(graph.graph, `graph.graph: ${graph.graph.id}`, [
       'id',
-      // 'label',
       'input_nodes',
       'output_nodes',
-      // 'uiProps',
     ])
   );
   result.push(
     graph.nodes.forEach((nod) =>
       includes(nod, `node: ${nod.id}`, [
         'id',
-        // 'label',
         'task_type',
         'task_identifier',
         'uiProps',
@@ -86,8 +76,6 @@ export function validateEwoksGraph(graph: GraphEwoks) {
     // console.error('At least one node id is not unique');
   }
 
-  console.log(nodeIds);
-
   graph.links.forEach((link, index) => {
     // DOC: links should have both ends attached to nodes or else delete link
     // since it is not shown on the canvas
@@ -96,29 +84,8 @@ export function validateEwoksGraph(graph: GraphEwoks) {
       result.push(true);
     } else {
       result.push(false);
-      // console.error(
-      // `link ${index} ${link.source} ${link.target} has wrong source and/or target node id`
-      // );
     }
   });
 
-  // graph.input_nodes.forEach((input, index) => {
-  //   if (input.sub_node) {
-  //     // The subgraph does not exist or has changed its input names remove link
-  //   }
-  //   if (!nodeIds.has(input.node)) {
-  //     assertLog(`${input.node} mentioned on an input-link does not exist`);
-  //     result.push(true);
-  //   } else {
-  //     result.push(false);
-  //     // console.error(
-  //     // `link ${index} ${link.source} ${link.target} has wrong source and/or target node id`
-  //     // );
-  //   }
-  // });
-
-  // if subgraphs exist look for the whole tree if it exists and warn
-
-  // // console.log(result);
   return { result: !result.includes(false), logs: {} };
 }

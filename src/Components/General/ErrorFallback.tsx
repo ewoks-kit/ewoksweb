@@ -25,7 +25,6 @@ interface Props extends FallbackProps {
 
 function ErrorFallback(props: Props) {
   const { error, resetErrorBoundary, children } = props;
-  // console.log(error, children);
 
   return (
     <div role="alert" style={{ padding: '1.5rem' }}>

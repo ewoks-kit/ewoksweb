@@ -8,7 +8,6 @@ import ManageIcons from './ManageIcons';
 import ManageWorkflows from './ManageWorkflows';
 import ManageTasks from './ManageTasks';
 import { getIcons } from '../utils/api';
-import type { IconsNames } from '../types';
 import ExecutionTable from '../Components/ExecutionTable';
 import state from '../store/state';
 
@@ -71,7 +70,7 @@ export default function BasicTabs() {
   ) => {
     setValue(newValue);
     if (newValue === 2) {
-      const iconsTitles: IconsNames = await getIcons();
+      await getIcons();
     }
   };
 

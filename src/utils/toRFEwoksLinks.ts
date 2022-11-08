@@ -73,12 +73,10 @@ export function toRFEwoksLinks(
           },
           labelBgStyle: {
             fill: 'rgb(223, 226, 247)',
-            // color: color,
             fillOpacity: 1,
             strokeWidth: 3,
             stroke: color,
           },
-          // labelShowBg: false,
           labelBgPadding: [8, 4],
           labelBgBorderRadius: 4,
           labelStyle: {

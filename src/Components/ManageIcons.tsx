@@ -61,19 +61,14 @@ export default function ManageIcons() {
   const allIcons = state((state) => state.allIcons);
 
   function clickIcon(icon: string) {
-    // console.log(allIcons);
     setSelectedIcon(icon);
   }
 
   async function deleteIcon() {
-    // console.log('delete icon');
-
     try {
       const tasksData = await getTaskDescription();
       const tasks = tasksData.data as { items: Task[] };
       const allTasks = tasks.items;
-
-      // console.log(allTasks);
 
       if (allTasks.map((task) => task.icon).includes(selectedIcon)) {
         setOpenSnackbar({
@@ -105,7 +100,7 @@ export default function ManageIcons() {
     const data = new FormData();
 
     data.append('file', (fileToBeSent.file as unknown) as File);
-    // data.append('filename', fileToBeSent.filename);
+
     try {
       await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/icon/${fileToBeSent.file.name}`,
@@ -128,10 +123,9 @@ export default function ManageIcons() {
         text: 'File ready to be uploadede as an icon',
         severity: 'success',
       });
-      // getIconL(ne.target.files[0].name as string);
+
       setFileToBeSent({ file: ne.target.files[0], filename: ne.target.value });
     } else {
-      // setFileToBeSent('');
       setOpenSnackbar({
         open: true,
         text: 'Files more than 10Kb are not acceptable for icons',
@@ -150,7 +144,6 @@ export default function ManageIcons() {
           text: `Icon was succesfully deleted!`,
           severity: 'success',
         });
-        // getIcons();
       })
       .catch((error) => {
         setOpenSnackbar({
@@ -165,6 +158,7 @@ export default function ManageIcons() {
     setOpenAgreeDialog(false);
   }
 
+  // TODO: Examine the code
   // const getIcons = async () => {
   //   const iconsData = await axios.get(
   //     `${process.env.REACT_APP_SERVER_URL}/icons/descriptions`

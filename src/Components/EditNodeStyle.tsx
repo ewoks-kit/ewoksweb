@@ -9,12 +9,10 @@ interface EditNodeStyleProps {
 }
 // DOC: Edit the node style
 export default function EditNodeStyle(props: EditNodeStyleProps) {
-  // console.log(props);
   const { element } = props;
 
   const setSelectedElement = state((state) => state.setSelectedElement);
 
-  // const [nodeType, setNodeType] = React.useState('');
   const [withImage, setWithImage] = useState<boolean>(false);
   const [withLabel, setWithLabel] = useState<boolean>(false);
   const [colorBorder, setColorBorder] = useState<string>('');
@@ -54,17 +52,6 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
       );
     }
   }
-
-  // const nodeTypeChanged = (event) => {
-  //   setNodeType(event.target.value);
-  //   setSelectedElement(
-  //     {
-  //       ...element,
-  //       data: { ...element.data, type: event.target.value },
-  //     },
-  //     'fromSaveElement'
-  //   );
-  // };
 
   const withImageChanged = (event) => {
     setWithImage(event.target.checked);
@@ -119,19 +106,6 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
 
   return (
     <FormControl variant="filled" fullWidth>
-      {/* <InputLabel>Node type</InputLabel>
-      <Select
-        id="demo-simple-select"
-        value={nodeType ? nodeType : 'internal'}
-        label="Node type"
-        onChange={nodeTypeChanged}
-      >
-        {['input', 'output', 'internal', 'input_output'].map((tex) => (
-          <MenuItem key={tex} value={tex}>
-            {tex}
-          </MenuItem>
-        ))}
-      </Select> */}
       {element.task_type !== 'note' && (
         <>
           <div>
@@ -189,8 +163,6 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
           min={40}
           max={300}
           style={{ width: '90%' }}
-          // aria-label="Small"
-          // valueLabelDisplay="auto"
         />
       </div>
     </FormControl>

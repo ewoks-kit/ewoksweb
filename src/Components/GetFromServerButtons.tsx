@@ -8,6 +8,7 @@ import state from '../store/state';
 import { getWorkflow } from '../utils/api';
 import ConfirmDialog from './ConfirmDialog';
 
+// DOC: buttons used to get or save to server
 export default function GetFromServerButtons(props) {
   const { workflowId, showButtons } = props;
 

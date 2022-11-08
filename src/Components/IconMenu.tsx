@@ -20,7 +20,7 @@ import type {
 } from '../types';
 import state from '../store/state';
 
-export default function IconMenu(props) {
+export default function IconMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
@@ -34,7 +34,6 @@ export default function IconMenu(props) {
 
   const graphRF = state((state) => state.graphRF);
   const tasks = state((state) => state.tasks);
-  const { handleShowEwoksGraph } = props;
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
@@ -48,7 +47,6 @@ export default function IconMenu(props) {
     action: string,
     element: Task | EwoksRFNode | EwoksRFLink | GraphRF
   ) {
-    // console.log(action, element, tasks);
     setDoAction(action);
     if (action === 'newTask') {
       setElementToEdit(initializedTask);

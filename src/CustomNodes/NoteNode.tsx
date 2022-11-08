@@ -16,29 +16,22 @@ const NoteNode = (args) => {
   useEffect(() => {
     setComment(args.data.comment);
     setNodeSize(args.data.nodeWidth);
-  }, [args.data]); // selectedElement.type?
+  }, [args.data]);
 
   const customTitle = {
     ...style.title,
     wordWrap: 'break-word',
     borderRadius: '10px',
-    // color: 'red',
     backgroundColor: '#ced3ee',
     textAlign: 'center',
     padding: '1px',
   };
 
   const commentChanged = (event) => {
-    // console.log(args);
     setComment(event.target.value);
   };
 
-  // const cancel = () => {
-  //   setEdit(false);
-  // };
-
   const save = () => {
-    // update graphRF on store
     // TODO: If permenant put it in undo-redo
     setGraphRF({
       graph: graphRF.graph,
@@ -69,8 +62,6 @@ const NoteNode = (args) => {
           padding: '10px',
         } as React.CSSProperties
       }
-      // id="choice"
-      // onMouseOver={() => // console.log('onMouseOver')}
       role="button"
       tabIndex={0}
     >

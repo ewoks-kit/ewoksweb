@@ -114,12 +114,10 @@ function calcNodeProps(
   link_index: number,
   inputOrOutput: string
 ): GraphNodes {
-  // console.log(nod);
   return {
     id: nod.id,
     node: nodConnected.id,
-    // IMPTODO: subnode must point to the internal of the graph
-    // or the input node "start" or "graphInput"? TALK Wout
+
     sub_node: isGraph
       ? (graph_links[link_index] && inputOrOutput === 'graphOutput'
           ? graph_links[link_index].data.sub_source

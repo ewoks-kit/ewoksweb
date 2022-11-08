@@ -61,7 +61,6 @@ export default function GetFromServer() {
           });
         }
       } catch (error) {
-        // console.log(error);
         setOpenSnackbar({
           open: true,
           text:

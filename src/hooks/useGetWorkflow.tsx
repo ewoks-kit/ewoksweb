@@ -3,6 +3,7 @@ import state from '../store/state';
 import type { GraphEwoks } from '../types';
 import { getWorkflow } from '../utils/api';
 
+// DOC: NOT USED
 const useGetWorkflow = async (
   workflowId: string,
   isSubgraph: string
@@ -20,7 +21,6 @@ const useGetWorkflow = async (
       getWorkflow(workflowId)
         .then((response) => {
           if (response.data) {
-            console.log(response.data);
             const graph = response.data as GraphEwoks;
             // setCallSuccess(true);
             setOpenSnackbar({

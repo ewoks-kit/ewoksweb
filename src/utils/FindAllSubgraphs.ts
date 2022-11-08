@@ -1,6 +1,5 @@
 import type { GraphEwoks, GraphRF } from '../types';
 import { getSubgraphs } from '../utils';
-// import { validateEwoksGraph } from './EwoksValidator';
 
 export async function findAllSubgraphs(
   graphToSearch: GraphEwoks,
@@ -20,7 +19,6 @@ export async function findAllSubgraphs(
       thisCallRecent as GraphRF[]
     );
     // store them as ewoksGraphs for later transforming to RFGraphs
-    // .map((gra) => gra !== null)
     if (allGraphSubs.includes(null)) {
       subsToGet.shift();
     } else {
@@ -32,14 +30,6 @@ export async function findAllSubgraphs(
       subsToGet.shift();
       // add the new subgraphs in the existing subgraphs we need to search
       subsToGet = [...subsToGet, ...allGraphSubs];
-      // validate the next graph to search for subgraphs
-      // if (subsToGet.length > 0 && validateEwoksGraph(subsToGet[0])) {
-      //   // console.log('validated:', subsToGet[0].graph.id);
-      // } else if (subsToGet.length === 0) {
-      //   // console.log('Finished ok');
-      // } else {
-      //   // console.log('NOT validated');
-      // }
     }
   }
   return newNodeSubgraphs;

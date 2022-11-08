@@ -118,7 +118,6 @@ export function addNodeProperties(
 ): EwoksRFNode {
   let tempNode = { ...node };
   if (task_type === 'graph') {
-    // if node=subgraph calculate inputs-outputs from subgraph.graph
     const subgraphNode: GraphEwoks = newNodeSubgraphs.find(
       (subGr) => subGr.graph.id === task_identifier
     );

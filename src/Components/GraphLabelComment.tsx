@@ -29,7 +29,6 @@ export default function GraphLabelComment() {
   }
 
   function saveLabel(label: string) {
-    // setLabel(event.target.value);
     setSelectedElement(
       {
         ...selectedElement,

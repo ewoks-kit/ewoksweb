@@ -13,6 +13,7 @@ export default function DefaultInputs(props) {
 
   const [defaultInputs, setDefaultInputs] = React.useState<Inputs[]>([]);
   const setSelectedElement = state((state) => state.setSelectedElement);
+  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
   useEffect(() => {
     setDefaultInputs(element.default_inputs ? element.default_inputs : []);
@@ -23,6 +24,11 @@ export default function DefaultInputs(props) {
     const elIn = el.default_inputs;
 
     if (elIn && elIn[elIn.length - 1] && elIn[elIn.length - 1].id === '') {
+      setOpenSnackbar({
+        open: true,
+        text: 'Please fill in the empty line before addining another!',
+        severity: 'warning',
+      });
     } else {
       setSelectedElement(
         {

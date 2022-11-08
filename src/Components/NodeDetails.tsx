@@ -9,7 +9,7 @@ import type {
 } from '../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
-// import EditIcon from '@material-ui/icons/EditOutlined'; DONT DELETE
+
 import {
   Accordion,
   AccordionDetails,
@@ -30,7 +30,7 @@ import DefaultInputs from './DefaultInputs';
 
 const useStyles = DashboardStyle;
 
-// selectedNode details in sidebar
+// DOC: selectedNode details in sidebar
 // Test
 // unit: fake some TaskProperties and check the form
 //       click and edit some properties and check the node properties
@@ -44,8 +44,6 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
   const graphRF = state((state) => state.graphRF);
   const setGraphRF = state((state) => state.setGraphRF);
   const setSelectedElement = state((state) => state.setSelectedElement);
-  // const selectedElement = state((state) => state.selectedElement);
-  // const [editProps, setEditProps] = React.useState<boolean>(false);
   const [inputsComplete, setInputsComplete] = React.useState<boolean>(false);
   const [advanced, setAdvanced] = React.useState<boolean>(false);
   const [defaultErrorNode, setDefaultErrorNode] = React.useState<boolean>(
@@ -57,7 +55,6 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
 
   const NonEditableTaskProperties = [
     { id: 'id', label: 'Id', value: props.element.id },
-    // { id: 'task_icon', label: 'Icon', value: props.element.task_icon },
     { id: 'task_type', label: 'Type', value: props.element.task_type },
     {
       id: 'task_generator',
@@ -141,7 +138,6 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
             };
           }
         }
-        // console.log
         return newLink;
       });
 
@@ -193,9 +189,8 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
   function addDataMapping() {
     const el = element;
     const elMap = el.default_error_attributes.data_mapping || [];
-    if (elMap && elMap[elMap.length - 1] && elMap[elMap.length - 1].id === '') {
-      // console.log('should not ADD mapping');
-    } else {
+
+    if (!elMap.some((x) => x.id === '')) {
       setSelectedElement(
         {
           ...el,
@@ -307,7 +302,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
         )}
         {defaultErrorNode && !mapAllData && advanced && (
           <div>
-            {/* TODO: Replace Data Mapping with the component to have dropdowns if not rarely used */}
+            {/* TODO: Check and Replace Data Mapping with the component to have dropdowns if not rarely used */}
             {/* <DataMappingComponent element={element} /> */}
             <b>Data Mapping </b>
             <IconButton
@@ -350,7 +345,6 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
           <AccordionSummary
             expandIcon={<OpenInBrowser />}
             aria-controls="panel1a-content"
-            id="panel1a-header"
           >
             <Typography>Node Info</Typography>
           </AccordionSummary>
@@ -380,16 +374,6 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
                   {typeof value === 'object' ? value.join(', ') : value}
                 </div>
               ))}
-              {/* DONT DELETE: Use later if we need to edit node details in EditTaskProp */}
-              {/* <IconButton
-        style={{ padding: '0px' }}
-        aria-label="edit"
-        onClick={() => {
-          setEditProps(!editProps);
-        }}
-      >
-        <EditIcon />
-      </IconButton> */}
             </div>
           </AccordionDetails>
         </Accordion>
