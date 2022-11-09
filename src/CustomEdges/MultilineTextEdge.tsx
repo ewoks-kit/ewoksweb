@@ -28,7 +28,7 @@ function multilineText({
     targetY,
   });
 
-  const titleWidth = Math.max(...label.split(',').map((mp) => mp.length)) * 7.2;
+  const titleWidth = Math.max(...label.split(',').map((mp) => mp.length)) * 7;
 
   const titleHeight = label.split(',').length * 30;
 
@@ -57,7 +57,6 @@ function multilineText({
             borderStyle: 'solid',
             borderColor: 'rgb(150, 165, 249)',
             wordWrap: 'break-word',
-            // minHeight: '100px',
             overflow: 'hidden',
           }}
         >

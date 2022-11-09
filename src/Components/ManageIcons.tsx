@@ -196,13 +196,7 @@ export default function ManageIcons() {
         agreeCallback={agreeDeleteIcon}
         disagreeCallback={disAgreeDeleteIcon}
       />
-      <Grid
-        container
-        spacing={1}
-        direction="row"
-        // justifyContent="flex-start"
-        alignItems="center"
-      >
+      <Grid container spacing={1} direction="row" alignItems="center">
         <Grid item xs={12} sm={12} md={8} lg={6}>
           <Item>
             <span className="dndflow" style={{ display: 'flex' }}>
