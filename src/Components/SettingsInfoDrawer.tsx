@@ -25,17 +25,6 @@ export default function SettingsInfoDrawer(props) {
     });
   }, [props.openSettings, props.openInfo, props.openDrawers]);
 
-  // useEffect(() => {
-  //   toggleDrawer('top', true);
-  //   // setState({
-  //   //   top: true,
-  //   //   left: false,
-  //   //   bottom: false,
-  //   //   right: false,
-  //   // });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   const toggleDrawer = (anchor: Anchor, open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent
   ) => {
@@ -55,8 +44,6 @@ export default function SettingsInfoDrawer(props) {
     <Box
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 350 }}
       role="presentation"
-      // onClick={toggleDrawer(anchor, false)}
-      // onKeyDown={toggleDrawer(anchor, false)}
     >
       {props.openInfo ? (
         <div className="infoAccordion">

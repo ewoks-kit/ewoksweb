@@ -50,34 +50,21 @@ export default function ExecutionFilters() {
   const [moreFilters, setMoreFilters] = useState<boolean>(false);
   const setExecutedWorkflows = state((state) => state.setExecutedWorkflows);
 
-  // useEffect(() => {
-  //   console.log(new Date().toString());
-  //   // setFromDateFilter(new Date().toString());
-  // }, []);
-
   const toDateChanged = (event) => {
-    // console.log(event.target.value, workflowId);
     setToDateFilter(event.target.value);
   };
 
   const fromDateChanged = (event) => {
-    // console.log(event.target.value, workflowId);
     setFromDateFilter(event.target.value);
   };
 
   const toTimeChanged = (event) => {
-    // console.log(event.target.value, workflowId);
     setToTimeFilter(event.target.value);
   };
 
   const fromTimeChanged = (event) => {
-    // console.log(event.target.value, workflowId);
     setFromTimeFilter(event.target.value);
   };
-
-  // const workflowNameChanged = (val) => {
-  //   console.log(val, workflowNameFilter);
-  // };
 
   // TODO: same as in manageWorkflows for category and workflows
   function setInputValue(workflowDetails: WorkflowDescription) {
@@ -98,7 +85,6 @@ export default function ExecutionFilters() {
   }
 
   function statusChanged(event) {
-    // console.log(event.target.value, workflowNameFilter);
     setStatus(event.target.value);
   }
 
@@ -125,9 +111,6 @@ export default function ExecutionFilters() {
       if (toTimeFilter && toDateFilter) {
         filterParams.endtime += ` ${toTimeFilter.toString()}`;
       }
-      // if (context) {
-      //   filterParams.context = context;
-      // }
       if (nodeId) {
         filterParams.node_id = nodeId;
       }
@@ -140,10 +123,6 @@ export default function ExecutionFilters() {
       if (jobId) {
         filterParams.job_id = jobId;
       }
-      // if (type) {
-      //   filterParams.type = type;
-      // }
-      // console.log(filterParams);
       const response = await getExecutionEvents(filterParams);
       if (response.data) {
         const execJobs = response.data as ExecutedJobsResponse;
@@ -155,23 +134,11 @@ export default function ExecutionFilters() {
     } catch (error) {
       console.log(error);
     }
-    // finally {
-
-    // }
   }
-
-  // const errorChanged = (event) => {
-  //   console.log(event.target.checked);
-  //   setError(event.target.checked);
-  // };
 
   function moreFiltersChanged(event) {
     setMoreFilters(event.target.checked);
   }
-
-  // const contextChanged = (event) => {
-  //   setContext(event.target.value);
-  // };
 
   function nodeIdChanged(event) {
     setNodeId(event.target.value);
@@ -188,10 +155,6 @@ export default function ExecutionFilters() {
   function jobIdChanged(event) {
     setJobId(event.target.value);
   }
-
-  // const typeChanged = (event) => {
-  //   setType(event.target.value);
-  // };
 
   return (
     <div
@@ -234,14 +197,6 @@ export default function ExecutionFilters() {
           <MenuItem value="Executing">Executing</MenuItem>
         </Select>
       </FormControl>
-      {/* <div style={{ margin: '8px' }}>
-        <FormControlLabel
-          value={error}
-          control={<Switch color="primary" onChange={errorChanged} />}
-          label="Error"
-          labelPlacement="bottom"
-        />
-      </div> */}
       <div style={{ margin: '8px' }}>
         <TextField
           id="date"
@@ -310,17 +265,6 @@ export default function ExecutionFilters() {
               onChange={toTimeChanged}
             />
           </div>
-          {/* <div style={{ margin: '8px' }}>
-            <TextField
-              label="Context"
-              value={context}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="outlined"
-              onChange={contextChanged}
-            />
-          </div> */}
           <div style={{ margin: '8px' }}>
             <TextField
               label="Node id"
@@ -365,17 +309,6 @@ export default function ExecutionFilters() {
               onChange={jobIdChanged}
             />
           </div>
-          {/* <div style={{ margin: '8px' }}>
-            <TextField
-              label="Type"
-              value={type}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="outlined"
-              onChange={typeChanged}
-            />
-          </div> */}
         </>
       )}
       <Button

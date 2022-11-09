@@ -6,7 +6,6 @@ import 'normalize.css';
 import './styles/index.css';
 
 import App from './App';
-// import SignUp from './layout/SignUp';
 import EwoksUiInfo from './Components/EwoksUiInfo';
 import ExecutionTable from './Components/ExecutionTable';
 

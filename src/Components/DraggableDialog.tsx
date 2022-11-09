@@ -30,7 +30,6 @@ function PaperComponent(props: PaperProps) {
 }
 
 export default function DraggableDialog(props) {
-  // { open, content }
   const [graph, setGraph] = React.useState({});
   const [oldGraph, setOldGraph] = React.useState({});
   const [isOpen, setIsOpen] = React.useState(false);
@@ -46,7 +45,6 @@ export default function DraggableDialog(props) {
   const { open, content, typeOfValues } = props;
 
   useEffect(() => {
-    // console.log(content, open);
     setGraph((content && content.object) || {});
     setOldGraph((content && content.object) || {});
     setIsOpen(open || false);
@@ -56,10 +54,6 @@ export default function DraggableDialog(props) {
     setOldName(content.id || '');
   }, [open, content]);
 
-  // const handleClickOpen = () => {
-  //   setGraph(rfToEwoks(graphRF));
-  // };
-
   const handleClose = () => {
     setIsOpen(false);
     props.setValue(oldName, oldGraph, callbackProps);
@@ -68,7 +62,6 @@ export default function DraggableDialog(props) {
   const handleSave = () => {
     if (name) {
       setIsOpen(false);
-      // console.log(name, graph, callbackProps);
       props.setValue(name, graph, callbackProps);
     } else {
       setOpenSnackbar({
@@ -141,14 +134,6 @@ export default function DraggableDialog(props) {
                 />
               </FormControl>
             </Tooltip>
-            {/* <Tooltip title="Input the name of parameter" arrow>
-              <TextField
-                label="Name"
-                variant="filled"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </Tooltip> */}
           </div>
           <ReactJson
             src={graph}

@@ -1,6 +1,6 @@
 import ReactJson from 'react-json-view';
 
-// TODO if needed
+// TODO NOT USED
 // interface CellEditInJsonProps {
 //   row,
 //   name,
@@ -39,7 +39,6 @@ export default function CellEditInJson({ row, name, type }) {
       quotesOnKeys={false}
       style={{ backgroundColor: 'rgb(59, 77, 172)' }}
       displayDataTypes
-      // defaultValue={object}
     />
   );
 }

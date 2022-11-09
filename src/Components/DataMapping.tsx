@@ -34,11 +34,11 @@ export default function DataMappingComponent(props: DataMappingProps) {
     const el = element;
 
     const elMap = el.data.data_mapping;
-    // console.log(el, elMap, dataMapping);
-    if (elMap && elMap[elMap.length - 1] && elMap[elMap.length - 1].id === '') {
+
+    if (!elMap.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
-        text: 'Cannot add another line!',
+        text: 'Please fill in the empty line before addining another!',
         severity: 'warning',
       });
     } else {

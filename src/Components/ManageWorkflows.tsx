@@ -24,7 +24,6 @@ export default function ManageWorkflows() {
     if (workflowDetails) {
       // TODO: error handling
       const response = await getWorkflow(workflowDetails.id);
-      // console.log('setInputWorkflowValue', val, response);
       setWorkflowValue(response.data as GraphEwoks);
     }
   }
@@ -40,13 +39,7 @@ export default function ManageWorkflows() {
 
   return (
     <Box>
-      <Grid
-        container
-        spacing={1}
-        direction="row"
-        // justifyContent="flex-start"
-        alignItems="center"
-      >
+      <Grid container spacing={1} direction="row" alignItems="center">
         <Grid item xs={12} sm={12} md={6} lg={3}>
           <Item>
             <FormControl variant="standard" style={{ width: '100%' }}>

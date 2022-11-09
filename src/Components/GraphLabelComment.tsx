@@ -29,7 +29,6 @@ export default function GraphLabelComment() {
   }
 
   function saveLabel(label: string) {
-    // setLabel(event.target.value);
     setSelectedElement(
       {
         ...selectedElement,
@@ -62,15 +61,6 @@ export default function GraphLabelComment() {
         value={category}
         valueSaved={saveCategory}
       />
-      {/* DOC: if the inputs and outputs of the graph are needed
-      <div>
-      <b>Inputs </b>
-      {graphInputs.length > 0 && <DenseTable data={graphInputs} />}
-    </div>
-    <div>
-      <b>Outputs </b>
-      {graphOutputs.length > 0 && <DenseTable data={graphOutputs} />}
-    </div> */}
     </>
   );
 }

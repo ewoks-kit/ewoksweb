@@ -122,10 +122,11 @@ function AddNodes(props: AddNodesProps) {
 
   useEffect(() => {
     if (props.openSaveDialogNewtask) {
-      setOpenSaveDialog(true);
       setDoAction('newTask');
+      setElementToEdit(initializedTask);
+      setOpenSaveDialog(true);
     }
-  }, [props.openSaveDialogNewtask]);
+  }, [props.openSaveDialogNewtask, initializedTask]);
 
   const insertGraph = () => {
     setGraphOrSubgraph(false);

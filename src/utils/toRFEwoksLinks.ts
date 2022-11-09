@@ -73,12 +73,10 @@ export function toRFEwoksLinks(
           },
           labelBgStyle: {
             fill: 'rgb(223, 226, 247)',
-            // color: color,
             fillOpacity: 1,
             strokeWidth: 3,
             stroke: color,
           },
-          // labelShowBg: false,
           labelBgPadding: [8, 4],
           labelBgBorderRadius: 4,
           labelStyle: {
@@ -138,7 +136,7 @@ function calcTargetHandle(uiProps: UiPropsLinks, sub_target: string): string {
     ? uiProps.targetHandle
     : sub_target
     ? sub_target
-    : '';
+    : 'tl';
 }
 
 function calcSourceHandle(uiProps: UiPropsLinks, sub_source: string): string {
@@ -146,7 +144,7 @@ function calcSourceHandle(uiProps: UiPropsLinks, sub_source: string): string {
     ? uiProps.sourceHandle
     : sub_source
     ? sub_source
-    : '';
+    : 'sr';
 }
 
 function calcInOutLinks(tempGraph: GraphEwoks): GraphEwoks {

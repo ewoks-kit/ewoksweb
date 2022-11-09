@@ -69,7 +69,7 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={8}>
           <h2 style={{ color: '#3f51b5' }}>
-            <IconButton color="inherit">
+            <IconButton color="inherit" disabled>
               <Fab
                 // className={classes.openFileButton}
                 color="primary"
@@ -87,7 +87,6 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
               <AccordionSummary
                 expandIcon={<OpenInBrowser />}
                 aria-controls="panel1a-content"
-                id="panel1a-header"
               >
                 <Typography>{summary}</Typography>
               </AccordionSummary>

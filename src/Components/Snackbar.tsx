@@ -9,14 +9,6 @@ function SimpleSnackbar() {
   const openSnackbar = state((state) => state.openSnackbar);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
 
-  // const handleClick = () => {
-  //   setOpenSnackbar({
-  //     open: true,
-  //     text: '',
-  //     severity: 'success',
-  //   });
-  // };
-
   const handleClose = (
     event: React.SyntheticEvent | React.MouseEvent,
     reason?: string
@@ -51,11 +43,7 @@ function SimpleSnackbar() {
       message={openSnackbar.text}
       action={action}
     >
-      <Alert
-        onClose={handleClose}
-        severity={openSnackbar.severity as Color}
-        // sx={{ width: '100%' }} // Uncomment
-      >
+      <Alert onClose={handleClose} severity={openSnackbar.severity as Color}>
         {openSnackbar.text}
       </Alert>
     </Snackbar>

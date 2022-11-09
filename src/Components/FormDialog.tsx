@@ -100,12 +100,20 @@ export default function FormDialog(props: FormDialogProps) {
 
   async function handleSave() {
     // get the selected element (graph or Node) give a new name before saving
-    if (isForGraph) {
+    if (isForGraph && newName) {
       saveGraph(element as GraphRF);
-    } else if (['cloneTask', 'newTask'].includes(action)) {
-      saveTask(element as Task);
-    } else if (['editTask'].includes(action)) {
-      puTask(element as Task);
+    } else if ('task_identifier' in element && newName) {
+      if (['cloneTask', 'newTask'].includes(action) && element) {
+        saveTask(element);
+      } else if (['editTask'].includes(action)) {
+        puTask(element);
+      }
+    } else {
+      setOpenSnackbar({
+        open: true,
+        text: 'Please give a name!',
+        severity: 'warning',
+      });
     }
   }
 

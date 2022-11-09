@@ -45,8 +45,6 @@ export function toRFEwoksNodes(
         default_error_node,
         default_error_attributes,
         task_generator,
-        // task_icon,
-        // task_category,
         uiProps,
       }) => {
         const nodeType = calcNodeType(inputsAl, outputsAl, task_type, id);

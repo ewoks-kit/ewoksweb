@@ -7,14 +7,11 @@ const selectedElement = (set, get) => ({
     element: EwoksRFNode | EwoksRFLink | GraphDetails,
     from: string
   ) => {
-    // console.log(element);
-
     const prevState = get((prev) => prev);
 
     const wg = prevState.workingGraph.graph.id;
     const { graph, nodes, links } = prevState.graphRF;
 
-    // console.log(element, from);
     if (from === 'fromSaveElement') {
       prevState.setCanvasGraphChanged(true);
     }

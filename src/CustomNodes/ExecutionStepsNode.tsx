@@ -7,7 +7,6 @@ import { style } from './NodeStyle';
 import state from '../store/state';
 
 function ExecutionStepsNode(args) {
-  // console.log(args);
   const customTitle = {
     ...style.title,
     wordWrap: 'break-word',
@@ -15,7 +14,7 @@ function ExecutionStepsNode(args) {
     backgroundColor: '#ced3ee',
     textAlign: 'center',
     padding: '1px',
-    color: args.data.event.error ? 'red' : '#4493dd', // TODO: red for failed events-workflows
+    color: args.data.event.error ? 'red' : '#4493dd',
     fontSize: '1.2em',
   };
 
@@ -24,7 +23,6 @@ function ExecutionStepsNode(args) {
   );
 
   const goToEvent = (val) => {
-    // console.log(val, args);
     setCurrentExecutionEvent(val);
   };
 

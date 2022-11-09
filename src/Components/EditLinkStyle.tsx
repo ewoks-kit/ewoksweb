@@ -67,7 +67,6 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
 
   const arrowTypeChanged = (event) => {
     setArrowType({ type: event.target.value });
-    // console.log(element, event.target.value);
 
     // 'none' is not available anymore in reactFlow so we
     // need to remove markerEnd if 'none' is selected in dropdown
@@ -159,11 +158,6 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
     setGraphRF(newGraph, true);
   }
 
-  // FOr brakpints in links MUST be nodes that will be minimal and:
-  // saved in link uiProps as a node with only position being important and type=breakpointNode
-  // the RF graph will have 2 links that will be clickable... if one changes
-  // label, comment or style what the other will do?
-  // AN SVG solution maybe better? A custom SVG link but no draggable breakpoints...
   return (
     <>
       <FormControl variant="filled" fullWidth className={classes.formStyleFlex}>
@@ -257,8 +251,6 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
             min={-200}
             max={200}
             style={{ width: '90%' }}
-            // aria-label="Small"
-            // valueLabelDisplay="auto"
           />
           <div>Y</div>
           <Slider
@@ -270,8 +262,6 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
             min={-200}
             max={200}
             style={{ width: '90%' }}
-            // aria-label="Small"
-            // valueLabelDisplay="auto"
           />
         </div>
       )}

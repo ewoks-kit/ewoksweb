@@ -25,9 +25,8 @@ export default function ExecuteWorkflow() {
   const setSelectedElement = state((state) => state.setSelectedElement);
 
   useEffect(() => {
-    // DOC: when execution begins it has to listen to incoming form the socket events
+    // DOC: when execution begins it has to listen to incoming from the socket events
     socket.on('Executing', (data) => {
-      // console.log(data);
       setExecutedEvents(data as Event);
     });
 
@@ -38,7 +37,6 @@ export default function ExecuteWorkflow() {
 
   // TODO: check and execute same on ExecutionDetails... merge
   function checkAndExecute() {
-    // console.log(canvasGraphChanged, undoIndex);
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
     } else {
@@ -50,10 +48,6 @@ export default function ExecuteWorkflow() {
 
   async function execute() {
     if (recentGraphs.length > 0 && !inExecutionMode) {
-      // if (socket.disconnected) {
-      //   socket = io(process.env.REACT_APP_SERVER_URL);
-      // }
-      // socket.emit('Execute Graph', graphRF);
       setInExecutionMode(true);
       try {
         await executeWorkflow(graphRF.graph.id);
@@ -71,7 +65,6 @@ export default function ExecuteWorkflow() {
       // DOC: when exiting the execution to show the graph as selected
       // and not a numbered execution node that the user might have clicked
       setSelectedElement(graphRF.graph);
-      // socket.disconnect();
     } else {
       setOpenSnackbar({
         open: true,

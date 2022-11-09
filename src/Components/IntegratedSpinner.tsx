@@ -9,16 +9,19 @@ import tooltipText from '../Components/TooltipText';
 
 import state from '../store/state';
 
+interface IntegratedSpinnerProps {
+  children;
+  tooltip: string;
+  getting: boolean;
+  action(isSubgraph?: string): void;
+  onClick?(): void;
+}
+
 // DOC: create the round spin effect changing from loading state
 // to success and then to the wait state using the image passed as children.
-export default function IntegratedSpinner({
-  children,
-  tooltip,
-  action,
-  getting,
-  onClick,
-  // callSuccess = false,
-}) {
+export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
+  const { children, tooltip, getting } = props;
+
   const undoIndex = state((state) => state.undoIndex);
 
   const [loading, setLoading] = useState(false);
@@ -32,7 +35,6 @@ export default function IntegratedSpinner({
   const useStyles = makeStyles(() => ({
     top: {
       animationDuration: '550ms',
-      // animation: 'animation-61bdi0 1.4s linear infinite',
       position: 'absolute',
       left: 0,
     },
@@ -48,13 +50,10 @@ export default function IntegratedSpinner({
   // TODO: synd with the real time the call makes using getting
   useEffect(() => {
     if (getting) {
-      // // console.log('gettingIn', getting);
       timer.current = window.setTimeout(() => {
-        // setSuccess(false);
         setLoading(false);
       }, 2000);
     }
-    // setLoading(getting);
 
     // DOC: clearing the timeout breaks the wanted effect of the tick
     // return () => {
@@ -63,22 +62,19 @@ export default function IntegratedSpinner({
   }, [getting]);
 
   function handleButtonClick() {
-    // console.log(loading, action);
     if (!loading) {
-      onClick();
-      // // console.log('getting1', getting);
-      if (action) {
-        action();
+      props.onClick();
+
+      if (props.action) {
+        props.action();
       }
       setSuccess(false);
       setLoading(true);
       timer.current = window.setTimeout(() => {
-        // // console.log('getting2', getting);
         setSuccess(true);
         setLoading(false);
       }, 1500);
       timer.current = window.setTimeout(() => {
-        // // console.log('getting3', getting);
         setSuccess(false);
         setLoading(false);
       }, 3000);

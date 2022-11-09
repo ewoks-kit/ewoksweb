@@ -19,7 +19,6 @@ const undoRedo = (set, get) => ({
   undoIndex: 0 as number,
 
   setUndoIndex: (index) => {
-    // console.log(index, get().undoIndex, get().undoRedo);
     if (index >= 0 && get().undoRedo.length > index) {
       set((state) => ({
         ...state,

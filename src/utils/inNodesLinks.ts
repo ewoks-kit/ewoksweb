@@ -20,7 +20,6 @@ function calcMarkerEnd(inNod: GraphNodes): '' | { type: string } {
 export function inNodesLinks(
   graph: GraphEwoks
 ): { nodes: EwoksNode[]; links: EwoksLink[] } {
-  // console.log(graph.graph.input_nodes, graph.graph.output_nodes);
   const inputs: { nodes: EwoksNode[]; links: EwoksLink[] } = {
     nodes: [],
     links: [],
@@ -45,7 +44,6 @@ export function inNodesLinks(
             label: existsOrValue(inNod.uiProps, 'label', inNod.id),
             task_type: 'graphInput',
             task_identifier: 'Start-End',
-            // position: temPosition,
             uiProps: {
               type: 'input',
               position: temPosition,
@@ -94,6 +92,5 @@ export function inNodesLinks(
       }
     });
   }
-  // console.log(inputs);
   return inputs;
 }

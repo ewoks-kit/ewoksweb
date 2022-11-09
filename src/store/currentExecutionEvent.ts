@@ -3,7 +3,6 @@ const currentExecutionEvent = (set) => ({
   currentExecutionEvent: 0,
 
   setCurrentExecutionEvent: (indexOfEvent) => {
-    // console.log(indexOfEvent);
     set((state) => ({
       ...state,
       currentExecutionEvent: indexOfEvent,

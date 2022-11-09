@@ -3,7 +3,7 @@ const undoIndex = (set, get) => ({
 
   setUndoIndex: (index) => {
     const prevState = get((prev) => prev);
-    // console.log(index, prevState.undoIndex, prevState.undoRedo);
+
     if (index >= 0 && prevState.undoRedo.length > index) {
       set((state) => ({
         ...state,
@@ -13,7 +13,7 @@ const undoIndex = (set, get) => ({
       // After setting the new GraphRF the selected element needs
       // to be updated to see the change in the sidebar again on undo-redo
       let selEl = prevState.selectedElement;
-      // if (selEl.id) {
+
       if ('position' in selEl) {
         selEl = prevState.undoRedo[index].graph.nodes.find(
           (nod) => nod.id === selEl.id
@@ -31,7 +31,6 @@ const undoIndex = (set, get) => ({
       } else if ('output_nodes' in selEl) {
         prevState.setSelectedElement(prevState.undoRedo[index].graph.graph);
       }
-      // }
     } else {
       prevState.setOpenSnackbar({
         open: true,

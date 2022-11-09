@@ -85,15 +85,11 @@ function Canvas() {
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
   const updateNodeInternals = useUpdateNodeInternals();
 
-  // const [stepDetails, setStepDetails] = useState(null);
-
   const { fitView, getZoom, zoomTo } = useReactFlow();
   // TODO: when selecting a node-link selected fires the re-render
   // since graphRF changes. We need to not rerender
   // Accosiated edges titles flicker when selecting a node and then select graph
   useEffect(() => {
-    // console.log(graphRF);
-
     setNodes(graphRF.nodes);
     setEdges(graphRF.links);
   }, [graphRF.nodes, graphRF.links]);
@@ -114,23 +110,12 @@ function Canvas() {
   }, [subgraphsStack]);
 
   useEffect(() => {
-    // console.log(prevGraphId);
-
     if (prevGraphId !== graphRF.graph.id) {
-      // console.log(
-      //   'prevgraph changed',
-      //   graphRF.nodes.length,
-      //   prevGraphId,
-      //   graphRF.graph.id
-      // );
-      // Todo: clear setTimeouts
       setTimeout(() => {
-        // console.log(getZoom(), graphRF.nodes.length);
         // DOC: Define a zoom level for small graphs to not show very-big nodes
         if (graphRF.nodes.length > 0 && graphRF.nodes.length < 6) {
           zoomTo(0.6);
         } else if (graphRF.nodes.length > 0) {
-          // console.log('fitview');
           fitView();
         }
         // DOC: the value of the delay is important to fitview even the execution
@@ -195,9 +180,7 @@ function Canvas() {
 
   const onEdgesChange = useCallback(
     (changes) => {
-      // console.log(changes);
       const edgeToRemove = graphRF.links.find((el) => el.id === changes[0].id);
-      // setNodes((ns) => applyNodeChanges(changes, ns));
 
       if (changes[0].type === 'remove') {
         onElementsRemove([edgeToRemove]);
@@ -207,15 +190,7 @@ function Canvas() {
     [onElementsRemove, graphRF.links]
   );
 
-  // const onSelectionChange = (elements) => {
-  //   // console.log(elements);
-  //   // if (elements.nodes.length === 0 && elements.edges.length === 0) {
-  //   //   setSelectedElement(graphRF.graph);
-  //   // }
-  // };
-
   const onPaneClick = () => {
-    // console.log(graphRF);
     setSelectedElement(graphRF.graph);
   };
 
@@ -322,7 +297,6 @@ function Canvas() {
 
       setGraphRF(newGraph, true);
       setUndoRedo({ action: 'Added a Node', graph: newGraph });
-      // need to also save it in recentGraphs if we leave and come back to the graph?
       setRecentGraphs(newGraph);
     } else {
       setOpenSnackbar({
@@ -345,7 +319,7 @@ function Canvas() {
     // 2. is attached to an input-output already connected to a node then
     // edgeUpdate should not happen and a message informs it is not ewoks-compatible
 
-    const { isValid, reason } = isValidLink(newConnection, graphRF);
+    const { isValid, reason } = isValidLink(newConnection, graphRF, oldEdge);
     if (!isValid) {
       setOpenSnackbar({
         open: true,
@@ -371,7 +345,6 @@ function Canvas() {
   };
 
   const onConnect = (params: Connection) => {
-    // console.log(params);
     if (workingGraph.graph.id === graphRF.graph.id) {
       const sourceTask = graphRF.nodes.find((nod) => nod.id === params.source);
       const targetTask = graphRF.nodes.find((nod) => nod.id === params.target);
@@ -450,16 +423,6 @@ function Canvas() {
     });
   };
 
-  // const onNodeContextMenu = (event: React.MouseEvent, nodes: Node) => {
-  //   event.preventDefault();
-  //   // console.log(nodes);
-  //   setOpenSnackbar({
-  //     open: true,
-  //     text: nodes.data.label || '',
-  //     severity: 'success',
-  //   });
-  // };
-
   const onNodeDoubleClick = (event, node) => {
     event.preventDefault();
     const nodeTmp = graphRF.nodes.find((el) => el.id === node.id);
@@ -482,7 +445,6 @@ function Canvas() {
         });
       }
     } else {
-      // TODO: need doubleClick on simple nodes?
       nodeTmp.data['details'] = true;
       setSelectedElement({
         ...nodeTmp,
@@ -502,7 +464,7 @@ function Canvas() {
   const onSelectionDragStop = (event, selectedElements) => {
     event.preventDefault();
     if (workingGraph.graph.id === graphRF.graph.id) {
-      // find selectedElements and update its position and save grapRF
+      // DOC: find selectedElements and update its position and save grapRF
       const newElements = [];
       const newElementsIds = [];
       selectedElements.forEach((el) => {
@@ -536,15 +498,10 @@ function Canvas() {
     }
   };
 
-  // const onSelectionDrag = (event) => {
-  //   event.preventDefault();
-  // };
-
   const onNodeDragStop = (event, node) => {
-    // console.log(node);
     event.preventDefault();
     if (workingGraph.graph.id === graphRF.graph.id) {
-      // find RFEwoksNode and update its position and save grapRF
+      // DOC: find RFEwoksNode and update its position and save grapRF
       const RFEwoksNode: EwoksRFNode = {
         ...graphRF.nodes.find((nod) => nod.id === node.id),
       };
@@ -557,8 +514,6 @@ function Canvas() {
         ],
         links: graphRF.links,
       };
-
-      // setSelectedElement(RFEwoksNode); // ? test if after drag the selected node should be set
 
       setGraphRF(newGraph, true);
       setUndoRedo({ action: 'Dragged a Node', graph: newGraph });
@@ -576,14 +531,6 @@ function Canvas() {
   const onClick = () => {
     setSelectedTask({});
   };
-
-  // in case we need on canvas buttons
-  // const buttonWrapperStyles: CSSProperties = {
-  //   position: 'absolute',
-  //   right: 10,
-  //   top: 10,
-  //   zIndex: 10,
-  // };
 
   const handleKeyDown = (event) => {
     const charCode = String.fromCharCode(event.which).toLowerCase();
@@ -660,16 +607,10 @@ function Canvas() {
           onEdgeUpdate={onEdgeUpdate}
           onDragOver={onDragOver}
           onPaneContextMenu={onPaneContextMenu}
-          // onNodeContextMenu={(evt, node) => {
-          //   onNodeContextMenu(evt, node);
-          // }}
           onNodeDoubleClick={onNodeDoubleClick}
-          // onSelectionChange={onSelectionChange}
-          // onNodeMouseMove={onNodeMouseMove}
           onSelectionDragStop={onSelectionDragStop}
           onSelectionDragStart={onSelectionDragStart}
           onSelectionDrag={onSelectionDrag}
-          // onNodeDrag={onNodeDrag}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onNodeDragStop={onNodeDragStop}
@@ -677,28 +618,9 @@ function Canvas() {
           nodeTypes={nodeTypes}
           deleteKeyCode="Delete"
         >
-          {/* <div style={buttonWrapperStyles}>
-            <button type="button" onClick={updateNode}>
-              update node internals
-            </button>
-          </div> */}
-          <Controls>
-            {/* <ControlButton
-                onClick={
-                  () =>
-                    rfInstance.fitView({
-                      padding: 0.2,
-                      includeHiddenNodes: true,
-                    })
-                  rfInstance.fitBounds({ x: 0, y: 0, width: 1000, height: 1000 }, 300)
-                }
-              >
-                act
-              </ControlButton> */}
-          </Controls>
+          <Controls />
           <MiniMap
             nodeStrokeColor={(n): string => {
-              // "rgb(60, 81, 202)"
               if (n.style?.background) {
                 return n.style.background as string;
               }
@@ -708,8 +630,6 @@ function Canvas() {
               if (n.type === 'graph') {
                 return '#ff0072';
               }
-              // if (n.type === 'default') return 'rgb(60, 81, 202)';
-
               return 'rgb(60, 81, 202)';
             }}
             nodeColor={(n): string => {
@@ -722,7 +642,6 @@ function Canvas() {
               if (n.type === 'graph') {
                 return 'rgba(244, 179, 131, 0.87)';
               }
-              // if (n.type === 'default') return 'rgb(60, 81, 202)';
 
               return 'rgb(60, 81, 202)';
             }}

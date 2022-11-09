@@ -19,7 +19,6 @@ import { getWorkflowsDescriptions, getWorkflow } from './utils/api';
 export const ewoksNetwork = {};
 
 export async function getWorkflows(): Promise<WorkflowDescription[]> {
-  // console.log(process.env);
   let res = [];
   try {
     const workflows = await getWorkflowsDescriptions();
@@ -56,7 +55,6 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
     console.log(error.config);
     res = [{ label: 'network error', category: error.response.status }];
   }
-  // console.log(res);
   return res;
 }
 
@@ -102,7 +100,6 @@ export async function getSubgraphs(
       .then(
         axios.spread((...res) => {
           // all requests are now complete in an array
-          // console.log(res);
           // if there is a null means the subgraph was not found
           // and it should show up in red
           const resCln = res.filter((result) => result.data !== null);
@@ -116,7 +113,6 @@ export async function getSubgraphs(
         return [];
       });
   }
-  // console.log(results);
   return results ? results : [];
 }
 
@@ -125,11 +121,7 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
   const graph = calcGraphInputsOutputs(tempGraph);
   const noteNodes = calcNoteNodes(tempGraph);
   graph.uiProps.notes = noteNodes;
-  console.log({
-    graph,
-    nodes: toEwoksNodes(tempGraph.nodes),
-    links: toEwoksLinks(tempGraph.links),
-  });
+
   return {
     graph,
     nodes: toEwoksNodes(tempGraph.nodes),

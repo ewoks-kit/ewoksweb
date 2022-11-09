@@ -1,6 +1,7 @@
 import state from '../store/state';
 import type { EwoksRFLink, EwoksRFNode, GraphDetails, GraphRF } from '../types';
 
+// DOC: NOT USED
 // TODO not applicable to change several things with set. keep it as example
 // to examine how custom hooks can be used to share functionallity
 function useDeleteElement(element, graphRF) {

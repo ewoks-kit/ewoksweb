@@ -11,7 +11,6 @@ const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
     padding: '1px',
-    // marginTop: theme.spacing(3),
     overflowX: 'auto',
   },
   table: {
@@ -20,7 +19,6 @@ const useStyles = makeStyles(() => ({
     maxWidth: 270,
   },
   tableCell: {
-    // padding: '1px',
     width: 120,
     height: 20,
     padding: '1px',

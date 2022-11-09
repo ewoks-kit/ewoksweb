@@ -35,7 +35,6 @@ const useApi = (asyncFunction, immediate, params) => {
       execute();
     }
   }, [execute, immediate]);
-  // console.log(status, value, error);
   return { execute, status, value, error };
 };
 

@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { FormControl, IconButton, TextField, Fab } from '@material-ui/core';
 import DashboardStyle from '../layout/DashboardStyle';
 import SaveIcon from '@material-ui/icons/Save';
 import state from '../store/state';
-// import SidebarTooltip from './SidebarTooltip';
-// import { Autocomplete } from '@material-ui/lab';
 
 const useStyles = DashboardStyle;
 
@@ -22,10 +20,6 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
 
   const [valueLocal, setValueLocal] = useState(value);
   const [valueIsChanged, setValueIsChanged] = useState(false);
-  // const [labelChoices, setLabelChoices] = useState([
-  //   'use mappings',
-  //   'use conditions',
-  // ]);
   const inExecutionMode = state((state) => state.inExecutionMode);
 
   useEffect(() => {
@@ -43,7 +37,6 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
   }
 
   function valueSavedLocal(val) {
-    // console.log(val);
     setValueIsChanged(false);
     props.valueSaved(val);
   }
@@ -55,28 +48,6 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
         fullWidth
         variant="outlined"
       >
-        {/* <SidebarTooltip text="Use Conditions or Data Mapping as label.">
-          <FormControl fullWidth variant="outlined">
-            <Autocomplete
-              id="free-solo-demo"
-              freeSolo
-              options={labelChoices}
-              value={valueLocal}
-              onChange={valueChanged}
-              // onInputChange={valueChanged}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label={label}
-                  margin="normal"
-                  variant="outlined"
-                  multiline
-                />
-              )}
-            />
-          </FormControl>
-        </SidebarTooltip> */}
-
         <TextField
           id="outlined-basic"
           label={label}

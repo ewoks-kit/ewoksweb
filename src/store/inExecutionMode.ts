@@ -4,7 +4,6 @@ const inExecutionMode = (set, get) => ({
 
   setInExecutionMode: (val: boolean) => {
     const prevState = get((prev) => prev);
-    // console.log(val, prevState);
 
     set((state) => ({
       ...state,

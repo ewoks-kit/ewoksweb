@@ -11,7 +11,6 @@ import EditElement from '../Components/EditElement';
 import EditElementStyle from '../Components/EditElementStyle';
 import DraggableDialog from '../Components/DraggableDialog';
 import IconMenu from '../Components/IconMenu';
-// import SettingsInfoDrawer from '../Components/SettingsInfoDrawer';
 import ExecutionDetails from '../Components/ExecutionDetails';
 import DashboardStyle from './DashboardStyle';
 import state from '../store/state';
@@ -22,7 +21,6 @@ import type {
   GraphRF,
   Icon,
 } from '../types';
-import { rfToEwoks } from '../utils';
 import { calcNewId } from '../utils/calcNewId';
 import ConfirmDialog from '../Components/ConfirmDialog';
 import { deleteWorkflow, getIcon, getIcons, getOtherIcon } from '../utils/api';
@@ -32,20 +30,6 @@ import { OpenInBrowser } from '@material-ui/icons';
 import SidebarTooltip from '../Components/SidebarTooltip';
 
 const useStyles = DashboardStyle;
-
-// const getIconsL = async () => {
-//   const iconsData: IconsNames = await getIcons();
-//   console.log(typeof iconsData.identifiers, iconsData.identifiers);
-//   return iconsData.identifiers;
-// };
-
-// const increment = (nodeId: string, nodes: EwoksRFNode[]) => {
-//   let id = 0;
-//   while (nodes.map((nod) => nod.id).includes(`${nodeId}_${id}`)) {
-//     id++;
-//   }
-//   return `${nodeId}_${id}`;
-// };
 
 export default function Sidebar() {
   const classes = useStyles();
@@ -65,8 +49,8 @@ export default function Sidebar() {
   const setGraphRF = state((state) => state.setGraphRF);
   const workingGraph = state((state) => state.workingGraph);
   const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const [dialogContent, setDialogContent] = useState({});
+  const [openDialog] = useState<boolean>(false);
+  const [dialogContent] = useState({});
   const setSubgraphsStack = state((state) => state.setSubgraphsStack);
   const setRecentGraphs = state((state) => state.setRecentGraphs);
   const initializedRFGraph = state((state) => state.initializedRFGraph);
@@ -87,20 +71,15 @@ export default function Sidebar() {
       const fetchIcons = async () => {
         if (allIcons.length <= 1) {
           const data = await getIcons();
-          // console.log(allIcons.length, data);
-          // get the non svg image icons(png)
-          const iconsPng = data.identifiers
-            // .map((str) => str.slice(6))
-            .filter((str) => {
-              return !str.endsWith('svg');
-            });
-          // const resultsPng = [];
+
+          const iconsPng = data.identifiers.filter((str) => {
+            return !str.endsWith('svg');
+          });
 
           await axios
             .all(iconsPng.map((id: string) => getOtherIcon(id)))
             .then(
               axios.spread((...resPng) => {
-                // console.log(resPng);
                 const resCln = resPng.filter((result) => result.data !== null);
                 return resCln.map((result) => {
                   const blobPng = new Blob([result.data], {
@@ -108,11 +87,7 @@ export default function Sidebar() {
                   });
                   const fileReader = new FileReader();
                   fileReader.readAsDataURL(blobPng);
-                  // fileReader.addEventListener('load', handleReader);
 
-                  // function handleReader() {
-                  //   // resultsPng.push({ name: theId, image: fileReader.result });
-                  // }
                   return result.data;
                 });
               })
@@ -126,30 +101,10 @@ export default function Sidebar() {
               });
               return [];
             });
-          // console.log(resultsPng);
 
-          // getOtherIcon('orange1.png').then((r) => {
-          //   // console.log(r, typeof r.data);
-          //   const blo = r.data;
-          //   const blob1 = new Blob([blo], { type: 'image/png' });
-          //   // console.log(blob1);
-          //   const fileReader = new FileReader();
-          //   fileReader.readAsDataURL(blob1);
-          //   fileReader.addEventListener('load', handleReader);
-
-          //   function handleReader() {
-          //     // console.log(fileReader.result);
-          //     setTestImage(fileReader.result as string);
-          //   }
-          // });
-
-          // get the svg icons
-          const iconsSvg = data.identifiers
-            // .map((str) => str.slice(6))
-            .filter((str) => {
-              return str.endsWith('svg');
-            });
-          // console.log(typeof iconsSvg, iconsSvg, Array.isArray(iconsSvg));
+          const iconsSvg = data.identifiers.filter((str) => {
+            return str.endsWith('svg');
+          });
 
           setAllIconNames([...iconsSvg, ...iconsPng]);
           const results = await axios
@@ -175,7 +130,6 @@ export default function Sidebar() {
               });
               return [];
             });
-          // console.log(results);
           setAllIcons(results as Icon[]);
         }
       };
@@ -191,7 +145,6 @@ export default function Sidebar() {
 
   const deleteElement = async () => {
     let newGraph = {} as GraphRF;
-    // console.log(element);
     const elN = element as EwoksRFNode; // TODO: is this the way to avoid typescript warning???
     const elL = element as EwoksRFLink;
     const elD = element as GraphDetails;
@@ -243,14 +196,15 @@ export default function Sidebar() {
     }
   };
 
-  const showEwoksGraph = () => {
-    setOpenDialog(true);
-    setDialogContent({
-      title: 'Ewoks Graph',
-      object: rfToEwoks(graphRF),
-      openFrom: 'sidebar',
-    });
-  };
+  // TODO: examine if is needed as a feature
+  // const showEwoksGraph = () => {
+  //   setOpenDialog(true);
+  //   setDialogContent({
+  //     title: 'Ewoks Graph',
+  //     object: rfToEwoks(graphRF),
+  //     openFrom: 'sidebar',
+  //   });
+  // };
 
   const agreeCallback = async () => {
     setOpenAgreeDialog(false);
@@ -273,11 +227,6 @@ export default function Sidebar() {
     setSelectedElement({} as GraphDetails);
     setSubgraphsStack({ id: 'initialiase', label: '' });
     setRecentGraphs({} as GraphRF, true);
-    // setDialogContent({
-    //   title: 'Ewoks Graph',
-    //   object: rfToEwoks(graphRF),
-    //   openFrom: 'sidebar',
-    // });
   };
 
   const disAgreeCallback = () => {
@@ -372,9 +321,7 @@ export default function Sidebar() {
           >
             Clone
           </Button>
-          {!('source' in selectedElement) && (
-            <IconMenu handleShowEwoksGraph={showEwoksGraph} />
-          )}
+          {!('source' in selectedElement) && <IconMenu />}
           <DraggableDialog open={openDialog} content={dialogContent} />
           <ConfirmDialog
             title={`Delete "${element.label}" workflow?`}
@@ -387,7 +334,6 @@ export default function Sidebar() {
           />
         </>
       )}
-      {/* <SettingsInfoDrawer /> */}
     </aside>
   );
 }

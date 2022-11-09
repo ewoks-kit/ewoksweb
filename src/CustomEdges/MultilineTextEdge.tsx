@@ -12,19 +12,6 @@ function multilineText({
   markerEnd,
   style = {},
 }) {
-  // console.log(
-  //   style,
-  //   id,
-  //   sourceX,
-  //   sourceY,
-  //   targetX,
-  //   targetY,
-  //   sourcePosition,
-  //   targetPosition,
-  //   label,
-  //   markerEnd,
-  //   labelBgStyle
-  // );
   const edgePath = getBezierPath({
     sourceX,
     sourceY,
@@ -41,7 +28,9 @@ function multilineText({
     targetY,
   });
 
-  const foreignObjectSize = 120;
+  const titleWidth = Math.max(...label.split(',').map((mp) => mp.length)) * 7;
+
+  const titleHeight = label.split(',').length * 30;
 
   return (
     <>
@@ -53,10 +42,10 @@ function multilineText({
         markerEnd={markerEnd}
       />
       <foreignObject
-        width={foreignObjectSize}
-        height={foreignObjectSize}
-        x={edgeCenterX - foreignObjectSize / 2}
-        y={edgeCenterY - foreignObjectSize / 2}
+        width={titleWidth}
+        height={titleHeight}
+        x={edgeCenterX - titleWidth / 2}
+        y={edgeCenterY - titleWidth / 8}
         style={{ ...style, backgroundColor: 'blue' }}
       >
         <div
@@ -67,9 +56,11 @@ function multilineText({
             borderRadius: '10px',
             borderStyle: 'solid',
             borderColor: 'rgb(150, 165, 249)',
+            wordWrap: 'break-word',
+            overflow: 'hidden',
           }}
         >
-          {label}
+          {label && label.split(',').map((mp) => <div key={mp}>{mp}</div>)}
         </div>
       </foreignObject>
     </>

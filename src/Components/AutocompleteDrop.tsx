@@ -16,7 +16,7 @@ interface AutocompleteDropProps {
 
 const openWorkflowPlaceholder = 'Open Workflow';
 
-// A dropdown that can be an input as well
+// DOC: A dropdown that can be an input as well
 function AutocompleteDrop(props: AutocompleteDropProps) {
   const [options, setOptions] = useState([]);
   const [value] = useState(options[0]);
@@ -31,12 +31,9 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
     if (!open) {
       setOptions([]);
     }
-    // else {
-    // }
   }, [open]);
 
   function setInputValue(newInputValue: WorkflowDescription) {
-    // console.log(newInputValue);
     props.setInputValue(newInputValue);
   }
 
@@ -95,7 +92,6 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
     WorkflowDescriptions: WorkflowDescription[]
   ) {
     let workflowToShow = [];
-    // console.log(props, props.category, WorkflowDescriptions);
     if (
       props.category === 'All' ||
       ['', null, undefined].includes(props.category)
@@ -116,12 +112,10 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
       open={open}
       onOpen={() => {
         openDropdown();
-        // setOpen(true);
       }}
       onClose={() => {
         setOpen(false);
       }}
-      // isOptionEqualToValue={(option, value) => option.label === value.label}
       getOptionSelected={(option) => {
         return option.label || '';
       }}
@@ -143,10 +137,6 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
       onChange={(event, newValue: WorkflowDescription | null) => {
         setInputValue(newValue);
       }}
-      // onInputChange={(event, newInputValue) => {
-      //   console.log(newInputValue);
-      //   // setInputValue(newInputValue);
-      // }}
       renderInput={(params) => (
         <TextField
           variant="filled"

@@ -35,7 +35,6 @@ export default function LabelComment(props: LabelCommentProps) {
   const inExecutionMode = state((state) => state.inExecutionMode);
 
   useEffect(() => {
-    // console.log('rerender');
     if ('position' in element) {
       setLabel(element.data.label);
       setComment(element.data.comment);
@@ -64,7 +63,6 @@ export default function LabelComment(props: LabelCommentProps) {
   }, [element]);
 
   function saveLabel(labelLocal: string) {
-    // console.log('save', element, labelLocal);
     if ('position' in element) {
       const el = element;
       setSelectedElement(

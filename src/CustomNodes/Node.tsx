@@ -64,7 +64,6 @@ const onDragStart = (e) => {
 };
 
 const execution = () => {
-  // console.log('executing');
   return true;
 };
 
@@ -133,7 +132,6 @@ const Node: React.FC<NodeProps> = ({
   const setUndoRedo = state((state) => state.setUndoRedo);
 
   useEffect(() => {
-    // console.log(label, details, image);
     setNodeSize(nodeWidth);
     setLabelLocal(label);
     setDetailsL(details || false);
@@ -144,14 +142,12 @@ const Node: React.FC<NodeProps> = ({
     width: `${nodeSize}px`,
     minWidth: '60px', // for standard width
     maxWidth: '300px',
-    // maxHeight: '200px',
     display: ['graphInput', 'graphOutput'].includes(type) ? 'flex' : 'inline',
     margin: '2px',
     padding: '2px',
   };
 
   const isValidConnection = (connection) => {
-    // console.log(connection);
     const { isValid, reason } = isValidLink(connection, graphRF);
     if (!isValid) {
       setOpenSnackbar({
@@ -162,15 +158,6 @@ const Node: React.FC<NodeProps> = ({
     }
     return isValid;
   };
-
-  // const changeNodeSize = (event, number) => {
-  //   const element = selectedElement as EwoksRFNode;
-  //   setSelectedElement({
-  //     ...selectedElement,
-  //     data: { ...element.data, nodeWidth: number },
-  //   } as EwoksRFNode);
-  //   setNodeSize(number);
-  // };
 
   const labelChanged = (event) => {
     setLabelLocal(event.target.value);
@@ -202,7 +189,6 @@ const Node: React.FC<NodeProps> = ({
 
   const findImage = (img) => {
     const imgIndex = allIcons.map((ico) => ico.name).indexOf(img);
-    // console.log(img, imgIndex);
 
     return imgIndex !== -1
       ? allIcons[imgIndex].image.data_url
@@ -230,8 +216,6 @@ const Node: React.FC<NodeProps> = ({
         } as React.CSSProperties
       }
       id="choice"
-      // onMouseOver={() => console.log(label)}
-      // onFocus={() => console.log(label)}
       role="button"
       tabIndex={0}
     >
@@ -245,28 +229,13 @@ const Node: React.FC<NodeProps> = ({
               style={{ ...contentStyle.handle, ...contentStyle.handleSource }}
               isValidConnection={isValidConnection}
               isConnectable
-              // onConnect={(params) => console.log('handle sr onConnect', params)}
-            >
-              {/* <img
-              role="presentation"
-              draggable="false"
-              onDragStart={(event) => onDragStart(event)}
-              src={iconsObj['right']}
-              alt=""
-            /> */}
-            </Handle>
+            />
           )}
           {!isGraph &&
             type !== 'graphOutput' &&
             type !== 'graphInput' &&
             moreHandles && (
-              <div
-                id="choice"
-                // onMouseOver={() => console.log(label)}
-                // onFocus={() => console.log(label)}
-                role="button"
-                tabIndex={0}
-              >
+              <div id="choice" role="button" tabIndex={0}>
                 {/* TODO: break the handles */}
                 <Handle
                   type="source"
@@ -293,9 +262,7 @@ const Node: React.FC<NodeProps> = ({
                   }}
                   isConnectable
                   isValidConnection={isValidConnection}
-                >
-                  {/* <img src={iconsObj['down']} alt="" /> */}
-                </Handle>
+                />
               </div>
             )}
           {withLabel &&
@@ -336,6 +303,7 @@ const Node: React.FC<NodeProps> = ({
                 />
               </ExecuteSpinner>
             )}
+          {/* If comment also needed sometimes */}
           {/* <div style={{ wordWrap: 'break-word' }}>{comment}</div> */}
           {withImage &&
             type !== 'graphOutput' &&
@@ -375,7 +343,6 @@ const Node: React.FC<NodeProps> = ({
               alt="icon"
             />
           )}
-          {/* {type !== 'graphOutput' && type !== 'graphInput' && <span style={style.contentWrapper}>{type}</span>} */}
           {!isGraph && type !== 'graphInput' && (
             <Handle
               type="target"
@@ -387,9 +354,7 @@ const Node: React.FC<NodeProps> = ({
               }}
               isConnectable
               isValidConnection={isValidConnection}
-            >
-              {/* <img src={iconsObj['right']} alt="" /> */}
-            </Handle>
+            />
           )}
           {!isGraph &&
             type !== 'graphOutput' &&
@@ -408,9 +373,6 @@ const Node: React.FC<NodeProps> = ({
                   isConnectable
                   isValidConnection={isValidConnection}
                 >
-                  {/* <Tooltip title="Delete">
-                  <IconButton>in</IconButton>
-                </Tooltip> */}
                   {/* <img src={iconsObj['up']} alt="" /> */}
                 </Handle>
                 <Handle
@@ -424,28 +386,12 @@ const Node: React.FC<NodeProps> = ({
                   }}
                   isConnectable
                   isValidConnection={isValidConnection}
-                  // onConnect={(params) =>
-                  //   // console.log('handle tt onConnect', params)
-                  // }
-                >
-                  {/* <img src={iconsObj['down']} alt="" /> */}
-                </Handle>
+                />
               </>
             )}
           {isGraph && <span style={style.contentWrapper}>{content}</span>}
           {detailsL && type !== 'graphOutput' && type !== 'graphInput' && (
             <>
-              {/* <Slider
-                color="primary"
-                defaultValue={nodeSize}
-                value={nodeSize}
-                onChange={changeNodeSize}
-                min={40}
-                max={300}
-                style={{ width: '90%' }}
-                // aria-label="Small"
-                // valueLabelDisplay="auto"
-              /> */}
               <Tooltip
                 title={tooltipText('Clone Node')}
                 enterDelay={800}

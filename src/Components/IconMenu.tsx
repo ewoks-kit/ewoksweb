@@ -6,8 +6,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
-// import Cloud from '@material-ui/icons/Cloud';
-// import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import FiberNewIcon from '@material-ui/icons/FiberNew';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { Button, Menu, Tooltip } from '@material-ui/core';
@@ -22,7 +20,7 @@ import type {
 } from '../types';
 import state from '../store/state';
 
-export default function IconMenu(props) {
+export default function IconMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
@@ -36,11 +34,6 @@ export default function IconMenu(props) {
 
   const graphRF = state((state) => state.graphRF);
   const tasks = state((state) => state.tasks);
-  const { handleShowEwoksGraph } = props;
-
-  // const cloneToCanvas = () => {
-  //   // console.log('clone the graphRF initializing the id and the label', graphRF);
-  // };
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
@@ -54,7 +47,6 @@ export default function IconMenu(props) {
     action: string,
     element: Task | EwoksRFNode | EwoksRFLink | GraphRF
   ) {
-    // console.log(action, element, tasks);
     setDoAction(action);
     if (action === 'newTask') {
       setElementToEdit(initializedTask);
@@ -68,7 +60,7 @@ export default function IconMenu(props) {
           });
           return;
         }
-        // if the task does not exist in the tasks populate the form with the element details
+        // DOC: if the task does not exist in the tasks populate the form with the element details
         const task = tasks.find(
           (tas) => tas.task_identifier === element.task_identifier
         );
@@ -144,19 +136,6 @@ export default function IconMenu(props) {
               <ListItemText>Clone Graph</ListItemText>
               <Typography variant="body2" color="primary" />
             </MenuItem>
-            <MenuItem onClick={handleShowEwoksGraph}>
-              {/* <ListItemIcon>
-                <AccountTreeIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>Graph in json</ListItemText> */}
-            </MenuItem>
-            {/* <Divider />
-            <MenuItem>
-              <ListItemIcon>
-                <Cloud fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>Web Clipboard?</ListItemText>
-            </MenuItem> */}
           </MenuList>
         </Paper>
       </Menu>

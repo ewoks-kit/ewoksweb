@@ -17,9 +17,6 @@ const useStyles = makeStyles(() =>
 const showFile = async (e): Promise<FileReader> => {
   e.preventDefault();
   const reader: FileReader = new FileReader();
-  // reader.addEventListener = async (e) => {
-  //   const text = e.target.result;
-  // };
   reader.readAsText(e.target.files[0]);
   return reader;
 };
@@ -38,7 +35,6 @@ function isJsonString(str: string): boolean {
 function Upload(props) {
   const classes = useStyles();
 
-  // const [selectedFile, setSelectedFile] = useState();
   const graphRF = state<GraphRF>((state) => state.graphRF);
   const graphOrSubgraph = state<Boolean>((state) => state.graphOrSubgraph);
 
@@ -49,9 +45,6 @@ function Upload(props) {
   const inExecutionMode = state<boolean>((state) => state.inExecutionMode);
 
   async function fileNameChanged(event) {
-    // // console.log(event.target.files[0], recentGraphs, graphRF, subgraphsStack);
-    /* eslint-disable no-console */
-    console.log(workingGraph.graph.id, graphRF.graph.id);
     if (workingGraph.graph.id === graphRF.graph.id) {
       const reader = showFile(event);
       const file = await reader.then((val) => val);

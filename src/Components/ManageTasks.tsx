@@ -57,13 +57,7 @@ export default function ManageTasks() {
   }
 
   return (
-    <Grid
-      container
-      spacing={1}
-      direction="row"
-      // justifyContent="flex-start"
-      alignItems="center"
-    >
+    <Grid container spacing={1} direction="row" alignItems="center">
       <Grid item xs={12} sm={8} md={6} lg={5} className="dndflow">
         <AddNodes title="Tasks" openSaveDialogNewtask={openSaveDialog} />
       </Grid>
@@ -81,7 +75,6 @@ export default function ManageTasks() {
           />
         </FormGroup>
         <Button
-          // startIcon={<FiberNew />}
           style={{ margin: '4px' }}
           variant="outlined"
           color="primary"
