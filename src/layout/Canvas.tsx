@@ -196,7 +196,7 @@ function Canvas() {
 
   const onNodeClick = (event, element?: Node) => {
     const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
-
+    console.log(element, graphElement);
     if (
       !(
         graphElement.task_type === 'executionSteps' &&
@@ -418,7 +418,7 @@ function Canvas() {
     event.preventDefault();
     setOpenSnackbar({
       open: true,
-      text: 'Open a graph to edit on this Canvas!',
+      text: 'Open a graph and click on nodes and links on this Canvas!',
       severity: 'success',
     });
   };

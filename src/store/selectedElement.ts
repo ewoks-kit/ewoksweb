@@ -9,6 +9,8 @@ const selectedElement = (set, get) => ({
   ) => {
     const prevState = get((prev) => prev);
 
+    console.log(element, prevState.selectedElement);
+
     const wg = prevState.workingGraph.graph.id;
     const { graph, nodes, links } = prevState.graphRF;
 
