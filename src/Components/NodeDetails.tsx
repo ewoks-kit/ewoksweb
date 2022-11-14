@@ -340,7 +340,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
       >
         <Accordion
           style={{ display: advanced ? 'block' : 'none' }}
-          id="Accordions-sidebar"
+          className="Accordions-sidebar"
         >
           <AccordionSummary
             expandIcon={<OpenInBrowser />}

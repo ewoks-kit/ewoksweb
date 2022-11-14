@@ -418,7 +418,7 @@ function Canvas() {
     event.preventDefault();
     setOpenSnackbar({
       open: true,
-      text: 'Show some choices?',
+      text: 'Open a graph to edit on this Canvas!',
       severity: 'success',
     });
   };
@@ -618,6 +618,7 @@ function Canvas() {
           nodeTypes={nodeTypes}
           deleteKeyCode="Delete"
         >
+          <Background />
           <Controls />
           <MiniMap
             nodeStrokeColor={(n): string => {
@@ -647,7 +648,6 @@ function Canvas() {
             }}
             nodeBorderRadius={2}
           />
-          <Background />
         </ReactFlow>
       </div>
     </div>

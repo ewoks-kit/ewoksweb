@@ -281,12 +281,12 @@ export default function Sidebar() {
       <Accordion
         expanded={openExecutionDetails}
         onChange={handleChangeExecutionDetails}
-        id="Accordions-sidebar"
+        className="Accordions-sidebar"
       >
         <AccordionSummary
           expandIcon={<OpenInBrowser />}
           aria-controls="panel1a-content"
-          id="Accordions-sidebar"
+          className="Accordions-sidebar"
         >
           <SidebarTooltip
             text={`Drag and drop Tasks from their categories

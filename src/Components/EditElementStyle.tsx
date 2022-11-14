@@ -17,7 +17,7 @@ export default function EditElementStyle() {
 
   return (
     ('position' in selectedElement || 'source' in selectedElement) && (
-      <Accordion id="Accordions-sidebar">
+      <Accordion className="Accordions-sidebar">
         <AccordionSummary
           expandIcon={<OpenInBrowser />}
           aria-controls="panel1a-content"

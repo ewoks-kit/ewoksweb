@@ -30,7 +30,7 @@ function EditElement(props: EditElementProps) {
     <Accordion
       expanded={!!expanded}
       onChange={handleChange}
-      id="Accordions-sidebar"
+      className="Accordions-sidebar"
     >
       <AccordionSummary
         expandIcon={<OpenInBrowser />}

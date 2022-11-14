@@ -1,4 +1,5 @@
-/// <reference types="cypress" />
+/* eslint-disable sonarjs/no-duplicate-string */
+// / <reference types="cypress" />
 
 // Welcome to Cypress!
 //
@@ -44,7 +45,7 @@ describe('example to-do app', () => {
     // This input has a data-test attribute so we'll use that to select the
     // element in accordance with best practices:
     // https://on.cypress.io/selecting-elements
-    cy.get('[data-test=new-todo]').type(`${newItem}{enter}`);
+    cy.get('.new-todo').type(`${newItem}{enter}`); // [data-test=new-todo]
 
     // Now that we've typed our new item, let's check that it actually was added to the list.
     // Since it's the newest item, it should exist as the last element in the list.

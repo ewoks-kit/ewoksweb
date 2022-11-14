@@ -193,7 +193,7 @@ function AddNodes(props: AddNodesProps) {
     <Accordion
       expanded={expanded}
       onChange={handleChange}
-      id="Accordions-sidebar"
+      className="Accordions-sidebar"
       // style={{ marginLeft: '5px', borderRadius: '15px 0px 0px 15px' }}
     >
       <AccordionSummary

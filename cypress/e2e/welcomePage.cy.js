@@ -1,4 +1,4 @@
-/// <reference types="cypress" />
+// / <reference types="cypress" />
 
 describe('example to-do app', () => {
   beforeEach(() => {
@@ -23,8 +23,12 @@ describe('example to-do app', () => {
     cy.get('a').first().should('have.text', 'Edit Workflows');
     cy.get('a').first().click();
     cy.contains('tutorial_Graph').should('not.exist');
-    console.log(cy.location('pathname'));
-    cy.location('pathname').should('include', 'edit-workflows');
+
+    cy.location().should((loc) => {
+      expect(loc.hash).to.eq('#/edit-workflows');
+      expect(loc.host).to.eq('localhost:3000');
+    });
+
     cy.go('back');
   });
 
@@ -32,7 +36,10 @@ describe('example to-do app', () => {
     cy.get('a').last().should('have.text', 'Tutorial Workflow');
     cy.get('a').last().click();
     cy.get('h1').should('include.text', 'tutorial_Graph');
-    // cy.get('button').should('have.length', 12);
-    // cy.location('pathname').should('include', '/#/edit-workflows');
+
+    cy.location().should((loc) => {
+      expect(loc.hash).to.eq('#/edit-workflows');
+      expect(loc.host).to.eq('localhost:3000');
+    });
   });
 });
