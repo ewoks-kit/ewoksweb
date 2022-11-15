@@ -17,7 +17,9 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
   const [withLabel, setWithLabel] = useState<boolean>(false);
   const [colorBorder, setColorBorder] = useState<string>('');
   const [moreHandles, setMoreHandles] = useState<boolean>(true);
-  const [nodeSize, setNodeSize] = useState<number>(100);
+  const [nodeSize, setNodeSize] = useState<number>(
+    element.data.nodeWidth || 100
+  );
 
   const debouncedNodeWidth = useDebounce(nodeSize, 500);
 

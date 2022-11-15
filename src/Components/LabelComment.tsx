@@ -132,7 +132,6 @@ export default function LabelComment(props: LabelCommentProps) {
             className={classes.formStyleFlex}
           >
             <Autocomplete
-              id="free-solo-demo"
               freeSolo
               options={labelChoices}
               value={label}
@@ -141,6 +140,7 @@ export default function LabelComment(props: LabelCommentProps) {
               style={{ width: valueIsChanged ? '80%' : '98%' }}
               renderInput={(params) => (
                 <TextField
+                  data-cy="node-edge-label"
                   {...params}
                   label="Label"
                   margin="normal"
@@ -154,6 +154,7 @@ export default function LabelComment(props: LabelCommentProps) {
                 style={{ width: '20%', minWidth: '30px' }}
                 color="inherit"
                 onClick={() => valueSavedLocal(label)}
+                data-cy="saveLabelComment"
               >
                 <Fab
                   className={classes.openFileButton}

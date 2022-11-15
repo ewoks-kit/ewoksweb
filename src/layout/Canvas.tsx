@@ -191,6 +191,8 @@ function Canvas() {
   );
 
   const onPaneClick = () => {
+    console.log('on pane click');
+
     setSelectedElement(graphRF.graph);
   };
 
@@ -208,6 +210,8 @@ function Canvas() {
   };
 
   const onEdgeClick = (event, element?: Edge) => {
+    console.log(element);
+
     const graphElement: EwoksRFLink = edges.find((el) => el.id === element.id);
     setSelectedElement(graphElement);
   };
@@ -533,6 +537,8 @@ function Canvas() {
   };
 
   const handleKeyDown = (event) => {
+    console.log(event);
+
     const charCode = String.fromCharCode(event.which).toLowerCase();
 
     const keys = event.ctrlKey || event.metaKey;

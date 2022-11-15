@@ -106,4 +106,10 @@ const state = create<State>((set, get) => ({
   tutorial_Graph,
 }));
 
+// @ts-ignore
+if (window.Cypress) {
+  // @ts-ignore
+  window.__state__ = state;
+}
+
 export default state;

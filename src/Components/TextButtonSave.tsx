@@ -56,6 +56,7 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
           style={{ width: valueIsChanged ? '80%' : '98%' }}
           onChange={valueChanged}
           multiline
+          data-cy="node-edge-label"
         />
 
         {valueIsChanged && (
@@ -63,6 +64,7 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
             style={{ width: '20%', minWidth: '40px' }}
             color="inherit"
             onClick={() => valueSavedLocal(valueLocal)}
+            data-cy="saveLabelComment"
           >
             <Fab
               className={classes.openFileButton}
