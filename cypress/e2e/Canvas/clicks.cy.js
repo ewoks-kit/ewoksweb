@@ -38,7 +38,6 @@ describe('clicks on canvas and elements', () => {
     cy.contains('Inputs-complete').should('not.be.visible');
   });
 
-  // select a link with click
   it('selects a link with click', () => {
     cy.contains('Map all Data').should('not.exist');
     cy.contains('on_error').should('not.exist');
@@ -62,7 +61,6 @@ describe('clicks on canvas and elements', () => {
     cy.contains('Comment').should('not.be.visible');
   });
 
-  // doubleclick on default node
   it('doubleclick on default node', () => {
     cy.get('.react-flow__nodes')
       .children()
@@ -74,7 +72,6 @@ describe('clicks on canvas and elements', () => {
       .should('have.length', 2);
   });
 
-  // doubleclick on note node
   it('doubleclick on note node', () => {
     cy.get('.react-flow__node-note')
       .last('include.class', 'node-note')
@@ -85,7 +82,6 @@ describe('clicks on canvas and elements', () => {
       .should('have.length', 1);
   });
 
-  // doubleclick on graph-node
   it('doubleclick on graph node', () => {
     cy.get('.react-flow__node-graph')
       .should('have.length', 3)

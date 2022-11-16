@@ -102,6 +102,7 @@ export default function IconMenu() {
           color="primary"
           onClick={handleClick}
           size="small"
+          data-cy="iconMenu"
         >
           <MenuIcon />
         </Button>

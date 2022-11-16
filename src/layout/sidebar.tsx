@@ -318,6 +318,7 @@ export default function Sidebar() {
             color="primary"
             onClick={cloneNode}
             size="small"
+            data-cy="cloneButton"
           >
             Clone
           </Button>

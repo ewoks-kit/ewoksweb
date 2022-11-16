@@ -59,28 +59,41 @@ describe('links in a graph', () => {
     cy.contains('arrow').click({ force: true });
     cy.contains('arrowclosed').click({ force: true });
 
-    // TODO: set text for a div element?
-    // cy.contains('arrow')
-    //   .click()
-    //   .then((div) => (div.textContent = 'arrowclosed')); // .parent().click().select('arrowclosed');
-
-    // TODO: setState?
     cy.window()
       .its('__state__')
-      .then((store) =>
-        store.setState({
-          // ...store.getState(),
-          // selectedElement: {
-          //   ...store.getState().selectedElement,
-          //   label: 'wdc',
-          // },
-        })
-      );
+      .then((store) => store.getState().selectedElement.markerEnd.type)
+      .as('markerEnd')
+      .should('eq', 'arrowclosed');
 
     cy.get('.react-flow')
       .contains('then...Always and forever...')
       .parent()
       .siblings()
       .should('have.attr', 'marker-end', 'url(#type=arrowclosed)');
+
+    // TODO: changing the state wont affect the node arrow type on canvas
+    // cy.window()
+    //   .its('__state__')
+    //   .then((store) =>
+    //     store.setState({
+    //       selectedElement: { markerEnd: { type: 'arrow' } },
+    //     })
+    //   );
+
+    // // cy.window()
+    // //   .its('__state__')
+    // //   .then((store) => console.log(store.getState()));
+
+    // cy.window()
+    //   .its('__state__')
+    //   .then((store) => store.getState().selectedElement.markerEnd.type)
+    //   .as('markerEnd')
+    //   .should('eq', 'arrow');
+
+    // cy.get('.react-flow')
+    //   .contains('then...Always and forever...')
+    //   .parent()
+    //   .siblings()
+    //   .should('have.attr', 'marker-end', 'url(#type=arrow)');
   });
 });

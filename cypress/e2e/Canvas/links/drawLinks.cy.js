@@ -107,4 +107,16 @@ describe('links in a graph', () => {
 
   //   cy.get('.react-flow__edge').should('have.length', 13);
   // });
+
+  it('deletes a link by button and keyboard', () => {
+    cy.get('.react-flow__edge')
+      .should('have.length', 13)
+      .first()
+      .click({ force: true })
+      .should('include.class', 'selected');
+
+    cy.contains('Delete').click();
+
+    cy.get('.react-flow__edge').should('have.length', 12);
+  });
 });
