@@ -7,7 +7,7 @@ import type {
 } from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
-import { findAllSubgraphs } from '../utils/FindAllSubgraphs';
+import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
 import configData from '../configData.json';
 import { getTaskDescription } from '../utils/api';
 

@@ -1,9 +1,9 @@
 import type { EwoksRFNode, GraphRF, GraphEwoks, GraphNodes } from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
-import { findAllSubgraphs } from '../utils/FindAllSubgraphs';
+import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
 import existsOrValue from '../utils/existsOrValue';
-import { calcCoordinatesFirstNode } from '../utils/CalcCoordinatesFirstNode';
+import { calcCoordinatesFirstNode } from './storeUtils/CalcCoordinatesFirstNode';
 
 const subGraph = (set, get) => ({
   subGraph: {

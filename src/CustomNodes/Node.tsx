@@ -19,7 +19,7 @@ import { Handle, Position } from 'react-flow-renderer';
 import type { EwoksRFNode, NodeProps } from '../types';
 import { contentStyle, style } from './NodeStyle';
 import Tooltip from '@material-ui/core/Tooltip';
-import ExecuteSpinner from '../Components/ExecuteSpinner';
+import ExecuteSpinner from '../Components/Execution/ExecuteSpinner';
 import isValidLink from '../utils/IsValidLink';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import EditIcon from '@material-ui/icons/EditOutlined';
@@ -28,7 +28,7 @@ import { calcNewId } from '../utils/calcNewId';
 
 import state from '../store/state';
 import { IconButton, TextField } from '@material-ui/core';
-import tooltipText from '../Components/TooltipText';
+import tooltipText from '../Components/General/TooltipText';
 
 const iconsObj = {
   'left.svg': left,
