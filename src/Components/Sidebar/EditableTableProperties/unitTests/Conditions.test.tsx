@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import type { EwoksRFLink } from 'types';
-import Conditions from './Conditions';
+import Conditions from '../Conditions';
 // import state from '../store/state';
 
 describe('In the Conditions:', () => {

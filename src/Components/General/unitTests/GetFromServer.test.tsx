@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import GetFromServer from './GetFromServer';
+import GetFromServer from '../GetFromServer';
 
 test('renders 4 buttons', () => {
   render(<GetFromServer />);

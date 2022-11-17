@@ -7,7 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper, { PaperProps } from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
-import { rfToEwoks } from '../../utils';
+import { rfToEwoks } from 'utils';
 
 import ReactJson from 'react-json-view';
 import {
@@ -16,7 +16,7 @@ import {
   ToggleButtonGroup,
 } from '@material-ui/lab';
 import { FormControl, TextField, Tooltip } from '@material-ui/core';
-import state from '../../store/state';
+import state from 'store/state';
 
 function PaperComponent(props: PaperProps) {
   return (

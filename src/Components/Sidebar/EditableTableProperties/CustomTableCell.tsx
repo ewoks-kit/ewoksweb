@@ -4,7 +4,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableCellInEditMode from './TableCellInEditMode';
 import type { CustomTableCellProps } from 'types';
 
-// Used as an app-wide dialog when confirmation is needed. Open is a prop
+// DOC: Used as an app-wide dialog when confirmation is needed. Open is a prop
 function CustomTableCell(props: CustomTableCellProps) {
   const { row, name } = props;
 

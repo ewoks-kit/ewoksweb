@@ -1,3 +1,4 @@
+/* eslint-disable promise/prefer-await-to-then */
 /* eslint-disable sonarjs/no-duplicate-string */
 // / <reference types="cypress" />
 
@@ -54,9 +55,9 @@ describe('links in a graph', () => {
       .contains('then...Always and forever...')
       .parent()
       .siblings()
-      .should('have.attr', 'marker-end', 'url(#type=arrow)');
+      .should('have.attr', 'marker-end', 'url(#type=)');
 
-    cy.contains('arrow').click({ force: true });
+    cy.contains('none').click({ force: true });
     cy.contains('arrowclosed').click({ force: true });
 
     cy.window()

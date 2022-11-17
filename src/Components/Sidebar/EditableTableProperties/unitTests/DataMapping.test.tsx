@@ -6,7 +6,7 @@
 // a dataMappingValuesChanged changes the selected link conditions
 
 import { fireEvent, render, screen } from '@testing-library/react';
-import DataMapping from './DataMapping';
+import DataMapping from '../DataMapping';
 // import state from 'store/state';
 import type { EwoksRFLink } from 'types';
 

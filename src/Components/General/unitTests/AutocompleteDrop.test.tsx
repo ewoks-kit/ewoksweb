@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import state from 'store/state';
-import AutocompleteDrop from './AutocompleteDrop';
+import AutocompleteDrop from '../AutocompleteDrop';
 // click and see the menu of workflows
 // select a workflow and check the input
 // e2e open and check call for tasks

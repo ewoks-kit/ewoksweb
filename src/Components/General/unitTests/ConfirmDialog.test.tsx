@@ -6,7 +6,7 @@
 // callbacks agreeCallback and disagreeCallback are called correctly on "Yes" and "No"
 
 import { render, screen } from '@testing-library/react';
-import ConfirmDialog from './ConfirmDialog';
+import ConfirmDialog from '../ConfirmDialog';
 // import state from '../store/state';
 
 describe('In the ConfirmDialog:', () => {
