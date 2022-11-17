@@ -135,6 +135,7 @@ export default function Sidebar() {
       };
       // eslint-disable-next-line promise/prefer-await-to-callbacks
       fetchIcons().catch((error) => {
+        // Keep logging in console for debugging when talking with a user
         /* eslint-disable no-console */
         console.log(error);
       });

@@ -30,7 +30,7 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
       const response = await getWorkflow('tutorial_Graph');
       if (response.data) {
         const graph = response.data as GraphEwoks;
-        // setCallSuccess(true);
+
         setOpenSnackbar({
           open: true,
           text: `Workflow ${graph.graph.label} was downloaded succesfully`,
@@ -57,13 +57,7 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
 
   return (
     <div className="infoAccordion">
-      <Grid
-        container
-        spacing={5}
-        direction="row"
-        // justifyContent="flex-start"
-        alignItems="center"
-      >
+      <Grid container spacing={5} direction="row" alignItems="center">
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <SignUp handleCloseDialog={closeDialog} />
         </Grid>
@@ -71,7 +65,6 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
           <h2 style={{ color: '#3f51b5' }}>
             <IconButton color="inherit" disabled>
               <Fab
-                // className={classes.openFileButton}
                 color="primary"
                 size="small"
                 component="span"
@@ -92,6 +85,7 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
+                  {/* The following will be deleted once decided how the documentation will be displayed */}
                   {/* eslint-disable-next-line react/no-danger */}
                   <span dangerouslySetInnerHTML={{ __html: details }} />
                 </Typography>

@@ -277,6 +277,7 @@ export default function ExecutionDetails() {
                 tooltip="Execute Workflow and exit Execution mode"
                 action={checkAndExecute}
                 onClick={() => {
+                  // Keep logging in console for debugging when talking with a user
                   /* eslint-disable no-console */
                   console.log('Starting Execution');
                 }}

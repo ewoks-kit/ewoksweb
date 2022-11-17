@@ -7,7 +7,7 @@
 
 import { fireEvent, render, screen } from '@testing-library/react';
 import DataMapping from './DataMapping';
-import state from 'store/state';
+// import state from 'store/state';
 import type { EwoksRFLink } from 'types';
 
 describe('In the DataMapping:', () => {
@@ -141,9 +141,7 @@ describe('In the DataMapping:', () => {
       })
     );
 
-    const { graphRF } = state.getState();
-    /* eslint-disable no-console */
-    console.log(graphRF.links[0].data);
+    // const { graphRF } = state.getState();
 
     // expect(graphRF.links[0].data.data_mapping[0].source_output).toEqual(
     //   'source'

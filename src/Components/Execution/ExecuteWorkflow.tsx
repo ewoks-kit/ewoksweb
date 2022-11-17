@@ -52,6 +52,7 @@ export default function ExecuteWorkflow() {
       try {
         await executeWorkflow(graphRF.graph.id);
       } catch (error) {
+        // Keep logging in console for debugging when talking with a user
         /* eslint-disable no-console */
         console.log(error);
         setOpenSnackbar({
@@ -92,6 +93,7 @@ export default function ExecuteWorkflow() {
         tooltip="Execute Workflow and exit Execution mode"
         action={checkAndExecute}
         onClick={() => {
+          // Keep logging in console for debugging when talking with a user
           /* eslint-disable no-console */
           console.log('Starting Execution');
         }}

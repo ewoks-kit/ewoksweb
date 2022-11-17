@@ -191,14 +191,12 @@ function Canvas() {
   );
 
   const onPaneClick = () => {
-    console.log('on pane click');
-
     setSelectedElement(graphRF.graph);
   };
 
   const onNodeClick = (event, element?: Node) => {
     const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
-    console.log(element, graphElement);
+
     if (
       !(
         graphElement.task_type === 'executionSteps' &&
@@ -210,8 +208,6 @@ function Canvas() {
   };
 
   const onEdgeClick = (event, element?: Edge) => {
-    console.log(element);
-
     const graphElement: EwoksRFLink = edges.find((el) => el.id === element.id);
     setSelectedElement(graphElement);
   };
@@ -404,7 +400,7 @@ function Canvas() {
       };
       // setElements((els) => addEdge(params, els));
       setGraphRF(newGraph as GraphRF, true);
-      // need to also save it in recentGraphs if we leave and come back to the graph?
+      // need to also save it in recentGraphs if we leave and come back                // className={classes.openFileButton} to the graph?
       setRecentGraphs(newGraph as GraphRF);
 
       // add action and new GraphRF to undo-redo array
@@ -537,8 +533,6 @@ function Canvas() {
   };
 
   const handleKeyDown = (event) => {
-    console.log(event);
-
     const charCode = String.fromCharCode(event.which).toLowerCase();
 
     const keys = event.ctrlKey || event.metaKey;

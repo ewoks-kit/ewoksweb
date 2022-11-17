@@ -106,6 +106,7 @@ export default function GetFromServerButtons(props) {
           tooltip="Open from Server"
           action={checkAndGetFromServer}
           onClick={() => {
+            // Keep logging in console for debugging when talking with a user
             /* eslint-disable no-console */
             console.log('Getting from server');
           }}
@@ -119,6 +120,7 @@ export default function GetFromServerButtons(props) {
           tooltip="Add workflow as subgraph"
           action={getSubgraphFromServer}
           onClick={() => {
+            // Keep logging in console for debugging when talking with a user
             /* eslint-disable no-console */
             console.log('Getting subgraph from server');
           }}
