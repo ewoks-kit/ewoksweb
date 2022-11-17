@@ -8,7 +8,7 @@ import {
   Switch,
 } from '@material-ui/core';
 import state from '../store/state';
-import AddNodes from './AddNodes';
+import AddNodes from './sidebar/AddNodes';
 import EventNoteIcon from '@material-ui/icons/EventNote';
 import { useState } from 'react';
 import { discoverTasks } from '../utils/api';

@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import AddNodes from './AddNodes';
-import state from '../store/state';
+import state from '../../store/state';
 
 describe('In the AddNodes test:', () => {
   test('initially it renders one button element named ¨Add Nodes¨', async () => {

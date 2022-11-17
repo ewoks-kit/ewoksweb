@@ -6,7 +6,7 @@ import {
   Button,
   Typography,
 } from '@material-ui/core';
-import AddNodes from '../Components/AddNodes';
+import AddNodes from '../Components/sidebar/AddNodes';
 import EditElement from '../Components/EditElement';
 import EditElementStyle from '../Components/EditElementStyle';
 import DraggableDialog from '../Components/DraggableDialog';

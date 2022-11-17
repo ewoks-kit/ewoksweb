@@ -53,6 +53,7 @@ describe('links in a graph', () => {
 
     // TODO: cannot close the menu with clicks outside?
     // cy.get('.react-flow').click({ force: true }).click({ force: true });
+    // cy.contains('Add Nodes').click({ force: true });
   });
 
   it('opens the clone Task form when node is selected', () => {
