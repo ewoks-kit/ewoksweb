@@ -12,6 +12,7 @@ import ReactFlow, {
   applyNodeChanges,
   applyEdgeChanges,
   useUpdateNodeInternals,
+  BackgroundVariant,
 } from 'react-flow-renderer';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import bendingText from 'CustomEdges/BendingTextEdge';
@@ -618,7 +619,7 @@ function Canvas() {
           nodeTypes={nodeTypes}
           deleteKeyCode="Delete"
         >
-          <Background />
+          <Background variant={BackgroundVariant.Lines} gap={50} size={1} />
           <Controls />
           <MiniMap
             nodeStrokeColor={(n): string => {

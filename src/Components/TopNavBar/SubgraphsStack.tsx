@@ -50,13 +50,18 @@ export default function SubgraphsStack() {
                   index === subgraphsStack.length - 1 && classes.isDisabled
                 }
                 onClick={goToGraph}
+                data-cy={gr.id}
               >
                 {gr.label}
               </Link>
             </span>
           ))}
       </Breadcrumbs>
-      {subgraphsStack[0] && subgraphsStack[subgraphsStack.length - 1].label}
+      {subgraphsStack[0] && (
+        <span data-cy={subgraphsStack[subgraphsStack.length - 1].label}>
+          {subgraphsStack[subgraphsStack.length - 1].label}
+        </span>
+      )}
     </Typography>
   );
 }

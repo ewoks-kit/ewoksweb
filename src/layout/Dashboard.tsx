@@ -55,6 +55,8 @@ export default function Dashboard() {
   const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const undoIndex = state((state) => state.undoIndex);
+  const initializedGraph = state((state) => state.initializedGraph);
+  const setWorkingGraph = state((state) => state.setWorkingGraph);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
@@ -84,6 +86,7 @@ export default function Dashboard() {
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
     } else {
+      setWorkingGraph(initializedGraph);
       setOpenSaveDialog(true);
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
@@ -160,7 +163,7 @@ export default function Dashboard() {
       />
       <FormDialog
         elementToEdit={graphRF}
-        action="cloneGraph"
+        action="newGraph"
         open={openSaveDialog}
         setOpenSaveDialog={setOpenSaveDialog}
       />
@@ -182,6 +185,7 @@ export default function Dashboard() {
               color="inherit"
               onClick={checkAndNewGraph}
               disabled={inExecutionMode}
+              data-cy="newWorkflowButton"
             >
               <Fab
                 className={classes.openFileButton}

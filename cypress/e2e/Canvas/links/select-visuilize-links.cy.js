@@ -55,8 +55,7 @@ describe('links in a graph', () => {
       .should('eq', 'then...');
 
     cy.get('[data-cy="node-edge-label"]')
-      .children()
-      .last()
+      .children('div')
       .children('textarea')
       .first()
       .should('have.value', 'then...');

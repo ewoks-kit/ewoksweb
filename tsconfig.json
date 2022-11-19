@@ -16,8 +16,11 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "types": ["cypress"]
   },
-  "include": ["src", ".eslintrc.js"],
+  "include": ["src", ".eslintrc.js", "**/*.tsx", "**/*.ts"],
   "exclude": ["src/notes.js"]
 }
+
+// { "compilerOptions": { "target": "es5", "lib": ["es5", "dom"], "types": ["cypress"] }, "include": ["**/*.ts"] }
