@@ -197,16 +197,6 @@ export default function Sidebar() {
     }
   };
 
-  // TODO: examine if is needed as a feature
-  // const showEwoksGraph = () => {
-  //   setOpenDialog(true);
-  //   setDialogContent({
-  //     title: 'Ewoks Graph',
-  //     object: rfToEwoks(graphRF),
-  //     openFrom: 'sidebar',
-  //   });
-  // };
-
   const agreeCallback = async () => {
     setOpenAgreeDialog(false);
     try {
@@ -310,6 +300,7 @@ export default function Sidebar() {
             color="secondary"
             onClick={deleteElement}
             size="small"
+            data-cy="sidebarDelete"
           >
             Delete
           </Button>

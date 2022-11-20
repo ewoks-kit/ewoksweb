@@ -22,7 +22,7 @@ describe('links in a graph', () => {
     cy.contains('Give the new Workflow name').should('be.visible');
   });
 
-  it('gives a new unique name and creates workflow', () => {
+  it('gives a new unique name creates and deletes workflow', () => {
     cy.window()
       .its('__state__')
       .then((store) => {
@@ -56,8 +56,15 @@ describe('links in a graph', () => {
 
         cy.get(`[data-cy="${id.toString()}"]`).contains(id.toString());
 
-        // return store.getState().allWorkflows;
+        cy.get(`[data-cy="tutorial_Graph"]`).should('not.exist');
+
+        cy.get(`[data-cy="sidebarDelete"]`).contains('Delete').click();
+
+        cy.contains(`Delete "${id.toString()}" workflow?`);
+
+        cy.get(`[data-cy="yesButtonConfirmDialod"]`).contains('Yes').click();
+
+        cy.get(`[data-cy="${id.toString()}"]`).should('not.exist');
       });
-    // .should('not.have.length', 0);
   });
 });

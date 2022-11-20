@@ -32,7 +32,12 @@ export default function UndoRedo({ undoF, redoF }) {
   return (
     <>
       <Tooltip title={tooltipText('Undo')} enterDelay={800} arrow>
-        <IconButton color="inherit" onClick={undo} disabled={inExecutionMode}>
+        <IconButton
+          color="inherit"
+          onClick={undo}
+          disabled={inExecutionMode}
+          data-cy="undoButton"
+        >
           <Fab
             className={classes.openFileButton}
             color="primary"
@@ -46,7 +51,12 @@ export default function UndoRedo({ undoF, redoF }) {
         </IconButton>
       </Tooltip>
       <Tooltip title={tooltipText('Redo')} enterDelay={800} arrow>
-        <IconButton color="inherit" onClick={redo} disabled={inExecutionMode}>
+        <IconButton
+          color="inherit"
+          onClick={redo}
+          disabled={inExecutionMode}
+          data-cy="redoButton"
+        >
           <Fab
             className={classes.openFileButton}
             color="primary"
