@@ -11,7 +11,7 @@ import {
 import SignUp from './SignUp';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 import { getWorkflow } from 'utils/api';
-import state from 'store/state';
+import useStore from 'store/useStore';
 import type { GraphEwoks } from 'types';
 
 interface EwoksUiInfoProps {
@@ -19,8 +19,8 @@ interface EwoksUiInfoProps {
 }
 
 export default function EwoksUiInfo(props: EwoksUiInfoProps) {
-  const setWorkingGraph = state((state) => state.setWorkingGraph);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const closeDialog = async () => {
     if (props.closeDialog) {

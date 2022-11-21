@@ -4,7 +4,7 @@ step that has been executed.
 */
 import { style } from './NodeStyle';
 
-import state from '../store/state';
+import useStore from '../store/useStore';
 
 function ExecutionStepsNode(args) {
   const customTitle = {
@@ -18,7 +18,7 @@ function ExecutionStepsNode(args) {
     fontSize: '1.2em',
   };
 
-  const setCurrentExecutionEvent = state(
+  const setCurrentExecutionEvent = useStore(
     (state) => state.setCurrentExecutionEvent
   );
 

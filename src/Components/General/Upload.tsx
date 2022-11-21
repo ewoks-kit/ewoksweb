@@ -3,7 +3,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Fab } from '@material-ui/core';
 
 // import { validateEwoksGraph } from '../utils/EwoksValidator';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import type { GraphRF } from '../../types';
 
 const useStyles = makeStyles(() =>
@@ -35,14 +35,14 @@ function isJsonString(str: string): boolean {
 function Upload(props) {
   const classes = useStyles();
 
-  const graphRF = state<GraphRF>((state) => state.graphRF);
-  const graphOrSubgraph = state<Boolean>((state) => state.graphOrSubgraph);
+  const graphRF = useStore<GraphRF>((state) => state.graphRF);
+  const graphOrSubgraph = useStore<Boolean>((state) => state.graphOrSubgraph);
 
-  const workingGraph = state<GraphRF>((state) => state.workingGraph);
-  const setWorkingGraph = state((state) => state.setWorkingGraph);
-  const setSubGraph = state((state) => state.setSubGraph);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const inExecutionMode = state<boolean>((state) => state.inExecutionMode);
+  const workingGraph = useStore<GraphRF>((state) => state.workingGraph);
+  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const setSubGraph = useStore((state) => state.setSubGraph);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const inExecutionMode = useStore<boolean>((state) => state.inExecutionMode);
 
   async function fileNameChanged(event) {
     if (workingGraph.graph.id === graphRF.graph.id) {

@@ -13,7 +13,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import axios from 'axios';
 import type { Task } from 'types';
-import state from 'store/state';
+import useStore from 'store/useStore';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { getTaskDescription } from 'utils/api';
 
@@ -57,8 +57,8 @@ export default function ManageIcons() {
   });
 
   const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const allIcons = state((state) => state.allIcons);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const allIcons = useStore((state) => state.allIcons);
 
   function clickIcon(icon: string) {
     setSelectedIcon(icon);

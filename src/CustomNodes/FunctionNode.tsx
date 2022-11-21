@@ -3,11 +3,11 @@ import { Handle, Position } from 'react-flow-renderer';
 import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
 import isValidLink from '../utils/IsValidLink';
-import state from '../store/state';
+import useStore from '../store/useStore';
 
 function FunctionNode(fnod) {
-  const graphRF = state((state) => state.graphRF);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const graphRF = useStore((state) => state.graphRF);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const isValidConnection = (connection) => {
     const { isValid, reason } = isValidLink(connection, graphRF);

@@ -16,7 +16,7 @@ import {
   ToggleButtonGroup,
 } from '@material-ui/lab';
 import { FormControl, TextField, Tooltip } from '@material-ui/core';
-import state from 'store/state';
+import useStore from 'store/useStore';
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -37,8 +37,8 @@ export default function DraggableDialog(props) {
   const [name, setName] = React.useState('');
   const [oldName, setOldName] = React.useState('');
   const [callbackProps, setCallbackProps] = React.useState({});
-  const graphRF = state((state) => state.graphRF);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const graphRF = useStore((state) => state.graphRF);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const [selection, setSelection] = React.useState('ewoks');
 

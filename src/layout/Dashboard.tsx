@@ -23,7 +23,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DashboardStyle from './DashboardStyle';
 import SaveToServer from '../Components/TopNavBar/SaveToServer';
 import tooltipText from '../Components/General/TooltipText';
-import state from '../store/state';
+import useStore from '../store/useStore';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 import FormDialog from '../Components/General/FormDialog';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
@@ -45,18 +45,22 @@ export default function Dashboard() {
   const [openDrawers, setOpenDrawers] = useState(true);
   const [openSettings, setOpenSettings] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
-  const gettingFromServer = state((state) => state.gettingFromServer);
-  const inExecutionMode = state((state) => state.inExecutionMode);
-  const graphRF = state((state) => state.graphRF);
+  const gettingFromServer = useStore((state) => state.gettingFromServer);
+  const inExecutionMode = useStore((state) => state.inExecutionMode);
+  const graphRF = useStore((state) => state.graphRF);
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
-  const openSettingsDrawer = state((state) => state.openSettingsDrawer);
-  const setOpenSettingsDrawer = state((state) => state.setOpenSettingsDrawer);
-  const canvasGraphChanged = state((state) => state.canvasGraphChanged);
-  const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
+  const openSettingsDrawer = useStore((state) => state.openSettingsDrawer);
+  const setOpenSettingsDrawer = useStore(
+    (state) => state.setOpenSettingsDrawer
+  );
+  const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
+  const setCanvasGraphChanged = useStore(
+    (state) => state.setCanvasGraphChanged
+  );
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
-  const undoIndex = state((state) => state.undoIndex);
-  const initializedGraph = state((state) => state.initializedGraph);
-  const setWorkingGraph = state((state) => state.setWorkingGraph);
+  const undoIndex = useStore((state) => state.undoIndex);
+  const initializedGraph = useStore((state) => state.initializedGraph);
+  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   useEffect(() => {

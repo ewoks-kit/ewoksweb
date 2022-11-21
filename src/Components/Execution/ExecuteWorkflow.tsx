@@ -1,4 +1,4 @@
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import SendIcon from '@material-ui/icons/Send';
 import IntegratedSpinner from '../General/IntegratedSpinner';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -11,18 +11,20 @@ import ConfirmDialog from 'Components/General/ConfirmDialog';
 export const socket = io(process.env.REACT_APP_SERVER_URL);
 
 export default function ExecuteWorkflow() {
-  const graphRF = state((state) => state.graphRF);
-  const recentGraphs = state((state) => state.recentGraphs);
+  const graphRF = useStore((state) => state.graphRF);
+  const recentGraphs = useStore((state) => state.recentGraphs);
 
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const inExecutionMode = state((state) => state.inExecutionMode);
-  const setInExecutionMode = state((state) => state.setInExecutionMode);
-  const setExecutedEvents = state((state) => state.setExecutedEvents);
-  const canvasGraphChanged = state((state) => state.canvasGraphChanged);
-  const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const inExecutionMode = useStore((state) => state.inExecutionMode);
+  const setInExecutionMode = useStore((state) => state.setInExecutionMode);
+  const setExecutedEvents = useStore((state) => state.setExecutedEvents);
+  const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
+  const setCanvasGraphChanged = useStore(
+    (state) => state.setCanvasGraphChanged
+  );
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
-  const undoIndex = state((state) => state.undoIndex);
-  const setSelectedElement = state((state) => state.setSelectedElement);
+  const undoIndex = useStore((state) => state.undoIndex);
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   useEffect(() => {
     // DOC: when execution begins it has to listen to incoming from the socket events

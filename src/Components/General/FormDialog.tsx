@@ -26,7 +26,7 @@ import type {
   Task,
 } from '../../types';
 import { rfToEwoks } from '../../utils';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import configData from '../../configData.json';
 import {
   getTaskDescription,
@@ -58,20 +58,20 @@ export default function FormDialog(props: FormDialogProps) {
   const [outputNames, setOutputNames] = React.useState([] as string[]);
   const [overwrite, setOverwrite] = React.useState<boolean>(false);
 
-  const selectedElement = state<EwoksRFNode | EwoksRFLink | GraphDetails>(
+  const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
   );
-  const setCanvasGraphChanged = state((st) => st.setCanvasGraphChanged);
-  const setWorkingGraph = state((state) => state.setWorkingGraph);
-  const setRecentGraphs = state((state) => state.setRecentGraphs);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const allIconNames = state((state) => state.allIconNames);
-  const setGettingFromServer = state((st) => st.setGettingFromServer);
+  const setCanvasGraphChanged = useStore((st) => st.setCanvasGraphChanged);
+  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const setRecentGraphs = useStore((state) => state.setRecentGraphs);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const allIconNames = useStore((state) => state.allIconNames);
+  const setGettingFromServer = useStore((st) => st.setGettingFromServer);
   const [element, setElement] = React.useState<Task | GraphRF>(
     {} as Task | GraphRF
   );
-  const setTasks = state((state) => state.setTasks);
-  const tasks = state((state) => state.tasks);
+  const setTasks = useStore((state) => state.setTasks);
+  const tasks = useStore((state) => state.tasks);
 
   const { open, action, elementToEdit } = props;
 

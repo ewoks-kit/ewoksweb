@@ -22,7 +22,7 @@ import {
 } from '@material-ui/core';
 import EditTaskProp from './EditTaskProp';
 import DashboardStyle from '../../layout/DashboardStyle';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import SidebarTooltip from './SidebarTooltip';
 import { OpenInBrowser } from '@material-ui/icons';
 import LabelComment from './LabelComment';
@@ -41,9 +41,9 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
 
   const { element } = props;
 
-  const graphRF = state((state) => state.graphRF);
-  const setGraphRF = state((state) => state.setGraphRF);
-  const setSelectedElement = state((state) => state.setSelectedElement);
+  const graphRF = useStore((state) => state.graphRF);
+  const setGraphRF = useStore((state) => state.setGraphRF);
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
   const [inputsComplete, setInputsComplete] = React.useState<boolean>(false);
   const [advanced, setAdvanced] = React.useState<boolean>(false);
   const [defaultErrorNode, setDefaultErrorNode] = React.useState<boolean>(

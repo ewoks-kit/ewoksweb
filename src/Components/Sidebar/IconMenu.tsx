@@ -18,7 +18,7 @@ import type {
   GraphRF,
   Task,
 } from '../../types';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 
 export default function IconMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -26,14 +26,14 @@ export default function IconMenu() {
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
   const [elementToEdit, setElementToEdit] = React.useState<Task | GraphRF>({});
   const [doAction, setDoAction] = React.useState<string>('');
-  const selectedElement = state<EwoksRFNode | EwoksRFLink | GraphDetails>(
+  const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
   );
-  const initializedTask = state((state) => state.initializedTask);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const initializedTask = useStore((state) => state.initializedTask);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const graphRF = state((state) => state.graphRF);
-  const tasks = state((state) => state.tasks);
+  const graphRF = useStore((state) => state.graphRF);
+  const tasks = useStore((state) => state.tasks);
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);

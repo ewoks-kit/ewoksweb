@@ -5,15 +5,15 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import { IconButton } from '@material-ui/core';
 
-import state from 'store/state';
+import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 
 export default function DefaultInputs(props) {
   const { element } = props;
 
   const [defaultInputs, setDefaultInputs] = React.useState<Inputs[]>([]);
-  const setSelectedElement = state((state) => state.setSelectedElement);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   useEffect(() => {
     setDefaultInputs(element.default_inputs ? element.default_inputs : []);

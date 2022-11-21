@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import type { EwoksRFLink, EwoksRFNode } from '../../types';
 import { FormControl, TextField, IconButton, Fab } from '@material-ui/core';
 import DashboardStyle from '../../layout/DashboardStyle';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import SidebarTooltip from './SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
@@ -31,8 +31,8 @@ export default function LabelComment(props: LabelCommentProps) {
   ]);
   const [valueIsChanged, setValueIsChanged] = useState(false);
 
-  const setSelectedElement = state((state) => state.setSelectedElement);
-  const inExecutionMode = state((state) => state.inExecutionMode);
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const inExecutionMode = useStore((state) => state.inExecutionMode);
 
   useEffect(() => {
     if ('position' in element) {

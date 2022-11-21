@@ -26,7 +26,7 @@ import EditIcon from '@material-ui/icons/EditOutlined';
 import SaveIcon from '@material-ui/icons/Save';
 import { calcNewId } from '../utils/calcNewId';
 
-import state from '../store/state';
+import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
 import tooltipText from '../Components/General/TooltipText';
 
@@ -119,17 +119,17 @@ const Node: React.FC<NodeProps> = ({
   }
 
   const [nodeSize, setNodeSize] = useState(nodeWidth);
-  const inExecutionMode = state((state) => state.inExecutionMode);
-  const graphRF = state((state) => state.graphRF);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const setSelectedElement = state((state) => state.setSelectedElement);
-  const selectedElement = state((state) => state.selectedElement);
+  const inExecutionMode = useStore((state) => state.inExecutionMode);
+  const graphRF = useStore((state) => state.graphRF);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const selectedElement = useStore((state) => state.selectedElement);
   const [edit, setEdit] = React.useState(false);
   const [labelLocal, setLabelLocal] = React.useState(label);
-  const setGraphRF = state((state) => state.setGraphRF);
+  const setGraphRF = useStore((state) => state.setGraphRF);
   const [detailsL, setDetailsL] = React.useState(false);
-  const allIcons = state((state) => state.allIcons);
-  const setUndoRedo = state((state) => state.setUndoRedo);
+  const allIcons = useStore((state) => state.allIcons);
+  const setUndoRedo = useStore((state) => state.setUndoRedo);
 
   useEffect(() => {
     setNodeSize(nodeWidth);

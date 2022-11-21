@@ -4,7 +4,7 @@ import IntegratedSpinner from './IntegratedSpinner';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import type { GraphEwoks } from '../../types';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import { getWorkflow } from '../../utils/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 
@@ -12,15 +12,17 @@ import ConfirmDialog from 'Components/General/ConfirmDialog';
 export default function GetFromServerButtons(props) {
   const { workflowId, showButtons } = props;
 
-  const setSubGraph = state((state) => state.setSubGraph);
-  const setWorkingGraph = state((state) => state.setWorkingGraph);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const setSubGraph = useStore((state) => state.setSubGraph);
+  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const [gettingFromServer, setGettingFromServer] = useState(false);
-  const graphRF = state((state) => state.graphRF);
-  const canvasGraphChanged = state((state) => state.canvasGraphChanged);
-  const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
+  const graphRF = useStore((state) => state.graphRF);
+  const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
+  const setCanvasGraphChanged = useStore(
+    (state) => state.setCanvasGraphChanged
+  );
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
-  const undoIndex = state((state) => state.undoIndex);
+  const undoIndex = useStore((state) => state.undoIndex);
 
   function getSubgraphFromServer() {
     getFromServer('subgraph');

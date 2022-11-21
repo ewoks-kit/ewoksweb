@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import IntegratedSpinner from '../General/IntegratedSpinner';
 import { rfToEwoks } from '../../utils';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import configData from '../../configData.json';
 import FormDialog from '../General/FormDialog';
 import curateGraph from './utils/curateGraph';
@@ -14,11 +14,11 @@ function workflowExists(id, workflowsIds) {
 
 // DOC: Save to server button with its spinner
 export default function SaveToServer({ saveToServerF }) {
-  const setGettingFromServer = state((st) => st.setGettingFromServer);
-  const setCanvasGraphChanged = state((st) => st.setCanvasGraphChanged);
-  const graphRF = state((state) => state.graphRF);
-  const workingGraph = state((state) => state.workingGraph);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const setGettingFromServer = useStore((st) => st.setGettingFromServer);
+  const setCanvasGraphChanged = useStore((st) => st.setCanvasGraphChanged);
+  const graphRF = useStore((state) => state.graphRF);
+  const workingGraph = useStore((state) => state.workingGraph);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
   const [action, setAction] = useState<string>('newGraph');
 

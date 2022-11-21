@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import tooltipText from './TooltipText';
 
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 
 interface IntegratedSpinnerProps {
   children;
@@ -22,13 +22,13 @@ interface IntegratedSpinnerProps {
 export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
   const { children, tooltip, getting } = props;
 
-  const undoIndex = state((state) => state.undoIndex);
+  const undoIndex = useStore((state) => state.undoIndex);
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const inExecutionMode = state((state) => state.inExecutionMode);
-  const canvasGraphChanged = state((state) => state.canvasGraphChanged);
+  const inExecutionMode = useStore((state) => state.inExecutionMode);
+  const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
 
   const timer = useRef<number>();
 

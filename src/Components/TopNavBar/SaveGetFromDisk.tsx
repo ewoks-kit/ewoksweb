@@ -7,7 +7,7 @@ import Upload from '../General/Upload';
 import tooltipText from '../General/TooltipText';
 import { rfToEwoks } from '../../utils';
 
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 
 const useStyles = DashboardStyle;
 
@@ -22,9 +22,9 @@ function download(content, fileName, contentType) {
 export default function SaveGetFromDisk() {
   const classes = useStyles();
 
-  const setGraphOrSubgraph = state((state) => state.setGraphOrSubgraph);
-  const graphRF = state((state) => state.graphRF);
-  const inExecutionMode = state((state) => state.inExecutionMode);
+  const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
+  const graphRF = useStore((state) => state.graphRF);
+  const inExecutionMode = useStore((state) => state.inExecutionMode);
 
   function loadFromDisk() {
     setGraphOrSubgraph(true);

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import DashboardStyle from '../../layout/DashboardStyle';
 import FormControl from '@material-ui/core/FormControl';
 import AutocompleteDrop from 'Components/General/AutocompleteDrop';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import type { GraphEwoks, WorkflowDescription } from '../../types';
 import { getWorkflow } from '../../utils/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
@@ -15,12 +15,14 @@ export default function GetFromServer() {
   const classes = useStyles();
 
   const [workflowId, setWorkflowId] = useState('');
-  const setWorkingGraph = state((state) => state.setWorkingGraph);
+  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
-  const canvasGraphChanged = state((state) => state.canvasGraphChanged);
-  const undoIndex = state((state) => state.undoIndex);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const setCanvasGraphChanged = useStore(
+    (state) => state.setCanvasGraphChanged
+  );
+  const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
+  const undoIndex = useStore((state) => state.undoIndex);
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails?.id) {

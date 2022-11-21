@@ -4,17 +4,17 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import HomeIcon from '@material-ui/icons/Home';
 
 import Link from '@material-ui/core/Link';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 
 const useStyles = DashboardStyle;
 
 export default function SubgraphsStack() {
   const classes = useStyles();
 
-  const recentGraphs = state((state) => state.recentGraphs);
-  const setGraphRF = state((state) => state.setGraphRF);
-  const setSubgraphsStack = state((state) => state.setSubgraphsStack);
-  const subgraphsStack = state((state) => {
+  const recentGraphs = useStore((state) => state.recentGraphs);
+  const setGraphRF = useStore((state) => state.setGraphRF);
+  const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
+  const subgraphsStack = useStore((state) => {
     return state.subgraphsStack;
   });
 

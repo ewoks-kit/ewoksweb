@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../../types';
 import TextButtonSave from './TextButtonSave';
 
@@ -8,8 +8,8 @@ export default function GraphLabelComment() {
   const [label, setLabel] = React.useState('');
   const [comment, setComment] = React.useState('');
   const [category, setCategory] = React.useState('');
-  const setSelectedElement = state((state) => state.setSelectedElement);
-  const selectedElement = state((state) => state.selectedElement);
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const selectedElement = useStore((state) => state.selectedElement);
 
   useEffect(() => {
     const graphElement = selectedElement as GraphDetails;

@@ -17,7 +17,7 @@ import { Fab, FormControl, MenuItem, Select } from '@material-ui/core';
 import CustomTableCell from './CustomTableCell';
 import DraggableDialog from 'Components/General/DraggableDialog';
 import DeleteIcon from '@material-ui/icons/Delete';
-import state from 'store/state';
+import useStore from 'store/useStore';
 import type {
   CustomTableCellProps,
   DataMapping,
@@ -78,7 +78,7 @@ function EditableTable(props: EditableTableProps) {
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const [dialogContent, setDialogContent] = React.useState({});
   const [disableSelectType, setDisableSelectType] = React.useState(false);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const { defaultValues } = props;
   const { headers } = props;

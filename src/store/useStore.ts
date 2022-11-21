@@ -72,7 +72,7 @@ const tutorial_Graph = {
   links: [],
 } as GraphRF;
 
-const state = create<State>((set, get) => ({
+const useStore = create<State>((set, get) => ({
   ...allIconNames(set),
   ...allIcons(set),
   ...allWorkflows(set),
@@ -112,4 +112,4 @@ if (window.Cypress) {
   window.__state__ = state;
 }
 
-export default state;
+export default useStore;

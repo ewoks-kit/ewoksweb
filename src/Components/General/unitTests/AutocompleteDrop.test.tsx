@@ -1,5 +1,5 @@
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
-import state from 'store/state';
+import useStore from 'store/useStore';
 import AutocompleteDrop from '../AutocompleteDrop';
 // click and see the menu of workflows
 // select a workflow and check the input

@@ -7,7 +7,7 @@
 
 import { fireEvent, render, screen } from '@testing-library/react';
 import DataMapping from '../DataMapping';
-// import state from 'store/state';
+// import useStore from 'store/state';
 import type { EwoksRFLink } from 'types';
 
 describe('In the DataMapping:', () => {

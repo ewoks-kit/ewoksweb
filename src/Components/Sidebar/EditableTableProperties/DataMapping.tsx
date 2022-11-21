@@ -4,7 +4,7 @@ import type { DataMapping, EwoksRFLink } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
-import state from 'store/state';
+import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 
 interface DataMappingProps {
@@ -14,13 +14,13 @@ interface DataMappingProps {
 export default function DataMappingComponent(props: DataMappingProps) {
   const { element } = props;
 
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const setSelectedElement = state((state) => state.setSelectedElement);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
   const [dataMapping, setDataMapping] = React.useState<DataMapping[]>([]);
   const [elementL, setElementL] = React.useState<EwoksRFLink>(
     {} as EwoksRFLink
   );
-  const graphRF = state((state) => state.graphRF);
+  const graphRF = useStore((state) => state.graphRF);
 
   useEffect(() => {
     setElementL(element);

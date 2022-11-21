@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Checkbox, FormControl, Slider } from '@material-ui/core';
 import type { EwoksRFNode } from '../../types';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import useDebounce from '../../hooks/useDebounce';
 
 interface EditNodeStyleProps {
@@ -11,7 +11,7 @@ interface EditNodeStyleProps {
 export default function EditNodeStyle(props: EditNodeStyleProps) {
   const { element } = props;
 
-  const setSelectedElement = state((state) => state.setSelectedElement);
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   const [withImage, setWithImage] = useState<boolean>(false);
   const [withLabel, setWithLabel] = useState<boolean>(false);

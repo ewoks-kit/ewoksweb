@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import type { EwoksRFLink } from '../../types';
 import { Checkbox, Paper } from '@material-ui/core';
 import DashboardStyle from '../../layout/DashboardStyle';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import DataMappingComponent from './EditableTableProperties/DataMapping';
 import Conditions from './EditableTableProperties/Conditions';
 import SidebarTooltip from './SidebarTooltip';
@@ -18,7 +18,7 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
   const on_error: boolean = element?.data?.on_error || false;
   const map_all_data: boolean = element?.data?.map_all_data || false;
 
-  const setSelectedElement = state((state) => state.setSelectedElement);
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   const [mapAllData, setMapAllData] = React.useState<boolean>(false);
   const [elementL, setElementL] = React.useState<EwoksRFLink>(

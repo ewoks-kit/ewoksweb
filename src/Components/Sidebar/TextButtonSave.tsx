@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { FormControl, IconButton, TextField, Fab } from '@material-ui/core';
 import DashboardStyle from '../../layout/DashboardStyle';
 import SaveIcon from '@material-ui/icons/Save';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 
 const useStyles = DashboardStyle;
 
@@ -20,7 +20,7 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
 
   const [valueLocal, setValueLocal] = useState(value);
   const [valueIsChanged, setValueIsChanged] = useState(false);
-  const inExecutionMode = state((state) => state.inExecutionMode);
+  const inExecutionMode = useStore((state) => state.inExecutionMode);
 
   useEffect(() => {
     setValueLocal(value);

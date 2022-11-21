@@ -24,7 +24,7 @@ import NoteNode from 'CustomNodes/NoteNode';
 import ExecutionStepsNode from 'CustomNodes/ExecutionStepsNode';
 import DataNode from 'CustomNodes/DataNode';
 import type { GraphRF, EwoksRFNode, EwoksRFLink } from 'types';
-import state from 'store/state';
+import useStore from 'store/useStore';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
 
@@ -71,19 +71,19 @@ function Canvas() {
 
   const reactFlowWrapper = useRef(null);
 
-  const graphRF = state((state) => state.graphRF);
-  const setGraphRF = state((state) => state.setGraphRF);
-  const setSubgraphsStack = state((state) => state.setSubgraphsStack);
-  const subgraphsStack = state((state) => state.subgraphsStack);
-  const setRecentGraphs = state((state) => state.setRecentGraphs);
-  const setUndoRedo = state((state) => state.setUndoRedo);
-  const setSelectedElement = state((state) => state.setSelectedElement);
-  const selectedElement = state((state) => state.selectedElement);
-  const setSelectedTask = state((state) => state.setSelectedTask);
-  const tasks = state((state) => state.tasks);
-  const recentGraphs = state((state) => state.recentGraphs);
-  const workingGraph = state((state) => state.workingGraph);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const graphRF = useStore((state) => state.graphRF);
+  const setGraphRF = useStore((state) => state.setGraphRF);
+  const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
+  const subgraphsStack = useStore((state) => state.subgraphsStack);
+  const setRecentGraphs = useStore((state) => state.setRecentGraphs);
+  const setUndoRedo = useStore((state) => state.setUndoRedo);
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const selectedElement = useStore((state) => state.selectedElement);
+  const setSelectedTask = useStore((state) => state.setSelectedTask);
+  const tasks = useStore((state) => state.tasks);
+  const recentGraphs = useStore((state) => state.recentGraphs);
+  const workingGraph = useStore((state) => state.workingGraph);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const updateNodeInternals = useUpdateNodeInternals();
 
   const { fitView, getZoom, zoomTo } = useReactFlow();

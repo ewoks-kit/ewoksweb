@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import ReactJson from 'react-json-view';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import IntegratedSpinner from '../General/IntegratedSpinner';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import { Button, Chip, IconButton } from '@material-ui/core';
 import type { Event, GraphEwoks, WorkflowDescription } from '../../types';
 import { getWorkflow } from '../../utils/api';
@@ -11,25 +11,27 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 
 export default function ExecutionDetails() {
-  // const graphRF = state((state) => state.graphRF);
+  // const graphRF = useStore((state) => state.graphRF);
 
-  const currentExecutionEvent = state((state) => state.currentExecutionEvent);
+  const currentExecutionEvent = useStore(
+    (state) => state.currentExecutionEvent
+  );
 
   // DOC: events from the ongoing live executions
-  const executedEvents = state((state) => state.executedEvents);
+  const executedEvents = useStore((state) => state.executedEvents);
 
   // DOC: the workflows from HISTORY that are visible on the execution tab
-  const watchedWorkflows = state((state) => state.watchedWorkflows);
-  const setWatchedWorkflows = state((state) => state.setWatchedWorkflows);
+  const watchedWorkflows = useStore((state) => state.watchedWorkflows);
+  const setWatchedWorkflows = useStore((state) => state.setWatchedWorkflows);
 
   // DOC: all workflows live and from history on the execution tab
   const [workflows, setWorkflows] = useState([]);
 
   // DOC: calculate the executing spinners for live execution
-  const setExecutingEvents = state((state) => state.setExecutingEvents);
-  // const executingEvents = state((state) => state.executingEvents);
+  const setExecutingEvents = useStore((state) => state.setExecutingEvents);
+  // const executingEvents = useStore((state) => state.executingEvents);
 
-  const setInExecutionMode = state((state) => state.setInExecutionMode);
+  const setInExecutionMode = useStore((state) => state.setInExecutionMode);
 
   // DOC: the events that are each moment on the canvas NOT? for live executing workflows
   const [currentWatchedEvents, setCurrentWatchedEvents] = useState(
@@ -40,20 +42,24 @@ export default function ExecutionDetails() {
   const [selectedWorkflow, setSelectedWorkflow] = useState<Event>({} as Event);
 
   // const [gettingFromServer, setGettingFromServer] = useState(false); TODO: Use the global...
-  const setGettingFromServer = state((state) => state.setGettingFromServer);
-  const gettingFromServer = state((state) => state.gettingFromServer);
+  const setGettingFromServer = useStore((state) => state.setGettingFromServer);
+  const gettingFromServer = useStore((state) => state.gettingFromServer);
 
-  const setWorkingGraph = state((state) => state.setWorkingGraph);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const allWorkflows = state((state) => state.allWorkflows);
+  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const allWorkflows = useStore((state) => state.allWorkflows);
 
   // const [expandedWorkflows, setExpandedWorkflows] = useState<boolean>(false);
-  // const openSettingsDrawer = state((state) => state.openSettingsDrawer);
-  const setOpenSettingsDrawer = state((state) => state.setOpenSettingsDrawer);
-  const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
+  // const openSettingsDrawer = useStore((state) => state.openSettingsDrawer);
+  const setOpenSettingsDrawer = useStore(
+    (state) => state.setOpenSettingsDrawer
+  );
+  const setCanvasGraphChanged = useStore(
+    (state) => state.setCanvasGraphChanged
+  );
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
-  const undoIndex = state((state) => state.undoIndex);
-  const canvasGraphChanged = state((state) => state.canvasGraphChanged);
+  const undoIndex = useStore((state) => state.undoIndex);
+  const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
 
   useEffect(() => {
     // DOC: for those live executing search the executedEvents

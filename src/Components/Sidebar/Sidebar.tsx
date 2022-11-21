@@ -13,7 +13,7 @@ import DraggableDialog from '../General/DraggableDialog';
 import IconMenu from './IconMenu';
 import ExecutionDetails from '../Execution/ExecutionDetails';
 import DashboardStyle from '../../layout/DashboardStyle';
-import state from 'store/state';
+import useStore from 'store/useStore';
 import type {
   EwoksRFNode,
   EwoksRFLink,
@@ -34,10 +34,10 @@ const useStyles = DashboardStyle;
 export default function Sidebar() {
   const classes = useStyles();
 
-  const selectedElement = state<EwoksRFNode | EwoksRFLink | GraphDetails>(
+  const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
   );
-  const setSelectedElement = state((state) => state.setSelectedElement);
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   const [element, setElement] = useState<
     EwoksRFNode | EwoksRFLink | GraphDetails
@@ -45,21 +45,21 @@ export default function Sidebar() {
   const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
     false
   );
-  const graphRF = state((state) => state.graphRF);
-  const setGraphRF = state((state) => state.setGraphRF);
-  const workingGraph = state((state) => state.workingGraph);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const graphRF = useStore((state) => state.graphRF);
+  const setGraphRF = useStore((state) => state.setGraphRF);
+  const workingGraph = useStore((state) => state.workingGraph);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const [openDialog] = useState<boolean>(false);
   const [dialogContent] = useState({});
-  const setSubgraphsStack = state((state) => state.setSubgraphsStack);
-  const setRecentGraphs = state((state) => state.setRecentGraphs);
-  const initializedRFGraph = state((state) => state.initializedRFGraph);
-  const setUndoRedo = state((state) => state.setUndoRedo);
-  const inExecutionMode = state((state) => state.inExecutionMode);
+  const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
+  const setRecentGraphs = useStore((state) => state.setRecentGraphs);
+  const initializedRFGraph = useStore((state) => state.initializedRFGraph);
+  const setUndoRedo = useStore((state) => state.setUndoRedo);
+  const inExecutionMode = useStore((state) => state.inExecutionMode);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
-  const setAllIcons = state((state) => state.setAllIcons);
-  const allIcons = state((state) => state.allIcons);
-  const setAllIconNames = state((state) => state.setAllIconNames);
+  const setAllIcons = useStore((state) => state.setAllIcons);
+  const allIcons = useStore((state) => state.allIcons);
+  const setAllIconNames = useStore((state) => state.setAllIconNames);
 
   useEffect(() => {
     setElement(selectedElement);

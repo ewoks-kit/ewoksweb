@@ -7,11 +7,11 @@ import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../../types';
 import EditNodeStyle from './EditNodeStyle';
 import EditLinkStyle from './EditLinkStyle';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 
 // DOC: For eiting the style of nodes and links
 export default function EditElementStyle() {
-  const selectedElement = state<EwoksRFNode | EwoksRFLink | GraphDetails>(
+  const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
   );
 

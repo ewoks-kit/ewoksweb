@@ -26,7 +26,7 @@ import down from 'images/down.svg';
 import TextsmsIcon from '@material-ui/icons/Textsms';
 import Upload from '../General/Upload';
 import AddIcon from '@material-ui/icons/Add';
-import state from 'store/state';
+import useStore from 'store/useStore';
 import configData from 'configData.json';
 import React, { useCallback, useEffect, useState } from 'react';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
@@ -81,22 +81,22 @@ interface AddNodesProps {
 }
 // Hosts the node images and categories to drag and drop to canvas
 function AddNodes(props: AddNodesProps) {
-  const taskCategories = state((state) => state.taskCategories);
-  const setTaskCategories = state((state) => state.setTaskCategories);
-  const tasks = state((state) => state.tasks);
-  const setTasks = state((state) => state.setTasks);
-  const selectedTask = state((state) => state.selectedTask);
-  const setSelectedTask = state((state) => state.setSelectedTask);
-  const setGraphOrSubgraph = state((state) => state.setGraphOrSubgraph);
+  const taskCategories = useStore((state) => state.taskCategories);
+  const setTaskCategories = useStore((state) => state.setTaskCategories);
+  const tasks = useStore((state) => state.tasks);
+  const setTasks = useStore((state) => state.setTasks);
+  const selectedTask = useStore((state) => state.selectedTask);
+  const setSelectedTask = useStore((state) => state.setSelectedTask);
+  const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const [doAction, setDoAction] = useState<string>('');
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
   const [elementToEdit, setElementToEdit] = useState<Task>({});
-  const initializedTask = state((state) => state.initializedTask);
+  const initializedTask = useStore((state) => state.initializedTask);
   const [expanded, setExpanded] = useState<boolean>(false);
-  const selectedElement = state((state) => state.selectedElement);
-  const allIcons = state((state) => state.allIcons);
+  const selectedElement = useStore((state) => state.selectedElement);
+  const allIcons = useStore((state) => state.allIcons);
 
   const getTasks = useCallback(async () => {
     try {

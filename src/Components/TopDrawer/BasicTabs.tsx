@@ -9,7 +9,7 @@ import ManageWorkflows from './ManageWorkflows';
 import ManageTasks from './ManageTasks';
 import { getIcons } from '../../utils/api';
 import ExecutionTable from '../Execution/ExecutionTable';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -46,7 +46,7 @@ function a11yProps(index: number) {
 
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
-  const openSettingsDrawer = state((state) => state.openSettingsDrawer);
+  const openSettingsDrawer = useStore((state) => state.openSettingsDrawer);
 
   useEffect(() => {
     setValue(

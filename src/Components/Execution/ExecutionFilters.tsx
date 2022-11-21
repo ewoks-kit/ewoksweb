@@ -1,5 +1,5 @@
 import { useState } from 'react';
-// import state from '../store/state';
+// import useStore from '../store/state';
 import {
   TextField,
   Button,
@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import AutocompleteDrop from 'Components/General/AutocompleteDrop';
 import { getExecutionEvents } from '../../utils/api';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import type { ExecutedJobsResponse, WorkflowDescription } from '../../types';
 
 interface filterParams {
@@ -48,7 +48,7 @@ export default function ExecutionFilters() {
   const [jobId, setJobId] = useState<string>('');
   // const [type, setType] = useState<string>('');
   const [moreFilters, setMoreFilters] = useState<boolean>(false);
-  const setExecutedWorkflows = state((state) => state.setExecutedWorkflows);
+  const setExecutedWorkflows = useStore((state) => state.setExecutedWorkflows);
 
   const toDateChanged = (event) => {
     setToDateFilter(event.target.value);

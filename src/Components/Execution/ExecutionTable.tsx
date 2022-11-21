@@ -22,7 +22,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import ExecutionFilters from './ExecutionFilters';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import type { Event, ExecutedJobsResponse } from '../../types';
 import { Link } from 'react-router-dom';
 import { Fab, makeStyles } from '@material-ui/core';
@@ -221,9 +221,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 function EnhancedTableToolbar(props) {
   const { selected } = props;
 
-  const executedWorkflows = state((state) => state.executedWorkflows);
-  const setWatchedWorkflows = state((state) => state.setWatchedWorkflows);
-  const watchedWorkflows = state((state) => state.watchedWorkflows);
+  const executedWorkflows = useStore((state) => state.executedWorkflows);
+  const setWatchedWorkflows = useStore((state) => state.setWatchedWorkflows);
+  const watchedWorkflows = useStore((state) => state.watchedWorkflows);
 
   const addToWatchedJobs = () => {
     const watchedJobs = [] as Event[][];
@@ -302,7 +302,7 @@ export default function EnhancedTable() {
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(true);
   const [rowsPerPage, setRowsPerPage] = useState(25);
-  const executedWorkflows = state((state) => state.executedWorkflows);
+  const executedWorkflows = useStore((state) => state.executedWorkflows);
   const [open, setOpen] = useState(false);
   const [eventsForWorflow, setEventsForWorflow] = useState([]);
 

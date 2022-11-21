@@ -4,7 +4,7 @@ import type { EditableTableRow, EwoksRFLink, Inputs } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
-import state from 'store/state';
+import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 
 interface ConditionsProps {
@@ -15,8 +15,8 @@ export default function Conditions(props: ConditionsProps) {
   const { element } = props;
 
   const [conditions, setConditions] = React.useState<Inputs[]>([]);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const setSelectedElement = state((state) => state.setSelectedElement);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   useEffect(() => {
     if (element?.data?.conditions) {

@@ -5,7 +5,7 @@ import React from 'react';
 import { getWorkflow } from 'utils/api';
 import GetFromServerButtons from '../General/GetFromServerButtons';
 import type { GraphEwoks, WorkflowDescription } from 'types';
-import state from 'store/state';
+import useStore from 'store/useStore';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -14,7 +14,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function ManageWorkflows() {
-  const initializedGraph = state((state) => state.initializedGraph);
+  const initializedGraph = useStore((state) => state.initializedGraph);
   const [workflowValue, setWorkflowValue] = React.useState<GraphEwoks>(
     initializedGraph
   );

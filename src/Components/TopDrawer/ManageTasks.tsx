@@ -7,7 +7,7 @@ import {
   FormControlLabel,
   Switch,
 } from '@material-ui/core';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import AddNodes from '../Sidebar/AddNodes';
 import EventNoteIcon from '@material-ui/icons/EventNote';
 import { useState } from 'react';
@@ -16,7 +16,7 @@ import configData from '../../configData.json';
 import type { SnackbarParams } from '../../types';
 
 export default function ManageTasks() {
-  const setOpenSnackbar = state<(params: SnackbarParams) => void>(
+  const setOpenSnackbar = useStore<(params: SnackbarParams) => void>(
     (state) => state.setOpenSnackbar
   );
   const [pythonModules, setPythonModules] = useState<string[]>([]);

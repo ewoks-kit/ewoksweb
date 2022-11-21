@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 
 import DashboardStyle from '../../layout/DashboardStyle';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import type { EwoksRFLink, GraphRF } from '../../types';
 
 const useStyles = DashboardStyle;
@@ -24,10 +24,10 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
 
   const { element } = props;
 
-  const setSelectedElement = state((state) => state.setSelectedElement);
-  const selectedElement = state((state) => state.selectedElement);
-  const graphRF = state((state) => state.graphRF);
-  const setGraphRF = state((state) => state.setGraphRF);
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const selectedElement = useStore((state) => state.selectedElement);
+  const graphRF = useStore((state) => state.graphRF);
+  const setGraphRF = useStore((state) => state.setGraphRF);
 
   const [linkType, setLinkType] = useState('');
   const [arrowType, setArrowType] = useState({

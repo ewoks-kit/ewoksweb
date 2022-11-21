@@ -6,7 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { getWorkflows } from 'utils';
 import type { WorkflowDescription } from 'types';
 
-import state from 'store/state';
+import useStore from 'store/useStore';
 
 interface AutocompleteDropProps {
   placeholder: string;
@@ -21,11 +21,11 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
   const [options, setOptions] = useState([]);
   const [value] = useState(options[0]);
   const [open, setOpen] = useState(false);
-  const setAllWorkflows = state((state) => state.setAllWorkflows);
-  const setAllCategories = state((state) => state.setAllCategories);
+  const setAllWorkflows = useStore((state) => state.setAllWorkflows);
+  const setAllCategories = useStore((state) => state.setAllCategories);
   const loading = open && options.length === 0;
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const inExecutionMode = state((state) => state.inExecutionMode);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const inExecutionMode = useStore((state) => state.inExecutionMode);
 
   useEffect(() => {
     if (!open) {
