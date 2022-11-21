@@ -37,7 +37,7 @@ describe('structure and basics for edit-workflows', () => {
       .should('be.visible');
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) => store.getState().selectedElement.label)
       .as('label')
       .should('include', 'Always and forever...');
@@ -64,7 +64,7 @@ describe('structure and basics for edit-workflows', () => {
       .should('be.visible');
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) => store.getState().selectedElement.data.comment)
       .as('label')
       .should('include', 'Always and forever comment...');
@@ -88,7 +88,7 @@ describe('structure and basics for edit-workflows', () => {
       .should('have.length', 2);
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) => store.getState().selectedElement.data.withImage)
       .as('label')
       .should('eq', false);
@@ -102,7 +102,7 @@ describe('structure and basics for edit-workflows', () => {
       .should('have.length', 3);
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) => store.getState().selectedElement.data.withImage)
       .as('label')
       .should('eq', true);
@@ -116,7 +116,7 @@ describe('structure and basics for edit-workflows', () => {
     cy.get('@node').children().should('have.length', 3);
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) => store.getState().selectedElement.data.withLabel)
       .as('label')
       .should('eq', false);
@@ -132,7 +132,7 @@ describe('structure and basics for edit-workflows', () => {
       .should('have.length', 3);
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) => store.getState().selectedElement.data.withLabel)
       .as('label')
       .should('eq', true);
@@ -142,7 +142,7 @@ describe('structure and basics for edit-workflows', () => {
     cy.get('.react-flow').contains('Always and forever...').parent().as('node');
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) => store.getState().selectedElement.data.nodeWidth)
       .as('width')
       .should('eq', 187);
@@ -170,7 +170,7 @@ describe('structure and basics for edit-workflows', () => {
     cy.get('@node').children('.react-flow__handle').should('have.length', 2);
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) => store.getState().selectedElement.data.moreHandles)
       .as('moreHandlesFalse')
       .should('eq', false);
@@ -178,7 +178,7 @@ describe('structure and basics for edit-workflows', () => {
     cy.contains('More handles').siblings('span').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) => store.getState().selectedElement.data.moreHandles)
       .as('moreHandlesTrue')
       .should('eq', true);
@@ -196,7 +196,7 @@ describe('structure and basics for edit-workflows', () => {
     cy.get('@node').children('.react-flow__handle').should('have.length', 2);
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) => store.getState().selectedElement.data.moreHandles)
       .as('moreHandlesFalse')
       .should('eq', false);
@@ -235,13 +235,13 @@ describe('structure and basics for edit-workflows', () => {
   //     .and('include', 'border: 2px solid rgb(233, 235, 247)');
 
   //   cy.window()
-  //     .its('__state__')
+  //     .its('__useStore__')
   //     .then((store) => store.getState().selectedElement.data.colorBorder)
   //     .as('colorBorder')
   //     .should('eq', '');
 
   //   cy.window()
-  //     .its('__state__')
+  //     .its('__useStore__')
   //     .then((store) =>
   //       store.setState({
   //         selectedElement: { data: { colorBorder: 'red' } },
@@ -254,7 +254,7 @@ describe('structure and basics for edit-workflows', () => {
   //     .and('include', 'border: 2px solid rgb(0, 0, 0)');
 
   //   cy.window()
-  //     .its('__state__')
+  //     .its('__useStore__')
   //     .then((store) => console.log(store.getState().selectedElement));
   // });
 });

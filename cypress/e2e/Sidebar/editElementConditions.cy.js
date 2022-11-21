@@ -13,7 +13,7 @@ describe('links in a graph', () => {
       .type('tutorial_Graph');
 
     cy.contains('tutorial_Graph').parent().click();
-    cy.window().should('have.property', '__state__');
+    cy.window().should('have.property', '__useStore__');
   });
 
   it('click and undo/redo sidebar on_error', () => {
@@ -23,7 +23,7 @@ describe('links in a graph', () => {
     cy.contains('Conditions').should('be.visible');
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.data.on_error).to.equal(false)
       );
@@ -31,7 +31,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="onErrorCheckbox"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.data.on_error).to.equal(true)
       );
@@ -41,7 +41,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="undoButton"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.data.on_error).to.equal(false)
       );
@@ -51,7 +51,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="redoButton"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.data.on_error).to.equal(true)
       );
@@ -61,7 +61,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="onErrorCheckbox"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.data.conditions).to.have.length(
           0
@@ -73,7 +73,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="addConditionsButton"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.data.conditions).to.have.length(
           1
@@ -81,7 +81,7 @@ describe('links in a graph', () => {
       );
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(
           store.getState().selectedElement.data.conditions[0]
@@ -93,7 +93,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="undoButton"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.data.conditions).to.have.length(
           0
@@ -103,7 +103,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="redoButton"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.data.conditions).to.have.length(
           1
@@ -115,7 +115,7 @@ describe('links in a graph', () => {
     cy.contains('Conditions').should('be.visible');
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.data.conditions).to.have.length(
           1
@@ -129,7 +129,7 @@ describe('links in a graph', () => {
     ).should('be.visible');
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.data.conditions).to.have.length(
           1
@@ -163,7 +163,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
     cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(
           store.getState().selectedElement.data.conditions[0]
@@ -176,7 +176,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="undoButton"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) => store.getState().selectedElement.data.conditions)
       .as('data_mapping')
       .should('have.length', 1);
@@ -187,7 +187,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="inputInEditableCell"]').should('not.exist');
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(
           store.getState().selectedElement.data.conditions[0]
@@ -197,7 +197,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="redoButton"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(
           store.getState().selectedElement.data.conditions[0]
@@ -210,7 +210,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="deleteButtonEditableTable"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.data.conditions).to.have.length(
           0
@@ -222,7 +222,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="undoButton"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.data.conditions).to.have.length(
           0

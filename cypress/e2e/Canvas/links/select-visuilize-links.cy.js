@@ -13,7 +13,7 @@ describe('links in a graph', () => {
       .type('tutorial_Graph');
 
     cy.contains('tutorial_Graph').parent().click();
-    cy.window().should('have.property', '__state__');
+    cy.window().should('have.property', '__useStore__');
   });
 
   it('link has the default style', () => {
@@ -32,7 +32,7 @@ describe('links in a graph', () => {
       );
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) => store.getState().graphRF.graph.label)
       .as('label')
       .should('eq', 'tutorial_Graph');
@@ -49,7 +49,7 @@ describe('links in a graph', () => {
     cy.contains('Map all Data').should('be.visible');
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) => store.getState().selectedElement.label)
       .as('label')
       .should('eq', 'then...');

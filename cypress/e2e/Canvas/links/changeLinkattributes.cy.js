@@ -14,7 +14,7 @@ describe('links in a graph', () => {
       .type('tutorial_Graph');
 
     cy.contains('tutorial_Graph').parent().click();
-    cy.window().should('have.property', '__state__');
+    cy.window().should('have.property', '__useStore__');
     cy.get('.react-flow').contains('then...').parent().click();
   });
 
@@ -32,7 +32,7 @@ describe('links in a graph', () => {
       .should('be.visible');
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) => store.getState().selectedElement.label)
       .as('label')
       .should('eq', 'then...Always and forever...');
@@ -61,7 +61,7 @@ describe('links in a graph', () => {
     cy.contains('arrowclosed').click({ force: true });
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) => store.getState().selectedElement.markerEnd.type)
       .as('markerEnd')
       .should('eq', 'arrowclosed');

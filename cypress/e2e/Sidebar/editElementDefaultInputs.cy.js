@@ -13,7 +13,7 @@ describe('links in a graph', () => {
       .type('tutorial_Graph');
 
     cy.contains('tutorial_Graph').parent().click();
-    cy.window().should('have.property', '__state__');
+    cy.window().should('have.property', '__useStore__');
   });
 
   it('click on a node and see Default Inputs', () => {
@@ -24,7 +24,7 @@ describe('links in a graph', () => {
 
   it('insert and undo/redo a new Default Input', () => {
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.default_inputs).to.have.length(
           0
@@ -36,7 +36,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="addDefaultInputsButton"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.default_inputs).to.have.length(
           1
@@ -44,7 +44,7 @@ describe('links in a graph', () => {
       );
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(
           store.getState().selectedElement.default_inputs[0]
@@ -56,7 +56,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="undoButton"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.default_inputs).to.have.length(
           0
@@ -66,7 +66,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="redoButton"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.default_inputs).to.have.length(
           1
@@ -78,7 +78,7 @@ describe('links in a graph', () => {
     cy.contains('Default Inputs').should('be.visible');
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.default_inputs).to.have.length(
           1
@@ -92,7 +92,7 @@ describe('links in a graph', () => {
     ).should('be.visible');
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.default_inputs).to.have.length(
           1
@@ -122,7 +122,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(
           store.getState().selectedElement.default_inputs[0]
@@ -132,7 +132,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="undoButton"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) => store.getState().selectedElement.default_inputs)
       .as('data_mapping')
       .should('have.length', 1);
@@ -143,7 +143,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="inputInEditableCell"]').should('not.exist');
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(
           store.getState().selectedElement.default_inputs[0]
@@ -153,7 +153,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="redoButton"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(
           store.getState().selectedElement.default_inputs[0]
@@ -163,7 +163,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="deleteButtonEditableTable"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.default_inputs).to.have.length(
           0
@@ -175,7 +175,7 @@ describe('links in a graph', () => {
     cy.get('[data-cy="undoButton"]').click();
 
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) =>
         expect(store.getState().selectedElement.default_inputs).to.have.length(
           0

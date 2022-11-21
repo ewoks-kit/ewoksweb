@@ -109,7 +109,7 @@ const useStore = create<State>((set, get) => ({
 // @ts-ignore
 if (window.Cypress) {
   // @ts-ignore
-  window.__state__ = state;
+  window.__useStore__ = useStore;
 }
 
 export default useStore;

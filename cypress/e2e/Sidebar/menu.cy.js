@@ -13,7 +13,7 @@ describe('links in a graph', () => {
     //   .type('tutorial_Graph');
 
     // cy.contains('tutorial_Graph').parent().click();
-    cy.window().should('have.property', '__state__');
+    cy.window().should('have.property', '__useStore__');
   });
 
   it('opens the newTask form', () => {

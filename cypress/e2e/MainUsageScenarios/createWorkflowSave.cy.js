@@ -13,7 +13,7 @@ describe('links in a graph', () => {
       .type('tutorial_Graph');
 
     cy.contains('tutorial_Graph').parent().click();
-    cy.window().should('have.property', '__state__');
+    cy.window().should('have.property', '__useStore__');
   });
 
   it('opens the dialog for name after clicking new', () => {
@@ -24,7 +24,7 @@ describe('links in a graph', () => {
 
   it('gives a new unique name creates and deletes workflow', () => {
     cy.window()
-      .its('__state__')
+      .its('__useStore__')
       .then((store) => {
         const allWorkflows = store.getState().allWorkflows;
 
