@@ -317,8 +317,6 @@ function EditableTable(props: EditableTableProps) {
                   >
                     <FormControl disabled={disableSelectType}>
                       <Select
-                        // labelId="demo-simple-select-label"
-                        // id="demo-simple-select"
                         value={
                           typeOfInputs[index] !== 'boolean'
                             ? typeOfInputs[index]

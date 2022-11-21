@@ -73,7 +73,6 @@ const NoteNode = (args) => {
         )}
         {args.data.details ? (
           <TextField
-            id="standard-multiline-flexible"
             label="edit comment"
             multiline
             maxRows={4}

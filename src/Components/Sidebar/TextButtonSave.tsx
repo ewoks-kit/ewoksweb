@@ -49,7 +49,6 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
         variant="outlined"
       >
         <TextField
-          id="outlined-basic"
           label={label}
           variant="outlined"
           value={valueLocal || ''}

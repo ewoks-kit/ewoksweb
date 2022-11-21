@@ -414,7 +414,7 @@ export default function EnhancedTable() {
           }}
         >
           <Table
-            aria-labelledby="tableTitle"
+            aria-labelledby="executionTable"
             size={dense ? 'small' : 'medium'}
             stickyHeader
             style={{ borderCollapse: 'collapse' }}

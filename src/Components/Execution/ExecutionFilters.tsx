@@ -199,7 +199,6 @@ export default function ExecutionFilters() {
       </FormControl>
       <div style={{ margin: '8px' }}>
         <TextField
-          id="date"
           label="From"
           type="date"
           value={fromDateFilter}
@@ -213,7 +212,6 @@ export default function ExecutionFilters() {
       </div>
       <div style={{ margin: '8px' }}>
         <TextField
-          id="date"
           label="To"
           type="date"
           value={toDateFilter}
@@ -239,7 +237,6 @@ export default function ExecutionFilters() {
         <>
           <div style={{ margin: '8px' }}>
             <TextField
-              id="date"
               label="From time"
               type="time"
               // value={toDateFilter}
@@ -253,7 +250,6 @@ export default function ExecutionFilters() {
           </div>
           <div style={{ margin: '8px' }}>
             <TextField
-              id="date"
               label="To time"
               type="time"
               // value={toDateFilter}

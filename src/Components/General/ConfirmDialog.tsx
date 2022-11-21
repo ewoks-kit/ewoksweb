@@ -38,17 +38,10 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
   };
 
   return (
-    <Dialog
-      open={isOpen}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+    <Dialog open={isOpen} onClose={handleClose}>
+      <DialogTitle>{title}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          {content}
-        </DialogContentText>
+        <DialogContentText>{content}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleDisagree} data-cy="noButtonConfirmDialod">

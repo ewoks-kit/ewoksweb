@@ -268,7 +268,6 @@ const Node: React.FC<NodeProps> = ({
           {withLabel &&
             (edit ? (
               <TextField
-                id="standard-multiline-flexible"
                 label="edit node Label"
                 multiline
                 maxRows={4}

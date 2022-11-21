@@ -372,12 +372,9 @@ export default function FormDialog(props: FormDialogProps) {
             <Tooltip title={field.tip || ''} key={field.id} arrow>
               {field.id === 'Task Type' ? (
                 <FormControl>
-                  <InputLabel id="demo-simple-select-helper-label">
-                    Task Type
-                  </InputLabel>
+                  <InputLabel id="taskTypeInFormDialog">Task Type</InputLabel>
                   <Select
-                    labelId="demo-simple-select-helper-label"
-                    id="demo-simple-select-helper"
+                    labelId="taskTypeInFormDialog"
                     value={field.value}
                     label="Task Type"
                     onChange={field.handleChange}
@@ -418,10 +415,9 @@ export default function FormDialog(props: FormDialogProps) {
           ))}
         {!isForGraph && (
           <FormControl>
-            <InputLabel id="demo-simple-select-helper-label">Icon</InputLabel>
+            <InputLabel id="iconNameInFormDialog">Icon</InputLabel>
             <Select
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
+              labelId="iconNameInFormDialog"
               value={icon}
               label="Icon"
               onChange={iconChanged}

@@ -2,7 +2,7 @@
 // / <reference types="cypress" />
 
 describe('structure and basics for edit-workflows', () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit('http://localhost:3000/#/edit-workflows');
   });
 

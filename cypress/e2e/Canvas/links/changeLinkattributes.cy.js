@@ -55,7 +55,7 @@ describe('links in a graph', () => {
       .contains('then...Always and forever...')
       .parent()
       .siblings()
-      .should('have.attr', 'marker-end', 'url(#type=)');
+      .should('have.attr', 'marker-end', 'url(#)');
 
     cy.contains('none').click({ force: true });
     cy.contains('arrowclosed').click({ force: true });
