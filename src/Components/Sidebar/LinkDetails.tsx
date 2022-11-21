@@ -93,6 +93,7 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
             checked={mapAllData}
             onChange={mapAllDataChanged}
             inputProps={{ 'aria-label': 'controlled' }}
+            data-cy="mapAllDataCheckbox"
           />
         </div>
       </SidebarTooltip>
@@ -112,6 +113,7 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
             checked={onError}
             onChange={onErrorChanged}
             inputProps={{ 'aria-label': 'controlled' }}
+            data-cy="onErrorCheckbox"
           />
         </div>
       </SidebarTooltip>

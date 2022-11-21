@@ -31,7 +31,7 @@ export default function Conditions(props: ConditionsProps) {
     if (elCon && elCon[elCon.length - 1] && elCon[elCon.length - 1].id === '') {
       setOpenSnackbar({
         open: true,
-        text: 'Cannot add another line!',
+        text: 'Please fill in the empty line before addining another!',
         severity: 'warning',
       });
     } else {
@@ -80,6 +80,7 @@ export default function Conditions(props: ConditionsProps) {
         style={{ padding: '1px' }}
         aria-label="Add Condition"
         onClick={addConditions}
+        data-cy="addConditionsButton"
       >
         <AddCircleOutlineIcon />
       </IconButton>

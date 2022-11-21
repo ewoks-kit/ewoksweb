@@ -68,6 +68,7 @@ export default function DefaultInputs(props) {
             style={{ padding: '1px' }}
             aria-label="delete"
             onClick={() => addDefaultInputs()}
+            data-cy="addDefaultInputsButton"
           >
             <AddCircleOutlineIcon />
           </IconButton>

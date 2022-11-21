@@ -35,7 +35,7 @@ export default function DataMappingComponent(props: DataMappingProps) {
 
     const elMap = el.data.data_mapping;
 
-    if (!elMap.some((x) => x.id === '')) {
+    if (elMap.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before addining another!',
@@ -90,6 +90,7 @@ export default function DataMappingComponent(props: DataMappingProps) {
         style={{ padding: '1px' }}
         aria-label="dataMapping"
         onClick={() => addDataMapping()}
+        data-cy="addDataMappingButton"
       >
         <AddCircleOutlineIcon />
       </IconButton>

@@ -7,6 +7,8 @@ const selectedElement = (set, get) => ({
     element: EwoksRFNode | EwoksRFLink | GraphDetails,
     from: string
   ) => {
+    console.log(element);
+
     const prevState = get((prev) => prev);
 
     const wg = prevState.workingGraph.graph.id;

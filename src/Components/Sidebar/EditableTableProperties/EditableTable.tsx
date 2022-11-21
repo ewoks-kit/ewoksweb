@@ -375,6 +375,7 @@ function EditableTable(props: EditableTableProps) {
                       onClick={() => onToggleEditMode(row.id, index, 'done')}
                       style={{ padding: '1px' }}
                       aria-label="edit"
+                      data-cy="doneEditingButtonEditableTable"
                     >
                       <Fab
                         // className={classes.openFileButton}
@@ -393,6 +394,7 @@ function EditableTable(props: EditableTableProps) {
                         aria-label="edit"
                         onClick={() => onToggleEditMode(row.id, index, 'edit')}
                         color="primary"
+                        data-cy="editButtonEditableTable"
                       >
                         <EditIcon fontSize="small" />
                       </IconButton>
@@ -400,6 +402,7 @@ function EditableTable(props: EditableTableProps) {
                         style={{ padding: '1px' }}
                         onClick={() => onDelete(row.id)}
                         aria-label="delete"
+                        data-cy="deleteButtonEditableTable"
                       >
                         <DeleteIcon fontSize="small" />
                       </IconButton>

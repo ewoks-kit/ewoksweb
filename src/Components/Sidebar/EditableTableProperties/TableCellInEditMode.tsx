@@ -78,6 +78,7 @@ function TableCellInEditMode(propsIn) {
               variant="outlined"
             />
           )}
+          data-cy="autocompleteInputInEditableCell"
         />
       </FormControl>
       {/* <Select
@@ -99,6 +100,7 @@ function TableCellInEditMode(propsIn) {
       name="value"
       value={boolVal} // {row[name]}
       onChange={(e) => onChangeBool(e, row, index)}
+      data-cy="radioInEditableCell"
     >
       <FormControlLabel value="true" control={<Radio />} label="true" />
       <FormControlLabel value="false" control={<Radio />} label="false" />
@@ -110,6 +112,7 @@ function TableCellInEditMode(propsIn) {
       name={name}
       onChange={(e) => onChange(e, row, index)}
       className={classes.input}
+      data-cy="inputInEditableCell"
     />
   ) : (
     <Input
@@ -117,6 +120,7 @@ function TableCellInEditMode(propsIn) {
       name={name}
       onChange={(e) => onChange(e, row, index)}
       className={classes.input}
+      data-cy="inputInEditableCell"
     />
   );
 }
