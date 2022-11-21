@@ -7,10 +7,13 @@ import CheckIcon from '@material-ui/icons/Check';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
-  top: {
+  circularEffect: {
     animationDuration: '550ms',
+    color: 'white',
     position: 'absolute',
-    left: 60,
+    top: -3,
+    left: -3,
+    zIndex: 1,
   },
   openFileButton: {
     width: '62px',
@@ -53,16 +56,9 @@ export default function ExecuteSpinner(props: ExecuteSpinnerProps) {
         {loading && (
           <CircularProgress
             size={66}
-            className={classes.top}
+            className={classes.circularEffect}
             thickness={4}
             value={100}
-            style={{
-              color: 'white',
-              position: 'absolute',
-              top: -3,
-              left: -3,
-              zIndex: 1,
-            }}
           />
         )}
       </Box>

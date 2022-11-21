@@ -85,21 +85,7 @@ const Node: React.FC<NodeProps> = ({
   nodeWidth,
   details,
 }: NodeProps) => {
-  const theCom = comment ? (
-    <span
-      style={{
-        padding: '1px',
-        color: 'white',
-        fontSize: '0.875rem',
-        fontWeight: 300,
-        lineHeight: '1.13',
-      }}
-    >
-      {comment}
-    </span>
-  ) : (
-    ''
-  );
+  const theCom = comment ? <span style={style.comment}>{comment}</span> : '';
 
   const border = colorBorder
     ? `4px solid ${colorBorder}`
@@ -293,7 +279,7 @@ const Node: React.FC<NodeProps> = ({
                 action={execution}
               >
                 <img
-                  style={{ padding: '2px' }}
+                  style={{ ...contentStyle.imgPadding }}
                   role="presentation"
                   draggable="false"
                   onDragStart={(event) => onDragStart(event)}
@@ -314,7 +300,7 @@ const Node: React.FC<NodeProps> = ({
                 action={execution}
               >
                 <img
-                  style={{ padding: '2px' }}
+                  style={{ ...contentStyle.imgPadding }}
                   role="presentation"
                   draggable="false"
                   onDragStart={(event) => onDragStart(event)}
@@ -324,7 +310,7 @@ const Node: React.FC<NodeProps> = ({
               </ExecuteSpinner>
             ) : (
               <img
-                style={{ padding: '2px' }}
+                style={{ ...contentStyle.imgPadding }}
                 role="presentation"
                 draggable="false"
                 onDragStart={(event) => onDragStart(event)}
@@ -334,7 +320,7 @@ const Node: React.FC<NodeProps> = ({
             ))}
           {withImage && (type === 'graphOutput' || type === 'graphInput') && (
             <img
-              style={{ padding: '2px' }}
+              style={{ ...contentStyle.imgPadding }}
               role="presentation"
               draggable="false"
               onDragStart={(event) => onDragStart(event)}
@@ -398,7 +384,7 @@ const Node: React.FC<NodeProps> = ({
                 placement="top"
               >
                 <IconButton
-                  style={{ margin: '0px 2px', padding: '0px' }}
+                  style={{ ...contentStyle.iconButtons }}
                   aria-label="edit"
                   onClick={() => {
                     cloneNode();
@@ -415,7 +401,7 @@ const Node: React.FC<NodeProps> = ({
                   placement="top"
                 >
                   <IconButton
-                    style={{ margin: '0px 2px', padding: '0px' }}
+                    style={{ ...contentStyle.iconButtons }}
                     aria-label="edit"
                     onClick={() => {
                       setEdit(true);

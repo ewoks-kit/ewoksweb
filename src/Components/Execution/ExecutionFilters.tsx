@@ -189,7 +189,7 @@ export default function ExecutionFilters() {
         variant="filled"
         style={{ minWidth: '100px', margin: '8px' }}
       >
-        <InputLabel id="demo-select-small">Status</InputLabel>
+        <InputLabel>Status</InputLabel>
         <Select value={status} label="Status" onChange={statusChanged}>
           <MenuItem value="">{/* <em>None</em> */}</MenuItem>
           <MenuItem value="Success">Success</MenuItem>

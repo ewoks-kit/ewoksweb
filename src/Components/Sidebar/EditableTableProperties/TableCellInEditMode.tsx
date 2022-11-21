@@ -60,7 +60,6 @@ function TableCellInEditMode(propsIn) {
     <>
       <FormControl fullWidth variant="outlined">
         <Autocomplete
-          id="free-solo-demo"
           freeSolo
           options={typeOfValues.values}
           value={row[name]}

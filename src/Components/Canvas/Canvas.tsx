@@ -575,15 +575,7 @@ function Canvas() {
       role="button"
       tabIndex={0}
     >
-      <div
-        className="reactflow-wrapper"
-        style={{
-          height: '100%',
-          width: '100%',
-          backgroundColor: '#e9ebf7',
-        }}
-        ref={reactFlowWrapper}
-      >
+      <div className="reactflow-wrapper" ref={reactFlowWrapper}>
         <ReactFlow
           fitView
           connectOnClick
