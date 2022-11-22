@@ -1,4 +1,3 @@
-// @ts-ignore
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 // TODO: UNDER DEVELOPMENT AND TESTING BY THE USERS
 import { getEdgeCenter } from 'react-flow-renderer';
@@ -105,7 +104,7 @@ export default function getAround({
     targetY,
   });
 
-  console.log(sourceX, sourceY);
+  const titleWidth = Math.max(...label.split(',').map((mp) => mp.length)) * 7;
   return (
     <>
       <path
@@ -121,13 +120,17 @@ export default function getAround({
         <textPath
           href={`#${id as string}`}
           style={{ ...style, strokeWidth: '1', fontSize: '16px' }}
-          startOffset="60%"
+          startOffset="50%"
           side={sourceX > targetX ? 'right' : 'left'}
           textAnchor="middle"
         >
           {label &&
             label.split(',').map((mp, index) => (
-              <tspan dx="-60" dy={index * 20} key={mp}>
+              <tspan
+                dx={index === 0 ? 0 : -mp.length * 7}
+                dy={index === 0 ? 0 : 20}
+                key={mp}
+              >
                 {mp}
               </tspan>
             ))}
