@@ -97,14 +97,6 @@ export default function getAround({
     data,
   });
 
-  const [edgeCenterX, edgeCenterY] = getEdgeCenter({
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
-  });
-
-  const titleWidth = Math.max(...label.split(',').map((mp) => mp.length)) * 7;
   return (
     <>
       <path
@@ -119,7 +111,7 @@ export default function getAround({
       <text>
         <textPath
           href={`#${id as string}`}
-          style={{ ...style, strokeWidth: '1', fontSize: '16px' }}
+          style={{ ...style, ...edgeStyle.bendingText }}
           startOffset="50%"
           side={sourceX > targetX ? 'right' : 'left'}
           textAnchor="middle"

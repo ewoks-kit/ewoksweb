@@ -42,14 +42,14 @@ export default function ManageWorkflows() {
       <Grid container spacing={1} direction="row" alignItems="center">
         <Grid item xs={12} sm={12} md={6} lg={3}>
           <Item>
-            <FormControl variant="standard" style={{ width: '100%' }}>
+            <FormControl variant="standard" fullWidth>
               <AutocompleteDrop
                 setInputValue={setInputCategoryValue}
                 placeholder="Categories"
                 category={categoryValue}
               />
             </FormControl>
-            <FormControl variant="standard" style={{ width: '100%' }}>
+            <FormControl variant="standard" fullWidth>
               <AutocompleteDrop
                 setInputValue={setInputWorkflowValue}
                 placeholder="Open Workflow"

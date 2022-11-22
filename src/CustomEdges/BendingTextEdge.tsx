@@ -1,4 +1,5 @@
 import { getBezierPath } from 'react-flow-renderer';
+import { edgeStyle } from './EdgeStyle';
 
 function bendingText({
   id,
@@ -35,7 +36,7 @@ function bendingText({
           href={`#${id as string}`}
           startOffset="50%"
           textAnchor="middle"
-          style={{ ...style, strokeWidth: '1', fontSize: '16px' }}
+          style={{ ...style, ...edgeStyle.bendingText }}
         >
           {label}
         </textPath>

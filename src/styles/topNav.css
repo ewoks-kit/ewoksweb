@@ -5,3 +5,8 @@
   flex-direction: column;
   margin: 20px;
 }
+
+.iconDetails {
+  overflow: 'hidden';
+  overflow-wrap: 'break-word';
+}

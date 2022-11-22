@@ -8,4 +8,9 @@ export const edgeStyle = {
     overflow: 'hidden',
     wordWrap: 'break-word',
   },
+
+  bendingText: {
+    strokeWidth: '1',
+    fontSize: '16px',
+  },
 };

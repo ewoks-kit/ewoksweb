@@ -371,7 +371,7 @@ function EditableTable(props: EditableTableProps) {
                     <IconButton
                       color="inherit"
                       onClick={() => onToggleEditMode(row.id, index, 'done')}
-                      style={{ padding: '1px' }}
+                      className={classes.root}
                       aria-label="edit"
                       data-cy="doneEditingButtonEditableTable"
                     >
@@ -388,7 +388,7 @@ function EditableTable(props: EditableTableProps) {
                   ) : (
                     <span>
                       <IconButton
-                        style={{ padding: '1px' }}
+                        className={classes.root}
                         aria-label="edit"
                         onClick={() => onToggleEditMode(row.id, index, 'edit')}
                         color="primary"
@@ -397,7 +397,7 @@ function EditableTable(props: EditableTableProps) {
                         <EditIcon fontSize="small" />
                       </IconButton>
                       <IconButton
-                        style={{ padding: '1px' }}
+                        className={classes.root}
                         onClick={() => onDelete(row.id)}
                         aria-label="delete"
                         data-cy="deleteButtonEditableTable"

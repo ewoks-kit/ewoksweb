@@ -194,7 +194,6 @@ function AddNodes(props: AddNodesProps) {
       expanded={expanded}
       onChange={handleChange}
       className="Accordions-sidebar"
-      // style={{ marginLeft: '5px', borderRadius: '15px 0px 0px 15px' }}
     >
       <AccordionSummary
         expandIcon={<OpenInBrowser />}

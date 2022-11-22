@@ -70,16 +70,7 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
   };
 
   return (
-    <Paper
-      style={{
-        backgroundColor: '#e9ebf7',
-        borderRadius: '10px 0px 0px 10px',
-        border: '#96a5f9',
-        borderStyle: 'solid none solid solid',
-        padding: '4px',
-        marginBottom: '10px',
-      }}
-    >
+    <Paper className={classes.nodeDetails}>
       <LabelComment element={element} showComment={advanced} />
       <hr style={{ color: '#96a5f9' }} />
       <SidebarTooltip

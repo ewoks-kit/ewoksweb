@@ -215,14 +215,7 @@ export default function ManageIcons() {
                     }`}
                   >
                     <Tooltip title={icon.name} arrow>
-                      <span
-                        role="button"
-                        tabIndex={0}
-                        style={{
-                          overflow: 'hidden',
-                          overflowWrap: 'break-word',
-                        }}
-                      >
+                      <span role="button" tabIndex={0} className="iconDetails">
                         <img
                           src={icon.image.data_url}
                           alt={icon.name}
@@ -245,14 +238,7 @@ export default function ManageIcons() {
                   }`}
                 >
                   <Tooltip title={ico} arrow>
-                    <span
-                      role="button"
-                      tabIndex={0}
-                      style={{
-                        overflow: 'hidden',
-                        overflowWrap: 'break-word',
-                      }}
-                    >
+                    <span role="button" tabIndex={0} className="iconDetails">
                       <img src={iconsObj[ico]} alt={ico} />
                     </span>
                   </Tooltip>
@@ -300,7 +286,6 @@ export default function ManageIcons() {
                   Select an Icon to Upload
                   <div>
                     <input
-                      // style={{ display: 'none' }}
                       type="file"
                       id="upload-icon"
                       name="upload-icon"
