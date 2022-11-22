@@ -41,6 +41,10 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   useEffect(() => {
     if ('source' in element) {
       setLinkType(element.type);
+      if (element.type === 'getAround') {
+        setX(element.data.getAroundProps.x);
+        setY(element.data.getAroundProps.y);
+      }
 
       if (element.markerEnd === '') {
         setArrowType({ type: 'none' });
