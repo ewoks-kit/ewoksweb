@@ -19,7 +19,6 @@ const DashboardStyle = makeStyles((theme) => ({
     display: 'flex',
   },
   toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -40,9 +39,6 @@ const DashboardStyle = makeStyles((theme) => ({
     height: '5%',
     minHeight: '64px',
     zIndex: theme.zIndex.drawer + 1,
-  },
-  appBarShift: {
-    // marginLeft: drawerWidth,
   },
 
   title: {

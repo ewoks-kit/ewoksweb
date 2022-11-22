@@ -173,10 +173,7 @@ export default function Dashboard() {
       />
       <CssBaseline />
       <SimpleSnackbar />
-      <AppBar
-        position="absolute"
-        className={clsx(classes.appBar, classes.appBarShift)}
-      >
+      <AppBar position="absolute" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <SubgraphsStack />
           <Tooltip
