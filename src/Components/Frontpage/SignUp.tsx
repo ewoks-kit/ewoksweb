@@ -79,20 +79,16 @@ export default function SignUp(props) {
               with a graph where Ewoks-UI describes itself:
             </Typography>
             {/* TODO: repetitive iconButton abstract when stable */}
-            <IconButton
-              color="inherit"
-              // onClick={props.handleCloseDialog || ''}
-            >
-              <Typography
-                component="h1"
-                variant="h5"
-                color="primary"
-                style={{ padding: '5px' }}
-              >
-                <Link to="/edit-workflows" className={classes.linkStyle}>
+            <Link to="/edit-workflows" className={classes.linkStyle}>
+              <IconButton color="inherit">
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  color="primary"
+                  style={{ padding: '5px' }}
+                >
                   Edit Workflows
                   <Fab
-                    // className={classes.openFileButton}
                     color="primary"
                     size="small"
                     component="span"
@@ -101,17 +97,17 @@ export default function SignUp(props) {
                   >
                     <ArrowForwardIosIcon />
                   </Fab>
-                </Link>
-              </Typography>
-            </IconButton>
-            <IconButton color="inherit">
-              <Typography
-                component="h1"
-                variant="h5"
-                color="primary"
-                style={{ padding: '5px' }}
-              >
-                <Link to="/monitor-workflows" className={classes.linkStyle}>
+                </Typography>
+              </IconButton>
+            </Link>
+            <Link to="/monitor-workflows" className={classes.linkStyle}>
+              <IconButton color="inherit">
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  color="primary"
+                  style={{ padding: '5px' }}
+                >
                   Monitor Workflows
                   <Fab
                     // className={classes.openFileButton}
@@ -123,17 +119,20 @@ export default function SignUp(props) {
                   >
                     <ArrowForwardIosIcon />
                   </Fab>
-                </Link>
-              </Typography>
-            </IconButton>
-            <IconButton color="inherit" onClick={props.handleCloseDialog || ''}>
-              <Typography
-                component="h1"
-                variant="h5"
-                color="primary"
-                style={{ padding: '5px' }}
+                </Typography>
+              </IconButton>
+            </Link>
+            <Link to="/edit-workflows" className={classes.linkStyle}>
+              <IconButton
+                color="inherit"
+                onClick={props.handleCloseDialog || ''}
               >
-                <Link to="/edit-workflows" className={classes.linkStyle}>
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  color="primary"
+                  style={{ padding: '5px' }}
+                >
                   Tutorial Workflow
                   <Fab
                     // className={classes.openFileButton}
@@ -145,9 +144,9 @@ export default function SignUp(props) {
                   >
                     <ArrowForwardIosIcon />
                   </Fab>
-                </Link>
-              </Typography>
-            </IconButton>
+                </Typography>
+              </IconButton>
+            </Link>
           </Box>
         </Container>
       </Grid>

@@ -1,6 +1,4 @@
 import { makeStyles } from '@material-ui/core/styles';
-// keep it on a const in case I need to change it during editing
-const drawerWidth = 290;
 
 const DashboardStyle = makeStyles((theme) => ({
   verticalRule: {
@@ -39,18 +37,12 @@ const DashboardStyle = makeStyles((theme) => ({
     height: '7vh',
   },
   appBar: {
+    height: '5%',
+    minHeight: '64px',
     zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
   },
   appBarShift: {
-    marginLeft: drawerWidth,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+    // marginLeft: drawerWidth,
   },
 
   title: {
@@ -112,6 +104,25 @@ const DashboardStyle = makeStyles((theme) => ({
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignContent: 'flex-start',
+  },
+
+  reflexSplitter: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '0.325rem !important',
+    height: '100vh !important',
+    backgroundColor: 'rgb(233, 235, 247) !important',
+    borderLeftColor: '#cfcfe1 !important',
+    borderRightColor: '#cfcfe1 !important',
+    color: '#777',
+    cursor: 'col-resize !important',
+    transition: 'none',
+  },
+
+  reflexContainer: {
+    flex: '1 4 0%',
+    display: 'flex',
+    minWidth: 0,
   },
 }));
 

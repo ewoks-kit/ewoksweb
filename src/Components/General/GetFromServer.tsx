@@ -93,15 +93,7 @@ export default function GetFromServer() {
         agreeCallback={() => getFromServer(workflowId)}
         disagreeCallback={disAgreeSaveWithout}
       />
-      <FormControl
-        variant="standard"
-        style={{
-          minWidth: '220px',
-          backgroundColor: '#7685dd',
-          borderRadius: '4px',
-        }}
-        className={classes.formControl}
-      >
+      <FormControl variant="standard" className={classes.formControl}>
         <AutocompleteDrop
           setInputValue={setInputValue}
           placeholder="Open Workflow"

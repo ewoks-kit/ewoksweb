@@ -55,7 +55,7 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   }, [element.id, element]);
 
   const linkTypeChanged = (event) => {
-    setLinkType(event.target.value);
+    // setLinkType(event.target.value);
     setSelectedElement(
       {
         ...element,
@@ -66,7 +66,7 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   };
 
   const arrowTypeChanged = (event) => {
-    setArrowType({ type: event.target.value });
+    // setArrowType({ type: event.target.value });
 
     // 'none' is not available anymore in reactFlow so we
     // need to remove markerEnd if 'none' is selected in dropdown
@@ -81,7 +81,7 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   };
 
   const colorLineChanged = (event) => {
-    setColorLine(event.target.value);
+    // setColorLine(event.target.value);
     setSelectedElement(
       {
         ...element,
@@ -94,7 +94,7 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   };
 
   const animatedChanged = (event) => {
-    setAnimated(event.target.checked);
+    // setAnimated(event.target.checked);
     setSelectedElement(
       {
         ...element,

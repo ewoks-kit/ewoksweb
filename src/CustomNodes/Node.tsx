@@ -419,7 +419,6 @@ const Node: React.FC<NodeProps> = ({
                   placement="top"
                 >
                   <IconButton
-                    style={{ margin: '0px px' }}
                     aria-label="edit"
                     onClick={() => {
                       setEdit(false);

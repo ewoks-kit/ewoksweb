@@ -176,7 +176,6 @@ export default function Dashboard() {
       <AppBar
         position="absolute"
         className={clsx(classes.appBar, classes.appBarShift)}
-        style={{ height: '5%', minHeight: '64px' }}
       >
         <Toolbar className={classes.toolbar}>
           <SubgraphsStack />
@@ -272,12 +271,7 @@ export default function Dashboard() {
             arrow
           >
             <IconButton color="inherit">
-              <Typography
-                component="h1"
-                variant="h5"
-                color="primary"
-                style={{ padding: '5px' }}
-              >
+              <Typography component="h1" variant="h5" color="primary">
                 <Link to="/">
                   <Fab
                     className={classes.openFileButton}
@@ -303,35 +297,12 @@ export default function Dashboard() {
 
       <ReflexContainer
         orientation="vertical"
-        style={{
-          flex: '1 4 0%',
-          display: 'flex',
-          minWidth: 0,
-        }}
+        className={classes.reflexContainer}
       >
-        <ReflexElement
-          className="left-pane"
-          minSize={100}
-          maxSize={500}
-          size={350}
-        >
+        <ReflexElement minSize={100} maxSize={500} size={350}>
           <Sidebar />
         </ReflexElement>
-        <ReflexSplitter
-          propagate
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            width: '0.325rem',
-            height: '100vh',
-            backgroundColor: 'rgb(233, 235, 247)',
-            borderRight: 'none !important',
-            borderLeftColor: '#eee !important',
-            color: '#777',
-            cursor: 'col-resize',
-            transition: 'none',
-          }}
-        />
+        <ReflexSplitter propagate className={classes.reflexSplitter} />
         <ReflexElement className="right-pane">
           <main className={classes.content}>
             <div className={classes.toolbar} />

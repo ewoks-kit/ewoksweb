@@ -92,23 +92,6 @@ const NoteNode = (args) => {
             <SaveIcon color="primary" />
           </IconButton>
         )}
-        {/* {!edit ? (
-          <IconButton
-            style={{ padding: '0px' }}
-            aria-label="edit"
-            onClick={() => {
-              setEdit(true);
-            }}
-          >
-            <EditIcon />
-          </IconButton>
-        ) : (
-          <>
-            <SaveIcon onClick={save} />
-
-            <UndoIcon onClick={cancel} />
-          </>
-        )} */}
       </span>
     </div>
   );

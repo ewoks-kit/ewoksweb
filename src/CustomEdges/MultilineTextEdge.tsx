@@ -1,4 +1,5 @@
 import { getBezierPath, getEdgeCenter } from 'react-flow-renderer';
+import { edgeStyle } from './EdgeStyle';
 
 function multilineText({
   id,
@@ -51,13 +52,7 @@ function multilineText({
         <div
           style={{
             ...style,
-            backgroundColor: 'rgb(223, 226, 247)',
-            color: 'rgb(150, 165, 249)',
-            borderRadius: '10px',
-            borderStyle: 'solid',
-            borderColor: 'rgb(150, 165, 249)',
-            wordWrap: 'break-word',
-            overflow: 'hidden',
+            ...(edgeStyle.multiline as React.CSSProperties),
           }}
         >
           {label && label.split(',').map((mp) => <div key={mp}>{mp}</div>)}
