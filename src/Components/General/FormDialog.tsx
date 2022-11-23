@@ -82,9 +82,10 @@ export default function FormDialog(props: FormDialogProps) {
   useEffect(() => {
     setElement(elementToEdit);
     setIsOpen(open);
+
     if (isForGraph) {
-      const elGraph = elementToEdit as GraphDetails;
-      setNewName(elGraph.label || '');
+      const elGraph = elementToEdit as GraphRF;
+      setNewName(elGraph.graph.label || '');
       setOverwrite(false);
     } else {
       const elTask = elementToEdit as Task;
@@ -99,7 +100,7 @@ export default function FormDialog(props: FormDialogProps) {
   }, [open, action, elementToEdit, isForGraph]);
 
   async function handleSave() {
-    // get the selected element (graph or Node) give a new name before saving
+    // DOC: get the selected element (graph or Node) give a new name before saving
     if (isForGraph && newName) {
       saveGraph(element as GraphRF);
     } else if ('task_identifier' in element && newName) {

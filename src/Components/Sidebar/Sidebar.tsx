@@ -1,3 +1,5 @@
+// TODO: remove the following after onlyEditRelease
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import {
   Accordion,
@@ -269,7 +271,8 @@ export default function Sidebar() {
           <EditElementStyle />
         </>
       )}
-      <Accordion
+      {/* TODO: commented for onlyEditRelease */}
+      {/* <Accordion
         expanded={openExecutionDetails}
         onChange={handleChangeExecutionDetails}
         className="Accordions-sidebar"
@@ -291,7 +294,7 @@ export default function Sidebar() {
             <ExecutionDetails />
           </div>
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
       {!inExecutionMode && (
         <>
           <Button

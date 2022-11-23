@@ -18,13 +18,13 @@ import SimpleSnackbar from '../General/Snackbar';
 import SettingsInfoDrawer from '../TopNavBar/SettingsInfoDrawer';
 import SubgraphsStack from '../TopNavBar/SubgraphsStack';
 import LinearSpinner from '../General/LinearSpinner';
-import ExecuteWorkflow from '../Execution/ExecuteWorkflow';
+// import ExecuteWorkflow from '../Execution/ExecuteWorkflow';
 import Tooltip from '@material-ui/core/Tooltip';
 import DashboardStyle from './DashboardStyle';
 import SaveToServer from '../TopNavBar/SaveToServer';
 import tooltipText from '../General/TooltipText';
 import useStore from 'store/useStore';
-import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import FormDialog from '../General/FormDialog';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -226,7 +226,8 @@ export default function Dashboard() {
           <div className={classes.verticalRule} />
           <SaveToServer saveToServerF={saveToServerF} />
           <GetFromServer />
-          <ExecuteWorkflow />
+          {/* TODO: commented for onlyEditRelease */}
+          {/* <ExecuteWorkflow /> */}
           <div>
             <Tooltip title={tooltipText('More')} enterDelay={800} arrow>
               <IconButton color="inherit" onClick={handleClick}>
@@ -277,7 +278,7 @@ export default function Dashboard() {
                     component="span"
                     aria-label="add"
                   >
-                    <NotListedLocationIcon />
+                    <ArrowUpwardIcon />
                   </Fab>
                 </Link>
               </Typography>
