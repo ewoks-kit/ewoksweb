@@ -309,7 +309,6 @@ function Canvas() {
   };
 
   const onEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => {
-    // TODO: it is link: EwoksRFLink but not compatible with Edge?
     const link = {
       ...oldEdge,
       ...newConnection,
@@ -348,18 +347,19 @@ function Canvas() {
   const onConnect = (params: Connection) => {
     if (workingGraph.graph.id === graphRF.graph.id) {
       const sourceTask = graphRF.nodes.find((nod) => nod.id === params.source);
+
       const targetTask = graphRF.nodes.find((nod) => nod.id === params.target);
-      // TODO: take link out
+
       const link = {
         data: {
           getAroundProps: { x: 0, y: 0 },
           on_error: false,
           comment: '',
-          // node optional_input_names are link's optional_output_names
+          // DOC: node optional_input_names are link's optional_output_names
           links_optional_output_names: targetTask.optional_input_names || [],
-          // node required_input_names are link's required_output_names
+          // DOC: node required_input_names are link's required_output_names
           links_required_output_names: targetTask.required_input_names || [],
-          // node output_names are link's input_names
+          // DOC: node output_names are link's input_names
           links_input_names: sourceTask.output_names || [],
           conditions: [],
           data_mapping: [],
@@ -397,11 +397,11 @@ function Canvas() {
       const newGraph = {
         graph: graphRF.graph,
         nodes: graphRF.nodes,
-        links: [...graphRF.links, link], // addEdge(params, graphRF.links),
+        links: [...graphRF.links, link],
       };
-      // setElements((els) => addEdge(params, els));
+
       setGraphRF(newGraph as GraphRF, true);
-      // need to also save it in recentGraphs if we leave and come back                // className={classes.openFileButton} to the graph?
+      // DOC: need to also save it in recentGraphs if we leave and come back                // className={classes.openFileButton} to the graph?
       setRecentGraphs(newGraph as GraphRF);
 
       // add action and new GraphRF to undo-redo array
@@ -517,8 +517,9 @@ function Canvas() {
       };
 
       setGraphRF(newGraph, true);
+
       setUndoRedo({ action: 'Dragged a Node', graph: newGraph });
-      // need to also save it in recentGraphs if we leave and come back to the graph?
+
       setRecentGraphs(newGraph);
     } else {
       setOpenSnackbar({
@@ -581,7 +582,6 @@ function Canvas() {
           connectOnClick
           nodesDraggable
           attributionPosition="bottom-right"
-          // defaultPosition={[-200, -200]}
           minZoom={0.2}
           snapToGrid
           nodes={nodes}

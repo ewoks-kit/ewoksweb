@@ -107,6 +107,8 @@ export default function Sidebar() {
           });
 
           setAllIconNames([...iconsSvg, ...iconsPng]);
+          console.log(iconsSvg, iconsPng);
+
           const results = await axios
             .all(iconsSvg.map((id: string) => getIcon(id)))
             .then(
@@ -131,6 +133,7 @@ export default function Sidebar() {
               return [];
             });
           setAllIcons(results as Icon[]);
+          console.log(results);
         }
       };
       // eslint-disable-next-line promise/prefer-await-to-callbacks

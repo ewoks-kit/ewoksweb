@@ -61,6 +61,8 @@ export default function ManageIcons() {
   const allIcons = useStore((state) => state.allIcons);
 
   function clickIcon(icon: string) {
+    console.log(icon);
+
     setSelectedIcon(icon);
   }
 
@@ -100,11 +102,14 @@ export default function ManageIcons() {
     const data = new FormData();
 
     data.append('file', (fileToBeSent.file as unknown) as File);
-
+    console.log(fileToBeSent, data);
     try {
       await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/icon/${fileToBeSent.file.name}`,
-        data
+        {
+          data_url:
+            'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxwYXRoIHN0eWxlPSJmaWxsOiNGRjUwMjM7IiBkPSJNMjU2LDUxMmMtNjguNDgsMC0xMzIuNzk3LTI2LjYtMTgxLjA5Ni03NC45MDRDMjYuNiwzODguNzk3LDAsMzI0LjQ4LDAsMjU2DQoJYzAtNjguNDg2LDI2LjYtMTMyLjc5Nyw3NC45MDQtMTgxLjA5NkMxMjMuMjA0LDI2LjYsMTg3LjUxNSwwLDI1NiwwYzY4LjQ4LDAsMTMyLjc5NywyNi42LDE4MS4wOTYsNzQuOTA0DQoJQzQ4NS40LDEyMy4yMDMsNTEyLDE4Ny41Miw1MTIsMjU2YzAsNjguNDg2LTI2LjYsMTMyLjc5Ny03NC45MDQsMTgxLjA5NmwwLDBsMCwwQzM4OC43OTcsNDg1LjQsMzI0LjQ4Niw1MTIsMjU2LDUxMnoiLz4NCjxwYXRoIHN0eWxlPSJmaWxsOiNDRDJBMDA7IiBkPSJNMjU2LDB2NTEyYzY4LjQ4NiwwLDEzMi43OTctMjYuNiwxODEuMDk2LTc0LjkwNEM0ODUuNCwzODguNzk3LDUxMiwzMjQuNDg2LDUxMiwyNTYNCgljMC02OC40OC0yNi42LTEzMi43OTctNzQuOTA0LTE4MS4wOTZDMzg4Ljc5NywyNi42LDMyNC40OCwwLDI1NiwweiIvPg0KPHBhdGggc3R5bGU9ImZpbGw6I0ZGRkZGRjsiIGQ9Ik0zNTYuMDcyLDM5NS4wNTRIMTU1LjU5NGMtNi40NTUsMC0xMi4zMzQtMy43Mi0xNS4wOTctOS41NDljLTIuNzYyLTUuODM1LTEuOTItMTIuNzQyLDIuMTY0LTE3LjczNQ0KCWw5MS41ODktMTExLjkzN2wtOTEuNTg2LTExMS45MzdjLTQuMDg0LTQuOTkyLTQuOTI3LTExLjktMi4xNjQtMTcuNzM1YzIuNzYyLTUuODI5LDguNjQyLTkuNTQ5LDE1LjA5Ny05LjU0OWgyMDAuNDc5DQoJYzkuMjI5LDAsMTYuNzA3LDcuNDc4LDE2LjcwNywxNi43MDd2MzMuNDEzYzAsOS4yMjktNy40NzgsMTYuNzA3LTE2LjcwNywxNi43MDdjLTkuMjI5LDAtMTYuNzA3LTcuNDc4LTE2LjcwNy0xNi43MDd2LTE2LjcwNw0KCUgxOTAuODUxbDc3LjkxNSw5NS4yMzFjNS4wMzEsNi4xNSw1LjAzMSwxNS4wMDUsMCwyMS4xNTVsLTc3LjkxNSw5NS4yMzFoMTQ4LjUxNXYtMTYuNzA3YzAtOS4yMjksNy40NzgtMTYuNzA3LDE2LjcwNy0xNi43MDcNCglzMTYuNzA3LDcuNDc4LDE2LjcwNywxNi43MDd2MzMuNDEzQzM3Mi43NzksMzg3LjU3NywzNjUuMzAyLDM5NS4wNTQsMzU2LjA3MiwzOTUuMDU0eiIvPg0KPGc+DQoJPHBhdGggc3R5bGU9ImZpbGw6I0ZGRTZCMzsiIGQ9Ik0zNzIuNzc5LDM3OC4zNDh2LTMzLjQxM2MwLTkuMjI5LTcuNDc4LTE2LjcwNy0xNi43MDctMTYuNzA3cy0xNi43MDcsNy40NzgtMTYuNzA3LDE2LjcwN3YxNi43MDcNCgkJaC04My41MzN2MzMuNDEzaDEwMC4yMzlDMzY1LjMwMiwzOTUuMDU0LDM3Mi43NzksMzg3LjU3NywzNzIuNzc5LDM3OC4zNDh6Ii8+DQoJPHBhdGggc3R5bGU9ImZpbGw6I0ZGRTZCMzsiIGQ9Ik0yNjguNzY2LDI0NS4yNTVsLTEyLjkzMy0xNS44MDd2NTIuNzY4bDEyLjkzMi0xNS44MDcNCgkJQzI3My43OTYsMjYwLjI2LDI3My43OTYsMjUxLjQwNywyNjguNzY2LDI0NS4yNTV6Ii8+DQoJPHBhdGggc3R5bGU9ImZpbGw6I0ZGRTZCMzsiIGQ9Ik0zNTYuMDcyLDExNi42MTJIMjU1LjgzM3YzMy40MTNoODMuNTMzdjE2LjcwN2MwLDkuMjI5LDcuNDc4LDE2LjcwNywxNi43MDcsMTYuNzA3DQoJCXMxNi43MDctNy40NzgsMTYuNzA3LTE2LjcwN3YtMzMuNDEzQzM3Mi43NzksMTI0LjA5LDM2NS4zMDIsMTE2LjYxMiwzNTYuMDcyLDExNi42MTJ6Ii8+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg==',
+        }
       );
     } catch (error) {
       setOpenSnackbar({
@@ -117,10 +122,11 @@ export default function ManageIcons() {
 
   // TODO: Typescript
   function inputNew(ne) {
+    console.log(ne.target);
     if (ne.target.files[0].size < 10_000) {
       setOpenSnackbar({
         open: true,
-        text: 'File ready to be uploadede as an icon',
+        text: 'File ready to be uploaded as an icon',
         severity: 'success',
       });
 
@@ -278,10 +284,10 @@ export default function ManageIcons() {
               <hr />
 
               <div>
-                {/* <img
+                <img
                   src={`data:image/svg+xml;utf8,${selectedIcon}`}
                   alt="missing"
-                /> */}
+                />
                 <label htmlFor="upload-icon">
                   Select an Icon to Upload
                   <div>
