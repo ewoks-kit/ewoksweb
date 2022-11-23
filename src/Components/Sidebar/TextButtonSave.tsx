@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { FormControl, IconButton, TextField, Fab } from '@material-ui/core';
-import DashboardStyle from '../../layout/DashboardStyle';
+import DashboardStyle from '../Dashboard/DashboardStyle';
 import SaveIcon from '@material-ui/icons/Save';
 import useStore from '../../store/useStore';
 

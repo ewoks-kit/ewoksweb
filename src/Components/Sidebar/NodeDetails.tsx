@@ -21,7 +21,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import EditTaskProp from './EditTaskProp';
-import DashboardStyle from '../../layout/DashboardStyle';
+import DashboardStyle from '../Dashboard/DashboardStyle';
 import useStore from '../../store/useStore';
 import SidebarTooltip from './SidebarTooltip';
 import { OpenInBrowser } from '@material-ui/icons';

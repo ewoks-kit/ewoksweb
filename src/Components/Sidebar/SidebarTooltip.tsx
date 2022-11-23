@@ -1,5 +1,5 @@
 import { Tooltip } from '@material-ui/core';
-import DashboardStyle from '../../layout/DashboardStyle';
+import DashboardStyle from '../Dashboard/DashboardStyle';
 
 const useStyles = DashboardStyle;
 

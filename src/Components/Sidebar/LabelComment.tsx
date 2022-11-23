@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import type { EwoksRFLink, EwoksRFNode } from '../../types';
 import { FormControl, TextField, IconButton, Fab } from '@material-ui/core';
-import DashboardStyle from '../../layout/DashboardStyle';
+import DashboardStyle from '../Dashboard/DashboardStyle';
 import useStore from '../../store/useStore';
 import SidebarTooltip from './SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';

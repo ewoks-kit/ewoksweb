@@ -9,7 +9,7 @@ import {
   Slider,
 } from '@material-ui/core';
 
-import DashboardStyle from '../../layout/DashboardStyle';
+import DashboardStyle from '../Dashboard/DashboardStyle';
 import useStore from '../../store/useStore';
 import type { EwoksRFLink, GraphRF } from '../../types';
 

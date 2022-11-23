@@ -12,7 +12,7 @@ import EditElementStyle from './EditElementStyle';
 import DraggableDialog from '../General/DraggableDialog';
 import IconMenu from './IconMenu';
 import ExecutionDetails from '../Execution/ExecutionDetails';
-import DashboardStyle from '../../layout/DashboardStyle';
+import DashboardStyle from '../Dashboard/DashboardStyle';
 import useStore from 'store/useStore';
 import type {
   EwoksRFNode,

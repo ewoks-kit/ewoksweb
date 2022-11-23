@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import DashboardStyle from '../../layout/DashboardStyle';
+import DashboardStyle from '../Dashboard/DashboardStyle';
 import FormControl from '@material-ui/core/FormControl';
 import AutocompleteDrop from 'Components/General/AutocompleteDrop';
 import useStore from '../../store/useStore';

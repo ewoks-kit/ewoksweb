@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import { IconButton } from '@material-ui/core';
-import DashboardStyle from '../../layout/DashboardStyle';
+import DashboardStyle from '../Dashboard/DashboardStyle';
 import TextButtonSave from './TextButtonSave';
 
 const useStyles = DashboardStyle;

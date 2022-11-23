@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import type { EwoksRFLink } from '../../types';
 import { Checkbox, Paper } from '@material-ui/core';
-import DashboardStyle from '../../layout/DashboardStyle';
+import DashboardStyle from '../Dashboard/DashboardStyle';
 import useStore from '../../store/useStore';
 import DataMappingComponent from './EditableTableProperties/DataMapping';
 import Conditions from './EditableTableProperties/Conditions';

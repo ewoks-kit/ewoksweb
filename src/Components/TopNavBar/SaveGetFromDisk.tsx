@@ -1,4 +1,4 @@
-import DashboardStyle from '../../layout/DashboardStyle';
+import DashboardStyle from '../Dashboard/DashboardStyle';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Fab, IconButton } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';

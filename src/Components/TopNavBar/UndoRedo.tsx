@@ -3,7 +3,7 @@ import RedoIcon from '@material-ui/icons/Redo';
 import UndoIcon from '@material-ui/icons/Undo';
 
 import { Fab, IconButton, Tooltip } from '@material-ui/core';
-import DashboardStyle from '../../layout/DashboardStyle';
+import DashboardStyle from '../Dashboard/DashboardStyle';
 import tooltipText from '../General/TooltipText';
 import useStore from '../../store/useStore';
 
