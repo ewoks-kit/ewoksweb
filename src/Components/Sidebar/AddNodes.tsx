@@ -208,7 +208,11 @@ function AddNodes(props: AddNodesProps) {
       </AccordionSummary>
       <AccordionDetails style={{ flexWrap: 'wrap' }}>
         {taskCategories.map((categoryName) => (
-          <Accordion key={categoryName} id="add-nodes-accordion">
+          <Accordion
+            key={categoryName}
+            className="add-nodes-accordion"
+            data-cy={`add-nodes-category-${categoryName}`}
+          >
             <AccordionSummary
               expandIcon={<OpenInBrowser />}
               aria-controls="panel1a-content"

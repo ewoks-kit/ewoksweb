@@ -249,6 +249,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
             checked={advanced}
             onChange={advancedChanged}
             inputProps={{ 'aria-label': 'controlled' }}
+            data-cy="advanced-checkbox-nodes"
           />
         </div>
         <SidebarTooltip

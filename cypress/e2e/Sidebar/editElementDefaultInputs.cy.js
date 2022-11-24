@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 // / <reference types="cypress" />
 
-describe('links in a graph', () => {
+describe('edit nodes defaultInputs', () => {
   before(() => {
     cy.visit('http://localhost:3000/#/edit-workflows');
 
@@ -17,7 +17,7 @@ describe('links in a graph', () => {
   });
 
   it('click on a node and see Default Inputs', () => {
-    cy.get('.react-flow').contains('Press NEW').parent().click();
+    cy.get('.react-flow').contains('ewoksweb').parent().click();
 
     cy.contains('Default Inputs').should('be.visible');
   });

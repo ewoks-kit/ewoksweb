@@ -13,7 +13,7 @@ describe('example to-do app', () => {
 
   // TODO: get back to 3 options for onlyEditRelease
   it('offers 2 options to go ahead', () => {
-    cy.get('a').should('have.length', 2);
+    cy.get('a').should('have.length', 4);
   });
 
   it('has an img of the canvas', () => {

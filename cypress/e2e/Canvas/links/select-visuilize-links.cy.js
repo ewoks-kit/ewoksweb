@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 // / <reference types="cypress" />
 
-describe('links in a graph', () => {
+describe('select visualize links', () => {
   before(() => {
     cy.visit('http://localhost:3000/#/edit-workflows');
 
