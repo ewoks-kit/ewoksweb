@@ -84,11 +84,11 @@ describe('clicks on canvas and elements', () => {
 
   it('doubleclick on graph node', () => {
     cy.get('.react-flow__node-graph')
-      .should('have.length', 3)
+      .should('have.length', 2)
       .last()
       .dblclick();
 
-    cy.get('.react-flow__node').should('not.have.length', 20);
+    cy.get('.react-flow__node').should('not.have.length', 19);
 
     cy.get('h1')
       .get('.MuiBreadcrumbs-li')
@@ -97,6 +97,6 @@ describe('clicks on canvas and elements', () => {
       .contains('tutorial_Graph')
       .click();
 
-    cy.get('.react-flow__node').should('have.length', 20);
+    cy.get('.react-flow__node').should('have.length', 19);
   });
 });

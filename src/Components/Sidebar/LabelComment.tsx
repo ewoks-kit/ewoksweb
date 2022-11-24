@@ -63,8 +63,6 @@ export default function LabelComment(props: LabelCommentProps) {
   }, [element]);
 
   function saveLabel(labelLocal: string) {
-    console.log(labelLocal);
-
     if ('position' in element) {
       const el = element;
       setSelectedElement(
@@ -99,8 +97,6 @@ export default function LabelComment(props: LabelCommentProps) {
   }
 
   function valueSavedLocal() {
-    console.log(label);
-
     setValueIsChanged(false);
     saveLabel(label);
   }
@@ -123,8 +119,6 @@ export default function LabelComment(props: LabelCommentProps) {
   }
 
   function valueSelectedChanged(event) {
-    console.log(event.target.value);
-
     setChanged(event);
     setLabel(event.target.value);
   }

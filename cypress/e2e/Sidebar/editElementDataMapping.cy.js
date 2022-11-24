@@ -17,7 +17,7 @@ describe('links in a graph', () => {
   });
 
   it('click and undo/redo sidebar Map all Data', () => {
-    cy.get('.react-flow').contains('then...').parent().click();
+    cy.get('.react-flow').contains('if you do then...').parent().click();
 
     cy.contains('Map all Data').should('be.visible');
 

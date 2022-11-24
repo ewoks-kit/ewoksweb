@@ -27,8 +27,6 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
   }, [value]);
 
   function valueChanged(event) {
-    console.log(event.target.value);
-
     if (value !== event.target.value) {
       setValueIsChanged(true);
     } else {
@@ -39,8 +37,6 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
   }
 
   function valueSavedLocal() {
-    console.log(valueLocal);
-
     setValueIsChanged(false);
     props.valueSaved(valueLocal);
   }

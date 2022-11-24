@@ -15,7 +15,7 @@ describe('structure and basics for edit-workflows', () => {
   });
 
   it('displays 18 buttons', () => {
-    cy.get('button').should('have.length', 18);
+    cy.get('button').should('have.length', 16);
   });
 
   it('displays the canvas', () => {
@@ -38,9 +38,10 @@ describe('structure and basics for edit-workflows', () => {
     cy.get('p').should('include.text', 'Edit Graph');
   });
 
-  it('displays the Execution History', () => {
-    cy.get('p').should('include.text', 'Execution History');
-  });
+  // TODO: commented for onlyEditRelease
+  // it('displays the Execution History', () => {
+  //   cy.get('p').should('include.text', 'Execution History');
+  // });
 
   it('should be able to open and close Add Nodes and see General category', () => {
     cy.contains('ewokscore').should('be.visible');
@@ -58,28 +59,29 @@ describe('structure and basics for edit-workflows', () => {
     cy.contains('Category').should('be.visible');
   });
 
-  it('should be able to open and close Execution History and see the buttons', () => {
-    cy.contains('Execution History').parents('.MuiButtonBase-root').click();
+  // TODO: commented for onlyEditRelease
+  // it('should be able to open and close Execution History and see the buttons', () => {
+  //   cy.contains('Execution History').parents('.MuiButtonBase-root').click();
 
-    cy.contains('Execution History')
-      .parents('.MuiAccordion-root')
-      .children()
-      .find('button')
-      .should('have.length', 2)
-      .last()
-      .should('have.text', 'Clean all');
+  //   cy.contains('Execution History')
+  //     .parents('.MuiAccordion-root')
+  //     .children()
+  //     .find('button')
+  //     .should('have.length', 2)
+  //     .last()
+  //     .should('have.text', 'Clean all');
 
-    cy.get('.MuiSwitch-root').should('have.length', 0);
+  //   cy.get('.MuiSwitch-root').should('have.length', 0);
 
-    cy.contains('Execution History')
-      .parents('.MuiAccordion-root')
-      .children()
-      .find('button')
-      .should('have.length', 2)
-      .first()
-      .should('have.text', 'All Executions')
-      .click();
+  //   cy.contains('Execution History')
+  //     .parents('.MuiAccordion-root')
+  //     .children()
+  //     .find('button')
+  //     .should('have.length', 2)
+  //     .first()
+  //     .should('have.text', 'All Executions')
+  //     .click();
 
-    cy.get('.MuiSwitch-root').should('have.length', 2);
-  });
+  //   cy.get('.MuiSwitch-root').should('have.length', 2);
+  // });
 });

@@ -4,13 +4,9 @@ const subgraphsStack = (set, get) => ({
   subgraphsStack: [] as stackGraph[],
 
   setSubgraphsStack: (stackGraph: stackGraph) => {
-    console.log(stackGraph);
-
     let stack = [];
     const subStack = get().subgraphsStack;
     const exists: number = subStack.map((gr) => gr.id).indexOf(stackGraph.id);
-
-    console.log(stackGraph, subStack, exists);
 
     if (stackGraph.id === 'initialiase') {
       stack = [];

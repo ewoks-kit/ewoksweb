@@ -11,8 +11,9 @@ describe('example to-do app', () => {
     cy.location('pathname').should('not.include', 'monitor-workflows');
   });
 
-  it('offers 3 options to go ahead', () => {
-    cy.get('a').should('have.length', 3);
+  // TODO: get back to 3 options for onlyEditRelease
+  it('offers 2 options to go ahead', () => {
+    cy.get('a').should('have.length', 2);
   });
 
   it('has an img of the canvas', () => {
@@ -32,14 +33,15 @@ describe('example to-do app', () => {
     cy.go('back');
   });
 
-  it('gets to editing when the appropriete button is pressed', () => {
-    cy.get('a').last().should('have.text', 'Tutorial Workflow');
-    cy.get('a').last().click();
-    cy.get('h1').should('include.text', 'tutorial_Graph');
+  // TODO: commented for onlyEditRelease
+  // it('gets to editing when the appropriete button is pressed', () => {
+  //   cy.get('a').last().should('have.text', 'Tutorial Workflow');
+  //   cy.get('a').last().click();
+  //   cy.get('h1').should('include.text', 'tutorial_Graph');
 
-    cy.location().should((loc) => {
-      expect(loc.hash).to.eq('#/edit-workflows');
-      expect(loc.host).to.eq('localhost:3000');
-    });
-  });
+  //   cy.location().should((loc) => {
+  //     expect(loc.hash).to.eq('#/edit-workflows');
+  //     expect(loc.host).to.eq('localhost:3000');
+  //   });
+  // });
 });

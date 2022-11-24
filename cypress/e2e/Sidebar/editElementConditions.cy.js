@@ -17,7 +17,7 @@ describe('links in a graph', () => {
   });
 
   it('click and undo/redo sidebar on_error', () => {
-    cy.get('.react-flow').contains('then...').parent().click();
+    cy.get('.react-flow').contains('if you do then...').parent().click();
 
     cy.contains('on_error').should('be.visible');
     cy.contains('Conditions').should('be.visible');
