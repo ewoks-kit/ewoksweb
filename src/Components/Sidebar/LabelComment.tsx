@@ -63,6 +63,8 @@ export default function LabelComment(props: LabelCommentProps) {
   }, [element]);
 
   function saveLabel(labelLocal: string) {
+    console.log(labelLocal);
+
     if ('position' in element) {
       const el = element;
       setSelectedElement(
@@ -78,6 +80,7 @@ export default function LabelComment(props: LabelCommentProps) {
         {
           ...element,
           label: labelLocal,
+          data: { ...element.data, label: labelLocal },
         },
         'fromSaveElement'
       );
@@ -95,9 +98,11 @@ export default function LabelComment(props: LabelCommentProps) {
     );
   }
 
-  function valueSavedLocal(val: string) {
+  function valueSavedLocal() {
+    console.log(label);
+
     setValueIsChanged(false);
-    saveLabel(val);
+    saveLabel(label);
   }
 
   function setChanged(event) {
@@ -118,8 +123,10 @@ export default function LabelComment(props: LabelCommentProps) {
   }
 
   function valueSelectedChanged(event) {
+    console.log(event.target.value);
+
     setChanged(event);
-    setLabel(event.target.textContent);
+    setLabel(event.target.value);
   }
 
   return (
@@ -153,7 +160,7 @@ export default function LabelComment(props: LabelCommentProps) {
               <IconButton
                 style={{ width: '20%', minWidth: '30px' }}
                 color="inherit"
-                onClick={() => valueSavedLocal(label)}
+                onClick={valueSavedLocal}
                 data-cy="saveLabelComment"
               >
                 <Fab

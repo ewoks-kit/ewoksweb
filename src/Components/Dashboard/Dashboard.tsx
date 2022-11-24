@@ -86,8 +86,8 @@ export default function Dashboard() {
     }
   }, [openSettingsDrawer, setOpenSettingsDrawer]);
 
-  const checkAndNewGraph = () => {
-    if (canvasGraphChanged && undoIndex !== 0) {
+  const checkAndNewGraph = (notSave: boolean) => {
+    if (canvasGraphChanged && undoIndex !== 0 && !notSave) {
       setOpenAgreeDialog(true);
     } else {
       setWorkingGraph(initializedGraph);
@@ -135,7 +135,7 @@ export default function Dashboard() {
     } else if (keys && event.shiftKey && charCode === 'n') {
       event.preventDefault();
       event.stopPropagation();
-      checkAndNewGraph();
+      checkAndNewGraph(false);
     }
   }
 
@@ -162,7 +162,7 @@ export default function Dashboard() {
         title="There are unsaved changes"
         content="Continue without saving?"
         open={openAgreeDialog}
-        agreeCallback={checkAndNewGraph}
+        agreeCallback={() => checkAndNewGraph(true)}
         disagreeCallback={disAgreeSaveWithout}
       />
       <FormDialog
@@ -183,7 +183,7 @@ export default function Dashboard() {
           >
             <IconButton
               color="inherit"
-              onClick={checkAndNewGraph}
+              onClick={() => checkAndNewGraph(false)}
               disabled={inExecutionMode}
               data-cy="newWorkflowButton"
             >

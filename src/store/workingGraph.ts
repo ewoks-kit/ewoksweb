@@ -15,7 +15,7 @@ import { getTaskDescription } from '../utils/api';
 const initializedGraph = {
   graph: {
     id: 'newGraph',
-    label: 'newGraph',
+    label: '',
     input_nodes: [],
     output_nodes: [],
     uiProps: {},
@@ -116,7 +116,7 @@ const workingGraph = (set, get) => ({
     });
     get().setSubgraphsStack({
       id: workingGraph.graph.id,
-      label: workingGraph.graph.label || workingGraph.graph.id,
+      label: workingGraph.graph.label,
     });
     set((state) => ({
       ...state,

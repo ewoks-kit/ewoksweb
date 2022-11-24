@@ -27,6 +27,8 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
   }, [value]);
 
   function valueChanged(event) {
+    console.log(event.target.value);
+
     if (value !== event.target.value) {
       setValueIsChanged(true);
     } else {
@@ -36,9 +38,11 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
     setValueLocal(event.target.value);
   }
 
-  function valueSavedLocal(val) {
+  function valueSavedLocal() {
+    console.log(valueLocal);
+
     setValueIsChanged(false);
-    props.valueSaved(val);
+    props.valueSaved(valueLocal);
   }
 
   return (
@@ -62,7 +66,7 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
           <IconButton
             style={{ width: '20%', minWidth: '40px' }}
             color="inherit"
-            onClick={() => valueSavedLocal(valueLocal)}
+            onClick={valueSavedLocal}
             data-cy="saveLabelComment"
           >
             <Fab

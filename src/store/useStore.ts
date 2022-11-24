@@ -42,7 +42,7 @@ const initializedTask: Task = {
 const initializedGraph = {
   graph: {
     id: 'newGraph',
-    label: 'newGraph',
+    label: '',
     input_nodes: [],
     output_nodes: [],
     uiProps: {},
@@ -54,7 +54,7 @@ const initializedGraph = {
 const initializedRFGraph = {
   graph: {
     id: 'newGraph',
-    label: 'newGraph',
+    label: '',
   },
   nodes: [],
   links: [],
