@@ -44,6 +44,13 @@ export const contentStyle = {
     // background: 'rgb(221, 221, 221)',
     // width: '11px',
   },
+  imgPadding: {
+    padding: '2px',
+  },
+  iconButtons: {
+    margin: '0px 2px',
+    padding: '0px',
+  },
 };
 
 export const style = {
@@ -73,5 +80,12 @@ export const style = {
   },
   contentWrapper: {
     padding: '8px 0px',
+  },
+  comment: {
+    padding: '1px',
+    color: 'white',
+    fontSize: '0.875rem',
+    fontWeight: 300,
+    lineHeight: '1.13',
   },
 };

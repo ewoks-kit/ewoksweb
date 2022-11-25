@@ -36,6 +36,7 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
     if (error.response) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
+      // Keep logging in console for debugging when talking with a user
       /* eslint-disable no-console */
       console.log(
         error.response.data,

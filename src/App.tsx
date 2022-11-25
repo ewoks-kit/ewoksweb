@@ -1,4 +1,4 @@
-import Dashboard from './layout/Dashboard';
+import Dashboard from './Components/Dashboard/Dashboard';
 import 'react-reflex/styles.css';
 
 function App() {

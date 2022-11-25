@@ -19,16 +19,16 @@ import { Handle, Position } from 'react-flow-renderer';
 import type { EwoksRFNode, NodeProps } from '../types';
 import { contentStyle, style } from './NodeStyle';
 import Tooltip from '@material-ui/core/Tooltip';
-import ExecuteSpinner from '../Components/ExecuteSpinner';
+import ExecuteSpinner from '../Components/Execution/ExecuteSpinner';
 import isValidLink from '../utils/IsValidLink';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import SaveIcon from '@material-ui/icons/Save';
 import { calcNewId } from '../utils/calcNewId';
 
-import state from '../store/state';
+import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
-import tooltipText from '../Components/TooltipText';
+import tooltipText from '../Components/General/TooltipText';
 
 const iconsObj = {
   'left.svg': left,
@@ -85,21 +85,7 @@ const Node: React.FC<NodeProps> = ({
   nodeWidth,
   details,
 }: NodeProps) => {
-  const theCom = comment ? (
-    <span
-      style={{
-        padding: '1px',
-        color: 'white',
-        fontSize: '0.875rem',
-        fontWeight: 300,
-        lineHeight: '1.13',
-      }}
-    >
-      {comment}
-    </span>
-  ) : (
-    ''
-  );
+  const theCom = comment ? <span style={style.comment}>{comment}</span> : '';
 
   const border = colorBorder
     ? `4px solid ${colorBorder}`
@@ -119,17 +105,17 @@ const Node: React.FC<NodeProps> = ({
   }
 
   const [nodeSize, setNodeSize] = useState(nodeWidth);
-  const inExecutionMode = state((state) => state.inExecutionMode);
-  const graphRF = state((state) => state.graphRF);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const setSelectedElement = state((state) => state.setSelectedElement);
-  const selectedElement = state((state) => state.selectedElement);
+  const inExecutionMode = useStore((state) => state.inExecutionMode);
+  const graphRF = useStore((state) => state.graphRF);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const selectedElement = useStore((state) => state.selectedElement);
   const [edit, setEdit] = React.useState(false);
   const [labelLocal, setLabelLocal] = React.useState(label);
-  const setGraphRF = state((state) => state.setGraphRF);
+  const setGraphRF = useStore((state) => state.setGraphRF);
   const [detailsL, setDetailsL] = React.useState(false);
-  const allIcons = state((state) => state.allIcons);
-  const setUndoRedo = state((state) => state.setUndoRedo);
+  const allIcons = useStore((state) => state.allIcons);
+  const setUndoRedo = useStore((state) => state.setUndoRedo);
 
   useEffect(() => {
     setNodeSize(nodeWidth);
@@ -268,7 +254,6 @@ const Node: React.FC<NodeProps> = ({
           {withLabel &&
             (edit ? (
               <TextField
-                id="standard-multiline-flexible"
                 label="edit node Label"
                 multiline
                 maxRows={4}
@@ -294,7 +279,7 @@ const Node: React.FC<NodeProps> = ({
                 action={execution}
               >
                 <img
-                  style={{ padding: '2px' }}
+                  style={{ ...contentStyle.imgPadding }}
                   role="presentation"
                   draggable="false"
                   onDragStart={(event) => onDragStart(event)}
@@ -315,7 +300,7 @@ const Node: React.FC<NodeProps> = ({
                 action={execution}
               >
                 <img
-                  style={{ padding: '2px' }}
+                  style={{ ...contentStyle.imgPadding }}
                   role="presentation"
                   draggable="false"
                   onDragStart={(event) => onDragStart(event)}
@@ -325,7 +310,7 @@ const Node: React.FC<NodeProps> = ({
               </ExecuteSpinner>
             ) : (
               <img
-                style={{ padding: '2px' }}
+                style={{ ...contentStyle.imgPadding }}
                 role="presentation"
                 draggable="false"
                 onDragStart={(event) => onDragStart(event)}
@@ -335,7 +320,7 @@ const Node: React.FC<NodeProps> = ({
             ))}
           {withImage && (type === 'graphOutput' || type === 'graphInput') && (
             <img
-              style={{ padding: '2px' }}
+              style={{ ...contentStyle.imgPadding }}
               role="presentation"
               draggable="false"
               onDragStart={(event) => onDragStart(event)}
@@ -399,7 +384,7 @@ const Node: React.FC<NodeProps> = ({
                 placement="top"
               >
                 <IconButton
-                  style={{ margin: '0px 2px', padding: '0px' }}
+                  style={{ ...contentStyle.iconButtons }}
                   aria-label="edit"
                   onClick={() => {
                     cloneNode();
@@ -416,7 +401,7 @@ const Node: React.FC<NodeProps> = ({
                   placement="top"
                 >
                   <IconButton
-                    style={{ margin: '0px 2px', padding: '0px' }}
+                    style={{ ...contentStyle.iconButtons }}
                     aria-label="edit"
                     onClick={() => {
                       setEdit(true);
@@ -434,7 +419,6 @@ const Node: React.FC<NodeProps> = ({
                   placement="top"
                 >
                   <IconButton
-                    style={{ margin: '0px px' }}
                     aria-label="edit"
                     onClick={() => {
                       setEdit(false);

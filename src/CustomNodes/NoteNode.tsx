@@ -4,13 +4,13 @@ import React, { useEffect, useState } from 'react';
 import { style } from './NodeStyle';
 import SaveIcon from '@material-ui/icons/Save';
 
-import state from '../store/state';
+import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
 
 const NoteNode = (args) => {
   const [comment, setComment] = useState('');
-  const graphRF = state((state) => state.graphRF);
-  const setGraphRF = state((state) => state.setGraphRF);
+  const graphRF = useStore((state) => state.graphRF);
+  const setGraphRF = useStore((state) => state.setGraphRF);
   const [nodeSize, setNodeSize] = useState(args.data.nodeWidth);
 
   useEffect(() => {
@@ -73,7 +73,6 @@ const NoteNode = (args) => {
         )}
         {args.data.details ? (
           <TextField
-            id="standard-multiline-flexible"
             label="edit comment"
             multiline
             maxRows={4}
@@ -93,23 +92,6 @@ const NoteNode = (args) => {
             <SaveIcon color="primary" />
           </IconButton>
         )}
-        {/* {!edit ? (
-          <IconButton
-            style={{ padding: '0px' }}
-            aria-label="edit"
-            onClick={() => {
-              setEdit(true);
-            }}
-          >
-            <EditIcon />
-          </IconButton>
-        ) : (
-          <>
-            <SaveIcon onClick={save} />
-
-            <UndoIcon onClick={cancel} />
-          </>
-        )} */}
       </span>
     </div>
   );

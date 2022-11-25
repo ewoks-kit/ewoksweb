@@ -6,8 +6,8 @@ import 'normalize.css';
 import './styles/index.css';
 
 import App from './App';
-import EwoksUiInfo from './Components/EwoksUiInfo';
-import ExecutionTable from './Components/ExecutionTable';
+import EwoksUiInfo from './Components/Frontpage/EwoksUiInfo';
+import ExecutionTable from './Components/Execution/ExecutionTable';
 
 ReactDOM.render(
   <StrictMode>
