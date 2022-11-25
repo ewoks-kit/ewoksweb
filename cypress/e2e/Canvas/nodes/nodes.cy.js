@@ -145,7 +145,7 @@ describe('structure and basics for edit-workflows', () => {
       .its('__useStore__')
       .then((store) => store.getState().selectedElement.data.nodeWidth)
       .as('width')
-      .should('eq', 205);
+      .should('eq', 100);
 
     cy.contains('Node Size').siblings().last('span').as('slider');
 
@@ -153,7 +153,7 @@ describe('structure and basics for edit-workflows', () => {
       .children('span')
       .last()
       .should('have.attr', 'aria-valuenow')
-      .and('eq', '205');
+      .and('eq', '100');
 
     cy.get('@slider').click();
 
@@ -203,17 +203,17 @@ describe('structure and basics for edit-workflows', () => {
   });
 
   it('clones a node by button', () => {
-    cy.get('.react-flow__node').should('have.length', 16);
+    cy.get('.react-flow__node').should('have.length', 17);
     cy.contains('Clone').click();
 
-    cy.get('.react-flow__node').should('have.length', 17);
+    cy.get('.react-flow__node').should('have.length', 18);
   });
 
   it('deletes a node by button and keyboard', () => {
-    cy.get('.react-flow__node').should('have.length', 17);
+    cy.get('.react-flow__node').should('have.length', 18);
     cy.contains('Delete').click();
 
-    cy.get('.react-flow__node').should('have.length', 16);
+    cy.get('.react-flow__node').should('have.length', 17);
     cy.get('.react-flow')
       .contains('Always and forever...')
       .parent()

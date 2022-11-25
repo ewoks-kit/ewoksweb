@@ -84,7 +84,7 @@ describe('clicks on canvas and elements', () => {
 
   it('doubleclick on graph node', () => {
     cy.get('.react-flow__node-graph')
-      .should('have.length', 3)
+      .should('have.length', 7)
       .last()
       .dblclick();
 
@@ -97,6 +97,6 @@ describe('clicks on canvas and elements', () => {
       .contains('tutorial_Graph')
       .click();
 
-    cy.get('.react-flow__node').should('have.length', 16);
+    cy.get('.react-flow__node').should('have.length', 17);
   });
 });

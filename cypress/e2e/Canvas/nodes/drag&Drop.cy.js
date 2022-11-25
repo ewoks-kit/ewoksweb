@@ -59,6 +59,6 @@ describe('drag and drop nodes', () => {
     cy.get('.react-flow').last().trigger('drop', {
       dataTransfer,
     });
-    cy.get('.react-flow__node').should('have.length', 18);
+    cy.get('.react-flow__node').should('have.length', 20);
   });
 });
