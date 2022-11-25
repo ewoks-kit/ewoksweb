@@ -59,21 +59,6 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
   return res;
 }
 
-const id = 'graph';
-export function createGraph() {
-  // server returns the basic structure of a graph
-  return {
-    graph: {
-      id: `${id}1`,
-      label: 'newGraph',
-      input_nodes: [],
-      output_nodes: [],
-    },
-    nodes: [],
-    links: [],
-  };
-}
-
 export async function getSubgraphs(
   graph: GraphEwoks | GraphRF,
   recentGraphs: GraphRF[]
@@ -110,7 +95,7 @@ export async function getSubgraphs(
       // Uncomment
       .catch((error) => {
         // remove after handling the error
-        console.log('AXIOS ERROR', id, error);
+        console.log('AXIOS ERROR', error);
         return [];
       });
   }

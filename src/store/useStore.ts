@@ -60,18 +60,6 @@ const initializedRFGraph = {
   links: [],
 } as GraphRF;
 
-const tutorial_Graph = {
-  graph: {
-    id: 'tutorial_Graph',
-    label: 'tutorial_Graph',
-    input_nodes: [],
-    output_nodes: [],
-    uiProps: {},
-  },
-  nodes: [],
-  links: [],
-} as GraphRF;
-
 const useStore = create<State>((set, get) => ({
   ...allIconNames(set),
   ...allIcons(set),
@@ -103,7 +91,6 @@ const useStore = create<State>((set, get) => ({
   initializedTask,
   initializedGraph,
   initializedRFGraph,
-  tutorial_Graph,
 }));
 
 // @ts-ignore

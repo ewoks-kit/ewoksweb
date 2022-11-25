@@ -179,7 +179,6 @@ export default function Sidebar() {
     }
 
     if (elD.input_nodes) {
-      // && elD.id !== 'newGraph'
       setOpenAgreeDialog(true);
     } else if (!elD.input_nodes) {
       if (workingGraph.graph.id === graphRF.graph.id) {
