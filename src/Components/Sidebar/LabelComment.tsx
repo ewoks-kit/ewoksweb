@@ -109,18 +109,18 @@ export default function LabelComment(props: LabelCommentProps) {
     }
   }
 
-  function valueChanged(event) {
-    if (event?.target.value !== 0) {
+  function valueSelectedChanged(event) {
+    if (event?.target.textContent && event.target.value) {
       setChanged(event);
-      if (event) {
-        setLabel(event.target.value);
-      }
+      setLabel(event.target.textContent);
     }
   }
 
-  function valueSelectedChanged(event) {
-    setChanged(event);
-    setLabel(event.target.value);
+  function valueChanged(event) {
+    if (event && event.target.value !== 0) {
+      setChanged(event);
+      setLabel(event.target.value);
+    }
   }
 
   return (
