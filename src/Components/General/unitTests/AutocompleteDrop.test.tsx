@@ -16,12 +16,12 @@ describe('AutocompleteDrop should:', () => {
     const textbox = screen.getByRole('textbox', { name: /Workflows/u });
     expect(textbox).toBeInTheDocument();
     act(() => {
-      state.setState({
+      useStore.setState({
         allWorkflows: [],
       });
     });
 
-    const { allWorkflows } = state.getState();
+    const { allWorkflows } = useStore.getState();
     expect(allWorkflows).toHaveLength(0);
 
     const autocomplete = screen.getByTestId('async-autocomplete-drop');
@@ -41,7 +41,7 @@ describe('AutocompleteDrop should:', () => {
     );
 
     act(() => {
-      state.setState({
+      useStore.setState({
         allWorkflows: [
           {
             id: 'EnergyInterleavedMAD',
@@ -72,11 +72,11 @@ describe('AutocompleteDrop should:', () => {
       })
     );
 
-    // const { openSnackbar } = state.getState();
+    // const { openSnackbar } = useStore.getState();
 
     // console.log(openSnackbar, autocomplete);
 
-    const allWorkflows2 = state.getState().allWorkflows;
+    const allWorkflows2 = useStore.getState().allWorkflows;
 
     expect(allWorkflows2).toHaveLength(2);
   });
