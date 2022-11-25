@@ -359,7 +359,7 @@ export default function FormDialog(props: FormDialogProps) {
           onChange={newNameChanged}
           disabled={action === 'editTask' || overwrite}
         />
-        {action === 'newGraphOrOverwrite' && (
+        {['newGraphOrOverwrite', 'cloneGraph'].includes(action) && (
           <div>
             <b>Overwrite existing workflow with the same ID</b>
             <Checkbox
