@@ -90,13 +90,6 @@ const DashboardStyle = makeStyles((theme) => ({
     minWidth: '150px',
   },
 
-  formStyleFlex: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignContent: 'flex-start',
-  },
-
   reflexSplitter: {
     display: 'flex',
     alignItems: 'center',

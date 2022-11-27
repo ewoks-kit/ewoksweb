@@ -9,6 +9,7 @@ import SidebarTooltip from './SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
 import SaveIcon from '@material-ui/icons/Save';
+import sidebarStyle from './sidebarStyle';
 
 const useStyles = DashboardStyle;
 
@@ -130,7 +131,7 @@ export default function LabelComment(props: LabelCommentProps) {
           <FormControl
             fullWidth
             variant="outlined"
-            className={classes.formStyleFlex}
+            style={{ ...sidebarStyle.formstyleflex }}
           >
             <Autocomplete
               freeSolo

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Button,
   Checkbox,
@@ -12,6 +12,7 @@ import {
 import DashboardStyle from '../Dashboard/DashboardStyle';
 import useStore from '../../store/useStore';
 import type { EwoksRFLink, GraphRF } from '../../types';
+import sidebarStyle from './sidebarStyle';
 
 const useStyles = DashboardStyle;
 
@@ -164,7 +165,11 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
 
   return (
     <>
-      <FormControl variant="filled" fullWidth className={classes.formStyleFlex}>
+      <FormControl
+        variant="filled"
+        fullWidth
+        style={{ ...sidebarStyle.formstyleflex }}
+      >
         <InputLabel id="linkTypeLabel">Link type</InputLabel>
         <Select
           className={classes.styleLinkDropdowns}
@@ -197,7 +202,11 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
           Apply to all
         </Button>
       </FormControl>
-      <FormControl variant="filled" fullWidth className={classes.formStyleFlex}>
+      <FormControl
+        variant="filled"
+        fullWidth
+        style={{ ...sidebarStyle.formstyleflex }}
+      >
         <InputLabel id="markerEnd">Arrow Head</InputLabel>
         <Select
           className={classes.styleLinkDropdowns}
