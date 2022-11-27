@@ -7,6 +7,7 @@ export const edgeStyle = {
     borderColor: 'rgb(150, 165, 249)',
     overflow: 'hidden',
     wordWrap: 'break-word',
+    padding: '1px',
   },
 
   bendingText: {

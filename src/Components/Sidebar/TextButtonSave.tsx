@@ -4,6 +4,7 @@ import { FormControl, IconButton, TextField, Fab } from '@material-ui/core';
 import DashboardStyle from '../Dashboard/DashboardStyle';
 import SaveIcon from '@material-ui/icons/Save';
 import useStore from '../../store/useStore';
+import sidebarStyle from './sidebarStyle';
 
 const useStyles = DashboardStyle;
 
@@ -44,7 +45,7 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
   return (
     <div className={classes.detailsLabels}>
       <FormControl
-        className={classes.formStyleFlex}
+        style={{ ...sidebarStyle.formstyleflex }}
         fullWidth
         variant="outlined"
       >
