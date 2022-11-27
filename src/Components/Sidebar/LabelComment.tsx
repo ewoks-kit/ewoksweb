@@ -111,7 +111,7 @@ export default function LabelComment(props: LabelCommentProps) {
   }
 
   function valueSelectedChanged(event) {
-    if (event?.target.textContent && event.target.value) {
+    if (event?.target.textContent) {
       setChanged(event);
       setLabel(event.target.textContent);
     }
