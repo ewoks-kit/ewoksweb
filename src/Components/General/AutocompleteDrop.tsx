@@ -15,16 +15,23 @@ interface AutocompleteDropProps {
 }
 
 // DOC: create groups from an array of objects based on a property of the objects
-function groupBy(arr, property) {
+function groupBy(
+  arr: WorkflowDescription[],
+  property: string
+): {
+  [key: string]: WorkflowDescription[];
+} {
   return arr.reduce((acc, cur) => {
     acc[cur[property]] = [...(acc[cur[property]] || []), cur];
     return acc;
   }, {});
 }
 
-function sortWorkflows(filterAddCategory) {
+function sortWorkflows(
+  filterAddCategory: WorkflowDescription[]
+): WorkflowDescription[] {
   // DOC: an object of arrays with keys being the categories sorted
-  const groupedByCategory = groupBy(
+  const groupedByCategory: { [key: string]: WorkflowDescription[] } = groupBy(
     filterAddCategory.sort((a, b) => -b.category.localeCompare(a.category)),
     'category'
   );
@@ -34,7 +41,7 @@ function sortWorkflows(filterAddCategory) {
   });
 
   // DOC: join the sorted by category and label arrays in one array for the dropdown
-  let allW = [];
+  let allW: WorkflowDescription[] = [];
   Object.keys(groupedByCategory).forEach((k) => {
     allW = [...allW, ...groupedByCategory[k]];
   });
@@ -100,11 +107,11 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
       setAllWorkflows(workF);
 
       if (active) {
-        const filterAddCategory = filterworkfToCategories([...workF]).map(
-          (workf) => {
-            return { ...workf, category: workf.category || 'NoCategory' };
-          }
-        );
+        const filterAddCategory: WorkflowDescription[] = filterworkfToCategories(
+          [...workF]
+        ).map((workf) => {
+          return { ...workf, category: workf.category || 'NoCategory' };
+        });
 
         setOptions(
           props.placeholder === openWorkflowPlaceholder
@@ -121,7 +128,7 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
 
   function filterworkfToCategories(
     WorkflowDescriptions: WorkflowDescription[]
-  ) {
+  ): WorkflowDescription[] {
     let workflowToShow = [];
     if (
       props.category === 'All' ||
