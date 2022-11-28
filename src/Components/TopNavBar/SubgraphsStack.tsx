@@ -5,7 +5,6 @@ import HomeIcon from '@material-ui/icons/Home';
 
 import Link from '@material-ui/core/Link';
 import useStore from '../../store/useStore';
-import type { GraphDetails } from '../../types';
 
 const useStyles = DashboardStyle;
 
@@ -29,7 +28,7 @@ export default function SubgraphsStack() {
     setGraphRF(subgraph);
     setSelectedElement({
       ...subgraph.graph,
-    } as GraphDetails);
+    });
   };
 
   return (
