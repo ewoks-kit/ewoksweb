@@ -14,23 +14,10 @@ interface AutocompleteDropProps {
   setInputValue(input: WorkflowDescription): void;
 }
 
-// DOC: create groups from an array of objects based on a property of the objects
-function groupBy(
-  arr: WorkflowDescription[],
-  property: string
-): {
-  [key: string]: WorkflowDescription[];
-} {
-  return arr.reduce((acc, cur) => {
-    acc[cur[property]] = [...(acc[cur[property]] || []), cur];
-    return acc;
-  }, {});
-}
-
 function sortWorkflows(
   filterAddCategory: WorkflowDescription[]
 ): WorkflowDescription[] {
-  return filterAddCategory.sort(function (a, b) {
+  return filterAddCategory.sort((a, b) => {
     return (
       a.category.localeCompare(b.category) || a.label.localeCompare(b.label)
     );
