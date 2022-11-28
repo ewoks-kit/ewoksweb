@@ -93,7 +93,7 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
           ),
           'category'
         );
-        // DOC: sort the indevidual arrays internally
+        // DOC: sort the individual arrays internally
         Object.keys(groupedByCategory).forEach((k) => {
           groupedByCategory[k].sort((a, b) => -b.label.localeCompare(a.label));
         });
@@ -131,7 +131,6 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
         (work) => work.category === props.category
       );
     }
-    console.log(workflowToShow);
 
     return workflowToShow;
   }
