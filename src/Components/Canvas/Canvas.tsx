@@ -438,6 +438,9 @@ function Canvas() {
           id: subgraph.graph.id,
           label: subgraph.graph.label,
         });
+        setSelectedElement({
+          ...subgraph.graph,
+        });
       } else {
         setOpenSnackbar({
           open: true,
