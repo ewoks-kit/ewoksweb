@@ -321,7 +321,7 @@ export interface UiPropsGraph {
   comment?: string;
   notes?: Note[];
   style?: LinkStyle;
-  source: string;
+  source?: string;
   icon?: string;
 }
 

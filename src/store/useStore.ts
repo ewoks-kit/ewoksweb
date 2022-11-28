@@ -39,7 +39,7 @@ const initializedTask: Task = {
   required_input_names: [],
 };
 
-const initializedGraph = {
+const initializedGraph: GraphEwoks = {
   graph: {
     id: 'newGraph',
     label: '',
@@ -49,16 +49,16 @@ const initializedGraph = {
   },
   nodes: [],
   links: [],
-} as GraphEwoks;
+};
 
-const initializedRFGraph = {
+const initializedRFGraph: GraphRF = {
   graph: {
     id: 'newGraph',
     label: '',
   },
   nodes: [],
   links: [],
-} as GraphRF;
+};
 
 const useStore = create<State>((set, get) => ({
   ...allIconNames(set),
