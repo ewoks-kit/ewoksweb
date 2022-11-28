@@ -22,6 +22,25 @@ function groupBy(arr, property) {
   }, {});
 }
 
+function sortWorkflows(filterAddCategory) {
+  // DOC: an object of arrays with keys being the categories sorted
+  const groupedByCategory = groupBy(
+    filterAddCategory.sort((a, b) => -b.category.localeCompare(a.category)),
+    'category'
+  );
+  // DOC: sort the individual arrays internally
+  Object.keys(groupedByCategory).forEach((k) => {
+    groupedByCategory[k].sort((a, b) => -b.label.localeCompare(a.label));
+  });
+
+  // DOC: join the sorted by category and label arrays in one array for the dropdown
+  let allW = [];
+  Object.keys(groupedByCategory).forEach((k) => {
+    allW = [...allW, ...groupedByCategory[k]];
+  });
+  return allW;
+}
+
 const openWorkflowPlaceholder = 'Open Workflow';
 
 // DOC: A dropdown that can be an input as well
@@ -86,27 +105,10 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
             return { ...workf, category: workf.category || 'NoCategory' };
           }
         );
-        // DOC: an object of arrays with keys being the categories sorted
-        const groupedByCategory = groupBy(
-          filterAddCategory.sort(
-            (a, b) => -b.category.localeCompare(a.category)
-          ),
-          'category'
-        );
-        // DOC: sort the individual arrays internally
-        Object.keys(groupedByCategory).forEach((k) => {
-          groupedByCategory[k].sort((a, b) => -b.label.localeCompare(a.label));
-        });
-
-        // DOC: join the sorted by category and label arrays in one array for the dropdown
-        let allW = [];
-        Object.keys(groupedByCategory).forEach((k) => {
-          allW = [...allW, ...groupedByCategory[k]];
-        });
 
         setOptions(
           props.placeholder === openWorkflowPlaceholder
-            ? allW
+            ? sortWorkflows(filterAddCategory)
             : [...categories, { label: 'All' }]
         );
       }
