@@ -5,6 +5,7 @@ import HomeIcon from '@material-ui/icons/Home';
 
 import Link from '@material-ui/core/Link';
 import useStore from '../../store/useStore';
+import type { GraphDetails } from '../../types';
 
 const useStyles = DashboardStyle;
 
@@ -17,6 +18,7 @@ export default function SubgraphsStack() {
   const subgraphsStack = useStore((state) => {
     return state.subgraphsStack;
   });
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   const goToGraph = (e) => {
     e.preventDefault();
@@ -25,6 +27,9 @@ export default function SubgraphsStack() {
     const subgraph = recentGraphs.find((gr) => gr.graph.id === e.target.id);
 
     setGraphRF(subgraph);
+    setSelectedElement({
+      ...subgraph.graph,
+    } as GraphDetails);
   };
 
   return (
