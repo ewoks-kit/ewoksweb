@@ -14,6 +14,14 @@ interface AutocompleteDropProps {
   setInputValue(input: WorkflowDescription): void;
 }
 
+// DOC: create groups from an array of objects based on a property of the objects
+function groupBy(arr, property) {
+  return arr.reduce((acc, cur) => {
+    acc[cur[property]] = [...(acc[cur[property]] || []), cur];
+    return acc;
+  }, {});
+}
+
 const openWorkflowPlaceholder = 'Open Workflow';
 
 // DOC: A dropdown that can be an input as well
@@ -73,11 +81,32 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
       setAllWorkflows(workF);
 
       if (active) {
+        const filterAddCategory = filterworkfToCategories([...workF]).map(
+          (workf) => {
+            return { ...workf, category: workf.category || 'NoCategory' };
+          }
+        );
+        // DOC: an object of arrays with keys being the categories sorted
+        const groupedByCategory = groupBy(
+          filterAddCategory.sort(
+            (a, b) => -b.category.localeCompare(a.category)
+          ),
+          'category'
+        );
+        // DOC: sort the indevidual arrays internally
+        Object.keys(groupedByCategory).forEach((k) => {
+          groupedByCategory[k].sort((a, b) => -b.label.localeCompare(a.label));
+        });
+
+        // DOC: join the sorted by category and label arrays in one array for the dropdown
+        let allW = [];
+        Object.keys(groupedByCategory).forEach((k) => {
+          allW = [...allW, ...groupedByCategory[k]];
+        });
+
         setOptions(
           props.placeholder === openWorkflowPlaceholder
-            ? filterworkfToCategories([...workF]).map((workf) => {
-                return { ...workf, category: workf.category || 'NoCategory' };
-              })
+            ? allW
             : [...categories, { label: 'All' }]
         );
       }
@@ -102,6 +131,8 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
         (work) => work.category === props.category
       );
     }
+    console.log(workflowToShow);
+
     return workflowToShow;
   }
 
