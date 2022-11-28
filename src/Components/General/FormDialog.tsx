@@ -339,9 +339,10 @@ export default function FormDialog(props: FormDialogProps) {
         {action === 'editTask' ? 'Edit the ' : 'Give the new '}
         {isForGraph ? 'Workflow name' : 'Task details'}
         {action === 'newGraphOrOverwrite' &&
-          ` or select to overwrite the existing with id: ${
-            'graph' in elementToEdit ? elementToEdit.graph.id : ''
-          }`}
+        'graph' in elementToEdit &&
+        elementToEdit.graph.label
+          ? ` or select to overwrite the existing with id: ${elementToEdit.graph.label}`
+          : ''}
       </DialogTitle>
       <DialogContent>
         <DialogContentText>

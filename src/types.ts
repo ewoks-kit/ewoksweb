@@ -152,7 +152,6 @@ export interface State {
   undoIndex?: number;
   setUndoIndex?: (index: number) => void;
 
-  tutorial_Graph?: GraphRF;
   initializedGraph?: GraphEwoks;
   initializedRFGraph?: GraphRF;
   initializedTask?: Task;
@@ -322,7 +321,7 @@ export interface UiPropsGraph {
   comment?: string;
   notes?: Note[];
   style?: LinkStyle;
-  source: string;
+  source?: string;
   icon?: string;
 }
 
