@@ -30,22 +30,11 @@ function groupBy(
 function sortWorkflows(
   filterAddCategory: WorkflowDescription[]
 ): WorkflowDescription[] {
-  // DOC: an object of arrays with keys being the categories sorted
-  const groupedByCategory: { [key: string]: WorkflowDescription[] } = groupBy(
-    filterAddCategory.sort((a, b) => -b.category.localeCompare(a.category)),
-    'category'
-  );
-  // DOC: sort the individual arrays internally
-  Object.keys(groupedByCategory).forEach((k) => {
-    groupedByCategory[k].sort((a, b) => -b.label.localeCompare(a.label));
+  return filterAddCategory.sort(function (a, b) {
+    return (
+      a.category.localeCompare(b.category) || a.label.localeCompare(b.label)
+    );
   });
-
-  // DOC: join the sorted by category and label arrays in one array for the dropdown
-  let allW: WorkflowDescription[] = [];
-  Object.keys(groupedByCategory).forEach((k) => {
-    allW = [...allW, ...groupedByCategory[k]];
-  });
-  return allW;
 }
 
 const openWorkflowPlaceholder = 'Open Workflow';
