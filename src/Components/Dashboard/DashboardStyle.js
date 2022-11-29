@@ -9,11 +9,6 @@ const DashboardStyle = makeStyles((theme) => ({
   openFileButton: {
     backgroundColor: '#96a5f9',
   },
-  formControl: {
-    minWidth: '220px',
-    backgroundColor: '#7685dd',
-    borderRadius: '4px',
-  },
 
   root: {
     display: 'flex',
@@ -93,13 +88,6 @@ const DashboardStyle = makeStyles((theme) => ({
 
   styleLinkDropdowns: {
     minWidth: '150px',
-  },
-
-  formStyleFlex: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignContent: 'flex-start',
   },
 
   reflexSplitter: {

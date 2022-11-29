@@ -39,38 +39,26 @@ const initializedTask: Task = {
   required_input_names: [],
 };
 
-const initializedGraph = {
+const initializedGraph: GraphEwoks = {
   graph: {
     id: 'newGraph',
-    label: 'newGraph',
+    label: '',
     input_nodes: [],
     output_nodes: [],
     uiProps: {},
   },
   nodes: [],
   links: [],
-} as GraphEwoks;
+};
 
-const initializedRFGraph = {
+const initializedRFGraph: GraphRF = {
   graph: {
     id: 'newGraph',
-    label: 'newGraph',
+    label: '',
   },
   nodes: [],
   links: [],
-} as GraphRF;
-
-const tutorial_Graph = {
-  graph: {
-    id: 'tutorial_Graph',
-    label: 'tutorial_Graph',
-    input_nodes: [],
-    output_nodes: [],
-    uiProps: {},
-  },
-  nodes: [],
-  links: [],
-} as GraphRF;
+};
 
 const useStore = create<State>((set, get) => ({
   ...allIconNames(set),
@@ -103,7 +91,6 @@ const useStore = create<State>((set, get) => ({
   initializedTask,
   initializedGraph,
   initializedRFGraph,
-  tutorial_Graph,
 }));
 
 // @ts-ignore

@@ -24,10 +24,11 @@ import type {
   GraphEwoks,
   GraphRF,
   Task,
+  FormAction,
 } from '../../types';
 import { rfToEwoks } from '../../utils';
 import useStore from '../../store/useStore';
-import configData from '../../configData.json';
+import commonStrings from '../../commonStrings.json';
 import {
   getTaskDescription,
   postWorkflow,
@@ -38,7 +39,7 @@ import {
 
 interface FormDialogProps {
   elementToEdit: Task | GraphRF;
-  action: string;
+  action: FormAction;
   open: boolean;
   setOpenSaveDialog: Dispatch<SetStateAction<boolean>>;
 }
@@ -82,9 +83,10 @@ export default function FormDialog(props: FormDialogProps) {
   useEffect(() => {
     setElement(elementToEdit);
     setIsOpen(open);
+
     if (isForGraph) {
-      const elGraph = elementToEdit as GraphDetails;
-      setNewName(elGraph.label || '');
+      const elGraph = elementToEdit as GraphRF;
+      setNewName(elGraph.graph.label || '');
       setOverwrite(false);
     } else {
       const elTask = elementToEdit as Task;
@@ -99,7 +101,7 @@ export default function FormDialog(props: FormDialogProps) {
   }, [open, action, elementToEdit, isForGraph]);
 
   async function handleSave() {
-    // get the selected element (graph or Node) give a new name before saving
+    // DOC: get the selected element (graph or Node) give a new name before saving
     if (isForGraph && newName) {
       saveGraph(element as GraphRF);
     } else if ('task_identifier' in element && newName) {
@@ -133,7 +135,7 @@ export default function FormDialog(props: FormDialogProps) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || configData.savingError,
+        text: error.response?.data?.message || commonStrings.savingError,
         severity: 'warning',
       });
     }
@@ -163,7 +165,7 @@ export default function FormDialog(props: FormDialogProps) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || configData.savingError,
+        text: error.response?.data?.message || commonStrings.savingError,
         severity: 'warning',
       });
     }
@@ -186,7 +188,7 @@ export default function FormDialog(props: FormDialogProps) {
         setGettingFromServer(false);
         setOpenSnackbar({
           open: true,
-          text: error.response?.data?.message || configData.savingError,
+          text: error.response?.data?.message || commonStrings.savingError,
           severity: 'error',
         });
       } finally {
@@ -214,7 +216,7 @@ export default function FormDialog(props: FormDialogProps) {
         setGettingFromServer(false);
         setOpenSnackbar({
           open: true,
-          text: error.response?.data?.message || configData.savingError,
+          text: error.response?.data?.message || commonStrings.savingError,
           severity: 'error',
         });
       }
@@ -338,9 +340,10 @@ export default function FormDialog(props: FormDialogProps) {
         {action === 'editTask' ? 'Edit the ' : 'Give the new '}
         {isForGraph ? 'Workflow name' : 'Task details'}
         {action === 'newGraphOrOverwrite' &&
-          ` or select to overwrite the existing with id: ${
-            'graph' in elementToEdit ? elementToEdit.graph.id : ''
-          }`}
+        'graph' in elementToEdit &&
+        elementToEdit.graph.label
+          ? ` or select to overwrite the existing with id: ${elementToEdit.graph.label}`
+          : ''}
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
@@ -357,7 +360,7 @@ export default function FormDialog(props: FormDialogProps) {
           onChange={newNameChanged}
           disabled={action === 'editTask' || overwrite}
         />
-        {action === 'newGraphOrOverwrite' && (
+        {['newGraphOrOverwrite', 'cloneGraph'].includes(action) && (
           <div>
             <b>Overwrite existing workflow with the same ID</b>
             <Checkbox

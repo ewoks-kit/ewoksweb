@@ -17,6 +17,7 @@ export default function SubgraphsStack() {
   const subgraphsStack = useStore((state) => {
     return state.subgraphsStack;
   });
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   const goToGraph = (e) => {
     e.preventDefault();
@@ -25,6 +26,9 @@ export default function SubgraphsStack() {
     const subgraph = recentGraphs.find((gr) => gr.graph.id === e.target.id);
 
     setGraphRF(subgraph);
+    setSelectedElement({
+      ...subgraph.graph,
+    });
   };
 
   return (

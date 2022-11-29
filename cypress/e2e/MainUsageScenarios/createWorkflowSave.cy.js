@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 // / <reference types="cypress" />
 
-describe('links in a graph', () => {
+describe('create workflow and save', () => {
   before(() => {
     cy.visit('http://localhost:3000/#/edit-workflows');
 
@@ -26,7 +26,7 @@ describe('links in a graph', () => {
     cy.window()
       .its('__useStore__')
       .then((store) => {
-        const allWorkflows = store.getState().allWorkflows;
+        const { allWorkflows } = store.getState();
 
         let id = 11;
         console.log(allWorkflows);

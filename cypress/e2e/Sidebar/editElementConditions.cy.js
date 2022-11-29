@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 // / <reference types="cypress" />
 
-describe('links in a graph', () => {
+describe('edit links conditions', () => {
   before(() => {
     cy.visit('http://localhost:3000/#/edit-workflows');
 
@@ -17,7 +17,7 @@ describe('links in a graph', () => {
   });
 
   it('click and undo/redo sidebar on_error', () => {
-    cy.get('.react-flow').contains('then...').parent().click();
+    cy.get('.react-flow').contains('web app?').parent().click();
 
     cy.contains('on_error').should('be.visible');
     cy.contains('Conditions').should('be.visible');

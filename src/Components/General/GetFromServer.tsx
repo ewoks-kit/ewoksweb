@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import DashboardStyle from '../Dashboard/DashboardStyle';
 import FormControl from '@material-ui/core/FormControl';
 import AutocompleteDrop from 'Components/General/AutocompleteDrop';
 import useStore from '../../store/useStore';
@@ -9,11 +8,7 @@ import { getWorkflow } from '../../utils/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { validateEwoksGraph } from '../../utils/EwoksValidator';
 
-const useStyles = DashboardStyle;
-
 export default function GetFromServer() {
-  const classes = useStyles();
-
   const [workflowId, setWorkflowId] = useState('');
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
@@ -93,7 +88,14 @@ export default function GetFromServer() {
         agreeCallback={() => getFromServer(workflowId)}
         disagreeCallback={disAgreeSaveWithout}
       />
-      <FormControl variant="standard" className={classes.formControl}>
+      <FormControl
+        variant="standard"
+        style={{
+          minWidth: '220px',
+          backgroundColor: '#7685dd',
+          borderRadius: '4px',
+        }}
+      >
         <AutocompleteDrop
           setInputValue={setInputValue}
           placeholder="Open Workflow"

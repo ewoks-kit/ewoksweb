@@ -23,7 +23,7 @@ describe('clicks on canvas and elements', () => {
 
   // select a node with click
   it('selects a node with click', () => {
-    cy.contains('Advanced').should('not.exist');
+    cy.get('[data-cy="advanced-checkbox-nodes"]').should('not.exist');
     cy.contains('Default Inputs').should('not.exist');
 
     cy.get('.react-flow__node')
@@ -31,7 +31,7 @@ describe('clicks on canvas and elements', () => {
       .click()
       .should('include.class', 'selected');
 
-    cy.contains('Advanced').should('exist');
+    cy.get('[data-cy="advanced-checkbox-nodes"]').should('exist');
     cy.contains('Default Inputs').should('exist');
     cy.contains('Default Inputs').should('be.visible');
     cy.contains('Inputs-complete').should('exist');
@@ -48,7 +48,7 @@ describe('clicks on canvas and elements', () => {
       .click({ force: true })
       .should('include.class', 'selected');
 
-    cy.contains('Advanced').should('exist');
+    cy.get('[data-cy="advanced-checkbox-links"]').should('exist');
     cy.contains('Map all Data').should('exist');
     cy.contains('Map all Data').should('be.visible');
     cy.contains('on_error').should('exist');
@@ -84,11 +84,11 @@ describe('clicks on canvas and elements', () => {
 
   it('doubleclick on graph node', () => {
     cy.get('.react-flow__node-graph')
-      .should('have.length', 3)
+      .should('have.length', 7)
       .last()
       .dblclick();
 
-    cy.get('.react-flow__node').should('not.have.length', 20);
+    cy.get('.react-flow__node').should('not.have.length', 19);
 
     cy.get('h1')
       .get('.MuiBreadcrumbs-li')
@@ -97,6 +97,6 @@ describe('clicks on canvas and elements', () => {
       .contains('tutorial_Graph')
       .click();
 
-    cy.get('.react-flow__node').should('have.length', 20);
+    cy.get('.react-flow__node').should('have.length', 17);
   });
 });

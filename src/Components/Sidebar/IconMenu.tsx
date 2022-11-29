@@ -19,13 +19,14 @@ import type {
   Task,
 } from '../../types';
 import useStore from '../../store/useStore';
+import { FormAction } from '../../types';
 
 export default function IconMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
   const [elementToEdit, setElementToEdit] = React.useState<Task | GraphRF>({});
-  const [doAction, setDoAction] = React.useState<string>('');
+  const [doAction, setDoAction] = React.useState<FormAction>();
   const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
   );
@@ -44,7 +45,7 @@ export default function IconMenu() {
   }
 
   function action(
-    action: string,
+    action: FormAction,
     element: Task | EwoksRFNode | EwoksRFLink | GraphRF
   ) {
     setDoAction(action);
@@ -117,19 +118,23 @@ export default function IconMenu() {
       >
         <Paper>
           <MenuList>
-            <MenuItem onClick={() => action('newTask', initializedTask)}>
+            <MenuItem
+              onClick={() => action(FormAction.newTask, initializedTask)}
+            >
               <ListItemIcon>
                 <FiberNewIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText>New Task</ListItemText>
             </MenuItem>
-            <MenuItem onClick={() => action('cloneTask', selectedElement)}>
+            <MenuItem
+              onClick={() => action(FormAction.cloneTask, selectedElement)}
+            >
               <ListItemIcon>
                 <FileCopyIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText>Clone as Task</ListItemText>
             </MenuItem>
-            <MenuItem onClick={() => action('cloneGraph', graphRF)}>
+            <MenuItem onClick={() => action(FormAction.cloneGraph, graphRF)}>
               <ListItemIcon>
                 <FileCopyIcon fontSize="small" />
               </ListItemIcon>

@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 // / <reference types="cypress" />
 
-describe('structure and basics for edit-workflows', () => {
+describe('drag and drop nodes', () => {
   before(() => {
     cy.visit('http://localhost:3000/#/edit-workflows');
 
@@ -17,22 +17,11 @@ describe('structure and basics for edit-workflows', () => {
 
   it('should drag and drop 2 nodes from add nodes into canvas', () => {
     const dataTransfer = new DataTransfer();
-    cy.contains('Add Nodes').click();
+    cy.contains('Add Nodes').click({ force: true });
 
     cy.contains('General').click();
 
-    cy.get('.dndnode').last().trigger('dragstart', {
-      dataTransfer,
-    });
-
-    cy.get('.react-flow').trigger('drop', {
-      dataTransfer,
-    });
-
-    cy.get('.react-flow__node').should('have.length', 21);
-
-    cy.contains('General')
-      .parents('#add-nodes-accordion')
+    cy.get('[data-cy="add-nodes-category-General"]')
       .find('.dndnode')
       .first()
       .trigger('dragstart', {
@@ -43,7 +32,20 @@ describe('structure and basics for edit-workflows', () => {
       dataTransfer,
     });
 
-    cy.get('.react-flow__node').should('have.length', 22);
+    cy.get('.react-flow__node').should('have.length', 17);
+
+    cy.get('[data-cy="add-nodes-category-General"]')
+      .find('.dndnode')
+      .first()
+      .trigger('dragstart', {
+        dataTransfer,
+      });
+
+    cy.get('.react-flow').trigger('drop', {
+      dataTransfer,
+    });
+
+    cy.get('.react-flow__node').should('have.length', 18);
   });
 
   // TODO: move node - dragstart seems to grasp the inner and creates a ghost
@@ -57,6 +59,6 @@ describe('structure and basics for edit-workflows', () => {
     cy.get('.react-flow').last().trigger('drop', {
       dataTransfer,
     });
-    cy.get('.react-flow__node').should('have.length', 22);
+    cy.get('.react-flow__node').should('have.length', 20);
   });
 });

@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 // / <reference types="cypress" />
 
-describe('links in a graph', () => {
+describe('select visualize links', () => {
   before(() => {
     cy.visit('http://localhost:3000/#/edit-workflows');
 
@@ -18,17 +18,17 @@ describe('links in a graph', () => {
 
   it('link has the default style', () => {
     cy.get('.react-flow')
-      .contains('then...')
+      .contains('if you do then...')
       .should(
         'have.attr',
         'style',
-        'color: rgb(150, 165, 249); fill: rgb(150, 165, 249); font-weight: 500; font-size: 14px;'
+        'color: rgb(206, 92, 0); fill: rgb(206, 92, 0); font-weight: 500; font-size: 14px;'
       )
       .siblings('rect')
       .should(
         'have.attr',
         'style',
-        'fill: rgb(223, 226, 247); fill-opacity: 1; stroke-width: 3px; stroke: rgb(150, 165, 249);'
+        'fill: rgb(223, 226, 247); fill-opacity: 1; stroke-width: 3px; stroke: rgb(206, 92, 0);'
       );
 
     cy.window()
@@ -40,7 +40,7 @@ describe('links in a graph', () => {
 
   it('selects a link and adds selected class and sidebar shows details', () => {
     cy.get('.react-flow')
-      .contains('then...')
+      .contains('if you do then...')
       .parent()
       .click()
       .parent()
@@ -52,17 +52,17 @@ describe('links in a graph', () => {
       .its('__useStore__')
       .then((store) => store.getState().selectedElement.label)
       .as('label')
-      .should('eq', 'then...');
+      .should('eq', 'if you do then...');
 
     cy.get('[data-cy="node-edge-label"]')
       .children('div')
       .children('textarea')
       .first()
-      .should('have.value', 'then...');
+      .should('have.value', 'if you do then...');
 
     // equal to the above without getting into the structure mui is producing
     cy.get('[data-cy="node-edge-label"]')
-      .contains('then...')
-      .should('have.value', 'then...');
+      .contains('if you do then...')
+      .should('have.value', 'if you do then...');
   });
 });

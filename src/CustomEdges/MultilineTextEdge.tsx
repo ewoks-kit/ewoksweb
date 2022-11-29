@@ -29,7 +29,7 @@ function multilineText({
     targetY,
   });
 
-  const titleWidth = Math.max(...label.split(',').map((mp) => mp.length)) * 7;
+  const titleWidth = Math.max(...label.split(',').map((mp) => mp.length)) * 8;
 
   const titleHeight = label.split(',').length * 30;
 

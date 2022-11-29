@@ -29,10 +29,10 @@ describe('structure and basics for edit-workflows', () => {
   });
 
   it('displays the number of nodes the tutorial_Graph has', () => {
-    cy.get('.react-flow__node').should('have.length', 20);
+    cy.get('.react-flow__node').should('have.length', 17);
   });
 
   it('displays the number of links the tutorial_Graph has', () => {
-    cy.get('.react-flow__edge').should('have.length', 12);
+    cy.get('.react-flow__edge').should('have.length', 13);
   });
 });

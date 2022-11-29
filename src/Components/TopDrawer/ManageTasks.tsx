@@ -12,7 +12,7 @@ import AddNodes from '../Sidebar/AddNodes';
 import EventNoteIcon from '@material-ui/icons/EventNote';
 import { useState } from 'react';
 import { discoverTasks } from '../../utils/api';
-import configData from '../../configData.json';
+import commonStrings from '../../commonStrings.json';
 import type { SnackbarParams } from '../../types';
 
 export default function ManageTasks() {
@@ -42,7 +42,7 @@ export default function ManageTasks() {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || configData.savingError,
+        text: error.response?.data?.message || commonStrings.savingError,
         severity: 'warning',
       });
     }

@@ -1,4 +1,5 @@
-import { defineConfig } from 'cypress'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { defineConfig } from 'cypress';
 
 export default defineConfig({
   e2e: {
@@ -7,10 +8,10 @@ export default defineConfig({
     },
   },
 
-  "component": {
-    "devServer": {
-      "framework": "create-react-app",
-      "bundler": "webpack"
-    }
-  }
-})
+  component: {
+    devServer: {
+      framework: 'create-react-app',
+      bundler: 'webpack',
+    },
+  },
+});

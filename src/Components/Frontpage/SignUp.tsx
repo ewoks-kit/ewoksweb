@@ -75,8 +75,8 @@ export default function SignUp(props) {
           >
             <Typography component="h1" variant="h5">
               Welcome to the <b className={classes.linkStyle}>Ewoks-UI</b> for
-              managing your Workflows. Select to Edit or Monitor or get started
-              with a graph where Ewoks-UI describes itself:
+              managing your Workflows. Select to Edit or get started with a
+              tutorial where Ewoks-UI describes itself:
             </Typography>
             {/* TODO: repetitive iconButton abstract when stable */}
             <Link to="/edit-workflows" className={classes.linkStyle}>
@@ -100,7 +100,7 @@ export default function SignUp(props) {
                 </Typography>
               </IconButton>
             </Link>
-            <Link to="/monitor-workflows" className={classes.linkStyle}>
+            {/* <Link to="/monitor-workflows" className={classes.linkStyle}>
               <IconButton color="inherit">
                 <Typography
                   component="h1"
@@ -121,7 +121,7 @@ export default function SignUp(props) {
                   </Fab>
                 </Typography>
               </IconButton>
-            </Link>
+            </Link> */}
             <Link to="/edit-workflows" className={classes.linkStyle}>
               <IconButton
                 color="inherit"
@@ -147,6 +147,12 @@ export default function SignUp(props) {
                 </Typography>
               </IconButton>
             </Link>
+            <Typography component="h2" variant="h5">
+              Click for documentation on{' '}
+              <a href="https://ewoks.readthedocs.io/en/latest/">ewoks </a>
+              and{' '}
+              <a href="https://ewoksweb.readthedocs.io/en/latest/">ewoksweb </a>
+            </Typography>
           </Box>
         </Container>
       </Grid>
@@ -160,7 +166,7 @@ export default function SignUp(props) {
           <img src={ewoksUI} alt="ewoks image" />
         </Box> */}
       </Grid>
-
+      {/* TODO: commented for onlyEditRelease */}
       {/* <Grid item xs={12} sm={12} md={6} lg={4}>
         <Container component="main" maxWidth="lg">
           <CssBaseline />

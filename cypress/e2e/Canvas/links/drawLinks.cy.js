@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 // / <reference types="cypress" />
 
-describe('links in a graph', () => {
+describe('draw links', () => {
   before(() => {
     cy.visit('http://localhost:3000/#/edit-workflows');
 
@@ -32,7 +32,7 @@ describe('links in a graph', () => {
       .find('div[data-handleid="tl"]')
       .click();
 
-    cy.get('.react-flow__edge').should('have.length', 13);
+    cy.get('.react-flow__edge').should('have.length', 14);
   });
 
   it('wont draw a link between 2 outputs', () => {
@@ -50,7 +50,7 @@ describe('links in a graph', () => {
       .find('div[data-handleid="sr"]')
       .click();
 
-    cy.get('.react-flow__edge').should('have.length', 13);
+    cy.get('.react-flow__edge').should('have.length', 14);
   });
 
   it('wont draw a link between 2 inputs', () => {
@@ -68,7 +68,7 @@ describe('links in a graph', () => {
       .find('div[data-handleid="tl"]')
       .click();
 
-    cy.get('.react-flow__edge').should('have.length', 13);
+    cy.get('.react-flow__edge').should('have.length', 14);
   });
 
   // try to draw link between 2 already connected simple nodes, graph nodes, input-output nodes
@@ -87,7 +87,7 @@ describe('links in a graph', () => {
       .find('div[data-handleid="tl"]')
       .click();
 
-    cy.get('.react-flow__edge').should('have.length', 13);
+    cy.get('.react-flow__edge').should('have.length', 14);
   });
 
   // it('wont draw a link between 2 already connected graph nodes', () => {
@@ -110,13 +110,13 @@ describe('links in a graph', () => {
 
   it('deletes a link by button and keyboard', () => {
     cy.get('.react-flow__edge')
-      .should('have.length', 13)
+      .should('have.length', 14)
       .first()
       .click({ force: true })
       .should('include.class', 'selected');
 
     cy.contains('Delete').click();
 
-    cy.get('.react-flow__edge').should('have.length', 12);
+    cy.get('.react-flow__edge').should('have.length', 13);
   });
 });

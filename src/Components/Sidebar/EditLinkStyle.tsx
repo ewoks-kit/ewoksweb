@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Button,
   Checkbox,
@@ -12,6 +12,7 @@ import {
 import DashboardStyle from '../Dashboard/DashboardStyle';
 import useStore from '../../store/useStore';
 import type { EwoksRFLink, GraphRF } from '../../types';
+import sidebarStyle from './sidebarStyle';
 
 const useStyles = DashboardStyle;
 
@@ -28,6 +29,7 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   const selectedElement = useStore((state) => state.selectedElement);
   const graphRF = useStore((state) => state.graphRF);
   const setGraphRF = useStore((state) => state.setGraphRF);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const [linkType, setLinkType] = useState('');
   const [arrowType, setArrowType] = useState({
@@ -52,14 +54,19 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
         setArrowType(element.markerEnd);
       }
 
-      // setArrowType(element.markerStart);
       setAnimated(element.animated);
       setColorLine(element.style.stroke);
     }
   }, [element.id, element]);
 
   const linkTypeChanged = (event) => {
-    // setLinkType(event.target.value);
+    if (['multilineText', 'getAround'].includes(event.target.value)) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Insert commas (,) in the label to break into multiple lines!',
+        severity: 'success',
+      });
+    }
     setSelectedElement(
       {
         ...element,
@@ -70,8 +77,6 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   };
 
   const arrowTypeChanged = (event) => {
-    // setArrowType({ type: event.target.value });
-
     // 'none' is not available anymore in reactFlow so we
     // need to remove markerEnd if 'none' is selected in dropdown
     if (event.target.value === 'none') {
@@ -85,7 +90,6 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   };
 
   const colorLineChanged = (event) => {
-    // setColorLine(event.target.value);
     setSelectedElement(
       {
         ...element,
@@ -98,7 +102,6 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   };
 
   const animatedChanged = (event) => {
-    // setAnimated(event.target.checked);
     setSelectedElement(
       {
         ...element,
@@ -164,7 +167,11 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
 
   return (
     <>
-      <FormControl variant="filled" fullWidth className={classes.formStyleFlex}>
+      <FormControl
+        variant="filled"
+        fullWidth
+        style={{ ...sidebarStyle.formstyleflex }}
+      >
         <InputLabel id="linkTypeLabel">Link type</InputLabel>
         <Select
           className={classes.styleLinkDropdowns}
@@ -197,7 +204,11 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
           Apply to all
         </Button>
       </FormControl>
-      <FormControl variant="filled" fullWidth className={classes.formStyleFlex}>
+      <FormControl
+        variant="filled"
+        fullWidth
+        style={{ ...sidebarStyle.formstyleflex }}
+      >
         <InputLabel id="markerEnd">Arrow Head</InputLabel>
         <Select
           className={classes.styleLinkDropdowns}

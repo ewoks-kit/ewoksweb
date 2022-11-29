@@ -120,6 +120,7 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
           checked={advanced}
           onChange={advancedChanged}
           inputProps={{ 'aria-label': 'controlled' }}
+          data-cy="advanced-checkbox-links"
         />
       </div>
       <div style={{ display: advanced ? 'block' : 'none' }}>

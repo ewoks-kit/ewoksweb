@@ -1,3 +1,5 @@
+// TODO: remove the following after onlyEditRelease
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import {
   Accordion,
@@ -61,7 +63,8 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <SignUp handleCloseDialog={closeDialog} />
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={8}>
+        {/* TODO: commented for onlyEditRelease */}
+        {/* <Grid item xs={12} sm={12} md={12} lg={8}>
           <h2 style={{ color: '#3f51b5' }}>
             <IconButton color="inherit" disabled>
               <Fab
@@ -84,15 +87,15 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
                 <Typography>{summary}</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>
-                  {/* The following will be deleted once decided how the documentation will be displayed */}
-                  {/* eslint-disable-next-line react/no-danger */}
-                  <span dangerouslySetInnerHTML={{ __html: details }} />
+                <Typography> */}
+        {/* The following will be deleted once decided how the documentation will be displayed */}
+
+        {/* <span dangerouslySetInnerHTML={{ __html: details }} />
                 </Typography>
               </AccordionDetails>
             </Accordion>
           ))}
-        </Grid>
+        </Grid> */}
       </Grid>
     </div>
   );

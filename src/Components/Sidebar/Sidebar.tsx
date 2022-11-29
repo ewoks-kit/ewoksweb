@@ -1,3 +1,5 @@
+// TODO: remove the following after onlyEditRelease
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import {
   Accordion,
@@ -179,7 +181,7 @@ export default function Sidebar() {
       });
     }
 
-    if (elD.input_nodes && elD.id !== 'newGraph') {
+    if (elD.input_nodes) {
       setOpenAgreeDialog(true);
     } else if (!elD.input_nodes) {
       if (workingGraph.graph.id === graphRF.graph.id) {
@@ -272,7 +274,8 @@ export default function Sidebar() {
           <EditElementStyle />
         </>
       )}
-      <Accordion
+      {/* TODO: commented for onlyEditRelease */}
+      {/* <Accordion
         expanded={openExecutionDetails}
         onChange={handleChangeExecutionDetails}
         className="Accordions-sidebar"
@@ -294,7 +297,7 @@ export default function Sidebar() {
             <ExecutionDetails />
           </div>
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
       {!inExecutionMode && (
         <>
           <Button

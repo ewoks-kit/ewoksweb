@@ -9,6 +9,7 @@ import SidebarTooltip from './SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
 import SaveIcon from '@material-ui/icons/Save';
+import sidebarStyle from './sidebarStyle';
 
 const useStyles = DashboardStyle;
 
@@ -78,6 +79,7 @@ export default function LabelComment(props: LabelCommentProps) {
         {
           ...element,
           label: labelLocal,
+          data: { ...element.data, label: labelLocal },
         },
         'fromSaveElement'
       );
@@ -95,9 +97,9 @@ export default function LabelComment(props: LabelCommentProps) {
     );
   }
 
-  function valueSavedLocal(val: string) {
+  function valueSavedLocal() {
     setValueIsChanged(false);
-    saveLabel(val);
+    saveLabel(label);
   }
 
   function setChanged(event) {
@@ -108,18 +110,18 @@ export default function LabelComment(props: LabelCommentProps) {
     }
   }
 
-  function valueChanged(event) {
-    if (event?.target.value !== 0) {
+  function valueSelectedChanged(event) {
+    if (event?.target.textContent) {
       setChanged(event);
-      if (event) {
-        setLabel(event.target.value);
-      }
+      setLabel(event.target.textContent);
     }
   }
 
-  function valueSelectedChanged(event) {
-    setChanged(event);
-    setLabel(event.target.textContent);
+  function valueChanged(event) {
+    if (event && event.target.value !== 0) {
+      setChanged(event);
+      setLabel(event.target.value);
+    }
   }
 
   return (
@@ -129,7 +131,7 @@ export default function LabelComment(props: LabelCommentProps) {
           <FormControl
             fullWidth
             variant="outlined"
-            className={classes.formStyleFlex}
+            style={{ ...sidebarStyle.formstyleflex }}
           >
             <Autocomplete
               freeSolo
@@ -153,7 +155,7 @@ export default function LabelComment(props: LabelCommentProps) {
               <IconButton
                 style={{ width: '20%', minWidth: '30px' }}
                 color="inherit"
-                onClick={() => valueSavedLocal(label)}
+                onClick={valueSavedLocal}
                 data-cy="saveLabelComment"
               >
                 <Fab

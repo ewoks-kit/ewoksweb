@@ -3,7 +3,7 @@ import type { GraphRF } from '../types';
 const tutorialGraph = {
   graph: {
     id: 'newGraph',
-    label: 'newGraph',
+    label: '',
     input_nodes: [],
     output_nodes: [],
     uiProps: {},

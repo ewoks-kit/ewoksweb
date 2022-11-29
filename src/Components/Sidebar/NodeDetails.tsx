@@ -249,6 +249,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
             checked={advanced}
             onChange={advancedChanged}
             inputProps={{ 'aria-label': 'controlled' }}
+            data-cy="advanced-checkbox-nodes"
           />
         </div>
         <SidebarTooltip
@@ -321,53 +322,52 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
             )}
           </div>
         )}
-      </Paper>
-
-      <SidebarTooltip
-        text={`These properties are being populated by the task the
+        <SidebarTooltip
+          text={`These properties are being populated by the task the
         specific node is based on. If you need to have them create a new Task
         with the appropriete properties and use it.`}
-      >
-        <Accordion
-          style={{ display: advanced ? 'block' : 'none' }}
-          className="Accordions-sidebar"
         >
-          <AccordionSummary
-            expandIcon={<OpenInBrowser />}
-            aria-controls="panel1a-content"
+          <Accordion
+            style={{ display: advanced ? 'block' : 'none' }}
+            className="Accordions-sidebar"
           >
-            <Typography>Node Info</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <div style={{ width: '100%' }}>
-              {editableTaskProperties.map(({ id, label, value }) =>
-                ['ppfmethod', 'method', 'script'].includes(
-                  props.element.task_type
-                ) ? (
-                  <EditTaskProp
-                    key={id}
-                    id={id}
-                    label={label}
-                    value={value}
-                    propChanged={propChanged}
-                    editProps // editProps
-                  />
-                ) : (
+            <AccordionSummary
+              expandIcon={<OpenInBrowser />}
+              aria-controls="panel1a-content"
+            >
+              <Typography>Node Info</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <div style={{ width: '100%' }}>
+                {editableTaskProperties.map(({ id, label, value }) =>
+                  ['ppfmethod', 'method', 'script'].includes(
+                    props.element.task_type
+                  ) ? (
+                    <EditTaskProp
+                      key={id}
+                      id={id}
+                      label={label}
+                      value={value}
+                      propChanged={propChanged}
+                      editProps // editProps
+                    />
+                  ) : (
+                    <div key={id} className={classes.detailsLabels}>
+                      <b>{label}:</b> {value}
+                    </div>
+                  )
+                )}
+                {NonEditableTaskProperties.map(({ id, label, value }) => (
                   <div key={id} className={classes.detailsLabels}>
-                    <b>{label}:</b> {value}
+                    <b>{label}:</b>{' '}
+                    {typeof value === 'object' ? value.join(', ') : value}
                   </div>
-                )
-              )}
-              {NonEditableTaskProperties.map(({ id, label, value }) => (
-                <div key={id} className={classes.detailsLabels}>
-                  <b>{label}:</b>{' '}
-                  {typeof value === 'object' ? value.join(', ') : value}
-                </div>
-              ))}
-            </div>
-          </AccordionDetails>
-        </Accordion>
-      </SidebarTooltip>
+                ))}
+              </div>
+            </AccordionDetails>
+          </Accordion>
+        </SidebarTooltip>
+      </Paper>
     </Box>
   );
 }
