@@ -15,13 +15,12 @@ interface AutocompleteDropProps {
 }
 
 function sortWorkflows(
-  filterAddCategory: WorkflowDescription[]
+  descriptions: WorkflowDescription[]
 ): WorkflowDescription[] {
-  return filterAddCategory.sort((a, b) => {
-    return (
+  return [...descriptions].sort(
+    (a, b) =>
       a.category.localeCompare(b.category) || a.label.localeCompare(b.label)
-    );
-  });
+  );
 }
 
 const openWorkflowPlaceholder = 'Open Workflow';
@@ -105,19 +104,15 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
   function filterworkfToCategories(
     WorkflowDescriptions: WorkflowDescription[]
   ): WorkflowDescription[] {
-    let workflowToShow = [];
     if (
       props.category === 'All' ||
       ['', null, undefined].includes(props.category)
     ) {
-      workflowToShow = WorkflowDescriptions;
-    } else {
-      workflowToShow = WorkflowDescriptions.filter(
-        (work) => work.category === props.category
-      );
+      return WorkflowDescriptions;
     }
-
-    return workflowToShow;
+    return WorkflowDescriptions.filter(
+      (work) => work.category === props.category
+    );
   }
 
   return (
