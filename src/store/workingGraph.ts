@@ -8,7 +8,7 @@ import type {
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
-import configData from '../configData.json';
+import commonStrings from '../commonStrings.json';
 import { getTaskDescription } from '../utils/api';
 
 // TODO: use the initial graph from store
@@ -41,7 +41,8 @@ const workingGraph = (set, get) => ({
         // console.error('The Promise is rejected!', error);
         get().setOpenSnackbar({
           open: true,
-          text: error.response?.data?.message || configData.retrieveTasksError,
+          text:
+            error.response?.data?.message || commonStrings.retrieveTasksError,
           severity: 'error',
         });
       }

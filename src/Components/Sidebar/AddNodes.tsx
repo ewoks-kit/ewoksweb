@@ -27,7 +27,7 @@ import TextsmsIcon from '@material-ui/icons/Textsms';
 import Upload from '../General/Upload';
 import AddIcon from '@material-ui/icons/Add';
 import useStore from 'store/useStore';
-import configData from 'configData.json';
+import commonStrings from 'commonStrings.json';
 import React, { useCallback, useEffect, useState } from 'react';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import SidebarTooltip from './SidebarTooltip';
@@ -108,7 +108,7 @@ function AddNodes(props: AddNodesProps) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || configData.retrieveTasksError,
+        text: error.response?.data?.message || commonStrings.retrieveTasksError,
         severity: 'error',
       });
     }

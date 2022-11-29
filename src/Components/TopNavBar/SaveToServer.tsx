@@ -3,7 +3,7 @@ import IntegratedSpinner from '../General/IntegratedSpinner';
 import { rfToEwoks } from '../../utils';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import useStore from '../../store/useStore';
-import configData from '../../configData.json';
+import commonStrings from '../../commonStrings.json';
 import FormDialog from '../General/FormDialog';
 import curateGraph from './utils/curateGraph';
 import { getWorkflowsIds, putWorkflow } from '../../utils/api';
@@ -65,7 +65,7 @@ export default function SaveToServer({ saveToServerF }) {
         } catch (error) {
           setOpenSnackbar({
             open: true,
-            text: error.response?.data?.message || configData.savingError,
+            text: error.response?.data?.message || commonStrings.savingError,
             severity: 'error',
           });
         } finally {
