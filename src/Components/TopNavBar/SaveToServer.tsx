@@ -3,10 +3,11 @@ import IntegratedSpinner from '../General/IntegratedSpinner';
 import { rfToEwoks } from '../../utils';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import useStore from '../../store/useStore';
-import configData from '../../configData.json';
+import commonStrings from '../../commonStrings.json';
 import FormDialog from '../General/FormDialog';
 import curateGraph from './utils/curateGraph';
 import { getWorkflowsIds, putWorkflow } from '../../utils/api';
+import { FormAction } from '../../types';
 
 function workflowExists(id, workflowsIds) {
   return workflowsIds.data.identifiers.includes(id);
@@ -20,7 +21,7 @@ export default function SaveToServer({ saveToServerF }) {
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
-  const [action, setAction] = useState<string>('newGraph');
+  const [action, setAction] = useState<FormAction>(FormAction.newGraph);
 
   useEffect(() => {
     saveToServerF.current = saveToServer;
@@ -39,7 +40,7 @@ export default function SaveToServer({ saveToServerF }) {
     const exists = workflowExists(graphRF.graph.id, workflowsIds);
 
     if (!exists) {
-      setAction('newGraph');
+      setAction(FormAction.newGraph);
       setOpenSaveDialog(true);
     } else if (workingGraph.graph.id === graphRF.graph.id) {
       if (graphRF.graph.uiProps.source === 'fromServer') {
@@ -64,14 +65,14 @@ export default function SaveToServer({ saveToServerF }) {
         } catch (error) {
           setOpenSnackbar({
             open: true,
-            text: error.response?.data?.message || configData.savingError,
+            text: error.response?.data?.message || commonStrings.savingError,
             severity: 'error',
           });
         } finally {
           setGettingFromServer(false);
         }
       } else if (graphRF.graph.uiProps.source !== 'fromServer') {
-        setAction('newGraphOrOverwrite');
+        setAction(FormAction.newGraphOrOverwrite);
         setOpenSaveDialog(true);
       } else {
         setGettingFromServer(false);

@@ -53,8 +53,8 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
       console.log('Error', error.message);
     }
     /* eslint-disable no-console */
-    console.log(error.config);
-    res = [{ label: 'network error', category: error.response.status }];
+    console.log(error);
+    res = [{ label: 'network error', category: error?.response?.status }];
   }
   return res;
 }

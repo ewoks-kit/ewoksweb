@@ -32,6 +32,7 @@ import ErrorFallback from '../General/ErrorFallback';
 import MenuPopover from '../General/MenuPopover';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
+import { FormAction } from '../../types';
 
 const useStyles = DashboardStyle;
 
@@ -167,7 +168,7 @@ export default function Dashboard() {
       />
       <FormDialog
         elementToEdit={graphRF}
-        action="newGraph"
+        action={FormAction.newGraph}
         open={openSaveDialog}
         setOpenSaveDialog={setOpenSaveDialog}
       />

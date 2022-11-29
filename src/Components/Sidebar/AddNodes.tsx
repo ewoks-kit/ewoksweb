@@ -27,7 +27,7 @@ import TextsmsIcon from '@material-ui/icons/Textsms';
 import Upload from '../General/Upload';
 import AddIcon from '@material-ui/icons/Add';
 import useStore from 'store/useStore';
-import configData from 'configData.json';
+import commonStrings from 'commonStrings.json';
 import React, { useCallback, useEffect, useState } from 'react';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import SidebarTooltip from './SidebarTooltip';
@@ -36,6 +36,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import BookmarksIcon from '@material-ui/icons/Bookmarks';
 import { getTaskDescription, deleteTask } from 'utils/api';
+import { FormAction } from '../../types';
 
 const onDragStart = (event, { task_identifier, task_type, icon }) => {
   event.dataTransfer.setData('task_identifier', task_identifier);
@@ -90,7 +91,7 @@ function AddNodes(props: AddNodesProps) {
   const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const [doAction, setDoAction] = useState<string>('');
+  const [doAction, setDoAction] = useState<FormAction>();
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
   const [elementToEdit, setElementToEdit] = useState<Task>({});
   const initializedTask = useStore((state) => state.initializedTask);
@@ -107,7 +108,7 @@ function AddNodes(props: AddNodesProps) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || configData.retrieveTasksError,
+        text: error.response?.data?.message || commonStrings.retrieveTasksError,
         severity: 'error',
       });
     }
@@ -122,7 +123,7 @@ function AddNodes(props: AddNodesProps) {
 
   useEffect(() => {
     if (props.openSaveDialogNewtask) {
-      setDoAction('newTask');
+      setDoAction(FormAction.newTask);
       setElementToEdit(initializedTask);
       setOpenSaveDialog(true);
     }
@@ -163,7 +164,7 @@ function AddNodes(props: AddNodesProps) {
     setOpenAgreeDialog(false);
   };
 
-  const action = (action: string, element: string | Task) => {
+  const action = (action: FormAction, element: string | Task) => {
     setDoAction(action);
     if (['cloneTask', 'editTask'].includes(action)) {
       const task = tasks.find((tas) => tas.task_identifier === element);
@@ -334,7 +335,7 @@ function AddNodes(props: AddNodesProps) {
                     style={{ padding: '1px' }}
                     aria-label="edit"
                     onClick={() =>
-                      action('editTask', selectedTask.task_identifier)
+                      action(FormAction.editTask, selectedTask.task_identifier)
                     }
                     color="primary"
                   >
@@ -346,7 +347,7 @@ function AddNodes(props: AddNodesProps) {
                     variant="outlined"
                     color="primary"
                     onClick={() =>
-                      action('cloneTask', selectedTask.task_identifier)
+                      action(FormAction.cloneTask, selectedTask.task_identifier)
                     }
                     size="small"
                   >
@@ -358,7 +359,7 @@ function AddNodes(props: AddNodesProps) {
                     style={{ margin: '4px' }}
                     variant="outlined"
                     color="primary"
-                    onClick={() => action('newTask', initializedTask)}
+                    onClick={() => action(FormAction.newTask, initializedTask)}
                     size="small"
                   >
                     New

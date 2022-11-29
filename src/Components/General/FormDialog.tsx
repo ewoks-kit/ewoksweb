@@ -24,10 +24,11 @@ import type {
   GraphEwoks,
   GraphRF,
   Task,
+  FormAction,
 } from '../../types';
 import { rfToEwoks } from '../../utils';
 import useStore from '../../store/useStore';
-import configData from '../../configData.json';
+import commonStrings from '../../commonStrings.json';
 import {
   getTaskDescription,
   postWorkflow,
@@ -38,7 +39,7 @@ import {
 
 interface FormDialogProps {
   elementToEdit: Task | GraphRF;
-  action: string;
+  action: FormAction;
   open: boolean;
   setOpenSaveDialog: Dispatch<SetStateAction<boolean>>;
 }
@@ -134,7 +135,7 @@ export default function FormDialog(props: FormDialogProps) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || configData.savingError,
+        text: error.response?.data?.message || commonStrings.savingError,
         severity: 'warning',
       });
     }
@@ -164,7 +165,7 @@ export default function FormDialog(props: FormDialogProps) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || configData.savingError,
+        text: error.response?.data?.message || commonStrings.savingError,
         severity: 'warning',
       });
     }
@@ -187,7 +188,7 @@ export default function FormDialog(props: FormDialogProps) {
         setGettingFromServer(false);
         setOpenSnackbar({
           open: true,
-          text: error.response?.data?.message || configData.savingError,
+          text: error.response?.data?.message || commonStrings.savingError,
           severity: 'error',
         });
       } finally {
@@ -215,7 +216,7 @@ export default function FormDialog(props: FormDialogProps) {
         setGettingFromServer(false);
         setOpenSnackbar({
           open: true,
-          text: error.response?.data?.message || configData.savingError,
+          text: error.response?.data?.message || commonStrings.savingError,
           severity: 'error',
         });
       }
@@ -359,7 +360,7 @@ export default function FormDialog(props: FormDialogProps) {
           onChange={newNameChanged}
           disabled={action === 'editTask' || overwrite}
         />
-        {action === 'newGraphOrOverwrite' && (
+        {['newGraphOrOverwrite', 'cloneGraph'].includes(action) && (
           <div>
             <b>Overwrite existing workflow with the same ID</b>
             <Checkbox
