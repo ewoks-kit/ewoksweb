@@ -62,7 +62,7 @@ const initializedRFGraph: GraphRF = {
 
 const useStore = create<State>((set, get) => ({
   ...allIconNames(set),
-  ...allIcons(set),
+  ...allIcons(set, get),
   ...allWorkflows(set),
   ...allCategories(set),
   ...currentExecutionEvent(set),

@@ -25,9 +25,7 @@ import type {
 } from 'types';
 import { calcNewId } from 'utils/calcNewId';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
-import { deleteWorkflow, getIcon, getIcons, getOtherIcon } from 'utils/api';
-import axios from 'axios';
-import path from 'path';
+import { deleteWorkflow } from 'utils/api';
 import { OpenInBrowser } from '@material-ui/icons';
 import SidebarTooltip from './SidebarTooltip';
 
@@ -70,80 +68,7 @@ export default function Sidebar() {
   // TODO move fetch out to be used when refresh in icons is needed
   useEffect(
     () => {
-      const fetchIcons = async () => {
-        if (allIcons.length <= 1) {
-          const data = await getIcons();
-
-          const iconsPng = data.identifiers.filter((str) => {
-            return !str.endsWith('svg');
-          });
-
-          await axios
-            .all(iconsPng.map((id: string) => getOtherIcon(id)))
-            .then(
-              axios.spread((...resPng) => {
-                const resCln = resPng.filter((result) => result.data !== null);
-                return resCln.map((result) => {
-                  const blobPng = new Blob([result.data], {
-                    type: 'image/png',
-                  });
-                  const fileReader = new FileReader();
-                  fileReader.readAsDataURL(blobPng);
-
-                  return result.data;
-                });
-              })
-            )
-            .catch((error) => {
-              // remove after handling the error
-              setOpenSnackbar({
-                open: true,
-                text: error.data,
-                severity: 'error',
-              });
-              return [];
-            });
-
-          const iconsSvg = data.identifiers.filter((str) => {
-            return str.endsWith('svg');
-          });
-
-          setAllIconNames([...iconsSvg, ...iconsPng]);
-          console.log(iconsSvg, iconsPng);
-
-          const results = await axios
-            .all(iconsSvg.map((id: string) => getIcon(id)))
-            .then(
-              axios.spread((...res) => {
-                const resCln = res.filter((result) => result.data !== null);
-                return resCln.map((result) => {
-                  return {
-                    name: path.basename(result.config.url),
-                    image: result.data,
-                    type: path.extname(result.config.url),
-                  };
-                });
-              })
-            )
-            .catch((error) => {
-              // remove after handling the error
-              setOpenSnackbar({
-                open: true,
-                text: error.data,
-                severity: 'warning',
-              });
-              return [];
-            });
-          setAllIcons(results as Icon[]);
-          console.log(results);
-        }
-      };
-      // eslint-disable-next-line promise/prefer-await-to-callbacks
-      fetchIcons().catch((error) => {
-        // Keep logging in console for debugging when talking with a user
-        /* eslint-disable no-console */
-        console.log(error);
-      });
+      setAllIcons([], true);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
