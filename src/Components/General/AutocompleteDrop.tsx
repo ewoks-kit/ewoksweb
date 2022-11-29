@@ -5,6 +5,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getWorkflows } from 'utils';
 import type { WorkflowDescription } from 'types';
+import configData from 'configData.json';
 
 import useStore from 'store/useStore';
 
@@ -56,7 +57,9 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
       setOpenSnackbar({
         open: true,
         text: `Something went wrong when contacting the server!
-          Error status: ${workF[0].category}`,
+          Error status: ${
+            workF[0].category || (configData.retrieveWorkflowsError as string)
+          }`,
         severity: 'error',
       });
     } else if (workF && workF.length > 0) {

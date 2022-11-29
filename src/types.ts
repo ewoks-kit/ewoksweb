@@ -1,6 +1,15 @@
 // import type { Color } from '@material-ui/lab';
 import type { Position } from 'react-flow-renderer';
 
+export enum FormAction {
+  cloneGraph = 'cloneGraph',
+  newGraph = 'newGraph',
+  newGraphOrOverwrite = 'newGraphOrOverwrite',
+  cloneTask = 'cloneTask',
+  newTask = 'newTask',
+  editTask = 'editTask',
+}
+
 export interface GraphNodes {
   id: string;
   node: string;

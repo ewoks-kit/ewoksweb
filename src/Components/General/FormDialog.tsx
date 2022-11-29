@@ -24,6 +24,7 @@ import type {
   GraphEwoks,
   GraphRF,
   Task,
+  FormAction,
 } from '../../types';
 import { rfToEwoks } from '../../utils';
 import useStore from '../../store/useStore';
@@ -38,7 +39,7 @@ import {
 
 interface FormDialogProps {
   elementToEdit: Task | GraphRF;
-  action: string;
+  action: FormAction;
   open: boolean;
   setOpenSaveDialog: Dispatch<SetStateAction<boolean>>;
 }
