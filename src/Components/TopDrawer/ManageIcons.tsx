@@ -1,14 +1,5 @@
 import React from 'react';
 import { Button, Box, Grid, Paper, styled, Tooltip } from '@material-ui/core';
-import orange1 from 'images/orange1.png';
-import orange2 from 'images/orange2.png';
-import orange3 from 'images/orange3.png';
-import AggregateColumns from 'images/AggregateColumns.svg';
-import Continuize from 'images/Continuize.svg';
-import graphInput from 'images/graphInput.svg';
-import graphOutput from 'images/graphOutput.svg';
-import Correlations from 'images/Correlations.svg';
-import CreateClass from 'images/CreateClass.svg';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import axios from 'axios';
@@ -24,30 +15,6 @@ const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: 'rgb(246, 248, 249)',
   color: theme.palette.text.secondary,
 }));
-
-const icons = [
-  'orange1',
-  'Continuize',
-  'graphInput',
-  'graphOutput',
-  'orange2',
-  'orange3',
-  'AggregateColumns',
-  'Correlations',
-  'CreateClass',
-];
-
-const iconsObj = {
-  orange1,
-  Continuize,
-  graphInput,
-  graphOutput,
-  orange2,
-  orange3,
-  AggregateColumns,
-  Correlations,
-  CreateClass,
-};
 
 export default function ManageIcons() {
   const [selectedIcon, setSelectedIcon] = React.useState('');
@@ -208,24 +175,6 @@ export default function ManageIcons() {
                   </span>
                 ))}
               </span>
-              {icons.map((ico) => (
-                <span
-                  onClick={() => clickIcon(ico)}
-                  aria-hidden="true"
-                  role="button"
-                  tabIndex={0}
-                  key={ico}
-                  className={`dndnode ${
-                    selectedIcon && selectedIcon === ico ? 'selectedTask' : ''
-                  }`}
-                >
-                  <Tooltip title={ico} arrow>
-                    <span role="button" tabIndex={0} className="iconDetails">
-                      <img src={iconsObj[ico]} alt={ico} />
-                    </span>
-                  </Tooltip>
-                </span>
-              ))}
             </span>
           </Item>
         </Grid>

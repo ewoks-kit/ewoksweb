@@ -401,7 +401,7 @@ function Canvas() {
       };
 
       setGraphRF(newGraph as GraphRF, true);
-      // DOC: need to also save it in recentGraphs if we leave and come back                // className={classes.openFileButton} to the graph?
+      // DOC: need to also save it in recentGraphs if we leave and come back
       setRecentGraphs(newGraph as GraphRF);
 
       // add action and new GraphRF to undo-redo array

@@ -31,10 +31,9 @@ const allIcons = (set, get) => ({
           })
         )
         .catch((error) => {
-          // TODO: remove after handling the error
           get().setOpenSnackbar({
             open: true,
-            text: error.data,
+            text: error?.data,
             severity: 'error',
           });
           return [];
@@ -61,10 +60,9 @@ const allIcons = (set, get) => ({
           })
         )
         .catch((error) => {
-          // TODO: remove after handling the error
           get().setOpenSnackbar({
             open: true,
-            text: error.data,
+            text: error?.data,
             severity: 'warning',
           });
           return [];
