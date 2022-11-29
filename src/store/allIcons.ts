@@ -8,79 +8,71 @@ const allIcons = (set, get) => ({
 
   setAllIcons: (icons: [Icon], fromServer) => {
     const fetchIcons = async () => {
-      console.log(allIcons);
+      const data = await getIcons();
 
-      if (get().allIcons.length <= 1) {
-        const data = await getIcons();
+      const iconsPng = data.identifiers.filter((str) => {
+        return !str.endsWith('svg');
+      });
 
-        const iconsPng = data.identifiers.filter((str) => {
-          return !str.endsWith('svg');
+      await axios
+        .all(iconsPng.map((id: string) => getOtherIcon(id)))
+        .then(
+          axios.spread((...resPng) => {
+            const resCln = resPng.filter((result) => result.data !== null);
+            return resCln.map((result) => {
+              const blobPng = new Blob([result.data], {
+                type: 'image/png',
+              });
+              const fileReader = new FileReader();
+              fileReader.readAsDataURL(blobPng);
+
+              return result.data;
+            });
+          })
+        )
+        .catch((error) => {
+          // TODO: remove after handling the error
+          get().setOpenSnackbar({
+            open: true,
+            text: error.data,
+            severity: 'error',
+          });
+          return [];
         });
 
-        await axios
-          .all(iconsPng.map((id: string) => getOtherIcon(id)))
-          .then(
-            axios.spread((...resPng) => {
-              const resCln = resPng.filter((result) => result.data !== null);
-              return resCln.map((result) => {
-                const blobPng = new Blob([result.data], {
-                  type: 'image/png',
-                });
-                const fileReader = new FileReader();
-                fileReader.readAsDataURL(blobPng);
+      const iconsSvg = data.identifiers.filter((str) => {
+        return str.endsWith('svg');
+      });
 
-                return result.data;
-              });
-            })
-          )
-          .catch((error) => {
-            // remove after handling the error
-            get().setOpenSnackbar({
-              open: true,
-              text: error.data,
-              severity: 'error',
+      get().setAllIconNames([...iconsSvg, ...iconsPng]);
+
+      const results = await axios
+        .all(iconsSvg.map((id: string) => getIcon(id)))
+        .then(
+          axios.spread((...res) => {
+            const resCln = res.filter((result) => result.data !== null);
+            return resCln.map((result) => {
+              return {
+                name: path.basename(result.config.url),
+                image: result.data,
+                type: path.extname(result.config.url),
+              };
             });
-            return [];
+          })
+        )
+        .catch((error) => {
+          // TODO: remove after handling the error
+          get().setOpenSnackbar({
+            open: true,
+            text: error.data,
+            severity: 'warning',
           });
-
-        const iconsSvg = data.identifiers.filter((str) => {
-          return str.endsWith('svg');
+          return [];
         });
-
-        get().setAllIconNames([...iconsSvg, ...iconsPng]);
-        console.log(iconsSvg, iconsPng);
-
-        const results = await axios
-          .all(iconsSvg.map((id: string) => getIcon(id)))
-          .then(
-            axios.spread((...res) => {
-              const resCln = res.filter((result) => result.data !== null);
-              return resCln.map((result) => {
-                return {
-                  name: path.basename(result.config.url),
-                  image: result.data,
-                  type: path.extname(result.config.url),
-                };
-              });
-            })
-          )
-          .catch((error) => {
-            // remove after handling the error
-            get().setOpenSnackbar({
-              open: true,
-              text: error.data,
-              severity: 'warning',
-            });
-            return [];
-          });
-        get().setAllIcons(results as Icon[]);
-        console.log(results);
-      }
+      get().setAllIcons(results as Icon[]);
     };
 
     if (fromServer) {
-      console.log(fromServer);
-
       fetchIcons();
     } else {
       set((state) => ({
