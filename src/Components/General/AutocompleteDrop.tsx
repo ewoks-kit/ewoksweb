@@ -110,7 +110,7 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
     ) {
       return WorkflowDescriptions;
     }
-    return WorkflowDescriptions.filter(
+    return [...WorkflowDescriptions].filter(
       (work) => work.category === props.category
     );
   }
