@@ -1,10 +1,16 @@
 import axios, { AxiosResponse } from 'axios';
-import type { GraphEwoks, Task, IconsNames } from '../types';
+import type {
+  GraphEwoks,
+  Task,
+  IconsNames,
+  WorkflowDescription,
+} from '../types';
 
 export const axiosRequest = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URL,
 });
 
+// TODO: typescriptify all
 // --------------Tasks
 // Get '/tasks/descriptions'
 export function getTaskDescription() {
@@ -33,7 +39,9 @@ export function discoverTasks(moduleNames: string[]) {
 
 // -------------Workflows
 // Get /workflows
-export function getWorkflowsDescriptions() {
+export function getWorkflowsDescriptions(): Promise<{
+  data: { items: WorkflowDescription[] };
+}> {
   return axiosRequest.get(`/workflows/descriptions`);
 }
 
@@ -85,10 +93,4 @@ export async function getIcons(): Promise<IconsNames> {
 // Get icon:id
 export function getIcon(id: string): Promise<AxiosResponse<string>> {
   return axiosRequest.get<string>(`/icon/${id}`);
-}
-
-export function getOtherIcon(id: string): Promise<AxiosResponse<string>> {
-  return axiosRequest.get(`${process.env.REACT_APP_SERVER_URL}/icon/${id}`, {
-    responseType: 'blob',
-  });
 }

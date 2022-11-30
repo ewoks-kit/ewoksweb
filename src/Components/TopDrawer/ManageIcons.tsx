@@ -7,6 +7,7 @@ import type { Task } from 'types';
 import useStore from 'store/useStore';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { getTaskDescription } from 'utils/api';
+import orange2 from 'images/orange2.png';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -166,10 +167,7 @@ export default function ManageIcons() {
                     <Tooltip title={icon.name} arrow>
                       <span role="button" tabIndex={0} className="iconDetails">
                         <img
-                          src={
-                            icon.image?.data_url ||
-                            ((icon.image as unknown) as string)
-                          }
+                          src={icon.image?.data_url || orange2}
                           alt={icon.name}
                           key={icon.name}
                         />

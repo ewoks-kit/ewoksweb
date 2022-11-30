@@ -23,14 +23,8 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
   try {
     const workflows = await getWorkflowsDescriptions();
     if (workflows && workflows.data) {
-      const workf = workflows.data as {
-        items: WorkflowDescription[];
-      };
+      const workf: { items: WorkflowDescription[] } = workflows.data;
       res = workf.items;
-      // .sort((a, b) => a.localeCompare(b))
-      // .map((work) => {
-      //   return { ...work, title: work.label };
-      // });
     }
   } catch (error) {
     if (error.response) {
@@ -54,6 +48,8 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
     }
     /* eslint-disable no-console */
     console.log(error);
+    // This is used to be able to use the Snackbar and inform the user
+    // since it cannot be done from a ts file (?). A custom Hook maybe to remove it?
     res = [{ label: 'network error', category: error?.response?.status }];
   }
   return res;
