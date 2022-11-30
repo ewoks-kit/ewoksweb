@@ -166,7 +166,10 @@ export default function ManageIcons() {
                     <Tooltip title={icon.name} arrow>
                       <span role="button" tabIndex={0} className="iconDetails">
                         <img
-                          src={icon.image.data_url}
+                          src={
+                            icon.image?.data_url ||
+                            ((icon.image as unknown) as string)
+                          }
                           alt={icon.name}
                           key={icon.name}
                         />

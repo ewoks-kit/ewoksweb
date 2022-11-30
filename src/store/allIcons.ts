@@ -1,5 +1,6 @@
+/* eslint-disable unicorn/consistent-function-scoping */
 import type { Icon } from '../types';
-import { getIcon, getIcons, getOtherIcon } from 'utils/api';
+import { getIcon, getIcons } from 'utils/api';
 import axios from 'axios';
 import path from 'path';
 
@@ -10,43 +11,8 @@ const allIcons = (set, get) => ({
     const fetchIcons = async () => {
       const data = await getIcons();
 
-      const iconsPng = data.identifiers.filter((str) => {
-        return !str.endsWith('svg');
-      });
-
-      await axios
-        .all(iconsPng.map((id: string) => getOtherIcon(id)))
-        .then(
-          axios.spread((...resPng) => {
-            const resCln = resPng.filter((result) => result.data !== null);
-            return resCln.map((result) => {
-              const blobPng = new Blob([result.data], {
-                type: 'image/png',
-              });
-              const fileReader = new FileReader();
-              fileReader.readAsDataURL(blobPng);
-
-              return result.data;
-            });
-          })
-        )
-        .catch((error) => {
-          get().setOpenSnackbar({
-            open: true,
-            text: error?.data,
-            severity: 'error',
-          });
-          return [];
-        });
-
-      const iconsSvg = data.identifiers.filter((str) => {
-        return str.endsWith('svg');
-      });
-
-      get().setAllIconNames([...iconsSvg, ...iconsPng]);
-
-      const results = await axios
-        .all(iconsSvg.map((id: string) => getIcon(id)))
+      const resultIcons = await axios
+        .all(data.identifiers.map((id: string) => getIcon(id)))
         .then(
           axios.spread((...res) => {
             const resCln = res.filter((result) => result.data !== null);
@@ -67,7 +33,9 @@ const allIcons = (set, get) => ({
           });
           return [];
         });
-      get().setAllIcons(results as Icon[]);
+
+      get().setAllIconNames(data.identifiers.map((id: string) => id));
+      get().setAllIcons([...resultIcons]);
     };
 
     if (fromServer) {
