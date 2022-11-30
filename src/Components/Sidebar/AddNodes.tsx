@@ -10,19 +10,7 @@ import Typography from '@material-ui/core/Typography';
 
 import type { Task } from 'types';
 import Tooltip from '@material-ui/core/Tooltip';
-import orange1 from 'images/orange1.png';
 import orange2 from 'images/orange2.png';
-import orange3 from 'images/orange3.png';
-import AggregateColumns from 'images/AggregateColumns.svg';
-import Continuize from 'images/Continuize.svg';
-import graphInput from 'images/graphInput.svg';
-import graphOutput from 'images/graphOutput.svg';
-import Correlations from 'images/Correlations.svg';
-import CreateClass from 'images/CreateClass.svg';
-import right from 'images/right.svg';
-import left from 'images/left.svg';
-import up from 'images/up.svg';
-import down from 'images/down.svg';
 import TextsmsIcon from '@material-ui/icons/Textsms';
 import Upload from '../General/Upload';
 import AddIcon from '@material-ui/icons/Add';
@@ -45,42 +33,11 @@ const onDragStart = (event, { task_identifier, task_type, icon }) => {
   event.dataTransfer.effectAllowed = 'move';
 };
 
-// TODO: to be removed but one for backup
-const iconsObj = {
-  'left.svg': left,
-  left,
-  'right.svg': right,
-  right,
-  'up.svg': up,
-  up,
-  'down.svg': down,
-  down,
-  'graphInput.svg': graphInput,
-  graphInput,
-  'graphOutput.svg': graphOutput,
-  graphOutput,
-  'orange1.png': orange1,
-  orange1,
-  'Continuize.svg': Continuize,
-  Continuize,
-  'orange2.png': orange2,
-  orange2,
-  'orange3.png': orange3,
-  orange3,
-  'AggregateColumns.svg': AggregateColumns,
-  AggregateColumns,
-  'Correlations.svg': Correlations,
-  Correlations,
-  'CreateClass.svg': CreateClass,
-  CreateClass,
-  TextsmsIcon,
-};
-
 interface AddNodesProps {
   title: string;
   openSaveDialogNewtask?: boolean;
 }
-// Hosts the node images and categories to drag and drop to canvas
+// DOC: Hosts the nodes (images and categories) to drag and drop to canvas
 function AddNodes(props: AddNodesProps) {
   const taskCategories = useStore((state) => state.taskCategories);
   const setTaskCategories = useStore((state) => state.setTaskCategories);
@@ -184,10 +141,14 @@ function AddNodes(props: AddNodesProps) {
 
   const findImage = (img: string) => {
     const imgIndex = allIcons.map((ico) => ico.name).indexOf(img);
+    console.log(
+      imgIndex,
+      img,
+      allIcons,
+      tasks.filter((t) => t.icon === 'default.png')
+    );
 
-    return imgIndex !== -1
-      ? allIcons[imgIndex].image.data_url
-      : iconsObj[img] || orange2;
+    return imgIndex !== -1 ? allIcons[imgIndex].image.data_url : orange2;
   };
 
   return (
@@ -287,7 +248,7 @@ function AddNodes(props: AddNodesProps) {
                       onDragStart(event, {
                         task_identifier: 'note',
                         task_type: 'note',
-                        icon: iconsObj['TextsmsIcon'],
+                        icon: TextsmsIcon,
                       })
                     }
                     draggable

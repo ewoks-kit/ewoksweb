@@ -42,7 +42,7 @@ export function outNodesLinks(
           uiProps: {
             type: 'output',
             position: temPosition,
-            icon: 'graphOutput',
+            icon: 'graphOutput.svg',
             withImage: existsOrValue(outNod.uiProps, 'withImage', true),
             withLabel: existsOrValue(outNod.uiProps, 'withLabel', true),
             colorBorder: existsOrValue(outNod.uiProps, 'colorBorder', ''),

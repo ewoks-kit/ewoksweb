@@ -47,7 +47,7 @@ export function inNodesLinks(
             uiProps: {
               type: 'input',
               position: temPosition,
-              icon: 'graphInput',
+              icon: 'graphInput.svg',
               withImage: existsOrValue(inNod.uiProps, 'withImage', true),
               withLabel: existsOrValue(inNod.uiProps, 'withLabel', true),
               colorBorder: existsOrValue(inNod.uiProps, 'colorBorder', ''),
