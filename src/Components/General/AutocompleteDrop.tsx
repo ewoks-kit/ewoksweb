@@ -15,6 +15,15 @@ interface AutocompleteDropProps {
   setInputValue(input: WorkflowDescription): void;
 }
 
+function sortWorkflows(
+  descriptions: WorkflowDescription[]
+): WorkflowDescription[] {
+  return [...descriptions].sort(
+    (a, b) =>
+      a.category.localeCompare(b.category) || a.label.localeCompare(b.label)
+  );
+}
+
 const openWorkflowPlaceholder = 'Open Workflow';
 
 // DOC: A dropdown that can be an input as well
@@ -76,11 +85,15 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
       setAllWorkflows(workF);
 
       if (active) {
+        const filterAddCategory: WorkflowDescription[] = filterworkfToCategories(
+          [...workF]
+        ).map((workf) => {
+          return { ...workf, category: workf.category || 'NoCategory' };
+        });
+
         setOptions(
           props.placeholder === openWorkflowPlaceholder
-            ? filterworkfToCategories([...workF]).map((workf) => {
-                return { ...workf, category: workf.category || 'NoCategory' };
-              })
+            ? sortWorkflows(filterAddCategory)
             : [...categories, { label: 'All' }]
         );
       }
@@ -93,19 +106,16 @@ function AutocompleteDrop(props: AutocompleteDropProps) {
 
   function filterworkfToCategories(
     WorkflowDescriptions: WorkflowDescription[]
-  ) {
-    let workflowToShow = [];
+  ): WorkflowDescription[] {
     if (
       props.category === 'All' ||
       ['', null, undefined].includes(props.category)
     ) {
-      workflowToShow = WorkflowDescriptions;
-    } else {
-      workflowToShow = WorkflowDescriptions.filter(
-        (work) => work.category === props.category
-      );
+      return WorkflowDescriptions;
     }
-    return workflowToShow;
+    return [...WorkflowDescriptions].filter(
+      (work) => work.category === props.category
+    );
   }
 
   return (
