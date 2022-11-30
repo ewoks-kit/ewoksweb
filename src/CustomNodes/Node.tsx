@@ -46,7 +46,6 @@ const Node: React.FC<NodeProps> = ({
   details,
 }: NodeProps) => {
   const theCom = comment ? <span style={style.comment}>{comment}</span> : '';
-  console.log(image, label, type);
 
   const border = colorBorder
     ? `4px solid ${colorBorder}`
@@ -136,7 +135,6 @@ const Node: React.FC<NodeProps> = ({
 
   const findImage = (img) => {
     const imgIndex = allIcons.map((ico) => ico.name).indexOf(img);
-    console.log(img, imgIndex);
 
     return imgIndex !== -1 ? allIcons[imgIndex].image.data_url : orange2;
   };
@@ -317,7 +315,7 @@ const Node: React.FC<NodeProps> = ({
                   }}
                   isConnectable
                   isValidConnection={isValidConnection}
-                ></Handle>
+                />
                 <Handle
                   type="target"
                   position={Position.Top}

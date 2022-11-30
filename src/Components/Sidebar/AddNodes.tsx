@@ -141,12 +141,6 @@ function AddNodes(props: AddNodesProps) {
 
   const findImage = (img: string) => {
     const imgIndex = allIcons.map((ico) => ico.name).indexOf(img);
-    console.log(
-      imgIndex,
-      img,
-      allIcons,
-      tasks.filter((t) => t.icon === 'default.png')
-    );
 
     return imgIndex !== -1 ? allIcons[imgIndex].image.data_url : orange2;
   };
