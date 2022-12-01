@@ -25,6 +25,7 @@ import EditIcon from '@material-ui/icons/EditOutlined';
 import BookmarksIcon from '@material-ui/icons/Bookmarks';
 import { getTaskDescription, deleteTask } from 'utils/api';
 import { FormAction } from '../../types';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 const onDragStart = (event, { task_identifier, task_type, icon }) => {
   event.dataTransfer.setData('task_identifier', task_identifier);
@@ -33,12 +34,41 @@ const onDragStart = (event, { task_identifier, task_type, icon }) => {
   event.dataTransfer.effectAllowed = 'move';
 };
 
+const useStyles = makeStyles(() =>
+  createStyles({
+    accordionDetails: {
+      flexWrap: 'wrap',
+    },
+    imgHolder: {
+      overflow: 'hidden',
+      overflowWrap: 'break-word',
+      position: 'relative',
+      textAlign: 'center',
+      color: 'black',
+      display: 'flex',
+    },
+    imgLabelHolder: {
+      position: 'absolute',
+      bottom: '1px',
+      left: '1px',
+    },
+    image: {
+      padding: '4px',
+    },
+    button: {
+      margin: '4px',
+    },
+  })
+);
+
 interface AddNodesProps {
   title: string;
   openSaveDialogNewtask?: boolean;
 }
 // DOC: Hosts the nodes (images and categories) to drag and drop to canvas
 function AddNodes(props: AddNodesProps) {
+  const classes = useStyles();
+
   const taskCategories = useStore((state) => state.taskCategories);
   const setTaskCategories = useStore((state) => state.setTaskCategories);
   const tasks = useStore((state) => state.tasks);
@@ -162,7 +192,7 @@ function AddNodes(props: AddNodesProps) {
           <Typography>{props.title}</Typography>
         </SidebarTooltip>
       </AccordionSummary>
-      <AccordionDetails style={{ flexWrap: 'wrap' }}>
+      <AccordionDetails className={classes.accordionDetails}>
         {taskCategories.map((categoryName) => (
           <Accordion
             key={categoryName}
@@ -175,7 +205,7 @@ function AddNodes(props: AddNodesProps) {
             >
               <Typography>{categoryName}</Typography>
             </AccordionSummary>
-            <AccordionDetails style={{ flexWrap: 'wrap' }}>
+            <AccordionDetails className={classes.accordionDetails}>
               {tasks
                 .filter((nod) => nod.category === categoryName)
                 .map((elem) => (
@@ -203,27 +233,15 @@ function AddNodes(props: AddNodesProps) {
                   >
                     <Tooltip title={elem.task_identifier} arrow>
                       <span
-                        // onContextMenu={onRigthClick}
                         role="button"
                         tabIndex={0}
-                        style={{
-                          overflow: 'hidden',
-                          overflowWrap: 'break-word',
-                          position: 'relative',
-                          textAlign: 'center',
-                          color: 'black',
-                        }}
+                        className={classes.imgHolder}
                       >
-                        <span
-                          style={{
-                            position: 'absolute',
-                            bottom: '1px',
-                            left: '1px',
-                          }}
-                        >
+                        <span className={classes.imgLabelHolder}>
                           {elem.task_identifier.split('.').pop()}
                         </span>
                         <img
+                          className={classes.image}
                           src={findImage(elem.icon)}
                           alt={elem.task_identifier}
                         />
@@ -287,7 +305,6 @@ function AddNodes(props: AddNodesProps) {
                     <DeleteIcon />
                   </IconButton>
                   <IconButton
-                    style={{ padding: '1px' }}
                     aria-label="edit"
                     onClick={() =>
                       action(FormAction.editTask, selectedTask.task_identifier)
@@ -297,8 +314,8 @@ function AddNodes(props: AddNodesProps) {
                     <EditIcon />
                   </IconButton>
                   <Button
+                    className={classes.button}
                     startIcon={<BookmarksIcon />}
-                    style={{ margin: '4px' }}
                     variant="outlined"
                     color="primary"
                     onClick={() =>
@@ -310,8 +327,7 @@ function AddNodes(props: AddNodesProps) {
                   </Button>
 
                   <Button
-                    // startIcon={<FiberNew />}
-                    style={{ margin: '4px' }}
+                    className={classes.button}
                     variant="outlined"
                     color="primary"
                     onClick={() => action(FormAction.newTask, initializedTask)}

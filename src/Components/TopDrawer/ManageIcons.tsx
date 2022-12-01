@@ -8,6 +8,7 @@ import useStore from 'store/useStore';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { getTaskDescription } from 'utils/api';
 import orange2 from 'images/orange2.png';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -17,7 +18,28 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+const useStyles = makeStyles(() =>
+  createStyles({
+    imgHolder: {
+      overflow: 'hidden',
+      overflowWrap: 'break-word',
+      position: 'relative',
+      textAlign: 'center',
+      color: 'black',
+      display: 'flex',
+    },
+    image: {
+      padding: '3px',
+    },
+    button: {
+      margin: '8px',
+    },
+  })
+);
+
 export default function ManageIcons() {
+  const classes = useStyles();
+
   const [selectedIcon, setSelectedIcon] = React.useState('');
   const [fileToBeSent, setFileToBeSent] = React.useState<string | ArrayBuffer>(
     ''
@@ -149,33 +171,36 @@ export default function ManageIcons() {
       <Grid container spacing={1} direction="row" alignItems="center">
         <Grid item xs={12} sm={12} md={8} lg={6}>
           <Item>
-            <span className="dndflow" style={{ display: 'flex' }}>
-              <span>
-                {allIcons.map((icon) => (
-                  <span
-                    onClick={() => clickIcon(icon.name)}
-                    aria-hidden="true"
-                    role="button"
-                    tabIndex={0}
-                    key={icon.name}
-                    className={`dndnode ${
-                      selectedIcon && selectedIcon === icon.name
-                        ? 'selectedTask'
-                        : ''
-                    }`}
-                  >
-                    <Tooltip title={icon.name} arrow>
-                      <span role="button" tabIndex={0} className="iconDetails">
-                        <img
-                          src={icon.image?.data_url || orange2}
-                          alt={icon.name}
-                          key={icon.name}
-                        />
-                      </span>
-                    </Tooltip>
-                  </span>
-                ))}
-              </span>
+            <span className="dndflow">
+              {allIcons.map((icon) => (
+                <span
+                  onClick={() => clickIcon(icon.name)}
+                  aria-hidden="true"
+                  role="button"
+                  tabIndex={0}
+                  key={icon.name}
+                  className={`dndnode ${
+                    selectedIcon && selectedIcon === icon.name
+                      ? 'selectedTask'
+                      : ''
+                  }`}
+                >
+                  <Tooltip title={icon.name} arrow>
+                    <span
+                      role="button"
+                      tabIndex={0}
+                      className={classes.imgHolder}
+                    >
+                      <img
+                        className={classes.image}
+                        src={icon.image?.data_url || orange2}
+                        alt={icon.name}
+                        key={icon.name}
+                      />
+                    </span>
+                  </Tooltip>
+                </span>
+              ))}
             </span>
           </Item>
         </Grid>
@@ -188,7 +213,7 @@ export default function ManageIcons() {
             >
               <Button
                 startIcon={<DeleteIcon />}
-                style={{ margin: '8px' }}
+                className={classes.button}
                 variant="outlined"
                 color="secondary"
                 onClick={deleteIcon}

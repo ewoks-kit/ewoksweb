@@ -19,12 +19,12 @@
   margin: 4px;
   height: 80px;
   width: 60px;
-  padding: 4px;
+
   margin-bottom: 10px;
   display: inline-grid;
   flex-direction: row;
   justify-content: safe;
-  align-items: center;
+  /* align-items: center; */
   cursor: grab;
 }
 
