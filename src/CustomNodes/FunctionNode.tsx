@@ -29,8 +29,9 @@ function FunctionNode(fnod) {
       nodeWidth={fnod.data.nodeWidth || 120}
       withLabel={fnod.data.withLabel}
       colorBorder={fnod.data.colorBorder}
+      // the following is calculated in calcNodeType for subgraphs-inNodes-outNodes
       type={fnod.data.type}
-      label={fnod.label ? fnod.label : fnod.data.label}
+      label={fnod.data.label}
       selected={fnod.selected}
       color={fnod.data.exists ? '#ced3ee' : 'red'}
       image={fnod.data.icon}
