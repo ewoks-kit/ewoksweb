@@ -38,7 +38,6 @@ const workingGraph = (set, get) => ({
         const tasks = tasksData.data as { items: Task[] };
         get().setTasks(tasks.items);
       } catch (error) {
-        // console.error('The Promise is rejected!', error);
         get().setOpenSnackbar({
           open: true,
           text:
@@ -49,12 +48,9 @@ const workingGraph = (set, get) => ({
     }
     get().setSelectedElement({} as EwoksRFNode | EwoksRFLink);
     get().setSubgraphsStack({ id: 'initialiase', label: '' });
-
-    // TODO: examine if the following initialization is needed any more?
-    // get().setGraphRF(get().initializedRFGraph);
-    // Is the following needed as to not get existing graphs? Better an empty array?
     get().setRecentGraphs({} as GraphRF, true);
 
+    // 2. Get node-subgraphs for the graph
     const newNodeSubgraphs = await findAllSubgraphs(
       workingGraph,
       get().recentGraphs
