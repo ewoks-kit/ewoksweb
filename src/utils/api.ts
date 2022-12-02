@@ -13,7 +13,9 @@ export const axiosRequest = axios.create({
 // TODO: typescriptify all
 // --------------Tasks
 // Get '/tasks/descriptions'
-export function getTaskDescription() {
+export function getTaskDescription(): Promise<{
+  data: { items: Task[] };
+}> {
   return axiosRequest.get(`/tasks/descriptions`);
 }
 

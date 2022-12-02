@@ -53,7 +53,7 @@ const useStyles = makeStyles(() =>
       left: '1px',
     },
     image: {
-      padding: '4px',
+      padding: '0px 0px 15px 0px',
     },
     button: {
       margin: '4px',
@@ -65,7 +65,7 @@ interface AddNodesProps {
   title: string;
   openSaveDialogNewtask?: boolean;
 }
-// DOC: Hosts the nodes (images and categories) to drag and drop to canvas
+// DOC: Hosts the nodes-tasks in their categories to drag and drop them into canvas
 function AddNodes(props: AddNodesProps) {
   const classes = useStyles();
 
@@ -89,9 +89,11 @@ function AddNodes(props: AddNodesProps) {
   const getTasks = useCallback(async () => {
     try {
       const tasksData = await getTaskDescription();
-      const tasks = tasksData.data as { items: Task[] };
-      setTasks(tasks.items);
-      setTaskCategories(tasks.items.map((tas) => tas.category));
+      if (tasksData && tasksData.data?.items?.length > 0) {
+        const allTasks = tasksData.data.items;
+        setTasks(allTasks);
+        setTaskCategories(allTasks.map((tas) => tas.category));
+      }
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -103,6 +105,7 @@ function AddNodes(props: AddNodesProps) {
 
   useEffect(() => {
     setExpanded(!selectedElement.id);
+    // TODO: examine the strategy for re-fetching tasks-workflows-icons
     if (tasks.length === 0) {
       getTasks();
     }
@@ -141,7 +144,9 @@ function AddNodes(props: AddNodesProps) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.message,
+        text:
+          error.message ||
+          'Error in task deletion. Please check connectivity with the server',
         severity: 'error',
       });
     }

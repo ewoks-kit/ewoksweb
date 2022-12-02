@@ -3,12 +3,12 @@ import { Button, Box, Grid, Paper, styled, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import axios from 'axios';
-import type { Task } from 'types';
 import useStore from 'store/useStore';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { getTaskDescription } from 'utils/api';
 import orange2 from 'images/orange2.png';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
+import commonStrings from 'commonStrings.json';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -27,9 +27,6 @@ const useStyles = makeStyles(() =>
       textAlign: 'center',
       color: 'black',
       display: 'flex',
-    },
-    image: {
-      padding: '3px',
     },
     button: {
       margin: '8px',
@@ -57,29 +54,31 @@ export default function ManageIcons() {
   async function deleteIcon() {
     try {
       const tasksData = await getTaskDescription();
-      const tasks = tasksData.data as { items: Task[] };
-      const allTasks = tasks.items;
+      if (tasksData && tasksData.data?.items?.length > 0) {
+        const allTasks = tasksData.data.items;
 
-      if (allTasks.map((task) => task.icon).includes(selectedIcon)) {
-        setOpenSnackbar({
-          open: true,
-          text: `Icon cannot be deleted since it is used in one or more Tasks!`,
-          severity: 'warning',
-        });
-      } else {
+        if (allTasks.some((task) => task.icon === selectedIcon)) {
+          setOpenSnackbar({
+            open: true,
+            text: `Icon cannot be deleted since it is used in one or more Tasks!`,
+            severity: 'warning',
+          });
+          return;
+        }
+
         setOpenSnackbar({
           open: true,
           text: `Icon can be deleted since it is not used in any Task!`,
           severity: 'success',
         });
+
         setOpenAgreeDialog(true);
       }
     } catch (error) {
+      // TODO: general error handling for all cases like workflows?
       setOpenSnackbar({
         open: true,
-        text:
-          error.response?.data?.message ||
-          'Error in deleting Task. Please check connectivity with the server!',
+        text: error.response?.data?.message || commonStrings.retrieveTasksError,
         severity: 'error',
       });
     }
@@ -94,11 +93,20 @@ export default function ManageIcons() {
         { data_url: fileToBeSent }
       );
 
+      setOpenSnackbar({
+        open: true,
+        text: `Icon ${fileNameToBeSent} was successfully uploaded`,
+        severity: 'success',
+      });
+
       setAllIcons([], true);
+      setFileNameToBeSent('');
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message,
+        text:
+          error.response?.data?.message ||
+          'Error in uploading the Icon. Please check connectivity with the server!',
         severity: 'error',
       });
     }
@@ -108,49 +116,52 @@ export default function ManageIcons() {
   function inputNew(ne) {
     const { files } = ne.target;
 
-    if (files[0].size < 10_000) {
-      const fileReader = new FileReader();
-
-      fileReader.readAsDataURL(files[0]);
-
-      fileReader.addEventListener('load', (event) => {
-        setFileToBeSent(event.target.result);
-        setFileNameToBeSent(files[0].name);
-      });
-
-      setOpenSnackbar({
-        open: true,
-        text: 'File ready to be uploaded as an icon',
-        severity: 'success',
-      });
-    } else {
+    if (files[0].size > 10_000) {
       setOpenSnackbar({
         open: true,
         text: 'Files more than 10Kb are not acceptable for icons',
         severity: 'warning',
       });
+      return;
     }
+
+    const fileReader = new FileReader();
+
+    fileReader.readAsDataURL(files[0]);
+
+    fileReader.addEventListener('load', (event) => {
+      setFileToBeSent(event.target.result);
+      setFileNameToBeSent(files[0].name);
+    });
+
+    setOpenSnackbar({
+      open: true,
+      text: 'File ready to be uploaded as an icon',
+      severity: 'success',
+    });
   }
 
   async function agreeDeleteIcon() {
     setOpenAgreeDialog(false);
-    await axios
-      .delete(`${process.env.REACT_APP_SERVER_URL}/icon/${selectedIcon}`)
-      .then(() => {
-        setOpenSnackbar({
-          open: true,
-          text: `Icon was succesfully deleted!`,
-          severity: 'success',
-        });
-        setAllIcons([], true);
-      })
-      .catch((error) => {
-        setOpenSnackbar({
-          open: true,
-          text: error?.response?.data || 'Error in deleting Task',
-          severity: 'error',
-        });
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_SERVER_URL}/icon/${selectedIcon}`
+      );
+
+      setOpenSnackbar({
+        open: true,
+        text: `Icon was succesfully deleted!`,
+        severity: 'success',
       });
+
+      setAllIcons([], true);
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: error?.response?.data || 'Error in deleting Icon',
+        severity: 'error',
+      });
+    }
   }
 
   function disAgreeDeleteIcon() {
@@ -192,7 +203,6 @@ export default function ManageIcons() {
                       className={classes.imgHolder}
                     >
                       <img
-                        className={classes.image}
                         src={icon.image?.data_url || orange2}
                         alt={icon.name}
                         key={icon.name}
@@ -207,10 +217,7 @@ export default function ManageIcons() {
 
         <Grid item xs={12} sm={12} md={4} lg={3}>
           <Item>
-            <form
-              onSubmit={uploadFile}
-              // enctype="multipart/form-data"
-            >
+            <form onSubmit={uploadFile}>
               <Button
                 startIcon={<DeleteIcon />}
                 className={classes.button}
