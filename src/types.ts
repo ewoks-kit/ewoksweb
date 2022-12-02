@@ -289,7 +289,6 @@ export interface stackGraph {
 }
 
 export interface UiPropsNodes {
-  // label?: string;
   type?: string;
   icon?: string;
   comment?: string;
