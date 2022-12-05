@@ -66,7 +66,7 @@ export default function FormDialog(props: FormDialogProps) {
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const allIconNames = useStore((state) => state.allIconNames);
+  const allIcons = useStore((state) => state.allIcons);
   const setGettingFromServer = useStore((st) => st.setGettingFromServer);
   const [element, setElement] = React.useState<Task | GraphRF>(
     {} as Task | GraphRF
@@ -428,9 +428,9 @@ export default function FormDialog(props: FormDialogProps) {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              {allIconNames.map((iconName) => (
-                <MenuItem value={iconName} key={iconName}>
-                  {iconName}
+              {allIcons.map((icon) => (
+                <MenuItem value={icon.name} key={icon.name}>
+                  {icon.name}
                 </MenuItem>
               ))}
             </Select>

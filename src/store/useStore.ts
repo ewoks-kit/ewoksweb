@@ -9,7 +9,6 @@ import selectedTask from './selectedTask';
 import workingGraph from './workingGraph';
 import graphRF from './graphRF';
 import allWorkflows from './allWorkflows';
-import allIconNames from './allIconNames';
 import allIcons from './allIcons';
 import executingEvents from './executingEvents';
 import executedEvents from './executedEvents';
@@ -59,8 +58,7 @@ const initializedRFGraph: GraphRF = {
 };
 
 const useStore = create<State>((set, get) => ({
-  ...allIconNames(set),
-  ...allIcons(set, get),
+  ...allIcons(set),
   ...allWorkflows(set),
   ...currentExecutionEvent(set),
   ...executedEvents(set, get),

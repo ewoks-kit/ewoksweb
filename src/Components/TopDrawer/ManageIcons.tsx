@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useCallback } from 'react';
 import { Button, Box, Grid, Paper, styled, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
@@ -9,6 +9,8 @@ import { getTaskDescription } from 'utils/api';
 import orange2 from 'images/orange2.png';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import commonStrings from 'commonStrings.json';
+import type { Icon } from '../../types';
+import getIconsFromServer from '../../utils/getIconsFromServer';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -99,7 +101,7 @@ export default function ManageIcons() {
         severity: 'success',
       });
 
-      setAllIcons([], true);
+      getIcons();
       setFileNameToBeSent('');
     } catch (error) {
       setOpenSnackbar({
@@ -153,7 +155,7 @@ export default function ManageIcons() {
         severity: 'success',
       });
 
-      setAllIcons([], true);
+      getIcons();
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -166,6 +168,22 @@ export default function ManageIcons() {
   function disAgreeDeleteIcon() {
     setOpenAgreeDialog(false);
   }
+
+  const getIcons = useCallback(async () => {
+    try {
+      const icons: Icon[] | object = await getIconsFromServer();
+
+      if (Array.isArray(icons) && icons?.length > 0) {
+        setAllIcons([...icons]);
+      }
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: error.response?.data?.message || commonStrings.retrieveIconsError,
+        severity: 'error',
+      });
+    }
+  }, [setOpenSnackbar, setAllIcons]);
 
   return (
     <Box>

@@ -1,6 +1,6 @@
 // TODO: remove the following after onlyEditRelease
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Accordion,
   AccordionDetails,
@@ -28,6 +28,8 @@ import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { deleteWorkflow } from 'utils/api';
 import { OpenInBrowser } from '@material-ui/icons';
 import SidebarTooltip from './SidebarTooltip';
+import getIconsFromServer from '../../utils/getIconsFromServer';
+import commonStrings from 'commonStrings.json';
 
 const useStyles = DashboardStyle;
 
@@ -63,13 +65,29 @@ export default function Sidebar() {
     setElement(selectedElement);
   }, [selectedElement]);
 
-  // TODO move fetch out to be used when refresh in icons is needed
+  const getIcons = useCallback(async () => {
+    try {
+      const icons: Icon[] | object = await getIconsFromServer();
+
+      if (Array.isArray(icons) && icons?.length > 0) {
+        setAllIcons([...icons]);
+      }
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: error.response?.data?.message || commonStrings.retrieveIconsError,
+        severity: 'error',
+      });
+    }
+  }, [setOpenSnackbar, setAllIcons]);
+
   useEffect(() => {
-    setAllIcons([], true);
-  }, [setAllIcons]);
+    getIcons();
+  }, [getIcons]);
 
   const deleteElement = async () => {
     let newGraph = {} as GraphRF;
+
     const elN = element as EwoksRFNode; // TODO: is this the way to avoid typescript warning???
     const elL = element as EwoksRFLink;
     const elD = element as GraphDetails;
