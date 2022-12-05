@@ -10,14 +10,13 @@ export function outputsAll(tempGraph: GraphEwoks): string[] {
 
 // DOC: calculate if node in a graph is input and/or output or internal
 export function calcNodeType(
-  inputsAl: string[],
-  outputsAll: string[],
+  inputs: string[],
+  outputs: string[],
   task_type: string,
   id: string
 ): string {
-  const isInput = inputsAl && inputsAl.includes(id);
-  const isOutput = outputsAll && outputsAll.includes(id);
-
+  const isInput = inputs?.includes(id);
+  const isOutput = outputs?.includes(id);
   if (isInput && isOutput) {
     return 'input_output';
   } else if (isInput) {
@@ -39,18 +38,17 @@ export function calcTask(
   task_identifier: string,
   task_type: string
 ): Task {
-  let tempTask = tasks.find((tas) => tas.task_identifier === task_identifier);
+  const tempTask = tasks.find((tas) => tas.task_identifier === task_identifier);
 
-  tempTask = tempTask
-    ? tempTask // if you found the Task return it
-    : task_type === 'graph' // if not found check if it is a graph
-    ? tempTask // if a graph return it and if not add some default inputs-outputs
-    : {
-        optional_input_names: [],
-        output_names: [],
-        required_input_names: [],
-      };
-  return tempTask;
+  if (tempTask || task_type === 'graph') {
+    return tempTask;
+  }
+
+  return {
+    optional_input_names: [],
+    output_names: [],
+    required_input_names: [],
+  };
 }
 
 interface calcInOutForSubgraphOutput {
@@ -66,7 +64,7 @@ export function calcInOutForSubgraph(
   let inputsSub: calcInOutForSubgraphOutput[] = [];
   let outputsSub: calcInOutForSubgraphOutput[] = [];
 
-  if (subgraphNode && subgraphNode.graph?.id) {
+  if (subgraphNode?.graph?.id) {
     const allOutputsIds = subgraphNode.graph.output_nodes.map((nod) => nod.id);
     const allInputsIds = subgraphNode.graph.input_nodes.map((nod) => nod.id);
 
