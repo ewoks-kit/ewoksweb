@@ -30,7 +30,7 @@ export default function SaveToServer({ saveToServerF }) {
   async function saveToServer(): Promise<void> {
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     // and Nodes DataMapping before attempting to save
-    let graphRFCurrated = curateGraph(graphRF);
+    const graphRFCurrated = curateGraph(graphRF);
     // DOC: search if id exists.
     // 1. If notExists open dialog for NEW NAME.
     // 2. If exists and you took it from me UPDATE without asking
