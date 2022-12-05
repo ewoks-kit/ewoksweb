@@ -1,11 +1,12 @@
 import { Box, FormControl, Grid, Paper, styled } from '@material-ui/core';
-import AutocompleteDrop from '../General/AutocompleteDrop';
+import WorkflowDropdown from '../General/dropdown/WorkflowDropdown';
 import ReactJson from 'react-json-view';
 import React from 'react';
 import { getWorkflow } from 'utils/api';
 import GetFromServerButtons from '../General/GetFromServerButtons';
 import type { GraphEwoks, WorkflowDescription } from 'types';
 import useStore from 'store/useStore';
+import CategoryDropdown from '../General/dropdown/CategoryDropdown';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -28,13 +29,8 @@ export default function ManageWorkflows() {
     }
   }
 
-  async function setInputCategoryValue(workflowDetails: WorkflowDescription) {
-    // DOC: filter according to the selected category
-    if (workflowDetails && workflowDetails.label) {
-      setCategoryValue(workflowDetails.label);
-    } else {
-      setCategoryValue('');
-    }
+  async function setCategoryFilter(category: string) {
+    setCategoryValue(category ? category : '');
   }
 
   return (
@@ -43,16 +39,11 @@ export default function ManageWorkflows() {
         <Grid item xs={12} sm={12} md={6} lg={3}>
           <Item>
             <FormControl variant="standard" fullWidth>
-              <AutocompleteDrop
-                setInputValue={setInputCategoryValue}
-                placeholder="Categories"
-                category={categoryValue}
-              />
+              <CategoryDropdown onChange={setCategoryFilter} />
             </FormControl>
             <FormControl variant="standard" fullWidth>
-              <AutocompleteDrop
-                setInputValue={setInputWorkflowValue}
-                placeholder="Open Workflow"
+              <WorkflowDropdown
+                onChange={setInputWorkflowValue}
                 category={categoryValue}
               />
             </FormControl>

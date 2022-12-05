@@ -187,21 +187,8 @@ export interface State {
   setAllIconNames?: (icons: string[]) => void;
   // { name: string; svgFile?: string; file?: File }[]
 
-  allCategories?: { label: string }[];
-  setAllCategories?: (categories: { label: string }[]) => void;
-
-  allWorkflows?: {
-    id?: string;
-    label?: string;
-    category?: string;
-  }[];
-  setAllWorkflows?: (
-    workflows: {
-      id?: string;
-      label?: string;
-      category?: string;
-    }[]
-  ) => void;
+  allWorkflows?: WorkflowDescription[];
+  setAllWorkflows?: (workflows: WorkflowDescription[]) => void;
 
   recentGraphs?: GraphRF[];
   setRecentGraphs?: (graphRF: GraphRF, reset?: boolean) => void;

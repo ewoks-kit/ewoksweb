@@ -10,10 +10,11 @@ import {
   FormControlLabel,
   Switch,
 } from '@material-ui/core';
-import AutocompleteDrop from 'Components/General/AutocompleteDrop';
 import { getExecutionEvents } from '../../utils/api';
 import useStore from '../../store/useStore';
 import type { ExecutedJobsResponse, WorkflowDescription } from '../../types';
+import CategoryDropdown from '../General/dropdown/CategoryDropdown';
+import WorkflowDropdown from '../General/dropdown/WorkflowDropdown';
 
 interface filterParams {
   workflow_id: string;
@@ -68,20 +69,11 @@ export default function ExecutionFilters() {
 
   // TODO: same as in manageWorkflows for category and workflows
   function setInputValue(workflowDetails: WorkflowDescription) {
-    if (workflowDetails && workflowDetails.id) {
-      setWorkflowId(workflowDetails.id || '');
-    } else {
-      setWorkflowId('');
-    }
+    setWorkflowId(workflowDetails?.id ? workflowDetails.id : '');
   }
 
-  function setInputCategoryValue(workflowDetails: WorkflowDescription) {
-    // DOC: filter according to the selected category
-    if (workflowDetails && workflowDetails.label) {
-      setCategoryValue(workflowDetails.label);
-    } else {
-      setCategoryValue('');
-    }
+  function setCategoryFilter(category: string) {
+    setCategoryValue(category ? category : '');
   }
 
   function statusChanged(event) {
@@ -169,21 +161,13 @@ export default function ExecutionFilters() {
         variant="outlined"
         style={{ minWidth: '200px', margin: '8px' }}
       >
-        <AutocompleteDrop
-          setInputValue={setInputCategoryValue}
-          placeholder="Categories"
-          category={categoryValue}
-        />
+        <CategoryDropdown onChange={setCategoryFilter} />
       </FormControl>
       <FormControl
         variant="outlined"
         style={{ minWidth: '200px', margin: '8px' }}
       >
-        <AutocompleteDrop
-          setInputValue={setInputValue}
-          placeholder="Open Workflow"
-          category={categoryValue}
-        />
+        <WorkflowDropdown onChange={setInputValue} category={categoryValue} />
       </FormControl>
       <FormControl
         variant="filled"
