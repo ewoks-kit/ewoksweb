@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -30,26 +30,42 @@ function PaperComponent(props: PaperProps) {
   );
 }
 
-export default function DraggableDialog(props) {
-  const [graph, setGraph] = React.useState({});
-  const [oldGraph, setOldGraph] = React.useState({});
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [title, setTitle] = React.useState('');
-  const [name, setName] = React.useState('');
-  const [oldName, setOldName] = React.useState('');
-  const [callbackProps, setCallbackProps] = React.useState({});
+// TODO: Improve typings
+type Graph = object;
+type CallbackProps = unknown;
+
+interface Props {
+  content: {
+    object?: Graph;
+    title?: string;
+    id?: string;
+    callbackProps?: CallbackProps;
+  };
+  open: boolean;
+  typeOfValues?: { values?: string[]; type: string };
+  setValue?: (name: string, graph: Graph, cp: CallbackProps) => void;
+}
+
+export default function DraggableDialog(props: Props) {
+  const [graph, setGraph] = useState<Graph>({});
+  const [oldGraph, setOldGraph] = useState<Graph>({});
+  const [isOpen, setIsOpen] = useState(false);
+  const [title, setTitle] = useState('');
+  const [name, setName] = useState('');
+  const [oldName, setOldName] = useState('');
+  const [callbackProps, setCallbackProps] = useState<CallbackProps>({});
   const graphRF = useStore((state) => state.graphRF);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const [selection, setSelection] = React.useState('ewoks');
+  const [selection, setSelection] = useState('ewoks');
 
   const { open, content, typeOfValues } = props;
 
   useEffect(() => {
-    setGraph((content && content.object) || {});
-    setOldGraph((content && content.object) || {});
+    setGraph(content?.object || {});
+    setOldGraph(content?.object || {});
     setIsOpen(open || false);
-    setTitle((content && content.title) || '');
+    setTitle(content?.title || '');
     setCallbackProps(content.callbackProps);
     setName(content.id || '');
     setOldName(content.id || '');
@@ -83,7 +99,7 @@ export default function DraggableDialog(props) {
     setIsOpen(true);
   };
 
-  const graphChanged = (edit) => {
+  const graphChanged = (edit: { updated_src: Graph }) => {
     setGraph(edit.updated_src);
   };
 
