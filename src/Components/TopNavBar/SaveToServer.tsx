@@ -30,7 +30,7 @@ export default function SaveToServer({ saveToServerF }) {
   async function saveToServer(): Promise<void> {
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     // and Nodes DataMapping before attempting to save
-    let graphRFCurrated = curateGraph(graphRF);
+    const graphRFCurrated = curateGraph(graphRF);
     // DOC: search if id exists.
     // 1. If notExists open dialog for NEW NAME.
     // 2. If exists and you took it from me UPDATE without asking
@@ -44,16 +44,6 @@ export default function SaveToServer({ saveToServerF }) {
       setOpenSaveDialog(true);
     } else if (workingGraph.graph.id === graphRF.graph.id) {
       if (graphRF.graph.uiProps.source === 'fromServer') {
-        // DOC: remove the 'fromServer' before saving as ewoksGraph
-        if (graphRFCurrated.graph.uiProps.source) {
-          /* eslint-disable @typescript-eslint/no-unused-vars */
-          const { source, ...uiPropsNoSource } = graphRFCurrated.graph.uiProps;
-          graphRFCurrated = {
-            ...graphRFCurrated,
-            graph: { ...graphRFCurrated.graph, ...uiPropsNoSource },
-          };
-        }
-
         try {
           await putWorkflow(rfToEwoks(graphRFCurrated));
           setOpenSnackbar({
