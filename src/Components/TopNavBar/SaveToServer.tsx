@@ -44,16 +44,6 @@ export default function SaveToServer({ saveToServerF }) {
       setOpenSaveDialog(true);
     } else if (workingGraph.graph.id === graphRF.graph.id) {
       if (graphRF.graph.uiProps.source === 'fromServer') {
-        // DOC: remove the 'fromServer' before saving as ewoksGraph
-        if (graphRFCurrated.graph.uiProps.source) {
-          /* eslint-disable @typescript-eslint/no-unused-vars */
-          const { source, ...uiPropsNoSource } = graphRFCurrated.graph.uiProps;
-          graphRFCurrated = {
-            ...graphRFCurrated,
-            graph: { ...graphRFCurrated.graph, ...uiPropsNoSource },
-          };
-        }
-
         try {
           await putWorkflow(rfToEwoks(graphRFCurrated));
           setOpenSnackbar({

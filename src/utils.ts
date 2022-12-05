@@ -100,7 +100,7 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
   const noteNodes = calcNoteNodes(tempGraph);
   graph.uiProps.notes = noteNodes;
 
-  // remove "fromServer" which is for UIs internal use
+  // DOC: remove "fromServer" which is for UIs internal use
   if (graph.uiProps?.source) {
     delete graph.uiProps?.source;
   }
