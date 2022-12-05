@@ -10,7 +10,7 @@ import ConfirmDialog from '../ConfirmDialog';
 // import useStore from '../store/state';
 
 describe('In the ConfirmDialog:', () => {
-  test('Initially not to be visible if open===false', async () => {
+  test('Initially not to be visible if open===false', () => {
     const agreeDeleteTask = jest.fn();
     const disAgreeDeleteTask = jest.fn();
 
@@ -30,7 +30,7 @@ describe('In the ConfirmDialog:', () => {
     expect(dialog1).not.toBeInTheDocument();
   });
 
-  test('To be visible if open===true', async () => {
+  test('To be visible if open===true', () => {
     const agreeDeleteTask = jest.fn();
     const disAgreeDeleteTask = jest.fn();
 

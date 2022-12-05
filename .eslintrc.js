@@ -39,7 +39,6 @@ module.exports = createConfig({
     {
       files: tsFiles,
       rules: {
-        'dot-notation': 'off',
         '@typescript-eslint/dot-notation': 'off',
         '@typescript-eslint/ban-ts-comment': 'off', // too strict
         '@typescript-eslint/no-floating-promises': 'off', // big crash sometimes better than silent fail
@@ -63,6 +62,10 @@ module.exports = createConfig({
           'error',
           'interface',
         ],
+
+        // TODO
+        '@typescript-eslint/consistent-type-assertions': 'off',
+        '@typescript-eslint/prefer-optional-chain': 'off',
       },
     },
     {

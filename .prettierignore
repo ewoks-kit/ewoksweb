@@ -1,3 +1,6 @@
+/.pnpm-store/
+/pnpm-lock.yaml
+
 /build/
 /package-lock.json
 /src/notes.js

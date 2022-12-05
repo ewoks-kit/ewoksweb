@@ -1,13 +1,11 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 /* eslint-disable consistent-return */
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import type { Node, Edge, Connection } from 'react-flow-renderer';
 import ReactFlow, {
   Controls,
   MiniMap,
-  Node,
-  Edge,
   Background,
-  Connection,
   useReactFlow,
   applyNodeChanges,
   applyEdgeChanges,
@@ -610,6 +608,8 @@ function Canvas() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onNodeDragStop={onNodeDragStop}
+          // TODO: Types of edgeTypes are mismatched !!
+          // @ts-expect-error
           edgeTypes={edgeTypes}
           nodeTypes={nodeTypes}
           deleteKeyCode="Delete"
