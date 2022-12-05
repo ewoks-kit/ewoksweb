@@ -38,11 +38,11 @@ export default function LabelComment(props: LabelCommentProps) {
   useEffect(() => {
     if ('position' in element) {
       setLabel(element.data.label);
-      setComment(element.data.comment);
+      setComment(element.data?.comment);
     } else if ('source' in element) {
       const el = element;
       setLabel(el.label);
-      setComment(el.data && el.data.comment);
+      setComment(el.data?.comment);
 
       const mappings =
         el.data.data_mapping.length > 0
