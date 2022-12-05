@@ -608,8 +608,6 @@ function Canvas() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onNodeDragStop={onNodeDragStop}
-          // TODO: Types of edgeTypes are mismatched !!
-          // @ts-expect-error
           edgeTypes={edgeTypes}
           nodeTypes={nodeTypes}
           deleteKeyCode="Delete"

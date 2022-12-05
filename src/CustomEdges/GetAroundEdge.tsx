@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
 // TODO: UNDER DEVELOPMENT AND TESTING BY THE USERS
+import type { EdgeProps } from 'react-flow-renderer';
 import { getEdgeCenter } from 'react-flow-renderer';
 import { edgeStyle } from './EdgeStyle';
+import type { SmoothStepData, SmoothStepParams } from './models';
 
 const leftBottomCorner = (x: number, y: number, size: number) => {
   return `L ${x + size},${y}Q ${x},${y} ${x},${y - size}`;
@@ -21,7 +22,7 @@ function getSmoothStepPathC({
   targetX = 0,
   targetY = 0,
   data,
-}) {
+}: SmoothStepParams) {
   const [, _centerY] = getEdgeCenter({
     sourceX,
     sourceY,
@@ -32,6 +33,8 @@ function getSmoothStepPathC({
   const cornerSize = 0;
   const cY = _centerY;
 
+  const { getAroundProps } = data;
+
   let firstCornerPath = '';
   let secondCornerPath = '';
   if (sourceX <= targetX) {
@@ -40,21 +43,21 @@ function getSmoothStepPathC({
     firstCornerPath =
       sourceY < targetY
         ? bottomRightCorner(
-            sourceX + data.getAroundProps.x,
-            cY + data.getAroundProps.y,
+            sourceX + getAroundProps.x,
+            cY + getAroundProps.y,
             cornerSize
           )
-        : topRightCorner(sourceX + data.getAroundProps.x, cY + 120, cornerSize);
+        : topRightCorner(sourceX + getAroundProps.x, cY + 120, cornerSize);
     secondCornerPath =
       sourceY < targetY
         ? leftTopCorner(
-            targetX - data.getAroundProps.x,
-            cY + data.getAroundProps.y,
+            targetX - getAroundProps.x,
+            cY + getAroundProps.y,
             cornerSize
           )
         : leftBottomCorner(
-            targetX - data.getAroundProps.x,
-            cY + data.getAroundProps.y,
+            targetX - getAroundProps.x,
+            cY + getAroundProps.y,
             cornerSize
           );
   }
@@ -62,13 +65,13 @@ function getSmoothStepPathC({
   if (sourceY >= targetY) {
     const cornerX = Math.min(sourceX, targetX);
     const firstStop = bottomRightCorner(
-      sourceX + data.getAroundProps.x,
-      sourceY + data.getAroundProps.y,
+      sourceX + getAroundProps.x,
+      sourceY + getAroundProps.y,
       cornerSize
     );
     const secondStop = leftBottomCorner(
-      cornerX - data.getAroundProps.x,
-      sourceY + data.getAroundProps.y,
+      cornerX - getAroundProps.x,
+      sourceY + getAroundProps.y,
       cornerSize
     );
 
@@ -88,7 +91,7 @@ export default function getAround({
   label,
   markerEnd,
   data,
-}) {
+}: EdgeProps<SmoothStepData>) {
   const edgePath = getSmoothStepPathC({
     sourceX,
     sourceY,
@@ -110,14 +113,14 @@ export default function getAround({
       />
       <text>
         <textPath
-          href={`#${id as string}`}
+          href={`#${id}`}
           style={{ ...style, ...edgeStyle.bendingText }}
           startOffset="50%"
           // @ts-expect-error
           side={sourceX > targetX ? 'right' : 'left'}
           textAnchor="middle"
         >
-          {label &&
+          {typeof label === 'string' &&
             label.split(',').map((mp, index) => (
               <tspan
                 dx={index === 0 ? 0 : -mp.length * 7}
