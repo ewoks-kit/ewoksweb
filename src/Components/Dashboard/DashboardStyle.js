@@ -47,7 +47,6 @@ const DashboardStyle = makeStyles((theme) => ({
   },
 
   isDisabled: {
-    color: 'grey',
     cursor: 'default',
     '&:hover': {
       textDecoration: 'none',
