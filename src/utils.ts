@@ -13,9 +13,6 @@ import { toEwoksNodes } from './utils/toEwoksNodes';
 import { calcNoteNodes } from './utils/calcNoteNodes';
 import { getWorkflowsDescriptions, getWorkflow } from './utils/api';
 
-// const { GraphDagre } = dagre.graphlib;
-// const NODE_SIZE = { width: 270, height: 36 };
-
 export const ewoksNetwork = {};
 
 export async function getWorkflows(): Promise<WorkflowDescription[]> {
@@ -27,10 +24,6 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
         items: WorkflowDescription[];
       };
       res = workf.items;
-      // .sort((a, b) => a.localeCompare(b))
-      // .map((work) => {
-      //   return { ...work, title: work.label };
-      // });
     }
   } catch (error) {
     if (error.response) {

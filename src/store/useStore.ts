@@ -9,7 +9,6 @@ import selectedTask from './selectedTask';
 import workingGraph from './workingGraph';
 import graphRF from './graphRF';
 import allWorkflows from './allWorkflows';
-import allCategories from './allCategories';
 import allIconNames from './allIconNames';
 import allIcons from './allIcons';
 import executingEvents from './executingEvents';
@@ -64,7 +63,6 @@ const useStore = create<State>((set, get) => ({
   ...allIconNames(set),
   ...allIcons(set),
   ...allWorkflows(set),
-  ...allCategories(set),
   ...currentExecutionEvent(set),
   ...executedEvents(set, get),
   ...executingEvents(set, get),
