@@ -64,7 +64,7 @@ export function toRFEwoksNodes(
           task_icon: uiProps.task_icon || '',
           default_inputs: default_inputs || [],
           data: {
-            label: label ? label : task_identifier,
+            label: label ?? task_identifier,
             type: nodeType,
             nodeWidth: existsOrValue(uiProps, 'nodeWidth', 120),
             icon: uiProps.node_icon

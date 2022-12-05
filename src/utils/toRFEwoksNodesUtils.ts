@@ -18,21 +18,19 @@ export function calcNodeType(
   const isInput = inputsAl && inputsAl.includes(id);
   const isOutput = outputsAll && outputsAll.includes(id);
 
-  let nodeType = '';
   if (isInput && isOutput) {
-    nodeType = 'input_output';
+    return 'input_output';
   } else if (isInput) {
-    nodeType = 'input';
+    return 'input';
   } else if (isOutput) {
-    nodeType = 'output';
+    return 'output';
   } else if (task_type === 'graphInput') {
-    nodeType = 'graphInput';
+    return 'graphInput';
   } else if (task_type === 'graphOutput') {
-    nodeType = 'graphOutput';
-  } else {
-    nodeType = 'internal';
+    return 'graphOutput';
   }
-  return nodeType;
+
+  return 'internal';
 }
 
 // DOC: locate the task and add required+optional-inputs + outputs
