@@ -81,7 +81,7 @@ const useStore = create<State>((set, get) => ({
   ...recentGraphs(set, get),
   ...subGraph(set, get),
   ...subgraphsStack(set, get),
-  ...taskCategories(set),
+  // ...taskCategories(set),
   ...tasks(set),
   ...undoIndex(set, get),
   ...undoRedo(set, get),
