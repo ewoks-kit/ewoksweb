@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
 import FormControl from '@material-ui/core/FormControl';
-import AutocompleteDrop from 'Components/General/AutocompleteDrop';
 import useStore from '../../store/useStore';
 import type { GraphEwoks, WorkflowDescription } from '../../types';
 import { getWorkflow } from '../../utils/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { validateEwoksGraph } from '../../utils/EwoksValidator';
+import WorkflowDropdown from './dropdown/WorkflowDropdown';
 
 export default function GetFromServer() {
   const [workflowId, setWorkflowId] = useState('');
@@ -96,11 +96,7 @@ export default function GetFromServer() {
           borderRadius: '4px',
         }}
       >
-        <AutocompleteDrop
-          setInputValue={setInputValue}
-          placeholder="Open Workflow"
-          category=""
-        />
+        <WorkflowDropdown onChange={setInputValue} />
       </FormControl>
     </>
   );
