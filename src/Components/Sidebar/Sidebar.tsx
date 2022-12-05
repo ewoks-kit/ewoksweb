@@ -65,6 +65,7 @@ export default function Sidebar() {
     setElement(selectedElement);
   }, [selectedElement]);
 
+  // TODO: similar getIcons is used in manage icons. Should we move it to a hook?
   const getIcons = useCallback(async () => {
     try {
       const icons: Icon[] | object = await getIconsFromServer();
