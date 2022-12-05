@@ -288,7 +288,7 @@ function EnhancedTableToolbar(props) {
   );
 }
 
-const formatedTime = (time) => {
+const formatedTime = (time: string) => {
   const dat = new Date(time);
   return `${dat.toTimeString().slice(0, 8)}
     ${dat.toDateString()}`;
@@ -379,10 +379,15 @@ export default function EnhancedTable() {
       ? Math.max(0, (1 + page) * rowsPerPage - executedWorkflows.length)
       : 0;
 
-  async function setOpenRow(job_id) {
+  async function setOpenRow(job_id: string) {
     if (expandRow === job_id) {
       setOpen(!open);
-    } else if (expandRow === '' || expandRow !== job_id) {
+      setExpandRow(job_id);
+
+      return;
+    }
+
+    if (expandRow === '' || expandRow !== job_id) {
       try {
         const response = await getExecutionEvents({ job_id });
         if (response.data) {
@@ -397,9 +402,8 @@ export default function EnhancedTable() {
         console.log(error);
       }
       setOpen(true);
+      setExpandRow(job_id);
     }
-
-    setExpandRow(job_id);
   }
 
   return (
@@ -475,7 +479,9 @@ export default function EnhancedTable() {
                           <IconButton
                             aria-label="expand row"
                             size="small"
-                            onClick={() => setOpenRow(row[0].job_id)}
+                            onClick={() => {
+                              setOpenRow(row[0].job_id);
+                            }}
                           >
                             {open && expandRow === row[0].job_id ? (
                               <KeyboardArrowUpIcon />
@@ -493,7 +499,7 @@ export default function EnhancedTable() {
                         </TableCell>
                         <TableCell align="right">{row[0].job_id}</TableCell>
                         <TableCell align="right">
-                          {formatedTime(row[0] && row[0].time)}
+                          {formatedTime(row[0]?.time)}
                         </TableCell>
                         <TableCell align="right">
                           {formatedTime(
@@ -576,7 +582,7 @@ export default function EnhancedTable() {
                                         {ev.type}
                                       </TableCell>
                                       <TableCell align="right">
-                                        {ev.error && ev.error.toString()}
+                                        {ev.error?.toString()}
                                       </TableCell>
                                       <TableCell align="right">
                                         <Tooltip title={ev.error_traceback}>
