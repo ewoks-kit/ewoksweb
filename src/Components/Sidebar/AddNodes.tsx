@@ -69,8 +69,6 @@ interface AddNodesProps {
 function AddNodes(props: AddNodesProps) {
   const classes = useStyles();
 
-  // const taskCategories = useStore((state) => state.taskCategories);
-  // const setTaskCategories = useStore((state) => state.setTaskCategories);
   const tasks = useStore((state) => state.tasks);
   const setTasks = useStore((state) => state.setTasks);
   const selectedTask = useStore((state) => state.selectedTask);
@@ -92,7 +90,6 @@ function AddNodes(props: AddNodesProps) {
       if (tasksData?.data?.items?.length > 0) {
         const allTasks = tasksData.data.items;
         setTasks(allTasks);
-        // setTaskCategories(allTasks.map((tas) => tas.category));
       }
     } catch (error) {
       setOpenSnackbar({
@@ -177,7 +174,7 @@ function AddNodes(props: AddNodesProps) {
   const findImage = (img: string) => {
     const icon = allIcons.find((ico) => ico.name === img);
 
-    return icon?.image?.data_url || 'orange2';
+    return icon?.image?.data_url || orange2;
   };
 
   return (

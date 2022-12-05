@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { Button, Box, Grid, Paper, styled, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
@@ -54,7 +54,7 @@ export default function ManageIcons() {
   async function deleteIcon() {
     try {
       const tasksData = await getTaskDescription();
-      if (tasksData && tasksData.data?.items?.length > 0) {
+      if (tasksData?.data?.items?.length > 0) {
         const allTasks = tasksData.data.items;
 
         if (allTasks.some((task) => task.icon === selectedIcon)) {
@@ -112,8 +112,7 @@ export default function ManageIcons() {
     }
   }
 
-  // TODO: Typescript
-  function inputNew(ne) {
+  function inputNew(ne: ChangeEvent<HTMLInputElement>) {
     const { files } = ne.target;
 
     if (files[0].size > 10_000) {

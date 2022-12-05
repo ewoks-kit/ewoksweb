@@ -168,9 +168,6 @@ export interface State {
   tasks?: Task[];
   setTasks?: (tasks: Task[]) => void;
 
-  // taskCategories?: string[];
-  // setTaskCategories?: (tasks: string[]) => void;
-
   openDraggableDialog?: DialogParams;
   setOpenDraggableDialog?: (params: DialogParams) => void;
 

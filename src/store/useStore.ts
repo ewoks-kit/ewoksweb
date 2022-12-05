@@ -21,7 +21,6 @@ import openSnackbar from './openSnackbar';
 import recentGraphs from './recentGraphs';
 import subGraph from './subGraph';
 import subgraphsStack from './subgraphsStack';
-import taskCategories from './taskCategories';
 import tasks from './tasks';
 import undoIndex from './undoIndex';
 import executedWorkflows from './executedWorkflows';
@@ -79,7 +78,6 @@ const useStore = create<State>((set, get) => ({
   ...recentGraphs(set, get),
   ...subGraph(set, get),
   ...subgraphsStack(set, get),
-  // ...taskCategories(set),
   ...tasks(set),
   ...undoIndex(set, get),
   ...undoRedo(set, get),

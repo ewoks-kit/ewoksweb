@@ -58,21 +58,15 @@ export default function Sidebar() {
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const setAllIcons = useStore((state) => state.setAllIcons);
-  const allIcons = useStore((state) => state.allIcons);
-  const setAllIconNames = useStore((state) => state.setAllIconNames);
 
   useEffect(() => {
     setElement(selectedElement);
   }, [selectedElement]);
 
   // TODO move fetch out to be used when refresh in icons is needed
-  useEffect(
-    () => {
-      setAllIcons([], true);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  useEffect(() => {
+    setAllIcons([], true);
+  }, [setAllIcons]);
 
   const deleteElement = async () => {
     let newGraph = {} as GraphRF;

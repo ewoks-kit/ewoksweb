@@ -47,6 +47,8 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
     console.log(error);
     // This is used to be able to use the Snackbar and inform the user
     // since it cannot be done from a ts file (?). A custom Hook maybe to remove it?
+    // TODO: pass an onError callback to the function or return an error field in the
+    // result that would be checked by the consumer as in !95
     res = [{ label: 'network error', category: error?.response?.status }];
   }
   return res;

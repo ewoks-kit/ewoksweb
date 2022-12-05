@@ -18,6 +18,9 @@ const allIcons = (set, get) => ({
   },
 });
 
+// TODO: fetching of icons should be moved out of the state in a dedicated function
+// fetchIcons or getIconsFromServer. And then, you call fetchIcons getting the result
+// in a variable followed by the setAllIcons to update the state.
 const fetchIcons = async (set, get) => {
   const data = await getIcons();
 
