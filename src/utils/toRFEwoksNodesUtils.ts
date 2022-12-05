@@ -8,7 +8,7 @@ export function outputsAll(tempGraph: GraphEwoks): string[] {
   return tempGraph.graph?.output_nodes?.map((nod) => nod.node);
 }
 
-// calculate if node input and/or output or internal
+// DOC: calculate if node in a graph is input and/or output or internal
 export function calcNodeType(
   inputsAl: string[],
   outputsAll: string[],
@@ -17,24 +17,23 @@ export function calcNodeType(
 ): string {
   const isInput = inputsAl && inputsAl.includes(id);
   const isOutput = outputsAll && outputsAll.includes(id);
-  let nodeType = '';
+
   if (isInput && isOutput) {
-    nodeType = 'input_output';
+    return 'input_output';
   } else if (isInput) {
-    nodeType = 'input';
+    return 'input';
   } else if (isOutput) {
-    nodeType = 'output';
+    return 'output';
   } else if (task_type === 'graphInput') {
-    nodeType = 'graphInput';
+    return 'graphInput';
   } else if (task_type === 'graphOutput') {
-    nodeType = 'graphOutput';
-  } else {
-    nodeType = 'internal';
+    return 'graphOutput';
   }
-  return nodeType;
+
+  return 'internal';
 }
 
-// locate the task and add required+optional-inputs + outputs
+// DOC: locate the task and add required+optional-inputs + outputs
 export function calcTask(
   tasks: Task[],
   task_identifier: string,
@@ -134,7 +133,6 @@ export function addNodeProperties(
       },
     };
   } else {
-    // locate the task and add required+optional-inputs + outputs
     const tempTask = calcTask(tasks, task_identifier, task_type);
 
     tempNode = {
