@@ -10,7 +10,7 @@ variables:
 ### Jobs templates ###
 
 .base:
-  image: "docker-registry.esrf.fr/dau/ewoks:python_3.9_node_16"
+  image: 'docker-registry.esrf.fr/dau/ewoks:python_3.9_node_16'
   tags:
     - linux
   only:
@@ -85,7 +85,6 @@ cypress:
     - pnpm build
     - pnpm dlx serve -s build -l 3000 & pnpm dlx wait-on http://localhost:3000
     - pnpm cypress:run
-
 
 build:
   extends: .build
