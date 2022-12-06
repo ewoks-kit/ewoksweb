@@ -1,5 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-
 describe('undo-redo functionality', () => {
   before(() => {
     cy.loadApp();

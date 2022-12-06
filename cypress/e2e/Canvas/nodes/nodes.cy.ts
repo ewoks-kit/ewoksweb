@@ -1,6 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-// / <reference types="cypress" />
-
 describe('structure and basics for edit-workflows', () => {
   before(() => {
     cy.loadApp();
@@ -70,7 +67,7 @@ describe('structure and basics for edit-workflows', () => {
       .siblings()
       .should('have.length', 3);
 
-    cy.contains('With Image').siblings().first('span').click();
+    cy.contains('With Image').siblings().find('span').first().click();
 
     cy.get('.react-flow')
       .contains('Always and forever...')
@@ -84,7 +81,7 @@ describe('structure and basics for edit-workflows', () => {
       .as('label')
       .should('eq', false);
 
-    cy.contains('With Image').siblings().first('span').click();
+    cy.contains('With Image').siblings().find('span').first().click();
 
     cy.get('.react-flow')
       .contains('Always and forever...')
@@ -102,7 +99,7 @@ describe('structure and basics for edit-workflows', () => {
   it('changes withLabel of node true->false->true', () => {
     cy.get('.react-flow').contains('Always and forever...').parent().as('node');
 
-    cy.contains('With Label').siblings().last('span').click();
+    cy.contains('With Label').siblings().find('span').last().click();
 
     cy.get('@node').children().should('have.length', 3);
 
@@ -112,7 +109,7 @@ describe('structure and basics for edit-workflows', () => {
       .as('label')
       .should('eq', false);
 
-    cy.contains('With Label').siblings().last('span').click();
+    cy.contains('With Label').siblings().find('span').last().click();
 
     cy.get('@node').children().should('have.length', 4);
 
@@ -138,7 +135,7 @@ describe('structure and basics for edit-workflows', () => {
       .as('width')
       .should('eq', 100);
 
-    cy.contains('Node Size').siblings().last('span').as('slider');
+    cy.contains('Node Size').siblings().find('span').last().as('slider');
 
     cy.get('@slider')
       .children('span')

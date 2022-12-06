@@ -1,6 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-// / <reference types="cypress" />
-
 describe('clicks on canvas and elements', () => {
   before(() => {
     cy.loadApp();
@@ -62,7 +59,7 @@ describe('clicks on canvas and elements', () => {
 
   it('doubleclick on note node', () => {
     cy.get('.react-flow__node-note')
-      .last('include.class', 'node-note')
+      .last()
       .dblclick()
       .should('include.class', 'selected')
       .get('.icons')

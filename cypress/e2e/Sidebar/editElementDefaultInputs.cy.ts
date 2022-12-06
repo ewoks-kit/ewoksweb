@@ -1,6 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-// / <reference types="cypress" />
-
 describe('edit nodes defaultInputs', () => {
   before(() => {
     cy.loadApp();

@@ -1,6 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-// / <reference types="cypress" />
-
 describe('edit links conditions', () => {
   before(() => {
     cy.loadApp();

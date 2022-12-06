@@ -1,5 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-
 describe('structure and basics for edit-workflows', () => {
   before(() => {
     cy.visit('http://localhost:3000/#/edit-workflows');

@@ -1,5 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-
 describe('create workflow and save', () => {
   before(() => {
     cy.loadAppWithoutGraph();
