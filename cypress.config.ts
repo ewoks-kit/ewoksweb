@@ -1,11 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
   e2e: {
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
-    },
+    supportFile: 'cypress/support/index.ts',
   },
 
   component: {
@@ -15,5 +12,7 @@ export default defineConfig({
     },
   },
 
+  fixturesFolder: false,
+  screenshotOnRunFailure: false,
   video: false,
 });
