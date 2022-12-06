@@ -115,7 +115,7 @@ export default function getAround({
           href={`#${id}`}
           style={{ ...style, ...edgeStyle.bendingText }}
           startOffset="50%"
-          // @ts-nocheck
+          // @ts-expect-error
           side={sourceX > targetX ? 'right' : 'left'}
           textAnchor="middle"
         >

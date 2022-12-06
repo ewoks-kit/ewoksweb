@@ -177,8 +177,8 @@ export interface State {
   openSnackbar?: SnackbarParams;
   setOpenSnackbar?: (params: SnackbarParams) => void;
 
-  allIcons?: Icon[];
-  setAllIcons?: (icons: Icon[]) => void;
+  allIcons: Icon[];
+  setAllIcons: (icons: Icon[]) => void;
 
   allWorkflows?: WorkflowDescription[];
   setAllWorkflows?: (workflows: WorkflowDescription[]) => void;

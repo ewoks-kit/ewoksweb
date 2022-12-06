@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Box, Grid, Paper, styled, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -10,8 +10,7 @@ import { getTaskDescription } from 'utils/api';
 import orange2 from 'images/orange2.png';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import commonStrings from 'commonStrings.json';
-import type { Icon } from '../../types';
-import getIconsFromServer from '../../utils/getIconsFromServer';
+import useFetchIcons from '../../hooks/useFetchIcons';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -46,7 +45,8 @@ export default function ManageIcons() {
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const allIcons = useStore((state) => state.allIcons);
-  const setAllIcons = useStore((state) => state.setAllIcons);
+
+  const getIcons = useFetchIcons();
 
   function clickIcon(icon: string) {
     setSelectedIcon(icon);
@@ -167,22 +167,6 @@ export default function ManageIcons() {
   function disAgreeDeleteIcon() {
     setOpenAgreeDialog(false);
   }
-
-  const getIcons = useCallback(async () => {
-    try {
-      const icons: Icon[] | object = await getIconsFromServer();
-
-      if (Array.isArray(icons) && icons?.length > 0) {
-        setAllIcons([...icons]);
-      }
-    } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: error.response?.data?.message || commonStrings.retrieveIconsError,
-        severity: 'error',
-      });
-    }
-  }, [setOpenSnackbar, setAllIcons]);
 
   return (
     <Box>

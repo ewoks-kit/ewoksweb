@@ -30,10 +30,11 @@ function multilineText({
     targetY,
   });
 
-  const labelString = label as string;
-  const titleWidth =
-    Math.max(...labelString.split(',').map((mp) => mp.length)) * 8;
-  const titleHeight = labelString.split(',').length * 30;
+  const hasStringLabel = typeof label === 'string';
+  const titleWidth = hasStringLabel
+    ? Math.max(...label.split(',').map((mp) => mp.length)) * 8
+    : undefined;
+  const titleHeight = hasStringLabel ? label.split(',').length * 30 : undefined;
 
   return (
     <>
@@ -57,9 +58,8 @@ function multilineText({
             ...edgeStyle.multiline,
           }}
         >
-          {labelString.split(',').map((mp) => (
-            <div key={mp}>{mp}</div>
-          ))}
+          {hasStringLabel &&
+            label.split(',').map((mp) => <div key={mp}>{mp}</div>)}
         </div>
       </foreignObject>
     </>
