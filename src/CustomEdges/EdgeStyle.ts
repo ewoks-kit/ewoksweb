@@ -6,7 +6,7 @@ export const edgeStyle = {
     borderStyle: 'solid',
     borderColor: 'rgb(150, 165, 249)',
     overflow: 'hidden',
-    wordWrap: 'break-word',
+    wordWrap: 'break-word' as const,
     padding: '1px',
   },
 

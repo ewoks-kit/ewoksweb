@@ -1,13 +1,11 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 /* eslint-disable consistent-return */
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import type { Node, Edge, Connection } from 'react-flow-renderer';
 import ReactFlow, {
   Controls,
   MiniMap,
-  Node,
-  Edge,
   Background,
-  Connection,
   useReactFlow,
   applyNodeChanges,
   applyEdgeChanges,

@@ -1,5 +1,6 @@
 /* eslint-disable sonarjs/cognitive-complexity */
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+import React, { useEffect } from 'react';
 import {
   Button,
   Checkbox,

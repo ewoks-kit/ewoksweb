@@ -12,15 +12,15 @@ https://workflow.gitlab-pages.esrf.fr/ewoks/ewoksweb/
 Start the frontend
 
 ```bash
-npm start
+pnpm start
 ```
 
 Build the package for deployment on pypi
 
 ```bash
 npx -y browserslist@latest --update-db  # optional
-npm install
-npm run build
+pnpm install
+pnpm build
 python setup.py sdist
 ```
 

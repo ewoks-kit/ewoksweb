@@ -1,8 +1,8 @@
 const sidebarStyle = {
   formstyleflex: {
     display: 'flex',
-    flexDirection: 'row' as 'row',
-    flexWrap: 'wrap' as 'wrap',
+    flexDirection: 'row' as const,
+    flexWrap: 'wrap' as const,
     alignContent: 'flex-start',
   },
 };

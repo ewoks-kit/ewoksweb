@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
     "target": "es2015",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -15,12 +16,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": "src",
-    "types": ["cypress"]
+    "jsx": "react-jsx"
   },
-  "include": ["src", ".eslintrc.js", "**/*.tsx", "**/*.ts"],
-  "exclude": ["src/notes.js"]
+  "include": ["src", ".eslintrc.js", "cypress.config.ts"]
 }
-
-// { "compilerOptions": { "target": "es5", "lib": ["es5", "dom"], "types": ["cypress"] }, "include": ["**/*.ts"] }
