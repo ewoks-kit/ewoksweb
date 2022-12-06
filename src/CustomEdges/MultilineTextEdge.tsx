@@ -1,3 +1,4 @@
+import type { EdgeProps } from 'react-flow-renderer';
 import { getBezierPath, getEdgeCenter } from 'react-flow-renderer';
 import { edgeStyle } from './EdgeStyle';
 
@@ -12,7 +13,7 @@ function multilineText({
   label = '',
   markerEnd,
   style = {},
-}) {
+}: EdgeProps) {
   const edgePath = getBezierPath({
     sourceX,
     sourceY,
@@ -29,9 +30,10 @@ function multilineText({
     targetY,
   });
 
-  const titleWidth = Math.max(...label.split(',').map((mp) => mp.length)) * 8;
-
-  const titleHeight = label.split(',').length * 30;
+  const labelString = label as string;
+  const titleWidth =
+    Math.max(...labelString.split(',').map((mp) => mp.length)) * 8;
+  const titleHeight = labelString.split(',').length * 30;
 
   return (
     <>
@@ -52,10 +54,12 @@ function multilineText({
         <div
           style={{
             ...style,
-            ...(edgeStyle.multiline as React.CSSProperties),
+            ...edgeStyle.multiline,
           }}
         >
-          {label && label.split(',').map((mp) => <div key={mp}>{mp}</div>)}
+          {labelString.split(',').map((mp) => (
+            <div key={mp}>{mp}</div>
+          ))}
         </div>
       </foreignObject>
     </>

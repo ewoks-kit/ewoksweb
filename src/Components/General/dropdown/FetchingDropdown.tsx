@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
-import Autocomplete, { AutocompleteProps } from '@material-ui/lab/Autocomplete';
+import type { AutocompleteProps } from '@material-ui/lab/Autocomplete';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import useStore from 'store/useStore';
