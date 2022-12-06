@@ -6,7 +6,7 @@ describe('create workflow and save', () => {
     cy.visit('http://localhost:3000/#/edit-workflows');
 
     cy.get('label')
-      .should('include.text', 'Open Workflow')
+      .should('include.text', 'Open workflow')
       .parents('.MuiAutocomplete-root')
       .click()
       .get('input[type=text]')
@@ -46,7 +46,7 @@ describe('create workflow and save', () => {
         cy.get('.react-flow__node').should('have.length', 0);
 
         cy.get('label')
-          .should('include.text', 'Open Workflow')
+          .should('include.text', 'Open workflow')
           .parents('.MuiAutocomplete-root')
           .click()
           .get('input[type=text]')

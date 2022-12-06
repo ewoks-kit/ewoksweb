@@ -28,7 +28,8 @@ import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { deleteWorkflow } from 'utils/api';
 import { OpenInBrowser } from '@material-ui/icons';
 import SidebarTooltip from './SidebarTooltip';
-import useFetchIcons from '../../hooks/useFetchIcons';
+import getIconsFromServer from '../../utils/getIconsFromServer';
+import commonStrings from 'commonStrings.json';
 
 const useStyles = DashboardStyle;
 
@@ -58,12 +59,28 @@ export default function Sidebar() {
   const setUndoRedo = useStore((state) => state.setUndoRedo);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
+  const setAllIcons = useStore((state) => state.setAllIcons);
 
   useEffect(() => {
     setElement(selectedElement);
   }, [selectedElement]);
 
-  const getIcons = useFetchIcons();
+  // TODO: similar getIcons is used in manage icons. Should we move it to a hook?
+  const getIcons = useCallback(async () => {
+    try {
+      const icons: Icon[] | object = await getIconsFromServer();
+
+      if (Array.isArray(icons) && icons?.length > 0) {
+        setAllIcons([...icons]);
+      }
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: error.response?.data?.message || commonStrings.retrieveIconsError,
+        severity: 'error',
+      });
+    }
+  }, [setOpenSnackbar, setAllIcons]);
 
   useEffect(() => {
     getIcons();

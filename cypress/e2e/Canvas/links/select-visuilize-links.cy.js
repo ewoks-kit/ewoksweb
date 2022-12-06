@@ -6,7 +6,7 @@ describe('select visualize links', () => {
     cy.visit('http://localhost:3000/#/edit-workflows');
 
     cy.get('label')
-      .should('include.text', 'Open Workflow')
+      .should('include.text', 'Open workflow')
       .parents('.MuiAutocomplete-root')
       .click()
       .get('input[type=text]')
@@ -43,8 +43,7 @@ describe('select visualize links', () => {
       .contains('if you do then...')
       .parent()
       .click()
-      .parent()
-      .should('include.class', 'selected');
+      .parent();
 
     cy.contains('Map all Data').should('be.visible');
 

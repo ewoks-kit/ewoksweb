@@ -27,7 +27,7 @@ describe('structure and basics for edit-workflows', () => {
   });
 
   it('displays the autocomplete dropdown', () => {
-    cy.get('label').should('include.text', 'Open Workflow');
+    cy.get('label').should('include.text', 'Open workflow');
   });
 
   it('displays the Add Nodes Accordion', () => {
