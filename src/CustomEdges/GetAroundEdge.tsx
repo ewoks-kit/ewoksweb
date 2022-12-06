@@ -1,4 +1,3 @@
-// TODO: UNDER DEVELOPMENT AND TESTING BY THE USERS
 import type { EdgeProps } from 'react-flow-renderer';
 import { getEdgeCenter } from 'react-flow-renderer';
 import { edgeStyle } from './EdgeStyle';
@@ -116,6 +115,7 @@ export default function getAround({
           href={`#${id}`}
           style={{ ...style, ...edgeStyle.bendingText }}
           startOffset="50%"
+          // @ts-nocheck
           side={sourceX > targetX ? 'right' : 'left'}
           textAnchor="middle"
         >

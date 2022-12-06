@@ -1,4 +1,5 @@
-import React, { ChangeEvent, useCallback } from 'react';
+import { useCallback, useState } from 'react';
+import type { ChangeEvent } from 'react';
 import { Button, Box, Grid, Paper, styled, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
@@ -39,12 +40,10 @@ const useStyles = makeStyles(() =>
 export default function ManageIcons() {
   const classes = useStyles();
 
-  const [selectedIcon, setSelectedIcon] = React.useState('');
-  const [fileToBeSent, setFileToBeSent] = React.useState<string | ArrayBuffer>(
-    ''
-  );
-  const [fileNameToBeSent, setFileNameToBeSent] = React.useState<string>('');
-  const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
+  const [selectedIcon, setSelectedIcon] = useState('');
+  const [fileToBeSent, setFileToBeSent] = useState<string | ArrayBuffer>('');
+  const [fileNameToBeSent, setFileNameToBeSent] = useState<string>('');
+  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const allIcons = useStore((state) => state.allIcons);
   const setAllIcons = useStore((state) => state.setAllIcons);
