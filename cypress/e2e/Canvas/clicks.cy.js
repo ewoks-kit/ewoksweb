@@ -3,16 +3,7 @@
 
 describe('clicks on canvas and elements', () => {
   before(() => {
-    cy.visit('http://localhost:3000/#/edit-workflows');
-
-    cy.get('label')
-      .should('include.text', 'Open workflow')
-      .parents('.MuiAutocomplete-root')
-      .click()
-      .get('input[type=text]')
-      .type('tutorial_Graph');
-
-    cy.contains('tutorial_Graph').parent().click();
+    cy.loadApp();
   });
 
   // TODO: rightClick? Must click on backround and not on a node

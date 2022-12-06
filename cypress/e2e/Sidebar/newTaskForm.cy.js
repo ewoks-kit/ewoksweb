@@ -3,7 +3,7 @@
 
 describe('new Task form', () => {
   before(() => {
-    cy.visit('http://localhost:3000/#/edit-workflows');
+    cy.loadAppWithoutGraph();
   });
 
   it('creates new task', () => {

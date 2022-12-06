@@ -19,7 +19,9 @@
     "lint:eslint": "eslint \"**/*.{ts,tsx,js,jsx}\" --max-warnings=0",
     "lint:tsc": "tsc --noEmit",
     "lint:prettier": "prettier --check .",
-    "analyze": "npx source-map-explorer 'build/static/js/*.js'"
+    "analyze": "npx source-map-explorer 'build/static/js/*.js'",
+    "cypress": "cypress open --e2e --browser firefox",
+    "cypress:run": "cypress run --e2e"
   },
   "dependencies": {
     "@material-ui/core": "^4.12.3",
