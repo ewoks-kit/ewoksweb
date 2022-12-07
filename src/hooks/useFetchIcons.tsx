@@ -1,4 +1,6 @@
-// import { useState, useEffect } from 'react';
+// TODO: Keep it to test hooks for REST actions
+// when use as suggested in react documentation it made several
+// un-needed refetches on component rerendering. Need to use it on click
 import getIconsFromServer from '../utils/getIconsFromServer';
 import useStore from '../store/useStore';
 import type { Icon } from '../types';
