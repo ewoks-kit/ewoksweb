@@ -69,12 +69,12 @@ export function toRFEwoksLinks(
           style: {
             stroke:
               (uiProps && uiProps.style && uiProps.style.stroke) || '#96a5f9',
-            strokeWidth: '3',
+            strokeWidth: '3px',
           },
           labelBgStyle: {
             fill: 'rgb(223, 226, 247)',
             fillOpacity: 1,
-            strokeWidth: 3,
+            strokeWidth: '3px',
             stroke: color,
           },
           labelBgPadding: [8, 4],

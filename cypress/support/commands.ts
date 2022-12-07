@@ -1,3 +1,5 @@
+import { registerCommand as addWaitForStableDomCommand } from 'cypress-wait-for-stable-dom';
+
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/;
 Cypress.on('uncaught:exception', (err) => {
   /* returning false here prevents Cypress from failing the test */
@@ -19,5 +21,7 @@ Cypress.Commands.add('loadApp', () => {
     .get('input[type=text]')
     .type('tutorial_Graph');
 
-  cy.contains('tutorial_Graph').parent().click();
+  cy.contains(/^tutorial_Graph$/g).click();
 });
+
+addWaitForStableDomCommand({ pollInterval: 300, timeout: 1000 });

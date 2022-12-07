@@ -8,7 +8,9 @@ describe('drag and drop nodes', () => {
 
   it('should drag and drop 2 nodes from add nodes into canvas', () => {
     const dataTransfer = new DataTransfer();
-    cy.contains('Add Nodes').click({ force: true });
+
+    cy.waitForStableDOM();
+    cy.contains('Add Nodes').click();
 
     cy.contains('General').click();
 

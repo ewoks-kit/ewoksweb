@@ -2,7 +2,7 @@
 
 describe('create workflow and save', () => {
   before(() => {
-    cy.loadApp();
+    cy.loadAppWithoutGraph();
   });
 
   it('opens the dialog for name after clicking new', () => {
@@ -30,6 +30,7 @@ describe('create workflow and save', () => {
           .type(id.toString(), { force: true });
 
         cy.contains('Save Workflow').click();
+        cy.waitForStableDOM();
 
         cy.get('.react-flow__edge').should('have.length', 0);
         cy.get('.react-flow__node').should('have.length', 0);
@@ -39,7 +40,7 @@ describe('create workflow and save', () => {
           .get('input[type=text]')
           .type(id.toString());
 
-        cy.contains(id.toString()).parent().click();
+        cy.contains(id.toString()).click();
 
         cy.get(`[data-cy="${id.toString()}"]`).contains(id.toString());
 
