@@ -1,4 +1,3 @@
-// TODO: UNDER DEVELOPMENT AND TESTING BY THE USERS
 import type { EdgeProps } from 'react-flow-renderer';
 import { getEdgeCenter } from 'react-flow-renderer';
 import { edgeStyle } from './EdgeStyle';

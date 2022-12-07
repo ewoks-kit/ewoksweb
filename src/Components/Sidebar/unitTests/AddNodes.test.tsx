@@ -26,7 +26,8 @@ describe('In the AddNodes test:', () => {
     });
     expect(ewoksCoreCategory).toBeInTheDocument();
 
-    const { taskCategories } = useStore.getState();
+    const { tasks } = useStore.getState();
+    const taskCategories = [...new Set(tasks.map((m) => m.category)).values()];
     expect(taskCategories).toHaveLength(1);
     expect(taskCategories).toEqual(expect.arrayContaining(['EwoksCore']));
 
@@ -37,10 +38,14 @@ describe('In the AddNodes test:', () => {
   test('if categories change and AddNodes is clicked it reveals the new categories', async () => {
     render(<AddNodes title="Add Nodes" />);
     const buttonAddNodes = screen.getByRole('button', { name: /Add Nodes/u });
-    // const { taskCategories } = useStore.getState();
 
     act(() => {
-      useStore.setState({ taskCategories: ['est', 'dusk'] });
+      useStore.setState({
+        tasks: [
+          { task_identifier: 'task1', task_type: 'class', category: 'est' },
+          { task_identifier: 'task1', task_type: 'class', category: 'dusk' },
+        ],
+      });
     });
 
     fireEvent(
@@ -56,7 +61,8 @@ describe('In the AddNodes test:', () => {
     });
     expect(ewoksCoreCategory).toBeInTheDocument();
 
-    const { taskCategories } = useStore.getState();
+    const { tasks } = useStore.getState();
+    const taskCategories = [...new Set(tasks.map((m) => m.category)).values()];
     expect(taskCategories).toHaveLength(2);
     expect(taskCategories).toEqual(expect.arrayContaining(['est', 'dusk']));
 
@@ -70,7 +76,6 @@ describe('In the AddNodes test:', () => {
 
     act(() => {
       useStore.setState({
-        taskCategories: ['ewokscore'],
         tasks: [
           {
             task_identifier: 'taskSkeleton',
@@ -92,9 +97,7 @@ describe('In the AddNodes test:', () => {
         cancelable: true,
       })
     );
-
     const { tasks } = useStore.getState();
-
     const taskName = tasks[0].task_identifier;
 
     const ewoksCoreCategory = screen.getByRole('button', {
@@ -123,7 +126,7 @@ describe('In the AddNodes test:', () => {
     // TODO: Although category was clicked again the task remains visible?
     // expect(ewoksCoreTask).not.toBeVisible();
 
-    const { taskCategories } = useStore.getState();
+    const taskCategories = [...new Set(tasks.map((m) => m.category)).values()];
     expect(taskCategories).toHaveLength(1);
     expect(taskCategories).toEqual(expect.arrayContaining(['ewokscore']));
 
@@ -139,7 +142,6 @@ describe('In the AddNodes test:', () => {
     act(() => {
       useStore.setState({
         graphOrSubgraph: true,
-        taskCategories: ['General'],
         tasks: [
           {
             task_identifier: 'taskSkeleton',
@@ -175,7 +177,8 @@ describe('In the AddNodes test:', () => {
       })
     );
 
-    const { taskCategories } = useStore.getState();
+    const { tasks } = useStore.getState();
+    const taskCategories = [...new Set(tasks.map((m) => m.category)).values()];
     expect(taskCategories).toHaveLength(1);
     expect(taskCategories).toEqual(expect.arrayContaining(['General']));
 

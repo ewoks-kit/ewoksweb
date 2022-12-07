@@ -10,6 +10,7 @@ import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
 import { calcNoteNodes } from './utils/calcNoteNodes';
 import { getWorkflowsDescriptions, getWorkflow } from './utils/api';
+import orange2 from 'images/orange2.png';
 
 export const ewoksNetwork = {};
 
@@ -18,9 +19,7 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
   try {
     const workflows = await getWorkflowsDescriptions();
     if (workflows && workflows.data) {
-      const workf = workflows.data as {
-        items: WorkflowDescription[];
-      };
+      const workf: { items: WorkflowDescription[] } = workflows.data;
       res = workf.items;
     }
   } catch (error) {
@@ -45,6 +44,10 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
     }
     /* eslint-disable no-console */
     console.log(error);
+    // This is used to be able to use the Snackbar and inform the user
+    // since it cannot be done from a ts file (?). A custom Hook maybe to remove it?
+    // TODO: pass an onError callback to the function or return an error field in the
+    // result that would be checked by the consumer as in !95
     res = [{ label: 'network error', category: error?.response?.status }];
   }
   return res;
@@ -108,4 +111,10 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
     nodes: toEwoksNodes(tempGraph.nodes),
     links: toEwoksLinks(tempGraph.links),
   };
+}
+
+export function findImage(img: string, allIcons) {
+  const icon = allIcons.find((ico) => ico.name === img);
+
+  return icon?.image?.data_url || orange2;
 }

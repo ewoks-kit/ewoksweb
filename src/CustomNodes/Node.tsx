@@ -3,18 +3,6 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 import React, { memo, useEffect, useState } from 'react';
 import orange1 from '../images/orange1.png';
-import orange2 from '../images/orange2.png';
-import orange3 from '../images/orange3.png';
-import AggregateColumns from '../images/AggregateColumns.svg';
-import Continuize from '../images/Continuize.svg';
-import graphInput from '../images/graphInput.svg';
-import right from '../images/right.svg';
-import left from '../images/left.svg';
-import up from '../images/up.svg';
-import down from '../images/down.svg';
-import graphOutput from '../images/graphOutput.svg';
-import Correlations from '../images/Correlations.svg';
-import CreateClass from '../images/CreateClass.svg';
 import { Handle, Position } from 'react-flow-renderer';
 import type { EwoksRFNode, NodeProps } from '../types';
 import { contentStyle, style } from './NodeStyle';
@@ -29,35 +17,7 @@ import { calcNewId } from '../utils/calcNewId';
 import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
 import tooltipText from '../Components/General/TooltipText';
-
-const iconsObj = {
-  'left.svg': left,
-  left,
-  'right.svg': right,
-  right,
-  'up.svg': up,
-  up,
-  'down.svg': down,
-  down,
-  'graphInput.svg': graphInput,
-  graphInput,
-  'graphOutput.svg': graphOutput,
-  graphOutput,
-  'orange1.png': orange1,
-  orange1,
-  'Continuize.svg': Continuize,
-  Continuize,
-  'orange2.png': orange2,
-  orange2,
-  'orange3.png': orange3,
-  orange3,
-  'AggregateColumns.svg': AggregateColumns,
-  AggregateColumns,
-  'Correlations.svg': Correlations,
-  Correlations,
-  'CreateClass.svg': CreateClass,
-  CreateClass,
-};
+import { findImage } from 'utils';
 
 const onDragStart = (e) => {
   e.preventDefault();
@@ -171,14 +131,6 @@ const Node: React.FC<NodeProps> = ({
 
     setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
     setSelectedElement(newClone as EwoksRFNode);
-  };
-
-  const findImage = (img) => {
-    const imgIndex = allIcons.map((ico) => ico.name).indexOf(img);
-
-    return imgIndex !== -1
-      ? allIcons[imgIndex].image.data_url
-      : iconsObj[img] || orange2;
   };
 
   function setSelEl() {
@@ -304,7 +256,7 @@ const Node: React.FC<NodeProps> = ({
                   role="presentation"
                   draggable="false"
                   onDragStart={(event) => onDragStart(event)}
-                  src={iconsObj[image] || orange1}
+                  src={findImage(image, allIcons)}
                   alt="icon"
                 />
               </ExecuteSpinner>
@@ -314,7 +266,7 @@ const Node: React.FC<NodeProps> = ({
                 role="presentation"
                 draggable="false"
                 onDragStart={(event) => onDragStart(event)}
-                src={findImage(image)}
+                src={findImage(image, allIcons)}
                 alt="taskIcon"
               />
             ))}
@@ -324,7 +276,7 @@ const Node: React.FC<NodeProps> = ({
               role="presentation"
               draggable="false"
               onDragStart={(event) => onDragStart(event)}
-              src={iconsObj[image] || orange1}
+              src={findImage(image, allIcons)}
               alt="icon"
             />
           )}
@@ -357,9 +309,7 @@ const Node: React.FC<NodeProps> = ({
                   }}
                   isConnectable
                   isValidConnection={isValidConnection}
-                >
-                  {/* <img src={iconsObj['up']} alt="" /> */}
-                </Handle>
+                />
                 <Handle
                   type="target"
                   position={Position.Top}

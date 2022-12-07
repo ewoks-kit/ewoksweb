@@ -9,7 +9,6 @@ import selectedTask from './selectedTask';
 import workingGraph from './workingGraph';
 import graphRF from './graphRF';
 import allWorkflows from './allWorkflows';
-import allIconNames from './allIconNames';
 import allIcons from './allIcons';
 import executingEvents from './executingEvents';
 import executedEvents from './executedEvents';
@@ -21,7 +20,6 @@ import openSnackbar from './openSnackbar';
 import recentGraphs from './recentGraphs';
 import subGraph from './subGraph';
 import subgraphsStack from './subgraphsStack';
-import taskCategories from './taskCategories';
 import tasks from './tasks';
 import undoIndex from './undoIndex';
 import executedWorkflows from './executedWorkflows';
@@ -60,7 +58,6 @@ const initializedRFGraph: GraphRF = {
 };
 
 const useStore = create<State>((set, get) => ({
-  ...allIconNames(set),
   ...allIcons(set),
   ...allWorkflows(set),
   ...currentExecutionEvent(set),
@@ -79,7 +76,6 @@ const useStore = create<State>((set, get) => ({
   ...recentGraphs(set, get),
   ...subGraph(set, get),
   ...subgraphsStack(set, get),
-  ...taskCategories(set),
   ...tasks(set),
   ...undoIndex(set, get),
   ...undoRedo(set, get),

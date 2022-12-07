@@ -6,7 +6,7 @@ describe('clicks on canvas and elements', () => {
     cy.visit('http://localhost:3000/#/edit-workflows');
 
     cy.get('label')
-      .should('include.text', 'Open Workflow')
+      .should('include.text', 'Open workflow')
       .parents('.MuiAutocomplete-root')
       .click()
       .get('input[type=text]')
@@ -43,10 +43,7 @@ describe('clicks on canvas and elements', () => {
     cy.contains('on_error').should('not.exist');
     cy.contains('Conditions').should('not.exist');
 
-    cy.get('.react-flow__edge')
-      .first()
-      .click({ force: true })
-      .should('include.class', 'selected');
+    cy.get('.react-flow__edge').first().click({ force: true });
 
     cy.get('[data-cy="advanced-checkbox-links"]').should('exist');
     cy.contains('Map all Data').should('exist');

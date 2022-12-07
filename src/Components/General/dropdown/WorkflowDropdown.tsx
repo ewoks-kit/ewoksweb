@@ -38,8 +38,7 @@ function WorkflowDropdown(props: Props) {
 
   return (
     <FetchingDropdown
-      options={sortedWorkflows}
-      filterOptions={() => options}
+      options={options}
       getOptionSelected={(option, value) => option.id === value.id}
       groupBy={(option) => option.category}
       onChange={(event, newValue) => {

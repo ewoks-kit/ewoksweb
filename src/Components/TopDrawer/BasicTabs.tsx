@@ -84,7 +84,7 @@ export default function BasicTabs() {
         >
           <Tab label="Workflows" {...a11yProps(0)} />
           <Tab label="Tasks" {...a11yProps(1)} />
-          <Tab label="Icons" {...a11yProps(2)} />
+          <Tab label="Icons" data-cy="iconsTab" {...a11yProps(2)} />
           {/* TODO: commented for onlyEditRelease */}
           {/* <Tab label="Executions" {...a11yProps(3)} /> */}
           {/* <Tab label="Settings" {...a11yProps(4)} /> */}

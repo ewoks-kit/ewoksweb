@@ -168,9 +168,6 @@ export interface State {
   tasks?: Task[];
   setTasks?: (tasks: Task[]) => void;
 
-  taskCategories?: string[];
-  setTaskCategories?: (tasks: string[]) => void;
-
   openDraggableDialog?: DialogParams;
   setOpenDraggableDialog?: (params: DialogParams) => void;
 
@@ -180,12 +177,8 @@ export interface State {
   openSnackbar?: SnackbarParams;
   setOpenSnackbar?: (params: SnackbarParams) => void;
 
-  allIcons?: Icon[];
-  setAllIcons?: (icons: Icon[]) => void;
-
-  allIconNames?: string[];
-  setAllIconNames?: (icons: string[]) => void;
-  // { name: string; svgFile?: string; file?: File }[]
+  allIcons: Icon[];
+  setAllIcons: (icons: Icon[]) => void;
 
   allWorkflows?: WorkflowDescription[];
   setAllWorkflows?: (workflows: WorkflowDescription[]) => void;

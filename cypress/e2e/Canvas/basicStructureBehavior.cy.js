@@ -6,7 +6,7 @@ describe('structure and basics for edit-workflows', () => {
     cy.visit('http://localhost:3000/#/edit-workflows');
 
     cy.get('label')
-      .should('include.text', 'Open Workflow')
+      .should('include.text', 'Open workflow')
       .parents('.MuiAutocomplete-root')
       .click()
       .get('input[type=text]')

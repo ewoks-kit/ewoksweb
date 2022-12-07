@@ -1,6 +1,6 @@
 // TODO: remove the following after onlyEditRelease
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Accordion,
   AccordionDetails,
@@ -25,11 +25,11 @@ import type {
 } from 'types';
 import { calcNewId } from 'utils/calcNewId';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
-import { deleteWorkflow, getIcon, getIcons, getOtherIcon } from 'utils/api';
-import axios from 'axios';
-import path from 'path';
+import { deleteWorkflow } from 'utils/api';
 import { OpenInBrowser } from '@material-ui/icons';
 import SidebarTooltip from './SidebarTooltip';
+import getIconsFromServer from '../../utils/getIconsFromServer';
+import commonStrings from 'commonStrings.json';
 
 const useStyles = DashboardStyle;
 
@@ -60,94 +60,35 @@ export default function Sidebar() {
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const setAllIcons = useStore((state) => state.setAllIcons);
-  const allIcons = useStore((state) => state.allIcons);
-  const setAllIconNames = useStore((state) => state.setAllIconNames);
 
   useEffect(() => {
     setElement(selectedElement);
   }, [selectedElement]);
 
-  // TODO move fetch out to be used when refresh in icons is needed
-  useEffect(
-    () => {
-      const fetchIcons = async () => {
-        if (allIcons.length <= 1) {
-          const data = await getIcons();
+  // TODO: similar getIcons is used in manage icons. Should we move it to a hook?
+  const getIcons = useCallback(async () => {
+    try {
+      const icons: Icon[] | object = await getIconsFromServer();
 
-          const iconsPng = data.identifiers.filter((str) => {
-            return !str.endsWith('svg');
-          });
-
-          await axios
-            .all(iconsPng.map((id: string) => getOtherIcon(id)))
-            .then(
-              axios.spread((...resPng) => {
-                const resCln = resPng.filter((result) => result.data !== null);
-                return resCln.map((result) => {
-                  const blobPng = new Blob([result.data], {
-                    type: 'image/png',
-                  });
-                  const fileReader = new FileReader();
-                  fileReader.readAsDataURL(blobPng);
-
-                  return result.data;
-                });
-              })
-            )
-            .catch((error) => {
-              // remove after handling the error
-              setOpenSnackbar({
-                open: true,
-                text: error.data,
-                severity: 'error',
-              });
-              return [];
-            });
-
-          const iconsSvg = data.identifiers.filter((str) => {
-            return str.endsWith('svg');
-          });
-
-          setAllIconNames([...iconsSvg, ...iconsPng]);
-          const results = await axios
-            .all(iconsSvg.map((id: string) => getIcon(id)))
-            .then(
-              axios.spread((...res) => {
-                const resCln = res.filter((result) => result.data !== null);
-                return resCln.map((result) => {
-                  return {
-                    name: path.basename(result.config.url),
-                    image: result.data,
-                    type: path.extname(result.config.url),
-                  };
-                });
-              })
-            )
-            .catch((error) => {
-              // remove after handling the error
-              setOpenSnackbar({
-                open: true,
-                text: error.data,
-                severity: 'warning',
-              });
-              return [];
-            });
-          setAllIcons(results as Icon[]);
-        }
-      };
-      // eslint-disable-next-line promise/prefer-await-to-callbacks
-      fetchIcons().catch((error) => {
-        // Keep logging in console for debugging when talking with a user
-        /* eslint-disable no-console */
-        console.log(error);
+      if (Array.isArray(icons) && icons.length > 0) {
+        setAllIcons(icons);
+      }
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: error.response?.data?.message || commonStrings.retrieveIconsError,
+        severity: 'error',
       });
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+    }
+  }, [setOpenSnackbar, setAllIcons]);
+
+  useEffect(() => {
+    getIcons();
+  }, [getIcons]);
 
   const deleteElement = async () => {
     let newGraph = {} as GraphRF;
+
     const elN = element as EwoksRFNode; // TODO: is this the way to avoid typescript warning???
     const elL = element as EwoksRFLink;
     const elD = element as GraphDetails;

@@ -1,6 +1,11 @@
-import type { AxiosResponse } from 'axios';
 import axios from 'axios';
-import type { GraphEwoks, Task, IconsNames } from '../types';
+import type { AxiosResponse } from 'axios';
+import type {
+  GraphEwoks,
+  Task,
+  IconsNames,
+  WorkflowDescription,
+} from '../types';
 
 export const axiosRequest = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URL,
@@ -8,7 +13,9 @@ export const axiosRequest = axios.create({
 
 // --------------Tasks
 // Get '/tasks/descriptions'
-export function getTaskDescription() {
+export function getTaskDescription(): Promise<{
+  data: { items: Task[] };
+}> {
   return axiosRequest.get(`/tasks/descriptions`);
 }
 
@@ -34,7 +41,9 @@ export function discoverTasks(moduleNames: string[]) {
 
 // -------------Workflows
 // Get /workflows
-export function getWorkflowsDescriptions() {
+export function getWorkflowsDescriptions(): Promise<{
+  data: { items: WorkflowDescription[] };
+}> {
   return axiosRequest.get(`/workflows/descriptions`);
 }
 
@@ -88,8 +97,12 @@ export function getIcon(id: string): Promise<AxiosResponse<string>> {
   return axiosRequest.get<string>(`/icon/${id}`);
 }
 
-export function getOtherIcon(id: string): Promise<AxiosResponse<string>> {
-  return axiosRequest.get(`${process.env.REACT_APP_SERVER_URL}/icon/${id}`, {
-    responseType: 'blob',
-  });
+// Delete icon
+export function deleteIcon(id: string) {
+  return axiosRequest.delete(`/icon/${id}`);
+}
+
+// Post task
+export function postIcon(iconName: string, iconData: string | ArrayBuffer) {
+  return axiosRequest.post(`/icon/${iconName}`, { data_url: iconData });
 }

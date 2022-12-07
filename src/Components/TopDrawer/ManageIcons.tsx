@@ -1,21 +1,16 @@
-import React from 'react';
+import { useCallback, useState } from 'react';
+import type { ChangeEvent } from 'react';
 import { Button, Box, Grid, Paper, styled, Tooltip } from '@material-ui/core';
-import orange1 from 'images/orange1.png';
-import orange2 from 'images/orange2.png';
-import orange3 from 'images/orange3.png';
-import AggregateColumns from 'images/AggregateColumns.svg';
-import Continuize from 'images/Continuize.svg';
-import graphInput from 'images/graphInput.svg';
-import graphOutput from 'images/graphOutput.svg';
-import Correlations from 'images/Correlations.svg';
-import CreateClass from 'images/CreateClass.svg';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import axios from 'axios';
-import type { Task } from 'types';
 import useStore from 'store/useStore';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
-import { getTaskDescription } from 'utils/api';
+import { getTaskDescription, deleteIcon, postIcon } from 'utils/api';
+import orange2 from 'images/orange2.png';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
+import commonStrings from 'commonStrings.json';
+import type { Icon } from '../../types';
+import getIconsFromServer from '../../utils/getIconsFromServer';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -25,71 +20,65 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const icons = [
-  'orange1',
-  'Continuize',
-  'graphInput',
-  'graphOutput',
-  'orange2',
-  'orange3',
-  'AggregateColumns',
-  'Correlations',
-  'CreateClass',
-];
-
-const iconsObj = {
-  orange1,
-  Continuize,
-  graphInput,
-  graphOutput,
-  orange2,
-  orange3,
-  AggregateColumns,
-  Correlations,
-  CreateClass,
-};
+const useStyles = makeStyles(() =>
+  createStyles({
+    imgHolder: {
+      overflow: 'hidden',
+      overflowWrap: 'break-word',
+      position: 'relative',
+      textAlign: 'center',
+      color: 'black',
+      display: 'flex',
+    },
+    button: {
+      margin: '8px',
+    },
+  })
+);
 
 export default function ManageIcons() {
-  const [selectedIcon, setSelectedIcon] = React.useState('');
-  const [fileToBeSent, setFileToBeSent] = React.useState({
-    file: File,
-    filename: '',
-  });
+  const classes = useStyles();
 
-  const [openAgreeDialog, setOpenAgreeDialog] = React.useState<boolean>(false);
+  const [selectedIcon, setSelectedIcon] = useState('');
+  const [fileToBeSent, setFileToBeSent] = useState<string | ArrayBuffer>('');
+  const [fileNameToBeSent, setFileNameToBeSent] = useState<string>('');
+  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const allIcons = useStore((state) => state.allIcons);
+  const setAllIcons = useStore((state) => state.setAllIcons);
 
   function clickIcon(icon: string) {
     setSelectedIcon(icon);
   }
 
-  async function deleteIcon() {
+  async function deleteTheIcon() {
     try {
       const tasksData = await getTaskDescription();
-      const tasks = tasksData.data as { items: Task[] };
-      const allTasks = tasks.items;
+      if (tasksData?.data?.items?.length > 0) {
+        const allTasks = tasksData.data.items;
 
-      if (allTasks.map((task) => task.icon).includes(selectedIcon)) {
-        setOpenSnackbar({
-          open: true,
-          text: `Icon cannot be deleted since it is used in one or more Tasks!`,
-          severity: 'warning',
-        });
-      } else {
+        if (allTasks.some((task) => task.icon === selectedIcon)) {
+          setOpenSnackbar({
+            open: true,
+            text: `Icon cannot be deleted since it is used in one or more Tasks!`,
+            severity: 'warning',
+          });
+          return;
+        }
+
         setOpenSnackbar({
           open: true,
           text: `Icon can be deleted since it is not used in any Task!`,
           severity: 'success',
         });
+
         setOpenAgreeDialog(true);
       }
     } catch (error) {
+      // TODO: general error handling for all cases like workflows?
       setOpenSnackbar({
         open: true,
-        text:
-          error.response?.data?.message ||
-          'Error in deleting Task. Please check connectivity with the server!',
+        text: error.response?.data?.message || commonStrings.retrieveTasksError,
         severity: 'error',
       });
     }
@@ -97,93 +86,97 @@ export default function ManageIcons() {
 
   async function uploadFile(event) {
     event.preventDefault();
-    const data = new FormData();
-
-    data.append('file', (fileToBeSent.file as unknown) as File);
 
     try {
-      await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/icon/${fileToBeSent.file.name}`,
-        data
-      );
+      await postIcon(fileNameToBeSent, fileToBeSent);
+
+      setOpenSnackbar({
+        open: true,
+        text: `Icon ${fileNameToBeSent} was successfully uploaded`,
+        severity: 'success',
+      });
+
+      getIcons();
+      setFileNameToBeSent('');
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message,
+        text:
+          error.response?.data?.message ||
+          'Error in uploading the Icon. Please check connectivity with the server!',
         severity: 'error',
       });
     }
   }
 
-  // TODO: Typescript
-  function inputNew(ne) {
-    if (ne.target.files[0].size < 10_000) {
-      setOpenSnackbar({
-        open: true,
-        text: 'File ready to be uploadede as an icon',
-        severity: 'success',
-      });
+  function inputNew(ne: ChangeEvent<HTMLInputElement>) {
+    const { files } = ne.target;
 
-      setFileToBeSent({ file: ne.target.files[0], filename: ne.target.value });
-    } else {
+    if (files[0].size > 10_000) {
       setOpenSnackbar({
         open: true,
         text: 'Files more than 10Kb are not acceptable for icons',
         severity: 'warning',
       });
+      return;
     }
+
+    const fileReader = new FileReader();
+
+    fileReader.readAsDataURL(files[0]);
+
+    fileReader.addEventListener('load', (event) => {
+      setFileToBeSent(event.target.result);
+      setFileNameToBeSent(files[0].name);
+    });
+
+    setOpenSnackbar({
+      open: true,
+      text: 'File ready to be uploaded as an icon',
+      severity: 'success',
+    });
   }
 
   async function agreeDeleteIcon() {
     setOpenAgreeDialog(false);
-    await axios
-      .delete(`${process.env.REACT_APP_SERVER_URL}/icon/${selectedIcon}`)
-      .then(() => {
-        setOpenSnackbar({
-          open: true,
-          text: `Icon was succesfully deleted!`,
-          severity: 'success',
-        });
-      })
-      .catch((error) => {
-        setOpenSnackbar({
-          open: true,
-          text: error?.response?.data || 'Error in deleting Task',
-          severity: 'error',
-        });
+    try {
+      await deleteIcon(selectedIcon);
+
+      setOpenSnackbar({
+        open: true,
+        text: `Icon was succesfully deleted!`,
+        severity: 'success',
       });
+
+      getIcons();
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: error?.response?.data || 'Error in deleting Icon',
+        severity: 'error',
+      });
+    }
   }
 
   function disAgreeDeleteIcon() {
     setOpenAgreeDialog(false);
   }
 
-  // TODO: Examine the code
-  // const getIcons = async () => {
-  //   const iconsData = await axios.get(
-  //     `${process.env.REACT_APP_SERVER_URL}/icons/descriptions`
-  //   );
-  //   const icons = iconsData.data as string[];
-  //   setIcons(icons);
-  // };
+  const getIcons = useCallback(async () => {
+    try {
+      const icons: Icon[] | object = await getIconsFromServer();
 
-  // const getIconL = async (id: string) => {
-  //   /* eslint-disable no-console */
-  //   console.log(selectedIcon, id);
-  //   const iconsData: AxiosResponse<string> = await getIcon(id);
-  //   console.log(iconsData, selectedIcon, id);
-  //   // console.log(iconsData);
-  //   // const parser = new DOMParser();
-  //   // const doc = parser.parseFromString(
-  //   //   iconsData.data as string,
-  //   //   'image/svg+xml'
-  //   // );
-  //   // // console.log(doc.childNodes[1]);
-  //   setSelectedIcon(iconsData.data);
-  // };
-
-  // const image =
-  //   '<svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width="47.4" height="40.65" viewBox="21 18.5 158 135.5"><path d="M25,50 l150,0 0,100 -150,0 z" stroke-width="4" stroke="black" fill="rgb(128,224,255)" fill-opacity="1" ></path><path d="M25,50 L175,150 M25,150 L175,50" stroke-width="4" stroke="black" fill="black" ></path><g transform="translate(0,0)" stroke-width="4" stroke="black" fill="none" ><circle cx="100" cy="30" r="7.5" fill="black" ></circle><circle cx="70" cy="30" r="7.5" fill="black" ></circle><circle cx="130" cy="30" r="7.5" fill="black" ></circle></g></svg>';
+      if (Array.isArray(icons) && icons?.length > 0) {
+        setAllIcons([...icons]);
+      }
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: error.response?.data?.message || commonStrings.retrieveIconsError,
+        severity: 'error',
+      });
+    }
+  }, [setOpenSnackbar, setAllIcons]);
 
   return (
     <Box>
@@ -199,47 +192,31 @@ export default function ManageIcons() {
       <Grid container spacing={1} direction="row" alignItems="center">
         <Grid item xs={12} sm={12} md={8} lg={6}>
           <Item>
-            <span className="dndflow" style={{ display: 'flex' }}>
-              <span>
-                {allIcons.map((icon) => (
-                  <span
-                    onClick={() => clickIcon(icon.name)}
-                    aria-hidden="true"
-                    role="button"
-                    tabIndex={0}
-                    key={icon.name}
-                    className={`dndnode ${
-                      selectedIcon && selectedIcon === icon.name
-                        ? 'selectedTask'
-                        : ''
-                    }`}
-                  >
-                    <Tooltip title={icon.name} arrow>
-                      <span role="button" tabIndex={0} className="iconDetails">
-                        <img
-                          src={icon.image.data_url}
-                          alt={icon.name}
-                          key={icon.name}
-                        />
-                      </span>
-                    </Tooltip>
-                  </span>
-                ))}
-              </span>
-              {icons.map((ico) => (
+            <span className="dndflow">
+              {allIcons.map((icon) => (
                 <span
-                  onClick={() => clickIcon(ico)}
+                  onClick={() => clickIcon(icon.name)}
                   aria-hidden="true"
                   role="button"
                   tabIndex={0}
-                  key={ico}
+                  key={icon.name}
                   className={`dndnode ${
-                    selectedIcon && selectedIcon === ico ? 'selectedTask' : ''
+                    selectedIcon && selectedIcon === icon.name
+                      ? 'selectedTask'
+                      : ''
                   }`}
                 >
-                  <Tooltip title={ico} arrow>
-                    <span role="button" tabIndex={0} className="iconDetails">
-                      <img src={iconsObj[ico]} alt={ico} />
+                  <Tooltip title={icon.name} arrow>
+                    <span
+                      role="button"
+                      tabIndex={0}
+                      className={classes.imgHolder}
+                    >
+                      <img
+                        src={icon.image?.data_url || orange2}
+                        alt={icon.name}
+                        key={icon.name}
+                      />
                     </span>
                   </Tooltip>
                 </span>
@@ -250,18 +227,16 @@ export default function ManageIcons() {
 
         <Grid item xs={12} sm={12} md={4} lg={3}>
           <Item>
-            <form
-              onSubmit={uploadFile}
-              // enctype="multipart/form-data"
-            >
+            <form onSubmit={uploadFile}>
               <Button
                 startIcon={<DeleteIcon />}
-                style={{ margin: '8px' }}
+                className={classes.button}
                 variant="outlined"
                 color="secondary"
-                onClick={deleteIcon}
+                onClick={deleteTheIcon}
                 size="small"
                 disabled={selectedIcon === ''}
+                data-cy="iconDeleteButton"
               >
                 Delete
               </Button>
@@ -271,17 +246,14 @@ export default function ManageIcons() {
                 type="submit"
                 color="primary"
                 size="small"
-                disabled={fileToBeSent.filename === ''}
+                disabled={fileNameToBeSent === ''}
+                data-cy="iconUploadButton"
               >
                 Upload
               </Button>
               <hr />
 
               <div>
-                {/* <img
-                  src={`data:image/svg+xml;utf8,${selectedIcon}`}
-                  alt="missing"
-                /> */}
                 <label htmlFor="upload-icon">
                   Select an Icon to Upload
                   <div>
@@ -292,6 +264,7 @@ export default function ManageIcons() {
                       accept="image/*"
                       onChange={inputNew}
                       aria-label="Select Icon"
+                      data-cy="browseInput"
                     />
                   </div>
                 </label>

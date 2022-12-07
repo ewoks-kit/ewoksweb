@@ -6,7 +6,7 @@ describe('draw links', () => {
     cy.visit('http://localhost:3000/#/edit-workflows');
 
     cy.get('label')
-      .should('include.text', 'Open Workflow')
+      .should('include.text', 'Open workflow')
       .parents('.MuiAutocomplete-root')
       .click()
       .get('input[type=text]')
@@ -71,8 +71,7 @@ describe('draw links', () => {
     cy.get('.react-flow__edge').should('have.length', 14);
   });
 
-  // try to draw link between 2 already connected simple nodes, graph nodes, input-output nodes
-  it('wont draw a link between 2 already connected simple nodes', () => {
+  it('draws a link between the input and the output of the same node', () => {
     cy.get('.react-flow__nodes')
       .children()
       .filter('.react-flow__node-ppfmethod')
@@ -87,36 +86,35 @@ describe('draw links', () => {
       .find('div[data-handleid="tl"]')
       .click();
 
-    cy.get('.react-flow__edge').should('have.length', 14);
+    cy.get('.react-flow__edge').should('have.length', 15);
   });
 
-  // it('wont draw a link between 2 already connected graph nodes', () => {
-  //   cy.get('.react-flow__nodes')
-  //     .children()
-  //     .filter('.react-flow__node-graph')
-  //     .first()
-  //     .find('div[data-handleid="sr"]')
-  //     .click();
+  // try to draw link between 2 already connected simple nodes
+  it('wont draw a link between 2 already connected simple nodes', () => {
+    cy.contains('a web application to EDIT ewoks graphs')
+      .parent()
+      .find('div[data-handleid="sr"]')
+      .click();
 
-  //   cy.get('.react-flow__nodes')
-  //     .children()
-  //     .filter('.react-flow__node-graph')
-  //     .last()
-  //     .find('div[data-handleid="tl"]')
-  //     .click();
+    cy.contains('has a web UI in React and a server side in Python-Flask')
+      .parent()
+      .find('div[data-handleid="tl"]')
+      .click();
 
-  //   cy.get('.react-flow__edge').should('have.length', 13);
-  // });
+    cy.get('.react-flow__edge').should('have.length', 15);
+    cy.contains('Cannot re-connect two nodes');
+  });
 
   it('deletes a link by button and keyboard', () => {
     cy.get('.react-flow__edge')
-      .should('have.length', 14)
+      .should('have.length', 15)
       .first()
-      .click({ force: true })
-      .should('include.class', 'selected');
+      .children('g')
+      .first()
+      .click({ force: true });
 
     cy.contains('Delete').click();
 
-    cy.get('.react-flow__edge').should('have.length', 13);
+    cy.get('.react-flow__edge').should('have.length', 14);
   });
 });

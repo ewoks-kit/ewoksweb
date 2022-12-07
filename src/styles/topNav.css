@@ -9,4 +9,9 @@
 .iconDetails {
   overflow: 'hidden';
   overflow-wrap: 'break-word';
+  overflow: 'hidden';
+  position: 'relative';
+  text-align: 'center';
+  color: 'black';
+  display: 'flex';
 }

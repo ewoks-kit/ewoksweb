@@ -258,6 +258,7 @@ export default function Dashboard() {
                 size="small"
                 component="span"
                 aria-label="add"
+                data-cy="openTopDrawerButton"
               >
                 <SettingsIcon />
               </Fab>
