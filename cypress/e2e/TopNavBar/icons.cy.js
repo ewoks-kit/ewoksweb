@@ -45,6 +45,42 @@ describe('draw links', () => {
       );
   });
 
-  it('should upload an icon and appear on the list - form disk???', () => {});
-  it('should delete an icon and disappear from the list', () => {});
+  // Assumes down.svg is on the server
+  it('should upload-fail-delete-upload down.svg and appear-disappear on the icon list', () => {
+    cy.get('[data-cy="openTopDrawerButton"]').click();
+    cy.contains('Categories');
+
+    cy.get('[data-cy="iconsTab"]').click();
+    cy.get('[data-cy="browseInput"]').selectFile('cypress/fixtures/down.svg');
+    cy.contains('File ready to be uploaded as an icon');
+
+    cy.get('[data-cy="iconUploadButton"]').click();
+    cy.contains("Icon 'down.svg' already exists");
+
+    // cy.get('img').filter('have.attr', 'alt', 'down.svg').click();
+    cy.get('[alt="down.svg"]').click();
+    cy.get('[data-cy="iconDeleteButton"]').click();
+    cy.contains('Delete "down.svg" icon?').should('be.visible');
+    cy.contains('Icon can be deleted since it is not used in any Task!').should(
+      'be.visible'
+    );
+
+    cy.get('[data-cy="noButtonConfirmDialod"]').click();
+    cy.get('[alt="down.svg"]').should('be.visible');
+
+    cy.get('[data-cy="iconDeleteButton"]').click();
+    cy.contains('Delete "down.svg" icon?').should('be.visible');
+    cy.contains('Icon can be deleted since it is not used in any Task!').should(
+      'be.visible'
+    );
+    cy.get('[data-cy="yesButtonConfirmDialog"]').click();
+    cy.get('[alt="down.svg"]').should('not.be.visible');
+
+    cy.get('[data-cy="iconsTab"]').click();
+    cy.get('[data-cy="browseInput"]').selectFile('cypress/fixtures/down.svg');
+    cy.contains('File ready to be uploaded as an icon');
+
+    cy.get('[data-cy="iconUploadButton"]').click();
+    cy.get('[alt="down.svg"]').should('be.visible');
+  });
 });

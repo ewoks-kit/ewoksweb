@@ -242,6 +242,7 @@ export default function ManageIcons() {
                 onClick={deleteIcon}
                 size="small"
                 disabled={selectedIcon === ''}
+                data-cy="iconDeleteButton"
               >
                 Delete
               </Button>
@@ -252,6 +253,7 @@ export default function ManageIcons() {
                 color="primary"
                 size="small"
                 disabled={fileNameToBeSent === ''}
+                data-cy="iconUploadButton"
               >
                 Upload
               </Button>
@@ -268,6 +270,7 @@ export default function ManageIcons() {
                       accept="image/*"
                       onChange={inputNew}
                       aria-label="Select Icon"
+                      data-cy="browseInput"
                     />
                   </div>
                 </label>

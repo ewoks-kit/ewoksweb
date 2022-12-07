@@ -62,7 +62,7 @@ describe('create workflow and save', () => {
 
         cy.contains(`Delete "${id.toString()}" workflow?`);
 
-        cy.get(`[data-cy="yesButtonConfirmDialod"]`).contains('Yes').click();
+        cy.get(`[data-cy="yesButtonConfirmDialog"]`).contains('Yes').click();
 
         cy.get(`[data-cy="${id.toString()}"]`).should('not.exist');
       });
