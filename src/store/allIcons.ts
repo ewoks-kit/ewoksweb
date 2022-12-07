@@ -3,7 +3,7 @@ import type { Icon } from '../types';
 const allIcons = (set) => ({
   allIcons: [],
 
-  setAllIcons: async (icons: [Icon]) => {
+  setAllIcons: (icons: [Icon]) => {
     set((state) => ({
       ...state,
       allIcons: icons,

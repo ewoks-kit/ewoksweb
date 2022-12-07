@@ -11,7 +11,6 @@ export const axiosRequest = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URL,
 });
 
-// TODO: typescriptify all
 // --------------Tasks
 // Get '/tasks/descriptions'
 export function getTaskDescription(): Promise<{
@@ -96,4 +95,14 @@ export async function getIcons(): Promise<IconsNames> {
 // Get icon:id
 export function getIcon(id: string): Promise<AxiosResponse<string>> {
   return axiosRequest.get<string>(`/icon/${id}`);
+}
+
+// Delete icon
+export function deleteIcon(id: string) {
+  return axiosRequest.delete(`/icon/${id}`);
+}
+
+// Post task
+export function postIcon(iconName: string, iconData: string | ArrayBuffer) {
+  return axiosRequest.post(`/icon/${iconName}`, { data_url: iconData });
 }

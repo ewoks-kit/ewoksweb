@@ -3,10 +3,9 @@ import type { ChangeEvent } from 'react';
 import { Button, Box, Grid, Paper, styled, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import axios from 'axios';
 import useStore from 'store/useStore';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
-import { getTaskDescription } from 'utils/api';
+import { getTaskDescription, deleteIcon, postIcon } from 'utils/api';
 import orange2 from 'images/orange2.png';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import commonStrings from 'commonStrings.json';
@@ -52,7 +51,7 @@ export default function ManageIcons() {
     setSelectedIcon(icon);
   }
 
-  async function deleteIcon() {
+  async function deleteTheIcon() {
     try {
       const tasksData = await getTaskDescription();
       if (tasksData?.data?.items?.length > 0) {
@@ -89,10 +88,7 @@ export default function ManageIcons() {
     event.preventDefault();
 
     try {
-      await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/icon/${fileNameToBeSent}`,
-        { data_url: fileToBeSent }
-      );
+      await postIcon(fileNameToBeSent, fileToBeSent);
 
       setOpenSnackbar({
         open: true,
@@ -144,9 +140,7 @@ export default function ManageIcons() {
   async function agreeDeleteIcon() {
     setOpenAgreeDialog(false);
     try {
-      await axios.delete(
-        `${process.env.REACT_APP_SERVER_URL}/icon/${selectedIcon}`
-      );
+      await deleteIcon(selectedIcon);
 
       setOpenSnackbar({
         open: true,
@@ -239,7 +233,7 @@ export default function ManageIcons() {
                 className={classes.button}
                 variant="outlined"
                 color="secondary"
-                onClick={deleteIcon}
+                onClick={deleteTheIcon}
                 size="small"
                 disabled={selectedIcon === ''}
                 data-cy="iconDeleteButton"

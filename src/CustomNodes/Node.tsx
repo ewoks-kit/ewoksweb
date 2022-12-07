@@ -3,7 +3,6 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 import React, { memo, useEffect, useState } from 'react';
 import orange1 from '../images/orange1.png';
-import orange2 from '../images/orange2.png';
 import { Handle, Position } from 'react-flow-renderer';
 import type { EwoksRFNode, NodeProps } from '../types';
 import { contentStyle, style } from './NodeStyle';
@@ -18,6 +17,7 @@ import { calcNewId } from '../utils/calcNewId';
 import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
 import tooltipText from '../Components/General/TooltipText';
+import { findImage } from 'utils';
 
 const onDragStart = (e) => {
   e.preventDefault();
@@ -131,12 +131,6 @@ const Node: React.FC<NodeProps> = ({
 
     setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
     setSelectedElement(newClone as EwoksRFNode);
-  };
-
-  const findImage = (img) => {
-    const imgIndex = allIcons.map((ico) => ico.name).indexOf(img);
-
-    return imgIndex !== -1 ? allIcons[imgIndex].image.data_url : orange2;
   };
 
   function setSelEl() {
@@ -262,7 +256,7 @@ const Node: React.FC<NodeProps> = ({
                   role="presentation"
                   draggable="false"
                   onDragStart={(event) => onDragStart(event)}
-                  src={findImage(image)}
+                  src={findImage(image, allIcons)}
                   alt="icon"
                 />
               </ExecuteSpinner>
@@ -272,7 +266,7 @@ const Node: React.FC<NodeProps> = ({
                 role="presentation"
                 draggable="false"
                 onDragStart={(event) => onDragStart(event)}
-                src={findImage(image)}
+                src={findImage(image, allIcons)}
                 alt="taskIcon"
               />
             ))}
@@ -282,7 +276,7 @@ const Node: React.FC<NodeProps> = ({
               role="presentation"
               draggable="false"
               onDragStart={(event) => onDragStart(event)}
-              src={findImage(image)}
+              src={findImage(image, allIcons)}
               alt="icon"
             />
           )}

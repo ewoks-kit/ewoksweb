@@ -10,6 +10,7 @@ import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
 import { calcNoteNodes } from './utils/calcNoteNodes';
 import { getWorkflowsDescriptions, getWorkflow } from './utils/api';
+import orange2 from 'images/orange2.png';
 
 export const ewoksNetwork = {};
 
@@ -110,4 +111,10 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
     nodes: toEwoksNodes(tempGraph.nodes),
     links: toEwoksLinks(tempGraph.links),
   };
+}
+
+export function findImage(img: string, allIcons) {
+  const icon = allIcons.find((ico) => ico.name === img);
+
+  return icon?.image?.data_url || orange2;
 }

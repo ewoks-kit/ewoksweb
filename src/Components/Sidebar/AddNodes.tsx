@@ -10,7 +10,6 @@ import Typography from '@material-ui/core/Typography';
 
 import type { Task } from 'types';
 import Tooltip from '@material-ui/core/Tooltip';
-import orange2 from 'images/orange2.png';
 import TextsmsIcon from '@material-ui/icons/Textsms';
 import Upload from '../General/Upload';
 import AddIcon from '@material-ui/icons/Add';
@@ -26,6 +25,7 @@ import BookmarksIcon from '@material-ui/icons/Bookmarks';
 import { getTaskDescription, deleteTask } from 'utils/api';
 import { FormAction } from '../../types';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { findImage } from 'utils';
 
 const onDragStart = (event, { task_identifier, task_type, icon }) => {
   event.dataTransfer.setData('task_identifier', task_identifier);
@@ -171,11 +171,11 @@ function AddNodes(props: AddNodesProps) {
     setExpanded(newExpanded);
   };
 
-  const findImage = (img: string) => {
-    const icon = allIcons.find((ico) => ico.name === img);
+  // const findImage = (img: string) => {
+  //   const icon = allIcons.find((ico) => ico.name === img);
 
-    return icon?.image?.data_url || orange2;
-  };
+  //   return icon?.image?.data_url || orange2;
+  // };
 
   return (
     <Accordion
@@ -245,7 +245,7 @@ function AddNodes(props: AddNodesProps) {
                           </span>
                           <img
                             className={classes.image}
-                            src={findImage(elem.icon)}
+                            src={findImage(elem.icon, allIcons)}
                             alt={elem.task_identifier}
                           />
                         </span>
@@ -292,6 +292,12 @@ function AddNodes(props: AddNodesProps) {
                   </>
                 )}
               </AccordionDetails>
+              {/* TODO: This is not really readable:
+                storing conditions in a variable/util. At first glance, selectedTask &&
+                selectedTask.task_identifier && tasks.length > 0 &&
+                tasks.find( (tas) => tas.task_identifier === selectedTask.task_identifier )?.category === categoryName
+                could be isSelectedTaskCategory
+                Making a new component where you could deal with these conditions with early return to null */}
               {selectedTask &&
                 selectedTask.task_identifier &&
                 categoryName !== 'General' &&

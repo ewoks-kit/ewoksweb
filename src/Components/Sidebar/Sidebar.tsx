@@ -70,8 +70,8 @@ export default function Sidebar() {
     try {
       const icons: Icon[] | object = await getIconsFromServer();
 
-      if (Array.isArray(icons) && icons?.length > 0) {
-        setAllIcons([...icons]);
+      if (Array.isArray(icons) && icons.length > 0) {
+        setAllIcons(icons);
       }
     } catch (error) {
       setOpenSnackbar({
