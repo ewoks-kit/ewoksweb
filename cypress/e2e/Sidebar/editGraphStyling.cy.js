@@ -1,4 +1,4 @@
-describe('edit links dataMapping', () => {
+describe('', () => {
   before(() => {
     cy.loadApp();
   });

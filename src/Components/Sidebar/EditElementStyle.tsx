@@ -10,11 +10,49 @@ import EditLinkStyle from './EditLinkStyle';
 import EditGraphStyle from './EditGraphStyle';
 import useStore from '../../store/useStore';
 
-// DOC: For eiting the style of nodes and links
+interface Content {
+  title: string;
+  EditComponent: () => JSX.Element;
+}
+
+function getAccordionContent(
+  element: EwoksRFNode | EwoksRFLink | GraphDetails
+): Content | undefined {
+  if ('position' in element) {
+    return {
+      title: 'Styling Node',
+      EditComponent: () => <EditNodeStyle element={element} />,
+    };
+  }
+
+  if ('source' in element) {
+    return {
+      title: 'Styling Link',
+      EditComponent: () => <EditLinkStyle element={element} />,
+    };
+  }
+
+  if ('input_nodes' in element) {
+    return {
+      title: 'Styling Graph',
+      EditComponent: () => <EditGraphStyle />,
+    };
+  }
+
+  return undefined;
+}
+
+// DOC: For editing the style of nodes and links
 export default function EditElementStyle() {
-  const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
-    (state) => state.selectedElement
-  );
+  const selectedElement = useStore((state) => state.selectedElement);
+
+  const content = getAccordionContent(selectedElement);
+
+  if (!content) {
+    return null;
+  }
+
+  const { title, EditComponent } = content;
 
   return (
     <Accordion className="Accordions-sidebar">
@@ -22,23 +60,11 @@ export default function EditElementStyle() {
         expandIcon={<OpenInBrowser />}
         aria-controls="panel1a-content"
       >
-        <Typography>
-          {'position' in selectedElement
-            ? 'Styling Node'
-            : 'source' in selectedElement
-            ? 'Styling Link'
-            : 'Styling Graph'}
-        </Typography>
+        <Typography>{title}</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <form noValidate autoComplete="off">
-          {'position' in selectedElement && (
-            <EditNodeStyle element={selectedElement} />
-          )}
-          {'source' in selectedElement && (
-            <EditLinkStyle element={selectedElement} />
-          )}
-          {'input_nodes' in selectedElement && <EditGraphStyle />}
+          <EditComponent />
         </form>
       </AccordionDetails>
     </Accordion>
