@@ -6,7 +6,7 @@ export interface ConfigState {
 }
 
 const useConfigStore = create<ConfigState>((set) => ({
-  canvasBackgroundColor: 'pink',
+  canvasBackgroundColor: '#e9ebf7',
   setCanvasBackgroundColor: (canvasBackgroundColor: string) =>
     set({
       canvasBackgroundColor,

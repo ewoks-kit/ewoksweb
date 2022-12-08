@@ -12,7 +12,6 @@ Cypress.Commands.add('loadAppWithoutGraph', () => {
   cy.visit('http://localhost:3000/#/edit-workflows');
 
   cy.window().should('have.property', '__useStore__');
-  cy.window().should('have.property', '__useConfigStore__');
 });
 
 Cypress.Commands.add('loadApp', () => {

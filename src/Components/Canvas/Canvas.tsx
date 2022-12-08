@@ -1,16 +1,14 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 /* eslint-disable consistent-return */
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import type { Node, Edge, Connection } from 'react-flow-renderer';
 import ReactFlow, {
   Controls,
   MiniMap,
-  Background,
   useReactFlow,
   applyNodeChanges,
   applyEdgeChanges,
   useUpdateNodeInternals,
-  BackgroundVariant,
 } from 'react-flow-renderer';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import bendingText from 'CustomEdges/BendingTextEdge';
@@ -23,9 +21,9 @@ import ExecutionStepsNode from 'CustomNodes/ExecutionStepsNode';
 import DataNode from 'CustomNodes/DataNode';
 import type { GraphRF, EwoksRFNode, EwoksRFLink } from 'types';
 import useStore from 'store/useStore';
-import useConfigStore from 'store/useConfigStore';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
+import CanvasBackground from './CanvasBackground';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -83,9 +81,6 @@ function Canvas() {
   const recentGraphs = useStore((state) => state.recentGraphs);
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const graphGeneralConfig = useConfigStore(
-    (state) => state.graphGeneralConfig
-  );
   const updateNodeInternals = useUpdateNodeInternals();
 
   const { fitView, getZoom, zoomTo } = useReactFlow();
@@ -616,13 +611,7 @@ function Canvas() {
           nodeTypes={nodeTypes}
           deleteKeyCode="Delete"
         >
-          <Background
-            variant={BackgroundVariant.Lines}
-            gap={50}
-            size={1}
-            color={graphGeneralConfig.canvasBackgroundColor}
-            style={{ background: graphGeneralConfig.canvasBackgroundColor }}
-          />
+          <CanvasBackground />
           <Controls />
           <MiniMap
             nodeStrokeColor={(n): string => {
