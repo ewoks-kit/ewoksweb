@@ -1,29 +1,16 @@
-import { useEffect, useState } from 'react';
 import useConfigStore from '../../store/useConfigStore';
-import type { GraphDetails } from '../../types';
 
-interface EditGraphStyleProps {
-  element: GraphDetails;
-}
 // DOC: Edit the graph style
-export default function EditGraphStyle(props: EditGraphStyleProps) {
-  const { element } = props;
-  const setGraphGeneralConfig = useConfigStore(
-    (state) => state.setGraphGeneralConfig
+export default function EditGraphStyle() {
+  const setCanvasBackgroundColor = useConfigStore(
+    (state) => state.setCanvasBackgroundColor
   );
-  const [colorCanvas, setColorCanvas] = useState<string>('#e9ebf7');
-
-  useEffect(() => {
-    if ('input_nodes' in element) {
-      setColorCanvas('#e9ebf7');
-    }
-  }, [element.id, element]);
+  const canvasBackgroundColor = useConfigStore(
+    (state) => state.canvasBackgroundColor
+  );
 
   const colorLineChanged = (event) => {
-    setColorCanvas(event.target.value);
-    setGraphGeneralConfig({
-      canvasBackgroundColor: event.target.value,
-    });
+    setCanvasBackgroundColor(event.target.value);
   };
 
   return (
@@ -32,9 +19,8 @@ export default function EditGraphStyle(props: EditGraphStyleProps) {
       <input
         aria-label="Color"
         type="color"
-        id="head"
         name="head"
-        value={colorCanvas}
+        value={canvasBackgroundColor}
         onChange={colorLineChanged}
         style={{ margin: '10px' }}
         onInput={colorLineChanged}

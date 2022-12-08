@@ -8,14 +8,6 @@ describe('edit links dataMapping', () => {
 
     cy.contains('Canvas Background Color').should('be.visible');
 
-    cy.window()
-      .its('__useConfigStore__')
-      .then((store) =>
-        expect(
-          store.getState().graphGeneralConfig.canvasBackgroundColor
-        ).to.equal('#e9ebf7')
-      );
-
     cy.get('[data-cy="colorPickerCanvasBackground"]').should(
       'have.attr',
       'value',
@@ -30,14 +22,6 @@ describe('edit links dataMapping', () => {
       .invoke('val', '#ff0000')
       .trigger('input')
       .should('have.attr', 'value', '#ff0000');
-
-    cy.window()
-      .its('__useConfigStore__')
-      .then((store) =>
-        expect(
-          store.getState().graphGeneralConfig.canvasBackgroundColor
-        ).to.equal('#ff0000')
-      );
 
     cy.get('.react-flow__background')
       .should('be.visible')

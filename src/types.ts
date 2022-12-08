@@ -550,7 +550,3 @@ export interface WorkflowDescription {
   label?: string;
   category?: string;
 }
-
-export interface graphGeneralConfiguration {
-  canvasBackgroundColor?: string;
-}

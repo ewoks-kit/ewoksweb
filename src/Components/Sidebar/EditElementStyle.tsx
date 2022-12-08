@@ -38,9 +38,7 @@ export default function EditElementStyle() {
           {'source' in selectedElement && (
             <EditLinkStyle element={selectedElement} />
           )}
-          {'input_nodes' in selectedElement && (
-            <EditGraphStyle element={selectedElement} />
-          )}
+          {'input_nodes' in selectedElement && <EditGraphStyle />}
         </form>
       </AccordionDetails>
     </Accordion>
