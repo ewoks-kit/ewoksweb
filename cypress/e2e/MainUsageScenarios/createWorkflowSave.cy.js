@@ -1,19 +1,8 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-// / <reference types="cypress" />
 
 describe('create workflow and save', () => {
   before(() => {
-    cy.visit('http://localhost:3000/#/edit-workflows');
-
-    cy.get('label')
-      .should('include.text', 'Open workflow')
-      .parents('.MuiAutocomplete-root')
-      .click()
-      .get('input[type=text]')
-      .type('tutorial_Graph');
-
-    cy.contains('tutorial_Graph').parent().click();
-    cy.window().should('have.property', '__useStore__');
+    cy.loadAppWithoutGraph();
   });
 
   it('opens the dialog for name after clicking new', () => {
@@ -41,18 +30,17 @@ describe('create workflow and save', () => {
           .type(id.toString(), { force: true });
 
         cy.contains('Save Workflow').click();
+        cy.waitForStableDOM();
 
         cy.get('.react-flow__edge').should('have.length', 0);
         cy.get('.react-flow__node').should('have.length', 0);
 
-        cy.get('label')
-          .should('include.text', 'Open workflow')
-          .parents('.MuiAutocomplete-root')
+        cy.get('[data-testid="async-autocomplete-drop"]')
           .click()
           .get('input[type=text]')
           .type(id.toString());
 
-        cy.contains(id.toString()).parent().click();
+        cy.contains(id.toString()).click();
 
         cy.get(`[data-cy="${id.toString()}"]`).contains(id.toString());
 

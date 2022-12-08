@@ -108,7 +108,7 @@ export default function getAround({
         d={edgePath}
         markerEnd={markerEnd}
         fill="none"
-        strokeWidth={1}
+        strokeWidth="1px"
       />
       <text>
         <textPath

@@ -3,21 +3,14 @@
 
 describe('drag and drop nodes', () => {
   before(() => {
-    cy.visit('http://localhost:3000/#/edit-workflows');
-
-    cy.get('label')
-      .should('include.text', 'Open workflow')
-      .parents('.MuiAutocomplete-root')
-      .click()
-      .get('input[type=text]')
-      .type('tutorial_Graph');
-
-    cy.contains('tutorial_Graph').parent().click();
+    cy.loadApp();
   });
 
   it('should drag and drop 2 nodes from add nodes into canvas', () => {
     const dataTransfer = new DataTransfer();
-    cy.contains('Add Nodes').click({ force: true });
+
+    cy.waitForStableDOM();
+    cy.contains('Add Nodes').click();
 
     cy.contains('General').click();
 

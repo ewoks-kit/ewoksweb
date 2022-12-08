@@ -11,7 +11,7 @@ export const edgeStyle = {
   },
 
   bendingText: {
-    strokeWidth: '1',
+    strokeWidth: '1px',
     fontSize: '16px',
   },
 };

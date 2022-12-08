@@ -4,17 +4,8 @@
 
 describe('change link attributes', () => {
   before(() => {
-    cy.visit('http://localhost:3000/#/edit-workflows');
+    cy.loadApp();
 
-    cy.get('label')
-      .should('include.text', 'Open workflow')
-      .parents('.MuiAutocomplete-root')
-      .click()
-      .get('input[type=text]')
-      .type('tutorial_Graph');
-
-    cy.contains('tutorial_Graph').parent().click();
-    cy.window().should('have.property', '__useStore__');
     cy.get('.react-flow').contains('if you do then...').parent().click();
   });
 

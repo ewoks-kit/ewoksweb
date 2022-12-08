@@ -9,6 +9,7 @@ describe('draw links', () => {
   });
 
   it('on load it fetches icons from server', () => {
+    cy.waitForStableDOM();
     cy.window()
       .its('__useStore__')
       .then((store) => store.getState().allIcons)
@@ -23,25 +24,12 @@ describe('draw links', () => {
       .first()
       .children('span')
       .children('span')
-      .should('have.text', 'taskSkeleton')
-      .siblings('img')
-      .should('have.attr', 'src')
-      .should(
-        'include',
-        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAGaUlEQVR4nO2aX0xT'
-      );
-
-    cy.get('[data-cy="add-nodes-category-General"]')
-      .find('.dndnode')
-      .eq(1)
-      .children('span')
-      .children('span')
       .should('have.text', 'graphOutput')
       .siblings('img')
       .should('have.attr', 'src')
       .should(
         'include',
-        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9'
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAGaUlEQVR4nO2aX0xT'
       );
   });
 

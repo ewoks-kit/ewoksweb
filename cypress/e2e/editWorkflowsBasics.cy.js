@@ -1,5 +1,4 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-// / <reference types="cypress" />
 
 describe('structure and basics for edit-workflows', () => {
   before(() => {
@@ -27,7 +26,7 @@ describe('structure and basics for edit-workflows', () => {
   });
 
   it('displays the autocomplete dropdown', () => {
-    cy.get('label').should('include.text', 'Open workflow');
+    cy.get('[data-testid="async-autocomplete-drop"]').should('be.visible');
   });
 
   it('displays the Add Nodes Accordion', () => {
@@ -37,11 +36,6 @@ describe('structure and basics for edit-workflows', () => {
   it('displays the Edit Graph', () => {
     cy.get('p').should('include.text', 'Edit Graph');
   });
-
-  // TODO: commented for onlyEditRelease
-  // it('displays the Execution History', () => {
-  //   cy.get('p').should('include.text', 'Execution History');
-  // });
 
   it('should be able to open and close Add Nodes and see General category', () => {
     cy.contains('ewokscore').should('be.visible');
@@ -58,30 +52,4 @@ describe('structure and basics for edit-workflows', () => {
     cy.contains('Comment').should('be.visible');
     cy.contains('Category').should('be.visible');
   });
-
-  // TODO: commented for onlyEditRelease
-  // it('should be able to open and close Execution History and see the buttons', () => {
-  //   cy.contains('Execution History').parents('.MuiButtonBase-root').click();
-
-  //   cy.contains('Execution History')
-  //     .parents('.MuiAccordion-root')
-  //     .children()
-  //     .find('button')
-  //     .should('have.length', 2)
-  //     .last()
-  //     .should('have.text', 'Clean all');
-
-  //   cy.get('.MuiSwitch-root').should('have.length', 0);
-
-  //   cy.contains('Execution History')
-  //     .parents('.MuiAccordion-root')
-  //     .children()
-  //     .find('button')
-  //     .should('have.length', 2)
-  //     .first()
-  //     .should('have.text', 'All Executions')
-  //     .click();
-
-  //   cy.get('.MuiSwitch-root').should('have.length', 2);
-  // });
 });

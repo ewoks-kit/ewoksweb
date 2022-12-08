@@ -138,7 +138,7 @@ function calcNodeProps(
       linkStyle: graph_links[link_index]?.type || 'default',
       style: {
         stroke: graph_links[link_index]?.style?.stroke || '',
-        strokeWidth: '3',
+        strokeWidth: '3px',
       },
       markerEnd: calcMarkerEnd(graph_links[link_index]),
       animated: graph_links[link_index]?.animated || false,
