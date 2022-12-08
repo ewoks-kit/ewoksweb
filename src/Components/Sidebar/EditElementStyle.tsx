@@ -7,6 +7,7 @@ import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../../types';
 import EditNodeStyle from './EditNodeStyle';
 import EditLinkStyle from './EditLinkStyle';
+import EditGraphStyle from './EditGraphStyle';
 import useStore from '../../store/useStore';
 
 // DOC: For eiting the style of nodes and links
@@ -16,32 +17,30 @@ export default function EditElementStyle() {
   );
 
   return (
-    ('position' in selectedElement || 'source' in selectedElement) && (
-      <Accordion className="Accordions-sidebar">
-        <AccordionSummary
-          expandIcon={<OpenInBrowser />}
-          aria-controls="panel1a-content"
-        >
-          <Typography>
-            Styling{' '}
-            {'position' in selectedElement
-              ? 'Node'
-              : 'source' in selectedElement
-              ? 'Link'
-              : 'Graph'}
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <form noValidate autoComplete="off">
-            {'position' in selectedElement && (
-              <EditNodeStyle element={selectedElement} />
-            )}
-            {'source' in selectedElement && (
-              <EditLinkStyle element={selectedElement} />
-            )}
-          </form>
-        </AccordionDetails>
-      </Accordion>
-    )
+    <Accordion className="Accordions-sidebar">
+      <AccordionSummary
+        expandIcon={<OpenInBrowser />}
+        aria-controls="panel1a-content"
+      >
+        <Typography>
+          {'position' in selectedElement
+            ? 'Styling Node'
+            : 'source' in selectedElement
+            ? 'Styling Link'
+            : 'Styling Graph'}
+        </Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <form noValidate autoComplete="off">
+          {'position' in selectedElement && (
+            <EditNodeStyle element={selectedElement} />
+          )}
+          {'source' in selectedElement && (
+            <EditLinkStyle element={selectedElement} />
+          )}
+          {'input_nodes' in selectedElement && <EditGraphStyle />}
+        </form>
+      </AccordionDetails>
+    </Accordion>
   );
 }

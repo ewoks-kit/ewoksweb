@@ -1,16 +1,14 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 /* eslint-disable consistent-return */
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import type { Node, Edge, Connection } from 'react-flow-renderer';
 import ReactFlow, {
   Controls,
   MiniMap,
-  Background,
   useReactFlow,
   applyNodeChanges,
   applyEdgeChanges,
   useUpdateNodeInternals,
-  BackgroundVariant,
 } from 'react-flow-renderer';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import bendingText from 'CustomEdges/BendingTextEdge';
@@ -25,6 +23,7 @@ import type { GraphRF, EwoksRFNode, EwoksRFLink } from 'types';
 import useStore from 'store/useStore';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
+import CanvasBackground from './CanvasBackground';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -612,7 +611,7 @@ function Canvas() {
           nodeTypes={nodeTypes}
           deleteKeyCode="Delete"
         >
-          <Background variant={BackgroundVariant.Lines} gap={50} size={1} />
+          <CanvasBackground />
           <Controls />
           <MiniMap
             nodeStrokeColor={(n): string => {
