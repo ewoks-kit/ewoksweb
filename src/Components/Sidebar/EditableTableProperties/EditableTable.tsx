@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/cognitive-complexity */
 /*
   The table that is used to pass parameters for default-values, conditions and data-mapping.
   Its cells can change depending on the kind of input and the parent-component params.

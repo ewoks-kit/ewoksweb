@@ -49,40 +49,51 @@ export default function IconMenu() {
     element: Task | EwoksRFNode | EwoksRFLink | GraphRF
   ) {
     setDoAction(action);
-    if (action === 'newTask') {
-      setElementToEdit(initializedTask);
-    } else if (action === 'cloneTask') {
-      if ('position' in element) {
-        if (element.task_type === 'graph') {
+    switch (action) {
+      case 'newTask': {
+        setElementToEdit(initializedTask);
+
+        break;
+      }
+      case 'cloneTask': {
+        if ('position' in element) {
+          if (element.task_type === 'graph') {
+            setOpenSnackbar({
+              open: true,
+              text: 'Cannot clone a graph, please select a Task!',
+              severity: 'warning',
+            });
+            return;
+          }
+          // DOC: if the task does not exist in the tasks populate the form with the element details
+          const task = tasks.find(
+            (tas) => tas.task_identifier === element.task_identifier
+          );
+
+          setElementToEdit(
+            task || {
+              ...initializedTask,
+              task_identifier: element.task_identifier,
+              task_type: element.task_type,
+            }
+          );
+        } else {
           setOpenSnackbar({
             open: true,
-            text: 'Cannot clone a graph, please select a Task!',
+            text: 'First select in the canvas a Node to clone and Save as Task',
             severity: 'warning',
           });
           return;
         }
-        // DOC: if the task does not exist in the tasks populate the form with the element details
-        const task = tasks.find(
-          (tas) => tas.task_identifier === element.task_identifier
-        );
 
-        setElementToEdit(
-          task || {
-            ...initializedTask,
-            task_identifier: element.task_identifier,
-            task_type: element.task_type,
-          }
-        );
-      } else {
-        setOpenSnackbar({
-          open: true,
-          text: 'First select in the canvas a Node to clone and Save as Task',
-          severity: 'warning',
-        });
-        return;
+        break;
       }
-    } else if (action === 'cloneGraph') {
-      setElementToEdit(graphRF);
+      case 'cloneGraph': {
+        setElementToEdit(graphRF);
+
+        break;
+      }
+      // No default
     }
 
     setOpenSaveDialog(true);

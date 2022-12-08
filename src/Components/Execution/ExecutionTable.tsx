@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/cognitive-complexity */
 // TODO: break apart when stable
 import React, { useState } from 'react';
 import Box from '@material-ui/core/Box';
@@ -53,10 +52,10 @@ interface Data {
 function descendingComparator(a: Event[], b: Event[], orderBy: string) {
   // TODO: compare time start-end
   if (['start time', 'end time'].includes(orderBy)) {
-    if (b[0]['time'] < a[0]['time']) {
+    if (b[0].time < a[0].time) {
       return -1;
     }
-    if (b[0]['time'] > a[0]['time']) {
+    if (b[0].time > a[0].time) {
       return 1;
     }
   }
@@ -340,17 +339,30 @@ export default function EnhancedTable() {
 
     // if (event.target)
 
-    if (selectedIndex === -1) {
-      newSelected = [...selected, name];
-    } else if (selectedIndex === 0) {
-      newSelected = [...selected.slice(1)];
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = [...selected.slice(0, -1)];
-    } else if (selectedIndex > 0) {
-      newSelected = [
-        ...selected.slice(0, selectedIndex),
-        ...selected.slice(selectedIndex + 1),
-      ];
+    switch (selectedIndex) {
+      case -1: {
+        newSelected = [...selected, name];
+
+        break;
+      }
+      case 0: {
+        newSelected = [...selected.slice(1)];
+
+        break;
+      }
+      case selected.length - 1: {
+        newSelected = [...selected.slice(0, -1)];
+
+        break;
+      }
+      default: {
+        if (selectedIndex > 0) {
+          newSelected = [
+            ...selected.slice(0, selectedIndex),
+            ...selected.slice(selectedIndex + 1),
+          ];
+        }
+      }
     }
 
     setSelected(newSelected);

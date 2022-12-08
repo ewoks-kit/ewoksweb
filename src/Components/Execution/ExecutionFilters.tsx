@@ -35,10 +35,10 @@ interface filterParams {
 
 export default function ExecutionFilters() {
   // const [workflowNameFilter, setWorkflowNameFilter] = useState<String>('');
-  const [fromTimeFilter, setFromTimeFilter] = useState<String>('');
-  const [toTimeFilter, setToTimeFilter] = useState<String>('');
-  const [fromDateFilter, setFromDateFilter] = useState<String>('');
-  const [toDateFilter, setToDateFilter] = useState<String>('');
+  const [fromTimeFilter, setFromTimeFilter] = useState<string>('');
+  const [toTimeFilter, setToTimeFilter] = useState<string>('');
+  const [fromDateFilter, setFromDateFilter] = useState<string>('');
+  const [toDateFilter, setToDateFilter] = useState<string>('');
   const [workflowId, setWorkflowId] = useState('');
   const [categoryValue, setCategoryValue] = useState('');
   const [status, setStatus] = useState('');

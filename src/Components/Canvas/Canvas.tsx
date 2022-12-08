@@ -447,7 +447,7 @@ function Canvas() {
         });
       }
     } else {
-      nodeTmp.data['details'] = true;
+      nodeTmp.data.details = true;
       setSelectedElement({
         ...nodeTmp,
         data: { ...nodeTmp.data, details: true },

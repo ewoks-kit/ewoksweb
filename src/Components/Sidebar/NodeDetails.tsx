@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/cognitive-complexity */
 import React, { useEffect } from 'react';
 
 import type {
@@ -108,7 +107,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
     // All links to this node also change source and/or target!
     if (Object.keys(propKeyValue)[0] === 'task_identifier') {
       // DOC: find unique id based on new task_identifier
-      // eslint-disable-next-line prefer-destructuring
+
       let uniqueId = Object.values(propKeyValue)[0];
       let id = 0;
       while (graphRF.nodes.some((nod) => nod.id === uniqueId)) {
