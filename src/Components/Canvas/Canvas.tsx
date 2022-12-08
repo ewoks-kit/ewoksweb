@@ -82,6 +82,7 @@ function Canvas() {
   const recentGraphs = useStore((state) => state.recentGraphs);
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const graphGeneralConfig = useStore((state) => state.graphGeneralConfig);
   const updateNodeInternals = useUpdateNodeInternals();
 
   const { fitView, getZoom, zoomTo } = useReactFlow();
@@ -612,7 +613,13 @@ function Canvas() {
           nodeTypes={nodeTypes}
           deleteKeyCode="Delete"
         >
-          <Background variant={BackgroundVariant.Lines} gap={50} size={1} />
+          <Background
+            variant={BackgroundVariant.Lines}
+            gap={50}
+            size={1}
+            color={graphGeneralConfig.canvasBackgroundColor}
+            style={{ background: graphGeneralConfig.canvasBackgroundColor }}
+          />
           <Controls />
           <MiniMap
             nodeStrokeColor={(n): string => {
