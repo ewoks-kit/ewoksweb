@@ -1,15 +1,16 @@
-import graphGeneralConfig from './graphGeneralConfig';
 import create from 'zustand';
-import type { ConfigState } from '../types';
+
+export interface ConfigState {
+  canvasBackgroundColor: string;
+  setCanvasBackgroundColor: (color: string) => void;
+}
 
 const useConfigStore = create<ConfigState>((set) => ({
-  ...graphGeneralConfig(set),
+  canvasBackgroundColor: 'pink',
+  setCanvasBackgroundColor: (canvasBackgroundColor: string) =>
+    set({
+      canvasBackgroundColor,
+    }),
 }));
-
-// @ts-expect-error
-if (window.Cypress) {
-  // @ts-expect-error
-  window.__useConfigStore__ = useConfigStore;
-}
 
 export default useConfigStore;

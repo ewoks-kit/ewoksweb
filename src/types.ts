@@ -133,11 +133,6 @@ export interface NodeExecutionHistory {
   // the ExecutingState can be found through the eventId again
 }
 
-export interface ConfigState {
-  graphGeneralConfig: graphGeneralConfiguration;
-  setGraphGeneralConfig: (config: graphGeneralConfiguration) => void;
-}
-
 export interface State {
   currentExecutionEvent?: number;
   setCurrentExecutionEvent?: (index: number) => void;
