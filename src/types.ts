@@ -134,6 +134,9 @@ export interface NodeExecutionHistory {
 }
 
 export interface State {
+  graphGeneralConfig: graphGeneralConfiguration;
+  setGraphGeneralConfig: (config: graphGeneralConfiguration) => void;
+
   currentExecutionEvent?: number;
   setCurrentExecutionEvent?: (index: number) => void;
 
@@ -549,4 +552,8 @@ export interface WorkflowDescription {
   id: string;
   label?: string;
   category?: string;
+}
+
+export interface graphGeneralConfiguration {
+  canvasBackgroundColor?: string;
 }
