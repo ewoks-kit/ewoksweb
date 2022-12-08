@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import useStore from '../../store/useStore';
+import useConfigStore from '../../store/useConfigStore';
 import type { GraphDetails } from '../../types';
 
 interface EditGraphStyleProps {
@@ -8,7 +8,7 @@ interface EditGraphStyleProps {
 // DOC: Edit the graph style
 export default function EditGraphStyle(props: EditGraphStyleProps) {
   const { element } = props;
-  const setGraphGeneralConfig = useStore(
+  const setGraphGeneralConfig = useConfigStore(
     (state) => state.setGraphGeneralConfig
   );
   const [colorCanvas, setColorCanvas] = useState<string>('#e9ebf7');

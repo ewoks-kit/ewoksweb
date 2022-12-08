@@ -23,6 +23,7 @@ import ExecutionStepsNode from 'CustomNodes/ExecutionStepsNode';
 import DataNode from 'CustomNodes/DataNode';
 import type { GraphRF, EwoksRFNode, EwoksRFLink } from 'types';
 import useStore from 'store/useStore';
+import useConfigStore from 'store/useConfigStore';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
 
@@ -82,7 +83,9 @@ function Canvas() {
   const recentGraphs = useStore((state) => state.recentGraphs);
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const graphGeneralConfig = useStore((state) => state.graphGeneralConfig);
+  const graphGeneralConfig = useConfigStore(
+    (state) => state.graphGeneralConfig
+  );
   const updateNodeInternals = useUpdateNodeInternals();
 
   const { fitView, getZoom, zoomTo } = useReactFlow();
