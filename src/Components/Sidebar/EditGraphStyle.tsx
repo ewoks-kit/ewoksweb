@@ -21,7 +21,6 @@ export default function EditGraphStyle() {
         type="color"
         name="head"
         value={canvasBackgroundColor}
-        onChange={colorLineChanged}
         style={{ margin: '10px' }}
         onInput={colorLineChanged}
         data-cy="colorPickerCanvasBackground"

@@ -2,7 +2,7 @@
 
 describe('create workflow and save', () => {
   before(() => {
-    cy.loadApp();
+    cy.loadAppWithoutGraph();
   });
 
   it('opens the dialog for name after clicking new', () => {
