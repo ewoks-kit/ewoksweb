@@ -9,7 +9,7 @@ describe('edit links dataMapping', () => {
     cy.contains('Canvas Background Color').should('be.visible');
 
     cy.window()
-      .its('__useStore__')
+      .its('__useConfigStore__')
       .then((store) =>
         expect(
           store.getState().graphGeneralConfig.canvasBackgroundColor
@@ -32,7 +32,7 @@ describe('edit links dataMapping', () => {
       .should('have.attr', 'value', '#ff0000');
 
     cy.window()
-      .its('__useStore__')
+      .its('__useConfigStore__')
       .then((store) =>
         expect(
           store.getState().graphGeneralConfig.canvasBackgroundColor
