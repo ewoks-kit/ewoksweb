@@ -37,13 +37,6 @@ variables:
   stage: style
   extends: .base
 
-.build:
-  stage: build
-  extends: .pnpm-base
-  only:
-    refs:
-      - main
-
 .deploy:
   stage: deploy
   extends: .base
@@ -73,21 +66,9 @@ lint:
   script:
     - pnpm run lint
 
-cypress:
-  image: cypress/base:16.18.0
-  stage: test
-  extends: .pnpm-base
-  before_script:
-    # https://github.com/cypress-io/cypress-docker-images/issues/642 and https://github.com/cypress-io/cypress-docker-images/issues/649
-    - apt-get update && apt-get install curl -y
-    - !reference [.pnpm-base, before_script]
-  script:
-    - pnpm build
-    - pnpm dlx serve -s build -l 3000 & pnpm dlx wait-on http://localhost:3000
-    - pnpm cypress:run
-
 build:
-  extends: .build
+  stage: build
+  extends: .pnpm-base
   script:
     - python3 --version
     - python3 -m pip install --upgrade pip
@@ -100,14 +81,28 @@ build:
   artifacts:
     paths:
       - sdist/
+      - build/
     when: on_success
     expire_in: 2h
+
+cypress:
+  image: cypress/base:16.18.0
+  stage: test
+  extends: .pnpm-base
+  needs: ['build']
+  before_script:
+    # https://github.com/cypress-io/cypress-docker-images/issues/642 and https://github.com/cypress-io/cypress-docker-images/issues/649
+    - apt-get update && apt-get install curl -y
+    - !reference [.pnpm-base, before_script]
+  script:
+    - pnpm dlx serve -s build -l 3000 & pnpm dlx wait-on http://localhost:3000
+    - pnpm cypress:run
 
 pages:
   stage: deploy
   extends: .pnpm-base
+  needs: ['build']
   script:
-    - pnpm build
     - rm -rf public
     - mv build public
   variables:
