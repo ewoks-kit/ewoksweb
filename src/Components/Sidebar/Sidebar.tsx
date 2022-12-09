@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import AddNodes from './AddNodes';
-import EditElement from './EditElement';
+import ElementDetails from './ElementDetails';
 import EditElementStyle from './EditElementStyle';
 import DraggableDialog from '../General/DraggableDialog';
 import IconMenu from './IconMenu';
@@ -208,7 +208,7 @@ export default function Sidebar() {
       {!inExecutionMode && (
         <>
           <AddNodes title="Add Nodes" />
-          <EditElement />
+          <ElementDetails />
           <EditElementStyle />
         </>
       )}

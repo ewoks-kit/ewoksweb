@@ -20,26 +20,26 @@ function getAccordionContent(
 ): Content {
   if ('position' in element) {
     return {
-      title: 'Styling Node',
+      title: 'Node Details',
       EditComponent: () => <NodeDetails element={element} />,
     };
   }
 
   if ('source' in element) {
     return {
-      title: 'Styling Link',
+      title: 'Link Details',
       EditComponent: () => <LinkDetails element={element} />,
     };
   }
 
   return {
-    title: 'Styling Graph',
+    title: 'Graph Details',
     EditComponent: () => <GraphLabelComment />,
   };
 }
 
 // DOC: Container for link-node-graph editing details
-function EditElement() {
+function ElementDetails() {
   const selectedElement = useStore((state) => state.selectedElement);
 
   const [expanded, setExpanded] = React.useState<boolean>(false);
@@ -77,4 +77,4 @@ function EditElement() {
   );
 }
 
-export default EditElement;
+export default ElementDetails;
