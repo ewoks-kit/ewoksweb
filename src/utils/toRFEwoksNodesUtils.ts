@@ -19,13 +19,17 @@ export function calcNodeType(
   const isOutput = outputs?.includes(id);
   if (isInput && isOutput) {
     return 'input_output';
-  } else if (isInput) {
+  }
+  if (isInput) {
     return 'input';
-  } else if (isOutput) {
+  }
+  if (isOutput) {
     return 'output';
-  } else if (task_type === 'graphInput') {
+  }
+  if (task_type === 'graphInput') {
     return 'graphInput';
-  } else if (task_type === 'graphOutput') {
+  }
+  if (task_type === 'graphOutput') {
     return 'graphOutput';
   }
 
