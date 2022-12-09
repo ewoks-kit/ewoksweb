@@ -8,25 +8,54 @@ import LinkDetails from './LinkDetails';
 import NodeDetails from './NodeDetails';
 import GraphLabelComment from './GraphLabelComment';
 import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../../types';
+import useStore from '../../store/useStore';
 
-interface EditElementProps {
-  element: EwoksRFNode | EwoksRFLink | GraphDetails;
+interface Content {
+  title: string;
+  EditComponent: () => JSX.Element;
 }
+
+function getAccordionContent(
+  element: EwoksRFNode | EwoksRFLink | GraphDetails
+): Content {
+  if ('position' in element) {
+    return {
+      title: 'Styling Node',
+      EditComponent: () => <NodeDetails element={element} />,
+    };
+  }
+
+  if ('source' in element) {
+    return {
+      title: 'Styling Link',
+      EditComponent: () => <LinkDetails element={element} />,
+    };
+  }
+
+  return {
+    title: 'Styling Graph',
+    EditComponent: () => <GraphLabelComment />,
+  };
+}
+
 // DOC: Container for link-node-graph editing details
-function EditElement(props: EditElementProps) {
-  const { element } = props;
+function EditElement() {
+  const selectedElement = useStore((state) => state.selectedElement);
 
   const [expanded, setExpanded] = React.useState<boolean>(false);
 
+  const content = getAccordionContent(selectedElement);
+
+  const { title, EditComponent } = content;
+
   useEffect(() => {
-    setExpanded(!!element.id);
-  }, [element.id]);
+    setExpanded(!!selectedElement.id);
+  }, [selectedElement.id]);
 
   const handleChange = (event: React.SyntheticEvent, newExpanded: boolean) => {
     setExpanded(newExpanded);
   };
-  // TODO: refactor the ternary handling title and content of accordion
-  // like in EditElementStyle
+
   return (
     <Accordion
       expanded={!!expanded}
@@ -37,23 +66,11 @@ function EditElement(props: EditElementProps) {
         expandIcon={<OpenInBrowser />}
         aria-controls="panel1a-content"
       >
-        <Typography>
-          {'position' in element
-            ? 'Node Details'
-            : 'source' in element
-            ? 'Link Details'
-            : 'Graph Details'}
-        </Typography>
+        <Typography>{title}</Typography>
       </AccordionSummary>
       <AccordionDetails style={{ padding: '0px 0px 0px 10px' }}>
         <form noValidate autoComplete="off" style={{ width: '100%' }}>
-          {'source' in element ? (
-            <LinkDetails element={element} />
-          ) : 'position' in element ? (
-            <NodeDetails element={element} />
-          ) : (
-            <GraphLabelComment />
-          )}
+          <EditComponent />
         </form>
       </AccordionDetails>
     </Accordion>

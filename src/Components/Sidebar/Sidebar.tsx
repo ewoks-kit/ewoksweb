@@ -208,7 +208,7 @@ export default function Sidebar() {
       {!inExecutionMode && (
         <>
           <AddNodes title="Add Nodes" />
-          <EditElement element={selectedElement} />
+          <EditElement />
           <EditElementStyle />
         </>
       )}
