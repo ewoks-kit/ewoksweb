@@ -31,8 +31,8 @@ describe('structure and basics for edit-workflows', () => {
     cy.get('p').should('include.text', 'Add Nodes');
   });
 
-  it('displays the Edit Graph', () => {
-    cy.get('p').should('include.text', 'Edit Graph');
+  it('displays the Graph Details', () => {
+    cy.get('p').should('include.text', 'Graph Details');
   });
 
   it('should be able to open and close Add Nodes and see General category', () => {
@@ -41,11 +41,11 @@ describe('structure and basics for edit-workflows', () => {
     cy.contains('ewokscore').should('not.be.visible');
   });
 
-  it('should be able to open and close Edit Graph and see graph editing elements', () => {
+  it('should be able to open and close Graph Details and see graph editing elements', () => {
     cy.contains('Label').should('not.be.visible');
     cy.contains('Comment').should('not.be.visible');
     cy.contains('Category').should('not.be.visible');
-    cy.contains('Edit Graph').parents('.MuiButtonBase-root').click();
+    cy.contains('Graph Details').parents('.MuiButtonBase-root').click();
     cy.contains('Label').should('be.visible');
     cy.contains('Comment').should('be.visible');
     cy.contains('Category').should('be.visible');
