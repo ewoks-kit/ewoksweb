@@ -1,5 +1,5 @@
 import { getIcon, getIcons } from './api';
-import path from 'path';
+import path from 'path-browserify';
 import type { Icon } from '../types';
 
 async function getIconsFromServer(): Promise<Icon[]> {
