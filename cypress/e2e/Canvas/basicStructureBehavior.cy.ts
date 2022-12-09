@@ -1,6 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-// / <reference types="cypress" />
-
 describe('structure and basics for edit-workflows', () => {
   before(() => {
     cy.loadApp();

@@ -1,6 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-// / <reference types="cypress" />
-
 describe('new Task form', () => {
   before(() => {
     cy.loadAppWithoutGraph();

@@ -4,5 +4,5 @@
     "isolatedModules": false,
     "types": ["cypress"]
   },
-  "include": ["e2e", "fixtures", "support"]
+  "include": ["e2e", "support"]
 }

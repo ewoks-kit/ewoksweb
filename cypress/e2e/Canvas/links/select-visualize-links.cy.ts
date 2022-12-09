@@ -1,6 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-// / <reference types="cypress" />
-
 describe('select visualize links', () => {
   before(() => {
     cy.loadApp();

@@ -1,7 +1,3 @@
-/* eslint-disable promise/prefer-await-to-then */
-/* eslint-disable sonarjs/no-duplicate-string */
-// / <reference types="cypress" />
-
 describe('change link attributes', () => {
   before(() => {
     cy.loadApp();

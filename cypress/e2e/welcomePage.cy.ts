@@ -1,5 +1,3 @@
-// / <reference types="cypress" />
-
 describe('example to-do app', () => {
   before(() => {
     cy.visit('http://localhost:3000');
