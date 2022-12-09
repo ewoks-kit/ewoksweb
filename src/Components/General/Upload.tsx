@@ -36,7 +36,7 @@ function Upload(props) {
   const classes = useStyles();
 
   const graphRF = useStore<GraphRF>((state) => state.graphRF);
-  const graphOrSubgraph = useStore<Boolean>((state) => state.graphOrSubgraph);
+  const graphOrSubgraph = useStore<boolean>((state) => state.graphOrSubgraph);
 
   const workingGraph = useStore<GraphRF>((state) => state.workingGraph);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);

@@ -242,15 +242,15 @@ function Canvas() {
       let tempTask = tasks.find(
         (tas) => tas.task_identifier === task_identifier
       );
-      tempTask = tempTask
-        ? tempTask // if you found the Task return it
-        : task_type === 'graph' // if not found check if it is a graph ???
-        ? tempTask // if a graph return it and if not add some default inputs-outputs
-        : {
-            optional_input_names: [],
-            output_names: [],
-            required_input_names: [],
-          };
+      // if you found the Task or if it is a graph return it else add some default inputs-outputs
+      tempTask =
+        tempTask || task_type === 'graph'
+          ? tempTask
+          : {
+              optional_input_names: [],
+              output_names: [],
+              required_input_names: [],
+            };
 
       const newNode = {
         id:
@@ -261,7 +261,7 @@ function Canvas() {
             : task_type === 'note'
             ? calcNewId('Note', graphRF.nodes)
             : calcNewId(task_identifier || 'Node', graphRF.nodes),
-        // TODO not dublicate label
+        // TODO not duplicate label
         label: trimLabel(task_identifier),
         task_type,
         task_identifier,
@@ -429,7 +429,7 @@ function Canvas() {
       const subgraph = recentGraphs.find(
         (gr) => gr.graph.id === nodeTmp.task_identifier
       );
-      if (subgraph && subgraph.graph.id) {
+      if (subgraph?.graph.id) {
         setGraphRF(subgraph);
         setSubgraphsStack({
           id: subgraph.graph.id,
@@ -446,7 +446,7 @@ function Canvas() {
         });
       }
     } else {
-      nodeTmp.data['details'] = true;
+      nodeTmp.data.details = true;
       setSelectedElement({
         ...nodeTmp,
         data: { ...nodeTmp.data, details: true },

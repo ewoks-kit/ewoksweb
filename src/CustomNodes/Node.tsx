@@ -1,6 +1,6 @@
 /* eslint-disable react/function-component-definition */
 /* jshint sub:true*/
-/* eslint-disable sonarjs/cognitive-complexity */
+
 import React, { memo, useEffect, useState } from 'react';
 import orange1 from '../images/orange1.png';
 import { Handle, Position } from 'react-flow-renderer';

@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/cognitive-complexity */
 import type { Dispatch, SetStateAction } from 'react';
 import React, { useEffect } from 'react';
 import {

@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/cognitive-complexity */
 import type { Connection, Edge } from 'react-flow-renderer';
 import type { GraphRF } from '../types';
 

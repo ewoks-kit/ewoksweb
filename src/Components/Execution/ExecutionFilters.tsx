@@ -1,3 +1,4 @@
+import type { ChangeEvent } from 'react';
 import { useState } from 'react';
 // import useStore from '../store/state';
 import {
@@ -34,10 +35,10 @@ interface filterParams {
 
 export default function ExecutionFilters() {
   // const [workflowNameFilter, setWorkflowNameFilter] = useState<String>('');
-  const [fromTimeFilter, setFromTimeFilter] = useState<String>('');
-  const [toTimeFilter, setToTimeFilter] = useState<String>('');
-  const [fromDateFilter, setFromDateFilter] = useState<String>('');
-  const [toDateFilter, setToDateFilter] = useState<String>('');
+  const [fromTimeFilter, setFromTimeFilter] = useState<string>('');
+  const [toTimeFilter, setToTimeFilter] = useState<string>('');
+  const [fromDateFilter, setFromDateFilter] = useState<string>('');
+  const [toDateFilter, setToDateFilter] = useState<string>('');
   const [workflowId, setWorkflowId] = useState('');
   const [categoryValue, setCategoryValue] = useState('');
   const [status, setStatus] = useState('');
@@ -51,32 +52,32 @@ export default function ExecutionFilters() {
   const [moreFilters, setMoreFilters] = useState<boolean>(false);
   const setExecutedWorkflows = useStore((state) => state.setExecutedWorkflows);
 
-  const toDateChanged = (event) => {
+  const toDateChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setToDateFilter(event.target.value);
   };
 
-  const fromDateChanged = (event) => {
+  const fromDateChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setFromDateFilter(event.target.value);
   };
 
-  const toTimeChanged = (event) => {
+  const toTimeChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setToTimeFilter(event.target.value);
   };
 
-  const fromTimeChanged = (event) => {
+  const fromTimeChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setFromTimeFilter(event.target.value);
   };
 
   // TODO: same as in manageWorkflows for category and workflows
   function setInputValue(workflowDetails: WorkflowDescription) {
-    setWorkflowId(workflowDetails?.id ? workflowDetails.id : '');
+    setWorkflowId(workflowDetails?.id ?? '');
   }
 
   function setCategoryFilter(category: string) {
-    setCategoryValue(category ? category : '');
+    setCategoryValue(category ?? '');
   }
 
-  function statusChanged(event) {
+  function statusChanged(event: ChangeEvent<{ value: string }>) {
     setStatus(event.target.value);
   }
 
@@ -86,11 +87,9 @@ export default function ExecutionFilters() {
       if (workflowId) {
         filterParams.workflow_id = workflowId;
       }
-      if (status === 'Failed') {
-        filterParams.error = true;
-      } else if (status === 'Success') {
-        filterParams.error = false;
-      }
+
+      filterParams.error = status !== 'Success';
+
       if (fromDateFilter) {
         filterParams.starttime = fromDateFilter.toString();
       }
@@ -128,23 +127,23 @@ export default function ExecutionFilters() {
     }
   }
 
-  function moreFiltersChanged(event) {
+  function moreFiltersChanged(event: ChangeEvent<HTMLInputElement>) {
     setMoreFilters(event.target.checked);
   }
 
-  function nodeIdChanged(event) {
+  function nodeIdChanged(event: ChangeEvent<HTMLInputElement>) {
     setNodeId(event.target.value);
   }
 
-  function taskIdChanged(event) {
+  function taskIdChanged(event: ChangeEvent<HTMLInputElement>) {
     setTaskId(event.target.value);
   }
 
-  function userNameChanged(event) {
+  function userNameChanged(event: ChangeEvent<HTMLInputElement>) {
     setUserName(event.target.value);
   }
 
-  function jobIdChanged(event) {
+  function jobIdChanged(event: ChangeEvent<HTMLInputElement>) {
     setJobId(event.target.value);
   }
 
@@ -295,7 +294,9 @@ export default function ExecutionFilters() {
         style={{ margin: '8px' }}
         variant="outlined"
         color="primary"
-        onClick={getEvents}
+        onClick={() => {
+          getEvents();
+        }}
         size="small"
       >
         Filter

@@ -73,7 +73,7 @@ build:
     - python3 --version
     - python3 -m pip install --upgrade pip
     - python3 -m pip install --upgrade setuptools
-    - pnpm build
+    - CI=false pnpm build # Don't let eslint warnings fail the build
     - python3 setup.py sdist
     - mv dist sdist
   after_script:
