@@ -25,7 +25,8 @@ function EditElement(props: EditElementProps) {
   const handleChange = (event: React.SyntheticEvent, newExpanded: boolean) => {
     setExpanded(newExpanded);
   };
-
+  // TODO: refactor the ternary handling title and content of accordion
+  // like in EditElementStyle
   return (
     <Accordion
       expanded={!!expanded}
@@ -37,12 +38,11 @@ function EditElement(props: EditElementProps) {
         aria-controls="panel1a-content"
       >
         <Typography>
-          Edit{' '}
           {'position' in element
-            ? 'Node'
+            ? 'Node Details'
             : 'source' in element
-            ? 'Link'
-            : 'Graph'}
+            ? 'Link Details'
+            : 'Graph Details'}
         </Typography>
       </AccordionSummary>
       <AccordionDetails style={{ padding: '0px 0px 0px 10px' }}>

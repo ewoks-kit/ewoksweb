@@ -17,7 +17,7 @@ interface Content {
 
 function getAccordionContent(
   element: EwoksRFNode | EwoksRFLink | GraphDetails
-): Content | undefined {
+): Content {
   if ('position' in element) {
     return {
       title: 'Styling Node',
@@ -32,14 +32,10 @@ function getAccordionContent(
     };
   }
 
-  if ('input_nodes' in element) {
-    return {
-      title: 'Styling Graph',
-      EditComponent: () => <EditGraphStyle />,
-    };
-  }
-
-  return undefined;
+  return {
+    title: 'Styling Graph',
+    EditComponent: () => <EditGraphStyle />,
+  };
 }
 
 // DOC: For editing the style of nodes and links
@@ -47,10 +43,6 @@ export default function EditElementStyle() {
   const selectedElement = useStore((state) => state.selectedElement);
 
   const content = getAccordionContent(selectedElement);
-
-  if (!content) {
-    return null;
-  }
 
   const { title, EditComponent } = content;
 
