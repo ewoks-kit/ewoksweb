@@ -11,17 +11,6 @@ describe('drag and drop nodes', () => {
 
     cy.contains('General').click();
 
-    cy.get('[data-cy="add-nodes-category-General"]')
-      .find('.dndnode')
-      .first()
-      .trigger('dragstart', {
-        dataTransfer,
-      });
-
-    cy.get('.react-flow').trigger('drop', {
-      dataTransfer,
-    });
-
     cy.get('.react-flow__node').should('have.length', 17);
 
     cy.get('[data-cy="add-nodes-category-General"]')
@@ -36,6 +25,19 @@ describe('drag and drop nodes', () => {
     });
 
     cy.get('.react-flow__node').should('have.length', 18);
+
+    cy.get('[data-cy="add-nodes-category-General"]')
+      .find('.dndnode')
+      .first()
+      .trigger('dragstart', {
+        dataTransfer,
+      });
+
+    cy.get('.react-flow').trigger('drop', {
+      dataTransfer,
+    });
+
+    cy.get('.react-flow__node').should('have.length', 19);
   });
 
   // TODO: move node - dragstart seems to grasp the inner and creates a ghost

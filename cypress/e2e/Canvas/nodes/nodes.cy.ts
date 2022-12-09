@@ -44,9 +44,7 @@ it('changes comment of node', () => {
     .should('be.visible')
     .click();
 
-  cy.get('#root')
-    .contains('Always and forever comment...')
-    .should('be.visible');
+  cy.contains('Always and forever comment...');
 
   cy.window()
     .its('__useStore__')
