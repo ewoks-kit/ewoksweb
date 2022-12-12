@@ -5,6 +5,7 @@ import DashboardStyle from '../Dashboard/DashboardStyle';
 import SaveIcon from '@material-ui/icons/Save';
 import useStore from '../../store/useStore';
 import sidebarStyle from './sidebarStyle';
+import type { ChangeEvent } from 'react';
 
 const useStyles = DashboardStyle;
 
@@ -27,7 +28,7 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
     setValueLocal(value);
   }, [value]);
 
-  function valueChanged(event) {
+  function valueChanged(event: ChangeEvent<HTMLInputElement>) {
     if (value !== event.target.value) {
       setValueIsChanged(true);
     } else {

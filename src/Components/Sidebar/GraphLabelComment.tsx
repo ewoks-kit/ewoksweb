@@ -15,34 +15,34 @@ export default function GraphLabelComment() {
     const graphElement = selectedElement as GraphDetails;
     setLabel(graphElement.label);
     setCategory(graphElement.category);
-    setComment(graphElement.uiProps && graphElement.uiProps.comment);
+    setComment(graphElement.uiProps?.comment);
   }, [selectedElement.id, selectedElement]);
 
-  function saveCategory(category) {
+  function saveCategory(categ) {
     setSelectedElement(
       {
         ...selectedElement,
-        category,
+        category: categ,
       } as GraphDetails,
       'fromSaveElement'
     );
   }
 
-  function saveLabel(label: string) {
+  function saveLabel(labe: string) {
     setSelectedElement(
       {
         ...selectedElement,
-        label,
+        label: labe,
       },
       'fromSaveElement'
     );
   }
 
-  function saveComment(comment: string) {
+  function saveComment(commen: string) {
     setSelectedElement(
       {
         ...selectedElement,
-        uiProps: { ...selectedElement.uiProps, comment },
+        uiProps: { ...selectedElement.uiProps, comment: commen },
       } as EwoksRFNode | EwoksRFLink,
       'fromSaveElement'
     );

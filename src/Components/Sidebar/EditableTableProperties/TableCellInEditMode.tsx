@@ -15,6 +15,7 @@ import {
 // TODO: Keep the following if edit on the table is needed
 // import CellEditInJson from './CellEditInJson';
 import { Autocomplete } from '@material-ui/lab';
+import type { CustomTableCellProps } from '../../../types';
 
 const useStyles = makeStyles(() => ({
   input: {
@@ -24,12 +25,12 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function TableCellInEditMode(propsIn) {
-  const { props } = propsIn;
+function TableCellInEditMode(props) {
   const { index, row, name, onChange, type, typeOfValues } = props;
   const classes = useStyles();
 
   const [boolVal, setBoolVal] = React.useState(true);
+  console.log(props);
 
   useEffect(() => {
     setBoolVal(

@@ -6,10 +6,10 @@ import type { Event } from '../types';
 const watchedWorkflows = (set, get) => ({
   watchedWorkflows: [] as Event[][],
 
-  setWatchedWorkflows: async (watchedWorkflows: Event[][]) => {
+  setWatchedWorkflows: async (watchedWorkflowsL: Event[][]) => {
     set((state) => ({
       ...state,
-      watchedWorkflows,
+      watchedWorkflowsL,
     }));
     get().setOpenSettingsDrawer('close');
   },

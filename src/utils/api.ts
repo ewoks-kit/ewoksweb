@@ -5,6 +5,7 @@ import type {
   Task,
   IconsNames,
   WorkflowDescription,
+  filterParams,
 } from '../types';
 
 export const axiosRequest = axios.create({
@@ -78,7 +79,7 @@ export function deleteWorkflow(id: string) {
 }
 
 // Get executed workflows
-export function getExecutionEvents(queryParams) {
+export function getExecutionEvents(queryParams: filterParams) {
   const queryString = Object.keys(queryParams)
     .map((key) => `${key}=${queryParams[key] as string}`)
     .join('&');

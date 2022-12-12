@@ -20,13 +20,16 @@ export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
         ...input_nodes,
         ...calcInOutNodes('graphInput', graph, nod, graph_links),
       ];
-    } else if (nod.task_type === 'graphOutput') {
+    }
+
+    if (nod.task_type === 'graphOutput') {
       output_nodes = [
         ...output_nodes,
         ...calcInOutNodes('graphOutput', graph, nod, graph_links),
       ];
     }
   });
+
   return {
     id: graph.graph.id,
     label: graph.graph.label || graph.graph.id,
@@ -46,12 +49,15 @@ function calcInOutNodes(
   const nodes: GraphNodes[] = [];
 
   let nodesNamesConnectedTo: string[] = [];
+
   if (inputOrOutput === 'graphInput') {
     // find those nodes this INPUT node is connected to
     nodesNamesConnectedTo = graph.links
       .filter((link) => link.source === nod.id)
       .map((link) => link.target);
-  } else if (inputOrOutput === 'graphOutput') {
+  }
+
+  if (inputOrOutput === 'graphOutput') {
     // find those nodes this OUTPUT node is connected to
     nodesNamesConnectedTo = graph.links
       .filter((link) => link.target === nod.id) // !!

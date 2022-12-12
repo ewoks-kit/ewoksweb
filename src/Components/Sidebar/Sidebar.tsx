@@ -87,14 +87,11 @@ export default function Sidebar() {
   }, [getIcons]);
 
   const deleteElement = async () => {
-    let newGraph = {} as GraphRF;
+    let newGraph: GraphRF = {};
 
-    const elN = element as EwoksRFNode; // TODO: is this the way to avoid typescript warning???
-    const elL = element as EwoksRFLink;
-    const elD = element as GraphDetails;
-    if (elN.position) {
+    if ('position' in element) {
       const nodesLinks = graphRF.links.filter(
-        (link) => !(link.source === elN.id || link.target === elN.id)
+        (link) => !(link.source === element.id || link.target === element.id)
       );
 
       newGraph = {
@@ -107,10 +104,12 @@ export default function Sidebar() {
         action: 'Removed a Node',
         graph: newGraph,
       });
-    } else if (elL.source) {
+    }
+
+    if ('source' in element) {
       newGraph = {
         ...graphRF,
-        links: graphRF.links.filter((link) => link.id !== elL.id),
+        links: graphRF.links.filter((link) => link.id !== element.id),
       };
 
       setUndoRedo({
@@ -119,7 +118,8 @@ export default function Sidebar() {
       });
     }
 
-    if (elD.input_nodes) {
+    const elD = element as GraphDetails;
+    if (elD) {
       setOpenAgreeDialog(true);
     } else if (!elD.input_nodes) {
       if (workingGraph.graph.id === graphRF.graph.id) {
@@ -242,7 +242,9 @@ export default function Sidebar() {
             style={{ margin: '8px' }}
             variant="outlined"
             color="secondary"
-            onClick={deleteElement}
+            onClick={() => {
+              deleteElement();
+            }}
             size="small"
             data-cy="sidebarDelete"
           >

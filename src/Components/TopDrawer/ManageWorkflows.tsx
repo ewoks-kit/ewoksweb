@@ -29,8 +29,8 @@ export default function ManageWorkflows() {
     }
   }
 
-  async function setCategoryFilter(category: string) {
-    setCategoryValue(category ? category : '');
+  function setCategoryFilter(category: string) {
+    setCategoryValue(category ?? '');
   }
 
   return (
@@ -43,7 +43,9 @@ export default function ManageWorkflows() {
             </FormControl>
             <FormControl variant="standard" fullWidth>
               <WorkflowDropdown
-                onChange={setInputWorkflowValue}
+                onChange={(e) => {
+                  setInputWorkflowValue(e);
+                }}
                 category={categoryValue}
               />
             </FormControl>

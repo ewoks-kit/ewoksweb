@@ -2,6 +2,7 @@
 /* jshint sub:true*/
 
 import React, { memo, useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
 import orange1 from '../images/orange1.png';
 import { Handle, Position } from 'react-flow-renderer';
 import type { EwoksRFNode, NodeProps } from '../types';
@@ -18,6 +19,7 @@ import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
 import tooltipText from '../Components/General/TooltipText';
 import { findImage } from 'utils';
+import type { Connection } from 'react-flow-renderer';
 
 const onDragStart = (e) => {
   e.preventDefault();
@@ -93,7 +95,7 @@ const Node: React.FC<NodeProps> = ({
     padding: '2px',
   };
 
-  const isValidConnection = (connection) => {
+  const isValidConnection = (connection: Connection) => {
     const { isValid, reason } = isValidLink(connection, graphRF);
     if (!isValid) {
       setOpenSnackbar({
@@ -105,7 +107,7 @@ const Node: React.FC<NodeProps> = ({
     return isValid;
   };
 
-  const labelChanged = (event) => {
+  const labelChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setLabelLocal(event.target.value);
   };
 

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-
+import type { ChangeEvent } from 'react';
 import type { EwoksRFLink } from '../../types';
 import { Checkbox, Paper } from '@material-ui/core';
 import DashboardStyle from '../Dashboard/DashboardStyle';
@@ -55,11 +55,11 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
     );
   }
 
-  const advancedChanged = (event) => {
+  const advancedChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setAdvanced(event.target.checked);
   };
 
-  const requiredChanged = (event) => {
+  const requiredChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectedElement(
       {
         ...element,

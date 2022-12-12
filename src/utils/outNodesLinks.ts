@@ -18,11 +18,7 @@ export function outNodesLinks(
   graph: GraphEwoks
 ): { nodes: EwoksNode[]; links: EwoksLink[] } {
   const outputs = { nodes: [], links: [] };
-  if (
-    graph.graph &&
-    graph.graph.output_nodes &&
-    graph.graph.output_nodes.length > 0
-  ) {
+  if (graph?.graph?.output_nodes?.length > 0) {
     const outNodesInputed = [];
     graph.graph.output_nodes.forEach((outNod) => {
       const nodeSource = graph.nodes.find((no) => no.id === outNod.node);

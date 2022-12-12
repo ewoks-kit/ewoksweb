@@ -45,14 +45,13 @@ export default function IconMenu() {
   }
 
   function action(
-    action: FormAction,
+    actionL: FormAction,
     element: Task | EwoksRFNode | EwoksRFLink | GraphRF
   ) {
-    setDoAction(action);
-    switch (action) {
+    setDoAction(actionL);
+    switch (actionL) {
       case 'newTask': {
         setElementToEdit(initializedTask);
-
         break;
       }
       case 'cloneTask': {
@@ -90,10 +89,11 @@ export default function IconMenu() {
       }
       case 'cloneGraph': {
         setElementToEdit(graphRF);
-
         break;
       }
-      // No default
+      default: {
+        break;
+      }
     }
 
     setOpenSaveDialog(true);

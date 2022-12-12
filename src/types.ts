@@ -115,7 +115,7 @@ export interface Event {
   id?: number;
   nodeId: string;
   event_type: string; // start/stop/progress events
-  values: {}; // all values entering or exiting a node
+  values: object; // all values entering or exiting a node
   // for now put static executing here
   executing?: string[];
 }
@@ -430,7 +430,7 @@ export interface EwoksRFNode {
 export interface EditableTableRow {
   id: number;
   name: string;
-  value: never; // string | number | null | undefined,
+  value: string | number | null | undefined | boolean | Record<string, unknown>;
   isEditMode: boolean;
   type: string;
 }
@@ -459,7 +459,7 @@ export interface EwoksRFLink {
     map_all_data?: boolean;
     required?: boolean;
     sub_target?: string;
-    sub_target_attributes?: {};
+    sub_target_attributes?: object;
     sub_source?: string;
     colorLine?: string;
     getAroundProps?: { x?: number; y?: number };
@@ -549,4 +549,20 @@ export interface WorkflowDescription {
   id: string;
   label?: string;
   category?: string;
+}
+
+export interface filterParams {
+  workflow_id?: string;
+  status?: string;
+  starttime?: string;
+  endtime?: string;
+  // sets context filters out within the job array that is not practical
+  // context: string;
+  node_id?: string;
+  // TODO: filter jobs that include this task_id and give back all jobs' steps?
+  task_id?: string;
+  user_name?: string;
+  job_id?: string;
+  // type: string;
+  error?: boolean;
 }

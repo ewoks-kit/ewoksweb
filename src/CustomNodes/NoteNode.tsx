@@ -3,11 +3,25 @@
 import React, { useEffect, useState } from 'react';
 import { style } from './NodeStyle';
 import SaveIcon from '@material-ui/icons/Save';
+import type { ChangeEvent } from 'react';
 
 import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
 
-const NoteNode = (args) => {
+interface NoteProps {
+  id?: string;
+  xPos?: number;
+  yPos?: number;
+  selected?: boolean;
+  data: {
+    label?: string;
+    comment: string;
+    nodeWidth: string;
+    details?: string;
+  };
+}
+
+const NoteNode = (args: NoteProps) => {
   const [comment, setComment] = useState('');
   const graphRF = useStore((state) => state.graphRF);
   const setGraphRF = useStore((state) => state.setGraphRF);
@@ -27,7 +41,7 @@ const NoteNode = (args) => {
     padding: '1px',
   };
 
-  const commentChanged = (event) => {
+  const commentChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setComment(event.target.value);
   };
 
@@ -65,7 +79,7 @@ const NoteNode = (args) => {
       role="button"
       tabIndex={0}
     >
-      <span style={{ maxWidth: `${nodeSize as string}px` }} className="icons">
+      <span style={{ maxWidth: `${nodeSize}px` }} className="icons">
         {args.data.label.length > 0 && (
           <div style={customTitle as React.CSSProperties}>
             {args.data.label}

@@ -1,9 +1,14 @@
 import type { GraphRF } from '../types';
 
-const recentGraphs = (set, get) => ({
-  recentGraphs: [] as GraphRF[],
+interface RecentGraphs {
+  recentGraphs: GraphRF[];
+  setRecentGraphs: (newGraph: GraphRF, reset: boolean) => void;
+}
 
-  setRecentGraphs: (newGraph: GraphRF, reset = false) => {
+const recentGraphs = (set, get): RecentGraphs => ({
+  recentGraphs: [],
+
+  setRecentGraphs: (newGraph, reset = false) => {
     let rec = [];
     if (!reset) {
       rec =

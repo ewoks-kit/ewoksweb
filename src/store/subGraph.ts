@@ -4,47 +4,58 @@ import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
 import existsOrValue from '../utils/existsOrValue';
 import { calcCoordinatesFirstNode } from './storeUtils/CalcCoordinatesFirstNode';
+import orange2 from 'images/orange2.png';
+import type { GetState, SetState } from 'zustand';
+import type { State } from '../types';
 
-const subGraph = (set, get) => ({
+interface SubGraphSlice {
+  subGraph: GraphRF;
+  setSubGraph: (graph: GraphEwoks) => Promise<GraphRF>;
+}
+
+const subGraph = (
+  set: SetState<State>,
+  get: GetState<State>
+): SubGraphSlice => ({
   subGraph: {
     graph: { id: '', label: '', input_nodes: [], output_nodes: [] },
     nodes: [],
     links: [],
-  } as GraphRF,
+  },
 
   // DOC: takes a GraphEwoks and transform it to graphRF
-  setSubGraph: async (subGraph: GraphEwoks) => {
+  setSubGraph: async (subGraphL: GraphEwoks) => {
     // 1. input the graphEwoks from server or file-system
     // 2. search for all subgraphs in it (async)
 
-    const prevState = get((prev) => prev);
+    // const get() = get((prev: any) => prev);
     const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(
-      subGraph,
-      prevState.recentGraphs
+      subGraphL,
+      get().recentGraphs
     );
 
     // 3. Put the newNodeSubgraphs into recent in their graphRF form (sync)
     newNodeSubgraphs.forEach((gr) => {
       // calculate the rfNodes using the fetched subgraphs
-      const rfNodes = toRFEwoksNodes(gr, newNodeSubgraphs, prevState.tasks);
+      const rfNodes: EwoksRFNode[] = toRFEwoksNodes(
+        gr,
+        newNodeSubgraphs,
+        get().tasks
+      );
 
-      prevState.setRecentGraphs({
+      get().setRecentGraphs({
         graph: gr.graph,
         nodes: rfNodes,
-        links: toRFEwoksLinks(gr, newNodeSubgraphs, prevState.tasks),
+        links: toRFEwoksLinks(gr, newNodeSubgraphs, get().tasks),
       });
     });
     // 4. Calculate the new graph given the subgraphs
-    const grfNodes = toRFEwoksNodes(
-      subGraph,
-      newNodeSubgraphs,
-      prevState.tasks
-    );
+    const grfNodes = toRFEwoksNodes(subGraphL, newNodeSubgraphs, get().tasks);
 
     const graph = {
-      graph: subGraph.graph,
+      graph: subGraphL.graph,
       nodes: grfNodes,
-      links: toRFEwoksLinks(subGraph, newNodeSubgraphs, prevState.tasks),
+      links: toRFEwoksLinks(subGraphL, newNodeSubgraphs, get().tasks),
     };
     // Adding a subgraph to an existing workingGraph:
     // save the workingGraph in the recent graphs and add a new graph node to it
@@ -69,7 +80,7 @@ const subGraph = (set, get) => ({
       });
       let id = 0;
       let graphId = subToAdd.graph.label;
-      while (prevState.graphRF.nodes.some((nod) => nod.id === graphId)) {
+      while (get().graphRF.nodes.some((nod) => nod.id === graphId)) {
         graphId += id++;
       }
       newNode = {
@@ -80,7 +91,7 @@ const subGraph = (set, get) => ({
         task_type: 'graph',
         task_identifier: subToAdd.graph.id,
         type: 'graph',
-        position: calcCoordinatesFirstNode(prevState.graphRF.nodes),
+        position: calcCoordinatesFirstNode(get().graphRF.nodes),
         default_inputs: [],
         inputs_complete: false,
         default_error_node: false,
@@ -93,7 +104,7 @@ const subGraph = (set, get) => ({
           label: subToAdd.graph.label,
           type: 'internal',
           comment: '',
-          icon: subToAdd.graph.uiProps && subToAdd.graph.uiProps.icon,
+          icon: subToAdd.graph?.uiProps?.icon || orange2,
           inputs: inputsSub,
           outputs: outputsSub,
           withImage: true,
@@ -101,21 +112,21 @@ const subGraph = (set, get) => ({
         },
       };
 
-      prevState.setRecentGraphs(subToAdd);
+      get().setRecentGraphs(subToAdd);
     } else {
-      prevState.setOpenSnackbar({
+      get().setOpenSnackbar({
         open: true,
         text: 'Couldnt locate the workingGraph in the recent!',
         severity: 'warning',
       });
     }
     const newWorkingGraph = {
-      graph: prevState.graphRF.graph,
-      nodes: [...prevState.graphRF.nodes, newNode],
-      links: prevState.graphRF.links,
+      graph: get().graphRF.graph,
+      nodes: [...get().graphRF.nodes, newNode],
+      links: get().graphRF.links,
     };
-    prevState.setGraphRF(newWorkingGraph);
-    prevState.setRecentGraphs(newWorkingGraph);
+    get().setGraphRF(newWorkingGraph);
+    get().setRecentGraphs(newWorkingGraph);
     return graph;
   },
 });

@@ -12,23 +12,30 @@ const tutorialGraph = {
   links: [],
 } as GraphRF;
 
-const graphRF = (set, get) => ({
+interface GraphRFStore {
+  graphRF: GraphRF;
+  setGraphRF: (graphRF: GraphRF, isChangeToCanvasGraph: boolean) => void;
+}
+
+const graphRF = (set, get): GraphRFStore => ({
   graphRF: tutorialGraph,
 
-  setGraphRF: (graphRF, isChangeToCanvasGraph) => {
+  setGraphRF: (graphRFL, isChangeToCanvasGraph) => {
     if (isChangeToCanvasGraph && !get().inExecutionMode) {
       get().setCanvasGraphChanged(true);
-    } else if (isChangeToCanvasGraph === false) {
+    }
+
+    if (!isChangeToCanvasGraph) {
       get().setCanvasGraphChanged(false);
     }
 
     // If missing uiProps or other fill it here
-    if (!graphRF.graph.uiProps) {
-      graphRF.graph.uiProps = {};
+    if (!graphRFL.graph.uiProps) {
+      graphRFL.graph.uiProps = {};
     }
     set((state) => ({
       ...state,
-      graphRF,
+      graphRF: graphRFL,
     }));
   },
 });

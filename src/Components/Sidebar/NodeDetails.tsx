@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import type { ChangeEvent } from 'react';
 
 import type {
   DataMapping,
@@ -124,19 +125,18 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
         let newLink: EwoksRFLink;
         if (![link.source, link.target].includes(element.id)) {
           newLink = link;
+        } else if (link.source === element.id) {
+          newLink = {
+            ...link,
+            source: uniqueId,
+          };
         } else {
-          if (link.source === element.id) {
-            newLink = {
-              ...link,
-              source: uniqueId,
-            };
-          } else if (link.target === element.id) {
-            newLink = {
-              ...link,
-              target: uniqueId,
-            };
-          }
+          newLink = {
+            ...link,
+            target: uniqueId,
+          };
         }
+
         return newLink;
       });
 
@@ -150,7 +150,10 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
       });
 
       setSelectedElement(newElement, 'fromSaveElement');
-    } else if (Object.keys(propKeyValue)[0] === 'node_icon') {
+    }
+
+    // TODO: still dont like the force else... inline solution?
+    if (Object.keys(propKeyValue)[0] === 'node_icon') {
       setSelectedElement(
         {
           ...element,
@@ -171,7 +174,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
     );
   }
 
-  function advancedChanged(event) {
+  function advancedChanged(event: ChangeEvent<HTMLInputElement>) {
     setAdvanced(event.target.checked);
   }
 
@@ -207,7 +210,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
     const dmap: DataMapping[] = table.map((row) => {
       return {
         source_output: row.name,
-        target_input: row.value,
+        target_input: row.value as string,
       };
     });
     setSelectedElement(

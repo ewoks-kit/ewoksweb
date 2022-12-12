@@ -58,7 +58,7 @@ export default function Conditions(props: ConditionsProps) {
           conditions: table.map((con1) => {
             return {
               source_output: con1.name,
-              value: con1.value,
+              value: con1.value as string | boolean,
             };
           }),
         },

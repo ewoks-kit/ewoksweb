@@ -2,21 +2,19 @@ import type { EwoksNode, EwoksRFNode } from '../types';
 
 function cleanDefaultInputs(default_inputs) {
   return (
-    (default_inputs &&
-      default_inputs.map((dIn) => {
-        return {
-          name: dIn.name,
-          value:
-            dIn.value === 'false'
-              ? false
-              : dIn.value === 'true'
-              ? true
-              : dIn.value === 'null'
-              ? null
-              : dIn.value,
-        };
-      })) ||
-    []
+    default_inputs?.map((dIn) => {
+      return {
+        name: dIn.name,
+        value:
+          dIn.value === 'false'
+            ? false
+            : dIn.value === 'true'
+            ? true
+            : dIn.value === 'null'
+            ? null
+            : dIn.value,
+      };
+    }) || []
   );
 }
 

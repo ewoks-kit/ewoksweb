@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-
+import type { ChangeEvent } from 'react';
 import type { EwoksRFLink, EwoksRFNode } from '../../types';
 import { FormControl, TextField, IconButton, Fab } from '@material-ui/core';
 import DashboardStyle from '../Dashboard/DashboardStyle';
@@ -38,6 +38,7 @@ export default function LabelComment(props: LabelCommentProps) {
     if ('position' in element) {
       setLabel(element.data.label);
       setComment(element.data?.comment);
+      /* eslint-disable sonarjs/elseif-without-else */
     } else if ('source' in element) {
       const el = element;
       setLabel(el.label);
@@ -101,7 +102,7 @@ export default function LabelComment(props: LabelCommentProps) {
     saveLabel(label);
   }
 
-  function setChanged(event) {
+  function setChanged(event: ChangeEvent<HTMLInputElement>) {
     if (event && label !== event.target.value) {
       setValueIsChanged(true);
     } else {
@@ -109,18 +110,16 @@ export default function LabelComment(props: LabelCommentProps) {
     }
   }
 
-  function valueSelectedChanged(event) {
+  function valueSelectedChanged(event: ChangeEvent<HTMLInputElement>) {
     if (event?.target.textContent) {
       setChanged(event);
       setLabel(event.target.textContent);
     }
   }
 
-  function valueChanged(event) {
-    if (event && event.target.value !== 0) {
-      setChanged(event);
-      setLabel(event.target.value);
-    }
+  function valueChanged(event: ChangeEvent<HTMLInputElement>) {
+    setChanged(event);
+    setLabel(event.target.value);
   }
 
   return (
@@ -136,8 +135,12 @@ export default function LabelComment(props: LabelCommentProps) {
               freeSolo
               options={labelChoices}
               value={label}
-              onChange={(event) => valueSelectedChanged(event)}
-              onInputChange={(event) => valueChanged(event)}
+              onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                valueSelectedChanged(event)
+              }
+              onInputChange={(event: ChangeEvent<HTMLInputElement>) =>
+                valueChanged(event)
+              }
               style={{ width: valueIsChanged ? '80%' : '98%' }}
               renderInput={(params) => (
                 <TextField

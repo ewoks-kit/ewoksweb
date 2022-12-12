@@ -38,28 +38,29 @@ function getSmoothStepPathC({
   let secondCornerPath = '';
   if (sourceX <= targetX) {
     return `M ${sourceX},${sourceY}L ${targetX},${targetY}`;
-  } else if (sourceX > targetX) {
-    firstCornerPath =
-      sourceY < targetY
-        ? bottomRightCorner(
-            sourceX + getAroundProps.x,
-            cY + getAroundProps.y,
-            cornerSize
-          )
-        : topRightCorner(sourceX + getAroundProps.x, cY + 120, cornerSize);
-    secondCornerPath =
-      sourceY < targetY
-        ? leftTopCorner(
-            targetX - getAroundProps.x,
-            cY + getAroundProps.y,
-            cornerSize
-          )
-        : leftBottomCorner(
-            targetX - getAroundProps.x,
-            cY + getAroundProps.y,
-            cornerSize
-          );
   }
+
+  firstCornerPath =
+    sourceY < targetY
+      ? bottomRightCorner(
+          sourceX + getAroundProps.x,
+          cY + getAroundProps.y,
+          cornerSize
+        )
+      : topRightCorner(sourceX + getAroundProps.x, cY + 120, cornerSize);
+
+  secondCornerPath =
+    sourceY < targetY
+      ? leftTopCorner(
+          targetX - getAroundProps.x,
+          cY + getAroundProps.y,
+          cornerSize
+        )
+      : leftBottomCorner(
+          targetX - getAroundProps.x,
+          cY + getAroundProps.y,
+          cornerSize
+        );
 
   if (sourceY >= targetY) {
     const cornerX = Math.min(sourceX, targetX);
@@ -115,6 +116,8 @@ export default function getAround({
           href={`#${id}`}
           style={{ ...style, ...edgeStyle.bendingText }}
           startOffset="50%"
+          // TODO: side works even if it is an unknown property, update textPath?
+          /* eslint-disable react/no-unknown-property */
           // @ts-expect-error
           side={sourceX > targetX ? 'right' : 'left'}
           textAnchor="middle"

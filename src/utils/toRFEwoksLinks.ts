@@ -46,9 +46,7 @@ export function toRFEwoksLinks(
           newNodeSubgraphs,
           tasks
         );
-        const color =
-          (uiProps && uiProps.style && uiProps.style.stroke) ||
-          'rgb(60, 81, 202)';
+        const color = uiProps?.style?.stroke || 'rgb(60, 81, 202)';
 
         const link: EwoksRFLink = {
           id: `${source}:${
@@ -63,12 +61,11 @@ export function toRFEwoksLinks(
           startEnd: startEnd || false,
           targetHandle: calcTargetHandle(uiProps, sub_target),
           sourceHandle: calcSourceHandle(uiProps, sub_source),
-          type: (uiProps && uiProps.type) || '',
+          type: uiProps?.type || '',
           markerEnd: existsOrValue(uiProps, 'markerEnd', ''),
           animated: existsOrValue(uiProps, 'animated', false),
           style: {
-            stroke:
-              (uiProps && uiProps.style && uiProps.style.stroke) || '#96a5f9',
+            stroke: uiProps?.style?.stroke || '#96a5f9',
             strokeWidth: '3px',
           },
           labelBgStyle: {
@@ -86,7 +83,7 @@ export function toRFEwoksLinks(
             fontSize: 14,
           },
           data: {
-            getAroundProps: (uiProps && uiProps.getAroundProps) || {
+            getAroundProps: uiProps?.getAroundProps || {
               x: 0,
               y: 0,
             },
@@ -107,7 +104,7 @@ export function toRFEwoksLinks(
           },
         };
         // DOC: if map_all_data is missing the default will be true
-        link.data.map_all_data = map_all_data ? map_all_data : true;
+        link.data.map_all_data = map_all_data ?? true;
         return link;
       }
     );
@@ -120,11 +117,9 @@ function calcLabel(
   conditions: Conditions[],
   data_mapping: DataMapping[]
 ): string {
-  return uiProps && uiProps.label
-    ? uiProps.label
-    : conditions && conditions.length > 0
+  return uiProps?.label ?? conditions?.length > 0
     ? conditions.map((el) => `${el.source_output}->${el.value}`).join(', ')
-    : data_mapping && data_mapping.length > 0
+    : data_mapping?.length > 0
     ? data_mapping
         .map((el) => `${el.source_output}->${el.target_input}`)
         .join(', ')
@@ -132,19 +127,11 @@ function calcLabel(
 }
 
 function calcTargetHandle(uiProps: UiPropsLinks, sub_target: string): string {
-  return uiProps?.targetHandle
-    ? uiProps.targetHandle
-    : sub_target
-    ? sub_target
-    : 'tl';
+  return uiProps?.targetHandle ?? sub_target ?? 'tl';
 }
 
 function calcSourceHandle(uiProps: UiPropsLinks, sub_source: string): string {
-  return uiProps && uiProps.sourceHandle
-    ? uiProps.sourceHandle
-    : sub_source
-    ? sub_source
-    : 'sr';
+  return uiProps?.sourceHandle ?? sub_source ?? 'sr';
 }
 
 function calcInOutLinks(tempGraph: GraphEwoks): GraphEwoks {

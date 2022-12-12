@@ -21,14 +21,18 @@ const undoIndex = (set, get) => ({
         if (selEl) {
           prevState.setSelectedElement(selEl);
         }
-      } else if ('source' in selEl) {
+      }
+
+      if ('source' in selEl) {
         selEl = prevState.undoRedo[index].graph.links.find(
           (lin) => lin.id === selEl.id
         );
         if (selEl) {
           prevState.setSelectedElement(selEl);
         }
-      } else if ('output_nodes' in selEl) {
+      }
+
+      if ('output_nodes' in selEl) {
         prevState.setSelectedElement(prevState.undoRedo[index].graph.graph);
       }
     } else {

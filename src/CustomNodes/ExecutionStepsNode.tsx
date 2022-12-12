@@ -22,7 +22,7 @@ function ExecutionStepsNode(args) {
     (state) => state.setCurrentExecutionEvent
   );
 
-  const goToEvent = (val) => {
+  const goToEvent = (val: number) => {
     setCurrentExecutionEvent(val);
   };
 
@@ -36,7 +36,7 @@ function ExecutionStepsNode(args) {
         } as React.CSSProperties
       }
     >
-      {args.data.label.split(',').map((val) => {
+      {args.data.label.split(',').map((val: number) => {
         return (
           <span style={{ maxWidth: '25px' }} className="icons" key={val}>
             {args.data.label.length > 0 && (
