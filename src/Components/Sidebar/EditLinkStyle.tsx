@@ -13,6 +13,7 @@ import DashboardStyle from '../Dashboard/DashboardStyle';
 import useStore from '../../store/useStore';
 import type { EwoksRFLink, GraphRF } from '../../types';
 import sidebarStyle from './sidebarStyle';
+import type { ChangeEvent } from 'react';
 
 const useStyles = DashboardStyle;
 
@@ -59,7 +60,7 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
     }
   }, [element.id, element]);
 
-  const linkTypeChanged = (event) => {
+  const linkTypeChanged = (event: ChangeEvent<HTMLInputElement>) => {
     if (['multilineText', 'getAround'].includes(event.target.value)) {
       setOpenSnackbar({
         open: true,
@@ -111,7 +112,7 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
     );
   };
 
-  const changeX = (event, number) => {
+  const changeX = (event, number: number) => {
     const elem = selectedElement as EwoksRFLink;
     setSelectedElement(
       {
@@ -126,7 +127,7 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
     setX(number);
   };
 
-  const changeY = (event, number) => {
+  const changeY = (event, number: number) => {
     const elem = selectedElement as EwoksRFLink;
     setSelectedElement(
       {
@@ -176,7 +177,7 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
         <Select
           className={classes.styleLinkDropdowns}
           labelId="linkTypeLabel"
-          value={linkType ? linkType : 'default'}
+          value={linkType ?? 'default'}
           label="Link type"
           onChange={linkTypeChanged}
         >
@@ -236,7 +237,7 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
         <label htmlFor="animated">Animated</label>
         <Checkbox
           name="animated"
-          checked={animated ? animated : false}
+          checked={animated ?? false}
           onChange={animatedChanged}
           inputProps={{ 'aria-label': 'controlled' }}
         />

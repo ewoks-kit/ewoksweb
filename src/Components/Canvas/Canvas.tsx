@@ -1,7 +1,13 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 /* eslint-disable consistent-return */
 import { useEffect, useState, useCallback, useRef } from 'react';
-import type { Node, Edge, Connection } from 'react-flow-renderer';
+import type {
+  Node,
+  Edge,
+  Connection,
+  NodeChange,
+  EdgeChange,
+} from 'react-flow-renderer';
 import ReactFlow, {
   Controls,
   MiniMap,
@@ -160,13 +166,15 @@ function Canvas() {
 
   const onNodesChange = useCallback(
     (changes) => {
+      // TODO: NodeChange[] but complaints for no id
+
       const node = [...graphRF.nodes].find((el) => el.id === changes[0].id);
       // TODO: nodes are updated only on rf canvas and not on graphRF
       // if we update graphRF we have a loop so we update on setSelectedElement
       // where we set every other selected to false... SOLUTION
 
-      setNodes((ns) => {
-        return applyNodeChanges(changes, ns);
+      setNodes((ns: Node[]) => {
+        return applyNodeChanges(changes as NodeChange[], ns);
       });
 
       if (changes[0].type === 'remove') {
@@ -183,7 +191,7 @@ function Canvas() {
       if (changes[0].type === 'remove') {
         onElementsRemove([edgeToRemove]);
       }
-      setEdges((es) => applyEdgeChanges(changes, es));
+      setEdges((es: Edge[]) => applyEdgeChanges(changes as EdgeChange[], es));
     },
     [onElementsRemove, graphRF.links]
   );
@@ -231,7 +239,9 @@ function Canvas() {
 
     if (workingGraph.graph.id === graphRF.graph.id) {
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-      const task_identifier = event.dataTransfer.getData('task_identifier');
+      const task_identifier: string = event.dataTransfer.getData(
+        'task_identifier'
+      );
       const task_type = event.dataTransfer.getData('task_type');
       const icon = event.dataTransfer.getData('icon');
       const position = rfInstance.project({
@@ -534,8 +544,8 @@ function Canvas() {
     setSelectedTask({});
   };
 
-  const handleKeyDown = (event) => {
-    const charCode = String.fromCharCode(event.which).toLowerCase();
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLImageElement>) => {
+    const charCode = String.fromCodePoint(event.which).toLowerCase();
 
     const keys = event.ctrlKey || event.metaKey;
     if (keys && charCode === 'v') {

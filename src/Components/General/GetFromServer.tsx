@@ -96,7 +96,11 @@ export default function GetFromServer() {
           borderRadius: '4px',
         }}
       >
-        <WorkflowDropdown onChange={setInputValue} />
+        <WorkflowDropdown
+          onChange={(workflowDetails) => {
+            setInputValue(workflowDetails);
+          }}
+        />
       </FormControl>
     </>
   );

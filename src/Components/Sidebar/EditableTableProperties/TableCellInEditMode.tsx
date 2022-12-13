@@ -15,7 +15,7 @@ import {
 // TODO: Keep the following if edit on the table is needed
 // import CellEditInJson from './CellEditInJson';
 import { Autocomplete } from '@material-ui/lab';
-import type { CustomTableCellProps } from '../../../types';
+import type { CustomTableCellProps, EditableTableRow } from '../../../types';
 
 const useStyles = makeStyles(() => ({
   input: {
@@ -25,12 +25,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function TableCellInEditMode(props) {
+function TableCellInEditMode(props: CustomTableCellProps) {
   const { index, row, name, onChange, type, typeOfValues } = props;
   const classes = useStyles();
 
-  const [boolVal, setBoolVal] = React.useState(true);
-  console.log(props);
+  const [boolVal, setBoolVal] = React.useState<boolean | string>(true);
 
   useEffect(() => {
     setBoolVal(
@@ -40,7 +39,7 @@ function TableCellInEditMode(props) {
     );
   }, [row.value, row]);
 
-  function onChangeBool(e, row, index) {
+  function onChangeBool(e, rowTable: EditableTableRow, indexRow: number) {
     const event = {
       ...e,
       target: {
@@ -49,7 +48,7 @@ function TableCellInEditMode(props) {
         value: e.target.value,
       },
     };
-    onChange(event, row, index);
+    onChange(event, rowTable, indexRow);
   }
 
   return type === 'dict' || type === 'list' || type === 'object' ? (

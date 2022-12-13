@@ -153,12 +153,14 @@ function AddNodes(props: AddNodesProps) {
     setOpenAgreeDialog(false);
   };
 
-  const action = (action: FormAction, element: string | Task) => {
-    setDoAction(action);
-    if (['cloneTask', 'editTask'].includes(action)) {
+  const action = (actionL: FormAction, element: string | Task) => {
+    setDoAction(actionL);
+    if (['cloneTask', 'editTask'].includes(actionL)) {
       const task = tasks.find((tas) => tas.task_identifier === element);
       setElementToEdit(task);
-    } else if (action === 'newTask') {
+    }
+    // TODO: better way?
+    if (actionL === 'newTask') {
       setElementToEdit(initializedTask);
     }
     setOpenSaveDialog(true);
@@ -298,8 +300,7 @@ function AddNodes(props: AddNodesProps) {
                 tasks.find( (tas) => tas.task_identifier === selectedTask.task_identifier )?.category === categoryName
                 could be isSelectedTaskCategory
                 Making a new component where you could deal with these conditions with early return to null */}
-              {selectedTask &&
-                selectedTask.task_identifier &&
+              {selectedTask?.task_identifier &&
                 categoryName !== 'General' &&
                 tasks.length > 0 &&
                 tasks.find(
@@ -359,7 +360,7 @@ function AddNodes(props: AddNodesProps) {
         )}
       </AccordionDetails>
       <ConfirmDialog
-        title={`Delete "${selectedTask && selectedTask.task_identifier}" task?`}
+        title={`Delete "${selectedTask?.task_identifier}" task?`}
         content={`You are about to delete a task.
               Please make sure that it is not used in any workflow!
               Do you agree to continue?`}

@@ -8,20 +8,17 @@ import { IconButton } from '@material-ui/core';
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 
-export default function DefaultInputs(props) {
-  const { element } = props;
-
+export default function DefaultInputs(element: EwoksRFNode) {
   const [defaultInputs, setDefaultInputs] = React.useState<Inputs[]>([]);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   useEffect(() => {
-    setDefaultInputs(element.default_inputs ? element.default_inputs : []);
+    setDefaultInputs(element.default_inputs ?? []);
   }, [element.id, element]);
 
   const addDefaultInputs = () => {
-    const el = element as EwoksRFNode;
-    const elIn = el.default_inputs;
+    const elIn = element.default_inputs;
 
     if (elIn && elIn[elIn.length - 1] && elIn[elIn.length - 1].id === '') {
       setOpenSnackbar({

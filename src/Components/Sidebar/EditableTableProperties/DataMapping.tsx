@@ -25,7 +25,7 @@ export default function DataMappingComponent(props: DataMappingProps) {
   useEffect(() => {
     setElementL(element);
 
-    if (element.data && element.data.data_mapping) {
+    if (element.data?.data_mapping) {
       setDataMapping(element.data.data_mapping);
     }
   }, [element.id, element]);
@@ -103,8 +103,7 @@ export default function DataMappingComponent(props: DataMappingProps) {
             {
               type: elementL.source
                 ? ['class'].includes(
-                    graphRF &&
-                      graphRF.nodes[0] &&
+                    graphRF?.nodes?.[0] &&
                       graphRF.nodes.find((nod) => {
                         return nod.id === elementL.source;
                       }).task_type
@@ -117,8 +116,7 @@ export default function DataMappingComponent(props: DataMappingProps) {
             {
               type: elementL.target
                 ? ['class'].includes(
-                    graphRF &&
-                      graphRF.nodes[0] &&
+                    graphRF?.nodes?.[0] &&
                       graphRF.nodes.find((nod) => {
                         return nod.id === elementL.target;
                       }).task_type
@@ -126,11 +124,10 @@ export default function DataMappingComponent(props: DataMappingProps) {
                   ? 'select'
                   : 'input'
                 : 'input',
-              values:
-                [
-                  ...props.element.data.links_required_output_names,
-                  ...props.element.data.links_optional_output_names,
-                ] || [],
+              values: [
+                ...props.element.data.links_required_output_names,
+                ...props.element.data.links_optional_output_names,
+              ],
             },
           ]}
         />

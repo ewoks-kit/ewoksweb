@@ -8,8 +8,13 @@ import useStore from '../../store/useStore';
 import { getWorkflow } from '../../utils/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 
+interface GetFromServerButtonsProps {
+  workflowId: string;
+  showButtons: boolean[];
+}
+
 // DOC: buttons used to get or save to server
-export default function GetFromServerButtons(props) {
+export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
   const { workflowId, showButtons } = props;
 
   const setSubGraph = useStore((state) => state.setSubGraph);

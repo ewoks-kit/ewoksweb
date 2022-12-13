@@ -80,7 +80,9 @@ export default function Dashboard() {
       setOpenInfo(false);
       setOpenDrawers(true);
       setOpenSettings(true);
-    } else if (openSettingsDrawer === 'close') {
+    }
+
+    if (openSettingsDrawer === 'close') {
       setOpenInfo(false);
       setOpenDrawers(false);
       setOpenSettings(false);
@@ -117,8 +119,8 @@ export default function Dashboard() {
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  function handleKeyDown(event) {
-    const charCode = String.fromCharCode(event.which).toLowerCase();
+  function handleKeyDown(event: React.KeyboardEvent<HTMLImageElement>) {
+    const charCode = String.fromCodePoint(event.which).toLowerCase();
 
     const keys = event.ctrlKey || event.metaKey;
     if (keys && charCode === 's') {

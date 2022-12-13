@@ -16,7 +16,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+import type { ChangeEvent } from 'react';
 import type {
   EwoksRFLink,
   EwoksRFNode,
@@ -107,7 +107,9 @@ export default function FormDialog(props: FormDialogProps) {
     } else if ('task_identifier' in element && newName) {
       if (['cloneTask', 'newTask'].includes(action) && element) {
         saveTask(element);
-      } else if (['editTask'].includes(action)) {
+      }
+
+      if (['editTask'].includes(action)) {
         puTask(element);
       }
     } else {
@@ -130,8 +132,9 @@ export default function FormDialog(props: FormDialogProps) {
       });
       props.setOpenSaveDialog(false);
       const tasksNew = await getTaskDescription();
-      const tasks = tasksNew.data as { items: Task[] };
-      setTasks(tasks.items);
+      // TODO: examine handling requests like that... better way?
+      const tasksL = tasksNew.data as { items: Task[] };
+      setTasks(tasksL.items);
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -160,8 +163,8 @@ export default function FormDialog(props: FormDialogProps) {
       });
       props.setOpenSaveDialog(false);
       const tasksNew = await getTaskDescription();
-      const tasks = tasksNew.data as { items: Task[] };
-      setTasks(tasks.items);
+      const tasksL = tasksNew.data as { items: Task[] };
+      setTasks(tasksL.items);
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -223,7 +226,7 @@ export default function FormDialog(props: FormDialogProps) {
     }
   }
 
-  function newNameChanged(event) {
+  function newNameChanged(event: ChangeEvent<HTMLInputElement>) {
     const val = event.target.value;
     setNewName(val);
     if ('graph' in selectedElement) {
@@ -240,7 +243,7 @@ export default function FormDialog(props: FormDialogProps) {
     }
   }
 
-  function taskTypeChanged(event) {
+  function taskTypeChanged(event: ChangeEvent<HTMLInputElement>) {
     const val = event.target.value;
     setTaskType(val);
     setElement({
@@ -249,7 +252,7 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function categoryChanged(event) {
+  function categoryChanged(event: ChangeEvent<HTMLInputElement>) {
     const val = event.target.value;
     setCategory(val);
 
@@ -259,7 +262,7 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function iconChanged(event) {
+  function iconChanged(event: ChangeEvent<HTMLInputElement>) {
     const val = event.target.value;
     setIcon(val);
     setElement({
@@ -268,7 +271,7 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function optionalInputNamesChanged(event) {
+  function optionalInputNamesChanged(event: ChangeEvent<HTMLInputElement>) {
     const val = event.target.value;
     setOptionalInputNames(val.split(','));
     setElement({
@@ -277,7 +280,7 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function requiredInputNamesChanged(event) {
+  function requiredInputNamesChanged(event: ChangeEvent<HTMLInputElement>) {
     const val = event.target.value;
     setRequiredInputNames(val.split(','));
     setElement({
@@ -286,7 +289,7 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function outputNamesChanged(event) {
+  function outputNamesChanged(event: ChangeEvent<HTMLInputElement>) {
     const val = event.target.value;
     setOutputNames(val.split(','));
     setElement({
@@ -330,7 +333,7 @@ export default function FormDialog(props: FormDialogProps) {
     },
   ];
 
-  const overwriteChanged = (event) => {
+  const overwriteChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setOverwrite(event.target.checked);
   };
 
@@ -428,9 +431,9 @@ export default function FormDialog(props: FormDialogProps) {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              {allIcons.map((icon) => (
-                <MenuItem value={icon.name} key={icon.name}>
-                  {icon.name}
+              {allIcons.map((iconL) => (
+                <MenuItem value={iconL.name} key={iconL.name}>
+                  {iconL.name}
                 </MenuItem>
               ))}
             </Select>
@@ -442,7 +445,11 @@ export default function FormDialog(props: FormDialogProps) {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSave}>
+        <Button
+          onClick={() => {
+            handleSave();
+          }}
+        >
           Save {isForGraph ? 'Workflow' : 'Task'}
         </Button>
       </DialogActions>

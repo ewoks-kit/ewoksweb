@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Checkbox, FormControl, Slider } from '@material-ui/core';
 import type { EwoksRFNode } from '../../types';
 import useStore from '../../store/useStore';
 import useDebounce from '../../hooks/useDebounce';
+import type { ChangeEvent } from 'react';
 
 interface EditNodeStyleProps {
   element: EwoksRFNode;
@@ -55,7 +56,7 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
     }
   }
 
-  const withImageChanged = (event) => {
+  const withImageChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setWithImage(event.target.checked);
     setSelectedElement(
       {
@@ -66,7 +67,7 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
     );
   };
 
-  const withLabelChanged = (event) => {
+  const withLabelChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setWithLabel(event.target.checked);
     setSelectedElement(
       {
@@ -77,7 +78,7 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
     );
   };
 
-  const colorBorderChanged = (event) => {
+  const colorBorderChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setColorBorder(event.target.value);
     setSelectedElement(
       {
@@ -88,7 +89,7 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
     );
   };
 
-  const moreHandlesChanged = (event) => {
+  const moreHandlesChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setMoreHandles(event.target.checked);
     setSelectedElement(
       {
@@ -102,7 +103,7 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
     );
   };
 
-  const changeNodeSize = (event, number) => {
+  const changeNodeSize = (event, number: number) => {
     setNodeSize(number);
   };
 

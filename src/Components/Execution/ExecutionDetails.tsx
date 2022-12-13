@@ -25,7 +25,7 @@ export default function ExecutionDetails() {
   const setWatchedWorkflows = useStore((state) => state.setWatchedWorkflows);
 
   // DOC: all workflows live and from history on the execution tab
-  const [workflows, setWorkflows] = useState([]);
+  const [workflows, setWorkflows] = useState<Event[]>([]);
 
   // DOC: calculate the executing spinners for live execution
   const setExecutingEvents = useStore((state) => state.setExecutingEvents);
@@ -63,10 +63,10 @@ export default function ExecutionDetails() {
 
   useEffect(() => {
     // DOC: for those live executing search the executedEvents
-    const allWorkflowsL = executedEvents
+    const allWorkflowsL: Event[] = executedEvents
       .filter((ev) => ev.context === 'workflow' && ev.type === 'start')
       .map((work) => {
-        let workL = {};
+        let workL: Event = {} as Event;
         if (
           executedEvents.some(
             (wor) =>
@@ -82,14 +82,14 @@ export default function ExecutionDetails() {
         return workL;
       });
 
-    const wjobs = watchedWorkflows.map((job) => {
+    const wjobs: Event[] = watchedWorkflows.map((job) => {
       return { ...(job[0].workflow_id ? job[0] : job[1]), status: 'finished' };
     });
 
     setWorkflows([...allWorkflowsL, ...wjobs]);
   }, [executedEvents, watchedWorkflows]);
 
-  function workflowDetails(work) {
+  function workflowDetails(work: Event) {
     if (selectedWorkflow !== work) {
       setSelectedWorkflow(work);
     } else {
@@ -98,8 +98,9 @@ export default function ExecutionDetails() {
   }
 
   function formatedDate(job: Event) {
-    const { label } = (allWorkflows &&
-      allWorkflows.find((work) => job.workflow_id === work.id)) || {
+    const { label } = allWorkflows?.find(
+      (work) => job.workflow_id === work.id
+    ) || {
       label: '',
     };
     const dat = new Date(job.time);
@@ -188,7 +189,7 @@ export default function ExecutionDetails() {
     return events;
   }
 
-  async function handleChangeOpenExecutions() {
+  function handleChangeOpenExecutions() {
     setOpenSettingsDrawer('Executions');
   }
 

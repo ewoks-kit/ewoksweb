@@ -114,6 +114,7 @@ export interface Event {
   output_uris?: [];
   id?: number;
   nodeId: string;
+  status?: string;
   event_type: string; // start/stop/progress events
   values: object; // all values entering or exiting a node
   // for now put static executing here
@@ -252,9 +253,9 @@ export interface Task {
 }
 
 export interface Inputs {
-  id?: string;
-  name?: string;
-  value?: string | boolean;
+  id: string;
+  name: string;
+  value: string | boolean;
 }
 
 export interface nodeInputsOutputs {
@@ -341,7 +342,7 @@ export interface DataMapping {
 
 export interface Conditions {
   source_output?: string;
-  value?: string | boolean;
+  value: string | boolean;
   id?: string;
   name?: string;
 }
@@ -428,20 +429,20 @@ export interface EwoksRFNode {
 }
 
 export interface EditableTableRow {
-  id: number;
-  name: string;
-  value: string | number | null | undefined | boolean | Record<string, unknown>;
-  isEditMode: boolean;
-  type: string;
+  id?: string;
+  name?: string;
+  value?: unknown; // string | number | null | undefined | boolean | Record<string, unknown>;
+  isEditMode?: boolean;
+  type?: string;
 }
 
 export interface CustomTableCellProps {
   index: number;
   row: EditableTableRow;
   name: string;
-  type: string;
-  typeOfValues: string[];
-  onChange(e: never, row: EditableTableRow, index: number): void;
+  type?: string;
+  typeOfValues: { type: string; values: string[] };
+  onChange(e: unknown, row: EditableTableRow, index: number): void;
 }
 
 export interface EwoksRFLink {
@@ -472,7 +473,7 @@ export interface EwoksRFLink {
   labelBgStyle;
   labelBgPadding;
   labelBgBorderRadius;
-  style;
+  style: { stroke: string; strokeWidth: string };
   startEnd?: boolean;
   subtarget?: string;
   subsource?: string;

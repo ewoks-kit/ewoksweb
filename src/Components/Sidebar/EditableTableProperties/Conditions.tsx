@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 
-import type { EditableTableRow, EwoksRFLink, Inputs } from 'types';
+import type {
+  EditableTableRow,
+  EwoksRFLink,
+  Conditions as ConditionsType,
+} from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
@@ -14,7 +18,7 @@ interface ConditionsProps {
 export default function Conditions(props: ConditionsProps) {
   const { element } = props;
 
-  const [conditions, setConditions] = React.useState<Inputs[]>([]);
+  const [conditions, setConditions] = React.useState<ConditionsType[]>([]);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 

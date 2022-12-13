@@ -37,7 +37,7 @@ function EditTaskProp(props: EditTaskProps) {
     setEditProp(!editProp);
   }
 
-  function taskPropChanged(taskP) {
+  function taskPropChanged(taskP: string) {
     setTaskProp(taskP);
     props.propChanged({ [id]: taskP });
   }

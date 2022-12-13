@@ -33,7 +33,9 @@ function FetchingDropdown<T, D extends boolean>(
       disabled={inExecutionMode}
       data-testid="async-autocomplete-drop"
       open={fetchStatus !== FetchStatus.ToDo}
-      onOpen={() => onOpenDropdown()}
+      onOpen={() => {
+        onOpenDropdown();
+      }}
       onClose={() => {
         setFetchStatusOpen(FetchStatus.ToDo);
       }}

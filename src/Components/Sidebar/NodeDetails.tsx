@@ -242,7 +242,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
     <Box>
       <Paper className={classes.nodeDetails}>
         <LabelComment element={element} showComment={advanced} />
-        <DefaultInputs element={element} />
+        <DefaultInputs {...element} />
 
         <hr style={{ color: '#96a5f9' }} />
         <div>
