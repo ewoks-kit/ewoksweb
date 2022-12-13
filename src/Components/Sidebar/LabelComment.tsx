@@ -38,8 +38,10 @@ export default function LabelComment(props: LabelCommentProps) {
     if ('position' in element) {
       setLabel(element.data.label);
       setComment(element.data?.comment);
-      /* eslint-disable sonarjs/elseif-without-else */
-    } else if ('source' in element) {
+      return;
+    }
+
+    if ('source' in element) {
       const el = element;
       setLabel(el.label);
       setComment(el.data?.comment);
@@ -60,7 +62,10 @@ export default function LabelComment(props: LabelCommentProps) {
           : '';
 
       setLabelChoices([mappings, conditions, 'text...']);
+      return;
     }
+
+    throw new Error('No link or Node tries to access LabelComment');
   }, [element]);
 
   function saveLabel(labelLocal: string) {
@@ -74,7 +79,10 @@ export default function LabelComment(props: LabelCommentProps) {
         },
         'fromSaveElement'
       );
-    } else {
+      return;
+    }
+
+    if ('source' in element) {
       setSelectedElement(
         {
           ...element,
@@ -118,8 +126,11 @@ export default function LabelComment(props: LabelCommentProps) {
   }
 
   function valueChanged(event: ChangeEvent<HTMLInputElement>) {
-    setChanged(event);
-    setLabel(event.target.value);
+    if (event?.target?.value) {
+      // event.target.value !== 0
+      setChanged(event);
+      setLabel(event.target.value);
+    }
   }
 
   return (

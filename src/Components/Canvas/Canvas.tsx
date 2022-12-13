@@ -116,10 +116,13 @@ function Canvas() {
   useEffect(() => {
     if (prevGraphId !== graphRF.graph.id) {
       setTimeout(() => {
+        if (graphRF.nodes.length === 0) {
+          return;
+        }
         // DOC: Define a zoom level for small graphs to not show very-big nodes
-        if (graphRF.nodes.length > 0 && graphRF.nodes.length < 6) {
+        if (graphRF.nodes.length < 6) {
           zoomTo(0.6);
-        } else if (graphRF.nodes.length > 0) {
+        } else {
           fitView();
         }
         // DOC: the value of the delay is important to fitview even the execution
@@ -139,27 +142,34 @@ function Canvas() {
 
   const onElementsRemove = useCallback(
     (elementsToRemove) => {
-      let newGraph = {} as GraphRF;
       const [el] = elementsToRemove;
+
       if (el.position) {
         const nodesLinks = graphRF.links.filter(
           (link) => !(link.source === el.id || link.target === el.id)
         );
 
-        newGraph = {
+        const newGraph: GraphRF = {
           ...graphRF,
           nodes: graphRF.nodes.filter((nod) => nod.id !== el.id),
           links: nodesLinks,
         };
+        setGraphRF(newGraph, true);
         setUndoRedo({ action: 'Removed a Node', graph: newGraph });
-      } else if (el.source) {
-        newGraph = {
+        return;
+      }
+
+      if (el.source) {
+        const newGraph: GraphRF = {
           ...graphRF,
           links: graphRF.links.filter((link) => link.id !== el.id),
         };
+        setGraphRF(newGraph, true);
         setUndoRedo({ action: 'Removed a Link', graph: newGraph });
+        return;
       }
-      setGraphRF(newGraph, true);
+
+      throw new Error('No link or Node requests deletion');
     },
     [graphRF, setGraphRF, setUndoRedo]
   );

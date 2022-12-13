@@ -80,6 +80,7 @@ export default function Dashboard() {
       setOpenInfo(false);
       setOpenDrawers(true);
       setOpenSettings(true);
+      return;
     }
 
     if (openSettingsDrawer === 'close') {
@@ -120,22 +121,32 @@ export default function Dashboard() {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLImageElement>) {
+    const keys = event.ctrlKey || event.metaKey;
+    if (!keys) {
+      return;
+    }
+
     const charCode = String.fromCodePoint(event.which).toLowerCase();
 
-    const keys = event.ctrlKey || event.metaKey;
-    if (keys && charCode === 's') {
+    if (charCode === 's') {
       event.preventDefault();
       event.stopPropagation();
       saveToServerF.current();
-    } else if (keys && charCode === 'z') {
+      return;
+    }
+    if (charCode === 'z') {
       event.preventDefault();
       event.stopPropagation();
       undoF.current();
-    } else if (keys && charCode === 'y') {
+      return;
+    }
+    if (charCode === 'y') {
       event.preventDefault();
       event.stopPropagation();
       redoF.current();
-    } else if (keys && event.shiftKey && charCode === 'n') {
+      return;
+    }
+    if (event.shiftKey && charCode === 'n') {
       event.preventDefault();
       event.stopPropagation();
       checkAndNewGraph(false);

@@ -87,14 +87,21 @@ export default function Sidebar() {
   }, [getIcons]);
 
   const deleteElement = async () => {
-    let newGraph: GraphRF = {};
+    if (workingGraph.graph.id !== graphRF.graph.id) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Not allowed to delete any element in a sub-graph!',
+        severity: 'success',
+      });
+      return;
+    }
 
     if ('position' in element) {
       const nodesLinks = graphRF.links.filter(
         (link) => !(link.source === element.id || link.target === element.id)
       );
 
-      newGraph = {
+      const newGraph: GraphRF = {
         ...graphRF,
         nodes: graphRF.nodes.filter((nod) => nod.id !== element.id),
         links: nodesLinks,
@@ -104,10 +111,12 @@ export default function Sidebar() {
         action: 'Removed a Node',
         graph: newGraph,
       });
+      setGraphRF(newGraph, true);
+      return;
     }
 
     if ('source' in element) {
-      newGraph = {
+      const newGraph: GraphRF = {
         ...graphRF,
         links: graphRF.links.filter((link) => link.id !== element.id),
       };
@@ -116,28 +125,20 @@ export default function Sidebar() {
         action: 'Removed a Link',
         graph: newGraph,
       });
+      setGraphRF(newGraph, true);
+      return;
     }
 
-    const elD = element as GraphDetails;
-    if (elD) {
+    if ('input_nodes' in element) {
       setOpenAgreeDialog(true);
-    } else if (!elD.input_nodes) {
-      if (workingGraph.graph.id === graphRF.graph.id) {
-        setGraphRF(newGraph, true);
-      } else {
-        setOpenSnackbar({
-          open: true,
-          text: 'Not allowed to delete any element in a sub-graph!',
-          severity: 'success',
-        });
-      }
-    } else {
-      setOpenSnackbar({
-        open: true,
-        text: 'Nothing to delete!',
-        severity: 'error',
-      });
+      return;
     }
+
+    setOpenSnackbar({
+      open: true,
+      text: 'Nothing to delete!',
+      severity: 'error',
+    });
   };
 
   const agreeCallback = async () => {

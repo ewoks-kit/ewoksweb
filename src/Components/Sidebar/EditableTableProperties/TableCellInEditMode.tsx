@@ -29,12 +29,14 @@ function TableCellInEditMode(props: CustomTableCellProps) {
   const { index, row, name, onChange, type, typeOfValues } = props;
   const classes = useStyles();
 
-  const [boolVal, setBoolVal] = React.useState<boolean | string>(true);
+  const [boolVal, setBoolVal] = React.useState<string>('true');
 
   useEffect(() => {
     setBoolVal(
       row.value !== null && row.value !== undefined
-        ? row.value.toString()
+        ? // I need to show as string any kind of value it gets?
+          // eslint-disable-next-line @typescript-eslint/no-base-to-string
+          row.value.toString()
         : 'null'
     );
   }, [row.value, row]);

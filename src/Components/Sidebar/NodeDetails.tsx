@@ -1,12 +1,7 @@
 import React, { useEffect } from 'react';
 import type { ChangeEvent } from 'react';
 
-import type {
-  DataMapping,
-  EditableTableRow,
-  EwoksRFLink,
-  EwoksRFNode,
-} from '../../types';
+import type { DataMapping, EditableTableRow, EwoksRFNode } from '../../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTableProperties/EditableTable';
 
@@ -122,22 +117,21 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
       };
 
       const newLinks = graphRF.links.map((link) => {
-        let newLink: EwoksRFLink;
-        if (![link.source, link.target].includes(element.id)) {
-          newLink = link;
-        } else if (link.source === element.id) {
-          newLink = {
+        if (link.source === element.id) {
+          return {
             ...link,
             source: uniqueId,
           };
-        } else {
-          newLink = {
+        }
+
+        if (link.target === element.id) {
+          return {
             ...link,
             target: uniqueId,
           };
         }
-
-        return newLink;
+        // ![link.source, link.target].includes(element.id))
+        return link;
       });
 
       setGraphRF({
@@ -150,9 +144,9 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
       });
 
       setSelectedElement(newElement, 'fromSaveElement');
+      return;
     }
 
-    // TODO: still dont like the force else... inline solution?
     if (Object.keys(propKeyValue)[0] === 'node_icon') {
       setSelectedElement(
         {
