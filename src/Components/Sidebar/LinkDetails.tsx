@@ -33,7 +33,7 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
     setMapAllData(!!element.data.map_all_data || false);
     setOnError(!!element.data.on_error || false);
     setRequired(element.data.required);
-  }, [element.id, element, on_error, map_all_data]);
+  }, [element, on_error, map_all_data]);
 
   const mapAllDataChanged = (event) => {
     setSelectedElement(
@@ -90,7 +90,7 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
       </SidebarTooltip>
       {!mapAllData && elementL.source && (
         <div>
-          <DataMappingComponent element={element} />
+          <DataMappingComponent {...element} />
         </div>
       )}
       <hr style={{ color: '#96a5f9' }} />

@@ -66,7 +66,6 @@ export default function ExecutionDetails() {
     const allWorkflowsL: Event[] = executedEvents
       .filter((ev) => ev.context === 'workflow' && ev.type === 'start')
       .map((work) => {
-        let workL: Event = {} as Event;
         if (
           executedEvents.some(
             (wor) =>
@@ -75,11 +74,10 @@ export default function ExecutionDetails() {
               wor.type === 'end'
           )
         ) {
-          workL = { ...work, status: 'finished' };
-        } else {
-          workL = { ...work, status: 'executing' };
+          return { ...work, status: 'finished' };
         }
-        return workL;
+
+        return { ...work, status: 'executing' };
       });
 
     const wjobs: Event[] = watchedWorkflows.map((job) => {
@@ -98,6 +96,7 @@ export default function ExecutionDetails() {
   }
 
   function formatedDate(job: Event) {
+    // TODO: works but is not entirelly correct but suggested by eslint
     const { label } = allWorkflows?.find(
       (work) => job.workflow_id === work.id
     ) || {

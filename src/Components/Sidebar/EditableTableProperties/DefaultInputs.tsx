@@ -15,12 +15,12 @@ export default function DefaultInputs(element: EwoksRFNode) {
 
   useEffect(() => {
     setDefaultInputs(element.default_inputs ?? []);
-  }, [element.id, element]);
+  }, [element]);
 
   const addDefaultInputs = () => {
     const elIn = element.default_inputs;
 
-    if (elIn && elIn[elIn.length - 1] && elIn[elIn.length - 1].id === '') {
+    if (elIn?.[elIn.length - 1]?.id === '') {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before addining another!',

@@ -17,15 +17,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import type { ChangeEvent } from 'react';
-import type {
-  EwoksRFLink,
-  EwoksRFNode,
-  GraphDetails,
-  GraphEwoks,
-  GraphRF,
-  Task,
-  FormAction,
-} from '../../types';
+import type { GraphRF, Task, FormAction } from '../../types';
 import { rfToEwoks } from '../../utils';
 import useStore from '../../store/useStore';
 import commonStrings from '../../commonStrings.json';
@@ -59,9 +51,6 @@ export default function FormDialog(props: FormDialogProps) {
   const [outputNames, setOutputNames] = React.useState([] as string[]);
   const [overwrite, setOverwrite] = React.useState<boolean>(false);
 
-  const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
-    (state) => state.selectedElement
-  );
   const setCanvasGraphChanged = useStore((st) => st.setCanvasGraphChanged);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
@@ -102,11 +91,12 @@ export default function FormDialog(props: FormDialogProps) {
 
   async function handleSave() {
     // DOC: get the selected element (graph or Node) give a new name before saving
-    if (isForGraph && newName) {
-      saveGraph(element as GraphRF);
+    if ('nodes' in element && isForGraph && newName) {
+      saveGraph(element);
     } else if ('task_identifier' in element && newName) {
       if (['cloneTask', 'newTask'].includes(action) && element) {
         saveTask(element);
+        return;
       }
 
       if (['editTask'].includes(action)) {
@@ -132,9 +122,7 @@ export default function FormDialog(props: FormDialogProps) {
       });
       props.setOpenSaveDialog(false);
       const tasksNew = await getTaskDescription();
-      // TODO: examine handling requests like that... better way?
-      const tasksL = tasksNew.data as { items: Task[] };
-      setTasks(tasksL.items);
+      setTasks(tasksNew.data.items);
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -206,7 +194,7 @@ export default function FormDialog(props: FormDialogProps) {
           })
         );
         setGettingFromServer(false);
-        const savedGraph = responseNew.data as GraphEwoks;
+        const savedGraph = responseNew.data;
         props.setOpenSaveDialog(false);
         setWorkingGraph(savedGraph, 'fromServer');
         setRecentGraphs({} as GraphRF, true);
@@ -229,8 +217,8 @@ export default function FormDialog(props: FormDialogProps) {
   function newNameChanged(event: ChangeEvent<HTMLInputElement>) {
     const val = event.target.value;
     setNewName(val);
-    if ('graph' in selectedElement) {
-      const el = element as GraphRF;
+    if ('graph' in element) {
+      const el = element;
       setElement({
         ...el,
         graph: { ...el.graph, id: val, label: val },

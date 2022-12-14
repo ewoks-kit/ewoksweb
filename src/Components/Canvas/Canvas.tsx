@@ -142,6 +142,7 @@ function Canvas() {
 
   const onElementsRemove = useCallback(
     (elementsToRemove) => {
+      // TODO: multiple delete investigate
       const [el] = elementsToRemove;
 
       if (el.position) {
@@ -176,7 +177,7 @@ function Canvas() {
 
   const onNodesChange = useCallback(
     (changes) => {
-      // TODO: NodeChange[] but complaints for no id
+      // TODO: type NodeChange[] but complaints for no id
 
       const node = [...graphRF.nodes].find((el) => el.id === changes[0].id);
       // TODO: nodes are updated only on rf canvas and not on graphRF
@@ -196,6 +197,7 @@ function Canvas() {
 
   const onEdgesChange = useCallback(
     (changes) => {
+      // TODO: type EdgeChange[] but complaints for no id
       const edgeToRemove = graphRF.links.find((el) => el.id === changes[0].id);
 
       if (changes[0].type === 'remove') {
@@ -252,8 +254,8 @@ function Canvas() {
       const task_identifier: string = event.dataTransfer.getData(
         'task_identifier'
       );
-      const task_type = event.dataTransfer.getData('task_type');
-      const icon = event.dataTransfer.getData('icon');
+      const task_type: string = event.dataTransfer.getData('task_type');
+      const icon: string = event.dataTransfer.getData('icon');
       const position = rfInstance.project({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
@@ -307,11 +309,11 @@ function Canvas() {
         },
       };
 
-      const newGraph = {
+      const newGraph: GraphRF = {
         graph: graphRF.graph,
         nodes: [...graphRF.nodes, newNode],
         links: graphRF.links,
-      } as GraphRF;
+      };
 
       setGraphRF(newGraph, true);
       setUndoRedo({ action: 'Added a Node', graph: newGraph });
@@ -344,7 +346,7 @@ function Canvas() {
         severity: 'warning',
       });
     } else {
-      const newGraph = {
+      const newGraph: GraphRF = {
         graph: { ...graphRF.graph },
         nodes: nodes.filter((el) => el.position), // [...graphRF.nodes],
         links: [
@@ -355,9 +357,9 @@ function Canvas() {
         ],
       };
 
-      setGraphRF(newGraph as GraphRF, true);
+      setGraphRF(newGraph, true);
       setUndoRedo({ action: 'Updated a Link', graph: newGraph });
-      setRecentGraphs(newGraph as GraphRF);
+      setRecentGraphs(newGraph);
     }
   };
 
@@ -411,18 +413,18 @@ function Canvas() {
           targetTask.task_type === 'graphOutput',
       };
 
-      const newGraph = {
+      const newGraph: GraphRF = {
         graph: graphRF.graph,
         nodes: graphRF.nodes,
         links: [...graphRF.links, link],
       };
 
-      setGraphRF(newGraph as GraphRF, true);
+      setGraphRF(newGraph, true);
       // DOC: need to also save it in recentGraphs if we leave and come back
-      setRecentGraphs(newGraph as GraphRF);
+      setRecentGraphs(newGraph);
 
       // add action and new GraphRF to undo-redo array
-      setUndoRedo({ action: 'new Link', graph: newGraph as GraphRF });
+      setUndoRedo({ action: 'new Link', graph: newGraph });
     } else {
       setOpenSnackbar({
         open: true,
@@ -470,7 +472,7 @@ function Canvas() {
       setSelectedElement({
         ...nodeTmp,
         data: { ...nodeTmp.data, details: true },
-      } as EwoksRFNode);
+      } as EwoksRFNode); // TODO: will allow this as creating a const makes no sense?
     }
   };
 
@@ -486,8 +488,8 @@ function Canvas() {
     event.preventDefault();
     if (workingGraph.graph.id === graphRF.graph.id) {
       // DOC: find selectedElements and update its position and save grapRF
-      const newElements = [];
-      const newElementsIds = [];
+      const newElements: EwoksRFNode[] = [];
+      const newElementsIds: string[] = [];
       selectedElements.forEach((el) => {
         const rfNode = { ...graphRF.nodes.find((nod) => nod.id === el.id) };
         rfNode.position = el.position;
@@ -495,7 +497,7 @@ function Canvas() {
         newElementsIds.push(rfNode.id);
       });
 
-      const newGraph = {
+      const newGraph: GraphRF = {
         graph: graphRF.graph,
         nodes: [
           ...graphRF.nodes.filter((nod) => !newElementsIds.includes(nod.id)),
@@ -504,10 +506,10 @@ function Canvas() {
         links: graphRF.links,
       };
 
-      setGraphRF(newGraph as GraphRF, true);
+      setGraphRF(newGraph, true);
       setUndoRedo({
         action: 'Dragged a selection',
-        graph: newGraph as GraphRF,
+        graph: newGraph,
       });
       setRecentGraphs(newGraph);
     } else {
@@ -562,7 +564,7 @@ function Canvas() {
       event.preventDefault();
       event.stopPropagation();
       if ('position' in selectedElement) {
-        const newClone = {
+        const newClone: EwoksRFNode = {
           ...selectedElement,
           id: calcNewId(selectedElement.id, graphRF.nodes),
           selected: false,
@@ -578,7 +580,7 @@ function Canvas() {
           },
           true
         );
-        setSelectedElement(newClone as EwoksRFNode);
+        setSelectedElement(newClone);
       } else {
         setOpenSnackbar({
           open: true,

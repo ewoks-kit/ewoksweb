@@ -28,7 +28,7 @@ export default function Conditions(props: ConditionsProps) {
     }
   }, [element]);
 
-  const addConditions = () => {
+  function addConditions() {
     const el = element;
     const elCon = el.data.conditions;
     // check if an empty line already exists
@@ -51,9 +51,9 @@ export default function Conditions(props: ConditionsProps) {
         'fromSaveElement'
       );
     }
-  };
+  }
 
-  const conditionsValuesChanged = (table: EditableTableRow[]) => {
+  function conditionsValuesChanged(table: EditableTableRow[]) {
     setSelectedElement(
       {
         ...element,
@@ -62,14 +62,14 @@ export default function Conditions(props: ConditionsProps) {
           conditions: table.map((con1) => {
             return {
               source_output: con1.name,
-              value: con1.value as string | boolean,
+              value: con1.value,
             };
           }),
         },
       },
       'fromSaveElement'
     );
-  };
+  }
 
   return (
     <div>

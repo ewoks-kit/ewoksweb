@@ -7,13 +7,7 @@ import EditableTable from './EditableTable';
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 
-interface DataMappingProps {
-  element: EwoksRFLink;
-}
-
-export default function DataMappingComponent(props: DataMappingProps) {
-  const { element } = props;
-
+export default function DataMappingComponent(element: EwoksRFLink) {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const [dataMapping, setDataMapping] = React.useState<DataMapping[]>([]);
@@ -28,12 +22,10 @@ export default function DataMappingComponent(props: DataMappingProps) {
     if (element.data?.data_mapping) {
       setDataMapping(element.data.data_mapping);
     }
-  }, [element.id, element]);
+  }, [element]);
 
   const addDataMapping = () => {
-    const el = element;
-
-    const elMap = el.data.data_mapping;
+    const elMap = element.data.data_mapping;
 
     if (elMap.some((x) => x.id === '')) {
       setOpenSnackbar({
@@ -44,9 +36,9 @@ export default function DataMappingComponent(props: DataMappingProps) {
     } else {
       setSelectedElement(
         {
-          ...el,
+          ...element,
           data: {
-            ...el.data,
+            ...element.data,
             data_mapping: [...elMap, { id: '', name: '', value: '' }],
           },
         },
@@ -111,7 +103,7 @@ export default function DataMappingComponent(props: DataMappingProps) {
                   ? 'select'
                   : 'input'
                 : 'input',
-              values: props.element.data.links_input_names || [],
+              values: element.data.links_input_names || [],
             },
             {
               type: elementL.target
@@ -125,8 +117,8 @@ export default function DataMappingComponent(props: DataMappingProps) {
                   : 'input'
                 : 'input',
               values: [
-                ...props.element.data.links_required_output_names,
-                ...props.element.data.links_optional_output_names,
+                ...element.data.links_required_output_names,
+                ...element.data.links_optional_output_names,
               ],
             },
           ]}

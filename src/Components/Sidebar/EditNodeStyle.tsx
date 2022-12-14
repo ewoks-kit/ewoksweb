@@ -5,13 +5,8 @@ import useStore from '../../store/useStore';
 import useDebounce from '../../hooks/useDebounce';
 import type { ChangeEvent } from 'react';
 
-interface EditNodeStyleProps {
-  element: EwoksRFNode;
-}
 // DOC: Edit the node style
-export default function EditNodeStyle(props: EditNodeStyleProps) {
-  const { element } = props;
-
+export default function EditNodeStyle(element: EwoksRFNode) {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   const [withImage, setWithImage] = useState<boolean>(false);
@@ -32,7 +27,8 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
       setMoreHandles(!!element.data.moreHandles);
       setNodeSize(element.data.nodeWidth || 100);
     }
-  }, [element.id, element]);
+    // TODO: Does this specific reference to id needed?
+  }, [element]);
 
   useEffect(
     () => {
@@ -56,8 +52,7 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
     }
   }
 
-  const withImageChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setWithImage(event.target.checked);
+  function withImageChanged(event: ChangeEvent<HTMLInputElement>) {
     setSelectedElement(
       {
         ...element,
@@ -65,10 +60,9 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
       },
       'fromSaveElement'
     );
-  };
+  }
 
-  const withLabelChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setWithLabel(event.target.checked);
+  function withLabelChanged(event: ChangeEvent<HTMLInputElement>) {
     setSelectedElement(
       {
         ...element,
@@ -76,10 +70,9 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
       },
       'fromSaveElement'
     );
-  };
+  }
 
   const colorBorderChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setColorBorder(event.target.value);
     setSelectedElement(
       {
         ...element,
@@ -90,7 +83,6 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
   };
 
   const moreHandlesChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setMoreHandles(event.target.checked);
     setSelectedElement(
       {
         ...element,

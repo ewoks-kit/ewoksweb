@@ -255,7 +255,7 @@ export interface Task {
 export interface Inputs {
   id: string;
   name: string;
-  value: string | boolean;
+  value: unknown;
 }
 
 export interface nodeInputsOutputs {
@@ -275,8 +275,8 @@ export interface UiPropsNodes {
   comment?: string;
   position?: CanvasPosition;
   style?: LinkStyle;
-  withImage: boolean;
-  withLabel: boolean;
+  withImage?: boolean;
+  withLabel?: boolean;
   colorBorder?: string;
   nodeWidth?: number;
   node_icon?: string;
@@ -335,14 +335,14 @@ export interface CanvasPosition {
 export interface DataMapping {
   source_output?: string;
   target_input?: string;
-  value?: string | boolean;
+  value?: unknown;
   id?: string;
   name?: string;
 }
 
 export interface Conditions {
   source_output?: string;
-  value: string | boolean;
+  value: unknown;
   id?: string;
   name?: string;
 }
@@ -441,7 +441,7 @@ export interface CustomTableCellProps {
   row: EditableTableRow;
   name: string;
   type?: string;
-  typeOfValues: { type: string; values: string[] };
+  typeOfValues: { type: string; values?: string[] };
   onChange(e: unknown, row: EditableTableRow, index: number): void;
 }
 

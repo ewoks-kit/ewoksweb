@@ -90,7 +90,7 @@ export default function Dashboard() {
     }
   }, [openSettingsDrawer, setOpenSettingsDrawer]);
 
-  const checkAndNewGraph = (notSave: boolean) => {
+  function checkAndNewGraph(notSave: boolean) {
     if (canvasGraphChanged && undoIndex !== 0 && !notSave) {
       setOpenAgreeDialog(true);
     } else {
@@ -99,25 +99,27 @@ export default function Dashboard() {
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
     }
-  };
+  }
 
-  const openGraph = () => {
+  function openGraph() {
     handleOpenSettings();
-  };
+  }
 
-  const handleOpenSettings = () => {
+  function handleOpenSettings() {
     setOpenInfo(false);
     setOpenSettings(true);
     setOpenDrawers(true);
-  };
-  const handleOpenDrawers = () => {
+  }
+
+  function handleOpenDrawers() {
     setOpenDrawers(!openDrawers);
-  };
+  }
 
-  const handleOpenInfo = () => {
+  function handleOpenInfo() {
     setOpenSettings(false);
-  };
+  }
 
+  // TODO: remove? this type of styling
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLImageElement>) {

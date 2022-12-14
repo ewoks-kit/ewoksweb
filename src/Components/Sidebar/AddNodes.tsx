@@ -153,18 +153,21 @@ function AddNodes(props: AddNodesProps) {
     setOpenAgreeDialog(false);
   };
 
-  const action = (actionL: FormAction, element: string | Task) => {
+  function action(actionL: FormAction, element: string | Task) {
     setDoAction(actionL);
+
     if (['cloneTask', 'editTask'].includes(actionL)) {
       const task = tasks.find((tas) => tas.task_identifier === element);
       setElementToEdit(task);
+      setOpenSaveDialog(true);
+      return;
     }
-    // TODO: better way?
+
     if (actionL === 'newTask') {
       setElementToEdit(initializedTask);
+      setOpenSaveDialog(true);
     }
-    setOpenSaveDialog(true);
-  };
+  }
 
   const handleChange = (event: React.SyntheticEvent, newExpanded: boolean) => {
     if (newExpanded) {
@@ -295,10 +298,7 @@ function AddNodes(props: AddNodesProps) {
                 )}
               </AccordionDetails>
               {/* TODO: This is not really readable:
-                storing conditions in a variable/util. At first glance, selectedTask &&
-                selectedTask.task_identifier && tasks.length > 0 &&
-                tasks.find( (tas) => tas.task_identifier === selectedTask.task_identifier )?.category === categoryName
-                could be isSelectedTaskCategory
+                storing conditions in a variable/util. At first glance could be isSelectedTaskCategory
                 Making a new component where you could deal with these conditions with early return to null */}
               {selectedTask?.task_identifier &&
                 categoryName !== 'General' &&

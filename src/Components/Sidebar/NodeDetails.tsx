@@ -92,7 +92,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
     setDefaultErrorNode(element.default_error_node || false);
     setDataMapping(element.default_error_attributes?.data_mapping);
     setMapAllData(element.default_error_attributes?.map_all_data || false);
-  }, [element.id, element]);
+  }, [element]);
 
   function propChanged(propKeyValue: {
     task_identifier?: string;
@@ -290,7 +290,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
         {defaultErrorNode && !mapAllData && advanced && (
           <div>
             {/* TODO: Check and Replace Data Mapping with the component to have dropdowns if not rarely used */}
-            {/* <DataMappingComponent element={element} /> */}
+            {/* <DataMappingComponent {...element} /> */}
             <b>Data Mapping </b>
             <IconButton
               style={{ padding: '1px' }}

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import useStore from '../../store/useStore';
-import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../../types';
 import TextButtonSave from './TextButtonSave';
 
 // DOC: the label and the comment when the graph is the selectedElement
@@ -12,18 +11,19 @@ export default function GraphLabelComment() {
   const selectedElement = useStore((state) => state.selectedElement);
 
   useEffect(() => {
-    const graphElement = selectedElement as GraphDetails;
-    setLabel(graphElement.label);
-    setCategory(graphElement.category);
-    setComment(graphElement.uiProps?.comment);
-  }, [selectedElement.id, selectedElement]);
+    if ('input_nodes' in selectedElement) {
+      setLabel(selectedElement.label);
+      setCategory(selectedElement.category);
+      setComment(selectedElement.uiProps?.comment);
+    }
+  }, [selectedElement]);
 
   function saveCategory(categ) {
     setSelectedElement(
       {
         ...selectedElement,
         category: categ,
-      } as GraphDetails,
+      },
       'fromSaveElement'
     );
   }
@@ -43,7 +43,7 @@ export default function GraphLabelComment() {
       {
         ...selectedElement,
         uiProps: { ...selectedElement.uiProps, comment: commen },
-      } as EwoksRFNode | EwoksRFLink,
+      },
       'fromSaveElement'
     );
   }

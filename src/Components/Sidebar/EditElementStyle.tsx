@@ -21,7 +21,7 @@ function getAccordionContent(
   if ('position' in element) {
     return {
       title: 'Styling Node',
-      EditComponent: () => <EditNodeStyle element={element} />,
+      EditComponent: () => <EditNodeStyle {...element} />,
     };
   }
 

@@ -21,20 +21,33 @@ export function getTaskDescription(): Promise<{
 }
 
 // Delete task
-export function deleteTask(id: string) {
+export function deleteTask(
+  id: string
+): Promise<{
+  data: { identifier: string };
+}> {
   return axiosRequest.delete(`/task/${id}`);
 }
 
 // Post task
-export function postTask(task: Task) {
+export function postTask(
+  task: Task
+): Promise<{
+  data: Task;
+}> {
   return axiosRequest.post(`/tasks`, task);
 }
 
 // Put task
-export function putTask(task: Task) {
+export function putTask(
+  task: Task
+): Promise<{
+  data: Task;
+}> {
   return axiosRequest.put(`/task/${task.task_identifier}`, task);
 }
 
+// TODO: improve back as for a random string a 500 error arises
 // Discover tasks
 export function discoverTasks(moduleNames: string[]) {
   return axiosRequest.post(`/tasks/discover`, { modules: moduleNames });
@@ -49,32 +62,51 @@ export function getWorkflowsDescriptions(): Promise<{
 }
 
 // Get /workflows only id
-export function getWorkflowsIds() {
+export function getWorkflowsIds(): Promise<{
+  data: { identifiers: string[] };
+}> {
   return axiosRequest.get(`/workflows`);
 }
 
 // Get workflow:id
-export function getWorkflow(id: string) {
+export function getWorkflow(
+  id: string
+): Promise<{
+  data: GraphEwoks;
+}> {
   return axiosRequest.get(`/workflow/${id}`);
 }
 
 // Post
-export function postWorkflow(workflow: GraphEwoks) {
+export function postWorkflow(
+  workflow: GraphEwoks
+): Promise<{
+  data: GraphEwoks;
+}> {
   return axiosRequest.post(`/workflows`, workflow);
 }
 
+// TODO add return types for execution api and move it in another file
 // Post execute
 export function executeWorkflow(workflowId: string) {
   return axiosRequest.post(`/execute/${workflowId}`, workflowId);
 }
 
 // Put
-export function putWorkflow(workflow: GraphEwoks) {
+export function putWorkflow(
+  workflow: GraphEwoks
+): Promise<{
+  data: GraphEwoks;
+}> {
   return axiosRequest.put(`/workflow/${workflow.graph.id}`, workflow);
 }
 
 // Delete
-export function deleteWorkflow(id: string) {
+export function deleteWorkflow(
+  id: string
+): Promise<{
+  data: { identifier: string };
+}> {
   return axiosRequest.delete(`/workflow/${id}`);
 }
 
@@ -99,11 +131,20 @@ export function getIcon(id: string): Promise<AxiosResponse<string>> {
 }
 
 // Delete icon
-export function deleteIcon(id: string) {
+export function deleteIcon(
+  id: string
+): Promise<{
+  data: { identifier: string };
+}> {
   return axiosRequest.delete(`/icon/${id}`);
 }
 
 // Post task
-export function postIcon(iconName: string, iconData: string | ArrayBuffer) {
+export function postIcon(
+  iconName: string,
+  iconData: string | ArrayBuffer
+): Promise<{
+  data: { data_url: string };
+}> {
   return axiosRequest.post(`/icon/${iconName}`, { data_url: iconData });
 }
