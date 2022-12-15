@@ -170,7 +170,7 @@ export default function Sidebar() {
 
   const cloneNode = () => {
     if ('position' in selectedElement) {
-      const newClone = {
+      const newClone: EwoksRFNode = {
         ...selectedElement,
         id: calcNewId(selectedElement.id, graphRF.nodes),
         selected: false,
@@ -187,7 +187,7 @@ export default function Sidebar() {
       setGraphRF(newGraph, true);
 
       setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
-      setSelectedElement(newClone as EwoksRFNode);
+      setSelectedElement(newClone);
     } else {
       setOpenSnackbar({
         open: true,

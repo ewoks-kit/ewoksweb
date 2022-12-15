@@ -162,13 +162,10 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
     const newGraph: GraphRF = {
       ...graphRF,
       links: graphRF.links.map((link) => {
-        let linkFinal = {} as EwoksRFLink;
         if (arrowType?.type && arrowType.type === 'none') {
-          linkFinal = { ...link, markerEnd: '' };
-        } else {
-          linkFinal = { ...link, markerEnd: { type: arrowType.type } };
+          return { ...link, markerEnd: '' };
         }
-        return linkFinal;
+        return { ...link, markerEnd: { type: arrowType.type } };
       }),
     };
     setGraphRF(newGraph, true);

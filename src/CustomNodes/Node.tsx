@@ -25,6 +25,7 @@ const onDragStart = (e) => {
   e.preventDefault();
 };
 
+// TODO: examine usage when execution in main
 const execution = () => {
   return true;
 };
@@ -113,37 +114,40 @@ const Node: React.FC<NodeProps> = ({
 
   // TODO: exists in sidebar abstract in a hook?
   const cloneNode = () => {
-    const element = selectedElement as EwoksRFNode;
-    const newClone = {
-      ...element,
-      id: calcNewId(selectedElement.id, graphRF.nodes),
-      selected: false,
-      position: {
-        x: element.position.x + 100,
-        y: element.position.y + 100,
-      },
-    };
+    if ('position' in selectedElement) {
+      const element = selectedElement;
+      const newClone: EwoksRFNode = {
+        ...element,
+        id: calcNewId(selectedElement.id, graphRF.nodes),
+        selected: false,
+        position: {
+          x: element.position.x + 100,
+          y: element.position.y + 100,
+        },
+      };
 
-    const newGraph = {
-      ...graphRF,
-      nodes: [...graphRF.nodes, newClone],
-    };
+      const newGraph = {
+        ...graphRF,
+        nodes: [...graphRF.nodes, newClone],
+      };
 
-    setGraphRF(newGraph, true);
+      setGraphRF(newGraph, true);
 
-    setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
-    setSelectedElement(newClone as EwoksRFNode);
+      setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
+      setSelectedElement(newClone);
+    }
   };
 
   function setSelEl() {
-    const el = selectedElement as EwoksRFNode;
-    setSelectedElement({
-      ...el,
-      data: {
-        ...el.data,
-        label: labelLocal,
-      },
-    });
+    if ('position' in selectedElement) {
+      setSelectedElement({
+        ...selectedElement,
+        data: {
+          ...selectedElement.data,
+          label: labelLocal,
+        },
+      });
+    }
   }
 
   return (

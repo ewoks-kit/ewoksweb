@@ -33,18 +33,19 @@ export default function DataMappingComponent(element: EwoksRFLink) {
         text: 'Please fill in the empty line before addining another!',
         severity: 'warning',
       });
-    } else {
-      setSelectedElement(
-        {
-          ...element,
-          data: {
-            ...element.data,
-            data_mapping: [...elMap, { id: '', name: '', value: '' }],
-          },
-        },
-        'fromSaveElement'
-      );
+      return;
     }
+
+    setSelectedElement(
+      {
+        ...element,
+        data: {
+          ...element.data,
+          data_mapping: [...elMap, { id: '', name: '', value: '' }],
+        },
+      },
+      'fromSaveElement'
+    );
   };
 
   const dataMappingValuesChanged = (table) => {

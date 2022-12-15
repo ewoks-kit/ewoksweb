@@ -41,11 +41,12 @@ export default function ExecuteWorkflow() {
   function checkAndExecute() {
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
-    } else {
-      execute();
-      setOpenAgreeDialog(false);
-      setCanvasGraphChanged(false);
+      return;
     }
+
+    execute();
+    setOpenAgreeDialog(false);
+    setCanvasGraphChanged(false);
   }
 
   async function execute() {

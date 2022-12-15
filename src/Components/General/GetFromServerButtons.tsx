@@ -3,7 +3,6 @@ import { useState } from 'react';
 import IntegratedSpinner from './IntegratedSpinner';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import type { GraphEwoks } from '../../types';
 import useStore from '../../store/useStore';
 import { getWorkflow } from '../../utils/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
@@ -44,7 +43,7 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
       try {
         const response = await getWorkflow(workflowId);
         if (response.data) {
-          const graph = response.data as GraphEwoks;
+          const graph = response.data;
           setOpenSnackbar({
             open: true,
             text: `Workflow ${graph.graph.label} was downloaded succesfully`,

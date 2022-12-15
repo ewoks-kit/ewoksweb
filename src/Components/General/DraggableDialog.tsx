@@ -80,13 +80,14 @@ export default function DraggableDialog(props: Props) {
     if (name) {
       setIsOpen(false);
       props.setValue(name, graph, callbackProps);
-    } else {
-      setOpenSnackbar({
-        open: true,
-        text: 'Please put a Name for the parameter!',
-        severity: 'warning',
-      });
+      return;
     }
+
+    setOpenSnackbar({
+      open: true,
+      text: 'Please put a Name for the parameter!',
+      severity: 'warning',
+    });
   };
 
   const handleChange = (

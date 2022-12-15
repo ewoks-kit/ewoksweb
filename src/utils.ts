@@ -83,7 +83,7 @@ export async function getSubgraphs(
           // if there is a null means the subgraph was not found
           // and it should show up in red
           const resCln = res.filter((result) => result.data !== null);
-          return resCln.map((result) => result.data) as GraphEwoks[];
+          return resCln.map((result) => result.data);
         })
       )
       .catch((error) => {

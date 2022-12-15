@@ -73,20 +73,20 @@ export default function FormDialog(props: FormDialogProps) {
     setElement(elementToEdit);
     setIsOpen(open);
 
-    if (isForGraph) {
-      const elGraph = elementToEdit as GraphRF;
-      setNewName(elGraph.graph.label || '');
+    if (isForGraph && 'graph' in elementToEdit) {
+      setNewName(elementToEdit.graph.label || '');
       setOverwrite(false);
-    } else {
-      const elTask = elementToEdit as Task;
-      setNewName(elTask.task_identifier);
-      setTaskType(elTask.task_type);
-      setCategory(elTask.category);
-      setIcon(elTask.icon);
-      setOptionalInputNames(elTask.optional_input_names);
-      setRequiredInputNames(elTask.required_input_names);
-      setOutputNames(elTask.output_names);
+      return;
     }
+    // TODO: here it ts should infer the Task type but it does not
+    const elTask = elementToEdit as Task;
+    setNewName(elTask.task_identifier);
+    setTaskType(elTask.task_type);
+    setCategory(elTask.category);
+    setIcon(elTask.icon);
+    setOptionalInputNames(elTask.optional_input_names);
+    setRequiredInputNames(elTask.required_input_names);
+    setOutputNames(elTask.output_names);
   }, [open, action, elementToEdit, isForGraph]);
 
   async function handleSave() {

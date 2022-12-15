@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import FormControl from '@material-ui/core/FormControl';
 import useStore from '../../store/useStore';
-import type { GraphEwoks, WorkflowDescription } from '../../types';
+import type { WorkflowDescription } from '../../types';
 import { getWorkflow } from '../../utils/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { validateEwoksGraph } from '../../utils/EwoksValidator';
@@ -40,7 +40,7 @@ export default function GetFromServer() {
       try {
         const response = await getWorkflow(workflowIdparam);
         if (response.data) {
-          const graph = response.data as GraphEwoks;
+          const graph = response.data;
           setOpenSnackbar({
             open: true,
             text: `Workflow ${graph.graph.label} was downloaded successfully`,

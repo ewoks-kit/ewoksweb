@@ -25,7 +25,7 @@ export default function ManageWorkflows() {
     if (workflowDetails) {
       // TODO: error handling
       const response = await getWorkflow(workflowDetails.id);
-      setWorkflowValue(response.data as GraphEwoks);
+      setWorkflowValue(response.data);
     }
   }
 

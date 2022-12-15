@@ -117,13 +117,18 @@ function calcLabel(
   conditions: Conditions[],
   data_mapping: DataMapping[]
 ): string {
-  return uiProps?.label ?? conditions?.length > 0
-    ? conditions.map((el) => `${el.source_output}->${el.value}`).join(', ')
-    : data_mapping?.length > 0
-    ? data_mapping
-        .map((el) => `${el.source_output}->${el.target_input}`)
-        .join(', ')
-    : '';
+  return (
+    uiProps?.label ??
+    (conditions?.length > 0
+      ? conditions
+          .map((el) => `${el.source_output}->${el.value as string}`)
+          .join(', ')
+      : data_mapping && data_mapping.length > 0
+      ? data_mapping
+          .map((el) => `${el.source_output}->${el.target_input}`)
+          .join(', ')
+      : '')
+  );
 }
 
 function calcTargetHandle(uiProps: UiPropsLinks, sub_target: string): string {

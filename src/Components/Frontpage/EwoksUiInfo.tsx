@@ -31,14 +31,14 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
     try {
       const response = await getWorkflow('tutorial_Graph');
       if (response.data) {
-        const graph = response.data as GraphEwoks;
+        const graph = response.data;
 
         setOpenSnackbar({
           open: true,
           text: `Workflow ${graph.graph.label} was downloaded succesfully`,
           severity: 'success',
         });
-        setWorkingGraph(response.data as GraphEwoks, 'fromServer');
+        setWorkingGraph(response.data, 'fromServer');
       } else {
         setOpenSnackbar({
           open: true,
