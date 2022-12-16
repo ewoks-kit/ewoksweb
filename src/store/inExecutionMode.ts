@@ -1,10 +1,20 @@
+import type { State } from '../types';
+import type { GetState, SetState } from 'zustand';
+
 // DOC: when UI in execution mode
-const inExecutionMode = (set, get) => ({
+
+export interface InExecutionModeSlice {
+  inExecutionMode?: boolean;
+  setInExecutionMode?: (val: boolean) => void;
+}
+
+const inExecutionMode = (
+  set: SetState<State>,
+  get: GetState<State>
+): InExecutionModeSlice => ({
   inExecutionMode: false,
 
   setInExecutionMode: (val: boolean) => {
-    const prevState = get((prev) => prev);
-
     set((state) => ({
       ...state,
       inExecutionMode: val,
@@ -16,8 +26,8 @@ const inExecutionMode = (set, get) => ({
         ...state,
         // only for testing set graphRF
         graphRF: {
-          ...prevState.graphRF,
-          nodes: prevState.graphRF.nodes.filter(
+          ...get().graphRF,
+          nodes: get().graphRF.nodes.filter(
             (nod) => nod.type !== 'executionSteps'
           ),
         },

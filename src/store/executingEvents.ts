@@ -1,7 +1,7 @@
 import type { Event, EwoksRFNode, State } from '../types';
 import type { GetState, SetState } from 'zustand';
 
-interface ExecutingEventsSlice {
+export interface ExecutingEventsSlice {
   executingEvents: Event[];
   setExecutingEvents: (execEvent: Event, live: boolean) => void;
 }

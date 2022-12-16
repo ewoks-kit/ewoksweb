@@ -1,7 +1,15 @@
-import type { Action } from '../types';
+import type { Action, State } from '../types';
+import type { GetState, SetState } from 'zustand';
 
-const undoRedo = (set, get) => ({
-  undoRedo: [] as Action[],
+export interface UndoRedoSlice {
+  undoRedo?: Action[];
+  setUndoRedo?: (action: Action) => void;
+}
+const undoRedo = (
+  set: SetState<State>,
+  get: GetState<State>
+): UndoRedoSlice => ({
+  undoRedo: [],
 
   setUndoRedo: (action: Action) => {
     set((state) => ({
@@ -9,10 +17,10 @@ const undoRedo = (set, get) => ({
       undoRedo: [
         ...get()
           .undoRedo.slice(-20)
-          .slice(0, (get().undoIndex as number) + 1),
+          .slice(0, get().undoIndex + 1),
         action,
       ],
-      undoIndex: (get().undoIndex as number) + 1,
+      undoIndex: get().undoIndex + 1,
     }));
   },
 });

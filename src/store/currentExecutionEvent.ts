@@ -3,13 +3,13 @@ import type { State } from '../types';
 
 // DOC: the number of the event we need to inspect on the sidebar
 
-interface currentExecutionEventSlice {
+export interface CurrentExecutionEventSlice {
   currentExecutionEvent?: number;
   setCurrentExecutionEvent?: (index: number) => void;
 }
 const currentExecutionEvent = (
   set: SetState<State>
-): currentExecutionEventSlice => ({
+): CurrentExecutionEventSlice => ({
   currentExecutionEvent: 0,
 
   setCurrentExecutionEvent: (indexOfEvent) => {

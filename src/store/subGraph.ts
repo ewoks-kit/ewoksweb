@@ -8,7 +8,7 @@ import orange2 from 'images/orange2.png';
 import type { GetState, SetState } from 'zustand';
 import type { State } from '../types';
 
-interface SubGraphSlice {
+export interface SubGraphSlice {
   subGraph: GraphRF;
   setSubGraph: (graph: GraphEwoks) => Promise<GraphRF>;
 }

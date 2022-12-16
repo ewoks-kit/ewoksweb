@@ -1,11 +1,12 @@
-import type { Task } from '../types';
+import type { Task, State } from '../types';
+import type { SetState } from 'zustand';
 
-interface Tasks {
+export interface TasksSlice {
   tasks: Task[];
   setTasks: (tasks: Task[]) => void;
 }
 
-const tasks = (set): Tasks => ({
+const tasks = (set: SetState<State>): TasksSlice => ({
   tasks: [],
   setTasks: (allTasks) => {
     set((state) => ({

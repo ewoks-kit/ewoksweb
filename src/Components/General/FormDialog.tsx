@@ -78,15 +78,16 @@ export default function FormDialog(props: FormDialogProps) {
       setOverwrite(false);
       return;
     }
-    // TODO: here it ts should infer the Task type but it does not
-    const elTask = elementToEdit as Task;
-    setNewName(elTask.task_identifier);
-    setTaskType(elTask.task_type);
-    setCategory(elTask.category);
-    setIcon(elTask.icon);
-    setOptionalInputNames(elTask.optional_input_names);
-    setRequiredInputNames(elTask.required_input_names);
-    setOutputNames(elTask.output_names);
+    // TODO: here it ts should infer the Task type without the if but it does not???
+    if ('task_identifier' in elementToEdit) {
+      setNewName(elementToEdit.task_identifier);
+      setTaskType(elementToEdit.task_type);
+      setCategory(elementToEdit.category);
+      setIcon(elementToEdit.icon);
+      setOptionalInputNames(elementToEdit.optional_input_names);
+      setRequiredInputNames(elementToEdit.required_input_names);
+      setOutputNames(elementToEdit.output_names);
+    }
   }, [open, action, elementToEdit, isForGraph]);
 
   async function handleSave() {

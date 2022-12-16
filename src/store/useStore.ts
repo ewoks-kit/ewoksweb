@@ -1,5 +1,5 @@
 import create from 'zustand';
-import type { GraphEwoks, GraphRF, State, Task } from '../types';
+import type { State } from '../types';
 
 import currentExecutionEvent from './currentExecutionEvent';
 import gettingFromServer from './gettingFromServer';
@@ -25,37 +25,11 @@ import undoIndex from './undoIndex';
 import executedWorkflows from './executedWorkflows';
 import watchedWorkflows from './watchedWorkflows';
 import canvasGraphChanged from './canvasGraphChanged';
-
-const initializedTask: Task = {
-  task_identifier: '',
-  task_type: '',
-  icon: '',
-  category: '',
-  optional_input_names: [],
-  output_names: [],
-  required_input_names: [],
-};
-
-const initializedGraph: GraphEwoks = {
-  graph: {
-    id: 'newGraph',
-    label: '',
-    input_nodes: [],
-    output_nodes: [],
-    uiProps: {},
-  },
-  nodes: [],
-  links: [],
-};
-
-const initializedRFGraph: GraphRF = {
-  graph: {
-    id: 'newGraph',
-    label: '',
-  },
-  nodes: [],
-  links: [],
-};
+import {
+  initializedTask,
+  initializedGraph,
+  initializedRFGraph,
+} from '../utils/InitializedEntities';
 
 const useStore = create<State>((set, get) => ({
   ...allIcons(set),

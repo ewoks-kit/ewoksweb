@@ -1,9 +1,18 @@
-import type { stackGraph } from '../types';
+import type { stackGraph, State } from '../types';
+import type { GetState, SetState } from 'zustand';
 
-const subgraphsStack = (set, get) => ({
-  subgraphsStack: [] as stackGraph[],
+export interface SubgraphsStackSlice {
+  subgraphsStack?: stackGraph[];
+  setSubgraphsStack?: (graphRF: stackGraph) => void;
+}
 
-  setSubgraphsStack: (stackGraph: stackGraph) => {
+const subgraphsStack = (
+  set: SetState<State>,
+  get: GetState<State>
+): SubgraphsStackSlice => ({
+  subgraphsStack: [],
+
+  setSubgraphsStack: (stackGraph) => {
     let stack = [];
     const subStack = get().subgraphsStack;
     const exists: number = subStack.map((gr) => gr.id).indexOf(stackGraph.id);

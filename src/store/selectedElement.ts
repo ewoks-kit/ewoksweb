@@ -1,21 +1,33 @@
-import type { EwoksRFLink, EwoksRFNode, GraphDetails, GraphRF } from '../types';
+import type {
+  EwoksRFLink,
+  EwoksRFNode,
+  GraphDetails,
+  GraphRF,
+  State,
+} from '../types';
+import type { GetState, SetState } from 'zustand';
 
-const selectedElement = (set, get) => ({
-  selectedElement: {} as EwoksRFNode | EwoksRFLink | GraphDetails,
-
-  setSelectedElement: (
+export interface SelectedElementSlice {
+  selectedElement?: EwoksRFNode | EwoksRFLink | GraphDetails;
+  setSelectedElement?: (
     element: EwoksRFNode | EwoksRFLink | GraphDetails,
-    from: string
-  ) => {
-    // console.log(element);
+    from?: string,
+    update?: boolean
+  ) => void;
+}
 
-    const prevState = get((prev) => prev);
+const selectedElement = (
+  set: SetState<State>,
+  get: GetState<State>
+): SelectedElementSlice => ({
+  selectedElement: {},
 
-    const wg = prevState.workingGraph.graph.id;
-    const { graph, nodes, links } = prevState.graphRF;
+  setSelectedElement: (element, from) => {
+    const wg = get().workingGraph.graph.id;
+    const { graph, nodes, links } = get().graphRF;
 
     if (from === 'fromSaveElement') {
-      prevState.setCanvasGraphChanged(true);
+      get().setCanvasGraphChanged(true);
     }
 
     if (wg === '0' || wg === graph.id) {
@@ -30,7 +42,7 @@ const selectedElement = (set, get) => ({
           }),
         };
         if (from === 'fromSaveElement') {
-          prevState.setUndoRedo({
+          get().setUndoRedo({
             action: 'Node details changed',
             graph: tempGraph,
           });
@@ -43,7 +55,7 @@ const selectedElement = (set, get) => ({
           links: [...links.filter((link) => link.id !== element.id), element],
         };
         if (from === 'fromSaveElement') {
-          prevState.setUndoRedo({
+          get().setUndoRedo({
             action: 'Link details changed',
             graph: tempGraph,
           });
@@ -58,7 +70,7 @@ const selectedElement = (set, get) => ({
         };
 
         if (from === 'fromSaveElement') {
-          prevState.setUndoRedo({
+          get().setUndoRedo({
             action: 'Graph details changed',
             graph: tempGraph,
           });

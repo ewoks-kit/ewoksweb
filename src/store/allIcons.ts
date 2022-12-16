@@ -2,7 +2,7 @@ import type { Icon } from '../types';
 import type { SetState } from 'zustand';
 import type { State } from '../types';
 
-interface AllIconsSlice {
+export interface AllIconsSlice {
   allIcons: Icon[];
   setAllIcons: (icons: Icon[]) => void;
 }

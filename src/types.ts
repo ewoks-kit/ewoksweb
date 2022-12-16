@@ -1,5 +1,28 @@
-// import type { Color } from '@material-ui/lab';
 import type { Position } from 'react-flow-renderer';
+import type { CanvasGraphChangedSlice } from './store/canvasGraphChanged';
+import type { AllWorkflowsSlice } from './store/allWorkflows';
+import type { CurrentExecutionEventSlice } from './store/currentExecutionEvent';
+import type { ExecutedEventsSlice } from './store/executedEvents';
+import type { GraphRFSlice } from './store/graphRF';
+import type { ExecutedWorkflowsSlice } from './store/executedWorkflows';
+import type { InExecutionModeSlice } from './store/inExecutionMode';
+import type { OpenDraggableDialogSlice } from './store/openDraggableDialog';
+import type { GettingFromServerSlice } from './store/gettingFromServer';
+import type { GraphOrSubgraphSlice } from './store/graphOrSubgraph';
+import type { OpenSettingsDrawerSlice } from './store/openSettingsDrawer';
+import type { OpenSnackbarSlice } from './store/openSnackbar';
+import type { SelectedElementSlice } from './store/selectedElement';
+import type { SelectedTaskSlice } from './store/selectedTask';
+import type { SubgraphsStackSlice } from './store/subgraphsStack';
+import type { SubGraphSlice } from './store/subGraph';
+import type { TasksSlice } from './store/tasks';
+import type { UndoIndexSlice } from './store/undoIndex';
+import type { UndoRedoSlice } from './store/undoRedo';
+import type { WatchedWorkflowsSlice } from './store/watchedWorkflows';
+import type { WorkingGraphSlice } from './store/workingGraph';
+import type { ExecutingEventsSlice } from './store/executingEvents';
+import type { AllIconsSlice } from './store/allIcons';
+import type { RecentGraphsSlice } from './store/recentGraphs';
 
 export enum FormAction {
   cloneGraph = 'cloneGraph',
@@ -134,86 +157,35 @@ export interface NodeExecutionHistory {
   // the ExecutingState can be found through the eventId again
 }
 
-export interface State {
-  currentExecutionEvent?: number;
-  setCurrentExecutionEvent?: (index: number) => void;
-
-  executedEvents?: Event[];
-  setExecutedEvents?: (execEvent: Event) => void;
-
-  executingEvents?: Event[];
-  setExecutingEvents?: (execEvent: Event, live: boolean) => void;
-
-  executedWorkflows?: Event[][];
-  setExecutedWorkflows?: (execEvent: Event[][], live?: boolean) => void;
-
-  watchedWorkflows?: Event[][];
-  setWatchedWorkflows?: (execEvent: Event[][]) => void;
-
-  inExecutionMode?: boolean;
-  setInExecutionMode?: (val: boolean) => void;
-
-  gettingFromServer?: boolean;
-  setGettingFromServer?: (val: boolean) => void;
-
-  undoRedo?: Action[];
-  setUndoRedo?: (action: Action) => void;
-
-  undoIndex?: number;
-  setUndoIndex?: (index: number) => void;
-
+export interface State
+  extends CanvasGraphChangedSlice,
+    AllWorkflowsSlice,
+    AllIconsSlice,
+    GraphRFSlice,
+    CurrentExecutionEventSlice,
+    ExecutedEventsSlice,
+    ExecutedWorkflowsSlice,
+    InExecutionModeSlice,
+    OpenDraggableDialogSlice,
+    GettingFromServerSlice,
+    GraphOrSubgraphSlice,
+    OpenSettingsDrawerSlice,
+    OpenSnackbarSlice,
+    SelectedElementSlice,
+    SelectedTaskSlice,
+    SubgraphsStackSlice,
+    SubGraphSlice,
+    TasksSlice,
+    UndoIndexSlice,
+    // TODO: check if index above can be merged with undoRedo below
+    UndoRedoSlice,
+    WatchedWorkflowsSlice,
+    WorkingGraphSlice,
+    ExecutingEventsSlice,
+    RecentGraphsSlice {
   initializedGraph?: GraphEwoks;
   initializedRFGraph?: GraphRF;
   initializedTask?: Task;
-
-  tasks?: Task[];
-  setTasks?: (tasks: Task[]) => void;
-
-  openDraggableDialog?: DialogParams;
-  setOpenDraggableDialog?: (params: DialogParams) => void;
-
-  openSettingsDrawer?: string;
-  setOpenSettingsDrawer?: (params: string) => void;
-
-  openSnackbar?: SnackbarParams;
-  setOpenSnackbar?: (params: SnackbarParams) => void;
-
-  allIcons: Icon[];
-  setAllIcons: (icons: Icon[]) => void;
-
-  allWorkflows?: WorkflowDescription[];
-  setAllWorkflows?: (workflows: WorkflowDescription[]) => void;
-
-  recentGraphs?: GraphRF[];
-  setRecentGraphs?: (graphRF: GraphRF, reset?: boolean) => void;
-
-  graphOrSubgraph?: boolean;
-  setGraphOrSubgraph?: (isItGraph: boolean) => void;
-
-  subgraphsStack?: stackGraph[];
-  setSubgraphsStack?: (graphRF: stackGraph) => void;
-
-  graphRF?: GraphRF;
-  setGraphRF?: (graphRF: GraphRF, isChangeToCanvasGraph?: boolean) => void;
-
-  canvasGraphChanged?: boolean;
-  setCanvasGraphChanged?: (isChanged: boolean) => void;
-
-  selectedElement?: EwoksRFNode | EwoksRFLink | GraphDetails;
-  setSelectedElement?: (
-    element: EwoksRFNode | EwoksRFLink | GraphDetails,
-    from?: string,
-    update?: boolean
-  ) => void;
-
-  selectedTask?: Task;
-  setSelectedTask?: (task: Task) => void;
-
-  subGraph?: GraphRF;
-  setSubGraph?: (graph: GraphEwoks) => Promise<GraphRF>;
-
-  workingGraph?: GraphRF;
-  setWorkingGraph?: (graph: GraphEwoks, source?: string) => Promise<GraphRF>;
 }
 
 export interface Action {

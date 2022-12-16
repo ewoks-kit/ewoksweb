@@ -1,23 +1,31 @@
-import type { Event } from '../types';
+import type { Event, State } from '../types';
+import type { GetState, SetState } from 'zustand';
+
+export interface ExecutedEventsSlice {
+  executedEvents?: Event[];
+  setExecutedEvents?: (execEvent: Event) => void;
+}
 
 // DOC: All the events that came in during live executions. These events keep
 // pilling-up while the app is up front-back. When should that stop;
-const executedEvents = (set, get) => ({
-  executedEvents: [] as Event[],
+const executedEvents = (
+  set: SetState<State>,
+  get: GetState<State>
+): ExecutedEventsSlice => ({
+  executedEvents: [],
 
   setExecutedEvents: (execEvent: Event) => {
     // Add all events to keep track of the order they came in
-    const prevState = get((prev) => prev);
     // calculate the id of the event based on the order of arrival
     const event = {
       ...execEvent,
-      id: prevState.executedEvents.length as number,
+      id: get().executedEvents.length,
     };
     // send it to executing events to adapt the canvas
-    prevState.setExecutingEvents(event, true);
+    get().setExecutingEvents(event, true);
     set((state) => ({
       ...state,
-      executedEvents: [...prevState.executedEvents, event],
+      executedEvents: [...get().executedEvents, event],
     }));
   },
 });
