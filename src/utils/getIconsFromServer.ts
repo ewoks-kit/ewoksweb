@@ -12,9 +12,7 @@ async function getIconsFromServer(): Promise<Icon[]> {
   return icons
     .filter((result) => result.data !== null)
     .map<Icon>((result) => {
-      const imgbase64 = (result.data as unknown) as {
-        data_url: string;
-      };
+      const imgbase64 = result.data;
 
       return {
         name: path.basename(result.config.url),

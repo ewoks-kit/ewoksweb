@@ -160,7 +160,7 @@ export default function Sidebar() {
 
     setGraphRF(initializedRFGraph);
     setSelectedElement({} as GraphDetails);
-    setSubgraphsStack({ id: 'initialiase', label: '' });
+    setSubgraphsStack({ id: '', label: '', resetStack: true });
     setRecentGraphs({} as GraphRF, true);
   };
 

@@ -25,9 +25,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
   }, [element]);
 
   const addDataMapping = () => {
-    const elMap = element.data.data_mapping;
-
-    if (elMap.some((x) => x.id === '')) {
+    if (element.data.data_mapping.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before addining another!',
@@ -41,7 +39,10 @@ export default function DataMappingComponent(element: EwoksRFLink) {
         ...element,
         data: {
           ...element.data,
-          data_mapping: [...elMap, { id: '', name: '', value: '' }],
+          data_mapping: [
+            ...element.data.data_mapping,
+            { id: '', name: '', value: '' },
+          ],
         },
       },
       'fromSaveElement'

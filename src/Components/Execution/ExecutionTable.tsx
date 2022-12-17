@@ -303,7 +303,7 @@ export default function EnhancedTable() {
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const executedWorkflows = useStore((state) => state.executedWorkflows);
   const [open, setOpen] = useState(false);
-  const [eventsForWorflow, setEventsForWorflow] = useState([]);
+  const [eventsForWorflow, setEventsForWorflow] = useState<Event[]>([]);
 
   const useRowStyles = makeStyles({
     root: {
@@ -600,12 +600,10 @@ export default function EnhancedTable() {
                                         <Tooltip title={ev.error_traceback}>
                                           <p>
                                             {ev.error &&
-                                              `${
-                                                ev.error_traceback?.slice(
-                                                  0,
-                                                  30
-                                                ) as string
-                                              }...`}
+                                              `${ev.error_traceback?.slice(
+                                                0,
+                                                30
+                                              )}...`}
                                           </p>
                                         </Tooltip>
                                       </TableCell>
@@ -616,9 +614,7 @@ export default function EnhancedTable() {
                                         <Tooltip title={ev.node_id}>
                                           <p>
                                             {ev.node_id?.slice(
-                                              (ev.node_id?.lastIndexOf(
-                                                '.'
-                                              ) as number) + 1
+                                              ev.node_id?.lastIndexOf('.') + 1
                                             )}
                                           </p>
                                         </Tooltip>
@@ -627,9 +623,7 @@ export default function EnhancedTable() {
                                         <Tooltip title={ev.task_id}>
                                           <p>
                                             {ev.task_id?.slice(
-                                              (ev.task_id?.lastIndexOf(
-                                                '.'
-                                              ) as number) + 1
+                                              ev.task_id?.lastIndexOf('.') + 1
                                             )}
                                           </p>
                                         </Tooltip>

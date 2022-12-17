@@ -62,10 +62,11 @@ const selectedElement = (
         }
       } else {
         tempGraph = {
+          // TODO: it should infer the type
           graph: element as GraphDetails,
           nodes: initializeNodes(nodes),
           links: links.map((link) => {
-            return { ...link, selected: false }; // TODO: examine this after update
+            return { ...link, selected: false }; // TODO: examine selected after reactflow update
           }),
         };
 

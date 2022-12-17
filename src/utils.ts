@@ -61,7 +61,7 @@ export async function getSubgraphs(
   const existingNodeSubgraphs = nodes.filter(
     (nod) => nod.task_type === 'graph'
   );
-  let results = [] as GraphEwoks[];
+  let results: GraphEwoks[] = [];
   if (existingNodeSubgraphs.length > 0) {
     // there are subgraphs -> first search in the recentGraphs for them
     const notInRecent = [];

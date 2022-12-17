@@ -23,6 +23,7 @@ import type { WorkingGraphSlice } from './store/workingGraph';
 import type { ExecutingEventsSlice } from './store/executingEvents';
 import type { AllIconsSlice } from './store/allIcons';
 import type { RecentGraphsSlice } from './store/recentGraphs';
+import type { Color } from '@material-ui/lab';
 
 export enum FormAction {
   cloneGraph = 'cloneGraph',
@@ -85,7 +86,7 @@ export interface Graph {
 export interface SnackbarParams {
   open: boolean;
   text: string;
-  severity: string;
+  severity: Color;
 }
 
 export interface DialogParams {
@@ -239,6 +240,7 @@ export interface nodeInputsOutputs {
 export interface stackGraph {
   id: string;
   label: string;
+  resetStack?: boolean;
 }
 
 export interface UiPropsNodes {

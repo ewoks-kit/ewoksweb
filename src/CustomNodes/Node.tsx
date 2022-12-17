@@ -115,14 +115,13 @@ const Node: React.FC<NodeProps> = ({
   // TODO: exists in sidebar abstract in a hook?
   const cloneNode = () => {
     if ('position' in selectedElement) {
-      const element = selectedElement;
       const newClone: EwoksRFNode = {
-        ...element,
+        ...selectedElement,
         id: calcNewId(selectedElement.id, graphRF.nodes),
         selected: false,
         position: {
-          x: element.position.x + 100,
-          y: element.position.y + 100,
+          x: selectedElement.position.x + 100,
+          y: selectedElement.position.y + 100,
         },
       };
 

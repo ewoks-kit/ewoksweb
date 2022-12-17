@@ -29,8 +29,8 @@ export default function Conditions(props: ConditionsProps) {
   }, [element]);
 
   function addConditions() {
-    const el = element;
-    const elCon = el.data.conditions;
+    const elCon = element.data.conditions;
+
     // check if an empty line already exists
     if (elCon && elCon[elCon.length - 1] && elCon[elCon.length - 1].id === '') {
       setOpenSnackbar({
@@ -38,19 +38,20 @@ export default function Conditions(props: ConditionsProps) {
         text: 'Please fill in the empty line before addining another!',
         severity: 'warning',
       });
-    } else {
-      setSelectedElement(
-        {
-          ...el,
-          data: {
-            ...element.data,
-            on_error: false,
-            conditions: [...elCon, { id: '', name: '', value: false }],
-          },
-        },
-        'fromSaveElement'
-      );
+      return;
     }
+
+    setSelectedElement(
+      {
+        ...element,
+        data: {
+          ...element.data,
+          on_error: false,
+          conditions: [...elCon, { id: '', name: '', value: false }],
+        },
+      },
+      'fromSaveElement'
+    );
   }
 
   function conditionsValuesChanged(table: EditableTableRow[]) {

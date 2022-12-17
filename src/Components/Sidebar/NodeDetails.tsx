@@ -183,15 +183,14 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
   }
 
   function addDataMapping() {
-    const el = element;
-    const elMap = el.default_error_attributes.data_mapping || [];
+    const elMap = element.default_error_attributes.data_mapping || [];
 
     if (!elMap.some((x) => x.id === '')) {
       setSelectedElement(
         {
-          ...el,
+          ...element,
           default_error_attributes: {
-            ...el.default_error_attributes,
+            ...element.default_error_attributes,
             data_mapping: [...elMap, { id: '', name: '', value: '' }],
           },
         },

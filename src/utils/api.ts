@@ -126,8 +126,13 @@ export async function getIcons(): Promise<IconsNames> {
 }
 
 // Get icon:id
-export function getIcon(id: string): Promise<AxiosResponse<string>> {
-  return axiosRequest.get<string>(`/icon/${id}`);
+export function getIcon(
+  id: string
+): Promise<{
+  data: { data_url: string };
+  config: { url: string };
+}> {
+  return axiosRequest.get(`/icon/${id}`);
 }
 
 // Delete icon

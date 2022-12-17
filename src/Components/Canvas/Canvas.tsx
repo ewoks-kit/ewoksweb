@@ -472,7 +472,7 @@ function Canvas() {
       setSelectedElement({
         ...nodeTmp,
         data: { ...nodeTmp.data, details: true },
-      } as EwoksRFNode); // TODO: will allow this as creating a const makes no sense?
+      });
     }
   };
 

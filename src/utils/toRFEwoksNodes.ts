@@ -91,5 +91,5 @@ export function toRFEwoksNodes(
     );
   }
 
-  return [] as EwoksRFNode[];
+  return [];
 }

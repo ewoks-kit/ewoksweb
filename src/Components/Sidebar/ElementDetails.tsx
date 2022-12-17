@@ -28,7 +28,7 @@ function getAccordionContent(
   if ('source' in element) {
     return {
       title: 'Link Details',
-      EditComponent: () => <LinkDetails element={element} />,
+      EditComponent: () => <LinkDetails {...element} />,
     };
   }
 

@@ -3,7 +3,7 @@ import type { GetState, SetState } from 'zustand';
 
 export interface SubgraphsStackSlice {
   subgraphsStack?: stackGraph[];
-  setSubgraphsStack?: (graphRF: stackGraph) => void;
+  setSubgraphsStack?: (stackGraph: stackGraph) => void;
 }
 
 const subgraphsStack = (
@@ -16,8 +16,7 @@ const subgraphsStack = (
     let stack = [];
     const subStack = get().subgraphsStack;
     const exists: number = subStack.map((gr) => gr.id).indexOf(stackGraph.id);
-
-    if (stackGraph.id === 'initialiase') {
+    if (stackGraph.resetStack) {
       stack = [];
     } else if (exists === -1) {
       stack = [...subStack, stackGraph];

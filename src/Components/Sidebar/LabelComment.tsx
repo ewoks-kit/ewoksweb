@@ -42,19 +42,18 @@ export default function LabelComment(props: LabelCommentProps) {
     }
 
     if ('source' in element) {
-      const el = element;
-      setLabel(el.label);
-      setComment(el.data?.comment);
+      setLabel(element.label);
+      setComment(element.data?.comment);
 
       const mappings =
-        el.data.data_mapping.length > 0
-          ? el.data.data_mapping
+        element.data.data_mapping.length > 0
+          ? element.data.data_mapping
               .map((con) => `${con.source_output}->${con.target_input}`)
               .join(', ')
           : '';
       const conditions =
-        el.data.conditions.length > 0
-          ? el.data.conditions
+        element.data.conditions.length > 0
+          ? element.data.conditions
               .map(
                 (con) => `${con.source_output}: ${JSON.stringify(con.value)}`
               )
@@ -70,10 +69,9 @@ export default function LabelComment(props: LabelCommentProps) {
 
   function saveLabel(labelLocal: string) {
     if ('position' in element) {
-      const el = element;
       setSelectedElement(
         {
-          ...el,
+          ...element,
           label: labelLocal,
           data: { ...element.data, label: labelLocal },
         },
@@ -81,7 +79,7 @@ export default function LabelComment(props: LabelCommentProps) {
       );
       return;
     }
-
+    // TODO: should infer type without if?
     if ('source' in element) {
       setSelectedElement(
         {
@@ -95,14 +93,15 @@ export default function LabelComment(props: LabelCommentProps) {
   }
 
   function saveComment(commentLocal: string) {
-    const el = element as EwoksRFLink;
-    setSelectedElement(
-      {
-        ...el,
-        data: { ...element.data, comment: commentLocal },
-      },
-      'fromSaveElement'
-    );
+    if ('source' in element) {
+      setSelectedElement(
+        {
+          ...element,
+          data: { ...element.data, comment: commentLocal },
+        },
+        'fromSaveElement'
+      );
+    }
   }
 
   function valueSavedLocal() {

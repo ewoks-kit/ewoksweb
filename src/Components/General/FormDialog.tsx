@@ -42,13 +42,9 @@ export default function FormDialog(props: FormDialogProps) {
   const [taskType, setTaskType] = React.useState('');
   const [category, setCategory] = React.useState('');
   const [icon, setIcon] = React.useState('');
-  const [optionalInputNames, setOptionalInputNames] = React.useState(
-    [] as string[]
-  );
-  const [requiredInputNames, setRequiredInputNames] = React.useState(
-    [] as string[]
-  );
-  const [outputNames, setOutputNames] = React.useState([] as string[]);
+  const [optionalInputNames, setOptionalInputNames] = React.useState([]);
+  const [requiredInputNames, setRequiredInputNames] = React.useState([]);
+  const [outputNames, setOutputNames] = React.useState([]);
   const [overwrite, setOverwrite] = React.useState<boolean>(false);
 
   const setCanvasGraphChanged = useStore((st) => st.setCanvasGraphChanged);
@@ -57,9 +53,7 @@ export default function FormDialog(props: FormDialogProps) {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const allIcons = useStore((state) => state.allIcons);
   const setGettingFromServer = useStore((st) => st.setGettingFromServer);
-  const [element, setElement] = React.useState<Task | GraphRF>(
-    {} as Task | GraphRF
-  );
+  const [element, setElement] = React.useState<Task | GraphRF>({});
   const setTasks = useStore((state) => state.setTasks);
   const tasks = useStore((state) => state.tasks);
 
@@ -72,6 +66,7 @@ export default function FormDialog(props: FormDialogProps) {
   useEffect(() => {
     setElement(elementToEdit);
     setIsOpen(open);
+    console.log(elementToEdit);
 
     if (isForGraph && 'graph' in elementToEdit) {
       setNewName(elementToEdit.graph.label || '');
@@ -152,7 +147,7 @@ export default function FormDialog(props: FormDialogProps) {
       });
       props.setOpenSaveDialog(false);
       const tasksNew = await getTaskDescription();
-      const tasksL = tasksNew.data as { items: Task[] };
+      const tasksL = tasksNew.data;
       setTasks(tasksL.items);
     } catch (error) {
       setOpenSnackbar({
@@ -198,7 +193,7 @@ export default function FormDialog(props: FormDialogProps) {
         const savedGraph = responseNew.data;
         props.setOpenSaveDialog(false);
         setWorkingGraph(savedGraph, 'fromServer');
-        setRecentGraphs({} as GraphRF, true);
+        setRecentGraphs({}, true);
         setOpenSnackbar({
           open: true,
           text: 'Graph saved succesfully!',
@@ -218,13 +213,15 @@ export default function FormDialog(props: FormDialogProps) {
   function newNameChanged(event: ChangeEvent<HTMLInputElement>) {
     const val = event.target.value;
     setNewName(val);
+    console.log(val);
+
     if ('graph' in element) {
-      const el = element;
       setElement({
-        ...el,
-        graph: { ...el.graph, id: val, label: val },
+        ...element,
+        graph: { ...element.graph, id: val, label: val },
       });
     } else {
+      // TODO: does not infer type
       setElement({
         ...element,
         task_identifier: val,

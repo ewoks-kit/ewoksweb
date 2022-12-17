@@ -11,19 +11,16 @@ import LabelComment from './LabelComment';
 
 const useStyles = DashboardStyle;
 
-export default function LinkDetails(props: { element: EwoksRFLink }) {
+export default function LinkDetails(element: EwoksRFLink) {
   const classes = useStyles();
 
-  const { element } = props;
   const on_error: boolean = element?.data?.on_error || false;
   const map_all_data: boolean = element?.data?.map_all_data || false;
 
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   const [mapAllData, setMapAllData] = React.useState<boolean>(false);
-  const [elementL, setElementL] = React.useState<EwoksRFLink>(
-    {} as EwoksRFLink
-  );
+  const [elementL, setElementL] = React.useState<EwoksRFLink>();
   const [onError, setOnError] = React.useState<boolean>(false);
   const [advanced, setAdvanced] = React.useState<boolean>(false);
   const [required, setRequired] = React.useState<boolean>(false);

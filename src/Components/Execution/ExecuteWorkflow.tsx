@@ -28,8 +28,8 @@ export default function ExecuteWorkflow() {
 
   useEffect(() => {
     // DOC: when execution begins it has to listen to incoming from the socket events
-    socket.on('Executing', (data) => {
-      setExecutedEvents(data as Event);
+    socket.on('Executing', (data: Event) => {
+      setExecutedEvents(data);
     });
 
     return () => {
