@@ -177,39 +177,32 @@ function Canvas() {
 
   const onNodesChange = useCallback(
     (changes) => {
-      if (changes[0].type === 'dimensions') {
-        return;
-      }
+      // TODO: need examination based on comments and commented code
+      // if (changes[0].type === 'dimensions') {
+      //   return;
+      // }
 
       // TODO: type NodeChange[] but complaints for no id
       // TODO: on click another node it is activated twice once with both
       // and then with the current??
 
-      if (changes.length === 1) {
-        const node = [...graphRF.nodes].find((el) => el.id === changes[0].id);
-        if (
-          !(
-            node.task_type === 'executionSteps' &&
-            node.type === 'executionSteps'
-          )
-        ) {
-          setSelectedElement(node);
-        }
+      // if (changes.length === 1) {
+      const node = [...graphRF.nodes].find((el) => el.id === changes[0].id);
 
-        if (changes[0].type === 'remove') {
-          onElementsRemove([node]);
-        }
-      } else {
-        // TODO: nodes are updated only on rf canvas and not on graphRF
-        // if we update graphRF we have a loop so we update on setSelectedElement
-        // where we set every other selected to false... Examine
-
-        setNodes((ns: Node[]) => {
-          return applyNodeChanges(changes as NodeChange[], ns);
-        });
+      if (changes[0].type === 'remove') {
+        onElementsRemove([node]);
       }
+      // } else {
+      // TODO: nodes are updated only on rf canvas and not on graphRF
+      // if we update graphRF we have a loop so we update on setSelectedElement
+      // where we set every other selected to false... Examine
+
+      setNodes((ns: Node[]) => {
+        return applyNodeChanges(changes as NodeChange[], ns);
+      });
+      // }
     },
-    [onElementsRemove, setSelectedElement, graphRF.nodes]
+    [onElementsRemove, graphRF.nodes]
   );
 
   const onEdgesChange = useCallback(
@@ -230,20 +223,18 @@ function Canvas() {
   };
 
   // Functionality moved onNodesChange so remove after testing and do the same onEdgeClick
-  // const onNodeClick = (event, element?: Node) => {
-  //   console.log(element);
+  const onNodeClick = (event, element?: Node) => {
+    const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
 
-  //   const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
-
-  //   if (
-  //     !(
-  //       graphElement.task_type === 'executionSteps' &&
-  //       graphElement.type === 'executionSteps'
-  //     )
-  //   ) {
-  //     setSelectedElement(graphElement);
-  //   }
-  // };
+    if (
+      !(
+        graphElement.task_type === 'executionSteps' &&
+        graphElement.type === 'executionSteps'
+      )
+    ) {
+      setSelectedElement(graphElement);
+    }
+  };
 
   const onEdgeClick = (event, element?: Edge) => {
     const graphElement: EwoksRFLink = edges.find((el) => el.id === element.id);
@@ -628,9 +619,9 @@ function Canvas() {
           snapToGrid
           nodes={nodes}
           edges={edges}
-          // onNodeClick={(evt, node) => {
-          //   onNodeClick(evt, node);
-          // }}
+          onNodeClick={(evt, node) => {
+            onNodeClick(evt, node);
+          }}
           onEdgeClick={(evt, node) => {
             onEdgeClick(evt, node);
           }}
