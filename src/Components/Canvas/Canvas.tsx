@@ -186,7 +186,7 @@ function Canvas() {
       // and then with the current??
 
       const change = changes[0];
-      if ('id' in change && change.type === 'remove') {
+      if (change.type === 'remove') {
         const node = [...graphRF.nodes].find((el) => el.id === change.id);
         onElementsRemove(node);
       }
