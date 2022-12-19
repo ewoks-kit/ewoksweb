@@ -65,7 +65,7 @@ export default function Dashboard() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
-    handleOpenInfo();
+    setOpenSettings(false);
   }, []);
 
   useEffect(() => {
@@ -88,7 +88,7 @@ export default function Dashboard() {
       setOpenDrawers(false);
       setOpenSettings(false);
     }
-  }, [openSettingsDrawer, setOpenSettingsDrawer]);
+  }, [openSettingsDrawer]);
 
   function checkAndNewGraph(notSave: boolean) {
     if (canvasGraphChanged && undoIndex !== 0 && !notSave) {
@@ -115,16 +115,12 @@ export default function Dashboard() {
     setOpenDrawers(!openDrawers);
   }
 
-  function handleOpenInfo() {
-    setOpenSettings(false);
-  }
-
   // TODO: remove? this type of styling
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLImageElement>) {
-    const keys = event.ctrlKey || event.metaKey;
-    if (!keys) {
+    const controlKey = event.ctrlKey || event.metaKey;
+    if (!controlKey) {
       return;
     }
 

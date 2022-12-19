@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react';
-import React, { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Button,
   Checkbox,
@@ -37,15 +37,15 @@ interface FormDialogProps {
 }
 
 export default function FormDialog(props: FormDialogProps) {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [newName, setNewName] = React.useState('');
-  const [taskType, setTaskType] = React.useState('');
-  const [category, setCategory] = React.useState('');
-  const [icon, setIcon] = React.useState('');
-  const [optionalInputNames, setOptionalInputNames] = React.useState([]);
-  const [requiredInputNames, setRequiredInputNames] = React.useState([]);
-  const [outputNames, setOutputNames] = React.useState([]);
-  const [overwrite, setOverwrite] = React.useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [taskType, setTaskType] = useState('');
+  const [category, setCategory] = useState('');
+  const [icon, setIcon] = useState('');
+  const [optionalInputNames, setOptionalInputNames] = useState<string[]>([]);
+  const [requiredInputNames, setRequiredInputNames] = useState<string[]>([]);
+  const [outputNames, setOutputNames] = useState<string[]>([]);
+  const [overwrite, setOverwrite] = useState<boolean>(false);
 
   const setCanvasGraphChanged = useStore((st) => st.setCanvasGraphChanged);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
@@ -53,7 +53,7 @@ export default function FormDialog(props: FormDialogProps) {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const allIcons = useStore((state) => state.allIcons);
   const setGettingFromServer = useStore((st) => st.setGettingFromServer);
-  const [element, setElement] = React.useState<Task | GraphRF>({});
+  const [element, setElement] = useState<Task | GraphRF>({});
   const setTasks = useStore((state) => state.setTasks);
   const tasks = useStore((state) => state.tasks);
 
@@ -72,7 +72,7 @@ export default function FormDialog(props: FormDialogProps) {
       setOverwrite(false);
       return;
     }
-    // TODO: here it ts should infer the Task type without the if but it does not???
+    // TODO: check on the optional of 'graph' in GraphRF that will enable type inferencing
     if ('task_identifier' in elementToEdit) {
       setNewName(elementToEdit.task_identifier);
       setTaskType(elementToEdit.task_type);
@@ -94,8 +94,8 @@ export default function FormDialog(props: FormDialogProps) {
         return;
       }
 
-      if (['editTask'].includes(action)) {
-        puTask(element);
+      if (action === 'editTask') {
+        updateTask(element);
       }
     } else {
       setOpenSnackbar({
@@ -106,7 +106,7 @@ export default function FormDialog(props: FormDialogProps) {
     }
   }
 
-  async function puTask(task: Task) {
+  async function updateTask(task: Task) {
     try {
       await putTask(task);
 
@@ -139,15 +139,18 @@ export default function FormDialog(props: FormDialogProps) {
     }
     try {
       await postTask(task);
+
       setOpenSnackbar({
         open: true,
         text: 'Task saved successfuly',
         severity: 'success',
       });
+
       props.setOpenSaveDialog(false);
+
       const tasksNew = await getTaskDescription();
-      const tasksL = tasksNew.data;
-      setTasks(tasksL.items);
+
+      setTasks(tasksNew.data.items);
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -189,10 +192,13 @@ export default function FormDialog(props: FormDialogProps) {
           })
         );
         setGettingFromServer(false);
-        const savedGraph = responseNew.data;
+
         props.setOpenSaveDialog(false);
-        setWorkingGraph(savedGraph, 'fromServer');
-        setRecentGraphs({}, true);
+
+        setWorkingGraph(responseNew.data, 'fromServer');
+
+        setRecentGraphs(undefined, true);
+
         setOpenSnackbar({
           open: true,
           text: 'Graph saved succesfully!',
