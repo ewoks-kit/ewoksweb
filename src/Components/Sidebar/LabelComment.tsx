@@ -9,6 +9,7 @@ import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
 import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from './sidebarStyle';
+import { isLink, isNode } from '../../utils/typeGuards';
 
 const useStyles = DashboardStyle;
 
@@ -35,13 +36,13 @@ export default function LabelComment(props: LabelCommentProps) {
   const inExecutionMode = useStore((state) => state.inExecutionMode);
 
   useEffect(() => {
-    if ('position' in element) {
+    if (isNode(element)) {
       setLabel(element.data.label);
       setComment(element.data?.comment);
       return;
     }
 
-    if ('source' in element) {
+    if (isLink(element)) {
       setLabel(element.label);
       setComment(element.data?.comment);
 
@@ -68,7 +69,7 @@ export default function LabelComment(props: LabelCommentProps) {
   }, [element]);
 
   function saveLabel(labelLocal: string) {
-    if ('position' in element) {
+    if (isNode(element)) {
       setSelectedElement(
         {
           ...element,
@@ -80,7 +81,7 @@ export default function LabelComment(props: LabelCommentProps) {
       return;
     }
     // TODO: should infer type without if?
-    if ('source' in element) {
+    if (isLink(element)) {
       setSelectedElement(
         {
           ...element,
@@ -93,7 +94,7 @@ export default function LabelComment(props: LabelCommentProps) {
   }
 
   function saveComment(commentLocal: string) {
-    if ('source' in element) {
+    if (isLink(element)) {
       setSelectedElement(
         {
           ...element,

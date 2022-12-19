@@ -14,6 +14,7 @@ import useStore from '../../store/useStore';
 import type { EwoksRFLink, GraphRF } from '../../types';
 import sidebarStyle from './sidebarStyle';
 import type { ChangeEvent } from 'react';
+import { isLink } from '../../utils/typeGuards';
 
 const useStyles = DashboardStyle;
 
@@ -42,7 +43,7 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   const [y, setY] = useState(80);
 
   useEffect(() => {
-    if ('source' in element) {
+    if (isLink(element)) {
       setLinkType(element.type);
       if (element.type === 'getAround') {
         setX(element.data.getAroundProps.x);
@@ -113,7 +114,7 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   };
 
   function changeX(event: ChangeEvent<HTMLInputElement>, number: number) {
-    if ('source' in selectedElement) {
+    if (isLink(selectedElement)) {
       setSelectedElement(
         {
           ...selectedElement,
@@ -132,7 +133,7 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   }
 
   function changeY(event: ChangeEvent<HTMLInputElement>, number: number) {
-    if ('source' in selectedElement) {
+    if (isLink(selectedElement)) {
       setSelectedElement(
         {
           ...selectedElement,

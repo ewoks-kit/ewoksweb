@@ -20,6 +20,7 @@ import { IconButton, TextField } from '@material-ui/core';
 import tooltipText from '../Components/General/TooltipText';
 import { findImage } from 'utils';
 import type { Connection } from 'react-flow-renderer';
+import { isNode } from '../utils/typeGuards';
 
 const onDragStart = (e) => {
   e.preventDefault();
@@ -114,7 +115,7 @@ const Node: React.FC<NodeProps> = ({
 
   // TODO: exists in sidebar abstract in a hook?
   const cloneNode = () => {
-    if ('position' in selectedElement) {
+    if (isNode(selectedElement)) {
       const newClone: EwoksRFNode = {
         ...selectedElement,
         id: calcNewId(selectedElement.id, graphRF.nodes),
@@ -138,7 +139,7 @@ const Node: React.FC<NodeProps> = ({
   };
 
   function setSelEl() {
-    if ('position' in selectedElement) {
+    if (isNode(selectedElement)) {
       setSelectedElement({
         ...selectedElement,
         data: {

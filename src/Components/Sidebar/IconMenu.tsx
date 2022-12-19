@@ -55,6 +55,7 @@ export default function IconMenu() {
         break;
       }
       case 'cloneTask': {
+        // TODO: check for using isNode by extending each possible types
         if ('position' in element) {
           if (element.task_type === 'graph') {
             setOpenSnackbar({

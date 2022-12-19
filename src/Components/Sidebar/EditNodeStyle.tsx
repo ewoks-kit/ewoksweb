@@ -4,6 +4,7 @@ import type { EwoksRFNode } from '../../types';
 import useStore from '../../store/useStore';
 import useDebounce from '../../hooks/useDebounce';
 import type { ChangeEvent } from 'react';
+import { isNode } from 'utils/typeGuards';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(element: EwoksRFNode) {
@@ -20,7 +21,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
   const debouncedNodeWidth = useDebounce(nodeSize, 500);
 
   useEffect(() => {
-    if ('position' in element) {
+    if (isNode(element)) {
       setWithImage(element.data.withImage);
       setWithLabel(element.data.withLabel);
       setColorBorder(element.data.colorBorder || '');

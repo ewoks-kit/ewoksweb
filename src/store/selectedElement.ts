@@ -6,6 +6,7 @@ import type {
   State,
 } from '../types';
 import type { GetState, SetState } from 'zustand';
+import { isLink, isNode } from '../utils/typeGuards';
 
 export interface SelectedElementSlice {
   selectedElement?: EwoksRFNode | EwoksRFLink | GraphDetails;
@@ -32,7 +33,7 @@ const selectedElement = (
 
     if (wg === '0' || wg === graph.id) {
       let tempGraph = {} as GraphRF;
-      if ('position' in element) {
+      if (isNode(element)) {
         const allOtherNodes = nodes.filter((nod) => nod.id !== element.id);
         tempGraph = {
           graph,
@@ -47,7 +48,7 @@ const selectedElement = (
             graph: tempGraph,
           });
         }
-      } else if ('source' in element) {
+      } else if (isLink(element)) {
         tempGraph = {
           graph,
           // setting all node de-selected...
@@ -63,7 +64,7 @@ const selectedElement = (
       } else {
         tempGraph = {
           // TODO: it should infer the type
-          graph: element as GraphDetails,
+          graph: element,
           nodes: initializeNodes(nodes),
           links: links.map((link) => {
             return { ...link, selected: false }; // TODO: examine selected after reactflow update

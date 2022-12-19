@@ -1,5 +1,6 @@
 import type { State } from '../types';
 import type { GetState, SetState } from 'zustand';
+import { isLink, isNode } from '../utils/typeGuards';
 
 export interface UndoIndexSlice {
   undoIndex?: number;
@@ -23,7 +24,7 @@ const undoIndex = (
       // to be updated to see the change in the sidebar again on undo-redo
       let selEl = get().selectedElement;
 
-      if ('position' in selEl) {
+      if (isNode(selEl)) {
         selEl = get().undoRedo[index].graph.nodes.find(
           (nod) => nod.id === selEl.id
         );
@@ -32,7 +33,7 @@ const undoIndex = (
         }
       }
 
-      if ('source' in selEl) {
+      if (isLink(selEl)) {
         selEl = get().undoRedo[index].graph.links.find(
           (lin) => lin.id === selEl.id
         );

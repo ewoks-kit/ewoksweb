@@ -30,6 +30,7 @@ import { OpenInBrowser } from '@material-ui/icons';
 import SidebarTooltip from './SidebarTooltip';
 import getIconsFromServer from '../../utils/getIconsFromServer';
 import commonStrings from 'commonStrings.json';
+import { isLink, isNode } from '../../utils/typeGuards';
 
 const useStyles = DashboardStyle;
 
@@ -96,7 +97,7 @@ export default function Sidebar() {
       return;
     }
 
-    if ('position' in element) {
+    if (isNode(element)) {
       const nodesLinks = graphRF.links.filter(
         (link) => !(link.source === element.id || link.target === element.id)
       );
@@ -115,7 +116,7 @@ export default function Sidebar() {
       return;
     }
 
-    if ('source' in element) {
+    if (isLink(element)) {
       const newGraph: GraphRF = {
         ...graphRF,
         links: graphRF.links.filter((link) => link.id !== element.id),
@@ -169,7 +170,7 @@ export default function Sidebar() {
   };
 
   const cloneNode = () => {
-    if ('position' in selectedElement) {
+    if (isNode(selectedElement)) {
       const newClone: EwoksRFNode = {
         ...selectedElement,
         id: calcNewId(selectedElement.id, graphRF.nodes),
@@ -261,7 +262,7 @@ export default function Sidebar() {
           >
             Clone
           </Button>
-          {!('source' in selectedElement) && <IconMenu />}
+          {!isLink(selectedElement) && <IconMenu />}
           <DraggableDialog open={openDialog} content={dialogContent} />
           <ConfirmDialog
             title={`Delete "${element.label}" workflow?`}

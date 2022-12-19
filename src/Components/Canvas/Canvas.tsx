@@ -100,7 +100,7 @@ function Canvas() {
   }, [graphRF.nodes, graphRF.links]);
 
   useEffect(() => {
-    if ('position' in selectedElement) {
+    if (isNode(selectedElement)) {
       const timeoutPosition = setTimeout(() => {
         updateNodeInternals(selectedElement.id);
       }, 400);
@@ -572,7 +572,7 @@ function Canvas() {
     if (keys && charCode === 'v') {
       event.preventDefault();
       event.stopPropagation();
-      if ('position' in selectedElement) {
+      if (isNode(selectedElement)) {
         const newClone: EwoksRFNode = {
           ...selectedElement,
           id: calcNewId(selectedElement.id, graphRF.nodes),
