@@ -66,7 +66,6 @@ export default function FormDialog(props: FormDialogProps) {
   useEffect(() => {
     setElement(elementToEdit);
     setIsOpen(open);
-    console.log(elementToEdit);
 
     if (isForGraph && 'graph' in elementToEdit) {
       setNewName(elementToEdit.graph.label || '');
@@ -213,7 +212,6 @@ export default function FormDialog(props: FormDialogProps) {
   function newNameChanged(event: ChangeEvent<HTMLInputElement>) {
     const val = event.target.value;
     setNewName(val);
-    console.log(val);
 
     if ('graph' in element) {
       setElement({

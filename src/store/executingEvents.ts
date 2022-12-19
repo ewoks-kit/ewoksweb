@@ -20,7 +20,7 @@ const executingEvents = (
   // in current-time. For that they are be feeded using a loop with setExecuting and setExecuted.
 
   setExecutingEvents: (execEvent: Event, live: boolean) => {
-    const prevExecutingEvents = [...get().executingEvents];
+    const prevExecutingEvents: Event[] = [...get().executingEvents];
 
     if (execEvent.context === 'node') {
       const newExecutingEvents: Event[] = calcNewExecutingEvents(

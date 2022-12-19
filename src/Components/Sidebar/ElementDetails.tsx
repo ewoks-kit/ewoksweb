@@ -21,7 +21,7 @@ function getAccordionContent(
   if ('position' in element) {
     return {
       title: 'Node Details',
-      EditComponent: () => <NodeDetails element={element} />,
+      EditComponent: () => <NodeDetails {...element} />,
     };
   }
 

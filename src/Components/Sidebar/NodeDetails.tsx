@@ -26,15 +26,8 @@ import DefaultInputs from './EditableTableProperties/DefaultInputs';
 const useStyles = DashboardStyle;
 
 // DOC: selectedNode details in sidebar
-// Test
-// unit: fake some TaskProperties and check the form
-//       click and edit some properties and check the node properties
-// integration: by setting a selected node and validating the form and chenge values to see
-//             the selected node change
-export default function NodeDetails(props: { element: EwoksRFNode }) {
+export default function NodeDetails(element: EwoksRFNode) {
   const classes = useStyles();
-
-  const { element } = props;
 
   const graphRF = useStore((state) => state.graphRF);
   const setGraphRF = useStore((state) => state.setGraphRF);
@@ -49,32 +42,32 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
   const [mapAllData, setMapAllData] = React.useState<boolean>(false);
 
   const NonEditableTaskProperties = [
-    { id: 'id', label: 'Id', value: props.element.id },
-    { id: 'task_type', label: 'Type', value: props.element.task_type },
+    { id: 'id', label: 'Id', value: element.id },
+    { id: 'task_type', label: 'Type', value: element.task_type },
     {
       id: 'task_generator',
       label: 'Generator',
-      value: props.element.task_generator,
+      value: element.task_generator,
     },
     {
       id: 'task_category',
       label: 'Category',
-      value: props.element.task_category,
+      value: element.task_category,
     },
     {
       id: 'optional_input_names',
       label: 'Optional Inputs',
-      value: props.element.optional_input_names,
+      value: element.optional_input_names,
     },
     {
       id: 'required_input_names',
       label: 'Required Inputs',
-      value: props.element.required_input_names,
+      value: element.required_input_names,
     },
     {
       id: 'output_names',
       label: 'Outputs',
-      value: props.element.output_names,
+      value: element.output_names,
     },
   ];
 
@@ -82,9 +75,9 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
     {
       id: 'task_identifier',
       label: 'Identifier',
-      value: props.element.task_identifier,
+      value: element.task_identifier,
     },
-    { id: 'node_icon', label: 'Icon', value: props.element.data.icon },
+    { id: 'node_icon', label: 'Icon', value: element.data.icon },
   ];
 
   useEffect(() => {
@@ -336,7 +329,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
               <div style={{ width: '100%' }}>
                 {editableTaskProperties.map(({ id, label, value }) =>
                   ['ppfmethod', 'method', 'script'].includes(
-                    props.element.task_type
+                    element.task_type
                   ) ? (
                     <EditTaskProp
                       key={id}

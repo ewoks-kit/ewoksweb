@@ -20,7 +20,7 @@ export default function LinkDetails(element: EwoksRFLink) {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   const [mapAllData, setMapAllData] = React.useState<boolean>(false);
-  const [elementL, setElementL] = React.useState<EwoksRFLink>();
+  const [elementL, setElementL] = React.useState<EwoksRFLink>(element);
   const [onError, setOnError] = React.useState<boolean>(false);
   const [advanced, setAdvanced] = React.useState<boolean>(false);
   const [required, setRequired] = React.useState<boolean>(false);

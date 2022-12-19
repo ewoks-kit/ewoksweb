@@ -11,7 +11,7 @@ const graphRF = (set: SetState<State>, get: GetState<State>): GraphRFSlice => ({
   graphRF: initializedRFGraph,
 
   setGraphRF: (graphRFL, isChangeToCanvasGraph) => {
-    // If missing uiProps or other fill it here
+    // DOC: If missing uiProps or other fill it here
     if (!graphRFL.graph.uiProps) {
       graphRFL.graph.uiProps = {};
     }

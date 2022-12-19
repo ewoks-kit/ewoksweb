@@ -29,7 +29,6 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
       id,
       task_type,
       task_identifier,
-      // type, exists in EwoksRFNode but is the same as task_type
       inputs_complete,
       task_generator,
       default_inputs,
@@ -76,18 +75,19 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           },
         };
       }
-      // graphs separately only if a transformation is needed???
+      // TODO: return the same for graphs and non-graphs
+      // node-icon is not in graphs? ok? Graphs have no editable Node Info where the node_icon is
+      // all the rest are the same... merge?
       return {
         id: id.toString(),
         label,
         task_type,
         task_identifier,
-        // type: task_type,
         inputs_complete,
         task_generator: task_generator || null,
         default_inputs: cleanDefaultInputs(default_inputs),
         default_error_node,
-        ddefault_error_attributes: default_error_node
+        default_error_attributes: default_error_node
           ? default_error_attributes
           : null,
         uiProps: {

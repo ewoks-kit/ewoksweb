@@ -177,22 +177,39 @@ function Canvas() {
 
   const onNodesChange = useCallback(
     (changes) => {
+      if (changes[0].type === 'dimensions') {
+        return;
+      }
+
       // TODO: type NodeChange[] but complaints for no id
+      // TODO: on click another node it is activated twice once with both
+      // and then with the current??
 
-      const node = [...graphRF.nodes].find((el) => el.id === changes[0].id);
-      // TODO: nodes are updated only on rf canvas and not on graphRF
-      // if we update graphRF we have a loop so we update on setSelectedElement
-      // where we set every other selected to false... SOLUTION
+      if (changes.length === 1) {
+        const node = [...graphRF.nodes].find((el) => el.id === changes[0].id);
+        if (
+          !(
+            node.task_type === 'executionSteps' &&
+            node.type === 'executionSteps'
+          )
+        ) {
+          setSelectedElement(node);
+        }
 
-      setNodes((ns: Node[]) => {
-        return applyNodeChanges(changes as NodeChange[], ns);
-      });
+        if (changes[0].type === 'remove') {
+          onElementsRemove([node]);
+        }
+      } else {
+        // TODO: nodes are updated only on rf canvas and not on graphRF
+        // if we update graphRF we have a loop so we update on setSelectedElement
+        // where we set every other selected to false... Examine
 
-      if (changes[0].type === 'remove') {
-        onElementsRemove([node]);
+        setNodes((ns: Node[]) => {
+          return applyNodeChanges(changes as NodeChange[], ns);
+        });
       }
     },
-    [onElementsRemove, graphRF.nodes]
+    [onElementsRemove, setSelectedElement, graphRF.nodes]
   );
 
   const onEdgesChange = useCallback(
@@ -212,18 +229,21 @@ function Canvas() {
     setSelectedElement(graphRF.graph);
   };
 
-  const onNodeClick = (event, element?: Node) => {
-    const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
+  // Functionality moved onNodesChange so remove after testing and do the same onEdgeClick
+  // const onNodeClick = (event, element?: Node) => {
+  //   console.log(element);
 
-    if (
-      !(
-        graphElement.task_type === 'executionSteps' &&
-        graphElement.type === 'executionSteps'
-      )
-    ) {
-      setSelectedElement(graphElement);
-    }
-  };
+  //   const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
+
+  //   if (
+  //     !(
+  //       graphElement.task_type === 'executionSteps' &&
+  //       graphElement.type === 'executionSteps'
+  //     )
+  //   ) {
+  //     setSelectedElement(graphElement);
+  //   }
+  // };
 
   const onEdgeClick = (event, element?: Edge) => {
     const graphElement: EwoksRFLink = edges.find((el) => el.id === element.id);
@@ -368,7 +388,7 @@ function Canvas() {
       const sourceTask = graphRF.nodes.find((nod) => nod.id === params.source);
 
       const targetTask = graphRF.nodes.find((nod) => nod.id === params.target);
-
+      // TODO: Move link creation to separate file
       const link = {
         data: {
           getAroundProps: { x: 0, y: 0 },
@@ -608,9 +628,9 @@ function Canvas() {
           snapToGrid
           nodes={nodes}
           edges={edges}
-          onNodeClick={(evt, node) => {
-            onNodeClick(evt, node);
-          }}
+          // onNodeClick={(evt, node) => {
+          //   onNodeClick(evt, node);
+          // }}
           onEdgeClick={(evt, node) => {
             onEdgeClick(evt, node);
           }}

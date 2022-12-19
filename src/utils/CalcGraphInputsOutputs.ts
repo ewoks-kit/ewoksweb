@@ -36,7 +36,7 @@ export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
     category: graph.graph.category || '',
     input_nodes,
     output_nodes,
-    uiProps: graph.graph.uiProps,
+    uiProps: { ...graph.graph.uiProps },
   };
 }
 
