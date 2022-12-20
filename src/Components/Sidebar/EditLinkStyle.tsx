@@ -18,14 +18,9 @@ import { isLink } from '../../utils/typeGuards';
 
 const useStyles = DashboardStyle;
 
-interface EditLinkStyleProps {
-  element: EwoksRFLink;
-}
 // DOC: Edit the link style
-export default function EditLinkStyle(props: EditLinkStyleProps) {
+export default function EditLinkStyle(element: EwoksRFLink) {
   const classes = useStyles();
-
-  const { element } = props;
 
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const selectedElement = useStore((state) => state.selectedElement);
@@ -43,22 +38,24 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
   const [y, setY] = useState(80);
 
   useEffect(() => {
-    if (isLink(element)) {
-      setLinkType(element.type);
-      if (element.type === 'getAround') {
-        setX(element.data.getAroundProps.x);
-        setY(element.data.getAroundProps.y);
-      }
-
-      if (element.markerEnd === '') {
-        setArrowType({ type: 'none' });
-      } else {
-        setArrowType(element.markerEnd);
-      }
-
-      setAnimated(element.animated);
-      setColorLine(element.style.stroke);
+    if (!isLink(element)) {
+      return;
     }
+
+    setLinkType(element.type);
+    if (element.type === 'getAround') {
+      setX(element.data.getAroundProps.x);
+      setY(element.data.getAroundProps.y);
+    }
+
+    if (element.markerEnd === '') {
+      setArrowType({ type: 'none' });
+    } else {
+      setArrowType(element.markerEnd);
+    }
+
+    setAnimated(element.animated);
+    setColorLine(element.style.stroke);
   }, [element]);
 
   function linkTypeChanged(event: ChangeEvent<HTMLInputElement>) {
@@ -113,42 +110,44 @@ export default function EditLinkStyle(props: EditLinkStyleProps) {
     );
   };
 
-  function changeX(event: ChangeEvent<HTMLInputElement>, number: number) {
-    if (isLink(selectedElement)) {
-      setSelectedElement(
-        {
-          ...selectedElement,
-          data: {
-            ...selectedElement.data,
-            getAroundProps: {
-              ...selectedElement.data.getAroundProps,
-              x: number,
-            },
+  function changeX(event: ChangeEvent<HTMLInputElement>, newX: number) {
+    if (!isLink(selectedElement)) {
+      return;
+    }
+    setSelectedElement(
+      {
+        ...selectedElement,
+        data: {
+          ...selectedElement.data,
+          getAroundProps: {
+            ...selectedElement.data.getAroundProps,
+            x: newX,
           },
         },
-        'fromSaveElement'
-      );
-      setX(number);
-    }
+      },
+      'fromSaveElement'
+    );
+    setX(newX);
   }
 
-  function changeY(event: ChangeEvent<HTMLInputElement>, number: number) {
-    if (isLink(selectedElement)) {
-      setSelectedElement(
-        {
-          ...selectedElement,
-          data: {
-            ...selectedElement.data,
-            getAroundProps: {
-              ...selectedElement.data.getAroundProps,
-              y: number,
-            },
+  function changeY(event: ChangeEvent<HTMLInputElement>, newY: number) {
+    if (!isLink(selectedElement)) {
+      return;
+    }
+    setSelectedElement(
+      {
+        ...selectedElement,
+        data: {
+          ...selectedElement.data,
+          getAroundProps: {
+            ...selectedElement.data.getAroundProps,
+            y: newY,
           },
         },
-        'fromSaveElement'
-      );
-      setY(number);
-    }
+      },
+      'fromSaveElement'
+    );
+    setY(newY);
   }
 
   function applyLinkTypeToAll() {

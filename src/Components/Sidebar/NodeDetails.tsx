@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 
 import type { DataMapping, EditableTableRow, EwoksRFNode } from '../../types';
@@ -32,14 +32,12 @@ export default function NodeDetails(element: EwoksRFNode) {
   const graphRF = useStore((state) => state.graphRF);
   const setGraphRF = useStore((state) => state.setGraphRF);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
-  const [inputsComplete, setInputsComplete] = React.useState<boolean>(false);
-  const [advanced, setAdvanced] = React.useState<boolean>(false);
-  const [defaultErrorNode, setDefaultErrorNode] = React.useState<boolean>(
-    false
-  );
+  const [inputsComplete, setInputsComplete] = useState<boolean>(false);
+  const [advanced, setAdvanced] = useState<boolean>(false);
+  const [defaultErrorNode, setDefaultErrorNode] = useState<boolean>(false);
 
-  const [dataMapping, setDataMapping] = React.useState<DataMapping[]>([]);
-  const [mapAllData, setMapAllData] = React.useState<boolean>(false);
+  const [dataMapping, setDataMapping] = useState<DataMapping[]>([]);
+  const [mapAllData, setMapAllData] = useState<boolean>(false);
 
   const NonEditableTaskProperties = [
     { id: 'id', label: 'Id', value: element.id },
@@ -123,7 +121,7 @@ export default function NodeDetails(element: EwoksRFNode) {
             target: uniqueId,
           };
         }
-        // ![link.source, link.target].includes(element.id))
+
         return link;
       });
 
@@ -194,9 +192,14 @@ export default function NodeDetails(element: EwoksRFNode) {
 
   function dataMappingValuesChanged(table: EditableTableRow[]) {
     const dmap: DataMapping[] = table.map((row) => {
+      if (typeof row.value !== 'string') {
+        throw new TypeError(
+          'Expecting only string but got another type for Data_Mapping'
+        );
+      }
       return {
         source_output: row.name,
-        target_input: row.value as string,
+        target_input: row.value,
       };
     });
     setSelectedElement(

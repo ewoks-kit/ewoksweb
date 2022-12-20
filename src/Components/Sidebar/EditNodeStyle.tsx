@@ -10,10 +10,6 @@ import { isNode } from 'utils/typeGuards';
 export default function EditNodeStyle(element: EwoksRFNode) {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
-  const [withImage, setWithImage] = useState<boolean>(false);
-  const [withLabel, setWithLabel] = useState<boolean>(false);
-  const [colorBorder, setColorBorder] = useState<string>('');
-  const [moreHandles, setMoreHandles] = useState<boolean>(true);
   const [nodeSize, setNodeSize] = useState<number>(
     element.data.nodeWidth || 100
   );
@@ -21,14 +17,11 @@ export default function EditNodeStyle(element: EwoksRFNode) {
   const debouncedNodeWidth = useDebounce(nodeSize, 500);
 
   useEffect(() => {
-    if (isNode(element)) {
-      setWithImage(element.data.withImage);
-      setWithLabel(element.data.withLabel);
-      setColorBorder(element.data.colorBorder || '');
-      setMoreHandles(!!element.data.moreHandles);
-      setNodeSize(element.data.nodeWidth || 100);
+    if (!isNode(element)) {
+      return;
     }
-    // TODO: Does this specific reference to id needed?
+
+    setNodeSize(element.data.nodeWidth || 100);
   }, [element]);
 
   useEffect(
@@ -108,14 +101,22 @@ export default function EditNodeStyle(element: EwoksRFNode) {
             <label htmlFor="withImage">With Image</label>
             <Checkbox
               name="withImage"
-              checked={withImage === undefined ? true : !!withImage}
+              checked={
+                element.data.withImage === undefined
+                  ? true
+                  : !!element.data.withImage
+              }
               onChange={withImageChanged}
               inputProps={{ 'aria-label': 'controlled' }}
             />
             <label htmlFor="withLabel">With Label</label>
             <Checkbox
               name="withLabel"
-              checked={withLabel === undefined ? true : !!withLabel}
+              checked={
+                element.data.withLabel === undefined
+                  ? true
+                  : !!element.data.withLabel
+              }
               onChange={withLabelChanged}
               inputProps={{ 'aria-label': 'controlled' }}
             />
@@ -128,7 +129,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
               type="color"
               id="head"
               name="head"
-              value={colorBorder}
+              value={element.data.colorBorder || ''}
               onChange={colorBorderChanged}
               style={{ margin: '10px' }}
             />
@@ -141,7 +142,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
             <label htmlFor="moreHandles">More handles</label>
             <Checkbox
               name="moreHandles"
-              checked={moreHandles}
+              checked={!!element.data.moreHandles}
               onChange={moreHandlesChanged}
               inputProps={{ 'aria-label': 'controlled' }}
             />

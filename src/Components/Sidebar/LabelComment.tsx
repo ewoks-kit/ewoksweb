@@ -69,28 +69,16 @@ export default function LabelComment(props: LabelCommentProps) {
   }, [element]);
 
   function saveLabel(labelLocal: string) {
-    if (isNode(element)) {
-      setSelectedElement(
-        {
-          ...element,
-          label: labelLocal,
-          data: { ...element.data, label: labelLocal },
-        },
-        'fromSaveElement'
-      );
-      return;
-    }
-    // TODO: should infer type without if?
-    if (isLink(element)) {
-      setSelectedElement(
-        {
-          ...element,
-          label: labelLocal,
-          data: { ...element.data, label: labelLocal },
-        },
-        'fromSaveElement'
-      );
-    }
+    // TODO: do not put label in both places. See the final spec of
+    // ewoks labels-nodes and handle label-comment in a different way.
+    setSelectedElement(
+      {
+        ...element,
+        label: labelLocal,
+        data: { ...element.data, label: labelLocal },
+      },
+      'fromSaveElement'
+    );
   }
 
   function saveComment(commentLocal: string) {

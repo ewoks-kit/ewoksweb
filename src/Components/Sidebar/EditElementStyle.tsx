@@ -29,7 +29,7 @@ function getAccordionContent(
   if (isLink(element)) {
     return {
       title: 'Styling Link',
-      EditComponent: () => <EditLinkStyle element={element} />,
+      EditComponent: () => <EditLinkStyle {...element} />,
     };
   }
 

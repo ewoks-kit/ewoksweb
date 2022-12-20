@@ -100,12 +100,14 @@ function Canvas() {
   }, [graphRF.nodes, graphRF.links]);
 
   useEffect(() => {
-    if (isNode(selectedElement)) {
-      const timeoutPosition = setTimeout(() => {
-        updateNodeInternals(selectedElement.id);
-      }, 400);
-      return () => clearTimeout(timeoutPosition);
+    if (!isNode(selectedElement)) {
+      return;
     }
+
+    const timeoutPosition = setTimeout(() => {
+      updateNodeInternals(selectedElement.id);
+    }, 400);
+    return () => clearTimeout(timeoutPosition);
   }, [selectedElement, updateNodeInternals]);
 
   useEffect(() => {

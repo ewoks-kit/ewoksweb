@@ -11,3 +11,9 @@ export function isLink(
 ): entity is EwoksRFLink {
   return 'source' in entity;
 }
+
+export function isGraphDetails(
+  entity: EwoksRFNode | EwoksRFLink | GraphDetails
+): entity is GraphDetails {
+  return 'input_nodes' in entity;
+}

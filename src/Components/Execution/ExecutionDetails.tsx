@@ -1,5 +1,5 @@
 // /* eslint-disable sonarjs/cognitive-complexity */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactJson from 'react-json-view';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import IntegratedSpinner from '../General/IntegratedSpinner';

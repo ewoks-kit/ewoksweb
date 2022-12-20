@@ -1,48 +1,37 @@
-import React, { useEffect } from 'react';
 import useStore from '../../store/useStore';
+import { isGraphDetails } from '../../utils/typeGuards';
 import TextButtonSave from './TextButtonSave';
 
 // DOC: the label and the comment when the graph is the selectedElement
 export default function GraphLabelComment() {
-  const [label, setLabel] = React.useState('');
-  const [comment, setComment] = React.useState('');
-  const [category, setCategory] = React.useState('');
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const selectedElement = useStore((state) => state.selectedElement);
 
-  useEffect(() => {
-    if ('input_nodes' in selectedElement) {
-      setLabel(selectedElement.label);
-      setCategory(selectedElement.category);
-      setComment(selectedElement.uiProps?.comment);
-    }
-  }, [selectedElement]);
-
-  function saveCategory(categ) {
+  function saveCategory(category) {
     setSelectedElement(
       {
         ...selectedElement,
-        category: categ,
+        category,
       },
       'fromSaveElement'
     );
   }
 
-  function saveLabel(labe: string) {
+  function saveLabel(label: string) {
     setSelectedElement(
       {
         ...selectedElement,
-        label: labe,
+        label,
       },
       'fromSaveElement'
     );
   }
 
-  function saveComment(commen: string) {
+  function saveComment(comment: string) {
     setSelectedElement(
       {
         ...selectedElement,
-        uiProps: { ...selectedElement.uiProps, comment: commen },
+        uiProps: { ...selectedElement.uiProps, comment },
       },
       'fromSaveElement'
     );
@@ -50,15 +39,22 @@ export default function GraphLabelComment() {
 
   return (
     <>
-      <TextButtonSave label="Label" value={label} valueSaved={saveLabel} />
+      <TextButtonSave
+        label="Label"
+        value={selectedElement.label}
+        valueSaved={saveLabel}
+      />
       <TextButtonSave
         label="Comment"
-        value={comment}
+        value={selectedElement.uiProps?.comment}
         valueSaved={saveComment}
       />
       <TextButtonSave
         label="Category"
-        value={category}
+        value={
+          (isGraphDetails(selectedElement) && selectedElement.category) ||
+          'No graph selected'
+        }
         valueSaved={saveCategory}
       />
     </>

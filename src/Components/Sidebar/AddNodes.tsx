@@ -153,17 +153,17 @@ function AddNodes(props: AddNodesProps) {
     setOpenAgreeDialog(false);
   };
 
-  function action(actionL: FormAction, element: string | Task) {
-    setDoAction(actionL);
+  function onAction(action: FormAction, element: string | Task) {
+    setDoAction(action);
 
-    if (['cloneTask', 'editTask'].includes(actionL)) {
+    if (['cloneTask', 'editTask'].includes(action)) {
       const task = tasks.find((tas) => tas.task_identifier === element);
       setElementToEdit(task);
       setOpenSaveDialog(true);
       return;
     }
 
-    if (actionL === 'newTask') {
+    if (action === 'newTask') {
       setElementToEdit(initializedTask);
       setOpenSaveDialog(true);
     }
@@ -317,7 +317,7 @@ function AddNodes(props: AddNodesProps) {
                     <IconButton
                       aria-label="edit"
                       onClick={() =>
-                        action(
+                        onAction(
                           FormAction.editTask,
                           selectedTask.task_identifier
                         )
@@ -332,7 +332,7 @@ function AddNodes(props: AddNodesProps) {
                       variant="outlined"
                       color="primary"
                       onClick={() =>
-                        action(
+                        onAction(
                           FormAction.cloneTask,
                           selectedTask.task_identifier
                         )
@@ -347,27 +347,28 @@ function AddNodes(props: AddNodesProps) {
                       variant="outlined"
                       color="primary"
                       onClick={() =>
-                        action(FormAction.newTask, initializedTask)
+                        onAction(FormAction.newTask, initializedTask)
                       }
                       size="small"
                     >
                       New
                     </Button>
+                    <ConfirmDialog
+                      title={`Delete "${selectedTask.task_identifier}" task?`}
+                      content={`You are about to delete a task.
+                                Please make sure that it is not used in any workflow!
+                                Do you agree to continue?`}
+                      open={openAgreeDialog}
+                      agreeCallback={agreeDeleteTask}
+                      disagreeCallback={disAgreeDeleteTask}
+                    />
                   </>
                 )}
             </Accordion>
           )
         )}
       </AccordionDetails>
-      <ConfirmDialog
-        title={`Delete "${selectedTask?.task_identifier}" task?`}
-        content={`You are about to delete a task.
-              Please make sure that it is not used in any workflow!
-              Do you agree to continue?`}
-        open={openAgreeDialog}
-        agreeCallback={agreeDeleteTask}
-        disagreeCallback={disAgreeDeleteTask}
-      />
+
       <FormDialog
         elementToEdit={elementToEdit}
         action={doAction}

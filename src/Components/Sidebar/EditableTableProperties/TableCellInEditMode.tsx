@@ -2,6 +2,7 @@
   The cell within a table when the row is in edit mode.
   Provides different input for any selected type (number, string, list etc)
 */
+import type { ChangeEvent } from 'react';
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
@@ -29,19 +30,24 @@ function TableCellInEditMode(props: CustomTableCellProps) {
   const { index, row, name, onChange, type, typeOfValues } = props;
   const classes = useStyles();
 
-  const [boolVal, setBoolVal] = React.useState<string>('true');
+  const [valueToString, setValueToString] = React.useState<string>('true');
 
   useEffect(() => {
-    setBoolVal(
+    setValueToString(
       row.value !== null && row.value !== undefined
-        ? // I need to show as string any kind of value it gets?
+        ? // I need to show as string any kind of (value: unknown) it gets
+          // value can be any type in the dropdown
           // eslint-disable-next-line @typescript-eslint/no-base-to-string
           row.value.toString()
         : 'null'
     );
   }, [row.value, row]);
 
-  function onChangeBool(e, rowTable: EditableTableRow, indexRow: number) {
+  function onChangeBool(
+    e: ChangeEvent<HTMLInputElement>,
+    changedRow: EditableTableRow,
+    rowIndex: number
+  ) {
     const event = {
       ...e,
       target: {
@@ -50,7 +56,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
         value: e.target.value,
       },
     };
-    onChange(event, rowTable, indexRow);
+    onChange(event, changedRow, rowIndex);
   }
 
   return type === 'dict' || type === 'list' || type === 'object' ? (
@@ -99,7 +105,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
     <RadioGroup
       aria-label="gender"
       name="value"
-      value={boolVal} // {row[name]}
+      value={valueToString}
       onChange={(e) => onChangeBool(e, row, index)}
       data-cy="radioInEditableCell"
     >
