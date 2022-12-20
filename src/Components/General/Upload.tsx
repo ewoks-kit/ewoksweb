@@ -15,14 +15,12 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const showFile = async (
-  e: ChangeEvent<HTMLInputElement>
-): Promise<FileReader> => {
+async function showFile(e: ChangeEvent<HTMLInputElement>): Promise<FileReader> {
   e.preventDefault();
   const reader: FileReader = new FileReader();
   reader.readAsText(e.target.files[0]);
   return reader;
-};
+}
 
 function isJsonString(str: string): boolean {
   try {

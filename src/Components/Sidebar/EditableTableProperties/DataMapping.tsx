@@ -1,5 +1,3 @@
-import React, { useEffect } from 'react';
-
 import type { DataMapping, EwoksRFLink } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
@@ -10,19 +8,7 @@ import SidebarTooltip from '../SidebarTooltip';
 export default function DataMappingComponent(element: EwoksRFLink) {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
-  const [dataMapping, setDataMapping] = React.useState<DataMapping[]>([]);
-  const [elementL, setElementL] = React.useState<EwoksRFLink>(
-    {} as EwoksRFLink
-  );
   const graphRF = useStore((state) => state.graphRF);
-
-  useEffect(() => {
-    setElementL(element);
-
-    if (element.data?.data_mapping) {
-      setDataMapping(element.data.data_mapping);
-    }
-  }, [element]);
 
   const addDataMapping = () => {
     if (element.data.data_mapping.some((x) => x.id === '')) {
@@ -88,18 +74,18 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       >
         <AddCircleOutlineIcon />
       </IconButton>
-      {dataMapping.length > 0 && (
+      {element.data.data_mapping.length > 0 && (
         <EditableTable
           headers={['Source', 'Target']}
-          defaultValues={dataMapping}
+          defaultValues={element.data.data_mapping}
           valuesChanged={dataMappingValuesChanged}
           typeOfValues={[
             {
-              type: elementL.source
+              type: element.source
                 ? ['class'].includes(
                     graphRF?.nodes?.[0] &&
                       graphRF.nodes.find((nod) => {
-                        return nod.id === elementL.source;
+                        return nod.id === element.source;
                       }).task_type
                   )
                   ? 'select'
@@ -108,11 +94,11 @@ export default function DataMappingComponent(element: EwoksRFLink) {
               values: element.data.links_input_names || [],
             },
             {
-              type: elementL.target
+              type: element.target
                 ? ['class'].includes(
                     graphRF?.nodes?.[0] &&
                       graphRF.nodes.find((nod) => {
-                        return nod.id === elementL.target;
+                        return nod.id === element.target;
                       }).task_type
                   )
                   ? 'select'

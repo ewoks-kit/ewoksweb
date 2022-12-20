@@ -42,9 +42,6 @@ export default function Sidebar() {
   );
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
-  const [element, setElement] = useState<
-    EwoksRFNode | EwoksRFLink | GraphDetails
-  >({});
   const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
     false
   );
@@ -61,10 +58,6 @@ export default function Sidebar() {
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const setAllIcons = useStore((state) => state.setAllIcons);
-
-  useEffect(() => {
-    setElement(selectedElement);
-  }, [selectedElement]);
 
   // TODO: similar getIcons is used in manage icons. Should we move it to a hook?
   const getIcons = useCallback(async () => {
@@ -97,14 +90,18 @@ export default function Sidebar() {
       return;
     }
 
-    if (isNode(element)) {
+    if (isNode(selectedElement)) {
       const nodesLinks = graphRF.links.filter(
-        (link) => !(link.source === element.id || link.target === element.id)
+        (link) =>
+          !(
+            link.source === selectedElement.id ||
+            link.target === selectedElement.id
+          )
       );
 
       const newGraph: GraphRF = {
         ...graphRF,
-        nodes: graphRF.nodes.filter((nod) => nod.id !== element.id),
+        nodes: graphRF.nodes.filter((nod) => nod.id !== selectedElement.id),
         links: nodesLinks,
       };
 
@@ -116,10 +113,10 @@ export default function Sidebar() {
       return;
     }
 
-    if (isLink(element)) {
+    if (isLink(selectedElement)) {
       const newGraph: GraphRF = {
         ...graphRF,
-        links: graphRF.links.filter((link) => link.id !== element.id),
+        links: graphRF.links.filter((link) => link.id !== selectedElement.id),
       };
 
       setUndoRedo({
@@ -130,7 +127,7 @@ export default function Sidebar() {
       return;
     }
 
-    if ('input_nodes' in element) {
+    if ('input_nodes' in selectedElement) {
       setOpenAgreeDialog(true);
       return;
     }
@@ -145,10 +142,10 @@ export default function Sidebar() {
   const agreeCallback = async () => {
     setOpenAgreeDialog(false);
     try {
-      await deleteWorkflow(element.id);
+      await deleteWorkflow(selectedElement.id);
       setOpenSnackbar({
         open: true,
-        text: `Workflow ${element.id} succesfully deleted!`,
+        text: `Workflow ${selectedElement.id} succesfully deleted!`,
         severity: 'success',
       });
     } catch (error) {
@@ -198,12 +195,12 @@ export default function Sidebar() {
     }
   };
 
-  const handleChangeExecutionDetails = (
-    event: React.SyntheticEvent,
-    expand: boolean
-  ) => {
-    setOpenExecutionDetails(expand);
-  };
+  // const handleChangeExecutionDetails = (
+  //   event: React.SyntheticEvent,
+  //   expand: boolean
+  // ) => {
+  //   setOpenExecutionDetails(expand);
+  // };
 
   return (
     <aside className="dndflow">
@@ -265,8 +262,8 @@ export default function Sidebar() {
           {!isLink(selectedElement) && <IconMenu />}
           <DraggableDialog open={openDialog} content={dialogContent} />
           <ConfirmDialog
-            title={`Delete "${element.label}" workflow?`}
-            content={`You are about to delete "${element.label}" workflow.
+            title={`Delete "${selectedElement.label}" workflow?`}
+            content={`You are about to delete "${selectedElement.label}" workflow.
               Please make sure that it is not used as a subgraph in other workflows!
               Do you agree to continue?`}
             open={openAgreeDialog}

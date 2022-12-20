@@ -114,7 +114,7 @@ export default function DraggableDialog(props: Props) {
       <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
         {title || ''}
       </DialogTitle>
-      <DialogContent style={{ minHeight: '300px' }}>
+      <DialogContent style={{ minHeight: '300px', minWidth: '380px' }}>
         <DialogContentText>
           {['Ewoks Graph', 'RF Graph'].includes(title) && (
             <ToggleButtonGroup

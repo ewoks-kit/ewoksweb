@@ -46,7 +46,7 @@ const useStyles = makeStyles(() => ({
 function createData(pair: DataMapping | Conditions | Inputs): EditableTableRow {
   return pair.id && (pair.value || pair.value === null || pair.value === false)
     ? { ...pair, isEditMode: false }
-    : ({
+    : {
         id: Object.values(pair)[0],
         name: Object.values(pair)[0],
         value: Object.values(pair)[1],
@@ -57,7 +57,7 @@ function createData(pair: DataMapping | Conditions | Inputs): EditableTableRow {
             : pair.value === null
             ? 'null'
             : typeof pair.value,
-      } as EditableTableRow);
+      };
 }
 
 interface EditableTableProps {
@@ -121,36 +121,52 @@ function EditableTable(props: EditableTableProps) {
     });
   }
 
-  function onToggleEditMode(id: string, index: number, command: string) {
-    if (command === 'edit' && ['list', 'dict'].includes(typeOfInputs[index])) {
-      let initialValue: unknown = '';
-
-      if (typeOfInputs[index] === 'list') {
-        if (Array.isArray(rows[index].value)) {
-          initialValue = rows[index].value;
-        } else {
-          initialValue = [];
-        }
-      } else {
-        // is a dict
-        if (
-          typeof rows[index].value === 'object' &&
-          !Array.isArray(rows[index].value)
-        ) {
-          initialValue = rows[index].value;
-        } else {
-          initialValue = {};
-        }
+  function calcNewRows(rowId: string): EditableTableRow[] {
+    return rows.map((row) => {
+      if (row.id === rowId) {
+        return {
+          ...row,
+          id: row.name.replace(' ', '_') || '',
+          isEditMode: !row.isEditMode,
+        };
       }
+      return row;
+    });
+  }
 
+  function onListOrDict(id: string, index: number): unknown {
+    if (typeOfInputs[index] === 'list') {
+      if (Array.isArray(rows[index].value)) {
+        return rows[index].value;
+      }
+      return [];
+    }
+
+    if (
+      typeof rows[index].value === 'object' &&
+      !Array.isArray(rows[index].value)
+    ) {
+      return rows[index].value;
+    }
+    return {};
+  }
+
+  function onEditRow(id: string, index: number) {
+    if (['list', 'dict'].includes(typeOfInputs[index])) {
       showEditableDialog({
         name: id,
         title: typeOfInputs[index] === 'list' ? 'Edit list' : 'Edit dict',
-        graph: initialValue,
+        graph: onListOrDict(id, index),
         callbackProps: { rows, id },
       });
     }
 
+    setRows(calcNewRows(id));
+
+    setDisableSelectType(false);
+  }
+
+  function onSaveRow(id: string, index: number) {
     const oldRows = [...rows].filter((row, inde) => index !== inde);
 
     if (
@@ -163,33 +179,20 @@ function EditableTable(props: EditableTableProps) {
         severity: 'error',
       });
     } else {
-      const newRows = rows.map((row) => {
-        if (row.id === id) {
-          return {
-            ...row,
-            id: row.name.replace(' ', '_') || '',
-            // value: row.value,
-            isEditMode: !row.isEditMode,
-          };
-        }
-        return row;
-      });
+      setRows(calcNewRows(id));
 
-      setRows(newRows);
+      props.valuesChanged(rows);
+    }
 
-      if (command === 'done') {
-        props.valuesChanged(rows);
-        setRows(rows);
-      }
-    }
-    if (command === 'done') {
-      setDisableSelectType(true);
-    } else {
-      setDisableSelectType(false);
-    }
+    setDisableSelectType(true);
   }
 
-  function onChange(e, row, index) {
+  function onChange(
+    e: { target: { name: string; value: string | number } },
+    row: EditableTableRow,
+    index: number
+  ) {
+    const { id } = row;
     if (
       ['string', 'bool', 'number', 'boolean', 'null'].includes(
         typeOfInputs[index]
@@ -202,7 +205,6 @@ function EditableTable(props: EditableTableProps) {
         value = typeOfInputs[index] === 'number' ? Number(value) : value;
       }
 
-      const { id } = row;
       const newRows = rows.map((rowe) => {
         if (rowe.id === id) {
           return { ...rowe, [name]: value };
@@ -210,29 +212,26 @@ function EditableTable(props: EditableTableProps) {
         return rowe;
       });
       setRows(newRows);
-    } else {
-      const { updated_src } = e;
-      const { id } = row;
-      const name =
-        e.target && e.target.name === 'name' ? e.target.name : 'value';
-
-      const newRows = rows.map((rowTable) => {
-        if (rowTable.id === id) {
-          return {
-            ...rowTable,
-            [name]:
-              e.target && e.target.name === 'name'
-                ? e.target.value
-                : updated_src,
-          };
-        }
-        return rowTable;
-      });
-      setRows(newRows);
+      return;
     }
+    // DOC: it is 'dict' or 'list' and uses the dialog
+    const name = e.target?.name === 'name' ? e.target.name : 'value';
+
+    const newRows = rows.map((rowTable) => {
+      if (rowTable.id === id) {
+        return {
+          ...rowTable,
+          // TODO: if not to use the local editing the e.target.name is always a 'name'
+          [name]: e.target?.name === 'name' ? e.target.value : undefined,
+        };
+      }
+      return rowTable;
+    });
+
+    setRows(newRows);
   }
 
-  function onDelete(id) {
+  function onDelete(id: string) {
     const newRows = rows.filter((row) => {
       return row.id !== id;
     });
@@ -244,8 +243,8 @@ function EditableTable(props: EditableTableProps) {
 
   const changedTypeOfInputs = (
     e: ChangeEvent<HTMLInputElement>,
-    row,
-    index
+    row: EditableTableRow,
+    index: number
   ) => {
     if (e.target.value === 'null') {
       const newRows = rows.map((rowe) => {
@@ -270,8 +269,8 @@ function EditableTable(props: EditableTableProps) {
   };
 
   function setRowValue(
-    name,
-    val,
+    name: string,
+    val: unknown, // can be a user defined list or dict
     callbackProps: { id: string; rows: EditableTableRow[] }
   ) {
     const newRows = callbackProps.rows.map((row) => {
@@ -377,7 +376,7 @@ function EditableTable(props: EditableTableProps) {
                   {row.isEditMode ? (
                     <IconButton
                       color="inherit"
-                      onClick={() => onToggleEditMode(row.id, index, 'done')}
+                      onClick={() => onSaveRow(row.id, index)}
                       className={classes.root}
                       aria-label="edit"
                       data-cy="doneEditingButtonEditableTable"
@@ -397,7 +396,7 @@ function EditableTable(props: EditableTableProps) {
                       <IconButton
                         className={classes.root}
                         aria-label="edit"
-                        onClick={() => onToggleEditMode(row.id, index, 'edit')}
+                        onClick={() => onEditRow(row.id, index)}
                         color="primary"
                         data-cy="editButtonEditableTable"
                       >
