@@ -149,7 +149,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
           </div>
         </div>
       )}
-      <div>
+      <div style={{ minWidth: '200px' }}>
         <label htmlFor="nodeSize">Node Size</label>
         <Slider
           id="nodeSize"

@@ -66,7 +66,7 @@ export default function DefaultInputs(element: EwoksRFNode) {
         </div>
       </SidebarTooltip>
 
-      {element.default_inputs.length > 0 && (
+      {element.default_inputs?.length > 0 && (
         <EditableTable
           headers={['Name', 'Value']}
           defaultValues={element.default_inputs}

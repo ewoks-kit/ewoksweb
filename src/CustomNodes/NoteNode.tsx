@@ -22,14 +22,13 @@ interface NoteProps {
 }
 
 const NoteNode = (args: NoteProps) => {
+  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const selectedElement = useStore((state) => state.selectedElement);
+
   const [comment, setComment] = useState('');
-  const graphRF = useStore((state) => state.graphRF);
-  const setGraphRF = useStore((state) => state.setGraphRF);
-  const [nodeSize, setNodeSize] = useState(args.data.nodeWidth);
 
   useEffect(() => {
     setComment(args.data.comment);
-    setNodeSize(args.data.nodeWidth);
   }, [args.data]);
 
   const customTitle = {
@@ -46,25 +45,22 @@ const NoteNode = (args: NoteProps) => {
   };
 
   const save = () => {
-    // TODO: If permenant put it in undo-redo
-    setGraphRF({
-      graph: graphRF.graph,
-      links: graphRF.links,
-      nodes: [
-        ...graphRF.nodes.filter((nod) => nod.id !== args.id),
-        {
-          data: {
-            label: args.data.label,
-            comment,
-          },
-          id: args.id,
-          task_type: 'note',
-          task_identifier: args.id,
-          type: 'note',
-          position: { x: args.xPos, y: args.yPos },
+    // TODO: If permenant put it in undo-redo and make title editable
+    setSelectedElement(
+      {
+        ...selectedElement,
+        data: {
+          label: args.data.label,
+          comment,
         },
-      ],
-    });
+        id: args.id,
+        task_type: 'note',
+        task_identifier: args.id,
+        type: 'note',
+        position: { x: args.xPos, y: args.yPos },
+      },
+      'fromSaveElement'
+    );
   };
 
   return (
@@ -79,7 +75,7 @@ const NoteNode = (args: NoteProps) => {
       role="button"
       tabIndex={0}
     >
-      <span style={{ maxWidth: `${nodeSize}px` }} className="icons">
+      <span style={{ maxWidth: `${args.data.nodeWidth}px` }} className="icons">
         {args.data.label.length > 0 && (
           <div style={customTitle as React.CSSProperties}>
             {args.data.label}

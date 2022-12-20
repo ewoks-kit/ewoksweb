@@ -68,6 +68,7 @@ function trimLabel(label) {
 function Canvas() {
   const classes = useStyles();
 
+  // TODO: resolve the types here for the local state
   const [rfInstance, setRfInstance] = useState(null);
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
@@ -206,8 +207,6 @@ function Canvas() {
 
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
-      // TODO: type EdgeChange[] but complaints for no id
-
       const change = changes[0];
       if ('id' in change && changes[0].type === 'remove') {
         const edgeToRemove = graphRF.links.find((el) => el.id === change.id);
@@ -222,7 +221,6 @@ function Canvas() {
     setSelectedElement(graphRF.graph);
   };
 
-  // Functionality moved onNodesChange so remove after testing and do the same onEdgeClick
   const onNodeClick = (event, element?: Node) => {
     const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
 
@@ -230,13 +228,18 @@ function Canvas() {
       !(
         graphElement.task_type === 'executionSteps' &&
         graphElement.type === 'executionSteps'
-      )
+      ) &&
+      // is already selected
+      selectedElement.id !== graphElement.id
     ) {
       setSelectedElement(graphElement);
     }
   };
 
   const onEdgeClick = (event, element?: Edge) => {
+    if (selectedElement.id !== element.id) {
+      return;
+    }
     const graphElement: EwoksRFLink = edges.find((el) => el.id === element.id);
     setSelectedElement(graphElement);
   };

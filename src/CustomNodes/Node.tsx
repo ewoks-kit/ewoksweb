@@ -114,6 +114,9 @@ const Node: React.FC<NodeProps> = ({
   };
 
   // TODO: exists in sidebar abstract in a hook?
+  // Could extract the cloning and graph generation part in a function
+  // that would return the newGraph (and newClone if needed).
+  // Then, it is up to the caller to deal with the result by using the setters.
   const cloneNode = () => {
     if (!isNode(selectedElement)) {
       return;
