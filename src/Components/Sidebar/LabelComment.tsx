@@ -82,15 +82,13 @@ export default function LabelComment(props: LabelCommentProps) {
   }
 
   function saveComment(commentLocal: string) {
-    if (isLink(element)) {
-      setSelectedElement(
-        {
-          ...element,
-          data: { ...element.data, comment: commentLocal },
-        },
-        'fromSaveElement'
-      );
-    }
+    setSelectedElement(
+      {
+        ...element,
+        data: { ...element.data, comment: commentLocal },
+      },
+      'fromSaveElement'
+    );
   }
 
   function valueSavedLocal() {

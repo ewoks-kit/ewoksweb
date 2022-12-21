@@ -2,7 +2,6 @@ import type { EwoksRFNode, GraphRF, GraphEwoks, GraphNodes } from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
-import existsOrValue from '../utils/existsOrValue';
 import { calcCoordinatesFirstNode } from './storeUtils/CalcCoordinatesFirstNode';
 import orange2 from 'images/orange2.png';
 import type { GetState, SetState } from 'zustand';
@@ -27,8 +26,6 @@ const subGraph = (
   setSubGraph: async (subGraphL: GraphEwoks) => {
     // 1. input the graphEwoks from server or file-system
     // 2. search for all subgraphs in it (async)
-
-    // const get() = get((prev: any) => prev);
     const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(
       subGraphL,
       get().recentGraphs
@@ -132,11 +129,9 @@ const subGraph = (
 });
 
 function calcLabel(inputOutput: GraphNodes): string {
-  return `${
-    existsOrValue(inputOutput.uiProps, 'label', inputOutput.id) as string
-  }: ${inputOutput.node} ${
-    inputOutput.sub_node ? ` -> ${inputOutput.sub_node}` : ''
-  }`;
+  return `${inputOutput.uiProps?.label ?? inputOutput.id}: ${
+    inputOutput.node
+  } ${inputOutput.sub_node ? ` -> ${inputOutput.sub_node}` : ''}`;
 }
 
 export default subGraph;

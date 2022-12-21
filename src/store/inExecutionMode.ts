@@ -4,8 +4,8 @@ import type { GetState, SetState } from 'zustand';
 // DOC: when UI in execution mode
 
 export interface InExecutionModeSlice {
-  inExecutionMode?: boolean;
-  setInExecutionMode?: (val: boolean) => void;
+  inExecutionMode: boolean;
+  setInExecutionMode: (val: boolean) => void;
 }
 
 const inExecutionMode = (

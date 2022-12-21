@@ -140,7 +140,7 @@ export interface Event {
   nodeId: string;
   status?: string;
   event_type: string; // start/stop/progress events
-  values: object; // all values entering or exiting a node
+  values: Record<string, unknown>; // all values entering or exiting a node
   // for now put static executing here
   executing?: string[];
 }
@@ -256,6 +256,8 @@ export interface UiPropsNodes {
   node_icon?: string;
   task_icon?: string;
   task_category?: string;
+  moreHandles?: boolean;
+  details?: boolean;
 }
 
 export interface UiPropsLinks {
@@ -416,7 +418,11 @@ export interface CustomTableCellProps {
   name: string;
   type?: string;
   typeOfValues: { type: string; values?: string[] };
-  onChange(e: unknown, row: EditableTableRow, index: number): void;
+  onChange(
+    e: { target: { name: string; value: string | number } },
+    row: EditableTableRow,
+    index: number
+  ): void;
 }
 
 export interface EwoksRFLink {
@@ -434,7 +440,7 @@ export interface EwoksRFLink {
     map_all_data?: boolean;
     required?: boolean;
     sub_target?: string;
-    sub_target_attributes?: object;
+    sub_target_attributes?: Record<string, unknown>;
     sub_source?: string;
     colorLine?: string;
     getAroundProps?: { x?: number; y?: number };

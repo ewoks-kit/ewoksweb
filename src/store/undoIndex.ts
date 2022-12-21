@@ -3,8 +3,8 @@ import type { GetState, SetState } from 'zustand';
 import { isLink, isNode } from '../utils/typeGuards';
 
 export interface UndoIndexSlice {
-  undoIndex?: number;
-  setUndoIndex?: (index: number) => void;
+  undoIndex: number;
+  setUndoIndex: (index: number) => void;
 }
 
 const undoIndex = (

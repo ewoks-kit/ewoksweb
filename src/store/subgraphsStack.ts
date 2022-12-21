@@ -2,8 +2,8 @@ import type { stackGraph, State } from '../types';
 import type { GetState, SetState } from 'zustand';
 
 export interface SubgraphsStackSlice {
-  subgraphsStack?: stackGraph[];
-  setSubgraphsStack?: (stackGraph: stackGraph) => void;
+  subgraphsStack: stackGraph[];
+  setSubgraphsStack: (stackGraph: stackGraph) => void;
 }
 
 const subgraphsStack = (

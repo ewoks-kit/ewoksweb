@@ -2,8 +2,8 @@ import type { Action, State } from '../types';
 import type { GetState, SetState } from 'zustand';
 
 export interface UndoRedoSlice {
-  undoRedo?: Action[];
-  setUndoRedo?: (action: Action) => void;
+  undoRedo: Action[];
+  setUndoRedo: (action: Action) => void;
 }
 const undoRedo = (
   set: SetState<State>,

@@ -9,7 +9,6 @@ import type {
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import { calcTasksForLink } from './calcTasksForLink';
-import existsOrValue from './existsOrValue';
 
 // DOC: from GraphEwoks get EwoksRFLinks
 // - tempGraph: the graph to transform its links
@@ -49,10 +48,8 @@ export function toRFEwoksLinks(
         const color = uiProps?.style?.stroke || 'rgb(60, 81, 202)';
 
         const link: EwoksRFLink = {
-          id: `${source}:${
-            existsOrValue(uiProps, 'sourceHandle', '') as string
-          }->${target}:${
-            existsOrValue(uiProps, 'targetHandle', '') as string
+          id: `${source}:${uiProps?.sourceHandle ?? ''}->${target}:${
+            uiProps?.targetHandle ?? ''
           }_${id++}`,
           label: calcLabel(uiProps, conditions, data_mapping),
           source: source.toString(),
@@ -62,8 +59,8 @@ export function toRFEwoksLinks(
           targetHandle: calcTargetHandle(uiProps, sub_target),
           sourceHandle: calcSourceHandle(uiProps, sub_source),
           type: uiProps?.type || '',
-          markerEnd: existsOrValue(uiProps, 'markerEnd', ''),
-          animated: existsOrValue(uiProps, 'animated', false),
+          markerEnd: uiProps?.markerEnd ?? '',
+          animated: uiProps?.animated ?? false,
           style: {
             stroke: uiProps?.style?.stroke || '#96a5f9',
             strokeWidth: '3px',
@@ -100,7 +97,7 @@ export function toRFEwoksLinks(
             conditions: conditions || [],
             // map_all_data: !!map_all_data,
             on_error: on_error || false,
-            comment: existsOrValue(uiProps, 'comment', ''),
+            comment: uiProps?.comment ?? '',
           },
         };
         // DOC: if map_all_data is missing the default will be true
@@ -117,26 +114,31 @@ function calcLabel(
   conditions: Conditions[],
   data_mapping: DataMapping[]
 ): string {
-  return (
-    uiProps?.label ??
-    (conditions?.length > 0
-      ? conditions
-          .map((el) => `${el.source_output}->${el.value as string}`)
-          .join(', ')
-      : data_mapping && data_mapping.length > 0
-      ? data_mapping
-          .map((el) => `${el.source_output}->${el.target_input}`)
-          .join(', ')
-      : '')
-  );
+  if (uiProps?.label) {
+    return uiProps?.label;
+  }
+
+  if (conditions && conditions.length > 0) {
+    return conditions
+      .map((el) => `${el.source_output}->${el.value as string}`)
+      .join(', ');
+  }
+
+  if (data_mapping && data_mapping.length > 0) {
+    return data_mapping
+      .map((el) => `${el.source_output}->${el.target_input}`)
+      .join(', ');
+  }
+
+  return '';
 }
 
 function calcTargetHandle(uiProps: UiPropsLinks, sub_target: string): string {
-  return uiProps?.targetHandle ?? sub_target ?? 'tl';
+  return uiProps.targetHandle ?? sub_target ?? 'tl';
 }
 
 function calcSourceHandle(uiProps: UiPropsLinks, sub_source: string): string {
-  return uiProps?.sourceHandle ?? sub_source ?? 'sr';
+  return uiProps.sourceHandle ?? sub_source ?? 'sr';
 }
 
 function calcInOutLinks(tempGraph: GraphEwoks): GraphEwoks {

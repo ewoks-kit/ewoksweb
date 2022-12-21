@@ -237,9 +237,6 @@ function Canvas() {
   };
 
   const onEdgeClick = (event, element?: Edge) => {
-    if (selectedElement.id !== element.id) {
-      return;
-    }
     const graphElement: EwoksRFLink = edges.find((el) => el.id === element.id);
     setSelectedElement(graphElement);
   };

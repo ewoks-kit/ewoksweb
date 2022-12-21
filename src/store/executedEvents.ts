@@ -2,8 +2,8 @@ import type { Event, State } from '../types';
 import type { GetState, SetState } from 'zustand';
 
 export interface ExecutedEventsSlice {
-  executedEvents?: Event[];
-  setExecutedEvents?: (execEvent: Event) => void;
+  executedEvents: Event[];
+  setExecutedEvents: (execEvent: Event) => void;
 }
 
 // DOC: All the events that came in during live executions. These events keep

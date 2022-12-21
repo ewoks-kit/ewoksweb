@@ -2,8 +2,8 @@ import type { SnackbarParams, State } from '../types';
 import type { SetState } from 'zustand';
 
 export interface OpenSnackbarSlice {
-  openSnackbar?: SnackbarParams;
-  setOpenSnackbar?: (params: SnackbarParams) => void;
+  openSnackbar: SnackbarParams;
+  setOpenSnackbar: (params: SnackbarParams) => void;
 }
 
 const openSnackbar = (set: SetState<State>): OpenSnackbarSlice => ({

@@ -1,5 +1,4 @@
 import type { EwoksLink, EwoksNode, GraphEwoks } from '../types';
-import existsOrValue from './existsOrValue';
 
 function calcMarkerEnd(inNod) {
   let type = {};
@@ -24,14 +23,14 @@ export function outNodesLinks(
       const nodeSource = graph.nodes.find((no) => no.id === outNod.node);
 
       if (!outNodesInputed.includes(outNod.id)) {
-        const temPosition = existsOrValue(outNod.uiProps, 'position', {
+        const temPosition = outNod.uiProps?.position ?? {
           x: 1250,
           y: 450,
-        });
+        };
 
         outputs.nodes.push({
           id: outNod.id,
-          label: existsOrValue(outNod.uiProps, 'label', outNod.id),
+          label: outNod.uiProps?.label ?? outNod.id,
           task_type: 'graphOutput',
           task_identifier: 'Start-End',
           position: temPosition,
@@ -39,10 +38,10 @@ export function outNodesLinks(
             type: 'output',
             position: temPosition,
             icon: 'graphOutput.svg',
-            withImage: existsOrValue(outNod.uiProps, 'withImage', true),
-            withLabel: existsOrValue(outNod.uiProps, 'withLabel', true),
-            colorBorder: existsOrValue(outNod.uiProps, 'colorBorder', ''),
-            nodeWidth: existsOrValue(outNod.uiProps, 'nodeWidth', 110),
+            withImage: outNod.uiProps?.withImage ?? true,
+            withLabel: outNod.uiProps?.withLabel ?? true,
+            colorBorder: outNod.uiProps?.colorBorder ?? '',
+            nodeWidth: outNod.uiProps?.nodeWidth ?? 110,
           },
         });
 
@@ -57,27 +56,23 @@ export function outNodesLinks(
           : nodeSource.task_type !== 'graph'
           ? ''
           : outNod.sub_node,
-        conditions: existsOrValue(outNod.link_attributes, 'conditions', []),
-        data_mapping: existsOrValue(outNod.link_attributes, 'data_mapping', []),
-        on_error: existsOrValue(outNod.link_attributes, 'on_error', false),
-        map_all_data: existsOrValue(
-          outNod.link_attributes,
-          'map_all_data',
-          false
-        ),
+        conditions: outNod.link_attributes?.conditions ?? [],
+        data_mapping: outNod.link_attributes?.data_mapping ?? [],
+        on_error: outNod.link_attributes?.on_error ?? false,
+        map_all_data: outNod.link_attributes?.map_all_data ?? false,
         uiProps: {
-          label: existsOrValue(outNod.link_attributes, 'label', ''),
-          comment: existsOrValue(outNod.link_attributes, 'comment', ''),
+          label: outNod.link_attributes?.label ?? '',
+          comment: outNod.link_attributes?.comment ?? '',
           style: {
-            stroke: existsOrValue(outNod.uiProps?.style, 'stroke', ''),
+            stroke: outNod.uiProps?.style?.stroke ?? '',
           },
-          type: existsOrValue(outNod.uiProps, 'linkStyle', 'default'),
+          type: outNod.uiProps?.linkStyle ?? 'default',
           markerEnd: calcMarkerEnd(outNod),
-          animated: existsOrValue(outNod.uiProps, 'animated', false),
-          withImage: existsOrValue(outNod.uiProps, 'withImage', true),
-          withLabel: existsOrValue(outNod.uiProps, 'withLabel', true),
-          colorBorder: existsOrValue(outNod.uiProps, 'colorBorder', ''),
-          nodeWidth: existsOrValue(outNod.uiProps, 'nodeWidth', 110),
+          animated: outNod.uiProps?.animated ?? false,
+          withImage: outNod.uiProps?.withImage ?? true,
+          withLabel: outNod.uiProps?.withLabel ?? true,
+          colorBorder: outNod.uiProps?.colorBorder ?? '',
+          nodeWidth: outNod.uiProps?.nodeWidth ?? 110,
         },
       });
       // }

@@ -8,8 +8,8 @@ export function calcTasksForLink(
   newNodeSubgraphs: GraphEwoks[],
   tasks: Task[]
 ): Task[] {
-  const sourceTmp: EwoksNode = tempGraph.nodes.find((nod) => nod.id === source);
-  const targetTmp: EwoksNode = tempGraph.nodes.find((nod) => nod.id === target);
+  const sourceTmp = tempGraph.nodes.find((nod) => nod.id === source);
+  const targetTmp = tempGraph.nodes.find((nod) => nod.id === target);
 
   let sourceTask: Task = {};
   let targetTask: Task = {};

@@ -9,8 +9,8 @@ import type { GetState, SetState } from 'zustand';
 import { isLink, isNode } from '../utils/typeGuards';
 
 export interface SelectedElementSlice {
-  selectedElement?: EwoksRFNode | EwoksRFLink | GraphDetails;
-  setSelectedElement?: (
+  selectedElement: EwoksRFNode | EwoksRFLink | GraphDetails;
+  setSelectedElement: (
     element: EwoksRFNode | EwoksRFLink | GraphDetails,
     from?: string,
     update?: boolean
@@ -24,14 +24,14 @@ const selectedElement = (
   selectedElement: {},
 
   setSelectedElement: (element, from) => {
-    const wg = get().workingGraph.graph.id;
+    const workingGraphId = get().workingGraph.graph.id;
     const { graph, nodes, links } = get().graphRF;
 
     if (from === 'fromSaveElement') {
       get().setCanvasGraphChanged(true);
     }
 
-    if (wg === '0' || wg === graph.id) {
+    if (workingGraphId === '0' || workingGraphId === graph.id) {
       let tempGraph = {} as GraphRF;
       if (isNode(element)) {
         const allOtherNodes = nodes.filter((nod) => nod.id !== element.id);

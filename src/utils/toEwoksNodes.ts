@@ -77,7 +77,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
       }
       // TODO: return the same for graphs and non-graphs
       // node-icon is not in graphs? ok? Graphs have no editable Node Info where the node_icon is
-      // all the rest are the same... merge?
+      // all the rest are the same... merge 2 returns?
       return {
         id: id.toString(),
         label,

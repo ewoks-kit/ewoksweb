@@ -4,8 +4,8 @@ import type { GetState, SetState } from 'zustand';
 // These are the workflows that can be examined on the canvas
 // They include executing-live and the watched workflows from server
 export interface WatchedWorkflowsSlice {
-  watchedWorkflows?: Event[][];
-  setWatchedWorkflows?: (execEvent: Event[][]) => void;
+  watchedWorkflows: Event[][];
+  setWatchedWorkflows: (execEvent: Event[][]) => void;
 }
 
 const watchedWorkflows = (

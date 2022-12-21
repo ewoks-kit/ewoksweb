@@ -1,5 +1,4 @@
 import type { EwoksLink, EwoksNode, GraphEwoks, GraphNodes } from '../types';
-import existsOrValue from './existsOrValue';
 
 function calcMarkerEnd(inNod: GraphNodes): '' | { type: string } {
   let type: '' | { type: string };
@@ -29,25 +28,25 @@ export function inNodesLinks(
     graph.graph.input_nodes.forEach((inNod) => {
       const nodeTarget = graph.nodes.find((no) => no.id === inNod.node);
       if (nodeTarget) {
-        const temPosition = existsOrValue(inNod.uiProps, 'position', {
+        const temPosition = inNod.uiProps?.position ?? {
           x: 50,
           y: 50,
-        });
+        };
 
         if (!inNodesInputed.includes(inNod.id)) {
           inputs.nodes.push({
             id: inNod.id,
-            label: existsOrValue(inNod.uiProps, 'label', inNod.id),
+            label: inNod.uiProps?.label ?? inNod.id,
             task_type: 'graphInput',
             task_identifier: 'Start-End',
             uiProps: {
               type: 'input',
               position: temPosition,
               icon: 'graphInput.svg',
-              withImage: existsOrValue(inNod.uiProps, 'withImage', true),
-              withLabel: existsOrValue(inNod.uiProps, 'withLabel', true),
-              colorBorder: existsOrValue(inNod.uiProps, 'colorBorder', ''),
-              nodeWidth: existsOrValue(inNod.uiProps, 'nodeWidth', 110),
+              withImage: inNod.uiProps?.withImage ?? true,
+              withLabel: inNod.uiProps?.withLabel ?? true,
+              colorBorder: inNod.uiProps?.colorBorder ?? '',
+              nodeWidth: inNod.uiProps?.nodeWidth ?? 110,
             },
           });
           inNodesInputed.push(inNod.id);
@@ -58,31 +57,21 @@ export function inNodesLinks(
           source: inNod.id,
           target: inNod.node,
           sub_target: nodeTarget.task_type !== 'graph' ? '' : inNod.sub_node,
-          conditions: existsOrValue(inNod.link_attributes, 'conditions', []),
-          data_mapping: existsOrValue(
-            inNod.link_attributes,
-            'data_mapping',
-            []
-          ),
-          on_error: existsOrValue(inNod.link_attributes, 'on_error', false),
-          map_all_data: existsOrValue(
-            inNod.link_attributes,
-            'map_all_data',
-            false
-          ),
+          conditions: inNod.link_attributes?.conditions ?? [],
+          data_mapping: inNod.link_attributes?.data_mapping ?? [],
+          on_error: inNod.link_attributes?.on_error ?? false,
+          map_all_data: inNod.link_attributes?.map_all_data ?? false,
           uiProps: {
-            label: existsOrValue(inNod.link_attributes, 'label', ''),
-            comment: existsOrValue(inNod.link_attributes, 'comment', ''),
-            style: {
-              stroke: existsOrValue(inNod.uiProps?.style, 'stroke', ''),
-            },
-            type: existsOrValue(inNod.uiProps, 'linkStyle', 'default'),
+            label: inNod.link_attributes?.label ?? '',
+            comment: inNod.link_attributes?.comment ?? '',
+            style: { stroke: inNod.uiProps?.style?.stroke ?? '' },
+            type: inNod.uiProps?.linkStyle ?? 'default',
             markerEnd: calcMarkerEnd(inNod),
-            animated: existsOrValue(inNod.uiProps, 'animated', false),
-            withImage: existsOrValue(inNod.uiProps, 'withImage', true),
-            withLabel: existsOrValue(inNod.uiProps, 'withLabel', true),
-            colorBorder: existsOrValue(inNod.uiProps, 'colorBorder', ''),
-            nodeWidth: existsOrValue(inNod.uiProps, 'nodeWidth', 110),
+            animated: inNod.uiProps?.animated ?? false,
+            withImage: inNod.uiProps?.withImage ?? true,
+            withLabel: inNod.uiProps?.withLabel ?? true,
+            colorBorder: inNod.uiProps?.colorBorder ?? '',
+            nodeWidth: inNod.uiProps?.nodeWidth ?? 110,
           },
         });
       }
