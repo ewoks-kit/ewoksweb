@@ -10,8 +10,8 @@ export default function DataMappingComponent(element: EwoksRFLink) {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const graphRF = useStore((state) => state.graphRF);
 
-  const addDataMapping = () => {
-    if (element.data.data_mapping.some((x) => x.id === '')) {
+  function addDataMapping() {
+    if (element.data?.data_mapping?.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before addining another!',
@@ -33,7 +33,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       },
       'fromSaveElement'
     );
-  };
+  }
 
   const dataMappingValuesChanged = (table) => {
     const dmap: DataMapping[] = table.map((row) => {

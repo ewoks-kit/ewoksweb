@@ -11,7 +11,7 @@ export default function DefaultInputs(element: EwoksRFNode) {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const addDefaultInputs = () => {
-    if (element.default_inputs?.slice(-1)[0].id === '') {
+    if (element.default_inputs.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before addining another!',
