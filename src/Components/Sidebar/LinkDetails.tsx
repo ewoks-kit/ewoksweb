@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-
+import { useState } from 'react';
+import type { ChangeEvent } from 'react';
 import type { EwoksRFLink } from '../../types';
 import { Checkbox, Paper } from '@material-ui/core';
 import DashboardStyle from '../Dashboard/DashboardStyle';
@@ -8,32 +8,16 @@ import DataMappingComponent from './EditableTableProperties/DataMapping';
 import Conditions from './EditableTableProperties/Conditions';
 import SidebarTooltip from './SidebarTooltip';
 import LabelComment from './LabelComment';
+import { isLink } from '../../utils/typeGuards';
 
 const useStyles = DashboardStyle;
 
-export default function LinkDetails(props: { element: EwoksRFLink }) {
+export default function LinkDetails(element: EwoksRFLink) {
   const classes = useStyles();
-
-  const { element } = props;
-  const on_error: boolean = element?.data?.on_error || false;
-  const map_all_data: boolean = element?.data?.map_all_data || false;
 
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
-  const [mapAllData, setMapAllData] = React.useState<boolean>(false);
-  const [elementL, setElementL] = React.useState<EwoksRFLink>(
-    {} as EwoksRFLink
-  );
-  const [onError, setOnError] = React.useState<boolean>(false);
-  const [advanced, setAdvanced] = React.useState<boolean>(false);
-  const [required, setRequired] = React.useState<boolean>(false);
-
-  useEffect(() => {
-    setElementL(element);
-    setMapAllData(!!element.data.map_all_data || false);
-    setOnError(!!element.data.on_error || false);
-    setRequired(element.data.required);
-  }, [element.id, element, on_error, map_all_data]);
+  const [advanced, setAdvanced] = useState<boolean>(false);
 
   const mapAllDataChanged = (event) => {
     setSelectedElement(
@@ -55,11 +39,11 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
     );
   }
 
-  const advancedChanged = (event) => {
+  const advancedChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setAdvanced(event.target.checked);
   };
 
-  const requiredChanged = (event) => {
+  const requiredChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectedElement(
       {
         ...element,
@@ -81,16 +65,16 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
         <div>
           <b>Map all Data</b>
           <Checkbox
-            checked={mapAllData}
+            checked={!!element.data.map_all_data || false}
             onChange={mapAllDataChanged}
             inputProps={{ 'aria-label': 'controlled' }}
             data-cy="mapAllDataCheckbox"
           />
         </div>
       </SidebarTooltip>
-      {!mapAllData && elementL.source && (
+      {!element.data.map_all_data && isLink(element) && (
         <div>
-          <DataMappingComponent element={element} />
+          <DataMappingComponent {...element} />
         </div>
       )}
       <hr style={{ color: '#96a5f9' }} />
@@ -101,14 +85,14 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
         <div>
           <b>on_error</b>
           <Checkbox
-            checked={onError}
+            checked={!!element.data.on_error || false}
             onChange={onErrorChanged}
             inputProps={{ 'aria-label': 'controlled' }}
             data-cy="onErrorCheckbox"
           />
         </div>
       </SidebarTooltip>
-      {!onError && elementL.source && (
+      {!element.data.on_error && isLink(element) && (
         <div>
           <Conditions element={element} />
         </div>
@@ -127,7 +111,7 @@ export default function LinkDetails(props: { element: EwoksRFLink }) {
         <div>
           <b>Required</b>
           <Checkbox
-            checked={required}
+            checked={element.data.required}
             onChange={requiredChanged}
             // inputProps={{ 'aria-label': 'controlled' }}
           />

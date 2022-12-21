@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react';
-
-import type { EditableTableRow, EwoksRFLink, Inputs } from 'types';
+import type { EditableTableRow, EwoksRFLink } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
@@ -14,42 +12,36 @@ interface ConditionsProps {
 export default function Conditions(props: ConditionsProps) {
   const { element } = props;
 
-  const [conditions, setConditions] = React.useState<Inputs[]>([]);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
-  useEffect(() => {
-    if (element?.data?.conditions) {
-      setConditions(element.data.conditions);
-    }
-  }, [element]);
+  function addConditions() {
+    const elCon = element.data.conditions;
 
-  const addConditions = () => {
-    const el = element;
-    const elCon = el.data.conditions;
     // check if an empty line already exists
-    if (elCon && elCon[elCon.length - 1] && elCon[elCon.length - 1].id === '') {
+    if (element.data.conditions.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before addining another!',
         severity: 'warning',
       });
-    } else {
-      setSelectedElement(
-        {
-          ...el,
-          data: {
-            ...element.data,
-            on_error: false,
-            conditions: [...elCon, { id: '', name: '', value: false }],
-          },
-        },
-        'fromSaveElement'
-      );
+      return;
     }
-  };
 
-  const conditionsValuesChanged = (table: EditableTableRow[]) => {
+    setSelectedElement(
+      {
+        ...element,
+        data: {
+          ...element.data,
+          on_error: false,
+          conditions: [...elCon, { id: '', name: '', value: false }],
+        },
+      },
+      'fromSaveElement'
+    );
+  }
+
+  function conditionsValuesChanged(table: EditableTableRow[]) {
     setSelectedElement(
       {
         ...element,
@@ -65,7 +57,7 @@ export default function Conditions(props: ConditionsProps) {
       },
       'fromSaveElement'
     );
-  };
+  }
 
   return (
     <div>
@@ -84,10 +76,10 @@ export default function Conditions(props: ConditionsProps) {
       >
         <AddCircleOutlineIcon />
       </IconButton>
-      {conditions && conditions.length > 0 && (
+      {element.data.conditions && element.data.conditions.length > 0 && (
         <EditableTable
           headers={['Output', 'Value']}
-          defaultValues={conditions}
+          defaultValues={element.data.conditions}
           valuesChanged={conditionsValuesChanged}
           typeOfValues={[
             {

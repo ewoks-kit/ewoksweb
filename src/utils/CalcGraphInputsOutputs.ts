@@ -5,7 +5,6 @@ import type {
   GraphNodes,
   GraphRF,
 } from '../types';
-import existsOrValue from './existsOrValue';
 
 // Calculate the ewoks input_nodes and output_nodes within the graph
 // from the nodes of the graphRF model with types graphInput, graphOutput
@@ -20,20 +19,23 @@ export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
         ...input_nodes,
         ...calcInOutNodes('graphInput', graph, nod, graph_links),
       ];
-    } else if (nod.task_type === 'graphOutput') {
+    }
+
+    if (nod.task_type === 'graphOutput') {
       output_nodes = [
         ...output_nodes,
         ...calcInOutNodes('graphOutput', graph, nod, graph_links),
       ];
     }
   });
+
   return {
     id: graph.graph.id,
     label: graph.graph.label || graph.graph.id,
     category: graph.graph.category || '',
     input_nodes,
     output_nodes,
-    uiProps: graph.graph.uiProps,
+    uiProps: { ...graph.graph.uiProps },
   };
 }
 
@@ -46,12 +48,15 @@ function calcInOutNodes(
   const nodes: GraphNodes[] = [];
 
   let nodesNamesConnectedTo: string[] = [];
+
   if (inputOrOutput === 'graphInput') {
     // find those nodes this INPUT node is connected to
     nodesNamesConnectedTo = graph.links
       .filter((link) => link.source === nod.id)
       .map((link) => link.target);
-  } else if (inputOrOutput === 'graphOutput') {
+  }
+
+  if (inputOrOutput === 'graphOutput') {
     // find those nodes this OUTPUT node is connected to
     nodesNamesConnectedTo = graph.links
       .filter((link) => link.target === nod.id) // !!
@@ -125,8 +130,8 @@ function calcNodeProps(
         null
       : null,
     link_attributes: {
-      label: existsOrValue(graph_links[link_index], 'label', ''),
-      comment: existsOrValue(graph_links[link_index]?.data, 'comment', ''),
+      label: graph_links[link_index]?.label ?? '',
+      comment: graph_links[link_index]?.data?.comment ?? '',
       conditions: graph_links[link_index]?.data?.conditions || [],
       data_mapping: graph_links[link_index]?.data?.data_mapping || [],
       map_all_data: graph_links[link_index]?.data?.map_all_data || false,

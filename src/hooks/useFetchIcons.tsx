@@ -12,7 +12,7 @@ export default function useFetchIcons() {
 
   return async () => {
     try {
-      const icons: Icon[] | object = await getIconsFromServer();
+      const icons: Icon[] = await getIconsFromServer();
 
       if (Array.isArray(icons) && icons?.length > 0) {
         setAllIcons([...icons]);

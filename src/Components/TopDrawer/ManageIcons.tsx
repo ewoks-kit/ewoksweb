@@ -164,7 +164,7 @@ export default function ManageIcons() {
 
   const getIcons = useCallback(async () => {
     try {
-      const icons: Icon[] | object = await getIconsFromServer();
+      const icons: Icon[] = await getIconsFromServer();
 
       if (Array.isArray(icons) && icons?.length > 0) {
         setAllIcons([...icons]);
@@ -227,13 +227,19 @@ export default function ManageIcons() {
 
         <Grid item xs={12} sm={12} md={4} lg={3}>
           <Item>
-            <form onSubmit={uploadFile}>
+            <form
+              onSubmit={(e) => {
+                uploadFile(e);
+              }}
+            >
               <Button
                 startIcon={<DeleteIcon />}
                 className={classes.button}
                 variant="outlined"
                 color="secondary"
-                onClick={deleteTheIcon}
+                onClick={() => {
+                  deleteTheIcon();
+                }}
                 size="small"
                 disabled={selectedIcon === ''}
                 data-cy="iconDeleteButton"

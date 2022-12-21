@@ -5,6 +5,7 @@ import type {
   Task,
   IconsNames,
   WorkflowDescription,
+  filterParams,
 } from '../types';
 
 export const axiosRequest = axios.create({
@@ -13,27 +14,26 @@ export const axiosRequest = axios.create({
 
 // --------------Tasks
 // Get '/tasks/descriptions'
-export function getTaskDescription(): Promise<{
-  data: { items: Task[] };
-}> {
-  return axiosRequest.get(`/tasks/descriptions`);
+export function getTaskDescription() {
+  return axiosRequest.get<{ items: Task[] }>(`/tasks/descriptions`);
 }
 
 // Delete task
 export function deleteTask(id: string) {
-  return axiosRequest.delete(`/task/${id}`);
+  return axiosRequest.delete<{ identifier: string }>(`/task/${id}`);
 }
 
 // Post task
 export function postTask(task: Task) {
-  return axiosRequest.post(`/tasks`, task);
+  return axiosRequest.post<Task>(`/tasks`, task);
 }
 
 // Put task
 export function putTask(task: Task) {
-  return axiosRequest.put(`/task/${task.task_identifier}`, task);
+  return axiosRequest.put<Task>(`/task/${task.task_identifier}`, task);
 }
 
+// TODO: improve back as for a random string a 500 error arises
 // Discover tasks
 export function discoverTasks(moduleNames: string[]) {
   return axiosRequest.post(`/tasks/discover`, { modules: moduleNames });
@@ -41,27 +41,28 @@ export function discoverTasks(moduleNames: string[]) {
 
 // -------------Workflows
 // Get /workflows
-export function getWorkflowsDescriptions(): Promise<{
-  data: { items: WorkflowDescription[] };
-}> {
-  return axiosRequest.get(`/workflows/descriptions`);
+export function getWorkflowsDescriptions() {
+  return axiosRequest.get<{ items: WorkflowDescription[] }>(
+    `/workflows/descriptions`
+  );
 }
 
 // Get /workflows only id
 export function getWorkflowsIds() {
-  return axiosRequest.get(`/workflows`);
+  return axiosRequest.get<{ identifiers: string[] }>(`/workflows`);
 }
 
 // Get workflow:id
 export function getWorkflow(id: string) {
-  return axiosRequest.get(`/workflow/${id}`);
+  return axiosRequest.get<GraphEwoks>(`/workflow/${id}`);
 }
 
 // Post
 export function postWorkflow(workflow: GraphEwoks) {
-  return axiosRequest.post(`/workflows`, workflow);
+  return axiosRequest.post<GraphEwoks>(`/workflows`, workflow);
 }
 
+// TODO add return types for execution api and move it in another file
 // Post execute
 export function executeWorkflow(workflowId: string) {
   return axiosRequest.post(`/execute/${workflowId}`, workflowId);
@@ -69,16 +70,20 @@ export function executeWorkflow(workflowId: string) {
 
 // Put
 export function putWorkflow(workflow: GraphEwoks) {
-  return axiosRequest.put(`/workflow/${workflow.graph.id}`, workflow);
+  return axiosRequest.put<GraphEwoks>(
+    `/workflow/${workflow.graph.id}`,
+    workflow
+  );
 }
 
 // Delete
 export function deleteWorkflow(id: string) {
-  return axiosRequest.delete(`/workflow/${id}`);
+  return axiosRequest.delete<{ identifier: string }>(`/workflow/${id}`);
 }
 
+// TODO: types for execution API
 // Get executed workflows
-export function getExecutionEvents(queryParams) {
+export function getExecutionEvents(queryParams: filterParams) {
   const queryString = Object.keys(queryParams)
     .map((key) => `${key}=${queryParams[key] as string}`)
     .join('&');
@@ -93,16 +98,23 @@ export async function getIcons(): Promise<IconsNames> {
 }
 
 // Get icon:id
-export function getIcon(id: string): Promise<AxiosResponse<string>> {
-  return axiosRequest.get<string>(`/icon/${id}`);
+export function getIcon(
+  id: string
+): Promise<{
+  data: { data_url: string };
+  config: { url: string };
+}> {
+  return axiosRequest.get(`/icon/${id}`);
 }
 
 // Delete icon
 export function deleteIcon(id: string) {
-  return axiosRequest.delete(`/icon/${id}`);
+  return axiosRequest.delete<{ identifier: string }>(`/icon/${id}`);
 }
 
 // Post task
 export function postIcon(iconName: string, iconData: string | ArrayBuffer) {
-  return axiosRequest.post(`/icon/${iconName}`, { data_url: iconData });
+  return axiosRequest.post<{ data_url: string }>(`/icon/${iconName}`, {
+    data_url: iconData,
+  });
 }

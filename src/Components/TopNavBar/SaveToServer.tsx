@@ -27,7 +27,7 @@ export default function SaveToServer({ saveToServerF }) {
     saveToServerF.current = saveToServer;
   });
 
-  async function saveToServer(): Promise<void> {
+  async function saveToServer() {
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     // and Nodes DataMapping before attempting to save
     const graphRFCurrated = curateGraph(graphRF);
@@ -95,7 +95,9 @@ export default function SaveToServer({ saveToServerF }) {
         tooltip="Save to Server"
         action={() => null}
         getting={false}
-        onClick={saveToServer}
+        onClick={() => {
+          saveToServer();
+        }}
       >
         <CloudUploadIcon />
       </IntegratedSpinner>

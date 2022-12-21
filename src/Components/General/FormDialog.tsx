@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react';
-import React, { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Button,
   Checkbox,
@@ -16,16 +16,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
-import type {
-  EwoksRFLink,
-  EwoksRFNode,
-  GraphDetails,
-  GraphEwoks,
-  GraphRF,
-  Task,
-  FormAction,
-} from '../../types';
+import type { ChangeEvent } from 'react';
+import type { GraphRF, Task, FormAction } from '../../types';
 import { rfToEwoks } from '../../utils';
 import useStore from '../../store/useStore';
 import commonStrings from '../../commonStrings.json';
@@ -45,32 +37,23 @@ interface FormDialogProps {
 }
 
 export default function FormDialog(props: FormDialogProps) {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [newName, setNewName] = React.useState('');
-  const [taskType, setTaskType] = React.useState('');
-  const [category, setCategory] = React.useState('');
-  const [icon, setIcon] = React.useState('');
-  const [optionalInputNames, setOptionalInputNames] = React.useState(
-    [] as string[]
-  );
-  const [requiredInputNames, setRequiredInputNames] = React.useState(
-    [] as string[]
-  );
-  const [outputNames, setOutputNames] = React.useState([] as string[]);
-  const [overwrite, setOverwrite] = React.useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [taskType, setTaskType] = useState('');
+  const [category, setCategory] = useState('');
+  const [icon, setIcon] = useState('');
+  const [optionalInputNames, setOptionalInputNames] = useState<string[]>([]);
+  const [requiredInputNames, setRequiredInputNames] = useState<string[]>([]);
+  const [outputNames, setOutputNames] = useState<string[]>([]);
+  const [overwrite, setOverwrite] = useState<boolean>(false);
 
-  const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
-    (state) => state.selectedElement
-  );
   const setCanvasGraphChanged = useStore((st) => st.setCanvasGraphChanged);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const allIcons = useStore((state) => state.allIcons);
   const setGettingFromServer = useStore((st) => st.setGettingFromServer);
-  const [element, setElement] = React.useState<Task | GraphRF>(
-    {} as Task | GraphRF
-  );
+  const [element, setElement] = useState<Task | GraphRF>({});
   const setTasks = useStore((state) => state.setTasks);
   const tasks = useStore((state) => state.tasks);
 
@@ -84,31 +67,35 @@ export default function FormDialog(props: FormDialogProps) {
     setElement(elementToEdit);
     setIsOpen(open);
 
-    if (isForGraph) {
-      const elGraph = elementToEdit as GraphRF;
-      setNewName(elGraph.graph.label || '');
+    if (isForGraph && 'graph' in elementToEdit) {
+      setNewName(elementToEdit.graph.label || '');
       setOverwrite(false);
-    } else {
-      const elTask = elementToEdit as Task;
-      setNewName(elTask.task_identifier);
-      setTaskType(elTask.task_type);
-      setCategory(elTask.category);
-      setIcon(elTask.icon);
-      setOptionalInputNames(elTask.optional_input_names);
-      setRequiredInputNames(elTask.required_input_names);
-      setOutputNames(elTask.output_names);
+      return;
+    }
+    // TODO: check on the optional of 'graph' in GraphRF that will enable type inferencing
+    if ('task_identifier' in elementToEdit) {
+      setNewName(elementToEdit.task_identifier);
+      setTaskType(elementToEdit.task_type);
+      setCategory(elementToEdit.category);
+      setIcon(elementToEdit.icon);
+      setOptionalInputNames(elementToEdit.optional_input_names);
+      setRequiredInputNames(elementToEdit.required_input_names);
+      setOutputNames(elementToEdit.output_names);
     }
   }, [open, action, elementToEdit, isForGraph]);
 
   async function handleSave() {
     // DOC: get the selected element (graph or Node) give a new name before saving
-    if (isForGraph && newName) {
-      saveGraph(element as GraphRF);
+    if ('nodes' in element && isForGraph && newName) {
+      saveGraph(element);
     } else if ('task_identifier' in element && newName) {
       if (['cloneTask', 'newTask'].includes(action) && element) {
         saveTask(element);
-      } else if (['editTask'].includes(action)) {
-        puTask(element);
+        return;
+      }
+
+      if (action === 'editTask') {
+        updateTask(element);
       }
     } else {
       setOpenSnackbar({
@@ -119,7 +106,7 @@ export default function FormDialog(props: FormDialogProps) {
     }
   }
 
-  async function puTask(task: Task) {
+  async function updateTask(task: Task) {
     try {
       await putTask(task);
 
@@ -130,8 +117,7 @@ export default function FormDialog(props: FormDialogProps) {
       });
       props.setOpenSaveDialog(false);
       const tasksNew = await getTaskDescription();
-      const tasks = tasksNew.data as { items: Task[] };
-      setTasks(tasks.items);
+      setTasks(tasksNew.data.items);
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -153,15 +139,18 @@ export default function FormDialog(props: FormDialogProps) {
     }
     try {
       await postTask(task);
+
       setOpenSnackbar({
         open: true,
         text: 'Task saved successfuly',
         severity: 'success',
       });
+
       props.setOpenSaveDialog(false);
+
       const tasksNew = await getTaskDescription();
-      const tasks = tasksNew.data as { items: Task[] };
-      setTasks(tasks.items);
+
+      setTasks(tasksNew.data.items);
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -203,10 +192,13 @@ export default function FormDialog(props: FormDialogProps) {
           })
         );
         setGettingFromServer(false);
-        const savedGraph = responseNew.data as GraphEwoks;
+
         props.setOpenSaveDialog(false);
-        setWorkingGraph(savedGraph, 'fromServer');
-        setRecentGraphs({} as GraphRF, true);
+
+        setWorkingGraph(responseNew.data, 'fromServer');
+
+        setRecentGraphs(undefined, true);
+
         setOpenSnackbar({
           open: true,
           text: 'Graph saved succesfully!',
@@ -223,16 +215,17 @@ export default function FormDialog(props: FormDialogProps) {
     }
   }
 
-  function newNameChanged(event) {
+  function newNameChanged(event: ChangeEvent<HTMLInputElement>) {
     const val = event.target.value;
     setNewName(val);
-    if ('graph' in selectedElement) {
-      const el = element as GraphRF;
+
+    if ('graph' in element) {
       setElement({
-        ...el,
-        graph: { ...el.graph, id: val, label: val },
+        ...element,
+        graph: { ...element.graph, id: val, label: val },
       });
     } else {
+      // TODO: does not infer type
       setElement({
         ...element,
         task_identifier: val,
@@ -240,7 +233,7 @@ export default function FormDialog(props: FormDialogProps) {
     }
   }
 
-  function taskTypeChanged(event) {
+  function taskTypeChanged(event: ChangeEvent<HTMLInputElement>) {
     const val = event.target.value;
     setTaskType(val);
     setElement({
@@ -249,7 +242,7 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function categoryChanged(event) {
+  function categoryChanged(event: ChangeEvent<HTMLInputElement>) {
     const val = event.target.value;
     setCategory(val);
 
@@ -259,7 +252,7 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function iconChanged(event) {
+  function iconChanged(event: ChangeEvent<HTMLInputElement>) {
     const val = event.target.value;
     setIcon(val);
     setElement({
@@ -268,7 +261,7 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function optionalInputNamesChanged(event) {
+  function optionalInputNamesChanged(event: ChangeEvent<HTMLInputElement>) {
     const val = event.target.value;
     setOptionalInputNames(val.split(','));
     setElement({
@@ -277,7 +270,7 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function requiredInputNamesChanged(event) {
+  function requiredInputNamesChanged(event: ChangeEvent<HTMLInputElement>) {
     const val = event.target.value;
     setRequiredInputNames(val.split(','));
     setElement({
@@ -286,7 +279,7 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function outputNamesChanged(event) {
+  function outputNamesChanged(event: ChangeEvent<HTMLInputElement>) {
     const val = event.target.value;
     setOutputNames(val.split(','));
     setElement({
@@ -330,7 +323,7 @@ export default function FormDialog(props: FormDialogProps) {
     },
   ];
 
-  const overwriteChanged = (event) => {
+  const overwriteChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setOverwrite(event.target.checked);
   };
 
@@ -428,9 +421,9 @@ export default function FormDialog(props: FormDialogProps) {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              {allIcons.map((icon) => (
-                <MenuItem value={icon.name} key={icon.name}>
-                  {icon.name}
+              {allIcons.map((iconL) => (
+                <MenuItem value={iconL.name} key={iconL.name}>
+                  {iconL.name}
                 </MenuItem>
               ))}
             </Select>
@@ -442,7 +435,11 @@ export default function FormDialog(props: FormDialogProps) {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSave}>
+        <Button
+          onClick={() => {
+            handleSave();
+          }}
+        >
           Save {isForGraph ? 'Workflow' : 'Task'}
         </Button>
       </DialogActions>

@@ -1,7 +1,6 @@
 import type { EwoksRFNode, GraphEwoks, Task } from '../types';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
-import existsOrValue from './existsOrValue';
 import {
   inputsAll,
   outputsAll,
@@ -66,19 +65,17 @@ export function toRFEwoksNodes(
           data: {
             label: label ?? task_identifier,
             type: nodeType,
-            nodeWidth: existsOrValue(uiProps, 'nodeWidth', 120),
-            icon: uiProps.node_icon
-              ? uiProps.node_icon
-              : existsOrValue(uiProps, 'icon', ''),
-            comment: existsOrValue(uiProps, 'comment', ''),
-            moreHandles: existsOrValue(uiProps, 'moreHandles', false),
-            details: existsOrValue(uiProps, 'details', false),
+            nodeWidth: uiProps?.nodeWidth ?? 120,
+            icon: uiProps.node_icon ?? uiProps?.icon ?? '',
+            comment: uiProps?.comment ?? '',
+            moreHandles: uiProps?.moreHandles ?? false,
+            details: uiProps?.details ?? false,
             executing: false,
-            withImage: existsOrValue(uiProps, 'withImage', true),
-            withLabel: existsOrValue(uiProps, 'withLabel', true),
-            colorBorder: existsOrValue(uiProps, 'colorBorder', ''),
+            withImage: uiProps?.withImage ?? true,
+            withLabel: uiProps?.withLabel ?? true,
+            colorBorder: uiProps?.colorBorder ?? '',
           },
-          position: existsOrValue(uiProps, 'position', { x: 100, y: 100 }),
+          position: uiProps?.position ?? { x: 100, y: 100 },
         };
 
         return addNodeProperties(
@@ -93,5 +90,5 @@ export function toRFEwoksNodes(
     );
   }
 
-  return [] as EwoksRFNode[];
+  return [];
 }

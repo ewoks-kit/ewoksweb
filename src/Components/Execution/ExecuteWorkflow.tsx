@@ -28,8 +28,8 @@ export default function ExecuteWorkflow() {
 
   useEffect(() => {
     // DOC: when execution begins it has to listen to incoming from the socket events
-    socket.on('Executing', (data) => {
-      setExecutedEvents(data as Event);
+    socket.on('Executing', (data: Event) => {
+      setExecutedEvents(data);
     });
 
     return () => {
@@ -41,11 +41,12 @@ export default function ExecuteWorkflow() {
   function checkAndExecute() {
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
-    } else {
-      execute();
-      setOpenAgreeDialog(false);
-      setCanvasGraphChanged(false);
+      return;
     }
+
+    execute();
+    setOpenAgreeDialog(false);
+    setCanvasGraphChanged(false);
   }
 
   async function execute() {

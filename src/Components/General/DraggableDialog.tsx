@@ -80,13 +80,14 @@ export default function DraggableDialog(props: Props) {
     if (name) {
       setIsOpen(false);
       props.setValue(name, graph, callbackProps);
-    } else {
-      setOpenSnackbar({
-        open: true,
-        text: 'Please put a Name for the parameter!',
-        severity: 'warning',
-      });
+      return;
     }
+
+    setOpenSnackbar({
+      open: true,
+      text: 'Please put a Name for the parameter!',
+      severity: 'warning',
+    });
   };
 
   const handleChange = (
@@ -113,7 +114,7 @@ export default function DraggableDialog(props: Props) {
       <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
         {title || ''}
       </DialogTitle>
-      <DialogContent style={{ minHeight: '300px' }}>
+      <DialogContent style={{ minHeight: '300px', minWidth: '380px' }}>
         <DialogContentText>
           {['Ewoks Graph', 'RF Graph'].includes(title) && (
             <ToggleButtonGroup

@@ -9,6 +9,7 @@ import EditNodeStyle from './EditNodeStyle';
 import EditLinkStyle from './EditLinkStyle';
 import EditGraphStyle from './EditGraphStyle';
 import useStore from '../../store/useStore';
+import { isNode, isLink } from 'utils/typeGuards';
 
 interface Content {
   title: string;
@@ -18,17 +19,17 @@ interface Content {
 function getAccordionContent(
   element: EwoksRFNode | EwoksRFLink | GraphDetails
 ): Content {
-  if ('position' in element) {
+  if (isNode(element)) {
     return {
       title: 'Styling Node',
-      EditComponent: () => <EditNodeStyle element={element} />,
+      EditComponent: () => <EditNodeStyle {...element} />,
     };
   }
 
-  if ('source' in element) {
+  if (isLink(element)) {
     return {
       title: 'Styling Link',
-      EditComponent: () => <EditLinkStyle element={element} />,
+      EditComponent: () => <EditLinkStyle {...element} />,
     };
   }
 

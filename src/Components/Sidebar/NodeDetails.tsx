@@ -1,11 +1,7 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
 
-import type {
-  DataMapping,
-  EditableTableRow,
-  EwoksRFLink,
-  EwoksRFNode,
-} from '../../types';
+import type { DataMapping, EditableTableRow, EwoksRFNode } from '../../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTableProperties/EditableTable';
 
@@ -30,55 +26,46 @@ import DefaultInputs from './EditableTableProperties/DefaultInputs';
 const useStyles = DashboardStyle;
 
 // DOC: selectedNode details in sidebar
-// Test
-// unit: fake some TaskProperties and check the form
-//       click and edit some properties and check the node properties
-// integration: by setting a selected node and validating the form and chenge values to see
-//             the selected node change
-export default function NodeDetails(props: { element: EwoksRFNode }) {
+export default function NodeDetails(element: EwoksRFNode) {
   const classes = useStyles();
-
-  const { element } = props;
 
   const graphRF = useStore((state) => state.graphRF);
   const setGraphRF = useStore((state) => state.setGraphRF);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
-  const [inputsComplete, setInputsComplete] = React.useState<boolean>(false);
-  const [advanced, setAdvanced] = React.useState<boolean>(false);
-  const [defaultErrorNode, setDefaultErrorNode] = React.useState<boolean>(
-    false
-  );
+  const [inputsComplete, setInputsComplete] = useState<boolean>(false);
+  const [advanced, setAdvanced] = useState<boolean>(false);
+  const [defaultErrorNode, setDefaultErrorNode] = useState<boolean>(false);
 
-  const [dataMapping, setDataMapping] = React.useState<DataMapping[]>([]);
-  const [mapAllData, setMapAllData] = React.useState<boolean>(false);
+  const [dataMapping, setDataMapping] = useState<DataMapping[]>([]);
+  const [mapAllData, setMapAllData] = useState<boolean>(false);
 
   const NonEditableTaskProperties = [
-    { id: 'id', label: 'Id', value: props.element.id },
-    { id: 'task_type', label: 'Type', value: props.element.task_type },
+    { id: 'id', label: 'Id', value: element.id },
+    { id: 'task_type', label: 'Type', value: element.task_type },
     {
       id: 'task_generator',
       label: 'Generator',
-      value: props.element.task_generator,
+      value: element.task_generator,
     },
     {
       id: 'task_category',
       label: 'Category',
-      value: props.element.task_category,
+      value: element.task_category,
     },
     {
       id: 'optional_input_names',
       label: 'Optional Inputs',
-      value: props.element.optional_input_names,
+      value: element.optional_input_names,
     },
     {
       id: 'required_input_names',
       label: 'Required Inputs',
-      value: props.element.required_input_names,
+      value: element.required_input_names,
     },
     {
       id: 'output_names',
       label: 'Outputs',
-      value: props.element.output_names,
+      value: element.output_names,
     },
   ];
 
@@ -86,9 +73,9 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
     {
       id: 'task_identifier',
       label: 'Identifier',
-      value: props.element.task_identifier,
+      value: element.task_identifier,
     },
-    { id: 'node_icon', label: 'Icon', value: props.element.data.icon },
+    { id: 'node_icon', label: 'Icon', value: element.data.icon },
   ];
 
   useEffect(() => {
@@ -96,7 +83,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
     setDefaultErrorNode(element.default_error_node || false);
     setDataMapping(element.default_error_attributes?.data_mapping);
     setMapAllData(element.default_error_attributes?.map_all_data || false);
-  }, [element.id, element]);
+  }, [element]);
 
   function propChanged(propKeyValue: {
     task_identifier?: string;
@@ -121,23 +108,21 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
       };
 
       const newLinks = graphRF.links.map((link) => {
-        let newLink: EwoksRFLink;
-        if (![link.source, link.target].includes(element.id)) {
-          newLink = link;
-        } else {
-          if (link.source === element.id) {
-            newLink = {
-              ...link,
-              source: uniqueId,
-            };
-          } else if (link.target === element.id) {
-            newLink = {
-              ...link,
-              target: uniqueId,
-            };
-          }
+        if (link.source === element.id) {
+          return {
+            ...link,
+            source: uniqueId,
+          };
         }
-        return newLink;
+
+        if (link.target === element.id) {
+          return {
+            ...link,
+            target: uniqueId,
+          };
+        }
+
+        return link;
       });
 
       setGraphRF({
@@ -150,7 +135,10 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
       });
 
       setSelectedElement(newElement, 'fromSaveElement');
-    } else if (Object.keys(propKeyValue)[0] === 'node_icon') {
+      return;
+    }
+
+    if (Object.keys(propKeyValue)[0] === 'node_icon') {
       setSelectedElement(
         {
           ...element,
@@ -171,7 +159,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
     );
   }
 
-  function advancedChanged(event) {
+  function advancedChanged(event: ChangeEvent<HTMLInputElement>) {
     setAdvanced(event.target.checked);
   }
 
@@ -186,15 +174,14 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
   }
 
   function addDataMapping() {
-    const el = element;
-    const elMap = el.default_error_attributes.data_mapping || [];
+    const elMap = element.default_error_attributes.data_mapping || [];
 
     if (!elMap.some((x) => x.id === '')) {
       setSelectedElement(
         {
-          ...el,
+          ...element,
           default_error_attributes: {
-            ...el.default_error_attributes,
+            ...element.default_error_attributes,
             data_mapping: [...elMap, { id: '', name: '', value: '' }],
           },
         },
@@ -205,6 +192,11 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
 
   function dataMappingValuesChanged(table: EditableTableRow[]) {
     const dmap: DataMapping[] = table.map((row) => {
+      if (typeof row.value !== 'string') {
+        throw new TypeError(
+          'Expecting only string but got another type for Data_Mapping'
+        );
+      }
       return {
         source_output: row.name,
         target_input: row.value,
@@ -239,7 +231,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
     <Box>
       <Paper className={classes.nodeDetails}>
         <LabelComment element={element} showComment={advanced} />
-        <DefaultInputs element={element} />
+        <DefaultInputs {...element} />
 
         <hr style={{ color: '#96a5f9' }} />
         <div>
@@ -293,7 +285,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
         {defaultErrorNode && !mapAllData && advanced && (
           <div>
             {/* TODO: Check and Replace Data Mapping with the component to have dropdowns if not rarely used */}
-            {/* <DataMappingComponent element={element} /> */}
+            {/* <DataMappingComponent {...element} /> */}
             <b>Data Mapping </b>
             <IconButton
               style={{ padding: '1px' }}
@@ -340,7 +332,7 @@ export default function NodeDetails(props: { element: EwoksRFNode }) {
               <div style={{ width: '100%' }}>
                 {editableTaskProperties.map(({ id, label, value }) =>
                   ['ppfmethod', 'method', 'script'].includes(
-                    props.element.task_type
+                    element.task_type
                   ) ? (
                     <EditTaskProp
                       key={id}

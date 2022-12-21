@@ -1,7 +1,13 @@
-import type { WorkflowDescription } from '../types';
+import type { WorkflowDescription, State } from '../types';
+import type { SetState } from 'zustand';
 
-const allWorkflows = (set) => ({
-  allWorkflows: [] as WorkflowDescription[],
+export interface AllWorkflowsSlice {
+  allWorkflows: WorkflowDescription[];
+  setAllWorkflows: (workflows: WorkflowDescription[]) => void;
+}
+
+const allWorkflows = (set: SetState<State>): AllWorkflowsSlice => ({
+  allWorkflows: [],
 
   setAllWorkflows: (workflows: WorkflowDescription[]) => {
     set((state) => ({

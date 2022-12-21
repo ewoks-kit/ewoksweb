@@ -1,5 +1,29 @@
-// import type { Color } from '@material-ui/lab';
 import type { Position } from 'react-flow-renderer';
+import type { CanvasGraphChangedSlice } from './store/canvasGraphChanged';
+import type { AllWorkflowsSlice } from './store/allWorkflows';
+import type { CurrentExecutionEventSlice } from './store/currentExecutionEvent';
+import type { ExecutedEventsSlice } from './store/executedEvents';
+import type { GraphRFSlice } from './store/graphRF';
+import type { ExecutedWorkflowsSlice } from './store/executedWorkflows';
+import type { InExecutionModeSlice } from './store/inExecutionMode';
+import type { OpenDraggableDialogSlice } from './store/openDraggableDialog';
+import type { GettingFromServerSlice } from './store/gettingFromServer';
+import type { GraphOrSubgraphSlice } from './store/graphOrSubgraph';
+import type { OpenSettingsDrawerSlice } from './store/openSettingsDrawer';
+import type { OpenSnackbarSlice } from './store/openSnackbar';
+import type { SelectedElementSlice } from './store/selectedElement';
+import type { SelectedTaskSlice } from './store/selectedTask';
+import type { SubgraphsStackSlice } from './store/subgraphsStack';
+import type { SubGraphSlice } from './store/subGraph';
+import type { TasksSlice } from './store/tasks';
+import type { UndoIndexSlice } from './store/undoIndex';
+import type { UndoRedoSlice } from './store/undoRedo';
+import type { WatchedWorkflowsSlice } from './store/watchedWorkflows';
+import type { WorkingGraphSlice } from './store/workingGraph';
+import type { ExecutingEventsSlice } from './store/executingEvents';
+import type { AllIconsSlice } from './store/allIcons';
+import type { RecentGraphsSlice } from './store/recentGraphs';
+import type { Color } from '@material-ui/lab';
 
 export enum FormAction {
   cloneGraph = 'cloneGraph',
@@ -62,7 +86,7 @@ export interface Graph {
 export interface SnackbarParams {
   open: boolean;
   text: string;
-  severity: string;
+  severity: Color;
 }
 
 export interface DialogParams {
@@ -114,8 +138,9 @@ export interface Event {
   output_uris?: [];
   id?: number;
   nodeId: string;
+  status?: string;
   event_type: string; // start/stop/progress events
-  values: {}; // all values entering or exiting a node
+  values: Record<string, unknown>; // all values entering or exiting a node
   // for now put static executing here
   executing?: string[];
 }
@@ -133,86 +158,35 @@ export interface NodeExecutionHistory {
   // the ExecutingState can be found through the eventId again
 }
 
-export interface State {
-  currentExecutionEvent?: number;
-  setCurrentExecutionEvent?: (index: number) => void;
-
-  executedEvents?: Event[];
-  setExecutedEvents?: (execEvent: Event) => void;
-
-  executingEvents?: Event[];
-  setExecutingEvents?: (execEvent: Event, live: boolean) => void;
-
-  executedWorkflows?: Event[][];
-  setExecutedWorkflows?: (execEvent: Event[][], live?: boolean) => void;
-
-  watchedWorkflows?: Event[][];
-  setWatchedWorkflows?: (execEvent: Event[][]) => void;
-
-  inExecutionMode?: boolean;
-  setInExecutionMode?: (val: boolean) => void;
-
-  gettingFromServer?: boolean;
-  setGettingFromServer?: (val: boolean) => void;
-
-  undoRedo?: Action[];
-  setUndoRedo?: (action: Action) => void;
-
-  undoIndex?: number;
-  setUndoIndex?: (index: number) => void;
-
+export interface State
+  extends CanvasGraphChangedSlice,
+    AllWorkflowsSlice,
+    AllIconsSlice,
+    GraphRFSlice,
+    CurrentExecutionEventSlice,
+    ExecutedEventsSlice,
+    ExecutedWorkflowsSlice,
+    InExecutionModeSlice,
+    OpenDraggableDialogSlice,
+    GettingFromServerSlice,
+    GraphOrSubgraphSlice,
+    OpenSettingsDrawerSlice,
+    OpenSnackbarSlice,
+    SelectedElementSlice,
+    SelectedTaskSlice,
+    SubgraphsStackSlice,
+    SubGraphSlice,
+    TasksSlice,
+    UndoIndexSlice,
+    // TODO: check if index above can be merged with undoRedo below
+    UndoRedoSlice,
+    WatchedWorkflowsSlice,
+    WorkingGraphSlice,
+    ExecutingEventsSlice,
+    RecentGraphsSlice {
   initializedGraph?: GraphEwoks;
   initializedRFGraph?: GraphRF;
   initializedTask?: Task;
-
-  tasks?: Task[];
-  setTasks?: (tasks: Task[]) => void;
-
-  openDraggableDialog?: DialogParams;
-  setOpenDraggableDialog?: (params: DialogParams) => void;
-
-  openSettingsDrawer?: string;
-  setOpenSettingsDrawer?: (params: string) => void;
-
-  openSnackbar?: SnackbarParams;
-  setOpenSnackbar?: (params: SnackbarParams) => void;
-
-  allIcons: Icon[];
-  setAllIcons: (icons: Icon[]) => void;
-
-  allWorkflows?: WorkflowDescription[];
-  setAllWorkflows?: (workflows: WorkflowDescription[]) => void;
-
-  recentGraphs?: GraphRF[];
-  setRecentGraphs?: (graphRF: GraphRF, reset?: boolean) => void;
-
-  graphOrSubgraph?: boolean;
-  setGraphOrSubgraph?: (isItGraph: boolean) => void;
-
-  subgraphsStack?: stackGraph[];
-  setSubgraphsStack?: (graphRF: stackGraph) => void;
-
-  graphRF?: GraphRF;
-  setGraphRF?: (graphRF: GraphRF, isChangeToCanvasGraph?: boolean) => void;
-
-  canvasGraphChanged?: boolean;
-  setCanvasGraphChanged?: (isChanged: boolean) => void;
-
-  selectedElement?: EwoksRFNode | EwoksRFLink | GraphDetails;
-  setSelectedElement?: (
-    element: EwoksRFNode | EwoksRFLink | GraphDetails,
-    from?: string,
-    update?: boolean
-  ) => void;
-
-  selectedTask?: Task;
-  setSelectedTask?: (task: Task) => void;
-
-  subGraph?: GraphRF;
-  setSubGraph?: (graph: GraphEwoks) => Promise<GraphRF>;
-
-  workingGraph?: GraphRF;
-  setWorkingGraph?: (graph: GraphEwoks, source?: string) => Promise<GraphRF>;
 }
 
 export interface Action {
@@ -252,9 +226,9 @@ export interface Task {
 }
 
 export interface Inputs {
-  id?: string;
-  name?: string;
-  value?: string | boolean;
+  id: string;
+  name: string;
+  value: unknown;
 }
 
 export interface nodeInputsOutputs {
@@ -266,6 +240,7 @@ export interface nodeInputsOutputs {
 export interface stackGraph {
   id: string;
   label: string;
+  resetStack?: boolean;
 }
 
 export interface UiPropsNodes {
@@ -274,13 +249,15 @@ export interface UiPropsNodes {
   comment?: string;
   position?: CanvasPosition;
   style?: LinkStyle;
-  withImage: boolean;
-  withLabel: boolean;
+  withImage?: boolean;
+  withLabel?: boolean;
   colorBorder?: string;
   nodeWidth?: number;
   node_icon?: string;
   task_icon?: string;
   task_category?: string;
+  moreHandles?: boolean;
+  details?: boolean;
 }
 
 export interface UiPropsLinks {
@@ -334,14 +311,14 @@ export interface CanvasPosition {
 export interface DataMapping {
   source_output?: string;
   target_input?: string;
-  value?: string | boolean;
+  value?: unknown;
   id?: string;
   name?: string;
 }
 
 export interface Conditions {
   source_output?: string;
-  value?: string | boolean;
+  value: unknown;
   id?: string;
   name?: string;
 }
@@ -428,20 +405,24 @@ export interface EwoksRFNode {
 }
 
 export interface EditableTableRow {
-  id: number;
-  name: string;
-  value: never; // string | number | null | undefined,
-  isEditMode: boolean;
-  type: string;
+  id?: string;
+  name?: string;
+  value?: unknown; // string | number | null | undefined | boolean | Record<string, unknown>;
+  isEditMode?: boolean;
+  type?: string;
 }
 
 export interface CustomTableCellProps {
   index: number;
   row: EditableTableRow;
   name: string;
-  type: string;
-  typeOfValues: string[];
-  onChange(e: never, row: EditableTableRow, index: number): void;
+  type?: string;
+  typeOfValues: { type: string; values?: string[] };
+  onChange(
+    e: { target: { name: string; value: string | number } },
+    row: EditableTableRow,
+    index: number
+  ): void;
 }
 
 export interface EwoksRFLink {
@@ -459,7 +440,7 @@ export interface EwoksRFLink {
     map_all_data?: boolean;
     required?: boolean;
     sub_target?: string;
-    sub_target_attributes?: {};
+    sub_target_attributes?: Record<string, unknown>;
     sub_source?: string;
     colorLine?: string;
     getAroundProps?: { x?: number; y?: number };
@@ -472,7 +453,7 @@ export interface EwoksRFLink {
   labelBgStyle;
   labelBgPadding;
   labelBgBorderRadius;
-  style;
+  style: { stroke: string; strokeWidth: string };
   startEnd?: boolean;
   subtarget?: string;
   subsource?: string;
@@ -549,4 +530,20 @@ export interface WorkflowDescription {
   id: string;
   label?: string;
   category?: string;
+}
+
+export interface filterParams {
+  workflow_id?: string;
+  status?: string;
+  starttime?: string;
+  endtime?: string;
+  // sets context filters out within the job array that is not practical
+  // context: string;
+  node_id?: string;
+  // TODO: filter jobs that include this task_id and give back all jobs' steps?
+  task_id?: string;
+  user_name?: string;
+  job_id?: string;
+  // type: string;
+  error?: boolean;
 }

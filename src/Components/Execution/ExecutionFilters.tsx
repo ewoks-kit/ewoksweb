@@ -13,25 +13,13 @@ import {
 } from '@material-ui/core';
 import { getExecutionEvents } from '../../utils/api';
 import useStore from '../../store/useStore';
-import type { ExecutedJobsResponse, WorkflowDescription } from '../../types';
+import type {
+  ExecutedJobsResponse,
+  WorkflowDescription,
+  filterParams,
+} from '../../types';
 import CategoryDropdown from '../General/dropdown/CategoryDropdown';
 import WorkflowDropdown from '../General/dropdown/WorkflowDropdown';
-
-interface filterParams {
-  workflow_id: string;
-  status: string;
-  starttime: string;
-  endtime: string;
-  // sets context filters out within the job array that is not practical
-  // context: string;
-  node_id: string;
-  // TODO: filter jobs that include this task_id and give back all jobs' steps?
-  task_id: string;
-  user_name: string;
-  job_id: string;
-  // type: string;
-  error?: boolean;
-}
 
 export default function ExecutionFilters() {
   // const [workflowNameFilter, setWorkflowNameFilter] = useState<String>('');

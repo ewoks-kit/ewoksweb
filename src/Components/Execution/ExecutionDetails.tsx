@@ -1,11 +1,11 @@
 // /* eslint-disable sonarjs/cognitive-complexity */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactJson from 'react-json-view';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import IntegratedSpinner from '../General/IntegratedSpinner';
 import useStore from '../../store/useStore';
 import { Button, Chip, IconButton } from '@material-ui/core';
-import type { Event, GraphEwoks } from '../../types';
+import type { Event } from '../../types';
 import { getWorkflow } from '../../utils/api';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
@@ -25,7 +25,7 @@ export default function ExecutionDetails() {
   const setWatchedWorkflows = useStore((state) => state.setWatchedWorkflows);
 
   // DOC: all workflows live and from history on the execution tab
-  const [workflows, setWorkflows] = useState([]);
+  const [workflows, setWorkflows] = useState<Event[]>([]);
 
   // DOC: calculate the executing spinners for live execution
   const setExecutingEvents = useStore((state) => state.setExecutingEvents);
@@ -63,10 +63,9 @@ export default function ExecutionDetails() {
 
   useEffect(() => {
     // DOC: for those live executing search the executedEvents
-    const allWorkflowsL = executedEvents
+    const allWorkflowsL: Event[] = executedEvents
       .filter((ev) => ev.context === 'workflow' && ev.type === 'start')
       .map((work) => {
-        let workL = {};
         if (
           executedEvents.some(
             (wor) =>
@@ -75,21 +74,20 @@ export default function ExecutionDetails() {
               wor.type === 'end'
           )
         ) {
-          workL = { ...work, status: 'finished' };
-        } else {
-          workL = { ...work, status: 'executing' };
+          return { ...work, status: 'finished' };
         }
-        return workL;
+
+        return { ...work, status: 'executing' };
       });
 
-    const wjobs = watchedWorkflows.map((job) => {
+    const wjobs: Event[] = watchedWorkflows.map((job) => {
       return { ...(job[0].workflow_id ? job[0] : job[1]), status: 'finished' };
     });
 
     setWorkflows([...allWorkflowsL, ...wjobs]);
   }, [executedEvents, watchedWorkflows]);
 
-  function workflowDetails(work) {
+  function workflowDetails(work: Event) {
     if (selectedWorkflow !== work) {
       setSelectedWorkflow(work);
     } else {
@@ -98,8 +96,10 @@ export default function ExecutionDetails() {
   }
 
   function formatedDate(job: Event) {
-    const { label } = (allWorkflows &&
-      allWorkflows.find((work) => job.workflow_id === work.id)) || {
+    // TODO: works but is not entirelly correct but suggested by eslint
+    const { label } = allWorkflows?.find(
+      (work) => job.workflow_id === work.id
+    ) || {
       label: '',
     };
     const dat = new Date(job.time);
@@ -114,11 +114,11 @@ export default function ExecutionDetails() {
   function checkAndExecute() {
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
-    } else {
-      executeWorkflow();
-      setOpenAgreeDialog(false);
-      setCanvasGraphChanged(false);
+      return;
     }
+    executeWorkflow();
+    setOpenAgreeDialog(false);
+    setCanvasGraphChanged(false);
   }
 
   async function executeWorkflow() {
@@ -135,7 +135,7 @@ export default function ExecutionDetails() {
     try {
       const response = await getWorkflow(workflowId);
       if (response.data) {
-        setWorkingGraph(response.data as GraphEwoks, 'fromServer');
+        setWorkingGraph(response.data, 'fromServer');
         // TODO: get rid of timeout?
         setTimeout(() => {
           // DOC:
@@ -188,7 +188,7 @@ export default function ExecutionDetails() {
     return events;
   }
 
-  async function handleChangeOpenExecutions() {
+  function handleChangeOpenExecutions() {
     setOpenSettingsDrawer('Executions');
   }
 

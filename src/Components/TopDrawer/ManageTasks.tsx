@@ -11,6 +11,7 @@ import useStore from '../../store/useStore';
 import AddNodes from '../Sidebar/AddNodes';
 import EventNoteIcon from '@material-ui/icons/EventNote';
 import { useState } from 'react';
+import type { ChangeEvent } from 'react';
 import { discoverTasks } from '../../utils/api';
 import commonStrings from '../../commonStrings.json';
 import type { SnackbarParams } from '../../types';
@@ -23,11 +24,11 @@ export default function ManageTasks() {
   const [showDiscover, setShowDiscover] = useState<boolean>(false);
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
 
-  function discoverTasksChanged(event) {
+  function discoverTasksChanged(event: ChangeEvent<HTMLInputElement>) {
     setShowDiscover(event.target.checked);
   }
 
-  function pythonModuleChanged(event) {
+  function pythonModuleChanged(event: ChangeEvent<HTMLInputElement>) {
     setPythonModules([event.target.value]);
   }
 
@@ -105,7 +106,9 @@ export default function ManageTasks() {
             style={{ margin: '8px' }}
             variant="outlined"
             color="primary"
-            onClick={discover}
+            onClick={() => {
+              discover();
+            }}
             size="small"
           >
             Discover Tasks

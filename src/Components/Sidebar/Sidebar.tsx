@@ -30,6 +30,7 @@ import { OpenInBrowser } from '@material-ui/icons';
 import SidebarTooltip from './SidebarTooltip';
 import getIconsFromServer from '../../utils/getIconsFromServer';
 import commonStrings from 'commonStrings.json';
+import { isLink, isNode } from '../../utils/typeGuards';
 
 const useStyles = DashboardStyle;
 
@@ -41,9 +42,6 @@ export default function Sidebar() {
   );
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
-  const [element, setElement] = useState<
-    EwoksRFNode | EwoksRFLink | GraphDetails
-  >({});
   const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
     false
   );
@@ -60,10 +58,6 @@ export default function Sidebar() {
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const setAllIcons = useStore((state) => state.setAllIcons);
-
-  useEffect(() => {
-    setElement(selectedElement);
-  }, [selectedElement]);
 
   // TODO: similar getIcons is used in manage icons. Should we move it to a hook?
   const getIcons = useCallback(async () => {
@@ -87,19 +81,27 @@ export default function Sidebar() {
   }, [getIcons]);
 
   const deleteElement = async () => {
-    let newGraph = {} as GraphRF;
+    if (workingGraph.graph.id !== graphRF.graph.id) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Not allowed to delete any element in a sub-graph!',
+        severity: 'success',
+      });
+      return;
+    }
 
-    const elN = element as EwoksRFNode; // TODO: is this the way to avoid typescript warning???
-    const elL = element as EwoksRFLink;
-    const elD = element as GraphDetails;
-    if (elN.position) {
+    if (isNode(selectedElement)) {
       const nodesLinks = graphRF.links.filter(
-        (link) => !(link.source === elN.id || link.target === elN.id)
+        (link) =>
+          !(
+            link.source === selectedElement.id ||
+            link.target === selectedElement.id
+          )
       );
 
-      newGraph = {
+      const newGraph: GraphRF = {
         ...graphRF,
-        nodes: graphRF.nodes.filter((nod) => nod.id !== element.id),
+        nodes: graphRF.nodes.filter((nod) => nod.id !== selectedElement.id),
         links: nodesLinks,
       };
 
@@ -107,46 +109,43 @@ export default function Sidebar() {
         action: 'Removed a Node',
         graph: newGraph,
       });
-    } else if (elL.source) {
-      newGraph = {
+      setGraphRF(newGraph, true);
+      return;
+    }
+
+    if (isLink(selectedElement)) {
+      const newGraph: GraphRF = {
         ...graphRF,
-        links: graphRF.links.filter((link) => link.id !== elL.id),
+        links: graphRF.links.filter((link) => link.id !== selectedElement.id),
       };
 
       setUndoRedo({
         action: 'Removed a Link',
         graph: newGraph,
       });
+      setGraphRF(newGraph, true);
+      return;
     }
 
-    if (elD.input_nodes) {
+    if ('input_nodes' in selectedElement) {
       setOpenAgreeDialog(true);
-    } else if (!elD.input_nodes) {
-      if (workingGraph.graph.id === graphRF.graph.id) {
-        setGraphRF(newGraph, true);
-      } else {
-        setOpenSnackbar({
-          open: true,
-          text: 'Not allowed to delete any element in a sub-graph!',
-          severity: 'success',
-        });
-      }
-    } else {
-      setOpenSnackbar({
-        open: true,
-        text: 'Nothing to delete!',
-        severity: 'error',
-      });
+      return;
     }
+
+    setOpenSnackbar({
+      open: true,
+      text: 'Nothing to delete!',
+      severity: 'error',
+    });
   };
 
   const agreeCallback = async () => {
     setOpenAgreeDialog(false);
     try {
-      await deleteWorkflow(element.id);
+      await deleteWorkflow(selectedElement.id);
       setOpenSnackbar({
         open: true,
-        text: `Workflow ${element.id} succesfully deleted!`,
+        text: `Workflow ${selectedElement.id} succesfully deleted!`,
         severity: 'success',
       });
     } catch (error) {
@@ -159,7 +158,7 @@ export default function Sidebar() {
 
     setGraphRF(initializedRFGraph);
     setSelectedElement({} as GraphDetails);
-    setSubgraphsStack({ id: 'initialiase', label: '' });
+    setSubgraphsStack({ id: '', label: '', resetStack: true });
     setRecentGraphs({} as GraphRF, true);
   };
 
@@ -168,8 +167,8 @@ export default function Sidebar() {
   };
 
   const cloneNode = () => {
-    if ('position' in selectedElement) {
-      const newClone = {
+    if (isNode(selectedElement)) {
+      const newClone: EwoksRFNode = {
         ...selectedElement,
         id: calcNewId(selectedElement.id, graphRF.nodes),
         selected: false,
@@ -186,7 +185,7 @@ export default function Sidebar() {
       setGraphRF(newGraph, true);
 
       setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
-      setSelectedElement(newClone as EwoksRFNode);
+      setSelectedElement(newClone);
     } else {
       setOpenSnackbar({
         open: true,
@@ -196,12 +195,12 @@ export default function Sidebar() {
     }
   };
 
-  const handleChangeExecutionDetails = (
-    event: React.SyntheticEvent,
-    expand: boolean
-  ) => {
-    setOpenExecutionDetails(expand);
-  };
+  // const handleChangeExecutionDetails = (
+  //   event: React.SyntheticEvent,
+  //   expand: boolean
+  // ) => {
+  //   setOpenExecutionDetails(expand);
+  // };
 
   return (
     <aside className="dndflow">
@@ -242,7 +241,9 @@ export default function Sidebar() {
             style={{ margin: '8px' }}
             variant="outlined"
             color="secondary"
-            onClick={deleteElement}
+            onClick={() => {
+              deleteElement();
+            }}
             size="small"
             data-cy="sidebarDelete"
           >
@@ -258,11 +259,11 @@ export default function Sidebar() {
           >
             Clone
           </Button>
-          {!('source' in selectedElement) && <IconMenu />}
+          {!isLink(selectedElement) && <IconMenu />}
           <DraggableDialog open={openDialog} content={dialogContent} />
           <ConfirmDialog
-            title={`Delete "${element.label}" workflow?`}
-            content={`You are about to delete "${element.label}" workflow.
+            title={`Delete "${selectedElement.label}" workflow?`}
+            content={`You are about to delete "${selectedElement.label}" workflow.
               Please make sure that it is not used as a subgraph in other workflows!
               Do you agree to continue?`}
             open={openAgreeDialog}

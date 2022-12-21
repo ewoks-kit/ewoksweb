@@ -1,5 +1,3 @@
-import React, { useEffect } from 'react';
-
 import type { DataMapping, EwoksRFLink } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
@@ -7,53 +5,35 @@ import EditableTable from './EditableTable';
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 
-interface DataMappingProps {
-  element: EwoksRFLink;
-}
-
-export default function DataMappingComponent(props: DataMappingProps) {
-  const { element } = props;
-
+export default function DataMappingComponent(element: EwoksRFLink) {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
-  const [dataMapping, setDataMapping] = React.useState<DataMapping[]>([]);
-  const [elementL, setElementL] = React.useState<EwoksRFLink>(
-    {} as EwoksRFLink
-  );
   const graphRF = useStore((state) => state.graphRF);
 
-  useEffect(() => {
-    setElementL(element);
-
-    if (element.data && element.data.data_mapping) {
-      setDataMapping(element.data.data_mapping);
-    }
-  }, [element.id, element]);
-
-  const addDataMapping = () => {
-    const el = element;
-
-    const elMap = el.data.data_mapping;
-
-    if (elMap.some((x) => x.id === '')) {
+  function addDataMapping() {
+    if (element.data?.data_mapping?.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before addining another!',
         severity: 'warning',
       });
-    } else {
-      setSelectedElement(
-        {
-          ...el,
-          data: {
-            ...el.data,
-            data_mapping: [...elMap, { id: '', name: '', value: '' }],
-          },
-        },
-        'fromSaveElement'
-      );
+      return;
     }
-  };
+
+    setSelectedElement(
+      {
+        ...element,
+        data: {
+          ...element.data,
+          data_mapping: [
+            ...element.data.data_mapping,
+            { id: '', name: '', value: '' },
+          ],
+        },
+      },
+      'fromSaveElement'
+    );
+  }
 
   const dataMappingValuesChanged = (table) => {
     const dmap: DataMapping[] = table.map((row) => {
@@ -94,43 +74,40 @@ export default function DataMappingComponent(props: DataMappingProps) {
       >
         <AddCircleOutlineIcon />
       </IconButton>
-      {dataMapping.length > 0 && (
+      {element.data.data_mapping.length > 0 && (
         <EditableTable
           headers={['Source', 'Target']}
-          defaultValues={dataMapping}
+          defaultValues={element.data.data_mapping}
           valuesChanged={dataMappingValuesChanged}
           typeOfValues={[
             {
-              type: elementL.source
+              type: element.source
                 ? ['class'].includes(
-                    graphRF &&
-                      graphRF.nodes[0] &&
+                    graphRF?.nodes?.[0] &&
                       graphRF.nodes.find((nod) => {
-                        return nod.id === elementL.source;
+                        return nod.id === element.source;
                       }).task_type
                   )
                   ? 'select'
                   : 'input'
                 : 'input',
-              values: props.element.data.links_input_names || [],
+              values: element.data.links_input_names || [],
             },
             {
-              type: elementL.target
+              type: element.target
                 ? ['class'].includes(
-                    graphRF &&
-                      graphRF.nodes[0] &&
+                    graphRF?.nodes?.[0] &&
                       graphRF.nodes.find((nod) => {
-                        return nod.id === elementL.target;
+                        return nod.id === element.target;
                       }).task_type
                   )
                   ? 'select'
                   : 'input'
                 : 'input',
-              values:
-                [
-                  ...props.element.data.links_required_output_names,
-                  ...props.element.data.links_optional_output_names,
-                ] || [],
+              values: [
+                ...element.data.links_required_output_names,
+                ...element.data.links_optional_output_names,
+              ],
             },
           ]}
         />

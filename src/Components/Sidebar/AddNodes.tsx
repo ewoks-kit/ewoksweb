@@ -153,16 +153,21 @@ function AddNodes(props: AddNodesProps) {
     setOpenAgreeDialog(false);
   };
 
-  const action = (action: FormAction, element: string | Task) => {
+  function onAction(action: FormAction, element: string | Task) {
     setDoAction(action);
+
     if (['cloneTask', 'editTask'].includes(action)) {
       const task = tasks.find((tas) => tas.task_identifier === element);
       setElementToEdit(task);
-    } else if (action === 'newTask') {
-      setElementToEdit(initializedTask);
+      setOpenSaveDialog(true);
+      return;
     }
-    setOpenSaveDialog(true);
-  };
+
+    if (action === 'newTask') {
+      setElementToEdit(initializedTask);
+      setOpenSaveDialog(true);
+    }
+  }
 
   const handleChange = (event: React.SyntheticEvent, newExpanded: boolean) => {
     if (newExpanded) {
@@ -293,13 +298,9 @@ function AddNodes(props: AddNodesProps) {
                 )}
               </AccordionDetails>
               {/* TODO: This is not really readable:
-                storing conditions in a variable/util. At first glance, selectedTask &&
-                selectedTask.task_identifier && tasks.length > 0 &&
-                tasks.find( (tas) => tas.task_identifier === selectedTask.task_identifier )?.category === categoryName
-                could be isSelectedTaskCategory
+                storing conditions in a variable/util. At first glance could be isSelectedTaskCategory
                 Making a new component where you could deal with these conditions with early return to null */}
-              {selectedTask &&
-                selectedTask.task_identifier &&
+              {selectedTask?.task_identifier &&
                 categoryName !== 'General' &&
                 tasks.length > 0 &&
                 tasks.find(
@@ -316,7 +317,7 @@ function AddNodes(props: AddNodesProps) {
                     <IconButton
                       aria-label="edit"
                       onClick={() =>
-                        action(
+                        onAction(
                           FormAction.editTask,
                           selectedTask.task_identifier
                         )
@@ -331,7 +332,7 @@ function AddNodes(props: AddNodesProps) {
                       variant="outlined"
                       color="primary"
                       onClick={() =>
-                        action(
+                        onAction(
                           FormAction.cloneTask,
                           selectedTask.task_identifier
                         )
@@ -346,27 +347,28 @@ function AddNodes(props: AddNodesProps) {
                       variant="outlined"
                       color="primary"
                       onClick={() =>
-                        action(FormAction.newTask, initializedTask)
+                        onAction(FormAction.newTask, initializedTask)
                       }
                       size="small"
                     >
                       New
                     </Button>
+                    <ConfirmDialog
+                      title={`Delete "${selectedTask.task_identifier}" task?`}
+                      content={`You are about to delete a task.
+                                Please make sure that it is not used in any workflow!
+                                Do you agree to continue?`}
+                      open={openAgreeDialog}
+                      agreeCallback={agreeDeleteTask}
+                      disagreeCallback={disAgreeDeleteTask}
+                    />
                   </>
                 )}
             </Accordion>
           )
         )}
       </AccordionDetails>
-      <ConfirmDialog
-        title={`Delete "${selectedTask && selectedTask.task_identifier}" task?`}
-        content={`You are about to delete a task.
-              Please make sure that it is not used in any workflow!
-              Do you agree to continue?`}
-        open={openAgreeDialog}
-        agreeCallback={agreeDeleteTask}
-        disagreeCallback={disAgreeDeleteTask}
-      />
+
       <FormDialog
         elementToEdit={elementToEdit}
         action={doAction}

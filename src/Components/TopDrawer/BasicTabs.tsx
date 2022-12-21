@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import type { ChangeEvent } from 'react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
@@ -65,7 +66,7 @@ export default function BasicTabs() {
   }, [openSettingsDrawer]);
 
   const handleChange = async (
-    event: React.SyntheticEvent,
+    event: ChangeEvent<HTMLInputElement>,
     newValue: number
   ) => {
     setValue(newValue);
@@ -79,7 +80,9 @@ export default function BasicTabs() {
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
-          onChange={handleChange}
+          onChange={(e: ChangeEvent<HTMLInputElement>, newValue: number) => {
+            handleChange(e, newValue);
+          }}
           aria-label="basic tabs example"
         >
           <Tab label="Workflows" {...a11yProps(0)} />

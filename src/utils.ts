@@ -18,7 +18,7 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
   let res = [];
   try {
     const workflows = await getWorkflowsDescriptions();
-    if (workflows && workflows.data) {
+    if (workflows?.data) {
       const workf: { items: WorkflowDescription[] } = workflows.data;
       res = workf.items;
     }
@@ -61,17 +61,17 @@ export async function getSubgraphs(
   const existingNodeSubgraphs = nodes.filter(
     (nod) => nod.task_type === 'graph'
   );
-  let results = [] as GraphEwoks[];
+  let results: GraphEwoks[] = [];
   if (existingNodeSubgraphs.length > 0) {
     // there are subgraphs -> first search in the recentGraphs for them
     const notInRecent = [];
-    existingNodeSubgraphs.forEach((graph) => {
+    existingNodeSubgraphs.forEach((graphL) => {
       if (
-        recentGraphs.filter((gr) => gr.graph.id === graph.task_identifier)
+        recentGraphs.filter((gr) => gr.graph.id === graphL.task_identifier)
           .length === 0
       ) {
         // add them in an array to request them from the server
-        notInRecent.push(graph.task_identifier);
+        notInRecent.push(graphL.task_identifier);
       }
     });
     // For those that are not in recent get them from the server
@@ -83,7 +83,7 @@ export async function getSubgraphs(
           // if there is a null means the subgraph was not found
           // and it should show up in red
           const resCln = res.filter((result) => result.data !== null);
-          return resCln.map((result) => result.data) as GraphEwoks[];
+          return resCln.map((result) => result.data);
         })
       )
       .catch((error) => {
@@ -92,7 +92,7 @@ export async function getSubgraphs(
         return [];
       });
   }
-  return results ? results : [];
+  return results ?? [];
 }
 
 export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {

@@ -2,6 +2,7 @@
 /* jshint sub:true*/
 
 import React, { memo, useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
 import orange1 from '../images/orange1.png';
 import { Handle, Position } from 'react-flow-renderer';
 import type { EwoksRFNode, NodeProps } from '../types';
@@ -18,11 +19,14 @@ import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
 import tooltipText from '../Components/General/TooltipText';
 import { findImage } from 'utils';
+import type { Connection } from 'react-flow-renderer';
+import { isNode } from '../utils/typeGuards';
 
 const onDragStart = (e) => {
   e.preventDefault();
 };
 
+// TODO: examine usage when execution in main
 const execution = () => {
   return true;
 };
@@ -93,7 +97,7 @@ const Node: React.FC<NodeProps> = ({
     padding: '2px',
   };
 
-  const isValidConnection = (connection) => {
+  const isValidConnection = (connection: Connection) => {
     const { isValid, reason } = isValidLink(connection, graphRF);
     if (!isValid) {
       setOpenSnackbar({
@@ -105,20 +109,25 @@ const Node: React.FC<NodeProps> = ({
     return isValid;
   };
 
-  const labelChanged = (event) => {
+  const labelChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setLabelLocal(event.target.value);
   };
 
   // TODO: exists in sidebar abstract in a hook?
+  // Could extract the cloning and graph generation part in a function
+  // that would return the newGraph (and newClone if needed).
+  // Then, it is up to the caller to deal with the result by using the setters.
   const cloneNode = () => {
-    const element = selectedElement as EwoksRFNode;
-    const newClone = {
-      ...element,
+    if (!isNode(selectedElement)) {
+      return;
+    }
+    const newClone: EwoksRFNode = {
+      ...selectedElement,
       id: calcNewId(selectedElement.id, graphRF.nodes),
       selected: false,
       position: {
-        x: element.position.x + 100,
-        y: element.position.y + 100,
+        x: selectedElement.position.x + 100,
+        y: selectedElement.position.y + 100,
       },
     };
 
@@ -130,15 +139,18 @@ const Node: React.FC<NodeProps> = ({
     setGraphRF(newGraph, true);
 
     setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
-    setSelectedElement(newClone as EwoksRFNode);
+    setSelectedElement(newClone);
   };
 
   function setSelEl() {
-    const el = selectedElement as EwoksRFNode;
+    if (!isNode(selectedElement)) {
+      return;
+    }
+
     setSelectedElement({
-      ...el,
+      ...selectedElement,
       data: {
-        ...el.data,
+        ...selectedElement.data,
         label: labelLocal,
       },
     });

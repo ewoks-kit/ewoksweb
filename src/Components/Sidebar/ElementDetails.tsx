@@ -9,6 +9,7 @@ import NodeDetails from './NodeDetails';
 import GraphLabelComment from './GraphLabelComment';
 import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../../types';
 import useStore from '../../store/useStore';
+import { isLink, isNode } from '../../utils/typeGuards';
 
 interface Content {
   title: string;
@@ -18,17 +19,17 @@ interface Content {
 function getAccordionContent(
   element: EwoksRFNode | EwoksRFLink | GraphDetails
 ): Content {
-  if ('position' in element) {
+  if (isNode(element)) {
     return {
       title: 'Node Details',
-      EditComponent: () => <NodeDetails element={element} />,
+      EditComponent: () => <NodeDetails {...element} />,
     };
   }
 
-  if ('source' in element) {
+  if (isLink(element)) {
     return {
       title: 'Link Details',
-      EditComponent: () => <LinkDetails element={element} />,
+      EditComponent: () => <LinkDetails {...element} />,
     };
   }
 

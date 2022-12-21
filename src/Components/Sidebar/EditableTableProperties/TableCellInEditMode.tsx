@@ -2,6 +2,7 @@
   The cell within a table when the row is in edit mode.
   Provides different input for any selected type (number, string, list etc)
 */
+import type { ChangeEvent } from 'react';
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
@@ -15,6 +16,7 @@ import {
 // TODO: Keep the following if edit on the table is needed
 // import CellEditInJson from './CellEditInJson';
 import { Autocomplete } from '@material-ui/lab';
+import type { CustomTableCellProps, EditableTableRow } from '../../../types';
 
 const useStyles = makeStyles(() => ({
   input: {
@@ -24,22 +26,28 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function TableCellInEditMode(propsIn) {
-  const { props } = propsIn;
+function TableCellInEditMode(props: CustomTableCellProps) {
   const { index, row, name, onChange, type, typeOfValues } = props;
   const classes = useStyles();
 
-  const [boolVal, setBoolVal] = React.useState(true);
+  const [valueToString, setValueToString] = React.useState<string>('true');
 
   useEffect(() => {
-    setBoolVal(
+    setValueToString(
       row.value !== null && row.value !== undefined
-        ? row.value.toString()
+        ? // I need to show as string any kind of (value: unknown) it gets
+          // value can be any type in the dropdown
+          // eslint-disable-next-line @typescript-eslint/no-base-to-string
+          row.value.toString()
         : 'null'
     );
   }, [row.value, row]);
 
-  function onChangeBool(e, row, index) {
+  function onChangeBool(
+    e: ChangeEvent<HTMLInputElement>,
+    changedRow: EditableTableRow,
+    rowIndex: number
+  ) {
     const event = {
       ...e,
       target: {
@@ -48,7 +56,7 @@ function TableCellInEditMode(propsIn) {
         value: e.target.value,
       },
     };
-    onChange(event, row, index);
+    onChange(event, changedRow, rowIndex);
   }
 
   return type === 'dict' || type === 'list' || type === 'object' ? (
@@ -97,7 +105,7 @@ function TableCellInEditMode(propsIn) {
     <RadioGroup
       aria-label="gender"
       name="value"
-      value={boolVal} // {row[name]}
+      value={valueToString}
       onChange={(e) => onChangeBool(e, row, index)}
       data-cy="radioInEditableCell"
     >

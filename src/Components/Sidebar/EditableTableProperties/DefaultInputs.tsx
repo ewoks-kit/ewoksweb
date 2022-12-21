@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react';
-
-import type { EwoksRFNode, Inputs } from 'types';
+import type { EwoksRFNode } from 'types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import { IconButton } from '@material-ui/core';
@@ -8,22 +6,12 @@ import { IconButton } from '@material-ui/core';
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 
-export default function DefaultInputs(props) {
-  const { element } = props;
-
-  const [defaultInputs, setDefaultInputs] = React.useState<Inputs[]>([]);
+export default function DefaultInputs(element: EwoksRFNode) {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  useEffect(() => {
-    setDefaultInputs(element.default_inputs ? element.default_inputs : []);
-  }, [element.id, element]);
-
   const addDefaultInputs = () => {
-    const el = element as EwoksRFNode;
-    const elIn = el.default_inputs;
-
-    if (elIn && elIn[elIn.length - 1] && elIn[elIn.length - 1].id === '') {
+    if (element.default_inputs.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before addining another!',
@@ -33,7 +21,10 @@ export default function DefaultInputs(props) {
       setSelectedElement(
         {
           ...element,
-          default_inputs: [...elIn, { id: '', name: '', value: '' }],
+          default_inputs: [
+            ...element.default_inputs,
+            { id: '', name: '', value: '' },
+          ],
         },
         'fromSaveElement'
       );
@@ -75,10 +66,10 @@ export default function DefaultInputs(props) {
         </div>
       </SidebarTooltip>
 
-      {defaultInputs.length > 0 && (
+      {element.default_inputs?.length > 0 && (
         <EditableTable
           headers={['Name', 'Value']}
-          defaultValues={defaultInputs}
+          defaultValues={element.default_inputs}
           valuesChanged={defaultInputsChanged}
           typeOfValues={[
             {

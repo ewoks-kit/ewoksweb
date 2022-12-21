@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import { Handle, Position } from 'react-flow-renderer';
+import type { Connection } from 'react-flow-renderer';
 import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
 import isValidLink from '../utils/IsValidLink';
@@ -9,7 +10,7 @@ function FunctionNode(fnod) {
   const graphRF = useStore((state) => state.graphRF);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const isValidConnection = (connection) => {
+  const isValidConnection = (connection: Connection) => {
     const { isValid, reason } = isValidLink(connection, graphRF);
     if (!isValid) {
       setOpenSnackbar({

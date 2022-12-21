@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import { IconButton } from '@material-ui/core';
 import DashboardStyle from '../Dashboard/DashboardStyle';
@@ -23,8 +23,8 @@ function EditTaskProp(props: EditTaskProps) {
   const { id, label, value, editProps } = props;
   const classes = useStyles();
 
-  const [editProp, setEditProp] = React.useState(false);
-  const [taskProp, setTaskProp] = React.useState('');
+  const [editProp, setEditProp] = useState(false);
+  const [taskProp, setTaskProp] = useState('');
 
   useEffect(() => {
     setTaskProp(value);
@@ -37,7 +37,7 @@ function EditTaskProp(props: EditTaskProps) {
     setEditProp(!editProp);
   }
 
-  function taskPropChanged(taskP) {
+  function taskPropChanged(taskP: string) {
     setTaskProp(taskP);
     props.propChanged({ [id]: taskP });
   }

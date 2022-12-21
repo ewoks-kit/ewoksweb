@@ -1,6 +1,15 @@
-import type { Event, EwoksRFNode } from '../types';
+import type { Event, EwoksRFNode, State } from '../types';
+import type { GetState, SetState } from 'zustand';
 
-const executingEvents = (set, get) => ({
+export interface ExecutingEventsSlice {
+  executingEvents: Event[];
+  setExecutingEvents: (execEvent: Event, live: boolean) => void;
+}
+
+const executingEvents = (
+  set: SetState<State>,
+  get: GetState<State>
+): ExecutingEventsSlice => ({
   executingEvents: [] as Event[],
 
   // Executing events receive one event at a time and calculate the executing spinners
@@ -11,37 +20,40 @@ const executingEvents = (set, get) => ({
   // in current-time. For that they are be feeded using a loop with setExecuting and setExecuted.
 
   setExecutingEvents: (execEvent: Event, live: boolean) => {
-    const prevState = get((prev) => prev);
-
-    const prevExecutingEvents = [...prevState.executingEvents];
+    const prevExecutingEvents: Event[] = [...get().executingEvents];
 
     if (execEvent.context === 'node') {
-      let newExecutingEvents = [];
-      if (execEvent.type === 'start') {
-        // add to executing events
-        newExecutingEvents = [...prevExecutingEvents, execEvent];
-      } else if (execEvent.type === 'end') {
-        // remove from executing events
-        // used event.id to be examined?? Examine if the following for the end event are needed
-        const eventToRemove = [...prevExecutingEvents]
-          .map((ev) => ev.id)
-          .indexOf(execEvent.id);
+      const newExecutingEvents: Event[] = calcNewExecutingEvents(
+        execEvent,
+        prevExecutingEvents
+      );
 
-        if (eventToRemove > -1) {
-          newExecutingEvents = [...prevExecutingEvents];
+      // TBD add else
+      // if (execEvent.type === 'start') {
+      //   // add to executing events
+      //   newExecutingEvents = [...prevExecutingEvents, execEvent];
+      // } else if (execEvent.type === 'end') {
+      //   // remove from executing events
+      //   // used event.id to be examined?? Examine if the following for the end event are needed
+      //   const eventToRemove = [...prevExecutingEvents]
+      //     .map((ev) => ev.id)
+      //     .indexOf(execEvent.id);
 
-          newExecutingEvents.splice(eventToRemove, 1);
-        }
+      //   if (eventToRemove > -1) {
+      //     newExecutingEvents = [...prevExecutingEvents];
 
-        newExecutingEvents = [...prevExecutingEvents].filter(
-          (ev) => ev.node_id !== execEvent.node_id
-        );
-      }
+      //     newExecutingEvents.splice(eventToRemove, 1);
+      //   }
+
+      //   newExecutingEvents = [...prevExecutingEvents].filter(
+      //     (ev) => ev.node_id !== execEvent.node_id
+      //   );
+      // }
 
       // DOC: define the position of the event nodes
       let tempPos = { x: 100, y: 100 };
 
-      const tempNode: EwoksRFNode = prevState.graphRF.nodes.find(
+      const tempNode: EwoksRFNode = get().graphRF.nodes.find(
         (nod) =>
           nod.id === execEvent.node_id &&
           nod.task_identifier === execEvent.task_id
@@ -74,7 +86,7 @@ const executingEvents = (set, get) => ({
       // TODO: test for not live maybe needed since events are fed one-by-one now
       let sameEls = [];
       if (live) {
-        sameEls = [...prevState.executedEvents]
+        sameEls = [...get().executedEvents]
           .reverse()
           .filter(
             (elem) =>
@@ -93,17 +105,16 @@ const executingEvents = (set, get) => ({
       // calculate the executing ones and add the executing param.
       // Not a set because maybe it needs a complex id
       /* eslint-disable unicorn/prefer-set-has */
-      const executingIds = newExecutingEvents.map((ev) => ev.node_id);
-      // console.log(executingIds, tempLabel);
+      const executingIds: string[] = newExecutingEvents.map((ev) => ev.node_id);
 
       execNodes = [
-        ...prevState.graphRF.nodes
-          .filter((nod) => !executingIds.includes(nod.id))
+        ...get()
+          .graphRF.nodes.filter((nod) => !executingIds.includes(nod.id))
           .map((no) => {
             return { ...no, data: { ...no.data, executing: false } };
           }),
-        ...prevState.graphRF.nodes
-          .filter((nod) => executingIds.includes(nod.id))
+        ...get()
+          .graphRF.nodes.filter((nod) => executingIds.includes(nod.id))
           .map((no) => {
             return { ...no, data: { ...no.data, executing: true } };
           }),
@@ -136,22 +147,51 @@ const executingEvents = (set, get) => ({
         },
       ];
       console.log(newExecutingEvents, nodess);
-      if (prevState.inExecutionMode) {
+      if (get().inExecutionMode) {
         set((state) => ({
           ...state,
           // only foe testing set graphRF
           graphRF: {
-            ...prevState.graphRF,
+            ...get().graphRF,
             nodes: nodess,
           },
           executingEvents: newExecutingEvents,
         }));
       }
-    } else if (execEvent.context === 'job') {
-      // TODO: Terminate the execution and exit executionMode
-      // If tasks still exist in executing raise an error?
     }
+    // else if (execEvent.context === 'job') {
+    //   // TODO: Terminate the execution and exit executionMode
+    //   // If tasks still exist in executing raise an error?
+    // }
   },
 });
 
 export default executingEvents;
+
+function calcNewExecutingEvents(
+  execEvent: Event,
+  prevExecutingEvents: Event[]
+): Event[] {
+  let newExecutingEvents: Event[] = [];
+
+  // TBD add else
+  if (execEvent.type === 'start') {
+    // add to executing events
+    return [...prevExecutingEvents, execEvent];
+  }
+
+  // remove from executing events
+  // used event.id to be examined?? Examine if the following for the end event are needed
+  const eventToRemove = [...prevExecutingEvents]
+    .map((ev) => ev.id)
+    .indexOf(execEvent.id);
+
+  if (eventToRemove > -1) {
+    newExecutingEvents = [...prevExecutingEvents].splice(eventToRemove, 1);
+  }
+
+  newExecutingEvents = [...prevExecutingEvents].filter(
+    (ev) => ev.node_id !== execEvent.node_id
+  );
+  return newExecutingEvents;
+}

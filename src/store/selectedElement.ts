@@ -1,26 +1,39 @@
-import type { EwoksRFLink, EwoksRFNode, GraphDetails, GraphRF } from '../types';
+import type {
+  EwoksRFLink,
+  EwoksRFNode,
+  GraphDetails,
+  GraphRF,
+  State,
+} from '../types';
+import type { GetState, SetState } from 'zustand';
+import { isLink, isNode } from '../utils/typeGuards';
 
-const selectedElement = (set, get) => ({
-  selectedElement: {} as EwoksRFNode | EwoksRFLink | GraphDetails,
-
+export interface SelectedElementSlice {
+  selectedElement: EwoksRFNode | EwoksRFLink | GraphDetails;
   setSelectedElement: (
     element: EwoksRFNode | EwoksRFLink | GraphDetails,
-    from: string
-  ) => {
-    // console.log(element);
+    from?: string,
+    update?: boolean
+  ) => void;
+}
 
-    const prevState = get((prev) => prev);
+const selectedElement = (
+  set: SetState<State>,
+  get: GetState<State>
+): SelectedElementSlice => ({
+  selectedElement: {},
 
-    const wg = prevState.workingGraph.graph.id;
-    const { graph, nodes, links } = prevState.graphRF;
+  setSelectedElement: (element, from) => {
+    const workingGraphId = get().workingGraph.graph.id;
+    const { graph, nodes, links } = get().graphRF;
 
     if (from === 'fromSaveElement') {
-      prevState.setCanvasGraphChanged(true);
+      get().setCanvasGraphChanged(true);
     }
 
-    if (wg === '0' || wg === graph.id) {
+    if (workingGraphId === '0' || workingGraphId === graph.id) {
       let tempGraph = {} as GraphRF;
-      if ('position' in element) {
+      if (isNode(element)) {
         const allOtherNodes = nodes.filter((nod) => nod.id !== element.id);
         tempGraph = {
           graph,
@@ -30,12 +43,12 @@ const selectedElement = (set, get) => ({
           }),
         };
         if (from === 'fromSaveElement') {
-          prevState.setUndoRedo({
+          get().setUndoRedo({
             action: 'Node details changed',
             graph: tempGraph,
           });
         }
-      } else if ('source' in element) {
+      } else if (isLink(element)) {
         tempGraph = {
           graph,
           // setting all node de-selected...
@@ -43,22 +56,23 @@ const selectedElement = (set, get) => ({
           links: [...links.filter((link) => link.id !== element.id), element],
         };
         if (from === 'fromSaveElement') {
-          prevState.setUndoRedo({
+          get().setUndoRedo({
             action: 'Link details changed',
             graph: tempGraph,
           });
         }
       } else {
         tempGraph = {
-          graph: element as GraphDetails,
+          // TODO: it should infer the type
+          graph: element,
           nodes: initializeNodes(nodes),
           links: links.map((link) => {
-            return { ...link, selected: false }; // TODO: examine this after update
+            return { ...link, selected: false }; // TODO: examine selected after reactflow update
           }),
         };
 
         if (from === 'fromSaveElement') {
-          prevState.setUndoRedo({
+          get().setUndoRedo({
             action: 'Graph details changed',
             graph: tempGraph,
           });

@@ -1,35 +1,34 @@
-import type { GraphRF } from '../types';
+import type { GraphRF, State } from '../types';
+import { initializedRFGraph } from '../utils/InitializedEntities';
+import type { GetState, SetState } from 'zustand';
 
-const tutorialGraph = {
-  graph: {
-    id: 'newGraph',
-    label: '',
-    input_nodes: [],
-    output_nodes: [],
-    uiProps: {},
-  },
-  nodes: [],
-  links: [],
-} as GraphRF;
+export interface GraphRFSlice {
+  graphRF: GraphRF;
+  setGraphRF: (graphRF: GraphRF, isChangeToCanvasGraph?: boolean) => void;
+}
 
-const graphRF = (set, get) => ({
-  graphRF: tutorialGraph,
+const graphRF = (set: SetState<State>, get: GetState<State>): GraphRFSlice => ({
+  graphRF: initializedRFGraph,
 
-  setGraphRF: (graphRF, isChangeToCanvasGraph) => {
-    if (isChangeToCanvasGraph && !get().inExecutionMode) {
-      get().setCanvasGraphChanged(true);
-    } else if (isChangeToCanvasGraph === false) {
-      get().setCanvasGraphChanged(false);
+  setGraphRF: (graphRFL, isChangeToCanvasGraph) => {
+    // DOC: If missing uiProps or other fill it here
+    if (!graphRFL.graph.uiProps) {
+      graphRFL.graph.uiProps = {};
     }
 
-    // If missing uiProps or other fill it here
-    if (!graphRF.graph.uiProps) {
-      graphRF.graph.uiProps = {};
-    }
     set((state) => ({
       ...state,
-      graphRF,
+      graphRF: graphRFL,
     }));
+
+    if (isChangeToCanvasGraph && !get().inExecutionMode) {
+      get().setCanvasGraphChanged(true);
+      return;
+    }
+
+    if (!isChangeToCanvasGraph) {
+      get().setCanvasGraphChanged(false);
+    }
   },
 });
 

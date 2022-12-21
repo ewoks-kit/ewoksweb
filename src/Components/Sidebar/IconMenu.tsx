@@ -44,7 +44,7 @@ export default function IconMenu() {
     setAnchorEl(null);
   }
 
-  function action(
+  function onAction(
     action: FormAction,
     element: Task | EwoksRFNode | EwoksRFLink | GraphRF
   ) {
@@ -52,10 +52,10 @@ export default function IconMenu() {
     switch (action) {
       case 'newTask': {
         setElementToEdit(initializedTask);
-
         break;
       }
       case 'cloneTask': {
+        // TODO: check for using isNode by extending each possible types
         if ('position' in element) {
           if (element.task_type === 'graph') {
             setOpenSnackbar({
@@ -90,10 +90,11 @@ export default function IconMenu() {
       }
       case 'cloneGraph': {
         setElementToEdit(graphRF);
-
         break;
       }
-      // No default
+      default: {
+        break;
+      }
     }
 
     setOpenSaveDialog(true);
@@ -130,7 +131,7 @@ export default function IconMenu() {
         <Paper>
           <MenuList>
             <MenuItem
-              onClick={() => action(FormAction.newTask, initializedTask)}
+              onClick={() => onAction(FormAction.newTask, initializedTask)}
             >
               <ListItemIcon>
                 <FiberNewIcon fontSize="small" />
@@ -138,14 +139,14 @@ export default function IconMenu() {
               <ListItemText>New Task</ListItemText>
             </MenuItem>
             <MenuItem
-              onClick={() => action(FormAction.cloneTask, selectedElement)}
+              onClick={() => onAction(FormAction.cloneTask, selectedElement)}
             >
               <ListItemIcon>
                 <FileCopyIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText>Clone as Task</ListItemText>
             </MenuItem>
-            <MenuItem onClick={() => action(FormAction.cloneGraph, graphRF)}>
+            <MenuItem onClick={() => onAction(FormAction.cloneGraph, graphRF)}>
               <ListItemIcon>
                 <FileCopyIcon fontSize="small" />
               </ListItemIcon>

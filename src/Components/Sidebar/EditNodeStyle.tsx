@@ -1,22 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Checkbox, FormControl, Slider } from '@material-ui/core';
 import type { EwoksRFNode } from '../../types';
 import useStore from '../../store/useStore';
 import useDebounce from '../../hooks/useDebounce';
+import type { ChangeEvent } from 'react';
+import { isNode } from 'utils/typeGuards';
 
-interface EditNodeStyleProps {
-  element: EwoksRFNode;
-}
 // DOC: Edit the node style
-export default function EditNodeStyle(props: EditNodeStyleProps) {
-  const { element } = props;
-
+export default function EditNodeStyle(element: EwoksRFNode) {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
-  const [withImage, setWithImage] = useState<boolean>(false);
-  const [withLabel, setWithLabel] = useState<boolean>(false);
-  const [colorBorder, setColorBorder] = useState<string>('');
-  const [moreHandles, setMoreHandles] = useState<boolean>(true);
   const [nodeSize, setNodeSize] = useState<number>(
     element.data.nodeWidth || 100
   );
@@ -24,14 +17,12 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
   const debouncedNodeWidth = useDebounce(nodeSize, 500);
 
   useEffect(() => {
-    if ('position' in element) {
-      setWithImage(element.data.withImage);
-      setWithLabel(element.data.withLabel);
-      setColorBorder(element.data.colorBorder || '');
-      setMoreHandles(!!element.data.moreHandles);
-      setNodeSize(element.data.nodeWidth || 100);
+    if (!isNode(element)) {
+      return;
     }
-  }, [element.id, element]);
+
+    setNodeSize(element.data.nodeWidth || 100);
+  }, [element]);
 
   useEffect(
     () => {
@@ -55,8 +46,7 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
     }
   }
 
-  const withImageChanged = (event) => {
-    setWithImage(event.target.checked);
+  function withImageChanged(event: ChangeEvent<HTMLInputElement>) {
     setSelectedElement(
       {
         ...element,
@@ -64,10 +54,9 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
       },
       'fromSaveElement'
     );
-  };
+  }
 
-  const withLabelChanged = (event) => {
-    setWithLabel(event.target.checked);
+  function withLabelChanged(event: ChangeEvent<HTMLInputElement>) {
     setSelectedElement(
       {
         ...element,
@@ -75,10 +64,9 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
       },
       'fromSaveElement'
     );
-  };
+  }
 
-  const colorBorderChanged = (event) => {
-    setColorBorder(event.target.value);
+  const colorBorderChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectedElement(
       {
         ...element,
@@ -88,8 +76,7 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
     );
   };
 
-  const moreHandlesChanged = (event) => {
-    setMoreHandles(event.target.checked);
+  const moreHandlesChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectedElement(
       {
         ...element,
@@ -102,7 +89,7 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
     );
   };
 
-  const changeNodeSize = (event, number) => {
+  const changeNodeSize = (event, number: number) => {
     setNodeSize(number);
   };
 
@@ -114,14 +101,22 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
             <label htmlFor="withImage">With Image</label>
             <Checkbox
               name="withImage"
-              checked={withImage === undefined ? true : !!withImage}
+              checked={
+                element.data.withImage === undefined
+                  ? true
+                  : !!element.data.withImage
+              }
               onChange={withImageChanged}
               inputProps={{ 'aria-label': 'controlled' }}
             />
             <label htmlFor="withLabel">With Label</label>
             <Checkbox
               name="withLabel"
-              checked={withLabel === undefined ? true : !!withLabel}
+              checked={
+                element.data.withLabel === undefined
+                  ? true
+                  : !!element.data.withLabel
+              }
               onChange={withLabelChanged}
               inputProps={{ 'aria-label': 'controlled' }}
             />
@@ -134,7 +129,7 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
               type="color"
               id="head"
               name="head"
-              value={colorBorder}
+              value={element.data.colorBorder || ''}
               onChange={colorBorderChanged}
               style={{ margin: '10px' }}
             />
@@ -147,14 +142,14 @@ export default function EditNodeStyle(props: EditNodeStyleProps) {
             <label htmlFor="moreHandles">More handles</label>
             <Checkbox
               name="moreHandles"
-              checked={moreHandles}
+              checked={!!element.data.moreHandles}
               onChange={moreHandlesChanged}
               inputProps={{ 'aria-label': 'controlled' }}
             />
           </div>
         </div>
       )}
-      <div>
+      <div style={{ minWidth: '200px' }}>
         <label htmlFor="nodeSize">Node Size</label>
         <Slider
           id="nodeSize"

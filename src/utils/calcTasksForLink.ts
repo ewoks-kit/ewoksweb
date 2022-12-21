@@ -5,14 +5,14 @@ export function calcTasksForLink(
   tempGraph: GraphEwoks,
   source: string,
   target: string,
-  newNodeSubgraphs,
+  newNodeSubgraphs: GraphEwoks[],
   tasks: Task[]
 ): Task[] {
   const sourceTmp = tempGraph.nodes.find((nod) => nod.id === source);
   const targetTmp = tempGraph.nodes.find((nod) => nod.id === target);
 
-  let sourceTask = {} as Task;
-  let targetTask = {} as Task;
+  let sourceTask: Task = {};
+  let targetTask: Task = {};
 
   if (sourceTmp) {
     sourceTask = calcTask('source', sourceTmp, tasks, newNodeSubgraphs);
@@ -39,38 +39,35 @@ function calcTask(
   node: EwoksNode,
   tasks: Task[],
   newNodeSubgraphs: GraphEwoks[]
-) {
-  let task = {} as Task;
-
+): Task {
   if (node.task_type !== 'graph') {
-    task = tasks.find((tas) => tas.task_identifier === node.task_identifier);
-  } else {
-    const subgraphNodeSource = newNodeSubgraphs.find(
-      (subGr) => subGr.graph.id === node.task_identifier
-    );
-
-    const outputsOrOutputs = [];
-
-    if (subgraphNodeSource) {
-      subgraphNodeSource.graph.output_nodes.forEach((out) =>
-        outputsOrOutputs.push(out.id)
-      );
-    }
-
-    if (sourceOrTarget === 'source') {
-      task = {
-        task_type: node.task_type,
-        task_identifier: node.task_identifier,
-        output_names: outputsOrOutputs,
-      };
-    } else if (sourceOrTarget === 'target') {
-      task = {
-        task_type: node.task_type,
-        task_identifier: node.task_identifier,
-        optional_input_names: outputsOrOutputs,
-        required_input_names: [],
-      };
-    }
+    return tasks.find((tas) => tas.task_identifier === node.task_identifier);
   }
-  return task;
+
+  const subgraphNodeSource = newNodeSubgraphs.find(
+    (subGr) => subGr.graph.id === node.task_identifier
+  );
+
+  const outputsOrOutputs = [];
+
+  if (subgraphNodeSource) {
+    subgraphNodeSource.graph.output_nodes.forEach((out) =>
+      outputsOrOutputs.push(out.id)
+    );
+  }
+
+  if (sourceOrTarget === 'source') {
+    return {
+      task_type: node.task_type,
+      task_identifier: node.task_identifier,
+      output_names: outputsOrOutputs,
+    };
+  }
+
+  return {
+    task_type: node.task_type,
+    task_identifier: node.task_identifier,
+    optional_input_names: outputsOrOutputs,
+    required_input_names: [],
+  };
 }

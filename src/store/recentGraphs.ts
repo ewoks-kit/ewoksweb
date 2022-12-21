@@ -1,9 +1,18 @@
-import type { GraphRF } from '../types';
+import type { GraphRF, State } from '../types';
+import type { GetState, SetState } from 'zustand';
 
-const recentGraphs = (set, get) => ({
-  recentGraphs: [] as GraphRF[],
+export interface RecentGraphsSlice {
+  recentGraphs: GraphRF[];
+  setRecentGraphs: (newGraph: GraphRF, reset?: boolean) => void;
+}
 
-  setRecentGraphs: (newGraph: GraphRF, reset = false) => {
+const recentGraphs = (
+  set: SetState<State>,
+  get: GetState<State>
+): RecentGraphsSlice => ({
+  recentGraphs: [],
+
+  setRecentGraphs: (newGraph, reset = false) => {
     let rec = [];
     if (!reset) {
       rec =

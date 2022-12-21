@@ -25,12 +25,12 @@ export default function ManageWorkflows() {
     if (workflowDetails) {
       // TODO: error handling
       const response = await getWorkflow(workflowDetails.id);
-      setWorkflowValue(response.data as GraphEwoks);
+      setWorkflowValue(response.data);
     }
   }
 
-  async function setCategoryFilter(category: string) {
-    setCategoryValue(category ? category : '');
+  function setCategoryFilter(category: string) {
+    setCategoryValue(category ?? '');
   }
 
   return (
@@ -43,7 +43,9 @@ export default function ManageWorkflows() {
             </FormControl>
             <FormControl variant="standard" fullWidth>
               <WorkflowDropdown
-                onChange={setInputWorkflowValue}
+                onChange={(e) => {
+                  setInputWorkflowValue(e);
+                }}
                 category={categoryValue}
               />
             </FormControl>

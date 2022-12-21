@@ -1,4 +1,5 @@
 import useConfigStore from '../../store/useConfigStore';
+import type { ChangeEvent } from 'react';
 
 // DOC: Edit the graph style
 export default function EditGraphStyle() {
@@ -9,7 +10,7 @@ export default function EditGraphStyle() {
     (state) => state.canvasBackgroundColor
   );
 
-  const colorLineChanged = (event) => {
+  const colorLineChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setCanvasBackgroundColor(event.target.value);
   };
 

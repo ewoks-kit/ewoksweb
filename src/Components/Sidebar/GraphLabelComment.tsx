@@ -1,29 +1,18 @@
-import React, { useEffect } from 'react';
 import useStore from '../../store/useStore';
-import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../../types';
+import { isGraphDetails } from '../../utils/typeGuards';
 import TextButtonSave from './TextButtonSave';
 
 // DOC: the label and the comment when the graph is the selectedElement
 export default function GraphLabelComment() {
-  const [label, setLabel] = React.useState('');
-  const [comment, setComment] = React.useState('');
-  const [category, setCategory] = React.useState('');
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const selectedElement = useStore((state) => state.selectedElement);
-
-  useEffect(() => {
-    const graphElement = selectedElement as GraphDetails;
-    setLabel(graphElement.label);
-    setCategory(graphElement.category);
-    setComment(graphElement.uiProps && graphElement.uiProps.comment);
-  }, [selectedElement.id, selectedElement]);
 
   function saveCategory(category) {
     setSelectedElement(
       {
         ...selectedElement,
         category,
-      } as GraphDetails,
+      },
       'fromSaveElement'
     );
   }
@@ -43,22 +32,29 @@ export default function GraphLabelComment() {
       {
         ...selectedElement,
         uiProps: { ...selectedElement.uiProps, comment },
-      } as EwoksRFNode | EwoksRFLink,
+      },
       'fromSaveElement'
     );
   }
 
   return (
     <>
-      <TextButtonSave label="Label" value={label} valueSaved={saveLabel} />
+      <TextButtonSave
+        label="Label"
+        value={selectedElement.label}
+        valueSaved={saveLabel}
+      />
       <TextButtonSave
         label="Comment"
-        value={comment}
+        value={selectedElement.uiProps?.comment}
         valueSaved={saveComment}
       />
       <TextButtonSave
         label="Category"
-        value={category}
+        value={
+          (isGraphDetails(selectedElement) && selectedElement.category) ||
+          'No graph selected'
+        }
         valueSaved={saveCategory}
       />
     </>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-
+import type { ChangeEvent } from 'react';
 import type { EwoksRFLink, EwoksRFNode } from '../../types';
 import { FormControl, TextField, IconButton, Fab } from '@material-ui/core';
 import DashboardStyle from '../Dashboard/DashboardStyle';
@@ -9,6 +9,7 @@ import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
 import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from './sidebarStyle';
+import { isLink, isNode } from '../../utils/typeGuards';
 
 const useStyles = DashboardStyle;
 
@@ -35,23 +36,25 @@ export default function LabelComment(props: LabelCommentProps) {
   const inExecutionMode = useStore((state) => state.inExecutionMode);
 
   useEffect(() => {
-    if ('position' in element) {
+    if (isNode(element)) {
       setLabel(element.data.label);
       setComment(element.data?.comment);
-    } else if ('source' in element) {
-      const el = element;
-      setLabel(el.label);
-      setComment(el.data?.comment);
+      return;
+    }
+
+    if (isLink(element)) {
+      setLabel(element.label);
+      setComment(element.data?.comment);
 
       const mappings =
-        el.data.data_mapping.length > 0
-          ? el.data.data_mapping
+        element.data.data_mapping.length > 0
+          ? element.data.data_mapping
               .map((con) => `${con.source_output}->${con.target_input}`)
               .join(', ')
           : '';
       const conditions =
-        el.data.conditions.length > 0
-          ? el.data.conditions
+        element.data.conditions.length > 0
+          ? element.data.conditions
               .map(
                 (con) => `${con.source_output}: ${JSON.stringify(con.value)}`
               )
@@ -59,37 +62,29 @@ export default function LabelComment(props: LabelCommentProps) {
           : '';
 
       setLabelChoices([mappings, conditions, 'text...']);
+      return;
     }
+
+    throw new Error('No link or Node tries to access LabelComment');
   }, [element]);
 
   function saveLabel(labelLocal: string) {
-    if ('position' in element) {
-      const el = element;
-      setSelectedElement(
-        {
-          ...el,
-          label: labelLocal,
-          data: { ...element.data, label: labelLocal },
-        },
-        'fromSaveElement'
-      );
-    } else {
-      setSelectedElement(
-        {
-          ...element,
-          label: labelLocal,
-          data: { ...element.data, label: labelLocal },
-        },
-        'fromSaveElement'
-      );
-    }
+    // TODO: do not put label in both places. See the final spec of
+    // ewoks labels-nodes and handle label-comment in a different way.
+    setSelectedElement(
+      {
+        ...element,
+        label: labelLocal,
+        data: { ...element.data, label: labelLocal },
+      },
+      'fromSaveElement'
+    );
   }
 
   function saveComment(commentLocal: string) {
-    const el = element as EwoksRFLink;
     setSelectedElement(
       {
-        ...el,
+        ...element,
         data: { ...element.data, comment: commentLocal },
       },
       'fromSaveElement'
@@ -101,7 +96,7 @@ export default function LabelComment(props: LabelCommentProps) {
     saveLabel(label);
   }
 
-  function setChanged(event) {
+  function setChanged(event: ChangeEvent<HTMLInputElement>) {
     if (event && label !== event.target.value) {
       setValueIsChanged(true);
     } else {
@@ -109,15 +104,16 @@ export default function LabelComment(props: LabelCommentProps) {
     }
   }
 
-  function valueSelectedChanged(event) {
+  function valueSelectedChanged(event: ChangeEvent<HTMLInputElement>) {
     if (event?.target.textContent) {
       setChanged(event);
       setLabel(event.target.textContent);
     }
   }
 
-  function valueChanged(event) {
-    if (event && event.target.value !== 0) {
+  function valueChanged(event: ChangeEvent<HTMLInputElement>) {
+    if (event?.target?.value) {
+      // event.target.value !== 0
       setChanged(event);
       setLabel(event.target.value);
     }
@@ -136,8 +132,12 @@ export default function LabelComment(props: LabelCommentProps) {
               freeSolo
               options={labelChoices}
               value={label}
-              onChange={(event) => valueSelectedChanged(event)}
-              onInputChange={(event) => valueChanged(event)}
+              onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                valueSelectedChanged(event)
+              }
+              onInputChange={(event: ChangeEvent<HTMLInputElement>) =>
+                valueChanged(event)
+              }
               style={{ width: valueIsChanged ? '80%' : '98%' }}
               renderInput={(params) => (
                 <TextField

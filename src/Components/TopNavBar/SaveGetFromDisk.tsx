@@ -11,7 +11,7 @@ import useStore from '../../store/useStore';
 
 const useStyles = DashboardStyle;
 
-function download(content, fileName, contentType) {
+function download(content: BlobPart, fileName: string, contentType: string) {
   const a = document.createElement('a');
   const file = new Blob([content], { type: contentType });
   a.href = URL.createObjectURL(file);
