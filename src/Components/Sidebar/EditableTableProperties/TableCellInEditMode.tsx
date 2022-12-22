@@ -103,7 +103,6 @@ function TableCellInEditMode(props: CustomTableCellProps) {
     </>
   ) : type === 'bool' || type === 'boolean' ? (
     <RadioGroup
-      aria-label="gender"
       name="value"
       value={valueToString}
       onChange={(e) => onChangeBool(e, row, index)}

@@ -95,7 +95,8 @@ cypress:
     - apt-get update && apt-get install curl -y
     - !reference [.pnpm-base, before_script]
   script:
-    - pnpm dlx serve -s build -l 3000 & pnpm dlx wait-on http://localhost:3000
+    # https://github.com/vercel/serve/issues/751
+    - pnpm dlx serve@13.0.4 --no-port-switching -s build -l 3000 & pnpm dlx wait-on http://localhost:3000
     - pnpm cypress:run
 
 pages:
