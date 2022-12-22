@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import type { EwoksRFLink } from '../../types';
 import { Checkbox, Paper } from '@material-ui/core';
