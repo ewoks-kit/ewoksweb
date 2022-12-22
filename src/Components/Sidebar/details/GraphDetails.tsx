@@ -1,9 +1,9 @@
-import useStore from '../../store/useStore';
-import { isGraphDetails } from '../../utils/typeGuards';
+import useStore from '../../../store/useStore';
+import { isGraphDetails } from '../../../utils/typeGuards';
 import TextButtonSave from './TextButtonSave';
 
 // DOC: the label and the comment when the graph is the selectedElement
-export default function GraphLabelComment() {
+export default function GraphDetails() {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const selectedElement = useStore((state) => state.selectedElement);
 

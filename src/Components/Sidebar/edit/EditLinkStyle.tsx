@@ -9,12 +9,12 @@ import {
   Slider,
 } from '@material-ui/core';
 
-import DashboardStyle from '../Dashboard/DashboardStyle';
-import useStore from '../../store/useStore';
-import type { EwoksRFLink, GraphRF } from '../../types';
-import sidebarStyle from './sidebarStyle';
+import DashboardStyle from '../../Dashboard/DashboardStyle';
+import useStore from '../../../store/useStore';
+import type { EwoksRFLink, GraphRF } from '../../../types';
+import sidebarStyle from '../sidebarStyle';
 import type { ChangeEvent } from 'react';
-import { isLink } from '../../utils/typeGuards';
+import { isLink } from '../../../utils/typeGuards';
 
 const useStyles = DashboardStyle;
 

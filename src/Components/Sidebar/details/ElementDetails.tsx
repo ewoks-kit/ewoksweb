@@ -5,10 +5,10 @@ import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import Typography from '@material-ui/core/Typography';
 import LinkDetails from './LinkDetails';
 import NodeDetails from './NodeDetails';
-import GraphLabelComment from './GraphLabelComment';
-import useStore from '../../store/useStore';
-import { isLink, isNode } from '../../utils/typeGuards';
-import type { EwoksRFElement } from './models';
+import GraphDetails from './GraphDetails';
+import useStore from '../../../store/useStore';
+import { isLink, isNode } from '../../../utils/typeGuards';
+import type { EwoksRFElement } from '../models';
 
 interface Content {
   title: string;
@@ -32,7 +32,7 @@ function getAccordionContent(element: EwoksRFElement): Content {
 
   return {
     title: 'Graph Details',
-    DetailsComponent: GraphLabelComment,
+    DetailsComponent: GraphDetails,
   };
 }
 

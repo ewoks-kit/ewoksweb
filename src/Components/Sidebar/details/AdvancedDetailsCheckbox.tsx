@@ -1,5 +1,5 @@
 import { Checkbox } from '@material-ui/core';
-import useConfigStore from '../../store/useConfigStore';
+import useConfigStore from '../../../store/useConfigStore';
 
 export default function AdvancedDetailsCheckbox() {
   const showAdvancedDetails = useConfigStore(

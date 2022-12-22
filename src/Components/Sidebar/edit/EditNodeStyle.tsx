@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Checkbox, FormControl, Slider } from '@material-ui/core';
-import type { EwoksRFNode } from '../../types';
-import useStore from '../../store/useStore';
-import useDebounce from '../../hooks/useDebounce';
+import type { EwoksRFNode } from '../../../types';
+import useStore from '../../../store/useStore';
+import useDebounce from '../../../hooks/useDebounce';
 import type { ChangeEvent } from 'react';
 import { isNode } from 'utils/typeGuards';
 

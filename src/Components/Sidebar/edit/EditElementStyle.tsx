@@ -7,9 +7,9 @@ import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import EditNodeStyle from './EditNodeStyle';
 import EditLinkStyle from './EditLinkStyle';
 import EditGraphStyle from './EditGraphStyle';
-import useStore from '../../store/useStore';
+import useStore from '../../../store/useStore';
 import { isNode, isLink } from 'utils/typeGuards';
-import type { EwoksRFElement } from './models';
+import type { EwoksRFElement } from '../models';
 
 interface Content {
   title: string;

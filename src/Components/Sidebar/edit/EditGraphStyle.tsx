@@ -1,4 +1,4 @@
-import useConfigStore from '../../store/useConfigStore';
+import useConfigStore from '../../../store/useConfigStore';
 import type { ChangeEvent } from 'react';
 
 // DOC: Edit the graph style
