@@ -11,7 +11,7 @@ describe('clicks on canvas and elements', () => {
 
   // select a node with click
   it('selects a node with click', () => {
-    cy.get('[data-cy="advanced-checkbox-nodes"]').should('not.exist');
+    cy.get('[data-cy="advanced-checkbox"]').should('not.exist');
     cy.contains('Default Inputs').should('not.exist');
 
     cy.get('.react-flow__node')
@@ -19,11 +19,11 @@ describe('clicks on canvas and elements', () => {
       .click()
       .should('include.class', 'selected');
 
-    cy.get('[data-cy="advanced-checkbox-nodes"]').should('exist');
+    cy.get('[data-cy="advanced-checkbox"]').should('exist');
     cy.contains('Default Inputs').should('exist');
     cy.contains('Default Inputs').should('be.visible');
-    cy.contains('Inputs-complete').should('exist');
-    cy.contains('Inputs-complete').should('not.be.visible');
+
+    cy.contains('Inputs-complete').should('not.exist');
   });
 
   it('selects a link with click', () => {
@@ -33,15 +33,15 @@ describe('clicks on canvas and elements', () => {
 
     cy.get('.react-flow__edge').first().click({ force: true });
 
-    cy.get('[data-cy="advanced-checkbox-links"]').should('exist');
+    cy.get('[data-cy="advanced-checkbox"]').should('exist');
     cy.contains('Map all Data').should('exist');
     cy.contains('Map all Data').should('be.visible');
     cy.contains('on_error').should('exist');
     cy.contains('on_error').should('be.visible');
     cy.contains('Conditions').should('exist');
     cy.contains('Conditions').should('be.visible');
-    cy.contains('Required').should('exist');
-    cy.contains('Required').should('not.be.visible');
+    // cy.contains('Required').should('exist');
+    cy.contains('Required').should('not.exist');
     cy.contains('Comment').should('exist');
     cy.contains('Comment').should('not.be.visible');
   });
