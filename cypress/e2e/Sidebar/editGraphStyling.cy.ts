@@ -4,11 +4,11 @@ describe('edit links dataMapping', () => {
   });
 
   it('change the canvas color', () => {
-    cy.contains('Styling Graph').should('be.visible').click();
+    cy.findByRole('button', { name: 'Styling Graph' })
+      .should('be.visible')
+      .click();
 
-    cy.contains('Canvas Background Color').should('be.visible');
-
-    cy.get('[data-cy="colorPickerCanvasBackground"]').should(
+    cy.findByLabelText('Canvas Background Color').should(
       'have.attr',
       'value',
       '#e9ebf7'
@@ -18,7 +18,7 @@ describe('edit links dataMapping', () => {
       .should('be.visible')
       .should('have.css', 'background-color', 'rgb(233, 235, 247)');
 
-    cy.get('input[type=color]')
+    cy.findByLabelText('Canvas Background Color')
       .invoke('val', '#ff0000')
       .trigger('input')
       .should('have.attr', 'value', '#ff0000');

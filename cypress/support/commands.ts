@@ -1,3 +1,4 @@
+import '@testing-library/cypress/add-commands';
 import { registerCommand as addWaitForStableDomCommand } from 'cypress-wait-for-stable-dom';
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/;

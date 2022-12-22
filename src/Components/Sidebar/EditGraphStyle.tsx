@@ -16,15 +16,16 @@ export default function EditGraphStyle() {
 
   return (
     <div>
-      <label htmlFor="head">Canvas Background Color</label>
+      <label id="canvas-background-color-label" htmlFor="head">
+        Canvas Background Color
+      </label>
       <input
-        aria-label="Color"
+        aria-labelledby="canvas-background-color-label"
         type="color"
         name="head"
         value={canvasBackgroundColor}
         style={{ margin: '10px' }}
         onInput={colorLineChanged}
-        data-cy="colorPickerCanvasBackground"
       />
     </div>
   );
