@@ -1,16 +1,14 @@
 import useStore from '../../../store/useStore';
-import { isGraphDetails } from '../../../utils/typeGuards';
 import TextButtonSave from './TextButtonSave';
+import type { GraphDetails as GraphDetailsType } from '../../../types';
 
-// DOC: the label and the comment when the graph is the selectedElement
-export default function GraphDetails() {
+export default function GraphDetails(graph: GraphDetailsType) {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
-  const selectedElement = useStore((state) => state.selectedElement);
 
-  function saveCategory(category) {
+  function saveCategory(category: string) {
     setSelectedElement(
       {
-        ...selectedElement,
+        ...graph,
         category,
       },
       'fromSaveElement'
@@ -20,7 +18,7 @@ export default function GraphDetails() {
   function saveLabel(label: string) {
     setSelectedElement(
       {
-        ...selectedElement,
+        ...graph,
         label,
       },
       'fromSaveElement'
@@ -30,8 +28,8 @@ export default function GraphDetails() {
   function saveComment(comment: string) {
     setSelectedElement(
       {
-        ...selectedElement,
-        uiProps: { ...selectedElement.uiProps, comment },
+        ...graph,
+        uiProps: { ...graph.uiProps, comment },
       },
       'fromSaveElement'
     );
@@ -41,20 +39,17 @@ export default function GraphDetails() {
     <>
       <TextButtonSave
         label="Label"
-        value={selectedElement.label}
+        value={graph.label}
         valueSaved={saveLabel}
       />
       <TextButtonSave
         label="Comment"
-        value={selectedElement.uiProps?.comment}
+        value={graph.uiProps?.comment}
         valueSaved={saveComment}
       />
       <TextButtonSave
         label="Category"
-        value={
-          (isGraphDetails(selectedElement) && selectedElement.category) ||
-          'No graph selected'
-        }
+        value={graph.category || 'No graph selected'}
         valueSaved={saveCategory}
       />
     </>
