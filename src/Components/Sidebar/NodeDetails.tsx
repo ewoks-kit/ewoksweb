@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import type { ChangeEvent } from 'react';
-
 import type { DataMapping, EditableTableRow, EwoksRFNode } from '../../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTableProperties/EditableTable';
@@ -22,6 +20,8 @@ import SidebarTooltip from './SidebarTooltip';
 import { OpenInBrowser } from '@material-ui/icons';
 import LabelComment from './LabelComment';
 import DefaultInputs from './EditableTableProperties/DefaultInputs';
+import useConfigStore from '../../store/useConfigStore';
+import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
 
 const useStyles = DashboardStyle;
 
@@ -32,10 +32,12 @@ export default function NodeDetails(element: EwoksRFNode) {
   const graphRF = useStore((state) => state.graphRF);
   const setGraphRF = useStore((state) => state.setGraphRF);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
-  const [inputsComplete, setInputsComplete] = useState<boolean>(false);
-  const [advanced, setAdvanced] = useState<boolean>(false);
-  const [defaultErrorNode, setDefaultErrorNode] = useState<boolean>(false);
+  const showAdvancedDetails = useConfigStore(
+    (state) => state.showAdvancedDetails
+  );
 
+  const [inputsComplete, setInputsComplete] = useState<boolean>(false);
+  const [defaultErrorNode, setDefaultErrorNode] = useState<boolean>(false);
   const [dataMapping, setDataMapping] = useState<DataMapping[]>([]);
   const [mapAllData, setMapAllData] = useState<boolean>(false);
 
@@ -159,10 +161,6 @@ export default function NodeDetails(element: EwoksRFNode) {
     );
   }
 
-  function advancedChanged(event: ChangeEvent<HTMLInputElement>) {
-    setAdvanced(event.target.checked);
-  }
-
   function defaulErrortNodeChanged(event) {
     setSelectedElement(
       {
@@ -230,49 +228,44 @@ export default function NodeDetails(element: EwoksRFNode) {
   return (
     <Box>
       <Paper className={classes.nodeDetails}>
-        <LabelComment element={element} showComment={advanced} />
+        <LabelComment element={element} showComment={showAdvancedDetails} />
         <DefaultInputs {...element} />
 
         <hr style={{ color: '#96a5f9' }} />
-        <div>
-          <b>Advanced</b>
-          <Checkbox
-            checked={advanced}
-            onChange={advancedChanged}
-            inputProps={{ 'aria-label': 'controlled' }}
-            data-cy="advanced-checkbox-nodes"
-          />
-        </div>
-        <SidebarTooltip
-          text={`Set to True when the default input covers all required input
-        (used for method and script as the required inputs are unknown).`}
-        >
-          <div style={{ display: advanced ? 'block' : 'none' }}>
-            <b>Inputs-complete</b>
-            <Checkbox
-              checked={inputsComplete}
-              onChange={inputsCompleteChanged}
-              inputProps={{ 'aria-label': 'controlled' }}
-            />
-          </div>
-        </SidebarTooltip>
-        <hr
-          style={{ color: '#96a5f9', display: advanced ? 'block' : 'none' }}
-        />
-        <SidebarTooltip
-          text={`When set to True all nodes without error handler
-        will be linked to this node. ONLY for one node in its graph`}
-        >
-          <div style={{ display: advanced ? 'block' : 'none' }}>
-            <b>Default Error Node</b>
-            <Checkbox
-              checked={defaultErrorNode}
-              onChange={defaulErrortNodeChanged}
-              inputProps={{ 'aria-label': 'controlled' }}
-            />
-          </div>
-        </SidebarTooltip>
-        {defaultErrorNode && advanced && (
+        <AdvancedDetailsCheckbox />
+        {showAdvancedDetails && (
+          <>
+            <SidebarTooltip
+              text={`Set to True when the default input covers all required input
+              (used for method and script as the required inputs are unknown).`}
+            >
+              <div>
+                <b>Inputs-complete</b>
+                <Checkbox
+                  checked={inputsComplete}
+                  onChange={inputsCompleteChanged}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                />
+              </div>
+            </SidebarTooltip>
+
+            <hr style={{ color: '#96a5f9' }} />
+            <SidebarTooltip
+              text={`When set to True all nodes without error handler
+              will be linked to this node. ONLY for one node in its graph`}
+            >
+              <div>
+                <b>Default Error Node</b>
+                <Checkbox
+                  checked={defaultErrorNode}
+                  onChange={defaulErrortNodeChanged}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                />
+              </div>
+            </SidebarTooltip>
+          </>
+        )}
+        {defaultErrorNode && showAdvancedDetails && (
           <div>
             <b>Map all Data</b>
             <Checkbox
@@ -282,7 +275,7 @@ export default function NodeDetails(element: EwoksRFNode) {
             />
           </div>
         )}
-        {defaultErrorNode && !mapAllData && advanced && (
+        {defaultErrorNode && !mapAllData && showAdvancedDetails && (
           <div>
             {/* TODO: Check and Replace Data Mapping with the component to have dropdowns if not rarely used */}
             {/* <DataMappingComponent {...element} /> */}
@@ -313,51 +306,50 @@ export default function NodeDetails(element: EwoksRFNode) {
             )}
           </div>
         )}
-        <SidebarTooltip
-          text={`These properties are being populated by the task the
+        {showAdvancedDetails && (
+          <SidebarTooltip
+            text={`These properties are being populated by the task the
         specific node is based on. If you need to have them create a new Task
         with the appropriete properties and use it.`}
-        >
-          <Accordion
-            style={{ display: advanced ? 'block' : 'none' }}
-            className="Accordions-sidebar"
           >
-            <AccordionSummary
-              expandIcon={<OpenInBrowser />}
-              aria-controls="panel1a-content"
-            >
-              <Typography>Node Info</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <div style={{ width: '100%' }}>
-                {editableTaskProperties.map(({ id, label, value }) =>
-                  ['ppfmethod', 'method', 'script'].includes(
-                    element.task_type
-                  ) ? (
-                    <EditTaskProp
-                      key={id}
-                      id={id}
-                      label={label}
-                      value={value}
-                      propChanged={propChanged}
-                      editProps // editProps
-                    />
-                  ) : (
+            <Accordion className="Accordions-sidebar">
+              <AccordionSummary
+                expandIcon={<OpenInBrowser />}
+                aria-controls="panel1a-content"
+              >
+                <Typography>Node Info</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <div style={{ width: '100%' }}>
+                  {editableTaskProperties.map(({ id, label, value }) =>
+                    ['ppfmethod', 'method', 'script'].includes(
+                      element.task_type
+                    ) ? (
+                      <EditTaskProp
+                        key={id}
+                        id={id}
+                        label={label}
+                        value={value}
+                        propChanged={propChanged}
+                        editProps // editProps
+                      />
+                    ) : (
+                      <div key={id} className={classes.detailsLabels}>
+                        <b>{label}:</b> {value}
+                      </div>
+                    )
+                  )}
+                  {NonEditableTaskProperties.map(({ id, label, value }) => (
                     <div key={id} className={classes.detailsLabels}>
-                      <b>{label}:</b> {value}
+                      <b>{label}:</b>{' '}
+                      {typeof value === 'object' ? value.join(', ') : value}
                     </div>
-                  )
-                )}
-                {NonEditableTaskProperties.map(({ id, label, value }) => (
-                  <div key={id} className={classes.detailsLabels}>
-                    <b>{label}:</b>{' '}
-                    {typeof value === 'object' ? value.join(', ') : value}
-                  </div>
-                ))}
-              </div>
-            </AccordionDetails>
-          </Accordion>
-        </SidebarTooltip>
+                  ))}
+                </div>
+              </AccordionDetails>
+            </Accordion>
+          </SidebarTooltip>
+        )}
       </Paper>
     </Box>
   );
