@@ -94,7 +94,7 @@ function Canvas() {
   const { fitView, getZoom, zoomTo } = useReactFlow();
   // TODO: when selecting a node-link selected fires the re-render
   // since graphRF changes. We need to not rerender
-  // Accosiated edges titles flicker when selecting a node and then select graph
+  // Associated edges titles flicker when selecting a node and then select graph
   useEffect(() => {
     setNodes(graphRF.nodes);
     setEdges(graphRF.links);

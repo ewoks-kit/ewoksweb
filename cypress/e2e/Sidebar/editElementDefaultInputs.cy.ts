@@ -34,9 +34,9 @@ describe('edit nodes defaultInputs', () => {
 
     cy.get('[data-cy="addDefaultInputsButton"]').click();
 
-    cy.contains(
-      'Please fill in the empty line before addining another!'
-    ).should('be.visible');
+    cy.contains('Please fill in the empty line before adding another!').should(
+      'be.visible'
+    );
 
     cy.get('[data-cy="autocompleteInputInEditableCell"]').should('not.exist');
     cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');

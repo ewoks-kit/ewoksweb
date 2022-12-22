@@ -101,27 +101,11 @@ describe('edit links conditions', () => {
   it('type and undo/redo a new Condition', () => {
     cy.contains('Conditions').should('be.visible');
 
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(store.getState().selectedElement.data.conditions).to.have.length(
-          1
-        )
-      );
-
     cy.get('[data-cy="addConditionsButton"]').click();
 
-    cy.contains(
-      'Please fill in the empty line before addining another!'
-    ).should('be.visible');
-
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(store.getState().selectedElement.data.conditions).to.have.length(
-          1
-        )
-      );
+    cy.contains('Please fill in the empty line before adding another!').should(
+      'be.visible'
+    );
 
     cy.get('[data-cy="autocompleteInputInEditableCell"]').should('not.exist');
     cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');
@@ -149,16 +133,6 @@ describe('edit links conditions', () => {
     cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
     cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
     cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(
-          store.getState().selectedElement.data.conditions[0]
-        ).to.deep.equal({
-          source_output: 'Always',
-          value: 'true',
-        })
-      );
 
     cy.get('[data-cy="undoButton"]').click();
 

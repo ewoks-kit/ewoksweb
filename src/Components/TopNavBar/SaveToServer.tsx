@@ -48,7 +48,7 @@ export default function SaveToServer({ saveToServerF }) {
           await putWorkflow(rfToEwoks(graphRFCurrated));
           setOpenSnackbar({
             open: true,
-            text: 'Graph saved succesfully!',
+            text: 'Graph saved successfully!',
             severity: 'success',
           });
           setCanvasGraphChanged(false);

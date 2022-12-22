@@ -14,7 +14,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
     if (element.data?.data_mapping?.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
-        text: 'Please fill in the empty line before addining another!',
+        text: 'Please fill in the empty line before adding another!',
         severity: 'warning',
       });
       return;

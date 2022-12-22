@@ -104,27 +104,11 @@ describe('edit links dataMapping', () => {
   it('type and undo/redo a new Data Mapping', () => {
     cy.contains('Data Mapping').should('be.visible');
 
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(
-          store.getState().selectedElement.data.data_mapping
-        ).to.have.length(1)
-      );
-
     cy.get('[data-cy="addDataMappingButton"]').click();
 
-    cy.contains(
-      'Please fill in the empty line before addining another!'
-    ).should('be.visible');
-
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(
-          store.getState().selectedElement.data.data_mapping
-        ).to.have.length(1)
-      );
+    cy.contains('Please fill in the empty line before adding another!').should(
+      'be.visible'
+    );
 
     cy.get('[data-cy="inputInEditableCell"]').should('not.exist');
     cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');

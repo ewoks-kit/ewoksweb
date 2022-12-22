@@ -145,7 +145,7 @@ export default function Sidebar() {
       await deleteWorkflow(selectedElement.id);
       setOpenSnackbar({
         open: true,
-        text: `Workflow ${selectedElement.id} succesfully deleted!`,
+        text: `Workflow ${selectedElement.id} successfully deleted!`,
         severity: 'success',
       });
     } catch (error) {

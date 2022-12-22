@@ -1,4 +1,4 @@
-export default function tooltipText(title) {
+export default function tooltipText(title: string) {
   return (
     <span
       style={{

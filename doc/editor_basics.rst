@@ -1,7 +1,7 @@
 Editor basic structure
 ======================
 
-EwoksWeb is web application where users can visually **view/create/edit** their workflows using the `ewoks <https://ewoks.readthedocs.io/>` abstraction model. It mainly employs a canvas where workflows with their Nodes and Links are being visualized and graphically edited.
+EwoksWeb is a web application where users can visually **view/create/edit** their workflows using the `ewoks <https://ewoks.readthedocs.io/>` abstraction model. It mainly employs a canvas where workflows with their Nodes and Links are being visualized and graphically edited.
 
 On startup ewoksWeb presents a lower drawer open with:
 

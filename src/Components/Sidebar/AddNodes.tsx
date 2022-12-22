@@ -134,7 +134,7 @@ function AddNodes(props: AddNodesProps) {
       await deleteTask(selectedTask.task_identifier);
       setOpenSnackbar({
         open: true,
-        text: `Task was succesfully deleted!`,
+        text: `Task was successfully deleted!`,
         severity: 'success',
       });
       getTasks();
