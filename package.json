@@ -49,6 +49,7 @@
     "zustand": "^3.5.10"
   },
   "devDependencies": {
+    "@testing-library/cypress": "8.0.7",
     "@testing-library/dom": "7.21.4",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
