@@ -9,6 +9,7 @@ import Conditions from './EditableTableProperties/Conditions';
 import SidebarTooltip from './SidebarTooltip';
 import LabelComment from './LabelComment';
 import { isLink } from '../../utils/typeGuards';
+import useConfigStore from '../../store/useConfigStore';
 
 const useStyles = DashboardStyle;
 
@@ -17,7 +18,12 @@ export default function LinkDetails(element: EwoksRFLink) {
 
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
-  const [advanced, setAdvanced] = useState<boolean>(false);
+  const showAdvancedDetails = useConfigStore(
+    (state) => state.showAdvancedDetails
+  );
+  const setShowAdvancedDetails = useConfigStore(
+    (state) => state.setShowAdvancedDetails
+  );
 
   const mapAllDataChanged = (event) => {
     setSelectedElement(
@@ -40,7 +46,7 @@ export default function LinkDetails(element: EwoksRFLink) {
   }
 
   const advancedChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setAdvanced(event.target.checked);
+    setShowAdvancedDetails(event.target.checked);
   };
 
   const requiredChanged = (event: ChangeEvent<HTMLInputElement>) => {
@@ -55,7 +61,7 @@ export default function LinkDetails(element: EwoksRFLink) {
 
   return (
     <Paper className={classes.nodeDetails}>
-      <LabelComment element={element} showComment={advanced} />
+      <LabelComment element={element} showComment={showAdvancedDetails} />
       <hr style={{ color: '#96a5f9' }} />
       <SidebarTooltip
         text={`Setting this to True is equivalent to Data Mapping
@@ -101,13 +107,13 @@ export default function LinkDetails(element: EwoksRFLink) {
       <div>
         <b>Advanced</b>
         <Checkbox
-          checked={advanced}
+          checked={showAdvancedDetails}
           onChange={advancedChanged}
           inputProps={{ 'aria-label': 'controlled' }}
           data-cy="advanced-checkbox-links"
         />
       </div>
-      <div style={{ display: advanced ? 'block' : 'none' }}>
+      <div style={{ display: showAdvancedDetails ? 'block' : 'none' }}>
         <div>
           <b>Required</b>
           <Checkbox

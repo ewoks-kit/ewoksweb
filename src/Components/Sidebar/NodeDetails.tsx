@@ -22,6 +22,7 @@ import SidebarTooltip from './SidebarTooltip';
 import { OpenInBrowser } from '@material-ui/icons';
 import LabelComment from './LabelComment';
 import DefaultInputs from './EditableTableProperties/DefaultInputs';
+import useConfigStore from '../../store/useConfigStore';
 
 const useStyles = DashboardStyle;
 
@@ -32,10 +33,15 @@ export default function NodeDetails(element: EwoksRFNode) {
   const graphRF = useStore((state) => state.graphRF);
   const setGraphRF = useStore((state) => state.setGraphRF);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
-  const [inputsComplete, setInputsComplete] = useState<boolean>(false);
-  const [advanced, setAdvanced] = useState<boolean>(false);
-  const [defaultErrorNode, setDefaultErrorNode] = useState<boolean>(false);
+  const showAdvancedDetails = useConfigStore(
+    (state) => state.showAdvancedDetails
+  );
+  const setShowAdvancedDetails = useConfigStore(
+    (state) => state.setShowAdvancedDetails
+  );
 
+  const [inputsComplete, setInputsComplete] = useState<boolean>(false);
+  const [defaultErrorNode, setDefaultErrorNode] = useState<boolean>(false);
   const [dataMapping, setDataMapping] = useState<DataMapping[]>([]);
   const [mapAllData, setMapAllData] = useState<boolean>(false);
 
@@ -160,7 +166,7 @@ export default function NodeDetails(element: EwoksRFNode) {
   }
 
   function advancedChanged(event: ChangeEvent<HTMLInputElement>) {
-    setAdvanced(event.target.checked);
+    setShowAdvancedDetails(event.target.checked);
   }
 
   function defaulErrortNodeChanged(event) {
@@ -230,14 +236,14 @@ export default function NodeDetails(element: EwoksRFNode) {
   return (
     <Box>
       <Paper className={classes.nodeDetails}>
-        <LabelComment element={element} showComment={advanced} />
+        <LabelComment element={element} showComment={showAdvancedDetails} />
         <DefaultInputs {...element} />
 
         <hr style={{ color: '#96a5f9' }} />
         <div>
           <b>Advanced</b>
           <Checkbox
-            checked={advanced}
+            checked={showAdvancedDetails}
             onChange={advancedChanged}
             inputProps={{ 'aria-label': 'controlled' }}
             data-cy="advanced-checkbox-nodes"
@@ -247,7 +253,7 @@ export default function NodeDetails(element: EwoksRFNode) {
           text={`Set to True when the default input covers all required input
         (used for method and script as the required inputs are unknown).`}
         >
-          <div style={{ display: advanced ? 'block' : 'none' }}>
+          <div style={{ display: showAdvancedDetails ? 'block' : 'none' }}>
             <b>Inputs-complete</b>
             <Checkbox
               checked={inputsComplete}
@@ -257,13 +263,16 @@ export default function NodeDetails(element: EwoksRFNode) {
           </div>
         </SidebarTooltip>
         <hr
-          style={{ color: '#96a5f9', display: advanced ? 'block' : 'none' }}
+          style={{
+            color: '#96a5f9',
+            display: showAdvancedDetails ? 'block' : 'none',
+          }}
         />
         <SidebarTooltip
           text={`When set to True all nodes without error handler
         will be linked to this node. ONLY for one node in its graph`}
         >
-          <div style={{ display: advanced ? 'block' : 'none' }}>
+          <div style={{ display: showAdvancedDetails ? 'block' : 'none' }}>
             <b>Default Error Node</b>
             <Checkbox
               checked={defaultErrorNode}
@@ -272,7 +281,7 @@ export default function NodeDetails(element: EwoksRFNode) {
             />
           </div>
         </SidebarTooltip>
-        {defaultErrorNode && advanced && (
+        {defaultErrorNode && showAdvancedDetails && (
           <div>
             <b>Map all Data</b>
             <Checkbox
@@ -282,7 +291,7 @@ export default function NodeDetails(element: EwoksRFNode) {
             />
           </div>
         )}
-        {defaultErrorNode && !mapAllData && advanced && (
+        {defaultErrorNode && !mapAllData && showAdvancedDetails && (
           <div>
             {/* TODO: Check and Replace Data Mapping with the component to have dropdowns if not rarely used */}
             {/* <DataMappingComponent {...element} /> */}
@@ -319,7 +328,7 @@ export default function NodeDetails(element: EwoksRFNode) {
         with the appropriete properties and use it.`}
         >
           <Accordion
-            style={{ display: advanced ? 'block' : 'none' }}
+            style={{ display: showAdvancedDetails ? 'block' : 'none' }}
             className="Accordions-sidebar"
           >
             <AccordionSummary
