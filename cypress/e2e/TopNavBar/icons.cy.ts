@@ -1,19 +1,6 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-// / <reference types="cypress" />
-
-describe('draw links', () => {
+describe('Icons:', () => {
   before(() => {
-    cy.visit('http://localhost:3000/#/edit-workflows');
-
-    cy.window().should('have.property', '__useStore__');
-  });
-
-  it('on load it fetches icons from server', () => {
-    cy.waitForStableDOM();
-    cy.window()
-      .its('__useStore__')
-      .then((store) => store.getState().allIcons)
-      .should('not.have.length', 0);
+    cy.loadApp();
   });
 
   it('icons appear on tasks correctly', () => {
@@ -45,7 +32,6 @@ describe('draw links', () => {
     cy.get('[data-cy="iconUploadButton"]').click();
     cy.contains("Icon 'down.svg' already exists");
 
-    // cy.get('img').filter('have.attr', 'alt', 'down.svg').click();
     cy.get('[alt="down.svg"]').click();
     cy.get('[data-cy="iconDeleteButton"]').click();
     cy.contains('Delete "down.svg" icon?').should('be.visible');
