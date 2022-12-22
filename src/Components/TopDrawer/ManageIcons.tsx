@@ -144,7 +144,7 @@ export default function ManageIcons() {
 
       setOpenSnackbar({
         open: true,
-        text: `Icon was succesfully deleted!`,
+        text: `Icon was successfully deleted!`,
         severity: 'success',
       });
 

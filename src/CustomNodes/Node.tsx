@@ -1,6 +1,3 @@
-/* eslint-disable react/function-component-definition */
-/* jshint sub:true*/
-
 import React, { memo, useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import orange1 from '../images/orange1.png';
@@ -32,7 +29,7 @@ const execution = () => {
 };
 
 // The basic Node component
-const Node: React.FC<NodeProps> = ({
+function Node({
   moreHandles,
   withImage,
   withLabel,
@@ -48,9 +45,7 @@ const Node: React.FC<NodeProps> = ({
   executing,
   nodeWidth,
   details,
-}: NodeProps) => {
-  const theCom = comment ? <span style={style.comment}>{comment}</span> : '';
-
+}: NodeProps) {
   const border = colorBorder
     ? `4px solid ${colorBorder}`
     : '2px solid rgb(233, 235, 247)';
@@ -142,7 +137,7 @@ const Node: React.FC<NodeProps> = ({
     setSelectedElement(newClone);
   };
 
-  function setSelEl() {
+  function setSelectedNode() {
     if (!isNode(selectedElement)) {
       return;
     }
@@ -169,7 +164,11 @@ const Node: React.FC<NodeProps> = ({
       role="button"
       tabIndex={0}
     >
-      <Tooltip title={theCom} enterDelay={800} arrow>
+      <Tooltip
+        title={comment ? <span style={style.comment}>{comment}</span> : ''}
+        enterDelay={800}
+        arrow
+      >
         <span style={displayNode} className="icons">
           {!isGraph && type !== 'graphOutput' && (
             <Handle
@@ -384,7 +383,7 @@ const Node: React.FC<NodeProps> = ({
                     aria-label="edit"
                     onClick={() => {
                       setEdit(false);
-                      setSelEl();
+                      setSelectedNode();
                     }}
                   >
                     <SaveIcon color="primary" />
@@ -397,6 +396,6 @@ const Node: React.FC<NodeProps> = ({
       </Tooltip>
     </div>
   );
-};
+}
 
 export default memo(Node);

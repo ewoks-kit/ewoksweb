@@ -19,7 +19,7 @@ Save a Workflow
 ---------------
 
 A workflow that is being edited in the canvas can be saved-updated either in the local storage or on the server.
-To save a workflow locally tha button with the save icon in the upper bar should be pressed.
+To save a workflow locally the button with the save icon in the upper bar should be pressed.
 To save a workflow on the server the button with the cloud-up-arrow should be pressed. Saving a new workflow on the server involves searching for other workflows with the same name and informing the user.
 
 Edit a Workflow
@@ -29,7 +29,7 @@ On the left sidebar under the Edit Graph dropdown the following can be edited:
 
  - the **Label** of the graph,
  - the **Comment** that can keep useful user notes about the graph and
- - the **Category** the specific graph belongs. By inserting a category the user can later filter his graphs based on the categories assigned to them making it easier to locate and explore graphs.
+ - the **Category** the specific graph belongs. By inserting a category the user can later filter their graphs based on the categories assigned to them making it easier to locate and explore graphs.
 
 **Graph** is made up from **nodes and links** between the nodes. A node can be the representation of a:
  1. **task**
@@ -44,7 +44,7 @@ The embedded Tasks are in the category *General* and include: **input**, **outpu
 Input and output are used for declaring the input and the output of a graph respectively.
 They can be connected to ONLY ONE node in a given graph.
 The task_skeleton is given as an empty cell when the user needs to get a node in the graph without having the
-task with which is conected already defined.
+task with which is connected already defined.
 In the *General* category 2 more icons represent the icon node that can be added and a *+G* which is used
 to add a subgraph from the local storage to the graph.
 
@@ -56,11 +56,11 @@ A *subgraph* is represented in the graph as a node with multiple inputs and outp
 a subgraph the canvas shows the subgraph internals i.e. another graph. To get back on the initial graph click
 on the topbar left side where a path is created that provides the path to the upper graph.
 
-Nodes can be conected with links that can be created in 2 ways:
+Nodes can be connected with links that can be created in 2 ways:
  1. by clicking on the handles that the nodes have on their sides and sliding without releasing the click to a handle of another node.
  2. by clicking on a handle and then on another handle.
 
-Every change you make on a graph including the addition og nodes and links can be undone and redone using the
+Every change you make on a graph (including the addition of nodes and links) can be undone and redone using the
 **Undo-Redo** buttons on the top-bar.
 
 Nodes and Links have **node-properties** and **link-properties** respectively that can be further edited on the sidebar.

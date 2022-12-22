@@ -169,7 +169,7 @@ export default function FormDialog(props: FormDialogProps) {
         setGettingFromServer(false);
         setOpenSnackbar({
           open: true,
-          text: 'Graph saved succesfully!',
+          text: 'Graph saved successfully!',
           severity: 'success',
         });
         setCanvasGraphChanged(false);
@@ -201,7 +201,7 @@ export default function FormDialog(props: FormDialogProps) {
 
         setOpenSnackbar({
           open: true,
-          text: 'Graph saved succesfully!',
+          text: 'Graph saved successfully!',
           severity: 'success',
         });
       } catch (error) {

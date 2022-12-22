@@ -22,7 +22,7 @@ export default function Conditions(props: ConditionsProps) {
     if (element.data.conditions.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
-        text: 'Please fill in the empty line before addining another!',
+        text: 'Please fill in the empty line before adding another!',
         severity: 'warning',
       });
       return;
