@@ -15,7 +15,7 @@ const useConfigStore = create<ConfigState>((set) => ({
     }),
 
   showAdvancedDetails: false,
-  setShowAdvancedDetails: (showAdvancedDetails: boolean) =>
+  setShowAdvancedDetails: (showAdvancedDetails) =>
     set({
       showAdvancedDetails,
     }),

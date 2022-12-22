@@ -9,6 +9,7 @@ import SidebarTooltip from './SidebarTooltip';
 import LabelComment from './LabelComment';
 import { isLink } from '../../utils/typeGuards';
 import useConfigStore from '../../store/useConfigStore';
+import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
 
 const useStyles = DashboardStyle;
 
@@ -19,9 +20,6 @@ export default function LinkDetails(element: EwoksRFLink) {
 
   const showAdvancedDetails = useConfigStore(
     (state) => state.showAdvancedDetails
-  );
-  const setShowAdvancedDetails = useConfigStore(
-    (state) => state.setShowAdvancedDetails
   );
 
   const mapAllDataChanged = (event) => {
@@ -43,10 +41,6 @@ export default function LinkDetails(element: EwoksRFLink) {
       'fromSaveElement'
     );
   }
-
-  const advancedChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setShowAdvancedDetails(event.target.checked);
-  };
 
   const requiredChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectedElement(
@@ -103,42 +97,36 @@ export default function LinkDetails(element: EwoksRFLink) {
         </div>
       )}
       <hr style={{ color: '#96a5f9' }} />
-      <div>
-        <b>Advanced</b>
-        <Checkbox
-          checked={showAdvancedDetails}
-          onChange={advancedChanged}
-          inputProps={{ 'aria-label': 'controlled' }}
-          data-cy="advanced-checkbox-links"
-        />
-      </div>
-      <div style={{ display: showAdvancedDetails ? 'block' : 'none' }}>
+      <AdvancedDetailsCheckbox />
+      {showAdvancedDetails && (
         <div>
-          <b>Required</b>
-          <Checkbox
-            checked={element.data.required}
-            onChange={requiredChanged}
-            // inputProps={{ 'aria-label': 'controlled' }}
-          />
-        </div>
-        <div className={classes.detailsLabels}>
-          <b>Source:</b> {element.source}
-        </div>
-        <div className={classes.detailsLabels}>
-          <b>Target:</b> {element.target}
-        </div>
-        {element.data.sub_target && (
-          <div className={classes.detailsLabels}>
-            <b>Sub_target:</b> {element.data.sub_target}
+          <div>
+            <b>Required</b>
+            <Checkbox
+              checked={element.data.required}
+              onChange={requiredChanged}
+              // inputProps={{ 'aria-label': 'controlled' }}
+            />
           </div>
-        )}
-        {element.data.sub_target_attributes && (
           <div className={classes.detailsLabels}>
-            <b>Sub_target_attributes:</b>
-            {element.data.sub_target_attributes}
+            <b>Source:</b> {element.source}
           </div>
-        )}
-      </div>
+          <div className={classes.detailsLabels}>
+            <b>Target:</b> {element.target}
+          </div>
+          {element.data.sub_target && (
+            <div className={classes.detailsLabels}>
+              <b>Sub_target:</b> {element.data.sub_target}
+            </div>
+          )}
+          {element.data.sub_target_attributes && (
+            <div className={classes.detailsLabels}>
+              <b>Sub_target_attributes:</b>
+              {element.data.sub_target_attributes}
+            </div>
+          )}
+        </div>
+      )}
     </Paper>
   );
 }
