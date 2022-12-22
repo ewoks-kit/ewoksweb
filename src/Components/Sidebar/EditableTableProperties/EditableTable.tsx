@@ -6,22 +6,19 @@ import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/EditOutlined';
-import { Fab, FormControl, MenuItem, Select } from '@material-ui/core';
 import CustomTableCell from './CustomTableCell';
 import DraggableDialog from 'Components/General/DraggableDialog';
-import DeleteIcon from '@material-ui/icons/Delete';
 import useStore from 'store/useStore';
 import type { Conditions, DataMapping, EditableTableRow, Inputs } from 'types';
-import SaveIcon from '@material-ui/icons/Save';
 import type { ChangeEvent } from 'react';
+import { createData, getType } from './utils';
+import TableHeader from './TableHeader';
+import TypeSelectCell from './TypeSelect';
+import ToolsCell from './ToolsCell';
 
-const useStyles = makeStyles(() => ({
+export const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
     padding: '1px',
@@ -43,78 +40,50 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function createData(pair: DataMapping | Conditions | Inputs): EditableTableRow {
-  return pair.id && (pair.value || pair.value === null || pair.value === false)
-    ? { ...pair, isEditMode: false }
-    : {
-        id: Object.values(pair)[0],
-        name: Object.values(pair)[0],
-        value: Object.values(pair)[1],
-        isEditMode: false,
-        type:
-          pair.value === 'true' || pair.value === 'false'
-            ? 'boolean'
-            : pair.value === null
-            ? 'null'
-            : typeof pair.value,
-      };
-}
-
 interface EditableTableProps {
   headers: string[];
   defaultValues: DataMapping[] | Conditions[] | Inputs[];
   typeOfValues: { type: string; values?: string[] }[];
-  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-  valuesChanged(rows: EditableTableRow[]): void | DataMapping[];
+  valuesChanged: (rows: EditableTableRow[]) => void;
 }
-// The table where lines can be added where type is selected and appropriete values are given to name and value...
+
+interface DialogContent {
+  id: string;
+  title: string;
+  object: object;
+  callbackProps: { rows: EditableTableRow[]; id: string };
+}
+
+// The table where lines can be added where type is selected and appropriate values are given to name and value.
 function EditableTable(props: EditableTableProps) {
   const [rows, setRows] = React.useState<EditableTableRow[]>([]);
   const [typeOfInputs, setTypeOfInputs] = React.useState<string[]>([]);
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
-  const [dialogContent, setDialogContent] = React.useState({});
-  const [disableSelectType, setDisableSelectType] = React.useState(false);
+  const [dialogContent, setDialogContent] = React.useState<DialogContent>();
+  const [disableSelectType, setDisableSelectType] = React.useState(true);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const { defaultValues } = props;
-  const { headers } = props;
-
-  const typesOfInputs = ['bool', 'number', 'string', 'list', 'dict', 'null'];
+  const { defaultValues, headers } = props;
 
   useEffect(() => {
-    const tOfIn = defaultValues.map((val) =>
-      val.value === true ||
-      val.value === false ||
-      val.value === 'true' ||
-      val.value === 'false'
-        ? 'boolean'
-        : Array.isArray(val.value)
-        ? 'list'
-        : val.value === 'null' || val.value === null
-        ? 'null'
-        : typeof val.value === 'object'
-        ? 'dict'
-        : typeof val.value === 'number'
-        ? 'number'
-        : 'string'
-    );
-    setTypeOfInputs(tOfIn);
-    setRows(
-      defaultValues
-        ? defaultValues.map((pair: DataMapping | Conditions | Inputs) => {
-            return createData(pair);
-          })
-        : []
-    );
-    setDisableSelectType(true);
+    setTypeOfInputs(defaultValues.map(getType));
+    setRows((defaultValues || []).map(createData));
   }, [defaultValues]);
 
   const classes = useStyles();
 
-  function showEditableDialog({ name, title, graph, callbackProps }) {
+  function showEditableDialog(
+    id: string,
+    title: string,
+    graph: unknown,
+    callbackProps: { rows: EditableTableRow[]; id: string }
+  ) {
+    if (typeof graph !== 'object' || graph === null) {
+      return;
+    }
     setOpenDialog(true);
     setDialogContent({
-      id: name,
+      id,
       title,
       object: graph,
       callbackProps,
@@ -153,12 +122,12 @@ function EditableTable(props: EditableTableProps) {
 
   function onEditRow(id: string, index: number) {
     if (['list', 'dict'].includes(typeOfInputs[index])) {
-      showEditableDialog({
-        name: id,
-        title: typeOfInputs[index] === 'list' ? 'Edit list' : 'Edit dict',
-        graph: onListOrDict(id, index),
-        callbackProps: { rows, id },
-      });
+      showEditableDialog(
+        id,
+        typeOfInputs[index] === 'list' ? 'Edit list' : 'Edit dict',
+        onListOrDict(id, index),
+        { rows, id }
+      );
     }
 
     setRows(calcNewRows(id));
@@ -167,11 +136,11 @@ function EditableTable(props: EditableTableProps) {
   }
 
   function onSaveRow(id: string, index: number) {
-    const oldRows = [...rows].filter((row, inde) => index !== inde);
+    const oldRows = [...rows].filter((row, i) => index !== i);
 
     if (
       rows[index].name !== '' &&
-      oldRows.map((oldro) => oldro.name).includes(rows[index].name)
+      oldRows.map((r) => r.name).includes(rows[index].name)
     ) {
       setOpenSnackbar({
         open: true,
@@ -258,13 +227,13 @@ function EditableTable(props: EditableTableProps) {
     const tOfI = [...typeOfInputs];
     tOfI[index] = e.target.value;
     setTypeOfInputs(tOfI);
-    if (['dict', 'list'].includes(e.target.value)) {
-      showEditableDialog({
-        name: row.id,
-        title: e.target.value === 'list' ? 'Edit list' : 'Edit dict',
-        graph: e.target.value === 'list' ? [] : {},
-        callbackProps: { rows, id: row.id },
-      });
+
+    if (e.target.value === 'list') {
+      showEditableDialog(row.id, 'Edit list', [], { rows, id: row.id });
+    }
+
+    if (e.target.value === 'dict') {
+      showEditableDialog(row.id, 'Edit dict', {}, { rows, id: row.id });
     }
   };
 
@@ -287,132 +256,66 @@ function EditableTable(props: EditableTableProps) {
 
   return (
     <Paper className={classes.root}>
-      <DraggableDialog
-        open={openDialog}
-        content={dialogContent}
-        setValue={setRowValue}
-        typeOfValues={props.typeOfValues[0]}
-      />
+      {dialogContent && (
+        <DraggableDialog
+          open={openDialog}
+          content={dialogContent}
+          setValue={setRowValue}
+          typeOfValues={props.typeOfValues[0]}
+        />
+      )}
       <Table className={classes.table} aria-label="editable table">
-        <TableHead>
-          <TableRow>
-            {!headers[0].startsWith('Source') && (
-              <TableCell align="left" className={classes.tableCell}>
-                Type
-              </TableCell>
-            )}
-            <TableCell align="left" className={classes.tableCell}>
-              <b>{headers[0]}</b>
-            </TableCell>
-            <TableCell align="left" className={classes.tableCell}>
-              <b>{headers[1]}</b>
-            </TableCell>
-          </TableRow>
-        </TableHead>
+        <TableHeader headers={headers} />
         <TableBody>
           {rows.map((row, index) => (
             <React.Fragment key={row.id}>
-              <TableRow key={row.id}>
+              <TableRow>
                 {!headers[0].startsWith('Source') && (
-                  <TableCell
-                    align="left"
-                    size="small"
+                  <TypeSelectCell
                     className={classes.tableCell}
-                  >
-                    <FormControl disabled={disableSelectType}>
-                      <Select
-                        value={
-                          typeOfInputs[index] !== 'boolean'
-                            ? typeOfInputs[index]
-                            : 'bool'
-                        }
-                        label="Task type"
-                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                          changedTypeOfInputs(e, row, index)
-                        }
-                      >
-                        {typesOfInputs.map((tex) => (
-                          <MenuItem key={tex} value={tex}>
-                            {tex}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </TableCell>
+                    value={
+                      typeOfInputs[index] !== 'boolean'
+                        ? typeOfInputs[index]
+                        : 'bool'
+                    }
+                    disabled={disableSelectType}
+                    onChange={(e) => changedTypeOfInputs(e, row, index)}
+                  />
                 )}
                 <CustomTableCell
-                  {...{
-                    index,
-                    row,
-                    name: 'name',
-                    onChange,
-                    type: '',
-                    typeOfValues: props.typeOfValues?.[0],
-                  }}
+                  index={index}
+                  row={row}
+                  name="name"
+                  onChange={onChange}
+                  type=""
+                  typeOfValues={props.typeOfValues?.[0]}
                 />
                 <CustomTableCell
-                  {...{
-                    index,
-                    row,
-                    name: 'value',
-                    onChange,
-                    type: typeOfInputs[index],
-                    typeOfValues: {
-                      type:
-                        headers[0].startsWith('Source') ||
-                        headers[1] === 'Node_Id'
-                          ? props?.typeOfValues?.[1]?.type
-                          : typeOfInputs[index],
-                      values:
-                        headers[0].startsWith('Source') ||
-                        headers[1] === 'Node_Id'
-                          ? props?.typeOfValues?.[1]?.values
-                          : [''],
-                    }, //
+                  index={index}
+                  row={row}
+                  name="value"
+                  onChange={onChange}
+                  type={typeOfInputs[index]}
+                  typeOfValues={{
+                    type:
+                      headers[0].startsWith('Source') ||
+                      headers[1] === 'Node_Id'
+                        ? props?.typeOfValues?.[1]?.type
+                        : typeOfInputs[index],
+                    values:
+                      headers[0].startsWith('Source') ||
+                      headers[1] === 'Node_Id'
+                        ? props?.typeOfValues?.[1]?.values
+                        : [''],
                   }}
                 />
 
-                <TableCell className={classes.selectTableCell}>
-                  {row.isEditMode ? (
-                    <IconButton
-                      color="inherit"
-                      onClick={() => onSaveRow(row.id, index)}
-                      className={classes.root}
-                      aria-label="edit"
-                      data-cy="doneEditingButtonEditableTable"
-                    >
-                      <Fab
-                        // className={classes.openFileButton}
-                        color="primary"
-                        size="small"
-                        component="span"
-                        aria-label="add"
-                      >
-                        <SaveIcon fontSize="small" />
-                      </Fab>
-                    </IconButton>
-                  ) : (
-                    <span>
-                      <IconButton
-                        className={classes.root}
-                        aria-label="edit"
-                        onClick={() => onEditRow(row.id, index)}
-                        color="primary"
-                        data-cy="editButtonEditableTable"
-                      >
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                      <IconButton
-                        className={classes.root}
-                        onClick={() => onDelete(row.id)}
-                        aria-label="delete"
-                        data-cy="deleteButtonEditableTable"
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    </span>
-                  )}
-                </TableCell>
+                <ToolsCell
+                  onSave={() => onSaveRow(row.id, index)}
+                  onEdit={() => onEditRow(row.id, index)}
+                  onDelete={() => onDelete(row.id)}
+                  isEditing={row.isEditMode}
+                />
               </TableRow>
             </React.Fragment>
           ))}
