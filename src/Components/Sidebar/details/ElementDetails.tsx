@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -6,36 +5,35 @@ import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import Typography from '@material-ui/core/Typography';
 import LinkDetails from './LinkDetails';
 import NodeDetails from './NodeDetails';
-import GraphLabelComment from './GraphLabelComment';
-import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../../types';
-import useStore from '../../store/useStore';
-import { isLink, isNode } from '../../utils/typeGuards';
+import GraphDetails from './GraphDetails';
+import useStore from '../../../store/useStore';
+import { isLink, isNode } from '../../../utils/typeGuards';
+import type { EwoksRFElement } from '../models';
+import { useEffect, useState } from 'react';
 
 interface Content {
   title: string;
-  EditComponent: () => JSX.Element;
+  DetailsComponent: (element: EwoksRFElement) => JSX.Element;
 }
 
-function getAccordionContent(
-  element: EwoksRFNode | EwoksRFLink | GraphDetails
-): Content {
+function getAccordionContent(element: EwoksRFElement): Content {
   if (isNode(element)) {
     return {
       title: 'Node Details',
-      EditComponent: () => <NodeDetails {...element} />,
+      DetailsComponent: NodeDetails,
     };
   }
 
   if (isLink(element)) {
     return {
       title: 'Link Details',
-      EditComponent: () => <LinkDetails {...element} />,
+      DetailsComponent: LinkDetails,
     };
   }
 
   return {
     title: 'Graph Details',
-    EditComponent: () => <GraphLabelComment />,
+    DetailsComponent: GraphDetails,
   };
 }
 
@@ -43,24 +41,18 @@ function getAccordionContent(
 function ElementDetails() {
   const selectedElement = useStore((state) => state.selectedElement);
 
-  const [expanded, setExpanded] = React.useState<boolean>(false);
+  const [expanded, setExpanded] = useState(false);
 
-  const content = getAccordionContent(selectedElement);
-
-  const { title, EditComponent } = content;
+  const { title, DetailsComponent } = getAccordionContent(selectedElement);
 
   useEffect(() => {
     setExpanded(!!selectedElement.id);
   }, [selectedElement.id]);
 
-  const handleChange = (event: React.SyntheticEvent, newExpanded: boolean) => {
-    setExpanded(newExpanded);
-  };
-
   return (
     <Accordion
       expanded={!!expanded}
-      onChange={handleChange}
+      onChange={(e, value) => setExpanded(value)}
       className="Accordions-sidebar"
     >
       <AccordionSummary
@@ -71,7 +63,7 @@ function ElementDetails() {
       </AccordionSummary>
       <AccordionDetails style={{ padding: '0px 0px 0px 10px' }}>
         <form noValidate autoComplete="off" style={{ width: '100%' }}>
-          <EditComponent />
+          <DetailsComponent {...selectedElement} />
         </form>
       </AccordionDetails>
     </Accordion>

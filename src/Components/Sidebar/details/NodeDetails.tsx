@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
-import type { DataMapping, EditableTableRow, EwoksRFNode } from '../../types';
+import type {
+  DataMapping,
+  EditableTableRow,
+  EwoksRFNode,
+} from '../../../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import EditableTable from './EditableTableProperties/EditableTable';
+import EditableTable from '../EditableTableProperties/EditableTable';
 
 import {
   Accordion,
@@ -14,13 +18,13 @@ import {
   Typography,
 } from '@material-ui/core';
 import EditTaskProp from './EditTaskProp';
-import DashboardStyle from '../Dashboard/DashboardStyle';
-import useStore from '../../store/useStore';
-import SidebarTooltip from './SidebarTooltip';
+import DashboardStyle from '../../Dashboard/DashboardStyle';
+import useStore from '../../../store/useStore';
+import SidebarTooltip from '../SidebarTooltip';
 import { OpenInBrowser } from '@material-ui/icons';
 import LabelComment from './LabelComment';
-import DefaultInputs from './EditableTableProperties/DefaultInputs';
-import useConfigStore from '../../store/useConfigStore';
+import DefaultInputs from '../EditableTableProperties/DefaultInputs';
+import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
 
 const useStyles = DashboardStyle;
@@ -310,7 +314,7 @@ export default function NodeDetails(element: EwoksRFNode) {
           <SidebarTooltip
             text={`These properties are being populated by the task the
         specific node is based on. If you need to have them create a new Task
-        with the appropriete properties and use it.`}
+        with the appropriate properties and use it.`}
           >
             <Accordion className="Accordions-sidebar">
               <AccordionSummary
