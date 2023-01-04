@@ -9,6 +9,7 @@ import GraphDetails from './GraphDetails';
 import useStore from '../../../store/useStore';
 import { isLink, isNode } from '../../../utils/typeGuards';
 import type { EwoksRFElement } from '../models';
+import { useEffect, useState } from 'react';
 
 interface Content {
   title: string;
@@ -40,10 +41,20 @@ function getAccordionContent(element: EwoksRFElement): Content {
 function ElementDetails() {
   const selectedElement = useStore((state) => state.selectedElement);
 
+  const [expanded, setExpanded] = useState(false);
+
   const { title, DetailsComponent } = getAccordionContent(selectedElement);
 
+  useEffect(() => {
+    setExpanded(!!selectedElement.id);
+  }, [selectedElement.id]);
+
   return (
-    <Accordion className="Accordions-sidebar">
+    <Accordion
+      expanded={!!expanded}
+      onChange={(e, value) => setExpanded(value)}
+      className="Accordions-sidebar"
+    >
       <AccordionSummary
         expandIcon={<OpenInBrowser />}
         aria-controls="panel1a-content"
