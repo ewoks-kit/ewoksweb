@@ -1,14 +1,14 @@
 import type { ChangeEvent } from 'react';
-import type { EwoksRFLink } from '../../types';
+import type { EwoksRFLink } from '../../../types';
 import { Checkbox, Paper } from '@material-ui/core';
-import DashboardStyle from '../Dashboard/DashboardStyle';
-import useStore from '../../store/useStore';
-import DataMappingComponent from './EditableTableProperties/DataMapping';
-import Conditions from './EditableTableProperties/Conditions';
-import SidebarTooltip from './SidebarTooltip';
+import DashboardStyle from '../../Dashboard/DashboardStyle';
+import useStore from '../../../store/useStore';
+import DataMappingComponent from '../EditableTableProperties/DataMapping';
+import Conditions from '../EditableTableProperties/Conditions';
+import SidebarTooltip from '../SidebarTooltip';
 import LabelComment from './LabelComment';
-import { isLink } from '../../utils/typeGuards';
-import useConfigStore from '../../store/useConfigStore';
+import { isLink } from '../../../utils/typeGuards';
+import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
 
 const useStyles = DashboardStyle;

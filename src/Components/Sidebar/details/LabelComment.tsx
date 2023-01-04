@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import type { EwoksRFLink, EwoksRFNode } from '../../types';
+import type { EwoksRFLink, EwoksRFNode } from '../../../types';
 import { FormControl, TextField, IconButton, Fab } from '@material-ui/core';
-import DashboardStyle from '../Dashboard/DashboardStyle';
-import useStore from '../../store/useStore';
-import SidebarTooltip from './SidebarTooltip';
+import DashboardStyle from '../../Dashboard/DashboardStyle';
+import useStore from '../../../store/useStore';
+import SidebarTooltip from '../SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
 import SaveIcon from '@material-ui/icons/Save';
-import sidebarStyle from './sidebarStyle';
-import { isLink, isNode } from '../../utils/typeGuards';
+import sidebarStyle from '../sidebarStyle';
+import { isLink, isNode } from '../../../utils/typeGuards';
 
 const useStyles = DashboardStyle;
 

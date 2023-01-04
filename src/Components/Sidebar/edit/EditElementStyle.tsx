@@ -4,38 +4,36 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 
-import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../../types';
 import EditNodeStyle from './EditNodeStyle';
 import EditLinkStyle from './EditLinkStyle';
 import EditGraphStyle from './EditGraphStyle';
-import useStore from '../../store/useStore';
+import useStore from '../../../store/useStore';
 import { isNode, isLink } from 'utils/typeGuards';
+import type { EwoksRFElement } from '../models';
 
 interface Content {
   title: string;
-  EditComponent: () => JSX.Element;
+  EditComponent: (element: EwoksRFElement) => JSX.Element;
 }
 
-function getAccordionContent(
-  element: EwoksRFNode | EwoksRFLink | GraphDetails
-): Content {
+function getAccordionContent(element: EwoksRFElement): Content {
   if (isNode(element)) {
     return {
       title: 'Styling Node',
-      EditComponent: () => <EditNodeStyle {...element} />,
+      EditComponent: EditNodeStyle,
     };
   }
 
   if (isLink(element)) {
     return {
       title: 'Styling Link',
-      EditComponent: () => <EditLinkStyle {...element} />,
+      EditComponent: EditLinkStyle,
     };
   }
 
   return {
     title: 'Styling Graph',
-    EditComponent: () => <EditGraphStyle />,
+    EditComponent: EditGraphStyle,
   };
 }
 
@@ -43,9 +41,7 @@ function getAccordionContent(
 export default function EditElementStyle() {
   const selectedElement = useStore((state) => state.selectedElement);
 
-  const content = getAccordionContent(selectedElement);
-
-  const { title, EditComponent } = content;
+  const { title, EditComponent } = getAccordionContent(selectedElement);
 
   return (
     <Accordion className="Accordions-sidebar">
@@ -57,7 +53,7 @@ export default function EditElementStyle() {
       </AccordionSummary>
       <AccordionDetails>
         <form noValidate autoComplete="off">
-          <EditComponent />
+          <EditComponent {...selectedElement} />
         </form>
       </AccordionDetails>
     </Accordion>

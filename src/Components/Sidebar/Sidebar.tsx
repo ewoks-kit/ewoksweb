@@ -9,8 +9,8 @@ import {
   Typography,
 } from '@material-ui/core';
 import AddNodes from './AddNodes';
-import ElementDetails from './ElementDetails';
-import EditElementStyle from './EditElementStyle';
+import ElementDetails from './details/ElementDetails';
+import EditElementStyle from './edit/EditElementStyle';
 import DraggableDialog from '../General/DraggableDialog';
 import IconMenu from './IconMenu';
 import ExecutionDetails from '../Execution/ExecutionDetails';
