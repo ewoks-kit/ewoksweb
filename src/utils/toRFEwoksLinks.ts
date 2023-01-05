@@ -133,12 +133,18 @@ function calcLabel(
   return '';
 }
 
-function calcTargetHandle(uiProps: UiPropsLinks, sub_target: string): string {
-  return uiProps.targetHandle ?? sub_target ?? 'tl';
+function calcTargetHandle(
+  uiProps: UiPropsLinks | undefined,
+  sub_target: string
+): string {
+  return uiProps?.targetHandle ?? sub_target ?? 'tl';
 }
 
-function calcSourceHandle(uiProps: UiPropsLinks, sub_source: string): string {
-  return uiProps.sourceHandle ?? sub_source ?? 'sr';
+function calcSourceHandle(
+  uiProps: UiPropsLinks | undefined,
+  sub_source: string
+): string {
+  return uiProps?.sourceHandle ?? sub_source ?? 'sr';
 }
 
 function calcInOutLinks(tempGraph: GraphEwoks): GraphEwoks {
