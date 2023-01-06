@@ -29,13 +29,6 @@ describe('select visualize links', () => {
     cy.contains('Map all Data').should('be.visible');
 
     cy.findByRole('textbox', { name: 'Label' })
-      .children('div')
-      .children('textarea')
-      .first()
-      .should('have.value', 'if you do then...');
-
-    // equal to the above without getting into the structure mui is producing
-    cy.findByRole('textbox', { name: 'Label' })
       .contains('if you do then...')
       .should('have.value', 'if you do then...');
   });

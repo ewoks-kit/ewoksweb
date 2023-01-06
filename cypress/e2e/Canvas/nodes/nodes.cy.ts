@@ -11,7 +11,7 @@ it('selects a default node', () => {
 });
 
 it('changes label of node', () => {
-  cy.findByRole('textbox', { name: 'Label' })
+  cy.get('[data-cy="node-edge-label"]')
     .first()
     .should('be.visible')
     .click()
@@ -25,7 +25,7 @@ it('changes label of node', () => {
 it('changes comment of node', () => {
   cy.contains('Advanced').siblings().click();
 
-  cy.findByRole('textbox', { name: 'Label' })
+  cy.get('[data-cy="node-edge-label"]')
     .last()
     .should('be.visible')
     .click()
