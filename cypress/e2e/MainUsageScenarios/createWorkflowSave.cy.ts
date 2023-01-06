@@ -36,11 +36,11 @@ describe('create workflow and save', () => {
 
     cy.get(`[data-cy="tutorial_Graph"]`).should('not.exist');
 
-    cy.get(`[data-cy="sidebarDelete"]`).contains('Delete').click();
+    cy.findByRole('button', { name: 'Delete' }).click();
 
     cy.contains(`Delete "${id.toString()}" workflow?`);
 
-    cy.get(`[data-cy="yesButtonConfirmDialog"]`).contains('Yes').click();
+    cy.findByRole('button', { name: 'Yes' }).click();
 
     cy.get(`[data-cy="${id.toString()}"]`).should('not.exist');
   });

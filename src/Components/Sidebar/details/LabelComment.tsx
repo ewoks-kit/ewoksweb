@@ -141,7 +141,6 @@ export default function LabelComment(props: LabelCommentProps) {
               style={{ width: valueIsChanged ? '80%' : '98%' }}
               renderInput={(params) => (
                 <TextField
-                  data-cy="node-edge-label"
                   {...params}
                   label="Label"
                   margin="normal"

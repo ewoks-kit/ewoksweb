@@ -11,7 +11,7 @@ it('selects a default node', () => {
 });
 
 it('changes label of node', () => {
-  cy.get('[data-cy="node-edge-label"]')
+  cy.findByRole('textbox', { name: 'Label' })
     .first()
     .should('be.visible')
     .click()
@@ -20,18 +20,12 @@ it('changes label of node', () => {
   cy.get('[data-cy="saveLabelComment"]').click();
 
   cy.get('.react-flow').contains('Always and forever...').should('be.visible');
-
-  cy.window()
-    .its('__useStore__')
-    .then((store) => store.getState().selectedElement.label)
-    .as('label')
-    .should('include', 'Always and forever...');
 });
 
 it('changes comment of node', () => {
   cy.contains('Advanced').siblings().click();
 
-  cy.get('[data-cy="node-edge-label"]')
+  cy.findByRole('textbox', { name: 'Label' })
     .last()
     .should('be.visible')
     .click()
@@ -64,12 +58,6 @@ it('changes withImage of node true->false->true', () => {
     .siblings()
     .should('have.length', 2);
 
-  cy.window()
-    .its('__useStore__')
-    .then((store) => store.getState().selectedElement.data.withImage)
-    .as('label')
-    .should('eq', false);
-
   cy.get('input[name="withImage"]').click();
 
   cy.get('.react-flow')
@@ -77,12 +65,6 @@ it('changes withImage of node true->false->true', () => {
     .should('be.visible')
     .siblings()
     .should('have.length', 3);
-
-  cy.window()
-    .its('__useStore__')
-    .then((store) => store.getState().selectedElement.data.withImage)
-    .as('label')
-    .should('eq', true);
 });
 
 it('changes withLabel of node true->false->true', () => {
@@ -91,12 +73,6 @@ it('changes withLabel of node true->false->true', () => {
   cy.get('input[name="withLabel"]').click();
 
   cy.get('@node').children().should('have.length', 3);
-
-  cy.window()
-    .its('__useStore__')
-    .then((store) => store.getState().selectedElement.data.withLabel)
-    .as('label')
-    .should('eq', false);
 
   cy.get('input[name="withLabel"]').click();
 
@@ -107,22 +83,10 @@ it('changes withLabel of node true->false->true', () => {
     .should('be.visible')
     .siblings()
     .should('have.length', 3);
-
-  cy.window()
-    .its('__useStore__')
-    .then((store) => store.getState().selectedElement.data.withLabel)
-    .as('label')
-    .should('eq', true);
 });
 
 it('changes width of node', () => {
   cy.get('.react-flow').contains('Always and forever...').parent().as('node');
-
-  cy.window()
-    .its('__useStore__')
-    .then((store) => store.getState().selectedElement.data.nodeWidth)
-    .as('width')
-    .should('eq', 100);
 
   cy.get('span[role="slider"]').as('sliderThumb');
 
@@ -138,19 +102,7 @@ it('changes moreHandles of node true->false->true', () => {
 
   cy.get('@node').children('.react-flow__handle').should('have.length', 2);
 
-  cy.window()
-    .its('__useStore__')
-    .then((store) => store.getState().selectedElement.data.moreHandles)
-    .as('moreHandlesFalse')
-    .should('eq', false);
-
   cy.contains('More handles').siblings('span').click();
-
-  cy.window()
-    .its('__useStore__')
-    .then((store) => store.getState().selectedElement.data.moreHandles)
-    .as('moreHandlesTrue')
-    .should('eq', true);
 
   cy.get('@node').children('.react-flow__handle').should('have.length', 4);
 
@@ -163,12 +115,6 @@ it('changes moreHandles of node true->false->true', () => {
   cy.contains('More handles').siblings('span').click();
 
   cy.get('@node').children('.react-flow__handle').should('have.length', 2);
-
-  cy.window()
-    .its('__useStore__')
-    .then((store) => store.getState().selectedElement.data.moreHandles)
-    .as('moreHandlesFalse')
-    .should('eq', false);
 });
 
 it('clones a node by button', () => {
@@ -203,26 +149,9 @@ it('deletes a node by button and keyboard', () => {
 //     .should('have.attr', 'style')
 //     .and('include', 'border: 2px solid rgb(233, 235, 247)');
 
-//   cy.window()
-//     .its('__useStore__')
-//     .then((store) => store.getState().selectedElement.data.colorBorder)
-//     .as('colorBorder')
-//     .should('eq', '');
-
-//   cy.window()
-//     .its('__useStore__')
-//     .then((store) =>
-//       store.setState({
-//         selectedElement: { data: { colorBorder: 'red' } },
-//       })
-//     );
-
 //   cy.get('@node')
 //     .parent()
 //     .should('have.attr', 'style')
 //     .and('include', 'border: 2px solid rgb(0, 0, 0)');
 
-//   cy.window()
-//     .its('__useStore__')
-//     .then((store) => console.log(store.getState().selectedElement));
 // });

@@ -1,6 +1,6 @@
 describe('Icons:', () => {
   before(() => {
-    cy.loadApp();
+    cy.loadAppWithoutGraph();
   });
 
   it('icons appear on tasks correctly', () => {
@@ -26,35 +26,39 @@ describe('Icons:', () => {
     cy.contains('Categories');
 
     cy.get('[data-cy="iconsTab"]').click();
-    cy.get('[data-cy="browseInput"]').selectFile('cypress/fixtures/down.svg');
+    cy.findByLabelText('Select an Icon to Upload').selectFile(
+      'cypress/fixtures/down.svg'
+    );
     cy.contains('File ready to be uploaded as an icon');
 
-    cy.get('[data-cy="iconUploadButton"]').click();
+    cy.findByRole('button', { name: 'Upload' }).click();
     cy.contains("Icon 'down.svg' already exists");
 
     cy.get('[alt="down.svg"]').click();
-    cy.get('[data-cy="iconDeleteButton"]').click();
+    cy.findByRole('button', { name: 'Delete' }).click();
     cy.contains('Delete "down.svg" icon?').should('be.visible');
     cy.contains('Icon can be deleted since it is not used in any Task!').should(
       'be.visible'
     );
 
-    cy.get('[data-cy="noButtonConfirmDialod"]').click();
+    cy.findByRole('button', { name: 'No' }).click();
     cy.get('[alt="down.svg"]').should('be.visible');
 
-    cy.get('[data-cy="iconDeleteButton"]').click();
+    cy.findByRole('button', { name: 'Delete' }).click();
     cy.contains('Delete "down.svg" icon?').should('be.visible');
     cy.contains('Icon can be deleted since it is not used in any Task!').should(
       'be.visible'
     );
-    cy.get('[data-cy="yesButtonConfirmDialog"]').click();
+    cy.findByRole('button', { name: 'Yes' }).click();
     cy.get('[alt="down.svg"]').should('not.be.visible');
 
     cy.get('[data-cy="iconsTab"]').click();
-    cy.get('[data-cy="browseInput"]').selectFile('cypress/fixtures/down.svg');
+    cy.findByLabelText('Select an Icon to Upload').selectFile(
+      'cypress/fixtures/down.svg'
+    );
     cy.contains('File ready to be uploaded as an icon');
 
-    cy.get('[data-cy="iconUploadButton"]').click();
+    cy.findByRole('button', { name: 'Upload' }).click();
     cy.get('[alt="down.svg"]').should('be.visible');
   });
 });

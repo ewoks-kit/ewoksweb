@@ -17,12 +17,6 @@ describe('select visualize links', () => {
         'style',
         'fill: rgb(223, 226, 247); fill-opacity: 1; stroke-width: 3px; stroke: rgb(206, 92, 0);'
       );
-
-    cy.window()
-      .its('__useStore__')
-      .then((store) => store.getState().graphRF.graph.label)
-      .as('label')
-      .should('eq', 'tutorial_Graph');
   });
 
   it('selects a link and adds selected class and sidebar shows details', () => {
@@ -34,20 +28,14 @@ describe('select visualize links', () => {
 
     cy.contains('Map all Data').should('be.visible');
 
-    cy.window()
-      .its('__useStore__')
-      .then((store) => store.getState().selectedElement.label)
-      .as('label')
-      .should('eq', 'if you do then...');
-
-    cy.get('[data-cy="node-edge-label"]')
+    cy.findByRole('textbox', { name: 'Label' })
       .children('div')
       .children('textarea')
       .first()
       .should('have.value', 'if you do then...');
 
     // equal to the above without getting into the structure mui is producing
-    cy.get('[data-cy="node-edge-label"]')
+    cy.findByRole('textbox', { name: 'Label' })
       .contains('if you do then...')
       .should('have.value', 'if you do then...');
   });

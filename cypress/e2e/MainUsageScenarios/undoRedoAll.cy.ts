@@ -16,7 +16,9 @@ describe('undo-redo functionality', () => {
   it('type and undo/redo sidebar label', () => {
     cy.get('.react-flow').contains('if you do then...').parent().click();
 
-    cy.get('[data-cy="node-edge-label"]')
+    // cy.findByRole('textbox', { name: 'Label' })
+    // screen.getByRole('textbox', {  name: /label/i})
+    cy.findByRole('textbox', { name: 'Label' })
       .contains('if you do then...')
       .should('have.value', 'if you do then...')
       .click()
@@ -32,7 +34,7 @@ describe('undo-redo functionality', () => {
 
     cy.get('.react-flow').contains('if you do then...').should('be.visible');
 
-    cy.get('[data-cy="node-edge-label"]')
+    cy.findByRole('textbox', { name: 'Label' })
       .contains('if you do then...')
       .should('have.value', 'if you do then...');
 
@@ -42,7 +44,7 @@ describe('undo-redo functionality', () => {
       .contains('if you do then...Always and forever...')
       .should('be.visible');
 
-    cy.get('[data-cy="node-edge-label"]')
+    cy.findByRole('textbox', { name: 'Label' })
       .contains('if you do then...')
       .should('have.value', 'if you do then...Always and forever...');
   });

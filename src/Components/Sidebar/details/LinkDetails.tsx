@@ -62,12 +62,16 @@ export default function LinkDetails(element: EwoksRFLink) {
         Cannot be used in combination with data_mapping.`}
       >
         <div>
-          <b>Map all Data</b>
+          <label htmlFor="map-all-data" id="map-all-data">
+            <b>Map all Data</b>
+          </label>
+          <b />
           <Checkbox
+            name="map-all-data"
             checked={!!element.data.map_all_data || false}
             onChange={mapAllDataChanged}
             inputProps={{ 'aria-label': 'controlled' }}
-            data-cy="mapAllDataCheckbox"
+            aria-labelledby="map-all-data"
           />
         </div>
       </SidebarTooltip>
@@ -82,12 +86,14 @@ export default function LinkDetails(element: EwoksRFLink) {
         Cannot be used in combination with conditions.`}
       >
         <div>
-          <b>on_error</b>
+          <label htmlFor="on_error" id="on_error">
+            <b>on_error</b>
+          </label>
           <Checkbox
             checked={!!element.data.on_error || false}
             onChange={onErrorChanged}
             inputProps={{ 'aria-label': 'controlled' }}
-            data-cy="onErrorCheckbox"
+            aria-labelledby="on_error"
           />
         </div>
       </SidebarTooltip>

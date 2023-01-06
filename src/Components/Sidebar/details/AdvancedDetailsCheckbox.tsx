@@ -11,12 +11,15 @@ export default function AdvancedDetailsCheckbox() {
 
   return (
     <div>
-      <b>Advanced</b>
+      <label htmlFor="advanced" id="advanced-checkbox">
+        <b>Advanced</b>
+      </label>
       <Checkbox
+        name="advanced"
         checked={showAdvancedDetails}
         onChange={(e) => setShowAdvancedDetails(e.target.checked)}
         inputProps={{ 'aria-label': 'controlled' }}
-        data-cy="advanced-checkbox"
+        aria-labelledby="advanced-checkbox"
       />
     </div>
   );

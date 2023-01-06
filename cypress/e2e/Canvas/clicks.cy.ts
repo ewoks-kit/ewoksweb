@@ -11,7 +11,7 @@ describe('clicks on canvas and elements', () => {
 
   // select a node with click
   it('selects a node with click', () => {
-    cy.get('[data-cy="advanced-checkbox"]').should('not.exist');
+    cy.findByLabelText('Advanced').should('not.exist');
     cy.contains('Default Inputs').should('not.exist');
 
     cy.get('.react-flow__node')
@@ -19,7 +19,7 @@ describe('clicks on canvas and elements', () => {
       .click()
       .should('include.class', 'selected');
 
-    cy.get('[data-cy="advanced-checkbox"]').should('exist');
+    cy.findByLabelText('Advanced').should('exist');
     cy.contains('Default Inputs').should('exist');
     cy.contains('Default Inputs').should('be.visible');
 
@@ -33,7 +33,7 @@ describe('clicks on canvas and elements', () => {
 
     cy.get('.react-flow__edge').first().click({ force: true });
 
-    cy.get('[data-cy="advanced-checkbox"]').should('exist');
+    cy.findByLabelText('Advanced').should('exist');
     cy.contains('Map all Data').should('exist');
     cy.contains('Map all Data').should('be.visible');
     cy.contains('on_error').should('exist');

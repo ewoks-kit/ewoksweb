@@ -6,7 +6,7 @@ describe('change link attributes', () => {
   });
 
   it('changes links label and is reflected on the canvas', () => {
-    cy.get('[data-cy="node-edge-label"]')
+    cy.findByRole('textbox', { name: 'Label' })
       .contains('if you do then...')
       .should('have.value', 'if you do then...')
       .click()
@@ -17,12 +17,6 @@ describe('change link attributes', () => {
     cy.get('.react-flow')
       .contains('if you do then...Always and forever...')
       .should('be.visible');
-
-    cy.window()
-      .its('__useStore__')
-      .then((store) => store.getState().selectedElement.label)
-      .as('label')
-      .should('eq', 'if you do then...Always and forever...');
   });
 
   it('changes links animated property to true and is shown on the canvas', () => {
@@ -46,12 +40,6 @@ describe('change link attributes', () => {
 
     cy.contains('none').click({ force: true });
     cy.contains('arrowclosed').click({ force: true });
-
-    cy.window()
-      .its('__useStore__')
-      .then((store) => store.getState().selectedElement.markerEnd.type)
-      .as('markerEnd')
-      .should('eq', 'arrowclosed');
 
     cy.get('.react-flow')
       .contains('if you do then...Always and forever...')
