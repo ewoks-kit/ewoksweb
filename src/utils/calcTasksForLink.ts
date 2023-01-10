@@ -11,8 +11,8 @@ export function calcTasksForLink(
   const sourceTmp = tempGraph.nodes.find((nod) => nod.id === source);
   const targetTmp = tempGraph.nodes.find((nod) => nod.id === target);
 
-  let sourceTask: Task | undefined = {};
-  let targetTask: Task | undefined = {};
+  let sourceTask: Task | undefined;
+  let targetTask: Task | undefined;
 
   if (sourceTmp) {
     sourceTask = calcTask('source', sourceTmp, tasks, newNodeSubgraphs);
@@ -50,8 +50,8 @@ function calcTask(
 
   const outputsOrOutputs: string[] = [];
 
-  if (subgraphNodeSource) {
-    subgraphNodeSource.graph?.output_nodes?.forEach((out) =>
+  if (subgraphNodeSource?.graph?.output_nodes) {
+    subgraphNodeSource.graph.output_nodes.forEach((out) =>
       outputsOrOutputs.push(out.id)
     );
   }

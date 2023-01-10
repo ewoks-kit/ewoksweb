@@ -2,7 +2,7 @@ import type { EwoksNode, EwoksRFNode, Inputs } from '../types';
 
 function cleanDefaultInputs(default_inputs: Inputs[]) {
   return (
-    default_inputs?.map((dIn) => {
+    default_inputs.map((dIn) => {
       return {
         name: dIn.name,
         value:
@@ -22,7 +22,8 @@ function cleanDefaultInputs(default_inputs: Inputs[]) {
 export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
   const tempNodes: EwoksRFNode[] = [...nodes].filter(
     (nod) =>
-      !['graphInput', 'graphOutput', 'note'].includes(nod?.task_type || '')
+      nod.task_type &&
+      !['graphInput', 'graphOutput', 'note'].includes(nod.task_type)
   );
 
   return tempNodes.map(
@@ -51,17 +52,19 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
     }) => {
       if (task_type !== 'graph') {
         return {
-          id: (id && id.toString()) || '',
+          id: id?.toString() || '',
           label,
           task_type,
           task_identifier,
           inputs_complete,
-          task_generator: task_generator || undefined,
+          task_generator,
           default_error_node,
           default_error_attributes: default_error_node
             ? default_error_attributes
             : undefined,
-          default_inputs: cleanDefaultInputs(default_inputs || []),
+          default_inputs: default_inputs
+            ? cleanDefaultInputs(default_inputs)
+            : [],
           uiProps: {
             nodeWidth,
             node_icon,
@@ -80,12 +83,12 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
       // node-icon is not in graphs? ok? Graphs have no editable Node Info where the node_icon is
       // all the rest are the same... merge 2 returns?
       return {
-        id: (id && id.toString()) || '',
+        id: id?.toString() || '',
         label,
         task_type,
         task_identifier,
         inputs_complete,
-        task_generator: task_generator || undefined,
+        task_generator,
         default_inputs: cleanDefaultInputs(default_inputs || []),
         default_error_node,
         default_error_attributes: default_error_node
@@ -103,10 +106,6 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           withLabel,
           nodeWidth,
         },
-        // inputs: inputsSub,
-        // outputs: outputsSub,
-        // inputsFlow,
-        // inputs: inputsFlow, // for connecting graphically to different input
       };
     }
   );

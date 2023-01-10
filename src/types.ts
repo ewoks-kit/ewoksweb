@@ -267,16 +267,17 @@ export interface UiPropsLinks {
   animated?: boolean;
   markerEnd?: '' | { type: string };
   labelStyle?: {
-    color: string;
-    fill: string;
-    fontWeight: number;
-    fontSize: number;
+    color?: string;
+    fill?: string;
+    fontWeight?: number;
+    fontSize?: number;
   };
   labelBgStyle?: {
-    fill: string;
-    fillOpacity: number;
-    strokeWidth: string;
-    stroke: string;
+    fill?: string;
+    color?: string;
+    fillOpacity?: number;
+    strokeWidth?: string;
+    stroke?: string;
   };
   markerStart?: { type: string };
   sourceHandle?: string;
@@ -458,18 +459,18 @@ export interface EwoksRFLink {
     links_required_output_names?: string[];
     links_optional_output_names?: string[];
   };
-  // TODO: see if used and give type to the following
   labelStyle?: {
-    color: string;
-    fill: string;
-    fontWeight: number;
-    fontSize: number;
+    color?: string;
+    fill?: string;
+    fontWeight?: number;
+    fontSize?: number;
   };
   labelBgStyle?: {
-    fill: string;
-    fillOpacity: number;
-    strokeWidth: string;
-    stroke: string;
+    fill?: string;
+    color?: string;
+    fillOpacity?: number;
+    strokeWidth?: string;
+    stroke?: string;
   };
   labelBgPadding?: number[];
   labelBgBorderRadius?: number;
