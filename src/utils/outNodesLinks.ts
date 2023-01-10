@@ -1,13 +1,17 @@
-import type { EwoksLink, EwoksNode, GraphEwoks } from '../types';
+import type {
+  EwoksLink,
+  EwoksNode,
+  EwoksRFLink,
+  EwoksRFNode,
+  GraphEwoks,
+  GraphNodes,
+} from '../types';
 
-function calcMarkerEnd(inNod) {
-  let type = {};
-  if (inNod.uiProps?.markerEnd?.type) {
-    type = { type: inNod.uiProps.markerEnd.type };
-  } else {
-    type = '';
+function calcMarkerEnd(inNod: GraphNodes): '' | { type: string } {
+  if (inNod.uiProps?.markerEnd) {
+    return { type: inNod.uiProps.markerEnd.type };
   }
-  return type;
+  return '';
 }
 
 // TODO: when stable compare to inNodesLinks and merge if possible
@@ -16,9 +20,12 @@ function calcMarkerEnd(inNod) {
 export function outNodesLinks(
   graph: GraphEwoks
 ): { nodes: EwoksNode[]; links: EwoksLink[] } {
-  const outputs = { nodes: [], links: [] };
-  if (graph?.graph?.output_nodes?.length > 0) {
-    const outNodesInputed = [];
+  const outputs: { nodes: EwoksNode[]; links: EwoksLink[] } = {
+    nodes: [],
+    links: [],
+  };
+  if (graph?.graph?.output_nodes && graph.graph.output_nodes.length > 0) {
+    const outNodesInputed: string[] = [];
     graph.graph.output_nodes.forEach((outNod) => {
       const nodeSource = graph.nodes.find((no) => no.id === outNod.node);
 
@@ -33,7 +40,6 @@ export function outNodesLinks(
           label: outNod.uiProps?.label ?? outNod.id,
           task_type: 'graphOutput',
           task_identifier: 'Start-End',
-          position: temPosition,
           uiProps: {
             type: 'output',
             position: temPosition,

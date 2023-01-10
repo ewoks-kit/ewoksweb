@@ -226,7 +226,7 @@ export interface Task {
 }
 
 export interface Inputs {
-  id: string;
+  id?: string;
   name: string;
   value: unknown;
 }
@@ -266,8 +266,18 @@ export interface UiPropsLinks {
   comment?: string;
   animated?: boolean;
   markerEnd?: '' | { type: string };
-  labelBgStyle?: string;
-  labelStyle?: string;
+  labelStyle?: {
+    color: string;
+    fill: string;
+    fontWeight: number;
+    fontSize: number;
+  };
+  labelBgStyle?: {
+    fill: string;
+    fillOpacity: number;
+    strokeWidth: string;
+    stroke: string;
+  };
   markerStart?: { type: string };
   sourceHandle?: string;
   targetHandle?: string;
@@ -332,8 +342,8 @@ export interface EwoksNode {
   id: string;
   label?: string;
   category?: string;
-  task_type?: string;
-  task_identifier?: string;
+  task_type: string;
+  task_identifier: string;
   default_inputs?: Inputs[];
   inputs_complete?: boolean;
   task_generator?: string;
@@ -346,7 +356,7 @@ export interface EwoksLink {
   id?: string;
   source: string;
   target: string;
-  map_all_data: boolean;
+  map_all_data?: boolean;
   required?: boolean;
   data_mapping?: DataMapping[];
   conditions?: Conditions[];
@@ -363,12 +373,12 @@ export interface outputsInputsSub {
 }
 
 export interface EwoksRFNode {
-  id?: string;
+  id: string;
   label?: string;
   category?: string;
-  task_type?: string;
+  task_type: string;
   type?: string;
-  task_identifier?: string;
+  task_identifier: string;
   task_icon?: string;
   task_category?: string;
   default_inputs?: Inputs[];
@@ -376,7 +386,7 @@ export interface EwoksRFNode {
   task_generator?: string;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes;
-  data?: {
+  data: {
     nodeWidth?: number;
     node_icon?: string;
     executing?: boolean;
@@ -430,7 +440,7 @@ export interface EwoksRFLink {
   source: string;
   target: string;
   label?: string;
-  data?: {
+  data: {
     label?: string;
     data_mapping?: DataMapping[];
     type?: string;
@@ -449,10 +459,20 @@ export interface EwoksRFLink {
     links_optional_output_names?: string[];
   };
   // TODO: see if used and give type to the following
-  labelStyle;
-  labelBgStyle;
-  labelBgPadding;
-  labelBgBorderRadius;
+  labelStyle?: {
+    color: string;
+    fill: string;
+    fontWeight: number;
+    fontSize: number;
+  };
+  labelBgStyle?: {
+    fill: string;
+    fillOpacity: number;
+    strokeWidth: string;
+    stroke: string;
+  };
+  labelBgPadding?: number[];
+  labelBgBorderRadius?: number;
   style: { stroke: string; strokeWidth: string };
   startEnd?: boolean;
   subtarget?: string;
@@ -505,15 +525,15 @@ export interface RFNode {
 }
 
 export interface GraphRF {
-  graph?: GraphDetails;
-  nodes?: EwoksRFNode[];
-  links?: EwoksRFLink[];
+  graph: GraphDetails;
+  nodes: EwoksRFNode[];
+  links: EwoksRFLink[];
 }
 
 export interface GraphEwoks {
-  graph?: GraphDetails;
-  nodes?: EwoksNode[];
-  links?: EwoksLink[];
+  graph: GraphDetails;
+  nodes: EwoksNode[];
+  links: EwoksLink[];
 }
 
 export interface IconsNames {

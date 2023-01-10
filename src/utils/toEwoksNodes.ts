@@ -1,6 +1,6 @@
-import type { EwoksNode, EwoksRFNode } from '../types';
+import type { EwoksNode, EwoksRFNode, Inputs } from '../types';
 
-function cleanDefaultInputs(default_inputs) {
+function cleanDefaultInputs(default_inputs: Inputs[]) {
   return (
     default_inputs?.map((dIn) => {
       return {
@@ -21,7 +21,8 @@ function cleanDefaultInputs(default_inputs) {
 // EwoksRFNode --> EwoksNode for saving
 export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
   const tempNodes: EwoksRFNode[] = [...nodes].filter(
-    (nod) => !['graphInput', 'graphOutput', 'note'].includes(nod.task_type)
+    (nod) =>
+      !['graphInput', 'graphOutput', 'note'].includes(nod?.task_type || '')
   );
 
   return tempNodes.map(
@@ -50,17 +51,17 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
     }) => {
       if (task_type !== 'graph') {
         return {
-          id: id.toString(),
+          id: (id && id.toString()) || '',
           label,
           task_type,
           task_identifier,
           inputs_complete,
-          task_generator: task_generator || null,
+          task_generator: task_generator || undefined,
           default_error_node,
           default_error_attributes: default_error_node
             ? default_error_attributes
-            : null,
-          default_inputs: cleanDefaultInputs(default_inputs),
+            : undefined,
+          default_inputs: cleanDefaultInputs(default_inputs || []),
           uiProps: {
             nodeWidth,
             node_icon,
@@ -79,17 +80,17 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
       // node-icon is not in graphs? ok? Graphs have no editable Node Info where the node_icon is
       // all the rest are the same... merge 2 returns?
       return {
-        id: id.toString(),
+        id: (id && id.toString()) || '',
         label,
         task_type,
         task_identifier,
         inputs_complete,
-        task_generator: task_generator || null,
-        default_inputs: cleanDefaultInputs(default_inputs),
+        task_generator: task_generator || undefined,
+        default_inputs: cleanDefaultInputs(default_inputs || []),
         default_error_node,
         default_error_attributes: default_error_node
           ? default_error_attributes
-          : null,
+          : undefined,
         uiProps: {
           label,
           type,

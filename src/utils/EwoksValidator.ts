@@ -1,6 +1,6 @@
 import type { GraphEwoks } from '../types';
 
-function assertLog(statement, severity = 'info') {
+function assertLog(statement: string, severity = 'info') {
   // severity can be error, warning, info
   if (severity === 'error') {
     /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
@@ -14,7 +14,7 @@ function assertLog(statement, severity = 'info') {
   }
 }
 
-function isJsonString(str) {
+function isJsonString(str: string) {
   return JSON.parse(str);
 }
 

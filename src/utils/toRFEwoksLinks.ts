@@ -51,13 +51,13 @@ export function toRFEwoksLinks(
           id: `${source}:${uiProps?.sourceHandle ?? ''}->${target}:${
             uiProps?.targetHandle ?? ''
           }_${id++}`,
-          label: calcLabel(uiProps, conditions, data_mapping),
+          label: calcLabel(uiProps || {}, conditions || [], data_mapping || []),
           source: source.toString(),
           target: target.toString(),
           // TODO: is the following used for inputs-outputs?
           startEnd: startEnd || false,
-          targetHandle: calcTargetHandle(uiProps, sub_target),
-          sourceHandle: calcSourceHandle(uiProps, sub_source),
+          targetHandle: calcTargetHandle(uiProps, sub_target || ''),
+          sourceHandle: calcSourceHandle(uiProps, sub_source || ''),
           type: uiProps?.type || '',
           markerEnd: uiProps?.markerEnd ?? '',
           animated: uiProps?.animated ?? false,
