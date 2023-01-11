@@ -58,6 +58,7 @@ export async function getSubgraphs(
   recentGraphs: GraphRF[]
 ): Promise<GraphEwoks[]> {
   const nodes: EwoksRFNode[] = [...graph.nodes];
+  console.log(nodes);
   const existingNodeSubgraphs = nodes.filter(
     (nod) => nod.task_type === 'graph'
   );
