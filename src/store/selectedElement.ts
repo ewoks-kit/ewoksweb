@@ -93,7 +93,7 @@ const selectedElement = (
   },
 });
 
-function initializeNodes(nodes) {
+function initializeNodes(nodes: EwoksRFNode[]) {
   return nodes.map((nod) => {
     return {
       ...nod,

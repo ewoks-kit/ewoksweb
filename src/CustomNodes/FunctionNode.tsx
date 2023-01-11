@@ -1,12 +1,12 @@
 import React, { memo } from 'react';
 import { Handle, Position } from 'react-flow-renderer';
-import type { Connection } from 'react-flow-renderer';
+import type { Connection, NodeProps } from 'react-flow-renderer';
 import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
 import isValidLink from '../utils/IsValidLink';
 import useStore from '../store/useStore';
 
-function FunctionNode(fnod) {
+function FunctionNode(fnod: NodeProps) {
   const graphRF = useStore((state) => state.graphRF);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
@@ -41,6 +41,7 @@ function FunctionNode(fnod) {
       content={
         <>
           {fnod.data.inputs
+            // TODO: this is the way react-flow passes arguments to custom nodes. Types?
             .sort((a, b) => a.positionY - b.positionY)
             .map((input: { label: string }) => (
               <div

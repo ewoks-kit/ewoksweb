@@ -13,7 +13,7 @@ const recentGraphs = (
   recentGraphs: [],
 
   setRecentGraphs: (newGraph, reset = false) => {
-    let rec = [];
+    let rec: GraphRF[] = [];
     if (!reset) {
       rec =
         get().recentGraphs.length > 0

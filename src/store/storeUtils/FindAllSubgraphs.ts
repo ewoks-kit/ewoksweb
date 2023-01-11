@@ -5,8 +5,10 @@ export async function findAllSubgraphs(
   graphToSearch: GraphEwoks,
   recentGraphs: GraphRF[] | GraphEwoks[]
 ): Promise<GraphEwoks[]> {
+  // TODO: examine functionality because it seems to get again previously
+  // fetched graphs. Also goes one by one awaiting. Promise.all better??
   let subsToGet = [graphToSearch];
-  const newNodeSubgraphs = [];
+  const newNodeSubgraphs: GraphEwoks[] = [];
 
   const thisCallRecent = [...recentGraphs];
 
@@ -19,18 +21,15 @@ export async function findAllSubgraphs(
       thisCallRecent as GraphRF[]
     );
     // store them as ewoksGraphs for later transforming to RFGraphs
-    if (allGraphSubs.includes(null)) {
-      subsToGet.shift();
-    } else {
-      allGraphSubs.forEach((gr) => {
-        newNodeSubgraphs.push(gr);
-        thisCallRecent.push(gr);
-      });
-      // drop the one we searched for its subgraphs
-      subsToGet.shift();
-      // add the new subgraphs in the existing subgraphs we need to search
-      subsToGet = [...subsToGet, ...allGraphSubs];
-    }
+
+    allGraphSubs.forEach((gr) => {
+      newNodeSubgraphs.push(gr);
+      thisCallRecent.push(gr);
+    });
+    // drop the one we searched for its subgraphs
+    subsToGet.shift();
+    // add the new subgraphs in the existing subgraphs we need to search
+    subsToGet = [...subsToGet, ...allGraphSubs];
   }
   return newNodeSubgraphs;
 }

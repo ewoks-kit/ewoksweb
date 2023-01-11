@@ -239,7 +239,7 @@ export interface nodeInputsOutputs {
 
 export interface stackGraph {
   id: string;
-  label: string;
+  label?: string;
   resetStack?: boolean;
 }
 
@@ -307,7 +307,7 @@ export interface LinkStyle {
 }
 
 export interface Note {
-  id?: string;
+  id: string;
   label?: string;
   comment: string;
   position: CanvasPosition;
