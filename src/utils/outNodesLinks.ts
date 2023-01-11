@@ -1,11 +1,4 @@
-import type {
-  EwoksLink,
-  EwoksNode,
-  EwoksRFLink,
-  EwoksRFNode,
-  GraphEwoks,
-  GraphNodes,
-} from '../types';
+import type { EwoksLink, EwoksNode, GraphEwoks, GraphNodes } from '../types';
 
 function calcMarkerEnd(inNod: GraphNodes): '' | { type: string } {
   if (inNod.uiProps?.markerEnd) {
