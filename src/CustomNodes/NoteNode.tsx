@@ -9,7 +9,7 @@ import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
 
 interface NoteProps {
-  id?: string;
+  id: string;
   xPos?: number;
   yPos?: number;
   selected?: boolean;
@@ -57,7 +57,7 @@ const NoteNode = (args: NoteProps) => {
         task_type: 'note',
         task_identifier: args.id,
         type: 'note',
-        position: { x: args.xPos, y: args.yPos },
+        position: { x: args.xPos || 500, y: args.yPos || 500 },
       },
       'fromSaveElement'
     );
@@ -76,7 +76,7 @@ const NoteNode = (args: NoteProps) => {
       tabIndex={0}
     >
       <span style={{ maxWidth: `${args.data.nodeWidth}px` }} className="icons">
-        {args.data.label.length > 0 && (
+        {args.data?.label && args.data.label.length > 0 && (
           <div style={customTitle as React.CSSProperties}>
             {args.data.label}
           </div>

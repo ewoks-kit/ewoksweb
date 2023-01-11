@@ -4,10 +4,10 @@ export function calcCoordinatesFirstNode(nodes: EwoksRFNode[]) {
   let x = 500;
   let y = 500;
   for (const nod of nodes) {
-    if (nod.position.x < x) {
+    if (nod.position?.x && nod.position.x < x) {
       ({ x } = nod.position);
     }
-    if (nod.position.y < y) {
+    if (nod.position?.y && nod.position.y < y) {
       ({ y } = nod.position);
     }
   }

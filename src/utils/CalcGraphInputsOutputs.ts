@@ -10,8 +10,8 @@ import type {
 // from the nodes of the graphRF model with types graphInput, graphOutput
 export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
   const graph_links = [...graph.links];
-  let input_nodes = [];
-  let output_nodes = [];
+  let input_nodes: GraphNodes[] = [];
+  let output_nodes: GraphNodes[] = [];
 
   graph.nodes.forEach((nod) => {
     if (nod.task_type === 'graphInput') {
@@ -65,7 +65,10 @@ function calcInOutNodes(
 
   const nodeObjConnectedTo: EwoksRFNode[] = [];
   for (const nodesNames of nodesNamesConnectedTo) {
-    nodeObjConnectedTo.push(graph.nodes.find((node) => nodesNames === node.id));
+    const nodeInGraph = graph.nodes.find((node) => nodesNames === node.id);
+    if (nodeInGraph) {
+      nodeObjConnectedTo.push(nodeInGraph);
+    }
   }
 
   // iterate the nodes to create the new input_nodes
@@ -73,7 +76,7 @@ function calcInOutNodes(
     const link_index =
       inputOrOutput === 'graphOutput'
         ? graph_links.findIndex(
-            (lin) => lin.target === nod.id && lin.source === nodConnected.id // !!
+            (lin) => lin.target === nod.id && lin.source === nodConnected.id
           )
         : graph_links.findIndex(
             (lin) => lin.source === nod.id && lin.target === nodConnected.id
@@ -107,7 +110,7 @@ function calcInOutNodes(
   return nodes;
 }
 
-function calcMarkerEnd(graph_link) {
+function calcMarkerEnd(graph_link: EwoksRFLink) {
   return graph_link?.markerEnd ? { type: graph_link?.markerEnd?.type } : '';
 }
 
@@ -126,9 +129,8 @@ function calcNodeProps(
     sub_node: isGraph
       ? (graph_links[link_index] && inputOrOutput === 'graphOutput'
           ? graph_links[link_index].data.sub_source
-          : graph_links[link_index].data.sub_target) || // !!
-        null
-      : null,
+          : graph_links[link_index].data.sub_target) || undefined
+      : undefined,
     link_attributes: {
       label: graph_links[link_index]?.label ?? '',
       comment: graph_links[link_index]?.data?.comment ?? '',

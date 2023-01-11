@@ -61,22 +61,20 @@ const subGraph = (
 
     let newNode = {} as EwoksRFNode;
     if (subToAdd) {
-      const inputsSub = subToAdd.graph.input_nodes.map((input) => {
+      const inputsSub = subToAdd.graph?.input_nodes?.map((input) => {
         return {
           label: calcLabel(input),
           type: 'data ',
-          // positionY: input.uiProps.position.y,
         };
       });
-      const outputsSub = subToAdd.graph.output_nodes.map((output) => {
+      const outputsSub = subToAdd.graph?.output_nodes?.map((output) => {
         return {
           label: calcLabel(output),
           type: 'data ',
-          // positionY: output.uiProps.position.y,
         };
       });
       let id = 0;
-      let graphId = subToAdd.graph.label;
+      let graphId = subToAdd.graph.label || '';
       while (get().graphRF.nodes.some((nod) => nod.id === graphId)) {
         graphId += id++;
       }
