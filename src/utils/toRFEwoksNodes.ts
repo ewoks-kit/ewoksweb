@@ -60,13 +60,13 @@ export function toRFEwoksNodes(
             data_mapping: [],
           },
           task_generator: task_generator || '',
-          task_icon: uiProps.task_icon || '',
+          task_icon: uiProps?.task_icon || '',
           default_inputs: default_inputs || [],
           data: {
             label: label ?? task_identifier,
             type: nodeType,
             nodeWidth: uiProps?.nodeWidth ?? 120,
-            icon: uiProps.node_icon ?? uiProps?.icon ?? '',
+            icon: uiProps?.node_icon ?? uiProps?.icon ?? '',
             comment: uiProps?.comment ?? '',
             moreHandles: uiProps?.moreHandles ?? false,
             details: uiProps?.details ?? false,
@@ -84,7 +84,7 @@ export function toRFEwoksNodes(
           task_identifier,
           node,
           tasks,
-          uiProps.task_category
+          uiProps?.task_category || ''
         );
       }
     );

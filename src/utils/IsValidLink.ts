@@ -20,6 +20,10 @@ export default function isValidLink(
   const source = graphRFL.nodes.find((nod) => nod.id === connection.source);
   const target = graphRFL.nodes.find((nod) => nod.id === connection.target);
 
+  if (!source || !target) {
+    return { isValid: false, reason: 'One of the link end is not defined' };
+  }
+
   if (source.task_type === 'graphInput') {
     // check if there is already a link using this graph-input
     if (graphRFL.links.some((link) => link.source === source.id)) {
@@ -105,8 +109,8 @@ export default function isValidLink(
         (link) =>
           link.source === connection.source &&
           link.target === connection.target &&
-          (link.sourceHandle.slice(0, -5) === connection.sourceHandle ||
-            link.sourceHandle === connection.sourceHandle.slice(0, -5) ||
+          (link.sourceHandle?.slice(0, -5) === connection.sourceHandle ||
+            link.sourceHandle === connection.sourceHandle?.slice(0, -5) ||
             link.sourceHandle === connection.sourceHandle)
       )) ||
     (source.type !== 'graph' &&
@@ -115,8 +119,8 @@ export default function isValidLink(
         (link) =>
           link.source === connection.source &&
           link.target === connection.target &&
-          (link.targetHandle.slice(0, -6) === connection.targetHandle ||
-            link.targetHandle === connection.targetHandle.slice(0, -6) ||
+          (link.targetHandle?.slice(0, -6) === connection.targetHandle ||
+            link.targetHandle === connection.targetHandle?.slice(0, -6) ||
             link.targetHandle === connection.targetHandle)
       )) ||
     (source.type === 'graph' &&
@@ -125,11 +129,11 @@ export default function isValidLink(
         (link) =>
           link.source === connection.source &&
           link.target === connection.target &&
-          (link.targetHandle.slice(0, -6) === connection.targetHandle ||
-            link.targetHandle === connection.targetHandle.slice(0, -6) ||
+          (link.targetHandle?.slice(0, -6) === connection.targetHandle ||
+            link.targetHandle === connection.targetHandle?.slice(0, -6) ||
             link.targetHandle === connection.targetHandle) &&
-          (link.sourceHandle.slice(0, -5) === connection.sourceHandle ||
-            link.sourceHandle === connection.sourceHandle.slice(0, -5) ||
+          (link.sourceHandle?.slice(0, -5) === connection.sourceHandle ||
+            link.sourceHandle === connection.sourceHandle?.slice(0, -5) ||
             link.sourceHandle === connection.sourceHandle)
       ))
   ) {

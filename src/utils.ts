@@ -1,4 +1,5 @@
 import type {
+  EwoksNode,
   EwoksRFNode,
   GraphEwoks,
   GraphRF,
@@ -57,8 +58,7 @@ export async function getSubgraphs(
   graph: GraphEwoks | GraphRF,
   recentGraphs: GraphRF[]
 ): Promise<GraphEwoks[]> {
-  const nodes: EwoksRFNode[] = [...graph.nodes];
-  console.log(nodes);
+  const nodes: EwoksRFNode[] | EwoksNode[] = [...graph.nodes];
   const existingNodeSubgraphs = nodes.filter(
     (nod) => nod.task_type === 'graph'
   );
