@@ -19,9 +19,9 @@ describe('clicks on canvas and elements', () => {
       .click()
       .should('include.class', 'selected');
 
-    cy.findByLabelText('Advanced').should('exist');
-    cy.contains('Default Inputs').should('exist');
-    cy.contains('Default Inputs').should('be.visible');
+    cy.findByRole('checkbox').should('not.be.checked');
+    cy.findByLabelText('Advanced').should('exist').should('be.visible');
+    cy.contains('Default Inputs').should('exist').should('be.visible');
 
     cy.contains('Inputs-complete').should('not.exist');
   });
