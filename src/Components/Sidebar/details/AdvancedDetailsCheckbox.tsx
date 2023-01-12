@@ -18,8 +18,8 @@ export default function AdvancedDetailsCheckbox() {
         name="advanced"
         checked={showAdvancedDetails}
         onChange={(e) => setShowAdvancedDetails(e.target.checked)}
-        inputProps={{ 'aria-label': 'controlled' }}
-        aria-labelledby="advanced-checkbox"
+        inputProps={{ 'aria-labelledby': 'advanced-checkbox' }}
+        // aria-labelledby="advanced-checkbox"
       />
     </div>
   );
