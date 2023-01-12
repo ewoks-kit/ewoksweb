@@ -7,6 +7,7 @@ import type {
   Connection,
   NodeChange,
   EdgeChange,
+  ReactFlowInstance,
 } from 'react-flow-renderer';
 import ReactFlow, {
   Controls,
@@ -241,7 +242,7 @@ function Canvas() {
     setSelectedElement(graphElement);
   };
 
-  const onInit = useCallback((instance) => {
+  const onInit = useCallback((instance: ReactFlowInstance) => {
     setRfInstance(instance);
   }, []);
 
