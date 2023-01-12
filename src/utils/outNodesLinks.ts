@@ -4,7 +4,7 @@ function calcMarkerEnd(inNod: GraphNodes): '' | { type: string } {
   if (inNod.uiProps?.markerEnd) {
     return { type: inNod.uiProps.markerEnd.type };
   }
-  return '';
+  return undefined;
 }
 
 // TODO: when stable compare to inNodesLinks and merge if possible
