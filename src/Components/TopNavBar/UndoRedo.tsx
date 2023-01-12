@@ -9,6 +9,7 @@ import useStore from '../../store/useStore';
 
 const useStyles = DashboardStyle;
 
+// TODO: give a type of function to ref?
 export default function UndoRedo({ undoF, redoF }) {
   const classes = useStyles();
 

@@ -1,4 +1,10 @@
-import type { EwoksRFNode, GraphEwoks, GraphNodes, Task } from '../types';
+import type {
+  calcInOutForSubgraphOutput,
+  EwoksRFNode,
+  GraphEwoks,
+  GraphNodes,
+  Task,
+} from '../types';
 
 export function inputsAll(tempGraph: GraphEwoks): string[] {
   return tempGraph.graph?.input_nodes?.map((nod) => nod.node) || [];
@@ -49,13 +55,6 @@ export function calcTask(tasks: Task[], task_identifier: string): Task {
     output_names: [],
     required_input_names: [],
   };
-}
-
-interface calcInOutForSubgraphOutput {
-  id: string;
-  label: string;
-  type: string;
-  positionY?: number;
 }
 
 export function calcInOutForSubgraph(

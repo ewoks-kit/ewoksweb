@@ -568,3 +568,10 @@ export interface filterParams {
   // type: string;
   error?: boolean;
 }
+
+export interface calcInOutForSubgraphOutput {
+  id: string;
+  label: string;
+  type: string;
+  positionY?: number;
+}

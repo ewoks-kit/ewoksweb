@@ -5,6 +5,7 @@ import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
 import isValidLink from '../utils/IsValidLink';
 import useStore from '../store/useStore';
+import type { calcInOutForSubgraphOutput } from '../types';
 
 function FunctionNode(fnod: NodeProps) {
   const graphRF = useStore((state) => state.graphRF);
@@ -41,8 +42,16 @@ function FunctionNode(fnod: NodeProps) {
       content={
         <>
           {fnod.data.inputs
-            // TODO: this is the way react-flow passes arguments to custom nodes. Types?
-            .sort((a, b) => a.positionY - b.positionY)
+            .sort(
+              (
+                a: calcInOutForSubgraphOutput,
+                b: calcInOutForSubgraphOutput
+              ) => {
+                return a.positionY && b.positionY
+                  ? a.positionY - b.positionY
+                  : 0;
+              }
+            )
             .map((input: { label: string }) => (
               <div
                 key={input.label}
@@ -88,7 +97,16 @@ function FunctionNode(fnod: NodeProps) {
               </div>
             ))}
           {fnod.data.outputs
-            .sort((a, b) => a.positionY - b.positionY)
+            .sort(
+              (
+                a: calcInOutForSubgraphOutput,
+                b: calcInOutForSubgraphOutput
+              ) => {
+                return a.positionY && b.positionY
+                  ? a.positionY - b.positionY
+                  : 0;
+              }
+            )
             .map((output: { label: string }) => (
               <div
                 key={output.label}

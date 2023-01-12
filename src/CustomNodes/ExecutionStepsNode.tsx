@@ -5,8 +5,9 @@ step that has been executed.
 import { style } from './NodeStyle';
 
 import useStore from '../store/useStore';
+import type { NodeProps } from 'react-flow-renderer';
 
-function ExecutionStepsNode(args) {
+function ExecutionStepsNode(args: NodeProps) {
   const customTitle = {
     ...style.title,
     wordWrap: 'break-word',

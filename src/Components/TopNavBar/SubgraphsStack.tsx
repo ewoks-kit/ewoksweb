@@ -21,14 +21,15 @@ export default function SubgraphsStack() {
 
   const goToGraph = (e) => {
     e.preventDefault();
-    setSubgraphsStack({ id: e.target.id, label: e.target.text });
+    setSubgraphsStack({ id: e.target?.id, label: e.target?.text });
 
     const subgraph = recentGraphs.find((gr) => gr.graph.id === e.target.id);
-
-    setGraphRF(subgraph);
-    setSelectedElement({
-      ...subgraph.graph,
-    });
+    if (subgraph) {
+      setGraphRF(subgraph);
+      setSelectedElement({
+        ...subgraph.graph,
+      });
+    }
   };
 
   return (
@@ -51,9 +52,9 @@ export default function SubgraphsStack() {
                 id={gr.id}
                 key={gr.id}
                 className={
-                  index === subgraphsStack.length - 1 && classes.isDisabled
+                  index === subgraphsStack.length - 1 ? classes.isDisabled : ''
                 }
-                onClick={goToGraph}
+                onClick={() => goToGraph}
                 data-cy={gr.id}
               >
                 {gr.label}

@@ -33,7 +33,7 @@ function multilineText({
   const hasStringLabel = typeof label === 'string';
   const titleWidth = hasStringLabel
     ? Math.max(...label.split(',').map((mp) => mp.length)) * 8
-    : undefined;
+    : 1;
   const titleHeight = hasStringLabel ? label.split(',').length * 30 : undefined;
 
   return (
