@@ -1,11 +1,11 @@
 import type { EwoksRFNode, GraphEwoks, GraphNodes, Task } from '../types';
 
 export function inputsAll(tempGraph: GraphEwoks): string[] {
-  return tempGraph.graph?.input_nodes?.map((nod) => nod.node);
+  return tempGraph.graph?.input_nodes?.map((nod) => nod.node) || [];
 }
 
 export function outputsAll(tempGraph: GraphEwoks): string[] {
-  return tempGraph.graph?.output_nodes?.map((nod) => nod.node);
+  return tempGraph.graph?.output_nodes?.map((nod) => nod.node) || [];
 }
 
 // DOC: calculate if node in a graph is input and/or output or internal
@@ -37,14 +37,10 @@ export function calcNodeType(
 }
 
 // DOC: locate the task and add required+optional-inputs + outputs
-export function calcTask(
-  tasks: Task[],
-  task_identifier: string,
-  task_type: string
-): Task {
+export function calcTask(tasks: Task[], task_identifier: string): Task {
   const tempTask = tasks.find((tas) => tas.task_identifier === task_identifier);
 
-  if (tempTask || task_type === 'graph') {
+  if (tempTask) {
     return tempTask;
   }
 
@@ -69,30 +65,36 @@ export function calcInOutForSubgraph(
   let outputsSub: calcInOutForSubgraphOutput[] = [];
 
   if (subgraphNode?.graph?.id) {
-    const allOutputsIds = subgraphNode.graph.output_nodes.map((nod) => nod.id);
-    const allInputsIds = subgraphNode.graph.input_nodes.map((nod) => nod.id);
+    if (subgraphNode.graph.output_nodes) {
+      const allOutputsIds = subgraphNode.graph.output_nodes.map(
+        (nod) => nod.id
+      );
+      outputsSub = subgraphNode.graph.output_nodes.map((output) => {
+        allOutputsIds.shift();
 
-    inputsSub = subgraphNode.graph.input_nodes.map((input) => {
-      allInputsIds.shift();
+        return {
+          id: output.id,
+          label: calcLabel(output, allOutputsIds),
+          type: 'data ',
+          positionY: output.uiProps?.position?.y || 100,
+        };
+      });
+    }
 
-      return {
-        id: input.id,
-        label: calcLabel(input, allInputsIds),
-        type: 'data ',
-        positionY: input.uiProps?.position?.y || 100,
-      };
-    });
+    if (subgraphNode.graph.input_nodes) {
+      const allInputsIds = subgraphNode.graph.input_nodes.map((nod) => nod.id);
 
-    outputsSub = subgraphNode.graph.output_nodes.map((output) => {
-      allOutputsIds.shift();
+      inputsSub = subgraphNode.graph.input_nodes.map((input) => {
+        allInputsIds.shift();
 
-      return {
-        id: output.id,
-        label: calcLabel(output, allOutputsIds),
-        type: 'data ',
-        positionY: output.uiProps?.position?.y || 100,
-      };
-    });
+        return {
+          id: input.id,
+          label: calcLabel(input, allInputsIds),
+          type: 'data ',
+          positionY: input.uiProps?.position?.y || 100,
+        };
+      });
+    }
   } else {
     inputsSub = [{ id: '', label: 'unknown_input', type: 'data' }];
     outputsSub = [{ id: '', label: 'unknown_output', type: 'data' }];
@@ -104,7 +106,7 @@ export function calcLabel(
   inOut: GraphNodes,
   allInOutputsIds: string[]
 ): string {
-  return `${('uiProps' in inOut && inOut.uiProps.label) || inOut.id}${
+  return `${inOut.uiProps?.label || inOut.id}${
     allInOutputsIds.includes(inOut.id) ? '_' : ':'
   } ${inOut.node} ${inOut.sub_node ? `  -> ${inOut.sub_node}` : ''}`;
 }
@@ -119,23 +121,25 @@ export function addNodeProperties(
 ): EwoksRFNode {
   let tempNode = { ...node };
   if (task_type === 'graph') {
-    const subgraphNode: GraphEwoks = newNodeSubgraphs.find(
+    const subgraphNode: GraphEwoks | undefined = newNodeSubgraphs.find(
       (subGr) => subGr.graph.id === task_identifier
     );
 
-    const [inputsSub, outputsSub] = calcInOutForSubgraph(subgraphNode);
+    if (subgraphNode) {
+      const [inputsSub, outputsSub] = calcInOutForSubgraph(subgraphNode);
 
-    tempNode = {
-      ...tempNode,
-      data: {
-        ...tempNode.data,
-        exists: subgraphNode && !!subgraphNode.graph.id,
-        inputs: inputsSub,
-        outputs: outputsSub,
-      },
-    };
+      tempNode = {
+        ...tempNode,
+        data: {
+          ...tempNode.data,
+          exists: subgraphNode && !!subgraphNode.graph.id,
+          inputs: inputsSub,
+          outputs: outputsSub,
+        },
+      };
+    }
   } else {
-    const tempTask = calcTask(tasks, task_identifier, task_type);
+    const tempTask = calcTask(tasks, task_identifier);
 
     tempNode = {
       ...tempNode,

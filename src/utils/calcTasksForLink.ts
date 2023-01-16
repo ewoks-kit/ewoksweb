@@ -11,8 +11,8 @@ export function calcTasksForLink(
   const sourceTmp = tempGraph.nodes.find((nod) => nod.id === source);
   const targetTmp = tempGraph.nodes.find((nod) => nod.id === target);
 
-  let sourceTask: Task = {};
-  let targetTask: Task = {};
+  let sourceTask: Task | undefined;
+  let targetTask: Task | undefined;
 
   if (sourceTmp) {
     sourceTask = calcTask('source', sourceTmp, tasks, newNodeSubgraphs);
@@ -39,7 +39,7 @@ function calcTask(
   node: EwoksNode,
   tasks: Task[],
   newNodeSubgraphs: GraphEwoks[]
-): Task {
+): Task | undefined {
   if (node.task_type !== 'graph') {
     return tasks.find((tas) => tas.task_identifier === node.task_identifier);
   }
@@ -48,9 +48,9 @@ function calcTask(
     (subGr) => subGr.graph.id === node.task_identifier
   );
 
-  const outputsOrOutputs = [];
+  const outputsOrOutputs: string[] = [];
 
-  if (subgraphNodeSource) {
+  if (subgraphNodeSource?.graph?.output_nodes) {
     subgraphNodeSource.graph.output_nodes.forEach((out) =>
       outputsOrOutputs.push(out.id)
     );

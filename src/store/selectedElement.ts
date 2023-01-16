@@ -21,7 +21,7 @@ const selectedElement = (
   set: SetState<State>,
   get: GetState<State>
 ): SelectedElementSlice => ({
-  selectedElement: {},
+  selectedElement: {} as GraphDetails,
 
   setSelectedElement: (element, from) => {
     const workingGraphId = get().workingGraph.graph.id;

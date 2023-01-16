@@ -1,7 +1,7 @@
-import type { EwoksLink, EwoksRFLink } from '../types';
+import type { Conditions, EwoksLink, EwoksRFLink } from '../types';
 
 // EwoksRFLinks --> EwoksLinks for saving
-export function toEwoksLinks(links): EwoksLink[] {
+export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
   const tempLinks: EwoksRFLink[] = [...links].filter((link) => !link.startEnd);
   // if there are some startEnd links with conditions or any other link_attributes
   // then graph.input_nodes and/or graph.output_nodes needs update
@@ -34,17 +34,9 @@ export function toEwoksLinks(links): EwoksLink[] {
         source,
         target,
         data_mapping,
-        conditions: conditions.map((con) => {
-          if (con.source_output) {
-            return {
-              ...con,
-              value: calcConditionValue(con),
-            };
-          }
-          return {
-            source_output: con.id,
-            value: calcConditionValue(con),
-          };
+        conditions: conditions?.map((con) => {
+          const newCon = con.source_output ? con : { source_output: con.id };
+          return { ...newCon, value: calcConditionValue(con) };
         }),
         on_error,
         map_all_data,
@@ -74,7 +66,7 @@ export function toEwoksLinks(links): EwoksLink[] {
   );
 }
 
-function calcConditionValue(condition) {
+function calcConditionValue(condition: Conditions) {
   return condition.value === 'true'
     ? true
     : condition.value === 'false'

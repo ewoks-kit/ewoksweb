@@ -380,7 +380,7 @@ function Canvas() {
 
       const targetTask = graphRF.nodes.find((nod) => nod.id === params.target);
       // TODO: Move link creation to separate file
-      const link = {
+      const link: EwoksRFLink = {
         data: {
           getAroundProps: { x: 0, y: 0 },
           on_error: false,
