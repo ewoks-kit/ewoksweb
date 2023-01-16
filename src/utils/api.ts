@@ -84,11 +84,8 @@ export function deleteWorkflow(id: string) {
 // TODO: types for execution API
 // Get executed workflows
 export function getExecutionEvents(queryParams: filterParams) {
-  const queryString = Object.keys(queryParams)
-    // TODO: solution
-    .map((key) => `${key}=${(queryParams as string)[key] as string}`)
-    .join('&');
-  return axiosRequest.get(`/execution/events?${queryString}`);
+  const query = new URLSearchParams(Object.entries(queryParams));
+  return axiosRequest.get(`/execution/events?${query.toString()}`);
 }
 
 // --------------Icons

@@ -13,15 +13,10 @@ const recentGraphs = (
   recentGraphs: [],
 
   setRecentGraphs: (newGraph, reset = false) => {
-    let rec: GraphRF[] = [];
-    if (!reset) {
-      rec =
-        get().recentGraphs.length > 0
-          ? get().recentGraphs.filter((gr) => {
-              return gr.graph.id !== newGraph.graph.id;
-            })
-          : [];
-    }
+    const rec: GraphRF[] = reset
+      ? []
+      : get().recentGraphs.filter((gr) => gr.graph.id !== newGraph.graph.id);
+
     if (newGraph.graph) {
       set((state) => ({
         ...state,

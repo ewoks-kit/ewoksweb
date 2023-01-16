@@ -14,6 +14,8 @@ import { getTaskDescription } from '../utils/api';
 import type { GetState, SetState } from 'zustand';
 import { initializedRFGraph } from '../utils/InitializedEntities';
 import type { AxiosError } from 'axios';
+import axios from 'axios';
+import { isEwoksServerResponseError } from '../utils/typeGuards';
 
 export interface WorkingGraphSlice {
   workingGraph: GraphRF;
@@ -36,12 +38,17 @@ const workingGraph = (
         const tasksData = await getTaskDescription();
         const tasks = tasksData.data as { items: Task[] };
         get().setTasks(tasks.items);
-      } catch (error) {
-        const err = error as AxiosError;
+      } catch (error: any) {
+        let text: string = '';
+        if (isEwoksServerResponseError(error)) {
+          text = error.response.data.message;
+        } else if (axios.isAxiosError(error)) {
+          text = error.response?.data as string;
+        }
+
         get().setOpenSnackbar({
           open: true,
-          // TODO: extend the data: T type to have a message?
-          text: err.response?.data?.message || commonStrings.retrieveTasksError,
+          text: text || commonStrings.retrieveTasksError,
           severity: 'error',
         });
       }

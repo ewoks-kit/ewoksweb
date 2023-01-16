@@ -120,6 +120,8 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
 }
 
 export function findImage(img: string | undefined, allIcons: Icon[]) {
+  if (!img) return;
+
   const icon = allIcons.find((ico) => ico.name === img);
 
   return icon?.image?.data_url || orange2;

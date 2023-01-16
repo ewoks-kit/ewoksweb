@@ -24,6 +24,7 @@ import type { ExecutingEventsSlice } from './store/executingEvents';
 import type { AllIconsSlice } from './store/allIcons';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
+import type { AxiosError } from 'axios';
 
 export enum FormAction {
   cloneGraph = 'cloneGraph',
@@ -567,4 +568,8 @@ export interface filterParams {
   job_id?: string;
   // type: string;
   error?: boolean;
+}
+
+export interface EwoksServerResponseError {
+  response: { data: { message: string } };
 }
