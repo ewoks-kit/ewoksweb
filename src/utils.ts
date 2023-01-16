@@ -119,8 +119,10 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
   };
 }
 
-export function findImage(img: string | undefined, allIcons: Icon[]) {
-  if (!img) return;
+export function findImage(img: string | undefined, allIcons: Icon[]): string {
+  if (!img) {
+    return '';
+  }
 
   const icon = allIcons.find((ico) => ico.name === img);
 

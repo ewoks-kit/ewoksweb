@@ -13,7 +13,6 @@ import commonStrings from '../commonStrings.json';
 import { getTaskDescription } from '../utils/api';
 import type { GetState, SetState } from 'zustand';
 import { initializedRFGraph } from '../utils/InitializedEntities';
-import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { isEwoksServerResponseError } from '../utils/typeGuards';
 
@@ -38,17 +37,19 @@ const workingGraph = (
         const tasksData = await getTaskDescription();
         const tasks = tasksData.data as { items: Task[] };
         get().setTasks(tasks.items);
-      } catch (error: any) {
-        let text: string = '';
+      } catch (error) {
+        let text = '';
         if (isEwoksServerResponseError(error)) {
           text = error.response.data.message;
         } else if (axios.isAxiosError(error)) {
           text = error.response?.data as string;
+        } else {
+          text = commonStrings.retrieveTasksError;
         }
 
         get().setOpenSnackbar({
           open: true,
-          text: text || commonStrings.retrieveTasksError,
+          text,
           severity: 'error',
         });
       }

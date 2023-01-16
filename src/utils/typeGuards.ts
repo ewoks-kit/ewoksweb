@@ -24,7 +24,7 @@ export function isGraphDetails(
 }
 
 export function isEwoksServerResponseError(
-  error: any
+  error
 ): error is EwoksServerResponseError {
   return 'message' in error.response?.data;
 }
