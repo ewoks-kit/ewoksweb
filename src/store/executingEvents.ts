@@ -106,6 +106,7 @@ const executingEvents = (
       let execNodes: EwoksRFNode[] = [];
 
       // calculate the executing ones and add the executing param.
+      // TODO: test later when execution accecible for using a Set
       // Not a set because maybe it needs a complex id
       /* eslint-disable unicorn/prefer-set-has */
       const executingIds: (string | undefined)[] = newExecutingEvents.map(
@@ -151,7 +152,7 @@ const executingEvents = (
           position: tempPos,
         } as unknown) as EwoksRFNode, // TODO: clear this casting when deal with execution
       ];
-      console.log(newExecutingEvents, nodess);
+      // console.log(newExecutingEvents, nodess);
       if (get().inExecutionMode) {
         set((state) => ({
           ...state,
