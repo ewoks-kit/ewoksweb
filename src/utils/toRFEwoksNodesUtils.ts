@@ -1,10 +1,4 @@
-import type {
-  calcInOutForSubgraphOutput,
-  EwoksRFNode,
-  GraphEwoks,
-  GraphNodes,
-  Task,
-} from '../types';
+import type { EwoksRFNode, GraphEwoks, GraphNodes, Task } from '../types';
 
 export function inputsAll(tempGraph: GraphEwoks): string[] {
   return tempGraph.graph?.input_nodes?.map((nod) => nod.node) || [];
@@ -57,6 +51,13 @@ export function calcTask(tasks: Task[], task_identifier: string): Task {
   };
 }
 
+interface calcInOutForSubgraphOutput {
+  id: string;
+  label: string;
+  type: string;
+  positionY?: number;
+}
+
 export function calcInOutForSubgraph(
   subgraphNode: GraphEwoks
 ): calcInOutForSubgraphOutput[][] {
@@ -105,7 +106,7 @@ export function calcLabel(
   inOut: GraphNodes,
   allInOutputsIds: string[]
 ): string {
-  return `${inOut?.uiProps?.label || inOut.id}${
+  return `${inOut.uiProps?.label || inOut.id}${
     allInOutputsIds.includes(inOut.id) ? '_' : ':'
   } ${inOut.node} ${inOut.sub_node ? `  -> ${inOut.sub_node}` : ''}`;
 }
@@ -124,19 +125,17 @@ export function addNodeProperties(
       (subGr) => subGr.graph.id === task_identifier
     );
 
-    if (subgraphNode) {
-      const [inputsSub, outputsSub] = calcInOutForSubgraph(subgraphNode);
+    const [inputsSub, outputsSub] = calcInOutForSubgraph(subgraphNode);
 
-      tempNode = {
-        ...tempNode,
-        data: {
-          ...tempNode.data,
-          exists: subgraphNode && !!subgraphNode.graph.id,
-          inputs: inputsSub,
-          outputs: outputsSub,
-        },
-      };
-    }
+    tempNode = {
+      ...tempNode,
+      data: {
+        ...tempNode.data,
+        exists: subgraphNode && !!subgraphNode.graph.id,
+        inputs: inputsSub,
+        outputs: outputsSub,
+      },
+    };
   } else {
     const tempTask = calcTask(tasks, task_identifier);
 
