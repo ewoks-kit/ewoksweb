@@ -1,12 +1,16 @@
 import { Tooltip } from '@material-ui/core';
+import type { ReactElement } from 'react';
 import DashboardStyle from '../Dashboard/DashboardStyle';
 
 const useStyles = DashboardStyle;
 
-export default function SidebarTooltip(props) {
+export default function SidebarTooltip(props: {
+  text: string;
+  children: ReactElement<any, any>;
+}) {
   const classes = useStyles();
 
-  const styleInfo = (title) => {
+  const styleInfo = (title: string) => {
     return (
       <span
         style={{

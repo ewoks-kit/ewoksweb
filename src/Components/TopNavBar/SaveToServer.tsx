@@ -9,7 +9,10 @@ import curateGraph from './utils/curateGraph';
 import { getWorkflowsIds, putWorkflow } from '../../utils/api';
 import { FormAction } from '../../types';
 
-function workflowExists(id, workflowsIds) {
+function workflowExists(
+  id: string,
+  workflowsIds: { data: { identifiers: string[] } }
+) {
   return workflowsIds.data.identifiers.includes(id);
 }
 
@@ -43,7 +46,7 @@ export default function SaveToServer({ saveToServerF }) {
       setAction(FormAction.newGraph);
       setOpenSaveDialog(true);
     } else if (workingGraph.graph.id === graphRF.graph.id) {
-      if (graphRF.graph.uiProps.source === 'fromServer') {
+      if (graphRF.graph?.uiProps?.source === 'fromServer') {
         try {
           await putWorkflow(rfToEwoks(graphRFCurrated));
           setOpenSnackbar({
@@ -61,7 +64,7 @@ export default function SaveToServer({ saveToServerF }) {
         } finally {
           setGettingFromServer(false);
         }
-      } else if (graphRF.graph.uiProps.source !== 'fromServer') {
+      } else if (graphRF.graph?.uiProps?.source !== 'fromServer') {
         setAction(FormAction.newGraphOrOverwrite);
         setOpenSaveDialog(true);
       } else {

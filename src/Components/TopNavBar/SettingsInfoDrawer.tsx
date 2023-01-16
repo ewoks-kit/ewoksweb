@@ -7,8 +7,15 @@ import EwoksUiInfo from '../Frontpage/EwoksUiInfo';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
+interface SettingsInfoDrawerProps {
+  openDrawers: boolean;
+  openSettings: boolean;
+  openInfo: boolean;
+  handleOpenDrawers: () => void;
+}
+
 // TODO: to decide if only top is needed and local state of the drawer
-export default function SettingsInfoDrawer(props) {
+export default function SettingsInfoDrawer(props: SettingsInfoDrawerProps) {
   const [drawerPositions, setDrawerPositions] = React.useState({
     top: false,
     left: false,

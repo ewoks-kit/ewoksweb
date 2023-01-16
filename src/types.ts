@@ -184,9 +184,9 @@ export interface State
     WorkingGraphSlice,
     ExecutingEventsSlice,
     RecentGraphsSlice {
-  initializedGraph?: GraphEwoks;
-  initializedRFGraph?: GraphRF;
-  initializedTask?: Task;
+  initializedGraph: GraphEwoks;
+  initializedRFGraph: GraphRF;
+  initializedTask: Task;
 }
 
 export interface Action {

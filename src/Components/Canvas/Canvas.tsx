@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 /* eslint-disable consistent-return */
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, MouseEvent } from 'react';
 import type {
   Node,
   Edge,
@@ -58,7 +58,7 @@ const nodeTypes = {
   class: DataNode,
 };
 
-function trimLabel(label) {
+function trimLabel(label: string) {
   if (label.length <= 20) {
     return label;
   }
@@ -71,8 +71,8 @@ function Canvas() {
 
   // TODO: resolve the types here for the local state
   const [rfInstance, setRfInstance] = useState(null);
-  const [nodes, setNodes] = useState([]);
-  const [edges, setEdges] = useState([]);
+  const [nodes, setNodes] = useState<EwoksRFNode[] | Node[]>([]);
+  const [edges, setEdges] = useState<EwoksRFLink[] | Edge[]>([]);
   const [prevGraphId, setPrevGraphId] = useState('');
 
   const reactFlowWrapper = useRef(null);
@@ -192,15 +192,15 @@ function Canvas() {
       const change = changes[0];
       if (change.type === 'remove') {
         const node = [...graphRF.nodes].find((el) => el.id === change.id);
-        onElementsRemove(node);
+        if (node) onElementsRemove(node);
       }
 
       // TODO: nodes are updated only on rf canvas and not on graphRF
       // if we update graphRF we have a loop so we update on setSelectedElement
       // where we set every other selected to false... Examine
 
-      setNodes((ns: Node[]) => {
-        return applyNodeChanges(changes, ns);
+      setNodes((ns) => {
+        return applyNodeChanges(changes, ns as Node[]);
       });
     },
     [onElementsRemove, graphRF.nodes]
@@ -211,9 +211,9 @@ function Canvas() {
       const change = changes[0];
       if ('id' in change && changes[0].type === 'remove') {
         const edgeToRemove = graphRF.links.find((el) => el.id === change.id);
-        onElementsRemove(edgeToRemove);
+        if (edgeToRemove) onElementsRemove(edgeToRemove);
       }
-      setEdges((es: Edge[]) => applyEdgeChanges(changes, es));
+      setEdges((es) => applyEdgeChanges(changes, es as Edge[]));
     },
     [onElementsRemove, graphRF.links]
   );
@@ -222,7 +222,10 @@ function Canvas() {
     setSelectedElement(graphRF.graph);
   };
 
-  const onNodeClick = (event, element?: Node) => {
+  const onNodeClick = (
+    _event: MouseEvent<Element, MouseEvent>,
+    element: Node
+  ) => {
     const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
 
     if (
@@ -309,9 +312,9 @@ function Canvas() {
           map_all_data: true,
           data_mapping: [],
         },
-        optional_input_names: tempTask.optional_input_names,
-        output_names: tempTask.output_names,
-        required_input_names: tempTask.required_input_names,
+        optional_input_names: tempTask?.optional_input_names,
+        output_names: tempTask?.output_names,
+        required_input_names: tempTask?.required_input_names,
         data: {
           label: trimLabel(task_identifier),
           type: 'internal',
