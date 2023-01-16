@@ -106,7 +106,7 @@ export function calcLabel(
   inOut: GraphNodes,
   allInOutputsIds: string[]
 ): string {
-  return `${inOut?.uiProps?.label || inOut.id}${
+  return `${inOut.uiProps?.label || inOut.id}${
     allInOutputsIds.includes(inOut.id) ? '_' : ':'
   } ${inOut.node} ${inOut.sub_node ? `  -> ${inOut.sub_node}` : ''}`;
 }
