@@ -141,19 +141,21 @@ export default function Sidebar() {
 
   const agreeCallback = async () => {
     setOpenAgreeDialog(false);
-    try {
-      await deleteWorkflow(selectedElement.id);
-      setOpenSnackbar({
-        open: true,
-        text: `Workflow ${selectedElement.id} successfully deleted!`,
-        severity: 'success',
-      });
-    } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: error.message,
-        severity: 'error',
-      });
+    if (selectedElement.id) {
+      try {
+        await deleteWorkflow(selectedElement.id);
+        setOpenSnackbar({
+          open: true,
+          text: `Workflow ${selectedElement.id} successfully deleted!`,
+          severity: 'success',
+        });
+      } catch (error) {
+        setOpenSnackbar({
+          open: true,
+          text: error.message,
+          severity: 'error',
+        });
+      }
     }
 
     setGraphRF(initializedRFGraph);
@@ -173,8 +175,8 @@ export default function Sidebar() {
         id: calcNewId(selectedElement.id, graphRF.nodes),
         selected: false,
         position: {
-          x: selectedElement.position.x + 100,
-          y: selectedElement.position.y + 100,
+          x: selectedElement.position?.x || 0 + 100,
+          y: selectedElement.position?.y || 0 + 100,
         },
       };
       const newGraph = {

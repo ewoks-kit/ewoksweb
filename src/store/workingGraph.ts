@@ -41,8 +41,7 @@ const workingGraph = (
         get().setOpenSnackbar({
           open: true,
           // TODO: extend the data: T type to have a message?
-          text:
-            error.response?.data?.message || commonStrings.retrieveTasksError,
+          text: err.response?.data?.message || commonStrings.retrieveTasksError,
           severity: 'error',
         });
       }

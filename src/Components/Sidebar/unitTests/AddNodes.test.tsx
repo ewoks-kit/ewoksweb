@@ -104,7 +104,7 @@ describe('In the AddNodes test:', () => {
       })
     );
     const { tasks } = useStore.getState();
-    const taskName = tasks[0].task_identifier;
+    const taskName: string = tasks[0].task_identifier || '';
 
     const ewoksCoreCategory = screen.getByRole('button', {
       name: /ewokscore/u,

@@ -26,7 +26,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
         data: {
           ...element.data,
           data_mapping: [
-            ...element.data.data_mapping,
+            ...(element.data?.data_mapping || []),
             { id: '', name: '', value: '' },
           ],
         },
@@ -35,11 +35,11 @@ export default function DataMappingComponent(element: EwoksRFLink) {
     );
   }
 
-  const dataMappingValuesChanged = (table) => {
+  const dataMappingValuesChanged = (table: DataMapping[]) => {
     const dmap: DataMapping[] = table.map((row) => {
       return {
         source_output: row.name,
-        target_input: row.value,
+        target_input: row.value as string,
       };
     });
     setSelectedElement(

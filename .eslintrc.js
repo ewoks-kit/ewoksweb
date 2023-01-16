@@ -15,6 +15,7 @@ const dependencies = getDependencies();
 module.exports = createConfig({
   enableJavaScriptSpecificRulesInTypeScriptProject: true,
   rules: {
+    'object-curly-newline': 'multi-line',
     'import/order': 'off',
 
     'dot-notation': 'off',
