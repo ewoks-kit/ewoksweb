@@ -8,12 +8,17 @@ import FormDialog from '../General/FormDialog';
 import curateGraph from './utils/curateGraph';
 import { getWorkflowsIds, putWorkflow } from '../../utils/api';
 import { FormAction } from '../../types';
+import type { AxiosResponse } from 'axios';
 
-function workflowExists(id, workflowsIds) {
+function workflowExists(
+  id: string,
+  workflowsIds: AxiosResponse<{ identifiers: string[] }, any>
+) {
   return workflowsIds.data.identifiers.includes(id);
 }
 
 // DOC: Save to server button with its spinner
+// TODO: type to react ref
 export default function SaveToServer({ saveToServerF }) {
   const setGettingFromServer = useStore((st) => st.setGettingFromServer);
   const setCanvasGraphChanged = useStore((st) => st.setCanvasGraphChanged);
@@ -43,7 +48,7 @@ export default function SaveToServer({ saveToServerF }) {
       setAction(FormAction.newGraph);
       setOpenSaveDialog(true);
     } else if (workingGraph.graph.id === graphRF.graph.id) {
-      if (graphRF.graph.uiProps.source === 'fromServer') {
+      if (graphRF.graph.uiProps?.source === 'fromServer') {
         try {
           await putWorkflow(rfToEwoks(graphRFCurrated));
           setOpenSnackbar({
@@ -53,15 +58,19 @@ export default function SaveToServer({ saveToServerF }) {
           });
           setCanvasGraphChanged(false);
         } catch (error) {
+          // TODO: TBD should we break it down according to the error we are expecting?
+          let message;
+          if (error instanceof Error) message = error.response?.data?.message;
+          else message = String(error);
           setOpenSnackbar({
             open: true,
-            text: error.response?.data?.message || commonStrings.savingError,
+            text: message || commonStrings.savingError,
             severity: 'error',
           });
         } finally {
           setGettingFromServer(false);
         }
-      } else if (graphRF.graph.uiProps.source !== 'fromServer') {
+      } else if (graphRF.graph.uiProps?.source !== 'fromServer') {
         setAction(FormAction.newGraphOrOverwrite);
         setOpenSaveDialog(true);
       } else {

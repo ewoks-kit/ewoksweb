@@ -1,4 +1,10 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  Matcher,
+  render,
+  screen,
+} from '@testing-library/react';
 import AddNodes from '../AddNodes';
 import useStore from 'store/useStore';
 
@@ -112,7 +118,7 @@ describe('In the AddNodes test:', () => {
       })
     );
 
-    const ewoksCoreTask = screen.getByTitle(taskName);
+    const ewoksCoreTask = screen.getByTitle(taskName as Matcher);
     expect(ewoksCoreTask).toBeVisible();
 
     fireEvent(

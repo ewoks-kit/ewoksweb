@@ -1,7 +1,7 @@
 import { Box, FormControl, Grid, Paper, styled } from '@material-ui/core';
 import WorkflowDropdown from '../General/dropdown/WorkflowDropdown';
 import ReactJson from 'react-json-view';
-import React from 'react';
+import { useState } from 'react';
 import { getWorkflow } from 'utils/api';
 import GetFromServerButtons from '../General/GetFromServerButtons';
 import type { GraphEwoks, WorkflowDescription } from 'types';
@@ -16,10 +16,10 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function ManageWorkflows() {
   const initializedGraph = useStore((state) => state.initializedGraph);
-  const [workflowValue, setWorkflowValue] = React.useState<GraphEwoks>(
+  const [workflowValue, setWorkflowValue] = useState<GraphEwoks>(
     initializedGraph
   );
-  const [categoryValue, setCategoryValue] = React.useState('');
+  const [categoryValue, setCategoryValue] = useState('');
 
   async function setInputWorkflowValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails) {

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { SyntheticEvent, useCallback, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Box, Grid, Paper, styled, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -84,7 +84,7 @@ export default function ManageIcons() {
     }
   }
 
-  async function uploadFile(event) {
+  async function uploadFile(event: SyntheticEvent<Element, Event>) {
     event.preventDefault();
 
     try {
@@ -112,7 +112,7 @@ export default function ManageIcons() {
   function inputNew(ne: ChangeEvent<HTMLInputElement>) {
     const { files } = ne.target;
 
-    if (files[0].size > 10_000) {
+    if (files && files[0].size > 10_000) {
       setOpenSnackbar({
         open: true,
         text: 'Files more than 10Kb are not acceptable for icons',
@@ -123,18 +123,22 @@ export default function ManageIcons() {
 
     const fileReader = new FileReader();
 
-    fileReader.readAsDataURL(files[0]);
+    if (files) {
+      fileReader.readAsDataURL(files[0]);
 
-    fileReader.addEventListener('load', (event) => {
-      setFileToBeSent(event.target.result);
-      setFileNameToBeSent(files[0].name);
-    });
+      fileReader.addEventListener('load', (event) => {
+        if (event.target?.result) {
+          setFileToBeSent(event.target.result);
+          setFileNameToBeSent(files[0].name);
+        }
+      });
 
-    setOpenSnackbar({
-      open: true,
-      text: 'File ready to be uploaded as an icon',
-      severity: 'success',
-    });
+      setOpenSnackbar({
+        open: true,
+        text: 'File ready to be uploaded as an icon',
+        severity: 'success',
+      });
+    }
   }
 
   async function agreeDeleteIcon() {
@@ -228,7 +232,7 @@ export default function ManageIcons() {
         <Grid item xs={12} sm={12} md={4} lg={3}>
           <Item>
             <form
-              onSubmit={(e) => {
+              onSubmit={(e: React.SyntheticEvent) => {
                 uploadFile(e);
               }}
             >

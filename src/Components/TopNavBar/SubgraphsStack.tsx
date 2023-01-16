@@ -18,12 +18,13 @@ export default function SubgraphsStack() {
     return state.subgraphsStack;
   });
   const setSelectedElement = useStore((state) => state.setSelectedElement);
-
+  // TODO: event type TBD
   const goToGraph = (e) => {
     e.preventDefault();
-    setSubgraphsStack({ id: e.target?.id, label: e.target?.text });
+    setSubgraphsStack({ id: e.target.id, label: e.target.text });
 
     const subgraph = recentGraphs.find((gr) => gr.graph.id === e.target.id);
+
     if (subgraph) {
       setGraphRF(subgraph);
       setSelectedElement({
@@ -54,7 +55,7 @@ export default function SubgraphsStack() {
                 className={
                   index === subgraphsStack.length - 1 ? classes.isDisabled : ''
                 }
-                onClick={() => goToGraph}
+                onClick={goToGraph}
                 data-cy={gr.id}
               >
                 {gr.label}
