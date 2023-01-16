@@ -44,12 +44,8 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
         <DialogContentText>{content}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleDisagree} data-cy="noButtonConfirmDialod">
-          No
-        </Button>
-        <Button onClick={handleAgree} data-cy="yesButtonConfirmDialog">
-          Yes
-        </Button>
+        <Button onClick={handleDisagree}>No</Button>
+        <Button onClick={handleAgree}>Yes</Button>
       </DialogActions>
     </Dialog>
   );

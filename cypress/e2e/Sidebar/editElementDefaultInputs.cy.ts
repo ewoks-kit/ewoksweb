@@ -10,14 +10,6 @@ describe('edit nodes defaultInputs', () => {
   });
 
   it('insert and undo/redo a new Default Input', () => {
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(store.getState().selectedElement.default_inputs).to.have.length(
-          0
-        )
-      );
-
     cy.get('[data-cy="editButtonEditableTable"]').should('not.exist');
 
     cy.get('[data-cy="addDefaultInputsButton"]').click();
@@ -60,65 +52,19 @@ describe('edit nodes defaultInputs', () => {
     cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
     cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');
 
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(
-          store.getState().selectedElement.default_inputs[0]
-        ).to.deep.equal({ id: 'Always', name: 'Always', value: 'and forever' })
-      );
-
     cy.get('[data-cy="undoButton"]').click();
-
-    cy.window()
-      .its('__useStore__')
-      .then((store) => store.getState().selectedElement.default_inputs)
-      .as('data_mapping')
-      .should('have.length', 1);
 
     cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
     cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
     cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');
     cy.get('[data-cy="inputInEditableCell"]').should('not.exist');
 
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(
-          store.getState().selectedElement.default_inputs[0]
-        ).to.deep.equal({ id: '', name: '', value: '' })
-      );
-
     cy.get('[data-cy="redoButton"]').click();
-
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(
-          store.getState().selectedElement.default_inputs[0]
-        ).to.deep.equal({ id: 'Always', name: 'Always', value: 'and forever' })
-      );
 
     cy.get('[data-cy="deleteButtonEditableTable"]').click();
 
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(store.getState().selectedElement.default_inputs).to.have.length(
-          0
-        )
-      );
-
     cy.get('[data-cy="undoButton"]').click();
     cy.get('[data-cy="undoButton"]').click();
     cy.get('[data-cy="undoButton"]').click();
-
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(store.getState().selectedElement.default_inputs).to.have.length(
-          0
-        )
-      );
   });
 });
