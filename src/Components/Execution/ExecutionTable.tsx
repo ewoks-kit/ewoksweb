@@ -502,11 +502,7 @@ export default function EnhancedTable() {
                             )}
                           </IconButton>
                         </TableCell>
-                        <TableCell
-                          // component="th"
-                          id={labelId}
-                          align="left"
-                        >
+                        <TableCell id={labelId} align="left">
                           {row[1]?.workflow_id}
                         </TableCell>
                         <TableCell align="right">{row[0].job_id}</TableCell>

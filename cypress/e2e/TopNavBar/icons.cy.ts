@@ -1,19 +1,6 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-// / <reference types="cypress" />
-
-describe('draw links', () => {
+describe('Icons:', () => {
   before(() => {
-    cy.visit('http://localhost:3000/#/edit-workflows');
-
-    cy.window().should('have.property', '__useStore__');
-  });
-
-  it('on load it fetches icons from server', () => {
-    cy.waitForStableDOM();
-    cy.window()
-      .its('__useStore__')
-      .then((store) => store.getState().allIcons)
-      .should('not.have.length', 0);
+    cy.loadAppWithoutGraph();
   });
 
   it('icons appear on tasks correctly', () => {
@@ -39,36 +26,39 @@ describe('draw links', () => {
     cy.contains('Categories');
 
     cy.get('[data-cy="iconsTab"]').click();
-    cy.get('[data-cy="browseInput"]').selectFile('cypress/fixtures/down.svg');
+    cy.findByLabelText('Select an Icon to Upload').selectFile(
+      'cypress/fixtures/down.svg'
+    );
     cy.contains('File ready to be uploaded as an icon');
 
-    cy.get('[data-cy="iconUploadButton"]').click();
+    cy.findByRole('button', { name: 'Upload' }).click();
     cy.contains("Icon 'down.svg' already exists");
 
-    // cy.get('img').filter('have.attr', 'alt', 'down.svg').click();
     cy.get('[alt="down.svg"]').click();
-    cy.get('[data-cy="iconDeleteButton"]').click();
+    cy.findByRole('button', { name: 'Delete' }).click();
     cy.contains('Delete "down.svg" icon?').should('be.visible');
     cy.contains('Icon can be deleted since it is not used in any Task!').should(
       'be.visible'
     );
 
-    cy.get('[data-cy="noButtonConfirmDialod"]').click();
+    cy.findByRole('button', { name: 'No' }).click();
     cy.get('[alt="down.svg"]').should('be.visible');
 
-    cy.get('[data-cy="iconDeleteButton"]').click();
+    cy.findByRole('button', { name: 'Delete' }).click();
     cy.contains('Delete "down.svg" icon?').should('be.visible');
     cy.contains('Icon can be deleted since it is not used in any Task!').should(
       'be.visible'
     );
-    cy.get('[data-cy="yesButtonConfirmDialog"]').click();
+    cy.findByRole('button', { name: 'Yes' }).click();
     cy.get('[alt="down.svg"]').should('not.be.visible');
 
     cy.get('[data-cy="iconsTab"]').click();
-    cy.get('[data-cy="browseInput"]').selectFile('cypress/fixtures/down.svg');
+    cy.findByLabelText('Select an Icon to Upload').selectFile(
+      'cypress/fixtures/down.svg'
+    );
     cy.contains('File ready to be uploaded as an icon');
 
-    cy.get('[data-cy="iconUploadButton"]').click();
+    cy.findByRole('button', { name: 'Upload' }).click();
     cy.get('[alt="down.svg"]').should('be.visible');
   });
 });

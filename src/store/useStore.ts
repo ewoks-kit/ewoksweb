@@ -61,10 +61,4 @@ const useStore = create<State>((set, get) => ({
   initializedRFGraph,
 }));
 
-// @ts-expect-error
-if (window.Cypress) {
-  // @ts-expect-error
-  window.__useStore__ = useStore;
-}
-
 export default useStore;
