@@ -7,7 +7,6 @@ import type {
 } from '../types';
 import type { GetState, SetState } from 'zustand';
 import { isLink, isNode } from '../utils/typeGuards';
-import { initializedGraph } from '../utils/InitializedEntities';
 
 export interface SelectedElementSlice {
   selectedElement: EwoksRFNode | EwoksRFLink | GraphDetails;
@@ -22,7 +21,7 @@ const selectedElement = (
   set: SetState<State>,
   get: GetState<State>
 ): SelectedElementSlice => ({
-  selectedElement: initializedGraph.graph,
+  selectedElement: {} as GraphDetails,
 
   setSelectedElement: (element, from) => {
     const workingGraphId = get().workingGraph.graph.id;
