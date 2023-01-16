@@ -20,9 +20,8 @@ describe('clicks on canvas and elements', () => {
       .should('include.class', 'selected');
 
     cy.findByRole('checkbox', { name: 'Advanced' }).should('not.be.checked');
-    cy.findByRole('checkbox', { name: 'Advanced' })
-      .should('exist')
-      .should('be.visible');
+    // Cannot test for visibility since MaterialUI renders an invisible checkbox atop of a SVG representing the checkbox
+    cy.findByRole('checkbox', { name: 'Advanced' }).should('exist');
     cy.contains('Default Inputs').should('exist').should('be.visible');
 
     cy.contains('Inputs-complete').should('not.exist');
