@@ -246,7 +246,6 @@ export default function ManageIcons() {
                 }}
                 size="small"
                 disabled={selectedIcon === ''}
-                data-cy="iconDeleteButton"
               >
                 Delete
               </Button>
@@ -257,24 +256,23 @@ export default function ManageIcons() {
                 color="primary"
                 size="small"
                 disabled={fileNameToBeSent === ''}
-                data-cy="iconUploadButton"
               >
                 Upload
               </Button>
               <hr />
 
               <div>
-                <label htmlFor="upload-icon">
+                <label htmlFor="upload-icon" id="upload-icon">
                   Select an Icon to Upload
                   <div>
                     <input
                       type="file"
                       id="upload-icon"
+                      aria-labelledby="upload-icon"
                       name="upload-icon"
                       accept="image/*"
                       onChange={inputNew}
                       aria-label="Select Icon"
-                      data-cy="browseInput"
                     />
                   </div>
                 </label>

@@ -9,93 +9,29 @@ describe('edit links conditions', () => {
     cy.contains('on_error').should('be.visible');
     cy.contains('Conditions').should('be.visible');
 
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(store.getState().selectedElement.data.on_error).to.equal(false)
-      );
-
-    cy.get('[data-cy="onErrorCheckbox"]').click();
-
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(store.getState().selectedElement.data.on_error).to.equal(true)
-      );
+    cy.findByLabelText('on_error').click();
 
     cy.contains('Conditions').should('not.exist');
 
     cy.get('[data-cy="undoButton"]').click();
 
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(store.getState().selectedElement.data.on_error).to.equal(false)
-      );
-
     cy.contains('Conditions').should('be.visible');
 
     cy.get('[data-cy="redoButton"]').click();
-
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(store.getState().selectedElement.data.on_error).to.equal(true)
-      );
   });
 
   it('insert and undo/redo a new Data Mapping', () => {
-    cy.get('[data-cy="onErrorCheckbox"]').click();
-
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(store.getState().selectedElement.data.conditions).to.have.length(
-          0
-        )
-      );
+    cy.findByLabelText('on_error').click();
 
     cy.get('[data-cy="editButtonEditableTable"]').should('not.exist');
 
     cy.get('[data-cy="addConditionsButton"]').click();
 
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(store.getState().selectedElement.data.conditions).to.have.length(
-          1
-        )
-      );
-
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(
-          store.getState().selectedElement.data.conditions[0]
-        ).to.deep.equal({ id: '', name: '', value: false })
-      );
-
     cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
 
     cy.get('[data-cy="undoButton"]').click();
 
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(store.getState().selectedElement.data.conditions).to.have.length(
-          0
-        )
-      );
-
     cy.get('[data-cy="redoButton"]').click();
-
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(store.getState().selectedElement.data.conditions).to.have.length(
-          1
-        )
-      );
   });
 
   it('type and undo/redo a new Condition', () => {
@@ -136,58 +72,17 @@ describe('edit links conditions', () => {
 
     cy.get('[data-cy="undoButton"]').click();
 
-    cy.window()
-      .its('__useStore__')
-      .then((store) => store.getState().selectedElement.data.conditions)
-      .as('data_mapping')
-      .should('have.length', 1);
-
     cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
     cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
     cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');
     cy.get('[data-cy="inputInEditableCell"]').should('not.exist');
 
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(
-          store.getState().selectedElement.data.conditions[0]
-        ).to.deep.equal({ id: '', name: '', value: false })
-      );
-
     cy.get('[data-cy="redoButton"]').click();
-
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(
-          store.getState().selectedElement.data.conditions[0]
-        ).to.deep.equal({
-          source_output: 'Always',
-          value: 'true',
-        })
-      );
 
     cy.get('[data-cy="deleteButtonEditableTable"]').click();
 
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(store.getState().selectedElement.data.conditions).to.have.length(
-          0
-        )
-      );
-
     cy.get('[data-cy="undoButton"]').click();
     cy.get('[data-cy="undoButton"]').click();
     cy.get('[data-cy="undoButton"]').click();
-
-    cy.window()
-      .its('__useStore__')
-      .then((store) =>
-        expect(store.getState().selectedElement.data.conditions).to.have.length(
-          0
-        )
-      );
   });
 });

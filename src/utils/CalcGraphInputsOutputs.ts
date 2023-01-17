@@ -76,10 +76,10 @@ function calcInOutNodes(
     const link_index =
       inputOrOutput === 'graphOutput'
         ? graph_links.findIndex(
-            (lin) => lin.target === nod.id && lin.source === nodConnected.id
+            (link) => link.target === nod.id && link.source === nodConnected.id
           )
         : graph_links.findIndex(
-            (lin) => lin.source === nod.id && lin.target === nodConnected.id
+            (link) => link.source === nod.id && link.target === nodConnected.id
           );
 
     if (nodConnected.task_type === 'graph') {

@@ -50,7 +50,7 @@ function multilineText({
         height={titleHeight}
         x={edgeCenterX - titleWidth / 2}
         y={edgeCenterY - titleWidth / 8}
-        style={{ ...style, backgroundColor: 'blue' }}
+        style={{ ...style }}
       >
         <div
           style={{

@@ -1,4 +1,9 @@
-import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../types';
+import type {
+  EwoksRFLink,
+  EwoksRFNode,
+  EwoksServerResponseError,
+  GraphDetails,
+} from '../types';
 
 export function isNode(
   entity: EwoksRFNode | EwoksRFLink | GraphDetails
@@ -16,4 +21,10 @@ export function isGraphDetails(
   entity: EwoksRFNode | EwoksRFLink | GraphDetails
 ): entity is GraphDetails {
   return 'input_nodes' in entity;
+}
+
+export function isEwoksServerResponseError(
+  error
+): error is EwoksServerResponseError {
+  return 'message' in error.response?.data;
 }

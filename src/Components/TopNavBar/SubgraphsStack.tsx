@@ -63,7 +63,7 @@ export default function SubgraphsStack() {
             </span>
           ))}
       </Breadcrumbs>
-      {subgraphsStack[0] && !subgraphsStack[1] && (
+      {subgraphsStack.length === 1 && (
         <span data-cy={subgraphsStack[subgraphsStack.length - 1].label}>
           {subgraphsStack[subgraphsStack.length - 1].label}
         </span>

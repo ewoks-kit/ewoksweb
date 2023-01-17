@@ -29,7 +29,7 @@ const undoIndex = (
           (nod) => nod.id === selEl.id
         );
         if (selElNode) {
-          get().setSelectedElement(selEl);
+          get().setSelectedElement(selElNode);
         }
       }
 
@@ -38,7 +38,7 @@ const undoIndex = (
           (lin) => lin.id === selEl.id
         );
         if (selElLink) {
-          get().setSelectedElement(selEl);
+          get().setSelectedElement(selElLink);
         }
       }
 

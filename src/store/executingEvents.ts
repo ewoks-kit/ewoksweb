@@ -106,6 +106,7 @@ const executingEvents = (
       let execNodes: EwoksRFNode[] = [];
 
       // calculate the executing ones and add the executing param.
+      // TODO: test later when execution accecible for using a Set
       // Not a set because maybe it needs a complex id
       /* eslint-disable unicorn/prefer-set-has */
       const executingIds: (string | undefined)[] = newExecutingEvents.map(
@@ -138,20 +139,20 @@ const executingEvents = (
               (nod.id === execEvent.node_id && nod.data.type === execEvent.type)
             )
         ),
-        ({
+        {
           data: {
             label: `${tempLabel},${(execEvent.id as unknown) as string}`,
             event: execEvent,
           },
-          id: execEvent.time,
+          id: execEvent.time || '',
           task_type: 'executionSteps',
-          task_identifier: execEvent.id,
+          task_identifier: execEvent.id?.toString() || '',
           type: 'executionSteps',
           // calculate position based on node_id -> node position + start or stop
           position: tempPos,
-        } as unknown) as EwoksRFNode, // TODO: clear this casting when deal with execution
+        }, // TODO: clear this casting when deal with execution
       ];
-      console.log(newExecutingEvents, nodess);
+      // console.log(newExecutingEvents, nodess);
       if (get().inExecutionMode) {
         set((state) => ({
           ...state,

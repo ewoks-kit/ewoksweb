@@ -247,7 +247,6 @@ export default function Sidebar() {
               deleteElement();
             }}
             size="small"
-            data-cy="sidebarDelete"
           >
             Delete
           </Button>

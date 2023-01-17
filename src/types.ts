@@ -575,3 +575,7 @@ export interface calcInOutForSubgraphOutput {
   type: string;
   positionY?: number;
 }
+
+export interface EwoksServerResponseError {
+  response: { data: { message: string } };
+}
