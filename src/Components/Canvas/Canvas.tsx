@@ -71,8 +71,8 @@ function Canvas() {
 
   // TODO: resolve the types here for the local state
   const [rfInstance, setRfInstance] = useState(null);
-  const [nodes, setNodes] = useState<EwoksRFNode[] | Node[]>([]);
-  const [edges, setEdges] = useState<EwoksRFLink[] | Edge[]>([]);
+  const [nodes, setNodes] = useState<EwoksRFNode[]>([]);
+  const [edges, setEdges] = useState<EwoksRFLink[]>([]);
   const [prevGraphId, setPrevGraphId] = useState('');
 
   const reactFlowWrapper = useRef(null);
@@ -368,7 +368,8 @@ function Canvas() {
           ...edges
             .filter((el) => el.source)
             .filter((lin) => lin.id !== oldEdge.id),
-          link,
+          // TODO: leave the type like that for now until I examine the RFModels with EwoksRFModels
+          (link as unknown) as EwoksRFLink,
         ],
       };
 
