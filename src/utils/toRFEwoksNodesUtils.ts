@@ -125,19 +125,17 @@ export function addNodeProperties(
       (subGr) => subGr.graph.id === task_identifier
     );
 
-    if (subgraphNode) {
-      const [inputsSub, outputsSub] = calcInOutForSubgraph(subgraphNode);
+    const [inputsSub, outputsSub] = calcInOutForSubgraph(subgraphNode);
 
-      tempNode = {
-        ...tempNode,
-        data: {
-          ...tempNode.data,
-          exists: subgraphNode && !!subgraphNode.graph.id,
-          inputs: inputsSub,
-          outputs: outputsSub,
-        },
-      };
-    }
+    tempNode = {
+      ...tempNode,
+      data: {
+        ...tempNode.data,
+        exists: subgraphNode && !!subgraphNode.graph.id,
+        inputs: inputsSub,
+        outputs: outputsSub,
+      },
+    };
   } else {
     const tempTask = calcTask(tasks, task_identifier);
 
