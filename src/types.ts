@@ -24,6 +24,7 @@ import type { ExecutingEventsSlice } from './store/executingEvents';
 import type { AllIconsSlice } from './store/allIcons';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
+import type { AxiosResponse } from 'axios';
 
 export enum FormAction {
   cloneGraph = 'cloneGraph',
@@ -576,6 +577,6 @@ export interface calcInOutForSubgraphOutput {
   positionY?: number;
 }
 
-export interface EwoksServerResponseError {
+export type EwoksServerErrorResponse = AxiosResponse<{
   response: { data: { message: string } };
-}
+}>;

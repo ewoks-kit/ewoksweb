@@ -49,7 +49,7 @@ export default function GraphDetails(graph: GraphDetailsType) {
       />
       <TextButtonSave
         label="Category"
-        value={graph.category || 'No graph selected'}
+        value={graph.category || ''}
         valueSaved={saveCategory}
       />
     </>

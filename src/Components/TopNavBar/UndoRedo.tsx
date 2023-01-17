@@ -1,4 +1,3 @@
-import React from 'react';
 import RedoIcon from '@material-ui/icons/Redo';
 import UndoIcon from '@material-ui/icons/Undo';
 
@@ -9,33 +8,22 @@ import useStore from '../../store/useStore';
 
 const useStyles = DashboardStyle;
 
-// TODO: give a type of function to ref?
-export default function UndoRedo({ undoF, redoF }) {
+interface undoRedoProps {
+  undo: () => void;
+  redo: () => void;
+}
+
+export default function UndoRedo({ undo, redo }: undoRedoProps) {
   const classes = useStyles();
 
   const inExecutionMode = useStore((state) => state.inExecutionMode);
-  const undoIndex = useStore((state) => state.undoIndex);
-  const setUndoIndex = useStore((state) => state.setUndoIndex);
-
-  function undo() {
-    setUndoIndex(undoIndex - 1);
-  }
-
-  function redo() {
-    setUndoIndex(undoIndex + 1);
-  }
-
-  React.useEffect(() => {
-    undoF.current = undo;
-    redoF.current = redo;
-  });
 
   return (
     <>
       <Tooltip title={tooltipText('Undo')} enterDelay={800} arrow>
         <IconButton
           color="inherit"
-          onClick={undo}
+          onClick={() => undo()}
           disabled={inExecutionMode}
           data-cy="undoButton"
         >

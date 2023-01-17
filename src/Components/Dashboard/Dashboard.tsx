@@ -33,15 +33,23 @@ import MenuPopover from '../General/MenuPopover';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import { FormAction } from '../../types';
+import { getWorkflowsIds, putWorkflow } from '../../utils/api';
+import { rfToEwoks } from '../../utils';
+import commonStrings from '../../commonStrings.json';
+import type { AxiosResponse } from 'axios';
+import curateGraph from '../TopNavBar/utils/curateGraph';
 
 const useStyles = DashboardStyle;
 
+function workflowExists(
+  id: string,
+  workflowsIds: AxiosResponse<{ identifiers: string[] }, any>
+) {
+  return workflowsIds.data.identifiers.includes(id);
+}
+
 export default function Dashboard() {
   const classes = useStyles();
-
-  const undoF = React.useRef(null);
-  const redoF = React.useRef(null);
-  const saveToServerF = React.useRef(null);
 
   const [openDrawers, setOpenDrawers] = useState(true);
   const [openSettings, setOpenSettings] = useState(false);
@@ -58,6 +66,13 @@ export default function Dashboard() {
   const setCanvasGraphChanged = useStore(
     (state) => state.setCanvasGraphChanged
   );
+  const setGettingFromServer = useStore((st) => st.setGettingFromServer);
+  const workingGraph = useStore((state) => state.workingGraph);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+
+  const [action, setAction] = useState<FormAction>(FormAction.newGraph);
+
+  const setUndoIndex = useStore((state) => state.setUndoIndex);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const undoIndex = useStore((state) => state.undoIndex);
   const initializedGraph = useStore((state) => state.initializedGraph);
@@ -129,19 +144,16 @@ export default function Dashboard() {
     if (charCode === 's') {
       event.preventDefault();
       event.stopPropagation();
-      saveToServerF.current();
       return;
     }
     if (charCode === 'z') {
       event.preventDefault();
       event.stopPropagation();
-      undoF.current();
       return;
     }
     if (charCode === 'y') {
       event.preventDefault();
       event.stopPropagation();
-      redoF.current();
       return;
     }
     if (event.shiftKey && charCode === 'n') {
@@ -162,6 +174,74 @@ export default function Dashboard() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  function undo() {
+    setUndoIndex(undoIndex - 1);
+  }
+
+  function redo() {
+    setUndoIndex(undoIndex + 1);
+  }
+
+  async function saveToServer() {
+    // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
+    // and Nodes DataMapping before attempting to save
+    const graphRFCurrated = curateGraph(graphRF);
+    // DOC: search if id exists.
+    // 1. If notExists open dialog for NEW NAME.
+    // 2. If exists and you took it from me UPDATE without asking
+    // 3. If exists and you took it from elseware open dialog for new name OR OVERWRITE
+    const workflowsIds = await getWorkflowsIds();
+    setGettingFromServer(true);
+    const exists = workflowExists(graphRF.graph.id, workflowsIds);
+
+    if (!exists) {
+      setAction(FormAction.newGraph);
+      setOpenSaveDialog(true);
+    } else if (workingGraph.graph.id === graphRF.graph.id) {
+      if (graphRF.graph.uiProps?.source === 'fromServer') {
+        try {
+          await putWorkflow(rfToEwoks(graphRFCurrated));
+          setOpenSnackbar({
+            open: true,
+            text: 'Graph saved successfully!',
+            severity: 'success',
+          });
+          setCanvasGraphChanged(false);
+        } catch (error) {
+          // TODO: TBD should we break it down according to the error we are expecting?
+          let message;
+          if (error instanceof Error) message = error.response?.data?.message;
+          else message = String(error);
+          setOpenSnackbar({
+            open: true,
+            text: message || commonStrings.savingError,
+            severity: 'error',
+          });
+        } finally {
+          setGettingFromServer(false);
+        }
+      } else if (graphRF.graph.uiProps?.source !== 'fromServer') {
+        setAction(FormAction.newGraphOrOverwrite);
+        setOpenSaveDialog(true);
+      } else {
+        setGettingFromServer(false);
+        setOpenSnackbar({
+          open: true,
+          text: 'No graph exists to save!',
+          severity: 'warning',
+        });
+      }
+    } else {
+      setGettingFromServer(false);
+      setOpenSnackbar({
+        open: true,
+        text:
+          'Cannot save any changes to subgraphs! Open it as the main graph to make changes.',
+        severity: 'warning',
+      });
+    }
+  }
 
   return (
     <div
@@ -234,9 +314,14 @@ export default function Dashboard() {
             </IconButton>
           </Tooltip>
           <div className={classes.verticalRule} />
-          <UndoRedo undoF={undoF} redoF={redoF} />
+          <UndoRedo undo={undo} redo={redo} />
           <div className={classes.verticalRule} />
-          <SaveToServer saveToServerF={saveToServerF} />
+          <SaveToServer
+            saveToServer={saveToServer}
+            action={action}
+            open={openSaveDialog}
+            setOpenSaveDialog={setOpenSaveDialog}
+          />
           <GetFromServer />
           {/* TODO: commented for onlyEditRelease */}
           {/* <ExecuteWorkflow /> */}

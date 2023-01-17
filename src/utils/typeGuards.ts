@@ -1,7 +1,7 @@
 import type {
   EwoksRFLink,
   EwoksRFNode,
-  EwoksServerResponseError,
+  EwoksServerErrorResponse,
   GraphDetails,
 } from '../types';
 
@@ -24,7 +24,7 @@ export function isGraphDetails(
 }
 
 export function isEwoksServerResponseError(
-  error
-): error is EwoksServerResponseError {
+  error: any
+): error is EwoksServerErrorResponse {
   return 'message' in error.response?.data;
 }

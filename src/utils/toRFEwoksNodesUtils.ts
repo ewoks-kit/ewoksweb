@@ -59,7 +59,7 @@ interface calcInOutForSubgraphOutput {
 }
 
 export function calcInOutForSubgraph(
-  subgraphNode: GraphEwoks
+  subgraphNode: GraphEwoks | undefined
 ): calcInOutForSubgraphOutput[][] {
   let inputsSub: calcInOutForSubgraphOutput[] = [];
   let outputsSub: calcInOutForSubgraphOutput[] = [];
