@@ -11,6 +11,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import commonStrings from 'commonStrings.json';
 import type { Icon } from '../../types';
 import getIconsFromServer from '../../utils/getIconsFromServer';
+import { textForError } from '../../utils';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -78,7 +79,7 @@ export default function ManageIcons() {
       // TODO: general error handling for all cases like workflows?
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || commonStrings.retrieveTasksError,
+        text: textForError(error, commonStrings.retrieveTasksError),
         severity: 'error',
       });
     }
@@ -101,9 +102,10 @@ export default function ManageIcons() {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text:
-          error.response?.data?.message ||
-          'Error in uploading the Icon. Please check connectivity with the server!',
+        text: textForError(
+          error,
+          'Error in uploading the Icon. Please check connectivity with the server!'
+        ),
         severity: 'error',
       });
     }
@@ -156,7 +158,7 @@ export default function ManageIcons() {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error?.response?.data || 'Error in deleting Icon',
+        text: textForError(error, 'Error in deleting Icon'),
         severity: 'error',
       });
     }
@@ -176,7 +178,7 @@ export default function ManageIcons() {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || commonStrings.retrieveIconsError,
+        text: textForError(error, commonStrings.retrieveIconsError),
         severity: 'error',
       });
     }

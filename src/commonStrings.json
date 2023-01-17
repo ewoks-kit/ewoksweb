@@ -2,5 +2,6 @@
   "savingError": "Error in saving. Please check connectivity with the server!",
   "retrieveTasksError": "Error in retrieving Tasks. Please check connectivity with the server!",
   "retrieveIconsError": "Error in retrieving Icons. Please check connectivity with the server!",
-  "retrieveWorkflowsError": "Error in retrieving Workflows. Please check connectivity with the server!"
+  "retrieveWorkflowsError": "Error in retrieving Workflows. Please check connectivity with the server!",
+  "deletingError": "Error in saving. Please check connectivity with the server!"
 }

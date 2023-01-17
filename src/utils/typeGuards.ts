@@ -1,12 +1,7 @@
-import type { AxiosResponse } from 'axios';
+import type { AxiosError } from 'axios';
 import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../types';
 
-interface EwoksServerResponseError {
-  response: { data: { message: string } };
-}
-
-// TODO: keep this or the above
-type EwoksServerErrorResponse = AxiosResponse<{
+type EwoksServerErrorResponse = AxiosError<{
   response: { data: { message: string } };
 }>;
 

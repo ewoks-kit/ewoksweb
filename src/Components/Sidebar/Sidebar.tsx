@@ -31,6 +31,7 @@ import SidebarTooltip from './SidebarTooltip';
 import getIconsFromServer from '../../utils/getIconsFromServer';
 import commonStrings from 'commonStrings.json';
 import { isLink, isNode } from '../../utils/typeGuards';
+import { textForError } from '../../utils';
 
 const useStyles = DashboardStyle;
 
@@ -70,7 +71,7 @@ export default function Sidebar() {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || commonStrings.retrieveIconsError,
+        text: textForError(error, commonStrings.retrieveIconsError),
         severity: 'error',
       });
     }
@@ -152,7 +153,7 @@ export default function Sidebar() {
       } catch (error) {
         setOpenSnackbar({
           open: true,
-          text: error.message,
+          text: textForError(error, commonStrings.deletingError),
           severity: 'error',
         });
       }

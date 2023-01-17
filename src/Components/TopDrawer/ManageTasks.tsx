@@ -15,6 +15,7 @@ import type { ChangeEvent } from 'react';
 import { discoverTasks } from '../../utils/api';
 import commonStrings from '../../commonStrings.json';
 import type { SnackbarParams } from '../../types';
+import { textForError } from '../../utils';
 
 export default function ManageTasks() {
   const setOpenSnackbar = useStore<(params: SnackbarParams) => void>(
@@ -43,7 +44,7 @@ export default function ManageTasks() {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || commonStrings.savingError,
+        text: textForError(error, commonStrings.savingError),
         severity: 'warning',
       });
     }
