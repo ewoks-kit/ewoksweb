@@ -371,8 +371,27 @@ export interface EwoksLink {
 export interface outputsInputsSub {
   label: string;
   type: string;
+  positionY?: number;
 }
 
+export interface EwoksRFNodeData {
+  nodeWidth?: number;
+  node_icon?: string;
+  executing?: boolean;
+  exists?: boolean;
+  label?: string;
+  type?: string;
+  inputs?: outputsInputsSub[]; // ?
+  outputs?: outputsInputsSub[]; // ?
+  icon?: string;
+  comment?: string;
+  moreHandles?: boolean;
+  details?: boolean;
+  withImage?: boolean;
+  withLabel?: boolean;
+  colorBorder?: string;
+  map_all_data?: boolean;
+}
 export interface EwoksRFNode {
   id: string;
   label?: string;
@@ -387,24 +406,7 @@ export interface EwoksRFNode {
   task_generator?: string;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes;
-  data: {
-    nodeWidth?: number;
-    node_icon?: string;
-    executing?: boolean;
-    exists?: boolean;
-    label?: string;
-    type?: string;
-    inputs?: outputsInputsSub[]; // ?
-    outputs?: outputsInputsSub[]; // ?
-    icon?: string;
-    comment?: string;
-    moreHandles?: boolean;
-    details?: boolean;
-    withImage?: boolean;
-    withLabel?: boolean;
-    colorBorder?: string;
-    map_all_data?: boolean;
-  };
+  data: EwoksRFNodeData;
   selected?: boolean;
   sourcePosition?: string;
   targetPosition?: string;
