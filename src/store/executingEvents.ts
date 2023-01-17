@@ -1,4 +1,4 @@
-import type { Event, EwoksRFNode, State } from '../types';
+import type { CanvasPosition, Event, EwoksRFNode, State } from '../types';
 import type { GetState, SetState } from 'zustand';
 
 export interface ExecutingEventsSlice {
@@ -51,21 +51,24 @@ const executingEvents = (
       // }
 
       // DOC: define the position of the event nodes
-      let tempPos = { x: 100, y: 100 };
+      let tempPos: CanvasPosition = { x: 100, y: 100 };
 
-      const tempNode: EwoksRFNode = get().graphRF.nodes.find(
+      const tempNode: EwoksRFNode | undefined = get().graphRF.nodes.find(
         (nod) =>
           nod.id === execEvent.node_id &&
           nod.task_identifier === execEvent.task_id
       );
 
-      if ([null, undefined].includes(tempNode)) {
+      if (!tempNode) {
         /* eslint-disable no-console */
         console.log('Node not found in current Graph');
         return;
       }
 
-      tempPos = tempNode.position;
+      if (tempNode.position) {
+        tempPos = tempNode.position;
+      }
+
       const { withLabel } = tempNode.data;
 
       // TODO: calc the exact pos based on the nodes width which is
@@ -74,7 +77,7 @@ const executingEvents = (
         tempPos = { x: tempPos.x - 30, y: tempPos.y + 30 };
       } else if (withLabel) {
         tempPos = {
-          x: tempPos.x + tempNode.data.nodeWidth + 15,
+          x: tempPos.x + (tempNode.data.nodeWidth ?? 0) + 15,
           y: tempPos.y + 30,
         };
       } else {
@@ -84,7 +87,7 @@ const executingEvents = (
       // if there are other nodes for the same position we need to to join them with comma
       // only if live-execution else ignore
       // TODO: test for not live maybe needed since events are fed one-by-one now
-      let sameEls = [];
+      let sameEls: Event[] = [];
       if (live) {
         sameEls = [...get().executedEvents]
           .reverse()
@@ -100,12 +103,15 @@ const executingEvents = (
       const tempLabel: string =
         sameEls.length > 0 ? sameEls.map((elem) => elem.id).join(',') : '';
 
-      let execNodes = [];
+      let execNodes: EwoksRFNode[] = [];
 
       // calculate the executing ones and add the executing param.
+      // TODO: test later when execution accecible for using a Set
       // Not a set because maybe it needs a complex id
       /* eslint-disable unicorn/prefer-set-has */
-      const executingIds: string[] = newExecutingEvents.map((ev) => ev.node_id);
+      const executingIds: (string | undefined)[] = newExecutingEvents.map(
+        (ev) => ev.node_id
+      );
 
       execNodes = [
         ...get()
@@ -123,14 +129,14 @@ const executingEvents = (
       // ExecutionStepNode with the old number before putting the new node
 
       // If not in execution dont affect the canvas
-      // TODO: if not the specific job_id dont afect the canvas in case of viewing
+      // TODO: if not the specific job_id dont affect the canvas in case of viewing
       // the same workflow_id but another job while some others are being executed
       const nodess = [
         ...execNodes.filter(
           (nod) =>
             !(
-              nod.data.node_id === execEvent.node_id &&
-              nod.data.type === execEvent.type
+              // todo: changed the node_id and can affect execution
+              (nod.id === execEvent.node_id && nod.data.type === execEvent.type)
             )
         ),
         {
@@ -138,15 +144,15 @@ const executingEvents = (
             label: `${tempLabel},${(execEvent.id as unknown) as string}`,
             event: execEvent,
           },
-          id: execEvent.time,
+          id: execEvent.time || '',
           task_type: 'executionSteps',
-          task_identifier: execEvent.id,
+          task_identifier: execEvent.id?.toString() || '',
           type: 'executionSteps',
           // calculate position based on node_id -> node position + start or stop
           position: tempPos,
-        },
+        }, // TODO: clear this casting when deal with execution
       ];
-      console.log(newExecutingEvents, nodess);
+      // console.log(newExecutingEvents, nodess);
       if (get().inExecutionMode) {
         set((state) => ({
           ...state,

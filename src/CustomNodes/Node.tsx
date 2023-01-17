@@ -19,7 +19,7 @@ import { findImage } from 'utils';
 import type { Connection } from 'react-flow-renderer';
 import { isNode } from '../utils/typeGuards';
 
-const onDragStart = (e) => {
+const onDragStart = (e: React.DragEvent<HTMLImageElement>) => {
   e.preventDefault();
 };
 
@@ -121,8 +121,8 @@ function Node({
       id: calcNewId(selectedElement.id, graphRF.nodes),
       selected: false,
       position: {
-        x: selectedElement.position.x + 100,
-        y: selectedElement.position.y + 100,
+        x: selectedElement.position?.x || 0 + 100,
+        y: selectedElement.position?.y || 0 + 100,
       },
     };
 

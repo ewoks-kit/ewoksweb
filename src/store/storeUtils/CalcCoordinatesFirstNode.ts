@@ -1,15 +1,15 @@
-import type { EwoksRFNode } from 'types';
+import type { EwoksRFNode, CanvasPosition } from 'types';
 
 export function calcCoordinatesFirstNode(nodes: EwoksRFNode[]) {
-  let x = 500;
-  let y = 500;
-  for (const nod of nodes) {
-    if (nod.position.x < x) {
-      ({ x } = nod.position);
-    }
-    if (nod.position.y < y) {
-      ({ y } = nod.position);
-    }
-  }
-  return { x: x + 20, y: y - 50 };
+  const boundaries = nodes.reduce<CanvasPosition>(
+    (result, { position }) => {
+      const x = position?.x && position.x < result.x ? position.x : result.x;
+      const y = position?.y && position.y < result.y ? position.y : result.y;
+
+      return { x, y };
+    },
+    { x: 500, y: 500 }
+  );
+
+  return { x: boundaries.x + 20, y: boundaries.y - 50 };
 }

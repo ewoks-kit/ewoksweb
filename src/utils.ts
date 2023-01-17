@@ -3,8 +3,10 @@ import type {
   EwoksRFNode,
   GraphEwoks,
   GraphRF,
+  Icon,
   WorkflowDescription,
 } from './types';
+import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
 import { toEwoksLinks } from './utils/toEwoksLinks';
@@ -16,7 +18,7 @@ import orange2 from 'images/orange2.png';
 export const ewoksNetwork = {};
 
 export async function getWorkflows(): Promise<WorkflowDescription[]> {
-  let res = [];
+  let res: WorkflowDescription[] = [];
   try {
     const workflows = await getWorkflowsDescriptions();
     if (workflows?.data) {
@@ -24,24 +26,21 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
       res = workf.items;
     }
   } catch (error) {
-    if (error.response) {
+    const err = error as AxiosError;
+    if (err.response) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
       // Keep logging in console for debugging when talking with a user
       /* eslint-disable no-console */
-      console.log(
-        error.response.data,
-        error.response.status,
-        error.response.headers
-      );
-    } else if (error.request) {
+      console.log(err.response.data, err.response.status, err.response.headers);
+    } else if (err.request) {
       // The request was made but no response was received
       /* eslint-disable no-console */
-      console.log(error.request);
+      console.log(err.request);
     } else {
       // Something happened in setting up the request that triggered an Error
       /* eslint-disable no-console */
-      console.log('Error', error.message);
+      console.log('Error', err.message);
     }
     /* eslint-disable no-console */
     console.log(error);
@@ -49,7 +48,13 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
     // since it cannot be done from a ts file (?). A custom Hook maybe to remove it?
     // TODO: pass an onError callback to the function or return an error field in the
     // result that would be checked by the consumer as in !95
-    res = [{ label: 'network error', category: error?.response?.status }];
+    res = [
+      {
+        id: 'network error',
+        label: 'network error',
+        category: err?.response?.status.toString(),
+      },
+    ];
   }
   return res;
 }
@@ -65,7 +70,7 @@ export async function getSubgraphs(
   let results: GraphEwoks[] = [];
   if (existingNodeSubgraphs.length > 0) {
     // there are subgraphs -> first search in the recentGraphs for them
-    const notInRecent = [];
+    const notInRecent: string[] = [];
     existingNodeSubgraphs.forEach((graphL) => {
       if (
         recentGraphs.filter((gr) => gr.graph.id === graphL.task_identifier)
@@ -98,9 +103,9 @@ export async function getSubgraphs(
 
 export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
   // calculate input_nodes-output_nodes nodes from graphInput-graphOutput
-  const graph = calcGraphInputsOutputs(tempGraph);
+  let graph = calcGraphInputsOutputs(tempGraph);
   const noteNodes = calcNoteNodes(tempGraph);
-  graph.uiProps.notes = noteNodes;
+  graph = { ...graph, uiProps: { ...graph.uiProps, notes: noteNodes } };
 
   // DOC: remove "fromServer" which is for UIs internal use
   if (graph.uiProps?.source) {
@@ -114,7 +119,11 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
   };
 }
 
-export function findImage(img: string, allIcons) {
+export function findImage(img: string | undefined, allIcons: Icon[]): string {
+  if (!img) {
+    return orange2;
+  }
+
   const icon = allIcons.find((ico) => ico.name === img);
 
   return icon?.image?.data_url || orange2;

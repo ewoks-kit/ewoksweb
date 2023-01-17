@@ -1,6 +1,6 @@
 import type { State } from '../types';
 import type { GetState, SetState } from 'zustand';
-import { isLink, isNode } from '../utils/typeGuards';
+import { isGraphDetails, isLink, isNode } from '../utils/typeGuards';
 
 export interface UndoIndexSlice {
   undoIndex: number;
@@ -22,27 +22,27 @@ const undoIndex = (
       }));
       // After setting the new GraphRF the selected element needs
       // to be updated to see the change in the sidebar again on undo-redo
-      let selEl = get().selectedElement;
+      const selEl = get().selectedElement;
 
       if (isNode(selEl)) {
-        selEl = get().undoRedo[index].graph.nodes.find(
+        const selElNode = get().undoRedo[index].graph.nodes.find(
           (nod) => nod.id === selEl.id
         );
-        if (selEl) {
-          get().setSelectedElement(selEl);
+        if (selElNode) {
+          get().setSelectedElement(selElNode);
         }
       }
 
       if (isLink(selEl)) {
-        selEl = get().undoRedo[index].graph.links.find(
+        const selElLink = get().undoRedo[index].graph.links.find(
           (lin) => lin.id === selEl.id
         );
-        if (selEl) {
-          get().setSelectedElement(selEl);
+        if (selElLink) {
+          get().setSelectedElement(selElLink);
         }
       }
 
-      if ('output_nodes' in selEl) {
+      if (isGraphDetails(selEl)) {
         get().setSelectedElement(get().undoRedo[index].graph.graph);
       }
     } else {

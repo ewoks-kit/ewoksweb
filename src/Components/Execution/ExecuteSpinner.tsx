@@ -23,8 +23,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface ExecuteSpinnerProps {
-  getting: boolean;
-  children: ReactNode;
+  getting?: boolean;
+  children?: ReactNode;
   tooltip?: string;
   action?(): void;
 }

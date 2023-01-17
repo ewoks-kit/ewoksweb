@@ -1,12 +1,14 @@
 import React, { memo } from 'react';
 import { Handle, Position } from 'react-flow-renderer';
-import type { Connection } from 'react-flow-renderer';
+import type { Connection, NodeProps } from 'react-flow-renderer';
 import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
 import isValidLink from '../utils/IsValidLink';
 import useStore from '../store/useStore';
+import type { EwoksRFNodeData } from '../types';
 
-function FunctionNode(fnod) {
+function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
+  const { data: node, selected } = props;
   const graphRF = useStore((state) => state.graphRF);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
@@ -25,33 +27,31 @@ function FunctionNode(fnod) {
   return (
     <Node
       isGraph
-      moreHandles={fnod.data.moreHandles}
-      withImage={fnod.data.withImage}
-      nodeWidth={fnod.data.nodeWidth || 120}
-      withLabel={fnod.data.withLabel}
-      colorBorder={fnod.data.colorBorder}
+      moreHandles={node.moreHandles}
+      withImage={node.withImage}
+      nodeWidth={node.nodeWidth || 120}
+      withLabel={node.withLabel}
+      colorBorder={node.colorBorder}
       // the following is calculated in calcNodeType for subgraphs-inNodes-outNodes
-      type={fnod.data.type}
-      label={fnod.data.label}
-      selected={fnod.selected}
-      color={fnod.data.exists ? '#ced3ee' : 'red'}
-      image={fnod.data.icon}
-      comment={fnod.data.comment}
-      executing={fnod.data.executing}
+      type={node.type}
+      label={node.label}
+      selected={selected}
+      color={node.exists ? '#ced3ee' : 'red'}
+      image={node.icon}
+      comment={node.comment}
+      executing={node.executing}
       content={
         <>
-          {fnod.data.inputs
-            .sort((a, b) => a.positionY - b.positionY)
+          {node.inputs
+            .sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
             .map((input: { label: string }) => (
               <div
                 key={input.label}
-                style={
-                  {
-                    ...style.io,
-                    ...style.textLeft,
-                    ...(fnod.data.moreHandles ? style.borderInput : {}),
-                  } as React.CSSProperties
-                }
+                style={{
+                  ...style.io,
+                  ...style.textLeft,
+                  ...(node.moreHandles ? style.borderInput : {}),
+                }}
               >
                 {/* remove the rest of the input {input.label} for now */}
                 {input.label.slice(0, input.label.indexOf(':'))}
@@ -67,7 +67,7 @@ function FunctionNode(fnod) {
                   }}
                   isValidConnection={isValidConnection}
                 />
-                {fnod.data.moreHandles && (
+                {node.moreHandles && (
                   <Handle
                     key="&{input.label} right"
                     type="target"
@@ -86,18 +86,16 @@ function FunctionNode(fnod) {
                 )}
               </div>
             ))}
-          {fnod.data.outputs
-            .sort((a, b) => a.positionY - b.positionY)
+          {node.outputs
+            .sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
             .map((output: { label: string }) => (
               <div
                 key={output.label}
-                style={
-                  {
-                    ...style.io,
-                    ...style.textRight,
-                    ...(fnod.data.moreHandles ? style.borderOutput : {}),
-                  } as React.CSSProperties
-                }
+                style={{
+                  ...style.io,
+                  ...style.textRight,
+                  ...(node.moreHandles ? style.borderOutput : {}),
+                }}
               >
                 {/* remove the rest of the output {output.label} for now */}
                 {output.label.slice(0, output.label.indexOf(':'))}
@@ -113,7 +111,7 @@ function FunctionNode(fnod) {
                   }}
                   isValidConnection={isValidConnection}
                 />
-                {fnod.data.moreHandles && (
+                {node.moreHandles && (
                   <Handle
                     key={`${output.label} left`}
                     type="source"

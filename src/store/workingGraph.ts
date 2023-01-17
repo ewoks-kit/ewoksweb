@@ -13,6 +13,8 @@ import commonStrings from '../commonStrings.json';
 import { getTaskDescription } from '../utils/api';
 import type { GetState, SetState } from 'zustand';
 import { initializedRFGraph } from '../utils/InitializedEntities';
+import axios from 'axios';
+import { isEwoksServerResponseError } from '../utils/typeGuards';
 
 export interface WorkingGraphSlice {
   workingGraph: GraphRF;
@@ -28,10 +30,7 @@ const workingGraph = (
 ): WorkingGraphSlice => ({
   workingGraph: initializedRFGraph,
 
-  setWorkingGraph: async (
-    workingGraphObject: GraphEwoks,
-    source: string
-  ): Promise<GraphRF> => {
+  setWorkingGraph: async (workingGraphObject, source): Promise<GraphRF> => {
     // 1. if it is a new graph opening initialize
     if (get().tasks.length === 0) {
       try {
@@ -39,10 +38,18 @@ const workingGraph = (
         const tasks = tasksData.data as { items: Task[] };
         get().setTasks(tasks.items);
       } catch (error) {
+        let text = '';
+        if (isEwoksServerResponseError(error)) {
+          text = error.response.data.message;
+        } else if (axios.isAxiosError(error)) {
+          text = error.message;
+        } else {
+          text = commonStrings.retrieveTasksError;
+        }
+
         get().setOpenSnackbar({
           open: true,
-          text:
-            error.response?.data?.message || commonStrings.retrieveTasksError,
+          text,
           severity: 'error',
         });
       }
@@ -75,7 +82,7 @@ const workingGraph = (
     );
 
     // 5. Calculate notes nodes
-    const notes =
+    const notes: EwoksRFNode[] =
       workingGraphObject.graph?.uiProps?.notes?.map((note) => {
         return {
           data: {
@@ -89,7 +96,7 @@ const workingGraph = (
           type: 'note',
           position: note.position,
         };
-      }) || ([] as EwoksRFNode[]);
+      }) || [];
 
     grfNodes = [...grfNodes, ...notes];
 

@@ -10,7 +10,7 @@ export interface AllIconsSlice {
 const allIcons = (set: SetState<State>): AllIconsSlice => ({
   allIcons: [],
 
-  setAllIcons: (icons: [Icon]) => {
+  setAllIcons: (icons) => {
     set((state) => ({
       ...state,
       allIcons: icons,

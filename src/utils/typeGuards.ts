@@ -1,4 +1,9 @@
+import type { AxiosError } from 'axios';
 import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../types';
+
+type EwoksServerErrorResponse = AxiosError<{
+  message: string;
+}>;
 
 export function isNode(
   entity: EwoksRFNode | EwoksRFLink | GraphDetails
@@ -16,4 +21,10 @@ export function isGraphDetails(
   entity: EwoksRFNode | EwoksRFLink | GraphDetails
 ): entity is GraphDetails {
   return 'input_nodes' in entity;
+}
+
+export function isEwoksServerResponseError(
+  error
+): error is EwoksServerErrorResponse {
+  return 'message' in error.response?.data;
 }

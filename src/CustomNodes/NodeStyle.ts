@@ -5,7 +5,7 @@ export const contentStyle = {
     backgroundColor: '#eee',
   },
   io: {
-    position: 'relative',
+    position: 'relative' as const,
     padding: '8px 16px',
     flexGrow: 1,
     borderRadius: '15px',
@@ -17,9 +17,9 @@ export const contentStyle = {
     border: '1px solid rgb(118, 133, 221)',
   },
   left: { left: '-8px' },
-  textLeft: { textAlign: 'left' },
+  textLeft: { textAlign: 'left' as const },
   right: { right: '-8px' },
-  textRight: { textAlign: 'right' },
+  textRight: { textAlign: 'right' as const },
   handle: {
     zIndex: 1000, // Uncomment
     widht: '20px', // Does not work
