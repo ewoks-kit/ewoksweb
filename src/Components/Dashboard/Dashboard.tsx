@@ -34,7 +34,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import { FormAction } from '../../types';
 import { getWorkflowsIds, putWorkflow } from '../../utils/api';
-import { rfToEwoks } from '../../utils';
+import { rfToEwoks, textForError } from '../../utils';
 import commonStrings from '../../commonStrings.json';
 import type { AxiosResponse } from 'axios';
 import curateGraph from '../TopNavBar/utils/curateGraph';
@@ -209,13 +209,9 @@ export default function Dashboard() {
           });
           setCanvasGraphChanged(false);
         } catch (error) {
-          // TODO: TBD should we break it down according to the error we are expecting?
-          let message;
-          if (error instanceof Error) message = error.response?.data?.message;
-          else message = String(error);
           setOpenSnackbar({
             open: true,
-            text: message || commonStrings.savingError,
+            text: textForError(error, commonStrings.savingError),
             severity: 'error',
           });
         } finally {

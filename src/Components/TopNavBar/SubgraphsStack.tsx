@@ -9,7 +9,7 @@ import useStore from '../../store/useStore';
 const useStyles = DashboardStyle;
 
 // TBD: a lot of trouble with Events...
-interface mouseEvent extends React.MouseEvent {
+interface mouseEvent extends MouseEvent {
   target: {
     id: string;
     text: string;

@@ -71,8 +71,8 @@ function Canvas() {
 
   // TODO: resolve the types here for the local state
   const [rfInstance, setRfInstance] = useState(null);
-  const [nodes, setNodes] = useState<EwoksRFNode[]>([]);
-  const [edges, setEdges] = useState<EwoksRFLink[]>([]);
+  const [nodes, setNodes] = useState<EwoksRFNode[] | Node[]>([]);
+  const [edges, setEdges] = useState<EwoksRFLink[] | Edge[]>([]);
   const [prevGraphId, setPrevGraphId] = useState('');
 
   const reactFlowWrapper = useRef(null);
@@ -222,25 +222,28 @@ function Canvas() {
     setSelectedElement(graphRF.graph);
   };
 
-  const onNodeClick = (
-    _event: MouseEvent<Element, MouseEvent>,
-    element: Node
-  ) => {
-    const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
-
-    if (
-      !(
-        graphElement.task_type === 'executionSteps' &&
-        graphElement.type === 'executionSteps'
-      ) &&
-      // is already selected
-      selectedElement.id !== graphElement.id
-    ) {
-      setSelectedElement(graphElement);
+  const onNodeClick = (_event: MouseEvent, element: Node) => {
+    // TODO: will ignore this strange error until I have a look at the models RF-EwoksRF
+    // @ts-ignore
+    const graphElement: EwoksRFNode | Node | undefined = nodes.find(
+      (el) => el.id === element.id
+    );
+    if ('task_type' in graphElement) {
+      if (
+        !(
+          graphElement.task_type === 'executionSteps' &&
+          graphElement.type === 'executionSteps'
+        ) &&
+        // is already selected
+        selectedElement.id !== graphElement.id
+      ) {
+        setSelectedElement(graphElement);
+      }
     }
   };
 
   const onEdgeClick = (event, element?: Edge) => {
+    // @ts-ignore
     const graphElement: EwoksRFLink = edges.find((el) => el.id === element.id);
     setSelectedElement(graphElement);
   };
@@ -363,9 +366,11 @@ function Canvas() {
     } else {
       const newGraph: GraphRF = {
         graph: { ...graphRF.graph },
+        // @ts-ignore
         nodes: nodes.filter((el) => el.position), // [...graphRF.nodes],
         links: [
           ...edges
+            // @ts-ignore
             .filter((el) => el.source)
             .filter((lin) => lin.id !== oldEdge.id),
           // TODO: leave the type like that for now until I examine the RFModels with EwoksRFModels
@@ -622,8 +627,8 @@ function Canvas() {
           attributionPosition="bottom-right"
           minZoom={0.2}
           snapToGrid
-          nodes={nodes}
-          edges={edges}
+          nodes={nodes as Node[]}
+          edges={edges as Edge[]}
           onNodeClick={(evt, node) => {
             onNodeClick(evt, node);
           }}
