@@ -121,7 +121,7 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
 
 export function findImage(img: string | undefined, allIcons: Icon[]): string {
   if (!img) {
-    return '';
+    return orange2;
   }
 
   const icon = allIcons.find((ico) => ico.name === img);

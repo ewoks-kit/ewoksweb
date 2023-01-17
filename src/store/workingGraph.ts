@@ -42,7 +42,7 @@ const workingGraph = (
         if (isEwoksServerResponseError(error)) {
           text = error.response.data.message;
         } else if (axios.isAxiosError(error)) {
-          text = error.response?.data as string;
+          text = error.message;
         } else {
           text = commonStrings.retrieveTasksError;
         }
