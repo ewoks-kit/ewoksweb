@@ -1,13 +1,8 @@
-import type { AxiosResponse } from 'axios';
+import type { AxiosError } from 'axios';
 import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../types';
 
-interface EwoksServerResponseError {
-  response: { data: { message: string } };
-}
-
-// TODO: keep this or the above
-type EwoksServerErrorResponse = AxiosResponse<{
-  response: { data: { message: string } };
+type EwoksServerErrorResponse = AxiosError<{
+  message: string;
 }>;
 
 export function isNode(
@@ -30,6 +25,6 @@ export function isGraphDetails(
 
 export function isEwoksServerResponseError(
   error
-): error is EwoksServerResponseError {
+): error is EwoksServerErrorResponse {
   return 'message' in error.response?.data;
 }
