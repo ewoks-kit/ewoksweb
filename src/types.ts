@@ -571,9 +571,3 @@ export interface filterParams {
   // type: string;
   error?: boolean;
 }
-
-export interface EwoksServerResponseError {
-  response: { data: { message: string } };
-}
-
-export type EwoksServerErrorResponse = AxiosResponse<{ message: string }>;
