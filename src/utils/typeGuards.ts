@@ -1,9 +1,14 @@
-import type {
-  EwoksRFLink,
-  EwoksRFNode,
-  EwoksServerErrorResponse,
-  GraphDetails,
-} from '../types';
+import type { AxiosResponse } from 'axios';
+import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../types';
+
+interface EwoksServerResponseError {
+  response: { data: { message: string } };
+}
+
+// TODO: keep this or the above
+type EwoksServerErrorResponse = AxiosResponse<{
+  response: { data: { message: string } };
+}>;
 
 export function isNode(
   entity: EwoksRFNode | EwoksRFLink | GraphDetails
