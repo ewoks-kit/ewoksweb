@@ -2,7 +2,7 @@ import type { AxiosError } from 'axios';
 import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../types';
 
 type EwoksServerErrorResponse = AxiosError<{
-  response: { data: { message: string } };
+  message: string;
 }>;
 
 export function isNode(
