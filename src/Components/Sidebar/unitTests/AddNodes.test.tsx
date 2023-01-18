@@ -1,10 +1,5 @@
-import {
-  act,
-  fireEvent,
-  Matcher,
-  render,
-  screen,
-} from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import type { Matcher } from '@testing-library/react';
 import AddNodes from '../AddNodes';
 import useStore from 'store/useStore';
 

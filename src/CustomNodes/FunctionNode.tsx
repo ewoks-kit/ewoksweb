@@ -42,96 +42,94 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
       executing={node.executing}
       content={
         <>
-          {node.inputs &&
-            node.inputs
-              .sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
-              .map((input: { label: string }) => (
-                <div
+          {node.inputs
+            ?.sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
+            .map((input: { label: string }) => (
+              <div
+                key={input.label}
+                style={{
+                  ...style.io,
+                  ...style.textLeft,
+                  ...(node.moreHandles ? style.borderInput : {}),
+                }}
+              >
+                {/* remove the rest of the input {input.label} for now */}
+                {input.label.slice(0, input.label.indexOf(':'))}
+                <Handle
                   key={input.label}
+                  type="target"
+                  position={Position.Left}
+                  id={input.label.slice(0, input.label.indexOf(':'))}
                   style={{
-                    ...style.io,
-                    ...style.textLeft,
-                    ...(node.moreHandles ? style.borderInput : {}),
+                    ...style.handle,
+                    ...style.left,
+                    ...style.handleTarget,
                   }}
-                >
-                  {/* remove the rest of the input {input.label} for now */}
-                  {input.label.slice(0, input.label.indexOf(':'))}
+                  isValidConnection={isValidConnection}
+                />
+                {node.moreHandles && (
                   <Handle
-                    key={input.label}
+                    key="&{input.label} right"
                     type="target"
-                    position={Position.Left}
-                    id={input.label.slice(0, input.label.indexOf(':'))}
+                    position={Position.Right}
+                    id={`${input.label.slice(
+                      0,
+                      input.label.indexOf(':')
+                    )} right`}
                     style={{
                       ...style.handle,
-                      ...style.left,
+                      ...style.right,
                       ...style.handleTarget,
                     }}
                     isValidConnection={isValidConnection}
                   />
-                  {node.moreHandles && (
-                    <Handle
-                      key="&{input.label} right"
-                      type="target"
-                      position={Position.Right}
-                      id={`${input.label.slice(
-                        0,
-                        input.label.indexOf(':')
-                      )} right`}
-                      style={{
-                        ...style.handle,
-                        ...style.right,
-                        ...style.handleTarget,
-                      }}
-                      isValidConnection={isValidConnection}
-                    />
-                  )}
-                </div>
-              ))}
-          {node.outputs &&
-            node.outputs
-              .sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
-              .map((output: { label: string }) => (
-                <div
+                )}
+              </div>
+            ))}
+          {node.outputs
+            ?.sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
+            .map((output: { label: string }) => (
+              <div
+                key={output.label}
+                style={{
+                  ...style.io,
+                  ...style.textRight,
+                  ...(node.moreHandles ? style.borderOutput : {}),
+                }}
+              >
+                {/* remove the rest of the output {output.label} for now */}
+                {output.label.slice(0, output.label.indexOf(':'))}
+                <Handle
                   key={output.label}
+                  type="source"
+                  position={Position.Right}
+                  id={output.label.slice(0, output.label.indexOf(':'))}
                   style={{
-                    ...style.io,
-                    ...style.textRight,
-                    ...(node.moreHandles ? style.borderOutput : {}),
+                    ...style.handle,
+                    ...style.right,
+                    ...style.handleSource,
                   }}
-                >
-                  {/* remove the rest of the output {output.label} for now */}
-                  {output.label.slice(0, output.label.indexOf(':'))}
+                  isValidConnection={isValidConnection}
+                />
+                {node.moreHandles && (
                   <Handle
-                    key={output.label}
+                    key={`${output.label} left`}
                     type="source"
-                    position={Position.Right}
-                    id={output.label.slice(0, output.label.indexOf(':'))}
+                    position={Position.Left}
+                    id={`${output.label.slice(
+                      0,
+                      output.label.indexOf(':')
+                    )} left`}
                     style={{
                       ...style.handle,
-                      ...style.right,
+                      ...style.left,
                       ...style.handleSource,
                     }}
                     isValidConnection={isValidConnection}
                   />
-                  {node.moreHandles && (
-                    <Handle
-                      key={`${output.label} left`}
-                      type="source"
-                      position={Position.Left}
-                      id={`${output.label.slice(
-                        0,
-                        output.label.indexOf(':')
-                      )} left`}
-                      style={{
-                        ...style.handle,
-                        ...style.left,
-                        ...style.handleSource,
-                      }}
-                      isValidConnection={isValidConnection}
-                    />
-                  )}
-                </div>
-              ))}
+                )}
+              </div>
+            ))}
         </>
       }
     />
