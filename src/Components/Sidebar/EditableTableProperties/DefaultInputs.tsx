@@ -1,4 +1,4 @@
-import type { EwoksRFNode } from 'types';
+import type { EditableTableRow, EwoksRFNode, Inputs } from 'types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import { IconButton } from '@material-ui/core';
@@ -11,7 +11,7 @@ export default function DefaultInputs(element: EwoksRFNode) {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const addDefaultInputs = () => {
-    if (element.default_inputs.some((x) => x.id === '')) {
+    if (element.default_inputs?.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before adding another!',
@@ -22,7 +22,7 @@ export default function DefaultInputs(element: EwoksRFNode) {
         {
           ...element,
           default_inputs: [
-            ...element.default_inputs,
+            ...(element.default_inputs || []),
             { id: '', name: '', value: '' },
           ],
         },
@@ -31,14 +31,14 @@ export default function DefaultInputs(element: EwoksRFNode) {
     }
   };
 
-  const defaultInputsChanged = (table) => {
+  const defaultInputsChanged = (table: EditableTableRow[]) => {
     setSelectedElement(
       {
         ...element,
         default_inputs: table.map((dval) => {
           return {
             id: dval.name,
-            name: dval.name,
+            name: dval.name || '',
             value: dval.value,
           };
         }),
@@ -66,7 +66,7 @@ export default function DefaultInputs(element: EwoksRFNode) {
         </div>
       </SidebarTooltip>
 
-      {element.default_inputs?.length > 0 && (
+      {element.default_inputs && element.default_inputs.length > 0 && (
         <EditableTable
           headers={['Name', 'Value']}
           defaultValues={element.default_inputs}

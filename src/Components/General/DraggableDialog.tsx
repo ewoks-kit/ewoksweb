@@ -18,6 +18,7 @@ import {
 } from '@material-ui/lab';
 import { FormControl, TextField, Tooltip } from '@material-ui/core';
 import useStore from 'store/useStore';
+import type { EditableTableRow } from '../../types';
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -32,7 +33,10 @@ function PaperComponent(props: PaperProps) {
 
 // TODO: Improve typings
 type Graph = object;
-type CallbackProps = unknown;
+interface CallbackProps {
+  id: string;
+  rows: EditableTableRow[];
+}
 
 interface Props {
   content: {
@@ -43,7 +47,7 @@ interface Props {
   };
   open: boolean;
   typeOfValues?: { values?: string[]; type: string };
-  setValue?: (name: string, graph: Graph, cp: CallbackProps) => void;
+  setValue?: (name: string, graph: Graph, callbackProps: CallbackProps) => void;
 }
 
 export default function DraggableDialog(props: Props) {
@@ -53,7 +57,7 @@ export default function DraggableDialog(props: Props) {
   const [title, setTitle] = useState('');
   const [name, setName] = useState('');
   const [oldName, setOldName] = useState('');
-  const [callbackProps, setCallbackProps] = useState<CallbackProps>({});
+  const [callbackProps, setCallbackProps] = useState<CallbackProps>();
   const graphRF = useStore((state) => state.graphRF);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 

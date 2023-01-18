@@ -18,7 +18,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import type { ChangeEvent } from 'react';
 import type { GraphRF, Task, FormAction } from '../../types';
-import { rfToEwoks } from '../../utils';
+import { rfToEwoks, textForError } from '../../utils';
 import useStore from '../../store/useStore';
 import commonStrings from '../../commonStrings.json';
 import {
@@ -74,13 +74,13 @@ export default function FormDialog(props: FormDialogProps) {
     }
     // TODO: check on the optional of 'graph' in GraphRF that will enable type inferencing
     if ('task_identifier' in elementToEdit) {
-      setNewName(elementToEdit.task_identifier);
-      setTaskType(elementToEdit.task_type);
-      setCategory(elementToEdit.category);
-      setIcon(elementToEdit.icon);
-      setOptionalInputNames(elementToEdit.optional_input_names);
-      setRequiredInputNames(elementToEdit.required_input_names);
-      setOutputNames(elementToEdit.output_names);
+      setNewName(elementToEdit.task_identifier || '');
+      setTaskType(elementToEdit.task_type || '');
+      setCategory(elementToEdit.category || '');
+      setIcon(elementToEdit.icon || '');
+      setOptionalInputNames(elementToEdit.optional_input_names || []);
+      setRequiredInputNames(elementToEdit.required_input_names || []);
+      setOutputNames(elementToEdit.output_names || []);
     }
   }, [open, action, elementToEdit, isForGraph]);
 
@@ -121,7 +121,7 @@ export default function FormDialog(props: FormDialogProps) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || commonStrings.savingError,
+        text: textForError(error, commonStrings.savingError),
         severity: 'warning',
       });
     }
@@ -154,7 +154,7 @@ export default function FormDialog(props: FormDialogProps) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || commonStrings.savingError,
+        text: textForError(error, commonStrings.savingError),
         severity: 'warning',
       });
     }
@@ -177,7 +177,7 @@ export default function FormDialog(props: FormDialogProps) {
         setGettingFromServer(false);
         setOpenSnackbar({
           open: true,
-          text: error.response?.data?.message || commonStrings.savingError,
+          text: textForError(error, commonStrings.savingError),
           severity: 'error',
         });
       } finally {
@@ -197,7 +197,7 @@ export default function FormDialog(props: FormDialogProps) {
 
         setWorkingGraph(responseNew.data, 'fromServer');
 
-        setRecentGraphs(undefined, true);
+        setRecentGraphs({} as GraphRF, true);
 
         setOpenSnackbar({
           open: true,
@@ -208,7 +208,7 @@ export default function FormDialog(props: FormDialogProps) {
         setGettingFromServer(false);
         setOpenSnackbar({
           open: true,
-          text: error.response?.data?.message || commonStrings.savingError,
+          text: textForError(error, commonStrings.savingError),
           severity: 'error',
         });
       }
@@ -373,6 +373,7 @@ export default function FormDialog(props: FormDialogProps) {
                     labelId="taskTypeInFormDialog"
                     value={field.value}
                     label="Task Type"
+                    // TBD: error asymetry
                     onChange={field.handleChange}
                   >
                     {task_types.map((type) => (
@@ -416,6 +417,7 @@ export default function FormDialog(props: FormDialogProps) {
               labelId="iconNameInFormDialog"
               value={icon}
               label="Icon"
+              // TBD: error asymetry
               onChange={iconChanged}
             >
               <MenuItem value="">

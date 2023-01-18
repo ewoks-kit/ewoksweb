@@ -26,6 +26,7 @@ import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
 
 export enum FormAction {
+  undefined = 'undefined',
   cloneGraph = 'cloneGraph',
   newGraph = 'newGraph',
   newGraphOrOverwrite = 'newGraphOrOverwrite',
@@ -85,7 +86,7 @@ export interface Graph {
 
 export interface SnackbarParams {
   open: boolean;
-  text: string;
+  text: string | undefined;
   severity: Color;
 }
 

@@ -90,12 +90,12 @@ function EditableTable(props: EditableTableProps) {
     });
   }
 
-  function calcNewRows(rowId: string): EditableTableRow[] {
+  function calcNewRows(rowId: string | undefined): EditableTableRow[] {
     return rows.map((row) => {
-      if (row.id === rowId) {
+      if (rowId && row.id === rowId) {
         return {
           ...row,
-          id: row.name.replace(' ', '_') || '',
+          id: row.name?.replace(' ', '_') || '',
           isEditMode: !row.isEditMode,
         };
       }
@@ -135,7 +135,7 @@ function EditableTable(props: EditableTableProps) {
     setDisableSelectType(false);
   }
 
-  function onSaveRow(id: string, index: number) {
+  function onSaveRow(id: string | undefined, index: number) {
     const oldRows = [...rows].filter((row, i) => index !== i);
 
     if (
@@ -229,11 +229,19 @@ function EditableTable(props: EditableTableProps) {
     setTypeOfInputs(tOfI);
 
     if (e.target.value === 'list') {
-      showEditableDialog(row.id, 'Edit list', [], { rows, id: row.id });
+      showEditableDialog(row.id || '', 'Edit list', [], {
+        rows,
+        id: row.id || '',
+      });
     }
 
     if (e.target.value === 'dict') {
-      showEditableDialog(row.id, 'Edit dict', {}, { rows, id: row.id });
+      showEditableDialog(
+        row.id || '',
+        'Edit dict',
+        {},
+        { rows, id: row.id || '' }
+      );
     }
   };
 
@@ -312,8 +320,8 @@ function EditableTable(props: EditableTableProps) {
 
                 <ToolsCell
                   onSave={() => onSaveRow(row.id, index)}
-                  onEdit={() => onEditRow(row.id, index)}
-                  onDelete={() => onDelete(row.id)}
+                  onEdit={() => onEditRow(row.id || '', index)}
+                  onDelete={() => onDelete(row.id || '')}
                   isEditing={row.isEditMode}
                 />
               </TableRow>

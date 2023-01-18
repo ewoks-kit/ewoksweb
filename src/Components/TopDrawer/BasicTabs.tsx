@@ -76,6 +76,7 @@ export default function BasicTabs() {
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
+          // TBD: type
           onChange={(e: React.ChangeEvent, newValue: number) => {
             handleChange(e, newValue);
           }}

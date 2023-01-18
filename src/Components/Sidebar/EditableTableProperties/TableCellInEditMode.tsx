@@ -62,6 +62,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
   return type === 'dict' || type === 'list' || type === 'object' ? (
     // TODO: examine if needed to edit in the cell?
     // <CellEditInJson props={{ row, name, type, onChange }} />
+    // TBD: tackle the following error
     <span>{JSON.stringify(row[name])}</span>
   ) : // <span></span>
   typeOfValues.type === 'select' ? (
@@ -69,7 +70,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
       <FormControl fullWidth variant="outlined">
         <Autocomplete
           freeSolo
-          options={typeOfValues.values}
+          options={typeOfValues.values || []}
           value={row[name]}
           onChange={(e, val) =>
             onChange({ target: { value: val, name } }, row, index)

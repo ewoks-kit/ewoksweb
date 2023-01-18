@@ -50,8 +50,6 @@ export default function Sidebar() {
   const setGraphRF = useStore((state) => state.setGraphRF);
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const [openDialog] = useState<boolean>(false);
-  const [dialogContent] = useState({});
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
   const initializedRFGraph = useStore((state) => state.initializedRFGraph);
@@ -262,7 +260,6 @@ export default function Sidebar() {
             Clone
           </Button>
           {!isLink(selectedElement) && <IconMenu />}
-          <DraggableDialog open={openDialog} content={dialogContent} />
           <ConfirmDialog
             title={`Delete "${selectedElement.label}" workflow?`}
             content={`You are about to delete "${selectedElement.label}" workflow.
