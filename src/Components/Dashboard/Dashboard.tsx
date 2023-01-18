@@ -283,7 +283,7 @@ export default function Dashboard() {
               color="inherit"
               onClick={() => checkAndNewGraph(false)}
               disabled={inExecutionMode}
-              data-cy="newWorkflowButton"
+              aria-label="Start a new workflow"
             >
               <Fab
                 className={classes.openFileButton}
