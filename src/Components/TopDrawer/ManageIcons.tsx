@@ -1,4 +1,5 @@
-import { SyntheticEvent, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
+import type { SyntheticEvent } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Box, Grid, Paper, styled, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';

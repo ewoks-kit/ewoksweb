@@ -13,8 +13,6 @@ import commonStrings from '../commonStrings.json';
 import { getTaskDescription } from '../utils/api';
 import type { GetState, SetState } from 'zustand';
 import { initializedRFGraph } from '../utils/InitializedEntities';
-import axios from 'axios';
-import { isEwoksServerResponseError } from '../utils/typeGuards';
 import { textForError } from '../utils';
 
 export interface WorkingGraphSlice {

@@ -6,7 +6,7 @@ const useStyles = DashboardStyle;
 
 export default function SidebarTooltip(props: {
   text: string;
-  children: ReactElement<any, any>;
+  children: ReactElement;
 }) {
   const classes = useStyles();
 

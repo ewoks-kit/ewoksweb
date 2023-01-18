@@ -1,6 +1,7 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 /* eslint-disable consistent-return */
-import { useEffect, useState, useCallback, useRef, MouseEvent } from 'react';
+import type { MouseEvent } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import type {
   Node,
   Edge,
@@ -192,7 +193,9 @@ function Canvas() {
       const change = changes[0];
       if (change.type === 'remove') {
         const node = [...graphRF.nodes].find((el) => el.id === change.id);
-        if (node) onElementsRemove(node);
+        if (node) {
+          onElementsRemove(node);
+        }
       }
 
       // TODO: nodes are updated only on rf canvas and not on graphRF
@@ -211,7 +214,9 @@ function Canvas() {
       const change = changes[0];
       if ('id' in change && changes[0].type === 'remove') {
         const edgeToRemove = graphRF.links.find((el) => el.id === change.id);
-        if (edgeToRemove) onElementsRemove(edgeToRemove);
+        if (edgeToRemove) {
+          onElementsRemove(edgeToRemove);
+        }
       }
       setEdges((es) => applyEdgeChanges(changes, es as Edge[]));
     },
@@ -224,26 +229,25 @@ function Canvas() {
 
   const onNodeClick = (_event: MouseEvent, element: Node) => {
     // TODO: will ignore this strange error until I have a look at the models RF-EwoksRF
-    // @ts-ignore
+    // @ts-expect-error
     const graphElement: EwoksRFNode | Node | undefined = nodes.find(
       (el) => el.id === element.id
     );
-    if ('task_type' in graphElement) {
-      if (
-        !(
-          graphElement.task_type === 'executionSteps' &&
-          graphElement.type === 'executionSteps'
-        ) &&
-        // is already selected
-        selectedElement.id !== graphElement.id
-      ) {
-        setSelectedElement(graphElement);
-      }
+    if (
+      'task_type' in graphElement &&
+      !(
+        graphElement.task_type === 'executionSteps' &&
+        graphElement.type === 'executionSteps'
+      ) &&
+      // is already selected
+      selectedElement.id !== graphElement.id
+    ) {
+      setSelectedElement(graphElement);
     }
   };
 
   const onEdgeClick = (event, element?: Edge) => {
-    // @ts-ignore
+    // @ts-expect-error
     const graphElement: EwoksRFLink = edges.find((el) => el.id === element.id);
     setSelectedElement(graphElement);
   };
@@ -366,11 +370,11 @@ function Canvas() {
     } else {
       const newGraph: GraphRF = {
         graph: { ...graphRF.graph },
-        // @ts-ignore
+        // @ts-expect-error
         nodes: nodes.filter((el) => el.position), // [...graphRF.nodes],
         links: [
           ...edges
-            // @ts-ignore
+            // @ts-expect-error
             .filter((el) => el.source)
             .filter((lin) => lin.id !== oldEdge.id),
           // TODO: leave the type like that for now until I examine the RFModels with EwoksRFModels

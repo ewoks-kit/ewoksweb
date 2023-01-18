@@ -43,7 +43,7 @@ const useStyles = DashboardStyle;
 
 function workflowExists(
   id: string,
-  workflowsIds: AxiosResponse<{ identifiers: string[] }, any>
+  workflowsIds: AxiosResponse<{ identifiers: string[] }>
 ) {
   return workflowsIds.data.identifiers.includes(id);
 }
