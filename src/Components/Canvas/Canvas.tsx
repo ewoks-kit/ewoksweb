@@ -13,7 +13,6 @@ import type {
 } from 'react-flow-renderer';
 import ReactFlow, {
   Controls,
-  MiniMap,
   useReactFlow,
   applyNodeChanges,
   applyEdgeChanges,
@@ -34,6 +33,7 @@ import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
 import CanvasBackground from './CanvasBackground';
 import { isNode, isLink } from 'utils/typeGuards';
+import CanvasMiniMap from './CanvasMiniMap';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -586,10 +586,6 @@ function Canvas() {
     }
   };
 
-  const onClick = () => {
-    setSelectedTask({});
-  };
-
   const handleKeyDown = (event: React.KeyboardEvent<HTMLImageElement>) => {
     const charCode = String.fromCodePoint(event.which).toLowerCase();
 
@@ -649,7 +645,7 @@ function Canvas() {
             onEdgeClick(evt, node);
           }}
           onPaneClick={onPaneClick}
-          onClick={onClick}
+          onClick={() => setSelectedTask({})}
           onInit={onInit}
           onDrop={onDrop}
           onConnect={onConnect}
@@ -669,34 +665,7 @@ function Canvas() {
         >
           <CanvasBackground />
           <Controls />
-          <MiniMap
-            nodeStrokeColor={(n): string => {
-              if (n.style?.background) {
-                return n.style.background as string;
-              }
-              if (['graphOutput', 'graphInput'].includes(n.type || '')) {
-                return '#0041d0';
-              }
-              if (n.type === 'graph') {
-                return '#ff0072';
-              }
-              return 'rgb(60, 81, 202)';
-            }}
-            nodeColor={(n): string => {
-              if (n.style?.background) {
-                return n.style.background as string;
-              }
-              if (['graphOutput', 'graphInput'].includes(n.type || '')) {
-                return 'rgb(223, 226, 247)';
-              }
-              if (n.type === 'graph') {
-                return 'rgba(244, 179, 131, 0.87)';
-              }
-
-              return 'rgb(60, 81, 202)';
-            }}
-            nodeBorderRadius={2}
-          />
+          <CanvasMiniMap />
         </ReactFlow>
       </div>
     </div>
