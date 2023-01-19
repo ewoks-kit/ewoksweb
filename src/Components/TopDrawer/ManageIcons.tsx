@@ -6,13 +6,17 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import useStore from 'store/useStore';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
-import { getTaskDescription, deleteIcon, postIcon } from 'api/api';
+import { getTaskDescription } from 'api/api';
 import orange2 from 'images/orange2.png';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import commonStrings from 'commonStrings.json';
 import type { Icon } from '../../types';
-import getIconsFromServer from '../../utils/getIconsFromServer';
 import { textForError } from '../../utils';
+import {
+  getIcons as getIconsFromServer,
+  deleteIcon,
+  postIcon,
+} from 'api/icons';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,

@@ -542,7 +542,7 @@ export interface GraphEwoks {
 }
 
 export interface IconsNames {
-  identifiers: [string];
+  identifiers: string[];
 }
 
 export interface Icon {

@@ -7,7 +7,7 @@ import { Box } from '@material-ui/core';
 import ManageIcons from './ManageIcons';
 import ManageWorkflows from './ManageWorkflows';
 import ManageTasks from './ManageTasks';
-import { getIcons } from '../../api/api';
+import { fetchIcons } from '../../api/icons';
 import ExecutionTable from '../Execution/ExecutionTable';
 import useStore from '../../store/useStore';
 
@@ -67,7 +67,7 @@ export default function BasicTabs() {
   async function handleChange(newValue: number) {
     setValue(newValue);
     if (newValue === 2) {
-      await getIcons();
+      await fetchIcons();
     }
   }
 

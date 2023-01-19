@@ -28,7 +28,7 @@ import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { deleteWorkflow } from 'api/api';
 import { OpenInBrowser } from '@material-ui/icons';
 import SidebarTooltip from './SidebarTooltip';
-import getIconsFromServer from '../../utils/getIconsFromServer';
+import { getIcons as getIconsFromServer } from 'api/icons';
 import commonStrings from 'commonStrings.json';
 import { isLink, isNode } from '../../utils/typeGuards';
 import { textForError } from '../../utils';
