@@ -419,6 +419,7 @@ export interface EwoksRFNode {
 }
 
 export interface EditableTableRow {
+  [key: string]: unknown;
   id?: string;
   name?: string;
   value?: unknown; // string | number | null | undefined | boolean | Record<string, unknown>;

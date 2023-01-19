@@ -12,10 +12,21 @@ interface Props {
 function TypeSelectCell(props: Props) {
   const { value, disabled, className, onChange } = props;
 
+  function onChangeLocal(
+    event: ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+    }>
+  ) {
+    if (onChange) {
+      onChange(event as ChangeEvent<HTMLInputElement>);
+    }
+  }
+
   return (
     <TableCell align="left" size="small" className={className}>
       <FormControl disabled={disabled}>
-        <Select value={value} label="Task type" onChange={onChange}>
+        <Select value={value} label="Task type" onChange={onChangeLocal}>
           {INPUT_TYPES.map((type) => (
             <MenuItem key={type} value={type}>
               {type}

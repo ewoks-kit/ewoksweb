@@ -73,7 +73,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
           options={typeOfValues.values || []}
           value={row[name]}
           onChange={(e, val) =>
-            onChange({ target: { value: val, name } }, row, index)
+            onChange({ target: { value: val as string, name } }, row, index)
           }
           onInputChange={(e, val) =>
             onChange({ target: { value: val, name } }, row, index)

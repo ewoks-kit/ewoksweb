@@ -49,13 +49,23 @@ export default function DataMappingComponent(element: EwoksRFLink) {
           ...element.data,
           data_mapping: dmap,
           label: dmap
-            .map((el) => `${el.source_output}->${el.target_input}`)
+            .map((el) => `${el.source_output || ''}->${el.target_input || ''}`)
             .join(', '),
         },
       },
       'fromSaveElement'
     );
   };
+
+  function isClassSource(): boolean {
+    const sourceNode = graphRF.nodes.find((nod) => {
+      return nod.id === element.source;
+    });
+    if (sourceNode) {
+      return sourceNode.task_type === 'class';
+    }
+    return false;
+  }
 
   return (
     <div>
@@ -74,7 +84,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       >
         <AddCircleOutlineIcon />
       </IconButton>
-      {element.data.data_mapping.length > 0 && (
+      {element.data.data_mapping && element.data.data_mapping.length > 0 && (
         <EditableTable
           headers={['Source', 'Target']}
           defaultValues={element.data.data_mapping}

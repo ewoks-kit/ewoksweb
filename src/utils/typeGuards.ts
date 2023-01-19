@@ -27,5 +27,22 @@ export function isEwoksServerResponseError(
   // TBD: the type of error?
   error: unknown
 ): error is EwoksServerErrorResponse {
-  return 'message' in error.response?.data;
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    hasOwnProperty(error, 'response') &&
+    typeof error.response === 'object' &&
+    error.response !== null &&
+    hasOwnProperty(error.response, 'data') &&
+    typeof error.response.data === 'object' &&
+    error.response.data !== null &&
+    hasOwnProperty(error.response.data, 'message')
+  );
+}
+
+function hasOwnProperty<X extends object, Y extends PropertyKey>(
+  obj: X,
+  prop: Y
+): obj is X & Record<Y, unknown> {
+  return prop in obj;
 }
