@@ -42,24 +42,33 @@ export default function EditLinkStyle(element: EwoksRFLink) {
       return;
     }
 
-    setLinkType(element.type);
-    if (element.type === 'getAround') {
-      setX(element.data.getAroundProps.x);
-      setY(element.data.getAroundProps.y);
+    if (element.type) {
+      setLinkType(element.type);
     }
 
-    if (element.markerEnd === '') {
+    if (element.type === 'getAround') {
+      setX(element.data?.getAroundProps?.x || 80);
+      setY(element.data?.getAroundProps?.y || 80);
+    }
+
+    if (element.markerEnd === '' || !element.markerEnd) {
       setArrowType({ type: 'none' });
     } else {
       setArrowType(element.markerEnd);
     }
 
-    setAnimated(element.animated);
+    setAnimated(element.animated || false);
     setColorLine(element.style.stroke);
   }, [element]);
 
-  function linkTypeChanged(event: ChangeEvent<HTMLInputElement>) {
-    if (['multilineText', 'getAround'].includes(event.target.value)) {
+  function linkTypeChanged(
+    event: ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+    }>
+  ) {
+    const val = event.target.value as string;
+    if (['multilineText', 'getAround'].includes(val)) {
       setOpenSnackbar({
         open: true,
         text: 'Insert commas (,) in the label to break into multiple lines!',
@@ -69,20 +78,26 @@ export default function EditLinkStyle(element: EwoksRFLink) {
     setSelectedElement(
       {
         ...element,
-        type: event.target.value,
+        type: val,
       },
       'fromSaveElement'
     );
   }
 
-  const arrowTypeChanged = (event: ChangeEvent<HTMLInputElement>) => {
+  const arrowTypeChanged = (
+    event: ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+    }>
+  ) => {
     // 'none' is not available anymore in reactFlow so we
     // need to remove markerEnd if 'none' is selected in dropdown
+    const val = event.target.value as string;
     if (event.target.value === 'none') {
       setSelectedElement({ ...element, markerEnd: '' }, 'fromSaveElement');
     } else {
       setSelectedElement(
-        { ...element, markerEnd: { type: event.target.value } },
+        { ...element, markerEnd: { type: val } },
         'fromSaveElement'
       );
     }
@@ -110,10 +125,11 @@ export default function EditLinkStyle(element: EwoksRFLink) {
     );
   };
 
-  function changeX(event: ChangeEvent<HTMLInputElement>, newX: number) {
+  function changeX(_event: ChangeEvent<unknown>, value: number | number[]) {
     if (!isLink(selectedElement)) {
       return;
     }
+    const newX = value as number;
     setSelectedElement(
       {
         ...selectedElement,
@@ -130,10 +146,11 @@ export default function EditLinkStyle(element: EwoksRFLink) {
     setX(newX);
   }
 
-  function changeY(event: ChangeEvent<HTMLInputElement>, newY: number) {
+  function changeY(_event: ChangeEvent<unknown>, value: number | number[]) {
     if (!isLink(selectedElement)) {
       return;
     }
+    const newY = value as number;
     setSelectedElement(
       {
         ...selectedElement,

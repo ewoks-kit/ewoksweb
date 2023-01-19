@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { useState, useEffect, useRef } from 'react';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -10,7 +11,7 @@ import tooltipText from './TooltipText';
 import useStore from '../../store/useStore';
 
 interface IntegratedSpinnerProps {
-  children;
+  children: JSX.Element;
   tooltip: string;
   getting: boolean;
   action(isSubgraph?: string): void;
@@ -63,8 +64,9 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
 
   function handleButtonClick() {
     if (!loading) {
-      props.onClick();
-
+      if (props.onClick) {
+        props.onClick();
+      }
       if (props.action) {
         props.action();
       }

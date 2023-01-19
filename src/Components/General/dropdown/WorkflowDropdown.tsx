@@ -42,7 +42,7 @@ function WorkflowDropdown(props: Props) {
       getOptionSelected={(option, value) => option.id === value.id}
       groupBy={(option) => option.category}
       onChange={(event, newValue) => {
-        onChange(newValue);
+        onChange(newValue ?? { id: '' });
       }}
       getOptionLabel={(option) => option.label}
       placeholder="Open workflow"

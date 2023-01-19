@@ -20,20 +20,20 @@ function getAccordionContent(element: EwoksRFElement): Content {
   if (isNode(element)) {
     return {
       title: 'Node Details',
-      DetailsComponent: NodeDetails,
+      DetailsComponent: () => <NodeDetails {...element} />,
     };
   }
 
   if (isLink(element)) {
     return {
       title: 'Link Details',
-      DetailsComponent: LinkDetails,
+      DetailsComponent: () => <LinkDetails {...element} />,
     };
   }
 
   return {
     title: 'Graph Details',
-    DetailsComponent: GraphDetails,
+    DetailsComponent: () => <GraphDetails {...element} />,
   };
 }
 

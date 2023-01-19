@@ -6,7 +6,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { FormAction } from '../../types';
 
 interface SaveToServerProps {
-  saveToServer: () => void;
+  saveToServer: () => Promise<void>;
   action: FormAction;
   open: boolean;
   setOpenSaveDialog: Dispatch<SetStateAction<boolean>>;
@@ -34,7 +34,9 @@ export default function SaveToServer({
         action={() => null}
         getting={false}
         onClick={() => {
-          saveToServer();
+          void (async () => {
+            await saveToServer();
+          })();
         }}
       >
         <CloudUploadIcon />

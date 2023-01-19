@@ -19,7 +19,7 @@ export default function Conditions(props: ConditionsProps) {
     const elCon = element.data.conditions;
 
     // check if an empty line already exists
-    if (element.data.conditions.some((x) => x.id === '')) {
+    if (element.data.conditions?.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before adding another!',
@@ -34,7 +34,7 @@ export default function Conditions(props: ConditionsProps) {
         data: {
           ...element.data,
           on_error: false,
-          conditions: [...elCon, { id: '', name: '', value: false }],
+          conditions: [...(elCon as []), { id: '', name: '', value: false }],
         },
       },
       'fromSaveElement'

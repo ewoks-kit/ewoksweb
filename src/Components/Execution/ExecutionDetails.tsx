@@ -5,7 +5,7 @@ import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import IntegratedSpinner from '../General/IntegratedSpinner';
 import useStore from '../../store/useStore';
 import { Button, Chip, IconButton } from '@material-ui/core';
-import type { Event } from '../../types';
+import type { Event, WorkflowDescription } from '../../types';
 import { getWorkflow } from '../../utils/api';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
@@ -97,15 +97,14 @@ export default function ExecutionDetails() {
 
   function formatedDate(job: Event) {
     // TODO: works but is not entirelly correct but suggested by eslint
-    const { label } = allWorkflows?.find(
+    const label: string | undefined = allWorkflows?.find(
       (work) => job.workflow_id === work.id
-    ) || {
-      label: '',
-    };
-    const dat = new Date(job.time);
+    )?.label;
+
+    const dat = new Date(job.time || '');
 
     return `${
-      label ? label.slice(0, 20) : job.workflow_id
+      label ? label.slice(0, 20) : (job.workflow_id as string)
     } ${dat.getHours()}:${dat.getMinutes()} ${dat.getDate()}/${
       dat.getMonth() + 1
     }/${dat.getFullYear()}`;

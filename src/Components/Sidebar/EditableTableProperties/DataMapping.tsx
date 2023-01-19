@@ -57,12 +57,14 @@ export default function DataMappingComponent(element: EwoksRFLink) {
     );
   };
 
-  function isClassSource(): boolean {
-    const sourceNode = graphRF.nodes.find((nod) => {
-      return nod.id === element.source;
+  function isClass(sourceOrTarget: 'source' | 'target'): boolean {
+    const theNode = graphRF.nodes.find((nod) => {
+      const sOrTNode =
+        sourceOrTarget === 'source' ? element.source : element.target;
+      return nod.id === sOrTNode;
     });
-    if (sourceNode) {
-      return sourceNode.task_type === 'class';
+    if (theNode) {
+      return theNode.task_type === 'class';
     }
     return false;
   }
@@ -92,7 +94,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
           typeOfValues={[
             {
               type: element.source
-                ? isClassSource()
+                ? isClass('source')
                   ? 'select'
                   : 'input'
                 : 'input',
@@ -100,18 +102,13 @@ export default function DataMappingComponent(element: EwoksRFLink) {
             },
             {
               type: element.target
-                ? ['class'].includes(
-                    graphRF?.nodes?.[0] &&
-                      graphRF.nodes.find((nod) => {
-                        return nod.id === element.target;
-                      }).task_type
-                  )
+                ? isClass('target')
                   ? 'select'
                   : 'input'
                 : 'input',
               values: [
-                ...element.data.links_required_output_names,
-                ...element.data.links_optional_output_names,
+                ...(element.data.links_required_output_names || []),
+                ...(element.data.links_optional_output_names || []),
               ],
             },
           ]}

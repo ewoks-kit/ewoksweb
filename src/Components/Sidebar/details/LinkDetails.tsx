@@ -22,7 +22,7 @@ export default function LinkDetails(element: EwoksRFLink) {
     (state) => state.showAdvancedDetails
   );
 
-  const mapAllDataChanged = (event) => {
+  const mapAllDataChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedElement(
       {
         ...element,
@@ -32,7 +32,7 @@ export default function LinkDetails(element: EwoksRFLink) {
     );
   };
 
-  function onErrorChanged(event) {
+  function onErrorChanged(event: React.ChangeEvent<HTMLInputElement>) {
     setSelectedElement(
       {
         ...element,

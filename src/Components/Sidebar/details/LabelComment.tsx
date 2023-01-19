@@ -37,26 +37,29 @@ export default function LabelComment(props: LabelCommentProps) {
 
   useEffect(() => {
     if (isNode(element)) {
-      setLabel(element.data.label);
-      setComment(element.data?.comment);
+      setLabel(element.data?.label || '');
+      setComment(element.data?.comment || '');
       return;
     }
 
     if (isLink(element)) {
-      setLabel(element.label);
-      setComment(element.data?.comment);
+      setLabel(element.label || '');
+      setComment(element.data?.comment || '');
 
       const mappings =
-        element.data.data_mapping.length > 0
+        element.data?.data_mapping && element.data.data_mapping.length > 0
           ? element.data.data_mapping
-              .map((con) => `${con.source_output}->${con.target_input}`)
+              .map(
+                (con) => `${con.source_output || ''}->${con.target_input || ''}`
+              )
               .join(', ')
           : '';
       const conditions =
-        element.data.conditions.length > 0
+        element.data?.conditions && element.data.conditions.length > 0
           ? element.data.conditions
               .map(
-                (con) => `${con.source_output}: ${JSON.stringify(con.value)}`
+                (con) =>
+                  `${con.source_output || ''}: ${JSON.stringify(con.value)}`
               )
               .join(', ')
           : '';
@@ -132,11 +135,11 @@ export default function LabelComment(props: LabelCommentProps) {
               freeSolo
               options={labelChoices}
               value={label}
-              onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                valueSelectedChanged(event)
+              onChange={(event) =>
+                valueSelectedChanged(event as ChangeEvent<HTMLInputElement>)
               }
-              onInputChange={(event: ChangeEvent<HTMLInputElement>) =>
-                valueChanged(event)
+              onInputChange={(event) =>
+                valueChanged(event as ChangeEvent<HTMLInputElement>)
               }
               style={{ width: valueIsChanged ? '80%' : '98%' }}
               renderInput={(params) => (

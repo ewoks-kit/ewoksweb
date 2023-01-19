@@ -20,14 +20,14 @@ function getAccordionContent(element: EwoksRFElement): Content {
   if (isNode(element)) {
     return {
       title: 'Styling Node',
-      EditComponent: EditNodeStyle,
+      EditComponent: () => <EditNodeStyle {...element} />,
     };
   }
 
   if (isLink(element)) {
     return {
       title: 'Styling Link',
-      EditComponent: EditLinkStyle,
+      EditComponent: () => <EditLinkStyle {...element} />,
     };
   }
 

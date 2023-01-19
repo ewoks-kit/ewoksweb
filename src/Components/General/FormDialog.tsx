@@ -233,8 +233,13 @@ export default function FormDialog(props: FormDialogProps) {
     }
   }
 
-  function taskTypeChanged(event: ChangeEvent<HTMLInputElement>) {
-    const val = event.target.value;
+  function taskTypeChanged(
+    event: ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+    }>
+  ) {
+    const val = event.target.value as string;
     setTaskType(val);
     setElement({
       ...element,
@@ -242,8 +247,13 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function categoryChanged(event: ChangeEvent<HTMLInputElement>) {
-    const val = event.target.value;
+  function categoryChanged(
+    event: ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+    }>
+  ) {
+    const val = event.target.value as string;
     setCategory(val);
 
     setElement({
@@ -252,8 +262,13 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function iconChanged(event: ChangeEvent<HTMLInputElement>) {
-    const val = event.target.value;
+  function iconChanged(
+    event: ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+    }>
+  ) {
+    const val = event.target.value as string;
     setIcon(val);
     setElement({
       ...element,
@@ -261,8 +276,13 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function optionalInputNamesChanged(event: ChangeEvent<HTMLInputElement>) {
-    const val = event.target.value;
+  function optionalInputNamesChanged(
+    event: ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+    }>
+  ) {
+    const val = event.target.value as string;
     setOptionalInputNames(val.split(','));
     setElement({
       ...element,
@@ -270,8 +290,13 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function requiredInputNamesChanged(event: ChangeEvent<HTMLInputElement>) {
-    const val = event.target.value;
+  function requiredInputNamesChanged(
+    event: ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+    }>
+  ) {
+    const val = event.target.value as string;
     setRequiredInputNames(val.split(','));
     setElement({
       ...element,
@@ -279,8 +304,13 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function outputNamesChanged(event: ChangeEvent<HTMLInputElement>) {
-    const val = event.target.value;
+  function outputNamesChanged(
+    event: ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+    }>
+  ) {
+    const val = event.target.value as string;
     setOutputNames(val.split(','));
     setElement({
       ...element,
@@ -298,7 +328,18 @@ export default function FormDialog(props: FormDialogProps) {
   const optionalInputs = 'Optional Inputs';
   const requiredInputs = 'Required Inputs';
   const outputs = 'Outputs';
-  const fields = [
+  const fields: {
+    id: string;
+    value: string | string[];
+    handleChange: (
+      event: ChangeEvent<{
+        name?: string | undefined;
+        value: unknown;
+      }>,
+      child: React.ReactNode
+    ) => void;
+    tip?: string;
+  }[] = [
     { id: 'Task Type', value: taskType, handleChange: taskTypeChanged },
     { id: 'Category', value: category, handleChange: categoryChanged },
     // { id: 'Icon', value: icon, handleChange: iconChanged },

@@ -87,7 +87,7 @@ export default function NodeDetails(element: EwoksRFNode) {
   useEffect(() => {
     setInputsComplete(!!element.inputs_complete);
     setDefaultErrorNode(element.default_error_node || false);
-    setDataMapping(element.default_error_attributes?.data_mapping);
+    setDataMapping(element.default_error_attributes?.data_mapping || []);
     setMapAllData(element.default_error_attributes?.map_all_data || false);
   }, [element]);
 
@@ -155,7 +155,7 @@ export default function NodeDetails(element: EwoksRFNode) {
     }
   }
 
-  function inputsCompleteChanged(event) {
+  function inputsCompleteChanged(event: React.ChangeEvent<HTMLInputElement>) {
     setSelectedElement(
       {
         ...element,
@@ -165,7 +165,7 @@ export default function NodeDetails(element: EwoksRFNode) {
     );
   }
 
-  function defaulErrortNodeChanged(event) {
+  function defaulErrortNodeChanged(event: React.ChangeEvent<HTMLInputElement>) {
     setSelectedElement(
       {
         ...element,
@@ -176,7 +176,7 @@ export default function NodeDetails(element: EwoksRFNode) {
   }
 
   function addDataMapping() {
-    const elMap = element.default_error_attributes.data_mapping || [];
+    const elMap = element.default_error_attributes?.data_mapping || [];
 
     if (!elMap.some((x) => x.id === '')) {
       setSelectedElement(
@@ -216,7 +216,7 @@ export default function NodeDetails(element: EwoksRFNode) {
     );
   }
 
-  function mapAllDataChanged(event) {
+  function mapAllDataChanged(event: React.ChangeEvent<HTMLInputElement>) {
     setSelectedElement(
       {
         ...element,
@@ -333,7 +333,7 @@ export default function NodeDetails(element: EwoksRFNode) {
                         key={id}
                         id={id}
                         label={label}
-                        value={value}
+                        value={value || ''}
                         propChanged={propChanged}
                         editProps // editProps
                       />

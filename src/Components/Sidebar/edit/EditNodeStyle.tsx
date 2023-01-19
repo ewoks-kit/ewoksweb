@@ -34,7 +34,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
     [debouncedNodeWidth] // Only call effect if debounced search term changes
   );
 
-  function setElementNodeWidth(width) {
+  function setElementNodeWidth(width: number) {
     if (debouncedNodeWidth !== element.data.nodeWidth) {
       setSelectedElement(
         {
@@ -89,8 +89,11 @@ export default function EditNodeStyle(element: EwoksRFNode) {
     );
   };
 
-  const changeNodeSize = (event, number: number) => {
-    setNodeSize(number);
+  const changeNodeSize = (
+    _event: ChangeEvent<unknown>,
+    value: number | number[]
+  ) => {
+    setNodeSize(value as number);
   };
 
   return (
