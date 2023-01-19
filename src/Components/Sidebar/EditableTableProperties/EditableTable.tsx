@@ -92,7 +92,7 @@ function EditableTable(props: EditableTableProps) {
 
   function calcNewRows(rowId: string | undefined): EditableTableRow[] {
     return rows.map((row) => {
-      if (rowId && row.id === rowId) {
+      if (row.id === rowId) {
         return {
           ...row,
           id: row.name?.replace(' ', '_') || '',

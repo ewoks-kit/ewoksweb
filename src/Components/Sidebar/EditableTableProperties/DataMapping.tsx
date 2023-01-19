@@ -92,12 +92,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
           typeOfValues={[
             {
               type: element.source
-                ? ['class'].includes(
-                    graphRF?.nodes?.[0] &&
-                      graphRF.nodes.find((nod) => {
-                        return nod.id === element.source;
-                      }).task_type
-                  )
+                ? isClassSource()
                   ? 'select'
                   : 'input'
                 : 'input',
