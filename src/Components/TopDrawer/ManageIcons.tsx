@@ -6,7 +6,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import useStore from 'store/useStore';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
-import { getTaskDescription, deleteIcon, postIcon } from 'utils/api';
+import { getTaskDescription, deleteIcon, postIcon } from 'api/api';
 import orange2 from 'images/orange2.png';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import commonStrings from 'commonStrings.json';

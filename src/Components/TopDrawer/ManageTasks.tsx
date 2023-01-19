@@ -12,7 +12,7 @@ import AddNodes from '../Sidebar/AddNodes';
 import EventNoteIcon from '@material-ui/icons/EventNote';
 import { useState } from 'react';
 import type { ChangeEvent } from 'react';
-import { discoverTasks } from '../../utils/api';
+import { discoverTasks } from '../../api/api';
 import commonStrings from '../../commonStrings.json';
 import type { SnackbarParams } from '../../types';
 import { textForError } from '../../utils';

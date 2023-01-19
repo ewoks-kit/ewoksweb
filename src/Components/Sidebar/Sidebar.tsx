@@ -25,7 +25,7 @@ import type {
 } from 'types';
 import { calcNewId } from 'utils/calcNewId';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
-import { deleteWorkflow } from 'utils/api';
+import { deleteWorkflow } from 'api/api';
 import { OpenInBrowser } from '@material-ui/icons';
 import SidebarTooltip from './SidebarTooltip';
 import getIconsFromServer from '../../utils/getIconsFromServer';

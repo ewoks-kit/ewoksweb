@@ -1,4 +1,4 @@
-import { getIcon, getIcons } from './api';
+import { getIcon, getIcons } from '../api/api';
 import path from 'path-browserify';
 import type { Icon } from '../types';
 

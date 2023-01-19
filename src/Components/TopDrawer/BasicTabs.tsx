@@ -7,7 +7,7 @@ import { Box } from '@material-ui/core';
 import ManageIcons from './ManageIcons';
 import ManageWorkflows from './ManageWorkflows';
 import ManageTasks from './ManageTasks';
-import { getIcons } from '../../utils/api';
+import { getIcons } from '../../api/api';
 import ExecutionTable from '../Execution/ExecutionTable';
 import useStore from '../../store/useStore';
 

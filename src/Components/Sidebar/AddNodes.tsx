@@ -23,7 +23,7 @@ import FormDialog from '../General/FormDialog';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import BookmarksIcon from '@material-ui/icons/Bookmarks';
-import { getTaskDescription, deleteTask } from 'utils/api';
+import { getTaskDescription, deleteTask } from 'api/api';
 import { FormAction } from '../../types';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { findImage, textForError } from 'utils';

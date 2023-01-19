@@ -32,7 +32,7 @@ import {
   postTask,
   putTask,
   putWorkflow,
-} from '../../utils/api';
+} from '../../api/api';
 
 interface FormDialogProps {
   elementToEdit: Task | GraphRF;

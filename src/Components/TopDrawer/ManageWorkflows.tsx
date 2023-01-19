@@ -2,7 +2,7 @@ import { Box, FormControl, Grid, Paper, styled } from '@material-ui/core';
 import WorkflowDropdown from '../General/dropdown/WorkflowDropdown';
 import ReactJson from 'react-json-view';
 import { useState } from 'react';
-import { getWorkflow } from 'utils/api';
+import { getWorkflow } from 'api/api';
 import GetFromServerButtons from '../General/GetFromServerButtons';
 import type { GraphEwoks, WorkflowDescription } from 'types';
 import useStore from 'store/useStore';

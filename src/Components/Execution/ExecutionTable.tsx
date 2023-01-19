@@ -29,7 +29,7 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import Collapse from '@material-ui/core/Collapse';
-import { getExecutionEvents } from '../../utils/api';
+import { getExecutionEvents } from '../../api/api';
 
 function descendingComparator(a: Event[], b: Event[], orderBy: keyof Event) {
   // TODO: compare time start-end
