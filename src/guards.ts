@@ -10,3 +10,12 @@ export function assertDefined<T>(
     throw new TypeError(message);
   }
 }
+
+export function assertStr(
+  val: unknown,
+  message = 'Expected string'
+): asserts val is string {
+  if (typeof val !== 'string') {
+    throw new TypeError(message);
+  }
+}

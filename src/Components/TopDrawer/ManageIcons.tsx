@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import type { SyntheticEvent } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Box, Grid, Paper, styled, Tooltip } from '@material-ui/core';
@@ -10,13 +10,9 @@ import { getTaskDescription } from 'api/api';
 import orange2 from 'images/orange2.png';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import commonStrings from 'commonStrings.json';
-import type { Icon } from '../../types';
 import { textForError } from '../../utils';
-import {
-  getIcons as getIconsFromServer,
-  deleteIcon,
-  postIcon,
-} from 'api/icons';
+import { deleteIcon, postIcon, useIcons } from 'api/icons';
+import { mutate } from 'swr';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -50,8 +46,7 @@ export default function ManageIcons() {
   const [fileNameToBeSent, setFileNameToBeSent] = useState<string>('');
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const allIcons = useStore((state) => state.allIcons);
-  const setAllIcons = useStore((state) => state.setAllIcons);
+  const { icons } = useIcons();
 
   function clickIcon(icon: string) {
     setSelectedIcon(icon);
@@ -102,7 +97,7 @@ export default function ManageIcons() {
         severity: 'success',
       });
 
-      getIcons();
+      mutate(`/icons`);
       setFileNameToBeSent('');
     } catch (error) {
       setOpenSnackbar({
@@ -167,7 +162,7 @@ export default function ManageIcons() {
         severity: 'success',
       });
 
-      getIcons();
+      mutate(`/icons`);
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -180,22 +175,6 @@ export default function ManageIcons() {
   function disAgreeDeleteIcon() {
     setOpenAgreeDialog(false);
   }
-
-  const getIcons = useCallback(async () => {
-    try {
-      const icons: Icon[] = await getIconsFromServer();
-
-      if (Array.isArray(icons) && icons?.length > 0) {
-        setAllIcons([...icons]);
-      }
-    } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(error, commonStrings.retrieveIconsError),
-        severity: 'error',
-      });
-    }
-  }, [setOpenSnackbar, setAllIcons]);
 
   return (
     <Box>
@@ -212,7 +191,7 @@ export default function ManageIcons() {
         <Grid item xs={12} sm={12} md={8} lg={6}>
           <Item>
             <span className="dndflow">
-              {allIcons.map((icon) => (
+              {icons.map((icon) => (
                 <span
                   onClick={() => clickIcon(icon.name)}
                   aria-hidden="true"

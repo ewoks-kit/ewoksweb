@@ -7,9 +7,9 @@ import { Box } from '@material-ui/core';
 import ManageIcons from './ManageIcons';
 import ManageWorkflows from './ManageWorkflows';
 import ManageTasks from './ManageTasks';
-import { fetchIcons } from '../../api/icons';
 import ExecutionTable from '../Execution/ExecutionTable';
 import useStore from '../../store/useStore';
+import IconBoundary from '../../IconBoundary';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -64,20 +64,13 @@ export default function BasicTabs() {
     );
   }, [openSettingsDrawer]);
 
-  async function handleChange(newValue: number) {
-    setValue(newValue);
-    if (newValue === 2) {
-      await fetchIcons();
-    }
-  }
-
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
-          onChange={(_event, newValue: number) => {
-            handleChange(newValue);
+          onChange={(e, newValue: number) => {
+            setValue(newValue);
           }}
           aria-label="basic tabs example"
         >
@@ -96,7 +89,9 @@ export default function BasicTabs() {
         <ManageTasks />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <ManageIcons />
+        <IconBoundary>
+          <ManageIcons />
+        </IconBoundary>
       </TabPanel>
       <TabPanel value={value} index={3}>
         <ExecutionTable />

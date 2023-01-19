@@ -2,6 +2,7 @@ import { assertDefined } from '../guards';
 import type { Icon, IconsNames } from '../types';
 import { axiosRequest } from './api';
 import path from 'path-browserify';
+import useSWR from 'swr';
 
 interface GetIconResponse {
   data_url: string;
@@ -13,18 +14,18 @@ interface DeleteIconResponse {
   identifier: string;
 }
 
-export async function fetchIcons() {
+async function fetchIcons() {
   const { data } = await axiosRequest.get<IconsNames>(`/icons`);
   return data;
 }
 
-interface IconParams extends GetIconResponse {
+interface IconInfo extends GetIconResponse {
   url: string;
 }
 
-export async function fetchIcon(id: string): Promise<IconParams> {
+async function fetchIcon(name: string): Promise<IconInfo> {
   const { config, data } = await axiosRequest.get<GetIconResponse>(
-    `/icon/${id}`
+    `/icon/${name}`
   );
   const { url } = config;
   assertDefined(url);
@@ -48,20 +49,29 @@ export async function postIcon(
   return data;
 }
 
-export async function deleteIcon(id: string) {
-  const { data } = await axiosRequest.delete<DeleteIconResponse>(`/icon/${id}`);
+export async function deleteIcon(name: string) {
+  const { data } = await axiosRequest.delete<DeleteIconResponse>(
+    `/icon/${name}`
+  );
 
   return data;
 }
 
-export async function getIcons(): Promise<Icon[]> {
-  const { identifiers: iconIds } = await fetchIcons();
+async function getIcons(): Promise<Icon[]> {
+  const { identifiers: iconNames } = await fetchIcons();
 
-  const icons = await Promise.all(iconIds.map((id: string) => fetchIcon(id)));
+  const iconInfos = await Promise.all(iconNames.map(fetchIcon));
 
-  return icons.map<Icon>((image) => ({
-    name: path.basename(image.url),
-    image,
-    type: path.extname(image.url),
+  return iconInfos.map<Icon>((info) => ({
+    name: path.basename(info.url),
+    image: info,
+    type: path.extname(info.url),
   }));
+}
+
+export function useIcons() {
+  const { data: icons } = useSWR('/icons', getIcons, { suspense: true });
+
+  assertDefined(icons);
+  return { icons };
 }

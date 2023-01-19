@@ -16,19 +16,12 @@ import IconMenu from './IconMenu';
 import ExecutionDetails from '../Execution/ExecutionDetails';
 import DashboardStyle from '../Dashboard/DashboardStyle';
 import useStore from 'store/useStore';
-import type {
-  EwoksRFNode,
-  EwoksRFLink,
-  GraphDetails,
-  GraphRF,
-  Icon,
-} from 'types';
+import type { EwoksRFNode, EwoksRFLink, GraphDetails, GraphRF } from 'types';
 import { calcNewId } from 'utils/calcNewId';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { deleteWorkflow } from 'api/api';
 import { OpenInBrowser } from '@material-ui/icons';
 import SidebarTooltip from './SidebarTooltip';
-import { getIcons as getIconsFromServer } from 'api/icons';
 import commonStrings from 'commonStrings.json';
 import { isLink, isNode } from '../../utils/typeGuards';
 import { textForError } from '../../utils';
@@ -56,28 +49,6 @@ export default function Sidebar() {
   const setUndoRedo = useStore((state) => state.setUndoRedo);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
-  const setAllIcons = useStore((state) => state.setAllIcons);
-
-  // TODO: similar getIcons is used in manage icons. Should we move it to a hook?
-  const getIcons = useCallback(async () => {
-    try {
-      const icons: Icon[] | object = await getIconsFromServer();
-
-      if (Array.isArray(icons) && icons.length > 0) {
-        setAllIcons(icons);
-      }
-    } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(error, commonStrings.retrieveIconsError),
-        severity: 'error',
-      });
-    }
-  }, [setOpenSnackbar, setAllIcons]);
-
-  useEffect(() => {
-    getIcons();
-  }, [getIcons]);
 
   const deleteElement = async () => {
     if (workingGraph.graph.id !== graphRF.graph.id) {
