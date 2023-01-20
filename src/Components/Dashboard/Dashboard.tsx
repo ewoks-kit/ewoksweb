@@ -202,50 +202,49 @@ export default function Dashboard() {
       return;
     }
 
-    if (workingGraph.graph.id === graphRF.graph.id) {
-      if (graphRF.graph.uiProps?.source === 'fromServer') {
-        try {
-          const graphRFCurrated = curateGraph(graphRF);
-          await putWorkflow(rfToEwoks(graphRFCurrated));
-          setOpenSnackbar({
-            open: true,
-            text: 'Graph saved successfully!',
-            severity: 'success',
-          });
-          setCanvasGraphChanged(false);
-        } catch (error) {
-          setOpenSnackbar({
-            open: true,
-            text: textForError(error, commonStrings.savingError),
-            severity: 'error',
-          });
-        } finally {
-          setGettingFromServer(false);
-        }
-        return;
-      }
-
-      if (graphRF.graph.uiProps?.source !== 'fromServer') {
-        setAction(FormAction.newGraphOrOverwrite);
-        setOpenSaveDialog(true);
-        return;
-      }
-
+    if (workingGraph.graph.id !== graphRF.graph.id) {
       setGettingFromServer(false);
       setOpenSnackbar({
         open: true,
-        text: 'No graph exists to save!',
+        text:
+          'Cannot save any changes to subgraphs! Open it as the main graph to make changes.',
         severity: 'warning',
       });
+      return;
+    }
 
+    if (graphRF.graph.uiProps?.source === 'fromServer') {
+      try {
+        const graphRFCurrated = curateGraph(graphRF);
+        await putWorkflow(rfToEwoks(graphRFCurrated));
+        setOpenSnackbar({
+          open: true,
+          text: 'Graph saved successfully!',
+          severity: 'success',
+        });
+        setCanvasGraphChanged(false);
+      } catch (error) {
+        setOpenSnackbar({
+          open: true,
+          text: textForError(error, commonStrings.savingError),
+          severity: 'error',
+        });
+      } finally {
+        setGettingFromServer(false);
+      }
+      return;
+    }
+
+    if (graphRF.graph.uiProps?.source !== 'fromServer') {
+      setAction(FormAction.newGraphOrOverwrite);
+      setOpenSaveDialog(true);
       return;
     }
 
     setGettingFromServer(false);
     setOpenSnackbar({
       open: true,
-      text:
-        'Cannot save any changes to subgraphs! Open it as the main graph to make changes.',
+      text: 'No graph exists to save!',
       severity: 'warning',
     });
   }
