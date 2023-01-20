@@ -1,6 +1,39 @@
+import type { ReactNode } from 'react';
 import type { EdgeProps } from 'react-flow-renderer';
 import { getBezierPath, getEdgeCenter } from 'react-flow-renderer';
 import { edgeStyle } from './EdgeStyle';
+
+function getForeignObjectProps(
+  sourceX: number,
+  sourceY: number,
+  targetX: number,
+  targetY: number,
+  label: ReactNode
+): React.SVGProps<SVGForeignObjectElement> {
+  const [x, y] = getEdgeCenter({
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+  });
+
+  if (typeof label !== 'string') {
+    return {
+      x,
+      y,
+    };
+  }
+
+  const width = Math.max(...label.split(',').map((mp) => mp.length)) * 8;
+  const height = label.split(',').length * 30;
+
+  return {
+    x: x - width / 2,
+    y: y - height / 2,
+    width,
+    height,
+  };
+}
 
 function multilineText({
   id,
@@ -23,19 +56,6 @@ function multilineText({
     targetPosition,
   });
 
-  const [edgeCenterX, edgeCenterY] = getEdgeCenter({
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
-  });
-
-  const hasStringLabel = typeof label === 'string';
-  const titleWidth = hasStringLabel
-    ? Math.max(...label.split(',').map((mp) => mp.length)) * 8
-    : 1;
-  const titleHeight = hasStringLabel ? label.split(',').length * 30 : undefined;
-
   return (
     <>
       <path
@@ -46,11 +66,8 @@ function multilineText({
         markerEnd={markerEnd}
       />
       <foreignObject
-        width={titleWidth}
-        height={titleHeight}
-        x={edgeCenterX - titleWidth / 2}
-        y={edgeCenterY - titleWidth / 8}
-        style={{ ...style }}
+        style={style}
+        {...getForeignObjectProps(sourceX, sourceY, targetX, targetY, label)}
       >
         <div
           style={{
@@ -58,7 +75,7 @@ function multilineText({
             ...edgeStyle.multiline,
           }}
         >
-          {hasStringLabel &&
+          {typeof label === 'string' &&
             label.split(',').map((mp) => <div key={mp}>{mp}</div>)}
         </div>
       </foreignObject>
