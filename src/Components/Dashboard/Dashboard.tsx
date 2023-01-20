@@ -144,16 +144,19 @@ export default function Dashboard() {
     if (charCode === 's') {
       event.preventDefault();
       event.stopPropagation();
+      saveToServer();
       return;
     }
     if (charCode === 'z') {
       event.preventDefault();
       event.stopPropagation();
+      undo();
       return;
     }
     if (charCode === 'y') {
       event.preventDefault();
       event.stopPropagation();
+      redo();
       return;
     }
     if (event.shiftKey && charCode === 'n') {
@@ -186,21 +189,23 @@ export default function Dashboard() {
   async function saveToServer() {
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     // and Nodes DataMapping before attempting to save
-    const graphRFCurrated = curateGraph(graphRF);
     // DOC: search if id exists.
     // 1. If notExists open dialog for NEW NAME.
     // 2. If exists and you took it from me UPDATE without asking
     // 3. If exists and you took it from elseware open dialog for new name OR OVERWRITE
     const workflowsIds = await getWorkflowsIds();
     setGettingFromServer(true);
-    const exists = workflowExists(graphRF.graph.id, workflowsIds);
 
-    if (!exists) {
+    if (!workflowExists(graphRF.graph.id, workflowsIds)) {
       setAction(FormAction.newGraph);
       setOpenSaveDialog(true);
-    } else if (workingGraph.graph.id === graphRF.graph.id) {
+      return;
+    }
+
+    if (workingGraph.graph.id === graphRF.graph.id) {
       if (graphRF.graph.uiProps?.source === 'fromServer') {
         try {
+          const graphRFCurrated = curateGraph(graphRF);
           await putWorkflow(rfToEwoks(graphRFCurrated));
           setOpenSnackbar({
             open: true,
@@ -217,26 +222,32 @@ export default function Dashboard() {
         } finally {
           setGettingFromServer(false);
         }
-      } else if (graphRF.graph.uiProps?.source !== 'fromServer') {
+        return;
+      }
+
+      if (graphRF.graph.uiProps?.source !== 'fromServer') {
         setAction(FormAction.newGraphOrOverwrite);
         setOpenSaveDialog(true);
-      } else {
-        setGettingFromServer(false);
-        setOpenSnackbar({
-          open: true,
-          text: 'No graph exists to save!',
-          severity: 'warning',
-        });
+        return;
       }
-    } else {
+
       setGettingFromServer(false);
       setOpenSnackbar({
         open: true,
-        text:
-          'Cannot save any changes to subgraphs! Open it as the main graph to make changes.',
+        text: 'No graph exists to save!',
         severity: 'warning',
       });
+
+      return;
     }
+
+    setGettingFromServer(false);
+    setOpenSnackbar({
+      open: true,
+      text:
+        'Cannot save any changes to subgraphs! Open it as the main graph to make changes.',
+      severity: 'warning',
+    });
   }
 
   return (
