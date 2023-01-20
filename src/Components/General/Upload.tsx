@@ -103,7 +103,7 @@ function Upload(props: { children?: ReactNode } | undefined) {
           aria-label="add"
           disabled={inExecutionMode}
         >
-          {props?.children}
+          {props?.children || ''}
         </Fab>
       </label>
     </div>

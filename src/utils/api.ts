@@ -30,6 +30,9 @@ export function postTask(task: Task) {
 
 // Put task
 export function putTask(task: Task) {
+  if (!task.task_identifier) {
+    return;
+  }
   return axiosRequest.put<Task>(`/task/${task.task_identifier}`, task);
 }
 

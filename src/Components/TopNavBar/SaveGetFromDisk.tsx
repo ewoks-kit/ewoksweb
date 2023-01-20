@@ -31,11 +31,13 @@ export default function SaveGetFromDisk() {
   }
 
   function saveToDisk() {
-    download(
-      JSON.stringify(rfToEwoks(graphRF), null, 2),
-      `${graphRF.graph.label}.json`,
-      'text/plain'
-    );
+    if (graphRF.graph.label) {
+      download(
+        JSON.stringify(rfToEwoks(graphRF), null, 2),
+        `${graphRF.graph.label}.json`,
+        'text/plain'
+      );
+    }
   }
 
   return (

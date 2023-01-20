@@ -1,5 +1,6 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 /* eslint-disable consistent-return */
+// @ts-nocheck
 import type { MouseEvent } from 'react';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import type {

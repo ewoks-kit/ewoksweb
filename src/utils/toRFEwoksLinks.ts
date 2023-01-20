@@ -119,14 +119,17 @@ function calcLabel(
   }
 
   if (conditions && conditions.length > 0) {
-    return conditions
-      .map((el) => `${el.source_output}->${el.value as string}`)
-      .join(', ');
+    return (
+      conditions
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
+        .map((el) => `${el.source_output || ''}->${el.value || ''}`)
+        .join(', ')
+    );
   }
 
   if (data_mapping && data_mapping.length > 0) {
     return data_mapping
-      .map((el) => `${el.source_output}->${el.target_input}`)
+      .map((el) => `${el.source_output || ''}->${el.target_input || ''}`)
       .join(', ');
   }
 

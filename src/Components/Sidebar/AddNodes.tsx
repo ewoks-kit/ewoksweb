@@ -5,6 +5,7 @@ import {
   Button,
   IconButton,
 } from '@material-ui/core';
+import type { SvgIconTypeMap } from '@material-ui/core';
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import Typography from '@material-ui/core/Typography';
 
@@ -26,11 +27,12 @@ import { getTaskDescription, deleteTask } from 'utils/api';
 import { FormAction } from '../../types';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { findImage, textForError } from 'utils';
+import type { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
 interface dragInfo {
   task_identifier: string;
   task_type: string;
-  icon: string;
+  icon: OverridableComponent<SvgIconTypeMap> | string;
 }
 const onDragStart = (
   event: React.DragEvent,
@@ -38,7 +40,7 @@ const onDragStart = (
 ) => {
   event.dataTransfer.setData('task_identifier', task_identifier);
   event.dataTransfer.setData('task_type', task_type);
-  event.dataTransfer.setData('icon', icon);
+  event.dataTransfer.setData('icon', icon as string);
   event.dataTransfer.effectAllowed = 'move';
 };
 
