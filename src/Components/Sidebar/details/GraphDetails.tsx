@@ -39,12 +39,12 @@ export default function GraphDetails(graph: GraphDetailsType) {
     <>
       <TextButtonSave
         label="Label"
-        value={graph.label}
+        value={graph.label || ''}
         valueSaved={saveLabel}
       />
       <TextButtonSave
         label="Comment"
-        value={graph.uiProps?.comment}
+        value={graph.uiProps?.comment || ''}
         valueSaved={saveComment}
       />
       <TextButtonSave

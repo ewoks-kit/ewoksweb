@@ -64,7 +64,7 @@ export default function BasicTabs() {
     );
   }, [openSettingsDrawer]);
 
-  const handleChange = async (event: React.ChangeEvent, newValue: number) => {
+  const handleChange = async (newValue: number) => {
     setValue(newValue);
     if (newValue === 2) {
       await getIcons();
@@ -76,8 +76,8 @@ export default function BasicTabs() {
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
-          onChange={(e: React.ChangeEvent, newValue: number) => {
-            handleChange(e, newValue);
+          onChange={(_event, newValue: number) => {
+            handleChange(newValue);
           }}
           aria-label="basic tabs example"
         >

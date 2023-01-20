@@ -115,7 +115,16 @@ export default function ManageIcons() {
   function inputNew(ne: ChangeEvent<HTMLInputElement>) {
     const { files } = ne.target;
 
-    if (files && files[0].size > 10_000) {
+    if (!files?.[0]) {
+      setOpenSnackbar({
+        open: true,
+        text: 'No file was selected',
+        severity: 'warning',
+      });
+      return;
+    }
+
+    if (files[0].size > 10_000) {
       setOpenSnackbar({
         open: true,
         text: 'Files more than 10Kb are not acceptable for icons',
@@ -126,22 +135,20 @@ export default function ManageIcons() {
 
     const fileReader = new FileReader();
 
-    if (files) {
-      fileReader.readAsDataURL(files[0]);
+    fileReader.readAsDataURL(files[0]);
 
-      fileReader.addEventListener('load', (event) => {
-        if (event.target?.result) {
-          setFileToBeSent(event.target.result);
-          setFileNameToBeSent(files[0].name);
-        }
-      });
+    fileReader.addEventListener('load', (event) => {
+      if (event.target?.result) {
+        setFileToBeSent(event.target.result);
+        setFileNameToBeSent(files[0].name);
+      }
+    });
 
-      setOpenSnackbar({
-        open: true,
-        text: 'File ready to be uploaded as an icon',
-        severity: 'success',
-      });
-    }
+    setOpenSnackbar({
+      open: true,
+      text: 'File ready to be uploaded as an icon',
+      severity: 'success',
+    });
   }
 
   async function agreeDeleteIcon() {
