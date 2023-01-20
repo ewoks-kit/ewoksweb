@@ -65,8 +65,13 @@ export default function ExecutionFilters() {
     setCategoryValue(category ?? '');
   }
 
-  function statusChanged(event: ChangeEvent<{ value: string }>) {
-    setStatus(event.target.value);
+  function statusChanged(
+    event: ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+    }>
+  ) {
+    setStatus(event.target.value as string);
   }
 
   async function getEvents() {

@@ -9,6 +9,7 @@ import type { Event, WorkflowDescription } from '../../types';
 import { getWorkflow } from '../../utils/api';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
+import { textForError } from '../../utils';
 
 export default function ExecutionDetails() {
   // const graphRF = useStore((state) => state.graphRF);
@@ -130,38 +131,42 @@ export default function ExecutionDetails() {
     // if (graphRF.graph.id !== workflowId) {
     // DOC: Get the workflow from server if not on canvas
     // TODO: dublicated code with getFromServer, abstract in store? hook?
-    setGettingFromServer(true);
-    try {
-      const response = await getWorkflow(workflowId);
-      if (response.data) {
-        setWorkingGraph(response.data, 'fromServer');
-        // TODO: get rid of timeout?
-        setTimeout(() => {
-          // DOC:
-          const events = getEventsForJob();
+    if (workflowId) {
+      setGettingFromServer(true);
+      try {
+        const response = await getWorkflow(workflowId);
+        if (response.data) {
+          setWorkingGraph(response.data, 'fromServer');
+          // TODO: get rid of timeout?
+          setTimeout(() => {
+            // DOC:
+            const events = getEventsForJob();
 
-          // TODO: timeout is needed because executingEvents try to find
-          // the nodes before they are there from the server
-          // probably because setWorkingGraph changes the graphRF used in executingEvents
-          events.forEach((ev) => setExecutingEvents(ev, false));
-        }, 400);
-      } else {
+            // TODO: timeout is needed because executingEvents try to find
+            // the nodes before they are there from the server
+            // probably because setWorkingGraph changes the graphRF used in executingEvents
+            events.forEach((ev) => setExecutingEvents(ev, false));
+          }, 400);
+        } else {
+          setOpenSnackbar({
+            open: true,
+            text:
+              'Could not locate the requested workflow! Maybe it is deleted!',
+            severity: 'warning',
+          });
+        }
+      } catch (error) {
         setOpenSnackbar({
           open: true,
-          text: 'Could not locate the requested workflow! Maybe it is deleted!',
-          severity: 'warning',
+          text: textForError(
+            error,
+            'Error in retrieving workflow. Please check connectivity with the server!'
+          ),
+          severity: 'error',
         });
+      } finally {
+        setGettingFromServer(false);
       }
-    } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text:
-          error.response?.data?.message ||
-          'Error in retrieving workflow. Please check connectivity with the server!',
-        severity: 'error',
-      });
-    } finally {
-      setGettingFromServer(false);
     }
   }
 

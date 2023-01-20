@@ -119,6 +119,7 @@ export interface ExecutedJobsResponse {
 }
 
 export interface Event {
+  [key: string]: unknown;
   host_name?: string;
   process_id?: string;
   user_name?: string;
@@ -147,7 +148,7 @@ export interface Event {
 }
 
 export interface ExecutingState {
-  executingNodes: [string];
+  executingNodes: string[];
   executed: [NodeExecutionHistory];
   eventId: string; // the point on the timeline of events is the unique id in this entity
 }

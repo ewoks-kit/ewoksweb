@@ -15,6 +15,7 @@ import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 import { getWorkflow } from 'utils/api';
 import useStore from 'store/useStore';
 import type { GraphEwoks } from 'types';
+import { textForError } from '../../utils';
 
 interface EwoksUiInfoProps {
   closeDialog?(event?: React.KeyboardEvent | React.MouseEvent): void;
@@ -49,9 +50,10 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text:
-          error.response?.data?.message ||
-          'Error in retrieving workflow. Please check connectivity with the server!',
+        text: textForError(
+          error,
+          'Error in retrieving workflow. Please check connectivity with the server!'
+        ),
         severity: 'error',
       });
     }

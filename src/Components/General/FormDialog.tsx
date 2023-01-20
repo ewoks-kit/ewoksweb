@@ -335,8 +335,7 @@ export default function FormDialog(props: FormDialogProps) {
       event: ChangeEvent<{
         name?: string | undefined;
         value: unknown;
-      }>,
-      child: React.ReactNode
+      }>
     ) => void;
     tip?: string;
   }[] = [

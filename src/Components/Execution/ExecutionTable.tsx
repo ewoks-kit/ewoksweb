@@ -51,7 +51,7 @@ interface Data {
 
 function descendingComparator(a: Event[], b: Event[], orderBy: string) {
   // TODO: compare time start-end
-  if (['start time', 'end time'].includes(orderBy)) {
+  if (['start time', 'end time'].includes(orderBy) && b[0].time && a[0].time) {
     if (b[0].time < a[0].time) {
       return -1;
     }
@@ -61,11 +61,21 @@ function descendingComparator(a: Event[], b: Event[], orderBy: string) {
   }
   // DOC: if orderBy === 'workflow_id' wont work because it is not included in a context: job
   // use the context: workflow that has both => a[1] which is the workflow context
-  if (b[1][orderBy] < a[1][orderBy]) {
-    return -1;
-  }
-  if (b[1][orderBy] > a[1][orderBy]) {
-    return 1;
+  if (
+    b[1][orderBy] &&
+    a[1][orderBy] &&
+    (typeof a[1][orderBy] === 'string' || a[1][orderBy] instanceof String) &&
+    typeof b[1][orderBy] === 'string'
+  ) {
+    // Check when table visible
+    // @ts-expect-error
+    if (b[1][orderBy] < a[1][orderBy]) {
+      return -1;
+    }
+    // @ts-expect-error
+    if (b[1][orderBy] > a[1][orderBy]) {
+      return 1;
+    }
   }
   return 0;
 }
@@ -81,10 +91,7 @@ function getComparator(
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-function stableSort<T>(
-  array: readonly T[],
-  comparator: (a: T, b: T) => number
-) {
+function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
   const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -103,7 +110,7 @@ interface HeadCell {
   numeric: boolean;
 }
 
-const headCells: readonly HeadCell[] = [
+const headCells: HeadCell[] = [
   {
     id: 'details',
     numeric: false,
@@ -217,8 +224,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-function EnhancedTableToolbar(props) {
-  const { selected } = props;
+function EnhancedTableToolbar(selected: string[]) {
+  // const { selected } = props;
 
   const executedWorkflows = useStore((state) => state.executedWorkflows);
   const setWatchedWorkflows = useStore((state) => state.setWatchedWorkflows);
@@ -229,9 +236,12 @@ function EnhancedTableToolbar(props) {
     const allExJobs = [...executedWorkflows];
     // DOC: from the jobs from server take the selected to watchedJobs
     selected.forEach((selectedjobid) => {
-      watchedJobs.push(
-        allExJobs.find((job) => job[0].job_id === selectedjobid)
+      const jobSelected = allExJobs.find(
+        (job) => job[0].job_id === selectedjobid
       );
+      if (jobSelected) {
+        watchedJobs.push(jobSelected);
+      }
     });
 
     const newWatchedJobs: Event[][] = [];
@@ -296,7 +306,7 @@ const formatedTime = (time: string) => {
 export default function EnhancedTable() {
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof Data>('workflow_id');
-  const [selected, setSelected] = useState<readonly string[]>([]);
+  const [selected, setSelected] = useState<string[]>([]);
   const [expandRow, setExpandRow] = useState<string>('');
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(true);
@@ -316,18 +326,20 @@ export default function EnhancedTable() {
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Data
+    property: string
   ) => {
     console.log(event, property);
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
+    setOrderBy(property as keyof Data);
   };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = executedWorkflows.map((n) => n[0].job_id);
-      setSelected(newSelecteds);
+      const newSelectedEvents = executedWorkflows.map((n) => n[0].job_id);
+      // Till I see the execution
+      // @ts-expect-error
+      setSelected(newSelectedEvents);
       return;
     }
     setSelected([]);
@@ -335,7 +347,7 @@ export default function EnhancedTable() {
 
   const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
     const selectedIndex = selected.indexOf(name);
-    let newSelected: readonly string[] = [];
+    let newSelected: string[] = [];
 
     // if (event.target)
 
@@ -421,7 +433,7 @@ export default function EnhancedTable() {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper>
-        <EnhancedTableToolbar selected={selected} />
+        <EnhancedTableToolbar {...selected} />
         <hr style={{ color: '#dee3ff' }} />
         <TableContainer
           style={{
@@ -449,8 +461,8 @@ export default function EnhancedTable() {
               {stableSort(executedWorkflows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  console.log(row, index, row.slice(-1)[0].error);
-                  const isItemSelected = isSelected(row[0].job_id);
+                  // console.log(row, index, row.slice(-1)[0].error);
+                  const isItemSelected = isSelected(row[0].job_id || '');
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
@@ -483,7 +495,7 @@ export default function EnhancedTable() {
                               'aria-labelledby': labelId,
                             }}
                             onClick={(event) =>
-                              handleClick(event, row[0].job_id)
+                              handleClick(event, row[0].job_id || '')
                             }
                           />
                         </TableCell>
@@ -492,7 +504,7 @@ export default function EnhancedTable() {
                             aria-label="expand row"
                             size="small"
                             onClick={() => {
-                              setOpenRow(row[0].job_id);
+                              setOpenRow(row[0].job_id || '');
                             }}
                           >
                             {open && expandRow === row[0].job_id ? (
@@ -507,11 +519,12 @@ export default function EnhancedTable() {
                         </TableCell>
                         <TableCell align="right">{row[0].job_id}</TableCell>
                         <TableCell align="right">
-                          {formatedTime(row[0]?.time)}
+                          {formatedTime(row[0]?.time || '')}
                         </TableCell>
                         <TableCell align="right">
                           {formatedTime(
-                            row[row.length - 1] && row[row.length - 1].time
+                            (row[row.length - 1] && row[row.length - 1].time) ||
+                              ''
                           )}
                         </TableCell>
                         <TableCell align="right">{row[0].process_id}</TableCell>
@@ -593,7 +606,9 @@ export default function EnhancedTable() {
                                         {ev.error?.toString()}
                                       </TableCell>
                                       <TableCell align="right">
-                                        <Tooltip title={ev.error_traceback}>
+                                        <Tooltip
+                                          title={ev.error_traceback || ''}
+                                        >
                                           <p>
                                             {ev.error &&
                                               `${ev.error_traceback?.slice(
@@ -607,7 +622,7 @@ export default function EnhancedTable() {
                                         {ev.error_message}
                                       </TableCell>
                                       <TableCell align="right">
-                                        <Tooltip title={ev.node_id}>
+                                        <Tooltip title={ev.node_id || ''}>
                                           <p>
                                             {ev.node_id?.slice(
                                               ev.node_id?.lastIndexOf('.') + 1
@@ -616,7 +631,7 @@ export default function EnhancedTable() {
                                         </Tooltip>
                                       </TableCell>
                                       <TableCell align="right">
-                                        <Tooltip title={ev.task_id}>
+                                        <Tooltip title={ev.task_id || ''}>
                                           <p>
                                             {ev.task_id?.slice(
                                               ev.task_id?.lastIndexOf('.') + 1

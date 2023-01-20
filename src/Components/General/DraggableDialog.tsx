@@ -43,11 +43,11 @@ interface Props {
     object?: Graph;
     title?: string;
     id?: string;
-    callbackProps?: CallbackProps;
+    callbackProps: CallbackProps;
   };
   open: boolean;
   typeOfValues?: { values?: string[]; type: string };
-  setValue?: (name: string, graph: Graph, callbackProps: CallbackProps) => void;
+  setValue: (name: string, graph: Graph, callbackProps: CallbackProps) => void;
 }
 
 export default function DraggableDialog(props: Props) {
@@ -57,7 +57,10 @@ export default function DraggableDialog(props: Props) {
   const [title, setTitle] = useState('');
   const [name, setName] = useState('');
   const [oldName, setOldName] = useState('');
-  const [callbackProps, setCallbackProps] = useState<CallbackProps>();
+  const [callbackProps, setCallbackProps] = useState<CallbackProps>({
+    id: '',
+    rows: [],
+  });
   const graphRF = useStore((state) => state.graphRF);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
@@ -143,12 +146,16 @@ export default function DraggableDialog(props: Props) {
                   freeSolo
                   options={typeOfValues?.values || ['set a name']}
                   value={name}
-                  onChange={(e, val) => setName(val)}
+                  onChange={(e, val) => {
+                    if (val) {
+                      setName(val);
+                    }
+                  }}
                   onInputChange={(e, val) => setName(val)}
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label={typeOfValues.type || 'name'}
+                      label={typeOfValues?.type || 'name'}
                       margin="normal"
                       variant="outlined"
                     />

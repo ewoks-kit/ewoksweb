@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function SignUp(props) {
+export default function SignUp(props: { handleCloseDialog(): void }) {
   const classes = useStyles();
 
   return (
