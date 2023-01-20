@@ -1,4 +1,4 @@
-import type { EditableTableRow, EwoksRFNode, Inputs } from 'types';
+import type { EditableTableRow, EwoksRFNode } from 'types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import { IconButton } from '@material-ui/core';

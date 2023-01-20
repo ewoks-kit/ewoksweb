@@ -130,9 +130,9 @@ export function findImage(img: string | undefined, allIcons: Icon[]): string {
   return icon?.image?.data_url || orange2;
 }
 
-export function textForError(error: unknown, alternative: string) {
+export function textForError(error: unknown, alternative: string): string {
   if (isEwoksServerResponseError(error)) {
-    return error.response?.data.message;
+    return error.response?.data.message || alternative;
   }
 
   if (axios.isAxiosError(error)) {

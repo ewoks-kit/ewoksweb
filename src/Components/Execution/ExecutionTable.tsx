@@ -611,10 +611,12 @@ export default function EnhancedTable() {
                                         >
                                           <p>
                                             {ev.error &&
-                                              `${ev.error_traceback?.slice(
-                                                0,
-                                                30
-                                              )}...`}
+                                              `${
+                                                ev.error_traceback?.slice(
+                                                  0,
+                                                  30
+                                                ) || ''
+                                              }...`}
                                           </p>
                                         </Tooltip>
                                       </TableCell>

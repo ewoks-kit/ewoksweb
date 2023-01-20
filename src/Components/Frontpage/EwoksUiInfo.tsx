@@ -36,7 +36,9 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
 
         setOpenSnackbar({
           open: true,
-          text: `Workflow ${graph.graph.label} was downloaded successfully`,
+          text: `Workflow ${
+            graph.graph.label || 'without Label!!!'
+          } was downloaded successfully`,
           severity: 'success',
         });
         setWorkingGraph(response.data, 'fromServer');

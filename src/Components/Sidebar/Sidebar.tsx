@@ -261,8 +261,12 @@ export default function Sidebar() {
           </Button>
           {!isLink(selectedElement) && <IconMenu />}
           <ConfirmDialog
-            title={`Delete "${selectedElement.label}" workflow?`}
-            content={`You are about to delete "${selectedElement.label}" workflow.
+            title={`Delete "${
+              selectedElement.label || 'not labelled'
+            }" workflow?`}
+            content={`You are about to delete "${
+              selectedElement.label || 'a not labelled'
+            }" workflow.
               Please make sure that it is not used as a subgraph in other workflows!
               Do you agree to continue?`}
             open={openAgreeDialog}

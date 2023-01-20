@@ -47,7 +47,9 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
           const graph = response.data;
           setOpenSnackbar({
             open: true,
-            text: `Workflow ${graph.graph.label} was downloaded successfully`,
+            text: `Workflow ${
+              graph.graph.label || 'without label!!!'
+            } was downloaded successfully`,
             severity: 'success',
           });
           setCanvasGraphChanged(false);

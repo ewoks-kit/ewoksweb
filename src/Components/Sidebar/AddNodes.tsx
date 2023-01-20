@@ -221,7 +221,7 @@ function AddNodes(props: AddNodesProps) {
             <Accordion
               key={categoryName}
               className="add-nodes-accordion"
-              data-cy={`add-nodes-category-${categoryName}`}
+              data-cy={`add-nodes-category-${categoryName || 'no-category'}`}
             >
               <AccordionSummary
                 expandIcon={<OpenInBrowser />}
