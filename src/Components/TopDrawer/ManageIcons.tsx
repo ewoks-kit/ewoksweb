@@ -114,8 +114,9 @@ export default function ManageIcons() {
 
   function inputNew(ne: ChangeEvent<HTMLInputElement>) {
     const { files } = ne.target;
+    const inputFile = files?.[0];
 
-    if (!files?.[0]) {
+    if (!inputFile) {
       setOpenSnackbar({
         open: true,
         text: 'No file was selected',
@@ -124,7 +125,7 @@ export default function ManageIcons() {
       return;
     }
 
-    if (files[0].size > 10_000) {
+    if (inputFile.size > 10_000) {
       setOpenSnackbar({
         open: true,
         text: 'Files more than 10Kb are not acceptable for icons',
@@ -135,12 +136,12 @@ export default function ManageIcons() {
 
     const fileReader = new FileReader();
 
-    fileReader.readAsDataURL(files[0]);
+    fileReader.readAsDataURL(inputFile);
 
     fileReader.addEventListener('load', (event) => {
       if (event.target?.result) {
         setFileToBeSent(event.target.result);
-        setFileNameToBeSent(files[0].name);
+        setFileNameToBeSent(inputFile.name);
       }
     });
 
