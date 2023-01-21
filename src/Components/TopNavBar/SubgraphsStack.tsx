@@ -58,7 +58,9 @@ export default function SubgraphsStack() {
                 id={gr.id}
                 key={gr.id}
                 className={
-                  index === subgraphsStack.length - 1 ? classes.isDisabled : ''
+                  index === subgraphsStack.length - 1
+                    ? classes.isDisabled
+                    : undefined
                 }
                 onClick={goToGraph}
                 data-cy={gr.id}

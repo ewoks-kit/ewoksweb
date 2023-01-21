@@ -23,7 +23,7 @@ export default function UndoRedo({ undo, redo }: undoRedoProps) {
       <Tooltip title={tooltipText('Undo')} enterDelay={800} arrow>
         <IconButton
           color="inherit"
-          onClick={() => undo()}
+          onClick={undo}
           disabled={inExecutionMode}
           data-cy="undoButton"
         >

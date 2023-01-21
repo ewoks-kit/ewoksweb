@@ -200,7 +200,7 @@ export interface NodeProps {
   nodeWidth?: number;
   withImage?: boolean;
   withLabel?: boolean;
-  moreHandles: boolean;
+  moreHandles?: boolean;
   isGraph: boolean;
   type: string;
   label: string;
