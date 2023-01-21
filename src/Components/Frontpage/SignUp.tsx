@@ -126,7 +126,7 @@ export default function SignUp(props: { handleCloseDialog(): Promise<void> }) {
             <Link to="/edit-workflows" className={classes.linkStyle}>
               <IconButton
                 color="inherit"
-                onClick={async () => props.handleCloseDialog || ''}
+                onClick={() => void props.handleCloseDialog()}
               >
                 <Typography
                   component="h1"

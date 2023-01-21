@@ -119,12 +119,9 @@ function calcLabel(
   }
 
   if (conditions && conditions.length > 0) {
-    return (
-      conditions
-        // eslint-disable-next-line @typescript-eslint/no-base-to-string
-        .map((el) => `${el.source_output || ''}->${el.value || ''}`)
-        .join(', ')
-    );
+    return conditions
+      .map((el) => `${el.source_output || ''}->${(el.value as string) || ''}`)
+      .join(', ');
   }
 
   if (data_mapping && data_mapping.length > 0) {

@@ -107,6 +107,15 @@ export default function FormDialog(props: FormDialogProps) {
   }
 
   async function updateTask(task: Task) {
+    if (!task.task_identifier) {
+      setOpenSnackbar({
+        open: true,
+        text: 'The task has no task-identifier. Please try again!',
+        severity: 'warning',
+      });
+      return;
+    }
+
     try {
       await putTask(task);
 

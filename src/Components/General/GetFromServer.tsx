@@ -45,7 +45,7 @@ export default function GetFromServer() {
           setOpenSnackbar({
             open: true,
             text: `Workflow ${
-              graph.graph.label as string
+              graph.graph.label || 'without Label!!!'
             } was downloaded successfully`,
             severity: 'success',
           });

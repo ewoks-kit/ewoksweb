@@ -323,7 +323,7 @@ export default function Dashboard() {
           <UndoRedo undo={undo} redo={redo} />
           <div className={classes.verticalRule} />
           <SaveToServer
-            saveToServer={saveToServer}
+            saveToServer={async () => void saveToServer()}
             action={action}
             open={openSaveDialog}
             setOpenSaveDialog={setOpenSaveDialog}
