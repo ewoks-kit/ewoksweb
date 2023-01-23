@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
-import type { EdgeProps } from 'react-flow-renderer';
-import { getBezierPath, getEdgeCenter } from 'react-flow-renderer';
+import type { EdgeProps } from 'reactflow';
+import { getBezierPath } from 'reactflow';
 import { edgeStyle } from './EdgeStyle';
 
 function getForeignObjectProps(
@@ -10,7 +10,7 @@ function getForeignObjectProps(
   targetY: number,
   label: ReactNode
 ): React.SVGProps<SVGForeignObjectElement> {
-  const [x, y] = getEdgeCenter({
+  const [x, y] = getBezierPath({
     sourceX,
     sourceY,
     targetX,
@@ -28,7 +28,7 @@ function getForeignObjectProps(
   const height = label.split(',').length * 30;
 
   return {
-    x: x - width / 2,
+    x: Number.parseInt(x) - width / 2,
     y: y - height / 2,
     width,
     height,
@@ -62,6 +62,7 @@ function multilineText({
         id={id}
         style={style}
         className="react-flow__edge-path"
+        // @ts-expect-error
         d={edgePath}
         markerEnd={markerEnd}
       />

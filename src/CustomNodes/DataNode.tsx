@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import type { NodeProps } from 'react-flow-renderer';
+import type { NodeProps } from 'reactflow';
 import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
 

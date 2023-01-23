@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { Handle, Position } from 'react-flow-renderer';
-import type { Connection, NodeProps } from 'react-flow-renderer';
+import { Handle, Position } from 'reactflow';
+import type { Connection, NodeProps } from 'reactflow';
 import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
 import isValidLink from '../utils/IsValidLink';

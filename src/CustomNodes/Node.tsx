@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import orange1 from '../images/orange1.png';
-import { Handle, Position } from 'react-flow-renderer';
+import { Handle, Position } from 'reactflow';
 import type { EwoksRFNode, NodeProps } from '../types';
 import { contentStyle, style } from './NodeStyle';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -16,7 +16,7 @@ import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
 import tooltipText from '../Components/General/TooltipText';
 import { findImage } from 'utils';
-import type { Connection } from 'react-flow-renderer';
+import type { Connection } from 'reactflow';
 import { isNode } from '../utils/typeGuards';
 
 const onDragStart = (e: React.DragEvent<HTMLImageElement>) => {

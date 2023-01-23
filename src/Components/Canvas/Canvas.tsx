@@ -10,7 +10,7 @@ import type {
   NodeChange,
   EdgeChange,
   ReactFlowInstance,
-} from 'react-flow-renderer';
+} from 'reactflow';
 import ReactFlow, {
   Controls,
   MiniMap,
@@ -18,7 +18,7 @@ import ReactFlow, {
   applyNodeChanges,
   applyEdgeChanges,
   useUpdateNodeInternals,
-} from 'react-flow-renderer';
+} from 'reactflow';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import bendingText from 'CustomEdges/BendingTextEdge';
 import multilineText from 'CustomEdges/MultilineTextEdge';

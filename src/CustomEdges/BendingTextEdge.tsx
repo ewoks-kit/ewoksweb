@@ -1,5 +1,5 @@
-import type { EdgeProps } from 'react-flow-renderer';
-import { getBezierPath } from 'react-flow-renderer';
+import type { EdgeProps } from 'reactflow';
+import { getBezierPath } from 'reactflow';
 import { edgeStyle } from './EdgeStyle';
 
 function bendingText({
@@ -29,6 +29,7 @@ function bendingText({
         id={id}
         style={style}
         className="react-flow__edge-path"
+        // @ts-expect-error
         d={edgePath}
         markerEnd={markerEnd}
       />
