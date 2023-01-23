@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { Handle, Position } from 'react-flow-renderer';
 import type { Connection, NodeProps } from 'react-flow-renderer';
 import Node from './Node';
@@ -27,14 +27,14 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
   return (
     <Node
       isGraph
-      moreHandles={node.moreHandles}
+      moreHandles={node.moreHandles || false}
       withImage={node.withImage}
       nodeWidth={node.nodeWidth || 120}
       withLabel={node.withLabel}
       colorBorder={node.colorBorder}
       // the following is calculated in calcNodeType for subgraphs-inNodes-outNodes
-      type={node.type}
-      label={node.label}
+      type={node.type || ''}
+      label={node.label || ''}
       selected={selected}
       color={node.exists ? '#ced3ee' : 'red'}
       image={node.icon}
@@ -43,7 +43,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
       content={
         <>
           {node.inputs
-            .sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
+            ?.sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
             .map((input: { label: string }) => (
               <div
                 key={input.label}
@@ -87,7 +87,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
               </div>
             ))}
           {node.outputs
-            .sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
+            ?.sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
             .map((output: { label: string }) => (
               <div
                 key={output.label}

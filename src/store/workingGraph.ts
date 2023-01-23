@@ -13,8 +13,7 @@ import commonStrings from '../commonStrings.json';
 import { getTaskDescription } from '../utils/api';
 import type { GetState, SetState } from 'zustand';
 import { initializedRFGraph } from '../utils/InitializedEntities';
-import axios from 'axios';
-import { isEwoksServerResponseError } from '../utils/typeGuards';
+import { textForError } from '../utils';
 
 export interface WorkingGraphSlice {
   workingGraph: GraphRF;
@@ -38,18 +37,9 @@ const workingGraph = (
         const tasks = tasksData.data as { items: Task[] };
         get().setTasks(tasks.items);
       } catch (error) {
-        let text = '';
-        if (isEwoksServerResponseError(error)) {
-          text = error.response.data.message;
-        } else if (axios.isAxiosError(error)) {
-          text = error.message;
-        } else {
-          text = commonStrings.retrieveTasksError;
-        }
-
         get().setOpenSnackbar({
           open: true,
-          text,
+          text: textForError(error, commonStrings.retrieveTasksError),
           severity: 'error',
         });
       }

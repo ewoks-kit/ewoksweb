@@ -97,7 +97,7 @@ export default function getAround({
     sourceY,
     targetX,
     targetY,
-    data,
+    data: data ?? { getAroundProps: { x: 0, y: 0 } },
   });
 
   return (

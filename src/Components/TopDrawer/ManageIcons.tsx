@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import type { SyntheticEvent } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Box, Grid, Paper, styled, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -11,6 +12,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import commonStrings from 'commonStrings.json';
 import type { Icon } from '../../types';
 import getIconsFromServer from '../../utils/getIconsFromServer';
+import { textForError } from '../../utils';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -78,13 +80,13 @@ export default function ManageIcons() {
       // TODO: general error handling for all cases like workflows?
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || commonStrings.retrieveTasksError,
+        text: textForError(error, commonStrings.retrieveTasksError),
         severity: 'error',
       });
     }
   }
 
-  async function uploadFile(event) {
+  async function uploadFile(event: SyntheticEvent<Element, Event>) {
     event.preventDefault();
 
     try {
@@ -101,9 +103,10 @@ export default function ManageIcons() {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text:
-          error.response?.data?.message ||
-          'Error in uploading the Icon. Please check connectivity with the server!',
+        text: textForError(
+          error,
+          'Error in uploading the Icon. Please check connectivity with the server!'
+        ),
         severity: 'error',
       });
     }
@@ -111,8 +114,18 @@ export default function ManageIcons() {
 
   function inputNew(ne: ChangeEvent<HTMLInputElement>) {
     const { files } = ne.target;
+    const inputFile = files?.[0];
 
-    if (files[0].size > 10_000) {
+    if (!inputFile) {
+      setOpenSnackbar({
+        open: true,
+        text: 'No file was selected',
+        severity: 'warning',
+      });
+      return;
+    }
+
+    if (inputFile.size > 10_000) {
       setOpenSnackbar({
         open: true,
         text: 'Files more than 10Kb are not acceptable for icons',
@@ -123,11 +136,13 @@ export default function ManageIcons() {
 
     const fileReader = new FileReader();
 
-    fileReader.readAsDataURL(files[0]);
+    fileReader.readAsDataURL(inputFile);
 
     fileReader.addEventListener('load', (event) => {
-      setFileToBeSent(event.target.result);
-      setFileNameToBeSent(files[0].name);
+      if (event.target?.result) {
+        setFileToBeSent(event.target.result);
+        setFileNameToBeSent(inputFile.name);
+      }
     });
 
     setOpenSnackbar({
@@ -152,7 +167,7 @@ export default function ManageIcons() {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error?.response?.data || 'Error in deleting Icon',
+        text: textForError(error, 'Error in deleting Icon'),
         severity: 'error',
       });
     }
@@ -172,7 +187,7 @@ export default function ManageIcons() {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || commonStrings.retrieveIconsError,
+        text: textForError(error, commonStrings.retrieveIconsError),
         severity: 'error',
       });
     }
@@ -228,7 +243,7 @@ export default function ManageIcons() {
         <Grid item xs={12} sm={12} md={4} lg={3}>
           <Item>
             <form
-              onSubmit={(e) => {
+              onSubmit={(e: React.SyntheticEvent) => {
                 uploadFile(e);
               }}
             >

@@ -1,6 +1,6 @@
 import type { EwoksLink, EwoksNode, GraphEwoks, GraphNodes } from '../types';
 
-function calcMarkerEnd(inNod: GraphNodes): '' | { type: string } {
+function calcMarkerEnd(inNod: GraphNodes): { type: string } | undefined {
   if (inNod.uiProps?.markerEnd) {
     return { type: inNod.uiProps.markerEnd.type };
   }

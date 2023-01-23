@@ -8,6 +8,14 @@ import useStore from '../../store/useStore';
 
 const useStyles = DashboardStyle;
 
+// TBD: a lot of trouble with Events...
+// interface mouseEvent extends MouseEvent {
+//   target: {
+//     id: string;
+//     text: string;
+//   };
+// }
+
 export default function SubgraphsStack() {
   const classes = useStyles();
 
@@ -18,17 +26,19 @@ export default function SubgraphsStack() {
     return state.subgraphsStack;
   });
   const setSelectedElement = useStore((state) => state.setSelectedElement);
-
+  // TODO: event type TBD
   const goToGraph = (e) => {
     e.preventDefault();
     setSubgraphsStack({ id: e.target.id, label: e.target.text });
 
     const subgraph = recentGraphs.find((gr) => gr.graph.id === e.target.id);
 
-    setGraphRF(subgraph);
-    setSelectedElement({
-      ...subgraph.graph,
-    });
+    if (subgraph) {
+      setGraphRF(subgraph);
+      setSelectedElement({
+        ...subgraph.graph,
+      });
+    }
   };
 
   return (
@@ -51,7 +61,9 @@ export default function SubgraphsStack() {
                 id={gr.id}
                 key={gr.id}
                 className={
-                  index === subgraphsStack.length - 1 && classes.isDisabled
+                  index === subgraphsStack.length - 1
+                    ? classes.isDisabled
+                    : undefined
                 }
                 onClick={goToGraph}
                 data-cy={gr.id}

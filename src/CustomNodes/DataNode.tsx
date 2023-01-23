@@ -1,8 +1,9 @@
 import React, { memo } from 'react';
+import type { NodeProps } from 'react-flow-renderer';
 import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
 
-function DataNode(args) {
+function DataNode(args: NodeProps) {
   return (
     <Node
       isGraph={false}

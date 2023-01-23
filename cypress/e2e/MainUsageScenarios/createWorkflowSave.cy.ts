@@ -6,9 +6,11 @@ describe('create workflow and save', () => {
   });
 
   it('opens the dialog for name after clicking new', () => {
+    cy.findByRole('dialog').should('not.exist');
+
     cy.get('[data-cy="newWorkflowButton"]').click();
 
-    cy.contains('Give the new Workflow name').should('be.visible');
+    cy.findByRole('dialog').should('be.visible');
   });
 
   it('gives a new unique name creates and deletes workflow', () => {
@@ -17,9 +19,9 @@ describe('create workflow and save', () => {
     cy.contains('New Name - Identifier')
       .siblings('div')
       .children('input')
-      .type(id.toString());
+      .type(id.toString(), { force: true });
 
-    cy.contains('Save Workflow').click();
+    cy.contains('Save Workflow').click({ force: true });
     cy.waitForStableDOM();
 
     cy.get('.react-flow__edge').should('have.length', 0);

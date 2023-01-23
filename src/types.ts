@@ -184,9 +184,9 @@ export interface State
     WorkingGraphSlice,
     ExecutingEventsSlice,
     RecentGraphsSlice {
-  initializedGraph?: GraphEwoks;
-  initializedRFGraph?: GraphRF;
-  initializedTask?: Task;
+  initializedGraph: GraphEwoks;
+  initializedRFGraph: GraphRF;
+  initializedTask: Task;
 }
 
 export interface Action {
@@ -198,7 +198,7 @@ export interface NodeProps {
   nodeWidth?: number;
   withImage?: boolean;
   withLabel?: boolean;
-  moreHandles: boolean;
+  moreHandles?: boolean;
   isGraph: boolean;
   type: string;
   label: string;
@@ -569,4 +569,11 @@ export interface filterParams {
   job_id?: string;
   // type: string;
   error?: boolean;
+}
+
+export interface calcInOutForSubgraphOutput {
+  id: string;
+  label: string;
+  type: string;
+  positionY?: number;
 }

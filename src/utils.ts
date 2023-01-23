@@ -14,6 +14,7 @@ import { toEwoksNodes } from './utils/toEwoksNodes';
 import { calcNoteNodes } from './utils/calcNoteNodes';
 import { getWorkflowsDescriptions, getWorkflow } from './utils/api';
 import orange2 from 'images/orange2.png';
+import { isEwoksServerResponseError } from './utils/typeGuards';
 
 export const ewoksNetwork = {};
 
@@ -127,4 +128,16 @@ export function findImage(img: string | undefined, allIcons: Icon[]): string {
   const icon = allIcons.find((ico) => ico.name === img);
 
   return icon?.image?.data_url || orange2;
+}
+
+export function textForError(error: unknown, alternative: string) {
+  if (isEwoksServerResponseError(error)) {
+    return error.response?.data.message;
+  }
+
+  if (axios.isAxiosError(error)) {
+    return error.message;
+  }
+
+  return alternative;
 }
