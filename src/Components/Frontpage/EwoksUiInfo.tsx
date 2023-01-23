@@ -37,6 +37,8 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
         setOpenSnackbar({
           open: true,
           text: `Workflow ${
+            // TODO: perhaps label should be mandatory in the model ?
+            // and give one if empty when Ewoks -> EwoksRF...
             graph.graph.label || 'without Label!!!'
           } was downloaded successfully`,
           severity: 'success',

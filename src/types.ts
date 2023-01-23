@@ -24,6 +24,7 @@ import type { ExecutingEventsSlice } from './store/executingEvents';
 import type { AllIconsSlice } from './store/allIcons';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
+import type { ChangeEvent } from 'react';
 
 export enum FormAction {
   undefined = 'undefined',
@@ -86,7 +87,7 @@ export interface Graph {
 
 export interface SnackbarParams {
   open: boolean;
-  text: string | undefined;
+  text: string;
   severity: Color;
 }
 
@@ -580,3 +581,8 @@ export interface calcInOutForSubgraphOutput {
   type: string;
   positionY?: number;
 }
+
+export type PropertyChangedEvent = ChangeEvent<{
+  name?: string | undefined;
+  value: unknown;
+}>;

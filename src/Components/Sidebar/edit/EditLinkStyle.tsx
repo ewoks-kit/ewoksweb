@@ -11,7 +11,11 @@ import {
 
 import DashboardStyle from '../../Dashboard/DashboardStyle';
 import useStore from '../../../store/useStore';
-import type { EwoksRFLink, GraphRF } from '../../../types';
+import type {
+  EwoksRFLink,
+  GraphRF,
+  PropertyChangedEvent,
+} from '../../../types';
 import sidebarStyle from '../sidebarStyle';
 import type { ChangeEvent } from 'react';
 import { isLink } from '../../../utils/typeGuards';
@@ -51,22 +55,17 @@ export default function EditLinkStyle(element: EwoksRFLink) {
       setY(element.data?.getAroundProps?.y || 80);
     }
 
-    if (element.markerEnd === '' || !element.markerEnd) {
+    if (!element.markerEnd) {
       setArrowType({ type: 'none' });
     } else {
       setArrowType(element.markerEnd);
     }
 
-    setAnimated(element.animated || false);
+    setAnimated(!!element.animated);
     setColorLine(element.style.stroke);
   }, [element]);
 
-  function linkTypeChanged(
-    event: ChangeEvent<{
-      name?: string | undefined;
-      value: unknown;
-    }>
-  ) {
+  function linkTypeChanged(event: PropertyChangedEvent) {
     const val = event.target.value as string;
     if (['multilineText', 'getAround'].includes(val)) {
       setOpenSnackbar({
@@ -84,12 +83,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
     );
   }
 
-  const arrowTypeChanged = (
-    event: ChangeEvent<{
-      name?: string | undefined;
-      value: unknown;
-    }>
-  ) => {
+  const arrowTypeChanged = (event: PropertyChangedEvent) => {
     // 'none' is not available anymore in reactFlow so we
     // need to remove markerEnd if 'none' is selected in dropdown
     const val = event.target.value as string;

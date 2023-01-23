@@ -24,7 +24,6 @@ export function isGraphDetails(
 }
 
 export function isEwoksServerResponseError(
-  // TBD: the type of error?
   error: unknown
 ): error is EwoksServerErrorResponse {
   return (
@@ -36,7 +35,8 @@ export function isEwoksServerResponseError(
     hasOwnProperty(error.response, 'data') &&
     typeof error.response.data === 'object' &&
     error.response.data !== null &&
-    hasOwnProperty(error.response.data, 'message')
+    hasOwnProperty(error.response.data, 'message') &&
+    typeof error.response.data.message === 'string'
   );
 }
 

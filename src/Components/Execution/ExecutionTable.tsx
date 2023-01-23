@@ -461,8 +461,9 @@ export default function EnhancedTable() {
               {stableSort(executedWorkflows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  // console.log(row, index, row.slice(-1)[0].error);
-                  const isItemSelected = isSelected(row[0].job_id || '');
+                  const isItemSelected = row[0].job_id
+                    ? isSelected(row[0].job_id)
+                    : false;
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (

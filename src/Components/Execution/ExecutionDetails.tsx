@@ -98,9 +98,8 @@ export default function ExecutionDetails() {
 
   function formatedDate(job: Event) {
     // TODO: works but is not entirelly correct but suggested by eslint
-    const label: string | undefined = allWorkflows?.find(
-      (work) => job.workflow_id === work.id
-    )?.label;
+    const label = allWorkflows?.find((work) => job.workflow_id === work.id)
+      ?.label;
 
     const dat = new Date(job.time || '');
 

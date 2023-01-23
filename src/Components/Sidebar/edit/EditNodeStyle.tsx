@@ -93,7 +93,9 @@ export default function EditNodeStyle(element: EwoksRFNode) {
     _event: ChangeEvent<unknown>,
     value: number | number[]
   ) => {
-    setNodeSize(value as number);
+    if (typeof value === 'number') {
+      setNodeSize(value);
+    }
   };
 
   return (
@@ -162,7 +164,8 @@ export default function EditNodeStyle(element: EwoksRFNode) {
           onChange={changeNodeSize}
           min={40}
           max={300}
-          style={{ width: '90%' }}
+          style={{ width: '100%', paddingTop: '45px' }}
+          valueLabelDisplay="on"
         />
       </div>
     </FormControl>

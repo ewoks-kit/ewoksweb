@@ -91,6 +91,10 @@ function EditableTable(props: EditableTableProps) {
   }
 
   function calcNewRows(rowId: string | undefined): EditableTableRow[] {
+    if (!rowId) {
+      return rows;
+    }
+
     return rows.map((row) => {
       if (row.id === rowId) {
         return {
@@ -215,9 +219,10 @@ function EditableTable(props: EditableTableProps) {
     row: EditableTableRow,
     index: number
   ) => {
+    const { id: rowId = '' } = row;
     if (e.target.value === 'null') {
       const newRows = rows.map((rowe) => {
-        if (rowe.id === row.id) {
+        if (rowe.id === rowId) {
           return { ...rowe, value: e.target.value };
         }
         return rowe;
@@ -229,19 +234,14 @@ function EditableTable(props: EditableTableProps) {
     setTypeOfInputs(tOfI);
 
     if (e.target.value === 'list') {
-      showEditableDialog(row.id || '', 'Edit list', [], {
+      showEditableDialog(rowId, 'Edit list', [], {
         rows,
-        id: row.id || '',
+        id: rowId,
       });
     }
 
     if (e.target.value === 'dict') {
-      showEditableDialog(
-        row.id || '',
-        'Edit dict',
-        {},
-        { rows, id: row.id || '' }
-      );
+      showEditableDialog(rowId, 'Edit dict', {}, { rows, id: rowId });
     }
   };
 

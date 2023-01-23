@@ -51,7 +51,7 @@ export default function Sidebar() {
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
-  const setRecentGraphs = useStore((state) => state.setRecentGraphs);
+  const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const initializedRFGraph = useStore((state) => state.initializedRFGraph);
   const setUndoRedo = useStore((state) => state.setUndoRedo);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
@@ -160,7 +160,7 @@ export default function Sidebar() {
     setGraphRF(initializedRFGraph);
     setSelectedElement({} as GraphDetails);
     setSubgraphsStack({ id: '', label: '', resetStack: true });
-    setRecentGraphs({} as GraphRF, true);
+    resetRecentGraphs();
   };
 
   const disAgreeCallback = () => {
