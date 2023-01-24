@@ -91,10 +91,6 @@ function EditableTable(props: EditableTableProps) {
   }
 
   function calcNewRows(rowId: string | undefined): EditableTableRow[] {
-    if (!rowId) {
-      return rows;
-    }
-
     return rows.map((row) => {
       if (row.id === rowId) {
         return {
