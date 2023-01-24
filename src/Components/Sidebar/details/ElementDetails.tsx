@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 
 interface Content {
   title: string;
-  DetailsComponent: (element: EwoksRFElement) => JSX.Element;
+  DetailsComponent: () => JSX.Element;
 }
 
 function getAccordionContent(element: EwoksRFElement): Content {
@@ -63,7 +63,7 @@ function ElementDetails() {
       </AccordionSummary>
       <AccordionDetails style={{ padding: '0px 0px 0px 10px' }}>
         <form noValidate autoComplete="off" style={{ width: '100%' }}>
-          <DetailsComponent {...selectedElement} />
+          <DetailsComponent />
         </form>
       </AccordionDetails>
     </Accordion>

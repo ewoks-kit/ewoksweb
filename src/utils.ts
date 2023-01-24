@@ -131,8 +131,8 @@ export function findImage(img: string | undefined, allIcons: Icon[]): string {
 }
 
 export function textForError(error: unknown, alternative: string): string {
-  if (isEwoksServerResponseError(error)) {
-    return error.response?.data.message || alternative;
+  if (isEwoksServerResponseError(error) && error.response) {
+    return error.response.data.message;
   }
 
   if (axios.isAxiosError(error)) {
