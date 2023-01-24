@@ -18,7 +18,9 @@ function CategoryDropdown(props: Props) {
       options={options}
       getOptionSelected={(option, value) => option === value}
       onChange={(event, newValue) => {
-        onChange(newValue);
+        if (newValue) {
+          onChange(newValue);
+        }
       }}
       placeholder="Categories"
     />

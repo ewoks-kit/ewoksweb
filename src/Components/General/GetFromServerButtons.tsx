@@ -6,6 +6,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import useStore from '../../store/useStore';
 import { getWorkflow } from '../../utils/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
+import { textForError } from '../../utils';
 
 interface GetFromServerButtonsProps {
   workflowId: string;
@@ -46,7 +47,9 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
           const graph = response.data;
           setOpenSnackbar({
             open: true,
-            text: `Workflow ${graph.graph.label} was downloaded successfully`,
+            text: `Workflow ${
+              graph.graph.label || 'without label!!!'
+            } was downloaded successfully`,
             severity: 'success',
           });
           setCanvasGraphChanged(false);
@@ -66,9 +69,10 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
       } catch (error) {
         setOpenSnackbar({
           open: true,
-          text:
-            error.response?.data?.message ||
-            'Error in retrieving workflow. Please check connectivity with the server!',
+          text: textForError(
+            error,
+            'Error in retrieving workflow. Please check connectivity with the server!'
+          ),
           severity: 'error',
         });
       } finally {

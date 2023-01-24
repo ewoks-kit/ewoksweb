@@ -50,10 +50,8 @@ export default function Sidebar() {
   const setGraphRF = useStore((state) => state.setGraphRF);
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const [openDialog] = useState<boolean>(false);
-  const [dialogContent] = useState({});
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
-  const setRecentGraphs = useStore((state) => state.setRecentGraphs);
+  const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const initializedRFGraph = useStore((state) => state.initializedRFGraph);
   const setUndoRedo = useStore((state) => state.setUndoRedo);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
@@ -162,7 +160,7 @@ export default function Sidebar() {
     setGraphRF(initializedRFGraph);
     setSelectedElement({} as GraphDetails);
     setSubgraphsStack({ id: '', label: '', resetStack: true });
-    setRecentGraphs({} as GraphRF, true);
+    resetRecentGraphs();
   };
 
   const disAgreeCallback = () => {
@@ -262,10 +260,13 @@ export default function Sidebar() {
             Clone
           </Button>
           {!isLink(selectedElement) && <IconMenu />}
-          <DraggableDialog open={openDialog} content={dialogContent} />
           <ConfirmDialog
-            title={`Delete "${selectedElement.label}" workflow?`}
-            content={`You are about to delete "${selectedElement.label}" workflow.
+            title={`Delete "${
+              selectedElement.label || 'not labelled'
+            }" workflow?`}
+            content={`You are about to delete "${
+              selectedElement.label || 'a not labelled'
+            }" workflow.
               Please make sure that it is not used as a subgraph in other workflows!
               Do you agree to continue?`}
             open={openAgreeDialog}

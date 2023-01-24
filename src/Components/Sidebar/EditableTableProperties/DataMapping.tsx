@@ -49,13 +49,22 @@ export default function DataMappingComponent(element: EwoksRFLink) {
           ...element.data,
           data_mapping: dmap,
           label: dmap
-            .map((el) => `${el.source_output}->${el.target_input}`)
+            .map((el) => `${el.source_output || ''}->${el.target_input || ''}`)
             .join(', '),
         },
       },
       'fromSaveElement'
     );
   };
+
+  function isClass(sourceOrTarget: 'source' | 'target'): boolean {
+    const theNode = graphRF.nodes.find((nod) => {
+      const sOrTNode =
+        sourceOrTarget === 'source' ? element.source : element.target;
+      return nod.id === sOrTNode;
+    });
+    return theNode?.task_type === 'class';
+  }
 
   return (
     <div>
@@ -74,7 +83,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       >
         <AddCircleOutlineIcon />
       </IconButton>
-      {element.data.data_mapping.length > 0 && (
+      {element.data.data_mapping && element.data.data_mapping.length > 0 && (
         <EditableTable
           headers={['Source', 'Target']}
           defaultValues={element.data.data_mapping}
@@ -82,12 +91,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
           typeOfValues={[
             {
               type: element.source
-                ? ['class'].includes(
-                    graphRF?.nodes?.[0] &&
-                      graphRF.nodes.find((nod) => {
-                        return nod.id === element.source;
-                      }).task_type
-                  )
+                ? isClass('source')
                   ? 'select'
                   : 'input'
                 : 'input',
@@ -95,18 +99,13 @@ export default function DataMappingComponent(element: EwoksRFLink) {
             },
             {
               type: element.target
-                ? ['class'].includes(
-                    graphRF?.nodes?.[0] &&
-                      graphRF.nodes.find((nod) => {
-                        return nod.id === element.target;
-                      }).task_type
-                  )
+                ? isClass('target')
                   ? 'select'
                   : 'input'
                 : 'input',
               values: [
-                ...element.data.links_required_output_names,
-                ...element.data.links_optional_output_names,
+                ...(element.data.links_required_output_names || []),
+                ...(element.data.links_optional_output_names || []),
               ],
             },
           ]}

@@ -1,5 +1,6 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 /* eslint-disable consistent-return */
+// @ts-nocheck
 import type { MouseEvent } from 'react';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import type {
@@ -246,7 +247,7 @@ function Canvas() {
     }
   };
 
-  const onEdgeClick = (event, element?: Edge) => {
+  const onEdgeClick = (_event: MouseEvent, element?: Edge) => {
     // @ts-expect-error
     const graphElement: EwoksRFLink = edges.find((el) => el.id === element.id);
     setSelectedElement(graphElement);
@@ -256,7 +257,7 @@ function Canvas() {
     setRfInstance(instance);
   }, []);
 
-  const onDragOver = (event) => {
+  const onDragOver = (event: DragEvent) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   };
@@ -400,27 +401,33 @@ function Canvas() {
           on_error: false,
           comment: '',
           // DOC: node optional_input_names are link's optional_output_names
-          links_optional_output_names: targetTask.optional_input_names || [],
+          links_optional_output_names: targetTask?.optional_input_names || [],
           // DOC: node required_input_names are link's required_output_names
-          links_required_output_names: targetTask.required_input_names || [],
+          links_required_output_names: targetTask?.required_input_names || [],
           // DOC: node output_names are link's input_names
-          links_input_names: sourceTask.output_names || [],
+          links_input_names: sourceTask?.output_names || [],
           conditions: [],
           data_mapping: [],
           map_all_data:
-            ['ppfmethod', 'ppfport'].includes(sourceTask.task_type) ||
-            ['ppfmethod', 'ppfport'].includes(targetTask.task_type),
+            ['ppfmethod', 'ppfport'].includes(sourceTask?.task_type || '') ||
+            ['ppfmethod', 'ppfport'].includes(targetTask?.task_type || ''),
           sub_source:
-            sourceTask.task_type === 'graph' ? params.sourceHandle : '',
+            sourceTask?.task_type === 'graph' && params.sourceHandle
+              ? params.sourceHandle
+              : '',
           sub_target:
-            targetTask.task_type === 'graph' ? params.targetHandle : '',
+            targetTask?.task_type === 'graph' && params.targetHandle
+              ? params.targetHandle
+              : '',
         },
-        id: `${params.source}:${params.sourceHandle}->${params.target}:${params.targetHandle}`,
+        id: `${params.source || ''}:${params.sourceHandle || ''}->${
+          params.target || ''
+        }:${params.targetHandle || ''}`,
         label: '', // `${params.source.slice(0, 6)}->${params.target.slice(0, 6)}`,
-        source: params.source,
-        target: params.target,
-        sourceHandle: params.sourceHandle,
-        targetHandle: params.targetHandle,
+        source: params.source || '',
+        target: params.target || '',
+        sourceHandle: params.sourceHandle || '',
+        targetHandle: params.targetHandle || '',
         type: 'default',
         animated: false,
         markerEnd: { type: 'arrowclosed' },
@@ -434,8 +441,8 @@ function Canvas() {
         labelBgBorderRadius: 4,
         labelStyle: { fill: 'blue', fontWeight: 500, fontSize: 14 },
         startEnd:
-          sourceTask.task_type === 'graphInput' ||
-          targetTask.task_type === 'graphOutput',
+          sourceTask?.task_type === 'graphInput' ||
+          targetTask?.task_type === 'graphOutput',
       };
 
       const newGraph: GraphRF = {
@@ -459,7 +466,7 @@ function Canvas() {
     }
   };
 
-  const onPaneContextMenu = (event) => {
+  const onPaneContextMenu = (event: MouseEvent) => {
     event.preventDefault();
     setOpenSnackbar({
       open: true,
@@ -468,10 +475,10 @@ function Canvas() {
     });
   };
 
-  const onNodeDoubleClick = (event, node) => {
+  const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
     event.preventDefault();
     const nodeTmp = graphRF.nodes.find((el) => el.id === node.id);
-    if (nodeTmp.task_type === 'graph') {
+    if (nodeTmp?.task_type === 'graph') {
       // if type==graph get the subgraph from the recentGraphs
       const subgraph = recentGraphs.find(
         (gr) => gr.graph.id === nodeTmp.task_identifier
@@ -493,23 +500,25 @@ function Canvas() {
         });
       }
     } else {
-      nodeTmp.data.details = true;
-      setSelectedElement({
-        ...nodeTmp,
-        data: { ...nodeTmp.data, details: true },
-      });
+      if (nodeTmp) {
+        nodeTmp.data.details = true;
+        setSelectedElement({
+          ...nodeTmp,
+          data: { ...nodeTmp.data, details: true },
+        });
+      }
     }
   };
 
-  const onSelectionDragStart = (event) => {
+  const onSelectionDragStart = (event: MouseEvent) => {
     event.preventDefault();
   };
 
-  const onSelectionDrag = (event) => {
+  const onSelectionDrag = (event: MouseEvent) => {
     event.preventDefault();
   };
 
-  const onSelectionDragStop = (event, selectedElements) => {
+  const onSelectionDragStop = (event: MouseEvent, selectedElements: Node[]) => {
     event.preventDefault();
     if (workingGraph.graph.id === graphRF.graph.id) {
       // DOC: find selectedElements and update its position and save grapRF
@@ -546,7 +555,7 @@ function Canvas() {
     }
   };
 
-  const onNodeDragStop = (event, node) => {
+  const onNodeDragStop = (event: MouseEvent, node: Node) => {
     event.preventDefault();
     if (workingGraph.graph.id === graphRF.graph.id) {
       // DOC: find RFEwoksNode and update its position and save grapRF
@@ -594,8 +603,8 @@ function Canvas() {
           id: calcNewId(selectedElement.id, graphRF.nodes),
           selected: false,
           position: {
-            x: selectedElement.position.x + 100,
-            y: selectedElement.position.y + 100,
+            x: selectedElement.position?.x || 0 + 100,
+            y: selectedElement.position?.y || 0 + 100,
           },
         };
         setGraphRF(
@@ -665,7 +674,7 @@ function Canvas() {
               if (n.style?.background) {
                 return n.style.background as string;
               }
-              if (['graphOutput', 'graphInput'].includes(n.type)) {
+              if (['graphOutput', 'graphInput'].includes(n.type || '')) {
                 return '#0041d0';
               }
               if (n.type === 'graph') {
@@ -677,7 +686,7 @@ function Canvas() {
               if (n.style?.background) {
                 return n.style.background as string;
               }
-              if (['graphOutput', 'graphInput'].includes(n.type)) {
+              if (['graphOutput', 'graphInput'].includes(n.type || '')) {
                 return 'rgb(223, 226, 247)';
               }
               if (n.type === 'graph') {

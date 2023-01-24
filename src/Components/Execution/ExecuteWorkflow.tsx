@@ -8,7 +8,7 @@ import type { Event } from '../../types';
 import { executeWorkflow } from '../../utils/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 
-export const socket = io(process.env.REACT_APP_SERVER_URL);
+export const socket = io(process.env.REACT_APP_SERVER_URL as string);
 
 export default function ExecuteWorkflow() {
   const graphRF = useStore((state) => state.graphRF);

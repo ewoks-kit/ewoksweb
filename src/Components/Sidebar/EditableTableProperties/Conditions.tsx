@@ -16,10 +16,10 @@ export default function Conditions(props: ConditionsProps) {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   function addConditions() {
-    const elCon = element.data.conditions;
+    const elCon = element.data.conditions || [];
 
     // check if an empty line already exists
-    if (element.data.conditions.some((x) => x.id === '')) {
+    if (elCon.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before adding another!',

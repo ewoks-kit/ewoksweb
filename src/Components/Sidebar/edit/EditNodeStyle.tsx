@@ -34,7 +34,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
     [debouncedNodeWidth] // Only call effect if debounced search term changes
   );
 
-  function setElementNodeWidth(width) {
+  function setElementNodeWidth(width: number) {
     if (debouncedNodeWidth !== element.data.nodeWidth) {
       setSelectedElement(
         {
@@ -89,8 +89,13 @@ export default function EditNodeStyle(element: EwoksRFNode) {
     );
   };
 
-  const changeNodeSize = (event, number: number) => {
-    setNodeSize(number);
+  const changeNodeSize = (
+    _event: ChangeEvent<unknown>,
+    value: number | number[]
+  ) => {
+    if (typeof value === 'number') {
+      setNodeSize(value);
+    }
   };
 
   return (
@@ -159,7 +164,8 @@ export default function EditNodeStyle(element: EwoksRFNode) {
           onChange={changeNodeSize}
           min={40}
           max={300}
-          style={{ width: '90%' }}
+          style={{ width: '100%', paddingTop: '45px' }}
+          valueLabelDisplay="on"
         />
       </div>
     </FormControl>

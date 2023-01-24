@@ -17,8 +17,13 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import type { ChangeEvent } from 'react';
-import type { GraphRF, Task, FormAction } from '../../types';
-import { rfToEwoks } from '../../utils';
+import type {
+  GraphRF,
+  Task,
+  FormAction,
+  PropertyChangedEvent,
+} from '../../types';
+import { rfToEwoks, textForError } from '../../utils';
 import useStore from '../../store/useStore';
 import commonStrings from '../../commonStrings.json';
 import {
@@ -49,7 +54,7 @@ export default function FormDialog(props: FormDialogProps) {
 
   const setCanvasGraphChanged = useStore((st) => st.setCanvasGraphChanged);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
-  const setRecentGraphs = useStore((state) => state.setRecentGraphs);
+  const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const allIcons = useStore((state) => state.allIcons);
   const setGettingFromServer = useStore((st) => st.setGettingFromServer);
@@ -74,13 +79,13 @@ export default function FormDialog(props: FormDialogProps) {
     }
     // TODO: check on the optional of 'graph' in GraphRF that will enable type inferencing
     if ('task_identifier' in elementToEdit) {
-      setNewName(elementToEdit.task_identifier);
-      setTaskType(elementToEdit.task_type);
-      setCategory(elementToEdit.category);
-      setIcon(elementToEdit.icon);
-      setOptionalInputNames(elementToEdit.optional_input_names);
-      setRequiredInputNames(elementToEdit.required_input_names);
-      setOutputNames(elementToEdit.output_names);
+      setNewName(elementToEdit.task_identifier || '');
+      setTaskType(elementToEdit.task_type || '');
+      setCategory(elementToEdit.category || '');
+      setIcon(elementToEdit.icon || '');
+      setOptionalInputNames(elementToEdit.optional_input_names || []);
+      setRequiredInputNames(elementToEdit.required_input_names || []);
+      setOutputNames(elementToEdit.output_names || []);
     }
   }, [open, action, elementToEdit, isForGraph]);
 
@@ -107,6 +112,15 @@ export default function FormDialog(props: FormDialogProps) {
   }
 
   async function updateTask(task: Task) {
+    if (!task.task_identifier) {
+      setOpenSnackbar({
+        open: true,
+        text: 'The task has no task-identifier. Please try again!',
+        severity: 'warning',
+      });
+      return;
+    }
+
     try {
       await putTask(task);
 
@@ -121,7 +135,7 @@ export default function FormDialog(props: FormDialogProps) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || commonStrings.savingError,
+        text: textForError(error, commonStrings.savingError),
         severity: 'warning',
       });
     }
@@ -142,7 +156,7 @@ export default function FormDialog(props: FormDialogProps) {
 
       setOpenSnackbar({
         open: true,
-        text: 'Task saved successfuly',
+        text: 'Task saved successfully',
         severity: 'success',
       });
 
@@ -154,7 +168,7 @@ export default function FormDialog(props: FormDialogProps) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || commonStrings.savingError,
+        text: textForError(error, commonStrings.savingError),
         severity: 'warning',
       });
     }
@@ -177,7 +191,7 @@ export default function FormDialog(props: FormDialogProps) {
         setGettingFromServer(false);
         setOpenSnackbar({
           open: true,
-          text: error.response?.data?.message || commonStrings.savingError,
+          text: textForError(error, commonStrings.savingError),
           severity: 'error',
         });
       } finally {
@@ -197,7 +211,7 @@ export default function FormDialog(props: FormDialogProps) {
 
         setWorkingGraph(responseNew.data, 'fromServer');
 
-        setRecentGraphs(undefined, true);
+        resetRecentGraphs();
 
         setOpenSnackbar({
           open: true,
@@ -208,7 +222,7 @@ export default function FormDialog(props: FormDialogProps) {
         setGettingFromServer(false);
         setOpenSnackbar({
           open: true,
-          text: error.response?.data?.message || commonStrings.savingError,
+          text: textForError(error, commonStrings.savingError),
           severity: 'error',
         });
       }
@@ -233,8 +247,8 @@ export default function FormDialog(props: FormDialogProps) {
     }
   }
 
-  function taskTypeChanged(event: ChangeEvent<HTMLInputElement>) {
-    const val = event.target.value;
+  function taskTypeChanged(event: PropertyChangedEvent) {
+    const val = event.target.value as string;
     setTaskType(val);
     setElement({
       ...element,
@@ -242,8 +256,8 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function categoryChanged(event: ChangeEvent<HTMLInputElement>) {
-    const val = event.target.value;
+  function categoryChanged(event: PropertyChangedEvent) {
+    const val = event.target.value as string;
     setCategory(val);
 
     setElement({
@@ -252,8 +266,8 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function iconChanged(event: ChangeEvent<HTMLInputElement>) {
-    const val = event.target.value;
+  function iconChanged(event: PropertyChangedEvent) {
+    const val = event.target.value as string;
     setIcon(val);
     setElement({
       ...element,
@@ -261,8 +275,8 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function optionalInputNamesChanged(event: ChangeEvent<HTMLInputElement>) {
-    const val = event.target.value;
+  function optionalInputNamesChanged(event: PropertyChangedEvent) {
+    const val = event.target.value as string;
     setOptionalInputNames(val.split(','));
     setElement({
       ...element,
@@ -270,8 +284,8 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function requiredInputNamesChanged(event: ChangeEvent<HTMLInputElement>) {
-    const val = event.target.value;
+  function requiredInputNamesChanged(event: PropertyChangedEvent) {
+    const val = event.target.value as string;
     setRequiredInputNames(val.split(','));
     setElement({
       ...element,
@@ -279,8 +293,8 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function outputNamesChanged(event: ChangeEvent<HTMLInputElement>) {
-    const val = event.target.value;
+  function outputNamesChanged(event: PropertyChangedEvent) {
+    const val = event.target.value as string;
     setOutputNames(val.split(','));
     setElement({
       ...element,
@@ -298,7 +312,12 @@ export default function FormDialog(props: FormDialogProps) {
   const optionalInputs = 'Optional Inputs';
   const requiredInputs = 'Required Inputs';
   const outputs = 'Outputs';
-  const fields = [
+  const fields: {
+    id: string;
+    value: string | string[];
+    handleChange: (event: PropertyChangedEvent) => void;
+    tip?: string;
+  }[] = [
     { id: 'Task Type', value: taskType, handleChange: taskTypeChanged },
     { id: 'Category', value: category, handleChange: categoryChanged },
     // { id: 'Icon', value: icon, handleChange: iconChanged },

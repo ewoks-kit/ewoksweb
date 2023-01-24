@@ -64,12 +64,12 @@ export default function BasicTabs() {
     );
   }, [openSettingsDrawer]);
 
-  const handleChange = async (newValue: number) => {
+  async function handleChange(newValue: number) {
     setValue(newValue);
     if (newValue === 2) {
       await getIcons();
     }
-  };
+  }
 
   return (
     <Box sx={{ width: '100%' }}>

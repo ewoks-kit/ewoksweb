@@ -3,7 +3,8 @@ import type { GetState, SetState } from 'zustand';
 
 export interface RecentGraphsSlice {
   recentGraphs: GraphRF[];
-  setRecentGraphs: (newGraph: GraphRF, reset?: boolean) => void;
+  setRecentGraphs: (newGraph: GraphRF) => void;
+  resetRecentGraphs: () => void;
 }
 
 const recentGraphs = (
@@ -12,12 +13,12 @@ const recentGraphs = (
 ): RecentGraphsSlice => ({
   recentGraphs: [],
 
-  setRecentGraphs: (newGraph, reset = false) => {
-    const rec: GraphRF[] = reset
-      ? []
-      : get().recentGraphs.filter((gr) => gr.graph.id !== newGraph.graph.id);
+  setRecentGraphs: (newGraph) => {
+    const rec: GraphRF[] = get().recentGraphs.filter(
+      (gr) => gr.graph.id !== newGraph.graph.id
+    );
 
-    if (newGraph.graph) {
+    if (newGraph?.graph) {
       set((state) => ({
         ...state,
         recentGraphs: [...rec, newGraph],
@@ -28,6 +29,13 @@ const recentGraphs = (
         recentGraphs: [...rec],
       }));
     }
+  },
+
+  resetRecentGraphs: () => {
+    set((state) => ({
+      ...state,
+      recentGraphs: [],
+    }));
   },
 });
 

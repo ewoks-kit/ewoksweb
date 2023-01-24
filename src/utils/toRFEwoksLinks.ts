@@ -120,13 +120,13 @@ function calcLabel(
 
   if (conditions && conditions.length > 0) {
     return conditions
-      .map((el) => `${el.source_output}->${el.value as string}`)
+      .map((el) => `${el.source_output || ''}->${(el.value as string) || ''}`)
       .join(', ');
   }
 
   if (data_mapping && data_mapping.length > 0) {
     return data_mapping
-      .map((el) => `${el.source_output}->${el.target_input}`)
+      .map((el) => `${el.source_output || ''}->${el.target_input || ''}`)
       .join(', ');
   }
 

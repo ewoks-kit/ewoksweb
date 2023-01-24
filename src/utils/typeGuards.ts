@@ -1,9 +1,8 @@
-import type { AxiosError } from 'axios';
 import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../types';
 
-type EwoksServerErrorResponse = AxiosError<{
-  message: string;
-}>;
+export interface EwoksServerErrorResponse {
+  response: { data: { message: string } };
+}
 
 export function isNode(
   entity: EwoksRFNode | EwoksRFLink | GraphDetails
@@ -23,8 +22,20 @@ export function isGraphDetails(
   return 'input_nodes' in entity;
 }
 
-export function isEwoksServerResponseError(
-  error
+export function isEwoksServerErrorResponse(
+  error: unknown
 ): error is EwoksServerErrorResponse {
-  return 'message' in error.response?.data;
+  return (
+    objNotNullWithProp(error, 'response') &&
+    objNotNullWithProp(error.response, 'data') &&
+    objNotNullWithProp(error.response.data, 'message') &&
+    typeof error.response.data.message === 'string'
+  );
+}
+
+function objNotNullWithProp<X, Y extends PropertyKey>(
+  obj: X,
+  prop: Y
+): obj is X & Record<Y, unknown> {
+  return typeof obj === 'object' && obj !== null && prop in obj;
 }

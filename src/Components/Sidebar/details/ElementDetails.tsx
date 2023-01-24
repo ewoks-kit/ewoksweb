@@ -13,27 +13,27 @@ import { useEffect, useState } from 'react';
 
 interface Content {
   title: string;
-  DetailsComponent: (element: EwoksRFElement) => JSX.Element;
+  DetailsComponent: () => JSX.Element;
 }
 
 function getAccordionContent(element: EwoksRFElement): Content {
   if (isNode(element)) {
     return {
       title: 'Node Details',
-      DetailsComponent: NodeDetails,
+      DetailsComponent: () => <NodeDetails {...element} />,
     };
   }
 
   if (isLink(element)) {
     return {
       title: 'Link Details',
-      DetailsComponent: LinkDetails,
+      DetailsComponent: () => <LinkDetails {...element} />,
     };
   }
 
   return {
     title: 'Graph Details',
-    DetailsComponent: GraphDetails,
+    DetailsComponent: () => <GraphDetails {...element} />,
   };
 }
 
@@ -63,7 +63,7 @@ function ElementDetails() {
       </AccordionSummary>
       <AccordionDetails style={{ padding: '0px 0px 0px 10px' }}>
         <form noValidate autoComplete="off" style={{ width: '100%' }}>
-          <DetailsComponent {...selectedElement} />
+          <DetailsComponent />
         </form>
       </AccordionDetails>
     </Accordion>

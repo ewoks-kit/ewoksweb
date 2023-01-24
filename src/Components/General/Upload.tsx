@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Fab } from '@material-ui/core';
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, ReactNode } from 'react';
 
 // import { validateEwoksGraph } from '../utils/EwoksValidator';
 import useStore from '../../store/useStore';
@@ -18,7 +18,9 @@ const useStyles = makeStyles(() =>
 async function showFile(e: ChangeEvent<HTMLInputElement>): Promise<FileReader> {
   e.preventDefault();
   const reader: FileReader = new FileReader();
-  reader.readAsText(e.target.files[0]);
+  if (e.target?.files?.[0]) {
+    reader.readAsText(e.target.files[0]);
+  }
   return reader;
 }
 
@@ -33,7 +35,7 @@ function isJsonString(str: string): boolean {
   return true;
 }
 
-function Upload(props) {
+function Upload(props: { children?: ReactNode } | undefined) {
   const classes = useStyles();
 
   const graphRF = useStore<GraphRF>((state) => state.graphRF);
@@ -101,7 +103,7 @@ function Upload(props) {
           aria-label="add"
           disabled={inExecutionMode}
         >
-          {props.children}
+          {props?.children || ''}
         </Fab>
       </label>
     </div>

@@ -17,6 +17,7 @@ import type {
   ExecutedJobsResponse,
   WorkflowDescription,
   filterParams,
+  PropertyChangedEvent,
 } from '../../types';
 import CategoryDropdown from '../General/dropdown/CategoryDropdown';
 import WorkflowDropdown from '../General/dropdown/WorkflowDropdown';
@@ -65,8 +66,8 @@ export default function ExecutionFilters() {
     setCategoryValue(category ?? '');
   }
 
-  function statusChanged(event: ChangeEvent<{ value: string }>) {
-    setStatus(event.target.value);
+  function statusChanged(event: PropertyChangedEvent) {
+    setStatus(event.target.value as string);
   }
 
   async function getEvents() {

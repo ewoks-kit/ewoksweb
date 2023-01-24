@@ -5,6 +5,7 @@ import {
   Button,
   IconButton,
 } from '@material-ui/core';
+import type { SvgIconTypeMap } from '@material-ui/core';
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import Typography from '@material-ui/core/Typography';
 
@@ -25,12 +26,21 @@ import BookmarksIcon from '@material-ui/icons/Bookmarks';
 import { getTaskDescription, deleteTask } from 'utils/api';
 import { FormAction } from '../../types';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { findImage } from 'utils';
+import { findImage, textForError } from 'utils';
+import type { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
-const onDragStart = (event, { task_identifier, task_type, icon }) => {
+interface DragInfo {
+  task_identifier: string;
+  task_type: string;
+  icon: OverridableComponent<SvgIconTypeMap> | string;
+}
+const onDragStart = (
+  event: React.DragEvent,
+  { task_identifier, task_type, icon }: DragInfo
+) => {
   event.dataTransfer.setData('task_identifier', task_identifier);
   event.dataTransfer.setData('task_type', task_type);
-  event.dataTransfer.setData('icon', icon);
+  event.dataTransfer.setData('icon', icon as string);
   event.dataTransfer.effectAllowed = 'move';
 };
 
@@ -94,7 +104,7 @@ function AddNodes(props: AddNodesProps) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || commonStrings.retrieveTasksError,
+        text: textForError(error, commonStrings.retrieveTasksError),
         severity: 'error',
       });
     }
@@ -130,6 +140,10 @@ function AddNodes(props: AddNodesProps) {
 
   const agreeDeleteTask = async () => {
     setOpenAgreeDialog(false);
+    if (!selectedTask.task_identifier) {
+      return;
+    }
+
     try {
       await deleteTask(selectedTask.task_identifier);
       setOpenSnackbar({
@@ -141,9 +155,10 @@ function AddNodes(props: AddNodesProps) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text:
-          error.message ||
-          'Error in task deletion. Please check connectivity with the server',
+        text: textForError(
+          error,
+          'Error in task deletion. Please check connectivity with the server'
+        ),
         severity: 'error',
       });
     }
@@ -153,14 +168,16 @@ function AddNodes(props: AddNodesProps) {
     setOpenAgreeDialog(false);
   };
 
-  function onAction(action: FormAction, element: string | Task) {
+  function onAction(action: FormAction, element?: string) {
     setDoAction(action);
 
     if (['cloneTask', 'editTask'].includes(action)) {
       const task = tasks.find((tas) => tas.task_identifier === element);
-      setElementToEdit(task);
-      setOpenSaveDialog(true);
-      return;
+      if (task) {
+        setElementToEdit(task);
+        setOpenSaveDialog(true);
+        return;
+      }
     }
 
     if (action === 'newTask') {
@@ -169,7 +186,10 @@ function AddNodes(props: AddNodesProps) {
     }
   }
 
-  const handleChange = (event: React.SyntheticEvent, newExpanded: boolean) => {
+  const handleChange = (
+    event: React.ChangeEvent<unknown>,
+    newExpanded: boolean
+  ) => {
     if (newExpanded) {
       getTasks();
     }
@@ -205,7 +225,7 @@ function AddNodes(props: AddNodesProps) {
             <Accordion
               key={categoryName}
               className="add-nodes-accordion"
-              data-cy={`add-nodes-category-${categoryName}`}
+              data-cy={`add-nodes-category-${categoryName || 'no-category'}`}
             >
               <AccordionSummary
                 expandIcon={<OpenInBrowser />}
@@ -232,21 +252,21 @@ function AddNodes(props: AddNodesProps) {
                       }`}
                       onDragStart={(event1) =>
                         onDragStart(event1, {
-                          task_identifier: elem.task_identifier,
-                          task_type: elem.task_type,
-                          icon: elem.icon,
+                          task_identifier: elem.task_identifier || '',
+                          task_type: elem.task_type || '',
+                          icon: elem.icon || '',
                         })
                       }
                       draggable
                     >
-                      <Tooltip title={elem.task_identifier} arrow>
+                      <Tooltip title={elem.task_identifier || ''} arrow>
                         <span
                           role="button"
                           tabIndex={0}
                           className={classes.imgHolder}
                         >
                           <span className={classes.imgLabelHolder}>
-                            {elem.task_identifier.split('.').pop()}
+                            {elem.task_identifier?.split('.').pop()}
                           </span>
                           <img
                             className={classes.image}
@@ -346,9 +366,7 @@ function AddNodes(props: AddNodesProps) {
                       className={classes.button}
                       variant="outlined"
                       color="primary"
-                      onClick={() =>
-                        onAction(FormAction.newTask, initializedTask)
-                      }
+                      onClick={() => onAction(FormAction.newTask)}
                       size="small"
                     >
                       New
@@ -371,7 +389,7 @@ function AddNodes(props: AddNodesProps) {
 
       <FormDialog
         elementToEdit={elementToEdit}
-        action={doAction}
+        action={doAction || FormAction.undefined}
         open={openSaveDialog}
         setOpenSaveDialog={setOpenSaveDialog}
       />

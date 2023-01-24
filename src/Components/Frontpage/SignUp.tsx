@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function SignUp(props) {
+export default function SignUp(props: { handleCloseDialog(): Promise<void> }) {
   const classes = useStyles();
 
   return (
@@ -126,7 +126,7 @@ export default function SignUp(props) {
             <Link to="/edit-workflows" className={classes.linkStyle}>
               <IconButton
                 color="inherit"
-                onClick={props.handleCloseDialog || ''}
+                onClick={() => void props.handleCloseDialog()}
               >
                 <Typography
                   component="h1"

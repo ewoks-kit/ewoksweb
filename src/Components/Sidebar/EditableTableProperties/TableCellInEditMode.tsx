@@ -59,68 +59,81 @@ function TableCellInEditMode(props: CustomTableCellProps) {
     onChange(event, changedRow, rowIndex);
   }
 
-  return type === 'dict' || type === 'list' || type === 'object' ? (
+  if (type && ['dict', 'list', 'object'].includes(type)) {
     // TODO: examine if needed to edit in the cell?
     // <CellEditInJson props={{ row, name, type, onChange }} />
-    <span>{JSON.stringify(row[name])}</span>
-  ) : // <span></span>
-  typeOfValues.type === 'select' ? (
-    <>
-      <FormControl fullWidth variant="outlined">
-        <Autocomplete
-          freeSolo
-          options={typeOfValues.values}
+    return <span>{JSON.stringify(row[name])}</span>;
+  }
+
+  if (typeOfValues.type === 'select') {
+    return (
+      <>
+        <FormControl fullWidth variant="outlined">
+          <Autocomplete
+            freeSolo
+            options={typeOfValues.values || []}
+            value={row[name]}
+            onChange={(e, val) =>
+              onChange({ target: { value: val as string, name } }, row, index)
+            }
+            onInputChange={(e, val) =>
+              onChange({ target: { value: val, name } }, row, index)
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={typeOfValues.type || 'name'}
+                margin="normal"
+                variant="outlined"
+              />
+            )}
+            data-cy="autocompleteInputInEditableCell"
+          />
+        </FormControl>
+        {/* <Select
+          name={name}
           value={row[name]}
-          onChange={(e, val) =>
-            onChange({ target: { value: val, name } }, row, index)
-          }
-          onInputChange={(e, val) =>
-            onChange({ target: { value: val, name } }, row, index)
-          }
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label={typeOfValues.type || 'name'}
-              margin="normal"
-              variant="outlined"
-            />
-          )}
-          data-cy="autocompleteInputInEditableCell"
-        />
-      </FormControl>
-      {/* <Select
-        name={name}
-        value={row[name]}
-        label="type"
-        onChange={(e) => onChange(e, row, index)}
+          label="type"
+          onChange={(e) => onChange(e, row, index)}
+        >
+          {typeOfValues.values.map((tex) => (
+            <MenuItem key={tex} value={tex}>
+              {tex}
+            </MenuItem>
+          ))}
+        </Select> */}
+      </>
+    );
+  }
+
+  if (type === 'bool' || type === 'boolean') {
+    return (
+      <RadioGroup
+        name="value"
+        value={valueToString}
+        onChange={(e) => onChangeBool(e, row, index)}
+        data-cy="radioInEditableCell"
       >
-        {typeOfValues.values.map((tex) => (
-          <MenuItem key={tex} value={tex}>
-            {tex}
-          </MenuItem>
-        ))}
-      </Select> */}
-    </>
-  ) : type === 'bool' || type === 'boolean' ? (
-    <RadioGroup
-      name="value"
-      value={valueToString}
-      onChange={(e) => onChangeBool(e, row, index)}
-      data-cy="radioInEditableCell"
-    >
-      <FormControlLabel value="true" control={<Radio />} label="true" />
-      <FormControlLabel value="false" control={<Radio />} label="false" />
-    </RadioGroup>
-  ) : type === 'number' ? (
-    <Input
-      value={row[name]}
-      type="number"
-      name={name}
-      onChange={(e) => onChange(e, row, index)}
-      className={classes.input}
-      data-cy="inputInEditableCell"
-    />
-  ) : (
+        <FormControlLabel value="true" control={<Radio />} label="true" />
+        <FormControlLabel value="false" control={<Radio />} label="false" />
+      </RadioGroup>
+    );
+  }
+
+  if (type === 'number') {
+    return (
+      <Input
+        value={row[name]}
+        type="number"
+        name={name}
+        onChange={(e) => onChange(e, row, index)}
+        className={classes.input}
+        data-cy="inputInEditableCell"
+      />
+    );
+  }
+
+  return (
     <Input
       value={row[name] || ''}
       name={name}

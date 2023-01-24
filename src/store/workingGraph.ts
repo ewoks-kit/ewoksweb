@@ -46,7 +46,7 @@ const workingGraph = (
     }
     get().setSelectedElement({} as EwoksRFNode | EwoksRFLink);
     get().setSubgraphsStack({ id: '', label: '', resetStack: true });
-    get().setRecentGraphs({} as GraphRF, true);
+    get().resetRecentGraphs();
 
     // 2. Get node-subgraphs for the graph
     const newNodeSubgraphs = await findAllSubgraphs(

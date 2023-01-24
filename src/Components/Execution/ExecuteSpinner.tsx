@@ -52,7 +52,7 @@ export default function ExecuteSpinner(props: ExecuteSpinnerProps) {
           component="span"
           aria-label="add"
         >
-          {success ? <CheckIcon /> : loading ? '...' : props.children}
+          {success ? <CheckIcon /> : loading ? '...' : props.children || ''}
         </Fab>
         {loading && (
           <CircularProgress

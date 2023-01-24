@@ -90,12 +90,12 @@ function EditableTable(props: EditableTableProps) {
     });
   }
 
-  function calcNewRows(rowId: string): EditableTableRow[] {
+  function calcNewRows(rowId: string | undefined): EditableTableRow[] {
     return rows.map((row) => {
       if (row.id === rowId) {
         return {
           ...row,
-          id: row.name.replace(' ', '_') || '',
+          id: row.name?.replace(' ', '_') || '',
           isEditMode: !row.isEditMode,
         };
       }
@@ -135,7 +135,7 @@ function EditableTable(props: EditableTableProps) {
     setDisableSelectType(false);
   }
 
-  function onSaveRow(id: string, index: number) {
+  function onSaveRow(id: string | undefined, index: number) {
     const oldRows = [...rows].filter((row, i) => index !== i);
 
     if (
@@ -215,9 +215,10 @@ function EditableTable(props: EditableTableProps) {
     row: EditableTableRow,
     index: number
   ) => {
+    const { id: rowId = '' } = row;
     if (e.target.value === 'null') {
       const newRows = rows.map((rowe) => {
-        if (rowe.id === row.id) {
+        if (rowe.id === rowId) {
           return { ...rowe, value: e.target.value };
         }
         return rowe;
@@ -229,11 +230,14 @@ function EditableTable(props: EditableTableProps) {
     setTypeOfInputs(tOfI);
 
     if (e.target.value === 'list') {
-      showEditableDialog(row.id, 'Edit list', [], { rows, id: row.id });
+      showEditableDialog(rowId, 'Edit list', [], {
+        rows,
+        id: rowId,
+      });
     }
 
     if (e.target.value === 'dict') {
-      showEditableDialog(row.id, 'Edit dict', {}, { rows, id: row.id });
+      showEditableDialog(rowId, 'Edit dict', {}, { rows, id: rowId });
     }
   };
 
@@ -312,8 +316,8 @@ function EditableTable(props: EditableTableProps) {
 
                 <ToolsCell
                   onSave={() => onSaveRow(row.id, index)}
-                  onEdit={() => onEditRow(row.id, index)}
-                  onDelete={() => onDelete(row.id)}
+                  onEdit={() => onEditRow(row.id || '', index)}
+                  onDelete={() => onDelete(row.id || '')}
                   isEditing={row.isEditMode}
                 />
               </TableRow>

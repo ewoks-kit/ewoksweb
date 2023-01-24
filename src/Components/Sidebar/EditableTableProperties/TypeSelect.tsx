@@ -1,5 +1,6 @@
 import { FormControl, MenuItem, Select, TableCell } from '@material-ui/core';
 import type { ChangeEvent } from 'react';
+import type { PropertyChangedEvent } from '../../../types';
 import { INPUT_TYPES } from './utils';
 
 interface Props {
@@ -12,10 +13,16 @@ interface Props {
 function TypeSelectCell(props: Props) {
   const { value, disabled, className, onChange } = props;
 
+  function onChangeLocal(event: PropertyChangedEvent) {
+    if (onChange) {
+      onChange(event as ChangeEvent<HTMLInputElement>);
+    }
+  }
+
   return (
     <TableCell align="left" size="small" className={className}>
       <FormControl disabled={disabled}>
-        <Select value={value} label="Task type" onChange={onChange}>
+        <Select value={value} label="Task type" onChange={onChangeLocal}>
           {INPUT_TYPES.map((type) => (
             <MenuItem key={type} value={type}>
               {type}

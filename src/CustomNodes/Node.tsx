@@ -84,7 +84,7 @@ function Node({
 
   const displayNode = {
     textAlign: 'center' as const,
-    width: `${nodeSize}px`,
+    width: `${nodeSize || 100}px`,
     minWidth: '60px', // for standard width
     maxWidth: '300px',
     display: ['graphInput', 'graphOutput'].includes(type) ? 'flex' : 'inline',

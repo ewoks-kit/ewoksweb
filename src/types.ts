@@ -24,8 +24,10 @@ import type { ExecutingEventsSlice } from './store/executingEvents';
 import type { AllIconsSlice } from './store/allIcons';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
+import type { ChangeEvent } from 'react';
 
 export enum FormAction {
+  undefined = 'undefined',
   cloneGraph = 'cloneGraph',
   newGraph = 'newGraph',
   newGraphOrOverwrite = 'newGraphOrOverwrite',
@@ -146,7 +148,7 @@ export interface Event {
 }
 
 export interface ExecutingState {
-  executingNodes: [string];
+  executingNodes: string[];
   executed: [NodeExecutionHistory];
   eventId: string; // the point on the timeline of events is the unique id in this entity
 }
@@ -428,7 +430,7 @@ export interface EditableTableRow {
 export interface CustomTableCellProps {
   index: number;
   row: EditableTableRow;
-  name: string;
+  name: 'name' | 'value';
   type?: string;
   typeOfValues: { type: string; values?: string[] };
   onChange(
@@ -577,3 +579,8 @@ export interface calcInOutForSubgraphOutput {
   type: string;
   positionY?: number;
 }
+
+export type PropertyChangedEvent = ChangeEvent<{
+  name?: string | undefined;
+  value: unknown;
+}>;

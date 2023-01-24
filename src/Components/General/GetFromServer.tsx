@@ -7,6 +7,7 @@ import { getWorkflow } from '../../utils/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { validateEwoksGraph } from '../../utils/EwoksValidator';
 import WorkflowDropdown from './dropdown/WorkflowDropdown';
+import { textForError } from '../../utils';
 
 export default function GetFromServer() {
   const [workflowId, setWorkflowId] = useState('');
@@ -43,7 +44,9 @@ export default function GetFromServer() {
           const graph = response.data;
           setOpenSnackbar({
             open: true,
-            text: `Workflow ${graph.graph.label} was downloaded successfully`,
+            text: `Workflow ${
+              graph.graph.label || 'without Label!!!'
+            } was downloaded successfully`,
             severity: 'success',
           });
           setCanvasGraphChanged(false);
@@ -60,9 +63,10 @@ export default function GetFromServer() {
       } catch (error) {
         setOpenSnackbar({
           open: true,
-          text:
-            error.response?.data?.message ||
-            'Error in retrieving workflow. Please check connectivity with the server!',
+          text: textForError(
+            error,
+            'Error in retrieving workflow. Please check connectivity with the server!'
+          ),
           severity: 'error',
         });
       }
