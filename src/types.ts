@@ -120,7 +120,6 @@ export interface ExecutedJobsResponse {
 }
 
 export interface Event {
-  [key: string]: unknown;
   host_name?: string;
   process_id?: string;
   user_name?: string;
@@ -421,7 +420,6 @@ export interface EwoksRFNode {
 }
 
 export interface EditableTableRow {
-  [key: string]: unknown;
   id?: string;
   name?: string;
   value?: unknown; // string | number | null | undefined | boolean | Record<string, unknown>;
@@ -432,7 +430,7 @@ export interface EditableTableRow {
 export interface CustomTableCellProps {
   index: number;
   row: EditableTableRow;
-  name: string;
+  name: 'name' | 'value';
   type?: string;
   typeOfValues: { type: string; values?: string[] };
   onChange(
