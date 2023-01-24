@@ -156,7 +156,7 @@ export default function FormDialog(props: FormDialogProps) {
 
       setOpenSnackbar({
         open: true,
-        text: 'Task saved successfuly',
+        text: 'Task saved successfully',
         severity: 'success',
       });
 
@@ -392,7 +392,6 @@ export default function FormDialog(props: FormDialogProps) {
                     labelId="taskTypeInFormDialog"
                     value={field.value}
                     label="Task Type"
-                    // TBD: error asymetry
                     onChange={field.handleChange}
                   >
                     {task_types.map((type) => (
