@@ -17,7 +17,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import type { ChangeEvent } from 'react';
-import type { GraphRF, Task, FormAction } from '../../types';
+import type {
+  GraphRF,
+  Task,
+  FormAction,
+  PropertyChangedEvent,
+} from '../../types';
 import { rfToEwoks, textForError } from '../../utils';
 import useStore from '../../store/useStore';
 import commonStrings from '../../commonStrings.json';
@@ -49,7 +54,7 @@ export default function FormDialog(props: FormDialogProps) {
 
   const setCanvasGraphChanged = useStore((st) => st.setCanvasGraphChanged);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
-  const setRecentGraphs = useStore((state) => state.setRecentGraphs);
+  const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const allIcons = useStore((state) => state.allIcons);
   const setGettingFromServer = useStore((st) => st.setGettingFromServer);
@@ -151,7 +156,7 @@ export default function FormDialog(props: FormDialogProps) {
 
       setOpenSnackbar({
         open: true,
-        text: 'Task saved successfuly',
+        text: 'Task saved successfully',
         severity: 'success',
       });
 
@@ -206,7 +211,7 @@ export default function FormDialog(props: FormDialogProps) {
 
         setWorkingGraph(responseNew.data, 'fromServer');
 
-        setRecentGraphs({} as GraphRF, true);
+        resetRecentGraphs();
 
         setOpenSnackbar({
           open: true,
@@ -242,12 +247,7 @@ export default function FormDialog(props: FormDialogProps) {
     }
   }
 
-  function taskTypeChanged(
-    event: ChangeEvent<{
-      name?: string | undefined;
-      value: unknown;
-    }>
-  ) {
+  function taskTypeChanged(event: PropertyChangedEvent) {
     const val = event.target.value as string;
     setTaskType(val);
     setElement({
@@ -256,12 +256,7 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function categoryChanged(
-    event: ChangeEvent<{
-      name?: string | undefined;
-      value: unknown;
-    }>
-  ) {
+  function categoryChanged(event: PropertyChangedEvent) {
     const val = event.target.value as string;
     setCategory(val);
 
@@ -271,12 +266,7 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function iconChanged(
-    event: ChangeEvent<{
-      name?: string | undefined;
-      value: unknown;
-    }>
-  ) {
+  function iconChanged(event: PropertyChangedEvent) {
     const val = event.target.value as string;
     setIcon(val);
     setElement({
@@ -285,12 +275,7 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function optionalInputNamesChanged(
-    event: ChangeEvent<{
-      name?: string | undefined;
-      value: unknown;
-    }>
-  ) {
+  function optionalInputNamesChanged(event: PropertyChangedEvent) {
     const val = event.target.value as string;
     setOptionalInputNames(val.split(','));
     setElement({
@@ -299,12 +284,7 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function requiredInputNamesChanged(
-    event: ChangeEvent<{
-      name?: string | undefined;
-      value: unknown;
-    }>
-  ) {
+  function requiredInputNamesChanged(event: PropertyChangedEvent) {
     const val = event.target.value as string;
     setRequiredInputNames(val.split(','));
     setElement({
@@ -313,12 +293,7 @@ export default function FormDialog(props: FormDialogProps) {
     });
   }
 
-  function outputNamesChanged(
-    event: ChangeEvent<{
-      name?: string | undefined;
-      value: unknown;
-    }>
-  ) {
+  function outputNamesChanged(event: PropertyChangedEvent) {
     const val = event.target.value as string;
     setOutputNames(val.split(','));
     setElement({
@@ -340,12 +315,7 @@ export default function FormDialog(props: FormDialogProps) {
   const fields: {
     id: string;
     value: string | string[];
-    handleChange: (
-      event: ChangeEvent<{
-        name?: string | undefined;
-        value: unknown;
-      }>
-    ) => void;
+    handleChange: (event: PropertyChangedEvent) => void;
     tip?: string;
   }[] = [
     { id: 'Task Type', value: taskType, handleChange: taskTypeChanged },
@@ -422,7 +392,6 @@ export default function FormDialog(props: FormDialogProps) {
                     labelId="taskTypeInFormDialog"
                     value={field.value}
                     label="Task Type"
-                    // TBD: error asymetry
                     onChange={field.handleChange}
                   >
                     {task_types.map((type) => (
@@ -466,7 +435,6 @@ export default function FormDialog(props: FormDialogProps) {
               labelId="iconNameInFormDialog"
               value={icon}
               label="Icon"
-              // TBD: error asymetry
               onChange={iconChanged}
             >
               <MenuItem value="">

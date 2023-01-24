@@ -27,7 +27,7 @@ function CustomTableCell(props: CustomTableCellProps) {
       ) : row[name] && typeof row[name] === 'object' ? (
         JSON.stringify(row[name])
       ) : (
-        String(row[name]) || ''
+        String(row[name])
       )}
     </TableCell>
   );

@@ -24,6 +24,7 @@ import type { ExecutingEventsSlice } from './store/executingEvents';
 import type { AllIconsSlice } from './store/allIcons';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
+import type { ChangeEvent } from 'react';
 
 export enum FormAction {
   undefined = 'undefined',
@@ -86,7 +87,7 @@ export interface Graph {
 
 export interface SnackbarParams {
   open: boolean;
-  text: string | undefined;
+  text: string;
   severity: Color;
 }
 
@@ -119,7 +120,6 @@ export interface ExecutedJobsResponse {
 }
 
 export interface Event {
-  [key: string]: unknown;
   host_name?: string;
   process_id?: string;
   user_name?: string;
@@ -420,7 +420,6 @@ export interface EwoksRFNode {
 }
 
 export interface EditableTableRow {
-  [key: string]: unknown;
   id?: string;
   name?: string;
   value?: unknown; // string | number | null | undefined | boolean | Record<string, unknown>;
@@ -431,7 +430,7 @@ export interface EditableTableRow {
 export interface CustomTableCellProps {
   index: number;
   row: EditableTableRow;
-  name: string;
+  name: 'name' | 'value';
   type?: string;
   typeOfValues: { type: string; values?: string[] };
   onChange(
@@ -580,3 +579,8 @@ export interface calcInOutForSubgraphOutput {
   type: string;
   positionY?: number;
 }
+
+export type PropertyChangedEvent = ChangeEvent<{
+  name?: string | undefined;
+  value: unknown;
+}>;

@@ -18,17 +18,22 @@ export default function SubgraphsStack() {
     return state.subgraphsStack;
   });
   const setSelectedElement = useStore((state) => state.setSelectedElement);
-  // TODO: event type TBD
+
   const goToGraph = (e: React.MouseEvent) => {
     e.preventDefault();
+
+    const { target } = e;
+
+    if (!(target instanceof Element)) {
+      return;
+    }
+
     setSubgraphsStack({
-      id: (e.target as Element).id,
-      label: (e.target as HTMLInputElement).value,
+      id: target.id,
+      label: (target as HTMLInputElement).value,
     });
 
-    const subgraph = recentGraphs.find(
-      (gr) => gr.graph.id === (e.target as Element).id
-    );
+    const subgraph = recentGraphs.find((gr) => gr.graph.id === target.id);
 
     if (subgraph) {
       setGraphRF(subgraph);

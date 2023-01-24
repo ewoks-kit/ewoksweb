@@ -13,7 +13,7 @@ import type { EwoksRFElement } from '../models';
 
 interface Content {
   title: string;
-  EditComponent: (element: EwoksRFElement) => JSX.Element;
+  EditComponent: () => JSX.Element;
 }
 
 function getAccordionContent(element: EwoksRFElement): Content {
@@ -53,7 +53,7 @@ export default function EditElementStyle() {
       </AccordionSummary>
       <AccordionDetails>
         <form noValidate autoComplete="off">
-          <EditComponent {...selectedElement} />
+          <EditComponent />
         </form>
       </AccordionDetails>
     </Accordion>

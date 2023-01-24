@@ -29,14 +29,14 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { findImage, textForError } from 'utils';
 import type { OverridableComponent } from '@material-ui/core/OverridableComponent';
 
-interface dragInfo {
+interface DragInfo {
   task_identifier: string;
   task_type: string;
   icon: OverridableComponent<SvgIconTypeMap> | string;
 }
 const onDragStart = (
   event: React.DragEvent,
-  { task_identifier, task_type, icon }: dragInfo
+  { task_identifier, task_type, icon }: DragInfo
 ) => {
   event.dataTransfer.setData('task_identifier', task_identifier);
   event.dataTransfer.setData('task_type', task_type);
@@ -140,25 +140,27 @@ function AddNodes(props: AddNodesProps) {
 
   const agreeDeleteTask = async () => {
     setOpenAgreeDialog(false);
-    if (selectedTask.task_identifier) {
-      try {
-        await deleteTask(selectedTask.task_identifier);
-        setOpenSnackbar({
-          open: true,
-          text: `Task was successfully deleted!`,
-          severity: 'success',
-        });
-        getTasks();
-      } catch (error) {
-        setOpenSnackbar({
-          open: true,
-          text: textForError(
-            error,
-            'Error in task deletion. Please check connectivity with the server'
-          ),
-          severity: 'error',
-        });
-      }
+    if (!selectedTask.task_identifier) {
+      return;
+    }
+
+    try {
+      await deleteTask(selectedTask.task_identifier);
+      setOpenSnackbar({
+        open: true,
+        text: `Task was successfully deleted!`,
+        severity: 'success',
+      });
+      getTasks();
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: textForError(
+          error,
+          'Error in task deletion. Please check connectivity with the server'
+        ),
+        severity: 'error',
+      });
     }
   };
 
@@ -166,7 +168,7 @@ function AddNodes(props: AddNodesProps) {
     setOpenAgreeDialog(false);
   };
 
-  function onAction(action: FormAction, element?: string | undefined) {
+  function onAction(action: FormAction, element?: string) {
     setDoAction(action);
 
     if (['cloneTask', 'editTask'].includes(action)) {

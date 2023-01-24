@@ -31,25 +31,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import Collapse from '@material-ui/core/Collapse';
 import { getExecutionEvents } from '../../utils/api';
 
-interface Data {
-  host_name: number;
-  process_id: number;
-  user_name: number;
-  name: string;
-  job_id: number;
-  binding: string;
-  workflow_id: string;
-  time: string;
-  error: string;
-  error_message: string;
-  error_traceback: string;
-  task_uri: string;
-  input_uris: string;
-  output_uris: string;
-  status: string; // "finished"
-}
-
-function descendingComparator(a: Event[], b: Event[], orderBy: string) {
+function descendingComparator(a: Event[], b: Event[], orderBy: keyof Event) {
   // TODO: compare time start-end
   if (['start time', 'end time'].includes(orderBy) && b[0].time && a[0].time) {
     if (b[0].time < a[0].time) {
@@ -84,7 +66,7 @@ type Order = 'asc' | 'desc';
 
 function getComparator(
   order: Order,
-  orderBy: string
+  orderBy: keyof Event
 ): (a: Event[], b: Event[]) => number {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
@@ -305,7 +287,7 @@ const formatedTime = (time: string) => {
 
 export default function EnhancedTable() {
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof Data>('workflow_id');
+  const [orderBy, setOrderBy] = useState<keyof Event>('workflow_id');
   const [selected, setSelected] = useState<string[]>([]);
   const [expandRow, setExpandRow] = useState<string>('');
   const [page, setPage] = useState(0);
@@ -331,7 +313,7 @@ export default function EnhancedTable() {
     console.log(event, property);
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property as keyof Data);
+    setOrderBy(property as keyof Event);
   };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -461,8 +443,9 @@ export default function EnhancedTable() {
               {stableSort(executedWorkflows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  // console.log(row, index, row.slice(-1)[0].error);
-                  const isItemSelected = isSelected(row[0].job_id || '');
+                  const isItemSelected = row[0].job_id
+                    ? isSelected(row[0].job_id)
+                    : false;
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
