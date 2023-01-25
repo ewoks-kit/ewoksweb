@@ -8,7 +8,7 @@ import useStore from '../store/useStore';
 import type { EwoksRFNodeData } from '../types';
 
 function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
-  console.log(props);
+  // console.log(props);
 
   const { data: node, selected } = props;
   const graphRF = useStore((state) => state.graphRF);
@@ -36,7 +36,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
       colorBorder={node.colorBorder}
       // the following is calculated in calcNodeType for subgraphs-inNodes-outNodes
       type={node.type || ''}
-      label={node.label || ''}
+      label={node.ewoks_props.label || ''}
       selected={selected}
       color={node.exists ? '#ced3ee' : 'red'}
       image={node.icon}

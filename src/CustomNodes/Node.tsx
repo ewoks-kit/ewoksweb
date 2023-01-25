@@ -36,6 +36,7 @@ function Node({
   isGraph,
   type,
   label,
+  // ewoks_props: {label},
   selected,
   color,
   colorBorder,

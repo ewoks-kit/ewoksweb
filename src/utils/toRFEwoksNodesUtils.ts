@@ -141,11 +141,11 @@ export function addNodeProperties(
 
     tempNode = {
       ...tempNode,
-      task_category: task_category || '',
       data: {
         ...tempNode.data,
-        task_properties: {
-          ...tempNode.data.task_properties,
+        task_props: {
+          ...tempNode.data.task_props,
+          task_category: task_category || '',
           optional_input_names: tempTask.optional_input_names,
           output_names: tempTask.output_names,
           required_input_names: tempTask.required_input_names,

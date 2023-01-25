@@ -47,7 +47,11 @@ export default function NodeDetails(element: EwoksRFNode) {
 
   const NonEditableTaskProperties = [
     { id: 'id', label: 'Id', value: element.id },
-    { id: 'task_type', label: 'Type', value: element.task_type },
+    {
+      id: 'task_type',
+      label: 'Type',
+      value: element.data.task_props.task_type,
+    },
     {
       id: 'task_generator',
       label: 'Generator',
@@ -56,22 +60,22 @@ export default function NodeDetails(element: EwoksRFNode) {
     {
       id: 'task_category',
       label: 'Category',
-      value: element.task_category,
+      value: element.data.task_props.task_category,
     },
     {
       id: 'optional_input_names',
       label: 'Optional Inputs',
-      value: element.data?.task_properties?.optional_input_names,
+      value: element.data.task_props.optional_input_names,
     },
     {
       id: 'required_input_names',
       label: 'Required Inputs',
-      value: element.data?.task_properties?.required_input_names,
+      value: element.data.task_props.required_input_names,
     },
     {
       id: 'output_names',
       label: 'Outputs',
-      value: element.data?.task_properties?.output_names,
+      value: element.data.task_props.output_names,
     },
   ];
 
@@ -79,7 +83,7 @@ export default function NodeDetails(element: EwoksRFNode) {
     {
       id: 'task_identifier',
       label: 'Identifier',
-      value: element.task_identifier,
+      value: element.data.task_props.task_identifier,
     },
     { id: 'node_icon', label: 'Icon', value: element.data.icon },
   ];
@@ -327,7 +331,7 @@ export default function NodeDetails(element: EwoksRFNode) {
                 <div style={{ width: '100%' }}>
                   {editableTaskProperties.map(({ id, label, value }) =>
                     ['ppfmethod', 'method', 'script'].includes(
-                      element.task_type
+                      element.data.task_props.task_type || ''
                     ) ? (
                       <EditTaskProp
                         key={id}

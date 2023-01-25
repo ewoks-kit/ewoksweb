@@ -50,12 +50,12 @@ const NoteNode = (args: NoteProps) => {
       {
         ...selectedElement,
         data: {
-          label: args.data.label,
+          task_props: { task_type: 'note', task_identifier: args.id },
+          ewoks_props: { label: args.data.label },
+          ui_props: {},
           comment,
         },
         id: args.id,
-        task_type: 'note',
-        task_identifier: args.id,
         type: 'note',
         position: { x: args.xPos || 500, y: args.yPos || 500 },
       },

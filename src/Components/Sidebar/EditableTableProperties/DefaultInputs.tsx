@@ -9,9 +9,10 @@ import SidebarTooltip from '../SidebarTooltip';
 export default function DefaultInputs(element: EwoksRFNode) {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const defautInputs = element.data.ewoks_props.default_inputs;
 
-  const addDefaultInputs = () => {
-    if (element.default_inputs?.some((x) => x.id === '')) {
+  function addDefaultInputs() {
+    if (defautInputs?.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before adding another!',
@@ -21,27 +22,39 @@ export default function DefaultInputs(element: EwoksRFNode) {
       setSelectedElement(
         {
           ...element,
-          default_inputs: [
-            ...(element.default_inputs || []),
-            { id: '', name: '', value: '' },
-          ],
+          data: {
+            ...element.data,
+            ewoks_props: {
+              ...element.data.ewoks_props,
+              default_inputs: [
+                ...(element.data.ewoks_props.default_inputs || []),
+                { id: '', name: '', value: '' },
+              ],
+            },
+          },
         },
         'fromSaveElement'
       );
     }
-  };
+  }
 
   const defaultInputsChanged = (table: EditableTableRow[]) => {
     setSelectedElement(
       {
         ...element,
-        default_inputs: table.map((dval) => {
-          return {
-            id: dval.name,
-            name: dval.name || '',
-            value: dval.value,
-          };
-        }),
+        data: {
+          ...element.data,
+          ewoks_props: {
+            ...element.data.ewoks_props,
+            default_inputs: table.map((dval) => {
+              return {
+                id: dval.name,
+                name: dval.name || '',
+                value: dval.value,
+              };
+            }),
+          },
+        },
       },
       'fromSaveElement'
     );
@@ -66,17 +79,17 @@ export default function DefaultInputs(element: EwoksRFNode) {
         </div>
       </SidebarTooltip>
 
-      {element.default_inputs && element.default_inputs.length > 0 && (
+      {defautInputs && defautInputs.length > 0 && (
         <EditableTable
           headers={['Name', 'Value']}
-          defaultValues={element.default_inputs}
+          defaultValues={defautInputs}
           valuesChanged={defaultInputsChanged}
           typeOfValues={[
             {
               type: 'select',
               values: [
-                ...(element.data?.task_properties?.optional_input_names || []),
-                ...(element.data?.task_properties?.required_input_names || []),
+                ...(element.data?.task_props?.optional_input_names || []),
+                ...(element.data?.task_props?.required_input_names || []),
               ],
             },
             { type: 'input' },

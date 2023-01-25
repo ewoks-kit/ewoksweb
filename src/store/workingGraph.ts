@@ -48,6 +48,8 @@ const workingGraph = (
     get().setSubgraphsStack({ id: '', label: '', resetStack: true });
     get().resetRecentGraphs();
 
+    console.log(workingGraphObject, get().recentGraphs);
+
     // 2. Get node-subgraphs for the graph
     const newNodeSubgraphs = await findAllSubgraphs(
       workingGraphObject,
@@ -76,6 +78,9 @@ const workingGraph = (
       workingGraphObject.graph?.uiProps?.notes?.map((note) => {
         return {
           data: {
+            ewoks_props: {},
+            task_props: { task_type: '', task_identifier: '' },
+            ui_props: {},
             label: note.label,
             comment: note.comment,
             nodeWidth: note.nodeWidth || 180,

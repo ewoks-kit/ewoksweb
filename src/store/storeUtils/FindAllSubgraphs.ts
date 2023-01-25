@@ -3,7 +3,7 @@ import { getSubgraphs } from '../../utils';
 
 export async function findAllSubgraphs(
   graphToSearch: GraphEwoks,
-  recentGraphs: GraphRF[] | GraphEwoks[]
+  recentGraphs: GraphEwoks[]
 ): Promise<GraphEwoks[]> {
   // TODO: examine functionality because it seems to get again previously
   // fetched graphs. Also goes one by one awaiting. Promise.all better??
@@ -18,9 +18,10 @@ export async function findAllSubgraphs(
     // eslint-disable-next-line no-await-in-loop
     const allGraphSubs: GraphEwoks[] = await getSubgraphs(
       subsToGet[0],
-      thisCallRecent as GraphRF[]
+      thisCallRecent
     );
     // store them as ewoksGraphs for later transforming to RFGraphs
+    console.log(allGraphSubs, thisCallRecent);
 
     allGraphSubs.forEach((gr) => {
       newNodeSubgraphs.push(gr);

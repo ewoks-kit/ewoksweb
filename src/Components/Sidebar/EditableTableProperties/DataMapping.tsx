@@ -63,7 +63,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
         sourceOrTarget === 'source' ? element.source : element.target;
       return nod.id === sOrTNode;
     });
-    return theNode?.task_type === 'class';
+    return theNode?.data.task_props.task_type === 'class';
   }
 
   return (

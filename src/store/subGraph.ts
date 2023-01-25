@@ -25,6 +25,8 @@ const subGraph = (
 
   // DOC: takes a GraphEwoks and transform it to graphRF
   setSubGraph: async (subGraphL: GraphEwoks) => {
+    console.log(get().recentGraphs);
+
     // 1. input the graphEwoks from server or file-system
     // 2. search for all subgraphs in it (async)
     const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(
@@ -84,11 +86,9 @@ const subGraph = (
         targetPosition: Position.Left,
         task_generator: '',
         id: graphId,
-        task_type: 'graph',
-        task_identifier: subToAdd.graph.id,
+
         type: 'graph',
         position: calcCoordinatesFirstNode(get().graphRF.nodes),
-        default_inputs: [],
         inputs_complete: false,
         default_error_node: false,
         default_error_attributes: {
@@ -96,8 +96,13 @@ const subGraph = (
           data_mapping: [],
         },
         data: {
+          task_props: {
+            task_type: 'graph',
+            task_identifier: subToAdd.graph.id,
+          },
+          ui_props: {},
           exists: true,
-          label: subToAdd.graph.label,
+          ewoks_props: { label: subToAdd.graph.label, default_inputs: [] },
           type: 'internal',
           comment: '',
           icon: subToAdd.graph?.uiProps?.icon || orange2,

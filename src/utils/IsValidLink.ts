@@ -24,7 +24,7 @@ export default function isValidLink(
     return { isValid: false, reason: 'One of the link end is not defined' };
   }
 
-  if (source.task_type === 'graphInput') {
+  if (source.data.task_props.task_type === 'graphInput') {
     // check if there is already a link using this graph-input
     if (graphRFL.links.some((link) => link.source === source.id)) {
       isValid = false;
@@ -58,7 +58,7 @@ export default function isValidLink(
     }
   }
 
-  if (target.task_type === 'graphOutput') {
+  if (target.data.task_props.task_type === 'graphOutput') {
     // DOC: check if there is already a link using this graph-output
     if (graphRFL.links.some((link) => link.target === target.id)) {
       isValid = false;

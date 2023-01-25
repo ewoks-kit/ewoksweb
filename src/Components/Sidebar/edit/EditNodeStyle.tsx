@@ -100,7 +100,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
 
   return (
     <FormControl variant="filled" fullWidth>
-      {element.task_type !== 'note' && (
+      {element.data.task_props.task_type !== 'note' && (
         <>
           <div>
             <label htmlFor="withImage">With Image</label>
@@ -141,7 +141,9 @@ export default function EditNodeStyle(element: EwoksRFNode) {
           </div>
         </>
       )}
-      {!['graphInput', 'graphOutput', 'note'].includes(element.task_type) && (
+      {!['graphInput', 'graphOutput', 'note'].includes(
+        element.data.task_props.task_type
+      ) && (
         <div>
           <div>
             <label htmlFor="moreHandles">More handles</label>

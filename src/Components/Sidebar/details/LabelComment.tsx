@@ -37,7 +37,7 @@ export default function LabelComment(props: LabelCommentProps) {
 
   useEffect(() => {
     if (isNode(element)) {
-      setLabel(element.data?.label || '');
+      setLabel(element.data.ewoks_props.label || '');
       setComment(element.data?.comment || '');
       return;
     }
@@ -72,13 +72,20 @@ export default function LabelComment(props: LabelCommentProps) {
   }, [element]);
 
   function saveLabel(labelLocal: string) {
+    console.log(labelLocal);
+
     // TODO: do not put label in both places. See the final spec of
     // ewoks labels-nodes and handle label-comment in a different way.
     setSelectedElement(
       {
         ...element,
-        label: labelLocal,
-        data: { ...element.data, label: labelLocal },
+        data: {
+          ...element.data,
+          ewoks_props: {
+            ...element.data.ewoks_props,
+            label: labelLocal,
+          },
+        },
       },
       'fromSaveElement'
     );

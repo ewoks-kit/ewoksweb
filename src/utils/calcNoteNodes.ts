@@ -7,7 +7,7 @@ export function calcNoteNodes(graph: GraphRF): Note[] {
     .map((noteNod) => {
       return {
         id: noteNod.id,
-        label: noteNod.data.label,
+        label: noteNod.data.ewoks_props.label,
         comment: noteNod.data.comment,
         position: noteNod.position,
         nodeWidth: noteNod.data.nodeWidth,

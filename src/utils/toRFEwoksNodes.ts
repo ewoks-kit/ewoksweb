@@ -50,8 +50,7 @@ export function toRFEwoksNodes(
 
         const node: EwoksRFNode = {
           id: id.toString(),
-          task_type,
-          task_identifier,
+
           type: task_type,
           inputs_complete: inputs_complete || false,
           default_error_node: default_error_node || false,
@@ -60,10 +59,18 @@ export function toRFEwoksNodes(
             data_mapping: [],
           },
           task_generator: task_generator || '',
-          task_icon: uiProps?.task_icon || '',
-          default_inputs: default_inputs || [],
+
           data: {
-            label: label ?? task_identifier,
+            ewoks_props: {
+              label: label ?? task_identifier,
+              default_inputs: default_inputs || [],
+            },
+            task_props: {
+              task_type,
+              task_identifier,
+              task_icon: uiProps?.task_icon || '',
+            },
+            ui_props: {},
             type: nodeType,
             nodeWidth: uiProps?.nodeWidth ?? 120,
             icon: uiProps?.node_icon ?? uiProps?.icon ?? '',

@@ -1,4 +1,4 @@
-import type { Position } from 'reactflow';
+import type { Position, XYPosition } from 'reactflow';
 import type { CanvasGraphChangedSlice } from './store/canvasGraphChanged';
 import type { AllWorkflowsSlice } from './store/allWorkflows';
 import type { CurrentExecutionEventSlice } from './store/currentExecutionEvent';
@@ -25,6 +25,7 @@ import type { AllIconsSlice } from './store/allIcons';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
 import type { ChangeEvent } from 'react';
+import type { Node, Edge } from 'reactflow';
 
 export enum FormAction {
   undefined = 'undefined',
@@ -335,7 +336,7 @@ export interface EwoksNode {
   task_generator?: string;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes;
-  uiProps?: UiPropsNodes;
+  uiProps?: RFNodeUiProps;
 }
 
 export interface EwoksLink {
@@ -359,12 +360,12 @@ export interface outputsInputsSub {
   positionY?: number;
 }
 
-export interface UiPropsNodes {
+export interface RFNodeUiProps {
   type?: string;
   icon?: string;
   comment?: string;
-  position?: CanvasPosition;
-  style?: LinkStyle;
+  position?: CanvasPosition; // remove as it is in the Node
+  style?: LinkStyle; // style?: CSSProperties; on Node?
   withImage?: boolean;
   withLabel?: boolean;
   colorBorder?: string;
@@ -375,23 +376,23 @@ export interface UiPropsNodes {
   moreHandles?: boolean;
   details?: boolean;
 
-  // executing?: boolean;
-  // exists?: boolean;
-  // inputs?: outputsInputsSub[];  --> UI to position inputs-outputs of subgraphs in a graph
-  // outputs?: outputsInputsSub[];
-  // icon?: string; --> UI and only there
-  // comment?: string; --> delete as comment is in ewoks_properties only?
-  // moreHandles?: boolean; --> UI
-  // details?: boolean; --> UI for showing the details in a node?
-  // withImage?: boolean; --> UI
-  // withLabel?: boolean; --> UI
-  // colorBorder?: string; --> UI
+  executing?: boolean;
+  exists?: boolean;
+  inputs?: outputsInputsSub[]; // --> UI to position inputs-outputs of subgraphs in a graph
+  outputs?: outputsInputsSub[];
+  // icon?: string; // --> UI and only there
+  // comment?: string; // --> delete as comment is in ewoks_properties only?
+  // moreHandles?: boolean; // --> UI
+  // details?: boolean; // --> UI for showing the details in a node?
+  // withImage?: boolean; // --> UI
+  // withLabel?: boolean; // --> UI
+  // colorBorder?: string; // --> UI
 }
 
-export interface TaskProperties {
-  task_type?: string;
+export interface RFNodeTaskProperties {
+  task_type: string;
   // type?: string; // graph, node, note? should it also be inside data?
-  task_identifier?: string;
+  task_identifier: string;
   task_icon?: string;
   task_category?: string;
   optional_input_names?: string[];
@@ -399,57 +400,44 @@ export interface TaskProperties {
   required_input_names?: string[];
 }
 
-export interface EwoksProperties {
+export interface RFNodeEwoksProperties {
   label?: string;
-  category?: string;
+  // category?: string;
   default_inputs?: Inputs[];
   inputs_complete?: boolean;
   task_generator?: string;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes;
-  // map_all_data?: boolean; --> ewoks_properties
+  map_all_data?: boolean; // --> ewoks_properties
 }
 
 export interface EwoksRFNodeData {
+  task_props: RFNodeTaskProperties;
+  ewoks_props: RFNodeEwoksProperties;
+  ui_props: RFNodeUiProps;
+  comment?: string; // will be here
+
+  // Clean the following
   nodeWidth?: number;
   node_icon?: string;
   executing?: boolean;
   exists?: boolean;
-  label?: string;
+  // label?: string;
   type?: string;
   inputs?: outputsInputsSub[]; // ?
   outputs?: outputsInputsSub[]; // ?
   icon?: string;
-  comment?: string;
   moreHandles?: boolean;
   details?: boolean;
   withImage?: boolean;
   withLabel?: boolean;
   colorBorder?: string;
   map_all_data?: boolean;
-  // nodeWidth?: number; --> UI
-  // node_icon?: string; --> UI
-  // executing?: boolean; --> UI
-  // exists?: boolean; --> UI to color missing subgraphs
-  // label?: string; delete
-  // type?: string; delete?
-  // inputs?: outputsInputsSub[];  --> UI to position inputs-outputs of subgraphs in a graph
-  // outputs?: outputsInputsSub[];
-  // icon?: string; --> UI and only there
-  // comment?: string; --> delete as comment is in ewoks_properties only?
-  // moreHandles?: boolean; --> UI
-  // details?: boolean; --> UI for showing the details in a node?
-  // withImage?: boolean; --> UI
-  // withLabel?: boolean; --> UI
-  // colorBorder?: string; --> UI
-  // map_all_data?: boolean; --> ewoks_properties
-  task_properties?: TaskProperties;
-  ewoks_properties?: EwoksProperties;
-  uiProps?: UiPropsNodes;
 }
 export interface EwoksRFNode {
+  // extends Node<EwoksRFNodeData>{
   id: string;
-  position?: CanvasPosition;
+  position?: XYPosition;
   type?: string; // graphInput, graphOuput, ppfmethod, graph
 
   sourcePosition?: Position;
@@ -464,48 +452,28 @@ export interface EwoksRFNode {
   // height?: number | null;
 
   // -----------
-  // data: {
-
-  // -----------
   // task_properties: {
-  task_type: string;
+  // task_type: string;
   // type?: string; // graph, node, note? should it also be inside data?
-  task_identifier: string;
-  task_icon?: string;
-  task_category?: string;
+  // task_identifier: string;
+  // task_icon?: string;
+  // task_category?: string;
   // optional_input_names?: string[];
   // output_names?: string[];
   // required_input_names?: string[];
-
   // -----------
   // ewoks_properties: {
-  label?: string;
-  category?: string;
-  default_inputs?: Inputs[];
+  // label?: string;
+  // category?: string;
+  // default_inputs?: Inputs[];
   inputs_complete?: boolean;
   task_generator?: string;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes;
-
   // -----------
   data: EwoksRFNodeData;
-
   // -----------
-  uiProps?: UiPropsNodes;
-  // type?: string;
-  // icon?: string;
-  // comment?: string;
-  // position?: CanvasPosition;
-  // style?: LinkStyle;
-  // withImage?: boolean;
-  // withLabel?: boolean;
-  // colorBorder?: string;
-  // nodeWidth?: number;
-  // node_icon?: string;
-  // task_icon?: string;
-  // task_category?: string;
-  // moreHandles?: boolean;
-  // details?: boolean;
+  uiProps?: RFNodeUiProps;
 }
 
 export interface EditableTableRow {
@@ -529,12 +497,17 @@ export interface CustomTableCellProps {
   ): void;
 }
 
+export interface RFLinkEwoksProperties {
+  label?: string;
+}
+
 export interface EwoksRFLink {
   id?: string;
   source: string;
   target: string;
   label?: string;
   data: {
+    ewoks_props?: RFLinkEwoksProperties;
     label?: string;
     data_mapping?: DataMapping[];
     type?: string;

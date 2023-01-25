@@ -4,13 +4,13 @@ import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
 
 function DataNode(args: NodeProps) {
-  console.log(args);
+  // console.log(args);
 
   return (
     <Node
       isGraph={false}
       type={args.type}
-      label={args.data.label}
+      label={args.data.ewoks_props.label}
       selected={args.selected}
       color="#ced3ee"
       image={args.data.icon}

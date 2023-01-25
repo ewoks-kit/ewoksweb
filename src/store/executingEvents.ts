@@ -56,7 +56,7 @@ const executingEvents = (
       const tempNode: EwoksRFNode | undefined = get().graphRF.nodes.find(
         (nod) =>
           nod.id === execEvent.node_id &&
-          nod.task_identifier === execEvent.task_id
+          nod.data.task_props.task_identifier === execEvent.task_id
       );
 
       if (!tempNode) {
@@ -141,12 +141,18 @@ const executingEvents = (
         ),
         {
           data: {
-            label: `${tempLabel},${(execEvent.id as unknown) as string}`,
+            ewoks_props: {
+              label: `${tempLabel},${(execEvent.id as unknown) as string}`,
+            },
+            task_props: {
+              task_type: 'executionSteps',
+              task_identifier: execEvent.id?.toString() || '',
+            },
+            ui_props: {},
             event: execEvent,
           },
           id: execEvent.time || '',
-          task_type: 'executionSteps',
-          task_identifier: execEvent.id?.toString() || '',
+
           type: 'executionSteps',
           // calculate position based on node_id -> node position + start or stop
           position: tempPos,
@@ -156,7 +162,7 @@ const executingEvents = (
       if (get().inExecutionMode) {
         set((state) => ({
           ...state,
-          // only foe testing set graphRF
+          // only for testing set graphRF
           graphRF: {
             ...get().graphRF,
             nodes: nodess,

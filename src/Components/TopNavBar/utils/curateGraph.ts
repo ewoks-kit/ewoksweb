@@ -8,13 +8,15 @@ function curateGraph(graphRF: GraphRF): GraphRF {
   for (const nod of graphRFCurrated.nodes) {
     // INFO: Remove empty lines in table for nodes and links
     // TODO: removes only the last not all empty...
+    const defaultInputs = nod.data.ewoks_props.default_inputs;
     if (
-      nod.default_inputs &&
-      nod.default_inputs.length > 0 &&
-      nod.default_inputs[nod.default_inputs.length - 1].id === ''
+      defaultInputs &&
+      defaultInputs.length > 0 &&
+      defaultInputs[defaultInputs.length - 1].id === ''
     ) {
-      nod.default_inputs.pop();
+      defaultInputs.pop();
     }
+
     if (
       nod.default_error_attributes?.data_mapping &&
       nod.default_error_attributes.data_mapping.length > 0 &&
