@@ -61,17 +61,17 @@ export default function NodeDetails(element: EwoksRFNode) {
     {
       id: 'optional_input_names',
       label: 'Optional Inputs',
-      value: element.optional_input_names,
+      value: element.data?.task_properties?.optional_input_names,
     },
     {
       id: 'required_input_names',
       label: 'Required Inputs',
-      value: element.required_input_names,
+      value: element.data?.task_properties?.required_input_names,
     },
     {
       id: 'output_names',
       label: 'Outputs',
-      value: element.output_names,
+      value: element.data?.task_properties?.output_names,
     },
   ];
 

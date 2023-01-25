@@ -8,6 +8,8 @@ import useStore from '../store/useStore';
 import type { EwoksRFNodeData } from '../types';
 
 function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
+  console.log(props);
+
   const { data: node, selected } = props;
   const graphRF = useStore((state) => state.graphRF);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);

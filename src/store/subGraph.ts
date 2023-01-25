@@ -6,6 +6,7 @@ import { calcCoordinatesFirstNode } from './storeUtils/CalcCoordinatesFirstNode'
 import orange2 from 'images/orange2.png';
 import type { GetState, SetState } from 'zustand';
 import type { State } from '../types';
+import { Position } from 'reactflow';
 
 export interface SubGraphSlice {
   subGraph: GraphRF;
@@ -79,8 +80,8 @@ const subGraph = (
         graphId += id++;
       }
       newNode = {
-        sourcePosition: 'right',
-        targetPosition: 'left',
+        sourcePosition: Position.Right,
+        targetPosition: Position.Left,
         task_generator: '',
         id: graphId,
         task_type: 'graph',

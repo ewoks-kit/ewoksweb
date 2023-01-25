@@ -4,6 +4,8 @@ import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
 
 function DataNode(args: NodeProps) {
+  console.log(args);
+
   return (
     <Node
       isGraph={false}

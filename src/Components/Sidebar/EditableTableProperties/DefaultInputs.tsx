@@ -75,8 +75,8 @@ export default function DefaultInputs(element: EwoksRFNode) {
             {
               type: 'select',
               values: [
-                ...(element.optional_input_names || []),
-                ...(element.required_input_names || []),
+                ...(element.data?.task_properties?.optional_input_names || []),
+                ...(element.data?.task_properties?.required_input_names || []),
               ],
             },
             { type: 'input' },
