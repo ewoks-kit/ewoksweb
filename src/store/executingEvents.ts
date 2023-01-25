@@ -69,7 +69,7 @@ const executingEvents = (
         tempPos = tempNode.position;
       }
 
-      const { withLabel } = tempNode.data;
+      const { withLabel } = tempNode.data.ui_props;
 
       // TODO: calc the exact pos based on the nodes width which is
       // available and adjustable now
@@ -77,7 +77,7 @@ const executingEvents = (
         tempPos = { x: tempPos.x - 30, y: tempPos.y + 30 };
       } else if (withLabel) {
         tempPos = {
-          x: tempPos.x + (tempNode.data.nodeWidth ?? 0) + 15,
+          x: tempPos.x + (tempNode.data.ui_props.nodeWidth ?? 0) + 15,
           y: tempPos.y + 30,
         };
       } else {
@@ -136,7 +136,10 @@ const executingEvents = (
           (nod) =>
             !(
               // todo: changed the node_id and can affect execution
-              (nod.id === execEvent.node_id && nod.data.type === execEvent.type)
+              (
+                nod.id === execEvent.node_id &&
+                nod.data.ui_props.type === execEvent.type
+              )
             )
         ),
         {

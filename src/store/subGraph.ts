@@ -84,32 +84,40 @@ const subGraph = (
       newNode = {
         sourcePosition: Position.Right,
         targetPosition: Position.Left,
-        task_generator: '',
+
         id: graphId,
 
         type: 'graph',
         position: calcCoordinatesFirstNode(get().graphRF.nodes),
-        inputs_complete: false,
-        default_error_node: false,
-        default_error_attributes: {
-          map_all_data: true,
-          data_mapping: [],
-        },
+
         data: {
           task_props: {
             task_type: 'graph',
             task_identifier: subToAdd.graph.id,
           },
-          ui_props: {},
-          exists: true,
-          ewoks_props: { label: subToAdd.graph.label, default_inputs: [] },
-          type: 'internal',
+          ui_props: {
+            exists: true,
+            type: 'internal',
+
+            icon: subToAdd.graph?.uiProps?.icon || orange2,
+            inputs: inputsSub,
+            outputs: outputsSub,
+            withImage: true,
+            withLabel: true,
+          },
+
+          ewoks_props: {
+            label: subToAdd.graph.label,
+            default_inputs: [],
+            task_generator: '',
+            inputs_complete: false,
+            default_error_node: false,
+            default_error_attributes: {
+              map_all_data: true,
+              data_mapping: [],
+            },
+          },
           comment: '',
-          icon: subToAdd.graph?.uiProps?.icon || orange2,
-          inputs: inputsSub,
-          outputs: outputsSub,
-          withImage: true,
-          withLabel: true,
         },
       };
 

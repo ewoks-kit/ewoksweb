@@ -380,13 +380,6 @@ export interface RFNodeUiProps {
   exists?: boolean;
   inputs?: outputsInputsSub[]; // --> UI to position inputs-outputs of subgraphs in a graph
   outputs?: outputsInputsSub[];
-  // icon?: string; // --> UI and only there
-  // comment?: string; // --> delete as comment is in ewoks_properties only?
-  // moreHandles?: boolean; // --> UI
-  // details?: boolean; // --> UI for showing the details in a node?
-  // withImage?: boolean; // --> UI
-  // withLabel?: boolean; // --> UI
-  // colorBorder?: string; // --> UI
 }
 
 export interface RFNodeTaskProperties {
@@ -408,7 +401,6 @@ export interface RFNodeEwoksProperties {
   task_generator?: string;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes;
-  map_all_data?: boolean; // --> ewoks_properties
 }
 
 export interface EwoksRFNodeData {
@@ -416,64 +408,21 @@ export interface EwoksRFNodeData {
   ewoks_props: RFNodeEwoksProperties;
   ui_props: RFNodeUiProps;
   comment?: string; // will be here
-
-  // Clean the following
-  nodeWidth?: number;
-  node_icon?: string;
-  executing?: boolean;
-  exists?: boolean;
-  // label?: string;
-  type?: string;
-  inputs?: outputsInputsSub[]; // ?
-  outputs?: outputsInputsSub[]; // ?
-  icon?: string;
-  moreHandles?: boolean;
-  details?: boolean;
-  withImage?: boolean;
-  withLabel?: boolean;
-  colorBorder?: string;
-  map_all_data?: boolean;
 }
+
 export interface EwoksRFNode {
-  // extends Node<EwoksRFNodeData>{
   id: string;
   position?: XYPosition;
   type?: string; // graphInput, graphOuput, ppfmethod, graph
-
   sourcePosition?: Position;
   targetPosition?: Position;
-  // sourcePosition?: Position;
-  // targetPosition?: Position;
-
   selected?: boolean;
 
   // From reactFlow?
   // width?: number | null; // what is their functionality
   // height?: number | null;
 
-  // -----------
-  // task_properties: {
-  // task_type: string;
-  // type?: string; // graph, node, note? should it also be inside data?
-  // task_identifier: string;
-  // task_icon?: string;
-  // task_category?: string;
-  // optional_input_names?: string[];
-  // output_names?: string[];
-  // required_input_names?: string[];
-  // -----------
-  // ewoks_properties: {
-  // label?: string;
-  // category?: string;
-  // default_inputs?: Inputs[];
-  inputs_complete?: boolean;
-  task_generator?: string;
-  default_error_node?: boolean;
-  default_error_attributes?: DefaultErrorAttributes;
-  // -----------
   data: EwoksRFNodeData;
-  // -----------
-  uiProps?: RFNodeUiProps;
 }
 
 export interface EditableTableRow {

@@ -3,14 +3,14 @@ import { getSubgraphs } from '../../utils';
 
 export async function findAllSubgraphs(
   graphToSearch: GraphEwoks,
-  recentGraphs: GraphEwoks[]
+  recentGraphs: GraphRF[]
 ): Promise<GraphEwoks[]> {
   // TODO: examine functionality because it seems to get again previously
   // fetched graphs. Also goes one by one awaiting. Promise.all better??
   let subsToGet = [graphToSearch];
   const newNodeSubgraphs: GraphEwoks[] = [];
 
-  const thisCallRecent = [...recentGraphs];
+  const thisCallRecent: GraphEwoks[] | GraphRF[] = [...recentGraphs];
 
   // Get for each graph all subgraphs it includes
   while (subsToGet.length > 0) {

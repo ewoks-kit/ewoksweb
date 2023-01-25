@@ -55,7 +55,7 @@ export default function NodeDetails(element: EwoksRFNode) {
     {
       id: 'task_generator',
       label: 'Generator',
-      value: element.task_generator,
+      value: element.data.ewoks_props.task_generator,
     },
     {
       id: 'task_category',
@@ -85,14 +85,18 @@ export default function NodeDetails(element: EwoksRFNode) {
       label: 'Identifier',
       value: element.data.task_props.task_identifier,
     },
-    { id: 'node_icon', label: 'Icon', value: element.data.icon },
+    { id: 'node_icon', label: 'Icon', value: element.data.ui_props.icon },
   ];
 
   useEffect(() => {
-    setInputsComplete(!!element.inputs_complete);
-    setDefaultErrorNode(element.default_error_node || false);
-    setDataMapping(element.default_error_attributes?.data_mapping || []);
-    setMapAllData(element.default_error_attributes?.map_all_data || false);
+    setInputsComplete(!!element.data.ewoks_props.inputs_complete);
+    setDefaultErrorNode(element.data.ewoks_props.default_error_node || false);
+    setDataMapping(
+      element.data.ewoks_props.default_error_attributes?.data_mapping || []
+    );
+    setMapAllData(
+      element.data.ewoks_props.default_error_attributes?.map_all_data || false
+    );
   }, [element]);
 
   function propChanged(propKeyValue: {
@@ -152,7 +156,13 @@ export default function NodeDetails(element: EwoksRFNode) {
       setSelectedElement(
         {
           ...element,
-          data: { ...element.data, icon: Object.values(propKeyValue)[0] },
+          data: {
+            ...element.data,
+            ui_props: {
+              ...element.data.ui_props,
+              icon: Object.values(propKeyValue)[0],
+            },
+          },
         },
         'fromSaveElement'
       );
@@ -163,7 +173,13 @@ export default function NodeDetails(element: EwoksRFNode) {
     setSelectedElement(
       {
         ...element,
-        inputs_complete: event.target.checked,
+        data: {
+          ...element.data,
+          ewoks_props: {
+            ...element.data.ewoks_props,
+            inputs_complete: event.target.checked,
+          },
+        },
       },
       'fromSaveElement'
     );
@@ -173,22 +189,35 @@ export default function NodeDetails(element: EwoksRFNode) {
     setSelectedElement(
       {
         ...element,
-        default_error_node: event.target.checked,
+        data: {
+          ...element.data,
+          ewoks_props: {
+            ...element.data.ewoks_props,
+            default_error_node: event.target.checked,
+          },
+        },
       },
       'fromSaveElement'
     );
   }
 
   function addDataMapping() {
-    const elMap = element.default_error_attributes?.data_mapping || [];
+    const elMap =
+      element.data.ewoks_props.default_error_attributes?.data_mapping || [];
 
     if (!elMap.some((x) => x.id === '')) {
       setSelectedElement(
         {
           ...element,
-          default_error_attributes: {
-            ...element.default_error_attributes,
-            data_mapping: [...elMap, { id: '', name: '', value: '' }],
+          data: {
+            ...element.data,
+            ewoks_props: {
+              ...element.data.ewoks_props,
+              default_error_attributes: {
+                ...element.data.ewoks_props.default_error_attributes,
+                data_mapping: [...elMap, { id: '', name: '', value: '' }],
+              },
+            },
           },
         },
         'fromSaveElement'
@@ -211,9 +240,15 @@ export default function NodeDetails(element: EwoksRFNode) {
     setSelectedElement(
       {
         ...element,
-        default_error_attributes: {
-          ...element.default_error_attributes,
-          data_mapping: dmap,
+        data: {
+          ...element.data,
+          ewoks_props: {
+            ...element.data.ewoks_props,
+            default_error_attributes: {
+              ...element.data.ewoks_props.default_error_attributes,
+              data_mapping: dmap,
+            },
+          },
         },
       },
       'fromSaveElement'
@@ -224,9 +259,15 @@ export default function NodeDetails(element: EwoksRFNode) {
     setSelectedElement(
       {
         ...element,
-        default_error_attributes: {
-          ...element.default_error_attributes,
-          map_all_data: event.target.checked,
+        data: {
+          ...element.data,
+          ewoks_props: {
+            ...element.data.ewoks_props,
+            default_error_attributes: {
+              ...element.data.ewoks_props.default_error_attributes,
+              map_all_data: event.target.checked,
+            },
+          },
         },
       },
       'fromSaveElement'

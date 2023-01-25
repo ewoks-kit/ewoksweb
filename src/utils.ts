@@ -63,7 +63,7 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
 // TODO: clear out the types used
 export async function getSubgraphs(
   graph: GraphEwoks,
-  recentGraphs: GraphEwoks[]
+  recentGraphs: GraphRF[]
 ): Promise<GraphEwoks[]> {
   console.log(graph, recentGraphs);
 

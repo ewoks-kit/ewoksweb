@@ -9,6 +9,9 @@ function curateGraph(graphRF: GraphRF): GraphRF {
     // INFO: Remove empty lines in table for nodes and links
     // TODO: removes only the last not all empty...
     const defaultInputs = nod.data.ewoks_props.default_inputs;
+    const defaultErrorDataMapping =
+      nod.data.ewoks_props.default_error_attributes?.data_mapping;
+
     if (
       defaultInputs &&
       defaultInputs.length > 0 &&
@@ -18,13 +21,11 @@ function curateGraph(graphRF: GraphRF): GraphRF {
     }
 
     if (
-      nod.default_error_attributes?.data_mapping &&
-      nod.default_error_attributes.data_mapping.length > 0 &&
-      nod.default_error_attributes.data_mapping[
-        nod.default_error_attributes.data_mapping.length - 1
-      ].id === ''
+      defaultErrorDataMapping &&
+      defaultErrorDataMapping.length > 0 &&
+      defaultErrorDataMapping[defaultErrorDataMapping.length - 1].id === ''
     ) {
-      nod.default_error_attributes.data_mapping.pop();
+      defaultErrorDataMapping.pop();
     }
   }
   for (const lin of graphRFCurrated.links) {

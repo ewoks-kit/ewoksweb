@@ -29,22 +29,22 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
   return (
     <Node
       isGraph
-      moreHandles={node.moreHandles || false}
-      withImage={node.withImage}
-      nodeWidth={node.nodeWidth || 120}
-      withLabel={node.withLabel}
-      colorBorder={node.colorBorder}
+      moreHandles={node.ui_props.moreHandles || false}
+      withImage={node.ui_props.withImage}
+      nodeWidth={node.ui_props.nodeWidth || 120}
+      withLabel={node.ui_props.withLabel}
+      colorBorder={node.ui_props.colorBorder}
       // the following is calculated in calcNodeType for subgraphs-inNodes-outNodes
-      type={node.type || ''}
+      type={node.ui_props.type || ''}
       label={node.ewoks_props.label || ''}
       selected={selected}
-      color={node.exists ? '#ced3ee' : 'red'}
-      image={node.icon}
+      color={node.ui_props.exists ? '#ced3ee' : 'red'}
+      image={node.ui_props.icon}
       comment={node.comment}
-      executing={node.executing}
+      executing={node.ui_props.executing}
       content={
         <>
-          {node.inputs
+          {node.ui_props.inputs
             ?.sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
             .map((input: { label: string }) => (
               <div
@@ -52,7 +52,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
                 style={{
                   ...style.io,
                   ...style.textLeft,
-                  ...(node.moreHandles ? style.borderInput : {}),
+                  ...(node.ui_props.moreHandles ? style.borderInput : {}),
                 }}
               >
                 {/* remove the rest of the input {input.label} for now */}
@@ -69,7 +69,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
                   }}
                   isValidConnection={isValidConnection}
                 />
-                {node.moreHandles && (
+                {node.ui_props.moreHandles && (
                   <Handle
                     key="&{input.label} right"
                     type="target"
@@ -88,7 +88,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
                 )}
               </div>
             ))}
-          {node.outputs
+          {node.ui_props.outputs
             ?.sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
             .map((output: { label: string }) => (
               <div
@@ -96,7 +96,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
                 style={{
                   ...style.io,
                   ...style.textRight,
-                  ...(node.moreHandles ? style.borderOutput : {}),
+                  ...(node.ui_props.moreHandles ? style.borderOutput : {}),
                 }}
               >
                 {/* remove the rest of the output {output.label} for now */}
@@ -113,7 +113,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
                   }}
                   isValidConnection={isValidConnection}
                 />
-                {node.moreHandles && (
+                {node.ui_props.moreHandles && (
                   <Handle
                     key={`${output.label} left`}
                     type="source"

@@ -31,23 +31,29 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
   return tempNodes.map(
     ({
       id,
-      inputs_complete,
-      task_generator,
-      default_error_node,
-      default_error_attributes,
-      data: {
-        ewoks_props: { default_inputs, label },
-        task_props: { task_type, task_identifier },
-        nodeWidth,
-        node_icon,
 
-        type,
-        icon,
+      data: {
+        ewoks_props: {
+          default_inputs,
+          label,
+          inputs_complete,
+          task_generator,
+          default_error_node,
+          default_error_attributes,
+        },
+        task_props: { task_type, task_identifier },
+        ui_props: {
+          nodeWidth,
+          node_icon,
+          type,
+          icon,
+          moreHandles,
+          withImage,
+          withLabel,
+          colorBorder,
+        },
+
         comment,
-        moreHandles,
-        withImage,
-        withLabel,
-        colorBorder,
       },
       position,
     }) => {

@@ -228,14 +228,19 @@ function Canvas() {
     setSelectedElement(graphRF.graph);
   };
 
+  // TODO: this function only handles selected element which is done by RF11 nicelly.
+  // It shouldn't update the whole graph as it is now since selected modifies the GraphRF
   const onNodeClick = (_event: MouseEvent, element: Node) => {
     // TODO: will ignore this strange error until I have a look at the models RF-EwoksRF
     // @ts-expect-error
     const graphElement: EwoksRFNode | Node | undefined = nodes.find(
       (el) => el.id === element.id
     );
+
+    console.log(element, graphElement);
+
     if (
-      'task_type' in graphElement &&
+      'task_type' in graphElement?.data.task_props &&
       !(
         graphElement.task_type === 'executionSteps' &&
         graphElement.type === 'executionSteps'
@@ -477,12 +482,14 @@ function Canvas() {
 
   const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
     event.preventDefault();
+
     const nodeTmp = graphRF.nodes.find((el) => el.id === node.id);
-    if (nodeTmp?.task_type === 'graph') {
+    if (nodeTmp?.data.task_props.task_type === 'graph') {
       // if type==graph get the subgraph from the recentGraphs
       const subgraph = recentGraphs.find(
-        (gr) => gr.graph.id === nodeTmp.task_identifier
+        (gr) => gr.graph.id === nodeTmp.data.task_props.task_identifier
       );
+
       if (subgraph?.graph.id) {
         setGraphRF(subgraph);
         setSubgraphsStack({

@@ -10,7 +10,7 @@ export function calcNoteNodes(graph: GraphRF): Note[] {
         label: noteNod.data.ewoks_props.label,
         comment: noteNod.data.comment,
         position: noteNod.position,
-        nodeWidth: noteNod.data.nodeWidth,
+        nodeWidth: noteNod.data.ui_props.nodeWidth,
       } as Note;
     });
 }

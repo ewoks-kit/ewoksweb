@@ -149,10 +149,12 @@ function calcNodeProps(
       },
       markerEnd: calcMarkerEnd(graph_links[link_index]),
       animated: graph_links[link_index]?.animated || false,
-      withImage: 'withImage' in nod.data ? nod.data.withImage : true,
-      withLabel: 'withLabel' in nod.data ? nod.data.withLabel : true,
-      colorBorder: nod.data.colorBorder,
-      nodeWidth: nod.data.nodeWidth,
+      withImage:
+        'withImage' in nod.data.ui_props ? nod.data.ui_props.withImage : true,
+      withLabel:
+        'withLabel' in nod.data.ui_props ? nod.data.ui_props.withLabel : true,
+      colorBorder: nod.data.ui_props.colorBorder,
+      nodeWidth: nod.data.ui_props.nodeWidth,
     },
   };
 }

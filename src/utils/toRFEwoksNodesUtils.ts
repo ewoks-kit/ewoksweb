@@ -131,9 +131,12 @@ export function addNodeProperties(
       ...tempNode,
       data: {
         ...tempNode.data,
-        exists: subgraphNode && !!subgraphNode.graph.id,
-        inputs: inputsSub,
-        outputs: outputsSub,
+        ui_props: {
+          ...tempNode.data.ui_props,
+          exists: subgraphNode && !!subgraphNode.graph.id,
+          inputs: inputsSub,
+          outputs: outputsSub,
+        },
       },
     };
   } else {
