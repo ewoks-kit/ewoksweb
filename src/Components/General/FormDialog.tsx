@@ -371,6 +371,7 @@ export default function FormDialog(props: FormDialogProps) {
           value={newName}
           onChange={newNameChanged}
           disabled={action === 'editTask' || overwrite}
+          inputProps={{ 'aria-labelledby': 'saveAsName-label' }}
         />
         {['newGraphOrOverwrite', 'cloneGraph'].includes(action) && (
           <div>

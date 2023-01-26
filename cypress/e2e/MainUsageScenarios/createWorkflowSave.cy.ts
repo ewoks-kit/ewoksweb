@@ -8,7 +8,7 @@ describe('create workflow and save', () => {
   it('opens the dialog for name after clicking new', () => {
     cy.findByRole('dialog').should('not.exist');
 
-    cy.get('[data-cy="newWorkflowButton"]').click();
+    cy.findByRole('button', { name: 'Start a new workflow' }).click();
 
     cy.findByRole('dialog').should('be.visible');
   });
@@ -16,34 +16,28 @@ describe('create workflow and save', () => {
   it('gives a new unique name creates and deletes workflow', () => {
     const id = nanoid();
 
-    cy.contains('New Name - Identifier')
-      .siblings('div')
-      .children('input')
-      .type(id.toString(), { force: true });
+    cy.findByRole('textbox', {
+      name: 'New Name - Identifier',
+    }).type(id);
 
-    cy.contains('Save Workflow').click({ force: true });
+    cy.findByRole('button', { name: 'Save Workflow' }).click();
     cy.waitForStableDOM();
 
     cy.get('.react-flow__edge').should('have.length', 0);
     cy.get('.react-flow__node').should('have.length', 0);
 
-    cy.get('[data-testid="async-autocomplete-drop"]')
-      .click()
-      .get('input[type=text]')
-      .type(id.toString());
+    cy.loadGraph(id);
 
-    cy.contains(id.toString()).click();
-
-    cy.get(`[data-cy="${id.toString()}"]`).contains(id.toString());
+    cy.get(`[data-cy="${id}"]`).contains(id);
 
     cy.get(`[data-cy="tutorial_Graph"]`).should('not.exist');
 
     cy.findByRole('button', { name: 'Delete' }).click();
 
-    cy.contains(`Delete "${id.toString()}" workflow?`);
+    cy.contains(`Delete "${id}" workflow?`);
 
     cy.findByRole('button', { name: 'Yes' }).click();
 
-    cy.get(`[data-cy="${id.toString()}"]`).should('not.exist');
+    cy.get(`[data-cy="${id}"]`).should('not.exist');
   });
 });

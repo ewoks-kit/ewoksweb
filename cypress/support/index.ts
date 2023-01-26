@@ -7,6 +7,7 @@ declare global {
     interface Chainable {
       mount: typeof mount;
       loadApp(): void;
+      loadGraph(name: string): void;
       loadAppWithoutGraph(): void;
     }
   }
