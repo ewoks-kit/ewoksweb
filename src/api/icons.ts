@@ -1,4 +1,4 @@
-import { assertDefined } from '../guards';
+import { assertDefined } from '../utils/typeGuards';
 import type { Icon, IconsNames } from '../types';
 import { axiosRequest } from './api';
 import path from 'path-browserify';
