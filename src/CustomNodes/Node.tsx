@@ -1,11 +1,9 @@
 import React, { memo, useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import orange1 from '../images/orange1.png';
 import { Handle, Position } from 'react-flow-renderer';
 import type { EwoksRFNode, NodeProps } from '../types';
 import { contentStyle, style } from './NodeStyle';
 import Tooltip from '@material-ui/core/Tooltip';
-import ExecuteSpinner from '../Components/Execution/ExecuteSpinner';
 import isValidLink from '../utils/IsValidLink';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import EditIcon from '@material-ui/icons/EditOutlined';
@@ -15,13 +13,10 @@ import { calcNewId } from '../utils/calcNewId';
 import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
 import tooltipText from '../Components/General/TooltipText';
-import { findImage } from 'utils';
 import type { Connection } from 'react-flow-renderer';
 import { isNode } from '../utils/typeGuards';
-
-const onDragStart = (e: React.DragEvent<HTMLImageElement>) => {
-  e.preventDefault();
-};
+import NodeIcon from './NodeIcon';
+import IconBoundary from '../IconBoundary';
 
 // TODO: examine usage when execution in main
 const execution = () => {
@@ -73,7 +68,6 @@ function Node({
   const [labelLocal, setLabelLocal] = React.useState(label);
   const setGraphRF = useStore((state) => state.setGraphRF);
   const [detailsL, setDetailsL] = React.useState(false);
-  const allIcons = useStore((state) => state.allIcons);
   const setUndoRedo = useStore((state) => state.setUndoRedo);
 
   useEffect(() => {
@@ -232,64 +226,25 @@ function Node({
               {label.slice(0, 1)}
             </div>
           )}
-          {inExecutionMode &&
-            !withImage &&
-            type !== 'graphOutput' &&
-            type !== 'graphInput' && (
-              <ExecuteSpinner
-                getting={executing}
-                tooltip="Execution"
-                action={execution}
-              >
-                <img
-                  style={{ ...contentStyle.imgPadding }}
-                  role="presentation"
-                  draggable="false"
-                  onDragStart={(event) => onDragStart(event)}
-                  src={orange1}
-                  alt="icon"
-                />
-              </ExecuteSpinner>
-            )}
           {/* If comment also needed sometimes */}
           {/* <div style={{ wordWrap: 'break-word' }}>{comment}</div> */}
-          {withImage &&
-            type !== 'graphOutput' &&
-            type !== 'graphInput' &&
-            (inExecutionMode ? (
-              <ExecuteSpinner
-                getting={executing}
-                tooltip="Execution"
-                action={execution}
-              >
-                <img
-                  style={{ ...contentStyle.imgPadding }}
-                  role="presentation"
-                  draggable="false"
-                  onDragStart={(event) => onDragStart(event)}
-                  src={findImage(image, allIcons)}
-                  alt="icon"
-                />
-              </ExecuteSpinner>
-            ) : (
-              <img
-                style={{ ...contentStyle.imgPadding }}
-                role="presentation"
-                draggable="false"
-                onDragStart={(event) => onDragStart(event)}
-                src={findImage(image, allIcons)}
-                alt="taskIcon"
+          {(withImage || inExecutionMode) && (
+            <IconBoundary>
+              <NodeIcon
+                image={image}
+                hasSpinner={
+                  inExecutionMode &&
+                  type !== 'graphOutput' &&
+                  type !== 'graphInput'
+                }
+                spinnerProps={{
+                  getting: executing,
+                  tooltip: 'Execution',
+                  action: execution,
+                }}
+                onDragStart={(e) => e.preventDefault()}
               />
-            ))}
-          {withImage && (type === 'graphOutput' || type === 'graphInput') && (
-            <img
-              style={{ ...contentStyle.imgPadding }}
-              role="presentation"
-              draggable="false"
-              onDragStart={(event) => onDragStart(event)}
-              src={findImage(image, allIcons)}
-              alt="icon"
-            />
+            </IconBoundary>
           )}
           {!isGraph && type !== 'graphInput' && (
             <Handle

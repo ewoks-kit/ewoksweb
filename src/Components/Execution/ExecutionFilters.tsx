@@ -11,7 +11,7 @@ import {
   FormControlLabel,
   Switch,
 } from '@material-ui/core';
-import { getExecutionEvents } from '../../utils/api';
+import { getExecutionEvents } from '../../api/api';
 import useStore from '../../store/useStore';
 import type {
   ExecutedJobsResponse,

@@ -1,4 +1,3 @@
-import type { Dispatch, SetStateAction } from 'react';
 import { useState, useEffect } from 'react';
 import {
   Button,
@@ -16,7 +15,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import type { ChangeEvent } from 'react';
 import type {
   GraphRF,
   Task,
@@ -24,6 +22,7 @@ import type {
   PropertyChangedEvent,
 } from '../../types';
 import { rfToEwoks, textForError } from '../../utils';
+import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import useStore from '../../store/useStore';
 import commonStrings from '../../commonStrings.json';
 import {
@@ -32,7 +31,10 @@ import {
   postTask,
   putTask,
   putWorkflow,
-} from '../../utils/api';
+} from '../../api/api';
+import IconControl from './IconControl';
+import { assertStr } from '../../guards';
+import IconBoundary from '../../IconBoundary';
 
 interface FormDialogProps {
   elementToEdit: Task | GraphRF;
@@ -56,7 +58,6 @@ export default function FormDialog(props: FormDialogProps) {
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
   const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const allIcons = useStore((state) => state.allIcons);
   const setGettingFromServer = useStore((st) => st.setGettingFromServer);
   const [element, setElement] = useState<Task | GraphRF>({});
   const setTasks = useStore((state) => state.setTasks);
@@ -267,11 +268,12 @@ export default function FormDialog(props: FormDialogProps) {
   }
 
   function iconChanged(event: PropertyChangedEvent) {
-    const val = event.target.value as string;
-    setIcon(val);
+    const { value } = event.target;
+    assertStr(value);
+    setIcon(value);
     setElement({
       ...element,
-      icon: val,
+      icon: value,
     });
   }
 
@@ -430,27 +432,9 @@ export default function FormDialog(props: FormDialogProps) {
             </Tooltip>
           ))}
         {!isForGraph && (
-          <FormControl>
-            <InputLabel id="iconNameInFormDialog">Icon</InputLabel>
-            <Select
-              labelId="iconNameInFormDialog"
-              value={icon}
-              label="Icon"
-              onChange={iconChanged}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {allIcons.map((iconL) => (
-                <MenuItem value={iconL.name} key={iconL.name}>
-                  {iconL.name}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText>
-              Select from the existing icons or upload a new one
-            </FormHelperText>
-          </FormControl>
+          <IconBoundary>
+            <IconControl value={icon} onChange={iconChanged} />
+          </IconBoundary>
         )}
       </DialogContent>
       <DialogActions>

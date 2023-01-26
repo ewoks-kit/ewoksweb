@@ -10,7 +10,7 @@ import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
 import commonStrings from '../commonStrings.json';
-import { getTaskDescription } from '../utils/api';
+import { getTaskDescription } from '../api/api';
 import type { GetState, SetState } from 'zustand';
 import { initializedRFGraph } from '../utils/InitializedEntities';
 import { textForError } from '../utils';

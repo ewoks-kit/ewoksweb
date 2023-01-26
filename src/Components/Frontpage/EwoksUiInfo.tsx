@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import SignUp from './SignUp';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
-import { getWorkflow } from 'utils/api';
+import { getWorkflow } from 'api/api';
 import useStore from 'store/useStore';
 import type { GraphEwoks } from 'types';
 import { textForError } from '../../utils';
