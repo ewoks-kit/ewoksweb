@@ -1,4 +1,4 @@
-import type { Connection } from 'react-flow-renderer';
+import type { Connection } from 'reactflow';
 import type { EwoksRFLink, GraphRF } from '../../types';
 
 export function trimLabel(label: string) {
