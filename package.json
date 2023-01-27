@@ -47,6 +47,7 @@
     "react-use": "^17.3.1",
     "reactflow": "11.4.2",
     "socket.io-client": "^4.4.1",
+    "swr": "2.0.1",
     "zustand": "^3.5.10"
   },
   "devDependencies": {

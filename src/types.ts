@@ -21,7 +21,6 @@ import type { UndoRedoSlice } from './store/undoRedo';
 import type { WatchedWorkflowsSlice } from './store/watchedWorkflows';
 import type { WorkingGraphSlice } from './store/workingGraph';
 import type { ExecutingEventsSlice } from './store/executingEvents';
-import type { AllIconsSlice } from './store/allIcons';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
 import type { ChangeEvent } from 'react';
@@ -163,7 +162,6 @@ export interface NodeExecutionHistory {
 export interface State
   extends CanvasGraphChangedSlice,
     AllWorkflowsSlice,
-    AllIconsSlice,
     GraphRFSlice,
     CurrentExecutionEventSlice,
     ExecutedEventsSlice,
@@ -542,7 +540,7 @@ export interface GraphEwoks {
 }
 
 export interface IconsNames {
-  identifiers: [string];
+  identifiers: string[];
 }
 
 export interface Icon {

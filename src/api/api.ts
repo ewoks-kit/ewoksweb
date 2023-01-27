@@ -1,9 +1,7 @@
 import axios from 'axios';
-import type { AxiosResponse } from 'axios';
 import type {
   GraphEwoks,
   Task,
-  IconsNames,
   WorkflowDescription,
   filterParams,
 } from '../types';
@@ -89,33 +87,4 @@ export function deleteWorkflow(id: string) {
 export function getExecutionEvents(queryParams: filterParams) {
   const query = new URLSearchParams(Object.entries(queryParams));
   return axiosRequest.get(`/execution/events?${query.toString()}`);
-}
-
-// --------------Icons
-// Get '/icons/descriptions'
-export async function getIcons(): Promise<IconsNames> {
-  const result: AxiosResponse<IconsNames> = await axiosRequest.get(`/icons`);
-  return result.data;
-}
-
-// Get icon:id
-export function getIcon(
-  id: string
-): Promise<{
-  data: { data_url: string };
-  config: { url: string };
-}> {
-  return axiosRequest.get(`/icon/${id}`);
-}
-
-// Delete icon
-export function deleteIcon(id: string) {
-  return axiosRequest.delete<{ identifier: string }>(`/icon/${id}`);
-}
-
-// Post task
-export function postIcon(iconName: string, iconData: string | ArrayBuffer) {
-  return axiosRequest.post<{ data_url: string }>(`/icon/${iconName}`, {
-    data_url: iconData,
-  });
 }

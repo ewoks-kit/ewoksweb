@@ -13,14 +13,17 @@ Cypress.Commands.add('loadAppWithoutGraph', () => {
   cy.visit('http://localhost:3000/#/edit-workflows');
 });
 
+Cypress.Commands.add('loadGraph', (name: string) => {
+  cy.findByRole('textbox', {
+    name: 'Open workflow',
+  }).type(name);
+
+  cy.findByRole('option', { name }).click();
+});
+
 Cypress.Commands.add('loadApp', () => {
   cy.loadAppWithoutGraph();
-  cy.get('[data-testid="async-autocomplete-drop"]')
-    .click()
-    .get('input[type=text]')
-    .type('tutorial_Graph');
-
-  cy.contains(/^tutorial_Graph$/g).click();
+  cy.loadGraph('tutorial_Graph');
 });
 
 addWaitForStableDomCommand({ pollInterval: 300, timeout: 1000 });

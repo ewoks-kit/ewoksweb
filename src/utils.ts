@@ -12,7 +12,7 @@ import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
 import { calcNoteNodes } from './utils/calcNoteNodes';
-import { getWorkflowsDescriptions, getWorkflow } from './utils/api';
+import { getWorkflowsDescriptions, getWorkflow } from './api/api';
 import orange2 from 'images/orange2.png';
 import { isEwoksServerErrorResponse } from './utils/typeGuards';
 

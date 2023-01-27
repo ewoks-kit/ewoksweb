@@ -33,7 +33,7 @@ import MenuPopover from '../General/MenuPopover';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import { FormAction } from '../../types';
-import { getWorkflowsIds, putWorkflow } from '../../utils/api';
+import { getWorkflowsIds, putWorkflow } from '../../api/api';
 import { rfToEwoks, textForError } from '../../utils';
 import commonStrings from '../../commonStrings.json';
 import type { AxiosResponse } from 'axios';

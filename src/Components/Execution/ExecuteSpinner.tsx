@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface ExecuteSpinnerProps {
+export interface ExecuteSpinnerProps {
   getting?: boolean;
   children?: ReactNode;
   tooltip?: string;

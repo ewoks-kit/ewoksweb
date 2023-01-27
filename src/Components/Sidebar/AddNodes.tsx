@@ -23,11 +23,13 @@ import FormDialog from '../General/FormDialog';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import BookmarksIcon from '@material-ui/icons/Bookmarks';
-import { getTaskDescription, deleteTask } from 'utils/api';
+import { getTaskDescription, deleteTask } from 'api/api';
 import { FormAction } from '../../types';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { findImage, textForError } from 'utils';
+import { textForError } from 'utils';
 import type { OverridableComponent } from '@material-ui/core/OverridableComponent';
+import TaskIcon from './TaskIcon';
+import IconBoundary from '../../IconBoundary';
 
 interface DragInfo {
   task_identifier: string;
@@ -92,7 +94,6 @@ function AddNodes(props: AddNodesProps) {
   const initializedTask = useStore((state) => state.initializedTask);
   const [expanded, setExpanded] = useState<boolean>(false);
   const selectedElement = useStore((state) => state.selectedElement);
-  const allIcons = useStore((state) => state.allIcons);
 
   const getTasks = useCallback(async () => {
     try {
@@ -196,12 +197,6 @@ function AddNodes(props: AddNodesProps) {
     setExpanded(newExpanded);
   };
 
-  // const findImage = (img: string) => {
-  //   const icon = allIcons.find((ico) => ico.name === img);
-
-  //   return icon?.image?.data_url || orange2;
-  // };
-
   return (
     <Accordion
       expanded={expanded}
@@ -268,11 +263,13 @@ function AddNodes(props: AddNodesProps) {
                           <span className={classes.imgLabelHolder}>
                             {elem.task_identifier?.split('.').pop()}
                           </span>
-                          <img
-                            className={classes.image}
-                            src={findImage(elem.icon, allIcons)}
-                            alt={elem.task_identifier}
-                          />
+                          <IconBoundary>
+                            <TaskIcon
+                              className={classes.image}
+                              name={elem.icon}
+                              alt={elem.task_identifier}
+                            />
+                          </IconBoundary>
                         </span>
                       </Tooltip>
                     </span>

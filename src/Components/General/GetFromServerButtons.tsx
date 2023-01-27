@@ -4,7 +4,7 @@ import IntegratedSpinner from './IntegratedSpinner';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import useStore from '../../store/useStore';
-import { getWorkflow } from '../../utils/api';
+import { getWorkflow } from '../../api/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { textForError } from '../../utils';
 
