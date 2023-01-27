@@ -45,8 +45,6 @@ describe('change link attributes', () => {
       .contains('if you do then...Always and forever...')
       .parent()
       .siblings()
-      .should('have.attr', 'marker-end', 'url(#type=arrowclosed)');
-
-    // TODO: changing the state wont affect the node arrow type on canvas
+      .should('have.attr', 'marker-end', 'url(#1__type=arrowclosed)');
   });
 });
