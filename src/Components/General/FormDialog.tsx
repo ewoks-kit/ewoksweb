@@ -33,7 +33,7 @@ import {
   putWorkflow,
 } from '../../api/api';
 import IconControl from './IconControl';
-import { assertStr } from '../../guards';
+import { assertStr } from '../../utils/typeGuards';
 import IconBoundary from '../../IconBoundary';
 
 interface FormDialogProps {
