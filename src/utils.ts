@@ -63,10 +63,8 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
 // TODO: clear out the types used
 export async function getSubgraphs(
   graph: GraphEwoks,
-  recentGraphs: GraphRF[]
+  recentGraphIds: string[]
 ): Promise<GraphEwoks[]> {
-  console.log(graph, recentGraphs);
-
   const nodes: EwoksNode[] = [...graph.nodes];
   const existingNodeSubgraphs = nodes.filter(
     (nod) => nod.task_type === 'graph'
@@ -77,8 +75,8 @@ export async function getSubgraphs(
     const notInRecent: string[] = [];
     existingNodeSubgraphs.forEach((graphL) => {
       if (
-        recentGraphs.filter((gr) => gr.graph.id === graphL.task_identifier)
-          .length === 0
+        recentGraphIds.filter((id) => id === graphL.task_identifier).length ===
+        0
       ) {
         // add them in an array to request them from the server
         notInRecent.push(graphL.task_identifier);

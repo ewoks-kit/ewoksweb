@@ -10,7 +10,7 @@ export async function findAllSubgraphs(
   let subsToGet = [graphToSearch];
   const newNodeSubgraphs: GraphEwoks[] = [];
 
-  const thisCallRecent: GraphEwoks[] | GraphRF[] = [...recentGraphs];
+  const thisCallRecent: string[] = recentGraphs.map((graph) => graph.graph.id);
 
   // Get for each graph all subgraphs it includes
   while (subsToGet.length > 0) {
@@ -21,11 +21,9 @@ export async function findAllSubgraphs(
       thisCallRecent
     );
     // store them as ewoksGraphs for later transforming to RFGraphs
-    console.log(allGraphSubs, thisCallRecent);
-
     allGraphSubs.forEach((gr) => {
       newNodeSubgraphs.push(gr);
-      thisCallRecent.push(gr);
+      thisCallRecent.push(gr.graph.id);
     });
     // drop the one we searched for its subgraphs
     subsToGet.shift();

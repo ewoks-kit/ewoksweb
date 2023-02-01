@@ -32,20 +32,28 @@ export function addConnectionToGraph(
       on_error: false,
       comment: '',
       // DOC: node optional_input_names are link's optional_output_names
-      links_optional_output_names: targetTask.optional_input_names || [],
+      links_optional_output_names:
+        targetTask.data.task_props.optional_input_names || [],
       // DOC: node required_input_names are link's required_output_names
-      links_required_output_names: targetTask.required_input_names || [],
+      links_required_output_names:
+        targetTask.data.task_props.required_input_names || [],
       // DOC: node output_names are link's input_names
-      links_input_names: sourceTask.output_names || [],
+      links_input_names: sourceTask.data.task_props.output_names || [],
       conditions: [],
       data_mapping: [],
       map_all_data:
-        ['ppfmethod', 'ppfport'].includes(sourceTask.task_type) ||
-        ['ppfmethod', 'ppfport'].includes(targetTask.task_type),
+        ['ppfmethod', 'ppfport'].includes(
+          sourceTask.data.task_props.task_type
+        ) ||
+        ['ppfmethod', 'ppfport'].includes(targetTask.data.task_props.task_type),
       sub_source:
-        sourceTask.task_type === 'graph' && sourceHandle ? sourceHandle : '',
+        sourceTask.data.task_props.task_type === 'graph' && sourceHandle
+          ? sourceHandle
+          : '',
       sub_target:
-        targetTask.task_type === 'graph' && targetHandle ? targetHandle : '',
+        targetTask.data.task_props.task_type === 'graph' && targetHandle
+          ? targetHandle
+          : '',
     },
     id: `${source}:${sourceHandle || ''}->${target}:${targetHandle || ''}`,
     label: '',
@@ -66,8 +74,8 @@ export function addConnectionToGraph(
     labelBgBorderRadius: 4,
     labelStyle: { fill: 'blue', fontWeight: 500, fontSize: 14 },
     startEnd:
-      sourceTask.task_type === 'graphInput' ||
-      targetTask.task_type === 'graphOutput',
+      sourceTask.data.task_props.task_type === 'graphInput' ||
+      targetTask.data.task_props.task_type === 'graphOutput',
   };
 
   return {
