@@ -1,5 +1,5 @@
-import type { EdgeProps } from 'react-flow-renderer';
-import { getEdgeCenter } from 'react-flow-renderer';
+import type { EdgeProps } from 'reactflow';
+import { getBezierPath } from 'reactflow';
 import { edgeStyle } from './EdgeStyle';
 import type { SmoothStepData, SmoothStepParams } from './models';
 
@@ -22,12 +22,12 @@ function getSmoothStepPathC({
   targetY = 0,
   data,
 }: SmoothStepParams) {
-  const [, _centerY] = getEdgeCenter({
+  const _centerY = getBezierPath({
     sourceX,
     sourceY,
     targetX,
     targetY,
-  });
+  })[2];
 
   const cornerSize = 0;
   const cY = _centerY;

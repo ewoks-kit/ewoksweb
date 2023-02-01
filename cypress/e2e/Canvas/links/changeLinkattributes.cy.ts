@@ -12,7 +12,7 @@ describe('change link attributes', () => {
       .click()
       .type('Always and forever...');
 
-    cy.get('[data-cy="saveLabelComment"]').click();
+    cy.findByRole('button', { name: 'saveLabelComment' }).click();
 
     cy.get('.react-flow')
       .contains('if you do then...Always and forever...')
@@ -45,8 +45,6 @@ describe('change link attributes', () => {
       .contains('if you do then...Always and forever...')
       .parent()
       .siblings()
-      .should('have.attr', 'marker-end', 'url(#type=arrowclosed)');
-
-    // TODO: changing the state wont affect the node arrow type on canvas
+      .should('have.attr', 'marker-end', 'url(#1__type=arrowclosed)');
   });
 });

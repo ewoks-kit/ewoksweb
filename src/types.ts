@@ -1,4 +1,4 @@
-import type { Position } from 'react-flow-renderer';
+import type { Position } from 'reactflow';
 import type { CanvasGraphChangedSlice } from './store/canvasGraphChanged';
 import type { AllWorkflowsSlice } from './store/allWorkflows';
 import type { CurrentExecutionEventSlice } from './store/currentExecutionEvent';

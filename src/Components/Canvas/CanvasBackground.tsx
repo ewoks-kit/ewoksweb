@@ -1,4 +1,4 @@
-import { Background, BackgroundVariant } from 'react-flow-renderer';
+import { Background, BackgroundVariant } from 'reactflow';
 import useConfigStore from 'store/useConfigStore';
 
 function CanvasBackground() {

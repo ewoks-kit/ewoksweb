@@ -1,4 +1,4 @@
-import type { Connection, Edge } from 'react-flow-renderer';
+import type { Connection, Edge } from 'reactflow';
 import type { GraphRF } from '../types';
 
 export default function isValidLink(

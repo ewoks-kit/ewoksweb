@@ -17,7 +17,7 @@ it('changes label of node', () => {
     .click()
     .type('Always and forever...');
 
-  cy.get('[data-cy="saveLabelComment"]').click();
+  cy.findByRole('button', { name: 'saveLabelComment' }).click();
 
   cy.get('.react-flow').contains('Always and forever...').should('be.visible');
 });
@@ -31,7 +31,7 @@ it('changes comment of node', () => {
     .click()
     .type('Always and forever comment...');
 
-  cy.get('[data-cy="saveLabelComment"]').click();
+  cy.findByRole('button', { name: 'saveLabelComment' }).click();
 
   cy.get('.react-flow')
     .contains('Always and forever...')

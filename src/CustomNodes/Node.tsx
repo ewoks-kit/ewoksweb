@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import { Handle, Position } from 'react-flow-renderer';
+import { Handle, Position } from 'reactflow';
 import type { EwoksRFNode, NodeProps } from '../types';
 import { contentStyle, style } from './NodeStyle';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -13,7 +13,7 @@ import { calcNewId } from '../utils/calcNewId';
 import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
 import tooltipText from '../Components/General/TooltipText';
-import type { Connection } from 'react-flow-renderer';
+import type { Connection } from 'reactflow';
 import { isNode } from '../utils/typeGuards';
 import NodeIcon from './NodeIcon';
 import IconBoundary from '../IconBoundary';
@@ -301,7 +301,7 @@ function Node({
               >
                 <IconButton
                   style={{ ...contentStyle.iconButtons }}
-                  aria-label="edit"
+                  aria-label="clone node"
                   onClick={() => {
                     cloneNode();
                   }}
@@ -318,7 +318,7 @@ function Node({
                 >
                   <IconButton
                     style={{ ...contentStyle.iconButtons }}
-                    aria-label="edit"
+                    aria-label="edit node"
                     onClick={() => {
                       setEdit(true);
                     }}
@@ -335,7 +335,7 @@ function Node({
                   placement="top"
                 >
                   <IconButton
-                    aria-label="edit"
+                    aria-label="exit edit mode"
                     onClick={() => {
                       setEdit(false);
                       setSelectedNode();

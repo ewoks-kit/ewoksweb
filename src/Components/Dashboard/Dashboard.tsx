@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import FiberNew from '@material-ui/icons/FiberNew';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import Sidebar from 'Components/Sidebar/Sidebar';
-import { ReactFlowProvider } from 'react-flow-renderer';
+import { ReactFlowProvider } from 'reactflow';
 import { Link } from 'react-router-dom';
 import Canvas from '../Canvas/Canvas';
 import UndoRedo from '../TopNavBar/UndoRedo';
@@ -256,163 +256,162 @@ export default function Dashboard() {
       tabIndex={0}
       role="button"
     >
-      <ConfirmDialog
-        title="There are unsaved changes"
-        content="Continue without saving?"
-        open={openAgreeDialog}
-        agreeCallback={() => checkAndNewGraph(true)}
-        disagreeCallback={disAgreeSaveWithout}
-      />
-      <FormDialog
-        elementToEdit={graphRF}
-        action={FormAction.newGraph}
-        open={openSaveDialog}
-        setOpenSaveDialog={setOpenSaveDialog}
-      />
-      <CssBaseline />
-      <SimpleSnackbar />
-      <AppBar position="absolute" className={classes.appBar}>
-        <Toolbar className={classes.toolbar}>
-          <SubgraphsStack />
-          <Tooltip
-            title={tooltipText('Start a new workflow')}
-            enterDelay={800}
-            arrow
-          >
-            <IconButton
-              color="inherit"
-              onClick={() => checkAndNewGraph(false)}
-              disabled={inExecutionMode}
-              aria-label="Start a new workflow"
+      <ReactFlowProvider>
+        <ConfirmDialog
+          title="There are unsaved changes"
+          content="Continue without saving?"
+          open={openAgreeDialog}
+          agreeCallback={() => checkAndNewGraph(true)}
+          disagreeCallback={disAgreeSaveWithout}
+        />
+        <FormDialog
+          elementToEdit={graphRF}
+          action={FormAction.newGraph}
+          open={openSaveDialog}
+          setOpenSaveDialog={setOpenSaveDialog}
+        />
+        <CssBaseline />
+        <SimpleSnackbar />
+        <AppBar position="absolute" className={classes.appBar}>
+          <Toolbar className={classes.toolbar}>
+            <SubgraphsStack />
+            <Tooltip
+              title={tooltipText('Start a new workflow')}
+              enterDelay={800}
+              arrow
             >
-              <Fab
-                className={classes.openFileButton}
-                color="primary"
-                size="small"
-                component="span"
-                aria-label="add"
+              <IconButton
+                color="inherit"
+                onClick={() => checkAndNewGraph(false)}
                 disabled={inExecutionMode}
               >
-                <FiberNew />
-              </Fab>
-            </IconButton>
-          </Tooltip>
-          <Tooltip
-            title={tooltipText('Open an existing workflow')}
-            enterDelay={800}
-            arrow
-          >
-            <IconButton
-              color="inherit"
-              onClick={openGraph}
-              disabled={inExecutionMode}
-            >
-              <Fab
-                className={classes.openFileButton}
-                color="primary"
-                size="small"
-                component="span"
-                aria-label="add"
-                disabled={inExecutionMode}
-              >
-                <ImportContactsIcon />
-              </Fab>
-            </IconButton>
-          </Tooltip>
-          <div className={classes.verticalRule} />
-          <UndoRedo undo={undo} redo={redo} />
-          <div className={classes.verticalRule} />
-          <SaveToServer
-            saveToServer={async () => void saveToServer()}
-            action={action}
-            open={openSaveDialog}
-            setOpenSaveDialog={setOpenSaveDialog}
-          />
-          <GetFromServer />
-          {/* TODO: commented for onlyEditRelease */}
-          {/* <ExecuteWorkflow /> */}
-          <div>
-            <Tooltip title={tooltipText('More')} enterDelay={800} arrow>
-              <IconButton color="inherit" onClick={handleClick}>
                 <Fab
                   className={classes.openFileButton}
                   color="primary"
                   size="small"
                   component="span"
-                  aria-label="add"
+                  aria-label="Start a new workflow"
+                  disabled={inExecutionMode}
                 >
-                  <MoreVertIcon />
+                  <FiberNew />
                 </Fab>
               </IconButton>
             </Tooltip>
-            <MenuPopover anchorEl={anchorEl} handleClose={handleClose} />
-          </div>
-          <div className={classes.verticalRule} />
-          <Tooltip
-            title={tooltipText('Manage tasks, icons and workflows')}
-            enterDelay={800}
-            arrow
-          >
-            <IconButton color="inherit" onClick={handleOpenSettings}>
-              <Fab
-                className={classes.openFileButton}
-                color="primary"
-                size="small"
-                component="span"
-                aria-label="add"
-                data-cy="openTopDrawerButton"
+            <Tooltip
+              title={tooltipText('Open an existing workflow')}
+              enterDelay={800}
+              arrow
+            >
+              <IconButton
+                color="inherit"
+                onClick={openGraph}
+                disabled={inExecutionMode}
               >
-                <SettingsIcon />
-              </Fab>
-            </IconButton>
-          </Tooltip>
-
-          <Tooltip
-            title={tooltipText('Guide for Ewoks UI')}
-            enterDelay={800}
-            arrow
-          >
-            <IconButton color="inherit">
-              <Typography component="h1" variant="h5" color="primary">
-                <Link to="/">
+                <Fab
+                  className={classes.openFileButton}
+                  color="primary"
+                  size="small"
+                  component="span"
+                  aria-label="Open an existing workflow"
+                  disabled={inExecutionMode}
+                >
+                  <ImportContactsIcon />
+                </Fab>
+              </IconButton>
+            </Tooltip>
+            <div className={classes.verticalRule} />
+            <UndoRedo undo={undo} redo={redo} />
+            <div className={classes.verticalRule} />
+            <SaveToServer
+              saveToServer={async () => void saveToServer()}
+              action={action}
+              open={openSaveDialog}
+              setOpenSaveDialog={setOpenSaveDialog}
+            />
+            <GetFromServer />
+            {/* TODO: commented for onlyEditRelease */}
+            {/* <ExecuteWorkflow /> */}
+            <div>
+              <Tooltip title={tooltipText('More')} enterDelay={800} arrow>
+                <IconButton color="inherit" onClick={handleClick}>
                   <Fab
                     className={classes.openFileButton}
                     color="primary"
                     size="small"
                     component="span"
-                    aria-label="add"
+                    aria-label="More actions"
                   >
-                    <ArrowUpwardIcon />
+                    <MoreVertIcon />
                   </Fab>
-                </Link>
-              </Typography>
-            </IconButton>
-          </Tooltip>
-          <SettingsInfoDrawer
-            handleOpenDrawers={handleOpenDrawers}
-            openDrawers={openDrawers}
-            openInfo={openInfo}
-            openSettings={openSettings}
-          />
-        </Toolbar>
-      </AppBar>
+                </IconButton>
+              </Tooltip>
+              <MenuPopover anchorEl={anchorEl} handleClose={handleClose} />
+            </div>
+            <div className={classes.verticalRule} />
+            <Tooltip
+              title={tooltipText('Manage tasks, icons and workflows')}
+              enterDelay={800}
+              arrow
+            >
+              <IconButton color="inherit" onClick={handleOpenSettings}>
+                <Fab
+                  className={classes.openFileButton}
+                  color="primary"
+                  size="small"
+                  component="span"
+                  aria-label="Manage tasks, icons and workflows"
+                  data-cy="openTopDrawerButton"
+                >
+                  <SettingsIcon />
+                </Fab>
+              </IconButton>
+            </Tooltip>
 
-      <ReflexContainer
-        orientation="vertical"
-        className={classes.reflexContainer}
-      >
-        <ReflexElement minSize={100} maxSize={500} size={350}>
-          <Sidebar />
-        </ReflexElement>
-        <ReflexSplitter propagate className={classes.reflexSplitter} />
-        <ReflexElement className="right-pane">
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
+            <Tooltip
+              title={tooltipText('Guide for Ewoks UI')}
+              enterDelay={800}
+              arrow
+            >
+              <IconButton color="inherit">
+                <Typography component="h1" variant="h5" color="primary">
+                  <Link to="/">
+                    <Fab
+                      className={classes.openFileButton}
+                      color="primary"
+                      size="small"
+                      component="span"
+                      aria-label="Guide for Ewoks UI"
+                    >
+                      <ArrowUpwardIcon />
+                    </Fab>
+                  </Link>
+                </Typography>
+              </IconButton>
+            </Tooltip>
+            <SettingsInfoDrawer
+              handleOpenDrawers={handleOpenDrawers}
+              openDrawers={openDrawers}
+              openInfo={openInfo}
+              openSettings={openSettings}
+            />
+          </Toolbar>
+        </AppBar>
 
-            <Paper className={fixedHeightPaper}>
-              {gettingFromServer && <LinearSpinner />}
+        <ReflexContainer
+          orientation="vertical"
+          className={classes.reflexContainer}
+        >
+          <ReflexElement minSize={100} maxSize={500} size={350}>
+            <Sidebar />
+          </ReflexElement>
+          <ReflexSplitter propagate className={classes.reflexSplitter} />
+          <ReflexElement className="right-pane">
+            <main className={classes.content}>
+              <div className={classes.toolbar} />
 
-              <ReactFlowProvider>
+              <Paper className={fixedHeightPaper}>
+                {gettingFromServer && <LinearSpinner />}
+
                 <ErrorBoundary
                   FallbackComponent={(fallbackProps) => (
                     <ErrorFallback {...fallbackProps} />
@@ -420,11 +419,11 @@ export default function Dashboard() {
                 >
                   <Canvas />
                 </ErrorBoundary>
-              </ReactFlowProvider>
-            </Paper>
-          </main>
-        </ReflexElement>
-      </ReflexContainer>
+              </Paper>
+            </main>
+          </ReflexElement>
+        </ReflexContainer>
+      </ReactFlowProvider>
     </div>
   );
 }

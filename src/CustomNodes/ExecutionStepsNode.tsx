@@ -5,7 +5,7 @@ step that has been executed.
 import { style } from './NodeStyle';
 
 import useStore from '../store/useStore';
-import type { NodeProps } from 'react-flow-renderer';
+import type { NodeProps } from 'reactflow';
 
 function ExecutionStepsNode(args: NodeProps) {
   const customTitle = {

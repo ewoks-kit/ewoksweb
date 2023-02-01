@@ -1,4 +1,4 @@
-import { MiniMap } from 'react-flow-renderer';
+import { MiniMap } from 'reactflow';
 
 function CanvasMiniMap() {
   return (
