@@ -33,7 +33,7 @@ import MenuPopover from '../General/MenuPopover';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import { FormAction } from '../../types';
-import { getWorkflowsIds, putWorkflow } from '../../utils/api';
+import { getWorkflowsIds, putWorkflow } from '../../api/api';
 import { rfToEwoks, textForError } from '../../utils';
 import commonStrings from '../../commonStrings.json';
 import type { AxiosResponse } from 'axios';
@@ -284,14 +284,13 @@ export default function Dashboard() {
                 color="inherit"
                 onClick={() => checkAndNewGraph(false)}
                 disabled={inExecutionMode}
-                data-cy="newWorkflowButton"
               >
                 <Fab
                   className={classes.openFileButton}
                   color="primary"
                   size="small"
                   component="span"
-                  aria-label="add"
+                  aria-label="Start a new workflow"
                   disabled={inExecutionMode}
                 >
                   <FiberNew />
@@ -313,7 +312,7 @@ export default function Dashboard() {
                   color="primary"
                   size="small"
                   component="span"
-                  aria-label="add"
+                  aria-label="Open an existing workflow"
                   disabled={inExecutionMode}
                 >
                   <ImportContactsIcon />
@@ -340,7 +339,7 @@ export default function Dashboard() {
                     color="primary"
                     size="small"
                     component="span"
-                    aria-label="add"
+                    aria-label="More actions"
                   >
                     <MoreVertIcon />
                   </Fab>
@@ -360,7 +359,7 @@ export default function Dashboard() {
                   color="primary"
                   size="small"
                   component="span"
-                  aria-label="add"
+                  aria-label="Manage tasks, icons and workflows"
                   data-cy="openTopDrawerButton"
                 >
                   <SettingsIcon />
@@ -381,7 +380,7 @@ export default function Dashboard() {
                       color="primary"
                       size="small"
                       component="span"
-                      aria-label="add"
+                      aria-label="Guide for Ewoks UI"
                     >
                       <ArrowUpwardIcon />
                     </Fab>

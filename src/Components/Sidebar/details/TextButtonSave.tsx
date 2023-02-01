@@ -66,14 +66,13 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
             style={{ width: '20%', minWidth: '40px' }}
             color="inherit"
             onClick={valueSavedLocal}
-            data-cy="saveLabelComment"
           >
             <Fab
               className={classes.openFileButton}
               color="primary"
               size="small"
               component="span"
-              aria-label="add"
+              aria-label="saveLabelComment"
               disabled={inExecutionMode}
             >
               <SaveIcon />

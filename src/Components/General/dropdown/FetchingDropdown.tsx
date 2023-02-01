@@ -56,6 +56,7 @@ function FetchingDropdown<T, D extends boolean>(
               </>
             ),
           }}
+          inputProps={{ ...params.inputProps, 'aria-label': props.placeholder }}
         />
       )}
       {...props}

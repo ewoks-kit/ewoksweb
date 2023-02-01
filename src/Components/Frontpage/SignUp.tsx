@@ -93,7 +93,7 @@ export default function SignUp(props: { handleCloseDialog(): Promise<void> }) {
                     color="primary"
                     size="small"
                     component="span"
-                    aria-label="add"
+                    aria-label="Edit Workflows"
                     className={classes.arrowForwardStyle}
                   >
                     <ArrowForwardIosIcon />
@@ -115,7 +115,7 @@ export default function SignUp(props: { handleCloseDialog(): Promise<void> }) {
                     color="primary"
                     size="small"
                     component="span"
-                    aria-label="add"
+                    aria-label="Monitor Workflows"
                     className={classes.arrowForwardStyle}
                   >
                     <ArrowForwardIosIcon />
@@ -140,7 +140,7 @@ export default function SignUp(props: { handleCloseDialog(): Promise<void> }) {
                     color="primary"
                     size="small"
                     component="span"
-                    aria-label="add"
+                    aria-label="Tutorial Workflow"
                     className={classes.arrowForwardStyle}
                   >
                     <ArrowForwardIosIcon />

@@ -13,7 +13,6 @@ import type {
 } from 'reactflow';
 import ReactFlow, {
   Controls,
-  MiniMap,
   useReactFlow,
   applyNodeChanges,
   applyEdgeChanges,
@@ -34,6 +33,8 @@ import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
 import CanvasBackground from './CanvasBackground';
 import { isNode, isLink } from 'utils/typeGuards';
+import CanvasMiniMap from './CanvasMiniMap';
+import { addConnectionToGraph, trimLabel } from './utils';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -59,14 +60,6 @@ const nodeTypes = {
   graphOutput: DataNode,
   class: DataNode,
 };
-
-function trimLabel(label: string) {
-  if (label.length <= 20) {
-    return label;
-  }
-
-  return label.split('.').pop();
-}
 
 function Canvas() {
   const classes = useStyles();
@@ -395,80 +388,23 @@ function Canvas() {
   };
 
   const onConnect = (params: Connection) => {
-    if (workingGraph.graph.id === graphRF.graph.id) {
-      const sourceTask = graphRF.nodes.find((nod) => nod.id === params.source);
-
-      const targetTask = graphRF.nodes.find((nod) => nod.id === params.target);
-      // TODO: Move link creation to separate file
-      const link: EwoksRFLink = {
-        data: {
-          getAroundProps: { x: 0, y: 0 },
-          on_error: false,
-          comment: '',
-          // DOC: node optional_input_names are link's optional_output_names
-          links_optional_output_names: targetTask?.optional_input_names || [],
-          // DOC: node required_input_names are link's required_output_names
-          links_required_output_names: targetTask?.required_input_names || [],
-          // DOC: node output_names are link's input_names
-          links_input_names: sourceTask?.output_names || [],
-          conditions: [],
-          data_mapping: [],
-          map_all_data:
-            ['ppfmethod', 'ppfport'].includes(sourceTask?.task_type || '') ||
-            ['ppfmethod', 'ppfport'].includes(targetTask?.task_type || ''),
-          sub_source:
-            sourceTask?.task_type === 'graph' && params.sourceHandle
-              ? params.sourceHandle
-              : '',
-          sub_target:
-            targetTask?.task_type === 'graph' && params.targetHandle
-              ? params.targetHandle
-              : '',
-        },
-        id: `${params.source || ''}:${params.sourceHandle || ''}->${
-          params.target || ''
-        }:${params.targetHandle || ''}`,
-        label: '', // `${params.source.slice(0, 6)}->${params.target.slice(0, 6)}`,
-        source: params.source || '',
-        target: params.target || '',
-        sourceHandle: params.sourceHandle || '',
-        targetHandle: params.targetHandle || '',
-        type: 'default',
-        animated: false,
-        markerEnd: { type: 'arrowclosed' },
-        style: { stroke: '#96a5f9', strokeWidth: '2.5' },
-        labelBgStyle: {
-          fill: 'rgb(223, 226, 247)',
-          color: 'rgb(50, 130, 219)',
-          fillOpacity: 1,
-        },
-        labelBgPadding: [8, 4],
-        labelBgBorderRadius: 4,
-        labelStyle: { fill: 'blue', fontWeight: 500, fontSize: 14 },
-        startEnd:
-          sourceTask?.task_type === 'graphInput' ||
-          targetTask?.task_type === 'graphOutput',
-      };
-
-      const newGraph: GraphRF = {
-        graph: graphRF.graph,
-        nodes: graphRF.nodes,
-        links: [...graphRF.links, link],
-      };
-
-      setGraphRF(newGraph, true);
-      // DOC: need to also save it in recentGraphs if we leave and come back
-      setRecentGraphs(newGraph);
-
-      // add action and new GraphRF to undo-redo array
-      setUndoRedo({ action: 'new Link', graph: newGraph });
-    } else {
+    if (workingGraph.graph.id !== graphRF.graph.id) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to create new links to any sub-graph!',
         severity: 'success',
       });
+      return;
     }
+
+    const newGraph = addConnectionToGraph(params, graphRF);
+
+    setGraphRF(newGraph, true);
+    // DOC: need to also save it in recentGraphs if we leave and come back
+    setRecentGraphs(newGraph);
+
+    // add action and new GraphRF to undo-redo array
+    setUndoRedo({ action: 'new Link', graph: newGraph });
   };
 
   const onPaneContextMenu = (event: MouseEvent) => {
@@ -593,10 +529,6 @@ function Canvas() {
     }
   };
 
-  const onClick = () => {
-    setSelectedTask({});
-  };
-
   const handleKeyDown = (event: React.KeyboardEvent<HTMLImageElement>) => {
     const charCode = String.fromCodePoint(event.which).toLowerCase();
 
@@ -656,7 +588,7 @@ function Canvas() {
             onEdgeClick(evt, node);
           }}
           onPaneClick={onPaneClick}
-          onClick={onClick}
+          onClick={() => setSelectedTask({})}
           onInit={onInit}
           onDrop={onDrop}
           onConnect={onConnect}
@@ -676,34 +608,7 @@ function Canvas() {
         >
           <CanvasBackground />
           <Controls />
-          <MiniMap
-            nodeStrokeColor={(n): string => {
-              if (n.style?.background) {
-                return n.style.background as string;
-              }
-              if (['graphOutput', 'graphInput'].includes(n.type || '')) {
-                return '#0041d0';
-              }
-              if (n.type === 'graph') {
-                return '#ff0072';
-              }
-              return 'rgb(60, 81, 202)';
-            }}
-            nodeColor={(n): string => {
-              if (n.style?.background) {
-                return n.style.background as string;
-              }
-              if (['graphOutput', 'graphInput'].includes(n.type || '')) {
-                return 'rgb(223, 226, 247)';
-              }
-              if (n.type === 'graph') {
-                return 'rgba(244, 179, 131, 0.87)';
-              }
-
-              return 'rgb(60, 81, 202)';
-            }}
-            nodeBorderRadius={2}
-          />
+          <CanvasMiniMap />
         </ReactFlow>
       </div>
     </div>
