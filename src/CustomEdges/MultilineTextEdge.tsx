@@ -10,7 +10,8 @@ function getForeignObjectProps(
   targetY: number,
   label: ReactNode
 ): React.SVGProps<SVGForeignObjectElement> {
-  const [x, y] = getBezierPath({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_path, labelX, labelY] = getBezierPath({
     sourceX,
     sourceY,
     targetX,
@@ -19,8 +20,8 @@ function getForeignObjectProps(
 
   if (typeof label !== 'string') {
     return {
-      x,
-      y,
+      x: labelX,
+      y: labelY,
     };
   }
 
@@ -28,8 +29,8 @@ function getForeignObjectProps(
   const height = label.split(',').length * 30;
 
   return {
-    x: Number.parseInt(x) - width / 2,
-    y: y - height / 2,
+    x: labelX - width / 2,
+    y: labelY - height / 2,
     width,
     height,
   };

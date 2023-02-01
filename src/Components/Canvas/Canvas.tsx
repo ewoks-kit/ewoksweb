@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 /* eslint-disable consistent-return */
-// @ts-nocheck
+
 import type { MouseEvent } from 'react';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import type {
@@ -224,18 +224,15 @@ function Canvas() {
   // TODO: this function only handles selected element which is done by RF11 nicelly.
   // It shouldn't update the whole graph as it is now since selected modifies the GraphRF
   const onNodeClick = (_event: MouseEvent, element: Node) => {
-    // TODO: will ignore this strange error until I have a look at the models RF-EwoksRF
-    // @ts-expect-error
-    const graphElement: EwoksRFNode | Node | undefined = nodes.find(
+    const graphElement: EwoksRFNode | undefined = nodes.find(
       (el) => el.id === element.id
     );
 
-    console.log(element, graphElement);
-
     if (
-      'task_type' in graphElement?.data.task_props &&
+      graphElement &&
+      'task_type' in graphElement.data.task_props &&
       !(
-        graphElement.task_type === 'executionSteps' &&
+        graphElement.data?.task_props.task_type === 'executionSteps' &&
         graphElement.type === 'executionSteps'
       ) &&
       // is already selected
@@ -246,7 +243,6 @@ function Canvas() {
   };
 
   const onEdgeClick = (_event: MouseEvent, element?: Edge) => {
-    // @ts-expect-error
     const graphElement: EwoksRFLink = edges.find((el) => el.id === element.id);
     setSelectedElement(graphElement);
   };
@@ -295,7 +291,7 @@ function Canvas() {
               required_input_names: [],
             };
 
-      const newNode = {
+      const newNode: EwoksRFNode = {
         id:
           task_type === 'graphInput'
             ? calcNewId('In', graphRF.nodes)
@@ -304,29 +300,34 @@ function Canvas() {
             : task_type === 'note'
             ? calcNewId('Note', graphRF.nodes)
             : calcNewId(task_identifier || 'Node', graphRF.nodes),
-        // TODO not duplicate label
-        label: trimLabel(task_identifier),
-        task_type,
-        task_identifier,
         type: task_type,
-        task_generator: '',
+
         position,
-        default_inputs: [],
-        inputs_complete: false,
-        default_error_node: false,
-        default_error_attributes: {
-          map_all_data: true,
-          data_mapping: [],
-        },
-        optional_input_names: tempTask?.optional_input_names,
-        output_names: tempTask?.output_names,
-        required_input_names: tempTask?.required_input_names,
+
         data: {
-          label: trimLabel(task_identifier),
-          type: 'internal',
-          icon,
-          moreHandles: false,
-          nodeWidth: 100,
+          task_props: {
+            task_type,
+            task_identifier,
+            optional_input_names: tempTask?.optional_input_names,
+            output_names: tempTask?.output_names,
+            required_input_names: tempTask?.required_input_names,
+          },
+          ewoks_props: {
+            label: trimLabel(task_identifier),
+            task_generator: '',
+            default_inputs: [],
+            inputs_complete: false,
+            default_error_node: false,
+            default_error_attributes: {
+              map_all_data: true,
+              data_mapping: [],
+            },
+          },
+          ui_props: {
+            icon,
+            moreHandles: false,
+            nodeWidth: 100,
+          },
         },
       };
 
@@ -369,11 +370,11 @@ function Canvas() {
     } else {
       const newGraph: GraphRF = {
         graph: { ...graphRF.graph },
-        // @ts-expect-error
+
         nodes: nodes.filter((el) => el.position), // [...graphRF.nodes],
         links: [
           ...edges
-            // @ts-expect-error
+
             .filter((el) => el.source)
             .filter((lin) => lin.id !== oldEdge.id),
           // TODO: leave the type like that for now until I examine the RFModels with EwoksRFModels
@@ -444,10 +445,13 @@ function Canvas() {
       }
     } else {
       if (nodeTmp) {
-        nodeTmp.data.details = true;
+        nodeTmp.data.ui_props.details = true;
         setSelectedElement({
           ...nodeTmp,
-          data: { ...nodeTmp.data, details: true },
+          data: {
+            ...nodeTmp.data,
+            ui_props: { ...nodeTmp.data.ui_props, details: true },
+          },
         });
       }
     }

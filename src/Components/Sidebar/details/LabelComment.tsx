@@ -72,8 +72,6 @@ export default function LabelComment(props: LabelCommentProps) {
   }, [element]);
 
   function saveLabel(labelLocal: string) {
-    console.log(labelLocal);
-
     // TODO: do not put label in both places. See the final spec of
     // ewoks labels-nodes and handle label-comment in a different way.
     setSelectedElement(

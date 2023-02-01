@@ -1,6 +1,5 @@
 import type {
   EwoksNode,
-  EwoksRFNode,
   GraphEwoks,
   GraphRF,
   Icon,

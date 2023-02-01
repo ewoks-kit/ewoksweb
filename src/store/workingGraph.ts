@@ -48,8 +48,6 @@ const workingGraph = (
     get().setSubgraphsStack({ id: '', label: '', resetStack: true });
     get().resetRecentGraphs();
 
-    console.log(workingGraphObject, get().recentGraphs);
-
     // 2. Get node-subgraphs for the graph
     const newNodeSubgraphs = await findAllSubgraphs(
       workingGraphObject,

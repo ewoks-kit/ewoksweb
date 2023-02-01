@@ -25,8 +25,6 @@ const subGraph = (
 
   // DOC: takes a GraphEwoks and transform it to graphRF
   setSubGraph: async (subGraphL: GraphEwoks) => {
-    console.log(get().recentGraphs);
-
     // 1. input the graphEwoks from server or file-system
     // 2. search for all subgraphs in it (async)
     const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(

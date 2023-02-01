@@ -24,7 +24,7 @@ import type { ExecutingEventsSlice } from './store/executingEvents';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
 import type { ChangeEvent } from 'react';
-import type { Node, Edge } from 'reactflow';
+import type { Node } from 'reactflow';
 
 export enum FormAction {
   undefined = 'undefined',
@@ -408,16 +408,16 @@ export interface EwoksRFNodeData {
   comment?: string; // will be here
 }
 
-export interface EwoksRFNode {
+export interface EwoksRFNode extends Node {
   id: string;
-  position?: XYPosition;
+  position: XYPosition;
   type?: string; // graphInput, graphOuput, ppfmethod, graph
   sourcePosition?: Position;
   targetPosition?: Position;
   selected?: boolean;
 
   // From reactFlow?
-  // width?: number | null; // what is their functionality
+  // width?: number | null; // what is their functionality?
   // height?: number | null;
 
   data: EwoksRFNodeData;
