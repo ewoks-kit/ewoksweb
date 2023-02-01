@@ -64,7 +64,17 @@ describe('clicks on canvas and elements', () => {
       // .should('include.class', 'selected')
       .get('.icons')
       .children('button[type=button]')
-      .should('have.length', 1);
+      .should('have.length', 2);
+  });
+
+  // TODO: click out and make these icons disappear
+  it('click outside of a doubleclicked note node', () => {
+    cy.get('.react-flow__node').first().click();
+    cy.get('.react-flow__node-note')
+      .last()
+      .get('.icons')
+      .children('button[type=button]')
+      .should('not.exist');
   });
 
   it('doubleclick on graph node', () => {

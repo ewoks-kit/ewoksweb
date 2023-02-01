@@ -24,6 +24,7 @@ interface NoteProps {
 const NoteNode = (args: NoteProps) => {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const selectedElement = useStore((state) => state.selectedElement);
+  console.log(args);
 
   const [comment, setComment] = useState('');
 

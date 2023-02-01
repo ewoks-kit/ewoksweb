@@ -227,6 +227,7 @@ function Canvas() {
     const graphElement: EwoksRFNode | undefined = nodes.find(
       (el) => el.id === element.id
     );
+    console.log(element, selectedElement, graphElement);
 
     if (
       graphElement &&
@@ -238,6 +239,8 @@ function Canvas() {
       // is already selected
       selectedElement.id !== graphElement.id
     ) {
+      console.log('set element');
+
       setSelectedElement(graphElement);
     }
   };
