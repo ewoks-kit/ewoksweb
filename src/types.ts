@@ -24,7 +24,7 @@ import type { ExecutingEventsSlice } from './store/executingEvents';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
 import type { ChangeEvent } from 'react';
-import type { Node } from 'reactflow';
+import type { Node, Edge } from 'reactflow';
 
 export enum FormAction {
   undefined = 'undefined',
@@ -453,7 +453,7 @@ export interface EwoksRFLink {
   label?: string;
   data: {
     ewoks_props?: RFLinkEwoksProperties;
-    label?: string;
+    label?: string; // not needed here use the one outside
     data_mapping?: DataMapping[];
     type?: string;
     comment?: string;
@@ -487,8 +487,7 @@ export interface EwoksRFLink {
   labelBgBorderRadius?: number;
   style: { stroke: string; strokeWidth: string };
   startEnd?: boolean;
-  subtarget?: string;
-  subsource?: string;
+
   uiProps?: UiPropsLinks;
   type?: string;
   markerEnd?: '' | { type: string };
@@ -510,8 +509,6 @@ export interface RFLink {
     conditions?: Conditions[];
     on_error?: Inputs;
   };
-  subtarget?: string;
-  subsource?: string;
   uiProps?: UiPropsLinks;
 }
 
