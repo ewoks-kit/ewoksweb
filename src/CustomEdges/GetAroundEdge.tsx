@@ -22,7 +22,8 @@ function getSmoothStepPathC({
   targetY = 0,
   data,
 }: SmoothStepParams) {
-  const [, _centerY] = getBezierPath({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, __, _centerY] = getBezierPath({
     sourceX,
     sourceY,
     targetX,
