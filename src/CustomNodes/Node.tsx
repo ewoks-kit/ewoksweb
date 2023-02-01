@@ -301,7 +301,7 @@ function Node({
               >
                 <IconButton
                   style={{ ...contentStyle.iconButtons }}
-                  aria-label="edit"
+                  aria-label="clone node"
                   onClick={() => {
                     cloneNode();
                   }}
@@ -318,7 +318,7 @@ function Node({
                 >
                   <IconButton
                     style={{ ...contentStyle.iconButtons }}
-                    aria-label="edit"
+                    aria-label="edit node"
                     onClick={() => {
                       setEdit(true);
                     }}
@@ -335,7 +335,7 @@ function Node({
                   placement="top"
                 >
                   <IconButton
-                    aria-label="edit"
+                    aria-label="exit edit mode"
                     onClick={() => {
                       setEdit(false);
                       setSelectedNode();

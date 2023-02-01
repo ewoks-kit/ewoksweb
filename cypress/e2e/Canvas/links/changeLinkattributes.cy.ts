@@ -12,7 +12,7 @@ describe('change link attributes', () => {
       .click()
       .type('Always and forever...');
 
-    cy.get('[data-cy="saveLabelComment"]').click();
+    cy.findByRole('button', { name: 'saveLabelComment' }).click();
 
     cy.get('.react-flow')
       .contains('if you do then...Always and forever...')

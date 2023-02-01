@@ -50,7 +50,7 @@ export default function ExecuteSpinner(props: ExecuteSpinnerProps) {
           className={classes.openFileButton}
           size="large"
           component="span"
-          aria-label="add"
+          aria-label="spin effect"
         >
           {success ? <CheckIcon /> : loading ? '...' : props.children || ''}
         </Fab>
