@@ -9,7 +9,7 @@ function DataNode(args: NodeProps) {
   return (
     <Node
       isGraph={false}
-      type={args.data.type}
+      type={args.data.ui_props.type}
       label={args.data.ewoks_props.label}
       selected={args.selected}
       color="#ced3ee"

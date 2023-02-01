@@ -382,7 +382,6 @@ export interface RFNodeUiProps {
 
 export interface RFNodeTaskProperties {
   task_type: string;
-  // type?: string; // graph, node, note? should it also be inside data?
   task_identifier: string;
   task_icon?: string;
   task_category?: string;
@@ -393,7 +392,6 @@ export interface RFNodeTaskProperties {
 
 export interface RFNodeEwoksProperties {
   label?: string;
-  // category?: string;
   default_inputs?: Inputs[];
   inputs_complete?: boolean;
   task_generator?: string;
@@ -405,7 +403,7 @@ export interface EwoksRFNodeData {
   task_props: RFNodeTaskProperties;
   ewoks_props: RFNodeEwoksProperties;
   ui_props: RFNodeUiProps;
-  comment?: string; // will be here
+  comment?: string;
 }
 
 export interface EwoksRFNode extends Node {
@@ -416,7 +414,7 @@ export interface EwoksRFNode extends Node {
   targetPosition?: Position;
   selected?: boolean;
 
-  // From reactFlow?
+  // From new reactFlow11:
   // width?: number | null; // what is their functionality?
   // height?: number | null;
 

@@ -77,15 +77,13 @@ const workingGraph = (
         return {
           data: {
             ewoks_props: {},
-            task_props: { task_type: '', task_identifier: '' },
+            task_props: { task_type: 'note', task_identifier: note.id },
             ui_props: {},
             label: note.label,
             comment: note.comment,
             nodeWidth: note.nodeWidth || 180,
           },
           id: note.id,
-          task_type: 'note',
-          task_identifier: note.id,
           type: 'note',
           position: note.position,
         };
