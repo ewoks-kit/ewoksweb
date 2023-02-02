@@ -22,12 +22,12 @@ function getSmoothStepPathC({
   targetY = 0,
   data,
 }: SmoothStepParams) {
-  const [, _centerY] = getBezierPath({
+  const _centerY = getBezierPath({
     sourceX,
     sourceY,
     targetX,
     targetY,
-  });
+  })[2];
 
   const cornerSize = 0;
   const cY = _centerY;

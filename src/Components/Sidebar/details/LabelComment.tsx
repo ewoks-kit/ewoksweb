@@ -72,21 +72,31 @@ export default function LabelComment(props: LabelCommentProps) {
   }, [element]);
 
   function saveLabel(labelLocal: string) {
-    // TODO: do not put label in both places. See the final spec of
-    // ewoks labels-nodes and handle label-comment in a different way.
-    setSelectedElement(
-      {
-        ...element,
-        data: {
-          ...element.data,
-          ewoks_props: {
-            ...element.data.ewoks_props,
-            label: labelLocal,
+    if (isNode(element)) {
+      setSelectedElement(
+        {
+          ...element,
+          data: {
+            ...element.data,
+            ewoks_props: {
+              ...element.data.ewoks_props,
+              label: labelLocal,
+            },
           },
         },
-      },
-      'fromSaveElement'
-    );
+        'fromSaveElement'
+      );
+    }
+
+    if (isLink(element)) {
+      setSelectedElement(
+        {
+          ...element,
+          label: labelLocal,
+        },
+        'fromSaveElement'
+      );
+    }
   }
 
   function saveComment(commentLocal: string) {

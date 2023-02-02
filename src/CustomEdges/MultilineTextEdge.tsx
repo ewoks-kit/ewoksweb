@@ -48,7 +48,7 @@ function multilineText({
   markerEnd,
   style = {},
 }: EdgeProps) {
-  const edgePath = getBezierPath({
+  const [path] = getBezierPath({
     sourceX,
     sourceY,
     sourcePosition,
@@ -63,8 +63,7 @@ function multilineText({
         id={id}
         style={style}
         className="react-flow__edge-path"
-        // @ts-expect-error
-        d={edgePath}
+        d={path}
         markerEnd={markerEnd}
       />
       <foreignObject

@@ -227,6 +227,7 @@ function Canvas() {
     const graphElement: EwoksRFNode | undefined = nodes.find(
       (el) => el.id === element.id
     );
+    // console.log(element, selectedElement, graphElement);
 
     if (
       graphElement &&

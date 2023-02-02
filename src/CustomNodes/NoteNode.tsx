@@ -8,16 +8,17 @@ import type { ChangeEvent } from 'react';
 import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
 
+// TODO: can be replaced with EwoksRFNode except xPos, yPos. Examine
 interface NoteProps {
   id: string;
   xPos?: number;
   yPos?: number;
   selected?: boolean;
   data: {
-    label?: string;
+    ewoks_props: { label?: string };
     comment: string;
-    nodeWidth: string;
-    details?: string;
+    ui_props: { nodeWidth: string; details?: string };
+    task_props: { task_type: string; task_identifier: string };
   };
 }
 
@@ -51,7 +52,7 @@ const NoteNode = (args: NoteProps) => {
         ...selectedElement,
         data: {
           task_props: { task_type: 'note', task_identifier: args.id },
-          ewoks_props: { label: args.data.label },
+          ewoks_props: { label: args.data.ewoks_props.label },
           ui_props: {},
           comment,
         },
@@ -75,13 +76,17 @@ const NoteNode = (args: NoteProps) => {
       role="button"
       tabIndex={0}
     >
-      <span style={{ maxWidth: `${args.data.nodeWidth}px` }} className="icons">
-        {args.data?.label && args.data.label.length > 0 && (
-          <div style={customTitle as React.CSSProperties}>
-            {args.data.label}
-          </div>
-        )}
-        {args.data.details ? (
+      <span
+        style={{ maxWidth: `${args.data.ui_props.nodeWidth}px` }}
+        className="icons"
+      >
+        {args.data?.ewoks_props.label &&
+          args.data.ewoks_props.label.length > 0 && (
+            <div style={customTitle as React.CSSProperties}>
+              {args.data.ewoks_props.label}
+            </div>
+          )}
+        {args.data.ui_props.details ? (
           <TextField
             label="edit comment"
             multiline
@@ -93,7 +98,7 @@ const NoteNode = (args: NoteProps) => {
         ) : (
           <div style={{ wordWrap: 'break-word' }}>{comment}</div>
         )}
-        {args.data.details && (
+        {args.data.ui_props.details && (
           <IconButton
             style={{ margin: '0px 2px', padding: '0px' }}
             aria-label="edit"
