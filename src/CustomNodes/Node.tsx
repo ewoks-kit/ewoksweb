@@ -31,7 +31,6 @@ function Node({
   isGraph,
   type,
   label,
-  // ewoks_props: {label},
   selected,
   color,
   colorBorder,
@@ -58,6 +57,7 @@ function Node({
     customTitle.backgroundColor = color;
     customTitle.borderRadius = '10px 10px 3px 3px';
   }
+  console.log(type);
 
   const [nodeSize, setNodeSize] = useState(nodeWidth);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
