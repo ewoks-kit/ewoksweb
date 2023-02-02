@@ -28,6 +28,9 @@ export function addConnectionToGraph(
 
   const link: EwoksRFLink = {
     data: {
+      startEnd:
+        sourceTask.data.task_props.task_type === 'graphInput' ||
+        targetTask.data.task_props.task_type === 'graphOutput',
       getAroundProps: { x: 0, y: 0 },
       on_error: false,
       comment: '',
@@ -73,9 +76,6 @@ export function addConnectionToGraph(
     labelBgPadding: [8, 4],
     labelBgBorderRadius: 4,
     labelStyle: { fill: 'blue', fontWeight: 500, fontSize: 14 },
-    startEnd:
-      sourceTask.data.task_props.task_type === 'graphInput' ||
-      targetTask.data.task_props.task_type === 'graphOutput',
   };
 
   return {

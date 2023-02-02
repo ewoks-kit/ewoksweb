@@ -244,37 +244,6 @@ export interface stackGraph {
   resetStack?: boolean;
 }
 
-export interface UiPropsLinks {
-  label?: string;
-  type?: string;
-  comment?: string;
-  animated?: boolean;
-  markerEnd?: '' | { type: string };
-  labelStyle?: {
-    color?: string;
-    fill?: string;
-    fontWeight?: number;
-    fontSize?: number;
-  };
-  labelBgStyle?: {
-    fill?: string;
-    color?: string;
-    fillOpacity?: number;
-    strokeWidth?: string;
-    stroke?: string;
-  };
-  markerStart?: { type: string };
-  sourceHandle?: string;
-  targetHandle?: string;
-  colorLink?: string;
-  style?: LinkStyle;
-  getAroundProps?: { x?: number; y?: number };
-  withImage?: boolean;
-  withLabel?: boolean;
-  colorBorder?: string;
-  nodeWidth?: number;
-}
-
 export interface UiPropsGraph {
   label?: string;
   type?: string;
@@ -447,29 +416,11 @@ export interface RFLinkEwoksProperties {
 }
 
 export interface EwoksRFLink {
+  // extends Edge
   id?: string;
   source: string;
   target: string;
   label?: string;
-  data: {
-    ewoks_props?: RFLinkEwoksProperties;
-    label?: string; // not needed here use the one outside
-    data_mapping?: DataMapping[];
-    type?: string;
-    comment?: string;
-    conditions?: Conditions[];
-    on_error?: boolean;
-    map_all_data?: boolean;
-    required?: boolean;
-    sub_target?: string;
-    sub_target_attributes?: Record<string, unknown>;
-    sub_source?: string;
-    colorLine?: string;
-    getAroundProps?: { x?: number; y?: number };
-    links_input_names?: string[];
-    links_required_output_names?: string[];
-    links_optional_output_names?: string[];
-  };
   labelStyle?: {
     color?: string;
     fill?: string;
@@ -486,51 +437,62 @@ export interface EwoksRFLink {
   labelBgPadding?: number[];
   labelBgBorderRadius?: number;
   style: { stroke: string; strokeWidth: string };
-  startEnd?: boolean;
-
-  uiProps?: UiPropsLinks;
   type?: string;
   markerEnd?: '' | { type: string };
   markerStart?: string;
   animated?: boolean;
   sourceHandle?: string;
   targetHandle?: string;
-}
 
-export interface RFLink {
-  id?: string;
-  source: string;
-  target: string;
-  label?: string;
-  data?: {
-    data_mapping?: DataMapping;
-    type?: string;
+  data: {
+    // ewoks_props?: RFLinkEwoksProperties;
+    // label?: string; // not needed here use the one outside
+    data_mapping?: DataMapping[];
+    // type?: string;
     comment?: string;
     conditions?: Conditions[];
-    on_error?: Inputs;
+    on_error?: boolean;
+    map_all_data?: boolean;
+    required?: boolean;
+    sub_target?: string;
+    sub_target_attributes?: Record<string, unknown>;
+    sub_source?: string;
+    getAroundProps?: { x?: number; y?: number };
+    links_input_names?: string[];
+    links_required_output_names?: string[];
+    links_optional_output_names?: string[];
+    startEnd?: boolean;
   };
-  uiProps?: UiPropsLinks;
 }
 
-export interface RFNode {
-  id: string;
+export interface UiPropsLinks {
   label?: string;
-  task_type?: string;
-  task_identifier?: string;
-  default_inputs?: Inputs[];
-  inputs_complete?: boolean;
-  task_generator?: string;
-  data?: {
-    label?: string;
-    type?: string;
-    inputs?: [string]; // ?
-    outputs?: [string]; // ?
-    icon?: string;
-    comment?: string;
+  type?: string;
+  comment?: string;
+  animated?: boolean;
+  markerEnd?: '' | { type: string };
+  labelStyle?: {
+    color?: string;
+    fill?: string;
+    fontWeight?: number;
+    fontSize?: number;
   };
-  sourcePosition?: Position;
-  targetPosition?: Position;
-  position?: CanvasPosition;
+  labelBgStyle?: {
+    fill?: string;
+    color?: string;
+    fillOpacity?: number;
+    strokeWidth?: string;
+    stroke?: string;
+  };
+  markerStart?: { type: string };
+  sourceHandle?: string;
+  targetHandle?: string;
+  style?: LinkStyle;
+  getAroundProps?: { x?: number; y?: number };
+  withImage?: boolean;
+  withLabel?: boolean;
+  colorBorder?: string;
+  nodeWidth?: number;
 }
 
 export interface GraphRF {

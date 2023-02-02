@@ -51,9 +51,6 @@ export default function DataMappingComponent(element: EwoksRFLink) {
         data: {
           ...element.data,
           data_mapping: dmap,
-          label: dmap
-            .map((el) => `${el.source_output || ''}->${el.target_input || ''}`)
-            .join(', '),
         },
       },
       'fromSaveElement'

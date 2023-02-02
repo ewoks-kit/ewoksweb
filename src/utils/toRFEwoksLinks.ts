@@ -54,8 +54,7 @@ export function toRFEwoksLinks(
           label: calcLabel(uiProps || {}, conditions || [], data_mapping || []),
           source: source.toString(),
           target: target.toString(),
-          // TODO: is the following used for inputs-outputs?
-          startEnd: startEnd || false,
+
           targetHandle: calcTargetHandle(uiProps, sub_target || ''),
           sourceHandle: calcSourceHandle(uiProps, sub_source || ''),
           type: uiProps?.type || '',
@@ -80,6 +79,7 @@ export function toRFEwoksLinks(
             fontSize: 14,
           },
           data: {
+            startEnd: startEnd || false,
             getAroundProps: uiProps?.getAroundProps || {
               x: 0,
               y: 0,
