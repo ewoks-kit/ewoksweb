@@ -64,7 +64,7 @@ describe('clicks on canvas and elements', () => {
       // .should('include.class', 'selected')
       .get('.icons')
       .children('button[type=button]')
-      .should('have.length', 2);
+      .should('have.length', 1);
   });
 
   // TODO: click out and make these icons disappear

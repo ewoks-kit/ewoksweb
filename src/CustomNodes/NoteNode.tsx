@@ -8,6 +8,7 @@ import type { ChangeEvent } from 'react';
 import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
 
+// TODO: can be replaced with EwoksRFNode except xPos, yPos. Examine
 interface NoteProps {
   id: string;
   xPos?: number;
@@ -24,7 +25,6 @@ interface NoteProps {
 const NoteNode = (args: NoteProps) => {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const selectedElement = useStore((state) => state.selectedElement);
-  console.log(args);
 
   const [comment, setComment] = useState('');
 

@@ -57,7 +57,6 @@ function Node({
     customTitle.backgroundColor = color;
     customTitle.borderRadius = '10px 10px 3px 3px';
   }
-  console.log(type);
 
   const [nodeSize, setNodeSize] = useState(nodeWidth);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
