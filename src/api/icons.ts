@@ -2,7 +2,8 @@ import { assertDefined } from '../utils/typeGuards';
 import type { Icon, IconsNames } from '../types';
 import { axiosRequest } from './api';
 import path from 'path-browserify';
-import useSWR from 'swr';
+import { Endpoint } from '@rest-hooks/rest';
+import { useController, useSuspense } from '@rest-hooks/react';
 
 interface GetIconResponse {
   data_url: string;
@@ -69,9 +70,16 @@ async function getIcons(): Promise<Icon[]> {
   }));
 }
 
-export function useIcons() {
-  const { data: icons } = useSWR('/icons', getIcons, { suspense: true });
+const getIconsEndpoint = new Endpoint(getIcons);
 
-  assertDefined(icons);
+export function useIcons() {
+  const icons = useSuspense(getIconsEndpoint);
+
   return { icons };
+}
+
+export function useMutateIcons() {
+  const ctrl = useController();
+
+  return () => ctrl.invalidate(getIconsEndpoint);
 }
