@@ -1,10 +1,4 @@
-import type {
-  EwoksNode,
-  GraphEwoks,
-  GraphRF,
-  Icon,
-  WorkflowDescription,
-} from './types';
+import type { GraphEwoks, GraphRF, Icon, WorkflowDescription } from './types';
 import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
@@ -64,7 +58,7 @@ export async function getSubgraphs(
   graph: GraphEwoks,
   recentGraphIds: string[]
 ): Promise<GraphEwoks[]> {
-  const nodes: EwoksNode[] = [...graph.nodes];
+  const nodes = [...graph.nodes];
   const existingNodeSubgraphs = nodes.filter(
     (nod) => nod.task_type === 'graph'
   );
@@ -73,10 +67,7 @@ export async function getSubgraphs(
     // there are subgraphs -> first search in the recentGraphs for them
     const notInRecent: string[] = [];
     existingNodeSubgraphs.forEach((graphL) => {
-      if (
-        recentGraphIds.filter((id) => id === graphL.task_identifier).length ===
-        0
-      ) {
+      if (!recentGraphIds.some((id) => id === graphL.task_identifier)) {
         // add them in an array to request them from the server
         notInRecent.push(graphL.task_identifier);
       }
