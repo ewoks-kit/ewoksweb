@@ -78,7 +78,7 @@ const workingGraph = (
           data: {
             ewoks_props: { label: note.label },
             task_props: { task_type: 'note', task_identifier: note.id },
-            ui_props: { nodeWidth: note.nodeWidth || 180 },
+            ui_props: { nodeWidth: note.nodeWidth ?? 180 },
             comment: note.comment,
           },
           id: note.id,

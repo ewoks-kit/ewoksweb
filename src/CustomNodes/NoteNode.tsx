@@ -7,20 +7,24 @@ import type { ChangeEvent } from 'react';
 
 import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
+import type { NodeProps } from 'reactflow';
+import type { EwoksRFNodeData } from '../types';
 
 // TODO: can be replaced with EwoksRFNode except xPos, yPos. Examine
-interface NoteProps {
-  id: string;
-  xPos?: number;
-  yPos?: number;
-  selected?: boolean;
-  data: {
-    ewoks_props: { label?: string };
-    comment: string;
-    ui_props: { nodeWidth: string; details?: string };
-    task_props: { task_type: string; task_identifier: string };
-  };
-}
+// interface NoteProps {
+//   id: string;
+//   xPos?: number;
+//   yPos?: number;
+//   selected?: boolean;
+//   data: {
+//     ewoks_props: { label?: string };
+//     comment: string;
+//     ui_props: { nodeWidth: string; details?: string };
+//     task_props: { task_type: string; task_identifier: string };
+//   };
+// }
+
+type NoteProps = NodeProps<EwoksRFNodeData>;
 
 const NoteNode = (args: NoteProps) => {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
@@ -29,7 +33,7 @@ const NoteNode = (args: NoteProps) => {
   const [comment, setComment] = useState('');
 
   useEffect(() => {
-    setComment(args.data.comment);
+    setComment(args.data.comment || '');
   }, [args.data]);
 
   const customTitle = {

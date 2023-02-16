@@ -53,13 +53,11 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
   return res;
 }
 
-// TODO: clear out the types used
 export async function getSubgraphs(
   graph: GraphEwoks,
   recentGraphIds: string[]
 ): Promise<GraphEwoks[]> {
-  const nodes = [...graph.nodes];
-  const existingNodeSubgraphs = nodes.filter(
+  const existingNodeSubgraphs = graph.nodes.filter(
     (nod) => nod.task_type === 'graph'
   );
   let results: GraphEwoks[] = [];

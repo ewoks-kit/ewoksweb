@@ -406,20 +406,10 @@ export interface EwoksRFNodeData {
   comment?: string;
 }
 
-export interface EwoksRFNode extends Node {
-  id: string;
-  position: XYPosition;
-  type?: string; // graphInput, graphOuput, ppfmethod, graph
-  sourcePosition?: Position;
-  targetPosition?: Position;
-  selected?: boolean;
-
-  // From new reactFlow11:
-  // width?: number | null; // what is their functionality?
-  // height?: number | null;
-
-  data: EwoksRFNodeData;
-}
+export type EwoksRFNode = Node<EwoksRFNodeData>;
+// From new reactFlow11:
+// width?: number | null; // what is their functionality?
+// height?: number | null;
 
 export interface EditableTableRow {
   id?: string;
