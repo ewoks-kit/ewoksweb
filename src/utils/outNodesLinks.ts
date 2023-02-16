@@ -68,10 +68,6 @@ export function outNodesLinks(
           type: outNod.uiProps?.linkStyle ?? 'default',
           markerEnd: calcMarkerEnd(outNod),
           animated: outNod.uiProps?.animated ?? false,
-          withImage: outNod.uiProps?.withImage ?? true,
-          withLabel: outNod.uiProps?.withLabel ?? true,
-          colorBorder: outNod.uiProps?.colorBorder ?? '',
-          nodeWidth: outNod.uiProps?.nodeWidth ?? 110,
         },
       });
       // }

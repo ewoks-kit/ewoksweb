@@ -1,5 +1,6 @@
-import type { CanvasPosition, Event, EwoksRFNode, State } from '../types';
+import type { Event, EwoksRFNode, State } from '../types';
 import type { GetState, SetState } from 'zustand';
+import type { XYPosition } from 'reactflow';
 
 export interface ExecutingEventsSlice {
   executingEvents: Event[];
@@ -51,7 +52,7 @@ const executingEvents = (
       // }
 
       // DOC: define the position of the event nodes
-      let tempPos: CanvasPosition = { x: 100, y: 100 };
+      let tempPos: XYPosition = { x: 100, y: 100 };
 
       const tempNode: EwoksRFNode | undefined = get().graphRF.nodes.find(
         (nod) =>

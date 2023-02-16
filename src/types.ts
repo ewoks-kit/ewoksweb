@@ -24,7 +24,7 @@ import type { ExecutingEventsSlice } from './store/executingEvents';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
 import type { ChangeEvent } from 'react';
-import type { Node, Edge } from 'reactflow';
+import type { Node } from 'reactflow';
 
 export enum FormAction {
   undefined = 'undefined',
@@ -56,12 +56,11 @@ export interface InOutLinkAttributes {
 
 export interface InOutNodesUiProps {
   label?: string;
-  position?: CanvasPosition;
+  position?: XYPosition;
   linkStyle?: string;
   style?: LinkStyle;
   animated?: boolean;
   markerEnd?: '' | { type: string };
-  // TODO: the following is not used for now
   markerStart?: { type: string };
   targetHandle?: string;
   withImage?: boolean;
@@ -79,12 +78,6 @@ export interface GraphDetails {
   uiProps?: UiPropsGraph;
 }
 
-export interface Graph {
-  graph?: GraphDetails;
-  nodes: EwoksNode[];
-  links: EwoksLink[];
-}
-
 export interface SnackbarParams {
   open: boolean;
   text: string;
@@ -94,7 +87,7 @@ export interface SnackbarParams {
 export interface DialogParams {
   open: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  content: any; // {title: string; graph: }
+  content: any;
 }
 
 // I need the EVENTS=[{nodeId, start/end, values: {}}] somewhere and the
@@ -232,12 +225,6 @@ export interface Inputs {
   value: unknown;
 }
 
-export interface nodeInputsOutputs {
-  optional_input_names?: string[];
-  output_names?: string[];
-  required_input_names?: string[];
-}
-
 export interface stackGraph {
   id: string;
   label?: string;
@@ -263,13 +250,8 @@ export interface Note {
   id: string;
   label?: string;
   comment: string;
-  position: CanvasPosition;
+  position: XYPosition;
   nodeWidth: number;
-}
-
-export interface CanvasPosition {
-  x: number;
-  y: number;
 }
 
 export interface DataMapping {
@@ -331,7 +313,7 @@ export interface RFNodeUiProps {
   type?: string;
   icon?: string;
   comment?: string;
-  position?: CanvasPosition; // remove as it is in the Node
+  position?: XYPosition; // remove as it is in the Node
   style?: LinkStyle; // style?: CSSProperties; on Node?
   withImage?: boolean;
   withLabel?: boolean;
@@ -382,18 +364,16 @@ export interface EwoksRFNode extends Node {
   sourcePosition?: Position;
   targetPosition?: Position;
   selected?: boolean;
-
-  // From new reactFlow11:
+  // TODO: From new reactFlow11 we have the following:
   // width?: number | null; // what is their functionality?
   // height?: number | null;
-
   data: EwoksRFNodeData;
 }
 
 export interface EditableTableRow {
   id?: string;
   name?: string;
-  value?: unknown; // string | number | null | undefined | boolean | Record<string, unknown>;
+  value?: unknown;
   isEditMode?: boolean;
   type?: string;
 }
@@ -411,29 +391,31 @@ export interface CustomTableCellProps {
   ): void;
 }
 
-export interface RFLinkEwoksProperties {
-  label?: string;
+export interface EwoksRFLinkData {
+  data_mapping?: DataMapping[];
+  comment?: string;
+  conditions?: Conditions[];
+  on_error?: boolean;
+  map_all_data?: boolean;
+  required?: boolean;
+  sub_target?: string;
+  sub_target_attributes?: Record<string, unknown>;
+  sub_source?: string;
+  getAroundProps?: { x?: number; y?: number };
+  links_input_names?: string[];
+  links_required_output_names?: string[];
+  links_optional_output_names?: string[];
+  startEnd?: boolean;
 }
 
 export interface EwoksRFLink {
-  // extends Edge
+  // extends Edge wont work as Edge is 3 types: extend the default?
   id?: string;
   source: string;
   target: string;
   label?: string;
-  labelStyle?: {
-    color?: string;
-    fill?: string;
-    fontWeight?: number;
-    fontSize?: number;
-  };
-  labelBgStyle?: {
-    fill?: string;
-    color?: string;
-    fillOpacity?: number;
-    strokeWidth?: string;
-    stroke?: string;
-  };
+  labelStyle?: LabelStyle;
+  labelBgStyle?: LabelBgStyle;
   labelBgPadding?: number[];
   labelBgBorderRadius?: number;
   style: { stroke: string; strokeWidth: string };
@@ -443,26 +425,22 @@ export interface EwoksRFLink {
   animated?: boolean;
   sourceHandle?: string;
   targetHandle?: string;
+  data: EwoksRFLinkData;
+}
 
-  data: {
-    // ewoks_props?: RFLinkEwoksProperties;
-    // label?: string; // not needed here use the one outside
-    data_mapping?: DataMapping[];
-    // type?: string;
-    comment?: string;
-    conditions?: Conditions[];
-    on_error?: boolean;
-    map_all_data?: boolean;
-    required?: boolean;
-    sub_target?: string;
-    sub_target_attributes?: Record<string, unknown>;
-    sub_source?: string;
-    getAroundProps?: { x?: number; y?: number };
-    links_input_names?: string[];
-    links_required_output_names?: string[];
-    links_optional_output_names?: string[];
-    startEnd?: boolean;
-  };
+export interface LabelBgStyle {
+  fill?: string;
+  color?: string;
+  fillOpacity?: number;
+  strokeWidth?: string;
+  stroke?: string;
+}
+
+export interface LabelStyle {
+  color?: string;
+  fill?: string;
+  fontWeight?: number;
+  fontSize?: number;
 }
 
 export interface UiPropsLinks {
@@ -471,28 +449,13 @@ export interface UiPropsLinks {
   comment?: string;
   animated?: boolean;
   markerEnd?: '' | { type: string };
-  labelStyle?: {
-    color?: string;
-    fill?: string;
-    fontWeight?: number;
-    fontSize?: number;
-  };
-  labelBgStyle?: {
-    fill?: string;
-    color?: string;
-    fillOpacity?: number;
-    strokeWidth?: string;
-    stroke?: string;
-  };
-  markerStart?: { type: string };
+  markerStart?: '' | { type: string };
+  labelStyle?: LabelStyle;
+  labelBgStyle?: LabelBgStyle;
   sourceHandle?: string;
   targetHandle?: string;
   style?: LinkStyle;
   getAroundProps?: { x?: number; y?: number };
-  withImage?: boolean;
-  withLabel?: boolean;
-  colorBorder?: string;
-  nodeWidth?: number;
 }
 
 export interface GraphRF {

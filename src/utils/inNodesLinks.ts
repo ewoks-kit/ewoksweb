@@ -15,7 +15,7 @@ function calcMarkerEnd(inNod: GraphNodes): '' | { type: string } {
 
 // TODO: merge with outNodesLinks if possible when stable
 // DOC: calc the input nodes and links that need to be added to the graph from
-// the input_nodes in the Ewoks json
+// the input_nodes in the Ewoks graph model
 export function inNodesLinks(
   graph: GraphEwoks
 ): { nodes: EwoksNode[]; links: EwoksLink[] } {
@@ -68,10 +68,6 @@ export function inNodesLinks(
             type: inNod.uiProps?.linkStyle ?? 'default',
             markerEnd: calcMarkerEnd(inNod),
             animated: inNod.uiProps?.animated ?? false,
-            withImage: inNod.uiProps?.withImage ?? true,
-            withLabel: inNod.uiProps?.withLabel ?? true,
-            colorBorder: inNod.uiProps?.colorBorder ?? '',
-            nodeWidth: inNod.uiProps?.nodeWidth ?? 110,
           },
         });
       }
