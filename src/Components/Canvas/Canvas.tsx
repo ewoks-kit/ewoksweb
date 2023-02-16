@@ -446,7 +446,6 @@ function Canvas() {
       }
     } else {
       if (nodeTmp) {
-        nodeTmp.data.ui_props.details = true;
         setSelectedElement({
           ...nodeTmp,
           data: {
