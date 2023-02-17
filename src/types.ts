@@ -56,7 +56,7 @@ export interface InOutLinkAttributes {
 
 export interface InOutNodesUiProps {
   label?: string;
-  position?: CanvasPosition;
+  position?: XYPosition;
   linkStyle?: string;
   style?: LinkStyle;
   animated?: boolean;
@@ -294,13 +294,8 @@ export interface Note {
   id: string;
   label?: string;
   comment: string;
-  position: CanvasPosition;
+  position: XYPosition;
   nodeWidth: number;
-}
-
-export interface CanvasPosition {
-  x: number;
-  y: number;
 }
 
 export interface DataMapping {
@@ -334,7 +329,28 @@ export interface EwoksNode {
   task_generator?: string;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes;
-  uiProps?: RFNodeUiProps;
+  uiProps?: EwoksNodeUiProps;
+}
+
+export interface EwoksNodeUiProps {
+  type?: string;
+  icon?: string;
+  comment?: string;
+  position?: XYPosition;
+  style?: LinkStyle;
+  withImage?: boolean;
+  withLabel?: boolean;
+  colorBorder?: string;
+  nodeWidth?: number;
+  node_icon?: string;
+  task_icon?: string;
+  task_category?: string;
+  moreHandles?: boolean;
+  details?: boolean;
+  executing?: boolean;
+  exists?: boolean;
+  inputs?: outputsInputsSub[];
+  outputs?: outputsInputsSub[];
 }
 
 export interface EwoksLink {
@@ -361,22 +377,18 @@ export interface outputsInputsSub {
 export interface RFNodeUiProps {
   type?: string;
   icon?: string;
-  comment?: string;
-  position?: CanvasPosition; // remove as it is in the Node
   style?: LinkStyle; // style?: CSSProperties; on Node?
   withImage?: boolean;
   withLabel?: boolean;
   colorBorder?: string;
   nodeWidth?: number;
   node_icon?: string;
-  task_icon?: string;
-  task_category?: string;
   moreHandles?: boolean;
   details?: boolean;
-
   executing?: boolean;
   exists?: boolean;
-  inputs?: outputsInputsSub[]; // --> UI to position inputs-outputs of subgraphs in a graph
+  // To position inputs-outputs of subgraphs in a graph
+  inputs?: outputsInputsSub[];
   outputs?: outputsInputsSub[];
 }
 
@@ -523,7 +535,7 @@ export interface RFNode {
   };
   sourcePosition?: Position;
   targetPosition?: Position;
-  position?: CanvasPosition;
+  position?: XYPosition;
 }
 
 export interface GraphRF {

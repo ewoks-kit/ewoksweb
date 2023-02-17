@@ -81,7 +81,7 @@ const NoteNode = (args: NoteProps) => {
       tabIndex={0}
     >
       <span
-        style={{ maxWidth: `${args.data.ui_props.nodeWidth}px` }}
+        style={{ maxWidth: `${args.data.ui_props.nodeWidth || 100}px` }}
         className="icons"
       >
         {args.data?.ewoks_props.label &&
