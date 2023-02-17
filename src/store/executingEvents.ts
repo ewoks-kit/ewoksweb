@@ -1,5 +1,6 @@
-import type { CanvasPosition, Event, EwoksRFNode, State } from '../types';
+import type { Event, EwoksRFNode, State } from '../types';
 import type { GetState, SetState } from 'zustand';
+import type { XYPosition } from 'reactflow';
 
 export interface ExecutingEventsSlice {
   executingEvents: Event[];
@@ -51,12 +52,12 @@ const executingEvents = (
       // }
 
       // DOC: define the position of the event nodes
-      let tempPos: CanvasPosition = { x: 100, y: 100 };
+      let tempPos: XYPosition = { x: 100, y: 100 };
 
       const tempNode: EwoksRFNode | undefined = get().graphRF.nodes.find(
         (nod) =>
           nod.id === execEvent.node_id &&
-          nod.task_identifier === execEvent.task_id
+          nod.data.task_props.task_identifier === execEvent.task_id
       );
 
       if (!tempNode) {
@@ -69,7 +70,7 @@ const executingEvents = (
         tempPos = tempNode.position;
       }
 
-      const { withLabel } = tempNode.data;
+      const { withLabel } = tempNode.data.ui_props;
 
       // TODO: calc the exact pos based on the nodes width which is
       // available and adjustable now
@@ -77,7 +78,7 @@ const executingEvents = (
         tempPos = { x: tempPos.x - 30, y: tempPos.y + 30 };
       } else if (withLabel) {
         tempPos = {
-          x: tempPos.x + (tempNode.data.nodeWidth ?? 0) + 15,
+          x: tempPos.x + (tempNode.data.ui_props.nodeWidth ?? 0) + 15,
           y: tempPos.y + 30,
         };
       } else {
@@ -136,17 +137,26 @@ const executingEvents = (
           (nod) =>
             !(
               // todo: changed the node_id and can affect execution
-              (nod.id === execEvent.node_id && nod.data.type === execEvent.type)
+              (
+                nod.id === execEvent.node_id &&
+                nod.data.ui_props.type === execEvent.type
+              )
             )
         ),
         {
           data: {
-            label: `${tempLabel},${(execEvent.id as unknown) as string}`,
+            ewoks_props: {
+              label: `${tempLabel},${(execEvent.id as unknown) as string}`,
+            },
+            task_props: {
+              task_type: 'executionSteps',
+              task_identifier: execEvent.id?.toString() || '',
+            },
+            ui_props: {},
             event: execEvent,
           },
           id: execEvent.time || '',
-          task_type: 'executionSteps',
-          task_identifier: execEvent.id?.toString() || '',
+
           type: 'executionSteps',
           // calculate position based on node_id -> node position + start or stop
           position: tempPos,
@@ -156,7 +166,7 @@ const executingEvents = (
       if (get().inExecutionMode) {
         set((state) => ({
           ...state,
-          // only foe testing set graphRF
+          // only for testing set graphRF
           graphRF: {
             ...get().graphRF,
             nodes: nodess,

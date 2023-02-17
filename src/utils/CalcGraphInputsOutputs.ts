@@ -14,14 +14,14 @@ export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
   let output_nodes: GraphNodes[] = [];
 
   graph.nodes.forEach((nod) => {
-    if (nod.task_type === 'graphInput') {
+    if (nod.data.task_props.task_type === 'graphInput') {
       input_nodes = [
         ...input_nodes,
         ...calcInOutNodes('graphInput', graph, nod, graph_links),
       ];
     }
 
-    if (nod.task_type === 'graphOutput') {
+    if (nod.data.task_props.task_type === 'graphOutput') {
       output_nodes = [
         ...output_nodes,
         ...calcInOutNodes('graphOutput', graph, nod, graph_links),
@@ -82,7 +82,7 @@ function calcInOutNodes(
             (link) => link.source === nod.id && link.target === nodConnected.id
           );
 
-    if (nodConnected.task_type === 'graph') {
+    if (nodConnected.data.task_props.task_type === 'graph') {
       // find the link and get the sub_node it is connected to in the graph
       nodes.push(
         calcNodeProps(
@@ -141,7 +141,7 @@ function calcNodeProps(
     },
     uiProps: {
       position: nod.position,
-      label: nod.data.label,
+      label: nod.data.ewoks_props.label,
       linkStyle: graph_links[link_index]?.type || 'default',
       style: {
         stroke: graph_links[link_index]?.style?.stroke || '',
@@ -149,10 +149,12 @@ function calcNodeProps(
       },
       markerEnd: calcMarkerEnd(graph_links[link_index]),
       animated: graph_links[link_index]?.animated || false,
-      withImage: 'withImage' in nod.data ? nod.data.withImage : true,
-      withLabel: 'withLabel' in nod.data ? nod.data.withLabel : true,
-      colorBorder: nod.data.colorBorder,
-      nodeWidth: nod.data.nodeWidth,
+      withImage:
+        'withImage' in nod.data.ui_props ? nod.data.ui_props.withImage : true,
+      withLabel:
+        'withLabel' in nod.data.ui_props ? nod.data.ui_props.withLabel : true,
+      colorBorder: nod.data.ui_props.colorBorder,
+      nodeWidth: nod.data.ui_props.nodeWidth,
     },
   };
 }

@@ -98,7 +98,7 @@ function initializeNodes(nodes: EwoksRFNode[]) {
     return {
       ...nod,
       selected: false,
-      data: { ...nod.data, details: false },
+      data: { ...nod.data, ui_props: { ...nod.data.ui_props, details: false } },
     };
   });
 }

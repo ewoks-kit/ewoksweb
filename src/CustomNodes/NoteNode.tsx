@@ -7,19 +7,24 @@ import type { ChangeEvent } from 'react';
 
 import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
+import type { NodeProps } from 'reactflow';
+import type { EwoksRFNodeData } from '../types';
 
-interface NoteProps {
-  id: string;
-  xPos?: number;
-  yPos?: number;
-  selected?: boolean;
-  data: {
-    label?: string;
-    comment: string;
-    nodeWidth: string;
-    details?: string;
-  };
-}
+// TODO: can be replaced with EwoksRFNode except xPos, yPos. Examine
+// interface NoteProps {
+//   id: string;
+//   xPos?: number;
+//   yPos?: number;
+//   selected?: boolean;
+//   data: {
+//     ewoks_props: { label?: string };
+//     comment: string;
+//     ui_props: { nodeWidth: string; details?: string };
+//     task_props: { task_type: string; task_identifier: string };
+//   };
+// }
+
+type NoteProps = NodeProps<EwoksRFNodeData>;
 
 const NoteNode = (args: NoteProps) => {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
@@ -28,7 +33,7 @@ const NoteNode = (args: NoteProps) => {
   const [comment, setComment] = useState('');
 
   useEffect(() => {
-    setComment(args.data.comment);
+    setComment(args.data.comment || '');
   }, [args.data]);
 
   const customTitle = {
@@ -50,12 +55,12 @@ const NoteNode = (args: NoteProps) => {
       {
         ...selectedElement,
         data: {
-          label: args.data.label,
+          task_props: { task_type: 'note', task_identifier: args.id },
+          ewoks_props: { label: args.data.ewoks_props.label },
+          ui_props: {},
           comment,
         },
         id: args.id,
-        task_type: 'note',
-        task_identifier: args.id,
         type: 'note',
         position: { x: args.xPos || 500, y: args.yPos || 500 },
       },
@@ -75,13 +80,17 @@ const NoteNode = (args: NoteProps) => {
       role="button"
       tabIndex={0}
     >
-      <span style={{ maxWidth: `${args.data.nodeWidth}px` }} className="icons">
-        {args.data?.label && args.data.label.length > 0 && (
-          <div style={customTitle as React.CSSProperties}>
-            {args.data.label}
-          </div>
-        )}
-        {args.data.details ? (
+      <span
+        style={{ maxWidth: `${args.data.ui_props.nodeWidth || 100}px` }}
+        className="icons"
+      >
+        {args.data?.ewoks_props.label &&
+          args.data.ewoks_props.label.length > 0 && (
+            <div style={customTitle as React.CSSProperties}>
+              {args.data.ewoks_props.label}
+            </div>
+          )}
+        {args.data.ui_props.details ? (
           <TextField
             label="edit comment"
             multiline
@@ -93,7 +102,7 @@ const NoteNode = (args: NoteProps) => {
         ) : (
           <div style={{ wordWrap: 'break-word' }}>{comment}</div>
         )}
-        {args.data.details && (
+        {args.data.ui_props.details && (
           <IconButton
             style={{ margin: '0px 2px', padding: '0px' }}
             aria-label="edit"

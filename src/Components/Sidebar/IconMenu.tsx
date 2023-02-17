@@ -59,7 +59,7 @@ export default function IconMenu() {
       case 'cloneTask': {
         // TODO: check for using isNode by extending each possible types
         if ('position' in element) {
-          if (element.task_type === 'graph') {
+          if (element.data.task_props.task_type === 'graph') {
             setOpenSnackbar({
               open: true,
               text: 'Cannot clone a graph, please select a Task!',
@@ -69,14 +69,15 @@ export default function IconMenu() {
           }
           // DOC: if the task does not exist in the tasks populate the form with the element details
           const task = tasks.find(
-            (tas) => tas.task_identifier === element.task_identifier
+            (tas) =>
+              tas.task_identifier === element.data.task_props.task_identifier
           );
 
           setElementToEdit(
             task || {
               ...initializedTask,
-              task_identifier: element.task_identifier,
-              task_type: element.task_type,
+              task_identifier: element.data.task_props.task_identifier,
+              task_type: element.data.task_props.task_type,
             }
           );
         } else {

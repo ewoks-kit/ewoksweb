@@ -23,7 +23,7 @@ import { deleteWorkflow } from 'api/api';
 import { OpenInBrowser } from '@material-ui/icons';
 import SidebarTooltip from './SidebarTooltip';
 import commonStrings from 'commonStrings.json';
-import { isLink, isNode } from '../../utils/typeGuards';
+import { isGraphDetails, isLink, isNode } from '../../utils/typeGuards';
 import { textForError } from '../../utils';
 
 const useStyles = DashboardStyle;
@@ -233,10 +233,12 @@ export default function Sidebar() {
           {!isLink(selectedElement) && <IconMenu />}
           <ConfirmDialog
             title={`Delete "${
-              selectedElement.label || 'not labelled'
+              (isGraphDetails(selectedElement) && selectedElement.label) ||
+              'not labelled'
             }" workflow?`}
             content={`You are about to delete "${
-              selectedElement.label || 'a not labelled'
+              (isGraphDetails(selectedElement) && selectedElement.label) ||
+              'a not labelled'
             }" workflow.
               Please make sure that it is not used as a subgraph in other workflows!
               Do you agree to continue?`}

@@ -6,6 +6,7 @@ import { calcCoordinatesFirstNode } from './storeUtils/CalcCoordinatesFirstNode'
 import orange2 from 'images/orange2.png';
 import type { GetState, SetState } from 'zustand';
 import type { State } from '../types';
+import { Position } from 'reactflow';
 
 export interface SubGraphSlice {
   subGraph: GraphRF;
@@ -79,31 +80,42 @@ const subGraph = (
         graphId += id++;
       }
       newNode = {
-        sourcePosition: 'right',
-        targetPosition: 'left',
-        task_generator: '',
+        sourcePosition: Position.Right,
+        targetPosition: Position.Left,
+
         id: graphId,
-        task_type: 'graph',
-        task_identifier: subToAdd.graph.id,
+
         type: 'graph',
         position: calcCoordinatesFirstNode(get().graphRF.nodes),
-        default_inputs: [],
-        inputs_complete: false,
-        default_error_node: false,
-        default_error_attributes: {
-          map_all_data: true,
-          data_mapping: [],
-        },
+
         data: {
-          exists: true,
-          label: subToAdd.graph.label,
-          type: 'internal',
+          task_props: {
+            task_type: 'graph',
+            task_identifier: subToAdd.graph.id,
+          },
+          ui_props: {
+            exists: true,
+            type: 'internal',
+
+            icon: subToAdd.graph?.uiProps?.icon || orange2,
+            inputs: inputsSub,
+            outputs: outputsSub,
+            withImage: true,
+            withLabel: true,
+          },
+
+          ewoks_props: {
+            label: subToAdd.graph.label,
+            default_inputs: [],
+            task_generator: '',
+            inputs_complete: false,
+            default_error_node: false,
+            default_error_attributes: {
+              map_all_data: true,
+              data_mapping: [],
+            },
+          },
           comment: '',
-          icon: subToAdd.graph?.uiProps?.icon || orange2,
-          inputs: inputsSub,
-          outputs: outputsSub,
-          withImage: true,
-          withLabel: true,
         },
       };
 

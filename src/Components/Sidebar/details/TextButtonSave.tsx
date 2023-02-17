@@ -17,6 +17,7 @@ interface TextButtonSaveProps {
 
 export default function TextButtonSave(props: TextButtonSaveProps) {
   const classes = useStyles();
+  // console.log(props); this is rerendered more than it should examine
 
   const { label, value } = props;
 

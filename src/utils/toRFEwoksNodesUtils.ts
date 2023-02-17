@@ -131,9 +131,12 @@ export function addNodeProperties(
       ...tempNode,
       data: {
         ...tempNode.data,
-        exists: subgraphNode && !!subgraphNode.graph.id,
-        inputs: inputsSub,
-        outputs: outputsSub,
+        ui_props: {
+          ...tempNode.data.ui_props,
+          exists: subgraphNode && !!subgraphNode.graph.id,
+          inputs: inputsSub,
+          outputs: outputsSub,
+        },
       },
     };
   } else {
@@ -141,10 +144,16 @@ export function addNodeProperties(
 
     tempNode = {
       ...tempNode,
-      task_category: task_category || '',
-      optional_input_names: tempTask.optional_input_names,
-      output_names: tempTask.output_names,
-      required_input_names: tempTask.required_input_names,
+      data: {
+        ...tempNode.data,
+        task_props: {
+          ...tempNode.data.task_props,
+          task_category: task_category || '',
+          optional_input_names: tempTask.optional_input_names,
+          output_names: tempTask.output_names,
+          required_input_names: tempTask.required_input_names,
+        },
+      },
     };
   }
 

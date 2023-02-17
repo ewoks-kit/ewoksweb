@@ -11,7 +11,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   const [nodeSize, setNodeSize] = useState<number>(
-    element.data.nodeWidth || 100
+    element.data.ui_props.nodeWidth || 100
   );
 
   const debouncedNodeWidth = useDebounce(nodeSize, 500);
@@ -21,7 +21,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
       return;
     }
 
-    setNodeSize(element.data.nodeWidth || 100);
+    setNodeSize(element.data.ui_props.nodeWidth || 100);
   }, [element]);
 
   useEffect(
@@ -35,11 +35,14 @@ export default function EditNodeStyle(element: EwoksRFNode) {
   );
 
   function setElementNodeWidth(width: number) {
-    if (debouncedNodeWidth !== element.data.nodeWidth) {
+    if (debouncedNodeWidth !== element.data.ui_props.nodeWidth) {
       setSelectedElement(
         {
           ...element,
-          data: { ...element.data, nodeWidth: width },
+          data: {
+            ...element.data,
+            ui_props: { ...element.data.ui_props, nodeWidth: width },
+          },
         },
         'fromSaveElement'
       );
@@ -50,7 +53,13 @@ export default function EditNodeStyle(element: EwoksRFNode) {
     setSelectedElement(
       {
         ...element,
-        data: { ...element.data, withImage: event.target.checked },
+        data: {
+          ...element.data,
+          ui_props: {
+            ...element.data.ui_props,
+            withImage: event.target.checked,
+          },
+        },
       },
       'fromSaveElement'
     );
@@ -60,7 +69,13 @@ export default function EditNodeStyle(element: EwoksRFNode) {
     setSelectedElement(
       {
         ...element,
-        data: { ...element.data, withLabel: event.target.checked },
+        data: {
+          ...element.data,
+          ui_props: {
+            ...element.data.ui_props,
+            withLabel: event.target.checked,
+          },
+        },
       },
       'fromSaveElement'
     );
@@ -70,7 +85,13 @@ export default function EditNodeStyle(element: EwoksRFNode) {
     setSelectedElement(
       {
         ...element,
-        data: { ...element.data, colorBorder: event.target.value },
+        data: {
+          ...element.data,
+          ui_props: {
+            ...element.data.ui_props,
+            colorBorder: event.target.value,
+          },
+        },
       },
       'fromSaveElement'
     );
@@ -82,7 +103,10 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         ...element,
         data: {
           ...element.data,
-          moreHandles: event.target.checked,
+          ui_props: {
+            ...element.data.ui_props,
+            moreHandles: event.target.checked,
+          },
         },
       },
       'fromSaveElement'
@@ -100,16 +124,16 @@ export default function EditNodeStyle(element: EwoksRFNode) {
 
   return (
     <FormControl variant="filled" fullWidth>
-      {element.task_type !== 'note' && (
+      {element.data.task_props.task_type !== 'note' && (
         <>
           <div>
             <label htmlFor="withImage">With Image</label>
             <Checkbox
               name="withImage"
               checked={
-                element.data.withImage === undefined
+                element.data.ui_props.withImage === undefined
                   ? true
-                  : !!element.data.withImage
+                  : !!element.data.ui_props.withImage
               }
               onChange={withImageChanged}
               inputProps={{ 'aria-label': 'controlled' }}
@@ -118,9 +142,9 @@ export default function EditNodeStyle(element: EwoksRFNode) {
             <Checkbox
               name="withLabel"
               checked={
-                element.data.withLabel === undefined
+                element.data.ui_props.withLabel === undefined
                   ? true
-                  : !!element.data.withLabel
+                  : !!element.data.ui_props.withLabel
               }
               onChange={withLabelChanged}
               inputProps={{ 'aria-label': 'controlled' }}
@@ -134,20 +158,22 @@ export default function EditNodeStyle(element: EwoksRFNode) {
               type="color"
               id="head"
               name="head"
-              value={element.data.colorBorder || ''}
+              value={element.data.ui_props.colorBorder || ''}
               onChange={colorBorderChanged}
               style={{ margin: '10px' }}
             />
           </div>
         </>
       )}
-      {!['graphInput', 'graphOutput', 'note'].includes(element.task_type) && (
+      {!['graphInput', 'graphOutput', 'note'].includes(
+        element.data.task_props.task_type
+      ) && (
         <div>
           <div>
             <label htmlFor="moreHandles">More handles</label>
             <Checkbox
               name="moreHandles"
-              checked={!!element.data.moreHandles}
+              checked={!!element.data.ui_props.moreHandles}
               onChange={moreHandlesChanged}
               inputProps={{ 'aria-label': 'controlled' }}
             />

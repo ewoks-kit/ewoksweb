@@ -1,4 +1,4 @@
-import type { Position } from 'reactflow';
+import type { Position, XYPosition } from 'reactflow';
 import type { CanvasGraphChangedSlice } from './store/canvasGraphChanged';
 import type { AllWorkflowsSlice } from './store/allWorkflows';
 import type { CurrentExecutionEventSlice } from './store/currentExecutionEvent';
@@ -24,6 +24,7 @@ import type { ExecutingEventsSlice } from './store/executingEvents';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
 import type { ChangeEvent } from 'react';
+import type { Node } from 'reactflow';
 
 export enum FormAction {
   undefined = 'undefined',
@@ -55,7 +56,7 @@ export interface InOutLinkAttributes {
 
 export interface InOutNodesUiProps {
   label?: string;
-  position?: CanvasPosition;
+  position?: XYPosition;
   linkStyle?: string;
   style?: LinkStyle;
   animated?: boolean;
@@ -243,23 +244,6 @@ export interface stackGraph {
   resetStack?: boolean;
 }
 
-export interface UiPropsNodes {
-  type?: string;
-  icon?: string;
-  comment?: string;
-  position?: CanvasPosition;
-  style?: LinkStyle;
-  withImage?: boolean;
-  withLabel?: boolean;
-  colorBorder?: string;
-  nodeWidth?: number;
-  node_icon?: string;
-  task_icon?: string;
-  task_category?: string;
-  moreHandles?: boolean;
-  details?: boolean;
-}
-
 export interface UiPropsLinks {
   label?: string;
   type?: string;
@@ -310,13 +294,8 @@ export interface Note {
   id: string;
   label?: string;
   comment: string;
-  position: CanvasPosition;
+  position: XYPosition;
   nodeWidth: number;
-}
-
-export interface CanvasPosition {
-  x: number;
-  y: number;
 }
 
 export interface DataMapping {
@@ -350,7 +329,28 @@ export interface EwoksNode {
   task_generator?: string;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes;
-  uiProps?: UiPropsNodes;
+  uiProps?: EwoksNodeUiProps;
+}
+
+export interface EwoksNodeUiProps {
+  type?: string;
+  icon?: string;
+  comment?: string;
+  position?: XYPosition;
+  style?: LinkStyle;
+  withImage?: boolean;
+  withLabel?: boolean;
+  colorBorder?: string;
+  nodeWidth?: number;
+  node_icon?: string;
+  task_icon?: string;
+  task_category?: string;
+  moreHandles?: boolean;
+  details?: boolean;
+  executing?: boolean;
+  exists?: boolean;
+  inputs?: outputsInputsSub[];
+  outputs?: outputsInputsSub[];
 }
 
 export interface EwoksLink {
@@ -374,48 +374,54 @@ export interface outputsInputsSub {
   positionY?: number;
 }
 
-export interface EwoksRFNodeData {
-  nodeWidth?: number;
-  node_icon?: string;
-  executing?: boolean;
-  exists?: boolean;
-  label?: string;
+export interface RFNodeUiProps {
   type?: string;
-  inputs?: outputsInputsSub[]; // ?
-  outputs?: outputsInputsSub[]; // ?
   icon?: string;
-  comment?: string;
-  moreHandles?: boolean;
-  details?: boolean;
+  style?: LinkStyle; // style?: CSSProperties; on Node?
   withImage?: boolean;
   withLabel?: boolean;
   colorBorder?: string;
-  map_all_data?: boolean;
+  nodeWidth?: number;
+  node_icon?: string;
+  moreHandles?: boolean;
+  details?: boolean;
+  executing?: boolean;
+  exists?: boolean;
+  // To position inputs-outputs of subgraphs in a graph
+  inputs?: outputsInputsSub[];
+  outputs?: outputsInputsSub[];
 }
-export interface EwoksRFNode {
-  id: string;
-  label?: string;
-  category?: string;
+
+export interface RFNodeTaskProperties {
   task_type: string;
-  type?: string;
   task_identifier: string;
   task_icon?: string;
   task_category?: string;
+  optional_input_names?: string[];
+  output_names?: string[];
+  required_input_names?: string[];
+}
+
+export interface RFNodeEwoksProperties {
+  label?: string;
   default_inputs?: Inputs[];
   inputs_complete?: boolean;
   task_generator?: string;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes;
-  data: EwoksRFNodeData;
-  selected?: boolean;
-  sourcePosition?: string;
-  targetPosition?: string;
-  position?: CanvasPosition;
-  optional_input_names?: string[];
-  output_names?: string[];
-  required_input_names?: string[];
-  uiProps?: UiPropsNodes;
 }
+
+export interface EwoksRFNodeData {
+  task_props: RFNodeTaskProperties;
+  ewoks_props: RFNodeEwoksProperties;
+  ui_props: RFNodeUiProps;
+  comment?: string;
+}
+
+export type EwoksRFNode = Node<EwoksRFNodeData>;
+// From new reactFlow11:
+// width?: number | null; // what is their functionality?
+// height?: number | null;
 
 export interface EditableTableRow {
   id?: string;
@@ -438,12 +444,17 @@ export interface CustomTableCellProps {
   ): void;
 }
 
+export interface RFLinkEwoksProperties {
+  label?: string;
+}
+
 export interface EwoksRFLink {
   id?: string;
   source: string;
   target: string;
   label?: string;
   data: {
+    ewoks_props?: RFLinkEwoksProperties;
     label?: string;
     data_mapping?: DataMapping[];
     type?: string;
@@ -524,7 +535,7 @@ export interface RFNode {
   };
   sourcePosition?: Position;
   targetPosition?: Position;
-  position?: CanvasPosition;
+  position?: XYPosition;
 }
 
 export interface GraphRF {

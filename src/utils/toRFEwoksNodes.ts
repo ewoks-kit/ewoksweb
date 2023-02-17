@@ -50,30 +50,38 @@ export function toRFEwoksNodes(
 
         const node: EwoksRFNode = {
           id: id.toString(),
-          task_type,
-          task_identifier,
+
           type: task_type,
-          inputs_complete: inputs_complete || false,
-          default_error_node: default_error_node || false,
-          default_error_attributes: default_error_attributes || {
-            map_all_data: true,
-            data_mapping: [],
-          },
-          task_generator: task_generator || '',
-          task_icon: uiProps?.task_icon || '',
-          default_inputs: default_inputs || [],
+
           data: {
-            label: label ?? task_identifier,
-            type: nodeType,
-            nodeWidth: uiProps?.nodeWidth ?? 120,
-            icon: uiProps?.node_icon ?? uiProps?.icon ?? '',
+            ewoks_props: {
+              label: label ?? task_identifier,
+              default_inputs: default_inputs || [],
+              inputs_complete: inputs_complete || false,
+              default_error_node: default_error_node || false,
+              default_error_attributes: default_error_attributes || {
+                map_all_data: true,
+                data_mapping: [],
+              },
+              task_generator: task_generator || '',
+            },
+            task_props: {
+              task_type,
+              task_identifier,
+              task_icon: uiProps?.task_icon || '',
+            },
+            ui_props: {
+              nodeWidth: uiProps?.nodeWidth ?? 120,
+              executing: false,
+              type: nodeType,
+              icon: uiProps?.node_icon ?? uiProps?.icon ?? '',
+              moreHandles: uiProps?.moreHandles ?? false,
+              details: uiProps?.details ?? false,
+              withImage: uiProps?.withImage ?? true,
+              withLabel: uiProps?.withLabel ?? true,
+              colorBorder: uiProps?.colorBorder ?? '',
+            },
             comment: uiProps?.comment ?? '',
-            moreHandles: uiProps?.moreHandles ?? false,
-            details: uiProps?.details ?? false,
-            executing: false,
-            withImage: uiProps?.withImage ?? true,
-            withLabel: uiProps?.withLabel ?? true,
-            colorBorder: uiProps?.colorBorder ?? '',
           },
           position: uiProps?.position ?? { x: 100, y: 100 },
         };

@@ -76,13 +76,12 @@ const workingGraph = (
       workingGraphObject.graph?.uiProps?.notes?.map((note) => {
         return {
           data: {
-            label: note.label,
+            ewoks_props: { label: note.label },
+            task_props: { task_type: 'note', task_identifier: note.id },
+            ui_props: { nodeWidth: note.nodeWidth ?? 180 },
             comment: note.comment,
-            nodeWidth: note.nodeWidth || 180,
           },
           id: note.id,
-          task_type: 'note',
-          task_identifier: note.id,
           type: 'note',
           position: note.position,
         };

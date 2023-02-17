@@ -22,31 +22,38 @@ function cleanDefaultInputs(default_inputs: Inputs[]) {
 export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
   const tempNodes: EwoksRFNode[] = [...nodes].filter(
     (nod) =>
-      nod.task_type &&
-      !['graphInput', 'graphOutput', 'note'].includes(nod.task_type)
+      nod.data.task_props.task_type &&
+      !['graphInput', 'graphOutput', 'note'].includes(
+        nod.data.task_props.task_type
+      )
   );
 
   return tempNodes.map(
     ({
       id,
-      task_type,
-      task_identifier,
-      inputs_complete,
-      task_generator,
-      default_inputs,
-      default_error_node,
-      default_error_attributes,
+
       data: {
-        nodeWidth,
-        node_icon,
-        label,
-        type,
-        icon,
+        ewoks_props: {
+          default_inputs,
+          label,
+          inputs_complete,
+          task_generator,
+          default_error_node,
+          default_error_attributes,
+        },
+        task_props: { task_type, task_identifier },
+        ui_props: {
+          nodeWidth,
+          node_icon,
+          type,
+          icon,
+          moreHandles,
+          withImage,
+          withLabel,
+          colorBorder,
+        },
+
         comment,
-        moreHandles,
-        withImage,
-        withLabel,
-        colorBorder,
       },
       position,
     }) => {
