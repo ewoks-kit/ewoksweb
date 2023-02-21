@@ -83,7 +83,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       >
         <AddCircleOutlineIcon />
       </IconButton>
-      {element.data.data_mapping && element.data.data_mapping.length > 0 && (
+      {element.data?.data_mapping && element.data.data_mapping.length > 0 && (
         <EditableTable
           headers={['Source', 'Target']}
           defaultValues={element.data.data_mapping}

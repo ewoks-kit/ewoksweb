@@ -1,3 +1,4 @@
+import type { EdgeMarkerType } from 'reactflow';
 import type {
   EwoksRFLink,
   EwoksRFNode,
@@ -110,8 +111,14 @@ function calcInOutNodes(
   return nodes;
 }
 
-function calcMarkerEnd(graph_link: EwoksRFLink) {
-  return graph_link?.markerEnd ? { type: graph_link?.markerEnd?.type } : '';
+function calcMarkerEnd(graph_link: EwoksRFLink): EdgeMarkerType | undefined {
+  const mEnd = graph_link?.markerEnd;
+
+  if (mEnd && typeof mEnd !== 'string') {
+    return { type: mEnd.type };
+  }
+
+  return undefined;
 }
 
 function calcNodeProps(
@@ -128,8 +135,8 @@ function calcNodeProps(
 
     sub_node: isGraph
       ? (graph_links[link_index] && inputOrOutput === 'graphOutput'
-          ? graph_links[link_index].data.sub_source
-          : graph_links[link_index].data.sub_target) || undefined
+          ? graph_links[link_index].data?.sub_source
+          : graph_links[link_index].data?.sub_target) || undefined
       : undefined,
     link_attributes: {
       label: graph_links[link_index]?.label ?? '',

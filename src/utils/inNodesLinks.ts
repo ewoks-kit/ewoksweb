@@ -1,16 +1,14 @@
+import type { EdgeMarkerType } from 'reactflow';
 import type { EwoksLink, EwoksNode, GraphEwoks, GraphNodes } from '../types';
 
-function calcMarkerEnd(inNod: GraphNodes): '' | { type: string } {
-  let type: '' | { type: string };
-  if (
-    typeof inNod.uiProps?.markerEnd === 'object' &&
-    'type' in inNod.uiProps.markerEnd
-  ) {
-    type = { type: inNod.uiProps.markerEnd.type };
-  } else {
-    type = '';
+function calcMarkerEnd(inNod: GraphNodes): EdgeMarkerType | undefined {
+  const mEnd = inNod.uiProps?.markerEnd;
+
+  if (mEnd && typeof mEnd !== 'string') {
+    return { type: mEnd.type };
   }
-  return type;
+
+  return undefined;
 }
 
 // TODO: merge with outNodesLinks if possible when stable

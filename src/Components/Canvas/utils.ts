@@ -1,4 +1,5 @@
 import type { Connection } from 'reactflow';
+import { MarkerType } from 'reactflow';
 import type { EwoksRFLink, GraphRF } from '../../types';
 
 export function trimLabel(label: string) {
@@ -66,7 +67,7 @@ export function addConnectionToGraph(
     targetHandle: targetHandle ?? undefined,
     type: 'default',
     animated: false,
-    markerEnd: { type: 'arrowclosed' },
+    markerEnd: { type: MarkerType.ArrowClosed },
     style: { stroke: '#96a5f9', strokeWidth: '2.5' },
     labelBgStyle: {
       fill: 'rgb(223, 226, 247)',

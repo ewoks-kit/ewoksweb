@@ -1,4 +1,4 @@
-import type { Position, XYPosition } from 'reactflow';
+import type { Edge, EdgeMarkerType, Position, XYPosition } from 'reactflow';
 import type { CanvasGraphChangedSlice } from './store/canvasGraphChanged';
 import type { AllWorkflowsSlice } from './store/allWorkflows';
 import type { CurrentExecutionEventSlice } from './store/currentExecutionEvent';
@@ -23,8 +23,9 @@ import type { WorkingGraphSlice } from './store/workingGraph';
 import type { ExecutingEventsSlice } from './store/executingEvents';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, CSSProperties, ReactNode } from 'react';
 import type { Node } from 'reactflow';
+import type React from 'react';
 
 export enum FormAction {
   undefined = 'undefined',
@@ -46,7 +47,7 @@ export interface GraphNodes {
 
 // TODO: examine with ewoks if all the following are needed in an InOutLink
 export interface InOutLinkAttributes {
-  label: string;
+  label: string | ReactNode;
   comment: string;
   conditions: Conditions[];
   data_mapping: DataMapping[];
@@ -60,8 +61,8 @@ export interface InOutNodesUiProps {
   linkStyle?: string;
   style?: LinkStyle;
   animated?: boolean;
-  markerEnd?: '' | { type: string };
-  markerStart?: { type: string };
+  markerEnd?: EdgeMarkerType;
+  markerStart?: EdgeMarkerType;
   targetHandle?: string;
   withImage?: boolean;
   withLabel?: boolean;
@@ -199,7 +200,7 @@ export interface NodeProps {
   selected: boolean;
   color?: string;
   colorBorder?: string;
-  content: React.ReactNode;
+  content: ReactNode;
   image?: string;
   comment?: string;
   executing?: boolean;
@@ -314,7 +315,7 @@ export interface RFNodeUiProps {
   icon?: string;
   comment?: string;
   position?: XYPosition; // remove as it is in the Node
-  style?: LinkStyle; // style?: CSSProperties; on Node?
+  style?: CSSProperties; // style?: CSSProperties; on Node?
   withImage?: boolean;
   withLabel?: boolean;
   colorBorder?: string;
@@ -324,7 +325,6 @@ export interface RFNodeUiProps {
   task_category?: string;
   moreHandles?: boolean;
   details?: boolean;
-
   executing?: boolean;
   exists?: boolean;
   inputs?: outputsInputsSub[]; // --> UI to position inputs-outputs of subgraphs in a graph
@@ -408,25 +408,26 @@ export interface EwoksRFLinkData {
   startEnd?: boolean;
 }
 
-export interface EwoksRFLink {
-  // extends Edge wont work as Edge is 3 types: extend the default?
-  id?: string;
-  source: string;
-  target: string;
-  label?: string;
-  labelStyle?: LabelStyle;
-  labelBgStyle?: LabelBgStyle;
-  labelBgPadding?: number[];
-  labelBgBorderRadius?: number;
-  style: { stroke: string; strokeWidth: string };
-  type?: string;
-  markerEnd?: '' | { type: string };
-  markerStart?: string;
-  animated?: boolean;
-  sourceHandle?: string;
-  targetHandle?: string;
-  data: EwoksRFLinkData;
-}
+export type EwoksRFLink = Edge<EwoksRFLinkData>;
+// export interface EwoksRFLink {
+//   // extends Edge wont work as Edge is 3 types: extend the default?
+//   id?: string;
+//   source: string;
+//   target: string;
+//   label?: string;
+//   labelStyle?: LabelStyle;
+//   labelBgStyle?: LabelBgStyle;
+//   labelBgPadding?: number[];
+//   labelBgBorderRadius?: number;
+//   style: { stroke: string; strokeWidth: string };
+//   type?: string;
+//   markerEnd?: '' | { type: string };
+//   markerStart?: string;
+//   animated?: boolean;
+//   sourceHandle?: string;
+//   targetHandle?: string;
+//   data: EwoksRFLinkData;
+// }
 
 export interface LabelBgStyle {
   fill?: string;
@@ -444,17 +445,17 @@ export interface LabelStyle {
 }
 
 export interface UiPropsLinks {
-  label?: string;
+  label?: string | ReactNode;
   type?: string;
   comment?: string;
   animated?: boolean;
-  markerEnd?: '' | { type: string };
-  markerStart?: '' | { type: string };
-  labelStyle?: LabelStyle;
-  labelBgStyle?: LabelBgStyle;
-  sourceHandle?: string;
-  targetHandle?: string;
-  style?: LinkStyle;
+  markerEnd?: EdgeMarkerType;
+  markerStart?: EdgeMarkerType;
+  labelStyle?: CSSProperties;
+  labelBgStyle?: CSSProperties;
+  sourceHandle?: string | null;
+  targetHandle?: string | null;
+  style?: CSSProperties;
   getAroundProps?: { x?: number; y?: number };
 }
 

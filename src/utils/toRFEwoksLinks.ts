@@ -9,6 +9,7 @@ import type {
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import { calcTasksForLink } from './calcTasksForLink';
+import type { ReactNode } from 'react';
 
 // DOC: from GraphEwoks get EwoksRFLinks
 // - tempGraph: the graph to transform its links
@@ -95,13 +96,11 @@ export function toRFEwoksLinks(
             sub_target: sub_target || '',
             sub_source: sub_source || '',
             conditions: conditions || [],
-            // map_all_data: !!map_all_data,
+            map_all_data: map_all_data ?? true,
             on_error: on_error || false,
             comment: uiProps?.comment ?? '',
           },
         };
-        // DOC: if map_all_data is missing the default will be true
-        link.data.map_all_data = map_all_data ?? true;
         return link;
       }
     );
@@ -113,7 +112,7 @@ function calcLabel(
   uiProps: UiPropsLinks,
   conditions: Conditions[],
   data_mapping: DataMapping[]
-): string {
+): string | ReactNode {
   if (uiProps?.label) {
     return uiProps?.label;
   }

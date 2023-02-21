@@ -19,6 +19,7 @@ import type {
 import sidebarStyle from '../sidebarStyle';
 import type { ChangeEvent } from 'react';
 import { isLink } from '../../../utils/typeGuards';
+import { MarkerType } from 'reactflow';
 
 const useStyles = DashboardStyle;
 
@@ -33,8 +34,10 @@ export default function EditLinkStyle(element: EwoksRFLink) {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const [linkType, setLinkType] = useState('');
-  const [arrowType, setArrowType] = useState({
-    type: 'arrow',
+  const [arrowType, setArrowType] = useState<
+    { type: MarkerType } | { type: 'none' } | undefined
+  >({
+    type: MarkerType.Arrow,
   });
   const [animated, setAnimated] = useState<boolean>(false);
   const [colorLine, setColorLine] = useState<string>('');
@@ -58,11 +61,15 @@ export default function EditLinkStyle(element: EwoksRFLink) {
     if (!element.markerEnd) {
       setArrowType({ type: 'none' });
     } else {
-      setArrowType(element.markerEnd);
+      setArrowType(
+        typeof element.markerEnd !== 'string'
+          ? { type: element.markerEnd.type }
+          : undefined
+      );
     }
 
     setAnimated(!!element.animated);
-    setColorLine(element.style.stroke);
+    setColorLine(element.style?.stroke || '#96a5f9');
   }, [element]);
 
   function linkTypeChanged(event: PropertyChangedEvent) {
@@ -86,15 +93,16 @@ export default function EditLinkStyle(element: EwoksRFLink) {
   const arrowTypeChanged = (event: PropertyChangedEvent) => {
     // 'none' is not available anymore in reactFlow so we
     // need to remove markerEnd if 'none' is selected in dropdown
-    const val = event.target.value as string;
-    if (event.target.value === 'none') {
-      setSelectedElement({ ...element, markerEnd: '' }, 'fromSaveElement');
+    const val = event.target.value;
+    let mEnd: string | { type: MarkerType } = '';
+    if (val === 'none') {
+      mEnd = '';
+    } else if (val === 'arrowclosed') {
+      mEnd = { type: MarkerType.ArrowClosed };
     } else {
-      setSelectedElement(
-        { ...element, markerEnd: { type: val } },
-        'fromSaveElement'
-      );
+      mEnd = { type: MarkerType.Arrow };
     }
+    setSelectedElement({ ...element, markerEnd: mEnd }, 'fromSaveElement');
   };
 
   const colorLineChanged = (event: ChangeEvent<HTMLInputElement>) => {
@@ -130,7 +138,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
         data: {
           ...selectedElement.data,
           getAroundProps: {
-            ...selectedElement.data.getAroundProps,
+            ...selectedElement.data?.getAroundProps,
             x: newX,
           },
         },
@@ -151,7 +159,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
         data: {
           ...selectedElement.data,
           getAroundProps: {
-            ...selectedElement.data.getAroundProps,
+            ...selectedElement.data?.getAroundProps,
             y: newY,
           },
         },
@@ -173,8 +181,8 @@ export default function EditLinkStyle(element: EwoksRFLink) {
     const newGraph: GraphRF = {
       ...graphRF,
       links: graphRF.links.map((link) => {
-        if (arrowType?.type && arrowType.type === 'none') {
-          return { ...link, markerEnd: '' };
+        if (!arrowType?.type || arrowType.type === 'none') {
+          return { ...link, markerEnd: undefined };
         }
         return { ...link, markerEnd: { type: arrowType.type } };
       }),
