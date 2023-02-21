@@ -1,4 +1,4 @@
-import type { Edge, EdgeMarkerType, Position, XYPosition } from 'reactflow';
+import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
 import type { CanvasGraphChangedSlice } from './store/canvasGraphChanged';
 import type { AllWorkflowsSlice } from './store/allWorkflows';
 import type { CurrentExecutionEventSlice } from './store/currentExecutionEvent';
