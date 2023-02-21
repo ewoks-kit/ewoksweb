@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { ChangeEvent, ReactNode } from 'react';
+import type { ChangeEvent } from 'react';
 import type { EwoksRFLink, EwoksRFNode } from '../../../types';
 import { FormControl, TextField, IconButton, Fab } from '@material-ui/core';
 import DashboardStyle from '../../Dashboard/DashboardStyle';
@@ -9,7 +9,7 @@ import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
 import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from '../sidebarStyle';
-import { isLink, isNode } from '../../../utils/typeGuards';
+import { isLink, isNode, isString } from '../../../utils/typeGuards';
 
 const useStyles = DashboardStyle;
 
@@ -25,7 +25,7 @@ export default function LabelComment(props: LabelCommentProps) {
   const { element, showComment } = props;
 
   const [comment, setComment] = useState('');
-  const [label, setLabel] = useState<string | ReactNode>('');
+  const [label, setLabel] = useState<string>('');
   const [labelChoices, setLabelChoices] = useState([
     'use mappings',
     'use conditions',
@@ -43,7 +43,10 @@ export default function LabelComment(props: LabelCommentProps) {
     }
 
     if (isLink(element)) {
-      setLabel(element.label || '');
+      const { label: elmtLabel } = element;
+      if (isString(elmtLabel)) {
+        setLabel(elmtLabel);
+      }
       setComment(element.data?.comment || '');
 
       const mappings =
@@ -71,8 +74,8 @@ export default function LabelComment(props: LabelCommentProps) {
     throw new Error('No link or Node tries to access LabelComment');
   }, [element]);
 
-  function saveLabel(labelLocal: string | ReactNode) {
-    if (isNode(element) && typeof labelLocal === 'string') {
+  function saveLabel(labelLocal: string) {
+    if (isNode(element)) {
       setSelectedElement(
         {
           ...element,
@@ -131,7 +134,6 @@ export default function LabelComment(props: LabelCommentProps) {
 
   function valueChanged(event: ChangeEvent<HTMLInputElement>) {
     if (event?.target?.value) {
-      // event.target.value !== 0
       setChanged(event);
       setLabel(event.target.value);
     }
@@ -188,11 +190,7 @@ export default function LabelComment(props: LabelCommentProps) {
           </FormControl>
         </SidebarTooltip>
       ) : (
-        <TextButtonSave
-          label="Label"
-          value={typeof label === 'string' ? label : ''}
-          valueSaved={saveLabel}
-        />
+        <TextButtonSave label="Label" value={label} valueSaved={saveLabel} />
       )}
 
       <div style={{ display: showComment ? 'block' : 'none' }}>

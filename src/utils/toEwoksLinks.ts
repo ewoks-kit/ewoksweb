@@ -1,3 +1,4 @@
+import { isString } from './typeGuards';
 import type { Conditions, EwoksLink, EwoksRFLink } from '../types';
 
 // EwoksRFLinks --> EwoksLinks for saving
@@ -34,7 +35,7 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
         map_all_data: data?.map_all_data,
         required: data?.required,
         uiProps: {
-          label,
+          label: isString(label) ? label : undefined,
           comment: data?.comment,
           type,
           markerEnd,

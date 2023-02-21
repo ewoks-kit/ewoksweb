@@ -9,7 +9,6 @@ import type {
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import { calcTasksForLink } from './calcTasksForLink';
-import type { ReactNode } from 'react';
 
 // DOC: from GraphEwoks get EwoksRFLinks
 // - tempGraph: the graph to transform its links
@@ -112,7 +111,7 @@ function calcLabel(
   uiProps: UiPropsLinks,
   conditions: Conditions[],
   data_mapping: DataMapping[]
-): string | ReactNode {
+): string {
   if (uiProps?.label) {
     return uiProps?.label;
   }

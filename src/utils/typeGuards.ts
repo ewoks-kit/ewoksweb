@@ -53,11 +53,15 @@ export function assertDefined<T>(
   }
 }
 
+export function isString(val: unknown): val is string {
+  return typeof val === 'string';
+}
+
 export function assertStr(
   val: unknown,
   message = 'Expected string'
 ): asserts val is string {
-  if (typeof val !== 'string') {
+  if (!isString(val)) {
     throw new TypeError(message);
   }
 }

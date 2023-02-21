@@ -1,3 +1,4 @@
+import { isString } from './typeGuards';
 import type { EdgeMarkerType } from 'reactflow';
 import type {
   EwoksRFLink,
@@ -129,6 +130,8 @@ function calcNodeProps(
   link_index: number,
   inputOrOutput: string
 ): GraphNodes {
+  const label = graph_links[link_index]?.label;
+
   return {
     id: nod.id,
     node: nodConnected.id,
@@ -139,7 +142,7 @@ function calcNodeProps(
           : graph_links[link_index].data?.sub_target) || undefined
       : undefined,
     link_attributes: {
-      label: graph_links[link_index]?.label ?? '',
+      label: isString(label) ? label : '',
       comment: graph_links[link_index]?.data?.comment ?? '',
       conditions: graph_links[link_index]?.data?.conditions || [],
       data_mapping: graph_links[link_index]?.data?.data_mapping || [],

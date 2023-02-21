@@ -46,7 +46,7 @@ export interface GraphNodes {
 
 // TODO: examine with ewoks if all the following are needed in an InOutLink
 export interface InOutLinkAttributes {
-  label: string | ReactNode;
+  label: string;
   comment: string;
   conditions: Conditions[];
   data_mapping: DataMapping[];
@@ -435,7 +435,7 @@ export interface LabelStyle {
 }
 
 export interface UiPropsLinks {
-  label?: string | ReactNode;
+  label?: string;
   type?: string;
   comment?: string;
   animated?: boolean;
