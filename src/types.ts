@@ -25,7 +25,6 @@ import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
 import type { ChangeEvent, CSSProperties, ReactNode } from 'react';
 import type { Node } from 'reactflow';
-import type React from 'react';
 
 export enum FormAction {
   undefined = 'undefined',
