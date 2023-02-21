@@ -285,7 +285,28 @@ export interface EwoksNode {
   task_generator?: string;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes;
-  uiProps?: RFNodeUiProps;
+  uiProps?: EwoksNodeUiProps;
+}
+
+export interface EwoksNodeUiProps {
+  type?: string;
+  icon?: string;
+  comment?: string;
+  position?: XYPosition;
+  style?: LinkStyle;
+  withImage?: boolean;
+  withLabel?: boolean;
+  colorBorder?: string;
+  nodeWidth?: number;
+  node_icon?: string;
+  task_icon?: string;
+  task_category?: string;
+  moreHandles?: boolean;
+  details?: boolean;
+  executing?: boolean;
+  exists?: boolean;
+  inputs?: outputsInputsSub[];
+  outputs?: outputsInputsSub[];
 }
 
 export interface EwoksLink {
@@ -312,21 +333,18 @@ export interface outputsInputsSub {
 export interface RFNodeUiProps {
   type?: string;
   icon?: string;
-  comment?: string;
-  position?: XYPosition; // remove as it is in the Node
-  style?: CSSProperties; // style?: CSSProperties; on Node?
+  style?: CSSProperties;
   withImage?: boolean;
   withLabel?: boolean;
   colorBorder?: string;
   nodeWidth?: number;
   node_icon?: string;
-  task_icon?: string;
-  task_category?: string;
   moreHandles?: boolean;
   details?: boolean;
   executing?: boolean;
   exists?: boolean;
-  inputs?: outputsInputsSub[]; // --> UI to position inputs-outputs of subgraphs in a graph
+  // To position inputs-outputs of subgraphs in a graph
+  inputs?: outputsInputsSub[];
   outputs?: outputsInputsSub[];
 }
 
@@ -356,18 +374,10 @@ export interface EwoksRFNodeData {
   comment?: string;
 }
 
-export interface EwoksRFNode extends Node {
-  id: string;
-  position: XYPosition;
-  type?: string; // graphInput, graphOuput, ppfmethod, graph
-  sourcePosition?: Position;
-  targetPosition?: Position;
-  selected?: boolean;
-  // TODO: From new reactFlow11 we have the following:
-  // width?: number | null; // what is their functionality?
-  // height?: number | null;
-  data: EwoksRFNodeData;
-}
+export type EwoksRFNode = Node<EwoksRFNodeData>;
+// From new reactFlow11:
+// width?: number | null; // what is their functionality?
+// height?: number | null;
 
 export interface EditableTableRow {
   id?: string;

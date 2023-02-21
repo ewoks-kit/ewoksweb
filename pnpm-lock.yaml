@@ -10,6 +10,15 @@ dependencies:
   '@material-ui/lab':
     specifier: ^4.0.0-alpha.60
     version: 4.0.0-alpha.61_sqwhrmufrdvplmyamw25egpziy
+  '@rest-hooks/hooks':
+    specifier: 3.1.7
+    version: 3.1.7_mnzaipdkghwi2w6bgyhobeilpe
+  '@rest-hooks/react':
+    specifier: 7.2.1
+    version: 7.2.1_mnzaipdkghwi2w6bgyhobeilpe
+  '@rest-hooks/rest':
+    specifier: 6.3.3
+    version: 6.3.3
   '@types/path-browserify':
     specifier: 1.0.0
     version: 1.0.0
@@ -67,9 +76,6 @@ dependencies:
   socket.io-client:
     specifier: ^4.4.1
     version: 4.5.4
-  swr:
-    specifier: 2.0.1
-    version: 2.0.1_react@17.0.2
   zustand:
     specifier: ^3.5.10
     version: 3.7.2_react@17.0.2
@@ -2652,6 +2658,86 @@ packages:
   /@remix-run/router/1.0.3:
     resolution: {integrity: sha512-ceuyTSs7PZ/tQqi19YZNBc5X7kj1f8p+4DIyrcIYFY9h+hd1OKm4RqtiWldR9eGEvIiJfsqwM4BsuCtRIuEw6Q==}
     engines: {node: '>=14'}
+    dev: false
+
+  /@rest-hooks/core/4.2.1:
+    resolution: {integrity: sha512-oNc4v9nzipg9VwkcBWiI/o//YM1xTW5RtWU8RVfw0hX2FKMk7rTqQclfBs1dk92rdfzjzO9EJjBv/Co1F1/mBg==}
+    engines: {node: ^12.17 || ^13.7 || >=14}
+    dependencies:
+      '@babel/runtime': 7.20.6
+      '@rest-hooks/normalizr': 9.4.1
+      flux-standard-action: 2.1.2
+    dev: false
+
+  /@rest-hooks/endpoint/3.4.1:
+    resolution: {integrity: sha512-hUAKUOaoxMVTU/Y6ojskwyZsgoRX3ADk6CuKdP6G8duDepalVIO8E6ogYMaLpHDmaR86eEKNgql7NODEkRmbGw==}
+    engines: {node: ^12.17 || ^13.7 || >=14}
+    dependencies:
+      '@babel/runtime': 7.20.6
+    dev: false
+
+  /@rest-hooks/hooks/3.1.7_mnzaipdkghwi2w6bgyhobeilpe:
+    resolution: {integrity: sha512-SNXm6ELeFJ6rCRNIbTWCVBteXShH8gaCRCHFXacFZKoU51xd8QfPp9T6AsM5zDvl6DfKDOZ9etvIsIEVZGjXPQ==}
+    peerDependencies:
+      '@types/react': ^16.8.4 || ^17.0.0 || ^18.0.0-0
+      react: ^16.8.4 || ^17.0.0 || ^18.0.0-0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.20.6
+      '@rest-hooks/normalizr': 9.4.1
+      '@types/react': 17.0.3
+      react: 17.0.2
+    dev: false
+
+  /@rest-hooks/normalizr/9.4.1:
+    resolution: {integrity: sha512-QTYqI0eicncIQch1Dmq7/0fEEGJissMyt+d8axgtikjSn7tIZ93HxrwzmqdGn6w6rd1Mz6AMabmvqsYZSk/+hA==}
+    engines: {node: ^12.17 || ^13.7 || >=14}
+    dependencies:
+      '@babel/runtime': 7.20.6
+    dev: false
+
+  /@rest-hooks/react/7.2.1_mnzaipdkghwi2w6bgyhobeilpe:
+    resolution: {integrity: sha512-dlpRLil9nr6ZpM8thD2RfIcnuWBiWr+Q2a/zUIC3QzPOcvSWeXWXXYK+ILV/uG6El/kHWjGcENxGJPuc8zHtlA==}
+    engines: {node: ^12.17 || ^13.7 || >=14}
+    peerDependencies:
+      '@react-navigation/native': ^6.0.0
+      '@types/react': ^16.8.4 || ^17.0.0 || ^18.0.0
+      react: ^16.8.4 || ^17.0.0 || ^18.0.0
+    peerDependenciesMeta:
+      '@react-navigation/native':
+        optional: true
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.20.6
+      '@rest-hooks/core': 4.2.1
+      '@rest-hooks/use-enhanced-reducer': 1.2.5_mnzaipdkghwi2w6bgyhobeilpe
+      '@types/react': 17.0.3
+      react: 17.0.2
+    dev: false
+
+  /@rest-hooks/rest/6.3.3:
+    resolution: {integrity: sha512-c1+nemNQP6iG9eCOgmL8Y88UoxrnIpj/6H+fNwGO3EmNysBKBj1ky9wyKKfsSBfJPdhcNSAfbptEsfNShwUssA==}
+    engines: {node: ^12.17 || ^13.7 || >=14}
+    dependencies:
+      '@babel/runtime': 7.20.6
+      '@rest-hooks/endpoint': 3.4.1
+      path-to-regexp: 6.2.1
+    dev: false
+
+  /@rest-hooks/use-enhanced-reducer/1.2.5_mnzaipdkghwi2w6bgyhobeilpe:
+    resolution: {integrity: sha512-gGH1gky3h8wcFhAzPcXusgaBkeaWZ0+aHSHYxC0yIjl3ntw9IYyVBht7AG3w9Jad2w5XJLwGdBXrldNbwt2OCQ==}
+    peerDependencies:
+      '@types/react': ^16.8.4 || ^17.0.0 || ^18.0.0-0
+      react: ^16.8.4 || ^17.0.0 || ^18.0.0-0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@types/react': 17.0.3
+      react: 17.0.2
     dev: false
 
   /@rollup/plugin-babel/5.3.1_opjstonlpkhafnz76jsxdwq25a:
@@ -7080,6 +7166,13 @@ packages:
   /flatted/3.1.1:
     resolution: {integrity: sha512-zAoAQiudy+r5SvnSw3KJy5os/oRJYHzrzja/tBDqrZtNhUw8bt6y8OBzMWcjWr+8liV8Eb6yOhw8WZ7VFZ5ZzA==}
 
+  /flux-standard-action/2.1.2:
+    resolution: {integrity: sha512-7vdgawlphCjzaMLdpZv8hlGC/FJCXu6sqE3Wuqe3HLZ22KcDiO4IFplxLDePDhEt6hgCrugt45RoUObuzZP6Kg==}
+    dependencies:
+      lodash.isplainobject: 4.0.6
+      lodash.isstring: 4.0.1
+    dev: false
+
   /flux/4.0.3_react@17.0.2:
     resolution: {integrity: sha512-yKAbrp7JhZhj6uiT1FTuVMlIAT1J4jqEyBpFApi1kxpGZCvacMVc/t1pMQyotqHhAgvoE3bNvAykhCo2CLjnYw==}
     peerDependencies:
@@ -9515,6 +9608,14 @@ packages:
     resolution: {integrity: sha512-ff3BX/tSioo+XojX4MOsOMhJw0nZoUEF011LX8g8d3gvjVbxd89cCio4BCXronjxcTUIJUoqKEUA+n4CqvvRPw==}
     dev: false
 
+  /lodash.isplainobject/4.0.6:
+    resolution: {integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==}
+    dev: false
+
+  /lodash.isstring/4.0.1:
+    resolution: {integrity: sha512-0wJxfxH1wgO3GrbuP+dTTk7op+6L41QCXbGINEmD+ny/G/eCqGzxyCsh7159S+mgDDcoarnBw6PC1PS5+wUGgw==}
+    dev: false
+
   /lodash.memoize/4.1.2:
     resolution: {integrity: sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==}
     dev: false
@@ -10255,6 +10356,10 @@ packages:
 
   /path-to-regexp/0.1.7:
     resolution: {integrity: sha512-5DFkuoqlv1uYQKxy8omFBeJPQcdoE07Kv2sferDCrAq1ohOU+MSDswDIbnx3YAM60qIOnYa53wBhXW0EbMonrQ==}
+    dev: false
+
+  /path-to-regexp/6.2.1:
+    resolution: {integrity: sha512-JLyh7xT1kizaEvcaXOQwOc2/Yhw6KZOvPf1S8401UyLk86CU79LN3vl7ztXGm/pZ+YjoyAJ4rxmHwbkBXJX+yw==}
     dev: false
 
   /path-type/3.0.0:
@@ -12856,16 +12961,6 @@ packages:
       csso: 4.2.0
       picocolors: 1.0.0
       stable: 0.1.8
-    dev: false
-
-  /swr/2.0.1_react@17.0.2:
-    resolution: {integrity: sha512-6z4FpS9dKAay7axedlStsPahEw25nuMlVh4GHkuPpGptbmEEP8v/+kr0GkAE/7ErUs25U2VFOnZQz3AWfkmXdw==}
-    engines: {pnpm: '7'}
-    peerDependencies:
-      react: ^16.11.0 || ^17.0.0 || ^18.0.0
-    dependencies:
-      react: 17.0.2
-      use-sync-external-store: 1.2.0_react@17.0.2
     dev: false
 
   /symbol-tree/3.2.4:

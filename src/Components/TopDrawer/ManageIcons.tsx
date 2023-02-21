@@ -11,8 +11,7 @@ import orange2 from 'images/orange2.png';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import commonStrings from 'commonStrings.json';
 import { textForError } from '../../utils';
-import { deleteIcon, postIcon, useIcons } from 'api/icons';
-import { mutate } from 'swr';
+import { deleteIcon, postIcon, useIcons, useMutateIcons } from 'api/icons';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -47,6 +46,7 @@ export default function ManageIcons() {
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const { icons } = useIcons();
+  const mutateIcons = useMutateIcons();
 
   function clickIcon(icon: string) {
     setSelectedIcon(icon);
@@ -97,7 +97,7 @@ export default function ManageIcons() {
         severity: 'success',
       });
 
-      mutate(`/icons`);
+      mutateIcons();
       setFileNameToBeSent('');
     } catch (error) {
       setOpenSnackbar({
@@ -162,7 +162,7 @@ export default function ManageIcons() {
         severity: 'success',
       });
 
-      mutate(`/icons`);
+      mutateIcons();
     } catch (error) {
       setOpenSnackbar({
         open: true,

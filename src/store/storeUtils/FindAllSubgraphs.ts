@@ -10,7 +10,7 @@ export async function findAllSubgraphs(
   let subsToGet = [graphToSearch];
   const newNodeSubgraphs: GraphEwoks[] = [];
 
-  const thisCallRecent: string[] = recentGraphs.map((graph) => graph.graph.id);
+  const recentGraphsIds = recentGraphs.map((graph) => graph.graph.id);
 
   // Get for each graph all subgraphs it includes
   while (subsToGet.length > 0) {
@@ -18,12 +18,12 @@ export async function findAllSubgraphs(
     // eslint-disable-next-line no-await-in-loop
     const allGraphSubs: GraphEwoks[] = await getSubgraphs(
       subsToGet[0],
-      thisCallRecent
+      recentGraphsIds
     );
     // store them as ewoksGraphs for later transforming to RFGraphs
     allGraphSubs.forEach((gr) => {
       newNodeSubgraphs.push(gr);
-      thisCallRecent.push(gr.graph.id);
+      recentGraphsIds.push(gr.graph.id);
     });
     // drop the one we searched for its subgraphs
     subsToGet.shift();
