@@ -418,25 +418,6 @@ export interface EwoksRFLinkData {
 }
 
 export type EwoksRFLink = Edge<EwoksRFLinkData>;
-// export interface EwoksRFLink {
-//   // extends Edge wont work as Edge is 3 types: extend the default?
-//   id?: string;
-//   source: string;
-//   target: string;
-//   label?: string;
-//   labelStyle?: LabelStyle;
-//   labelBgStyle?: LabelBgStyle;
-//   labelBgPadding?: number[];
-//   labelBgBorderRadius?: number;
-//   style: { stroke: string; strokeWidth: string };
-//   type?: string;
-//   markerEnd?: '' | { type: string };
-//   markerStart?: string;
-//   animated?: boolean;
-//   sourceHandle?: string;
-//   targetHandle?: string;
-//   data: EwoksRFLinkData;
-// }
 
 export interface LabelBgStyle {
   fill?: string;
