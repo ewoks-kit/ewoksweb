@@ -25,7 +25,7 @@ function NodeIcon(props: Props) {
   const Wrapper = hasSpinner ? ExecuteSpinner : Fragment;
 
   return (
-    <Wrapper {...spinnerParams}>
+    <Wrapper {...(hasSpinner ? { ...spinnerParams } : {})}>
       <img
         style={contentStyle.imgPadding}
         role="presentation"

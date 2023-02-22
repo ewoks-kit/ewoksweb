@@ -1,15 +1,4 @@
-import type { EdgeMarkerType } from 'reactflow';
-import type { EwoksLink, EwoksNode, GraphEwoks, GraphNodes } from '../types';
-
-function calcMarkerEnd(inNod: GraphNodes): EdgeMarkerType | undefined {
-  const mEnd = inNod.uiProps?.markerEnd;
-
-  if (mEnd && typeof mEnd !== 'string') {
-    return { type: mEnd.type };
-  }
-
-  return undefined;
-}
+import type { EwoksLink, EwoksNode, GraphEwoks } from '../types';
 
 // TODO: merge with outNodesLinks if possible when stable
 // DOC: calc the input nodes and links that need to be added to the graph from
@@ -64,7 +53,7 @@ export function inNodesLinks(
             comment: inNod.link_attributes?.comment ?? '',
             style: { stroke: inNod.uiProps?.style?.stroke ?? '' },
             type: inNod.uiProps?.linkStyle ?? 'default',
-            markerEnd: calcMarkerEnd(inNod),
+            markerEnd: inNod.uiProps?.markerEnd,
             animated: inNod.uiProps?.animated ?? false,
           },
         });

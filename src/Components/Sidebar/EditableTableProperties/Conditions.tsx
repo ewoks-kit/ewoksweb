@@ -16,7 +16,7 @@ export default function Conditions(props: ConditionsProps) {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   function addConditions() {
-    const elCon = element.data?.conditions || [];
+    const elCon = element.data.conditions || [];
 
     // check if an empty line already exists
     if (elCon.some((x) => x.id === '')) {
@@ -76,7 +76,7 @@ export default function Conditions(props: ConditionsProps) {
       >
         <AddCircleOutlineIcon />
       </IconButton>
-      {element.data?.conditions && element.data.conditions.length > 0 && (
+      {element.data.conditions && element.data.conditions.length > 0 && (
         <EditableTable
           headers={['Output', 'Value']}
           defaultValues={element.data.conditions}

@@ -84,7 +84,7 @@ const NoteNode = (args: NoteProps) => {
         style={{ maxWidth: `${args.data.ui_props.nodeWidth || 100}px` }}
         className="icons"
       >
-        {args.data?.ewoks_props.label &&
+        {args.data.ewoks_props.label &&
           args.data.ewoks_props.label.length > 0 && (
             <div style={customTitle as React.CSSProperties}>
               {args.data.ewoks_props.label}

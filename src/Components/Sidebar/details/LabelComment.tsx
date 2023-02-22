@@ -38,7 +38,7 @@ export default function LabelComment(props: LabelCommentProps) {
   useEffect(() => {
     if (isNode(element)) {
       setLabel(element.data.ewoks_props.label || '');
-      setComment(element.data?.comment || '');
+      setComment(element.data.comment || '');
       return;
     }
 
@@ -47,10 +47,10 @@ export default function LabelComment(props: LabelCommentProps) {
       if (isString(elmtLabel)) {
         setLabel(elmtLabel);
       }
-      setComment(element.data?.comment || '');
+      setComment(element.data.comment || '');
 
       const mappings =
-        element.data?.data_mapping && element.data.data_mapping.length > 0
+        element.data.data_mapping && element.data.data_mapping.length > 0
           ? element.data.data_mapping
               .map(
                 (con) => `${con.source_output || ''}->${con.target_input || ''}`
@@ -58,7 +58,7 @@ export default function LabelComment(props: LabelCommentProps) {
               .join(', ')
           : '';
       const conditions =
-        element.data?.conditions && element.data.conditions.length > 0
+        element.data.conditions && element.data.conditions.length > 0
           ? element.data.conditions
               .map(
                 (con) =>

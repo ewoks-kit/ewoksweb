@@ -11,7 +11,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
   const graphRF = useStore((state) => state.graphRF);
 
   function addDataMapping() {
-    if (element.data?.data_mapping?.some((x) => x.id === '')) {
+    if (element.data.data_mapping?.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before adding another!',
@@ -26,7 +26,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
         data: {
           ...element.data,
           data_mapping: [
-            ...(element.data?.data_mapping || []),
+            ...(element.data.data_mapping || []),
             { id: '', name: '', value: '' },
           ],
         },
@@ -83,7 +83,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       >
         <AddCircleOutlineIcon />
       </IconButton>
-      {element.data?.data_mapping && element.data.data_mapping.length > 0 && (
+      {element.data.data_mapping && element.data.data_mapping.length > 0 && (
         <EditableTable
           headers={['Source', 'Target']}
           defaultValues={element.data.data_mapping}

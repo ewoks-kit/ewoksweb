@@ -1,5 +1,4 @@
 import { isString } from './typeGuards';
-import type { EdgeMarkerType } from 'reactflow';
 import type {
   EwoksRFLink,
   EwoksRFNode,
@@ -112,16 +111,6 @@ function calcInOutNodes(
   return nodes;
 }
 
-function calcMarkerEnd(graph_link: EwoksRFLink): EdgeMarkerType | undefined {
-  const mEnd = graph_link?.markerEnd;
-
-  if (mEnd && typeof mEnd !== 'string') {
-    return { type: mEnd.type };
-  }
-
-  return undefined;
-}
-
 function calcNodeProps(
   isGraph: boolean,
   nod: EwoksRFNode,
@@ -138,16 +127,16 @@ function calcNodeProps(
 
     sub_node: isGraph
       ? (graph_links[link_index] && inputOrOutput === 'graphOutput'
-          ? graph_links[link_index].data?.sub_source
-          : graph_links[link_index].data?.sub_target) || undefined
+          ? graph_links[link_index].data.sub_source
+          : graph_links[link_index].data.sub_target) || undefined
       : undefined,
     link_attributes: {
       label: isString(label) ? label : '',
-      comment: graph_links[link_index]?.data?.comment ?? '',
-      conditions: graph_links[link_index]?.data?.conditions || [],
-      data_mapping: graph_links[link_index]?.data?.data_mapping || [],
-      map_all_data: graph_links[link_index]?.data?.map_all_data || false,
-      on_error: graph_links[link_index]?.data?.on_error || false,
+      comment: graph_links[link_index]?.data.comment ?? '',
+      conditions: graph_links[link_index]?.data.conditions || [],
+      data_mapping: graph_links[link_index]?.data.data_mapping || [],
+      map_all_data: graph_links[link_index]?.data.map_all_data || false,
+      on_error: graph_links[link_index]?.data.on_error || false,
     },
     uiProps: {
       position: nod.position,
@@ -157,7 +146,7 @@ function calcNodeProps(
         stroke: graph_links[link_index]?.style?.stroke || '',
         strokeWidth: '3px',
       },
-      markerEnd: calcMarkerEnd(graph_links[link_index]),
+      markerEnd: graph_links[link_index].markerEnd,
       animated: graph_links[link_index]?.animated || false,
       withImage:
         'withImage' in nod.data.ui_props ? nod.data.ui_props.withImage : true,

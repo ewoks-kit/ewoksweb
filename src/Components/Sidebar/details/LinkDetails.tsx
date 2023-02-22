@@ -68,14 +68,14 @@ export default function LinkDetails(element: EwoksRFLink) {
           <b />
           <Checkbox
             name="map-all-data"
-            checked={!!element.data?.map_all_data || false}
+            checked={!!element.data.map_all_data || false}
             onChange={mapAllDataChanged}
             inputProps={{ 'aria-label': 'controlled' }}
             aria-labelledby="map-all-data"
           />
         </div>
       </SidebarTooltip>
-      {!element.data?.map_all_data && isLink(element) && (
+      {!element.data.map_all_data && isLink(element) && (
         <div>
           <DataMappingComponent {...element} />
         </div>
@@ -90,14 +90,14 @@ export default function LinkDetails(element: EwoksRFLink) {
             <b>on_error</b>
           </label>
           <Checkbox
-            checked={!!element.data?.on_error || false}
+            checked={!!element.data.on_error || false}
             onChange={onErrorChanged}
             inputProps={{ 'aria-label': 'controlled' }}
             aria-labelledby="on_error"
           />
         </div>
       </SidebarTooltip>
-      {!element.data?.on_error && isLink(element) && (
+      {!element.data.on_error && isLink(element) && (
         <div>
           <Conditions element={element} />
         </div>
@@ -109,7 +109,7 @@ export default function LinkDetails(element: EwoksRFLink) {
           <div>
             <b>Required</b>
             <Checkbox
-              checked={element.data?.required}
+              checked={element.data.required}
               onChange={requiredChanged}
               // inputProps={{ 'aria-label': 'controlled' }}
             />
@@ -120,12 +120,12 @@ export default function LinkDetails(element: EwoksRFLink) {
           <div className={classes.detailsLabels}>
             <b>Target:</b> {element.target}
           </div>
-          {element.data?.sub_target && (
+          {element.data.sub_target && (
             <div className={classes.detailsLabels}>
               <b>Sub_target:</b> {element.data.sub_target}
             </div>
           )}
-          {element.data?.sub_target_attributes && (
+          {element.data.sub_target_attributes && (
             <div className={classes.detailsLabels}>
               <b>Sub_target_attributes:</b>
               {element.data.sub_target_attributes}

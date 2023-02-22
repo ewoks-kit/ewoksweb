@@ -54,8 +54,8 @@ export default function EditLinkStyle(element: EwoksRFLink) {
     }
 
     if (element.type === 'getAround') {
-      setX(element.data?.getAroundProps?.x || 80);
-      setY(element.data?.getAroundProps?.y || 80);
+      setX(element.data.getAroundProps?.x || 80);
+      setY(element.data.getAroundProps?.y || 80);
     }
 
     if (!element.markerEnd) {
@@ -142,7 +142,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
         data: {
           ...selectedElement.data,
           getAroundProps: {
-            ...selectedElement.data?.getAroundProps,
+            ...selectedElement.data.getAroundProps,
             x: newX,
           },
         },
@@ -163,7 +163,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
         data: {
           ...selectedElement.data,
           getAroundProps: {
-            ...selectedElement.data?.getAroundProps,
+            ...selectedElement.data.getAroundProps,
             y: newY,
           },
         },

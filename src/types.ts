@@ -417,7 +417,10 @@ export interface EwoksRFLinkData {
   startEnd?: boolean;
 }
 
-export type EwoksRFLink = Edge<EwoksRFLinkData>;
+type NoDataEdge = Omit<Edge, 'data'>;
+export interface EwoksRFLink extends NoDataEdge {
+  data: EwoksRFLinkData;
+}
 
 export interface LabelBgStyle {
   fill?: string;
