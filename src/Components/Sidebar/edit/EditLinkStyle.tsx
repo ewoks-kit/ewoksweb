@@ -18,7 +18,7 @@ import type {
 } from '../../../types';
 import sidebarStyle from '../sidebarStyle';
 import type { ChangeEvent } from 'react';
-import { isLink } from '../../../utils/typeGuards';
+import { isLink, isMarkerType, isString } from '../../../utils/typeGuards';
 import { MarkerType } from 'reactflow';
 
 const useStyles = DashboardStyle;
@@ -93,16 +93,20 @@ export default function EditLinkStyle(element: EwoksRFLink) {
   const arrowTypeChanged = (event: PropertyChangedEvent) => {
     // 'none' is not available anymore in reactFlow so we
     // need to remove markerEnd if 'none' is selected in dropdown
-    const val = event.target.value;
-    let mEnd: string | { type: MarkerType } = '';
-    if (val === 'none') {
-      mEnd = '';
-    } else if (val === 'arrowclosed') {
-      mEnd = { type: MarkerType.ArrowClosed };
-    } else {
-      mEnd = { type: MarkerType.Arrow };
+    const type = event.target.value;
+    if (!isString(type)) {
+      return;
     }
-    setSelectedElement({ ...element, markerEnd: mEnd }, 'fromSaveElement');
+
+    if (isMarkerType(type)) {
+      setSelectedElement(
+        { ...element, markerEnd: { type } },
+        'fromSaveElement'
+      );
+      return;
+    }
+
+    setSelectedElement({ ...element, markerEnd: undefined }, 'fromSaveElement');
   };
 
   const colorLineChanged = (event: ChangeEvent<HTMLInputElement>) => {
@@ -241,7 +245,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
           label="Arrow head"
           onChange={arrowTypeChanged}
         >
-          {['arrow', 'arrowclosed', 'none'].map((tex) => (
+          {[...Object.values(MarkerType), 'none'].map((tex) => (
             <MenuItem value={tex} key={tex}>
               {tex}
             </MenuItem>

@@ -1,3 +1,4 @@
+import { MarkerType } from 'reactflow';
 import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../types';
 
 export interface EwoksServerErrorResponse {
@@ -64,4 +65,8 @@ export function assertStr(
   if (!isString(val)) {
     throw new TypeError(message);
   }
+}
+
+export function isMarkerType(val: string): val is MarkerType {
+  return Object.values<string>(MarkerType).includes(val);
 }
