@@ -34,11 +34,14 @@ export default function EditLinkStyle(element: EwoksRFLink) {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const [linkType, setLinkType] = useState('');
-  const [arrowType, setArrowType] = useState<
-    { type: MarkerType } | { type: 'none' } | undefined
-  >({
-    type: MarkerType.Arrow,
-  });
+  // const [arrowType, setArrowType] = useState<
+  //   { type: MarkerType } | { type: 'none' } | undefined
+  // >({
+  //   type: MarkerType.Arrow,
+  // });
+  const [arrowType, setArrowType] = useState<MarkerType | 'none'>(
+    MarkerType.Arrow
+  );
   const [animated, setAnimated] = useState<boolean>(false);
   const [colorLine, setColorLine] = useState<string>('');
   const [x, setX] = useState(80);
@@ -59,12 +62,10 @@ export default function EditLinkStyle(element: EwoksRFLink) {
     }
 
     if (!element.markerEnd) {
-      setArrowType({ type: 'none' });
+      setArrowType('none');
     } else {
       setArrowType(
-        typeof element.markerEnd !== 'string'
-          ? { type: element.markerEnd.type }
-          : undefined
+        typeof element.markerEnd !== 'string' ? element.markerEnd.type : 'none'
       );
     }
 
@@ -185,10 +186,10 @@ export default function EditLinkStyle(element: EwoksRFLink) {
     const newGraph: GraphRF = {
       ...graphRF,
       links: graphRF.links.map((link) => {
-        if (!arrowType?.type || arrowType.type === 'none') {
+        if (!arrowType || arrowType === 'none') {
           return { ...link, markerEnd: undefined };
         }
-        return { ...link, markerEnd: { type: arrowType.type } };
+        return { ...link, markerEnd: { type: arrowType } };
       }),
     };
     setGraphRF(newGraph, true);
@@ -241,7 +242,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
         <InputLabel id="markerEnd">Arrow Head</InputLabel>
         <Select
           className={classes.styleLinkDropdowns}
-          value={arrowType?.type || 'none'}
+          value={arrowType || 'none'}
           label="Arrow head"
           onChange={arrowTypeChanged}
         >

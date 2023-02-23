@@ -417,6 +417,8 @@ export interface EwoksRFLinkData {
   startEnd?: boolean;
 }
 
+// For data still being optional in Edge
+// https://github.com/wbkd/react-flow/issues/1679#issuecomment-1438743754
 type NoDataEdge = Omit<Edge, 'data'>;
 export interface EwoksRFLink extends NoDataEdge {
   data: EwoksRFLinkData;
