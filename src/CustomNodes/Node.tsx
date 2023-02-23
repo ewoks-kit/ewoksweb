@@ -140,7 +140,7 @@ function Node({
       ...selectedElement,
       data: {
         ...selectedElement.data,
-        label: labelLocal,
+        ewoks_props: { ...selectedElement.data.ewoks_props, label: labelLocal },
       },
     });
   }

@@ -1,11 +1,4 @@
-import type { EwoksLink, EwoksNode, GraphEwoks, GraphNodes } from '../types';
-
-function calcMarkerEnd(inNod: GraphNodes): { type: string } | undefined {
-  if (inNod.uiProps?.markerEnd) {
-    return { type: inNod.uiProps.markerEnd.type };
-  }
-  return undefined;
-}
+import type { EwoksLink, EwoksNode, GraphEwoks } from '../types';
 
 // TODO: when stable compare to inNodesLinks and merge if possible
 // DOC: calc the output nodes and links that need to be added to
@@ -66,12 +59,8 @@ export function outNodesLinks(
             stroke: outNod.uiProps?.style?.stroke ?? '',
           },
           type: outNod.uiProps?.linkStyle ?? 'default',
-          markerEnd: calcMarkerEnd(outNod),
+          markerEnd: outNod.uiProps?.markerEnd,
           animated: outNod.uiProps?.animated ?? false,
-          withImage: outNod.uiProps?.withImage ?? true,
-          withLabel: outNod.uiProps?.withLabel ?? true,
-          colorBorder: outNod.uiProps?.colorBorder ?? '',
-          nodeWidth: outNod.uiProps?.nodeWidth ?? 110,
         },
       });
       // }

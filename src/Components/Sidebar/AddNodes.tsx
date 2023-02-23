@@ -98,7 +98,7 @@ function AddNodes(props: AddNodesProps) {
   const getTasks = useCallback(async () => {
     try {
       const tasksData = await getTaskDescription();
-      if (tasksData?.data?.items?.length > 0) {
+      if (tasksData?.data.items?.length > 0) {
         const allTasks = tasksData.data.items;
         setTasks(allTasks);
       }

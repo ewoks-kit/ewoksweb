@@ -1,3 +1,4 @@
+import { isString } from './typeGuards';
 import type {
   EwoksRFLink,
   EwoksRFNode,
@@ -110,10 +111,6 @@ function calcInOutNodes(
   return nodes;
 }
 
-function calcMarkerEnd(graph_link: EwoksRFLink) {
-  return graph_link?.markerEnd ? { type: graph_link?.markerEnd?.type } : '';
-}
-
 function calcNodeProps(
   isGraph: boolean,
   nod: EwoksRFNode,
@@ -122,6 +119,8 @@ function calcNodeProps(
   link_index: number,
   inputOrOutput: string
 ): GraphNodes {
+  const label = graph_links[link_index]?.label;
+
   return {
     id: nod.id,
     node: nodConnected.id,
@@ -132,12 +131,12 @@ function calcNodeProps(
           : graph_links[link_index].data.sub_target) || undefined
       : undefined,
     link_attributes: {
-      label: graph_links[link_index]?.label ?? '',
-      comment: graph_links[link_index]?.data?.comment ?? '',
-      conditions: graph_links[link_index]?.data?.conditions || [],
-      data_mapping: graph_links[link_index]?.data?.data_mapping || [],
-      map_all_data: graph_links[link_index]?.data?.map_all_data || false,
-      on_error: graph_links[link_index]?.data?.on_error || false,
+      label: isString(label) ? label : '',
+      comment: graph_links[link_index]?.data.comment ?? '',
+      conditions: graph_links[link_index]?.data.conditions || [],
+      data_mapping: graph_links[link_index]?.data.data_mapping || [],
+      map_all_data: graph_links[link_index]?.data.map_all_data || false,
+      on_error: graph_links[link_index]?.data.on_error || false,
     },
     uiProps: {
       position: nod.position,
@@ -147,7 +146,7 @@ function calcNodeProps(
         stroke: graph_links[link_index]?.style?.stroke || '',
         strokeWidth: '3px',
       },
-      markerEnd: calcMarkerEnd(graph_links[link_index]),
+      markerEnd: graph_links[link_index].markerEnd,
       animated: graph_links[link_index]?.animated || false,
       withImage:
         'withImage' in nod.data.ui_props ? nod.data.ui_props.withImage : true,

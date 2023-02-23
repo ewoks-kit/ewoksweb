@@ -233,7 +233,7 @@ function Canvas() {
       graphElement &&
       'task_type' in graphElement.data.task_props &&
       !(
-        graphElement.data?.task_props.task_type === 'executionSteps' &&
+        graphElement.data.task_props.task_type === 'executionSteps' &&
         graphElement.type === 'executionSteps'
       ) &&
       // is already selected

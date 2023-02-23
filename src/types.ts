@@ -1,4 +1,4 @@
-import type { Position, XYPosition } from 'reactflow';
+import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
 import type { CanvasGraphChangedSlice } from './store/canvasGraphChanged';
 import type { AllWorkflowsSlice } from './store/allWorkflows';
 import type { CurrentExecutionEventSlice } from './store/currentExecutionEvent';
@@ -23,7 +23,7 @@ import type { WorkingGraphSlice } from './store/workingGraph';
 import type { ExecutingEventsSlice } from './store/executingEvents';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, CSSProperties, ReactNode } from 'react';
 import type { Node } from 'reactflow';
 
 export enum FormAction {
@@ -60,9 +60,8 @@ export interface InOutNodesUiProps {
   linkStyle?: string;
   style?: LinkStyle;
   animated?: boolean;
-  markerEnd?: '' | { type: string };
-  // TODO: the following is not used for now
-  markerStart?: { type: string };
+  markerEnd?: EdgeMarkerType;
+  markerStart?: EdgeMarkerType;
   targetHandle?: string;
   withImage?: boolean;
   withLabel?: boolean;
@@ -79,12 +78,6 @@ export interface GraphDetails {
   uiProps?: UiPropsGraph;
 }
 
-export interface Graph {
-  graph?: GraphDetails;
-  nodes: EwoksNode[];
-  links: EwoksLink[];
-}
-
 export interface SnackbarParams {
   open: boolean;
   text: string;
@@ -94,7 +87,7 @@ export interface SnackbarParams {
 export interface DialogParams {
   open: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  content: any; // {title: string; graph: }
+  content: any;
 }
 
 // I need the EVENTS=[{nodeId, start/end, values: {}}] somewhere and the
@@ -206,7 +199,7 @@ export interface NodeProps {
   selected: boolean;
   color?: string;
   colorBorder?: string;
-  content: React.ReactNode;
+  content: ReactNode;
   image?: string;
   comment?: string;
   executing?: boolean;
@@ -232,47 +225,10 @@ export interface Inputs {
   value: unknown;
 }
 
-export interface nodeInputsOutputs {
-  optional_input_names?: string[];
-  output_names?: string[];
-  required_input_names?: string[];
-}
-
 export interface stackGraph {
   id: string;
   label?: string;
   resetStack?: boolean;
-}
-
-export interface UiPropsLinks {
-  label?: string;
-  type?: string;
-  comment?: string;
-  animated?: boolean;
-  markerEnd?: '' | { type: string };
-  labelStyle?: {
-    color?: string;
-    fill?: string;
-    fontWeight?: number;
-    fontSize?: number;
-  };
-  labelBgStyle?: {
-    fill?: string;
-    color?: string;
-    fillOpacity?: number;
-    strokeWidth?: string;
-    stroke?: string;
-  };
-  markerStart?: { type: string };
-  sourceHandle?: string;
-  targetHandle?: string;
-  colorLink?: string;
-  style?: LinkStyle;
-  getAroundProps?: { x?: number; y?: number };
-  withImage?: boolean;
-  withLabel?: boolean;
-  colorBorder?: string;
-  nodeWidth?: number;
 }
 
 export interface UiPropsGraph {
@@ -377,7 +333,7 @@ export interface outputsInputsSub {
 export interface RFNodeUiProps {
   type?: string;
   icon?: string;
-  style?: LinkStyle; // style?: CSSProperties; on Node?
+  style?: CSSProperties;
   withImage?: boolean;
   withLabel?: boolean;
   colorBorder?: string;
@@ -426,7 +382,7 @@ export type EwoksRFNode = Node<EwoksRFNodeData>;
 export interface EditableTableRow {
   id?: string;
   name?: string;
-  value?: unknown; // string | number | null | undefined | boolean | Record<string, unknown>;
+  value?: unknown;
   isEditMode?: boolean;
   type?: string;
 }
@@ -444,98 +400,58 @@ export interface CustomTableCellProps {
   ): void;
 }
 
-export interface RFLinkEwoksProperties {
-  label?: string;
-}
-
-export interface EwoksRFLink {
-  id?: string;
-  source: string;
-  target: string;
-  label?: string;
-  data: {
-    ewoks_props?: RFLinkEwoksProperties;
-    label?: string;
-    data_mapping?: DataMapping[];
-    type?: string;
-    comment?: string;
-    conditions?: Conditions[];
-    on_error?: boolean;
-    map_all_data?: boolean;
-    required?: boolean;
-    sub_target?: string;
-    sub_target_attributes?: Record<string, unknown>;
-    sub_source?: string;
-    colorLine?: string;
-    getAroundProps?: { x?: number; y?: number };
-    links_input_names?: string[];
-    links_required_output_names?: string[];
-    links_optional_output_names?: string[];
-  };
-  labelStyle?: {
-    color?: string;
-    fill?: string;
-    fontWeight?: number;
-    fontSize?: number;
-  };
-  labelBgStyle?: {
-    fill?: string;
-    color?: string;
-    fillOpacity?: number;
-    strokeWidth?: string;
-    stroke?: string;
-  };
-  labelBgPadding?: number[];
-  labelBgBorderRadius?: number;
-  style: { stroke: string; strokeWidth: string };
+export interface EwoksRFLinkData {
+  data_mapping?: DataMapping[];
+  comment?: string;
+  conditions?: Conditions[];
+  on_error?: boolean;
+  map_all_data?: boolean;
+  required?: boolean;
+  sub_target?: string;
+  sub_target_attributes?: Record<string, unknown>;
+  sub_source?: string;
+  getAroundProps?: { x?: number; y?: number };
+  links_input_names?: string[];
+  links_required_output_names?: string[];
+  links_optional_output_names?: string[];
   startEnd?: boolean;
-  subtarget?: string;
-  subsource?: string;
-  uiProps?: UiPropsLinks;
+}
+
+// For data still being optional in Edge
+// https://github.com/wbkd/react-flow/issues/1679#issuecomment-1438743754
+type NoDataEdge = Omit<Edge, 'data'>;
+export interface EwoksRFLink extends NoDataEdge {
+  data: EwoksRFLinkData;
+}
+
+export interface LabelBgStyle {
+  fill?: string;
+  color?: string;
+  fillOpacity?: number;
+  strokeWidth?: string;
+  stroke?: string;
+}
+
+export interface LabelStyle {
+  color?: string;
+  fill?: string;
+  fontWeight?: number;
+  fontSize?: number;
+}
+
+export interface UiPropsLinks {
+  label?: string;
   type?: string;
-  markerEnd?: '' | { type: string };
-  markerStart?: string;
+  comment?: string;
   animated?: boolean;
-  sourceHandle?: string;
-  targetHandle?: string;
-}
-
-export interface RFLink {
-  id?: string;
-  source: string;
-  target: string;
-  label?: string;
-  data?: {
-    data_mapping?: DataMapping;
-    type?: string;
-    comment?: string;
-    conditions?: Conditions[];
-    on_error?: Inputs;
-  };
-  subtarget?: string;
-  subsource?: string;
-  uiProps?: UiPropsLinks;
-}
-
-export interface RFNode {
-  id: string;
-  label?: string;
-  task_type?: string;
-  task_identifier?: string;
-  default_inputs?: Inputs[];
-  inputs_complete?: boolean;
-  task_generator?: string;
-  data?: {
-    label?: string;
-    type?: string;
-    inputs?: [string]; // ?
-    outputs?: [string]; // ?
-    icon?: string;
-    comment?: string;
-  };
-  sourcePosition?: Position;
-  targetPosition?: Position;
-  position?: XYPosition;
+  markerEnd?: EdgeMarkerType;
+  markerStart?: EdgeMarkerType;
+  labelStyle?: CSSProperties;
+  labelBgStyle?: CSSProperties;
+  sourceHandle?: string | null;
+  targetHandle?: string | null;
+  style?: CSSProperties;
+  getAroundProps?: { x?: number; y?: number };
 }
 
 export interface GraphRF {

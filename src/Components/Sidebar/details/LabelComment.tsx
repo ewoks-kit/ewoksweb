@@ -9,7 +9,7 @@ import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
 import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from '../sidebarStyle';
-import { isLink, isNode } from '../../../utils/typeGuards';
+import { isLink, isNode, isString } from '../../../utils/typeGuards';
 
 const useStyles = DashboardStyle;
 
@@ -25,7 +25,7 @@ export default function LabelComment(props: LabelCommentProps) {
   const { element, showComment } = props;
 
   const [comment, setComment] = useState('');
-  const [label, setLabel] = useState('');
+  const [label, setLabel] = useState<string>('');
   const [labelChoices, setLabelChoices] = useState([
     'use mappings',
     'use conditions',
@@ -38,16 +38,19 @@ export default function LabelComment(props: LabelCommentProps) {
   useEffect(() => {
     if (isNode(element)) {
       setLabel(element.data.ewoks_props.label || '');
-      setComment(element.data?.comment || '');
+      setComment(element.data.comment || '');
       return;
     }
 
     if (isLink(element)) {
-      setLabel(element.label || '');
-      setComment(element.data?.comment || '');
+      const { label: elmtLabel } = element;
+      if (isString(elmtLabel)) {
+        setLabel(elmtLabel);
+      }
+      setComment(element.data.comment || '');
 
       const mappings =
-        element.data?.data_mapping && element.data.data_mapping.length > 0
+        element.data.data_mapping && element.data.data_mapping.length > 0
           ? element.data.data_mapping
               .map(
                 (con) => `${con.source_output || ''}->${con.target_input || ''}`
@@ -55,7 +58,7 @@ export default function LabelComment(props: LabelCommentProps) {
               .join(', ')
           : '';
       const conditions =
-        element.data?.conditions && element.data.conditions.length > 0
+        element.data.conditions && element.data.conditions.length > 0
           ? element.data.conditions
               .map(
                 (con) =>
@@ -131,7 +134,6 @@ export default function LabelComment(props: LabelCommentProps) {
 
   function valueChanged(event: ChangeEvent<HTMLInputElement>) {
     if (event?.target?.value) {
-      // event.target.value !== 0
       setChanged(event);
       setLabel(event.target.value);
     }

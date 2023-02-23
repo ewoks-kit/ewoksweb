@@ -11,7 +11,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
   const graphRF = useStore((state) => state.graphRF);
 
   function addDataMapping() {
-    if (element.data?.data_mapping?.some((x) => x.id === '')) {
+    if (element.data.data_mapping?.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before adding another!',
@@ -26,7 +26,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
         data: {
           ...element.data,
           data_mapping: [
-            ...(element.data?.data_mapping || []),
+            ...(element.data.data_mapping || []),
             { id: '', name: '', value: '' },
           ],
         },
@@ -45,12 +45,12 @@ export default function DataMappingComponent(element: EwoksRFLink) {
     setSelectedElement(
       {
         ...element,
+        label: dmap
+          .map((el) => `${el.source_output || ''}->${el.target_input || ''}`)
+          .join(', '),
         data: {
           ...element.data,
           data_mapping: dmap,
-          label: dmap
-            .map((el) => `${el.source_output || ''}->${el.target_input || ''}`)
-            .join(', '),
         },
       },
       'fromSaveElement'

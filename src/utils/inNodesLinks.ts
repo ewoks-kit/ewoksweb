@@ -1,21 +1,8 @@
-import type { EwoksLink, EwoksNode, GraphEwoks, GraphNodes } from '../types';
-
-function calcMarkerEnd(inNod: GraphNodes): '' | { type: string } {
-  let type: '' | { type: string };
-  if (
-    typeof inNod.uiProps?.markerEnd === 'object' &&
-    'type' in inNod.uiProps.markerEnd
-  ) {
-    type = { type: inNod.uiProps.markerEnd.type };
-  } else {
-    type = '';
-  }
-  return type;
-}
+import type { EwoksLink, EwoksNode, GraphEwoks } from '../types';
 
 // TODO: merge with outNodesLinks if possible when stable
 // DOC: calc the input nodes and links that need to be added to the graph from
-// the input_nodes in the Ewoks json
+// the input_nodes in the Ewoks graph model
 export function inNodesLinks(
   graph: GraphEwoks
 ): { nodes: EwoksNode[]; links: EwoksLink[] } {
@@ -66,12 +53,8 @@ export function inNodesLinks(
             comment: inNod.link_attributes?.comment ?? '',
             style: { stroke: inNod.uiProps?.style?.stroke ?? '' },
             type: inNod.uiProps?.linkStyle ?? 'default',
-            markerEnd: calcMarkerEnd(inNod),
+            markerEnd: inNod.uiProps?.markerEnd,
             animated: inNod.uiProps?.animated ?? false,
-            withImage: inNod.uiProps?.withImage ?? true,
-            withLabel: inNod.uiProps?.withLabel ?? true,
-            colorBorder: inNod.uiProps?.colorBorder ?? '',
-            nodeWidth: inNod.uiProps?.nodeWidth ?? 110,
           },
         });
       }

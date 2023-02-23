@@ -54,8 +54,7 @@ export function toRFEwoksLinks(
           label: calcLabel(uiProps || {}, conditions || [], data_mapping || []),
           source: source.toString(),
           target: target.toString(),
-          // TODO: is the following used for inputs-outputs?
-          startEnd: startEnd || false,
+
           targetHandle: calcTargetHandle(uiProps, sub_target || ''),
           sourceHandle: calcSourceHandle(uiProps, sub_source || ''),
           type: uiProps?.type || '',
@@ -80,6 +79,7 @@ export function toRFEwoksLinks(
             fontSize: 14,
           },
           data: {
+            startEnd: startEnd || false,
             getAroundProps: uiProps?.getAroundProps || {
               x: 0,
               y: 0,
@@ -95,13 +95,11 @@ export function toRFEwoksLinks(
             sub_target: sub_target || '',
             sub_source: sub_source || '',
             conditions: conditions || [],
-            // map_all_data: !!map_all_data,
+            map_all_data: map_all_data ?? true,
             on_error: on_error || false,
             comment: uiProps?.comment ?? '',
           },
         };
-        // DOC: if map_all_data is missing the default will be true
-        link.data.map_all_data = map_all_data ?? true;
         return link;
       }
     );

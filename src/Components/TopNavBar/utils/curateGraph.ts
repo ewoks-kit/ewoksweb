@@ -30,14 +30,14 @@ function curateGraph(graphRF: GraphRF): GraphRF {
   }
   for (const lin of graphRFCurrated.links) {
     if (
-      lin.data?.conditions &&
+      lin.data.conditions &&
       lin.data.conditions.length > 0 &&
       lin.data.conditions[lin.data.conditions.length - 1].id === ''
     ) {
       lin.data.conditions.pop();
     }
     if (
-      lin.data?.data_mapping &&
+      lin.data.data_mapping &&
       lin.data.data_mapping.length > 0 &&
       lin.data.data_mapping[lin.data.data_mapping.length - 1].id === ''
     ) {
