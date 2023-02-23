@@ -18,7 +18,7 @@ import type {
 } from '../../../types';
 import sidebarStyle from '../sidebarStyle';
 import type { ChangeEvent } from 'react';
-import { isLink, isMarkerType, isString } from '../../../utils/typeGuards';
+import { isMarkerType, isString } from '../../../utils/typeGuards';
 import { MarkerType } from 'reactflow';
 
 const useStyles = DashboardStyle;
@@ -28,17 +28,11 @@ export default function EditLinkStyle(element: EwoksRFLink) {
   const classes = useStyles();
 
   const setSelectedElement = useStore((state) => state.setSelectedElement);
-  const selectedElement = useStore((state) => state.selectedElement);
   const graphRF = useStore((state) => state.graphRF);
   const setGraphRF = useStore((state) => state.setGraphRF);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const [linkType, setLinkType] = useState('');
-  // const [arrowType, setArrowType] = useState<
-  //   { type: MarkerType } | { type: 'none' } | undefined
-  // >({
-  //   type: MarkerType.Arrow,
-  // });
+  const [linkType, setLinkType] = useState('default');
   const [arrowType, setArrowType] = useState<MarkerType | 'none'>(
     MarkerType.Arrow
   );
@@ -48,10 +42,6 @@ export default function EditLinkStyle(element: EwoksRFLink) {
   const [y, setY] = useState(80);
 
   useEffect(() => {
-    if (!isLink(element)) {
-      return;
-    }
-
     if (element.type) {
       setLinkType(element.type);
     }
@@ -61,12 +51,13 @@ export default function EditLinkStyle(element: EwoksRFLink) {
       setY(element.data.getAroundProps?.y || 80);
     }
 
-    if (!element.markerEnd) {
+    const { markerEnd } = element;
+    if (!markerEnd) {
       setArrowType('none');
+    } else if (isString(markerEnd)) {
+      setArrowType(isMarkerType(markerEnd) ? markerEnd : 'none');
     } else {
-      setArrowType(
-        typeof element.markerEnd !== 'string' ? element.markerEnd.type : 'none'
-      );
+      setArrowType(markerEnd.type);
     }
 
     setAnimated(!!element.animated);
@@ -133,17 +124,14 @@ export default function EditLinkStyle(element: EwoksRFLink) {
   };
 
   function changeX(_event: ChangeEvent<unknown>, value: number | number[]) {
-    if (!isLink(selectedElement)) {
-      return;
-    }
     const newX = value as number;
     setSelectedElement(
       {
-        ...selectedElement,
+        ...element,
         data: {
-          ...selectedElement.data,
+          ...element.data,
           getAroundProps: {
-            ...selectedElement.data.getAroundProps,
+            ...element.data.getAroundProps,
             x: newX,
           },
         },
@@ -154,17 +142,14 @@ export default function EditLinkStyle(element: EwoksRFLink) {
   }
 
   function changeY(_event: ChangeEvent<unknown>, value: number | number[]) {
-    if (!isLink(selectedElement)) {
-      return;
-    }
     const newY = value as number;
     setSelectedElement(
       {
-        ...selectedElement,
+        ...element,
         data: {
-          ...selectedElement.data,
+          ...element.data,
           getAroundProps: {
-            ...selectedElement.data.getAroundProps,
+            ...element.data.getAroundProps,
             y: newY,
           },
         },
@@ -186,7 +171,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
     const newGraph: GraphRF = {
       ...graphRF,
       links: graphRF.links.map((link) => {
-        if (!arrowType || arrowType === 'none') {
+        if (arrowType === 'none') {
           return { ...link, markerEnd: undefined };
         }
         return { ...link, markerEnd: { type: arrowType } };
@@ -206,7 +191,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
         <Select
           className={classes.styleLinkDropdowns}
           labelId="linkTypeLabel"
-          value={linkType ?? 'default'}
+          value={linkType}
           label="Link type"
           onChange={linkTypeChanged}
         >
@@ -242,7 +227,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
         <InputLabel id="markerEnd">Arrow Head</InputLabel>
         <Select
           className={classes.styleLinkDropdowns}
-          value={arrowType || 'none'}
+          value={arrowType}
           label="Arrow head"
           onChange={arrowTypeChanged}
         >
@@ -266,7 +251,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
         <label htmlFor="animated">Animated</label>
         <Checkbox
           name="animated"
-          checked={animated ?? false}
+          checked={animated}
           onChange={animatedChanged}
           inputProps={{ 'aria-label': 'controlled' }}
         />
