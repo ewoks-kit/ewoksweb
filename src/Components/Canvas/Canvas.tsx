@@ -1,16 +1,6 @@
-/* eslint-disable unicorn/consistent-function-scoping */
-/* eslint-disable consistent-return */
-// @ts-nocheck
-import type { MouseEvent } from 'react';
+import type { DragEventHandler, MouseEvent } from 'react';
 import { useEffect, useState, useCallback, useRef } from 'react';
-import type {
-  Node,
-  Edge,
-  Connection,
-  NodeChange,
-  EdgeChange,
-  ReactFlowInstance,
-} from 'reactflow';
+import type { Node, Edge, Connection, NodeChange, EdgeChange } from 'reactflow';
 import ReactFlow, {
   Controls,
   useReactFlow,
@@ -27,7 +17,7 @@ import FunctionNode from 'CustomNodes/FunctionNode';
 import NoteNode from 'CustomNodes/NoteNode';
 import ExecutionStepsNode from 'CustomNodes/ExecutionStepsNode';
 import DataNode from 'CustomNodes/DataNode';
-import type { GraphRF, EwoksRFNode, EwoksRFLink } from 'types';
+import type { GraphRF, EwoksRFNode, EwoksRFLink, EwoksRFLinkData } from 'types';
 import useStore from 'store/useStore';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
@@ -65,12 +55,12 @@ function Canvas() {
   const classes = useStyles();
 
   // TODO: resolve the types here for the local state
-  const [rfInstance, setRfInstance] = useState(null);
-  const [nodes, setNodes] = useState<EwoksRFNode[] | Node[]>([]);
-  const [edges, setEdges] = useState<EwoksRFLink[] | Edge[]>([]);
+  const rfInstance = useReactFlow();
+  const [nodes, setNodes] = useState<EwoksRFNode[]>([]);
+  const [edges, setEdges] = useState<EwoksRFLink[]>([]);
   const [prevGraphId, setPrevGraphId] = useState('');
 
-  const reactFlowWrapper = useRef(null);
+  const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
   const graphRF = useStore((state) => state.graphRF);
   const setGraphRF = useStore((state) => state.setGraphRF);
@@ -104,6 +94,7 @@ function Canvas() {
     const timeoutPosition = setTimeout(() => {
       updateNodeInternals(selectedElement.id);
     }, 400);
+    // eslint-disable-next-line consistent-return
     return () => clearTimeout(timeoutPosition);
   }, [selectedElement, updateNodeInternals]);
 
@@ -196,9 +187,7 @@ function Canvas() {
       // if we update graphRF we have a loop so we update on setSelectedElement
       // where we set every other selected to false... Examine
 
-      setNodes((ns) => {
-        return applyNodeChanges(changes, ns as Node[]);
-      });
+      setNodes((ns) => applyNodeChanges(changes, ns));
     },
     [onElementsRemove, graphRF.nodes]
   );
@@ -212,7 +201,12 @@ function Canvas() {
           onElementsRemove(edgeToRemove);
         }
       }
-      setEdges((es) => applyEdgeChanges(changes, es as Edge[]));
+
+      setEdges((es) => {
+        const newEdges = applyEdgeChanges<EwoksRFLinkData>(changes, es);
+        // Needed to force `data to not be optional. See EwoksRFLink in src/types.
+        return newEdges as EwoksRFLink[];
+      });
     },
     [onElementsRemove, graphRF.links]
   );
@@ -227,7 +221,6 @@ function Canvas() {
     const graphElement: EwoksRFNode | undefined = nodes.find(
       (el) => el.id === element.id
     );
-    // console.log(element, selectedElement, graphElement);
 
     if (
       graphElement &&
@@ -243,21 +236,18 @@ function Canvas() {
     }
   };
 
-  const onEdgeClick = (_event: MouseEvent, element?: Edge) => {
-    const graphElement: EwoksRFLink = edges.find((el) => el.id === element.id);
-    setSelectedElement(graphElement);
+  const onEdgeClick = (_event: MouseEvent, element: Edge) => {
+    // Needed to force `data to not be optional. See EwoksRFLink in src/types.
+    setSelectedElement(element as EwoksRFLink);
   };
 
-  const onInit = useCallback((instance: ReactFlowInstance) => {
-    setRfInstance(instance);
-  }, []);
-
-  const onDragOver = (event: DragEvent) => {
+  // eslint-disable-next-line unicorn/consistent-function-scoping
+  const onDragOver: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   };
 
-  const onDrop = (event) => {
+  const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
 
     if (graphRF.graph.id === '0') {
@@ -268,7 +258,10 @@ function Canvas() {
     }
 
     if (workingGraph.graph.id === graphRF.graph.id) {
-      const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+      const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect() || {
+        left: 0,
+        top: 0,
+      };
       const task_identifier: string = event.dataTransfer.getData(
         'task_identifier'
       );
@@ -457,33 +450,31 @@ function Canvas() {
     }
   };
 
-  const onSelectionDragStart = (event: MouseEvent) => {
-    event.preventDefault();
-  };
-
-  const onSelectionDrag = (event: MouseEvent) => {
-    event.preventDefault();
-  };
-
-  const onSelectionDragStop = (event: MouseEvent, selectedElements: Node[]) => {
+  const onSelectionDragStop = (
+    event: MouseEvent,
+    selectedElements: EwoksRFNode[]
+  ) => {
     event.preventDefault();
     if (workingGraph.graph.id === graphRF.graph.id) {
-      // DOC: find selectedElements and update its position and save grapRF
-      const newElements: EwoksRFNode[] = [];
-      const newElementsIds: string[] = [];
-      selectedElements.forEach((el) => {
-        const rfNode = { ...graphRF.nodes.find((nod) => nod.id === el.id) };
-        rfNode.position = el.position;
-        newElements.push(rfNode);
-        newElementsIds.push(rfNode.id);
+      const { nodes: graphNodes } = graphRF;
+
+      const selectedIds = selectedElements.map((e) => e.id);
+
+      const newNodes = graphNodes.map((n) => {
+        const selectedIndex = selectedIds.indexOf(n.id);
+        if (selectedIndex >= 0) {
+          return {
+            ...n,
+            position: selectedElements[selectedIndex].position,
+          };
+        }
+
+        return n;
       });
 
       const newGraph: GraphRF = {
         graph: graphRF.graph,
-        nodes: [
-          ...graphRF.nodes.filter((nod) => !newElementsIds.includes(nod.id)),
-          ...newElements,
-        ],
+        nodes: newNodes,
         links: graphRF.links,
       };
 
@@ -502,20 +493,25 @@ function Canvas() {
     }
   };
 
-  const onNodeDragStop = (event: MouseEvent, node: Node) => {
+  const onNodeDragStop = (event: MouseEvent, draggedNode: EwoksRFNode) => {
     event.preventDefault();
     if (workingGraph.graph.id === graphRF.graph.id) {
       // DOC: find RFEwoksNode and update its position and save grapRF
-      const RFEwoksNode: EwoksRFNode = {
-        ...graphRF.nodes.find((nod) => nod.id === node.id),
-      };
-      RFEwoksNode.position = node.position;
+      const { nodes: graphNodes } = graphRF;
+
+      const newNodes = graphNodes.map((n) => {
+        if (n.id === draggedNode.id) {
+          return {
+            ...n,
+            position: draggedNode.position,
+          };
+        }
+
+        return n;
+      });
       const newGraph: GraphRF = {
         graph: graphRF.graph,
-        nodes: [
-          ...graphRF.nodes.filter((nod) => nod.id !== node.id),
-          RFEwoksNode,
-        ],
+        nodes: newNodes,
         links: graphRF.links,
       };
 
@@ -583,17 +579,12 @@ function Canvas() {
           attributionPosition="bottom-right"
           minZoom={0.2}
           snapToGrid
-          nodes={nodes as Node[]}
-          edges={edges as Edge[]}
-          onNodeClick={(evt, node) => {
-            onNodeClick(evt, node);
-          }}
-          onEdgeClick={(evt, node) => {
-            onEdgeClick(evt, node);
-          }}
+          nodes={nodes}
+          edges={edges}
+          onNodeClick={onNodeClick}
+          onEdgeClick={onEdgeClick}
           onPaneClick={onPaneClick}
           onClick={() => setSelectedTask({})}
-          onInit={onInit}
           onDrop={onDrop}
           onConnect={onConnect}
           onEdgeUpdate={onEdgeUpdate}
@@ -601,8 +592,8 @@ function Canvas() {
           onPaneContextMenu={onPaneContextMenu}
           onNodeDoubleClick={onNodeDoubleClick}
           onSelectionDragStop={onSelectionDragStop}
-          onSelectionDragStart={onSelectionDragStart}
-          onSelectionDrag={onSelectionDrag}
+          onSelectionDragStart={(e) => e.preventDefault()}
+          onSelectionDrag={(e) => e.preventDefault()}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onNodeDragStop={onNodeDragStop}
