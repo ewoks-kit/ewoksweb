@@ -25,11 +25,21 @@ import SidebarTooltip from './SidebarTooltip';
 import commonStrings from 'commonStrings.json';
 import { isGraphDetails, isLink, isNode } from '../../utils/typeGuards';
 import { textForError } from '../../utils';
+import { useStore as useRFStore } from 'reactflow';
+import { edgeStyle } from '../../CustomEdges/EdgeStyle';
 
 const useStyles = DashboardStyle;
 
+const nodesSelectedSelector = (state) => [...state.nodeInternals.values()];
+
+// const edgesSelectedSelector = (state) =>
+//   [...state.edgeInternals.values()].filter((edge) => edge.selected);
+
 export default function Sidebar() {
   const classes = useStyles();
+
+  const nodesSelected = useRFStore(nodesSelectedSelector);
+  const edgesSelected = useRFStore(nodesSelectedSelector);
 
   const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
@@ -51,6 +61,8 @@ export default function Sidebar() {
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
 
   const deleteElement = async () => {
+    console.log(nodesSelected, edgesSelected);
+
     if (workingGraph.graph.id !== graphRF.graph.id) {
       setOpenSnackbar({
         open: true,
