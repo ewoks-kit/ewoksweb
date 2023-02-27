@@ -1,7 +1,8 @@
 import { useStore as useRFStore } from 'reactflow';
+import shallow from 'zustand/shallow';
 
 export default function useNodesIds() {
-  return useRFStore((state) =>
-    [...state.nodeInternals.values()].map((nod) => nod.id)
-  );
+  return useRFStore((state) => {
+    return [...state.nodeInternals.keys()];
+  }, shallow);
 }
