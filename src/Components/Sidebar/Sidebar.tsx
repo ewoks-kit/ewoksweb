@@ -25,11 +25,16 @@ import SidebarTooltip from './SidebarTooltip';
 import commonStrings from 'commonStrings.json';
 import { isGraphDetails, isLink, isNode } from '../../utils/typeGuards';
 import { textForError } from '../../utils';
+import useNodesIds from '../../store/graph_hooks/useNodesIds';
+import { useReactFlow } from 'reactflow';
 
 const useStyles = DashboardStyle;
 
 export default function Sidebar() {
   const classes = useStyles();
+
+  const nodesIds = useNodesIds();
+  const { deleteElements } = useReactFlow();
 
   const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
@@ -69,6 +74,10 @@ export default function Sidebar() {
           )
       );
 
+      console.log(nodesIds, graphRF.nodes);
+
+      deleteElements({ nodes: [selectedElement] });
+
       const newGraph: GraphRF = {
         ...graphRF,
         nodes: graphRF.nodes.filter((nod) => nod.id !== selectedElement.id),
@@ -79,7 +88,7 @@ export default function Sidebar() {
         action: 'Removed a Node',
         graph: newGraph,
       });
-      setGraphRF(newGraph, true);
+      // setGraphRF(newGraph, true);
       return;
     }
 
