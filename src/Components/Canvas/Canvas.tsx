@@ -54,7 +54,6 @@ const nodeTypes = {
 function Canvas() {
   const classes = useStyles();
 
-  // TODO: resolve the types here for the local state
   const rfInstance = useReactFlow();
   const [nodes, setNodes] = useState<EwoksRFNode[]>([]);
   const [edges, setEdges] = useState<EwoksRFLink[]>([]);
@@ -77,7 +76,7 @@ function Canvas() {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const updateNodeInternals = useUpdateNodeInternals();
 
-  const { fitView, getZoom, zoomTo } = useReactFlow();
+  const { fitView, getZoom, zoomTo } = rfInstance;
   // TODO: when selecting a node-link selected fires the re-render
   // since graphRF changes. We need to not rerender
   // Associated edges titles flicker when selecting a node and then select graph
