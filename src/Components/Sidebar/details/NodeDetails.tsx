@@ -26,12 +26,15 @@ import LabelComment from './LabelComment';
 import DefaultInputs from '../EditableTableProperties/DefaultInputs';
 import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
+import useNodesIds from '../../../store/graph_hooks/useNodesIds';
 
 const useStyles = DashboardStyle;
 
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(element: EwoksRFNode) {
   const classes = useStyles();
+
+  const nodesIds = useNodesIds();
 
   const graphRF = useStore((state) => state.graphRF);
   const setGraphRF = useStore((state) => state.setGraphRF);
@@ -108,10 +111,9 @@ export default function NodeDetails(element: EwoksRFNode) {
     // All links to this node also change source and/or target!
     if (Object.keys(propKeyValue)[0] === 'task_identifier') {
       // DOC: find unique id based on new task_identifier
-
       let uniqueId = Object.values(propKeyValue)[0];
       let id = 0;
-      while (graphRF.nodes.some((nod) => nod.id === uniqueId)) {
+      while (nodesIds.some((nodeId) => nodeId === uniqueId)) {
         uniqueId += id++;
       }
 
