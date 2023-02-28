@@ -34,7 +34,7 @@ export default function Sidebar() {
   const classes = useStyles();
 
   const nodesIds = useNodesIds();
-  const { deleteElements } = useReactFlow();
+  const { deleteElements, getNodes } = useReactFlow();
 
   const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
@@ -73,8 +73,6 @@ export default function Sidebar() {
             link.target === selectedElement.id
           )
       );
-
-      console.log(nodesIds, graphRF.nodes);
 
       deleteElements({ nodes: [selectedElement] });
 
@@ -151,16 +149,16 @@ export default function Sidebar() {
     if (isNode(selectedElement)) {
       const newClone: EwoksRFNode = {
         ...selectedElement,
-        id: calcNewId(selectedElement.id, graphRF.nodes),
+        id: calcNewId(selectedElement.id, getNodes()),
         selected: false,
         position: {
-          x: selectedElement.position?.x || 0 + 100,
-          y: selectedElement.position?.y || 0 + 100,
+          x: (selectedElement.position?.x || 0) + 100,
+          y: (selectedElement.position?.y || 0) + 100,
         },
       };
       const newGraph = {
         ...graphRF,
-        nodes: [...graphRF.nodes, newClone],
+        nodes: [...getNodes(), newClone],
       };
 
       setGraphRF(newGraph, true);
