@@ -25,8 +25,7 @@ import CanvasBackground from './CanvasBackground';
 import { isNode, isLink } from 'utils/typeGuards';
 import CanvasMiniMap from './CanvasMiniMap';
 import { addConnectionToGraph, trimLabel } from './utils';
-import useNodesIds from '../../store/graph_hooks/useNodesIds';
-import useNodesLength from '../../store/graph_hooks/useNodesLength';
+import { useNodesIds, useNodesLength } from '../../store/graph-hooks';
 
 const useStyles = makeStyles(() =>
   createStyles({

@@ -17,7 +17,7 @@ import type { Connection } from 'reactflow';
 import { isNode } from '../utils/typeGuards';
 import NodeIcon from './NodeIcon';
 import IconBoundary from '../IconBoundary';
-import useNodesIds from '../store/graph_hooks/useNodesIds';
+import { useNodesIds } from '../store/graph-hooks';
 
 // TODO: examine usage when execution in main
 const execution = () => {
