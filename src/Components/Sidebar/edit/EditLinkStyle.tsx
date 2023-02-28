@@ -11,11 +11,7 @@ import {
 
 import DashboardStyle from '../../Dashboard/DashboardStyle';
 import useStore from '../../../store/useStore';
-import type {
-  EwoksRFLink,
-  GraphRF,
-  PropertyChangedEvent,
-} from '../../../types';
+import type { EwoksRFLink, PropertyChangedEvent } from '../../../types';
 import sidebarStyle from '../sidebarStyle';
 import type { ChangeEvent } from 'react';
 import { isMarkerType, isString } from '../../../utils/typeGuards';
@@ -32,8 +28,6 @@ export default function EditLinkStyle(element: EwoksRFLink) {
   const { setEdges, getEdges } = useReactFlow();
 
   const setSelectedElement = useStore((state) => state.setSelectedElement);
-  const graphRF = useStore((state) => state.graphRF);
-  const setGraphRF = useStore((state) => state.setGraphRF);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const [linkType, setLinkType] = useState('default');
@@ -169,13 +163,6 @@ export default function EditLinkStyle(element: EwoksRFLink) {
       type: linkType,
     }));
     setEdges(newEdges);
-
-    // TODO: Remove the following graphRF update
-    const newGraph: GraphRF = {
-      ...graphRF,
-      links: graphRF.links.map((link) => ({ ...link, type: linkType })),
-    };
-    setGraphRF(newGraph, true);
   }
 
   function applyArrowTypeToAll() {
@@ -186,18 +173,6 @@ export default function EditLinkStyle(element: EwoksRFLink) {
       return { ...edge, markerEnd: { type: arrowType } };
     });
     setEdges(newEdges);
-
-    // TODO: Remove the following graphRF update
-    const newGraph: GraphRF = {
-      ...graphRF,
-      links: graphRF.links.map((link) => {
-        if (arrowType === 'none') {
-          return { ...link, markerEnd: undefined };
-        }
-        return { ...link, markerEnd: { type: arrowType } };
-      }),
-    };
-    setGraphRF(newGraph, true);
   }
 
   return (
