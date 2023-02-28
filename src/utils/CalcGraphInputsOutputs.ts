@@ -1,20 +1,20 @@
 import { isString } from './typeGuards';
 import type {
-  EwoksRFLink,
   EwoksRFNode,
   GraphDetails,
   GraphNodes,
-  GraphRF,
+  stateRFwithGraph,
 } from '../types';
+import type { Edge } from 'reactflow';
 
 // Calculate the ewoks input_nodes and output_nodes within the graph
 // from the nodes of the graphRF model with types graphInput, graphOutput
-export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
-  const graph_links = [...graph.links];
+export function calcGraphInputsOutputs(graph: stateRFwithGraph): GraphDetails {
+  const graph_links = [...graph.edges];
   let input_nodes: GraphNodes[] = [];
   let output_nodes: GraphNodes[] = [];
 
-  graph.nodes.forEach((nod) => {
+  graph.getNodes().forEach((nod) => {
     if (nod.data.task_props.task_type === 'graphInput') {
       input_nodes = [
         ...input_nodes,
@@ -42,9 +42,9 @@ export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
 
 function calcInOutNodes(
   inputOrOutput: string,
-  graph: GraphRF,
+  graph: stateRFwithGraph,
   nod: EwoksRFNode,
-  graph_links: EwoksRFLink[]
+  graph_links: Edge[]
 ): GraphNodes[] {
   const nodes: GraphNodes[] = [];
 
@@ -52,21 +52,21 @@ function calcInOutNodes(
 
   if (inputOrOutput === 'graphInput') {
     // find those nodes this INPUT node is connected to
-    nodesNamesConnectedTo = graph.links
-      .filter((link) => link.source === nod.id)
-      .map((link) => link.target);
+    nodesNamesConnectedTo = graph.edges
+      .filter((edge) => edge.source === nod.id)
+      .map((edge) => edge.target);
   }
 
   if (inputOrOutput === 'graphOutput') {
     // find those nodes this OUTPUT node is connected to
-    nodesNamesConnectedTo = graph.links
-      .filter((link) => link.target === nod.id) // !!
-      .map((link) => link.source); // !!
+    nodesNamesConnectedTo = graph.edges
+      .filter((edge) => edge.target === nod.id) // !!
+      .map((edge) => edge.source); // !!
   }
 
   const nodeObjConnectedTo: EwoksRFNode[] = [];
   for (const nodesNames of nodesNamesConnectedTo) {
-    const nodeInGraph = graph.nodes.find((node) => nodesNames === node.id);
+    const nodeInGraph = graph.getNodes().find((node) => nodesNames === node.id);
     if (nodeInGraph) {
       nodeObjConnectedTo.push(nodeInGraph);
     }
@@ -115,7 +115,7 @@ function calcNodeProps(
   isGraph: boolean,
   nod: EwoksRFNode,
   nodConnected: EwoksRFNode,
-  graph_links: EwoksRFLink[],
+  graph_links: Edge[],
   link_index: number,
   inputOrOutput: string
 ): GraphNodes {

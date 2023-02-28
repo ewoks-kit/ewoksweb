@@ -19,6 +19,7 @@ import {
 import { FormControl, TextField, Tooltip } from '@material-ui/core';
 import useStore from 'store/useStore';
 import type { EditableTableRow } from '../../types';
+import { useStoreApi } from 'reactflow';
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -51,6 +52,9 @@ interface Props {
 }
 
 export default function DraggableDialog(props: Props) {
+  const storeRF = useStoreApi();
+  const stateRF = storeRF.getState();
+
   const [graph, setGraph] = useState<Graph>({});
   const [oldGraph, setOldGraph] = useState<Graph>({});
   const [isOpen, setIsOpen] = useState(false);
@@ -103,7 +107,14 @@ export default function DraggableDialog(props: Props) {
   ) => {
     setSelection(newSelection);
     setTitle(newSelection === 'ewoks' ? 'Ewoks Graph' : 'RF Graph');
-    setGraph(newSelection === 'ewoks' ? rfToEwoks(graphRF) : graphRF);
+    setGraph(
+      newSelection === 'ewoks'
+        ? rfToEwoks({
+            graph: graphRF.graph,
+            ...stateRF,
+          })
+        : graphRF
+    );
     setIsOpen(true);
   };
 

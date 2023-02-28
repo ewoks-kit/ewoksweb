@@ -1,9 +1,10 @@
 import { isString } from './typeGuards';
-import type { Conditions, EwoksLink, EwoksRFLink } from '../types';
+import type { Conditions, EwoksLink } from '../types';
+import type { Edge } from 'reactflow';
 
 // EwoksRFLinks --> EwoksLinks for saving
-export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
-  const tempLinks: EwoksRFLink[] = [...links].filter(
+export function toEwoksLinks(links: Edge[]): EwoksLink[] {
+  const tempLinks: Edge[] = [...links].filter(
     (link) => link.data && !link.data.startEnd
   );
   // if there are some startEnd links with conditions or any other link_attributes
@@ -27,7 +28,7 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
         source,
         target,
         data_mapping: data.data_mapping,
-        conditions: data.conditions?.map((con) => {
+        conditions: data.conditions?.map((con: Conditions) => {
           const newCon = con.source_output ? con : { source_output: con.id };
           return { ...newCon, value: calcConditionValue(con) };
         }),

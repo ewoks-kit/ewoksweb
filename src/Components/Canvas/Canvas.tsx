@@ -81,6 +81,7 @@ function Canvas() {
   const updateNodeInternals = useUpdateNodeInternals();
 
   const { fitView, getZoom, zoomTo } = rfInstance;
+
   useEffect(() => {
     setNodes(graphRF.nodes);
     setEdges(graphRF.links);

@@ -1,4 +1,9 @@
-import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
+import type {
+  Edge,
+  EdgeMarkerType,
+  ReactFlowState,
+  XYPosition,
+} from 'reactflow';
 import type { CanvasGraphChangedSlice } from './store/canvasGraphChanged';
 import type { AllWorkflowsSlice } from './store/allWorkflows';
 import type { CurrentExecutionEventSlice } from './store/currentExecutionEvent';
@@ -422,6 +427,10 @@ export interface EwoksRFLinkData {
 type NoDataEdge = Omit<Edge, 'data'>;
 export interface EwoksRFLink extends NoDataEdge {
   data: EwoksRFLinkData;
+}
+
+export interface stateRFwithGraph extends ReactFlowState {
+  graph: GraphDetails;
 }
 
 export interface LabelBgStyle {

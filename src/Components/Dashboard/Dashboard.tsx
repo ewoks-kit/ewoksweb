@@ -31,14 +31,13 @@ import ErrorFallback from '../General/ErrorFallback';
 import MenuPopover from '../General/MenuPopover';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
-import type { EwoksRFLink } from '../../types';
 import { FormAction } from '../../types';
 import { getWorkflowsIds, putWorkflow } from '../../api/api';
 import { rfToEwoks, textForError } from '../../utils';
 import commonStrings from '../../commonStrings.json';
 import type { AxiosResponse } from 'axios';
 import curateGraph from '../TopNavBar/utils/curateGraph';
-import { useReactFlow } from 'reactflow';
+import { useStoreApi } from 'reactflow';
 
 const useStyles = DashboardStyle;
 
@@ -52,7 +51,8 @@ function workflowExists(
 export default function Dashboard() {
   const classes = useStyles();
 
-  const { getNodes, getEdges } = useReactFlow();
+  const storeRF = useStoreApi();
+  const stateRF = storeRF.getState();
 
   const [openDrawers, setOpenDrawers] = useState(true);
   const [openSettings, setOpenSettings] = useState(false);
@@ -219,9 +219,7 @@ export default function Dashboard() {
       try {
         const graphRFCurrated = curateGraph({
           graph: graphRF.graph,
-          nodes: getNodes(),
-          // TBD: Check declaration of links extends NoDataEdge to remove as
-          links: getEdges() as EwoksRFLink[],
+          ...stateRF,
         });
 
         await putWorkflow(rfToEwoks(graphRFCurrated));
@@ -273,7 +271,10 @@ export default function Dashboard() {
         disagreeCallback={disAgreeSaveWithout}
       />
       <FormDialog
-        elementToEdit={graphRF}
+        elementToEdit={{
+          graph: graphRF.graph,
+          ...stateRF,
+        }}
         action={FormAction.newGraph}
         open={openSaveDialog}
         setOpenSaveDialog={setOpenSaveDialog}

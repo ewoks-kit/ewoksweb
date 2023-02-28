@@ -1,4 +1,9 @@
-import type { GraphEwoks, GraphRF, Icon, WorkflowDescription } from './types';
+import type {
+  GraphEwoks,
+  Icon,
+  stateRFwithGraph,
+  WorkflowDescription,
+} from './types';
 import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
@@ -91,7 +96,7 @@ export async function getSubgraphs(
   return results ?? [];
 }
 
-export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
+export function rfToEwoks(tempGraph: stateRFwithGraph): GraphEwoks {
   // calculate input_nodes-output_nodes nodes from graphInput-graphOutput
   let graph = calcGraphInputsOutputs(tempGraph);
   const noteNodes = calcNoteNodes(tempGraph);
@@ -104,8 +109,8 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
 
   return {
     graph,
-    nodes: toEwoksNodes(tempGraph.nodes),
-    links: toEwoksLinks(tempGraph.links),
+    nodes: toEwoksNodes(tempGraph.getNodes()),
+    links: toEwoksLinks(tempGraph.edges),
   };
 }
 

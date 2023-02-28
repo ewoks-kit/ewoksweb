@@ -1,8 +1,9 @@
-import type { GraphRF, Note } from '../types';
+import type { Note, stateRFwithGraph } from '../types';
 
 // EwoksRFNode --> EwoksNode for saving
-export function calcNoteNodes(graph: GraphRF): Note[] {
-  return graph.nodes
+export function calcNoteNodes(graph: stateRFwithGraph): Note[] {
+  return graph
+    .getNodes()
     .filter((nod) => nod.type === 'note')
     .map((noteNod) => {
       return {

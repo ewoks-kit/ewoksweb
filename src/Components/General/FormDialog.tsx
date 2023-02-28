@@ -16,10 +16,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import type {
-  GraphRF,
   Task,
   FormAction,
   PropertyChangedEvent,
+  stateRFwithGraph,
 } from '../../types';
 import { rfToEwoks, textForError } from '../../utils';
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
@@ -37,7 +37,7 @@ import { assertStr } from '../../utils/typeGuards';
 import IconBoundary from '../../IconBoundary';
 
 interface FormDialogProps {
-  elementToEdit: Task | GraphRF;
+  elementToEdit: Task | stateRFwithGraph;
   action: FormAction;
   open: boolean;
   setOpenSaveDialog: Dispatch<SetStateAction<boolean>>;
@@ -59,7 +59,7 @@ export default function FormDialog(props: FormDialogProps) {
   const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setGettingFromServer = useStore((st) => st.setGettingFromServer);
-  const [element, setElement] = useState<Task | GraphRF>({});
+  const [element, setElement] = useState<Task | stateRFwithGraph>({});
   const setTasks = useStore((state) => state.setTasks);
   const tasks = useStore((state) => state.tasks);
 
@@ -92,7 +92,7 @@ export default function FormDialog(props: FormDialogProps) {
 
   async function handleSave() {
     // DOC: get the selected element (graph or Node) give a new name before saving
-    if ('nodes' in element && isForGraph && newName) {
+    if ('edges' in element && isForGraph && newName) {
       saveGraph(element);
     } else if ('task_identifier' in element && newName) {
       if (['cloneTask', 'newTask'].includes(action) && element) {
@@ -175,7 +175,7 @@ export default function FormDialog(props: FormDialogProps) {
     }
   }
 
-  async function saveGraph(graph: GraphRF) {
+  async function saveGraph(graph: stateRFwithGraph) {
     if (overwrite) {
       // put
       try {

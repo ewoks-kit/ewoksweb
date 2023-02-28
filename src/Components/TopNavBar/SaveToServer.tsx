@@ -4,6 +4,7 @@ import useStore from '../../store/useStore';
 import FormDialog from '../General/FormDialog';
 import type { Dispatch, SetStateAction } from 'react';
 import type { FormAction } from '../../types';
+import { useStoreApi } from 'reactflow';
 
 interface SaveToServerProps {
   saveToServer: () => Promise<void>;
@@ -19,12 +20,18 @@ export default function SaveToServer({
   open,
   setOpenSaveDialog,
 }: SaveToServerProps) {
+  const storeRF = useStoreApi();
+  const stateRF = storeRF.getState();
+
   const graphRF = useStore((state) => state.graphRF);
 
   return (
     <>
       <FormDialog
-        elementToEdit={graphRF}
+        elementToEdit={{
+          graph: graphRF.graph,
+          ...stateRF,
+        }}
         action={action}
         open={open}
         setOpenSaveDialog={setOpenSaveDialog}

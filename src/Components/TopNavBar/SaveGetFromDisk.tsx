@@ -6,6 +6,7 @@ import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import Upload from '../General/Upload';
 import tooltipText from '../General/TooltipText';
 import { rfToEwoks } from '../../utils';
+import { useStoreApi } from 'reactflow';
 
 import useStore from '../../store/useStore';
 
@@ -22,6 +23,9 @@ function download(content: BlobPart, fileName: string, contentType: string) {
 export default function SaveGetFromDisk() {
   const classes = useStyles();
 
+  const storeRF = useStoreApi();
+  const stateRF = storeRF.getState();
+
   const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
   const graphRF = useStore((state) => state.graphRF);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
@@ -33,7 +37,14 @@ export default function SaveGetFromDisk() {
   function saveToDisk() {
     if (graphRF.graph.label) {
       download(
-        JSON.stringify(rfToEwoks(graphRF), null, 2),
+        JSON.stringify(
+          rfToEwoks({
+            graph: graphRF.graph,
+            ...stateRF,
+          }),
+          null,
+          2
+        ),
         `${graphRF.graph.label}.json`,
         'text/plain'
       );

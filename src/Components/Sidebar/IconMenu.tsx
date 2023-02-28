@@ -16,16 +16,23 @@ import type {
   EwoksRFNode,
   GraphDetails,
   GraphRF,
+  stateRFwithGraph,
   Task,
 } from '../../types';
 import useStore from '../../store/useStore';
 import { FormAction } from '../../types';
+import { useStoreApi } from 'reactflow';
 
 export default function IconMenu() {
+  const storeRF = useStoreApi();
+  const stateRF = storeRF.getState();
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
-  const [elementToEdit, setElementToEdit] = React.useState<Task | GraphRF>({});
+  const [elementToEdit, setElementToEdit] = React.useState<
+    Task | stateRFwithGraph
+  >({});
   const [doAction, setDoAction] = React.useState<FormAction>(
     FormAction.newTask
   );
@@ -92,7 +99,10 @@ export default function IconMenu() {
         break;
       }
       case 'cloneGraph': {
-        setElementToEdit(graphRF);
+        setElementToEdit({
+          graph: graphRF.graph,
+          ...stateRF,
+        });
         break;
       }
       default: {
