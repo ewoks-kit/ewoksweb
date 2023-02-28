@@ -25,7 +25,7 @@ import SidebarTooltip from './SidebarTooltip';
 import commonStrings from 'commonStrings.json';
 import { isGraphDetails, isLink, isNode } from '../../utils/typeGuards';
 import { textForError } from '../../utils';
-import useNodesIds from '../../store/graph_hooks/useNodesIds';
+import { useNodesIds } from '../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
 
 const useStyles = DashboardStyle;
@@ -149,7 +149,7 @@ export default function Sidebar() {
     if (isNode(selectedElement)) {
       const newClone: EwoksRFNode = {
         ...selectedElement,
-        id: calcNewId(selectedElement.id, getNodes()),
+        id: calcNewId(selectedElement.id, nodesIds),
         selected: false,
         position: {
           x: (selectedElement.position?.x || 0) + 100,

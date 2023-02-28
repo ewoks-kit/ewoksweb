@@ -26,7 +26,7 @@ import LabelComment from './LabelComment';
 import DefaultInputs from '../EditableTableProperties/DefaultInputs';
 import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
-import useNodesIds from '../../../store/graph_hooks/useNodesIds';
+import { useNodesIds } from '../../../store/graph-hooks';
 
 const useStyles = DashboardStyle;
 
