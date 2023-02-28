@@ -149,7 +149,7 @@ export default function Sidebar() {
     if (isNode(selectedElement)) {
       const newClone: EwoksRFNode = {
         ...selectedElement,
-        id: calcNewId(selectedElement.id, getNodes()),
+        id: calcNewId(selectedElement.id, nodesIds),
         selected: false,
         position: {
           x: (selectedElement.position?.x || 0) + 100,

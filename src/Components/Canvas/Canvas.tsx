@@ -25,6 +25,8 @@ import CanvasBackground from './CanvasBackground';
 import { isNode, isLink } from 'utils/typeGuards';
 import CanvasMiniMap from './CanvasMiniMap';
 import { addConnectionToGraph, trimLabel } from './utils';
+import useNodesIds from '../../store/graph_hooks/useNodesIds';
+import useNodesLength from '../../store/graph_hooks/useNodesLength';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -54,6 +56,9 @@ const nodeTypes = {
 function Canvas() {
   const classes = useStyles();
 
+  const nodesIds = useNodesIds();
+  const nodesLength = useNodesLength();
+
   const rfInstance = useReactFlow();
   const [nodes, setNodes] = useState<EwoksRFNode[]>([]);
   const [edges, setEdges] = useState<EwoksRFLink[]>([]);
@@ -77,9 +82,6 @@ function Canvas() {
   const updateNodeInternals = useUpdateNodeInternals();
 
   const { fitView, getZoom, zoomTo } = rfInstance;
-  // TODO: when selecting a node-link selected fires the re-render
-  // since graphRF changes. We need to not rerender
-  // Associated edges titles flicker when selecting a node and then select graph
   useEffect(() => {
     setNodes(graphRF.nodes);
     setEdges(graphRF.links);
@@ -106,11 +108,11 @@ function Canvas() {
   useEffect(() => {
     if (prevGraphId !== graphRF.graph.id) {
       setTimeout(() => {
-        if (graphRF.nodes.length === 0) {
+        if (nodesLength === 0) {
           return;
         }
         // DOC: Define a zoom level for small graphs to not show very-big nodes
-        if (graphRF.nodes.length < 6) {
+        if (nodesLength < 6) {
           zoomTo(0.6);
         } else {
           fitView();
@@ -121,14 +123,7 @@ function Canvas() {
       // DOC: if I clear the timeout for memory leaks the setTImeout never runs fitview???
       // return () => clearTimeout(timer);
     }
-  }, [
-    graphRF.graph.id,
-    fitView,
-    getZoom,
-    zoomTo,
-    graphRF.nodes.length,
-    prevGraphId,
-  ]);
+  }, [graphRF.graph.id, fitView, getZoom, zoomTo, nodesLength, prevGraphId]);
 
   const onElementsRemove = useCallback(
     (el: EwoksRFNode | EwoksRFLink) => {
@@ -287,12 +282,12 @@ function Canvas() {
       const newNode: EwoksRFNode = {
         id:
           task_type === 'graphInput'
-            ? calcNewId('In', graphRF.nodes)
+            ? calcNewId('In', nodesIds)
             : task_type === 'graphOutput'
-            ? calcNewId('Out', graphRF.nodes)
+            ? calcNewId('Out', nodesIds)
             : task_type === 'note'
-            ? calcNewId('Note', graphRF.nodes)
-            : calcNewId(task_identifier || 'Node', graphRF.nodes),
+            ? calcNewId('Note', nodesIds)
+            : calcNewId(task_identifier || 'Node', nodesIds),
         type: task_type,
 
         position,
@@ -364,7 +359,7 @@ function Canvas() {
       const newGraph: GraphRF = {
         graph: { ...graphRF.graph },
 
-        nodes: nodes.filter((el) => el.position), // [...graphRF.nodes],
+        nodes: nodes.filter((el) => el.position),
         links: [
           ...edges
 
@@ -538,11 +533,11 @@ function Canvas() {
       if (isNode(selectedElement)) {
         const newClone: EwoksRFNode = {
           ...selectedElement,
-          id: calcNewId(selectedElement.id, graphRF.nodes),
+          id: calcNewId(selectedElement.id, nodesIds),
           selected: false,
           position: {
-            x: selectedElement.position?.x || 0 + 100,
-            y: selectedElement.position?.y || 0 + 100,
+            x: (selectedElement.position?.x || 0) + 100,
+            y: (selectedElement.position?.y || 0) + 100,
           },
         };
         setGraphRF(

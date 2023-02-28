@@ -17,6 +17,7 @@ import type { Connection } from 'reactflow';
 import { isNode } from '../utils/typeGuards';
 import NodeIcon from './NodeIcon';
 import IconBoundary from '../IconBoundary';
+import useNodesIds from '../store/graph_hooks/useNodesIds';
 
 // TODO: examine usage when execution in main
 const execution = () => {
@@ -41,6 +42,8 @@ function Node({
   nodeWidth,
   details,
 }: NodeProps) {
+  const nodesIds = useNodesIds();
+
   const border = colorBorder
     ? `4px solid ${colorBorder}`
     : '2px solid rgb(233, 235, 247)';
@@ -112,7 +115,7 @@ function Node({
     }
     const newClone: EwoksRFNode = {
       ...selectedElement,
-      id: calcNewId(selectedElement.id, graphRF.nodes),
+      id: calcNewId(selectedElement.id, nodesIds),
       selected: false,
       position: {
         x: selectedElement.position?.x || 0 + 100,
