@@ -25,11 +25,16 @@ import SidebarTooltip from './SidebarTooltip';
 import commonStrings from 'commonStrings.json';
 import { isGraphDetails, isLink, isNode } from '../../utils/typeGuards';
 import { textForError } from '../../utils';
+import useNodesIds from '../../store/graph_hooks/useNodesIds';
+import { useReactFlow } from 'reactflow';
 
 const useStyles = DashboardStyle;
 
 export default function Sidebar() {
   const classes = useStyles();
+
+  const nodesIds = useNodesIds();
+  const { deleteElements, getNodes } = useReactFlow();
 
   const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
@@ -69,6 +74,8 @@ export default function Sidebar() {
           )
       );
 
+      deleteElements({ nodes: [selectedElement] });
+
       const newGraph: GraphRF = {
         ...graphRF,
         nodes: graphRF.nodes.filter((nod) => nod.id !== selectedElement.id),
@@ -79,7 +86,7 @@ export default function Sidebar() {
         action: 'Removed a Node',
         graph: newGraph,
       });
-      setGraphRF(newGraph, true);
+      // setGraphRF(newGraph, true);
       return;
     }
 
@@ -142,16 +149,16 @@ export default function Sidebar() {
     if (isNode(selectedElement)) {
       const newClone: EwoksRFNode = {
         ...selectedElement,
-        id: calcNewId(selectedElement.id, graphRF.nodes),
+        id: calcNewId(selectedElement.id, getNodes()),
         selected: false,
         position: {
-          x: selectedElement.position?.x || 0 + 100,
-          y: selectedElement.position?.y || 0 + 100,
+          x: (selectedElement.position?.x || 0) + 100,
+          y: (selectedElement.position?.y || 0) + 100,
         },
       };
       const newGraph = {
         ...graphRF,
-        nodes: [...graphRF.nodes, newClone],
+        nodes: [...getNodes(), newClone],
       };
 
       setGraphRF(newGraph, true);
