@@ -19,13 +19,17 @@ import type {
 import sidebarStyle from '../sidebarStyle';
 import type { ChangeEvent } from 'react';
 import { isMarkerType, isString } from '../../../utils/typeGuards';
+import type { Edge } from 'reactflow';
 import { MarkerType } from 'reactflow';
+import { useReactFlow } from 'reactflow';
 
 const useStyles = DashboardStyle;
 
 // DOC: Edit the link style
 export default function EditLinkStyle(element: EwoksRFLink) {
   const classes = useStyles();
+
+  const { setEdges, getEdges } = useReactFlow();
 
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const graphRF = useStore((state) => state.graphRF);
@@ -160,6 +164,13 @@ export default function EditLinkStyle(element: EwoksRFLink) {
   }
 
   function applyLinkTypeToAll() {
+    const newEdges: Edge[] = getEdges().map((edge) => ({
+      ...edge,
+      type: linkType,
+    }));
+    setEdges(newEdges);
+
+    // TODO: Remove the following graphRF update
     const newGraph: GraphRF = {
       ...graphRF,
       links: graphRF.links.map((link) => ({ ...link, type: linkType })),
@@ -168,6 +179,15 @@ export default function EditLinkStyle(element: EwoksRFLink) {
   }
 
   function applyArrowTypeToAll() {
+    const newEdges: Edge[] = getEdges().map((edge) => {
+      if (arrowType === 'none') {
+        return { ...edge, markerEnd: undefined };
+      }
+      return { ...edge, markerEnd: { type: arrowType } };
+    });
+    setEdges(newEdges);
+
+    // TODO: Remove the following graphRF update
     const newGraph: GraphRF = {
       ...graphRF,
       links: graphRF.links.map((link) => {
