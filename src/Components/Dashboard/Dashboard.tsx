@@ -218,13 +218,6 @@ export default function Dashboard() {
       try {
         const graphRFCurrated = curateGraph(graphRF.graph, storeRF.getState());
 
-        // const graphRFCurrated = curateGraph({
-        //   graph: graphRF.graph,
-        //   nodes: getNodes(),
-        //   // TBD: Check declaration of links extends NoDataEdge to remove as
-        //   links: getEdges() as EwoksRFLink[],
-        // });
-
         await putWorkflow(rfToEwoks(graphRFCurrated));
 
         setOpenSnackbar({
