@@ -33,7 +33,7 @@ function curateGraph(
           },
         },
       },
-    } as EwoksRFNode;
+    };
   });
 
   const links = [...stateRF.edges].map((edgeRF) => {
@@ -45,7 +45,7 @@ function curateGraph(
         conditions: deleteEmptyLines(edge.data.conditions),
         data_mapping: deleteEmptyLines(edge.data.data_mapping),
       },
-    } as EwoksRFLink;
+    };
   });
 
   return {
