@@ -5,7 +5,6 @@ import type {
   GraphRF,
   Inputs,
   EwoksRFLink,
-  EwoksNode,
   EwoksRFNode,
 } from '../../../types';
 import type { ReactFlowState } from 'reactflow';
@@ -59,8 +58,9 @@ function curateGraph(
 function deleteEmptyLines(
   arrayObjId: DataMapping[] | Conditions[] | Inputs[] | undefined
 ) {
-  // DataMapping[] | Conditions[] | Inputs[]
   if (arrayObjId && arrayObjId.length > 0) {
+    // lodash filter seems to work
+    // @ts-expect-error
     return arrayObjId.filter(
       (obj: DataMapping | Conditions | Inputs) => obj.id !== ''
     );
