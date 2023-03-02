@@ -58,10 +58,7 @@ function curateGraph(
 function deleteEmptyLines<T extends DataMapping | Conditions | Inputs>(
   arrayObjId: T[] | undefined
 ): T[] {
-  if (
-    !Array.isArray(arrayObjId) ||
-    (Array.isArray(arrayObjId) && arrayObjId.length === 0)
-  ) {
+  if (!arrayObjId) {
     return [];
   }
 
