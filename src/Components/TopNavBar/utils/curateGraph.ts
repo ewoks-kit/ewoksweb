@@ -55,17 +55,19 @@ function curateGraph(
   };
 }
 
-function deleteEmptyLines(
-  arrayObjId: DataMapping[] | Conditions[] | Inputs[] | undefined
-) {
-  if (arrayObjId && arrayObjId.length > 0) {
-    // lodash filter seems to work
-    // @ts-expect-error
-    return arrayObjId.filter(
-      (obj: DataMapping | Conditions | Inputs) => obj.id !== ''
-    );
+function deleteEmptyLines<T extends DataMapping | Conditions | Inputs>(
+  arrayObjId: T[] | undefined
+): T[] {
+  if (
+    !Array.isArray(arrayObjId) ||
+    (Array.isArray(arrayObjId) && arrayObjId.length === 0)
+  ) {
+    return [];
   }
-  return [];
+
+  return arrayObjId.filter(
+    (obj: DataMapping | Conditions | Inputs) => obj.id !== ''
+  );
 }
 
 export default curateGraph;
