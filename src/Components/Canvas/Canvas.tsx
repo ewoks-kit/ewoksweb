@@ -82,9 +82,9 @@ function Canvas() {
 
   const { fitView, getZoom, zoomTo } = rfInstance;
   useEffect(() => {
-    setNodes(graphRF.nodes);
-    setEdges(graphRF.links);
-  }, [graphRF.nodes, graphRF.links]);
+    setNodes(workingGraph.nodes);
+    setEdges(workingGraph.links);
+  }, [workingGraph.nodes, workingGraph.links]);
 
   useEffect(() => {
     if (!isNode(selectedElement)) {
