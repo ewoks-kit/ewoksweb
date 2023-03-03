@@ -27,11 +27,14 @@ import { isGraphDetails, isLink, isNode } from '../../utils/typeGuards';
 import { textForError } from '../../utils';
 import { useNodesIds } from '../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
+import { useStoreApi } from 'reactflow';
 
 const useStyles = DashboardStyle;
 
 export default function Sidebar() {
   const classes = useStyles();
+
+  const storeRF = useStoreApi();
 
   const nodesIds = useNodesIds();
   const { deleteElements, getNodes } = useReactFlow();
@@ -50,10 +53,11 @@ export default function Sidebar() {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
-  const initializedRFGraph = useStore((state) => state.initializedRFGraph);
+  const initializedGraph = useStore((state) => state.initializedGraph);
   const setUndoRedo = useStore((state) => state.setUndoRedo);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
+  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
   const deleteElement = async () => {
     if (workingGraph.graph.id !== graphRF.graph.id) {
@@ -100,7 +104,8 @@ export default function Sidebar() {
         action: 'Removed a Link',
         graph: newGraph,
       });
-      setGraphRF(newGraph, true);
+      deleteElements({ edges: [selectedElement] });
+      // setGraphRF(newGraph, true);
       return;
     }
 
@@ -135,7 +140,7 @@ export default function Sidebar() {
       }
     }
 
-    setGraphRF(initializedRFGraph);
+    setWorkingGraph(initializedGraph);
     setSelectedElement({} as GraphDetails);
     setSubgraphsStack({ id: '', label: '', resetStack: true });
     resetRecentGraphs();
@@ -156,15 +161,16 @@ export default function Sidebar() {
           y: (selectedElement.position?.y || 0) + 100,
         },
       };
+      const stateRF = storeRF.getState();
       const newGraph = {
         ...graphRF,
-        nodes: [...getNodes(), newClone],
+        nodes: [...stateRF.getNodes(), newClone],
       };
+      stateRF.setNodes([...stateRF.getNodes(), newClone]);
+      // setGraphRF(newGraph, true);
 
-      setGraphRF(newGraph, true);
-
-      setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
-      setSelectedElement(newClone);
+      // setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
+      // setSelectedElement(newClone);
     } else {
       setOpenSnackbar({
         open: true,

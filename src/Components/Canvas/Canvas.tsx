@@ -25,7 +25,8 @@ import CanvasBackground from './CanvasBackground';
 import { isNode, isLink } from 'utils/typeGuards';
 import CanvasMiniMap from './CanvasMiniMap';
 import { addConnectionToGraph, trimLabel } from './utils';
-import { useNodesIds, useNodesLength } from '../../store/graph-hooks';
+// import { useNodesIds, useNodesLength } from '../../store/graph-hooks';
+import { useStoreApi } from 'reactflow';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -55,11 +56,29 @@ const nodeTypes = {
 function Canvas() {
   const classes = useStyles();
 
-  const nodesIds = useNodesIds();
-  const nodesLength = useNodesLength();
+  const storeRF = useStoreApi();
+
+  // const nodesIds = useNodesIds();
+  // const nodesLength = useNodesLength();
 
   const rfInstance = useReactFlow();
-  const [nodes, setNodes] = useState<EwoksRFNode[]>([]);
+  const [nodes, setNodes] = useState<EwoksRFNode[]>([
+    {
+      id: 'integrate1d_plot',
+      position: {
+        x: 625,
+        y: 130,
+      },
+      data: {
+        task_props: {
+          task_type: 'class',
+          task_identifier: 'ewoksxrpd.tasks.diagnostics.DiagnoseIntegrate1D',
+        },
+        ewoks_props: {},
+        ui_props: {},
+      },
+    },
+  ]);
   const [edges, setEdges] = useState<EwoksRFLink[]>([]);
   const [prevGraphId, setPrevGraphId] = useState('');
 
@@ -82,11 +101,15 @@ function Canvas() {
 
   const { fitView, getZoom, zoomTo } = rfInstance;
   useEffect(() => {
-    setNodes(workingGraph.nodes);
-    setEdges(workingGraph.links);
-  }, [workingGraph.nodes, workingGraph.links]);
+    if (workingGraph.graph.id !== 'tutorial_Graph') {
+      setNodes(workingGraph.nodes);
+      setEdges(workingGraph.links);
+    }
+    console.log('rerender workingGraph');
+  }, [workingGraph.nodes, workingGraph.links, workingGraph.graph.id]);
 
   useEffect(() => {
+    console.log('rerender selectedElement');
     if (!isNode(selectedElement)) {
       return;
     }
@@ -104,25 +127,29 @@ function Canvas() {
     }
   }, [subgraphsStack]);
 
-  useEffect(() => {
-    if (prevGraphId !== graphRF.graph.id) {
-      setTimeout(() => {
-        if (nodesLength === 0) {
-          return;
-        }
-        // DOC: Define a zoom level for small graphs to not show very-big nodes
-        if (nodesLength < 6) {
-          zoomTo(0.6);
-        } else {
-          fitView();
-        }
-        // DOC: the value of the delay is important to fitview even the execution
-        // that takes up to 4secs. Possibly rerender after the call to get the workflow??
-      }, 1000);
-      // DOC: if I clear the timeout for memory leaks the setTImeout never runs fitview???
-      // return () => clearTimeout(timer);
-    }
-  }, [graphRF.graph.id, fitView, getZoom, zoomTo, nodesLength, prevGraphId]);
+  console.log('rerender canvas');
+
+  // useEffect(() => {
+  //   console.log('rerender nodesLength');
+  //   if (prevGraphId !== workingGraph.graph.id) {
+  //     const nodesLength = storeRF.getState().getNodes().length;
+  //     setTimeout(() => {
+  //       if (nodesLength === 0) {
+  //         return;
+  //       }
+  //       // DOC: Define a zoom level for small graphs to not show very-big nodes
+  //       if (nodesLength < 6) {
+  //         zoomTo(0.6);
+  //       } else {
+  //         fitView();
+  //       }
+  //       // DOC: the value of the delay is important to fitview even the execution
+  //       // that takes up to 4secs. Possibly rerender after the call to get the workflow??
+  //     }, 1000);
+  //     // DOC: if I clear the timeout for memory leaks the setTImeout never runs fitview???
+  //     // return () => clearTimeout(timer);
+  //   }
+  // }, [storeRF, workingGraph.graph.id, fitView, getZoom, zoomTo, prevGraphId]);
 
   const onElementsRemove = useCallback(
     (el: EwoksRFNode | EwoksRFLink) => {
@@ -160,10 +187,12 @@ function Canvas() {
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
+      console.log('onNodesChange', changes);
+
       // TODO: need examination based on comments and commented code
-      // if (changes[0].type === 'dimensions') {
-      //   return;
-      // }
+      if (changes[0].type === 'dimensions') {
+        return;
+      }
 
       // TODO: on click another node it is activated twice once with both
       // and then with the current??
@@ -187,6 +216,7 @@ function Canvas() {
 
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
+      console.log('onEdgesChange', changes);
       const change = changes[0];
       if ('id' in change && changes[0].type === 'remove') {
         const edgeToRemove = graphRF.links.find((el) => el.id === change.id);
@@ -251,6 +281,7 @@ function Canvas() {
     }
 
     if (workingGraph.graph.id === graphRF.graph.id) {
+      const stateRF = storeRF.getState();
       const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect() || {
         left: 0,
         top: 0,
@@ -277,7 +308,7 @@ function Canvas() {
               output_names: [],
               required_input_names: [],
             };
-
+      const nodesIds = [...stateRF.nodeInternals.keys()];
       const newNode: EwoksRFNode = {
         id:
           task_type === 'graphInput'
@@ -324,9 +355,10 @@ function Canvas() {
         links: graphRF.links,
       };
 
-      setGraphRF(newGraph, true);
-      setUndoRedo({ action: 'Added a Node', graph: newGraph });
-      setRecentGraphs(newGraph);
+      stateRF.setNodes([...stateRF.getNodes(), newNode]);
+      // setGraphRF(newGraph, true);
+      // setUndoRedo({ action: 'Added a Node', graph: newGraph });
+      // setRecentGraphs(newGraph);
     } else {
       setOpenSnackbar({
         open: true,
@@ -341,6 +373,8 @@ function Canvas() {
       ...oldEdge,
       ...newConnection,
     };
+
+    console.log('Edge update', oldEdge, newConnection);
 
     // DOC: if the new link is:
     // 1. attached to a node-handle where there is already a link or
@@ -524,6 +558,8 @@ function Canvas() {
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLImageElement>) => {
     const charCode = String.fromCodePoint(event.which).toLowerCase();
+
+    const nodesIds = [...storeRF.getState().nodeInternals.keys()];
 
     const keys = event.ctrlKey || event.metaKey;
     if (keys && charCode === 'v') {
