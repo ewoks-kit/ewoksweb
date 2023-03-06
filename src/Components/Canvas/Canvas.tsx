@@ -6,7 +6,6 @@ import ReactFlow, {
   useReactFlow,
   applyNodeChanges,
   applyEdgeChanges,
-  useUpdateNodeInternals,
 } from 'reactflow';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import bendingText from 'CustomEdges/BendingTextEdge';
@@ -26,6 +25,7 @@ import { isNode } from 'utils/typeGuards';
 import CanvasMiniMap from './CanvasMiniMap';
 import { addConnectionToGraph, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
+import { useGraphId } from '../../store/graph-hooks';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -74,42 +74,43 @@ function Canvas() {
   const recentGraphs = useStore((state) => state.recentGraphs);
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const updateNodeInternals = useUpdateNodeInternals();
 
-  const { fitView, getZoom, zoomTo } = rfInstance;
+  const graphId = useGraphId();
+
+  const {
+    fitView,
+    getZoom,
+    zoomTo,
+    setNodes,
+    setEdges,
+    getNodes,
+    getEdges,
+    addNodes,
+    getNode,
+  } = rfInstance;
 
   useEffect(() => {
-    storeRF.getState().setNodes(workingGraph.nodes);
-    storeRF.getState().setEdges(workingGraph.links);
-  }, [workingGraph.nodes, workingGraph.links, storeRF]);
+    setNodes(workingGraph.nodes);
+    setEdges(workingGraph.links);
+  }, [workingGraph, setEdges, setNodes]);
 
   // TBD when selectedElement changes updates the canvas directly
   useEffect(() => {
-    storeRF.getState().setNodes(graphRF.nodes);
-    storeRF.getState().setEdges(graphRF.links);
-  }, [graphRF.nodes, graphRF.links, storeRF]);
+    setNodes(graphRF.nodes);
+    setEdges(graphRF.links);
+  }, [graphRF, setEdges, setNodes]);
 
   useEffect(() => {
-    if (!isNode(selectedElement)) {
-      return;
-    }
-
-    const timeoutPosition = setTimeout(() => {
-      updateNodeInternals(selectedElement.id);
-    }, 400);
-    // eslint-disable-next-line consistent-return
-    return () => clearTimeout(timeoutPosition);
-  }, [selectedElement, updateNodeInternals]);
-
-  useEffect(() => {
-    if (subgraphsStack[subgraphsStack.length - 1]) {
+    if (subgraphsStack[subgraphsStack.length - 1]?.id) {
       setPrevGraphId(subgraphsStack[subgraphsStack.length - 1].id);
     }
   }, [subgraphsStack]);
 
+  // TBD if workingGraph replaces graphRF then it wont update when doubleclicking
+  // to a subgraph. Merge with the above since it is based on the above value is not working
   useEffect(() => {
-    if (prevGraphId !== graphRF.graph.id) {
-      const nodesLength = storeRF.getState().getNodes().length;
+    if (prevGraphId !== graphId) {
+      const nodesLength = getNodes().length;
 
       setTimeout(() => {
         if (nodesLength === 0) {
@@ -127,47 +128,29 @@ function Canvas() {
       // DOC: if I clear the timeout for memory leaks the setTImeout never runs fitview???
       // return () => clearTimeout(timer);
     }
-  }, [storeRF, graphRF.graph.id, fitView, getZoom, zoomTo, prevGraphId]);
+  }, [getNodes, graphId, fitView, getZoom, zoomTo, prevGraphId]);
 
-  const onNodesChange = useCallback(
-    (changes: NodeChange[]) => {
-      storeRF
-        .getState()
-        .setNodes(applyNodeChanges(changes, storeRF.getState().getNodes()));
-    },
-    [storeRF]
-  );
+  function onNodesChange(changes: NodeChange[]) {
+    storeRF.getState().setNodes(applyNodeChanges(changes, getNodes()));
+  }
 
-  const onEdgesChange = useCallback(
-    (changes: EdgeChange[]) => {
-      storeRF
-        .getState()
-        .setEdges(applyEdgeChanges(changes, storeRF.getState().edges));
-    },
-    [storeRF]
-  );
+  function onEdgesChange(changes: EdgeChange[]) {
+    storeRF.getState().setEdges(applyEdgeChanges(changes, getEdges()));
+  }
 
   const onPaneClick = () => {
     setSelectedElement(graphRF.graph);
   };
 
   const onNodeClick = (_event: MouseEvent, element: Node) => {
-    const nodesRF = [...storeRF.getState().nodeInternals.values()];
-    const graphElement: EwoksRFNode | undefined = nodesRF.find(
-      (el) => el.id === element.id
-    );
-
     if (
-      graphElement &&
-      isNode(graphElement) &&
+      element &&
       !(
-        graphElement.data.task_props.task_type === 'executionSteps' &&
-        graphElement.type === 'executionSteps'
-      ) &&
-      // is not already selected
-      selectedElement.id !== graphElement.id
+        element.data.task_props.task_type === 'executionSteps' &&
+        element.type === 'executionSteps'
+      )
     ) {
-      setSelectedElement(graphElement);
+      setSelectedElement(element);
     }
   };
 
@@ -183,8 +166,7 @@ function Canvas() {
 
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
-
-    if (workingGraph.graph.id === graphRF.graph.id) {
+    if (workingGraph.graph.id === graphId) {
       const stateRF = storeRF.getState();
       const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect() || {
         left: 0,
@@ -255,8 +237,7 @@ function Canvas() {
         },
       };
 
-      storeRF.getState().setNodes([...stateRF.getNodes(), newNode]);
-
+      addNodes(newNode);
       // TBD
       const newGraph: GraphRF = {
         graph: graphRF.graph,
@@ -264,6 +245,9 @@ function Canvas() {
         links: graphRF.links,
       };
 
+      // When the following is deactivated and after the drop we try to create a link
+      // with the new node a non valid link originating from node.tsx will flash.
+      // Need to also handle isValidLink in nodes that use graphRF to validate.
       setGraphRF(newGraph, true);
 
       setUndoRedo({ action: 'Added a Node', graph: newGraph });
@@ -282,8 +266,9 @@ function Canvas() {
     // 1. attached to a node-handle where there is already a link or
     // 2. is attached to an input-output already connected to a node then
     // edgeUpdate should not happen and a message informs it is not ewoks-compatible
-    const nodesRF = [...storeRF.getState().nodeInternals.values()];
-    const edgesRF = storeRF.getState().edges;
+    const nodesRF = getNodes();
+    const edgesRF = getEdges();
+
     const { isValid, reason } = isValidLink(
       newConnection,
       { nodes: nodesRF, links: edgesRF as EwoksRFLink[], graph: graphRF.graph },
@@ -316,7 +301,7 @@ function Canvas() {
   };
 
   const onConnect = (params: Connection) => {
-    if (workingGraph.graph.id !== graphRF.graph.id) {
+    if (workingGraph.graph.id !== graphId) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to create new links to any sub-graph!',
@@ -327,7 +312,7 @@ function Canvas() {
 
     // TBD or refactor addConnectionToGraph wont need graphRF
     const newGraph = addConnectionToGraph(params, graphRF);
-    storeRF.getState().setEdges(newGraph.links);
+    setEdges(newGraph.links);
     setGraphRF(newGraph, true);
 
     setRecentGraphs(newGraph);
@@ -346,7 +331,7 @@ function Canvas() {
   const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
     event.preventDefault();
 
-    const nodeTmp = storeRF.getState().nodeInternals.get(node.id);
+    const nodeTmp = getNode(node.id);
 
     if (nodeTmp?.data.task_props.task_type === 'graph') {
       const subgraph = recentGraphs.find(
@@ -354,8 +339,8 @@ function Canvas() {
       );
 
       if (subgraph?.graph.id) {
-        storeRF.getState().setNodes(subgraph.nodes);
-        storeRF.getState().setEdges(subgraph.links);
+        setNodes(subgraph.nodes);
+        setEdges(subgraph.links);
         // TBD
         setGraphRF(subgraph);
 
@@ -375,11 +360,8 @@ function Canvas() {
       }
     } else {
       if (nodeTmp) {
-        storeRF.getState().setNodes([
-          ...storeRF
-            .getState()
-            .getNodes()
-            .filter((nod) => nod.id !== nodeTmp.id),
+        setNodes([
+          ...getNodes().filter((nod) => nod.id !== nodeTmp.id),
           {
             ...nodeTmp,
             data: {
@@ -397,8 +379,7 @@ function Canvas() {
     selectedElements: EwoksRFNode[]
   ) => {
     event.preventDefault();
-    // graphRF.graph.id stays as is in the store
-    if (workingGraph.graph.id === graphRF.graph.id) {
+    if (workingGraph.graph.id === graphId) {
       // Get them from RF
       const { nodes: graphNodes } = graphRF;
 
@@ -443,8 +424,7 @@ function Canvas() {
   // TBD when graphRF removed. Only needed for setRecentGraphs, undoRedo
   const onNodeDragStop = (event: MouseEvent, draggedNode: EwoksRFNode) => {
     event.preventDefault();
-    // graphRF.graph.id stays as is in the store
-    if (workingGraph.graph.id === graphRF.graph.id) {
+    if (workingGraph.graph.id === graphId) {
       // const { nodes: graphNodes } = graphRF;
 
       const nodesRF = [...storeRF.getState().nodeInternals.values()];
@@ -498,9 +478,7 @@ function Canvas() {
             y: (selectedElement.position?.y || 0) + 100,
           },
         };
-        storeRF
-          .getState()
-          .setNodes([...storeRF.getState().getNodes(), newClone]);
+        setNodes([...getNodes(), newClone]);
 
         // TBD
         setGraphRF(
@@ -537,8 +515,6 @@ function Canvas() {
           attributionPosition="bottom-right"
           minZoom={0.2}
           snapToGrid
-          nodes={[...storeRF.getState().nodeInternals.values()]}
-          edges={storeRF.getState().edges}
           onNodeClick={onNodeClick}
           onEdgeClick={onEdgeClick}
           onPaneClick={onPaneClick}

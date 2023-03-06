@@ -167,10 +167,10 @@ export default function Sidebar() {
         nodes: [...stateRF.getNodes(), newClone],
       };
       stateRF.setNodes([...stateRF.getNodes(), newClone]);
-      // setGraphRF(newGraph, true);
+      setGraphRF(newGraph, true);
 
-      // setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
-      // setSelectedElement(newClone);
+      setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
+      setSelectedElement(newClone);
     } else {
       setOpenSnackbar({
         open: true,
