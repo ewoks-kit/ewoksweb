@@ -57,29 +57,14 @@ function Canvas() {
   const classes = useStyles();
 
   const storeRF = useStoreApi();
+  const { deleteElements } = useReactFlow();
 
   // const nodesIds = useNodesIds();
   // const nodesLength = useNodesLength();
 
   const rfInstance = useReactFlow();
-  const [nodes, setNodes] = useState<EwoksRFNode[]>([
-    {
-      id: 'integrate1d_plot',
-      position: {
-        x: 625,
-        y: 130,
-      },
-      data: {
-        task_props: {
-          task_type: 'class',
-          task_identifier: 'ewoksxrpd.tasks.diagnostics.DiagnoseIntegrate1D',
-        },
-        ewoks_props: {},
-        ui_props: {},
-      },
-    },
-  ]);
-  const [edges, setEdges] = useState<EwoksRFLink[]>([]);
+  // const [nodes, setNodes] = useState<EwoksRFNode[]>([]);
+  // const [edges, setEdges] = useState<EwoksRFLink[]>([]);
   const [prevGraphId, setPrevGraphId] = useState('');
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
@@ -101,12 +86,12 @@ function Canvas() {
 
   const { fitView, getZoom, zoomTo } = rfInstance;
   useEffect(() => {
-    if (workingGraph.graph.id !== 'tutorial_Graph') {
-      setNodes(workingGraph.nodes);
-      setEdges(workingGraph.links);
-    }
+    storeRF.getState().setNodes(workingGraph.nodes);
+    storeRF.getState().setEdges(workingGraph.links);
+    // setNodes(workingGraph.nodes);
+    // setEdges(workingGraph.links);
     console.log('rerender workingGraph');
-  }, [workingGraph.nodes, workingGraph.links, workingGraph.graph.id]);
+  }, [workingGraph.nodes, workingGraph.links, storeRF]);
 
   useEffect(() => {
     console.log('rerender selectedElement');
@@ -129,109 +114,47 @@ function Canvas() {
 
   console.log('rerender canvas');
 
-  // useEffect(() => {
-  //   console.log('rerender nodesLength');
-  //   if (prevGraphId !== workingGraph.graph.id) {
-  //     const nodesLength = storeRF.getState().getNodes().length;
-  //     setTimeout(() => {
-  //       if (nodesLength === 0) {
-  //         return;
-  //       }
-  //       // DOC: Define a zoom level for small graphs to not show very-big nodes
-  //       if (nodesLength < 6) {
-  //         zoomTo(0.6);
-  //       } else {
-  //         fitView();
-  //       }
-  //       // DOC: the value of the delay is important to fitview even the execution
-  //       // that takes up to 4secs. Possibly rerender after the call to get the workflow??
-  //     }, 1000);
-  //     // DOC: if I clear the timeout for memory leaks the setTImeout never runs fitview???
-  //     // return () => clearTimeout(timer);
-  //   }
-  // }, [storeRF, workingGraph.graph.id, fitView, getZoom, zoomTo, prevGraphId]);
-
-  const onElementsRemove = useCallback(
-    (el: EwoksRFNode | EwoksRFLink) => {
-      // TODO: multiple delete investigate
-
-      if (isNode(el)) {
-        const nodesLinks = graphRF.links.filter(
-          (link) => !(link.source === el.id || link.target === el.id)
-        );
-
-        const newGraph: GraphRF = {
-          ...graphRF,
-          nodes: graphRF.nodes.filter((nod) => nod.id !== el.id),
-          links: nodesLinks,
-        };
-        setGraphRF(newGraph, true);
-        setUndoRedo({ action: 'Removed a Node', graph: newGraph });
-        return;
-      }
-
-      if (isLink(el)) {
-        const newGraph: GraphRF = {
-          ...graphRF,
-          links: graphRF.links.filter((link) => link.id !== el.id),
-        };
-        setGraphRF(newGraph, true);
-        setUndoRedo({ action: 'Removed a Link', graph: newGraph });
-        return;
-      }
-
-      throw new Error('Expected a link or a node for deletion');
-    },
-    [graphRF, setGraphRF, setUndoRedo]
-  );
+  useEffect(() => {
+    console.log('rerender nodesLength');
+    if (prevGraphId !== workingGraph.graph.id) {
+      const nodesLength = storeRF.getState().getNodes().length;
+      setTimeout(() => {
+        if (nodesLength === 0) {
+          return;
+        }
+        // DOC: Define a zoom level for small graphs to not show very-big nodes
+        if (nodesLength < 6) {
+          zoomTo(0.6);
+        } else {
+          fitView();
+        }
+        // DOC: the value of the delay is important to fitview even the execution
+        // that takes up to 4secs. Possibly rerender after the call to get the workflow??
+      }, 1000);
+      // DOC: if I clear the timeout for memory leaks the setTImeout never runs fitview???
+      // return () => clearTimeout(timer);
+    }
+  }, [storeRF, workingGraph.graph.id, fitView, getZoom, zoomTo, prevGraphId]);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
       console.log('onNodesChange', changes);
-
-      // TODO: need examination based on comments and commented code
-      if (changes[0].type === 'dimensions') {
-        return;
-      }
-
-      // TODO: on click another node it is activated twice once with both
-      // and then with the current??
-
-      const change = changes[0];
-      if (change.type === 'remove') {
-        const node = [...graphRF.nodes].find((el) => el.id === change.id);
-        if (node) {
-          onElementsRemove(node);
-        }
-      }
-
-      // TODO: nodes are updated only on rf canvas and not on graphRF
-      // if we update graphRF we have a loop so we update on setSelectedElement
-      // where we set every other selected to false... Examine
-
-      setNodes((ns) => applyNodeChanges(changes, ns));
+      storeRF
+        .getState()
+        .setNodes(applyNodeChanges(changes, storeRF.getState().getNodes()));
     },
-    [onElementsRemove, graphRF.nodes]
+    [storeRF]
   );
 
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
       console.log('onEdgesChange', changes);
       const change = changes[0];
-      if ('id' in change && changes[0].type === 'remove') {
-        const edgeToRemove = graphRF.links.find((el) => el.id === change.id);
-        if (edgeToRemove) {
-          onElementsRemove(edgeToRemove);
-        }
-      }
-
-      setEdges((es) => {
-        const newEdges = applyEdgeChanges<EwoksRFLinkData>(changes, es);
-        // Needed to force `data to not be optional. See EwoksRFLink in src/types.
-        return newEdges as EwoksRFLink[];
-      });
+      storeRF
+        .getState()
+        .setEdges(applyEdgeChanges(changes, storeRF.getState().edges));
     },
-    [onElementsRemove, graphRF.links]
+    [storeRF]
   );
 
   const onPaneClick = () => {
@@ -241,7 +164,10 @@ function Canvas() {
   // TODO: this function only handles selected element which is done by RF11 nicelly.
   // It shouldn't update the whole graph as it is now since selected modifies the GraphRF
   const onNodeClick = (_event: MouseEvent, element: Node) => {
-    const graphElement: EwoksRFNode | undefined = nodes.find(
+    console.log(storeRF.getState().nodeInternals, storeRF.getState().edges);
+
+    const nodesRF = [...storeRF.getState().nodeInternals.values()];
+    const graphElement: EwoksRFNode | undefined = nodesRF.find(
       (el) => el.id === element.id
     );
 
@@ -273,12 +199,13 @@ function Canvas() {
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
 
-    if (graphRF.graph.id === '0') {
-      setSubgraphsStack({
-        id: graphRF.graph.id,
-        label: graphRF.graph.label,
-      });
-    }
+    // Examine 0 should not be used
+    // if (graphRF.graph.id === '0') {
+    //   setSubgraphsStack({
+    //     id: graphRF.graph.id,
+    //     label: graphRF.graph.label,
+    //   });
+    // }
 
     if (workingGraph.graph.id === graphRF.graph.id) {
       const stateRF = storeRF.getState();
@@ -349,16 +276,18 @@ function Canvas() {
         },
       };
 
+      storeRF.getState().setNodes([...stateRF.getNodes(), newNode]);
+
+      // TBD
       const newGraph: GraphRF = {
         graph: graphRF.graph,
         nodes: [...graphRF.nodes, newNode],
         links: graphRF.links,
       };
+      setGraphRF(newGraph, true);
 
-      stateRF.setNodes([...stateRF.getNodes(), newNode]);
-      // setGraphRF(newGraph, true);
-      // setUndoRedo({ action: 'Added a Node', graph: newGraph });
-      // setRecentGraphs(newGraph);
+      setUndoRedo({ action: 'Added a Node', graph: newGraph });
+      setRecentGraphs(newGraph);
     } else {
       setOpenSnackbar({
         open: true,
@@ -366,6 +295,7 @@ function Canvas() {
         severity: 'success',
       });
     }
+    console.log(storeRF.getState().nodeInternals, storeRF.getState().edges);
   };
 
   const onEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => {
@@ -381,7 +311,14 @@ function Canvas() {
     // 2. is attached to an input-output already connected to a node then
     // edgeUpdate should not happen and a message informs it is not ewoks-compatible
 
-    const { isValid, reason } = isValidLink(newConnection, graphRF, oldEdge);
+    // check validation
+    const nodesRF = [...storeRF.getState().nodeInternals.values()];
+    const edgesRF = storeRF.getState().edges;
+    const { isValid, reason } = isValidLink(
+      newConnection,
+      { nodes: nodesRF, links: edgesRF as EwoksRFLink[], graph: graphRF.graph },
+      oldEdge
+    );
     if (!isValid) {
       setOpenSnackbar({
         open: true,
@@ -392,15 +329,12 @@ function Canvas() {
       const newGraph: GraphRF = {
         graph: { ...graphRF.graph },
 
-        nodes: nodes.filter((el) => el.position),
+        nodes: nodesRF.filter((el) => el.position),
         links: [
-          ...edges
-
+          ...edgesRF
             .filter((el) => el.source)
             .filter((lin) => lin.id !== oldEdge.id),
-          // TODO: leave the type like that for now until I examine the RFModels with EwoksRFModels
-          (link as unknown) as EwoksRFLink,
-        ],
+        ] as EwoksRFLink[],
       };
 
       setGraphRF(newGraph, true);
@@ -410,6 +344,8 @@ function Canvas() {
   };
 
   const onConnect = (params: Connection) => {
+    console.log(params);
+
     if (workingGraph.graph.id !== graphRF.graph.id) {
       setOpenSnackbar({
         open: true,
@@ -419,13 +355,12 @@ function Canvas() {
       return;
     }
 
+    // To Be Deleted
     const newGraph = addConnectionToGraph(params, graphRF);
-
+    storeRF.getState().setEdges(newGraph.links);
     setGraphRF(newGraph, true);
-    // DOC: need to also save it in recentGraphs if we leave and come back
-    setRecentGraphs(newGraph);
 
-    // add action and new GraphRF to undo-redo array
+    setRecentGraphs(newGraph);
     setUndoRedo({ action: 'new Link', graph: newGraph });
   };
 
@@ -441,15 +376,19 @@ function Canvas() {
   const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
     event.preventDefault();
 
-    const nodeTmp = graphRF.nodes.find((el) => el.id === node.id);
+    const nodeTmp = storeRF.getState().nodeInternals.get(node.id);
+
     if (nodeTmp?.data.task_props.task_type === 'graph') {
-      // if type==graph get the subgraph from the recentGraphs
       const subgraph = recentGraphs.find(
         (gr) => gr.graph.id === nodeTmp.data.task_props.task_identifier
       );
 
       if (subgraph?.graph.id) {
+        storeRF.getState().setNodes(subgraph.nodes);
+        storeRF.getState().setEdges(subgraph.links);
+        // <TBD
         setGraphRF(subgraph);
+        // TBD>
         setSubgraphsStack({
           id: subgraph.graph.id,
           label: subgraph.graph.label,
@@ -466,13 +405,26 @@ function Canvas() {
       }
     } else {
       if (nodeTmp) {
-        setSelectedElement({
-          ...nodeTmp,
-          data: {
-            ...nodeTmp.data,
-            ui_props: { ...nodeTmp.data.ui_props, details: true },
+        storeRF.getState().setNodes([
+          ...storeRF
+            .getState()
+            .getNodes()
+            .filter((nod) => nod.id !== nodeTmp.id),
+          {
+            ...nodeTmp,
+            data: {
+              ...nodeTmp.data,
+              ui_props: { ...nodeTmp.data.ui_props, details: true },
+            },
           },
-        });
+        ]);
+        // setSelectedElement({
+        //   ...nodeTmp,
+        //   data: {
+        //     ...nodeTmp.data,
+        //     ui_props: { ...nodeTmp.data.ui_props, details: true },
+        //   },
+        // });
       }
     }
   };
@@ -482,11 +434,14 @@ function Canvas() {
     selectedElements: EwoksRFNode[]
   ) => {
     event.preventDefault();
+    // graphRF.graph.id stays as is in the store
     if (workingGraph.graph.id === graphRF.graph.id) {
+      // Get them from RF
       const { nodes: graphNodes } = graphRF;
 
       const selectedIds = selectedElements.map((e) => e.id);
 
+      // This is not needed probably
       const newNodes = graphNodes.map((n) => {
         const selectedIndex = selectedIds.indexOf(n.id);
         if (selectedIndex >= 0) {
@@ -499,13 +454,15 @@ function Canvas() {
         return n;
       });
 
+      // TBD
       const newGraph: GraphRF = {
         graph: graphRF.graph,
         nodes: newNodes,
         links: graphRF.links,
       };
-
       setGraphRF(newGraph, true);
+
+      // Replace newGraph with RF
       setUndoRedo({
         action: 'Dragged a selection',
         graph: newGraph,
@@ -522,11 +479,14 @@ function Canvas() {
 
   const onNodeDragStop = (event: MouseEvent, draggedNode: EwoksRFNode) => {
     event.preventDefault();
+    // graphRF.graph.id stays as is in the store
     if (workingGraph.graph.id === graphRF.graph.id) {
-      // DOC: find RFEwoksNode and update its position and save grapRF
-      const { nodes: graphNodes } = graphRF;
+      // const { nodes: graphNodes } = graphRF;
 
-      const newNodes = graphNodes.map((n) => {
+      const nodesRF = [...storeRF.getState().nodeInternals.values()];
+
+      // This is not needed probably
+      const newNodes = nodesRF.map((n) => {
         if (n.id === draggedNode.id) {
           return {
             ...n,
@@ -541,11 +501,10 @@ function Canvas() {
         nodes: newNodes,
         links: graphRF.links,
       };
-
+      // TBD
       setGraphRF(newGraph, true);
 
       setUndoRedo({ action: 'Dragged a Node', graph: newGraph });
-
       setRecentGraphs(newGraph);
     } else {
       setOpenSnackbar({
@@ -563,6 +522,8 @@ function Canvas() {
 
     const keys = event.ctrlKey || event.metaKey;
     if (keys && charCode === 'v') {
+      console.log('key clone?');
+
       event.preventDefault();
       event.stopPropagation();
       if (isNode(selectedElement)) {
@@ -575,6 +536,11 @@ function Canvas() {
             y: (selectedElement.position?.y || 0) + 100,
           },
         };
+        storeRF
+          .getState()
+          .setNodes([...storeRF.getState().getNodes(), newClone]);
+
+        // TBD
         setGraphRF(
           {
             ...graphRF,
@@ -582,6 +548,7 @@ function Canvas() {
           },
           true
         );
+
         setSelectedElement(newClone);
       } else {
         setOpenSnackbar({
@@ -608,8 +575,8 @@ function Canvas() {
           attributionPosition="bottom-right"
           minZoom={0.2}
           snapToGrid
-          nodes={nodes}
-          edges={edges}
+          nodes={[...storeRF.getState().nodeInternals.values()]}
+          edges={storeRF.getState().edges}
           onNodeClick={onNodeClick}
           onEdgeClick={onEdgeClick}
           onPaneClick={onPaneClick}
