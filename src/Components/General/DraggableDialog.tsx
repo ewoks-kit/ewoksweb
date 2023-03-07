@@ -18,7 +18,13 @@ import {
 } from '@material-ui/lab';
 import { FormControl, TextField, Tooltip } from '@material-ui/core';
 import useStore from 'store/useStore';
-import type { EditableTableRow } from '../../types';
+import type {
+  EditableTableRow,
+  EwoksRFLink,
+  EwoksRFNode,
+  GraphRF,
+} from '../../types';
+import { useStoreApi } from 'reactflow';
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -51,6 +57,8 @@ interface Props {
 }
 
 export default function DraggableDialog(props: Props) {
+  const storeRF = useStoreApi();
+
   const [graph, setGraph] = useState<Graph>({});
   const [oldGraph, setOldGraph] = useState<Graph>({});
   const [isOpen, setIsOpen] = useState(false);
@@ -101,9 +109,15 @@ export default function DraggableDialog(props: Props) {
     event: React.MouseEvent<HTMLElement>,
     newSelection: string
   ) => {
+    const graphRf: GraphRF = {
+      graph: graphRF.graph,
+      nodes: storeRF.getState().getNodes() as EwoksRFNode[],
+      links: storeRF.getState().edges as EwoksRFLink[],
+    };
+
     setSelection(newSelection);
     setTitle(newSelection === 'ewoks' ? 'Ewoks Graph' : 'RF Graph');
-    setGraph(newSelection === 'ewoks' ? rfToEwoks(graphRF) : graphRF);
+    setGraph(newSelection === 'ewoks' ? rfToEwoks(graphRf) : graphRf);
     setIsOpen(true);
   };
 
