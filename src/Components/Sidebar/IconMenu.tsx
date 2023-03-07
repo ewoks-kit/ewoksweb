@@ -11,13 +11,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { Button, Menu, Tooltip } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import FormDialog from '../General/FormDialog';
-import type {
-  EwoksRFLink,
-  EwoksRFNode,
-  GraphDetails,
-  GraphRF,
-  Task,
-} from '../../types';
+import type { EwoksRFLink, EwoksRFNode, GraphDetails, Task } from '../../types';
 import useStore from '../../store/useStore';
 import { FormAction } from '../../types';
 
@@ -25,7 +19,9 @@ export default function IconMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
-  const [elementToEdit, setElementToEdit] = React.useState<Task | GraphRF>({});
+  const [elementToEdit, setElementToEdit] = React.useState<Task | GraphDetails>(
+    {}
+  );
   const [doAction, setDoAction] = React.useState<FormAction>(
     FormAction.newTask
   );
@@ -48,7 +44,7 @@ export default function IconMenu() {
 
   function onAction(
     action: FormAction,
-    element: Task | EwoksRFNode | EwoksRFLink | GraphRF
+    element: Task | EwoksRFNode | EwoksRFLink | GraphDetails
   ) {
     setDoAction(action);
     switch (action) {
@@ -92,7 +88,7 @@ export default function IconMenu() {
         break;
       }
       case 'cloneGraph': {
-        setElementToEdit(graphRF);
+        setElementToEdit(graphRF.graph);
         break;
       }
       default: {
@@ -149,7 +145,9 @@ export default function IconMenu() {
               </ListItemIcon>
               <ListItemText>Clone as Task</ListItemText>
             </MenuItem>
-            <MenuItem onClick={() => onAction(FormAction.cloneGraph, graphRF)}>
+            <MenuItem
+              onClick={() => onAction(FormAction.cloneGraph, graphRF.graph)}
+            >
               <ListItemIcon>
                 <FileCopyIcon fontSize="small" />
               </ListItemIcon>

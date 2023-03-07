@@ -267,7 +267,7 @@ export default function Dashboard() {
         disagreeCallback={disAgreeSaveWithout}
       />
       <FormDialog
-        elementToEdit={graphRF}
+        elementToEdit={graphRF.graph}
         action={FormAction.newGraph}
         open={openSaveDialog}
         setOpenSaveDialog={setOpenSaveDialog}

@@ -16,10 +16,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import type {
-  GraphRF,
   Task,
   FormAction,
   PropertyChangedEvent,
+  GraphDetails,
+  EwoksRFNode,
+  EwoksRFLink,
 } from '../../types';
 import { rfToEwoks, textForError } from '../../utils';
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
@@ -35,15 +37,18 @@ import {
 import IconControl from './IconControl';
 import { assertStr } from '../../utils/typeGuards';
 import IconBoundary from '../../IconBoundary';
+import { useStoreApi } from 'reactflow';
 
 interface FormDialogProps {
-  elementToEdit: Task | GraphRF;
+  elementToEdit: Task | GraphDetails;
   action: FormAction;
   open: boolean;
   setOpenSaveDialog: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function FormDialog(props: FormDialogProps) {
+  const storeRF = useStoreApi();
+
   const [isOpen, setIsOpen] = useState(false);
   const [newName, setNewName] = useState('');
   const [taskType, setTaskType] = useState('');
@@ -59,7 +64,7 @@ export default function FormDialog(props: FormDialogProps) {
   const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setGettingFromServer = useStore((st) => st.setGettingFromServer);
-  const [element, setElement] = useState<Task | GraphRF>({});
+  const [element, setElement] = useState<Task | GraphDetails>({});
   const setTasks = useStore((state) => state.setTasks);
   const tasks = useStore((state) => state.tasks);
 
@@ -73,8 +78,8 @@ export default function FormDialog(props: FormDialogProps) {
     setElement(elementToEdit);
     setIsOpen(open);
 
-    if (isForGraph && 'graph' in elementToEdit) {
-      setNewName(elementToEdit.graph.label || '');
+    if (isForGraph && 'label' in elementToEdit) {
+      setNewName(elementToEdit.label || '');
       setOverwrite(false);
       return;
     }
@@ -92,7 +97,7 @@ export default function FormDialog(props: FormDialogProps) {
 
   async function handleSave() {
     // DOC: get the selected element (graph or Node) give a new name before saving
-    if ('nodes' in element && isForGraph && newName) {
+    if ('label' in element && isForGraph && newName) {
       saveGraph(element);
     } else if ('task_identifier' in element && newName) {
       if (['cloneTask', 'newTask'].includes(action) && element) {
@@ -175,7 +180,12 @@ export default function FormDialog(props: FormDialogProps) {
     }
   }
 
-  async function saveGraph(graph: GraphRF) {
+  async function saveGraph(graphDetails: GraphDetails) {
+    const graph = {
+      graph: graphDetails,
+      nodes: storeRF.getState().getNodes() as EwoksRFNode[],
+      links: storeRF.getState().edges as EwoksRFLink[],
+    };
     if (overwrite) {
       // put
       try {
@@ -234,10 +244,11 @@ export default function FormDialog(props: FormDialogProps) {
     const val = event.target.value;
     setNewName(val);
 
-    if ('graph' in element) {
+    if ('label' in element) {
       setElement({
         ...element,
-        graph: { ...element.graph, id: val, label: val },
+        id: val,
+        label: val,
       });
     } else {
       // TODO: does not infer type
@@ -354,9 +365,9 @@ export default function FormDialog(props: FormDialogProps) {
         {action === 'editTask' ? 'Edit the ' : 'Give the new '}
         {isForGraph ? 'Workflow name' : 'Task details'}
         {action === 'newGraphOrOverwrite' &&
-        'graph' in elementToEdit &&
-        elementToEdit.graph.label
-          ? ` or select to overwrite the existing with id: ${elementToEdit.graph.label}`
+        'label' in elementToEdit &&
+        elementToEdit.label
+          ? ` or select to overwrite the existing with id: ${elementToEdit.label}`
           : ''}
       </DialogTitle>
       <DialogContent>
