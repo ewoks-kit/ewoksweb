@@ -34,7 +34,7 @@ export default function Sidebar() {
   const classes = useStyles();
 
   const nodesIds = useNodesIds();
-  const { deleteElements, getNodes } = useReactFlow();
+  const { deleteElements, getNodes, setNodes } = useReactFlow();
 
   const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
@@ -50,10 +50,11 @@ export default function Sidebar() {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
-  const initializedRFGraph = useStore((state) => state.initializedRFGraph);
+  const initializedGraph = useStore((state) => state.initializedGraph);
   const setUndoRedo = useStore((state) => state.setUndoRedo);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
+  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
   const deleteElement = async () => {
     if (workingGraph.graph.id !== graphRF.graph.id) {
@@ -100,7 +101,8 @@ export default function Sidebar() {
         action: 'Removed a Link',
         graph: newGraph,
       });
-      setGraphRF(newGraph, true);
+      deleteElements({ edges: [selectedElement] });
+      // setGraphRF(newGraph, true);
       return;
     }
 
@@ -135,7 +137,7 @@ export default function Sidebar() {
       }
     }
 
-    setGraphRF(initializedRFGraph);
+    setWorkingGraph(initializedGraph);
     setSelectedElement({} as GraphDetails);
     setSubgraphsStack({ id: '', label: '', resetStack: true });
     resetRecentGraphs();
@@ -156,11 +158,12 @@ export default function Sidebar() {
           y: (selectedElement.position?.y || 0) + 100,
         },
       };
+      const nodesRF = getNodes();
       const newGraph = {
         ...graphRF,
-        nodes: [...getNodes(), newClone],
+        nodes: [...nodesRF, newClone],
       };
-
+      setNodes([...nodesRF, newClone]);
       setGraphRF(newGraph, true);
 
       setUndoRedo({ action: 'Cloned a Node', graph: newGraph });

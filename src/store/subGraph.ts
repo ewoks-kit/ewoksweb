@@ -24,6 +24,8 @@ const subGraph = (
   },
 
   // DOC: takes a GraphEwoks and transform it to graphRF
+  // UWG: replace this with the workingGraph by also passing
+  // the new node-graph to add. Does the same and adds a graph?
   setSubGraph: async (subGraphL: GraphEwoks) => {
     // 1. input the graphEwoks from server or file-system
     // 2. search for all subgraphs in it (async)
