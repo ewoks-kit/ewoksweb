@@ -100,7 +100,7 @@ const workingGraph = (
 
     get().setRecentGraphs(graph as GraphRF);
 
-    // set the new graph as the working graph
+    // TBD when new graph button is ok
     get().setGraphRF(graph as GraphRF);
     get().setSelectedElement(graph.graph);
     // add the new graph to the recent graphs if not already there

@@ -1,4 +1,11 @@
-import type { EwoksRFNode, GraphRF, GraphEwoks, GraphNodes } from '../types';
+import type {
+  EwoksRFNode,
+  GraphRF,
+  GraphEwoks,
+  GraphNodes,
+  EwoksLink,
+  EwoksRFLink,
+} from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
@@ -7,10 +14,15 @@ import orange2 from 'images/orange2.png';
 import type { GetState, SetState } from 'zustand';
 import type { State } from '../types';
 import { Position } from 'reactflow';
+import type { Node, Edge } from 'reactflow';
 
 export interface SubGraphSlice {
   subGraph: GraphRF;
-  setSubGraph: (graph: GraphEwoks) => Promise<GraphRF>;
+  setSubGraph: (
+    graph: GraphEwoks,
+    nodes: Node[],
+    links: Edge[]
+  ) => Promise<EwoksRFNode>;
 }
 
 const subGraph = (
@@ -26,7 +38,7 @@ const subGraph = (
   // DOC: takes a GraphEwoks and transform it to graphRF
   // UWG: replace this with the workingGraph by also passing
   // the new node-graph to add. Does the same and adds a graph?
-  setSubGraph: async (subGraphL: GraphEwoks) => {
+  setSubGraph: async (subGraphL, nodes, links) => {
     // 1. input the graphEwoks from server or file-system
     // 2. search for all subgraphs in it (async)
     const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(
@@ -78,7 +90,7 @@ const subGraph = (
       });
       let id = 0;
       let graphId = subToAdd.graph.label || '';
-      while (get().graphRF.nodes.some((nod) => nod.id === graphId)) {
+      while (nodes.some((nod) => nod.id === graphId)) {
         graphId += id++;
       }
       newNode = {
@@ -88,7 +100,7 @@ const subGraph = (
         id: graphId,
 
         type: 'graph',
-        position: calcCoordinatesFirstNode(get().graphRF.nodes),
+        position: calcCoordinatesFirstNode(nodes),
 
         data: {
           task_props: {
@@ -131,12 +143,12 @@ const subGraph = (
     }
     const newWorkingGraph = {
       graph: get().graphRF.graph,
-      nodes: [...get().graphRF.nodes, newNode],
-      links: get().graphRF.links,
+      nodes: [...nodes, newNode] as EwoksRFNode[],
+      links: links as EwoksRFLink[],
     };
-    get().setGraphRF(newWorkingGraph);
+
     get().setRecentGraphs(newWorkingGraph);
-    return graph;
+    return newNode;
   },
 });
 
