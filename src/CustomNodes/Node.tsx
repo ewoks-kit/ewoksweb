@@ -18,7 +18,7 @@ import NodeIcon from './NodeIcon';
 import IconBoundary from '../IconBoundary';
 import { useNodesIds } from '../store/graph-hooks';
 import type { NodeProps, EwoksRFLink, EwoksRFNode, GraphRF } from '../types';
-import { useStoreApi } from 'reactflow';
+import { useReactFlow } from 'reactflow';
 
 // TODO: examine usage when execution in main
 const execution = () => {
@@ -43,7 +43,7 @@ function Node({
   nodeWidth,
   details,
 }: NodeProps) {
-  const storeRF = useStoreApi();
+  const { getNodes, getEdges, setNodes } = useReactFlow();
   const nodesIds = useNodesIds();
 
   const border = colorBorder
@@ -94,8 +94,8 @@ function Node({
   const isValidConnection = (connection: Connection) => {
     const graphRf: GraphRF = {
       graph: graphRF.graph,
-      nodes: storeRF.getState().getNodes() as EwoksRFNode[],
-      links: storeRF.getState().edges as EwoksRFLink[],
+      nodes: getNodes(),
+      links: getEdges() as EwoksRFLink[],
     };
     const { isValid, reason } = isValidLink(connection, graphRf);
     if (!isValid) {
@@ -129,8 +129,7 @@ function Node({
         y: selectedElement.position?.y || 0 + 100,
       },
     };
-    const stateRF = storeRF.getState();
-    stateRF.setNodes([...stateRF.getNodes(), newClone]);
+    setNodes([...getNodes(), newClone]);
 
     // TBD
     const newGraph = {

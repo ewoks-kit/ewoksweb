@@ -5,16 +5,11 @@ import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
 import isValidLink from '../utils/IsValidLink';
 import useStore from '../store/useStore';
-import type {
-  EwoksRFLink,
-  EwoksRFNode,
-  EwoksRFNodeData,
-  GraphRF,
-} from '../types';
-import { useStoreApi } from 'reactflow';
+import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../types';
+import { useReactFlow } from 'reactflow';
 
 function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
-  const storeRF = useStoreApi();
+  const { getNodes, getEdges } = useReactFlow();
 
   const { data: node, selected } = props;
   const graphRF = useStore((state) => state.graphRF);
@@ -23,8 +18,8 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
   const isValidConnection = (connection: Connection) => {
     const graphRf: GraphRF = {
       graph: graphRF.graph,
-      nodes: storeRF.getState().getNodes() as EwoksRFNode[],
-      links: storeRF.getState().edges as EwoksRFLink[],
+      nodes: getNodes(),
+      links: getEdges() as EwoksRFLink[],
     };
     const { isValid, reason } = isValidLink(connection, graphRf);
     if (!isValid) {
