@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type {
   DataMapping,
   EditableTableRow,
+  EwoksRFLink,
   EwoksRFNode,
 } from '../../../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
@@ -27,12 +28,15 @@ import DefaultInputs from '../EditableTableProperties/DefaultInputs';
 import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
 import { useNodesIds } from '../../../store/graph-hooks';
+import { useReactFlow } from 'reactflow';
 
 const useStyles = DashboardStyle;
 
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(element: EwoksRFNode) {
   const classes = useStyles();
+
+  const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
 
   const nodesIds = useNodesIds();
 
@@ -123,7 +127,7 @@ export default function NodeDetails(element: EwoksRFNode) {
         id: uniqueId,
       };
 
-      const newLinks = graphRF.links.map((link) => {
+      const newLinks = getEdges().map((link) => {
         if (link.source === element.id) {
           return {
             ...link,
@@ -141,9 +145,18 @@ export default function NodeDetails(element: EwoksRFNode) {
         return link;
       });
 
+      const newNodes = [
+        ...getNodes().filter((nod) => nod.id !== element.id),
+        newElement,
+      ];
+
+      setNodes(newNodes);
+      setEdges(newLinks);
+
+      // TBD
       setGraphRF({
         graph: graphRF.graph,
-        links: newLinks,
+        links: newLinks as EwoksRFLink[],
         nodes: [
           ...graphRF.nodes.filter((nod) => nod.id !== element.id),
           newElement,

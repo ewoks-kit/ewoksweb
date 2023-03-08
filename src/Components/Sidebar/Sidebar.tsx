@@ -67,6 +67,9 @@ export default function Sidebar() {
     }
 
     if (isNode(selectedElement)) {
+      deleteElements({ nodes: [selectedElement] });
+
+      // TBD used only for undoRedo
       const nodesLinks = graphRF.links.filter(
         (link) =>
           !(
@@ -74,15 +77,11 @@ export default function Sidebar() {
             link.target === selectedElement.id
           )
       );
-
-      deleteElements({ nodes: [selectedElement] });
-
       const newGraph: GraphRF = {
         ...graphRF,
         nodes: graphRF.nodes.filter((nod) => nod.id !== selectedElement.id),
         links: nodesLinks,
       };
-
       setUndoRedo({
         action: 'Removed a Node',
         graph: newGraph,
@@ -92,16 +91,17 @@ export default function Sidebar() {
     }
 
     if (isLink(selectedElement)) {
+      deleteElements({ edges: [selectedElement] });
+
+      // TBD used only for undoRedo
       const newGraph: GraphRF = {
         ...graphRF,
         links: graphRF.links.filter((link) => link.id !== selectedElement.id),
       };
-
       setUndoRedo({
         action: 'Removed a Link',
         graph: newGraph,
       });
-      deleteElements({ edges: [selectedElement] });
       // setGraphRF(newGraph, true);
       return;
     }
@@ -165,7 +165,6 @@ export default function Sidebar() {
       };
       setNodes([...nodesRF, newClone]);
       setGraphRF(newGraph, true);
-
       setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
       setSelectedElement(newClone);
     } else {
