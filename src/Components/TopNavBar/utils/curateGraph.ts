@@ -14,7 +14,7 @@ function curateGraph(
   stateRF: ReactFlowState
 ): GraphRF {
   // INFO: Remove empty lines in table for nodes and links
-  const nodes = [...stateRF.nodeInternals.values()].map((nodeRF) => {
+  const nodes = stateRF.getNodes().map((nodeRF) => {
     const node = nodeRF as EwoksRFNode;
     return {
       ...node,
@@ -36,7 +36,7 @@ function curateGraph(
     };
   });
 
-  const links = [...stateRF.edges].map((edgeRF) => {
+  const links = stateRF.edges.map((edgeRF) => {
     const edge = edgeRF as EwoksRFLink;
     return {
       ...edge,

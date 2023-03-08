@@ -24,7 +24,7 @@ export default function SaveToServer({
   return (
     <>
       <FormDialog
-        elementToEdit={graphRF}
+        elementToEdit={graphRF.graph}
         action={action}
         open={open}
         setOpenSaveDialog={setOpenSaveDialog}
