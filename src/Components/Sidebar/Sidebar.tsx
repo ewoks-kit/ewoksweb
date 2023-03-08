@@ -166,6 +166,7 @@ export default function Sidebar() {
       setNodes([...nodesRF, newClone]);
       setGraphRF(newGraph, true);
       setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
+      setSelectedElement(newClone);
     } else {
       setOpenSnackbar({
         open: true,
