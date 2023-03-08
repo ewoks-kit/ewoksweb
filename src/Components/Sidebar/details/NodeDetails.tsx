@@ -28,7 +28,7 @@ import DefaultInputs from '../EditableTableProperties/DefaultInputs';
 import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
 import { useNodesIds } from '../../../store/graph-hooks';
-import { useStoreApi } from 'reactflow';
+import { useReactFlow } from 'reactflow';
 
 const useStyles = DashboardStyle;
 
@@ -36,7 +36,7 @@ const useStyles = DashboardStyle;
 export default function NodeDetails(element: EwoksRFNode) {
   const classes = useStyles();
 
-  const storeRF = useStoreApi();
+  const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
 
   const nodesIds = useNodesIds();
 
@@ -127,7 +127,7 @@ export default function NodeDetails(element: EwoksRFNode) {
         id: uniqueId,
       };
 
-      const newLinks = storeRF.getState().edges.map((link) => {
+      const newLinks = getEdges().map((link) => {
         if (link.source === element.id) {
           return {
             ...link,
@@ -146,15 +146,12 @@ export default function NodeDetails(element: EwoksRFNode) {
       });
 
       const newNodes = [
-        ...storeRF
-          .getState()
-          .getNodes()
-          .filter((nod) => nod.id !== element.id),
+        ...getNodes().filter((nod) => nod.id !== element.id),
         newElement,
       ];
 
-      storeRF.getState().setNodes(newNodes);
-      storeRF.getState().setEdges(newLinks);
+      setNodes(newNodes);
+      setEdges(newLinks);
 
       // TBD
       setGraphRF({

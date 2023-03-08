@@ -27,17 +27,14 @@ import { isGraphDetails, isLink, isNode } from '../../utils/typeGuards';
 import { textForError } from '../../utils';
 import { useNodesIds } from '../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
-import { useStoreApi } from 'reactflow';
 
 const useStyles = DashboardStyle;
 
 export default function Sidebar() {
   const classes = useStyles();
 
-  const storeRF = useStoreApi();
-
   const nodesIds = useNodesIds();
-  const { deleteElements, getNodes } = useReactFlow();
+  const { deleteElements, getNodes, setNodes } = useReactFlow();
 
   const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
@@ -161,17 +158,15 @@ export default function Sidebar() {
           y: (selectedElement.position?.y || 0) + 100,
         },
       };
-      const stateRF = storeRF.getState();
-      stateRF.setNodes([...stateRF.getNodes(), newClone]);
-      setSelectedElement(newClone);
-
-      // TBD used only for undoRedo
+      const nodesRF = getNodes();
       const newGraph = {
         ...graphRF,
-        nodes: [...stateRF.getNodes(), newClone],
+        nodes: [...nodesRF, newClone],
       };
+      setNodes([...nodesRF, newClone]);
       setGraphRF(newGraph, true);
       setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
+      setSelectedElement(newClone);
     } else {
       setOpenSnackbar({
         open: true,

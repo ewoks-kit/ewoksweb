@@ -144,7 +144,6 @@ function Canvas() {
 
   const onNodeClick = (_event: MouseEvent, element: Node) => {
     if (
-      element &&
       !(
         element.data.task_props.task_type === 'executionSteps' &&
         element.type === 'executionSteps'
@@ -425,12 +424,8 @@ function Canvas() {
   const onNodeDragStop = (event: MouseEvent, draggedNode: EwoksRFNode) => {
     event.preventDefault();
     if (workingGraph.graph.id === graphId) {
-      // const { nodes: graphNodes } = graphRF;
-
-      const nodesRF = [...storeRF.getState().nodeInternals.values()];
-
-      // This is not needed probably
-      const newNodes = nodesRF.map((n) => {
+      // This is not needed probably TBD
+      const newNodes = getNodes().map((n) => {
         if (n.id === draggedNode.id) {
           return {
             ...n,
