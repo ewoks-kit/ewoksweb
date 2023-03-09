@@ -2,6 +2,7 @@ import type {
   Conditions,
   DataMapping,
   EditableTableRow,
+  EwoksRFNode,
   Inputs,
 } from '../../../types';
 
@@ -52,4 +53,8 @@ export function getType(val: DataMapping | Conditions | Inputs) {
   }
 
   return 'string';
+}
+
+export function isClass(node: EwoksRFNode | undefined): boolean {
+  return node?.data.task_props.task_type === 'class';
 }

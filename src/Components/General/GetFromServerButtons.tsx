@@ -7,6 +7,7 @@ import useStore from '../../store/useStore';
 import { getWorkflow } from '../../api/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { textForError } from '../../utils';
+import { useReactFlow } from 'reactflow';
 
 interface GetFromServerButtonsProps {
   workflowId: string;
@@ -16,6 +17,8 @@ interface GetFromServerButtonsProps {
 // DOC: buttons used to get or save to server
 export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
   const { workflowId, showButtons } = props;
+
+  const { getNodes, getEdges, setNodes } = useReactFlow();
 
   const setSubGraph = useStore((state) => state.setSubGraph);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
@@ -53,8 +56,11 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
             severity: 'success',
           });
           setCanvasGraphChanged(false);
+          const nodes = getNodes();
           if (isSubgraph === 'subgraph') {
-            setSubGraph(graph);
+            const newGraphNode = await setSubGraph(graph, nodes, getEdges());
+
+            setNodes([...nodes, newGraphNode]);
           } else {
             setWorkingGraph(graph, 'fromServer');
           }

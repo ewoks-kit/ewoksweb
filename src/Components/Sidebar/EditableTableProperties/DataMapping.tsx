@@ -4,13 +4,15 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
-import { useReactFlow } from 'reactflow';
+import { useNode } from '../../../store/graph-hooks';
+import { isClass } from './utils';
 
 export default function DataMappingComponent(element: EwoksRFLink) {
-  const { getNodes } = useReactFlow();
-
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
+
+  const sourceNode = useNode(element.source);
+  const targetNode = useNode(element.target);
 
   function addDataMapping() {
     if (element.data.data_mapping?.some((x) => x.id === '')) {
@@ -59,15 +61,6 @@ export default function DataMappingComponent(element: EwoksRFLink) {
     );
   };
 
-  function isClass(sourceOrTarget: 'source' | 'target'): boolean {
-    const theNode = getNodes().find((nod) => {
-      const sOrTNode =
-        sourceOrTarget === 'source' ? element.source : element.target;
-      return nod.id === sOrTNode;
-    });
-    return theNode?.data.task_props.task_type === 'class';
-  }
-
   return (
     <div>
       <SidebarTooltip
@@ -93,7 +86,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
           typeOfValues={[
             {
               type: element.source
-                ? isClass('source')
+                ? isClass(sourceNode)
                   ? 'select'
                   : 'input'
                 : 'input',
@@ -101,7 +94,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
             },
             {
               type: element.target
-                ? isClass('target')
+                ? isClass(targetNode)
                   ? 'select'
                   : 'input'
                 : 'input',

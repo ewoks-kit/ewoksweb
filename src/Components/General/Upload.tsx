@@ -6,6 +6,7 @@ import type { ChangeEvent, ReactNode } from 'react';
 // import { validateEwoksGraph } from '../utils/EwoksValidator';
 import useStore from '../../store/useStore';
 import type { GraphEwoks, GraphRF } from '../../types';
+import { useReactFlow } from 'reactflow';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -38,6 +39,8 @@ function isJsonString(str: string): boolean {
 function Upload(props: { children?: ReactNode } | undefined) {
   const classes = useStyles();
 
+  const { getNodes, getEdges } = useReactFlow();
+
   const graphRF = useStore<GraphRF>((state) => state.graphRF);
   const graphOrSubgraph = useStore<boolean>((state) => state.graphOrSubgraph);
 
@@ -59,11 +62,9 @@ function Upload(props: { children?: ReactNode } | undefined) {
           if (graphOrSubgraph) {
             // TODO validate from disk workflows but visualize them
             // const { result } = validateEwoksGraph(newGraph);
-            // if (result) {
             await setWorkingGraph(newGraph, 'fromDisk');
-            // }
           } else {
-            await setSubGraph(newGraph);
+            await setSubGraph(newGraph, getNodes(), getEdges());
           }
         } else {
           setOpenSnackbar({

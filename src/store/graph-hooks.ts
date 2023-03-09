@@ -15,3 +15,7 @@ export function useNodesLength() {
 export function useGraphId() {
   return useStore((state) => state.graphRF.graph.id);
 }
+
+export function useNode(id: string) {
+  return useRFStore((state) => state.nodeInternals.get(id));
+}

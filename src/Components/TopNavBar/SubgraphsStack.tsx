@@ -5,11 +5,14 @@ import HomeIcon from '@material-ui/icons/Home';
 
 import Link from '@material-ui/core/Link';
 import useStore from '../../store/useStore';
+import { useReactFlow } from 'reactflow';
 
 const useStyles = DashboardStyle;
 
 export default function SubgraphsStack() {
   const classes = useStyles();
+
+  const { setNodes, setEdges } = useReactFlow();
 
   const recentGraphs = useStore((state) => state.recentGraphs);
   const setGraphRF = useStore((state) => state.setGraphRF);
@@ -36,6 +39,9 @@ export default function SubgraphsStack() {
     const subgraph = recentGraphs.find((gr) => gr.graph.id === target.id);
 
     if (subgraph) {
+      setNodes(subgraph.nodes);
+      setEdges(subgraph.links);
+      // TBD It will only set the graphDetails subgraph.graph
       setGraphRF(subgraph);
       setSelectedElement({
         ...subgraph.graph,
