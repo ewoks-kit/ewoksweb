@@ -4,11 +4,13 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
+import { useReactFlow } from 'reactflow';
 
 export default function DataMappingComponent(element: EwoksRFLink) {
+  const { getNodes } = useReactFlow();
+
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
-  const graphRF = useStore((state) => state.graphRF);
 
   function addDataMapping() {
     if (element.data.data_mapping?.some((x) => x.id === '')) {
@@ -58,7 +60,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
   };
 
   function isClass(sourceOrTarget: 'source' | 'target'): boolean {
-    const theNode = graphRF.nodes.find((nod) => {
+    const theNode = getNodes().find((nod) => {
       const sOrTNode =
         sourceOrTarget === 'source' ? element.source : element.target;
       return nod.id === sOrTNode;

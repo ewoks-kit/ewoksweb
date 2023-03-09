@@ -5,17 +5,23 @@ import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
 import isValidLink from '../utils/IsValidLink';
 import useStore from '../store/useStore';
-import type { EwoksRFNodeData } from '../types';
+import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../types';
+import { useReactFlow } from 'reactflow';
 
 function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
-  // console.log(props);
+  const { getNodes, getEdges } = useReactFlow();
 
   const { data: node, selected } = props;
   const graphRF = useStore((state) => state.graphRF);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const isValidConnection = (connection: Connection) => {
-    const { isValid, reason } = isValidLink(connection, graphRF);
+    const graphRf: GraphRF = {
+      graph: graphRF.graph,
+      nodes: getNodes(),
+      links: getEdges() as EwoksRFLink[],
+    };
+    const { isValid, reason } = isValidLink(connection, graphRf);
     if (!isValid) {
       setOpenSnackbar({
         open: true,
