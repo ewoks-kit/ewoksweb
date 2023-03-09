@@ -61,6 +61,7 @@ function Canvas() {
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
+  const graphRFDetails = useStore((state) => state.graphRFDetails);
   const graphRF = useStore((state) => state.graphRF);
   const setGraphRF = useStore((state) => state.setGraphRF);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
@@ -95,10 +96,10 @@ function Canvas() {
   }, [workingGraph, setEdges, setNodes]);
 
   // TBD when selectedElement changes updates the canvas directly
-  useEffect(() => {
-    setNodes(graphRF.nodes);
-    setEdges(graphRF.links);
-  }, [graphRF, setEdges, setNodes]);
+  // useEffect(() => {
+  //   setNodes(graphRF.nodes);
+  //   setEdges(graphRF.links);
+  // }, [graphRF, setEdges, setNodes]);
 
   useEffect(() => {
     if (subgraphsStack[subgraphsStack.length - 1]?.id) {
@@ -131,15 +132,31 @@ function Canvas() {
   }, [getNodes, graphId, fitView, getZoom, zoomTo, prevGraphId]);
 
   function onNodesChange(changes: NodeChange[]) {
+    console.log(changes);
+
+    if (workingGraph.graph.id !== graphId) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Any node changes in any subgraph will not be saved!',
+        severity: 'warning',
+      });
+    }
     storeRF.getState().setNodes(applyNodeChanges(changes, getNodes()));
   }
 
   function onEdgesChange(changes: EdgeChange[]) {
+    if (workingGraph.graph.id !== graphId) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Any link changes in any subgraph will not be saved!',
+        severity: 'warning',
+      });
+    }
     storeRF.getState().setEdges(applyEdgeChanges(changes, getEdges()));
   }
 
   const onPaneClick = () => {
-    setSelectedElement(graphRF.graph);
+    setSelectedElement(graphRFDetails);
   };
 
   const onNodeClick = (_event: MouseEvent, element: Node) => {
@@ -237,16 +254,14 @@ function Canvas() {
       };
 
       addNodes(newNode);
-      // TBD
+
+      // TBD BUTRC but newGraph is needed for the recentGraphs too
       const newGraph: GraphRF = {
         graph: graphRF.graph,
         nodes: [...graphRF.nodes, newNode],
         links: graphRF.links,
       };
 
-      // When the following is deactivated and after the drop we try to create a link
-      // with the new node a non valid link originating from node.tsx will flash.
-      // Need to also handle isValidLink in nodes that use graphRF to validate.
       setGraphRF(newGraph, true);
 
       setUndoRedo({ action: 'Added a Node', graph: newGraph });
@@ -280,17 +295,13 @@ function Canvas() {
         severity: 'warning',
       });
     } else {
-      // TODO: examine why there is filtering in nodes and links
-      // probably TBD
+      console.log(nodesRF, edgesRF);
+
+      // TBD BUTRC but newGraph is needed for the recentGraphs too
       const newGraph: GraphRF = {
         graph: { ...graphRF.graph },
-
-        nodes: nodesRF.filter((el) => el.position),
-        links: [
-          ...edgesRF
-            .filter((el) => el.source)
-            .filter((lin) => lin.id !== oldEdge.id),
-        ] as EwoksRFLink[],
+        nodes: [...nodesRF],
+        links: [...edgesRF] as EwoksRFLink[],
       };
 
       setGraphRF(newGraph, true);
@@ -309,8 +320,11 @@ function Canvas() {
       return;
     }
 
-    // TBD or refactor addConnectionToGraph wont need graphRF
-    const newGraph = addConnectionToGraph(params, graphRF);
+    const newGraph = addConnectionToGraph(params, {
+      graph: graphRF.graph,
+      nodes: getNodes(),
+      links: getEdges() as EwoksRFLink[],
+    });
     setEdges(newGraph.links);
     setGraphRF(newGraph, true);
 
@@ -340,7 +354,8 @@ function Canvas() {
       if (subgraph?.graph.id) {
         setNodes(subgraph.nodes);
         setEdges(subgraph.links);
-        // TBD
+
+        // TBD and set only subgraph.graph
         setGraphRF(subgraph);
 
         setSubgraphsStack({
@@ -373,86 +388,8 @@ function Canvas() {
     }
   };
 
-  const onSelectionDragStop = (
-    event: MouseEvent,
-    selectedElements: EwoksRFNode[]
-  ) => {
-    event.preventDefault();
-    if (workingGraph.graph.id === graphId) {
-      // Get them from RF
-      const { nodes: graphNodes } = graphRF;
-
-      const selectedIds = selectedElements.map((e) => e.id);
-
-      // TBD
-      const newNodes = graphNodes.map((n) => {
-        const selectedIndex = selectedIds.indexOf(n.id);
-        if (selectedIndex >= 0) {
-          return {
-            ...n,
-            position: selectedElements[selectedIndex].position,
-          };
-        }
-
-        return n;
-      });
-
-      // TBD
-      const newGraph: GraphRF = {
-        graph: graphRF.graph,
-        nodes: newNodes,
-        links: graphRF.links,
-      };
-      setGraphRF(newGraph, true);
-
-      // Replace newGraph with RF
-      setUndoRedo({
-        action: 'Dragged a selection',
-        graph: newGraph,
-      });
-      setRecentGraphs(newGraph);
-    } else {
-      setOpenSnackbar({
-        open: true,
-        text: 'Any positional change in any subgraph wont be saved!',
-        severity: 'warning',
-      });
-    }
-  };
-
-  // TBD when graphRF removed. Only needed for setRecentGraphs, undoRedo
-  const onNodeDragStop = (event: MouseEvent, draggedNode: EwoksRFNode) => {
-    event.preventDefault();
-    if (workingGraph.graph.id === graphId) {
-      // This is not needed probably TBD
-      const newNodes = getNodes().map((n) => {
-        if (n.id === draggedNode.id) {
-          return {
-            ...n,
-            position: draggedNode.position,
-          };
-        }
-
-        return n;
-      });
-      const newGraph: GraphRF = {
-        graph: graphRF.graph,
-        nodes: newNodes,
-        links: graphRF.links,
-      };
-      // TBD
-      setGraphRF(newGraph, true);
-
-      setUndoRedo({ action: 'Dragged a Node', graph: newGraph });
-      setRecentGraphs(newGraph);
-    } else {
-      setOpenSnackbar({
-        open: true,
-        text: 'Any positional change in any subgraph wont be saved!',
-        severity: 'warning',
-      });
-    }
-  };
+  // Important: onNodeDragStop, onSelectionDragStop: Only needed for setRecentGraphs, undoRedo
+  // and for informing in case of subgraphs that changes wont be saved
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLImageElement>) => {
     const charCode = String.fromCodePoint(event.which).toLowerCase();
@@ -512,7 +449,7 @@ function Canvas() {
           snapToGrid
           onNodeClick={onNodeClick}
           onEdgeClick={onEdgeClick}
-          onPaneClick={onPaneClick}
+          onPaneClick={() => onPaneClick()}
           onClick={() => setSelectedTask({})}
           onDrop={onDrop}
           onConnect={onConnect}
@@ -520,12 +457,8 @@ function Canvas() {
           onDragOver={onDragOver}
           onPaneContextMenu={onPaneContextMenu}
           onNodeDoubleClick={onNodeDoubleClick}
-          onSelectionDragStop={onSelectionDragStop}
-          onSelectionDragStart={(e) => e.preventDefault()}
-          onSelectionDrag={(e) => e.preventDefault()}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
-          onNodeDragStop={onNodeDragStop}
           edgeTypes={edgeTypes}
           nodeTypes={nodeTypes}
           deleteKeyCode="Delete"
