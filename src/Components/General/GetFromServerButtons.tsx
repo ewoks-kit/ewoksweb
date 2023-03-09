@@ -56,15 +56,11 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
             severity: 'success',
           });
           setCanvasGraphChanged(false);
-
+          const nodes = getNodes();
           if (isSubgraph === 'subgraph') {
-            const newGraphNode = await setSubGraph(
-              graph,
-              getNodes(),
-              getEdges()
-            );
+            const newGraphNode = await setSubGraph(graph, nodes, getEdges());
 
-            setNodes([...getNodes(), newGraphNode]);
+            setNodes([...nodes, newGraphNode]);
           } else {
             setWorkingGraph(graph, 'fromServer');
           }

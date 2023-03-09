@@ -62,11 +62,8 @@ function Upload(props: { children?: ReactNode } | undefined) {
           if (graphOrSubgraph) {
             // TODO validate from disk workflows but visualize them
             // const { result } = validateEwoksGraph(newGraph);
-            // if (result) {
             await setWorkingGraph(newGraph, 'fromDisk');
-            // }
           } else {
-            // Same here replace the setSubGraph
             await setSubGraph(newGraph, getNodes(), getEdges());
           }
         } else {

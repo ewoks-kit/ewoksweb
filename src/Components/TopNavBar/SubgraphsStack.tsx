@@ -15,8 +15,8 @@ export default function SubgraphsStack() {
   const { setNodes, setEdges } = useReactFlow();
 
   const recentGraphs = useStore((state) => state.recentGraphs);
-  const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const setGraphRF = useStore((state) => state.setGraphRF);
+  const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const subgraphsStack = useStore((state) => {
     return state.subgraphsStack;
   });
