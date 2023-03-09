@@ -16,6 +16,7 @@ export default function SubgraphsStack() {
 
   const recentGraphs = useStore((state) => state.recentGraphs);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
+  const setGraphRF = useStore((state) => state.setGraphRF);
   const subgraphsStack = useStore((state) => {
     return state.subgraphsStack;
   });
@@ -40,6 +41,8 @@ export default function SubgraphsStack() {
     if (subgraph) {
       setNodes(subgraph.nodes);
       setEdges(subgraph.links);
+      // TBD It will only set the graphDetails subgraph.graph
+      setGraphRF(subgraph);
       setSelectedElement({
         ...subgraph.graph,
       });
