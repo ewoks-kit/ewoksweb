@@ -1,7 +1,6 @@
 import React, { memo, useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Handle, Position } from 'reactflow';
-import type { EwoksRFNode, NodeProps } from '../types';
 import { contentStyle, style } from './NodeStyle';
 import Tooltip from '@material-ui/core/Tooltip';
 import isValidLink from '../utils/IsValidLink';
@@ -18,6 +17,8 @@ import { isNode } from '../utils/typeGuards';
 import NodeIcon from './NodeIcon';
 import IconBoundary from '../IconBoundary';
 import { useNodesIds } from '../store/graph-hooks';
+import type { NodeProps, EwoksRFLink, EwoksRFNode, GraphRF } from '../types';
+import { useReactFlow } from 'reactflow';
 
 // TODO: examine usage when execution in main
 const execution = () => {
@@ -42,6 +43,7 @@ function Node({
   nodeWidth,
   details,
 }: NodeProps) {
+  const { getNodes, getEdges, setNodes } = useReactFlow();
   const nodesIds = useNodesIds();
 
   const border = colorBorder
@@ -90,7 +92,12 @@ function Node({
   };
 
   const isValidConnection = (connection: Connection) => {
-    const { isValid, reason } = isValidLink(connection, graphRF);
+    const graphRf: GraphRF = {
+      graph: graphRF.graph,
+      nodes: getNodes(),
+      links: getEdges() as EwoksRFLink[],
+    };
+    const { isValid, reason } = isValidLink(connection, graphRf);
     if (!isValid) {
       setOpenSnackbar({
         open: true,
@@ -118,11 +125,13 @@ function Node({
       id: calcNewId(selectedElement.id, nodesIds),
       selected: false,
       position: {
-        x: selectedElement.position?.x || 0 + 100,
-        y: selectedElement.position?.y || 0 + 100,
+        x: (selectedElement.position?.x || 0) + 100,
+        y: (selectedElement.position?.y || 0) + 100,
       },
     };
+    setNodes([...getNodes(), newClone]);
 
+    // TBD
     const newGraph = {
       ...graphRF,
       nodes: [...graphRF.nodes, newClone],

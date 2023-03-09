@@ -20,7 +20,6 @@ import type {
   FormAction,
   PropertyChangedEvent,
   GraphDetails,
-  EwoksRFNode,
   EwoksRFLink,
 } from '../../types';
 import { rfToEwoks, textForError } from '../../utils';
@@ -37,7 +36,7 @@ import {
 import IconControl from './IconControl';
 import { assertStr } from '../../utils/typeGuards';
 import IconBoundary from '../../IconBoundary';
-import { useStoreApi } from 'reactflow';
+import { useReactFlow } from 'reactflow';
 
 interface FormDialogProps {
   elementToEdit: Task | GraphDetails;
@@ -47,7 +46,7 @@ interface FormDialogProps {
 }
 
 export default function FormDialog(props: FormDialogProps) {
-  const storeRF = useStoreApi();
+  const { getNodes, getEdges } = useReactFlow();
 
   const [isOpen, setIsOpen] = useState(false);
   const [newName, setNewName] = useState('');
@@ -183,8 +182,8 @@ export default function FormDialog(props: FormDialogProps) {
   async function saveGraph(graphDetails: GraphDetails) {
     const graph = {
       graph: graphDetails,
-      nodes: storeRF.getState().getNodes() as EwoksRFNode[],
-      links: storeRF.getState().edges as EwoksRFLink[],
+      nodes: getNodes(),
+      links: getEdges() as EwoksRFLink[],
     };
     if (overwrite) {
       // put
