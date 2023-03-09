@@ -3,7 +3,6 @@ import type {
   GraphRF,
   GraphEwoks,
   GraphNodes,
-  EwoksLink,
   EwoksRFLink,
 } from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
