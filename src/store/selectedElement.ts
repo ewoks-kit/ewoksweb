@@ -12,8 +12,7 @@ export interface SelectedElementSlice {
   selectedElement: EwoksRFNode | EwoksRFLink | GraphDetails;
   setSelectedElement: (
     element: EwoksRFNode | EwoksRFLink | GraphDetails,
-    from?: string,
-    update?: boolean
+    from?: string
   ) => void;
 }
 

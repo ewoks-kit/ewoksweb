@@ -10,6 +10,7 @@ import TextButtonSave from './TextButtonSave';
 import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from '../sidebarStyle';
 import { isLink, isNode, isString } from '../../../utils/typeGuards';
+import { useReactFlow } from 'reactflow';
 
 const useStyles = DashboardStyle;
 
@@ -21,6 +22,8 @@ interface LabelCommentProps {
 // DOC: the label and comment for nodes-links when selected
 export default function LabelComment(props: LabelCommentProps) {
   const classes = useStyles();
+
+  const { getNodes, setNodes, getEdges, setEdges } = useReactFlow();
 
   const { element, showComment } = props;
 
@@ -76,40 +79,54 @@ export default function LabelComment(props: LabelCommentProps) {
 
   function saveLabel(labelLocal: string) {
     if (isNode(element)) {
-      setSelectedElement(
-        {
-          ...element,
-          data: {
-            ...element.data,
-            ewoks_props: {
-              ...element.data.ewoks_props,
-              label: labelLocal,
-            },
+      const newNode = {
+        ...element,
+        data: {
+          ...element.data,
+          ewoks_props: {
+            ...element.data.ewoks_props,
+            label: labelLocal,
           },
         },
-        'fromSaveElement'
-      );
+      };
+      setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+      setSelectedElement(newNode, 'fromSaveElement');
     }
 
     if (isLink(element)) {
-      setSelectedElement(
-        {
-          ...element,
-          label: labelLocal,
-        },
-        'fromSaveElement'
-      );
+      const newLink = {
+        ...element,
+        label: labelLocal,
+      };
+      setEdges([
+        ...getEdges().filter((edge) => edge.id !== element.id),
+        newLink,
+      ]);
+      setSelectedElement(newLink, 'fromSaveElement');
     }
   }
 
   function saveComment(commentLocal: string) {
-    setSelectedElement(
-      {
-        ...element,
-        data: { ...element.data, comment: commentLocal },
-      },
-      'fromSaveElement'
-    );
+    const newElement = {
+      ...element,
+      data: { ...element.data, comment: commentLocal },
+    };
+    setSelectedElement(newElement, 'fromSaveElement');
+
+    if (isNode(newElement)) {
+      setNodes([
+        ...getNodes().filter((nod) => nod.id !== element.id),
+        newElement,
+      ]);
+      return;
+    }
+
+    if (isLink(newElement)) {
+      setEdges([
+        ...getEdges().filter((edg) => edg.id !== element.id),
+        newElement,
+      ]);
+    }
   }
 
   function valueSavedLocal() {
