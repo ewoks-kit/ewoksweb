@@ -86,7 +86,7 @@ export default function NodeDetails(element: EwoksRFNode) {
   const editableTaskProperties = [
     {
       id: 'task_identifier',
-      label: 'Identifier',
+      label: 'Task identifier',
       value: element.data.task_props.task_identifier,
     },
     { id: 'node_icon', label: 'Icon', value: element.data.ui_props.icon },
@@ -120,8 +120,14 @@ export default function NodeDetails(element: EwoksRFNode) {
 
       const newElement = {
         ...element,
-        ...propKeyValue,
         id: uniqueId,
+        data: {
+          ...element.data,
+          task_props: {
+            ...element.data.task_props,
+            task_identifier: propKeyValue.task_identifier || '',
+          },
+        },
       };
 
       const newLinks = getEdges().map((link) => {
@@ -142,12 +148,7 @@ export default function NodeDetails(element: EwoksRFNode) {
         return link;
       });
 
-      const newNodes = [
-        ...getNodes().filter((nod) => nod.id !== element.id),
-        newElement,
-      ];
-
-      setNodes(newNodes);
+      setAllNode(newElement, 'fromSaveElement');
       setEdges(newLinks);
 
       return;
