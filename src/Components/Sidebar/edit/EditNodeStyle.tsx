@@ -5,9 +5,12 @@ import useStore from '../../../store/useStore';
 import useDebounce from '../../../hooks/useDebounce';
 import type { ChangeEvent } from 'react';
 import { isNode } from 'utils/typeGuards';
+import { useReactFlow } from 'reactflow';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(element: EwoksRFNode) {
+  const { getNodes, setNodes } = useReactFlow();
+
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   const [nodeSize, setNodeSize] = useState<number>(
@@ -36,82 +39,77 @@ export default function EditNodeStyle(element: EwoksRFNode) {
 
   function setElementNodeWidth(width: number) {
     if (debouncedNodeWidth !== element.data.ui_props.nodeWidth) {
-      setSelectedElement(
-        {
-          ...element,
-          data: {
-            ...element.data,
-            ui_props: { ...element.data.ui_props, nodeWidth: width },
-          },
+      const newNode = {
+        ...element,
+        data: {
+          ...element.data,
+          ui_props: { ...element.data.ui_props, nodeWidth: width },
         },
-        'fromSaveElement'
-      );
+      };
+      setAllNode(newNode, 'fromSaveElement');
     }
   }
 
   function withImageChanged(event: ChangeEvent<HTMLInputElement>) {
-    setSelectedElement(
-      {
-        ...element,
-        data: {
-          ...element.data,
-          ui_props: {
-            ...element.data.ui_props,
-            withImage: event.target.checked,
-          },
+    const newNode = {
+      ...element,
+      data: {
+        ...element.data,
+        ui_props: {
+          ...element.data.ui_props,
+          withImage: event.target.checked,
         },
       },
-      'fromSaveElement'
-    );
+    };
+    setAllNode(newNode, 'fromSaveElement');
   }
 
   function withLabelChanged(event: ChangeEvent<HTMLInputElement>) {
-    setSelectedElement(
-      {
-        ...element,
-        data: {
-          ...element.data,
-          ui_props: {
-            ...element.data.ui_props,
-            withLabel: event.target.checked,
-          },
+    const newNode = {
+      ...element,
+      data: {
+        ...element.data,
+        ui_props: {
+          ...element.data.ui_props,
+          withLabel: event.target.checked,
         },
       },
-      'fromSaveElement'
-    );
+    };
+    setAllNode(newNode, 'fromSaveElement');
   }
 
   const colorBorderChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setSelectedElement(
-      {
-        ...element,
-        data: {
-          ...element.data,
-          ui_props: {
-            ...element.data.ui_props,
-            colorBorder: event.target.value,
-          },
+    const newNode = {
+      ...element,
+      data: {
+        ...element.data,
+        ui_props: {
+          ...element.data.ui_props,
+          colorBorder: event.target.value,
         },
       },
-      'fromSaveElement'
-    );
+    };
+    setAllNode(newNode, 'fromSaveElement');
   };
 
   const moreHandlesChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setSelectedElement(
-      {
-        ...element,
-        data: {
-          ...element.data,
-          ui_props: {
-            ...element.data.ui_props,
-            moreHandles: event.target.checked,
-          },
+    const newNode = {
+      ...element,
+      data: {
+        ...element.data,
+        ui_props: {
+          ...element.data.ui_props,
+          moreHandles: event.target.checked,
         },
       },
-      'fromSaveElement'
-    );
+    };
+    setAllNode(newNode, 'fromSaveElement');
   };
+
+  function setAllNode(newNode: EwoksRFNode, from?: string) {
+    setSelectedElement(newNode, from);
+    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+  }
 
   const changeNodeSize = (
     _event: ChangeEvent<unknown>,

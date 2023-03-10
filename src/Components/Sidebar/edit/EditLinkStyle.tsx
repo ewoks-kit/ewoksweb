@@ -71,90 +71,78 @@ export default function EditLinkStyle(element: EwoksRFLink) {
         severity: 'success',
       });
     }
-    setSelectedElement(
-      {
-        ...element,
-        type: val,
-      },
-      'fromSaveElement'
-    );
+    const newEdge = {
+      ...element,
+      type: val,
+    };
+    setAllEdge(newEdge, 'fromSaveElement');
   }
 
   const arrowTypeChanged = (event: PropertyChangedEvent) => {
-    // 'none' is not available anymore in reactFlow so we
-    // need to remove markerEnd if 'none' is selected in dropdown
     const type = event.target.value;
     if (!isString(type)) {
       return;
     }
+    const newEdge = isMarkerType(type)
+      ? { ...element, markerEnd: { type } }
+      : { ...element, markerEnd: undefined };
 
-    if (isMarkerType(type)) {
-      setSelectedElement(
-        { ...element, markerEnd: { type } },
-        'fromSaveElement'
-      );
-      return;
-    }
-
-    setSelectedElement({ ...element, markerEnd: undefined }, 'fromSaveElement');
+    setAllEdge(newEdge, 'fromSaveElement');
   };
 
   const colorLineChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setSelectedElement(
-      {
-        ...element,
-        style: { ...element.style, stroke: event.target.value },
-        labelStyle: { ...element.labelStyle, fill: event.target.value },
-        labelBgStyle: { ...element.labelBgStyle, stroke: event.target.value },
-      },
-      'fromSaveElement'
-    );
+    const newEdge = {
+      ...element,
+      style: { ...element.style, stroke: event.target.value },
+      labelStyle: { ...element.labelStyle, fill: event.target.value },
+      labelBgStyle: { ...element.labelBgStyle, stroke: event.target.value },
+    };
+    setAllEdge(newEdge, 'fromSaveElement');
   };
 
   const animatedChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setSelectedElement(
-      {
-        ...element,
-        animated: event.target.checked,
-      },
-      'fromSaveElement'
-    );
+    const newEdge = {
+      ...element,
+      animated: event.target.checked,
+    };
+    setAllEdge(newEdge, 'fromSaveElement');
   };
 
   function changeX(_event: ChangeEvent<unknown>, value: number | number[]) {
     const newX = value as number;
-    setSelectedElement(
-      {
-        ...element,
-        data: {
-          ...element.data,
-          getAroundProps: {
-            ...element.data.getAroundProps,
-            x: newX,
-          },
+    const newEdge = {
+      ...element,
+      data: {
+        ...element.data,
+        getAroundProps: {
+          ...element.data.getAroundProps,
+          x: newX,
         },
       },
-      'fromSaveElement'
-    );
+    };
+    setAllEdge(newEdge, 'fromSaveElement');
     setX(newX);
   }
 
   function changeY(_event: ChangeEvent<unknown>, value: number | number[]) {
     const newY = value as number;
-    setSelectedElement(
-      {
-        ...element,
-        data: {
-          ...element.data,
-          getAroundProps: {
-            ...element.data.getAroundProps,
-            y: newY,
-          },
+    const newEdge = {
+      ...element,
+      data: {
+        ...element.data,
+        getAroundProps: {
+          ...element.data.getAroundProps,
+          y: newY,
         },
       },
-      'fromSaveElement'
-    );
+    };
+    setAllEdge(newEdge, 'fromSaveElement');
     setY(newY);
+  }
+
+  function setAllEdge(newEdge: EwoksRFLink, from?: string) {
+    setSelectedElement(newEdge, from);
+    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
   }
 
   function applyLinkTypeToAll() {

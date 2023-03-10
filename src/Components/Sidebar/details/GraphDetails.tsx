@@ -4,35 +4,29 @@ import type { GraphDetails as GraphDetailsType } from '../../../types';
 
 export default function GraphDetails(graph: GraphDetailsType) {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const setGraphRFDetails = useStore((state) => state.setGraphRFDetails);
 
   function saveCategory(category: string) {
-    setSelectedElement(
-      {
-        ...graph,
-        category,
-      },
-      'fromSaveElement'
-    );
+    const newGraph = { ...graph, category };
+    setGraphAll(newGraph, 'fromSaveElement');
   }
 
   function saveLabel(label: string) {
-    setSelectedElement(
-      {
-        ...graph,
-        label,
-      },
-      'fromSaveElement'
-    );
+    const newGraph = { ...graph, label };
+    setGraphAll(newGraph, 'fromSaveElement');
   }
 
   function saveComment(comment: string) {
-    setSelectedElement(
-      {
-        ...graph,
-        uiProps: { ...graph.uiProps, comment },
-      },
-      'fromSaveElement'
-    );
+    const newGraph = {
+      ...graph,
+      uiProps: { ...graph.uiProps, comment },
+    };
+    setGraphAll(newGraph, 'fromSaveElement');
+  }
+
+  function setGraphAll(newGraph: GraphDetailsType, from?: string) {
+    setGraphRFDetails(newGraph);
+    setSelectedElement(newGraph, from);
   }
 
   return (
