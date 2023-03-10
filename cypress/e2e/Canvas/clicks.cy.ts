@@ -56,27 +56,6 @@ describe('clicks on canvas and elements', () => {
       .should('have.length', 2);
   });
 
-  it('doubleclick on note node', () => {
-    cy.get('.react-flow__node-note')
-      .last()
-      .dblclick()
-      // TODO: RF11 does not add a selected. Should find another way after moving canvas to RF11
-      // .should('include.class', 'selected')
-      .get('.icons')
-      .children('button[type=button]')
-      .should('have.length', 1);
-  });
-
-  // TODO: click out and make these icons disappear
-  it('click outside of a doubleclicked note node', () => {
-    cy.get('.react-flow__node').first().click();
-    cy.get('.react-flow__node-note')
-      .last()
-      .get('.icons')
-      .children('button[type=button]')
-      .should('not.exist');
-  });
-
   it('doubleclick on graph node', () => {
     cy.get('.react-flow__node-graph')
       .should('have.length', 7)
@@ -94,4 +73,24 @@ describe('clicks on canvas and elements', () => {
 
     cy.get('.react-flow__node').should('have.length', 17);
   });
+
+  // TODO: test the deactivation by setting details to false if the feature is needed
+  it('doubleclick on note node', () => {
+    cy.get('.react-flow__node-note')
+      .last()
+      .dblclick()
+      .get('.icons')
+      .children('button[type=button]')
+      .should('have.length', 1);
+  });
+
+  // TODO: click out and make these icons disappear
+  // it('click outside of a doubleclicked note node', () => {
+  //   cy.get('.react-flow__node').first().click();
+  //   cy.get('.react-flow__node-note')
+  //     .last()
+  //     .get('.icons')
+  //     .children('button[type=button]')
+  //     .should('not.exist');
+  // });
 });

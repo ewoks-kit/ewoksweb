@@ -69,7 +69,7 @@ describe('draw links', () => {
     cy.get('.react-flow__nodes')
       .children()
       .filter('.react-flow__node-ppfmethod')
-      .last()
+      .first()
       .find('div[data-handleid="tl"]')
       .click();
 

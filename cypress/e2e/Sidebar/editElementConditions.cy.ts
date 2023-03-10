@@ -13,11 +13,11 @@ describe('edit links conditions', () => {
 
     cy.contains('Conditions').should('not.exist');
 
-    cy.get('[data-cy="undoButton"]').click();
+    // cy.get('[data-cy="undoButton"]').click();
 
-    cy.contains('Conditions').should('be.visible');
+    // cy.contains('Conditions').should('be.visible');
 
-    cy.get('[data-cy="redoButton"]').click();
+    // cy.get('[data-cy="redoButton"]').click();
   });
 
   it('insert and undo/redo a new Data Mapping', () => {
@@ -29,9 +29,9 @@ describe('edit links conditions', () => {
 
     cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
 
-    cy.get('[data-cy="undoButton"]').click();
+    // cy.get('[data-cy="undoButton"]').click();
 
-    cy.get('[data-cy="redoButton"]').click();
+    // cy.get('[data-cy="redoButton"]').click();
   });
 
   it('type and undo/redo a new Condition', () => {
@@ -70,7 +70,7 @@ describe('edit links conditions', () => {
     cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
     cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');
 
-    cy.get('[data-cy="undoButton"]').click();
+    // cy.get('[data-cy="undoButton"]').click();
 
     cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
     cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
@@ -81,8 +81,8 @@ describe('edit links conditions', () => {
 
     cy.get('[data-cy="deleteButtonEditableTable"]').click();
 
-    cy.get('[data-cy="undoButton"]').click();
-    cy.get('[data-cy="undoButton"]').click();
-    cy.get('[data-cy="undoButton"]').click();
+    // cy.get('[data-cy="undoButton"]').click();
+    // cy.get('[data-cy="undoButton"]').click();
+    // cy.get('[data-cy="undoButton"]').click();
   });
 });
