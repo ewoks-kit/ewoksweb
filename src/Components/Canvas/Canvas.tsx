@@ -124,8 +124,6 @@ function Canvas() {
   }, [getNodes, graphId, fitView, getZoom, zoomTo, prevGraphId]);
 
   function onNodesChange(changes: NodeChange[]) {
-    console.log(changes);
-
     if (workingGraph.graph.id !== graphId) {
       setOpenSnackbar({
         open: true,
@@ -289,8 +287,6 @@ function Canvas() {
         severity: 'warning',
       });
     } else {
-      console.log(nodesRF, edgesRF);
-
       // TBD BUTRC but newGraph is needed for the recentGraphs too
       const newGraph: GraphRF = {
         graph: { ...graphRFDetails },
