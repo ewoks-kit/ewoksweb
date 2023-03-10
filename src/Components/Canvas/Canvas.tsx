@@ -62,8 +62,7 @@ function Canvas() {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
   const graphRFDetails = useStore((state) => state.graphRFDetails);
-  const graphRF = useStore((state) => state.graphRF);
-  const setGraphRF = useStore((state) => state.setGraphRF);
+  const setGraphRFDetails = useStore((state) => state.setGraphRFDetails);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const subgraphsStack = useStore((state) => state.subgraphsStack);
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
@@ -95,20 +94,13 @@ function Canvas() {
     setEdges(workingGraph.links);
   }, [workingGraph, setEdges, setNodes]);
 
-  // TBD when selectedElement changes updates the canvas directly
-  // useEffect(() => {
-  //   setNodes(graphRF.nodes);
-  //   setEdges(graphRF.links);
-  // }, [graphRF, setEdges, setNodes]);
-
   useEffect(() => {
     if (subgraphsStack[subgraphsStack.length - 1]?.id) {
       setPrevGraphId(subgraphsStack[subgraphsStack.length - 1].id);
     }
   }, [subgraphsStack]);
 
-  // TBD if workingGraph replaces graphRF then it wont update when doubleclicking
-  // to a subgraph. Merge with the above since it is based on the above value is not working
+  // TODO: Merge with the above since it is based on the above value is not working
   useEffect(() => {
     if (prevGraphId !== graphId) {
       const nodesLength = getNodes().length;
@@ -257,12 +249,10 @@ function Canvas() {
 
       // TBD BUTRC but newGraph is needed for the recentGraphs too
       const newGraph: GraphRF = {
-        graph: graphRF.graph,
-        nodes: [...graphRF.nodes, newNode],
-        links: graphRF.links,
+        graph: graphRFDetails,
+        nodes: [...getNodes(), newNode],
+        links: [...getEdges()] as EwoksRFLink[],
       };
-
-      setGraphRF(newGraph, true);
 
       setUndoRedo({ action: 'Added a Node', graph: newGraph });
       setRecentGraphs(newGraph);
@@ -285,7 +275,11 @@ function Canvas() {
 
     const { isValid, reason } = isValidLink(
       newConnection,
-      { nodes: nodesRF, links: edgesRF as EwoksRFLink[], graph: graphRF.graph },
+      {
+        nodes: nodesRF,
+        links: edgesRF as EwoksRFLink[],
+        graph: graphRFDetails,
+      },
       oldEdge
     );
     if (!isValid) {
@@ -299,12 +293,12 @@ function Canvas() {
 
       // TBD BUTRC but newGraph is needed for the recentGraphs too
       const newGraph: GraphRF = {
-        graph: { ...graphRF.graph },
+        graph: { ...graphRFDetails },
         nodes: [...nodesRF],
         links: [...edgesRF] as EwoksRFLink[],
       };
 
-      setGraphRF(newGraph, true);
+      // setGraphRF(newGraph, true);
       setUndoRedo({ action: 'Updated a Link', graph: newGraph });
       setRecentGraphs(newGraph);
     }
@@ -321,12 +315,14 @@ function Canvas() {
     }
 
     const newGraph = addConnectionToGraph(params, {
-      graph: graphRF.graph,
+      graph: graphRFDetails,
       nodes: getNodes(),
       links: getEdges() as EwoksRFLink[],
     });
     setEdges(newGraph.links);
-    setGraphRF(newGraph, true);
+
+    setGraphRFDetails(graphRFDetails);
+    // setGraphRF(newGraph, true);
 
     setRecentGraphs(newGraph);
     setUndoRedo({ action: 'new Link', graph: newGraph });
@@ -355,8 +351,7 @@ function Canvas() {
         setNodes(subgraph.nodes);
         setEdges(subgraph.links);
 
-        // TBD and set only subgraph.graph
-        setGraphRF(subgraph);
+        setGraphRFDetails(subgraph.graph);
 
         setSubgraphsStack({
           id: subgraph.graph.id,
@@ -411,15 +406,6 @@ function Canvas() {
           },
         };
         setNodes([...getNodes(), newClone]);
-
-        // TBD
-        setGraphRF(
-          {
-            ...graphRF,
-            nodes: [...graphRF.nodes, newClone],
-          },
-          true
-        );
 
         setSelectedElement(newClone);
       } else {
