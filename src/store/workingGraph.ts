@@ -100,8 +100,6 @@ const workingGraph = (
 
     get().setRecentGraphs(graph as GraphRF);
 
-    // TBD keep in parallel with GraphRF until removed completelly
-    // get().setGraphRF(graph as GraphRF);
     get().setGraphRFDetails(graph.graph);
 
     get().setSelectedElement(graph.graph);

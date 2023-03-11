@@ -37,12 +37,10 @@ export default function SubgraphsStack() {
     });
 
     const subgraph = recentGraphs.find((gr) => gr.graph.id === target.id);
-    console.log(subgraph);
 
     if (subgraph) {
       setNodes(subgraph.nodes);
       setEdges(subgraph.links);
-      // TBD It will only set the graphDetails subgraph.graph
       setGraphRFDetails(subgraph.graph);
       setSelectedElement({
         ...subgraph.graph,

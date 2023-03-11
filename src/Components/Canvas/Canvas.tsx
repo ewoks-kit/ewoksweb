@@ -359,8 +359,6 @@ function Canvas() {
         (gr) => gr.graph.id === nodeTmp.data.task_props.task_identifier
       );
 
-      console.log(subgraph);
-
       if (subgraph?.graph.id) {
         setNodes(subgraph.nodes);
         setEdges(subgraph.links);
