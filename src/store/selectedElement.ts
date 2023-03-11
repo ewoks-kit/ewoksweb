@@ -80,7 +80,7 @@ const selectedElement = (
 
       set((state) => ({
         ...state,
-        graphRF: tempGraph,
+        // graphRFDetails: tempGraph.graph,
         selectedElement: element,
       }));
     } else {

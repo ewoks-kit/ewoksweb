@@ -31,7 +31,7 @@ export default function IconMenu() {
   const initializedTask = useStore((state) => state.initializedTask);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const graphRF = useStore((state) => state.graphRF);
+  const graphRFDetails = useStore((state) => state.graphRFDetails);
   const tasks = useStore((state) => state.tasks);
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
@@ -88,7 +88,7 @@ export default function IconMenu() {
         break;
       }
       case 'cloneGraph': {
-        setElementToEdit(graphRF.graph);
+        setElementToEdit(graphRFDetails);
         break;
       }
       default: {
@@ -146,7 +146,7 @@ export default function IconMenu() {
               <ListItemText>Clone as Task</ListItemText>
             </MenuItem>
             <MenuItem
-              onClick={() => onAction(FormAction.cloneGraph, graphRF.graph)}
+              onClick={() => onAction(FormAction.cloneGraph, graphRFDetails)}
             >
               <ListItemIcon>
                 <FileCopyIcon fontSize="small" />

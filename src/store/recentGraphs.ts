@@ -19,6 +19,7 @@ const recentGraphs = (
     );
 
     if (newGraph?.graph) {
+      console.log(newGraph, rec);
       set((state) => ({
         ...state,
         recentGraphs: [...rec, newGraph],
