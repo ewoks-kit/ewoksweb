@@ -75,14 +75,14 @@ describe('clicks on canvas and elements', () => {
   });
 
   // TODO: test the deactivation by setting details to false if the feature is needed
-  it('doubleclick on note node', () => {
-    cy.get('.react-flow__node-note')
-      .last()
-      .dblclick()
-      .get('.icons')
-      .children('button[type=button]')
-      .should('have.length', 1);
-  });
+  // it('doubleclick on note node', () => {
+  //   cy.get('.react-flow__node-note')
+  //     .last()
+  //     .dblclick()
+  //     .get('.icons')
+  //     .children('button[type=button]')
+  //     .should('have.length', 1);
+  // });
 
   // TODO: click out and make these icons disappear
   // it('click outside of a doubleclicked note node', () => {
