@@ -16,7 +16,7 @@ import IconMenu from './IconMenu';
 import ExecutionDetails from '../Execution/ExecutionDetails';
 import DashboardStyle from '../Dashboard/DashboardStyle';
 import useStore from 'store/useStore';
-import type { EwoksRFNode, EwoksRFLink, GraphDetails, GraphRF } from 'types';
+import type { EwoksRFNode, EwoksRFLink, GraphDetails } from 'types';
 import { calcNewId } from 'utils/calcNewId';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { deleteWorkflow } from 'api/api';
@@ -34,7 +34,7 @@ export default function Sidebar() {
   const classes = useStyles();
 
   const nodesIds = useNodesIds();
-  const { deleteElements, getNodes, setNodes } = useReactFlow();
+  const { deleteElements, getNodes, setNodes, getEdges } = useReactFlow();
 
   const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
     (state) => state.selectedElement
@@ -44,8 +44,7 @@ export default function Sidebar() {
   const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
     false
   );
-  const graphRF = useStore((state) => state.graphRF);
-  const setGraphRF = useStore((state) => state.setGraphRF);
+  const graphRFDetails = useStore((state) => state.graphRFDetails);
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
@@ -57,7 +56,7 @@ export default function Sidebar() {
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
   const deleteElement = async () => {
-    if (workingGraph.graph.id !== graphRF.graph.id) {
+    if (workingGraph.graph.id !== graphRFDetails.id) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to delete any element in a sub-graph!',
@@ -70,23 +69,22 @@ export default function Sidebar() {
       deleteElements({ nodes: [selectedElement] });
 
       // TBD used only for undoRedo
-      const nodesLinks = graphRF.links.filter(
-        (link) =>
-          !(
-            link.source === selectedElement.id ||
-            link.target === selectedElement.id
-          )
-      );
-      const newGraph: GraphRF = {
-        ...graphRF,
-        nodes: graphRF.nodes.filter((nod) => nod.id !== selectedElement.id),
-        links: nodesLinks,
-      };
-      setUndoRedo({
-        action: 'Removed a Node',
-        graph: newGraph,
-      });
-      // setGraphRF(newGraph, true);
+      // const nodesLinks = graphRF.links.filter(
+      //   (link) =>
+      //     !(
+      //       link.source === selectedElement.id ||
+      //       link.target === selectedElement.id
+      //     )
+      // );
+      // const newGraph: GraphRF = {
+      //   ...graphRF,
+      //   nodes: graphRF.nodes.filter((nod) => nod.id !== selectedElement.id),
+      //   links: nodesLinks,
+      // };
+      // setUndoRedo({
+      //   action: 'Removed a Node',
+      //   graph: newGraph,
+      // });
       return;
     }
 
@@ -94,15 +92,14 @@ export default function Sidebar() {
       deleteElements({ edges: [selectedElement] });
 
       // TBD used only for undoRedo
-      const newGraph: GraphRF = {
-        ...graphRF,
-        links: graphRF.links.filter((link) => link.id !== selectedElement.id),
-      };
-      setUndoRedo({
-        action: 'Removed a Link',
-        graph: newGraph,
-      });
-      // setGraphRF(newGraph, true);
+      // const newGraph: GraphRF = {
+      //   ...graphRF,
+      //   links: graphRF.links.filter((link) => link.id !== selectedElement.id),
+      // };
+      // setUndoRedo({
+      //   action: 'Removed a Link',
+      //   graph: newGraph,
+      // });
       return;
     }
 
@@ -160,11 +157,12 @@ export default function Sidebar() {
       };
       const nodesRF = getNodes();
       const newGraph = {
-        ...graphRF,
+        graph: graphRFDetails,
         nodes: [...nodesRF, newClone],
+        links: getEdges() as EwoksRFLink[],
       };
       setNodes([...nodesRF, newClone]);
-      setGraphRF(newGraph, true);
+
       setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
       setSelectedElement(newClone);
     } else {

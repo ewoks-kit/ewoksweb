@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import type {
   DataMapping,
   EditableTableRow,
-  EwoksRFLink,
   EwoksRFNode,
 } from '../../../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
@@ -40,8 +39,6 @@ export default function NodeDetails(element: EwoksRFNode) {
 
   const nodesIds = useNodesIds();
 
-  const graphRF = useStore((state) => state.graphRF);
-  const setGraphRF = useStore((state) => state.setGraphRF);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const showAdvancedDetails = useConfigStore(
     (state) => state.showAdvancedDetails
@@ -89,14 +86,14 @@ export default function NodeDetails(element: EwoksRFNode) {
   const editableTaskProperties = [
     {
       id: 'task_identifier',
-      label: 'Identifier',
+      label: 'Task identifier',
       value: element.data.task_props.task_identifier,
     },
     { id: 'node_icon', label: 'Icon', value: element.data.ui_props.icon },
   ];
 
   useEffect(() => {
-    setInputsComplete(!!element.data.ewoks_props.inputs_complete);
+    setInputsComplete(element.data.ewoks_props.inputs_complete || false);
     setDefaultErrorNode(element.data.ewoks_props.default_error_node || false);
     setDataMapping(
       element.data.ewoks_props.default_error_attributes?.data_mapping || []
@@ -123,8 +120,14 @@ export default function NodeDetails(element: EwoksRFNode) {
 
       const newElement = {
         ...element,
-        ...propKeyValue,
         id: uniqueId,
+        data: {
+          ...element.data,
+          task_props: {
+            ...element.data.task_props,
+            task_identifier: propKeyValue.task_identifier || '',
+          },
+        },
       };
 
       const newLinks = getEdges().map((link) => {
@@ -145,75 +148,53 @@ export default function NodeDetails(element: EwoksRFNode) {
         return link;
       });
 
-      const newNodes = [
-        ...getNodes().filter((nod) => nod.id !== element.id),
-        newElement,
-      ];
-
-      setNodes(newNodes);
+      setAllNode(newElement, 'fromSaveElement');
       setEdges(newLinks);
 
-      // TBD
-      setGraphRF({
-        graph: graphRF.graph,
-        links: newLinks as EwoksRFLink[],
-        nodes: [
-          ...graphRF.nodes.filter((nod) => nod.id !== element.id),
-          newElement,
-        ],
-      });
-
-      setSelectedElement(newElement, 'fromSaveElement');
       return;
     }
 
     if (Object.keys(propKeyValue)[0] === 'node_icon') {
-      setSelectedElement(
-        {
-          ...element,
-          data: {
-            ...element.data,
-            ui_props: {
-              ...element.data.ui_props,
-              icon: Object.values(propKeyValue)[0],
-            },
+      const newNode = {
+        ...element,
+        data: {
+          ...element.data,
+          ui_props: {
+            ...element.data.ui_props,
+            icon: Object.values(propKeyValue)[0],
           },
         },
-        'fromSaveElement'
-      );
+      };
+      setAllNode(newNode, 'fromSaveElement');
     }
   }
 
   function inputsCompleteChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    setSelectedElement(
-      {
-        ...element,
-        data: {
-          ...element.data,
-          ewoks_props: {
-            ...element.data.ewoks_props,
-            inputs_complete: event.target.checked,
-          },
+    const newNode = {
+      ...element,
+      data: {
+        ...element.data,
+        ewoks_props: {
+          ...element.data.ewoks_props,
+          inputs_complete: event.target.checked,
         },
       },
-      'fromSaveElement'
-    );
+    };
+    setAllNode(newNode, 'fromSaveElement');
   }
 
   function defaulErrortNodeChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    setSelectedElement(
-      {
-        ...element,
-        data: {
-          ...element.data,
-          ewoks_props: {
-            ...element.data.ewoks_props,
-            default_error_node: event.target.checked,
-          },
+    const newNode = {
+      ...element,
+      data: {
+        ...element.data,
+        ewoks_props: {
+          ...element.data.ewoks_props,
+          default_error_node: event.target.checked,
         },
       },
-      'fromSaveElement'
-    );
+    };
+    setAllNode(newNode, 'fromSaveElement');
   }
 
   function addDataMapping() {
@@ -221,22 +202,20 @@ export default function NodeDetails(element: EwoksRFNode) {
       element.data.ewoks_props.default_error_attributes?.data_mapping || [];
 
     if (!elMap.some((x) => x.id === '')) {
-      setSelectedElement(
-        {
-          ...element,
-          data: {
-            ...element.data,
-            ewoks_props: {
-              ...element.data.ewoks_props,
-              default_error_attributes: {
-                ...element.data.ewoks_props.default_error_attributes,
-                data_mapping: [...elMap, { id: '', name: '', value: '' }],
-              },
+      const newNode = {
+        ...element,
+        data: {
+          ...element.data,
+          ewoks_props: {
+            ...element.data.ewoks_props,
+            default_error_attributes: {
+              ...element.data.ewoks_props.default_error_attributes,
+              data_mapping: [...elMap, { id: '', name: '', value: '' }],
             },
           },
         },
-        'fromSaveElement'
-      );
+      };
+      setAllNode(newNode, 'fromSaveElement');
     }
   }
 
@@ -252,41 +231,43 @@ export default function NodeDetails(element: EwoksRFNode) {
         target_input: row.value,
       };
     });
-    setSelectedElement(
-      {
-        ...element,
-        data: {
-          ...element.data,
-          ewoks_props: {
-            ...element.data.ewoks_props,
-            default_error_attributes: {
-              ...element.data.ewoks_props.default_error_attributes,
-              data_mapping: dmap,
-            },
+
+    const newNode = {
+      ...element,
+      data: {
+        ...element.data,
+        ewoks_props: {
+          ...element.data.ewoks_props,
+          default_error_attributes: {
+            ...element.data.ewoks_props.default_error_attributes,
+            data_mapping: dmap,
           },
         },
       },
-      'fromSaveElement'
-    );
+    };
+    setAllNode(newNode, 'fromSaveElement');
   }
 
   function mapAllDataChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    setSelectedElement(
-      {
-        ...element,
-        data: {
-          ...element.data,
-          ewoks_props: {
-            ...element.data.ewoks_props,
-            default_error_attributes: {
-              ...element.data.ewoks_props.default_error_attributes,
-              map_all_data: event.target.checked,
-            },
+    const newNode = {
+      ...element,
+      data: {
+        ...element.data,
+        ewoks_props: {
+          ...element.data.ewoks_props,
+          default_error_attributes: {
+            ...element.data.ewoks_props.default_error_attributes,
+            map_all_data: event.target.checked,
           },
         },
       },
-      'fromSaveElement'
-    );
+    };
+    setAllNode(newNode, 'fromSaveElement');
+  }
+
+  function setAllNode(newNode: EwoksRFNode, from?: string) {
+    setSelectedElement(newNode, from);
+    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 
   return (

@@ -10,11 +10,14 @@ import LabelComment from './LabelComment';
 import { isLink } from '../../../utils/typeGuards';
 import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
+import { useReactFlow } from 'reactflow';
 
 const useStyles = DashboardStyle;
 
 export default function LinkDetails(element: EwoksRFLink) {
   const classes = useStyles();
+
+  const { getEdges, setEdges } = useReactFlow();
 
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
@@ -23,34 +26,33 @@ export default function LinkDetails(element: EwoksRFLink) {
   );
 
   const mapAllDataChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedElement(
-      {
-        ...element,
-        data: { ...element.data, map_all_data: event.target.checked },
-      },
-      'fromSaveElement'
-    );
+    const newEdge = {
+      ...element,
+      data: { ...element.data, map_all_data: event.target.checked },
+    };
+    setAllEdge(newEdge);
   };
 
   function onErrorChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    setSelectedElement(
-      {
-        ...element,
-        data: { ...element.data, on_error: event.target.checked },
-      },
-      'fromSaveElement'
-    );
+    const newEdge = {
+      ...element,
+      data: { ...element.data, on_error: event.target.checked },
+    };
+    setAllEdge(newEdge);
   }
 
   const requiredChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setSelectedElement(
-      {
-        ...element,
-        data: { ...element.data, required: event.target.checked },
-      },
-      'fromSaveElement'
-    );
+    const newEdge = {
+      ...element,
+      data: { ...element.data, required: event.target.checked },
+    };
+    setAllEdge(newEdge);
   };
+
+  function setAllEdge(newEdge: EwoksRFLink, from?: string) {
+    setSelectedElement(newEdge, from);
+    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+  }
 
   return (
     <Paper className={classes.nodeDetails}>

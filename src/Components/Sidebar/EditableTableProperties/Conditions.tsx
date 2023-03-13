@@ -4,6 +4,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
+import { useReactFlow } from 'reactflow';
 
 interface ConditionsProps {
   element: EwoksRFLink;
@@ -11,6 +12,8 @@ interface ConditionsProps {
 // DOC: The conditions for a link are being set in this component
 export default function Conditions(props: ConditionsProps) {
   const { element } = props;
+
+  const { getEdges, setEdges } = useReactFlow();
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
@@ -28,35 +31,33 @@ export default function Conditions(props: ConditionsProps) {
       return;
     }
 
-    setSelectedElement(
-      {
-        ...element,
-        data: {
-          ...element.data,
-          on_error: false,
-          conditions: [...elCon, { id: '', name: '', value: false }],
-        },
+    const newEdge = {
+      ...element,
+      data: {
+        ...element.data,
+        on_error: false,
+        conditions: [...elCon, { id: '', name: '', value: false }],
       },
-      'fromSaveElement'
-    );
+    };
+    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    setSelectedElement(newEdge, 'fromSaveElement');
   }
 
   function conditionsValuesChanged(table: EditableTableRow[]) {
-    setSelectedElement(
-      {
-        ...element,
-        data: {
-          ...element.data,
-          conditions: table.map((con1) => {
-            return {
-              source_output: con1.name,
-              value: con1.value,
-            };
-          }),
-        },
+    const newEdge = {
+      ...element,
+      data: {
+        ...element.data,
+        conditions: table.map((con1) => {
+          return {
+            source_output: con1.name,
+            value: con1.value,
+          };
+        }),
       },
-      'fromSaveElement'
-    );
+    };
+    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    setSelectedElement(newEdge, 'fromSaveElement');
   }
 
   return (

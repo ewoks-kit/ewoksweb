@@ -2,11 +2,13 @@ import type { EditableTableRow, EwoksRFNode } from 'types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import { IconButton } from '@material-ui/core';
-
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
+import { useReactFlow } from 'reactflow';
 
 export default function DefaultInputs(element: EwoksRFNode) {
+  const { getNodes, setNodes } = useReactFlow();
+
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const defautInputs = element.data.ewoks_props.default_inputs;
@@ -19,45 +21,43 @@ export default function DefaultInputs(element: EwoksRFNode) {
         severity: 'warning',
       });
     } else {
-      setSelectedElement(
-        {
-          ...element,
-          data: {
-            ...element.data,
-            ewoks_props: {
-              ...element.data.ewoks_props,
-              default_inputs: [
-                ...(element.data.ewoks_props.default_inputs || []),
-                { id: '', name: '', value: '' },
-              ],
-            },
-          },
-        },
-        'fromSaveElement'
-      );
-    }
-  }
-
-  const defaultInputsChanged = (table: EditableTableRow[]) => {
-    setSelectedElement(
-      {
+      const newNode = {
         ...element,
         data: {
           ...element.data,
           ewoks_props: {
             ...element.data.ewoks_props,
-            default_inputs: table.map((dval) => {
-              return {
-                id: dval.name,
-                name: dval.name || '',
-                value: dval.value,
-              };
-            }),
+            default_inputs: [
+              ...(element.data.ewoks_props.default_inputs || []),
+              { id: '', name: '', value: '' },
+            ],
           },
         },
+      };
+      setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+      setSelectedElement(newNode, 'fromSaveElement');
+    }
+  }
+
+  const defaultInputsChanged = (table: EditableTableRow[]) => {
+    const newNode = {
+      ...element,
+      data: {
+        ...element.data,
+        ewoks_props: {
+          ...element.data.ewoks_props,
+          default_inputs: table.map((dval) => {
+            return {
+              id: dval.name,
+              name: dval.name || '',
+              value: dval.value,
+            };
+          }),
+        },
       },
-      'fromSaveElement'
-    );
+    };
+    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+    setSelectedElement(newNode, 'fromSaveElement');
   };
 
   return (

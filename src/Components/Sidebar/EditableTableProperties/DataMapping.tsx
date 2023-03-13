@@ -6,8 +6,11 @@ import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import { useNode } from '../../../store/graph-hooks';
 import { isClass } from './utils';
+import { useReactFlow } from 'reactflow';
 
 export default function DataMappingComponent(element: EwoksRFLink) {
+  const { getEdges, setEdges } = useReactFlow();
+
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
@@ -23,20 +26,18 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       });
       return;
     }
-
-    setSelectedElement(
-      {
-        ...element,
-        data: {
-          ...element.data,
-          data_mapping: [
-            ...(element.data.data_mapping || []),
-            { id: '', name: '', value: '' },
-          ],
-        },
+    const newEdge = {
+      ...element,
+      data: {
+        ...element.data,
+        data_mapping: [
+          ...(element.data.data_mapping || []),
+          { id: '', name: '', value: '' },
+        ],
       },
-      'fromSaveElement'
-    );
+    };
+    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    setSelectedElement(newEdge, 'fromSaveElement');
   }
 
   const dataMappingValuesChanged = (table: DataMapping[]) => {
@@ -46,19 +47,18 @@ export default function DataMappingComponent(element: EwoksRFLink) {
         target_input: row.value as string,
       };
     });
-    setSelectedElement(
-      {
-        ...element,
-        label: dmap
-          .map((el) => `${el.source_output || ''}->${el.target_input || ''}`)
-          .join(', '),
-        data: {
-          ...element.data,
-          data_mapping: dmap,
-        },
+    const newEdge = {
+      ...element,
+      label: dmap
+        .map((el) => `${el.source_output || ''}->${el.target_input || ''}`)
+        .join(', '),
+      data: {
+        ...element.data,
+        data_mapping: dmap,
       },
-      'fromSaveElement'
-    );
+    };
+    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    setSelectedElement(newEdge, 'fromSaveElement');
   };
 
   return (

@@ -12,8 +12,7 @@ export interface SelectedElementSlice {
   selectedElement: EwoksRFNode | EwoksRFLink | GraphDetails;
   setSelectedElement: (
     element: EwoksRFNode | EwoksRFLink | GraphDetails,
-    from?: string,
-    update?: boolean
+    from?: string
   ) => void;
 }
 
@@ -81,7 +80,7 @@ const selectedElement = (
 
       set((state) => ({
         ...state,
-        graphRF: tempGraph,
+        // graphRFDetails: tempGraph.graph,
         selectedElement: element,
       }));
     } else {

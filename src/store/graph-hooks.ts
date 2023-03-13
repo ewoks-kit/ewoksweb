@@ -13,7 +13,7 @@ export function useNodesLength() {
 }
 
 export function useGraphId() {
-  return useStore((state) => state.graphRF.graph.id);
+  return useStore((state) => state.graphRFDetails.id);
 }
 
 export function useNode(id: string) {

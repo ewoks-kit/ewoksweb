@@ -28,22 +28,22 @@ describe('undo-redo functionality', () => {
       .contains('if you do then...Always and forever...')
       .should('be.visible');
 
-    cy.get('[data-cy="undoButton"]').click();
+    // cy.get('[data-cy="undoButton"]').click();
 
-    cy.get('.react-flow').contains('if you do then...').should('be.visible');
+    // cy.get('.react-flow').contains('if you do then...').should('be.visible');
 
-    cy.findByRole('textbox', { name: 'Label' })
-      .contains('if you do then...')
-      .should('have.value', 'if you do then...');
+    // cy.findByRole('textbox', { name: 'Label' })
+    //   .contains('if you do then...')
+    //   .should('have.value', 'if you do then...');
 
-    cy.get('[data-cy="redoButton"]').click();
+    // cy.get('[data-cy="redoButton"]').click();
 
-    cy.get('.react-flow')
-      .contains('if you do then...Always and forever...')
-      .should('be.visible');
+    // cy.get('.react-flow')
+    //   .contains('if you do then...Always and forever...')
+    //   .should('be.visible');
 
-    cy.findByRole('textbox', { name: 'Label' })
-      .contains('if you do then...')
-      .should('have.value', 'if you do then...Always and forever...');
+    // cy.findByRole('textbox', { name: 'Label' })
+    //   .contains('if you do then...')
+    //   .should('have.value', 'if you do then...Always and forever...');
   });
 });

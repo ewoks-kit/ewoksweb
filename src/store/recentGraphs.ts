@@ -17,7 +17,7 @@ const recentGraphs = (
     const rec: GraphRF[] = get().recentGraphs.filter(
       (gr) => gr.graph.id !== newGraph.graph.id
     );
-
+    // TODO: examine the need of this if
     if (newGraph?.graph) {
       set((state) => ({
         ...state,
