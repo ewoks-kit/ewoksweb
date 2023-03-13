@@ -6,10 +6,12 @@ import Typography from '@material-ui/core/Typography';
 import LinkDetails from './LinkDetails';
 import NodeDetails from './NodeDetails';
 import GraphDetails from './GraphDetails';
-import useStore from '../../../store/useStore';
 import { isLink, isNode } from '../../../utils/typeGuards';
 import type { EwoksRFElement } from '../models';
 import { useEffect, useState } from 'react';
+import useSelectedElementStore from '../../../store/useSelectedElementStore';
+import { useReactFlow } from 'reactflow';
+import useStore from '../../../store/useStore';
 
 interface Content {
   title: string;
@@ -39,15 +41,29 @@ function getAccordionContent(element: EwoksRFElement): Content {
 
 // DOC: Container for link-node-graph editing details
 function ElementDetails() {
-  const selectedElement = useStore((state) => state.selectedElement);
+  const selectedElementNew = useSelectedElementStore(
+    (state) => state.selectedElement
+  );
+  const graphRFDetails = useStore((state) => state.graphRFDetails);
+
+  const { getNodes, getEdges } = useReactFlow();
+
+  const selectedElement =
+    selectedElementNew.type === 'node'
+      ? getNodes().find((node) => node.id === selectedElementNew.id)
+      : selectedElementNew.type === 'edge'
+      ? getEdges().find((edge) => edge.id === selectedElementNew.id)
+      : graphRFDetails;
 
   const [expanded, setExpanded] = useState(false);
 
-  const { title, DetailsComponent } = getAccordionContent(selectedElement);
+  const { title, DetailsComponent } = getAccordionContent(
+    selectedElement as EwoksRFElement
+  );
 
   useEffect(() => {
-    setExpanded(!!selectedElement.id);
-  }, [selectedElement.id]);
+    setExpanded(!!selectedElement?.id);
+  }, [selectedElement?.id]);
 
   return (
     <Accordion

@@ -507,6 +507,11 @@ export interface calcInOutForSubgraphOutput {
   positionY?: number;
 }
 
+export interface selectedElementType {
+  type: 'graph' | 'node' | 'edge';
+  id: string;
+}
+
 export type PropertyChangedEvent = ChangeEvent<{
   name?: string | undefined;
   value: unknown;

@@ -30,6 +30,7 @@ import { textForError } from 'utils';
 import type { OverridableComponent } from '@material-ui/core/OverridableComponent';
 import TaskIcon from './TaskIcon';
 import IconBoundary from '../../IconBoundary';
+import useSelectedElementStore from '../../store/useSelectedElementStore';
 
 interface DragInfo {
   task_identifier: string;
@@ -93,7 +94,9 @@ function AddNodes(props: AddNodesProps) {
   const [elementToEdit, setElementToEdit] = useState<Task>({});
   const initializedTask = useStore((state) => state.initializedTask);
   const [expanded, setExpanded] = useState<boolean>(false);
-  const selectedElement = useStore((state) => state.selectedElement);
+  const selectedElementNew = useSelectedElementStore(
+    (state) => state.selectedElement
+  );
 
   const getTasks = useCallback(async () => {
     try {
@@ -112,12 +115,12 @@ function AddNodes(props: AddNodesProps) {
   }, [setOpenSnackbar, setTasks]);
 
   useEffect(() => {
-    setExpanded(!selectedElement.id);
+    setExpanded(!selectedElementNew.id);
     // TODO: examine the strategy for re-fetching tasks-workflows-icons
     if (tasks.length === 0) {
       getTasks();
     }
-  }, [selectedElement.id, tasks.length, getTasks]);
+  }, [selectedElementNew.id, tasks.length, getTasks]);
 
   useEffect(() => {
     if (props.openSaveDialogNewtask) {
