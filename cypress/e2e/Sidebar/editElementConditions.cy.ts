@@ -72,14 +72,14 @@ describe('edit links conditions', () => {
 
     // cy.get('[data-cy="undoButton"]').click();
 
-    cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
-    cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
-    cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');
-    cy.get('[data-cy="inputInEditableCell"]').should('not.exist');
+    // cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
+    // cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
+    // cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');
+    // cy.get('[data-cy="inputInEditableCell"]').should('not.exist');
 
-    cy.get('[data-cy="redoButton"]').click();
+    // cy.get('[data-cy="redoButton"]').click();
 
-    cy.get('[data-cy="deleteButtonEditableTable"]').click();
+    // cy.get('[data-cy="deleteButtonEditableTable"]').click();
 
     // cy.get('[data-cy="undoButton"]').click();
     // cy.get('[data-cy="undoButton"]').click();

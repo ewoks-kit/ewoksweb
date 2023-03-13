@@ -1,5 +1,5 @@
 import type { EwoksRFLink, EwoksRFNode, GraphDetails, State } from '../types';
-import type { GetState, SetState } from 'zustand';
+import type { SetState } from 'zustand';
 
 export interface SelectedElementSlice {
   selectedElement: EwoksRFNode | EwoksRFLink | GraphDetails;
@@ -8,10 +8,7 @@ export interface SelectedElementSlice {
   ) => void;
 }
 
-const selectedElement = (
-  set: SetState<State>,
-  get: GetState<State>
-): SelectedElementSlice => ({
+const selectedElement = (set: SetState<State>): SelectedElementSlice => ({
   selectedElement: {} as GraphDetails,
 
   setSelectedElement: (element) => {

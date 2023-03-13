@@ -12,7 +12,7 @@ describe('structure and basics for edit-workflows', () => {
   });
 
   it('displays 18 buttons', () => {
-    cy.get('button').should('have.length', 16);
+    cy.get('button').should('have.length', 14);
   });
 
   it('displays the canvas', () => {

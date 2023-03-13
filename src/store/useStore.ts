@@ -53,7 +53,7 @@ const useStore = create<State>((set, get) => ({
   ...tasks(set),
   ...undoIndex(set, get),
   ...undoRedo(set, get),
-  ...selectedElement(set, get),
+  ...selectedElement(set),
   ...selectedTask(set),
   ...workingGraph(set, get),
   initializedTask,
