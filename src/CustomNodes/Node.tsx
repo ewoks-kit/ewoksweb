@@ -65,15 +65,14 @@ function Node({
 
   const [nodeSize, setNodeSize] = useState(nodeWidth);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
-  const graphRF = useStore((state) => state.graphRF);
+  const graphRFDetails = useStore((state) => state.graphRFDetails);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const selectedElement = useStore((state) => state.selectedElement);
   const [edit, setEdit] = React.useState(false);
   const [labelLocal, setLabelLocal] = React.useState(label);
-  const setGraphRF = useStore((state) => state.setGraphRF);
   const [detailsL, setDetailsL] = React.useState(false);
-  const setUndoRedo = useStore((state) => state.setUndoRedo);
+  // const setUndoRedo = useStore((state) => state.setUndoRedo);
 
   useEffect(() => {
     setNodeSize(nodeWidth);
@@ -93,7 +92,7 @@ function Node({
 
   const isValidConnection = (connection: Connection) => {
     const graphRf: GraphRF = {
-      graph: graphRF.graph,
+      graph: graphRFDetails,
       nodes: getNodes(),
       links: getEdges() as EwoksRFLink[],
     };
@@ -132,14 +131,14 @@ function Node({
     setNodes([...getNodes(), newClone]);
 
     // TBD
-    const newGraph = {
-      ...graphRF,
-      nodes: [...graphRF.nodes, newClone],
-    };
+    // const newGraph = {
+    //   ...graphRF,
+    //   nodes: [...graphRF.nodes, newClone],
+    // };
 
-    setGraphRF(newGraph, true);
+    // setGraphRF(newGraph, true);
 
-    setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
+    // setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
     setSelectedElement(newClone);
   };
 

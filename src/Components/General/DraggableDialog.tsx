@@ -64,7 +64,7 @@ export default function DraggableDialog(props: Props) {
     id: '',
     rows: [],
   });
-  const graphRF = useStore((state) => state.graphRF);
+  const graphRFDetails = useStore((state) => state.graphRFDetails);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const [selection, setSelection] = useState('ewoks');
@@ -105,7 +105,7 @@ export default function DraggableDialog(props: Props) {
     newSelection: string
   ) => {
     const graphRf: GraphRF = {
-      graph: graphRF.graph,
+      graph: graphRFDetails,
       nodes: getNodes(),
       links: getEdges() as EwoksRFLink[],
     };

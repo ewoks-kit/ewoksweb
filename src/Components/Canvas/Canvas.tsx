@@ -147,6 +147,18 @@ function Canvas() {
 
   const onPaneClick = () => {
     setSelectedElement(graphRFDetails);
+    setNodes(
+      getNodes().map((nod) => {
+        return {
+          ...nod,
+          selected: false,
+          data: {
+            ...nod.data,
+            ui_props: { ...nod.data.ui_props, details: false },
+          },
+        };
+      })
+    );
   };
 
   const onNodeClick = (_event: MouseEvent, element: Node) => {
@@ -294,7 +306,6 @@ function Canvas() {
         links: [...edgesRF] as EwoksRFLink[],
       };
 
-      // setGraphRF(newGraph, true);
       setUndoRedo({ action: 'Updated a Link', graph: newGraph });
       setRecentGraphs(newGraph);
     }
@@ -318,7 +329,6 @@ function Canvas() {
     setEdges(newGraph.links);
 
     setGraphRFDetails(graphRFDetails);
-    // setGraphRF(newGraph, true);
 
     setRecentGraphs(newGraph);
     setUndoRedo({ action: 'new Link', graph: newGraph });
@@ -339,6 +349,12 @@ function Canvas() {
     const nodeTmp = getNode(node.id);
 
     if (nodeTmp?.data.task_props.task_type === 'graph') {
+      setRecentGraphs({
+        graph: graphRFDetails,
+        nodes: getNodes(),
+        links: getEdges() as EwoksRFLink[],
+      });
+
       const subgraph = recentGraphs.find(
         (gr) => gr.graph.id === nodeTmp.data.task_props.task_identifier
       );
