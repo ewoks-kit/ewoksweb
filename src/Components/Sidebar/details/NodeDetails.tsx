@@ -148,7 +148,7 @@ export default function NodeDetails(element: EwoksRFNode) {
         return link;
       });
 
-      setAllNode(newElement, 'fromSaveElement');
+      setAllNode(newElement);
       setEdges(newLinks);
 
       return;
@@ -165,7 +165,7 @@ export default function NodeDetails(element: EwoksRFNode) {
           },
         },
       };
-      setAllNode(newNode, 'fromSaveElement');
+      setAllNode(newNode);
     }
   }
 
@@ -180,7 +180,7 @@ export default function NodeDetails(element: EwoksRFNode) {
         },
       },
     };
-    setAllNode(newNode, 'fromSaveElement');
+    setAllNode(newNode);
   }
 
   function defaulErrortNodeChanged(event: React.ChangeEvent<HTMLInputElement>) {
@@ -194,7 +194,7 @@ export default function NodeDetails(element: EwoksRFNode) {
         },
       },
     };
-    setAllNode(newNode, 'fromSaveElement');
+    setAllNode(newNode);
   }
 
   function addDataMapping() {
@@ -215,7 +215,7 @@ export default function NodeDetails(element: EwoksRFNode) {
           },
         },
       };
-      setAllNode(newNode, 'fromSaveElement');
+      setAllNode(newNode);
     }
   }
 
@@ -245,7 +245,7 @@ export default function NodeDetails(element: EwoksRFNode) {
         },
       },
     };
-    setAllNode(newNode, 'fromSaveElement');
+    setAllNode(newNode);
   }
 
   function mapAllDataChanged(event: React.ChangeEvent<HTMLInputElement>) {
@@ -262,11 +262,11 @@ export default function NodeDetails(element: EwoksRFNode) {
         },
       },
     };
-    setAllNode(newNode, 'fromSaveElement');
+    setAllNode(newNode);
   }
 
-  function setAllNode(newNode: EwoksRFNode, from?: string) {
-    setSelectedElement(newNode, from);
+  function setAllNode(newNode: EwoksRFNode) {
+    setSelectedElement(newNode);
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 

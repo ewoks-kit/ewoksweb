@@ -75,7 +75,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
       ...element,
       type: val,
     };
-    setAllEdge(newEdge, 'fromSaveElement');
+    setAllEdge(newEdge);
   }
 
   const arrowTypeChanged = (event: PropertyChangedEvent) => {
@@ -87,7 +87,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
       ? { ...element, markerEnd: { type } }
       : { ...element, markerEnd: undefined };
 
-    setAllEdge(newEdge, 'fromSaveElement');
+    setAllEdge(newEdge);
   };
 
   const colorLineChanged = (event: ChangeEvent<HTMLInputElement>) => {
@@ -97,7 +97,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
       labelStyle: { ...element.labelStyle, fill: event.target.value },
       labelBgStyle: { ...element.labelBgStyle, stroke: event.target.value },
     };
-    setAllEdge(newEdge, 'fromSaveElement');
+    setAllEdge(newEdge);
   };
 
   const animatedChanged = (event: ChangeEvent<HTMLInputElement>) => {
@@ -105,7 +105,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
       ...element,
       animated: event.target.checked,
     };
-    setAllEdge(newEdge, 'fromSaveElement');
+    setAllEdge(newEdge);
   };
 
   function changeX(_event: ChangeEvent<unknown>, value: number | number[]) {
@@ -120,7 +120,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
         },
       },
     };
-    setAllEdge(newEdge, 'fromSaveElement');
+    setAllEdge(newEdge);
     setX(newX);
   }
 
@@ -136,12 +136,12 @@ export default function EditLinkStyle(element: EwoksRFLink) {
         },
       },
     };
-    setAllEdge(newEdge, 'fromSaveElement');
+    setAllEdge(newEdge);
     setY(newY);
   }
 
-  function setAllEdge(newEdge: EwoksRFLink, from?: string) {
-    setSelectedElement(newEdge, from);
+  function setAllEdge(newEdge: EwoksRFLink) {
+    setSelectedElement(newEdge);
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
   }
 

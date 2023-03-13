@@ -40,7 +40,7 @@ export default function Conditions(props: ConditionsProps) {
       },
     };
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-    setSelectedElement(newEdge, 'fromSaveElement');
+    setSelectedElement(newEdge);
   }
 
   function conditionsValuesChanged(table: EditableTableRow[]) {
@@ -57,7 +57,7 @@ export default function Conditions(props: ConditionsProps) {
       },
     };
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-    setSelectedElement(newEdge, 'fromSaveElement');
+    setSelectedElement(newEdge);
   }
 
   return (

@@ -46,7 +46,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
           ui_props: { ...element.data.ui_props, nodeWidth: width },
         },
       };
-      setAllNode(newNode, 'fromSaveElement');
+      setAllNode(newNode);
     }
   }
 
@@ -61,7 +61,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         },
       },
     };
-    setAllNode(newNode, 'fromSaveElement');
+    setAllNode(newNode);
   }
 
   function withLabelChanged(event: ChangeEvent<HTMLInputElement>) {
@@ -75,7 +75,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         },
       },
     };
-    setAllNode(newNode, 'fromSaveElement');
+    setAllNode(newNode);
   }
 
   const colorBorderChanged = (event: ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +89,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         },
       },
     };
-    setAllNode(newNode, 'fromSaveElement');
+    setAllNode(newNode);
   };
 
   const moreHandlesChanged = (event: ChangeEvent<HTMLInputElement>) => {
@@ -103,11 +103,11 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         },
       },
     };
-    setAllNode(newNode, 'fromSaveElement');
+    setAllNode(newNode);
   };
 
-  function setAllNode(newNode: EwoksRFNode, from?: string) {
-    setSelectedElement(newNode, from);
+  function setAllNode(newNode: EwoksRFNode) {
+    setSelectedElement(newNode);
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 

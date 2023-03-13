@@ -90,7 +90,7 @@ export default function LabelComment(props: LabelCommentProps) {
         },
       };
       setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
-      setSelectedElement(newNode, 'fromSaveElement');
+      setSelectedElement(newNode);
     }
 
     if (isLink(element)) {
@@ -102,7 +102,7 @@ export default function LabelComment(props: LabelCommentProps) {
         ...getEdges().filter((edge) => edge.id !== element.id),
         newLink,
       ]);
-      setSelectedElement(newLink, 'fromSaveElement');
+      setSelectedElement(newLink);
     }
   }
 
@@ -111,7 +111,7 @@ export default function LabelComment(props: LabelCommentProps) {
       ...element,
       data: { ...element.data, comment: commentLocal },
     };
-    setSelectedElement(newElement, 'fromSaveElement');
+    setSelectedElement(newElement);
 
     if (isNode(newElement)) {
       setNodes([

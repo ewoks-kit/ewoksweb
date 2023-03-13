@@ -49,8 +49,8 @@ export default function LinkDetails(element: EwoksRFLink) {
     setAllEdge(newEdge);
   };
 
-  function setAllEdge(newEdge: EwoksRFLink, from?: string) {
-    setSelectedElement(newEdge, from);
+  function setAllEdge(newEdge: EwoksRFLink) {
+    setSelectedElement(newEdge);
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
   }
 

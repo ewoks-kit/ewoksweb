@@ -35,7 +35,7 @@ export default function DefaultInputs(element: EwoksRFNode) {
         },
       };
       setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
-      setSelectedElement(newNode, 'fromSaveElement');
+      setSelectedElement(newNode);
     }
   }
 
@@ -57,7 +57,7 @@ export default function DefaultInputs(element: EwoksRFNode) {
       },
     };
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
-    setSelectedElement(newNode, 'fromSaveElement');
+    setSelectedElement(newNode);
   };
 
   return (

@@ -37,7 +37,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       },
     };
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-    setSelectedElement(newEdge, 'fromSaveElement');
+    setSelectedElement(newEdge);
   }
 
   const dataMappingValuesChanged = (table: DataMapping[]) => {
@@ -58,7 +58,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       },
     };
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-    setSelectedElement(newEdge, 'fromSaveElement');
+    setSelectedElement(newEdge);
   };
 
   return (

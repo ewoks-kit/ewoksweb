@@ -51,21 +51,18 @@ const NoteNode = (args: NoteProps) => {
 
   const save = () => {
     // TODO: If permenant put it in undo-redo and make title editable
-    setSelectedElement(
-      {
-        ...selectedElement,
-        data: {
-          task_props: { task_type: 'note', task_identifier: args.id },
-          ewoks_props: { label: args.data.ewoks_props.label },
-          ui_props: {},
-          comment,
-        },
-        id: args.id,
-        type: 'note',
-        position: { x: args.xPos || 500, y: args.yPos || 500 },
+    setSelectedElement({
+      ...selectedElement,
+      data: {
+        task_props: { task_type: 'note', task_identifier: args.id },
+        ewoks_props: { label: args.data.ewoks_props.label },
+        ui_props: {},
+        comment,
       },
-      'fromSaveElement'
-    );
+      id: args.id,
+      type: 'note',
+      position: { x: args.xPos || 500, y: args.yPos || 500 },
+    });
   };
 
   return (

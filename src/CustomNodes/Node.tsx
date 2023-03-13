@@ -72,7 +72,6 @@ function Node({
   const [edit, setEdit] = React.useState(false);
   const [labelLocal, setLabelLocal] = React.useState(label);
   const [detailsL, setDetailsL] = React.useState(false);
-  // const setUndoRedo = useStore((state) => state.setUndoRedo);
 
   useEffect(() => {
     setNodeSize(nodeWidth);
@@ -129,16 +128,6 @@ function Node({
       },
     };
     setNodes([...getNodes(), newClone]);
-
-    // TBD
-    // const newGraph = {
-    //   ...graphRF,
-    //   nodes: [...graphRF.nodes, newClone],
-    // };
-
-    // setGraphRF(newGraph, true);
-
-    // setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
     setSelectedElement(newClone);
   };
 

@@ -8,12 +8,12 @@ export default function GraphDetails(graph: GraphDetailsType) {
 
   function saveCategory(category: string) {
     const newGraph = { ...graph, category };
-    setGraphAll(newGraph, 'fromSaveElement');
+    setGraphAll(newGraph);
   }
 
   function saveLabel(label: string) {
     const newGraph = { ...graph, label };
-    setGraphAll(newGraph, 'fromSaveElement');
+    setGraphAll(newGraph);
   }
 
   function saveComment(comment: string) {
@@ -21,12 +21,12 @@ export default function GraphDetails(graph: GraphDetailsType) {
       ...graph,
       uiProps: { ...graph.uiProps, comment },
     };
-    setGraphAll(newGraph, 'fromSaveElement');
+    setGraphAll(newGraph);
   }
 
-  function setGraphAll(newGraph: GraphDetailsType, from?: string) {
+  function setGraphAll(newGraph: GraphDetailsType) {
     setGraphRFDetails(newGraph);
-    setSelectedElement(newGraph, from);
+    setSelectedElement(newGraph);
   }
 
   return (

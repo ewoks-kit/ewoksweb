@@ -66,7 +66,6 @@ function Canvas() {
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const subgraphsStack = useStore((state) => state.subgraphsStack);
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
-  const setUndoRedo = useStore((state) => state.setUndoRedo);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const selectedElement = useStore((state) => state.selectedElement);
   const setSelectedTask = useStore((state) => state.setSelectedTask);
@@ -74,6 +73,7 @@ function Canvas() {
   const recentGraphs = useStore((state) => state.recentGraphs);
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  // const setUndoRedo = useStore((state) => state.setUndoRedo);
 
   const graphId = useGraphId();
 
@@ -124,6 +124,16 @@ function Canvas() {
   }, [getNodes, graphId, fitView, getZoom, zoomTo, prevGraphId]);
 
   function onNodesChange(changes: NodeChange[]) {
+    const newNodes = applyNodeChanges(changes, getNodes());
+
+    // setUndoRedo({
+    //   action: 'Nodes change',
+    //   graph: {
+    //     graph: graphRFDetails,
+    //     nodes: newNodes,
+    //     links: getEdges() as EwoksRFLink[],
+    //   },
+    // });
     if (workingGraph.graph.id !== graphId) {
       setOpenSnackbar({
         open: true,
@@ -131,10 +141,19 @@ function Canvas() {
         severity: 'warning',
       });
     }
-    storeRF.getState().setNodes(applyNodeChanges(changes, getNodes()));
+    storeRF.getState().setNodes(newNodes);
   }
 
   function onEdgesChange(changes: EdgeChange[]) {
+    const newEdges = applyEdgeChanges(changes, getEdges());
+    // setUndoRedo({
+    //   action: 'Edges change',
+    //   graph: {
+    //     graph: graphRFDetails,
+    //     nodes: getNodes(),
+    //     links: newEdges as EwoksRFLink[],
+    //   },
+    // });
     if (workingGraph.graph.id !== graphId) {
       setOpenSnackbar({
         open: true,
@@ -142,7 +161,7 @@ function Canvas() {
         severity: 'warning',
       });
     }
-    storeRF.getState().setEdges(applyEdgeChanges(changes, getEdges()));
+    storeRF.getState().setEdges(newEdges);
   }
 
   const onPaneClick = () => {
@@ -256,16 +275,6 @@ function Canvas() {
       };
 
       addNodes(newNode);
-
-      // TBD BUTRC but newGraph is needed for the recentGraphs too
-      const newGraph: GraphRF = {
-        graph: graphRFDetails,
-        nodes: [...getNodes(), newNode],
-        links: [...getEdges()] as EwoksRFLink[],
-      };
-
-      setUndoRedo({ action: 'Added a Node', graph: newGraph });
-      setRecentGraphs(newGraph);
     } else {
       setOpenSnackbar({
         open: true,
@@ -298,16 +307,6 @@ function Canvas() {
         text: reason,
         severity: 'warning',
       });
-    } else {
-      // TBD BUTRC but newGraph is needed for the recentGraphs too
-      const newGraph: GraphRF = {
-        graph: { ...graphRFDetails },
-        nodes: [...nodesRF],
-        links: [...edgesRF] as EwoksRFLink[],
-      };
-
-      setUndoRedo({ action: 'Updated a Link', graph: newGraph });
-      setRecentGraphs(newGraph);
     }
   };
 
@@ -327,11 +326,6 @@ function Canvas() {
       links: getEdges() as EwoksRFLink[],
     });
     setEdges(newGraph.links);
-
-    setGraphRFDetails(graphRFDetails);
-
-    setRecentGraphs(newGraph);
-    setUndoRedo({ action: 'new Link', graph: newGraph });
   };
 
   const onPaneContextMenu = (event: MouseEvent) => {
@@ -394,9 +388,6 @@ function Canvas() {
       }
     }
   };
-
-  // Important: onNodeDragStop, onSelectionDragStop: Only needed for setRecentGraphs, undoRedo
-  // and for informing in case of subgraphs that changes wont be saved
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLImageElement>) => {
     const charCode = String.fromCodePoint(event.which).toLowerCase();
