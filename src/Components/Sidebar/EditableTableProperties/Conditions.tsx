@@ -43,7 +43,7 @@ export default function Conditions(props: ConditionsProps) {
       },
     };
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-    setSelectedElementNew({ type: 'graph', id: newEdge.id });
+    setSelectedElementNew({ type: 'edge', id: newEdge.id });
   }
 
   function conditionsValuesChanged(table: EditableTableRow[]) {
@@ -60,7 +60,7 @@ export default function Conditions(props: ConditionsProps) {
       },
     };
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-    setSelectedElementNew({ type: 'graph', id: newEdge.id });
+    setSelectedElementNew({ type: 'edge', id: newEdge.id });
   }
 
   return (

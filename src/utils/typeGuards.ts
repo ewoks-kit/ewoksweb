@@ -6,21 +6,21 @@ export interface EwoksServerErrorResponse {
 }
 
 export function isNode(
-  entity: EwoksRFNode | EwoksRFLink | GraphDetails
+  entity: EwoksRFNode | EwoksRFLink | GraphDetails | undefined
 ): entity is EwoksRFNode {
-  return 'position' in entity;
+  return !!entity && 'position' in entity;
 }
 
 export function isLink(
-  entity: EwoksRFNode | EwoksRFLink | GraphDetails
+  entity: EwoksRFNode | EwoksRFLink | GraphDetails | undefined
 ): entity is EwoksRFLink {
-  return 'source' in entity;
+  return !!entity && 'source' in entity;
 }
 
 export function isGraphDetails(
-  entity: EwoksRFNode | EwoksRFLink | GraphDetails
+  entity: EwoksRFNode | EwoksRFLink | GraphDetails | undefined
 ): entity is GraphDetails {
-  return 'input_nodes' in entity;
+  return !!entity && 'input_nodes' in entity;
 }
 
 export function isEwoksServerErrorResponse(

@@ -64,6 +64,7 @@ export default function Sidebar() {
       });
       return;
     }
+    console.log(selectedElement);
 
     if (isNode(selectedElement)) {
       deleteElements({ nodes: [selectedElement] });

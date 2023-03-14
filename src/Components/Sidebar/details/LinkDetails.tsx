@@ -52,7 +52,7 @@ export default function LinkDetails(element: EwoksRFLink) {
   };
 
   function setAllEdge(newEdge: EwoksRFLink) {
-    setSelectedElementNew({ type: 'graph', id: newEdge.id });
+    setSelectedElementNew({ type: 'edge', id: newEdge.id });
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
   }
 
