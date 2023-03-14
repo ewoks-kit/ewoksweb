@@ -16,9 +16,10 @@ import type { Connection } from 'reactflow';
 import { isNode } from '../utils/typeGuards';
 import NodeIcon from './NodeIcon';
 import IconBoundary from '../IconBoundary';
-import { useNodesIds } from '../store/graph-hooks';
+import { useNodesIds, useSelectedElement } from '../store/graph-hooks';
 import type { NodeProps, EwoksRFLink, EwoksRFNode, GraphRF } from '../types';
 import { useReactFlow } from 'reactflow';
+import useSelectedElementStore from '../store/useSelectedElementStore';
 
 // TODO: examine usage when execution in main
 const execution = () => {
@@ -67,8 +68,10 @@ function Node({
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const graphRFDetails = useStore((state) => state.graphRFDetails);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
-  const selectedElement = useStore((state) => state.selectedElement);
+  const setSelectedElementNew = useSelectedElementStore(
+    (state) => state.setSelectedElementNew
+  );
+  const selectedElement = useSelectedElement();
   const [edit, setEdit] = React.useState(false);
   const [labelLocal, setLabelLocal] = React.useState(label);
   const [detailsL, setDetailsL] = React.useState(false);
@@ -128,7 +131,7 @@ function Node({
       },
     };
     setNodes([...getNodes(), newClone]);
-    setSelectedElement(newClone);
+    setSelectedElementNew({ type: 'graph', id: newClone.id });
   };
 
   function setSelectedNode() {
@@ -136,13 +139,16 @@ function Node({
       return;
     }
 
-    setSelectedElement({
+    const newNode = {
       ...selectedElement,
       data: {
         ...selectedElement.data,
         ewoks_props: { ...selectedElement.data.ewoks_props, label: labelLocal },
       },
-    });
+    };
+
+    setNodes([...getNodes(), newNode]);
+    setSelectedElementNew({ type: 'node', id: newNode.id });
   }
 
   return (

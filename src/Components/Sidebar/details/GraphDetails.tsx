@@ -1,9 +1,12 @@
 import useStore from '../../../store/useStore';
 import TextButtonSave from './TextButtonSave';
 import type { GraphDetails as GraphDetailsType } from '../../../types';
+import useSelectedElementStore from 'store/useSelectedElementStore';
 
 export default function GraphDetails(graph: GraphDetailsType) {
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const setSelectedElementNew = useSelectedElementStore(
+    (state) => state.setSelectedElementNew
+  );
   const setGraphRFDetails = useStore((state) => state.setGraphRFDetails);
 
   function saveCategory(category: string) {
@@ -26,7 +29,7 @@ export default function GraphDetails(graph: GraphDetailsType) {
 
   function setGraphAll(newGraph: GraphDetailsType) {
     setGraphRFDetails(newGraph);
-    setSelectedElement(newGraph);
+    setSelectedElementNew({ type: 'graph', id: newGraph.id });
   }
 
   return (

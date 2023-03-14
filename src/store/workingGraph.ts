@@ -1,11 +1,4 @@
-import type {
-  EwoksRFLink,
-  EwoksRFNode,
-  GraphEwoks,
-  GraphRF,
-  State,
-  Task,
-} from '../types';
+import type { EwoksRFNode, GraphEwoks, GraphRF, State, Task } from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
@@ -14,6 +7,7 @@ import { getTaskDescription } from '../api/api';
 import type { GetState, SetState } from 'zustand';
 import { initializedRFGraph } from '../utils/InitializedEntities';
 import { textForError } from '../utils';
+import useSelectedElementStore from './useSelectedElementStore';
 
 export interface WorkingGraphSlice {
   workingGraph: GraphRF;
@@ -44,7 +38,9 @@ const workingGraph = (
         });
       }
     }
-    get().setSelectedElement({} as EwoksRFNode | EwoksRFLink);
+    useSelectedElementStore
+      .getState()
+      .setSelectedElementNew({ type: 'graph', id: '' });
     get().setSubgraphsStack({ id: '', label: '', resetStack: true });
     get().resetRecentGraphs();
 
@@ -102,7 +98,9 @@ const workingGraph = (
 
     get().setGraphRFDetails(graph.graph);
 
-    get().setSelectedElement(graph.graph);
+    useSelectedElementStore
+      .getState()
+      .setSelectedElementNew({ type: 'graph', id: graph.graph.id });
     // add the new graph to the recent graphs if not already there
     get().setRecentGraphs({
       graph: workingGraphObject.graph,

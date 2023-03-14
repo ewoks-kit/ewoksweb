@@ -7,12 +7,15 @@ import SidebarTooltip from '../SidebarTooltip';
 import { useNode } from '../../../store/graph-hooks';
 import { isClass } from './utils';
 import { useReactFlow } from 'reactflow';
+import useSelectedElementStore from '../../../store/useSelectedElementStore';
 
 export default function DataMappingComponent(element: EwoksRFLink) {
   const { getEdges, setEdges } = useReactFlow();
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const setSelectedElementNew = useSelectedElementStore(
+    (state) => state.setSelectedElementNew
+  );
 
   const sourceNode = useNode(element.source);
   const targetNode = useNode(element.target);
@@ -37,7 +40,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       },
     };
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-    setSelectedElement(newEdge);
+    setSelectedElementNew({ type: 'edge', id: newEdge.id });
   }
 
   const dataMappingValuesChanged = (table: DataMapping[]) => {
@@ -58,7 +61,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       },
     };
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-    setSelectedElement(newEdge);
+    setSelectedElementNew({ type: 'edge', id: newEdge.id });
   };
 
   return (

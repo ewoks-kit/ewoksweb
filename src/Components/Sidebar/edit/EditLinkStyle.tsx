@@ -18,6 +18,7 @@ import { isMarkerType, isString } from '../../../utils/typeGuards';
 import type { Edge } from 'reactflow';
 import { MarkerType } from 'reactflow';
 import { useReactFlow } from 'reactflow';
+import useSelectedElementStore from '../../../store/useSelectedElementStore';
 
 const useStyles = DashboardStyle;
 
@@ -27,7 +28,9 @@ export default function EditLinkStyle(element: EwoksRFLink) {
 
   const { setEdges, getEdges } = useReactFlow();
 
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const setSelectedElementNew = useSelectedElementStore(
+    (state) => state.setSelectedElementNew
+  );
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const [linkType, setLinkType] = useState('default');
@@ -141,7 +144,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
   }
 
   function setAllEdge(newEdge: EwoksRFLink) {
-    setSelectedElement(newEdge);
+    setSelectedElementNew({ type: 'graph', id: newEdge.id });
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
   }
 

@@ -25,7 +25,7 @@ import CanvasBackground from './CanvasBackground';
 import CanvasMiniMap from './CanvasMiniMap';
 import { addConnectionToGraph, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
-import { useEdge, useGraphId, useNode } from '../../store/graph-hooks';
+import { useGraphId, useSelectedElement } from '../../store/graph-hooks';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -55,6 +55,9 @@ const nodeTypes = {
 function Canvas() {
   const classes = useStyles();
 
+  const graphId = useGraphId();
+
+  const selectedElement = useSelectedElement();
   const storeRF = useStoreApi();
   const rfInstance = useReactFlow();
   const [prevGraphId, setPrevGraphId] = useState('');
@@ -66,9 +69,8 @@ function Canvas() {
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const subgraphsStack = useStore((state) => state.subgraphsStack);
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
-  const selectedElementNew = useSelectedElementStore(
-    (state) => state.selectedElement
+  const setSelectedElementNew = useSelectedElementStore(
+    (state) => state.setSelectedElementNew
   );
   const setSelectedTask = useStore((state) => state.setSelectedTask);
   const tasks = useStore((state) => state.tasks);
@@ -76,10 +78,6 @@ function Canvas() {
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   // const setUndoRedo = useStore((state) => state.setUndoRedo);
-
-  const graphId = useGraphId();
-
-  const selectedNode = useNode(selectedElementNew.id);
 
   const {
     fitView,
@@ -169,7 +167,7 @@ function Canvas() {
   }
 
   const onPaneClick = () => {
-    setSelectedElement(graphRFDetails);
+    setSelectedElementNew({ type: 'graph', id: graphRFDetails.id });
     setNodes(
       getNodes().map((nod) => {
         return {
@@ -191,12 +189,12 @@ function Canvas() {
         element.type === 'executionSteps'
       )
     ) {
-      setSelectedElement(element);
+      setSelectedElementNew({ type: 'node', id: element.id });
     }
   };
 
   const onEdgeClick = (_event: MouseEvent, element: Edge) => {
-    setSelectedElement(element as EwoksRFLink);
+    setSelectedElementNew({ type: 'edge', id: element.id });
   };
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
@@ -367,9 +365,7 @@ function Canvas() {
           id: subgraph.graph.id,
           label: subgraph.graph.label,
         });
-        setSelectedElement({
-          ...subgraph.graph,
-        });
+        setSelectedElementNew({ type: 'graph', id: subgraph.graph.id });
       } else {
         setOpenSnackbar({
           open: true,
@@ -402,19 +398,19 @@ function Canvas() {
     if (keys && charCode === 'v') {
       event.preventDefault();
       event.stopPropagation();
-      if (selectedNode && selectedElementNew.type === 'node') {
+      if ('position' in selectedElement) {
         const newClone: EwoksRFNode = {
-          ...selectedNode,
-          id: calcNewId(selectedNode.id, nodesIds),
+          ...selectedElement,
+          id: calcNewId(selectedElement.id, nodesIds),
           selected: false,
           position: {
-            x: (selectedNode.position?.x || 0) + 100,
-            y: (selectedNode.position?.y || 0) + 100,
+            x: (selectedElement.position?.x || 0) + 100,
+            y: (selectedElement.position?.y || 0) + 100,
           },
         };
         setNodes([...getNodes(), newClone]);
 
-        setSelectedElement(newClone);
+        setSelectedElementNew({ type: 'node', id: newClone.id });
       } else {
         setOpenSnackbar({
           open: true,

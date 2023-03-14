@@ -11,6 +11,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from '../sidebarStyle';
 import { isLink, isNode, isString } from '../../../utils/typeGuards';
 import { useReactFlow } from 'reactflow';
+import useSelectedElementStore from '../../../store/useSelectedElementStore';
 
 const useStyles = DashboardStyle;
 
@@ -35,7 +36,9 @@ export default function LabelComment(props: LabelCommentProps) {
   ]);
   const [valueIsChanged, setValueIsChanged] = useState(false);
 
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const setSelectedElementNew = useSelectedElementStore(
+    (state) => state.setSelectedElementNew
+  );
   const inExecutionMode = useStore((state) => state.inExecutionMode);
 
   useEffect(() => {
@@ -90,7 +93,7 @@ export default function LabelComment(props: LabelCommentProps) {
         },
       };
       setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
-      setSelectedElement(newNode);
+      setSelectedElementNew({ type: 'node', id: newNode.id });
     }
 
     if (isLink(element)) {
@@ -102,7 +105,7 @@ export default function LabelComment(props: LabelCommentProps) {
         ...getEdges().filter((edge) => edge.id !== element.id),
         newLink,
       ]);
-      setSelectedElement(newLink);
+      setSelectedElementNew({ type: 'edge', id: newLink.id });
     }
   }
 
@@ -111,9 +114,9 @@ export default function LabelComment(props: LabelCommentProps) {
       ...element,
       data: { ...element.data, comment: commentLocal },
     };
-    setSelectedElement(newElement);
 
     if (isNode(newElement)) {
+      setSelectedElementNew({ type: 'node', id: newElement.id });
       setNodes([
         ...getNodes().filter((nod) => nod.id !== element.id),
         newElement,
@@ -122,6 +125,7 @@ export default function LabelComment(props: LabelCommentProps) {
     }
 
     if (isLink(newElement)) {
+      setSelectedElementNew({ type: 'edge', id: newElement.id });
       setEdges([
         ...getEdges().filter((edg) => edg.id !== element.id),
         newElement,

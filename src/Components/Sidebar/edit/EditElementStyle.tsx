@@ -10,6 +10,9 @@ import EditGraphStyle from './EditGraphStyle';
 import useStore from '../../../store/useStore';
 import { isNode, isLink } from 'utils/typeGuards';
 import type { EwoksRFElement } from '../models';
+import useSelectedElementStore from 'store/useSelectedElementStore';
+import { useReactFlow } from 'reactflow';
+// import { useSelectedElement } from '../../../store/graph-hooks';
 
 interface Content {
   title: string;
@@ -39,9 +42,22 @@ function getAccordionContent(element: EwoksRFElement): Content {
 
 // DOC: For editing the style of nodes and links
 export default function EditElementStyle() {
-  const selectedElement = useStore((state) => state.selectedElement);
+  const { getNodes, getEdges } = useReactFlow();
+  const graphRFDetails = useStore((state) => state.graphRFDetails);
+  const selectedElementNew = useSelectedElementStore(
+    (state) => state.selectedElementNew
+  );
+  // In a hook when the 2 stores stop setting each other
+  const element =
+    selectedElementNew.type === 'node'
+      ? getNodes().find((node) => node.id === selectedElementNew.id)
+      : selectedElementNew.type === 'edge'
+      ? getEdges().find((edge) => edge.id === selectedElementNew.id)
+      : graphRFDetails;
 
-  const { title, EditComponent } = getAccordionContent(selectedElement);
+  const { title, EditComponent } = getAccordionContent(
+    element as EwoksRFElement
+  );
 
   return (
     <Accordion className="Accordions-sidebar">

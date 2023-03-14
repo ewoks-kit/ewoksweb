@@ -25,8 +25,9 @@ import SidebarTooltip from './SidebarTooltip';
 import commonStrings from 'commonStrings.json';
 import { isGraphDetails, isLink, isNode } from '../../utils/typeGuards';
 import { textForError } from '../../utils';
-import { useNodesIds } from '../../store/graph-hooks';
+import { useNodesIds, useSelectedElement } from '../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
+import useSelectedElementStore from '../../store/useSelectedElementStore';
 
 const useStyles = DashboardStyle;
 
@@ -36,14 +37,14 @@ export default function Sidebar() {
   const nodesIds = useNodesIds();
   const { deleteElements, getNodes, setNodes, getEdges } = useReactFlow();
 
-  const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
-    (state) => state.selectedElement
+  const setSelectedElementNew = useSelectedElementStore(
+    (state) => state.setSelectedElementNew
   );
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const selectedElement = useSelectedElement();
 
-  const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
-    false
-  );
+  // const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
+  //   false
+  // );
   const graphRFDetails = useStore((state) => state.graphRFDetails);
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
@@ -106,7 +107,7 @@ export default function Sidebar() {
     }
 
     setWorkingGraph(initializedGraph);
-    setSelectedElement({} as GraphDetails);
+    setSelectedElementNew({ type: 'graph', id: '' });
     setSubgraphsStack({ id: '', label: '', resetStack: true });
     resetRecentGraphs();
   };
@@ -128,7 +129,7 @@ export default function Sidebar() {
       };
       const nodesRF = getNodes();
       setNodes([...nodesRF, newClone]);
-      setSelectedElement(newClone);
+      setSelectedElementNew({ type: 'node', id: newClone.id });
     } else {
       setOpenSnackbar({
         open: true,

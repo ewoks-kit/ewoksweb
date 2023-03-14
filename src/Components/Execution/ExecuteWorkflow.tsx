@@ -7,11 +7,12 @@ import { useEffect, useState } from 'react';
 import type { Event } from '../../types';
 import { executeWorkflow } from '../../api/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
+import useSelectedElementStore from '../../store/useSelectedElementStore';
 
 export const socket = io(process.env.REACT_APP_SERVER_URL as string);
 
 export default function ExecuteWorkflow() {
-  const graphRF = useStore((state) => state.graphRF);
+  const graphRFDetails = useStore((state) => state.graphRFDetails);
   const recentGraphs = useStore((state) => state.recentGraphs);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
@@ -24,7 +25,9 @@ export default function ExecuteWorkflow() {
   );
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const undoIndex = useStore((state) => state.undoIndex);
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const setSelectedElementNew = useSelectedElementStore(
+    (state) => state.setSelectedElementNew
+  );
 
   useEffect(() => {
     // DOC: when execution begins it has to listen to incoming from the socket events
@@ -53,7 +56,7 @@ export default function ExecuteWorkflow() {
     if (recentGraphs.length > 0 && !inExecutionMode) {
       setInExecutionMode(true);
       try {
-        await executeWorkflow(graphRF.graph.id);
+        await executeWorkflow(graphRFDetails.id);
       } catch (error) {
         // Keep logging in console for debugging when talking with a user
         /* eslint-disable no-console */
@@ -68,7 +71,7 @@ export default function ExecuteWorkflow() {
       setInExecutionMode(false);
       // DOC: when exiting the execution to show the graph as selected
       // and not a numbered execution node that the user might have clicked
-      setSelectedElement(graphRF.graph);
+      setSelectedElementNew({ type: 'graph', id: graphRFDetails.id });
     } else {
       setOpenSnackbar({
         open: true,

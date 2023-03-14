@@ -11,9 +11,11 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { Button, Menu, Tooltip } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import FormDialog from '../General/FormDialog';
-import type { EwoksRFLink, EwoksRFNode, GraphDetails, Task } from '../../types';
+import type { GraphDetails, Task } from '../../types';
 import useStore from '../../store/useStore';
 import { FormAction } from '../../types';
+import { useSelectedElement } from '../../store/graph-hooks';
+import type { Edge, Node } from 'reactflow';
 
 export default function IconMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -25,9 +27,9 @@ export default function IconMenu() {
   const [doAction, setDoAction] = React.useState<FormAction>(
     FormAction.newTask
   );
-  const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
-    (state) => state.selectedElement
-  );
+
+  const selectedElement = useSelectedElement();
+
   const initializedTask = useStore((state) => state.initializedTask);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
@@ -44,8 +46,11 @@ export default function IconMenu() {
 
   function onAction(
     action: FormAction,
-    element: Task | EwoksRFNode | EwoksRFLink | GraphDetails
+    element: Task | GraphDetails | Node | Edge | undefined
   ) {
+    if (!element) {
+      return;
+    }
     setDoAction(action);
     switch (action) {
       case 'newTask': {

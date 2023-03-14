@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Checkbox, FormControl, Slider } from '@material-ui/core';
 import type { EwoksRFNode } from '../../../types';
-import useStore from '../../../store/useStore';
 import useDebounce from '../../../hooks/useDebounce';
 import type { ChangeEvent } from 'react';
 import { isNode } from 'utils/typeGuards';
 import { useReactFlow } from 'reactflow';
+import useSelectedElementStore from '../../../store/useSelectedElementStore';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(element: EwoksRFNode) {
   const { getNodes, setNodes } = useReactFlow();
 
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const setSelectedElementNew = useSelectedElementStore(
+    (state) => state.setSelectedElementNew
+  );
 
   const [nodeSize, setNodeSize] = useState<number>(
     element.data.ui_props.nodeWidth || 100
@@ -107,7 +109,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
   };
 
   function setAllNode(newNode: EwoksRFNode) {
-    setSelectedElement(newNode);
+    setSelectedElementNew({ type: 'node', id: newNode.id });
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 

@@ -5,6 +5,7 @@ import EditableTable from './EditableTable';
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import { useReactFlow } from 'reactflow';
+import useSelectedElementStore from '../../../store/useSelectedElementStore';
 
 interface ConditionsProps {
   element: EwoksRFLink;
@@ -16,7 +17,9 @@ export default function Conditions(props: ConditionsProps) {
   const { getEdges, setEdges } = useReactFlow();
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const setSelectedElementNew = useSelectedElementStore(
+    (state) => state.setSelectedElementNew
+  );
 
   function addConditions() {
     const elCon = element.data.conditions || [];
@@ -40,7 +43,7 @@ export default function Conditions(props: ConditionsProps) {
       },
     };
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-    setSelectedElement(newEdge);
+    setSelectedElementNew({ type: 'graph', id: newEdge.id });
   }
 
   function conditionsValuesChanged(table: EditableTableRow[]) {
@@ -57,7 +60,7 @@ export default function Conditions(props: ConditionsProps) {
       },
     };
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-    setSelectedElement(newEdge);
+    setSelectedElementNew({ type: 'graph', id: newEdge.id });
   }
 
   return (

@@ -19,7 +19,6 @@ import {
 } from '@material-ui/core';
 import EditTaskProp from './EditTaskProp';
 import DashboardStyle from '../../Dashboard/DashboardStyle';
-import useStore from '../../../store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import { OpenInBrowser } from '@material-ui/icons';
 import LabelComment from './LabelComment';
@@ -28,6 +27,7 @@ import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
 import { useNodesIds } from '../../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
+import useSelectedElementStore from '../../../store/useSelectedElementStore';
 
 const useStyles = DashboardStyle;
 
@@ -39,7 +39,9 @@ export default function NodeDetails(element: EwoksRFNode) {
 
   const nodesIds = useNodesIds();
 
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const setSelectedElementNew = useSelectedElementStore(
+    (state) => state.setSelectedElementNew
+  );
   const showAdvancedDetails = useConfigStore(
     (state) => state.showAdvancedDetails
   );
@@ -266,7 +268,7 @@ export default function NodeDetails(element: EwoksRFNode) {
   }
 
   function setAllNode(newNode: EwoksRFNode) {
-    setSelectedElement(newNode);
+    setSelectedElementNew({ type: 'node', id: newNode.id });
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 

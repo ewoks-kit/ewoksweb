@@ -9,9 +9,7 @@ import GraphDetails from './GraphDetails';
 import { isLink, isNode } from '../../../utils/typeGuards';
 import type { EwoksRFElement } from '../models';
 import { useEffect, useState } from 'react';
-import useSelectedElementStore from '../../../store/useSelectedElementStore';
-import { useReactFlow } from 'reactflow';
-import useStore from '../../../store/useStore';
+import { useSelectedElement } from '../../../store/graph-hooks';
 
 interface Content {
   title: string;
@@ -41,19 +39,7 @@ function getAccordionContent(element: EwoksRFElement): Content {
 
 // DOC: Container for link-node-graph editing details
 function ElementDetails() {
-  const selectedElementNew = useSelectedElementStore(
-    (state) => state.selectedElement
-  );
-  const graphRFDetails = useStore((state) => state.graphRFDetails);
-
-  const { getNodes, getEdges } = useReactFlow();
-
-  const selectedElement =
-    selectedElementNew.type === 'node'
-      ? getNodes().find((node) => node.id === selectedElementNew.id)
-      : selectedElementNew.type === 'edge'
-      ? getEdges().find((edge) => edge.id === selectedElementNew.id)
-      : graphRFDetails;
+  const selectedElement = useSelectedElement();
 
   const [expanded, setExpanded] = useState(false);
 
