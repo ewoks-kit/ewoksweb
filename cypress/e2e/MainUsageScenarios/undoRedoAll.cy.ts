@@ -3,7 +3,7 @@ describe('undo-redo functionality', () => {
     cy.loadApp();
   });
 
-  it('initially there is no back or forth', () => {
+  it.skip('initially there is no back or forth', () => {
     cy.get('[data-cy="undoButton"]').click();
 
     cy.contains('No more back or forth!').should('be.visible');
@@ -13,7 +13,7 @@ describe('undo-redo functionality', () => {
     cy.contains('No more back or forth!').should('be.visible');
   });
 
-  it('type and undo/redo sidebar label', () => {
+  it.skip('type and undo/redo sidebar label', () => {
     cy.get('.react-flow').contains('if you do then...').parent().click();
 
     cy.findByRole('textbox', { name: 'Label' })

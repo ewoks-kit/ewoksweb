@@ -50,7 +50,6 @@ export default function Sidebar() {
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const initializedGraph = useStore((state) => state.initializedGraph);
-  const setUndoRedo = useStore((state) => state.setUndoRedo);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
@@ -67,39 +66,11 @@ export default function Sidebar() {
 
     if (isNode(selectedElement)) {
       deleteElements({ nodes: [selectedElement] });
-
-      // TBD used only for undoRedo
-      // const nodesLinks = graphRF.links.filter(
-      //   (link) =>
-      //     !(
-      //       link.source === selectedElement.id ||
-      //       link.target === selectedElement.id
-      //     )
-      // );
-      // const newGraph: GraphRF = {
-      //   ...graphRF,
-      //   nodes: graphRF.nodes.filter((nod) => nod.id !== selectedElement.id),
-      //   links: nodesLinks,
-      // };
-      // setUndoRedo({
-      //   action: 'Removed a Node',
-      //   graph: newGraph,
-      // });
       return;
     }
 
     if (isLink(selectedElement)) {
       deleteElements({ edges: [selectedElement] });
-
-      // TBD used only for undoRedo
-      // const newGraph: GraphRF = {
-      //   ...graphRF,
-      //   links: graphRF.links.filter((link) => link.id !== selectedElement.id),
-      // };
-      // setUndoRedo({
-      //   action: 'Removed a Link',
-      //   graph: newGraph,
-      // });
       return;
     }
 
@@ -156,14 +127,7 @@ export default function Sidebar() {
         },
       };
       const nodesRF = getNodes();
-      const newGraph = {
-        graph: graphRFDetails,
-        nodes: [...nodesRF, newClone],
-        links: getEdges() as EwoksRFLink[],
-      };
       setNodes([...nodesRF, newClone]);
-
-      setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
       setSelectedElement(newClone);
     } else {
       setOpenSnackbar({

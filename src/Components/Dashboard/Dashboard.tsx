@@ -9,7 +9,7 @@ import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import Sidebar from 'Components/Sidebar/Sidebar';
 import { Link } from 'react-router-dom';
 import Canvas from '../Canvas/Canvas';
-import UndoRedo from '../TopNavBar/UndoRedo';
+// import UndoRedo from '../TopNavBar/UndoRedo';
 import GetFromServer from '../General/GetFromServer';
 import { Fab, IconButton, Typography } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -322,7 +322,7 @@ export default function Dashboard() {
             </IconButton>
           </Tooltip>
           <div className={classes.verticalRule} />
-          <UndoRedo undo={undo} redo={redo} />
+          {/* <UndoRedo undo={undo} redo={redo} /> */}
           <div className={classes.verticalRule} />
           <SaveToServer
             saveToServer={async () => void saveToServer()}
