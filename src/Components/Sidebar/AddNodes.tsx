@@ -94,8 +94,8 @@ function AddNodes(props: AddNodesProps) {
   const [elementToEdit, setElementToEdit] = useState<Task>({});
   const initializedTask = useStore((state) => state.initializedTask);
   const [expanded, setExpanded] = useState<boolean>(false);
-  const selectedElementNew = useSelectedElementStore(
-    (state) => state.selectedElementNew
+  const selectedElementNewId = useSelectedElementStore(
+    (state) => state.selectedElementNew.id
   );
 
   const getTasks = useCallback(async () => {
@@ -115,12 +115,12 @@ function AddNodes(props: AddNodesProps) {
   }, [setOpenSnackbar, setTasks]);
 
   useEffect(() => {
-    setExpanded(!selectedElementNew.id);
+    setExpanded(!selectedElementNewId);
     // TODO: examine the strategy for re-fetching tasks-workflows-icons
     if (tasks.length === 0) {
       getTasks();
     }
-  }, [selectedElementNew.id, tasks.length, getTasks]);
+  }, [selectedElementNewId, tasks.length, getTasks]);
 
   useEffect(() => {
     if (props.openSaveDialogNewtask) {

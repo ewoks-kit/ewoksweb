@@ -64,16 +64,18 @@ export default function Sidebar() {
     }
 
     if (isNode(selectedElement)) {
+      setSelectedElement(graphRFDetails);
       deleteElements({ nodes: [selectedElement] });
       return;
     }
 
     if (isLink(selectedElement)) {
+      setSelectedElement(graphRFDetails);
       deleteElements({ edges: [selectedElement] });
       return;
     }
 
-    if ('input_nodes' in selectedElement) {
+    if (isGraphDetails(selectedElement)) {
       setOpenAgreeDialog(true);
       return;
     }
