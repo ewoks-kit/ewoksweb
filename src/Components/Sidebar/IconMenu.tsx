@@ -14,7 +14,6 @@ import FormDialog from '../General/FormDialog';
 import type { EwoksRFLink, EwoksRFNode, GraphDetails, Task } from '../../types';
 import useStore from '../../store/useStore';
 import { FormAction } from '../../types';
-import { useSelectedElement } from '../../store/graph-hooks';
 
 export default function IconMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -26,8 +25,9 @@ export default function IconMenu() {
   const [doAction, setDoAction] = React.useState<FormAction>(
     FormAction.newTask
   );
-  const selectedElement = useSelectedElement();
-
+  const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
+    (state) => state.selectedElement
+  );
   const initializedTask = useStore((state) => state.initializedTask);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 

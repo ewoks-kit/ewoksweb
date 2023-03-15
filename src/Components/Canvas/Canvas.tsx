@@ -18,14 +18,14 @@ import ExecutionStepsNode from 'CustomNodes/ExecutionStepsNode';
 import DataNode from 'CustomNodes/DataNode';
 import type { EwoksRFNode, EwoksRFLink } from 'types';
 import useStore from 'store/useStore';
-import useSelectedElementStore from 'store/useSelectedElementStore';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
 import CanvasBackground from './CanvasBackground';
 import CanvasMiniMap from './CanvasMiniMap';
 import { addConnectionToGraph, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
-import { useGraphId, useNode } from '../../store/graph-hooks';
+import { useGraphId, useSelectedElement } from '../../store/graph-hooks';
+import { isNode } from '../../utils/typeGuards';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -67,9 +67,6 @@ function Canvas() {
   const subgraphsStack = useStore((state) => state.subgraphsStack);
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
-  const selectedElementNew = useSelectedElementStore(
-    (state) => state.selectedElementNew
-  );
   const setSelectedTask = useStore((state) => state.setSelectedTask);
   const tasks = useStore((state) => state.tasks);
   const recentGraphs = useStore((state) => state.recentGraphs);
@@ -79,7 +76,7 @@ function Canvas() {
 
   const graphId = useGraphId();
 
-  const selectedNode = useNode(selectedElementNew.id);
+  const selectedElement = useSelectedElement();
 
   const {
     fitView,
@@ -402,14 +399,14 @@ function Canvas() {
     if (keys && charCode === 'v') {
       event.preventDefault();
       event.stopPropagation();
-      if (selectedNode && selectedElementNew.type === 'node') {
+      if (isNode(selectedElement)) {
         const newClone: EwoksRFNode = {
-          ...selectedNode,
-          id: calcNewId(selectedNode.id, nodesIds),
+          ...selectedElement,
+          id: calcNewId(selectedElement.id, nodesIds),
           selected: false,
           position: {
-            x: (selectedNode.position?.x || 0) + 100,
-            y: (selectedNode.position?.y || 0) + 100,
+            x: (selectedElement.position?.x || 0) + 100,
+            y: (selectedElement.position?.y || 0) + 100,
           },
         };
         setNodes([...getNodes(), newClone]);
