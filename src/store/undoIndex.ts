@@ -1,6 +1,5 @@
 import type { State } from '../types';
 import type { GetState, SetState } from 'zustand';
-import { isGraphDetails, isLink, isNode } from '../utils/typeGuards';
 import useSelectedElementStore from './useSelectedElementStore';
 
 export interface UndoIndexSlice {
