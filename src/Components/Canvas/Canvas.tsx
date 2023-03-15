@@ -25,7 +25,7 @@ import CanvasBackground from './CanvasBackground';
 import CanvasMiniMap from './CanvasMiniMap';
 import { addConnectionToGraph, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
-import { useEdge, useGraphId, useNode } from '../../store/graph-hooks';
+import { useGraphId, useNode } from '../../store/graph-hooks';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -68,7 +68,7 @@ function Canvas() {
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
   const selectedElementNew = useSelectedElementStore(
-    (state) => state.selectedElement
+    (state) => state.selectedElementNew
   );
   const setSelectedTask = useStore((state) => state.setSelectedTask);
   const tasks = useStore((state) => state.tasks);

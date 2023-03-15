@@ -95,7 +95,7 @@ function AddNodes(props: AddNodesProps) {
   const initializedTask = useStore((state) => state.initializedTask);
   const [expanded, setExpanded] = useState<boolean>(false);
   const selectedElementNew = useSelectedElementStore(
-    (state) => state.selectedElement
+    (state) => state.selectedElementNew
   );
 
   const getTasks = useCallback(async () => {

@@ -1,7 +1,8 @@
 import { useStore as useRFStore } from 'reactflow';
 import useStore from 'store/useStore';
 import shallow from 'zustand/shallow';
-import type { selectedElementType } from '../types';
+import type { EwoksRFLink, EwoksRFNode } from '../types';
+import useSelectedElementStore from './useSelectedElementStore';
 
 export function useNodesIds() {
   return useRFStore((state) => {
@@ -25,11 +26,27 @@ export function useEdge(id: string) {
   return useRFStore((state) => state.edges.find((edge) => edge.id === id));
 }
 
-// export function useSelectedElement(selected: selectedElementType) {
-//   return
-//     selectedElementNew.type === 'node'
-//       ? getNodes().find((node) => node.id === selectedElementNew.id)
-//       : selectedElementNew.type === 'edge'
-//       ? getEdges().find((edge) => edge.id === selectedElementNew.id)
-//       : graphRFDetails;
-// }
+export function useSelectedElement() {
+  const selectedElementNew = useSelectedElementStore(
+    (state) => state.selectedElementNew
+  );
+  const nodeSelected = useRFStore((state) =>
+    state.nodeInternals.get(selectedElementNew.id)
+  ) as EwoksRFNode;
+
+  const edgeSelected = useRFStore((state) =>
+    state.edges.find((edge) => edge.id === selectedElementNew.id)
+  ) as EwoksRFLink;
+
+  const graph = useStore((state) => state.graphRFDetails);
+
+  if (selectedElementNew.type === 'node') {
+    return nodeSelected;
+  }
+
+  if (selectedElementNew.type === 'edge') {
+    return edgeSelected;
+  }
+
+  return graph;
+}
