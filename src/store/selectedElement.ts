@@ -16,7 +16,7 @@ const selectedElement = (set: SetState<State>): SelectedElementSlice => ({
   setSelectedElement: (element) => {
     useSelectedElementStore.getState().setSelectedElementNew({
       type: isNode(element) ? 'node' : isLink(element) ? 'edge' : 'graph',
-      id: element.id,
+      id: element.id || '',
     });
     set((state) => ({
       ...state,

@@ -12,7 +12,7 @@ export const initializedTask: Task = {
 
 export const initializedGraph: GraphEwoks = {
   graph: {
-    id: 'newGraph',
+    id: '',
     label: '',
     input_nodes: [],
     output_nodes: [],
@@ -24,7 +24,7 @@ export const initializedGraph: GraphEwoks = {
 
 export const initializedRFGraph: GraphRF = {
   graph: {
-    id: 'newGraph',
+    id: '',
     label: '',
   },
   nodes: [],
