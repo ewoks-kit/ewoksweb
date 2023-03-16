@@ -97,7 +97,7 @@ const workingGraph = (
 
     useSelectedElementStore
       .getState()
-      .setSelectedElementNew({ type: 'graph', id: graph.graph.id });
+      .setSelectedElement({ type: 'graph', id: graph.graph.id });
 
     // add the new graph to the recent graphs if not already there
     get().setRecentGraphs({

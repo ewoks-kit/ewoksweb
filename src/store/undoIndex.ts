@@ -23,7 +23,7 @@ const undoIndex = (
       }));
       // After setting the new GraphRF the selected element needs
       // to be updated to see the change in the sidebar again on undo-redo
-      // const selEl = useSelectedElementStore.getState().selectedElementNew;
+      // const selEl = useSelectedElementStore.getState().selectedElement;
 
       // if (selEl.type === 'node') {
       //   const selElNode = get().undoRedo[index].graph.nodes.find(

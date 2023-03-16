@@ -25,8 +25,8 @@ export default function ExecuteWorkflow() {
   );
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const undoIndex = useStore((state) => state.undoIndex);
-  const setSelectedElementNew = useSelectedElementStore(
-    (state) => state.setSelectedElementNew
+  const setSelectedElement = useSelectedElementStore(
+    (state) => state.setSelectedElement
   );
   useEffect(() => {
     // DOC: when execution begins it has to listen to incoming from the socket events
@@ -70,7 +70,7 @@ export default function ExecuteWorkflow() {
       setInExecutionMode(false);
       // DOC: when exiting the execution to show the graph as selected
       // and not a numbered execution node that the user might have clicked
-      setSelectedElementNew({ type: 'graph', id: graphRFDetails.id });
+      setSelectedElement({ type: 'graph', id: graphRFDetails.id });
     } else {
       setOpenSnackbar({
         open: true,

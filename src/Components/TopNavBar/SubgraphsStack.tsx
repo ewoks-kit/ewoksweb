@@ -21,8 +21,8 @@ export default function SubgraphsStack() {
   const subgraphsStack = useStore((state) => {
     return state.subgraphsStack;
   });
-  const setSelectedElementNew = useSelectedElementStore(
-    (state) => state.setSelectedElementNew
+  const setSelectedElement = useSelectedElementStore(
+    (state) => state.setSelectedElement
   );
   const goToGraph = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -44,7 +44,7 @@ export default function SubgraphsStack() {
       setNodes(subgraph.nodes);
       setEdges(subgraph.links);
       setGraphRFDetails(subgraph.graph);
-      setSelectedElementNew({ type: 'graph', id: subgraph.graph.id });
+      setSelectedElement({ type: 'graph', id: subgraph.graph.id });
     }
   };
 

@@ -68,8 +68,8 @@ function Canvas() {
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const subgraphsStack = useStore((state) => state.subgraphsStack);
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
-  const setSelectedElementNew = useSelectedElementStore(
-    (state) => state.setSelectedElementNew
+  const setSelectedElement = useSelectedElementStore(
+    (state) => state.setSelectedElement
   );
   const setSelectedTask = useStore((state) => state.setSelectedTask);
   const tasks = useStore((state) => state.tasks);
@@ -97,14 +97,14 @@ function Canvas() {
   useOnSelectionChange({
     onChange: ({ nodes, edges }) => {
       if (nodes.length > 0) {
-        setSelectedElementNew({ type: 'node', id: nodes[0].id });
+        setSelectedElement({ type: 'node', id: nodes[0].id });
         return;
       }
       if (edges.length > 0) {
-        setSelectedElementNew({ type: 'edge', id: edges[0].id });
+        setSelectedElement({ type: 'edge', id: edges[0].id });
         return;
       }
-      setSelectedElementNew({ type: 'graph', id: graphRFDetails.id });
+      setSelectedElement({ type: 'graph', id: graphRFDetails.id });
     },
   });
 
@@ -206,7 +206,7 @@ function Canvas() {
   //       element.type === 'executionSteps'
   //     )
   //   ) {
-  //     setSelectedElementNew({ type: 'node', id: element.id });
+  //     setSelectedElement({ type: 'node', id: element.id });
   //   }
   // };
 
@@ -378,7 +378,7 @@ function Canvas() {
           id: subgraph.graph.id,
           label: subgraph.graph.label,
         });
-        setSelectedElementNew({ type: 'graph', id: subgraph.graph.id });
+        setSelectedElement({ type: 'graph', id: subgraph.graph.id });
       } else {
         setOpenSnackbar({
           open: true,
@@ -422,7 +422,7 @@ function Canvas() {
           },
         };
         setNodes([...getNodes(), newClone]);
-        setSelectedElementNew({ type: 'node', id: newClone.id });
+        setSelectedElement({ type: 'node', id: newClone.id });
       } else {
         setOpenSnackbar({
           open: true,
