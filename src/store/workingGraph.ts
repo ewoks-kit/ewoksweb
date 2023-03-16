@@ -23,7 +23,7 @@ const workingGraph = (
   initGraph: async (workingGraphObject, source): Promise<GraphRF> => {
     // 1. Initialize the canvas while working on the new graph
     get().setSubgraphsStack({ id: '', label: '', resetStack: true });
-    get().resetRecentGraphs();
+    get().readdRecentGraph();
 
     // 2. Get node-subgraphs for the graph
     const newNodeSubgraphs = await findAllSubgraphs(
@@ -34,7 +34,7 @@ const workingGraph = (
     // 3. Put the newNodeSubgraphs into recent in their graphRF form (sync)
     newNodeSubgraphs.forEach((gr) => {
       // calculate the rfNodes using the fetched subgraphs
-      get().setRecentGraphs({
+      get().addRecentGraph({
         graph: gr.graph,
         nodes: toRFEwoksNodes(gr, newNodeSubgraphs, get().tasks),
         links: toRFEwoksLinks(gr, newNodeSubgraphs, get().tasks),
@@ -75,7 +75,7 @@ const workingGraph = (
       links: toRFEwoksLinks(workingGraphObject, newNodeSubgraphs, get().tasks),
     };
 
-    get().setRecentGraphs(graph as GraphRF);
+    get().addRecentGraph(graph as GraphRF);
 
     get().setGraphInfo(graph.graph);
 
@@ -84,7 +84,7 @@ const workingGraph = (
       .setSelectedElement({ type: 'graph', id: graph.graph.id });
 
     // add the new graph to the recent graphs if not already there
-    get().setRecentGraphs({
+    get().addRecentGraph({
       graph: workingGraphObject.graph,
       nodes: grfNodes,
       links: toRFEwoksLinks(workingGraphObject, newNodeSubgraphs, get().tasks),

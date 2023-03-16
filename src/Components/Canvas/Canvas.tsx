@@ -67,7 +67,7 @@ function Canvas() {
   const setGraphInfo = useStore((state) => state.setGraphInfo);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const subgraphsStack = useStore((state) => state.subgraphsStack);
-  const setRecentGraphs = useStore((state) => state.setRecentGraphs);
+  const addRecentGraph = useStore((state) => state.addRecentGraph);
   const setSelectedElement = useSelectedElementStore(
     (state) => state.setSelectedElement
   );
@@ -144,15 +144,6 @@ function Canvas() {
 
   function onNodesChange(changes: NodeChange[]) {
     const newNodes = applyNodeChanges(changes, getNodes());
-
-    // setUndoRedo({
-    //   action: 'Nodes change',
-    //   graph: {
-    //     graph: graphInfo,
-    //     nodes: newNodes,
-    //     links: getEdges() as EwoksRFLink[],
-    //   },
-    // });
     if (workingGraph.graph.id !== graphId) {
       setOpenSnackbar({
         open: true,
@@ -165,14 +156,6 @@ function Canvas() {
 
   function onEdgesChange(changes: EdgeChange[]) {
     const newEdges = applyEdgeChanges(changes, getEdges());
-    // setUndoRedo({
-    //   action: 'Edges change',
-    //   graph: {
-    //     graph: graphInfo,
-    //     nodes: getNodes(),
-    //     links: newEdges as EwoksRFLink[],
-    //   },
-    // });
     if (workingGraph.graph.id !== graphId) {
       setOpenSnackbar({
         open: true,
@@ -358,12 +341,13 @@ function Canvas() {
     const nodeTmp = getNode(node.id);
 
     if (nodeTmp?.data.task_props.task_type === 'graph') {
-      setRecentGraphs({
-        graph: graphInfo,
-        nodes: getNodes(),
-        links: getEdges() as EwoksRFLink[],
-      });
-
+      if (workingGraph.graph.id !== graphId) {
+        addRecentGraph({
+          graph: graphInfo,
+          nodes: getNodes(),
+          links: getEdges() as EwoksRFLink[],
+        });
+      }
       const subgraph = recentGraphs.find(
         (gr) => gr.graph.id === nodeTmp.data.task_props.task_identifier
       );
