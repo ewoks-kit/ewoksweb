@@ -12,12 +12,12 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
   const { getNodes, getEdges } = useReactFlow();
 
   const { data: node, selected } = props;
-  const graphRFDetails = useStore((state) => state.graphRFDetails);
+  const graphInfo = useStore((state) => state.graphInfo);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const isValidConnection = (connection: Connection) => {
     const graphRf: GraphRF = {
-      graph: graphRFDetails,
+      graph: graphInfo,
       nodes: getNodes(),
       links: getEdges() as EwoksRFLink[],
     };

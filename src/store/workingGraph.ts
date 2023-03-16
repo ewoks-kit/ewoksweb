@@ -93,7 +93,7 @@ const workingGraph = (
 
     get().setRecentGraphs(graph as GraphRF);
 
-    get().setGraphRFDetails(graph.graph);
+    get().setGraphInfo(graph.graph);
 
     useSelectedElementStore
       .getState()

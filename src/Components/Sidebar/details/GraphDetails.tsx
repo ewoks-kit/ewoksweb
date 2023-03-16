@@ -3,14 +3,14 @@ import TextButtonSave from './TextButtonSave';
 import type { GraphDetails as GraphDetailsType } from '../../../types';
 
 export default function GraphDetails(graph: GraphDetailsType) {
-  const setGraphRFDetails = useStore((state) => state.setGraphRFDetails);
+  const setGraphInfo = useStore((state) => state.setGraphInfo);
 
   function saveCategory(category: string) {
-    setGraphRFDetails({ ...graph, category });
+    setGraphInfo({ ...graph, category });
   }
 
   function saveLabel(label: string) {
-    setGraphRFDetails({ ...graph, label });
+    setGraphInfo({ ...graph, label });
   }
 
   function saveComment(comment: string) {
@@ -18,7 +18,7 @@ export default function GraphDetails(graph: GraphDetailsType) {
       ...graph,
       uiProps: { ...graph.uiProps, comment },
     };
-    setGraphRFDetails(newGraph);
+    setGraphInfo(newGraph);
   }
 
   return (

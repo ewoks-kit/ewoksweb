@@ -24,7 +24,7 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const [gettingFromServer, setGettingFromServer] = useState(false);
-  const graphRFDetails = useStore((state) => state.graphRFDetails);
+  const graphInfo = useStore((state) => state.graphInfo);
   const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
   const setCanvasGraphChanged = useStore(
     (state) => state.setCanvasGraphChanged
@@ -96,8 +96,8 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
   const checkAndGetFromServer = (isSubgraph: string) => {
     if (
       workflowId &&
-      graphRFDetails.id &&
-      graphRFDetails.id !== workflowId &&
+      graphInfo.id &&
+      graphInfo.id !== workflowId &&
       canvasGraphChanged &&
       undoIndex !== 0
     ) {

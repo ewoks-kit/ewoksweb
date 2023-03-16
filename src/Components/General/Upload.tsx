@@ -41,7 +41,7 @@ function Upload(props: { children?: ReactNode } | undefined) {
 
   const { getNodes, getEdges } = useReactFlow();
 
-  const graphRFDetails = useStore((state) => state.graphRFDetails);
+  const graphInfo = useStore((state) => state.graphInfo);
   const graphOrSubgraph = useStore<boolean>((state) => state.graphOrSubgraph);
 
   const workingGraph = useStore<GraphRF>((state) => state.workingGraph);
@@ -51,7 +51,7 @@ function Upload(props: { children?: ReactNode } | undefined) {
   const inExecutionMode = useStore<boolean>((state) => state.inExecutionMode);
 
   async function fileNameChanged(event: ChangeEvent<HTMLInputElement>) {
-    if (workingGraph.graph.id === graphRFDetails.id) {
+    if (workingGraph.graph.id === graphInfo.id) {
       const reader = showFile(event);
       const file = await reader.then((val) => val);
       // eslint-disable-next-line require-atomic-updates

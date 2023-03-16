@@ -24,7 +24,7 @@ import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
 import type { ChangeEvent, CSSProperties, ReactNode } from 'react';
 import type { Node } from 'reactflow';
-import type { GraphRFDetailsSlice } from './store/graphRFDetails';
+import type { GraphInfoSlice } from './store/graphInfo';
 
 export enum FormAction {
   undefined = 'undefined',
@@ -157,7 +157,7 @@ export interface State
   extends CanvasGraphChangedSlice,
     AllWorkflowsSlice,
     GraphRFSlice,
-    GraphRFDetailsSlice,
+    GraphInfoSlice,
     CurrentExecutionEventSlice,
     ExecutedEventsSlice,
     ExecutedWorkflowsSlice,

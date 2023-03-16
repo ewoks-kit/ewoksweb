@@ -15,7 +15,7 @@ export function useNodesLength() {
 }
 
 export function useGraphId() {
-  return useStore((state) => state.graphRFDetails.id);
+  return useStore((state) => state.graphInfo.id);
 }
 
 export function useNode(id: string) {
@@ -34,7 +34,7 @@ export function useSelectedElement(): EwoksRFNode | EwoksRFLink | GraphDetails {
 
   const edgeSelected = useEdge(selectedElement.id) as EwoksRFLink;
 
-  const graph = useStore((state) => state.graphRFDetails);
+  const graph = useStore((state) => state.graphInfo);
 
   if (selectedElement.type === 'node') {
     return nodeSelected;

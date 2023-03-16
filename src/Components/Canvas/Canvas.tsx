@@ -63,8 +63,8 @@ function Canvas() {
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
-  const graphRFDetails = useStore((state) => state.graphRFDetails);
-  const setGraphRFDetails = useStore((state) => state.setGraphRFDetails);
+  const graphInfo = useStore((state) => state.graphInfo);
+  const setGraphInfo = useStore((state) => state.setGraphInfo);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const subgraphsStack = useStore((state) => state.subgraphsStack);
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
@@ -104,7 +104,7 @@ function Canvas() {
         setSelectedElement({ type: 'edge', id: edges[0].id });
         return;
       }
-      setSelectedElement({ type: 'graph', id: graphRFDetails.id });
+      setSelectedElement({ type: 'graph', id: graphInfo.id });
     },
   });
 
@@ -148,7 +148,7 @@ function Canvas() {
     // setUndoRedo({
     //   action: 'Nodes change',
     //   graph: {
-    //     graph: graphRFDetails,
+    //     graph: graphInfo,
     //     nodes: newNodes,
     //     links: getEdges() as EwoksRFLink[],
     //   },
@@ -168,7 +168,7 @@ function Canvas() {
     // setUndoRedo({
     //   action: 'Edges change',
     //   graph: {
-    //     graph: graphRFDetails,
+    //     graph: graphInfo,
     //     nodes: getNodes(),
     //     links: newEdges as EwoksRFLink[],
     //   },
@@ -312,7 +312,7 @@ function Canvas() {
       {
         nodes: nodesRF,
         links: edgesRF as EwoksRFLink[],
-        graph: graphRFDetails,
+        graph: graphInfo,
       },
       oldEdge
     );
@@ -336,7 +336,7 @@ function Canvas() {
     }
 
     const newGraph = addConnectionToGraph(params, {
-      graph: graphRFDetails,
+      graph: graphInfo,
       nodes: getNodes(),
       links: getEdges() as EwoksRFLink[],
     });
@@ -359,7 +359,7 @@ function Canvas() {
 
     if (nodeTmp?.data.task_props.task_type === 'graph') {
       setRecentGraphs({
-        graph: graphRFDetails,
+        graph: graphInfo,
         nodes: getNodes(),
         links: getEdges() as EwoksRFLink[],
       });
@@ -372,7 +372,7 @@ function Canvas() {
         setNodes(subgraph.nodes);
         setEdges(subgraph.links);
 
-        setGraphRFDetails(subgraph.graph);
+        setGraphInfo(subgraph.graph);
 
         setSubgraphsStack({
           id: subgraph.graph.id,

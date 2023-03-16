@@ -58,7 +58,7 @@ export default function Dashboard() {
   const [openInfo, setOpenInfo] = useState(false);
   const gettingFromServer = useStore((state) => state.gettingFromServer);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
-  const graphRFDetails = useStore((state) => state.graphRFDetails);
+  const graphInfo = useStore((state) => state.graphInfo);
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
   const openSettingsDrawer = useStore((state) => state.openSettingsDrawer);
   const setOpenSettingsDrawer = useStore(
@@ -197,13 +197,13 @@ export default function Dashboard() {
     const workflowsIds = await getWorkflowsIds();
     setGettingFromServer(true);
 
-    if (!workflowExists(graphRFDetails.id, workflowsIds)) {
+    if (!workflowExists(graphInfo.id, workflowsIds)) {
       setAction(FormAction.newGraph);
       setOpenSaveDialog(true);
       return;
     }
 
-    if (workingGraph.graph.id !== graphRFDetails.id) {
+    if (workingGraph.graph.id !== graphInfo.id) {
       setGettingFromServer(false);
       setOpenSnackbar({
         open: true,
@@ -214,9 +214,9 @@ export default function Dashboard() {
       return;
     }
 
-    if (graphRFDetails.uiProps?.source === 'fromServer') {
+    if (graphInfo.uiProps?.source === 'fromServer') {
       try {
-        const graphRFCurrated = curateGraph(graphRFDetails, storeRF.getState());
+        const graphRFCurrated = curateGraph(graphInfo, storeRF.getState());
 
         await putWorkflow(rfToEwoks(graphRFCurrated));
 
@@ -238,7 +238,7 @@ export default function Dashboard() {
       return;
     }
 
-    if (graphRFDetails.uiProps?.source !== 'fromServer') {
+    if (graphInfo.uiProps?.source !== 'fromServer') {
       setAction(FormAction.newGraphOrOverwrite);
       setOpenSaveDialog(true);
       return;
@@ -267,7 +267,7 @@ export default function Dashboard() {
         disagreeCallback={disAgreeSaveWithout}
       />
       <FormDialog
-        elementToEdit={graphRFDetails}
+        elementToEdit={graphInfo}
         action={FormAction.newGraph}
         open={openSaveDialog}
         setOpenSaveDialog={setOpenSaveDialog}

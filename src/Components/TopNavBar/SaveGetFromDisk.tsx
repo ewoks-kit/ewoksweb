@@ -27,7 +27,7 @@ export default function SaveGetFromDisk() {
   const { getNodes, getEdges } = useReactFlow();
 
   const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
-  const graphRFDetails = useStore((state) => state.graphRFDetails);
+  const graphInfo = useStore((state) => state.graphInfo);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
 
   function loadFromDisk() {
@@ -35,15 +35,15 @@ export default function SaveGetFromDisk() {
   }
 
   function saveToDisk() {
-    if (graphRFDetails.label) {
+    if (graphInfo.label) {
       const graphRf: GraphRF = {
-        graph: graphRFDetails,
+        graph: graphInfo,
         nodes: getNodes(),
         links: getEdges() as EwoksRFLink[],
       };
       download(
         JSON.stringify(rfToEwoks(graphRf), null, 2),
-        `${graphRFDetails.label}.json`,
+        `${graphInfo.label}.json`,
         'text/plain'
       );
     }

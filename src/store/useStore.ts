@@ -28,7 +28,7 @@ import {
   initializedGraph,
   initializedRFGraph,
 } from '../utils/InitializedEntities';
-import graphRFDetails from './graphRFDetails';
+import graphInfo from './graphInfo';
 
 const useStore = create<State>((set, get) => ({
   ...allWorkflows(set),
@@ -41,7 +41,7 @@ const useStore = create<State>((set, get) => ({
   ...gettingFromServer(set),
   ...graphOrSubgraph(set),
   ...graphRF(set, get),
-  ...graphRFDetails(set, get),
+  ...graphInfo(set, get),
   ...canvasGraphChanged(set),
   ...openDraggableDialog(set),
   ...openSettingsDrawer(set),
