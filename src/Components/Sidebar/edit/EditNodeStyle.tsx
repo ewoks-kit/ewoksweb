@@ -43,6 +43,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
           ui_props: { ...element.data.ui_props, nodeWidth: width },
         },
       };
+      // no nodeData ui_props
       setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
     }
   }
@@ -58,6 +59,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         },
       },
     };
+    // no nodeData ui_props
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 
@@ -72,6 +74,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         },
       },
     };
+    // no nodeData ui_props
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 
@@ -86,6 +89,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         },
       },
     };
+    // no nodeData ui_props
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   };
 
@@ -100,6 +104,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         },
       },
     };
+    // no nodeData ui_props
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   };
 

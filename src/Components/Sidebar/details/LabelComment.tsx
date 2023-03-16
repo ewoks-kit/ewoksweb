@@ -11,6 +11,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from '../sidebarStyle';
 import { isLink, isNode, isString } from '../../../utils/typeGuards';
 import { useReactFlow } from 'reactflow';
+import useNodeDataStore from '../../../store/useNodeDataStore';
 
 const useStyles = DashboardStyle;
 
@@ -36,6 +37,7 @@ export default function LabelComment(props: LabelCommentProps) {
   const [valueIsChanged, setValueIsChanged] = useState(false);
 
   const inExecutionMode = useStore((state) => state.inExecutionMode);
+  const addNodeData = useNodeDataStore((state) => state.addNodeData);
 
   useEffect(() => {
     if (isNode(element)) {
@@ -88,7 +90,9 @@ export default function LabelComment(props: LabelCommentProps) {
           },
         },
       };
+      // TBD
       setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+      addNodeData(newNode.id, newNode.data);
     }
 
     if (isLink(element)) {
@@ -110,6 +114,7 @@ export default function LabelComment(props: LabelCommentProps) {
     };
 
     if (isNode(newElement)) {
+      // Comment also stays on Node since it appears as a tooltip
       setNodes([
         ...getNodes().filter((nod) => nod.id !== element.id),
         newElement,

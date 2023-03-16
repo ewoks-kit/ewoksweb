@@ -28,6 +28,7 @@ import { useStoreApi } from 'reactflow';
 import { useGraphId, useSelectedElement } from '../../store/graph-hooks';
 import { isNode } from '../../utils/typeGuards';
 import useSelectedElementStore from '../../store/useSelectedElementStore';
+import useNodeDataStore from '../../store/useNodeDataStore';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -77,6 +78,7 @@ function Canvas() {
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   // const setUndoRedo = useStore((state) => state.setUndoRedo);
+  const addNodeData = useNodeDataStore((state) => state.addNodeData);
 
   const graphId = useGraphId();
 
@@ -167,6 +169,7 @@ function Canvas() {
   }
 
   const onPaneClick = () => {
+    // No need to set nodeData since ui_props will stay in Node
     setNodes(
       getNodes().map((nod) => {
         return {
@@ -353,7 +356,11 @@ function Canvas() {
       );
 
       if (subgraph?.graph.id) {
+        // Both stay
         setNodes(subgraph.nodes);
+        subgraph.nodes.forEach((nod) => {
+          addNodeData(nod.id, nod.data);
+        });
         setEdges(subgraph.links);
 
         setGraphInfo(subgraph.graph);
@@ -372,6 +379,7 @@ function Canvas() {
       }
     } else {
       if (nodeTmp) {
+        // ui_props in node
         setNodes([
           ...getNodes().filter((nod) => nod.id !== nodeTmp.id),
           {
@@ -405,7 +413,10 @@ function Canvas() {
             y: (selectedElement.position?.y || 0) + 100,
           },
         };
+        // Both stay
         setNodes([...getNodes(), newClone]);
+        addNodeData(newClone.id, newClone.data);
+
         setSelectedElement({ type: 'node', id: newClone.id });
       } else {
         setOpenSnackbar({

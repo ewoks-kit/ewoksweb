@@ -49,6 +49,7 @@ const NoteNode = (args: NoteProps) => {
       type: 'note',
       position: { x: args.xPos || 500, y: args.yPos || 500 },
     };
+    // Many things change here. Examine
     setNodes([
       ...getNodes().filter((nod) => nod.id !== selectedElement.id),
       newNode,

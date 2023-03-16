@@ -19,6 +19,7 @@ import IconBoundary from '../IconBoundary';
 import { useNodesIds, useSelectedElement } from '../store/graph-hooks';
 import type { NodeProps, EwoksRFLink, EwoksRFNode, GraphRF } from '../types';
 import { useReactFlow } from 'reactflow';
+import useNodeDataStore from '../store/useNodeDataStore';
 
 // TODO: examine usage when execution in main
 const execution = () => {
@@ -68,9 +69,11 @@ function Node({
   const graphInfo = useStore((state) => state.graphInfo);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const selectedElement = useSelectedElement();
-  const [edit, setEdit] = React.useState(false);
-  const [labelLocal, setLabelLocal] = React.useState(label);
-  const [detailsL, setDetailsL] = React.useState(false);
+  const [edit, setEdit] = useState(false);
+  const [labelLocal, setLabelLocal] = useState(label);
+  const [detailsL, setDetailsL] = useState(false);
+
+  const addNodeData = useNodeDataStore((state) => state.addNodeData);
 
   useEffect(() => {
     setNodeSize(nodeWidth);
@@ -126,7 +129,9 @@ function Node({
         y: (selectedElement.position?.y || 0) + 100,
       },
     };
+    // Both stay
     setNodes([...getNodes(), newClone]);
+    addNodeData(newClone.id, newClone.data);
   };
 
   function setNodeLabel() {
@@ -140,7 +145,7 @@ function Node({
         ewoks_props: { ...selectedElement.data.ewoks_props, label: labelLocal },
       },
     };
-
+    // PROBLEM: label is in ewoks_props but needed on the canvas. Change models
     setNodes([...getNodes().filter((nod) => nod.id !== newNode.id), newNode]);
   }
 
