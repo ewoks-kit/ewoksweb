@@ -2,21 +2,21 @@ import type { GraphDetails, State } from '../types';
 import { initializedRFGraph } from '../utils/InitializedEntities';
 import type { GetState, SetState } from 'zustand';
 
-export interface GraphRFDetailsSlice {
-  graphRFDetails: GraphDetails;
-  setGraphRFDetails: (
-    graphRFDetails: GraphDetails,
+export interface GraphInfoSlice {
+  graphInfo: GraphDetails;
+  setGraphInfo: (
+    graphInfo: GraphDetails,
     isChangeToCanvasGraph?: boolean
   ) => void;
 }
 
-const graphRFDetails = (
+const graphInfo = (
   set: SetState<State>,
   get: GetState<State>
-): GraphRFDetailsSlice => ({
-  graphRFDetails: initializedRFGraph.graph,
+): GraphInfoSlice => ({
+  graphInfo: initializedRFGraph.graph,
 
-  setGraphRFDetails: (graphRFD, isChangeToCanvasGraph) => {
+  setGraphInfo: (graphRFD, isChangeToCanvasGraph) => {
     // DOC: If missing uiProps or other fill it here
     if (!graphRFD.uiProps) {
       graphRFD.uiProps = {};
@@ -24,7 +24,7 @@ const graphRFDetails = (
 
     set((state) => ({
       ...state,
-      graphRFDetails: graphRFD,
+      graphInfo: graphRFD,
     }));
 
     if (isChangeToCanvasGraph && !get().inExecutionMode) {
@@ -38,4 +38,4 @@ const graphRFDetails = (
   },
 });
 
-export default graphRFDetails;
+export default graphInfo;

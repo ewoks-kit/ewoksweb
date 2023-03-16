@@ -65,7 +65,7 @@ function Node({
 
   const [nodeSize, setNodeSize] = useState(nodeWidth);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
-  const graphRFDetails = useStore((state) => state.graphRFDetails);
+  const graphInfo = useStore((state) => state.graphInfo);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const selectedElement = useSelectedElement();
   const [edit, setEdit] = React.useState(false);
@@ -90,7 +90,7 @@ function Node({
 
   const isValidConnection = (connection: Connection) => {
     const graphRf: GraphRF = {
-      graph: graphRFDetails,
+      graph: graphInfo,
       nodes: getNodes(),
       links: getEdges() as EwoksRFLink[],
     };

@@ -15,7 +15,7 @@ import IconMenu from './IconMenu';
 // import ExecutionDetails from '../Execution/ExecutionDetails';
 import DashboardStyle from '../Dashboard/DashboardStyle';
 import useStore from 'store/useStore';
-import type { EwoksRFNode, EwoksRFLink, GraphDetails } from 'types';
+import type { EwoksRFNode } from 'types';
 import { calcNewId } from 'utils/calcNewId';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { deleteWorkflow } from 'api/api';
@@ -39,7 +39,7 @@ export default function Sidebar() {
   // const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
   //   false
   // );
-  const graphRFDetails = useStore((state) => state.graphRFDetails);
+  const graphInfo = useStore((state) => state.graphInfo);
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
@@ -50,7 +50,7 @@ export default function Sidebar() {
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
   const deleteElement = async () => {
-    if (workingGraph.graph.id !== graphRFDetails.id) {
+    if (workingGraph.graph.id !== graphInfo.id) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to delete any element in a sub-graph!',

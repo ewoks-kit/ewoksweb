@@ -16,7 +16,7 @@ export default function SubgraphsStack() {
   const { setNodes, setEdges } = useReactFlow();
 
   const recentGraphs = useStore((state) => state.recentGraphs);
-  const setGraphRFDetails = useStore((state) => state.setGraphRFDetails);
+  const setGraphInfo = useStore((state) => state.setGraphInfo);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const subgraphsStack = useStore((state) => {
     return state.subgraphsStack;
@@ -43,7 +43,7 @@ export default function SubgraphsStack() {
     if (subgraph) {
       setNodes(subgraph.nodes);
       setEdges(subgraph.links);
-      setGraphRFDetails(subgraph.graph);
+      setGraphInfo(subgraph.graph);
       setSelectedElement({ type: 'graph', id: subgraph.graph.id });
     }
   };

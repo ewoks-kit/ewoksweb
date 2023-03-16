@@ -19,12 +19,12 @@ export default function SaveToServer({
   open,
   setOpenSaveDialog,
 }: SaveToServerProps) {
-  const graphRFDetails = useStore((state) => state.graphRFDetails);
+  const graphInfo = useStore((state) => state.graphInfo);
 
   return (
     <>
       <FormDialog
-        elementToEdit={graphRFDetails}
+        elementToEdit={graphInfo}
         action={action}
         open={open}
         setOpenSaveDialog={setOpenSaveDialog}

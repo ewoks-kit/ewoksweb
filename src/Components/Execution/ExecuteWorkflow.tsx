@@ -12,7 +12,7 @@ import useSelectedElementStore from '../../store/useSelectedElementStore';
 export const socket = io(process.env.REACT_APP_SERVER_URL as string);
 
 export default function ExecuteWorkflow() {
-  const graphRFDetails = useStore((state) => state.graphRFDetails);
+  const graphInfo = useStore((state) => state.graphInfo);
   const recentGraphs = useStore((state) => state.recentGraphs);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
@@ -55,7 +55,7 @@ export default function ExecuteWorkflow() {
     if (recentGraphs.length > 0 && !inExecutionMode) {
       setInExecutionMode(true);
       try {
-        await executeWorkflow(graphRFDetails.id);
+        await executeWorkflow(graphInfo.id);
       } catch (error) {
         // Keep logging in console for debugging when talking with a user
         /* eslint-disable no-console */
@@ -70,7 +70,7 @@ export default function ExecuteWorkflow() {
       setInExecutionMode(false);
       // DOC: when exiting the execution to show the graph as selected
       // and not a numbered execution node that the user might have clicked
-      setSelectedElement({ type: 'graph', id: graphRFDetails.id });
+      setSelectedElement({ type: 'graph', id: graphInfo.id });
     } else {
       setOpenSnackbar({
         open: true,
