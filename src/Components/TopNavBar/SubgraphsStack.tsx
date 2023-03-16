@@ -6,6 +6,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import Link from '@material-ui/core/Link';
 import useStore from '../../store/useStore';
 import { useReactFlow } from 'reactflow';
+import useSelectedElementStore from '../../store/useSelectedElementStore';
 
 const useStyles = DashboardStyle;
 
@@ -20,8 +21,9 @@ export default function SubgraphsStack() {
   const subgraphsStack = useStore((state) => {
     return state.subgraphsStack;
   });
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
-
+  const setSelectedElementNew = useSelectedElementStore(
+    (state) => state.setSelectedElementNew
+  );
   const goToGraph = (e: React.MouseEvent) => {
     e.preventDefault();
 
@@ -42,9 +44,7 @@ export default function SubgraphsStack() {
       setNodes(subgraph.nodes);
       setEdges(subgraph.links);
       setGraphRFDetails(subgraph.graph);
-      setSelectedElement({
-        ...subgraph.graph,
-      });
+      setSelectedElementNew({ type: 'graph', id: subgraph.graph.id });
     }
   };
 

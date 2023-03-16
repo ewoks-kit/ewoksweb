@@ -67,7 +67,6 @@ function Node({
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const graphRFDetails = useStore((state) => state.graphRFDetails);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
   const selectedElement = useSelectedElement();
   const [edit, setEdit] = React.useState(false);
   const [labelLocal, setLabelLocal] = React.useState(label);
@@ -128,21 +127,21 @@ function Node({
       },
     };
     setNodes([...getNodes(), newClone]);
-    setSelectedElement(newClone);
   };
 
   function setSelectedNode() {
     if (!isNode(selectedElement)) {
       return;
     }
-
-    setSelectedElement({
+    const newNode = {
       ...selectedElement,
       data: {
         ...selectedElement.data,
         ewoks_props: { ...selectedElement.data.ewoks_props, label: labelLocal },
       },
-    });
+    };
+
+    setNodes([...getNodes().filter((nod) => nod.id !== newNode.id), newNode]);
   }
 
   return (

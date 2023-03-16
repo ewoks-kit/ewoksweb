@@ -27,7 +27,6 @@ export default function EditLinkStyle(element: EwoksRFLink) {
 
   const { setEdges, getEdges } = useReactFlow();
 
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const [linkType, setLinkType] = useState('default');
@@ -75,7 +74,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
       ...element,
       type: val,
     };
-    setAllEdge(newEdge);
+    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
   }
 
   const arrowTypeChanged = (event: PropertyChangedEvent) => {
@@ -87,7 +86,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
       ? { ...element, markerEnd: { type } }
       : { ...element, markerEnd: undefined };
 
-    setAllEdge(newEdge);
+    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
   };
 
   const colorLineChanged = (event: ChangeEvent<HTMLInputElement>) => {
@@ -97,7 +96,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
       labelStyle: { ...element.labelStyle, fill: event.target.value },
       labelBgStyle: { ...element.labelBgStyle, stroke: event.target.value },
     };
-    setAllEdge(newEdge);
+    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
   };
 
   const animatedChanged = (event: ChangeEvent<HTMLInputElement>) => {
@@ -105,7 +104,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
       ...element,
       animated: event.target.checked,
     };
-    setAllEdge(newEdge);
+    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
   };
 
   function changeX(_event: ChangeEvent<unknown>, value: number | number[]) {
@@ -120,7 +119,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
         },
       },
     };
-    setAllEdge(newEdge);
+    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
     setX(newX);
   }
 
@@ -136,13 +135,8 @@ export default function EditLinkStyle(element: EwoksRFLink) {
         },
       },
     };
-    setAllEdge(newEdge);
-    setY(newY);
-  }
-
-  function setAllEdge(newEdge: EwoksRFLink) {
-    setSelectedElement(newEdge);
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    setY(newY);
   }
 
   function applyLinkTypeToAll() {

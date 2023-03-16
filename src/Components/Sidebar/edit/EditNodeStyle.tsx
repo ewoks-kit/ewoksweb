@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Checkbox, FormControl, Slider } from '@material-ui/core';
 import type { EwoksRFNode } from '../../../types';
-import useStore from '../../../store/useStore';
 import useDebounce from '../../../hooks/useDebounce';
 import type { ChangeEvent } from 'react';
 import { isNode } from 'utils/typeGuards';
@@ -10,8 +9,6 @@ import { useReactFlow } from 'reactflow';
 // DOC: Edit the node style
 export default function EditNodeStyle(element: EwoksRFNode) {
   const { getNodes, setNodes } = useReactFlow();
-
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   const [nodeSize, setNodeSize] = useState<number>(
     element.data.ui_props.nodeWidth || 100
@@ -46,7 +43,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
           ui_props: { ...element.data.ui_props, nodeWidth: width },
         },
       };
-      setAllNode(newNode);
+      setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
     }
   }
 
@@ -61,7 +58,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         },
       },
     };
-    setAllNode(newNode);
+    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 
   function withLabelChanged(event: ChangeEvent<HTMLInputElement>) {
@@ -75,7 +72,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         },
       },
     };
-    setAllNode(newNode);
+    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 
   const colorBorderChanged = (event: ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +86,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         },
       },
     };
-    setAllNode(newNode);
+    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   };
 
   const moreHandlesChanged = (event: ChangeEvent<HTMLInputElement>) => {
@@ -103,13 +100,8 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         },
       },
     };
-    setAllNode(newNode);
-  };
-
-  function setAllNode(newNode: EwoksRFNode) {
-    setSelectedElement(newNode);
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
-  }
+  };
 
   const changeNodeSize = (
     _event: ChangeEvent<unknown>,
