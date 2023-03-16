@@ -2,11 +2,8 @@ import type { EwoksRFNode, GraphEwoks, GraphRF, State, Task } from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
-import commonStrings from '../commonStrings.json';
-import { getTaskDescription } from '../api/api';
 import type { GetState, SetState } from 'zustand';
 import { initializedRFGraph } from '../utils/InitializedEntities';
-import { textForError } from '../utils';
 import useSelectedElementStore from './useSelectedElementStore';
 
 export interface WorkingGraphSlice {
@@ -24,20 +21,7 @@ const workingGraph = (
   workingGraph: initializedRFGraph,
 
   initGraph: async (workingGraphObject, source): Promise<GraphRF> => {
-    // 1. if it is a new graph opening initialize
-    if (get().tasks.length === 0) {
-      try {
-        const tasksData = await getTaskDescription();
-        const tasks = tasksData.data as { items: Task[] };
-        get().setTasks(tasks.items);
-      } catch (error) {
-        get().setOpenSnackbar({
-          open: true,
-          text: textForError(error, commonStrings.retrieveTasksError),
-          severity: 'error',
-        });
-      }
-    }
+    // 1. Initialize the canvas while working on the new graph
     get().setSubgraphsStack({ id: '', label: '', resetStack: true });
     get().resetRecentGraphs();
 
