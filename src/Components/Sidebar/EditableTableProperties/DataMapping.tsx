@@ -12,7 +12,6 @@ export default function DataMappingComponent(element: EwoksRFLink) {
   const { getEdges, setEdges } = useReactFlow();
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   const sourceNode = useNode(element.source);
   const targetNode = useNode(element.target);
@@ -37,7 +36,6 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       },
     };
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-    setSelectedElement(newEdge);
   }
 
   const dataMappingValuesChanged = (table: DataMapping[]) => {
@@ -58,7 +56,6 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       },
     };
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-    setSelectedElement(newEdge);
   };
 
   return (

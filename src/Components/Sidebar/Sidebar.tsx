@@ -2,26 +2,25 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
+  // Accordion,
+  // AccordionDetails,
+  // AccordionSummary,
   Button,
-  Typography,
+  // Typography,
 } from '@material-ui/core';
 import AddNodes from './AddNodes';
 import ElementDetails from './details/ElementDetails';
 import EditElementStyle from './edit/EditElementStyle';
-import DraggableDialog from '../General/DraggableDialog';
 import IconMenu from './IconMenu';
-import ExecutionDetails from '../Execution/ExecutionDetails';
+// import ExecutionDetails from '../Execution/ExecutionDetails';
 import DashboardStyle from '../Dashboard/DashboardStyle';
 import useStore from 'store/useStore';
 import type { EwoksRFNode, EwoksRFLink, GraphDetails } from 'types';
 import { calcNewId } from 'utils/calcNewId';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { deleteWorkflow } from 'api/api';
-import { OpenInBrowser } from '@material-ui/icons';
-import SidebarTooltip from './SidebarTooltip';
+// import { OpenInBrowser } from '@material-ui/icons';
+// import SidebarTooltip from './SidebarTooltip';
 import commonStrings from 'commonStrings.json';
 import { isGraphDetails, isLink, isNode } from '../../utils/typeGuards';
 import { textForError } from '../../utils';
@@ -40,9 +39,9 @@ export default function Sidebar() {
 
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
-  const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
-    false
-  );
+  // const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
+  //   false
+  // );
   const graphRFDetails = useStore((state) => state.graphRFDetails);
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);

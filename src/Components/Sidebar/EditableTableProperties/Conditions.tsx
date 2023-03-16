@@ -16,7 +16,6 @@ export default function Conditions(props: ConditionsProps) {
   const { getEdges, setEdges } = useReactFlow();
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   function addConditions() {
     const elCon = element.data.conditions || [];
@@ -40,7 +39,6 @@ export default function Conditions(props: ConditionsProps) {
       },
     };
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-    setSelectedElement(newEdge);
   }
 
   function conditionsValuesChanged(table: EditableTableRow[]) {
@@ -57,7 +55,6 @@ export default function Conditions(props: ConditionsProps) {
       },
     };
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-    setSelectedElement(newEdge);
   }
 
   return (

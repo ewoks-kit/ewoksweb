@@ -35,7 +35,6 @@ export default function LabelComment(props: LabelCommentProps) {
   ]);
   const [valueIsChanged, setValueIsChanged] = useState(false);
 
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
 
   useEffect(() => {
@@ -90,7 +89,6 @@ export default function LabelComment(props: LabelCommentProps) {
         },
       };
       setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
-      setSelectedElement(newNode);
     }
 
     if (isLink(element)) {
@@ -102,7 +100,6 @@ export default function LabelComment(props: LabelCommentProps) {
         ...getEdges().filter((edge) => edge.id !== element.id),
         newLink,
       ]);
-      setSelectedElement(newLink);
     }
   }
 
@@ -111,7 +108,6 @@ export default function LabelComment(props: LabelCommentProps) {
       ...element,
       data: { ...element.data, comment: commentLocal },
     };
-    setSelectedElement(newElement);
 
     if (isNode(newElement)) {
       setNodes([

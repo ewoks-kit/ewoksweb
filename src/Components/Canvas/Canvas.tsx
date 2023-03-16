@@ -1,6 +1,7 @@
 import type { DragEventHandler, MouseEvent } from 'react';
 import { useEffect, useState, useRef } from 'react';
 import type { Node, Edge, Connection, NodeChange, EdgeChange } from 'reactflow';
+import { useOnSelectionChange } from 'reactflow';
 import ReactFlow, {
   Controls,
   useReactFlow,
@@ -26,6 +27,7 @@ import { addConnectionToGraph, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
 import { useGraphId, useSelectedElement } from '../../store/graph-hooks';
 import { isNode } from '../../utils/typeGuards';
+import useSelectedElementStore from '../../store/useSelectedElementStore';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -66,7 +68,9 @@ function Canvas() {
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const subgraphsStack = useStore((state) => state.subgraphsStack);
   const setRecentGraphs = useStore((state) => state.setRecentGraphs);
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
+  const setSelectedElementNew = useSelectedElementStore(
+    (state) => state.setSelectedElementNew
+  );
   const setSelectedTask = useStore((state) => state.setSelectedTask);
   const tasks = useStore((state) => state.tasks);
   const recentGraphs = useStore((state) => state.recentGraphs);
@@ -89,6 +93,20 @@ function Canvas() {
     addNodes,
     getNode,
   } = rfInstance;
+
+  useOnSelectionChange({
+    onChange: ({ nodes, edges }) => {
+      if (nodes.length > 0) {
+        setSelectedElementNew({ type: 'node', id: nodes[0].id });
+        return;
+      }
+      if (edges.length > 0) {
+        setSelectedElementNew({ type: 'edge', id: edges[0].id });
+        return;
+      }
+      setSelectedElementNew({ type: 'graph', id: graphRFDetails.id });
+    },
+  });
 
   useEffect(() => {
     setNodes(workingGraph.nodes);
@@ -166,7 +184,6 @@ function Canvas() {
   }
 
   const onPaneClick = () => {
-    setSelectedElement(graphRFDetails);
     setNodes(
       getNodes().map((nod) => {
         return {
@@ -181,20 +198,17 @@ function Canvas() {
     );
   };
 
-  const onNodeClick = (_event: MouseEvent, element: Node) => {
-    if (
-      !(
-        element.data.task_props.task_type === 'executionSteps' &&
-        element.type === 'executionSteps'
-      )
-    ) {
-      setSelectedElement(element);
-    }
-  };
-
-  const onEdgeClick = (_event: MouseEvent, element: Edge) => {
-    setSelectedElement(element as EwoksRFLink);
-  };
+  // Keep this comment until execution is deleted
+  // const onNodeClick = (_event: MouseEvent, element: Node) => {
+  //   if (
+  //     !(
+  //       element.data.task_props.task_type === 'executionSteps' &&
+  //       element.type === 'executionSteps'
+  //     )
+  //   ) {
+  //     setSelectedElementNew({ type: 'node', id: element.id });
+  //   }
+  // };
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
   const onDragOver: DragEventHandler<HTMLDivElement> = (event) => {
@@ -364,9 +378,7 @@ function Canvas() {
           id: subgraph.graph.id,
           label: subgraph.graph.label,
         });
-        setSelectedElement({
-          ...subgraph.graph,
-        });
+        setSelectedElementNew({ type: 'graph', id: subgraph.graph.id });
       } else {
         setOpenSnackbar({
           open: true,
@@ -410,8 +422,7 @@ function Canvas() {
           },
         };
         setNodes([...getNodes(), newClone]);
-
-        setSelectedElement(newClone);
+        setSelectedElementNew({ type: 'node', id: newClone.id });
       } else {
         setOpenSnackbar({
           open: true,
@@ -437,8 +448,6 @@ function Canvas() {
           attributionPosition="bottom-right"
           minZoom={0.2}
           snapToGrid
-          onNodeClick={onNodeClick}
-          onEdgeClick={onEdgeClick}
           onPaneClick={() => onPaneClick()}
           onClick={() => setSelectedTask({})}
           onDrop={onDrop}

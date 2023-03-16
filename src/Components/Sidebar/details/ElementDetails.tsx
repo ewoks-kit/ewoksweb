@@ -43,9 +43,7 @@ function ElementDetails() {
 
   const [expanded, setExpanded] = useState(false);
 
-  const { title, DetailsComponent } = getAccordionContent(
-    selectedElement as EwoksRFElement
-  );
+  const { title, DetailsComponent } = getAccordionContent(selectedElement);
 
   useEffect(() => {
     setExpanded(!!selectedElement?.id);
