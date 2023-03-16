@@ -16,7 +16,7 @@ import type { Connection } from 'reactflow';
 import { isNode } from '../utils/typeGuards';
 import NodeIcon from './NodeIcon';
 import IconBoundary from '../IconBoundary';
-import { useNodesIds } from '../store/graph-hooks';
+import { useNodesIds, useSelectedElement } from '../store/graph-hooks';
 import type { NodeProps, EwoksRFLink, EwoksRFNode, GraphRF } from '../types';
 import { useReactFlow } from 'reactflow';
 
@@ -68,7 +68,7 @@ function Node({
   const graphRFDetails = useStore((state) => state.graphRFDetails);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSelectedElement = useStore((state) => state.setSelectedElement);
-  const selectedElement = useStore((state) => state.selectedElement);
+  const selectedElement = useSelectedElement();
   const [edit, setEdit] = React.useState(false);
   const [labelLocal, setLabelLocal] = React.useState(label);
   const [detailsL, setDetailsL] = React.useState(false);

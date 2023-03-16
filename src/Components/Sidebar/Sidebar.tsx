@@ -25,7 +25,7 @@ import SidebarTooltip from './SidebarTooltip';
 import commonStrings from 'commonStrings.json';
 import { isGraphDetails, isLink, isNode } from '../../utils/typeGuards';
 import { textForError } from '../../utils';
-import { useNodesIds } from '../../store/graph-hooks';
+import { useNodesIds, useSelectedElement } from '../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
 
 const useStyles = DashboardStyle;
@@ -36,9 +36,8 @@ export default function Sidebar() {
   const nodesIds = useNodesIds();
   const { deleteElements, getNodes, setNodes, getEdges } = useReactFlow();
 
-  const selectedElement = useStore<EwoksRFNode | EwoksRFLink | GraphDetails>(
-    (state) => state.selectedElement
-  );
+  const selectedElement = useSelectedElement();
+
   const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
@@ -65,16 +64,18 @@ export default function Sidebar() {
     }
 
     if (isNode(selectedElement)) {
+      setSelectedElement(graphRFDetails);
       deleteElements({ nodes: [selectedElement] });
       return;
     }
 
     if (isLink(selectedElement)) {
+      setSelectedElement(graphRFDetails);
       deleteElements({ edges: [selectedElement] });
       return;
     }
 
-    if ('input_nodes' in selectedElement) {
+    if (isGraphDetails(selectedElement)) {
       setOpenAgreeDialog(true);
       return;
     }

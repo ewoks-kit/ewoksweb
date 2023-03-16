@@ -7,9 +7,9 @@ import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import EditNodeStyle from './EditNodeStyle';
 import EditLinkStyle from './EditLinkStyle';
 import EditGraphStyle from './EditGraphStyle';
-import useStore from '../../../store/useStore';
 import { isNode, isLink } from 'utils/typeGuards';
 import type { EwoksRFElement } from '../models';
+import { useSelectedElement } from '../../../store/graph-hooks';
 
 interface Content {
   title: string;
@@ -39,8 +39,7 @@ function getAccordionContent(element: EwoksRFElement): Content {
 
 // DOC: For editing the style of nodes and links
 export default function EditElementStyle() {
-  const selectedElement = useStore((state) => state.selectedElement);
-
+  const selectedElement = useSelectedElement();
   const { title, EditComponent } = getAccordionContent(selectedElement);
 
   return (

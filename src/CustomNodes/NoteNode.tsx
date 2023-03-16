@@ -9,6 +9,7 @@ import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
 import type { NodeProps } from 'reactflow';
 import type { EwoksRFNodeData } from '../types';
+import { useSelectedElement } from '../store/graph-hooks';
 
 // TODO: can be replaced with EwoksRFNode except xPos, yPos. Examine
 // interface NoteProps {
@@ -28,7 +29,7 @@ type NoteProps = NodeProps<EwoksRFNodeData>;
 
 const NoteNode = (args: NoteProps) => {
   const setSelectedElement = useStore((state) => state.setSelectedElement);
-  const selectedElement = useStore((state) => state.selectedElement);
+  const selectedElement = useSelectedElement();
 
   const [comment, setComment] = useState('');
 

@@ -6,10 +6,10 @@ import Typography from '@material-ui/core/Typography';
 import LinkDetails from './LinkDetails';
 import NodeDetails from './NodeDetails';
 import GraphDetails from './GraphDetails';
-import useStore from '../../../store/useStore';
 import { isLink, isNode } from '../../../utils/typeGuards';
 import type { EwoksRFElement } from '../models';
 import { useEffect, useState } from 'react';
+import { useSelectedElement } from '../../../store/graph-hooks';
 
 interface Content {
   title: string;
@@ -39,15 +39,17 @@ function getAccordionContent(element: EwoksRFElement): Content {
 
 // DOC: Container for link-node-graph editing details
 function ElementDetails() {
-  const selectedElement = useStore((state) => state.selectedElement);
+  const selectedElement = useSelectedElement();
 
   const [expanded, setExpanded] = useState(false);
 
-  const { title, DetailsComponent } = getAccordionContent(selectedElement);
+  const { title, DetailsComponent } = getAccordionContent(
+    selectedElement as EwoksRFElement
+  );
 
   useEffect(() => {
-    setExpanded(!!selectedElement.id);
-  }, [selectedElement.id]);
+    setExpanded(!!selectedElement?.id);
+  }, [selectedElement?.id]);
 
   return (
     <Accordion
