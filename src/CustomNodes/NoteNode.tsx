@@ -4,32 +4,17 @@ import React, { useEffect, useState } from 'react';
 import { style } from './NodeStyle';
 import SaveIcon from '@material-ui/icons/Save';
 import type { ChangeEvent } from 'react';
-
-import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
 import type { NodeProps } from 'reactflow';
+import { useReactFlow } from 'reactflow';
 import type { EwoksRFNodeData } from '../types';
 import { useSelectedElement } from '../store/graph-hooks';
-
-// TODO: can be replaced with EwoksRFNode except xPos, yPos. Examine
-// interface NoteProps {
-//   id: string;
-//   xPos?: number;
-//   yPos?: number;
-//   selected?: boolean;
-//   data: {
-//     ewoks_props: { label?: string };
-//     comment: string;
-//     ui_props: { nodeWidth: string; details?: string };
-//     task_props: { task_type: string; task_identifier: string };
-//   };
-// }
 
 type NoteProps = NodeProps<EwoksRFNodeData>;
 
 const NoteNode = (args: NoteProps) => {
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
   const selectedElement = useSelectedElement();
+  const { getNodes, setNodes } = useReactFlow();
 
   const [comment, setComment] = useState('');
 
@@ -52,7 +37,7 @@ const NoteNode = (args: NoteProps) => {
 
   const save = () => {
     // TODO: If permenant put it in undo-redo and make title editable
-    setSelectedElement({
+    const newNode = {
       ...selectedElement,
       data: {
         task_props: { task_type: 'note', task_identifier: args.id },
@@ -63,7 +48,11 @@ const NoteNode = (args: NoteProps) => {
       id: args.id,
       type: 'note',
       position: { x: args.xPos || 500, y: args.yPos || 500 },
-    });
+    };
+    setNodes([
+      ...getNodes().filter((nod) => nod.id !== selectedElement.id),
+      newNode,
+    ]);
   };
 
   return (

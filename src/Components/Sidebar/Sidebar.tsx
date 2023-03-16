@@ -36,9 +36,6 @@ export default function Sidebar() {
   const { deleteElements, getNodes, setNodes, getEdges } = useReactFlow();
 
   const selectedElement = useSelectedElement();
-
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
-
   // const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
   //   false
   // );
@@ -63,13 +60,11 @@ export default function Sidebar() {
     }
 
     if (isNode(selectedElement)) {
-      setSelectedElement(graphRFDetails);
       deleteElements({ nodes: [selectedElement] });
       return;
     }
 
     if (isLink(selectedElement)) {
-      setSelectedElement(graphRFDetails);
       deleteElements({ edges: [selectedElement] });
       return;
     }
@@ -106,7 +101,6 @@ export default function Sidebar() {
     }
 
     setWorkingGraph(initializedGraph);
-    setSelectedElement({} as GraphDetails);
     setSubgraphsStack({ id: '', label: '', resetStack: true });
     resetRecentGraphs();
   };
@@ -128,7 +122,6 @@ export default function Sidebar() {
       };
       const nodesRF = getNodes();
       setNodes([...nodesRF, newClone]);
-      setSelectedElement(newClone);
     } else {
       setOpenSnackbar({
         open: true,

@@ -4,7 +4,6 @@ import type { State } from '../types';
 import currentExecutionEvent from './currentExecutionEvent';
 import gettingFromServer from './gettingFromServer';
 import undoRedo from './undoRedo';
-import selectedElement from './selectedElement';
 import selectedTask from './selectedTask';
 import workingGraph from './workingGraph';
 import graphRF from './graphRF';
@@ -53,7 +52,6 @@ const useStore = create<State>((set, get) => ({
   ...tasks(set),
   ...undoIndex(set, get),
   ...undoRedo(set, get),
-  ...selectedElement(set),
   ...selectedTask(set),
   ...workingGraph(set, get),
   initializedTask,

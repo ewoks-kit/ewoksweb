@@ -2,16 +2,16 @@ import create from 'zustand';
 import type { SelectedElement } from '../types';
 
 export interface SelectedElementState {
-  selectedElementNew: SelectedElement;
-  setSelectedElementNew: (element: SelectedElement) => void;
+  selectedElement: SelectedElement;
+  setSelectedElement: (element: SelectedElement) => void;
 }
 
 const useSelectedElementStore = create<SelectedElementState>((set) => ({
-  selectedElementNew: { type: 'graph', id: '' },
+  selectedElement: { type: 'graph', id: '' },
 
-  setSelectedElementNew: (element) => {
+  setSelectedElement: (element) => {
     set(() => ({
-      selectedElementNew: element,
+      selectedElement: element,
     }));
   },
 }));

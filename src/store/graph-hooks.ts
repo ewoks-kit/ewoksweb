@@ -27,20 +27,20 @@ export function useEdge(id: string) {
 }
 
 export function useSelectedElement(): EwoksRFNode | EwoksRFLink | GraphDetails {
-  const selectedElementNew = useSelectedElementStore(
-    (state) => state.selectedElementNew
+  const selectedElement = useSelectedElementStore(
+    (state) => state.selectedElement
   );
-  const nodeSelected = useNode(selectedElementNew.id) as EwoksRFNode;
+  const nodeSelected = useNode(selectedElement.id) as EwoksRFNode;
 
-  const edgeSelected = useEdge(selectedElementNew.id) as EwoksRFLink;
+  const edgeSelected = useEdge(selectedElement.id) as EwoksRFLink;
 
   const graph = useStore((state) => state.graphRFDetails);
 
-  if (selectedElementNew.type === 'node') {
+  if (selectedElement.type === 'node') {
     return nodeSelected;
   }
 
-  if (selectedElementNew.type === 'edge') {
+  if (selectedElement.type === 'edge') {
     return edgeSelected;
   }
 
