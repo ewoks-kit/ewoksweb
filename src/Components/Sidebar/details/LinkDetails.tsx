@@ -2,7 +2,6 @@ import type { ChangeEvent } from 'react';
 import type { EwoksRFLink } from '../../../types';
 import { Checkbox, Paper } from '@material-ui/core';
 import DashboardStyle from '../../Dashboard/DashboardStyle';
-import useStore from '../../../store/useStore';
 import DataMappingComponent from '../EditableTableProperties/DataMapping';
 import Conditions from '../EditableTableProperties/Conditions';
 import SidebarTooltip from '../SidebarTooltip';
@@ -18,8 +17,6 @@ export default function LinkDetails(element: EwoksRFLink) {
   const classes = useStyles();
 
   const { getEdges, setEdges } = useReactFlow();
-
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
 
   const showAdvancedDetails = useConfigStore(
     (state) => state.showAdvancedDetails
@@ -50,7 +47,6 @@ export default function LinkDetails(element: EwoksRFLink) {
   };
 
   function setAllEdge(newEdge: EwoksRFLink) {
-    setSelectedElement(newEdge);
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
   }
 

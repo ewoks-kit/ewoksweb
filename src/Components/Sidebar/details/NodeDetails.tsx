@@ -19,7 +19,6 @@ import {
 } from '@material-ui/core';
 import EditTaskProp from './EditTaskProp';
 import DashboardStyle from '../../Dashboard/DashboardStyle';
-import useStore from '../../../store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import { OpenInBrowser } from '@material-ui/icons';
 import LabelComment from './LabelComment';
@@ -39,7 +38,6 @@ export default function NodeDetails(element: EwoksRFNode) {
 
   const nodesIds = useNodesIds();
 
-  const setSelectedElement = useStore((state) => state.setSelectedElement);
   const showAdvancedDetails = useConfigStore(
     (state) => state.showAdvancedDetails
   );
@@ -148,7 +146,10 @@ export default function NodeDetails(element: EwoksRFNode) {
         return link;
       });
 
-      setAllNode(newElement);
+      setNodes([
+        ...getNodes().filter((nod) => nod.id !== element.id),
+        newElement,
+      ]);
       setEdges(newLinks);
 
       return;
@@ -165,7 +166,7 @@ export default function NodeDetails(element: EwoksRFNode) {
           },
         },
       };
-      setAllNode(newNode);
+      setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
     }
   }
 
@@ -180,7 +181,7 @@ export default function NodeDetails(element: EwoksRFNode) {
         },
       },
     };
-    setAllNode(newNode);
+    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 
   function defaulErrortNodeChanged(event: React.ChangeEvent<HTMLInputElement>) {
@@ -194,7 +195,7 @@ export default function NodeDetails(element: EwoksRFNode) {
         },
       },
     };
-    setAllNode(newNode);
+    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 
   function addDataMapping() {
@@ -215,7 +216,7 @@ export default function NodeDetails(element: EwoksRFNode) {
           },
         },
       };
-      setAllNode(newNode);
+      setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
     }
   }
 
@@ -245,7 +246,7 @@ export default function NodeDetails(element: EwoksRFNode) {
         },
       },
     };
-    setAllNode(newNode);
+    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 
   function mapAllDataChanged(event: React.ChangeEvent<HTMLInputElement>) {
@@ -262,11 +263,6 @@ export default function NodeDetails(element: EwoksRFNode) {
         },
       },
     };
-    setAllNode(newNode);
-  }
-
-  function setAllNode(newNode: EwoksRFNode) {
-    setSelectedElement(newNode);
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 

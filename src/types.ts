@@ -507,7 +507,7 @@ export interface calcInOutForSubgraphOutput {
   positionY?: number;
 }
 
-export interface selectedElementType {
+export interface SelectedElement {
   type: 'graph' | 'node' | 'edge';
   id: string;
 }
