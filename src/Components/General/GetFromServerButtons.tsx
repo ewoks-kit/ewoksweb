@@ -21,7 +21,7 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
   const { getNodes, getEdges, setNodes } = useReactFlow();
 
   const setSubGraph = useStore((state) => state.setSubGraph);
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const initGraph = useStore((state) => state.initGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const [gettingFromServer, setGettingFromServer] = useState(false);
   const graphInfo = useStore((state) => state.graphInfo);
@@ -62,7 +62,7 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
 
             setNodes([...nodes, newGraphNode]);
           } else {
-            setWorkingGraph(graph, 'fromServer');
+            initGraph(graph, 'fromServer');
           }
         } else {
           setOpenSnackbar({

@@ -47,7 +47,7 @@ export default function Sidebar() {
   const initializedGraph = useStore((state) => state.initializedGraph);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const initGraph = useStore((state) => state.initGraph);
 
   const deleteElement = async () => {
     if (workingGraph.graph.id !== graphInfo.id) {
@@ -100,7 +100,7 @@ export default function Sidebar() {
       }
     }
 
-    setWorkingGraph(initializedGraph);
+    initGraph(initializedGraph);
     setSubgraphsStack({ id: '', label: '', resetStack: true });
     resetRecentGraphs();
   };

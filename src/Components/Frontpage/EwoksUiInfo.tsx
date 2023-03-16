@@ -22,7 +22,7 @@ interface EwoksUiInfoProps {
 }
 
 export default function EwoksUiInfo(props: EwoksUiInfoProps) {
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const initGraph = useStore((state) => state.initGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const closeDialog = async () => {
@@ -43,7 +43,7 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
           } was downloaded successfully`,
           severity: 'success',
         });
-        setWorkingGraph(response.data, 'fromServer');
+        initGraph(response.data, 'fromServer');
       } else {
         setOpenSnackbar({
           open: true,

@@ -59,7 +59,7 @@ export default function FormDialog(props: FormDialogProps) {
   const [overwrite, setOverwrite] = useState<boolean>(false);
 
   const setCanvasGraphChanged = useStore((st) => st.setCanvasGraphChanged);
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const initGraph = useStore((state) => state.initGraph);
   const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setGettingFromServer = useStore((st) => st.setGettingFromServer);
@@ -219,7 +219,7 @@ export default function FormDialog(props: FormDialogProps) {
 
         props.setOpenSaveDialog(false);
 
-        setWorkingGraph(responseNew.data, 'fromServer');
+        initGraph(responseNew.data, 'fromServer');
 
         resetRecentGraphs();
 

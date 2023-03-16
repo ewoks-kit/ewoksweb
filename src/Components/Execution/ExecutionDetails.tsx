@@ -46,7 +46,7 @@ export default function ExecutionDetails() {
   const setGettingFromServer = useStore((state) => state.setGettingFromServer);
   const gettingFromServer = useStore((state) => state.gettingFromServer);
 
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const initGraph = useStore((state) => state.initGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const allWorkflows = useStore((state) => state.allWorkflows);
 
@@ -135,7 +135,7 @@ export default function ExecutionDetails() {
       try {
         const response = await getWorkflow(workflowId);
         if (response.data) {
-          setWorkingGraph(response.data, 'fromServer');
+          initGraph(response.data, 'fromServer');
           // TODO: get rid of timeout?
           setTimeout(() => {
             // DOC:
@@ -143,7 +143,7 @@ export default function ExecutionDetails() {
 
             // TODO: timeout is needed because executingEvents try to find
             // the nodes before they are there from the server
-            // probably because setWorkingGraph changes the graphRF used in executingEvents
+            // probably because initGraph changes the graphRF used in executingEvents
             events.forEach((ev) => setExecutingEvents(ev, false));
           }, 400);
         } else {

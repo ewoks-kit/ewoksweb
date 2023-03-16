@@ -11,7 +11,7 @@ import useSelectedElementStore from './useSelectedElementStore';
 
 export interface WorkingGraphSlice {
   workingGraph: GraphRF;
-  setWorkingGraph: (
+  initGraph: (
     workingGraphObject: GraphEwoks,
     source?: string
   ) => Promise<GraphRF>;
@@ -23,7 +23,7 @@ const workingGraph = (
 ): WorkingGraphSlice => ({
   workingGraph: initializedRFGraph,
 
-  setWorkingGraph: async (workingGraphObject, source): Promise<GraphRF> => {
+  initGraph: async (workingGraphObject, source): Promise<GraphRF> => {
     // 1. if it is a new graph opening initialize
     if (get().tasks.length === 0) {
       try {

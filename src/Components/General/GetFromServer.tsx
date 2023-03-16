@@ -11,7 +11,7 @@ import { textForError } from '../../utils';
 
 export default function GetFromServer() {
   const [workflowId, setWorkflowId] = useState('');
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const initGraph = useStore((state) => state.initGraph);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setCanvasGraphChanged = useStore(
@@ -50,7 +50,7 @@ export default function GetFromServer() {
             severity: 'success',
           });
           setCanvasGraphChanged(false);
-          setWorkingGraph(graph, 'fromServer');
+          initGraph(graph, 'fromServer');
           validateEwoksGraph(graph);
         } else {
           setOpenSnackbar({
