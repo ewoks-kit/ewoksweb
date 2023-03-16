@@ -129,7 +129,7 @@ function Node({
     setNodes([...getNodes(), newClone]);
   };
 
-  function setSelectedNode() {
+  function setNodeLabel() {
     if (!isNode(selectedElement)) {
       return;
     }
@@ -337,7 +337,7 @@ function Node({
                     aria-label="exit edit mode"
                     onClick={() => {
                       setEdit(false);
-                      setSelectedNode();
+                      setNodeLabel();
                     }}
                   >
                     <SaveIcon color="primary" />
