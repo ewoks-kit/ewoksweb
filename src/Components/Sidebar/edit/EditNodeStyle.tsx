@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Checkbox, FormControl, Slider } from '@material-ui/core';
-import type { EwoksRFNode } from '../../../types';
+import type { EwoksRFNode, EwoksRFNodeData } from '../../../types';
 import useDebounce from '../../../hooks/useDebounce';
 import type { ChangeEvent } from 'react';
 import { isNode } from 'utils/typeGuards';
@@ -39,22 +39,18 @@ export default function EditNodeStyle(element: EwoksRFNode) {
   );
 
   function setElementNodeWidth(width: number) {
-    const uiProps = nodesData.get(element.id)?.ui_props;
-    if (debouncedNodeWidth !== uiProps?.nodeWidth) {
-      const newNode = {
-        ...element,
-        data: {
-          ...element.data,
-          ui_props: { ...uiProps, nodeWidth: width },
-        },
+    const elementData = nodesData.get(element.id);
+    if (debouncedNodeWidth !== elementData?.ui_props.nodeWidth) {
+      const newNodeData: EwoksRFNodeData = {
+        ...elementData,
+        ui_props: { ...elementData?.ui_props, nodeWidth: width },
       };
-      setNodeData(element.id, newNode.data);
-      // TBD
-      setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+      setNodeData(element.id, newNodeData);
     }
   }
 
   function withImageChanged(event: ChangeEvent<HTMLInputElement>) {
+    // const uiProps = nodesData.get(element.id)?.ui_props;
     const newNode = {
       ...element,
       data: {

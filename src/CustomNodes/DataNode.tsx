@@ -8,13 +8,12 @@ function DataNode(args: NodeProps) {
   const nodesData = useNodeDataStore((state) => state.nodesData);
 
   const uiProps = nodesData.get(args.id)?.ui_props;
-  console.log(args, uiProps);
 
   return (
     <Node
       isGraph={false}
       type={uiProps?.type || 'internal'}
-      label={args.data.ewoks_props.label}
+      label={nodesData.get(args.id)?.ewoks_props.label || ''}
       selected={args.selected}
       color="#ced3ee"
       image={uiProps?.icon}
