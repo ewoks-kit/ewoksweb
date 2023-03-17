@@ -24,7 +24,7 @@ const workingGraph = (
   initGraph: async (workingGraphObject, source): Promise<GraphRF> => {
     // 1. Initialize the canvas while working on the new graph
     get().setSubgraphsStack({ id: '', label: '', resetStack: true });
-    get().readdRecentGraph();
+    get().resetRecentGraphs();
 
     // 2. Get node-subgraphs for the graph
     const newNodeSubgraphs = await findAllSubgraphs(

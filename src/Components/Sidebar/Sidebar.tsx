@@ -44,7 +44,7 @@ export default function Sidebar() {
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
-  const readdRecentGraph = useStore((state) => state.readdRecentGraph);
+  const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const initializedGraph = useStore((state) => state.initializedGraph);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
@@ -104,7 +104,7 @@ export default function Sidebar() {
 
     initGraph(initializedGraph);
     setSubgraphsStack({ id: '', label: '', resetStack: true });
-    readdRecentGraph();
+    resetRecentGraphs();
   };
 
   const disAgreeCallback = () => {
