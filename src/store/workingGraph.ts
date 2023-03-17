@@ -1,4 +1,4 @@
-import type { EwoksRFNode, GraphEwoks, GraphRF, State, Task } from '../types';
+import type { EwoksRFNode, GraphEwoks, GraphRF, State } from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
