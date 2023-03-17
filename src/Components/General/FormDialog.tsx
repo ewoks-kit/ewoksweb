@@ -60,7 +60,7 @@ export default function FormDialog(props: FormDialogProps) {
 
   const setCanvasGraphChanged = useStore((st) => st.setCanvasGraphChanged);
   const initGraph = useStore((state) => state.initGraph);
-  const readdRecentGraph = useStore((state) => state.readdRecentGraph);
+  const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setGettingFromServer = useStore((st) => st.setGettingFromServer);
   const [element, setElement] = useState<Task | GraphDetails>({});
@@ -221,7 +221,7 @@ export default function FormDialog(props: FormDialogProps) {
 
         initGraph(responseNew.data, 'fromServer');
 
-        readdRecentGraph();
+        resetRecentGraphs();
 
         setOpenSnackbar({
           open: true,
