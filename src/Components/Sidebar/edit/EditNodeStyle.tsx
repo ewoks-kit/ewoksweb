@@ -11,8 +11,10 @@ import useNodeDataStore from '../../../store/useNodeDataStore';
 export default function EditNodeStyle(element: EwoksRFNode) {
   const { getNodes, setNodes } = useReactFlow();
 
+  const nodesData = useNodeDataStore((state) => state.nodesData);
+
   const [nodeSize, setNodeSize] = useState<number>(
-    element.data.ui_props.nodeWidth || 100
+    nodesData.get(element.id)?.ui_props.nodeWidth || 100
   );
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
@@ -23,8 +25,8 @@ export default function EditNodeStyle(element: EwoksRFNode) {
       return;
     }
 
-    setNodeSize(element.data.ui_props.nodeWidth || 100);
-  }, [element]);
+    setNodeSize(nodesData.get(element.id)?.ui_props.nodeWidth || 100);
+  }, [element, nodesData]);
 
   useEffect(
     () => {
@@ -37,12 +39,13 @@ export default function EditNodeStyle(element: EwoksRFNode) {
   );
 
   function setElementNodeWidth(width: number) {
-    if (debouncedNodeWidth !== element.data.ui_props.nodeWidth) {
+    const uiProps = nodesData.get(element.id)?.ui_props;
+    if (debouncedNodeWidth !== uiProps?.nodeWidth) {
       const newNode = {
         ...element,
         data: {
           ...element.data,
-          ui_props: { ...element.data.ui_props, nodeWidth: width },
+          ui_props: { ...uiProps, nodeWidth: width },
         },
       };
       setNodeData(element.id, newNode.data);

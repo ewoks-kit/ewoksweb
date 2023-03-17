@@ -2,37 +2,33 @@ import React, { memo } from 'react';
 import type { NodeProps } from 'reactflow';
 import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
+import useNodeDataStore from '../store/useNodeDataStore';
 
 function DataNode(args: NodeProps) {
-  // console.log(args);
+  const nodesData = useNodeDataStore((state) => state.nodesData);
+
+  const uiProps = nodesData.get(args.id)?.ui_props;
+  console.log(args, uiProps);
 
   return (
     <Node
       isGraph={false}
-      type={args.data.ui_props.type}
+      type={uiProps?.type || 'node'}
       label={args.data.ewoks_props.label}
       selected={args.selected}
       color="#ced3ee"
-      image={args.data.ui_props.icon}
+      image={uiProps?.icon}
       comment={args.data.comment}
-      moreHandles={args.data.ui_props.moreHandles}
-      details={args.data.ui_props.details}
-      withImage={
-        'withImage' in args.data.ui_props ? args.data.ui_props.withImage : true
-      }
-      nodeWidth={
-        'nodeWidth' in args.data.ui_props ? args.data.ui_props.nodeWidth : 100
-      }
-      withLabel={
-        'withLabel' in args.data.ui_props ? args.data.ui_props.withLabel : true
-      }
+      moreHandles={uiProps?.moreHandles}
+      details={uiProps?.details}
+      withImage={uiProps && 'withImage' in uiProps ? uiProps?.withImage : true}
+      nodeWidth={uiProps && 'nodeWidth' in uiProps ? uiProps?.nodeWidth : 100}
+      withLabel={uiProps && 'withLabel' in uiProps ? uiProps?.withLabel : true}
       colorBorder={
-        'colorBorder' in args.data.ui_props
-          ? args.data.ui_props.colorBorder
-          : ''
+        uiProps && 'colorBorder' in uiProps ? uiProps?.colorBorder : ''
       }
       content={<div style={{ ...style.io } as React.CSSProperties} />}
-      executing={args.data.ui_props.executing}
+      executing={uiProps?.executing}
     />
   );
 }
