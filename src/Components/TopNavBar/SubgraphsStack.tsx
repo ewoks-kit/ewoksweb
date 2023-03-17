@@ -22,7 +22,7 @@ export default function SubgraphsStack() {
   const subgraphsStack = useStore((state) => {
     return state.subgraphsStack;
   });
-  const addNodeData = useNodeDataStore((state) => state.addNodeData);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   const setSelectedElement = useSelectedElementStore(
     (state) => state.setSelectedElement
@@ -47,7 +47,7 @@ export default function SubgraphsStack() {
       // Both stay
       setNodes(subgraph.nodes);
       subgraph.nodes.forEach((nod) => {
-        addNodeData(nod.id, nod.data);
+        setNodeData(nod.id, nod.data);
       });
       setEdges(subgraph.links);
       setGraphInfo(subgraph.graph);

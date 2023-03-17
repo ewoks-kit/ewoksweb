@@ -1,4 +1,4 @@
-import type { EwoksRFNode, GraphEwoks, GraphRF, State, Task } from '../types';
+import type { EwoksRFNode, GraphEwoks, GraphRF, State } from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
@@ -86,7 +86,7 @@ const workingGraph = (
 
     useNodeDataStore.getState().resetNodesData();
     graph.nodes.forEach((nod) => {
-      useNodeDataStore.getState().addNodeData(nod.id, nod.data);
+      useNodeDataStore.getState().setNodeData(nod.id, nod.data);
     });
 
     // add the new graph to the recent graphs if not already there

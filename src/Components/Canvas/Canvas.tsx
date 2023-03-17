@@ -17,7 +17,7 @@ import FunctionNode from 'CustomNodes/FunctionNode';
 import NoteNode from 'CustomNodes/NoteNode';
 import ExecutionStepsNode from 'CustomNodes/ExecutionStepsNode';
 import DataNode from 'CustomNodes/DataNode';
-import type { EwoksRFNode, EwoksRFLink } from 'types';
+import type { EwoksRFNode, EwoksRFLink, EwoksRFNodeData } from 'types';
 import useStore from 'store/useStore';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
@@ -78,7 +78,8 @@ function Canvas() {
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   // const setUndoRedo = useStore((state) => state.setUndoRedo);
-  const addNodeData = useNodeDataStore((state) => state.addNodeData);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const nodesData = useNodeDataStore((state) => state.nodesData);
 
   const graphId = useGraphId();
 
@@ -169,7 +170,15 @@ function Canvas() {
   }
 
   const onPaneClick = () => {
-    // No need to set nodeData since ui_props will stay in Node
+    nodesData.forEach((nodData, id) => {
+      if (nodData.ui_props.details === true) {
+        setNodeData(id, {
+          ...nodData,
+          ui_props: { ...nodData.ui_props, details: false },
+        });
+      }
+    });
+    // TBD
     setNodes(
       getNodes().map((nod) => {
         return {
@@ -356,11 +365,12 @@ function Canvas() {
       );
 
       if (subgraph?.graph.id) {
-        // Both stay
+        // Both stay. Can it create multiple canvas rerenders to set the both?
         setNodes(subgraph.nodes);
         subgraph.nodes.forEach((nod) => {
-          addNodeData(nod.id, nod.data);
+          setNodeData(nod.id, nod.data);
         });
+
         setEdges(subgraph.links);
 
         setGraphInfo(subgraph.graph);
@@ -379,15 +389,18 @@ function Canvas() {
       }
     } else {
       if (nodeTmp) {
-        // ui_props in node
+        const nodeTmpData: EwoksRFNodeData = {
+          ...nodeTmp.data,
+          ui_props: { ...nodeTmp.data.ui_props, details: true },
+        };
+        setNodeData(nodeTmp.id, nodeTmpData);
+
+        // TBD
         setNodes([
           ...getNodes().filter((nod) => nod.id !== nodeTmp.id),
           {
             ...nodeTmp,
-            data: {
-              ...nodeTmp.data,
-              ui_props: { ...nodeTmp.data.ui_props, details: true },
-            },
+            data: nodeTmpData,
           },
         ]);
       }
@@ -415,7 +428,7 @@ function Canvas() {
         };
         // Both stay
         setNodes([...getNodes(), newClone]);
-        addNodeData(newClone.id, newClone.data);
+        setNodeData(newClone.id, newClone.data);
 
         setSelectedElement({ type: 'node', id: newClone.id });
       } else {

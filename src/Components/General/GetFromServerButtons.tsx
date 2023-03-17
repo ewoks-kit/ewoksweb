@@ -32,7 +32,7 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
   );
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const undoIndex = useStore((state) => state.undoIndex);
-  const addNodeData = useNodeDataStore((state) => state.addNodeData);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   function getSubgraphFromServer() {
     getFromServer('subgraph');
@@ -63,7 +63,7 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
             const newGraphNode = await setSubGraph(graph, nodes, getEdges());
             // Both stay
             setNodes([...nodes, newGraphNode]);
-            addNodeData(newGraphNode.id, newGraphNode.data);
+            setNodeData(newGraphNode.id, newGraphNode.data);
           } else {
             initGraph(graph, 'fromServer');
           }

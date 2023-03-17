@@ -73,7 +73,7 @@ function Node({
   const [labelLocal, setLabelLocal] = useState(label);
   const [detailsL, setDetailsL] = useState(false);
 
-  const addNodeData = useNodeDataStore((state) => state.addNodeData);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   useEffect(() => {
     setNodeSize(nodeWidth);
@@ -131,7 +131,7 @@ function Node({
     };
     // Both stay
     setNodes([...getNodes(), newClone]);
-    addNodeData(newClone.id, newClone.data);
+    setNodeData(newClone.id, newClone.data);
   };
 
   function setNodeLabel() {
@@ -145,7 +145,8 @@ function Node({
         ewoks_props: { ...selectedElement.data.ewoks_props, label: labelLocal },
       },
     };
-    // PROBLEM: label is in ewoks_props but needed on the canvas. Change models
+    setNodeData(selectedElement.id, newNode.data);
+    // TBD
     setNodes([...getNodes().filter((nod) => nod.id !== newNode.id), newNode]);
   }
 

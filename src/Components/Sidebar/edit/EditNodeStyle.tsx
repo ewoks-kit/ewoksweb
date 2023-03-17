@@ -5,6 +5,7 @@ import useDebounce from '../../../hooks/useDebounce';
 import type { ChangeEvent } from 'react';
 import { isNode } from 'utils/typeGuards';
 import { useReactFlow } from 'reactflow';
+import useNodeDataStore from '../../../store/useNodeDataStore';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(element: EwoksRFNode) {
@@ -13,6 +14,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
   const [nodeSize, setNodeSize] = useState<number>(
     element.data.ui_props.nodeWidth || 100
   );
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   const debouncedNodeWidth = useDebounce(nodeSize, 500);
 
@@ -43,7 +45,8 @@ export default function EditNodeStyle(element: EwoksRFNode) {
           ui_props: { ...element.data.ui_props, nodeWidth: width },
         },
       };
-      // no nodeData ui_props
+      setNodeData(element.id, newNode.data);
+      // TBD
       setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
     }
   }
@@ -59,7 +62,8 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         },
       },
     };
-    // no nodeData ui_props
+    setNodeData(element.id, newNode.data);
+    // TBD
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 
@@ -74,7 +78,8 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         },
       },
     };
-    // no nodeData ui_props
+    setNodeData(element.id, newNode.data);
+    // TBD
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 
@@ -89,7 +94,8 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         },
       },
     };
-    // no nodeData ui_props
+    setNodeData(element.id, newNode.data);
+    // TBD
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   };
 
@@ -104,7 +110,8 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         },
       },
     };
-    // no nodeData ui_props
+    setNodeData(element.id, newNode.data);
+    // TBD
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   };
 

@@ -11,7 +11,7 @@ export default function DefaultInputs(element: EwoksRFNode) {
   const { getNodes, setNodes } = useReactFlow();
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const addNodeData = useNodeDataStore((state) => state.addNodeData);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   const defautInputs = element.data.ewoks_props.default_inputs;
 
@@ -36,9 +36,9 @@ export default function DefaultInputs(element: EwoksRFNode) {
           },
         },
       };
+      setNodeData(element.id, newNode.data);
       // TBD
       setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
-      addNodeData(element.id, newNode.data);
     }
   }
 
@@ -59,9 +59,9 @@ export default function DefaultInputs(element: EwoksRFNode) {
         },
       },
     };
+    setNodeData(element.id, newNode.data);
     // TBD
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
-    addNodeData(element.id, newNode.data);
   };
 
   return (

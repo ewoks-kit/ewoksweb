@@ -49,7 +49,7 @@ export default function Sidebar() {
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const initGraph = useStore((state) => state.initGraph);
-  const addNodeData = useNodeDataStore((state) => state.addNodeData);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   const deleteElement = async () => {
     if (workingGraph.graph.id !== graphInfo.id) {
@@ -125,7 +125,7 @@ export default function Sidebar() {
       const nodesRF = getNodes();
       // Both stay
       setNodes([...nodesRF, newClone]);
-      addNodeData(newClone.id, newClone.data);
+      setNodeData(newClone.id, newClone.data);
     } else {
       setOpenSnackbar({
         open: true,
