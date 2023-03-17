@@ -79,6 +79,7 @@ function Canvas() {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   // const setUndoRedo = useStore((state) => state.setUndoRedo);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const setNodesData = useNodeDataStore((state) => state.setNodesData);
   const nodesData = useNodeDataStore((state) => state.nodesData);
 
   const graphId = useGraphId();
@@ -367,9 +368,8 @@ function Canvas() {
       if (subgraph?.graph.id) {
         // Both stay. Can it create multiple canvas rerenders to set the both?
         setNodes(subgraph.nodes);
-        subgraph.nodes.forEach((nod) => {
-          setNodeData(nod.id, nod.data);
-        });
+
+        setNodesData(subgraph.nodes);
 
         setEdges(subgraph.links);
 

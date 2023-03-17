@@ -85,9 +85,8 @@ const workingGraph = (
       .setSelectedElement({ type: 'graph', id: graph.graph.id });
 
     useNodeDataStore.getState().resetNodesData();
-    graph.nodes.forEach((nod) => {
-      useNodeDataStore.getState().setNodeData(nod.id, nod.data);
-    });
+
+    useNodeDataStore.getState().setNodesData(graph.nodes);
 
     // add the new graph to the recent graphs if not already there
     get().addRecentGraph({

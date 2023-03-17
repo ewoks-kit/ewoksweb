@@ -13,7 +13,7 @@ function DataNode(args: NodeProps) {
   return (
     <Node
       isGraph={false}
-      type={uiProps?.type || 'node'}
+      type={uiProps?.type || 'internal'}
       label={args.data.ewoks_props.label}
       selected={args.selected}
       color="#ced3ee"
