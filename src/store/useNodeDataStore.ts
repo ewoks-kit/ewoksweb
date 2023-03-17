@@ -11,8 +11,8 @@ const useNodeDataStore = create<NodeDataState>((set, get) => ({
   nodesData: new Map(),
 
   setNodeData: (nodeId, nodeData) => {
-    set(() => ({
-      nodesData: get().nodesData.set(nodeId, nodeData),
+    set(({ nodesData }) => ({
+      nodesData: new Map(nodesData).set(nodeId, nodeData),
     }));
   },
   resetNodesData: () => {
