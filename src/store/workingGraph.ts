@@ -1,17 +1,14 @@
-import type { EwoksRFNode, GraphEwoks, GraphRF, State, Task } from '../types';
+import type { EwoksRFNode, GraphEwoks, GraphRF, State } from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
-import commonStrings from '../commonStrings.json';
-import { getTaskDescription } from '../api/api';
 import type { GetState, SetState } from 'zustand';
 import { initializedRFGraph } from '../utils/InitializedEntities';
-import { textForError } from '../utils';
 import useSelectedElementStore from './useSelectedElementStore';
 
 export interface WorkingGraphSlice {
   workingGraph: GraphRF;
-  setWorkingGraph: (
+  initGraph: (
     workingGraphObject: GraphEwoks,
     source?: string
   ) => Promise<GraphRF>;
@@ -23,21 +20,8 @@ const workingGraph = (
 ): WorkingGraphSlice => ({
   workingGraph: initializedRFGraph,
 
-  setWorkingGraph: async (workingGraphObject, source): Promise<GraphRF> => {
-    // 1. if it is a new graph opening initialize
-    if (get().tasks.length === 0) {
-      try {
-        const tasksData = await getTaskDescription();
-        const tasks = tasksData.data as { items: Task[] };
-        get().setTasks(tasks.items);
-      } catch (error) {
-        get().setOpenSnackbar({
-          open: true,
-          text: textForError(error, commonStrings.retrieveTasksError),
-          severity: 'error',
-        });
-      }
-    }
+  initGraph: async (workingGraphObject, source): Promise<GraphRF> => {
+    // 1. Initialize the canvas while working on the new graph
     get().setSubgraphsStack({ id: '', label: '', resetStack: true });
     get().resetRecentGraphs();
 
@@ -50,7 +34,7 @@ const workingGraph = (
     // 3. Put the newNodeSubgraphs into recent in their graphRF form (sync)
     newNodeSubgraphs.forEach((gr) => {
       // calculate the rfNodes using the fetched subgraphs
-      get().setRecentGraphs({
+      get().addRecentGraph({
         graph: gr.graph,
         nodes: toRFEwoksNodes(gr, newNodeSubgraphs, get().tasks),
         links: toRFEwoksLinks(gr, newNodeSubgraphs, get().tasks),
@@ -91,7 +75,7 @@ const workingGraph = (
       links: toRFEwoksLinks(workingGraphObject, newNodeSubgraphs, get().tasks),
     };
 
-    get().setRecentGraphs(graph as GraphRF);
+    get().addRecentGraph(graph as GraphRF);
 
     get().setGraphInfo(graph.graph);
 
@@ -100,7 +84,7 @@ const workingGraph = (
       .setSelectedElement({ type: 'graph', id: graph.graph.id });
 
     // add the new graph to the recent graphs if not already there
-    get().setRecentGraphs({
+    get().addRecentGraph({
       graph: workingGraphObject.graph,
       nodes: grfNodes,
       links: toRFEwoksLinks(workingGraphObject, newNodeSubgraphs, get().tasks),

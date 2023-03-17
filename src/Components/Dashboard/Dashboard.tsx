@@ -78,7 +78,7 @@ export default function Dashboard() {
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const undoIndex = useStore((state) => state.undoIndex);
   const initializedGraph = useStore((state) => state.initializedGraph);
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const initGraph = useStore((state) => state.initGraph);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
@@ -111,7 +111,7 @@ export default function Dashboard() {
     if (canvasGraphChanged && undoIndex !== 0 && !notSave) {
       setOpenAgreeDialog(true);
     } else {
-      setWorkingGraph(initializedGraph);
+      initGraph(initializedGraph);
       setOpenSaveDialog(true);
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);

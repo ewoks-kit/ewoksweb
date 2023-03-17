@@ -54,7 +54,7 @@ const subGraph = (
         get().tasks
       );
 
-      get().setRecentGraphs({
+      get().addRecentGraph({
         graph: gr.graph,
         nodes: rfNodes,
         links: toRFEwoksLinks(gr, newNodeSubgraphs, get().tasks),
@@ -132,7 +132,7 @@ const subGraph = (
         },
       };
 
-      get().setRecentGraphs(subToAdd);
+      get().addRecentGraph(subToAdd);
     } else {
       get().setOpenSnackbar({
         open: true,
@@ -146,7 +146,7 @@ const subGraph = (
       links: links as EwoksRFLink[],
     };
 
-    get().setRecentGraphs(newWorkingGraph);
+    get().addRecentGraph(newWorkingGraph);
     return newNode;
   },
 });

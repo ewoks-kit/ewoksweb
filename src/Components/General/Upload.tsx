@@ -45,7 +45,7 @@ function Upload(props: { children?: ReactNode } | undefined) {
   const graphOrSubgraph = useStore<boolean>((state) => state.graphOrSubgraph);
 
   const workingGraph = useStore<GraphRF>((state) => state.workingGraph);
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const initGraph = useStore((state) => state.initGraph);
   const setSubGraph = useStore((state) => state.setSubGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const inExecutionMode = useStore<boolean>((state) => state.inExecutionMode);
@@ -62,7 +62,7 @@ function Upload(props: { children?: ReactNode } | undefined) {
           if (graphOrSubgraph) {
             // TODO validate from disk workflows but visualize them
             // const { result } = validateEwoksGraph(newGraph);
-            await setWorkingGraph(newGraph, 'fromDisk');
+            await initGraph(newGraph, 'fromDisk');
           } else {
             await setSubGraph(newGraph, getNodes(), getEdges());
           }
