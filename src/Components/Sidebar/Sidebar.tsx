@@ -26,6 +26,7 @@ import { isGraphDetails, isLink, isNode } from '../../utils/typeGuards';
 import { textForError } from '../../utils';
 import { useNodesIds, useSelectedElement } from '../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
+import useNodeDataStore from '../../store/useNodeDataStore';
 
 const useStyles = DashboardStyle;
 
@@ -48,6 +49,7 @@ export default function Sidebar() {
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const initGraph = useStore((state) => state.initGraph);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   const deleteElement = async () => {
     if (workingGraph.graph.id !== graphInfo.id) {
@@ -121,7 +123,9 @@ export default function Sidebar() {
         },
       };
       const nodesRF = getNodes();
+      // Both stay
       setNodes([...nodesRF, newClone]);
+      setNodeData(newClone.id, newClone.data);
     } else {
       setOpenSnackbar({
         open: true,

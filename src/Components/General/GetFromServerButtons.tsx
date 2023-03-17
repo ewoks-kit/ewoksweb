@@ -8,6 +8,7 @@ import { getWorkflow } from '../../api/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { textForError } from '../../utils';
 import { useReactFlow } from 'reactflow';
+import useNodeDataStore from '../../store/useNodeDataStore';
 
 interface GetFromServerButtonsProps {
   workflowId: string;
@@ -31,6 +32,7 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
   );
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const undoIndex = useStore((state) => state.undoIndex);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   function getSubgraphFromServer() {
     getFromServer('subgraph');
@@ -59,8 +61,9 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
           const nodes = getNodes();
           if (isSubgraph === 'subgraph') {
             const newGraphNode = await setSubGraph(graph, nodes, getEdges());
-
+            // Both stay
             setNodes([...nodes, newGraphNode]);
+            setNodeData(newGraphNode.id, newGraphNode.data);
           } else {
             initGraph(graph, 'fromServer');
           }

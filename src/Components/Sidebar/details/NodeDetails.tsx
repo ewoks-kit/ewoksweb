@@ -27,6 +27,7 @@ import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
 import { useNodesIds } from '../../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
+import useNodeDataStore from '../../../store/useNodeDataStore';
 
 const useStyles = DashboardStyle;
 
@@ -41,6 +42,7 @@ export default function NodeDetails(element: EwoksRFNode) {
   const showAdvancedDetails = useConfigStore(
     (state) => state.showAdvancedDetails
   );
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   const [inputsComplete, setInputsComplete] = useState<boolean>(false);
   const [defaultErrorNode, setDefaultErrorNode] = useState<boolean>(false);
@@ -116,7 +118,7 @@ export default function NodeDetails(element: EwoksRFNode) {
         uniqueId += id++;
       }
 
-      const newElement = {
+      const newNode = {
         ...element,
         id: uniqueId,
         data: {
@@ -145,11 +147,10 @@ export default function NodeDetails(element: EwoksRFNode) {
 
         return link;
       });
+      setNodeData(element.id, newNode.data);
+      // TBD
+      setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
 
-      setNodes([
-        ...getNodes().filter((nod) => nod.id !== element.id),
-        newElement,
-      ]);
       setEdges(newLinks);
 
       return;
@@ -166,6 +167,8 @@ export default function NodeDetails(element: EwoksRFNode) {
           },
         },
       };
+      setNodeData(element.id, newNode.data);
+      // TBD
       setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
     }
   }
@@ -181,6 +184,8 @@ export default function NodeDetails(element: EwoksRFNode) {
         },
       },
     };
+    setNodeData(element.id, newNode.data);
+    // TBD
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 
@@ -195,6 +200,8 @@ export default function NodeDetails(element: EwoksRFNode) {
         },
       },
     };
+    setNodeData(element.id, newNode.data);
+    // TBD
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 
@@ -216,6 +223,8 @@ export default function NodeDetails(element: EwoksRFNode) {
           },
         },
       };
+      setNodeData(element.id, newNode.data);
+      // TBD
       setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
     }
   }
@@ -246,6 +255,8 @@ export default function NodeDetails(element: EwoksRFNode) {
         },
       },
     };
+    setNodeData(element.id, newNode.data);
+    // TBD
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 
@@ -263,6 +274,8 @@ export default function NodeDetails(element: EwoksRFNode) {
         },
       },
     };
+    setNodeData(element.id, newNode.data);
+    // TBD
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   }
 

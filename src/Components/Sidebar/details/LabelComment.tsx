@@ -11,6 +11,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from '../sidebarStyle';
 import { isLink, isNode, isString } from '../../../utils/typeGuards';
 import { useReactFlow } from 'reactflow';
+import useNodeDataStore from '../../../store/useNodeDataStore';
 
 const useStyles = DashboardStyle;
 
@@ -36,6 +37,7 @@ export default function LabelComment(props: LabelCommentProps) {
   const [valueIsChanged, setValueIsChanged] = useState(false);
 
   const inExecutionMode = useStore((state) => state.inExecutionMode);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   useEffect(() => {
     if (isNode(element)) {
@@ -78,15 +80,19 @@ export default function LabelComment(props: LabelCommentProps) {
 
   function saveLabel(labelLocal: string) {
     if (isNode(element)) {
+      const newNodeData = {
+        ...element.data,
+        ewoks_props: {
+          ...element.data.ewoks_props,
+          label: labelLocal,
+        },
+      };
+      setNodeData(element.id, newNodeData);
+
+      // TBD
       const newNode = {
         ...element,
-        data: {
-          ...element.data,
-          ewoks_props: {
-            ...element.data.ewoks_props,
-            label: labelLocal,
-          },
-        },
+        data: newNodeData,
       };
       setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
     }
@@ -110,6 +116,8 @@ export default function LabelComment(props: LabelCommentProps) {
     };
 
     if (isNode(newElement)) {
+      setNodeData(element.id, newElement.data);
+      // TBD
       setNodes([
         ...getNodes().filter((nod) => nod.id !== element.id),
         newElement,

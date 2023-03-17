@@ -9,6 +9,7 @@ import type { NodeProps } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 import type { EwoksRFNodeData } from '../types';
 import { useSelectedElement } from '../store/graph-hooks';
+import useNodeDataStore from '../store/useNodeDataStore';
 
 type NoteProps = NodeProps<EwoksRFNodeData>;
 
@@ -17,6 +18,8 @@ const NoteNode = (args: NoteProps) => {
   const { getNodes, setNodes } = useReactFlow();
 
   const [comment, setComment] = useState('');
+
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   useEffect(() => {
     setComment(args.data.comment || '');
@@ -49,6 +52,8 @@ const NoteNode = (args: NoteProps) => {
       type: 'note',
       position: { x: args.xPos || 500, y: args.yPos || 500 },
     };
+    setNodeData(selectedElement.id, newNode.data);
+    // TBD
     setNodes([
       ...getNodes().filter((nod) => nod.id !== selectedElement.id),
       newNode,

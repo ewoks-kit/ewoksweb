@@ -17,7 +17,7 @@ import FunctionNode from 'CustomNodes/FunctionNode';
 import NoteNode from 'CustomNodes/NoteNode';
 import ExecutionStepsNode from 'CustomNodes/ExecutionStepsNode';
 import DataNode from 'CustomNodes/DataNode';
-import type { EwoksRFNode, EwoksRFLink } from 'types';
+import type { EwoksRFNode, EwoksRFLink, EwoksRFNodeData } from 'types';
 import useStore from 'store/useStore';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
@@ -28,6 +28,7 @@ import { useStoreApi } from 'reactflow';
 import { useGraphId, useSelectedElement } from '../../store/graph-hooks';
 import { isNode } from '../../utils/typeGuards';
 import useSelectedElementStore from '../../store/useSelectedElementStore';
+import useNodeDataStore from '../../store/useNodeDataStore';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -77,6 +78,8 @@ function Canvas() {
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   // const setUndoRedo = useStore((state) => state.setUndoRedo);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const nodesData = useNodeDataStore((state) => state.nodesData);
 
   const graphId = useGraphId();
 
@@ -167,6 +170,15 @@ function Canvas() {
   }
 
   const onPaneClick = () => {
+    nodesData.forEach((nodData, id) => {
+      if (nodData.ui_props.details === true) {
+        setNodeData(id, {
+          ...nodData,
+          ui_props: { ...nodData.ui_props, details: false },
+        });
+      }
+    });
+    // TBD
     setNodes(
       getNodes().map((nod) => {
         return {
@@ -353,7 +365,12 @@ function Canvas() {
       );
 
       if (subgraph?.graph.id) {
+        // Both stay. Can it create multiple canvas rerenders to set the both?
         setNodes(subgraph.nodes);
+        subgraph.nodes.forEach((nod) => {
+          setNodeData(nod.id, nod.data);
+        });
+
         setEdges(subgraph.links);
 
         setGraphInfo(subgraph.graph);
@@ -372,14 +389,18 @@ function Canvas() {
       }
     } else {
       if (nodeTmp) {
+        const nodeTmpData: EwoksRFNodeData = {
+          ...nodeTmp.data,
+          ui_props: { ...nodeTmp.data.ui_props, details: true },
+        };
+        setNodeData(nodeTmp.id, nodeTmpData);
+
+        // TBD
         setNodes([
           ...getNodes().filter((nod) => nod.id !== nodeTmp.id),
           {
             ...nodeTmp,
-            data: {
-              ...nodeTmp.data,
-              ui_props: { ...nodeTmp.data.ui_props, details: true },
-            },
+            data: nodeTmpData,
           },
         ]);
       }
@@ -405,7 +426,10 @@ function Canvas() {
             y: (selectedElement.position?.y || 0) + 100,
           },
         };
+        // Both stay
         setNodes([...getNodes(), newClone]);
+        setNodeData(newClone.id, newClone.data);
+
         setSelectedElement({ type: 'node', id: newClone.id });
       } else {
         setOpenSnackbar({

@@ -5,11 +5,14 @@ import { IconButton } from '@material-ui/core';
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import { useReactFlow } from 'reactflow';
+import useNodeDataStore from '../../../store/useNodeDataStore';
 
 export default function DefaultInputs(element: EwoksRFNode) {
   const { getNodes, setNodes } = useReactFlow();
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
+
   const defautInputs = element.data.ewoks_props.default_inputs;
 
   function addDefaultInputs() {
@@ -33,6 +36,8 @@ export default function DefaultInputs(element: EwoksRFNode) {
           },
         },
       };
+      setNodeData(element.id, newNode.data);
+      // TBD
       setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
     }
   }
@@ -54,6 +59,8 @@ export default function DefaultInputs(element: EwoksRFNode) {
         },
       },
     };
+    setNodeData(element.id, newNode.data);
+    // TBD
     setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
   };
 

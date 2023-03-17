@@ -5,6 +5,7 @@ import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
 import type { GetState, SetState } from 'zustand';
 import { initializedRFGraph } from '../utils/InitializedEntities';
 import useSelectedElementStore from './useSelectedElementStore';
+import useNodeDataStore from './useNodeDataStore';
 
 export interface WorkingGraphSlice {
   workingGraph: GraphRF;
@@ -82,6 +83,11 @@ const workingGraph = (
     useSelectedElementStore
       .getState()
       .setSelectedElement({ type: 'graph', id: graph.graph.id });
+
+    useNodeDataStore.getState().resetNodesData();
+    graph.nodes.forEach((nod) => {
+      useNodeDataStore.getState().setNodeData(nod.id, nod.data);
+    });
 
     // add the new graph to the recent graphs if not already there
     get().addRecentGraph({
