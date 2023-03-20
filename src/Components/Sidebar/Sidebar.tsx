@@ -13,7 +13,7 @@ import ElementDetails from './details/ElementDetails';
 import EditElementStyle from './edit/EditElementStyle';
 import IconMenu from './IconMenu';
 // import ExecutionDetails from '../Execution/ExecutionDetails';
-import DashboardStyle from '../Dashboard/DashboardStyle';
+// import DashboardStyle from '../Dashboard/DashboardStyle';
 import useStore from 'store/useStore';
 import type { EwoksRFNode } from 'types';
 import { calcNewId } from 'utils/calcNewId';
@@ -28,10 +28,10 @@ import { useNodesIds, useSelectedElement } from '../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
 
-const useStyles = DashboardStyle;
+// const useStyles = DashboardStyle;
 
 export default function Sidebar() {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const nodesIds = useNodesIds();
   const { deleteElements, getNodes, setNodes, getEdges } = useReactFlow();
@@ -148,7 +148,7 @@ export default function Sidebar() {
         <>
           <AddNodes title="Add Nodes" />
           <ElementDetails />
-          <EditElementStyle />
+          <EditElementStyle {...selectedElement} />
         </>
       )}
       {/* TODO: commented for onlyEditRelease */}

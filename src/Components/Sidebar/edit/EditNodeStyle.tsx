@@ -1,32 +1,23 @@
 import { useEffect, useState } from 'react';
 import { Checkbox, FormControl, Slider } from '@material-ui/core';
-import type { EwoksRFNode, EwoksRFNodeData } from '../../../types';
 import useDebounce from '../../../hooks/useDebounce';
 import type { ChangeEvent } from 'react';
-import { isNode } from 'utils/typeGuards';
-import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 
 // DOC: Edit the node style
-export default function EditNodeStyle(element: EwoksRFNode) {
-  const { getNodes, setNodes } = useReactFlow();
-
+export default function EditNodeStyle(props: { nodeId: string }) {
   const nodesData = useNodeDataStore((state) => state.nodesData);
-
+  const { nodeId } = props;
   const [nodeSize, setNodeSize] = useState<number>(
-    nodesData.get(element.id)?.ui_props.nodeWidth || 100
+    nodesData.get(nodeId)?.ui_props.nodeWidth || 100
   );
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   const debouncedNodeWidth = useDebounce(nodeSize, 500);
 
   useEffect(() => {
-    if (!isNode(element)) {
-      return;
-    }
-
-    setNodeSize(nodesData.get(element.id)?.ui_props.nodeWidth || 100);
-  }, [element, nodesData]);
+    setNodeSize(nodesData.get(nodeId)?.ui_props.nodeWidth || 100);
+  }, [nodeId, nodesData]);
 
   useEffect(
     () => {
@@ -39,79 +30,70 @@ export default function EditNodeStyle(element: EwoksRFNode) {
   );
 
   function setElementNodeWidth(width: number) {
-    const elementData = nodesData.get(element.id);
-    if (debouncedNodeWidth !== elementData?.ui_props.nodeWidth) {
-      const newNodeData: EwoksRFNodeData = {
-        ...elementData,
-        ui_props: { ...elementData?.ui_props, nodeWidth: width },
+    const nodeData = nodesData.get(nodeId);
+    if (nodeData && debouncedNodeWidth !== nodeData?.ui_props.nodeWidth) {
+      const newNodeData = {
+        ...nodeData,
+        ui_props: { ...nodeData.ui_props, nodeWidth: width },
       };
-      setNodeData(element.id, newNodeData);
+      setNodeData(nodeId, newNodeData);
     }
   }
 
   function withImageChanged(event: ChangeEvent<HTMLInputElement>) {
-    // const uiProps = nodesData.get(element.id)?.ui_props;
-    const newNode = {
-      ...element,
-      data: {
-        ...element.data,
+    const nodeData = nodesData.get(nodeId);
+    if (nodeData) {
+      const newNodeData = {
+        ...nodeData,
         ui_props: {
-          ...element.data.ui_props,
+          ...nodeData.ui_props,
           withImage: event.target.checked,
         },
-      },
-    };
-    setNodeData(element.id, newNode.data);
-    // TBD
-    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+      };
+      setNodeData(nodeId, newNodeData);
+    }
   }
 
   function withLabelChanged(event: ChangeEvent<HTMLInputElement>) {
-    const newNode = {
-      ...element,
-      data: {
-        ...element.data,
+    const nodeData = nodesData.get(nodeId);
+    if (nodeData) {
+      const newNodeData = {
+        ...nodeData,
         ui_props: {
-          ...element.data.ui_props,
+          ...nodeData.ui_props,
           withLabel: event.target.checked,
         },
-      },
-    };
-    setNodeData(element.id, newNode.data);
-    // TBD
-    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+      };
+      setNodeData(nodeId, newNodeData);
+    }
   }
 
   const colorBorderChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    const newNode = {
-      ...element,
-      data: {
-        ...element.data,
+    const nodeData = nodesData.get(nodeId);
+    if (nodeData) {
+      const newNodeData = {
+        ...nodeData,
         ui_props: {
-          ...element.data.ui_props,
+          ...nodeData.ui_props,
           colorBorder: event.target.value,
         },
-      },
-    };
-    setNodeData(element.id, newNode.data);
-    // TBD
-    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+      };
+      setNodeData(nodeId, newNodeData);
+    }
   };
 
   const moreHandlesChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    const newNode = {
-      ...element,
-      data: {
-        ...element.data,
+    const nodeData = nodesData.get(nodeId);
+    if (nodeData) {
+      const newNodeData = {
+        ...nodeData,
         ui_props: {
-          ...element.data.ui_props,
+          ...nodeData.ui_props,
           moreHandles: event.target.checked,
         },
-      },
-    };
-    setNodeData(element.id, newNode.data);
-    // TBD
-    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+      };
+      setNodeData(nodeId, newNodeData);
+    }
   };
 
   const changeNodeSize = (
@@ -125,16 +107,16 @@ export default function EditNodeStyle(element: EwoksRFNode) {
 
   return (
     <FormControl variant="filled" fullWidth>
-      {element.data.task_props.task_type !== 'note' && (
+      {nodesData.get(nodeId)?.task_props.task_type !== 'note' && (
         <>
           <div>
             <label htmlFor="withImage">With Image</label>
             <Checkbox
               name="withImage"
               checked={
-                element.data.ui_props.withImage === undefined
+                nodesData.get(nodeId)?.ui_props.withImage === undefined
                   ? true
-                  : !!element.data.ui_props.withImage
+                  : !!nodesData.get(nodeId)?.ui_props.withImage
               }
               onChange={withImageChanged}
               inputProps={{ 'aria-label': 'controlled' }}
@@ -143,9 +125,9 @@ export default function EditNodeStyle(element: EwoksRFNode) {
             <Checkbox
               name="withLabel"
               checked={
-                element.data.ui_props.withLabel === undefined
+                nodesData.get(nodeId)?.ui_props.withLabel === undefined
                   ? true
-                  : !!element.data.ui_props.withLabel
+                  : !!nodesData.get(nodeId)?.ui_props.withLabel
               }
               onChange={withLabelChanged}
               inputProps={{ 'aria-label': 'controlled' }}
@@ -159,7 +141,7 @@ export default function EditNodeStyle(element: EwoksRFNode) {
               type="color"
               id="head"
               name="head"
-              value={element.data.ui_props.colorBorder || ''}
+              value={nodesData.get(nodeId)?.ui_props.colorBorder || ''}
               onChange={colorBorderChanged}
               style={{ margin: '10px' }}
             />
@@ -167,14 +149,14 @@ export default function EditNodeStyle(element: EwoksRFNode) {
         </>
       )}
       {!['graphInput', 'graphOutput', 'note'].includes(
-        element.data.task_props.task_type
+        nodesData.get(nodeId)?.task_props.task_type || ''
       ) && (
         <div>
           <div>
             <label htmlFor="moreHandles">More handles</label>
             <Checkbox
               name="moreHandles"
-              checked={!!element.data.ui_props.moreHandles}
+              checked={!!nodesData.get(nodeId)?.ui_props.moreHandles}
               onChange={moreHandlesChanged}
               inputProps={{ 'aria-label': 'controlled' }}
             />

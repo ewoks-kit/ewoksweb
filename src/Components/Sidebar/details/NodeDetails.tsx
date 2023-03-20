@@ -35,6 +35,8 @@ const useStyles = DashboardStyle;
 export default function NodeDetails(element: EwoksRFNode) {
   const classes = useStyles();
 
+  const nodesData = useNodeDataStore((state) => state.nodesData);
+
   const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
 
   const nodesIds = useNodesIds();
@@ -93,7 +95,8 @@ export default function NodeDetails(element: EwoksRFNode) {
   ];
 
   useEffect(() => {
-    setInputsComplete(element.data.ewoks_props.inputs_complete || false);
+    const nodeData = nodesData.get(element.id);
+    setInputsComplete(nodeData?.ewoks_props.inputs_complete || false);
     setDefaultErrorNode(element.data.ewoks_props.default_error_node || false);
     setDataMapping(
       element.data.ewoks_props.default_error_attributes?.data_mapping || []
@@ -101,7 +104,7 @@ export default function NodeDetails(element: EwoksRFNode) {
     setMapAllData(
       element.data.ewoks_props.default_error_attributes?.map_all_data || false
     );
-  }, [element]);
+  }, [element, nodesData]);
 
   function propChanged(propKeyValue: {
     task_identifier?: string;
@@ -174,19 +177,17 @@ export default function NodeDetails(element: EwoksRFNode) {
   }
 
   function inputsCompleteChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    const newNode = {
-      ...element,
-      data: {
-        ...element.data,
+    const nodeData = nodesData.get(element.id);
+    if (nodeData) {
+      const newNodeData = {
+        ...nodeData,
         ewoks_props: {
           ...element.data.ewoks_props,
           inputs_complete: event.target.checked,
         },
-      },
-    };
-    setNodeData(element.id, newNode.data);
-    // TBD
-    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+      };
+      setNodeData(element.id, newNodeData);
+    }
   }
 
   function defaulErrortNodeChanged(event: React.ChangeEvent<HTMLInputElement>) {
