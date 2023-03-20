@@ -18,8 +18,14 @@ import {
 } from '@material-ui/lab';
 import { FormControl, TextField, Tooltip } from '@material-ui/core';
 import useStore from 'store/useStore';
-import type { EditableTableRow, EwoksRFLink, GraphRF } from '../../types';
+import type {
+  EditableTableRow,
+  EwoksRFLink,
+  EwoksRFNodeData,
+  GraphRF,
+} from '../../types';
 import { useReactFlow } from 'reactflow';
+import useNodeDataStore from '../../store/useNodeDataStore';
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -53,6 +59,8 @@ interface Props {
 
 export default function DraggableDialog(props: Props) {
   const { getNodes, getEdges } = useReactFlow();
+
+  const nodesData = useNodeDataStore((state) => state.nodesData);
 
   const [graph, setGraph] = useState<Graph>({});
   const [oldGraph, setOldGraph] = useState<Graph>({});
@@ -106,7 +114,9 @@ export default function DraggableDialog(props: Props) {
   ) => {
     const graphRf: GraphRF = {
       graph: graphInfo,
-      nodes: getNodes(),
+      nodes: getNodes().map((nod) => {
+        return { ...nod, data: nodesData.get(nod.id) as EwoksRFNodeData };
+      }),
       links: getEdges() as EwoksRFLink[],
     };
 

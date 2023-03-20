@@ -8,8 +8,9 @@ import tooltipText from '../General/TooltipText';
 import { rfToEwoks } from '../../utils';
 
 import useStore from '../../store/useStore';
-import type { EwoksRFLink, GraphRF } from '../../types';
+import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../../types';
 import { useReactFlow } from 'reactflow';
+import useNodeDataStore from '../../store/useNodeDataStore';
 
 const useStyles = DashboardStyle;
 
@@ -23,6 +24,7 @@ function download(content: BlobPart, fileName: string, contentType: string) {
 
 export default function SaveGetFromDisk() {
   const classes = useStyles();
+  const nodesData = useNodeDataStore((state) => state.nodesData);
 
   const { getNodes, getEdges } = useReactFlow();
 
@@ -38,7 +40,9 @@ export default function SaveGetFromDisk() {
     if (graphInfo.label) {
       const graphRf: GraphRF = {
         graph: graphInfo,
-        nodes: getNodes(),
+        nodes: getNodes().map((nod) => {
+          return { ...nod, data: nodesData.get(nod.id) as EwoksRFNodeData };
+        }),
         links: getEdges() as EwoksRFLink[],
       };
       download(

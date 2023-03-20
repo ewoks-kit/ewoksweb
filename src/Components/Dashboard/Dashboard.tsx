@@ -31,6 +31,7 @@ import ErrorFallback from '../General/ErrorFallback';
 import MenuPopover from '../General/MenuPopover';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
+import type { EwoksRFNodeData } from '../../types';
 import { FormAction } from '../../types';
 import { getWorkflowsIds, putWorkflow } from '../../api/api';
 import { rfToEwoks, textForError } from '../../utils';
@@ -38,6 +39,7 @@ import commonStrings from '../../commonStrings.json';
 import type { AxiosResponse } from 'axios';
 import curateGraph from '../TopNavBar/utils/curateGraph';
 import { useStoreApi } from 'reactflow';
+import useNodeDataStore from '../../store/useNodeDataStore';
 
 const useStyles = DashboardStyle;
 
@@ -80,6 +82,7 @@ export default function Dashboard() {
   const initializedGraph = useStore((state) => state.initializedGraph);
   const initGraph = useStore((state) => state.initGraph);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const nodesData = useNodeDataStore((state) => state.nodesData);
 
   useEffect(() => {
     setOpenSettings(false);
@@ -218,7 +221,17 @@ export default function Dashboard() {
       try {
         const graphRFCurrated = curateGraph(graphInfo, storeRF.getState());
 
-        await putWorkflow(rfToEwoks(graphRFCurrated));
+        // TODO move nodesData out of Dashboard with saveToServer
+        const nodesWithData = graphRFCurrated.nodes.map((nod) => {
+          return { ...nod, data: nodesData.get(nod.id) as EwoksRFNodeData };
+        });
+
+        await putWorkflow(
+          rfToEwoks({
+            ...graphRFCurrated,
+            nodes: nodesWithData,
+          })
+        );
 
         setOpenSnackbar({
           open: true,

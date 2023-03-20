@@ -25,7 +25,6 @@ import LabelComment from './LabelComment';
 import DefaultInputs from '../EditableTableProperties/DefaultInputs';
 import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
-import { useNodesIds } from '../../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 
@@ -38,8 +37,6 @@ export default function NodeDetails(element: EwoksRFNode) {
   const nodesData = useNodeDataStore((state) => state.nodesData);
 
   const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
-
-  const nodesIds = useNodesIds();
 
   const showAdvancedDetails = useConfigStore(
     (state) => state.showAdvancedDetails
@@ -97,19 +94,23 @@ export default function NodeDetails(element: EwoksRFNode) {
   useEffect(() => {
     const nodeData = nodesData.get(element.id);
     setInputsComplete(nodeData?.ewoks_props.inputs_complete || false);
-    setDefaultErrorNode(element.data.ewoks_props.default_error_node || false);
+    setDefaultErrorNode(nodeData?.ewoks_props.default_error_node || false);
     setDataMapping(
-      element.data.ewoks_props.default_error_attributes?.data_mapping || []
+      nodeData?.ewoks_props.default_error_attributes?.data_mapping || []
     );
     setMapAllData(
-      element.data.ewoks_props.default_error_attributes?.map_all_data || false
+      nodeData?.ewoks_props.default_error_attributes?.map_all_data || false
     );
-  }, [element, nodesData]);
+  }, [element.id, nodesData]);
 
   function propChanged(propKeyValue: {
     task_identifier?: string;
     node_icon?: string;
   }) {
+    const nodeData = nodesData.get(element.id);
+    if (!nodeData) {
+      return;
+    }
     // DOC: if the task_identifier changes (ppfmethod, ppfport, script case) then the id
     // of the node needs to change for a coherent json.
     // All links to this node also change source and/or target!
@@ -117,19 +118,19 @@ export default function NodeDetails(element: EwoksRFNode) {
       // DOC: find unique id based on new task_identifier
       let uniqueId = Object.values(propKeyValue)[0];
       let id = 0;
-      while (nodesIds.some((nodeId) => nodeId === uniqueId)) {
+
+      while ([...nodesData.keys()].some((nodeId) => nodeId === uniqueId)) {
         uniqueId += id++;
       }
-
       const newNode = {
         ...element,
         id: uniqueId,
-        data: {
-          ...element.data,
-          task_props: {
-            ...element.data.task_props,
-            task_identifier: propKeyValue.task_identifier || '',
-          },
+      };
+      const newNodeData = {
+        ...nodeData,
+        task_props: {
+          ...nodeData.task_props,
+          task_identifier: propKeyValue.task_identifier || '',
         },
       };
 
@@ -150,10 +151,9 @@ export default function NodeDetails(element: EwoksRFNode) {
 
         return link;
       });
-      setNodeData(element.id, newNode.data);
-      // TBD
+      // All stay since it affects the canvas by modifying node id and associated links
+      setNodeData(element.id, newNodeData);
       setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
-
       setEdges(newLinks);
 
       return;
@@ -171,66 +171,68 @@ export default function NodeDetails(element: EwoksRFNode) {
         },
       };
       setNodeData(element.id, newNode.data);
-      // TBD
-      setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
     }
   }
 
   function inputsCompleteChanged(event: React.ChangeEvent<HTMLInputElement>) {
     const nodeData = nodesData.get(element.id);
-    if (nodeData) {
+    if (!nodeData) {
+      return;
+    }
+    const newNodeData = {
+      ...nodeData,
+      ewoks_props: {
+        ...nodeData.ewoks_props,
+        inputs_complete: event.target.checked,
+      },
+    };
+    setNodeData(element.id, newNodeData);
+  }
+
+  function defaulErrortNodeChanged(event: React.ChangeEvent<HTMLInputElement>) {
+    const nodeData = nodesData.get(element.id);
+    if (!nodeData) {
+      return;
+    }
+    const newNodeData = {
+      ...nodeData,
+      ewoks_props: {
+        ...nodeData.ewoks_props,
+        default_error_node: event.target.checked,
+      },
+    };
+    setNodeData(element.id, newNodeData);
+  }
+
+  function addDataMapping() {
+    const nodeData = nodesData.get(element.id);
+    if (!nodeData) {
+      return;
+    }
+
+    const elMap =
+      nodeData.ewoks_props.default_error_attributes?.data_mapping || [];
+
+    if (!elMap.some((x) => x.id === '')) {
       const newNodeData = {
         ...nodeData,
         ewoks_props: {
-          ...element.data.ewoks_props,
-          inputs_complete: event.target.checked,
+          ...nodeData.ewoks_props,
+          default_error_attributes: {
+            ...nodeData.ewoks_props.default_error_attributes,
+            data_mapping: [...elMap, { id: '', name: '', value: '' }],
+          },
         },
       };
       setNodeData(element.id, newNodeData);
     }
   }
 
-  function defaulErrortNodeChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    const newNode = {
-      ...element,
-      data: {
-        ...element.data,
-        ewoks_props: {
-          ...element.data.ewoks_props,
-          default_error_node: event.target.checked,
-        },
-      },
-    };
-    setNodeData(element.id, newNode.data);
-    // TBD
-    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
-  }
-
-  function addDataMapping() {
-    const elMap =
-      element.data.ewoks_props.default_error_attributes?.data_mapping || [];
-
-    if (!elMap.some((x) => x.id === '')) {
-      const newNode = {
-        ...element,
-        data: {
-          ...element.data,
-          ewoks_props: {
-            ...element.data.ewoks_props,
-            default_error_attributes: {
-              ...element.data.ewoks_props.default_error_attributes,
-              data_mapping: [...elMap, { id: '', name: '', value: '' }],
-            },
-          },
-        },
-      };
-      setNodeData(element.id, newNode.data);
-      // TBD
-      setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
-    }
-  }
-
   function dataMappingValuesChanged(table: EditableTableRow[]) {
+    const nodeData = nodesData.get(element.id);
+    if (!nodeData) {
+      return;
+    }
     const dmap: DataMapping[] = table.map((row) => {
       if (typeof row.value !== 'string') {
         throw new TypeError(
@@ -243,41 +245,36 @@ export default function NodeDetails(element: EwoksRFNode) {
       };
     });
 
-    const newNode = {
-      ...element,
-      data: {
-        ...element.data,
-        ewoks_props: {
-          ...element.data.ewoks_props,
-          default_error_attributes: {
-            ...element.data.ewoks_props.default_error_attributes,
-            data_mapping: dmap,
-          },
+    const newNodeData = {
+      ...nodeData,
+      ewoks_props: {
+        ...nodeData.ewoks_props,
+        default_error_attributes: {
+          ...nodeData.ewoks_props.default_error_attributes,
+          data_mapping: dmap,
         },
       },
     };
-    setNodeData(element.id, newNode.data);
-    // TBD
-    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+    setNodeData(element.id, newNodeData);
   }
 
   function mapAllDataChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    const newNode = {
-      ...element,
-      data: {
-        ...element.data,
-        ewoks_props: {
-          ...element.data.ewoks_props,
-          default_error_attributes: {
-            ...element.data.ewoks_props.default_error_attributes,
-            map_all_data: event.target.checked,
-          },
+    const nodeData = nodesData.get(element.id);
+    if (!nodeData) {
+      return;
+    }
+
+    const newNodeData = {
+      ...nodeData,
+      ewoks_props: {
+        ...nodeData.ewoks_props,
+        default_error_attributes: {
+          ...nodeData.ewoks_props.default_error_attributes,
+          map_all_data: event.target.checked,
         },
       },
     };
-    setNodeData(element.id, newNode.data);
-    // TBD
-    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+    setNodeData(element.id, newNodeData);
   }
 
   return (
