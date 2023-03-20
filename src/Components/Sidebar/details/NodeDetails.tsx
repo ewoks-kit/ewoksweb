@@ -35,6 +35,7 @@ export default function NodeDetails(element: EwoksRFNode) {
   const classes = useStyles();
 
   const nodesData = useNodeDataStore((state) => state.nodesData);
+  const nodeData = nodesData.get(element.id);
 
   const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
 
@@ -53,32 +54,32 @@ export default function NodeDetails(element: EwoksRFNode) {
     {
       id: 'task_type',
       label: 'Type',
-      value: element.data.task_props.task_type,
+      value: nodeData?.task_props.task_type || '',
     },
     {
       id: 'task_generator',
       label: 'Generator',
-      value: element.data.ewoks_props.task_generator,
+      value: nodeData?.ewoks_props.task_generator || '',
     },
     {
       id: 'task_category',
       label: 'Category',
-      value: element.data.task_props.task_category,
+      value: nodeData?.task_props.task_category || '',
     },
     {
       id: 'optional_input_names',
       label: 'Optional Inputs',
-      value: element.data.task_props.optional_input_names,
+      value: nodeData?.task_props.optional_input_names || [],
     },
     {
       id: 'required_input_names',
       label: 'Required Inputs',
-      value: element.data.task_props.required_input_names,
+      value: nodeData?.task_props.required_input_names || [],
     },
     {
       id: 'output_names',
       label: 'Outputs',
-      value: element.data.task_props.output_names,
+      value: nodeData?.task_props.output_names || [],
     },
   ];
 
@@ -86,13 +87,16 @@ export default function NodeDetails(element: EwoksRFNode) {
     {
       id: 'task_identifier',
       label: 'Task identifier',
-      value: element.data.task_props.task_identifier,
+      value: nodeData?.task_props.task_identifier || '',
     },
-    { id: 'node_icon', label: 'Icon', value: element.data.ui_props.icon },
+    {
+      id: 'node_icon',
+      label: 'Icon',
+      value: nodeData?.ui_props.icon || 'default',
+    },
   ];
 
   useEffect(() => {
-    const nodeData = nodesData.get(element.id);
     setInputsComplete(nodeData?.ewoks_props.inputs_complete || false);
     setDefaultErrorNode(nodeData?.ewoks_props.default_error_node || false);
     setDataMapping(
@@ -101,13 +105,12 @@ export default function NodeDetails(element: EwoksRFNode) {
     setMapAllData(
       nodeData?.ewoks_props.default_error_attributes?.map_all_data || false
     );
-  }, [element.id, nodesData]);
+  }, [element.id, nodeData]);
 
   function propChanged(propKeyValue: {
     task_identifier?: string;
     node_icon?: string;
   }) {
-    const nodeData = nodesData.get(element.id);
     if (!nodeData) {
       return;
     }
@@ -160,22 +163,18 @@ export default function NodeDetails(element: EwoksRFNode) {
     }
 
     if (Object.keys(propKeyValue)[0] === 'node_icon') {
-      const newNode = {
-        ...element,
-        data: {
-          ...element.data,
-          ui_props: {
-            ...element.data.ui_props,
-            icon: Object.values(propKeyValue)[0],
-          },
+      const newNodeData = {
+        ...nodeData,
+        ui_props: {
+          ...nodeData.ui_props,
+          icon: Object.values(propKeyValue)[0],
         },
       };
-      setNodeData(element.id, newNode.data);
+      setNodeData(element.id, newNodeData);
     }
   }
 
   function inputsCompleteChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    const nodeData = nodesData.get(element.id);
     if (!nodeData) {
       return;
     }
@@ -190,7 +189,6 @@ export default function NodeDetails(element: EwoksRFNode) {
   }
 
   function defaulErrortNodeChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    const nodeData = nodesData.get(element.id);
     if (!nodeData) {
       return;
     }
@@ -205,7 +203,6 @@ export default function NodeDetails(element: EwoksRFNode) {
   }
 
   function addDataMapping() {
-    const nodeData = nodesData.get(element.id);
     if (!nodeData) {
       return;
     }
@@ -229,7 +226,6 @@ export default function NodeDetails(element: EwoksRFNode) {
   }
 
   function dataMappingValuesChanged(table: EditableTableRow[]) {
-    const nodeData = nodesData.get(element.id);
     if (!nodeData) {
       return;
     }
@@ -259,7 +255,6 @@ export default function NodeDetails(element: EwoksRFNode) {
   }
 
   function mapAllDataChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    const nodeData = nodesData.get(element.id);
     if (!nodeData) {
       return;
     }
@@ -329,8 +324,6 @@ export default function NodeDetails(element: EwoksRFNode) {
         )}
         {defaultErrorNode && !mapAllData && showAdvancedDetails && (
           <div>
-            {/* TODO: Check and Replace Data Mapping with the component to have dropdowns if not rarely used */}
-            {/* <DataMappingComponent {...element} /> */}
             <b>Data Mapping </b>
             <IconButton
               style={{ padding: '1px' }}
