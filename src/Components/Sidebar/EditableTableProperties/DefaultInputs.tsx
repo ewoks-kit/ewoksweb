@@ -4,16 +4,16 @@ import EditableTable from './EditableTable';
 import { IconButton } from '@material-ui/core';
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
-import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 
 export default function DefaultInputs(element: EwoksRFNode) {
-  const { getNodes, setNodes } = useReactFlow();
-
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const nodesData = useNodeDataStore((state) => state.nodesData);
 
-  const defautInputs = element.data.ewoks_props.default_inputs;
+  const nodeData = nodesData.get(element.id);
+
+  const defautInputs = nodeData?.ewoks_props.default_inputs || [];
 
   function addDefaultInputs() {
     if (defautInputs?.some((x) => x.id === '')) {
@@ -23,45 +23,41 @@ export default function DefaultInputs(element: EwoksRFNode) {
         severity: 'warning',
       });
     } else {
-      const newNode = {
-        ...element,
-        data: {
-          ...element.data,
-          ewoks_props: {
-            ...element.data.ewoks_props,
-            default_inputs: [
-              ...(element.data.ewoks_props.default_inputs || []),
-              { id: '', name: '', value: '' },
-            ],
-          },
+      if (!nodeData) {
+        return;
+      }
+      const newNodeData = {
+        ...nodeData,
+        ewoks_props: {
+          ...nodeData?.ewoks_props,
+          default_inputs: [
+            ...(nodeData?.ewoks_props.default_inputs || []),
+            { id: '', name: '', value: '' },
+          ],
         },
       };
-      setNodeData(element.id, newNode.data);
-      // TBD
-      setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+      setNodeData(element.id, newNodeData);
     }
   }
 
   const defaultInputsChanged = (table: EditableTableRow[]) => {
-    const newNode = {
-      ...element,
-      data: {
-        ...element.data,
-        ewoks_props: {
-          ...element.data.ewoks_props,
-          default_inputs: table.map((dval) => {
-            return {
-              id: dval.name,
-              name: dval.name || '',
-              value: dval.value,
-            };
-          }),
-        },
+    if (!nodeData) {
+      return;
+    }
+    const newNodeData = {
+      ...nodeData,
+      ewoks_props: {
+        ...nodeData?.ewoks_props,
+        default_inputs: table.map((dval) => {
+          return {
+            id: dval.name,
+            name: dval.name || '',
+            value: dval.value,
+          };
+        }),
       },
     };
-    setNodeData(element.id, newNode.data);
-    // TBD
-    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+    setNodeData(element.id, newNodeData);
   };
 
   return (
@@ -92,8 +88,8 @@ export default function DefaultInputs(element: EwoksRFNode) {
             {
               type: 'select',
               values: [
-                ...(element.data.task_props?.optional_input_names || []),
-                ...(element.data.task_props?.required_input_names || []),
+                ...(nodeData?.task_props?.optional_input_names || []),
+                ...(nodeData?.task_props?.required_input_names || []),
               ],
             },
             { type: 'input' },

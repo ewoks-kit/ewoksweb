@@ -6,7 +6,6 @@ import SaveIcon from '@material-ui/icons/Save';
 import type { ChangeEvent } from 'react';
 import { IconButton, TextField } from '@material-ui/core';
 import type { NodeProps } from 'reactflow';
-import { useReactFlow } from 'reactflow';
 import type { EwoksRFNodeData } from '../types';
 import { useSelectedElement } from '../store/graph-hooks';
 import useNodeDataStore from '../store/useNodeDataStore';
@@ -15,15 +14,16 @@ type NoteProps = NodeProps<EwoksRFNodeData>;
 
 const NoteNode = (args: NoteProps) => {
   const selectedElement = useSelectedElement();
-  const { getNodes, setNodes } = useReactFlow();
 
   const [comment, setComment] = useState('');
 
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const nodesData = useNodeDataStore((state) => state.nodesData);
+  const nodeData = nodesData.get(args.id);
 
   useEffect(() => {
-    setComment(args.data.comment || '');
-  }, [args.data]);
+    setComment(nodeData?.comment || '');
+  }, [args.id, nodeData]);
 
   const customTitle = {
     ...style.title,
@@ -40,24 +40,17 @@ const NoteNode = (args: NoteProps) => {
 
   const save = () => {
     // TODO: If permenant put it in undo-redo and make title editable
-    const newNode = {
-      ...selectedElement,
-      data: {
-        task_props: { task_type: 'note', task_identifier: args.id },
-        ewoks_props: { label: args.data.ewoks_props.label },
-        ui_props: {},
-        comment,
-      },
-      id: args.id,
-      type: 'note',
-      position: { x: args.xPos || 500, y: args.yPos || 500 },
+    if (!nodeData) {
+      return;
+    }
+    const newNodeData = {
+      task_props: { task_type: 'note', task_identifier: args.id },
+      ewoks_props: { label: nodeData?.ewoks_props.label },
+      ui_props: {},
+      comment,
     };
-    setNodeData(selectedElement.id, newNode.data);
-    // TBD
-    setNodes([
-      ...getNodes().filter((nod) => nod.id !== selectedElement.id),
-      newNode,
-    ]);
+
+    setNodeData(selectedElement.id, newNodeData);
   };
 
   return (
@@ -73,16 +66,16 @@ const NoteNode = (args: NoteProps) => {
       tabIndex={0}
     >
       <span
-        style={{ maxWidth: `${args.data.ui_props.nodeWidth || 100}px` }}
+        style={{ maxWidth: `${nodeData?.ui_props.nodeWidth || 100}px` }}
         className="icons"
       >
-        {args.data.ewoks_props.label &&
-          args.data.ewoks_props.label.length > 0 && (
+        {nodeData?.ewoks_props.label &&
+          nodeData?.ewoks_props.label.length > 0 && (
             <div style={customTitle as React.CSSProperties}>
-              {args.data.ewoks_props.label}
+              {nodeData?.ewoks_props.label}
             </div>
           )}
-        {args.data.ui_props.details ? (
+        {nodeData?.ui_props.details ? (
           <TextField
             label="edit comment"
             multiline
@@ -94,7 +87,7 @@ const NoteNode = (args: NoteProps) => {
         ) : (
           <div style={{ wordWrap: 'break-word' }}>{comment}</div>
         )}
-        {args.data.ui_props.details && (
+        {nodeData?.ui_props.details && (
           <IconButton
             style={{ margin: '0px 2px', padding: '0px' }}
             aria-label="edit"

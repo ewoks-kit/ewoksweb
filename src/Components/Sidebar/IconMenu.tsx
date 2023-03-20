@@ -15,6 +15,7 @@ import type { EwoksRFLink, EwoksRFNode, GraphDetails, Task } from '../../types';
 import useStore from '../../store/useStore';
 import { FormAction } from '../../types';
 import { useSelectedElement } from '../../store/graph-hooks';
+import useNodeDataStore from '../../store/useNodeDataStore';
 
 export default function IconMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -32,6 +33,7 @@ export default function IconMenu() {
 
   const graphInfo = useStore((state) => state.graphInfo);
   const tasks = useStore((state) => state.tasks);
+  const nodesData = useNodeDataStore((state) => state.nodesData);
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
@@ -46,6 +48,7 @@ export default function IconMenu() {
     element: Task | EwoksRFNode | EwoksRFLink | GraphDetails
   ) {
     setDoAction(action);
+    const nodeData = nodesData.get(selectedElement.id);
     switch (action) {
       case 'newTask': {
         setElementToEdit(initializedTask);
@@ -54,7 +57,7 @@ export default function IconMenu() {
       case 'cloneTask': {
         // TODO: check for using isNode by extending each possible types
         if ('position' in element) {
-          if (element.data.task_props.task_type === 'graph') {
+          if (nodeData?.task_props.task_type === 'graph') {
             setOpenSnackbar({
               open: true,
               text: 'Cannot clone a graph, please select a Task!',
@@ -65,14 +68,14 @@ export default function IconMenu() {
           // DOC: if the task does not exist in the tasks populate the form with the element details
           const task = tasks.find(
             (tas) =>
-              tas.task_identifier === element.data.task_props.task_identifier
+              tas.task_identifier === nodeData?.task_props.task_identifier
           );
 
           setElementToEdit(
             task || {
               ...initializedTask,
-              task_identifier: element.data.task_props.task_identifier,
-              task_type: element.data.task_props.task_type,
+              task_identifier: nodeData?.task_props.task_identifier,
+              task_type: nodeData?.task_props.task_type,
             }
           );
         } else {

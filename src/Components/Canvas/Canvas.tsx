@@ -179,19 +179,6 @@ function Canvas() {
         });
       }
     });
-    // TBD
-    setNodes(
-      getNodes().map((nod) => {
-        return {
-          ...nod,
-          selected: false,
-          data: {
-            ...nod.data,
-            ui_props: { ...nod.data.ui_props, details: false },
-          },
-        };
-      })
-    );
   };
 
   // Keep this comment until execution is deleted
@@ -244,47 +231,46 @@ function Canvas() {
             };
 
       const nodesIds = [...stateRF.nodeInternals.keys()];
+      const newId =
+        task_type === 'graphInput'
+          ? calcNewId('In', nodesIds)
+          : task_type === 'graphOutput'
+          ? calcNewId('Out', nodesIds)
+          : task_type === 'note'
+          ? calcNewId('Note', nodesIds)
+          : calcNewId(task_identifier || 'Node', nodesIds);
 
       const newNode: EwoksRFNode = {
-        id:
-          task_type === 'graphInput'
-            ? calcNewId('In', nodesIds)
-            : task_type === 'graphOutput'
-            ? calcNewId('Out', nodesIds)
-            : task_type === 'note'
-            ? calcNewId('Note', nodesIds)
-            : calcNewId(task_identifier || 'Node', nodesIds),
+        id: newId,
         type: task_type,
-
         position,
-
-        data: {
-          task_props: {
-            task_type,
-            task_identifier,
-            optional_input_names: tempTask?.optional_input_names,
-            output_names: tempTask?.output_names,
-            required_input_names: tempTask?.required_input_names,
-          },
-          ewoks_props: {
-            label: trimLabel(task_identifier),
-            task_generator: '',
-            default_inputs: [],
-            inputs_complete: false,
-            default_error_node: false,
-            default_error_attributes: {
-              map_all_data: true,
-              data_mapping: [],
-            },
-          },
-          ui_props: {
-            icon,
-            moreHandles: false,
-            nodeWidth: 100,
+        data: {} as EwoksRFNodeData,
+      };
+      setNodeData(newId, {
+        task_props: {
+          task_type,
+          task_identifier,
+          optional_input_names: tempTask?.optional_input_names,
+          output_names: tempTask?.output_names,
+          required_input_names: tempTask?.required_input_names,
+        },
+        ewoks_props: {
+          label: trimLabel(task_identifier),
+          task_generator: '',
+          default_inputs: [],
+          inputs_complete: false,
+          default_error_node: false,
+          default_error_attributes: {
+            map_all_data: true,
+            data_mapping: [],
           },
         },
-      };
-
+        ui_props: {
+          icon,
+          moreHandles: false,
+          nodeWidth: 100,
+        },
+      });
       addNodes(newNode);
     } else {
       setOpenSnackbar({
@@ -352,8 +338,14 @@ function Canvas() {
     event.preventDefault();
 
     const nodeTmp = getNode(node.id);
-
-    if (nodeTmp?.data.task_props.task_type === 'graph') {
+    if (!nodeTmp) {
+      return;
+    }
+    const nodeData = nodesData.get(nodeTmp.id);
+    if (!nodeData) {
+      return;
+    }
+    if (nodeData.task_props.task_type === 'graph') {
       if (workingGraph.graph.id !== graphId) {
         addRecentGraph({
           graph: graphInfo,
@@ -362,7 +354,7 @@ function Canvas() {
         });
       }
       const subgraph = recentGraphs.find(
-        (gr) => gr.graph.id === nodeTmp.data.task_props.task_identifier
+        (gr) => gr.graph.id === nodeData.task_props.task_identifier
       );
 
       if (subgraph?.graph.id) {
@@ -388,22 +380,11 @@ function Canvas() {
         });
       }
     } else {
-      if (nodeTmp) {
-        const nodeTmpData: EwoksRFNodeData = {
-          ...nodeTmp.data,
-          ui_props: { ...nodeTmp.data.ui_props, details: true },
-        };
-        setNodeData(nodeTmp.id, nodeTmpData);
-
-        // TBD
-        setNodes([
-          ...getNodes().filter((nod) => nod.id !== nodeTmp.id),
-          {
-            ...nodeTmp,
-            data: nodeTmpData,
-          },
-        ]);
-      }
+      const nodeTmpData: EwoksRFNodeData = {
+        ...nodeData,
+        ui_props: { ...nodeData?.ui_props, details: true },
+      };
+      setNodeData(nodeTmp.id, nodeTmpData);
     }
   };
 

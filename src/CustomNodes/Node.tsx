@@ -74,6 +74,7 @@ function Node({
   const [detailsL, setDetailsL] = useState(false);
 
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const nodesData = useNodeDataStore((state) => state.nodesData);
 
   useEffect(() => {
     setNodeSize(nodeWidth);
@@ -135,19 +136,16 @@ function Node({
   };
 
   function setNodeLabel() {
-    if (!isNode(selectedElement)) {
+    const nodeData = nodesData.get(selectedElement.id);
+
+    if (!nodeData || !isNode(selectedElement)) {
       return;
     }
-    const newNode = {
-      ...selectedElement,
-      data: {
-        ...selectedElement.data,
-        ewoks_props: { ...selectedElement.data.ewoks_props, label: labelLocal },
-      },
+    const newNodeData = {
+      ...nodeData,
+      ewoks_props: { ...nodeData?.ewoks_props, label: labelLocal },
     };
-    setNodeData(selectedElement.id, newNode.data);
-    // TBD
-    setNodes([...getNodes().filter((nod) => nod.id !== newNode.id), newNode]);
+    setNodeData(selectedElement.id, newNodeData);
   }
 
   return (
