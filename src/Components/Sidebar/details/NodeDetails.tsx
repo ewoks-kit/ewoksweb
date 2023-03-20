@@ -368,7 +368,7 @@ export default function NodeDetails(element: EwoksRFNode) {
                 <div style={{ width: '100%' }}>
                   {editableTaskProperties.map(({ id, label, value }) =>
                     ['ppfmethod', 'method', 'script'].includes(
-                      element.data.task_props.task_type || ''
+                      nodeData?.task_props.task_type || ''
                     ) ? (
                       <EditTaskProp
                         key={id}
