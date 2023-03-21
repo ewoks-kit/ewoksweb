@@ -6,18 +6,19 @@ import useNodeDataStore from '../../../store/useNodeDataStore';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(props: { nodeId: string }) {
-  const nodesData = useNodeDataStore((state) => state.nodesData);
   const { nodeId } = props;
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(nodeId));
+
   const [nodeSize, setNodeSize] = useState<number>(
-    nodesData.get(nodeId)?.ui_props.nodeWidth || 100
+    nodeData?.ui_props.nodeWidth || 100
   );
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   const debouncedNodeWidth = useDebounce(nodeSize, 500);
 
   useEffect(() => {
-    setNodeSize(nodesData.get(nodeId)?.ui_props.nodeWidth || 100);
-  }, [nodeId, nodesData]);
+    setNodeSize(nodeData?.ui_props.nodeWidth || 100);
+  }, [nodeData]);
 
   useEffect(
     () => {
@@ -30,7 +31,6 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   );
 
   function setElementNodeWidth(width: number) {
-    const nodeData = nodesData.get(nodeId);
     if (nodeData && debouncedNodeWidth !== nodeData?.ui_props.nodeWidth) {
       const newNodeData = {
         ...nodeData,
@@ -41,7 +41,6 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   }
 
   function withImageChanged(event: ChangeEvent<HTMLInputElement>) {
-    const nodeData = nodesData.get(nodeId);
     if (nodeData) {
       const newNodeData = {
         ...nodeData,
@@ -55,7 +54,6 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   }
 
   function withLabelChanged(event: ChangeEvent<HTMLInputElement>) {
-    const nodeData = nodesData.get(nodeId);
     if (nodeData) {
       const newNodeData = {
         ...nodeData,
@@ -69,7 +67,6 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   }
 
   const colorBorderChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    const nodeData = nodesData.get(nodeId);
     if (nodeData) {
       const newNodeData = {
         ...nodeData,
@@ -83,7 +80,6 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   };
 
   const moreHandlesChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    const nodeData = nodesData.get(nodeId);
     if (nodeData) {
       const newNodeData = {
         ...nodeData,
@@ -107,16 +103,16 @@ export default function EditNodeStyle(props: { nodeId: string }) {
 
   return (
     <FormControl variant="filled" fullWidth>
-      {nodesData.get(nodeId)?.task_props.task_type !== 'note' && (
+      {nodeData?.task_props.task_type !== 'note' && (
         <>
           <div>
             <label htmlFor="withImage">With Image</label>
             <Checkbox
               name="withImage"
               checked={
-                nodesData.get(nodeId)?.ui_props.withImage === undefined
+                nodeData?.ui_props.withImage === undefined
                   ? true
-                  : !!nodesData.get(nodeId)?.ui_props.withImage
+                  : !!nodeData?.ui_props.withImage
               }
               onChange={withImageChanged}
               inputProps={{ 'aria-label': 'controlled' }}
@@ -125,9 +121,9 @@ export default function EditNodeStyle(props: { nodeId: string }) {
             <Checkbox
               name="withLabel"
               checked={
-                nodesData.get(nodeId)?.ui_props.withLabel === undefined
+                nodeData?.ui_props.withLabel === undefined
                   ? true
-                  : !!nodesData.get(nodeId)?.ui_props.withLabel
+                  : !!nodeData?.ui_props.withLabel
               }
               onChange={withLabelChanged}
               inputProps={{ 'aria-label': 'controlled' }}
@@ -141,7 +137,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
               type="color"
               id="head"
               name="head"
-              value={nodesData.get(nodeId)?.ui_props.colorBorder || ''}
+              value={nodeData?.ui_props.colorBorder || ''}
               onChange={colorBorderChanged}
               style={{ margin: '10px' }}
             />
@@ -149,14 +145,14 @@ export default function EditNodeStyle(props: { nodeId: string }) {
         </>
       )}
       {!['graphInput', 'graphOutput', 'note'].includes(
-        nodesData.get(nodeId)?.task_props.task_type || ''
+        nodeData?.task_props.task_type || ''
       ) && (
         <div>
           <div>
             <label htmlFor="moreHandles">More handles</label>
             <Checkbox
               name="moreHandles"
-              checked={!!nodesData.get(nodeId)?.ui_props.moreHandles}
+              checked={!!nodeData?.ui_props.moreHandles}
               onChange={moreHandlesChanged}
               inputProps={{ 'aria-label': 'controlled' }}
             />

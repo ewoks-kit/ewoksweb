@@ -15,10 +15,9 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
   const { selected, id } = props;
   const graphInfo = useStore((state) => state.graphInfo);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const nodesData = useNodeDataStore((state) => state.nodesData);
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
 
-  const uiProps = nodesData.get(id)?.ui_props;
-  const nodeData = nodesData.get(id);
+  const uiProps = nodeData?.ui_props;
 
   const isValidConnection = (connection: Connection) => {
     const graphRf: GraphRF = {

@@ -35,7 +35,7 @@ const useStyles = DashboardStyle;
 export default function NodeDetails(element: EwoksRFNode) {
   const classes = useStyles();
 
-  const nodesData = useNodeDataStore((state) => state.nodesData);
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
 
   const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
 
@@ -95,7 +95,6 @@ export default function NodeDetails(element: EwoksRFNode) {
   ];
 
   useEffect(() => {
-    const nodeData = nodesData.get(element.id);
     setInputsComplete(nodeData?.ewoks_props.inputs_complete || false);
     setDefaultErrorNode(element.data.ewoks_props.default_error_node || false);
     setDataMapping(
@@ -104,7 +103,7 @@ export default function NodeDetails(element: EwoksRFNode) {
     setMapAllData(
       element.data.ewoks_props.default_error_attributes?.map_all_data || false
     );
-  }, [element, nodesData]);
+  }, [element, nodeData]);
 
   function propChanged(propKeyValue: {
     task_identifier?: string;
@@ -177,7 +176,6 @@ export default function NodeDetails(element: EwoksRFNode) {
   }
 
   function inputsCompleteChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    const nodeData = nodesData.get(element.id);
     if (nodeData) {
       const newNodeData = {
         ...nodeData,
