@@ -34,7 +34,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   );
 
   function setElementNodeWidth(width: number, nodeDataProp: EwoksRFNodeData) {
-    if (debouncedNodeWidth !== nodeData?.ui_props.nodeWidth) {
+    if (debouncedNodeWidth !== nodeDataProp.ui_props.nodeWidth) {
       const newNodeData = {
         ...nodeDataProp,
         ui_props: { ...nodeDataProp.ui_props, nodeWidth: width },
@@ -43,54 +43,51 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     }
   }
 
-  function withImageChanged(event: ChangeEvent<HTMLInputElement>) {
+  function withImageChanged(checked: boolean, nodeDataProp: EwoksRFNodeData) {
     const newNodeData = {
-      ...nodeData,
+      ...nodeDataProp,
       ui_props: {
-        ...nodeData.ui_props,
-        withImage: event.target.checked,
+        ...nodeDataProp.ui_props,
+        withImage: checked,
       },
     };
     setNodeData(nodeId, newNodeData);
   }
 
-  function withLabelChanged(event: ChangeEvent<HTMLInputElement>) {
-    if (nodeData) {
-      const newNodeData = {
-        ...nodeData,
-        ui_props: {
-          ...nodeData.ui_props,
-          withLabel: event.target.checked,
-        },
-      };
-      setNodeData(nodeId, newNodeData);
-    }
+  function withLabelChanged(checked: boolean, nodeDataProp: EwoksRFNodeData) {
+    const newNodeData = {
+      ...nodeDataProp,
+      ui_props: {
+        ...nodeDataProp.ui_props,
+        withLabel: checked,
+      },
+    };
+    setNodeData(nodeId, newNodeData);
   }
 
-  const colorBorderChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    if (nodeData) {
-      const newNodeData = {
-        ...nodeData,
-        ui_props: {
-          ...nodeData.ui_props,
-          colorBorder: event.target.value,
-        },
-      };
-      setNodeData(nodeId, newNodeData);
-    }
+  const colorBorderChanged = (value: string, nodeDataProp: EwoksRFNodeData) => {
+    const newNodeData = {
+      ...nodeDataProp,
+      ui_props: {
+        ...nodeDataProp.ui_props,
+        colorBorder: value,
+      },
+    };
+    setNodeData(nodeId, newNodeData);
   };
 
-  const moreHandlesChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    if (nodeData) {
-      const newNodeData = {
-        ...nodeData,
-        ui_props: {
-          ...nodeData.ui_props,
-          moreHandles: event.target.checked,
-        },
-      };
-      setNodeData(nodeId, newNodeData);
-    }
+  const moreHandlesChanged = (
+    checked: boolean,
+    nodeDataProp: EwoksRFNodeData
+  ) => {
+    const newNodeData = {
+      ...nodeDataProp,
+      ui_props: {
+        ...nodeDataProp.ui_props,
+        moreHandles: checked,
+      },
+    };
+    setNodeData(nodeId, newNodeData);
   };
 
   const changeNodeSize = (
@@ -104,29 +101,33 @@ export default function EditNodeStyle(props: { nodeId: string }) {
 
   return (
     <FormControl variant="filled" fullWidth>
-      {nodeData?.task_props.task_type !== 'note' && (
+      {nodeData.task_props.task_type !== 'note' && (
         <>
           <div>
             <label htmlFor="withImage">With Image</label>
             <Checkbox
               name="withImage"
               checked={
-                nodeData?.ui_props.withImage === undefined
+                nodeData.ui_props.withImage === undefined
                   ? true
-                  : !!nodeData?.ui_props.withImage
+                  : !!nodeData.ui_props.withImage
               }
-              onChange={withImageChanged}
+              onChange={(event) =>
+                withImageChanged(event.target.checked, nodeData)
+              }
               inputProps={{ 'aria-label': 'controlled' }}
             />
             <label htmlFor="withLabel">With Label</label>
             <Checkbox
               name="withLabel"
               checked={
-                nodeData?.ui_props.withLabel === undefined
+                nodeData.ui_props.withLabel === undefined
                   ? true
-                  : !!nodeData?.ui_props.withLabel
+                  : !!nodeData.ui_props.withLabel
               }
-              onChange={withLabelChanged}
+              onChange={(event) =>
+                withLabelChanged(event.target.checked, nodeData)
+              }
               inputProps={{ 'aria-label': 'controlled' }}
             />
           </div>
@@ -138,23 +139,27 @@ export default function EditNodeStyle(props: { nodeId: string }) {
               type="color"
               id="head"
               name="head"
-              value={nodeData?.ui_props.colorBorder || ''}
-              onChange={colorBorderChanged}
+              value={nodeData.ui_props.colorBorder || ''}
+              onChange={(event) =>
+                colorBorderChanged(event.target.value, nodeData)
+              }
               style={{ margin: '10px' }}
             />
           </div>
         </>
       )}
       {!['graphInput', 'graphOutput', 'note'].includes(
-        nodeData?.task_props.task_type || ''
+        nodeData.task_props.task_type || ''
       ) && (
         <div>
           <div>
             <label htmlFor="moreHandles">More handles</label>
             <Checkbox
               name="moreHandles"
-              checked={!!nodeData?.ui_props.moreHandles}
-              onChange={moreHandlesChanged}
+              checked={!!nodeData.ui_props.moreHandles}
+              onChange={(event) =>
+                moreHandlesChanged(event.target.checked, nodeData)
+              }
               inputProps={{ 'aria-label': 'controlled' }}
             />
           </div>
