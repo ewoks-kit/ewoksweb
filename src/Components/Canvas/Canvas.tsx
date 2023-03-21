@@ -171,7 +171,7 @@ function Canvas() {
   }
 
   const onPaneClick = () => {
-    // Handle details differently and remove nodesData from canvas?
+    // TODO: Handle details differently and remove nodesData from canvas?
     nodesData.forEach((nodData, id) => {
       if (nodData.ui_props.details === true) {
         setNodeData(id, {

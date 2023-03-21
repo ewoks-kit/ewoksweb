@@ -3,54 +3,55 @@ import { Checkbox, FormControl, Slider } from '@material-ui/core';
 import useDebounce from '../../../hooks/useDebounce';
 import type { ChangeEvent } from 'react';
 import useNodeDataStore from '../../../store/useNodeDataStore';
+import { isNodeDataDefined } from '../../../utils/typeGuards';
+import type { EwoksRFNodeData } from '../../../types';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(props: { nodeId: string }) {
   const { nodeId } = props;
   const nodeData = useNodeDataStore((state) => state.nodesData.get(nodeId));
+  isNodeDataDefined(nodeData, nodeId);
 
   const [nodeSize, setNodeSize] = useState<number>(
-    nodeData?.ui_props.nodeWidth || 100
+    nodeData.ui_props.nodeWidth || 100
   );
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   const debouncedNodeWidth = useDebounce(nodeSize, 500);
 
   useEffect(() => {
-    setNodeSize(nodeData?.ui_props.nodeWidth || 100);
+    setNodeSize(nodeData.ui_props.nodeWidth || 100);
   }, [nodeData]);
 
   useEffect(
     () => {
       if (debouncedNodeWidth) {
-        setElementNodeWidth(debouncedNodeWidth);
+        setElementNodeWidth(debouncedNodeWidth, nodeData);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [debouncedNodeWidth] // Only call effect if debounced search term changes
   );
 
-  function setElementNodeWidth(width: number) {
-    if (nodeData && debouncedNodeWidth !== nodeData?.ui_props.nodeWidth) {
+  function setElementNodeWidth(width: number, nodeDataProp: EwoksRFNodeData) {
+    if (debouncedNodeWidth !== nodeData?.ui_props.nodeWidth) {
       const newNodeData = {
-        ...nodeData,
-        ui_props: { ...nodeData.ui_props, nodeWidth: width },
+        ...nodeDataProp,
+        ui_props: { ...nodeDataProp.ui_props, nodeWidth: width },
       };
       setNodeData(nodeId, newNodeData);
     }
   }
 
   function withImageChanged(event: ChangeEvent<HTMLInputElement>) {
-    if (nodeData) {
-      const newNodeData = {
-        ...nodeData,
-        ui_props: {
-          ...nodeData.ui_props,
-          withImage: event.target.checked,
-        },
-      };
-      setNodeData(nodeId, newNodeData);
-    }
+    const newNodeData = {
+      ...nodeData,
+      ui_props: {
+        ...nodeData.ui_props,
+        withImage: event.target.checked,
+      },
+    };
+    setNodeData(nodeId, newNodeData);
   }
 
   function withLabelChanged(event: ChangeEvent<HTMLInputElement>) {
