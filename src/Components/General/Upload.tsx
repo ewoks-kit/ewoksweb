@@ -7,6 +7,7 @@ import type { ChangeEvent, ReactNode } from 'react';
 import useStore from '../../store/useStore';
 import type { GraphEwoks, GraphRF } from '../../types';
 import { useReactFlow } from 'reactflow';
+import useNodeDataStore from '../../store/useNodeDataStore';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -39,7 +40,8 @@ function isJsonString(str: string): boolean {
 function Upload(props: { children?: ReactNode } | undefined) {
   const classes = useStyles();
 
-  const { getNodes, getEdges } = useReactFlow();
+  const { getNodes, getEdges, setNodes } = useReactFlow();
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   const graphInfo = useStore((state) => state.graphInfo);
   const graphOrSubgraph = useStore<boolean>((state) => state.graphOrSubgraph);
@@ -64,7 +66,13 @@ function Upload(props: { children?: ReactNode } | undefined) {
             // const { result } = validateEwoksGraph(newGraph);
             await initGraph(newGraph, 'fromDisk');
           } else {
-            await setSubGraph(newGraph, getNodes(), getEdges());
+            const newGraphNode = await setSubGraph(
+              newGraph,
+              getNodes(),
+              getEdges()
+            );
+            setNodes([...getNodes(), newGraphNode]);
+            setNodeData(newGraphNode.id, newGraphNode.data);
           }
         } else {
           setOpenSnackbar({

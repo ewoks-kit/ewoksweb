@@ -14,6 +14,7 @@ import type { GetState, SetState } from 'zustand';
 import type { State } from '../types';
 import { Position } from 'reactflow';
 import type { Node, Edge } from 'reactflow';
+import useNodeDataStore from './useNodeDataStore';
 
 export interface SubGraphSlice {
   subGraph: GraphRF;
@@ -101,6 +102,7 @@ const subGraph = (
         type: 'graph',
         position: calcCoordinatesFirstNode(nodes),
 
+        // DATAC needs to set nodeData for this subgraph?
         data: {
           task_props: {
             task_type: 'graph',
@@ -145,6 +147,8 @@ const subGraph = (
       nodes: [...nodes, newNode] as EwoksRFNode[],
       links: links as EwoksRFLink[],
     };
+
+    useNodeDataStore.getState().setNodeData(newNode.id, newNode.data);
 
     get().addRecentGraph(newWorkingGraph);
     return newNode;

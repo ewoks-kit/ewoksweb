@@ -35,6 +35,7 @@ const workingGraph = (
     // 3. Put the newNodeSubgraphs into recent in their graphRF form (sync)
     newNodeSubgraphs.forEach((gr) => {
       // calculate the rfNodes using the fetched subgraphs
+      // nodes and edges stored with their data as EwoksRFNodes-Links
       get().addRecentGraph({
         graph: gr.graph,
         nodes: toRFEwoksNodes(gr, newNodeSubgraphs, get().tasks),

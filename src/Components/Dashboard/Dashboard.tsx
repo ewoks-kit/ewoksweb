@@ -226,6 +226,7 @@ export default function Dashboard() {
           return { ...nod, data: nodesData.get(nod.id) as EwoksRFNodeData };
         });
 
+        // DATAC for edges too
         await putWorkflow(
           rfToEwoks({
             ...graphRFCurrated,

@@ -54,9 +54,11 @@ const executingEvents = (
       // DOC: define the position of the event nodes
       let tempPos: XYPosition = { x: 100, y: 100 };
 
+      // Replace graphRF
       const tempNode: EwoksRFNode | undefined = get().graphRF.nodes.find(
         (nod) =>
           nod.id === execEvent.node_id &&
+          // DATAC
           nod.data.task_props.task_identifier === execEvent.task_id
       );
 

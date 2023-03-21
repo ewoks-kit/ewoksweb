@@ -296,6 +296,7 @@ function Canvas() {
         links: edgesRF as EwoksRFLink[],
         graph: graphInfo,
       },
+      nodesData,
       oldEdge
     );
     if (!isValid) {
@@ -317,6 +318,7 @@ function Canvas() {
       return;
     }
 
+    // DATAC to nodes and edges
     const newGraph = addConnectionToGraph(params, {
       graph: graphInfo,
       nodes: getNodes(),

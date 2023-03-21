@@ -98,7 +98,7 @@ function Node({
       nodes: getNodes(),
       links: getEdges() as EwoksRFLink[],
     };
-    const { isValid, reason } = isValidLink(connection, graphRf);
+    const { isValid, reason } = isValidLink(connection, graphRf, nodesData);
     if (!isValid) {
       setOpenSnackbar({
         open: true,
