@@ -4,7 +4,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
-import { useReactFlow } from 'reactflow';
+import useEdgeDataStore from '../../../store/useEdgeDataStore';
 
 interface ConditionsProps {
   element: EwoksRFLink;
@@ -12,13 +12,13 @@ interface ConditionsProps {
 // DOC: The conditions for a link are being set in this component
 export default function Conditions(props: ConditionsProps) {
   const { element } = props;
-
-  const { getEdges, setEdges } = useReactFlow();
+  const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
+  const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   function addConditions() {
-    const elCon = element.data.conditions || [];
+    const elCon = edgeData?.conditions || [];
 
     // check if an empty line already exists
     if (elCon.some((x) => x.id === '')) {
@@ -30,31 +30,25 @@ export default function Conditions(props: ConditionsProps) {
       return;
     }
 
-    const newEdge = {
-      ...element,
-      data: {
-        ...element.data,
-        on_error: false,
-        conditions: [...elCon, { id: '', name: '', value: false }],
-      },
+    const newEdgeData = {
+      ...edgeData,
+      on_error: false,
+      conditions: [...elCon, { id: '', name: '', value: false }],
     };
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    setEdgeData(element.id, newEdgeData);
   }
 
   function conditionsValuesChanged(table: EditableTableRow[]) {
-    const newEdge = {
-      ...element,
-      data: {
-        ...element.data,
-        conditions: table.map((con1) => {
-          return {
-            source_output: con1.name,
-            value: con1.value,
-          };
-        }),
-      },
+    const newEdgeData = {
+      ...edgeData,
+      conditions: table.map((con1) => {
+        return {
+          source_output: con1.name,
+          value: con1.value,
+        };
+      }),
     };
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    setEdgeData(element.id, newEdgeData);
   }
 
   return (
@@ -74,15 +68,15 @@ export default function Conditions(props: ConditionsProps) {
       >
         <AddCircleOutlineIcon />
       </IconButton>
-      {element.data.conditions && element.data.conditions.length > 0 && (
+      {edgeData?.conditions && edgeData.conditions.length > 0 && (
         <EditableTable
           headers={['Output', 'Value']}
-          defaultValues={element.data.conditions}
+          defaultValues={edgeData.conditions}
           valuesChanged={conditionsValuesChanged}
           typeOfValues={[
             {
               type: 'select',
-              values: element.data.links_input_names || [],
+              values: edgeData.links_input_names || [],
             },
             {
               type: 'input',

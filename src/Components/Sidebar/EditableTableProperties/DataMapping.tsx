@@ -6,18 +6,18 @@ import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import { useNode } from '../../../store/graph-hooks';
 import { isClass } from './utils';
-import { useReactFlow } from 'reactflow';
+import useEdgeDataStore from '../../../store/useEdgeDataStore';
 
 export default function DataMappingComponent(element: EwoksRFLink) {
-  const { getEdges, setEdges } = useReactFlow();
-
+  const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
+  const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const sourceNode = useNode(element.source);
   const targetNode = useNode(element.target);
 
   function addDataMapping() {
-    if (element.data.data_mapping?.some((x) => x.id === '')) {
+    if (edgeData?.data_mapping?.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before adding another!',
@@ -25,17 +25,14 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       });
       return;
     }
-    const newEdge = {
-      ...element,
-      data: {
-        ...element.data,
-        data_mapping: [
-          ...(element.data.data_mapping || []),
-          { id: '', name: '', value: '' },
-        ],
-      },
+    const newEdgeData = {
+      ...edgeData,
+      data_mapping: [
+        ...(edgeData?.data_mapping || []),
+        { id: '', name: '', value: '' },
+      ],
     };
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    setEdgeData(element.id, newEdgeData);
   }
 
   const dataMappingValuesChanged = (table: DataMapping[]) => {
@@ -45,17 +42,11 @@ export default function DataMappingComponent(element: EwoksRFLink) {
         target_input: row.value as string,
       };
     });
-    const newEdge = {
-      ...element,
-      label: dmap
-        .map((el) => `${el.source_output || ''}->${el.target_input || ''}`)
-        .join(', '),
-      data: {
-        ...element.data,
-        data_mapping: dmap,
-      },
+    const newEdgeData = {
+      ...edgeData,
+      data_mapping: dmap,
     };
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    setEdgeData(element.id, newEdgeData);
   };
 
   return (
@@ -75,10 +66,10 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       >
         <AddCircleOutlineIcon />
       </IconButton>
-      {element.data.data_mapping && element.data.data_mapping.length > 0 && (
+      {edgeData?.data_mapping && edgeData.data_mapping.length > 0 && (
         <EditableTable
           headers={['Source', 'Target']}
-          defaultValues={element.data.data_mapping}
+          defaultValues={edgeData.data_mapping}
           valuesChanged={dataMappingValuesChanged}
           typeOfValues={[
             {
@@ -87,7 +78,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
                   ? 'select'
                   : 'input'
                 : 'input',
-              values: element.data.links_input_names || [],
+              values: edgeData.links_input_names || [],
             },
             {
               type: element.target
@@ -96,8 +87,8 @@ export default function DataMappingComponent(element: EwoksRFLink) {
                   : 'input'
                 : 'input',
               values: [
-                ...(element.data.links_required_output_names || []),
-                ...(element.data.links_optional_output_names || []),
+                ...(edgeData.links_required_output_names || []),
+                ...(edgeData.links_optional_output_names || []),
               ],
             },
           ]}
