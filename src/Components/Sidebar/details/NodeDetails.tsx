@@ -29,6 +29,7 @@ import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
+import { useNodesIds } from '../../../store/graph-hooks';
 
 const useStyles = DashboardStyle;
 
@@ -36,11 +37,12 @@ const useStyles = DashboardStyle;
 export default function NodeDetails(element: EwoksRFNode) {
   const classes = useStyles();
 
-  const nodesData = useNodeDataStore((state) => state.nodesData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
   assertNodeDataDefined(nodeData, element.id);
 
   const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
+
+  const nodesIds = useNodesIds();
 
   const showAdvancedDetails = useConfigStore(
     (state) => state.showAdvancedDetails
@@ -125,7 +127,7 @@ export default function NodeDetails(element: EwoksRFNode) {
       let uniqueId = Object.values(propKeyValue)[0];
       let id = 0;
       // TODO not use nodesData to calculati new id
-      while ([...nodesData.keys()].some((nodeId) => nodeId === uniqueId)) {
+      while (nodesIds.some((nodeId) => nodeId === uniqueId)) {
         uniqueId += id++;
       }
       const newNode = {
