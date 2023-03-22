@@ -285,7 +285,7 @@ function Canvas() {
           },
         },
       };
-
+      setNodeData(newNode.id, newNode.data);
       addNodes(newNode);
     } else {
       setOpenSnackbar({
