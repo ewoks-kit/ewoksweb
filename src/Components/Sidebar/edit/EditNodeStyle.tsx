@@ -3,14 +3,14 @@ import { Checkbox, FormControl, Slider } from '@material-ui/core';
 import useDebounce from '../../../hooks/useDebounce';
 import type { ChangeEvent } from 'react';
 import useNodeDataStore from '../../../store/useNodeDataStore';
-import { isNodeDataDefined } from '../../../utils/typeGuards';
+import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import type { EwoksRFNodeData } from '../../../types';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(props: { nodeId: string }) {
   const { nodeId } = props;
   const nodeData = useNodeDataStore((state) => state.nodesData.get(nodeId));
-  isNodeDataDefined(nodeData, nodeId);
+  assertNodeDataDefined(nodeData, nodeId);
 
   const [nodeSize, setNodeSize] = useState<number>(
     nodeData.ui_props.nodeWidth || 100

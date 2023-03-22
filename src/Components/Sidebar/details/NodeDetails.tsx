@@ -29,7 +29,7 @@ import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
 import { useNodesIds } from '../../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../../store/useNodeDataStore';
-import { isNodeDataDefined } from '../../../utils/typeGuards';
+import { assertNodeDataDefined } from '../../../utils/typeGuards';
 
 const useStyles = DashboardStyle;
 
@@ -38,7 +38,7 @@ export default function NodeDetails(element: EwoksRFNode) {
   const classes = useStyles();
 
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
-  isNodeDataDefined(nodeData, element.id);
+  assertNodeDataDefined(nodeData, element.id);
 
   const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
 
@@ -190,6 +190,16 @@ export default function NodeDetails(element: EwoksRFNode) {
       },
     };
     setNodeData(element.id, newNodeData);
+
+    // TBD
+    // const newNodeData1 = {
+    //   ewoks_props: {
+    //     inputs_complete: checked,
+    //   },
+    // };
+    // console.log(checked, newNodeData1);
+
+    // mergeNodeData(element.id, newNodeData1 as EwoksRFNodeData);
   }
 
   function defaulErrortNodeChanged(event: React.ChangeEvent<HTMLInputElement>) {

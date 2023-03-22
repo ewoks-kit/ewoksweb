@@ -76,7 +76,7 @@ export function isMarkerType(val: string): val is MarkerType {
   return Object.values<string>(MarkerType).includes(val);
 }
 
-export function isNodeDataDefined(
+export function assertNodeDataDefined(
   nodeData: EwoksRFNodeData | undefined,
   nodeId: string
 ): asserts nodeData is EwoksRFNodeData extends undefined

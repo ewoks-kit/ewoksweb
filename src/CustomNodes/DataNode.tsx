@@ -3,13 +3,13 @@ import type { NodeProps } from 'reactflow';
 import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
 import useNodeDataStore from '../store/useNodeDataStore';
-import { isNodeDataDefined } from '../utils/typeGuards';
+import { assertNodeDataDefined } from '../utils/typeGuards';
 
 function DataNode(args: NodeProps) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
-  isNodeDataDefined(nodeData, args.id);
+  assertNodeDataDefined(nodeData, args.id);
 
-  const uiProps = nodeData.ui_props;
+  const { ui_props: uiProps } = nodeData;
 
   return (
     <Node
