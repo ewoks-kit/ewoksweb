@@ -3,6 +3,7 @@ import type {
   DataMapping,
   EditableTableRow,
   EwoksRFNode,
+  EwoksRFNodeData,
 } from '../../../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from '../EditableTableProperties/EditableTable';
@@ -27,6 +28,7 @@ import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../../store/useNodeDataStore';
+import { assertNodeDataDefined } from '../../../utils/typeGuards';
 
 const useStyles = DashboardStyle;
 
@@ -35,7 +37,8 @@ export default function NodeDetails(element: EwoksRFNode) {
   const classes = useStyles();
 
   const nodesData = useNodeDataStore((state) => state.nodesData);
-  const nodeData = nodesData.get(element.id);
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
+  assertNodeDataDefined(nodeData, element.id);
 
   const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
 
@@ -97,15 +100,15 @@ export default function NodeDetails(element: EwoksRFNode) {
   ];
 
   useEffect(() => {
-    setInputsComplete(nodeData?.ewoks_props.inputs_complete || false);
-    setDefaultErrorNode(nodeData?.ewoks_props.default_error_node || false);
+    setInputsComplete(nodeData.ewoks_props.inputs_complete || false);
+    setDefaultErrorNode(nodeData.ewoks_props.default_error_node || false);
     setDataMapping(
       nodeData?.ewoks_props.default_error_attributes?.data_mapping || []
     );
     setMapAllData(
       nodeData?.ewoks_props.default_error_attributes?.map_all_data || false
     );
-  }, [element.id, nodeData]);
+  }, [nodeData]);
 
   function propChanged(propKeyValue: {
     task_identifier?: string;
@@ -121,7 +124,7 @@ export default function NodeDetails(element: EwoksRFNode) {
       // DOC: find unique id based on new task_identifier
       let uniqueId = Object.values(propKeyValue)[0];
       let id = 0;
-
+      // TODO not use nodesData to calculati new id
       while ([...nodesData.keys()].some((nodeId) => nodeId === uniqueId)) {
         uniqueId += id++;
       }
@@ -174,18 +177,28 @@ export default function NodeDetails(element: EwoksRFNode) {
     }
   }
 
-  function inputsCompleteChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    if (!nodeData) {
-      return;
-    }
+  function inputsCompleteChanged(
+    checked: boolean,
+    nodeDataProp: EwoksRFNodeData
+  ) {
     const newNodeData = {
-      ...nodeData,
+      ...nodeDataProp,
       ewoks_props: {
-        ...nodeData.ewoks_props,
-        inputs_complete: event.target.checked,
+        ...nodeDataProp.ewoks_props,
+        inputs_complete: checked,
       },
     };
     setNodeData(element.id, newNodeData);
+
+    // TBD
+    // const newNodeData1 = {
+    //   ewoks_props: {
+    //     inputs_complete: checked,
+    //   },
+    // };
+    // console.log(checked, newNodeData1);
+
+    // mergeNodeData(element.id, newNodeData1 as EwoksRFNodeData);
   }
 
   function defaulErrortNodeChanged(event: React.ChangeEvent<HTMLInputElement>) {
@@ -290,7 +303,9 @@ export default function NodeDetails(element: EwoksRFNode) {
                 <b>Inputs-complete</b>
                 <Checkbox
                   checked={inputsComplete}
-                  onChange={inputsCompleteChanged}
+                  onChange={(event) =>
+                    inputsCompleteChanged(event.target.checked, nodeData)
+                  }
                   inputProps={{ 'aria-label': 'controlled' }}
                 />
               </div>

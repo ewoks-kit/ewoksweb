@@ -171,6 +171,7 @@ function Canvas() {
   }
 
   const onPaneClick = () => {
+    // TODO: Handle details differently and remove nodesData from canvas?
     nodesData.forEach((nodData, id) => {
       if (nodData.ui_props.details === true) {
         setNodeData(id, {
@@ -284,7 +285,7 @@ function Canvas() {
           },
         },
       };
-
+      setNodeData(newNode.id, newNode.data);
       addNodes(newNode);
     } else {
       setOpenSnackbar({
@@ -366,7 +367,6 @@ function Canvas() {
       );
 
       if (subgraph?.graph.id) {
-        // Both stay. Can it create multiple canvas rerenders to set the both?
         setNodes(subgraph.nodes);
 
         setNodesData(subgraph.nodes);
