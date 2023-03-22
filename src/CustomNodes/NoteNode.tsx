@@ -19,10 +19,8 @@ const NoteNode = (args: NoteProps) => {
   const [comment, setComment] = useState('');
 
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
-  const nodeData = useNodeDataStore((state) =>
-    state.nodesData.get(selectedElement.id)
-  );
-  assertNodeDataDefined(nodeData, selectedElement.id);
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
+  assertNodeDataDefined(nodeData, args.id);
 
   useEffect(() => {
     setComment(nodeData.comment || '');

@@ -40,10 +40,10 @@ export default function IconMenu() {
 
   const graphInfo = useStore((state) => state.graphInfo);
   const tasks = useStore((state) => state.tasks);
-  const nodeData = useNodeDataStore((state) =>
-    state.nodesData.get(selectedElement.id)
+  const nodeData = useNodeDataStore(
+    (state) =>
+      state.nodesData.get(selectedElement.id) || ({} as EwoksRFNodeData)
   );
-  assertNodeDataDefined(nodeData, selectedElement.id);
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
@@ -55,10 +55,10 @@ export default function IconMenu() {
 
   function onAction(
     action: FormAction,
-    element: Task | EwoksRFNode | EwoksRFLink | GraphDetails,
-    nodeDataProps: EwoksRFNodeData
+    element: Task | EwoksRFNode | EwoksRFLink | GraphDetails
   ) {
     setDoAction(action);
+
     switch (action) {
       case 'newTask': {
         setElementToEdit(initializedTask);
@@ -67,7 +67,7 @@ export default function IconMenu() {
       case 'cloneTask': {
         // TODO: check for using isNode by extending each possible types
         if ('position' in element) {
-          if (nodeDataProps.task_props.task_type === 'graph') {
+          if (nodeData?.task_props.task_type === 'graph') {
             setOpenSnackbar({
               open: true,
               text: 'Cannot clone a graph, please select a Task!',
@@ -78,14 +78,14 @@ export default function IconMenu() {
           // DOC: if the task does not exist in the tasks populate the form with the element details
           const task = tasks.find(
             (tas) =>
-              tas.task_identifier === nodeDataProps.task_props.task_identifier
+              tas.task_identifier === nodeData?.task_props.task_identifier
           );
 
           setElementToEdit(
             task || {
               ...initializedTask,
-              task_identifier: nodeDataProps.task_props.task_identifier,
-              task_type: nodeDataProps.task_props.task_type,
+              task_identifier: nodeData?.task_props.task_identifier,
+              task_type: nodeData?.task_props.task_type,
             }
           );
         } else {
@@ -142,9 +142,7 @@ export default function IconMenu() {
         <Paper>
           <MenuList>
             <MenuItem
-              onClick={() =>
-                onAction(FormAction.newTask, initializedTask, nodeData)
-              }
+              onClick={() => onAction(FormAction.newTask, initializedTask)}
             >
               <ListItemIcon>
                 <FiberNewIcon fontSize="small" />
@@ -152,9 +150,7 @@ export default function IconMenu() {
               <ListItemText>New Task</ListItemText>
             </MenuItem>
             <MenuItem
-              onClick={() =>
-                onAction(FormAction.cloneTask, selectedElement, nodeData)
-              }
+              onClick={() => onAction(FormAction.cloneTask, selectedElement)}
             >
               <ListItemIcon>
                 <FileCopyIcon fontSize="small" />
@@ -162,9 +158,7 @@ export default function IconMenu() {
               <ListItemText>Clone as Task</ListItemText>
             </MenuItem>
             <MenuItem
-              onClick={() =>
-                onAction(FormAction.cloneGraph, graphInfo, nodeData)
-              }
+              onClick={() => onAction(FormAction.cloneGraph, graphInfo)}
             >
               <ListItemIcon>
                 <FileCopyIcon fontSize="small" />
