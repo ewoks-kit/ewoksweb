@@ -9,7 +9,12 @@ import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
 import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from '../sidebarStyle';
-import { isLink, isNode, isString } from '../../../utils/typeGuards';
+import {
+  assertNodeDataDefined,
+  isLink,
+  isNode,
+  isString,
+} from '../../../utils/typeGuards';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 
@@ -38,13 +43,13 @@ export default function LabelComment(props: LabelCommentProps) {
 
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
-  const nodesData = useNodeDataStore((state) => state.nodesData);
-  const nodeData = nodesData.get(element.id);
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
+  assertNodeDataDefined(nodeData, element.id);
 
   useEffect(() => {
     if (isNode(element)) {
-      setLabel(nodeData?.ewoks_props.label || '');
-      setComment(nodeData?.comment || '');
+      setLabel(nodeData.ewoks_props.label || '');
+      setComment(nodeData.comment || '');
       return;
     }
 

@@ -11,11 +11,18 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { Button, Menu, Tooltip } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import FormDialog from '../General/FormDialog';
-import type { EwoksRFLink, EwoksRFNode, GraphDetails, Task } from '../../types';
+import type {
+  EwoksRFLink,
+  EwoksRFNode,
+  EwoksRFNodeData,
+  GraphDetails,
+  Task,
+} from '../../types';
 import useStore from '../../store/useStore';
 import { FormAction } from '../../types';
 import { useSelectedElement } from '../../store/graph-hooks';
 import useNodeDataStore from '../../store/useNodeDataStore';
+import { assertNodeDataDefined } from '../../utils/typeGuards';
 
 export default function IconMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -33,7 +40,10 @@ export default function IconMenu() {
 
   const graphInfo = useStore((state) => state.graphInfo);
   const tasks = useStore((state) => state.tasks);
-  const nodesData = useNodeDataStore((state) => state.nodesData);
+  const nodeData = useNodeDataStore((state) =>
+    state.nodesData.get(selectedElement.id)
+  );
+  assertNodeDataDefined(nodeData, selectedElement.id);
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
@@ -45,10 +55,10 @@ export default function IconMenu() {
 
   function onAction(
     action: FormAction,
-    element: Task | EwoksRFNode | EwoksRFLink | GraphDetails
+    element: Task | EwoksRFNode | EwoksRFLink | GraphDetails,
+    nodeDataProps: EwoksRFNodeData
   ) {
     setDoAction(action);
-    const nodeData = nodesData.get(selectedElement.id);
     switch (action) {
       case 'newTask': {
         setElementToEdit(initializedTask);
@@ -57,7 +67,7 @@ export default function IconMenu() {
       case 'cloneTask': {
         // TODO: check for using isNode by extending each possible types
         if ('position' in element) {
-          if (nodeData?.task_props.task_type === 'graph') {
+          if (nodeDataProps.task_props.task_type === 'graph') {
             setOpenSnackbar({
               open: true,
               text: 'Cannot clone a graph, please select a Task!',
@@ -68,14 +78,14 @@ export default function IconMenu() {
           // DOC: if the task does not exist in the tasks populate the form with the element details
           const task = tasks.find(
             (tas) =>
-              tas.task_identifier === nodeData?.task_props.task_identifier
+              tas.task_identifier === nodeDataProps.task_props.task_identifier
           );
 
           setElementToEdit(
             task || {
               ...initializedTask,
-              task_identifier: nodeData?.task_props.task_identifier,
-              task_type: nodeData?.task_props.task_type,
+              task_identifier: nodeDataProps.task_props.task_identifier,
+              task_type: nodeDataProps.task_props.task_type,
             }
           );
         } else {
@@ -132,7 +142,9 @@ export default function IconMenu() {
         <Paper>
           <MenuList>
             <MenuItem
-              onClick={() => onAction(FormAction.newTask, initializedTask)}
+              onClick={() =>
+                onAction(FormAction.newTask, initializedTask, nodeData)
+              }
             >
               <ListItemIcon>
                 <FiberNewIcon fontSize="small" />
@@ -140,7 +152,9 @@ export default function IconMenu() {
               <ListItemText>New Task</ListItemText>
             </MenuItem>
             <MenuItem
-              onClick={() => onAction(FormAction.cloneTask, selectedElement)}
+              onClick={() =>
+                onAction(FormAction.cloneTask, selectedElement, nodeData)
+              }
             >
               <ListItemIcon>
                 <FileCopyIcon fontSize="small" />
@@ -148,7 +162,9 @@ export default function IconMenu() {
               <ListItemText>Clone as Task</ListItemText>
             </MenuItem>
             <MenuItem
-              onClick={() => onAction(FormAction.cloneGraph, graphInfo)}
+              onClick={() =>
+                onAction(FormAction.cloneGraph, graphInfo, nodeData)
+              }
             >
               <ListItemIcon>
                 <FileCopyIcon fontSize="small" />
