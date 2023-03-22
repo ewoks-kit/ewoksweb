@@ -3,6 +3,7 @@ import type {
   DataMapping,
   EditableTableRow,
   EwoksRFNode,
+  EwoksRFNodeData,
 } from '../../../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from '../EditableTableProperties/EditableTable';
@@ -28,12 +29,16 @@ import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
 import { useNodesIds } from '../../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../../store/useNodeDataStore';
+import { assertNodeDataDefined } from '../../../utils/typeGuards';
 
 const useStyles = DashboardStyle;
 
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(element: EwoksRFNode) {
   const classes = useStyles();
+
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
+  assertNodeDataDefined(nodeData, element.id);
 
   const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
 
@@ -93,7 +98,7 @@ export default function NodeDetails(element: EwoksRFNode) {
   ];
 
   useEffect(() => {
-    setInputsComplete(element.data.ewoks_props.inputs_complete || false);
+    setInputsComplete(nodeData.ewoks_props.inputs_complete || false);
     setDefaultErrorNode(element.data.ewoks_props.default_error_node || false);
     setDataMapping(
       element.data.ewoks_props.default_error_attributes?.data_mapping || []
@@ -101,7 +106,7 @@ export default function NodeDetails(element: EwoksRFNode) {
     setMapAllData(
       element.data.ewoks_props.default_error_attributes?.map_all_data || false
     );
-  }, [element]);
+  }, [element, nodeData]);
 
   function propChanged(propKeyValue: {
     task_identifier?: string;
@@ -173,20 +178,28 @@ export default function NodeDetails(element: EwoksRFNode) {
     }
   }
 
-  function inputsCompleteChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    const newNode = {
-      ...element,
-      data: {
-        ...element.data,
-        ewoks_props: {
-          ...element.data.ewoks_props,
-          inputs_complete: event.target.checked,
-        },
+  function inputsCompleteChanged(
+    checked: boolean,
+    nodeDataProp: EwoksRFNodeData
+  ) {
+    const newNodeData = {
+      ...nodeDataProp,
+      ewoks_props: {
+        ...element.data.ewoks_props,
+        inputs_complete: checked,
       },
     };
-    setNodeData(element.id, newNode.data);
+    setNodeData(element.id, newNodeData);
+
     // TBD
-    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+    // const newNodeData1 = {
+    //   ewoks_props: {
+    //     inputs_complete: checked,
+    //   },
+    // };
+    // console.log(checked, newNodeData1);
+
+    // mergeNodeData(element.id, newNodeData1 as EwoksRFNodeData);
   }
 
   function defaulErrortNodeChanged(event: React.ChangeEvent<HTMLInputElement>) {
@@ -297,7 +310,9 @@ export default function NodeDetails(element: EwoksRFNode) {
                 <b>Inputs-complete</b>
                 <Checkbox
                   checked={inputsComplete}
-                  onChange={inputsCompleteChanged}
+                  onChange={(event) =>
+                    inputsCompleteChanged(event.target.checked, nodeData)
+                  }
                   inputProps={{ 'aria-label': 'controlled' }}
                 />
               </div>

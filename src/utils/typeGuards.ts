@@ -1,5 +1,10 @@
 import { MarkerType } from 'reactflow';
-import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../types';
+import type {
+  EwoksRFLink,
+  EwoksRFNode,
+  EwoksRFNodeData,
+  GraphDetails,
+} from '../types';
 
 export interface EwoksServerErrorResponse {
   response: { data: { message: string } };
@@ -69,4 +74,13 @@ export function assertStr(
 
 export function isMarkerType(val: string): val is MarkerType {
   return Object.values<string>(MarkerType).includes(val);
+}
+
+export function assertNodeDataDefined(
+  nodeData: EwoksRFNodeData | undefined,
+  nodeId: string
+): asserts nodeData is EwoksRFNodeData extends undefined
+  ? never
+  : EwoksRFNodeData {
+  assertDefined(nodeData, `Node with id ${nodeId} has undefined data!`);
 }

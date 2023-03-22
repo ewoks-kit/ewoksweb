@@ -7,13 +7,19 @@ import isValidLink from '../utils/IsValidLink';
 import useStore from '../store/useStore';
 import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../types';
 import { useReactFlow } from 'reactflow';
+import useNodeDataStore from '../store/useNodeDataStore';
+import { assertNodeDataDefined } from '../utils/typeGuards';
 
 function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
   const { getNodes, getEdges } = useReactFlow();
 
-  const { data: node, selected } = props;
+  const { selected, id } = props;
   const graphInfo = useStore((state) => state.graphInfo);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
+  assertNodeDataDefined(nodeData, id);
+
+  const { ui_props: uiProps } = nodeData;
 
   const isValidConnection = (connection: Connection) => {
     const graphRf: GraphRF = {
@@ -35,22 +41,22 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
   return (
     <Node
       isGraph
-      moreHandles={node.ui_props.moreHandles || false}
-      withImage={node.ui_props.withImage}
-      nodeWidth={node.ui_props.nodeWidth || 120}
-      withLabel={node.ui_props.withLabel}
-      colorBorder={node.ui_props.colorBorder}
-      // the following is calculated in calcNodeType for subgraphs-inNodes-outNodes
-      type={node.ui_props.type || ''}
-      label={node.ewoks_props.label || ''}
+      moreHandles={uiProps.moreHandles || false}
+      withImage={uiProps.withImage}
+      nodeWidth={uiProps.nodeWidth || 120}
+      withLabel={uiProps.withLabel}
+      colorBorder={uiProps.colorBorder}
+      // type is calculated in calcNodeType for subgraphs-inNodes-outNodes
+      type={uiProps.type || ''}
+      label={nodeData.ewoks_props.label || ''}
       selected={selected}
-      color={node.ui_props.exists ? '#ced3ee' : 'red'}
-      image={node.ui_props.icon}
-      comment={node.comment}
-      executing={node.ui_props.executing}
+      color={uiProps.exists ? '#ced3ee' : 'red'}
+      image={uiProps.icon}
+      comment={nodeData.comment}
+      executing={uiProps.executing}
       content={
         <>
-          {node.ui_props.inputs
+          {uiProps.inputs
             ?.sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
             .map((input: { label: string }) => (
               <div
@@ -58,7 +64,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
                 style={{
                   ...style.io,
                   ...style.textLeft,
-                  ...(node.ui_props.moreHandles ? style.borderInput : {}),
+                  ...(uiProps.moreHandles ? style.borderInput : {}),
                 }}
               >
                 {/* remove the rest of the input {input.label} for now */}
@@ -75,7 +81,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
                   }}
                   isValidConnection={isValidConnection}
                 />
-                {node.ui_props.moreHandles && (
+                {uiProps.moreHandles && (
                   <Handle
                     key="&{input.label} right"
                     type="target"
@@ -94,7 +100,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
                 )}
               </div>
             ))}
-          {node.ui_props.outputs
+          {uiProps.outputs
             ?.sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
             .map((output: { label: string }) => (
               <div
@@ -102,7 +108,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
                 style={{
                   ...style.io,
                   ...style.textRight,
-                  ...(node.ui_props.moreHandles ? style.borderOutput : {}),
+                  ...(uiProps.moreHandles ? style.borderOutput : {}),
                 }}
               >
                 {/* remove the rest of the output {output.label} for now */}
@@ -119,7 +125,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
                   }}
                   isValidConnection={isValidConnection}
                 />
-                {node.ui_props.moreHandles && (
+                {uiProps.moreHandles && (
                   <Handle
                     key={`${output.label} left`}
                     type="source"

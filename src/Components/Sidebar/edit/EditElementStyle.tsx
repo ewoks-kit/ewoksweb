@@ -9,7 +9,7 @@ import EditLinkStyle from './EditLinkStyle';
 import EditGraphStyle from './EditGraphStyle';
 import { isNode, isLink } from 'utils/typeGuards';
 import type { EwoksRFElement } from '../models';
-import { useSelectedElement } from '../../../store/graph-hooks';
+import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../../../types';
 
 interface Content {
   title: string;
@@ -20,7 +20,7 @@ function getAccordionContent(element: EwoksRFElement): Content {
   if (isNode(element)) {
     return {
       title: 'Styling Node',
-      EditComponent: () => <EditNodeStyle {...element} />,
+      EditComponent: () => <EditNodeStyle nodeId={element.id} />,
     };
   }
 
@@ -38,9 +38,10 @@ function getAccordionContent(element: EwoksRFElement): Content {
 }
 
 // DOC: For editing the style of nodes and links
-export default function EditElementStyle() {
-  const selectedElement = useSelectedElement();
-  const { title, EditComponent } = getAccordionContent(selectedElement);
+export default function EditElementStyle(
+  element: EwoksRFNode | EwoksRFLink | GraphDetails
+) {
+  const { title, EditComponent } = getAccordionContent(element);
 
   return (
     <Accordion className="Accordions-sidebar">
