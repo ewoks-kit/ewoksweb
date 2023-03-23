@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import type { EwoksRFLink, EwoksRFNode } from '../../../types';
+import type { EwoksRFLink, EwoksRFNode, EwoksRFNodeData } from '../../../types';
 import { FormControl, TextField, IconButton, Fab } from '@material-ui/core';
 import DashboardStyle from '../../Dashboard/DashboardStyle';
 import useStore from '../../../store/useStore';
@@ -24,7 +24,7 @@ interface LabelCommentProps {
 export default function LabelComment(props: LabelCommentProps) {
   const classes = useStyles();
 
-  const { getNodes, setNodes, getEdges, setEdges } = useReactFlow();
+  const { getEdges, setEdges } = useReactFlow();
 
   const { element, showComment } = props;
 
@@ -38,11 +38,13 @@ export default function LabelComment(props: LabelCommentProps) {
 
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
 
   useEffect(() => {
     if (isNode(element)) {
-      setLabel(element.data.ewoks_props.label || '');
-      setComment(element.data.comment || '');
+      setLabel(nodeData?.ewoks_props.label || '');
+      setComment(nodeData?.comment || '');
       return;
     }
 
@@ -76,25 +78,15 @@ export default function LabelComment(props: LabelCommentProps) {
     }
 
     throw new Error('No link or Node tries to access LabelComment');
-  }, [element]);
+  }, [element, nodeData]);
 
   function saveLabel(labelLocal: string) {
-    if (isNode(element)) {
-      const newNodeData = {
-        ...element.data,
+    if (isNode(element) && nodeData) {
+      mergeNodeData(element.id, {
         ewoks_props: {
-          ...element.data.ewoks_props,
           label: labelLocal,
         },
-      };
-      setNodeData(element.id, newNodeData);
-
-      // TBD
-      const newNode = {
-        ...element,
-        data: newNodeData,
-      };
-      setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+      } as EwoksRFNodeData);
     }
 
     if (isLink(element)) {
@@ -110,22 +102,21 @@ export default function LabelComment(props: LabelCommentProps) {
   }
 
   function saveComment(commentLocal: string) {
-    const newElement = {
-      ...element,
-      data: { ...element.data, comment: commentLocal },
-    };
-
-    if (isNode(newElement)) {
-      setNodeData(element.id, newElement.data);
-      // TBD
-      setNodes([
-        ...getNodes().filter((nod) => nod.id !== element.id),
-        newElement,
-      ]);
+    if (isNode(element) && nodeData) {
+      const newNodeData: EwoksRFNodeData = {
+        ...nodeData,
+        comment: commentLocal,
+      };
+      setNodeData(element.id, newNodeData);
       return;
     }
 
-    if (isLink(newElement)) {
+    if (isLink(element)) {
+      const newElement = {
+        ...element,
+        data: { ...element.data, comment: commentLocal },
+      };
+
       setEdges([
         ...getEdges().filter((edg) => edg.id !== element.id),
         newElement,

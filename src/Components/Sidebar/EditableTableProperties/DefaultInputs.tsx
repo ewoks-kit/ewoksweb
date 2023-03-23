@@ -1,21 +1,21 @@
-import type { EditableTableRow, EwoksRFNode } from 'types';
+import type { EditableTableRow, EwoksRFNode, EwoksRFNodeData } from 'types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import { IconButton } from '@material-ui/core';
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
-import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../../store/useNodeDataStore';
+import { assertNodeDataDefined } from '../../../utils/typeGuards';
 
 export default function DefaultInputs(element: EwoksRFNode) {
-  const { getNodes, setNodes } = useReactFlow();
-
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
+  assertNodeDataDefined(nodeData, element.id);
 
-  const defautInputs = element.data.ewoks_props.default_inputs;
+  const defautInputs = nodeData.ewoks_props.default_inputs || [];
 
-  function addDefaultInputs() {
+  function addDefaultInputs(nodeDataProps: EwoksRFNodeData) {
     if (defautInputs?.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
@@ -23,45 +23,31 @@ export default function DefaultInputs(element: EwoksRFNode) {
         severity: 'warning',
       });
     } else {
-      const newNode = {
-        ...element,
-        data: {
-          ...element.data,
-          ewoks_props: {
-            ...element.data.ewoks_props,
-            default_inputs: [
-              ...(element.data.ewoks_props.default_inputs || []),
-              { id: '', name: '', value: '' },
-            ],
-          },
+      const newNodeData = {
+        ewoks_props: {
+          default_inputs: [
+            ...(nodeDataProps.ewoks_props.default_inputs || []),
+            { id: '', name: '', value: '' },
+          ],
         },
       };
-      setNodeData(element.id, newNode.data);
-      // TBD
-      setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+      mergeNodeData(element.id, newNodeData as EwoksRFNodeData);
     }
   }
 
   const defaultInputsChanged = (table: EditableTableRow[]) => {
-    const newNode = {
-      ...element,
-      data: {
-        ...element.data,
-        ewoks_props: {
-          ...element.data.ewoks_props,
-          default_inputs: table.map((dval) => {
-            return {
-              id: dval.name,
-              name: dval.name || '',
-              value: dval.value,
-            };
-          }),
-        },
+    const newNodeData = {
+      ewoks_props: {
+        default_inputs: table.map((dval) => {
+          return {
+            id: dval.name,
+            name: dval.name || '',
+            value: dval.value,
+          };
+        }),
       },
     };
-    setNodeData(element.id, newNode.data);
-    // TBD
-    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+    mergeNodeData(element.id, newNodeData as EwoksRFNodeData);
   };
 
   return (
@@ -75,7 +61,7 @@ export default function DefaultInputs(element: EwoksRFNode) {
           <IconButton
             style={{ padding: '1px' }}
             aria-label="delete"
-            onClick={() => addDefaultInputs()}
+            onClick={() => addDefaultInputs(nodeData)}
             data-cy="addDefaultInputsButton"
           >
             <AddCircleOutlineIcon />
@@ -92,8 +78,8 @@ export default function DefaultInputs(element: EwoksRFNode) {
             {
               type: 'select',
               values: [
-                ...(element.data.task_props?.optional_input_names || []),
-                ...(element.data.task_props?.required_input_names || []),
+                ...(nodeData.task_props?.optional_input_names || []),
+                ...(nodeData.task_props?.required_input_names || []),
               ],
             },
             { type: 'input' },

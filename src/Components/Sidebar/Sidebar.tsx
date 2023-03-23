@@ -123,7 +123,7 @@ export default function Sidebar() {
         },
       };
       const nodesRF = getNodes();
-      // Both stay
+
       setNodes([...nodesRF, newClone]);
       setNodeData(newClone.id, newClone.data);
     } else {

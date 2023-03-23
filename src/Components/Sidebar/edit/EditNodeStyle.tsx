@@ -15,7 +15,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   const [nodeSize, setNodeSize] = useState<number>(
     nodeData.ui_props.nodeWidth || 100
   );
-  const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
   const debouncedNodeWidth = useDebounce(nodeSize, 500);
 
@@ -35,59 +35,42 @@ export default function EditNodeStyle(props: { nodeId: string }) {
 
   function setElementNodeWidth(width: number, nodeDataProp: EwoksRFNodeData) {
     if (debouncedNodeWidth !== nodeDataProp.ui_props.nodeWidth) {
-      const newNodeData = {
-        ...nodeDataProp,
-        ui_props: { ...nodeDataProp.ui_props, nodeWidth: width },
-      };
-      setNodeData(nodeId, newNodeData);
+      mergeNodeData(nodeId, {
+        ui_props: { nodeWidth: width },
+      } as EwoksRFNodeData);
     }
   }
 
-  function withImageChanged(checked: boolean, nodeDataProp: EwoksRFNodeData) {
-    const newNodeData = {
-      ...nodeDataProp,
+  function withImageChanged(checked: boolean) {
+    mergeNodeData(nodeId, {
       ui_props: {
-        ...nodeDataProp.ui_props,
         withImage: checked,
       },
-    };
-    setNodeData(nodeId, newNodeData);
+    } as EwoksRFNodeData);
   }
 
-  function withLabelChanged(checked: boolean, nodeDataProp: EwoksRFNodeData) {
-    const newNodeData = {
-      ...nodeDataProp,
+  function withLabelChanged(checked: boolean) {
+    mergeNodeData(nodeId, {
       ui_props: {
-        ...nodeDataProp.ui_props,
         withLabel: checked,
       },
-    };
-    setNodeData(nodeId, newNodeData);
+    } as EwoksRFNodeData);
   }
 
-  const colorBorderChanged = (value: string, nodeDataProp: EwoksRFNodeData) => {
-    const newNodeData = {
-      ...nodeDataProp,
+  const colorBorderChanged = (value: string) => {
+    mergeNodeData(nodeId, {
       ui_props: {
-        ...nodeDataProp.ui_props,
         colorBorder: value,
       },
-    };
-    setNodeData(nodeId, newNodeData);
+    } as EwoksRFNodeData);
   };
 
-  const moreHandlesChanged = (
-    checked: boolean,
-    nodeDataProp: EwoksRFNodeData
-  ) => {
-    const newNodeData = {
-      ...nodeDataProp,
+  const moreHandlesChanged = (checked: boolean) => {
+    mergeNodeData(nodeId, {
       ui_props: {
-        ...nodeDataProp.ui_props,
         moreHandles: checked,
       },
-    };
-    setNodeData(nodeId, newNodeData);
+    } as EwoksRFNodeData);
   };
 
   const changeNodeSize = (
@@ -112,9 +95,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
                   ? true
                   : !!nodeData.ui_props.withImage
               }
-              onChange={(event) =>
-                withImageChanged(event.target.checked, nodeData)
-              }
+              onChange={(event) => withImageChanged(event.target.checked)}
               inputProps={{ 'aria-label': 'controlled' }}
             />
             <label htmlFor="withLabel">With Label</label>
@@ -125,9 +106,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
                   ? true
                   : !!nodeData.ui_props.withLabel
               }
-              onChange={(event) =>
-                withLabelChanged(event.target.checked, nodeData)
-              }
+              onChange={(event) => withLabelChanged(event.target.checked)}
               inputProps={{ 'aria-label': 'controlled' }}
             />
           </div>
@@ -140,9 +119,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
               id="head"
               name="head"
               value={nodeData.ui_props.colorBorder || ''}
-              onChange={(event) =>
-                colorBorderChanged(event.target.value, nodeData)
-              }
+              onChange={(event) => colorBorderChanged(event.target.value)}
               style={{ margin: '10px' }}
             />
           </div>
@@ -157,9 +134,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
             <Checkbox
               name="moreHandles"
               checked={!!nodeData.ui_props.moreHandles}
-              onChange={(event) =>
-                moreHandlesChanged(event.target.checked, nodeData)
-              }
+              onChange={(event) => moreHandlesChanged(event.target.checked)}
               inputProps={{ 'aria-label': 'controlled' }}
             />
           </div>

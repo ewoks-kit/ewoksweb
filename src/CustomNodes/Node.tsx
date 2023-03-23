@@ -6,7 +6,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import isValidLink from '../utils/IsValidLink';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import EditIcon from '@material-ui/icons/EditOutlined';
-import SaveIcon from '@material-ui/icons/Save';
+// import SaveIcon from '@material-ui/icons/Save';
 import { calcNewId } from '../utils/calcNewId';
 
 import useStore from '../store/useStore';
@@ -133,22 +133,17 @@ function Node({
     setNodes([...getNodes(), newClone]);
     setNodeData(newClone.id, newClone.data);
   };
-
-  function setNodeLabel() {
-    if (!isNode(selectedElement)) {
-      return;
-    }
-    const newNode = {
-      ...selectedElement,
-      data: {
-        ...selectedElement.data,
-        ewoks_props: { ...selectedElement.data.ewoks_props, label: labelLocal },
-      },
-    };
-    setNodeData(selectedElement.id, newNode.data);
-    // TBD
-    setNodes([...getNodes().filter((nod) => nod.id !== newNode.id), newNode]);
-  }
+  // TBD if needed cause it cause many rerenders on selecting an element on canvas
+  // function setNodeLabel() {
+  //   if (!nodeData || !isNode(selectedElement)) {
+  //     return;
+  //   }
+  //   const newNodeData = {
+  //     ...nodeData,
+  //     ewoks_props: { ...nodeData.ewoks_props, label: labelLocal },
+  //   };
+  //   setNodeData(selectedElement.id, newNodeData);
+  // }
 
   return (
     <div
@@ -332,7 +327,7 @@ function Node({
                   </IconButton>
                 </Tooltip>
               )}
-              {withLabel && edit && (
+              {/* {withLabel && edit && (
                 <Tooltip
                   title={tooltipText('Save new label')}
                   enterDelay={800}
@@ -349,7 +344,7 @@ function Node({
                     <SaveIcon color="primary" />
                   </IconButton>
                 </Tooltip>
-              )}
+              )} */}
             </>
           )}
         </span>
