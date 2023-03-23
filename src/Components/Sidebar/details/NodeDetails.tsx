@@ -48,6 +48,7 @@ export default function NodeDetails(element: EwoksRFNode) {
     (state) => state.showAdvancedDetails
   );
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
   const [inputsComplete, setInputsComplete] = useState<boolean>(false);
   const [defaultErrorNode, setDefaultErrorNode] = useState<boolean>(false);
@@ -179,28 +180,14 @@ export default function NodeDetails(element: EwoksRFNode) {
     }
   }
 
-  function inputsCompleteChanged(
-    checked: boolean,
-    nodeDataProp: EwoksRFNodeData
-  ) {
+  function inputsCompleteChanged(checked: boolean) {
     const newNodeData = {
-      ...nodeDataProp,
       ewoks_props: {
-        ...nodeDataProp.ewoks_props,
         inputs_complete: checked,
       },
     };
-    setNodeData(element.id, newNodeData);
 
-    // TBD
-    // const newNodeData1 = {
-    //   ewoks_props: {
-    //     inputs_complete: checked,
-    //   },
-    // };
-    // console.log(checked, newNodeData1);
-
-    // mergeNodeData(element.id, newNodeData1 as EwoksRFNodeData);
+    mergeNodeData(element.id, newNodeData as EwoksRFNodeData);
   }
 
   function defaulErrortNodeChanged(
@@ -298,7 +285,7 @@ export default function NodeDetails(element: EwoksRFNode) {
                 <Checkbox
                   checked={inputsComplete}
                   onChange={(event) =>
-                    inputsCompleteChanged(event.target.checked, nodeData)
+                    inputsCompleteChanged(event.target.checked)
                   }
                   inputProps={{ 'aria-label': 'controlled' }}
                 />

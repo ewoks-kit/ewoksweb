@@ -44,12 +44,11 @@ export default function LabelComment(props: LabelCommentProps) {
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
-  assertNodeDataDefined(nodeData, element.id);
 
   useEffect(() => {
     if (isNode(element)) {
-      setLabel(nodeData.ewoks_props.label || '');
-      setComment(nodeData.comment || '');
+      setLabel(nodeData?.ewoks_props.label || '');
+      setComment(nodeData?.comment || '');
       return;
     }
 
