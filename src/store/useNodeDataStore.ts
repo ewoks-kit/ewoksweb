@@ -19,14 +19,14 @@ const useNodeDataStore = create<NodeDataState>((set, get) => ({
     }));
   },
   mergeNodeData: (nodeId, nodeData) => {
-    const newData: EwoksRFNodeData = merge(
-      get().nodesData.get(nodeId),
-      nodeData
-    );
+    set(({ nodesData }) => {
+      const newData: EwoksRFNodeData = merge(nodesData.get(nodeId), nodeData);
 
-    set(({ nodesData }) => ({
-      nodesData: new Map(nodesData).set(nodeId, newData),
-    }));
+      // TBD if newData is not spread it is not working!!!
+      return {
+        nodesData: new Map(nodesData).set(nodeId, { ...newData }),
+      };
+    });
   },
   setNodesData: (nodes) => {
     set(() => ({

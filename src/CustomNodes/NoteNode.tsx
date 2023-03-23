@@ -68,7 +68,7 @@ const NoteNode = (args: NoteProps) => {
         className="icons"
       >
         {nodeData.ewoks_props.label &&
-          nodeData?.ewoks_props.label.length > 0 && (
+          nodeData.ewoks_props.label.length > 0 && (
             <div style={customTitle as React.CSSProperties}>
               {nodeData.ewoks_props.label}
             </div>

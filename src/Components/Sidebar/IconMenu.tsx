@@ -41,7 +41,7 @@ export default function IconMenu() {
   const tasks = useStore((state) => state.tasks);
   const nodeData = useNodeDataStore(
     (state) =>
-      state.nodesData.get(selectedElement.id) || ({} as EwoksRFNodeData)
+      state.nodesData.get(selectedElement?.id) || ({} as EwoksRFNodeData)
   );
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {

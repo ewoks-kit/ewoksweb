@@ -74,10 +74,6 @@ function Node({
   const [detailsL, setDetailsL] = useState(false);
 
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
-  // const nodeData = useNodeDataStore((state) =>
-  //   state.nodesData.get(selectedElement.id)
-  // );
-  // assertNodeDataDefined(nodeData, selectedElement.id);
 
   useEffect(() => {
     setNodeSize(nodeWidth);
@@ -144,7 +140,7 @@ function Node({
   //   }
   //   const newNodeData = {
   //     ...nodeData,
-  //     ewoks_props: { ...nodeData?.ewoks_props, label: labelLocal },
+  //     ewoks_props: { ...nodeData.ewoks_props, label: labelLocal },
   //   };
   //   setNodeData(selectedElement.id, newNodeData);
   // }
