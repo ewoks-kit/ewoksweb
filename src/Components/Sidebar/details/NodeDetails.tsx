@@ -47,7 +47,6 @@ export default function NodeDetails(element: EwoksRFNode) {
   const showAdvancedDetails = useConfigStore(
     (state) => state.showAdvancedDetails
   );
-  const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
   const [inputsComplete, setInputsComplete] = useState<boolean>(false);
@@ -135,13 +134,6 @@ export default function NodeDetails(element: EwoksRFNode) {
         ...element,
         id: uniqueId,
       };
-      const newNodeData = {
-        ...nodeData,
-        task_props: {
-          ...nodeData.task_props,
-          task_identifier: propKeyValue.task_identifier || '',
-        },
-      };
 
       const newLinks = getEdges().map((link) => {
         if (link.source === element.id) {
@@ -161,7 +153,12 @@ export default function NodeDetails(element: EwoksRFNode) {
         return link;
       });
       // All stay since it affects the canvas by modifying node id and associated links
-      setNodeData(element.id, newNodeData);
+      mergeNodeData(element.id, {
+        task_props: {
+          task_identifier: propKeyValue.task_identifier || '',
+        },
+      } as EwoksRFNodeData);
+
       setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
       setEdges(newLinks);
 
@@ -169,39 +166,28 @@ export default function NodeDetails(element: EwoksRFNode) {
     }
 
     if (Object.keys(propKeyValue)[0] === 'node_icon') {
-      const newNodeData = {
-        ...nodeData,
+      mergeNodeData(element.id, {
         ui_props: {
-          ...nodeData.ui_props,
           icon: Object.values(propKeyValue)[0],
         },
-      };
-      setNodeData(element.id, newNodeData);
+      } as EwoksRFNodeData);
     }
   }
 
   function inputsCompleteChanged(checked: boolean) {
-    const newNodeData = {
+    mergeNodeData(element.id, {
       ewoks_props: {
         inputs_complete: checked,
       },
-    };
-
-    mergeNodeData(element.id, newNodeData as EwoksRFNodeData);
+    } as EwoksRFNodeData);
   }
 
-  function defaulErrortNodeChanged(
-    checked: boolean,
-    nodeDataProp: EwoksRFNodeData
-  ) {
-    const newNodeData = {
-      ...nodeDataProp,
+  function defaulErrortNodeChanged(checked: boolean) {
+    mergeNodeData(element.id, {
       ewoks_props: {
-        ...nodeDataProp.ewoks_props,
         default_error_node: checked,
       },
-    };
-    setNodeData(element.id, newNodeData);
+    } as EwoksRFNodeData);
   }
 
   function addDataMapping(nodeDataProp: EwoksRFNodeData) {
@@ -210,23 +196,17 @@ export default function NodeDetails(element: EwoksRFNode) {
 
     if (!elMap.some((x) => x.id === '')) {
       const newNodeData = {
-        ...nodeDataProp,
         ewoks_props: {
-          ...nodeDataProp.ewoks_props,
           default_error_attributes: {
-            ...nodeDataProp.ewoks_props.default_error_attributes,
             data_mapping: [...elMap, { id: '', name: '', value: '' }],
           },
         },
       };
-      setNodeData(element.id, newNodeData);
+      mergeNodeData(element.id, newNodeData as EwoksRFNodeData);
     }
   }
 
   function dataMappingValuesChanged(table: EditableTableRow[]) {
-    if (!nodeData) {
-      return;
-    }
     const dmap: DataMapping[] = table.map((row) => {
       if (typeof row.value !== 'string') {
         throw new TypeError(
@@ -240,30 +220,24 @@ export default function NodeDetails(element: EwoksRFNode) {
     });
 
     const newNodeData = {
-      ...nodeData,
       ewoks_props: {
-        ...nodeData.ewoks_props,
         default_error_attributes: {
-          ...nodeData.ewoks_props.default_error_attributes,
           data_mapping: dmap,
         },
       },
     };
-    setNodeData(element.id, newNodeData);
+    mergeNodeData(element.id, newNodeData as EwoksRFNodeData);
   }
 
-  function mapAllDataChanged(checked: boolean, nodeDataProp: EwoksRFNodeData) {
+  function mapAllDataChanged(checked: boolean) {
     const newNodeData = {
-      ...nodeDataProp,
       ewoks_props: {
-        ...nodeDataProp.ewoks_props,
         default_error_attributes: {
-          ...nodeDataProp.ewoks_props.default_error_attributes,
           map_all_data: checked,
         },
       },
     };
-    setNodeData(element.id, newNodeData);
+    mergeNodeData(element.id, newNodeData as EwoksRFNodeData);
   }
 
   return (
@@ -302,7 +276,7 @@ export default function NodeDetails(element: EwoksRFNode) {
                 <Checkbox
                   checked={defaultErrorNode}
                   onChange={(event) =>
-                    defaulErrortNodeChanged(event.target.checked, nodeData)
+                    defaulErrortNodeChanged(event.target.checked)
                   }
                   inputProps={{ 'aria-label': 'controlled' }}
                 />
@@ -315,9 +289,7 @@ export default function NodeDetails(element: EwoksRFNode) {
             <b>Map all Data</b>
             <Checkbox
               checked={mapAllData}
-              onChange={(event) =>
-                mapAllDataChanged(event.target.checked, nodeData)
-              }
+              onChange={(event) => mapAllDataChanged(event.target.checked)}
               inputProps={{ 'aria-label': 'controlled' }}
             />
           </div>

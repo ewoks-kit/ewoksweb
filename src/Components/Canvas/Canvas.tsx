@@ -80,6 +80,8 @@ function Canvas() {
   // const setUndoRedo = useStore((state) => state.setUndoRedo);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setNodesData = useNodeDataStore((state) => state.setNodesData);
+  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
+
   const nodesData = useNodeDataStore((state) => state.nodesData);
 
   const graphId = useGraphId();
@@ -171,7 +173,8 @@ function Canvas() {
   }
 
   const onPaneClick = () => {
-    // TODO: Handle details differently and remove nodesData from canvas?
+    // TBD: Handle details differently and remove nodesData from canvas?
+    // also need to use type in Node and carry the task_identifier for onDoubleClick
     nodesData.forEach((nodData, id) => {
       if (nodData.ui_props.details === true) {
         setNodeData(id, {
@@ -342,6 +345,7 @@ function Canvas() {
     if (!nodeTmp) {
       return;
     }
+
     const nodeData = nodesData.get(nodeTmp.id);
     if (!nodeData) {
       return;
@@ -380,11 +384,9 @@ function Canvas() {
         });
       }
     } else {
-      const nodeTmpData: EwoksRFNodeData = {
-        ...nodeData,
-        ui_props: { ...nodeData?.ui_props, details: true },
-      };
-      setNodeData(nodeTmp.id, nodeTmpData);
+      mergeNodeData(nodeTmp.id, {
+        ui_props: { details: true },
+      } as EwoksRFNodeData);
     }
   };
 
@@ -407,7 +409,7 @@ function Canvas() {
             y: (selectedElement.position?.y || 0) + 100,
           },
         };
-        // Both stay
+
         setNodes([...getNodes(), newClone]);
         setNodeData(newClone.id, newClone.data);
 

@@ -61,7 +61,7 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
           const nodes = getNodes();
           if (isSubgraph === 'subgraph') {
             const newGraphNode = await setSubGraph(graph, nodes, getEdges());
-            // Both stay
+
             setNodes([...nodes, newGraphNode]);
             setNodeData(newGraphNode.id, newGraphNode.data);
           } else {

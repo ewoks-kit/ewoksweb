@@ -9,12 +9,7 @@ import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
 import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from '../sidebarStyle';
-import {
-  assertNodeDataDefined,
-  isLink,
-  isNode,
-  isString,
-} from '../../../utils/typeGuards';
+import { isLink, isNode, isString } from '../../../utils/typeGuards';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 
@@ -43,6 +38,7 @@ export default function LabelComment(props: LabelCommentProps) {
 
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
 
   useEffect(() => {
@@ -86,14 +82,11 @@ export default function LabelComment(props: LabelCommentProps) {
 
   function saveLabel(labelLocal: string) {
     if (isNode(element) && nodeData) {
-      const newNodeData = {
-        ...nodeData,
+      mergeNodeData(element.id, {
         ewoks_props: {
-          ...nodeData?.ewoks_props,
           label: labelLocal,
         },
-      };
-      setNodeData(element.id, newNodeData);
+      } as EwoksRFNodeData);
     }
 
     if (isLink(element)) {

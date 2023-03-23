@@ -22,7 +22,6 @@ import useStore from '../../store/useStore';
 import { FormAction } from '../../types';
 import { useSelectedElement } from '../../store/graph-hooks';
 import useNodeDataStore from '../../store/useNodeDataStore';
-import { assertNodeDataDefined } from '../../utils/typeGuards';
 
 export default function IconMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

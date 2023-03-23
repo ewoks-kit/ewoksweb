@@ -9,7 +9,7 @@ import { assertNodeDataDefined } from '../../../utils/typeGuards';
 
 export default function DefaultInputs(element: EwoksRFNode) {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
   assertNodeDataDefined(nodeData, element.id);
 
@@ -24,24 +24,20 @@ export default function DefaultInputs(element: EwoksRFNode) {
       });
     } else {
       const newNodeData = {
-        ...nodeDataProps,
         ewoks_props: {
-          ...nodeDataProps.ewoks_props,
           default_inputs: [
             ...(nodeDataProps.ewoks_props.default_inputs || []),
             { id: '', name: '', value: '' },
           ],
         },
       };
-      setNodeData(element.id, newNodeData);
+      mergeNodeData(element.id, newNodeData as EwoksRFNodeData);
     }
   }
 
   const defaultInputsChanged = (table: EditableTableRow[]) => {
     const newNodeData = {
-      ...nodeData,
       ewoks_props: {
-        ...nodeData?.ewoks_props,
         default_inputs: table.map((dval) => {
           return {
             id: dval.name,
@@ -51,7 +47,7 @@ export default function DefaultInputs(element: EwoksRFNode) {
         }),
       },
     };
-    setNodeData(element.id, newNodeData);
+    mergeNodeData(element.id, newNodeData as EwoksRFNodeData);
   };
 
   return (
