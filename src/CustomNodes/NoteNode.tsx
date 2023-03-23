@@ -9,7 +9,6 @@ import type { NodeProps } from 'reactflow';
 import type { EwoksRFNodeData } from '../types';
 import { useSelectedElement } from '../store/graph-hooks';
 import useNodeDataStore from '../store/useNodeDataStore';
-import { assertNodeDataDefined } from '../utils/typeGuards';
 
 type NoteProps = NodeProps<EwoksRFNodeData>;
 
@@ -20,10 +19,9 @@ const NoteNode = (args: NoteProps) => {
 
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
-  assertNodeDataDefined(nodeData, args.id);
 
   useEffect(() => {
-    setComment(nodeData.comment || '');
+    setComment(nodeData?.comment || '');
   }, [args.id, nodeData]);
 
   const customTitle = {
@@ -64,16 +62,16 @@ const NoteNode = (args: NoteProps) => {
       tabIndex={0}
     >
       <span
-        style={{ maxWidth: `${nodeData.ui_props.nodeWidth || 100}px` }}
+        style={{ maxWidth: `${nodeData?.ui_props.nodeWidth || 100}px` }}
         className="icons"
       >
-        {nodeData.ewoks_props.label &&
+        {nodeData?.ewoks_props.label &&
           nodeData.ewoks_props.label.length > 0 && (
             <div style={customTitle as React.CSSProperties}>
               {nodeData.ewoks_props.label}
             </div>
           )}
-        {nodeData.ui_props.details ? (
+        {nodeData?.ui_props.details ? (
           <TextField
             label="edit comment"
             multiline
@@ -85,7 +83,7 @@ const NoteNode = (args: NoteProps) => {
         ) : (
           <div style={{ wordWrap: 'break-word' }}>{comment}</div>
         )}
-        {nodeData.ui_props.details && (
+        {nodeData?.ui_props.details && (
           <IconButton
             style={{ margin: '0px 2px', padding: '0px' }}
             aria-label="edit"
