@@ -17,9 +17,8 @@ const NoteNode = (args: NoteProps) => {
 
   const [comment, setComment] = useState('');
 
-  const setNodeData = useNodeDataStore((state) => state.setNodeData);
-  const nodesData = useNodeDataStore((state) => state.nodesData);
-  const nodeData = nodesData.get(args.id);
+  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
 
   useEffect(() => {
     setComment(nodeData?.comment || '');
@@ -38,19 +37,16 @@ const NoteNode = (args: NoteProps) => {
     setComment(event.target.value);
   };
 
-  const save = () => {
-    // TODO: If permenant put it in undo-redo and make title editable
-    if (!nodeData) {
-      return;
-    }
+  const save = (nodeDataProps: EwoksRFNodeData) => {
+    // TBD: If permenant put it in undo-redo and make title editable
     const newNodeData = {
       task_props: { task_type: 'note', task_identifier: args.id },
-      ewoks_props: { label: nodeData?.ewoks_props.label },
+      ewoks_props: { label: nodeDataProps.ewoks_props.label },
       ui_props: {},
       comment,
     };
 
-    setNodeData(selectedElement.id, newNodeData);
+    mergeNodeData(selectedElement.id, newNodeData);
   };
 
   return (
@@ -70,9 +66,9 @@ const NoteNode = (args: NoteProps) => {
         className="icons"
       >
         {nodeData?.ewoks_props.label &&
-          nodeData?.ewoks_props.label.length > 0 && (
+          nodeData.ewoks_props.label.length > 0 && (
             <div style={customTitle as React.CSSProperties}>
-              {nodeData?.ewoks_props.label}
+              {nodeData.ewoks_props.label}
             </div>
           )}
         {nodeData?.ui_props.details ? (
@@ -91,7 +87,7 @@ const NoteNode = (args: NoteProps) => {
           <IconButton
             style={{ margin: '0px 2px', padding: '0px' }}
             aria-label="edit"
-            onClick={save}
+            onClick={() => save(nodeData)}
           >
             <SaveIcon color="primary" />
           </IconButton>

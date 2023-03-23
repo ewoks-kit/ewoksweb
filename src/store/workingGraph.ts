@@ -76,6 +76,7 @@ const workingGraph = (
       nodes: grfNodes,
       links: toRFEwoksLinks(workingGraphObject, newNodeSubgraphs, get().tasks),
     };
+    useNodeDataStore.getState().setNodesData(graph.nodes);
 
     get().addRecentGraph(graph as GraphRF);
 
@@ -84,8 +85,6 @@ const workingGraph = (
     useSelectedElementStore
       .getState()
       .setSelectedElement({ type: 'graph', id: graph.graph.id });
-
-    useNodeDataStore.getState().setNodesData(graph.nodes);
 
     // add the new graph to the recent graphs if not already there
     get().addRecentGraph({
