@@ -81,8 +81,6 @@ export default function LabelComment(props: LabelCommentProps) {
   }, [element, nodeData]);
 
   function saveLabel(labelLocal: string) {
-    console.log(labelLocal, element.id, nodeData);
-
     if (isNode(element) && nodeData) {
       mergeNodeData(element.id, {
         ewoks_props: {

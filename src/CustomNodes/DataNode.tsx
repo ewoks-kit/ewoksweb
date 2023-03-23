@@ -10,7 +10,6 @@ function DataNode(args: NodeProps) {
   assertNodeDataDefined(nodeData, args.id);
 
   const { ui_props: uiProps } = nodeData;
-  console.log(nodeData);
 
   return (
     <Node

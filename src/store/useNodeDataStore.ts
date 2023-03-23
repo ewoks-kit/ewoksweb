@@ -10,7 +10,7 @@ export interface NodeDataState {
   resetNodesData: () => void;
 }
 
-const useNodeDataStore = create<NodeDataState>((set, get) => ({
+const useNodeDataStore = create<NodeDataState>((set) => ({
   nodesData: new Map(),
 
   setNodeData: (nodeId, nodeData) => {
