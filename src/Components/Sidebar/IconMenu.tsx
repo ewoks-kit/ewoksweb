@@ -11,7 +11,13 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { Button, Menu, Tooltip } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import FormDialog from '../General/FormDialog';
-import type { EwoksRFLink, EwoksRFNode, GraphDetails, Task } from '../../types';
+import type {
+  EwoksRFLink,
+  EwoksRFNode,
+  EwoksRFNodeData,
+  GraphDetails,
+  Task,
+} from '../../types';
 import useStore from '../../store/useStore';
 import { FormAction } from '../../types';
 import { useSelectedElement } from '../../store/graph-hooks';
@@ -33,7 +39,10 @@ export default function IconMenu() {
 
   const graphInfo = useStore((state) => state.graphInfo);
   const tasks = useStore((state) => state.tasks);
-  const nodesData = useNodeDataStore((state) => state.nodesData);
+  const nodeData = useNodeDataStore(
+    (state) =>
+      state.nodesData.get(selectedElement?.id) || ({} as EwoksRFNodeData)
+  );
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
@@ -48,7 +57,7 @@ export default function IconMenu() {
     element: Task | EwoksRFNode | EwoksRFLink | GraphDetails
   ) {
     setDoAction(action);
-    const nodeData = nodesData.get(selectedElement.id);
+
     switch (action) {
       case 'newTask': {
         setElementToEdit(initializedTask);

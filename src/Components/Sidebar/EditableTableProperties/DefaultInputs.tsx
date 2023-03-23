@@ -1,21 +1,21 @@
-import type { EditableTableRow, EwoksRFNode } from 'types';
+import type { EditableTableRow, EwoksRFNode, EwoksRFNodeData } from 'types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import { IconButton } from '@material-ui/core';
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import useNodeDataStore from '../../../store/useNodeDataStore';
+import { assertNodeDataDefined } from '../../../utils/typeGuards';
 
 export default function DefaultInputs(element: EwoksRFNode) {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const setNodeData = useNodeDataStore((state) => state.setNodeData);
-  const nodesData = useNodeDataStore((state) => state.nodesData);
+  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
+  assertNodeDataDefined(nodeData, element.id);
 
-  const nodeData = nodesData.get(element.id);
+  const defautInputs = nodeData.ewoks_props.default_inputs || [];
 
-  const defautInputs = nodeData?.ewoks_props.default_inputs || [];
-
-  function addDefaultInputs() {
+  function addDefaultInputs(nodeDataProps: EwoksRFNodeData) {
     if (defautInputs?.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
@@ -23,31 +23,21 @@ export default function DefaultInputs(element: EwoksRFNode) {
         severity: 'warning',
       });
     } else {
-      if (!nodeData) {
-        return;
-      }
       const newNodeData = {
-        ...nodeData,
         ewoks_props: {
-          ...nodeData?.ewoks_props,
           default_inputs: [
-            ...(nodeData?.ewoks_props.default_inputs || []),
+            ...(nodeDataProps.ewoks_props.default_inputs || []),
             { id: '', name: '', value: '' },
           ],
         },
       };
-      setNodeData(element.id, newNodeData);
+      mergeNodeData(element.id, newNodeData as EwoksRFNodeData);
     }
   }
 
   const defaultInputsChanged = (table: EditableTableRow[]) => {
-    if (!nodeData) {
-      return;
-    }
     const newNodeData = {
-      ...nodeData,
       ewoks_props: {
-        ...nodeData?.ewoks_props,
         default_inputs: table.map((dval) => {
           return {
             id: dval.name,
@@ -57,7 +47,7 @@ export default function DefaultInputs(element: EwoksRFNode) {
         }),
       },
     };
-    setNodeData(element.id, newNodeData);
+    mergeNodeData(element.id, newNodeData as EwoksRFNodeData);
   };
 
   return (
@@ -71,7 +61,7 @@ export default function DefaultInputs(element: EwoksRFNode) {
           <IconButton
             style={{ padding: '1px' }}
             aria-label="delete"
-            onClick={() => addDefaultInputs()}
+            onClick={() => addDefaultInputs(nodeData)}
             data-cy="addDefaultInputsButton"
           >
             <AddCircleOutlineIcon />
@@ -88,8 +78,8 @@ export default function DefaultInputs(element: EwoksRFNode) {
             {
               type: 'select',
               values: [
-                ...(nodeData?.task_props?.optional_input_names || []),
-                ...(nodeData?.task_props?.required_input_names || []),
+                ...(nodeData.task_props?.optional_input_names || []),
+                ...(nodeData.task_props?.required_input_names || []),
               ],
             },
             { type: 'input' },
