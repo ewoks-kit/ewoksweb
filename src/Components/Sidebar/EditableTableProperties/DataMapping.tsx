@@ -1,4 +1,4 @@
-import type { DataMapping, EwoksRFLink } from 'types';
+import type { DataMapping, EwoksRFLink, EwoksRFLinkData } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
@@ -11,6 +11,7 @@ import useEdgeDataStore from '../../../store/useEdgeDataStore';
 export default function DataMappingComponent(element: EwoksRFLink) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
+  const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const sourceNode = useNode(element.source);
@@ -25,14 +26,13 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       });
       return;
     }
-    const newEdgeData = {
-      ...edgeData,
+
+    mergeEdgeData(element.id, {
       data_mapping: [
         ...(edgeData?.data_mapping || []),
         { id: '', name: '', value: '' },
       ],
-    };
-    setEdgeData(element.id, newEdgeData);
+    } as EwoksRFLinkData);
   }
 
   const dataMappingValuesChanged = (table: DataMapping[]) => {
@@ -42,11 +42,10 @@ export default function DataMappingComponent(element: EwoksRFLink) {
         target_input: row.value as string,
       };
     });
-    const newEdgeData = {
-      ...edgeData,
+
+    setEdgeData(element.id, {
       data_mapping: dmap,
-    };
-    setEdgeData(element.id, newEdgeData);
+    } as EwoksRFLinkData);
   };
 
   return (

@@ -1,4 +1,4 @@
-import type { EditableTableRow, EwoksRFLink } from 'types';
+import type { EditableTableRow, EwoksRFLink, EwoksRFLinkData } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
@@ -13,14 +13,13 @@ interface ConditionsProps {
 export default function Conditions(props: ConditionsProps) {
   const { element } = props;
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
-  const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
+  const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   function addConditions() {
     const elCon = edgeData?.conditions || [];
 
-    // check if an empty line already exists
     if (elCon.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
@@ -31,16 +30,14 @@ export default function Conditions(props: ConditionsProps) {
     }
 
     const newEdgeData = {
-      ...edgeData,
       on_error: false,
       conditions: [...elCon, { id: '', name: '', value: false }],
     };
-    setEdgeData(element.id, newEdgeData);
+    mergeEdgeData(element.id, newEdgeData as EwoksRFLinkData);
   }
 
   function conditionsValuesChanged(table: EditableTableRow[]) {
     const newEdgeData = {
-      ...edgeData,
       conditions: table.map((con1) => {
         return {
           source_output: con1.name,
@@ -48,7 +45,7 @@ export default function Conditions(props: ConditionsProps) {
         };
       }),
     };
-    setEdgeData(element.id, newEdgeData);
+    mergeEdgeData(element.id, newEdgeData as EwoksRFLinkData);
   }
 
   return (

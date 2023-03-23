@@ -1,5 +1,6 @@
 import type { EdgeProps } from 'reactflow';
 import { getBezierPath } from 'reactflow';
+import useEdgeDataStore from '../store/useEdgeDataStore';
 import { edgeStyle } from './EdgeStyle';
 import type { SmoothStepData, SmoothStepParams } from './models';
 
@@ -81,7 +82,7 @@ function getSmoothStepPathC({
   return `M ${sourceX},${sourceY}${firstCornerPath}${secondCornerPath}L ${targetX},${targetY}`;
 }
 
-export default function getAround({
+export default function GetAroundEdge({
   id,
   sourceX,
   sourceY,
@@ -90,14 +91,20 @@ export default function getAround({
   style = {},
   label,
   markerEnd,
-  data,
 }: EdgeProps<SmoothStepData>) {
+  const edgesData = useEdgeDataStore((state) => state.edgesData);
+
   const edgePath = getSmoothStepPathC({
     sourceX,
     sourceY,
     targetX,
     targetY,
-    data: data ?? { getAroundProps: { x: 0, y: 0 } },
+    data: {
+      getAroundProps: {
+        x: edgesData?.get(id)?.getAroundProps?.x || 0,
+        y: edgesData?.get(id)?.getAroundProps?.y || 0,
+      },
+    },
   });
 
   return (
