@@ -17,7 +17,7 @@ const NoteNode = (args: NoteProps) => {
 
   const [comment, setComment] = useState('');
 
-  const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const NoteNode = (args: NoteProps) => {
       comment,
     };
 
-    setNodeData(selectedElement.id, newNodeData);
+    mergeNodeData(selectedElement.id, newNodeData);
   };
 
   return (
