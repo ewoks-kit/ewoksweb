@@ -26,10 +26,10 @@ import LabelComment from './LabelComment';
 import DefaultInputs from '../EditableTableProperties/DefaultInputs';
 import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
-import { useNodesIds } from '../../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
+import { useNodesIds } from '../../../store/graph-hooks';
 
 const useStyles = DashboardStyle;
 
@@ -59,32 +59,32 @@ export default function NodeDetails(element: EwoksRFNode) {
     {
       id: 'task_type',
       label: 'Type',
-      value: element.data.task_props.task_type,
+      value: nodeData.task_props.task_type || '',
     },
     {
       id: 'task_generator',
       label: 'Generator',
-      value: element.data.ewoks_props.task_generator,
+      value: nodeData.ewoks_props.task_generator || '',
     },
     {
       id: 'task_category',
       label: 'Category',
-      value: element.data.task_props.task_category,
+      value: nodeData.task_props.task_category || '',
     },
     {
       id: 'optional_input_names',
       label: 'Optional Inputs',
-      value: element.data.task_props.optional_input_names,
+      value: nodeData.task_props.optional_input_names || [],
     },
     {
       id: 'required_input_names',
       label: 'Required Inputs',
-      value: element.data.task_props.required_input_names,
+      value: nodeData.task_props.required_input_names || [],
     },
     {
       id: 'output_names',
       label: 'Outputs',
-      value: element.data.task_props.output_names,
+      value: nodeData.task_props.output_names || [],
     },
   ];
 
@@ -92,26 +92,33 @@ export default function NodeDetails(element: EwoksRFNode) {
     {
       id: 'task_identifier',
       label: 'Task identifier',
-      value: element.data.task_props.task_identifier,
+      value: nodeData.task_props.task_identifier || '',
     },
-    { id: 'node_icon', label: 'Icon', value: element.data.ui_props.icon },
+    {
+      id: 'node_icon',
+      label: 'Icon',
+      value: nodeData.ui_props.icon || 'default',
+    },
   ];
 
   useEffect(() => {
     setInputsComplete(nodeData.ewoks_props.inputs_complete || false);
-    setDefaultErrorNode(element.data.ewoks_props.default_error_node || false);
+    setDefaultErrorNode(nodeData.ewoks_props.default_error_node || false);
     setDataMapping(
-      element.data.ewoks_props.default_error_attributes?.data_mapping || []
+      nodeData.ewoks_props.default_error_attributes?.data_mapping || []
     );
     setMapAllData(
-      element.data.ewoks_props.default_error_attributes?.map_all_data || false
+      nodeData.ewoks_props.default_error_attributes?.map_all_data || false
     );
-  }, [element, nodeData]);
+  }, [nodeData]);
 
   function propChanged(propKeyValue: {
     task_identifier?: string;
     node_icon?: string;
   }) {
+    if (!nodeData) {
+      return;
+    }
     // DOC: if the task_identifier changes (ppfmethod, ppfport, script case) then the id
     // of the node needs to change for a coherent json.
     // All links to this node also change source and/or target!
@@ -119,19 +126,19 @@ export default function NodeDetails(element: EwoksRFNode) {
       // DOC: find unique id based on new task_identifier
       let uniqueId = Object.values(propKeyValue)[0];
       let id = 0;
+      // TODO not use nodesData to calculati new id
       while (nodesIds.some((nodeId) => nodeId === uniqueId)) {
         uniqueId += id++;
       }
-
       const newNode = {
         ...element,
         id: uniqueId,
-        data: {
-          ...element.data,
-          task_props: {
-            ...element.data.task_props,
-            task_identifier: propKeyValue.task_identifier || '',
-          },
+      };
+      const newNodeData = {
+        ...nodeData,
+        task_props: {
+          ...nodeData.task_props,
+          task_identifier: propKeyValue.task_identifier || '',
         },
       };
 
@@ -152,29 +159,23 @@ export default function NodeDetails(element: EwoksRFNode) {
 
         return link;
       });
-      setNodeData(element.id, newNode.data);
-      // TBD
+      // All stay since it affects the canvas by modifying node id and associated links
+      setNodeData(element.id, newNodeData);
       setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
-
       setEdges(newLinks);
 
       return;
     }
 
     if (Object.keys(propKeyValue)[0] === 'node_icon') {
-      const newNode = {
-        ...element,
-        data: {
-          ...element.data,
-          ui_props: {
-            ...element.data.ui_props,
-            icon: Object.values(propKeyValue)[0],
-          },
+      const newNodeData = {
+        ...nodeData,
+        ui_props: {
+          ...nodeData.ui_props,
+          icon: Object.values(propKeyValue)[0],
         },
       };
-      setNodeData(element.id, newNode.data);
-      // TBD
-      setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+      setNodeData(element.id, newNodeData);
     }
   }
 
@@ -185,7 +186,7 @@ export default function NodeDetails(element: EwoksRFNode) {
     const newNodeData = {
       ...nodeDataProp,
       ewoks_props: {
-        ...element.data.ewoks_props,
+        ...nodeDataProp.ewoks_props,
         inputs_complete: checked,
       },
     };
@@ -202,47 +203,43 @@ export default function NodeDetails(element: EwoksRFNode) {
     // mergeNodeData(element.id, newNodeData1 as EwoksRFNodeData);
   }
 
-  function defaulErrortNodeChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    const newNode = {
-      ...element,
-      data: {
-        ...element.data,
-        ewoks_props: {
-          ...element.data.ewoks_props,
-          default_error_node: event.target.checked,
-        },
+  function defaulErrortNodeChanged(
+    checked: boolean,
+    nodeDataProp: EwoksRFNodeData
+  ) {
+    const newNodeData = {
+      ...nodeDataProp,
+      ewoks_props: {
+        ...nodeDataProp.ewoks_props,
+        default_error_node: checked,
       },
     };
-    setNodeData(element.id, newNode.data);
-    // TBD
-    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+    setNodeData(element.id, newNodeData);
   }
 
-  function addDataMapping() {
+  function addDataMapping(nodeDataProp: EwoksRFNodeData) {
     const elMap =
-      element.data.ewoks_props.default_error_attributes?.data_mapping || [];
+      nodeDataProp.ewoks_props.default_error_attributes?.data_mapping || [];
 
     if (!elMap.some((x) => x.id === '')) {
-      const newNode = {
-        ...element,
-        data: {
-          ...element.data,
-          ewoks_props: {
-            ...element.data.ewoks_props,
-            default_error_attributes: {
-              ...element.data.ewoks_props.default_error_attributes,
-              data_mapping: [...elMap, { id: '', name: '', value: '' }],
-            },
+      const newNodeData = {
+        ...nodeDataProp,
+        ewoks_props: {
+          ...nodeDataProp.ewoks_props,
+          default_error_attributes: {
+            ...nodeDataProp.ewoks_props.default_error_attributes,
+            data_mapping: [...elMap, { id: '', name: '', value: '' }],
           },
         },
       };
-      setNodeData(element.id, newNode.data);
-      // TBD
-      setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+      setNodeData(element.id, newNodeData);
     }
   }
 
   function dataMappingValuesChanged(table: EditableTableRow[]) {
+    if (!nodeData) {
+      return;
+    }
     const dmap: DataMapping[] = table.map((row) => {
       if (typeof row.value !== 'string') {
         throw new TypeError(
@@ -255,41 +252,31 @@ export default function NodeDetails(element: EwoksRFNode) {
       };
     });
 
-    const newNode = {
-      ...element,
-      data: {
-        ...element.data,
-        ewoks_props: {
-          ...element.data.ewoks_props,
-          default_error_attributes: {
-            ...element.data.ewoks_props.default_error_attributes,
-            data_mapping: dmap,
-          },
+    const newNodeData = {
+      ...nodeData,
+      ewoks_props: {
+        ...nodeData.ewoks_props,
+        default_error_attributes: {
+          ...nodeData.ewoks_props.default_error_attributes,
+          data_mapping: dmap,
         },
       },
     };
-    setNodeData(element.id, newNode.data);
-    // TBD
-    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+    setNodeData(element.id, newNodeData);
   }
 
-  function mapAllDataChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    const newNode = {
-      ...element,
-      data: {
-        ...element.data,
-        ewoks_props: {
-          ...element.data.ewoks_props,
-          default_error_attributes: {
-            ...element.data.ewoks_props.default_error_attributes,
-            map_all_data: event.target.checked,
-          },
+  function mapAllDataChanged(checked: boolean, nodeDataProp: EwoksRFNodeData) {
+    const newNodeData = {
+      ...nodeDataProp,
+      ewoks_props: {
+        ...nodeDataProp.ewoks_props,
+        default_error_attributes: {
+          ...nodeDataProp.ewoks_props.default_error_attributes,
+          map_all_data: checked,
         },
       },
     };
-    setNodeData(element.id, newNode.data);
-    // TBD
-    setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+    setNodeData(element.id, newNodeData);
   }
 
   return (
@@ -327,7 +314,9 @@ export default function NodeDetails(element: EwoksRFNode) {
                 <b>Default Error Node</b>
                 <Checkbox
                   checked={defaultErrorNode}
-                  onChange={defaulErrortNodeChanged}
+                  onChange={(event) =>
+                    defaulErrortNodeChanged(event.target.checked, nodeData)
+                  }
                   inputProps={{ 'aria-label': 'controlled' }}
                 />
               </div>
@@ -339,20 +328,20 @@ export default function NodeDetails(element: EwoksRFNode) {
             <b>Map all Data</b>
             <Checkbox
               checked={mapAllData}
-              onChange={mapAllDataChanged}
+              onChange={(event) =>
+                mapAllDataChanged(event.target.checked, nodeData)
+              }
               inputProps={{ 'aria-label': 'controlled' }}
             />
           </div>
         )}
         {defaultErrorNode && !mapAllData && showAdvancedDetails && (
           <div>
-            {/* TODO: Check and Replace Data Mapping with the component to have dropdowns if not rarely used */}
-            {/* <DataMappingComponent {...element} /> */}
             <b>Data Mapping </b>
             <IconButton
               style={{ padding: '1px' }}
               aria-label="delete"
-              onClick={() => addDataMapping()}
+              onClick={() => addDataMapping(nodeData)}
             >
               <AddCircleOutlineIcon />
             </IconButton>
@@ -392,7 +381,7 @@ export default function NodeDetails(element: EwoksRFNode) {
                 <div style={{ width: '100%' }}>
                   {editableTaskProperties.map(({ id, label, value }) =>
                     ['ppfmethod', 'method', 'script'].includes(
-                      element.data.task_props.task_type || ''
+                      nodeData.task_props.task_type || ''
                     ) ? (
                       <EditTaskProp
                         key={id}
@@ -400,7 +389,7 @@ export default function NodeDetails(element: EwoksRFNode) {
                         label={label}
                         value={value || ''}
                         propChanged={propChanged}
-                        editProps // editProps
+                        editProps
                       />
                     ) : (
                       <div key={id} className={classes.detailsLabels}>
