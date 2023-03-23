@@ -72,6 +72,7 @@ function Node({
   const [edit, setEdit] = useState(false);
   const [labelLocal, setLabelLocal] = useState(label);
   const [detailsL, setDetailsL] = useState(false);
+  const nodesData = useNodeDataStore((state) => state.nodesData);
 
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
