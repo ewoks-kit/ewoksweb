@@ -3,6 +3,7 @@ import type { Conditions, EwoksLink, EwoksRFLink } from '../types';
 
 // EwoksRFLinks --> EwoksLinks for saving
 export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
+  // DATAC
   const tempLinks: EwoksRFLink[] = [...links].filter(
     (link) => link.data && !link.data.startEnd
   );

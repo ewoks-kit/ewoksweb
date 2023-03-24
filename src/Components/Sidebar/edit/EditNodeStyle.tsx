@@ -37,7 +37,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     if (debouncedNodeWidth !== nodeDataProp.ui_props.nodeWidth) {
       mergeNodeData(nodeId, {
         ui_props: { nodeWidth: width },
-      } as EwoksRFNodeData);
+      });
     }
   }
 
@@ -46,7 +46,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
       ui_props: {
         withImage: checked,
       },
-    } as EwoksRFNodeData);
+    });
   }
 
   function withLabelChanged(checked: boolean) {
@@ -54,7 +54,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
       ui_props: {
         withLabel: checked,
       },
-    } as EwoksRFNodeData);
+    });
   }
 
   const colorBorderChanged = (value: string) => {
@@ -62,7 +62,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
       ui_props: {
         colorBorder: value,
       },
-    } as EwoksRFNodeData);
+    });
   };
 
   const moreHandlesChanged = (checked: boolean) => {
@@ -70,7 +70,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
       ui_props: {
         moreHandles: checked,
       },
-    } as EwoksRFNodeData);
+    });
   };
 
   const changeNodeSize = (

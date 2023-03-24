@@ -112,6 +112,7 @@ export default function DraggableDialog(props: Props) {
     event: React.MouseEvent<HTMLElement>,
     newSelection: string
   ) => {
+    // DATAC for edges
     const graphRf: GraphRF = {
       graph: graphInfo,
       nodes: getNodes().map((nod) => {

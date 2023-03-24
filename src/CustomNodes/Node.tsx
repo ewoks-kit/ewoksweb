@@ -72,6 +72,7 @@ function Node({
   const [edit, setEdit] = useState(false);
   const [labelLocal, setLabelLocal] = useState(label);
   const [detailsL, setDetailsL] = useState(false);
+  const nodesData = useNodeDataStore((state) => state.nodesData);
 
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
@@ -97,7 +98,7 @@ function Node({
       nodes: getNodes(),
       links: getEdges() as EwoksRFLink[],
     };
-    const { isValid, reason } = isValidLink(connection, graphRf);
+    const { isValid, reason } = isValidLink(connection, graphRf, nodesData);
     if (!isValid) {
       setOpenSnackbar({
         open: true,

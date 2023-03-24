@@ -7,18 +7,15 @@ import type { ChangeEvent } from 'react';
 import { IconButton, TextField } from '@material-ui/core';
 import type { NodeProps } from 'reactflow';
 import type { EwoksRFNodeData } from '../types';
-import { useSelectedElement } from '../store/graph-hooks';
 import useNodeDataStore from '../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../utils/typeGuards';
 
 type NoteProps = NodeProps<EwoksRFNodeData>;
 
 const NoteNode = (args: NoteProps) => {
-  const selectedElement = useSelectedElement();
-
   const [comment, setComment] = useState('');
 
-  const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
   assertNodeDataDefined(nodeData, args.id);
 
@@ -39,16 +36,15 @@ const NoteNode = (args: NoteProps) => {
     setComment(event.target.value);
   };
 
-  const save = (nodeDataProps: EwoksRFNodeData) => {
+  const save = () => {
     // TBD: If permenant put it in undo-redo and make title editable
     const newNodeData = {
       task_props: { task_type: 'note', task_identifier: args.id },
-      ewoks_props: { label: nodeDataProps.ewoks_props.label },
-      ui_props: {},
+      ewoks_props: { label: nodeData.ewoks_props.label },
       comment,
     };
 
-    setNodeData(selectedElement.id, newNodeData);
+    mergeNodeData(args.id, newNodeData);
   };
 
   return (
@@ -89,7 +85,7 @@ const NoteNode = (args: NoteProps) => {
           <IconButton
             style={{ margin: '0px 2px', padding: '0px' }}
             aria-label="edit"
-            onClick={() => save(nodeData)}
+            onClick={save}
           >
             <SaveIcon color="primary" />
           </IconButton>

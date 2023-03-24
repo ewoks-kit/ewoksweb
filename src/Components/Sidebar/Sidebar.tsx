@@ -34,7 +34,7 @@ export default function Sidebar() {
   // const classes = useStyles();
 
   const nodesIds = useNodesIds();
-  const { deleteElements, getNodes, setNodes, getEdges } = useReactFlow();
+  const { deleteElements, getNodes, setNodes } = useReactFlow();
 
   const selectedElement = useSelectedElement();
   // const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
@@ -50,6 +50,7 @@ export default function Sidebar() {
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const initGraph = useStore((state) => state.initGraph);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const nodesData = useNodeDataStore((state) => state.nodesData);
 
   const deleteElement = async () => {
     if (workingGraph.graph.id !== graphInfo.id) {
@@ -113,19 +114,33 @@ export default function Sidebar() {
 
   const cloneNode = () => {
     if (isNode(selectedElement)) {
+      const clonedNode = getNodes().find(
+        (nod) => nod.id === selectedElement.id
+      );
+      const clonedNodeData = nodesData.get(selectedElement.id);
+
+      if (!clonedNode || !clonedNodeData) {
+        setOpenSnackbar({
+          open: true,
+          text: 'Cannot locate the node to clone',
+          severity: 'warning',
+        });
+        return;
+      }
       const newClone: EwoksRFNode = {
-        ...selectedElement,
-        id: calcNewId(selectedElement.id, nodesIds),
+        ...clonedNode,
+        id: calcNewId(clonedNode.id, nodesIds),
         selected: false,
         position: {
-          x: (selectedElement.position?.x || 0) + 100,
-          y: (selectedElement.position?.y || 0) + 100,
+          x: (clonedNode.position?.x || 0) + 100,
+          y: (clonedNode.position?.y || 0) + 100,
         },
       };
+
       const nodesRF = getNodes();
 
       setNodes([...nodesRF, newClone]);
-      setNodeData(newClone.id, newClone.data);
+      setNodeData(newClone.id, clonedNodeData);
     } else {
       setOpenSnackbar({
         open: true,

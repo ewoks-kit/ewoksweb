@@ -35,6 +35,7 @@ const workingGraph = (
     // 3. Put the newNodeSubgraphs into recent in their graphRF form (sync)
     newNodeSubgraphs.forEach((gr) => {
       // calculate the rfNodes using the fetched subgraphs
+      // nodes and edges stored with their data as EwoksRFNodes-Links
       get().addRecentGraph({
         graph: gr.graph,
         nodes: toRFEwoksNodes(gr, newNodeSubgraphs, get().tasks),
@@ -75,6 +76,15 @@ const workingGraph = (
       nodes: grfNodes,
       links: toRFEwoksLinks(workingGraphObject, newNodeSubgraphs, get().tasks),
     };
+    // DOC: set the working graph twice to avoid bug with nodeData.
+    // Better solution?
+    set((state) => ({
+      ...state,
+      workingGraph: initializedRFGraph,
+      undoRedo: [{ action: 'Opened new graph', graph }],
+      undoIndex: 0,
+    }));
+    useNodeDataStore.getState().setNodesData(graph.nodes);
 
     get().addRecentGraph(graph as GraphRF);
 
@@ -83,8 +93,6 @@ const workingGraph = (
     useSelectedElementStore
       .getState()
       .setSelectedElement({ type: 'graph', id: graph.graph.id });
-
-    useNodeDataStore.getState().setNodesData(graph.nodes);
 
     // add the new graph to the recent graphs if not already there
     get().addRecentGraph({
@@ -99,8 +107,6 @@ const workingGraph = (
     set((state) => ({
       ...state,
       workingGraph: graph,
-      undoRedo: [{ action: 'Opened new graph', graph }],
-      undoIndex: 0,
     }));
     return graph;
   },

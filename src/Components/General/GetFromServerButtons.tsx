@@ -60,10 +60,14 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
           setCanvasGraphChanged(false);
           const nodes = getNodes();
           if (isSubgraph === 'subgraph') {
-            const newGraphNode = await setSubGraph(graph, nodes, getEdges());
+            const { nodeWithoutData, data } = await setSubGraph(
+              graph,
+              nodes,
+              getEdges()
+            );
 
-            setNodes([...nodes, newGraphNode]);
-            setNodeData(newGraphNode.id, newGraphNode.data);
+            setNodes([...getNodes(), nodeWithoutData]);
+            setNodeData(nodeWithoutData.id, data);
           } else {
             initGraph(graph, 'fromServer');
           }

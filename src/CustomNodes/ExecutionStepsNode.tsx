@@ -15,6 +15,7 @@ function ExecutionStepsNode(args: NodeProps) {
     backgroundColor: '#ced3ee',
     textAlign: 'center',
     padding: '1px',
+    // DATAC
     color: args.data.event.error ? 'red' : '#4493dd',
     fontSize: '1.2em',
   };
@@ -37,6 +38,7 @@ function ExecutionStepsNode(args: NodeProps) {
         } as React.CSSProperties
       }
     >
+      {/* DATAC */}
       {args.data.label.split(',').map((val: number) => {
         return (
           <span style={{ maxWidth: '25px' }} className="icons" key={val}>

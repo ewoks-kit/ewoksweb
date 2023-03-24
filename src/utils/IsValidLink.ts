@@ -1,9 +1,10 @@
 import type { Connection, Edge } from 'reactflow';
-import type { GraphRF } from '../types';
+import type { EwoksRFNodeData, GraphRF } from '../types';
 
 export default function isValidLink(
   connection: Connection,
   graphRF: GraphRF,
+  nodesData?: Map<string, EwoksRFNodeData>,
   oldEdge?: Edge
 ): { isValid: boolean; reason: string } {
   let isValid = true;
@@ -24,7 +25,7 @@ export default function isValidLink(
     return { isValid: false, reason: 'One of the link end is not defined' };
   }
 
-  if (source.data.task_props.task_type === 'graphInput') {
+  if (nodesData?.get(source.id)?.task_props.task_type === 'graphInput') {
     // check if there is already a link using this graph-input
     if (graphRFL.links.some((link) => link.source === source.id)) {
       isValid = false;
@@ -58,7 +59,7 @@ export default function isValidLink(
     }
   }
 
-  if (target.data.task_props.task_type === 'graphOutput') {
+  if (nodesData?.get(target.id)?.task_props.task_type === 'graphOutput') {
     // DOC: check if there is already a link using this graph-output
     if (graphRFL.links.some((link) => link.target === target.id)) {
       isValid = false;

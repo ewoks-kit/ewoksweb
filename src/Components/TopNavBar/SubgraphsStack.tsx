@@ -14,7 +14,7 @@ const useStyles = DashboardStyle;
 export default function SubgraphsStack() {
   const classes = useStyles();
 
-  const { setNodes, setEdges } = useReactFlow();
+  const { setNodes, setEdges, fitView } = useReactFlow();
 
   const recentGraphs = useStore((state) => state.recentGraphs);
   const setGraphInfo = useStore((state) => state.setGraphInfo);
@@ -50,6 +50,9 @@ export default function SubgraphsStack() {
       setEdges(subgraph.links);
       setGraphInfo(subgraph.graph);
       setSelectedElement({ type: 'graph', id: subgraph.graph.id });
+      setTimeout(() => {
+        fitView();
+      }, 1000);
     }
   };
 

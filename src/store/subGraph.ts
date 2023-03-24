@@ -4,6 +4,7 @@ import type {
   GraphEwoks,
   GraphNodes,
   EwoksRFLink,
+  EwoksRFNodeData,
 } from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
@@ -14,6 +15,7 @@ import type { GetState, SetState } from 'zustand';
 import type { State } from '../types';
 import { Position } from 'reactflow';
 import type { Node, Edge } from 'reactflow';
+import useNodeDataStore from './useNodeDataStore';
 
 export interface SubGraphSlice {
   subGraph: GraphRF;
@@ -21,7 +23,7 @@ export interface SubGraphSlice {
     graph: GraphEwoks,
     nodes: Node[],
     links: Edge[]
-  ) => Promise<EwoksRFNode>;
+  ) => Promise<{ nodeWithoutData: Node; data: EwoksRFNodeData }>;
 }
 
 const subGraph = (
@@ -101,6 +103,7 @@ const subGraph = (
         type: 'graph',
         position: calcCoordinatesFirstNode(nodes),
 
+        // DATAC needs to set nodeData for this subgraph?
         data: {
           task_props: {
             task_type: 'graph',
@@ -146,8 +149,11 @@ const subGraph = (
       links: links as EwoksRFLink[],
     };
 
+    useNodeDataStore.getState().setNodeData(newNode.id, newNode.data);
+
     get().addRecentGraph(newWorkingGraph);
-    return newNode;
+    const { data, ...nodeWithoutData } = newNode;
+    return { nodeWithoutData: nodeWithoutData as Node, data };
   },
 });
 

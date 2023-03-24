@@ -38,6 +38,7 @@ export default function SaveGetFromDisk() {
 
   function saveToDisk() {
     if (graphInfo.label) {
+      // DATAC for edges
       const graphRf: GraphRF = {
         graph: graphInfo,
         nodes: getNodes().map((nod) => {

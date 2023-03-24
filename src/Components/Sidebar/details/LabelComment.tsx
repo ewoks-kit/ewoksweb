@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import type { EwoksRFLink, EwoksRFNode, EwoksRFNodeData } from '../../../types';
+import type { EwoksRFLink, EwoksRFNode } from '../../../types';
 import { FormControl, TextField, IconButton, Fab } from '@material-ui/core';
 import DashboardStyle from '../../Dashboard/DashboardStyle';
 import useStore from '../../../store/useStore';
@@ -37,7 +37,6 @@ export default function LabelComment(props: LabelCommentProps) {
   const [valueIsChanged, setValueIsChanged] = useState(false);
 
   const inExecutionMode = useStore((state) => state.inExecutionMode);
-  const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
 
@@ -82,11 +81,8 @@ export default function LabelComment(props: LabelCommentProps) {
 
   function saveLabel(labelLocal: string) {
     if (isNode(element) && nodeData) {
-      mergeNodeData(element.id, {
-        ewoks_props: {
-          label: labelLocal,
-        },
-      } as EwoksRFNodeData);
+      mergeNodeData(element.id, { ewoks_props: { label: labelLocal } });
+      return;
     }
 
     if (isLink(element)) {
@@ -103,11 +99,7 @@ export default function LabelComment(props: LabelCommentProps) {
 
   function saveComment(commentLocal: string) {
     if (isNode(element) && nodeData) {
-      const newNodeData: EwoksRFNodeData = {
-        ...nodeData,
-        comment: commentLocal,
-      };
-      setNodeData(element.id, newNodeData);
+      mergeNodeData(element.id, { comment: commentLocal });
       return;
     }
 

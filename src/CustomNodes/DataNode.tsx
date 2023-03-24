@@ -9,7 +9,7 @@ function DataNode(args: NodeProps) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
   assertNodeDataDefined(nodeData, args.id);
 
-  const { ui_props: uiProps } = nodeData;
+  const uiProps = nodeData.ui_props;
 
   return (
     <Node
@@ -18,8 +18,8 @@ function DataNode(args: NodeProps) {
       label={nodeData.ewoks_props.label || ''}
       selected={args.selected}
       color="#ced3ee"
-      image={uiProps.icon}
-      comment={nodeData.comment}
+      image={uiProps.icon || ''}
+      comment={nodeData.comment || ''}
       moreHandles={uiProps.moreHandles}
       details={uiProps.details}
       withImage={'withImage' in uiProps ? uiProps.withImage : true}
@@ -27,7 +27,7 @@ function DataNode(args: NodeProps) {
       withLabel={'withLabel' in uiProps ? uiProps.withLabel : true}
       colorBorder={'colorBorder' in uiProps ? uiProps.colorBorder : ''}
       content={<div style={{ ...style.io } as React.CSSProperties} />}
-      executing={uiProps.executing}
+      executing={uiProps.executing || false}
     />
   );
 }

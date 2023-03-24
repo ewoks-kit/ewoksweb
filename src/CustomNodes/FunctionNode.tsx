@@ -16,6 +16,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
   const { selected, id } = props;
   const graphInfo = useStore((state) => state.graphInfo);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const nodesData = useNodeDataStore((state) => state.nodesData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
   assertNodeDataDefined(nodeData, id);
 
@@ -27,7 +28,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
       nodes: getNodes(),
       links: getEdges() as EwoksRFLink[],
     };
-    const { isValid, reason } = isValidLink(connection, graphRf);
+    const { isValid, reason } = isValidLink(connection, graphRf, nodesData);
     if (!isValid) {
       setOpenSnackbar({
         open: true,
