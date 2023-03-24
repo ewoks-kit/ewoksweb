@@ -7,7 +7,6 @@ import type { ChangeEvent } from 'react';
 import { IconButton, TextField } from '@material-ui/core';
 import type { NodeProps } from 'reactflow';
 import type { EwoksRFNodeData } from '../types';
-import { useSelectedElement } from '../store/graph-hooks';
 import useNodeDataStore from '../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../utils/typeGuards';
 
