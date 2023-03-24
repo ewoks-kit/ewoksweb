@@ -29,6 +29,7 @@ import { useGraphId, useSelectedElement } from '../../store/graph-hooks';
 import { isNode } from '../../utils/typeGuards';
 import useSelectedElementStore from '../../store/useSelectedElementStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
+import useEdgeDataStore from '../../store/useEdgeDataStore';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -78,6 +79,7 @@ function Canvas() {
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setNodesData = useNodeDataStore((state) => state.setNodesData);
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
+  const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
 
   const nodesData = useNodeDataStore((state) => state.nodesData);
 
@@ -292,13 +294,16 @@ function Canvas() {
       return;
     }
 
-    // DATAC to nodes and edges
-    const newGraph = addConnectionToGraph(params, {
+    const newLink = addConnectionToGraph(params, {
       graph: graphInfo,
       nodes: getNodes(),
       links: getEdges() as EwoksRFLink[],
     });
-    setEdges(newGraph.links);
+
+    if (newLink) {
+      setEdgeData(newLink.id, newLink.data);
+      setEdges([...getEdges(), newLink]);
+    }
   };
 
   const onPaneContextMenu = (event: MouseEvent) => {
