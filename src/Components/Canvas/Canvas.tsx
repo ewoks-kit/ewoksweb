@@ -1,5 +1,5 @@
 import type { DragEventHandler, MouseEvent } from 'react';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import type { Node, Edge, Connection, NodeChange, EdgeChange } from 'reactflow';
 import { useOnSelectionChange } from 'reactflow';
 import ReactFlow, {
@@ -60,14 +60,12 @@ function Canvas() {
 
   const storeRF = useStoreApi();
   const rfInstance = useReactFlow();
-  const [prevGraphId, setPrevGraphId] = useState('');
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
   const graphInfo = useStore((state) => state.graphInfo);
   const setGraphInfo = useStore((state) => state.setGraphInfo);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
-  const subgraphsStack = useStore((state) => state.subgraphsStack);
   const addRecentGraph = useStore((state) => state.addRecentGraph);
   const setSelectedElement = useSelectedElementStore(
     (state) => state.setSelectedElement
@@ -77,7 +75,6 @@ function Canvas() {
   const recentGraphs = useStore((state) => state.recentGraphs);
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  // const setUndoRedo = useStore((state) => state.setUndoRedo);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setNodesData = useNodeDataStore((state) => state.setNodesData);
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
@@ -90,8 +87,6 @@ function Canvas() {
 
   const {
     fitView,
-    getZoom,
-    zoomTo,
     setNodes,
     setEdges,
     getNodes,
@@ -117,36 +112,10 @@ function Canvas() {
   useEffect(() => {
     setNodes(workingGraph.nodes);
     setEdges(workingGraph.links);
-  }, [workingGraph, setEdges, setNodes]);
-
-  useEffect(() => {
-    if (subgraphsStack[subgraphsStack.length - 1]?.id) {
-      setPrevGraphId(subgraphsStack[subgraphsStack.length - 1].id);
-    }
-  }, [subgraphsStack]);
-
-  // TODO: Merge with the above since it is based on the above value is not working
-  useEffect(() => {
-    if (prevGraphId !== graphId) {
-      const nodesLength = getNodes().length;
-
-      setTimeout(() => {
-        if (nodesLength === 0) {
-          return;
-        }
-        // DOC: Define a zoom level for small graphs to not show very-big nodes
-        if (nodesLength < 6) {
-          zoomTo(0.6);
-        } else {
-          fitView();
-        }
-        // DOC: the value of the delay is important to fitview even the execution
-        // that takes up to 4secs. Possibly rerender after the call to get the workflow??
-      }, 1000);
-      // DOC: if I clear the timeout for memory leaks the setTImeout never runs fitview???
-      // return () => clearTimeout(timer);
-    }
-  }, [getNodes, graphId, fitView, getZoom, zoomTo, prevGraphId]);
+    setTimeout(() => {
+      fitView();
+    }, 1000);
+  }, [workingGraph, setEdges, setNodes, fitView]);
 
   function onNodesChange(changes: NodeChange[]) {
     const newNodes = applyNodeChanges(changes, getNodes());
@@ -372,7 +341,9 @@ function Canvas() {
         setEdges(subgraph.links);
 
         setGraphInfo(subgraph.graph);
-
+        setTimeout(() => {
+          fitView();
+        }, 1000);
         setSubgraphsStack({
           id: subgraph.graph.id,
           label: subgraph.graph.label,
