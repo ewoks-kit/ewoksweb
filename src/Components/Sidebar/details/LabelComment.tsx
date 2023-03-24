@@ -40,6 +40,7 @@ export default function LabelComment(props: LabelCommentProps) {
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
+  const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
 
   useEffect(() => {
@@ -106,15 +107,7 @@ export default function LabelComment(props: LabelCommentProps) {
     }
 
     if (isLink(element)) {
-      const newElement = {
-        ...element,
-        data: { ...edgeData, comment: commentLocal },
-      };
-
-      setEdges([
-        ...getEdges().filter((edg) => edg.id !== element.id),
-        newElement,
-      ]);
+      mergeEdgeData(element.id, { comment: commentLocal });
     }
   }
 

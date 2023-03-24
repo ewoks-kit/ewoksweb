@@ -1,6 +1,7 @@
 import { MarkerType } from 'reactflow';
 import type {
   EwoksRFLink,
+  EwoksRFLinkData,
   EwoksRFNode,
   EwoksRFNodeData,
   GraphDetails,
@@ -83,4 +84,13 @@ export function assertNodeDataDefined(
   ? never
   : EwoksRFNodeData {
   assertDefined(nodeData, `Node with id ${nodeId} has undefined data!`);
+}
+
+export function assertEdgeDataDefined(
+  edgeData: EwoksRFLinkData | undefined,
+  edgeId: string
+): asserts edgeData is EwoksRFLinkData extends undefined
+  ? never
+  : EwoksRFLinkData {
+  assertDefined(edgeData, `Edge with id ${edgeId} has undefined data!`);
 }
