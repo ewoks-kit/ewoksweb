@@ -22,7 +22,12 @@ import { deleteWorkflow } from 'api/api';
 // import { OpenInBrowser } from '@material-ui/icons';
 // import SidebarTooltip from './SidebarTooltip';
 import commonStrings from 'commonStrings.json';
-import { isGraphDetails, isLink, isNode } from '../../utils/typeGuards';
+import {
+  assertNodeDataDefined,
+  isGraphDetails,
+  isLink,
+  isNode,
+} from '../../utils/typeGuards';
 import { textForError } from '../../utils';
 import { useNodesIds, useSelectedElement } from '../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
@@ -117,9 +122,8 @@ export default function Sidebar() {
       const clonedNode = getNodes().find(
         (nod) => nod.id === selectedElement.id
       );
-      const clonedNodeData = nodesData.get(selectedElement.id);
 
-      if (!clonedNode || !clonedNodeData) {
+      if (!clonedNode) {
         setOpenSnackbar({
           open: true,
           text: 'Cannot locate the node to clone',
@@ -127,6 +131,8 @@ export default function Sidebar() {
         });
         return;
       }
+      const clonedNodeData = nodesData.get(selectedElement.id);
+      assertNodeDataDefined(clonedNodeData, selectedElement.id);
       const newClone: EwoksRFNode = {
         ...clonedNode,
         id: calcNewId(clonedNode.id, nodesIds),

@@ -11,11 +11,7 @@ import {
 
 import DashboardStyle from '../../Dashboard/DashboardStyle';
 import useStore from '../../../store/useStore';
-import type {
-  EwoksRFLink,
-  EwoksRFLinkData,
-  PropertyChangedEvent,
-} from '../../../types';
+import type { EwoksRFLink, PropertyChangedEvent } from '../../../types';
 import sidebarStyle from '../sidebarStyle';
 import type { ChangeEvent } from 'react';
 import { isMarkerType, isString } from '../../../utils/typeGuards';
