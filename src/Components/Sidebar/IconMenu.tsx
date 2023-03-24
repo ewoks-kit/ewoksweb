@@ -11,13 +11,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { Button, Menu, Tooltip } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import FormDialog from '../General/FormDialog';
-import type {
-  EwoksRFLink,
-  EwoksRFNode,
-  EwoksRFNodeData,
-  GraphDetails,
-  Task,
-} from '../../types';
+import type { EwoksRFLink, EwoksRFNode, GraphDetails, Task } from '../../types';
 import useStore from '../../store/useStore';
 import { FormAction } from '../../types';
 import { useSelectedElement } from '../../store/graph-hooks';
