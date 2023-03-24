@@ -5,7 +5,7 @@ import { merge } from 'lodash';
 export interface EdgeDataState {
   edgesData: Map<string, EwoksRFLinkData>;
   setEdgeData: (edgeId: string, edgeData: EwoksRFLinkData) => void;
-  mergeEdgeData: (edgeId: string, edgeData: EwoksRFLinkData) => void;
+  mergeEdgeData: (edgeId: string, edgeData: Partial<EwoksRFLinkData>) => void;
   setEdgesData: (edges: EwoksRFLink[]) => void;
   resetEdgesData: () => void;
 }

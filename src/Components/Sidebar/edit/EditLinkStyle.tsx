@@ -121,24 +121,18 @@ export default function EditLinkStyle(element: EwoksRFLink) {
         x: newX,
       },
     };
-    mergeEdgeData(element.id, newEdgeData as EwoksRFLinkData);
-    // setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    mergeEdgeData(element.id, newEdgeData);
     setX(newX);
   }
 
   function changeY(_event: ChangeEvent<unknown>, value: number | number[]) {
     const newY = value as number;
-    const newEdge = {
-      ...element,
-      data: {
-        ...element.data,
-        getAroundProps: {
-          ...element.data.getAroundProps,
-          y: newY,
-        },
+    const newEdgeData = {
+      getAroundProps: {
+        y: newY,
       },
     };
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    mergeEdgeData(element.id, newEdgeData);
     setY(newY);
   }
 
