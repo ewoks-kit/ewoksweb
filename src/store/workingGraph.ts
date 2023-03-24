@@ -76,6 +76,14 @@ const workingGraph = (
       nodes: grfNodes,
       links: toRFEwoksLinks(workingGraphObject, newNodeSubgraphs, get().tasks),
     };
+    // DOC: set the working graph twice to avoid bug with nodeData.
+    // Better solution?
+    set((state) => ({
+      ...state,
+      workingGraph: initializedRFGraph,
+      undoRedo: [{ action: 'Opened new graph', graph }],
+      undoIndex: 0,
+    }));
     useNodeDataStore.getState().setNodesData(graph.nodes);
 
     get().addRecentGraph(graph as GraphRF);
@@ -99,8 +107,6 @@ const workingGraph = (
     set((state) => ({
       ...state,
       workingGraph: graph,
-      undoRedo: [{ action: 'Opened new graph', graph }],
-      undoIndex: 0,
     }));
     return graph;
   },

@@ -31,7 +31,7 @@ export default function DefaultInputs(element: EwoksRFNode) {
           ],
         },
       };
-      mergeNodeData(element.id, newNodeData as EwoksRFNodeData);
+      mergeNodeData(element.id, newNodeData);
     }
   }
 
@@ -47,7 +47,7 @@ export default function DefaultInputs(element: EwoksRFNode) {
         }),
       },
     };
-    mergeNodeData(element.id, newNodeData as EwoksRFNodeData);
+    mergeNodeData(element.id, newNodeData);
   };
 
   return (

@@ -5,7 +5,7 @@ import { merge } from 'lodash';
 export interface NodeDataState {
   nodesData: Map<string, EwoksRFNodeData>;
   setNodeData: (nodeId: string, nodeData: EwoksRFNodeData) => void;
-  mergeNodeData: (nodeId: string, nodeData: EwoksRFNodeData) => void;
+  mergeNodeData: (nodeId: string, nodeData: Partial<EwoksRFNodeData>) => void;
   setNodesData: (nodes: EwoksRFNode[]) => void;
   resetNodesData: () => void;
 }
