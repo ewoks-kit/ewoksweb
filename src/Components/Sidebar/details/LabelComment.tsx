@@ -82,11 +82,8 @@ export default function LabelComment(props: LabelCommentProps) {
 
   function saveLabel(labelLocal: string) {
     if (isNode(element) && nodeData) {
-      mergeNodeData(element.id, {
-        ewoks_props: {
-          label: labelLocal,
-        },
-      } as EwoksRFNodeData);
+      mergeNodeData(element.id, { ewoks_props: { label: labelLocal } });
+      return;
     }
 
     if (isLink(element)) {
@@ -103,11 +100,7 @@ export default function LabelComment(props: LabelCommentProps) {
 
   function saveComment(commentLocal: string) {
     if (isNode(element) && nodeData) {
-      const newNodeData: EwoksRFNodeData = {
-        ...nodeData,
-        comment: commentLocal,
-      };
-      setNodeData(element.id, newNodeData);
+      mergeNodeData(element.id, { comment: commentLocal });
       return;
     }
 

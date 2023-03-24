@@ -386,9 +386,7 @@ function Canvas() {
         });
       }
     } else {
-      mergeNodeData(nodeTmp.id, {
-        ui_props: { details: true },
-      } as EwoksRFNodeData);
+      mergeNodeData(nodeTmp.id, { ui_props: { details: true } });
     }
   };
 

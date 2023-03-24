@@ -4,6 +4,7 @@ import type {
   EditableTableRow,
   EwoksRFNode,
   EwoksRFNodeData,
+  RFNodeTaskProperties,
 } from '../../../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from '../EditableTableProperties/EditableTable';
@@ -156,8 +157,8 @@ export default function NodeDetails(element: EwoksRFNode) {
       mergeNodeData(element.id, {
         task_props: {
           task_identifier: propKeyValue.task_identifier || '',
-        },
-      } as EwoksRFNodeData);
+        } as RFNodeTaskProperties,
+      });
 
       setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
       setEdges(newLinks);
@@ -167,10 +168,8 @@ export default function NodeDetails(element: EwoksRFNode) {
 
     if (Object.keys(propKeyValue)[0] === 'node_icon') {
       mergeNodeData(element.id, {
-        ui_props: {
-          icon: Object.values(propKeyValue)[0],
-        },
-      } as EwoksRFNodeData);
+        ui_props: { icon: Object.values(propKeyValue)[0] },
+      });
     }
   }
 
@@ -179,7 +178,7 @@ export default function NodeDetails(element: EwoksRFNode) {
       ewoks_props: {
         inputs_complete: checked,
       },
-    } as EwoksRFNodeData);
+    });
   }
 
   function defaulErrortNodeChanged(checked: boolean) {
@@ -187,7 +186,7 @@ export default function NodeDetails(element: EwoksRFNode) {
       ewoks_props: {
         default_error_node: checked,
       },
-    } as EwoksRFNodeData);
+    });
   }
 
   function addDataMapping(nodeDataProp: EwoksRFNodeData) {
@@ -202,7 +201,7 @@ export default function NodeDetails(element: EwoksRFNode) {
           },
         },
       };
-      mergeNodeData(element.id, newNodeData as EwoksRFNodeData);
+      mergeNodeData(element.id, newNodeData);
     }
   }
 
@@ -226,7 +225,7 @@ export default function NodeDetails(element: EwoksRFNode) {
         },
       },
     };
-    mergeNodeData(element.id, newNodeData as EwoksRFNodeData);
+    mergeNodeData(element.id, newNodeData);
   }
 
   function mapAllDataChanged(checked: boolean) {
@@ -237,7 +236,7 @@ export default function NodeDetails(element: EwoksRFNode) {
         },
       },
     };
-    mergeNodeData(element.id, newNodeData as EwoksRFNodeData);
+    mergeNodeData(element.id, newNodeData);
   }
 
   return (
