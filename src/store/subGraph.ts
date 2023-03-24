@@ -4,6 +4,7 @@ import type {
   GraphEwoks,
   GraphNodes,
   EwoksRFLink,
+  EwoksRFNodeData,
 } from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
@@ -22,7 +23,7 @@ export interface SubGraphSlice {
     graph: GraphEwoks,
     nodes: Node[],
     links: Edge[]
-  ) => Promise<EwoksRFNode>;
+  ) => Promise<{ nodeWithoutData: Node; data: EwoksRFNodeData }>;
 }
 
 const subGraph = (
@@ -151,7 +152,8 @@ const subGraph = (
     useNodeDataStore.getState().setNodeData(newNode.id, newNode.data);
 
     get().addRecentGraph(newWorkingGraph);
-    return newNode;
+    const { data, ...nodeWithoutData } = newNode;
+    return { nodeWithoutData: nodeWithoutData as Node, data };
   },
 });
 

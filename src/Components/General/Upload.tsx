@@ -66,13 +66,13 @@ function Upload(props: { children?: ReactNode } | undefined) {
             // const { result } = validateEwoksGraph(newGraph);
             await initGraph(newGraph, 'fromDisk');
           } else {
-            const newGraphNode = await setSubGraph(
+            const { nodeWithoutData, data } = await setSubGraph(
               newGraph,
               getNodes(),
               getEdges()
             );
-            setNodes([...getNodes(), newGraphNode]);
-            setNodeData(newGraphNode.id, newGraphNode.data);
+            setNodes([...getNodes(), nodeWithoutData]);
+            setNodeData(nodeWithoutData.id, data);
           }
         } else {
           setOpenSnackbar({
