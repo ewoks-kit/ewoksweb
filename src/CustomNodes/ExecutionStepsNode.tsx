@@ -4,9 +4,10 @@ step that has been executed.
 */
 import { style } from './NodeStyle';
 
-import state from '../store/state';
+import useStore from '../store/useStore';
+import type { NodeProps } from 'reactflow';
 
-function ExecutionStepsNode(args) {
+function ExecutionStepsNode(args: NodeProps) {
   const customTitle = {
     ...style.title,
     wordWrap: 'break-word',
@@ -14,15 +15,16 @@ function ExecutionStepsNode(args) {
     backgroundColor: '#ced3ee',
     textAlign: 'center',
     padding: '1px',
+    // DATAC
     color: args.data.event.error ? 'red' : '#4493dd',
     fontSize: '1.2em',
   };
 
-  const setCurrentExecutionEvent = state(
+  const setCurrentExecutionEvent = useStore(
     (state) => state.setCurrentExecutionEvent
   );
 
-  const goToEvent = (val) => {
+  const goToEvent = (val: number) => {
     setCurrentExecutionEvent(val);
   };
 
@@ -36,7 +38,8 @@ function ExecutionStepsNode(args) {
         } as React.CSSProperties
       }
     >
-      {args.data.label.split(',').map((val) => {
+      {/* DATAC */}
+      {args.data.label.split(',').map((val: number) => {
         return (
           <span style={{ maxWidth: '25px' }} className="icons" key={val}>
             {args.data.label.length > 0 && (

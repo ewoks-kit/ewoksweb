@@ -1,50 +1,74 @@
-import type { EwoksRFNode, GraphRF, GraphEwoks, GraphNodes } from '../types';
+import type {
+  EwoksRFNode,
+  GraphRF,
+  GraphEwoks,
+  GraphNodes,
+  EwoksRFLink,
+  EwoksRFNodeData,
+} from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
-import existsOrValue from '../utils/existsOrValue';
 import { calcCoordinatesFirstNode } from './storeUtils/CalcCoordinatesFirstNode';
+import orange2 from 'images/orange2.png';
+import type { GetState, SetState } from 'zustand';
+import type { State } from '../types';
+import { Position } from 'reactflow';
+import type { Node, Edge } from 'reactflow';
+import useNodeDataStore from './useNodeDataStore';
 
-const subGraph = (set, get) => ({
+export interface SubGraphSlice {
+  subGraph: GraphRF;
+  setSubGraph: (
+    graph: GraphEwoks,
+    nodes: Node[],
+    links: Edge[]
+  ) => Promise<{ nodeWithoutData: Node; data: EwoksRFNodeData }>;
+}
+
+const subGraph = (
+  set: SetState<State>,
+  get: GetState<State>
+): SubGraphSlice => ({
   subGraph: {
     graph: { id: '', label: '', input_nodes: [], output_nodes: [] },
     nodes: [],
     links: [],
-  } as GraphRF,
+  },
 
   // DOC: takes a GraphEwoks and transform it to graphRF
-  setSubGraph: async (subGraph: GraphEwoks) => {
+  // UWG: replace this with the workingGraph by also passing
+  // the new node-graph to add. Does the same and adds a graph?
+  setSubGraph: async (subGraphL, nodes, links) => {
     // 1. input the graphEwoks from server or file-system
     // 2. search for all subgraphs in it (async)
-
-    const prevState = get((prev) => prev);
     const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(
-      subGraph,
-      prevState.recentGraphs
+      subGraphL,
+      get().recentGraphs
     );
 
     // 3. Put the newNodeSubgraphs into recent in their graphRF form (sync)
     newNodeSubgraphs.forEach((gr) => {
       // calculate the rfNodes using the fetched subgraphs
-      const rfNodes = toRFEwoksNodes(gr, newNodeSubgraphs, prevState.tasks);
+      const rfNodes: EwoksRFNode[] = toRFEwoksNodes(
+        gr,
+        newNodeSubgraphs,
+        get().tasks
+      );
 
-      prevState.setRecentGraphs({
+      get().addRecentGraph({
         graph: gr.graph,
         nodes: rfNodes,
-        links: toRFEwoksLinks(gr, newNodeSubgraphs, prevState.tasks),
+        links: toRFEwoksLinks(gr, newNodeSubgraphs, get().tasks),
       });
     });
     // 4. Calculate the new graph given the subgraphs
-    const grfNodes = toRFEwoksNodes(
-      subGraph,
-      newNodeSubgraphs,
-      prevState.tasks
-    );
+    const grfNodes = toRFEwoksNodes(subGraphL, newNodeSubgraphs, get().tasks);
 
     const graph = {
-      graph: subGraph.graph,
+      graph: subGraphL.graph,
       nodes: grfNodes,
-      links: toRFEwoksLinks(subGraph, newNodeSubgraphs, prevState.tasks),
+      links: toRFEwoksLinks(subGraphL, newNodeSubgraphs, get().tasks),
     };
     // Adding a subgraph to an existing workingGraph:
     // save the workingGraph in the recent graphs and add a new graph node to it
@@ -53,79 +77,90 @@ const subGraph = (set, get) => ({
 
     let newNode = {} as EwoksRFNode;
     if (subToAdd) {
-      const inputsSub = subToAdd.graph.input_nodes.map((input) => {
+      const inputsSub = subToAdd.graph?.input_nodes?.map((input) => {
         return {
           label: calcLabel(input),
           type: 'data ',
-          // positionY: input.uiProps.position.y,
         };
       });
-      const outputsSub = subToAdd.graph.output_nodes.map((output) => {
+      const outputsSub = subToAdd.graph?.output_nodes?.map((output) => {
         return {
           label: calcLabel(output),
           type: 'data ',
-          // positionY: output.uiProps.position.y,
         };
       });
       let id = 0;
-      let graphId = subToAdd.graph.label;
-      while (prevState.graphRF.nodes.some((nod) => nod.id === graphId)) {
+      let graphId = subToAdd.graph.label || '';
+      while (nodes.some((nod) => nod.id === graphId)) {
         graphId += id++;
       }
       newNode = {
-        sourcePosition: 'right',
-        targetPosition: 'left',
-        task_generator: '',
+        sourcePosition: Position.Right,
+        targetPosition: Position.Left,
+
         id: graphId,
-        task_type: 'graph',
-        task_identifier: subToAdd.graph.id,
+
         type: 'graph',
-        position: calcCoordinatesFirstNode(prevState.graphRF.nodes),
-        default_inputs: [],
-        inputs_complete: false,
-        default_error_node: false,
-        default_error_attributes: {
-          map_all_data: true,
-          data_mapping: [],
-        },
+        position: calcCoordinatesFirstNode(nodes),
+
+        // DATAC needs to set nodeData for this subgraph?
         data: {
-          exists: true,
-          label: subToAdd.graph.label,
-          type: 'internal',
+          task_props: {
+            task_type: 'graph',
+            task_identifier: subToAdd.graph.id,
+          },
+          ui_props: {
+            exists: true,
+            type: 'internal',
+
+            icon: subToAdd.graph?.uiProps?.icon || orange2,
+            inputs: inputsSub,
+            outputs: outputsSub,
+            withImage: true,
+            withLabel: true,
+          },
+
+          ewoks_props: {
+            label: subToAdd.graph.label,
+            default_inputs: [],
+            task_generator: '',
+            inputs_complete: false,
+            default_error_node: false,
+            default_error_attributes: {
+              map_all_data: true,
+              data_mapping: [],
+            },
+          },
           comment: '',
-          icon: subToAdd.graph.uiProps && subToAdd.graph.uiProps.icon,
-          inputs: inputsSub,
-          outputs: outputsSub,
-          withImage: true,
-          withLabel: true,
         },
       };
 
-      prevState.setRecentGraphs(subToAdd);
+      get().addRecentGraph(subToAdd);
     } else {
-      prevState.setOpenSnackbar({
+      get().setOpenSnackbar({
         open: true,
         text: 'Couldnt locate the workingGraph in the recent!',
         severity: 'warning',
       });
     }
     const newWorkingGraph = {
-      graph: prevState.graphRF.graph,
-      nodes: [...prevState.graphRF.nodes, newNode],
-      links: prevState.graphRF.links,
+      graph: get().graphRF.graph,
+      nodes: [...nodes, newNode] as EwoksRFNode[],
+      links: links as EwoksRFLink[],
     };
-    prevState.setGraphRF(newWorkingGraph);
-    prevState.setRecentGraphs(newWorkingGraph);
-    return graph;
+
+    useNodeDataStore.getState().setNodeData(newNode.id, newNode.data);
+
+    get().addRecentGraph(newWorkingGraph);
+    const { data, ...nodeWithoutData } = newNode;
+    return { nodeWithoutData: nodeWithoutData as Node, data };
   },
 });
 
 function calcLabel(inputOutput: GraphNodes): string {
-  return `${
-    existsOrValue(inputOutput.uiProps, 'label', inputOutput.id) as string
-  }: ${inputOutput.node} ${
-    inputOutput.sub_node ? ` -> ${inputOutput.sub_node}` : ''
-  }`;
+  return `${inputOutput.uiProps?.label ?? inputOutput.id}: ${
+    inputOutput.node
+  } ${inputOutput.sub_node ? ` -> ${inputOutput.sub_node}` : ''}`;
 }
 
 export default subGraph;

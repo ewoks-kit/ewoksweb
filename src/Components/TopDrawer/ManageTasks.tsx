@@ -7,27 +7,29 @@ import {
   FormControlLabel,
   Switch,
 } from '@material-ui/core';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import AddNodes from '../Sidebar/AddNodes';
 import EventNoteIcon from '@material-ui/icons/EventNote';
 import { useState } from 'react';
-import { discoverTasks } from '../../utils/api';
-import configData from '../../configData.json';
+import type { ChangeEvent } from 'react';
+import { discoverTasks } from '../../api/api';
+import commonStrings from '../../commonStrings.json';
 import type { SnackbarParams } from '../../types';
+import { textForError } from '../../utils';
 
 export default function ManageTasks() {
-  const setOpenSnackbar = state<(params: SnackbarParams) => void>(
+  const setOpenSnackbar = useStore<(params: SnackbarParams) => void>(
     (state) => state.setOpenSnackbar
   );
   const [pythonModules, setPythonModules] = useState<string[]>([]);
   const [showDiscover, setShowDiscover] = useState<boolean>(false);
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
 
-  function discoverTasksChanged(event) {
+  function discoverTasksChanged(event: ChangeEvent<HTMLInputElement>) {
     setShowDiscover(event.target.checked);
   }
 
-  function pythonModuleChanged(event) {
+  function pythonModuleChanged(event: ChangeEvent<HTMLInputElement>) {
     setPythonModules([event.target.value]);
   }
 
@@ -42,7 +44,7 @@ export default function ManageTasks() {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text: error.response?.data?.message || configData.savingError,
+        text: textForError(error, commonStrings.savingError),
         severity: 'warning',
       });
     }
@@ -105,7 +107,9 @@ export default function ManageTasks() {
             style={{ margin: '8px' }}
             variant="outlined"
             color="primary"
-            onClick={discover}
+            onClick={() => {
+              discover();
+            }}
             size="small"
           >
             Discover Tasks

@@ -23,11 +23,11 @@ function CustomTableCell(props: CustomTableCellProps) {
       {/* In edit mode the type comes from sidebar in data-mapping and
       from the selected type here for conditions and default-values */}
       {isEditMode ? (
-        <TableCellInEditMode props={props} />
+        <TableCellInEditMode {...props} />
       ) : row[name] && typeof row[name] === 'object' ? (
         JSON.stringify(row[name])
       ) : (
-        (row[name] === null ? 'null' : row[name].toString()) || ''
+        String(row[name])
       )}
     </TableCell>
   );

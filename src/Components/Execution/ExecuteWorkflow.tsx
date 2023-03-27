@@ -1,33 +1,37 @@
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import SendIcon from '@material-ui/icons/Send';
 import IntegratedSpinner from '../General/IntegratedSpinner';
 import ClearIcon from '@material-ui/icons/Clear';
 import io from 'socket.io-client';
 import { useEffect, useState } from 'react';
 import type { Event } from '../../types';
-import { executeWorkflow } from '../../utils/api';
+import { executeWorkflow } from '../../api/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
+import useSelectedElementStore from '../../store/useSelectedElementStore';
 
-export const socket = io(process.env.REACT_APP_SERVER_URL);
+export const socket = io(process.env.REACT_APP_SERVER_URL as string);
 
 export default function ExecuteWorkflow() {
-  const graphRF = state((state) => state.graphRF);
-  const recentGraphs = state((state) => state.recentGraphs);
+  const graphInfo = useStore((state) => state.graphInfo);
+  const recentGraphs = useStore((state) => state.recentGraphs);
 
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const inExecutionMode = state((state) => state.inExecutionMode);
-  const setInExecutionMode = state((state) => state.setInExecutionMode);
-  const setExecutedEvents = state((state) => state.setExecutedEvents);
-  const canvasGraphChanged = state((state) => state.canvasGraphChanged);
-  const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const inExecutionMode = useStore((state) => state.inExecutionMode);
+  const setInExecutionMode = useStore((state) => state.setInExecutionMode);
+  const setExecutedEvents = useStore((state) => state.setExecutedEvents);
+  const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
+  const setCanvasGraphChanged = useStore(
+    (state) => state.setCanvasGraphChanged
+  );
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
-  const undoIndex = state((state) => state.undoIndex);
-  const setSelectedElement = state((state) => state.setSelectedElement);
-
+  const undoIndex = useStore((state) => state.undoIndex);
+  const setSelectedElement = useSelectedElementStore(
+    (state) => state.setSelectedElement
+  );
   useEffect(() => {
     // DOC: when execution begins it has to listen to incoming from the socket events
-    socket.on('Executing', (data) => {
-      setExecutedEvents(data as Event);
+    socket.on('Executing', (data: Event) => {
+      setExecutedEvents(data);
     });
 
     return () => {
@@ -39,18 +43,19 @@ export default function ExecuteWorkflow() {
   function checkAndExecute() {
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
-    } else {
-      execute();
-      setOpenAgreeDialog(false);
-      setCanvasGraphChanged(false);
+      return;
     }
+
+    execute();
+    setOpenAgreeDialog(false);
+    setCanvasGraphChanged(false);
   }
 
   async function execute() {
     if (recentGraphs.length > 0 && !inExecutionMode) {
       setInExecutionMode(true);
       try {
-        await executeWorkflow(graphRF.graph.id);
+        await executeWorkflow(graphInfo.id);
       } catch (error) {
         // Keep logging in console for debugging when talking with a user
         /* eslint-disable no-console */
@@ -65,7 +70,7 @@ export default function ExecuteWorkflow() {
       setInExecutionMode(false);
       // DOC: when exiting the execution to show the graph as selected
       // and not a numbered execution node that the user might have clicked
-      setSelectedElement(graphRF.graph);
+      setSelectedElement({ type: 'graph', id: graphInfo.id });
     } else {
       setOpenSnackbar({
         open: true,

@@ -1,5 +1,6 @@
+import type { ChangeEvent } from 'react';
 import { useState } from 'react';
-// import state from '../store/state';
+// import useStore from '../store/state';
 import {
   TextField,
   Button,
@@ -10,33 +11,23 @@ import {
   FormControlLabel,
   Switch,
 } from '@material-ui/core';
-import AutocompleteDrop from 'Components/General/AutocompleteDrop';
-import { getExecutionEvents } from '../../utils/api';
-import state from '../../store/state';
-import type { ExecutedJobsResponse, WorkflowDescription } from '../../types';
-
-interface filterParams {
-  workflow_id: string;
-  status: string;
-  starttime: string;
-  endtime: string;
-  // sets context filters out within the job array that is not practical
-  // context: string;
-  node_id: string;
-  // TODO: filter jobs that include this task_id and give back all jobs' steps?
-  task_id: string;
-  user_name: string;
-  job_id: string;
-  // type: string;
-  error?: boolean;
-}
+import { getExecutionEvents } from '../../api/api';
+import useStore from '../../store/useStore';
+import type {
+  ExecutedJobsResponse,
+  WorkflowDescription,
+  filterParams,
+  PropertyChangedEvent,
+} from '../../types';
+import CategoryDropdown from '../General/dropdown/CategoryDropdown';
+import WorkflowDropdown from '../General/dropdown/WorkflowDropdown';
 
 export default function ExecutionFilters() {
   // const [workflowNameFilter, setWorkflowNameFilter] = useState<String>('');
-  const [fromTimeFilter, setFromTimeFilter] = useState<String>('');
-  const [toTimeFilter, setToTimeFilter] = useState<String>('');
-  const [fromDateFilter, setFromDateFilter] = useState<String>('');
-  const [toDateFilter, setToDateFilter] = useState<String>('');
+  const [fromTimeFilter, setFromTimeFilter] = useState<string>('');
+  const [toTimeFilter, setToTimeFilter] = useState<string>('');
+  const [fromDateFilter, setFromDateFilter] = useState<string>('');
+  const [toDateFilter, setToDateFilter] = useState<string>('');
   const [workflowId, setWorkflowId] = useState('');
   const [categoryValue, setCategoryValue] = useState('');
   const [status, setStatus] = useState('');
@@ -48,44 +39,35 @@ export default function ExecutionFilters() {
   const [jobId, setJobId] = useState<string>('');
   // const [type, setType] = useState<string>('');
   const [moreFilters, setMoreFilters] = useState<boolean>(false);
-  const setExecutedWorkflows = state((state) => state.setExecutedWorkflows);
+  const setExecutedWorkflows = useStore((state) => state.setExecutedWorkflows);
 
-  const toDateChanged = (event) => {
+  const toDateChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setToDateFilter(event.target.value);
   };
 
-  const fromDateChanged = (event) => {
+  const fromDateChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setFromDateFilter(event.target.value);
   };
 
-  const toTimeChanged = (event) => {
+  const toTimeChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setToTimeFilter(event.target.value);
   };
 
-  const fromTimeChanged = (event) => {
+  const fromTimeChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setFromTimeFilter(event.target.value);
   };
 
   // TODO: same as in manageWorkflows for category and workflows
   function setInputValue(workflowDetails: WorkflowDescription) {
-    if (workflowDetails && workflowDetails.id) {
-      setWorkflowId(workflowDetails.id || '');
-    } else {
-      setWorkflowId('');
-    }
+    setWorkflowId(workflowDetails?.id ?? '');
   }
 
-  function setInputCategoryValue(workflowDetails: WorkflowDescription) {
-    // DOC: filter according to the selected category
-    if (workflowDetails && workflowDetails.label) {
-      setCategoryValue(workflowDetails.label);
-    } else {
-      setCategoryValue('');
-    }
+  function setCategoryFilter(category: string) {
+    setCategoryValue(category ?? '');
   }
 
-  function statusChanged(event) {
-    setStatus(event.target.value);
+  function statusChanged(event: PropertyChangedEvent) {
+    setStatus(event.target.value as string);
   }
 
   async function getEvents() {
@@ -94,11 +76,9 @@ export default function ExecutionFilters() {
       if (workflowId) {
         filterParams.workflow_id = workflowId;
       }
-      if (status === 'Failed') {
-        filterParams.error = true;
-      } else if (status === 'Success') {
-        filterParams.error = false;
-      }
+
+      filterParams.error = status !== 'Success';
+
       if (fromDateFilter) {
         filterParams.starttime = fromDateFilter.toString();
       }
@@ -136,23 +116,23 @@ export default function ExecutionFilters() {
     }
   }
 
-  function moreFiltersChanged(event) {
+  function moreFiltersChanged(event: ChangeEvent<HTMLInputElement>) {
     setMoreFilters(event.target.checked);
   }
 
-  function nodeIdChanged(event) {
+  function nodeIdChanged(event: ChangeEvent<HTMLInputElement>) {
     setNodeId(event.target.value);
   }
 
-  function taskIdChanged(event) {
+  function taskIdChanged(event: ChangeEvent<HTMLInputElement>) {
     setTaskId(event.target.value);
   }
 
-  function userNameChanged(event) {
+  function userNameChanged(event: ChangeEvent<HTMLInputElement>) {
     setUserName(event.target.value);
   }
 
-  function jobIdChanged(event) {
+  function jobIdChanged(event: ChangeEvent<HTMLInputElement>) {
     setJobId(event.target.value);
   }
 
@@ -169,27 +149,19 @@ export default function ExecutionFilters() {
         variant="outlined"
         style={{ minWidth: '200px', margin: '8px' }}
       >
-        <AutocompleteDrop
-          setInputValue={setInputCategoryValue}
-          placeholder="Categories"
-          category={categoryValue}
-        />
+        <CategoryDropdown onChange={setCategoryFilter} />
       </FormControl>
       <FormControl
         variant="outlined"
         style={{ minWidth: '200px', margin: '8px' }}
       >
-        <AutocompleteDrop
-          setInputValue={setInputValue}
-          placeholder="Open Workflow"
-          category={categoryValue}
-        />
+        <WorkflowDropdown onChange={setInputValue} category={categoryValue} />
       </FormControl>
       <FormControl
         variant="filled"
         style={{ minWidth: '100px', margin: '8px' }}
       >
-        <InputLabel id="demo-select-small">Status</InputLabel>
+        <InputLabel>Status</InputLabel>
         <Select value={status} label="Status" onChange={statusChanged}>
           <MenuItem value="">{/* <em>None</em> */}</MenuItem>
           <MenuItem value="Success">Success</MenuItem>
@@ -199,7 +171,6 @@ export default function ExecutionFilters() {
       </FormControl>
       <div style={{ margin: '8px' }}>
         <TextField
-          id="date"
           label="From"
           type="date"
           value={fromDateFilter}
@@ -213,7 +184,6 @@ export default function ExecutionFilters() {
       </div>
       <div style={{ margin: '8px' }}>
         <TextField
-          id="date"
           label="To"
           type="date"
           value={toDateFilter}
@@ -239,7 +209,6 @@ export default function ExecutionFilters() {
         <>
           <div style={{ margin: '8px' }}>
             <TextField
-              id="date"
               label="From time"
               type="time"
               // value={toDateFilter}
@@ -253,7 +222,6 @@ export default function ExecutionFilters() {
           </div>
           <div style={{ margin: '8px' }}>
             <TextField
-              id="date"
               label="To time"
               type="time"
               // value={toDateFilter}
@@ -315,7 +283,9 @@ export default function ExecutionFilters() {
         style={{ margin: '8px' }}
         variant="outlined"
         color="primary"
-        onClick={getEvents}
+        onClick={() => {
+          getEvents();
+        }}
         size="small"
       >
         Filter

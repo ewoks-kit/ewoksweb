@@ -1,49 +1,43 @@
-import React, { useEffect } from 'react';
-
-import type { EwoksRFNode, Inputs } from 'types';
+import type { EditableTableRow, EwoksRFNode, EwoksRFNodeData } from 'types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import { IconButton } from '@material-ui/core';
-
-import state from 'store/state';
+import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
+import useNodeDataStore from '../../../store/useNodeDataStore';
+import { assertNodeDataDefined } from '../../../utils/typeGuards';
 
-export default function DefaultInputs(props) {
-  const { element } = props;
+export default function DefaultInputs(element: EwoksRFNode) {
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
+  assertNodeDataDefined(nodeData, element.id);
 
-  const [defaultInputs, setDefaultInputs] = React.useState<Inputs[]>([]);
-  const setSelectedElement = state((state) => state.setSelectedElement);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const defautInputs = nodeData.ewoks_props.default_inputs || [];
 
-  useEffect(() => {
-    setDefaultInputs(element.default_inputs ? element.default_inputs : []);
-  }, [element.id, element]);
-
-  const addDefaultInputs = () => {
-    const el = element as EwoksRFNode;
-    const elIn = el.default_inputs;
-
-    if (elIn && elIn[elIn.length - 1] && elIn[elIn.length - 1].id === '') {
+  function addDefaultInputs(nodeDataProps: EwoksRFNodeData) {
+    if (defautInputs?.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
-        text: 'Please fill in the empty line before addining another!',
+        text: 'Please fill in the empty line before adding another!',
         severity: 'warning',
       });
     } else {
-      setSelectedElement(
-        {
-          ...element,
-          default_inputs: [...elIn, { id: '', name: '', value: '' }],
+      const newNodeData = {
+        ewoks_props: {
+          default_inputs: [
+            ...(nodeDataProps.ewoks_props.default_inputs || []),
+            { id: '', name: '', value: '' },
+          ],
         },
-        'fromSaveElement'
-      );
+      };
+      mergeNodeData(element.id, newNodeData);
     }
-  };
+  }
 
-  const defaultInputsChanged = (table) => {
-    setSelectedElement(
-      {
-        ...element,
+  const defaultInputsChanged = (table: EditableTableRow[]) => {
+    const newNodeData = {
+      ewoks_props: {
         default_inputs: table.map((dval) => {
           return {
             id: dval.name,
@@ -52,8 +46,8 @@ export default function DefaultInputs(props) {
           };
         }),
       },
-      'fromSaveElement'
-    );
+    };
+    mergeNodeData(element.id, newNodeData);
   };
 
   return (
@@ -67,24 +61,25 @@ export default function DefaultInputs(props) {
           <IconButton
             style={{ padding: '1px' }}
             aria-label="delete"
-            onClick={() => addDefaultInputs()}
+            onClick={() => addDefaultInputs(nodeData)}
+            data-cy="addDefaultInputsButton"
           >
             <AddCircleOutlineIcon />
           </IconButton>
         </div>
       </SidebarTooltip>
 
-      {defaultInputs.length > 0 && (
+      {defautInputs && defautInputs.length > 0 && (
         <EditableTable
           headers={['Name', 'Value']}
-          defaultValues={defaultInputs}
+          defaultValues={defautInputs}
           valuesChanged={defaultInputsChanged}
           typeOfValues={[
             {
               type: 'select',
               values: [
-                ...(element.optional_input_names || []),
-                ...(element.required_input_names || []),
+                ...(nodeData.task_props?.optional_input_names || []),
+                ...(nodeData.task_props?.required_input_names || []),
               ],
             },
             { type: 'input' },

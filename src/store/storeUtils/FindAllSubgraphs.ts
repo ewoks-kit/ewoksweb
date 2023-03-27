@@ -3,12 +3,14 @@ import { getSubgraphs } from '../../utils';
 
 export async function findAllSubgraphs(
   graphToSearch: GraphEwoks,
-  recentGraphs: GraphRF[] | GraphEwoks[]
+  recentGraphs: GraphRF[]
 ): Promise<GraphEwoks[]> {
+  // TODO: examine functionality because it seems to get again previously
+  // fetched graphs. Also goes one by one awaiting. Promise.all better??
   let subsToGet = [graphToSearch];
-  const newNodeSubgraphs = [];
+  const newNodeSubgraphs: GraphEwoks[] = [];
 
-  const thisCallRecent = [...recentGraphs];
+  const recentGraphsIds = recentGraphs.map((graph) => graph.graph.id);
 
   // Get for each graph all subgraphs it includes
   while (subsToGet.length > 0) {
@@ -16,21 +18,17 @@ export async function findAllSubgraphs(
     // eslint-disable-next-line no-await-in-loop
     const allGraphSubs: GraphEwoks[] = await getSubgraphs(
       subsToGet[0],
-      thisCallRecent as GraphRF[]
+      recentGraphsIds
     );
     // store them as ewoksGraphs for later transforming to RFGraphs
-    if (allGraphSubs.includes(null)) {
-      subsToGet.shift();
-    } else {
-      allGraphSubs.forEach((gr) => {
-        newNodeSubgraphs.push(gr);
-        thisCallRecent.push(gr);
-      });
-      // drop the one we searched for its subgraphs
-      subsToGet.shift();
-      // add the new subgraphs in the existing subgraphs we need to search
-      subsToGet = [...subsToGet, ...allGraphSubs];
-    }
+    allGraphSubs.forEach((gr) => {
+      newNodeSubgraphs.push(gr);
+      recentGraphsIds.push(gr.graph.id);
+    });
+    // drop the one we searched for its subgraphs
+    subsToGet.shift();
+    // add the new subgraphs in the existing subgraphs we need to search
+    subsToGet = [...subsToGet, ...allGraphSubs];
   }
   return newNodeSubgraphs;
 }

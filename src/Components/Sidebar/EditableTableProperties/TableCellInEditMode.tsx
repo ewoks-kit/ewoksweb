@@ -2,6 +2,7 @@
   The cell within a table when the row is in edit mode.
   Provides different input for any selected type (number, string, list etc)
 */
+import type { ChangeEvent } from 'react';
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
@@ -15,6 +16,7 @@ import {
 // TODO: Keep the following if edit on the table is needed
 // import CellEditInJson from './CellEditInJson';
 import { Autocomplete } from '@material-ui/lab';
+import type { CustomTableCellProps, EditableTableRow } from '../../../types';
 
 const useStyles = makeStyles(() => ({
   input: {
@@ -24,22 +26,28 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function TableCellInEditMode(propsIn) {
-  const { props } = propsIn;
+function TableCellInEditMode(props: CustomTableCellProps) {
   const { index, row, name, onChange, type, typeOfValues } = props;
   const classes = useStyles();
 
-  const [boolVal, setBoolVal] = React.useState(true);
+  const [valueToString, setValueToString] = React.useState<string>('true');
 
   useEffect(() => {
-    setBoolVal(
+    setValueToString(
       row.value !== null && row.value !== undefined
-        ? row.value.toString()
+        ? // I need to show as string any kind of (value: unknown) it gets
+          // value can be any type in the dropdown
+          // eslint-disable-next-line @typescript-eslint/no-base-to-string
+          row.value.toString()
         : 'null'
     );
   }, [row.value, row]);
 
-  function onChangeBool(e, row, index) {
+  function onChangeBool(
+    e: ChangeEvent<HTMLInputElement>,
+    changedRow: EditableTableRow,
+    rowIndex: number
+  ) {
     const event = {
       ...e,
       target: {
@@ -48,75 +56,90 @@ function TableCellInEditMode(propsIn) {
         value: e.target.value,
       },
     };
-    onChange(event, row, index);
+    onChange(event, changedRow, rowIndex);
   }
 
-  return type === 'dict' || type === 'list' || type === 'object' ? (
+  if (type && ['dict', 'list', 'object'].includes(type)) {
     // TODO: examine if needed to edit in the cell?
     // <CellEditInJson props={{ row, name, type, onChange }} />
-    <span>{JSON.stringify(row[name])}</span>
-  ) : // <span></span>
-  typeOfValues.type === 'select' ? (
-    <>
-      <FormControl fullWidth variant="outlined">
-        <Autocomplete
-          id="free-solo-demo"
-          freeSolo
-          options={typeOfValues.values}
+    return <span>{JSON.stringify(row[name])}</span>;
+  }
+
+  if (typeOfValues.type === 'select') {
+    return (
+      <>
+        <FormControl fullWidth variant="outlined">
+          <Autocomplete
+            freeSolo
+            options={typeOfValues.values || []}
+            value={row[name]}
+            onChange={(e, val) =>
+              onChange({ target: { value: val as string, name } }, row, index)
+            }
+            onInputChange={(e, val) =>
+              onChange({ target: { value: val, name } }, row, index)
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={typeOfValues.type || 'name'}
+                margin="normal"
+                variant="outlined"
+              />
+            )}
+            data-cy="autocompleteInputInEditableCell"
+          />
+        </FormControl>
+        {/* <Select
+          name={name}
           value={row[name]}
-          onChange={(e, val) =>
-            onChange({ target: { value: val, name } }, row, index)
-          }
-          onInputChange={(e, val) =>
-            onChange({ target: { value: val, name } }, row, index)
-          }
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label={typeOfValues.type || 'name'}
-              margin="normal"
-              variant="outlined"
-            />
-          )}
-        />
-      </FormControl>
-      {/* <Select
-        name={name}
-        value={row[name]}
-        label="type"
-        onChange={(e) => onChange(e, row, index)}
+          label="type"
+          onChange={(e) => onChange(e, row, index)}
+        >
+          {typeOfValues.values.map((tex) => (
+            <MenuItem key={tex} value={tex}>
+              {tex}
+            </MenuItem>
+          ))}
+        </Select> */}
+      </>
+    );
+  }
+
+  if (type === 'bool' || type === 'boolean') {
+    return (
+      <RadioGroup
+        name="value"
+        value={valueToString}
+        onChange={(e) => onChangeBool(e, row, index)}
+        data-cy="radioInEditableCell"
       >
-        {typeOfValues.values.map((tex) => (
-          <MenuItem key={tex} value={tex}>
-            {tex}
-          </MenuItem>
-        ))}
-      </Select> */}
-    </>
-  ) : type === 'bool' || type === 'boolean' ? (
-    <RadioGroup
-      aria-label="gender"
-      name="value"
-      value={boolVal} // {row[name]}
-      onChange={(e) => onChangeBool(e, row, index)}
-    >
-      <FormControlLabel value="true" control={<Radio />} label="true" />
-      <FormControlLabel value="false" control={<Radio />} label="false" />
-    </RadioGroup>
-  ) : type === 'number' ? (
-    <Input
-      value={row[name]}
-      type="number"
-      name={name}
-      onChange={(e) => onChange(e, row, index)}
-      className={classes.input}
-    />
-  ) : (
+        <FormControlLabel value="true" control={<Radio />} label="true" />
+        <FormControlLabel value="false" control={<Radio />} label="false" />
+      </RadioGroup>
+    );
+  }
+
+  if (type === 'number') {
+    return (
+      <Input
+        value={row[name]}
+        type="number"
+        name={name}
+        onChange={(e) => onChange(e, row, index)}
+        className={classes.input}
+        data-cy="inputInEditableCell"
+      />
+    );
+  }
+
+  return (
     <Input
       value={row[name] || ''}
       name={name}
       onChange={(e) => onChange(e, row, index)}
       className={classes.input}
+      data-cy="inputInEditableCell"
     />
   );
 }

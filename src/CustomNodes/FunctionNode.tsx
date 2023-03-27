@@ -1,16 +1,34 @@
-import React, { memo } from 'react';
-import { Handle, Position } from 'react-flow-renderer';
+import { memo } from 'react';
+import { Handle, Position } from 'reactflow';
+import type { Connection, NodeProps } from 'reactflow';
 import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
 import isValidLink from '../utils/IsValidLink';
-import state from '../store/state';
+import useStore from '../store/useStore';
+import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../types';
+import { useReactFlow } from 'reactflow';
+import useNodeDataStore from '../store/useNodeDataStore';
+import { assertNodeDataDefined } from '../utils/typeGuards';
 
-function FunctionNode(fnod) {
-  const graphRF = state((state) => state.graphRF);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
+  const { getNodes, getEdges } = useReactFlow();
 
-  const isValidConnection = (connection) => {
-    const { isValid, reason } = isValidLink(connection, graphRF);
+  const { selected, id } = props;
+  const graphInfo = useStore((state) => state.graphInfo);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const nodesData = useNodeDataStore((state) => state.nodesData);
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
+  assertNodeDataDefined(nodeData, id);
+
+  const { ui_props: uiProps } = nodeData;
+
+  const isValidConnection = (connection: Connection) => {
+    const graphRf: GraphRF = {
+      graph: graphInfo,
+      nodes: getNodes(),
+      links: getEdges() as EwoksRFLink[],
+    };
+    const { isValid, reason } = isValidLink(connection, graphRf, nodesData);
     if (!isValid) {
       setOpenSnackbar({
         open: true,
@@ -24,32 +42,31 @@ function FunctionNode(fnod) {
   return (
     <Node
       isGraph
-      moreHandles={fnod.data.moreHandles}
-      withImage={fnod.data.withImage}
-      nodeWidth={fnod.data.nodeWidth || 120}
-      withLabel={fnod.data.withLabel}
-      colorBorder={fnod.data.colorBorder}
-      type={fnod.data.type}
-      label={fnod.label ? fnod.label : fnod.data.label}
-      selected={fnod.selected}
-      color={fnod.data.exists ? '#ced3ee' : 'red'}
-      image={fnod.data.icon}
-      comment={fnod.data.comment}
-      executing={fnod.data.executing}
+      moreHandles={uiProps.moreHandles || false}
+      withImage={uiProps.withImage}
+      nodeWidth={uiProps.nodeWidth || 120}
+      withLabel={uiProps.withLabel}
+      colorBorder={uiProps.colorBorder}
+      // type is calculated in calcNodeType for subgraphs-inNodes-outNodes
+      type={uiProps.type || ''}
+      label={nodeData.ewoks_props.label || ''}
+      selected={selected}
+      color={uiProps.exists ? '#ced3ee' : 'red'}
+      image={uiProps.icon}
+      comment={nodeData.comment}
+      executing={uiProps.executing}
       content={
         <>
-          {fnod.data.inputs
-            .sort((a, b) => a.positionY - b.positionY)
+          {uiProps.inputs
+            ?.sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
             .map((input: { label: string }) => (
               <div
                 key={input.label}
-                style={
-                  {
-                    ...style.io,
-                    ...style.textLeft,
-                    ...(fnod.data.moreHandles ? style.borderInput : {}),
-                  } as React.CSSProperties
-                }
+                style={{
+                  ...style.io,
+                  ...style.textLeft,
+                  ...(uiProps.moreHandles ? style.borderInput : {}),
+                }}
               >
                 {/* remove the rest of the input {input.label} for now */}
                 {input.label.slice(0, input.label.indexOf(':'))}
@@ -65,7 +82,7 @@ function FunctionNode(fnod) {
                   }}
                   isValidConnection={isValidConnection}
                 />
-                {fnod.data.moreHandles && (
+                {uiProps.moreHandles && (
                   <Handle
                     key="&{input.label} right"
                     type="target"
@@ -84,18 +101,16 @@ function FunctionNode(fnod) {
                 )}
               </div>
             ))}
-          {fnod.data.outputs
-            .sort((a, b) => a.positionY - b.positionY)
+          {uiProps.outputs
+            ?.sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
             .map((output: { label: string }) => (
               <div
                 key={output.label}
-                style={
-                  {
-                    ...style.io,
-                    ...style.textRight,
-                    ...(fnod.data.moreHandles ? style.borderOutput : {}),
-                  } as React.CSSProperties
-                }
+                style={{
+                  ...style.io,
+                  ...style.textRight,
+                  ...(uiProps.moreHandles ? style.borderOutput : {}),
+                }}
               >
                 {/* remove the rest of the output {output.label} for now */}
                 {output.label.slice(0, output.label.indexOf(':'))}
@@ -111,7 +126,7 @@ function FunctionNode(fnod) {
                   }}
                   isValidConnection={isValidConnection}
                 />
-                {fnod.data.moreHandles && (
+                {uiProps.moreHandles && (
                   <Handle
                     key={`${output.label} left`}
                     type="source"

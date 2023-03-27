@@ -1,4 +1,4 @@
-import DashboardStyle from '../../layout/DashboardStyle';
+import DashboardStyle from '../Dashboard/DashboardStyle';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Fab, IconButton } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
@@ -7,11 +7,14 @@ import Upload from '../General/Upload';
 import tooltipText from '../General/TooltipText';
 import { rfToEwoks } from '../../utils';
 
-import state from '../../store/state';
+import useStore from '../../store/useStore';
+import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../../types';
+import { useReactFlow } from 'reactflow';
+import useNodeDataStore from '../../store/useNodeDataStore';
 
 const useStyles = DashboardStyle;
 
-function download(content, fileName, contentType) {
+function download(content: BlobPart, fileName: string, contentType: string) {
   const a = document.createElement('a');
   const file = new Blob([content], { type: contentType });
   a.href = URL.createObjectURL(file);
@@ -21,21 +24,34 @@ function download(content, fileName, contentType) {
 
 export default function SaveGetFromDisk() {
   const classes = useStyles();
+  const nodesData = useNodeDataStore((state) => state.nodesData);
 
-  const setGraphOrSubgraph = state((state) => state.setGraphOrSubgraph);
-  const graphRF = state((state) => state.graphRF);
-  const inExecutionMode = state((state) => state.inExecutionMode);
+  const { getNodes, getEdges } = useReactFlow();
+
+  const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
+  const graphInfo = useStore((state) => state.graphInfo);
+  const inExecutionMode = useStore((state) => state.inExecutionMode);
 
   function loadFromDisk() {
     setGraphOrSubgraph(true);
   }
 
   function saveToDisk() {
-    download(
-      JSON.stringify(rfToEwoks(graphRF), null, 2),
-      `${graphRF.graph.label}.json`,
-      'text/plain'
-    );
+    if (graphInfo.label) {
+      // DATAC for edges
+      const graphRf: GraphRF = {
+        graph: graphInfo,
+        nodes: getNodes().map((nod) => {
+          return { ...nod, data: nodesData.get(nod.id) as EwoksRFNodeData };
+        }),
+        links: getEdges() as EwoksRFLink[],
+      };
+      download(
+        JSON.stringify(rfToEwoks(graphRf), null, 2),
+        `${graphInfo.label}.json`,
+        'text/plain'
+      );
+    }
   }
 
   return (

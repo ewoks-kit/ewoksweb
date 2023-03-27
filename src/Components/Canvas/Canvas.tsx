@@ -1,18 +1,13 @@
-/* eslint-disable unicorn/consistent-function-scoping */
-/* eslint-disable consistent-return */
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import type { DragEventHandler, MouseEvent } from 'react';
+import { useEffect, useRef } from 'react';
+import type { Node, Edge, Connection, NodeChange, EdgeChange } from 'reactflow';
+import { useOnSelectionChange } from 'reactflow';
 import ReactFlow, {
   Controls,
-  MiniMap,
-  Node,
-  Edge,
-  Background,
-  Connection,
   useReactFlow,
   applyNodeChanges,
   applyEdgeChanges,
-  useUpdateNodeInternals,
-} from 'react-flow-renderer';
+} from 'reactflow';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import bendingText from 'CustomEdges/BendingTextEdge';
 import multilineText from 'CustomEdges/MultilineTextEdge';
@@ -22,10 +17,18 @@ import FunctionNode from 'CustomNodes/FunctionNode';
 import NoteNode from 'CustomNodes/NoteNode';
 import ExecutionStepsNode from 'CustomNodes/ExecutionStepsNode';
 import DataNode from 'CustomNodes/DataNode';
-import type { GraphRF, EwoksRFNode, EwoksRFLink } from 'types';
-import state from 'store/state';
+import type { EwoksRFNode, EwoksRFLink, EwoksRFNodeData } from 'types';
+import useStore from 'store/useStore';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
+import CanvasBackground from './CanvasBackground';
+import CanvasMiniMap from './CanvasMiniMap';
+import { addConnectionToGraph, trimLabel } from './utils';
+import { useStoreApi } from 'reactflow';
+import { useGraphId, useSelectedElement } from '../../store/graph-hooks';
+import { isNode } from '../../utils/typeGuards';
+import useSelectedElementStore from '../../store/useSelectedElementStore';
+import useNodeDataStore from '../../store/useNodeDataStore';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -52,190 +55,136 @@ const nodeTypes = {
   class: DataNode,
 };
 
-function trimLabel(label) {
-  if (label.length <= 20) {
-    return label;
-  }
-
-  return label.split('.').pop();
-}
-
 function Canvas() {
   const classes = useStyles();
 
-  const [rfInstance, setRfInstance] = useState(null);
-  const [nodes, setNodes] = useState([]);
-  const [edges, setEdges] = useState([]);
-  const [prevGraphId, setPrevGraphId] = useState('');
+  const storeRF = useStoreApi();
+  const rfInstance = useReactFlow();
 
-  const reactFlowWrapper = useRef(null);
+  const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
-  const graphRF = state((state) => state.graphRF);
-  const setGraphRF = state((state) => state.setGraphRF);
-  const setSubgraphsStack = state((state) => state.setSubgraphsStack);
-  const subgraphsStack = state((state) => state.subgraphsStack);
-  const setRecentGraphs = state((state) => state.setRecentGraphs);
-  const setUndoRedo = state((state) => state.setUndoRedo);
-  const setSelectedElement = state((state) => state.setSelectedElement);
-  const selectedElement = state((state) => state.selectedElement);
-  const setSelectedTask = state((state) => state.setSelectedTask);
-  const tasks = state((state) => state.tasks);
-  const recentGraphs = state((state) => state.recentGraphs);
-  const workingGraph = state((state) => state.workingGraph);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const updateNodeInternals = useUpdateNodeInternals();
+  const graphInfo = useStore((state) => state.graphInfo);
+  const setGraphInfo = useStore((state) => state.setGraphInfo);
+  const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
+  const addRecentGraph = useStore((state) => state.addRecentGraph);
+  const setSelectedElement = useSelectedElementStore(
+    (state) => state.setSelectedElement
+  );
+  const setSelectedTask = useStore((state) => state.setSelectedTask);
+  const tasks = useStore((state) => state.tasks);
+  const recentGraphs = useStore((state) => state.recentGraphs);
+  const workingGraph = useStore((state) => state.workingGraph);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const setNodesData = useNodeDataStore((state) => state.setNodesData);
+  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
-  const { fitView, getZoom, zoomTo } = useReactFlow();
-  // TODO: when selecting a node-link selected fires the re-render
-  // since graphRF changes. We need to not rerender
-  // Accosiated edges titles flicker when selecting a node and then select graph
-  useEffect(() => {
-    setNodes(graphRF.nodes);
-    setEdges(graphRF.links);
-  }, [graphRF.nodes, graphRF.links]);
+  const nodesData = useNodeDataStore((state) => state.nodesData);
 
-  useEffect(() => {
-    if ('position' in selectedElement) {
-      const timeoutPosition = setTimeout(() => {
-        updateNodeInternals(selectedElement.id);
-      }, 400);
-      return () => clearTimeout(timeoutPosition);
-    }
-  }, [selectedElement, updateNodeInternals]);
+  const graphId = useGraphId();
 
-  useEffect(() => {
-    if (subgraphsStack[subgraphsStack.length - 1]) {
-      setPrevGraphId(subgraphsStack[subgraphsStack.length - 1].id);
-    }
-  }, [subgraphsStack]);
+  const selectedElement = useSelectedElement();
 
-  useEffect(() => {
-    if (prevGraphId !== graphRF.graph.id) {
-      setTimeout(() => {
-        // DOC: Define a zoom level for small graphs to not show very-big nodes
-        if (graphRF.nodes.length > 0 && graphRF.nodes.length < 6) {
-          zoomTo(0.6);
-        } else if (graphRF.nodes.length > 0) {
-          fitView();
-        }
-        // DOC: the value of the delay is important to fitview even the execution
-        // that takes up to 4secs. Possibly rerender after the call to get the workflow??
-      }, 1000);
-      // DOC: if I clear the timeout for memory leaks the setTImeout never runs fitview???
-      // return () => clearTimeout(timer);
-    }
-  }, [
-    graphRF.graph.id,
+  const {
     fitView,
-    getZoom,
-    zoomTo,
-    graphRF.nodes.length,
-    prevGraphId,
-  ]);
+    setNodes,
+    setEdges,
+    getNodes,
+    getEdges,
+    addNodes,
+    getNode,
+  } = rfInstance;
 
-  const onElementsRemove = useCallback(
-    (elementsToRemove) => {
-      let newGraph = {} as GraphRF;
-      const [el] = elementsToRemove;
-      if (el.position) {
-        const nodesLinks = graphRF.links.filter(
-          (link) => !(link.source === el.id || link.target === el.id)
-        );
-
-        newGraph = {
-          ...graphRF,
-          nodes: graphRF.nodes.filter((nod) => nod.id !== el.id),
-          links: nodesLinks,
-        };
-        setUndoRedo({ action: 'Removed a Node', graph: newGraph });
-      } else if (el.source) {
-        newGraph = {
-          ...graphRF,
-          links: graphRF.links.filter((link) => link.id !== el.id),
-        };
-        setUndoRedo({ action: 'Removed a Link', graph: newGraph });
+  useOnSelectionChange({
+    onChange: ({ nodes, edges }) => {
+      if (nodes.length > 0) {
+        setSelectedElement({ type: 'node', id: nodes[0].id });
+        return;
       }
-      setGraphRF(newGraph, true);
+      if (edges.length > 0) {
+        setSelectedElement({ type: 'edge', id: edges[0].id });
+        return;
+      }
+      setSelectedElement({ type: 'graph', id: graphInfo.id });
     },
-    [graphRF, setGraphRF, setUndoRedo]
-  );
+  });
 
-  const onNodesChange = useCallback(
-    (changes) => {
-      const node = [...graphRF.nodes].find((el) => el.id === changes[0].id);
-      // TODO: nodes are updated only on rf canvas and not on graphRF
-      // if we update graphRF we have a loop so we update on setSelectedElement
-      // where we set every other selected to false... SOLUTION
+  useEffect(() => {
+    setNodes(workingGraph.nodes);
+    setEdges(workingGraph.links);
+    setTimeout(() => {
+      fitView();
+    }, 1000);
+  }, [workingGraph, setEdges, setNodes, fitView]);
 
-      setNodes((ns) => {
-        return applyNodeChanges(changes, ns);
+  function onNodesChange(changes: NodeChange[]) {
+    const newNodes = applyNodeChanges(changes, getNodes());
+    if (workingGraph.graph.id !== graphId) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Any node changes in any subgraph will not be saved!',
+        severity: 'warning',
       });
+    }
+    storeRF.getState().setNodes(newNodes);
+  }
 
-      if (changes[0].type === 'remove') {
-        onElementsRemove([node]);
-      }
-    },
-    [onElementsRemove, graphRF.nodes]
-  );
-
-  const onEdgesChange = useCallback(
-    (changes) => {
-      const edgeToRemove = graphRF.links.find((el) => el.id === changes[0].id);
-
-      if (changes[0].type === 'remove') {
-        onElementsRemove([edgeToRemove]);
-      }
-      setEdges((es) => applyEdgeChanges(changes, es));
-    },
-    [onElementsRemove, graphRF.links]
-  );
+  function onEdgesChange(changes: EdgeChange[]) {
+    const newEdges = applyEdgeChanges(changes, getEdges());
+    if (workingGraph.graph.id !== graphId) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Any link changes in any subgraph will not be saved!',
+        severity: 'warning',
+      });
+    }
+    storeRF.getState().setEdges(newEdges);
+  }
 
   const onPaneClick = () => {
-    setSelectedElement(graphRF.graph);
+    // TBD: Handle details differently and remove nodesData from canvas?
+    // also need to use type in Node and carry the task_identifier for onDoubleClick
+    nodesData.forEach((nodData, id) => {
+      if (nodData.ui_props.details === true) {
+        setNodeData(id, {
+          ...nodData,
+          ui_props: { ...nodData.ui_props, details: false },
+        });
+      }
+    });
   };
 
-  const onNodeClick = (event, element?: Node) => {
-    const graphElement: EwoksRFNode = nodes.find((el) => el.id === element.id);
+  // Keep this comment until execution is deleted
+  // const onNodeClick = (_event: MouseEvent, element: Node) => {
+  //   if (
+  //     !(
+  //       element.data.task_props.task_type === 'executionSteps' &&
+  //       element.type === 'executionSteps'
+  //     )
+  //   ) {
+  //     setSelectedElement({ type: 'node', id: element.id });
+  //   }
+  // };
 
-    if (
-      !(
-        graphElement.task_type === 'executionSteps' &&
-        graphElement.type === 'executionSteps'
-      )
-    ) {
-      setSelectedElement(graphElement);
-    }
-  };
-
-  const onEdgeClick = (event, element?: Edge) => {
-    const graphElement: EwoksRFLink = edges.find((el) => el.id === element.id);
-    setSelectedElement(graphElement);
-  };
-
-  const onInit = useCallback((instance) => {
-    setRfInstance(instance);
-  }, []);
-
-  const onDragOver = (event) => {
+  // eslint-disable-next-line unicorn/consistent-function-scoping
+  const onDragOver: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   };
 
-  const onDrop = (event) => {
+  const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
-
-    if (graphRF.graph.id === '0') {
-      setSubgraphsStack({
-        id: graphRF.graph.id,
-        label: graphRF.graph.label,
-      });
-    }
-
-    if (workingGraph.graph.id === graphRF.graph.id) {
-      const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-      const task_identifier = event.dataTransfer.getData('task_identifier');
-      const task_type = event.dataTransfer.getData('task_type');
-      const icon = event.dataTransfer.getData('icon');
+    if (workingGraph.graph.id === graphId) {
+      const stateRF = storeRF.getState();
+      const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect() || {
+        left: 0,
+        top: 0,
+      };
+      const task_identifier: string = event.dataTransfer.getData(
+        'task_identifier'
+      );
+      const task_type: string = event.dataTransfer.getData('task_type');
+      const icon: string = event.dataTransfer.getData('icon');
       const position = rfInstance.project({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
@@ -244,60 +193,58 @@ function Canvas() {
       let tempTask = tasks.find(
         (tas) => tas.task_identifier === task_identifier
       );
-      tempTask = tempTask
-        ? tempTask // if you found the Task return it
-        : task_type === 'graph' // if not found check if it is a graph ???
-        ? tempTask // if a graph return it and if not add some default inputs-outputs
-        : {
-            optional_input_names: [],
-            output_names: [],
-            required_input_names: [],
-          };
 
-      const newNode = {
-        id:
-          task_type === 'graphInput'
-            ? calcNewId('In', graphRF.nodes)
-            : task_type === 'graphOutput'
-            ? calcNewId('Out', graphRF.nodes)
-            : task_type === 'note'
-            ? calcNewId('Note', graphRF.nodes)
-            : calcNewId(task_identifier || 'Node', graphRF.nodes),
-        // TODO not dublicate label
-        label: trimLabel(task_identifier),
-        task_type,
-        task_identifier,
+      tempTask =
+        tempTask || task_type === 'graph'
+          ? tempTask
+          : {
+              optional_input_names: [],
+              output_names: [],
+              required_input_names: [],
+            };
+
+      const nodesIds = [...stateRF.nodeInternals.keys()];
+      const newId =
+        task_type === 'graphInput'
+          ? calcNewId('In', nodesIds)
+          : task_type === 'graphOutput'
+          ? calcNewId('Out', nodesIds)
+          : task_type === 'note'
+          ? calcNewId('Note', nodesIds)
+          : calcNewId(task_identifier || 'Node', nodesIds);
+
+      const newNode: EwoksRFNode = {
+        id: newId,
         type: task_type,
-        task_generator: '',
         position,
-        default_inputs: [],
-        inputs_complete: false,
-        default_error_node: false,
-        default_error_attributes: {
-          map_all_data: true,
-          data_mapping: [],
+        data: {} as EwoksRFNodeData,
+      };
+      setNodeData(newId, {
+        task_props: {
+          task_type,
+          task_identifier,
+          optional_input_names: tempTask?.optional_input_names,
+          output_names: tempTask?.output_names,
+          required_input_names: tempTask?.required_input_names,
         },
-        optional_input_names: tempTask.optional_input_names,
-        output_names: tempTask.output_names,
-        required_input_names: tempTask.required_input_names,
-        data: {
+        ewoks_props: {
           label: trimLabel(task_identifier),
-          type: 'internal',
+          task_generator: '',
+          default_inputs: [],
+          inputs_complete: false,
+          default_error_node: false,
+          default_error_attributes: {
+            map_all_data: true,
+            data_mapping: [],
+          },
+        },
+        ui_props: {
           icon,
           moreHandles: false,
           nodeWidth: 100,
         },
-      };
-
-      const newGraph = {
-        graph: graphRF.graph,
-        nodes: [...graphRF.nodes, newNode],
-        links: graphRF.links,
-      } as GraphRF;
-
-      setGraphRF(newGraph, true);
-      setUndoRedo({ action: 'Added a Node', graph: newGraph });
-      setRecentGraphs(newGraph);
+      });
+      addNodes(newNode);
     } else {
       setOpenSnackbar({
         open: true,
@@ -308,113 +255,52 @@ function Canvas() {
   };
 
   const onEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => {
-    // TODO: it is link: EwoksRFLink but not compatible with Edge?
-    const link = {
-      ...oldEdge,
-      ...newConnection,
-    };
-
     // DOC: if the new link is:
     // 1. attached to a node-handle where there is already a link or
     // 2. is attached to an input-output already connected to a node then
     // edgeUpdate should not happen and a message informs it is not ewoks-compatible
+    const nodesRF = getNodes();
+    const edgesRF = getEdges();
 
-    const { isValid, reason } = isValidLink(newConnection, graphRF, oldEdge);
+    const { isValid, reason } = isValidLink(
+      newConnection,
+      {
+        nodes: nodesRF,
+        links: edgesRF as EwoksRFLink[],
+        graph: graphInfo,
+      },
+      nodesData,
+      oldEdge
+    );
     if (!isValid) {
       setOpenSnackbar({
         open: true,
         text: reason,
         severity: 'warning',
       });
-    } else {
-      const newGraph = {
-        graph: { ...graphRF.graph },
-        nodes: nodes.filter((el) => el.position), // [...graphRF.nodes],
-        links: [
-          ...edges
-            .filter((el) => el.source)
-            .filter((lin) => lin.id !== oldEdge.id),
-          link,
-        ],
-      };
-
-      setGraphRF(newGraph as GraphRF, true);
-      setUndoRedo({ action: 'Updated a Link', graph: newGraph });
-      setRecentGraphs(newGraph as GraphRF);
     }
   };
 
   const onConnect = (params: Connection) => {
-    if (workingGraph.graph.id === graphRF.graph.id) {
-      const sourceTask = graphRF.nodes.find((nod) => nod.id === params.source);
-      const targetTask = graphRF.nodes.find((nod) => nod.id === params.target);
-      // TODO: take link out
-      const link = {
-        data: {
-          getAroundProps: { x: 0, y: 0 },
-          on_error: false,
-          comment: '',
-          // node optional_input_names are link's optional_output_names
-          links_optional_output_names: targetTask.optional_input_names || [],
-          // node required_input_names are link's required_output_names
-          links_required_output_names: targetTask.required_input_names || [],
-          // node output_names are link's input_names
-          links_input_names: sourceTask.output_names || [],
-          conditions: [],
-          data_mapping: [],
-          map_all_data:
-            ['ppfmethod', 'ppfport'].includes(sourceTask.task_type) ||
-            ['ppfmethod', 'ppfport'].includes(targetTask.task_type),
-          sub_source:
-            sourceTask.task_type === 'graph' ? params.sourceHandle : '',
-          sub_target:
-            targetTask.task_type === 'graph' ? params.targetHandle : '',
-        },
-        id: `${params.source}:${params.sourceHandle}->${params.target}:${params.targetHandle}`,
-        label: '', // `${params.source.slice(0, 6)}->${params.target.slice(0, 6)}`,
-        source: params.source,
-        target: params.target,
-        sourceHandle: params.sourceHandle,
-        targetHandle: params.targetHandle,
-        type: 'default',
-        animated: false,
-        markerEnd: { type: 'arrowclosed' },
-        style: { stroke: '#96a5f9', strokeWidth: '2.5' },
-        labelBgStyle: {
-          fill: 'rgb(223, 226, 247)',
-          color: 'rgb(50, 130, 219)',
-          fillOpacity: 1,
-        },
-        labelBgPadding: [8, 4],
-        labelBgBorderRadius: 4,
-        labelStyle: { fill: 'blue', fontWeight: 500, fontSize: 14 },
-        startEnd:
-          sourceTask.task_type === 'graphInput' ||
-          targetTask.task_type === 'graphOutput',
-      };
-
-      const newGraph = {
-        graph: graphRF.graph,
-        nodes: graphRF.nodes,
-        links: [...graphRF.links, link], // addEdge(params, graphRF.links),
-      };
-      // setElements((els) => addEdge(params, els));
-      setGraphRF(newGraph as GraphRF, true);
-      // need to also save it in recentGraphs if we leave and come back                // className={classes.openFileButton} to the graph?
-      setRecentGraphs(newGraph as GraphRF);
-
-      // add action and new GraphRF to undo-redo array
-      setUndoRedo({ action: 'new Link', graph: newGraph as GraphRF });
-    } else {
+    if (workingGraph.graph.id !== graphId) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to create new links to any sub-graph!',
         severity: 'success',
       });
+      return;
     }
+
+    // DATAC to nodes and edges
+    const newGraph = addConnectionToGraph(params, {
+      graph: graphInfo,
+      nodes: getNodes(),
+      links: getEdges() as EwoksRFLink[],
+    });
+    setEdges(newGraph.links);
   };
 
-  const onPaneContextMenu = (event) => {
+  const onPaneContextMenu = (event: MouseEvent) => {
     event.preventDefault();
     setOpenSnackbar({
       open: true,
@@ -423,20 +309,46 @@ function Canvas() {
     });
   };
 
-  const onNodeDoubleClick = (event, node) => {
+  const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
     event.preventDefault();
-    const nodeTmp = graphRF.nodes.find((el) => el.id === node.id);
-    if (nodeTmp.task_type === 'graph') {
-      // if type==graph get the subgraph from the recentGraphs
+
+    const nodeTmp = getNode(node.id);
+    if (!nodeTmp) {
+      return;
+    }
+
+    const nodeData = nodesData.get(nodeTmp.id);
+    if (!nodeData) {
+      return;
+    }
+    if (nodeData.task_props.task_type === 'graph') {
+      if (workingGraph.graph.id !== graphId) {
+        addRecentGraph({
+          graph: graphInfo,
+          nodes: getNodes(),
+          links: getEdges() as EwoksRFLink[],
+        });
+      }
       const subgraph = recentGraphs.find(
-        (gr) => gr.graph.id === nodeTmp.task_identifier
+        (gr) => gr.graph.id === nodeData.task_props.task_identifier
       );
-      if (subgraph && subgraph.graph.id) {
-        setGraphRF(subgraph);
+
+      if (subgraph?.graph.id) {
+        setNodes(subgraph.nodes);
+
+        setNodesData(subgraph.nodes);
+
+        setEdges(subgraph.links);
+
+        setGraphInfo(subgraph.graph);
+        setTimeout(() => {
+          fitView();
+        }, 1000);
         setSubgraphsStack({
           id: subgraph.graph.id,
           label: subgraph.graph.label,
         });
+        setSelectedElement({ type: 'graph', id: subgraph.graph.id });
       } else {
         setOpenSnackbar({
           open: true,
@@ -445,118 +357,34 @@ function Canvas() {
         });
       }
     } else {
-      nodeTmp.data['details'] = true;
-      setSelectedElement({
-        ...nodeTmp,
-        data: { ...nodeTmp.data, details: true },
-      } as EwoksRFNode);
+      mergeNodeData(nodeTmp.id, { ui_props: { details: true } });
     }
   };
 
-  const onSelectionDragStart = (event) => {
-    event.preventDefault();
-  };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLImageElement>) => {
+    const charCode = String.fromCodePoint(event.which).toLowerCase();
 
-  const onSelectionDrag = (event) => {
-    event.preventDefault();
-  };
-
-  const onSelectionDragStop = (event, selectedElements) => {
-    event.preventDefault();
-    if (workingGraph.graph.id === graphRF.graph.id) {
-      // DOC: find selectedElements and update its position and save grapRF
-      const newElements = [];
-      const newElementsIds = [];
-      selectedElements.forEach((el) => {
-        const rfNode = { ...graphRF.nodes.find((nod) => nod.id === el.id) };
-        rfNode.position = el.position;
-        newElements.push(rfNode);
-        newElementsIds.push(rfNode.id);
-      });
-
-      const newGraph = {
-        graph: graphRF.graph,
-        nodes: [
-          ...graphRF.nodes.filter((nod) => !newElementsIds.includes(nod.id)),
-          ...newElements,
-        ],
-        links: graphRF.links,
-      };
-
-      setGraphRF(newGraph as GraphRF, true);
-      setUndoRedo({
-        action: 'Dragged a selection',
-        graph: newGraph as GraphRF,
-      });
-      setRecentGraphs(newGraph);
-    } else {
-      setOpenSnackbar({
-        open: true,
-        text: 'Any positional change in any subgraph wont be saved!',
-        severity: 'warning',
-      });
-    }
-  };
-
-  const onNodeDragStop = (event, node) => {
-    event.preventDefault();
-    if (workingGraph.graph.id === graphRF.graph.id) {
-      // DOC: find RFEwoksNode and update its position and save grapRF
-      const RFEwoksNode: EwoksRFNode = {
-        ...graphRF.nodes.find((nod) => nod.id === node.id),
-      };
-      RFEwoksNode.position = node.position;
-      const newGraph: GraphRF = {
-        graph: graphRF.graph,
-        nodes: [
-          ...graphRF.nodes.filter((nod) => nod.id !== node.id),
-          RFEwoksNode,
-        ],
-        links: graphRF.links,
-      };
-
-      setGraphRF(newGraph, true);
-      setUndoRedo({ action: 'Dragged a Node', graph: newGraph });
-      // need to also save it in recentGraphs if we leave and come back to the graph?
-      setRecentGraphs(newGraph);
-    } else {
-      setOpenSnackbar({
-        open: true,
-        text: 'Any positional change in any subgraph wont be saved!',
-        severity: 'warning',
-      });
-    }
-  };
-
-  const onClick = () => {
-    setSelectedTask({});
-  };
-
-  const handleKeyDown = (event) => {
-    const charCode = String.fromCharCode(event.which).toLowerCase();
+    const nodesIds = [...storeRF.getState().nodeInternals.keys()];
 
     const keys = event.ctrlKey || event.metaKey;
     if (keys && charCode === 'v') {
       event.preventDefault();
       event.stopPropagation();
-      if ('position' in selectedElement) {
-        const newClone = {
+      if (isNode(selectedElement)) {
+        const newClone: EwoksRFNode = {
           ...selectedElement,
-          id: calcNewId(selectedElement.id, graphRF.nodes),
+          id: calcNewId(selectedElement.id, nodesIds),
           selected: false,
           position: {
-            x: selectedElement.position.x + 100,
-            y: selectedElement.position.y + 100,
+            x: (selectedElement.position?.x || 0) + 100,
+            y: (selectedElement.position?.y || 0) + 100,
           },
         };
-        setGraphRF(
-          {
-            ...graphRF,
-            nodes: [...graphRF.nodes, newClone],
-          },
-          true
-        );
-        setSelectedElement(newClone as EwoksRFNode);
+
+        setNodes([...getNodes(), newClone]);
+        setNodeData(newClone.id, newClone.data);
+
+        setSelectedElement({ type: 'node', id: newClone.id });
       } else {
         setOpenSnackbar({
           open: true,
@@ -574,80 +402,31 @@ function Canvas() {
       role="button"
       tabIndex={0}
     >
-      <div
-        className="reactflow-wrapper"
-        style={{
-          height: '100%',
-          width: '100%',
-          backgroundColor: '#e9ebf7',
-        }}
-        ref={reactFlowWrapper}
-      >
+      <div className="reactflow-wrapper" ref={reactFlowWrapper}>
         <ReactFlow
           fitView
           connectOnClick
           nodesDraggable
           attributionPosition="bottom-right"
-          // defaultPosition={[-200, -200]}
           minZoom={0.2}
           snapToGrid
-          nodes={nodes}
-          edges={edges}
-          onNodeClick={(evt, node) => {
-            onNodeClick(evt, node);
-          }}
-          onEdgeClick={(evt, node) => {
-            onEdgeClick(evt, node);
-          }}
-          onPaneClick={onPaneClick}
-          onClick={onClick}
-          onInit={onInit}
+          onPaneClick={() => onPaneClick()}
+          onClick={() => setSelectedTask({})}
           onDrop={onDrop}
           onConnect={onConnect}
           onEdgeUpdate={onEdgeUpdate}
           onDragOver={onDragOver}
           onPaneContextMenu={onPaneContextMenu}
           onNodeDoubleClick={onNodeDoubleClick}
-          onSelectionDragStop={onSelectionDragStop}
-          onSelectionDragStart={onSelectionDragStart}
-          onSelectionDrag={onSelectionDrag}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
-          onNodeDragStop={onNodeDragStop}
           edgeTypes={edgeTypes}
           nodeTypes={nodeTypes}
           deleteKeyCode="Delete"
         >
-          <Background />
+          <CanvasBackground />
           <Controls />
-          <MiniMap
-            nodeStrokeColor={(n): string => {
-              if (n.style?.background) {
-                return n.style.background as string;
-              }
-              if (['graphOutput', 'graphInput'].includes(n.type)) {
-                return '#0041d0';
-              }
-              if (n.type === 'graph') {
-                return '#ff0072';
-              }
-              return 'rgb(60, 81, 202)';
-            }}
-            nodeColor={(n): string => {
-              if (n.style?.background) {
-                return n.style.background as string;
-              }
-              if (['graphOutput', 'graphInput'].includes(n.type)) {
-                return 'rgb(223, 226, 247)';
-              }
-              if (n.type === 'graph') {
-                return 'rgba(244, 179, 131, 0.87)';
-              }
-
-              return 'rgb(60, 81, 202)';
-            }}
-            nodeBorderRadius={2}
-          />
+          <CanvasMiniMap />
         </ReactFlow>
       </div>
     </div>

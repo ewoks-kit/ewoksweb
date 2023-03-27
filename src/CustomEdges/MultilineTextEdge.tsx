@@ -1,4 +1,40 @@
-import { getBezierPath, getEdgeCenter } from 'react-flow-renderer';
+import type { ReactNode } from 'react';
+import type { EdgeProps } from 'reactflow';
+import { getBezierPath } from 'reactflow';
+import { edgeStyle } from './EdgeStyle';
+
+function getForeignObjectProps(
+  sourceX: number,
+  sourceY: number,
+  targetX: number,
+  targetY: number,
+  label: ReactNode
+): React.SVGProps<SVGForeignObjectElement> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_path, labelX, labelY] = getBezierPath({
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+  });
+
+  if (typeof label !== 'string') {
+    return {
+      x: labelX,
+      y: labelY,
+    };
+  }
+
+  const width = Math.max(...label.split(',').map((mp) => mp.length)) * 8;
+  const height = label.split(',').length * 30;
+
+  return {
+    x: labelX - width / 2,
+    y: labelY - height / 2,
+    width,
+    height,
+  };
+}
 
 function multilineText({
   id,
@@ -11,8 +47,8 @@ function multilineText({
   label = '',
   markerEnd,
   style = {},
-}) {
-  const edgePath = getBezierPath({
+}: EdgeProps) {
+  const [path] = getBezierPath({
     sourceX,
     sourceY,
     sourcePosition,
@@ -21,46 +57,27 @@ function multilineText({
     targetPosition,
   });
 
-  const [edgeCenterX, edgeCenterY] = getEdgeCenter({
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
-  });
-
-  const titleWidth = Math.max(...label.split(',').map((mp) => mp.length)) * 7;
-
-  const titleHeight = label.split(',').length * 30;
-
   return (
     <>
       <path
         id={id}
         style={style}
         className="react-flow__edge-path"
-        d={edgePath}
+        d={path}
         markerEnd={markerEnd}
       />
       <foreignObject
-        width={titleWidth}
-        height={titleHeight}
-        x={edgeCenterX - titleWidth / 2}
-        y={edgeCenterY - titleWidth / 8}
-        style={{ ...style, backgroundColor: 'blue' }}
+        style={style}
+        {...getForeignObjectProps(sourceX, sourceY, targetX, targetY, label)}
       >
         <div
           style={{
             ...style,
-            backgroundColor: 'rgb(223, 226, 247)',
-            color: 'rgb(150, 165, 249)',
-            borderRadius: '10px',
-            borderStyle: 'solid',
-            borderColor: 'rgb(150, 165, 249)',
-            wordWrap: 'break-word',
-            overflow: 'hidden',
+            ...edgeStyle.multiline,
           }}
         >
-          {label && label.split(',').map((mp) => <div key={mp}>{mp}</div>)}
+          {typeof label === 'string' &&
+            label.split(',').map((mp) => <div key={mp}>{mp}</div>)}
         </div>
       </foreignObject>
     </>

@@ -1,40 +1,5 @@
-/// <reference types="cypress" />
-// ***********************************************
-// This example commands.ts shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-//
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+import '@testing-library/cypress/add-commands';
+import { registerCommand as addWaitForStableDomCommand } from 'cypress-wait-for-stable-dom';
 
 const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/;
 Cypress.on('uncaught:exception', (err) => {
@@ -43,3 +8,22 @@ Cypress.on('uncaught:exception', (err) => {
     return false;
   }
 });
+
+Cypress.Commands.add('loadAppWithoutGraph', () => {
+  cy.visit('http://localhost:3000/#/edit-workflows');
+});
+
+Cypress.Commands.add('loadGraph', (name: string) => {
+  cy.findByRole('textbox', {
+    name: 'Open workflow',
+  }).type(name);
+
+  cy.findByRole('option', { name }).click();
+});
+
+Cypress.Commands.add('loadApp', () => {
+  cy.loadAppWithoutGraph();
+  cy.loadGraph('tutorial_Graph');
+});
+
+addWaitForStableDomCommand({ pollInterval: 300, timeout: 1000 });

@@ -4,7 +4,7 @@ Node editing
 Node editing is hosted on the left-sidebar under the **Edit Node** dropdown when a node on the canvas is selected. If no node is selected the dropdown is:
 
  - empty if no graph is under editing or
- - depicts the attrubutes of the graph if a graph is under editing and no node or link is selected or
+ - depicts the attributes of the graph if a graph is under editing and no node or link is selected or
  - depicts the attributes of a link if a link is selected.
 
 Each node has several attributes that follow the  `ewokscore <https://ewokscore.readthedocs.io/en/latest/definitions.html#node-attributes>`_specification. On a new node three items are being depicted:

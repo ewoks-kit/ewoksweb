@@ -1,25 +1,33 @@
 import React, { memo } from 'react';
+import type { NodeProps } from 'reactflow';
 import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
+import useNodeDataStore from '../store/useNodeDataStore';
+import { assertNodeDataDefined } from '../utils/typeGuards';
 
-function DataNode(args) {
+function DataNode(args: NodeProps) {
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
+  assertNodeDataDefined(nodeData, args.id);
+
+  const uiProps = nodeData.ui_props;
+
   return (
     <Node
       isGraph={false}
-      type={args.type}
-      label={args.data.label}
+      type={uiProps.type || 'internal'}
+      label={nodeData.ewoks_props.label || ''}
       selected={args.selected}
       color="#ced3ee"
-      image={args.data.icon}
-      comment={args.data.comment}
-      moreHandles={args.data.moreHandles}
-      details={args.data.details}
-      withImage={'withImage' in args.data ? args.data.withImage : true}
-      nodeWidth={'nodeWidth' in args.data ? args.data.nodeWidth : 100}
-      withLabel={'withLabel' in args.data ? args.data.withLabel : true}
-      colorBorder={'colorBorder' in args.data ? args.data.colorBorder : ''}
+      image={uiProps.icon || ''}
+      comment={nodeData.comment || ''}
+      moreHandles={uiProps.moreHandles}
+      details={uiProps.details}
+      withImage={'withImage' in uiProps ? uiProps.withImage : true}
+      nodeWidth={'nodeWidth' in uiProps ? uiProps.nodeWidth : 100}
+      withLabel={'withLabel' in uiProps ? uiProps.withLabel : true}
+      colorBorder={'colorBorder' in uiProps ? uiProps.colorBorder : ''}
       content={<div style={{ ...style.io } as React.CSSProperties} />}
-      executing={args.data.executing}
+      executing={uiProps.executing || false}
     />
   );
 }

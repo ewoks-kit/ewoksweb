@@ -1,69 +1,77 @@
-import type { EwoksNode, EwoksRFNode } from '../types';
+import type { EwoksNode, EwoksRFNode, Inputs } from '../types';
 
-function cleanDefaultInputs(default_inputs) {
+function cleanDefaultInputs(default_inputs: Inputs[]) {
   return (
-    (default_inputs &&
-      default_inputs.map((dIn) => {
-        return {
-          name: dIn.name,
-          value:
-            dIn.value === 'false'
-              ? false
-              : dIn.value === 'true'
-              ? true
-              : dIn.value === 'null'
-              ? null
-              : dIn.value,
-        };
-      })) ||
-    []
+    default_inputs.map((dIn) => {
+      return {
+        name: dIn.name,
+        value:
+          dIn.value === 'false'
+            ? false
+            : dIn.value === 'true'
+            ? true
+            : dIn.value === 'null'
+            ? null
+            : dIn.value,
+      };
+    }) || []
   );
 }
 
 // EwoksRFNode --> EwoksNode for saving
 export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
   const tempNodes: EwoksRFNode[] = [...nodes].filter(
-    (nod) => !['graphInput', 'graphOutput', 'note'].includes(nod.task_type)
+    (nod) =>
+      nod.data.task_props.task_type &&
+      !['graphInput', 'graphOutput', 'note'].includes(
+        nod.data.task_props.task_type
+      )
   );
 
   return tempNodes.map(
     ({
       id,
-      task_type,
-      task_identifier,
-      // type, exists in EwoksRFNode but is the same as task_type
-      inputs_complete,
-      task_generator,
-      default_inputs,
-      default_error_node,
-      default_error_attributes,
+
       data: {
-        nodeWidth,
-        node_icon,
-        label,
-        type,
-        icon,
+        ewoks_props: {
+          default_inputs,
+          label,
+          inputs_complete,
+          task_generator,
+          default_error_node,
+          default_error_attributes,
+        },
+        task_props: { task_type, task_identifier },
+        ui_props: {
+          nodeWidth,
+          node_icon,
+          type,
+          icon,
+          moreHandles,
+          withImage,
+          withLabel,
+          colorBorder,
+        },
+
         comment,
-        moreHandles,
-        withImage,
-        withLabel,
-        colorBorder,
       },
       position,
     }) => {
       if (task_type !== 'graph') {
         return {
-          id: id.toString(),
+          id: id?.toString() || '',
           label,
           task_type,
           task_identifier,
           inputs_complete,
-          task_generator: task_generator || null,
+          task_generator,
           default_error_node,
           default_error_attributes: default_error_node
             ? default_error_attributes
-            : null,
-          default_inputs: cleanDefaultInputs(default_inputs),
+            : undefined,
+          default_inputs: default_inputs
+            ? cleanDefaultInputs(default_inputs)
+            : [],
           uiProps: {
             nodeWidth,
             node_icon,
@@ -78,20 +86,21 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           },
         };
       }
-      // graphs separately only if a transformation is needed???
+      // TODO: return the same for graphs and non-graphs
+      // node-icon is not in graphs? ok? Graphs have no editable Node Info where the node_icon is
+      // all the rest are the same... merge 2 returns?
       return {
-        id: id.toString(),
+        id: id?.toString() || '',
         label,
         task_type,
         task_identifier,
-        // type: task_type,
         inputs_complete,
-        task_generator: task_generator || null,
-        default_inputs: cleanDefaultInputs(default_inputs),
+        task_generator,
+        default_inputs: cleanDefaultInputs(default_inputs || []),
         default_error_node,
-        ddefault_error_attributes: default_error_node
+        default_error_attributes: default_error_node
           ? default_error_attributes
-          : null,
+          : undefined,
         uiProps: {
           label,
           type,
@@ -104,10 +113,6 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           withLabel,
           nodeWidth,
         },
-        // inputs: inputsSub,
-        // outputs: outputsSub,
-        // inputsFlow,
-        // inputs: inputsFlow, // for connecting graphically to different input
       };
     }
   );

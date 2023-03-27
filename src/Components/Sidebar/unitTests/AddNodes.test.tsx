@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import AddNodes from '../AddNodes';
-import state from 'store/state';
+import useStore from 'store/useStore';
 
 describe('In the AddNodes test:', () => {
   test('initially it renders one button element named ¨Add Nodes¨', async () => {
@@ -26,7 +26,8 @@ describe('In the AddNodes test:', () => {
     });
     expect(ewoksCoreCategory).toBeInTheDocument();
 
-    const { taskCategories } = state.getState();
+    const { tasks } = useStore.getState();
+    const taskCategories = [...new Set(tasks.map((m) => m.category)).values()];
     expect(taskCategories).toHaveLength(1);
     expect(taskCategories).toEqual(expect.arrayContaining(['EwoksCore']));
 
@@ -37,10 +38,14 @@ describe('In the AddNodes test:', () => {
   test('if categories change and AddNodes is clicked it reveals the new categories', async () => {
     render(<AddNodes title="Add Nodes" />);
     const buttonAddNodes = screen.getByRole('button', { name: /Add Nodes/u });
-    // const { taskCategories } = state.getState();
 
     act(() => {
-      state.setState({ taskCategories: ['est', 'dusk'] });
+      useStore.setState({
+        tasks: [
+          { task_identifier: 'task1', task_type: 'class', category: 'est' },
+          { task_identifier: 'task1', task_type: 'class', category: 'dusk' },
+        ],
+      });
     });
 
     fireEvent(
@@ -56,7 +61,8 @@ describe('In the AddNodes test:', () => {
     });
     expect(ewoksCoreCategory).toBeInTheDocument();
 
-    const { taskCategories } = state.getState();
+    const { tasks } = useStore.getState();
+    const taskCategories = [...new Set(tasks.map((m) => m.category)).values()];
     expect(taskCategories).toHaveLength(2);
     expect(taskCategories).toEqual(expect.arrayContaining(['est', 'dusk']));
 
@@ -69,8 +75,7 @@ describe('In the AddNodes test:', () => {
     const buttonAddNodes = screen.getByRole('button', { name: /Add Nodes/u });
 
     act(() => {
-      state.setState({
-        taskCategories: ['ewokscore'],
+      useStore.setState({
         tasks: [
           {
             task_identifier: 'taskSkeleton',
@@ -92,10 +97,8 @@ describe('In the AddNodes test:', () => {
         cancelable: true,
       })
     );
-
-    const { tasks } = state.getState();
-
-    const taskName = tasks[0].task_identifier;
+    const { tasks } = useStore.getState();
+    const taskName: string = tasks[0].task_identifier || '';
 
     const ewoksCoreCategory = screen.getByRole('button', {
       name: /ewokscore/u,
@@ -123,7 +126,7 @@ describe('In the AddNodes test:', () => {
     // TODO: Although category was clicked again the task remains visible?
     // expect(ewoksCoreTask).not.toBeVisible();
 
-    const { taskCategories } = state.getState();
+    const taskCategories = [...new Set(tasks.map((m) => m.category)).values()];
     expect(taskCategories).toHaveLength(1);
     expect(taskCategories).toEqual(expect.arrayContaining(['ewokscore']));
 
@@ -137,9 +140,8 @@ describe('In the AddNodes test:', () => {
     const buttonAddNodes = screen.getByRole('button', { name: /Add Nodes/u });
 
     act(() => {
-      state.setState({
+      useStore.setState({
         graphOrSubgraph: true,
-        taskCategories: ['General'],
         tasks: [
           {
             task_identifier: 'taskSkeleton',
@@ -175,7 +177,8 @@ describe('In the AddNodes test:', () => {
       })
     );
 
-    const { taskCategories } = state.getState();
+    const { tasks } = useStore.getState();
+    const taskCategories = [...new Set(tasks.map((m) => m.category)).values()];
     expect(taskCategories).toHaveLength(1);
     expect(taskCategories).toEqual(expect.arrayContaining(['General']));
 
@@ -195,7 +198,7 @@ describe('In the AddNodes test:', () => {
       })
     );
 
-    expect(state.getState().graphOrSubgraph).toBe(false);
+    expect(useStore.getState().graphOrSubgraph).toBe(false);
 
     fireEvent(
       GeneralCategory,

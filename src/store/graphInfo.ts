@@ -1,0 +1,41 @@
+import type { GraphDetails, State } from '../types';
+import { initializedRFGraph } from '../utils/InitializedEntities';
+import type { GetState, SetState } from 'zustand';
+
+export interface GraphInfoSlice {
+  graphInfo: GraphDetails;
+  setGraphInfo: (
+    graphInfo: GraphDetails,
+    isChangeToCanvasGraph?: boolean
+  ) => void;
+}
+
+const graphInfo = (
+  set: SetState<State>,
+  get: GetState<State>
+): GraphInfoSlice => ({
+  graphInfo: initializedRFGraph.graph,
+
+  setGraphInfo: (graphRFD, isChangeToCanvasGraph) => {
+    // DOC: If missing uiProps or other fill it here
+    if (!graphRFD.uiProps) {
+      graphRFD.uiProps = {};
+    }
+
+    set((state) => ({
+      ...state,
+      graphInfo: graphRFD,
+    }));
+
+    if (isChangeToCanvasGraph && !get().inExecutionMode) {
+      get().setCanvasGraphChanged(true);
+      return;
+    }
+
+    if (!isChangeToCanvasGraph) {
+      get().setCanvasGraphChanged(false);
+    }
+  },
+});
+
+export default graphInfo;

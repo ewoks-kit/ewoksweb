@@ -1,7 +1,6 @@
 import type { EwoksRFNode, GraphEwoks, Task } from '../types';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
-import existsOrValue from './existsOrValue';
 import {
   inputsAll,
   outputsAll,
@@ -51,38 +50,41 @@ export function toRFEwoksNodes(
 
         const node: EwoksRFNode = {
           id: id.toString(),
-          task_type,
-          task_identifier,
+
           type: task_type,
-          inputs_complete: inputs_complete || false,
-          default_error_node: default_error_node || false,
-          default_error_attributes: default_error_attributes || {
-            map_all_data: true,
-            data_mapping: [],
-          },
-          task_generator: task_generator || '',
-          task_icon: uiProps.task_icon || '',
-          default_inputs: default_inputs || [],
+          // DATAC puts data into node have to get them
+          // out of there in the calling functions?
           data: {
-            label: label
-              ? label
-              : uiProps && uiProps.label
-              ? uiProps.label
-              : task_identifier,
-            type: nodeType,
-            nodeWidth: existsOrValue(uiProps, 'nodeWidth', 120),
-            icon: uiProps.node_icon
-              ? uiProps.node_icon
-              : existsOrValue(uiProps, 'icon', ''),
-            comment: existsOrValue(uiProps, 'comment', ''),
-            moreHandles: existsOrValue(uiProps, 'moreHandles', false),
-            details: existsOrValue(uiProps, 'details', false),
-            executing: false,
-            withImage: existsOrValue(uiProps, 'withImage', true),
-            withLabel: existsOrValue(uiProps, 'withLabel', true),
-            colorBorder: existsOrValue(uiProps, 'colorBorder', ''),
+            ewoks_props: {
+              label: label ?? task_identifier,
+              default_inputs: default_inputs || [],
+              inputs_complete: inputs_complete || false,
+              default_error_node: default_error_node || false,
+              default_error_attributes: default_error_attributes || {
+                map_all_data: true,
+                data_mapping: [],
+              },
+              task_generator: task_generator || '',
+            },
+            task_props: {
+              task_type,
+              task_identifier,
+              task_icon: uiProps?.task_icon || '',
+            },
+            ui_props: {
+              nodeWidth: uiProps?.nodeWidth ?? 120,
+              executing: false,
+              type: nodeType,
+              icon: uiProps?.node_icon ?? uiProps?.icon ?? '',
+              moreHandles: uiProps?.moreHandles ?? false,
+              details: uiProps?.details ?? false,
+              withImage: uiProps?.withImage ?? true,
+              withLabel: uiProps?.withLabel ?? true,
+              colorBorder: uiProps?.colorBorder ?? '',
+            },
+            comment: uiProps?.comment ?? '',
           },
-          position: existsOrValue(uiProps, 'position', { x: 100, y: 100 }),
+          position: uiProps?.position ?? { x: 100, y: 100 },
         };
 
         return addNodeProperties(
@@ -91,11 +93,11 @@ export function toRFEwoksNodes(
           task_identifier,
           node,
           tasks,
-          uiProps.task_category
+          uiProps?.task_category || ''
         );
       }
     );
   }
 
-  return [] as EwoksRFNode[];
+  return [];
 }

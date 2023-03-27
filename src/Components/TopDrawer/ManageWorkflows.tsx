@@ -1,11 +1,12 @@
 import { Box, FormControl, Grid, Paper, styled } from '@material-ui/core';
-import AutocompleteDrop from '../General/AutocompleteDrop';
+import WorkflowDropdown from '../General/dropdown/WorkflowDropdown';
 import ReactJson from 'react-json-view';
-import React from 'react';
-import { getWorkflow } from 'utils/api';
+import { useState } from 'react';
+import { getWorkflow } from 'api/api';
 import GetFromServerButtons from '../General/GetFromServerButtons';
 import type { GraphEwoks, WorkflowDescription } from 'types';
-import state from 'store/state';
+import useStore from 'store/useStore';
+import CategoryDropdown from '../General/dropdown/CategoryDropdown';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -14,27 +15,22 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function ManageWorkflows() {
-  const initializedGraph = state((state) => state.initializedGraph);
-  const [workflowValue, setWorkflowValue] = React.useState<GraphEwoks>(
+  const initializedGraph = useStore((state) => state.initializedGraph);
+  const [workflowValue, setWorkflowValue] = useState<GraphEwoks>(
     initializedGraph
   );
-  const [categoryValue, setCategoryValue] = React.useState('');
+  const [categoryValue, setCategoryValue] = useState('');
 
   async function setInputWorkflowValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails) {
       // TODO: error handling
       const response = await getWorkflow(workflowDetails.id);
-      setWorkflowValue(response.data as GraphEwoks);
+      setWorkflowValue(response.data);
     }
   }
 
-  async function setInputCategoryValue(workflowDetails: WorkflowDescription) {
-    // DOC: filter according to the selected category
-    if (workflowDetails && workflowDetails.label) {
-      setCategoryValue(workflowDetails.label);
-    } else {
-      setCategoryValue('');
-    }
+  function setCategoryFilter(category: string) {
+    setCategoryValue(category ?? '');
   }
 
   return (
@@ -42,17 +38,14 @@ export default function ManageWorkflows() {
       <Grid container spacing={1} direction="row" alignItems="center">
         <Grid item xs={12} sm={12} md={6} lg={3}>
           <Item>
-            <FormControl variant="standard" style={{ width: '100%' }}>
-              <AutocompleteDrop
-                setInputValue={setInputCategoryValue}
-                placeholder="Categories"
-                category={categoryValue}
-              />
+            <FormControl variant="standard" fullWidth>
+              <CategoryDropdown onChange={setCategoryFilter} />
             </FormControl>
-            <FormControl variant="standard" style={{ width: '100%' }}>
-              <AutocompleteDrop
-                setInputValue={setInputWorkflowValue}
-                placeholder="Open Workflow"
+            <FormControl variant="standard" fullWidth>
+              <WorkflowDropdown
+                onChange={(e) => {
+                  setInputWorkflowValue(e);
+                }}
                 category={categoryValue}
               />
             </FormControl>

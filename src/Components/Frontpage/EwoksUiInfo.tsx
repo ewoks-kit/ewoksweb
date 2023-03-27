@@ -1,3 +1,5 @@
+// TODO: remove the following after onlyEditRelease
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import {
   Accordion,
@@ -10,17 +12,18 @@ import {
 } from '@material-ui/core';
 import SignUp from './SignUp';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
-import { getWorkflow } from 'utils/api';
-import state from 'store/state';
+import { getWorkflow } from 'api/api';
+import useStore from 'store/useStore';
 import type { GraphEwoks } from 'types';
+import { textForError } from '../../utils';
 
 interface EwoksUiInfoProps {
   closeDialog?(event?: React.KeyboardEvent | React.MouseEvent): void;
 }
 
 export default function EwoksUiInfo(props: EwoksUiInfoProps) {
-  const setWorkingGraph = state((state) => state.setWorkingGraph);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const initGraph = useStore((state) => state.initGraph);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const closeDialog = async () => {
     if (props.closeDialog) {
@@ -29,14 +32,18 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
     try {
       const response = await getWorkflow('tutorial_Graph');
       if (response.data) {
-        const graph = response.data as GraphEwoks;
+        const graph = response.data;
 
         setOpenSnackbar({
           open: true,
-          text: `Workflow ${graph.graph.label} was downloaded succesfully`,
+          text: `Workflow ${
+            // TODO: perhaps label should be mandatory in the model ?
+            // and give one if empty when Ewoks -> EwoksRF...
+            graph.graph.label || 'without Label!!!'
+          } was downloaded successfully`,
           severity: 'success',
         });
-        setWorkingGraph(response.data as GraphEwoks, 'fromServer');
+        initGraph(response.data, 'fromServer');
       } else {
         setOpenSnackbar({
           open: true,
@@ -47,9 +54,10 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
     } catch (error) {
       setOpenSnackbar({
         open: true,
-        text:
-          error.response?.data?.message ||
-          'Error in retrieving workflow. Please check connectivity with the server!',
+        text: textForError(
+          error,
+          'Error in retrieving workflow. Please check connectivity with the server!'
+        ),
         severity: 'error',
       });
     }
@@ -61,7 +69,8 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <SignUp handleCloseDialog={closeDialog} />
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={8}>
+        {/* TODO: commented for onlyEditRelease */}
+        {/* <Grid item xs={12} sm={12} md={12} lg={8}>
           <h2 style={{ color: '#3f51b5' }}>
             <IconButton color="inherit" disabled>
               <Fab
@@ -84,15 +93,15 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
                 <Typography>{summary}</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>
-                  {/* The following will be deleted once decided how the documentation will be displayed */}
-                  {/* eslint-disable-next-line react/no-danger */}
-                  <span dangerouslySetInnerHTML={{ __html: details }} />
+                <Typography> */}
+        {/* The following will be deleted once decided how the documentation will be displayed */}
+
+        {/* <span dangerouslySetInnerHTML={{ __html: details }} />
                 </Typography>
               </AccordionDetails>
             </Accordion>
           ))}
-        </Grid>
+        </Grid> */}
       </Grid>
     </div>
   );

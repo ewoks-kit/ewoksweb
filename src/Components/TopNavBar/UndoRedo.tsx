@@ -1,38 +1,32 @@
-import React from 'react';
 import RedoIcon from '@material-ui/icons/Redo';
 import UndoIcon from '@material-ui/icons/Undo';
 
 import { Fab, IconButton, Tooltip } from '@material-ui/core';
-import DashboardStyle from '../../layout/DashboardStyle';
+import DashboardStyle from '../Dashboard/DashboardStyle';
 import tooltipText from '../General/TooltipText';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 
 const useStyles = DashboardStyle;
 
-export default function UndoRedo({ undoF, redoF }) {
+interface undoRedoProps {
+  undo: () => void;
+  redo: () => void;
+}
+
+export default function UndoRedo({ undo, redo }: undoRedoProps) {
   const classes = useStyles();
 
-  const inExecutionMode = state((state) => state.inExecutionMode);
-  const undoIndex = state((state) => state.undoIndex);
-  const setUndoIndex = state((state) => state.setUndoIndex);
-
-  function undo() {
-    setUndoIndex(undoIndex - 1);
-  }
-
-  function redo() {
-    setUndoIndex(undoIndex + 1);
-  }
-
-  React.useEffect(() => {
-    undoF.current = undo;
-    redoF.current = redo;
-  });
+  const inExecutionMode = useStore((state) => state.inExecutionMode);
 
   return (
     <>
       <Tooltip title={tooltipText('Undo')} enterDelay={800} arrow>
-        <IconButton color="inherit" onClick={undo} disabled={inExecutionMode}>
+        <IconButton
+          color="inherit"
+          onClick={undo}
+          disabled={inExecutionMode}
+          data-cy="undoButton"
+        >
           <Fab
             className={classes.openFileButton}
             color="primary"
@@ -46,7 +40,12 @@ export default function UndoRedo({ undoF, redoF }) {
         </IconButton>
       </Tooltip>
       <Tooltip title={tooltipText('Redo')} enterDelay={800} arrow>
-        <IconButton color="inherit" onClick={redo} disabled={inExecutionMode}>
+        <IconButton
+          color="inherit"
+          onClick={redo}
+          disabled={inExecutionMode}
+          data-cy="redoButton"
+        >
           <Fab
             className={classes.openFileButton}
             color="primary"

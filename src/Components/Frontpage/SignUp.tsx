@@ -15,7 +15,8 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { Fab, IconButton } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import ewoksUI from 'assets/ewoksUI.png';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import type { Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 import ImageList from '@material-ui/core/ImageList';
 import ImageListItem from '@material-ui/core/ImageListItem';
 // import itemData from './itemData';
@@ -52,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function SignUp(props) {
+export default function SignUp(props: { handleCloseDialog(): Promise<void> }) {
   const classes = useStyles();
 
   return (
@@ -75,79 +76,84 @@ export default function SignUp(props) {
           >
             <Typography component="h1" variant="h5">
               Welcome to the <b className={classes.linkStyle}>Ewoks-UI</b> for
-              managing your Workflows. Select to Edit or Monitor or get started
-              with a graph where Ewoks-UI describes itself:
+              managing your Workflows. Select to Edit or get started with a
+              tutorial where Ewoks-UI describes itself:
             </Typography>
             {/* TODO: repetitive iconButton abstract when stable */}
-            <IconButton
-              color="inherit"
-              // onClick={props.handleCloseDialog || ''}
-            >
-              <Typography
-                component="h1"
-                variant="h5"
-                color="primary"
-                style={{ padding: '5px' }}
-              >
-                <Link to="/edit-workflows" className={classes.linkStyle}>
+            <Link to="/edit-workflows" className={classes.linkStyle}>
+              <IconButton color="inherit">
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  color="primary"
+                  style={{ padding: '5px' }}
+                >
                   Edit Workflows
                   <Fab
-                    // className={classes.openFileButton}
                     color="primary"
                     size="small"
                     component="span"
-                    aria-label="add"
+                    aria-label="Edit Workflows"
                     className={classes.arrowForwardStyle}
                   >
                     <ArrowForwardIosIcon />
                   </Fab>
-                </Link>
-              </Typography>
-            </IconButton>
-            <IconButton color="inherit">
-              <Typography
-                component="h1"
-                variant="h5"
-                color="primary"
-                style={{ padding: '5px' }}
-              >
-                <Link to="/monitor-workflows" className={classes.linkStyle}>
+                </Typography>
+              </IconButton>
+            </Link>
+            {/* <Link to="/monitor-workflows" className={classes.linkStyle}>
+              <IconButton color="inherit">
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  color="primary"
+                  style={{ padding: '5px' }}
+                >
                   Monitor Workflows
                   <Fab
                     // className={classes.openFileButton}
                     color="primary"
                     size="small"
                     component="span"
-                    aria-label="add"
+                    aria-label="Monitor Workflows"
                     className={classes.arrowForwardStyle}
                   >
                     <ArrowForwardIosIcon />
                   </Fab>
-                </Link>
-              </Typography>
-            </IconButton>
-            <IconButton color="inherit" onClick={props.handleCloseDialog || ''}>
-              <Typography
-                component="h1"
-                variant="h5"
-                color="primary"
-                style={{ padding: '5px' }}
+                </Typography>
+              </IconButton>
+            </Link> */}
+            <Link to="/edit-workflows" className={classes.linkStyle}>
+              <IconButton
+                color="inherit"
+                onClick={() => void props.handleCloseDialog()}
               >
-                <Link to="/edit-workflows" className={classes.linkStyle}>
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  color="primary"
+                  style={{ padding: '5px' }}
+                >
                   Tutorial Workflow
                   <Fab
                     // className={classes.openFileButton}
                     color="primary"
                     size="small"
                     component="span"
-                    aria-label="add"
+                    aria-label="Tutorial Workflow"
                     className={classes.arrowForwardStyle}
                   >
                     <ArrowForwardIosIcon />
                   </Fab>
-                </Link>
-              </Typography>
-            </IconButton>
+                </Typography>
+              </IconButton>
+            </Link>
+            <Typography component="h2" variant="h5">
+              Click for documentation on{' '}
+              <a href="https://ewoks.readthedocs.io/en/latest/">ewoks </a>
+              and{' '}
+              <a href="https://ewoksweb.readthedocs.io/en/latest/">ewoksweb </a>
+            </Typography>
           </Box>
         </Container>
       </Grid>
@@ -161,7 +167,7 @@ export default function SignUp(props) {
           <img src={ewoksUI} alt="ewoks image" />
         </Box> */}
       </Grid>
-
+      {/* TODO: commented for onlyEditRelease */}
       {/* <Grid item xs={12} sm={12} md={6} lg={4}>
         <Container component="main" maxWidth="lg">
           <CssBaseline />

@@ -1,38 +1,54 @@
-const undoIndex = (set, get) => ({
-  undoIndex: 0 as number,
+import type { State } from '../types';
+import type { GetState, SetState } from 'zustand';
+// import useSelectedElementStore from './useSelectedElementStore';
+
+export interface UndoIndexSlice {
+  undoIndex: number;
+  setUndoIndex: (index: number) => void;
+}
+
+const undoIndex = (
+  set: SetState<State>,
+  get: GetState<State>
+): UndoIndexSlice => ({
+  undoIndex: 0,
 
   setUndoIndex: (index) => {
-    const prevState = get((prev) => prev);
-
-    if (index >= 0 && prevState.undoRedo.length > index) {
+    if (index >= 0 && get().undoRedo.length > index) {
+      // This would have to set the RF Node through initWorkflow
       set((state) => ({
         ...state,
         undoIndex: index,
-        graphRF: prevState.undoRedo[index].graph,
+        graphRF: get().undoRedo[index].graph,
       }));
       // After setting the new GraphRF the selected element needs
       // to be updated to see the change in the sidebar again on undo-redo
-      let selEl = prevState.selectedElement;
+      // const selEl = useSelectedElementStore.getState().selectedElement;
 
-      if ('position' in selEl) {
-        selEl = prevState.undoRedo[index].graph.nodes.find(
-          (nod) => nod.id === selEl.id
-        );
-        if (selEl) {
-          prevState.setSelectedElement(selEl);
-        }
-      } else if ('source' in selEl) {
-        selEl = prevState.undoRedo[index].graph.links.find(
-          (lin) => lin.id === selEl.id
-        );
-        if (selEl) {
-          prevState.setSelectedElement(selEl);
-        }
-      } else if ('output_nodes' in selEl) {
-        prevState.setSelectedElement(prevState.undoRedo[index].graph.graph);
-      }
+      // if (selEl.type === 'node') {
+      //   const selElNode = get().undoRedo[index].graph.nodes.find(
+      //     (nod) => nod.id === selEl.id
+      //   );
+      //   // This would have to set the RF Node through initWorkflow
+      //   if (selElNode) {
+      //     get().setSelectedElement(selElNode);
+      //   }
+      // }
+
+      // if (selEl.type === 'edge') {
+      //   const selElLink = get().undoRedo[index].graph.links.find(
+      //     (lin) => lin.id === selEl.id
+      //   );
+      //   if (selElLink) {
+      //     get().setSelectedElement(selElLink);
+      //   }
+      // }
+
+      // if (selEl.type === 'graph') {
+      //   get().setSelectedElement(get().undoRedo[index].graph.graph);
+      // }
     } else {
-      prevState.setOpenSnackbar({
+      get().setOpenSnackbar({
         open: true,
         text: 'No more back or forth!',
         severity: 'warning',

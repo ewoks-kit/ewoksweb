@@ -1,98 +1,73 @@
-// @ts-ignore
-// import dagre from 'dagre';
-import type {
-  EwoksRFNode,
-  GraphEwoks,
-  GraphRF,
-  WorkflowDescription,
-} from './types';
+import type { GraphEwoks, GraphRF, Icon, WorkflowDescription } from './types';
+import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
 import { calcNoteNodes } from './utils/calcNoteNodes';
-import { getWorkflowsDescriptions, getWorkflow } from './utils/api';
-
-// const { GraphDagre } = dagre.graphlib;
-// const NODE_SIZE = { width: 270, height: 36 };
+import { getWorkflowsDescriptions, getWorkflow } from './api/api';
+import orange2 from 'images/orange2.png';
+import { isEwoksServerErrorResponse } from './utils/typeGuards';
 
 export const ewoksNetwork = {};
 
 export async function getWorkflows(): Promise<WorkflowDescription[]> {
-  let res = [];
+  let res: WorkflowDescription[] = [];
   try {
     const workflows = await getWorkflowsDescriptions();
-    if (workflows && workflows.data) {
-      const workf = workflows.data as {
-        items: WorkflowDescription[];
-      };
+    if (workflows?.data) {
+      const workf: { items: WorkflowDescription[] } = workflows.data;
       res = workf.items;
-      // .sort((a, b) => a.localeCompare(b))
-      // .map((work) => {
-      //   return { ...work, title: work.label };
-      // });
     }
   } catch (error) {
-    if (error.response) {
+    const err = error as AxiosError;
+    if (err.response) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
       // Keep logging in console for debugging when talking with a user
       /* eslint-disable no-console */
-      console.log(
-        error.response.data,
-        error.response.status,
-        error.response.headers
-      );
-    } else if (error.request) {
+      console.log(err.response.data, err.response.status, err.response.headers);
+    } else if (err.request) {
       // The request was made but no response was received
       /* eslint-disable no-console */
-      console.log(error.request);
+      console.log(err.request);
     } else {
       // Something happened in setting up the request that triggered an Error
       /* eslint-disable no-console */
-      console.log('Error', error.message);
+      console.log('Error', err.message);
     }
     /* eslint-disable no-console */
-    console.log(error.config);
-    res = [{ label: 'network error', category: error.response.status }];
+    console.log(error);
+    // This is used to be able to use the Snackbar and inform the user
+    // since it cannot be done from a ts file (?). A custom Hook maybe to remove it?
+    // TODO: pass an onError callback to the function or return an error field in the
+    // result that would be checked by the consumer as in !95
+    res = [
+      {
+        id: 'network error',
+        label: 'network error',
+        category: err?.response?.status.toString(),
+      },
+    ];
   }
   return res;
 }
 
-const id = 'graph';
-export function createGraph() {
-  // server returns the basic structure of a graph
-  return {
-    graph: {
-      id: `${id}1`,
-      label: 'newGraph',
-      input_nodes: [],
-      output_nodes: [],
-    },
-    nodes: [],
-    links: [],
-  };
-}
-
 export async function getSubgraphs(
-  graph: GraphEwoks | GraphRF,
-  recentGraphs: GraphRF[]
+  graph: GraphEwoks,
+  recentGraphIds: string[]
 ): Promise<GraphEwoks[]> {
-  const nodes: EwoksRFNode[] = [...graph.nodes];
-  const existingNodeSubgraphs = nodes.filter(
+  const existingNodeSubgraphs = graph.nodes.filter(
     (nod) => nod.task_type === 'graph'
   );
-  let results = [] as GraphEwoks[];
+  let results: GraphEwoks[] = [];
   if (existingNodeSubgraphs.length > 0) {
     // there are subgraphs -> first search in the recentGraphs for them
-    const notInRecent = [];
-    existingNodeSubgraphs.forEach((graph) => {
-      if (
-        recentGraphs.filter((gr) => gr.graph.id === graph.task_identifier)
-          .length === 0
-      ) {
+    const notInRecent: string[] = [];
+    existingNodeSubgraphs.forEach((graphL) => {
+      if (!recentGraphIds.some((id) => id === graphL.task_identifier)) {
         // add them in an array to request them from the server
-        notInRecent.push(graph.task_identifier);
+        notInRecent.push(graphL.task_identifier);
       }
     });
     // For those that are not in recent get them from the server
@@ -104,24 +79,28 @@ export async function getSubgraphs(
           // if there is a null means the subgraph was not found
           // and it should show up in red
           const resCln = res.filter((result) => result.data !== null);
-          return resCln.map((result) => result.data) as GraphEwoks[];
+          return resCln.map((result) => result.data);
         })
       )
-      // Uncomment
       .catch((error) => {
-        // remove after handling the error
-        console.log('AXIOS ERROR', id, error);
+        // TODO: remove after handling the error
+        console.log('AXIOS ERROR', error);
         return [];
       });
   }
-  return results ? results : [];
+  return results ?? [];
 }
 
 export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
   // calculate input_nodes-output_nodes nodes from graphInput-graphOutput
-  const graph = calcGraphInputsOutputs(tempGraph);
+  let graph = calcGraphInputsOutputs(tempGraph);
   const noteNodes = calcNoteNodes(tempGraph);
-  graph.uiProps.notes = noteNodes;
+  graph = { ...graph, uiProps: { ...graph.uiProps, notes: noteNodes } };
+
+  // DOC: remove "fromServer" which is for UIs internal use
+  if (graph.uiProps?.source) {
+    delete graph.uiProps?.source;
+  }
 
   return {
     graph,
@@ -130,39 +109,24 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
   };
 }
 
-// function getNodeType(isSource: boolean, isTarget: boolean): string {
-//   return isSource ? (isTarget ? 'internal' : 'input') : 'output';
-// }
+export function findImage(img: string | undefined, allIcons: Icon[]): string {
+  if (!img) {
+    return orange2;
+  }
 
-// export function positionNodes(nodes: Node[], edges: Edge[]): Node[] {
-//   const graph = new GraphDagre();
-//   graph.setDefaultEdgeLabel(() => ({}));
-//   graph.setGraph({ rankdir: 'LR' });
+  const icon = allIcons.find((ico) => ico.name === img);
 
-//   const sourceNodes = new Set();
-//   const targetNodes = new Set();
+  return icon?.image?.data_url || orange2;
+}
 
-//   edges.forEach((e) => {
-//     sourceNodes.add(e.source);
-//     targetNodes.add(e.target);
-//     graph.setEdge(e.source, e.target);
-//   });
+export function textForError(error: unknown, alternative: string): string {
+  if (isEwoksServerErrorResponse(error)) {
+    return error.response.data.message;
+  }
 
-//   nodes.forEach((n) => graph.setNode(n.id, { ...NODE_SIZE }));
+  if (axios.isAxiosError(error)) {
+    return error.message;
+  }
 
-//   dagre.layout(graph);
-
-//   return nodes.map<Node>((node) => {
-//     const { id } = node;
-//     const { x, y } = graph.node(id);
-
-//     return {
-//       ...node,
-//       type: getNodeType(sourceNodes.has(id), targetNodes.has(id)),
-//       position: {
-//         x: x - NODE_SIZE.width / 2,
-//         y: y - NODE_SIZE.height / 2,
-//       },
-//     };
-//   });
-// }
+  return alternative;
+}

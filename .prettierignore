@@ -1,8 +1,8 @@
 /build/
-/package-lock.json
-/src/notes.js
-.gitlab-ci.yml
-.readthedocs.yaml
+/.pnpm-store/
+/pnpm-lock.yaml
+.cypress-cache/
+
 /ewoksserver/
 /pybuild/
 /pysrc/

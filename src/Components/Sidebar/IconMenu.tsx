@@ -11,29 +11,31 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { Button, Menu, Tooltip } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import FormDialog from '../General/FormDialog';
-import type {
-  EwoksRFLink,
-  EwoksRFNode,
-  GraphDetails,
-  GraphRF,
-  Task,
-} from '../../types';
-import state from '../../store/state';
+import type { EwoksRFLink, EwoksRFNode, GraphDetails, Task } from '../../types';
+import useStore from '../../store/useStore';
+import { FormAction } from '../../types';
+import { useSelectedElement } from '../../store/graph-hooks';
+import useNodeDataStore from '../../store/useNodeDataStore';
 
 export default function IconMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
-  const [elementToEdit, setElementToEdit] = React.useState<Task | GraphRF>({});
-  const [doAction, setDoAction] = React.useState<string>('');
-  const selectedElement = state<EwoksRFNode | EwoksRFLink | GraphDetails>(
-    (state) => state.selectedElement
+  const [elementToEdit, setElementToEdit] = React.useState<Task | GraphDetails>(
+    {}
   );
-  const initializedTask = state((state) => state.initializedTask);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const [doAction, setDoAction] = React.useState<FormAction>(
+    FormAction.newTask
+  );
+  const selectedElement = useSelectedElement();
+  const initializedTask = useStore((state) => state.initializedTask);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const graphRF = state((state) => state.graphRF);
-  const tasks = state((state) => state.tasks);
+  const graphInfo = useStore((state) => state.graphInfo);
+  const tasks = useStore((state) => state.tasks);
+  const nodeData = useNodeDataStore((state) =>
+    state.nodesData.get(selectedElement?.id)
+  );
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
@@ -43,45 +45,59 @@ export default function IconMenu() {
     setAnchorEl(null);
   }
 
-  function action(
-    action: string,
-    element: Task | EwoksRFNode | EwoksRFLink | GraphRF
+  function onAction(
+    action: FormAction,
+    element: Task | EwoksRFNode | EwoksRFLink | GraphDetails
   ) {
     setDoAction(action);
-    if (action === 'newTask') {
-      setElementToEdit(initializedTask);
-    } else if (action === 'cloneTask') {
-      if ('position' in element) {
-        if (element.task_type === 'graph') {
+
+    switch (action) {
+      case 'newTask': {
+        setElementToEdit(initializedTask);
+        break;
+      }
+      case 'cloneTask': {
+        // TODO: check for using isNode by extending each possible types
+        if ('position' in element) {
+          if (nodeData?.task_props.task_type === 'graph') {
+            setOpenSnackbar({
+              open: true,
+              text: 'Cannot clone a graph, please select a Task!',
+              severity: 'warning',
+            });
+            return;
+          }
+          // DOC: if the task does not exist in the tasks populate the form with the element details
+          const task = tasks.find(
+            (tas) =>
+              tas.task_identifier === nodeData?.task_props.task_identifier
+          );
+
+          setElementToEdit(
+            task || {
+              ...initializedTask,
+              task_identifier: nodeData?.task_props.task_identifier,
+              task_type: nodeData?.task_props.task_type,
+            }
+          );
+        } else {
           setOpenSnackbar({
             open: true,
-            text: 'Cannot clone a graph, please select a Task!',
+            text: 'First select in the canvas a Node to clone and Save as Task',
             severity: 'warning',
           });
           return;
         }
-        // DOC: if the task does not exist in the tasks populate the form with the element details
-        const task = tasks.find(
-          (tas) => tas.task_identifier === element.task_identifier
-        );
 
-        setElementToEdit(
-          task || {
-            ...initializedTask,
-            task_identifier: element.task_identifier,
-            task_type: element.task_type,
-          }
-        );
-      } else {
-        setOpenSnackbar({
-          open: true,
-          text: 'First select in the canvas a Node to clone and Save as Task',
-          severity: 'warning',
-        });
-        return;
+        break;
       }
-    } else if (action === 'cloneGraph') {
-      setElementToEdit(graphRF);
+      case 'cloneGraph': {
+        setElementToEdit(graphInfo);
+        break;
+      }
+      default: {
+        break;
+      }
     }
 
     setOpenSaveDialog(true);
@@ -108,7 +124,6 @@ export default function IconMenu() {
         </Button>
       </Tooltip>
       <Menu
-        id="basic-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -118,19 +133,25 @@ export default function IconMenu() {
       >
         <Paper>
           <MenuList>
-            <MenuItem onClick={() => action('newTask', initializedTask)}>
+            <MenuItem
+              onClick={() => onAction(FormAction.newTask, initializedTask)}
+            >
               <ListItemIcon>
                 <FiberNewIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText>New Task</ListItemText>
             </MenuItem>
-            <MenuItem onClick={() => action('cloneTask', selectedElement)}>
+            <MenuItem
+              onClick={() => onAction(FormAction.cloneTask, selectedElement)}
+            >
               <ListItemIcon>
                 <FileCopyIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText>Clone as Task</ListItemText>
             </MenuItem>
-            <MenuItem onClick={() => action('cloneGraph', graphRF)}>
+            <MenuItem
+              onClick={() => onAction(FormAction.cloneGraph, graphInfo)}
+            >
               <ListItemIcon>
                 <FileCopyIcon fontSize="small" />
               </ListItemIcon>

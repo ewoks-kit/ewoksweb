@@ -102,7 +102,7 @@ abbr[title] {
   margin-left: 2px;
   border-radius: 10px 0px 0px 10px;
 }
-#add-nodes-accordion {
+.add-nodes-accordion {
   width: 100%;
   /* margin-left: 2px; */
   border-radius: 10px 0px 0px 10px;

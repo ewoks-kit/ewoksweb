@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
     "target": "es2015",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": false,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "importsNotUsedAsValues": "error",
@@ -15,9 +16,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": "src"
+    "jsx": "react-jsx"
   },
-  "include": ["src", ".eslintrc.js"],
-  "exclude": ["src/notes.js"]
+  "include": ["src", ".eslintrc.js", "cypress.config.ts"]
 }

@@ -1,80 +1,60 @@
-import React, { useEffect } from 'react';
-
 import type { DataMapping, EwoksRFLink } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
-import state from 'store/state';
+import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
+import { useNode } from '../../../store/graph-hooks';
+import { isClass } from './utils';
+import { useReactFlow } from 'reactflow';
 
-interface DataMappingProps {
-  element: EwoksRFLink;
-}
+export default function DataMappingComponent(element: EwoksRFLink) {
+  const { getEdges, setEdges } = useReactFlow();
 
-export default function DataMappingComponent(props: DataMappingProps) {
-  const { element } = props;
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const setSelectedElement = state((state) => state.setSelectedElement);
-  const [dataMapping, setDataMapping] = React.useState<DataMapping[]>([]);
-  const [elementL, setElementL] = React.useState<EwoksRFLink>(
-    {} as EwoksRFLink
-  );
-  const graphRF = state((state) => state.graphRF);
-
-  useEffect(() => {
-    setElementL(element);
-
-    if (element.data && element.data.data_mapping) {
-      setDataMapping(element.data.data_mapping);
-    }
-  }, [element.id, element]);
-
-  const addDataMapping = () => {
-    const el = element;
-
-    const elMap = el.data.data_mapping;
+  const sourceNode = useNode(element.source);
+  const targetNode = useNode(element.target);
 
     if (elMap.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
-        text: 'Please fill in the empty line before addining another!',
+        text: 'Please fill in the empty line before adding another!',
         severity: 'warning',
       });
-    } else {
-      setSelectedElement(
-        {
-          ...el,
-          data: {
-            ...el.data,
-            data_mapping: [...elMap, { id: '', name: '', value: '' }],
-          },
-        },
-        'fromSaveElement'
-      );
+      return;
     }
-  };
+    const newEdge = {
+      ...element,
+      data: {
+        ...element.data,
+        data_mapping: [
+          ...(element.data.data_mapping || []),
+          { id: '', name: '', value: '' },
+        ],
+      },
+    };
+    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+  }
 
-  const dataMappingValuesChanged = (table) => {
+  const dataMappingValuesChanged = (table: DataMapping[]) => {
     const dmap: DataMapping[] = table.map((row) => {
       return {
         source_output: row.name,
-        target_input: row.value,
+        target_input: row.value as string,
       };
     });
-    setSelectedElement(
-      {
-        ...element,
-        data: {
-          ...element.data,
-          data_mapping: dmap,
-          label: dmap
-            .map((el) => `${el.source_output}->${el.target_input}`)
-            .join(', '),
-        },
+    const newEdge = {
+      ...element,
+      label: dmap
+        .map((el) => `${el.source_output || ''}->${el.target_input || ''}`)
+        .join(', '),
+      data: {
+        ...element.data,
+        data_mapping: dmap,
       },
-      'fromSaveElement'
-    );
+    };
+    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
   };
 
   return (
@@ -90,46 +70,34 @@ export default function DataMappingComponent(props: DataMappingProps) {
         style={{ padding: '1px' }}
         aria-label="dataMapping"
         onClick={() => addDataMapping()}
+        data-cy="addDataMappingButton"
       >
         <AddCircleOutlineIcon />
       </IconButton>
-      {dataMapping.length > 0 && (
+      {element.data.data_mapping && element.data.data_mapping.length > 0 && (
         <EditableTable
           headers={['Source', 'Target']}
-          defaultValues={dataMapping}
+          defaultValues={element.data.data_mapping}
           valuesChanged={dataMappingValuesChanged}
           typeOfValues={[
             {
-              type: elementL.source
-                ? ['class'].includes(
-                    graphRF &&
-                      graphRF.nodes[0] &&
-                      graphRF.nodes.find((nod) => {
-                        return nod.id === elementL.source;
-                      }).task_type
-                  )
+              type: element.source
+                ? isClass(sourceNode)
                   ? 'select'
                   : 'input'
                 : 'input',
-              values: props.element.data.links_input_names || [],
+              values: element.data.links_input_names || [],
             },
             {
-              type: elementL.target
-                ? ['class'].includes(
-                    graphRF &&
-                      graphRF.nodes[0] &&
-                      graphRF.nodes.find((nod) => {
-                        return nod.id === elementL.target;
-                      }).task_type
-                  )
+              type: element.target
+                ? isClass(targetNode)
                   ? 'select'
                   : 'input'
                 : 'input',
-              values:
-                [
-                  ...props.element.data.links_required_output_names,
-                  ...props.element.data.links_optional_output_names,
-                ] || [],
+              values: [
+                ...(element.data.links_required_output_names || []),
+                ...(element.data.links_optional_output_names || []),
+              ],
             },
           ]}
         />

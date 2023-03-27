@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
-
-import type { EditableTableRow, EwoksRFLink, Inputs } from 'types';
+import type { EditableTableRow, EwoksRFLink } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
-import state from 'store/state';
+import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
+import { useReactFlow } from 'reactflow';
 
 interface ConditionsProps {
   element: EwoksRFLink;
@@ -14,58 +13,49 @@ interface ConditionsProps {
 export default function Conditions(props: ConditionsProps) {
   const { element } = props;
 
-  const [conditions, setConditions] = React.useState<Inputs[]>([]);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const setSelectedElement = state((state) => state.setSelectedElement);
+  const { getEdges, setEdges } = useReactFlow();
 
-  useEffect(() => {
-    if (element?.data?.conditions) {
-      setConditions(element.data.conditions);
-    }
-  }, [element]);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const addConditions = () => {
-    const el = element;
-    const elCon = el.data.conditions;
+  function addConditions() {
+    const elCon = element.data.conditions || [];
+
     // check if an empty line already exists
-    if (elCon && elCon[elCon.length - 1] && elCon[elCon.length - 1].id === '') {
+    if (elCon.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
-        text: 'Cannot add another line!',
+        text: 'Please fill in the empty line before adding another!',
         severity: 'warning',
       });
-    } else {
-      setSelectedElement(
-        {
-          ...el,
-          data: {
-            ...element.data,
-            on_error: false,
-            conditions: [...elCon, { id: '', name: '', value: false }],
-          },
-        },
-        'fromSaveElement'
-      );
+      return;
     }
-  };
 
-  const conditionsValuesChanged = (table: EditableTableRow[]) => {
-    setSelectedElement(
-      {
-        ...element,
-        data: {
-          ...element.data,
-          conditions: table.map((con1) => {
-            return {
-              source_output: con1.name,
-              value: con1.value,
-            };
-          }),
-        },
+    const newEdge = {
+      ...element,
+      data: {
+        ...element.data,
+        on_error: false,
+        conditions: [...elCon, { id: '', name: '', value: false }],
       },
-      'fromSaveElement'
-    );
-  };
+    };
+    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+  }
+
+  function conditionsValuesChanged(table: EditableTableRow[]) {
+    const newEdge = {
+      ...element,
+      data: {
+        ...element.data,
+        conditions: table.map((con1) => {
+          return {
+            source_output: con1.name,
+            value: con1.value,
+          };
+        }),
+      },
+    };
+    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+  }
 
   return (
     <div>
@@ -80,13 +70,14 @@ export default function Conditions(props: ConditionsProps) {
         style={{ padding: '1px' }}
         aria-label="Add Condition"
         onClick={addConditions}
+        data-cy="addConditionsButton"
       >
         <AddCircleOutlineIcon />
       </IconButton>
-      {conditions && conditions.length > 0 && (
+      {element.data.conditions && element.data.conditions.length > 0 && (
         <EditableTable
           headers={['Output', 'Value']}
-          defaultValues={conditions}
+          defaultValues={element.data.conditions}
           valuesChanged={conditionsValuesChanged}
           typeOfValues={[
             {

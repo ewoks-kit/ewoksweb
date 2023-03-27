@@ -1,26 +1,24 @@
 import { useState } from 'react';
 
-import DashboardStyle from '../../layout/DashboardStyle';
 import FormControl from '@material-ui/core/FormControl';
-import AutocompleteDrop from 'Components/General/AutocompleteDrop';
-import state from '../../store/state';
-import type { GraphEwoks, WorkflowDescription } from '../../types';
-import { getWorkflow } from '../../utils/api';
+import useStore from '../../store/useStore';
+import type { WorkflowDescription } from '../../types';
+import { getWorkflow } from '../../api/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { validateEwoksGraph } from '../../utils/EwoksValidator';
-
-const useStyles = DashboardStyle;
+import WorkflowDropdown from './dropdown/WorkflowDropdown';
+import { textForError } from '../../utils';
 
 export default function GetFromServer() {
-  const classes = useStyles();
-
   const [workflowId, setWorkflowId] = useState('');
-  const setWorkingGraph = state((state) => state.setWorkingGraph);
+  const initGraph = useStore((state) => state.initGraph);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
-  const canvasGraphChanged = state((state) => state.canvasGraphChanged);
-  const undoIndex = state((state) => state.undoIndex);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const setCanvasGraphChanged = useStore(
+    (state) => state.setCanvasGraphChanged
+  );
+  const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
+  const undoIndex = useStore((state) => state.undoIndex);
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails?.id) {
@@ -43,14 +41,16 @@ export default function GetFromServer() {
       try {
         const response = await getWorkflow(workflowIdparam);
         if (response.data) {
-          const graph = response.data as GraphEwoks;
+          const graph = response.data;
           setOpenSnackbar({
             open: true,
-            text: `Workflow ${graph.graph.label} was downloaded successfully`,
+            text: `Workflow ${
+              graph.graph.label || 'without Label!!!'
+            } was downloaded successfully`,
             severity: 'success',
           });
           setCanvasGraphChanged(false);
-          setWorkingGraph(graph, 'fromServer');
+          initGraph(graph, 'fromServer');
           validateEwoksGraph(graph);
         } else {
           setOpenSnackbar({
@@ -63,9 +63,10 @@ export default function GetFromServer() {
       } catch (error) {
         setOpenSnackbar({
           open: true,
-          text:
-            error.response?.data?.message ||
-            'Error in retrieving workflow. Please check connectivity with the server!',
+          text: textForError(
+            error,
+            'Error in retrieving workflow. Please check connectivity with the server!'
+          ),
           severity: 'error',
         });
       }
@@ -98,12 +99,11 @@ export default function GetFromServer() {
           backgroundColor: '#7685dd',
           borderRadius: '4px',
         }}
-        className={classes.formControl}
       >
-        <AutocompleteDrop
-          setInputValue={setInputValue}
-          placeholder="Open Workflow"
-          category=""
+        <WorkflowDropdown
+          onChange={(workflowDetails) => {
+            setInputValue(workflowDetails);
+          }}
         />
       </FormControl>
     </>

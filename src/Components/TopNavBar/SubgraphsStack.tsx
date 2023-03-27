@@ -1,30 +1,59 @@
 import Typography from '@material-ui/core/Typography';
-import DashboardStyle from '../../layout/DashboardStyle';
+import DashboardStyle from '../Dashboard/DashboardStyle';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import HomeIcon from '@material-ui/icons/Home';
 
 import Link from '@material-ui/core/Link';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
+import { useReactFlow } from 'reactflow';
+import useSelectedElementStore from '../../store/useSelectedElementStore';
+import useNodeDataStore from '../../store/useNodeDataStore';
 
 const useStyles = DashboardStyle;
 
 export default function SubgraphsStack() {
   const classes = useStyles();
 
-  const recentGraphs = state((state) => state.recentGraphs);
-  const setGraphRF = state((state) => state.setGraphRF);
-  const setSubgraphsStack = state((state) => state.setSubgraphsStack);
-  const subgraphsStack = state((state) => {
+  const { setNodes, setEdges, fitView } = useReactFlow();
+
+  const recentGraphs = useStore((state) => state.recentGraphs);
+  const setGraphInfo = useStore((state) => state.setGraphInfo);
+  const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
+  const subgraphsStack = useStore((state) => {
     return state.subgraphsStack;
   });
+  const setNodesData = useNodeDataStore((state) => state.setNodesData);
 
-  const goToGraph = (e) => {
+  const setSelectedElement = useSelectedElementStore(
+    (state) => state.setSelectedElement
+  );
+  const goToGraph = (e: React.MouseEvent) => {
     e.preventDefault();
-    setSubgraphsStack({ id: e.target.id, label: e.target.text });
 
-    const subgraph = recentGraphs.find((gr) => gr.graph.id === e.target.id);
+    const { target } = e;
 
-    setGraphRF(subgraph);
+    if (!(target instanceof Element)) {
+      return;
+    }
+
+    setSubgraphsStack({
+      id: target.id,
+      label: (target as HTMLInputElement).value,
+    });
+
+    const subgraph = recentGraphs.find((gr) => gr.graph.id === target.id);
+
+    if (subgraph) {
+      // Both stay
+      setNodes(subgraph.nodes);
+      setNodesData(subgraph.nodes);
+      setEdges(subgraph.links);
+      setGraphInfo(subgraph.graph);
+      setSelectedElement({ type: 'graph', id: subgraph.graph.id });
+      setTimeout(() => {
+        fitView();
+      }, 1000);
+    }
   };
 
   return (
@@ -47,16 +76,21 @@ export default function SubgraphsStack() {
                 id={gr.id}
                 key={gr.id}
                 className={
-                  index === subgraphsStack.length - 1 && classes.isDisabled
+                  index === subgraphsStack.length - 1
+                    ? classes.isDisabled
+                    : undefined
                 }
                 onClick={goToGraph}
+                data-cy={gr.id}
               >
                 {gr.label}
               </Link>
             </span>
           ))}
       </Breadcrumbs>
-      {subgraphsStack[0] && subgraphsStack[subgraphsStack.length - 1].label}
+      {subgraphsStack.length === 1 && (
+        <span data-cy={subgraphsStack[0].label}>{subgraphsStack[0].label}</span>
+      )}
     </Typography>
   );
 }

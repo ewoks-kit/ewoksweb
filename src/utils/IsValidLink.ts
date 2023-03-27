@@ -1,10 +1,10 @@
-/* eslint-disable sonarjs/cognitive-complexity */
-import type { Connection, Edge } from 'react-flow-renderer';
-import type { GraphRF } from '../types';
+import type { Connection, Edge } from 'reactflow';
+import type { EwoksRFNodeData, GraphRF } from '../types';
 
 export default function isValidLink(
   connection: Connection,
   graphRF: GraphRF,
+  nodesData?: Map<string, EwoksRFNodeData>,
   oldEdge?: Edge
 ): { isValid: boolean; reason: string } {
   let isValid = true;
@@ -21,7 +21,11 @@ export default function isValidLink(
   const source = graphRFL.nodes.find((nod) => nod.id === connection.source);
   const target = graphRFL.nodes.find((nod) => nod.id === connection.target);
 
-  if (source.task_type === 'graphInput') {
+  if (!source || !target) {
+    return { isValid: false, reason: 'One of the link end is not defined' };
+  }
+
+  if (nodesData?.get(source.id)?.task_props.task_type === 'graphInput') {
     // check if there is already a link using this graph-input
     if (graphRFL.links.some((link) => link.source === source.id)) {
       isValid = false;
@@ -55,7 +59,7 @@ export default function isValidLink(
     }
   }
 
-  if (target.task_type === 'graphOutput') {
+  if (nodesData?.get(target.id)?.task_props.task_type === 'graphOutput') {
     // DOC: check if there is already a link using this graph-output
     if (graphRFL.links.some((link) => link.target === target.id)) {
       isValid = false;
@@ -106,8 +110,8 @@ export default function isValidLink(
         (link) =>
           link.source === connection.source &&
           link.target === connection.target &&
-          (link.sourceHandle.slice(0, -5) === connection.sourceHandle ||
-            link.sourceHandle === connection.sourceHandle.slice(0, -5) ||
+          (link.sourceHandle?.slice(0, -5) === connection.sourceHandle ||
+            link.sourceHandle === connection.sourceHandle?.slice(0, -5) ||
             link.sourceHandle === connection.sourceHandle)
       )) ||
     (source.type !== 'graph' &&
@@ -116,8 +120,8 @@ export default function isValidLink(
         (link) =>
           link.source === connection.source &&
           link.target === connection.target &&
-          (link.targetHandle.slice(0, -6) === connection.targetHandle ||
-            link.targetHandle === connection.targetHandle.slice(0, -6) ||
+          (link.targetHandle?.slice(0, -6) === connection.targetHandle ||
+            link.targetHandle === connection.targetHandle?.slice(0, -6) ||
             link.targetHandle === connection.targetHandle)
       )) ||
     (source.type === 'graph' &&
@@ -126,11 +130,11 @@ export default function isValidLink(
         (link) =>
           link.source === connection.source &&
           link.target === connection.target &&
-          (link.targetHandle.slice(0, -6) === connection.targetHandle ||
-            link.targetHandle === connection.targetHandle.slice(0, -6) ||
+          (link.targetHandle?.slice(0, -6) === connection.targetHandle ||
+            link.targetHandle === connection.targetHandle?.slice(0, -6) ||
             link.targetHandle === connection.targetHandle) &&
-          (link.sourceHandle.slice(0, -5) === connection.sourceHandle ||
-            link.sourceHandle === connection.sourceHandle.slice(0, -5) ||
+          (link.sourceHandle?.slice(0, -5) === connection.sourceHandle ||
+            link.sourceHandle === connection.sourceHandle?.slice(0, -5) ||
             link.sourceHandle === connection.sourceHandle)
       ))
   ) {

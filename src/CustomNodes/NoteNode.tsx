@@ -3,20 +3,25 @@
 import React, { useEffect, useState } from 'react';
 import { style } from './NodeStyle';
 import SaveIcon from '@material-ui/icons/Save';
-
-import state from '../store/state';
+import type { ChangeEvent } from 'react';
 import { IconButton, TextField } from '@material-ui/core';
+import type { NodeProps } from 'reactflow';
+import type { EwoksRFNodeData } from '../types';
+import useNodeDataStore from '../store/useNodeDataStore';
+import { assertNodeDataDefined } from '../utils/typeGuards';
 
-const NoteNode = (args) => {
+type NoteProps = NodeProps<EwoksRFNodeData>;
+
+const NoteNode = (args: NoteProps) => {
   const [comment, setComment] = useState('');
-  const graphRF = state((state) => state.graphRF);
-  const setGraphRF = state((state) => state.setGraphRF);
-  const [nodeSize, setNodeSize] = useState(args.data.nodeWidth);
+
+  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
+  assertNodeDataDefined(nodeData, args.id);
 
   useEffect(() => {
-    setComment(args.data.comment);
-    setNodeSize(args.data.nodeWidth);
-  }, [args.data]);
+    setComment(nodeData.comment || '');
+  }, [args.id, nodeData]);
 
   const customTitle = {
     ...style.title,
@@ -27,30 +32,19 @@ const NoteNode = (args) => {
     padding: '1px',
   };
 
-  const commentChanged = (event) => {
+  const commentChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setComment(event.target.value);
   };
 
   const save = () => {
-    // TODO: If permenant put it in undo-redo
-    setGraphRF({
-      graph: graphRF.graph,
-      links: graphRF.links,
-      nodes: [
-        ...graphRF.nodes.filter((nod) => nod.id !== args.id),
-        {
-          data: {
-            label: args.data.label,
-            comment,
-          },
-          id: args.id,
-          task_type: 'note',
-          task_identifier: args.id,
-          type: 'note',
-          position: { x: args.xPos, y: args.yPos },
-        },
-      ],
-    });
+    // TBD: If permenant put it in undo-redo and make title editable
+    const newNodeData = {
+      task_props: { task_type: 'note', task_identifier: args.id },
+      ewoks_props: { label: nodeData.ewoks_props.label },
+      comment,
+    };
+
+    mergeNodeData(args.id, newNodeData);
   };
 
   return (
@@ -65,15 +59,18 @@ const NoteNode = (args) => {
       role="button"
       tabIndex={0}
     >
-      <span style={{ maxWidth: `${nodeSize as string}px` }} className="icons">
-        {args.data.label.length > 0 && (
-          <div style={customTitle as React.CSSProperties}>
-            {args.data.label}
-          </div>
-        )}
-        {args.data.details ? (
+      <span
+        style={{ maxWidth: `${nodeData.ui_props.nodeWidth || 100}px` }}
+        className="icons"
+      >
+        {nodeData.ewoks_props.label &&
+          nodeData.ewoks_props.label.length > 0 && (
+            <div style={customTitle as React.CSSProperties}>
+              {nodeData.ewoks_props.label}
+            </div>
+          )}
+        {nodeData.ui_props.details ? (
           <TextField
-            id="standard-multiline-flexible"
             label="edit comment"
             multiline
             maxRows={4}
@@ -84,7 +81,7 @@ const NoteNode = (args) => {
         ) : (
           <div style={{ wordWrap: 'break-word' }}>{comment}</div>
         )}
-        {args.data.details && (
+        {nodeData.ui_props.details && (
           <IconButton
             style={{ margin: '0px 2px', padding: '0px' }}
             aria-label="edit"
@@ -93,23 +90,6 @@ const NoteNode = (args) => {
             <SaveIcon color="primary" />
           </IconButton>
         )}
-        {/* {!edit ? (
-          <IconButton
-            style={{ padding: '0px' }}
-            aria-label="edit"
-            onClick={() => {
-              setEdit(true);
-            }}
-          >
-            <EditIcon />
-          </IconButton>
-        ) : (
-          <>
-            <SaveIcon onClick={save} />
-
-            <UndoIcon onClick={cancel} />
-          </>
-        )} */}
       </span>
     </div>
   );

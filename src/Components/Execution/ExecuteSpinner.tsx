@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unused-prop-types */
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React from 'react';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
@@ -7,10 +8,13 @@ import CheckIcon from '@material-ui/icons/Check';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
-  top: {
+  circularEffect: {
     animationDuration: '550ms',
+    color: 'white',
     position: 'absolute',
-    left: 60,
+    top: -3,
+    left: -3,
+    zIndex: 1,
   },
   openFileButton: {
     width: '62px',
@@ -18,9 +22,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface ExecuteSpinnerProps {
-  getting: boolean;
-  children: ReactNode;
+export interface ExecuteSpinnerProps {
+  getting?: boolean;
+  children?: ReactNode;
   tooltip?: string;
   action?(): void;
 }
@@ -46,23 +50,16 @@ export default function ExecuteSpinner(props: ExecuteSpinnerProps) {
           className={classes.openFileButton}
           size="large"
           component="span"
-          aria-label="add"
+          aria-label="spin effect"
         >
-          {success ? <CheckIcon /> : loading ? '...' : props.children}
+          {success ? <CheckIcon /> : loading ? '...' : props.children || ''}
         </Fab>
         {loading && (
           <CircularProgress
             size={66}
-            className={classes.top}
+            className={classes.circularEffect}
             thickness={4}
             value={100}
-            style={{
-              color: 'white',
-              position: 'absolute',
-              top: -3,
-              left: -3,
-              zIndex: 1,
-            }}
           />
         )}
       </Box>

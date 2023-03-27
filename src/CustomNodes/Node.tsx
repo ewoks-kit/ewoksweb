@@ -1,74 +1,33 @@
-/* eslint-disable react/function-component-definition */
-/* jshint sub:true*/
-/* eslint-disable sonarjs/cognitive-complexity */
 import React, { memo, useEffect, useState } from 'react';
-import orange1 from '../images/orange1.png';
-import orange2 from '../images/orange2.png';
-import orange3 from '../images/orange3.png';
-import AggregateColumns from '../images/AggregateColumns.svg';
-import Continuize from '../images/Continuize.svg';
-import graphInput from '../images/graphInput.svg';
-import right from '../images/right.svg';
-import left from '../images/left.svg';
-import up from '../images/up.svg';
-import down from '../images/down.svg';
-import graphOutput from '../images/graphOutput.svg';
-import Correlations from '../images/Correlations.svg';
-import CreateClass from '../images/CreateClass.svg';
-import { Handle, Position } from 'react-flow-renderer';
-import type { EwoksRFNode, NodeProps } from '../types';
+import type { ChangeEvent } from 'react';
+import { Handle, Position } from 'reactflow';
 import { contentStyle, style } from './NodeStyle';
 import Tooltip from '@material-ui/core/Tooltip';
-import ExecuteSpinner from '../Components/Execution/ExecuteSpinner';
 import isValidLink from '../utils/IsValidLink';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import EditIcon from '@material-ui/icons/EditOutlined';
-import SaveIcon from '@material-ui/icons/Save';
+// import SaveIcon from '@material-ui/icons/Save';
 import { calcNewId } from '../utils/calcNewId';
 
-import state from '../store/state';
+import useStore from '../store/useStore';
 import { IconButton, TextField } from '@material-ui/core';
 import tooltipText from '../Components/General/TooltipText';
+import type { Connection } from 'reactflow';
+import { isNode } from '../utils/typeGuards';
+import NodeIcon from './NodeIcon';
+import IconBoundary from '../IconBoundary';
+import { useNodesIds, useSelectedElement } from '../store/graph-hooks';
+import type { NodeProps, EwoksRFLink, EwoksRFNode, GraphRF } from '../types';
+import { useReactFlow } from 'reactflow';
+import useNodeDataStore from '../store/useNodeDataStore';
 
-const iconsObj = {
-  'left.svg': left,
-  left,
-  'right.svg': right,
-  right,
-  'up.svg': up,
-  up,
-  'down.svg': down,
-  down,
-  'graphInput.svg': graphInput,
-  graphInput,
-  'graphOutput.svg': graphOutput,
-  graphOutput,
-  'orange1.png': orange1,
-  orange1,
-  'Continuize.svg': Continuize,
-  Continuize,
-  'orange2.png': orange2,
-  orange2,
-  'orange3.png': orange3,
-  orange3,
-  'AggregateColumns.svg': AggregateColumns,
-  AggregateColumns,
-  'Correlations.svg': Correlations,
-  Correlations,
-  'CreateClass.svg': CreateClass,
-  CreateClass,
-};
-
-const onDragStart = (e) => {
-  e.preventDefault();
-};
-
+// TODO: examine usage when execution in main
 const execution = () => {
   return true;
 };
 
 // The basic Node component
-const Node: React.FC<NodeProps> = ({
+function Node({
   moreHandles,
   withImage,
   withLabel,
@@ -84,22 +43,9 @@ const Node: React.FC<NodeProps> = ({
   executing,
   nodeWidth,
   details,
-}: NodeProps) => {
-  const theCom = comment ? (
-    <span
-      style={{
-        padding: '1px',
-        color: 'white',
-        fontSize: '0.875rem',
-        fontWeight: 300,
-        lineHeight: '1.13',
-      }}
-    >
-      {comment}
-    </span>
-  ) : (
-    ''
-  );
+}: NodeProps) {
+  const { getNodes, getEdges, setNodes } = useReactFlow();
+  const nodesIds = useNodesIds();
 
   const border = colorBorder
     ? `4px solid ${colorBorder}`
@@ -119,17 +65,16 @@ const Node: React.FC<NodeProps> = ({
   }
 
   const [nodeSize, setNodeSize] = useState(nodeWidth);
-  const inExecutionMode = state((state) => state.inExecutionMode);
-  const graphRF = state((state) => state.graphRF);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const setSelectedElement = state((state) => state.setSelectedElement);
-  const selectedElement = state((state) => state.selectedElement);
-  const [edit, setEdit] = React.useState(false);
-  const [labelLocal, setLabelLocal] = React.useState(label);
-  const setGraphRF = state((state) => state.setGraphRF);
-  const [detailsL, setDetailsL] = React.useState(false);
-  const allIcons = state((state) => state.allIcons);
-  const setUndoRedo = state((state) => state.setUndoRedo);
+  const inExecutionMode = useStore((state) => state.inExecutionMode);
+  const graphInfo = useStore((state) => state.graphInfo);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const selectedElement = useSelectedElement();
+  const [edit, setEdit] = useState(false);
+  const [labelLocal, setLabelLocal] = useState(label);
+  const [detailsL, setDetailsL] = useState(false);
+  const nodesData = useNodeDataStore((state) => state.nodesData);
+
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   useEffect(() => {
     setNodeSize(nodeWidth);
@@ -139,7 +84,7 @@ const Node: React.FC<NodeProps> = ({
 
   const displayNode = {
     textAlign: 'center' as const,
-    width: `${nodeSize}px`,
+    width: `${nodeSize || 100}px`,
     minWidth: '60px', // for standard width
     maxWidth: '300px',
     display: ['graphInput', 'graphOutput'].includes(type) ? 'flex' : 'inline',
@@ -147,8 +92,13 @@ const Node: React.FC<NodeProps> = ({
     padding: '2px',
   };
 
-  const isValidConnection = (connection) => {
-    const { isValid, reason } = isValidLink(connection, graphRF);
+  const isValidConnection = (connection: Connection) => {
+    const graphRf: GraphRF = {
+      graph: graphInfo,
+      nodes: getNodes(),
+      links: getEdges() as EwoksRFLink[],
+    };
+    const { isValid, reason } = isValidLink(connection, graphRf, nodesData);
     if (!isValid) {
       setOpenSnackbar({
         open: true,
@@ -159,52 +109,42 @@ const Node: React.FC<NodeProps> = ({
     return isValid;
   };
 
-  const labelChanged = (event) => {
+  const labelChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setLabelLocal(event.target.value);
   };
 
   // TODO: exists in sidebar abstract in a hook?
+  // Could extract the cloning and graph generation part in a function
+  // that would return the newGraph (and newClone if needed).
+  // Then, it is up to the caller to deal with the result by using the setters.
   const cloneNode = () => {
-    const element = selectedElement as EwoksRFNode;
-    const newClone = {
-      ...element,
-      id: calcNewId(selectedElement.id, graphRF.nodes),
+    if (!isNode(selectedElement)) {
+      return;
+    }
+    const newClone: EwoksRFNode = {
+      ...selectedElement,
+      id: calcNewId(selectedElement.id, nodesIds),
       selected: false,
       position: {
-        x: element.position.x + 100,
-        y: element.position.y + 100,
+        x: (selectedElement.position?.x || 0) + 100,
+        y: (selectedElement.position?.y || 0) + 100,
       },
     };
-
-    const newGraph = {
-      ...graphRF,
-      nodes: [...graphRF.nodes, newClone],
-    };
-
-    setGraphRF(newGraph, true);
-
-    setUndoRedo({ action: 'Cloned a Node', graph: newGraph });
-    setSelectedElement(newClone as EwoksRFNode);
+    // Both stay
+    setNodes([...getNodes(), newClone]);
+    setNodeData(newClone.id, newClone.data);
   };
-
-  const findImage = (img) => {
-    const imgIndex = allIcons.map((ico) => ico.name).indexOf(img);
-
-    return imgIndex !== -1
-      ? allIcons[imgIndex].image.data_url
-      : iconsObj[img] || orange2;
-  };
-
-  function setSelEl() {
-    const el = selectedElement as EwoksRFNode;
-    setSelectedElement({
-      ...el,
-      data: {
-        ...el.data,
-        label: labelLocal,
-      },
-    });
-  }
+  // TBD if needed cause it cause many rerenders on selecting an element on canvas
+  // function setNodeLabel() {
+  //   if (!nodeData || !isNode(selectedElement)) {
+  //     return;
+  //   }
+  //   const newNodeData = {
+  //     ...nodeData,
+  //     ewoks_props: { ...nodeData.ewoks_props, label: labelLocal },
+  //   };
+  //   setNodeData(selectedElement.id, newNodeData);
+  // }
 
   return (
     <div
@@ -219,7 +159,11 @@ const Node: React.FC<NodeProps> = ({
       role="button"
       tabIndex={0}
     >
-      <Tooltip title={theCom} enterDelay={800} arrow>
+      <Tooltip
+        title={comment ? <span style={style.comment}>{comment}</span> : ''}
+        enterDelay={800}
+        arrow
+      >
         <span style={displayNode} className="icons">
           {!isGraph && type !== 'graphOutput' && (
             <Handle
@@ -268,7 +212,6 @@ const Node: React.FC<NodeProps> = ({
           {withLabel &&
             (edit ? (
               <TextField
-                id="standard-multiline-flexible"
                 label="edit node Label"
                 multiline
                 maxRows={4}
@@ -284,64 +227,25 @@ const Node: React.FC<NodeProps> = ({
               {label.slice(0, 1)}
             </div>
           )}
-          {inExecutionMode &&
-            !withImage &&
-            type !== 'graphOutput' &&
-            type !== 'graphInput' && (
-              <ExecuteSpinner
-                getting={executing}
-                tooltip="Execution"
-                action={execution}
-              >
-                <img
-                  style={{ padding: '2px' }}
-                  role="presentation"
-                  draggable="false"
-                  onDragStart={(event) => onDragStart(event)}
-                  src={orange1}
-                  alt="icon"
-                />
-              </ExecuteSpinner>
-            )}
           {/* If comment also needed sometimes */}
           {/* <div style={{ wordWrap: 'break-word' }}>{comment}</div> */}
-          {withImage &&
-            type !== 'graphOutput' &&
-            type !== 'graphInput' &&
-            (inExecutionMode ? (
-              <ExecuteSpinner
-                getting={executing}
-                tooltip="Execution"
-                action={execution}
-              >
-                <img
-                  style={{ padding: '2px' }}
-                  role="presentation"
-                  draggable="false"
-                  onDragStart={(event) => onDragStart(event)}
-                  src={iconsObj[image] || orange1}
-                  alt="icon"
-                />
-              </ExecuteSpinner>
-            ) : (
-              <img
-                style={{ padding: '2px' }}
-                role="presentation"
-                draggable="false"
-                onDragStart={(event) => onDragStart(event)}
-                src={findImage(image)}
-                alt="taskIcon"
+          {(withImage || inExecutionMode) && (
+            <IconBoundary>
+              <NodeIcon
+                image={image}
+                hasSpinner={
+                  inExecutionMode &&
+                  type !== 'graphOutput' &&
+                  type !== 'graphInput'
+                }
+                spinnerProps={{
+                  getting: executing,
+                  tooltip: 'Execution',
+                  action: execution,
+                }}
+                onDragStart={(e) => e.preventDefault()}
               />
-            ))}
-          {withImage && (type === 'graphOutput' || type === 'graphInput') && (
-            <img
-              style={{ padding: '2px' }}
-              role="presentation"
-              draggable="false"
-              onDragStart={(event) => onDragStart(event)}
-              src={iconsObj[image] || orange1}
-              alt="icon"
-            />
+            </IconBoundary>
           )}
           {!isGraph && type !== 'graphInput' && (
             <Handle
@@ -372,9 +276,7 @@ const Node: React.FC<NodeProps> = ({
                   }}
                   isConnectable
                   isValidConnection={isValidConnection}
-                >
-                  {/* <img src={iconsObj['up']} alt="" /> */}
-                </Handle>
+                />
                 <Handle
                   type="target"
                   position={Position.Top}
@@ -399,8 +301,8 @@ const Node: React.FC<NodeProps> = ({
                 placement="top"
               >
                 <IconButton
-                  style={{ margin: '0px 2px', padding: '0px' }}
-                  aria-label="edit"
+                  style={{ ...contentStyle.iconButtons }}
+                  aria-label="clone node"
                   onClick={() => {
                     cloneNode();
                   }}
@@ -416,8 +318,8 @@ const Node: React.FC<NodeProps> = ({
                   placement="top"
                 >
                   <IconButton
-                    style={{ margin: '0px 2px', padding: '0px' }}
-                    aria-label="edit"
+                    style={{ ...contentStyle.iconButtons }}
+                    aria-label="edit node"
                     onClick={() => {
                       setEdit(true);
                     }}
@@ -426,7 +328,7 @@ const Node: React.FC<NodeProps> = ({
                   </IconButton>
                 </Tooltip>
               )}
-              {withLabel && edit && (
+              {/* {withLabel && edit && (
                 <Tooltip
                   title={tooltipText('Save new label')}
                   enterDelay={800}
@@ -434,23 +336,22 @@ const Node: React.FC<NodeProps> = ({
                   placement="top"
                 >
                   <IconButton
-                    style={{ margin: '0px px' }}
-                    aria-label="edit"
+                    aria-label="exit edit mode"
                     onClick={() => {
                       setEdit(false);
-                      setSelEl();
+                      setNodeLabel();
                     }}
                   >
                     <SaveIcon color="primary" />
                   </IconButton>
                 </Tooltip>
-              )}
+              )} */}
             </>
           )}
         </span>
       </Tooltip>
     </div>
   );
-};
+}
 
 export default memo(Node);

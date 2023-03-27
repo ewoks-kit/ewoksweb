@@ -1,13 +1,12 @@
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-
-import { Alert, Color } from '@material-ui/lab';
-import state from '../../store/state';
+import { Alert } from '@material-ui/lab';
+import useStore from '../../store/useStore';
 
 function SimpleSnackbar() {
-  const openSnackbar = state((state) => state.openSnackbar);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const openSnackbar = useStore((state) => state.openSnackbar);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const handleClose = (
     event: React.SyntheticEvent | React.MouseEvent,
@@ -43,7 +42,7 @@ function SimpleSnackbar() {
       message={openSnackbar.text}
       action={action}
     >
-      <Alert onClose={handleClose} severity={openSnackbar.severity as Color}>
+      <Alert onClose={handleClose} severity={openSnackbar.severity}>
         {openSnackbar.text}
       </Alert>
     </Snackbar>

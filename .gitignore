@@ -21,3 +21,7 @@ node_modules/
 Thumbs.db
 .DS_Store
 /src/data/directed.json
+
+# tests
+/cypress/screenshots/
+/cypress/videos/

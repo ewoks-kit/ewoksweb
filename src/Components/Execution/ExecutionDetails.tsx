@@ -1,35 +1,38 @@
 // /* eslint-disable sonarjs/cognitive-complexity */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactJson from 'react-json-view';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import IntegratedSpinner from '../General/IntegratedSpinner';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
 import { Button, Chip, IconButton } from '@material-ui/core';
-import type { Event, GraphEwoks, WorkflowDescription } from '../../types';
-import { getWorkflow } from '../../utils/api';
+import type { Event } from '../../types';
+import { getWorkflow } from '../../api/api';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
+import { textForError } from '../../utils';
 
 export default function ExecutionDetails() {
-  // const graphRF = state((state) => state.graphRF);
+  // const graphRF = useStore((state) => state.graphRF);
 
-  const currentExecutionEvent = state((state) => state.currentExecutionEvent);
+  const currentExecutionEvent = useStore(
+    (state) => state.currentExecutionEvent
+  );
 
   // DOC: events from the ongoing live executions
-  const executedEvents = state((state) => state.executedEvents);
+  const executedEvents = useStore((state) => state.executedEvents);
 
   // DOC: the workflows from HISTORY that are visible on the execution tab
-  const watchedWorkflows = state((state) => state.watchedWorkflows);
-  const setWatchedWorkflows = state((state) => state.setWatchedWorkflows);
+  const watchedWorkflows = useStore((state) => state.watchedWorkflows);
+  const setWatchedWorkflows = useStore((state) => state.setWatchedWorkflows);
 
   // DOC: all workflows live and from history on the execution tab
-  const [workflows, setWorkflows] = useState([]);
+  const [workflows, setWorkflows] = useState<Event[]>([]);
 
   // DOC: calculate the executing spinners for live execution
-  const setExecutingEvents = state((state) => state.setExecutingEvents);
-  // const executingEvents = state((state) => state.executingEvents);
+  const setExecutingEvents = useStore((state) => state.setExecutingEvents);
+  // const executingEvents = useStore((state) => state.executingEvents);
 
-  const setInExecutionMode = state((state) => state.setInExecutionMode);
+  const setInExecutionMode = useStore((state) => state.setInExecutionMode);
 
   // DOC: the events that are each moment on the canvas NOT? for live executing workflows
   const [currentWatchedEvents, setCurrentWatchedEvents] = useState(
@@ -40,27 +43,30 @@ export default function ExecutionDetails() {
   const [selectedWorkflow, setSelectedWorkflow] = useState<Event>({} as Event);
 
   // const [gettingFromServer, setGettingFromServer] = useState(false); TODO: Use the global...
-  const setGettingFromServer = state((state) => state.setGettingFromServer);
-  const gettingFromServer = state((state) => state.gettingFromServer);
+  const setGettingFromServer = useStore((state) => state.setGettingFromServer);
+  const gettingFromServer = useStore((state) => state.gettingFromServer);
 
-  const setWorkingGraph = state((state) => state.setWorkingGraph);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const allWorkflows = state((state) => state.allWorkflows);
+  const initGraph = useStore((state) => state.initGraph);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const allWorkflows = useStore((state) => state.allWorkflows);
 
   // const [expandedWorkflows, setExpandedWorkflows] = useState<boolean>(false);
-  // const openSettingsDrawer = state((state) => state.openSettingsDrawer);
-  const setOpenSettingsDrawer = state((state) => state.setOpenSettingsDrawer);
-  const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
+  // const openSettingsDrawer = useStore((state) => state.openSettingsDrawer);
+  const setOpenSettingsDrawer = useStore(
+    (state) => state.setOpenSettingsDrawer
+  );
+  const setCanvasGraphChanged = useStore(
+    (state) => state.setCanvasGraphChanged
+  );
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
-  const undoIndex = state((state) => state.undoIndex);
-  const canvasGraphChanged = state((state) => state.canvasGraphChanged);
+  const undoIndex = useStore((state) => state.undoIndex);
+  const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
 
   useEffect(() => {
     // DOC: for those live executing search the executedEvents
-    const allWorkflowsL = executedEvents
+    const allWorkflowsL: Event[] = executedEvents
       .filter((ev) => ev.context === 'workflow' && ev.type === 'start')
       .map((work) => {
-        let workL = {};
         if (
           executedEvents.some(
             (wor) =>
@@ -69,21 +75,20 @@ export default function ExecutionDetails() {
               wor.type === 'end'
           )
         ) {
-          workL = { ...work, status: 'finished' };
-        } else {
-          workL = { ...work, status: 'executing' };
+          return { ...work, status: 'finished' };
         }
-        return workL;
+
+        return { ...work, status: 'executing' };
       });
 
-    const wjobs = watchedWorkflows.map((job) => {
+    const wjobs: Event[] = watchedWorkflows.map((job) => {
       return { ...(job[0].workflow_id ? job[0] : job[1]), status: 'finished' };
     });
 
     setWorkflows([...allWorkflowsL, ...wjobs]);
   }, [executedEvents, watchedWorkflows]);
 
-  function workflowDetails(work) {
+  function workflowDetails(work: Event) {
     if (selectedWorkflow !== work) {
       setSelectedWorkflow(work);
     } else {
@@ -92,18 +97,14 @@ export default function ExecutionDetails() {
   }
 
   function formatedDate(job: Event) {
-    const allWorkF: WorkflowDescription[] = [
-      ...(allWorkflows as WorkflowDescription[]),
-    ];
+    // TODO: works but is not entirelly correct but suggested by eslint
+    const label = allWorkflows?.find((work) => job.workflow_id === work.id)
+      ?.label;
 
-    const { label } = (allWorkF &&
-      allWorkF.find((work) => job.workflow_id === work.id)) || {
-      label: '',
-    };
-    const dat = new Date(job.time);
+    const dat = new Date(job.time || '');
 
     return `${
-      label ? label.slice(0, 20) : job.workflow_id
+      label ? label.slice(0, 20) : (job.workflow_id as string)
     } ${dat.getHours()}:${dat.getMinutes()} ${dat.getDate()}/${
       dat.getMonth() + 1
     }/${dat.getFullYear()}`;
@@ -112,11 +113,11 @@ export default function ExecutionDetails() {
   function checkAndExecute() {
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
-    } else {
-      executeWorkflow();
-      setOpenAgreeDialog(false);
-      setCanvasGraphChanged(false);
+      return;
     }
+    executeWorkflow();
+    setOpenAgreeDialog(false);
+    setCanvasGraphChanged(false);
   }
 
   async function executeWorkflow() {
@@ -129,38 +130,42 @@ export default function ExecutionDetails() {
     // if (graphRF.graph.id !== workflowId) {
     // DOC: Get the workflow from server if not on canvas
     // TODO: dublicated code with getFromServer, abstract in store? hook?
-    setGettingFromServer(true);
-    try {
-      const response = await getWorkflow(workflowId);
-      if (response.data) {
-        setWorkingGraph(response.data as GraphEwoks, 'fromServer');
-        // TODO: get rid of timeout?
-        setTimeout(() => {
-          // DOC:
-          const events = getEventsForJob();
+    if (workflowId) {
+      setGettingFromServer(true);
+      try {
+        const response = await getWorkflow(workflowId);
+        if (response.data) {
+          initGraph(response.data, 'fromServer');
+          // TODO: get rid of timeout?
+          setTimeout(() => {
+            // DOC:
+            const events = getEventsForJob();
 
-          // TODO: timeout is needed because executingEvents try to find
-          // the nodes before they are there from the server
-          // probably because setWorkingGraph changes the graphRF used in executingEvents
-          events.forEach((ev) => setExecutingEvents(ev, false));
-        }, 400);
-      } else {
+            // TODO: timeout is needed because executingEvents try to find
+            // the nodes before they are there from the server
+            // probably because initGraph changes the graphRF used in executingEvents
+            events.forEach((ev) => setExecutingEvents(ev, false));
+          }, 400);
+        } else {
+          setOpenSnackbar({
+            open: true,
+            text:
+              'Could not locate the requested workflow! Maybe it is deleted!',
+            severity: 'warning',
+          });
+        }
+      } catch (error) {
         setOpenSnackbar({
           open: true,
-          text: 'Could not locate the requested workflow! Maybe it is deleted!',
-          severity: 'warning',
+          text: textForError(
+            error,
+            'Error in retrieving workflow. Please check connectivity with the server!'
+          ),
+          severity: 'error',
         });
+      } finally {
+        setGettingFromServer(false);
       }
-    } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text:
-          error.response?.data?.message ||
-          'Error in retrieving workflow. Please check connectivity with the server!',
-        severity: 'error',
-      });
-    } finally {
-      setGettingFromServer(false);
     }
   }
 
@@ -186,7 +191,7 @@ export default function ExecutionDetails() {
     return events;
   }
 
-  async function handleChangeOpenExecutions() {
+  function handleChangeOpenExecutions() {
     setOpenSettingsDrawer('Executions');
   }
 

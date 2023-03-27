@@ -1,49 +1,70 @@
-import type { GraphRF } from '../../../types';
+import type {
+  Conditions,
+  DataMapping,
+  GraphDetails,
+  GraphRF,
+  Inputs,
+  EwoksRFLink,
+  EwoksRFNode,
+} from '../../../types';
+import type { ReactFlowState } from 'reactflow';
 
-function curateGraph(graphRF: GraphRF): GraphRF {
-  const graphRFCurrated = { ...graphRF };
-  // INFO: change the workflow id when the label is changed
-  // graphRFCurrated.graph.id = graphRFCurrated.graph.label;
+function curateGraph(
+  graphDetails: GraphDetails,
+  stateRF: ReactFlowState
+): GraphRF {
+  // INFO: Remove empty lines in table for nodes and links
+  const nodes = stateRF.getNodes().map((nodeRF) => {
+    const node = nodeRF as EwoksRFNode;
+    return {
+      ...node,
+      data: {
+        ...node.data,
+        ewoks_props: {
+          ...node.data.ewoks_props,
+          default_inputs: deleteEmptyLines(
+            node.data.ewoks_props.default_inputs
+          ),
+          default_error_attributes: {
+            ...node.data.ewoks_props.default_error_attributes,
+            data_mapping: deleteEmptyLines(
+              node.data.ewoks_props.default_error_attributes?.data_mapping
+            ),
+          },
+        },
+      },
+    };
+  });
 
-  for (const nod of graphRFCurrated.nodes) {
-    // INFO: Remove empty lines in table for nodes and links
-    // TODO: removes only the last not all empty...
-    if (
-      nod.default_inputs &&
-      nod.default_inputs.length > 0 &&
-      nod.default_inputs[nod.default_inputs.length - 1].id === ''
-    ) {
-      nod.default_inputs.pop();
-    }
-    if (
-      nod.default_error_attributes &&
-      nod.default_error_attributes.data_mapping &&
-      nod.default_error_attributes.data_mapping.length > 0 &&
-      nod.default_error_attributes.data_mapping[
-        nod.default_error_attributes.data_mapping.length - 1
-      ].id === ''
-    ) {
-      nod.default_error_attributes.data_mapping.pop();
-    }
+  const links = stateRF.edges.map((edgeRF) => {
+    const edge = edgeRF as EwoksRFLink;
+    return {
+      ...edge,
+      data: {
+        ...edge.data,
+        conditions: deleteEmptyLines(edge.data.conditions),
+        data_mapping: deleteEmptyLines(edge.data.data_mapping),
+      },
+    };
+  });
+
+  return {
+    graph: graphDetails,
+    nodes,
+    links,
+  };
+}
+
+function deleteEmptyLines<T extends DataMapping | Conditions | Inputs>(
+  arrayObjId: T[] | undefined
+): T[] {
+  if (!arrayObjId) {
+    return [];
   }
-  for (const lin of graphRFCurrated.links) {
-    if (
-      lin.data.conditions &&
-      lin.data.conditions.length > 0 &&
-      lin.data.conditions[lin.data.conditions.length - 1].id === ''
-    ) {
-      lin.data.conditions.pop();
-    }
-    if (
-      lin.data.data_mapping &&
-      lin.data.data_mapping.length > 0 &&
-      lin.data.data_mapping[lin.data.data_mapping.length - 1].id === ''
-    ) {
-      lin.data.data_mapping.pop();
-    }
-  }
 
-  return graphRFCurrated;
+  return arrayObjId.filter(
+    (obj: DataMapping | Conditions | Inputs) => obj.id !== ''
+  );
 }
 
 export default curateGraph;

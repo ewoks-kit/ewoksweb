@@ -1,29 +1,34 @@
-import type { GraphRF } from '../types';
+import type { GraphRF, State } from '../types';
+import type { GetState, SetState } from 'zustand';
 
-const recentGraphs = (set, get) => ({
-  recentGraphs: [] as GraphRF[],
+export interface RecentGraphsSlice {
+  recentGraphs: GraphRF[];
+  addRecentGraph: (newGraph: GraphRF) => void;
+  resetRecentGraphs: () => void;
+}
 
-  setRecentGraphs: (newGraph: GraphRF, reset = false) => {
-    let rec = [];
-    if (!reset) {
-      rec =
-        get().recentGraphs.length > 0
-          ? get().recentGraphs.filter((gr) => {
-              return gr.graph.id !== newGraph.graph.id;
-            })
-          : [];
-    }
-    if (newGraph.graph) {
-      set((state) => ({
-        ...state,
-        recentGraphs: [...rec, newGraph],
-      }));
-    } else {
-      set((state) => ({
-        ...state,
-        recentGraphs: [...rec],
-      }));
-    }
+const recentGraphs = (
+  set: SetState<State>,
+  get: GetState<State>
+): RecentGraphsSlice => ({
+  recentGraphs: [],
+
+  addRecentGraph: (newGraph) => {
+    const rec: GraphRF[] = get().recentGraphs.filter(
+      (gr) => gr.graph.id !== newGraph.graph.id
+    );
+
+    set((state) => ({
+      ...state,
+      recentGraphs: [...rec, newGraph],
+    }));
+  },
+
+  resetRecentGraphs: () => {
+    set((state) => ({
+      ...state,
+      recentGraphs: [],
+    }));
   },
 });
 

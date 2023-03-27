@@ -7,9 +7,9 @@ import { Box } from '@material-ui/core';
 import ManageIcons from './ManageIcons';
 import ManageWorkflows from './ManageWorkflows';
 import ManageTasks from './ManageTasks';
-import { getIcons } from '../../utils/api';
 import ExecutionTable from '../Execution/ExecutionTable';
-import state from '../../store/state';
+import useStore from '../../store/useStore';
+import IconBoundary from '../../IconBoundary';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -46,7 +46,7 @@ function a11yProps(index: number) {
 
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
-  const openSettingsDrawer = state((state) => state.openSettingsDrawer);
+  const openSettingsDrawer = useStore((state) => state.openSettingsDrawer);
 
   useEffect(() => {
     setValue(
@@ -64,28 +64,21 @@ export default function BasicTabs() {
     );
   }, [openSettingsDrawer]);
 
-  const handleChange = async (
-    event: React.SyntheticEvent,
-    newValue: number
-  ) => {
-    setValue(newValue);
-    if (newValue === 2) {
-      await getIcons();
-    }
-  };
-
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
-          onChange={handleChange}
+          onChange={(e, newValue: number) => {
+            setValue(newValue);
+          }}
           aria-label="basic tabs example"
         >
           <Tab label="Workflows" {...a11yProps(0)} />
           <Tab label="Tasks" {...a11yProps(1)} />
-          <Tab label="Icons" {...a11yProps(2)} />
-          <Tab label="Executions" {...a11yProps(3)} />
+          <Tab label="Icons" data-cy="iconsTab" {...a11yProps(2)} />
+          {/* TODO: commented for onlyEditRelease */}
+          {/* <Tab label="Executions" {...a11yProps(3)} /> */}
           {/* <Tab label="Settings" {...a11yProps(4)} /> */}
         </Tabs>
       </Box>
@@ -96,7 +89,9 @@ export default function BasicTabs() {
         <ManageTasks />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <ManageIcons />
+        <IconBoundary>
+          <ManageIcons />
+        </IconBoundary>
       </TabPanel>
       <TabPanel value={value} index={3}>
         <ExecutionTable />

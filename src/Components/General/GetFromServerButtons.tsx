@@ -3,24 +3,36 @@ import { useState } from 'react';
 import IntegratedSpinner from './IntegratedSpinner';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import type { GraphEwoks } from '../../types';
-import state from '../../store/state';
-import { getWorkflow } from '../../utils/api';
+import useStore from '../../store/useStore';
+import { getWorkflow } from '../../api/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
+import { textForError } from '../../utils';
+import { useReactFlow } from 'reactflow';
+import useNodeDataStore from '../../store/useNodeDataStore';
+
+interface GetFromServerButtonsProps {
+  workflowId: string;
+  showButtons: boolean[];
+}
 
 // DOC: buttons used to get or save to server
-export default function GetFromServerButtons(props) {
+export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
   const { workflowId, showButtons } = props;
 
-  const setSubGraph = state((state) => state.setSubGraph);
-  const setWorkingGraph = state((state) => state.setWorkingGraph);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
+  const { getNodes, getEdges, setNodes } = useReactFlow();
+
+  const setSubGraph = useStore((state) => state.setSubGraph);
+  const initGraph = useStore((state) => state.initGraph);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const [gettingFromServer, setGettingFromServer] = useState(false);
-  const graphRF = state((state) => state.graphRF);
-  const canvasGraphChanged = state((state) => state.canvasGraphChanged);
-  const setCanvasGraphChanged = state((state) => state.setCanvasGraphChanged);
+  const graphInfo = useStore((state) => state.graphInfo);
+  const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
+  const setCanvasGraphChanged = useStore(
+    (state) => state.setCanvasGraphChanged
+  );
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
-  const undoIndex = state((state) => state.undoIndex);
+  const undoIndex = useStore((state) => state.undoIndex);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   function getSubgraphFromServer() {
     getFromServer('subgraph');
@@ -37,17 +49,27 @@ export default function GetFromServerButtons(props) {
       try {
         const response = await getWorkflow(workflowId);
         if (response.data) {
-          const graph = response.data as GraphEwoks;
+          const graph = response.data;
           setOpenSnackbar({
             open: true,
-            text: `Workflow ${graph.graph.label} was downloaded succesfully`,
+            text: `Workflow ${
+              graph.graph.label || 'without label!!!'
+            } was downloaded successfully`,
             severity: 'success',
           });
           setCanvasGraphChanged(false);
+          const nodes = getNodes();
           if (isSubgraph === 'subgraph') {
-            setSubGraph(graph);
+            const { nodeWithoutData, data } = await setSubGraph(
+              graph,
+              nodes,
+              getEdges()
+            );
+
+            setNodes([...getNodes(), nodeWithoutData]);
+            setNodeData(nodeWithoutData.id, data);
           } else {
-            setWorkingGraph(graph, 'fromServer');
+            initGraph(graph, 'fromServer');
           }
         } else {
           setOpenSnackbar({
@@ -60,9 +82,10 @@ export default function GetFromServerButtons(props) {
       } catch (error) {
         setOpenSnackbar({
           open: true,
-          text:
-            error.response?.data?.message ||
-            'Error in retrieving workflow. Please check connectivity with the server!',
+          text: textForError(
+            error,
+            'Error in retrieving workflow. Please check connectivity with the server!'
+          ),
           severity: 'error',
         });
       } finally {
@@ -80,8 +103,8 @@ export default function GetFromServerButtons(props) {
   const checkAndGetFromServer = (isSubgraph: string) => {
     if (
       workflowId &&
-      graphRF.graph.id &&
-      graphRF.graph.id !== workflowId &&
+      graphInfo.id &&
+      graphInfo.id !== workflowId &&
       canvasGraphChanged &&
       undoIndex !== 0
     ) {

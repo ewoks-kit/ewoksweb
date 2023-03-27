@@ -1,4 +1,6 @@
-import { getBezierPath } from 'react-flow-renderer';
+import type { EdgeProps } from 'reactflow';
+import { getBezierPath } from 'reactflow';
+import { edgeStyle } from './EdgeStyle';
 
 function bendingText({
   id,
@@ -11,8 +13,8 @@ function bendingText({
   label = '',
   markerEnd,
   style = {},
-}) {
-  const edgePath = getBezierPath({
+}: EdgeProps) {
+  const [path] = getBezierPath({
     sourceX,
     sourceY,
     sourcePosition,
@@ -27,15 +29,15 @@ function bendingText({
         id={id}
         style={style}
         className="react-flow__edge-path"
-        d={edgePath}
+        d={path}
         markerEnd={markerEnd}
       />
       <text>
         <textPath
-          href={`#${id as string}`}
+          href={`#${id}`}
           startOffset="50%"
           textAnchor="middle"
-          style={{ ...style, strokeWidth: '1', fontSize: '16px' }}
+          style={{ ...style, ...edgeStyle.bendingText }}
         >
           {label}
         </textPath>

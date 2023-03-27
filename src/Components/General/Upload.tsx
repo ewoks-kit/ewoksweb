@@ -1,10 +1,13 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Fab } from '@material-ui/core';
+import type { ChangeEvent, ReactNode } from 'react';
 
 // import { validateEwoksGraph } from '../utils/EwoksValidator';
-import state from '../../store/state';
-import type { GraphRF } from '../../types';
+import useStore from '../../store/useStore';
+import type { GraphEwoks, GraphRF } from '../../types';
+import { useReactFlow } from 'reactflow';
+import useNodeDataStore from '../../store/useNodeDataStore';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -14,12 +17,14 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const showFile = async (e): Promise<FileReader> => {
+async function showFile(e: ChangeEvent<HTMLInputElement>): Promise<FileReader> {
   e.preventDefault();
   const reader: FileReader = new FileReader();
-  reader.readAsText(e.target.files[0]);
+  if (e.target?.files?.[0]) {
+    reader.readAsText(e.target.files[0]);
+  }
   return reader;
-};
+}
 
 function isJsonString(str: string): boolean {
   try {
@@ -32,35 +37,42 @@ function isJsonString(str: string): boolean {
   return true;
 }
 
-function Upload(props) {
+function Upload(props: { children?: ReactNode } | undefined) {
   const classes = useStyles();
 
-  const graphRF = state<GraphRF>((state) => state.graphRF);
-  const graphOrSubgraph = state<Boolean>((state) => state.graphOrSubgraph);
+  const { getNodes, getEdges, setNodes } = useReactFlow();
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
-  const workingGraph = state<GraphRF>((state) => state.workingGraph);
-  const setWorkingGraph = state((state) => state.setWorkingGraph);
-  const setSubGraph = state((state) => state.setSubGraph);
-  const setOpenSnackbar = state((state) => state.setOpenSnackbar);
-  const inExecutionMode = state<boolean>((state) => state.inExecutionMode);
+  const graphInfo = useStore((state) => state.graphInfo);
+  const graphOrSubgraph = useStore<boolean>((state) => state.graphOrSubgraph);
 
-  async function fileNameChanged(event) {
-    if (workingGraph.graph.id === graphRF.graph.id) {
+  const workingGraph = useStore<GraphRF>((state) => state.workingGraph);
+  const initGraph = useStore((state) => state.initGraph);
+  const setSubGraph = useStore((state) => state.setSubGraph);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const inExecutionMode = useStore<boolean>((state) => state.inExecutionMode);
+
+  async function fileNameChanged(event: ChangeEvent<HTMLInputElement>) {
+    if (workingGraph.graph.id === graphInfo.id) {
       const reader = showFile(event);
       const file = await reader.then((val) => val);
       // eslint-disable-next-line require-atomic-updates
       file.onloadend = async () => {
         if (isJsonString(file.result as string)) {
-          const newGraph = JSON.parse(file.result as string);
+          const newGraph: GraphEwoks = JSON.parse(file.result as string);
 
           if (graphOrSubgraph) {
             // TODO validate from disk workflows but visualize them
             // const { result } = validateEwoksGraph(newGraph);
-            // if (result) {
-            await setWorkingGraph(newGraph, 'fromDisk');
-            // }
+            await initGraph(newGraph, 'fromDisk');
           } else {
-            await setSubGraph(newGraph);
+            const { nodeWithoutData, data } = await setSubGraph(
+              newGraph,
+              getNodes(),
+              getEdges()
+            );
+            setNodes([...getNodes(), nodeWithoutData]);
+            setNodeData(nodeWithoutData.id, data);
           }
         } else {
           setOpenSnackbar({
@@ -88,7 +100,9 @@ function Upload(props) {
           id="load-graph"
           name="load-graph"
           type="file"
-          onChange={fileNameChanged}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            fileNameChanged(e);
+          }}
         />
         <Fab
           className={classes.openFileButton}
@@ -98,7 +112,7 @@ function Upload(props) {
           aria-label="add"
           disabled={inExecutionMode}
         >
-          {props.children}
+          {props?.children || ''}
         </Fab>
       </label>
     </div>
