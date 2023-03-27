@@ -1,16 +1,12 @@
 stages:
   - style
   - build
-  - test
   - deploy
-
-variables:
-  CYPRESS_CACHE_FOLDER: '$CI_PROJECT_DIR/.cypress-cache/'
 
 ### Jobs templates ###
 
 .base:
-  image: 'docker-registry.esrf.fr/dau/ewoks:python_3.9_node_16'
+  image: "docker-registry.esrf.fr/dau/ewoks:python_3.9_node_12"
   tags:
     - linux
   only:
@@ -19,23 +15,16 @@ variables:
       - merge_requests
   timeout: 10m
 
-.pnpm-base:
-  extends: .base
-  before_script:
-    - curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@7
-    - pnpm config set store-dir .pnpm-store
-    - pnpm install
-  cache:
-    key:
-      files:
-        - pnpm-lock.yaml
-    paths:
-      - .pnpm-store
-      - .cypress-cache
-
 .style:
   stage: style
   extends: .base
+
+.build:
+  stage: build
+  extends: .base
+  only:
+    refs:
+      - main
 
 .deploy:
   stage: deploy
@@ -61,19 +50,23 @@ black:
     - LC_ALL=C.UTF-8 black --check --safe .
 
 lint:
-  stage: style
-  extends: .pnpm-base
+  extends: .style
+  before_script:
+    # - npx -y browserslist@latest --update-db
+    - npm install -y
   script:
-    - pnpm run lint
+    - npm run lint
 
 build:
+  extends: .build
   stage: build
-  extends: .pnpm-base
   script:
+    # - npx -y browserslist@latest --update-db
     - python3 --version
     - python3 -m pip install --upgrade pip
     - python3 -m pip install --upgrade setuptools
-    - CI=false pnpm build # Don't let eslint warnings fail the build
+    - npm install -y
+    - npm run build
     - python3 setup.py sdist
     - mv dist sdist
   after_script:
@@ -81,29 +74,15 @@ build:
   artifacts:
     paths:
       - sdist/
-      - build/
     when: on_success
     expire_in: 2h
 
-cypress:
-  image: cypress/base:16.18.0
-  stage: test
-  extends: .pnpm-base
-  needs: ['build']
-  before_script:
-    # https://github.com/cypress-io/cypress-docker-images/issues/642 and https://github.com/cypress-io/cypress-docker-images/issues/649
-    - apt-get update && apt-get install curl -y
-    - !reference [.pnpm-base, before_script]
-  script:
-    # https://github.com/vercel/serve/issues/751
-    - pnpm dlx serve@13.0.4 --no-port-switching -s build -l 3000 & pnpm dlx wait-on http://localhost:3000
-    - pnpm cypress:run
-
 pages:
   stage: deploy
-  extends: .pnpm-base
-  needs: ['build']
+  extends: .base
   script:
+    - npm install
+    - npm run build
     - rm -rf public
     - mv build public
   variables:
