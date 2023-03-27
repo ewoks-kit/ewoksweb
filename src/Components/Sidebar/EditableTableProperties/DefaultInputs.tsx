@@ -60,7 +60,7 @@ export default function DefaultInputs(props) {
     <div>
       <SidebarTooltip
         text={`Used to create an input when not provided
-              by the output of other connected nodes(tasks).`}
+              by the output of other connected nodes.`}
       >
         <div>
           <b>Default Inputs </b>
