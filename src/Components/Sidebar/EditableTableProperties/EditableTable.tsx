@@ -148,7 +148,19 @@ function EditableTable(props: EditableTableProps) {
         severity: 'error',
       });
     } else {
-      setRows(calcNewRows(id));
+      const newRows = rows.map((row) => {
+        if (row.id === id) {
+          return {
+            ...row,
+            id: Number.isNaN(row.name)
+              ? row.name.replace(' ', '_') || ''
+              : Number(row.name),
+            // value: row.value,
+            isEditMode: !row.isEditMode,
+          };
+        }
+        return row;
+      });
 
       props.valuesChanged(rows);
     }
