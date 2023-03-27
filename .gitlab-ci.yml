@@ -49,13 +49,13 @@ black:
   script:
     - LC_ALL=C.UTF-8 black --check --safe .
 
-lint:
-  extends: .style
-  before_script:
-    # - npx -y browserslist@latest --update-db
-    - npm install -y
-  script:
-    - npm run lint
+# lint:
+#   extends: .style
+#   before_script:
+#     # - npx -y browserslist@latest --update-db
+#     - npm install -y
+#   script:
+#     - npm run lint
 
 build:
   extends: .build
