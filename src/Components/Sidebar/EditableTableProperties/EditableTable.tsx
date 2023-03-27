@@ -170,7 +170,9 @@ function EditableTable(props: EditableTableProps) {
         if (row.id === id) {
           return {
             ...row,
-            id: row.name.replace(' ', '_') || '',
+            id: Number.isNaN(row.name)
+              ? row.name.replace(' ', '_') || ''
+              : Number(row.name),
             // value: row.value,
             isEditMode: !row.isEditMode,
           };
