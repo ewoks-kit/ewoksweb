@@ -47,7 +47,7 @@ export default function DefaultInputs(props) {
         default_inputs: table.map((dval) => {
           return {
             id: dval.name,
-            name: dval.name,
+            name: Number.isNaN(dval.name) ? dval.name : Number(dval.name),
             value: dval.value,
           };
         }),
