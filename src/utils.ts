@@ -123,6 +123,8 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
   const noteNodes = calcNoteNodes(tempGraph);
   graph.uiProps.notes = noteNodes;
 
+  console.log(toEwoksNodes(tempGraph.nodes));
+
   return {
     graph,
     nodes: toEwoksNodes(tempGraph.nodes),

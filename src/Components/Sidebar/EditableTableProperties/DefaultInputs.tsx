@@ -47,7 +47,7 @@ export default function DefaultInputs(props) {
         default_inputs: table.map((dval) => {
           return {
             id: dval.name,
-            name: Number.isNaN(dval.name) ? dval.name : Number(dval.name),
+            name: dval.name,
             value: dval.value,
           };
         }),
@@ -60,7 +60,7 @@ export default function DefaultInputs(props) {
     <div>
       <SidebarTooltip
         text={`Used to create an input when not provided
-              by the output of other connected nodes.`}
+              by the output of other connected nodes(tasks).`}
       >
         <div>
           <b>Default Inputs </b>
