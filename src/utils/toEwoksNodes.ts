@@ -5,7 +5,7 @@ function cleanDefaultInputs(default_inputs) {
     (default_inputs &&
       default_inputs.map((dIn) => {
         return {
-          name: !isNaN(dIn.name) ? Number(dIn.name) : dIn.name,
+          name: !Number.isNaN(dIn.name) ? Number(dIn.name) : dIn.name,
           value:
             dIn.value === 'false'
               ? false
