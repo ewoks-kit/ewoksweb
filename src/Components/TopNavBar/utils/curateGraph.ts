@@ -6,37 +6,37 @@ import type {
   Inputs,
   EwoksRFLink,
   EwoksRFNode,
+  EwoksRFNodeData,
+  EwoksRFLinkData,
 } from '../../../types';
-import type { ReactFlowState } from 'reactflow';
 
 function curateGraph(
-  graphDetails: GraphDetails,
-  stateRF: ReactFlowState
-): GraphRF {
+  nodesData: Map<string, EwoksRFNodeData>,
+  edgesData: Map<string, EwoksRFLinkData>
+): {
+  nodesData: Map<string, EwoksRFNodeData>;
+  edgesData: Map<string, EwoksRFLinkData>;
+} {
   // INFO: Remove empty lines in table for nodes and links
-  const nodes = stateRF.getNodes().map((nodeRF) => {
-    const node = nodeRF as EwoksRFNode;
-    return {
-      ...node,
-      data: {
-        ...node.data,
+  const newNodesData: EwoksRFNodeData[] = [...nodesData.values()].map(
+    (nodeData) => {
+      return {
+        ...nodeData,
         ewoks_props: {
-          ...node.data.ewoks_props,
-          default_inputs: deleteEmptyLines(
-            node.data.ewoks_props.default_inputs
-          ),
+          ...nodeData.ewoks_props,
+          default_inputs: deleteEmptyLines(nodeData.ewoks_props.default_inputs),
           default_error_attributes: {
-            ...node.data.ewoks_props.default_error_attributes,
+            ...nodeData.ewoks_props.default_error_attributes,
             data_mapping: deleteEmptyLines(
-              node.data.ewoks_props.default_error_attributes?.data_mapping
+              nodeData.ewoks_props.default_error_attributes?.data_mapping
             ),
           },
         },
-      },
-    };
-  });
+      };
+    }
+  );
 
-  const links = stateRF.edges.map((edgeRF) => {
+  const newLinksData = stateRF.edges.map((edgeRF) => {
     const edge = edgeRF as EwoksRFLink;
     return {
       ...edge,
@@ -49,9 +49,8 @@ function curateGraph(
   });
 
   return {
-    graph: graphDetails,
-    nodes,
-    links,
+    newNodesData,
+    newLinksData,
   };
 }
 

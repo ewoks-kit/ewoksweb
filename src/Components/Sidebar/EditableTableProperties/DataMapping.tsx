@@ -4,9 +4,9 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
-import { useNode } from '../../../store/graph-hooks';
 import { isClass } from './utils';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
+import useNodeDataStore from '../../../store/useNodeDataStore';
 
 export default function DataMappingComponent(element: EwoksRFLink) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
@@ -14,8 +14,13 @@ export default function DataMappingComponent(element: EwoksRFLink) {
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const sourceNode = useNode(element.source);
-  const targetNode = useNode(element.target);
+  const sourceNodeData = useNodeDataStore((state) =>
+    state.nodesData.get(element.source)
+  );
+
+  const targetNodeData = useNodeDataStore((state) =>
+    state.nodesData.get(element.target)
+  );
 
   function addDataMapping() {
     if (edgeData?.data_mapping?.some((x) => x.id === '')) {
@@ -73,7 +78,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
           typeOfValues={[
             {
               type: element.source
-                ? isClass(sourceNode)
+                ? isClass(sourceNodeData)
                   ? 'select'
                   : 'input'
                 : 'input',
@@ -81,7 +86,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
             },
             {
               type: element.target
-                ? isClass(targetNode)
+                ? isClass(targetNodeData)
                   ? 'select'
                   : 'input'
                 : 'input',
