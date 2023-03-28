@@ -21,11 +21,13 @@ import useStore from 'store/useStore';
 import type {
   EditableTableRow,
   EwoksRFLink,
+  EwoksRFLinkData,
   EwoksRFNodeData,
   GraphRF,
 } from '../../types';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
+import useEdgeDataStore from '../../store/useEdgeDataStore';
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -61,6 +63,7 @@ export default function DraggableDialog(props: Props) {
   const { getNodes, getEdges } = useReactFlow();
 
   const nodesData = useNodeDataStore((state) => state.nodesData);
+  const edgesData = useEdgeDataStore((state) => state.edgesData);
 
   const [graph, setGraph] = useState<Graph>({});
   const [oldGraph, setOldGraph] = useState<Graph>({});
@@ -112,15 +115,15 @@ export default function DraggableDialog(props: Props) {
     event: React.MouseEvent<HTMLElement>,
     newSelection: string
   ) => {
-    // DATAC for edges
     const graphRf: GraphRF = {
       graph: graphInfo,
       nodes: getNodes().map((nod) => {
         return { ...nod, data: nodesData.get(nod.id) as EwoksRFNodeData };
       }),
-      links: getEdges() as EwoksRFLink[],
+      links: getEdges().map((edge) => {
+        return { ...edge, data: edgesData.get(edge.id) as EwoksRFLinkData };
+      }),
     };
-
     setSelection(newSelection);
     setTitle(newSelection === 'ewoks' ? 'Ewoks Graph' : 'RF Graph');
     setGraph(newSelection === 'ewoks' ? rfToEwoks(graphRf) : graphRf);

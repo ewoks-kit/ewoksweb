@@ -55,7 +55,7 @@ export function getType(val: DataMapping | Conditions | Inputs) {
 
   return 'string';
 }
-// DATAC with edges
+
 export function isClass(edgeData: EwoksRFNodeData | undefined): boolean {
   return edgeData?.task_props.task_type === 'class';
 }
