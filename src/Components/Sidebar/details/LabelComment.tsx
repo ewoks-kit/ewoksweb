@@ -13,11 +13,13 @@ import { isLink, isNode, isString } from '../../../utils/typeGuards';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
+import useSelectedElementStore from '../../../store/useSelectedElementStore';
+import { useSelectedElement } from '../../../store/graph-hooks';
 
 const useStyles = DashboardStyle;
 
 interface LabelCommentProps {
-  element: EwoksRFNode | EwoksRFLink;
+  // element: EwoksRFNode | EwoksRFLink;
   showComment: boolean;
 }
 
@@ -26,8 +28,8 @@ export default function LabelComment(props: LabelCommentProps) {
   const classes = useStyles();
 
   const { getEdges, setEdges } = useReactFlow();
-
-  const { element, showComment } = props;
+  const element = useSelectedElement();
+  const { showComment } = props;
 
   const [comment, setComment] = useState('');
   const [label, setLabel] = useState<string>('');
@@ -44,6 +46,8 @@ export default function LabelComment(props: LabelCommentProps) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
 
   useEffect(() => {
+    console.log(element);
+
     if (isNode(element)) {
       setLabel(nodeData?.ewoks_props.label || '');
       setComment(nodeData?.comment || '');

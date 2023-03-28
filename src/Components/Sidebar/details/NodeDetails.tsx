@@ -31,12 +31,14 @@ import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import { useNodesIds } from '../../../store/graph-hooks';
+import useSelectedElementStore from '../../../store/useSelectedElementStore';
 
 const useStyles = DashboardStyle;
 
 // DOC: selectedNode details in sidebar
-export default function NodeDetails(element: EwoksRFNode) {
+export default function NodeDetails() {
   const classes = useStyles();
+  const element = useSelectedElementStore((state) => state.selectedElement);
 
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
   assertNodeDataDefined(nodeData, element.id);
@@ -131,10 +133,18 @@ export default function NodeDetails(element: EwoksRFNode) {
       while (nodesIds.some((nodeId) => nodeId === uniqueId)) {
         uniqueId += id++;
       }
-      const newNode = {
-        ...element,
-        id: uniqueId,
-      };
+      // const newNode = {
+      //   ...element,
+      //   id: uniqueId,
+      // };
+
+      const newNode = getNodes().find((nod) => nod.id === element.id);
+
+      if (!newNode) {
+        return;
+      }
+
+      newNode.id = uniqueId;
 
       const newLinks = getEdges().map((link) => {
         if (link.source === element.id) {
@@ -242,8 +252,8 @@ export default function NodeDetails(element: EwoksRFNode) {
   return (
     <Box>
       <Paper className={classes.nodeDetails}>
-        <LabelComment element={element} showComment={showAdvancedDetails} />
-        <DefaultInputs {...element} />
+        <LabelComment showComment={showAdvancedDetails} />
+        <DefaultInputs />
 
         <hr style={{ color: '#96a5f9' }} />
         <AdvancedDetailsCheckbox />

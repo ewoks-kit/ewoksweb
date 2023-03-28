@@ -10,36 +10,40 @@ import { isLink, isNode } from '../../../utils/typeGuards';
 import type { EwoksRFElement } from '../models';
 import { useEffect, useState } from 'react';
 import { useSelectedElement } from '../../../store/graph-hooks';
+import useSelectedElementStore from '../../../store/useSelectedElementStore';
+import type { SelectedElement } from '../../../types';
 
 interface Content {
   title: string;
   DetailsComponent: () => JSX.Element;
 }
 
-function getAccordionContent(element: EwoksRFElement): Content {
-  if (isNode(element)) {
+function getAccordionContent(element: SelectedElement): Content {
+  if (element.type === 'node') {
     return {
       title: 'Node Details',
-      DetailsComponent: () => <NodeDetails {...element} />,
+      DetailsComponent: () => <NodeDetails />,
     };
   }
 
-  if (isLink(element)) {
+  if (element.type === 'edge') {
     return {
       title: 'Link Details',
-      DetailsComponent: () => <LinkDetails {...element} />,
+      DetailsComponent: () => <LinkDetails />,
     };
   }
 
   return {
     title: 'Graph Details',
-    DetailsComponent: () => <GraphDetails {...element} />,
+    DetailsComponent: () => <GraphDetails />,
   };
 }
 
 // DOC: Container for link-node-graph editing details
 function ElementDetails() {
-  const selectedElement = useSelectedElement();
+  const selectedElement = useSelectedElementStore(
+    (state) => state.selectedElement
+  );
 
   const [expanded, setExpanded] = useState(false);
 

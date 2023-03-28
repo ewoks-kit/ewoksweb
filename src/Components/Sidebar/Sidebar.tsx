@@ -32,6 +32,7 @@ import { textForError } from '../../utils';
 import { useNodesIds, useSelectedElement } from '../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
+import useSelectedElementStore from '../../store/useSelectedElementStore';
 
 // const useStyles = DashboardStyle;
 
@@ -41,7 +42,10 @@ export default function Sidebar() {
   const nodesIds = useNodesIds();
   const { deleteElements, getNodes, setNodes } = useReactFlow();
 
-  const selectedElement = useSelectedElement();
+  // const selectedElement = useSelectedElement();
+  const selectedElement = useSelectedElementStore(
+    (state) => state.selectedElement
+  );
   // const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
   //   false
   // );
@@ -67,17 +71,17 @@ export default function Sidebar() {
       return;
     }
 
-    if (isNode(selectedElement)) {
+    if (selectedElement.type === 'node') {
       deleteElements({ nodes: [selectedElement] });
       return;
     }
 
-    if (isLink(selectedElement)) {
+    if (selectedElement.type === 'edge') {
       deleteElements({ edges: [selectedElement] });
       return;
     }
 
-    if (isGraphDetails(selectedElement)) {
+    if (selectedElement.type === 'graph') {
       setOpenAgreeDialog(true);
       return;
     }
@@ -169,7 +173,7 @@ export default function Sidebar() {
         <>
           <AddNodes title="Add Nodes" />
           <ElementDetails />
-          <EditElementStyle {...selectedElement} />
+          <EditElementStyle />
         </>
       )}
       {/* TODO: commented for onlyEditRelease */}
@@ -222,11 +226,11 @@ export default function Sidebar() {
           {!isLink(selectedElement) && <IconMenu />}
           <ConfirmDialog
             title={`Delete "${
-              (isGraphDetails(selectedElement) && selectedElement.label) ||
+              (selectedElement.type === 'graph' && selectedElement.id) ||
               'not labelled'
             }" workflow?`}
             content={`You are about to delete "${
-              (isGraphDetails(selectedElement) && selectedElement.label) ||
+              (selectedElement.type === 'graph' && selectedElement.id) ||
               'a not labelled'
             }" workflow.
               Please make sure that it is not used as a subgraph in other workflows!
