@@ -96,7 +96,6 @@ const workingGraph = (
       undoRedo: [{ action: 'Opened new graph', graph }],
       undoIndex: 0,
     }));
-    console.log(useNodeDataStore.getState().nodesData);
 
     useNodeDataStore.getState().setNodesData(graph.nodes);
     useEdgeDataStore.getState().setEdgesData(graph.links);

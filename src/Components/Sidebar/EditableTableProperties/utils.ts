@@ -2,7 +2,6 @@ import type {
   Conditions,
   DataMapping,
   EditableTableRow,
-  EwoksRFNode,
   EwoksRFNodeData,
   Inputs,
 } from '../../../types';

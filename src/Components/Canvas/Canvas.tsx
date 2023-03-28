@@ -112,8 +112,6 @@ function Canvas() {
   });
 
   useEffect(() => {
-    console.log('set new graph');
-
     setNodes(workingGraph.nodes);
     setEdges(workingGraph.links);
     setTimeout(() => {

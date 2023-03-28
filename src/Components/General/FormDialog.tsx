@@ -20,7 +20,6 @@ import type {
   FormAction,
   PropertyChangedEvent,
   GraphDetails,
-  EwoksRFLink,
   EwoksRFNodeData,
   EwoksRFLinkData,
 } from '../../types';

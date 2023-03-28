@@ -1,11 +1,7 @@
 import type {
   Conditions,
   DataMapping,
-  GraphDetails,
-  GraphRF,
   Inputs,
-  EwoksRFLink,
-  EwoksRFNode,
   EwoksRFNodeData,
   EwoksRFLinkData,
 } from '../../../types';
@@ -33,8 +29,6 @@ function curateGraph(
     value.conditions = deleteEmptyLines(value.conditions);
     value.data_mapping = deleteEmptyLines(value.data_mapping);
   });
-  console.log(newNodesData, newEdgesData);
-
   return {
     newNodesData,
     newEdgesData,

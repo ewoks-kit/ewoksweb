@@ -20,7 +20,6 @@ import { FormControl, TextField, Tooltip } from '@material-ui/core';
 import useStore from 'store/useStore';
 import type {
   EditableTableRow,
-  EwoksRFLink,
   EwoksRFLinkData,
   EwoksRFNodeData,
   GraphRF,
