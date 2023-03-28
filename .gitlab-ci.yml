@@ -57,25 +57,25 @@ lint:
   script:
     - npm run lint
 
-build:
-  extends: .build
-  stage: build
-  script:
-    # - npx -y browserslist@latest --update-db
-    - python3 --version
-    - python3 -m pip install --upgrade pip
-    - python3 -m pip install --upgrade setuptools
-    - npm install -y
-    - npm run build
-    - python3 setup.py sdist
-    - mv dist sdist
-  after_script:
-    - ls -Rl sdist
-  artifacts:
-    paths:
-      - sdist/
-    when: on_success
-    expire_in: 2h
+# build:
+#   extends: .build
+#   stage: build
+#   script:
+#     # - npx -y browserslist@latest --update-db
+#     - python3 --version
+#     - python3 -m pip install --upgrade pip
+#     - python3 -m pip install --upgrade setuptools
+#     - npm install -y
+#     - npm run build
+#     - python3 setup.py sdist
+#     - mv dist sdist
+#   after_script:
+#     - ls -Rl sdist
+#   artifacts:
+#     paths:
+#       - sdist/
+#     when: on_success
+#     expire_in: 2h
 
 pages:
   stage: deploy
@@ -91,7 +91,7 @@ pages:
     paths:
       - public
   only:
-    - main
+    - 64-restructuring-files-in-src
 
 assets:
   extends: .deploy
