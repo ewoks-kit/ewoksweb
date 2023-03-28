@@ -7,10 +7,11 @@ import SidebarTooltip from '../SidebarTooltip';
 import { isClass } from './utils';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
+import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 
 export default function DataMappingComponent(element: EwoksRFLink) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
-  const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
+  assertEdgeDataDefined(edgeData, element.id);
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
@@ -22,8 +23,8 @@ export default function DataMappingComponent(element: EwoksRFLink) {
     state.nodesData.get(element.target)
   );
 
-  function addDataMapping() {
-    if (edgeData?.data_mapping?.some((x) => x.id === '')) {
+  function addDataMapping(edgeDataC: EwoksRFLinkData) {
+    if (edgeDataC.data_mapping?.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before adding another!',
@@ -34,10 +35,10 @@ export default function DataMappingComponent(element: EwoksRFLink) {
 
     mergeEdgeData(element.id, {
       data_mapping: [
-        ...(edgeData?.data_mapping || []),
+        ...(edgeDataC.data_mapping || []),
         { id: '', name: '', value: '' },
       ],
-    } as EwoksRFLinkData);
+    });
   }
 
   const dataMappingValuesChanged = (table: DataMapping[]) => {
@@ -48,9 +49,9 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       };
     });
 
-    setEdgeData(element.id, {
+    mergeEdgeData(element.id, {
       data_mapping: dmap,
-    } as EwoksRFLinkData);
+    });
   };
 
   return (
@@ -65,12 +66,12 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       <IconButton
         style={{ padding: '1px' }}
         aria-label="dataMapping"
-        onClick={() => addDataMapping()}
+        onClick={() => addDataMapping(edgeData)}
         data-cy="addDataMappingButton"
       >
         <AddCircleOutlineIcon />
       </IconButton>
-      {edgeData?.data_mapping && edgeData.data_mapping.length > 0 && (
+      {edgeData.data_mapping && edgeData.data_mapping.length > 0 && (
         <EditableTable
           headers={['Source', 'Target']}
           defaultValues={edgeData.data_mapping}

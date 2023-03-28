@@ -1,4 +1,4 @@
-import type { EditableTableRow, EwoksRFLink, EwoksRFLinkData } from 'types';
+import type { EditableTableRow, EwoksRFLink } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
@@ -33,7 +33,7 @@ export default function Conditions(props: ConditionsProps) {
       on_error: false,
       conditions: [...elCon, { id: '', name: '', value: false }],
     };
-    mergeEdgeData(element.id, newEdgeData as EwoksRFLinkData);
+    mergeEdgeData(element.id, newEdgeData);
   }
 
   function conditionsValuesChanged(table: EditableTableRow[]) {
@@ -45,7 +45,7 @@ export default function Conditions(props: ConditionsProps) {
         };
       }),
     };
-    mergeEdgeData(element.id, newEdgeData as EwoksRFLinkData);
+    mergeEdgeData(element.id, newEdgeData);
   }
 
   return (
