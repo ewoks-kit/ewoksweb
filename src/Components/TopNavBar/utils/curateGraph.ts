@@ -14,43 +14,30 @@ function curateGraph(
   nodesData: Map<string, EwoksRFNodeData>,
   edgesData: Map<string, EwoksRFLinkData>
 ): {
-  nodesData: Map<string, EwoksRFNodeData>;
-  edgesData: Map<string, EwoksRFLinkData>;
+  newNodesData: Map<string, EwoksRFNodeData>;
+  newEdgesData: Map<string, EwoksRFLinkData>;
 } {
-  // INFO: Remove empty lines in table for nodes and links
-  const newNodesData: EwoksRFNodeData[] = [...nodesData.values()].map(
-    (nodeData) => {
-      return {
-        ...nodeData,
-        ewoks_props: {
-          ...nodeData.ewoks_props,
-          default_inputs: deleteEmptyLines(nodeData.ewoks_props.default_inputs),
-          default_error_attributes: {
-            ...nodeData.ewoks_props.default_error_attributes,
-            data_mapping: deleteEmptyLines(
-              nodeData.ewoks_props.default_error_attributes?.data_mapping
-            ),
-          },
-        },
-      };
+  const newNodesData: Map<string, EwoksRFNodeData> = new Map(nodesData);
+  newNodesData.forEach((value) => {
+    const np = value.ewoks_props;
+    np.default_inputs = deleteEmptyLines(np.default_inputs);
+    if (np.default_error_attributes?.data_mapping) {
+      np.default_error_attributes.data_mapping = deleteEmptyLines(
+        np.default_error_attributes?.data_mapping
+      );
     }
-  );
-
-  const newLinksData = stateRF.edges.map((edgeRF) => {
-    const edge = edgeRF as EwoksRFLink;
-    return {
-      ...edge,
-      data: {
-        ...edge.data,
-        conditions: deleteEmptyLines(edge.data.conditions),
-        data_mapping: deleteEmptyLines(edge.data.data_mapping),
-      },
-    };
   });
+
+  const newEdgesData: Map<string, EwoksRFLinkData> = new Map(edgesData);
+  newEdgesData.forEach((value) => {
+    value.conditions = deleteEmptyLines(value.conditions);
+    value.data_mapping = deleteEmptyLines(value.data_mapping);
+  });
+  console.log(newNodesData, newEdgesData);
 
   return {
     newNodesData,
-    newLinksData,
+    newEdgesData,
   };
 }
 
