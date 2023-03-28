@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-number-properties */
 import type { EwoksLink, EwoksRFLink } from '../types';
 
 // EwoksRFLinks --> EwoksLinks for saving
@@ -33,7 +34,16 @@ export function toEwoksLinks(links): EwoksLink[] {
       const link: EwoksLink = {
         source,
         target,
-        data_mapping,
+        data_mapping: data_mapping.map((mapping) => {
+          return {
+            source_output: !isNaN(mapping.source_output as number)
+              ? Number(mapping.source_output)
+              : mapping.source_output,
+            target_input: !isNaN(mapping.target_input as number)
+              ? Number(mapping.target_input)
+              : mapping.target_input,
+          };
+        }),
         conditions: conditions.map((con) => {
           if (con.source_output) {
             return {

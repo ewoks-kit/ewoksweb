@@ -345,8 +345,8 @@ export interface CanvasPosition {
 }
 
 export interface DataMapping {
-  source_output?: string;
-  target_input?: string;
+  source_output?: string | number;
+  target_input?: string | number;
   value?: string | boolean;
   id?: string;
   name?: string;

@@ -5,7 +5,8 @@ function cleanDefaultInputs(default_inputs) {
     (default_inputs &&
       default_inputs.map((dIn) => {
         return {
-          name: !Number.isNaN(dIn.name) ? Number(dIn.name) : dIn.name,
+          // eslint-disable-next-line unicorn/prefer-number-properties
+          name: !isNaN(dIn.name) ? Number(dIn.name) : dIn.name,
           value:
             dIn.value === 'false'
               ? false

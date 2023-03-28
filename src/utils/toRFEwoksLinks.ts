@@ -50,7 +50,7 @@ export function toRFEwoksLinks(
           (uiProps && uiProps.style && uiProps.style.stroke) ||
           'rgb(60, 81, 202)';
 
-        const link: EwoksRFLink = {
+        return {
           id: `${source}:${
             existsOrValue(uiProps, 'sourceHandle', '') as string
           }->${target}:${
@@ -101,14 +101,11 @@ export function toRFEwoksLinks(
             sub_target: sub_target || '',
             sub_source: sub_source || '',
             conditions: conditions || [],
-            // map_all_data: !!map_all_data,
+            map_all_data: !!map_all_data,
             on_error: on_error || false,
             comment: existsOrValue(uiProps, 'comment', ''),
           },
         };
-        // DOC: if map_all_data is missing the default will be true
-        link.data.map_all_data = map_all_data ? map_all_data : true;
-        return link;
       }
     );
   }
