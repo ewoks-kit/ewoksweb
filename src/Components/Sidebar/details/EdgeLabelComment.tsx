@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import type { EwoksRFLink, EwoksRFNode } from '../../../types';
 import { FormControl, TextField, IconButton, Fab } from '@material-ui/core';
 import DashboardStyle from '../../Dashboard/DashboardStyle';
-import useStore from '../../../store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
@@ -11,20 +9,17 @@ import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from '../sidebarStyle';
 import { isLink, isNode, isString } from '../../../utils/typeGuards';
 import { useReactFlow } from 'reactflow';
-import useNodeDataStore from '../../../store/useNodeDataStore';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
-import useSelectedElementStore from '../../../store/useSelectedElementStore';
 import { useSelectedElement } from '../../../store/graph-hooks';
 
 const useStyles = DashboardStyle;
 
 interface LabelCommentProps {
-  // element: EwoksRFNode | EwoksRFLink;
   showComment: boolean;
 }
 
-// DOC: the label and comment for nodes-links when selected
-export default function LabelComment(props: LabelCommentProps) {
+// DOC: the label and comment for links when selected
+export default function EdgeLabelComment(props: LabelCommentProps) {
   const classes = useStyles();
 
   const { getEdges, setEdges } = useReactFlow();
@@ -39,20 +34,11 @@ export default function LabelComment(props: LabelCommentProps) {
   ]);
   const [valueIsChanged, setValueIsChanged] = useState(false);
 
-  const inExecutionMode = useStore((state) => state.inExecutionMode);
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
-  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
-  const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
 
   useEffect(() => {
     console.log(element);
-
-    if (isNode(element)) {
-      setLabel(nodeData?.ewoks_props.label || '');
-      setComment(nodeData?.comment || '');
-      return;
-    }
 
     if (isLink(element)) {
       const { label: elmtLabel } = element;
@@ -84,14 +70,9 @@ export default function LabelComment(props: LabelCommentProps) {
     }
 
     throw new Error('No link or Node tries to access LabelComment');
-  }, [element, nodeData, edgeData]);
+  }, [element, edgeData]);
 
   function saveLabel(labelLocal: string) {
-    if (isNode(element) && nodeData) {
-      mergeNodeData(element.id, { ewoks_props: { label: labelLocal } });
-      return;
-    }
-
     if (isLink(element)) {
       const newLink = {
         ...element,
@@ -105,11 +86,6 @@ export default function LabelComment(props: LabelCommentProps) {
   }
 
   function saveComment(commentLocal: string) {
-    if (isNode(element) && nodeData) {
-      mergeNodeData(element.id, { comment: commentLocal });
-      return;
-    }
-
     if (isLink(element)) {
       mergeEdgeData(element.id, { comment: commentLocal });
     }
@@ -144,7 +120,7 @@ export default function LabelComment(props: LabelCommentProps) {
 
   return (
     <div className={classes.detailsLabels}>
-      {Object.keys(element).includes('source') ? (
+      {Object.keys(element).includes('source') && (
         <SidebarTooltip text="Use Conditions or Data Mapping as label.">
           <FormControl
             fullWidth
@@ -184,7 +160,7 @@ export default function LabelComment(props: LabelCommentProps) {
                   size="small"
                   component="span"
                   aria-label="saveLabelComment"
-                  disabled={inExecutionMode}
+                  // disabled={inExecutionMode}
                 >
                   <SaveIcon />
                 </Fab>
@@ -192,8 +168,6 @@ export default function LabelComment(props: LabelCommentProps) {
             )}
           </FormControl>
         </SidebarTooltip>
-      ) : (
-        <TextButtonSave label="Label" value={label} valueSaved={saveLabel} />
       )}
 
       <div style={{ display: showComment ? 'block' : 'none' }}>

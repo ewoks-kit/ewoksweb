@@ -5,7 +5,7 @@ import DashboardStyle from '../../Dashboard/DashboardStyle';
 import DataMappingComponent from '../EditableTableProperties/DataMapping';
 import Conditions from '../EditableTableProperties/Conditions';
 import SidebarTooltip from '../SidebarTooltip';
-import LabelComment from './LabelComment';
+import EdgeLabelComment from './EdgeLabelComment';
 import { assertEdgeDataDefined, isLink } from '../../../utils/typeGuards';
 import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
@@ -40,7 +40,7 @@ export default function LinkDetails() {
 
   return (
     <Paper className={classes.nodeDetails}>
-      <LabelComment showComment={showAdvancedDetails} />
+      <EdgeLabelComment showComment={showAdvancedDetails} />
       <hr style={{ color: '#96a5f9' }} />
       <SidebarTooltip
         text={`Setting this to True is equivalent to Data Mapping

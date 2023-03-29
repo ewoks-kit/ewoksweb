@@ -121,6 +121,7 @@ function Canvas() {
 
   function onNodesChange(changes: NodeChange[]) {
     const newNodes = applyNodeChanges(changes, getNodes());
+    console.log(changes, newNodes);
 
     if (workingGraph.graph.id !== graphId) {
       setOpenSnackbar({
