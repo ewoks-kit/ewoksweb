@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import type { EwoksRFLink, EwoksRFNode } from '../../../types';
 import { FormControl, TextField, IconButton, Fab } from '@material-ui/core';
 import DashboardStyle from '../../Dashboard/DashboardStyle';
 import useStore from '../../../store/useStore';
@@ -13,7 +12,6 @@ import { isLink, isNode, isString } from '../../../utils/typeGuards';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
-import useSelectedElementStore from '../../../store/useSelectedElementStore';
 import { useSelectedElement } from '../../../store/graph-hooks';
 
 const useStyles = DashboardStyle;
@@ -46,8 +44,6 @@ export default function LabelComment(props: LabelCommentProps) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
 
   useEffect(() => {
-    console.log(element);
-
     if (isNode(element)) {
       setLabel(nodeData?.ewoks_props.label || '');
       setComment(nodeData?.comment || '');

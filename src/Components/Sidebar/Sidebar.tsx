@@ -1,6 +1,6 @@
 // TODO: remove the following after onlyEditRelease
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   // Accordion,
   // AccordionDetails,
@@ -22,15 +22,11 @@ import { deleteWorkflow } from 'api/api';
 // import { OpenInBrowser } from '@material-ui/icons';
 // import SidebarTooltip from './SidebarTooltip';
 import commonStrings from 'commonStrings.json';
-import {
-  assertNodeDataDefined,
-  isGraphDetails,
-  isLink,
-  isNode,
-} from '../../utils/typeGuards';
+import { assertNodeDataDefined, isLink } from '../../utils/typeGuards';
 import { textForError } from '../../utils';
 import { useNodesIds, useSelectedElement } from '../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
+import type { Node, Edge } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSelectedElementStore from '../../store/useSelectedElementStore';
 
@@ -40,7 +36,7 @@ export default function Sidebar() {
   // const classes = useStyles();
 
   const nodesIds = useNodesIds();
-  const { deleteElements, getNodes, setNodes } = useReactFlow();
+  const { deleteElements, getNodes, setNodes, getEdges } = useReactFlow();
 
   // const selectedElement = useSelectedElement();
   const selectedElement = useSelectedElementStore(
@@ -60,6 +56,9 @@ export default function Sidebar() {
   const initGraph = useStore((state) => state.initGraph);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const nodesData = useNodeDataStore((state) => state.nodesData);
+  const setSelectedElement = useSelectedElementStore(
+    (state) => state.setSelectedElement
+  );
 
   const deleteElement = async () => {
     if (workingGraph.graph.id !== graphInfo.id) {
@@ -72,12 +71,22 @@ export default function Sidebar() {
     }
 
     if (selectedElement.type === 'node') {
-      deleteElements({ nodes: [selectedElement] });
+      const node: Node | undefined = getNodes().find(
+        (nod) => nod.id === selectedElement.id
+      );
+      // Need to set selectedElement to not be undefined or
+      // when undefined it can show to graph.
+      setSelectedElement({ type: 'graph', id: graphInfo.id });
+      deleteElements({ nodes: [node] as Node[] });
       return;
     }
 
     if (selectedElement.type === 'edge') {
-      deleteElements({ edges: [selectedElement] });
+      const edge: Edge | undefined = getEdges().find(
+        (edg) => edg.id === selectedElement.id
+      );
+      setSelectedElement({ type: 'graph', id: graphInfo.id });
+      deleteElements({ edges: [edge] as Edge[] });
       return;
     }
 
@@ -97,6 +106,7 @@ export default function Sidebar() {
     setOpenAgreeDialog(false);
     if (selectedElement.id) {
       try {
+        setSelectedElement({ type: 'graph', id: '' });
         await deleteWorkflow(selectedElement.id);
         setOpenSnackbar({
           open: true,
@@ -122,7 +132,7 @@ export default function Sidebar() {
   };
 
   const cloneNode = () => {
-    if (isNode(selectedElement)) {
+    if (selectedElement.type === 'node') {
       const clonedNode = getNodes().find(
         (nod) => nod.id === selectedElement.id
       );

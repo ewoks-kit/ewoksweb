@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import type {
   DataMapping,
   EditableTableRow,
-  EwoksRFNode,
   EwoksRFNodeData,
   RFNodeTaskProperties,
 } from '../../../types';
