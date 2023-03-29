@@ -1,10 +1,11 @@
-import type { EditableTableRow, EwoksRFLink } from 'types';
+import type { EditableTableRow, EwoksRFLink, EwoksRFLinkData } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
+import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 
 interface ConditionsProps {
   element: EwoksRFLink;
@@ -13,12 +14,14 @@ interface ConditionsProps {
 export default function Conditions(props: ConditionsProps) {
   const { element } = props;
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
+  assertEdgeDataDefined(edgeData, element.id);
+
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  function addConditions() {
-    const elCon = edgeData?.conditions || [];
+  function addConditions(edgeDataL: EwoksRFLinkData) {
+    const elCon = edgeDataL.conditions || [];
 
     if (elCon.some((x) => x.id === '')) {
       setOpenSnackbar({
@@ -60,12 +63,12 @@ export default function Conditions(props: ConditionsProps) {
       <IconButton
         style={{ padding: '1px' }}
         aria-label="Add Condition"
-        onClick={addConditions}
+        onClick={() => addConditions(edgeData)}
         data-cy="addConditionsButton"
       >
         <AddCircleOutlineIcon />
       </IconButton>
-      {edgeData?.conditions && edgeData.conditions.length > 0 && (
+      {edgeData.conditions && edgeData.conditions.length > 0 && (
         <EditableTable
           headers={['Output', 'Value']}
           defaultValues={edgeData.conditions}
