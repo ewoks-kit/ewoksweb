@@ -83,6 +83,9 @@ module.exports = createConfig({
         // Disallow shadowing variables for an outer scope, as this can cause bugs
         // when the inner-scope variable is removed, for instance
         '@typescript-eslint/no-shadow': 'error',
+
+        // Catch unnecessary checks to ease readability
+        '@typescript-eslint/no-unnecessary-condition': 'warn',
       },
     }),
     createJestOverride({
