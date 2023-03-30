@@ -86,6 +86,13 @@ export function assertNodeDataDefined(
   assertDefined(nodeData, `Node with id ${nodeId} has undefined data!`);
 }
 
+export function assertNodeDefined(
+  node: EwoksRFNode | undefined,
+  nodeId: string
+): asserts node is EwoksRFNode extends undefined ? never : EwoksRFNode {
+  assertDefined(node, `Node with id ${nodeId} has undefined data!`);
+}
+
 export function assertEdgeDataDefined(
   edgeData: EwoksRFLinkData | undefined,
   edgeId: string

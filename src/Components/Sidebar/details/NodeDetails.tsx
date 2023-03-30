@@ -28,7 +28,10 @@ import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../../store/useNodeDataStore';
-import { assertNodeDataDefined } from '../../../utils/typeGuards';
+import {
+  assertNodeDataDefined,
+  assertNodeDefined,
+} from '../../../utils/typeGuards';
 import { useNodesIds } from '../../../store/graph-hooks';
 import useSelectedElementStore from '../../../store/useSelectedElementStore';
 
@@ -118,9 +121,6 @@ export default function NodeDetails() {
     task_identifier?: string;
     node_icon?: string;
   }) {
-    if (!nodeData) {
-      return;
-    }
     // DOC: if the task_identifier changes (ppfmethod, ppfport, script case) then the id
     // of the node needs to change for a coherent json.
     // All links to this node also change source and/or target!
@@ -128,16 +128,15 @@ export default function NodeDetails() {
       // DOC: find unique id based on new task_identifier
       let uniqueId = Object.values(propKeyValue)[0];
       let id = 0;
-      // TODO not use nodesData to calculati new id
+      // TODO not use nodesData to calculate new id
+      // IMP TODO: by also changinh the id of a node we make the previous one disappear and
+      // assertDefined where the old id is used complains. Solution
       while (nodesIds.some((nodeId) => nodeId === uniqueId)) {
         uniqueId += id++;
       }
 
       const newNode = getNodes().find((nod) => nod.id === element.id);
-
-      if (!newNode) {
-        return;
-      }
+      assertNodeDefined(newNode, element.id);
 
       newNode.id = uniqueId;
 
