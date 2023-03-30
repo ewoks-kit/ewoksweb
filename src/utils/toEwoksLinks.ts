@@ -3,11 +3,10 @@ import type { Conditions, EwoksLink, EwoksRFLink } from '../types';
 
 // EwoksRFLinks --> EwoksLinks for saving
 export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
-  // DATAC
   const tempLinks: EwoksRFLink[] = [...links].filter(
     (link) => link.data && !link.data.startEnd
   );
-  // if there are some startEnd links with conditions or any other link_attributes
+  // TODO: if there are some startEnd links with conditions or any other link_attributes
   // then graph.input_nodes and/or graph.output_nodes needs update
   return tempLinks.map(
     ({

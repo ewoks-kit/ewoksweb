@@ -1,6 +1,6 @@
 import type { Connection } from 'reactflow';
 import { MarkerType } from 'reactflow';
-import type { EwoksRFLink, GraphRF } from '../../types';
+import type { EwoksRFLink, EwoksRFNodeData } from '../../types';
 
 export function trimLabel(label: string) {
   if (label.length <= 20) {
@@ -12,7 +12,7 @@ export function trimLabel(label: string) {
 
 export function addConnectionToGraph(
   connection: Connection,
-  graph: GraphRF
+  nodesData: Map<string, EwoksRFNodeData>
 ): EwoksRFLink | undefined {
   const { source, target, sourceHandle, targetHandle } = connection;
 
@@ -20,42 +20,42 @@ export function addConnectionToGraph(
     return undefined;
   }
 
-  const sourceTask = graph.nodes.find((nod) => nod.id === connection.source);
-  const targetTask = graph.nodes.find((nod) => nod.id === connection.target);
+  const sourceTaskData = nodesData.get(source);
+  const targetTaskData = nodesData.get(target);
 
-  if (!sourceTask || !targetTask) {
+  if (!sourceTaskData || !targetTaskData) {
     return undefined;
   }
 
   const link: EwoksRFLink = {
     data: {
       startEnd:
-        sourceTask.data.task_props.task_type === 'graphInput' ||
-        targetTask.data.task_props.task_type === 'graphOutput',
+        sourceTaskData.task_props.task_type === 'graphInput' ||
+        targetTaskData.task_props.task_type === 'graphOutput',
       getAroundProps: { x: 0, y: 0 },
       on_error: false,
       comment: '',
       // DOC: node optional_input_names are link's optional_output_names
       links_optional_output_names:
-        targetTask.data.task_props.optional_input_names || [],
+        targetTaskData.task_props.optional_input_names || [],
       // DOC: node required_input_names are link's required_output_names
       links_required_output_names:
-        targetTask.data.task_props.required_input_names || [],
+        targetTaskData.task_props.required_input_names || [],
       // DOC: node output_names are link's input_names
-      links_input_names: sourceTask.data.task_props.output_names || [],
+      links_input_names: sourceTaskData.task_props.output_names || [],
       conditions: [],
       data_mapping: [],
       map_all_data:
         ['ppfmethod', 'ppfport'].includes(
-          sourceTask.data.task_props.task_type
+          sourceTaskData.task_props.task_type
         ) ||
-        ['ppfmethod', 'ppfport'].includes(targetTask.data.task_props.task_type),
+        ['ppfmethod', 'ppfport'].includes(targetTaskData.task_props.task_type),
       sub_source:
-        sourceTask.data.task_props.task_type === 'graph' && sourceHandle
+        sourceTaskData.task_props.task_type === 'graph' && sourceHandle
           ? sourceHandle
           : '',
       sub_target:
-        targetTask.data.task_props.task_type === 'graph' && targetHandle
+        targetTaskData.task_props.task_type === 'graph' && targetHandle
           ? targetHandle
           : '',
     },

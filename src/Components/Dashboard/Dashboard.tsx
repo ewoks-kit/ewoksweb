@@ -31,15 +31,16 @@ import ErrorFallback from '../General/ErrorFallback';
 import MenuPopover from '../General/MenuPopover';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
-import type { EwoksRFNodeData } from '../../types';
+import type { EwoksRFLinkData, EwoksRFNodeData } from '../../types';
 import { FormAction } from '../../types';
 import { getWorkflowsIds, putWorkflow } from '../../api/api';
 import { rfToEwoks, textForError } from '../../utils';
 import commonStrings from '../../commonStrings.json';
 import type { AxiosResponse } from 'axios';
 import curateGraph from '../TopNavBar/utils/curateGraph';
-import { useStoreApi } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
+import useEdgeDataStore from '../../store/useEdgeDataStore';
+import { useReactFlow } from 'reactflow';
 
 const useStyles = DashboardStyle;
 
@@ -53,7 +54,7 @@ function workflowExists(
 export default function Dashboard() {
   const classes = useStyles();
 
-  const storeRF = useStoreApi();
+  const { getNodes, getEdges } = useReactFlow();
 
   const [openDrawers, setOpenDrawers] = useState(true);
   const [openSettings, setOpenSettings] = useState(false);
@@ -83,6 +84,7 @@ export default function Dashboard() {
   const initGraph = useStore((state) => state.initGraph);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const nodesData = useNodeDataStore((state) => state.nodesData);
+  const edgesData = useEdgeDataStore((state) => state.edgesData);
 
   useEffect(() => {
     setOpenSettings(false);
@@ -219,18 +221,31 @@ export default function Dashboard() {
 
     if (graphInfo.uiProps?.source === 'fromServer') {
       try {
-        const graphRFCurrated = curateGraph(graphInfo, storeRF.getState());
+        const { newNodesData, newEdgesData } = curateGraph(
+          nodesData,
+          edgesData
+        );
 
         // TODO move nodesData out of Dashboard with saveToServer
-        const nodesWithData = graphRFCurrated.nodes.map((nod) => {
-          return { ...nod, data: nodesData.get(nod.id) as EwoksRFNodeData };
+        const nodesWithData = [...getNodes()].map((node) => {
+          return {
+            ...node,
+            data: newNodesData.get(node.id) as EwoksRFNodeData,
+          };
         });
 
-        // DATAC for edges too
+        const edgesWithData = [...getEdges()].map((edge) => {
+          return {
+            ...edge,
+            data: newEdgesData.get(edge.id) as EwoksRFLinkData,
+          };
+        });
+
         await putWorkflow(
           rfToEwoks({
-            ...graphRFCurrated,
+            graph: graphInfo,
             nodes: nodesWithData,
+            links: edgesWithData,
           })
         );
 

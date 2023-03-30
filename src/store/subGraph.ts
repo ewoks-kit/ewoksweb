@@ -97,13 +97,9 @@ const subGraph = (
       newNode = {
         sourcePosition: Position.Right,
         targetPosition: Position.Left,
-
         id: graphId,
-
         type: 'graph',
         position: calcCoordinatesFirstNode(nodes),
-
-        // DATAC needs to set nodeData for this subgraph?
         data: {
           task_props: {
             task_type: 'graph',

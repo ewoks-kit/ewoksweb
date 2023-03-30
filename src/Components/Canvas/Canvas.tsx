@@ -294,11 +294,7 @@ function Canvas() {
       return;
     }
 
-    const newLink = addConnectionToGraph(params, {
-      graph: graphInfo,
-      nodes: getNodes(),
-      links: getEdges() as EwoksRFLink[],
-    });
+    const newLink = addConnectionToGraph(params, nodesData);
 
     if (newLink) {
       setEdgeData(newLink.id, newLink.data);
