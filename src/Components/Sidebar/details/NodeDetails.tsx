@@ -132,10 +132,6 @@ export default function NodeDetails() {
       while (nodesIds.some((nodeId) => nodeId === uniqueId)) {
         uniqueId += id++;
       }
-      // const newNode = {
-      //   ...element,
-      //   id: uniqueId,
-      // };
 
       const newNode = getNodes().find((nod) => nod.id === element.id);
 

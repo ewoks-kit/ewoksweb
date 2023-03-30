@@ -9,6 +9,13 @@ https://workflow.gitlab-pages.esrf.fr/ewoks/ewoksweb/
 
 ## From source
 
+Required system packages
+
+```bash
+apt-get install npm
+npm install -g pnpm
+```
+
 Start the frontend
 
 ```bash

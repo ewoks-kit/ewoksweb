@@ -38,8 +38,6 @@ export default function EdgeLabelComment(props: LabelCommentProps) {
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   useEffect(() => {
-    console.log(element);
-
     if (isLink(element)) {
       const { label: elmtLabel } = element;
       if (isString(elmtLabel)) {

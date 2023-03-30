@@ -14,7 +14,11 @@ import useStore from '../../../store/useStore';
 import type { EwoksRFLink, PropertyChangedEvent } from '../../../types';
 import sidebarStyle from '../sidebarStyle';
 import type { ChangeEvent } from 'react';
-import { isMarkerType, isString } from '../../../utils/typeGuards';
+import {
+  assertEdgeDataDefined,
+  isMarkerType,
+  isString,
+} from '../../../utils/typeGuards';
 import type { Edge } from 'reactflow';
 import { MarkerType } from 'reactflow';
 import { useReactFlow } from 'reactflow';
@@ -29,6 +33,7 @@ export default function EditLinkStyle() {
   const element = useSelectedElement() as EwoksRFLink;
   const { setEdges, getEdges } = useReactFlow();
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
+  assertEdgeDataDefined(edgeData, element.id);
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
@@ -48,8 +53,8 @@ export default function EditLinkStyle() {
     }
 
     if (element.type === 'getAround') {
-      setX(edgeData?.getAroundProps?.x || 80);
-      setY(edgeData?.getAroundProps?.y || 80);
+      setX(edgeData.getAroundProps?.x || 80);
+      setY(edgeData.getAroundProps?.y || 80);
     }
 
     const { markerEnd } = element;

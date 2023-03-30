@@ -6,10 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import LinkDetails from './LinkDetails';
 import NodeDetails from './NodeDetails';
 import GraphDetails from './GraphDetails';
-import { isLink, isNode } from '../../../utils/typeGuards';
-import type { EwoksRFElement } from '../models';
 import { useEffect, useState } from 'react';
-import { useSelectedElement } from '../../../store/graph-hooks';
 import useSelectedElementStore from '../../../store/useSelectedElementStore';
 import type { SelectedElement } from '../../../types';
 
@@ -50,8 +47,8 @@ function ElementDetails() {
   const { title, DetailsComponent } = getAccordionContent(selectedElement);
 
   useEffect(() => {
-    setExpanded(!!selectedElement?.id);
-  }, [selectedElement?.id]);
+    setExpanded(!!selectedElement.id);
+  }, [selectedElement.id]);
 
   return (
     <Accordion
