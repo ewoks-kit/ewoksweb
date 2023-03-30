@@ -12,6 +12,7 @@ import sidebarStyle from '../sidebarStyle';
 import { isLink, isNode, isString } from '../../../utils/typeGuards';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../../store/useNodeDataStore';
+import useEdgeDataStore from '../../../store/useEdgeDataStore';
 
 const useStyles = DashboardStyle;
 
@@ -37,7 +38,9 @@ export default function LabelComment(props: LabelCommentProps) {
   const [valueIsChanged, setValueIsChanged] = useState(false);
 
   const inExecutionMode = useStore((state) => state.inExecutionMode);
+  const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
+  const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
 
   useEffect(() => {
@@ -52,19 +55,19 @@ export default function LabelComment(props: LabelCommentProps) {
       if (isString(elmtLabel)) {
         setLabel(elmtLabel);
       }
-      setComment(element.data.comment || '');
+      setComment(edgeData?.comment || '');
 
       const mappings =
-        element.data.data_mapping && element.data.data_mapping.length > 0
-          ? element.data.data_mapping
+        edgeData?.data_mapping && edgeData.data_mapping.length > 0
+          ? edgeData.data_mapping
               .map(
                 (con) => `${con.source_output || ''}->${con.target_input || ''}`
               )
               .join(', ')
           : '';
       const conditions =
-        element.data.conditions && element.data.conditions.length > 0
-          ? element.data.conditions
+        edgeData?.conditions && edgeData.conditions.length > 0
+          ? edgeData.conditions
               .map(
                 (con) =>
                   `${con.source_output || ''}: ${JSON.stringify(con.value)}`
@@ -77,7 +80,7 @@ export default function LabelComment(props: LabelCommentProps) {
     }
 
     throw new Error('No link or Node tries to access LabelComment');
-  }, [element, nodeData]);
+  }, [element, nodeData, edgeData]);
 
   function saveLabel(labelLocal: string) {
     if (isNode(element) && nodeData) {
@@ -104,15 +107,7 @@ export default function LabelComment(props: LabelCommentProps) {
     }
 
     if (isLink(element)) {
-      const newElement = {
-        ...element,
-        data: { ...element.data, comment: commentLocal },
-      };
-
-      setEdges([
-        ...getEdges().filter((edg) => edg.id !== element.id),
-        newElement,
-      ]);
+      mergeEdgeData(element.id, { comment: commentLocal });
     }
   }
 

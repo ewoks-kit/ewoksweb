@@ -6,49 +6,35 @@ import DataMappingComponent from '../EditableTableProperties/DataMapping';
 import Conditions from '../EditableTableProperties/Conditions';
 import SidebarTooltip from '../SidebarTooltip';
 import LabelComment from './LabelComment';
-import { isLink } from '../../../utils/typeGuards';
+import { assertEdgeDataDefined, isLink } from '../../../utils/typeGuards';
 import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
-import { useReactFlow } from 'reactflow';
+import useEdgeDataStore from '../../../store/useEdgeDataStore';
 
 const useStyles = DashboardStyle;
 
 export default function LinkDetails(element: EwoksRFLink) {
   const classes = useStyles();
 
-  const { getEdges, setEdges } = useReactFlow();
+  const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
+  assertEdgeDataDefined(edgeData, element.id);
+  const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   const showAdvancedDetails = useConfigStore(
     (state) => state.showAdvancedDetails
   );
 
   const mapAllDataChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newEdge = {
-      ...element,
-      data: { ...element.data, map_all_data: event.target.checked },
-    };
-    setAllEdge(newEdge);
+    mergeEdgeData(element.id, { map_all_data: event.target.checked });
   };
 
   function onErrorChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    const newEdge = {
-      ...element,
-      data: { ...element.data, on_error: event.target.checked },
-    };
-    setAllEdge(newEdge);
+    mergeEdgeData(element.id, { on_error: event.target.checked });
   }
 
   const requiredChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    const newEdge = {
-      ...element,
-      data: { ...element.data, required: event.target.checked },
-    };
-    setAllEdge(newEdge);
+    mergeEdgeData(element.id, { required: event.target.checked });
   };
-
-  function setAllEdge(newEdge: EwoksRFLink) {
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-  }
 
   return (
     <Paper className={classes.nodeDetails}>
@@ -66,14 +52,14 @@ export default function LinkDetails(element: EwoksRFLink) {
           <b />
           <Checkbox
             name="map-all-data"
-            checked={!!element.data.map_all_data || false}
+            checked={!!edgeData.map_all_data || false}
             onChange={mapAllDataChanged}
             inputProps={{ 'aria-label': 'controlled' }}
             aria-labelledby="map-all-data"
           />
         </div>
       </SidebarTooltip>
-      {!element.data.map_all_data && isLink(element) && (
+      {!edgeData.map_all_data && isLink(element) && (
         <div>
           <DataMappingComponent {...element} />
         </div>
@@ -88,14 +74,14 @@ export default function LinkDetails(element: EwoksRFLink) {
             <b>on_error</b>
           </label>
           <Checkbox
-            checked={!!element.data.on_error || false}
+            checked={!!edgeData.on_error || false}
             onChange={onErrorChanged}
             inputProps={{ 'aria-label': 'controlled' }}
             aria-labelledby="on_error"
           />
         </div>
       </SidebarTooltip>
-      {!element.data.on_error && isLink(element) && (
+      {!edgeData.on_error && isLink(element) && (
         <div>
           <Conditions element={element} />
         </div>
@@ -107,7 +93,7 @@ export default function LinkDetails(element: EwoksRFLink) {
           <div>
             <b>Required</b>
             <Checkbox
-              checked={element.data.required}
+              checked={edgeData.required}
               onChange={requiredChanged}
               // inputProps={{ 'aria-label': 'controlled' }}
             />
@@ -118,15 +104,15 @@ export default function LinkDetails(element: EwoksRFLink) {
           <div className={classes.detailsLabels}>
             <b>Target:</b> {element.target}
           </div>
-          {element.data.sub_target && (
+          {edgeData.sub_target && (
             <div className={classes.detailsLabels}>
-              <b>Sub_target:</b> {element.data.sub_target}
+              <b>Sub_target:</b> {edgeData.sub_target}
             </div>
           )}
-          {element.data.sub_target_attributes && (
+          {edgeData.sub_target_attributes && (
             <div className={classes.detailsLabels}>
               <b>Sub_target_attributes:</b>
-              {element.data.sub_target_attributes}
+              {edgeData.sub_target_attributes}
             </div>
           )}
         </div>

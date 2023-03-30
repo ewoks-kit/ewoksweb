@@ -13,18 +13,18 @@ export function trimLabel(label: string) {
 export function addConnectionToGraph(
   connection: Connection,
   graph: GraphRF
-): GraphRF {
+): EwoksRFLink | undefined {
   const { source, target, sourceHandle, targetHandle } = connection;
 
   if (!source || !target) {
-    return graph;
+    return undefined;
   }
 
   const sourceTask = graph.nodes.find((nod) => nod.id === connection.source);
   const targetTask = graph.nodes.find((nod) => nod.id === connection.target);
 
   if (!sourceTask || !targetTask) {
-    return graph;
+    return undefined;
   }
 
   const link: EwoksRFLink = {
@@ -79,9 +79,5 @@ export function addConnectionToGraph(
     labelStyle: { fill: 'blue', fontWeight: 500, fontSize: 14 },
   };
 
-  return {
-    graph: graph.graph,
-    nodes: graph.nodes,
-    links: [...graph.links, link],
-  };
+  return link;
 }

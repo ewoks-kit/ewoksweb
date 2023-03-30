@@ -1,4 +1,4 @@
-import type { DataMapping, EwoksRFLink } from 'types';
+import type { DataMapping, EwoksRFLink, EwoksRFLinkData } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
@@ -6,18 +6,20 @@ import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import { useNode } from '../../../store/graph-hooks';
 import { isClass } from './utils';
-import { useReactFlow } from 'reactflow';
+import useEdgeDataStore from '../../../store/useEdgeDataStore';
+import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 
 export default function DataMappingComponent(element: EwoksRFLink) {
-  const { getEdges, setEdges } = useReactFlow();
-
+  const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
+  assertEdgeDataDefined(edgeData, element.id);
+  const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const sourceNode = useNode(element.source);
   const targetNode = useNode(element.target);
 
-  function addDataMapping() {
-    if (element.data.data_mapping?.some((x) => x.id === '')) {
+  function addDataMapping(edgeDataC: EwoksRFLinkData) {
+    if (edgeDataC.data_mapping?.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before adding another!',
@@ -25,17 +27,13 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       });
       return;
     }
-    const newEdge = {
-      ...element,
-      data: {
-        ...element.data,
-        data_mapping: [
-          ...(element.data.data_mapping || []),
-          { id: '', name: '', value: '' },
-        ],
-      },
-    };
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+
+    mergeEdgeData(element.id, {
+      data_mapping: [
+        ...(edgeDataC.data_mapping || []),
+        { id: '', name: '', value: '' },
+      ],
+    });
   }
 
   const dataMappingValuesChanged = (table: DataMapping[]) => {
@@ -45,17 +43,10 @@ export default function DataMappingComponent(element: EwoksRFLink) {
         target_input: row.value as string,
       };
     });
-    const newEdge = {
-      ...element,
-      label: dmap
-        .map((el) => `${el.source_output || ''}->${el.target_input || ''}`)
-        .join(', '),
-      data: {
-        ...element.data,
-        data_mapping: dmap,
-      },
-    };
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+
+    mergeEdgeData(element.id, {
+      data_mapping: dmap,
+    });
   };
 
   return (
@@ -70,15 +61,15 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       <IconButton
         style={{ padding: '1px' }}
         aria-label="dataMapping"
-        onClick={() => addDataMapping()}
+        onClick={() => addDataMapping(edgeData)}
         data-cy="addDataMappingButton"
       >
         <AddCircleOutlineIcon />
       </IconButton>
-      {element.data.data_mapping && element.data.data_mapping.length > 0 && (
+      {edgeData.data_mapping && edgeData.data_mapping.length > 0 && (
         <EditableTable
           headers={['Source', 'Target']}
-          defaultValues={element.data.data_mapping}
+          defaultValues={edgeData.data_mapping}
           valuesChanged={dataMappingValuesChanged}
           typeOfValues={[
             {
@@ -87,7 +78,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
                   ? 'select'
                   : 'input'
                 : 'input',
-              values: element.data.links_input_names || [],
+              values: edgeData.links_input_names || [],
             },
             {
               type: element.target
@@ -96,8 +87,8 @@ export default function DataMappingComponent(element: EwoksRFLink) {
                   : 'input'
                 : 'input',
               values: [
-                ...(element.data.links_required_output_names || []),
-                ...(element.data.links_optional_output_names || []),
+                ...(edgeData.links_required_output_names || []),
+                ...(edgeData.links_optional_output_names || []),
               ],
             },
           ]}

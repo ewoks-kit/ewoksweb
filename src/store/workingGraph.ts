@@ -6,6 +6,7 @@ import type { GetState, SetState } from 'zustand';
 import { initializedRFGraph } from '../utils/InitializedEntities';
 import useSelectedElementStore from './useSelectedElementStore';
 import useNodeDataStore from './useNodeDataStore';
+import useEdgeDataStore from './useEdgeDataStore';
 
 export interface WorkingGraphSlice {
   workingGraph: GraphRF;
@@ -85,6 +86,7 @@ const workingGraph = (
       undoIndex: 0,
     }));
     useNodeDataStore.getState().setNodesData(graph.nodes);
+    useEdgeDataStore.getState().setEdgesData(graph.links);
 
     get().addRecentGraph(graph as GraphRF);
 

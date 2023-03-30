@@ -18,6 +18,7 @@ import { isMarkerType, isString } from '../../../utils/typeGuards';
 import type { Edge } from 'reactflow';
 import { MarkerType } from 'reactflow';
 import { useReactFlow } from 'reactflow';
+import useEdgeDataStore from '../../../store/useEdgeDataStore';
 
 const useStyles = DashboardStyle;
 
@@ -26,6 +27,8 @@ export default function EditLinkStyle(element: EwoksRFLink) {
   const classes = useStyles();
 
   const { setEdges, getEdges } = useReactFlow();
+  const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
+  const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
@@ -44,8 +47,8 @@ export default function EditLinkStyle(element: EwoksRFLink) {
     }
 
     if (element.type === 'getAround') {
-      setX(element.data.getAroundProps?.x || 80);
-      setY(element.data.getAroundProps?.y || 80);
+      setX(edgeData?.getAroundProps?.x || 80);
+      setY(edgeData?.getAroundProps?.y || 80);
     }
 
     const { markerEnd } = element;
@@ -59,7 +62,7 @@ export default function EditLinkStyle(element: EwoksRFLink) {
 
     setAnimated(!!element.animated);
     setColorLine(element.style?.stroke || '#96a5f9');
-  }, [element]);
+  }, [element, edgeData]);
 
   function linkTypeChanged(event: PropertyChangedEvent) {
     const val = event.target.value as string;
@@ -109,33 +112,23 @@ export default function EditLinkStyle(element: EwoksRFLink) {
 
   function changeX(_event: ChangeEvent<unknown>, value: number | number[]) {
     const newX = value as number;
-    const newEdge = {
-      ...element,
-      data: {
-        ...element.data,
-        getAroundProps: {
-          ...element.data.getAroundProps,
-          x: newX,
-        },
+    const newEdgeData = {
+      getAroundProps: {
+        x: newX,
       },
     };
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    mergeEdgeData(element.id, newEdgeData);
     setX(newX);
   }
 
   function changeY(_event: ChangeEvent<unknown>, value: number | number[]) {
     const newY = value as number;
-    const newEdge = {
-      ...element,
-      data: {
-        ...element.data,
-        getAroundProps: {
-          ...element.data.getAroundProps,
-          y: newY,
-        },
+    const newEdgeData = {
+      getAroundProps: {
+        y: newY,
       },
     };
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    mergeEdgeData(element.id, newEdgeData);
     setY(newY);
   }
 
