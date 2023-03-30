@@ -235,14 +235,13 @@ export default function Sidebar() {
           </Button>
           {!isLink(selectedElement) && <IconMenu />}
           <ConfirmDialog
-            title={`Delete "${
-              (selectedElement.type === 'graph' && selectedElement.id) ||
-              'not labelled'
-            }" workflow?`}
-            content={`You are about to delete "${
-              (selectedElement.type === 'graph' && selectedElement.id) ||
-              'a not labelled'
-            }" workflow.
+            // TODO: Here maybe it is better to see the label and id.
+            title={`Delete workflow with id: "${
+              selectedElement.type === 'graph' && selectedElement.id
+            }"?`}
+            content={`You are about to delete the workflow wit id: "${
+              selectedElement.type === 'graph' && selectedElement.id
+            }".
               Please make sure that it is not used as a subgraph in other workflows!
               Do you agree to continue?`}
             open={openAgreeDialog}

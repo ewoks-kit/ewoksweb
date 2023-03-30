@@ -47,8 +47,8 @@ function ElementDetails() {
   const { title, DetailsComponent } = getAccordionContent(selectedElement);
 
   useEffect(() => {
-    setExpanded(!!selectedElement?.id);
-  }, [selectedElement?.id]);
+    setExpanded(!!selectedElement.id);
+  }, [selectedElement.id]);
 
   return (
     <Accordion

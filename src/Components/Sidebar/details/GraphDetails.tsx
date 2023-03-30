@@ -4,23 +4,22 @@ import type { GraphDetails as GraphDetailsType } from '../../../types';
 import { useSelectedElement } from '../../../store/graph-hooks';
 
 export default function GraphDetails() {
-  const setGraphInfo = useStore((state) => state.setGraphInfo);
+  // const setGraphInfo = useStore((state) => state.setGraphInfo);
+  const mergeGraphInfo = useStore((state) => state.mergeGraphInfo);
   const graph = useSelectedElement() as GraphDetailsType;
 
   function saveCategory(category: string) {
-    setGraphInfo({ ...graph, category });
+    mergeGraphInfo({ category });
   }
 
   function saveLabel(label: string) {
-    setGraphInfo({ ...graph, label });
+    mergeGraphInfo({ label });
   }
 
   function saveComment(comment: string) {
-    const newGraph = {
-      ...graph,
-      uiProps: { ...graph.uiProps, comment },
-    };
-    setGraphInfo(newGraph);
+    mergeGraphInfo({
+      uiProps: { comment },
+    });
   }
 
   return (
