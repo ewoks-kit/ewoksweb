@@ -225,9 +225,13 @@ export default function Dashboard() {
           nodesData,
           edgesData
         );
+
         // TODO move nodesData out of Dashboard with saveToServer
-        const nodesWithData = [...getNodes()].map((nod) => {
-          return { ...nod, data: newNodesData.get(nod.id) as EwoksRFNodeData };
+        const nodesWithData = [...getNodes()].map((node) => {
+          return {
+            ...node,
+            data: newNodesData.get(node.id) as EwoksRFNodeData,
+          };
         });
 
         const edgesWithData = [...getEdges()].map((edge) => {

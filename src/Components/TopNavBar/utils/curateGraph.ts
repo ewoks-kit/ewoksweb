@@ -13,22 +13,41 @@ function curateGraph(
   newNodesData: Map<string, EwoksRFNodeData>;
   newEdgesData: Map<string, EwoksRFLinkData>;
 } {
-  const newNodesData: Map<string, EwoksRFNodeData> = new Map(nodesData);
-  newNodesData.forEach((value) => {
-    const np = value.ewoks_props;
-    np.default_inputs = deleteEmptyLines(np.default_inputs);
-    if (np.default_error_attributes?.data_mapping) {
-      np.default_error_attributes.data_mapping = deleteEmptyLines(
-        np.default_error_attributes?.data_mapping
-      );
-    }
-  });
+  const newNodesData: Map<string, EwoksRFNodeData> = new Map(
+    [...nodesData.entries()].map(([nodeId, nodeData]) => {
+      return [
+        nodeId,
+        {
+          ...nodeData,
+          ewoks_props: {
+            ...nodeData.ewoks_props,
+            default_inputs: deleteEmptyLines(
+              nodeData.ewoks_props.default_inputs
+            ),
+            default_error_attributes: {
+              data_mapping: deleteEmptyLines(
+                nodeData.ewoks_props.default_error_attributes?.data_mapping
+              ),
+            },
+          },
+        },
+      ];
+    })
+  );
 
-  const newEdgesData: Map<string, EwoksRFLinkData> = new Map(edgesData);
-  newEdgesData.forEach((value) => {
-    value.conditions = deleteEmptyLines(value.conditions);
-    value.data_mapping = deleteEmptyLines(value.data_mapping);
-  });
+  const newEdgesData: Map<string, EwoksRFLinkData> = new Map(
+    [...edgesData.entries()].map(([edgeId, edgeData]) => {
+      return [
+        edgeId,
+        {
+          ...edgeData,
+          conditions: deleteEmptyLines(edgeData.conditions),
+          data_mapping: deleteEmptyLines(edgeData.data_mapping),
+        },
+      ];
+    })
+  );
+
   return {
     newNodesData,
     newEdgesData,
@@ -41,9 +60,8 @@ function deleteEmptyLines<T extends DataMapping | Conditions | Inputs>(
   if (!arrayObjId) {
     return [];
   }
-
   return arrayObjId.filter(
-    (obj: DataMapping | Conditions | Inputs) => obj.id !== ''
+    (obj: DataMapping | Conditions | Inputs) => obj.name !== ''
   );
 }
 
