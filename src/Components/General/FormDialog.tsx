@@ -136,7 +136,7 @@ export default function FormDialog(props: FormDialogProps) {
 
       setOpenSnackbar({
         open: true,
-        text: 'Task saved successfuly',
+        text: 'Task saved successfully',
         severity: 'success',
       });
       props.setOpenSaveDialog(false);
@@ -161,6 +161,16 @@ export default function FormDialog(props: FormDialogProps) {
       });
       return;
     }
+
+    if (!task.task_type) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Please give the Task a valid type',
+        severity: 'warning',
+      });
+      return;
+    }
+
     try {
       await postTask(task);
 
