@@ -34,7 +34,7 @@ describe('create workflow and save', () => {
 
     cy.findByRole('button', { name: 'Delete' }).click();
 
-    cy.contains(`Delete "${id}" workflow?`);
+    cy.contains(`Delete workflow with id: "${id}"?`);
 
     cy.findByRole('button', { name: 'Yes' }).click();
 
