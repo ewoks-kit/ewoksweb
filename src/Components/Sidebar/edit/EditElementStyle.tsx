@@ -7,27 +7,26 @@ import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import EditNodeStyle from './EditNodeStyle';
 import EditLinkStyle from './EditLinkStyle';
 import EditGraphStyle from './EditGraphStyle';
-import { isNode, isLink } from 'utils/typeGuards';
-import type { EwoksRFElement } from '../models';
-import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../../../types';
+import type { SelectedElement } from '../../../types';
+import useSelectedElementStore from '../../../store/useSelectedElementStore';
 
 interface Content {
   title: string;
   EditComponent: () => JSX.Element;
 }
 
-function getAccordionContent(element: EwoksRFElement): Content {
-  if (isNode(element)) {
+function getAccordionContent(element: SelectedElement): Content {
+  if (element.type === 'node') {
     return {
       title: 'Styling Node',
       EditComponent: () => <EditNodeStyle nodeId={element.id} />,
     };
   }
 
-  if (isLink(element)) {
+  if (element.type === 'edge') {
     return {
       title: 'Styling Link',
-      EditComponent: () => <EditLinkStyle {...element} />,
+      EditComponent: () => <EditLinkStyle />,
     };
   }
 
@@ -38,10 +37,12 @@ function getAccordionContent(element: EwoksRFElement): Content {
 }
 
 // DOC: For editing the style of nodes and links
-export default function EditElementStyle(
-  element: EwoksRFNode | EwoksRFLink | GraphDetails
-) {
-  const { title, EditComponent } = getAccordionContent(element);
+export default function EditElementStyle() {
+  // element: EwoksRFNode | EwoksRFLink | GraphDetails
+  const selectedElement = useSelectedElementStore(
+    (state) => state.selectedElement
+  );
+  const { title, EditComponent } = getAccordionContent(selectedElement);
 
   return (
     <Accordion className="Accordions-sidebar">

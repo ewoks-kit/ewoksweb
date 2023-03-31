@@ -1,6 +1,6 @@
 // TODO: remove the following after onlyEditRelease
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   // Accordion,
   // AccordionDetails,
@@ -22,16 +22,13 @@ import { deleteWorkflow } from 'api/api';
 // import { OpenInBrowser } from '@material-ui/icons';
 // import SidebarTooltip from './SidebarTooltip';
 import commonStrings from 'commonStrings.json';
-import {
-  assertNodeDataDefined,
-  isGraphDetails,
-  isLink,
-  isNode,
-} from '../../utils/typeGuards';
+import { assertNodeDataDefined, isLink } from '../../utils/typeGuards';
 import { textForError } from '../../utils';
 import { useNodesIds, useSelectedElement } from '../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
+import type { Node, Edge } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
+import useSelectedElementStore from '../../store/useSelectedElementStore';
 
 // const useStyles = DashboardStyle;
 
@@ -39,9 +36,12 @@ export default function Sidebar() {
   // const classes = useStyles();
 
   const nodesIds = useNodesIds();
-  const { deleteElements, getNodes, setNodes } = useReactFlow();
+  const { deleteElements, getNodes, setNodes, getEdges } = useReactFlow();
 
-  const selectedElement = useSelectedElement();
+  // const selectedElement = useSelectedElement();
+  const selectedElement = useSelectedElementStore(
+    (state) => state.selectedElement
+  );
   // const [openExecutionDetails, setOpenExecutionDetails] = useState<boolean>(
   //   false
   // );
@@ -56,6 +56,9 @@ export default function Sidebar() {
   const initGraph = useStore((state) => state.initGraph);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const nodesData = useNodeDataStore((state) => state.nodesData);
+  const setSelectedElement = useSelectedElementStore(
+    (state) => state.setSelectedElement
+  );
 
   const deleteElement = async () => {
     if (workingGraph.graph.id !== graphInfo.id) {
@@ -67,17 +70,27 @@ export default function Sidebar() {
       return;
     }
 
-    if (isNode(selectedElement)) {
-      deleteElements({ nodes: [selectedElement] });
+    if (selectedElement.type === 'node') {
+      const node: Node | undefined = getNodes().find(
+        (nod) => nod.id === selectedElement.id
+      );
+      // Need to set selectedElement to not be undefined or
+      // when undefined it can show to graph.
+      setSelectedElement({ type: 'graph', id: graphInfo.id });
+      deleteElements({ nodes: [node] as Node[] });
       return;
     }
 
-    if (isLink(selectedElement)) {
-      deleteElements({ edges: [selectedElement] });
+    if (selectedElement.type === 'edge') {
+      const edge: Edge | undefined = getEdges().find(
+        (edg) => edg.id === selectedElement.id
+      );
+      setSelectedElement({ type: 'graph', id: graphInfo.id });
+      deleteElements({ edges: [edge] as Edge[] });
       return;
     }
 
-    if (isGraphDetails(selectedElement)) {
+    if (selectedElement.type === 'graph') {
       setOpenAgreeDialog(true);
       return;
     }
@@ -93,6 +106,7 @@ export default function Sidebar() {
     setOpenAgreeDialog(false);
     if (selectedElement.id) {
       try {
+        setSelectedElement({ type: 'graph', id: '' });
         await deleteWorkflow(selectedElement.id);
         setOpenSnackbar({
           open: true,
@@ -118,7 +132,7 @@ export default function Sidebar() {
   };
 
   const cloneNode = () => {
-    if (isNode(selectedElement)) {
+    if (selectedElement.type === 'node') {
       const clonedNode = getNodes().find(
         (nod) => nod.id === selectedElement.id
       );
@@ -169,7 +183,7 @@ export default function Sidebar() {
         <>
           <AddNodes title="Add Nodes" />
           <ElementDetails />
-          <EditElementStyle {...selectedElement} />
+          <EditElementStyle />
         </>
       )}
       {/* TODO: commented for onlyEditRelease */}
@@ -221,14 +235,13 @@ export default function Sidebar() {
           </Button>
           {!isLink(selectedElement) && <IconMenu />}
           <ConfirmDialog
-            title={`Delete "${
-              (isGraphDetails(selectedElement) && selectedElement.label) ||
-              'not labelled'
-            }" workflow?`}
-            content={`You are about to delete "${
-              (isGraphDetails(selectedElement) && selectedElement.label) ||
-              'a not labelled'
-            }" workflow.
+            // TODO: Here maybe it is better to see the label and id.
+            title={`Delete workflow with id: "${
+              selectedElement.type === 'graph' && selectedElement.id
+            }"?`}
+            content={`You are about to delete the workflow wit id: "${
+              selectedElement.type === 'graph' && selectedElement.id
+            }".
               Please make sure that it is not used as a subgraph in other workflows!
               Do you agree to continue?`}
             open={openAgreeDialog}
