@@ -30,7 +30,6 @@ export function useSelectedElement(): EwoksRFNode | EwoksRFLink | GraphDetails {
   const selectedElement = useSelectedElementStore(
     (state) => state.selectedElement
   );
-  console.log(selectedElement, 'efvfdv');
 
   const nodeSelected = useNode(selectedElement.id) as EwoksRFNode;
 
