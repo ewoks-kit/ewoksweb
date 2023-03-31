@@ -95,14 +95,14 @@ export default function EdgeLabelComment(props: LabelCommentProps) {
   }
 
   function valueSelectedChanged(event: ChangeEvent<HTMLInputElement>) {
-    if (event.target.textContent) {
+    if (event?.target.textContent) {
       setChanged(event);
       setLabel(event.target.textContent);
     }
   }
 
   function valueChanged(event: ChangeEvent<HTMLInputElement>) {
-    if (event.target.value) {
+    if (event?.target?.value) {
       setChanged(event);
       setLabel(event.target.value);
     }
