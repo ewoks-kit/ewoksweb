@@ -7,10 +7,11 @@ import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
 import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from '../sidebarStyle';
-import { isLink, isNode, isString } from '../../../utils/typeGuards';
+import { assertElementIsEdge, isString } from '../../../utils/typeGuards';
 import { useReactFlow } from 'reactflow';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { useSelectedElement } from '../../../store/graph-hooks';
+import type { EwoksRFLink } from '../../../types';
 
 const useStyles = DashboardStyle;
 
@@ -24,6 +25,7 @@ export default function EdgeLabelComment(props: LabelCommentProps) {
 
   const { getEdges, setEdges } = useReactFlow();
   const element = useSelectedElement();
+  assertElementIsEdge(element);
   const { showComment } = props;
 
   const [comment, setComment] = useState('');
@@ -38,60 +40,50 @@ export default function EdgeLabelComment(props: LabelCommentProps) {
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   useEffect(() => {
-    if (isLink(element)) {
-      const { label: elmtLabel } = element;
-      if (isString(elmtLabel)) {
-        setLabel(elmtLabel);
-      }
-      setComment(edgeData?.comment || '');
-
-      const mappings =
-        edgeData?.data_mapping && edgeData.data_mapping.length > 0
-          ? edgeData.data_mapping
-              .map(
-                (con) => `${con.source_output || ''}->${con.target_input || ''}`
-              )
-              .join(', ')
-          : '';
-      const conditions =
-        edgeData?.conditions && edgeData.conditions.length > 0
-          ? edgeData.conditions
-              .map(
-                (con) =>
-                  `${con.source_output || ''}: ${JSON.stringify(con.value)}`
-              )
-              .join(', ')
-          : '';
-
-      setLabelChoices([mappings, conditions, 'text...']);
-      return;
+    const { label: elmtLabel } = element;
+    if (isString(elmtLabel)) {
+      setLabel(elmtLabel);
     }
+    setComment(edgeData?.comment || '');
 
-    throw new Error('No link or Node tries to access LabelComment');
+    const mappings =
+      edgeData?.data_mapping && edgeData.data_mapping.length > 0
+        ? edgeData.data_mapping
+            .map(
+              (con) => `${con.source_output || ''}->${con.target_input || ''}`
+            )
+            .join(', ')
+        : '';
+    const conditions =
+      edgeData?.conditions && edgeData.conditions.length > 0
+        ? edgeData.conditions
+            .map(
+              (con) =>
+                `${con.source_output || ''}: ${JSON.stringify(con.value)}`
+            )
+            .join(', ')
+        : '';
+
+    setLabelChoices([mappings, conditions, 'text...']);
   }, [element, edgeData]);
 
-  function saveLabel(labelLocal: string) {
-    if (isLink(element)) {
-      const newLink = {
-        ...element,
+  function saveLabel(labelLocal: string, elementL: EwoksRFLink) {
+    setEdges([
+      ...getEdges().filter((edge) => edge.id !== element.id),
+      {
+        ...elementL,
         label: labelLocal,
-      };
-      setEdges([
-        ...getEdges().filter((edge) => edge.id !== element.id),
-        newLink,
-      ]);
-    }
+      },
+    ]);
   }
 
-  function saveComment(commentLocal: string) {
-    if (isLink(element)) {
-      mergeEdgeData(element.id, { comment: commentLocal });
-    }
+  function saveComment(commentLocal: string, elementL: EwoksRFLink) {
+    mergeEdgeData(elementL.id, { comment: commentLocal });
   }
 
-  function valueSavedLocal() {
+  function valueSavedLocal(labelL: string, elementL: EwoksRFLink) {
     setValueIsChanged(false);
-    saveLabel(label);
+    saveLabel(labelL, elementL);
   }
 
   function setChanged(event: ChangeEvent<HTMLInputElement>) {
@@ -103,14 +95,14 @@ export default function EdgeLabelComment(props: LabelCommentProps) {
   }
 
   function valueSelectedChanged(event: ChangeEvent<HTMLInputElement>) {
-    if (event?.target.textContent) {
+    if (event.target.textContent) {
       setChanged(event);
       setLabel(event.target.textContent);
     }
   }
 
   function valueChanged(event: ChangeEvent<HTMLInputElement>) {
-    if (event?.target?.value) {
+    if (event.target.value) {
       setChanged(event);
       setLabel(event.target.value);
     }
@@ -150,7 +142,7 @@ export default function EdgeLabelComment(props: LabelCommentProps) {
               <IconButton
                 style={{ width: '20%', minWidth: '30px' }}
                 color="inherit"
-                onClick={valueSavedLocal}
+                onClick={() => valueSavedLocal(label, element)}
               >
                 <Fab
                   className={classes.openFileButton}
@@ -172,7 +164,7 @@ export default function EdgeLabelComment(props: LabelCommentProps) {
         <TextButtonSave
           label="Comment"
           value={comment}
-          valueSaved={saveComment}
+          valueSaved={() => saveComment(comment, element)}
         />
       </div>
     </div>

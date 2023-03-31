@@ -3,6 +3,10 @@ import DashboardStyle from '../../Dashboard/DashboardStyle';
 import TextButtonSave from './TextButtonSave';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import useSelectedElementStore from '../../../store/useSelectedElementStore';
+import {
+  assertNodeDataDefined,
+  assertElementIsNodeType,
+} from '../../../utils/typeGuards';
 
 const useStyles = DashboardStyle;
 
@@ -14,38 +18,33 @@ interface LabelCommentProps {
 export default function NodeLabelComment(props: LabelCommentProps) {
   const classes = useStyles();
 
-  const node = useSelectedElementStore((state) => state.selectedElement);
+  const selectedElement = useSelectedElementStore(
+    (state) => state.selectedElement
+  );
+  assertElementIsNodeType(selectedElement);
   const { showComment } = props;
 
   const [comment, setComment] = useState('');
-  const [label, setLabel] = useState<string>('');
+  const [label, setLabel] = useState('');
 
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
-  const nodeData = useNodeDataStore((state) => state.nodesData.get(node.id));
+  const nodeData = useNodeDataStore((state) =>
+    state.nodesData.get(selectedElement.id)
+  );
+  assertNodeDataDefined(nodeData, selectedElement.id);
 
   useEffect(() => {
-    console.log(node);
-
-    if (node.type === 'node') {
-      setLabel(nodeData?.ewoks_props.label || '');
-      setComment(nodeData?.comment || '');
-      return;
-    }
-
-    throw new Error('No Node tries to access NodeLabelComment');
-  }, [node, nodeData]);
+    setLabel(nodeData?.ewoks_props.label || '');
+    setComment(nodeData?.comment || '');
+  }, [nodeData]);
 
   function saveLabel(labelLocal: string) {
-    if (node.type === 'node' && nodeData) {
-      mergeNodeData(node.id, { ewoks_props: { label: labelLocal } });
-    }
+    mergeNodeData(selectedElement.id, { ewoks_props: { label: labelLocal } });
   }
 
   function saveComment(commentLocal: string) {
-    if (node.type === 'node' && nodeData) {
-      mergeNodeData(node.id, { comment: commentLocal });
-    }
+    mergeNodeData(selectedElement.id, { comment: commentLocal });
   }
 
   return (

@@ -5,6 +5,8 @@ import type {
   EwoksRFNode,
   EwoksRFNodeData,
   GraphDetails,
+  SelectedElement,
+  SelectedElementNode,
 } from '../types';
 
 export interface EwoksServerErrorResponse {
@@ -100,4 +102,21 @@ export function assertEdgeDataDefined(
   ? never
   : EwoksRFLinkData {
   assertDefined(edgeData, `Edge with id ${edgeId} has undefined data!`);
+}
+
+export function assertElementIsNodeType(
+  entity: SelectedElement | undefined
+): asserts entity is SelectedElementNode extends undefined
+  ? never
+  : SelectedElementNode {
+  assertDefined(
+    !!entity && 'type' in entity && entity.type === 'node',
+    `Node is possibly undefined!`
+  );
+}
+
+export function assertElementIsEdge(
+  entity: EwoksRFNode | EwoksRFLink | GraphDetails | undefined
+): asserts entity is EwoksRFLink extends undefined ? never : EwoksRFLink {
+  assertDefined(!!entity && 'source' in entity, `Node is possibly undefined!`);
 }
