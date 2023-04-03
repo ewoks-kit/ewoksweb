@@ -19,7 +19,7 @@ export default function DefaultInputs() {
   const defautInputs = nodeData.ewoks_props.default_inputs || [];
 
   function addDefaultInputs(nodeDataProps: EwoksRFNodeData) {
-    if (defautInputs?.some((x) => x.id === '')) {
+    if (defautInputs.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before adding another!',
@@ -72,7 +72,7 @@ export default function DefaultInputs() {
         </div>
       </SidebarTooltip>
 
-      {defautInputs && defautInputs.length > 0 && (
+      {defautInputs.length > 0 && (
         <EditableTable
           headers={['Name', 'Value']}
           defaultValues={defautInputs}
@@ -81,8 +81,8 @@ export default function DefaultInputs() {
             {
               type: 'select',
               values: [
-                ...(nodeData.task_props?.optional_input_names || []),
-                ...(nodeData.task_props?.required_input_names || []),
+                ...(nodeData.task_props.optional_input_names || []),
+                ...(nodeData.task_props.required_input_names || []),
               ],
             },
             { type: 'input' },

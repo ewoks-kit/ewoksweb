@@ -101,7 +101,7 @@ function AddNodes(props: AddNodesProps) {
   const getTasks = useCallback(async () => {
     try {
       const tasksData = await getTaskDescription();
-      if (tasksData?.data.items?.length > 0) {
+      if (tasksData.data.items.length > 0) {
         const allTasks = tasksData.data.items;
         setTasks(allTasks);
       }
@@ -243,7 +243,6 @@ function AddNodes(props: AddNodesProps) {
                       tabIndex={0}
                       key={elem.task_identifier}
                       className={`dndnode ${
-                        selectedTask &&
                         selectedTask.task_identifier === elem.task_identifier
                           ? 'selectedTask'
                           : ''
@@ -320,7 +319,7 @@ function AddNodes(props: AddNodesProps) {
               {/* TODO: This is not really readable:
                 storing conditions in a variable/util. At first glance could be isSelectedTaskCategory
                 Making a new component where you could deal with these conditions with early return to null */}
-              {selectedTask?.task_identifier &&
+              {selectedTask.task_identifier &&
                 categoryName !== 'General' &&
                 tasks.length > 0 &&
                 tasks.find(

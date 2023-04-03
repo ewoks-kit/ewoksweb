@@ -59,11 +59,11 @@ export default function ExecutionFilters() {
 
   // TODO: same as in manageWorkflows for category and workflows
   function setInputValue(workflowDetails: WorkflowDescription) {
-    setWorkflowId(workflowDetails?.id ?? '');
+    setWorkflowId(workflowDetails.id);
   }
 
   function setCategoryFilter(category: string) {
-    setCategoryValue(category ?? '');
+    setCategoryValue(category);
   }
 
   function statusChanged(event: PropertyChangedEvent) {

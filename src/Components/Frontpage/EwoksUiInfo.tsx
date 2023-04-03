@@ -31,26 +31,19 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
     }
     try {
       const response = await getWorkflow('tutorial_Graph');
-      if (response.data) {
-        const graph = response.data;
 
-        setOpenSnackbar({
-          open: true,
-          text: `Workflow ${
-            // TODO: perhaps label should be mandatory in the model ?
-            // and give one if empty when Ewoks -> EwoksRF...
-            graph.graph.label || 'without Label!!!'
-          } was downloaded successfully`,
-          severity: 'success',
-        });
-        initGraph(response.data, 'fromServer');
-      } else {
-        setOpenSnackbar({
-          open: true,
-          text: 'Could not locate the requested workflow! Maybe it is deleted!',
-          severity: 'warning',
-        });
-      }
+      const graph = response.data;
+
+      setOpenSnackbar({
+        open: true,
+        text: `Workflow ${
+          // TODO: perhaps label should be mandatory in the model ?
+          // and give one if empty when Ewoks -> EwoksRF...
+          graph.graph.label || 'without Label!!!'
+        } was downloaded successfully`,
+        severity: 'success',
+      });
+      initGraph(response.data, 'fromServer');
     } catch (error) {
       setOpenSnackbar({
         open: true,

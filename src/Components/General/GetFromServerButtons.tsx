@@ -48,36 +48,27 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
       setGettingFromServer(true);
       try {
         const response = await getWorkflow(workflowId);
-        if (response.data) {
-          const graph = response.data;
-          setOpenSnackbar({
-            open: true,
-            text: `Workflow ${
-              graph.graph.label || 'without label!!!'
-            } was downloaded successfully`,
-            severity: 'success',
-          });
-          setCanvasGraphChanged(false);
-          const nodes = getNodes();
-          if (isSubgraph === 'subgraph') {
-            const { nodeWithoutData, data } = await setSubGraph(
-              graph,
-              nodes,
-              getEdges()
-            );
+        const graph = response.data;
+        setOpenSnackbar({
+          open: true,
+          text: `Workflow ${
+            graph.graph.label || 'without label!!!'
+          } was downloaded successfully`,
+          severity: 'success',
+        });
+        setCanvasGraphChanged(false);
+        const nodes = getNodes();
+        if (isSubgraph === 'subgraph') {
+          const { nodeWithoutData, data } = await setSubGraph(
+            graph,
+            nodes,
+            getEdges()
+          );
 
-            setNodes([...getNodes(), nodeWithoutData]);
-            setNodeData(nodeWithoutData.id, data);
-          } else {
-            initGraph(graph, 'fromServer');
-          }
+          setNodes([...getNodes(), nodeWithoutData]);
+          setNodeData(nodeWithoutData.id, data);
         } else {
-          setOpenSnackbar({
-            open: true,
-            text:
-              'Could not locate the requested workflow! Maybe it is deleted!',
-            severity: 'warning',
-          });
+          initGraph(graph, 'fromServer');
         }
       } catch (error) {
         setOpenSnackbar({

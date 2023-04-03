@@ -21,13 +21,13 @@ export default function GetFromServer() {
   const undoIndex = useStore((state) => state.undoIndex);
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
-    if (workflowDetails?.id) {
+    if (workflowDetails.id) {
       setWorkflowId(workflowDetails.id || '');
     }
 
     setOpenAgreeDialog(false);
 
-    if (workflowDetails?.id) {
+    if (workflowDetails.id) {
       if (canvasGraphChanged && undoIndex !== 0) {
         setOpenAgreeDialog(true);
       } else {
@@ -40,26 +40,18 @@ export default function GetFromServer() {
     if (workflowIdparam) {
       try {
         const response = await getWorkflow(workflowIdparam);
-        if (response.data) {
-          const graph = response.data;
-          setOpenSnackbar({
-            open: true,
-            text: `Workflow ${
-              graph.graph.label || 'without Label!!!'
-            } was downloaded successfully`,
-            severity: 'success',
-          });
-          setCanvasGraphChanged(false);
-          initGraph(graph, 'fromServer');
-          validateEwoksGraph(graph);
-        } else {
-          setOpenSnackbar({
-            open: true,
-            text:
-              'Could not locate the requested workflow! Maybe it is deleted!',
-            severity: 'warning',
-          });
-        }
+
+        const graph = response.data;
+        setOpenSnackbar({
+          open: true,
+          text: `Workflow ${
+            graph.graph.label || 'without Label!!!'
+          } was downloaded successfully`,
+          severity: 'success',
+        });
+        setCanvasGraphChanged(false);
+        initGraph(graph, 'fromServer');
+        validateEwoksGraph(graph);
       } catch (error) {
         setOpenSnackbar({
           open: true,

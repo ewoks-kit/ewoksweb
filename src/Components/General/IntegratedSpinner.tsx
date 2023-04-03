@@ -66,9 +66,9 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
       if (props.onClick) {
         props.onClick();
       }
-      if (props.action) {
-        props.action();
-      }
+
+      props.action();
+
       setSuccess(false);
       setLoading(true);
       timer.current = window.setTimeout(() => {
@@ -83,7 +83,7 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
   }
 
   return (
-    <Tooltip title={tooltipText(tooltip) || ''} enterDelay={800} arrow>
+    <Tooltip title={tooltipText(tooltip)} enterDelay={800} arrow>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Box sx={{ m: 1, position: 'relative' }}>
           <Fab
