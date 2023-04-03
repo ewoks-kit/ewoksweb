@@ -1,4 +1,11 @@
-import type { EwoksRFNode, GraphEwoks, GraphRF, State } from '../types';
+import type {
+  EwoksRFLinkData,
+  EwoksRFNode,
+  EwoksRFNodeData,
+  GraphEwoks,
+  GraphRF,
+  State,
+} from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
@@ -68,14 +75,18 @@ const workingGraph = (
       }) || [];
 
     grfNodes = [...grfNodes, ...notes];
-
+    const rfLinks = toRFEwoksLinks(
+      workingGraphObject,
+      newNodeSubgraphs,
+      get().tasks
+    );
     const graph = {
       graph: {
         ...workingGraphObject.graph,
         uiProps: { ...workingGraphObject.graph.uiProps, source },
       },
       nodes: grfNodes,
-      links: toRFEwoksLinks(workingGraphObject, newNodeSubgraphs, get().tasks),
+      links: rfLinks,
     };
     // DOC: set the working graph twice to avoid bug with nodeData.
     // Better solution?
@@ -85,6 +96,7 @@ const workingGraph = (
       undoRedo: [{ action: 'Opened new graph', graph }],
       undoIndex: 0,
     }));
+
     useNodeDataStore.getState().setNodesData(graph.nodes);
     useEdgeDataStore.getState().setEdgesData(graph.links);
 
@@ -96,6 +108,15 @@ const workingGraph = (
       .getState()
       .setSelectedElement({ type: 'graph', id: graph.graph.id });
 
+    const newGraphNoData = {
+      graph: graph.graph,
+      nodes: grfNodes.map((nod) => {
+        return { ...nod, data: {} as EwoksRFNodeData };
+      }),
+      links: rfLinks.map((lin) => {
+        return { ...lin, data: {} as EwoksRFLinkData };
+      }),
+    };
     // add the new graph to the recent graphs if not already there
     get().addRecentGraph({
       graph: workingGraphObject.graph,
@@ -108,7 +129,7 @@ const workingGraph = (
     });
     set((state) => ({
       ...state,
-      workingGraph: graph,
+      workingGraph: newGraphNoData,
     }));
     return graph;
   },

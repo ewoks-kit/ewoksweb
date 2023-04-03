@@ -50,10 +50,7 @@ export function toRFEwoksNodes(
 
         const node: EwoksRFNode = {
           id: id.toString(),
-
           type: task_type,
-          // DATAC puts data into node have to get them
-          // out of there in the calling functions?
           data: {
             ewoks_props: {
               label: label ?? task_identifier,

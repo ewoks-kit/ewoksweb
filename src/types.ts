@@ -510,6 +510,10 @@ export interface SelectedElement {
   id: string;
 }
 
+export interface SelectedElementNode extends SelectedElement {
+  type: 'node';
+}
+
 export type PropertyChangedEvent = ChangeEvent<{
   name?: string | undefined;
   value: unknown;

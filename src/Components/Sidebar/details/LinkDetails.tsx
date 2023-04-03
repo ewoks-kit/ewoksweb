@@ -5,17 +5,19 @@ import DashboardStyle from '../../Dashboard/DashboardStyle';
 import DataMappingComponent from '../EditableTableProperties/DataMapping';
 import Conditions from '../EditableTableProperties/Conditions';
 import SidebarTooltip from '../SidebarTooltip';
-import LabelComment from './LabelComment';
+import EdgeLabelComment from './EdgeLabelComment';
 import { assertEdgeDataDefined, isLink } from '../../../utils/typeGuards';
 import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
+import { useSelectedElement } from '../../../store/graph-hooks';
 
 const useStyles = DashboardStyle;
 
-export default function LinkDetails(element: EwoksRFLink) {
+export default function LinkDetails() {
   const classes = useStyles();
 
+  const element = useSelectedElement() as EwoksRFLink;
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
@@ -38,7 +40,7 @@ export default function LinkDetails(element: EwoksRFLink) {
 
   return (
     <Paper className={classes.nodeDetails}>
-      <LabelComment element={element} showComment={showAdvancedDetails} />
+      <EdgeLabelComment showComment={showAdvancedDetails} />
       <hr style={{ color: '#96a5f9' }} />
       <SidebarTooltip
         text={`Setting this to True is equivalent to Data Mapping

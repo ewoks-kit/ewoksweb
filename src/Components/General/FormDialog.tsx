@@ -20,8 +20,8 @@ import type {
   FormAction,
   PropertyChangedEvent,
   GraphDetails,
-  EwoksRFLink,
   EwoksRFNodeData,
+  EwoksRFLinkData,
 } from '../../types';
 import { rfToEwoks, textForError } from '../../utils';
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
@@ -39,6 +39,7 @@ import { assertStr } from '../../utils/typeGuards';
 import IconBoundary from '../../IconBoundary';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
+import useEdgeDataStore from '../../store/useEdgeDataStore';
 
 interface FormDialogProps {
   elementToEdit: Task | GraphDetails;
@@ -69,6 +70,7 @@ export default function FormDialog(props: FormDialogProps) {
   const setTasks = useStore((state) => state.setTasks);
   const tasks = useStore((state) => state.tasks);
   const nodesData = useNodeDataStore((state) => state.nodesData);
+  const edgesData = useEdgeDataStore((state) => state.edgesData);
 
   const { open, action, elementToEdit } = props;
 
@@ -134,7 +136,7 @@ export default function FormDialog(props: FormDialogProps) {
 
       setOpenSnackbar({
         open: true,
-        text: 'Task saved successfuly',
+        text: 'Task saved successfully',
         severity: 'success',
       });
       props.setOpenSaveDialog(false);
@@ -159,6 +161,16 @@ export default function FormDialog(props: FormDialogProps) {
       });
       return;
     }
+
+    if (!task.task_type) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Please give the Task a valid type',
+        severity: 'warning',
+      });
+      return;
+    }
+
     try {
       await postTask(task);
 
@@ -183,13 +195,14 @@ export default function FormDialog(props: FormDialogProps) {
   }
 
   async function saveGraph(graphDetails: GraphDetails) {
-    // DATAC for edges
     const graph = {
       graph: graphDetails,
       nodes: getNodes().map((nod) => {
         return { ...nod, data: nodesData.get(nod.id) as EwoksRFNodeData };
       }),
-      links: getEdges() as EwoksRFLink[],
+      links: getEdges().map((edge) => {
+        return { ...edge, data: edgesData.get(edge.id) as EwoksRFLinkData };
+      }),
     };
     if (overwrite) {
       // put

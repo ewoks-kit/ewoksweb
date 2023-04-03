@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import type {
   DataMapping,
   EditableTableRow,
-  EwoksRFNode,
   EwoksRFNodeData,
   RFNodeTaskProperties,
 } from '../../../types';
@@ -23,20 +22,25 @@ import EditTaskProp from './EditTaskProp';
 import DashboardStyle from '../../Dashboard/DashboardStyle';
 import SidebarTooltip from '../SidebarTooltip';
 import { OpenInBrowser } from '@material-ui/icons';
-import LabelComment from './LabelComment';
+import NodeLabelComment from './NodeLabelComment';
 import DefaultInputs from '../EditableTableProperties/DefaultInputs';
 import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../../store/useNodeDataStore';
-import { assertNodeDataDefined } from '../../../utils/typeGuards';
+import {
+  assertNodeDataDefined,
+  assertNodeDefined,
+} from '../../../utils/typeGuards';
 import { useNodesIds } from '../../../store/graph-hooks';
+import useSelectedElementStore from '../../../store/useSelectedElementStore';
 
 const useStyles = DashboardStyle;
 
 // DOC: selectedNode details in sidebar
-export default function NodeDetails(element: EwoksRFNode) {
+export default function NodeDetails() {
   const classes = useStyles();
+  const element = useSelectedElementStore((state) => state.selectedElement);
 
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
   assertNodeDataDefined(nodeData, element.id);
@@ -117,9 +121,6 @@ export default function NodeDetails(element: EwoksRFNode) {
     task_identifier?: string;
     node_icon?: string;
   }) {
-    if (!nodeData) {
-      return;
-    }
     // DOC: if the task_identifier changes (ppfmethod, ppfport, script case) then the id
     // of the node needs to change for a coherent json.
     // All links to this node also change source and/or target!
@@ -127,14 +128,17 @@ export default function NodeDetails(element: EwoksRFNode) {
       // DOC: find unique id based on new task_identifier
       let uniqueId = Object.values(propKeyValue)[0];
       let id = 0;
-      // TODO not use nodesData to calculati new id
+      // TODO not use nodesData to calculate new id
+      // IMP TODO: by also changinh the id of a node we make the previous one disappear and
+      // assertDefined where the old id is used complains. Solution
       while (nodesIds.some((nodeId) => nodeId === uniqueId)) {
         uniqueId += id++;
       }
-      const newNode = {
-        ...element,
-        id: uniqueId,
-      };
+
+      const newNode = getNodes().find((nod) => nod.id === element.id);
+      assertNodeDefined(newNode, element.id);
+
+      newNode.id = uniqueId;
 
       const newLinks = getEdges().map((link) => {
         if (link.source === element.id) {
@@ -242,8 +246,8 @@ export default function NodeDetails(element: EwoksRFNode) {
   return (
     <Box>
       <Paper className={classes.nodeDetails}>
-        <LabelComment element={element} showComment={showAdvancedDetails} />
-        <DefaultInputs {...element} />
+        <NodeLabelComment showComment={showAdvancedDetails} />
+        <DefaultInputs />
 
         <hr style={{ color: '#96a5f9' }} />
         <AdvancedDetailsCheckbox />

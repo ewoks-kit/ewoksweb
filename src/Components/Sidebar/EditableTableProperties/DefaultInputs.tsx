@@ -1,4 +1,4 @@
-import type { EditableTableRow, EwoksRFNode, EwoksRFNodeData } from 'types';
+import type { EditableTableRow, EwoksRFNodeData } from 'types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import { IconButton } from '@material-ui/core';
@@ -6,9 +6,12 @@ import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
+import useSelectedElementStore from '../../../store/useSelectedElementStore';
 
-export default function DefaultInputs(element: EwoksRFNode) {
+export default function DefaultInputs() {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const element = useSelectedElementStore((state) => state.selectedElement);
+
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
   assertNodeDataDefined(nodeData, element.id);
