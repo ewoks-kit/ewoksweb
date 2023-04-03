@@ -106,12 +106,10 @@ export function assertEdgeDataDefined(
 
 export function assertElementIsNodeType(
   entity: SelectedElement | undefined
-): asserts entity is SelectedElementNode extends undefined
-  ? never
-  : SelectedElementNode {
+): asserts entity is SelectedElementNode {
   assertDefined(
     !!entity && 'type' in entity && entity.type === 'node',
-    `Node is possibly undefined!`
+    `Node is not defined!`
   );
 }
 
