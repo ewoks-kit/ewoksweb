@@ -3,7 +3,6 @@ import type {
   DataMapping,
   EditableTableRow,
   EwoksRFNodeData,
-  RFNodeTaskProperties,
 } from '../../../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from '../EditableTableProperties/EditableTable';
@@ -125,8 +124,6 @@ export default function NodeDetails() {
     },
     nodeDataL: EwoksRFNodeData
   ) {
-    console.log(propKeyValue, nodeData);
-
     // DOC: if the task_identifier changes (ppfmethod, ppfport, script case) then the id
     // of the node needs to change for a coherent json. Links to/from this node also change!
     if (Object.keys(propKeyValue)[0] === 'task_identifier') {
