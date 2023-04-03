@@ -55,12 +55,12 @@ export default function IconMenu() {
         break;
       }
       case 'cloneTask': {
-        const nodeData = useNodeDataStore
-          .getState()
-          .nodesData.get(selectedElement.id);
-        assertNodeDataDefined(nodeData, selectedElement.id);
-        // TODO: check for using isNode by extending each possible types
         if ('position' in element) {
+          const nodeData = useNodeDataStore
+            .getState()
+            .nodesData.get(selectedElement.id);
+          assertNodeDataDefined(nodeData, selectedElement.id);
+
           if (nodeData.task_props.task_type === 'graph') {
             setOpenSnackbar({
               open: true,
