@@ -30,6 +30,7 @@ export function useSelectedElement(): EwoksRFNode | EwoksRFLink | GraphDetails {
   const selectedElement = useSelectedElementStore(
     (state) => state.selectedElement
   );
+
   const nodeSelected = useNode(selectedElement.id) as EwoksRFNode;
 
   const edgeSelected = useEdge(selectedElement.id) as EwoksRFLink;

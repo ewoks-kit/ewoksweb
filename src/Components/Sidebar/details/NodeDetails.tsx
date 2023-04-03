@@ -22,7 +22,7 @@ import EditTaskProp from './EditTaskProp';
 import DashboardStyle from '../../Dashboard/DashboardStyle';
 import SidebarTooltip from '../SidebarTooltip';
 import { OpenInBrowser } from '@material-ui/icons';
-import LabelComment from './LabelComment';
+import NodeLabelComment from './NodeLabelComment';
 import DefaultInputs from '../EditableTableProperties/DefaultInputs';
 import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
@@ -246,7 +246,7 @@ export default function NodeDetails() {
   return (
     <Box>
       <Paper className={classes.nodeDetails}>
-        <LabelComment showComment={showAdvancedDetails} />
+        <NodeLabelComment showComment={showAdvancedDetails} />
         <DefaultInputs />
 
         <hr style={{ color: '#96a5f9' }} />

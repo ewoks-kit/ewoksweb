@@ -2,31 +2,30 @@ import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { FormControl, TextField, IconButton, Fab } from '@material-ui/core';
 import DashboardStyle from '../../Dashboard/DashboardStyle';
-import useStore from '../../../store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
 import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from '../sidebarStyle';
-import { isLink, isNode, isString } from '../../../utils/typeGuards';
+import { assertElementIsEdge, isString } from '../../../utils/typeGuards';
 import { useReactFlow } from 'reactflow';
-import useNodeDataStore from '../../../store/useNodeDataStore';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { useSelectedElement } from '../../../store/graph-hooks';
+import type { EwoksRFLink } from '../../../types';
 
 const useStyles = DashboardStyle;
 
 interface LabelCommentProps {
-  // element: EwoksRFNode | EwoksRFLink;
   showComment: boolean;
 }
 
-// DOC: the label and comment for nodes-links when selected
-export default function LabelComment(props: LabelCommentProps) {
+// DOC: the label and comment for links when selected
+export default function EdgeLabelComment(props: LabelCommentProps) {
   const classes = useStyles();
 
   const { getEdges, setEdges } = useReactFlow();
   const element = useSelectedElement();
+  assertElementIsEdge(element);
   const { showComment } = props;
 
   const [comment, setComment] = useState('');
@@ -37,83 +36,54 @@ export default function LabelComment(props: LabelCommentProps) {
   ]);
   const [valueIsChanged, setValueIsChanged] = useState(false);
 
-  const inExecutionMode = useStore((state) => state.inExecutionMode);
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
-  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
-  const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
 
   useEffect(() => {
-    if (isNode(element)) {
-      setLabel(nodeData?.ewoks_props.label || '');
-      setComment(nodeData?.comment || '');
-      return;
+    const { label: elmtLabel } = element;
+    if (isString(elmtLabel)) {
+      setLabel(elmtLabel);
     }
+    setComment(edgeData?.comment || '');
 
-    if (isLink(element)) {
-      const { label: elmtLabel } = element;
-      if (isString(elmtLabel)) {
-        setLabel(elmtLabel);
-      }
-      setComment(edgeData?.comment || '');
+    const mappings =
+      edgeData?.data_mapping && edgeData.data_mapping.length > 0
+        ? edgeData.data_mapping
+            .map(
+              (con) => `${con.source_output || ''}->${con.target_input || ''}`
+            )
+            .join(', ')
+        : '';
+    const conditions =
+      edgeData?.conditions && edgeData.conditions.length > 0
+        ? edgeData.conditions
+            .map(
+              (con) =>
+                `${con.source_output || ''}: ${JSON.stringify(con.value)}`
+            )
+            .join(', ')
+        : '';
 
-      const mappings =
-        edgeData?.data_mapping && edgeData.data_mapping.length > 0
-          ? edgeData.data_mapping
-              .map(
-                (con) => `${con.source_output || ''}->${con.target_input || ''}`
-              )
-              .join(', ')
-          : '';
-      const conditions =
-        edgeData?.conditions && edgeData.conditions.length > 0
-          ? edgeData.conditions
-              .map(
-                (con) =>
-                  `${con.source_output || ''}: ${JSON.stringify(con.value)}`
-              )
-              .join(', ')
-          : '';
+    setLabelChoices([mappings, conditions, 'text...']);
+  }, [element, edgeData]);
 
-      setLabelChoices([mappings, conditions, 'text...']);
-      return;
-    }
-
-    throw new Error('No link or Node tries to access LabelComment');
-  }, [element, nodeData, edgeData]);
-
-  function saveLabel(labelLocal: string) {
-    if (isNode(element) && nodeData) {
-      mergeNodeData(element.id, { ewoks_props: { label: labelLocal } });
-      return;
-    }
-
-    if (isLink(element)) {
-      const newLink = {
-        ...element,
+  function saveLabel(labelLocal: string, elementL: EwoksRFLink) {
+    setEdges([
+      ...getEdges().filter((edge) => edge.id !== element.id),
+      {
+        ...elementL,
         label: labelLocal,
-      };
-      setEdges([
-        ...getEdges().filter((edge) => edge.id !== element.id),
-        newLink,
-      ]);
-    }
+      },
+    ]);
   }
 
-  function saveComment(commentLocal: string) {
-    if (isNode(element) && nodeData) {
-      mergeNodeData(element.id, { comment: commentLocal });
-      return;
-    }
-
-    if (isLink(element)) {
-      mergeEdgeData(element.id, { comment: commentLocal });
-    }
+  function saveComment(commentLocal: string, elementL: EwoksRFLink) {
+    mergeEdgeData(elementL.id, { comment: commentLocal });
   }
 
-  function valueSavedLocal() {
+  function valueSavedLocal(labelL: string, elementL: EwoksRFLink) {
     setValueIsChanged(false);
-    saveLabel(label);
+    saveLabel(labelL, elementL);
   }
 
   function setChanged(event: ChangeEvent<HTMLInputElement>) {
@@ -140,7 +110,7 @@ export default function LabelComment(props: LabelCommentProps) {
 
   return (
     <div className={classes.detailsLabels}>
-      {Object.keys(element).includes('source') ? (
+      {Object.keys(element).includes('source') && (
         <SidebarTooltip text="Use Conditions or Data Mapping as label.">
           <FormControl
             fullWidth
@@ -172,7 +142,7 @@ export default function LabelComment(props: LabelCommentProps) {
               <IconButton
                 style={{ width: '20%', minWidth: '30px' }}
                 color="inherit"
-                onClick={valueSavedLocal}
+                onClick={() => valueSavedLocal(label, element)}
               >
                 <Fab
                   className={classes.openFileButton}
@@ -180,7 +150,7 @@ export default function LabelComment(props: LabelCommentProps) {
                   size="small"
                   component="span"
                   aria-label="saveLabelComment"
-                  disabled={inExecutionMode}
+                  // disabled={inExecutionMode}
                 >
                   <SaveIcon />
                 </Fab>
@@ -188,15 +158,13 @@ export default function LabelComment(props: LabelCommentProps) {
             )}
           </FormControl>
         </SidebarTooltip>
-      ) : (
-        <TextButtonSave label="Label" value={label} valueSaved={saveLabel} />
       )}
 
       <div style={{ display: showComment ? 'block' : 'none' }}>
         <TextButtonSave
           label="Comment"
           value={comment}
-          valueSaved={saveComment}
+          valueSaved={() => saveComment(comment, element)}
         />
       </div>
     </div>
