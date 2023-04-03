@@ -60,7 +60,7 @@ const workingGraph = (
 
     // 5. Calculate notes nodes
     const notes: EwoksRFNode[] =
-      workingGraphObject.graph?.uiProps?.notes?.map((note) => {
+      workingGraphObject.graph.uiProps?.notes?.map((note) => {
         return {
           data: {
             ewoks_props: { label: note.label },

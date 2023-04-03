@@ -15,10 +15,8 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
   let res: WorkflowDescription[] = [];
   try {
     const workflows = await getWorkflowsDescriptions();
-    if (workflows?.data) {
-      const workf: { items: WorkflowDescription[] } = workflows.data;
-      res = workf.items;
-    }
+    const workf: { items: WorkflowDescription[] } = workflows.data;
+    res = workf.items;
   } catch (error) {
     const err = error as AxiosError;
     if (err.response) {
@@ -46,7 +44,7 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
       {
         id: 'network error',
         label: 'network error',
-        category: err?.response?.status.toString(),
+        category: err.response?.status.toString(),
       },
     ];
   }
@@ -78,6 +76,7 @@ export async function getSubgraphs(
           // all requests are now complete in an array
           // if there is a null means the subgraph was not found
           // and it should show up in red
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           const resCln = res.filter((result) => result.data !== null);
           return resCln.map((result) => result.data);
         })
@@ -88,7 +87,7 @@ export async function getSubgraphs(
         return [];
       });
   }
-  return results ?? [];
+  return results;
 }
 
 export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
@@ -99,7 +98,7 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
 
   // DOC: remove "fromServer" which is for UIs internal use
   if (graph.uiProps?.source) {
-    delete graph.uiProps?.source;
+    delete graph.uiProps.source;
   }
 
   return {

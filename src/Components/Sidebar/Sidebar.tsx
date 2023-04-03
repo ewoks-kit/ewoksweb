@@ -90,16 +90,7 @@ export default function Sidebar() {
       return;
     }
 
-    if (selectedElement.type === 'graph') {
-      setOpenAgreeDialog(true);
-      return;
-    }
-
-    setOpenSnackbar({
-      open: true,
-      text: 'Nothing to delete!',
-      severity: 'error',
-    });
+    setOpenAgreeDialog(true);
   };
 
   const agreeCallback = async () => {
@@ -152,8 +143,8 @@ export default function Sidebar() {
         id: calcNewId(clonedNode.id, nodesIds),
         selected: false,
         position: {
-          x: (clonedNode.position?.x || 0) + 100,
-          y: (clonedNode.position?.y || 0) + 100,
+          x: (clonedNode.position.x || 0) + 100,
+          y: (clonedNode.position.y || 0) + 100,
         },
       };
 

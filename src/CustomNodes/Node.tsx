@@ -126,8 +126,8 @@ function Node({
       id: calcNewId(selectedElement.id, nodesIds),
       selected: false,
       position: {
-        x: (selectedElement.position?.x || 0) + 100,
-        y: (selectedElement.position?.y || 0) + 100,
+        x: (selectedElement.position.x || 0) + 100,
+        y: (selectedElement.position.y || 0) + 100,
       },
     };
     // Both stay

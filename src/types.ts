@@ -251,7 +251,7 @@ export interface Note {
   label?: string;
   comment: string;
   position: XYPosition;
-  nodeWidth: number;
+  nodeWidth?: number;
 }
 
 export interface DataMapping {

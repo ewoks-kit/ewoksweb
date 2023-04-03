@@ -34,7 +34,7 @@ export default function IconMenu() {
   const graphInfo = useStore((state) => state.graphInfo);
   const tasks = useStore((state) => state.tasks);
   const nodeData = useNodeDataStore((state) =>
-    state.nodesData.get(selectedElement?.id)
+    state.nodesData.get(selectedElement.id)
   );
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {

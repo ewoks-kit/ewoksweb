@@ -37,8 +37,6 @@ const subGraph = (
   },
 
   // DOC: takes a GraphEwoks and transform it to graphRF
-  // UWG: replace this with the workingGraph by also passing
-  // the new node-graph to add. Does the same and adds a graph?
   setSubGraph: async (subGraphL, nodes, links) => {
     // 1. input the graphEwoks from server or file-system
     // 2. search for all subgraphs in it (async)
@@ -76,69 +74,63 @@ const subGraph = (
     const subToAdd = graph as GraphRF;
 
     let newNode = {} as EwoksRFNode;
-    if (subToAdd) {
-      const inputsSub = subToAdd.graph?.input_nodes?.map((input) => {
-        return {
-          label: calcLabel(input),
-          type: 'data ',
-        };
-      });
-      const outputsSub = subToAdd.graph?.output_nodes?.map((output) => {
-        return {
-          label: calcLabel(output),
-          type: 'data ',
-        };
-      });
-      let id = 0;
-      let graphId = subToAdd.graph.label || '';
-      while (nodes.some((nod) => nod.id === graphId)) {
-        graphId += id++;
-      }
-      newNode = {
-        sourcePosition: Position.Right,
-        targetPosition: Position.Left,
-        id: graphId,
-        type: 'graph',
-        position: calcCoordinatesFirstNode(nodes),
-        data: {
-          task_props: {
-            task_type: 'graph',
-            task_identifier: subToAdd.graph.id,
-          },
-          ui_props: {
-            exists: true,
-            type: 'internal',
 
-            icon: subToAdd.graph?.uiProps?.icon || orange2,
-            inputs: inputsSub,
-            outputs: outputsSub,
-            withImage: true,
-            withLabel: true,
-          },
-
-          ewoks_props: {
-            label: subToAdd.graph.label,
-            default_inputs: [],
-            task_generator: '',
-            inputs_complete: false,
-            default_error_node: false,
-            default_error_attributes: {
-              map_all_data: true,
-              data_mapping: [],
-            },
-          },
-          comment: '',
-        },
+    const inputsSub = subToAdd.graph.input_nodes?.map((input) => {
+      return {
+        label: calcLabel(input),
+        type: 'data ',
       };
-
-      get().addRecentGraph(subToAdd);
-    } else {
-      get().setOpenSnackbar({
-        open: true,
-        text: 'Couldnt locate the workingGraph in the recent!',
-        severity: 'warning',
-      });
+    });
+    const outputsSub = subToAdd.graph.output_nodes?.map((output) => {
+      return {
+        label: calcLabel(output),
+        type: 'data ',
+      };
+    });
+    let id = 0;
+    let graphId = subToAdd.graph.label || '';
+    while (nodes.some((nod) => nod.id === graphId)) {
+      graphId += id++;
     }
+    newNode = {
+      sourcePosition: Position.Right,
+      targetPosition: Position.Left,
+      id: graphId,
+      type: 'graph',
+      position: calcCoordinatesFirstNode(nodes),
+      data: {
+        task_props: {
+          task_type: 'graph',
+          task_identifier: subToAdd.graph.id,
+        },
+        ui_props: {
+          exists: true,
+          type: 'internal',
+
+          icon: subToAdd.graph.uiProps?.icon || orange2,
+          inputs: inputsSub,
+          outputs: outputsSub,
+          withImage: true,
+          withLabel: true,
+        },
+
+        ewoks_props: {
+          label: subToAdd.graph.label,
+          default_inputs: [],
+          task_generator: '',
+          inputs_complete: false,
+          default_error_node: false,
+          default_error_attributes: {
+            map_all_data: true,
+            data_mapping: [],
+          },
+        },
+        comment: '',
+      },
+    };
+
+    get().addRecentGraph(subToAdd);
+
     const newWorkingGraph = {
       graph: get().graphRF.graph,
       nodes: [...nodes, newNode] as EwoksRFNode[],

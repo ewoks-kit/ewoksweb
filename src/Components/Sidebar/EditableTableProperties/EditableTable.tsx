@@ -67,7 +67,7 @@ function EditableTable(props: EditableTableProps) {
 
   useEffect(() => {
     setTypeOfInputs(defaultValues.map(getType));
-    setRows((defaultValues || []).map(createData));
+    setRows(defaultValues.map(createData));
   }, [defaultValues]);
 
   const classes = useStyles();
@@ -184,14 +184,14 @@ function EditableTable(props: EditableTableProps) {
       return;
     }
     // DOC: it is 'dict' or 'list' and uses the dialog
-    const name = e.target?.name === 'name' ? e.target.name : 'value';
+    const name = e.target.name === 'name' ? e.target.name : 'value';
 
     const newRows = rows.map((rowTable) => {
       if (rowTable.id === id) {
         return {
           ...rowTable,
           // TODO: if not to use the local editing the e.target.name is always a 'name'
-          [name]: e.target?.name === 'name' ? e.target.value : undefined,
+          [name]: e.target.name === 'name' ? e.target.value : undefined,
         };
       }
       return rowTable;
@@ -292,7 +292,7 @@ function EditableTable(props: EditableTableProps) {
                   name="name"
                   onChange={onChange}
                   type=""
-                  typeOfValues={props.typeOfValues?.[0]}
+                  typeOfValues={props.typeOfValues[0]}
                 />
                 <CustomTableCell
                   index={index}
@@ -304,12 +304,12 @@ function EditableTable(props: EditableTableProps) {
                     type:
                       headers[0].startsWith('Source') ||
                       headers[1] === 'Node_Id'
-                        ? props?.typeOfValues?.[1]?.type
+                        ? props.typeOfValues[1]?.type
                         : typeOfInputs[index],
                     values:
                       headers[0].startsWith('Source') ||
                       headers[1] === 'Node_Id'
-                        ? props?.typeOfValues?.[1]?.values
+                        ? props.typeOfValues[1]?.values
                         : [''],
                   }}
                 />

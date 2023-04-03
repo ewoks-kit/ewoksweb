@@ -1,11 +1,11 @@
 import type { EwoksRFNode, GraphEwoks, GraphNodes, Task } from '../types';
 
 export function inputsAll(tempGraph: GraphEwoks): string[] {
-  return tempGraph.graph?.input_nodes?.map((nod) => nod.node) || [];
+  return tempGraph.graph.input_nodes?.map((nod) => nod.node) || [];
 }
 
 export function outputsAll(tempGraph: GraphEwoks): string[] {
-  return tempGraph.graph?.output_nodes?.map((nod) => nod.node) || [];
+  return tempGraph.graph.output_nodes?.map((nod) => nod.node) || [];
 }
 
 // DOC: calculate if node in a graph is input and/or output or internal
@@ -15,8 +15,8 @@ export function calcNodeType(
   task_type: string,
   id: string
 ): string {
-  const isInput = inputs?.includes(id);
-  const isOutput = outputs?.includes(id);
+  const isInput = inputs.includes(id);
+  const isOutput = outputs.includes(id);
   if (isInput && isOutput) {
     return 'input_output';
   }
@@ -64,7 +64,7 @@ export function calcInOutForSubgraph(
   let inputsSub: calcInOutForSubgraphOutput[] = [];
   let outputsSub: calcInOutForSubgraphOutput[] = [];
 
-  if (subgraphNode?.graph?.id) {
+  if (subgraphNode?.graph.id) {
     if (subgraphNode.graph.output_nodes) {
       const allOutputsIds = subgraphNode.graph.output_nodes.map(
         (nod) => nod.id

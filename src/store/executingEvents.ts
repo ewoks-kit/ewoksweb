@@ -68,9 +68,7 @@ const executingEvents = (
         return;
       }
 
-      if (tempNode.position) {
-        tempPos = tempNode.position;
-      }
+      tempPos = tempNode.position;
 
       const { withLabel } = tempNode.data.ui_props;
 
