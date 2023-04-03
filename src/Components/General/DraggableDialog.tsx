@@ -61,7 +61,6 @@ interface Props {
 export default function DraggableDialog(props: Props) {
   const { getNodes, getEdges } = useReactFlow();
 
-  const nodesData = useNodeDataStore((state) => state.nodesData);
   const edgesData = useEdgeDataStore((state) => state.edgesData);
 
   const [graph, setGraph] = useState<Graph>({});
@@ -114,6 +113,7 @@ export default function DraggableDialog(props: Props) {
     event: React.MouseEvent<HTMLElement>,
     newSelection: string
   ) => {
+    const { nodesData } = useNodeDataStore.getState();
     const graphRf: GraphRF = {
       graph: graphInfo,
       nodes: getNodes().map((nod) => {

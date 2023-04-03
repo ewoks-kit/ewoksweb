@@ -83,7 +83,6 @@ export default function Dashboard() {
   const initializedGraph = useStore((state) => state.initializedGraph);
   const initGraph = useStore((state) => state.initGraph);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const nodesData = useNodeDataStore((state) => state.nodesData);
   const edgesData = useEdgeDataStore((state) => state.edgesData);
 
   useEffect(() => {
@@ -221,6 +220,7 @@ export default function Dashboard() {
 
     if (graphInfo.uiProps?.source === 'fromServer') {
       try {
+        const { nodesData } = useNodeDataStore.getState();
         const { newNodesData, newEdgesData } = curateGraph(
           nodesData,
           edgesData

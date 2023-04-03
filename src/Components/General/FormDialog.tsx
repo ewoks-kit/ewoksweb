@@ -69,7 +69,6 @@ export default function FormDialog(props: FormDialogProps) {
   const [element, setElement] = useState<Task | GraphDetails>({});
   const setTasks = useStore((state) => state.setTasks);
   const tasks = useStore((state) => state.tasks);
-  const nodesData = useNodeDataStore((state) => state.nodesData);
   const edgesData = useEdgeDataStore((state) => state.edgesData);
 
   const { open, action, elementToEdit } = props;
@@ -195,6 +194,7 @@ export default function FormDialog(props: FormDialogProps) {
   }
 
   async function saveGraph(graphDetails: GraphDetails) {
+    const { nodesData } = useNodeDataStore.getState();
     const graph = {
       graph: graphDetails,
       nodes: getNodes().map((nod) => {

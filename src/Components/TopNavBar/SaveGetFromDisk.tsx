@@ -25,7 +25,6 @@ function download(content: BlobPart, fileName: string, contentType: string) {
 
 export default function SaveGetFromDisk() {
   const classes = useStyles();
-  const nodesData = useNodeDataStore((state) => state.nodesData);
   const edgesData = useEdgeDataStore((state) => state.edgesData);
 
   const { getNodes, getEdges } = useReactFlow();
@@ -40,6 +39,8 @@ export default function SaveGetFromDisk() {
 
   function saveToDisk() {
     if (graphInfo.label) {
+      const { nodesData } = useNodeDataStore.getState();
+
       const graphRf: GraphRF = {
         graph: graphInfo,
         nodes: getNodes().map((nod) => {

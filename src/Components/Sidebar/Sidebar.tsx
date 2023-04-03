@@ -55,7 +55,6 @@ export default function Sidebar() {
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const initGraph = useStore((state) => state.initGraph);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
-  const nodesData = useNodeDataStore((state) => state.nodesData);
   const setSelectedElement = useSelectedElementStore(
     (state) => state.setSelectedElement
   );
@@ -136,6 +135,7 @@ export default function Sidebar() {
         });
         return;
       }
+      const { nodesData } = useNodeDataStore.getState();
       const clonedNodeData = nodesData.get(selectedElement.id);
       assertNodeDataDefined(clonedNodeData, selectedElement.id);
       const newClone: EwoksRFNode = {

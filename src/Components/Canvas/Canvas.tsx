@@ -81,8 +81,6 @@ function Canvas() {
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
-
-  const nodesData = useNodeDataStore((state) => state.nodesData);
   const edgesData = useEdgeDataStore((state) => state.edgesData);
 
   const graphId = useGraphId();
@@ -132,6 +130,7 @@ function Canvas() {
   }
 
   const onPaneClick = () => {
+    const { nodesData } = useNodeDataStore.getState();
     nodesData.forEach((nodData, id) => {
       if (nodData.ui_props.details === true) {
         setNodeData(id, {
@@ -249,7 +248,7 @@ function Canvas() {
     // edgeUpdate should not happen and a message informs it is not ewoks-compatible
     const nodesRF = getNodes();
     const edgesRF = getEdges();
-
+    const { nodesData } = useNodeDataStore.getState();
     const { isValid, reason } = isValidLink(
       newConnection,
       {
@@ -278,7 +277,7 @@ function Canvas() {
       });
       return;
     }
-
+    const { nodesData } = useNodeDataStore.getState();
     const newLink = addConnectionToGraph(params, nodesData);
 
     if (newLink) {
@@ -303,8 +302,8 @@ function Canvas() {
     if (!nodeTmp) {
       return;
     }
-
-    const nodeData = nodesData.get(nodeTmp.id);
+    const { nodesData } = useNodeDataStore.getState();
+    const nodeData = nodesData.get(selectedElement.id);
     if (!nodeData) {
       return;
     }
