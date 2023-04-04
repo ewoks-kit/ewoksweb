@@ -20,6 +20,7 @@ export default function LinkDetails() {
   const element = useSelectedElement() as EwoksRFLink;
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
+
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   const showAdvancedDetails = useConfigStore(

@@ -12,7 +12,6 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import bendingText from 'CustomEdges/BendingTextEdge';
 import multilineText from 'CustomEdges/MultilineTextEdge';
 import getAround from 'CustomEdges/GetAroundEdge';
-
 import FunctionNode from 'CustomNodes/FunctionNode';
 import NoteNode from 'CustomNodes/NoteNode';
 import ExecutionStepsNode from 'CustomNodes/ExecutionStepsNode';
@@ -25,11 +24,11 @@ import CanvasBackground from './CanvasBackground';
 import CanvasMiniMap from './CanvasMiniMap';
 import { addConnectionToGraph, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
-import { useGraphId, useSelectedElement } from '../../store/graph-hooks';
-import { isNode } from '../../utils/typeGuards';
+import { useGraphId } from '../../store/graph-hooks';
 import useSelectedElementStore from '../../store/useSelectedElementStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
+import { getEdgesData, getNodeData, getNodesData } from '../../utils';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -82,13 +81,11 @@ function Canvas() {
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
 
-  const nodesData = useNodeDataStore((state) => state.nodesData);
-  const edgesData = useEdgeDataStore((state) => state.edgesData);
-
   const graphId = useGraphId();
 
-  const selectedElement = useSelectedElement();
-
+  const selectedElement = useSelectedElementStore(
+    (state) => state.selectedElement
+  );
   const {
     fitView,
     setNodes,
@@ -132,7 +129,7 @@ function Canvas() {
   }
 
   const onPaneClick = () => {
-    nodesData.forEach((nodData, id) => {
+    getNodesData().forEach((nodData, id) => {
       if (nodData.ui_props.details === true) {
         setNodeData(id, {
           ...nodData,
@@ -249,7 +246,6 @@ function Canvas() {
     // edgeUpdate should not happen and a message informs it is not ewoks-compatible
     const nodesRF = getNodes();
     const edgesRF = getEdges();
-
     const { isValid, reason } = isValidLink(
       newConnection,
       {
@@ -257,7 +253,7 @@ function Canvas() {
         links: edgesRF as EwoksRFLink[],
         graph: graphInfo,
       },
-      nodesData,
+      getNodesData(),
       oldEdge
     );
     if (!isValid) {
@@ -278,8 +274,7 @@ function Canvas() {
       });
       return;
     }
-
-    const newLink = addConnectionToGraph(params, nodesData);
+    const newLink = addConnectionToGraph(params, getNodesData());
 
     if (newLink) {
       setEdgeData(newLink.id, newLink.data);
@@ -304,7 +299,7 @@ function Canvas() {
       return;
     }
 
-    const nodeData = nodesData.get(nodeTmp.id);
+    const nodeData = getNodesData().get(selectedElement.id);
     if (!nodeData) {
       return;
     }
@@ -317,12 +312,15 @@ function Canvas() {
       addRecentGraph({
         graph: graphInfo,
         nodes: getNodes().map((nod) => {
-          return { ...nod, data: { ...nod.data, ...nodesData.get(nod.id) } };
+          return {
+            ...nod,
+            data: { ...nod.data, ...getNodesData().get(nod.id) },
+          };
         }),
         links: getEdges().map((edge) => {
           return {
             ...edge,
-            data: { ...edge.data, ...edgesData.get(edge.id) },
+            data: { ...edge.data, ...getEdgesData().get(edge.id) },
           };
         }),
       });
@@ -364,19 +362,21 @@ function Canvas() {
     const charCode = String.fromCodePoint(event.which).toLowerCase();
 
     const nodesIds = [...storeRF.getState().nodeInternals.keys()];
+    const node = getNode(selectedElement.id);
 
     const keys = event.ctrlKey || event.metaKey;
     if (keys && charCode === 'v') {
       event.preventDefault();
       event.stopPropagation();
-      if (isNode(selectedElement)) {
+      if ((selectedElement.type === 'node', node)) {
         const newClone: EwoksRFNode = {
-          ...selectedElement,
+          ...node,
+          ...getNodeData(selectedElement.id),
           id: calcNewId(selectedElement.id, nodesIds),
           selected: false,
           position: {
-            x: (selectedElement.position.x || 0) + 100,
-            y: (selectedElement.position.y || 0) + 100,
+            x: (node.position.x || 0) + 100,
+            y: (node.position.y || 0) + 100,
           },
         };
 

@@ -1,4 +1,11 @@
-import type { GraphEwoks, GraphRF, Icon, WorkflowDescription } from './types';
+import type {
+  EwoksRFLinkData,
+  EwoksRFNodeData,
+  GraphEwoks,
+  GraphRF,
+  Icon,
+  WorkflowDescription,
+} from './types';
 import type { AxiosError, AxiosResponse } from 'axios';
 import axios from 'axios';
 import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
@@ -8,6 +15,8 @@ import { calcNoteNodes } from './utils/calcNoteNodes';
 import { getWorkflowsDescriptions, getWorkflow } from './api/api';
 import orange2 from 'images/orange2.png';
 import { isEwoksServerErrorResponse } from './utils/typeGuards';
+import useNodeDataStore from './store/useNodeDataStore';
+import useEdgeDataStore from './store/useEdgeDataStore';
 
 export const ewoksNetwork = {};
 
@@ -129,4 +138,20 @@ export function textForError(error: unknown, alternative: string): string {
   }
 
   return alternative;
+}
+
+export function getNodesData(): Map<string, EwoksRFNodeData> {
+  return useNodeDataStore.getState().nodesData;
+}
+
+export function getNodeData(id: string): EwoksRFNodeData | undefined {
+  return useNodeDataStore.getState().nodesData.get(id);
+}
+
+export function getEdgesData(): Map<string, EwoksRFLinkData> {
+  return useEdgeDataStore.getState().edgesData;
+}
+
+export function getEdgeData(id: string): EwoksRFLinkData | undefined {
+  return useEdgeDataStore.getState().edgesData.get(id);
 }

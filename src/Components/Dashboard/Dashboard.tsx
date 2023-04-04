@@ -34,13 +34,12 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import type { EwoksRFLinkData, EwoksRFNodeData } from '../../types';
 import { FormAction } from '../../types';
 import { getWorkflowsIds, putWorkflow } from '../../api/api';
-import { rfToEwoks, textForError } from '../../utils';
+import { getEdgesData, rfToEwoks, textForError } from '../../utils';
 import commonStrings from '../../commonStrings.json';
 import type { AxiosResponse } from 'axios';
 import curateGraph from '../TopNavBar/utils/curateGraph';
-import useNodeDataStore from '../../store/useNodeDataStore';
-import useEdgeDataStore from '../../store/useEdgeDataStore';
 import { useReactFlow } from 'reactflow';
+import { getNodesData } from '../../utils';
 
 const useStyles = DashboardStyle;
 
@@ -83,8 +82,6 @@ export default function Dashboard() {
   const initializedGraph = useStore((state) => state.initializedGraph);
   const initGraph = useStore((state) => state.initGraph);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const nodesData = useNodeDataStore((state) => state.nodesData);
-  const edgesData = useEdgeDataStore((state) => state.edgesData);
 
   useEffect(() => {
     setOpenSettings(false);
@@ -222,8 +219,8 @@ export default function Dashboard() {
     if (graphInfo.uiProps?.source === 'fromServer') {
       try {
         const { newNodesData, newEdgesData } = curateGraph(
-          nodesData,
-          edgesData
+          getNodesData(),
+          getEdgesData()
         );
 
         // TODO move nodesData out of Dashboard with saveToServer

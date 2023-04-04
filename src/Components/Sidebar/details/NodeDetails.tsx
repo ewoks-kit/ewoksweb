@@ -3,7 +3,6 @@ import type {
   DataMapping,
   EditableTableRow,
   EwoksRFNodeData,
-  RFNodeTaskProperties,
 } from '../../../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from '../EditableTableProperties/EditableTable';
@@ -53,6 +52,7 @@ export default function NodeDetails() {
     (state) => state.showAdvancedDetails
   );
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   const [inputsComplete, setInputsComplete] = useState<boolean>(false);
   const [defaultErrorNode, setDefaultErrorNode] = useState<boolean>(false);
@@ -117,13 +117,15 @@ export default function NodeDetails() {
     );
   }, [nodeData]);
 
-  function propChanged(propKeyValue: {
-    task_identifier?: string;
-    node_icon?: string;
-  }) {
+  function propChanged(
+    propKeyValue: {
+      task_identifier?: string;
+      node_icon?: string;
+    },
+    nodeDataL: EwoksRFNodeData
+  ) {
     // DOC: if the task_identifier changes (ppfmethod, ppfport, script case) then the id
-    // of the node needs to change for a coherent json.
-    // All links to this node also change source and/or target!
+    // of the node needs to change for a coherent json. Links to/from this node also change!
     if (Object.keys(propKeyValue)[0] === 'task_identifier') {
       // DOC: find unique id based on new task_identifier
       let uniqueId = Object.values(propKeyValue)[0];
@@ -157,11 +159,13 @@ export default function NodeDetails() {
 
         return link;
       });
-      // All stay since it affects the canvas by modifying node id and associated links
-      mergeNodeData(element.id, {
+
+      setNodeData(uniqueId, {
+        ...nodeDataL,
         task_props: {
+          ...nodeDataL.task_props,
           task_identifier: propKeyValue.task_identifier || '',
-        } as RFNodeTaskProperties,
+        },
       });
 
       setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
@@ -258,7 +262,7 @@ export default function NodeDetails() {
               (used for method and script as the required inputs are unknown).`}
             >
               <div>
-                <b>Inputs-complete</b>
+                <b>Inputs Complete</b>
                 <Checkbox
                   checked={inputsComplete}
                   onChange={(event) =>
@@ -350,7 +354,9 @@ export default function NodeDetails() {
                         id={id}
                         label={label}
                         value={value || ''}
-                        propChanged={propChanged}
+                        propChanged={(propKeyValue) =>
+                          propChanged(propKeyValue, nodeData)
+                        }
                         editProps
                       />
                     ) : (

@@ -1,5 +1,4 @@
 // TODO: remove the following after onlyEditRelease
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
 import {
   // Accordion,
@@ -23,8 +22,8 @@ import { deleteWorkflow } from 'api/api';
 // import SidebarTooltip from './SidebarTooltip';
 import commonStrings from 'commonStrings.json';
 import { assertNodeDataDefined, isLink } from '../../utils/typeGuards';
-import { textForError } from '../../utils';
-import { useNodesIds, useSelectedElement } from '../../store/graph-hooks';
+import { getNodesData, textForError } from '../../utils';
+import { useNodesIds } from '../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
 import type { Node, Edge } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
@@ -38,7 +37,6 @@ export default function Sidebar() {
   const nodesIds = useNodesIds();
   const { deleteElements, getNodes, setNodes, getEdges } = useReactFlow();
 
-  // const selectedElement = useSelectedElement();
   const selectedElement = useSelectedElementStore(
     (state) => state.selectedElement
   );
@@ -55,7 +53,6 @@ export default function Sidebar() {
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const initGraph = useStore((state) => state.initGraph);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
-  const nodesData = useNodeDataStore((state) => state.nodesData);
   const setSelectedElement = useSelectedElementStore(
     (state) => state.setSelectedElement
   );
@@ -136,7 +133,7 @@ export default function Sidebar() {
         });
         return;
       }
-      const clonedNodeData = nodesData.get(selectedElement.id);
+      const clonedNodeData = getNodesData().get(selectedElement.id);
       assertNodeDataDefined(clonedNodeData, selectedElement.id);
       const newClone: EwoksRFNode = {
         ...clonedNode,

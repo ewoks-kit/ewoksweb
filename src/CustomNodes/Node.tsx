@@ -20,6 +20,7 @@ import { useNodesIds, useSelectedElement } from '../store/graph-hooks';
 import type { NodeProps, EwoksRFLink, EwoksRFNode, GraphRF } from '../types';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../store/useNodeDataStore';
+import { getNodesData } from '../utils';
 
 // TODO: examine usage when execution in main
 const execution = () => {
@@ -72,7 +73,6 @@ function Node({
   const [edit, setEdit] = useState(false);
   const [labelLocal, setLabelLocal] = useState(label);
   const [detailsL, setDetailsL] = useState(false);
-  const nodesData = useNodeDataStore((state) => state.nodesData);
 
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
@@ -98,7 +98,11 @@ function Node({
       nodes: getNodes(),
       links: getEdges() as EwoksRFLink[],
     };
-    const { isValid, reason } = isValidLink(connection, graphRf, nodesData);
+    const { isValid, reason } = isValidLink(
+      connection,
+      graphRf,
+      getNodesData()
+    );
     if (!isValid) {
       setOpenSnackbar({
         open: true,

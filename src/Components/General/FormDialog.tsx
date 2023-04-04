@@ -38,8 +38,7 @@ import IconControl from './IconControl';
 import { assertStr } from '../../utils/typeGuards';
 import IconBoundary from '../../IconBoundary';
 import { useReactFlow } from 'reactflow';
-import useNodeDataStore from '../../store/useNodeDataStore';
-import useEdgeDataStore from '../../store/useEdgeDataStore';
+import { getNodesData, getEdgesData } from '../../utils';
 
 interface FormDialogProps {
   elementToEdit: Task | GraphDetails;
@@ -69,8 +68,6 @@ export default function FormDialog(props: FormDialogProps) {
   const [element, setElement] = useState<Task | GraphDetails>({});
   const setTasks = useStore((state) => state.setTasks);
   const tasks = useStore((state) => state.tasks);
-  const nodesData = useNodeDataStore((state) => state.nodesData);
-  const edgesData = useEdgeDataStore((state) => state.edgesData);
 
   const { open, action, elementToEdit } = props;
 
@@ -198,10 +195,13 @@ export default function FormDialog(props: FormDialogProps) {
     const graph = {
       graph: graphDetails,
       nodes: getNodes().map((nod) => {
-        return { ...nod, data: nodesData.get(nod.id) as EwoksRFNodeData };
+        return { ...nod, data: getNodesData().get(nod.id) as EwoksRFNodeData };
       }),
       links: getEdges().map((edge) => {
-        return { ...edge, data: edgesData.get(edge.id) as EwoksRFLinkData };
+        return {
+          ...edge,
+          data: getEdgesData().get(edge.id) as EwoksRFLinkData,
+        };
       }),
     };
     if (overwrite) {

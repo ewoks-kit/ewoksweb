@@ -9,6 +9,7 @@ import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../types';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../utils/typeGuards';
+import { getNodesData } from '../utils';
 
 function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
   const { getNodes, getEdges } = useReactFlow();
@@ -16,8 +17,8 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
   const { selected, id } = props;
   const graphInfo = useStore((state) => state.graphInfo);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const nodesData = useNodeDataStore((state) => state.nodesData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
+
   assertNodeDataDefined(nodeData, id);
 
   const { ui_props: uiProps } = nodeData;
@@ -28,7 +29,11 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
       nodes: getNodes(),
       links: getEdges() as EwoksRFLink[],
     };
-    const { isValid, reason } = isValidLink(connection, graphRf, nodesData);
+    const { isValid, reason } = isValidLink(
+      connection,
+      graphRf,
+      getNodesData()
+    );
     if (!isValid) {
       setOpenSnackbar({
         open: true,
