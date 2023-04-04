@@ -1,5 +1,5 @@
 import type { GraphEwoks, GraphRF, Icon, WorkflowDescription } from './types';
-import type { AxiosError } from 'axios';
+import type { AxiosError, AxiosResponse } from 'axios';
 import axios from 'axios';
 import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
 import { toEwoksLinks } from './utils/toEwoksLinks';
@@ -72,13 +72,14 @@ export async function getSubgraphs(
     results = await axios
       .all(notInRecent.map((id: string) => getWorkflow(id)))
       .then(
-        axios.spread((...res) => {
+        axios.spread((...res: AxiosResponse<GraphEwoks | null, unknown>[]) => {
+          const graphs: (GraphEwoks | null)[] = [...res].map((re) => re.data);
           // all requests are now complete in an array
           // if there is a null means the subgraph was not found
           // and it should show up in red
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-          const resCln = res.filter((result) => result.data !== null);
-          return resCln.map((result) => result.data);
+          return graphs.reduce<GraphEwoks[]>((acc, data) => {
+            return data !== null ? [...acc, data] : acc;
+          }, []);
         })
       )
       .catch((error) => {
