@@ -67,42 +67,23 @@ function TableCellInEditMode(props: CustomTableCellProps) {
 
   if (typeOfValues.type === 'select') {
     return (
-      <>
-        <FormControl fullWidth variant="outlined">
-          <Autocomplete
-            freeSolo
-            options={typeOfValues.values || []}
-            value={row[name]}
-            onChange={(e, val) =>
-              onChange({ target: { value: val as string, name } }, row, index)
-            }
-            onInputChange={(e, val) =>
-              onChange({ target: { value: val, name } }, row, index)
-            }
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label={typeOfValues.type || 'name'}
-                margin="normal"
-                variant="outlined"
-              />
-            )}
-            data-cy="autocompleteInputInEditableCell"
-          />
-        </FormControl>
-        {/* <Select
-          name={name}
+      <FormControl fullWidth variant="outlined">
+        <Autocomplete
+          freeSolo={!typeOfValues.values}
+          options={typeOfValues.values || []}
           value={row[name]}
-          label="type"
-          onChange={(e) => onChange(e, row, index)}
-        >
-          {typeOfValues.values.map((tex) => (
-            <MenuItem key={tex} value={tex}>
-              {tex}
-            </MenuItem>
-          ))}
-        </Select> */}
-      </>
+          onChange={(e, val) =>
+            onChange({ target: { value: val as string, name } }, row, index)
+          }
+          onInputChange={(e, val) =>
+            onChange({ target: { value: val, name } }, row, index)
+          }
+          renderInput={(params) => (
+            <TextField {...params} margin="normal" variant="outlined" />
+          )}
+          data-cy="autocompleteInputInEditableCell"
+        />
+      </FormControl>
     );
   }
 
