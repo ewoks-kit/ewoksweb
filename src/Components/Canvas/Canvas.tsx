@@ -85,7 +85,10 @@ function Canvas() {
 
   const graphId = useGraphId();
 
-  const selectedElement = useSelectedElement();
+  const selectedElement = useSelectedElementStore(
+    (state) => state.selectedElement
+  );
+  // const selectedElement = useSelectedElement();
 
   const {
     fitView,
@@ -363,19 +366,23 @@ function Canvas() {
     const charCode = String.fromCodePoint(event.which).toLowerCase();
 
     const nodesIds = [...storeRF.getState().nodeInternals.keys()];
-
+    const node = storeRF.getState().nodeInternals.get(selectedElement.id);
+    const nodeData = useNodeDataStore
+      .getState()
+      .nodesData.get(selectedElement.id);
     const keys = event.ctrlKey || event.metaKey;
     if (keys && charCode === 'v') {
       event.preventDefault();
       event.stopPropagation();
-      if (isNode(selectedElement)) {
+      if ((selectedElement.type === 'node', node)) {
         const newClone: EwoksRFNode = {
-          ...selectedElement,
+          ...node,
+          ...nodeData,
           id: calcNewId(selectedElement.id, nodesIds),
           selected: false,
           position: {
-            x: (selectedElement.position.x || 0) + 100,
-            y: (selectedElement.position.y || 0) + 100,
+            x: (node.position.x || 0) + 100,
+            y: (node.position.y || 0) + 100,
           },
         };
 
