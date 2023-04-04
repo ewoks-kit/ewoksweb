@@ -15,8 +15,8 @@ import type { EwoksRFLink, EwoksRFNode, GraphDetails, Task } from '../../types';
 import useStore from '../../store/useStore';
 import { FormAction } from '../../types';
 import { useSelectedElement } from '../../store/graph-hooks';
-import useNodeDataStore from '../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
+import { getNodeData } from '../../utils';
 
 export default function IconMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -56,9 +56,7 @@ export default function IconMenu() {
       }
       case 'cloneTask': {
         if ('position' in element) {
-          const nodeData = useNodeDataStore
-            .getState()
-            .nodesData.get(selectedElement.id);
+          const nodeData = getNodeData(selectedElement.id);
           assertNodeDataDefined(nodeData, selectedElement.id);
 
           if (nodeData.task_props.task_type === 'graph') {

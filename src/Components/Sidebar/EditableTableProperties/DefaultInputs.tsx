@@ -7,13 +7,14 @@ import SidebarTooltip from '../SidebarTooltip';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import useSelectedElementStore from '../../../store/useSelectedElementStore';
+import { getNodeData } from '../../../utils';
 
 export default function DefaultInputs() {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const element = useSelectedElementStore((state) => state.selectedElement);
 
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
-  const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
+  const nodeData = getNodeData(element.id);
   assertNodeDataDefined(nodeData, element.id);
 
   const defautInputs = nodeData.ewoks_props.default_inputs || [];

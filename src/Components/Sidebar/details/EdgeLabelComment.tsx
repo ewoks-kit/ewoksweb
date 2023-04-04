@@ -7,11 +7,16 @@ import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
 import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from '../sidebarStyle';
-import { assertElementIsEdge, isString } from '../../../utils/typeGuards';
+import {
+  assertEdgeDataDefined,
+  assertElementIsEdge,
+  isString,
+} from '../../../utils/typeGuards';
 import { useReactFlow } from 'reactflow';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { useSelectedElement } from '../../../store/graph-hooks';
 import type { EwoksRFLink } from '../../../types';
+import { getEdgeData } from '../../../utils';
 
 const useStyles = DashboardStyle;
 
@@ -36,7 +41,8 @@ export default function EdgeLabelComment(props: LabelCommentProps) {
   ]);
   const [valueIsChanged, setValueIsChanged] = useState(false);
 
-  const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
+  const edgeData = getEdgeData(element.id);
+  assertEdgeDataDefined(edgeData, element.id);
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   useEffect(() => {
@@ -44,10 +50,10 @@ export default function EdgeLabelComment(props: LabelCommentProps) {
     if (isString(elmtLabel)) {
       setLabel(elmtLabel);
     }
-    setComment(edgeData?.comment || '');
+    setComment(edgeData.comment || '');
 
     const mappings =
-      edgeData?.data_mapping && edgeData.data_mapping.length > 0
+      edgeData.data_mapping && edgeData.data_mapping.length > 0
         ? edgeData.data_mapping
             .map(
               (con) => `${con.source_output || ''}->${con.target_input || ''}`
@@ -55,7 +61,7 @@ export default function EdgeLabelComment(props: LabelCommentProps) {
             .join(', ')
         : '';
     const conditions =
-      edgeData?.conditions && edgeData.conditions.length > 0
+      edgeData.conditions && edgeData.conditions.length > 0
         ? edgeData.conditions
             .map(
               (con) =>

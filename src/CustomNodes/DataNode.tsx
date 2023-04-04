@@ -2,11 +2,11 @@ import React, { memo } from 'react';
 import type { NodeProps } from 'reactflow';
 import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
-import useNodeDataStore from '../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../utils/typeGuards';
+import { getNodeData } from '../utils';
 
 function DataNode(args: NodeProps) {
-  const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
+  const nodeData = getNodeData(args.id);
   assertNodeDataDefined(nodeData, args.id);
 
   const uiProps = nodeData.ui_props;

@@ -5,11 +5,12 @@ import type { ChangeEvent } from 'react';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import type { EwoksRFNodeData } from '../../../types';
+import { getNodeData } from '../../../utils';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(props: { nodeId: string }) {
   const { nodeId } = props;
-  const nodeData = useNodeDataStore((state) => state.nodesData.get(nodeId));
+  const nodeData = getNodeData(nodeId);
   assertNodeDataDefined(nodeData, nodeId);
 
   const [nodeSize, setNodeSize] = useState<number>(

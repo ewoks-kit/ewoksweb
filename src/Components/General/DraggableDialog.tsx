@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import type { PaperProps } from '@material-ui/core/Paper';
 import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
-import { rfToEwoks } from 'utils';
+import { getEdgesData, rfToEwoks, getNodesData } from 'utils';
 
 import ReactJson from 'react-json-view';
 import {
@@ -25,8 +25,6 @@ import type {
   GraphRF,
 } from '../../types';
 import { useReactFlow } from 'reactflow';
-import useNodeDataStore from '../../store/useNodeDataStore';
-import useEdgeDataStore from '../../store/useEdgeDataStore';
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -60,8 +58,6 @@ interface Props {
 
 export default function DraggableDialog(props: Props) {
   const { getNodes, getEdges } = useReactFlow();
-
-  const edgesData = useEdgeDataStore((state) => state.edgesData);
 
   const [graph, setGraph] = useState<Graph>({});
   const [oldGraph, setOldGraph] = useState<Graph>({});
@@ -113,14 +109,16 @@ export default function DraggableDialog(props: Props) {
     event: React.MouseEvent<HTMLElement>,
     newSelection: string
   ) => {
-    const { nodesData } = useNodeDataStore.getState();
     const graphRf: GraphRF = {
       graph: graphInfo,
       nodes: getNodes().map((nod) => {
-        return { ...nod, data: nodesData.get(nod.id) as EwoksRFNodeData };
+        return { ...nod, data: getNodesData().get(nod.id) as EwoksRFNodeData };
       }),
       links: getEdges().map((edge) => {
-        return { ...edge, data: edgesData.get(edge.id) as EwoksRFLinkData };
+        return {
+          ...edge,
+          data: getEdgesData().get(edge.id) as EwoksRFLinkData,
+        };
       }),
     };
     setSelection(newSelection);

@@ -12,7 +12,6 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import bendingText from 'CustomEdges/BendingTextEdge';
 import multilineText from 'CustomEdges/MultilineTextEdge';
 import getAround from 'CustomEdges/GetAroundEdge';
-
 import FunctionNode from 'CustomNodes/FunctionNode';
 import NoteNode from 'CustomNodes/NoteNode';
 import ExecutionStepsNode from 'CustomNodes/ExecutionStepsNode';
@@ -29,6 +28,7 @@ import { useGraphId } from '../../store/graph-hooks';
 import useSelectedElementStore from '../../store/useSelectedElementStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
+import { getEdgesData, getNodeData, getNodesData } from '../../utils';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -80,7 +80,6 @@ function Canvas() {
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
-  const edgesData = useEdgeDataStore((state) => state.edgesData);
 
   const graphId = useGraphId();
 
@@ -130,8 +129,7 @@ function Canvas() {
   }
 
   const onPaneClick = () => {
-    const { nodesData } = useNodeDataStore.getState();
-    nodesData.forEach((nodData, id) => {
+    getNodesData().forEach((nodData, id) => {
       if (nodData.ui_props.details === true) {
         setNodeData(id, {
           ...nodData,
@@ -248,7 +246,6 @@ function Canvas() {
     // edgeUpdate should not happen and a message informs it is not ewoks-compatible
     const nodesRF = getNodes();
     const edgesRF = getEdges();
-    const { nodesData } = useNodeDataStore.getState();
     const { isValid, reason } = isValidLink(
       newConnection,
       {
@@ -256,7 +253,7 @@ function Canvas() {
         links: edgesRF as EwoksRFLink[],
         graph: graphInfo,
       },
-      nodesData,
+      getNodesData(),
       oldEdge
     );
     if (!isValid) {
@@ -277,8 +274,7 @@ function Canvas() {
       });
       return;
     }
-    const { nodesData } = useNodeDataStore.getState();
-    const newLink = addConnectionToGraph(params, nodesData);
+    const newLink = addConnectionToGraph(params, getNodesData());
 
     if (newLink) {
       setEdgeData(newLink.id, newLink.data);
@@ -302,8 +298,8 @@ function Canvas() {
     if (!nodeTmp) {
       return;
     }
-    const { nodesData } = useNodeDataStore.getState();
-    const nodeData = nodesData.get(selectedElement.id);
+
+    const nodeData = getNodesData().get(selectedElement.id);
     if (!nodeData) {
       return;
     }
@@ -316,12 +312,15 @@ function Canvas() {
       addRecentGraph({
         graph: graphInfo,
         nodes: getNodes().map((nod) => {
-          return { ...nod, data: { ...nod.data, ...nodesData.get(nod.id) } };
+          return {
+            ...nod,
+            data: { ...nod.data, ...getNodesData().get(nod.id) },
+          };
         }),
         links: getEdges().map((edge) => {
           return {
             ...edge,
-            data: { ...edge.data, ...edgesData.get(edge.id) },
+            data: { ...edge.data, ...getEdgesData().get(edge.id) },
           };
         }),
       });
@@ -363,10 +362,8 @@ function Canvas() {
     const charCode = String.fromCodePoint(event.which).toLowerCase();
 
     const nodesIds = [...storeRF.getState().nodeInternals.keys()];
-    const node = storeRF.getState().nodeInternals.get(selectedElement.id);
-    const nodeData = useNodeDataStore
-      .getState()
-      .nodesData.get(selectedElement.id);
+    const node = getNode(selectedElement.id);
+
     const keys = event.ctrlKey || event.metaKey;
     if (keys && charCode === 'v') {
       event.preventDefault();
@@ -374,7 +371,7 @@ function Canvas() {
       if ((selectedElement.type === 'node', node)) {
         const newClone: EwoksRFNode = {
           ...node,
-          ...nodeData,
+          ...getNodeData(selectedElement.id),
           id: calcNewId(selectedElement.id, nodesIds),
           selected: false,
           position: {

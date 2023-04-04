@@ -9,6 +9,7 @@ import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../types';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../utils/typeGuards';
+import { getNodeData } from '../utils';
 
 function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
   const { getNodes, getEdges } = useReactFlow();
@@ -17,7 +18,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
   const graphInfo = useStore((state) => state.graphInfo);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const nodesData = useNodeDataStore((state) => state.nodesData);
-  const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
+  const nodeData = getNodeData(id);
   assertNodeDataDefined(nodeData, id);
 
   const { ui_props: uiProps } = nodeData;
