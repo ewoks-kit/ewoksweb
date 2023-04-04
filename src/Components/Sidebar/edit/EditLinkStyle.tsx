@@ -24,7 +24,6 @@ import { MarkerType } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { useSelectedElement } from '../../../store/graph-hooks';
-import { getEdgeData } from '../../../utils';
 
 const useStyles = DashboardStyle;
 
@@ -33,7 +32,7 @@ export default function EditLinkStyle() {
   const classes = useStyles();
   const element = useSelectedElement() as EwoksRFLink;
   const { setEdges, getEdges } = useReactFlow();
-  const edgeData = getEdgeData(element.id);
+  const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 

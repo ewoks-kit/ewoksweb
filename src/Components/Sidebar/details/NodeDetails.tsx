@@ -33,7 +33,6 @@ import {
 } from '../../../utils/typeGuards';
 import { useNodesIds } from '../../../store/graph-hooks';
 import useSelectedElementStore from '../../../store/useSelectedElementStore';
-import { getNodeData } from '../../../utils';
 
 const useStyles = DashboardStyle;
 
@@ -42,7 +41,7 @@ export default function NodeDetails() {
   const classes = useStyles();
   const element = useSelectedElementStore((state) => state.selectedElement);
 
-  const nodeData = getNodeData(element.id);
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
   assertNodeDataDefined(nodeData, element.id);
 
   const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
@@ -263,7 +262,7 @@ export default function NodeDetails() {
               (used for method and script as the required inputs are unknown).`}
             >
               <div>
-                <b>Inputs-complete</b>
+                <b>Inputs Complete</b>
                 <Checkbox
                   checked={inputsComplete}
                   onChange={(event) =>

@@ -16,7 +16,6 @@ import { useReactFlow } from 'reactflow';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { useSelectedElement } from '../../../store/graph-hooks';
 import type { EwoksRFLink } from '../../../types';
-import { getEdgeData } from '../../../utils';
 
 const useStyles = DashboardStyle;
 
@@ -41,7 +40,7 @@ export default function EdgeLabelComment(props: LabelCommentProps) {
   ]);
   const [valueIsChanged, setValueIsChanged] = useState(false);
 
-  const edgeData = getEdgeData(element.id);
+  const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 

@@ -11,7 +11,6 @@ import useConfigStore from '../../../store/useConfigStore';
 import AdvancedDetailsCheckbox from './AdvancedDetailsCheckbox';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { useSelectedElement } from '../../../store/graph-hooks';
-import { getEdgeData } from '../../../utils';
 
 const useStyles = DashboardStyle;
 
@@ -19,8 +18,9 @@ export default function LinkDetails() {
   const classes = useStyles();
 
   const element = useSelectedElement() as EwoksRFLink;
-  const edgeData = getEdgeData(element.id);
+  const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
+
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   const showAdvancedDetails = useConfigStore(

@@ -9,7 +9,6 @@ import type { NodeProps } from 'reactflow';
 import type { EwoksRFNodeData } from '../types';
 import useNodeDataStore from '../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../utils/typeGuards';
-import { getNodeData } from '../utils';
 
 type NoteProps = NodeProps<EwoksRFNodeData>;
 
@@ -17,7 +16,7 @@ const NoteNode = (args: NoteProps) => {
   const [comment, setComment] = useState('');
 
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
-  const nodeData = getNodeData(args.id);
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
   assertNodeDataDefined(nodeData, args.id);
 
   useEffect(() => {

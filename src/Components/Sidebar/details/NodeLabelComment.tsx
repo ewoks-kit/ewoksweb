@@ -7,7 +7,6 @@ import {
   assertNodeDataDefined,
   assertElementIsNodeType,
 } from '../../../utils/typeGuards';
-import { getNodeData } from '../../../utils';
 
 const useStyles = DashboardStyle;
 
@@ -30,7 +29,9 @@ export default function NodeLabelComment(props: LabelCommentProps) {
 
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
-  const nodeData = getNodeData(selectedElement.id);
+  const nodeData = useNodeDataStore((state) =>
+    state.nodesData.get(selectedElement.id)
+  );
   assertNodeDataDefined(nodeData, selectedElement.id);
 
   useEffect(() => {

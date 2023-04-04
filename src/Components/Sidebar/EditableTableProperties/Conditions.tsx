@@ -6,7 +6,6 @@ import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
-import { getEdgeData } from '../../../utils';
 
 interface ConditionsProps {
   element: EwoksRFLink;
@@ -14,7 +13,7 @@ interface ConditionsProps {
 // DOC: The conditions for a link are being set in this component
 export default function Conditions(props: ConditionsProps) {
   const { element } = props;
-  const edgeData = getEdgeData(element.id);
+  const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
 
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);

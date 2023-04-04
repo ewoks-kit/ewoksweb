@@ -8,10 +8,9 @@ import { isClass } from './utils';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
-import { getEdgeData } from '../../../utils';
 
 export default function DataMappingComponent(element: EwoksRFLink) {
-  const edgeData = getEdgeData(element.id);
+  const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
