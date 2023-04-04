@@ -25,8 +25,7 @@ import CanvasBackground from './CanvasBackground';
 import CanvasMiniMap from './CanvasMiniMap';
 import { addConnectionToGraph, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
-import { useGraphId, useSelectedElement } from '../../store/graph-hooks';
-import { isNode } from '../../utils/typeGuards';
+import { useGraphId } from '../../store/graph-hooks';
 import useSelectedElementStore from '../../store/useSelectedElementStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
@@ -88,8 +87,6 @@ function Canvas() {
   const selectedElement = useSelectedElementStore(
     (state) => state.selectedElement
   );
-  // const selectedElement = useSelectedElement();
-
   const {
     fitView,
     setNodes,
