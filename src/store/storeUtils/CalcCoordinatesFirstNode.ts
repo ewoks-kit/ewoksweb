@@ -4,8 +4,8 @@ import type { XYPosition } from 'reactflow';
 export function calcCoordinatesFirstNode(nodes: EwoksRFNode[]) {
   const boundaries = nodes.reduce<XYPosition>(
     (result, { position }) => {
-      const x = position?.x && position.x < result.x ? position.x : result.x;
-      const y = position?.y && position.y < result.y ? position.y : result.y;
+      const x = position.x < result.x ? position.x : result.x;
+      const y = position.y < result.y ? position.y : result.y;
 
       return { x, y };
     },

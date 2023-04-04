@@ -10,7 +10,7 @@ export function inNodesLinks(
     nodes: [],
     links: [],
   };
-  if (graph?.graph?.input_nodes && graph.graph.input_nodes.length > 0) {
+  if (graph.graph.input_nodes && graph.graph.input_nodes.length > 0) {
     const inNodesInputed: string[] = [];
     graph.graph.input_nodes.forEach((inNod) => {
       const nodeTarget = graph.nodes.find((no) => no.id === inNod.node);

@@ -98,7 +98,7 @@ export default function ExecutionDetails() {
 
   function formatedDate(job: Event) {
     // TODO: works but is not entirelly correct but suggested by eslint
-    const label = allWorkflows?.find((work) => job.workflow_id === work.id)
+    const label = allWorkflows.find((work) => job.workflow_id === work.id)
       ?.label;
 
     const dat = new Date(job.time || '');
@@ -134,26 +134,18 @@ export default function ExecutionDetails() {
       setGettingFromServer(true);
       try {
         const response = await getWorkflow(workflowId);
-        if (response.data) {
-          initGraph(response.data, 'fromServer');
-          // TODO: get rid of timeout?
-          setTimeout(() => {
-            // DOC:
-            const events = getEventsForJob();
 
-            // TODO: timeout is needed because executingEvents try to find
-            // the nodes before they are there from the server
-            // probably because initGraph changes the graphRF used in executingEvents
-            events.forEach((ev) => setExecutingEvents(ev, false));
-          }, 400);
-        } else {
-          setOpenSnackbar({
-            open: true,
-            text:
-              'Could not locate the requested workflow! Maybe it is deleted!',
-            severity: 'warning',
-          });
-        }
+        initGraph(response.data, 'fromServer');
+        // TODO: get rid of timeout?
+        setTimeout(() => {
+          // DOC:
+          const events = getEventsForJob();
+
+          // TODO: timeout is needed because executingEvents try to find
+          // the nodes before they are there from the server
+          // probably because initGraph changes the graphRF used in executingEvents
+          events.forEach((ev) => setExecutingEvents(ev, false));
+        }, 400);
       } catch (error) {
         setOpenSnackbar({
           open: true,

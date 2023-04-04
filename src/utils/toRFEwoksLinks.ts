@@ -23,88 +23,85 @@ export function toRFEwoksLinks(
   // DOC: calculate the links from inputs-outputs of the Ewoks graph
   const inOutTempGraph = calcInOutLinks(tempGraph);
 
-  if (inOutTempGraph.links) {
-    return inOutTempGraph.links.map(
-      ({
+  return inOutTempGraph.links.map(
+    ({
+      source,
+      target,
+      data_mapping = [],
+      sub_target,
+      sub_source,
+      on_error = false,
+      conditions = [],
+      map_all_data = true,
+      required = false,
+      uiProps = {},
+      startEnd,
+    }) => {
+      const [sourceTask, targetTask] = calcTasksForLink(
+        tempGraph,
         source,
         target,
-        data_mapping = [],
-        sub_target,
-        sub_source,
-        on_error,
-        conditions,
-        map_all_data,
-        required,
-        uiProps,
-        startEnd,
-      }) => {
-        const [sourceTask, targetTask] = calcTasksForLink(
-          tempGraph,
-          source,
-          target,
-          newNodeSubgraphs,
-          tasks
-        );
-        const color = uiProps?.style?.stroke || 'rgb(60, 81, 202)';
+        newNodeSubgraphs,
+        tasks
+      );
+      const color = uiProps.style?.stroke || 'rgb(60, 81, 202)';
 
-        const link: EwoksRFLink = {
-          id: `${source}:${uiProps?.sourceHandle ?? ''}->${target}:${
-            uiProps?.targetHandle ?? ''
-          }_${id++}`,
-          label: calcLabel(uiProps || {}, conditions || [], data_mapping || []),
-          source: source.toString(),
-          target: target.toString(),
+      const link: EwoksRFLink = {
+        id: `${source}:${uiProps.sourceHandle ?? ''}->${target}:${
+          uiProps.targetHandle ?? ''
+        }_${id++}`,
+        label: calcLabel(uiProps, conditions, data_mapping),
+        source: source.toString(),
+        target: target.toString(),
 
-          targetHandle: calcTargetHandle(uiProps, sub_target || ''),
-          sourceHandle: calcSourceHandle(uiProps, sub_source || ''),
-          type: uiProps?.type || '',
-          markerEnd: uiProps?.markerEnd ?? '',
-          animated: uiProps?.animated ?? false,
-          style: {
-            stroke: uiProps?.style?.stroke || '#96a5f9',
-            strokeWidth: '3px',
+        targetHandle: calcTargetHandle(uiProps, sub_target),
+        sourceHandle: calcSourceHandle(uiProps, sub_source),
+        type: uiProps.type || '',
+        markerEnd: uiProps.markerEnd ?? '',
+        animated: uiProps.animated ?? false,
+        style: {
+          stroke: uiProps.style?.stroke || '#96a5f9',
+          strokeWidth: '3px',
+        },
+        labelBgStyle: {
+          fill: 'rgb(223, 226, 247)',
+          fillOpacity: 1,
+          strokeWidth: '3px',
+          stroke: color,
+        },
+        labelBgPadding: [8, 4],
+        labelBgBorderRadius: 4,
+        labelStyle: {
+          color,
+          fill: color,
+          fontWeight: 500,
+          fontSize: 14,
+        },
+        data: {
+          startEnd: startEnd || false,
+          getAroundProps: uiProps.getAroundProps || {
+            x: 0,
+            y: 0,
           },
-          labelBgStyle: {
-            fill: 'rgb(223, 226, 247)',
-            fillOpacity: 1,
-            strokeWidth: '3px',
-            stroke: color,
-          },
-          labelBgPadding: [8, 4],
-          labelBgBorderRadius: 4,
-          labelStyle: {
-            color,
-            fill: color,
-            fontWeight: 500,
-            fontSize: 14,
-          },
-          data: {
-            startEnd: startEnd || false,
-            getAroundProps: uiProps?.getAroundProps || {
-              x: 0,
-              y: 0,
-            },
-            // DOC: node optional_input_names are link's optional_output_names
-            links_optional_output_names: targetTask.optional_input_names || [],
-            // DOC: node required_input_names are link's required_output_names
-            links_required_output_names: targetTask.required_input_names || [],
-            // DOC: node output_names are link's input_names
-            links_input_names: sourceTask.output_names || [],
-            data_mapping,
-            required: required || false,
-            sub_target: sub_target || '',
-            sub_source: sub_source || '',
-            conditions: conditions || [],
-            map_all_data: map_all_data ?? true,
-            on_error: on_error || false,
-            comment: uiProps?.comment ?? '',
-          },
-        };
-        return link;
-      }
-    );
-  }
-  return [] as EwoksRFLink[];
+          // DOC: node optional_input_names are link's optional_output_names
+          links_optional_output_names: targetTask.optional_input_names || [],
+          // DOC: node required_input_names are link's required_output_names
+          links_required_output_names: targetTask.required_input_names || [],
+          // DOC: node output_names are link's input_names
+          links_input_names: sourceTask.output_names || [],
+          data_mapping,
+          required,
+          sub_target,
+          sub_source,
+          conditions,
+          map_all_data,
+          on_error,
+          comment: uiProps.comment ?? '',
+        },
+      };
+      return link;
+    }
+  );
 }
 
 function calcLabel(
@@ -112,17 +109,17 @@ function calcLabel(
   conditions: Conditions[],
   data_mapping: DataMapping[]
 ): string {
-  if (uiProps?.label) {
-    return uiProps?.label;
+  if (uiProps.label) {
+    return uiProps.label;
   }
 
-  if (conditions && conditions.length > 0) {
+  if (conditions.length > 0) {
     return conditions
       .map((el) => `${el.source_output || ''}->${(el.value as string) || ''}`)
       .join(', ');
   }
 
-  if (data_mapping && data_mapping.length > 0) {
+  if (data_mapping.length > 0) {
     return data_mapping
       .map((el) => `${el.source_output || ''}->${el.target_input || ''}`)
       .join(', ');
@@ -133,14 +130,14 @@ function calcLabel(
 
 function calcTargetHandle(
   uiProps: UiPropsLinks | undefined,
-  sub_target: string
+  sub_target: string | undefined
 ): string {
   return uiProps?.targetHandle ?? sub_target ?? 'tl';
 }
 
 function calcSourceHandle(
   uiProps: UiPropsLinks | undefined,
-  sub_source: string
+  sub_source: string | undefined
 ): string {
   return uiProps?.sourceHandle ?? sub_source ?? 'sr';
 }

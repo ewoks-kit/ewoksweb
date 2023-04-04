@@ -20,17 +20,23 @@ export default function ManageWorkflows() {
     initializedGraph
   );
   const [categoryValue, setCategoryValue] = useState('');
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   async function setInputWorkflowValue(workflowDetails: WorkflowDescription) {
-    if (workflowDetails) {
-      // TODO: error handling
+    try {
       const response = await getWorkflow(workflowDetails.id);
       setWorkflowValue(response.data);
+    } catch {
+      setOpenSnackbar({
+        open: true,
+        text: 'Workflow could not be retrieved!',
+        severity: 'success',
+      });
     }
   }
 
   function setCategoryFilter(category: string) {
-    setCategoryValue(category ?? '');
+    setCategoryValue(category);
   }
 
   return (

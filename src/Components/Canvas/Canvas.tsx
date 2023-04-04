@@ -80,8 +80,10 @@ function Canvas() {
   const setNodesData = useNodeDataStore((state) => state.setNodesData);
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
+  const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
 
   const nodesData = useNodeDataStore((state) => state.nodesData);
+  const edgesData = useEdgeDataStore((state) => state.edgesData);
 
   const graphId = useGraphId();
 
@@ -121,31 +123,15 @@ function Canvas() {
 
   function onNodesChange(changes: NodeChange[]) {
     const newNodes = applyNodeChanges(changes, getNodes());
-    if (workingGraph.graph.id !== graphId) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Any node changes in any subgraph will not be saved!',
-        severity: 'warning',
-      });
-    }
     storeRF.getState().setNodes(newNodes);
   }
 
   function onEdgesChange(changes: EdgeChange[]) {
     const newEdges = applyEdgeChanges(changes, getEdges());
-    if (workingGraph.graph.id !== graphId) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Any link changes in any subgraph will not be saved!',
-        severity: 'warning',
-      });
-    }
     storeRF.getState().setEdges(newEdges);
   }
 
   const onPaneClick = () => {
-    // TBD: Handle details differently and remove nodesData from canvas?
-    // also need to use type in Node and carry the task_identifier for onDoubleClick
     nodesData.forEach((nodData, id) => {
       if (nodData.ui_props.details === true) {
         setNodeData(id, {
@@ -323,13 +309,24 @@ function Canvas() {
       return;
     }
     if (nodeData.task_props.task_type === 'graph') {
-      if (workingGraph.graph.id !== graphId) {
-        addRecentGraph({
-          graph: graphInfo,
-          nodes: getNodes(),
-          links: getEdges() as EwoksRFLink[],
-        });
-      }
+      setOpenSnackbar({
+        open: true,
+        text: 'Any link changes in any subgraph will not be saved!',
+        severity: 'warning',
+      });
+      addRecentGraph({
+        graph: graphInfo,
+        nodes: getNodes().map((nod) => {
+          return { ...nod, data: { ...nod.data, ...nodesData.get(nod.id) } };
+        }),
+        links: getEdges().map((edge) => {
+          return {
+            ...edge,
+            data: { ...edge.data, ...edgesData.get(edge.id) },
+          };
+        }),
+      });
+
       const subgraph = recentGraphs.find(
         (gr) => gr.graph.id === nodeData.task_props.task_identifier
       );
@@ -338,6 +335,7 @@ function Canvas() {
         setNodes(subgraph.nodes);
 
         setNodesData(subgraph.nodes);
+        setEdgesData(subgraph.links);
 
         setEdges(subgraph.links);
 
@@ -377,8 +375,8 @@ function Canvas() {
           id: calcNewId(selectedElement.id, nodesIds),
           selected: false,
           position: {
-            x: (selectedElement.position?.x || 0) + 100,
-            y: (selectedElement.position?.y || 0) + 100,
+            x: (selectedElement.position.x || 0) + 100,
+            y: (selectedElement.position.y || 0) + 100,
           },
         };
 

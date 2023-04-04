@@ -8,6 +8,7 @@ import useStore from '../../store/useStore';
 import { useReactFlow } from 'reactflow';
 import useSelectedElementStore from '../../store/useSelectedElementStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
+import useEdgeDataStore from '../../store/useEdgeDataStore';
 
 const useStyles = DashboardStyle;
 
@@ -23,6 +24,7 @@ export default function SubgraphsStack() {
     return state.subgraphsStack;
   });
   const setNodesData = useNodeDataStore((state) => state.setNodesData);
+  const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
 
   const setSelectedElement = useSelectedElementStore(
     (state) => state.setSelectedElement
@@ -48,6 +50,7 @@ export default function SubgraphsStack() {
       setNodes(subgraph.nodes);
       setNodesData(subgraph.nodes);
       setEdges(subgraph.links);
+      setEdgesData(subgraph.links);
       setGraphInfo(subgraph.graph);
       setSelectedElement({ type: 'graph', id: subgraph.graph.id });
       setTimeout(() => {

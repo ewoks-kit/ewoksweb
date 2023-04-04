@@ -32,69 +32,65 @@ export function toRFEwoksNodes(
     inOutTempGraph.nodes = [...inOutTempGraph.nodes, ...outNodeLinks.nodes];
   }
 
-  if (inOutTempGraph.nodes) {
-    return inOutTempGraph.nodes.map(
-      ({
-        id,
-        task_type,
-        task_identifier,
-        label,
-        default_inputs,
-        inputs_complete,
-        default_error_node,
-        default_error_attributes,
-        task_generator,
-        uiProps,
-      }) => {
-        const nodeType = calcNodeType(inputsAl, outputsAl, task_type, id);
+  return inOutTempGraph.nodes.map(
+    ({
+      id,
+      task_type,
+      task_identifier,
+      label,
+      default_inputs,
+      inputs_complete,
+      default_error_node,
+      default_error_attributes,
+      task_generator,
+      uiProps,
+    }) => {
+      const nodeType = calcNodeType(inputsAl, outputsAl, task_type, id);
 
-        const node: EwoksRFNode = {
-          id: id.toString(),
-          type: task_type,
-          data: {
-            ewoks_props: {
-              label: label ?? task_identifier,
-              default_inputs: default_inputs || [],
-              inputs_complete: inputs_complete || false,
-              default_error_node: default_error_node || false,
-              default_error_attributes: default_error_attributes || {
-                map_all_data: true,
-                data_mapping: [],
-              },
-              task_generator: task_generator || '',
+      const node: EwoksRFNode = {
+        id: id.toString(),
+        type: task_type,
+        data: {
+          ewoks_props: {
+            label: label ?? task_identifier,
+            default_inputs: default_inputs || [],
+            inputs_complete: inputs_complete || false,
+            default_error_node: default_error_node || false,
+            default_error_attributes: default_error_attributes || {
+              map_all_data: true,
+              data_mapping: [],
             },
-            task_props: {
-              task_type,
-              task_identifier,
-              task_icon: uiProps?.task_icon || '',
-            },
-            ui_props: {
-              nodeWidth: uiProps?.nodeWidth ?? 120,
-              executing: false,
-              type: nodeType,
-              icon: uiProps?.node_icon ?? uiProps?.icon ?? '',
-              moreHandles: uiProps?.moreHandles ?? false,
-              details: uiProps?.details ?? false,
-              withImage: uiProps?.withImage ?? true,
-              withLabel: uiProps?.withLabel ?? true,
-              colorBorder: uiProps?.colorBorder ?? '',
-            },
-            comment: uiProps?.comment ?? '',
+            task_generator: task_generator || '',
           },
-          position: uiProps?.position ?? { x: 100, y: 100 },
-        };
+          task_props: {
+            task_type,
+            task_identifier,
+            task_icon: uiProps?.task_icon || '',
+          },
+          ui_props: {
+            nodeWidth: uiProps?.nodeWidth ?? 120,
+            executing: false,
+            type: nodeType,
+            icon: uiProps?.node_icon ?? uiProps?.icon ?? '',
+            moreHandles: uiProps?.moreHandles ?? false,
+            details: uiProps?.details ?? false,
+            withImage: uiProps?.withImage ?? true,
+            withLabel: uiProps?.withLabel ?? true,
+            colorBorder: uiProps?.colorBorder ?? '',
+          },
+          comment: uiProps?.comment ?? '',
+        },
+        position: uiProps?.position ?? { x: 100, y: 100 },
+      };
 
-        return addNodeProperties(
-          task_type,
-          newNodeSubgraphs,
-          task_identifier,
-          node,
-          tasks,
-          uiProps?.task_category || ''
-        );
-      }
-    );
-  }
-
-  return [];
+      return addNodeProperties(
+        task_type,
+        newNodeSubgraphs,
+        task_identifier,
+        node,
+        tasks,
+        uiProps?.task_category || ''
+      );
+    }
+  );
 }

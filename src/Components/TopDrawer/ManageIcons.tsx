@@ -55,7 +55,7 @@ export default function ManageIcons() {
   async function deleteTheIcon() {
     try {
       const tasksData = await getTaskDescription();
-      if (tasksData?.data?.items?.length > 0) {
+      if (tasksData.data.items.length > 0) {
         const allTasks = tasksData.data.items;
 
         if (allTasks.some((task) => task.icon === selectedIcon)) {

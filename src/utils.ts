@@ -1,5 +1,5 @@
 import type { GraphEwoks, GraphRF, Icon, WorkflowDescription } from './types';
-import type { AxiosError } from 'axios';
+import type { AxiosError, AxiosResponse } from 'axios';
 import axios from 'axios';
 import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
 import { toEwoksLinks } from './utils/toEwoksLinks';
@@ -15,10 +15,8 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
   let res: WorkflowDescription[] = [];
   try {
     const workflows = await getWorkflowsDescriptions();
-    if (workflows?.data) {
-      const workf: { items: WorkflowDescription[] } = workflows.data;
-      res = workf.items;
-    }
+    const workf: { items: WorkflowDescription[] } = workflows.data;
+    res = workf.items;
   } catch (error) {
     const err = error as AxiosError;
     if (err.response) {
@@ -46,7 +44,7 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
       {
         id: 'network error',
         label: 'network error',
-        category: err?.response?.status.toString(),
+        category: err.response?.status.toString(),
       },
     ];
   }
@@ -74,12 +72,14 @@ export async function getSubgraphs(
     results = await axios
       .all(notInRecent.map((id: string) => getWorkflow(id)))
       .then(
-        axios.spread((...res) => {
+        axios.spread((...res: AxiosResponse<GraphEwoks | null, unknown>[]) => {
+          const graphs: (GraphEwoks | null)[] = [...res].map((re) => re.data);
           // all requests are now complete in an array
           // if there is a null means the subgraph was not found
           // and it should show up in red
-          const resCln = res.filter((result) => result.data !== null);
-          return resCln.map((result) => result.data);
+          return graphs.reduce<GraphEwoks[]>((acc, data) => {
+            return data !== null ? [...acc, data] : acc;
+          }, []);
         })
       )
       .catch((error) => {
@@ -88,7 +88,7 @@ export async function getSubgraphs(
         return [];
       });
   }
-  return results ?? [];
+  return results;
 }
 
 export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
@@ -99,7 +99,7 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
 
   // DOC: remove "fromServer" which is for UIs internal use
   if (graph.uiProps?.source) {
-    delete graph.uiProps?.source;
+    delete graph.uiProps.source;
   }
 
   return {

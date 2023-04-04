@@ -104,7 +104,7 @@ export default function FormDialog(props: FormDialogProps) {
     if ('label' in element && isForGraph && newName) {
       saveGraph(element);
     } else if ('task_identifier' in element && newName) {
-      if (['cloneTask', 'newTask'].includes(action) && element) {
+      if (['cloneTask', 'newTask'].includes(action)) {
         saveTask(element);
         return;
       }

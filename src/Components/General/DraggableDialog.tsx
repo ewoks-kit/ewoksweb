@@ -82,10 +82,10 @@ export default function DraggableDialog(props: Props) {
   const { open, content, typeOfValues } = props;
 
   useEffect(() => {
-    setGraph(content?.object || {});
-    setOldGraph(content?.object || {});
+    setGraph(content.object || {});
+    setOldGraph(content.object || {});
     setIsOpen(open || false);
-    setTitle(content?.title || '');
+    setTitle(content.title || '');
     setCallbackProps(content.callbackProps);
     setName(content.id || '');
     setOldName(content.id || '');

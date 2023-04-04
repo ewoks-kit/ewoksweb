@@ -307,7 +307,7 @@ export default function NodeDetails() {
             >
               <AddCircleOutlineIcon />
             </IconButton>
-            {dataMapping && dataMapping.length > 0 && (
+            {dataMapping.length > 0 && (
               <EditableTable
                 headers={['Source', 'Target']}
                 defaultValues={dataMapping}

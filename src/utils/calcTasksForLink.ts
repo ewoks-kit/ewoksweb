@@ -50,7 +50,7 @@ function calcTask(
 
   const outputsOrOutputs: string[] = [];
 
-  if (subgraphNodeSource?.graph?.output_nodes) {
+  if (subgraphNodeSource?.graph.output_nodes) {
     subgraphNodeSource.graph.output_nodes.forEach((out) =>
       outputsOrOutputs.push(out.id)
     );

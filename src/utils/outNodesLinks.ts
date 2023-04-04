@@ -10,7 +10,7 @@ export function outNodesLinks(
     nodes: [],
     links: [],
   };
-  if (graph?.graph?.output_nodes && graph.graph.output_nodes.length > 0) {
+  if (graph.graph.output_nodes && graph.graph.output_nodes.length > 0) {
     const outNodesInputed: string[] = [];
     graph.graph.output_nodes.forEach((outNod) => {
       const nodeSource = graph.nodes.find((no) => no.id === outNod.node);

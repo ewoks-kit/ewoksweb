@@ -610,7 +610,7 @@ export default function EnhancedTable() {
                                         <Tooltip title={ev.node_id || ''}>
                                           <p>
                                             {ev.node_id?.slice(
-                                              ev.node_id?.lastIndexOf('.') + 1
+                                              ev.node_id.lastIndexOf('.') + 1
                                             )}
                                           </p>
                                         </Tooltip>
@@ -619,7 +619,7 @@ export default function EnhancedTable() {
                                         <Tooltip title={ev.task_id || ''}>
                                           <p>
                                             {ev.task_id?.slice(
-                                              ev.task_id?.lastIndexOf('.') + 1
+                                              ev.task_id.lastIndexOf('.') + 1
                                             )}
                                           </p>
                                         </Tooltip>

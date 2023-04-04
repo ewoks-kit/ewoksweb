@@ -20,7 +20,7 @@ const useStyles = makeStyles(() =>
 async function showFile(e: ChangeEvent<HTMLInputElement>): Promise<FileReader> {
   e.preventDefault();
   const reader: FileReader = new FileReader();
-  if (e.target?.files?.[0]) {
+  if (e.target.files?.[0]) {
     reader.readAsText(e.target.files[0]);
   }
   return reader;

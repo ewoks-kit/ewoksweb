@@ -35,8 +35,8 @@ export default function NodeLabelComment(props: LabelCommentProps) {
   assertNodeDataDefined(nodeData, selectedElement.id);
 
   useEffect(() => {
-    setLabel(nodeData?.ewoks_props.label || '');
-    setComment(nodeData?.comment || '');
+    setLabel(nodeData.ewoks_props.label || '');
+    setComment(nodeData.comment || '');
   }, [nodeData]);
 
   function saveLabel(labelLocal: string) {

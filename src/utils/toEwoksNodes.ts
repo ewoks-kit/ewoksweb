@@ -1,21 +1,19 @@
 import type { EwoksNode, EwoksRFNode, Inputs } from '../types';
 
 function cleanDefaultInputs(default_inputs: Inputs[]) {
-  return (
-    default_inputs.map((dIn) => {
-      return {
-        name: dIn.name,
-        value:
-          dIn.value === 'false'
-            ? false
-            : dIn.value === 'true'
-            ? true
-            : dIn.value === 'null'
-            ? null
-            : dIn.value,
-      };
-    }) || []
-  );
+  return default_inputs.map((dIn) => {
+    return {
+      name: dIn.name,
+      value:
+        dIn.value === 'false'
+          ? false
+          : dIn.value === 'true'
+          ? true
+          : dIn.value === 'null'
+          ? null
+          : dIn.value,
+    };
+  });
 }
 
 // EwoksRFNode --> EwoksNode for saving
@@ -59,7 +57,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
     }) => {
       if (task_type !== 'graph') {
         return {
-          id: id?.toString() || '',
+          id: id.toString() || '',
           label,
           task_type,
           task_identifier,
@@ -90,7 +88,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
       // node-icon is not in graphs? ok? Graphs have no editable Node Info where the node_icon is
       // all the rest are the same... merge 2 returns?
       return {
-        id: id?.toString() || '',
+        id: id.toString() || '',
         label,
         task_type,
         task_identifier,

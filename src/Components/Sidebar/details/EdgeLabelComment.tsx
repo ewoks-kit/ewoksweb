@@ -87,7 +87,7 @@ export default function EdgeLabelComment(props: LabelCommentProps) {
   }
 
   function setChanged(event: ChangeEvent<HTMLInputElement>) {
-    if (event && label !== event.target.value) {
+    if (label !== event.target.value) {
       setValueIsChanged(true);
     } else {
       setValueIsChanged(false);
@@ -95,14 +95,17 @@ export default function EdgeLabelComment(props: LabelCommentProps) {
   }
 
   function valueSelectedChanged(event: ChangeEvent<HTMLInputElement>) {
-    if (event?.target.textContent) {
+    if (event.target.textContent) {
       setChanged(event);
       setLabel(event.target.textContent);
     }
   }
 
-  function valueChanged(event: ChangeEvent<HTMLInputElement>) {
-    if (event?.target?.value) {
+  function valueChanged(event: ChangeEvent<HTMLInputElement> | undefined) {
+    if (!event) {
+      return;
+    }
+    if (event.target.value) {
       setChanged(event);
       setLabel(event.target.value);
     }
