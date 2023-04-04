@@ -1,6 +1,7 @@
 import type { DragEventHandler, MouseEvent } from 'react';
 import { useEffect, useRef } from 'react';
 import type { Node, Edge, Connection, NodeChange, EdgeChange } from 'reactflow';
+import { useUpdateNodeInternals } from 'reactflow';
 import { useOnSelectionChange } from 'reactflow';
 import ReactFlow, {
   Controls,
@@ -80,6 +81,7 @@ function Canvas() {
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
+  const updateNodeInternals = useUpdateNodeInternals();
 
   const graphId = useGraphId();
 
