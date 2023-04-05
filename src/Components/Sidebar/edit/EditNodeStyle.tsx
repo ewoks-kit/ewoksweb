@@ -5,6 +5,7 @@ import type { ChangeEvent } from 'react';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import type { EwoksRFNodeData } from '../../../types';
+import { useUpdateNodeInternals } from 'reactflow';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(props: { nodeId: string }) {
@@ -16,6 +17,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     nodeData.ui_props.nodeWidth || 100
   );
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
+  const updateNodeInternals = useUpdateNodeInternals();
 
   const debouncedNodeWidth = useDebounce(nodeSize, 500);
 
@@ -66,6 +68,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   };
 
   const moreHandlesChanged = (checked: boolean) => {
+    updateNodeInternals(nodeId);
     mergeNodeData(nodeId, {
       ui_props: {
         moreHandles: checked,
