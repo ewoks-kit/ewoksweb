@@ -32,6 +32,7 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       });
       return;
     }
+    console.log(edgeDataC);
 
     mergeEdgeData(element.id, {
       data_mapping: [

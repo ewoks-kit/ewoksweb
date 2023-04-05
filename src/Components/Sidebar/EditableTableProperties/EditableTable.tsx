@@ -137,6 +137,7 @@ function EditableTable(props: EditableTableProps) {
 
   function onSaveRow(id: string | undefined, index: number) {
     const oldRows = [...rows].filter((row, i) => index !== i);
+    console.log(id, index, oldRows);
 
     if (
       rows[index].name !== '' &&
@@ -204,6 +205,7 @@ function EditableTable(props: EditableTableProps) {
     const newRows = rows.filter((row) => {
       return row.id !== id;
     });
+    console.log(id);
 
     setRows(newRows);
     props.valuesChanged(newRows);
