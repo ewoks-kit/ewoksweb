@@ -33,6 +33,12 @@ const workingGraph = (
     // 1. Initialize the canvas while working on the new graph
     get().setSubgraphsStack({ id: '', label: '', resetStack: true });
     get().resetRecentGraphs();
+    // DOC: set the working graph twice to avoid bug with nodeData.
+    // Better solution?
+    set((state) => ({
+      ...state,
+      workingGraph: initializedRFGraph,
+    }));
 
     // 2. Get node-subgraphs for the graph
     const newNodeSubgraphs = await findAllSubgraphs(
@@ -92,15 +98,6 @@ const workingGraph = (
     useSelectedElementStore
       .getState()
       .setSelectedElement({ type: 'graph', id: graph.graph.id });
-
-    // DOC: set the working graph twice to avoid bug with nodeData.
-    // Better solution?
-    set((state) => ({
-      ...state,
-      workingGraph: initializedRFGraph,
-      undoRedo: [{ action: 'Opened new graph', graph }],
-      undoIndex: 0,
-    }));
 
     useNodeDataStore.getState().setNodesData(graph.nodes);
     useEdgeDataStore.getState().setEdgesData(graph.links);

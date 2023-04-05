@@ -2,32 +2,35 @@ import React, { memo } from 'react';
 import type { NodeProps } from 'reactflow';
 import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
-import { assertNodeDataDefined } from '../utils/typeGuards';
 import useNodeDataStore from '../store/useNodeDataStore';
 
 function DataNode(args: NodeProps) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
-  assertNodeDataDefined(nodeData, args.id);
 
-  const uiProps = nodeData.ui_props;
+  // causes too much instability by breaking the app due to re-renders and race conditions
+  // assertNodeDataDefined(nodeData, args.id);
+
+  const uiProps = nodeData?.ui_props;
 
   return (
     <Node
       isGraph={false}
-      type={uiProps.type || 'internal'}
-      label={nodeData.ewoks_props.label || ''}
+      type={uiProps?.type || 'internal'}
+      label={nodeData?.ewoks_props.label || ''}
       selected={args.selected}
       color="#ced3ee"
-      image={uiProps.icon || ''}
-      comment={nodeData.comment || ''}
-      moreHandles={uiProps.moreHandles}
-      details={uiProps.details}
-      withImage={'withImage' in uiProps ? uiProps.withImage : true}
-      nodeWidth={'nodeWidth' in uiProps ? uiProps.nodeWidth : 100}
-      withLabel={'withLabel' in uiProps ? uiProps.withLabel : true}
-      colorBorder={'colorBorder' in uiProps ? uiProps.colorBorder : ''}
+      image={uiProps?.icon || ''}
+      comment={nodeData?.comment || ''}
+      moreHandles={uiProps?.moreHandles}
+      details={uiProps?.details}
+      withImage={uiProps && 'withImage' in uiProps ? uiProps.withImage : true}
+      nodeWidth={uiProps && 'nodeWidth' in uiProps ? uiProps.nodeWidth : 100}
+      withLabel={uiProps && 'withLabel' in uiProps ? uiProps.withLabel : true}
+      colorBorder={
+        uiProps && 'colorBorder' in uiProps ? uiProps.colorBorder : ''
+      }
       content={<div style={{ ...style.io } as React.CSSProperties} />}
-      executing={uiProps.executing || false}
+      executing={uiProps?.executing || false}
     />
   );
 }

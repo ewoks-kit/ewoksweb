@@ -8,7 +8,6 @@ import useStore from '../store/useStore';
 import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../types';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../store/useNodeDataStore';
-import { assertNodeDataDefined } from '../utils/typeGuards';
 import { getNodesData } from '../utils';
 
 function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
@@ -19,9 +18,10 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
 
-  assertNodeDataDefined(nodeData, id);
+  // causes too much instability by breaking the app due to re-renders and race conditions
+  // assertNodeDataDefined(nodeData, id);
 
-  const { ui_props: uiProps } = nodeData;
+  const uiProps = nodeData?.ui_props;
 
   const isValidConnection = (connection: Connection) => {
     const graphRf: GraphRF = {
@@ -47,22 +47,22 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
   return (
     <Node
       isGraph
-      moreHandles={uiProps.moreHandles || false}
-      withImage={uiProps.withImage}
-      nodeWidth={uiProps.nodeWidth || 120}
-      withLabel={uiProps.withLabel}
-      colorBorder={uiProps.colorBorder}
+      moreHandles={uiProps?.moreHandles || false}
+      withImage={uiProps?.withImage}
+      nodeWidth={uiProps?.nodeWidth || 120}
+      withLabel={uiProps?.withLabel}
+      colorBorder={uiProps?.colorBorder}
       // type is calculated in calcNodeType for subgraphs-inNodes-outNodes
-      type={uiProps.type || ''}
-      label={nodeData.ewoks_props.label || ''}
+      type={uiProps?.type || ''}
+      label={nodeData?.ewoks_props.label || ''}
       selected={selected}
-      color={uiProps.exists ? '#ced3ee' : 'red'}
-      image={uiProps.icon}
-      comment={nodeData.comment}
-      executing={uiProps.executing}
+      color={uiProps?.exists ? '#ced3ee' : 'red'}
+      image={uiProps?.icon}
+      comment={nodeData?.comment}
+      executing={uiProps?.executing}
       content={
         <>
-          {uiProps.inputs
+          {uiProps?.inputs
             ?.sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
             .map((input: { label: string }) => (
               <div
@@ -106,7 +106,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
                 )}
               </div>
             ))}
-          {uiProps.outputs
+          {uiProps?.outputs
             ?.sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
             .map((output: { label: string }) => (
               <div
