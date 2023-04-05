@@ -12,14 +12,13 @@ export default function DefaultInputs() {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const element = useSelectedElementStore((state) => state.selectedElement);
 
-  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
   assertNodeDataDefined(nodeData, element.id);
 
-  const defautInputs = nodeData.ewoks_props.default_inputs || [];
-
+  const defaultInputs = nodeData.ewoks_props.default_inputs || [];
   function addDefaultInputs(nodeDataProps: EwoksRFNodeData) {
-    if (defautInputs.some((x) => x.id === '')) {
+    if (defaultInputs.some((x) => x.id === '')) {
       setOpenSnackbar({
         open: true,
         text: 'Please fill in the empty line before adding another!',
@@ -27,20 +26,24 @@ export default function DefaultInputs() {
       });
     } else {
       const newNodeData = {
+        ...nodeDataProps,
         ewoks_props: {
+          ...nodeDataProps.ewoks_props,
           default_inputs: [
             ...(nodeDataProps.ewoks_props.default_inputs || []),
             { id: '', name: '', value: '' },
           ],
         },
       };
-      mergeNodeData(element.id, newNodeData);
+      setNodeData(element.id, newNodeData);
     }
   }
 
   const defaultInputsChanged = (table: EditableTableRow[]) => {
     const newNodeData = {
+      ...nodeData,
       ewoks_props: {
+        ...nodeData.ewoks_props,
         default_inputs: table.map((dval) => {
           return {
             id: dval.name,
@@ -50,7 +53,7 @@ export default function DefaultInputs() {
         }),
       },
     };
-    mergeNodeData(element.id, newNodeData);
+    setNodeData(element.id, newNodeData);
   };
 
   return (
@@ -72,10 +75,10 @@ export default function DefaultInputs() {
         </div>
       </SidebarTooltip>
 
-      {defautInputs.length > 0 && (
+      {defaultInputs.length > 0 && (
         <EditableTable
           headers={['Name', 'Value']}
-          defaultValues={defautInputs}
+          defaultValues={defaultInputs}
           valuesChanged={defaultInputsChanged}
           typeOfValues={[
             {

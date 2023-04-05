@@ -12,7 +12,7 @@ import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 export default function DataMappingComponent(element: EwoksRFLink) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
-  const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
+  const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const sourceNodeData = useNodeDataStore((state) =>
@@ -32,9 +32,9 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       });
       return;
     }
-    console.log(edgeDataC);
 
-    mergeEdgeData(element.id, {
+    setEdgeData(element.id, {
+      ...edgeDataC,
       data_mapping: [
         ...(edgeDataC.data_mapping || []),
         { id: '', name: '', value: '' },
@@ -50,7 +50,8 @@ export default function DataMappingComponent(element: EwoksRFLink) {
       };
     });
 
-    mergeEdgeData(element.id, {
+    setEdgeData(element.id, {
+      ...edgeData,
       data_mapping: dmap,
     });
   };

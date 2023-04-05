@@ -19,8 +19,6 @@ const useEdgeDataStore = create<EdgeDataState>((set) => ({
     }));
   },
   mergeEdgeData: (edgeId, edgeData) => {
-    console.log(edgeId, edgeData);
-
     set(({ edgesData }) => {
       const newData: EwoksRFLinkData = merge(
         {},
