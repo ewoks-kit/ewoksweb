@@ -25,6 +25,7 @@ const useNodeDataStore = create<NodeDataState>((set) => ({
         nodesData.get(nodeId),
         nodeData
       );
+
       return {
         nodesData: new Map(nodesData).set(nodeId, newData),
       };
