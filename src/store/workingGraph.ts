@@ -88,6 +88,11 @@ const workingGraph = (
       nodes: grfNodes,
       links: rfLinks,
     };
+
+    useSelectedElementStore
+      .getState()
+      .setSelectedElement({ type: 'graph', id: graph.graph.id });
+
     // DOC: set the working graph twice to avoid bug with nodeData.
     // Better solution?
     set((state) => ({
@@ -103,10 +108,6 @@ const workingGraph = (
     get().addRecentGraph(graph as GraphRF);
 
     get().setGraphInfo(graph.graph);
-
-    useSelectedElementStore
-      .getState()
-      .setSelectedElement({ type: 'graph', id: graph.graph.id });
 
     const newGraphNoData = {
       graph: graph.graph,
