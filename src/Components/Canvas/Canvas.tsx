@@ -29,6 +29,10 @@ import useSelectedElementStore from '../../store/useSelectedElementStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 import { getEdgesData, getNodeData, getNodesData } from '../../utils';
+import {
+  assertNodeDataDefined,
+  assertNodeDefined,
+} from '../../utils/typeGuards';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -361,17 +365,22 @@ function Canvas() {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLImageElement>) => {
     const charCode = String.fromCodePoint(event.which).toLowerCase();
 
-    const nodesIds = [...storeRF.getState().nodeInternals.keys()];
-    const node = getNode(selectedElement.id);
-
     const keys = event.ctrlKey || event.metaKey;
     if (keys && charCode === 'v') {
       event.preventDefault();
       event.stopPropagation();
-      if ((selectedElement.type === 'node', node)) {
+      if (selectedElement.type === 'node') {
+        const nodesIds = [...storeRF.getState().nodeInternals.keys()];
+
+        const node = getNode(selectedElement.id);
+        assertNodeDefined(node, selectedElement.id);
+
+        const nodeData = getNodeData(selectedElement.id);
+        assertNodeDataDefined(nodeData, selectedElement.id);
+
         const newClone: EwoksRFNode = {
           ...node,
-          ...getNodeData(selectedElement.id),
+          data: nodeData,
           id: calcNewId(selectedElement.id, nodesIds),
           selected: false,
           position: {
