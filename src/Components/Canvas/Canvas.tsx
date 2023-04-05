@@ -111,8 +111,6 @@ function Canvas() {
   });
 
   useEffect(() => {
-    console.log(workingGraph.nodes);
-
     setNodes(workingGraph.nodes);
     setEdges(workingGraph.links);
     setTimeout(() => {
@@ -161,8 +159,6 @@ function Canvas() {
 
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
-    console.log(workingGraph.graph.id, graphId);
-
     if (workingGraph.graph.id === graphId) {
       const stateRF = storeRF.getState();
       const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect() || {
