@@ -40,7 +40,7 @@ function isJsonString(str: string): boolean {
 function Upload(props: { children?: ReactNode } | undefined) {
   const classes = useStyles();
 
-  const { getNodes, getEdges, setNodes } = useReactFlow();
+  const rfInstance = useReactFlow();
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   const graphInfo = useStore((state) => state.graphInfo);
@@ -64,14 +64,15 @@ function Upload(props: { children?: ReactNode } | undefined) {
           if (graphOrSubgraph) {
             // TODO validate from disk workflows but visualize them
             // const { result } = validateEwoksGraph(newGraph);
-            await initGraph(newGraph, 'fromDisk');
+            await initGraph(newGraph, 'fromDisk', rfInstance);
           } else {
+            const nodes = rfInstance.getNodes();
             const { nodeWithoutData, data } = await setSubGraph(
               newGraph,
-              getNodes(),
-              getEdges()
+              nodes,
+              rfInstance.getEdges()
             );
-            setNodes([...getNodes(), nodeWithoutData]);
+            rfInstance.setNodes([...nodes, nodeWithoutData]);
             setNodeData(nodeWithoutData.id, data);
           }
         } else {

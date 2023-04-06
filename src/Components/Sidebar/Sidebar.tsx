@@ -35,7 +35,7 @@ export default function Sidebar() {
   // const classes = useStyles();
 
   const nodesIds = useNodesIds();
-  const { deleteElements, getNodes, setNodes, getEdges } = useReactFlow();
+  const rfInstance = useReactFlow();
 
   const selectedElement = useSelectedElementStore(
     (state) => state.selectedElement
@@ -68,22 +68,22 @@ export default function Sidebar() {
     }
 
     if (selectedElement.type === 'node') {
-      const node: Node | undefined = getNodes().find(
-        (nod) => nod.id === selectedElement.id
-      );
+      const node: Node | undefined = rfInstance
+        .getNodes()
+        .find((nod) => nod.id === selectedElement.id);
       // Need to set selectedElement to not be undefined or
       // when undefined it can show to graph.
       setSelectedElement({ type: 'graph', id: graphInfo.id });
-      deleteElements({ nodes: [node] as Node[] });
+      rfInstance.deleteElements({ nodes: [node] as Node[] });
       return;
     }
 
     if (selectedElement.type === 'edge') {
-      const edge: Edge | undefined = getEdges().find(
-        (edg) => edg.id === selectedElement.id
-      );
+      const edge: Edge | undefined = rfInstance
+        .getEdges()
+        .find((edg) => edg.id === selectedElement.id);
       setSelectedElement({ type: 'graph', id: graphInfo.id });
-      deleteElements({ edges: [edge] as Edge[] });
+      rfInstance.deleteElements({ edges: [edge] as Edge[] });
       return;
     }
 
@@ -110,7 +110,7 @@ export default function Sidebar() {
       }
     }
 
-    initGraph(initializedGraph);
+    initGraph(initializedGraph, undefined, rfInstance);
     setSubgraphsStack({ id: '', label: '', resetStack: true });
     resetRecentGraphs();
   };
@@ -121,9 +121,8 @@ export default function Sidebar() {
 
   const cloneNode = () => {
     if (selectedElement.type === 'node') {
-      const clonedNode = getNodes().find(
-        (nod) => nod.id === selectedElement.id
-      );
+      const nodes = rfInstance.getNodes();
+      const clonedNode = nodes.find((nod) => nod.id === selectedElement.id);
 
       if (!clonedNode) {
         setOpenSnackbar({
@@ -145,9 +144,7 @@ export default function Sidebar() {
         },
       };
 
-      const nodesRF = getNodes();
-
-      setNodes([...nodesRF, newClone]);
+      rfInstance.setNodes([...nodes, newClone]);
       setNodeData(newClone.id, clonedNodeData);
     } else {
       setOpenSnackbar({

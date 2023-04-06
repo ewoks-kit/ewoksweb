@@ -10,6 +10,7 @@ import { getWorkflow } from '../../api/api';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { textForError } from '../../utils';
+import { useReactFlow } from 'reactflow';
 
 export default function ExecutionDetails() {
   // const graphRF = useStore((state) => state.graphRF);
@@ -61,6 +62,8 @@ export default function ExecutionDetails() {
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const undoIndex = useStore((state) => state.undoIndex);
   const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
+
+  const rfInstance = useReactFlow();
 
   useEffect(() => {
     // DOC: for those live executing search the executedEvents
@@ -135,7 +138,7 @@ export default function ExecutionDetails() {
       try {
         const response = await getWorkflow(workflowId);
 
-        initGraph(response.data, 'fromServer');
+        initGraph(response.data, 'fromServer', rfInstance);
         // TODO: get rid of timeout?
         setTimeout(() => {
           // DOC:
