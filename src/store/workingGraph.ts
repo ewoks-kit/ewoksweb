@@ -14,12 +14,14 @@ import { initializedRFGraph } from '../utils/InitializedEntities';
 import useSelectedElementStore from './useSelectedElementStore';
 import useNodeDataStore from './useNodeDataStore';
 import useEdgeDataStore from './useEdgeDataStore';
+import type { ReactFlowInstance } from 'reactflow';
 
 export interface WorkingGraphSlice {
   workingGraph: GraphRF;
   initGraph: (
     workingGraphObject: GraphEwoks,
-    source?: string
+    source?: string,
+    rfInstance?: ReactFlowInstance
   ) => Promise<GraphRF>;
 }
 
@@ -29,7 +31,11 @@ const workingGraph = (
 ): WorkingGraphSlice => ({
   workingGraph: initializedRFGraph,
 
-  initGraph: async (workingGraphObject, source): Promise<GraphRF> => {
+  initGraph: async (
+    workingGraphObject,
+    source,
+    rfInstance
+  ): Promise<GraphRF> => {
     // 1. Initialize the canvas while working on the new graph
     get().setSubgraphsStack({ id: '', label: '', resetStack: true });
     get().resetRecentGraphs();
@@ -88,14 +94,12 @@ const workingGraph = (
       nodes: grfNodes,
       links: rfLinks,
     };
-    // DOC: set the working graph twice to avoid bug with nodeData.
+    // DOC: reset RF nodes and edges before setting new nodes/edges data
     // Better solution?
-    set((state) => ({
-      ...state,
-      workingGraph: initializedRFGraph,
-      undoRedo: [{ action: 'Opened new graph', graph }],
-      undoIndex: 0,
-    }));
+    if (rfInstance) {
+      rfInstance.setNodes([]);
+      rfInstance.setEdges([]);
+    }
 
     useNodeDataStore.getState().setNodesData(graph.nodes);
     useEdgeDataStore.getState().setEdgesData(graph.links);
@@ -131,6 +135,12 @@ const workingGraph = (
       ...state,
       workingGraph: newGraphNoData,
     }));
+
+    if (rfInstance) {
+      rfInstance.setNodes(newGraphNoData.nodes);
+      rfInstance.setEdges(newGraphNoData.links);
+    }
+
     return graph;
   },
 });
