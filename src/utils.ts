@@ -13,12 +13,12 @@ import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
 import { calcNoteNodes } from './utils/calcNoteNodes';
 import { getWorkflowsDescriptions, getWorkflow } from './api/api';
-import orange2 from 'images/orange2.png';
+import orange3 from 'images/orange3.png';
 import { isEwoksServerErrorResponse } from './utils/typeGuards';
 import useNodeDataStore from './store/useNodeDataStore';
 import useEdgeDataStore from './store/useEdgeDataStore';
 
-export const ewoksNetwork = {};
+const DEFAULT_ICON = orange3;
 
 export async function getWorkflows(): Promise<WorkflowDescription[]> {
   let res: WorkflowDescription[] = [];
@@ -120,12 +120,12 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
 
 export function findImage(img: string | undefined, allIcons: Icon[]): string {
   if (!img) {
-    return orange2;
+    return DEFAULT_ICON;
   }
 
   const icon = allIcons.find((ico) => ico.name === img);
 
-  return icon?.image?.data_url || orange2;
+  return icon?.image?.data_url || DEFAULT_ICON;
 }
 
 export function textForError(error: unknown, alternative: string): string {

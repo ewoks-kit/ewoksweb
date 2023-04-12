@@ -10,7 +10,6 @@ import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
 import { calcCoordinatesFirstNode } from './storeUtils/CalcCoordinatesFirstNode';
-import orange2 from 'images/orange2.png';
 import type { GetState, SetState } from 'zustand';
 import type { State } from '../types';
 import { Position } from 'reactflow';
@@ -106,8 +105,7 @@ const subGraph = (
         ui_props: {
           exists: true,
           type: 'internal',
-
-          icon: subToAdd.graph.uiProps?.icon || orange2,
+          icon: subToAdd.graph.uiProps?.icon,
           inputs: inputsSub,
           outputs: outputsSub,
           withImage: true,
