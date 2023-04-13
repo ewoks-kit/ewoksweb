@@ -1,25 +1,16 @@
-import React, { memo, useEffect, useState } from 'react';
-import type { ChangeEvent } from 'react';
+import React, { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 import { contentStyle, style } from './NodeStyle';
 import Tooltip from '@material-ui/core/Tooltip';
 import isValidLink from '../utils/IsValidLink';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import EditIcon from '@material-ui/icons/EditOutlined';
 // import SaveIcon from '@material-ui/icons/Save';
-import { calcNewId } from '../utils/calcNewId';
 
 import useStore from '../store/useStore';
-import { IconButton, TextField } from '@material-ui/core';
-import tooltipText from '../Components/General/TooltipText';
 import type { Connection } from 'reactflow';
-import { isNode } from '../utils/typeGuards';
 import NodeIcon from './NodeIcon';
 import IconBoundary from '../IconBoundary';
-import { useNodesIds, useSelectedElement } from '../store/graph-hooks';
-import type { NodeProps, EwoksRFLink, EwoksRFNode, GraphRF } from '../types';
+import type { NodeProps, EwoksRFLink, GraphRF } from '../types';
 import { useReactFlow } from 'reactflow';
-import useNodeDataStore from '../store/useNodeDataStore';
 import { getNodesData } from '../utils';
 
 // TODO: examine usage when execution in main
@@ -43,10 +34,8 @@ function Node({
   comment,
   executing,
   nodeWidth,
-  details,
 }: NodeProps) {
-  const { getNodes, getEdges, setNodes } = useReactFlow();
-  const nodesIds = useNodesIds();
+  const { getNodes, getEdges } = useReactFlow();
 
   const border = colorBorder
     ? `4px solid ${colorBorder}`
@@ -65,26 +54,13 @@ function Node({
     customTitle.borderRadius = '10px 10px 3px 3px';
   }
 
-  const [nodeSize, setNodeSize] = useState(nodeWidth);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const graphInfo = useStore((state) => state.graphInfo);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const selectedElement = useSelectedElement();
-  const [edit, setEdit] = useState(false);
-  const [labelLocal, setLabelLocal] = useState(label);
-  const [detailsL, setDetailsL] = useState(false);
-
-  const setNodeData = useNodeDataStore((state) => state.setNodeData);
-
-  useEffect(() => {
-    setNodeSize(nodeWidth);
-    setLabelLocal(label);
-    setDetailsL(details || false);
-  }, [nodeWidth, label, details, detailsL]);
 
   const displayNode = {
     textAlign: 'center' as const,
-    width: `${nodeSize || 100}px`,
+    width: `${nodeWidth || 100}px`,
     minWidth: '60px', // for standard width
     maxWidth: '300px',
     display: ['graphInput', 'graphOutput'].includes(type) ? 'flex' : 'inline',
@@ -112,43 +88,6 @@ function Node({
     }
     return isValid;
   };
-
-  const labelChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setLabelLocal(event.target.value);
-  };
-
-  // TODO: exists in sidebar abstract in a hook?
-  // Could extract the cloning and graph generation part in a function
-  // that would return the newGraph (and newClone if needed).
-  // Then, it is up to the caller to deal with the result by using the setters.
-  const cloneNode = () => {
-    if (!isNode(selectedElement)) {
-      return;
-    }
-    const newClone: EwoksRFNode = {
-      ...selectedElement,
-      id: calcNewId(selectedElement.id, nodesIds),
-      selected: false,
-      position: {
-        x: (selectedElement.position.x || 0) + 100,
-        y: (selectedElement.position.y || 0) + 100,
-      },
-    };
-    // Both stay
-    setNodes([...getNodes(), newClone]);
-    setNodeData(newClone.id, newClone.data);
-  };
-  // TBD if needed cause it cause many rerenders on selecting an element on canvas
-  // function setNodeLabel() {
-  //   if (!nodeData || !isNode(selectedElement)) {
-  //     return;
-  //   }
-  //   const newNodeData = {
-  //     ...nodeData,
-  //     ewoks_props: { ...nodeData.ewoks_props, label: labelLocal },
-  //   };
-  //   setNodeData(selectedElement.id, newNodeData);
-  // }
 
   return (
     <div
@@ -213,19 +152,9 @@ function Node({
                 />
               </div>
             )}
-          {withLabel &&
-            (edit ? (
-              <TextField
-                label="edit node Label"
-                multiline
-                maxRows={4}
-                value={labelLocal}
-                onChange={labelChanged}
-                variant="standard"
-              />
-            ) : (
-              <div style={customTitle as React.CSSProperties}>{labelLocal}</div>
-            ))}
+          {withLabel && (
+            <div style={customTitle as React.CSSProperties}>{label}</div>
+          )}
           {!withLabel && !withImage && (
             <div style={customTitle as React.CSSProperties}>
               {label.slice(0, 1)}
@@ -296,62 +225,6 @@ function Node({
               </>
             )}
           {isGraph && <span style={style.contentWrapper}>{content}</span>}
-          {detailsL && type !== 'graphOutput' && type !== 'graphInput' && (
-            <>
-              <Tooltip
-                title={tooltipText('Clone Node')}
-                enterDelay={800}
-                arrow
-                placement="top"
-              >
-                <IconButton
-                  style={{ ...contentStyle.iconButtons }}
-                  aria-label="clone node"
-                  onClick={() => {
-                    cloneNode();
-                  }}
-                >
-                  <FileCopyIcon fontSize="small" color="primary" />
-                </IconButton>
-              </Tooltip>
-              {withLabel && !edit && (
-                <Tooltip
-                  title={tooltipText('Edit label')}
-                  enterDelay={800}
-                  arrow
-                  placement="top"
-                >
-                  <IconButton
-                    style={{ ...contentStyle.iconButtons }}
-                    aria-label="edit node"
-                    onClick={() => {
-                      setEdit(true);
-                    }}
-                  >
-                    <EditIcon color="primary" />
-                  </IconButton>
-                </Tooltip>
-              )}
-              {/* {withLabel && edit && (
-                <Tooltip
-                  title={tooltipText('Save new label')}
-                  enterDelay={800}
-                  arrow
-                  placement="top"
-                >
-                  <IconButton
-                    aria-label="exit edit mode"
-                    onClick={() => {
-                      setEdit(false);
-                      setNodeLabel();
-                    }}
-                  >
-                    <SaveIcon color="primary" />
-                  </IconButton>
-                </Tooltip>
-              )} */}
-            </>
-          )}
         </span>
       </Tooltip>
     </div>
