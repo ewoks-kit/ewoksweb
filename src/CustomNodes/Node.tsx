@@ -12,6 +12,7 @@ import IconBoundary from '../IconBoundary';
 import type { NodeProps, EwoksRFLink, GraphRF } from '../types';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../utils';
+import NodeLabel from './NodeLabel';
 
 // TODO: examine usage when execution in main
 const execution = () => {
@@ -40,19 +41,6 @@ function Node({
   const border = colorBorder
     ? `4px solid ${colorBorder}`
     : '2px solid rgb(233, 235, 247)';
-
-  const customTitle = {
-    ...style.title,
-    wordWrap: 'break-word',
-    borderRadius: '0px',
-    margin: '2px',
-    padding: '2px',
-  };
-
-  if (color) {
-    customTitle.backgroundColor = color;
-    customTitle.borderRadius = '10px 10px 3px 3px';
-  }
 
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const graphInfo = useStore((state) => state.graphInfo);
@@ -152,16 +140,12 @@ function Node({
                 />
               </div>
             )}
-          {withLabel && (
-            <div style={customTitle as React.CSSProperties}>{label}</div>
-          )}
-          {!withLabel && !withImage && (
-            <div style={customTitle as React.CSSProperties}>
-              {label.slice(0, 1)}
-            </div>
-          )}
-          {/* If comment also needed sometimes */}
-          {/* <div style={{ wordWrap: 'break-word' }}>{comment}</div> */}
+          <NodeLabel
+            label={label}
+            showFull={withLabel}
+            showCropped={!withLabel && !withImage}
+            color={color}
+          />
           {(withImage || inExecutionMode) && (
             <IconBoundary>
               <NodeIcon
