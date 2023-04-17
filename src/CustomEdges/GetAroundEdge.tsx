@@ -2,7 +2,6 @@ import type { EdgeProps } from 'reactflow';
 import { getBezierPath } from 'reactflow';
 import useEdgeDataStore from '../store/useEdgeDataStore';
 import { assertEdgeDataDefined } from '../utils/typeGuards';
-import { edgeStyle } from './EdgeStyle';
 import type { SmoothStepData, SmoothStepParams } from './models';
 
 const leftBottomCorner = (x: number, y: number, size: number) => {
@@ -122,14 +121,15 @@ export default function GetAroundEdge({
       />
       <text>
         <textPath
+          className="bendingText"
           href={`#${id}`}
-          style={{ ...style, ...edgeStyle.bendingText }}
           startOffset="50%"
           // TODO: side works even if it is an unknown property, update textPath?
           /* eslint-disable react/no-unknown-property */
           // @ts-expect-error
           side={sourceX > targetX ? 'right' : 'left'}
           textAnchor="middle"
+          fill={style.stroke}
         >
           {typeof label === 'string' &&
             label.split(',').map((mp, index) => (

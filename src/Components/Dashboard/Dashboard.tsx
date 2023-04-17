@@ -34,7 +34,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import type { EwoksRFLinkData, EwoksRFNodeData } from '../../types';
 import { FormAction } from '../../types';
-import { getWorkflowsIds, putWorkflow } from '../../api/api';
+import { getWorkflow, getWorkflowsIds, putWorkflow } from '../../api/api';
 import { getEdgesData, rfToEwoks, textForError } from '../../utils';
 import commonStrings from '../../commonStrings.json';
 import type { AxiosResponse } from 'axios';
@@ -43,6 +43,8 @@ import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
 
 const useStyles = DashboardStyle;
+
+const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
 
 function workflowExists(
   id: string,
@@ -83,6 +85,16 @@ export default function Dashboard() {
   const initializedGraph = useStore((state) => state.initializedGraph);
   const initGraph = useStore((state) => state.initGraph);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  useEffect(() => {
+    if (initialWorkflowId) {
+      const loadGraph = async () => {
+        const { data: graph } = await getWorkflow(initialWorkflowId);
+        initGraph(graph, 'fromServer', rfInstance);
+      };
+      loadGraph();
+    }
+  }, [initGraph, rfInstance]);
 
   useEffect(() => {
     setOpenSettings(false);
