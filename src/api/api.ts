@@ -34,10 +34,11 @@ export function putTask(task: Task) {
   return axiosRequest.put<Task>(`/task/${task.task_identifier}`, task);
 }
 
-// TODO: improve back as for a random string a 500 error arises
 // Discover tasks
 export function discoverTasks(moduleNames: string[]) {
-  return axiosRequest.post(`/tasks/discover`, { modules: moduleNames });
+  return axiosRequest.post<{ identifiers: string[] }>(`/tasks/discover`, {
+    modules: moduleNames,
+  });
 }
 
 // -------------Workflows

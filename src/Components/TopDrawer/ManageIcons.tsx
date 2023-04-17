@@ -7,7 +7,6 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import useStore from 'store/useStore';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { getTaskDescription } from 'api/api';
-import orange2 from 'images/orange2.png';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import commonStrings from 'commonStrings.json';
 import { textForError } from '../../utils';
@@ -191,34 +190,36 @@ export default function ManageIcons() {
         <Grid item xs={12} sm={12} md={8} lg={6}>
           <Item>
             <span className="dndflow">
-              {icons.map((icon) => (
-                <span
-                  onClick={() => clickIcon(icon.name)}
-                  aria-hidden="true"
-                  role="button"
-                  tabIndex={0}
-                  key={icon.name}
-                  className={`dndnode ${
-                    selectedIcon && selectedIcon === icon.name
-                      ? 'selectedTask'
-                      : ''
-                  }`}
-                >
-                  <Tooltip title={icon.name} arrow>
-                    <span
-                      role="button"
-                      tabIndex={0}
-                      className={classes.imgHolder}
-                    >
-                      <img
-                        src={icon.image?.data_url || orange2}
-                        alt={icon.name}
-                        key={icon.name}
-                      />
-                    </span>
-                  </Tooltip>
-                </span>
-              ))}
+              {icons
+                .filter((icon) => icon.image?.data_url)
+                .map((icon) => (
+                  <span
+                    onClick={() => clickIcon(icon.name)}
+                    aria-hidden="true"
+                    role="button"
+                    tabIndex={0}
+                    key={icon.name}
+                    className={`dndnode ${
+                      selectedIcon && selectedIcon === icon.name
+                        ? 'selectedTask'
+                        : ''
+                    }`}
+                  >
+                    <Tooltip title={icon.name} arrow>
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        className={classes.imgHolder}
+                      >
+                        <img
+                          src={icon.image?.data_url}
+                          alt={icon.name}
+                          key={icon.name}
+                        />
+                      </span>
+                    </Tooltip>
+                  </span>
+                ))}
             </span>
           </Item>
         </Grid>

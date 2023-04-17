@@ -16,7 +16,7 @@ export default function Conditions(props: ConditionsProps) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
 
-  const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
+  const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
@@ -33,14 +33,16 @@ export default function Conditions(props: ConditionsProps) {
     }
 
     const newEdgeData = {
+      ...edgeDataL,
       on_error: false,
       conditions: [...elCon, { id: '', name: '', value: false }],
     };
-    mergeEdgeData(element.id, newEdgeData);
+    setEdgeData(element.id, newEdgeData);
   }
 
   function conditionsValuesChanged(table: EditableTableRow[]) {
     const newEdgeData = {
+      ...edgeData,
       conditions: table.map((con1) => {
         return {
           source_output: con1.name,
@@ -48,7 +50,7 @@ export default function Conditions(props: ConditionsProps) {
         };
       }),
     };
-    mergeEdgeData(element.id, newEdgeData);
+    setEdgeData(element.id, newEdgeData);
   }
 
   return (

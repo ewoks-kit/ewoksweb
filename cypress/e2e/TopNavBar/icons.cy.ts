@@ -16,7 +16,7 @@ describe('Icons:', () => {
       .should('have.attr', 'src')
       .should(
         'include',
-        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAGaUlEQVR4nO2aX0xT'
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFC0lEQVR4nO2a308UVxT'
       );
   });
 

@@ -8,6 +8,7 @@ import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { validateEwoksGraph } from '../../utils/EwoksValidator';
 import WorkflowDropdown from './dropdown/WorkflowDropdown';
 import { textForError } from '../../utils';
+import { useReactFlow } from 'reactflow';
 
 export default function GetFromServer() {
   const [workflowId, setWorkflowId] = useState('');
@@ -19,6 +20,8 @@ export default function GetFromServer() {
   );
   const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
   const undoIndex = useStore((state) => state.undoIndex);
+
+  const rfInstance = useReactFlow();
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails.id) {
@@ -50,7 +53,7 @@ export default function GetFromServer() {
           severity: 'success',
         });
         setCanvasGraphChanged(false);
-        initGraph(graph, 'fromServer');
+        initGraph(graph, 'fromServer', rfInstance);
         validateEwoksGraph(graph);
       } catch (error) {
         setOpenSnackbar({

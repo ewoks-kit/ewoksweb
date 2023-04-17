@@ -48,7 +48,7 @@ interface FormDialogProps {
 }
 
 export default function FormDialog(props: FormDialogProps) {
-  const { getNodes, getEdges } = useReactFlow();
+  const rfInstance = useReactFlow();
 
   const [isOpen, setIsOpen] = useState(false);
   const [newName, setNewName] = useState('');
@@ -194,10 +194,10 @@ export default function FormDialog(props: FormDialogProps) {
   async function saveGraph(graphDetails: GraphDetails) {
     const graph = {
       graph: graphDetails,
-      nodes: getNodes().map((nod) => {
+      nodes: rfInstance.getNodes().map((nod) => {
         return { ...nod, data: getNodesData().get(nod.id) as EwoksRFNodeData };
       }),
-      links: getEdges().map((edge) => {
+      links: rfInstance.getEdges().map((edge) => {
         return {
           ...edge,
           data: getEdgesData().get(edge.id) as EwoksRFLinkData,
@@ -238,7 +238,7 @@ export default function FormDialog(props: FormDialogProps) {
 
         props.setOpenSaveDialog(false);
 
-        initGraph(responseNew.data, 'fromServer');
+        initGraph(responseNew.data, 'fromServer', rfInstance);
 
         resetRecentGraphs();
 

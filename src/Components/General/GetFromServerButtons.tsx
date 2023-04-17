@@ -19,7 +19,7 @@ interface GetFromServerButtonsProps {
 export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
   const { workflowId, showButtons } = props;
 
-  const { getNodes, getEdges, setNodes } = useReactFlow();
+  const rfInstance = useReactFlow();
 
   const setSubGraph = useStore((state) => state.setSubGraph);
   const initGraph = useStore((state) => state.initGraph);
@@ -57,18 +57,18 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
           severity: 'success',
         });
         setCanvasGraphChanged(false);
-        const nodes = getNodes();
+        const nodes = rfInstance.getNodes();
         if (isSubgraph === 'subgraph') {
           const { nodeWithoutData, data } = await setSubGraph(
             graph,
             nodes,
-            getEdges()
+            rfInstance.getEdges()
           );
 
-          setNodes([...getNodes(), nodeWithoutData]);
+          rfInstance.setNodes([...nodes, nodeWithoutData]);
           setNodeData(nodeWithoutData.id, data);
         } else {
-          initGraph(graph, 'fromServer');
+          initGraph(graph, 'fromServer', rfInstance);
         }
       } catch (error) {
         setOpenSnackbar({

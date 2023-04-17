@@ -54,7 +54,7 @@ function workflowExists(
 export default function Dashboard() {
   const classes = useStyles();
 
-  const { getNodes, getEdges } = useReactFlow();
+  const rfInstance = useReactFlow();
 
   const [openDrawers, setOpenDrawers] = useState(true);
   const [openSettings, setOpenSettings] = useState(false);
@@ -114,7 +114,7 @@ export default function Dashboard() {
     if (canvasGraphChanged && undoIndex !== 0 && !notSave) {
       setOpenAgreeDialog(true);
     } else {
-      initGraph(initializedGraph);
+      initGraph(initializedGraph, undefined, rfInstance);
       setOpenSaveDialog(true);
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
@@ -225,14 +225,14 @@ export default function Dashboard() {
         );
 
         // TODO move nodesData out of Dashboard with saveToServer
-        const nodesWithData = [...getNodes()].map((node) => {
+        const nodesWithData = [...rfInstance.getNodes()].map((node) => {
           return {
             ...node,
             data: newNodesData.get(node.id) as EwoksRFNodeData,
           };
         });
 
-        const edgesWithData = [...getEdges()].map((edge) => {
+        const edgesWithData = [...rfInstance.getEdges()].map((edge) => {
           return {
             ...edge,
             data: newEdgesData.get(edge.id) as EwoksRFLinkData,

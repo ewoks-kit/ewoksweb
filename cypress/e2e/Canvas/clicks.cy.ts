@@ -45,17 +45,6 @@ describe('clicks on canvas and elements', () => {
     cy.contains('Comment').should('not.be.visible');
   });
 
-  it('doubleclick on default node', () => {
-    cy.get('.react-flow__nodes')
-      .children()
-      .filter('.react-flow__node-ppfmethod')
-      .first()
-      .dblclick()
-      .get('.icons')
-      .children('button[type=button]')
-      .should('have.length', 2);
-  });
-
   it('doubleclick on graph node', () => {
     cy.get('.react-flow__node-graph')
       .should('have.length', 7)

@@ -77,7 +77,7 @@ function Canvas() {
   const setSelectedTask = useStore((state) => state.setSelectedTask);
   const tasks = useStore((state) => state.tasks);
   const recentGraphs = useStore((state) => state.recentGraphs);
-  const workingGraph = useStore((state) => state.workingGraph);
+  const workingGraphId = useStore((state) => state.workingGraph.graph.id);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setNodesData = useNodeDataStore((state) => state.setNodesData);
@@ -115,12 +115,10 @@ function Canvas() {
   });
 
   useEffect(() => {
-    setNodes(workingGraph.nodes);
-    setEdges(workingGraph.links);
     setTimeout(() => {
       fitView();
     }, 1000);
-  }, [workingGraph, setEdges, setNodes, fitView]);
+  }, [workingGraphId, fitView]);
 
   function onNodesChange(changes: NodeChange[]) {
     const newNodes = applyNodeChanges(changes, getNodes());
@@ -163,7 +161,7 @@ function Canvas() {
 
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
-    if (workingGraph.graph.id === graphId) {
+    if (workingGraphId === graphId) {
       const stateRF = storeRF.getState();
       const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect() || {
         left: 0,
@@ -270,7 +268,7 @@ function Canvas() {
   };
 
   const onConnect = (params: Connection) => {
-    if (workingGraph.graph.id !== graphId) {
+    if (workingGraphId !== graphId) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to create new links to any sub-graph!',
