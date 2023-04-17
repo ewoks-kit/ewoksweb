@@ -35,3 +35,18 @@
   border-color: var(--selected-edge--color) !important;
   color: var(--selected-edge--color) !important;
 }
+
+.bendingText {
+  font-size: 16px;
+}
+
+.multiLineDiv {
+  background-color: rgb(223, 226, 247);
+  color: rgb(150, 165, 249);
+  border-radius: 10px;
+  border-style: solid;
+  border-color: rgb(150, 165, 249);
+  overflow: hidden;
+  word-wrap: break-word;
+  padding: 1px;
+}

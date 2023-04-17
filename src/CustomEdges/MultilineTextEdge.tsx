@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import type { EdgeProps } from 'reactflow';
 import { getBezierPath } from 'reactflow';
-import { edgeStyle } from './EdgeStyle';
 
 function getForeignObjectProps(
   sourceX: number,
@@ -70,8 +69,8 @@ function multilineText({
         {...getForeignObjectProps(sourceX, sourceY, targetX, targetY, label)}
       >
         <div
+          className="multiLineDiv"
           style={{
-            ...edgeStyle.multiline,
             borderColor: style.stroke,
             color: style.stroke,
           }}
