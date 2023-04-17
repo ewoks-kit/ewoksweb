@@ -15,10 +15,14 @@
   width: 10px;
 }
 
-.selected {
-  stroke: rgb(10, 34, 78);
+.selected path {
+  stroke: var(--selected-edge--color) !important;
 }
 
-.react-flow__edge.selected .react-flow__edge-path {
-  stroke: rgb(18, 88, 219);
+.selected text {
+  fill: var(--selected-edge--color) !important;
+}
+
+.selected rect {
+  stroke: var(--selected-edge--color) !important;
 }
