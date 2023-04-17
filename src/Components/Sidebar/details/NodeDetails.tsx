@@ -14,7 +14,6 @@ import {
   Box,
   Checkbox,
   IconButton,
-  Paper,
   Typography,
 } from '@material-ui/core';
 import EditTaskProp from './EditTaskProp';

@@ -1,6 +1,6 @@
 import type { ChangeEvent } from 'react';
 import type { EwoksRFLink } from '../../../types';
-import { Checkbox, Paper } from '@material-ui/core';
+import { Checkbox } from '@material-ui/core';
 import DashboardStyle from '../../Dashboard/DashboardStyle';
 import DataMappingComponent from '../EditableTableProperties/DataMapping';
 import Conditions from '../EditableTableProperties/Conditions';
