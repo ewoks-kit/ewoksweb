@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import FiberNew from '@material-ui/icons/FiberNew';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import Sidebar from 'Components/Sidebar/Sidebar';
+import EditSidebar from 'Components/Sidebar/EditSidebar';
 import { Link } from 'react-router-dom';
 import Canvas from '../Canvas/Canvas';
 // import UndoRedo from '../TopNavBar/UndoRedo';
@@ -461,6 +462,10 @@ export default function Dashboard() {
               </ErrorBoundary>
             </Paper>
           </main>
+        </ReflexElement>
+        <ReflexSplitter propagate className={classes.reflexSplitter} />
+        <ReflexElement minSize={100} maxSize={500} size={350}>
+          <EditSidebar />
         </ReflexElement>
       </ReflexContainer>
     </div>
