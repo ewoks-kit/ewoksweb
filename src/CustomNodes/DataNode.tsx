@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import type { NodeProps } from 'reactflow';
 import Node from './Node';
 import { contentStyle as style } from './NodeStyle';
@@ -26,7 +26,7 @@ function DataNode(args: NodeProps) {
       nodeWidth={'nodeWidth' in uiProps ? uiProps.nodeWidth : 100}
       withLabel={'withLabel' in uiProps ? uiProps.withLabel : true}
       colorBorder={'colorBorder' in uiProps ? uiProps.colorBorder : ''}
-      content={<div style={{ ...style.io } as React.CSSProperties} />}
+      content={<div style={style.io} />}
       executing={uiProps.executing || false}
     />
   );

@@ -5,7 +5,7 @@ export const contentStyle = {
     backgroundColor: '#eee',
   },
   io: {
-    position: 'relative' as const,
+    position: 'relative',
     padding: '8px 16px',
     flexGrow: 1,
     borderRadius: '15px',
@@ -17,9 +17,9 @@ export const contentStyle = {
     border: '1px solid rgb(118, 133, 221)',
   },
   left: { left: '-8px' },
-  textLeft: { textAlign: 'left' as const },
+  textLeft: { textAlign: 'left' },
   right: { right: '-8px' },
-  textRight: { textAlign: 'right' as const },
+  textRight: { textAlign: 'right' },
   handle: {
     zIndex: 1000, // Uncomment
     widht: '20px', // Does not work
@@ -51,7 +51,7 @@ export const contentStyle = {
     margin: '0px 2px',
     padding: '0px',
   },
-};
+} as const;
 
 export const style = {
   icons: {
@@ -68,7 +68,7 @@ export const style = {
     fontSize: '10pt',
   },
   title: {
-    position: 'relative' as const,
+    position: 'relative',
     padding: '8px 8px',
     flexGrow: 1,
     backgroundColor: '#ee1',
@@ -84,4 +84,4 @@ export const style = {
     fontWeight: 300,
     lineHeight: '1.13',
   },
-};
+} as const;

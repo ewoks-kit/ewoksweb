@@ -1,6 +1,4 @@
-/* eslint-disable react/function-component-definition */
-/* jshint sub:true*/
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { style } from './NodeStyle';
 import SaveIcon from '@material-ui/icons/Save';
 import type { ChangeEvent } from 'react';
@@ -12,7 +10,7 @@ import { assertNodeDataDefined } from '../utils/typeGuards';
 
 type NoteProps = NodeProps<EwoksRFNodeData>;
 
-const NoteNode = (args: NoteProps) => {
+function NoteNode(args: NoteProps) {
   const [comment, setComment] = useState('');
 
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
@@ -30,7 +28,7 @@ const NoteNode = (args: NoteProps) => {
     backgroundColor: '#ced3ee',
     textAlign: 'center',
     padding: '1px',
-  };
+  } as const;
 
   const commentChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setComment(event.target.value);
@@ -49,13 +47,10 @@ const NoteNode = (args: NoteProps) => {
 
   return (
     <div
-      style={
-        {
-          ...style.body,
-          ...(args.selected ? style.selected : []),
-          padding: '10px',
-        } as React.CSSProperties
-      }
+      style={{
+        ...style.body,
+        padding: '10px',
+      }}
       role="button"
       tabIndex={0}
     >
@@ -65,9 +60,7 @@ const NoteNode = (args: NoteProps) => {
       >
         {nodeData.ewoks_props.label &&
           nodeData.ewoks_props.label.length > 0 && (
-            <div style={customTitle as React.CSSProperties}>
-              {nodeData.ewoks_props.label}
-            </div>
+            <div style={customTitle}>{nodeData.ewoks_props.label}</div>
           )}
         {nodeData.ui_props.details ? (
           <TextField
@@ -93,6 +86,6 @@ const NoteNode = (args: NoteProps) => {
       </span>
     </div>
   );
-};
+}
 
 export default NoteNode;
