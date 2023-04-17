@@ -19,18 +19,13 @@ import type { EwoksRFLink } from '../../../types';
 
 const useStyles = DashboardStyle;
 
-interface LabelCommentProps {
-  showComment: boolean;
-}
-
 // DOC: the label and comment for links when selected
-export default function EdgeLabelComment(props: LabelCommentProps) {
+export default function EdgeLabelComment() {
   const classes = useStyles();
 
   const { getEdges, setEdges } = useReactFlow();
   const element = useSelectedElement();
   assertElementIsEdge(element);
-  const { showComment } = props;
 
   const [comment, setComment] = useState('');
   const [label, setLabel] = useState<string>('');
@@ -168,7 +163,7 @@ export default function EdgeLabelComment(props: LabelCommentProps) {
         </SidebarTooltip>
       )}
 
-      <div style={{ display: showComment ? 'block' : 'none' }}>
+      <div style={{ display: 'block' }}>
         <TextButtonSave
           label="Comment"
           value={comment}

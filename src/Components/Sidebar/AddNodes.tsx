@@ -6,7 +6,7 @@ import {
   IconButton,
 } from '@material-ui/core';
 import type { SvgIconTypeMap } from '@material-ui/core';
-import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 import type { Task } from 'types';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -215,7 +215,7 @@ function AddNodes(props: AddNodesProps) {
             data-cy={`add-nodes-category-${categoryName || 'no-category'}`}
           >
             <AccordionSummary
-              expandIcon={<OpenInBrowser />}
+              expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
             >
               <Typography>{categoryName}</Typography>

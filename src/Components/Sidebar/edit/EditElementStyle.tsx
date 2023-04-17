@@ -2,8 +2,7 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
-import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
-
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import EditNodeStyle from './EditNodeStyle';
 import EditLinkStyle from './EditLinkStyle';
 import EditGraphStyle from './EditGraphStyle';
@@ -47,7 +46,7 @@ export default function EditElementStyle() {
   return (
     <Accordion className="Accordions-sidebar">
       <AccordionSummary
-        expandIcon={<OpenInBrowser />}
+        expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"
       >
         <Typography>{title}</Typography>
