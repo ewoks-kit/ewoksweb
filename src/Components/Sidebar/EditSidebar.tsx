@@ -162,6 +162,7 @@ export default function EditSidebar() {
             }}
             size="small"
           >
+            Delete
             <DeleteIcon fontSize="small" />
           </Button>
           {['node'].includes(selectedElement.type) && (
