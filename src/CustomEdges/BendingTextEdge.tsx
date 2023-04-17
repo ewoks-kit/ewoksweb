@@ -37,7 +37,8 @@ function bendingText({
           href={`#${id}`}
           startOffset="50%"
           textAnchor="middle"
-          style={{ ...style, ...edgeStyle.bendingText }}
+          style={edgeStyle.bendingText}
+          fill={style.stroke}
         >
           {label}
         </textPath>

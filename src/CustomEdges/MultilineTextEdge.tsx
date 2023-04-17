@@ -67,13 +67,13 @@ function multilineText({
         markerEnd={markerEnd}
       />
       <foreignObject
-        style={style}
         {...getForeignObjectProps(sourceX, sourceY, targetX, targetY, label)}
       >
         <div
           style={{
-            ...style,
             ...edgeStyle.multiline,
+            borderColor: style.stroke,
+            color: style.stroke,
           }}
         >
           {typeof label === 'string' &&

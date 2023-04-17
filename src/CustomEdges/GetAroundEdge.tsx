@@ -123,13 +123,14 @@ export default function GetAroundEdge({
       <text>
         <textPath
           href={`#${id}`}
-          style={{ ...style, ...edgeStyle.bendingText }}
+          style={edgeStyle.bendingText}
           startOffset="50%"
           // TODO: side works even if it is an unknown property, update textPath?
           /* eslint-disable react/no-unknown-property */
           // @ts-expect-error
           side={sourceX > targetX ? 'right' : 'left'}
           textAnchor="middle"
+          fill={style.stroke}
         >
           {typeof label === 'string' &&
             label.split(',').map((mp, index) => (

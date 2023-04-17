@@ -23,6 +23,15 @@
   fill: var(--selected-edge--color) !important;
 }
 
+.selected textPath {
+  fill: var(--selected-edge--color) !important;
+}
+
 .selected rect {
   stroke: var(--selected-edge--color) !important;
+}
+
+.selected div {
+  border-color: var(--selected-edge--color) !important;
+  color: var(--selected-edge--color) !important;
 }
