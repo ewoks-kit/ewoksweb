@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Icon, IconButton } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import EditElementStyle from './edit/EditElementStyle';
 import IconMenu from './IconMenu';
 import useStore from 'store/useStore';
@@ -8,7 +8,7 @@ import { calcNewId } from 'utils/calcNewId';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { deleteWorkflow } from 'api/api';
 import commonStrings from 'commonStrings.json';
-import { assertNodeDataDefined, isLink } from '../../utils/typeGuards';
+import { assertNodeDataDefined } from '../../utils/typeGuards';
 import { getNodesData, textForError } from '../../utils';
 import { useNodesIds } from '../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
@@ -16,11 +16,6 @@ import type { Node, Edge } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSelectedElementStore from '../../store/useSelectedElementStore';
 import ElementDetails from './details/ElementDetails';
-import {
-  // EditOutlined as EditIcon,
-  Check as CheckIcon,
-  Delete as DeleteIcon,
-} from '@material-ui/icons';
 
 export default function EditSidebar() {
   const nodesIds = useNodesIds();
