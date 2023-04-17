@@ -5,3 +5,20 @@
 .react-flow__edge-textbg:hover {
   cursor: grab;
 }
+
+.react-flow__handle-top {
+  top: -35px;
+  border-radius: 0;
+}
+
+.react-flow__handle {
+  width: 10px;
+}
+
+.selected {
+  stroke: rgb(10, 34, 78);
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: rgb(18, 88, 219);
+}
