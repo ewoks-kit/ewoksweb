@@ -50,3 +50,12 @@
   word-wrap: break-word;
   padding: 1px;
 }
+
+.react-flow__arrowhead[id$='arrow'] polyline {
+  stroke: context-stroke;
+}
+
+.react-flow__arrowhead[id$='arrowclosed'] polyline {
+  stroke: context-stroke;
+  fill: context-stroke;
+}
