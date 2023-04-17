@@ -198,6 +198,15 @@ function AddNodes(props: AddNodesProps) {
 
   return (
     <>
+      {/* Inline style till sidebar is refactored */}
+      <p
+        style={{
+          fontSize: 30,
+          color: 'blue',
+        }}
+      >
+        Add Nodes
+      </p>
       {[...new Set(tasks.map((m) => m.category)).values()].map(
         (categoryName) => (
           <Accordion

@@ -140,6 +140,7 @@ export default function EditSidebar() {
 
   return (
     <aside className="dndflow">
+      {/* Inline style till sidebar is refactored */}
       <span style={{ display: 'block' }}>
         <span
           style={{
@@ -175,7 +176,7 @@ export default function EditSidebar() {
           >
             Clone
           </Button>
-          {!['edge', 'graph'].includes(selectedElement.type) && <IconMenu />}
+          {!['edge'].includes(selectedElement.type) && <IconMenu />}
         </span>
       </span>
       <ElementDetails />
