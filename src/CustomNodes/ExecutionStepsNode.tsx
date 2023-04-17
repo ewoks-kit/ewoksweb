@@ -3,7 +3,7 @@ A kind of node to appear on the canvas carrying the number of the
 step that has been executed.
 */
 import type { CSSProperties } from 'react';
-import { style } from './NodeStyle';
+import { style } from './nodeStyles';
 
 import useStore from '../store/useStore';
 import type { NodeProps } from 'reactflow';

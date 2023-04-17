@@ -3,7 +3,7 @@ import { useIcons } from '../api/icons';
 import type { ExecuteSpinnerProps } from '../Components/Execution/ExecuteSpinner';
 import ExecuteSpinner from '../Components/Execution/ExecuteSpinner';
 import { findImage } from '../utils';
-import { contentStyle } from './NodeStyle';
+import { contentStyle } from './nodeStyles';
 
 interface Props {
   image: string | undefined;

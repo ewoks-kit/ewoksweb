@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { style } from './NodeStyle';
+import { style } from './nodeStyles';
 import SaveIcon from '@material-ui/icons/Save';
 import type { ChangeEvent } from 'react';
 import { IconButton, TextField } from '@material-ui/core';
