@@ -1,4 +1,4 @@
-import { style } from './NodeStyle';
+import { style } from './nodeStyles';
 
 interface Props {
   label: string;

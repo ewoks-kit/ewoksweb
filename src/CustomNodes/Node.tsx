@@ -1,6 +1,6 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { Handle, Position } from 'reactflow';
-import { contentStyle, style } from './NodeStyle';
+import { contentStyle, style } from './nodeStyles';
 import Tooltip from '@material-ui/core/Tooltip';
 import isValidLink from '../utils/IsValidLink';
 // import SaveIcon from '@material-ui/icons/Save';
@@ -27,7 +27,6 @@ function Node({
   isGraph,
   type,
   label,
-  selected,
   color,
   colorBorder,
   content,
@@ -79,13 +78,10 @@ function Node({
 
   return (
     <div
-      style={
-        {
-          ...style.body,
-          ...(selected ? style.selected : []),
-          border,
-        } as React.CSSProperties
-      }
+      style={{
+        ...style.body,
+        border,
+      }}
       id="choice"
       role="button"
       tabIndex={0}
