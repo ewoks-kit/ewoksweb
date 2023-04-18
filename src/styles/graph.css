@@ -37,7 +37,12 @@
   font-weight: bold !important;
 }
 
+.react-flow__node div {
+  background-color: var(--node--bgColor);
+}
+
 .react-flow__node.selected div {
+  background-color: var(--selected-node--bgColor);
   border-color: var(--selected-node--color) !important;
   color: var(--selected-node--color) !important;
 }
