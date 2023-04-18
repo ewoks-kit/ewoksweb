@@ -133,7 +133,11 @@ it('deletes a node by button and keyboard', () => {
   cy.get('.react-flow')
     .contains('Always and forever...')
     .parent()
-    .should('have.length', 1);
+    .should('have.length', 1)
+    .click()
+    .type('{del}');
+
+  cy.get('.react-flow__node').should('have.length', 16);
 });
 
 // TODO: find a way to set a color from the firefox color picker

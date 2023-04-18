@@ -103,5 +103,14 @@ describe('draw links', () => {
     cy.contains('Delete').click();
 
     cy.get('.react-flow__edge').should('have.length', 14);
+
+    cy.get('.react-flow__edge')
+      .first()
+      .children('g')
+      .first()
+      .click({ force: true })
+      .type('{del}');
+
+    cy.get('.react-flow__edge').should('have.length', 13);
   });
 });
