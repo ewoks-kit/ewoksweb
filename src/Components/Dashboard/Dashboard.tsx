@@ -41,6 +41,7 @@ import type { AxiosResponse } from 'axios';
 import curateGraph from '../TopNavBar/utils/curateGraph';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
+import OverflowDrawer from '../Sidebar/OverflowDrawer';
 
 const useStyles = DashboardStyle;
 
@@ -437,15 +438,17 @@ export default function Dashboard() {
           />
         </Toolbar>
       </AppBar>
-
+      <OverflowDrawer />
       <ReflexContainer
         orientation="vertical"
         className={classes.reflexContainer}
       >
-        <ReflexElement minSize={100} maxSize={500} size={350}>
+        {/* <ReflexElement minSize={100} maxSize={500} size={350}>
           <Sidebar />
+          <OverflowDrawer />
         </ReflexElement>
-        <ReflexSplitter propagate className={classes.reflexSplitter} />
+
+        <ReflexSplitter propagate className={classes.reflexSplitter} /> */}
         <ReflexElement className="right-pane">
           <main className={classes.content}>
             <div className={classes.toolbar} />

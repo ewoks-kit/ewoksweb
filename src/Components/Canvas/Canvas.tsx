@@ -33,6 +33,8 @@ import {
   assertNodeDataDefined,
   assertNodeDefined,
 } from '../../utils/typeGuards';
+import { Fab } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -409,6 +411,14 @@ function Canvas() {
       tabIndex={0}
     >
       <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+        {/* <Fab
+          size="small"
+          color="primary"
+          aria-label="add"
+          style={{ marginTop: '10px' }}
+        >
+          <AddIcon />
+        </Fab> */}
         <ReactFlow
           fitView
           connectOnClick
