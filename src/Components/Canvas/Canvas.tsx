@@ -126,6 +126,9 @@ function Canvas() {
   }
 
   function onEdgesChange(changes: EdgeChange[]) {
+    if (changes[0]?.type === 'remove') {
+      setSelectedElement({ type: 'graph', id: graphInfo.id });
+    }
     const newEdges = applyEdgeChanges(changes, getEdges());
     storeRF.getState().setEdges(newEdges);
   }
