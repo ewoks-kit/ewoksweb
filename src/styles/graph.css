@@ -15,25 +15,31 @@
   width: 10px;
 }
 
-.selected path {
-  stroke: var(--selected-edge--color) !important;
+.react-flow__edge.selected path {
+  stroke-width: var(--selected-edge--width) !important;
+  stroke-linecap: round;
 }
 
-.selected text {
-  fill: var(--selected-edge--color) !important;
+.react-flow__edge.selected rect {
+  stroke-width: var(--selected-edge--width) !important;
 }
 
-.selected textPath {
-  fill: var(--selected-edge--color) !important;
+.react-flow__edge.selected div {
+  border-width: var(--selected-edge--width) !important;
+  font-weight: bold !important;
 }
 
-.selected rect {
-  stroke: var(--selected-edge--color) !important;
+.react-flow__edge.selected text {
+  font-weight: bold !important;
 }
 
-.selected div {
-  border-color: var(--selected-edge--color) !important;
-  color: var(--selected-edge--color) !important;
+.react-flow__edge.selected textPath {
+  font-weight: bold !important;
+}
+
+.react-flow__node.selected div {
+  border-color: var(--selected-node--color) !important;
+  color: var(--selected-node--color) !important;
 }
 
 .bendingText {
