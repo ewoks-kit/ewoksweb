@@ -2,13 +2,14 @@
 A kind of node to appear on the canvas carrying the number of the
 step that has been executed.
 */
-import { style } from './NodeStyle';
+import type { CSSProperties } from 'react';
+import { style } from './nodeStyles';
 
 import useStore from '../store/useStore';
 import type { NodeProps } from 'reactflow';
 
 function ExecutionStepsNode(args: NodeProps) {
-  const customTitle = {
+  const customTitle: CSSProperties = {
     ...style.title,
     wordWrap: 'break-word',
     borderRadius: '25px',
@@ -30,13 +31,10 @@ function ExecutionStepsNode(args: NodeProps) {
 
   return (
     <div
-      style={
-        {
-          ...style.body,
-          ...(args.selected ? style.selected : []),
-          padding: '2px',
-        } as React.CSSProperties
-      }
+      style={{
+        ...style.body,
+        padding: '2px',
+      }}
     >
       {/* DATAC */}
       {args.data.label.split(',').map((val: number) => {
@@ -48,7 +46,7 @@ function ExecutionStepsNode(args: NodeProps) {
                 onKeyUp={() => goToEvent(val)}
                 role="button"
                 tabIndex={0}
-                style={customTitle as React.CSSProperties}
+                style={customTitle}
                 key={val}
               >
                 {val}
