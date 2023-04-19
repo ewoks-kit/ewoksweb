@@ -1,6 +1,6 @@
 // TODO: remove the following after onlyEditRelease
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {
   Accordion,
   AccordionDetails,
@@ -80,7 +80,7 @@ export default function EwoksUiInfo(props: EwoksUiInfoProps) {
           {infoCategories.map(({ summary, details }) => (
             <Accordion key={summary}>
               <AccordionSummary
-                expandIcon={<OpenInBrowser />}
+                expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
               >
                 <Typography>{summary}</Typography>

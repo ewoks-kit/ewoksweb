@@ -16,6 +16,7 @@ import type { Node, Edge } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSelectedElementStore from '../../store/useSelectedElementStore';
 import ElementDetails from './details/ElementDetails';
+import { Delete as DeleteIcon } from '@material-ui/icons';
 
 export default function EditSidebar() {
   const nodesIds = useNodesIds();
@@ -162,17 +163,20 @@ export default function EditSidebar() {
             size="small"
           >
             Delete
+            <DeleteIcon fontSize="small" />
           </Button>
-          <Button
-            style={{ margin: '8px' }}
-            variant="outlined"
-            color="primary"
-            onClick={cloneNode}
-            size="small"
-            data-cy="cloneButton"
-          >
-            Clone
-          </Button>
+          {selectedElement.type === 'node' && (
+            <Button
+              style={{ margin: '8px' }}
+              variant="outlined"
+              color="primary"
+              onClick={cloneNode}
+              size="small"
+              data-cy="cloneButton"
+            >
+              Clone
+            </Button>
+          )}
           {selectedElement.type !== 'edge' && <IconMenu />}
         </span>
       </span>
