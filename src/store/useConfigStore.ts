@@ -3,8 +3,6 @@ import create from 'zustand';
 export interface ConfigState {
   canvasBackgroundColor: string;
   setCanvasBackgroundColor: (color: string) => void;
-  showAdvancedDetails: boolean;
-  setShowAdvancedDetails: (advanced: boolean) => void;
 }
 
 const useConfigStore = create<ConfigState>((set) => ({
@@ -12,12 +10,6 @@ const useConfigStore = create<ConfigState>((set) => ({
   setCanvasBackgroundColor: (canvasBackgroundColor: string) =>
     set({
       canvasBackgroundColor,
-    }),
-
-  showAdvancedDetails: false,
-  setShowAdvancedDetails: (showAdvancedDetails) =>
-    set({
-      showAdvancedDetails,
     }),
 }));
 
