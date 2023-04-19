@@ -165,7 +165,7 @@ export default function EditSidebar() {
             Delete
             <DeleteIcon fontSize="small" />
           </Button>
-          {['node'].includes(selectedElement.type) && (
+          {selectedElement.type === 'node' && (
             <Button
               style={{ margin: '8px' }}
               variant="outlined"

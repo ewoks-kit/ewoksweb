@@ -5,6 +5,7 @@
   padding-left: 5px;
   overflow: scroll;
   height: 90vh;
+  scrollbar-width: thin;
 }
 
 .dndflow aside {
