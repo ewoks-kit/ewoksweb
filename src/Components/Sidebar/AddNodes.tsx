@@ -201,11 +201,11 @@ function AddNodes(props: AddNodesProps) {
       {/* Inline style till sidebar is refactored */}
       <p
         style={{
-          fontSize: 30,
+          fontSize: 24,
           color: 'blue',
         }}
       >
-        Add Nodes
+        {props.title}
       </p>
       {[...new Set(tasks.map((m) => m.category)).values()].map(
         (categoryName) => (

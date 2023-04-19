@@ -6,7 +6,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import FiberNew from '@material-ui/icons/FiberNew';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
-import Sidebar from 'Components/Sidebar/Sidebar';
 import EditSidebar from 'Components/Sidebar/EditSidebar';
 import { Link } from 'react-router-dom';
 import Canvas from '../Canvas/Canvas';
@@ -43,8 +42,6 @@ import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
 import OverflowDrawer from '../Sidebar/OverflowDrawer';
 
-const useStyles = DashboardStyle;
-
 const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
 
 function workflowExists(
@@ -55,6 +52,7 @@ function workflowExists(
 }
 
 export default function Dashboard() {
+  const useStyles = DashboardStyle;
   const classes = useStyles();
 
   const rfInstance = useReactFlow();
@@ -328,12 +326,12 @@ export default function Dashboard() {
               disabled={inExecutionMode}
             >
               <Fab
-                className={classes.openFileButton}
                 color="primary"
                 size="small"
                 component="span"
                 aria-label="Start a new workflow"
                 disabled={inExecutionMode}
+                className={classes.openFileButton}
               >
                 <FiberNew />
               </Fab>
@@ -443,12 +441,6 @@ export default function Dashboard() {
         orientation="vertical"
         className={classes.reflexContainer}
       >
-        {/* <ReflexElement minSize={100} maxSize={500} size={350}>
-          <Sidebar />
-          <OverflowDrawer />
-        </ReflexElement>
-
-        <ReflexSplitter propagate className={classes.reflexSplitter} /> */}
         <ReflexElement className="right-pane">
           <main className={classes.content}>
             <div className={classes.toolbar} />

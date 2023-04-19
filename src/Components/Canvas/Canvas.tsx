@@ -33,8 +33,6 @@ import {
   assertNodeDataDefined,
   assertNodeDefined,
 } from '../../utils/typeGuards';
-import { Fab } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -142,18 +140,6 @@ function Canvas() {
       }
     });
   };
-
-  // Keep this comment until execution is deleted
-  // const onNodeClick = (_event: MouseEvent, element: Node) => {
-  //   if (
-  //     !(
-  //       element.data.task_props.task_type === 'executionSteps' &&
-  //       element.type === 'executionSteps'
-  //     )
-  //   ) {
-  //     setSelectedElement({ type: 'node', id: element.id });
-  //   }
-  // };
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
   const onDragOver: DragEventHandler<HTMLDivElement> = (event) => {
@@ -411,14 +397,6 @@ function Canvas() {
       tabIndex={0}
     >
       <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-        {/* <Fab
-          size="small"
-          color="primary"
-          aria-label="add"
-          style={{ marginTop: '10px' }}
-        >
-          <AddIcon />
-        </Fab> */}
         <ReactFlow
           fitView
           connectOnClick
