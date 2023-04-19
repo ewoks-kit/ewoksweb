@@ -14,12 +14,8 @@ Each link has several attributes that follow the `Ewokscore <https://ewokscore.r
  - **Data Mapping** where manual data mapping can take place for the link.
  - **on_error** which is a a special condition where a task raises an exception. Cannot be used in combination with Conditions which disappear if on_error is checked.
  - **Conditions** where the user can define the conditions for the link to be activated and move to the next node.
- - **Advanced** that reveals more attributes when checked.
-
- The properties that are revealed when Advanced is checked are:
-
  - **Comment** that allows the user to keep some notes of interest about the specific link.
- - The links Source and Target nodes with their Labels.
+ - **The links** Source and Target nodes with their Labels.
 
 Link styling
 ------------
