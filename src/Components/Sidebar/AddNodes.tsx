@@ -205,7 +205,7 @@ function AddNodes(props: AddNodesProps) {
           color: 'blue',
         }}
       >
-        {props.title}
+        {/* {props.title} */}
       </p>
       {[...new Set(tasks.map((m) => m.category)).values()].map(
         (categoryName) => (
