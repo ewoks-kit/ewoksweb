@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     }),
   },
   drawerOpen: {
-    width: '240px',
+    width: '250px',
   },
   drawerClose: {
     width: '1px',
@@ -76,7 +76,7 @@ function OverflowDrawer() {
         color="primary"
         aria-label="add"
         onClick={toggleDrawer}
-        style={{ marginLeft: open ? '220px' : '10px' }}
+        style={{ marginLeft: open ? '230px' : '10px' }}
         className={classes.leftDrawerButton}
       >
         {open ? (
