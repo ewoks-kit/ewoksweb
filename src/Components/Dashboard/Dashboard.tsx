@@ -43,6 +43,7 @@ import { getNodesData } from '../../utils';
 import OverflowDrawer from '../Sidebar/OverflowDrawer';
 
 const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
+const useStyles = DashboardStyle;
 
 function workflowExists(
   id: string,
@@ -52,7 +53,6 @@ function workflowExists(
 }
 
 export default function Dashboard() {
-  const useStyles = DashboardStyle;
   const classes = useStyles();
 
   const rfInstance = useReactFlow();
@@ -326,12 +326,12 @@ export default function Dashboard() {
               disabled={inExecutionMode}
             >
               <Fab
+                className={classes.openFileButton}
                 color="primary"
                 size="small"
                 component="span"
                 aria-label="Start a new workflow"
                 disabled={inExecutionMode}
-                className={classes.openFileButton}
               >
                 <FiberNew />
               </Fab>

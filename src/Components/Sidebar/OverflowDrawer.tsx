@@ -27,17 +27,16 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerOpen: {
     width: '240px',
-    transform: 'translateX(0)',
   },
   drawerClose: {
-    transform: 'translateX(-100%)',
+    width: '1px',
   },
   // Needed for the rest of the elements if we need to push the rest
-  content: {
-    marginLeft: '300px', // Same as drawer width
-    width: 'calc(100% - 300px)', // Width of content = 100% - drawer width
-  },
-  button: {
+  // content: {
+  //   marginLeft: '300px', // Same as drawer width
+  //   width: 'calc(100% - 300px)', // Width of content = 100% - drawer width
+  // },
+  leftDrawerButton: {
     position: 'absolute',
     top: theme.spacing(9),
     zIndex: theme.zIndex.drawer + 1,
@@ -78,7 +77,7 @@ function OverflowDrawer() {
         aria-label="add"
         onClick={toggleDrawer}
         style={{ marginLeft: open ? '220px' : '10px' }}
-        className={classes.button}
+        className={classes.leftDrawerButton}
       >
         {open ? (
           <ArrowBackIosIcon style={{ marginLeft: '8px' }} />
