@@ -1,4 +1,5 @@
 import { MarkerType } from 'reactflow';
+import type { Node, Edge } from 'reactflow';
 import type {
   EwoksRFLink,
   EwoksRFLinkData,
@@ -16,6 +17,10 @@ export interface EwoksServerErrorResponse {
 export function isNode(
   entity: EwoksRFNode | EwoksRFLink | GraphDetails | undefined
 ): entity is EwoksRFNode {
+  return !!entity && 'position' in entity;
+}
+
+export function isNodeRF(entity: Node | Edge | undefined): entity is Node {
   return !!entity && 'position' in entity;
 }
 

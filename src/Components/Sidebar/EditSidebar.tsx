@@ -8,19 +8,45 @@ import { calcNewId } from 'utils/calcNewId';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { deleteWorkflow } from 'api/api';
 import commonStrings from 'commonStrings.json';
-import { assertNodeDataDefined } from '../../utils/typeGuards';
+import {
+  assertNodeDataDefined,
+  isNode,
+  isNodeRF,
+} from '../../utils/typeGuards';
 import { getNodesData, textForError } from '../../utils';
 import { useNodesIds } from '../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
-import type { Node, Edge } from 'reactflow';
+import type { Node, Edge, ReactFlowState } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSelectedElementStore from '../../store/useSelectedElementStore';
 import ElementDetails from './details/ElementDetails';
 import { Delete as DeleteIcon } from '@material-ui/icons';
+import { useStore as useRFStore } from 'reactflow';
+
+const nodeEdgeSelectedSelector = (state: ReactFlowState) => {
+  console.log(state);
+
+  const nodeSelected =
+    state.nodeInternals &&
+    [...state.nodeInternals.values()].find((node) => node.selected);
+  if (nodeSelected) {
+    console.log(nodeSelected);
+
+    return nodeSelected;
+  }
+  const edgeSelected =
+    state.edges && [...state.edges.values()].find((edge) => edge.selected);
+  if (edgeSelected) {
+    console.log(edgeSelected);
+    return edgeSelected;
+  }
+  return undefined;
+};
 
 export default function EditSidebar() {
   const nodesIds = useNodesIds();
   const rfInstance = useReactFlow();
+  const selected = useRFStore(nodeEdgeSelectedSelector);
 
   const selectedElement = useSelectedElementStore(
     (state) => state.selectedElement
@@ -146,7 +172,7 @@ export default function EditSidebar() {
             color: 'blue',
           }}
         >
-          {selectedElement.type === 'node'
+          {isNodeRF(selected) // selectedElement.type === 'node'
             ? 'Node'
             : selectedElement.type === 'edge'
             ? 'Edge'
