@@ -8,7 +8,6 @@ import AddNodes from './AddNodes';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
-    // backgroundColor: theme.palette.background.paper,
     overflow: 'auto',
     width: '0px',
     height: '100%',
@@ -19,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     left: 0,
     bottom: 0,
-    // transition: 'transform 0.3s ease-in-out',
     transition: theme.transitions.create(['width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -41,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
     top: theme.spacing(9),
     zIndex: theme.zIndex.drawer + 1,
     transition: 'transform 0.3s ease-in-out',
+    '&:hover': {
+      transform: 'scale(1.1)', // Add the scaling effect on hover
+    },
   },
 }));
 

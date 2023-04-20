@@ -26,7 +26,7 @@ import { FormAction } from '../../types';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { textForError } from 'utils';
 import type { OverridableComponent } from '@material-ui/core/OverridableComponent';
-import TaskIcon from './TaskIcon';
+import TaskIcon from '../Sidebar/TaskIcon';
 import IconBoundary from '../../IconBoundary';
 import useSelectedElementStore from '../../store/useSelectedElementStore';
 

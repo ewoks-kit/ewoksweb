@@ -19,7 +19,7 @@ import SubgraphsStack from '../TopNavBar/SubgraphsStack';
 import LinearSpinner from '../General/LinearSpinner';
 // import ExecuteWorkflow from '../Execution/ExecuteWorkflow';
 import Tooltip from '@material-ui/core/Tooltip';
-import DashboardStyle from './DashboardStyle';
+import dashboardStyle from './DashboardStyle';
 import SaveToServer from '../TopNavBar/SaveToServer';
 import tooltipText from '../General/TooltipText';
 import useStore from 'store/useStore';
@@ -40,10 +40,9 @@ import type { AxiosResponse } from 'axios';
 import curateGraph from '../TopNavBar/utils/curateGraph';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
-import OverflowDrawer from '../Sidebar/OverflowDrawer';
+import OverflowDrawer from '../AddNodesDrawer/OverflowDrawer';
 
 const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
-const useStyles = DashboardStyle;
 
 function workflowExists(
   id: string,
@@ -53,7 +52,7 @@ function workflowExists(
 }
 
 export default function Dashboard() {
-  const classes = useStyles();
+  const classes = dashboardStyle();
 
   const rfInstance = useReactFlow();
 

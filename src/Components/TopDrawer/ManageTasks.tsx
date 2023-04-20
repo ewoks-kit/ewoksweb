@@ -1,5 +1,5 @@
 import { Button, Grid } from '@material-ui/core';
-import AddNodes from '../Sidebar/AddNodes';
+import AddNodes from '../AddNodesDrawer/AddNodes';
 import { useState } from 'react';
 import DiscoverTasksForm from './DiscoverTasksForm';
 import { Add } from '@material-ui/icons';
