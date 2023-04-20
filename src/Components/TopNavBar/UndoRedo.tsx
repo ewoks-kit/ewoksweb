@@ -2,11 +2,9 @@ import RedoIcon from '@material-ui/icons/Redo';
 import UndoIcon from '@material-ui/icons/Undo';
 
 import { Fab, IconButton, Tooltip } from '@material-ui/core';
-import DashboardStyle from '../Dashboard/DashboardStyle';
+import { useDashboardStyles } from '../Dashboard/useDashboardStyles';
 import tooltipText from '../General/TooltipText';
 import useStore from '../../store/useStore';
-
-const useStyles = DashboardStyle;
 
 interface undoRedoProps {
   undo: () => void;
@@ -14,7 +12,7 @@ interface undoRedoProps {
 }
 
 export default function UndoRedo({ undo, redo }: undoRedoProps) {
-  const classes = useStyles();
+  const classes = useDashboardStyles();
 
   const inExecutionMode = useStore((state) => state.inExecutionMode);
 

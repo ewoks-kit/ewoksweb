@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import DashboardStyle from '../../Dashboard/DashboardStyle';
+import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import TextButtonSave from './TextButtonSave';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import useSelectedElementStore from '../../../store/useSelectedElementStore';
@@ -8,15 +8,13 @@ import {
   assertElementIsNodeType,
 } from '../../../utils/typeGuards';
 
-const useStyles = DashboardStyle;
-
 interface LabelCommentProps {
   showComment: boolean;
 }
 
 // DOC: the label and comment for nodes-links when selected
 export default function NodeLabelComment(props: LabelCommentProps) {
-  const classes = useStyles();
+  const classes = useDashboardStyles();
 
   const selectedElement = useSelectedElementStore(
     (state) => state.selectedElement

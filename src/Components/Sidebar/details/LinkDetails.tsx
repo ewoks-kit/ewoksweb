@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react';
 import type { EwoksRFLink } from '../../../types';
 import { Checkbox } from '@material-ui/core';
-import DashboardStyle from '../../Dashboard/DashboardStyle';
+import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import DataMappingComponent from '../EditableTableProperties/DataMapping';
 import Conditions from '../EditableTableProperties/Conditions';
 import SidebarTooltip from '../SidebarTooltip';
@@ -10,10 +10,8 @@ import { assertEdgeDataDefined, isLink } from '../../../utils/typeGuards';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { useSelectedElement } from '../../../store/graph-hooks';
 
-const useStyles = DashboardStyle;
-
 export default function LinkDetails() {
-  const classes = useStyles();
+  const classes = useDashboardStyles();
 
   const element = useSelectedElement() as EwoksRFLink;
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
