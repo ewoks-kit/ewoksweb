@@ -31,8 +31,8 @@ function ExecutionStepsNode(args: NodeProps) {
 
   return (
     <div
+      className="node-content"
       style={{
-        ...style.body,
         padding: '2px',
       }}
     >

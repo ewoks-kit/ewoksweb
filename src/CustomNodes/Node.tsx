@@ -78,10 +78,8 @@ function Node({
 
   return (
     <div
-      style={{
-        ...style.body,
-        border,
-      }}
+      className="node-content"
+      style={{ border }}
       id="choice"
       role="button"
       tabIndex={0}

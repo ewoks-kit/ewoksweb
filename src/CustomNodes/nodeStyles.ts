@@ -57,16 +57,6 @@ export const style = {
   icons: {
     maxWidth: '100px',
   },
-
-  body: {
-    display: 'flex',
-    flexDirection: 'column',
-    // backgroundColor: 'rgb(217, 223, 255)',
-    boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
-    border: '2px solid #bbb',
-    borderRadius: '15px', // TODO: radius to 50 to create a cycle like orange
-    fontSize: '10pt',
-  },
   title: {
     position: 'relative',
     padding: '8px 8px',
