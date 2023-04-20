@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { EdgeProps } from 'reactflow';
 import { getBezierPath } from 'reactflow';
+import InteractionHelper from './InteractionHelper';
 
 function getForeignObjectProps(
   sourceX: number,
@@ -46,6 +47,7 @@ function multilineText({
   label = '',
   markerEnd,
   style = {},
+  interactionWidth,
 }: EdgeProps) {
   const [path] = getBezierPath({
     sourceX,
@@ -79,6 +81,7 @@ function multilineText({
             label.split(',').map((mp) => <div key={mp}>{mp}</div>)}
         </div>
       </foreignObject>
+      <InteractionHelper path={path} interactionWidth={interactionWidth} />
     </>
   );
 }
