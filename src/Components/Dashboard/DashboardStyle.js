@@ -8,7 +8,6 @@ const dashboardStyle = makeStyles((theme) => ({
   },
   openFileButton: {
     backgroundColor: '#96a5f9',
-    color: '#fff',
   },
 
   root: {

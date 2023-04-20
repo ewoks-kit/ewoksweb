@@ -73,7 +73,7 @@ const useStyles = makeStyles(() =>
 );
 
 interface AddNodesProps {
-  title: string;
+  title?: string;
   openSaveDialogNewtask?: boolean;
 }
 // DOC: Hosts the nodes-tasks in their categories to drag and drop them into canvas
@@ -198,15 +198,6 @@ function AddNodes(props: AddNodesProps) {
 
   return (
     <>
-      {/* Inline style till sidebar is refactored */}
-      <p
-        style={{
-          fontSize: 24,
-          color: 'blue',
-        }}
-      >
-        {/* {props.title} */}
-      </p>
       {[...new Set(tasks.map((m) => m.category)).values()].map(
         (categoryName) => (
           <Accordion

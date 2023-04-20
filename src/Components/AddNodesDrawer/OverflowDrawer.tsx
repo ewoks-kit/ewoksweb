@@ -29,18 +29,13 @@ const useStyles = makeStyles((theme) => ({
   drawerClose: {
     width: '1px',
   },
-  // Needed for the rest of the elements if we need to push the rest
-  // content: {
-  //   marginLeft: '300px', // Same as drawer width
-  //   width: 'calc(100% - 300px)', // Width of content = 100% - drawer width
-  // },
   leftDrawerButton: {
     position: 'absolute',
     top: theme.spacing(9),
     zIndex: theme.zIndex.drawer + 1,
     transition: 'transform 0.3s ease-in-out',
     '&:hover': {
-      transform: 'scale(1.1)', // Add the scaling effect on hover
+      transform: 'scale(1.1)',
     },
   },
 }));
