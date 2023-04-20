@@ -28,7 +28,7 @@ function Node({
   type,
   label,
   color,
-  colorBorder,
+  colorBorder: borderColor,
   content,
   image,
   comment,
@@ -36,10 +36,6 @@ function Node({
   nodeWidth,
 }: NodeProps) {
   const { getNodes, getEdges } = useReactFlow();
-
-  const border = colorBorder
-    ? `4px solid ${colorBorder}`
-    : '2px solid rgb(233, 235, 247)';
 
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const graphInfo = useStore((state) => state.graphInfo);
@@ -79,7 +75,7 @@ function Node({
   return (
     <div
       className="node-content"
-      style={{ border }}
+      style={borderColor ? { borderColor } : undefined}
       id="choice"
       role="button"
       tabIndex={0}
