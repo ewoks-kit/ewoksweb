@@ -28,7 +28,6 @@ import { textForError } from 'utils';
 import type { OverridableComponent } from '@material-ui/core/OverridableComponent';
 import TaskIcon from '../Sidebar/TaskIcon';
 import IconBoundary from '../../IconBoundary';
-import useSelectedElementStore from '../../store/useSelectedElementStore';
 
 interface DragInfo {
   task_identifier: string;
@@ -91,9 +90,6 @@ function AddNodes(props: AddNodesProps) {
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
   const [elementToEdit, setElementToEdit] = useState<Task>({});
   const initializedTask = useStore((state) => state.initializedTask);
-  const selectedElementId = useSelectedElementStore(
-    (state) => state.selectedElement.id
-  );
 
   const getTasks = useCallback(async () => {
     try {
@@ -116,7 +112,7 @@ function AddNodes(props: AddNodesProps) {
     if (tasks.length === 0) {
       getTasks();
     }
-  }, [selectedElementId, tasks.length, getTasks]);
+  }, [tasks.length, getTasks]);
 
   useEffect(() => {
     if (props.openSaveDialogNewtask) {
@@ -184,6 +180,15 @@ function AddNodes(props: AddNodesProps) {
       setElementToEdit(initializedTask);
       setOpenSaveDialog(true);
     }
+  }
+
+  function showTaskManageButtons(categoryName: string | undefined) {
+    return (
+      selectedTask.task_identifier &&
+      categoryName !== 'General' &&
+      tasks.length > 0 &&
+      props.openSaveDialogNewtask
+    );
   }
 
   // The following will be triggered by the plus button on the navBar
@@ -296,12 +301,7 @@ function AddNodes(props: AddNodesProps) {
                 </>
               )}
             </AccordionDetails>
-            {/* TODO: This is not really readable:
-                storing conditions in a variable/util. At first glance could be isSelectedTaskCategory
-                Making a new component where you could deal with these conditions with early return to null */}
-            {selectedTask.task_identifier &&
-              categoryName !== 'General' &&
-              tasks.length > 0 &&
+            {showTaskManageButtons(categoryName) &&
               tasks.find(
                 (tas) => tas.task_identifier === selectedTask.task_identifier
               )?.category === categoryName && (
@@ -351,7 +351,9 @@ function AddNodes(props: AddNodesProps) {
                     New
                   </Button>
                   <ConfirmDialog
-                    title={`Delete "${selectedTask.task_identifier}" task?`}
+                    title={`Delete "${
+                      selectedTask.task_identifier || ''
+                    }" task?`}
                     content={`You are about to delete a task.
                                 Please make sure that it is not used in any workflow!
                                 Do you agree to continue?`}
