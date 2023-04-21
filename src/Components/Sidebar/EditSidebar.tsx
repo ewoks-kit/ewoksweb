@@ -8,11 +8,7 @@ import { calcNewId } from 'utils/calcNewId';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { deleteWorkflow } from 'api/api';
 import commonStrings from 'commonStrings.json';
-import {
-  assertNodeDataDefined,
-  isNode,
-  isNodeRF,
-} from '../../utils/typeGuards';
+import { assertNodeDataDefined, isNodeRF } from '../../utils/typeGuards';
 import { getNodesData, textForError } from '../../utils';
 import { useNodesIds } from '../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
@@ -24,20 +20,14 @@ import { Delete as DeleteIcon } from '@material-ui/icons';
 import { useStore as useRFStore } from 'reactflow';
 
 const nodeEdgeSelectedSelector = (state: ReactFlowState) => {
-  console.log(state);
-
-  const nodeSelected =
-    state.nodeInternals &&
-    [...state.nodeInternals.values()].find((node) => node.selected);
+  const nodeSelected = [...state.nodeInternals.values()].find(
+    (node) => node.selected
+  );
   if (nodeSelected) {
-    console.log(nodeSelected);
-
     return nodeSelected;
   }
-  const edgeSelected =
-    state.edges && [...state.edges.values()].find((edge) => edge.selected);
+  const edgeSelected = [...state.edges.values()].find((edge) => edge.selected);
   if (edgeSelected) {
-    console.log(edgeSelected);
     return edgeSelected;
   }
   return undefined;
