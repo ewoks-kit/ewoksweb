@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { FormControl, TextField, IconButton, Fab } from '@material-ui/core';
-import DashboardStyle from '../../Dashboard/DashboardStyle';
+import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import SidebarTooltip from '../SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
@@ -17,11 +17,9 @@ import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { useSelectedElement } from '../../../store/graph-hooks';
 import type { EwoksRFLink } from '../../../types';
 
-const useStyles = DashboardStyle;
-
 // DOC: the label and comment for links when selected
 export default function EdgeLabelComment() {
-  const classes = useStyles();
+  const classes = useDashboardStyles();
 
   const { getEdges, setEdges } = useReactFlow();
   const element = useSelectedElement();

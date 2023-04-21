@@ -47,8 +47,8 @@ function NoteNode(args: NoteProps) {
 
   return (
     <div
+      className="node-content"
       style={{
-        ...style.body,
         padding: '10px',
       }}
       role="button"

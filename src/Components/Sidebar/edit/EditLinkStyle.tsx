@@ -9,7 +9,7 @@ import {
   Slider,
 } from '@material-ui/core';
 
-import DashboardStyle from '../../Dashboard/DashboardStyle';
+import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import useStore from '../../../store/useStore';
 import type { EwoksRFLink, PropertyChangedEvent } from '../../../types';
 import sidebarStyle from '../sidebarStyle';
@@ -25,11 +25,9 @@ import { useReactFlow } from 'reactflow';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { useSelectedElement } from '../../../store/graph-hooks';
 
-const useStyles = DashboardStyle;
-
 // DOC: Edit the link style
 export default function EditLinkStyle() {
-  const classes = useStyles();
+  const classes = useDashboardStyles();
   const element = useSelectedElement() as EwoksRFLink;
   const { setEdges, getEdges } = useReactFlow();
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));

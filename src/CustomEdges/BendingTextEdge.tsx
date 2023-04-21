@@ -1,5 +1,6 @@
 import type { EdgeProps } from 'reactflow';
 import { getBezierPath } from 'reactflow';
+import InteractionHelper from './InteractionHelper';
 
 function bendingText({
   id,
@@ -12,6 +13,7 @@ function bendingText({
   label = '',
   markerEnd,
   style = {},
+  interactionWidth,
 }: EdgeProps) {
   const [path] = getBezierPath({
     sourceX,
@@ -42,6 +44,7 @@ function bendingText({
           {label}
         </textPath>
       </text>
+      <InteractionHelper path={path} interactionWidth={interactionWidth} />
     </>
   );
 }

@@ -1,10 +1,10 @@
-import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AddIcon from '@material-ui/icons/Add';
 import { Fab } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import AddNodes from './AddNodes';
+import { useToggle } from '@react-hookz/web/esm/useToggle';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -42,10 +42,10 @@ const useStyles = makeStyles((theme) => ({
 
 function OverflowDrawer() {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
+  const [isToggled, toggle] = useToggle(false);
 
   const toggleDrawer = () => {
-    setOpen(!open);
+    toggle(!isToggled);
   };
 
   return (
@@ -54,14 +54,14 @@ function OverflowDrawer() {
         variant="permanent"
         anchor="left"
         className={`${classes.drawer} ${
-          open ? classes.drawerOpen : classes.drawerClose
+          isToggled ? classes.drawerOpen : classes.drawerClose
         }`}
         classes={{
           paper: `${classes.drawer} ${
-            open ? classes.drawerOpen : classes.drawerClose
+            isToggled ? classes.drawerOpen : classes.drawerClose
           }`,
         }}
-        open={open}
+        open={isToggled}
       >
         <aside className="dndflow">
           <AddNodes title="Add Nodes" />
@@ -72,10 +72,10 @@ function OverflowDrawer() {
         color="primary"
         aria-label="add"
         onClick={toggleDrawer}
-        style={{ marginLeft: open ? '230px' : '10px' }}
+        style={{ marginLeft: isToggled ? '230px' : '10px' }}
         className={classes.leftDrawerButton}
       >
-        {open ? (
+        {isToggled ? (
           <ArrowBackIosIcon style={{ marginLeft: '8px' }} />
         ) : (
           <AddIcon />

@@ -19,7 +19,7 @@ import SubgraphsStack from '../TopNavBar/SubgraphsStack';
 import LinearSpinner from '../General/LinearSpinner';
 // import ExecuteWorkflow from '../Execution/ExecuteWorkflow';
 import Tooltip from '@material-ui/core/Tooltip';
-import useDashboardStyle from './DashboardStyle';
+import { useDashboardStyles } from './useDashboardStyles';
 import SaveToServer from '../TopNavBar/SaveToServer';
 import tooltipText from '../General/TooltipText';
 import useStore from 'store/useStore';
@@ -52,7 +52,7 @@ function workflowExists(
 }
 
 export default function Dashboard() {
-  const classes = useDashboardStyle();
+  const classes = useDashboardStyles();
 
   const rfInstance = useReactFlow();
 

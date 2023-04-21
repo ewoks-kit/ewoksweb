@@ -17,7 +17,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import EditTaskProp from './EditTaskProp';
-import DashboardStyle from '../../Dashboard/DashboardStyle';
+import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import SidebarTooltip from '../SidebarTooltip';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import NodeLabelComment from './NodeLabelComment';
@@ -31,11 +31,9 @@ import {
 import { useNodesIds } from '../../../store/graph-hooks';
 import useSelectedElementStore from '../../../store/useSelectedElementStore';
 
-const useStyles = DashboardStyle;
-
 // DOC: selectedNode details in sidebar
 export default function NodeDetails() {
-  const classes = useStyles();
+  const classes = useDashboardStyles();
   const element = useSelectedElementStore((state) => state.selectedElement);
 
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
