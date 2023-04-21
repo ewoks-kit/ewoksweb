@@ -141,18 +141,6 @@ function Canvas() {
     });
   };
 
-  // Keep this comment until execution is deleted
-  // const onNodeClick = (_event: MouseEvent, element: Node) => {
-  //   if (
-  //     !(
-  //       element.data.task_props.task_type === 'executionSteps' &&
-  //       element.type === 'executionSteps'
-  //     )
-  //   ) {
-  //     setSelectedElement({ type: 'node', id: element.id });
-  //   }
-  // };
-
   // eslint-disable-next-line unicorn/consistent-function-scoping
   const onDragOver: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();

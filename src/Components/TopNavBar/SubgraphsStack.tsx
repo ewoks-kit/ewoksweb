@@ -1,5 +1,5 @@
 import Typography from '@material-ui/core/Typography';
-import DashboardStyle from '../Dashboard/DashboardStyle';
+import { useDashboardStyles } from '../Dashboard/useDashboardStyles';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import HomeIcon from '@material-ui/icons/Home';
 
@@ -10,10 +10,8 @@ import useSelectedElementStore from '../../store/useSelectedElementStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 
-const useStyles = DashboardStyle;
-
 export default function SubgraphsStack() {
-  const classes = useStyles();
+  const classes = useDashboardStyles();
 
   const { setNodes, setEdges, fitView } = useReactFlow();
 

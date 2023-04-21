@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 
 import { FormControl, IconButton, TextField, Fab } from '@material-ui/core';
-import DashboardStyle from '../../Dashboard/DashboardStyle';
+import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import SaveIcon from '@material-ui/icons/Save';
 import useStore from '../../../store/useStore';
 import sidebarStyle from '../sidebarStyle';
 import type { ChangeEvent } from 'react';
-
-const useStyles = DashboardStyle;
 
 interface TextButtonSaveProps {
   label: string;
@@ -16,7 +14,7 @@ interface TextButtonSaveProps {
 }
 
 export default function TextButtonSave(props: TextButtonSaveProps) {
-  const classes = useStyles();
+  const classes = useDashboardStyles();
   // console.log(props); this is rerendered more than it should examine
 
   const { label, value } = props;
