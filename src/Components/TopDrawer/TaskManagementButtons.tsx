@@ -9,7 +9,7 @@ import useStore from 'store/useStore';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { getTaskDescription, deleteTask } from 'api/api';
+import { getTaskDescription, deleteTask } from 'api/tasks';
 import { textForError } from 'utils';
 import commonStrings from 'commonStrings.json';
 import FormDialog from '../General/FormDialog';

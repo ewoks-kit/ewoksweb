@@ -5,6 +5,11 @@ import { Fab } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import AddNodes from './AddNodes';
 import { useToggle } from '@react-hookz/web/esm/useToggle';
+import { useCallback } from 'react';
+import { getTaskDescription } from '../../api/tasks';
+import useStore from 'store/useStore';
+import { textForError } from '../../utils';
+import commonStrings from 'commonStrings.json';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -44,9 +49,31 @@ function OverflowDrawer() {
   const classes = useStyles();
   const [isToggled, toggle] = useToggle(false);
 
+  const setTasks = useStore((state) => state.setTasks);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+
   const toggleDrawer = () => {
+    if (!isToggled) {
+      getTasks();
+    }
     toggle(!isToggled);
   };
+
+  const getTasks = useCallback(async () => {
+    try {
+      const tasksData = await getTaskDescription();
+      if (tasksData.data.items.length > 0) {
+        const allTasks = tasksData.data.items;
+        setTasks(allTasks);
+      }
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: textForError(error, commonStrings.retrieveTasksError),
+        severity: 'error',
+      });
+    }
+  }, [setOpenSnackbar, setTasks]);
 
   return (
     <>

@@ -12,15 +12,17 @@ import TextsmsIcon from '@material-ui/icons/Textsms';
 import Upload from '../General/Upload';
 import AddIcon from '@material-ui/icons/Add';
 import useStore from 'store/useStore';
-import commonStrings from 'commonStrings.json';
-import React, { useCallback, useEffect } from 'react';
-import { getTaskDescription } from 'api/api';
+import type { DragEvent } from 'react';
+import { useCallback } from 'react';
+import { useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { textForError } from 'utils';
 import type { OverridableComponent } from '@material-ui/core/OverridableComponent';
 import TaskIcon from '../Sidebar/TaskIcon';
 import IconBoundary from '../../IconBoundary';
 import TaskManagementButtons from '../TopDrawer/TaskManagementButtons';
+import { getTaskDescription } from '../../api/tasks';
+import { textForError } from '../../utils';
+import commonStrings from 'commonStrings.json';
 
 interface DragInfo {
   task_identifier: string;
@@ -28,7 +30,7 @@ interface DragInfo {
   icon: OverridableComponent<SvgIconTypeMap> | string;
 }
 const onDragStart = (
-  event: React.DragEvent,
+  event: DragEvent,
   { task_identifier, task_type, icon }: DragInfo
 ) => {
   event.dataTransfer.setData('task_identifier', task_identifier);
@@ -79,6 +81,13 @@ function AddNodes(props: AddNodesProps) {
   const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
+  useEffect(() => {
+    // TODO: examine the strategy for re-fetching tasks like with icons
+    if (tasks.length === 0) {
+      getTasks();
+    }
+  });
+
   const getTasks = useCallback(async () => {
     try {
       const tasksData = await getTaskDescription();
@@ -94,13 +103,6 @@ function AddNodes(props: AddNodesProps) {
       });
     }
   }, [setOpenSnackbar, setTasks]);
-
-  useEffect(() => {
-    // TODO: examine the strategy for re-fetching tasks-workflows-icons
-    if (tasks.length === 0) {
-      getTasks();
-    }
-  }, [tasks.length, getTasks]);
 
   const insertGraph = () => {
     setGraphOrSubgraph(false);
@@ -118,17 +120,6 @@ function AddNodes(props: AddNodesProps) {
       props.showManagementButtons
     );
   }
-
-  // TODO: The following will be triggered by the plus button on the canvas
-  // and when selecting the manage tasks on the top drawer
-  // const handleChange = (
-  //   event: React.ChangeEvent<unknown>,
-  //   newExpanded: boolean
-  // ) => {
-  //   if (newExpanded) {
-  //     getTasks();
-  //   }
-  // };
 
   return (
     <>

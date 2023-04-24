@@ -2,7 +2,7 @@ import { Button, Grid, TextField } from '@material-ui/core';
 import useStore from '../../store/useStore';
 import EventNoteIcon from '@material-ui/icons/EventNote';
 import { useState } from 'react';
-import { discoverTasks } from '../../api/api';
+import { discoverTasks } from '../../api/tasks';
 import commonStrings from '../../commonStrings.json';
 import type { SnackbarParams } from '../../types';
 import { textForError } from '../../utils';
