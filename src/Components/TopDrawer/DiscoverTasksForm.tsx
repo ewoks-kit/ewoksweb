@@ -45,7 +45,7 @@ export default function DiscoverTasksForm() {
   }
 
   return (
-    <Grid item xs={12} sm={4} md={3} lg={2} className="dndflow">
+    <Grid item xs={12} sm={4} md={3} lg={2}>
       Import tasks from a module
       <TextField
         margin="dense"
