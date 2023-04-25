@@ -13,16 +13,11 @@ import Upload from '../General/Upload';
 import AddIcon from '@material-ui/icons/Add';
 import useStore from 'store/useStore';
 import type { DragEvent } from 'react';
-import { useCallback } from 'react';
-import { useEffect } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import type { OverridableComponent } from '@material-ui/core/OverridableComponent';
 import TaskIcon from '../Sidebar/TaskIcon';
 import IconBoundary from '../../IconBoundary';
 import TaskManagementButtons from '../TopDrawer/TaskManagementButtons';
-import { getTaskDescription } from '../../api/tasks';
-import { textForError } from '../../utils';
-import commonStrings from 'commonStrings.json';
 
 interface DragInfo {
   task_identifier: string;
@@ -75,34 +70,9 @@ function AddNodes(props: AddNodesProps) {
   const classes = useStyles();
 
   const tasks = useStore((state) => state.tasks);
-  const setTasks = useStore((state) => state.setTasks);
   const selectedTask = useStore((state) => state.selectedTask);
   const setSelectedTask = useStore((state) => state.setSelectedTask);
   const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-
-  useEffect(() => {
-    // TODO: examine the strategy for re-fetching tasks like with icons
-    if (tasks.length === 0) {
-      getTasks();
-    }
-  });
-
-  const getTasks = useCallback(async () => {
-    try {
-      const tasksData = await getTaskDescription();
-      if (tasksData.data.items.length > 0) {
-        const allTasks = tasksData.data.items;
-        setTasks(allTasks);
-      }
-    } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(error, commonStrings.retrieveTasksError),
-        severity: 'error',
-      });
-    }
-  }, [setOpenSnackbar, setTasks]);
 
   const insertGraph = () => {
     setGraphOrSubgraph(false);
@@ -111,15 +81,6 @@ function AddNodes(props: AddNodesProps) {
   const clickTask = (task: Task) => {
     setSelectedTask(task);
   };
-
-  function showTaskManageButtons(categoryName: string | undefined) {
-    return (
-      selectedTask.task_identifier &&
-      categoryName !== 'General' &&
-      tasks.length > 0 &&
-      props.showManagementButtons
-    );
-  }
 
   return (
     <>
@@ -221,7 +182,8 @@ function AddNodes(props: AddNodesProps) {
                 </>
               )}
             </AccordionDetails>
-            {showTaskManageButtons(categoryName) &&
+            {categoryName !== 'General' &&
+              props.showManagementButtons &&
               tasks.find(
                 (tas) => tas.task_identifier === selectedTask.task_identifier
               )?.category === categoryName && <TaskManagementButtons />}

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { Button, IconButton } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import BookmarksIcon from '@material-ui/icons/Bookmarks';
@@ -36,7 +36,7 @@ function TaskManagementButtons() {
   const tasks = useStore((state) => state.tasks);
   const setTasks = useStore((state) => state.setTasks);
 
-  const getTasks = useCallback(async () => {
+  const getTasks = async () => {
     try {
       const tasksData = await getTaskDescription();
       if (tasksData.data.items.length > 0) {
@@ -50,7 +50,7 @@ function TaskManagementButtons() {
         severity: 'error',
       });
     }
-  }, [setOpenSnackbar, setTasks]);
+  };
 
   function onAction(action: FormAction, element?: string) {
     setDoAction(action);
