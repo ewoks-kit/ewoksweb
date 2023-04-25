@@ -11,7 +11,6 @@ import { Button, Menu, Tooltip } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import FormDialog from '../General/FormDialog';
 import type {
-  EwoksRFLink,
   EwoksRFNode,
   GraphDetails,
   SelectedElement,
