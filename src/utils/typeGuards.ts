@@ -20,8 +20,8 @@ export function isNode(
   return !!entity && 'position' in entity;
 }
 
-export function isNodeRF(entity: Node | Edge | GraphDetails): entity is Node {
-  return 'position' in entity;
+export function isNodeRF(entity: Node | Edge | undefined): entity is Node {
+  return !!entity && 'position' in entity;
 }
 
 export function isLink(

@@ -27,11 +27,8 @@ export function useEdge(id: string) {
   return useRFStore((state) => state.edges.find((edge) => edge.id === id));
 }
 
-export function useSelectedElement(): Node | Edge | GraphDetails {
-  const selectedElement = useRFStore(nodeEdgeSelectedSelector);
-  const graphInfo = useStore((state) => state.graphInfo);
-
-  return selectedElement ?? graphInfo;
+export function useSelectedElement(): Node | Edge | undefined {
+  return useRFStore(nodeEdgeSelectedSelector);
 }
 
 const nodeEdgeSelectedSelector = (state: ReactFlowState) => {
