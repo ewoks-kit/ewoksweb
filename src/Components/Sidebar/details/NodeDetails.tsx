@@ -34,7 +34,6 @@ import type { Node } from 'reactflow';
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(selectedElement: Node) {
   const classes = useDashboardStyles();
-  // const element = useSelectedElementStore((state) => state.selectedElement);
 
   const nodeData = useNodeDataStore((state) =>
     state.nodesData.get(selectedElement.id)
@@ -246,8 +245,8 @@ export default function NodeDetails(selectedElement: Node) {
 
   return (
     <Box>
-      <NodeLabelComment showComment />
-      <DefaultInputs />
+      <NodeLabelComment showComment selectedElement={selectedElement} />
+      <DefaultInputs {...selectedElement} />
 
       <SidebarTooltip
         text={`Set to True when the default input covers all required input

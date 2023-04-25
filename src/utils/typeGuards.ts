@@ -6,8 +6,6 @@ import type {
   EwoksRFNode,
   EwoksRFNodeData,
   GraphDetails,
-  SelectedElement,
-  SelectedElementNode,
 } from '../types';
 
 export interface EwoksServerErrorResponse {
@@ -114,12 +112,9 @@ export function assertEdgeDataDefined(
 }
 
 export function assertElementIsNodeType(
-  entity: SelectedElement | undefined
-): asserts entity is SelectedElementNode {
-  assertDefined(
-    !!entity && 'type' in entity && entity.type === 'node',
-    `Node is not defined!`
-  );
+  entity: Node | undefined
+): asserts entity is Node {
+  assertDefined(!!entity && 'position' in entity, `Node is not defined!`);
 }
 
 export function assertElementIsEdge(
