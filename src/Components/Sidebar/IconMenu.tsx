@@ -10,7 +10,13 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { Button, Menu, Tooltip } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import FormDialog from '../General/FormDialog';
-import type { EwoksRFLink, EwoksRFNode, GraphDetails, Task } from '../../types';
+import type {
+  EwoksRFLink,
+  EwoksRFNode,
+  GraphDetails,
+  SelectedElement,
+  Task,
+} from '../../types';
 import useStore from '../../store/useStore';
 import { FormAction } from '../../types';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
@@ -37,7 +43,7 @@ export default function IconMenu() {
   const open = Boolean(anchorEl);
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
   const [elementToEdit, setElementToEdit] = useState<Task | GraphDetails>({});
-  const [doAction, setDoAction] = useState<FormAction>(FormAction.newTask);
+  const [doAction, setDoAction] = useState<FormAction>(FormAction.cloneTask);
   const selectedElement = useSelectedElementStore(
     (state) => state.selectedElement
   );
@@ -68,52 +74,56 @@ export default function IconMenu() {
 
   function onAction(
     action: FormAction,
-    element: Task | EwoksRFNode | EwoksRFLink | GraphDetails
+    element: SelectedElement | GraphDetails
   ) {
     setDoAction(action);
 
     switch (action) {
-      case 'newTask': {
-        setElementToEdit(initializedTask);
-        break;
-      }
       case 'cloneTask': {
-        if ('position' in element) {
-          const nodeData = getNodeData(selectedElement.id);
-          assertNodeDataDefined(nodeData, selectedElement.id);
-
-          if (nodeData.task_props.task_type === 'graph') {
-            setOpenSnackbar({
-              open: true,
-              text: 'Cannot clone a graph, please select a Task!',
-              severity: 'warning',
-            });
-            return;
-          }
-          // DOC: if the task does not exist in the tasks populate the form with the element details
-          const task = tasks.find(
-            (tas) => tas.task_identifier === nodeData.task_props.task_identifier
-          );
-
-          setElementToEdit(
-            task || {
-              ...initializedTask,
-              task_identifier: nodeData.task_props.task_identifier,
-              task_type: nodeData.task_props.task_type,
-            }
-          );
-        } else {
+        if (!('type' in element) || element.type !== 'node') {
           setOpenSnackbar({
             open: true,
-            text: 'First select in the canvas a Node to clone and Save as Task',
+            text: 'First select in the canvas a Node to create a new Task',
             severity: 'warning',
           });
           return;
         }
+        const nodeData = getNodeData(selectedElement.id);
+        assertNodeDataDefined(nodeData, selectedElement.id);
 
+        if (nodeData.task_props.task_type === 'graph') {
+          setOpenSnackbar({
+            open: true,
+            text:
+              'Cannot clone a sub-workflow as a Task, please select a Node!',
+            severity: 'warning',
+          });
+          return;
+        }
+        // DOC: if the task does not exist in the tasks populate the form with the element details
+        const task = tasks.find(
+          (tas) => tas.task_identifier === nodeData.task_props.task_identifier
+        );
+
+        setElementToEdit(
+          task || {
+            ...initializedTask,
+            task_identifier: nodeData.task_props.task_identifier,
+            task_type: nodeData.task_props.task_type,
+          }
+        );
         break;
       }
       case 'cloneGraph': {
+        if (!workingGraph.graph.id) {
+          setOpenSnackbar({
+            open: true,
+            text:
+              'No Workflow to clone! Please open a workflow that you need to clone first.',
+            severity: 'success',
+          });
+          return;
+        }
         setElementToEdit(graphInfo);
         break;
       }
@@ -126,10 +136,18 @@ export default function IconMenu() {
   }
 
   const deleteElement = async () => {
+    if (!workingGraph.graph.id) {
+      setOpenSnackbar({
+        open: true,
+        text: 'No workflow on canvas to delete!',
+        severity: 'success',
+      });
+      return;
+    }
     if (workingGraph.graph.id !== graphInfo.id) {
       setOpenSnackbar({
         open: true,
-        text: 'Not allowed to delete any element in a sub-graph!',
+        text: 'Not allowed to delete any element in a sub-workflow!',
         severity: 'success',
       });
       return;
@@ -230,7 +248,7 @@ export default function IconMenu() {
         open={openSaveDialog}
         setOpenSaveDialog={setOpenSaveDialog}
       />
-      <Tooltip title="Clone or create task/workflow" arrow>
+      <Tooltip title="Delete, Clone" arrow>
         <Button
           style={{ margin: '8px' }}
           variant="contained"
@@ -266,7 +284,7 @@ export default function IconMenu() {
                   ? 'Node'
                   : selectedElement.type === 'edge'
                   ? 'Link'
-                  : 'Graph'}
+                  : 'Workflow'}
               </ListItemText>
               <Typography variant="body2" color="primary" />
             </MenuItem>
@@ -277,7 +295,7 @@ export default function IconMenu() {
                 <ListItemIcon>
                   <FileCopyIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Clone Graph</ListItemText>
+                <ListItemText>Clone Workflow</ListItemText>
                 <Typography variant="body2" color="primary" />
               </MenuItem>
             )}
@@ -292,7 +310,9 @@ export default function IconMenu() {
                 </MenuItem>
 
                 <MenuItem
-                  onClick={() => onAction(FormAction.editTask, selectedElement)}
+                  onClick={() =>
+                    onAction(FormAction.cloneTask, selectedElement)
+                  }
                 >
                   <ListItemIcon>
                     <FileCopyIcon fontSize="small" />

@@ -75,7 +75,7 @@ export default function BasicTabs() {
           aria-label="basic tabs example"
         >
           <Tab label="Workflows" {...a11yProps(0)} />
-          <Tab label="Tasks" {...a11yProps(1)} />
+          <Tab label="Tasks" data-cy="tasksTab" {...a11yProps(1)} />
           <Tab label="Icons" data-cy="iconsTab" {...a11yProps(2)} />
           {/* TODO: commented for onlyEditRelease */}
           {/* <Tab label="Executions" {...a11yProps(3)} /> */}
