@@ -3,57 +3,34 @@ describe('sidebar menu', () => {
     cy.loadAppWithoutGraph();
   });
 
-  it('opens the newTask form', () => {
+  it('Cannot delete or clone a workflow with an empty canvas', () => {
     cy.get('[data-cy="iconMenu"]').click();
 
     cy.get('.MuiListItem-button')
-      .should('have.length', 3)
+      .should('have.length', 2)
       .first()
       .children('.MuiListItemText-root')
       .should('have.length', 1)
-      .and('have.text', 'New Task')
+      .and('have.text', 'Clone Workflow')
       .click();
 
-    cy.contains('Give the new Task details')
-      .parent()
-      .should('have.class', 'MuiDialogTitle-root')
-      .siblings()
-      .first()
-      .as('dialogContent')
-      .should('have.class', 'MuiDialogContent-root');
+    cy.contains('No Workflow to clone!');
 
-    cy.get('@dialogContent')
-      .contains('New Name - Identifier')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .type('Always-and-forever');
+    cy.get('.MuiListItem-button')
+      .should('have.length', 2)
+      .last()
+      .children('.MuiListItemText-root')
+      .should('have.length', 1)
+      .and('have.text', 'Delete Workflow')
+      .click();
 
-    cy.contains('Cancel').click();
+    cy.contains('No workflow on canvas to delete!');
   });
 
-  it('wont open the clone Task form when node is not selected', () => {
-    cy.get('.MuiListItem-button').contains('Clone as Task').parent().click();
-
-    cy.contains('First select in the canvas a Node to clone and Save as Task');
-
-    // TODO: cannot close the menu with clicks outside?
-    // cy.get('.react-flow').click({ force: true }).click({ force: true });
-    // cy.contains('Add Nodes').click({ force: true });
-  });
+  // TODO: cannot close the menu with clicks outside? So use again loadApp
 
   it('opens the clone Task form when node is selected', () => {
-    cy.visit('http://localhost:3000/#/edit-workflows');
-
-    cy.get('label')
-      .should('include.text', 'Open workflow')
-      .parents('.MuiAutocomplete-root')
-      .click()
-      .get('input[type=text]')
-      .type('tutorial_Graph');
-
-    cy.contains('tutorial_Graph').parent().click();
+    cy.loadApp();
 
     cy.get('.react-flow__nodes')
       .children()
@@ -63,7 +40,10 @@ describe('sidebar menu', () => {
 
     cy.get('[data-cy="iconMenu"]').click();
 
-    cy.get('.MuiListItem-button').contains('Clone as Task').parent().click();
+    cy.get('.MuiListItem-button')
+      .contains('Create Task from Node')
+      .parent()
+      .click();
 
     cy.contains('Give the new Task details')
       .parent()
@@ -75,11 +55,11 @@ describe('sidebar menu', () => {
   });
 
   it('opens the clone Graph form with new workflow name', () => {
-    cy.visit('http://localhost:3000/#/edit-workflows');
+    cy.loadApp();
 
     cy.get('[data-cy="iconMenu"]').click();
 
-    cy.get('.MuiListItem-button').contains('Clone Graph').parent().click();
+    cy.get('.MuiListItem-button').contains('Clone Workflow').parent().click();
 
     cy.contains('Give the new Workflow name')
       .parent()
