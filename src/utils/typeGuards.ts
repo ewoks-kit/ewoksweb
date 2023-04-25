@@ -24,6 +24,10 @@ export function isNodeRF(entity: Node | Edge | undefined): entity is Node {
   return !!entity && 'position' in entity;
 }
 
+export function isEdgeRF(entity: Node | Edge | undefined): entity is Edge {
+  return !!entity && 'source' in entity;
+}
+
 export function isLink(
   entity: EwoksRFNode | EwoksRFLink | GraphDetails | undefined
 ): entity is EwoksRFLink {

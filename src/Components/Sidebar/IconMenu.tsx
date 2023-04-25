@@ -20,7 +20,7 @@ import useStore from '../../store/useStore';
 import { FormAction } from '../../types';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
 import { getNodeData } from '../../utils';
-import type { Node, Edge } from 'reactflow';
+import type { Edge } from 'reactflow';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import { useReactFlow } from 'reactflow';
 import useSelectedElementStore from '../../store/useSelectedElementStore';

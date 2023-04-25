@@ -11,7 +11,7 @@ import {
 
 import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import useStore from '../../../store/useStore';
-import type { EwoksRFLink, PropertyChangedEvent } from '../../../types';
+import type { PropertyChangedEvent } from '../../../types';
 import sidebarStyle from '../sidebarStyle';
 import type { ChangeEvent } from 'react';
 import {
@@ -23,12 +23,11 @@ import type { Edge } from 'reactflow';
 import { MarkerType } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
-import { useSelectedElement } from '../../../store/graph-hooks';
 
 // DOC: Edit the link style
-export default function EditLinkStyle() {
+export default function EditLinkStyle(element: Edge) {
   const classes = useDashboardStyles();
-  const element = useSelectedElement() as EwoksRFLink;
+  // const element = useSelectedElement() as EwoksRFLink;
   const { setEdges, getEdges } = useReactFlow();
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);

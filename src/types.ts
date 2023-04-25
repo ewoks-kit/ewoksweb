@@ -518,3 +518,7 @@ export type PropertyChangedEvent = ChangeEvent<{
   name?: string | undefined;
   value: unknown;
 }>;
+
+export interface SelectedElementRF {
+  selectedElement: Node | Edge | undefined;
+}

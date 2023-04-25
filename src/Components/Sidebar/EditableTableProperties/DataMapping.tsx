@@ -1,4 +1,4 @@
-import type { DataMapping, EwoksRFLink, EwoksRFLinkData } from 'types';
+import type { DataMapping, EwoksRFLinkData } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
@@ -8,8 +8,9 @@ import { isClass } from './utils';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
+import type { Edge } from 'reactflow';
 
-export default function DataMappingComponent(element: EwoksRFLink) {
+export default function DataMappingComponent(element: Edge) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);

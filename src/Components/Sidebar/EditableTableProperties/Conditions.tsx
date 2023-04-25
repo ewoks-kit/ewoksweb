@@ -1,4 +1,4 @@
-import type { EditableTableRow, EwoksRFLink, EwoksRFLinkData } from 'types';
+import type { EditableTableRow, EwoksRFLinkData } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
@@ -6,13 +6,10 @@ import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
+import type { Edge } from 'reactflow';
 
-interface ConditionsProps {
-  element: EwoksRFLink;
-}
 // DOC: The conditions for a link are being set in this component
-export default function Conditions(props: ConditionsProps) {
-  const { element } = props;
+export default function Conditions(element: Edge) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
 

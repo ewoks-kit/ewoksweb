@@ -2,8 +2,6 @@ import type { Node, Edge, ReactFlowState } from 'reactflow';
 import { useStore as useRFStore } from 'reactflow';
 import useStore from 'store/useStore';
 import shallow from 'zustand/shallow';
-import type { GraphDetails } from '../types';
-// import useSelectedElementStore from './useSelectedElementStore';
 
 export function useNodesIds() {
   return useRFStore((state) => {
