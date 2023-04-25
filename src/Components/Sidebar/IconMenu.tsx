@@ -269,24 +269,6 @@ export default function IconMenu() {
       >
         <Paper>
           <MenuList>
-            <MenuItem
-              onClick={() => {
-                deleteElement();
-              }}
-            >
-              <ListItemIcon>
-                <DeleteIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>
-                Delete{' '}
-                {selectedElement.type === 'node'
-                  ? 'Node'
-                  : selectedElement.type === 'edge'
-                  ? 'Link'
-                  : 'Workflow'}
-              </ListItemText>
-              <Typography variant="body2" color="primary" />
-            </MenuItem>
             {selectedElement.type === 'graph' && (
               <MenuItem
                 onClick={() => onAction(FormAction.cloneGraph, graphInfo)}
@@ -320,6 +302,24 @@ export default function IconMenu() {
                 </MenuItem>
               </>
             )}
+            <MenuItem
+              onClick={() => {
+                deleteElement();
+              }}
+            >
+              <ListItemIcon>
+                <DeleteIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>
+                Delete{' '}
+                {selectedElement.type === 'node'
+                  ? 'Node'
+                  : selectedElement.type === 'edge'
+                  ? 'Link'
+                  : 'Workflow'}
+              </ListItemText>
+              <Typography variant="body2" color="primary" />
+            </MenuItem>
           </MenuList>
         </Paper>
       </Menu>
