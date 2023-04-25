@@ -1,8 +1,9 @@
+import type { Node, Edge, ReactFlowState } from 'reactflow';
 import { useStore as useRFStore } from 'reactflow';
 import useStore from 'store/useStore';
 import shallow from 'zustand/shallow';
-import type { EwoksRFLink, EwoksRFNode, GraphDetails } from '../types';
-import useSelectedElementStore from './useSelectedElementStore';
+import type { GraphDetails } from '../types';
+// import useSelectedElementStore from './useSelectedElementStore';
 
 export function useNodesIds() {
   return useRFStore((state) => {
@@ -26,24 +27,23 @@ export function useEdge(id: string) {
   return useRFStore((state) => state.edges.find((edge) => edge.id === id));
 }
 
-export function useSelectedElement(): EwoksRFNode | EwoksRFLink | GraphDetails {
-  const selectedElement = useSelectedElementStore(
-    (state) => state.selectedElement
+export function useSelectedElement(): Node | Edge | GraphDetails {
+  const selectedElement = useRFStore(nodeEdgeSelectedSelector);
+  const graphInfo = useStore((state) => state.graphInfo);
+
+  return selectedElement ?? graphInfo;
+}
+
+const nodeEdgeSelectedSelector = (state: ReactFlowState) => {
+  const nodeSelected = [...state.nodeInternals.values()].find(
+    (node) => node.selected
   );
-
-  const nodeSelected = useNode(selectedElement.id) as EwoksRFNode;
-
-  const edgeSelected = useEdge(selectedElement.id) as EwoksRFLink;
-
-  const graph = useStore((state) => state.graphInfo);
-
-  if (selectedElement.type === 'node') {
+  if (nodeSelected) {
     return nodeSelected;
   }
-
-  if (selectedElement.type === 'edge') {
+  const edgeSelected = [...state.edges.values()].find((edge) => edge.selected);
+  if (edgeSelected) {
     return edgeSelected;
   }
-
-  return graph;
-}
+  return undefined;
+};

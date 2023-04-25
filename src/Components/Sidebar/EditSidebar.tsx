@@ -12,31 +12,17 @@ import { assertNodeDataDefined, isNodeRF } from '../../utils/typeGuards';
 import { getNodesData, textForError } from '../../utils';
 import { useNodesIds } from '../../store/graph-hooks';
 import { useReactFlow } from 'reactflow';
-import type { Node, Edge, ReactFlowState } from 'reactflow';
+import type { Node, Edge } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSelectedElementStore from '../../store/useSelectedElementStore';
 import ElementDetails from './details/ElementDetails';
 import { Delete as DeleteIcon } from '@material-ui/icons';
-import { useStore as useRFStore } from 'reactflow';
-
-const nodeEdgeSelectedSelector = (state: ReactFlowState) => {
-  const nodeSelected = [...state.nodeInternals.values()].find(
-    (node) => node.selected
-  );
-  if (nodeSelected) {
-    return nodeSelected;
-  }
-  const edgeSelected = [...state.edges.values()].find((edge) => edge.selected);
-  if (edgeSelected) {
-    return edgeSelected;
-  }
-  return undefined;
-};
+import { useSelectedElement } from '../../store/graph-hooks';
 
 export default function EditSidebar() {
   const nodesIds = useNodesIds();
   const rfInstance = useReactFlow();
-  const selected = useRFStore(nodeEdgeSelectedSelector);
+  const selected = useSelectedElement();
 
   const selectedElement = useSelectedElementStore(
     (state) => state.selectedElement

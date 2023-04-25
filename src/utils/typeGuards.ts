@@ -20,8 +20,8 @@ export function isNode(
   return !!entity && 'position' in entity;
 }
 
-export function isNodeRF(entity: Node | Edge | undefined): entity is Node {
-  return !!entity && 'position' in entity;
+export function isNodeRF(entity: Node | Edge | GraphDetails): entity is Node {
+  return 'position' in entity;
 }
 
 export function isLink(
@@ -119,7 +119,7 @@ export function assertElementIsNodeType(
 }
 
 export function assertElementIsEdge(
-  entity: EwoksRFNode | EwoksRFLink | GraphDetails | undefined
+  entity: EwoksRFNode | EwoksRFLink | Edge | Node | GraphDetails | undefined
 ): asserts entity is EwoksRFLink extends undefined ? never : EwoksRFLink {
   assertDefined(!!entity && 'source' in entity, `Node is possibly undefined!`);
 }

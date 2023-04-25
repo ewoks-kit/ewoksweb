@@ -17,6 +17,7 @@ import { FormAction } from '../../types';
 import { useSelectedElement } from '../../store/graph-hooks';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
 import { getNodeData } from '../../utils';
+import type { Node, Edge } from 'reactflow';
 
 export default function IconMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -45,7 +46,7 @@ export default function IconMenu() {
 
   function onAction(
     action: FormAction,
-    element: Task | EwoksRFNode | EwoksRFLink | GraphDetails
+    element: Task | EwoksRFNode | EwoksRFLink | Edge | Node | GraphDetails
   ) {
     setDoAction(action);
 
