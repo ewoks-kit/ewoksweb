@@ -2,8 +2,6 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Button,
-  IconButton,
 } from '@material-ui/core';
 import type { SvgIconTypeMap } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -14,21 +12,12 @@ import TextsmsIcon from '@material-ui/icons/Textsms';
 import Upload from '../General/Upload';
 import AddIcon from '@material-ui/icons/Add';
 import useStore from 'store/useStore';
-import commonStrings from 'commonStrings.json';
-import React, { useCallback, useEffect, useState } from 'react';
-import ConfirmDialog from 'Components/General/ConfirmDialog';
-import FormDialog from '../General/FormDialog';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/EditOutlined';
-import BookmarksIcon from '@material-ui/icons/Bookmarks';
-import { getTaskDescription, deleteTask } from 'api/api';
-import { FormAction } from '../../types';
+import type { DragEvent } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { textForError } from 'utils';
 import type { OverridableComponent } from '@material-ui/core/OverridableComponent';
 import TaskIcon from '../Sidebar/TaskIcon';
 import IconBoundary from '../../IconBoundary';
-import useSelectedElementStore from '../../store/useSelectedElementStore';
+import TaskManagementButtons from '../TopDrawer/TaskManagementButtons';
 
 interface DragInfo {
   task_identifier: string;
@@ -36,7 +25,7 @@ interface DragInfo {
   icon: OverridableComponent<SvgIconTypeMap> | string;
 }
 const onDragStart = (
-  event: React.DragEvent,
+  event: DragEvent,
   { task_identifier, task_type, icon }: DragInfo
 ) => {
   event.dataTransfer.setData('task_identifier', task_identifier);
@@ -74,57 +63,16 @@ const useStyles = makeStyles(() =>
 
 interface AddNodesProps {
   title?: string;
-  openSaveDialogNewtask?: boolean;
+  showManagementButtons?: boolean;
 }
 // DOC: Hosts the nodes-tasks in their categories to drag and drop them into canvas
 function AddNodes(props: AddNodesProps) {
   const classes = useStyles();
 
   const tasks = useStore((state) => state.tasks);
-  const setTasks = useStore((state) => state.setTasks);
   const selectedTask = useStore((state) => state.selectedTask);
   const setSelectedTask = useStore((state) => state.setSelectedTask);
   const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
-  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const [doAction, setDoAction] = useState<FormAction>();
-  const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
-  const [elementToEdit, setElementToEdit] = useState<Task>({});
-  const initializedTask = useStore((state) => state.initializedTask);
-  const selectedElementId = useSelectedElementStore(
-    (state) => state.selectedElement.id
-  );
-
-  const getTasks = useCallback(async () => {
-    try {
-      const tasksData = await getTaskDescription();
-      if (tasksData.data.items.length > 0) {
-        const allTasks = tasksData.data.items;
-        setTasks(allTasks);
-      }
-    } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(error, commonStrings.retrieveTasksError),
-        severity: 'error',
-      });
-    }
-  }, [setOpenSnackbar, setTasks]);
-
-  useEffect(() => {
-    // TODO: examine the strategy for re-fetching tasks-workflows-icons
-    if (tasks.length === 0) {
-      getTasks();
-    }
-  }, [selectedElementId, tasks.length, getTasks]);
-
-  useEffect(() => {
-    if (props.openSaveDialogNewtask) {
-      setDoAction(FormAction.newTask);
-      setElementToEdit(initializedTask);
-      setOpenSaveDialog(true);
-    }
-  }, [props.openSaveDialogNewtask, initializedTask]);
 
   const insertGraph = () => {
     setGraphOrSubgraph(false);
@@ -133,68 +81,6 @@ function AddNodes(props: AddNodesProps) {
   const clickTask = (task: Task) => {
     setSelectedTask(task);
   };
-
-  const deleteTaskDialog = () => {
-    setOpenAgreeDialog(true);
-  };
-
-  const agreeDeleteTask = async () => {
-    setOpenAgreeDialog(false);
-    if (!selectedTask.task_identifier) {
-      return;
-    }
-
-    try {
-      await deleteTask(selectedTask.task_identifier);
-      setOpenSnackbar({
-        open: true,
-        text: `Task was successfully deleted!`,
-        severity: 'success',
-      });
-      getTasks();
-    } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(
-          error,
-          'Error in task deletion. Please check connectivity with the server'
-        ),
-        severity: 'error',
-      });
-    }
-  };
-
-  const disAgreeDeleteTask = () => {
-    setOpenAgreeDialog(false);
-  };
-
-  function onAction(action: FormAction, element?: string) {
-    setDoAction(action);
-
-    if (['cloneTask', 'editTask'].includes(action)) {
-      const task = tasks.find((tas) => tas.task_identifier === element);
-      if (task) {
-        setElementToEdit(task);
-        setOpenSaveDialog(true);
-        return;
-      }
-    }
-
-    if (action === 'newTask') {
-      setElementToEdit(initializedTask);
-      setOpenSaveDialog(true);
-    }
-  }
-
-  // The following will be triggered by the plus button on the navBar
-  // const handleChange = (
-  //   event: React.ChangeEvent<unknown>,
-  //   newExpanded: boolean
-  // ) => {
-  //   if (newExpanded) {
-  //     getTasks();
-  //   }
-  // };
 
   return (
     <>
@@ -296,80 +182,14 @@ function AddNodes(props: AddNodesProps) {
                 </>
               )}
             </AccordionDetails>
-            {/* TODO: This is not really readable:
-                storing conditions in a variable/util. At first glance could be isSelectedTaskCategory
-                Making a new component where you could deal with these conditions with early return to null */}
-            {selectedTask.task_identifier &&
-              categoryName !== 'General' &&
-              tasks.length > 0 &&
+            {categoryName !== 'General' &&
+              props.showManagementButtons &&
               tasks.find(
                 (tas) => tas.task_identifier === selectedTask.task_identifier
-              )?.category === categoryName && (
-                <>
-                  <IconButton
-                    onClick={deleteTaskDialog}
-                    aria-label="delete"
-                    color="secondary"
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                  <IconButton
-                    aria-label="edit"
-                    onClick={() =>
-                      onAction(
-                        FormAction.editTask,
-                        selectedTask.task_identifier
-                      )
-                    }
-                    color="primary"
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <Button
-                    className={classes.button}
-                    startIcon={<BookmarksIcon />}
-                    variant="outlined"
-                    color="primary"
-                    onClick={() =>
-                      onAction(
-                        FormAction.cloneTask,
-                        selectedTask.task_identifier
-                      )
-                    }
-                    size="small"
-                  >
-                    Clone
-                  </Button>
-
-                  <Button
-                    className={classes.button}
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => onAction(FormAction.newTask)}
-                    size="small"
-                  >
-                    New
-                  </Button>
-                  <ConfirmDialog
-                    title={`Delete "${selectedTask.task_identifier}" task?`}
-                    content={`You are about to delete a task.
-                                Please make sure that it is not used in any workflow!
-                                Do you agree to continue?`}
-                    open={openAgreeDialog}
-                    agreeCallback={agreeDeleteTask}
-                    disagreeCallback={disAgreeDeleteTask}
-                  />
-                </>
-              )}
+              )?.category === categoryName && <TaskManagementButtons />}
           </Accordion>
         )
       )}
-      <FormDialog
-        elementToEdit={elementToEdit}
-        action={doAction || FormAction.undefined}
-        open={openSaveDialog}
-        setOpenSaveDialog={setOpenSaveDialog}
-      />
     </>
   );
 }

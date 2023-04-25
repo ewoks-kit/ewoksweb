@@ -74,7 +74,6 @@ function Canvas() {
   const setSelectedElement = useSelectedElementStore(
     (state) => state.setSelectedElement
   );
-  const setSelectedTask = useStore((state) => state.setSelectedTask);
   const tasks = useStore((state) => state.tasks);
   const recentGraphs = useStore((state) => state.recentGraphs);
   const workingGraphId = useStore((state) => state.workingGraph.graph.id);
@@ -405,7 +404,6 @@ function Canvas() {
           minZoom={0.2}
           snapToGrid
           onPaneClick={() => onPaneClick()}
-          onClick={() => setSelectedTask({})}
           onDrop={onDrop}
           onConnect={onConnect}
           onEdgeUpdate={onEdgeUpdate}
