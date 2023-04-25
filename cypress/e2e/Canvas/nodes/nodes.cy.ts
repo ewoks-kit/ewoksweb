@@ -117,14 +117,16 @@ it('changes moreHandles of node true->false->true', () => {
 
 it('clones a node by button', () => {
   cy.get('.react-flow__node').should('have.length', 17);
-  cy.contains('Clone').click();
+  cy.get('[data-cy="iconMenu"]').click();
+  cy.contains('Clone Node').click();
 
   cy.get('.react-flow__node').should('have.length', 18);
 });
 
 it('deletes a node by button and keyboard', () => {
   cy.get('.react-flow__node').should('have.length', 18);
-  cy.contains('Delete').click();
+
+  cy.contains('Delete Node').click();
 
   cy.get('.react-flow__node').should('have.length', 17);
   cy.get('.react-flow')

@@ -4,15 +4,22 @@ describe('new Task form', () => {
   });
 
   it('creates new task', () => {
-    cy.get('[data-cy="iconMenu"]').click();
+    // cy.get('[data-cy="iconMenu"]').click();
 
-    cy.get('.MuiListItem-button')
-      .should('have.length', 3)
-      .first()
-      .children('.MuiListItemText-root')
-      .should('have.length', 1)
-      .and('have.text', 'New Task')
-      .click();
+    // cy.get('.MuiListItem-button')
+    //   .should('have.length', 2)
+    //   .first()
+    //   .children('.MuiListItemText-root')
+    //   .should('have.length', 1)
+    //   .and('have.text', 'New Task')
+    //   .click();
+
+    cy.get('[data-cy="openTopDrawerButton"]').click();
+    cy.contains('Categories');
+
+    cy.get('[data-cy="tasksTab"]').click();
+
+    cy.contains('button', 'Create a new task').should('be.visible').click();
 
     cy.contains('Give the new Task details')
       .parent()

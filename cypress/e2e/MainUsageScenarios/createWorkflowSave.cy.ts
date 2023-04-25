@@ -32,7 +32,9 @@ describe('create workflow and save', () => {
 
     cy.get(`[data-cy="tutorial_Graph"]`).should('not.exist');
 
-    cy.findByRole('button', { name: 'Delete' }).click();
+    cy.get('[data-cy="iconMenu"]').click();
+
+    cy.contains(`Delete Workflow`).click();
 
     cy.contains(`Delete workflow with id: "${id}"?`);
 
