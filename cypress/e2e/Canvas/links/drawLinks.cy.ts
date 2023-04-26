@@ -97,11 +97,8 @@ describe('draw links', () => {
       .first()
       .children('g')
       .first()
-      .click({ force: true });
-
-    cy.get('[data-cy="iconMenu"]').click();
-
-    cy.contains('Delete Link').click();
+      .click({ force: true })
+      .type('{del}');
 
     cy.get('.react-flow__edge').should('have.length', 14);
 
@@ -109,8 +106,11 @@ describe('draw links', () => {
       .first()
       .children('g')
       .first()
-      .click({ force: true })
-      .type('{del}');
+      .click({ force: true });
+
+    cy.get('[data-cy="iconMenu"]').click();
+
+    cy.contains('Delete Link').click();
 
     cy.get('.react-flow__edge').should('have.length', 13);
   });
