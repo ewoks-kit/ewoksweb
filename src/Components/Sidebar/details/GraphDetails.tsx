@@ -1,12 +1,9 @@
 import useStore from '../../../store/useStore';
 import TextButtonSave from './TextButtonSave';
-import type { GraphDetails as GraphDetailsType } from '../../../types';
-import { useSelectedElement } from '../../../store/graph-hooks';
 
 export default function GraphDetails() {
-  // const setGraphInfo = useStore((state) => state.setGraphInfo);
+  const graphInfo = useStore((state) => state.graphInfo);
   const mergeGraphInfo = useStore((state) => state.mergeGraphInfo);
-  const graph = useSelectedElement() as GraphDetailsType;
 
   function saveCategory(category: string) {
     mergeGraphInfo({ category });
@@ -26,17 +23,17 @@ export default function GraphDetails() {
     <>
       <TextButtonSave
         label="Label"
-        value={graph.label || ''}
+        value={graphInfo.label || ''}
         valueSaved={saveLabel}
       />
       <TextButtonSave
         label="Comment"
-        value={graph.uiProps?.comment || ''}
+        value={graphInfo.uiProps?.comment || ''}
         valueSaved={saveComment}
       />
       <TextButtonSave
         label="Category"
-        value={graph.category || ''}
+        value={graphInfo.category || ''}
         valueSaved={saveCategory}
       />
     </>

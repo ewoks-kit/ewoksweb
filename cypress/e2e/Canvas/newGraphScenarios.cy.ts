@@ -16,6 +16,8 @@ describe('test newGraph scenarios', () => {
 
     cy.waitForStableDOM();
 
+    cy.get('button[aria-label="add"]').click();
+
     cy.contains('General').click();
 
     cy.get('.react-flow__node').should('have.length', 0);

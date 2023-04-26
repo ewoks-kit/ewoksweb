@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 import type { Event } from '../../types';
 import { executeWorkflow } from '../../api/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
-import useSelectedElementStore from '../../store/useSelectedElementStore';
 
 export const socket = io(process.env.REACT_APP_SERVER_URL as string);
 
@@ -25,9 +24,7 @@ export default function ExecuteWorkflow() {
   );
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const undoIndex = useStore((state) => state.undoIndex);
-  const setSelectedElement = useSelectedElementStore(
-    (state) => state.setSelectedElement
-  );
+
   useEffect(() => {
     // DOC: when execution begins it has to listen to incoming from the socket events
     socket.on('Executing', (data: Event) => {
@@ -70,7 +67,6 @@ export default function ExecuteWorkflow() {
       setInExecutionMode(false);
       // DOC: when exiting the execution to show the graph as selected
       // and not a numbered execution node that the user might have clicked
-      setSelectedElement({ type: 'graph', id: graphInfo.id });
     } else {
       setOpenSnackbar({
         open: true,

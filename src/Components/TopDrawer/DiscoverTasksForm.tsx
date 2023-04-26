@@ -2,7 +2,7 @@ import { Button, Grid, TextField } from '@material-ui/core';
 import useStore from '../../store/useStore';
 import EventNoteIcon from '@material-ui/icons/EventNote';
 import { useState } from 'react';
-import { discoverTasks } from '../../api/api';
+import { discoverTasks } from '../../api/tasks';
 import commonStrings from '../../commonStrings.json';
 import type { SnackbarParams } from '../../types';
 import { textForError } from '../../utils';
@@ -45,7 +45,7 @@ export default function DiscoverTasksForm() {
   }
 
   return (
-    <Grid item xs={12} sm={4} md={3} lg={2} className="dndflow">
+    <Grid item xs={12} sm={4} md={3} lg={2}>
       Import tasks from a module
       <TextField
         margin="dense"

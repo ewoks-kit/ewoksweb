@@ -10,6 +10,9 @@ dependencies:
   '@material-ui/lab':
     specifier: ^4.0.0-alpha.60
     version: 4.0.0-alpha.61_sqwhrmufrdvplmyamw25egpziy
+  '@react-hookz/web':
+    specifier: 23.0.0
+    version: 23.0.0_sfoxds7t5ydpegc3knd667wn6m
   '@rest-hooks/hooks':
     specifier: 3.1.7
     version: 3.1.7_mnzaipdkghwi2w6bgyhobeilpe
@@ -2589,6 +2592,25 @@ packages:
       source-map: 0.7.4
       webpack: 5.75.0
       webpack-dev-server: 4.11.1_webpack@5.75.0
+    dev: false
+
+  /@react-hookz/deep-equal/1.0.4:
+    resolution: {integrity: sha512-N56fTrAPUDz/R423pag+n6TXWbvlBZDtTehaGFjK0InmN+V2OFWLE/WmORhmn6Ce7dlwH5+tQN1LJFw3ngTJVg==}
+    dev: false
+
+  /@react-hookz/web/23.0.0_sfoxds7t5ydpegc3knd667wn6m:
+    resolution: {integrity: sha512-diBtlo17CJtZJ/Yb8veri7hZL7QPnqNZ+IAMHWWSb//nq+Z3XDHaXcozH7cyvMZj4gYwQeY/L/H4298etHxu1Q==}
+    peerDependencies:
+      js-cookie: ^3.0.1
+      react: ^16.8 || ^17 || ^18
+      react-dom: ^16.8 || ^17 || ^18
+    peerDependenciesMeta:
+      js-cookie:
+        optional: true
+    dependencies:
+      '@react-hookz/deep-equal': 1.0.4
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
     dev: false
 
   /@reactflow/background/11.1.2_sfoxds7t5ydpegc3knd667wn6m:

@@ -15,25 +15,50 @@
   width: 10px;
 }
 
-.selected path {
-  stroke: var(--selected-edge--color) !important;
+.react-flow__edge.selected path {
+  stroke-width: var(--selected-edge--width) !important;
+  stroke-linecap: round;
 }
 
-.selected text {
-  fill: var(--selected-edge--color) !important;
+.react-flow__edge.selected rect {
+  stroke-width: var(--selected-edge--width) !important;
 }
 
-.selected textPath {
-  fill: var(--selected-edge--color) !important;
+.react-flow__edge.selected div {
+  border-width: var(--selected-edge--width) !important;
+  font-weight: bold !important;
 }
 
-.selected rect {
-  stroke: var(--selected-edge--color) !important;
+.react-flow__edge.selected text {
+  font-weight: bold !important;
 }
 
-.selected div {
-  border-color: var(--selected-edge--color) !important;
-  color: var(--selected-edge--color) !important;
+.react-flow__edge.selected textPath {
+  font-weight: bold !important;
+}
+
+.node-content {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-radius: 15px;
+  font-size: 10pt;
+  border: 2px solid rgb(233, 235, 247);
+  background-color: var(--node--bgColor);
+}
+
+.react-flow__node {
+  border: dashed 2px rgba(0, 0, 0, 0);
+  border-radius: 15px;
+}
+
+.react-flow__node.selected {
+  border-color: var(--selected-node--color);
+}
+
+.react-flow__node.selected .node-content {
+  background-color: var(--selected-node--bgColor);
+  color: var(--selected-node--color) !important;
 }
 
 .bendingText {
@@ -49,4 +74,13 @@
   overflow: hidden;
   word-wrap: break-word;
   padding: 1px;
+}
+
+.react-flow__arrowhead[id$='arrow'] polyline {
+  stroke: context-stroke;
+}
+
+.react-flow__arrowhead[id$='arrowclosed'] polyline {
+  stroke: context-stroke;
+  fill: context-stroke;
 }

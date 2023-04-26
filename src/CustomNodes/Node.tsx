@@ -1,6 +1,6 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { Handle, Position } from 'reactflow';
-import { contentStyle, style } from './NodeStyle';
+import { contentStyle, style } from './nodeStyles';
 import Tooltip from '@material-ui/core/Tooltip';
 import isValidLink from '../utils/IsValidLink';
 // import SaveIcon from '@material-ui/icons/Save';
@@ -27,9 +27,8 @@ function Node({
   isGraph,
   type,
   label,
-  selected,
   color,
-  colorBorder,
+  colorBorder: borderColor,
   content,
   image,
   comment,
@@ -37,10 +36,6 @@ function Node({
   nodeWidth,
 }: NodeProps) {
   const { getNodes, getEdges } = useReactFlow();
-
-  const border = colorBorder
-    ? `4px solid ${colorBorder}`
-    : '2px solid rgb(233, 235, 247)';
 
   const inExecutionMode = useStore((state) => state.inExecutionMode);
   const graphInfo = useStore((state) => state.graphInfo);
@@ -79,13 +74,8 @@ function Node({
 
   return (
     <div
-      style={
-        {
-          ...style.body,
-          ...(selected ? style.selected : []),
-          border,
-        } as React.CSSProperties
-      }
+      className="node-content"
+      style={borderColor ? { borderColor } : undefined}
       id="choice"
       role="button"
       tabIndex={0}

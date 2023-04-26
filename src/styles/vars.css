@@ -5,5 +5,8 @@
   --sans-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
     'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  --selected-edge--color: rgb(10, 34, 78);
+  --node--bgColor: rgba(237, 239, 249, 0.75);
+  --selected-node--bgColor: rgba(237, 239, 249, 1);
+  --selected-node--color: rgb(10, 34, 78);
+  --selected-edge--width: 5px;
 }

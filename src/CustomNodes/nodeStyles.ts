@@ -5,7 +5,7 @@ export const contentStyle = {
     backgroundColor: '#eee',
   },
   io: {
-    position: 'relative' as const,
+    position: 'relative',
     padding: '8px 16px',
     flexGrow: 1,
     borderRadius: '15px',
@@ -17,9 +17,9 @@ export const contentStyle = {
     border: '1px solid rgb(118, 133, 221)',
   },
   left: { left: '-8px' },
-  textLeft: { textAlign: 'left' as const },
+  textLeft: { textAlign: 'left' },
   right: { right: '-8px' },
-  textRight: { textAlign: 'right' as const },
+  textRight: { textAlign: 'right' },
   handle: {
     zIndex: 1000, // Uncomment
     widht: '20px', // Does not work
@@ -51,28 +51,14 @@ export const contentStyle = {
     margin: '0px 2px',
     padding: '0px',
   },
-};
+} as const;
 
 export const style = {
   icons: {
     maxWidth: '100px',
   },
-
-  body: {
-    display: 'flex',
-    flexDirection: 'column',
-    // backgroundColor: 'rgb(217, 223, 255)',
-    transition: 'all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-    boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
-    border: '2px solid #bbb',
-    borderRadius: '15px', // TODO: radius to 50 to create a cycle like orange
-    fontSize: '10pt',
-  },
-  selected: {
-    boxShadow: '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
-  },
   title: {
-    position: 'relative' as const,
+    position: 'relative',
     padding: '8px 8px',
     flexGrow: 1,
     backgroundColor: '#ee1',
@@ -88,4 +74,4 @@ export const style = {
     fontWeight: 300,
     lineHeight: '1.13',
   },
-};
+} as const;

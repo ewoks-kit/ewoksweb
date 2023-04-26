@@ -6,7 +6,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import FiberNew from '@material-ui/icons/FiberNew';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
-import Sidebar from 'Components/Sidebar/Sidebar';
 import EditSidebar from 'Components/Sidebar/EditSidebar';
 import { Link } from 'react-router-dom';
 import Canvas from '../Canvas/Canvas';
@@ -20,7 +19,7 @@ import SubgraphsStack from '../TopNavBar/SubgraphsStack';
 import LinearSpinner from '../General/LinearSpinner';
 // import ExecuteWorkflow from '../Execution/ExecuteWorkflow';
 import Tooltip from '@material-ui/core/Tooltip';
-import DashboardStyle from './DashboardStyle';
+import { useDashboardStyles } from './useDashboardStyles';
 import SaveToServer from '../TopNavBar/SaveToServer';
 import tooltipText from '../General/TooltipText';
 import useStore from 'store/useStore';
@@ -41,8 +40,8 @@ import type { AxiosResponse } from 'axios';
 import curateGraph from '../TopNavBar/utils/curateGraph';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
-
-const useStyles = DashboardStyle;
+import OverflowDrawer from '../AddNodesDrawer/OverflowDrawer';
+import { getTaskDescription } from '../../api/tasks';
 
 const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
 
@@ -54,7 +53,7 @@ function workflowExists(
 }
 
 export default function Dashboard() {
-  const classes = useStyles();
+  const classes = useDashboardStyles();
 
   const rfInstance = useReactFlow();
 
@@ -76,6 +75,8 @@ export default function Dashboard() {
   const setGettingFromServer = useStore((st) => st.setGettingFromServer);
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const tasks = useStore((state) => state.tasks);
+  const setTasks = useStore((state) => state.setTasks);
 
   const [action, setAction] = useState<FormAction>(FormAction.newGraph);
 
@@ -121,6 +122,29 @@ export default function Dashboard() {
       setOpenSettings(false);
     }
   }, [openSettingsDrawer]);
+
+  useEffect(() => {
+    // TODO: examine the strategy for re-fetching tasks like with icons
+    if (tasks.length === 0) {
+      getTasks();
+    }
+  });
+
+  const getTasks = async () => {
+    try {
+      const tasksData = await getTaskDescription();
+      if (tasksData.data.items.length > 0) {
+        const allTasks = tasksData.data.items;
+        setTasks(allTasks);
+      }
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: textForError(error, commonStrings.retrieveTasksError),
+        severity: 'error',
+      });
+    }
+  };
 
   function checkAndNewGraph(notSave: boolean) {
     if (canvasGraphChanged && undoIndex !== 0 && !notSave) {
@@ -437,15 +461,11 @@ export default function Dashboard() {
           />
         </Toolbar>
       </AppBar>
-
+      <OverflowDrawer />
       <ReflexContainer
         orientation="vertical"
         className={classes.reflexContainer}
       >
-        <ReflexElement minSize={100} maxSize={500} size={350}>
-          <Sidebar />
-        </ReflexElement>
-        <ReflexSplitter propagate className={classes.reflexSplitter} />
         <ReflexElement className="right-pane">
           <main className={classes.content}>
             <div className={classes.toolbar} />

@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 
 import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
@@ -6,34 +6,56 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
-import FiberNewIcon from '@material-ui/icons/FiberNew';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { Button, Menu, Tooltip } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import FormDialog from '../General/FormDialog';
-import type { EwoksRFLink, EwoksRFNode, GraphDetails, Task } from '../../types';
+import type {
+  EwoksRFNode,
+  GraphDetails,
+  SelectedElementRF,
+  Task,
+} from '../../types';
 import useStore from '../../store/useStore';
 import { FormAction } from '../../types';
-import { useSelectedElement } from '../../store/graph-hooks';
-import { assertNodeDataDefined } from '../../utils/typeGuards';
+import { assertNodeDataDefined, isNodeRF } from '../../utils/typeGuards';
 import { getNodeData } from '../../utils';
+import { Delete as DeleteIcon } from '@material-ui/icons';
+import { useReactFlow } from 'reactflow';
+import ConfirmDialog from 'Components/General/ConfirmDialog';
+import { deleteWorkflow } from 'api/api';
+import commonStrings from 'commonStrings.json';
+import { textForError } from '../../utils';
+import { getNodesData } from '../../utils';
+import { calcNewId } from 'utils/calcNewId';
+import { useNodesIds } from '../../store/graph-hooks';
+import useNodeDataStore from '../../store/useNodeDataStore';
+import type { Node, Edge } from 'reactflow';
 
-export default function IconMenu() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+export default function IconMenu({ selectedElement }: SelectedElementRF) {
+  const rfInstance = useReactFlow();
+
+  const nodesIds = useNodesIds();
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const [openSaveDialog, setOpenSaveDialog] = React.useState<boolean>(false);
-  const [elementToEdit, setElementToEdit] = React.useState<Task | GraphDetails>(
-    {}
-  );
-  const [doAction, setDoAction] = React.useState<FormAction>(
-    FormAction.newTask
-  );
-  const selectedElement = useSelectedElement();
+  const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
+  const [elementToEdit, setElementToEdit] = useState<Task | GraphDetails>({});
+  const [doAction, setDoAction] = useState<FormAction>(FormAction.cloneTask);
+
+  const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
+  const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
+  const initializedGraph = useStore((state) => state.initializedGraph);
+  const initGraph = useStore((state) => state.initGraph);
+  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
+
   const initializedTask = useStore((state) => state.initializedTask);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const graphInfo = useStore((state) => state.graphInfo);
   const tasks = useStore((state) => state.tasks);
+  const workingGraph = useStore((state) => state.workingGraph);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
@@ -43,54 +65,55 @@ export default function IconMenu() {
     setAnchorEl(null);
   }
 
-  function onAction(
-    action: FormAction,
-    element: Task | EwoksRFNode | EwoksRFLink | GraphDetails
-  ) {
+  function onAction(action: FormAction, element?: Node | Edge | undefined) {
     setDoAction(action);
 
     switch (action) {
-      case 'newTask': {
-        setElementToEdit(initializedTask);
-        break;
-      }
       case 'cloneTask': {
-        if ('position' in element) {
-          const nodeData = getNodeData(selectedElement.id);
-          assertNodeDataDefined(nodeData, selectedElement.id);
-
-          if (nodeData.task_props.task_type === 'graph') {
-            setOpenSnackbar({
-              open: true,
-              text: 'Cannot clone a graph, please select a Task!',
-              severity: 'warning',
-            });
-            return;
-          }
-          // DOC: if the task does not exist in the tasks populate the form with the element details
-          const task = tasks.find(
-            (tas) => tas.task_identifier === nodeData.task_props.task_identifier
-          );
-
-          setElementToEdit(
-            task || {
-              ...initializedTask,
-              task_identifier: nodeData.task_props.task_identifier,
-              task_type: nodeData.task_props.task_type,
-            }
-          );
-        } else {
+        if (!element || !isNodeRF(element)) {
           setOpenSnackbar({
             open: true,
-            text: 'First select in the canvas a Node to clone and Save as Task',
+            text: 'First select in the canvas a Node to create a new Task',
             severity: 'warning',
           });
           return;
         }
+        const nodeData = getNodeData(element.id);
+        assertNodeDataDefined(nodeData, element.id);
 
+        if (nodeData.task_props.task_type === 'graph') {
+          setOpenSnackbar({
+            open: true,
+            text:
+              'Cannot clone a sub-workflow as a Task, please select a Node!',
+            severity: 'warning',
+          });
+          return;
+        }
+        // DOC: if the task does not exist in the tasks populate the form with the element details
+        const task = tasks.find(
+          (tas) => tas.task_identifier === nodeData.task_props.task_identifier
+        );
+
+        setElementToEdit(
+          task || {
+            ...initializedTask,
+            task_identifier: nodeData.task_props.task_identifier,
+            task_type: nodeData.task_props.task_type,
+          }
+        );
         break;
       }
       case 'cloneGraph': {
+        if (!workingGraph.graph.id) {
+          setOpenSnackbar({
+            open: true,
+            text:
+              'No Workflow to clone! Please open a workflow that you need to clone first.',
+            severity: 'success',
+          });
+          return;
+        }
         setElementToEdit(graphInfo);
         break;
       }
@@ -102,6 +125,109 @@ export default function IconMenu() {
     setOpenSaveDialog(true);
   }
 
+  const deleteElement = async () => {
+    if (!workingGraph.graph.id) {
+      setOpenSnackbar({
+        open: true,
+        text: 'No workflow on canvas to delete!',
+        severity: 'success',
+      });
+      return;
+    }
+    if (workingGraph.graph.id !== graphInfo.id) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Not allowed to delete any element in a sub-workflow!',
+        severity: 'success',
+      });
+      return;
+    }
+
+    if (!selectedElement) {
+      setOpenAgreeDialog(true);
+      return;
+    }
+
+    if (isNodeRF(selectedElement)) {
+      const node = rfInstance
+        .getNodes()
+        .find((nod) => nod.id === selectedElement.id);
+
+      rfInstance.deleteElements({ nodes: [{ id: node?.id || '' }] });
+      return;
+    }
+
+    const edge: Edge | undefined = rfInstance
+      .getEdges()
+      .find((edg) => edg.id === selectedElement.id);
+    rfInstance.deleteElements({ edges: [edge] as Edge[] });
+  };
+
+  const agreeCallback = async () => {
+    setOpenAgreeDialog(false);
+    if (graphInfo.id) {
+      try {
+        await deleteWorkflow(graphInfo.id);
+        setOpenSnackbar({
+          open: true,
+          text: `Workflow ${graphInfo.id} successfully deleted!`,
+          severity: 'success',
+        });
+      } catch (error) {
+        setOpenSnackbar({
+          open: true,
+          text: textForError(error, commonStrings.deletingError),
+          severity: 'error',
+        });
+      }
+    }
+
+    initGraph(initializedGraph, undefined, rfInstance);
+    setSubgraphsStack({ id: '', label: '', resetStack: true });
+    resetRecentGraphs();
+  };
+
+  const disAgreeCallback = () => {
+    setOpenAgreeDialog(false);
+  };
+
+  const cloneNode = () => {
+    if (!selectedElement || !isNodeRF(selectedElement)) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Clone is for cloning nodes within the working workflow',
+        severity: 'warning',
+      });
+      return;
+    }
+
+    const nodes = rfInstance.getNodes();
+    const clonedNode = nodes.find((nod) => nod.id === selectedElement.id);
+
+    if (!clonedNode) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Cannot locate the node to clone',
+        severity: 'warning',
+      });
+      return;
+    }
+    const clonedNodeData = getNodesData().get(selectedElement.id);
+    assertNodeDataDefined(clonedNodeData, selectedElement.id);
+    const newClone: EwoksRFNode = {
+      ...clonedNode,
+      id: calcNewId(clonedNode.id, nodesIds),
+      selected: false,
+      position: {
+        x: (clonedNode.position.x || 0) + 100,
+        y: (clonedNode.position.y || 0) + 100,
+      },
+    };
+
+    rfInstance.setNodes([...nodes, newClone]);
+    setNodeData(newClone.id, clonedNodeData);
+  };
+
   return (
     <>
       <FormDialog
@@ -110,7 +236,7 @@ export default function IconMenu() {
         open={openSaveDialog}
         setOpenSaveDialog={setOpenSaveDialog}
       />
-      <Tooltip title="Clone or create task/workflow" arrow>
+      <Tooltip title="Delete, Clone" arrow>
         <Button
           style={{ margin: '8px' }}
           variant="contained"
@@ -132,34 +258,72 @@ export default function IconMenu() {
       >
         <Paper>
           <MenuList>
+            {!selectedElement && (
+              <MenuItem onClick={() => onAction(FormAction.cloneGraph)}>
+                <ListItemIcon>
+                  <FileCopyIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Clone Workflow</ListItemText>
+                <Typography variant="body2" color="primary" />
+              </MenuItem>
+            )}
+            {selectedElement && isNodeRF(selectedElement) && (
+              <>
+                <MenuItem onClick={cloneNode}>
+                  <ListItemIcon>
+                    <FileCopyIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>Clone Node</ListItemText>
+                  <Typography variant="body2" color="primary" />
+                </MenuItem>
+
+                <MenuItem
+                  onClick={() =>
+                    onAction(FormAction.cloneTask, selectedElement)
+                  }
+                >
+                  <ListItemIcon>
+                    <FileCopyIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>Create Task from Node</ListItemText>
+                </MenuItem>
+              </>
+            )}
             <MenuItem
-              onClick={() => onAction(FormAction.newTask, initializedTask)}
+              onClick={() => {
+                deleteElement();
+              }}
             >
               <ListItemIcon>
-                <FiberNewIcon fontSize="small" />
+                <DeleteIcon fontSize="small" />
               </ListItemIcon>
-              <ListItemText>New Task</ListItemText>
-            </MenuItem>
-            <MenuItem
-              onClick={() => onAction(FormAction.cloneTask, selectedElement)}
-            >
-              <ListItemIcon>
-                <FileCopyIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>Clone as Task</ListItemText>
-            </MenuItem>
-            <MenuItem
-              onClick={() => onAction(FormAction.cloneGraph, graphInfo)}
-            >
-              <ListItemIcon>
-                <FileCopyIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>Clone Graph</ListItemText>
+              <ListItemText>
+                Delete{' '}
+                {!selectedElement
+                  ? 'Workflow'
+                  : isNodeRF(selectedElement)
+                  ? 'Node'
+                  : 'Link'}
+              </ListItemText>
               <Typography variant="body2" color="primary" />
             </MenuItem>
           </MenuList>
         </Paper>
       </Menu>
+      <ConfirmDialog
+        // TODO: Here maybe it is better to see the label and id.
+        title={`Delete workflow with id: "${
+          !selectedElement && graphInfo.id
+        }"?`}
+        content={`You are about to delete the workflow with id: "${
+          !selectedElement && graphInfo.id
+        }".
+              Please make sure that it is not used as a subgraph in other workflows!
+              Do you agree to continue?`}
+        open={openAgreeDialog}
+        agreeCallback={agreeCallback}
+        disagreeCallback={disAgreeCallback}
+      />
     </>
   );
 }

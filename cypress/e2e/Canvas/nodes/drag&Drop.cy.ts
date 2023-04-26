@@ -7,7 +7,7 @@ describe('drag and drop nodes', () => {
     const dataTransfer = new DataTransfer();
 
     cy.waitForStableDOM();
-    cy.contains('Add Nodes').click();
+    cy.get('button[aria-label="add"]').click();
 
     cy.contains('General').click();
 

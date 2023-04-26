@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { FormControl, TextField, IconButton, Fab } from '@material-ui/core';
-import DashboardStyle from '../../Dashboard/DashboardStyle';
+import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import SidebarTooltip from '../SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
@@ -17,20 +17,13 @@ import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { useSelectedElement } from '../../../store/graph-hooks';
 import type { EwoksRFLink } from '../../../types';
 
-const useStyles = DashboardStyle;
-
-interface LabelCommentProps {
-  showComment: boolean;
-}
-
 // DOC: the label and comment for links when selected
-export default function EdgeLabelComment(props: LabelCommentProps) {
-  const classes = useStyles();
+export default function EdgeLabelComment() {
+  const classes = useDashboardStyles();
 
   const { getEdges, setEdges } = useReactFlow();
   const element = useSelectedElement();
   assertElementIsEdge(element);
-  const { showComment } = props;
 
   const [comment, setComment] = useState('');
   const [label, setLabel] = useState<string>('');
@@ -74,7 +67,7 @@ export default function EdgeLabelComment(props: LabelCommentProps) {
 
   function saveLabel(labelLocal: string, elementL: EwoksRFLink) {
     setEdges([
-      ...getEdges().filter((edge) => edge.id !== element.id),
+      ...getEdges().filter((edge) => edge.id !== element?.id),
       {
         ...elementL,
         label: labelLocal,
@@ -168,7 +161,7 @@ export default function EdgeLabelComment(props: LabelCommentProps) {
         </SidebarTooltip>
       )}
 
-      <div style={{ display: showComment ? 'block' : 'none' }}>
+      <div style={{ display: 'block' }}>
         <TextButtonSave
           label="Comment"
           value={comment}

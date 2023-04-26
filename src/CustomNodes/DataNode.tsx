@@ -1,7 +1,7 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import type { NodeProps } from 'reactflow';
 import Node from './Node';
-import { contentStyle as style } from './NodeStyle';
+import { contentStyle as style } from './nodeStyles';
 import { assertNodeDataDefined } from '../utils/typeGuards';
 import useNodeDataStore from '../store/useNodeDataStore';
 
@@ -14,7 +14,7 @@ function DataNode(args: NodeProps) {
   return (
     <Node
       isGraph={false}
-      type={uiProps.type || 'internal'}
+      type={args.type || 'internal'}
       label={nodeData.ewoks_props.label || ''}
       selected={args.selected}
       color="#ced3ee"
@@ -26,7 +26,7 @@ function DataNode(args: NodeProps) {
       nodeWidth={'nodeWidth' in uiProps ? uiProps.nodeWidth : 100}
       withLabel={'withLabel' in uiProps ? uiProps.withLabel : true}
       colorBorder={'colorBorder' in uiProps ? uiProps.colorBorder : ''}
-      content={<div style={{ ...style.io } as React.CSSProperties} />}
+      content={<div style={style.io} />}
       executing={uiProps.executing || false}
     />
   );

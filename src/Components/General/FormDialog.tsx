@@ -27,13 +27,8 @@ import { rfToEwoks, textForError } from '../../utils';
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import useStore from '../../store/useStore';
 import commonStrings from '../../commonStrings.json';
-import {
-  getTaskDescription,
-  postWorkflow,
-  postTask,
-  putTask,
-  putWorkflow,
-} from '../../api/api';
+import { getTaskDescription, postTask, putTask } from '../../api/tasks';
+import { postWorkflow, putWorkflow } from '../../api/api';
 import IconControl from './IconControl';
 import { assertStr } from '../../utils/typeGuards';
 import IconBoundary from '../../IconBoundary';

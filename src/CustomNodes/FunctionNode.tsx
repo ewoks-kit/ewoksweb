@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 import type { Connection, NodeProps } from 'reactflow';
 import Node from './Node';
-import { contentStyle as style } from './NodeStyle';
+import { contentStyle as style } from './nodeStyles';
 import isValidLink from '../utils/IsValidLink';
 import useStore from '../store/useStore';
 import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../types';

@@ -1,7 +1,6 @@
 import type { DragEventHandler, MouseEvent } from 'react';
 import { useEffect, useRef } from 'react';
 import type { Node, Edge, Connection, NodeChange, EdgeChange } from 'reactflow';
-import { useOnSelectionChange } from 'reactflow';
 import ReactFlow, {
   Controls,
   useReactFlow,
@@ -25,7 +24,6 @@ import CanvasMiniMap from './CanvasMiniMap';
 import { addConnectionToGraph, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
 import { useGraphId } from '../../store/graph-hooks';
-import useSelectedElementStore from '../../store/useSelectedElementStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 import { getEdgesData, getNodeData, getNodesData } from '../../utils';
@@ -71,10 +69,7 @@ function Canvas() {
   const setGraphInfo = useStore((state) => state.setGraphInfo);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const addRecentGraph = useStore((state) => state.addRecentGraph);
-  const setSelectedElement = useSelectedElementStore(
-    (state) => state.setSelectedElement
-  );
-  const setSelectedTask = useStore((state) => state.setSelectedTask);
+
   const tasks = useStore((state) => state.tasks);
   const recentGraphs = useStore((state) => state.recentGraphs);
   const workingGraphId = useStore((state) => state.workingGraph.graph.id);
@@ -84,12 +79,7 @@ function Canvas() {
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
-
   const graphId = useGraphId();
-
-  const selectedElement = useSelectedElementStore(
-    (state) => state.selectedElement
-  );
   const {
     fitView,
     setNodes,
@@ -99,20 +89,6 @@ function Canvas() {
     addNodes,
     getNode,
   } = rfInstance;
-
-  useOnSelectionChange({
-    onChange: ({ nodes, edges }) => {
-      if (nodes.length > 0) {
-        setSelectedElement({ type: 'node', id: nodes[0].id });
-        return;
-      }
-      if (edges.length > 0) {
-        setSelectedElement({ type: 'edge', id: edges[0].id });
-        return;
-      }
-      setSelectedElement({ type: 'graph', id: graphInfo.id });
-    },
-  });
 
   useEffect(() => {
     setTimeout(() => {
@@ -140,18 +116,6 @@ function Canvas() {
       }
     });
   };
-
-  // Keep this comment until execution is deleted
-  // const onNodeClick = (_event: MouseEvent, element: Node) => {
-  //   if (
-  //     !(
-  //       element.data.task_props.task_type === 'executionSteps' &&
-  //       element.type === 'executionSteps'
-  //     )
-  //   ) {
-  //     setSelectedElement({ type: 'node', id: element.id });
-  //   }
-  // };
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
   const onDragOver: DragEventHandler<HTMLDivElement> = (event) => {
@@ -296,12 +260,7 @@ function Canvas() {
   const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
     event.preventDefault();
 
-    const nodeTmp = getNode(node.id);
-    if (!nodeTmp) {
-      return;
-    }
-
-    const nodeData = getNodesData().get(selectedElement.id);
+    const nodeData = getNodesData().get(node.id);
     if (!nodeData) {
       return;
     }
@@ -347,7 +306,6 @@ function Canvas() {
           id: subgraph.graph.id,
           label: subgraph.graph.label,
         });
-        setSelectedElement({ type: 'graph', id: subgraph.graph.id });
       } else {
         setOpenSnackbar({
           open: true,
@@ -356,7 +314,7 @@ function Canvas() {
         });
       }
     } else {
-      mergeNodeData(nodeTmp.id, { ui_props: { details: true } });
+      mergeNodeData(node.id, { ui_props: { details: true } });
     }
   };
 
@@ -367,37 +325,37 @@ function Canvas() {
     if (keys && charCode === 'v') {
       event.preventDefault();
       event.stopPropagation();
-      if (selectedElement.type === 'node') {
-        const nodesIds = [...storeRF.getState().nodeInternals.keys()];
-
-        const node = getNode(selectedElement.id);
-        assertNodeDefined(node, selectedElement.id);
-
-        const nodeData = getNodeData(selectedElement.id);
-        assertNodeDataDefined(nodeData, selectedElement.id);
-
-        const newClone: EwoksRFNode = {
-          ...node,
-          data: nodeData,
-          id: calcNewId(selectedElement.id, nodesIds),
-          selected: false,
-          position: {
-            x: (node.position.x || 0) + 100,
-            y: (node.position.y || 0) + 100,
-          },
-        };
-
-        setNodes([...getNodes(), newClone]);
-        setNodeData(newClone.id, newClone.data);
-
-        setSelectedElement({ type: 'node', id: newClone.id });
-      } else {
+      const selectedNode = getNodes().find((nod) => nod.selected);
+      if (!selectedNode) {
         setOpenSnackbar({
           open: true,
-          text: 'Clone is for cloning nodes within the working workflow',
-          severity: 'warning',
+          text: 'First select a node to clone!',
+          severity: 'error',
         });
+        return;
       }
+
+      const nodesIds = [...storeRF.getState().nodeInternals.keys()];
+
+      const node = getNode(selectedNode.id);
+      assertNodeDefined(node, selectedNode.id);
+
+      const nodeData = getNodeData(selectedNode.id);
+      assertNodeDataDefined(nodeData, selectedNode.id);
+
+      const newClone: EwoksRFNode = {
+        ...node,
+        data: nodeData,
+        id: calcNewId(selectedNode.id, nodesIds),
+        selected: false,
+        position: {
+          x: (node.position.x || 0) + 100,
+          y: (node.position.y || 0) + 100,
+        },
+      };
+
+      setNodes([...getNodes(), newClone]);
+      setNodeData(newClone.id, newClone.data);
     }
   };
 
@@ -417,7 +375,6 @@ function Canvas() {
           minZoom={0.2}
           snapToGrid
           onPaneClick={() => onPaneClick()}
-          onClick={() => setSelectedTask({})}
           onDrop={onDrop}
           onConnect={onConnect}
           onEdgeUpdate={onEdgeUpdate}

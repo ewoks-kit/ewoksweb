@@ -1,28 +1,24 @@
 import { useEffect, useState } from 'react';
-import DashboardStyle from '../../Dashboard/DashboardStyle';
+import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import TextButtonSave from './TextButtonSave';
 import useNodeDataStore from '../../../store/useNodeDataStore';
-import useSelectedElementStore from '../../../store/useSelectedElementStore';
 import {
   assertNodeDataDefined,
   assertElementIsNodeType,
 } from '../../../utils/typeGuards';
-
-const useStyles = DashboardStyle;
+import type { Node } from 'reactflow';
 
 interface LabelCommentProps {
   showComment: boolean;
+  selectedElement: Node;
 }
 
 // DOC: the label and comment for nodes-links when selected
 export default function NodeLabelComment(props: LabelCommentProps) {
-  const classes = useStyles();
+  const classes = useDashboardStyles();
 
-  const selectedElement = useSelectedElementStore(
-    (state) => state.selectedElement
-  );
+  const { showComment, selectedElement } = props;
   assertElementIsNodeType(selectedElement);
-  const { showComment } = props;
 
   const [comment, setComment] = useState('');
   const [label, setLabel] = useState('');

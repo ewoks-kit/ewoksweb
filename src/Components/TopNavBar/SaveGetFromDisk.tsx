@@ -1,4 +1,4 @@
-import DashboardStyle from '../Dashboard/DashboardStyle';
+import { useDashboardStyles } from '../Dashboard/useDashboardStyles';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Fab, IconButton } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
@@ -11,8 +11,6 @@ import useStore from '../../store/useStore';
 import type { EwoksRFLinkData, EwoksRFNodeData, GraphRF } from '../../types';
 import { useReactFlow } from 'reactflow';
 
-const useStyles = DashboardStyle;
-
 function download(content: BlobPart, fileName: string, contentType: string) {
   const a = document.createElement('a');
   const file = new Blob([content], { type: contentType });
@@ -22,7 +20,7 @@ function download(content: BlobPart, fileName: string, contentType: string) {
 }
 
 export default function SaveGetFromDisk() {
-  const classes = useStyles();
+  const classes = useDashboardStyles();
 
   const { getNodes, getEdges } = useReactFlow();
 

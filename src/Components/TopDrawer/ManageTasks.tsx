@@ -1,26 +1,25 @@
 import { Button, Grid } from '@material-ui/core';
-import AddNodes from '../Sidebar/AddNodes';
+import AddNodes from '../AddNodesDrawer/AddNodes';
 import { useState } from 'react';
 import DiscoverTasksForm from './DiscoverTasksForm';
 import { Add } from '@material-ui/icons';
+import FormDialog from '../General/FormDialog';
+import { initializedTask } from '../../utils/InitializedEntities';
+import { FormAction } from '../../types';
 
 export default function ManageTasks() {
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
 
   function openDialogNew() {
     setOpenSaveDialog(true);
-
-    setTimeout(() => {
-      setOpenSaveDialog(false);
-    }, 100);
   }
 
   return (
     <Grid container spacing={1} direction="row" alignItems="center">
-      <Grid item xs={12} sm={8} md={6} lg={5} className="dndflow">
-        <AddNodes title="Tasks" openSaveDialogNewtask={openSaveDialog} />
+      <Grid item xs={12} sm={8} md={6} lg={5}>
+        <AddNodes showManagementButtons />
       </Grid>
-      <Grid item xs={12} sm={4} md={3} lg={2} className="dndflow">
+      <Grid item xs={12} sm={8} md={6} lg={5}>
         <Button
           startIcon={<Add />}
           style={{ margin: '4px' }}
@@ -33,6 +32,12 @@ export default function ManageTasks() {
         </Button>
       </Grid>
       <DiscoverTasksForm />
+      <FormDialog
+        elementToEdit={initializedTask}
+        action={FormAction.newTask}
+        open={openSaveDialog}
+        setOpenSaveDialog={setOpenSaveDialog}
+      />
     </Grid>
   );
 }

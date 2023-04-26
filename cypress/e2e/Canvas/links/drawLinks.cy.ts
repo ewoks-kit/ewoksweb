@@ -76,7 +76,6 @@ describe('draw links', () => {
     cy.get('.react-flow__edge').should('have.length', 15);
   });
 
-  // try to draw link between 2 already connected simple nodes
   it('wont draw a link between 2 already connected simple nodes', () => {
     cy.contains('a web application to EDIT ewoks graphs')
       .parent()
@@ -100,7 +99,9 @@ describe('draw links', () => {
       .first()
       .click({ force: true });
 
-    cy.contains('Delete').click();
+    cy.get('[data-cy="iconMenu"]').click();
+
+    cy.contains('Delete Link').click();
 
     cy.get('.react-flow__edge').should('have.length', 14);
 

@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const DashboardStyle = makeStyles((theme) => ({
+export const useDashboardStyles = makeStyles((theme) => ({
   verticalRule: {
     borderLeft: '1px solid #7685dd',
     height: '84%',
@@ -117,5 +117,3 @@ const DashboardStyle = makeStyles((theme) => ({
     marginBottom: '10px',
   },
 }));
-
-export default DashboardStyle;
