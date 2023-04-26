@@ -24,7 +24,7 @@ import CanvasBackground from './CanvasBackground';
 import CanvasMiniMap from './CanvasMiniMap';
 import { addConnectionToGraph, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
-import { useGraphId } from '../../store/graph-hooks';
+import { useGraphId, useSelectedElement } from '../../store/graph-hooks';
 import useSelectedElementStore from '../../store/useSelectedElementStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
@@ -32,6 +32,7 @@ import { getEdgesData, getNodeData, getNodesData } from '../../utils';
 import {
   assertNodeDataDefined,
   assertNodeDefined,
+  isNodeRF,
 } from '../../utils/typeGuards';
 
 const useStyles = makeStyles(() =>
@@ -71,6 +72,7 @@ function Canvas() {
   const setGraphInfo = useStore((state) => state.setGraphInfo);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const addRecentGraph = useStore((state) => state.addRecentGraph);
+  // TODO: remove when selected totally refactored
   const setSelectedElement = useSelectedElementStore(
     (state) => state.setSelectedElement
   );
@@ -86,9 +88,7 @@ function Canvas() {
 
   const graphId = useGraphId();
 
-  const selectedElement = useSelectedElementStore(
-    (state) => state.selectedElement
-  );
+  const selectedElement = useSelectedElement();
   const {
     fitView,
     setNodes,
@@ -98,7 +98,7 @@ function Canvas() {
     addNodes,
     getNode,
   } = rfInstance;
-
+  // TODO: remove when selected totally refactored
   useOnSelectionChange({
     onChange: ({ nodes, edges }) => {
       if (nodes.length > 0) {
@@ -283,6 +283,15 @@ function Canvas() {
   const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
     event.preventDefault();
 
+    if (!selectedElement) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Seems that this node cannot be selected!',
+        severity: 'error',
+      });
+      return;
+    }
+
     const nodeTmp = getNode(node.id);
     if (!nodeTmp) {
       return;
@@ -354,7 +363,15 @@ function Canvas() {
     if (keys && charCode === 'v') {
       event.preventDefault();
       event.stopPropagation();
-      if (selectedElement.type === 'node') {
+      if (!selectedElement) {
+        setOpenSnackbar({
+          open: true,
+          text: 'First select a node to clone!',
+          severity: 'error',
+        });
+        return;
+      }
+      if (isNodeRF(selectedElement)) {
         const nodesIds = [...storeRF.getState().nodeInternals.keys()];
 
         const node = getNode(selectedElement.id);
