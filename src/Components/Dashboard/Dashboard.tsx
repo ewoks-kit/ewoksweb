@@ -432,7 +432,7 @@ export default function Dashboard() {
             </IconButton>
           </Tooltip>
 
-          <Tooltip
+          {/* <Tooltip
             title={tooltipText('Guide for Ewoks UI')}
             enterDelay={800}
             arrow
@@ -452,7 +452,7 @@ export default function Dashboard() {
                 </Link>
               </Typography>
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
           <SettingsInfoDrawer
             handleOpenDrawers={handleOpenDrawers}
             openDrawers={openDrawers}
