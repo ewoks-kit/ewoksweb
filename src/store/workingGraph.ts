@@ -11,7 +11,6 @@ import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
 import type { GetState, SetState } from 'zustand';
 import { initializedRFGraph } from '../utils/InitializedEntities';
-import useSelectedElementStore from './useSelectedElementStore';
 import useNodeDataStore from './useNodeDataStore';
 import useEdgeDataStore from './useEdgeDataStore';
 import type { ReactFlowInstance } from 'reactflow';
@@ -107,10 +106,6 @@ const workingGraph = (
     get().addRecentGraph(graph as GraphRF);
 
     get().setGraphInfo(graph.graph);
-
-    useSelectedElementStore
-      .getState()
-      .setSelectedElement({ type: 'graph', id: graph.graph.id });
 
     const newGraphNoData = {
       graph: graph.graph,
