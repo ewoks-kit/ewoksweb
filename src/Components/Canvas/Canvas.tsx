@@ -24,7 +24,7 @@ import CanvasBackground from './CanvasBackground';
 import CanvasMiniMap from './CanvasMiniMap';
 import { addConnectionToGraph, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
-import { useGraphId, useSelectedElement } from '../../store/graph-hooks';
+import { useGraphId } from '../../store/graph-hooks';
 import useSelectedElementStore from '../../store/useSelectedElementStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
@@ -32,7 +32,6 @@ import { getEdgesData, getNodeData, getNodesData } from '../../utils';
 import {
   assertNodeDataDefined,
   assertNodeDefined,
-  isNodeRF,
 } from '../../utils/typeGuards';
 
 const useStyles = makeStyles(() =>
@@ -85,10 +84,7 @@ function Canvas() {
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
-
   const graphId = useGraphId();
-
-  const selectedElement = useSelectedElement();
   const {
     fitView,
     setNodes,
@@ -283,21 +279,7 @@ function Canvas() {
   const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
     event.preventDefault();
 
-    if (!selectedElement) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Seems that this node cannot be selected!',
-        severity: 'error',
-      });
-      return;
-    }
-
-    const nodeTmp = getNode(node.id);
-    if (!nodeTmp) {
-      return;
-    }
-
-    const nodeData = getNodesData().get(selectedElement.id);
+    const nodeData = getNodesData().get(node.id);
     if (!nodeData) {
       return;
     }
@@ -352,7 +334,7 @@ function Canvas() {
         });
       }
     } else {
-      mergeNodeData(nodeTmp.id, { ui_props: { details: true } });
+      mergeNodeData(node.id, { ui_props: { details: true } });
     }
   };
 
@@ -363,7 +345,8 @@ function Canvas() {
     if (keys && charCode === 'v') {
       event.preventDefault();
       event.stopPropagation();
-      if (!selectedElement) {
+      const selectedNode = getNodes().find((nod) => nod.selected);
+      if (!selectedNode) {
         setOpenSnackbar({
           open: true,
           text: 'First select a node to clone!',
@@ -371,37 +354,30 @@ function Canvas() {
         });
         return;
       }
-      if (isNodeRF(selectedElement)) {
-        const nodesIds = [...storeRF.getState().nodeInternals.keys()];
 
-        const node = getNode(selectedElement.id);
-        assertNodeDefined(node, selectedElement.id);
+      const nodesIds = [...storeRF.getState().nodeInternals.keys()];
 
-        const nodeData = getNodeData(selectedElement.id);
-        assertNodeDataDefined(nodeData, selectedElement.id);
+      const node = getNode(selectedNode.id);
+      assertNodeDefined(node, selectedNode.id);
 
-        const newClone: EwoksRFNode = {
-          ...node,
-          data: nodeData,
-          id: calcNewId(selectedElement.id, nodesIds),
-          selected: false,
-          position: {
-            x: (node.position.x || 0) + 100,
-            y: (node.position.y || 0) + 100,
-          },
-        };
+      const nodeData = getNodeData(selectedNode.id);
+      assertNodeDataDefined(nodeData, selectedNode.id);
 
-        setNodes([...getNodes(), newClone]);
-        setNodeData(newClone.id, newClone.data);
+      const newClone: EwoksRFNode = {
+        ...node,
+        data: nodeData,
+        id: calcNewId(selectedNode.id, nodesIds),
+        selected: false,
+        position: {
+          x: (node.position.x || 0) + 100,
+          y: (node.position.y || 0) + 100,
+        },
+      };
 
-        setSelectedElement({ type: 'node', id: newClone.id });
-      } else {
-        setOpenSnackbar({
-          open: true,
-          text: 'Clone is for cloning nodes within the working workflow',
-          severity: 'warning',
-        });
-      }
+      setNodes([...getNodes(), newClone]);
+      setNodeData(newClone.id, newClone.data);
+
+      setSelectedElement({ type: 'node', id: newClone.id });
     }
   };
 
