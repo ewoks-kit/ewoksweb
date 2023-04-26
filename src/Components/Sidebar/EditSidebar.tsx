@@ -17,10 +17,10 @@ export default function EditSidebar() {
             color: 'blue',
           }}
         >
-          {isNodeRF(selected) ? 'Node' : selected ? 'Edge' : 'Workflow'}
+          {!selected ? 'Workflow' : isNodeRF(selected) ? 'Node' : 'Edge'}
         </span>
         <span style={{ float: 'right' }}>
-          <IconMenu />
+          <IconMenu selectedElement={selected} />
         </span>
       </span>
       <ElementDetails selectedElement={selected} />

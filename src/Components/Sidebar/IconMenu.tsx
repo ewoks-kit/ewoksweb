@@ -13,14 +13,13 @@ import FormDialog from '../General/FormDialog';
 import type {
   EwoksRFNode,
   GraphDetails,
-  SelectedElement,
+  SelectedElementRF,
   Task,
 } from '../../types';
 import useStore from '../../store/useStore';
 import { FormAction } from '../../types';
-import { assertNodeDataDefined } from '../../utils/typeGuards';
+import { assertNodeDataDefined, isNodeRF } from '../../utils/typeGuards';
 import { getNodeData } from '../../utils';
-import type { Edge } from 'reactflow';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import { useReactFlow } from 'reactflow';
 import useSelectedElementStore from '../../store/useSelectedElementStore';
@@ -32,8 +31,9 @@ import { getNodesData } from '../../utils';
 import { calcNewId } from 'utils/calcNewId';
 import { useNodesIds } from '../../store/graph-hooks';
 import useNodeDataStore from '../../store/useNodeDataStore';
+import type { Node, Edge } from 'reactflow';
 
-export default function IconMenu() {
+export default function IconMenu({ selectedElement }: SelectedElementRF) {
   const rfInstance = useReactFlow();
 
   const nodesIds = useNodesIds();
@@ -43,9 +43,6 @@ export default function IconMenu() {
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
   const [elementToEdit, setElementToEdit] = useState<Task | GraphDetails>({});
   const [doAction, setDoAction] = useState<FormAction>(FormAction.cloneTask);
-  const selectedElement = useSelectedElementStore(
-    (state) => state.selectedElement
-  );
   const setSelectedElement = useSelectedElementStore(
     (state) => state.setSelectedElement
   );
@@ -71,15 +68,12 @@ export default function IconMenu() {
     setAnchorEl(null);
   }
 
-  function onAction(
-    action: FormAction,
-    element: SelectedElement | GraphDetails
-  ) {
+  function onAction(action: FormAction, element?: Node | Edge | undefined) {
     setDoAction(action);
 
     switch (action) {
       case 'cloneTask': {
-        if (!('type' in element) || element.type !== 'node') {
+        if (!element || !isNodeRF(element)) {
           setOpenSnackbar({
             open: true,
             text: 'First select in the canvas a Node to create a new Task',
@@ -87,8 +81,8 @@ export default function IconMenu() {
           });
           return;
         }
-        const nodeData = getNodeData(selectedElement.id);
-        assertNodeDataDefined(nodeData, selectedElement.id);
+        const nodeData = getNodeData(element.id);
+        assertNodeDataDefined(nodeData, element.id);
 
         if (nodeData.task_props.task_type === 'graph') {
           setOpenSnackbar({
@@ -152,7 +146,12 @@ export default function IconMenu() {
       return;
     }
 
-    if (selectedElement.type === 'node') {
+    if (!selectedElement) {
+      setOpenAgreeDialog(true);
+      return;
+    }
+
+    if (isNodeRF(selectedElement)) {
       const node = rfInstance
         .getNodes()
         .find((nod) => nod.id === selectedElement.id);
@@ -162,27 +161,22 @@ export default function IconMenu() {
       return;
     }
 
-    if (selectedElement.type === 'edge') {
-      const edge: Edge | undefined = rfInstance
-        .getEdges()
-        .find((edg) => edg.id === selectedElement.id);
-      setSelectedElement({ type: 'graph', id: graphInfo.id });
-      rfInstance.deleteElements({ edges: [edge] as Edge[] });
-      return;
-    }
-
-    setOpenAgreeDialog(true);
+    const edge: Edge | undefined = rfInstance
+      .getEdges()
+      .find((edg) => edg.id === selectedElement.id);
+    setSelectedElement({ type: 'graph', id: graphInfo.id });
+    rfInstance.deleteElements({ edges: [edge] as Edge[] });
   };
 
   const agreeCallback = async () => {
     setOpenAgreeDialog(false);
-    if (selectedElement.id) {
+    if (graphInfo.id) {
       try {
         setSelectedElement({ type: 'graph', id: '' });
-        await deleteWorkflow(selectedElement.id);
+        await deleteWorkflow(graphInfo.id);
         setOpenSnackbar({
           open: true,
-          text: `Workflow ${selectedElement.id} successfully deleted!`,
+          text: `Workflow ${graphInfo.id} successfully deleted!`,
           severity: 'success',
         });
       } catch (error) {
@@ -204,39 +198,40 @@ export default function IconMenu() {
   };
 
   const cloneNode = () => {
-    if (selectedElement.type === 'node') {
-      const nodes = rfInstance.getNodes();
-      const clonedNode = nodes.find((nod) => nod.id === selectedElement.id);
-
-      if (!clonedNode) {
-        setOpenSnackbar({
-          open: true,
-          text: 'Cannot locate the node to clone',
-          severity: 'warning',
-        });
-        return;
-      }
-      const clonedNodeData = getNodesData().get(selectedElement.id);
-      assertNodeDataDefined(clonedNodeData, selectedElement.id);
-      const newClone: EwoksRFNode = {
-        ...clonedNode,
-        id: calcNewId(clonedNode.id, nodesIds),
-        selected: false,
-        position: {
-          x: (clonedNode.position.x || 0) + 100,
-          y: (clonedNode.position.y || 0) + 100,
-        },
-      };
-
-      rfInstance.setNodes([...nodes, newClone]);
-      setNodeData(newClone.id, clonedNodeData);
-    } else {
+    if (!selectedElement || !isNodeRF(selectedElement)) {
       setOpenSnackbar({
         open: true,
         text: 'Clone is for cloning nodes within the working workflow',
         severity: 'warning',
       });
+      return;
     }
+
+    const nodes = rfInstance.getNodes();
+    const clonedNode = nodes.find((nod) => nod.id === selectedElement.id);
+
+    if (!clonedNode) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Cannot locate the node to clone',
+        severity: 'warning',
+      });
+      return;
+    }
+    const clonedNodeData = getNodesData().get(selectedElement.id);
+    assertNodeDataDefined(clonedNodeData, selectedElement.id);
+    const newClone: EwoksRFNode = {
+      ...clonedNode,
+      id: calcNewId(clonedNode.id, nodesIds),
+      selected: false,
+      position: {
+        x: (clonedNode.position.x || 0) + 100,
+        y: (clonedNode.position.y || 0) + 100,
+      },
+    };
+
+    rfInstance.setNodes([...nodes, newClone]);
+    setNodeData(newClone.id, clonedNodeData);
   };
 
   return (
@@ -269,10 +264,8 @@ export default function IconMenu() {
       >
         <Paper>
           <MenuList>
-            {selectedElement.type === 'graph' && (
-              <MenuItem
-                onClick={() => onAction(FormAction.cloneGraph, graphInfo)}
-              >
+            {!selectedElement && (
+              <MenuItem onClick={() => onAction(FormAction.cloneGraph)}>
                 <ListItemIcon>
                   <FileCopyIcon fontSize="small" />
                 </ListItemIcon>
@@ -280,7 +273,7 @@ export default function IconMenu() {
                 <Typography variant="body2" color="primary" />
               </MenuItem>
             )}
-            {selectedElement.type === 'node' && (
+            {selectedElement && isNodeRF(selectedElement) && (
               <>
                 <MenuItem onClick={cloneNode}>
                   <ListItemIcon>
@@ -312,11 +305,11 @@ export default function IconMenu() {
               </ListItemIcon>
               <ListItemText>
                 Delete{' '}
-                {selectedElement.type === 'node'
+                {!selectedElement
+                  ? 'Workflow'
+                  : isNodeRF(selectedElement)
                   ? 'Node'
-                  : selectedElement.type === 'edge'
-                  ? 'Link'
-                  : 'Workflow'}
+                  : 'Link'}
               </ListItemText>
               <Typography variant="body2" color="primary" />
             </MenuItem>
@@ -326,10 +319,10 @@ export default function IconMenu() {
       <ConfirmDialog
         // TODO: Here maybe it is better to see the label and id.
         title={`Delete workflow with id: "${
-          selectedElement.type === 'graph' && selectedElement.id
+          !selectedElement && graphInfo.id
         }"?`}
-        content={`You are about to delete the workflow wit id: "${
-          selectedElement.type === 'graph' && selectedElement.id
+        content={`You are about to delete the workflow with id: "${
+          !selectedElement && graphInfo.id
         }".
               Please make sure that it is not used as a subgraph in other workflows!
               Do you agree to continue?`}

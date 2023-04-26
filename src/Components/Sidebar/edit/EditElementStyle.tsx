@@ -18,6 +18,13 @@ interface Content {
 function getAccordionContent(
   selectedElement: Node | Edge | undefined
 ): Content {
+  if (!selectedElement) {
+    return {
+      title: 'Styling Graph',
+      EditComponent: EditGraphStyle,
+    };
+  }
+
   if (isNodeRF(selectedElement)) {
     return {
       title: 'Styling Node',
@@ -25,16 +32,9 @@ function getAccordionContent(
     };
   }
 
-  if (selectedElement) {
-    return {
-      title: 'Styling Link',
-      EditComponent: () => <EditLinkStyle {...selectedElement} />,
-    };
-  }
-
   return {
-    title: 'Styling Graph',
-    EditComponent: EditGraphStyle,
+    title: 'Styling Link',
+    EditComponent: () => <EditLinkStyle {...selectedElement} />,
   };
 }
 

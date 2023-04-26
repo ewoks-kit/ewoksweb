@@ -71,6 +71,7 @@ function Canvas() {
   const setGraphInfo = useStore((state) => state.setGraphInfo);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const addRecentGraph = useStore((state) => state.addRecentGraph);
+  // TODO: remove when selected totally refactored
   const setSelectedElement = useSelectedElementStore(
     (state) => state.setSelectedElement
   );
@@ -83,12 +84,7 @@ function Canvas() {
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
-
   const graphId = useGraphId();
-
-  const selectedElement = useSelectedElementStore(
-    (state) => state.selectedElement
-  );
   const {
     fitView,
     setNodes,
@@ -98,7 +94,7 @@ function Canvas() {
     addNodes,
     getNode,
   } = rfInstance;
-
+  // TODO: remove when selected totally refactored
   useOnSelectionChange({
     onChange: ({ nodes, edges }) => {
       if (nodes.length > 0) {
@@ -283,12 +279,7 @@ function Canvas() {
   const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
     event.preventDefault();
 
-    const nodeTmp = getNode(node.id);
-    if (!nodeTmp) {
-      return;
-    }
-
-    const nodeData = getNodesData().get(selectedElement.id);
+    const nodeData = getNodesData().get(node.id);
     if (!nodeData) {
       return;
     }
@@ -343,7 +334,7 @@ function Canvas() {
         });
       }
     } else {
-      mergeNodeData(nodeTmp.id, { ui_props: { details: true } });
+      mergeNodeData(node.id, { ui_props: { details: true } });
     }
   };
 
@@ -354,37 +345,39 @@ function Canvas() {
     if (keys && charCode === 'v') {
       event.preventDefault();
       event.stopPropagation();
-      if (selectedElement.type === 'node') {
-        const nodesIds = [...storeRF.getState().nodeInternals.keys()];
-
-        const node = getNode(selectedElement.id);
-        assertNodeDefined(node, selectedElement.id);
-
-        const nodeData = getNodeData(selectedElement.id);
-        assertNodeDataDefined(nodeData, selectedElement.id);
-
-        const newClone: EwoksRFNode = {
-          ...node,
-          data: nodeData,
-          id: calcNewId(selectedElement.id, nodesIds),
-          selected: false,
-          position: {
-            x: (node.position.x || 0) + 100,
-            y: (node.position.y || 0) + 100,
-          },
-        };
-
-        setNodes([...getNodes(), newClone]);
-        setNodeData(newClone.id, newClone.data);
-
-        setSelectedElement({ type: 'node', id: newClone.id });
-      } else {
+      const selectedNode = getNodes().find((nod) => nod.selected);
+      if (!selectedNode) {
         setOpenSnackbar({
           open: true,
-          text: 'Clone is for cloning nodes within the working workflow',
-          severity: 'warning',
+          text: 'First select a node to clone!',
+          severity: 'error',
         });
+        return;
       }
+
+      const nodesIds = [...storeRF.getState().nodeInternals.keys()];
+
+      const node = getNode(selectedNode.id);
+      assertNodeDefined(node, selectedNode.id);
+
+      const nodeData = getNodeData(selectedNode.id);
+      assertNodeDataDefined(nodeData, selectedNode.id);
+
+      const newClone: EwoksRFNode = {
+        ...node,
+        data: nodeData,
+        id: calcNewId(selectedNode.id, nodesIds),
+        selected: false,
+        position: {
+          x: (node.position.x || 0) + 100,
+          y: (node.position.y || 0) + 100,
+        },
+      };
+
+      setNodes([...getNodes(), newClone]);
+      setNodeData(newClone.id, newClone.data);
+
+      setSelectedElement({ type: 'node', id: newClone.id });
     }
   };
 
