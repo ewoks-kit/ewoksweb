@@ -68,15 +68,12 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
     setAnchorEl(null);
   }
 
-  function onAction(
-    action: FormAction,
-    element: Node | Edge | undefined | GraphDetails
-  ) {
+  function onAction(action: FormAction, element?: Node | Edge | undefined) {
     setDoAction(action);
 
     switch (action) {
       case 'cloneTask': {
-        if (!element || !isNodeRF(selectedElement)) {
+        if (!element || !isNodeRF(element)) {
           setOpenSnackbar({
             open: true,
             text: 'First select in the canvas a Node to create a new Task',
@@ -132,8 +129,6 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
   }
 
   const deleteElement = async () => {
-    console.log(selectedElement);
-
     if (!workingGraph.graph.id) {
       setOpenSnackbar({
         open: true,
@@ -151,6 +146,11 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
       return;
     }
 
+    if (!selectedElement) {
+      setOpenAgreeDialog(true);
+      return;
+    }
+
     if (isNodeRF(selectedElement)) {
       const node = rfInstance
         .getNodes()
@@ -161,16 +161,11 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
       return;
     }
 
-    if (selectedElement) {
-      const edge: Edge | undefined = rfInstance
-        .getEdges()
-        .find((edg) => edg.id === selectedElement.id);
-      setSelectedElement({ type: 'graph', id: graphInfo.id });
-      rfInstance.deleteElements({ edges: [edge] as Edge[] });
-      return;
-    }
-
-    setOpenAgreeDialog(true);
+    const edge: Edge | undefined = rfInstance
+      .getEdges()
+      .find((edg) => edg.id === selectedElement.id);
+    setSelectedElement({ type: 'graph', id: graphInfo.id });
+    rfInstance.deleteElements({ edges: [edge] as Edge[] });
   };
 
   const agreeCallback = async () => {
@@ -203,39 +198,40 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
   };
 
   const cloneNode = () => {
-    if (isNodeRF(selectedElement)) {
-      const nodes = rfInstance.getNodes();
-      const clonedNode = nodes.find((nod) => nod.id === selectedElement.id);
-
-      if (!clonedNode) {
-        setOpenSnackbar({
-          open: true,
-          text: 'Cannot locate the node to clone',
-          severity: 'warning',
-        });
-        return;
-      }
-      const clonedNodeData = getNodesData().get(selectedElement.id);
-      assertNodeDataDefined(clonedNodeData, selectedElement.id);
-      const newClone: EwoksRFNode = {
-        ...clonedNode,
-        id: calcNewId(clonedNode.id, nodesIds),
-        selected: false,
-        position: {
-          x: (clonedNode.position.x || 0) + 100,
-          y: (clonedNode.position.y || 0) + 100,
-        },
-      };
-
-      rfInstance.setNodes([...nodes, newClone]);
-      setNodeData(newClone.id, clonedNodeData);
-    } else {
+    if (!selectedElement || !isNodeRF(selectedElement)) {
       setOpenSnackbar({
         open: true,
         text: 'Clone is for cloning nodes within the working workflow',
         severity: 'warning',
       });
+      return;
     }
+
+    const nodes = rfInstance.getNodes();
+    const clonedNode = nodes.find((nod) => nod.id === selectedElement.id);
+
+    if (!clonedNode) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Cannot locate the node to clone',
+        severity: 'warning',
+      });
+      return;
+    }
+    const clonedNodeData = getNodesData().get(selectedElement.id);
+    assertNodeDataDefined(clonedNodeData, selectedElement.id);
+    const newClone: EwoksRFNode = {
+      ...clonedNode,
+      id: calcNewId(clonedNode.id, nodesIds),
+      selected: false,
+      position: {
+        x: (clonedNode.position.x || 0) + 100,
+        y: (clonedNode.position.y || 0) + 100,
+      },
+    };
+
+    rfInstance.setNodes([...nodes, newClone]);
+    setNodeData(newClone.id, clonedNodeData);
   };
 
   return (
@@ -269,9 +265,7 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
         <Paper>
           <MenuList>
             {!selectedElement && (
-              <MenuItem
-                onClick={() => onAction(FormAction.cloneGraph, graphInfo)}
-              >
+              <MenuItem onClick={() => onAction(FormAction.cloneGraph)}>
                 <ListItemIcon>
                   <FileCopyIcon fontSize="small" />
                 </ListItemIcon>
@@ -279,7 +273,7 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
                 <Typography variant="body2" color="primary" />
               </MenuItem>
             )}
-            {isNodeRF(selectedElement) && (
+            {selectedElement && isNodeRF(selectedElement) && (
               <>
                 <MenuItem onClick={cloneNode}>
                   <ListItemIcon>
@@ -311,11 +305,11 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
               </ListItemIcon>
               <ListItemText>
                 Delete{' '}
-                {isNodeRF(selectedElement)
+                {!selectedElement
+                  ? 'Workflow'
+                  : isNodeRF(selectedElement)
                   ? 'Node'
-                  : selectedElement
-                  ? 'Link'
-                  : 'Workflow'}
+                  : 'Link'}
               </ListItemText>
               <Typography variant="body2" color="primary" />
             </MenuItem>

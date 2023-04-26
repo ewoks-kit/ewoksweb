@@ -18,8 +18,8 @@ export function isNode(
   return !!entity && 'position' in entity;
 }
 
-export function isNodeRF(entity: Node | Edge | undefined): entity is Node {
-  return !!entity && 'position' in entity;
+export function isNodeRF(entity: Node | Edge): entity is Node {
+  return 'position' in entity;
 }
 
 export function isEdgeRF(entity: Node | Edge | undefined): entity is Edge {
