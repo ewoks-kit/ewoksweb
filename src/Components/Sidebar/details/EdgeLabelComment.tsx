@@ -67,7 +67,7 @@ export default function EdgeLabelComment() {
 
   function saveLabel(labelLocal: string, elementL: EwoksRFLink) {
     setEdges([
-      ...getEdges().filter((edge) => edge.id !== element.id),
+      ...getEdges().filter((edge) => edge.id !== element?.id),
       {
         ...elementL,
         label: labelLocal,

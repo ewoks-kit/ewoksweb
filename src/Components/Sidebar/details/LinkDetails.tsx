@@ -1,34 +1,34 @@
 import type { ChangeEvent } from 'react';
-import type { EwoksRFLink } from '../../../types';
 import { Checkbox } from '@material-ui/core';
 import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import DataMappingComponent from '../EditableTableProperties/DataMapping';
 import Conditions from '../EditableTableProperties/Conditions';
 import SidebarTooltip from '../SidebarTooltip';
 import EdgeLabelComment from './EdgeLabelComment';
-import { assertEdgeDataDefined, isLink } from '../../../utils/typeGuards';
+import { assertEdgeDataDefined, isEdgeRF } from '../../../utils/typeGuards';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
-import { useSelectedElement } from '../../../store/graph-hooks';
+import type { Edge } from 'reactflow';
 
-export default function LinkDetails() {
+export default function LinkDetails(selectedElement: Edge) {
   const classes = useDashboardStyles();
 
-  const element = useSelectedElement() as EwoksRFLink;
-  const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
-  assertEdgeDataDefined(edgeData, element.id);
+  const edgeData = useEdgeDataStore((state) =>
+    state.edgesData.get(selectedElement.id)
+  );
+  assertEdgeDataDefined(edgeData, selectedElement.id);
 
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   const mapAllDataChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-    mergeEdgeData(element.id, { map_all_data: event.target.checked });
+    mergeEdgeData(selectedElement.id, { map_all_data: event.target.checked });
   };
 
   function onErrorChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    mergeEdgeData(element.id, { on_error: event.target.checked });
+    mergeEdgeData(selectedElement.id, { on_error: event.target.checked });
   }
 
   const requiredChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    mergeEdgeData(element.id, { required: event.target.checked });
+    mergeEdgeData(selectedElement.id, { required: event.target.checked });
   };
 
   return (
@@ -53,9 +53,9 @@ export default function LinkDetails() {
           />
         </div>
       </SidebarTooltip>
-      {!edgeData.map_all_data && isLink(element) && (
+      {!edgeData.map_all_data && isEdgeRF(selectedElement) && (
         <div>
-          <DataMappingComponent {...element} />
+          <DataMappingComponent {...selectedElement} />
         </div>
       )}
       <SidebarTooltip
@@ -74,9 +74,9 @@ export default function LinkDetails() {
           />
         </div>
       </SidebarTooltip>
-      {!edgeData.on_error && isLink(element) && (
+      {!edgeData.on_error && isEdgeRF(selectedElement) && (
         <div>
-          <Conditions element={element} />
+          <Conditions {...selectedElement} />
         </div>
       )}
       <div>
@@ -89,10 +89,10 @@ export default function LinkDetails() {
           />
         </div>
         <div className={classes.detailsLabels}>
-          <b>Source:</b> {element.source}
+          <b>Source:</b> {selectedElement.source}
         </div>
         <div className={classes.detailsLabels}>
-          <b>Target:</b> {element.target}
+          <b>Target:</b> {selectedElement.target}
         </div>
         {edgeData.sub_target && (
           <div className={classes.detailsLabels}>

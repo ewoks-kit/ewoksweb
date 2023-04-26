@@ -29,15 +29,16 @@ import {
   assertNodeDefined,
 } from '../../../utils/typeGuards';
 import { useNodesIds } from '../../../store/graph-hooks';
-import useSelectedElementStore from '../../../store/useSelectedElementStore';
+import type { Node } from 'reactflow';
 
 // DOC: selectedNode details in sidebar
-export default function NodeDetails() {
+export default function NodeDetails(selectedElement: Node) {
   const classes = useDashboardStyles();
-  const element = useSelectedElementStore((state) => state.selectedElement);
 
-  const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
-  assertNodeDataDefined(nodeData, element.id);
+  const nodeData = useNodeDataStore((state) =>
+    state.nodesData.get(selectedElement.id)
+  );
+  assertNodeDataDefined(nodeData, selectedElement.id);
 
   const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
 
@@ -52,7 +53,7 @@ export default function NodeDetails() {
   const [mapAllData, setMapAllData] = useState<boolean>(false);
 
   const NonEditableTaskProperties = [
-    { id: 'id', label: 'Id', value: element.id },
+    { id: 'id', label: 'Id', value: selectedElement.id },
     {
       id: 'task_type',
       label: 'Type',
@@ -129,20 +130,20 @@ export default function NodeDetails() {
         uniqueId += id++;
       }
 
-      const newNode = getNodes().find((nod) => nod.id === element.id);
-      assertNodeDefined(newNode, element.id);
+      const newNode = getNodes().find((nod) => nod.id === selectedElement.id);
+      assertNodeDefined(newNode, selectedElement.id);
 
       newNode.id = uniqueId;
 
       const newLinks = getEdges().map((link) => {
-        if (link.source === element.id) {
+        if (link.source === selectedElement.id) {
           return {
             ...link,
             source: uniqueId,
           };
         }
 
-        if (link.target === element.id) {
+        if (link.target === selectedElement.id) {
           return {
             ...link,
             target: uniqueId,
@@ -160,21 +161,24 @@ export default function NodeDetails() {
         },
       });
 
-      setNodes([...getNodes().filter((nod) => nod.id !== element.id), newNode]);
+      setNodes([
+        ...getNodes().filter((nod) => nod.id !== selectedElement.id),
+        newNode,
+      ]);
       setEdges(newLinks);
 
       return;
     }
 
     if (Object.keys(propKeyValue)[0] === 'node_icon') {
-      mergeNodeData(element.id, {
+      mergeNodeData(selectedElement.id, {
         ui_props: { icon: Object.values(propKeyValue)[0] },
       });
     }
   }
 
   function inputsCompleteChanged(checked: boolean) {
-    mergeNodeData(element.id, {
+    mergeNodeData(selectedElement.id, {
       ewoks_props: {
         inputs_complete: checked,
       },
@@ -182,7 +186,7 @@ export default function NodeDetails() {
   }
 
   function defaulErrortNodeChanged(checked: boolean) {
-    mergeNodeData(element.id, {
+    mergeNodeData(selectedElement.id, {
       ewoks_props: {
         default_error_node: checked,
       },
@@ -201,7 +205,7 @@ export default function NodeDetails() {
           },
         },
       };
-      mergeNodeData(element.id, newNodeData);
+      mergeNodeData(selectedElement.id, newNodeData);
     }
   }
 
@@ -225,7 +229,7 @@ export default function NodeDetails() {
         },
       },
     };
-    mergeNodeData(element.id, newNodeData);
+    mergeNodeData(selectedElement.id, newNodeData);
   }
 
   function mapAllDataChanged(checked: boolean) {
@@ -236,13 +240,13 @@ export default function NodeDetails() {
         },
       },
     };
-    mergeNodeData(element.id, newNodeData);
+    mergeNodeData(selectedElement.id, newNodeData);
   }
 
   return (
     <Box>
-      <NodeLabelComment showComment />
-      <DefaultInputs />
+      <NodeLabelComment showComment selectedElement={selectedElement} />
+      <DefaultInputs {...selectedElement} />
 
       <SidebarTooltip
         text={`Set to True when the default input covers all required input

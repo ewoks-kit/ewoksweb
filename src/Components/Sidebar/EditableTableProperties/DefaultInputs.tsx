@@ -6,11 +6,10 @@ import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
-import useSelectedElementStore from '../../../store/useSelectedElementStore';
+import type { Node } from 'reactflow';
 
-export default function DefaultInputs() {
+export default function DefaultInputs(element: Node) {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const element = useSelectedElementStore((state) => state.selectedElement);
 
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
