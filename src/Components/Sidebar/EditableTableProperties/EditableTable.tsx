@@ -274,6 +274,14 @@ function EditableTable(props: EditableTableProps) {
           {rows.map((row, index) => (
             <React.Fragment key={row.id}>
               <TableRow>
+                <CustomTableCell
+                  index={index}
+                  row={row}
+                  name="name"
+                  onChange={onChange}
+                  type=""
+                  typeOfValues={props.typeOfValues[0]}
+                />
                 {!headers[0].startsWith('Source') && (
                   <TypeSelectCell
                     className={classes.tableCell}
@@ -286,14 +294,6 @@ function EditableTable(props: EditableTableProps) {
                     onChange={(e) => changedTypeOfInputs(e, row, index)}
                   />
                 )}
-                <CustomTableCell
-                  index={index}
-                  row={row}
-                  name="name"
-                  onChange={onChange}
-                  type=""
-                  typeOfValues={props.typeOfValues[0]}
-                />
                 <CustomTableCell
                   index={index}
                   row={row}

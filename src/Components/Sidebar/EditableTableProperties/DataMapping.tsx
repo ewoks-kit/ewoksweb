@@ -9,6 +9,7 @@ import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import type { Edge } from 'reactflow';
+import TableDataMapping from './TableDataMapping';
 
 export default function DataMappingComponent(element: Edge) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
@@ -75,32 +76,61 @@ export default function DataMappingComponent(element: Edge) {
         <AddCircleOutlineIcon />
       </IconButton>
       {edgeData.data_mapping && edgeData.data_mapping.length > 0 && (
-        <EditableTable
-          headers={['Source', 'Target']}
-          defaultValues={edgeData.data_mapping}
-          valuesChanged={dataMappingValuesChanged}
-          typeOfValues={[
-            {
-              type: element.source
-                ? isClass(sourceNodeData)
-                  ? 'select'
-                  : 'input'
-                : 'input',
-              values: edgeData.links_input_names || [],
-            },
-            {
-              type: element.target
-                ? isClass(targetNodeData)
-                  ? 'select'
-                  : 'input'
-                : 'input',
-              values: [
-                ...(edgeData.links_required_output_names || []),
-                ...(edgeData.links_optional_output_names || []),
-              ],
-            },
-          ]}
-        />
+        <>
+          <TableDataMapping
+            headers={['Source', 'Target']}
+            defaultValues={edgeData.data_mapping}
+            valuesChanged={dataMappingValuesChanged}
+            typeOfValues={[
+              {
+                type: element.source
+                  ? isClass(sourceNodeData)
+                    ? 'select'
+                    : 'input'
+                  : 'input',
+                values: edgeData.links_input_names || [],
+              },
+              {
+                type: element.target
+                  ? isClass(targetNodeData)
+                    ? 'select'
+                    : 'input'
+                  : 'input',
+                values: [
+                  ...(edgeData.links_required_output_names || []),
+                  ...(edgeData.links_optional_output_names || []),
+                ],
+              },
+            ]}
+          />
+
+          <EditableTable
+            headers={['Source', 'Target']}
+            defaultValues={edgeData.data_mapping}
+            valuesChanged={dataMappingValuesChanged}
+            typeOfValues={[
+              {
+                type: element.source
+                  ? isClass(sourceNodeData)
+                    ? 'select'
+                    : 'input'
+                  : 'input',
+                values: edgeData.links_input_names || [],
+              },
+              {
+                type: element.target
+                  ? isClass(targetNodeData)
+                    ? 'select'
+                    : 'input'
+                  : 'input',
+                values: [
+                  ...(edgeData.links_required_output_names || []),
+                  ...(edgeData.links_optional_output_names || []),
+                ],
+              },
+            ]}
+          />
+        </>
       )}
     </div>
   );
