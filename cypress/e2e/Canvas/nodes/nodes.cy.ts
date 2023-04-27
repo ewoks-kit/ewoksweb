@@ -115,24 +115,31 @@ it('changes moreHandles of node true->false->true', () => {
   cy.get('@node').children('.react-flow__handle').should('have.length', 2);
 });
 
-it('clones a node by button', () => {
-  cy.get('.react-flow__node').should('have.length', 17);
-  cy.get('[data-cy="iconMenu"]').click();
-  cy.contains('Clone Node').click();
-
-  cy.get('.react-flow__node').should('have.length', 18);
-});
-
 it('deletes a node by button and keyboard', () => {
-  cy.get('.react-flow__node').should('have.length', 18);
-
-  cy.contains('Delete Node').click();
-
   cy.get('.react-flow__node').should('have.length', 17);
+
   cy.get('.react-flow')
     .contains('Always and forever...')
     .parent()
-    .should('have.length', 1);
+    .should('have.length', 1)
+    .click()
+    .type('{del}');
+
+  cy.get('.react-flow__node').should('have.length', 16);
+
+  cy.get('.react-flow__node').first().click();
+  cy.get('[data-cy="iconMenu"]').click();
+  cy.contains('Delete Node').click();
+
+  cy.get('.react-flow__node').should('have.length', 15);
+});
+
+it('clones a node by button', () => {
+  cy.get('.react-flow__node').first().click({ force: true });
+
+  cy.contains('Clone Node').click();
+
+  cy.get('.react-flow__node').should('have.length', 16);
 });
 
 // TODO: find a way to set a color from the firefox color picker
