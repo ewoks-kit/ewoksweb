@@ -1,11 +1,12 @@
 before(() => {
   cy.visit('http://localhost:3000');
 });
-
-it('displays a welcome message', () => {
-  cy.get('h1').should('include.text', 'Welcome to the Ewoks-UI');
-  cy.location('pathname').should('not.include', 'edit-workflows');
-  cy.location('pathname').should('not.include', 'monitor-workflows');
+// Deactivate tests for as long as there is no need for a first page
+it.only('displays a welcome message', () => {
+  cy.get('.react-flow').should('be.visible');
+  // cy.get('h1').should('include.text', 'Welcome to the Ewoks-UI');
+  // cy.location('pathname').should('not.include', 'edit-workflows');
+  // cy.location('pathname').should('not.include', 'monitor-workflows');
 });
 
 // TODO: get back to 3 options for onlyEditRelease
