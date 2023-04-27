@@ -1,7 +1,6 @@
 import type { DragEventHandler, MouseEvent } from 'react';
 import { useEffect, useRef } from 'react';
 import type { Node, Edge, Connection, NodeChange, EdgeChange } from 'reactflow';
-import { useOnSelectionChange } from 'reactflow';
 import ReactFlow, {
   Controls,
   useReactFlow,
@@ -25,7 +24,6 @@ import CanvasMiniMap from './CanvasMiniMap';
 import { addConnectionToGraph, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
 import { useGraphId } from '../../store/graph-hooks';
-import useSelectedElementStore from '../../store/useSelectedElementStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 import { getEdgesData, getNodeData, getNodesData } from '../../utils';
@@ -71,10 +69,7 @@ function Canvas() {
   const setGraphInfo = useStore((state) => state.setGraphInfo);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const addRecentGraph = useStore((state) => state.addRecentGraph);
-  // TODO: remove when selected totally refactored
-  const setSelectedElement = useSelectedElementStore(
-    (state) => state.setSelectedElement
-  );
+
   const tasks = useStore((state) => state.tasks);
   const recentGraphs = useStore((state) => state.recentGraphs);
   const workingGraphId = useStore((state) => state.workingGraph.graph.id);
@@ -94,20 +89,6 @@ function Canvas() {
     addNodes,
     getNode,
   } = rfInstance;
-  // TODO: remove when selected totally refactored
-  useOnSelectionChange({
-    onChange: ({ nodes, edges }) => {
-      if (nodes.length > 0) {
-        setSelectedElement({ type: 'node', id: nodes[0].id });
-        return;
-      }
-      if (edges.length > 0) {
-        setSelectedElement({ type: 'edge', id: edges[0].id });
-        return;
-      }
-      setSelectedElement({ type: 'graph', id: graphInfo.id });
-    },
-  });
 
   useEffect(() => {
     setTimeout(() => {
@@ -325,7 +306,6 @@ function Canvas() {
           id: subgraph.graph.id,
           label: subgraph.graph.label,
         });
-        setSelectedElement({ type: 'graph', id: subgraph.graph.id });
       } else {
         setOpenSnackbar({
           open: true,
@@ -376,8 +356,6 @@ function Canvas() {
 
       setNodes([...getNodes(), newClone]);
       setNodeData(newClone.id, newClone.data);
-
-      setSelectedElement({ type: 'node', id: newClone.id });
     }
   };
 

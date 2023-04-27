@@ -22,7 +22,6 @@ import { assertNodeDataDefined, isNodeRF } from '../../utils/typeGuards';
 import { getNodeData } from '../../utils';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import { useReactFlow } from 'reactflow';
-import useSelectedElementStore from '../../store/useSelectedElementStore';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { deleteWorkflow } from 'api/api';
 import commonStrings from 'commonStrings.json';
@@ -43,9 +42,7 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
   const [elementToEdit, setElementToEdit] = useState<Task | GraphDetails>({});
   const [doAction, setDoAction] = useState<FormAction>(FormAction.cloneTask);
-  const setSelectedElement = useSelectedElementStore(
-    (state) => state.setSelectedElement
-  );
+
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const initializedGraph = useStore((state) => state.initializedGraph);
@@ -156,7 +153,6 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
         .getNodes()
         .find((nod) => nod.id === selectedElement.id);
 
-      setSelectedElement({ type: 'graph', id: graphInfo.id });
       rfInstance.deleteElements({ nodes: [{ id: node?.id || '' }] });
       return;
     }
@@ -164,7 +160,6 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
     const edge: Edge | undefined = rfInstance
       .getEdges()
       .find((edg) => edg.id === selectedElement.id);
-    setSelectedElement({ type: 'graph', id: graphInfo.id });
     rfInstance.deleteElements({ edges: [edge] as Edge[] });
   };
 
@@ -172,7 +167,6 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
     setOpenAgreeDialog(false);
     if (graphInfo.id) {
       try {
-        setSelectedElement({ type: 'graph', id: '' });
         await deleteWorkflow(graphInfo.id);
         setOpenSnackbar({
           open: true,

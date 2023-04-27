@@ -6,7 +6,6 @@ import HomeIcon from '@material-ui/icons/Home';
 import Link from '@material-ui/core/Link';
 import useStore from '../../store/useStore';
 import { useReactFlow } from 'reactflow';
-import useSelectedElementStore from '../../store/useSelectedElementStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 
@@ -23,10 +22,6 @@ export default function SubgraphsStack() {
   });
   const setNodesData = useNodeDataStore((state) => state.setNodesData);
   const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
-
-  const setSelectedElement = useSelectedElementStore(
-    (state) => state.setSelectedElement
-  );
   const goToGraph = (e: React.MouseEvent) => {
     e.preventDefault();
 
@@ -50,7 +45,6 @@ export default function SubgraphsStack() {
       setEdges(subgraph.links);
       setEdgesData(subgraph.links);
       setGraphInfo(subgraph.graph);
-      setSelectedElement({ type: 'graph', id: subgraph.graph.id });
       setTimeout(() => {
         fitView();
       }, 1000);

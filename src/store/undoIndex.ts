@@ -1,6 +1,5 @@
 import type { State } from '../types';
 import type { GetState, SetState } from 'zustand';
-// import useSelectedElementStore from './useSelectedElementStore';
 
 export interface UndoIndexSlice {
   undoIndex: number;
@@ -23,7 +22,6 @@ const undoIndex = (
       }));
       // After setting the new GraphRF the selected element needs
       // to be updated to see the change in the sidebar again on undo-redo
-      // const selEl = useSelectedElementStore.getState().selectedElement;
 
       // if (selEl.type === 'node') {
       //   const selElNode = get().undoRedo[index].graph.nodes.find(
