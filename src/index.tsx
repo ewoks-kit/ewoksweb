@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import 'normalize.css';
 import './styles/index.css';
@@ -15,7 +15,7 @@ ReactDOM.render(
       <Routes>
         <Route path="/" element={<App />} />
         {/* element={<EwoksUiInfo />} */}
-        <Route path="/edit-workflows" element={<App />} />
+        <Route path="/edit-workflows" element={<Navigate to="/" replace />} />
         {/* <Route path="/monitor-workflows" element={<ExecutionTable />} /> */}
       </Routes>
     </HashRouter>
