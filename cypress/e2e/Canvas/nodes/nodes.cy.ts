@@ -135,7 +135,7 @@ it('deletes a node by button and keyboard', () => {
 });
 
 it('clones a node by button', () => {
-  cy.get('.react-flow__node').first().click();
+  cy.get('.react-flow__node').first().click({ force: true });
 
   cy.contains('Clone Node').click();
 
