@@ -30,6 +30,7 @@ import {
 } from '../../../utils/typeGuards';
 import { useNodesIds } from '../../../store/graph-hooks';
 import type { Node } from 'reactflow';
+import TableDataMapping from '../EditableTableProperties/TableDataMapping';
 
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(selectedElement: Node) {
@@ -102,6 +103,8 @@ export default function NodeDetails(selectedElement: Node) {
   useEffect(() => {
     setInputsComplete(nodeData.ewoks_props.inputs_complete || false);
     setDefaultErrorNode(nodeData.ewoks_props.default_error_node || false);
+    console.log(nodeData.ewoks_props.default_error_attributes?.data_mapping);
+
     setDataMapping(
       nodeData.ewoks_props.default_error_attributes?.data_mapping || []
     );
@@ -210,6 +213,8 @@ export default function NodeDetails(selectedElement: Node) {
   }
 
   function dataMappingValuesChanged(table: EditableTableRow[]) {
+    console.log(table);
+
     const dmap: DataMapping[] = table.map((row) => {
       if (typeof row.value !== 'string') {
         throw new TypeError(
@@ -221,6 +226,8 @@ export default function NodeDetails(selectedElement: Node) {
         target_input: row.value,
       };
     });
+
+    console.log(dmap);
 
     const newNodeData = {
       ewoks_props: {
@@ -297,7 +304,7 @@ export default function NodeDetails(selectedElement: Node) {
             <AddCircleOutlineIcon />
           </IconButton>
           {dataMapping.length > 0 && (
-            <EditableTable
+            <TableDataMapping
               headers={['Source', 'Target']}
               defaultValues={dataMapping}
               valuesChanged={dataMappingValuesChanged}

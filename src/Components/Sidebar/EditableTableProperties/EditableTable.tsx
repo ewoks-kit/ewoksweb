@@ -60,7 +60,6 @@ function EditableTable(props: EditableTableProps) {
   const [typeOfInputs, setTypeOfInputs] = React.useState<string[]>([]);
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const [dialogContent, setDialogContent] = React.useState<DialogContent>();
-  const [disableSelectType, setDisableSelectType] = React.useState(true);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const { defaultValues, headers } = props;
@@ -121,6 +120,8 @@ function EditableTable(props: EditableTableProps) {
   }
 
   function onEditRow(id: string, index: number) {
+    console.log(id, index);
+
     if (['list', 'dict'].includes(typeOfInputs[index])) {
       showEditableDialog(
         id,
@@ -131,8 +132,6 @@ function EditableTable(props: EditableTableProps) {
     }
 
     setRows(calcNewRows(id));
-
-    setDisableSelectType(false);
   }
 
   function onSaveRow(id: string | undefined, index: number) {
@@ -152,8 +151,6 @@ function EditableTable(props: EditableTableProps) {
 
       props.valuesChanged(rows);
     }
-
-    setDisableSelectType(true);
   }
 
   function onChange(
@@ -207,7 +204,6 @@ function EditableTable(props: EditableTableProps) {
 
     setRows(newRows);
     props.valuesChanged(newRows);
-    setDisableSelectType(false);
   }
 
   const changedTypeOfInputs = (
@@ -215,7 +211,19 @@ function EditableTable(props: EditableTableProps) {
     row: EditableTableRow,
     index: number
   ) => {
+    console.log(e.target.value, row, index);
+
     const { id: rowId = '' } = row;
+    if (['string', 'number'].includes(e.target.value)) {
+      const newRows = rows.map((rowe) => {
+        if (rowe.id === rowId) {
+          return { ...rowe, value: '' };
+        }
+        return rowe;
+      });
+      setRows(newRows);
+    }
+
     if (e.target.value === 'null') {
       const newRows = rows.map((rowe) => {
         if (rowe.id === rowId) {
@@ -229,16 +237,17 @@ function EditableTable(props: EditableTableProps) {
     tOfI[index] = e.target.value;
     setTypeOfInputs(tOfI);
 
-    if (e.target.value === 'list') {
-      showEditableDialog(rowId, 'Edit list', [], {
-        rows,
-        id: rowId,
-      });
-    }
+    // if (['list', 'dict'].includes(e.target.value)) {
+    //   // setShowEditIcon(true);
+    //   // showEditableDialog(rowId, 'Edit list', [], {
+    //   //   rows,
+    //   //   id: rowId,
+    //   // });
+    // }
 
-    if (e.target.value === 'dict') {
-      showEditableDialog(rowId, 'Edit dict', {}, { rows, id: rowId });
-    }
+    // if (e.target.value === 'dict') {
+    //   showEditableDialog(rowId, 'Edit dict', {}, { rows, id: rowId });
+    // }
   };
 
   function setRowValue(
@@ -246,6 +255,8 @@ function EditableTable(props: EditableTableProps) {
     val: unknown, // can be a user defined list or dict
     callbackProps: { id: string; rows: EditableTableRow[] }
   ) {
+    console.log(name, val);
+
     const newRows = callbackProps.rows.map((row) => {
       if (row.id === callbackProps.id) {
         return name !== ''
@@ -290,7 +301,6 @@ function EditableTable(props: EditableTableProps) {
                       ? typeOfInputs[index]
                       : 'bool'
                   }
-                  // disabled={disableSelectType}
                   onChange={(e) => changedTypeOfInputs(e, row, index)}
                 />
 
@@ -312,11 +322,11 @@ function EditableTable(props: EditableTableProps) {
                         ? props.typeOfValues[1]?.values
                         : [''],
                   }}
+                  onEdit={() => onEditRow(row.id || '', index)}
                 />
 
                 <ToolsCell
                   onSave={() => onSaveRow(row.id, index)}
-                  // onEdit={() => onEditRow(row.id || '', index)}
                   onDelete={() => onDelete(row.id || '')}
                   isEditing={row.isEditMode}
                 />

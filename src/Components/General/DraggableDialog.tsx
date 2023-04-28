@@ -154,13 +154,13 @@ export default function DraggableDialog(props: Props) {
               <ToggleButton value="rf">RF Graph</ToggleButton>
             </ToggleButtonGroup>
           )}
-          <div style={{ marginBottom: '10px' }}>
+          {/* <div style={{ marginBottom: '10px' }}>
             <Tooltip
               title="Input the name of parameter"
               arrow
               placement="top-start"
             >
-              <FormControl fullWidth variant="outlined">
+              <FormControl fullWidth>
                 <Autocomplete
                   id="free-solo-demo"
                   freeSolo
@@ -183,7 +183,7 @@ export default function DraggableDialog(props: Props) {
                 />
               </FormControl>
             </Tooltip>
-          </div>
+          </div> */}
           <ReactJson
             src={graph}
             name="value"

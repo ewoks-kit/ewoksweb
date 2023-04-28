@@ -30,7 +30,7 @@ function ToolsCell(props: Props) {
           Save
         </Button> */}
       <IconButton
-        color="primary"
+        style={{ color: '#c2c8ea' }}
         onClick={() => onSave()}
         className={classes.root}
         aria-label="edit"
@@ -43,7 +43,7 @@ function ToolsCell(props: Props) {
             component="span"
             aria-label="add"
           > */}
-        <SaveIcon fontSize="medium" />
+        <SaveIcon fontSize="small" />
         {/* </Fab> */}
       </IconButton>
       {/* ) : (
@@ -59,14 +59,13 @@ function ToolsCell(props: Props) {
         </IconButton>
       )} */}
       <IconButton
-        size="medium"
-        style={{ color: '#d5646a' }}
+        style={{ color: 'rgb(249, 200, 200)' }}
         className={classes.root}
         onClick={() => onDelete()}
         aria-label="delete"
         data-cy="deleteButtonEditableTable"
       >
-        <DeleteIcon fontSize="medium" />
+        <DeleteIcon fontSize="small" />
       </IconButton>
     </TableCell>
   );

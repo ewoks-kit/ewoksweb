@@ -6,12 +6,11 @@ import { INPUT_TYPES } from './utils';
 interface Props {
   value: string;
   className?: string;
-  disabled?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 function TypeSelectCell(props: Props) {
-  const { value, disabled, className, onChange } = props;
+  const { value, className, onChange } = props;
 
   function onChangeLocal(event: PropertyChangedEvent) {
     if (onChange) {
@@ -21,7 +20,7 @@ function TypeSelectCell(props: Props) {
 
   return (
     <TableCell align="left" size="small" className={className}>
-      <FormControl disabled={disabled}>
+      <FormControl fullWidth style={{ paddingTop: '8px' }}>
         <Select value={value} label="Task type" onChange={onChangeLocal}>
           {INPUT_TYPES.map((type) => (
             <MenuItem key={type} value={type}>

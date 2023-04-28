@@ -47,7 +47,6 @@ interface EditableTableProps {
 function TableDataMapping(props: EditableTableProps) {
   const [rows, setRows] = React.useState<EditableTableRow[]>([]);
   const [typeOfInputs, setTypeOfInputs] = React.useState<string[]>([]);
-  const [disableSelectType, setDisableSelectType] = React.useState(true);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const { defaultValues, headers } = props;
@@ -87,11 +86,10 @@ function TableDataMapping(props: EditableTableProps) {
       });
     } else {
       setRows(calcNewRows(id));
+      console.log(rows);
 
       props.valuesChanged(rows);
     }
-
-    setDisableSelectType(true);
   }
 
   function onChange(
@@ -145,7 +143,6 @@ function TableDataMapping(props: EditableTableProps) {
 
     setRows(newRows);
     props.valuesChanged(newRows);
-    setDisableSelectType(false);
   }
 
   return (
@@ -162,6 +159,7 @@ function TableDataMapping(props: EditableTableProps) {
                 onChange={onChange}
                 type=""
                 typeOfValues={props.typeOfValues[0]}
+                headers={headers}
               />
               <CustomTableCell
                 index={index}
@@ -169,16 +167,8 @@ function TableDataMapping(props: EditableTableProps) {
                 name="value"
                 onChange={onChange}
                 type={typeOfInputs[index]}
-                typeOfValues={{
-                  type:
-                    headers[0].startsWith('Source') || headers[1] === 'Node_Id'
-                      ? props.typeOfValues[1]?.type
-                      : typeOfInputs[index],
-                  values:
-                    headers[0].startsWith('Source') || headers[1] === 'Node_Id'
-                      ? props.typeOfValues[1]?.values
-                      : [''],
-                }}
+                typeOfValues={props.typeOfValues[1]}
+                headers={headers}
               />
               <ToolsCell
                 onSave={() => onSaveRow(row.id, index)}

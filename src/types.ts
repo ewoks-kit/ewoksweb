@@ -393,6 +393,8 @@ export interface CustomTableCellProps {
   name: 'name' | 'value';
   type?: string;
   typeOfValues: { type: string; values?: string[] };
+  headers?: string[];
+  onEdit?: () => void;
   onChange(
     e: { target: { name: string; value: string | number } },
     row: EditableTableRow,

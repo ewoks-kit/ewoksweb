@@ -134,7 +134,6 @@ export default function EdgeLabelComment() {
                   {...params}
                   label="Label"
                   margin="normal"
-                  variant="outlined"
                   multiline
                 />
               )}
