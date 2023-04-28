@@ -8,45 +8,45 @@ import {
 
 interface Props {
   onSave: () => void;
-  onEdit?: () => void;
+  // onEdit?: () => void;
   onDelete: () => void;
   isEditing?: boolean;
 }
 
 function ToolsCell(props: Props) {
-  const { isEditing, onSave, onEdit, onDelete } = props;
+  const { isEditing, onSave, onDelete } = props;
   const classes = useStyles();
 
   return (
     <TableCell className={classes.selectTableCell}>
-      {isEditing ? (
-        //   <Button
-        //   variant="contained"
-        //   color="primary"
-        //   size="large"
-        //   // className={classes.button}
-        //   startIcon={<SaveIcon />}
-        // >
-        //   Save
-        // </Button>
-        <IconButton
+      {/* {isEditing ? (
+          <Button
+          variant="contained"
           color="primary"
-          onClick={() => onSave()}
-          className={classes.root}
-          aria-label="edit"
-          data-cy="doneEditingButtonEditableTable"
+          size="large"
+          // className={classes.button}
+          startIcon={<SaveIcon />}
         >
-          {/* <Fab
+          Save
+        </Button> */}
+      <IconButton
+        color="primary"
+        onClick={() => onSave()}
+        className={classes.root}
+        aria-label="edit"
+        data-cy="doneEditingButtonEditableTable"
+      >
+        {/* <Fab
             // className={classes.openFileButton}
             color="primary"
             size="small"
             component="span"
             aria-label="add"
           > */}
-          <SaveIcon fontSize="medium" />
-          {/* </Fab> */}
-        </IconButton>
-      ) : (
+        <SaveIcon fontSize="medium" />
+        {/* </Fab> */}
+      </IconButton>
+      {/* ) : (
         <IconButton
           size="small"
           className={classes.root}
@@ -57,10 +57,10 @@ function ToolsCell(props: Props) {
         >
           <EditIcon fontSize="small" />
         </IconButton>
-      )}
+      )} */}
       <IconButton
         size="medium"
-        color="secondary"
+        style={{ color: '#d5646a' }}
         className={classes.root}
         onClick={() => onDelete()}
         aria-label="delete"

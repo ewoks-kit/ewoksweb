@@ -60,8 +60,6 @@ function TableCellInEditMode(props: CustomTableCellProps) {
   }
 
   if (type && ['dict', 'list', 'object'].includes(type)) {
-    // TODO: examine if needed to edit in the cell?
-    // <CellEditInJson props={{ row, name, type, onChange }} />
     return <span>{JSON.stringify(row[name])}</span>;
   }
 

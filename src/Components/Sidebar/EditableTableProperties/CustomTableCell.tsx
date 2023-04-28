@@ -11,8 +11,8 @@ function CustomTableCell(props: CustomTableCellProps) {
   const useStyles = makeStyles(() => ({
     tableCell: {
       width: name === 'value' ? '50%' : '30%',
-      height: 20,
-      padding: '1px',
+      height: 15,
+      padding: '0px 3px 0px 0px',
     },
   }));
   const classes = useStyles();
@@ -22,12 +22,10 @@ function CustomTableCell(props: CustomTableCellProps) {
     <TableCell align="left" className={classes.tableCell}>
       {/* In edit mode the type comes from sidebar in data-mapping and
       from the selected type here for conditions and default-values */}
-      {isEditMode ? (
-        <TableCellInEditMode {...props} />
-      ) : row[name] && typeof row[name] === 'object' ? (
+      {row[name] && typeof row[name] === 'object' ? (
         JSON.stringify(row[name])
       ) : (
-        String(row[name])
+        <TableCellInEditMode {...props} />
       )}
     </TableCell>
   );

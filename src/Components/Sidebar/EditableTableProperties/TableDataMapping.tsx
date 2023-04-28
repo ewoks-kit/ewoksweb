@@ -56,6 +56,7 @@ function TableDataMapping(props: EditableTableProps) {
     setTypeOfInputs(defaultValues.map(getType));
     setRows(defaultValues.map(createData));
   }, [defaultValues]);
+  console.log(props);
 
   const classes = useStyles();
 

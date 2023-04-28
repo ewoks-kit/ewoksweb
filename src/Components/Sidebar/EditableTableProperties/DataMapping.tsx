@@ -76,61 +76,24 @@ export default function DataMappingComponent(element: Edge) {
         <AddCircleOutlineIcon />
       </IconButton>
       {edgeData.data_mapping && edgeData.data_mapping.length > 0 && (
-        <>
-          <TableDataMapping
-            headers={['Source', 'Target']}
-            defaultValues={edgeData.data_mapping}
-            valuesChanged={dataMappingValuesChanged}
-            typeOfValues={[
-              {
-                type: element.source
-                  ? isClass(sourceNodeData)
-                    ? 'select'
-                    : 'input'
-                  : 'input',
-                values: edgeData.links_input_names || [],
-              },
-              {
-                type: element.target
-                  ? isClass(targetNodeData)
-                    ? 'select'
-                    : 'input'
-                  : 'input',
-                values: [
-                  ...(edgeData.links_required_output_names || []),
-                  ...(edgeData.links_optional_output_names || []),
-                ],
-              },
-            ]}
-          />
-
-          <EditableTable
-            headers={['Source', 'Target']}
-            defaultValues={edgeData.data_mapping}
-            valuesChanged={dataMappingValuesChanged}
-            typeOfValues={[
-              {
-                type: element.source
-                  ? isClass(sourceNodeData)
-                    ? 'select'
-                    : 'input'
-                  : 'input',
-                values: edgeData.links_input_names || [],
-              },
-              {
-                type: element.target
-                  ? isClass(targetNodeData)
-                    ? 'select'
-                    : 'input'
-                  : 'input',
-                values: [
-                  ...(edgeData.links_required_output_names || []),
-                  ...(edgeData.links_optional_output_names || []),
-                ],
-              },
-            ]}
-          />
-        </>
+        <TableDataMapping
+          headers={['Source', 'Target']}
+          defaultValues={edgeData.data_mapping}
+          valuesChanged={dataMappingValuesChanged}
+          typeOfValues={[
+            {
+              type: isClass(sourceNodeData) ? 'select' : 'input',
+              values: edgeData.links_input_names || [],
+            },
+            {
+              type: isClass(targetNodeData) ? 'select' : 'input',
+              values: [
+                ...(edgeData.links_required_output_names || []),
+                ...(edgeData.links_optional_output_names || []),
+              ],
+            },
+          ]}
+        />
       )}
     </div>
   );

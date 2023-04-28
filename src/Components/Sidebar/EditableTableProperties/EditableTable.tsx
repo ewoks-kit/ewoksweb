@@ -259,7 +259,7 @@ function EditableTable(props: EditableTableProps) {
   }
 
   return (
-    <Paper className={classes.root}>
+    <>
       {dialogContent && (
         <DraggableDialog
           open={openDialog}
@@ -282,18 +282,18 @@ function EditableTable(props: EditableTableProps) {
                   type=""
                   typeOfValues={props.typeOfValues[0]}
                 />
-                {!headers[0].startsWith('Source') && (
-                  <TypeSelectCell
-                    className={classes.tableCell}
-                    value={
-                      typeOfInputs[index] !== 'boolean'
-                        ? typeOfInputs[index]
-                        : 'bool'
-                    }
-                    disabled={disableSelectType}
-                    onChange={(e) => changedTypeOfInputs(e, row, index)}
-                  />
-                )}
+
+                <TypeSelectCell
+                  className={classes.tableCell}
+                  value={
+                    typeOfInputs[index] !== 'boolean'
+                      ? typeOfInputs[index]
+                      : 'bool'
+                  }
+                  // disabled={disableSelectType}
+                  onChange={(e) => changedTypeOfInputs(e, row, index)}
+                />
+
                 <CustomTableCell
                   index={index}
                   row={row}
@@ -316,7 +316,7 @@ function EditableTable(props: EditableTableProps) {
 
                 <ToolsCell
                   onSave={() => onSaveRow(row.id, index)}
-                  onEdit={() => onEditRow(row.id || '', index)}
+                  // onEdit={() => onEditRow(row.id || '', index)}
                   onDelete={() => onDelete(row.id || '')}
                   isEditing={row.isEditMode}
                 />
@@ -325,7 +325,7 @@ function EditableTable(props: EditableTableProps) {
           ))}
         </TableBody>
       </Table>
-    </Paper>
+    </>
   );
 }
 
