@@ -1,4 +1,4 @@
-ewoksweb |release|
+ewoksweb |version|
 ==================
 
 *ewoksweb* is a frontend to create, visualize and execute `ewoks <https://ewoks.readthedocs.io/>`_ workflows in the web.
