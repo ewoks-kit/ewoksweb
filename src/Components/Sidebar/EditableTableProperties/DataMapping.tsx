@@ -1,7 +1,6 @@
 import type { DataMapping, EwoksRFLinkData } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import EditableTable from './EditableTable';
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import { isClass } from './utils';

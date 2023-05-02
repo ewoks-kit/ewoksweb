@@ -5,7 +5,6 @@ import type {
   EwoksRFNodeData,
 } from '../../../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import EditableTable from '../EditableTableProperties/EditableTable';
 
 import {
   Accordion,
@@ -103,7 +102,6 @@ export default function NodeDetails(selectedElement: Node) {
   useEffect(() => {
     setInputsComplete(nodeData.ewoks_props.inputs_complete || false);
     setDefaultErrorNode(nodeData.ewoks_props.default_error_node || false);
-    console.log(nodeData.ewoks_props.default_error_attributes?.data_mapping);
 
     setDataMapping(
       nodeData.ewoks_props.default_error_attributes?.data_mapping || []
@@ -213,8 +211,6 @@ export default function NodeDetails(selectedElement: Node) {
   }
 
   function dataMappingValuesChanged(table: EditableTableRow[]) {
-    console.log(table);
-
     const dmap: DataMapping[] = table.map((row) => {
       if (typeof row.value !== 'string') {
         throw new TypeError(
@@ -226,9 +222,6 @@ export default function NodeDetails(selectedElement: Node) {
         target_input: row.value,
       };
     });
-
-    console.log(dmap);
-
     const newNodeData = {
       ewoks_props: {
         default_error_attributes: {

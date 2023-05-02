@@ -55,8 +55,6 @@ function TableDataMapping(props: EditableTableProps) {
     setTypeOfInputs(defaultValues.map(getType));
     setRows(defaultValues.map(createData));
   }, [defaultValues]);
-  console.log(props);
-
   const classes = useStyles();
 
   function calcNewRows(rowId: string | undefined): EditableTableRow[] {
@@ -86,8 +84,6 @@ function TableDataMapping(props: EditableTableProps) {
       });
     } else {
       setRows(calcNewRows(id));
-      console.log(rows);
-
       props.valuesChanged(rows);
     }
   }
@@ -173,7 +169,6 @@ function TableDataMapping(props: EditableTableProps) {
               <ToolsCell
                 onSave={() => onSaveRow(row.id, index)}
                 onDelete={() => onDelete(row.id || '')}
-                isEditing={row.isEditMode}
               />
             </TableRow>
           </React.Fragment>
