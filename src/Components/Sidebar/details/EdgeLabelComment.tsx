@@ -128,12 +128,14 @@ export default function EdgeLabelComment() {
               onInputChange={(event) =>
                 valueChanged(event as ChangeEvent<HTMLInputElement>)
               }
-              style={{ width: valueIsChanged ? '80%' : '95%' }}
+              style={{ width: valueIsChanged ? '80%' : '98%' }}
               renderInput={(params) => (
                 <TextField
+                  variant="outlined"
+                  margin="dense"
+                  style={{ margin: '0px 0px 8px 0px', paddingTop: '2px' }}
                   {...params}
                   label="Label"
-                  margin="normal"
                   multiline
                 />
               )}

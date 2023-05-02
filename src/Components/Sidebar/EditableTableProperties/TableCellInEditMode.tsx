@@ -20,9 +20,16 @@ import type { CustomTableCellProps, EditableTableRow } from '../../../types';
 
 const useStyles = makeStyles(() => ({
   input: {
-    // width: 90,
-    // height: 20,
-    // padding: '1px',
+    fontSize: '12px',
+  },
+  smallRadio: {
+    '& svg': {
+      width: '0.7em',
+      height: '0.7em',
+    },
+    '& .MuiFormControlLabel-label': {
+      fontSize: '14px',
+    },
   },
 }));
 
@@ -91,17 +98,20 @@ function TableCellInEditMode(props: CustomTableCellProps) {
         value={valueToString}
         onChange={(e) => onChangeBool(e, row, index)}
         data-cy="radioInEditableCell"
+        style={{ fontSize: '10px' }}
       >
         <FormControlLabel
           value="true"
           control={<Radio />}
           label="true"
-          style={{ margin: '-10px 0px -10px 0px' }}
+          className={classes.smallRadio}
+          style={{ margin: '-10px 0px -10px 0px', fontSize: '10px' }}
         />
         <FormControlLabel
           value="false"
           control={<Radio />}
           label="false"
+          className={classes.smallRadio}
           style={{ margin: '-10px 0px -10px 0px' }}
         />
       </RadioGroup>

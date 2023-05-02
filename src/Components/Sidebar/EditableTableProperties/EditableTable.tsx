@@ -262,7 +262,12 @@ function EditableTable(props: EditableTableProps) {
           // typeOfValues={props.typeOfValues[0]}
         />
       )}
-      <Table className={classes.table} aria-label="editable table">
+      <Table
+        className={classes.table}
+        aria-label="editable table"
+        size="small"
+        padding="none"
+      >
         <TableHeader headers={headers} />
         <TableBody>
           {rows.map((row, index) => (

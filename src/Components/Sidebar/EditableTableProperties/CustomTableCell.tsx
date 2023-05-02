@@ -14,6 +14,12 @@ function CustomTableCell(props: CustomTableCellProps) {
       width: name === 'value' || headers?.includes('Source') ? '50%' : '30%',
       height: 15,
       padding: '0px 5px 0px 0px',
+      '& input': {
+        fontSize: '14px',
+      },
+      '& .MuiFormControl-marginNormal': {
+        margin: '0px',
+      },
     },
   }));
   const classes = useStyles();

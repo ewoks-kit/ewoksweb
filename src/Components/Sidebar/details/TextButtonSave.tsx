@@ -47,13 +47,18 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
       <FormControl
         style={{ ...sidebarStyle.formstyleflex }}
         fullWidth
-        variant="outlined"
+        size="small"
       >
         <TextField
           label={label}
-          // variant="outlined"
+          variant="outlined"
           value={valueLocal || ''}
-          style={{ width: valueIsChanged ? '80%' : '93%' }}
+          margin="dense"
+          style={{
+            width: valueIsChanged ? '80%' : '98%',
+            margin: '0px 0px 7px 0px',
+            paddingTop: '2px',
+          }}
           onChange={valueChanged}
           multiline
           data-cy="node-edge-label"

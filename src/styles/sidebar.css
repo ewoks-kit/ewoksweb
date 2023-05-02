@@ -72,3 +72,7 @@
   padding: 1px;
   width: 98%;
 }
+
+.MuiFormControl-marginNormal {
+  margin: 0px;
+}
