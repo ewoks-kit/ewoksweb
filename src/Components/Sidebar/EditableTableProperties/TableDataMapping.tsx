@@ -1,6 +1,5 @@
 /*
-  The table that is used to pass parameters for default-values, conditions and data-mapping.
-  Its cells can change depending on the kind of input and the parent-component params.
+  The table that is used to pass parameters for data-mapping.
 */
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,29 +9,15 @@ import TableRow from '@material-ui/core/TableRow';
 import CustomTableCell from './CustomTableCell';
 import useStore from 'store/useStore';
 import type { Conditions, DataMapping, EditableTableRow, Inputs } from 'types';
-import { createData, getType } from './utils';
+import { createData } from './utils';
 import TableHeader from './TableHeader';
 import ToolsCell from './ToolsCell';
 
 export const useStyles = makeStyles(() => ({
-  root: {
-    width: '100%',
-    padding: '1px',
-    overflowX: 'auto',
-  },
   table: {
     padding: '1px',
     minWidth: 160,
     wordBreak: 'break-all',
-  },
-  selectTableCell: {
-    width: 28,
-    padding: '1px',
-  },
-  tableCell: {
-    width: 120,
-    height: 20,
-    padding: '1px',
   },
 }));
 
@@ -46,13 +31,11 @@ interface EditableTableProps {
 // The table where lines can be added where type is selected and appropriate values are given to name and value.
 function TableDataMapping(props: EditableTableProps) {
   const [rows, setRows] = React.useState<EditableTableRow[]>([]);
-  const [typeOfInputs, setTypeOfInputs] = React.useState<string[]>([]);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const { defaultValues, headers } = props;
 
   useEffect(() => {
-    setTypeOfInputs(defaultValues.map(getType));
     setRows(defaultValues.map(createData));
   }, [defaultValues]);
   const classes = useStyles();
@@ -63,7 +46,6 @@ function TableDataMapping(props: EditableTableProps) {
         return {
           ...row,
           id: row.name?.replace(' ', '_') || '',
-          isEditMode: !row.isEditMode,
         };
       }
       return row;
@@ -83,52 +65,34 @@ function TableDataMapping(props: EditableTableProps) {
         severity: 'error',
       });
     } else {
-      setRows(calcNewRows(id));
-      props.valuesChanged(rows);
+      const newRows = calcNewRows(id);
+      setRows(newRows);
+      props.valuesChanged(newRows);
     }
   }
 
   function onChange(
     e: { target: { name: string; value: string | number } },
-    row: EditableTableRow,
-    index: number
+    row: EditableTableRow
+    // Use index instead of using the id to find the line or remove
+    // index: number
   ) {
+    // The old unique id === name of the row
     const { id } = row;
-    if (
-      ['string', 'bool', 'number', 'boolean', 'null'].includes(
-        typeOfInputs[index]
-      )
-    ) {
-      let { value } = e.target;
-      const { name } = e.target;
-
-      if (name === 'value') {
-        value = typeOfInputs[index] === 'number' ? Number(value) : value;
-      }
-
-      const newRows = rows.map((rowe) => {
-        if (rowe.id === id) {
-          return { ...rowe, [name]: value };
-        }
-        return rowe;
-      });
-      setRows(newRows);
-      return;
+    // New value and name
+    let { value } = e.target;
+    const { name } = e.target;
+    if (name === 'value') {
+      // Handle positional arguments with this in next MR
+      value = typeof value === 'number' ? Number(value) : value;
     }
-    // DOC: it is 'dict' or 'list' and uses the dialog
-    const name = e.target.name === 'name' ? e.target.name : 'value';
 
-    const newRows = rows.map((rowTable) => {
-      if (rowTable.id === id) {
-        return {
-          ...rowTable,
-          // TODO: if not to use the local editing the e.target.name is always a 'name'
-          [name]: e.target.name === 'name' ? e.target.value : undefined,
-        };
+    const newRows = rows.map((rowe) => {
+      if (rowe.id === id) {
+        return { ...rowe, [name]: value };
       }
-      return rowTable;
+      return rowe;
     });
-
     setRows(newRows);
   }
 
@@ -162,7 +126,7 @@ function TableDataMapping(props: EditableTableProps) {
                 row={row}
                 name="value"
                 onChange={onChange}
-                type={typeOfInputs[index]}
+                type=""
                 typeOfValues={props.typeOfValues[1]}
                 headers={headers}
               />

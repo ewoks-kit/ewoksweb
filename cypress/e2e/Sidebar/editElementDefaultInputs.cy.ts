@@ -10,11 +10,7 @@ describe('edit nodes defaultInputs', () => {
   });
 
   it('insert and undo/redo a new Default Input', () => {
-    cy.get('[data-cy="editButtonEditableTable"]').should('not.exist');
-
     cy.get('[data-cy="addDefaultInputsButton"]').click();
-
-    cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
 
     // cy.get('[data-cy="undoButton"]').click();
 
@@ -30,12 +26,13 @@ describe('edit nodes defaultInputs', () => {
       'be.visible'
     );
 
-    cy.get('[data-cy="autocompleteInputInEditableCell"]').should('not.exist');
-    cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');
+    cy.get('[data-cy="autocompleteInputInEditableCell"]')
+      .should('exist')
+      .should('be.visible');
+    cy.get('[data-cy="doneEditingButtonEditableTable"]')
+      .should('exist')
+      .should('be.visible');
     cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
-    cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
-
-    cy.get('[data-cy="editButtonEditableTable"]').click();
 
     cy.get('[data-cy="autocompleteInputInEditableCell"]').should(
       'have.length',
@@ -49,8 +46,6 @@ describe('edit nodes defaultInputs', () => {
     cy.get('[data-cy="doneEditingButtonEditableTable"]').click();
 
     cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
-    cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
-    cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');
 
     // cy.get('[data-cy="undoButton"]').click();
 

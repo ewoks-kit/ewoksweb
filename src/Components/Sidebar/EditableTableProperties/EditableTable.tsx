@@ -94,7 +94,6 @@ function EditableTable(props: EditableTableProps) {
         return {
           ...row,
           id: row.name?.replace(' ', '_') || '',
-          isEditMode: !row.isEditMode,
         };
       }
       return row;
