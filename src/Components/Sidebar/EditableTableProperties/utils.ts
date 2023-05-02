@@ -11,9 +11,13 @@ export const INPUT_TYPES = ['bool', 'number', 'string', 'list', 'dict', 'null'];
 export function createData(
   pair: DataMapping | Conditions | Inputs
 ): EditableTableRow {
-  if (pair.id && (pair.value || pair.value === null || pair.value === false)) {
+  if (
+    pair.id &&
+    (pair.value === null || pair.value === false || pair.value === '')
+  ) {
     return { ...pair, isEditMode: true };
   }
+  console.log(pair);
 
   return {
     id: Object.values(pair)[0],

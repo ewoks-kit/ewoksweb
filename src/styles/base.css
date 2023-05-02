@@ -82,7 +82,7 @@ abbr[title] {
 }
 
 .Accordions-sidebar {
-  margin-left: 2px;
+  margin: 10px 6px 0px 0px;
   border-radius: 10px 0px 0px 10px;
 }
 .add-nodes-accordion {

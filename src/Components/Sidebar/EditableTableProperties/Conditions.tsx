@@ -2,7 +2,6 @@ import type { EditableTableRow, EwoksRFLinkData } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
-import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
@@ -15,19 +14,8 @@ export default function Conditions(element: Edge) {
 
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
 
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-
   function addConditions(edgeDataL: EwoksRFLinkData) {
     const elCon = edgeDataL.conditions || [];
-
-    if (elCon.some((x) => x.id === '')) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Please fill in the empty line before adding another!',
-        severity: 'warning',
-      });
-      return;
-    }
 
     const newEdgeData = {
       ...edgeDataL,

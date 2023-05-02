@@ -53,7 +53,7 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
           label={label}
           // variant="outlined"
           value={valueLocal || ''}
-          style={{ width: valueIsChanged ? '80%' : '98%' }}
+          style={{ width: valueIsChanged ? '80%' : '93%' }}
           onChange={valueChanged}
           multiline
           data-cy="node-edge-label"

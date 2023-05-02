@@ -98,6 +98,8 @@ function EditableTable(props: EditableTableProps) {
           isEditMode: !row.isEditMode,
         };
       }
+      console.log(rows, row);
+
       return row;
     });
   }

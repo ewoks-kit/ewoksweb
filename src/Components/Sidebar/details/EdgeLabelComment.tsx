@@ -128,7 +128,7 @@ export default function EdgeLabelComment() {
               onInputChange={(event) =>
                 valueChanged(event as ChangeEvent<HTMLInputElement>)
               }
-              style={{ width: valueIsChanged ? '80%' : '98%' }}
+              style={{ width: valueIsChanged ? '80%' : '95%' }}
               renderInput={(params) => (
                 <TextField
                   {...params}

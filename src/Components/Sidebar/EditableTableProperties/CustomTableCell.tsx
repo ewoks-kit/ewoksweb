@@ -15,7 +15,7 @@ function CustomTableCell(props: CustomTableCellProps) {
     tableCell: {
       width: name === 'value' || headers?.includes('Source') ? '50%' : '30%',
       height: 15,
-      padding: '0px 10px 0px 0px',
+      padding: '0px 5px 0px 0px',
     },
   }));
   const classes = useStyles();
@@ -24,9 +24,11 @@ function CustomTableCell(props: CustomTableCellProps) {
     <TableCell align="left" className={classes.tableCell}>
       {/* In edit mode the type comes from sidebar in data-mapping and
       from the selected type here for conditions and default-values */}
-      {['list', 'dict'].includes(type || '') ? ( // {row[name] && typeof row[name] === 'object' ? (
+      {type && ['list', 'dict'].includes(type) ? ( //
         <span>
-          {JSON.stringify(row[name])}
+          {row[name] && typeof row[name] === 'object'
+            ? JSON.stringify(row[name])
+            : ''}
 
           <IconButton
             size="small"

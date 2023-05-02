@@ -86,8 +86,6 @@ function TableDataMapping(props: EditableTableProps) {
       });
     } else {
       setRows(calcNewRows(id));
-      console.log(rows);
-
       props.valuesChanged(rows);
     }
   }

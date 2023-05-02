@@ -14,7 +14,7 @@ export default function EditSidebar() {
         <span
           style={{
             fontSize: 30,
-            color: 'blue',
+            color: '#3f51b5',
           }}
         >
           {!selected ? 'Workflow' : isNodeRF(selected) ? 'Node' : 'Edge'}

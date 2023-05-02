@@ -2,40 +2,30 @@ import type { EditableTableRow, EwoksRFNodeData } from 'types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
 import { IconButton } from '@material-ui/core';
-import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import type { Node } from 'reactflow';
+import { nanoid } from 'nanoid';
 
 export default function DefaultInputs(element: Node) {
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
   assertNodeDataDefined(nodeData, element.id);
 
   const defaultInputs = nodeData.ewoks_props.default_inputs || [];
   function addDefaultInputs(nodeDataProps: EwoksRFNodeData) {
-    if (defaultInputs.some((x) => x.id === '')) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Please fill in the empty line before adding another!',
-        severity: 'warning',
-      });
-    } else {
-      const newNodeData = {
-        ...nodeDataProps,
-        ewoks_props: {
-          ...nodeDataProps.ewoks_props,
-          default_inputs: [
-            ...(nodeDataProps.ewoks_props.default_inputs || []),
-            { id: '', name: '', value: '' },
-          ],
-        },
-      };
-      setNodeData(element.id, newNodeData);
-    }
+    const newNodeData = {
+      ...nodeDataProps,
+      ewoks_props: {
+        ...nodeDataProps.ewoks_props,
+        default_inputs: [
+          ...(nodeDataProps.ewoks_props.default_inputs || []),
+          { id: nanoid(), name: '', value: '' },
+        ],
+      },
+    };
+    setNodeData(element.id, newNodeData);
   }
 
   const defaultInputsChanged = (table: EditableTableRow[]) => {

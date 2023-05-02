@@ -5,7 +5,6 @@ import type {
   EwoksRFNodeData,
 } from '../../../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import EditableTable from '../EditableTableProperties/EditableTable';
 
 import {
   Accordion,
@@ -103,7 +102,6 @@ export default function NodeDetails(selectedElement: Node) {
   useEffect(() => {
     setInputsComplete(nodeData.ewoks_props.inputs_complete || false);
     setDefaultErrorNode(nodeData.ewoks_props.default_error_node || false);
-    console.log(nodeData.ewoks_props.default_error_attributes?.data_mapping);
 
     setDataMapping(
       nodeData.ewoks_props.default_error_attributes?.data_mapping || []

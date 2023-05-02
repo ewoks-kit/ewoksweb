@@ -1,8 +1,6 @@
 import type { DataMapping, EwoksRFLinkData } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import EditableTable from './EditableTable';
-import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import { isClass } from './utils';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
@@ -15,7 +13,6 @@ export default function DataMappingComponent(element: Edge) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const sourceNodeData = useNodeDataStore((state) =>
     state.nodesData.get(element.source)
@@ -26,20 +23,15 @@ export default function DataMappingComponent(element: Edge) {
   );
 
   function addDataMapping(edgeDataC: EwoksRFLinkData) {
-    if (edgeDataC.data_mapping?.some((x) => x.id === '')) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Please fill in the empty line before adding another!',
-        severity: 'warning',
-      });
-      return;
-    }
-
     setEdgeData(element.id, {
       ...edgeDataC,
       data_mapping: [
         ...(edgeDataC.data_mapping || []),
-        { id: '', name: '', value: '' },
+        {
+          id: `source-${edgeDataC.data_mapping?.length || 1}`,
+          name: '',
+          value: '',
+        },
       ],
     });
   }
