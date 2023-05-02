@@ -7,7 +7,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import CustomTableCell from './CustomTableCell';
 import DraggableDialog from 'Components/General/DraggableDialog';
 import useStore from 'store/useStore';
@@ -95,7 +94,6 @@ function EditableTable(props: EditableTableProps) {
         return {
           ...row,
           id: row.name?.replace(' ', '_') || '',
-          isEditMode: !row.isEditMode,
         };
       }
       console.log(rows, row);
@@ -122,8 +120,6 @@ function EditableTable(props: EditableTableProps) {
   }
 
   function onEditRow(id: string, index: number) {
-    console.log(id, index);
-
     if (['list', 'dict'].includes(typeOfInputs[index])) {
       showEditableDialog(
         id,
@@ -213,8 +209,6 @@ function EditableTable(props: EditableTableProps) {
     row: EditableTableRow,
     index: number
   ) => {
-    console.log(e.target.value, row, index);
-
     const { id: rowId = '' } = row;
     if (['string', 'number'].includes(e.target.value)) {
       const newRows = rows.map((rowe) => {
@@ -238,18 +232,6 @@ function EditableTable(props: EditableTableProps) {
     const tOfI = [...typeOfInputs];
     tOfI[index] = e.target.value;
     setTypeOfInputs(tOfI);
-
-    // if (['list', 'dict'].includes(e.target.value)) {
-    //   // setShowEditIcon(true);
-    //   // showEditableDialog(rowId, 'Edit list', [], {
-    //   //   rows,
-    //   //   id: rowId,
-    //   // });
-    // }
-
-    // if (e.target.value === 'dict') {
-    //   showEditableDialog(rowId, 'Edit dict', {}, { rows, id: rowId });
-    // }
   };
 
   function setRowValue(
@@ -257,8 +239,6 @@ function EditableTable(props: EditableTableProps) {
     val: unknown, // can be a user defined list or dict
     callbackProps: { id: string; rows: EditableTableRow[] }
   ) {
-    console.log(name, val);
-
     const newRows = callbackProps.rows.map((row) => {
       if (row.id === callbackProps.id) {
         return name !== ''
@@ -278,7 +258,8 @@ function EditableTable(props: EditableTableProps) {
           open={openDialog}
           content={dialogContent}
           setValue={setRowValue}
-          typeOfValues={props.typeOfValues[0]}
+          // TODO: examine the usage of the following
+          // typeOfValues={props.typeOfValues[0]}
         />
       )}
       <Table className={classes.table} aria-label="editable table">
@@ -330,7 +311,6 @@ function EditableTable(props: EditableTableProps) {
                 <ToolsCell
                   onSave={() => onSaveRow(row.id, index)}
                   onDelete={() => onDelete(row.id || '')}
-                  isEditing={row.isEditMode}
                 />
               </TableRow>
             </React.Fragment>

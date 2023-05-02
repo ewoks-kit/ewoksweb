@@ -18,11 +18,7 @@ describe('edit links dataMapping', () => {
   it('insert and undo/redo a new Data Mapping', () => {
     cy.contains('Data Mapping').should('be.visible');
 
-    cy.get('[data-cy="editButtonEditableTable"]').should('not.exist');
-
     cy.get('[data-cy="addDataMappingButton"]').click();
-
-    cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
 
     // cy.get('[data-cy="undoButton"]').click();
 
@@ -38,12 +34,13 @@ describe('edit links dataMapping', () => {
       'be.visible'
     );
 
-    cy.get('[data-cy="inputInEditableCell"]').should('not.exist');
-    cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');
+    cy.get('[data-cy="inputInEditableCell"]')
+      .should('exist')
+      .should('be.visible');
+    cy.get('[data-cy="doneEditingButtonEditableTable"]')
+      .should('exist')
+      .should('be.visible');
     cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
-    cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
-
-    cy.get('[data-cy="editButtonEditableTable"]').click();
 
     cy.get('[data-cy="inputInEditableCell"]').should('have.length', 2);
     cy.get('[data-cy="doneEditingButtonEditableTable"]').should('be.visible');
@@ -54,13 +51,10 @@ describe('edit links dataMapping', () => {
     cy.get('[data-cy="doneEditingButtonEditableTable"]').click();
 
     cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
-    cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
-    cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');
 
     // cy.get('[data-cy="undoButton"]').click();
 
     // cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
-    // cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
     // cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');
     // cy.get('[data-cy="inputInEditableCell"]').should('not.exist');
 

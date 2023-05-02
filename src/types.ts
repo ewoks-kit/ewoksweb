@@ -383,7 +383,6 @@ export interface EditableTableRow {
   id?: string;
   name?: string;
   value?: unknown;
-  isEditMode?: boolean;
   type?: string;
 }
 

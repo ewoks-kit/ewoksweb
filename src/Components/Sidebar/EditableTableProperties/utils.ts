@@ -15,7 +15,7 @@ export function createData(
     pair.id &&
     (pair.value === null || pair.value === false || pair.value === '')
   ) {
-    return { ...pair, isEditMode: true };
+    return { ...pair };
   }
   console.log(pair);
 
@@ -23,7 +23,6 @@ export function createData(
     id: Object.values(pair)[0],
     name: Object.values(pair)[0],
     value: Object.values(pair)[1],
-    isEditMode: true,
     type:
       pair.value === 'true' || pair.value === 'false'
         ? 'boolean'

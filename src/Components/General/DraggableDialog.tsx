@@ -11,12 +11,7 @@ import Draggable from 'react-draggable';
 import { getEdgesData, rfToEwoks, getNodesData } from 'utils';
 
 import ReactJson from 'react-json-view';
-import {
-  Autocomplete,
-  ToggleButton,
-  ToggleButtonGroup,
-} from '@material-ui/lab';
-import { FormControl, TextField, Tooltip } from '@material-ui/core';
+import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import useStore from 'store/useStore';
 import type {
   EditableTableRow,
@@ -52,7 +47,7 @@ interface Props {
     callbackProps: CallbackProps;
   };
   open: boolean;
-  typeOfValues?: { values?: string[]; type: string };
+  // typeOfValues?: { values?: string[]; type: string };
   setValue: (name: string, graph: Graph, callbackProps: CallbackProps) => void;
 }
 
@@ -74,7 +69,7 @@ export default function DraggableDialog(props: Props) {
 
   const [selection, setSelection] = useState('ewoks');
 
-  const { open, content, typeOfValues } = props;
+  const { open, content } = props;
 
   useEffect(() => {
     setGraph(content.object || {});
@@ -154,36 +149,6 @@ export default function DraggableDialog(props: Props) {
               <ToggleButton value="rf">RF Graph</ToggleButton>
             </ToggleButtonGroup>
           )}
-          {/* <div style={{ marginBottom: '10px' }}>
-            <Tooltip
-              title="Input the name of parameter"
-              arrow
-              placement="top-start"
-            >
-              <FormControl fullWidth>
-                <Autocomplete
-                  id="free-solo-demo"
-                  freeSolo
-                  options={typeOfValues?.values || ['set a name']}
-                  value={name}
-                  onChange={(e, val) => {
-                    if (val) {
-                      setName(val);
-                    }
-                  }}
-                  onInputChange={(e, val) => setName(val)}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={typeOfValues?.type || 'name'}
-                      margin="normal"
-                      variant="outlined"
-                    />
-                  )}
-                />
-              </FormControl>
-            </Tooltip>
-          </div> */}
           <ReactJson
             src={graph}
             name="value"

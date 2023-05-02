@@ -9,8 +9,6 @@ import { EditOutlined as EditIcon } from '@material-ui/icons';
 // DOC: Used as an app-wide dialog when confirmation is needed. Open is a prop
 function CustomTableCell(props: CustomTableCellProps) {
   const { row, name, headers, type } = props;
-  console.log(props);
-
   const useStyles = makeStyles(() => ({
     tableCell: {
       width: name === 'value' || headers?.includes('Source') ? '50%' : '30%',

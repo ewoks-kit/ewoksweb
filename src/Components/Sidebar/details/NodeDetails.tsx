@@ -211,8 +211,6 @@ export default function NodeDetails(selectedElement: Node) {
   }
 
   function dataMappingValuesChanged(table: EditableTableRow[]) {
-    console.log(table);
-
     const dmap: DataMapping[] = table.map((row) => {
       if (typeof row.value !== 'string') {
         throw new TypeError(
@@ -224,9 +222,6 @@ export default function NodeDetails(selectedElement: Node) {
         target_input: row.value,
       };
     });
-
-    console.log(dmap);
-
     const newNodeData = {
       ewoks_props: {
         default_error_attributes: {
