@@ -75,7 +75,7 @@ export const useDashboardStyles = makeStyles((theme) => ({
   },
 
   detailsLabels: {
-    padding: '8px 0px',
+    padding: '2px 0px',
     wordBreak: 'break-word',
   },
 

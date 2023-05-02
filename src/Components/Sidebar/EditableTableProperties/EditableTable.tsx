@@ -7,7 +7,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import CustomTableCell from './CustomTableCell';
 import DraggableDialog from 'Components/General/DraggableDialog';
 import useStore from 'store/useStore';
@@ -60,7 +59,6 @@ function EditableTable(props: EditableTableProps) {
   const [typeOfInputs, setTypeOfInputs] = React.useState<string[]>([]);
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
   const [dialogContent, setDialogContent] = React.useState<DialogContent>();
-  const [disableSelectType, setDisableSelectType] = React.useState(true);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const { defaultValues, headers } = props;
@@ -96,7 +94,6 @@ function EditableTable(props: EditableTableProps) {
         return {
           ...row,
           id: row.name?.replace(' ', '_') || '',
-          isEditMode: !row.isEditMode,
         };
       }
       return row;
@@ -131,8 +128,6 @@ function EditableTable(props: EditableTableProps) {
     }
 
     setRows(calcNewRows(id));
-
-    setDisableSelectType(false);
   }
 
   function onSaveRow(id: string | undefined, index: number) {
@@ -152,8 +147,6 @@ function EditableTable(props: EditableTableProps) {
 
       props.valuesChanged(rows);
     }
-
-    setDisableSelectType(true);
   }
 
   function onChange(
@@ -207,7 +200,6 @@ function EditableTable(props: EditableTableProps) {
 
     setRows(newRows);
     props.valuesChanged(newRows);
-    setDisableSelectType(false);
   }
 
   const changedTypeOfInputs = (
@@ -216,6 +208,16 @@ function EditableTable(props: EditableTableProps) {
     index: number
   ) => {
     const { id: rowId = '' } = row;
+    if (['string', 'number'].includes(e.target.value)) {
+      const newRows = rows.map((rowe) => {
+        if (rowe.id === rowId) {
+          return { ...rowe, value: '' };
+        }
+        return rowe;
+      });
+      setRows(newRows);
+    }
+
     if (e.target.value === 'null') {
       const newRows = rows.map((rowe) => {
         if (rowe.id === rowId) {
@@ -228,17 +230,6 @@ function EditableTable(props: EditableTableProps) {
     const tOfI = [...typeOfInputs];
     tOfI[index] = e.target.value;
     setTypeOfInputs(tOfI);
-
-    if (e.target.value === 'list') {
-      showEditableDialog(rowId, 'Edit list', [], {
-        rows,
-        id: rowId,
-      });
-    }
-
-    if (e.target.value === 'dict') {
-      showEditableDialog(rowId, 'Edit dict', {}, { rows, id: rowId });
-    }
   };
 
   function setRowValue(
@@ -259,13 +250,14 @@ function EditableTable(props: EditableTableProps) {
   }
 
   return (
-    <Paper className={classes.root}>
+    <>
       {dialogContent && (
         <DraggableDialog
           open={openDialog}
           content={dialogContent}
           setValue={setRowValue}
-          typeOfValues={props.typeOfValues[0]}
+          // TODO: examine the usage of the following
+          // typeOfValues={props.typeOfValues[0]}
         />
       )}
       <Table className={classes.table} aria-label="editable table">
@@ -274,18 +266,6 @@ function EditableTable(props: EditableTableProps) {
           {rows.map((row, index) => (
             <React.Fragment key={row.id}>
               <TableRow>
-                {!headers[0].startsWith('Source') && (
-                  <TypeSelectCell
-                    className={classes.tableCell}
-                    value={
-                      typeOfInputs[index] !== 'boolean'
-                        ? typeOfInputs[index]
-                        : 'bool'
-                    }
-                    disabled={disableSelectType}
-                    onChange={(e) => changedTypeOfInputs(e, row, index)}
-                  />
-                )}
                 <CustomTableCell
                   index={index}
                   row={row}
@@ -294,6 +274,17 @@ function EditableTable(props: EditableTableProps) {
                   type=""
                   typeOfValues={props.typeOfValues[0]}
                 />
+
+                <TypeSelectCell
+                  className={classes.tableCell}
+                  value={
+                    typeOfInputs[index] !== 'boolean'
+                      ? typeOfInputs[index]
+                      : 'bool'
+                  }
+                  onChange={(e) => changedTypeOfInputs(e, row, index)}
+                />
+
                 <CustomTableCell
                   index={index}
                   row={row}
@@ -312,20 +303,19 @@ function EditableTable(props: EditableTableProps) {
                         ? props.typeOfValues[1]?.values
                         : [''],
                   }}
+                  onEdit={() => onEditRow(row.id || '', index)}
                 />
 
                 <ToolsCell
                   onSave={() => onSaveRow(row.id, index)}
-                  onEdit={() => onEditRow(row.id || '', index)}
                   onDelete={() => onDelete(row.id || '')}
-                  isEditing={row.isEditMode}
                 />
               </TableRow>
             </React.Fragment>
           ))}
         </TableBody>
       </Table>
-    </Paper>
+    </>
   );
 }
 

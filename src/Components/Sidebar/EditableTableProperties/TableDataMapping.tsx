@@ -1,0 +1,145 @@
+/*
+  The table that is used to pass parameters for data-mapping.
+*/
+import React, { useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableRow from '@material-ui/core/TableRow';
+import CustomTableCell from './CustomTableCell';
+import useStore from 'store/useStore';
+import type { Conditions, DataMapping, EditableTableRow, Inputs } from 'types';
+import { createData } from './utils';
+import TableHeader from './TableHeader';
+import ToolsCell from './ToolsCell';
+
+export const useStyles = makeStyles(() => ({
+  table: {
+    padding: '1px',
+    minWidth: 160,
+    wordBreak: 'break-all',
+  },
+}));
+
+interface EditableTableProps {
+  headers: string[];
+  defaultValues: DataMapping[] | Conditions[] | Inputs[];
+  typeOfValues: { type: string; values?: string[] }[];
+  valuesChanged: (rows: EditableTableRow[]) => void;
+}
+
+// The table where lines can be added where type is selected and appropriate values are given to name and value.
+function TableDataMapping(props: EditableTableProps) {
+  const [rows, setRows] = React.useState<EditableTableRow[]>([]);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+
+  const { defaultValues, headers } = props;
+
+  useEffect(() => {
+    setRows(defaultValues.map(createData));
+  }, [defaultValues]);
+  const classes = useStyles();
+
+  function calcNewRows(rowId: string | undefined): EditableTableRow[] {
+    return rows.map((row) => {
+      if (row.id === rowId) {
+        return {
+          ...row,
+          id: row.name?.replace(' ', '_') || '',
+        };
+      }
+      return row;
+    });
+  }
+
+  function onSaveRow(id: string | undefined, index: number) {
+    const oldRows = [...rows].filter((row, i) => index !== i);
+
+    if (
+      rows[index].name !== '' &&
+      oldRows.map((r) => r.name).includes(rows[index].name)
+    ) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Not allowed to assign the same property TWICE!',
+        severity: 'error',
+      });
+    } else {
+      const newRows = calcNewRows(id);
+      setRows(newRows);
+      props.valuesChanged(newRows);
+    }
+  }
+
+  function onChange(
+    e: { target: { name: string; value: string | number } },
+    row: EditableTableRow
+    // Use index instead of using the id to find the line or remove
+    // index: number
+  ) {
+    // The old unique id === name of the row
+    const { id } = row;
+    // New value and name
+    let { value } = e.target;
+    const { name } = e.target;
+    if (name === 'value') {
+      // Handle positional arguments with this in next MR
+      value = typeof value === 'number' ? Number(value) : value;
+    }
+
+    const newRows = rows.map((rowe) => {
+      if (rowe.id === id) {
+        return { ...rowe, [name]: value };
+      }
+      return rowe;
+    });
+    setRows(newRows);
+  }
+
+  function onDelete(id: string) {
+    const newRows = rows.filter((row) => {
+      return row.id !== id;
+    });
+
+    setRows(newRows);
+    props.valuesChanged(newRows);
+  }
+
+  return (
+    <Table className={classes.table} aria-label="editable table">
+      <TableHeader headers={headers} />
+      <TableBody>
+        {rows.map((row, index) => (
+          <React.Fragment key={row.id}>
+            <TableRow>
+              <CustomTableCell
+                index={index}
+                row={row}
+                name="name"
+                onChange={onChange}
+                type=""
+                typeOfValues={props.typeOfValues[0]}
+                headers={headers}
+              />
+              <CustomTableCell
+                index={index}
+                row={row}
+                name="value"
+                onChange={onChange}
+                type=""
+                typeOfValues={props.typeOfValues[1]}
+                headers={headers}
+              />
+              <ToolsCell
+                onSave={() => onSaveRow(row.id, index)}
+                onDelete={() => onDelete(row.id || '')}
+              />
+            </TableRow>
+          </React.Fragment>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}
+
+export default TableDataMapping;

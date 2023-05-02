@@ -20,9 +20,9 @@ import type { CustomTableCellProps, EditableTableRow } from '../../../types';
 
 const useStyles = makeStyles(() => ({
   input: {
-    width: 90,
-    height: 20,
-    padding: '1px',
+    // width: 90,
+    // height: 20,
+    // padding: '1px',
   },
 }));
 
@@ -60,15 +60,13 @@ function TableCellInEditMode(props: CustomTableCellProps) {
   }
 
   if (type && ['dict', 'list', 'object'].includes(type)) {
-    // TODO: examine if needed to edit in the cell?
-    // <CellEditInJson props={{ row, name, type, onChange }} />
     return <span>{JSON.stringify(row[name])}</span>;
   }
 
   if (typeOfValues.type === 'select') {
     const options = typeOfValues.values || [];
     return (
-      <FormControl fullWidth variant="outlined">
+      <FormControl fullWidth>
         <Autocomplete
           freeSolo={options.length === 0}
           options={options}
@@ -79,9 +77,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
           onInputChange={(e, val) =>
             onChange({ target: { value: val, name } }, row, index)
           }
-          renderInput={(params) => (
-            <TextField {...params} margin="normal" variant="outlined" />
-          )}
+          renderInput={(params) => <TextField {...params} margin="normal" />}
           data-cy="autocompleteInputInEditableCell"
         />
       </FormControl>
@@ -96,33 +92,47 @@ function TableCellInEditMode(props: CustomTableCellProps) {
         onChange={(e) => onChangeBool(e, row, index)}
         data-cy="radioInEditableCell"
       >
-        <FormControlLabel value="true" control={<Radio />} label="true" />
-        <FormControlLabel value="false" control={<Radio />} label="false" />
+        <FormControlLabel
+          value="true"
+          control={<Radio />}
+          label="true"
+          style={{ margin: '-10px 0px -10px 0px' }}
+        />
+        <FormControlLabel
+          value="false"
+          control={<Radio />}
+          label="false"
+          style={{ margin: '-10px 0px -10px 0px' }}
+        />
       </RadioGroup>
     );
   }
 
   if (type === 'number') {
     return (
+      <FormControl fullWidth style={{ marginTop: '8px', marginLeft: '5px' }}>
+        <Input
+          value={row[name]}
+          type="number"
+          name={name}
+          onChange={(e) => onChange(e, row, index)}
+          className={classes.input}
+          data-cy="inputInEditableCell"
+        />
+      </FormControl>
+    );
+  }
+
+  return (
+    <FormControl fullWidth style={{ marginTop: '8px', marginLeft: '5px' }}>
       <Input
-        value={row[name]}
-        type="number"
+        value={row[name] || ''}
         name={name}
         onChange={(e) => onChange(e, row, index)}
         className={classes.input}
         data-cy="inputInEditableCell"
       />
-    );
-  }
-
-  return (
-    <Input
-      value={row[name] || ''}
-      name={name}
-      onChange={(e) => onChange(e, row, index)}
-      className={classes.input}
-      data-cy="inputInEditableCell"
-    />
+    </FormControl>
   );
 }
 

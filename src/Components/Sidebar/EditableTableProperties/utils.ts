@@ -12,14 +12,13 @@ export function createData(
   pair: DataMapping | Conditions | Inputs
 ): EditableTableRow {
   if (pair.id && (pair.value || pair.value === null || pair.value === false)) {
-    return { ...pair, isEditMode: false };
+    return { ...pair };
   }
 
   return {
     id: Object.values(pair)[0],
     name: Object.values(pair)[0],
     value: Object.values(pair)[1],
-    isEditMode: false,
     type:
       pair.value === 'true' || pair.value === 'false'
         ? 'boolean'

@@ -13,14 +13,14 @@ function TableHeader(props: Props) {
   return (
     <TableHead>
       <TableRow>
+        <TableCell align="left" className={classes.tableCell}>
+          <b>{headers[0]}</b>
+        </TableCell>
         {!headers[0].startsWith('Source') && (
           <TableCell align="left" className={classes.tableCell}>
             Type
           </TableCell>
         )}
-        <TableCell align="left" className={classes.tableCell}>
-          <b>{headers[0]}</b>
-        </TableCell>
         <TableCell align="left" className={classes.tableCell}>
           <b>{headers[1]}</b>
         </TableCell>

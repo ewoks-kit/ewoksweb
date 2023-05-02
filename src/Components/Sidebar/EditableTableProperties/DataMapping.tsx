@@ -1,7 +1,6 @@
 import type { DataMapping, EwoksRFLinkData } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import EditableTable from './EditableTable';
 import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import { isClass } from './utils';
@@ -9,6 +8,7 @@ import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import type { Edge } from 'reactflow';
+import TableDataMapping from './TableDataMapping';
 
 export default function DataMappingComponent(element: Edge) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
@@ -75,25 +75,17 @@ export default function DataMappingComponent(element: Edge) {
         <AddCircleOutlineIcon />
       </IconButton>
       {edgeData.data_mapping && edgeData.data_mapping.length > 0 && (
-        <EditableTable
+        <TableDataMapping
           headers={['Source', 'Target']}
           defaultValues={edgeData.data_mapping}
           valuesChanged={dataMappingValuesChanged}
           typeOfValues={[
             {
-              type: element.source
-                ? isClass(sourceNodeData)
-                  ? 'select'
-                  : 'input'
-                : 'input',
+              type: isClass(sourceNodeData) ? 'select' : 'input',
               values: edgeData.links_input_names || [],
             },
             {
-              type: element.target
-                ? isClass(targetNodeData)
-                  ? 'select'
-                  : 'input'
-                : 'input',
+              type: isClass(targetNodeData) ? 'select' : 'input',
               values: [
                 ...(edgeData.links_required_output_names || []),
                 ...(edgeData.links_optional_output_names || []),

@@ -5,7 +5,6 @@ import type {
   EwoksRFNodeData,
 } from '../../../types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import EditableTable from '../EditableTableProperties/EditableTable';
 
 import {
   Accordion,
@@ -30,6 +29,7 @@ import {
 } from '../../../utils/typeGuards';
 import { useNodesIds } from '../../../store/graph-hooks';
 import type { Node } from 'reactflow';
+import TableDataMapping from '../EditableTableProperties/TableDataMapping';
 
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(selectedElement: Node) {
@@ -102,6 +102,7 @@ export default function NodeDetails(selectedElement: Node) {
   useEffect(() => {
     setInputsComplete(nodeData.ewoks_props.inputs_complete || false);
     setDefaultErrorNode(nodeData.ewoks_props.default_error_node || false);
+
     setDataMapping(
       nodeData.ewoks_props.default_error_attributes?.data_mapping || []
     );
@@ -221,7 +222,6 @@ export default function NodeDetails(selectedElement: Node) {
         target_input: row.value,
       };
     });
-
     const newNodeData = {
       ewoks_props: {
         default_error_attributes: {
@@ -297,7 +297,7 @@ export default function NodeDetails(selectedElement: Node) {
             <AddCircleOutlineIcon />
           </IconButton>
           {dataMapping.length > 0 && (
-            <EditableTable
+            <TableDataMapping
               headers={['Source', 'Target']}
               defaultValues={dataMapping}
               valuesChanged={dataMappingValuesChanged}

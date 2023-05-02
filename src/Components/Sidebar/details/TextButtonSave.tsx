@@ -51,7 +51,7 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
       >
         <TextField
           label={label}
-          variant="outlined"
+          // variant="outlined"
           value={valueLocal || ''}
           style={{ width: valueIsChanged ? '80%' : '98%' }}
           onChange={valueChanged}
