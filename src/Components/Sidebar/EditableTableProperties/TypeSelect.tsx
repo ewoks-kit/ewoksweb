@@ -20,13 +20,13 @@ function TypeSelectCell(props: Props) {
 
   return (
     <TableCell align="left" size="small" className={className}>
-      <FormControl fullWidth style={{ fontSize: '13px' }}>
+      <FormControl fullWidth>
         {/* paddingTop: '8px' */}
         <Select
           value={value}
           label="Task type"
           onChange={onChangeLocal}
-          style={{ fontSize: '13px' }}
+          style={{ fontSize: '14px' }}
         >
           {INPUT_TYPES.map((type) => (
             <MenuItem key={type} value={type}>

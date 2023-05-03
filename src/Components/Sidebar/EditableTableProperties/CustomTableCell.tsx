@@ -9,6 +9,7 @@ import { EditOutlined as EditIcon } from '@material-ui/icons';
 // DOC: Used as an app-wide dialog when confirmation is needed. Open is a prop
 function CustomTableCell(props: CustomTableCellProps) {
   const { row, name, headers, type } = props;
+  console.log(row, name, row[name], typeof row[name]);
   const useStyles = makeStyles(() => ({
     tableCell: {
       width: name === 'value' || headers?.includes('Source') ? '50%' : '30%',
@@ -29,7 +30,7 @@ function CustomTableCell(props: CustomTableCellProps) {
       {/* In edit mode the type comes from sidebar in data-mapping and
       from the selected type here for conditions and default-values */}
       {type && ['list', 'dict'].includes(type) ? ( //
-        <span>
+        <span style={{ paddingLeft: '8px' }}>
           {row[name] && typeof row[name] === 'object'
             ? JSON.stringify(row[name])
             : ''}

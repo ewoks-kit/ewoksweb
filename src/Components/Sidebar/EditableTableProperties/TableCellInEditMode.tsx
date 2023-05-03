@@ -23,6 +23,10 @@ const useStyles = makeStyles(() => ({
     fontSize: '12px',
   },
   smallRadio: {
+    '& span': {
+      padding: '0px 8px',
+      margin: '0px',
+    },
     '& svg': {
       width: '0.7em',
       height: '0.7em',
@@ -71,13 +75,14 @@ function TableCellInEditMode(props: CustomTableCellProps) {
   }
 
   if (typeOfValues.type === 'select') {
-    const options = typeOfValues.values || [];
+    const options = typeOfValues.values || [''];
     return (
       <FormControl fullWidth>
         <Autocomplete
+          disableClearable
           freeSolo={options.length === 0}
           options={options}
-          value={row[name]}
+          value={row[name] || ''}
           onChange={(e, val) =>
             onChange({ target: { value: val as string, name } }, row, index)
           }
@@ -98,21 +103,18 @@ function TableCellInEditMode(props: CustomTableCellProps) {
         value={valueToString}
         onChange={(e) => onChangeBool(e, row, index)}
         data-cy="radioInEditableCell"
-        style={{ fontSize: '10px' }}
       >
         <FormControlLabel
           value="true"
           control={<Radio />}
           label="true"
           className={classes.smallRadio}
-          style={{ margin: '-10px 0px -10px 0px', fontSize: '10px' }}
         />
         <FormControlLabel
           value="false"
           control={<Radio />}
           label="false"
           className={classes.smallRadio}
-          style={{ margin: '-10px 0px -10px 0px' }}
         />
       </RadioGroup>
     );
@@ -120,7 +122,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
 
   if (type === 'number') {
     return (
-      <FormControl fullWidth style={{ marginTop: '8px', marginLeft: '5px' }}>
+      <FormControl fullWidth style={{ marginLeft: '5px' }}>
         <Input
           value={row[name]}
           type="number"
@@ -134,7 +136,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
   }
 
   return (
-    <FormControl fullWidth style={{ marginTop: '8px', marginLeft: '5px' }}>
+    <FormControl fullWidth style={{ marginLeft: '5px' }}>
       <Input
         value={row[name] || ''}
         name={name}

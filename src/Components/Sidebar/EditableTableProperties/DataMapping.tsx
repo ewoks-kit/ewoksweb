@@ -8,6 +8,7 @@ import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import type { Edge } from 'reactflow';
 import TableDataMapping from './TableDataMapping';
+import { nanoid } from 'nanoid';
 
 export default function DataMappingComponent(element: Edge) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
@@ -28,7 +29,7 @@ export default function DataMappingComponent(element: Edge) {
       data_mapping: [
         ...(edgeDataC.data_mapping || []),
         {
-          id: `source-${edgeDataC.data_mapping?.length || 1}`,
+          id: nanoid(),
           name: '',
           value: '',
         },
@@ -52,23 +53,24 @@ export default function DataMappingComponent(element: Edge) {
 
   return (
     <div>
-      <SidebarTooltip
+      {/* <SidebarTooltip
         text={`Describes the data transfer from source output to
           target input arguments.`}
       >
         <b>Data Mapping </b>
-      </SidebarTooltip>
+      </SidebarTooltip> */}
 
-      <IconButton
+      {/* <IconButton
         style={{ padding: '1px' }}
         aria-label="dataMapping"
         onClick={() => addDataMapping(edgeData)}
         data-cy="addDataMappingButton"
       >
         <AddCircleOutlineIcon />
-      </IconButton>
-      {edgeData.data_mapping && edgeData.data_mapping.length > 0 && (
+      </IconButton> */}
+      {edgeData.data_mapping && (
         <TableDataMapping
+          addNewLine={() => addDataMapping(edgeData)}
           headers={['Source', 'Target']}
           defaultValues={edgeData.data_mapping}
           valuesChanged={dataMappingValuesChanged}

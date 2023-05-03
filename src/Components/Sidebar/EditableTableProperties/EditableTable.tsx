@@ -64,6 +64,8 @@ function EditableTable(props: EditableTableProps) {
   const { defaultValues, headers } = props;
 
   useEffect(() => {
+    console.log(defaultValues);
+
     setTypeOfInputs(defaultValues.map(getType));
     setRows(defaultValues.map(createData));
   }, [defaultValues]);
@@ -76,6 +78,8 @@ function EditableTable(props: EditableTableProps) {
     graph: unknown,
     callbackProps: { rows: EditableTableRow[]; id: string }
   ) {
+    console.log(id, title, graph, callbackProps);
+
     if (typeof graph !== 'object' || graph === null) {
       return;
     }
@@ -120,6 +124,8 @@ function EditableTable(props: EditableTableProps) {
   }
 
   function onEditRow(id: string, index: number) {
+    console.log(id, index);
+
     if (['list', 'dict'].includes(typeOfInputs[index])) {
       showEditableDialog(
         id,
@@ -133,22 +139,31 @@ function EditableTable(props: EditableTableProps) {
   }
 
   function onSaveRow(id: string | undefined, index: number) {
+    console.log(id, index, rows);
+
+    // Remove the row under editing
     const oldRows = [...rows].filter((row, i) => index !== i);
 
-    if (
-      rows[index].name !== '' &&
-      oldRows.map((r) => r.name).includes(rows[index].name)
-    ) {
+    if (rows[index].name === '') {
+      setOpenSnackbar({
+        open: true,
+        text: 'Please first give a Name to save the Value!',
+        severity: 'warning',
+      });
+      return;
+    }
+
+    if (oldRows.map((r) => r.name).includes(rows[index].name)) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to assign the same property TWICE!',
         severity: 'error',
       });
-    } else {
-      setRows(calcNewRows(id));
-
-      props.valuesChanged(rows);
+      return;
     }
+
+    setRows(calcNewRows(id));
+    props.valuesChanged(rows);
   }
 
   function onChange(
@@ -209,8 +224,10 @@ function EditableTable(props: EditableTableProps) {
     row: EditableTableRow,
     index: number
   ) => {
+    console.log(e.target.value, row, index);
+
     const { id: rowId = '' } = row;
-    if (['string', 'number'].includes(e.target.value)) {
+    if (['string', 'number', 'dict', 'list'].includes(e.target.value)) {
       const newRows = rows.map((rowe) => {
         if (rowe.id === rowId) {
           return { ...rowe, value: '' };
@@ -239,10 +256,12 @@ function EditableTable(props: EditableTableProps) {
     val: unknown, // can be a user defined list or dict
     callbackProps: { id: string; rows: EditableTableRow[] }
   ) {
+    console.log(name, val);
+
     const newRows = callbackProps.rows.map((row) => {
       if (row.id === callbackProps.id) {
         return name !== ''
-          ? { ...row, name, value: val }
+          ? { ...row, id: name, value: val }
           : { ...row, value: val };
       }
       return row;

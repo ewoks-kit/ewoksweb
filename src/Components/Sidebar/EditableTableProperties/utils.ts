@@ -17,18 +17,38 @@ export function createData(
   ) {
     return { ...pair };
   }
-  console.log(pair);
-
-  return {
-    id: Object.values(pair)[0],
-    name: Object.values(pair)[0],
-    value: Object.values(pair)[1],
+  console.log(pair, {
     type:
       pair.value === 'true' || pair.value === 'false'
         ? 'boolean'
         : pair.value === null
         ? 'null'
         : typeof pair.value,
+  });
+
+  return {
+    // id: Object.values(pair)[0],
+    // name: Object.values(pair)[0],
+    // value: Object.values(pair)[1],
+    id: pair.id,
+    name: pair.name,
+    value: pair.value,
+    type:
+      pair.value === 'true' || pair.value === 'false'
+        ? 'boolean'
+        : pair.value === null
+        ? 'null'
+        : typeof pair.value,
+  };
+}
+
+export function createDataMappingData(pair: DataMapping): EditableTableRow {
+  console.log(pair);
+
+  return {
+    id: pair.source_output ?? pair.id ?? '',
+    name: pair.source_output ?? pair.name ?? '',
+    value: pair.target_input ?? pair.value ?? '',
   };
 }
 

@@ -1,5 +1,6 @@
 import type { ChangeEvent } from 'react';
-import { Checkbox } from '@material-ui/core';
+import { useState } from 'react';
+import { Checkbox, Grid, Switch, Typography } from '@material-ui/core';
 import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import DataMappingComponent from '../EditableTableProperties/DataMapping';
 import Conditions from '../EditableTableProperties/Conditions';
@@ -19,9 +20,9 @@ export default function LinkDetails(selectedElement: Edge) {
 
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
-  const mapAllDataChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-    mergeEdgeData(selectedElement.id, { map_all_data: event.target.checked });
-  };
+  const [showDataMapping, setShowDataMapping] = useState<boolean>(
+    !!edgeData.map_all_data || false
+  );
 
   function onErrorChanged(event: React.ChangeEvent<HTMLInputElement>) {
     mergeEdgeData(selectedElement.id, { on_error: event.target.checked });
@@ -29,6 +30,14 @@ export default function LinkDetails(selectedElement: Edge) {
 
   const requiredChanged = (event: ChangeEvent<HTMLInputElement>) => {
     mergeEdgeData(selectedElement.id, { required: event.target.checked });
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.checked);
+
+    setShowDataMapping(!showDataMapping);
+
+    mergeEdgeData(selectedElement.id, { map_all_data: event.target.checked });
   };
 
   return (
@@ -40,20 +49,26 @@ export default function LinkDetails(selectedElement: Edge) {
         Cannot be used in combination with data_mapping.`}
       >
         <div>
-          <label htmlFor="map-all-data" id="map-all-data">
-            <b>Map all Data</b>
-          </label>
-          <b />
-          <Checkbox
-            name="map-all-data"
-            checked={!!edgeData.map_all_data || false}
-            onChange={mapAllDataChanged}
-            inputProps={{ 'aria-label': 'controlled' }}
-            aria-labelledby="map-all-data"
-          />
+          <Typography component="div" style={{ fontSize: '15px' }}>
+            <Grid component="label" container alignItems="center" spacing={1}>
+              <Grid item>
+                {!showDataMapping ? <b>Map all data</b> : 'Map all data'}
+              </Grid>
+              <Grid item>
+                <Switch
+                  checked={showDataMapping}
+                  onChange={handleChange}
+                  name="checkedC"
+                />
+              </Grid>
+              <Grid item>
+                {showDataMapping ? <b>Data Mapping</b> : 'Data Mapping'}
+              </Grid>
+            </Grid>
+          </Typography>
         </div>
       </SidebarTooltip>
-      {!edgeData.map_all_data && isEdgeRF(selectedElement) && (
+      {showDataMapping && isEdgeRF(selectedElement) && (
         <div>
           <DataMappingComponent {...selectedElement} />
         </div>
@@ -82,11 +97,7 @@ export default function LinkDetails(selectedElement: Edge) {
       <div>
         <div>
           <b>Required</b>
-          <Checkbox
-            checked={edgeData.required}
-            onChange={requiredChanged}
-            // inputProps={{ 'aria-label': 'controlled' }}
-          />
+          <Checkbox checked={edgeData.required} onChange={requiredChanged} />
         </div>
         <div className={classes.detailsLabels}>
           <b>Source:</b> {selectedElement.source}

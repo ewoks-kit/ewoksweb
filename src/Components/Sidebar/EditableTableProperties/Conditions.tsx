@@ -6,6 +6,8 @@ import SidebarTooltip from '../SidebarTooltip';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import type { Edge } from 'reactflow';
+import { nanoid } from 'nanoid';
+import { identity } from 'lodash';
 
 // DOC: The conditions for a link are being set in this component
 export default function Conditions(element: Edge) {
@@ -20,17 +22,20 @@ export default function Conditions(element: Edge) {
     const newEdgeData = {
       ...edgeDataL,
       on_error: false,
-      conditions: [...elCon, { id: '', name: '', value: false }],
+      conditions: [...elCon, { id: nanoid(), name: '', value: false }],
     };
     setEdgeData(element.id, newEdgeData);
   }
 
   function conditionsValuesChanged(table: EditableTableRow[]) {
+    console.log(table);
+
     const newEdgeData = {
       ...edgeData,
       conditions: table.map((con1) => {
         return {
-          source_output: con1.name,
+          id: con1.id,
+          name: con1.name,
           value: con1.value,
         };
       }),

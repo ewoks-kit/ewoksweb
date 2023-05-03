@@ -14,6 +14,7 @@ export default function DefaultInputs(element: Node) {
   assertNodeDataDefined(nodeData, element.id);
 
   const defaultInputs = nodeData.ewoks_props.default_inputs || [];
+
   function addDefaultInputs(nodeDataProps: EwoksRFNodeData) {
     const newNodeData = {
       ...nodeDataProps,
@@ -29,6 +30,8 @@ export default function DefaultInputs(element: Node) {
   }
 
   const defaultInputsChanged = (table: EditableTableRow[]) => {
+    console.log(table);
+
     const newNodeData = {
       ...nodeData,
       ewoks_props: {
