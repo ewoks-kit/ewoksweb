@@ -42,6 +42,7 @@ export default function EdgeLabelComment() {
     if (isString(elmtLabel)) {
       setLabel(elmtLabel);
     }
+
     setComment(edgeData.comment || '');
 
     const mappings =
@@ -75,8 +76,10 @@ export default function EdgeLabelComment() {
     ]);
   }
 
-  function saveComment(commentLocal: string, elementL: EwoksRFLink) {
-    mergeEdgeData(elementL.id, { comment: commentLocal });
+  function saveComment(commentLocal: string) {
+    if (element?.id) {
+      mergeEdgeData(element.id, { comment: commentLocal });
+    }
   }
 
   function valueSavedLocal(labelL: string, elementL: EwoksRFLink) {
@@ -142,7 +145,11 @@ export default function EdgeLabelComment() {
             />
             {valueIsChanged && (
               <IconButton
-                style={{ width: '20%', minWidth: '30px' }}
+                style={{
+                  width: '20%',
+                  minWidth: '40px',
+                  padding: '0px 0px 6px 0px',
+                }}
                 color="inherit"
                 onClick={() => valueSavedLocal(label, element)}
               >
@@ -166,7 +173,7 @@ export default function EdgeLabelComment() {
         <TextButtonSave
           label="Comment"
           value={comment}
-          valueSaved={() => saveComment(comment, element)}
+          valueSaved={saveComment}
         />
       </div>
     </div>

@@ -84,16 +84,12 @@ function TableDataMapping(props: EditableTableProps) {
   function onChange(
     e: { target: { name: string; value: string | number } },
     row: EditableTableRow
-    // Use index instead of using the id to find the line or remove
-    // index: number
   ) {
-    // The old unique id === name of the row
     const { id } = row;
-    // New value and name
+
     let { value } = e.target;
     const { name } = e.target;
     if (name === 'value') {
-      // Handle positional arguments with this in next MR
       value = typeof value === 'number' ? Number(value) : value;
     }
 
@@ -116,19 +112,7 @@ function TableDataMapping(props: EditableTableProps) {
   }
 
   function addDataMapping() {
-    console.log('h');
     props.addNewLine?.();
-    // setEdgeData(element.id, {
-    //   ...edgeDataC,
-    //   data_mapping: [
-    //     ...(edgeDataC.data_mapping || []),
-    //     {
-    //       id: nanoid(),
-    //       name: '',
-    //       value: '',
-    //     },
-    //   ],
-    // });
   }
 
   return (

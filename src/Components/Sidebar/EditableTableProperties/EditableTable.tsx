@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import CustomTableCell from './CustomTableCell';
 import DraggableDialog from 'Components/General/DraggableDialog';
 import useStore from 'store/useStore';
-import type { Conditions, DataMapping, EditableTableRow, Inputs } from 'types';
+import type { Conditions, EditableTableRow, Inputs } from 'types';
 import type { ChangeEvent } from 'react';
 import { createData, getType } from './utils';
 import TableHeader from './TableHeader';
@@ -41,7 +41,7 @@ export const useStyles = makeStyles(() => ({
 
 interface EditableTableProps {
   headers: string[];
-  defaultValues: DataMapping[] | Conditions[] | Inputs[];
+  defaultValues: Conditions[] | Inputs[];
   typeOfValues: { type: string; values?: string[] }[];
   valuesChanged: (rows: EditableTableRow[]) => void;
 }
@@ -64,8 +64,6 @@ function EditableTable(props: EditableTableProps) {
   const { defaultValues, headers } = props;
 
   useEffect(() => {
-    console.log(defaultValues);
-
     setTypeOfInputs(defaultValues.map(getType));
     setRows(defaultValues.map(createData));
   }, [defaultValues]);
@@ -78,8 +76,6 @@ function EditableTable(props: EditableTableProps) {
     graph: unknown,
     callbackProps: { rows: EditableTableRow[]; id: string }
   ) {
-    console.log(id, title, graph, callbackProps);
-
     if (typeof graph !== 'object' || graph === null) {
       return;
     }
@@ -100,7 +96,6 @@ function EditableTable(props: EditableTableProps) {
           id: row.name?.replace(' ', '_') || '',
         };
       }
-      console.log(rows, row);
 
       return row;
     });
@@ -124,8 +119,6 @@ function EditableTable(props: EditableTableProps) {
   }
 
   function onEditRow(id: string, index: number) {
-    console.log(id, index);
-
     if (['list', 'dict'].includes(typeOfInputs[index])) {
       showEditableDialog(
         id,
@@ -139,9 +132,6 @@ function EditableTable(props: EditableTableProps) {
   }
 
   function onSaveRow(id: string | undefined, index: number) {
-    console.log(id, index, rows);
-
-    // Remove the row under editing
     const oldRows = [...rows].filter((row, i) => index !== i);
 
     if (rows[index].name === '') {
@@ -224,8 +214,6 @@ function EditableTable(props: EditableTableProps) {
     row: EditableTableRow,
     index: number
   ) => {
-    console.log(e.target.value, row, index);
-
     const { id: rowId = '' } = row;
     if (['string', 'number', 'dict', 'list'].includes(e.target.value)) {
       const newRows = rows.map((rowe) => {
@@ -256,8 +244,6 @@ function EditableTable(props: EditableTableProps) {
     val: unknown, // can be a user defined list or dict
     callbackProps: { id: string; rows: EditableTableRow[] }
   ) {
-    console.log(name, val);
-
     const newRows = callbackProps.rows.map((row) => {
       if (row.id === callbackProps.id) {
         return name !== ''

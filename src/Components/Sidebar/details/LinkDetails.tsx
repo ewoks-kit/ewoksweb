@@ -33,8 +33,6 @@ export default function LinkDetails(selectedElement: Edge) {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.checked);
-
     setShowDataMapping(!showDataMapping);
 
     mergeEdgeData(selectedElement.id, { map_all_data: event.target.checked });

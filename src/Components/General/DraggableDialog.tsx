@@ -65,16 +65,12 @@ export default function DraggableDialog(props: Props) {
     rows: [],
   });
   const graphInfo = useStore((state) => state.graphInfo);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const [selection, setSelection] = useState('ewoks');
 
   const { open, content } = props;
-  console.log(open, content);
 
   useEffect(() => {
-    console.log(content);
-
     setGraph(content.object || {});
     setOldGraph(content.object || {});
     setIsOpen(open || false);
@@ -90,8 +86,6 @@ export default function DraggableDialog(props: Props) {
   };
 
   const handleSave = () => {
-    console.log(name, graph, callbackProps);
-
     setIsOpen(false);
     props.setValue(name, graph, callbackProps);
   };

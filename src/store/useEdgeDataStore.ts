@@ -14,8 +14,6 @@ const useEdgeDataStore = create<EdgeDataState>((set) => ({
   edgesData: new Map(),
 
   setEdgeData: (edgeId, edgeData) => {
-    console.log(edgeId, edgeData);
-
     set(({ edgesData }) => ({
       edgesData: new Map(edgesData).set(edgeId, edgeData),
     }));
@@ -27,6 +25,7 @@ const useEdgeDataStore = create<EdgeDataState>((set) => ({
         edgesData.get(edgeId),
         edgeData
       );
+
       return {
         edgesData: new Map(edgesData).set(edgeId, { ...newData }),
       };

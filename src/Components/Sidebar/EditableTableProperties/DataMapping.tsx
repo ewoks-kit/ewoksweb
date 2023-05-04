@@ -1,7 +1,4 @@
 import type { DataMapping, EwoksRFLinkData } from 'types';
-import { IconButton } from '@material-ui/core';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import SidebarTooltip from '../SidebarTooltip';
 import { isClass } from './utils';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
@@ -53,21 +50,6 @@ export default function DataMappingComponent(element: Edge) {
 
   return (
     <div>
-      {/* <SidebarTooltip
-        text={`Describes the data transfer from source output to
-          target input arguments.`}
-      >
-        <b>Data Mapping </b>
-      </SidebarTooltip> */}
-
-      {/* <IconButton
-        style={{ padding: '1px' }}
-        aria-label="dataMapping"
-        onClick={() => addDataMapping(edgeData)}
-        data-cy="addDataMappingButton"
-      >
-        <AddCircleOutlineIcon />
-      </IconButton> */}
       {edgeData.data_mapping && (
         <TableDataMapping
           addNewLine={() => addDataMapping(edgeData)}

@@ -15,7 +15,6 @@ interface TextButtonSaveProps {
 
 export default function TextButtonSave(props: TextButtonSaveProps) {
   const classes = useDashboardStyles();
-  // console.log(props); this is rerendered more than it should examine
 
   const { label, value } = props;
 
@@ -66,7 +65,11 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
 
         {valueIsChanged && (
           <IconButton
-            style={{ width: '20%', minWidth: '40px' }}
+            style={{
+              width: '20%',
+              minWidth: '40px',
+              padding: '0px 0px 6px 0px',
+            }}
             color="inherit"
             onClick={valueSavedLocal}
           >

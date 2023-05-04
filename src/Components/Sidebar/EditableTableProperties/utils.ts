@@ -8,43 +8,32 @@ import type {
 
 export const INPUT_TYPES = ['bool', 'number', 'string', 'list', 'dict', 'null'];
 
-export function createData(
-  pair: DataMapping | Conditions | Inputs
-): EditableTableRow {
-  if (
-    pair.id &&
-    (pair.value === null || pair.value === false || pair.value === '')
-  ) {
-    return { ...pair };
+export function createData(pair: Conditions | Inputs): EditableTableRow {
+  const type =
+    pair.value === 'true' || pair.value === 'false'
+      ? 'boolean'
+      : pair.value === null
+      ? 'null'
+      : typeof pair.value;
+
+  if ('source_output' in pair) {
+    return {
+      id: pair.source_output,
+      name: pair.source_output,
+      value: pair.value !== null ? pair.value : 'null',
+      type,
+    };
   }
-  console.log(pair, {
-    type:
-      pair.value === 'true' || pair.value === 'false'
-        ? 'boolean'
-        : pair.value === null
-        ? 'null'
-        : typeof pair.value,
-  });
 
   return {
-    // id: Object.values(pair)[0],
-    // name: Object.values(pair)[0],
-    // value: Object.values(pair)[1],
-    id: pair.id,
+    id: pair.id || pair.name,
     name: pair.name,
     value: pair.value,
-    type:
-      pair.value === 'true' || pair.value === 'false'
-        ? 'boolean'
-        : pair.value === null
-        ? 'null'
-        : typeof pair.value,
+    type,
   };
 }
 
 export function createDataMappingData(pair: DataMapping): EditableTableRow {
-  console.log(pair);
-
   return {
     id: pair.source_output ?? pair.id ?? '',
     name: pair.source_output ?? pair.name ?? '',

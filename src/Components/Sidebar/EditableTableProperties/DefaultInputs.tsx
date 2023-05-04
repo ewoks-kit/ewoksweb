@@ -30,8 +30,6 @@ export default function DefaultInputs(element: Node) {
   }
 
   const defaultInputsChanged = (table: EditableTableRow[]) => {
-    console.log(table);
-
     const newNodeData = {
       ...nodeData,
       ewoks_props: {
