@@ -21,9 +21,13 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
   const [valueLocal, setValueLocal] = useState(value);
   const [valueIsChanged, setValueIsChanged] = useState(false);
   const inExecutionMode = useStore((state) => state.inExecutionMode);
+  console.log(valueIsChanged, label, value);
 
   useEffect(() => {
+    console.log(value);
+
     setValueLocal(value);
+    setValueIsChanged(false);
   }, [value]);
 
   function valueChanged(event: ChangeEvent<HTMLInputElement>) {
@@ -55,7 +59,7 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
           margin="dense"
           style={{
             width: valueIsChanged ? '80%' : '98%',
-            margin: '0px 0px 7px 0px',
+            margin: '0 0 7px 0',
             paddingTop: '2px',
           }}
           onChange={valueChanged}
@@ -68,7 +72,7 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
             style={{
               width: '20%',
               minWidth: '40px',
-              padding: '0px 0px 6px 0px',
+              padding: '0 0 6px 0',
             }}
             color="inherit"
             onClick={valueSavedLocal}

@@ -53,7 +53,7 @@ const useStyles = makeStyles(() =>
       left: '1px',
     },
     image: {
-      padding: '0px 0px 15px 0px',
+      padding: '0 0 15px 0',
     },
     button: {
       margin: '4px',

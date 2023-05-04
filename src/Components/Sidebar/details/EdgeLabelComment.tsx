@@ -36,15 +36,18 @@ export default function EdgeLabelComment() {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
+  console.log(valueIsChanged, edgeData.comment);
 
   useEffect(() => {
+    console.log(element, edgeData.comment);
+
     const { label: elmtLabel } = element;
     if (isString(elmtLabel)) {
       setLabel(elmtLabel);
     }
 
     setComment(edgeData.comment || '');
-
+    setValueIsChanged(false);
     const mappings =
       edgeData.data_mapping && edgeData.data_mapping.length > 0
         ? edgeData.data_mapping
@@ -76,13 +79,8 @@ export default function EdgeLabelComment() {
     ]);
   }
 
-  function saveComment(commentLocal: string) {
-    if (element?.id) {
-      mergeEdgeData(element.id, { comment: commentLocal });
-    }
-  }
-
   function valueSavedLocal(labelL: string, elementL: EwoksRFLink) {
+    cy.get('.MuiSwitch-switchBase').click();
     setValueIsChanged(false);
     saveLabel(labelL, elementL);
   }
@@ -136,7 +134,7 @@ export default function EdgeLabelComment() {
                 <TextField
                   variant="outlined"
                   margin="dense"
-                  style={{ margin: '0px 0px 8px 0px', paddingTop: '2px' }}
+                  style={{ margin: '0 0 8px 0', paddingTop: '2px' }}
                   {...params}
                   label="Label"
                   multiline
@@ -148,7 +146,7 @@ export default function EdgeLabelComment() {
                 style={{
                   width: '20%',
                   minWidth: '40px',
-                  padding: '0px 0px 6px 0px',
+                  padding: '0 0 6px 0',
                 }}
                 color="inherit"
                 onClick={() => valueSavedLocal(label, element)}
@@ -173,7 +171,9 @@ export default function EdgeLabelComment() {
         <TextButtonSave
           label="Comment"
           value={comment}
-          valueSaved={saveComment}
+          valueSaved={(newComment) =>
+            mergeEdgeData(element.id, { comment: newComment })
+          }
         />
       </div>
     </div>

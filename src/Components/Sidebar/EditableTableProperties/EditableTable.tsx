@@ -134,6 +134,7 @@ function EditableTable(props: EditableTableProps) {
   function onSaveRow(id: string | undefined, index: number) {
     const oldRows = [...rows].filter((row, i) => index !== i);
 
+    // TODO: not needed if button is deactivated
     if (rows[index].name === '') {
       setOpenSnackbar({
         open: true,
@@ -319,6 +320,7 @@ function EditableTable(props: EditableTableProps) {
                 />
 
                 <ToolsCell
+                  disableSave={rows[index].name === ''}
                   onSave={() => onSaveRow(row.id, index)}
                   onDelete={() => onDelete(row.id || '')}
                 />
