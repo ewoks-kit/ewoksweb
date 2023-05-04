@@ -386,12 +386,6 @@ export interface EditableTableRow {
   type?: string;
 }
 
-export interface DataMappingRow {
-  id?: string;
-  source_output?: string;
-  target_input?: unknown;
-}
-
 export interface CustomTableCellProps {
   index: number;
   row: EditableTableRow;

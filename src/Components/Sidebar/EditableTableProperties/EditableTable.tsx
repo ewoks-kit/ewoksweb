@@ -137,7 +137,7 @@ function EditableTable(props: EditableTableProps) {
     if (rows[index].name === '') {
       setOpenSnackbar({
         open: true,
-        text: 'Please first give a Name to save the Value!',
+        text: 'Please first give a Name!',
         severity: 'warning',
       });
       return;
