@@ -1,4 +1,5 @@
 import type { ChangeEvent } from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { Checkbox, Grid, Switch, Typography } from '@material-ui/core';
 import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
@@ -21,8 +22,12 @@ export default function LinkDetails(selectedElement: Edge) {
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   const [showDataMapping, setShowDataMapping] = useState<boolean>(
-    !!edgeData.map_all_data || false
+    !edgeData.map_all_data
   );
+
+  useEffect(() => {
+    setShowDataMapping(!edgeData.map_all_data);
+  }, [edgeData.map_all_data]);
 
   function onErrorChanged(event: React.ChangeEvent<HTMLInputElement>) {
     mergeEdgeData(selectedElement.id, { on_error: event.target.checked });
@@ -33,9 +38,9 @@ export default function LinkDetails(selectedElement: Edge) {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setShowDataMapping(!showDataMapping);
+    setShowDataMapping(event.target.checked);
 
-    mergeEdgeData(selectedElement.id, { map_all_data: event.target.checked });
+    mergeEdgeData(selectedElement.id, { map_all_data: !event.target.checked });
   };
 
   return (
@@ -56,7 +61,7 @@ export default function LinkDetails(selectedElement: Edge) {
                 <Switch
                   checked={showDataMapping}
                   onChange={handleChange}
-                  name="checkedC"
+                  name="dataMappingSwitch"
                 />
               </Grid>
               <Grid item>

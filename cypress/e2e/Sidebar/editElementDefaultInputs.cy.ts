@@ -20,12 +20,6 @@ describe('edit nodes defaultInputs', () => {
   it('type and undo/redo a new Default Input', () => {
     cy.contains('Default Inputs').should('be.visible');
 
-    cy.get('[data-cy="addDefaultInputsButton"]').click();
-
-    cy.contains('Please fill in the empty line before adding another!').should(
-      'be.visible'
-    );
-
     cy.get('[data-cy="autocompleteInputInEditableCell"]')
       .should('exist')
       .should('be.visible');

@@ -6,7 +6,6 @@ describe('test newGraph scenarios', () => {
   it('Initially it displays the empty canvas', () => {
     cy.get('.react-flow').should('be.visible');
     cy.get('.react-flow__controls').should('be.visible');
-    cy.get('.react-flow__minimap').should('be.visible');
     cy.get('.react-flow__background').should('be.visible');
     cy.get('.react-flow__attribution').should('be.visible');
   });

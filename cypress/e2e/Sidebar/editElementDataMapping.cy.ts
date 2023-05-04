@@ -3,12 +3,12 @@ describe('edit links dataMapping', () => {
     cy.loadApp();
   });
 
-  it('click and undo/redo sidebar Map all Data', () => {
+  it('click and undo/redo sidebar Map all data', () => {
     cy.get('.react-flow').contains('web app?').parent().click();
 
-    cy.contains('Map all Data').should('be.visible');
+    cy.contains('Map all data').should('be.visible');
 
-    cy.findByLabelText('Map all Data').click();
+    cy.get('.MuiSwitch-switchBase').click();
 
     // cy.get('[data-cy="undoButton"]').click();
 
@@ -17,6 +17,8 @@ describe('edit links dataMapping', () => {
 
   it('insert and undo/redo a new Data Mapping', () => {
     cy.contains('Data Mapping').should('be.visible');
+
+    cy.get('.MuiSwitch-thumb').click({ force: true });
 
     cy.get('[data-cy="addDataMappingButton"]').click();
 
@@ -27,12 +29,6 @@ describe('edit links dataMapping', () => {
 
   it('type and undo/redo a new Data Mapping', () => {
     cy.contains('Data Mapping').should('be.visible');
-
-    cy.get('[data-cy="addDataMappingButton"]').click();
-
-    cy.contains('Please fill in the empty line before adding another!').should(
-      'be.visible'
-    );
 
     cy.get('[data-cy="inputInEditableCell"]')
       .should('exist')

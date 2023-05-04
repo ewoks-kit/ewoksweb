@@ -26,7 +26,7 @@ describe('select visualize links', () => {
       .click()
       .parent();
 
-    cy.contains('Map all Data').should('be.visible');
+    cy.contains('Map all data').should('be.visible');
 
     cy.findByRole('textbox', { name: 'Label' })
       .contains('if you do then...')

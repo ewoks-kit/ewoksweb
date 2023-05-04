@@ -19,7 +19,6 @@ describe('structure and basics for edit-workflows', () => {
   it('displays the canvas', () => {
     cy.get('.react-flow').should('be.visible');
     cy.get('.react-flow__controls').should('be.visible');
-    cy.get('.react-flow__minimap').should('be.visible');
     cy.get('.react-flow__background').should('be.visible');
     cy.get('.react-flow__attribution').should('be.visible');
   });

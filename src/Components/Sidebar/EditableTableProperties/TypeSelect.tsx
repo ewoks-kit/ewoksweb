@@ -21,7 +21,6 @@ function TypeSelectCell(props: Props) {
   return (
     <TableCell align="left" size="small" className={className}>
       <FormControl fullWidth>
-        {/* paddingTop: '8px' */}
         <Select
           value={value}
           label="Task type"
