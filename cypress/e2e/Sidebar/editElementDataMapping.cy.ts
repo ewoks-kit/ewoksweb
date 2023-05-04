@@ -8,8 +8,6 @@ describe('edit links dataMapping', () => {
 
     cy.contains('Map all data').should('be.visible');
 
-    cy.get('.MuiSwitch-switchBase').click();
-
     // cy.get('[data-cy="undoButton"]').click();
 
     // cy.get('[data-cy="redoButton"]').click();
