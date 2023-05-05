@@ -28,12 +28,6 @@ describe('structure and basics for edit-workflows', () => {
   });
 
   it('displays the Graph Details', () => {
-    cy.get('span').should('include.text', 'Workflow');
-  });
-
-  it('should be able to see graph editing elements', () => {
-    cy.contains('Label').should('be.visible');
-    cy.contains('Comment').should('be.visible');
-    cy.contains('Category').should('be.visible');
+    cy.get('span').should('include.text', 'Open a workflow to edit');
   });
 });

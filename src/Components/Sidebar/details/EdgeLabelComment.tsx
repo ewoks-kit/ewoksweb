@@ -77,7 +77,6 @@ export default function EdgeLabelComment() {
   }
 
   function valueSavedLocal(labelL: string, elementL: EwoksRFLink) {
-    cy.get('.MuiSwitch-switchBase').click();
     setValueIsChanged(false);
     saveLabel(labelL, elementL);
   }
@@ -101,6 +100,7 @@ export default function EdgeLabelComment() {
     if (!event) {
       return;
     }
+
     if (event.target.value) {
       setChanged(event);
       setLabel(event.target.value);
