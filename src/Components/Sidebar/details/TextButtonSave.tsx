@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import { FormControl, IconButton, TextField, Fab } from '@material-ui/core';
 import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import SaveIcon from '@material-ui/icons/Save';
-import useStore from '../../../store/useStore';
 import sidebarStyle from '../sidebarStyle';
 import type { ChangeEvent } from 'react';
 
 interface TextButtonSaveProps {
+  elementId?: string;
   label: string;
   value: string;
   valueSaved(value: string): void;
@@ -16,19 +16,15 @@ interface TextButtonSaveProps {
 export default function TextButtonSave(props: TextButtonSaveProps) {
   const classes = useDashboardStyles();
 
-  const { label, value } = props;
+  const { label, value, elementId } = props;
 
   const [valueLocal, setValueLocal] = useState(value);
   const [valueIsChanged, setValueIsChanged] = useState(false);
-  const inExecutionMode = useStore((state) => state.inExecutionMode);
-  console.log(valueIsChanged, label, value);
 
   useEffect(() => {
-    console.log(value);
-
     setValueLocal(value);
     setValueIsChanged(false);
-  }, [value]);
+  }, [value, elementId]);
 
   function valueChanged(event: ChangeEvent<HTMLInputElement>) {
     if (value !== event.target.value) {
@@ -60,7 +56,6 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
           style={{
             width: valueIsChanged ? '80%' : '98%',
             margin: '0 0 7px 0',
-            paddingTop: '2px',
           }}
           onChange={valueChanged}
           multiline
@@ -83,7 +78,6 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
               size="small"
               component="span"
               aria-label="saveLabelComment"
-              disabled={inExecutionMode}
             >
               <SaveIcon />
             </Fab>

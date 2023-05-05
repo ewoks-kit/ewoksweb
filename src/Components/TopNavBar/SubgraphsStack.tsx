@@ -1,7 +1,6 @@
 import Typography from '@material-ui/core/Typography';
 import { useDashboardStyles } from '../Dashboard/useDashboardStyles';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import HomeIcon from '@material-ui/icons/Home';
 
 import Link from '@material-ui/core/Link';
 import useStore from '../../store/useStore';
@@ -63,10 +62,9 @@ export default function SubgraphsStack() {
         {subgraphsStack.length > 1 &&
           subgraphsStack.map((gr, index) => (
             <span key={gr.id}>
-              {index === 0 && <HomeIcon className={classes.icon} />}
               <Link
                 underline="hover"
-                color="textPrimary"
+                style={{ color: 'white', fontSize: '18px' }}
                 href="/"
                 id={gr.id}
                 key={gr.id}

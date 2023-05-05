@@ -16,7 +16,6 @@ function FetchingDropdown<T, D extends boolean>(
   const loading = fetchStatus === FetchStatus.Pending;
   const setAllWorkflows = useStore((state) => state.setAllWorkflows);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const inExecutionMode = useStore((state) => state.inExecutionMode);
 
   async function onOpenDropdown() {
     setFetchStatusOpen(FetchStatus.Pending);
@@ -30,7 +29,6 @@ function FetchingDropdown<T, D extends boolean>(
 
   return (
     <Autocomplete
-      disabled={inExecutionMode}
       data-testid="async-autocomplete-drop"
       open={fetchStatus !== FetchStatus.ToDo}
       onOpen={() => {

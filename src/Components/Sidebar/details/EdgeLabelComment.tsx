@@ -36,11 +36,8 @@ export default function EdgeLabelComment() {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
-  console.log(valueIsChanged, edgeData.comment);
 
   useEffect(() => {
-    console.log(element, edgeData.comment);
-
     const { label: elmtLabel } = element;
     if (isString(elmtLabel)) {
       setLabel(elmtLabel);
@@ -157,7 +154,6 @@ export default function EdgeLabelComment() {
                   size="small"
                   component="span"
                   aria-label="saveLabelComment"
-                  // disabled={inExecutionMode}
                 >
                   <SaveIcon />
                 </Fab>
@@ -169,11 +165,12 @@ export default function EdgeLabelComment() {
 
       <div style={{ display: 'block' }}>
         <TextButtonSave
+          elementId={element.id}
           label="Comment"
           value={comment}
-          valueSaved={(newComment) =>
-            mergeEdgeData(element.id, { comment: newComment })
-          }
+          valueSaved={(newComment) => {
+            mergeEdgeData(element.id, { comment: newComment });
+          }}
         />
       </div>
     </div>

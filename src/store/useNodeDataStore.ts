@@ -18,6 +18,7 @@ const useNodeDataStore = create<NodeDataState>((set) => ({
       nodesData: new Map(nodesData).set(nodeId, nodeData),
     }));
   },
+
   mergeNodeData: (nodeId, nodeData) => {
     set(({ nodesData }) => {
       const newData: EwoksRFNodeData = merge(

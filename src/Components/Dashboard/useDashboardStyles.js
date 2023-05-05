@@ -41,6 +41,7 @@ export const useDashboardStyles = makeStyles((theme) => ({
   },
 
   icon: {
+    marginTop: theme.spacing(1.5),
     marginRight: theme.spacing(0.5),
     width: 20,
     height: 20,
