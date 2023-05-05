@@ -9,15 +9,23 @@ import TableRow from '@material-ui/core/TableRow';
 import CustomTableCell from './CustomTableCell';
 import useStore from 'store/useStore';
 import type { Conditions, DataMapping, EditableTableRow, Inputs } from 'types';
-import { createData } from './utils';
+import { createDataMappingData } from './utils';
 import TableHeader from './TableHeader';
 import ToolsCell from './ToolsCell';
+import { IconButton, TableCell } from '@material-ui/core';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 export const useStyles = makeStyles(() => ({
   table: {
     padding: '1px',
     minWidth: 160,
     wordBreak: 'break-all',
+  },
+  tableCell: {
+    textAlign: 'end',
+    width: '50%',
+    height: 15,
+    padding: '0px 5px 0px 0px',
   },
 }));
 
@@ -26,17 +34,19 @@ interface EditableTableProps {
   defaultValues: DataMapping[] | Conditions[] | Inputs[];
   typeOfValues: { type: string; values?: string[] }[];
   valuesChanged: (rows: EditableTableRow[]) => void;
+  addNewLine?: () => void;
 }
 
 // The table where lines can be added where type is selected and appropriate values are given to name and value.
 function TableDataMapping(props: EditableTableProps) {
   const [rows, setRows] = React.useState<EditableTableRow[]>([]);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  // const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
 
   const { defaultValues, headers } = props;
 
   useEffect(() => {
-    setRows(defaultValues.map(createData));
+    setRows(defaultValues.map(createDataMappingData));
   }, [defaultValues]);
   const classes = useStyles();
 
@@ -74,16 +84,12 @@ function TableDataMapping(props: EditableTableProps) {
   function onChange(
     e: { target: { name: string; value: string | number } },
     row: EditableTableRow
-    // Use index instead of using the id to find the line or remove
-    // index: number
   ) {
-    // The old unique id === name of the row
     const { id } = row;
-    // New value and name
+
     let { value } = e.target;
     const { name } = e.target;
     if (name === 'value') {
-      // Handle positional arguments with this in next MR
       value = typeof value === 'number' ? Number(value) : value;
     }
 
@@ -103,6 +109,10 @@ function TableDataMapping(props: EditableTableProps) {
 
     setRows(newRows);
     props.valuesChanged(newRows);
+  }
+
+  function addDataMapping() {
+    props.addNewLine?.();
   }
 
   return (
@@ -137,6 +147,19 @@ function TableDataMapping(props: EditableTableProps) {
             </TableRow>
           </React.Fragment>
         ))}
+        <TableRow>
+          <TableCell align="left" className={classes.tableCell}>
+            <IconButton
+              style={{ padding: '1px' }}
+              aria-label="dataMapping"
+              onClick={() => addDataMapping()}
+              data-cy="addDataMappingButton"
+            >
+              <AddCircleOutlineIcon />
+            </IconButton>
+          </TableCell>
+          <TableCell />
+        </TableRow>
       </TableBody>
     </Table>
   );

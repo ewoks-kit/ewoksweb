@@ -8,23 +8,36 @@ import type {
 
 export const INPUT_TYPES = ['bool', 'number', 'string', 'list', 'dict', 'null'];
 
-export function createData(
-  pair: DataMapping | Conditions | Inputs
-): EditableTableRow {
-  if (pair.id && (pair.value || pair.value === null || pair.value === false)) {
-    return { ...pair };
+export function createData(pair: Conditions | Inputs): EditableTableRow {
+  const type =
+    pair.value === 'true' || pair.value === 'false'
+      ? 'boolean'
+      : pair.value === null
+      ? 'null'
+      : typeof pair.value;
+
+  if ('source_output' in pair) {
+    return {
+      id: pair.source_output,
+      name: pair.source_output,
+      value: pair.value !== null ? pair.value : 'null',
+      type,
+    };
   }
 
   return {
-    id: Object.values(pair)[0],
-    name: Object.values(pair)[0],
-    value: Object.values(pair)[1],
-    type:
-      pair.value === 'true' || pair.value === 'false'
-        ? 'boolean'
-        : pair.value === null
-        ? 'null'
-        : typeof pair.value,
+    id: pair.id || pair.name,
+    name: pair.name,
+    value: pair.value,
+    type,
+  };
+}
+
+export function createDataMappingData(pair: DataMapping): EditableTableRow {
+  return {
+    id: pair.source_output ?? pair.id ?? '',
+    name: pair.source_output ?? pair.name ?? '',
+    value: pair.target_input ?? pair.value ?? '',
   };
 }
 

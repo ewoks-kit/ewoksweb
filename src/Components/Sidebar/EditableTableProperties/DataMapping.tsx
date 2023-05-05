@@ -1,20 +1,16 @@
 import type { DataMapping, EwoksRFLinkData } from 'types';
-import { IconButton } from '@material-ui/core';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import useStore from 'store/useStore';
-import SidebarTooltip from '../SidebarTooltip';
 import { isClass } from './utils';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import type { Edge } from 'reactflow';
 import TableDataMapping from './TableDataMapping';
+import { nanoid } from 'nanoid';
 
 export default function DataMappingComponent(element: Edge) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const sourceNodeData = useNodeDataStore((state) =>
     state.nodesData.get(element.source)
@@ -25,20 +21,15 @@ export default function DataMappingComponent(element: Edge) {
   );
 
   function addDataMapping(edgeDataC: EwoksRFLinkData) {
-    if (edgeDataC.data_mapping?.some((x) => x.id === '')) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Please fill in the empty line before adding another!',
-        severity: 'warning',
-      });
-      return;
-    }
-
     setEdgeData(element.id, {
       ...edgeDataC,
       data_mapping: [
         ...(edgeDataC.data_mapping || []),
-        { id: '', name: '', value: '' },
+        {
+          id: nanoid(),
+          name: '',
+          value: '',
+        },
       ],
     });
   }
@@ -59,23 +50,9 @@ export default function DataMappingComponent(element: Edge) {
 
   return (
     <div>
-      <SidebarTooltip
-        text={`Describes the data transfer from source output to
-          target input arguments.`}
-      >
-        <b>Data Mapping </b>
-      </SidebarTooltip>
-
-      <IconButton
-        style={{ padding: '1px' }}
-        aria-label="dataMapping"
-        onClick={() => addDataMapping(edgeData)}
-        data-cy="addDataMappingButton"
-      >
-        <AddCircleOutlineIcon />
-      </IconButton>
-      {edgeData.data_mapping && edgeData.data_mapping.length > 0 && (
+      {edgeData.data_mapping && (
         <TableDataMapping
+          addNewLine={() => addDataMapping(edgeData)}
           headers={['Source', 'Target']}
           defaultValues={edgeData.data_mapping}
           valuesChanged={dataMappingValuesChanged}

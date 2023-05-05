@@ -20,14 +20,13 @@ describe('clicks on canvas and elements', () => {
   });
 
   it('selects a link with click', () => {
-    cy.contains('Map all Data').should('not.exist');
     cy.contains('on_error').should('not.exist');
     cy.contains('Conditions').should('not.exist');
 
     cy.get('.react-flow__edge').first().click({ force: true });
 
-    cy.contains('Map all Data').should('exist');
-    cy.contains('Map all Data').should('be.visible');
+    cy.contains('Map all data').should('exist');
+    cy.contains('Map all data').should('be.visible');
     cy.contains('on_error').should('exist');
     cy.contains('on_error').should('be.visible');
     cy.contains('Conditions').should('exist');

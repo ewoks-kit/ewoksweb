@@ -120,5 +120,5 @@ export function assertElementIsNodeType(
 export function assertElementIsEdge(
   entity: EwoksRFNode | EwoksRFLink | Edge | Node | GraphDetails | undefined
 ): asserts entity is EwoksRFLink extends undefined ? never : EwoksRFLink {
-  assertDefined(!!entity && 'source' in entity, `Node is possibly undefined!`);
+  assertDefined(!!entity && 'source' in entity, `Edge is possibly undefined!`);
 }

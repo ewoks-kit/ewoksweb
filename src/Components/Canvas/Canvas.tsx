@@ -20,7 +20,6 @@ import useStore from 'store/useStore';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
 import CanvasBackground from './CanvasBackground';
-import CanvasMiniMap from './CanvasMiniMap';
 import { addConnectionToGraph, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
 import { useGraphId } from '../../store/graph-hooks';
@@ -388,8 +387,8 @@ function Canvas() {
           deleteKeyCode="Delete"
         >
           <CanvasBackground />
-          <Controls />
-          <CanvasMiniMap />
+          <Controls position="bottom-right" />
+          {/* <CanvasMiniMap /> */}
         </ReactFlow>
       </div>
     </div>

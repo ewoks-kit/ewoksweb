@@ -15,7 +15,6 @@ interface TextButtonSaveProps {
 
 export default function TextButtonSave(props: TextButtonSaveProps) {
   const classes = useDashboardStyles();
-  // console.log(props); this is rerendered more than it should examine
 
   const { label, value } = props;
 
@@ -47,13 +46,18 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
       <FormControl
         style={{ ...sidebarStyle.formstyleflex }}
         fullWidth
-        variant="outlined"
+        size="small"
       >
         <TextField
           label={label}
-          // variant="outlined"
+          variant="outlined"
           value={valueLocal || ''}
-          style={{ width: valueIsChanged ? '80%' : '98%' }}
+          margin="dense"
+          style={{
+            width: valueIsChanged ? '80%' : '98%',
+            margin: '0px 0px 7px 0px',
+            paddingTop: '2px',
+          }}
           onChange={valueChanged}
           multiline
           data-cy="node-edge-label"
@@ -61,7 +65,11 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
 
         {valueIsChanged && (
           <IconButton
-            style={{ width: '20%', minWidth: '40px' }}
+            style={{
+              width: '20%',
+              minWidth: '40px',
+              padding: '0px 0px 6px 0px',
+            }}
             color="inherit"
             onClick={valueSavedLocal}
           >

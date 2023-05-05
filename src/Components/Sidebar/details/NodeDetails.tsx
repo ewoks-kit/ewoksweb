@@ -278,7 +278,7 @@ export default function NodeDetails(selectedElement: Node) {
 
       {defaultErrorNode && (
         <div>
-          <b>Map all Data</b>
+          <b>Map all data</b>
           <Checkbox
             checked={mapAllData}
             onChange={(event) => mapAllDataChanged(event.target.checked)}

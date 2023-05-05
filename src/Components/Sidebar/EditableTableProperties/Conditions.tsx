@@ -2,11 +2,11 @@ import type { EditableTableRow, EwoksRFLinkData } from 'types';
 import { IconButton } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
-import useStore from 'store/useStore';
 import SidebarTooltip from '../SidebarTooltip';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import type { Edge } from 'reactflow';
+import { nanoid } from 'nanoid';
 
 // DOC: The conditions for a link are being set in this component
 export default function Conditions(element: Edge) {
@@ -15,24 +15,13 @@ export default function Conditions(element: Edge) {
 
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
 
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-
   function addConditions(edgeDataL: EwoksRFLinkData) {
     const elCon = edgeDataL.conditions || [];
-
-    if (elCon.some((x) => x.id === '')) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Please fill in the empty line before adding another!',
-        severity: 'warning',
-      });
-      return;
-    }
 
     const newEdgeData = {
       ...edgeDataL,
       on_error: false,
-      conditions: [...elCon, { id: '', name: '', value: false }],
+      conditions: [...elCon, { id: nanoid(), name: '', value: false }],
     };
     setEdgeData(element.id, newEdgeData);
   }
@@ -42,7 +31,8 @@ export default function Conditions(element: Edge) {
       ...edgeData,
       conditions: table.map((con1) => {
         return {
-          source_output: con1.name,
+          id: con1.id,
+          name: con1.name,
           value: con1.value,
         };
       }),

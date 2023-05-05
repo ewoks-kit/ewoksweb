@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import CustomTableCell from './CustomTableCell';
 import DraggableDialog from 'Components/General/DraggableDialog';
 import useStore from 'store/useStore';
-import type { Conditions, DataMapping, EditableTableRow, Inputs } from 'types';
+import type { Conditions, EditableTableRow, Inputs } from 'types';
 import type { ChangeEvent } from 'react';
 import { createData, getType } from './utils';
 import TableHeader from './TableHeader';
@@ -41,7 +41,7 @@ export const useStyles = makeStyles(() => ({
 
 interface EditableTableProps {
   headers: string[];
-  defaultValues: DataMapping[] | Conditions[] | Inputs[];
+  defaultValues: Conditions[] | Inputs[];
   typeOfValues: { type: string; values?: string[] }[];
   valuesChanged: (rows: EditableTableRow[]) => void;
 }
@@ -96,6 +96,7 @@ function EditableTable(props: EditableTableProps) {
           id: row.name?.replace(' ', '_') || '',
         };
       }
+
       return row;
     });
   }
@@ -133,20 +134,26 @@ function EditableTable(props: EditableTableProps) {
   function onSaveRow(id: string | undefined, index: number) {
     const oldRows = [...rows].filter((row, i) => index !== i);
 
-    if (
-      rows[index].name !== '' &&
-      oldRows.map((r) => r.name).includes(rows[index].name)
-    ) {
+    if (rows[index].name === '') {
+      setOpenSnackbar({
+        open: true,
+        text: 'Please first give a Name!',
+        severity: 'warning',
+      });
+      return;
+    }
+
+    if (oldRows.map((r) => r.name).includes(rows[index].name)) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to assign the same property TWICE!',
         severity: 'error',
       });
-    } else {
-      setRows(calcNewRows(id));
-
-      props.valuesChanged(rows);
+      return;
     }
+
+    setRows(calcNewRows(id));
+    props.valuesChanged(rows);
   }
 
   function onChange(
@@ -208,7 +215,7 @@ function EditableTable(props: EditableTableProps) {
     index: number
   ) => {
     const { id: rowId = '' } = row;
-    if (['string', 'number'].includes(e.target.value)) {
+    if (['string', 'number', 'dict', 'list'].includes(e.target.value)) {
       const newRows = rows.map((rowe) => {
         if (rowe.id === rowId) {
           return { ...rowe, value: '' };
@@ -240,7 +247,7 @@ function EditableTable(props: EditableTableProps) {
     const newRows = callbackProps.rows.map((row) => {
       if (row.id === callbackProps.id) {
         return name !== ''
-          ? { ...row, name, value: val }
+          ? { ...row, id: name, value: val }
           : { ...row, value: val };
       }
       return row;
@@ -260,7 +267,12 @@ function EditableTable(props: EditableTableProps) {
           // typeOfValues={props.typeOfValues[0]}
         />
       )}
-      <Table className={classes.table} aria-label="editable table">
+      <Table
+        className={classes.table}
+        aria-label="editable table"
+        size="small"
+        padding="none"
+      >
         <TableHeader headers={headers} />
         <TableBody>
           {rows.map((row, index) => (

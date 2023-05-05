@@ -35,13 +35,11 @@ describe('edit links conditions', () => {
 
     cy.get('[data-cy="addConditionsButton"]').click();
 
-    cy.contains('Please fill in the empty line before adding another!').should(
-      'be.visible'
-    );
-
     cy.get('[data-cy="autocompleteInputInEditableCell"]')
       .should('exist')
-      .should('be.visible');
+      .should('be.visible')
+      .should('have.length', 2);
+
     cy.get('[data-cy="doneEditingButtonEditableTable"]')
       .should('exist')
       .should('be.visible');
@@ -49,11 +47,14 @@ describe('edit links conditions', () => {
 
     cy.get('[data-cy="autocompleteInputInEditableCell"]').should(
       'have.length',
-      1
+      2
     );
     cy.get('[data-cy="doneEditingButtonEditableTable"]').should('be.visible');
 
-    cy.get('[data-cy="autocompleteInputInEditableCell"]').type('Always');
+    cy.get('[data-cy="autocompleteInputInEditableCell"]')
+      .first()
+      .type('Always');
+
     cy.get('[data-cy="radioInEditableCell"]')
       .children('label')
       .first()
@@ -61,7 +62,7 @@ describe('edit links conditions', () => {
       .first()
       .click();
 
-    cy.get('[data-cy="doneEditingButtonEditableTable"]').click();
+    cy.get('[data-cy="doneEditingButtonEditableTable"]').first().click();
 
     cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
 

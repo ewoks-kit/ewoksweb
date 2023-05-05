@@ -25,6 +25,7 @@ const useEdgeDataStore = create<EdgeDataState>((set) => ({
         edgesData.get(edgeId),
         edgeData
       );
+
       return {
         edgesData: new Map(edgesData).set(edgeId, { ...newData }),
       };

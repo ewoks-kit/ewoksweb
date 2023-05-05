@@ -28,7 +28,7 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
         target,
         data_mapping: data.data_mapping,
         conditions: data.conditions?.map((con) => {
-          const newCon = con.source_output ? con : { source_output: con.id };
+          const newCon = con.source_output ? con : { source_output: con.name };
           return { ...newCon, value: calcConditionValue(con) };
         }),
         on_error: data.on_error,

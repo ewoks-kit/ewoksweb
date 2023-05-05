@@ -9,11 +9,18 @@ import { EditOutlined as EditIcon } from '@material-ui/icons';
 // DOC: Used as an app-wide dialog when confirmation is needed. Open is a prop
 function CustomTableCell(props: CustomTableCellProps) {
   const { row, name, headers, type } = props;
+
   const useStyles = makeStyles(() => ({
     tableCell: {
       width: name === 'value' || headers?.includes('Source') ? '50%' : '30%',
       height: 15,
-      padding: '0px 10px 0px 0px',
+      padding: '0px 5px 0px 0px',
+      '& input': {
+        fontSize: '14px',
+      },
+      '& .MuiFormControl-marginNormal': {
+        margin: '0px',
+      },
     },
   }));
   const classes = useStyles();
@@ -22,9 +29,11 @@ function CustomTableCell(props: CustomTableCellProps) {
     <TableCell align="left" className={classes.tableCell}>
       {/* In edit mode the type comes from sidebar in data-mapping and
       from the selected type here for conditions and default-values */}
-      {['list', 'dict'].includes(type || '') ? ( // {row[name] && typeof row[name] === 'object' ? (
-        <span>
-          {JSON.stringify(row[name])}
+      {type && ['list', 'dict'].includes(type) ? ( //
+        <span style={{ paddingLeft: '8px' }}>
+          {row[name] && typeof row[name] === 'object'
+            ? JSON.stringify(row[name])
+            : ''}
 
           <IconButton
             size="small"
