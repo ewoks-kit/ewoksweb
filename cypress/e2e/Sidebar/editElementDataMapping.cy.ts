@@ -28,7 +28,7 @@ describe('edit links dataMapping', () => {
   it('type and undo/redo a new Data Mapping', () => {
     cy.contains('Data Mapping').should('be.visible');
 
-    cy.get('.MuiSwitch-thumb').click({ force: true });
+    // cy.get('.MuiSwitch-thumb').click({ force: true });
 
     cy.get('[data-cy="addDataMappingButton"]').click();
 
