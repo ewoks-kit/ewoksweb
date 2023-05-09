@@ -24,9 +24,8 @@ function curateGraph(
             default_inputs: deleteEmptyLines(
               nodeData.ewoks_props.default_inputs
             ),
-            default_error_attributes: {
-              ...nodeData.ewoks_props.default_error_attributes,
-            },
+            default_error_attributes:
+              nodeData.ewoks_props.default_error_attributes,
           },
         },
       ];

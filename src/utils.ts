@@ -110,7 +110,6 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
   if (graph.uiProps?.source) {
     delete graph.uiProps.source;
   }
-  console.log(tempGraph.nodes);
 
   return {
     graph,
