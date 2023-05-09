@@ -25,7 +25,7 @@ export const useStyles = makeStyles(() => ({
     textAlign: 'end',
     width: '50%',
     height: 15,
-    padding: '0px 5px 0px 0px',
+    padding: '0 5px 0 0',
   },
 }));
 
@@ -41,7 +41,6 @@ interface EditableTableProps {
 function TableDataMapping(props: EditableTableProps) {
   const [rows, setRows] = React.useState<EditableTableRow[]>([]);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  // const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
 
   const { defaultValues, headers } = props;
 
@@ -111,10 +110,6 @@ function TableDataMapping(props: EditableTableProps) {
     props.valuesChanged(newRows);
   }
 
-  function addDataMapping() {
-    props.addNewLine?.();
-  }
-
   return (
     <Table className={classes.table} aria-label="editable table">
       <TableHeader headers={headers} />
@@ -141,6 +136,7 @@ function TableDataMapping(props: EditableTableProps) {
                 headers={headers}
               />
               <ToolsCell
+                disableSave={row.name === '' || row.value === ''}
                 onSave={() => onSaveRow(row.id, index)}
                 onDelete={() => onDelete(row.id || '')}
               />
@@ -152,7 +148,7 @@ function TableDataMapping(props: EditableTableProps) {
             <IconButton
               style={{ padding: '1px' }}
               aria-label="dataMapping"
-              onClick={() => addDataMapping()}
+              onClick={() => props.addNewLine?.()}
               data-cy="addDataMappingButton"
             >
               <AddCircleOutlineIcon />

@@ -260,7 +260,6 @@ export default function Dashboard() {
           getEdgesData()
         );
 
-        // TODO move nodesData out of Dashboard with saveToServer
         const nodesWithData = [...rfInstance.getNodes()].map((node) => {
           return {
             ...node,

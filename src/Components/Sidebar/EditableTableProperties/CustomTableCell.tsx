@@ -14,7 +14,7 @@ function CustomTableCell(props: CustomTableCellProps) {
     tableCell: {
       width: name === 'value' || headers?.includes('Source') ? '50%' : '30%',
       height: 15,
-      padding: '0px 5px 0px 0px',
+      padding: '0 5px 0 0',
       '& input': {
         fontSize: '14px',
       },
@@ -27,9 +27,7 @@ function CustomTableCell(props: CustomTableCellProps) {
 
   return (
     <TableCell align="left" className={classes.tableCell}>
-      {/* In edit mode the type comes from sidebar in data-mapping and
-      from the selected type here for conditions and default-values */}
-      {type && ['list', 'dict'].includes(type) ? ( //
+      {type && ['list', 'dict'].includes(type) ? (
         <span style={{ paddingLeft: '8px' }}>
           {row[name] && typeof row[name] === 'object'
             ? JSON.stringify(row[name])

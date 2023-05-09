@@ -10,9 +10,9 @@ function ElementDetails({ selectedElement }: SelectedElementRF) {
       {!selectedElement ? (
         <GraphDetails />
       ) : isNodeRF(selectedElement) ? (
-        <NodeDetails {...selectedElement} />
+        <NodeDetails key={selectedElement.id} {...selectedElement} />
       ) : (
-        <LinkDetails {...selectedElement} />
+        <LinkDetails key={selectedElement.id} {...selectedElement} />
       )}
     </form>
   );

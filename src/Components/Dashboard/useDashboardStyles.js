@@ -41,6 +41,7 @@ export const useDashboardStyles = makeStyles((theme) => ({
   },
 
   icon: {
+    marginTop: theme.spacing(1.5),
     marginRight: theme.spacing(0.5),
     width: 20,
     height: 20,
@@ -110,7 +111,7 @@ export const useDashboardStyles = makeStyles((theme) => ({
 
   nodeDetails: {
     backgroundColor: '#e9ebf7',
-    borderRadius: '10px 0px 0px 10px',
+    borderRadius: '10px 0 0 10px',
     border: '#96a5f9',
     borderStyle: 'solid none solid solid',
     padding: '4px',

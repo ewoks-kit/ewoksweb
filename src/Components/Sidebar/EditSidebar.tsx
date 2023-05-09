@@ -3,28 +3,43 @@ import IconMenu from './IconMenu';
 import { isNodeRF } from '../../utils/typeGuards';
 import ElementDetails from './details/ElementDetails';
 import { useSelectedElement } from '../../store/graph-hooks';
+import useStore from '../../store/useStore';
 
 export default function EditSidebar() {
   const selected = useSelectedElement();
+  const workingGraphId = useStore((state) => state.workingGraph.graph.id);
 
   return (
     <aside className="dndflow">
       {/* Inline style till sidebar is refactored */}
-      <span style={{ display: 'block' }}>
+      {workingGraphId ? (
+        <>
+          <span style={{ display: 'block' }}>
+            <span
+              style={{
+                fontSize: 30,
+                color: '#3f51b5',
+              }}
+            >
+              {!selected ? 'Workflow' : isNodeRF(selected) ? 'Node' : 'Edge'}
+            </span>
+            <span style={{ float: 'right' }}>
+              <IconMenu selectedElement={selected} />
+            </span>
+          </span>
+          <ElementDetails selectedElement={selected} />
+          <EditElementStyle selectedElement={selected} />
+        </>
+      ) : (
         <span
           style={{
-            fontSize: 30,
+            fontSize: 20,
             color: '#3f51b5',
           }}
         >
-          {!selected ? 'Workflow' : isNodeRF(selected) ? 'Node' : 'Edge'}
+          Open a workflow to edit
         </span>
-        <span style={{ float: 'right' }}>
-          <IconMenu selectedElement={selected} />
-        </span>
-      </span>
-      <ElementDetails selectedElement={selected} />
-      <EditElementStyle selectedElement={selected} />
+      )}
     </aside>
   );
 }

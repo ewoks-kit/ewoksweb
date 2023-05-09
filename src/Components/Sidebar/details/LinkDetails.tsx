@@ -24,6 +24,7 @@ export default function LinkDetails(selectedElement: Edge) {
   const [showDataMapping, setShowDataMapping] = useState<boolean>(
     !edgeData.map_all_data
   );
+  // console.log(edgeData.map_all_data, showDataMapping, selectedElement.id);
 
   useEffect(() => {
     setShowDataMapping(!edgeData.map_all_data);
