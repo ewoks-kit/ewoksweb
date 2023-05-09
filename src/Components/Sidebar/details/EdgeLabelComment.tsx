@@ -168,7 +168,6 @@ export default function EdgeLabelComment() {
 
       <div style={{ display: 'block' }}>
         <TextButtonSave
-          elementId={element.id}
           label="Comment"
           value={comment}
           valueSaved={(newComment) => {

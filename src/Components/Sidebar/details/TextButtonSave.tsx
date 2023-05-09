@@ -7,7 +7,6 @@ import sidebarStyle from '../sidebarStyle';
 import type { ChangeEvent } from 'react';
 
 interface TextButtonSaveProps {
-  elementId?: string;
   label: string;
   value: string;
   valueSaved(value: string): void;
@@ -16,7 +15,7 @@ interface TextButtonSaveProps {
 export default function TextButtonSave(props: TextButtonSaveProps) {
   const classes = useDashboardStyles();
 
-  const { label, value, elementId } = props;
+  const { label, value } = props;
 
   const [valueLocal, setValueLocal] = useState(value);
   const [valueIsChanged, setValueIsChanged] = useState(false);
@@ -24,7 +23,7 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
   useEffect(() => {
     setValueLocal(value);
     setValueIsChanged(false);
-  }, [value, elementId]);
+  }, [value]);
 
   function valueChanged(event: ChangeEvent<HTMLInputElement>) {
     if (value !== event.target.value) {

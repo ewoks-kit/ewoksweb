@@ -48,7 +48,6 @@ export default function NodeLabelComment(props: LabelCommentProps) {
       <TextButtonSave label="Label" value={label} valueSaved={saveLabel} />
       <div style={{ display: showComment ? 'block' : 'none' }}>
         <TextButtonSave
-          elementId={selectedElement.id}
           label="Comment"
           value={comment}
           valueSaved={saveComment}

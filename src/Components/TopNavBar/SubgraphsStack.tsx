@@ -58,13 +58,13 @@ export default function SubgraphsStack() {
       noWrap
       className={classes.title}
     >
-      <Breadcrumbs aria-label="breadcrumb" color="secondary">
+      <Breadcrumbs aria-label="breadcrumb" color="inherit">
         {subgraphsStack.length > 1 &&
           subgraphsStack.map((gr, index) => (
             <span key={gr.id}>
               <Link
                 underline="hover"
-                style={{ color: 'white', fontSize: '18px' }}
+                style={{ color: 'inherit', fontSize: '18px' }}
                 href="/"
                 id={gr.id}
                 key={gr.id}
