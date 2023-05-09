@@ -254,16 +254,9 @@ export interface Note {
   nodeWidth?: number;
 }
 
-// TODO: change the following to DataMappingEwoks?
 export interface DataMapping {
   source_output?: string | number;
   target_input?: string | number;
-  value?: unknown;
-  id?: string;
-  name?: string;
-}
-
-export interface DataMappingForTable {
   value?: unknown;
   id?: string;
   name?: string;

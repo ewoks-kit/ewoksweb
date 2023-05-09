@@ -156,10 +156,6 @@ export default function Dashboard() {
     }
   }
 
-  // function openGraph() {
-  //   handleOpenSettings();
-  // }
-
   function handleOpenSettings() {
     setOpenInfo(false);
     setOpenSettings(true);
@@ -344,12 +340,13 @@ export default function Dashboard() {
             arrow
           >
             <IconButton
+              color="inherit"
               onClick={() => checkAndNewGraph(false)}
               disabled={inExecutionMode}
-              color="inherit"
             >
               <Fab
                 className={classes.openFileButton}
+                // TODO: examine why the above class is not applied as the inline below
                 style={{ backgroundColor: '#96a5f9' }}
                 color="primary"
                 size="small"
