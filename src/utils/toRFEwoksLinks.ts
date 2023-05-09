@@ -45,7 +45,6 @@ export function toRFEwoksLinks(
         tasks
       );
       const color = uiProps.style?.stroke || 'rgb(60, 81, 202)';
-      console.log(conditions);
       const conditionsSourceToString = conditions.map((con) => {
         return {
           ...con,

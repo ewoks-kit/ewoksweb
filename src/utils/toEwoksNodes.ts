@@ -1,4 +1,3 @@
-import { defaultMethod } from 'react-router-dom/dist/dom';
 import type { EwoksNode, EwoksRFNode, Inputs } from '../types';
 
 function cleanDefaultInputs(default_inputs: Inputs[]) {
@@ -22,6 +21,8 @@ function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
   }
   return default_inputs.map((dIn) => {
     return {
+      // Does not seem to work in the same way
+      // eslint-disable-next-line unicorn/prefer-number-properties
       name: !isNaN((dIn.name as unknown) as number)
         ? Number(dIn.name)
         : dIn.name,
@@ -43,7 +44,6 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
   return tempNodes.map(
     ({
       id,
-
       data: {
         ewoks_props: {
           default_inputs,
@@ -106,9 +106,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         task_identifier,
         inputs_complete,
         task_generator,
-        default_inputs: cleanDefaultInputs(
-          calcDefaultInputs(default_inputs) || []
-        ),
+        default_inputs: cleanDefaultInputs(calcDefaultInputs(default_inputs)),
         default_error_node,
         default_error_attributes: default_error_node
           ? default_error_attributes

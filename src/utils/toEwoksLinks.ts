@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-number-properties */
 import { isString } from './typeGuards';
 import type { Conditions, DataMapping, EwoksLink, EwoksRFLink } from '../types';
 
@@ -23,15 +24,11 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
       style,
       animated,
     }) => {
-      console.log(data.conditions);
-
       const link: EwoksLink = {
         source,
         target,
         data_mapping: data.data_mapping && calcDataMapping(data.data_mapping),
         conditions: data.conditions?.map((con) => {
-          console.log(con, calcConditionName(con));
-
           const newCon = con.source_output ? con : calcConditionName(con);
           return { ...newCon, value: calcConditionValue(con) };
         }),

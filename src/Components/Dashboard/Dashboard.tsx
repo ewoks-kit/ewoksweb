@@ -5,7 +5,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import FiberNew from '@material-ui/icons/FiberNew';
-import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import EditSidebar from 'Components/Sidebar/EditSidebar';
 // import { Link } from 'react-router-dom';
 import Canvas from '../Canvas/Canvas';
@@ -362,28 +361,6 @@ export default function Dashboard() {
               </Fab>
             </IconButton>
           </Tooltip>
-          {/* <Tooltip
-            title={tooltipText('Open an existing workflow')}
-            enterDelay={800}
-            arrow
-          >
-            <IconButton
-              color="inherit"
-              onClick={openGraph}
-              disabled={inExecutionMode}
-            >
-              <Fab
-                className={classes.openFileButton}
-                color="primary"
-                size="small"
-                component="span"
-                aria-label="Open an existing workflow"
-                disabled={inExecutionMode}
-              >
-                <ImportContactsIcon />
-              </Fab>
-            </IconButton>
-          </Tooltip> */}
           <div className={classes.verticalRule} />
           {/* <UndoRedo undo={undo} redo={redo} /> */}
           <div className={classes.verticalRule} />
