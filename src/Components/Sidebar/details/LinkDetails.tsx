@@ -17,6 +17,8 @@ export default function LinkDetails(selectedElement: Edge) {
   const edgeData = useEdgeDataStore((state) =>
     state.edgesData.get(selectedElement.id)
   );
+  console.log(edgeData);
+
   assertEdgeDataDefined(edgeData, selectedElement.id);
 
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);

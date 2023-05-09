@@ -273,6 +273,7 @@ export default function Dashboard() {
             data: newEdgesData.get(edge.id) as EwoksRFLinkData,
           };
         });
+        console.log(edgesWithData);
 
         await putWorkflow(
           rfToEwoks({

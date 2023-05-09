@@ -49,7 +49,10 @@ export default function EdgeLabelComment() {
       edgeData.data_mapping && edgeData.data_mapping.length > 0
         ? edgeData.data_mapping
             .map(
-              (con) => `${con.source_output || ''}->${con.target_input || ''}`
+              (con) =>
+                `${con.source_output?.toString() || ''}->${
+                  con.target_input?.toString() || ''
+                }`
             )
             .join(', ')
         : '';

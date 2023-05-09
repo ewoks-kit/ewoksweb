@@ -31,7 +31,7 @@ export const useStyles = makeStyles(() => ({
 
 interface EditableTableProps {
   headers: string[];
-  defaultValues: DataMapping[] | Conditions[] | Inputs[];
+  defaultValues: DataMapping[];
   typeOfValues: { type: string; values?: string[] }[];
   valuesChanged: (rows: EditableTableRow[]) => void;
   addNewLine?: () => void;

@@ -1,3 +1,4 @@
+import { defaultMethod } from 'react-router-dom/dist/dom';
 import type { EwoksNode, EwoksRFNode, Inputs } from '../types';
 
 function cleanDefaultInputs(default_inputs: Inputs[]) {
@@ -12,6 +13,19 @@ function cleanDefaultInputs(default_inputs: Inputs[]) {
           : dIn.value === 'null'
           ? null
           : dIn.value,
+    };
+  });
+}
+function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
+  if (!default_inputs) {
+    return [];
+  }
+  return default_inputs.map((dIn) => {
+    return {
+      name: !isNaN((dIn.name as unknown) as number)
+        ? Number(dIn.name)
+        : dIn.name,
+      value: dIn.value,
     };
   });
 }
@@ -67,9 +81,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           default_error_attributes: default_error_node
             ? default_error_attributes
             : undefined,
-          default_inputs: default_inputs
-            ? cleanDefaultInputs(default_inputs)
-            : [],
+          default_inputs: cleanDefaultInputs(calcDefaultInputs(default_inputs)),
           uiProps: {
             nodeWidth,
             node_icon,
@@ -94,7 +106,9 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         task_identifier,
         inputs_complete,
         task_generator,
-        default_inputs: cleanDefaultInputs(default_inputs || []),
+        default_inputs: cleanDefaultInputs(
+          calcDefaultInputs(default_inputs) || []
+        ),
         default_error_node,
         default_error_attributes: default_error_node
           ? default_error_attributes

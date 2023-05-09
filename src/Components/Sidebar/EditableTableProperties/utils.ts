@@ -18,16 +18,16 @@ export function createData(pair: Conditions | Inputs): EditableTableRow {
 
   if ('source_output' in pair) {
     return {
-      id: pair.source_output,
-      name: pair.source_output,
+      id: pair.source_output as string,
+      name: pair.source_output as string,
       value: pair.value !== null ? pair.value : 'null',
       type,
     };
   }
 
   return {
-    id: pair.id || pair.name,
-    name: pair.name,
+    id: pair.id?.toString() || pair.name?.toString(),
+    name: pair.name?.toString(),
     value: pair.value,
     type,
   };
@@ -35,8 +35,8 @@ export function createData(pair: Conditions | Inputs): EditableTableRow {
 
 export function createDataMappingData(pair: DataMapping): EditableTableRow {
   return {
-    id: pair.source_output ?? pair.id ?? '',
-    name: pair.source_output ?? pair.name ?? '',
+    id: pair.source_output?.toString() ?? pair.id ?? '',
+    name: pair.source_output?.toString() ?? pair.name ?? '',
     value: pair.target_input ?? pair.value ?? '',
   };
 }
