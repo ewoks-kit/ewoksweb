@@ -37,7 +37,7 @@ export default function EditSidebar() {
             color: '#3f51b5',
           }}
         >
-          Open a workflow to edit
+          Open an existing workflow or press NEW
         </span>
       )}
     </aside>

@@ -56,7 +56,7 @@ export function toRFEwoksNodes(
             default_inputs: default_inputs?.map((dIn) => {
               return {
                 name: dIn.name.toString(),
-                value: dIn.value?.toString(),
+                value: dIn.value,
               };
             }),
             inputs_complete: inputs_complete || false,

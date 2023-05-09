@@ -157,9 +157,9 @@ export default function Dashboard() {
     }
   }
 
-  function openGraph() {
-    handleOpenSettings();
-  }
+  // function openGraph() {
+  //   handleOpenSettings();
+  // }
 
   function handleOpenSettings() {
     setOpenInfo(false);
@@ -273,7 +273,6 @@ export default function Dashboard() {
             data: newEdgesData.get(edge.id) as EwoksRFLinkData,
           };
         });
-        console.log(edgesWithData);
 
         await putWorkflow(
           rfToEwoks({
@@ -346,12 +345,13 @@ export default function Dashboard() {
             arrow
           >
             <IconButton
-              color="inherit"
               onClick={() => checkAndNewGraph(false)}
               disabled={inExecutionMode}
+              color="inherit"
             >
               <Fab
                 className={classes.openFileButton}
+                style={{ backgroundColor: '#96a5f9' }}
                 color="primary"
                 size="small"
                 component="span"
@@ -362,7 +362,7 @@ export default function Dashboard() {
               </Fab>
             </IconButton>
           </Tooltip>
-          <Tooltip
+          {/* <Tooltip
             title={tooltipText('Open an existing workflow')}
             enterDelay={800}
             arrow
@@ -383,7 +383,7 @@ export default function Dashboard() {
                 <ImportContactsIcon />
               </Fab>
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
           <div className={classes.verticalRule} />
           {/* <UndoRedo undo={undo} redo={redo} /> */}
           <div className={classes.verticalRule} />
@@ -401,6 +401,7 @@ export default function Dashboard() {
               <IconButton color="inherit" onClick={handleClick}>
                 <Fab
                   className={classes.openFileButton}
+                  style={{ backgroundColor: '#96a5f9' }}
                   color="primary"
                   size="small"
                   component="span"
@@ -421,6 +422,7 @@ export default function Dashboard() {
             <IconButton color="inherit" onClick={handleOpenSettings}>
               <Fab
                 className={classes.openFileButton}
+                style={{ backgroundColor: '#96a5f9' }}
                 color="primary"
                 size="small"
                 component="span"
