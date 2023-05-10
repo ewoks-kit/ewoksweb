@@ -72,10 +72,9 @@ function calcConditionValue(condition: Conditions) {
 
 function calcConditionName(condition: Conditions) {
   return {
-    source_output:
-      condition.name && !isNaN((condition.name as unknown) as number)
-        ? Number(condition.name)
-        : condition.name,
+    source_output: !isNaN((condition.name as unknown) as number)
+      ? Number(condition.name)
+      : condition.name,
   };
 }
 
