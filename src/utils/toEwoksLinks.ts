@@ -1,6 +1,6 @@
+/* eslint-disable unicorn/prefer-number-properties */
 import { isString } from './typeGuards';
 import type { Conditions, DataMapping, EwoksLink, EwoksRFLink } from '../types';
-import { isInteger } from 'lodash';
 
 // EwoksRFLinks --> EwoksLinks for saving
 export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
@@ -72,19 +72,20 @@ function calcConditionValue(condition: Conditions) {
 
 function calcConditionName(condition: Conditions) {
   return {
-    source_output: isInteger(condition.name)
-      ? Number(condition.name)
-      : condition.name,
+    source_output:
+      condition.name && !isNaN((condition.name as unknown) as number)
+        ? Number(condition.name)
+        : condition.name,
   };
 }
 
 function calcDataMapping(data_mapping: DataMapping[]) {
   return data_mapping.map((mapping) => {
     return {
-      source_output: isInteger(mapping.source_output)
+      source_output: !isNaN(mapping.source_output as number)
         ? Number(mapping.source_output)
         : mapping.source_output,
-      target_input: isInteger(mapping.target_input)
+      target_input: !isNaN(mapping.target_input as number)
         ? Number(mapping.target_input)
         : mapping.target_input,
     };

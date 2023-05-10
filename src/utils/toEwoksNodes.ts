@@ -1,5 +1,4 @@
 import type { EwoksNode, EwoksRFNode, Inputs } from '../types';
-import { isInteger } from 'lodash';
 
 function cleanDefaultInputs(default_inputs: Inputs[]) {
   return default_inputs.map((dIn) => {
@@ -22,7 +21,11 @@ function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
   }
   return default_inputs.map((dIn) => {
     return {
-      name: isInteger(dIn.name) ? Number(dIn.name) : dIn.name,
+      // Does not seem to work in the same way
+      // eslint-disable-next-line unicorn/prefer-number-properties
+      name: !isNaN((dIn.name as unknown) as number)
+        ? Number(dIn.name)
+        : dIn.name,
       value: dIn.value,
     };
   });
