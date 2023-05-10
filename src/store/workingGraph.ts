@@ -36,7 +36,11 @@ const workingGraph = (
     rfInstance
   ): Promise<GraphRF> => {
     // 1. Initialize the canvas while working on the new graph
-    get().setSubgraphsStack({ id: '', label: '', resetStack: true });
+    get().setSubgraphsStack({
+      id: '',
+      label: '',
+      resetStack: true,
+    });
     get().resetRecentGraphs();
 
     // 2. Get node-subgraphs for the graph

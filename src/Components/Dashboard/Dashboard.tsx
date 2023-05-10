@@ -101,6 +101,12 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
+    initGraph(initializedGraph, undefined, rfInstance);
+    // Only run once on initial render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     if (!openDrawers) {
       setOpenSettings(false);
       setOpenSettingsDrawer('Workflows');

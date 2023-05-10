@@ -183,8 +183,6 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
     }
 
     initGraph(initializedGraph, undefined, rfInstance);
-    setSubgraphsStack({ id: '', label: '', resetStack: true });
-    resetRecentGraphs();
   };
 
   const disAgreeCallback = () => {

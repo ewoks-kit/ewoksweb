@@ -29,6 +29,7 @@ export default function SubgraphsStack() {
     if (!(target instanceof Element)) {
       return;
     }
+    console.log(subgraphsStack);
 
     setSubgraphsStack({
       id: target.id,
@@ -81,6 +82,9 @@ export default function SubgraphsStack() {
             </span>
           ))}
       </Breadcrumbs>
+      {subgraphsStack.length === 0 && (
+        <span data-cy="untitled_workflow">untitled_workflow</span>
+      )}
       {subgraphsStack.length === 1 && (
         <span data-cy={subgraphsStack[0].label}>{subgraphsStack[0].label}</span>
       )}
