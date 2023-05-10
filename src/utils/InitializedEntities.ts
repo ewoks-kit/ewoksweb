@@ -19,7 +19,7 @@ export const initializedGraph: GraphEwoks = {
     uiProps: {
       notes: [
         {
-          id: 'Note0',
+          id: 'Note-for-untitled_workflow',
           label:
             'Open a workflow or drag-and-drop nodes from the left to create a new one',
           comment: '',

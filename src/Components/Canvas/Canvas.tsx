@@ -124,6 +124,13 @@ function Canvas() {
 
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
+    const initialNote = rfInstance
+      .getNodes()
+      .find((nod) => nod.id === 'Note-for-untitled_workflow');
+    if (initialNote) {
+      rfInstance.setNodes([]);
+    }
+
     if (workingGraphId === graphId) {
       const stateRF = storeRF.getState();
       const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect() || {
