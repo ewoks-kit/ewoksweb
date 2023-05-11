@@ -70,7 +70,7 @@ function calcConditionValue(condition: Conditions) {
 }
 
 function calcConditionName(condition: Conditions) {
-  const nameAsNumber = condition.name && Number.parseInt(condition.name, 10);
+  const nameAsNumber = condition.name && Number(condition.name);
   return {
     source_output: Number.isNaN(nameAsNumber) ? condition.name : nameAsNumber,
   };
@@ -79,11 +79,8 @@ function calcConditionName(condition: Conditions) {
 function calcDataMapping(data_mapping: DataMapping[]) {
   return data_mapping.map((mapping) => {
     const outputAsNumber =
-      mapping.source_output &&
-      Number.parseInt(mapping.source_output as string, 10);
-    const targetAsNumber =
-      mapping.target_input &&
-      Number.parseInt(mapping.target_input as string, 10);
+      mapping.source_output && Number(mapping.source_output);
+    const targetAsNumber = mapping.target_input && Number(mapping.target_input);
     return {
       source_output: Number.isNaN(outputAsNumber)
         ? mapping.source_output

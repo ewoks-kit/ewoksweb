@@ -1,8 +1,5 @@
 import type { EditableTableRow, EwoksRFLinkData } from 'types';
-import { IconButton } from '@material-ui/core';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
-import SidebarTooltip from '../SidebarTooltip';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import type { Edge } from 'reactflow';

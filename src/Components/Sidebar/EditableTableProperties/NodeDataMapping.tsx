@@ -9,7 +9,7 @@ import { nanoid } from 'nanoid';
 export default function NodeDataMapping(element: Node) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
   assertNodeDataDefined(nodeData, element.id);
-  const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
   // TODO: specify the source and target of this imaginary link to specify data_mapping
   const sourceNodeData = useNodeDataStore((state) =>
@@ -20,45 +20,41 @@ export default function NodeDataMapping(element: Node) {
     state.nodesData.get(element.id)
   );
 
-  function addDataMapping(nodeDataC: EwoksRFNodeData) {
-    setNodeData(element.id, {
-      ...nodeDataC,
+  function addDataMapping(nodeDataProp: EwoksRFNodeData) {
+    const elMap =
+      nodeDataProp.ewoks_props.default_error_attributes?.data_mapping || [];
+
+    const newNodeData = {
       ewoks_props: {
-        ...nodeDataC.ewoks_props,
         default_error_attributes: {
-          ...nodeDataC.ewoks_props.default_error_attributes,
-          data_mapping: [
-            ...(nodeDataC.ewoks_props.default_error_attributes?.data_mapping ||
-              []),
-            {
-              id: nanoid(),
-              name: '',
-              value: '',
-            },
-          ],
+          data_mapping: [...elMap, { id: nanoid(), name: '', value: '' }],
         },
       },
-    });
+    };
+
+    mergeNodeData(element.id, newNodeData);
   }
 
   const dataMappingValuesChanged = (table: DataMapping[]) => {
     const dmap: DataMapping[] = table.map((row) => {
+      if (typeof row.value !== 'string') {
+        throw new TypeError(
+          'Expecting only string but got another type for Data_Mapping'
+        );
+      }
       return {
         source_output: row.name,
-        target_input: row.value as string,
+        target_input: row.value,
       };
     });
-
-    setNodeData(element.id, {
-      ...nodeData,
+    const newNodeData = {
       ewoks_props: {
-        ...nodeData.ewoks_props,
         default_error_attributes: {
-          ...nodeData.ewoks_props.default_error_attributes,
           data_mapping: dmap,
         },
       },
-    });
+    };
+    mergeNodeData(element.id, newNodeData);
   };
 
   return (

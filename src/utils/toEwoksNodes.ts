@@ -1,5 +1,4 @@
 import type {
-  DataMapping,
   DefaultErrorAttributes,
   EwoksNode,
   EwoksRFNode,
@@ -25,8 +24,6 @@ function calcDefaultErrorAttributes(
   default_error_attributes: DefaultErrorAttributes | undefined,
   default_error_node?: boolean
 ) {
-  console.log(default_error_attributes, default_error_node);
-
   if (!default_error_node) {
     return undefined;
   }
@@ -38,18 +35,20 @@ function calcDefaultErrorAttributes(
   return {
     map_all_data: false,
     data_mapping:
-      default_error_attributes?.data_mapping?.map((dmap) => {
-        console.log(dmap);
+      default_error_attributes?.data_mapping?.map((mapping) => {
+        const outputAsNumber =
+          mapping.source_output && Number(mapping.source_output);
+
+        const targetAsNumber =
+          mapping.target_input && Number(mapping.target_input);
 
         return {
-          // Does not seem to work in the same way
-          // eslint-disable-next-line unicorn/prefer-number-properties
-          source_output: !isNaN((dmap.source_output as unknown) as number)
-            ? Number(dmap.source_output)
-            : dmap.source_output,
-          target_input: !isNaN((dmap.target_input as unknown) as number)
-            ? Number(dmap.target_input)
-            : dmap.target_input,
+          source_output: Number.isNaN(outputAsNumber)
+            ? mapping.source_output
+            : outputAsNumber,
+          target_input: Number.isNaN(targetAsNumber)
+            ? mapping.target_input
+            : targetAsNumber,
         };
       }) || [],
   };
@@ -60,7 +59,7 @@ function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
     return [];
   }
   return default_inputs.map((dIn) => {
-    const nameAsNumber = dIn.name && Number.parseInt(dIn.name as string, 10);
+    const nameAsNumber = dIn.name && Number(dIn.name);
     return {
       name: Number.isNaN(nameAsNumber) ? dIn.name : nameAsNumber,
       value: dIn.value,

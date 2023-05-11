@@ -43,7 +43,6 @@ function TableDataMapping(props: EditableTableProps) {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const { defaultValues, headers } = props;
-  console.log(defaultValues);
 
   useEffect(() => {
     setRows(defaultValues.map(createDataMappingData));

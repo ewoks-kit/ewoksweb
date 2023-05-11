@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react';
-import type {
-  DataMapping,
-  EditableTableRow,
-  EwoksRFNodeData,
-} from '../../../types';
+import type { EwoksRFNodeData } from '../../../types';
 import {
   Accordion,
   AccordionDetails,
@@ -28,9 +24,6 @@ import {
 } from '../../../utils/typeGuards';
 import { useNodesIds } from '../../../store/graph-hooks';
 import type { Node } from 'reactflow';
-import TableDataMapping from '../EditableTableProperties/TableDataMapping';
-import { nanoid } from 'nanoid';
-import DataMappingComponent from '../EditableTableProperties/DataMapping';
 import NodeDataMapping from '../EditableTableProperties/NodeDataMapping';
 
 // DOC: selectedNode details in sidebar
@@ -51,8 +44,6 @@ export default function NodeDetails(selectedElement: Node) {
 
   const [inputsComplete, setInputsComplete] = useState<boolean>(false);
   const [defaultErrorNode, setDefaultErrorNode] = useState<boolean>(false);
-  const [dataMapping, setDataMapping] = useState<DataMapping[]>([]);
-  const [mapAllData, setMapAllData] = useState<boolean>(false);
   const [showDataMapping, setShowDataMapping] = useState<boolean>(
     !nodeData.ewoks_props.default_error_attributes?.map_all_data
   );
@@ -107,13 +98,6 @@ export default function NodeDetails(selectedElement: Node) {
   useEffect(() => {
     setInputsComplete(nodeData.ewoks_props.inputs_complete || false);
     setDefaultErrorNode(nodeData.ewoks_props.default_error_node || false);
-
-    setDataMapping(
-      nodeData.ewoks_props.default_error_attributes?.data_mapping || []
-    );
-    setMapAllData(
-      nodeData.ewoks_props.default_error_attributes?.map_all_data || false
-    );
   }, [nodeData]);
 
   function propChanged(
@@ -199,43 +183,6 @@ export default function NodeDetails(selectedElement: Node) {
     });
   }
 
-  function addDataMapping(nodeDataProp: EwoksRFNodeData) {
-    const elMap =
-      nodeDataProp.ewoks_props.default_error_attributes?.data_mapping || [];
-
-    const newNodeData = {
-      ewoks_props: {
-        default_error_attributes: {
-          data_mapping: [...elMap, { id: nanoid(), name: '', value: '' }],
-        },
-      },
-    };
-
-    mergeNodeData(selectedElement.id, newNodeData);
-  }
-
-  function dataMappingValuesChanged(table: EditableTableRow[]) {
-    const dmap: DataMapping[] = table.map((row) => {
-      if (typeof row.value !== 'string') {
-        throw new TypeError(
-          'Expecting only string but got another type for Data_Mapping'
-        );
-      }
-      return {
-        source_output: row.name,
-        target_input: row.value,
-      };
-    });
-    const newNodeData = {
-      ewoks_props: {
-        default_error_attributes: {
-          data_mapping: dmap,
-        },
-      },
-    };
-    mergeNodeData(selectedElement.id, newNodeData);
-  }
-
   const handleChangeShowDataMapping = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -303,28 +250,7 @@ export default function NodeDetails(selectedElement: Node) {
       )}
       {defaultErrorNode && showDataMapping && (
         <div>
-          <div>
-            <NodeDataMapping {...selectedElement} />
-          </div>
-
-          {/* {dataMapping.length > 0 && (
-            <TableDataMapping
-              addNewLine={() => addDataMapping(nodeData)}
-              headers={['Source', 'Target']}
-              defaultValues={dataMapping}
-              valuesChanged={dataMappingValuesChanged}
-              typeOfValues={[
-                {
-                  type: 'input',
-                  values: [],
-                },
-                {
-                  type: 'input',
-                  values: [],
-                },
-              ]}
-            />
-          )} */}
+          <NodeDataMapping {...selectedElement} />
         </div>
       )}
 

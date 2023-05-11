@@ -51,7 +51,6 @@ export function toRFEwoksNodes(
       uiProps,
     }) => {
       const nodeType = calcNodeType(inputsAl, outputsAl, task_type, id);
-      console.log(default_error_attributes);
 
       const node: EwoksRFNode = {
         id: id.toString(),

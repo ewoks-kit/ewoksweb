@@ -344,7 +344,7 @@ function EditableTable(props: EditableTableProps) {
                 style={{ padding: '1px' }}
                 aria-label="dataMapping"
                 onClick={() => props.addNewLine?.()}
-                data-cy="addDataMappingButton"
+                data-cy="addNewLineButton"
               >
                 <AddCircleOutlineIcon />
               </IconButton>
