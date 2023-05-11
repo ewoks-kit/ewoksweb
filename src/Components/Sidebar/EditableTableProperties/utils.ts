@@ -18,8 +18,8 @@ export function createData(pair: Conditions | Inputs): EditableTableRow {
 
   if ('source_output' in pair) {
     return {
-      id: pair.source_output as string,
-      name: pair.source_output as string,
+      id: pair.source_output?.toString(),
+      name: pair.source_output?.toString(),
       value: pair.value !== null ? pair.value : 'null',
       type,
     };
