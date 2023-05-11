@@ -1,4 +1,10 @@
-import type { EwoksNode, EwoksRFNode, Inputs } from '../types';
+import type {
+  DataMapping,
+  DefaultErrorAttributes,
+  EwoksNode,
+  EwoksRFNode,
+  Inputs,
+} from '../types';
 
 function cleanDefaultInputs(default_inputs: Inputs[]) {
   return default_inputs.map((dIn) => {
@@ -15,6 +21,40 @@ function cleanDefaultInputs(default_inputs: Inputs[]) {
     };
   });
 }
+function calcDefaultErrorAttributes(
+  default_error_attributes: DefaultErrorAttributes | undefined,
+  default_error_node?: boolean
+) {
+  console.log(default_error_attributes, default_error_node);
+
+  if (!default_error_node) {
+    return undefined;
+  }
+
+  if (default_error_attributes?.map_all_data) {
+    return { map_all_data: true, data_mapping: [] };
+  }
+
+  return {
+    map_all_data: false,
+    data_mapping:
+      default_error_attributes?.data_mapping?.map((dmap) => {
+        console.log(dmap);
+
+        return {
+          // Does not seem to work in the same way
+          // eslint-disable-next-line unicorn/prefer-number-properties
+          source_output: !isNaN((dmap.source_output as unknown) as number)
+            ? Number(dmap.source_output)
+            : dmap.source_output,
+          target_input: !isNaN((dmap.target_input as unknown) as number)
+            ? Number(dmap.target_input)
+            : dmap.target_input,
+        };
+      }) || [],
+  };
+}
+
 function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
   if (!default_inputs) {
     return [];
@@ -78,9 +118,10 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           inputs_complete,
           task_generator,
           default_error_node,
-          default_error_attributes: default_error_node
-            ? default_error_attributes
-            : undefined,
+          default_error_attributes: calcDefaultErrorAttributes(
+            default_error_attributes,
+            default_error_node
+          ),
           default_inputs: cleanDefaultInputs(calcDefaultInputs(default_inputs)),
           uiProps: {
             nodeWidth,

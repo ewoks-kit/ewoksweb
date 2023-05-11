@@ -25,24 +25,31 @@ export default function LinkDetails(selectedElement: Edge) {
   const [showDataMapping, setShowDataMapping] = useState<boolean>(
     !edgeData.map_all_data
   );
-  // console.log(edgeData.map_all_data, showDataMapping, selectedElement.id);
+  const [showConditions, setShowConditions] = useState<boolean>(
+    !edgeData.map_all_data
+  );
 
   useEffect(() => {
     setShowDataMapping(!edgeData.map_all_data);
-  }, [edgeData.map_all_data]);
-
-  function onErrorChanged(event: React.ChangeEvent<HTMLInputElement>) {
-    mergeEdgeData(selectedElement.id, { on_error: event.target.checked });
-  }
+    setShowConditions(!edgeData.on_error);
+  }, [edgeData.map_all_data, edgeData.on_error]);
 
   const requiredChanged = (event: ChangeEvent<HTMLInputElement>) => {
     mergeEdgeData(selectedElement.id, { required: event.target.checked });
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeShowDataMapping = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setShowDataMapping(event.target.checked);
-
     mergeEdgeData(selectedElement.id, { map_all_data: !event.target.checked });
+  };
+
+  const handleChangeShowConditions = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setShowConditions(event.target.checked);
+    mergeEdgeData(selectedElement.id, { on_error: !event.target.checked });
   };
 
   return (
@@ -62,7 +69,7 @@ export default function LinkDetails(selectedElement: Edge) {
               <Grid item>
                 <Switch
                   checked={showDataMapping}
-                  onChange={handleChange}
+                  onChange={handleChangeShowDataMapping}
                   name="dataMappingSwitch"
                 />
               </Grid>
@@ -83,18 +90,24 @@ export default function LinkDetails(selectedElement: Edge) {
         Cannot be used in combination with conditions.`}
       >
         <div>
-          <label htmlFor="on_error" id="on_error">
-            <b>on_error</b>
-          </label>
-          <Checkbox
-            checked={!!edgeData.on_error || false}
-            onChange={onErrorChanged}
-            inputProps={{ 'aria-label': 'controlled' }}
-            aria-labelledby="on_error"
-          />
+          <Typography component="div" style={{ fontSize: '15px' }}>
+            <Grid component="label" container alignItems="center" spacing={1}>
+              <Grid item>{!showConditions ? <b>on_error</b> : 'on_error'}</Grid>
+              <Grid item>
+                <Switch
+                  checked={showConditions}
+                  onChange={handleChangeShowConditions}
+                  name="conditionsSwitch"
+                />
+              </Grid>
+              <Grid item>
+                {showConditions ? <b>Conditions</b> : 'Conditions'}
+              </Grid>
+            </Grid>
+          </Typography>
         </div>
       </SidebarTooltip>
-      {!edgeData.on_error && isEdgeRF(selectedElement) && (
+      {showConditions && isEdgeRF(selectedElement) && (
         <div>
           <Conditions {...selectedElement} />
         </div>

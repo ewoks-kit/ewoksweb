@@ -42,37 +42,21 @@ export default function Conditions(element: Edge) {
 
   return (
     <div>
-      <SidebarTooltip
-        text={`Provides a list of expected values for source outputs.
-          [{"source_output": "result", "value": 10}]`}
-      >
-        <b>Conditions </b>
-      </SidebarTooltip>
-
-      <IconButton
-        style={{ padding: '1px' }}
-        aria-label="Add Condition"
-        onClick={() => addConditions(edgeData)}
-        data-cy="addConditionsButton"
-      >
-        <AddCircleOutlineIcon />
-      </IconButton>
-      {edgeData.conditions && edgeData.conditions.length > 0 && (
-        <EditableTable
-          headers={['Output', 'Value']}
-          defaultValues={edgeData.conditions}
-          valuesChanged={conditionsValuesChanged}
-          typeOfValues={[
-            {
-              type: 'select',
-              values: edgeData.links_input_names || [],
-            },
-            {
-              type: 'input',
-            },
-          ]}
-        />
-      )}
+      <EditableTable
+        headers={['Output', 'Value']}
+        defaultValues={edgeData.conditions || []}
+        valuesChanged={conditionsValuesChanged}
+        addNewLine={() => addConditions(edgeData)}
+        typeOfValues={[
+          {
+            type: 'select',
+            values: edgeData.links_input_names || [],
+          },
+          {
+            type: 'input',
+          },
+        ]}
+      />
     </div>
   );
 }

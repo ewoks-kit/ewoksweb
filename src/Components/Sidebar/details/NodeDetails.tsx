@@ -4,15 +4,14 @@ import type {
   EditableTableRow,
   EwoksRFNodeData,
 } from '../../../types';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Box,
   Checkbox,
-  IconButton,
+  Grid,
+  Switch,
   Typography,
 } from '@material-ui/core';
 import EditTaskProp from './EditTaskProp';
@@ -30,6 +29,9 @@ import {
 import { useNodesIds } from '../../../store/graph-hooks';
 import type { Node } from 'reactflow';
 import TableDataMapping from '../EditableTableProperties/TableDataMapping';
+import { nanoid } from 'nanoid';
+import DataMappingComponent from '../EditableTableProperties/DataMapping';
+import NodeDataMapping from '../EditableTableProperties/NodeDataMapping';
 
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(selectedElement: Node) {
@@ -51,6 +53,9 @@ export default function NodeDetails(selectedElement: Node) {
   const [defaultErrorNode, setDefaultErrorNode] = useState<boolean>(false);
   const [dataMapping, setDataMapping] = useState<DataMapping[]>([]);
   const [mapAllData, setMapAllData] = useState<boolean>(false);
+  const [showDataMapping, setShowDataMapping] = useState<boolean>(
+    !nodeData.ewoks_props.default_error_attributes?.map_all_data
+  );
 
   const NonEditableTaskProperties = [
     { id: 'id', label: 'Id', value: selectedElement.id },
@@ -198,16 +203,15 @@ export default function NodeDetails(selectedElement: Node) {
     const elMap =
       nodeDataProp.ewoks_props.default_error_attributes?.data_mapping || [];
 
-    if (!elMap.some((x) => x.id === '')) {
-      const newNodeData = {
-        ewoks_props: {
-          default_error_attributes: {
-            data_mapping: [...elMap, { id: '', name: '', value: '' }],
-          },
+    const newNodeData = {
+      ewoks_props: {
+        default_error_attributes: {
+          data_mapping: [...elMap, { id: nanoid(), name: '', value: '' }],
         },
-      };
-      mergeNodeData(selectedElement.id, newNodeData);
-    }
+      },
+    };
+
+    mergeNodeData(selectedElement.id, newNodeData);
   }
 
   function dataMappingValuesChanged(table: EditableTableRow[]) {
@@ -232,16 +236,16 @@ export default function NodeDetails(selectedElement: Node) {
     mergeNodeData(selectedElement.id, newNodeData);
   }
 
-  function mapAllDataChanged(checked: boolean) {
-    const newNodeData = {
+  const handleChangeShowDataMapping = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setShowDataMapping(event.target.checked);
+    mergeNodeData(selectedElement.id, {
       ewoks_props: {
-        default_error_attributes: {
-          map_all_data: checked,
-        },
+        default_error_attributes: { map_all_data: !event.target.checked },
       },
-    };
-    mergeNodeData(selectedElement.id, newNodeData);
-  }
+    });
+  };
 
   return (
     <Box>
@@ -278,26 +282,34 @@ export default function NodeDetails(selectedElement: Node) {
 
       {defaultErrorNode && (
         <div>
-          <b>Map all data</b>
-          <Checkbox
-            checked={mapAllData}
-            onChange={(event) => mapAllDataChanged(event.target.checked)}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
+          <Typography component="div" style={{ fontSize: '15px' }}>
+            <Grid component="label" container alignItems="center" spacing={1}>
+              <Grid item>
+                {!showDataMapping ? <b>Map all data</b> : 'Map all data'}
+              </Grid>
+              <Grid item>
+                <Switch
+                  checked={showDataMapping}
+                  onChange={handleChangeShowDataMapping}
+                  name="dataMappingSwitch"
+                />
+              </Grid>
+              <Grid item>
+                {showDataMapping ? <b>Data Mapping</b> : 'Data Mapping'}
+              </Grid>
+            </Grid>
+          </Typography>
         </div>
       )}
-      {defaultErrorNode && !mapAllData && (
+      {defaultErrorNode && showDataMapping && (
         <div>
-          <b>Data Mapping </b>
-          <IconButton
-            style={{ padding: '1px' }}
-            aria-label="delete"
-            onClick={() => addDataMapping(nodeData)}
-          >
-            <AddCircleOutlineIcon />
-          </IconButton>
-          {dataMapping.length > 0 && (
+          <div>
+            <NodeDataMapping {...selectedElement} />
+          </div>
+
+          {/* {dataMapping.length > 0 && (
             <TableDataMapping
+              addNewLine={() => addDataMapping(nodeData)}
               headers={['Source', 'Target']}
               defaultValues={dataMapping}
               valuesChanged={dataMappingValuesChanged}
@@ -312,7 +324,7 @@ export default function NodeDetails(selectedElement: Node) {
                 },
               ]}
             />
-          )}
+          )} */}
         </div>
       )}
 

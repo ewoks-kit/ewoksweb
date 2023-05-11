@@ -54,14 +54,14 @@ export default function DefaultInputs(element: Node) {
       >
         <div>
           <b>Default Inputs </b>
-          <IconButton
+          {/* <IconButton
             style={{ padding: '1px' }}
             aria-label="delete"
             onClick={() => addDefaultInputs(nodeData)}
             data-cy="addDefaultInputsButton"
           >
             <AddCircleOutlineIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
       </SidebarTooltip>
 
@@ -70,6 +70,7 @@ export default function DefaultInputs(element: Node) {
           headers={['Name', 'Value']}
           defaultValues={defaultInputs}
           valuesChanged={defaultInputsChanged}
+          addNewLine={() => addDefaultInputs(nodeData)}
           typeOfValues={[
             {
               type: 'select',
