@@ -41,6 +41,7 @@ import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
 import OverflowDrawer from '../AddNodesDrawer/OverflowDrawer';
 import { getTaskDescription } from '../../api/tasks';
+import toggleAddNodesSidebar from '../../store/toggleAddNodesSidebar';
 
 const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
 
@@ -76,6 +77,9 @@ export default function Dashboard() {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const tasks = useStore((state) => state.tasks);
   const setTasks = useStore((state) => state.setTasks);
+  const setOpenAddNodesSidebar = toggleAddNodesSidebar(
+    (state) => state.setOpenAddNodesSidebar
+  );
 
   const [action, setAction] = useState<FormAction>(FormAction.newGraph);
 
@@ -98,6 +102,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     setOpenSettings(false);
+    setOpenAddNodesSidebar(true);
   }, []);
 
   useEffect(() => {
@@ -159,6 +164,7 @@ export default function Dashboard() {
       setOpenSaveDialog(true);
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
+      setOpenAddNodesSidebar(true);
     }
   }
 

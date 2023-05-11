@@ -4,7 +4,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { Fab } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import AddNodes from './AddNodes';
-import { useToggle } from '@react-hookz/web/esm/useToggle';
+import toggleAddNodesSidebar from '../../store/toggleAddNodesSidebar';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -42,10 +42,16 @@ const useStyles = makeStyles((theme) => ({
 
 function OverflowDrawer() {
   const classes = useStyles();
-  const [isToggled, toggle] = useToggle(false);
+
+  const setOpenAddNodesSidebar = toggleAddNodesSidebar(
+    (state) => state.setOpenAddNodesSidebar
+  );
+  const openAddNodesSidebar = toggleAddNodesSidebar(
+    (state) => state.openAddNodesSidebar
+  );
 
   const toggleDrawer = () => {
-    toggle(!isToggled);
+    setOpenAddNodesSidebar(!openAddNodesSidebar);
   };
 
   return (
@@ -54,14 +60,14 @@ function OverflowDrawer() {
         variant="permanent"
         anchor="left"
         className={`${classes.drawer} ${
-          isToggled ? classes.drawerOpen : classes.drawerClose
+          openAddNodesSidebar ? classes.drawerOpen : classes.drawerClose
         }`}
         classes={{
           paper: `${classes.drawer} ${
-            isToggled ? classes.drawerOpen : classes.drawerClose
+            openAddNodesSidebar ? classes.drawerOpen : classes.drawerClose
           }`,
         }}
-        open={isToggled}
+        open={openAddNodesSidebar}
       >
         <aside className="dndflow">
           <AddNodes title="Add Nodes" />
@@ -72,10 +78,10 @@ function OverflowDrawer() {
         color="primary"
         aria-label="add"
         onClick={toggleDrawer}
-        style={{ marginLeft: isToggled ? '230px' : '10px' }}
+        style={{ marginLeft: openAddNodesSidebar ? '230px' : '10px' }}
         className={classes.leftDrawerButton}
       >
-        {isToggled ? (
+        {openAddNodesSidebar ? (
           <ArrowBackIosIcon style={{ marginLeft: '8px' }} />
         ) : (
           <AddIcon />
