@@ -47,7 +47,6 @@ export const useStyles = makeStyles(() => ({
   },
 }));
 
-// TODO move to types if used in multiple places
 interface EditableTableProps {
   headers: string[];
   defaultValues: Conditions[] | Inputs[];
