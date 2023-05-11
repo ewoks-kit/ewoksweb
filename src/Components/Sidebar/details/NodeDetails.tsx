@@ -1,18 +1,13 @@
 import { useEffect, useState } from 'react';
-import type {
-  DataMapping,
-  EditableTableRow,
-  EwoksRFNodeData,
-} from '../../../types';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-
+import type { EwoksRFNodeData } from '../../../types';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Box,
   Checkbox,
-  IconButton,
+  Grid,
+  Switch,
   Typography,
 } from '@material-ui/core';
 import EditTaskProp from './EditTaskProp';
@@ -29,7 +24,7 @@ import {
 } from '../../../utils/typeGuards';
 import { useNodesIds } from '../../../store/graph-hooks';
 import type { Node } from 'reactflow';
-import TableDataMapping from '../EditableTableProperties/TableDataMapping';
+import NodeDataMapping from '../EditableTableProperties/NodeDataMapping';
 
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(selectedElement: Node) {
@@ -49,8 +44,9 @@ export default function NodeDetails(selectedElement: Node) {
 
   const [inputsComplete, setInputsComplete] = useState<boolean>(false);
   const [defaultErrorNode, setDefaultErrorNode] = useState<boolean>(false);
-  const [dataMapping, setDataMapping] = useState<DataMapping[]>([]);
-  const [mapAllData, setMapAllData] = useState<boolean>(false);
+  const [showDataMapping, setShowDataMapping] = useState<boolean>(
+    !nodeData.ewoks_props.default_error_attributes?.map_all_data
+  );
 
   const NonEditableTaskProperties = [
     { id: 'id', label: 'Id', value: selectedElement.id },
@@ -102,13 +98,6 @@ export default function NodeDetails(selectedElement: Node) {
   useEffect(() => {
     setInputsComplete(nodeData.ewoks_props.inputs_complete || false);
     setDefaultErrorNode(nodeData.ewoks_props.default_error_node || false);
-
-    setDataMapping(
-      nodeData.ewoks_props.default_error_attributes?.data_mapping || []
-    );
-    setMapAllData(
-      nodeData.ewoks_props.default_error_attributes?.map_all_data || false
-    );
   }, [nodeData]);
 
   function propChanged(
@@ -194,54 +183,16 @@ export default function NodeDetails(selectedElement: Node) {
     });
   }
 
-  function addDataMapping(nodeDataProp: EwoksRFNodeData) {
-    const elMap =
-      nodeDataProp.ewoks_props.default_error_attributes?.data_mapping || [];
-
-    if (!elMap.some((x) => x.id === '')) {
-      const newNodeData = {
-        ewoks_props: {
-          default_error_attributes: {
-            data_mapping: [...elMap, { id: '', name: '', value: '' }],
-          },
-        },
-      };
-      mergeNodeData(selectedElement.id, newNodeData);
-    }
-  }
-
-  function dataMappingValuesChanged(table: EditableTableRow[]) {
-    const dmap: DataMapping[] = table.map((row) => {
-      if (typeof row.value !== 'string') {
-        throw new TypeError(
-          'Expecting only string but got another type for Data_Mapping'
-        );
-      }
-      return {
-        source_output: row.name,
-        target_input: row.value,
-      };
+  const handleChangeShowDataMapping = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setShowDataMapping(event.target.checked);
+    mergeNodeData(selectedElement.id, {
+      ewoks_props: {
+        default_error_attributes: { map_all_data: !event.target.checked },
+      },
     });
-    const newNodeData = {
-      ewoks_props: {
-        default_error_attributes: {
-          data_mapping: dmap,
-        },
-      },
-    };
-    mergeNodeData(selectedElement.id, newNodeData);
-  }
-
-  function mapAllDataChanged(checked: boolean) {
-    const newNodeData = {
-      ewoks_props: {
-        default_error_attributes: {
-          map_all_data: checked,
-        },
-      },
-    };
-    mergeNodeData(selectedElement.id, newNodeData);
-  }
+  };
 
   return (
     <Box>
@@ -278,41 +229,28 @@ export default function NodeDetails(selectedElement: Node) {
 
       {defaultErrorNode && (
         <div>
-          <b>Map all data</b>
-          <Checkbox
-            checked={mapAllData}
-            onChange={(event) => mapAllDataChanged(event.target.checked)}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
+          <Typography component="div" style={{ fontSize: '15px' }}>
+            <Grid component="label" container alignItems="center" spacing={1}>
+              <Grid item>
+                {!showDataMapping ? <b>Map all data</b> : 'Map all data'}
+              </Grid>
+              <Grid item>
+                <Switch
+                  checked={showDataMapping}
+                  onChange={handleChangeShowDataMapping}
+                  name="dataMappingSwitch"
+                />
+              </Grid>
+              <Grid item>
+                {showDataMapping ? <b>Data Mapping</b> : 'Data Mapping'}
+              </Grid>
+            </Grid>
+          </Typography>
         </div>
       )}
-      {defaultErrorNode && !mapAllData && (
+      {defaultErrorNode && showDataMapping && (
         <div>
-          <b>Data Mapping </b>
-          <IconButton
-            style={{ padding: '1px' }}
-            aria-label="delete"
-            onClick={() => addDataMapping(nodeData)}
-          >
-            <AddCircleOutlineIcon />
-          </IconButton>
-          {dataMapping.length > 0 && (
-            <TableDataMapping
-              headers={['Source', 'Target']}
-              defaultValues={dataMapping}
-              valuesChanged={dataMappingValuesChanged}
-              typeOfValues={[
-                {
-                  type: 'input',
-                  values: [],
-                },
-                {
-                  type: 'input',
-                  values: [],
-                },
-              ]}
-            />
-          )}
+          <NodeDataMapping {...selectedElement} />
         </div>
       )}
 

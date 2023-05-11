@@ -29,7 +29,7 @@ export const useStyles = makeStyles(() => ({
   },
 }));
 
-interface EditableTableProps {
+interface TableDataMappingProps {
   headers: string[];
   defaultValues: DataMapping[];
   typeOfValues: { type: string; values?: string[] }[];
@@ -38,7 +38,7 @@ interface EditableTableProps {
 }
 
 // The table where lines can be added where type is selected and appropriate values are given to name and value.
-function TableDataMapping(props: EditableTableProps) {
+function TableDataMapping(props: TableDataMappingProps) {
   const [rows, setRows] = React.useState<EditableTableRow[]>([]);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
