@@ -20,12 +20,9 @@ function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
     return [];
   }
   return default_inputs.map((dIn) => {
+    const nameAsNumber = dIn.name && Number.parseInt(dIn.name as string, 10);
     return {
-      // Does not seem to work in the same way
-      // eslint-disable-next-line unicorn/prefer-number-properties
-      name: !isNaN((dIn.name as unknown) as number)
-        ? Number(dIn.name)
-        : dIn.name,
+      name: Number.isNaN(nameAsNumber) ? dIn.name : nameAsNumber,
       value: dIn.value,
     };
   });

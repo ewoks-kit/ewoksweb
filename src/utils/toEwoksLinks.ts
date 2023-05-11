@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/prefer-number-properties */
 import { isString } from './typeGuards';
 import type { Conditions, DataMapping, EwoksLink, EwoksRFLink } from '../types';
 
@@ -71,22 +70,27 @@ function calcConditionValue(condition: Conditions) {
 }
 
 function calcConditionName(condition: Conditions) {
+  const nameAsNumber = condition.name && Number.parseInt(condition.name, 10);
   return {
-    source_output: !isNaN((condition.name as unknown) as number)
-      ? Number(condition.name)
-      : condition.name,
+    source_output: Number.isNaN(nameAsNumber) ? condition.name : nameAsNumber,
   };
 }
 
 function calcDataMapping(data_mapping: DataMapping[]) {
   return data_mapping.map((mapping) => {
+    const outputAsNumber =
+      mapping.source_output &&
+      Number.parseInt(mapping.source_output as string, 10);
+    const targetAsNumber =
+      mapping.target_input &&
+      Number.parseInt(mapping.target_input as string, 10);
     return {
-      source_output: !isNaN(mapping.source_output as number)
-        ? Number(mapping.source_output)
-        : mapping.source_output,
-      target_input: !isNaN(mapping.target_input as number)
-        ? Number(mapping.target_input)
-        : mapping.target_input,
+      source_output: Number.isNaN(outputAsNumber)
+        ? mapping.source_output
+        : outputAsNumber,
+      target_input: Number.isNaN(targetAsNumber)
+        ? mapping.target_input
+        : targetAsNumber,
     };
   });
 }
