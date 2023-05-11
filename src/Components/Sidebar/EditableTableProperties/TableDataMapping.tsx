@@ -8,7 +8,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import CustomTableCell from './CustomTableCell';
 import useStore from 'store/useStore';
-import type { Conditions, DataMapping, EditableTableRow, Inputs } from 'types';
+import type { DataMapping, EditableTableRow } from 'types';
 import { createDataMappingData } from './utils';
 import TableHeader from './TableHeader';
 import ToolsCell from './ToolsCell';
@@ -31,7 +31,7 @@ export const useStyles = makeStyles(() => ({
 
 interface EditableTableProps {
   headers: string[];
-  defaultValues: DataMapping[] | Conditions[] | Inputs[];
+  defaultValues: DataMapping[];
   typeOfValues: { type: string; values?: string[] }[];
   valuesChanged: (rows: EditableTableRow[]) => void;
   addNewLine?: () => void;

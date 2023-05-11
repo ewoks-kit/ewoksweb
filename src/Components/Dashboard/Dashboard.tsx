@@ -5,7 +5,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import FiberNew from '@material-ui/icons/FiberNew';
-import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import EditSidebar from 'Components/Sidebar/EditSidebar';
 // import { Link } from 'react-router-dom';
 import Canvas from '../Canvas/Canvas';
@@ -155,10 +154,6 @@ export default function Dashboard() {
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
     }
-  }
-
-  function openGraph() {
-    handleOpenSettings();
   }
 
   function handleOpenSettings() {
@@ -351,6 +346,8 @@ export default function Dashboard() {
             >
               <Fab
                 className={classes.openFileButton}
+                // TODO: examine why the above class is not applied as the inline below
+                style={{ backgroundColor: '#96a5f9' }}
                 color="primary"
                 size="small"
                 component="span"
@@ -358,28 +355,6 @@ export default function Dashboard() {
                 disabled={inExecutionMode}
               >
                 <FiberNew />
-              </Fab>
-            </IconButton>
-          </Tooltip>
-          <Tooltip
-            title={tooltipText('Open an existing workflow')}
-            enterDelay={800}
-            arrow
-          >
-            <IconButton
-              color="inherit"
-              onClick={openGraph}
-              disabled={inExecutionMode}
-            >
-              <Fab
-                className={classes.openFileButton}
-                color="primary"
-                size="small"
-                component="span"
-                aria-label="Open an existing workflow"
-                disabled={inExecutionMode}
-              >
-                <ImportContactsIcon />
               </Fab>
             </IconButton>
           </Tooltip>
@@ -400,6 +375,7 @@ export default function Dashboard() {
               <IconButton color="inherit" onClick={handleClick}>
                 <Fab
                   className={classes.openFileButton}
+                  style={{ backgroundColor: '#96a5f9' }}
                   color="primary"
                   size="small"
                   component="span"
@@ -420,6 +396,7 @@ export default function Dashboard() {
             <IconButton color="inherit" onClick={handleOpenSettings}>
               <Fab
                 className={classes.openFileButton}
+                style={{ backgroundColor: '#96a5f9' }}
                 color="primary"
                 size="small"
                 component="span"

@@ -15,6 +15,18 @@ function cleanDefaultInputs(default_inputs: Inputs[]) {
     };
   });
 }
+function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
+  if (!default_inputs) {
+    return [];
+  }
+  return default_inputs.map((dIn) => {
+    const nameAsNumber = dIn.name && Number.parseInt(dIn.name as string, 10);
+    return {
+      name: Number.isNaN(nameAsNumber) ? dIn.name : nameAsNumber,
+      value: dIn.value,
+    };
+  });
+}
 
 // EwoksRFNode --> EwoksNode for saving
 export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
@@ -29,7 +41,6 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
   return tempNodes.map(
     ({
       id,
-
       data: {
         ewoks_props: {
           default_inputs,
@@ -67,9 +78,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           default_error_attributes: default_error_node
             ? default_error_attributes
             : undefined,
-          default_inputs: default_inputs
-            ? cleanDefaultInputs(default_inputs)
-            : [],
+          default_inputs: cleanDefaultInputs(calcDefaultInputs(default_inputs)),
           uiProps: {
             nodeWidth,
             node_icon,
@@ -94,7 +103,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         task_identifier,
         inputs_complete,
         task_generator,
-        default_inputs: cleanDefaultInputs(default_inputs || []),
+        default_inputs: cleanDefaultInputs(calcDefaultInputs(default_inputs)),
         default_error_node,
         default_error_attributes: default_error_node
           ? default_error_attributes

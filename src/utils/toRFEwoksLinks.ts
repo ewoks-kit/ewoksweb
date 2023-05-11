@@ -45,12 +45,18 @@ export function toRFEwoksLinks(
         tasks
       );
       const color = uiProps.style?.stroke || 'rgb(60, 81, 202)';
+      const conditionsSourceToString = conditions.map((con) => {
+        return {
+          ...con,
+          source_output: con.source_output?.toString(),
+        };
+      });
 
       const link: EwoksRFLink = {
         id: `${source}:${uiProps.sourceHandle ?? ''}->${target}:${
           uiProps.targetHandle ?? ''
         }_${id++}`,
-        label: calcLabel(uiProps, conditions, data_mapping),
+        label: calcLabel(uiProps, conditionsSourceToString, data_mapping),
         source: source.toString(),
         target: target.toString(),
 
@@ -89,11 +95,16 @@ export function toRFEwoksLinks(
           links_required_output_names: targetTask.required_input_names || [],
           // DOC: node output_names are link's input_names
           links_input_names: sourceTask.output_names || [],
-          data_mapping,
+          data_mapping: data_mapping.map((dmap) => {
+            return {
+              source_output: dmap.source_output?.toString(),
+              target_input: dmap.target_input?.toString(),
+            };
+          }),
           required,
           sub_target,
           sub_source,
-          conditions,
+          conditions: conditionsSourceToString,
           map_all_data,
           on_error,
           comment: uiProps.comment ?? '',

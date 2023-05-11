@@ -221,7 +221,7 @@ export interface Task {
 
 export interface Inputs {
   id?: string;
-  name: string;
+  name: string | number;
   value: unknown;
 }
 
@@ -255,15 +255,15 @@ export interface Note {
 }
 
 export interface DataMapping {
-  source_output?: string;
-  target_input?: string;
+  source_output?: string | number;
+  target_input?: string | number;
   value?: unknown;
   id?: string;
   name?: string;
 }
 
 export interface Conditions {
-  source_output?: string;
+  source_output?: string | number;
   value: unknown;
   id?: string;
   name?: string;

@@ -53,7 +53,12 @@ export function toRFEwoksNodes(
         data: {
           ewoks_props: {
             label: label ?? task_identifier,
-            default_inputs: default_inputs || [],
+            default_inputs: default_inputs?.map((dIn) => {
+              return {
+                name: dIn.name.toString(),
+                value: dIn.value,
+              };
+            }),
             inputs_complete: inputs_complete || false,
             default_error_node: default_error_node || false,
             default_error_attributes: default_error_attributes || {

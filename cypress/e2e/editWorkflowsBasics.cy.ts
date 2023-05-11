@@ -28,6 +28,9 @@ describe('structure and basics for edit-workflows', () => {
   });
 
   it('displays the Graph Details', () => {
-    cy.get('span').should('include.text', 'Open a workflow to edit');
+    cy.get('span').should(
+      'include.text',
+      'Open an existing workflow or press NEW'
+    );
   });
 });
