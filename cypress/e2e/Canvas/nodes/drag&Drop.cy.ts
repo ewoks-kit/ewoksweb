@@ -4,6 +4,9 @@ describe('drag and drop nodes', () => {
   });
 
   it('should drag and drop 2 nodes from add nodes into canvas', () => {
+    cy.get('button[aria-label="add"]').click();
+    cy.waitForStableDOM();
+
     const dataTransfer = new DataTransfer();
 
     cy.waitForStableDOM();

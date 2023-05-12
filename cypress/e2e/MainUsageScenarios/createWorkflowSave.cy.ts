@@ -24,11 +24,11 @@ describe('create workflow and save', () => {
     cy.waitForStableDOM();
 
     cy.get('.react-flow__edge').should('have.length', 0);
-    cy.get('.react-flow__node').should('have.length', 0);
+    cy.get('.react-flow__node').should('have.length', 1);
 
-    cy.loadGraph(id);
+    cy.loadGraph('untitled_workflow' + id);
 
-    cy.get(`[data-cy="${id}"]`).contains(id);
+    cy.get(`[data-cy="${'untitled_workflow' + id}"]`).contains(id);
 
     cy.get(`[data-cy="tutorial_Graph"]`).should('not.exist');
 
@@ -36,10 +36,10 @@ describe('create workflow and save', () => {
 
     cy.contains(`Delete Workflow`).click();
 
-    cy.contains(`Delete workflow with id: "${id}"?`);
+    cy.contains(`Delete workflow with id: "${'untitled_workflow' + id}"?`);
 
     cy.findByRole('button', { name: 'Yes' }).click();
 
-    cy.get(`[data-cy="${id}"]`).should('not.exist');
+    cy.get(`[data-cy="${'untitled_workflow' + id}"]`).should('not.exist');
   });
 });

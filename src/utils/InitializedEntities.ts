@@ -21,7 +21,7 @@ export const initializedGraph: GraphEwoks = {
         {
           id: 'Note-for-untitled_workflow',
           label:
-            'Open a workflow or drag-and-drop nodes from the left to create a new one',
+            'Open a workflow from the top-right or drag-and-drop nodes from the left sidebar to create a new',
           comment: '',
           position: {
             x: 570,

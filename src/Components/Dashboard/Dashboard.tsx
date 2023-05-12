@@ -101,12 +101,9 @@ export default function Dashboard() {
   }, [initGraph, rfInstance]);
 
   useEffect(() => {
+    initGraph(initializedGraph, undefined, rfInstance);
     setOpenSettings(false);
     setOpenAddNodesSidebar(true);
-  }, []);
-
-  useEffect(() => {
-    initGraph(initializedGraph, undefined, rfInstance);
     // Only run once on initial render
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

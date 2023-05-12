@@ -43,8 +43,6 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
   const [elementToEdit, setElementToEdit] = useState<Task | GraphDetails>({});
   const [doAction, setDoAction] = useState<FormAction>(FormAction.cloneTask);
 
-  const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
-  const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const initializedGraph = useStore((state) => state.initializedGraph);
   const initGraph = useStore((state) => state.initGraph);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);

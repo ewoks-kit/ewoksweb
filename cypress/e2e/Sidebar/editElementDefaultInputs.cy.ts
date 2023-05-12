@@ -4,7 +4,7 @@ describe('edit nodes defaultInputs', () => {
   });
 
   it('click on a node and see Default Inputs', () => {
-    cy.get('.react-flow').contains('ewoksweb').parent().click();
+    cy.get('.react-flow').contains('ewoksweb').parent().click({ force: true });
 
     cy.contains('Default Inputs').should('be.visible');
   });

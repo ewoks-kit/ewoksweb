@@ -30,7 +30,7 @@ describe('structure and basics for edit-workflows', () => {
   it('displays the Graph Details', () => {
     cy.get('span').should(
       'include.text',
-      'Open an existing workflow or press NEW'
+      'Open a workflow from the top-right or drag-and-drop nodes from the left sidebar to create a new'
     );
   });
 });

@@ -29,7 +29,6 @@ export default function SubgraphsStack() {
     if (!(target instanceof Element)) {
       return;
     }
-    console.log(subgraphsStack);
 
     setSubgraphsStack({
       id: target.id,

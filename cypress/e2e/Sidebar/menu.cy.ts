@@ -33,11 +33,7 @@ describe('sidebar menu', () => {
   it('opens the clone Task form when node is selected', () => {
     cy.loadApp();
 
-    cy.get('.react-flow__nodes')
-      .children()
-      .filter('.react-flow__node-ppfmethod')
-      .first()
-      .click();
+    cy.get('.react-flow').contains('ewoksweb').parent().click({ force: true });
 
     cy.get('[data-cy="iconMenu"]').click();
 

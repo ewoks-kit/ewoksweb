@@ -4,7 +4,6 @@ describe('Icons:', () => {
   });
 
   it('icons appear on tasks correctly', () => {
-    cy.get('button[aria-label="add"]').click();
     cy.contains('General').click();
 
     cy.get('[data-cy="add-nodes-category-General"]')

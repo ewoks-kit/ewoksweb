@@ -5,19 +5,22 @@ describe('draw links', () => {
 
   // draw link by clicking two handles in simple nodes
   it('draws a link by clicking two handles in simple nodes', () => {
+    cy.get('button[aria-label="add"]').click();
+    cy.get('.react-flow__edge').should('have.length', 13);
+    cy.waitForStableDOM();
     cy.get('.react-flow__nodes')
       .children()
       .filter('.react-flow__node-ppfmethod')
       .first()
       .find('div[data-handleid="sr"]')
-      .click();
+      .click({ force: true });
 
     cy.get('.react-flow__nodes')
       .children()
       .filter('.react-flow__node-ppfmethod')
       .last()
       .find('div[data-handleid="tl"]')
-      .click();
+      .click({ force: true });
 
     cy.get('.react-flow__edge').should('have.length', 14);
   });
@@ -28,14 +31,14 @@ describe('draw links', () => {
       .filter('.react-flow__node-ppfmethod')
       .first()
       .find('div[data-handleid="sr"]')
-      .click();
+      .click({ force: true });
 
     cy.get('.react-flow__nodes')
       .children()
       .filter('.react-flow__node-ppfmethod')
       .last()
       .find('div[data-handleid="sr"]')
-      .click();
+      .click({ force: true });
 
     cy.get('.react-flow__edge').should('have.length', 14);
   });
@@ -46,14 +49,14 @@ describe('draw links', () => {
       .filter('.react-flow__node-ppfmethod')
       .first()
       .find('div[data-handleid="tl"]')
-      .click();
+      .click({ force: true });
 
     cy.get('.react-flow__nodes')
       .children()
       .filter('.react-flow__node-ppfmethod')
       .last()
       .find('div[data-handleid="tl"]')
-      .click();
+      .click({ force: true });
 
     cy.get('.react-flow__edge').should('have.length', 14);
   });
@@ -64,14 +67,14 @@ describe('draw links', () => {
       .filter('.react-flow__node-ppfmethod')
       .first()
       .find('div[data-handleid="sr"]')
-      .click();
+      .click({ force: true });
 
     cy.get('.react-flow__nodes')
       .children()
       .filter('.react-flow__node-ppfmethod')
       .first()
       .find('div[data-handleid="tl"]')
-      .click();
+      .click({ force: true });
 
     cy.get('.react-flow__edge').should('have.length', 15);
   });
@@ -80,12 +83,12 @@ describe('draw links', () => {
     cy.contains('a web application to EDIT ewoks graphs')
       .parent()
       .find('div[data-handleid="sr"]')
-      .click();
+      .click({ force: true });
 
     cy.contains('has a web UI in React and a server side in Python-Flask')
       .parent()
       .find('div[data-handleid="tl"]')
-      .click();
+      .click({ force: true });
 
     cy.get('.react-flow__edge').should('have.length', 15);
     cy.contains('Cannot re-connect two nodes');

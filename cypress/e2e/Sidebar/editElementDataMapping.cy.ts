@@ -4,7 +4,7 @@ describe('edit links dataMapping', () => {
   });
 
   it('click and undo/redo sidebar Map all data', () => {
-    cy.get('.react-flow').contains('web app?').parent().click();
+    cy.get('.react-flow').contains('web app?').parent().click({ force: true });
 
     cy.contains('Map all data').should('be.visible');
 
@@ -18,8 +18,6 @@ describe('edit links dataMapping', () => {
 
     cy.get('.MuiSwitch-thumb').first().click({ force: true });
 
-    // cy.get('[data-cy="addDataMappingButton"]').click();
-
     // cy.get('[data-cy="undoButton"]').click();
 
     // cy.get('[data-cy="redoButton"]').click();
@@ -28,7 +26,7 @@ describe('edit links dataMapping', () => {
   it('type and undo/redo a new Data Mapping', () => {
     cy.contains('Data Mapping').should('be.visible');
 
-    // cy.get('.MuiSwitch-thumb').click({ force: true });
+    cy.get('.MuiSwitch-thumb').first().click({ force: true });
 
     cy.get('[data-cy="addDataMappingButton"]').click();
 

@@ -15,11 +15,13 @@ describe('test newGraph scenarios', () => {
 
     cy.waitForStableDOM();
 
+    // Close and re-open the sidebar
+    cy.get('button[aria-label="add"]').click();
     cy.get('button[aria-label="add"]').click();
 
     cy.contains('General').click();
 
-    cy.get('.react-flow__node').should('have.length', 0);
+    cy.get('.react-flow__node').should('have.length', 1);
 
     cy.get('[data-cy="add-nodes-category-General"]')
       .find('.dndnode')
