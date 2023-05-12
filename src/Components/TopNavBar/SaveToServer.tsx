@@ -1,5 +1,5 @@
 import IntegratedSpinner from '../General/IntegratedSpinner';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import SaveIcon from '@material-ui/icons/Save';
 import useStore from '../../store/useStore';
 import FormDialog from '../General/FormDialog';
 import type { Dispatch, SetStateAction } from 'react';
@@ -39,7 +39,7 @@ export default function SaveToServer({
           })();
         }}
       >
-        <CloudUploadIcon />
+        <SaveIcon />
       </IntegratedSpinner>
     </>
   );

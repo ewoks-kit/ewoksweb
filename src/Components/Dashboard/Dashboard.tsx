@@ -4,31 +4,24 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
-import FiberNew from '@material-ui/icons/FiberNew';
 import EditSidebar from 'Components/Sidebar/EditSidebar';
 // import { Link } from 'react-router-dom';
 import Canvas from '../Canvas/Canvas';
 // import UndoRedo from '../TopNavBar/UndoRedo';
 import GetFromServer from '../General/GetFromServer';
-import { Fab, IconButton } from '@material-ui/core';
-import SettingsIcon from '@material-ui/icons/Settings';
 import SimpleSnackbar from '../General/Snackbar';
 import SettingsInfoDrawer from '../TopNavBar/SettingsInfoDrawer';
 import SubgraphsStack from '../TopNavBar/SubgraphsStack';
 import LinearSpinner from '../General/LinearSpinner';
 // import ExecuteWorkflow from '../Execution/ExecuteWorkflow';
-import Tooltip from '@material-ui/core/Tooltip';
 import { useDashboardStyles } from './useDashboardStyles';
 import SaveToServer from '../TopNavBar/SaveToServer';
-import tooltipText from '../General/TooltipText';
 import useStore from 'store/useStore';
 // import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import FormDialog from '../General/FormDialog';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from '../General/ErrorFallback';
-import MenuPopover from '../General/MenuPopover';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import type { EwoksRFLinkData, EwoksRFNodeData } from '../../types';
 import { FormAction } from '../../types';
@@ -42,6 +35,7 @@ import { getNodesData } from '../../utils';
 import OverflowDrawer from '../AddNodesDrawer/OverflowDrawer';
 import { getTaskDescription } from '../../api/tasks';
 import toggleAddNodesSidebar from '../../store/toggleAddNodesSidebar';
+import MoreMenu from '../TopNavBar/MoreMenu';
 
 const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
 
@@ -61,7 +55,6 @@ export default function Dashboard() {
   const [openSettings, setOpenSettings] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
   const gettingFromServer = useStore((state) => state.gettingFromServer);
-  const inExecutionMode = useStore((state) => state.inExecutionMode);
   const graphInfo = useStore((state) => state.graphInfo);
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
   const openSettingsDrawer = useStore((state) => state.openSettingsDrawer);
@@ -88,7 +81,6 @@ export default function Dashboard() {
   const undoIndex = useStore((state) => state.undoIndex);
   const initializedGraph = useStore((state) => state.initializedGraph);
   const initGraph = useStore((state) => state.initGraph);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
     if (initialWorkflowId) {
@@ -215,14 +207,6 @@ export default function Dashboard() {
     setOpenAgreeDialog(false);
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   function undo() {
     setUndoIndex(undoIndex - 1);
   }
@@ -343,101 +327,20 @@ export default function Dashboard() {
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <SubgraphsStack />
-          <Tooltip
-            title={tooltipText('Start a new workflow')}
-            enterDelay={800}
-            arrow
-          >
-            <IconButton
-              color="inherit"
-              onClick={() => checkAndNewGraph(false)}
-              disabled={inExecutionMode}
-            >
-              <Fab
-                className={classes.openFileButton}
-                // TODO: examine why the above class is not applied as the inline below
-                style={{ backgroundColor: '#96a5f9' }}
-                color="primary"
-                size="small"
-                component="span"
-                aria-label="Start a new workflow"
-                disabled={inExecutionMode}
-              >
-                <FiberNew />
-              </Fab>
-            </IconButton>
-          </Tooltip>
-          <div className={classes.verticalRule} />
-          {/* <UndoRedo undo={undo} redo={redo} /> */}
-          <div className={classes.verticalRule} />
+
+          <GetFromServer />
           <SaveToServer
             saveToServer={async () => void saveToServer()}
             action={action}
             open={openSaveDialog}
             setOpenSaveDialog={setOpenSaveDialog}
           />
-          <GetFromServer />
-          {/* TODO: commented for onlyEditRelease */}
-          {/* <ExecuteWorkflow /> */}
           <div>
-            <Tooltip title={tooltipText('More')} enterDelay={800} arrow>
-              <IconButton color="inherit" onClick={handleClick}>
-                <Fab
-                  className={classes.openFileButton}
-                  style={{ backgroundColor: '#96a5f9' }}
-                  color="primary"
-                  size="small"
-                  component="span"
-                  aria-label="More actions"
-                >
-                  <MoreVertIcon />
-                </Fab>
-              </IconButton>
-            </Tooltip>
-            <MenuPopover anchorEl={anchorEl} handleClose={handleClose} />
+            <MoreMenu
+              checkAndNewGraph={() => checkAndNewGraph(false)}
+              handleOpenSettings={handleOpenSettings}
+            />
           </div>
-          <div className={classes.verticalRule} />
-          <Tooltip
-            title={tooltipText('Manage tasks, icons and workflows')}
-            enterDelay={800}
-            arrow
-          >
-            <IconButton color="inherit" onClick={handleOpenSettings}>
-              <Fab
-                className={classes.openFileButton}
-                style={{ backgroundColor: '#96a5f9' }}
-                color="primary"
-                size="small"
-                component="span"
-                aria-label="Manage tasks, icons and workflows"
-                data-cy="openTopDrawerButton"
-              >
-                <SettingsIcon />
-              </Fab>
-            </IconButton>
-          </Tooltip>
-
-          {/* <Tooltip
-            title={tooltipText('Guide for Ewoks UI')}
-            enterDelay={800}
-            arrow
-          >
-            <IconButton color="inherit">
-              <Typography component="h1" variant="h5" color="primary">
-                <Link to="/">
-                  <Fab
-                    className={classes.openFileButton}
-                    color="primary"
-                    size="small"
-                    component="span"
-                    aria-label="Guide for Ewoks UI"
-                  >
-                    <ArrowUpwardIcon />
-                  </Fab>
-                </Link>
-              </Typography>
-            </IconButton>
-          </Tooltip> */}
           <SettingsInfoDrawer
             handleOpenDrawers={handleOpenDrawers}
             openDrawers={openDrawers}
