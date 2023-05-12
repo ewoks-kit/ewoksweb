@@ -13,7 +13,7 @@ export const initializedTask: Task = {
 export const initializedGraph: GraphEwoks = {
   graph: {
     id: '',
-    label: 'untitled_workflow',
+    label: 'untitled_workflow (unsaved)',
     input_nodes: [],
     output_nodes: [],
     uiProps: {

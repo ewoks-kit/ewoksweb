@@ -122,7 +122,8 @@ export default function CustomizedMenus(props: Props) {
         color="primary"
         onClick={handleClick}
         style={{
-          backgroundColor: '#96a5f9',
+          // backgroundColor: '#3f51b5',
+          // backgroundColor: '#96a5f9',
           margin: '8px',
           borderRadius: '20px',
           minWidth: '30px',

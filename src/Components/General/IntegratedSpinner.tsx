@@ -38,12 +38,12 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
       position: 'absolute',
       left: 0,
     },
-    openFileButton: {
-      backgroundColor:
-        tooltip === 'Save to Server' && canvasGraphChanged && undoIndex !== 0
-          ? 'red'
-          : '#96a5f9',
-    },
+    // openFileButton: {
+    //   backgroundColor:
+    //     tooltip === 'Save to Server' && canvasGraphChanged && undoIndex !== 0
+    //       ? 'red'
+    //       : '#96a5f9',
+    // },
   }));
   const classes = useStyles();
 
@@ -87,7 +87,7 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Box sx={{ m: 1, position: 'relative' }}>
           <Fab
-            className={classes.openFileButton}
+            // className={classes.openFileButton}
             color="primary"
             size="small"
             onClick={handleButtonClick}
