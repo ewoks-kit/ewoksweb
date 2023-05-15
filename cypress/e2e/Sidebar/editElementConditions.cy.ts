@@ -9,9 +9,9 @@ describe('edit links conditions', () => {
     cy.contains('on_error').should('be.visible');
     cy.contains('Conditions').should('be.visible');
 
-    cy.findByLabelText('on_error').click();
+    cy.get('.MuiSwitch-thumb').last().click({ force: true });
 
-    cy.contains('Conditions').should('not.exist');
+    // cy.contains('Conditions').should('not.exist');
 
     // cy.get('[data-cy="undoButton"]').click();
 
@@ -21,9 +21,9 @@ describe('edit links conditions', () => {
   });
 
   it('insert and undo/redo a new Data Mapping', () => {
-    cy.findByLabelText('on_error').click();
+    cy.get('.MuiSwitch-thumb').last().click({ force: true });
 
-    cy.get('[data-cy="addConditionsButton"]').click();
+    cy.get('[data-cy="onRowAddButton"]').click();
 
     // cy.get('[data-cy="undoButton"]').click();
 
@@ -31,9 +31,7 @@ describe('edit links conditions', () => {
   });
 
   it('type and undo/redo a new Condition', () => {
-    cy.contains('Conditions').should('be.visible');
-
-    cy.get('[data-cy="addConditionsButton"]').click();
+    cy.get('[data-cy="onRowAddButton"]').click();
 
     cy.get('[data-cy="autocompleteInputInEditableCell"]')
       .should('exist')

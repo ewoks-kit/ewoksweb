@@ -1,4 +1,9 @@
-import type { EwoksNode, EwoksRFNode, Inputs } from '../types';
+import type {
+  DefaultErrorAttributes,
+  EwoksNode,
+  EwoksRFNode,
+  Inputs,
+} from '../types';
 
 function cleanDefaultInputs(default_inputs: Inputs[]) {
   return default_inputs.map((dIn) => {
@@ -15,14 +20,51 @@ function cleanDefaultInputs(default_inputs: Inputs[]) {
     };
   });
 }
+function calcDefaultErrorAttributes(
+  default_error_attributes: DefaultErrorAttributes | undefined,
+  default_error_node?: boolean
+) {
+  if (!default_error_node) {
+    return undefined;
+  }
+
+  if (default_error_attributes?.map_all_data) {
+    return { map_all_data: true, data_mapping: [] };
+  }
+
+  return {
+    map_all_data: false,
+    data_mapping:
+      default_error_attributes?.data_mapping?.map((mapping) => {
+        const outputAsNumber =
+          mapping.source_output && Number(mapping.source_output);
+
+        const targetAsNumber =
+          mapping.target_input && Number(mapping.target_input);
+
+        return {
+          source_output: Number.isNaN(outputAsNumber)
+            ? mapping.source_output
+            : outputAsNumber,
+          target_input: Number.isNaN(targetAsNumber)
+            ? mapping.target_input
+            : targetAsNumber,
+        };
+      }) || [],
+  };
+}
+
 function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
   if (!default_inputs) {
     return [];
   }
   return default_inputs.map((dIn) => {
-    const nameAsNumber = dIn.name && Number.parseInt(dIn.name as string, 10);
     return {
-      name: Number.isNaN(nameAsNumber) ? dIn.name : nameAsNumber,
+      name:
+        // eslint-disable-next-line require-unicode-regexp
+        dIn.name && /^\d+$/.test(dIn.name as string)
+          ? Number.parseInt(dIn.name as string, 10)
+          : dIn.name,
       value: dIn.value,
     };
   });
@@ -75,9 +117,10 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           inputs_complete,
           task_generator,
           default_error_node,
-          default_error_attributes: default_error_node
-            ? default_error_attributes
-            : undefined,
+          default_error_attributes: calcDefaultErrorAttributes(
+            default_error_attributes,
+            default_error_node
+          ),
           default_inputs: cleanDefaultInputs(calcDefaultInputs(default_inputs)),
           uiProps: {
             nodeWidth,

@@ -10,7 +10,7 @@ describe('edit nodes defaultInputs', () => {
   });
 
   it('insert and undo/redo a new Default Input', () => {
-    cy.get('[data-cy="addDefaultInputsButton"]').click();
+    cy.get('[data-cy="onRowAddButton"]').click();
 
     // cy.get('[data-cy="undoButton"]').click();
 

@@ -16,6 +16,8 @@ import { createData, getType } from './utils';
 import TableHeader from './TableHeader';
 import TypeSelectCell from './TypeSelect';
 import ToolsCell from './ToolsCell';
+import { IconButton, TableCell } from '@material-ui/core';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 export const useStyles = makeStyles(() => ({
   root: {
@@ -37,6 +39,12 @@ export const useStyles = makeStyles(() => ({
     height: 20,
     padding: '1px',
   },
+  plusButtonTableCell: {
+    textAlign: 'end',
+    width: '20%',
+    height: 15,
+    padding: '0 5px 0 0',
+  },
 }));
 
 interface EditableTableProps {
@@ -44,6 +52,7 @@ interface EditableTableProps {
   defaultValues: Conditions[] | Inputs[];
   typeOfValues: { type: string; values?: string[] }[];
   valuesChanged: (rows: EditableTableRow[]) => void;
+  onRowAdd?: () => void;
 }
 
 interface DialogContent {
@@ -327,6 +336,20 @@ function EditableTable(props: EditableTableProps) {
               </TableRow>
             </React.Fragment>
           ))}
+          <TableRow>
+            <TableCell align="left" className={classes.plusButtonTableCell} />
+            <TableCell align="left" className={classes.plusButtonTableCell}>
+              <IconButton
+                style={{ padding: '1px' }}
+                aria-label="dataMapping"
+                onClick={() => props.onRowAdd?.()}
+                data-cy="onRowAddButton"
+              >
+                <AddCircleOutlineIcon />
+              </IconButton>
+            </TableCell>
+            <TableCell />
+          </TableRow>
         </TableBody>
       </Table>
     </>

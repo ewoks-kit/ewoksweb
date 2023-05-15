@@ -18,7 +18,7 @@ function TableHeader(props: Props) {
         </TableCell>
         {!headers[0].startsWith('Source') && (
           <TableCell align="left" className={classes.tableCell}>
-            Type
+            <b>Type</b>
           </TableCell>
         )}
         <TableCell align="left" className={classes.tableCell}>

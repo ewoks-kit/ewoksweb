@@ -1,7 +1,5 @@
 import type { EditableTableRow, EwoksRFNodeData } from 'types';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import EditableTable from './EditableTable';
-import { IconButton } from '@material-ui/core';
 import SidebarTooltip from '../SidebarTooltip';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
@@ -54,34 +52,25 @@ export default function DefaultInputs(element: Node) {
       >
         <div>
           <b>Default Inputs </b>
-          <IconButton
-            style={{ padding: '1px' }}
-            aria-label="delete"
-            onClick={() => addDefaultInputs(nodeData)}
-            data-cy="addDefaultInputsButton"
-          >
-            <AddCircleOutlineIcon />
-          </IconButton>
         </div>
       </SidebarTooltip>
 
-      {defaultInputs.length > 0 && (
-        <EditableTable
-          headers={['Name', 'Value']}
-          defaultValues={defaultInputs}
-          valuesChanged={defaultInputsChanged}
-          typeOfValues={[
-            {
-              type: 'select',
-              values: [
-                ...(nodeData.task_props.optional_input_names || []),
-                ...(nodeData.task_props.required_input_names || []),
-              ],
-            },
-            { type: 'input' },
-          ]}
-        />
-      )}
+      <EditableTable
+        headers={['Name', 'Value']}
+        defaultValues={defaultInputs}
+        valuesChanged={defaultInputsChanged}
+        onRowAdd={() => addDefaultInputs(nodeData)}
+        typeOfValues={[
+          {
+            type: 'select',
+            values: [
+              ...(nodeData.task_props.optional_input_names || []),
+              ...(nodeData.task_props.required_input_names || []),
+            ],
+          },
+          { type: 'input' },
+        ]}
+      />
     </div>
   );
 }

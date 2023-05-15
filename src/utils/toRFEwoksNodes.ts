@@ -1,4 +1,9 @@
-import type { EwoksRFNode, GraphEwoks, Task } from '../types';
+import type {
+  DefaultErrorAttributes,
+  EwoksRFNode,
+  GraphEwoks,
+  Task,
+} from '../types';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import {
@@ -61,10 +66,9 @@ export function toRFEwoksNodes(
             }),
             inputs_complete: inputs_complete || false,
             default_error_node: default_error_node || false,
-            default_error_attributes: default_error_attributes || {
-              map_all_data: true,
-              data_mapping: [],
-            },
+            default_error_attributes: calcDefaultErrorAttributes(
+              default_error_attributes
+            ),
             task_generator: task_generator || '',
           },
           task_props: {
@@ -98,4 +102,18 @@ export function toRFEwoksNodes(
       );
     }
   );
+}
+
+function calcDefaultErrorAttributes(
+  default_error_attributes: DefaultErrorAttributes | undefined
+): DefaultErrorAttributes | undefined {
+  return {
+    map_all_data: default_error_attributes?.map_all_data,
+    data_mapping: default_error_attributes?.data_mapping?.map((dmap) => {
+      return {
+        source_output: dmap.source_output?.toString(),
+        target_input: dmap.target_input?.toString(),
+      };
+    }),
+  };
 }

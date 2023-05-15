@@ -29,24 +29,24 @@ export const useStyles = makeStyles(() => ({
   },
 }));
 
-interface EditableTableProps {
+interface TableDataMappingProps {
   headers: string[];
-  defaultValues: DataMapping[];
+  values: DataMapping[];
   typeOfValues: { type: string; values?: string[] }[];
   valuesChanged: (rows: EditableTableRow[]) => void;
-  addNewLine?: () => void;
+  onRowAdd?: () => void;
 }
 
 // The table where lines can be added where type is selected and appropriate values are given to name and value.
-function TableDataMapping(props: EditableTableProps) {
+function TableDataMapping(props: TableDataMappingProps) {
   const [rows, setRows] = React.useState<EditableTableRow[]>([]);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const { defaultValues, headers } = props;
+  const { values, headers } = props;
 
   useEffect(() => {
-    setRows(defaultValues.map(createDataMappingData));
-  }, [defaultValues]);
+    setRows(values.map(createDataMappingData));
+  }, [values]);
   const classes = useStyles();
 
   function calcNewRows(rowId: string | undefined): EditableTableRow[] {
@@ -111,7 +111,7 @@ function TableDataMapping(props: EditableTableProps) {
   }
 
   return (
-    <Table className={classes.table} aria-label="editable table">
+    <Table className={classes.table} aria-label="data-mapping-table">
       <TableHeader headers={headers} />
       <TableBody>
         {rows.map((row, index) => (
@@ -148,7 +148,7 @@ function TableDataMapping(props: EditableTableProps) {
             <IconButton
               style={{ padding: '1px' }}
               aria-label="dataMapping"
-              onClick={() => props.addNewLine?.()}
+              onClick={() => props.onRowAdd?.()}
               data-cy="addDataMappingButton"
             >
               <AddCircleOutlineIcon />
