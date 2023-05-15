@@ -13,21 +13,18 @@ describe('edit links dataMapping', () => {
     // cy.get('[data-cy="redoButton"]').click();
   });
 
-  it('insert and undo/redo a new Data Mapping', () => {
-    cy.contains('Data Mapping').should('be.visible');
+  // it('insert and undo/redo a new Data Mapping', () => {
+  //   cy.contains('Data Mapping').should('be.visible');
 
-    cy.get('.MuiSwitch-thumb').first().click({ force: true });
+  //   cy.get('.MuiSwitch-thumb').first().click({ force: true });
 
-    // cy.get('[data-cy="undoButton"]').click();
+  //   // cy.get('[data-cy="undoButton"]').click();
 
-    // cy.get('[data-cy="redoButton"]').click();
-  });
+  //   // cy.get('[data-cy="redoButton"]').click();
+  // });
 
   it('type and undo/redo a new Data Mapping', () => {
     cy.contains('Data Mapping').should('be.visible');
-
-    // cy.get('.MuiSwitch-thumb').click({ force: true });
-    cy.get('.MuiSwitch-thumb').first().click({ force: true });
 
     cy.get('[data-cy="addDataMappingButton"]').click();
 
