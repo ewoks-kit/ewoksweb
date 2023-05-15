@@ -60,9 +60,9 @@ export default function NodeDataMapping(element: Node) {
   return (
     <div>
       <TableDataMapping
-        addNewLine={() => addDataMapping(nodeData)}
+        onRowAdd={() => addDataMapping(nodeData)}
         headers={['Source', 'Target']}
-        defaultValues={
+        values={
           nodeData.ewoks_props.default_error_attributes?.data_mapping || []
         }
         valuesChanged={dataMappingValuesChanged}

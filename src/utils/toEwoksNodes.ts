@@ -59,9 +59,12 @@ function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
     return [];
   }
   return default_inputs.map((dIn) => {
-    const nameAsNumber = dIn.name && Number(dIn.name);
     return {
-      name: Number.isNaN(nameAsNumber) ? dIn.name : nameAsNumber,
+      name:
+        // eslint-disable-next-line require-unicode-regexp
+        dIn.name && /^\d+$/.test(dIn.name as string)
+          ? Number.parseInt(dIn.name as string, 10)
+          : dIn.name,
       value: dIn.value,
     };
   });

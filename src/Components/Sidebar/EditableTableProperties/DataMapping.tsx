@@ -37,6 +37,9 @@ export default function DataMappingComponent(element: Edge) {
   const dataMappingValuesChanged = (table: DataMapping[]) => {
     const dmap: DataMapping[] = table.map((row) => {
       return {
+        id: row.source_output ? row.source_output.toString() : row.id,
+        name: row.name,
+        value: row.value,
         source_output: row.name,
         target_input: row.value as string,
       };
@@ -50,27 +53,25 @@ export default function DataMappingComponent(element: Edge) {
 
   return (
     <div>
-      {edgeData.data_mapping && (
-        <TableDataMapping
-          addNewLine={() => addDataMapping(edgeData)}
-          headers={['Source', 'Target']}
-          defaultValues={edgeData.data_mapping}
-          valuesChanged={dataMappingValuesChanged}
-          typeOfValues={[
-            {
-              type: isClass(sourceNodeData) ? 'select' : 'input',
-              values: edgeData.links_input_names || [],
-            },
-            {
-              type: isClass(targetNodeData) ? 'select' : 'input',
-              values: [
-                ...(edgeData.links_required_output_names || []),
-                ...(edgeData.links_optional_output_names || []),
-              ],
-            },
-          ]}
-        />
-      )}
+      <TableDataMapping
+        onRowAdd={() => addDataMapping(edgeData)}
+        headers={['Source', 'Target']}
+        values={edgeData.data_mapping || []}
+        valuesChanged={dataMappingValuesChanged}
+        typeOfValues={[
+          {
+            type: isClass(sourceNodeData) ? 'select' : 'input',
+            values: edgeData.links_input_names || [],
+          },
+          {
+            type: isClass(targetNodeData) ? 'select' : 'input',
+            values: [
+              ...(edgeData.links_required_output_names || []),
+              ...(edgeData.links_optional_output_names || []),
+            ],
+          },
+        ]}
+      />
     </div>
   );
 }
