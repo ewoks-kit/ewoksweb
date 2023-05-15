@@ -45,10 +45,10 @@ function WorkflowDropdown(props: Props) {
 
   return (
     <FetchingDropdown
-      value
+      value={value}
       options={options}
-      getOptionSelected={(option, value) => option.id === value.id}
-      groupBy={(option) => option.category}
+      getOptionSelected={(option, valueSelect) => option.id === valueSelect.id}
+      groupBy={(option) => option.category || ''}
       onChange={(event, newValue) => {
         if (newValue) {
           onChange(newValue);
@@ -57,7 +57,7 @@ function WorkflowDropdown(props: Props) {
           setValue({ id: '', label: '', category: '' });
         }, 200);
       }}
-      getOptionLabel={(option) => option.label}
+      getOptionLabel={(option) => option.label || ''}
       placeholder="Quick open"
     />
   );

@@ -22,13 +22,10 @@ interface IntegratedSpinnerProps {
 export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
   const { children, tooltip, getting } = props;
 
-  const undoIndex = useStore((state) => state.undoIndex);
-
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const inExecutionMode = useStore((state) => state.inExecutionMode);
-  const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
 
   const timer = useRef<number>();
 
@@ -38,12 +35,6 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
       position: 'absolute',
       left: 0,
     },
-    // openFileButton: {
-    //   backgroundColor:
-    //     tooltip === 'Save to Server' && canvasGraphChanged && undoIndex !== 0
-    //       ? 'red'
-    //       : '#96a5f9',
-    // },
   }));
   const classes = useStyles();
 

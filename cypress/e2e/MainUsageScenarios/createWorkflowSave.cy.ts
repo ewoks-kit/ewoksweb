@@ -8,7 +8,11 @@ describe('create workflow and save', () => {
   it('opens the dialog for name after clicking new', () => {
     cy.findByRole('dialog').should('not.exist');
 
-    cy.findByRole('button', { name: 'Start a new workflow' }).click();
+    cy.get('[aria-controls="navbar-dropdown-menu"]').click();
+
+    cy.get('#navbar-dropdown-menu').within(() => {
+      cy.contains('[role="menuitem"]', 'New workflow').click();
+    });
 
     cy.findByRole('dialog').should('be.visible');
   });
@@ -23,23 +27,31 @@ describe('create workflow and save', () => {
     cy.findByRole('button', { name: 'Save Workflow' }).click();
     cy.waitForStableDOM();
 
+    cy.get('[aria-controls="navbar-dropdown-menu"]').click({ force: true });
+
     cy.get('.react-flow__edge').should('have.length', 0);
     cy.get('.react-flow__node').should('have.length', 1);
 
-    cy.loadGraph('untitled_workflow' + id);
+    cy.get('body').click();
 
-    cy.get(`[data-cy="${'untitled_workflow' + id}"]`).contains(id);
+    cy.loadGraph('untitled_workflow (unsaved)' + id);
+
+    cy.get(`[data-cy="${'untitled_workflow (unsaved)' + id}"]`).contains(id);
 
     cy.get(`[data-cy="tutorial_Graph"]`).should('not.exist');
 
-    cy.get('[data-cy="iconMenu"]').click();
+    cy.get('[aria-controls="editSidebar-dropdown-menu"]').click();
 
     cy.contains(`Delete Workflow`).click();
 
-    cy.contains(`Delete workflow with id: "${'untitled_workflow' + id}"?`);
+    cy.contains(
+      `Delete workflow with id: "${'untitled_workflow (unsaved)' + id}"?`
+    );
 
     cy.findByRole('button', { name: 'Yes' }).click();
 
-    cy.get(`[data-cy="${'untitled_workflow' + id}"]`).should('not.exist');
+    cy.get(`[data-cy="${'untitled_workflow (unsaved)' + id}"]`).should(
+      'not.exist'
+    );
   });
 });

@@ -116,14 +116,12 @@ export default function CustomizedMenus(props: Props) {
   return (
     <div>
       <Button
-        aria-controls="customized-menu"
+        aria-controls="navbar-dropdown-menu"
         aria-haspopup="true"
         variant="contained"
         color="primary"
         onClick={handleClick}
         style={{
-          // backgroundColor: '#3f51b5',
-          // backgroundColor: '#96a5f9',
           margin: '8px',
           borderRadius: '20px',
           minWidth: '30px',
@@ -134,29 +132,29 @@ export default function CustomizedMenus(props: Props) {
       </Button>
 
       <StyledMenu
-        id="customized-menu"
+        id="navbar-dropdown-menu"
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
         <MenuList>
-          <StyledMenuItem onClick={checkAndNewGraph}>
+          <StyledMenuItem onClick={checkAndNewGraph} role="menuitem">
             <ListItemIcon>
               <FiberNew fontSize="small" />
             </ListItemIcon>
             <ListItemText primary="New workflow" />
           </StyledMenuItem>
-          <StyledMenuItem onClick={saveToDisk}>
+          <StyledMenuItem onClick={saveToDisk} role="menuitem">
             <ListItemIcon>
               <AssignmentReturnIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText primary="Export to disk" />
           </StyledMenuItem>
-          <StyledMenuItem onClick={loadFromDisk}>
+          <StyledMenuItem onClick={loadFromDisk} role="menuitem">
             <MenuUpload />
           </StyledMenuItem>
-          <StyledMenuItem onClick={handleOpenSettings}>
+          <StyledMenuItem onClick={handleOpenSettings} role="menuitem">
             <ListItemIcon>
               <SettingsIcon fontSize="small" />
             </ListItemIcon>

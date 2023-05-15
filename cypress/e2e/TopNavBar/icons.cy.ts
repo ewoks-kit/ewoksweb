@@ -22,7 +22,12 @@ describe('Icons:', () => {
 
   // Assumes down.svg is on the server
   it('should upload-fail-delete-upload down.svg and appear-disappear on the icon list', () => {
-    cy.get('[data-cy="openTopDrawerButton"]').click();
+    cy.get('[aria-controls="navbar-dropdown-menu"]').click();
+
+    cy.get('#navbar-dropdown-menu').within(() => {
+      cy.contains('[role="menuitem"]', 'Workflows-Tasks-Icons').click();
+    });
+
     cy.contains('Categories');
 
     cy.get('[data-cy="iconsTab"]').click();

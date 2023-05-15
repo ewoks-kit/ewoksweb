@@ -4,38 +4,46 @@ describe('sidebar menu', () => {
   });
 
   // Stays until decide on the initial screen
-  // it('Cannot delete or clone a workflow with an empty canvas', () => {
-  //   cy.get('[data-cy="iconMenu"]').click();
+  it('Cannot delete or clone a workflow with an empty canvas', () => {
+    cy.get('[aria-controls="editSidebar-dropdown-menu"]').click();
 
-  //   cy.get('.MuiListItem-button')
-  //     .should('have.length', 2)
-  //     .first()
-  //     .children('.MuiListItemText-root')
-  //     .should('have.length', 1)
-  //     .and('have.text', 'Clone Workflow')
-  //     .click();
+    cy.get('#editSidebar-dropdown-menu').within(() => {
+      cy.contains('[role="sidebarMenuItem"]', 'Clone Workflow').click();
+    });
 
-  //   cy.contains('No Workflow to clone!');
+    cy.contains('No Workflow to clone!');
 
-  //   cy.get('.MuiListItem-button')
-  //     .should('have.length', 2)
-  //     .last()
-  //     .children('.MuiListItemText-root')
-  //     .should('have.length', 1)
-  //     .and('have.text', 'Delete Workflow')
-  //     .click();
+    cy.get('#editSidebar-dropdown-menu').within(() => {
+      cy.contains('[role="sidebarMenuItem"]', 'Delete Workflow').click();
+    });
 
-  //   cy.contains('No workflow on canvas to delete!');
-  // });
+    cy.contains('No workflow on canvas to delete!');
+    cy.get('body').click();
+  });
 
-  // TODO: cannot close the menu with clicks outside? So use again loadApp
+  it('opens the clone Graph form with new workflow name', () => {
+    cy.loadApp();
+    cy.get('[aria-controls="editSidebar-dropdown-menu"]').click();
+
+    cy.get('#editSidebar-dropdown-menu').within(() => {
+      cy.contains('[role="sidebarMenuItem"]', 'Clone Workflow').click();
+    });
+
+    cy.contains('Give the new Workflow name')
+      .parent()
+      .should('have.class', 'MuiDialogTitle-root')
+      .siblings()
+      .first()
+      .as('dialogContent')
+      .should('have.class', 'MuiDialogContent-root');
+
+    cy.loadApp();
+  });
 
   it('opens the clone Task form when node is selected', () => {
-    cy.loadApp();
-
     cy.get('.react-flow').contains('ewoksweb').parent().click({ force: true });
 
-    cy.get('[data-cy="iconMenu"]').click();
+    cy.get('[aria-controls="editSidebar-dropdown-menu"]').click();
 
     cy.get('.MuiListItem-button')
       .contains('Create Task from Node')
@@ -49,21 +57,8 @@ describe('sidebar menu', () => {
       .first()
       .as('dialogContent')
       .should('have.class', 'MuiDialogContent-root');
-  });
 
-  it('opens the clone Graph form with new workflow name', () => {
-    cy.loadApp();
-
-    cy.get('[data-cy="iconMenu"]').click();
-
-    cy.get('.MuiListItem-button').contains('Clone Workflow').parent().click();
-
-    cy.contains('Give the new Workflow name')
-      .parent()
-      .should('have.class', 'MuiDialogTitle-root')
-      .siblings()
-      .first()
-      .as('dialogContent')
-      .should('have.class', 'MuiDialogContent-root');
+    cy.findByRole('button', { name: 'Cancel' }).click({ force: true });
+    cy.get('body').click();
   });
 });

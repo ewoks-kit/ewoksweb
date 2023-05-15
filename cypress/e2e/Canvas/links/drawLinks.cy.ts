@@ -111,7 +111,7 @@ describe('draw links', () => {
       .first()
       .click({ force: true });
 
-    cy.get('[data-cy="iconMenu"]').click();
+    cy.get('[aria-controls="editSidebar-dropdown-menu"]').click();
 
     cy.contains('Delete Link').click();
 
