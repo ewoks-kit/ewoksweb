@@ -117,7 +117,6 @@ function TableDataMapping(props: TableDataMappingProps) {
         {rows.map((row, index) => (
           <React.Fragment key={row.id}>
             <TableRow>
-              <TableCell>{row.id}</TableCell>
               <CustomTableCell
                 index={index}
                 row={row}
