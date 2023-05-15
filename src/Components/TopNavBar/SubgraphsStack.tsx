@@ -19,6 +19,7 @@ export default function SubgraphsStack() {
   const subgraphsStack = useStore((state) => {
     return state.subgraphsStack;
   });
+
   const setNodesData = useNodeDataStore((state) => state.setNodesData);
   const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
   const goToGraph = (e: React.MouseEvent) => {
@@ -81,9 +82,10 @@ export default function SubgraphsStack() {
             </span>
           ))}
       </Breadcrumbs>
-      {subgraphsStack.length === 0 && (
-        <span data-cy="untitled_workflow">untitled_workflow</span>
-      )}
+      {subgraphsStack.length === 0 ||
+        (subgraphsStack.length === 1 && subgraphsStack[0].label === '' && (
+          <span data-cy="untitled_workflow">untitled_workflow</span>
+        ))}
       {subgraphsStack.length === 1 && (
         <span data-cy={subgraphsStack[0].label}>{subgraphsStack[0].label}</span>
       )}

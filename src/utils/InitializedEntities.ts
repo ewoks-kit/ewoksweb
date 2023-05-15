@@ -13,24 +13,10 @@ export const initializedTask: Task = {
 export const initializedGraph: GraphEwoks = {
   graph: {
     id: '',
-    label: 'untitled_workflow',
+    label: '',
     input_nodes: [],
     output_nodes: [],
-    uiProps: {
-      notes: [
-        {
-          id: 'Note-for-untitled_workflow',
-          label:
-            'Open a workflow from the top-right or drag-and-drop nodes from the left sidebar to create a new',
-          comment: '',
-          position: {
-            x: 570,
-            y: 390,
-          },
-          nodeWidth: 248,
-        },
-      ],
-    },
+    uiProps: {},
   },
   nodes: [],
   links: [],

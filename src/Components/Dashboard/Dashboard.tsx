@@ -10,7 +10,7 @@ import EditSidebar from 'Components/Sidebar/EditSidebar';
 import Canvas from '../Canvas/Canvas';
 // import UndoRedo from '../TopNavBar/UndoRedo';
 import GetFromServer from '../General/GetFromServer';
-import { Fab, IconButton } from '@material-ui/core';
+import { createStyles, Fab, IconButton, makeStyles } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SimpleSnackbar from '../General/Snackbar';
 import SettingsInfoDrawer from '../TopNavBar/SettingsInfoDrawer';
@@ -52,8 +52,28 @@ function workflowExists(
   return workflowsIds.data.identifiers.includes(id);
 }
 
+const useStyles = makeStyles(() =>
+  createStyles({
+    noWorkflowMessage: {
+      position: 'fixed',
+      top: '30%',
+      left: '30%',
+      width: '20%',
+      height: '20%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1000,
+      color: '#3f51b5',
+      opacity: '0.5',
+      textAlign: 'center',
+    },
+  })
+);
+
 export default function Dashboard() {
   const classes = useDashboardStyles();
+  const classesLocal = useStyles();
 
   const rfInstance = useReactFlow();
 
@@ -454,7 +474,10 @@ export default function Dashboard() {
         <ReflexElement className="right-pane">
           <main className={classes.content}>
             <div className={classes.toolbar} />
-
+            <h3 className={classesLocal.noWorkflowMessage}>
+              Open a workflow from the top-right or drag-and-drop nodes from the
+              left sidebar to create a new workflow
+            </h3>
             <Paper className={fixedHeightPaper}>
               {gettingFromServer && <LinearSpinner />}
 
