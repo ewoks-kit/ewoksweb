@@ -23,7 +23,7 @@ describe('edit links conditions', () => {
   it('insert and undo/redo a new Data Mapping', () => {
     cy.get('.MuiSwitch-thumb').last().click({ force: true });
 
-    cy.get('[data-cy="addNewLineButton"]').click();
+    cy.get('[data-cy="onRowAddButton"]').click();
 
     // cy.get('[data-cy="undoButton"]').click();
 
@@ -31,7 +31,7 @@ describe('edit links conditions', () => {
   });
 
   it('type and undo/redo a new Condition', () => {
-    cy.get('[data-cy="addNewLineButton"]').click();
+    cy.get('[data-cy="onRowAddButton"]').click();
 
     cy.get('[data-cy="autocompleteInputInEditableCell"]')
       .should('exist')

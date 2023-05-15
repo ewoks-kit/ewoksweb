@@ -59,7 +59,7 @@ export default function DefaultInputs(element: Node) {
         headers={['Name', 'Value']}
         defaultValues={defaultInputs}
         valuesChanged={defaultInputsChanged}
-        addNewLine={() => addDefaultInputs(nodeData)}
+        onRowAdd={() => addDefaultInputs(nodeData)}
         typeOfValues={[
           {
             type: 'select',

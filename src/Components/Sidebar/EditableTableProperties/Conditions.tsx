@@ -43,7 +43,7 @@ export default function Conditions(element: Edge) {
         headers={['Output', 'Value']}
         defaultValues={edgeData.conditions || []}
         valuesChanged={conditionsValuesChanged}
-        addNewLine={() => addConditions(edgeData)}
+        onRowAdd={() => addConditions(edgeData)}
         typeOfValues={[
           {
             type: 'select',
