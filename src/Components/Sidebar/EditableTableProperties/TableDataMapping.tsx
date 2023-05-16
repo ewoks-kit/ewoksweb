@@ -99,6 +99,7 @@ function TableDataMapping(props: TableDataMappingProps) {
       return rowe;
     });
     setRows(newRows);
+    props.valuesChanged(newRows);
   }
 
   function onDelete(id: string) {

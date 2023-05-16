@@ -11,8 +11,6 @@ export default function DefaultInputs(element: Node) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
   assertNodeDataDefined(nodeData, element.id);
 
-  const defaultInputs = nodeData.ewoks_props.default_inputs || [];
-
   function addDefaultInputs(nodeDataProps: EwoksRFNodeData) {
     const newNodeData = {
       ...nodeDataProps,
@@ -34,7 +32,7 @@ export default function DefaultInputs(element: Node) {
         ...nodeData.ewoks_props,
         default_inputs: table.map((dval) => {
           return {
-            id: dval.name,
+            id: dval.id,
             name: dval.name || '',
             value: dval.value,
           };
@@ -57,7 +55,7 @@ export default function DefaultInputs(element: Node) {
 
       <EditableTable
         headers={['Name', 'Value']}
-        defaultValues={defaultInputs}
+        defaultValues={nodeData.ewoks_props.default_inputs || []}
         valuesChanged={defaultInputsChanged}
         onRowAdd={() => addDefaultInputs(nodeData)}
         typeOfValues={[

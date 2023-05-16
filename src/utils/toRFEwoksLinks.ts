@@ -48,7 +48,7 @@ export function toRFEwoksLinks(
       const conditionsSourceToString = conditions.map((con) => {
         return {
           ...con,
-          source_output: con.source_output?.toString(),
+          name: con.source_output?.toString(),
         };
       });
 

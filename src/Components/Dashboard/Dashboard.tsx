@@ -149,8 +149,14 @@ export default function Dashboard() {
     if (canvasGraphChanged && undoIndex !== 0 && !notSave) {
       setOpenAgreeDialog(true);
     } else {
-      initGraph(initializedGraph, undefined, rfInstance);
-      setOpenSaveDialog(true);
+      initGraph(
+        {
+          ...initializedGraph,
+          graph: { ...initializedGraph.graph, id: 'untitled_workflow' },
+        },
+        undefined,
+        rfInstance
+      );
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
       setOpenAddNodesSidebar(true);

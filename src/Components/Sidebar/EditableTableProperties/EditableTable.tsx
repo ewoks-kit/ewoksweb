@@ -191,6 +191,7 @@ function EditableTable(props: EditableTableProps) {
         return rowe;
       });
       setRows(newRows);
+      props.valuesChanged(newRows);
       return;
     }
     // DOC: it is 'dict' or 'list' and uses the dialog

@@ -96,6 +96,7 @@ export default function EdgeLabelComment() {
     if (event.target.textContent) {
       setChanged(event);
       setLabel(event.target.textContent);
+      // valueSavedLocal(event.target.textContent, element as EwoksRFLink);
     }
   }
 
@@ -107,6 +108,7 @@ export default function EdgeLabelComment() {
     if (event.target.value) {
       setChanged(event);
       setLabel(event.target.value);
+      // valueSavedLocal(event.target.value, element as EwoksRFLink);
     }
   }
 
@@ -126,12 +128,14 @@ export default function EdgeLabelComment() {
               onChange={(event) =>
                 valueSelectedChanged(event as ChangeEvent<HTMLInputElement>)
               }
+              // onBlur={() => valueSavedLocal(label, element)}
               onInputChange={(event) =>
                 valueChanged(event as ChangeEvent<HTMLInputElement>)
               }
               style={{ width: valueIsChanged ? '80%' : '98%' }}
               renderInput={(params) => (
                 <TextField
+                  onBlur={() => valueSavedLocal(label, element)}
                   variant="outlined"
                   margin="dense"
                   style={{ margin: '0 0 8px 0', paddingTop: '2px' }}

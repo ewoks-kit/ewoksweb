@@ -57,6 +57,7 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
             margin: '0 0 7px 0',
           }}
           onChange={valueChanged}
+          onBlur={valueSavedLocal}
           multiline
           data-cy="node-edge-label"
         />
