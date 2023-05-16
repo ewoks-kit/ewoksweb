@@ -1,5 +1,4 @@
 import type { DragEventHandler, MouseEvent } from 'react';
-import { useState } from 'react';
 import { useEffect, useRef } from 'react';
 import type { Node, Edge, Connection, NodeChange, EdgeChange } from 'reactflow';
 import ReactFlow, {
@@ -31,6 +30,7 @@ import {
   assertNodeDataDefined,
   assertNodeDefined,
 } from '../../utils/typeGuards';
+import FallbackMessage from './FallbackMessage';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -107,14 +107,6 @@ function Canvas() {
     getNode,
   } = rfInstance;
 
-  const [showInitialMessage, setShowInitialMessage] = useState(true);
-
-  const nodesNumber = getNodes().length;
-
-  useEffect(() => {
-    setShowInitialMessage(nodesNumber === 0 && workingGraphId === '');
-  }, [getNodes, nodesNumber, workingGraphId]);
-
   useEffect(() => {
     setTimeout(() => {
       fitView();
@@ -150,8 +142,6 @@ function Canvas() {
 
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
-
-    setShowInitialMessage(false);
 
     if (workingGraphId === graphId) {
       const stateRF = storeRF.getState();
@@ -394,21 +384,7 @@ function Canvas() {
       role="button"
       tabIndex={0}
     >
-      {showInitialMessage && (
-        // <h3 className={classes.noWorkflowMessage}>
-        //   Open a workflow from the top-right or drag-and-drop nodes from the
-        //   left sidebar to create a new workflow
-        // </h3>
-        <div className={classes.noWorkflowMessage}>
-          <p>
-            <strong>Drag and drop</strong> tasks here to start building your
-            workflow,
-            <br />
-            or use <em>Quick Open</em> to <strong>open</strong> an existing
-            workflow.
-          </p>
-        </div>
-      )}
+      <FallbackMessage />
       <div className="reactflow-wrapper" ref={reactFlowWrapper}>
         <ReactFlow
           fitView
