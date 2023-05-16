@@ -39,11 +39,8 @@ const useStyles = makeStyles(() =>
     },
     noWorkflowMessage: {
       position: 'fixed',
+      top: '30%',
       left: '30%',
-      // Vertical centering minus `1rem` to compensate for the visual illusion that items that are perfectly centered don't seem to be
-      top: '50%',
-      transform: 'translateY(calc(-50% - 1rem))',
-
       width: '20%',
       height: '20%',
       display: 'flex',
