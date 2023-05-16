@@ -37,20 +37,6 @@ const useStyles = makeStyles(() =>
     root: {
       flexGrow: 1,
     },
-    noWorkflowMessage: {
-      position: 'fixed',
-      top: '30%',
-      left: '30%',
-      width: '20%',
-      height: '20%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 1000,
-      color: '#3f51b5',
-      opacity: '0.5',
-      textAlign: 'center',
-    },
   })
 );
 
