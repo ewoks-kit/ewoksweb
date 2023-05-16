@@ -9,7 +9,7 @@ it('selects a default node', () => {
     .children()
     .filter('.react-flow__node-ppfmethod')
     .first()
-    .click();
+    .click({ force: true });
 });
 
 it('changes label of node', () => {

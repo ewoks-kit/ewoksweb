@@ -12,7 +12,7 @@ const addNodesSidebarState = create<ToggleAddNodesSidebarState>((set) => ({
   toggleAddNodesSidebar: (open) => {
     set((state) => ({
       ...state,
-      openAddNodesSidebar: open,
+      isAddNodesSidebarOpen: open,
     }));
   },
 }));

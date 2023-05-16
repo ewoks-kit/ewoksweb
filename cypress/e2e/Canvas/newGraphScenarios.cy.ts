@@ -22,9 +22,9 @@ describe('test newGraph scenarios', () => {
     cy.contains('General').click();
 
     cy.get('.react-flow__node').should('have.length', 0);
-    cy.get('h3').should(
+    cy.get('p').should(
       'include.text',
-      'Open a workflow from the top-right or drag-and-drop nodes from the left sidebar to create a new workflow'
+      'Drag and drop tasks here to start building your workflow,or use Quick Open to open an existing workflow.'
     );
 
     cy.get('[data-cy="add-nodes-category-General"]')
@@ -36,6 +36,7 @@ describe('test newGraph scenarios', () => {
 
     cy.get('.react-flow').trigger('drop', {
       dataTransfer,
+      force: true,
     });
 
     cy.get('.react-flow__node').should('have.length', 1);
