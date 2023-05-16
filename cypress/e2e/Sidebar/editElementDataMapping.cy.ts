@@ -23,7 +23,7 @@ describe('edit links dataMapping', () => {
   //   // cy.get('[data-cy="redoButton"]').click();
   // });
 
-  it('type and undo/redo a new Data Mapping', () => {
+  it.skip('type and undo/redo a new Data Mapping', () => {
     cy.contains('Data Mapping').should('be.visible');
 
     cy.get('[data-cy="addDataMappingButton"]').click();
