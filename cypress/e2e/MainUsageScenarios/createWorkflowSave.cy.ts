@@ -41,9 +41,9 @@ describe('create workflow and save', () => {
     cy.findByRole('button', { name: 'Yes' }).click();
 
     cy.get(`[data-cy="${id}"]`).should('not.exist');
-    cy.get('h3').should(
+    cy.get('p').should(
       'include.text',
-      'Open a workflow from the top-right or drag-and-drop nodes from the left sidebar to create a new workflow'
+      'Drag and drop tasks here to start building your workflow,or use Quick Open to open an existing workflow.'
     );
   });
 });
