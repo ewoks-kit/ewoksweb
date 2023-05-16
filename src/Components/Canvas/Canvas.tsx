@@ -109,14 +109,8 @@ function Canvas() {
   const nodesNumber = getNodes().length;
 
   useEffect(() => {
-    setZeroNodes(nodesNumber === 0);
-  }, [getNodes, nodesNumber]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      fitView();
-    }, 1000);
-  }, [workingGraphId, fitView]);
+    setZeroNodes(nodesNumber === 0 && workingGraphId === '');
+  }, [getNodes, nodesNumber, workingGraphId]);
 
   useEffect(() => {
     setTimeout(() => {

@@ -10,7 +10,7 @@ import EditSidebar from 'Components/Sidebar/EditSidebar';
 import Canvas from '../Canvas/Canvas';
 // import UndoRedo from '../TopNavBar/UndoRedo';
 import GetFromServer from '../General/GetFromServer';
-import { createStyles, Fab, IconButton, makeStyles } from '@material-ui/core';
+import { Fab, IconButton } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SimpleSnackbar from '../General/Snackbar';
 import SettingsInfoDrawer from '../TopNavBar/SettingsInfoDrawer';
