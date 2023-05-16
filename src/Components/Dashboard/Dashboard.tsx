@@ -357,7 +357,6 @@ export default function Dashboard() {
         <ReflexElement className="right-pane">
           <main className={classes.content}>
             <div className={classes.toolbar} />
-
             <Paper className={fixedHeightPaper}>
               {gettingFromServer && <LinearSpinner />}
 

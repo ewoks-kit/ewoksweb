@@ -30,13 +30,11 @@ describe('create workflow and save', () => {
     cy.get('[aria-controls="navbar-dropdown-menu"]').click({ force: true });
 
     cy.get('.react-flow__edge').should('have.length', 0);
-    cy.get('.react-flow__node').should('have.length', 1);
+    cy.get('.react-flow__node').should('have.length', 0);
 
-    cy.get('body').click();
+    cy.loadGraph(id);
 
-    cy.loadGraph('untitled_workflow (unsaved)' + id);
-
-    cy.get(`[data-cy="${'untitled_workflow (unsaved)' + id}"]`).contains(id);
+    cy.get(`[data-cy="${id}"]`).contains(id);
 
     cy.get(`[data-cy="tutorial_Graph"]`).should('not.exist');
 
@@ -44,14 +42,14 @@ describe('create workflow and save', () => {
 
     cy.contains(`Delete Workflow`).click();
 
-    cy.contains(
-      `Delete workflow with id: "${'untitled_workflow (unsaved)' + id}"?`
-    );
+    cy.contains(`Delete workflow with id: "${id}"?`);
 
     cy.findByRole('button', { name: 'Yes' }).click();
 
-    cy.get(`[data-cy="${'untitled_workflow (unsaved)' + id}"]`).should(
-      'not.exist'
+    cy.get(`[data-cy="${id}"]`).should('not.exist');
+    cy.get('h3').should(
+      'include.text',
+      'Open a workflow from the top-right or drag-and-drop nodes from the left sidebar to create a new workflow'
     );
   });
 });

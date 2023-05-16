@@ -1,4 +1,5 @@
 import type { DragEventHandler, MouseEvent } from 'react';
+import { useState } from 'react';
 import { useEffect, useRef } from 'react';
 import type { Node, Edge, Connection, NodeChange, EdgeChange } from 'reactflow';
 import ReactFlow, {
@@ -35,6 +36,20 @@ const useStyles = makeStyles(() =>
   createStyles({
     root: {
       flexGrow: 1,
+    },
+    noWorkflowMessage: {
+      position: 'fixed',
+      top: '30%',
+      left: '30%',
+      width: '20%',
+      height: '20%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1000,
+      color: '#3f51b5',
+      opacity: '0.5',
+      textAlign: 'center',
     },
   })
 );
@@ -89,6 +104,14 @@ function Canvas() {
     getNode,
   } = rfInstance;
 
+  const [showInitialMessage, setShowInitialMessage] = useState(true);
+
+  const nodesNumber = getNodes().length;
+
+  useEffect(() => {
+    setShowInitialMessage(nodesNumber === 0 && workingGraphId === '');
+  }, [getNodes, nodesNumber, workingGraphId]);
+
   useEffect(() => {
     setTimeout(() => {
       fitView();
@@ -124,12 +147,8 @@ function Canvas() {
 
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
-    const initialNote = rfInstance
-      .getNodes()
-      .find((nod) => nod.id === 'Note-for-untitled_workflow');
-    if (initialNote) {
-      rfInstance.setNodes([]);
-    }
+
+    setShowInitialMessage(false);
 
     if (workingGraphId === graphId) {
       const stateRF = storeRF.getState();
@@ -372,6 +391,12 @@ function Canvas() {
       role="button"
       tabIndex={0}
     >
+      {showInitialMessage && (
+        <h3 className={classes.noWorkflowMessage}>
+          Open a workflow from the top-right or drag-and-drop nodes from the
+          left sidebar to create a new workflow
+        </h3>
+      )}
       <div className="reactflow-wrapper" ref={reactFlowWrapper}>
         <ReactFlow
           fitView
