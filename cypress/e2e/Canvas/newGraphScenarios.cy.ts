@@ -21,7 +21,11 @@ describe('test newGraph scenarios', () => {
 
     cy.contains('General').click();
 
-    cy.get('.react-flow__node').should('have.length', 1);
+    cy.get('.react-flow__node').should('have.length', 0);
+    cy.get('h3').should(
+      'include.text',
+      'Open a workflow from the top-right or drag-and-drop nodes from the left sidebar to create a new workflow'
+    );
 
     cy.get('[data-cy="add-nodes-category-General"]')
       .find('.dndnode')
@@ -35,6 +39,7 @@ describe('test newGraph scenarios', () => {
     });
 
     cy.get('.react-flow__node').should('have.length', 1);
+    cy.get('h3').should('not.exist');
   });
 
   it('...then open a graph and show graph details', () => {

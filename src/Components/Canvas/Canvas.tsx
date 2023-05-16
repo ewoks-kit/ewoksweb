@@ -104,12 +104,12 @@ function Canvas() {
     getNode,
   } = rfInstance;
 
-  const [zeroNodes, setZeroNodes] = useState(true);
+  const [showInitialMessage, setShowInitialMessage] = useState(true);
 
   const nodesNumber = getNodes().length;
 
   useEffect(() => {
-    setZeroNodes(nodesNumber === 0 && workingGraphId === '');
+    setShowInitialMessage(nodesNumber === 0 && workingGraphId === '');
   }, [getNodes, nodesNumber, workingGraphId]);
 
   useEffect(() => {
@@ -147,13 +147,8 @@ function Canvas() {
 
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
-    setZeroNodes(false);
-    const initialNote = rfInstance
-      .getNodes()
-      .find((nod) => nod.id === 'Note-for-untitled_workflow');
-    if (initialNote) {
-      rfInstance.setNodes([]);
-    }
+
+    setShowInitialMessage(false);
 
     if (workingGraphId === graphId) {
       const stateRF = storeRF.getState();
@@ -396,7 +391,7 @@ function Canvas() {
       role="button"
       tabIndex={0}
     >
-      {zeroNodes && (
+      {showInitialMessage && (
         <h3 className={classes.noWorkflowMessage}>
           Open a workflow from the top-right or drag-and-drop nodes from the
           left sidebar to create a new workflow
