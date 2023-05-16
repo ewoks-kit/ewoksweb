@@ -41,6 +41,7 @@ import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
 import OverflowDrawer from '../AddNodesDrawer/OverflowDrawer';
 import { getTaskDescription } from '../../api/tasks';
+import addNodesSidebarState from '../../store/addNodesSidebarState';
 
 const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
 
@@ -76,6 +77,9 @@ export default function Dashboard() {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const tasks = useStore((state) => state.tasks);
   const setTasks = useStore((state) => state.setTasks);
+  const toggleAddNodesSidebar = addNodesSidebarState(
+    (state) => state.toggleAddNodesSidebar
+  );
 
   const [action, setAction] = useState<FormAction>(FormAction.newGraph);
 
@@ -97,7 +101,9 @@ export default function Dashboard() {
   }, [initGraph, rfInstance]);
 
   useEffect(() => {
-    setOpenSettings(false);
+    initGraph(initializedGraph, undefined, rfInstance);
+    // Only run once on initial render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -153,6 +159,7 @@ export default function Dashboard() {
       setOpenSaveDialog(true);
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
+      toggleAddNodesSidebar(true);
     }
   }
 
@@ -445,7 +452,6 @@ export default function Dashboard() {
         <ReflexElement className="right-pane">
           <main className={classes.content}>
             <div className={classes.toolbar} />
-
             <Paper className={fixedHeightPaper}>
               {gettingFromServer && <LinearSpinner />}
 

@@ -28,9 +28,9 @@ describe('structure and basics for edit-workflows', () => {
   });
 
   it('displays the Graph Details', () => {
-    cy.get('span').should(
+    cy.get('p').should(
       'include.text',
-      'Open an existing workflow or press NEW'
+      'Drag and drop tasks here to start building your workflow,or use Quick Open to open an existing workflow.'
     );
   });
 });

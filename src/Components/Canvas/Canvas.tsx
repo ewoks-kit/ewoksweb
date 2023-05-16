@@ -30,6 +30,7 @@ import {
   assertNodeDataDefined,
   assertNodeDefined,
 } from '../../utils/typeGuards';
+import FallbackMessage from './FallbackMessage';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -124,6 +125,7 @@ function Canvas() {
 
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
+
     if (workingGraphId === graphId) {
       const stateRF = storeRF.getState();
       const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect() || {
@@ -365,6 +367,7 @@ function Canvas() {
       role="button"
       tabIndex={0}
     >
+      <FallbackMessage />
       <div className="reactflow-wrapper" ref={reactFlowWrapper}>
         <ReactFlow
           fitView

@@ -32,6 +32,7 @@ const subgraphsStack = (
       stack = subStack.slice(0, exists + 1);
       // stack = ['graph'];
     }
+
     set((state) => ({
       ...state,
       subgraphsStack: stack,

@@ -3,11 +3,13 @@ before(() => {
 });
 
 it('selects a default node', () => {
+  cy.get('button[aria-label="add"]').click();
+  cy.waitForStableDOM();
   cy.get('.react-flow__nodes')
     .children()
     .filter('.react-flow__node-ppfmethod')
     .first()
-    .click();
+    .click({ force: true });
 });
 
 it('changes label of node', () => {

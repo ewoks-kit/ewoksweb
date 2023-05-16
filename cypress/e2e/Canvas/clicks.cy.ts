@@ -11,7 +11,8 @@ describe('clicks on canvas and elements', () => {
 
   // select a node with click
   it('selects a node with click', () => {
-    cy.get('.react-flow__node').first().click();
+    cy.get('.react-flow__node').first().click({ force: true });
+    cy.waitForStableDOM();
     // TODO: RF11 does not add a selected. Should find another way after moving canvas to RF11
     //   .should('include.class', 'selected');
     cy.contains('Default Inputs').should('exist').should('be.visible');

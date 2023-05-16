@@ -41,5 +41,9 @@ describe('create workflow and save', () => {
     cy.findByRole('button', { name: 'Yes' }).click();
 
     cy.get(`[data-cy="${id}"]`).should('not.exist');
+    cy.get('p').should(
+      'include.text',
+      'Drag and drop tasks here to start building your workflow,or use Quick Open to open an existing workflow.'
+    );
   });
 });

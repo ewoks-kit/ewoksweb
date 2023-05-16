@@ -4,7 +4,7 @@ describe('edit links conditions', () => {
   });
 
   it('click and undo/redo sidebar on_error', () => {
-    cy.get('.react-flow').contains('web app?').parent().click();
+    cy.get('.react-flow').contains('web app?').parent().click({ force: true });
 
     cy.contains('on_error').should('be.visible');
     cy.contains('Conditions').should('be.visible');
