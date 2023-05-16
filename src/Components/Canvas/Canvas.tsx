@@ -39,8 +39,11 @@ const useStyles = makeStyles(() =>
     },
     noWorkflowMessage: {
       position: 'fixed',
-      top: '30%',
       left: '30%',
+      // Vertical centering minus `1rem` to compensate for the visual illusion that items that are perfectly centered don't seem to be
+      top: '50%',
+      transform: 'translateY(calc(-50% - 1rem))',
+
       width: '20%',
       height: '20%',
       display: 'flex',
@@ -392,10 +395,19 @@ function Canvas() {
       tabIndex={0}
     >
       {showInitialMessage && (
-        <h3 className={classes.noWorkflowMessage}>
-          Open a workflow from the top-right or drag-and-drop nodes from the
-          left sidebar to create a new workflow
-        </h3>
+        // <h3 className={classes.noWorkflowMessage}>
+        //   Open a workflow from the top-right or drag-and-drop nodes from the
+        //   left sidebar to create a new workflow
+        // </h3>
+        <div className={classes.noWorkflowMessage}>
+          <p>
+            <strong>Drag and drop</strong> tasks here to start building your
+            workflow,
+            <br />
+            or use <em>Quick Open</em> to <strong>open</strong> an existing
+            workflow.
+          </p>
+        </div>
       )}
       <div className="reactflow-wrapper" ref={reactFlowWrapper}>
         <ReactFlow
