@@ -130,7 +130,7 @@ it('deletes a node by button and keyboard', () => {
   cy.get('.react-flow__node').should('have.length', 16);
 
   cy.get('.react-flow__node').first().click();
-  cy.get('[data-cy="iconMenu"]').click();
+  cy.get('[aria-controls="editSidebar-dropdown-menu"]').click();
   cy.contains('Delete Node').click();
 
   cy.get('.react-flow__node').should('have.length', 15);

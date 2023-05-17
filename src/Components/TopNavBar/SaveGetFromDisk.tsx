@@ -10,6 +10,7 @@ import { getEdgesData, getNodesData, rfToEwoks } from '../../utils';
 import useStore from '../../store/useStore';
 import type { EwoksRFLinkData, EwoksRFNodeData, GraphRF } from '../../types';
 import { useReactFlow } from 'reactflow';
+import curateGraph from './utils/curateGraph';
 
 function download(content: BlobPart, fileName: string, contentType: string) {
   const a = document.createElement('a');
@@ -34,18 +35,23 @@ export default function SaveGetFromDisk() {
 
   function saveToDisk() {
     if (graphInfo.label) {
+      const { newNodesData, newEdgesData } = curateGraph(
+        getNodesData(),
+        getEdgesData()
+      );
+
       const graphRf: GraphRF = {
         graph: graphInfo,
         nodes: getNodes().map((nod) => {
           return {
             ...nod,
-            data: getNodesData().get(nod.id) as EwoksRFNodeData,
+            data: newNodesData.get(nod.id) as EwoksRFNodeData,
           };
         }),
         links: getEdges().map((edge) => {
           return {
             ...edge,
-            data: getEdgesData().get(edge.id) as EwoksRFLinkData,
+            data: newEdgesData.get(edge.id) as EwoksRFLinkData,
           };
         }),
       };

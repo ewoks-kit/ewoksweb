@@ -15,7 +15,7 @@ Cypress.Commands.add('loadAppWithoutGraph', () => {
 
 Cypress.Commands.add('loadGraph', (name: string) => {
   cy.findByRole('textbox', {
-    name: 'Open workflow',
+    name: 'Quick open',
   }).type(name);
 
   cy.findByRole('option', { name }).click();

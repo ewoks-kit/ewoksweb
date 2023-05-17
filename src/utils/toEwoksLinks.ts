@@ -30,7 +30,7 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
         data_mapping: data.data_mapping && calcDataMapping(data.data_mapping),
         conditions: data.conditions?.map((con) => {
           return {
-            source_outout: calcConditionName(con),
+            source_output: calcConditionName(con),
             value: calcConditionValue(con),
           };
         }),

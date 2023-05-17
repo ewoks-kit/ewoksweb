@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -239,72 +238,72 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
           color="primary"
           onClick={handleClick}
           size="small"
-          data-cy="iconMenu"
+          aria-controls="editSidebar-dropdown-menu"
         >
           <MenuIcon />
         </Button>
       </Tooltip>
       <Menu
+        id="editSidebar-dropdown-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
       >
-        <Paper>
-          <MenuList>
-            {!selectedElement && (
-              <MenuItem onClick={() => onAction(FormAction.cloneGraph)}>
+        {/* <Paper> */}
+        <MenuList>
+          {!selectedElement && (
+            <MenuItem
+              onClick={() => onAction(FormAction.cloneGraph)}
+              role="sidebarMenuItem"
+            >
+              <ListItemIcon>
+                <FileCopyIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Clone Workflow</ListItemText>
+              <Typography variant="body2" color="primary" />
+            </MenuItem>
+          )}
+          {selectedElement && isNodeRF(selectedElement) && (
+            <>
+              <MenuItem onClick={cloneNode} role="sidebarMenuItem">
                 <ListItemIcon>
                   <FileCopyIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Clone Workflow</ListItemText>
+                <ListItemText>Clone Node</ListItemText>
                 <Typography variant="body2" color="primary" />
               </MenuItem>
-            )}
-            {selectedElement && isNodeRF(selectedElement) && (
-              <>
-                <MenuItem onClick={cloneNode}>
-                  <ListItemIcon>
-                    <FileCopyIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText>Clone Node</ListItemText>
-                  <Typography variant="body2" color="primary" />
-                </MenuItem>
 
-                <MenuItem
-                  onClick={() =>
-                    onAction(FormAction.cloneTask, selectedElement)
-                  }
-                >
-                  <ListItemIcon>
-                    <FileCopyIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText>Create Task from Node</ListItemText>
-                </MenuItem>
-              </>
-            )}
-            <MenuItem
-              onClick={() => {
-                deleteElement();
-              }}
-            >
-              <ListItemIcon>
-                <DeleteIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>
-                Delete{' '}
-                {!selectedElement
-                  ? 'Workflow'
-                  : isNodeRF(selectedElement)
-                  ? 'Node'
-                  : 'Link'}
-              </ListItemText>
-              <Typography variant="body2" color="primary" />
-            </MenuItem>
-          </MenuList>
-        </Paper>
+              <MenuItem
+                onClick={() => onAction(FormAction.cloneTask, selectedElement)}
+                role="sidebarMenuItem"
+              >
+                <ListItemIcon>
+                  <FileCopyIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Create Task from Node</ListItemText>
+              </MenuItem>
+            </>
+          )}
+          <MenuItem
+            onClick={() => {
+              deleteElement();
+            }}
+            role="sidebarMenuItem"
+          >
+            <ListItemIcon>
+              <DeleteIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>
+              Delete{' '}
+              {!selectedElement
+                ? 'Workflow'
+                : isNodeRF(selectedElement)
+                ? 'Node'
+                : 'Link'}
+            </ListItemText>
+            <Typography variant="body2" color="primary" />
+          </MenuItem>
+        </MenuList>
       </Menu>
       <ConfirmDialog
         // TODO: Here maybe it is better to see the label and id.

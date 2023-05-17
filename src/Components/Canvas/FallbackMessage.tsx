@@ -9,10 +9,9 @@ const useStyles = makeStyles(() =>
     },
     noWorkflowMessage: {
       position: 'fixed',
-      top: '30%',
+      top: '50%',
+      transform: 'translateY(calc(-50% - 1rem))',
       left: '30%',
-      width: '20%',
-      height: '20%',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',

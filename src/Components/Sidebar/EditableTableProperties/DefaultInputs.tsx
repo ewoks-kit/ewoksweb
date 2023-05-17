@@ -34,7 +34,7 @@ export default function DefaultInputs(element: Node) {
         ...nodeData.ewoks_props,
         default_inputs: table.map((dval) => {
           return {
-            id: dval.name,
+            id: dval.id,
             name: dval.name || '',
             value: dval.value,
           };

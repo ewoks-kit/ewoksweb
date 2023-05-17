@@ -2,6 +2,7 @@ import type { WorkflowDescription } from 'types';
 
 import useStore from 'store/useStore';
 import FetchingDropdown from './FetchingDropdown';
+import { useState } from 'react';
 
 interface Props {
   onChange: (input: WorkflowDescription) => void;
@@ -25,6 +26,12 @@ function sortByCategory(
 
 // DOC: A dropdown that can be an input as well
 function WorkflowDropdown(props: Props) {
+  const [value, setValue] = useState<WorkflowDescription>({
+    id: '',
+    label: '',
+    category: '',
+  });
+
   const workflows = useStore((state) => state.allWorkflows);
 
   const { onChange, category } = props;
@@ -38,16 +45,20 @@ function WorkflowDropdown(props: Props) {
 
   return (
     <FetchingDropdown
+      value={value}
       options={options}
-      getOptionSelected={(option, value) => option.id === value.id}
-      groupBy={(option) => option.category}
+      getOptionSelected={(option, valueSelect) => option.id === valueSelect.id}
+      groupBy={(option) => option.category || ''}
       onChange={(event, newValue) => {
         if (newValue) {
           onChange(newValue);
         }
+        setTimeout(() => {
+          setValue({ id: '', label: '', category: '' });
+        }, 200);
       }}
-      getOptionLabel={(option) => option.label}
-      placeholder="Open workflow"
+      getOptionLabel={(option) => option.label || ''}
+      placeholder="Quick open"
     />
   );
 }
