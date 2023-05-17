@@ -1,17 +1,14 @@
 import { withStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import { MenuList } from '@material-ui/core';
 import useStore from '../../store/useStore';
 import MenuUpload from '../General/MenuUpload';
-import FiberNew from '@material-ui/icons/FiberNew';
-import AssignmentReturnIcon from '@material-ui/icons/AssignmentReturn';
-import SettingsIcon from '@material-ui/icons/Settings';
 import curateGraph from './utils/curateGraph';
 import { getEdgesData, getNodesData, rfToEwoks } from '../../utils';
 import type { EwoksRFLinkData, EwoksRFNodeData, GraphRF } from '../../types';
 import { useReactFlow } from 'reactflow';
+import MoreMenuItem from './MoreMenuItem';
+import { GetApp, FiberNew, Settings } from '@material-ui/icons';
 
 const StyledMenuItem = withStyles((theme) => ({
   root: {
@@ -80,27 +77,20 @@ function MoreMenu(props: Props) {
 
   return (
     <MenuList>
-      <StyledMenuItem onClick={checkAndNewGraph} role="menuitem">
-        <ListItemIcon>
-          <FiberNew fontSize="small" />
-        </ListItemIcon>
-        <ListItemText primary="New workflow" />
-      </StyledMenuItem>
-      <StyledMenuItem onClick={saveToDisk} role="menuitem">
-        <ListItemIcon>
-          <AssignmentReturnIcon fontSize="small" />
-        </ListItemIcon>
-        <ListItemText primary="Export to disk" />
-      </StyledMenuItem>
+      <MoreMenuItem
+        icon={FiberNew}
+        label="New workflow"
+        onClick={checkAndNewGraph}
+      />
+      <MoreMenuItem icon={GetApp} label="Download" onClick={saveToDisk} />
       <StyledMenuItem onClick={loadFromDisk} role="menuitem">
         <MenuUpload />
       </StyledMenuItem>
-      <StyledMenuItem onClick={handleOpenSettings} role="menuitem">
-        <ListItemIcon>
-          <SettingsIcon fontSize="small" />
-        </ListItemIcon>
-        <ListItemText primary="Workflows-Tasks-Icons" />
-      </StyledMenuItem>
+      <MoreMenuItem
+        icon={Settings}
+        label="Workflows-Tasks-Icons"
+        onClick={handleOpenSettings}
+      />
     </MenuList>
   );
 }
