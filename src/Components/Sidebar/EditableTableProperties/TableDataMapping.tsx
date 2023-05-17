@@ -110,7 +110,7 @@ function TableDataMapping(props: TableDataMappingProps) {
     });
 
     setRows(newRows);
-    // props.valuesChanged(newRows);
+    props.valuesChanged(newRows);
   }
 
   return (

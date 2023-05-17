@@ -28,7 +28,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   useEffect(
     () => {
       if (debouncedNodeWidth) {
-        setElementNodeWidth(debouncedNodeWidth, nodeData);
+        setElementNodeWidth(debouncedNodeWidth as number, nodeData);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

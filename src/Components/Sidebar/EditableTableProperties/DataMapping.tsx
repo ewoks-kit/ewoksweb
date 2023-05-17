@@ -6,6 +6,8 @@ import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import type { Edge } from 'reactflow';
 import TableDataMapping from './TableDataMapping';
 import { nanoid } from 'nanoid';
+import { useEffect, useState } from 'react';
+import useDebounce from '../../../hooks/useDebounce';
 
 export default function DataMappingComponent(element: Edge) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
@@ -21,6 +23,20 @@ export default function DataMappingComponent(element: Edge) {
   const targetNodeData = useNodeDataStore((state) =>
     state.nodesData.get(element.target)
   );
+
+  const [dmapping, setDmapping] = useState<DataMapping[]>(
+    edgeData.data_mapping || []
+  );
+  const debouncedDmapping = useDebounce(dmapping, 600);
+
+  useEffect(() => {
+    console.log(debouncedDmapping);
+
+    setEdgeData(element.id, {
+      ...edgeData,
+      data_mapping: debouncedDmapping,
+    });
+  }, [debouncedDmapping]);
 
   function addDataMapping(edgeDataC: EwoksRFLinkData) {
     setEdgeData(element.id, {
@@ -49,11 +65,12 @@ export default function DataMappingComponent(element: Edge) {
       };
     });
     console.log(dmap);
+    setDmapping(dmap);
 
-    setEdgeData(element.id, {
-      ...edgeData,
-      data_mapping: dmap,
-    });
+    // setEdgeData(element.id, {
+    //   ...edgeData,
+    //   data_mapping: dmap,
+    // });
   };
 
   return (
