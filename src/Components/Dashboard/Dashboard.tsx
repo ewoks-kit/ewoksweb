@@ -148,7 +148,7 @@ export default function Dashboard() {
       setOpenAgreeDialog(true);
     } else {
       initGraph(initializedGraph, undefined, rfInstance);
-      setOpenSaveDialog(true);
+      // setOpenSaveDialog(true);
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
       toggleAddNodesSidebar(true);
@@ -182,18 +182,19 @@ export default function Dashboard() {
       saveToServer();
       return;
     }
-    if (charCode === 'z') {
-      event.preventDefault();
-      event.stopPropagation();
-      undo();
-      return;
-    }
-    if (charCode === 'y') {
-      event.preventDefault();
-      event.stopPropagation();
-      redo();
-      return;
-    }
+    // Comment until undo-redo is back
+    // if (charCode === 'z') {
+    //   event.preventDefault();
+    //   event.stopPropagation();
+    //   undo();
+    //   return;
+    // }
+    // if (charCode === 'y') {
+    //   event.preventDefault();
+    //   event.stopPropagation();
+    //   redo();
+    //   return;
+    // }
     if (event.shiftKey && charCode === 'n') {
       event.preventDefault();
       event.stopPropagation();

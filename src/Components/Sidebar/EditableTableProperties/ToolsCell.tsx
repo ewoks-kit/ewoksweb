@@ -25,7 +25,7 @@ function ToolsCell(props: Props) {
         <SaveIcon fontSize="small" />
       </IconButton>
       <IconButton
-        style={{ color: 'rgb(249, 200, 200)' }}
+        style={{ color: 'rgb(108, 128, 236)' }}
         className={classes.root}
         onClick={() => onDelete()}
         aria-label="delete"

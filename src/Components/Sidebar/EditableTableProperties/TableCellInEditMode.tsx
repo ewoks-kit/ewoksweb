@@ -30,6 +30,7 @@ const useStyles = makeStyles(() => ({
     '& svg': {
       width: '0.7em',
       height: '0.7em',
+      color: 'blue',
     },
     '& .MuiFormControlLabel-label': {
       fontSize: '14px',
@@ -109,6 +110,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
           control={<Radio />}
           label="true"
           className={classes.smallRadio}
+          color="primary"
         />
         <FormControlLabel
           value="false"

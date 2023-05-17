@@ -11,12 +11,12 @@ import { MenuList } from '@material-ui/core';
 import useStore from '../../store/useStore';
 import MenuUpload from '../General/MenuUpload';
 import FiberNew from '@material-ui/icons/FiberNew';
-import AssignmentReturnIcon from '@material-ui/icons/AssignmentReturn';
 import SettingsIcon from '@material-ui/icons/Settings';
 import curateGraph from './utils/curateGraph';
 import { getEdgesData, getNodesData, rfToEwoks } from '../../utils';
 import type { EwoksRFLinkData, EwoksRFNodeData, GraphRF } from '../../types';
 import { useReactFlow } from 'reactflow';
+import ArchiveIcon from '@material-ui/icons/Archive';
 
 const StyledMenu = withStyles({
   paper: {
@@ -147,9 +147,9 @@ export default function CustomizedMenus(props: Props) {
           </StyledMenuItem>
           <StyledMenuItem onClick={saveToDisk} role="menuitem">
             <ListItemIcon>
-              <AssignmentReturnIcon fontSize="small" />
+              <ArchiveIcon fontSize="small" />
             </ListItemIcon>
-            <ListItemText primary="Export to disk" />
+            <ListItemText primary="Download to disk" />
           </StyledMenuItem>
           <StyledMenuItem onClick={loadFromDisk} role="menuitem">
             <MenuUpload />

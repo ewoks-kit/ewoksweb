@@ -221,13 +221,14 @@ export default function EditLinkStyle(element: Edge) {
         </Button>
       </FormControl>
       <div>
-        <label htmlFor="animated">Animated</label>
         <Checkbox
           name="animated"
           checked={animated}
           onChange={animatedChanged}
           inputProps={{ 'aria-label': 'controlled' }}
+          color="primary"
         />
+        <label htmlFor="animated">Animated</label>
       </div>
       <div>
         <label htmlFor="head">Color</label>

@@ -50,7 +50,7 @@ export default function DefaultInputs(element: Node) {
         text={`Used to create an input when not provided
               by the output of other connected nodes(tasks).`}
       >
-        <div>
+        <div style={{ marginTop: '5px', fontSize: '16px' }}>
           <b>Default Inputs </b>
         </div>
       </SidebarTooltip>

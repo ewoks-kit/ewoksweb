@@ -19,7 +19,12 @@ function TypeSelectCell(props: Props) {
   }
 
   return (
-    <TableCell align="left" size="small" className={className}>
+    <TableCell
+      align="left"
+      size="small"
+      className={className}
+      style={{ borderBottom: 'none' }}
+    >
       <FormControl fullWidth>
         <Select
           value={value}

@@ -7,7 +7,7 @@ import useStore from '../../store/useStore';
 import type { GraphEwoks, GraphRF } from '../../types';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
-import InputIcon from '@material-ui/icons/Input';
+import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 
 async function showFile(e: ChangeEvent<HTMLInputElement>): Promise<FileReader> {
   e.preventDefault();
@@ -85,7 +85,7 @@ function MenuUpload(props: { children?: ReactNode } | undefined) {
   return (
     <>
       <ListItemIcon>
-        <InputIcon fontSize="small" />
+        <FolderOpenIcon fontSize="small" />
       </ListItemIcon>
       <label htmlFor="load-graph">
         <input
@@ -98,7 +98,7 @@ function MenuUpload(props: { children?: ReactNode } | undefined) {
           }}
         />
 
-        <ListItemText primary="Import from disk" style={{ margin: '5px' }} />
+        <ListItemText primary="Open from disk" style={{ margin: '5px' }} />
         {props?.children || ''}
       </label>
     </>
