@@ -9,6 +9,8 @@ import { nanoid } from 'nanoid';
 
 export default function DataMappingComponent(element: Edge) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
+  console.log(edgeData);
+
   assertEdgeDataDefined(edgeData, element.id);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
 
@@ -35,6 +37,8 @@ export default function DataMappingComponent(element: Edge) {
   }
 
   const dataMappingValuesChanged = (table: DataMapping[]) => {
+    console.log(table);
+
     const dmap: DataMapping[] = table.map((row) => {
       return {
         id: row.source_output ? row.source_output.toString() : row.id,
@@ -44,6 +48,7 @@ export default function DataMappingComponent(element: Edge) {
         target_input: row.value as string,
       };
     });
+    console.log(dmap);
 
     setEdgeData(element.id, {
       ...edgeData,

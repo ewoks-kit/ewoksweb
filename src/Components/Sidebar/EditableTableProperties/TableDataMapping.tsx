@@ -54,7 +54,7 @@ function TableDataMapping(props: TableDataMappingProps) {
       if (row.id === rowId) {
         return {
           ...row,
-          id: row.name?.replace(' ', '_') || '',
+          // id: row.name?.replace(' ', '_') || '',
         };
       }
       return row;
@@ -84,6 +84,8 @@ function TableDataMapping(props: TableDataMappingProps) {
     e: { target: { name: string; value: string | number } },
     row: EditableTableRow
   ) {
+    console.log(e.target.name, e.target.value, row);
+
     const { id } = row;
 
     let { value } = e.target;
@@ -108,7 +110,7 @@ function TableDataMapping(props: TableDataMappingProps) {
     });
 
     setRows(newRows);
-    props.valuesChanged(newRows);
+    // props.valuesChanged(newRows);
   }
 
   return (
