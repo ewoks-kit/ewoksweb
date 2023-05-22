@@ -82,13 +82,13 @@ function MoreMenu(props: Props) {
         label="New workflow"
         onClick={checkAndNewGraph}
       />
-      <MoreMenuItem icon={GetApp} label="Download" onClick={saveToDisk} />
       <StyledMenuItem onClick={loadFromDisk} role="menuitem">
         <MenuUpload />
       </StyledMenuItem>
+      <MoreMenuItem icon={GetApp} label="Download" onClick={saveToDisk} />
       <MoreMenuItem
         icon={Settings}
-        label="Workflows-Tasks-Icons"
+        label="Settings"
         onClick={handleOpenSettings}
       />
     </MenuList>

@@ -1,6 +1,6 @@
 import { ListItemIcon, ListItemText } from '@material-ui/core';
 import type { ChangeEvent } from 'react';
-import { Input } from '@material-ui/icons';
+import { FolderOpen } from '@material-ui/icons';
 
 import { useLoadGraph } from '../TopNavBar/hooks';
 
@@ -10,7 +10,7 @@ function MenuUpload() {
   return (
     <>
       <ListItemIcon>
-        <Input fontSize="small" />
+        <FolderOpen fontSize="small" />
       </ListItemIcon>
       <input
         style={{ display: 'none' }}
@@ -21,7 +21,7 @@ function MenuUpload() {
           fileNameChanged(e);
         }}
       />
-      <ListItemText id="load-graph-label" primary="Import from disk" />
+      <ListItemText id="load-graph-label" primary="Open from disk" />
     </>
   );
 }
