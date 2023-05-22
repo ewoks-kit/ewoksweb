@@ -76,7 +76,6 @@ export default function Dashboard() {
 
   const [action, setAction] = useState<FormAction>(FormAction.newGraph);
 
-  const setUndoIndex = useStore((state) => state.setUndoIndex);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const undoIndex = useStore((state) => state.undoIndex);
   const initializedGraph = useStore((state) => state.initializedGraph);
@@ -205,14 +204,6 @@ export default function Dashboard() {
   const disAgreeSaveWithout = () => {
     setOpenAgreeDialog(false);
   };
-
-  function undo() {
-    setUndoIndex(undoIndex - 1);
-  }
-
-  function redo() {
-    setUndoIndex(undoIndex + 1);
-  }
 
   async function saveToServer() {
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues

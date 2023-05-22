@@ -1,4 +1,4 @@
-import type { EditableTableRow, EwoksRFNodeData } from 'types';
+import type { EditableTableRow, EwoksRFNodeData, Inputs } from 'types';
 import EditableTable from './EditableTable';
 import SidebarTooltip from '../SidebarTooltip';
 import useNodeDataStore from '../../../store/useNodeDataStore';
@@ -13,13 +13,16 @@ export default function DefaultInputs(element: Node) {
 
   const defaultInputs = nodeData.ewoks_props.default_inputs || [];
 
-  function addDefaultInputs(nodeDataProps: EwoksRFNodeData) {
+  function addDefaultInputs(
+    nodeDataProps: EwoksRFNodeData,
+    rows: EditableTableRow[] | undefined
+  ) {
     const newNodeData = {
       ...nodeDataProps,
       ewoks_props: {
         ...nodeDataProps.ewoks_props,
         default_inputs: [
-          ...(nodeDataProps.ewoks_props.default_inputs || []),
+          ...(rows as Inputs[]),
           { id: nanoid(), name: '', value: '' },
         ],
       },
@@ -59,7 +62,7 @@ export default function DefaultInputs(element: Node) {
         headers={['Name', 'Value']}
         defaultValues={defaultInputs}
         valuesChanged={defaultInputsChanged}
-        onRowAdd={() => addDefaultInputs(nodeData)}
+        onRowAdd={(rows) => addDefaultInputs(nodeData, rows)}
         typeOfValues={[
           {
             type: 'select',

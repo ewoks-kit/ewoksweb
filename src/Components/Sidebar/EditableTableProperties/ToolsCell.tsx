@@ -13,9 +13,15 @@ function ToolsCell(props: Props) {
   const classes = useStyles();
 
   return (
-    <TableCell className={classes.selectTableCell}>
+    <TableCell
+      className={classes.selectTableCell}
+      style={{ borderBottom: 'none', display: 'flex', width: '42px' }}
+    >
       <IconButton
-        style={{ color: disableSave ? '#c2c8ea' : 'rgb(108, 128, 236)' }}
+        style={{
+          color: disableSave ? '#c2c8ea' : 'rgb(108, 128, 236)',
+          width: '50%',
+        }}
         onClick={() => onSave()}
         className={classes.root}
         aria-label="edit"
@@ -25,7 +31,7 @@ function ToolsCell(props: Props) {
         <SaveIcon fontSize="small" />
       </IconButton>
       <IconButton
-        style={{ color: 'rgb(108, 128, 236)' }}
+        style={{ color: 'rgb(108, 128, 236)', width: '50%' }}
         className={classes.root}
         onClick={() => onDelete()}
         aria-label="delete"

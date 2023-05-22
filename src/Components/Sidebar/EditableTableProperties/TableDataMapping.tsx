@@ -34,10 +34,9 @@ interface TableDataMappingProps {
   values: DataMapping[];
   typeOfValues: { type: string; values?: string[] }[];
   valuesChanged: (rows: EditableTableRow[]) => void;
-  onRowAdd?: () => void;
+  onRowAdd?: (rows?: EditableTableRow[]) => void;
 }
 
-// The table where lines can be added where type is selected and appropriate values are given to name and value.
 function TableDataMapping(props: TableDataMappingProps) {
   const [rows, setRows] = React.useState<EditableTableRow[]>([]);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
@@ -136,7 +135,14 @@ function TableDataMapping(props: TableDataMappingProps) {
                 headers={headers}
               />
               <ToolsCell
-                disableSave={row.name === '' || row.value === ''}
+                disableSave={
+                  row.name === '' ||
+                  row.value === '' ||
+                  (values[index].source_output === rows[index].name &&
+                    values[index].target_input === rows[index].value) ||
+                  (values[index].name === rows[index].name &&
+                    values[index].value === rows[index].value)
+                }
                 onSave={() => onSaveRow(row.id, index)}
                 onDelete={() => onDelete(row.id || '')}
               />
@@ -148,7 +154,7 @@ function TableDataMapping(props: TableDataMappingProps) {
             <IconButton
               style={{ padding: '1px' }}
               aria-label="dataMapping"
-              onClick={() => props.onRowAdd?.()}
+              onClick={() => props.onRowAdd?.(rows)}
               data-cy="addDataMappingButton"
             >
               <AddCircleOutlineIcon />
