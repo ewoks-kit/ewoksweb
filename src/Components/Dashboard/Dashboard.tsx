@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import EditSidebar from 'Components/Sidebar/EditSidebar';
 import Canvas from '../Canvas/Canvas';
-import GetFromServer from '../General/GetFromServer';
 import SimpleSnackbar from '../General/Snackbar';
 import SettingsInfoDrawer from '../TopNavBar/SettingsInfoDrawer';
-import SubgraphsStack from '../TopNavBar/SubgraphsStack';
-import ProgressBar from '../General/ProgressBar';
 import { useDashboardStyles } from './useDashboardStyles';
 import SaveToServer from '../TopNavBar/SaveToServer';
 import useStore from 'store/useStore';
@@ -30,6 +25,7 @@ import OverflowDrawer from '../AddNodesDrawer/OverflowDrawer';
 import MoreMenuButton from '../TopNavBar/menu/MoreMenuButton';
 import addNodesSidebarState from '../../store/addNodesSidebarState';
 import { useGetTasks } from '../TopNavBar/hooks';
+import TopAppBar from './TopAppBar';
 
 const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
 
@@ -286,32 +282,26 @@ export default function Dashboard() {
       />
       <CssBaseline />
       <SimpleSnackbar />
-      <AppBar position="static" className={classes.appBar}>
-        <Toolbar className={classes.toolbar}>
-          <SubgraphsStack />
-
-          <GetFromServer />
-          <SaveToServer
-            saveToServer={async () => void saveToServer()}
-            action={action}
-            open={openSaveDialog}
-            setOpenSaveDialog={setOpenSaveDialog}
+      <TopAppBar classes={classes}>
+        <SaveToServer
+          saveToServer={async () => void saveToServer()}
+          action={action}
+          open={openSaveDialog}
+          setOpenSaveDialog={setOpenSaveDialog}
+        />
+        <div>
+          <MoreMenuButton
+            checkAndNewGraph={() => checkAndNewGraph(false)}
+            handleOpenSettings={handleOpenSettings}
           />
-          <div>
-            <MoreMenuButton
-              checkAndNewGraph={() => checkAndNewGraph(false)}
-              handleOpenSettings={handleOpenSettings}
-            />
-          </div>
-          <SettingsInfoDrawer
-            handleOpenDrawers={handleOpenDrawers}
-            openDrawers={openDrawers}
-            openInfo={openInfo}
-            openSettings={openSettings}
-          />
-        </Toolbar>
-        <ProgressBar />
-      </AppBar>
+        </div>
+        <SettingsInfoDrawer
+          handleOpenDrawers={handleOpenDrawers}
+          openDrawers={openDrawers}
+          openInfo={openInfo}
+          openSettings={openSettings}
+        />
+      </TopAppBar>
       <div className={classes.mainArea}>
         <OverflowDrawer />
         <ReflexContainer
