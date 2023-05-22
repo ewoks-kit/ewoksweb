@@ -1,13 +1,26 @@
-import { Button, Grid, TextField } from '@material-ui/core';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+} from '@material-ui/core';
 import useStore from '../../store/useStore';
-import EventNoteIcon from '@material-ui/icons/EventNote';
 import { useState } from 'react';
 import { discoverTasks } from '../../api/tasks';
 import commonStrings from '../../commonStrings.json';
 import type { SnackbarParams } from '../../types';
 import { textForError } from '../../utils';
 
-export default function DiscoverTasksForm() {
+interface Props {
+  open: boolean;
+  onClose?: () => void;
+}
+
+export default function DiscoverTasksDialog(props: Props) {
+  const { open, onClose } = props;
   const setOpenSnackbar = useStore<(params: SnackbarParams) => void>(
     (state) => state.setOpenSnackbar
   );
@@ -15,6 +28,11 @@ export default function DiscoverTasksForm() {
 
   async function discover() {
     if (!textValue) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Please provide a module name',
+        severity: 'warning',
+      });
       return;
     }
     try {
@@ -45,28 +63,40 @@ export default function DiscoverTasksForm() {
   }
 
   return (
-    <Grid item xs={12} sm={4} md={3} lg={2}>
-      Import tasks from a module
-      <TextField
-        margin="dense"
-        label="Module name"
-        fullWidth
-        variant="standard"
-        value={textValue}
-        onChange={(event) => setTextValue(event.target.value)}
-      />
-      <Button
-        startIcon={<EventNoteIcon />}
-        style={{ margin: '8px' }}
-        variant="outlined"
-        color="primary"
-        onClick={() => {
-          discover();
-        }}
-        size="small"
-      >
-        Import
-      </Button>
-    </Grid>
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>Import tasks from a module</DialogTitle>
+
+      <DialogContent>
+        <DialogContentText>
+          Provide the module name from which tasks will be imported.
+        </DialogContentText>
+        <TextField
+          margin="dense"
+          label="Module name"
+          fullWidth
+          variant="standard"
+          value={textValue}
+          onChange={(event) => setTextValue(event.target.value)}
+          onKeyPress={(event) => {
+            if (event.key === 'Enter') {
+              discover();
+            }
+          }}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button
+          color="primary"
+          onClick={() => {
+            discover();
+          }}
+        >
+          Import
+        </Button>
+        <Button color="primary" onClick={onClose}>
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
