@@ -1,6 +1,6 @@
 import { Publish } from '@material-ui/icons';
 import { useState } from 'react';
-import DiscoverTasksDialog from '../TopDrawer/DiscoverTasksForm';
+import DiscoverTasksDialog from './DiscoverMenuDialog';
 import MoreMenuItem from './MoreMenuItem';
 
 function DiscoverMenuItem() {
