@@ -34,7 +34,7 @@ import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
 import OverflowDrawer from '../AddNodesDrawer/OverflowDrawer';
 import { getTaskDescription } from '../../api/tasks';
-import MoreMenu from '../TopNavBar/MoreMenu';
+import MoreMenuButton from '../TopNavBar/MoreMenuButton';
 import addNodesSidebarState from '../../store/addNodesSidebarState';
 
 const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
@@ -326,7 +326,7 @@ export default function Dashboard() {
             setOpenSaveDialog={setOpenSaveDialog}
           />
           <div>
-            <MoreMenu
+            <MoreMenuButton
               checkAndNewGraph={() => checkAndNewGraph(false)}
               handleOpenSettings={handleOpenSettings}
             />
