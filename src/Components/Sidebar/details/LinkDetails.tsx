@@ -60,8 +60,10 @@ export default function LinkDetails(selectedElement: Edge) {
         being the identity mapping for all input names.
         Cannot be used in combination with data_mapping.`}
       >
-        <div>
-          <Typography component="div" style={{ fontSize: '15px' }}>
+        <div
+          style={{ marginTop: '5px', display: 'grid', placeItems: 'center' }}
+        >
+          <Typography component="div" style={{ fontSize: '16px' }}>
             <Grid component="label" container alignItems="center" spacing={1}>
               <Grid item>
                 {!showDataMapping ? <b>Map all data</b> : 'Map all data'}
@@ -71,6 +73,7 @@ export default function LinkDetails(selectedElement: Edge) {
                   checked={showDataMapping}
                   onChange={handleChangeShowDataMapping}
                   name="dataMappingSwitch"
+                  color="primary"
                 />
               </Grid>
               <Grid item>
@@ -89,8 +92,10 @@ export default function LinkDetails(selectedElement: Edge) {
         text={`A special condition where the task raises an exception.
         Cannot be used in combination with conditions.`}
       >
-        <div>
-          <Typography component="div" style={{ fontSize: '15px' }}>
+        <div
+          style={{ marginTop: '5px', display: 'grid', placeItems: 'center' }}
+        >
+          <Typography component="div" style={{ fontSize: '16px' }}>
             <Grid component="label" container alignItems="center" spacing={1}>
               <Grid item>{!showConditions ? <b>on_error</b> : 'on_error'}</Grid>
               <Grid item>
@@ -98,6 +103,7 @@ export default function LinkDetails(selectedElement: Edge) {
                   checked={showConditions}
                   onChange={handleChangeShowConditions}
                   name="conditionsSwitch"
+                  color="primary"
                 />
               </Grid>
               <Grid item>
@@ -113,9 +119,13 @@ export default function LinkDetails(selectedElement: Edge) {
         </div>
       )}
       <div>
-        <div>
+        <div style={{ marginTop: '5px', fontSize: '16px' }}>
+          <Checkbox
+            checked={edgeData.required}
+            onChange={requiredChanged}
+            color="primary"
+          />
           <b>Required</b>
-          <Checkbox checked={edgeData.required} onChange={requiredChanged} />
         </div>
         <div className={classes.detailsLabels}>
           <b>Source:</b> {selectedElement.source}

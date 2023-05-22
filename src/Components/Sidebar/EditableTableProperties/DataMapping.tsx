@@ -1,4 +1,4 @@
-import type { DataMapping, EwoksRFLinkData } from 'types';
+import type { DataMapping, EditableTableRow, EwoksRFLinkData } from 'types';
 import { isClass } from './utils';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
@@ -20,11 +20,14 @@ export default function DataMappingComponent(element: Edge) {
     state.nodesData.get(element.target)
   );
 
-  function addDataMapping(edgeDataC: EwoksRFLinkData) {
+  function addDataMapping(
+    edgeDataC: EwoksRFLinkData,
+    rows?: EditableTableRow[]
+  ) {
     setEdgeData(element.id, {
       ...edgeDataC,
       data_mapping: [
-        ...(edgeDataC.data_mapping || []),
+        ...(rows as DataMapping[]),
         {
           id: nanoid(),
           name: '',
@@ -54,7 +57,7 @@ export default function DataMappingComponent(element: Edge) {
   return (
     <div>
       <TableDataMapping
-        onRowAdd={() => addDataMapping(edgeData)}
+        onRowAdd={(rows) => addDataMapping(edgeData, rows)}
         headers={['Source', 'Target']}
         values={edgeData.data_mapping || []}
         valuesChanged={dataMappingValuesChanged}

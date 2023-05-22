@@ -52,7 +52,7 @@ interface EditableTableProps {
   defaultValues: Conditions[] | Inputs[];
   typeOfValues: { type: string; values?: string[] }[];
   valuesChanged: (rows: EditableTableRow[]) => void;
-  onRowAdd?: () => void;
+  onRowAdd?: (rows?: EditableTableRow[]) => void;
 }
 
 interface DialogContent {
@@ -329,7 +329,11 @@ function EditableTable(props: EditableTableProps) {
                 />
 
                 <ToolsCell
-                  disableSave={rows[index].name === ''}
+                  disableSave={
+                    rows[index].name === '' ||
+                    (defaultValues[index].name === rows[index].name &&
+                      defaultValues[index].value === rows[index].value)
+                  }
                   onSave={() => onSaveRow(row.id, index)}
                   onDelete={() => onDelete(row.id || '')}
                 />
@@ -342,7 +346,7 @@ function EditableTable(props: EditableTableProps) {
               <IconButton
                 style={{ padding: '1px' }}
                 aria-label="dataMapping"
-                onClick={() => props.onRowAdd?.()}
+                onClick={() => props.onRowAdd?.(rows)}
                 data-cy="onRowAddButton"
               >
                 <AddCircleOutlineIcon />

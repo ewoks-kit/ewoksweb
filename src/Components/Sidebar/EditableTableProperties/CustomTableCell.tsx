@@ -26,7 +26,11 @@ function CustomTableCell(props: CustomTableCellProps) {
   const classes = useStyles();
 
   return (
-    <TableCell align="left" className={classes.tableCell}>
+    <TableCell
+      align="left"
+      className={classes.tableCell}
+      style={{ borderBottom: 'none' }}
+    >
       {type && ['list', 'dict'].includes(type) ? (
         <span style={{ paddingLeft: '8px' }}>
           {row[name] && typeof row[name] === 'object'

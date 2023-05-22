@@ -26,7 +26,7 @@ function getForeignObjectProps(
   }
 
   const width = Math.max(...label.split(',').map((mp) => mp.length)) * 8;
-  const height = label.split(',').length * 30;
+  const height = label.split(',').length * 40;
 
   return {
     x: labelX - width / 2,

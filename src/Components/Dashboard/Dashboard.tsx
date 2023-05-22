@@ -76,7 +76,6 @@ export default function Dashboard() {
 
   const [action, setAction] = useState<FormAction>(FormAction.newGraph);
 
-  const setUndoIndex = useStore((state) => state.setUndoIndex);
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const undoIndex = useStore((state) => state.undoIndex);
   const initializedGraph = useStore((state) => state.initializedGraph);
@@ -148,7 +147,7 @@ export default function Dashboard() {
       setOpenAgreeDialog(true);
     } else {
       initGraph(initializedGraph, undefined, rfInstance);
-      setOpenSaveDialog(true);
+      // setOpenSaveDialog(true);
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
       toggleAddNodesSidebar(true);
@@ -182,18 +181,19 @@ export default function Dashboard() {
       saveToServer();
       return;
     }
-    if (charCode === 'z') {
-      event.preventDefault();
-      event.stopPropagation();
-      undo();
-      return;
-    }
-    if (charCode === 'y') {
-      event.preventDefault();
-      event.stopPropagation();
-      redo();
-      return;
-    }
+    // Comment until undo-redo is back
+    // if (charCode === 'z') {
+    //   event.preventDefault();
+    //   event.stopPropagation();
+    //   undo();
+    //   return;
+    // }
+    // if (charCode === 'y') {
+    //   event.preventDefault();
+    //   event.stopPropagation();
+    //   redo();
+    //   return;
+    // }
     if (event.shiftKey && charCode === 'n') {
       event.preventDefault();
       event.stopPropagation();
@@ -204,14 +204,6 @@ export default function Dashboard() {
   const disAgreeSaveWithout = () => {
     setOpenAgreeDialog(false);
   };
-
-  function undo() {
-    setUndoIndex(undoIndex - 1);
-  }
-
-  function redo() {
-    setUndoIndex(undoIndex + 1);
-  }
 
   async function saveToServer() {
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
