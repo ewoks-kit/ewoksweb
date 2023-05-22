@@ -1,32 +1,27 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import { ListItemIcon, ListItemText } from '@material-ui/core';
-import type { ChangeEvent, ReactNode } from 'react';
+import type { ChangeEvent } from 'react';
+import { Input } from '@material-ui/icons';
 
-import InputIcon from '@material-ui/icons/Input';
 import { useLoadGraph } from '../TopNavBar/hooks';
 
-function MenuUpload(props: { children?: ReactNode } | undefined) {
+function MenuUpload() {
   const fileNameChanged = useLoadGraph();
 
   return (
     <>
       <ListItemIcon>
-        <InputIcon fontSize="small" />
+        <Input fontSize="small" />
       </ListItemIcon>
-      <label htmlFor="load-graph">
-        <input
-          style={{ display: 'none' }}
-          id="load-graph"
-          name="load-graph"
-          type="file"
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            fileNameChanged(e);
-          }}
-        />
-
-        <ListItemText primary="Import from disk" style={{ margin: '5px' }} />
-        {props?.children || ''}
-      </label>
+      <input
+        style={{ display: 'none' }}
+        aria-labelledby="load-graph-label"
+        name="load-graph"
+        type="file"
+        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          fileNameChanged(e);
+        }}
+      />
+      <ListItemText id="load-graph-label" primary="Import from disk" />
     </>
   );
 }
