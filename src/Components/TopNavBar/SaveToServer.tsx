@@ -39,7 +39,7 @@ export default function SaveToServer({
           })();
         }}
       >
-        <SaveIcon />
+        <SaveIcon data-cy="saveToServer" />
       </IntegratedSpinner>
     </>
   );
