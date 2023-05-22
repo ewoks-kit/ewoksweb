@@ -1,17 +1,16 @@
-import { ListItemIcon, ListItemText } from '@material-ui/core';
+import { ListItemText } from '@material-ui/core';
 import type { ChangeEvent } from 'react';
 import { FolderOpen } from '@material-ui/icons';
 
 import { useLoadGraph } from '../TopNavBar/hooks';
+import MoreMenuIcon from '../TopNavBar/MoreMenuIcon';
 
 function MenuUpload() {
   const fileNameChanged = useLoadGraph();
 
   return (
     <>
-      <ListItemIcon>
-        <FolderOpen fontSize="small" />
-      </ListItemIcon>
+      <MoreMenuIcon icon={FolderOpen} />
       <input
         style={{ display: 'none' }}
         aria-labelledby="load-graph-label"

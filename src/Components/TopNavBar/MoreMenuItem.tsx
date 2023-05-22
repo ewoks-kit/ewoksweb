@@ -1,8 +1,7 @@
 import { withStyles } from '@material-ui/core';
-import { ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
+import { ListItemText, MenuItem } from '@material-ui/core';
 import type { SvgIcon } from '@material-ui/core';
-
-type SvgIconComponent = typeof SvgIcon;
+import MoreMenuIcon from './MoreMenuIcon';
 
 const StyledMenuItem = withStyles((theme) => ({
   root: {
@@ -16,19 +15,17 @@ const StyledMenuItem = withStyles((theme) => ({
 }))(MenuItem);
 
 interface Props {
-  icon: SvgIconComponent;
+  icon: typeof SvgIcon;
   label: string;
   onClick: () => void;
 }
 
 function MoreMenuItem(props: Props) {
-  const { icon: Icon, label, onClick } = props;
+  const { icon, label, onClick } = props;
 
   return (
     <StyledMenuItem onClick={onClick} role="menuitem">
-      <ListItemIcon>
-        <Icon fontSize="small" />
-      </ListItemIcon>
+      <MoreMenuIcon icon={icon} />
       <ListItemText primary={label} />
     </StyledMenuItem>
   );
