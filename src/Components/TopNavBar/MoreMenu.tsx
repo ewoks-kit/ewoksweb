@@ -9,6 +9,7 @@ import type { EwoksRFLinkData, EwoksRFNodeData, GraphRF } from '../../types';
 import { useReactFlow } from 'reactflow';
 import MoreMenuItem from './MoreMenuItem';
 import { GetApp, FiberNew, Settings } from '@material-ui/icons';
+import DiscoverMenuItem from './DiscoverMenuItem';
 
 const StyledMenuItem = withStyles((theme) => ({
   root: {
@@ -86,6 +87,7 @@ function MoreMenu(props: Props) {
         <MenuUpload />
       </StyledMenuItem>
       <MoreMenuItem icon={GetApp} label="Download" onClick={saveToDisk} />
+      <DiscoverMenuItem />
       <MoreMenuItem
         icon={Settings}
         label="Settings"

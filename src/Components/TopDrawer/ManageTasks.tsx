@@ -1,7 +1,6 @@
 import { Button, Grid } from '@material-ui/core';
 import AddNodes from '../AddNodesDrawer/AddNodes';
 import { useState } from 'react';
-import DiscoverTasksForm from './DiscoverTasksForm';
 import { Add } from '@material-ui/icons';
 import FormDialog from '../General/FormDialog';
 import { initializedTask } from '../../utils/InitializedEntities';
@@ -31,7 +30,6 @@ export default function ManageTasks() {
           Create a new task
         </Button>
       </Grid>
-      <DiscoverTasksForm />
       <FormDialog
         elementToEdit={initializedTask}
         action={FormAction.newTask}
