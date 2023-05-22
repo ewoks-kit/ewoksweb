@@ -19,6 +19,7 @@ Cypress.Commands.add('loadGraph', (name: string) => {
   }).type(name);
 
   cy.findByRole('option', { name }).click();
+  cy.waitForStableDOM();
 });
 
 Cypress.Commands.add('loadApp', () => {
