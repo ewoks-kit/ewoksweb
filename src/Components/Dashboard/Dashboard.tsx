@@ -3,7 +3,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import EditSidebar from 'Components/Sidebar/EditSidebar';
 import Canvas from '../Canvas/Canvas';
 import SimpleSnackbar from '../General/Snackbar';
-import SettingsInfoDrawer from '../TopNavBar/SettingsInfoDrawer';
 import { useDashboardStyles } from './useDashboardStyles';
 import SaveToServer from '../TopNavBar/SaveToServer';
 import useStore from 'store/useStore';
@@ -22,7 +21,6 @@ import curateGraph from '../TopNavBar/utils/curateGraph';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
 import OverflowDrawer from '../AddNodesDrawer/OverflowDrawer';
-import MoreMenuButton from '../TopNavBar/menu/MoreMenuButton';
 import addNodesSidebarState from '../../store/addNodesSidebarState';
 import { useGetTasks } from '../TopNavBar/hooks';
 import TopAppBar from './TopAppBar';
@@ -41,15 +39,9 @@ export default function Dashboard() {
 
   const rfInstance = useReactFlow();
 
-  const [openDrawers, setOpenDrawers] = useState(true);
-  const [openSettings, setOpenSettings] = useState(false);
-  const [openInfo, setOpenInfo] = useState(false);
   const graphInfo = useStore((state) => state.graphInfo);
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
-  const openSettingsDrawer = useStore((state) => state.openSettingsDrawer);
-  const setOpenSettingsDrawer = useStore(
-    (state) => state.setOpenSettingsDrawer
-  );
+
   const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
   const setCanvasGraphChanged = useStore(
     (state) => state.setCanvasGraphChanged
@@ -85,30 +77,7 @@ export default function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (!openDrawers) {
-      setOpenSettings(false);
-      setOpenSettingsDrawer('Workflows');
-    }
-  }, [openDrawers, openSettings, setOpenSettingsDrawer]);
-
-  useEffect(() => {
-    if (openSettingsDrawer === 'Executions') {
-      setOpenInfo(false);
-      setOpenDrawers(true);
-      setOpenSettings(true);
-      return;
-    }
-
-    if (openSettingsDrawer === 'close') {
-      setOpenInfo(false);
-      setOpenDrawers(false);
-      setOpenSettings(false);
-    }
-  }, [openSettingsDrawer]);
-
   const getTasks = useGetTasks();
-
   useEffect(() => {
     if (tasks.length === 0) {
       getTasks();
@@ -124,16 +93,6 @@ export default function Dashboard() {
       setCanvasGraphChanged(false);
       toggleAddNodesSidebar(true);
     }
-  }
-
-  function handleOpenSettings() {
-    setOpenInfo(false);
-    setOpenSettings(true);
-    setOpenDrawers(true);
-  }
-
-  function handleOpenDrawers() {
-    setOpenDrawers(!openDrawers);
   }
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLImageElement>) {
@@ -282,24 +241,12 @@ export default function Dashboard() {
       />
       <CssBaseline />
       <SimpleSnackbar />
-      <TopAppBar classes={classes}>
+      <TopAppBar classes={classes} checkAndNewGraph={checkAndNewGraph}>
         <SaveToServer
           saveToServer={async () => void saveToServer()}
           action={action}
           open={openSaveDialog}
           setOpenSaveDialog={setOpenSaveDialog}
-        />
-        <div>
-          <MoreMenuButton
-            checkAndNewGraph={() => checkAndNewGraph(false)}
-            handleOpenSettings={handleOpenSettings}
-          />
-        </div>
-        <SettingsInfoDrawer
-          handleOpenDrawers={handleOpenDrawers}
-          openDrawers={openDrawers}
-          openInfo={openInfo}
-          openSettings={openSettings}
         />
       </TopAppBar>
       <div className={classes.mainArea}>
