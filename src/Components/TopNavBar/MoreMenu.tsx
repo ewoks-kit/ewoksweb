@@ -1,8 +1,6 @@
-import { withStyles } from '@material-ui/core/styles';
-import MenuItem from '@material-ui/core/MenuItem';
 import { MenuList } from '@material-ui/core';
 import useStore from '../../store/useStore';
-import MenuUpload from '../General/MenuUpload';
+import UploadMenuItem from './UploadMenuItem';
 import curateGraph from './utils/curateGraph';
 import { getEdgesData, getNodesData, rfToEwoks } from '../../utils';
 import type { EwoksRFLinkData, EwoksRFNodeData, GraphRF } from '../../types';
@@ -10,17 +8,6 @@ import { useReactFlow } from 'reactflow';
 import MoreMenuItem from './MoreMenuItem';
 import { GetApp, FiberNew, Settings } from '@material-ui/icons';
 import DiscoverMenuItem from './DiscoverMenuItem';
-
-const StyledMenuItem = withStyles((theme) => ({
-  root: {
-    '&:focus': {
-      backgroundColor: theme.palette.primary.main,
-      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-        color: theme.palette.common.white,
-      },
-    },
-  },
-}))(MenuItem);
 
 function download(content: BlobPart, fileName: string, contentType: string) {
   const a = document.createElement('a');
@@ -39,12 +26,7 @@ function MoreMenu(props: Props) {
   const { checkAndNewGraph, handleOpenSettings } = props;
   const { getNodes, getEdges } = useReactFlow();
 
-  const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
   const graphInfo = useStore((state) => state.graphInfo);
-
-  function loadFromDisk() {
-    setGraphOrSubgraph(true);
-  }
 
   function saveToDisk() {
     if (graphInfo.label) {
@@ -83,9 +65,7 @@ function MoreMenu(props: Props) {
         label="New workflow"
         onClick={checkAndNewGraph}
       />
-      <StyledMenuItem onClick={loadFromDisk} role="menuitem">
-        <MenuUpload />
-      </StyledMenuItem>
+      <UploadMenuItem />
       <MoreMenuItem icon={GetApp} label="Download" onClick={saveToDisk} />
       <DiscoverMenuItem />
       <MoreMenuItem
