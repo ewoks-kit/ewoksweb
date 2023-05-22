@@ -24,9 +24,7 @@ describe('Icons:', () => {
   it('should upload-fail-delete-upload down.svg and appear-disappear on the icon list', () => {
     cy.get('[aria-controls="navbar-dropdown-menu"]').click();
 
-    cy.get('#navbar-dropdown-menu').within(() => {
-      cy.contains('[role="menuitem"]', 'Settings').click();
-    });
+    cy.findByRole('menuitem', { name: 'Settings' }).click();
 
     cy.contains('Categories');
 

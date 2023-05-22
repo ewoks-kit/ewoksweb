@@ -38,6 +38,7 @@ describe('create workflow and save', () => {
     cy.get('.react-flow__node').should('have.length', 0);
 
     cy.get('body').click();
+    cy.waitForStableDOM();
 
     cy.loadGraph(id);
 
