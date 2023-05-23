@@ -6,13 +6,11 @@ import { ReactFlowProvider } from 'reactflow';
 
 function App() {
   return (
-    <div>
-      <CacheProvider>
-        <ReactFlowProvider>
-          <Dashboard />
-        </ReactFlowProvider>
-      </CacheProvider>
-    </div>
+    <CacheProvider>
+      <ReactFlowProvider>
+        <Dashboard />
+      </ReactFlowProvider>
+    </CacheProvider>
   );
 }
 

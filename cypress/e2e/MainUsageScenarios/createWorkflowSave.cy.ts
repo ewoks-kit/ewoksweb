@@ -32,13 +32,8 @@ describe('create workflow and save', () => {
 
     cy.findByRole('button', { name: 'Save Workflow' }).click();
 
-    cy.get('[aria-controls="navbar-dropdown-menu"]').click({ force: true });
-
     cy.get('.react-flow__edge').should('have.length', 0);
     cy.get('.react-flow__node').should('have.length', 0);
-
-    cy.get('body').click();
-    cy.waitForStableDOM();
 
     cy.loadGraph(id);
 
