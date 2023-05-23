@@ -73,7 +73,7 @@ export default function SaveGetFromDisk() {
               color="primary"
               size="small"
               component="span"
-              aria-label="add"
+              aria-label="saveToDisk"
             >
               <SaveIcon />
             </Fab>

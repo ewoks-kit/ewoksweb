@@ -76,7 +76,7 @@ function OverflowDrawer() {
       <Fab
         size="small"
         color="primary"
-        aria-label="add"
+        aria-label="addNodes"
         onClick={toggleDrawer}
         style={{ marginLeft: isAddNodesSidebarOpen ? '230px' : '10px' }}
         className={classes.leftDrawerButton}

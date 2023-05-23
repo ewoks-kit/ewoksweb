@@ -24,7 +24,8 @@ describe('select visualize links', () => {
       .contains('if you do then...')
       .parent()
       .click()
-      .parent();
+      .parent()
+      .should('include.class', 'selected');
 
     cy.contains('Map all data').should('be.visible');
 

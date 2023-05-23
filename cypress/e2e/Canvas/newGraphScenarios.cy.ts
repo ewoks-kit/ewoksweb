@@ -16,8 +16,8 @@ describe('test newGraph scenarios', () => {
     cy.waitForStableDOM();
 
     // Close and re-open the sidebar
-    cy.get('button[aria-label="add"]').click();
-    cy.get('button[aria-label="add"]').click();
+    cy.get('button[aria-label="addNodes"]').click();
+    cy.get('button[aria-label="addNodes"]').click();
 
     cy.contains('General').click();
 

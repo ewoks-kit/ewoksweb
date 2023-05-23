@@ -1,6 +1,7 @@
 describe('clicks on canvas and elements', () => {
   before(() => {
     cy.loadApp();
+    cy.get('button[aria-label="addNodes"]').click();
   });
 
   // TODO: rightClick? Must click on backround and not on a node
@@ -11,31 +12,40 @@ describe('clicks on canvas and elements', () => {
 
   // select a node with click
   it('selects a node with click', () => {
-    cy.get('.react-flow__node').first().click({ force: true });
-    cy.waitForStableDOM();
-    // TODO: RF11 does not add a selected. Should find another way after moving canvas to RF11
-    //   .should('include.class', 'selected');
-    cy.contains('Default Inputs').should('exist').should('be.visible');
+    cy.get('.react-flow__node')
+      .first()
+      .click({ force: true })
+      .should('include.class', 'selected');
 
-    cy.contains('Inputs-complete').should('not.exist');
+    cy.waitForStableDOM();
+
+    cy.contains('Label').should('exist').should('be.visible');
+    cy.contains('Comment').should('exist').should('be.visible');
+    cy.contains('Default Inputs').should('exist').should('be.visible');
+    cy.contains('Default Error Node').should('exist').should('be.visible');
+    cy.contains('Inputs Complete').should('exist').should('be.visible');
+    cy.contains('Node Info').should('exist').should('be.visible');
+    cy.contains('Styling Node').should('exist').should('be.visible');
   });
 
   it('selects a link with click', () => {
     cy.contains('on_error').should('not.exist');
     cy.contains('Conditions').should('not.exist');
+    cy.contains('Map all data').should('not.exist');
+    cy.contains('Required').should('not.be.visible');
+    cy.contains('Source').should('not.exist');
+    cy.contains('Target').should('not.exist');
 
-    cy.get('.react-flow__edge').first().click({ force: true });
+    cy.get('.react-flow__edge')
+      .first()
+      .click({ force: true })
+      .should('include.class', 'selected');
 
-    cy.contains('Map all data').should('exist');
-    cy.contains('Map all data').should('be.visible');
-    cy.contains('on_error').should('exist');
-    cy.contains('on_error').should('be.visible');
-    cy.contains('Conditions').should('exist');
-    cy.contains('Conditions').should('be.visible');
-    cy.contains('Required').should('exist');
-    cy.contains('Required').should('be.visible');
-    cy.contains('Comment').should('exist');
-    cy.contains('Comment').should('be.visible');
+    cy.contains('Map all data').should('exist').should('be.visible');
+    cy.contains('on_error').should('exist').should('be.visible');
+    cy.contains('Conditions').should('exist').should('be.visible');
+    cy.contains('Required').should('exist').should('be.visible');
+    cy.contains('Comment').should('exist').should('be.visible');
   });
 
   it('doubleclick on graph node', () => {
@@ -44,7 +54,7 @@ describe('clicks on canvas and elements', () => {
       .last()
       .dblclick();
 
-    cy.get('.react-flow__node').should('not.have.length', 19);
+    cy.get('.react-flow__node').should('not.have.length', 17);
 
     cy.get('h1')
       .get('.MuiBreadcrumbs-li')
@@ -55,24 +65,4 @@ describe('clicks on canvas and elements', () => {
 
     cy.get('.react-flow__node').should('have.length', 17);
   });
-
-  // TODO: test the deactivation by setting details to false if the feature is needed
-  // it('doubleclick on note node', () => {
-  //   cy.get('.react-flow__node-note')
-  //     .last()
-  //     .dblclick()
-  //     .get('.icons')
-  //     .children('button[type=button]')
-  //     .should('have.length', 1);
-  // });
-
-  // TODO: click out and make these icons disappear
-  // it('click outside of a doubleclicked note node', () => {
-  //   cy.get('.react-flow__node').first().click();
-  //   cy.get('.react-flow__node-note')
-  //     .last()
-  //     .get('.icons')
-  //     .children('button[type=button]')
-  //     .should('not.exist');
-  // });
 });
