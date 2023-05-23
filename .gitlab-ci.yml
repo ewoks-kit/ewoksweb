@@ -98,6 +98,8 @@ cypress:
     # https://github.com/vercel/serve/issues/751
     - pnpm dlx serve@13.0.4 --no-port-switching -s build -l 3000 & pnpm dlx wait-on http://localhost:3000
     - pnpm cypress:run
+  variables:
+    REACT_APP_SERVER_URL: https://bosquet.silx.org/ewoks/
 
 pages:
   stage: deploy
