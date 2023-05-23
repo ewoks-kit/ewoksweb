@@ -31,9 +31,9 @@ import curateGraph from '../TopNavBar/utils/curateGraph';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
 import OverflowDrawer from '../AddNodesDrawer/OverflowDrawer';
-import { getTaskDescription } from '../../api/tasks';
 import MoreMenuButton from '../TopNavBar/menu/MoreMenuButton';
 import addNodesSidebarState from '../../store/addNodesSidebarState';
+import { useGetTasks } from '../TopNavBar/hooks';
 
 const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
 
@@ -67,7 +67,6 @@ export default function Dashboard() {
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const tasks = useStore((state) => state.tasks);
-  const setTasks = useStore((state) => state.setTasks);
   const toggleAddNodesSidebar = addNodesSidebarState(
     (state) => state.toggleAddNodesSidebar
   );
@@ -117,28 +116,14 @@ export default function Dashboard() {
     }
   }, [openSettingsDrawer]);
 
+  const getTasks = useGetTasks();
+
   useEffect(() => {
     // TODO: examine the strategy for re-fetching tasks like with icons
     if (tasks.length === 0) {
       getTasks();
     }
   });
-
-  const getTasks = async () => {
-    try {
-      const tasksData = await getTaskDescription();
-      if (tasksData.data.items.length > 0) {
-        const allTasks = tasksData.data.items;
-        setTasks(allTasks);
-      }
-    } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(error, commonStrings.retrieveTasksError),
-        severity: 'error',
-      });
-    }
-  };
 
   function checkAndNewGraph(notSave: boolean) {
     if (canvasGraphChanged && undoIndex !== 0 && !notSave) {

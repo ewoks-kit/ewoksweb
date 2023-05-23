@@ -13,10 +13,11 @@ import { discoverTasks } from '../../../api/tasks';
 import commonStrings from '../../../commonStrings.json';
 import type { SnackbarParams } from '../../../types';
 import { textForError } from '../../../utils';
+import { useGetTasks } from '../hooks';
 
 interface Props {
   open: boolean;
-  onClose?: () => void;
+  onClose: () => void;
 }
 
 export default function DiscoverTasksDialog(props: Props) {
@@ -25,6 +26,8 @@ export default function DiscoverTasksDialog(props: Props) {
     (state) => state.setOpenSnackbar
   );
   const [textValue, setTextValue] = useState<string>('');
+
+  const getTasks = useGetTasks();
 
   async function discover() {
     if (!textValue) {
@@ -50,9 +53,10 @@ export default function DiscoverTasksDialog(props: Props) {
 
       setOpenSnackbar({
         open: true,
-        text: `${identifiers.length} tasks imported`,
+        text: `${identifiers.length} tasks imported.`,
         severity: 'success',
       });
+      getTasks();
     } catch (error) {
       setOpenSnackbar({
         open: true,
