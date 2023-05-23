@@ -7,12 +7,12 @@ import {
   DialogTitle,
   TextField,
 } from '@material-ui/core';
-import useStore from '../../store/useStore';
+import useStore from '../../../store/useStore';
 import { useState } from 'react';
-import { discoverTasks } from '../../api/tasks';
-import commonStrings from '../../commonStrings.json';
-import type { SnackbarParams } from '../../types';
-import { textForError } from '../../utils';
+import { discoverTasks } from '../../../api/tasks';
+import commonStrings from '../../../commonStrings.json';
+import type { SnackbarParams } from '../../../types';
+import { textForError } from '../../../utils';
 
 interface Props {
   open: boolean;

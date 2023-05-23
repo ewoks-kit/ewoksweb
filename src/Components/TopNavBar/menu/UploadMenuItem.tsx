@@ -3,9 +3,9 @@ import type { ChangeEvent } from 'react';
 import { useRef } from 'react';
 import { FolderOpen } from '@material-ui/icons';
 
-import { useLoadGraph } from './hooks';
+import { useLoadGraph } from '../hooks';
 import MoreMenuIcon from './MoreMenuIcon';
-import useStore from '../../store/useStore';
+import useStore from '../../../store/useStore';
 import StyledMenuItem from './StyledMenuItem';
 
 function UploadMenuItem() {
