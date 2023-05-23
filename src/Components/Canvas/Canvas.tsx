@@ -92,8 +92,8 @@ function Canvas() {
 
   useEffect(() => {
     setTimeout(() => {
-      fitView();
-    }, 1000);
+      fitView({ duration: 500 });
+    }, 300);
   }, [workingGraphId, fitView]);
 
   function onNodesChange(changes: NodeChange[]) {
@@ -301,8 +301,8 @@ function Canvas() {
 
         setGraphInfo(subgraph.graph);
         setTimeout(() => {
-          fitView();
-        }, 1000);
+          fitView({ duration: 500 });
+        }, 300);
         setSubgraphsStack({
           id: subgraph.graph.id,
           label: subgraph.graph.label,

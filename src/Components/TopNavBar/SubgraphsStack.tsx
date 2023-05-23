@@ -46,8 +46,8 @@ export default function SubgraphsStack() {
       setEdgesData(subgraph.links);
       setGraphInfo(subgraph.graph);
       setTimeout(() => {
-        fitView();
-      }, 1000);
+        fitView({ duration: 500 });
+      }, 300);
     }
   };
 
