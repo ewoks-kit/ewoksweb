@@ -11,7 +11,7 @@ function DiscoverMenuItem() {
       <DiscoverTasksDialog open={isOpen} onClose={() => setOpen(false)} />
       <MoreMenuItem
         icon={Publish}
-        label="Import tasks"
+        label="Discover tasks"
         onClick={() => setOpen(true)}
       />
     </>

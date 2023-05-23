@@ -64,11 +64,11 @@ export default function DiscoverTasksDialog(props: Props) {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Import tasks from a module</DialogTitle>
+      <DialogTitle>Discover tasks from a module</DialogTitle>
 
       <DialogContent>
         <DialogContentText>
-          Provide the module name from which tasks will be imported.
+          Provide the module name from which tasks will be discovered.
         </DialogContentText>
         <TextField
           margin="dense"
@@ -91,7 +91,7 @@ export default function DiscoverTasksDialog(props: Props) {
             discover();
           }}
         >
-          Import
+          Discover
         </Button>
         <Button color="primary" onClick={onClose}>
           Cancel
