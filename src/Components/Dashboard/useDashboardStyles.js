@@ -12,6 +12,8 @@ export const useDashboardStyles = makeStyles((theme) => ({
 
   root: {
     display: 'flex',
+    flexDirection: 'column',
+    flex: '1 1 0',
   },
   toolbar: {
     display: 'flex',
@@ -31,7 +33,6 @@ export const useDashboardStyles = makeStyles((theme) => ({
     height: '7vh',
   },
   appBar: {
-    height: '5%',
     minHeight: '64px',
     zIndex: theme.zIndex.drawer + 1,
   },
@@ -57,8 +58,8 @@ export const useDashboardStyles = makeStyles((theme) => ({
 
   appBarSpacer: theme.mixins.toolbar,
   content: {
-    flexGrow: 1,
-    overflow: 'auto',
+    display: 'flex',
+    height: '100%',
   },
   container: {
     paddingTop: theme.spacing(1),
@@ -94,7 +95,6 @@ export const useDashboardStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     width: '0.325rem !important',
-    height: '100vh !important',
     backgroundColor: 'rgb(233, 235, 247) !important',
     borderLeftColor: '#cfcfe1 !important',
     borderRightColor: '#cfcfe1 !important',
@@ -104,9 +104,8 @@ export const useDashboardStyles = makeStyles((theme) => ({
   },
 
   reflexContainer: {
-    flex: '1 4 0%',
     display: 'flex',
-    minWidth: 0,
+    minHeight: 0,
   },
 
   nodeDetails: {
@@ -116,5 +115,11 @@ export const useDashboardStyles = makeStyles((theme) => ({
     borderStyle: 'solid none solid solid',
     padding: '4px',
     marginBottom: '10px',
+  },
+
+  mainArea: {
+    display: 'flex',
+    flex: '1 1 0%',
+    minHeight: 0,
   },
 }));

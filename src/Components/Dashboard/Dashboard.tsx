@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Paper from '@material-ui/core/Paper';
 import EditSidebar from 'Components/Sidebar/EditSidebar';
 // import { Link } from 'react-router-dom';
 import Canvas from '../Canvas/Canvas';
@@ -164,9 +162,6 @@ export default function Dashboard() {
     setOpenDrawers(!openDrawers);
   }
 
-  // TODO: remove? this type of styling
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
   function handleKeyDown(event: React.KeyboardEvent<HTMLImageElement>) {
     const controlKey = event.ctrlKey || event.metaKey;
     if (!controlKey) {
@@ -314,7 +309,7 @@ export default function Dashboard() {
       />
       <CssBaseline />
       <SimpleSnackbar />
-      <AppBar position="absolute" className={classes.appBar}>
+      <AppBar position="static" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <SubgraphsStack />
 
@@ -339,15 +334,14 @@ export default function Dashboard() {
           />
         </Toolbar>
       </AppBar>
-      <OverflowDrawer />
-      <ReflexContainer
-        orientation="vertical"
-        className={classes.reflexContainer}
-      >
-        <ReflexElement className="right-pane">
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
-            <Paper className={fixedHeightPaper}>
+      <div className={classes.mainArea}>
+        <OverflowDrawer />
+        <ReflexContainer
+          orientation="vertical"
+          className={classes.reflexContainer}
+        >
+          <ReflexElement>
+            <main className={classes.content}>
               {gettingFromServer && <LinearSpinner />}
 
               <ErrorBoundary
@@ -357,14 +351,14 @@ export default function Dashboard() {
               >
                 <Canvas />
               </ErrorBoundary>
-            </Paper>
-          </main>
-        </ReflexElement>
-        <ReflexSplitter propagate className={classes.reflexSplitter} />
-        <ReflexElement minSize={100} maxSize={500} size={350}>
-          <EditSidebar />
-        </ReflexElement>
-      </ReflexContainer>
+            </main>
+          </ReflexElement>
+          <ReflexSplitter propagate className={classes.reflexSplitter} />
+          <ReflexElement minSize={100} maxSize={500} size={350}>
+            <EditSidebar />
+          </ReflexElement>
+        </ReflexContainer>
+      </div>
     </div>
   );
 }
