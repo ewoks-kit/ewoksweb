@@ -1,18 +1,7 @@
-import { withStyles } from '@material-ui/core';
-import { ListItemText, MenuItem } from '@material-ui/core';
+import { ListItemText } from '@material-ui/core';
 import type { SvgIcon } from '@material-ui/core';
 import MoreMenuIcon from './MoreMenuIcon';
-
-const StyledMenuItem = withStyles((theme) => ({
-  root: {
-    '&:focus': {
-      backgroundColor: theme.palette.primary.main,
-      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-        color: theme.palette.common.white,
-      },
-    },
-  },
-}))(MenuItem);
+import StyledMenuItem from './StyledMenuItem';
 
 interface Props {
   icon: typeof SvgIcon;
