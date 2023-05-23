@@ -32,7 +32,7 @@ import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
 import OverflowDrawer from '../AddNodesDrawer/OverflowDrawer';
 import { getTaskDescription } from '../../api/tasks';
-import MoreMenuButton from '../TopNavBar/MoreMenuButton';
+import MoreMenuButton from '../TopNavBar/menu/MoreMenuButton';
 import addNodesSidebarState from '../../store/addNodesSidebarState';
 
 const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;

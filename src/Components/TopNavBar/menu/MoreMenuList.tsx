@@ -1,9 +1,9 @@
 import { MenuList } from '@material-ui/core';
-import useStore from '../../store/useStore';
+import useStore from '../../../store/useStore';
 import UploadMenuItem from './UploadMenuItem';
-import curateGraph from './utils/curateGraph';
-import { getEdgesData, getNodesData, rfToEwoks } from '../../utils';
-import type { EwoksRFLinkData, EwoksRFNodeData, GraphRF } from '../../types';
+import curateGraph from '../utils/curateGraph';
+import { getEdgesData, getNodesData, rfToEwoks } from '../../../utils';
+import type { EwoksRFLinkData, EwoksRFNodeData, GraphRF } from '../../../types';
 import { useReactFlow } from 'reactflow';
 import MoreMenuItem from './MoreMenuItem';
 import { GetApp, FiberNew, Settings } from '@material-ui/icons';
@@ -22,7 +22,7 @@ interface Props {
   handleOpenSettings: () => void;
 }
 
-function MoreMenu(props: Props) {
+function MoreMenuList(props: Props) {
   const { checkAndNewGraph, handleOpenSettings } = props;
   const { getNodes, getEdges } = useReactFlow();
 
@@ -77,4 +77,4 @@ function MoreMenu(props: Props) {
   );
 }
 
-export default MoreMenu;
+export default MoreMenuList;

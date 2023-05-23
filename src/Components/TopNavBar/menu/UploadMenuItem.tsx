@@ -3,16 +3,18 @@ import type { ChangeEvent } from 'react';
 import { useRef } from 'react';
 import { FolderOpen } from '@material-ui/icons';
 
-import { useLoadGraph } from './hooks';
+import { useLoadGraph } from '../hooks';
 import MoreMenuIcon from './MoreMenuIcon';
-import useStore from '../../store/useStore';
+import useStore from '../../../store/useStore';
 import StyledMenuItem from './StyledMenuItem';
+import { useMenuContext } from './MenuContext';
 
 function UploadMenuItem() {
   const loadGraph = useLoadGraph();
   const ref = useRef<HTMLInputElement>(null);
 
   const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
+  const { onClose } = useMenuContext();
 
   return (
     <StyledMenuItem
@@ -37,6 +39,7 @@ function UploadMenuItem() {
           }
 
           loadGraph(file);
+          onClose();
         }}
       />
       <ListItemText id="load-graph-label" primary="Open from disk" />

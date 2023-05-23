@@ -1,30 +1,8 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import type { MenuProps } from '@material-ui/core/Menu';
-import Menu from '@material-ui/core/Menu';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import MoreMenu from './MoreMenu';
-
-const StyledMenu = withStyles({
-  paper: {
-    border: '1px solid #d3d4d5',
-  },
-})((props: MenuProps) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
-    }}
-    {...props}
-  />
-));
+import MoreMenuList from './MoreMenuList';
+import StyledMenu from './StyledMenu';
 
 interface Props {
   checkAndNewGraph: () => void;
@@ -67,7 +45,7 @@ export default function MoreMenuButton(props: Props) {
         open={anchorEl !== null}
         onClose={handleClose}
       >
-        <MoreMenu {...props} />
+        <MoreMenuList {...props} />
       </StyledMenu>
     </div>
   );
