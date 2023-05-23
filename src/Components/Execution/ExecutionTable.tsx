@@ -679,7 +679,12 @@ export default function EnhancedTable() {
             }}
           >
             Edit Workflows
-            <Fab color="primary" size="small" component="span" aria-label="add">
+            <Fab
+              color="primary"
+              size="small"
+              component="span"
+              aria-label="editWorkflows"
+            >
               <ArrowForwardIosIcon />
             </Fab>
           </Link>

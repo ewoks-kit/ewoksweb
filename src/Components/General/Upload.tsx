@@ -110,7 +110,7 @@ function Upload(props: { children?: ReactNode } | undefined) {
           color="primary"
           size="small"
           component="span"
-          aria-label="add"
+          aria-label="upload"
           disabled={inExecutionMode}
         >
           {props?.children || ''}

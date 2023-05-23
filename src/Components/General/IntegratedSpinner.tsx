@@ -83,7 +83,6 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
             size="small"
             onClick={handleButtonClick}
             component="span"
-            aria-label="add"
             disabled={
               loading
                 ? true

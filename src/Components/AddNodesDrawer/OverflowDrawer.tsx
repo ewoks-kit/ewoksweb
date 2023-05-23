@@ -5,6 +5,7 @@ import { Fab } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import AddNodes from './AddNodes';
 import addNodesSidebarState from '../../store/addNodesSidebarState';
+import { useReactFlow } from 'reactflow';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -14,7 +15,8 @@ const useStyles = makeStyles((theme) => ({
     flex: 'none',
     borderRight: `1px solid ${theme.palette.divider}`,
     zIndex: theme.zIndex.drawer,
-    position: 'absolute',
+    // The following can make the drawer to overflow the canvas if needed
+    // position: 'absolute',
     top: 0,
     left: 0,
     bottom: 0,
@@ -43,6 +45,8 @@ const useStyles = makeStyles((theme) => ({
 function OverflowDrawer() {
   const classes = useStyles();
 
+  const { fitView } = useReactFlow();
+
   const toggleAddNodesSidebar = addNodesSidebarState(
     (state) => state.toggleAddNodesSidebar
   );
@@ -52,6 +56,9 @@ function OverflowDrawer() {
 
   const toggleDrawer = () => {
     toggleAddNodesSidebar(!isAddNodesSidebarOpen);
+    setTimeout(() => {
+      fitView({ duration: 800 });
+    }, 300);
   };
 
   return (
@@ -76,7 +83,7 @@ function OverflowDrawer() {
       <Fab
         size="small"
         color="primary"
-        aria-label="add"
+        aria-label="addNodes"
         onClick={toggleDrawer}
         style={{ marginLeft: isAddNodesSidebarOpen ? '230px' : '10px' }}
         className={classes.leftDrawerButton}

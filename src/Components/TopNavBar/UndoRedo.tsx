@@ -30,7 +30,7 @@ export default function UndoRedo({ undo, redo }: undoRedoProps) {
             color="primary"
             size="small"
             component="span"
-            aria-label="add"
+            aria-label="undo"
             disabled={inExecutionMode}
           >
             <UndoIcon />
@@ -49,7 +49,7 @@ export default function UndoRedo({ undo, redo }: undoRedoProps) {
             color="primary"
             size="small"
             component="span"
-            aria-label="add"
+            aria-label="redo"
             disabled={inExecutionMode}
           >
             <RedoIcon />
