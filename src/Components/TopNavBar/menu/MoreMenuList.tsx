@@ -22,7 +22,7 @@ interface Props {
   handleOpenSettings: () => void;
 }
 
-function MoreMenu(props: Props) {
+function MoreMenuList(props: Props) {
   const { checkAndNewGraph, handleOpenSettings } = props;
   const { getNodes, getEdges } = useReactFlow();
 
@@ -77,4 +77,4 @@ function MoreMenu(props: Props) {
   );
 }
 
-export default MoreMenu;
+export default MoreMenuList;
