@@ -11,7 +11,7 @@ describe('sidebar menu', () => {
       cy.contains('[role="sidebarMenuItem"]', 'Clone Workflow').click();
     });
 
-    cy.contains('No Workflow to clone!');
+    cy.contains('No workflow to clone!');
 
     cy.get('#editSidebar-dropdown-menu').within(() => {
       cy.contains('[role="sidebarMenuItem"]', 'Delete Workflow').click();
