@@ -50,15 +50,15 @@ function WorkflowDropdown(props: Props) {
       getOptionSelected={(option, valueSelect) => option.id === valueSelect.id}
       groupBy={(option) => option.category || ''}
       onChange={(event, newValue) => {
-        if (newValue) {
-          onChange(newValue);
-        }
+        onChange(newValue);
+
         setTimeout(() => {
           setValue({ id: '', label: '', category: '' });
         }, 200);
       }}
       getOptionLabel={(option) => option.label || ''}
       placeholder="Quick open"
+      disableClearable
     />
   );
 }

@@ -28,7 +28,7 @@ function ToolsCell(props: Props) {
         data-cy="doneEditingButtonEditableTable"
         disabled={disableSave}
       >
-        <SaveIcon fontSize="small" />
+        <SaveIcon />
       </IconButton>
       <IconButton
         style={{ color: 'rgb(108, 128, 236)', width: '50%' }}
@@ -37,7 +37,7 @@ function ToolsCell(props: Props) {
         aria-label="delete"
         data-cy="deleteButtonEditableTable"
       >
-        <DeleteIcon fontSize="small" />
+        <DeleteIcon />
       </IconButton>
     </TableCell>
   );

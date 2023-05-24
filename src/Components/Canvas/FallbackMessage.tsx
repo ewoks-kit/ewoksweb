@@ -4,21 +4,16 @@ import useStore from '../../store/useStore';
 
 const useStyles = makeStyles(() =>
   createStyles({
-    root: {
-      flexGrow: 1,
-    },
     noWorkflowMessage: {
       position: 'fixed',
       top: '50%',
       transform: 'translateY(calc(-50% - 1rem))',
       left: '30%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
       zIndex: 1000,
       color: '#3f51b5',
       opacity: '0.5',
       textAlign: 'center',
+      pointerEvents: 'none', // Let RF events go through the message
     },
   })
 );
