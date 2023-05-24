@@ -10,7 +10,7 @@ import GetFromServer from '../General/GetFromServer';
 import SimpleSnackbar from '../General/Snackbar';
 import SettingsInfoDrawer from '../TopNavBar/SettingsInfoDrawer';
 import SubgraphsStack from '../TopNavBar/SubgraphsStack';
-import LinearSpinner from '../General/LinearSpinner';
+// import LinearSpinner from '../General/LinearSpinner';
 // import ExecuteWorkflow from '../Execution/ExecuteWorkflow';
 import { useDashboardStyles } from './useDashboardStyles';
 import SaveToServer from '../TopNavBar/SaveToServer';
@@ -52,7 +52,7 @@ export default function Dashboard() {
   const [openDrawers, setOpenDrawers] = useState(true);
   const [openSettings, setOpenSettings] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
-  const gettingFromServer = useStore((state) => state.gettingFromServer);
+  // const gettingFromServer = useStore((state) => state.gettingFromServer);
   const graphInfo = useStore((state) => state.graphInfo);
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
   const openSettingsDrawer = useStore((state) => state.openSettingsDrawer);
@@ -63,7 +63,7 @@ export default function Dashboard() {
   const setCanvasGraphChanged = useStore(
     (state) => state.setCanvasGraphChanged
   );
-  const setGettingFromServer = useStore((st) => st.setGettingFromServer);
+  // const setGettingFromServer = useStore((st) => st.setGettingFromServer);
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const tasks = useStore((state) => state.tasks);
@@ -192,7 +192,7 @@ export default function Dashboard() {
     // 2. If exists and you took it from the server UPDATE without asking
     // 3. If exists and you took it from elseware open dialog for new name OR OVERWRITE
     const workflowsIds = await getWorkflowsIds();
-    setGettingFromServer(true);
+    // setGettingFromServer(true);
 
     if (!workflowExists(graphInfo.id, workflowsIds)) {
       setAction(FormAction.newGraph);
@@ -201,7 +201,7 @@ export default function Dashboard() {
     }
 
     if (workingGraph.graph.id !== graphInfo.id) {
-      setGettingFromServer(false);
+      // setGettingFromServer(false);
       setOpenSnackbar({
         open: true,
         text:
@@ -252,9 +252,10 @@ export default function Dashboard() {
           text: textForError(error, commonStrings.savingError),
           severity: 'error',
         });
-      } finally {
-        setGettingFromServer(false);
       }
+      // finally {
+      //   setGettingFromServer(false);
+      // }
       return;
     }
 
@@ -264,7 +265,7 @@ export default function Dashboard() {
       return;
     }
 
-    setGettingFromServer(false);
+    // setGettingFromServer(false);
     setOpenSnackbar({
       open: true,
       text: 'No graph exists to save!',
@@ -327,7 +328,7 @@ export default function Dashboard() {
         >
           <ReflexElement>
             <main className={classes.content}>
-              {gettingFromServer && <LinearSpinner />}
+              {/* {gettingFromServer && <LinearSpinner />} */}
 
               <ErrorBoundary
                 FallbackComponent={(fallbackProps) => (
