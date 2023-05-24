@@ -16,8 +16,8 @@ import { createData, getType } from './utils';
 import TableHeader from './TableHeader';
 import TypeSelectCell from './TypeSelect';
 import ToolsCell from './ToolsCell';
-import { IconButton, TableCell } from '@material-ui/core';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import { Button, TableCell } from '@material-ui/core';
+import { AddCircleOutline } from '@material-ui/icons';
 
 export const useStyles = makeStyles(() => ({
   root: {
@@ -343,14 +343,15 @@ function EditableTable(props: EditableTableProps) {
           <TableRow>
             <TableCell align="left" className={classes.plusButtonTableCell} />
             <TableCell align="left" className={classes.plusButtonTableCell}>
-              <IconButton
-                style={{ padding: '1px' }}
-                aria-label="dataMapping"
+              <Button
+                style={{ padding: '0.25rem' }}
+                aria-label="Add row"
                 onClick={() => props.onRowAdd?.(rows)}
                 data-cy="onRowAddButton"
+                endIcon={<AddCircleOutline htmlColor="#7c7c7c" />}
               >
-                <AddCircleOutlineIcon />
-              </IconButton>
+                <span style={{ color: '#7c7c7c' }}>Add</span>
+              </Button>
             </TableCell>
             <TableCell />
           </TableRow>
