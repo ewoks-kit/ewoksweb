@@ -106,7 +106,7 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
           setOpenSnackbar({
             open: true,
             text:
-              'No Workflow to clone! Please open a workflow that you need to clone first.',
+              'No workflow to clone! Please open a workflow that you need to clone first.',
             severity: 'success',
           });
           return;
@@ -236,10 +236,7 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
           style={{
             margin: '2px 20px 8px 8px',
             borderRadius: '0px',
-            backgroundColor: 'transparent',
-            color: 'rgb(108, 128, 236)',
           }}
-          variant="contained"
           color="primary"
           onClick={handleClick}
           size="small"
