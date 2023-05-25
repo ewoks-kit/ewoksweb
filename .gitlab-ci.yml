@@ -28,7 +28,6 @@ stages:
         - pnpm-lock.yaml
     paths:
       - .pnpm-store
-      - .cypress-cache
 
 .pnpm-base-build:
   stage: build
@@ -74,6 +73,13 @@ test:
   extends: .pnpm-base
   variables:
     CYPRESS_CACHE_FOLDER: '$CI_PROJECT_DIR/.cypress-cache/'
+  cache:
+    key:
+      files:
+        - pnpm-lock.yaml
+    paths:
+      - .pnpm-store
+      - .cypress-cache
   before_script:
     # https://github.com/cypress-io/cypress-docker-images/issues/642 and https://github.com/cypress-io/cypress-docker-images/issues/649
     - apt-get update && apt-get install curl -y
