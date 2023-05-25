@@ -1,7 +1,8 @@
 /* TODO: check if all style is used with the new interface */
 .dndflow {
   flex-wrap: wrap;
-  padding-top: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   padding-left: 5px;
   overflow: scroll;
   scrollbar-width: thin;
