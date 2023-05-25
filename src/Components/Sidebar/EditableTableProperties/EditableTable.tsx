@@ -16,8 +16,8 @@ import { createData, getType } from './utils';
 import TableHeader from './TableHeader';
 import TypeSelectCell from './TypeSelect';
 import ToolsCell from './ToolsCell';
-import { Button, TableCell } from '@material-ui/core';
-import { AddCircleOutline } from '@material-ui/icons';
+import AddRowButton from './AddRowButton';
+import { TableCell } from '@material-ui/core';
 
 export const useStyles = makeStyles(() => ({
   root: {
@@ -70,7 +70,7 @@ function EditableTable(props: EditableTableProps) {
   const [dialogContent, setDialogContent] = React.useState<DialogContent>();
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const { defaultValues, headers } = props;
+  const { defaultValues, headers, onRowAdd } = props;
 
   useEffect(() => {
     setTypeOfInputs(defaultValues.map(getType));
@@ -340,21 +340,15 @@ function EditableTable(props: EditableTableProps) {
               </TableRow>
             </React.Fragment>
           ))}
-          <TableRow>
-            <TableCell align="left" className={classes.plusButtonTableCell} />
-            <TableCell align="left" className={classes.plusButtonTableCell}>
-              <Button
-                style={{ padding: '0.25rem' }}
-                aria-label="Add row"
-                onClick={() => props.onRowAdd?.(rows)}
-                data-cy="onRowAddButton"
-                endIcon={<AddCircleOutline htmlColor="#7c7c7c" />}
-              >
-                <span style={{ color: '#7c7c7c' }}>Add</span>
-              </Button>
-            </TableCell>
-            <TableCell />
-          </TableRow>
+          {onRowAdd && (
+            <TableRow>
+              <TableCell align="left" className={classes.plusButtonTableCell} />
+              <TableCell align="left" className={classes.plusButtonTableCell}>
+                <AddRowButton onClick={() => onRowAdd(rows)} />
+              </TableCell>
+              <TableCell />
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </>
