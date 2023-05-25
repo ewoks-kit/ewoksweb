@@ -7,19 +7,24 @@ pnpm install
 pnpm start
 ```
 
-Ewoksweb requires an instance of
-[ewoksserver](https://gitlab.esrf.fr/workflow/ewoks/ewoksserver) running. See
-the instructions on the
-[ewoksserver repo](https://gitlab.esrf.fr/workflow/ewoks/ewoksserver/-/blob/main/README.md)
-to see how to set-up such an instance.
+Ewoksweb requires an instance of [ewoksserver](https://ewoksserver.readthedocs.io)
 
-The URL to the instance can then be set locally through the env variable
+```bash
+ewoks-server
+```
+
+When the instance is not running locally, its URL needs to be set locally through the env variable
 `REACT_APP_SERVER_URL` in `.env.local` (default: `http://localhost:5000`).
 
 ## Cypress tests
 
-To run Cypress tests, your local `ewoksserver` instance must be launched with
-the config located at `pysrc/ewoksweb/tests/resources/config.py`.
+To run Cypress tests, the `ewoksserver` instance must be configured appropriately.
+To serve the test resources from a local repository:
+
+```bash
+pip install -e .
+ewoks-server --frontend-tests
+```
 
 Cypress tests can then be run with
 
