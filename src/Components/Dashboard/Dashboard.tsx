@@ -3,19 +3,15 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import EditSidebar from 'Components/Sidebar/EditSidebar';
-// import { Link } from 'react-router-dom';
 import Canvas from '../Canvas/Canvas';
-// import UndoRedo from '../TopNavBar/UndoRedo';
 import GetFromServer from '../General/GetFromServer';
 import SimpleSnackbar from '../General/Snackbar';
 import SettingsInfoDrawer from '../TopNavBar/SettingsInfoDrawer';
 import SubgraphsStack from '../TopNavBar/SubgraphsStack';
-import LinearSpinner from '../General/LinearSpinner';
-// import ExecuteWorkflow from '../Execution/ExecuteWorkflow';
+import ProgressBar from '../General/ProgressBar';
 import { useDashboardStyles } from './useDashboardStyles';
 import SaveToServer from '../TopNavBar/SaveToServer';
 import useStore from 'store/useStore';
-// import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import FormDialog from '../General/FormDialog';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -52,7 +48,6 @@ export default function Dashboard() {
   const [openDrawers, setOpenDrawers] = useState(true);
   const [openSettings, setOpenSettings] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
-  const gettingFromServer = useStore((state) => state.gettingFromServer);
   const graphInfo = useStore((state) => state.graphInfo);
   const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
   const openSettingsDrawer = useStore((state) => state.openSettingsDrawer);
@@ -119,7 +114,6 @@ export default function Dashboard() {
   const getTasks = useGetTasks();
 
   useEffect(() => {
-    // TODO: examine the strategy for re-fetching tasks like with icons
     if (tasks.length === 0) {
       getTasks();
     }
@@ -130,7 +124,6 @@ export default function Dashboard() {
       setOpenAgreeDialog(true);
     } else {
       initGraph(initializedGraph, undefined, rfInstance);
-      // setOpenSaveDialog(true);
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
       toggleAddNodesSidebar(true);
@@ -245,7 +238,6 @@ export default function Dashboard() {
           text: 'Graph saved successfully!',
           severity: 'success',
         });
-        setCanvasGraphChanged(false);
       } catch (error) {
         setOpenSnackbar({
           open: true,
@@ -318,6 +310,7 @@ export default function Dashboard() {
             openSettings={openSettings}
           />
         </Toolbar>
+        <ProgressBar />
       </AppBar>
       <div className={classes.mainArea}>
         <OverflowDrawer />
@@ -327,8 +320,6 @@ export default function Dashboard() {
         >
           <ReflexElement>
             <main className={classes.content}>
-              {gettingFromServer && <LinearSpinner />}
-
               <ErrorBoundary
                 FallbackComponent={(fallbackProps) => (
                   <ErrorFallback {...fallbackProps} />
