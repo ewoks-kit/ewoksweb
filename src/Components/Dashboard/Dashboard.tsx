@@ -102,13 +102,6 @@ export default function Dashboard() {
     }
 
     const charCode = String.fromCodePoint(event.which).toLowerCase();
-
-    if (charCode === 's') {
-      event.preventDefault();
-      event.stopPropagation();
-      saveToServer();
-      return;
-    }
     // Comment until undo-redo is back
     // if (charCode === 'z') {
     //   event.preventDefault();

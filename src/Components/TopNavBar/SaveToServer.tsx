@@ -4,6 +4,7 @@ import useStore from '../../store/useStore';
 import FormDialog from '../General/FormDialog';
 import type { Dispatch, SetStateAction } from 'react';
 import type { FormAction } from '../../types';
+import { useKeyboardEvent } from '@react-hookz/web';
 
 interface SaveToServerProps {
   saveToServer: () => Promise<void>;
@@ -20,6 +21,15 @@ export default function SaveToServer({
   setOpenSaveDialog,
 }: SaveToServerProps) {
   const graphInfo = useStore((state) => state.graphInfo);
+
+  useKeyboardEvent(
+    (e) => (e.ctrlKey || e.metaKey) && e.key === 's',
+    (e) => {
+      e.preventDefault();
+      void saveToServer();
+    },
+    []
+  );
 
   return (
     <>
