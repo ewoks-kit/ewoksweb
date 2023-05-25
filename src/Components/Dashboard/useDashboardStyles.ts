@@ -1,11 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export const useDashboardStyles = makeStyles((theme) => ({
-  verticalRule: {
-    borderLeft: '1px solid #7685dd',
-    height: '84%',
-    color: 'wight',
-  },
   openFileButton: {
     backgroundColor: '#96a5f9',
   },
@@ -34,7 +29,6 @@ export const useDashboardStyles = makeStyles((theme) => ({
   },
   appBar: {
     minHeight: '64px',
-    zIndex: theme.zIndex.drawer + 1,
   },
 
   title: {
