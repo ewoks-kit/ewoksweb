@@ -9,12 +9,12 @@ describe('edit nodes defaultInputs', () => {
     cy.contains('Default Inputs').should('be.visible');
   });
 
-  it('insert and undo/redo a new Default Input', () => {
-    cy.get('[data-cy="onRowAddButton"]').click();
+  it('insert a new Default Input', () => {
+    cy.findAllByRole('row').should('have.length', 2); // Header + Button
 
-    // cy.get('[data-cy="undoButton"]').click();
+    cy.findByRole('button', { name: 'Add row' }).click();
 
-    // cy.get('[data-cy="redoButton"]').click();
+    cy.findAllByRole('row').should('have.length', 3); // Header + New Row + Button
   });
 
   it('type and undo/redo a new Default Input', () => {

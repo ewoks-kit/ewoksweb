@@ -26,7 +26,7 @@ describe('edit links dataMapping', () => {
   it.skip('type and undo/redo a new Data Mapping', () => {
     cy.contains('Data Mapping').should('be.visible');
 
-    cy.get('[data-cy="addDataMappingButton"]').click();
+    cy.findByRole('button', { name: 'Add data mapping entry' }).click();
 
     cy.get('[data-cy="inputInEditableCell"]')
       .should('exist')

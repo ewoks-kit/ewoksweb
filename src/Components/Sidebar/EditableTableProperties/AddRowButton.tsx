@@ -3,17 +3,17 @@ import { AddCircleOutline } from '@material-ui/icons';
 
 interface Props {
   onClick: () => void;
+  ariaLabel?: string;
 }
 
 function AddRowButton(props: Props) {
-  const { onClick } = props;
+  const { onClick, ariaLabel } = props;
 
   return (
     <Button
       style={{ padding: '0.25rem' }}
-      aria-label="Add row"
+      aria-label={ariaLabel || 'Add row'}
       onClick={onClick}
-      data-cy="onRowAddButton"
       endIcon={<AddCircleOutline htmlColor="#7c7c7c" />}
     >
       <span style={{ color: '#7c7c7c' }}>Add</span>

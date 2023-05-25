@@ -152,7 +152,10 @@ function TableDataMapping(props: TableDataMappingProps) {
         {onRowAdd && (
           <TableRow>
             <TableCell align="left" className={classes.tableCell}>
-              <AddRowButton onClick={() => onRowAdd(rows)} />
+              <AddRowButton
+                onClick={() => onRowAdd(rows)}
+                ariaLabel="Add data mapping entry"
+              />
             </TableCell>
             <TableCell />
           </TableRow>
