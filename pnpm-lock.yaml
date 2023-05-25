@@ -34,6 +34,9 @@ dependencies:
   dagre:
     specifier: ^0.8.5
     version: 0.8.5
+  elkjs:
+    specifier: 0.8.2
+    version: 0.8.2
   lodash:
     specifier: 4.17.21
     version: 4.17.21
@@ -147,6 +150,9 @@ devDependencies:
   typescript:
     specifier: 4.9.3
     version: 4.9.3
+  web-worker:
+    specifier: 1.2.0
+    version: 1.2.0
 
 packages:
 
@@ -6101,6 +6107,10 @@ packages:
 
   /electron-to-chromium/1.4.284:
     resolution: {integrity: sha512-M8WEXFuKXMYMVr45fo8mq0wUrrJHheiKZf6BArTKk9ZBYCKJEOU5H8cdWgDT+qCVZf7Na4lVUaZsA+h6uA9+PA==}
+
+  /elkjs/0.8.2:
+    resolution: {integrity: sha512-L6uRgvZTH+4OF5NE/MBbzQx/WYpru1xCBE9respNj6qznEewGUIfhzmm7horWWxbNO2M0WckQypGctR8lH79xQ==}
+    dev: false
 
   /emittery/0.10.2:
     resolution: {integrity: sha512-aITqOwnLanpHLNXZJENbOgjUBeHocD+xsSJmNrjovKBW5HbSpW3d1pEls7GFQPUWXiwG9+0P4GtHfEqC/4M0Iw==}
@@ -13717,6 +13727,10 @@ packages:
     dependencies:
       minimalistic-assert: 1.0.1
     dev: false
+
+  /web-worker/1.2.0:
+    resolution: {integrity: sha512-PgF341avzqyx60neE9DD+XS26MMNMoUQRz9NOZwW32nPQrF6p77f1htcnjBSEV8BGMKZ16choqUG4hyI0Hx7mA==}
+    dev: true
 
   /webidl-conversions/3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}

@@ -14,6 +14,7 @@ import { initializedRFGraph } from '../utils/InitializedEntities';
 import useNodeDataStore from './useNodeDataStore';
 import useEdgeDataStore from './useEdgeDataStore';
 import type { ReactFlowInstance } from 'reactflow';
+import ELK from 'elkjs';
 
 export interface WorkingGraphSlice {
   workingGraph: GraphRF;
@@ -136,8 +137,52 @@ const workingGraph = (
     }));
 
     if (rfInstance) {
-      rfInstance.setNodes(newGraphNoData.nodes);
-      rfInstance.setEdges(newGraphNoData.links);
+      if (!newGraphNoData.nodes.some((nod) => nod.position.x !== 100)) {
+        const elk = new ELK();
+
+        const layoutOptions = {
+          'elk.algorithm': 'layered',
+        };
+
+        const elkGraph = {
+          id: 'root',
+          layoutOptions,
+          children: newGraphNoData.nodes.map((node) => {
+            return {
+              ...node,
+              width: 200,
+              height: 180,
+            };
+          }),
+          edges: newGraphNoData.links.map((link) => {
+            return {
+              ...link,
+              sources: [link.source],
+              targets: [link.target],
+            };
+          }),
+        };
+
+        // eslint-disable-next-line promise/prefer-await-to-then
+        elk.layout(elkGraph).then((result) => {
+          rfInstance.setNodes(
+            newGraphNoData.nodes.map((node) => {
+              const elkNode = result.children?.find(
+                (elknode) => elknode.id === node.id
+              );
+
+              return {
+                ...node,
+                position: { x: elkNode?.x || 100, y: elkNode?.y || 100 },
+              };
+            })
+          );
+          rfInstance.setEdges(newGraphNoData.links);
+        });
+      } else {
+        rfInstance.setNodes(newGraphNoData.nodes);
+        rfInstance.setEdges(newGraphNoData.links);
+      }
     }
 
     return graph;
