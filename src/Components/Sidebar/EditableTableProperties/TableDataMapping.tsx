@@ -12,8 +12,8 @@ import type { DataMapping, EditableTableRow } from 'types';
 import { createDataMappingData } from './utils';
 import TableHeader from './TableHeader';
 import ToolsCell from './ToolsCell';
-import { IconButton, TableCell } from '@material-ui/core';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import { TableCell } from '@material-ui/core';
+import AddRowButton from './AddRowButton';
 
 export const useStyles = makeStyles(() => ({
   table: {
@@ -41,7 +41,7 @@ function TableDataMapping(props: TableDataMappingProps) {
   const [rows, setRows] = React.useState<EditableTableRow[]>([]);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const { values, headers } = props;
+  const { values, headers, onRowAdd } = props;
 
   useEffect(() => {
     setRows(values.map(createDataMappingData));
@@ -149,19 +149,14 @@ function TableDataMapping(props: TableDataMappingProps) {
             </TableRow>
           </React.Fragment>
         ))}
-        <TableRow>
-          <TableCell align="left" className={classes.tableCell}>
-            <IconButton
-              style={{ padding: '1px' }}
-              aria-label="dataMapping"
-              onClick={() => props.onRowAdd?.(rows)}
-              data-cy="addDataMappingButton"
-            >
-              <AddCircleOutlineIcon />
-            </IconButton>
-          </TableCell>
-          <TableCell />
-        </TableRow>
+        {onRowAdd && (
+          <TableRow>
+            <TableCell align="left" className={classes.tableCell}>
+              <AddRowButton onClick={() => onRowAdd(rows)} />
+            </TableCell>
+            <TableCell />
+          </TableRow>
+        )}
       </TableBody>
     </Table>
   );
