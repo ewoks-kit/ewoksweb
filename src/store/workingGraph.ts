@@ -142,47 +142,6 @@ const workingGraph = (
           await layoutNewGraph(newGraphNoData.nodes, newGraphNoData.links)
         );
         rfInstance.setEdges(newGraphNoData.links);
-        // const elk = new ELK();
-
-        // const layoutOptions = {
-        //   'elk.algorithm': 'layered',
-        // };
-
-        // const elkGraph = {
-        //   id: 'root',
-        //   layoutOptions,
-        //   children: newGraphNoData.nodes.map((node) => {
-        //     return {
-        //       ...node,
-        //       width: 200,
-        //       height: 180,
-        //     };
-        //   }),
-        //   edges: newGraphNoData.links.map((link) => {
-        //     return {
-        //       ...link,
-        //       sources: [link.source],
-        //       targets: [link.target],
-        //     };
-        //   }),
-        // };
-
-        // // eslint-disable-next-line promise/prefer-await-to-then
-        // elk.layout(elkGraph).then((result) => {
-        //   rfInstance.setNodes(
-        //     newGraphNoData.nodes.map((node) => {
-        //       const elkNode = result.children?.find(
-        //         (elknode) => elknode.id === node.id
-        //       );
-
-        //       return {
-        //         ...node,
-        //         position: { x: elkNode?.x || 100, y: elkNode?.y || 100 },
-        //       };
-        //     })
-        //   );
-        //   rfInstance.setEdges(newGraphNoData.links);
-        // });
       } else {
         rfInstance.setNodes(newGraphNoData.nodes);
         rfInstance.setEdges(newGraphNoData.links);
