@@ -163,6 +163,22 @@ export default function FormDialog(props: FormDialogProps) {
       return;
     }
 
+    if (
+      task.optional_input_names?.length !==
+        new Set(task.optional_input_names).size ||
+      task.required_input_names?.length !==
+        new Set(task.required_input_names).size ||
+      task.output_names?.length !== new Set(task.output_names).size
+    ) {
+      setOpenSnackbar({
+        open: true,
+        text:
+          'A task cannot have two or more inputs or outputs with the same name',
+        severity: 'warning',
+      });
+      return;
+    }
+
     try {
       await postTask(task);
 

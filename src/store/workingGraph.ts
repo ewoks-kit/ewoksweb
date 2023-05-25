@@ -14,6 +14,7 @@ import { initializedRFGraph } from '../utils/InitializedEntities';
 import useNodeDataStore from './useNodeDataStore';
 import useEdgeDataStore from './useEdgeDataStore';
 import type { ReactFlowInstance } from 'reactflow';
+import layoutNewGraph from '../utils/layoutNewGraph';
 
 export interface WorkingGraphSlice {
   workingGraph: GraphRF;
@@ -136,8 +137,15 @@ const workingGraph = (
     }));
 
     if (rfInstance) {
-      rfInstance.setNodes(newGraphNoData.nodes);
-      rfInstance.setEdges(newGraphNoData.links);
+      if (!newGraphNoData.nodes.some((nod) => nod.position.x !== 100)) {
+        rfInstance.setNodes(
+          await layoutNewGraph(newGraphNoData.nodes, newGraphNoData.links)
+        );
+        rfInstance.setEdges(newGraphNoData.links);
+      } else {
+        rfInstance.setNodes(newGraphNoData.nodes);
+        rfInstance.setEdges(newGraphNoData.links);
+      }
     }
 
     return graph;
