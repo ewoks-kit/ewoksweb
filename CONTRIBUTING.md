@@ -34,6 +34,15 @@ pnpm cypress # in interactive GUI mode
 pnpm cypress:run # to run all specs in CLI
 ```
 
+## Build
+
+Building the `ewoksweb` python package
+
+```bash
+pnpm build
+python setup.py sdist
+```
+
 ## Release
 
 Since `ewoksweb` is a companion package of `ewoksserver`, it is released as a
