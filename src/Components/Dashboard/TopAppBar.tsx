@@ -64,7 +64,7 @@ function TopAppBar(props: PropsWithChildren<Props>) {
     <AppBar
       className={classes.appBar}
       position="static"
-      style={{ zIndex: zIndex.drawer + 1 }}
+      style={{ zIndex: zIndex.drawer + 1, backgroundColor: '#1976d2' }}
     >
       <Toolbar className={classes.toolbar}>
         <SubgraphsStack />
