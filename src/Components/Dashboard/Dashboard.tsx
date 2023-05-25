@@ -6,20 +6,12 @@ import SimpleSnackbar from '../General/Snackbar';
 import { useDashboardStyles } from './useDashboardStyles';
 import SaveToServer from '../TopNavBar/SaveToServer';
 import useStore from 'store/useStore';
-import FormDialog from '../General/FormDialog';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from '../General/ErrorFallback';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
-import type { EwoksRFLinkData, EwoksRFNodeData } from '../../types';
-import { FormAction } from '../../types';
-import { getWorkflow, getWorkflowsIds, putWorkflow } from '../../api/api';
-import { getEdgesData, rfToEwoks, textForError } from '../../utils';
-import commonStrings from '../../commonStrings.json';
-import type { AxiosResponse } from 'axios';
-import curateGraph from '../TopNavBar/utils/curateGraph';
+import { getWorkflow } from '../../api/api';
 import { useReactFlow } from 'reactflow';
-import { getNodesData } from '../../utils';
 import OverflowDrawer from '../AddNodesDrawer/OverflowDrawer';
 import addNodesSidebarState from '../../store/addNodesSidebarState';
 import { useGetTasks } from '../TopNavBar/hooks';
@@ -27,34 +19,19 @@ import TopAppBar from './TopAppBar';
 
 const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
 
-function workflowExists(
-  id: string,
-  workflowsIds: AxiosResponse<{ identifiers: string[] }>
-) {
-  return workflowsIds.data.identifiers.includes(id);
-}
-
 export default function Dashboard() {
   const classes = useDashboardStyles();
 
   const rfInstance = useReactFlow();
 
-  const graphInfo = useStore((state) => state.graphInfo);
-  const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
-
   const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
   const setCanvasGraphChanged = useStore(
     (state) => state.setCanvasGraphChanged
   );
-  const setGettingFromServer = useStore((st) => st.setGettingFromServer);
-  const workingGraph = useStore((state) => state.workingGraph);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const tasks = useStore((state) => state.tasks);
   const toggleAddNodesSidebar = addNodesSidebarState(
     (state) => state.toggleAddNodesSidebar
   );
-
-  const [action, setAction] = useState<FormAction>(FormAction.newGraph);
 
   const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
   const undoIndex = useStore((state) => state.undoIndex);
@@ -126,92 +103,6 @@ export default function Dashboard() {
     setOpenAgreeDialog(false);
   };
 
-  async function saveToServer() {
-    // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
-    // DOC: search if id exists.
-    // 1. If notExists open dialog for NEW NAME.
-    // 2. If exists and you took it from the server UPDATE without asking
-    // 3. If exists and you took it from elseware open dialog for new name OR OVERWRITE
-    const workflowsIds = await getWorkflowsIds();
-    setGettingFromServer(true);
-
-    if (!workflowExists(graphInfo.id, workflowsIds)) {
-      setAction(FormAction.newGraph);
-      setOpenSaveDialog(true);
-      return;
-    }
-
-    if (workingGraph.graph.id !== graphInfo.id) {
-      setGettingFromServer(false);
-      setOpenSnackbar({
-        open: true,
-        text:
-          'Cannot save any changes to subgraphs! Open it as the main graph to make changes.',
-        severity: 'warning',
-      });
-      return;
-    }
-
-    if (graphInfo.uiProps?.source === 'fromServer') {
-      try {
-        const { newNodesData, newEdgesData } = curateGraph(
-          getNodesData(),
-          getEdgesData()
-        );
-
-        const nodesWithData = [...rfInstance.getNodes()].map((node) => {
-          return {
-            ...node,
-            data: newNodesData.get(node.id) as EwoksRFNodeData,
-          };
-        });
-
-        const edgesWithData = [...rfInstance.getEdges()].map((edge) => {
-          return {
-            ...edge,
-            data: newEdgesData.get(edge.id) as EwoksRFLinkData,
-          };
-        });
-
-        await putWorkflow(
-          rfToEwoks({
-            graph: graphInfo,
-            nodes: nodesWithData,
-            links: edgesWithData,
-          })
-        );
-
-        setOpenSnackbar({
-          open: true,
-          text: 'Graph saved successfully!',
-          severity: 'success',
-        });
-      } catch (error) {
-        setOpenSnackbar({
-          open: true,
-          text: textForError(error, commonStrings.savingError),
-          severity: 'error',
-        });
-      } finally {
-        setGettingFromServer(false);
-      }
-      return;
-    }
-
-    if (graphInfo.uiProps?.source !== 'fromServer') {
-      setAction(FormAction.newGraphOrOverwrite);
-      setOpenSaveDialog(true);
-      return;
-    }
-
-    setGettingFromServer(false);
-    setOpenSnackbar({
-      open: true,
-      text: 'No graph exists to save!',
-      severity: 'warning',
-    });
-  }
-
   return (
     <div
       className={classes.root}
@@ -226,21 +117,10 @@ export default function Dashboard() {
         agreeCallback={() => checkAndNewGraph(true)}
         disagreeCallback={disAgreeSaveWithout}
       />
-      <FormDialog
-        elementToEdit={graphInfo}
-        action={FormAction.newGraph}
-        open={openSaveDialog}
-        setOpenSaveDialog={setOpenSaveDialog}
-      />
       <CssBaseline />
       <SimpleSnackbar />
       <TopAppBar classes={classes} checkAndNewGraph={checkAndNewGraph}>
-        <SaveToServer
-          saveToServer={async () => void saveToServer()}
-          action={action}
-          open={openSaveDialog}
-          setOpenSaveDialog={setOpenSaveDialog}
-        />
+        <SaveToServer />
       </TopAppBar>
       <div className={classes.mainArea}>
         <OverflowDrawer />
