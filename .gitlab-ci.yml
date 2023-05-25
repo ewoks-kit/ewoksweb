@@ -108,24 +108,13 @@ build:
     when: on_success
     expire_in: 2h
 
-build-for-pages:
+pages:
+  stage: deploy
   variables:
     REACT_APP_SERVER_URL: https://bosquet.silx.org/ewoks/
   extends: .pnpm-base-build
   script:
-    - python3 --version
-    - python3 -m pip install --upgrade pip
-    - python3 -m pip install --upgrade setuptools
     - CI=false pnpm build # Don't let eslint warnings fail the build
-  artifacts:
-    paths:
-      - build/
-    when: on_success
-    expire_in: 2h
-
-pages:
-  extends: .deploy
-  script:
     - rm -rf public
     - mv build public
   artifacts:
@@ -133,6 +122,9 @@ pages:
       - public
     when: on_success
     expire_in: 2h
+  only:
+    refs:
+      - main
 
 assets:
   extends: .deploy
