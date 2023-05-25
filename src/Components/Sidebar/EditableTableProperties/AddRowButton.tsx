@@ -11,7 +11,7 @@ function AddRowButton(props: Props) {
 
   return (
     <Button
-      style={{ padding: '0.25rem' }}
+      style={{ padding: '0.25rem', alignItems: 'flex-start' }}
       aria-label={ariaLabel || 'Add row'}
       onClick={onClick}
       endIcon={<AddCircleOutline htmlColor="#7c7c7c" />}

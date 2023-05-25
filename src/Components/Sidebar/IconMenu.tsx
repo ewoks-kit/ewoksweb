@@ -234,8 +234,7 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
       <Tooltip title="Delete, Clone" arrow>
         <Button
           style={{
-            margin: '2px 20px 8px 8px',
-            borderRadius: '0px',
+            margin: '2px 8px',
           }}
           color="primary"
           onClick={handleClick}

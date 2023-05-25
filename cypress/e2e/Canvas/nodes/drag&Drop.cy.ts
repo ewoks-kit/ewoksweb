@@ -3,44 +3,25 @@ describe('drag and drop nodes', () => {
     cy.loadApp();
   });
 
-  it('should drag and drop 2 nodes from add nodes into canvas', () => {
-    cy.get('button[aria-label="addNodes"]').click();
-    cy.waitForStableDOM();
+  it('should drag and drop a node from add nodes into canvas', () => {
+    cy.get('.react-flow__node').should('have.length', 17);
 
     const dataTransfer = new DataTransfer();
 
-    cy.waitForStableDOM();
-    cy.get('button[aria-label="addNodes"]').click();
+    cy.findByRole('button', { name: 'ewokscore' }).click();
 
-    cy.contains('General').click();
-
-    cy.get('.react-flow__node').should('have.length', 17);
-
-    cy.get('[data-cy="add-nodes-category-General"]')
-      .find('.dndnode')
-      .first()
-      .trigger('dragstart', {
+    cy.findByTitle('ewokscore.tests.examples.tasks.sumtask.SumTask').trigger(
+      'dragstart',
+      {
         dataTransfer,
-      });
+      }
+    );
 
     cy.get('.react-flow').trigger('drop', {
       dataTransfer,
     });
 
     cy.get('.react-flow__node').should('have.length', 18);
-
-    cy.get('[data-cy="add-nodes-category-General"]')
-      .find('.dndnode')
-      .first()
-      .trigger('dragstart', {
-        dataTransfer,
-      });
-
-    cy.get('.react-flow').trigger('drop', {
-      dataTransfer,
-    });
-
-    cy.get('.react-flow__node').should('have.length', 19);
   });
 
   // TODO: move node - dragstart seems to grasp the inner and creates a ghost

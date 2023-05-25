@@ -1,11 +1,8 @@
 stages:
+  - test
   - style
   - build
-  - test
   - deploy
-
-variables:
-  CYPRESS_CACHE_FOLDER: '$CI_PROJECT_DIR/.cypress-cache/'
 
 ### Jobs templates ###
 
@@ -33,9 +30,12 @@ variables:
       - .pnpm-store
       - .cypress-cache
 
-.style:
-  stage: style
-  extends: .base
+.pnpm-base-build:
+  stage: build
+  extends: .pnpm-base
+  only:
+    refs:
+      - main
 
 .deploy:
   stage: deploy
@@ -47,14 +47,16 @@ variables:
 ### Required jobs ###
 
 flake8:
-  extends: .style
+  stage: style
+  extends: .base
   before_script:
     - python3 -m pip install flake8
   script:
     - flake8
 
 black:
-  extends: .style
+  stage: style
+  extends: .base
   before_script:
     - python3 -m pip install black
   script:
@@ -66,9 +68,31 @@ lint:
   script:
     - pnpm run lint
 
-build:
-  stage: build
+test:
+  image: cypress/base:16.18.0
+  stage: test
   extends: .pnpm-base
+  variables:
+    CYPRESS_CACHE_FOLDER: '$CI_PROJECT_DIR/.cypress-cache/'
+  before_script:
+    # https://github.com/cypress-io/cypress-docker-images/issues/642 and https://github.com/cypress-io/cypress-docker-images/issues/649
+    - apt-get update && apt-get install curl -y
+    - apt-get install python3 python3-pip -y
+    - !reference [.pnpm-base, before_script]
+  script:
+    - python3 --version
+    - python3 -m pip install --upgrade pip
+    - python3 -m pip install --upgrade setuptools
+    - python3 -m pip install ewoksserver
+    - python3 -m pip install --upgrade --pre ewoksserver
+    - ewoks-server -p 5000 -c ./pysrc/ewoksweb/tests/resources/config.py &
+    - CI=false pnpm build # Don't let eslint warnings fail the build
+    # https://github.com/vercel/serve/issues/751
+    - pnpm dlx serve@13.0.4 --no-port-switching -s build -l 3000 & pnpm dlx wait-on http://localhost:3000
+    - pnpm cypress:run
+
+build:
+  extends: .pnpm-base-build
   script:
     - python3 --version
     - python3 -m pip install --upgrade pip
@@ -81,43 +105,26 @@ build:
   artifacts:
     paths:
       - sdist/
-      - build/
     when: on_success
     expire_in: 2h
 
-build-test:
-  variables:
-    REACT_APP_SERVER_URL: https://bosquet.silx.org/ewoks/
-  extends: build
-
-cypress:
-  image: cypress/base:16.18.0
-  stage: test
-  extends: .pnpm-base
-  needs: ['build-test']
-  before_script:
-    # https://github.com/cypress-io/cypress-docker-images/issues/642 and https://github.com/cypress-io/cypress-docker-images/issues/649
-    - apt-get update && apt-get install curl -y
-    - !reference [.pnpm-base, before_script]
-  script:
-    # https://github.com/vercel/serve/issues/751
-    - pnpm dlx serve@13.0.4 --no-port-switching -s build -l 3000 & pnpm dlx wait-on http://localhost:3000
-    - pnpm cypress:run
-
 pages:
+  stage: deploy
   variables:
     REACT_APP_SERVER_URL: https://bosquet.silx.org/ewoks/
-  stage: deploy
-  extends: .pnpm-base
-  needs: ['build-test']
+  extends: .pnpm-base-build
   script:
+    - CI=false pnpm build # Don't let eslint warnings fail the build
     - rm -rf public
     - mv build public
   artifacts:
     paths:
       - public
+    when: on_success
+    expire_in: 2h
   only:
-    - main
+    refs:
+      - main
 
 assets:
   extends: .deploy
