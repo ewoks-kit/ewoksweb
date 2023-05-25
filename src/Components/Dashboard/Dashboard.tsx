@@ -4,7 +4,6 @@ import EditSidebar from 'Components/Sidebar/EditSidebar';
 import Canvas from '../Canvas/Canvas';
 import SimpleSnackbar from '../General/Snackbar';
 import { useDashboardStyles } from './useDashboardStyles';
-import SaveToServer from '../TopNavBar/SaveToServer';
 import useStore from 'store/useStore';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -119,9 +118,7 @@ export default function Dashboard() {
       />
       <CssBaseline />
       <SimpleSnackbar />
-      <TopAppBar classes={classes} checkAndNewGraph={checkAndNewGraph}>
-        <SaveToServer />
-      </TopAppBar>
+      <TopAppBar classes={classes} checkAndNewGraph={checkAndNewGraph} />
       <div className={classes.mainArea}>
         <OverflowDrawer />
         <ReflexContainer

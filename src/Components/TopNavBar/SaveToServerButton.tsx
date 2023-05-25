@@ -9,12 +9,12 @@ import type { EwoksRFLinkData, EwoksRFNodeData } from '../../types';
 import { getWorkflowsIds, putWorkflow } from '../../api/api';
 import { getEdgesData, rfToEwoks, textForError } from '../../utils';
 import commonStrings from '../../commonStrings.json';
-import curateGraph from '../TopNavBar/utils/curateGraph';
+import curateGraph from './utils/curateGraph';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
 
 // DOC: Save to server button with its spinner
-export default function SaveToServer() {
+export default function SaveToServerButton() {
   const graphInfo = useStore((state) => state.graphInfo);
   const rfInstance = useReactFlow();
 
@@ -25,7 +25,7 @@ export default function SaveToServer() {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const [action, setAction] = useState<FormAction>(FormAction.newGraph);
 
-  async function saveToServer() {
+  async function handleSave() {
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     // DOC: search if id exists.
     // 1. If notExists open dialog for NEW NAME.
@@ -115,7 +115,7 @@ export default function SaveToServer() {
     (e) => (e.ctrlKey || e.metaKey) && e.key === 's',
     (e) => {
       e.preventDefault();
-      void saveToServer();
+      void handleSave();
     },
     []
   );
@@ -133,9 +133,7 @@ export default function SaveToServer() {
         action={() => null}
         getting={false}
         onClick={() => {
-          void (async () => {
-            await saveToServer();
-          })();
+          void handleSave();
         }}
       >
         <SaveIcon data-cy="saveToServer" />

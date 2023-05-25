@@ -1,11 +1,11 @@
 import { AppBar, Toolbar, useTheme } from '@material-ui/core';
-import type { PropsWithChildren } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import useStore from '../../store/useStore';
 import GetFromServer from '../General/GetFromServer';
 import ProgressBar from '../General/ProgressBar';
 import MoreMenuButton from '../TopNavBar/menu/MoreMenuButton';
+import SaveToServerButton from '../TopNavBar/SaveToServerButton';
 import SettingsInfoDrawer from '../TopNavBar/SettingsInfoDrawer';
 import SubgraphsStack from '../TopNavBar/SubgraphsStack';
 
@@ -14,8 +14,8 @@ interface Props {
   checkAndNewGraph: (notSave: boolean) => void;
 }
 
-function TopAppBar(props: PropsWithChildren<Props>) {
-  const { classes, checkAndNewGraph, children } = props;
+function TopAppBar(props: Props) {
+  const { classes, checkAndNewGraph } = props;
 
   const { zIndex } = useTheme();
 
@@ -70,8 +70,7 @@ function TopAppBar(props: PropsWithChildren<Props>) {
         <SubgraphsStack />
         <GetFromServer />
 
-        {children}
-
+        <SaveToServerButton />
         <div>
           <MoreMenuButton
             checkAndNewGraph={() => checkAndNewGraph(false)}
