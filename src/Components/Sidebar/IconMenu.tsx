@@ -126,7 +126,8 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
     if (!selectedElement && !workingGraph.graph.id) {
       setOpenSnackbar({
         open: true,
-        text: 'Workflow is not saved yet! Nothing to delete.',
+        text:
+          'Workflow is not saved yet! If you need to start over select "New workflow".',
         severity: 'success',
       });
       return;
