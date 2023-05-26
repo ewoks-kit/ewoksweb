@@ -62,7 +62,7 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
           data-cy="node-edge-label"
         />
 
-        {valueIsChanged && (
+        {/* {valueIsChanged && (
           <IconButton
             style={{
               width: '20%',
@@ -82,7 +82,7 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
               <SaveIcon />
             </Fab>
           </IconButton>
-        )}
+        )} */}
       </FormControl>
     </div>
   );

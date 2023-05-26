@@ -137,18 +137,7 @@ function TableDataMapping(props: TableDataMappingProps) {
                 typeOfValues={props.typeOfValues[1]}
                 headers={headers}
               />
-              <ToolsCell
-                disableSave={
-                  row.name === '' ||
-                  row.value === '' ||
-                  (values[index].source_output === rows[index].name &&
-                    values[index].target_input === rows[index].value) ||
-                  (values[index].name === rows[index].name &&
-                    values[index].value === rows[index].value)
-                }
-                onSave={() => onSaveRow(row.id, index)}
-                onDelete={() => onDelete(row.id || '')}
-              />
+              <ToolsCell onDelete={() => onDelete(row.id || '')} />
             </TableRow>
           </React.Fragment>
         ))}

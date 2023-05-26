@@ -11,7 +11,6 @@ import useDebounce from '../../../hooks/useDebounce';
 
 export default function DataMappingComponent(element: Edge) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
-  console.log(edgeData);
 
   assertEdgeDataDefined(edgeData, element.id);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
@@ -27,16 +26,15 @@ export default function DataMappingComponent(element: Edge) {
   const [dmapping, setDmapping] = useState<DataMapping[]>(
     edgeData.data_mapping || []
   );
-  const debouncedDmapping = useDebounce(dmapping, 600);
+  const debouncedDmapping = useDebounce(dmapping, 300);
 
   useEffect(() => {
-    console.log(debouncedDmapping);
-
     setEdgeData(element.id, {
       ...edgeData,
-      data_mapping: debouncedDmapping,
+      data_mapping: debouncedDmapping as DataMapping[],
     });
-  }, [debouncedDmapping]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedDmapping, setEdgeData]);
 
   function addDataMapping(
     edgeDataC: EwoksRFLinkData,
@@ -56,8 +54,6 @@ export default function DataMappingComponent(element: Edge) {
   }
 
   const dataMappingValuesChanged = (table: DataMapping[]) => {
-    console.log(table);
-
     const dmap: DataMapping[] = table.map((row) => {
       return {
         id: row.source_output ? row.source_output.toString() : row.id,
@@ -67,7 +63,6 @@ export default function DataMappingComponent(element: Edge) {
         target_input: row.value as string,
       };
     });
-    console.log(dmap);
     setDmapping(dmap);
 
     // setEdgeData(element.id, {

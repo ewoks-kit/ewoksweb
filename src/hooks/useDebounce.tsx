@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
+import type { DataMapping } from '../types';
 
-export default function useDebounce(value: string | number, delay: number) {
-  const [debouncedValue, setDebouncedValue] = useState<string | number>(value);
+export default function useDebounce(
+  value: string | number | DataMapping[],
+  delay: number
+) {
+  const [debouncedValue, setDebouncedValue] = useState<
+    string | number | DataMapping[]
+  >(value);
 
   useEffect(
     () => {

@@ -132,7 +132,7 @@ export default function EdgeLabelComment() {
               onInputChange={(event) =>
                 valueChanged(event as ChangeEvent<HTMLInputElement>)
               }
-              style={{ width: valueIsChanged ? '80%' : '98%' }}
+              style={{ width: '98%' }}
               renderInput={(params) => (
                 <TextField
                   onBlur={() => valueSavedLocal(label, element)}
@@ -145,7 +145,7 @@ export default function EdgeLabelComment() {
                 />
               )}
             />
-            {valueIsChanged && (
+            {/* {valueIsChanged && (
               <IconButton
                 style={{
                   width: '20%',
@@ -165,7 +165,7 @@ export default function EdgeLabelComment() {
                   <SaveIcon />
                 </Fab>
               </IconButton>
-            )}
+            )} */}
           </FormControl>
         </SidebarTooltip>
       )}
