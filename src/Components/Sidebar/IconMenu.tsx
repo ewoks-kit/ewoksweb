@@ -123,14 +123,15 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
   }
 
   const deleteElement = async () => {
-    if (!workingGraph.graph.id) {
+    if (!selectedElement && !workingGraph.graph.id) {
       setOpenSnackbar({
         open: true,
-        text: 'No workflow on canvas to delete!',
+        text: 'Workflow is not saved yet! Nothing to delete.',
         severity: 'success',
       });
       return;
     }
+
     if (workingGraph.graph.id !== graphInfo.id) {
       setOpenSnackbar({
         open: true,
