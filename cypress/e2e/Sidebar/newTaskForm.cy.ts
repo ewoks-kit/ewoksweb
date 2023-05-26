@@ -6,9 +6,7 @@ describe('new Task form', () => {
   it('creates new task', () => {
     cy.get('[aria-controls="navbar-dropdown-menu"]').click();
 
-    cy.get('#navbar-dropdown-menu').within(() => {
-      cy.contains('[role="menuitem"]', 'Workflows-Tasks-Icons').click();
-    });
+    cy.findByRole('menuitem', { name: 'Settings' }).click();
 
     cy.contains('Categories');
 

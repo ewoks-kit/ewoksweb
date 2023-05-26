@@ -8,13 +8,13 @@ import addNodesSidebarState from '../../store/addNodesSidebarState';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
-    overflow: 'auto',
+    overflow: 'hidden',
     width: '0px',
     height: '100%',
     flex: 'none',
     borderRight: `1px solid ${theme.palette.divider}`,
     zIndex: theme.zIndex.drawer,
-    position: 'absolute',
+    position: 'static',
     top: 0,
     left: 0,
     bottom: 0,
@@ -76,7 +76,7 @@ function OverflowDrawer() {
       <Fab
         size="small"
         color="primary"
-        aria-label="add"
+        aria-label="addNodes"
         onClick={toggleDrawer}
         style={{ marginLeft: isAddNodesSidebarOpen ? '230px' : '10px' }}
         className={classes.leftDrawerButton}

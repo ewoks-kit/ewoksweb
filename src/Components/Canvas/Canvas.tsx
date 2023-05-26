@@ -1,5 +1,4 @@
 import type { DragEventHandler, MouseEvent } from 'react';
-import { useState } from 'react';
 import { useEffect, useRef } from 'react';
 import type { Node, Edge, Connection, NodeChange, EdgeChange } from 'reactflow';
 import ReactFlow, {
@@ -31,28 +30,12 @@ import {
   assertNodeDataDefined,
   assertNodeDefined,
 } from '../../utils/typeGuards';
+import FallbackMessage from './FallbackMessage';
 
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
       flexGrow: 1,
-    },
-    noWorkflowMessage: {
-      position: 'fixed',
-      left: '30%',
-      // Vertical centering minus `1rem` to compensate for the visual illusion that items that are perfectly centered don't seem to be
-      top: '50%',
-      transform: 'translateY(calc(-50% - 1rem))',
-
-      width: '20%',
-      height: '20%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 1000,
-      color: '#3f51b5',
-      opacity: '0.5',
-      textAlign: 'center',
     },
   })
 );
@@ -107,18 +90,10 @@ function Canvas() {
     getNode,
   } = rfInstance;
 
-  const [showInitialMessage, setShowInitialMessage] = useState(true);
-
-  const nodesNumber = getNodes().length;
-
-  useEffect(() => {
-    setShowInitialMessage(nodesNumber === 0 && workingGraphId === '');
-  }, [getNodes, nodesNumber, workingGraphId]);
-
   useEffect(() => {
     setTimeout(() => {
-      fitView();
-    }, 1000);
+      fitView({ duration: 500 });
+    }, 300);
   }, [workingGraphId, fitView]);
 
   function onNodesChange(changes: NodeChange[]) {
@@ -150,8 +125,6 @@ function Canvas() {
 
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
-
-    setShowInitialMessage(false);
 
     if (workingGraphId === graphId) {
       const stateRF = storeRF.getState();
@@ -328,8 +301,8 @@ function Canvas() {
 
         setGraphInfo(subgraph.graph);
         setTimeout(() => {
-          fitView();
-        }, 1000);
+          fitView({ duration: 500 });
+        }, 300);
         setSubgraphsStack({
           id: subgraph.graph.id,
           label: subgraph.graph.label,
@@ -394,21 +367,7 @@ function Canvas() {
       role="button"
       tabIndex={0}
     >
-      {showInitialMessage && (
-        // <h3 className={classes.noWorkflowMessage}>
-        //   Open a workflow from the top-right or drag-and-drop nodes from the
-        //   left sidebar to create a new workflow
-        // </h3>
-        <div className={classes.noWorkflowMessage}>
-          <p>
-            <strong>Drag and drop</strong> tasks here to start building your
-            workflow,
-            <br />
-            or use <em>Quick Open</em> to <strong>open</strong> an existing
-            workflow.
-          </p>
-        </div>
-      )}
+      <FallbackMessage />
       <div className="reactflow-wrapper" ref={reactFlowWrapper}>
         <ReactFlow
           fitView

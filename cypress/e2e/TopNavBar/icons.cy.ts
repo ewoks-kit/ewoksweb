@@ -4,29 +4,25 @@ describe('Icons:', () => {
   });
 
   it('icons appear on tasks correctly', () => {
-    cy.contains('General').click();
+    cy.findByRole('button', { name: 'ewokscore' }).click();
 
-    cy.get('[data-cy="add-nodes-category-General"]')
-      .find('.dndnode')
-      .first()
-      .children('span')
-      .children('span')
-      .should('have.text', 'graphOutput')
-      .siblings('img')
-      .should('have.attr', 'src')
-      .should(
-        'include',
-        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFC0lEQVR4nO2a308UVxT'
-      );
+    cy.findByTitle('ewokscore.tests.examples.tasks.sumtask.SumTask').within(
+      () => {
+        cy.findByRole('img', { hidden: true })
+          .should('have.attr', 'src')
+          .should(
+            'include',
+            'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAA7D'
+          );
+      }
+    );
   });
 
   // Assumes down.svg is on the server
   it('should upload-fail-delete-upload down.svg and appear-disappear on the icon list', () => {
     cy.get('[aria-controls="navbar-dropdown-menu"]').click();
 
-    cy.get('#navbar-dropdown-menu').within(() => {
-      cy.contains('[role="menuitem"]', 'Workflows-Tasks-Icons').click();
-    });
+    cy.findByRole('menuitem', { name: 'Settings' }).click();
 
     cy.contains('Categories');
 

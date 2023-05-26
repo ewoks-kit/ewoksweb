@@ -9,10 +9,10 @@ import useStore from 'store/useStore';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { getTaskDescription, deleteTask } from 'api/tasks';
+import { deleteTask } from 'api/tasks';
 import { textForError } from 'utils';
-import commonStrings from 'commonStrings.json';
 import FormDialog from '../General/FormDialog';
+import { useGetTasks } from '../TopNavBar/hooks';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -34,23 +34,6 @@ function TaskManagementButtons() {
   const selectedTask = useStore((state) => state.selectedTask);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const tasks = useStore((state) => state.tasks);
-  const setTasks = useStore((state) => state.setTasks);
-
-  const getTasks = async () => {
-    try {
-      const tasksData = await getTaskDescription();
-      if (tasksData.data.items.length > 0) {
-        const allTasks = tasksData.data.items;
-        setTasks(allTasks);
-      }
-    } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(error, commonStrings.retrieveTasksError),
-        severity: 'error',
-      });
-    }
-  };
 
   function onAction(action: FormAction, element?: string) {
     setDoAction(action);
@@ -73,6 +56,8 @@ function TaskManagementButtons() {
   const deleteTaskDialog = () => {
     setOpenAgreeDialog(true);
   };
+
+  const getTasks = useGetTasks();
 
   const agreeDeleteTask = async () => {
     setOpenAgreeDialog(false);

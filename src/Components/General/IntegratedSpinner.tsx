@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Fab from '@material-ui/core/Fab';
 import CheckIcon from '@material-ui/icons/Check';
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import tooltipText from './TooltipText';
 
 import useStore from '../../store/useStore';
+import { IconButton } from '@material-ui/core';
 
 interface IntegratedSpinnerProps {
   children: JSX.Element;
@@ -77,13 +77,11 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
     <Tooltip title={tooltipText(tooltip)} enterDelay={800} arrow>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Box sx={{ m: 1, position: 'relative' }}>
-          <Fab
+          <IconButton
             // className={classes.openFileButton}
-            color="primary"
-            size="small"
+            color="inherit"
             onClick={handleButtonClick}
-            component="span"
-            aria-label="add"
+            aria-label={tooltip}
             disabled={
               loading
                 ? true
@@ -93,7 +91,7 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
             }
           >
             {success ? <CheckIcon /> : loading ? '...' : children}
-          </Fab>
+          </IconButton>
           {loading && (
             <CircularProgress
               size={46}

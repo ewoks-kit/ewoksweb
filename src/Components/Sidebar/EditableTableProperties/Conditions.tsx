@@ -1,4 +1,4 @@
-import type { EditableTableRow, EwoksRFLinkData } from 'types';
+import type { EditableTableRow, Conditions as EdgeConditions } from 'types';
 import EditableTable from './EditableTable';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
@@ -10,17 +10,17 @@ export default function Conditions(element: Edge) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
 
+  const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
 
-  function addConditions(edgeDataL: EwoksRFLinkData) {
-    const elCon = edgeDataL.conditions || [];
+  function addConditions(rows: EditableTableRow[] | undefined) {
+    const elCon = rows as EdgeConditions[];
 
     const newEdgeData = {
-      ...edgeDataL,
       on_error: false,
       conditions: [...elCon, { id: nanoid(), name: '', value: false }],
     };
-    setEdgeData(element.id, newEdgeData);
+    mergeEdgeData(element.id, newEdgeData);
   }
 
   function conditionsValuesChanged(table: EditableTableRow[]) {
@@ -43,7 +43,7 @@ export default function Conditions(element: Edge) {
         headers={['Output', 'Value']}
         defaultValues={edgeData.conditions || []}
         valuesChanged={conditionsValuesChanged}
-        onRowAdd={() => addConditions(edgeData)}
+        onRowAdd={(rows) => addConditions(rows)}
         typeOfValues={[
           {
             type: 'select',

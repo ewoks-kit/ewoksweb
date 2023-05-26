@@ -127,6 +127,7 @@ function AddNodes(props: AddNodesProps) {
                         role="button"
                         tabIndex={0}
                         className={classes.imgHolder}
+                        aria-label={elem.task_identifier}
                       >
                         <span className={classes.imgLabelHolder}>
                           {elem.task_identifier?.split('.').pop()}

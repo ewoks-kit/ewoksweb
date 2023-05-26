@@ -11,7 +11,7 @@ describe('sidebar menu', () => {
       cy.contains('[role="sidebarMenuItem"]', 'Clone Workflow').click();
     });
 
-    cy.contains('No Workflow to clone!');
+    cy.contains('No workflow to clone!');
 
     cy.get('#editSidebar-dropdown-menu').within(() => {
       cy.contains('[role="sidebarMenuItem"]', 'Delete Workflow').click();
@@ -29,6 +29,8 @@ describe('sidebar menu', () => {
       cy.contains('[role="sidebarMenuItem"]', 'Clone Workflow').click();
     });
 
+    cy.waitForStableDOM();
+
     cy.contains('Give the new Workflow name')
       .parent()
       .should('have.class', 'MuiDialogTitle-root')
@@ -42,6 +44,8 @@ describe('sidebar menu', () => {
 
   it('opens the clone Task form when node is selected', () => {
     cy.get('.react-flow').contains('ewoksweb').parent().click({ force: true });
+
+    cy.waitForStableDOM();
 
     cy.get('[aria-controls="editSidebar-dropdown-menu"]').click();
 

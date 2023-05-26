@@ -204,12 +204,13 @@ export default function NodeDetails(selectedElement: Node) {
               (used for method and script as the required inputs are unknown).`}
       >
         <div>
-          <b>Inputs Complete</b>
           <Checkbox
             checked={inputsComplete}
             onChange={(event) => inputsCompleteChanged(event.target.checked)}
             inputProps={{ 'aria-label': 'controlled' }}
+            color="primary"
           />
+          <b>Inputs Complete</b>
         </div>
       </SidebarTooltip>
 
@@ -218,12 +219,13 @@ export default function NodeDetails(selectedElement: Node) {
               will be linked to this node. ONLY for one node in its graph`}
       >
         <div>
-          <b>Default Error Node</b>
           <Checkbox
             checked={defaultErrorNode}
             onChange={(event) => defaulErrortNodeChanged(event.target.checked)}
             inputProps={{ 'aria-label': 'controlled' }}
+            color="primary"
           />
+          <b>Default Error Node</b>
         </div>
       </SidebarTooltip>
 

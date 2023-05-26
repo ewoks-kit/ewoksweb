@@ -1,4 +1,4 @@
-import type { EditableTableRow, EwoksRFNodeData } from 'types';
+import type { EditableTableRow, Inputs } from 'types';
 import EditableTable from './EditableTable';
 import SidebarTooltip from '../SidebarTooltip';
 import useNodeDataStore from '../../../store/useNodeDataStore';
@@ -8,21 +8,23 @@ import { nanoid } from 'nanoid';
 
 export default function DefaultInputs(element: Node) {
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
   assertNodeDataDefined(nodeData, element.id);
 
-  function addDefaultInputs(nodeDataProps: EwoksRFNodeData) {
+  const defaultInputs = nodeData.ewoks_props.default_inputs || [];
+
+  function addDefaultInputs(rows: EditableTableRow[] | undefined) {
     const newNodeData = {
-      ...nodeDataProps,
       ewoks_props: {
-        ...nodeDataProps.ewoks_props,
         default_inputs: [
-          ...(nodeDataProps.ewoks_props.default_inputs || []),
+          ...(rows as Inputs[]),
           { id: nanoid(), name: '', value: '' },
         ],
       },
     };
-    setNodeData(element.id, newNodeData);
+
+    mergeNodeData(element.id, newNodeData);
   }
 
   const defaultInputsChanged = (table: EditableTableRow[]) => {
@@ -48,7 +50,7 @@ export default function DefaultInputs(element: Node) {
         text={`Used to create an input when not provided
               by the output of other connected nodes(tasks).`}
       >
-        <div>
+        <div style={{ marginTop: '5px', fontSize: '16px' }}>
           <b>Default Inputs </b>
         </div>
       </SidebarTooltip>
@@ -57,7 +59,7 @@ export default function DefaultInputs(element: Node) {
         headers={['Name', 'Value']}
         defaultValues={nodeData.ewoks_props.default_inputs || []}
         valuesChanged={defaultInputsChanged}
-        onRowAdd={() => addDefaultInputs(nodeData)}
+        onRowAdd={(rows) => addDefaultInputs(rows)}
         typeOfValues={[
           {
             type: 'select',

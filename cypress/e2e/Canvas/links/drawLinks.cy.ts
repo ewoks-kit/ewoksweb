@@ -5,7 +5,7 @@ describe('draw links', () => {
 
   // draw link by clicking two handles in simple nodes
   it('draws a link by clicking two handles in simple nodes', () => {
-    cy.get('button[aria-label="add"]').click();
+    cy.get('button[aria-label="addNodes"]').click();
     cy.get('.react-flow__edge').should('have.length', 13);
     cy.waitForStableDOM();
     cy.get('.react-flow__nodes')

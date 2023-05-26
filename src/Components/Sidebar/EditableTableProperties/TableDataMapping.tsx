@@ -12,8 +12,8 @@ import type { DataMapping, EditableTableRow } from 'types';
 import { createDataMappingData } from './utils';
 import TableHeader from './TableHeader';
 import ToolsCell from './ToolsCell';
-import { IconButton, TableCell } from '@material-ui/core';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import { TableCell } from '@material-ui/core';
+import AddRowButton from './AddRowButton';
 
 export const useStyles = makeStyles(() => ({
   table: {
@@ -34,15 +34,14 @@ interface TableDataMappingProps {
   values: DataMapping[];
   typeOfValues: { type: string; values?: string[] }[];
   valuesChanged: (rows: EditableTableRow[]) => void;
-  onRowAdd?: () => void;
+  onRowAdd?: (rows?: EditableTableRow[]) => void;
 }
 
-// The table where lines can be added where type is selected and appropriate values are given to name and value.
 function TableDataMapping(props: TableDataMappingProps) {
   const [rows, setRows] = React.useState<EditableTableRow[]>([]);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const { values, headers } = props;
+  const { values, headers, onRowAdd } = props;
 
   useEffect(() => {
     setRows(values.map(createDataMappingData));
@@ -139,26 +138,31 @@ function TableDataMapping(props: TableDataMappingProps) {
                 headers={headers}
               />
               <ToolsCell
-                disableSave={row.name === '' || row.value === ''}
+                disableSave={
+                  row.name === '' ||
+                  row.value === '' ||
+                  (values[index].source_output === rows[index].name &&
+                    values[index].target_input === rows[index].value) ||
+                  (values[index].name === rows[index].name &&
+                    values[index].value === rows[index].value)
+                }
                 onSave={() => onSaveRow(row.id, index)}
                 onDelete={() => onDelete(row.id || '')}
               />
             </TableRow>
           </React.Fragment>
         ))}
-        <TableRow>
-          <TableCell align="left" className={classes.tableCell}>
-            <IconButton
-              style={{ padding: '1px' }}
-              aria-label="dataMapping"
-              onClick={() => props.onRowAdd?.()}
-              data-cy="addDataMappingButton"
-            >
-              <AddCircleOutlineIcon />
-            </IconButton>
-          </TableCell>
-          <TableCell />
-        </TableRow>
+        {onRowAdd && (
+          <TableRow>
+            <TableCell align="left" className={classes.tableCell}>
+              <AddRowButton
+                onClick={() => onRowAdd(rows)}
+                ariaLabel="Add data mapping entry"
+              />
+            </TableCell>
+            <TableCell />
+          </TableRow>
+        )}
       </TableBody>
     </Table>
   );

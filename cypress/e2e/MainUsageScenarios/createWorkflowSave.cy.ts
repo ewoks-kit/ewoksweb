@@ -5,7 +5,7 @@ describe('create workflow and save', () => {
     cy.loadAppWithoutGraph();
   });
 
-  it('opens the dialog for name after clicking new', () => {
+  it('will not open the dialog for name after clicking new', () => {
     cy.findByRole('dialog').should('not.exist');
 
     cy.get('[aria-controls="navbar-dropdown-menu"]').click();
@@ -14,10 +14,16 @@ describe('create workflow and save', () => {
       cy.contains('[role="menuitem"]', 'New workflow').click();
     });
 
-    cy.findByRole('dialog').should('be.visible');
+    cy.findByRole('dialog').should('not.exist');
+    cy.get('body').click();
+    cy.waitForStableDOM();
   });
 
   it('gives a new unique name creates and deletes workflow', () => {
+    cy.get('[data-cy="saveToServer"]').click();
+
+    cy.findByRole('dialog').should('be.visible');
+
     const id = nanoid();
 
     cy.findByRole('textbox', {
@@ -25,9 +31,6 @@ describe('create workflow and save', () => {
     }).type(id);
 
     cy.findByRole('button', { name: 'Save Workflow' }).click();
-    cy.waitForStableDOM();
-
-    cy.get('[aria-controls="navbar-dropdown-menu"]').click({ force: true });
 
     cy.get('.react-flow__edge').should('have.length', 0);
     cy.get('.react-flow__node').should('have.length', 0);
