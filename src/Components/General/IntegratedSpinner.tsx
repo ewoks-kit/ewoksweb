@@ -35,6 +35,11 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
       position: 'absolute',
       left: 0,
     },
+    openFileButton: {
+      '&:hover': {
+        backgroundColor: '#96a5f9',
+      },
+    },
   }));
   const classes = useStyles();
 
@@ -78,7 +83,7 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Box sx={{ m: 1, position: 'relative' }}>
           <IconButton
-            // className={classes.openFileButton}
+            className={classes.openFileButton}
             color="inherit"
             onClick={handleButtonClick}
             aria-label={tooltip}
