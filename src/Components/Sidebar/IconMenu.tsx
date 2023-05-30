@@ -308,7 +308,7 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
               <ListItemIcon>
                 <DeleteIcon fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Delete workflow</ListItemText>
+              <ListItemText>Delete Workflow</ListItemText>
               <Typography variant="body2" color="primary" />
             </MenuItem>
           ) : isNodeRF(selectedElement) ? (
@@ -321,7 +321,7 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
               <ListItemIcon>
                 <DeleteIcon fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Delete node</ListItemText>
+              <ListItemText>Delete Node</ListItemText>
               <Typography variant="body2" color="primary" />
             </MenuItem>
           ) : (
@@ -334,7 +334,7 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
               <ListItemIcon>
                 <DeleteIcon fontSize="small" />
               </ListItemIcon>
-              <ListItemText>Delete link</ListItemText>
+              <ListItemText>Delete Link</ListItemText>
               <Typography variant="body2" color="primary" />
             </MenuItem>
           )}
