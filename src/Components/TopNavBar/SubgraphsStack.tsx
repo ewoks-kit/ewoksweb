@@ -82,6 +82,7 @@ export default function SubgraphsStack() {
             </span>
           ))}
       </Breadcrumbs>
+
       {subgraphsStack.length === 0 ||
         (subgraphsStack.length === 1 && subgraphsStack[0].label === '' && (
           <span data-cy="untitled_workflow">
