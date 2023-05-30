@@ -140,32 +140,6 @@ function EditableTable(props: EditableTableProps) {
     setRows(calcNewRows(id));
   }
 
-  // function onSaveRow(id: string | undefined, index: number) {
-  //   const oldRows = [...rows].filter((row, i) => index !== i);
-
-  //   // TODO: not needed if button is deactivated
-  //   if (rows[index].name === '') {
-  //     setOpenSnackbar({
-  //       open: true,
-  //       text: 'Please first give a Name!',
-  //       severity: 'warning',
-  //     });
-  //     return;
-  //   }
-
-  //   if (oldRows.map((r) => r.name).includes(rows[index].name)) {
-  //     setOpenSnackbar({
-  //       open: true,
-  //       text: 'Not allowed to assign the same property TWICE!',
-  //       severity: 'error',
-  //     });
-  //     return;
-  //   }
-
-  //   setRows(calcNewRows(id));
-  //   props.valuesChanged(rows);
-  // }
-
   function onChange(
     e: { target: { name: string; value: string | number } },
     row: EditableTableRow,
@@ -182,6 +156,20 @@ function EditableTable(props: EditableTableProps) {
 
       if (name === 'value') {
         value = typeOfInputs[index] === 'number' ? Number(value) : value;
+      }
+
+      const oldRows = [...rows].filter((_row, i) => index !== i);
+
+      if (
+        name === 'name' &&
+        oldRows.map((r) => r.name).includes(value as string)
+      ) {
+        setOpenSnackbar({
+          open: true,
+          text: 'Not allowed to assign the same property TWICE!',
+          severity: 'error',
+        });
+        return;
       }
 
       const newRows = rows.map((rowe) => {

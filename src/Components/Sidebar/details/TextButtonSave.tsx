@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { FormControl, IconButton, TextField, Fab } from '@material-ui/core';
+import { FormControl, TextField } from '@material-ui/core';
 import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
-import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from '../sidebarStyle';
 import type { ChangeEvent } from 'react';
 
@@ -61,28 +60,6 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
           multiline
           data-cy="node-edge-label"
         />
-
-        {/* {valueIsChanged && (
-          <IconButton
-            style={{
-              width: '20%',
-              minWidth: '40px',
-              padding: '0 0 6px 0',
-            }}
-            color="inherit"
-            onClick={valueSavedLocal}
-          >
-            <Fab
-              className={classes.openFileButton}
-              color="primary"
-              size="small"
-              component="span"
-              aria-label="saveLabelComment"
-            >
-              <SaveIcon />
-            </Fab>
-          </IconButton>
-        )} */}
       </FormControl>
     </div>
   );

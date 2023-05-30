@@ -64,11 +64,6 @@ export default function DataMappingComponent(element: Edge) {
       };
     });
     setDmapping(dmap);
-
-    // setEdgeData(element.id, {
-    //   ...edgeData,
-    //   data_mapping: dmap,
-    // });
   };
 
   return (

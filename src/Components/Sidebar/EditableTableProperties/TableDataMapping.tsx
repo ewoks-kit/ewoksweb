@@ -48,49 +48,62 @@ function TableDataMapping(props: TableDataMappingProps) {
   }, [values]);
   const classes = useStyles();
 
-  function calcNewRows(rowId: string | undefined): EditableTableRow[] {
-    return rows.map((row) => {
-      if (row.id === rowId) {
-        return {
-          ...row,
-          // id: row.name?.replace(' ', '_') || '',
-        };
-      }
-      return row;
-    });
-  }
+  // function calcNewRows(rowId: string | undefined): EditableTableRow[] {
+  //   return rows.map((row) => {
+  //     if (row.id === rowId) {
+  //       return {
+  //         ...row,
+  //         // id: row.name?.replace(' ', '_') || '',
+  //       };
+  //     }
+  //     return row;
+  //   });
+  // }
 
-  function onSaveRow(id: string | undefined, index: number) {
-    const oldRows = [...rows].filter((row, i) => index !== i);
+  // function onSaveRow(id: string | undefined, index: number) {
+  //   const oldRows = [...rows].filter((row, i) => index !== i);
+
+  //   if (
+  //     rows[index].name !== '' &&
+  //     oldRows.map((r) => r.name).includes(rows[index].name)
+  //   ) {
+  //     setOpenSnackbar({
+  //       open: true,
+  //       text: 'Not allowed to assign the same property TWICE!',
+  //       severity: 'error',
+  //     });
+  //   } else {
+  //     const newRows = calcNewRows(id);
+  //     setRows(newRows);
+  //     props.valuesChanged(newRows);
+  //   }
+  // }
+
+  function onChange(
+    e: { target: { name: string; value: string | number } },
+    row: EditableTableRow,
+    index: number
+  ) {
+    const { id } = row;
+
+    let { value } = e.target;
+    const { name } = e.target;
+
+    if (name === 'value') {
+      value = typeof value === 'number' ? Number(value) : value;
+    }
+    const oldRows = [...rows].filter((_row, i) => index !== i);
 
     if (
-      rows[index].name !== '' &&
-      oldRows.map((r) => r.name).includes(rows[index].name)
+      name === 'name' &&
+      oldRows.map((r) => r.name).includes(value as string)
     ) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to assign the same property TWICE!',
         severity: 'error',
       });
-    } else {
-      const newRows = calcNewRows(id);
-      setRows(newRows);
-      props.valuesChanged(newRows);
-    }
-  }
-
-  function onChange(
-    e: { target: { name: string; value: string | number } },
-    row: EditableTableRow
-  ) {
-    console.log(e.target.name, e.target.value, row);
-
-    const { id } = row;
-
-    let { value } = e.target;
-    const { name } = e.target;
-    if (name === 'value') {
-      value = typeof value === 'number' ? Number(value) : value;
+      return;
     }
 
     const newRows = rows.map((rowe) => {
@@ -99,6 +112,7 @@ function TableDataMapping(props: TableDataMappingProps) {
       }
       return rowe;
     });
+
     setRows(newRows);
     props.valuesChanged(newRows);
   }

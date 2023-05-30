@@ -36,13 +36,10 @@ export default function NodeLabelComment(props: LabelCommentProps) {
   }, [nodeData]);
 
   function saveLabel(labelLocal: string) {
-    console.log(labelLocal);
-
     mergeNodeData(selectedElement.id, { ewoks_props: { label: labelLocal } });
   }
 
   function saveComment(commentLocal: string) {
-    console.log(commentLocal);
     mergeNodeData(selectedElement.id, { comment: commentLocal });
   }
 

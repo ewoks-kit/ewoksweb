@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import { FormControl, TextField, IconButton, Fab } from '@material-ui/core';
+import { FormControl, TextField } from '@material-ui/core';
 import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import SidebarTooltip from '../SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
-import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from '../sidebarStyle';
 import {
   assertEdgeDataDefined,
@@ -31,7 +30,6 @@ export default function EdgeLabelComment() {
     'use mappings',
     'use conditions',
   ]);
-  const [valueIsChanged, setValueIsChanged] = useState(false);
 
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
@@ -44,7 +42,6 @@ export default function EdgeLabelComment() {
     }
 
     setComment(edgeData.comment || '');
-    setValueIsChanged(false);
     const mappings =
       edgeData.data_mapping && edgeData.data_mapping.length > 0
         ? edgeData.data_mapping
@@ -80,23 +77,12 @@ export default function EdgeLabelComment() {
   }
 
   function valueSavedLocal(labelL: string, elementL: EwoksRFLink) {
-    setValueIsChanged(false);
     saveLabel(labelL, elementL);
-  }
-
-  function setChanged(event: ChangeEvent<HTMLInputElement>) {
-    if (label !== event.target.value) {
-      setValueIsChanged(true);
-    } else {
-      setValueIsChanged(false);
-    }
   }
 
   function valueSelectedChanged(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.textContent) {
-      setChanged(event);
       setLabel(event.target.textContent);
-      // valueSavedLocal(event.target.textContent, element as EwoksRFLink);
     }
   }
 
@@ -106,9 +92,7 @@ export default function EdgeLabelComment() {
     }
 
     if (event.target.value) {
-      setChanged(event);
       setLabel(event.target.value);
-      // valueSavedLocal(event.target.value, element as EwoksRFLink);
     }
   }
 
@@ -145,27 +129,6 @@ export default function EdgeLabelComment() {
                 />
               )}
             />
-            {/* {valueIsChanged && (
-              <IconButton
-                style={{
-                  width: '20%',
-                  minWidth: '40px',
-                  padding: '0 0 6px 0',
-                }}
-                color="inherit"
-                onClick={() => valueSavedLocal(label, element)}
-              >
-                <Fab
-                  className={classes.openFileButton}
-                  color="primary"
-                  size="small"
-                  component="span"
-                  aria-label="saveLabelComment"
-                >
-                  <SaveIcon />
-                </Fab>
-              </IconButton>
-            )} */}
           </FormControl>
         </SidebarTooltip>
       )}
