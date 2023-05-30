@@ -105,7 +105,10 @@ export function toRFEwoksLinks(
           sub_target,
           sub_source,
           conditions: conditionsSourceToString,
-          map_all_data: calcMapAllData(map_all_data, data_mapping.length > 0),
+          map_all_data:
+            map_all_data === undefined
+              ? data_mapping.length === 0
+              : map_all_data,
           on_error,
           comment: uiProps.comment ?? '',
         },
@@ -113,22 +116,6 @@ export function toRFEwoksLinks(
       return link;
     }
   );
-}
-
-function calcMapAllData(
-  map_all: boolean | undefined,
-  hasDataMappings: boolean
-) {
-  if (map_all === false) {
-    return false;
-  }
-
-  if (map_all) {
-    return map_all;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  return !(!map_all && hasDataMappings);
 }
 
 function calcLabel(
