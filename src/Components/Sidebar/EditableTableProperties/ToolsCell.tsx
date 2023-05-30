@@ -13,7 +13,7 @@ function ToolsCell(props: Props) {
   return (
     <TableCell
       className={classes.selectTableCell}
-      style={{ borderBottom: 'none', display: 'flex', minWidth: '35px' }}
+      style={{ borderBottom: 'none', display: 'flex', minWidth: '25px' }}
     >
       {/* <IconButton
         style={{ color: 'rgb(108, 128, 236)', width: '50%' }}
@@ -30,7 +30,12 @@ function ToolsCell(props: Props) {
         }}
         aria-label="Remove row"
         onClick={() => onDelete()}
-        endIcon={<RemoveCircleOutline htmlColor="#rgb(108, 128, 236)" />}
+        endIcon={
+          <RemoveCircleOutline
+            htmlColor="#rgb(108, 128, 236)"
+            style={{ marginLeft: '-9px', marginRight: '2px' }}
+          />
+        }
       />
     </TableCell>
   );
