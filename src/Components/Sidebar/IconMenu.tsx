@@ -122,43 +122,56 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
     setOpenSaveDialog(true);
   }
 
-  const deleteElement = async () => {
-    if (!workingGraph.graph.id) {
-      setOpenSnackbar({
-        open: true,
-        text: 'No workflow on canvas to delete!',
-        severity: 'success',
-      });
-      return;
-    }
+  async function deleteNode(isnode: Node) {
     if (workingGraph.graph.id !== graphInfo.id) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Not allowed to delete any element in a sub-workflow!',
-        severity: 'success',
-      });
+      warnForSubgraph();
       return;
     }
 
-    if (!selectedElement) {
-      setOpenAgreeDialog(true);
-      return;
-    }
+    const node = rfInstance.getNodes().find((nod) => nod.id === isnode.id);
 
-    if (isNodeRF(selectedElement)) {
-      const node = rfInstance
-        .getNodes()
-        .find((nod) => nod.id === selectedElement.id);
+    rfInstance.deleteElements({ nodes: [{ id: node?.id || '' }] });
+  }
 
-      rfInstance.deleteElements({ nodes: [{ id: node?.id || '' }] });
+  async function deleteLink(islink: Edge) {
+    if (workingGraph.graph.id !== graphInfo.id) {
+      warnForSubgraph();
       return;
     }
 
     const edge: Edge | undefined = rfInstance
       .getEdges()
-      .find((edg) => edg.id === selectedElement.id);
+      .find((edg) => edg.id === islink.id);
+
     rfInstance.deleteElements({ edges: [edge] as Edge[] });
-  };
+  }
+
+  async function deleteTheWorkflow() {
+    if (!workingGraph.graph.id) {
+      setOpenSnackbar({
+        open: true,
+        text:
+          'Workflow is not saved yet! If you need to start over select "New workflow".',
+        severity: 'warning',
+      });
+      return;
+    }
+
+    if (workingGraph.graph.id !== graphInfo.id) {
+      warnForSubgraph();
+      return;
+    }
+
+    setOpenAgreeDialog(true);
+  }
+
+  function warnForSubgraph() {
+    setOpenSnackbar({
+      open: true,
+      text: 'Not allowed to delete any element in a sub-workflow!',
+      severity: 'warning',
+    });
+  }
 
   const agreeCallback = async () => {
     setOpenAgreeDialog(false);
@@ -285,25 +298,46 @@ export default function IconMenu({ selectedElement }: SelectedElementRF) {
               </MenuItem>
             </>
           )}
-          <MenuItem
-            onClick={() => {
-              deleteElement();
-            }}
-            role="sidebarMenuItem"
-          >
-            <ListItemIcon>
-              <DeleteIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>
-              Delete{' '}
-              {!selectedElement
-                ? 'Workflow'
-                : isNodeRF(selectedElement)
-                ? 'Node'
-                : 'Link'}
-            </ListItemText>
-            <Typography variant="body2" color="primary" />
-          </MenuItem>
+          {!selectedElement ? (
+            <MenuItem
+              onClick={() => {
+                deleteTheWorkflow();
+              }}
+              role="sidebarMenuItem"
+            >
+              <ListItemIcon>
+                <DeleteIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Delete Workflow</ListItemText>
+              <Typography variant="body2" color="primary" />
+            </MenuItem>
+          ) : isNodeRF(selectedElement) ? (
+            <MenuItem
+              onClick={() => {
+                deleteNode(selectedElement);
+              }}
+              role="sidebarMenuItem"
+            >
+              <ListItemIcon>
+                <DeleteIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Delete Node</ListItemText>
+              <Typography variant="body2" color="primary" />
+            </MenuItem>
+          ) : (
+            <MenuItem
+              onClick={() => {
+                deleteLink(selectedElement);
+              }}
+              role="sidebarMenuItem"
+            >
+              <ListItemIcon>
+                <DeleteIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Delete Link</ListItemText>
+              <Typography variant="body2" color="primary" />
+            </MenuItem>
+          )}
         </MenuList>
       </Menu>
       <ConfirmDialog
