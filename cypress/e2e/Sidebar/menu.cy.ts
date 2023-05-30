@@ -17,7 +17,9 @@ describe('sidebar menu', () => {
       cy.contains('[role="sidebarMenuItem"]', 'Delete Workflow').click();
     });
 
-    cy.contains('No workflow on canvas to delete!');
+    cy.contains(
+      'Workflow is not saved yet! If you need to start over select "New workflow".'
+    );
     cy.get('body').click();
   });
 
