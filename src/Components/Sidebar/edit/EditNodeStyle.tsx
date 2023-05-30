@@ -28,7 +28,6 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   useEffect(
     () => {
       if (debouncedNodeWidth) {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         setElementNodeWidth(debouncedNodeWidth as number, nodeData);
       }
     },

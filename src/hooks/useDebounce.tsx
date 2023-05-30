@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import type { DataMapping } from '../types';
+import type { DataMapping, Inputs } from '../types';
 
 export default function useDebounce(
-  value: string | number | DataMapping[],
+  value: string | number | DataMapping[] | Inputs[],
   delay: number
 ) {
   const [debouncedValue, setDebouncedValue] = useState<
-    string | number | DataMapping[]
+    string | number | DataMapping[] | Inputs[]
   >(value);
 
   useEffect(
