@@ -1,5 +1,5 @@
 import EditElementStyle from './edit/EditElementStyle';
-import IconMenu from './IconMenu';
+import EditSidebarMenu from './sidebarMenu/EditSidebarMenu';
 import { isNodeRF } from '../../utils/typeGuards';
 import ElementDetails from './details/ElementDetails';
 import { useSelectedElement } from '../../store/graph-hooks';
@@ -19,7 +19,7 @@ export default function EditSidebar() {
           {!selected ? 'Workflow' : isNodeRF(selected) ? 'Node' : 'Link'}
         </span>
         <span style={{ float: 'right' }}>
-          <IconMenu selectedElement={selected} />
+          <EditSidebarMenu selectedElement={selected} />
         </span>
       </span>
       <ElementDetails selectedElement={selected} />
