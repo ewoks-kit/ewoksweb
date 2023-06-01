@@ -20,20 +20,22 @@ export default function NodeLabelComment(props: LabelCommentProps) {
   const { showComment, selectedElement } = props;
   assertElementIsNodeType(selectedElement);
 
-  const [comment, setComment] = useState('');
-  const [label, setLabel] = useState('');
+  const [comment, setComment] = useState<string>();
+  const [label, setLabel] = useState<string>();
 
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
   const nodeData = useNodeDataStore((state) =>
     state.nodesData.get(selectedElement.id)
   );
+  // TBD: the props seem to be ok but an undefined appears in TextButtonSave
+  // console.log(selectedElement.id, nodeData?.ewoks_props.label);
   assertNodeDataDefined(nodeData, selectedElement.id);
 
   useEffect(() => {
     setLabel(nodeData.ewoks_props.label || '');
     setComment(nodeData.comment || '');
-  }, [nodeData]);
+  }, [nodeData.ewoks_props.label, nodeData.comment]);
 
   function saveLabel(labelLocal: string) {
     mergeNodeData(selectedElement.id, { ewoks_props: { label: labelLocal } });

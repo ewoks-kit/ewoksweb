@@ -18,10 +18,6 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const updateNodeInternals = useUpdateNodeInternals();
 
-  useEffect(() => {
-    setNodeSize(nodeData.ui_props.nodeWidth || 100);
-  }, [nodeData.ui_props.nodeWidth]);
-
   useDebouncedEffect(
     () => {
       mergeNodeData(nodeId, {
