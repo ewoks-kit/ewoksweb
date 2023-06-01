@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Checkbox, FormControl, Slider } from '@material-ui/core';
 import type { ChangeEvent } from 'react';
 import useNodeDataStore from '../../../store/useNodeDataStore';

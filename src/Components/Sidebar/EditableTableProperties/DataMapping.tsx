@@ -26,6 +26,8 @@ export default function DataMappingComponent(element: Edge) {
   const [dmapping, setDmapping] = useState<DataMapping[]>(
     edgeData.data_mapping || []
   );
+  console.log(edgeData, element);
+
   const debouncedDmapping = useDebounce(dmapping, 300);
 
   useEffect(() => {
@@ -54,6 +56,8 @@ export default function DataMappingComponent(element: Edge) {
   }
 
   const dataMappingValuesChanged = (table: DataMapping[]) => {
+    console.log(table);
+
     const dmap: DataMapping[] = table.map((row) => {
       return {
         id: row.source_output ? row.source_output.toString() : row.id,

@@ -34,6 +34,12 @@ export function createData(pair: Conditions | Inputs): EditableTableRow {
 }
 
 export function createDataMappingData(pair: DataMapping): EditableTableRow {
+  console.log(pair, {
+    id: pair.source_output ? pair.source_output.toString() : pair.id || '',
+    name: pair.source_output ? pair.source_output.toString() : pair.name || '',
+    value: pair.target_input ?? pair.value ?? '',
+  });
+
   return {
     id: pair.source_output ? pair.source_output.toString() : pair.id || '',
     name: pair.source_output ? pair.source_output.toString() : pair.name || '',
