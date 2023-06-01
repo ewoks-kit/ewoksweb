@@ -6,16 +6,12 @@ import useStore from '../../../store/useStore';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import { useReactFlow } from 'reactflow';
 import type { Edge } from 'reactflow';
-import { useState } from 'react';
 
 export default function LinkSidebarMenu(selectedElement: Edge) {
   const rfInstance = useReactFlow();
 
   const graphInfo = useStore((state) => state.graphInfo);
   const workingGraph = useStore((state) => state.workingGraph);
-  const [cannotDelete] = useState<boolean>(
-    workingGraph.graph.id !== graphInfo.id
-  );
 
   async function deleteLink(islink: Edge) {
     const edge: Edge | undefined = rfInstance
@@ -31,7 +27,7 @@ export default function LinkSidebarMenu(selectedElement: Edge) {
         deleteLink(selectedElement);
       }}
       role="sidebarMenuItem"
-      disabled={cannotDelete}
+      disabled={workingGraph.graph.id !== graphInfo.id}
     >
       <ListItemIcon>
         <DeleteIcon fontSize="small" />

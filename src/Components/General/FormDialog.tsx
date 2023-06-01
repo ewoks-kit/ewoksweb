@@ -53,7 +53,7 @@ export default function FormDialog(props: FormDialogProps) {
   const [optionalInputNames, setOptionalInputNames] = useState<string[]>([]);
   const [requiredInputNames, setRequiredInputNames] = useState<string[]>([]);
   const [outputNames, setOutputNames] = useState<string[]>([]);
-  const [overwrite, setOverwrite] = useState<boolean>(false);
+  const [overwrite, setOverwrite] = useState(false);
 
   const setCanvasGraphChanged = useStore((st) => st.setCanvasGraphChanged);
   const initGraph = useStore((state) => state.initGraph);

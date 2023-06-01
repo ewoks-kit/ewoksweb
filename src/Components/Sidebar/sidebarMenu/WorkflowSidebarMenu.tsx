@@ -17,20 +17,17 @@ import { textForError } from '../../../utils';
 export default function WorkflowSidebarMenu() {
   const rfInstance = useReactFlow();
 
-  const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
+  const [openSaveDialog, setOpenSaveDialog] = useState(false);
   const initializedGraph = useStore((state) => state.initializedGraph);
   const initGraph = useStore((state) => state.initGraph);
-  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
+  const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const graphInfo = useStore((state) => state.graphInfo);
   const workingGraph = useStore((state) => state.workingGraph);
-  const [cannotCloneDelete] = useState<boolean>(
-    !workingGraph.graph.id || workingGraph.graph.id !== graphInfo.id
-  );
 
-  const agreeCallback = async () => {
+  async function agreeCallback() {
     setOpenAgreeDialog(false);
     if (graphInfo.id) {
       try {
@@ -50,11 +47,11 @@ export default function WorkflowSidebarMenu() {
     }
 
     initGraph(initializedGraph, undefined, rfInstance);
-  };
+  }
 
-  const disAgreeCallback = () => {
+  function disAgreeCallback() {
     setOpenAgreeDialog(false);
-  };
+  }
 
   return (
     <>
@@ -68,7 +65,9 @@ export default function WorkflowSidebarMenu() {
       <MenuItem
         onClick={() => setOpenSaveDialog(true)}
         role="sidebarMenuItem"
-        disabled={cannotCloneDelete}
+        disabled={
+          !workingGraph.graph.id || workingGraph.graph.id !== graphInfo.id
+        }
       >
         <ListItemIcon>
           <FileCopyIcon fontSize="small" />
@@ -79,7 +78,9 @@ export default function WorkflowSidebarMenu() {
       <MenuItem
         onClick={() => setOpenAgreeDialog(true)}
         role="sidebarMenuItem"
-        disabled={cannotCloneDelete}
+        disabled={
+          !workingGraph.graph.id || workingGraph.graph.id !== graphInfo.id
+        }
       >
         <ListItemIcon>
           <DeleteIcon fontSize="small" />
@@ -91,7 +92,7 @@ export default function WorkflowSidebarMenu() {
       <ConfirmDialog
         title={`Delete workflow with id: "${graphInfo.id}"?`}
         content={`You are about to delete the workflow with id: "${graphInfo.id}".
-              Please make sure that it is not used as a subgraph in other workflows!
+              Please make sure that it is not used as a sub-workflow in other workflows!
               Do you agree to continue?`}
         open={openAgreeDialog}
         agreeCallback={agreeCallback}

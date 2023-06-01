@@ -7,7 +7,7 @@ import { initializedTask } from '../../utils/InitializedEntities';
 import { FormAction } from '../../types';
 
 export default function ManageTasks() {
-  const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
+  const [openSaveDialog, setOpenSaveDialog] = useState(false);
 
   function openDialogNew() {
     setOpenSaveDialog(true);

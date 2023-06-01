@@ -32,7 +32,7 @@ export default function Dashboard() {
     (state) => state.toggleAddNodesSidebar
   );
 
-  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
+  const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const undoIndex = useStore((state) => state.undoIndex);
   const initializedGraph = useStore((state) => state.initializedGraph);
   const initGraph = useStore((state) => state.initGraph);

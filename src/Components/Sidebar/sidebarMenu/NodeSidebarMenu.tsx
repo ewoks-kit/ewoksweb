@@ -30,11 +30,8 @@ export default function NodeSidebarMenu(selectedElement: Node) {
   const tasks = useStore((state) => state.tasks);
   const workingGraph = useStore((state) => state.workingGraph);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
-  const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
+  const [openSaveDialog, setOpenSaveDialog] = useState(false);
   const [elementToEdit, setElementToEdit] = useState<Task | GraphDetails>({});
-  const [cannotCloneDelete] = useState<boolean>(
-    workingGraph.graph.id !== graphInfo.id
-  );
 
   function cloneAsTask() {
     const nodeData = getNodeData(selectedElement.id);
@@ -66,12 +63,10 @@ export default function NodeSidebarMenu(selectedElement: Node) {
   }
 
   async function deleteNode(isnode: Node) {
-    const node = rfInstance.getNodes().find((nod) => nod.id === isnode.id);
-
-    rfInstance.deleteElements({ nodes: [{ id: node?.id || '' }] });
+    rfInstance.deleteElements({ nodes: [{ id: isnode.id || '' }] });
   }
 
-  const cloneNode = () => {
+  function cloneNode() {
     const nodes = rfInstance.getNodes();
     const clonedNode = nodes.find((nod) => nod.id === selectedElement.id);
 
@@ -98,7 +93,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
 
     rfInstance.setNodes([...nodes, newClone]);
     setNodeData(newClone.id, clonedNodeData);
-  };
+  }
 
   return (
     <>
@@ -111,7 +106,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
       <MenuItem
         onClick={cloneNode}
         role="sidebarMenuItem"
-        disabled={cannotCloneDelete}
+        disabled={workingGraph.graph.id !== graphInfo.id}
       >
         <ListItemIcon>
           <FileCopyIcon fontSize="small" />
@@ -123,7 +118,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
       <MenuItem
         onClick={() => cloneAsTask()}
         role="sidebarMenuItem"
-        disabled={cannotCloneDelete}
+        disabled={workingGraph.graph.id !== graphInfo.id}
       >
         <ListItemIcon>
           <FileCopyIcon fontSize="small" />
@@ -136,7 +131,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
           deleteNode(selectedElement);
         }}
         role="sidebarMenuItem"
-        disabled={cannotCloneDelete}
+        disabled={workingGraph.graph.id !== graphInfo.id}
       >
         <ListItemIcon>
           <DeleteIcon fontSize="small" />

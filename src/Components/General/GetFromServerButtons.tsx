@@ -30,7 +30,7 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
   const setCanvasGraphChanged = useStore(
     (state) => state.setCanvasGraphChanged
   );
-  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
+  const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const undoIndex = useStore((state) => state.undoIndex);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 

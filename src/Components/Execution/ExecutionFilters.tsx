@@ -31,14 +31,14 @@ export default function ExecutionFilters() {
   const [workflowId, setWorkflowId] = useState('');
   const [categoryValue, setCategoryValue] = useState('');
   const [status, setStatus] = useState('');
-  // const [error, setError] = useState<boolean>(false);
+  // const [error, setError] = useState(false);
   // const [context, setContext] = useState<string>('');
   const [nodeId, setNodeId] = useState<string>('');
   const [taskId, setTaskId] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
   const [jobId, setJobId] = useState<string>('');
   // const [type, setType] = useState<string>('');
-  const [moreFilters, setMoreFilters] = useState<boolean>(false);
+  const [moreFilters, setMoreFilters] = useState(false);
   const setExecutedWorkflows = useStore((state) => state.setExecutedWorkflows);
 
   const toDateChanged = (event: ChangeEvent<HTMLInputElement>) => {
