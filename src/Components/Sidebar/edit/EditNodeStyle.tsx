@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Checkbox, FormControl, Slider } from '@material-ui/core';
-import useDebounce from '../../../hooks/useDebounce';
 import type { ChangeEvent } from 'react';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
-import type { EwoksRFNodeData } from '../../../types';
 import { useUpdateNodeInternals } from 'reactflow';
+import { useDebouncedEffect } from '@react-hookz/web';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(props: { nodeId: string }) {
@@ -19,29 +18,20 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const updateNodeInternals = useUpdateNodeInternals();
 
-  const debouncedNodeWidth = useDebounce(nodeSize, 500);
-
   useEffect(() => {
     setNodeSize(nodeData.ui_props.nodeWidth || 100);
-  }, [nodeData]);
+  }, [nodeData.ui_props.nodeWidth]);
 
-  useEffect(
+  useDebouncedEffect(
     () => {
-      if (debouncedNodeWidth) {
-        setElementNodeWidth(debouncedNodeWidth as number, nodeData);
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [debouncedNodeWidth] // Only call effect if debounced search term changes
-  );
-
-  function setElementNodeWidth(width: number, nodeDataProp: EwoksRFNodeData) {
-    if (debouncedNodeWidth !== nodeDataProp.ui_props.nodeWidth) {
       mergeNodeData(nodeId, {
-        ui_props: { nodeWidth: width },
+        ui_props: { nodeWidth: nodeSize },
       });
-    }
-  }
+    },
+    [nodeSize],
+    300,
+    600
+  );
 
   function withImageChanged(checked: boolean) {
     mergeNodeData(nodeId, {
