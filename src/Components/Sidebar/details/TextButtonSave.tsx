@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { FormControl, TextField } from '@material-ui/core';
 import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import sidebarStyle from '../sidebarStyle';
-import type { ChangeEvent } from 'react';
+import { useDebouncedEffect } from '@react-hookz/web';
 
 interface TextButtonSaveProps {
   label: string;
@@ -17,27 +17,15 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
   const { label, value } = props;
 
   const [valueLocal, setValueLocal] = useState(value);
-  const [valueIsChanged, setValueIsChanged] = useState(false);
 
-  useEffect(() => {
-    setValueLocal(value);
-    setValueIsChanged(false);
-  }, [value]);
-
-  function valueChanged(event: ChangeEvent<HTMLInputElement>) {
-    if (value !== event.target.value) {
-      setValueIsChanged(true);
-    } else {
-      setValueIsChanged(false);
-    }
-
-    setValueLocal(event.target.value);
-  }
-
-  function valueSavedLocal() {
-    setValueIsChanged(false);
-    props.valueSaved(valueLocal);
-  }
+  useDebouncedEffect(
+    () => {
+      props.valueSaved(valueLocal);
+    },
+    [valueLocal],
+    100,
+    500
+  );
 
   return (
     <div className={classes.detailsLabels}>
@@ -52,11 +40,9 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
           value={valueLocal || ''}
           margin="dense"
           style={{
-            width: valueIsChanged ? '80%' : '98%',
             margin: '0 0 7px 0',
           }}
-          onChange={valueChanged}
-          onBlur={valueSavedLocal}
+          onChange={(event) => setValueLocal(event.target.value)}
           multiline
           data-cy="node-edge-label"
         />
