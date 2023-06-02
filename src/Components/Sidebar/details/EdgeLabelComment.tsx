@@ -72,7 +72,6 @@ export default function EdgeLabelComment() {
     elementL: EwoksRFLink
   ) {
     if (event.target.textContent) {
-      // setLabel(event.target.textContent);
       saveLabel(event.target.textContent, elementL);
     }
   }
