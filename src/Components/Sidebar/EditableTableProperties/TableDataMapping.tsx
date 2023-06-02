@@ -48,37 +48,6 @@ function TableDataMapping(props: TableDataMappingProps) {
   }, [values]);
   const classes = useStyles();
 
-  // function calcNewRows(rowId: string | undefined): EditableTableRow[] {
-  //   return rows.map((row) => {
-  //     if (row.id === rowId) {
-  //       return {
-  //         ...row,
-  //         // id: row.name?.replace(' ', '_') || '',
-  //       };
-  //     }
-  //     return row;
-  //   });
-  // }
-
-  // function onSaveRow(id: string | undefined, index: number) {
-  //   const oldRows = [...rows].filter((row, i) => index !== i);
-
-  //   if (
-  //     rows[index].name !== '' &&
-  //     oldRows.map((r) => r.name).includes(rows[index].name)
-  //   ) {
-  //     setOpenSnackbar({
-  //       open: true,
-  //       text: 'Not allowed to assign the same property TWICE!',
-  //       severity: 'error',
-  //     });
-  //   } else {
-  //     const newRows = calcNewRows(id);
-  //     setRows(newRows);
-  //     props.valuesChanged(newRows);
-  //   }
-  // }
-
   function onChange(
     e: { target: { name: string; value: string | number } },
     row: EditableTableRow,

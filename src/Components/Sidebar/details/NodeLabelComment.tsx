@@ -37,22 +37,26 @@ export default function NodeLabelComment(props: LabelCommentProps) {
     setComment(nodeData.comment || '');
   }, [nodeData.ewoks_props.label, nodeData.comment]);
 
-  function saveLabel(labelLocal: string) {
+  function handelSaveLabel(labelLocal: string) {
     mergeNodeData(selectedElement.id, { ewoks_props: { label: labelLocal } });
   }
 
-  function saveComment(commentLocal: string) {
+  function handleSaveComment(commentLocal: string) {
     mergeNodeData(selectedElement.id, { comment: commentLocal });
   }
 
   return (
     <div className={classes.detailsLabels}>
-      <TextButtonSave label="Label" value={label} valueSaved={saveLabel} />
+      <TextButtonSave
+        label="Label"
+        value={label}
+        onValueSave={handelSaveLabel}
+      />
       <div style={{ display: showComment ? 'block' : 'none' }}>
         <TextButtonSave
           label="Comment"
           value={comment}
-          valueSaved={saveComment}
+          onValueSave={handleSaveComment}
         />
       </div>
     </div>

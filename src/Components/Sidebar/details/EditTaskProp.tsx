@@ -72,7 +72,7 @@ function EditTaskProp(props: EditTaskProps) {
           <TextButtonSave
             label="Identifier"
             value={taskProp || ''}
-            valueSaved={(val) => taskPropChanged(val)}
+            onValueSave={(val) => taskPropChanged(val)}
           />
         </div>
       )}

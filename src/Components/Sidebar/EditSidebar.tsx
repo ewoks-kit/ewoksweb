@@ -8,7 +8,16 @@ export default function EditSidebar() {
   const selected = useSelectedElement();
 
   return (
-    <aside className="dndflow">
+    <aside
+      className="dndflow"
+      key={
+        !selected
+          ? 'Workflow'
+          : isNodeRF(selected)
+          ? `Node ${selected.id}`
+          : `Link ${selected.id}`
+      }
+    >
       <span style={{ display: 'block' }}>
         <span
           style={{
