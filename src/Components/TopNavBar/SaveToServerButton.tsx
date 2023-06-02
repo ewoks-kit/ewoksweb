@@ -18,7 +18,7 @@ export default function SaveToServerButton() {
   const graphInfo = useStore((state) => state.graphInfo);
   const rfInstance = useReactFlow();
 
-  const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [isDialogOpen, setDialogOpen] = useState(false);
 
   const setGettingFromServer = useStore((state) => state.setGettingFromServer);
   const workingGraph = useStore((state) => state.workingGraph);

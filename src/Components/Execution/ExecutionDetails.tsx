@@ -51,7 +51,7 @@ export default function ExecutionDetails() {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const allWorkflows = useStore((state) => state.allWorkflows);
 
-  // const [expandedWorkflows, setExpandedWorkflows] = useState<boolean>(false);
+  // const [expandedWorkflows, setExpandedWorkflows] = useState(false);
   // const openSettingsDrawer = useStore((state) => state.openSettingsDrawer);
   const setOpenSettingsDrawer = useStore(
     (state) => state.setOpenSettingsDrawer
@@ -59,7 +59,7 @@ export default function ExecutionDetails() {
   const setCanvasGraphChanged = useStore(
     (state) => state.setCanvasGraphChanged
   );
-  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
+  const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const undoIndex = useStore((state) => state.undoIndex);
   const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
 

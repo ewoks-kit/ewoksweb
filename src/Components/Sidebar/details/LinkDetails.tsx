@@ -22,12 +22,10 @@ export default function LinkDetails(selectedElement: Edge) {
 
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
-  const [showDataMapping, setShowDataMapping] = useState<boolean>(
+  const [showDataMapping, setShowDataMapping] = useState(
     !edgeData.map_all_data
   );
-  const [showConditions, setShowConditions] = useState<boolean>(
-    !edgeData.map_all_data
-  );
+  const [showConditions, setShowConditions] = useState(!edgeData.map_all_data);
 
   useEffect(() => {
     setShowDataMapping(!edgeData.map_all_data);
