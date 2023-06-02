@@ -42,9 +42,9 @@ export default function NodeDetails(selectedElement: Node) {
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
-  const [inputsComplete, setInputsComplete] = useState<boolean>(false);
-  const [defaultErrorNode, setDefaultErrorNode] = useState<boolean>(false);
-  const [showDataMapping, setShowDataMapping] = useState<boolean>(
+  const [inputsComplete, setInputsComplete] = useState(false);
+  const [defaultErrorNode, setDefaultErrorNode] = useState(false);
+  const [showDataMapping, setShowDataMapping] = useState(
     !nodeData.ewoks_props.default_error_attributes?.map_all_data
   );
 

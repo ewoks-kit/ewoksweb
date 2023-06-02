@@ -32,7 +32,7 @@ export function toRFEwoksLinks(
       sub_source,
       on_error = false,
       conditions = [],
-      map_all_data = true,
+      map_all_data,
       required = false,
       uiProps = {},
       startEnd,
@@ -105,7 +105,10 @@ export function toRFEwoksLinks(
           sub_target,
           sub_source,
           conditions: conditionsSourceToString,
-          map_all_data,
+          map_all_data:
+            map_all_data === undefined
+              ? data_mapping.length === 0
+              : map_all_data,
           on_error,
           comment: uiProps.comment ?? '',
         },

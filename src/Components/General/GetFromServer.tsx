@@ -13,7 +13,7 @@ import { useReactFlow } from 'reactflow';
 export default function GetFromServer() {
   const [workflowId, setWorkflowId] = useState('');
   const initGraph = useStore((state) => state.initGraph);
-  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
+  const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setCanvasGraphChanged = useStore(
     (state) => state.setCanvasGraphChanged

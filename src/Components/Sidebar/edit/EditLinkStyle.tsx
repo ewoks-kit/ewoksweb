@@ -39,8 +39,8 @@ export default function EditLinkStyle(element: Edge) {
   const [arrowType, setArrowType] = useState<MarkerType | 'none'>(
     MarkerType.Arrow
   );
-  const [animated, setAnimated] = useState<boolean>(false);
-  const [colorLine, setColorLine] = useState<string>('');
+  const [animated, setAnimated] = useState(false);
+  const [colorLine, setColorLine] = useState('');
   const [x, setX] = useState(80);
   const [y, setY] = useState(80);
 

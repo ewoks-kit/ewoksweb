@@ -26,9 +26,9 @@ function TaskManagementButtons() {
   const classes = useStyles();
 
   const [elementToEdit, setElementToEdit] = useState<Task>({});
-  const [openSaveDialog, setOpenSaveDialog] = useState<boolean>(false);
+  const [openSaveDialog, setOpenSaveDialog] = useState(false);
   const [doAction, setDoAction] = useState<FormAction>();
-  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
+  const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
 
   const initializedTask = useStore((state) => state.initializedTask);
   const selectedTask = useStore((state) => state.selectedTask);

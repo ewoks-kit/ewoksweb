@@ -44,13 +44,13 @@ function Upload(props: { children?: ReactNode } | undefined) {
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   const graphInfo = useStore((state) => state.graphInfo);
-  const graphOrSubgraph = useStore<boolean>((state) => state.graphOrSubgraph);
+  const graphOrSubgraph = useStore((state) => state.graphOrSubgraph);
 
   const workingGraph = useStore<GraphRF>((state) => state.workingGraph);
   const initGraph = useStore((state) => state.initGraph);
   const setSubGraph = useStore((state) => state.setSubGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const inExecutionMode = useStore<boolean>((state) => state.inExecutionMode);
+  const inExecutionMode = useStore((state) => state.inExecutionMode);
 
   async function fileNameChanged(event: ChangeEvent<HTMLInputElement>) {
     if (workingGraph.graph.id === graphInfo.id) {

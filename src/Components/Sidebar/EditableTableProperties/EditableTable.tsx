@@ -66,7 +66,7 @@ interface DialogContent {
 function EditableTable(props: EditableTableProps) {
   const [rows, setRows] = React.useState<EditableTableRow[]>([]);
   const [typeOfInputs, setTypeOfInputs] = React.useState<string[]>([]);
-  const [openDialog, setOpenDialog] = React.useState<boolean>(false);
+  const [openDialog, setOpenDialog] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<DialogContent>();
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 

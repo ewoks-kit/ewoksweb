@@ -41,8 +41,8 @@ export default function ManageIcons() {
 
   const [selectedIcon, setSelectedIcon] = useState('');
   const [fileToBeSent, setFileToBeSent] = useState<string | ArrayBuffer>('');
-  const [fileNameToBeSent, setFileNameToBeSent] = useState<string>('');
-  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
+  const [fileNameToBeSent, setFileNameToBeSent] = useState('');
+  const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const { icons } = useIcons();
   const mutateIcons = useMutateIcons();

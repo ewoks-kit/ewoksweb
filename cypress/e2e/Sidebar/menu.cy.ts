@@ -8,16 +8,19 @@ describe('sidebar menu', () => {
     cy.get('[aria-controls="editSidebar-dropdown-menu"]').click();
 
     cy.get('#editSidebar-dropdown-menu').within(() => {
-      cy.contains('[role="sidebarMenuItem"]', 'Clone Workflow').click();
+      cy.contains('[role="sidebarMenuItem"]', 'Clone Workflow').should(
+        'have.class',
+        'Mui-disabled'
+      );
     });
-
-    cy.contains('No workflow to clone!');
 
     cy.get('#editSidebar-dropdown-menu').within(() => {
-      cy.contains('[role="sidebarMenuItem"]', 'Delete Workflow').click();
+      cy.contains('[role="sidebarMenuItem"]', 'Delete Workflow').should(
+        'have.class',
+        'Mui-disabled'
+      );
     });
 
-    cy.contains('No workflow on canvas to delete!');
     cy.get('body').click();
   });
 

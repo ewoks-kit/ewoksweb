@@ -22,7 +22,7 @@ export default function ExecuteWorkflow() {
   const setCanvasGraphChanged = useStore(
     (state) => state.setCanvasGraphChanged
   );
-  const [openAgreeDialog, setOpenAgreeDialog] = useState<boolean>(false);
+  const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const undoIndex = useStore((state) => state.undoIndex);
 
   useEffect(() => {
