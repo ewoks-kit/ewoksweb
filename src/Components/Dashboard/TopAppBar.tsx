@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, useTheme } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, useTheme } from '@material-ui/core';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import useStore from '../../store/useStore';
@@ -7,10 +7,10 @@ import ProgressBar from '../General/ProgressBar';
 import MoreMenuButton from '../TopNavBar/menu/MoreMenuButton';
 import SaveToServerButton from '../TopNavBar/SaveToServerButton';
 import SettingsInfoDrawer from '../TopNavBar/SettingsInfoDrawer';
-import SubgraphsStack from '../TopNavBar/SubgraphsStack';
+import TopNavbarLabel from '../TopNavBar/TopNavbarLabel';
 
 interface Props {
-  classes: { appBar: string; toolbar: string };
+  classes: { appBar: string; toolbar: string; title: string };
   checkAndNewGraph: (notSave: boolean) => void;
 }
 
@@ -67,7 +67,15 @@ function TopAppBar(props: Props) {
       style={{ zIndex: zIndex.drawer + 1, backgroundColor: '#1976d2' }}
     >
       <Toolbar className={classes.toolbar}>
-        <SubgraphsStack />
+        <Typography
+          component="h1"
+          variant="h6"
+          color="inherit"
+          noWrap
+          className={classes.title}
+        >
+          <TopNavbarLabel />
+        </Typography>
         <GetFromServer />
 
         <SaveToServerButton />
