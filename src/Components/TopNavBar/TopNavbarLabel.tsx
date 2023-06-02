@@ -6,10 +6,7 @@ export default function TopNavbarLabel() {
     return state.subgraphsStack;
   });
 
-  if (
-    subgraphsStack.length === 0 ||
-    (subgraphsStack.length === 1 && subgraphsStack[0].label === '')
-  ) {
+  if (subgraphsStack.length === 0 || !subgraphsStack[0].label) {
     return (
       <span data-cy="untitled_workflow">
         untitled_workflow{' '}
@@ -26,11 +23,11 @@ export default function TopNavbarLabel() {
     );
   }
 
-  if (subgraphsStack.length === 1) {
-    return (
-      <span data-cy={subgraphsStack[0].label}>{subgraphsStack[0].label}</span>
-    );
+  if (subgraphsStack.length > 1) {
+    return <SubgraphStack />;
   }
 
-  return <SubgraphStack />;
+  return (
+    <span data-cy={subgraphsStack[0].label}>{subgraphsStack[0].label}</span>
+  );
 }
