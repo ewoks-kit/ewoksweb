@@ -5,30 +5,12 @@ import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import type { Node } from 'reactflow';
 import { nanoid } from 'nanoid';
-import { useEffect, useState } from 'react';
-import useDebounce from '../../../hooks/useDebounce';
 
 export default function DefaultInputs(element: Node) {
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
   assertNodeDataDefined(nodeData, element.id);
-
-  const [defInputs, setDefInputs] = useState<Inputs[]>(
-    nodeData.ewoks_props.default_inputs || []
-  );
-  const debouncedDefInputs = useDebounce(defInputs, 300);
-
-  useEffect(() => {
-    setNodeData(element.id, {
-      ...nodeData,
-      ewoks_props: {
-        ...nodeData.ewoks_props,
-        default_inputs: debouncedDefInputs as Inputs[],
-      },
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedDefInputs, setNodeData]);
 
   function addDefaultInputs(rows: EditableTableRow[] | undefined) {
     const newNodeData = {
@@ -44,29 +26,23 @@ export default function DefaultInputs(element: Node) {
   }
 
   const defaultInputsChanged = (table: EditableTableRow[]) => {
-    // const newNodeData = {
-    //   ...nodeData,
-    //   ewoks_props: {
-    //     ...nodeData.ewoks_props,
-    //     default_inputs: table.map((dval) => {
-    //       return {
-    //         id: dval.id,
-    //         name: dval.name || '',
-    //         value: dval.value,
-    //       };
-    //     }),
-    //   },
-    // };
-    // setNodeData(element.id, newNodeData);
-
-    const dInputs: Inputs[] = table.map((dval) => {
-      return {
-        id: dval.id,
-        name: dval.name || '',
-        value: dval.value,
-      };
-    });
-    setDefInputs(dInputs);
+    // mergeNodeData(element.id, {
+    //   ewoks_props: { default_inputs: table as Inputs[] },
+    // });
+    const newNodeData = {
+      ...nodeData,
+      ewoks_props: {
+        ...nodeData.ewoks_props,
+        default_inputs: table.map((dval) => {
+          return {
+            id: dval.id,
+            name: dval.name || '',
+            value: dval.value,
+          };
+        }),
+      },
+    };
+    setNodeData(element.id, newNodeData);
   };
 
   return (
