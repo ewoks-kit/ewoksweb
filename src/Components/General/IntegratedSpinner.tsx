@@ -2,12 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckIcon from '@material-ui/icons/Check';
-import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import tooltipText from './TooltipText';
 import { useDashboardStyles } from '../Dashboard/useDashboardStyles';
 import useStore from '../../store/useStore';
 import { IconButton } from '@material-ui/core';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
 interface IntegratedSpinnerProps {
   children: JSX.Element;
@@ -83,19 +83,26 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
                 : inExecutionMode
             }
           >
-            {success ? <CheckIcon /> : loading ? '...' : children}
+            {/* {children} */}
+            {success ? (
+              <CheckIcon />
+            ) : loading ? (
+              <ArrowUpwardIcon style={{ color: 'white' }} />
+            ) : (
+              children
+            )}
           </IconButton>
           {loading && (
             <CircularProgress
-              size={46}
+              size={48}
               thickness={4}
               value={100}
               style={{
                 animationDuration: '550ms',
                 color: 'white',
                 position: 'absolute',
-                top: -4,
-                left: -4,
+                top: 0,
+                left: 0,
                 zIndex: 1,
               }}
             />
