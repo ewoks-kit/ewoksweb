@@ -29,15 +29,7 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
 
   const timer = useRef<number>();
 
-  const useStyles = makeStyles(() => ({
-    top: {
-      animationDuration: '550ms',
-      position: 'absolute',
-      left: 0,
-    },
-  }));
-  const classes = useStyles();
-  const classesDashboard = useDashboardStyles();
+  const classes = useDashboardStyles();
 
   // TODO: synd with the real time the call makes using getting
   useEffect(() => {
@@ -79,7 +71,7 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Box sx={{ m: 1, position: 'relative' }}>
           <IconButton
-            className={classesDashboard.openFileButton}
+            className={classes.openFileButton}
             color="inherit"
             onClick={handleButtonClick}
             aria-label={tooltip}
@@ -96,11 +88,10 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
           {loading && (
             <CircularProgress
               size={46}
-              className={classes.top}
               thickness={4}
-              // {...props}
               value={100}
               style={{
+                animationDuration: '550ms',
                 color: 'white',
                 position: 'absolute',
                 top: -4,

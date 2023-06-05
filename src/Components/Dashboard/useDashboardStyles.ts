@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 export const useDashboardStyles = makeStyles((theme) => ({
   openFileButton: {
     '&:hover': {
-      backgroundColor: '#0b229f',
+      backgroundColor: '#303f9f',
     },
   },
 

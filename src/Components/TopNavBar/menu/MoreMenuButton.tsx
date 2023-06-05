@@ -13,7 +13,7 @@ interface Props {
 export default function MoreMenuButton(props: Props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const classesDashboard = useDashboardStyles();
+  const classes = useDashboardStyles();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -26,7 +26,7 @@ export default function MoreMenuButton(props: Props) {
   return (
     <div>
       <IconButton
-        className={classesDashboard.openFileButton}
+        className={classes.openFileButton}
         aria-controls="navbar-dropdown-menu"
         aria-haspopup="true"
         color="inherit"
