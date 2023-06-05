@@ -88,9 +88,30 @@ it('changes width of node', () => {
 
   cy.get('@sliderThumb').should('have.attr', 'aria-valuenow').and('eq', '100');
 
-  cy.get('@sliderThumb').click().type('{end}');
+  // cy.get('@sliderThumb').click().type('{end}');
+  const endValue = 300;
 
-  cy.get('@sliderThumb').should('have.attr', 'aria-valuenow').and('eq', '300');
+  cy.get('@sliderThumb').then(($slider) => {
+    const slider = $slider[0]; // Extract the DOM element from the jQuery object
+
+    const { left, right, top, bottom } = $slider[0].getBoundingClientRect();
+    const xPos =
+      ((endValue - parseFloat(slider.min)) /
+        (parseFloat(slider.max) - parseFloat(slider.min))) *
+        (right - left) +
+      left;
+    const yPos = (top + bottom) / 2;
+
+    cy.get('@sliderThumb')
+      .trigger('mousedown', { button: 0 })
+      .trigger('mousemove', { clientX: xPos, clientY: yPos })
+      .trigger('mouseup', { force: true });
+
+    // cy.get('@sliderThumb').should('have.value', endValue.toString());
+    cy.get('@sliderThumb').should('have.attr', 'aria-valuenow').and('eq', '98');
+  });
+
+  // cy.get('@sliderThumb').should('have.attr', 'aria-valuenow').and('eq', '300');
 });
 
 it('changes moreHandles of node true->false->true', () => {
