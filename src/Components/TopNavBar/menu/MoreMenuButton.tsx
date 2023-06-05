@@ -3,6 +3,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import MoreMenuList from './MoreMenuList';
 import StyledMenu from './StyledMenu';
 import { IconButton } from '@material-ui/core';
+import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 
 interface Props {
   checkAndNewGraph: () => void;
@@ -11,6 +12,8 @@ interface Props {
 
 export default function MoreMenuButton(props: Props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const classes = useDashboardStyles();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -23,6 +26,7 @@ export default function MoreMenuButton(props: Props) {
   return (
     <div>
       <IconButton
+        className={classes.openFileButton}
         aria-controls="navbar-dropdown-menu"
         aria-haspopup="true"
         color="inherit"
