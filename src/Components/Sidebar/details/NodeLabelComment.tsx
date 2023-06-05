@@ -49,13 +49,13 @@ export default function NodeLabelComment(props: LabelCommentProps) {
     <div className={classes.detailsLabels}>
       <TextButtonSave
         label="Label"
-        value={label}
+        defaultValue={label}
         onValueSave={handelSaveLabel}
       />
       <div style={{ display: showComment ? 'block' : 'none' }}>
         <TextButtonSave
           label="Comment"
-          value={comment}
+          defaultValue={comment}
           onValueSave={handleSaveComment}
         />
       </div>

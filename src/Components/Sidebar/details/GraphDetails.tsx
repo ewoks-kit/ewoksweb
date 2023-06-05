@@ -23,17 +23,17 @@ export default function GraphDetails() {
     <>
       <TextButtonSave
         label="Label"
-        value={graphInfo.label || ''}
+        defaultValue={graphInfo.label || ''}
         onValueSave={handleSaveLabel}
       />
       <TextButtonSave
         label="Comment"
-        value={graphInfo.uiProps?.comment || ''}
+        defaultValue={graphInfo.uiProps?.comment || ''}
         onValueSave={handleSaveComment}
       />
       <TextButtonSave
         label="Category"
-        value={graphInfo.category || ''}
+        defaultValue={graphInfo.category || ''}
         onValueSave={handleSaveCategory}
       />
     </>

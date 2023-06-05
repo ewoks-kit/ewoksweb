@@ -134,7 +134,7 @@ export default function EdgeLabelComment() {
       <div style={{ display: 'block' }}>
         <TextButtonSave
           label="Comment"
-          value={edgeData.comment}
+          defaultValue={edgeData.comment}
           onValueSave={(newComment) => {
             mergeEdgeData(element.id, { comment: newComment });
           }}

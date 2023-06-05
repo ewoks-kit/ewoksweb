@@ -4,14 +4,14 @@ import sidebarStyle from '../sidebarStyle';
 
 interface TextButtonSaveProps {
   label: string;
-  value: string | undefined;
+  defaultValue: string | undefined;
   onValueSave(value: string): void;
 }
 
 export default function TextButtonSave(props: TextButtonSaveProps) {
   const classes = useDashboardStyles();
 
-  const { label, value } = props;
+  const { label, defaultValue } = props;
 
   return (
     <div className={classes.detailsLabels}>
@@ -23,7 +23,7 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
         <TextField
           label={label}
           variant="outlined"
-          value={value || ''}
+          defaultValue={defaultValue || ''}
           margin="dense"
           style={{
             width: '98%',

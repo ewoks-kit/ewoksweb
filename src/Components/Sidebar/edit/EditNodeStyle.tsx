@@ -4,7 +4,6 @@ import type { ChangeEvent } from 'react';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import { useUpdateNodeInternals } from 'reactflow';
-import { useDebouncedEffect } from '@react-hookz/web';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(props: { nodeId: string }) {
@@ -17,17 +16,6 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   );
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const updateNodeInternals = useUpdateNodeInternals();
-
-  useDebouncedEffect(
-    () => {
-      mergeNodeData(nodeId, {
-        ui_props: { nodeWidth: nodeSize },
-      });
-    },
-    [nodeSize],
-    300,
-    600
-  );
 
   function withImageChanged(checked: boolean) {
     mergeNodeData(nodeId, {
@@ -70,6 +58,17 @@ export default function EditNodeStyle(props: { nodeId: string }) {
       setNodeSize(value);
     }
   };
+
+  function onChangeCommitted(
+    _event: ChangeEvent<unknown>,
+    value: number | number[]
+  ) {
+    if (typeof value === 'number') {
+      mergeNodeData(nodeId, {
+        ui_props: { nodeWidth: value },
+      });
+    }
+  }
 
   return (
     <FormControl variant="filled" fullWidth>
@@ -137,6 +136,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
           defaultValue={nodeSize}
           value={nodeSize}
           onChange={changeNodeSize}
+          onChangeCommitted={onChangeCommitted}
           min={40}
           max={300}
           style={{ width: '100%', paddingTop: '45px' }}
