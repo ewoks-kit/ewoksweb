@@ -19,8 +19,6 @@ it('changes label of node', () => {
     .click()
     .type('Always and forever...');
 
-  cy.findByRole('button', { name: 'saveLabelComment' }).click();
-
   cy.get('.react-flow').contains('Always and forever...').should('be.visible');
 });
 
@@ -30,8 +28,6 @@ it('changes comment of node', () => {
     .should('be.visible')
     .click()
     .type('Always and forever comment...');
-
-  cy.findByRole('button', { name: 'saveLabelComment' }).click();
 
   cy.get('.react-flow')
     .contains('Always and forever...')
@@ -139,7 +135,11 @@ it('deletes a node by button and keyboard', () => {
 it('clones a node by button', () => {
   cy.get('.react-flow__node').first().click({ force: true });
 
-  cy.contains('Clone Node').click();
+  cy.get('[aria-controls="editSidebar-dropdown-menu"]').click();
+
+  cy.get('#editSidebar-dropdown-menu').within(() => {
+    cy.contains('[role="sidebarMenuItem"]', 'Clone Node').click();
+  });
 
   cy.get('.react-flow__node').should('have.length', 16);
 });

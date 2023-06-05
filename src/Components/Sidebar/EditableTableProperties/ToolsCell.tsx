@@ -15,15 +15,6 @@ function ToolsCell(props: Props) {
       className={classes.selectTableCell}
       style={{ borderBottom: 'none', display: 'flex', minWidth: '25px' }}
     >
-      {/* <IconButton
-        style={{ color: 'rgb(108, 128, 236)', width: '50%' }}
-        className={classes.root}
-        onClick={() => onDelete()}
-        aria-label="delete"
-        data-cy="deleteButtonEditableTable"
-      >
-        <DeleteIcon />
-      </IconButton> */}
       <Button
         style={{
           minWidth: '15px',
@@ -36,6 +27,7 @@ function ToolsCell(props: Props) {
             style={{ marginLeft: '-9px', marginRight: '2px' }}
           />
         }
+        data-cy="deleteButtonEditableTable"
       />
     </TableCell>
   );
