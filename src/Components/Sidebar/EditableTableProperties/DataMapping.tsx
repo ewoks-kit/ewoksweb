@@ -12,6 +12,7 @@ export default function DataMappingComponent(element: Edge) {
 
   assertEdgeDataDefined(edgeData, element.id);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
+  const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   const sourceNodeData = useNodeDataStore((state) =>
     state.nodesData.get(element.source)
@@ -21,19 +22,11 @@ export default function DataMappingComponent(element: Edge) {
     state.nodesData.get(element.target)
   );
 
-  function addDataMapping(
-    edgeDataC: EwoksRFLinkData,
-    rows?: EditableTableRow[]
-  ) {
-    setEdgeData(element.id, {
-      ...edgeDataC,
+  function addDataMapping(rows?: EditableTableRow[]) {
+    mergeEdgeData(element.id, {
       data_mapping: [
         ...(rows as DataMapping[]),
-        {
-          id: nanoid(),
-          name: '',
-          value: '',
-        },
+        { id: nanoid(), name: '', value: '' },
       ],
     });
   }
@@ -55,7 +48,7 @@ export default function DataMappingComponent(element: Edge) {
   return (
     <div>
       <TableDataMapping
-        onRowAdd={(rows) => addDataMapping(edgeData, rows)}
+        onRowAdd={(rows) => addDataMapping(rows)}
         headers={['Source', 'Target']}
         values={edgeData.data_mapping || []}
         valuesChanged={dataMappingValuesChanged}

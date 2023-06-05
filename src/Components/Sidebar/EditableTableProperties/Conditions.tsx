@@ -11,6 +11,7 @@ export default function Conditions(element: Edge) {
   assertEdgeDataDefined(edgeData, element.id);
 
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
+  const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
 
   function addConditions(rows: EditableTableRow[] | undefined) {
     const elCon = rows as EdgeConditions[];
@@ -23,20 +24,20 @@ export default function Conditions(element: Edge) {
   }
 
   function conditionsValuesChanged(table: EditableTableRow[]) {
-    mergeEdgeData(element.id, {
-      conditions: [...(table as EdgeConditions[])],
-    });
-    // const newEdgeData = {
-    //   ...edgeData,
-    //   conditions: table.map((con1) => {
-    //     return {
-    //       id: con1.id,
-    //       name: con1.name,
-    //       value: con1.value,
-    //     };
-    //   }),
-    // };
-    // setEdgeData(element.id, newEdgeData);
+    // mergeEdgeData(element.id, {
+    //   conditions: [...(table as EdgeConditions[])],
+    // });
+    const newEdgeData = {
+      ...edgeData,
+      conditions: table.map((con1) => {
+        return {
+          id: con1.id,
+          name: con1.name,
+          value: con1.value,
+        };
+      }),
+    };
+    setEdgeData(element.id, newEdgeData);
   }
 
   return (
