@@ -1,4 +1,4 @@
-import type { DataMapping, EditableTableRow, EwoksRFLinkData } from 'types';
+import type { DataMapping, EditableTableRow } from 'types';
 import { isClass } from './utils';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
