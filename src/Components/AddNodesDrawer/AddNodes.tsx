@@ -5,18 +5,14 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
-import type { Task } from 'types';
-import Tooltip from '@material-ui/core/Tooltip';
 import useStore from 'store/useStore';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import TaskIcon from '../Sidebar/TaskIcon';
-import IconBoundary from '../../IconBoundary';
 import TaskManagementButtons from '../TopDrawer/TaskManagementButtons';
 import AddSubgraphButton from './AddSubgraphButton';
-import { onDragStart } from './utils';
 import AddNoteButton from './AddNoteButton';
+import TaskItem from './TaskItem';
 
-const useStyles = makeStyles(() =>
+export const useStyles = makeStyles(() =>
   createStyles({
     accordionDetails: {
       flexWrap: 'wrap',
@@ -76,46 +72,11 @@ function AddNodes(props: AddNodesProps) {
               {tasks
                 .filter((nod) => nod.category === categoryName)
                 .map((elem) => (
-                  <span
-                    onClick={() => setSelectedTask(elem)}
-                    aria-hidden="true"
-                    role="button"
-                    tabIndex={0}
+                  <TaskItem
                     key={elem.task_identifier}
-                    className={`dndnode ${
-                      selectedTask.task_identifier === elem.task_identifier
-                        ? 'selectedTask'
-                        : ''
-                    }`}
-                    onDragStart={(event1) =>
-                      onDragStart(event1, {
-                        task_identifier: elem.task_identifier || '',
-                        task_type: elem.task_type || '',
-                        icon: elem.icon || '',
-                      })
-                    }
-                    draggable
-                  >
-                    <Tooltip title={elem.task_identifier || ''} arrow>
-                      <span
-                        role="button"
-                        tabIndex={0}
-                        className={classes.imgHolder}
-                        aria-label={elem.task_identifier}
-                      >
-                        <span className={classes.imgLabelHolder}>
-                          {elem.task_identifier?.split('.').pop()}
-                        </span>
-                        <IconBoundary>
-                          <TaskIcon
-                            className={classes.image}
-                            name={elem.icon}
-                            alt={elem.task_identifier}
-                          />
-                        </IconBoundary>
-                      </span>
-                    </Tooltip>
-                  </span>
+                    task={elem}
+                    onClick={() => setSelectedTask(elem)}
+                  />
                 ))}
               {isSidebar && categoryName === 'General' && (
                 <>
@@ -126,9 +87,9 @@ function AddNodes(props: AddNodesProps) {
             </AccordionDetails>
             {categoryName !== 'General' &&
               showManagementButtons &&
-              tasks.find(
-                (tas) => tas.task_identifier === selectedTask.task_identifier
-              )?.category === categoryName && <TaskManagementButtons />}
+              selectedTask.category === categoryName && (
+                <TaskManagementButtons />
+              )}
           </Accordion>
         )
       )}
