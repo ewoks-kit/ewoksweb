@@ -67,7 +67,7 @@ function TableDataMapping(props: TableDataMappingProps) {
         text: 'Not allowed to assign the same property TWICE!',
         severity: 'error',
       });
-      return;
+      // return;
     }
 
     if (name === 'value') {
@@ -104,6 +104,7 @@ function TableDataMapping(props: TableDataMappingProps) {
               <CustomTableCell
                 index={index}
                 row={row}
+                rowsNames={rows.map((ro) => ro.name || '')}
                 name="name"
                 onChange={onChange}
                 type=""

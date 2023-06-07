@@ -157,7 +157,7 @@ function EditableTable(props: EditableTableProps) {
         text: 'Not allowed to assign the same property TWICE!',
         severity: 'error',
       });
-      return;
+      // return;
     }
     if (
       ['string', 'bool', 'number', 'boolean', 'null'].includes(
@@ -279,6 +279,7 @@ function EditableTable(props: EditableTableProps) {
                 <CustomTableCell
                   index={index}
                   row={row}
+                  rowsNames={rows.map((ro) => ro.name || '')}
                   name="name"
                   onChange={onChange}
                   type=""

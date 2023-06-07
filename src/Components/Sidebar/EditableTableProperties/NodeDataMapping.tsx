@@ -1,4 +1,4 @@
-import type { DataMapping, EditableTableRow, EwoksRFNodeData } from 'types';
+import type { DataMapping, EditableTableRow } from 'types';
 import { isClass } from './utils';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
@@ -22,18 +22,6 @@ export default function NodeDataMapping(element: Node) {
   );
 
   function addDataMapping(rows: EditableTableRow[] | undefined) {
-    // const elMap =
-    //   nodeDataProp.ewoks_props.default_error_attributes?.data_mapping || [];
-
-    // const newNodeData = {
-    //   ewoks_props: {
-    //     default_error_attributes: {
-    //       data_mapping: [...elMap, { id: nanoid(), name: '', value: '' }],
-    //     },
-    //   },
-    // };
-
-    // mergeNodeData(element.id, newNodeData);
     mergeNodeData(element.id, {
       ewoks_props: {
         default_error_attributes: {
