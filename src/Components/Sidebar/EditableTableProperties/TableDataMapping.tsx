@@ -54,18 +54,13 @@ function TableDataMapping(props: TableDataMappingProps) {
     index: number
   ) {
     const { id } = row;
-
     let { value } = e.target;
     const { name } = e.target;
-
-    if (name === 'value') {
-      value = typeof value === 'number' ? Number(value) : value;
-    }
     const oldRows = [...rows].filter((_row, i) => index !== i);
 
     if (
-      name === 'name' &&
-      oldRows.map((r) => r.name).includes(value as string)
+      e.target.name === 'name' &&
+      oldRows.map((r) => r.name).includes(e.target.value as string)
     ) {
       setOpenSnackbar({
         open: true,
@@ -73,6 +68,10 @@ function TableDataMapping(props: TableDataMappingProps) {
         severity: 'error',
       });
       return;
+    }
+
+    if (name === 'value') {
+      value = typeof value === 'number' ? Number(value) : value;
     }
 
     const newRows = rows.map((rowe) => {

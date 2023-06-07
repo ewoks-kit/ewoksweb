@@ -39,6 +39,7 @@ export default function DataMappingComponent(element: Edge) {
         value: row.value,
       };
     });
+
     setEdgeData(element.id, {
       ...edgeData,
       data_mapping: dmap,

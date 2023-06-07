@@ -146,6 +146,19 @@ function EditableTable(props: EditableTableProps) {
     index: number
   ) {
     const { id } = row;
+    const oldRows = [...rows].filter((_row, i) => index !== i);
+
+    if (
+      e.target.name === 'name' &&
+      oldRows.map((r) => r.name).includes(e.target.value as string)
+    ) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Not allowed to assign the same property TWICE!',
+        severity: 'error',
+      });
+      return;
+    }
     if (
       ['string', 'bool', 'number', 'boolean', 'null'].includes(
         typeOfInputs[index]
@@ -156,20 +169,6 @@ function EditableTable(props: EditableTableProps) {
 
       if (name === 'value') {
         value = typeOfInputs[index] === 'number' ? Number(value) : value;
-      }
-
-      const oldRows = [...rows].filter((_row, i) => index !== i);
-
-      if (
-        name === 'name' &&
-        oldRows.map((r) => r.name).includes(value as string)
-      ) {
-        setOpenSnackbar({
-          open: true,
-          text: 'Not allowed to assign the same property TWICE!',
-          severity: 'error',
-        });
-        return;
       }
 
       const newRows = rows.map((rowe) => {
