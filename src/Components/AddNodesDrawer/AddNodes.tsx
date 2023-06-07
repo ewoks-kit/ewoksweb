@@ -62,11 +62,13 @@ const useStyles = makeStyles(() =>
 );
 
 interface AddNodesProps {
-  title?: string;
-  showManagementButtons?: boolean;
+  sidebar?: boolean;
 }
 // DOC: Hosts the nodes-tasks in their categories to drag and drop them into canvas
 function AddNodes(props: AddNodesProps) {
+  const { sidebar: isSidebar } = props;
+  const showManagementButtons = !isSidebar;
+
   const classes = useStyles();
 
   const tasks = useStore((state) => state.tasks);
@@ -159,13 +161,13 @@ function AddNodes(props: AddNodesProps) {
                     }
                     draggable
                   >
-                    {props.title === 'Add Nodes' && (
+                    {isSidebar && (
                       <Tooltip title="add note" arrow>
                         <TextsmsIcon fontSize="large" />
                       </Tooltip>
                     )}
                   </span>
-                  {props.title === 'Add Nodes' && (
+                  {isSidebar && (
                     <Upload>
                       <Tooltip title="Add a subgraph from disk" arrow>
                         <span
@@ -184,7 +186,7 @@ function AddNodes(props: AddNodesProps) {
               )}
             </AccordionDetails>
             {categoryName !== 'General' &&
-              props.showManagementButtons &&
+              showManagementButtons &&
               tasks.find(
                 (tas) => tas.task_identifier === selectedTask.task_identifier
               )?.category === categoryName && <TaskManagementButtons />}
