@@ -3,36 +3,18 @@ import {
   AccordionSummary,
   AccordionDetails,
 } from '@material-ui/core';
-import type { SvgIconTypeMap } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 import type { Task } from 'types';
 import Tooltip from '@material-ui/core/Tooltip';
-import TextsmsIcon from '@material-ui/icons/Textsms';
-import Upload from '../General/Upload';
-import AddIcon from '@material-ui/icons/Add';
 import useStore from 'store/useStore';
-import type { DragEvent } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import type { OverridableComponent } from '@material-ui/core/OverridableComponent';
 import TaskIcon from '../Sidebar/TaskIcon';
 import IconBoundary from '../../IconBoundary';
 import TaskManagementButtons from '../TopDrawer/TaskManagementButtons';
-
-interface DragInfo {
-  task_identifier: string;
-  task_type: string;
-  icon: OverridableComponent<SvgIconTypeMap> | string;
-}
-const onDragStart = (
-  event: DragEvent,
-  { task_identifier, task_type, icon }: DragInfo
-) => {
-  event.dataTransfer.setData('task_identifier', task_identifier);
-  event.dataTransfer.setData('task_type', task_type);
-  event.dataTransfer.setData('icon', icon as string);
-  event.dataTransfer.effectAllowed = 'move';
-};
+import AddSubgraphButton from './AddSubgraphButton';
+import { onDragStart } from './utils';
+import AddNoteButton from './AddNoteButton';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -74,15 +56,6 @@ function AddNodes(props: AddNodesProps) {
   const tasks = useStore((state) => state.tasks);
   const selectedTask = useStore((state) => state.selectedTask);
   const setSelectedTask = useStore((state) => state.setSelectedTask);
-  const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
-
-  const insertGraph = () => {
-    setGraphOrSubgraph(false);
-  };
-
-  const clickTask = (task: Task) => {
-    setSelectedTask(task);
-  };
 
   return (
     <>
@@ -104,8 +77,7 @@ function AddNodes(props: AddNodesProps) {
                 .filter((nod) => nod.category === categoryName)
                 .map((elem) => (
                   <span
-                    // onContextMenu={() => clickTask(elem)}
-                    onClick={() => clickTask(elem)}
+                    onClick={() => setSelectedTask(elem)}
                     aria-hidden="true"
                     role="button"
                     tabIndex={0}
@@ -145,43 +117,10 @@ function AddNodes(props: AddNodesProps) {
                     </Tooltip>
                   </span>
                 ))}
-              {categoryName === 'General' && (
+              {isSidebar && categoryName === 'General' && (
                 <>
-                  <span
-                    role="button"
-                    tabIndex={0}
-                    key="addNote"
-                    className="dndnode"
-                    onDragStart={(event) =>
-                      onDragStart(event, {
-                        task_identifier: 'note',
-                        task_type: 'note',
-                        icon: TextsmsIcon,
-                      })
-                    }
-                    draggable
-                  >
-                    {isSidebar && (
-                      <Tooltip title="add note" arrow>
-                        <TextsmsIcon fontSize="large" />
-                      </Tooltip>
-                    )}
-                  </span>
-                  {isSidebar && (
-                    <Upload>
-                      <Tooltip title="Add a subgraph from disk" arrow>
-                        <span
-                          role="button"
-                          tabIndex={0}
-                          onClick={insertGraph}
-                          onKeyPress={insertGraph}
-                          data-testid="addSubgraphFromDisk"
-                        >
-                          <AddIcon />G
-                        </span>
-                      </Tooltip>
-                    </Upload>
-                  )}
+                  <AddNoteButton />
+                  <AddSubgraphButton />
                 </>
               )}
             </AccordionDetails>
