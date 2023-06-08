@@ -72,6 +72,9 @@ function AddNodes(props: AddNodesProps) {
                     key={elem.task_identifier}
                     task={elem}
                     onClick={() => setSelectedTask(elem)}
+                    isSelected={
+                      elem.task_identifier === selectedTask.task_identifier
+                    }
                   />
                 ))}
               {isSidebar && categoryName === 'General' && (
