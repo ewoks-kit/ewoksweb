@@ -23,21 +23,16 @@ describe('edit nodes defaultInputs', () => {
     cy.get('[data-cy="autocompleteInputInEditableCell"]')
       .should('exist')
       .should('be.visible');
-    cy.get('[data-cy="doneEditingButtonEditableTable"]')
-      .should('exist')
-      .should('be.visible');
+
     cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
 
     cy.get('[data-cy="autocompleteInputInEditableCell"]').should(
       'have.length',
       1
     );
-    cy.get('[data-cy="doneEditingButtonEditableTable"]').should('be.visible');
 
     cy.get('[data-cy="autocompleteInputInEditableCell"]').type('Always');
     cy.get('[data-cy="inputInEditableCell"]').type('and forever');
-
-    cy.get('[data-cy="doneEditingButtonEditableTable"]').click();
 
     cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
 
@@ -45,7 +40,6 @@ describe('edit nodes defaultInputs', () => {
 
     // cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
     // cy.get('[data-cy="editButtonEditableTable"]').should('be.visible');
-    // cy.get('[data-cy="doneEditingButtonEditableTable"]').should('not.exist');
     // cy.get('[data-cy="inputInEditableCell"]').should('not.exist');
 
     // cy.get('[data-cy="redoButton"]').click();

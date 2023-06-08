@@ -389,6 +389,7 @@ export interface EditableTableRow {
 export interface CustomTableCellProps {
   index: number;
   row: EditableTableRow;
+  rowsNames?: string[];
   name: 'name' | 'value';
   type?: string;
   typeOfValues: { type: string; values?: string[] };

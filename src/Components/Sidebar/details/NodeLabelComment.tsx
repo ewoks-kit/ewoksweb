@@ -20,37 +20,43 @@ export default function NodeLabelComment(props: LabelCommentProps) {
   const { showComment, selectedElement } = props;
   assertElementIsNodeType(selectedElement);
 
-  const [comment, setComment] = useState('');
-  const [label, setLabel] = useState('');
+  const [comment, setComment] = useState<string>();
+  const [label, setLabel] = useState<string>();
 
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
   const nodeData = useNodeDataStore((state) =>
     state.nodesData.get(selectedElement.id)
   );
+  // TBD: the props seem to be ok but an undefined appears in TextButtonSave
+  // console.log(selectedElement.id, nodeData?.ewoks_props.label);
   assertNodeDataDefined(nodeData, selectedElement.id);
 
   useEffect(() => {
     setLabel(nodeData.ewoks_props.label || '');
     setComment(nodeData.comment || '');
-  }, [nodeData]);
+  }, [nodeData.ewoks_props.label, nodeData.comment]);
 
-  function saveLabel(labelLocal: string) {
+  function handelSaveLabel(labelLocal: string) {
     mergeNodeData(selectedElement.id, { ewoks_props: { label: labelLocal } });
   }
 
-  function saveComment(commentLocal: string) {
+  function handleSaveComment(commentLocal: string) {
     mergeNodeData(selectedElement.id, { comment: commentLocal });
   }
 
   return (
     <div className={classes.detailsLabels}>
-      <TextButtonSave label="Label" value={label} valueSaved={saveLabel} />
+      <TextButtonSave
+        label="Label"
+        defaultValue={label}
+        onValueSave={handelSaveLabel}
+      />
       <div style={{ display: showComment ? 'block' : 'none' }}>
         <TextButtonSave
           label="Comment"
-          value={comment}
-          valueSaved={saveComment}
+          defaultValue={comment}
+          onValueSave={handleSaveComment}
         />
       </div>
     </div>

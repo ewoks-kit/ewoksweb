@@ -1,4 +1,4 @@
-import type { DataMapping, EwoksRFNodeData } from 'types';
+import type { DataMapping, EditableTableRow } from 'types';
 import { isClass } from './utils';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
@@ -10,6 +10,7 @@ export default function NodeDataMapping(element: Node) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
   assertNodeDataDefined(nodeData, element.id);
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   // TODO: specify the source and target of this imaginary link to specify data_mapping
   const sourceNodeData = useNodeDataStore((state) =>
@@ -20,47 +21,44 @@ export default function NodeDataMapping(element: Node) {
     state.nodesData.get(element.id)
   );
 
-  function addDataMapping(nodeDataProp: EwoksRFNodeData) {
-    const elMap =
-      nodeDataProp.ewoks_props.default_error_attributes?.data_mapping || [];
-
-    const newNodeData = {
+  function addDataMapping(rows: EditableTableRow[] | undefined) {
+    mergeNodeData(element.id, {
       ewoks_props: {
         default_error_attributes: {
-          data_mapping: [...elMap, { id: nanoid(), name: '', value: '' }],
+          data_mapping: [
+            ...(rows as DataMapping[]),
+            { id: nanoid(), name: '', value: '' },
+          ],
         },
       },
-    };
-
-    mergeNodeData(element.id, newNodeData);
+    });
   }
 
   const dataMappingValuesChanged = (table: DataMapping[]) => {
     const dmap: DataMapping[] = table.map((row) => {
-      if (typeof row.value !== 'string') {
-        throw new TypeError(
-          'Expecting only string but got another type for Data_Mapping'
-        );
-      }
       return {
-        source_output: row.name,
-        target_input: row.value,
+        id: row.source_output ? row.source_output.toString() : row.id,
+        name: row.name,
+        value: row.value,
       };
     });
-    const newNodeData = {
+
+    setNodeData(element.id, {
+      ...nodeData,
       ewoks_props: {
+        ...nodeData.ewoks_props,
         default_error_attributes: {
+          ...nodeData.ewoks_props.default_error_attributes,
           data_mapping: dmap,
         },
       },
-    };
-    mergeNodeData(element.id, newNodeData);
+    });
   };
 
   return (
     <div>
       <TableDataMapping
-        onRowAdd={() => addDataMapping(nodeData)}
+        onRowAdd={(rows) => addDataMapping(rows)}
         headers={['Source', 'Target']}
         values={
           nodeData.ewoks_props.default_error_attributes?.data_mapping || []

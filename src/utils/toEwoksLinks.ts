@@ -84,13 +84,13 @@ function calcDataMapping(data_mapping: DataMapping[]) {
   return data_mapping.map((mapping) => {
     return {
       source_output:
-        mapping.source_output && /^\d+$/.test(mapping.source_output as string)
-          ? Number.parseInt(mapping.source_output as string, 10)
-          : mapping.source_output,
+        mapping.name && /^\d+$/.test(mapping.name)
+          ? Number.parseInt(mapping.name, 10)
+          : mapping.name,
       target_input:
-        mapping.target_input && /^\d+$/.test(mapping.target_input as string)
-          ? Number.parseInt(mapping.target_input as string, 10)
-          : mapping.target_input,
+        mapping.value && /^\d+$/.test(mapping.value as string)
+          ? Number.parseInt(mapping.value as string, 10)
+          : (mapping.value as string),
     };
   });
 }

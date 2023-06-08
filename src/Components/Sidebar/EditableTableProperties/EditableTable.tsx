@@ -140,38 +140,25 @@ function EditableTable(props: EditableTableProps) {
     setRows(calcNewRows(id));
   }
 
-  function onSaveRow(id: string | undefined, index: number) {
-    const oldRows = [...rows].filter((row, i) => index !== i);
-
-    // TODO: not needed if button is deactivated
-    if (rows[index].name === '') {
-      setOpenSnackbar({
-        open: true,
-        text: 'Please first give a Name!',
-        severity: 'warning',
-      });
-      return;
-    }
-
-    if (oldRows.map((r) => r.name).includes(rows[index].name)) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Not allowed to assign the same property TWICE!',
-        severity: 'error',
-      });
-      return;
-    }
-
-    setRows(calcNewRows(id));
-    props.valuesChanged(rows);
-  }
-
   function onChange(
     e: { target: { name: string; value: string | number } },
     row: EditableTableRow,
     index: number
   ) {
     const { id } = row;
+    const oldRows = [...rows].filter((_row, i) => index !== i);
+
+    if (
+      e.target.name === 'name' &&
+      oldRows.map((r) => r.name).includes(e.target.value as string)
+    ) {
+      setOpenSnackbar({
+        open: true,
+        text: 'Not allowed to assign the same property TWICE!',
+        severity: 'error',
+      });
+      // return;
+    }
     if (
       ['string', 'bool', 'number', 'boolean', 'null'].includes(
         typeOfInputs[index]
@@ -191,6 +178,7 @@ function EditableTable(props: EditableTableProps) {
         return rowe;
       });
       setRows(newRows);
+      props.valuesChanged(newRows);
       return;
     }
     // DOC: it is 'dict' or 'list' and uses the dialog
@@ -291,6 +279,7 @@ function EditableTable(props: EditableTableProps) {
                 <CustomTableCell
                   index={index}
                   row={row}
+                  rowsNames={rows.map((ro) => ro.name || '')}
                   name="name"
                   onChange={onChange}
                   type=""
@@ -328,15 +317,7 @@ function EditableTable(props: EditableTableProps) {
                   onEdit={() => onEditRow(row.id || '', index)}
                 />
 
-                <ToolsCell
-                  disableSave={
-                    rows[index].name === '' ||
-                    (defaultValues[index].name === rows[index].name &&
-                      defaultValues[index].value === rows[index].value)
-                  }
-                  onSave={() => onSaveRow(row.id, index)}
-                  onDelete={() => onDelete(row.id || '')}
-                />
+                <ToolsCell onDelete={() => onDelete(row.id || '')} />
               </TableRow>
             </React.Fragment>
           ))}

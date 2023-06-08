@@ -1,3 +1,4 @@
+/* eslint-disable require-unicode-regexp */
 import type {
   DefaultErrorAttributes,
   EwoksNode,
@@ -36,19 +37,15 @@ function calcDefaultErrorAttributes(
     map_all_data: false,
     data_mapping:
       default_error_attributes?.data_mapping?.map((mapping) => {
-        const outputAsNumber =
-          mapping.source_output && Number(mapping.source_output);
-
-        const targetAsNumber =
-          mapping.target_input && Number(mapping.target_input);
-
         return {
-          source_output: Number.isNaN(outputAsNumber)
-            ? mapping.source_output
-            : outputAsNumber,
-          target_input: Number.isNaN(targetAsNumber)
-            ? mapping.target_input
-            : targetAsNumber,
+          source_output:
+            mapping.name && /^\d+$/.test(mapping.name)
+              ? Number.parseInt(mapping.name, 10)
+              : mapping.name,
+          target_input:
+            mapping.value && /^\d+$/.test(mapping.value as string)
+              ? Number.parseInt(mapping.value as string, 10)
+              : (mapping.value as string),
         };
       }) || [],
   };
@@ -61,7 +58,6 @@ function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
   return default_inputs.map((dIn) => {
     return {
       name:
-        // eslint-disable-next-line require-unicode-regexp
         dIn.name && /^\d+$/.test(dIn.name as string)
           ? Number.parseInt(dIn.name as string, 10)
           : dIn.name,

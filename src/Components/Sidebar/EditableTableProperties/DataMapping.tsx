@@ -1,4 +1,4 @@
-import type { DataMapping, EditableTableRow, EwoksRFLinkData } from 'types';
+import type { DataMapping, EditableTableRow } from 'types';
 import { isClass } from './utils';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
@@ -9,8 +9,10 @@ import { nanoid } from 'nanoid';
 
 export default function DataMappingComponent(element: Edge) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
+
   assertEdgeDataDefined(edgeData, element.id);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
+  const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   const sourceNodeData = useNodeDataStore((state) =>
     state.nodesData.get(element.source)
@@ -20,19 +22,11 @@ export default function DataMappingComponent(element: Edge) {
     state.nodesData.get(element.target)
   );
 
-  function addDataMapping(
-    edgeDataC: EwoksRFLinkData,
-    rows?: EditableTableRow[]
-  ) {
-    setEdgeData(element.id, {
-      ...edgeDataC,
+  function addDataMapping(rows?: EditableTableRow[]) {
+    mergeEdgeData(element.id, {
       data_mapping: [
         ...(rows as DataMapping[]),
-        {
-          id: nanoid(),
-          name: '',
-          value: '',
-        },
+        { id: nanoid(), name: '', value: '' },
       ],
     });
   }
@@ -43,8 +37,6 @@ export default function DataMappingComponent(element: Edge) {
         id: row.source_output ? row.source_output.toString() : row.id,
         name: row.name,
         value: row.value,
-        source_output: row.name,
-        target_input: row.value as string,
       };
     });
 
@@ -57,7 +49,7 @@ export default function DataMappingComponent(element: Edge) {
   return (
     <div>
       <TableDataMapping
-        onRowAdd={(rows) => addDataMapping(edgeData, rows)}
+        onRowAdd={(rows) => addDataMapping(rows)}
         headers={['Source', 'Target']}
         values={edgeData.data_mapping || []}
         valuesChanged={dataMappingValuesChanged}

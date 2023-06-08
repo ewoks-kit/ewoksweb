@@ -1,44 +1,17 @@
-import { useEffect, useState } from 'react';
-
-import { FormControl, IconButton, TextField, Fab } from '@material-ui/core';
+import { FormControl, TextField } from '@material-ui/core';
 import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
-import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from '../sidebarStyle';
-import type { ChangeEvent } from 'react';
 
 interface TextButtonSaveProps {
   label: string;
-  value: string;
-  valueSaved(value: string): void;
+  defaultValue: string | undefined;
+  onValueSave(value: string): void;
 }
 
 export default function TextButtonSave(props: TextButtonSaveProps) {
   const classes = useDashboardStyles();
 
-  const { label, value } = props;
-
-  const [valueLocal, setValueLocal] = useState(value);
-  const [valueIsChanged, setValueIsChanged] = useState(false);
-
-  useEffect(() => {
-    setValueLocal(value);
-    setValueIsChanged(false);
-  }, [value]);
-
-  function valueChanged(event: ChangeEvent<HTMLInputElement>) {
-    if (value !== event.target.value) {
-      setValueIsChanged(true);
-    } else {
-      setValueIsChanged(false);
-    }
-
-    setValueLocal(event.target.value);
-  }
-
-  function valueSavedLocal() {
-    setValueIsChanged(false);
-    props.valueSaved(valueLocal);
-  }
+  const { label, defaultValue } = props;
 
   return (
     <div className={classes.detailsLabels}>
@@ -50,38 +23,16 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
         <TextField
           label={label}
           variant="outlined"
-          value={valueLocal || ''}
+          defaultValue={defaultValue || ''}
           margin="dense"
           style={{
-            width: valueIsChanged ? '80%' : '98%',
+            width: '98%',
             margin: '0 0 7px 0',
           }}
-          onChange={valueChanged}
+          onChange={(event) => props.onValueSave(event.target.value)}
           multiline
           data-cy="node-edge-label"
         />
-
-        {valueIsChanged && (
-          <IconButton
-            style={{
-              width: '20%',
-              minWidth: '40px',
-              padding: '0 0 6px 0',
-            }}
-            color="inherit"
-            onClick={valueSavedLocal}
-          >
-            <Fab
-              className={classes.openFileButton}
-              color="primary"
-              size="small"
-              component="span"
-              aria-label="saveLabelComment"
-            >
-              <SaveIcon />
-            </Fab>
-          </IconButton>
-        )}
       </FormControl>
     </div>
   );

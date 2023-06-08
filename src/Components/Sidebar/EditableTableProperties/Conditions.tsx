@@ -24,6 +24,9 @@ export default function Conditions(element: Edge) {
   }
 
   function conditionsValuesChanged(table: EditableTableRow[]) {
+    // mergeEdgeData(element.id, {
+    //   conditions: [...(table as EdgeConditions[])],
+    // });
     const newEdgeData = {
       ...edgeData,
       conditions: table.map((con1) => {

@@ -19,8 +19,6 @@ it('changes label of node', () => {
     .click()
     .type('Always and forever...');
 
-  cy.findByRole('button', { name: 'saveLabelComment' }).click();
-
   cy.get('.react-flow').contains('Always and forever...').should('be.visible');
 });
 
@@ -30,8 +28,6 @@ it('changes comment of node', () => {
     .should('be.visible')
     .click()
     .type('Always and forever comment...');
-
-  cy.findByRole('button', { name: 'saveLabelComment' }).click();
 
   cy.get('.react-flow')
     .contains('Always and forever...')
@@ -92,9 +88,29 @@ it('changes width of node', () => {
 
   cy.get('@sliderThumb').should('have.attr', 'aria-valuenow').and('eq', '100');
 
-  cy.get('@sliderThumb').click().type('{end}');
+  cy.get('@sliderThumb').should('have.attr', 'aria-valuemin').and('eq', '40');
 
-  cy.get('@sliderThumb').should('have.attr', 'aria-valuenow').and('eq', '300');
+  cy.get('@sliderThumb').should('have.attr', 'aria-valuemax').and('eq', '300');
+
+  cy.get('@sliderThumb').then(($slider) => {
+    const slider = $slider[0] as HTMLInputElement;
+
+    const { left, right, top, bottom } = $slider[0].getBoundingClientRect();
+    const yPos = (top + bottom) / 2;
+
+    cy.get('@sliderThumb')
+      .trigger('mousedown', { button: 0 })
+      .trigger('mousemove', { clientX: 1000, clientY: yPos })
+      .trigger('mouseup', { force: true });
+
+    cy.get('@sliderThumb')
+      .should('have.attr', 'aria-valuenow')
+      .and('not.eq', '100');
+
+    cy.get('@sliderThumb')
+      .should('have.attr', 'aria-valuenow')
+      .and('eq', '300');
+  });
 });
 
 it('changes moreHandles of node true->false->true', () => {
@@ -139,7 +155,11 @@ it('deletes a node by button and keyboard', () => {
 it('clones a node by button', () => {
   cy.get('.react-flow__node').first().click({ force: true });
 
-  cy.contains('Clone Node').click();
+  cy.get('[aria-controls="editSidebar-dropdown-menu"]').click();
+
+  cy.get('#editSidebar-dropdown-menu').within(() => {
+    cy.contains('[role="sidebarMenuItem"]', 'Clone Node').click();
+  });
 
   cy.get('.react-flow__node').should('have.length', 16);
 });

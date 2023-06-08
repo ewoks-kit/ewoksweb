@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import { FormControl, TextField, IconButton, Fab } from '@material-ui/core';
+import { FormControl, TextField } from '@material-ui/core';
 import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import SidebarTooltip from '../SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
-import SaveIcon from '@material-ui/icons/Save';
 import sidebarStyle from '../sidebarStyle';
 import {
   assertEdgeDataDefined,
   assertElementIsEdge,
-  isString,
 } from '../../../utils/typeGuards';
 import { useReactFlow } from 'reactflow';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
@@ -25,26 +23,16 @@ export default function EdgeLabelComment() {
   const element = useSelectedElement();
   assertElementIsEdge(element);
 
-  const [comment, setComment] = useState('');
-  const [label, setLabel] = useState<string>('');
   const [labelChoices, setLabelChoices] = useState([
     'use mappings',
     'use conditions',
   ]);
-  const [valueIsChanged, setValueIsChanged] = useState(false);
 
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   useEffect(() => {
-    const { label: elmtLabel } = element;
-    if (isString(elmtLabel)) {
-      setLabel(elmtLabel);
-    }
-
-    setComment(edgeData.comment || '');
-    setValueIsChanged(false);
     const mappings =
       edgeData.data_mapping && edgeData.data_mapping.length > 0
         ? edgeData.data_mapping
@@ -71,7 +59,7 @@ export default function EdgeLabelComment() {
 
   function saveLabel(labelLocal: string, elementL: EwoksRFLink) {
     setEdges([
-      ...getEdges().filter((edge) => edge.id !== element?.id),
+      ...getEdges().filter((edge) => edge.id !== elementL.id),
       {
         ...elementL,
         label: labelLocal,
@@ -79,34 +67,25 @@ export default function EdgeLabelComment() {
     ]);
   }
 
-  function valueSavedLocal(labelL: string, elementL: EwoksRFLink) {
-    setValueIsChanged(false);
-    saveLabel(labelL, elementL);
-  }
-
-  function setChanged(event: ChangeEvent<HTMLInputElement>) {
-    if (label !== event.target.value) {
-      setValueIsChanged(true);
-    } else {
-      setValueIsChanged(false);
-    }
-  }
-
-  function valueSelectedChanged(event: ChangeEvent<HTMLInputElement>) {
+  function handleValueSelectedChange(
+    event: ChangeEvent<HTMLInputElement>,
+    elementL: EwoksRFLink
+  ) {
     if (event.target.textContent) {
-      setChanged(event);
-      setLabel(event.target.textContent);
+      saveLabel(event.target.textContent, elementL);
     }
   }
 
-  function valueChanged(event: ChangeEvent<HTMLInputElement> | undefined) {
+  function handleValueChange(
+    event: ChangeEvent<HTMLInputElement> | undefined,
+    elementL: EwoksRFLink
+  ) {
     if (!event) {
       return;
     }
 
     if (event.target.value) {
-      setChanged(event);
-      setLabel(event.target.value);
+      saveLabel(event.target.value, elementL);
     }
   }
 
@@ -122,16 +101,23 @@ export default function EdgeLabelComment() {
             <Autocomplete
               freeSolo
               options={labelChoices}
-              value={label}
+              value={element.label}
               onChange={(event) =>
-                valueSelectedChanged(event as ChangeEvent<HTMLInputElement>)
+                handleValueSelectedChange(
+                  event as ChangeEvent<HTMLInputElement>,
+                  element
+                )
               }
               onInputChange={(event) =>
-                valueChanged(event as ChangeEvent<HTMLInputElement>)
+                handleValueChange(
+                  event as ChangeEvent<HTMLInputElement>,
+                  element
+                )
               }
-              style={{ width: valueIsChanged ? '80%' : '98%' }}
+              style={{ width: '98%' }}
               renderInput={(params) => (
                 <TextField
+                  // onBlur={() => saveLabel(element.label, element)}
                   variant="outlined"
                   margin="dense"
                   style={{ margin: '0 0 8px 0', paddingTop: '2px' }}
@@ -141,27 +127,6 @@ export default function EdgeLabelComment() {
                 />
               )}
             />
-            {valueIsChanged && (
-              <IconButton
-                style={{
-                  width: '20%',
-                  minWidth: '40px',
-                  padding: '0 0 6px 0',
-                }}
-                color="inherit"
-                onClick={() => valueSavedLocal(label, element)}
-              >
-                <Fab
-                  className={classes.openFileButton}
-                  color="primary"
-                  size="small"
-                  component="span"
-                  aria-label="saveLabelComment"
-                >
-                  <SaveIcon />
-                </Fab>
-              </IconButton>
-            )}
           </FormControl>
         </SidebarTooltip>
       )}
@@ -169,8 +134,8 @@ export default function EdgeLabelComment() {
       <div style={{ display: 'block' }}>
         <TextButtonSave
           label="Comment"
-          value={comment}
-          valueSaved={(newComment) => {
+          defaultValue={edgeData.comment}
+          onValueSave={(newComment) => {
             mergeEdgeData(element.id, { comment: newComment });
           }}
         />

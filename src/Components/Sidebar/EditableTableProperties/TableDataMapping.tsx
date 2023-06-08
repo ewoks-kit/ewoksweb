@@ -48,45 +48,28 @@ function TableDataMapping(props: TableDataMappingProps) {
   }, [values]);
   const classes = useStyles();
 
-  function calcNewRows(rowId: string | undefined): EditableTableRow[] {
-    return rows.map((row) => {
-      if (row.id === rowId) {
-        return {
-          ...row,
-          id: row.name?.replace(' ', '_') || '',
-        };
-      }
-      return row;
-    });
-  }
-
-  function onSaveRow(id: string | undefined, index: number) {
-    const oldRows = [...rows].filter((row, i) => index !== i);
+  function onChange(
+    e: { target: { name: string; value: string | number } },
+    row: EditableTableRow,
+    index: number
+  ) {
+    const { id } = row;
+    let { value } = e.target;
+    const { name } = e.target;
+    const oldRows = [...rows].filter((_row, i) => index !== i);
 
     if (
-      rows[index].name !== '' &&
-      oldRows.map((r) => r.name).includes(rows[index].name)
+      e.target.name === 'name' &&
+      oldRows.map((r) => r.name).includes(e.target.value as string)
     ) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to assign the same property TWICE!',
         severity: 'error',
       });
-    } else {
-      const newRows = calcNewRows(id);
-      setRows(newRows);
-      props.valuesChanged(newRows);
+      // return;
     }
-  }
 
-  function onChange(
-    e: { target: { name: string; value: string | number } },
-    row: EditableTableRow
-  ) {
-    const { id } = row;
-
-    let { value } = e.target;
-    const { name } = e.target;
     if (name === 'value') {
       value = typeof value === 'number' ? Number(value) : value;
     }
@@ -97,7 +80,9 @@ function TableDataMapping(props: TableDataMappingProps) {
       }
       return rowe;
     });
+
     setRows(newRows);
+    props.valuesChanged(newRows);
   }
 
   function onDelete(id: string) {
@@ -119,6 +104,7 @@ function TableDataMapping(props: TableDataMappingProps) {
               <CustomTableCell
                 index={index}
                 row={row}
+                rowsNames={rows.map((ro) => ro.name || '')}
                 name="name"
                 onChange={onChange}
                 type=""
@@ -134,18 +120,7 @@ function TableDataMapping(props: TableDataMappingProps) {
                 typeOfValues={props.typeOfValues[1]}
                 headers={headers}
               />
-              <ToolsCell
-                disableSave={
-                  row.name === '' ||
-                  row.value === '' ||
-                  (values[index].source_output === rows[index].name &&
-                    values[index].target_input === rows[index].value) ||
-                  (values[index].name === rows[index].name &&
-                    values[index].value === rows[index].value)
-                }
-                onSave={() => onSaveRow(row.id, index)}
-                onDelete={() => onDelete(row.id || '')}
-              />
+              <ToolsCell onDelete={() => onDelete(row.id || '')} />
             </TableRow>
           </React.Fragment>
         ))}

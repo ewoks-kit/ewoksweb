@@ -35,18 +35,10 @@ function EditTaskProp(props: EditTaskProps) {
     setEditProp(!editProp);
   }
 
-  function taskPropChanged(taskP: string) {
+  function handleTaskPropChange(taskP: string) {
     setTaskProp(taskP);
     props.propChanged({ [id]: taskP });
   }
-
-  // TODO: new textButton should it have a save on enter?
-  // function enterPressed(event) {
-  //   if (event.key === 'Enter') {
-  //     event.preventDefault();
-  //     setEditProp(!editProp);
-  //   }
-  // }
 
   return (
     <>
@@ -71,8 +63,8 @@ function EditTaskProp(props: EditTaskProps) {
         <div>
           <TextButtonSave
             label="Identifier"
-            value={taskProp || ''}
-            valueSaved={(val) => taskPropChanged(val)}
+            defaultValue={taskProp || ''}
+            onValueSave={(val) => handleTaskPropChange(val)}
           />
         </div>
       )}

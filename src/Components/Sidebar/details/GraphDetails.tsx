@@ -5,15 +5,15 @@ export default function GraphDetails() {
   const graphInfo = useStore((state) => state.graphInfo);
   const mergeGraphInfo = useStore((state) => state.mergeGraphInfo);
 
-  function saveCategory(category: string) {
+  function handleSaveCategory(category: string) {
     mergeGraphInfo({ category });
   }
 
-  function saveLabel(label: string) {
+  function handleSaveLabel(label: string) {
     mergeGraphInfo({ label });
   }
 
-  function saveComment(comment: string) {
+  function handleSaveComment(comment: string) {
     mergeGraphInfo({
       uiProps: { comment },
     });
@@ -23,18 +23,18 @@ export default function GraphDetails() {
     <>
       <TextButtonSave
         label="Label"
-        value={graphInfo.label || ''}
-        valueSaved={saveLabel}
+        defaultValue={graphInfo.label || ''}
+        onValueSave={handleSaveLabel}
       />
       <TextButtonSave
         label="Comment"
-        value={graphInfo.uiProps?.comment || ''}
-        valueSaved={saveComment}
+        defaultValue={graphInfo.uiProps?.comment || ''}
+        onValueSave={handleSaveComment}
       />
       <TextButtonSave
         label="Category"
-        value={graphInfo.category || ''}
-        valueSaved={saveCategory}
+        defaultValue={graphInfo.category || ''}
+        onValueSave={handleSaveCategory}
       />
     </>
   );

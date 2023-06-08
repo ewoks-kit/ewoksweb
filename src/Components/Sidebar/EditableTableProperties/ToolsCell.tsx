@@ -1,44 +1,34 @@
-import { IconButton, TableCell } from '@material-ui/core';
+import { Button, TableCell } from '@material-ui/core';
+import { RemoveCircleOutline } from '@material-ui/icons';
 import { useStyles } from './EditableTable';
-import { Save as SaveIcon, Delete as DeleteIcon } from '@material-ui/icons';
 
 interface Props {
-  disableSave?: boolean;
-  onSave: () => void;
   onDelete: () => void;
 }
 
 function ToolsCell(props: Props) {
-  const { disableSave, onSave, onDelete } = props;
+  const { onDelete } = props;
   const classes = useStyles();
 
   return (
     <TableCell
       className={classes.selectTableCell}
-      style={{ borderBottom: 'none', display: 'flex', width: '42px' }}
+      style={{ borderBottom: 'none', display: 'flex', minWidth: '25px' }}
     >
-      <IconButton
+      <Button
         style={{
-          color: disableSave ? '#c2c8ea' : 'rgb(108, 128, 236)',
-          width: '50%',
+          minWidth: '15px',
         }}
-        onClick={() => onSave()}
-        className={classes.root}
-        aria-label="edit"
-        data-cy="doneEditingButtonEditableTable"
-        disabled={disableSave}
-      >
-        <SaveIcon />
-      </IconButton>
-      <IconButton
-        style={{ color: 'rgb(108, 128, 236)', width: '50%' }}
-        className={classes.root}
+        aria-label="Remove row"
         onClick={() => onDelete()}
-        aria-label="delete"
+        endIcon={
+          <RemoveCircleOutline
+            htmlColor="#rgb(108, 128, 236)"
+            style={{ marginLeft: '-9px', marginRight: '2px' }}
+          />
+        }
         data-cy="deleteButtonEditableTable"
-      >
-        <DeleteIcon />
-      </IconButton>
+      />
     </TableCell>
   );
 }
