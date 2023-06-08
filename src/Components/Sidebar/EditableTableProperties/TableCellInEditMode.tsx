@@ -12,6 +12,7 @@ import {
   Radio,
   RadioGroup,
   TextField,
+  Typography,
 } from '@material-ui/core';
 // TODO: Keep the following if edit on the table is needed
 // import CellEditInJson from './CellEditInJson';
@@ -40,6 +41,7 @@ const useStyles = makeStyles(() => ({
 
 function TableCellInEditMode(props: CustomTableCellProps) {
   const { index, row, name, onChange, type, typeOfValues } = props;
+
   const classes = useStyles();
 
   const [valueToString, setValueToString] = React.useState<string>('true');
@@ -75,6 +77,22 @@ function TableCellInEditMode(props: CustomTableCellProps) {
     return <span>{JSON.stringify(row[name])}</span>;
   }
 
+  const renderOption = (option: string) => {
+    const matches = typeOfValues.requiredValues?.includes(option);
+
+    return (
+      <li>
+        <Typography
+          component="div"
+          variant="body1"
+          style={matches ? { fontWeight: 'bold' } : { fontWeight: 'normal' }}
+        >
+          {option}
+        </Typography>
+      </li>
+    );
+  };
+
   if (typeOfValues.type === 'select') {
     const options = typeOfValues.values || [''];
     return (
@@ -83,9 +101,10 @@ function TableCellInEditMode(props: CustomTableCellProps) {
           disableClearable
           freeSolo={options.length === 0}
           options={options}
-          value={row[name] || ''}
+          renderOption={renderOption}
+          value={(row[name] as string) || ''}
           onChange={(e, val) =>
-            onChange({ target: { value: val as string, name } }, row, index)
+            onChange({ target: { value: val, name } }, row, index)
           }
           onInputChange={(e, val) =>
             onChange({ target: { value: val, name } }, row, index)

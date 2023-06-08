@@ -50,7 +50,11 @@ export const useStyles = makeStyles(() => ({
 interface EditableTableProps {
   headers: string[];
   defaultValues: Conditions[] | Inputs[];
-  typeOfValues: { type: string; values?: string[] }[];
+  typeOfValues: {
+    type: string;
+    values?: string[];
+    requiredValues?: string[];
+  }[];
   valuesChanged: (rows: EditableTableRow[]) => void;
   onRowAdd?: (rows?: EditableTableRow[]) => void;
 }
@@ -313,6 +317,7 @@ function EditableTable(props: EditableTableProps) {
                       headers[1] === 'Node_Id'
                         ? props.typeOfValues[1]?.values
                         : [''],
+                    requiredValues: props.typeOfValues[1]?.requiredValues,
                   }}
                   onEdit={() => onEditRow(row.id || '', index)}
                 />

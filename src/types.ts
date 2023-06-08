@@ -392,7 +392,7 @@ export interface CustomTableCellProps {
   rowsNames?: string[];
   name: 'name' | 'value';
   type?: string;
-  typeOfValues: { type: string; values?: string[] };
+  typeOfValues: { type: string; values?: string[]; requiredValues?: string[] };
   headers?: string[];
   onEdit?: () => void;
   onChange(
