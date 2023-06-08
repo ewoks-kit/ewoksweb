@@ -156,7 +156,5 @@ export function addNodeProperties(
       },
     };
   }
-  console.log(tempNode);
-
   return tempNode;
 }

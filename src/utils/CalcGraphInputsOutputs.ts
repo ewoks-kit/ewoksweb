@@ -6,7 +6,6 @@ import type {
   GraphNodes,
   GraphRF,
 } from '../types';
-import { MarkerType } from 'reactflow';
 
 // Calculate the ewoks input_nodes and output_nodes within the graph
 // from the nodes of the graphRF model with types graphInput, graphOutput
