@@ -16,7 +16,7 @@ export default function ManageTasks() {
   return (
     <Grid container spacing={1} direction="row" alignItems="center">
       <Grid item xs={12} sm={8} md={6} lg={5}>
-        <AddNodes showManagementButtons />
+        <AddNodes />
       </Grid>
       <Grid item xs={12} sm={8} md={6} lg={5}>
         <Button

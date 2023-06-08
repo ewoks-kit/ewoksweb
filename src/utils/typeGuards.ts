@@ -7,6 +7,7 @@ import type {
   EwoksRFNodeData,
   GraphDetails,
 } from '../types';
+import type { TaskInfo } from '../Components/Canvas/models';
 
 export interface EwoksServerErrorResponse {
   response: { data: { message: string } };
@@ -121,4 +122,22 @@ export function assertElementIsEdge(
   entity: EwoksRFNode | EwoksRFLink | Edge | Node | GraphDetails | undefined
 ): asserts entity is EwoksRFLink extends undefined ? never : EwoksRFLink {
   assertDefined(!!entity && 'source' in entity, `Edge is possibly undefined!`);
+}
+
+export function assertTaskInfo(
+  taskInfo: unknown
+): asserts taskInfo is TaskInfo {
+  if (
+    !taskInfo ||
+    typeof taskInfo !== 'object' ||
+    !('task_identifier' in taskInfo) ||
+    !('task_type' in taskInfo)
+  ) {
+    throw new TypeError('Expected task info');
+  }
+  assertStr(taskInfo.task_identifier);
+  assertStr(taskInfo.task_type);
+  if ('icon' in taskInfo && taskInfo.icon) {
+    assertStr(taskInfo.icon);
+  }
 }

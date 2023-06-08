@@ -1,6 +1,8 @@
 import type { Connection } from 'reactflow';
 import { MarkerType } from 'reactflow';
 import type { EwoksRFLink, EwoksRFNodeData } from '../../types';
+import { assertTaskInfo } from '../../utils/typeGuards';
+import type { TaskInfo } from './models';
 
 export function trimLabel(label: string) {
   if (label.length <= 20) {
@@ -80,4 +82,25 @@ export function addConnectionToGraph(
   };
 
   return link;
+}
+
+const DATA_TRANSFER_TASK_TYPE = 'ewoks/task';
+
+export function attachTaskInfo(dataTransfer: DataTransfer, taskInfo: TaskInfo) {
+  dataTransfer.setData(DATA_TRANSFER_TASK_TYPE, JSON.stringify(taskInfo));
+  dataTransfer.effectAllowed = 'move';
+}
+
+export function retrieveTaskInfo(
+  dataTransfer: DataTransfer,
+  onError?: () => void
+): TaskInfo | undefined {
+  try {
+    const taskInfo = JSON.parse(dataTransfer.getData(DATA_TRANSFER_TASK_TYPE));
+    assertTaskInfo(taskInfo);
+    return taskInfo;
+  } catch {
+    onError?.();
+    return undefined;
+  }
 }
