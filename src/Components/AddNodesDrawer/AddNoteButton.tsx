@@ -1,6 +1,6 @@
 import { Tooltip } from '@material-ui/core';
 import { Textsms } from '@material-ui/icons';
-import { onDragStart } from './utils';
+import { attachTaskInfo } from '../Canvas/utils';
 
 function AddNoteButton() {
   return (
@@ -9,13 +9,12 @@ function AddNoteButton() {
       tabIndex={0}
       key="addNote"
       className="dndnode"
-      onDragStart={(event) =>
-        onDragStart(event, {
+      onDragStart={(event) => {
+        attachTaskInfo(event.dataTransfer, {
           task_identifier: 'note',
           task_type: 'note',
-          icon: Textsms,
-        })
-      }
+        });
+      }}
       draggable
     >
       <Tooltip title="add note" arrow>

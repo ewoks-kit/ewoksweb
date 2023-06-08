@@ -1,5 +1,5 @@
 import type { Task } from '../../types';
-import { onDragStart } from './utils';
+import { attachTaskInfo } from '../Canvas/utils';
 import { Tooltip } from '@material-ui/core';
 import IconBoundary from '../../IconBoundary';
 import TaskIcon from '../Sidebar/TaskIcon';
@@ -24,7 +24,7 @@ function TaskItem(props: Props) {
       tabIndex={0}
       className={`dndnode ${isSelected ? 'selectedTask' : ''}`}
       onDragStart={(event) =>
-        onDragStart(event, {
+        attachTaskInfo(event.dataTransfer, {
           task_identifier: task.task_identifier || '',
           task_type: task.task_type || '',
           icon: task.icon || '',
