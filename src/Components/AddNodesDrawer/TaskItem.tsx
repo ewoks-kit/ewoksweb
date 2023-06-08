@@ -3,55 +3,45 @@ import { attachTaskInfo } from '../Canvas/utils';
 import { Tooltip } from '@material-ui/core';
 import IconBoundary from '../../IconBoundary';
 import TaskIcon from '../Sidebar/TaskIcon';
-import { useStyles } from './AddNodes';
 
 interface Props {
   task: Task;
+  className?: string;
   isSelected?: boolean;
   onClick?: () => void;
 }
 
 function TaskItem(props: Props) {
-  const { task, isSelected, onClick } = props;
+  const { task, className, isSelected, onClick } = props;
+  const { task_identifier, icon, task_type } = task;
 
-  const classes = useStyles();
+  if (!task_identifier) {
+    return null;
+  }
 
   return (
-    <span
-      onClick={onClick}
-      aria-hidden="true"
-      role="button"
-      tabIndex={0}
-      className={`dndnode ${isSelected ? 'selectedTask' : ''}`}
-      onDragStart={(event) =>
-        attachTaskInfo(event.dataTransfer, {
-          task_identifier: task.task_identifier || '',
-          task_type: task.task_type || '',
-          icon: task.icon || '',
-        })
-      }
-      draggable
-    >
-      <Tooltip title={task.task_identifier || ''} arrow>
-        <span
-          role="button"
-          tabIndex={0}
-          className={classes.imgHolder}
-          aria-label={task.task_identifier}
-        >
-          <span className={classes.imgLabelHolder}>
-            {task.task_identifier?.split('.').pop()}
-          </span>
-          <IconBoundary>
-            <TaskIcon
-              className={classes.image}
-              name={task.icon}
-              alt={task.task_identifier}
-            />
-          </IconBoundary>
-        </span>
-      </Tooltip>
-    </span>
+    <Tooltip title={task_identifier} arrow>
+      <button
+        className={className}
+        type="button"
+        onClick={onClick}
+        onDragStart={(event) =>
+          attachTaskInfo(event.dataTransfer, {
+            task_type: task_type || '',
+            task_identifier,
+            icon,
+          })
+        }
+        data-selected={isSelected || undefined}
+        aria-label={task_identifier}
+        draggable
+      >
+        <IconBoundary>
+          <TaskIcon name={icon} alt={task_identifier} />
+        </IconBoundary>
+        <label>{task_identifier.split('.').pop()}</label>
+      </button>
+    </Tooltip>
   );
 }
 

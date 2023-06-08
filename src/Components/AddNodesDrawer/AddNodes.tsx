@@ -6,38 +6,11 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 import useStore from 'store/useStore';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
 import TaskManagementButtons from '../TopDrawer/TaskManagementButtons';
 import AddSubgraphButton from './AddSubgraphButton';
 import AddNoteButton from './AddNoteButton';
 import TaskItem from './TaskItem';
-
-export const useStyles = makeStyles(() =>
-  createStyles({
-    accordionDetails: {
-      flexWrap: 'wrap',
-    },
-    imgHolder: {
-      overflow: 'hidden',
-      overflowWrap: 'break-word',
-      position: 'relative',
-      textAlign: 'center',
-      color: 'black',
-      display: 'flex',
-    },
-    imgLabelHolder: {
-      position: 'absolute',
-      bottom: '1px',
-      left: '1px',
-    },
-    image: {
-      padding: '0 0 15px 0',
-    },
-    button: {
-      margin: '4px',
-    },
-  })
-);
+import styles from './AddNodes.module.css';
 
 interface AddNodesProps {
   sidebar?: boolean;
@@ -46,8 +19,6 @@ interface AddNodesProps {
 function AddNodes(props: AddNodesProps) {
   const { sidebar: isSidebar } = props;
   const showManagementButtons = !isSidebar;
-
-  const classes = useStyles();
 
   const tasks = useStore((state) => state.tasks);
   const selectedTask = useStore((state) => state.selectedTask);
@@ -64,25 +35,28 @@ function AddNodes(props: AddNodesProps) {
             >
               <Typography>{categoryName}</Typography>
             </AccordionSummary>
-            <AccordionDetails className={classes.accordionDetails}>
-              {tasks
-                .filter((nod) => nod.category === categoryName)
-                .map((elem) => (
-                  <TaskItem
-                    key={elem.task_identifier}
-                    task={elem}
-                    onClick={() => setSelectedTask(elem)}
-                    isSelected={
-                      elem.task_identifier === selectedTask.task_identifier
-                    }
-                  />
-                ))}
-              {isSidebar && categoryName === 'General' && (
-                <>
-                  <AddNoteButton />
-                  <AddSubgraphButton />
-                </>
-              )}
+            <AccordionDetails>
+              <div className={styles.itemContainer}>
+                {tasks
+                  .filter((nod) => nod.category === categoryName)
+                  .map((elem) => (
+                    <TaskItem
+                      className={styles.item}
+                      key={elem.task_identifier}
+                      task={elem}
+                      onClick={() => setSelectedTask(elem)}
+                      isSelected={
+                        elem.task_identifier === selectedTask.task_identifier
+                      }
+                    />
+                  ))}
+                {isSidebar && categoryName === 'General' && (
+                  <>
+                    <AddNoteButton />
+                    <AddSubgraphButton />
+                  </>
+                )}
+              </div>
             </AccordionDetails>
             {categoryName !== 'General' &&
               showManagementButtons &&
