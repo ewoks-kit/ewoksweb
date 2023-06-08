@@ -64,6 +64,7 @@ export default function DataMappingComponent(element: Edge) {
               ...(edgeData.links_required_output_names || []),
               ...(edgeData.links_optional_output_names || []),
             ],
+            requiredValues: edgeData.links_required_output_names || [],
           },
         ]}
       />

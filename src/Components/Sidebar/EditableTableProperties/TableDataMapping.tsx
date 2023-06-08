@@ -32,7 +32,11 @@ export const useStyles = makeStyles(() => ({
 interface TableDataMappingProps {
   headers: string[];
   values: DataMapping[];
-  typeOfValues: { type: string; values?: string[] }[];
+  typeOfValues: {
+    type: string;
+    values?: string[];
+    requiredValues?: string[];
+  }[];
   valuesChanged: (rows: EditableTableRow[]) => void;
   onRowAdd?: (rows?: EditableTableRow[]) => void;
 }
