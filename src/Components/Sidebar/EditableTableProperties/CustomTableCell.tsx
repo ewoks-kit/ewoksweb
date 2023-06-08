@@ -9,7 +9,7 @@ import { EditOutlined as EditIcon } from '@material-ui/icons';
 function isRowContentinValid(row: EditableTableRow, rowNames: string[]) {
   return (
     !row.name ||
-    (!row.value && row.value !== false) ||
+    (!row.value && row.value !== false && row.value !== 0) ||
     rowNames.filter((ro) => ro === row.name).length > 1
   );
 }
