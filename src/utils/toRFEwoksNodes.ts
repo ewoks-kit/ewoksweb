@@ -21,11 +21,14 @@ export function toRFEwoksNodes(
 ): EwoksRFNode[] {
   // Find input and output nodes of the graph
   const inputsAl = inputsAll(tempGraph);
+  console.log(inputsAl);
 
   const outputsAl = outputsAll(tempGraph);
+  console.log(outputsAl);
 
   const inNodeLinks = inNodesLinks(tempGraph);
   const outNodeLinks = outNodesLinks(tempGraph);
+  console.log(inNodeLinks.nodes, outNodeLinks.nodes);
 
   const inOutTempGraph = { ...tempGraph };
 
@@ -36,6 +39,8 @@ export function toRFEwoksNodes(
   if (outNodeLinks.nodes.length > 0) {
     inOutTempGraph.nodes = [...inOutTempGraph.nodes, ...outNodeLinks.nodes];
   }
+
+  console.log(inOutTempGraph);
 
   return inOutTempGraph.nodes.map(
     ({

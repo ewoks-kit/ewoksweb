@@ -6,6 +6,7 @@ import type {
   GraphNodes,
   GraphRF,
 } from '../types';
+import { MarkerType } from 'reactflow';
 
 // Calculate the ewoks input_nodes and output_nodes within the graph
 // from the nodes of the graphRF model with types graphInput, graphOutput
@@ -108,6 +109,13 @@ function calcInOutNodes(
       );
     }
   });
+
+  if (nodeObjConnectedTo.length === 0) {
+    nodes.push(
+      calcNodeProps(false, nod, { id: '' } as EwoksRFNode, [], 0, inputOrOutput)
+    );
+  }
+
   return nodes;
 }
 
@@ -146,7 +154,7 @@ function calcNodeProps(
         stroke: graph_links[link_index]?.style?.stroke || '',
         strokeWidth: '3px',
       },
-      markerEnd: graph_links[link_index].markerEnd,
+      markerEnd: graph_links[link_index]?.markerEnd || '',
       animated: graph_links[link_index]?.animated || false,
       withImage:
         'withImage' in nod.data.ui_props ? nod.data.ui_props.withImage : true,
