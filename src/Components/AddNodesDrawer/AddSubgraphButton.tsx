@@ -18,7 +18,6 @@ function AddSubgraphButton() {
           tabIndex={0}
           onClick={insertGraph}
           onKeyPress={insertGraph}
-          data-testid="addSubgraphFromDisk"
         >
           <Add />G
         </span>

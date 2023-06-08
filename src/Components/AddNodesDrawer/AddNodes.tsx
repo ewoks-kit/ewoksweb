@@ -57,11 +57,7 @@ function AddNodes(props: AddNodesProps) {
     <>
       {[...new Set(tasks.map((m) => m.category)).values()].map(
         (categoryName) => (
-          <Accordion
-            key={categoryName}
-            className="add-nodes-accordion"
-            data-cy={`add-nodes-category-${categoryName || 'no-category'}`}
-          >
+          <Accordion key={categoryName} className="add-nodes-accordion">
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"

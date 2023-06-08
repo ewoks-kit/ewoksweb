@@ -22,7 +22,6 @@ function TaskItem(props: Props) {
       aria-hidden="true"
       role="button"
       tabIndex={0}
-      key={task.task_identifier}
       className={`dndnode ${isSelected ? 'selectedTask' : ''}`}
       onDragStart={(event) =>
         onDragStart(event, {
