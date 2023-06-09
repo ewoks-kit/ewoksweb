@@ -9,23 +9,17 @@ ewoksweb has been developed by the `Software group <http://www.esrf.eu/Instrumen
 Getting started
 ---------------
 
-Install requirements
+Install the `ewoksserver <https://ewoksserver.readthedocs.io>`_ python package
 
 .. code:: bash
 
     pip install ewoksserver[frontend]
 
-Start the server that serves the frontend
+Start the server and open the frontend in a web browser
 
 .. code:: bash
 
     ewoks-server
-
-or for an installation with the system python
-
-.. code:: bash
-
-    python3 -m ewoksserver.server
 
 Documentation
 -------------
