@@ -6,11 +6,16 @@ import type { CustomTableCellProps, EditableTableRow } from 'types';
 import { IconButton } from '@material-ui/core';
 import { EditOutlined as EditIcon } from '@material-ui/icons';
 
-function isRowContentinValid(row: EditableTableRow, rowNames: string[]) {
+function isRowContentInValid(
+  row: EditableTableRow,
+  rowNames: string[],
+  type?: string
+) {
   return (
     !row.name ||
-    (!row.value && row.value !== false && row.value !== 0) ||
-    rowNames.filter((ro) => ro === row.name).length > 1
+    row.value === undefined ||
+    row.value === '' ||
+    (type && rowNames.filter((ro) => ro === row.name).length > 1)
   );
 }
 
@@ -38,11 +43,11 @@ function CustomTableCell(props: CustomTableCellProps) {
       align="left"
       className={classes.tableCell}
       style={{
-        borderBottom: isRowContentinValid(row, rowsNames || [])
+        borderBottom: isRowContentInValid(row, rowsNames || [], type)
           ? 'solid'
           : 'none',
-        borderColor: isRowContentinValid(row, rowsNames || [])
-          ? 'red'
+        borderColor: isRowContentInValid(row, rowsNames || [], type)
+          ? 'rgb(249, 81, 81)'
           : 'white',
       }}
     >
