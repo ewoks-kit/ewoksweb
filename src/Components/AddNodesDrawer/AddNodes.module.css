@@ -39,3 +39,7 @@ label {
   overflow: hidden;
   white-space: nowrap;
 }
+
+.taskButtonContainer {
+  display: flex;
+}

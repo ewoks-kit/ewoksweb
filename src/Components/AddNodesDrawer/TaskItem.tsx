@@ -3,6 +3,7 @@ import { attachTaskInfo } from '../Canvas/utils';
 import { Tooltip } from '@material-ui/core';
 import IconBoundary from '../../IconBoundary';
 import TaskIcon from '../Sidebar/TaskIcon';
+import TaskManagementButtons from './TaskManagementButtons';
 
 interface Props {
   task: Task;
@@ -40,6 +41,7 @@ function TaskItem(props: Props) {
           <TaskIcon name={icon} alt={task_identifier} />
         </IconBoundary>
         <label>{task_identifier.split('.').pop()}</label>
+        {isSelected && <TaskManagementButtons />}
       </button>
     </Tooltip>
   );
