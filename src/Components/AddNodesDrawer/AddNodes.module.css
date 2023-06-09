@@ -2,6 +2,20 @@
   overflow: hidden;
 }
 
+.itemContainer[data-gridLayout] {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.itemContainer[data-gridLayout] .item {
+  flex-direction: column;
+  width: 60px;
+}
+
+.itemContainer[data-gridLayout] label {
+  margin-left: 0;
+}
+
 .item {
   composes: btnClean from global;
   text-align: center;
@@ -12,6 +26,7 @@
   border: 2px solid transparent;
   border-radius: 10px;
   min-width: 0;
+  overflow: hidden;
 }
 
 .item[data-selected] {

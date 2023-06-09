@@ -524,3 +524,5 @@ export type PropertyChangedEvent = ChangeEvent<{
 export interface SelectedElementRF {
   selectedElement: Node | Edge | undefined;
 }
+
+export type SidebarLayout = 'grid' | 'list';

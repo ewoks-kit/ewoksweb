@@ -2,6 +2,7 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  IconButton,
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
@@ -11,6 +12,8 @@ import AddSubgraphButton from './AddSubgraphButton';
 import AddNoteButton from './AddNoteButton';
 import TaskItem from './TaskItem';
 import styles from './AddNodes.module.css';
+import { ViewModule, ViewList } from '@material-ui/icons';
+import useConfigStore from '../../store/useConfigStore';
 
 interface AddNodesProps {
   sidebar?: boolean;
@@ -23,9 +26,24 @@ function AddNodes(props: AddNodesProps) {
   const tasks = useStore((state) => state.tasks);
   const selectedTask = useStore((state) => state.selectedTask);
   const setSelectedTask = useStore((state) => state.setSelectedTask);
+  const { sidebarLayout, setSidebarLayout } = useConfigStore();
 
   return (
     <>
+      <div>
+        <IconButton
+          onClick={() => setSidebarLayout('grid')}
+          aria-label="Switch to grid layout"
+        >
+          <ViewModule />
+        </IconButton>
+        <IconButton
+          onClick={() => setSidebarLayout('list')}
+          aria-label="Switch to list layout"
+        >
+          <ViewList />
+        </IconButton>
+      </div>
       {[...new Set(tasks.map((m) => m.category)).values()].map(
         (categoryName) => (
           <Accordion key={categoryName} className="add-nodes-accordion">
@@ -36,7 +54,10 @@ function AddNodes(props: AddNodesProps) {
               <Typography>{categoryName}</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <div className={styles.itemContainer}>
+              <div
+                className={styles.itemContainer}
+                data-gridLayout={sidebarLayout === 'grid' || undefined}
+              >
                 {tasks
                   .filter((nod) => nod.category === categoryName)
                   .map((elem) => (
