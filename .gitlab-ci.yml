@@ -85,11 +85,10 @@ test:
     - python3 -m pip install --upgrade setuptools
     - python3 -m pip install ewoksserver
     - python3 -m pip install --upgrade --pre ewoksserver
-    - ewoks-server -p 5000 -c ./pysrc/ewoksweb/tests/resources/config.py &
     - CI=false pnpm build # Don't let eslint warnings fail the build
-    - timeout 10s bash -c "while ! curl http://127.0.0.1:5000 -m1 -o/dev/null -s;do sleep 0.3;done"
-    # https://github.com/vercel/serve/issues/751
-    - pnpm dlx serve@13.0.4 --no-port-switching -s build -l 3000 & pnpm dlx wait-on http://localhost:3000
+    - python3 -m pip install -e .
+    - ewoks-server --frontend-tests -p 3000 &
+    - timeout 10s bash -c "while ! curl http://127.0.0.1:3000 -m1 -o/dev/null -s;do sleep 0.3;done"
     - pnpm cypress:run
 
 build:
