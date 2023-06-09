@@ -20,7 +20,7 @@ import useStore from 'store/useStore';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
 import CanvasBackground from './CanvasBackground';
-import { addConnectionToGraph, trimLabel } from './utils';
+import { addConnectionToGraph, retrieveTaskInfo, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
 import { useGraphId } from '../../store/graph-hooks';
 import useNodeDataStore from '../../store/useNodeDataStore';
@@ -126,84 +126,82 @@ function Canvas() {
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
 
-    if (workingGraphId === graphId) {
-      const stateRF = storeRF.getState();
-      const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect() || {
-        left: 0,
-        top: 0,
-      };
-      const task_identifier: string = event.dataTransfer.getData(
-        'task_identifier'
-      );
-      const task_type: string = event.dataTransfer.getData('task_type');
-      const icon: string = event.dataTransfer.getData('icon');
-      const position = rfInstance.project({
-        x: event.clientX - reactFlowBounds.left,
-        y: event.clientY - reactFlowBounds.top,
-      });
-
-      let tempTask = tasks.find(
-        (tas) => tas.task_identifier === task_identifier
-      );
-
-      tempTask =
-        tempTask || task_type === 'graph'
-          ? tempTask
-          : {
-              optional_input_names: [],
-              output_names: [],
-              required_input_names: [],
-            };
-
-      const nodesIds = [...stateRF.nodeInternals.keys()];
-      const newId =
-        task_type === 'graphInput'
-          ? calcNewId('In', nodesIds)
-          : task_type === 'graphOutput'
-          ? calcNewId('Out', nodesIds)
-          : task_type === 'note'
-          ? calcNewId('Note', nodesIds)
-          : calcNewId(task_identifier || 'Node', nodesIds);
-
-      const newNode: EwoksRFNode = {
-        id: newId,
-        type: task_type,
-        position,
-        data: {} as EwoksRFNodeData,
-      };
-      setNodeData(newId, {
-        task_props: {
-          task_type,
-          task_identifier,
-          optional_input_names: tempTask?.optional_input_names,
-          output_names: tempTask?.output_names,
-          required_input_names: tempTask?.required_input_names,
-        },
-        ewoks_props: {
-          label: trimLabel(task_identifier),
-          task_generator: '',
-          default_inputs: [],
-          inputs_complete: false,
-          default_error_node: false,
-          default_error_attributes: {
-            map_all_data: true,
-            data_mapping: [],
-          },
-        },
-        ui_props: {
-          icon,
-          moreHandles: false,
-          nodeWidth: 100,
-        },
-      });
-      addNodes(newNode);
-    } else {
+    if (workingGraphId !== graphId) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to add a new node to any sub-graph!',
         severity: 'success',
       });
+      return;
     }
+
+    const stateRF = storeRF.getState();
+    const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect() || {
+      left: 0,
+      top: 0,
+    };
+
+    const taskInfo = retrieveTaskInfo(event.dataTransfer);
+    if (!taskInfo) {
+      return;
+    }
+    const { task_type, icon, task_identifier } = taskInfo;
+
+    const position = rfInstance.project({
+      x: event.clientX - reactFlowBounds.left,
+      y: event.clientY - reactFlowBounds.top,
+    });
+
+    const task = tasks.find(
+      (tas) => tas.task_identifier === task_identifier
+    ) || {
+      optional_input_names: [],
+      output_names: [],
+      required_input_names: [],
+    };
+
+    const nodesIds = [...stateRF.nodeInternals.keys()];
+    const newId =
+      task_type === 'graphInput'
+        ? calcNewId('In', nodesIds)
+        : task_type === 'graphOutput'
+        ? calcNewId('Out', nodesIds)
+        : task_type === 'note'
+        ? calcNewId('Note', nodesIds)
+        : calcNewId(task_identifier || 'Node', nodesIds);
+
+    const newNode: EwoksRFNode = {
+      id: newId,
+      type: task_type,
+      position,
+      data: {} as EwoksRFNodeData,
+    };
+    setNodeData(newId, {
+      task_props: {
+        task_type,
+        task_identifier,
+        optional_input_names: task.optional_input_names,
+        output_names: task.output_names,
+        required_input_names: task.required_input_names,
+      },
+      ewoks_props: {
+        label: trimLabel(task_identifier),
+        task_generator: '',
+        default_inputs: [],
+        inputs_complete: false,
+        default_error_node: false,
+        default_error_attributes: {
+          map_all_data: true,
+          data_mapping: [],
+        },
+      },
+      ui_props: {
+        icon,
+        moreHandles: false,
+        nodeWidth: 100,
+      },
+    });
+    addNodes(newNode);
   };
 
   const onEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => {

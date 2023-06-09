@@ -70,7 +70,7 @@ function OverflowDrawer() {
         open={isAddNodesSidebarOpen}
       >
         <aside className="dndflow">
-          <AddNodes title="Add Nodes" />
+          <AddNodes sidebar />
         </aside>
       </Drawer>
       <Fab

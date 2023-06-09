@@ -6,16 +6,14 @@ describe('Icons:', () => {
   it('icons appear on tasks correctly', () => {
     cy.findByRole('button', { name: 'ewokscore' }).click();
 
-    cy.findByTitle('ewokscore.tests.examples.tasks.sumtask.SumTask').within(
-      () => {
-        cy.findByRole('img', { hidden: true })
-          .should('have.attr', 'src')
-          .should(
-            'include',
-            'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAA7D'
-          );
-      }
-    );
+    cy.findByRole('img', {
+      name: 'ewokscore.tests.examples.tasks.sumtask.SumTask',
+    })
+      .should('have.attr', 'src')
+      .should(
+        'include',
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAA7D'
+      );
   });
 
   // Assumes down.svg is on the server
