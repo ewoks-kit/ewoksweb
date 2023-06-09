@@ -7,24 +7,28 @@ pnpm install
 pnpm start
 ```
 
-Ewoksweb requires an instance of
-[ewoksserver](https://ewoksserver.readthedocs.io)
+To use all the features from ewoksweb, an instance of
+[ewoksserver](https://ewoksserver.readthedocs.io) must be running locally on the
+port 5000.
+
+Such an instance can be installed and run by running
 
 ```bash
+pip install ewoks-server
 ewoks-server
 ```
 
-When the instance is not running locally, its URL needs to be set locally
-through the env variable `REACT_APP_SERVER_URL` in `.env.local` (default:
-`http://localhost:5000`).
+Another `ewoksserver` instance (remote for example) can be used instead by
+setting its URL through the env variable `REACT_APP_SERVER_URL` in `.env.local`
+(default: `http://localhost:5000`).
 
 ## Cypress tests
 
-To run Cypress tests, the `ewoksserver` instance must be configured
-appropriately. To serve the test resources from a local repository:
+To run Cypress tests, the `ewoksweb` instance must be running (`pnpm start`) and
+the `ewoksserver` instance must be configured appropriately to serve the test
+resources:
 
 ```bash
-pip install -e .
 ewoks-server --frontend-tests
 ```
 
