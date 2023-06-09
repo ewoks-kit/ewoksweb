@@ -10,12 +10,11 @@ describe('drag and drop nodes', () => {
 
     cy.findByRole('button', { name: 'ewokscore' }).click();
 
-    cy.findByTitle('ewokscore.tests.examples.tasks.sumtask.SumTask').trigger(
-      'dragstart',
-      {
-        dataTransfer,
-      }
-    );
+    cy.findByRole('button', {
+      name: 'ewokscore.tests.examples.tasks.sumtask.SumTask',
+    }).trigger('dragstart', {
+      dataTransfer,
+    });
 
     cy.get('.react-flow').trigger('drop', {
       dataTransfer,

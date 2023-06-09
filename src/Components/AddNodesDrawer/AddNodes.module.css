@@ -1,0 +1,41 @@
+.itemContainer {
+  overflow: hidden;
+}
+
+.itemContainer[data-gridLayout] {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.itemContainer[data-gridLayout] .item {
+  flex-direction: column;
+  width: 60px;
+}
+
+.itemContainer[data-gridLayout] label {
+  margin-left: 0;
+}
+
+.item {
+  composes: btnClean from global;
+  text-align: center;
+  color: black;
+  display: flex;
+  align-items: center;
+  cursor: grab;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.item[data-selected] {
+  border-color: #3f51b5;
+}
+
+label {
+  margin-left: 0.5rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
