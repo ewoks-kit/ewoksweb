@@ -1,6 +1,7 @@
 /* eslint-disable require-unicode-regexp */
 import type {
   DefaultErrorAttributes,
+  DefaultErrorAttributesEwoks,
   EwoksNode,
   EwoksRFNode,
   Inputs,
@@ -24,7 +25,7 @@ function cleanDefaultInputs(default_inputs: Inputs[]) {
 function calcDefaultErrorAttributes(
   default_error_attributes: DefaultErrorAttributes | undefined,
   default_error_node?: boolean
-) {
+): DefaultErrorAttributesEwoks | undefined {
   if (!default_error_node) {
     return undefined;
   }
@@ -35,19 +36,18 @@ function calcDefaultErrorAttributes(
 
   return {
     map_all_data: false,
-    data_mapping:
-      default_error_attributes?.data_mapping?.map((mapping) => {
-        return {
-          source_output:
-            mapping.name && /^\d+$/.test(mapping.name)
-              ? Number.parseInt(mapping.name, 10)
-              : mapping.name,
-          target_input:
-            mapping.value && /^\d+$/.test(mapping.value as string)
-              ? Number.parseInt(mapping.value as string, 10)
-              : (mapping.value as string),
-        };
-      }) || [],
+    data_mapping: default_error_attributes?.data_mapping?.map((mapping) => {
+      return {
+        source_output:
+          mapping.name && /^\d+$/.test(mapping.name)
+            ? Number.parseInt(mapping.name, 10)
+            : mapping.name,
+        target_input:
+          mapping.value && /^\d+$/.test(mapping.value as string)
+            ? Number.parseInt(mapping.value as string, 10)
+            : (mapping.value as string),
+      };
+    }),
   };
 }
 
@@ -144,9 +144,10 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         task_generator,
         default_inputs: cleanDefaultInputs(calcDefaultInputs(default_inputs)),
         default_error_node,
-        default_error_attributes: default_error_node
-          ? default_error_attributes
-          : undefined,
+        default_error_attributes: calcDefaultErrorAttributes(
+          default_error_attributes,
+          default_error_node
+        ),
         uiProps: {
           label,
           type,

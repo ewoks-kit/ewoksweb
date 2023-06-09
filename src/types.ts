@@ -49,7 +49,7 @@ export interface InOutLinkAttributes {
   label: string;
   comment: string;
   conditions: Conditions[];
-  data_mapping: DataMapping[];
+  data_mapping: DataMappingEwoks[];
   map_all_data: boolean;
   on_error: boolean;
 }
@@ -262,10 +262,6 @@ export interface DataMappingEwoks {
 }
 
 export interface DataMapping {
-  // TODO: remove source_output and target_input to have clear
-  // distinction from the DataMappingEwoks model
-  source_output?: string | number;
-  target_input?: string | number;
   value?: unknown;
   id?: string;
   name?: string;
@@ -279,7 +275,7 @@ export interface ConditionsEwoks {
 export interface Conditions {
   // TODO: remove source_output to have clear
   // distinction from the ConditionsEwoks model
-  source_output?: string | number;
+  // source_output?: string | number;
   value: unknown;
   id?: string;
   name?: string;
@@ -288,6 +284,11 @@ export interface Conditions {
 export interface DefaultErrorAttributes {
   map_all_data?: boolean;
   data_mapping?: DataMapping[];
+}
+
+export interface DefaultErrorAttributesEwoks {
+  map_all_data?: boolean;
+  data_mapping?: DataMappingEwoks[];
 }
 
 export interface EwoksNode {
@@ -300,7 +301,7 @@ export interface EwoksNode {
   inputs_complete?: boolean;
   task_generator?: string;
   default_error_node?: boolean;
-  default_error_attributes?: DefaultErrorAttributes;
+  default_error_attributes?: DefaultErrorAttributesEwoks;
   uiProps?: EwoksNodeUiProps;
 }
 
@@ -331,8 +332,8 @@ export interface EwoksLink {
   target: string;
   map_all_data?: boolean;
   required?: boolean;
-  data_mapping?: DataMapping[];
-  conditions?: Conditions[];
+  data_mapping?: DataMappingEwoks[];
+  conditions?: ConditionsEwoks[];
   on_error?: boolean;
   sub_target?: string;
   sub_source?: string;

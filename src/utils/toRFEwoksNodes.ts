@@ -1,5 +1,6 @@
 import type {
   DefaultErrorAttributes,
+  DefaultErrorAttributesEwoks,
   EwoksRFNode,
   GraphEwoks,
   Task,
@@ -12,6 +13,7 @@ import {
   calcNodeType,
   addNodeProperties,
 } from './toRFEwoksNodesUtils';
+import { createDataMappingData } from './utils';
 
 // Accepts a GraphEwoks and returns an EwoksRFNode[]
 export function toRFEwoksNodes(
@@ -105,15 +107,12 @@ export function toRFEwoksNodes(
 }
 
 function calcDefaultErrorAttributes(
-  default_error_attributes: DefaultErrorAttributes | undefined
+  default_error_attributes: DefaultErrorAttributesEwoks | undefined
 ): DefaultErrorAttributes | undefined {
   return {
     map_all_data: default_error_attributes?.map_all_data,
-    data_mapping: default_error_attributes?.data_mapping?.map((dmap) => {
-      return {
-        source_output: dmap.source_output?.toString(),
-        target_input: dmap.target_input?.toString(),
-      };
-    }),
+    data_mapping: default_error_attributes?.data_mapping?.map(
+      createDataMappingData
+    ),
   };
 }

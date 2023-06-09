@@ -134,7 +134,13 @@ function calcNodeProps(
       label: isString(label) ? label : '',
       comment: graph_links[link_index]?.data.comment ?? '',
       conditions: graph_links[link_index]?.data.conditions || [],
-      data_mapping: graph_links[link_index]?.data.data_mapping || [],
+      data_mapping:
+        graph_links[link_index]?.data.data_mapping?.map((dmap) => {
+          return {
+            source_output: dmap.name,
+            target_input: dmap.value as string,
+          };
+        }) || [],
       map_all_data: graph_links[link_index]?.data.map_all_data || false,
       on_error: graph_links[link_index]?.data.on_error || false,
     },

@@ -38,19 +38,14 @@ export default function EdgeLabelComment() {
         ? edgeData.data_mapping
             .map(
               (con) =>
-                `${con.source_output?.toString() || ''}->${
-                  con.target_input?.toString() || ''
-                }`
+                `${con.name?.toString() || ''}->${con.value?.toString() || ''}`
             )
             .join(', ')
         : '';
     const conditions =
       edgeData.conditions && edgeData.conditions.length > 0
         ? edgeData.conditions
-            .map(
-              (con) =>
-                `${con.source_output || ''}: ${JSON.stringify(con.value)}`
-            )
+            .map((con) => `${con.name || ''}: ${JSON.stringify(con.value)}`)
             .join(', ')
         : '';
 

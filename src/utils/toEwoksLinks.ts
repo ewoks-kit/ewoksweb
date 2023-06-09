@@ -73,11 +73,9 @@ function calcConditionValue(condition: Conditions) {
 }
 
 function calcConditionName(condition: Conditions) {
-  const cond = condition.source_output ?? condition.name;
+  const cond = condition.name;
 
-  return cond && /^\d+$/.test(cond as string)
-    ? Number.parseInt(cond as string, 10)
-    : cond;
+  return cond && /^\d+$/.test(cond) ? Number.parseInt(cond, 10) : cond;
 }
 
 function calcDataMapping(data_mapping: DataMapping[]) {
