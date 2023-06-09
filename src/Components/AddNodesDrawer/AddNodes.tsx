@@ -56,7 +56,7 @@ function AddNodes(props: AddNodesProps) {
             <AccordionDetails>
               <div
                 className={styles.itemContainer}
-                data-gridLayout={sidebarLayout === 'grid' || undefined}
+                data-gridlayout={sidebarLayout === 'grid' || undefined}
               >
                 {tasks
                   .filter((nod) => nod.category === categoryName)

@@ -225,6 +225,8 @@ export interface Inputs {
   value: unknown;
 }
 
+export interface InputsEwoks extends Omit<Inputs, 'id'> {}
+
 export interface stackGraph {
   id: string;
   label?: string;
@@ -254,7 +256,14 @@ export interface Note {
   nodeWidth?: number;
 }
 
+export interface DataMappingEwoks {
+  source_output?: string | number;
+  target_input?: string | number;
+}
+
 export interface DataMapping {
+  // TODO: remove source_output and target_input to have clear
+  // distinction from the DataMappingEwoks model
   source_output?: string | number;
   target_input?: string | number;
   value?: unknown;
@@ -262,7 +271,14 @@ export interface DataMapping {
   name?: string;
 }
 
+export interface ConditionsEwoks {
+  source_output?: string | number;
+  value: unknown;
+}
+
 export interface Conditions {
+  // TODO: remove source_output to have clear
+  // distinction from the ConditionsEwoks model
   source_output?: string | number;
   value: unknown;
   id?: string;

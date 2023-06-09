@@ -8,7 +8,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import CustomTableCell from './CustomTableCell';
 import type { DataMapping, EditableTableRow, TypeOfValues } from 'types';
-import { createDataMappingData } from './utils';
 import TableHeader from './TableHeader';
 import ToolsCell from './ToolsCell';
 import { TableCell } from '@material-ui/core';
@@ -42,7 +41,7 @@ function TableDataMapping(props: TableDataMappingProps) {
   const { values, headers, onRowAdd } = props;
 
   useEffect(() => {
-    setRows(values.map(createDataMappingData));
+    setRows(values);
   }, [values]);
   const classes = useStyles();
 

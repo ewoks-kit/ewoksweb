@@ -2,17 +2,17 @@
   overflow: hidden;
 }
 
-.itemContainer[data-gridLayout] {
+.itemContainer[data-gridlayout] {
   display: flex;
   flex-wrap: wrap;
 }
 
-.itemContainer[data-gridLayout] .item {
+.itemContainer[data-gridlayout] .item {
   flex-direction: column;
   width: 60px;
 }
 
-.itemContainer[data-gridLayout] label {
+.itemContainer[data-gridlayout] label {
   margin-left: 0;
 }
 

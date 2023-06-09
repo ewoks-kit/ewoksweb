@@ -4,7 +4,6 @@ import type { CustomTableCellProps } from '../../../types';
 
 function SelectRenderer(props: CustomTableCellProps) {
   const { index, row, name, onChange, typeOfValues } = props;
-  console.log(index, row, name, onChange, typeOfValues);
 
   const renderOption = (option: string) => {
     const valueIsRequired = typeOfValues.requiredValues?.includes(option);
