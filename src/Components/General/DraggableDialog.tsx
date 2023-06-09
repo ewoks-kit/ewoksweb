@@ -47,7 +47,6 @@ interface Props {
     callbackProps: CallbackProps;
   };
   open: boolean;
-  // typeOfValues?: { values?: string[]; type: string };
   setValue: (name: string, graph: Graph, callbackProps: CallbackProps) => void;
 }
 

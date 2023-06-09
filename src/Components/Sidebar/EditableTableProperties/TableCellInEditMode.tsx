@@ -13,7 +13,7 @@ import {
   RadioGroup,
 } from '@material-ui/core';
 import type { CustomTableCellProps, EditableTableRow } from '../../../types';
-import SelectRenderer from './SelectRenderer';
+import SelectNameValue from './SelectNameValue';
 
 const useStyles = makeStyles(() => ({
   input: {
@@ -74,7 +74,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
   }
 
   if (typeOfValues.type === 'select') {
-    return <SelectRenderer {...props} />;
+    return <SelectNameValue {...props} />;
   }
 
   if (type === 'bool' || type === 'boolean') {
