@@ -11,12 +11,9 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
-  TextField,
 } from '@material-ui/core';
-// TODO: Keep the following if edit on the table is needed
-// import CellEditInJson from './CellEditInJson';
-import { Autocomplete } from '@material-ui/lab';
 import type { CustomTableCellProps, EditableTableRow } from '../../../types';
+import SelectNameValue from './SelectNameValue';
 
 const useStyles = makeStyles(() => ({
   input: {
@@ -40,6 +37,7 @@ const useStyles = makeStyles(() => ({
 
 function TableCellInEditMode(props: CustomTableCellProps) {
   const { index, row, name, onChange, type, typeOfValues } = props;
+
   const classes = useStyles();
 
   const [valueToString, setValueToString] = React.useState<string>('true');
@@ -76,25 +74,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
   }
 
   if (typeOfValues.type === 'select') {
-    const options = typeOfValues.values || [''];
-    return (
-      <FormControl fullWidth>
-        <Autocomplete
-          disableClearable
-          freeSolo={options.length === 0}
-          options={options}
-          value={row[name] || ''}
-          onChange={(e, val) =>
-            onChange({ target: { value: val as string, name } }, row, index)
-          }
-          onInputChange={(e, val) =>
-            onChange({ target: { value: val, name } }, row, index)
-          }
-          renderInput={(params) => <TextField {...params} margin="normal" />}
-          data-cy="autocompleteInputInEditableCell"
-        />
-      </FormControl>
-    );
+    return <SelectNameValue {...props} />;
   }
 
   if (type === 'bool' || type === 'boolean') {

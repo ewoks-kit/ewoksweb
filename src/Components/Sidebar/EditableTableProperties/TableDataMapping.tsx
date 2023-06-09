@@ -7,9 +7,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import CustomTableCell from './CustomTableCell';
-import useStore from 'store/useStore';
-import type { DataMapping, EditableTableRow } from 'types';
-import { createDataMappingData } from './utils';
+import type { DataMapping, EditableTableRow, TypeOfValues } from 'types';
 import TableHeader from './TableHeader';
 import ToolsCell from './ToolsCell';
 import { TableCell } from '@material-ui/core';
@@ -32,43 +30,28 @@ export const useStyles = makeStyles(() => ({
 interface TableDataMappingProps {
   headers: string[];
   values: DataMapping[];
-  typeOfValues: { type: string; values?: string[] }[];
+  typeOfValues: TypeOfValues[];
   valuesChanged: (rows: EditableTableRow[]) => void;
   onRowAdd?: (rows?: EditableTableRow[]) => void;
 }
 
 function TableDataMapping(props: TableDataMappingProps) {
   const [rows, setRows] = React.useState<EditableTableRow[]>([]);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const { values, headers, onRowAdd } = props;
 
   useEffect(() => {
-    setRows(values.map(createDataMappingData));
+    setRows(values);
   }, [values]);
   const classes = useStyles();
 
   function onChange(
     e: { target: { name: string; value: string | number } },
-    row: EditableTableRow,
-    index: number
+    row: EditableTableRow
   ) {
     const { id } = row;
     let { value } = e.target;
     const { name } = e.target;
-    const oldRows = [...rows].filter((_row, i) => index !== i);
-
-    if (
-      e.target.name === 'name' &&
-      oldRows.map((r) => r.name).includes(e.target.value as string)
-    ) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Not allowed to assign the same property TWICE!',
-        severity: 'error',
-      });
-      // return;
-    }
 
     if (name === 'value') {
       value = typeof value === 'number' ? Number(value) : value;
@@ -107,18 +90,16 @@ function TableDataMapping(props: TableDataMappingProps) {
                 rowsNames={rows.map((ro) => ro.name || '')}
                 name="name"
                 onChange={onChange}
-                type=""
                 typeOfValues={props.typeOfValues[0]}
-                headers={headers}
+                usedIn="DataMapping"
               />
               <CustomTableCell
                 index={index}
                 row={row}
                 name="value"
                 onChange={onChange}
-                type=""
                 typeOfValues={props.typeOfValues[1]}
-                headers={headers}
+                usedIn="DataMapping"
               />
               <ToolsCell onDelete={() => onDelete(row.id || '')} />
             </TableRow>

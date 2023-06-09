@@ -6,21 +6,27 @@ import type { CustomTableCellProps, EditableTableRow } from 'types';
 import { IconButton } from '@material-ui/core';
 import { EditOutlined as EditIcon } from '@material-ui/icons';
 
-function isRowContentinValid(row: EditableTableRow, rowNames: string[]) {
-  return (
-    !row.name ||
-    (!row.value && row.value !== false) ||
-    rowNames.filter((ro) => ro === row.name).length > 1
-  );
+function isRowContentInvalid(
+  row: EditableTableRow,
+  rowNames: string[],
+  usedIn?: 'DataMapping' | 'DefaultInputs' | 'Conditions'
+) {
+  const hasInvalidValue = row.value === undefined || row.value === '';
+
+  const forEditableTableDublicateName =
+    usedIn !== 'DataMapping' &&
+    rowNames.filter((ro) => ro === row.name).length > 1;
+
+  return !row.name || hasInvalidValue || forEditableTableDublicateName;
 }
 
 // DOC: Used as an app-wide dialog when confirmation is needed. Open is a prop
 function CustomTableCell(props: CustomTableCellProps) {
-  const { row, rowsNames, name, headers, type } = props;
+  const { row, rowsNames, name, usedIn, type } = props;
 
   const useStyles = makeStyles(() => ({
     tableCell: {
-      width: name === 'value' || headers?.includes('Source') ? '50%' : '30%',
+      width: name === 'value' || usedIn === 'DataMapping' ? '50%' : '30%',
       height: 15,
       padding: '0 5px 0 0',
       '& input': {
@@ -38,11 +44,11 @@ function CustomTableCell(props: CustomTableCellProps) {
       align="left"
       className={classes.tableCell}
       style={{
-        borderBottom: isRowContentinValid(row, rowsNames || [])
+        borderBottom: isRowContentInvalid(row, rowsNames || [], usedIn)
           ? 'solid'
           : 'none',
-        borderColor: isRowContentinValid(row, rowsNames || [])
-          ? 'red'
+        borderColor: isRowContentInvalid(row, rowsNames || [], usedIn)
+          ? 'rgb(249, 81, 81)'
           : 'white',
       }}
     >

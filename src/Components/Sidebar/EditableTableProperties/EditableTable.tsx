@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import CustomTableCell from './CustomTableCell';
 import DraggableDialog from 'Components/General/DraggableDialog';
 import useStore from 'store/useStore';
-import type { Conditions, EditableTableRow, Inputs } from 'types';
+import type { Conditions, EditableTableRow, Inputs, TypeOfValues } from 'types';
 import type { ChangeEvent } from 'react';
 import { createData, getType } from './utils';
 import TableHeader from './TableHeader';
@@ -50,7 +50,7 @@ export const useStyles = makeStyles(() => ({
 interface EditableTableProps {
   headers: string[];
   defaultValues: Conditions[] | Inputs[];
-  typeOfValues: { type: string; values?: string[] }[];
+  typeOfValues: TypeOfValues[];
   valuesChanged: (rows: EditableTableRow[]) => void;
   onRowAdd?: (rows?: EditableTableRow[]) => void;
 }
@@ -313,6 +313,7 @@ function EditableTable(props: EditableTableProps) {
                       headers[1] === 'Node_Id'
                         ? props.typeOfValues[1]?.values
                         : [''],
+                    requiredValues: props.typeOfValues[1]?.requiredValues,
                   }}
                   onEdit={() => onEditRow(row.id || '', index)}
                 />

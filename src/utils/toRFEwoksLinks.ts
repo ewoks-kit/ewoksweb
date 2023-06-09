@@ -1,6 +1,8 @@
 import type {
   Conditions,
   DataMapping,
+  DataMappingEwoks,
+  EditableTableRow,
   EwoksRFLink,
   GraphEwoks,
   Task,
@@ -9,6 +11,7 @@ import type {
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import { calcTasksForLink } from './calcTasksForLink';
+import { nanoid } from 'nanoid';
 
 // DOC: from GraphEwoks get EwoksRFLinks
 // - tempGraph: the graph to transform its links
@@ -95,12 +98,7 @@ export function toRFEwoksLinks(
           links_required_output_names: targetTask.required_input_names || [],
           // DOC: node output_names are link's input_names
           links_input_names: sourceTask.output_names || [],
-          data_mapping: data_mapping.map((dmap) => {
-            return {
-              source_output: dmap.source_output?.toString(),
-              target_input: dmap.target_input?.toString(),
-            };
-          }),
+          data_mapping: data_mapping.map(createDataMappingData),
           required,
           sub_target,
           sub_source,
@@ -116,6 +114,16 @@ export function toRFEwoksLinks(
       return link;
     }
   );
+}
+
+export function createDataMappingData(
+  pair: DataMappingEwoks
+): EditableTableRow {
+  return {
+    id: nanoid(),
+    name: pair.source_output ? pair.source_output.toString() : '',
+    value: pair.target_input ?? '',
+  };
 }
 
 function calcLabel(
