@@ -18,7 +18,7 @@ function SelectRenderer(props: CustomTableCellProps) {
     );
   };
 
-  const options = values.values || [];
+  const options = values.allValues || [];
   return (
     <FormControl fullWidth>
       <Autocomplete

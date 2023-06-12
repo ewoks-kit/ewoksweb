@@ -56,10 +56,10 @@ export default function NodeDataMapping(element: Node) {
         valuesChanged={dataMappingValuesChanged}
         typeOfValues={[
           {
-            values: [],
+            allValues: [],
           },
           {
-            values: [],
+            allValues: [],
           },
         ]}
       />

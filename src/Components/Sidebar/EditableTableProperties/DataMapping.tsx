@@ -45,10 +45,10 @@ export default function DataMappingComponent(element: Edge) {
         valuesChanged={dataMappingValuesChanged}
         typeOfValues={[
           {
-            values: edgeData.links_input_names || [],
+            allValues: edgeData.links_input_names || [],
           },
           {
-            values: [
+            allValues: [
               ...(edgeData.links_required_output_names || []),
               ...(edgeData.links_optional_output_names || []),
             ],

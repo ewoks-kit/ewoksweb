@@ -309,7 +309,7 @@ function EditableTable(props: EditableTableProps) {
                   name="value"
                   onChange={onChange}
                   values={{
-                    values: [],
+                    allValues: [],
                     requiredValues: props.values[1]?.requiredValues,
                   }}
                   onEdit={() => onEditRow(row.id || '', index)}

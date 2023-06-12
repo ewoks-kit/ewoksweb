@@ -62,7 +62,7 @@ export default function DefaultInputs(element: Node) {
         onRowAdd={(rows) => addDefaultInputs(rows)}
         values={[
           {
-            values: [
+            allValues: [
               ...(nodeData.task_props.optional_input_names || []),
               ...(nodeData.task_props.required_input_names || []),
             ],

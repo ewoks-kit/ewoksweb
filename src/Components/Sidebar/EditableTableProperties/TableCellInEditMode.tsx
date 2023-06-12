@@ -118,7 +118,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
     );
   }
 
-  if (values.values && values.values.length > 0) {
+  if (values.allValues && values.allValues.length > 0) {
     return <SelectNameValue {...props} />;
   }
 

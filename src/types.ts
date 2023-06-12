@@ -404,7 +404,7 @@ export interface EditableTableRow {
 }
 
 export interface EditableTableValues {
-  values?: string[];
+  allValues?: string[];
   requiredValues?: string[];
 }
 

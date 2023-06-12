@@ -49,7 +49,7 @@ export default function Conditions(element: Edge) {
         onRowAdd={(rows) => addConditions(rows)}
         values={[
           {
-            values: edgeData.links_input_names || [],
+            allValues: edgeData.links_input_names || [],
           },
           {},
         ]}
