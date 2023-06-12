@@ -8,13 +8,14 @@ import { EditOutlined as EditIcon } from '@material-ui/icons';
 
 function isRowContentInvalid(
   row: EditableTableRow,
-  rowNames: string[],
+  rowNames: string[] | undefined,
   usedIn?: 'DataMapping' | 'DefaultInputs' | 'Conditions'
 ) {
   const hasInvalidValue = row.value === undefined || row.value === '';
 
   const forEditableTableDublicateName =
     usedIn !== 'DataMapping' &&
+    rowNames !== undefined &&
     rowNames.filter((ro) => ro === row.name).length > 1;
 
   return !row.name || hasInvalidValue || forEditableTableDublicateName;
@@ -44,10 +45,10 @@ function CustomTableCell(props: CustomTableCellProps) {
       align="left"
       className={classes.tableCell}
       style={{
-        borderBottom: isRowContentInvalid(row, rowsNames || [], usedIn)
+        borderBottom: isRowContentInvalid(row, rowsNames, usedIn)
           ? 'solid'
           : 'none',
-        borderColor: isRowContentInvalid(row, rowsNames || [], usedIn)
+        borderColor: isRowContentInvalid(row, rowsNames, usedIn)
           ? 'rgb(249, 81, 81)'
           : 'white',
       }}

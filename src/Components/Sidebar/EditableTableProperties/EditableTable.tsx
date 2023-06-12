@@ -157,8 +157,8 @@ function EditableTable(props: EditableTableProps) {
         text: 'Not allowed to assign the same property TWICE!',
         severity: 'error',
       });
-      // return;
     }
+
     if (
       ['string', 'bool', 'number', 'boolean', 'null'].includes(
         typeOfInputs[index]
@@ -177,6 +177,7 @@ function EditableTable(props: EditableTableProps) {
         }
         return rowe;
       });
+
       setRows(newRows);
       props.valuesChanged(newRows);
       return;
@@ -231,6 +232,7 @@ function EditableTable(props: EditableTableProps) {
         return rowe;
       });
       setRows(newRows);
+      props.valuesChanged(newRows);
     }
     const tOfI = [...typeOfInputs];
     tOfI[index] = e.target.value;
@@ -299,20 +301,13 @@ function EditableTable(props: EditableTableProps) {
                 <CustomTableCell
                   index={index}
                   row={row}
+                  rowsNames={rows.map((ro) => ro.name || '')}
                   name="value"
                   onChange={onChange}
                   type={typeOfInputs[index]}
                   typeOfValues={{
-                    type:
-                      headers[0].startsWith('Source') ||
-                      headers[1] === 'Node_Id'
-                        ? props.typeOfValues[1]?.type
-                        : typeOfInputs[index],
-                    values:
-                      headers[0].startsWith('Source') ||
-                      headers[1] === 'Node_Id'
-                        ? props.typeOfValues[1]?.values
-                        : [''],
+                    type: typeOfInputs[index],
+                    values: [''],
                     requiredValues: props.typeOfValues[1]?.requiredValues,
                   }}
                   onEdit={() => onEditRow(row.id || '', index)}

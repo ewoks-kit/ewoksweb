@@ -125,7 +125,10 @@ function calcLabel(
 
   if (conditions.length > 0) {
     return conditions
-      .map((el) => `${el.source_output || ''}->${(el.value as string) || ''}`)
+      .map((el) => {
+        const rowValue = el.value === null ? 'null' : JSON.stringify(el.value); // el.value?.toString() || '';
+        return `${el.source_output || ''}->${rowValue}`;
+      })
       .join(', ');
   }
 

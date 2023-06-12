@@ -96,6 +96,7 @@ function TableDataMapping(props: TableDataMappingProps) {
               <CustomTableCell
                 index={index}
                 row={row}
+                rowsNames={rows.map((ro) => ro.name || '')}
                 name="value"
                 onChange={onChange}
                 typeOfValues={props.typeOfValues[1]}

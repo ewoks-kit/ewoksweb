@@ -44,9 +44,10 @@ function TableCellInEditMode(props: CustomTableCellProps) {
 
   useEffect(() => {
     setValueToString(
-      row.value !== null && row.value !== undefined
-        ? // I need to show as string any kind of (value: unknown) it gets
-          // value can be any type in the dropdown
+      row.value === undefined
+        ? ''
+        : row.value !== null
+        ? // Need to show as string any kind of (value: unknown) it gets
           // eslint-disable-next-line @typescript-eslint/no-base-to-string
           row.value.toString()
         : 'null'

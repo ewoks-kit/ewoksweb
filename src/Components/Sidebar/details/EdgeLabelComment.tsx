@@ -66,7 +66,7 @@ export default function EdgeLabelComment() {
     event: ChangeEvent<HTMLInputElement>,
     elementL: EwoksRFLink
   ) {
-    if (event.target.textContent) {
+    if (event.target.textContent !== null && event.target.value !== '') {
       saveLabel(event.target.textContent, elementL);
     }
   }
@@ -79,9 +79,7 @@ export default function EdgeLabelComment() {
       return;
     }
 
-    if (event.target.value) {
-      saveLabel(event.target.value, elementL);
-    }
+    saveLabel(event.target.value, elementL);
   }
 
   return (
