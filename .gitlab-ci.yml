@@ -18,6 +18,8 @@ stages:
 
 .pnpm-base:
   extends: .base
+  variables:
+    CYPRESS_CACHE_FOLDER: '$CI_PROJECT_DIR/.cypress-cache/'
   before_script:
     - curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@8
     - pnpm config set store-dir .pnpm-store
@@ -72,8 +74,6 @@ test:
   image: cypress/base:16.18.0
   stage: test
   extends: .pnpm-base
-  variables:
-    CYPRESS_CACHE_FOLDER: '$CI_PROJECT_DIR/.cypress-cache/'
   before_script:
     # https://github.com/cypress-io/cypress-docker-images/issues/642 and https://github.com/cypress-io/cypress-docker-images/issues/649
     - apt-get update && apt-get install curl -y
@@ -87,10 +87,10 @@ test:
     - python3 -m pip install --upgrade --pre ewoksserver
     - ewoks-server -p 5000 -c ./pysrc/ewoksweb/tests/resources/config.py &
     - CI=false pnpm build # Don't let eslint warnings fail the build
+    # Try to connect to server for 10s. If not, `timeout` will return non-zero so the CI fails.
     - timeout 10s bash -c "while ! curl http://127.0.0.1:5000 -m1 -o/dev/null -s;do sleep 0.3;done"
     # https://github.com/vercel/serve/issues/751
     - pnpm dlx serve@13.0.4 --no-port-switching -s build -l 3000 &
-    # Try to connect to server for 10s. If not, `timeout` will return non-zero so the CI fails.
     - timeout 10s bash -c "while ! curl http://127.0.0.1:3000 -m1 -o/dev/null -s;do sleep 0.3;done"
     - pnpm cypress:run
 
