@@ -28,7 +28,7 @@ export function createData(pair: Conditions | Inputs): EditableTableRow {
   return {
     id: pair.id?.toString() || pair.name?.toString(),
     name: pair.name?.toString(),
-    value: pair.value,
+    value: pair.value !== null ? pair.value : 'null',
     type,
   };
 }

@@ -1,5 +1,4 @@
 import type { DataMapping, EditableTableRow } from 'types';
-import { isClass } from './utils';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import type { Node } from 'reactflow';
@@ -11,15 +10,6 @@ export default function NodeDataMapping(element: Node) {
   assertNodeDataDefined(nodeData, element.id);
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
-
-  // TODO: specify the source and target of this imaginary link to specify data_mapping
-  const sourceNodeData = useNodeDataStore((state) =>
-    state.nodesData.get(element.id)
-  );
-
-  const targetNodeData = useNodeDataStore((state) =>
-    state.nodesData.get(element.id)
-  );
 
   function addDataMapping(rows: EditableTableRow[] | undefined) {
     mergeNodeData(element.id, {
@@ -66,16 +56,10 @@ export default function NodeDataMapping(element: Node) {
         valuesChanged={dataMappingValuesChanged}
         typeOfValues={[
           {
-            type: isClass(sourceNodeData) ? 'select' : 'input',
-            values: [], // nodeData.links_input_names || [],
+            values: [],
           },
           {
-            type: isClass(targetNodeData) ? 'select' : 'input',
             values: [],
-            // [
-            //   ...(nodeData.links_required_output_names || []),
-            //   ...(nodeData.links_optional_output_names || []),
-            // ],
           },
         ]}
       />

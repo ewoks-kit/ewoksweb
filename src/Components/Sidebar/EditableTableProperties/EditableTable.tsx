@@ -10,7 +10,12 @@ import TableRow from '@material-ui/core/TableRow';
 import CustomTableCell from './CustomTableCell';
 import DraggableDialog from 'Components/General/DraggableDialog';
 import useStore from 'store/useStore';
-import type { Conditions, EditableTableRow, Inputs, TypeOfValues } from 'types';
+import type {
+  Conditions,
+  EditableTableRow,
+  Inputs,
+  EditableTableValues,
+} from 'types';
 import type { ChangeEvent } from 'react';
 import { createData, getType } from './utils';
 import TableHeader from './TableHeader';
@@ -50,7 +55,7 @@ export const useStyles = makeStyles(() => ({
 interface EditableTableProps {
   headers: string[];
   defaultValues: Conditions[] | Inputs[];
-  typeOfValues: TypeOfValues[];
+  values: EditableTableValues[];
   valuesChanged: (rows: EditableTableRow[]) => void;
   onRowAdd?: (rows?: EditableTableRow[]) => void;
 }
@@ -284,8 +289,7 @@ function EditableTable(props: EditableTableProps) {
                   rowsNames={rows.map((ro) => ro.name || '')}
                   name="name"
                   onChange={onChange}
-                  type=""
-                  typeOfValues={props.typeOfValues[0]}
+                  values={props.values[0]}
                 />
 
                 <TypeSelectCell
@@ -304,11 +308,9 @@ function EditableTable(props: EditableTableProps) {
                   rowsNames={rows.map((ro) => ro.name || '')}
                   name="value"
                   onChange={onChange}
-                  type={typeOfInputs[index]}
-                  typeOfValues={{
-                    type: typeOfInputs[index],
-                    values: [''],
-                    requiredValues: props.typeOfValues[1]?.requiredValues,
+                  values={{
+                    values: [],
+                    requiredValues: props.values[1]?.requiredValues,
                   }}
                   onEdit={() => onEditRow(row.id || '', index)}
                 />

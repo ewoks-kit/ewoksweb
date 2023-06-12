@@ -403,8 +403,7 @@ export interface EditableTableRow {
   type?: string;
 }
 
-export interface TypeOfValues {
-  type: string;
+export interface EditableTableValues {
   values?: string[];
   requiredValues?: string[];
 }
@@ -414,8 +413,7 @@ export interface CustomTableCellProps {
   row: EditableTableRow;
   rowsNames?: string[];
   name: 'name' | 'value';
-  type?: string;
-  typeOfValues: TypeOfValues;
+  values: EditableTableValues;
   usedIn?: 'DataMapping' | 'DefaultInputs' | 'Conditions';
   onEdit?: () => void;
   onChange(

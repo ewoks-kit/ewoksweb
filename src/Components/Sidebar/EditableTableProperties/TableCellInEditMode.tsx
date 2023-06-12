@@ -36,7 +36,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 function TableCellInEditMode(props: CustomTableCellProps) {
-  const { index, row, name, onChange, type, typeOfValues } = props;
+  const { index, row, name, onChange, values } = props;
 
   const classes = useStyles();
 
@@ -70,15 +70,15 @@ function TableCellInEditMode(props: CustomTableCellProps) {
     onChange(event, changedRow, rowIndex);
   }
 
-  if (type && ['dict', 'list', 'object'].includes(type)) {
+  if (
+    name === 'value' &&
+    row.type &&
+    ['dict', 'list', 'object'].includes(row.type)
+  ) {
     return <span>{JSON.stringify(row[name])}</span>;
   }
 
-  if (typeOfValues.type === 'select') {
-    return <SelectNameValue {...props} />;
-  }
-
-  if (type === 'bool' || type === 'boolean') {
+  if (name === 'value' && (row.type === 'bool' || row.type === 'boolean')) {
     return (
       <RadioGroup
         name="value"
@@ -103,7 +103,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
     );
   }
 
-  if (type === 'number') {
+  if (name === 'value' && row.type === 'number') {
     return (
       <FormControl fullWidth style={{ marginLeft: '5px' }}>
         <Input
@@ -116,6 +116,10 @@ function TableCellInEditMode(props: CustomTableCellProps) {
         />
       </FormControl>
     );
+  }
+
+  if (values.values && values.values.length > 0) {
+    return <SelectNameValue {...props} />;
   }
 
   return (

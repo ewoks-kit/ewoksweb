@@ -3,10 +3,10 @@ import { Autocomplete } from '@material-ui/lab';
 import type { CustomTableCellProps } from '../../../types';
 
 function SelectRenderer(props: CustomTableCellProps) {
-  const { index, row, name, onChange, typeOfValues } = props;
+  const { index, row, name, onChange, values } = props;
 
   const renderOption = (option: string) => {
-    const valueIsRequired = typeOfValues.requiredValues?.includes(option);
+    const valueIsRequired = values.requiredValues?.includes(option);
 
     return (
       <li>
@@ -18,7 +18,7 @@ function SelectRenderer(props: CustomTableCellProps) {
     );
   };
 
-  const options = typeOfValues.values || [''];
+  const options = values.values || [];
   return (
     <FormControl fullWidth>
       <Autocomplete

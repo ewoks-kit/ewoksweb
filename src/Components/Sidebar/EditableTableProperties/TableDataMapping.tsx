@@ -7,7 +7,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import CustomTableCell from './CustomTableCell';
-import type { DataMapping, EditableTableRow, TypeOfValues } from 'types';
+import type { DataMapping, EditableTableRow, EditableTableValues } from 'types';
 import TableHeader from './TableHeader';
 import ToolsCell from './ToolsCell';
 import { TableCell } from '@material-ui/core';
@@ -30,7 +30,7 @@ export const useStyles = makeStyles(() => ({
 interface TableDataMappingProps {
   headers: string[];
   values: DataMapping[];
-  typeOfValues: TypeOfValues[];
+  typeOfValues: EditableTableValues[];
   valuesChanged: (rows: EditableTableRow[]) => void;
   onRowAdd?: (rows?: EditableTableRow[]) => void;
 }
@@ -90,7 +90,7 @@ function TableDataMapping(props: TableDataMappingProps) {
                 rowsNames={rows.map((ro) => ro.name || '')}
                 name="name"
                 onChange={onChange}
-                typeOfValues={props.typeOfValues[0]}
+                values={props.typeOfValues[0]}
                 usedIn="DataMapping"
               />
               <CustomTableCell
@@ -99,7 +99,7 @@ function TableDataMapping(props: TableDataMappingProps) {
                 rowsNames={rows.map((ro) => ro.name || '')}
                 name="value"
                 onChange={onChange}
-                typeOfValues={props.typeOfValues[1]}
+                values={props.typeOfValues[1]}
                 usedIn="DataMapping"
               />
               <ToolsCell onDelete={() => onDelete(row.id || '')} />

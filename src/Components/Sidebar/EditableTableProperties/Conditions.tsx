@@ -47,14 +47,11 @@ export default function Conditions(element: Edge) {
         defaultValues={edgeData.conditions || []}
         valuesChanged={conditionsValuesChanged}
         onRowAdd={(rows) => addConditions(rows)}
-        typeOfValues={[
+        values={[
           {
-            type: 'select',
             values: edgeData.links_input_names || [],
           },
-          {
-            type: 'input',
-          },
+          {},
         ]}
       />
     </div>
