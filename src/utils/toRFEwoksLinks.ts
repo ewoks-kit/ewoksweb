@@ -1,6 +1,6 @@
 import type {
-  Conditions,
-  DataMapping,
+  ConditionsEwoks,
+  DataMappingEwoks,
   EwoksRFLink,
   GraphEwoks,
   Task,
@@ -116,8 +116,8 @@ export function toRFEwoksLinks(
 
 function calcLabel(
   uiProps: UiPropsLinks,
-  conditions: Conditions[],
-  data_mapping: DataMapping[]
+  conditions: ConditionsEwoks[],
+  data_mapping: DataMappingEwoks[]
 ): string {
   if (uiProps.label) {
     return uiProps.label;

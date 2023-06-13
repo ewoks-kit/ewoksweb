@@ -37,7 +37,7 @@ export default function NodeDataMapping(element: Node) {
   const dataMappingValuesChanged = (table: DataMapping[]) => {
     const dmap: DataMapping[] = table.map((row) => {
       return {
-        id: row.source_output ? row.source_output.toString() : row.id,
+        id: row.id,
         name: row.name,
         value: row.value,
       };

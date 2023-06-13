@@ -1,5 +1,7 @@
 /* eslint-disable require-unicode-regexp */
 import type {
+  DataMapping,
+  DataMappingEwoks,
   DefaultErrorAttributes,
   EwoksNode,
   EwoksRFNode,
@@ -22,9 +24,9 @@ function cleanDefaultInputs(default_inputs: Inputs[]) {
   });
 }
 function calcDefaultErrorAttributes(
-  default_error_attributes: DefaultErrorAttributes | undefined,
+  default_error_attributes: DefaultErrorAttributes<DataMapping> | undefined,
   default_error_node?: boolean
-) {
+): DefaultErrorAttributes<DataMappingEwoks> | undefined {
   if (!default_error_node) {
     return undefined;
   }
