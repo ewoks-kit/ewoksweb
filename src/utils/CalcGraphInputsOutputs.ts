@@ -6,6 +6,11 @@ import type {
   GraphNodes,
   GraphRF,
 } from '../types';
+import {
+  calcConditionName,
+  calcConditionValue,
+  calcDataMapping,
+} from './utils';
 
 // Calculate the ewoks input_nodes and output_nodes within the graph
 // from the nodes of the graphRF model with types graphInput, graphOutput
@@ -133,16 +138,19 @@ function calcNodeProps(
     link_attributes: {
       label: isString(label) ? label : '',
       comment: graph_links[link_index]?.data.comment ?? '',
-      conditions: graph_links[link_index]?.data.conditions || [],
-      data_mapping:
-        graph_links[link_index]?.data.data_mapping?.map((dmap) => {
+      conditions:
+        graph_links[link_index]?.data.conditions?.map((con) => {
           return {
-            source_output: dmap.name,
-            target_input: dmap.value as string,
+            source_output: calcConditionName(con),
+            value: calcConditionValue(con),
           };
         }) || [],
+      data_mapping: calcDataMapping(
+        graph_links[link_index]?.data.data_mapping || []
+      ),
       map_all_data: graph_links[link_index]?.data.map_all_data || false,
       on_error: graph_links[link_index]?.data.on_error || false,
+      required: graph_links[link_index]?.data.required || false,
     },
     uiProps: {
       position: nod.position,

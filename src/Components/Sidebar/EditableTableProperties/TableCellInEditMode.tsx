@@ -42,6 +42,8 @@ function TableCellInEditMode(props: CustomTableCellProps) {
 
   const [valueToString, setValueToString] = React.useState<string>('true');
 
+  console.log(index, row, name, values);
+
   useEffect(() => {
     setValueToString(
       row.value === undefined

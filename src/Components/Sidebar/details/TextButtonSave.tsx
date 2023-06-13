@@ -23,7 +23,9 @@ export default function TextButtonSave(props: TextButtonSaveProps) {
         <TextField
           label={label}
           variant="outlined"
-          defaultValue={defaultValue || ''}
+          // TODO: Default value causes the input to not behave accordingly when
+          // you first open a workflow
+          value={defaultValue || ''}
           margin="dense"
           style={{
             width: '98%',

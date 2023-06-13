@@ -79,6 +79,8 @@ function EditableTable(props: EditableTableProps) {
 
   useEffect(() => {
     setTypeOfInputs(defaultValues.map(getType));
+    console.log(defaultValues.map(getType), defaultValues);
+
     setRows(defaultValues.map(createData));
   }, [defaultValues]);
 
@@ -222,23 +224,26 @@ function EditableTable(props: EditableTableProps) {
     if (['string', 'number', 'dict', 'list'].includes(e.target.value)) {
       const newRows = rows.map((rowe) => {
         if (rowe.id === rowId) {
-          return { ...rowe, value: '' };
+          return { ...rowe, type: e.target.value };
         }
         return rowe;
       });
+      console.log(newRows);
       setRows(newRows);
+      props.valuesChanged(newRows);
     }
 
     if (e.target.value === 'null') {
       const newRows = rows.map((rowe) => {
         if (rowe.id === rowId) {
-          return { ...rowe, value: e.target.value };
+          return { ...rowe, value: e.target.value, type: e.target.value };
         }
         return rowe;
       });
       setRows(newRows);
       props.valuesChanged(newRows);
     }
+
     const tOfI = [...typeOfInputs];
     tOfI[index] = e.target.value;
     setTypeOfInputs(tOfI);
@@ -305,12 +310,10 @@ function EditableTable(props: EditableTableProps) {
                 <CustomTableCell
                   index={index}
                   row={row}
-                  rowsNames={rows.map((ro) => ro.name || '')}
                   name="value"
                   onChange={onChange}
                   values={{
                     allValues: [],
-                    requiredValues: props.values[1]?.requiredValues,
                   }}
                   onEdit={() => onEditRow(row.id || '', index)}
                 />

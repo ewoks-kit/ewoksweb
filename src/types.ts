@@ -52,6 +52,7 @@ export interface InOutLinkAttributes {
   data_mapping: DataMappingEwoks[];
   map_all_data: boolean;
   on_error: boolean;
+  required?: boolean;
 }
 
 export interface InOutNodesUiProps {
@@ -223,6 +224,7 @@ export interface Inputs {
   id?: string;
   name: string | number;
   value: unknown;
+  type?: string;
 }
 
 export interface InputsEwoks extends Omit<Inputs, 'id'> {}
@@ -279,7 +281,12 @@ export interface Conditions {
   value: unknown;
   id?: string;
   name?: string;
+  type?: string; // 'string' | 'bool' | 'number' | 'boolean' | 'null' | 'list' | 'dict';
 }
+
+// export interface TypeOfInputs {
+
+// }
 
 export interface DefaultErrorAttributes {
   map_all_data?: boolean;

@@ -27,6 +27,8 @@ export default function Conditions(element: Edge) {
     // mergeEdgeData(element.id, {
     //   conditions: [...(table as EdgeConditions[])],
     // });
+    console.log(table);
+
     const newEdgeData = {
       ...edgeData,
       conditions: table.map((con1) => {
@@ -34,6 +36,7 @@ export default function Conditions(element: Edge) {
           id: con1.id,
           name: con1.name,
           value: con1.value,
+          type: con1.type,
         };
       }),
     };

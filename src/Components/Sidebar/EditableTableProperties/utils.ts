@@ -9,12 +9,15 @@ import type {
 export const INPUT_TYPES = ['bool', 'number', 'string', 'list', 'dict', 'null'];
 
 export function createData(pair: Conditions | Inputs): EditableTableRow {
+  console.log(pair);
+
   const type =
-    pair.value === 'true' || pair.value === 'false'
+    pair.type ??
+    (pair.value === 'true' || pair.value === 'false'
       ? 'boolean'
       : pair.value === null
       ? 'null'
-      : typeof pair.value;
+      : typeof pair.value);
 
   if ('source_output' in pair) {
     return {
@@ -34,7 +37,12 @@ export function createData(pair: Conditions | Inputs): EditableTableRow {
 }
 
 export function getType(val: DataMapping | Conditions | Inputs) {
-  const { value } = val;
+  const { value, type } = val;
+  console.log(val, value);
+
+  if (type in val && val.type) {
+    return type;
+  }
 
   if (typeof value === 'boolean' || value === 'true' || value === 'false') {
     return 'boolean';
