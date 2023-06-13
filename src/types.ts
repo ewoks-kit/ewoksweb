@@ -52,6 +52,7 @@ export interface InOutLinkAttributes {
   data_mapping: DataMapping[];
   map_all_data: boolean;
   on_error: boolean;
+  required: boolean;
 }
 
 export interface InOutNodesUiProps {

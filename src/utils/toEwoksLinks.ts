@@ -1,14 +1,17 @@
-/* eslint-disable require-unicode-regexp */
 import { isString } from './typeGuards';
-import type { Conditions, DataMapping, EwoksLink, EwoksRFLink } from '../types';
+import type { EwoksLink, EwoksRFLink } from '../types';
+import {
+  calcConditionName,
+  calcConditionValue,
+  calcDataMapping,
+} from './utils';
 
 // EwoksRFLinks --> EwoksLinks for saving
 export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
   const tempLinks: EwoksRFLink[] = [...links].filter(
     (link) => !link.data.startEnd
   );
-  // TODO: if there are some startEnd links with conditions or any other link_attributes
-  // then graph.input_nodes and/or graph.output_nodes needs update
+
   return tempLinks.map(
     ({
       label,
@@ -60,37 +63,4 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
       return link;
     }
   );
-}
-
-function calcConditionValue(condition: Conditions) {
-  return condition.value === 'true'
-    ? true
-    : condition.value === 'false'
-    ? false
-    : condition.value === 'null'
-    ? null
-    : condition.value;
-}
-
-function calcConditionName(condition: Conditions) {
-  const cond = condition.source_output ?? condition.name;
-
-  return cond && /^\d+$/.test(cond as string)
-    ? Number.parseInt(cond as string, 10)
-    : cond;
-}
-
-function calcDataMapping(data_mapping: DataMapping[]) {
-  return data_mapping.map((mapping) => {
-    return {
-      source_output:
-        mapping.name && /^\d+$/.test(mapping.name)
-          ? Number.parseInt(mapping.name, 10)
-          : mapping.name,
-      target_input:
-        mapping.value && /^\d+$/.test(mapping.value as string)
-          ? Number.parseInt(mapping.value as string, 10)
-          : (mapping.value as string),
-    };
-  });
 }

@@ -144,9 +144,10 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         task_generator,
         default_inputs: cleanDefaultInputs(calcDefaultInputs(default_inputs)),
         default_error_node,
-        default_error_attributes: default_error_node
-          ? default_error_attributes
-          : undefined,
+        default_error_attributes: calcDefaultErrorAttributes(
+          default_error_attributes,
+          default_error_node
+        ),
         uiProps: {
           label,
           type,
