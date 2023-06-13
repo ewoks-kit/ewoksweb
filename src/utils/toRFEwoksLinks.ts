@@ -1,4 +1,5 @@
 import type {
+  Conditions,
   ConditionsEwoks,
   DataMappingEwoks,
   EwoksRFLink,
@@ -46,10 +47,10 @@ export function toRFEwoksLinks(
         tasks
       );
       const color = uiProps.style?.stroke || 'rgb(60, 81, 202)';
-      const conditionsSourceToString = conditions.map((con) => {
+      const conditionsSourceToString: Conditions[] = conditions.map((con) => {
         return {
-          ...con,
           name: con.source_output?.toString(),
+          value: con.value,
         };
       });
 

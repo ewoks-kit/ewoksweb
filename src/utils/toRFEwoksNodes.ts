@@ -1,4 +1,6 @@
 import type {
+  DataMapping,
+  DataMappingEwoks,
   DefaultErrorAttributes,
   EwoksRFNode,
   GraphEwoks,
@@ -106,8 +108,8 @@ export function toRFEwoksNodes(
 }
 
 function calcDefaultErrorAttributes(
-  default_error_attributes: DefaultErrorAttributes | undefined
-): DefaultErrorAttributes | undefined {
+  default_error_attributes: DefaultErrorAttributes<DataMappingEwoks> | undefined
+): DefaultErrorAttributes<DataMapping> | undefined {
   return {
     map_all_data: default_error_attributes?.map_all_data,
     data_mapping: default_error_attributes?.data_mapping?.map(

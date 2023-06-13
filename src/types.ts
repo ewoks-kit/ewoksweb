@@ -294,7 +294,7 @@ export interface EwoksNode {
   inputs_complete?: boolean;
   task_generator?: string;
   default_error_node?: boolean;
-  default_error_attributes?: DefaultErrorAttributes<DataMappingEwoks[]>;
+  default_error_attributes?: DefaultErrorAttributes<DataMappingEwoks>;
   uiProps?: EwoksNodeUiProps;
 }
 
@@ -374,7 +374,7 @@ export interface RFNodeEwoksProperties {
   inputs_complete?: boolean;
   task_generator?: string;
   default_error_node?: boolean;
-  default_error_attributes?: DefaultErrorAttributes<DataMappingEwoks[]>;
+  default_error_attributes?: DefaultErrorAttributes<DataMapping>;
 }
 
 export interface EwoksRFNodeData {

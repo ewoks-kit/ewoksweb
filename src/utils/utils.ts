@@ -1,15 +1,8 @@
 /* eslint-disable require-unicode-regexp */
 import { nanoid } from 'nanoid';
-import type {
-  Conditions,
-  DataMapping,
-  DataMappingEwoks,
-  EditableTableRow,
-} from '../types';
+import type { Conditions, DataMapping, DataMappingEwoks } from '../types';
 
-export function createDataMappingData(
-  pair: DataMappingEwoks
-): EditableTableRow {
+export function createDataMappingData(pair: DataMappingEwoks): DataMapping {
   return {
     id: nanoid(),
     name: pair.source_output ? pair.source_output.toString() : '',
