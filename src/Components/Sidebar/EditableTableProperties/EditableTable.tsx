@@ -15,6 +15,7 @@ import type {
   EditableTableRow,
   Inputs,
   EditableTableValues,
+  TypeOfValues,
 } from 'types';
 import type { ChangeEvent } from 'react';
 import { createData, getType } from './utils';
@@ -224,7 +225,7 @@ function EditableTable(props: EditableTableProps) {
       if (rowe.id === rowId) {
         return {
           ...rowe,
-          type: e.target.value,
+          type: e.target.value as TypeOfValues,
           value: e.target.value === 'null' ? 'null' : '',
         };
       }

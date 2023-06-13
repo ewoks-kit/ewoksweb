@@ -224,7 +224,7 @@ export interface Inputs {
   id?: string;
   name: string | number;
   value: unknown;
-  type?: string;
+  type?: TypeOfValues;
 }
 
 export interface InputsEwoks extends Omit<Inputs, 'id'> {}
@@ -267,7 +267,6 @@ export interface DataMapping {
   value?: unknown;
   id?: string;
   name?: string;
-  type?: string;
 }
 
 export interface ConditionsEwoks {
@@ -276,18 +275,21 @@ export interface ConditionsEwoks {
 }
 
 export interface Conditions {
-  // TODO: remove source_output to have clear
-  // distinction from the ConditionsEwoks model
-  // source_output?: string | number;
   value: unknown;
   id?: string;
   name?: string;
-  type?: string; // 'string' | 'bool' | 'number' | 'boolean' | 'null' | 'list' | 'dict';
+  type?: TypeOfValues;
 }
 
-// export interface TypeOfInputs {
-
-// }
+export type TypeOfValues =
+  | 'string'
+  | 'bool'
+  | 'number'
+  | 'boolean'
+  | 'null'
+  | 'list'
+  | 'dict'
+  | undefined;
 
 export interface DefaultErrorAttributes {
   map_all_data?: boolean;
@@ -408,7 +410,7 @@ export interface EditableTableRow {
   id?: string;
   name?: string;
   value?: unknown;
-  type?: string;
+  type?: TypeOfValues;
 }
 
 export interface EditableTableValues {
