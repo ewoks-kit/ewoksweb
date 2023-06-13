@@ -55,7 +55,7 @@ function CustomTableCell(props: CustomTableCellProps) {
           : 'white',
       }}
     >
-      {row.type && ['list', 'dict'].includes(row.type) ? (
+      {name === 'value' && row.type && ['list', 'dict'].includes(row.type) ? (
         <span style={{ paddingLeft: '8px' }}>
           {row[name] && typeof row[name] === 'object'
             ? JSON.stringify(row[name])

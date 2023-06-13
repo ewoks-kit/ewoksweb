@@ -79,8 +79,6 @@ function EditableTable(props: EditableTableProps) {
 
   useEffect(() => {
     setTypeOfInputs(defaultValues.map(getType));
-    console.log(defaultValues.map(getType), defaultValues);
-
     setRows(defaultValues.map(createData));
   }, [defaultValues]);
 
@@ -221,28 +219,21 @@ function EditableTable(props: EditableTableProps) {
     index: number
   ) => {
     const { id: rowId = '' } = row;
-    if (['string', 'number', 'dict', 'list'].includes(e.target.value)) {
-      const newRows = rows.map((rowe) => {
-        if (rowe.id === rowId) {
-          return { ...rowe, type: e.target.value };
-        }
-        return rowe;
-      });
-      console.log(newRows);
-      setRows(newRows);
-      props.valuesChanged(newRows);
-    }
 
-    if (e.target.value === 'null') {
-      const newRows = rows.map((rowe) => {
-        if (rowe.id === rowId) {
-          return { ...rowe, value: e.target.value, type: e.target.value };
-        }
-        return rowe;
-      });
-      setRows(newRows);
-      props.valuesChanged(newRows);
-    }
+    const newRows = rows.map((rowe) => {
+      if (rowe.id === rowId) {
+        return {
+          ...rowe,
+          type: e.target.value,
+          value: e.target.value === 'null' ? 'null' : '',
+        };
+      }
+      return rowe;
+    });
+
+    setRows(newRows);
+
+    props.valuesChanged(newRows);
 
     const tOfI = [...typeOfInputs];
     tOfI[index] = e.target.value;

@@ -1,4 +1,3 @@
-/* eslint-disable require-unicode-regexp */
 import { isString } from './typeGuards';
 import type { EwoksLink, EwoksRFLink } from '../types';
 import {

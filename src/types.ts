@@ -267,6 +267,7 @@ export interface DataMapping {
   value?: unknown;
   id?: string;
   name?: string;
+  type?: string;
 }
 
 export interface ConditionsEwoks {

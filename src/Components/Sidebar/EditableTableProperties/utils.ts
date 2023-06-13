@@ -9,8 +9,6 @@ import type {
 export const INPUT_TYPES = ['bool', 'number', 'string', 'list', 'dict', 'null'];
 
 export function createData(pair: Conditions | Inputs): EditableTableRow {
-  console.log(pair);
-
   const type =
     pair.type ??
     (pair.value === 'true' || pair.value === 'false'
@@ -37,11 +35,10 @@ export function createData(pair: Conditions | Inputs): EditableTableRow {
 }
 
 export function getType(val: DataMapping | Conditions | Inputs) {
-  const { value, type } = val;
-  console.log(val, value);
+  const { value } = val;
 
-  if (type in val && val.type) {
-    return type;
+  if (val.type) {
+    return val.type;
   }
 
   if (typeof value === 'boolean' || value === 'true' || value === 'false') {

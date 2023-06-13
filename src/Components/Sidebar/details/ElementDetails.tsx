@@ -5,8 +5,6 @@ import { isEdgeRF, isNodeRF } from '../../../utils/typeGuards';
 import type { SelectedElementRF } from '../../../types';
 
 function ElementDetails({ selectedElement }: SelectedElementRF) {
-  console.log(selectedElement);
-
   return (
     <form noValidate autoComplete="off" style={{ width: '100%' }}>
       {!selectedElement ? (

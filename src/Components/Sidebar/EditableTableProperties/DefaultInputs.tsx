@@ -37,6 +37,7 @@ export default function DefaultInputs(element: Node) {
             id: dval.id,
             name: dval.name || '',
             value: dval.value,
+            type: dval.type,
           };
         }),
       },
