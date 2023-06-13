@@ -20,19 +20,17 @@ describe('edit nodes defaultInputs', () => {
   it('type and undo/redo a new Default Input', () => {
     cy.contains('Default Inputs').should('be.visible');
 
-    cy.get('[data-cy="autocompleteInputInEditableCell"]')
+    cy.get('[data-cy="inputInEditableCell"]')
+
       .should('exist')
       .should('be.visible');
 
     cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
 
-    cy.get('[data-cy="autocompleteInputInEditableCell"]').should(
-      'have.length',
-      1
-    );
+    cy.get('[data-cy="inputInEditableCell"]').should('have.length', 2);
 
-    cy.get('[data-cy="autocompleteInputInEditableCell"]').type('Always');
-    cy.get('[data-cy="inputInEditableCell"]').type('and forever');
+    cy.get('[data-cy="inputInEditableCell"]').first().type('Always');
+    cy.get('[data-cy="inputInEditableCell"]').last().type('and forever');
 
     cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
 
