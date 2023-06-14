@@ -1,13 +1,10 @@
-import { MenuList } from '@material-ui/core';
-import useStore from '../../../store/useStore';
-import UploadMenuItem from './UploadMenuItem';
-import curateGraph from '../utils/curateGraph';
-import { getEdgesData, getNodesData, rfToEwoks } from '../../../utils';
-import type { EwoksRFLinkData, EwoksRFNodeData, GraphRF } from '../../../types';
+import { GetApp } from '@material-ui/icons';
 import { useReactFlow } from 'reactflow';
-import MoreMenuItem from './MoreMenuItem';
-import { GetApp, FiberNew, Settings } from '@material-ui/icons';
-import DiscoverMenuItem from './DiscoverMenuItem';
+import useStore from '../../../store/useStore';
+import type { EwoksRFLinkData, EwoksRFNodeData, GraphRF } from '../../../types';
+import { getEdgesData, getNodesData, rfToEwoks } from '../../../utils';
+import curateGraph from '../utils/curateGraph';
+import ActionMenuItem from './ActionMenuItem';
 
 function download(content: BlobPart, fileName: string, contentType: string) {
   const a = document.createElement('a');
@@ -17,13 +14,7 @@ function download(content: BlobPart, fileName: string, contentType: string) {
   a.click();
 }
 
-interface Props {
-  checkAndNewGraph: () => void;
-  handleOpenSettings: () => void;
-}
-
-function MoreMenuList(props: Props) {
-  const { checkAndNewGraph, handleOpenSettings } = props;
+function DownloadMenuItem() {
   const { getNodes, getEdges } = useReactFlow();
 
   const graphInfo = useStore((state) => state.graphInfo);
@@ -57,24 +48,7 @@ function MoreMenuList(props: Props) {
       );
     }
   }
-
-  return (
-    <MenuList>
-      <MoreMenuItem
-        icon={FiberNew}
-        label="New workflow"
-        onClick={checkAndNewGraph}
-      />
-      <UploadMenuItem />
-      <MoreMenuItem icon={GetApp} label="Download" onClick={saveToDisk} />
-      <DiscoverMenuItem />
-      <MoreMenuItem
-        icon={Settings}
-        label="Settings"
-        onClick={handleOpenSettings}
-      />
-    </MenuList>
-  );
+  return <ActionMenuItem icon={GetApp} label="Download" onClick={saveToDisk} />;
 }
 
-export default MoreMenuList;
+export default DownloadMenuItem;
