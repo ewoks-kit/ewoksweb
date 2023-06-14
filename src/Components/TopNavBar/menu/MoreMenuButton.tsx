@@ -1,7 +1,6 @@
 import React from 'react';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { IconButton, Menu } from '@material-ui/core';
-import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import styles from './MoreMenu.module.css';
 import { FiberNew, Settings } from '@material-ui/icons';
 import DiscoverMenuItem from './DiscoverMenuItem';
@@ -19,8 +18,6 @@ export default function MoreMenuButton(props: Props) {
   const { checkAndNewGraph, handleOpenSettings } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const classes = useDashboardStyles();
-
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -33,7 +30,7 @@ export default function MoreMenuButton(props: Props) {
   return (
     <div>
       <IconButton
-        className={classes.openFileButton}
+        className={styles.openMenuButton}
         aria-controls="navbar-dropdown-menu"
         aria-haspopup="true"
         color="inherit"
