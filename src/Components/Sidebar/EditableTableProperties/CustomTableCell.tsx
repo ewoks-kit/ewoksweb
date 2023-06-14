@@ -8,13 +8,16 @@ import { EditOutlined as EditIcon } from '@material-ui/icons';
 
 function isRowContentInvalid(
   row: EditableTableRow,
-  rowNames: string[],
+  rowNames: string[] | undefined,
+  name: string,
   usedIn?: 'DataMapping' | 'DefaultInputs' | 'Conditions'
 ) {
   const hasInvalidValue = row.value === undefined || row.value === '';
 
   const forEditableTableDublicateName =
+    name === 'name' &&
     usedIn !== 'DataMapping' &&
+    rowNames !== undefined &&
     rowNames.filter((ro) => ro === row.name).length > 1;
 
   return !row.name || hasInvalidValue || forEditableTableDublicateName;
@@ -22,7 +25,7 @@ function isRowContentInvalid(
 
 // DOC: Used as an app-wide dialog when confirmation is needed. Open is a prop
 function CustomTableCell(props: CustomTableCellProps) {
-  const { row, rowsNames, name, usedIn, type } = props;
+  const { row, rowsNames, name, usedIn } = props;
 
   const useStyles = makeStyles(() => ({
     tableCell: {
@@ -44,15 +47,15 @@ function CustomTableCell(props: CustomTableCellProps) {
       align="left"
       className={classes.tableCell}
       style={{
-        borderBottom: isRowContentInvalid(row, rowsNames || [], usedIn)
+        borderBottom: isRowContentInvalid(row, rowsNames, name, usedIn)
           ? 'solid'
           : 'none',
-        borderColor: isRowContentInvalid(row, rowsNames || [], usedIn)
+        borderColor: isRowContentInvalid(row, rowsNames, name, usedIn)
           ? 'rgb(249, 81, 81)'
           : 'white',
       }}
     >
-      {type && ['list', 'dict'].includes(type) ? (
+      {name === 'value' && row.type && ['list', 'dict'].includes(row.type) ? (
         <span style={{ paddingLeft: '8px' }}>
           {row[name] && typeof row[name] === 'object'
             ? JSON.stringify(row[name])

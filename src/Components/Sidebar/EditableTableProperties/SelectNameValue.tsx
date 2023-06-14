@@ -6,7 +6,7 @@ function SelectRenderer(props: CustomTableCellProps) {
   const { index, row, name, onChange, typeOfValues } = props;
 
   const renderOption = (option: string) => {
-    const valueIsRequired = typeOfValues.requiredValues?.includes(option);
+    const valueIsRequired = typeOfValues?.requiredValues?.includes(option);
 
     return (
       <li>
@@ -18,7 +18,7 @@ function SelectRenderer(props: CustomTableCellProps) {
     );
   };
 
-  const options = typeOfValues.values || [''];
+  const options = typeOfValues?.values || [''];
   return (
     <FormControl fullWidth>
       <Autocomplete

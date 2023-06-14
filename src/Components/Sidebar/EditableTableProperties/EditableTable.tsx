@@ -219,6 +219,7 @@ function EditableTable(props: EditableTableProps) {
         return {
           ...rowe,
           value: e.target.value === 'null' ? e.target.value : '',
+          type: e.target.value,
         };
       }
       return rowe;
@@ -277,7 +278,6 @@ function EditableTable(props: EditableTableProps) {
                   rowsNames={rows.map((ro) => ro.name || '')}
                   name="name"
                   onChange={onChange}
-                  type=""
                   typeOfValues={props.typeOfValues[0]}
                 />
 
@@ -296,20 +296,6 @@ function EditableTable(props: EditableTableProps) {
                   row={row}
                   name="value"
                   onChange={onChange}
-                  type={typeOfInputs[index]}
-                  typeOfValues={{
-                    type:
-                      headers[0].startsWith('Source') ||
-                      headers[1] === 'Node_Id'
-                        ? props.typeOfValues[1]?.type
-                        : typeOfInputs[index],
-                    values:
-                      headers[0].startsWith('Source') ||
-                      headers[1] === 'Node_Id'
-                        ? props.typeOfValues[1]?.values
-                        : [''],
-                    requiredValues: props.typeOfValues[1]?.requiredValues,
-                  }}
                   onEdit={() => onEditRow(row.id || '', index)}
                 />
 
