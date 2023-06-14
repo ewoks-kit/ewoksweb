@@ -1,9 +1,14 @@
 import React from 'react';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import MoreMenuList from './MoreMenuList';
-import StyledMenu from './StyledMenu';
-import { IconButton } from '@material-ui/core';
+import { IconButton, Menu } from '@material-ui/core';
 import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
+import styles from './MoreMenu.module.css';
+import { FiberNew, Settings } from '@material-ui/icons';
+import DiscoverMenuItem from './DiscoverMenuItem';
+import MoreMenuItem from './MoreMenuItem';
+import UploadMenuItem from './UploadMenuItem';
+import DownloadMenuItem from './DownloadMenuItem';
+import { MenuContext } from './MenuContext';
 
 interface Props {
   checkAndNewGraph: () => void;
@@ -11,6 +16,7 @@ interface Props {
 }
 
 export default function MoreMenuButton(props: Props) {
+  const { checkAndNewGraph, handleOpenSettings } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const classes = useDashboardStyles();
@@ -19,7 +25,8 @@ export default function MoreMenuButton(props: Props) {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const open = anchorEl !== null;
+  const onClose = () => {
     setAnchorEl(null);
   };
 
@@ -35,15 +42,39 @@ export default function MoreMenuButton(props: Props) {
         <MoreVertIcon />
       </IconButton>
 
-      <StyledMenu
-        id="navbar-dropdown-menu"
+      <Menu
         anchorEl={anchorEl}
+        open={open}
+        onClose={onClose}
+        id="navbar-dropdown-menu"
+        PaperProps={{ className: styles.paper }}
         keepMounted
-        open={anchorEl !== null}
-        onClose={handleClose}
+        elevation={0}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
       >
-        <MoreMenuList {...props} />
-      </StyledMenu>
+        <MenuContext.Provider value={{ open, onClose }}>
+          <MoreMenuItem
+            icon={FiberNew}
+            label="New workflow"
+            onClick={checkAndNewGraph}
+          />
+          <UploadMenuItem />
+          <DownloadMenuItem />
+          <DiscoverMenuItem />
+          <MoreMenuItem
+            icon={Settings}
+            label="Settings"
+            onClick={handleOpenSettings}
+          />
+        </MenuContext.Provider>
+      </Menu>
     </div>
   );
 }
