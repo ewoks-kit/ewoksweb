@@ -1,34 +1,30 @@
-import { ListItemText } from '@material-ui/core';
 import type { ChangeEvent } from 'react';
 import { useRef } from 'react';
 import { FolderOpen } from '@material-ui/icons';
 
 import { useLoadGraph } from '../hooks';
-import MoreMenuIcon from './MoreMenuIcon';
 import useStore from '../../../store/useStore';
-import StyledMenuItem from './StyledMenuItem';
-import { useMenuContext } from './MenuContext';
+import MoreMenuItem from './MoreMenuItem';
 
 function UploadMenuItem() {
   const loadGraph = useLoadGraph();
   const ref = useRef<HTMLInputElement>(null);
 
   const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
-  const { onClose } = useMenuContext();
 
   return (
-    <StyledMenuItem
+    <MoreMenuItem
       onClick={() => {
         setGraphOrSubgraph(true);
         ref.current?.click();
       }}
-      role="menuitem"
+      icon={FolderOpen}
+      label="Open from disk"
     >
-      <MoreMenuIcon icon={FolderOpen} />
       <input
         ref={ref}
         style={{ display: 'none' }}
-        aria-labelledby="load-graph-label"
+        aria-label="Open from disk"
         name="load-graph"
         id="load-graph"
         type="file"
@@ -39,11 +35,9 @@ function UploadMenuItem() {
           }
 
           loadGraph(file);
-          onClose();
         }}
       />
-      <ListItemText id="load-graph-label" primary="Open from disk" />
-    </StyledMenuItem>
+    </MoreMenuItem>
   );
 }
 
