@@ -1,4 +1,4 @@
-import type { EditableTableRow, Conditions as EdgeConditions } from 'types';
+import type { EditableTableRow, Condition as EdgeConditions } from 'types';
 import EditableTable from './EditableTable';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';

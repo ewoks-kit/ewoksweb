@@ -102,25 +102,11 @@ function TableCellInEditMode(props: CustomTableCellProps) {
     );
   }
 
-  if (type === 'number') {
-    return (
-      <FormControl fullWidth style={{ marginLeft: '5px' }}>
-        <Input
-          value={row[name]}
-          type="number"
-          name={name}
-          onChange={(e) => onChange(e, row, index)}
-          className={classes.input}
-          data-cy="inputInEditableCell"
-        />
-      </FormControl>
-    );
-  }
-
   return (
     <FormControl fullWidth style={{ marginLeft: '5px' }}>
       <Input
         value={row[name] || ''}
+        type={type === 'number' ? 'number' : 'text'}
         name={name}
         onChange={(e) => onChange(e, row, index)}
         className={classes.input}

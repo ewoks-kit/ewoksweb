@@ -1,5 +1,5 @@
 import type {
-  Conditions,
+  Condition,
   DataMapping,
   EditableTableRow,
   EwoksRFNodeData,
@@ -8,7 +8,7 @@ import type {
 
 export const INPUT_TYPES = ['bool', 'number', 'string', 'list', 'dict', 'null'];
 
-export function createData(pair: Conditions | Inputs): EditableTableRow {
+export function createData(pair: Condition | Inputs): EditableTableRow {
   const type =
     pair.value === 'true' || pair.value === 'false'
       ? 'boolean'
@@ -18,7 +18,7 @@ export function createData(pair: Conditions | Inputs): EditableTableRow {
 
   if ('source_output' in pair) {
     return {
-      id: pair.source_output?.toString(),
+      id: pair.id?.toString() || pair.source_output?.toString(),
       name: pair.source_output?.toString(),
       value: pair.value !== null ? pair.value : 'null',
       type,
@@ -33,7 +33,7 @@ export function createData(pair: Conditions | Inputs): EditableTableRow {
   };
 }
 
-export function getType(val: DataMapping | Conditions | Inputs) {
+export function getType(val: DataMapping | Condition | Inputs) {
   const { value } = val;
 
   if (typeof value === 'boolean' || value === 'true' || value === 'false') {

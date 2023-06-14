@@ -1,5 +1,5 @@
 import type {
-  Conditions,
+  Condition,
   DataMapping,
   Inputs,
   EwoksRFNodeData,
@@ -51,14 +51,14 @@ function curateGraph(
   };
 }
 
-function deleteEmptyLines<T extends DataMapping | Conditions | Inputs>(
+function deleteEmptyLines<T extends DataMapping | Condition | Inputs>(
   arrayObjId: T[] | undefined
 ): T[] {
   if (!arrayObjId) {
     return [];
   }
   return arrayObjId.filter(
-    (obj: DataMapping | Conditions | Inputs) => obj.name !== ''
+    (obj: DataMapping | Condition | Inputs) => obj.name !== ''
   );
 }
 

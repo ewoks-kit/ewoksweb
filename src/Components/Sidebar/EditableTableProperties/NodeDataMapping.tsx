@@ -35,21 +35,13 @@ export default function NodeDataMapping(element: Node) {
   }
 
   const dataMappingValuesChanged = (table: DataMapping[]) => {
-    const dmap: DataMapping[] = table.map((row) => {
-      return {
-        id: row.id,
-        name: row.name,
-        value: row.value,
-      };
-    });
-
     setNodeData(element.id, {
       ...nodeData,
       ewoks_props: {
         ...nodeData.ewoks_props,
         default_error_attributes: {
           ...nodeData.ewoks_props.default_error_attributes,
-          data_mapping: dmap,
+          data_mapping: [...table],
         },
       },
     });

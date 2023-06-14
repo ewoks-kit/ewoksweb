@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import CustomTableCell from './CustomTableCell';
 import DraggableDialog from 'Components/General/DraggableDialog';
 import useStore from 'store/useStore';
-import type { Conditions, EditableTableRow, Inputs, TypeOfValues } from 'types';
+import type { Condition, EditableTableRow, Inputs, TypeOfValues } from 'types';
 import type { ChangeEvent } from 'react';
 import { createData, getType } from './utils';
 import TableHeader from './TableHeader';
@@ -49,7 +49,7 @@ export const useStyles = makeStyles(() => ({
 
 interface EditableTableProps {
   headers: string[];
-  defaultValues: Conditions[] | Inputs[];
+  defaultValues: Condition[] | Inputs[];
   typeOfValues: TypeOfValues[];
   valuesChanged: (rows: EditableTableRow[]) => void;
   onRowAdd?: (rows?: EditableTableRow[]) => void;
@@ -102,7 +102,7 @@ function EditableTable(props: EditableTableProps) {
       if (row.id === rowId) {
         return {
           ...row,
-          id: row.name?.replace(' ', '_') || '',
+          id: row.name || '',
         };
       }
 
@@ -213,25 +213,20 @@ function EditableTable(props: EditableTableProps) {
     index: number
   ) => {
     const { id: rowId = '' } = row;
-    if (['string', 'number', 'dict', 'list'].includes(e.target.value)) {
-      const newRows = rows.map((rowe) => {
-        if (rowe.id === rowId) {
-          return { ...rowe, value: '' };
-        }
-        return rowe;
-      });
-      setRows(newRows);
-    }
 
-    if (e.target.value === 'null') {
-      const newRows = rows.map((rowe) => {
-        if (rowe.id === rowId) {
-          return { ...rowe, value: e.target.value };
-        }
-        return rowe;
-      });
-      setRows(newRows);
-    }
+    const newRows = rows.map((rowe) => {
+      if (rowe.id === rowId) {
+        return {
+          ...rowe,
+          value: e.target.value === 'null' ? e.target.value : '',
+        };
+      }
+      return rowe;
+    });
+
+    setRows(newRows);
+    props.valuesChanged(newRows);
+
     const tOfI = [...typeOfInputs];
     tOfI[index] = e.target.value;
     setTypeOfInputs(tOfI);

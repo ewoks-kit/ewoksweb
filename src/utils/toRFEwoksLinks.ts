@@ -1,6 +1,6 @@
 import type {
-  Conditions,
-  ConditionsEwoks,
+  Condition,
+  ConditionEwoks,
   DataMappingEwoks,
   EwoksRFLink,
   GraphEwoks,
@@ -47,7 +47,7 @@ export function toRFEwoksLinks(
         tasks
       );
       const color = uiProps.style?.stroke || 'rgb(60, 81, 202)';
-      const conditionsSourceToString: Conditions[] = conditions.map((con) => {
+      const conditionsSourceToString = conditions.map<Condition>((con) => {
         return {
           name: con.source_output?.toString(),
           value: con.value,
@@ -117,7 +117,7 @@ export function toRFEwoksLinks(
 
 function calcLabel(
   uiProps: UiPropsLinks,
-  conditions: ConditionsEwoks[],
+  conditions: ConditionEwoks[],
   data_mapping: DataMappingEwoks[]
 ): string {
   if (uiProps.label) {

@@ -48,7 +48,7 @@ export interface GraphNodes {
 export interface InOutLinkAttributes {
   label: string;
   comment: string;
-  conditions: ConditionsEwoks[];
+  conditions: ConditionEwoks[];
   data_mapping: DataMappingEwoks[];
   map_all_data: boolean;
   on_error: boolean;
@@ -263,17 +263,17 @@ export interface DataMappingEwoks {
 }
 
 export interface DataMapping {
-  value?: unknown;
+  value?: string | number;
   id?: string;
   name?: string;
 }
 
-export interface ConditionsEwoks {
+export interface ConditionEwoks {
   source_output?: string | number;
   value: unknown;
 }
 
-export interface Conditions {
+export interface Condition {
   value: unknown;
   id?: string;
   name?: string;
@@ -326,7 +326,7 @@ export interface EwoksLink {
   map_all_data?: boolean;
   required?: boolean;
   data_mapping?: DataMappingEwoks[];
-  conditions?: ConditionsEwoks[];
+  conditions?: ConditionEwoks[];
   on_error?: boolean;
   sub_target?: string;
   sub_source?: string;
@@ -421,7 +421,7 @@ export interface CustomTableCellProps {
 export interface EwoksRFLinkData {
   data_mapping?: DataMapping[];
   comment?: string;
-  conditions?: Conditions[];
+  conditions?: Condition[];
   on_error?: boolean;
   map_all_data?: boolean;
   required?: boolean;
