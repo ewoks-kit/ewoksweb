@@ -38,19 +38,14 @@ export default function EdgeLabelComment() {
         ? edgeData.data_mapping
             .map(
               (con) =>
-                `${con.source_output?.toString() || ''}->${
-                  con.target_input?.toString() || ''
-                }`
+                `${con.name?.toString() || ''}->${con.value?.toString() || ''}`
             )
             .join(', ')
         : '';
     const conditions =
       edgeData.conditions && edgeData.conditions.length > 0
         ? edgeData.conditions
-            .map(
-              (con) =>
-                `${con.source_output || ''}: ${JSON.stringify(con.value)}`
-            )
+            .map((con) => `${con.name || ''}: ${JSON.stringify(con.value)}`)
             .join(', ')
         : '';
 
@@ -71,7 +66,7 @@ export default function EdgeLabelComment() {
     event: ChangeEvent<HTMLInputElement>,
     elementL: EwoksRFLink
   ) {
-    if (event.target.textContent) {
+    if (event.target.textContent !== null && event.target.value !== '') {
       saveLabel(event.target.textContent, elementL);
     }
   }
@@ -84,9 +79,7 @@ export default function EdgeLabelComment() {
       return;
     }
 
-    if (event.target.value) {
-      saveLabel(event.target.value, elementL);
-    }
+    saveLabel(event.target.value, elementL);
   }
 
   return (

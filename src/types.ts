@@ -48,10 +48,11 @@ export interface GraphNodes {
 export interface InOutLinkAttributes {
   label: string;
   comment: string;
-  conditions: Conditions[];
-  data_mapping: DataMapping[];
+  conditions: ConditionEwoks[];
+  data_mapping: DataMappingEwoks[];
   map_all_data: boolean;
   on_error: boolean;
+  required: boolean;
 }
 
 export interface InOutNodesUiProps {
@@ -262,32 +263,25 @@ export interface DataMappingEwoks {
 }
 
 export interface DataMapping {
-  // TODO: remove source_output and target_input to have clear
-  // distinction from the DataMappingEwoks model
-  source_output?: string | number;
-  target_input?: string | number;
-  value?: unknown;
+  value?: string | number;
   id?: string;
   name?: string;
 }
 
-export interface ConditionsEwoks {
+export interface ConditionEwoks {
   source_output?: string | number;
   value: unknown;
 }
 
-export interface Conditions {
-  // TODO: remove source_output to have clear
-  // distinction from the ConditionsEwoks model
-  source_output?: string | number;
+export interface Condition {
   value: unknown;
   id?: string;
   name?: string;
 }
 
-export interface DefaultErrorAttributes {
+export interface DefaultErrorAttributes<T = DataMapping | DataMappingEwoks> {
   map_all_data?: boolean;
-  data_mapping?: DataMapping[];
+  data_mapping?: T[];
 }
 
 export interface EwoksNode {
@@ -300,7 +294,7 @@ export interface EwoksNode {
   inputs_complete?: boolean;
   task_generator?: string;
   default_error_node?: boolean;
-  default_error_attributes?: DefaultErrorAttributes;
+  default_error_attributes?: DefaultErrorAttributes<DataMappingEwoks>;
   uiProps?: EwoksNodeUiProps;
 }
 
@@ -331,8 +325,8 @@ export interface EwoksLink {
   target: string;
   map_all_data?: boolean;
   required?: boolean;
-  data_mapping?: DataMapping[];
-  conditions?: Conditions[];
+  data_mapping?: DataMappingEwoks[];
+  conditions?: ConditionEwoks[];
   on_error?: boolean;
   sub_target?: string;
   sub_source?: string;
@@ -380,7 +374,7 @@ export interface RFNodeEwoksProperties {
   inputs_complete?: boolean;
   task_generator?: string;
   default_error_node?: boolean;
-  default_error_attributes?: DefaultErrorAttributes;
+  default_error_attributes?: DefaultErrorAttributes<DataMapping>;
 }
 
 export interface EwoksRFNodeData {
@@ -427,7 +421,7 @@ export interface CustomTableCellProps {
 export interface EwoksRFLinkData {
   data_mapping?: DataMapping[];
   comment?: string;
-  conditions?: Conditions[];
+  conditions?: Condition[];
   on_error?: boolean;
   map_all_data?: boolean;
   required?: boolean;

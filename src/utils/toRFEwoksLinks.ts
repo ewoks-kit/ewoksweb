@@ -1,8 +1,7 @@
 import type {
-  Conditions,
-  DataMapping,
+  Condition,
+  ConditionEwoks,
   DataMappingEwoks,
-  EditableTableRow,
   EwoksRFLink,
   GraphEwoks,
   Task,
@@ -11,7 +10,7 @@ import type {
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import { calcTasksForLink } from './calcTasksForLink';
-import { nanoid } from 'nanoid';
+import { createDataMappingData } from './utils';
 
 // DOC: from GraphEwoks get EwoksRFLinks
 // - tempGraph: the graph to transform its links
@@ -48,10 +47,10 @@ export function toRFEwoksLinks(
         tasks
       );
       const color = uiProps.style?.stroke || 'rgb(60, 81, 202)';
-      const conditionsSourceToString = conditions.map((con) => {
+      const conditionsSourceToString = conditions.map<Condition>((con) => {
         return {
-          ...con,
           name: con.source_output?.toString(),
+          value: con.value,
         };
       });
 
@@ -116,20 +115,10 @@ export function toRFEwoksLinks(
   );
 }
 
-export function createDataMappingData(
-  pair: DataMappingEwoks
-): EditableTableRow {
-  return {
-    id: nanoid(),
-    name: pair.source_output ? pair.source_output.toString() : '',
-    value: pair.target_input ?? '',
-  };
-}
-
 function calcLabel(
   uiProps: UiPropsLinks,
-  conditions: Conditions[],
-  data_mapping: DataMapping[]
+  conditions: ConditionEwoks[],
+  data_mapping: DataMappingEwoks[]
 ): string {
   if (uiProps.label) {
     return uiProps.label;

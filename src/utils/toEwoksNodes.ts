@@ -1,10 +1,12 @@
-/* eslint-disable require-unicode-regexp */
 import type {
+  DataMapping,
+  DataMappingEwoks,
   DefaultErrorAttributes,
   EwoksNode,
   EwoksRFNode,
   Inputs,
 } from '../types';
+import { calcDataMapping, stringOrNumber } from './utils';
 
 function cleanDefaultInputs(default_inputs: Inputs[]) {
   return default_inputs.map((dIn) => {
@@ -22,9 +24,9 @@ function cleanDefaultInputs(default_inputs: Inputs[]) {
   });
 }
 function calcDefaultErrorAttributes(
-  default_error_attributes: DefaultErrorAttributes | undefined,
+  default_error_attributes: DefaultErrorAttributes<DataMapping> | undefined,
   default_error_node?: boolean
-) {
+): DefaultErrorAttributes<DataMappingEwoks> | undefined {
   if (!default_error_node) {
     return undefined;
   }
@@ -35,19 +37,9 @@ function calcDefaultErrorAttributes(
 
   return {
     map_all_data: false,
-    data_mapping:
-      default_error_attributes?.data_mapping?.map((mapping) => {
-        return {
-          source_output:
-            mapping.name && /^\d+$/.test(mapping.name)
-              ? Number.parseInt(mapping.name, 10)
-              : mapping.name,
-          target_input:
-            mapping.value && /^\d+$/.test(mapping.value as string)
-              ? Number.parseInt(mapping.value as string, 10)
-              : (mapping.value as string),
-        };
-      }) || [],
+    data_mapping: default_error_attributes?.data_mapping
+      ? calcDataMapping(default_error_attributes.data_mapping)
+      : [],
   };
 }
 
@@ -55,13 +47,10 @@ function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
   if (!default_inputs) {
     return [];
   }
-  return default_inputs.map((dIn) => {
+  return default_inputs.map(({ name, value }) => {
     return {
-      name:
-        dIn.name && /^\d+$/.test(dIn.name as string)
-          ? Number.parseInt(dIn.name as string, 10)
-          : dIn.name,
-      value: dIn.value,
+      name: stringOrNumber(name),
+      value,
     };
   });
 }
@@ -144,9 +133,10 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         task_generator,
         default_inputs: cleanDefaultInputs(calcDefaultInputs(default_inputs)),
         default_error_node,
-        default_error_attributes: default_error_node
-          ? default_error_attributes
-          : undefined,
+        default_error_attributes: calcDefaultErrorAttributes(
+          default_error_attributes,
+          default_error_node
+        ),
         uiProps: {
           label,
           type,

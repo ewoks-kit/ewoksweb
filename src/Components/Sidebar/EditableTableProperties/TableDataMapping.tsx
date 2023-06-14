@@ -7,7 +7,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import CustomTableCell from './CustomTableCell';
-import type { DataMapping, EditableTableRow, TypeOfValues } from 'types';
+import type { DataMapping, TypeOfValues } from 'types';
 import TableHeader from './TableHeader';
 import ToolsCell from './ToolsCell';
 import { TableCell } from '@material-ui/core';
@@ -31,12 +31,12 @@ interface TableDataMappingProps {
   headers: string[];
   values: DataMapping[];
   typeOfValues: TypeOfValues[];
-  valuesChanged: (rows: EditableTableRow[]) => void;
-  onRowAdd?: (rows?: EditableTableRow[]) => void;
+  valuesChanged: (rows: DataMapping[]) => void;
+  onRowAdd?: (rows?: DataMapping[]) => void;
 }
 
 function TableDataMapping(props: TableDataMappingProps) {
-  const [rows, setRows] = React.useState<EditableTableRow[]>([]);
+  const [rows, setRows] = React.useState<DataMapping[]>([]);
 
   const { values, headers, onRowAdd } = props;
 
@@ -47,7 +47,7 @@ function TableDataMapping(props: TableDataMappingProps) {
 
   function onChange(
     e: { target: { name: string; value: string | number } },
-    row: EditableTableRow
+    row: DataMapping
   ) {
     const { id } = row;
     let { value } = e.target;

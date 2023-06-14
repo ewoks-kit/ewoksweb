@@ -1,4 +1,4 @@
-import type { DataMapping, EditableTableRow } from 'types';
+import type { DataMapping } from 'types';
 import { isClass } from './utils';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
@@ -22,7 +22,7 @@ export default function DataMappingComponent(element: Edge) {
     state.nodesData.get(element.target)
   );
 
-  function addDataMapping(rows?: EditableTableRow[]) {
+  function addDataMapping(rows?: DataMapping[]) {
     mergeEdgeData(element.id, {
       data_mapping: [
         ...(rows as DataMapping[]),
@@ -32,17 +32,9 @@ export default function DataMappingComponent(element: Edge) {
   }
 
   const dataMappingValuesChanged = (table: DataMapping[]) => {
-    const dmap: DataMapping[] = table.map((row) => {
-      return {
-        id: row.source_output ? row.source_output.toString() : row.id,
-        name: row.name,
-        value: row.value,
-      };
-    });
-
     setEdgeData(element.id, {
       ...edgeData,
-      data_mapping: dmap,
+      data_mapping: [...table],
     });
   };
 
