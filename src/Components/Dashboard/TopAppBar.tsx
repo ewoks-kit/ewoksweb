@@ -4,7 +4,7 @@ import { useState } from 'react';
 import useStore from '../../store/useStore';
 import GetFromServer from '../General/GetFromServer';
 import ProgressBar from '../General/ProgressBar';
-import MoreMenuButton from '../TopNavBar/menu/MoreMenuButton';
+import OpenActionMenuButton from '../TopNavBar/menu/OpenActionMenuButton';
 import SaveToServerButton from '../TopNavBar/SaveToServerButton';
 import SettingsInfoDrawer from '../TopNavBar/SettingsInfoDrawer';
 import TopNavbarLabel from '../TopNavBar/TopNavbarLabel';
@@ -80,7 +80,7 @@ function TopAppBar(props: Props) {
 
         <SaveToServerButton />
         <div>
-          <MoreMenuButton
+          <OpenActionMenuButton
             checkAndNewGraph={() => checkAndNewGraph(false)}
             handleOpenSettings={handleOpenSettings}
           />

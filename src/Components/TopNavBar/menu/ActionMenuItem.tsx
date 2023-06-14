@@ -1,7 +1,7 @@
 import { ListItemText, MenuItem } from '@material-ui/core';
 import type { SvgIcon } from '@material-ui/core';
-import MoreMenuIcon from './MoreMenuIcon';
-import { useMenuContext } from './MenuContext';
+import ActionMenuIcon from './ActionMenuIcon';
+import { useActionMenuContext } from './ActionMenuContext';
 import type { PropsWithChildren } from 'react';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 function MoreMenuItem(props: PropsWithChildren<Props>) {
   const { icon, label, onClick, children } = props;
 
-  const { onClose } = useMenuContext();
+  const { onClose } = useActionMenuContext();
 
   return (
     <MenuItem
@@ -23,7 +23,7 @@ function MoreMenuItem(props: PropsWithChildren<Props>) {
       }}
       role="menuitem"
     >
-      <MoreMenuIcon icon={icon} />
+      <ActionMenuIcon icon={icon} />
       <ListItemText primary={label} />
       {children}
     </MenuItem>

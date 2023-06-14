@@ -4,7 +4,7 @@ import { FolderOpen } from '@material-ui/icons';
 
 import { useLoadGraph } from '../hooks';
 import useStore from '../../../store/useStore';
-import MoreMenuItem from './MoreMenuItem';
+import ActionMenuItem from './ActionMenuItem';
 
 function UploadMenuItem() {
   const loadGraph = useLoadGraph();
@@ -13,7 +13,7 @@ function UploadMenuItem() {
   const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
 
   return (
-    <MoreMenuItem
+    <ActionMenuItem
       onClick={() => {
         setGraphOrSubgraph(true);
         ref.current?.click();
@@ -37,7 +37,7 @@ function UploadMenuItem() {
           loadGraph(file);
         }}
       />
-    </MoreMenuItem>
+    </ActionMenuItem>
   );
 }
 

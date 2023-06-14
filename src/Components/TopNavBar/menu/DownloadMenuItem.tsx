@@ -4,7 +4,7 @@ import useStore from '../../../store/useStore';
 import type { EwoksRFLinkData, EwoksRFNodeData, GraphRF } from '../../../types';
 import { getEdgesData, getNodesData, rfToEwoks } from '../../../utils';
 import curateGraph from '../utils/curateGraph';
-import MoreMenuItem from './MoreMenuItem';
+import ActionMenuItem from './ActionMenuItem';
 
 function download(content: BlobPart, fileName: string, contentType: string) {
   const a = document.createElement('a');
@@ -48,7 +48,7 @@ function DownloadMenuItem() {
       );
     }
   }
-  return <MoreMenuItem icon={GetApp} label="Download" onClick={saveToDisk} />;
+  return <ActionMenuItem icon={GetApp} label="Download" onClick={saveToDisk} />;
 }
 
 export default DownloadMenuItem;

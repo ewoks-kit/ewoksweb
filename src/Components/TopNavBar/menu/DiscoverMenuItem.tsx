@@ -1,7 +1,7 @@
 import { Publish } from '@material-ui/icons';
 import { useState } from 'react';
 import DiscoverTasksDialog from './DiscoverMenuDialog';
-import MoreMenuItem from './MoreMenuItem';
+import ActionMenuItem from './ActionMenuItem';
 
 function DiscoverMenuItem() {
   const [isOpen, setOpen] = useState(false);
@@ -9,7 +9,7 @@ function DiscoverMenuItem() {
   return (
     <>
       <DiscoverTasksDialog open={isOpen} onClose={() => setOpen(false)} />
-      <MoreMenuItem
+      <ActionMenuItem
         icon={Publish}
         label="Discover tasks"
         onClick={() => setOpen(true)}

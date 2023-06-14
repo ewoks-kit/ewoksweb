@@ -1,12 +1,12 @@
 import { ListItemIcon } from '@material-ui/core';
 import type { SvgIcon } from '@material-ui/core';
-import styles from './MoreMenu.module.css';
+import styles from './ActionMenu.module.css';
 
 interface Props {
   icon: typeof SvgIcon;
 }
 
-function MoreMenuIcon(props: Props) {
+function ActionMenuIcon(props: Props) {
   const { icon: Icon } = props;
 
   return (
@@ -16,4 +16,4 @@ function MoreMenuIcon(props: Props) {
   );
 }
 
-export default MoreMenuIcon;
+export default ActionMenuIcon;

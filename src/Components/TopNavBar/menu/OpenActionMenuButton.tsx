@@ -1,20 +1,21 @@
-import React from 'react';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { IconButton, Menu } from '@material-ui/core';
-import styles from './MoreMenu.module.css';
 import { FiberNew, Settings } from '@material-ui/icons';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import React from 'react';
+import { ActionMenuContext } from './ActionMenuContext';
+import ActionMenuItem from './ActionMenuItem';
 import DiscoverMenuItem from './DiscoverMenuItem';
-import MoreMenuItem from './MoreMenuItem';
-import UploadMenuItem from './UploadMenuItem';
 import DownloadMenuItem from './DownloadMenuItem';
-import { MenuContext } from './MenuContext';
+import UploadMenuItem from './UploadMenuItem';
+
+import styles from './ActionMenu.module.css';
 
 interface Props {
   checkAndNewGraph: () => void;
   handleOpenSettings: () => void;
 }
 
-export default function MoreMenuButton(props: Props) {
+export default function OpenActionMenuButton(props: Props) {
   const { checkAndNewGraph, handleOpenSettings } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -56,8 +57,8 @@ export default function MoreMenuButton(props: Props) {
           horizontal: 'center',
         }}
       >
-        <MenuContext.Provider value={{ open, onClose }}>
-          <MoreMenuItem
+        <ActionMenuContext.Provider value={{ open, onClose }}>
+          <ActionMenuItem
             icon={FiberNew}
             label="New workflow"
             onClick={checkAndNewGraph}
@@ -65,12 +66,12 @@ export default function MoreMenuButton(props: Props) {
           <UploadMenuItem />
           <DownloadMenuItem />
           <DiscoverMenuItem />
-          <MoreMenuItem
+          <ActionMenuItem
             icon={Settings}
             label="Settings"
             onClick={handleOpenSettings}
           />
-        </MenuContext.Provider>
+        </ActionMenuContext.Provider>
       </Menu>
     </div>
   );
