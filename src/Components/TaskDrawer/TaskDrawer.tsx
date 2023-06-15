@@ -3,18 +3,13 @@ import AddIcon from '@material-ui/icons/Add';
 import { Fab } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import TaskList from './TaskList';
-import addNodesSidebarState from '../../store/addNodesSidebarState';
+import useTaskDrawerState from '../../store/taskDrawerState';
 import { useDrawerStyles } from './hooks';
 
 import styles from './TaskDrawer.module.css';
 
 function OverflowDrawer() {
-  const open = addNodesSidebarState((state) => state.isAddNodesSidebarOpen);
-  const setOpen = addNodesSidebarState((state) => state.toggleAddNodesSidebar);
-
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
+  const { open, setOpen } = useTaskDrawerState();
 
   const drawerStyles = useDrawerStyles();
 
@@ -42,7 +37,7 @@ function OverflowDrawer() {
         size="small"
         color="primary"
         aria-label={`${open ? 'Close' : 'Open'} task drawer`}
-        onClick={toggleDrawer}
+        onClick={() => setOpen(!open)}
         style={{
           left: open ? '230px' : '10px',
           zIndex: drawerStyles.zIndex + 1,

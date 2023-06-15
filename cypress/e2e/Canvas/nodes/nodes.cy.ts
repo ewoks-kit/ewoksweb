@@ -3,7 +3,7 @@ before(() => {
 });
 
 it('selects a default node', () => {
-  cy.get('button[aria-label="addNodes"]').click();
+  cy.findByRole('button', { name: 'Close task drawer' }).click();
   cy.waitForStableDOM();
   cy.get('.react-flow__nodes')
     .children()

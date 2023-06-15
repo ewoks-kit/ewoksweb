@@ -12,7 +12,7 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import { getWorkflow } from '../../api/api';
 import { useReactFlow } from 'reactflow';
 import OverflowDrawer from '../TaskDrawer/TaskDrawer';
-import addNodesSidebarState from '../../store/addNodesSidebarState';
+import useTaskDrawerState from '../../store/taskDrawerState';
 import { useGetTasks } from '../TopNavBar/hooks';
 import TopAppBar from './TopAppBar';
 
@@ -28,9 +28,7 @@ export default function Dashboard() {
     (state) => state.setCanvasGraphChanged
   );
   const tasks = useStore((state) => state.tasks);
-  const toggleAddNodesSidebar = addNodesSidebarState(
-    (state) => state.toggleAddNodesSidebar
-  );
+  const setTaskDrawerOpen = useTaskDrawerState((state) => state.setOpen);
 
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const undoIndex = useStore((state) => state.undoIndex);
@@ -67,7 +65,7 @@ export default function Dashboard() {
       initGraph(initializedGraph, undefined, rfInstance);
       setOpenAgreeDialog(false);
       setCanvasGraphChanged(false);
-      toggleAddNodesSidebar(true);
+      setTaskDrawerOpen(true);
     }
   }
 

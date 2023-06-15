@@ -1,7 +1,7 @@
 describe('clicks on canvas and elements', () => {
   before(() => {
     cy.loadApp();
-    cy.get('button[aria-label="addNodes"]').click();
+    cy.findByRole('button', { name: 'Close task drawer' }).click();
   });
 
   // TODO: rightClick? Must click on backround and not on a node
