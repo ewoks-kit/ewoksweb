@@ -1,30 +1,18 @@
 import { useState } from 'react';
-import { Button, IconButton } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/EditOutlined';
-import BookmarksIcon from '@material-ui/icons/Bookmarks';
+import { IconButton } from '@material-ui/core';
 
 import { FormAction } from '../../types';
 import type { Task } from '../../types';
 import useStore from 'store/useStore';
-import DeleteIcon from '@material-ui/icons/Delete';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { deleteTask } from 'api/tasks';
 import { textForError } from 'utils';
 import FormDialog from '../General/FormDialog';
 import { useGetTasks } from '../TopNavBar/hooks';
+import { Delete, Edit, LibraryAdd } from '@material-ui/icons';
+import styles from './TaskButtonGroup.module.css';
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    button: {
-      margin: '4px',
-    },
-  })
-);
-
-function TaskManagementButtons() {
-  const classes = useStyles();
-
+function TaskButtonGroup() {
   const [elementToEdit, setElementToEdit] = useState<Task>({});
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
   const [doAction, setDoAction] = useState<FormAction>();
@@ -90,35 +78,30 @@ function TaskManagementButtons() {
   };
 
   return (
-    <>
+    <div className={styles.container}>
       <IconButton
-        onClick={deleteTaskDialog}
-        aria-label="delete"
-        color="secondary"
-      >
-        <DeleteIcon />
-      </IconButton>
-      <IconButton
-        aria-label="edit"
+        className={styles.edit}
+        aria-label="Edit task details"
         onClick={() =>
           onAction(FormAction.editTask, selectedTask.task_identifier)
         }
         color="primary"
+        size="small"
       >
-        <EditIcon />
+        <Edit fontSize="small" />
       </IconButton>
-      <Button
-        className={classes.button}
-        startIcon={<BookmarksIcon />}
-        variant="outlined"
-        color="primary"
+
+      <IconButton
+        className={styles.clone}
         onClick={() =>
           onAction(FormAction.cloneTask, selectedTask.task_identifier)
         }
+        aria-label="Clone task"
+        color="primary"
         size="small"
       >
-        Clone
-      </Button>
+        <LibraryAdd fontSize="small" />
+      </IconButton>
       <ConfirmDialog
         title={`Delete "${selectedTask.task_identifier || ''}" task?`}
         content={`You are about to delete a task.
@@ -134,8 +117,18 @@ function TaskManagementButtons() {
         open={openSaveDialog}
         setOpenSaveDialog={setOpenSaveDialog}
       />
-    </>
+
+      <IconButton
+        className={styles.delete}
+        onClick={deleteTaskDialog}
+        aria-label="Delete task"
+        color="secondary"
+        size="small"
+      >
+        <Delete fontSize="small" />
+      </IconButton>
+    </div>
   );
 }
 
-export default TaskManagementButtons;
+export default TaskButtonGroup;
