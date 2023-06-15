@@ -52,6 +52,7 @@ export function outNodesLinks(
         data_mapping: outNod.link_attributes?.data_mapping ?? [],
         on_error: outNod.link_attributes?.on_error ?? false,
         map_all_data: outNod.link_attributes?.map_all_data ?? false,
+        required: outNod.link_attributes?.required,
         uiProps: {
           label: outNod.link_attributes?.label ?? '',
           comment: outNod.link_attributes?.comment ?? '',

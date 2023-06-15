@@ -48,6 +48,7 @@ export function inNodesLinks(
         data_mapping: inNod.link_attributes?.data_mapping ?? [],
         on_error: inNod.link_attributes?.on_error ?? false,
         map_all_data: inNod.link_attributes?.map_all_data ?? false,
+        required: inNod.link_attributes?.required,
         uiProps: {
           label: inNod.link_attributes?.label ?? '',
           comment: inNod.link_attributes?.comment ?? '',
