@@ -1,0 +1,85 @@
+import MoreMenuItem from './MoreMenuItem';
+import useStore from '../../../store/useStore';
+import SendIcon from '@material-ui/icons/Send';
+import { useState } from 'react';
+import type { Event } from '../../../types';
+import { executeWorkflow } from '../../../api/api';
+import ConfirmDialog from 'Components/General/ConfirmDialog';
+import { useNavigate } from 'react-router-dom';
+
+function ExecutionMenuItem() {
+  const navigate = useNavigate();
+
+  const recentGraphs = useStore((state) => state.recentGraphs);
+
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  // const setInExecutionMode = useStore((state) => state.setInExecutionMode);
+  // const setExecutedEvents = useStore((state) => state.setExecutedEvents);
+  // const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
+  const setCanvasGraphChanged = useStore(
+    (state) => state.setCanvasGraphChanged
+  );
+  const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
+  // const undoIndex = useStore((state) => state.undoIndex);
+  const workingGraph = useStore((state) => state.workingGraph);
+
+  function checkAndExecute() {
+    // if (canvasGraphChanged && undoIndex !== 0) {
+    //   setOpenAgreeDialog(true);
+    //   return;
+    // }
+
+    execute();
+    setOpenAgreeDialog(false);
+    setCanvasGraphChanged(false);
+  }
+
+  async function execute() {
+    console.log(recentGraphs);
+
+    if (recentGraphs.length > 0) {
+      try {
+        await executeWorkflow(workingGraph.graph.id);
+        navigate('/monitor-workflows');
+      } catch (error) {
+        // Keep logging in console for debugging when talking with a user
+        /* eslint-disable no-console */
+        console.log(error);
+        setOpenSnackbar({
+          open: true,
+          text: 'Execution could not start!',
+          severity: 'error',
+        });
+      }
+    } else {
+      setOpenSnackbar({
+        open: true,
+        text: 'Please open a workflow in the canvas to execute',
+        severity: 'warning',
+      });
+    }
+  }
+
+  function disAgreeSaveWithout() {
+    setOpenAgreeDialog(false);
+  }
+
+  return (
+    <>
+      <ConfirmDialog
+        title="There are unsaved changes"
+        content="Continue without saving?"
+        open={openAgreeDialog}
+        agreeCallback={execute}
+        disagreeCallback={disAgreeSaveWithout}
+      />
+      <MoreMenuItem
+        icon={SendIcon}
+        label="Execute workflow"
+        onClick={checkAndExecute}
+      />
+    </>
+  );
+}
+
+export default ExecutionMenuItem;

@@ -8,6 +8,7 @@ import { useReactFlow } from 'reactflow';
 import MoreMenuItem from './MoreMenuItem';
 import { GetApp, FiberNew, Settings } from '@material-ui/icons';
 import DiscoverMenuItem from './DiscoverMenuItem';
+import ExecutionMenuItem from './ExecutionMenuItem';
 
 function download(content: BlobPart, fileName: string, contentType: string) {
   const a = document.createElement('a');
@@ -68,6 +69,7 @@ function MoreMenuList(props: Props) {
       <UploadMenuItem />
       <MoreMenuItem icon={GetApp} label="Download" onClick={saveToDisk} />
       <DiscoverMenuItem />
+      <ExecutionMenuItem />
       <MoreMenuItem
         icon={Settings}
         label="Settings"

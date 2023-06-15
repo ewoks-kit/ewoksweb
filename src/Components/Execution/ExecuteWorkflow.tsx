@@ -1,17 +1,18 @@
 import useStore from '../../store/useStore';
 import SendIcon from '@material-ui/icons/Send';
 import IntegratedSpinner from '../General/IntegratedSpinner';
-import ClearIcon from '@material-ui/icons/Clear';
 import io from 'socket.io-client';
 import { useEffect, useState } from 'react';
 import type { Event } from '../../types';
 import { executeWorkflow } from '../../api/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
+import { useNavigate } from 'react-router-dom';
 
 export const socket = io(process.env.REACT_APP_SERVER_URL as string);
 
-export default function ExecuteWorkflow() {
-  const graphInfo = useStore((state) => state.graphInfo);
+export default function ExecuteWorkflow(props: { id: string }) {
+  const navigate = useNavigate();
+
   const recentGraphs = useStore((state) => state.recentGraphs);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
@@ -52,7 +53,8 @@ export default function ExecuteWorkflow() {
     if (recentGraphs.length > 0 && !inExecutionMode) {
       setInExecutionMode(true);
       try {
-        await executeWorkflow(graphInfo.id);
+        await executeWorkflow(props.id);
+        navigate('/monitor-workflows');
       } catch (error) {
         // Keep logging in console for debugging when talking with a user
         /* eslint-disable no-console */
@@ -99,7 +101,7 @@ export default function ExecuteWorkflow() {
           console.log('Starting Execution');
         }}
       >
-        {inExecutionMode ? <ClearIcon color="secondary" /> : <SendIcon />}
+        <SendIcon />
       </IntegratedSpinner>
     </>
   );
