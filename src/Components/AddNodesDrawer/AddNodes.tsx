@@ -7,7 +7,6 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 import useStore from 'store/useStore';
-import TaskManagementButtons from '../TopDrawer/TaskManagementButtons';
 import AddSubgraphButton from './AddSubgraphButton';
 import AddNoteButton from './AddNoteButton';
 import TaskItem from './TaskItem';
@@ -21,7 +20,6 @@ interface AddNodesProps {
 // DOC: Hosts the nodes-tasks in their categories to drag and drop them into canvas
 function AddNodes(props: AddNodesProps) {
   const { sidebar: isSidebar } = props;
-  const showManagementButtons = !isSidebar;
 
   const tasks = useStore((state) => state.tasks);
   const selectedTask = useStore((state) => state.selectedTask);
@@ -62,7 +60,6 @@ function AddNodes(props: AddNodesProps) {
                   .filter((nod) => nod.category === categoryName)
                   .map((elem) => (
                     <TaskItem
-                      className={styles.item}
                       key={elem.task_identifier}
                       task={elem}
                       onClick={() => setSelectedTask(elem)}
@@ -79,11 +76,6 @@ function AddNodes(props: AddNodesProps) {
                 )}
               </div>
             </AccordionDetails>
-            {categoryName !== 'General' &&
-              showManagementButtons &&
-              selectedTask.category === categoryName && (
-                <TaskManagementButtons />
-              )}
           </Accordion>
         )
       )}
