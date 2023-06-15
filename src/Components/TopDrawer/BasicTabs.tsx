@@ -10,6 +10,7 @@ import ManageTasks from './ManageTasks';
 import ExecutionTable from '../Execution/ExecutionTable';
 import useStore from '../../store/useStore';
 import IconBoundary from '../../IconBoundary';
+import { DrawerTab } from '../../types';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -45,23 +46,11 @@ function a11yProps(index: number) {
 }
 
 export default function BasicTabs() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState<DrawerTab>(DrawerTab.Workflows);
   const openSettingsDrawer = useStore((state) => state.openSettingsDrawer);
 
   useEffect(() => {
-    setValue(
-      openSettingsDrawer === 'Workflows'
-        ? 0
-        : openSettingsDrawer === 'Tasks'
-        ? 1
-        : openSettingsDrawer === 'Icons'
-        ? 2
-        : openSettingsDrawer === 'Executions'
-        ? 3
-        : openSettingsDrawer === 'Settings'
-        ? 4
-        : 0
-    );
+    setValue(openSettingsDrawer);
   }, [openSettingsDrawer]);
 
   return (
@@ -74,26 +63,34 @@ export default function BasicTabs() {
           }}
           aria-label="basic tabs example"
         >
-          <Tab label="Workflows" {...a11yProps(0)} />
-          <Tab label="Tasks" data-cy="tasksTab" {...a11yProps(1)} />
-          <Tab label="Icons" data-cy="iconsTab" {...a11yProps(2)} />
+          <Tab label="Workflows" {...a11yProps(DrawerTab.Workflows)} />
+          <Tab
+            label="Tasks"
+            data-cy="tasksTab"
+            {...a11yProps(DrawerTab.Tasks)}
+          />
+          <Tab
+            label="Icons"
+            data-cy="iconsTab"
+            {...a11yProps(DrawerTab.Icons)}
+          />
           {/* TODO: commented for onlyEditRelease */}
           {/* <Tab label="Executions" {...a11yProps(3)} /> */}
           {/* <Tab label="Settings" {...a11yProps(4)} /> */}
         </Tabs>
       </Box>
-      <TabPanel value={value} index={0}>
+      <TabPanel value={value} index={DrawerTab.Workflows}>
         <ManageWorkflows />
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      <TabPanel value={value} index={DrawerTab.Tasks}>
         <ManageTasks />
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel value={value} index={DrawerTab.Icons}>
         <IconBoundary>
           <ManageIcons />
         </IconBoundary>
       </TabPanel>
-      <TabPanel value={value} index={3}>
+      <TabPanel value={value} index={DrawerTab.Executions}>
         <ExecutionTable />
       </TabPanel>
     </Box>

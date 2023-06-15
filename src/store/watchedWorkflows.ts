@@ -1,4 +1,5 @@
 import type { Event, State } from '../types';
+import { DrawerTab } from '../types';
 import type { GetState, SetState } from 'zustand';
 
 // These are the workflows that can be examined on the canvas
@@ -19,7 +20,7 @@ const watchedWorkflows = (
       ...state,
       watchedWorkflowsL,
     }));
-    get().setOpenSettingsDrawer('close');
+    get().setOpenSettingsDrawer(DrawerTab.Closed);
   },
 });
 
