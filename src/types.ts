@@ -542,3 +542,11 @@ export interface SelectedElementRF {
 }
 
 export type SidebarLayout = 'grid' | 'list';
+
+export enum DrawerTab {
+  Workflows,
+  Icons,
+  Executions,
+  Settings,
+  Closed,
+}

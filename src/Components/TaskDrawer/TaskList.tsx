@@ -1,27 +1,23 @@
 import {
   Accordion,
-  AccordionSummary,
   AccordionDetails,
+  AccordionSummary,
   IconButton,
 } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
+import { ViewList, ViewModule } from '@material-ui/icons';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import useStore from 'store/useStore';
-import AddSubgraphButton from './AddSubgraphButton';
-import AddNoteButton from './AddNoteButton';
-import TaskItem from './TaskItem';
-import styles from './AddNodes.module.css';
-import { ViewModule, ViewList } from '@material-ui/icons';
 import useConfigStore from '../../store/useConfigStore';
+import AddNoteButton from './AddNoteButton';
+import AddSubgraphButton from './AddSubgraphButton';
 import CreateTaskButton from './CreateTaskButton';
+import TaskItem from './TaskItem';
 
-interface AddNodesProps {
-  sidebar?: boolean;
-}
+import styles from './TaskList.module.css';
+
 // DOC: Hosts the nodes-tasks in their categories to drag and drop them into canvas
-function AddNodes(props: AddNodesProps) {
-  const { sidebar: isSidebar } = props;
-
+function TaskList() {
   const tasks = useStore((state) => state.tasks);
   const selectedTask = useStore((state) => state.selectedTask);
   const setSelectedTask = useStore((state) => state.setSelectedTask);
@@ -70,7 +66,7 @@ function AddNodes(props: AddNodesProps) {
                     }
                   />
                 ))}
-              {isSidebar && category === 'General' && (
+              {category === 'General' && (
                 <>
                   <AddNoteButton />
                   <AddSubgraphButton />
@@ -84,4 +80,4 @@ function AddNodes(props: AddNodesProps) {
   );
 }
 
-export default AddNodes;
+export default TaskList;

@@ -1,10 +1,11 @@
-import type { Task } from '../../types';
-import { attachTaskInfo } from '../Canvas/utils';
 import { Tooltip } from '@material-ui/core';
 import IconBoundary from '../../IconBoundary';
+import type { Task } from '../../types';
+import { attachTaskInfo } from '../Canvas/utils';
 import TaskIcon from '../Sidebar/TaskIcon';
 import TaskButtonGroup from './TaskButtonGroup';
-import styles from './AddNodes.module.css';
+
+import styles from './TaskList.module.css';
 
 interface Props {
   task: Task;
