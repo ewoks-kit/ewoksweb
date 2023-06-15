@@ -12,7 +12,7 @@ import { useGetTasks } from '../TopNavBar/hooks';
 import { Delete, Edit, LibraryAdd } from '@material-ui/icons';
 import styles from './AddNodes.module.css';
 
-function TaskManagementButtons() {
+function TaskButtonGroup() {
   const [elementToEdit, setElementToEdit] = useState<Task>({});
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
   const [doAction, setDoAction] = useState<FormAction>();
@@ -127,4 +127,4 @@ function TaskManagementButtons() {
   );
 }
 
-export default TaskManagementButtons;
+export default TaskButtonGroup;
