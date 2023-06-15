@@ -33,21 +33,16 @@ describe('edit links conditions', () => {
   it('type and undo/redo a new Condition', () => {
     cy.findByRole('button', { name: 'Add row' }).click();
 
-    cy.get('[data-cy="autocompleteInputInEditableCell"]')
+    cy.get('[data-cy="inputInEditableCell"]')
       .should('exist')
       .should('be.visible')
       .should('have.length', 2);
 
     cy.get('[data-cy="deleteButtonEditableTable"]').should('be.visible');
 
-    cy.get('[data-cy="autocompleteInputInEditableCell"]').should(
-      'have.length',
-      2
-    );
+    cy.get('[data-cy="inputInEditableCell"]').should('have.length', 2);
 
-    cy.get('[data-cy="autocompleteInputInEditableCell"]')
-      .first()
-      .type('Always');
+    cy.get('[data-cy="inputInEditableCell"]').first().type('Always');
 
     cy.get('[data-cy="radioInEditableCell"]')
       .children('label')
