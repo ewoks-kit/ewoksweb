@@ -1,87 +1,54 @@
-import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AddIcon from '@material-ui/icons/Add';
 import { Fab } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import TaskList from './TaskList';
 import addNodesSidebarState from '../../store/addNodesSidebarState';
+import { useDrawerStyles } from './hooks';
 
-const useStyles = makeStyles((theme) => ({
-  drawer: {
-    overflow: 'hidden',
-    width: '0px',
-    height: '100%',
-    flex: 'none',
-    borderRight: `1px solid ${theme.palette.divider}`,
-    zIndex: theme.zIndex.drawer,
-    position: 'static',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    transition: theme.transitions.create(['width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  drawerOpen: {
-    width: '250px',
-  },
-  drawerClose: {
-    width: '1px',
-  },
-  leftDrawerButton: {
-    position: 'absolute',
-    top: theme.spacing(9),
-    zIndex: theme.zIndex.drawer + 1,
-    transition: 'transform 0.3s ease-in-out',
-    '&:hover': {
-      transform: 'scale(1.1)',
-    },
-  },
-}));
+import styles from './TaskDrawer.module.css';
 
 function OverflowDrawer() {
-  const classes = useStyles();
-
-  const toggleAddNodesSidebar = addNodesSidebarState(
-    (state) => state.toggleAddNodesSidebar
-  );
-  const isAddNodesSidebarOpen = addNodesSidebarState(
-    (state) => state.isAddNodesSidebarOpen
-  );
+  const open = addNodesSidebarState((state) => state.isAddNodesSidebarOpen);
+  const setOpen = addNodesSidebarState((state) => state.toggleAddNodesSidebar);
 
   const toggleDrawer = () => {
-    toggleAddNodesSidebar(!isAddNodesSidebarOpen);
+    setOpen(!open);
   };
+
+  const drawerStyles = useDrawerStyles();
 
   return (
     <>
       <Drawer
         variant="permanent"
         anchor="left"
-        className={`${classes.drawer} ${
-          isAddNodesSidebarOpen ? classes.drawerOpen : classes.drawerClose
-        }`}
         classes={{
-          paper: `${classes.drawer} ${
-            isAddNodesSidebarOpen ? classes.drawerOpen : classes.drawerClose
-          }`,
+          root: styles.drawer,
+          paper: styles.paper,
         }}
-        open={isAddNodesSidebarOpen}
+        open={open}
+        style={{
+          width: open ? '250px' : '0px',
+          ...drawerStyles,
+        }}
       >
         <aside className="dndflow">
           <TaskList />
         </aside>
       </Drawer>
       <Fab
+        className={styles.openButton}
         size="small"
         color="primary"
-        aria-label="addNodes"
+        aria-label={`${open ? 'Close' : 'Open'} task drawer`}
         onClick={toggleDrawer}
-        style={{ marginLeft: isAddNodesSidebarOpen ? '230px' : '10px' }}
-        className={classes.leftDrawerButton}
+        style={{
+          left: open ? '230px' : '10px',
+          zIndex: drawerStyles.zIndex + 1,
+        }}
       >
-        {isAddNodesSidebarOpen ? (
+        {open ? (
           <ArrowBackIosIcon style={{ marginLeft: '8px' }} />
         ) : (
           <AddIcon />

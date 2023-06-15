@@ -1,0 +1,19 @@
+.drawer {
+  position: static;
+  top: 0;
+  left: 0;
+}
+
+.paper {
+  position: static !important;
+}
+
+.openButton {
+  position: absolute !important;
+  top: 72px;
+  transition: transform 0.3s ease-in-out !important;
+}
+
+.openButton:hover {
+  transform: scale(1.1);
+}
