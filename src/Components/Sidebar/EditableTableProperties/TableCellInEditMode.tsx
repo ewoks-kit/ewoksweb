@@ -36,7 +36,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 function TableCellInEditMode(props: CustomTableCellProps) {
-  const { index, row, name, onChange, typeOfValues } = props;
+  const { index, row, name, onChange, typeOfValues, usedIn } = props;
 
   const classes = useStyles();
 
@@ -70,7 +70,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
     onChange(event, changedRow, rowIndex);
   }
 
-  if (name === 'value') {
+  if (name === 'value' && usedIn !== 'DataMapping' && row.type !== 'null') {
     if (row.type && ['dict', 'list', 'object'].includes(row.type)) {
       return <span>{JSON.stringify(row[name])}</span>;
     }
@@ -105,7 +105,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
         <Input
           value={row[name]}
           type="number"
-          // name={name}
+          name={name}
           onChange={(e) => onChange(e, row, index)}
           className={classes.input}
           data-cy="inputInEditableCell"
@@ -123,7 +123,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
       <Input
         value={row[name]}
         type="text"
-        // name={name}
+        name={name}
         onChange={(e) => onChange(e, row, index)}
         className={classes.input}
         data-cy="inputInEditableCell"

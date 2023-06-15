@@ -2,19 +2,17 @@ import { FormControl, TextField, Typography } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import type { CustomTableCellProps } from '../../../types';
 
-function SelectRenderer(props: CustomTableCellProps) {
+function SelectNameValue(props: CustomTableCellProps) {
   const { index, row, name, onChange, typeOfValues } = props;
 
   const renderOption = (option: string) => {
     const valueIsRequired = typeOfValues?.requiredValues?.includes(option);
 
     return (
-      <li>
-        <Typography component="div" variant="body1">
-          {option}
-          {valueIsRequired && <span style={{ color: 'red' }}>*</span>}
-        </Typography>
-      </li>
+      <Typography component="div" variant="body1">
+        {option}
+        {valueIsRequired && <span style={{ color: 'red' }}>*</span>}
+      </Typography>
     );
   };
 
@@ -40,4 +38,4 @@ function SelectRenderer(props: CustomTableCellProps) {
   );
 }
 
-export default SelectRenderer;
+export default SelectNameValue;
