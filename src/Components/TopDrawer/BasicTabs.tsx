@@ -6,10 +6,10 @@ import { Box } from '@material-ui/core';
 
 import ManageIcons from './ManageIcons';
 import ManageWorkflows from './ManageWorkflows';
-import ExecutionTable from '../Execution/ExecutionTable';
 import useStore from '../../store/useStore';
 import IconBoundary from '../../IconBoundary';
 import { DrawerTab } from '../../types';
+import ExecutedWorkflows from '../Execution/ExecutedWorkflows';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -82,7 +82,7 @@ export default function BasicTabs() {
         </IconBoundary>
       </TabPanel>
       <TabPanel value={value} index={DrawerTab.Executions}>
-        <ExecutionTable />
+        <ExecutedWorkflows />
       </TabPanel>
     </Box>
   );

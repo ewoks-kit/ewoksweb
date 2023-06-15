@@ -1,11 +1,10 @@
-import MoreMenuItem from './MoreMenuItem';
 import useStore from '../../../store/useStore';
 import SendIcon from '@material-ui/icons/Send';
 import { useState } from 'react';
-import type { Event } from '../../../types';
 import { executeWorkflow } from '../../../api/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { useNavigate } from 'react-router-dom';
+import ActionMenuItem from './ActionMenuItem';
 
 function ExecutionMenuItem() {
   const navigate = useNavigate();
@@ -35,8 +34,6 @@ function ExecutionMenuItem() {
   }
 
   async function execute() {
-    console.log(recentGraphs);
-
     if (recentGraphs.length > 0) {
       try {
         await executeWorkflow(workingGraph.graph.id);
@@ -73,7 +70,7 @@ function ExecutionMenuItem() {
         agreeCallback={execute}
         disagreeCallback={disAgreeSaveWithout}
       />
-      <MoreMenuItem
+      <ActionMenuItem
         icon={SendIcon}
         label="Execute workflow"
         onClick={checkAndExecute}
