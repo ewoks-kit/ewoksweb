@@ -13,6 +13,7 @@ import TaskItem from './TaskItem';
 import styles from './AddNodes.module.css';
 import { ViewModule, ViewList } from '@material-ui/icons';
 import useConfigStore from '../../store/useConfigStore';
+import CreateTaskButton from './CreateTaskButton';
 
 interface AddNodesProps {
   sidebar?: boolean;
@@ -29,6 +30,8 @@ function AddNodes(props: AddNodesProps) {
   return (
     <>
       <div>
+        <CreateTaskButton />
+
         <IconButton
           onClick={() => setSidebarLayout('grid')}
           aria-label="Switch to grid layout"
@@ -42,43 +45,41 @@ function AddNodes(props: AddNodesProps) {
           <ViewList />
         </IconButton>
       </div>
-      {[...new Set(tasks.map((m) => m.category)).values()].map(
-        (categoryName) => (
-          <Accordion key={categoryName} className="add-nodes-accordion">
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
+      {[...new Set(tasks.map((m) => m.category)).values()].map((category) => (
+        <Accordion key={category} className="add-nodes-accordion">
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+          >
+            <Typography>{category}</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <div
+              className={styles.itemContainer}
+              data-gridlayout={sidebarLayout === 'grid' || undefined}
             >
-              <Typography>{categoryName}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <div
-                className={styles.itemContainer}
-                data-gridlayout={sidebarLayout === 'grid' || undefined}
-              >
-                {tasks
-                  .filter((nod) => nod.category === categoryName)
-                  .map((elem) => (
-                    <TaskItem
-                      key={elem.task_identifier}
-                      task={elem}
-                      onClick={() => setSelectedTask(elem)}
-                      isSelected={
-                        elem.task_identifier === selectedTask.task_identifier
-                      }
-                    />
-                  ))}
-                {isSidebar && categoryName === 'General' && (
-                  <>
-                    <AddNoteButton />
-                    <AddSubgraphButton />
-                  </>
-                )}
-              </div>
-            </AccordionDetails>
-          </Accordion>
-        )
-      )}
+              {tasks
+                .filter((nod) => nod.category === category)
+                .map((task) => (
+                  <TaskItem
+                    key={task.task_identifier}
+                    task={task}
+                    onClick={() => setSelectedTask(task)}
+                    isSelected={
+                      task.task_identifier === selectedTask.task_identifier
+                    }
+                  />
+                ))}
+              {isSidebar && category === 'General' && (
+                <>
+                  <AddNoteButton />
+                  <AddSubgraphButton />
+                </>
+              )}
+            </div>
+          </AccordionDetails>
+        </Accordion>
+      ))}
     </>
   );
 }
