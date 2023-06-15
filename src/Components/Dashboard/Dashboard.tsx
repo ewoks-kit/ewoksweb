@@ -11,7 +11,7 @@ import ErrorFallback from '../General/ErrorFallback';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import { getWorkflow } from '../../api/api';
 import { useReactFlow } from 'reactflow';
-import OverflowDrawer from '../AddNodesDrawer/OverflowDrawer';
+import OverflowDrawer from '../TaskDrawer/TaskDrawer';
 import addNodesSidebarState from '../../store/addNodesSidebarState';
 import { useGetTasks } from '../TopNavBar/hooks';
 import TopAppBar from './TopAppBar';

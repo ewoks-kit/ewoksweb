@@ -6,6 +6,7 @@ import IntegratedSpinner from '../General/IntegratedSpinner';
 import useStore from '../../store/useStore';
 import { Button, Chip, IconButton } from '@material-ui/core';
 import type { Event } from '../../types';
+import { DrawerTab } from '../../types';
 import { getWorkflow } from '../../api/api';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
@@ -187,7 +188,7 @@ export default function ExecutionDetails() {
   }
 
   function handleChangeOpenExecutions() {
-    setOpenSettingsDrawer('Executions');
+    setOpenSettingsDrawer(DrawerTab.Executions);
   }
 
   function handleChangeCleanExecutions() {

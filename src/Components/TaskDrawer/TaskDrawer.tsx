@@ -3,7 +3,7 @@ import Drawer from '@material-ui/core/Drawer';
 import AddIcon from '@material-ui/icons/Add';
 import { Fab } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import AddNodes from './AddNodes';
+import TaskList from './TaskList';
 import addNodesSidebarState from '../../store/addNodesSidebarState';
 
 const useStyles = makeStyles((theme) => ({
@@ -70,7 +70,7 @@ function OverflowDrawer() {
         open={isAddNodesSidebarOpen}
       >
         <aside className="dndflow">
-          <AddNodes sidebar />
+          <TaskList />
         </aside>
       </Drawer>
       <Fab

@@ -4,287 +4,61 @@ describe('new Task form', () => {
   });
 
   it('creates new task', () => {
-    cy.get('[aria-controls="navbar-dropdown-menu"]').click();
+    cy.findByRole('button', { name: 'New task' }).click();
+    cy.waitForStableDOM();
 
-    cy.findByRole('menuitem', { name: 'Settings' }).click();
+    cy.findByRole('textbox', { name: 'New Name - Identifier' }).type(
+      'Always-and-forever'
+    );
 
-    cy.contains('Categories');
+    cy.findByRole('textbox', { name: 'Category' }).should('be.enabled');
 
-    cy.get('[data-cy="tasksTab"]').click();
+    cy.findByRole('textbox', { name: 'Optional Inputs' })
+      .should('be.disabled')
+      .as('optionalInputsBox');
+    cy.findByRole('textbox', { name: 'Required Inputs' })
+      .should('be.disabled')
+      .as('requiredInputsBox');
+    cy.findByRole('textbox', { name: 'Outputs' })
+      .should('be.disabled')
+      .as('outputsBox');
+    cy.findByRole('button', { name: 'Icon' }).should('not.be.disabled');
 
-    cy.contains('button', 'Create a new task').should('be.visible').click();
+    // Test `class` Task type
+    cy.findByRole('button', { name: 'Task Type' }).click();
+    cy.findByRole('option', { name: 'class' }).click();
 
-    cy.contains('Give the new Task details')
-      .parent()
-      .should('have.class', 'MuiDialogTitle-root')
-      .siblings()
-      .first()
-      .as('dialogContent')
-      .should('have.class', 'MuiDialogContent-root');
+    cy.get('@optionalInputsBox').should('be.enabled');
+    cy.get('@requiredInputsBox').should('be.enabled');
+    cy.get('@outputsBox').should('be.enabled');
 
-    cy.get('@dialogContent')
-      .contains('New Name - Identifier')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .type('Always-and-forever');
+    // Test `method` Task type
+    cy.findByRole('button', { name: 'Task Type' }).click();
+    cy.findByRole('option', { name: 'method' }).click();
 
-    // TODO for some reason this is covered by another element and force is not working??
-    // cy.get('@dialogContent')
-    //   .contains('Task Type')
-    //   .should('exist')
-    //   .parent()
-    //   .click({ force: true });
+    cy.get('@optionalInputsBox').should('be.disabled');
+    cy.get('@requiredInputsBox').should('be.disabled');
+    cy.get('@outputsBox').should('be.disabled');
 
-    // cy.contains('ppfmethod').click();
+    // Test `script` Task type
+    cy.findByRole('button', { name: 'Task Type' }).click();
+    cy.findByRole('option', { name: 'script' }).click();
 
-    cy.get('@dialogContent')
-      .contains('Category')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('not.has.attr', 'disabled');
+    cy.get('@optionalInputsBox').should('be.disabled');
+    cy.get('@requiredInputsBox').should('be.disabled');
+    cy.get('@outputsBox').should('be.disabled');
 
-    cy.get('@dialogContent')
-      .contains('Optional Inputs')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('has.attr', 'disabled');
+    // Test `ppfmethod` Task type
+    cy.findByRole('button', { name: 'Task Type' }).click();
+    cy.findByRole('option', { name: 'ppfport' }).click();
 
-    cy.get('@dialogContent')
-      .contains('Required Inputs')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('has.attr', 'disabled');
+    cy.get('@optionalInputsBox').should('be.disabled');
+    cy.get('@requiredInputsBox').should('be.disabled');
+    cy.get('@outputsBox').should('be.disabled');
 
-    cy.get('@dialogContent')
-      .contains('Outputs')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('has.attr', 'disabled');
+    cy.findByRole('textbox', { name: 'Category' }).type('till-forever-ends');
 
-    cy.get('@dialogContent')
-      .contains('Icon')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('not.has.attr', 'disabled');
-
-    // Test if the choice in Task Type is class
-    cy.get('@dialogContent')
-      .contains('Task Type')
-      .should('exist')
-      .parent()
-      .click();
-
-    cy.contains('class').click();
-
-    cy.get('@dialogContent')
-      .contains('Category')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('not.has.attr', 'disabled');
-
-    cy.get('@dialogContent')
-      .contains('Optional Inputs')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('not.has.attr', 'disabled');
-
-    cy.get('@dialogContent')
-      .contains('Required Inputs')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('not.has.attr', 'disabled');
-
-    cy.get('@dialogContent')
-      .contains('Outputs')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('not.has.attr', 'disabled');
-
-    cy.get('@dialogContent')
-      .contains('Icon')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('not.has.attr', 'disabled');
-
-    // Test if the choice in Task Type is method
-    cy.get('@dialogContent')
-      .contains('Task Type')
-      .should('exist')
-      .parent()
-      .click();
-
-    cy.contains('method').click();
-
-    cy.get('@dialogContent')
-      .contains('Category')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('not.has.attr', 'disabled');
-
-    cy.get('@dialogContent')
-      .contains('Optional Inputs')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('has.attr', 'disabled');
-
-    cy.get('@dialogContent')
-      .contains('Required Inputs')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('has.attr', 'disabled');
-
-    cy.get('@dialogContent')
-      .contains('Outputs')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .should('have.value', 'return_value')
-      .and('has.attr', 'disabled');
-
-    cy.get('@dialogContent')
-      .contains('Icon')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('not.has.attr', 'disabled');
-
-    // Test if the choice in Task Type is script
-    cy.get('@dialogContent')
-      .contains('Task Type')
-      .should('exist')
-      .parent()
-      .click();
-
-    cy.contains('script').click();
-
-    cy.get('@dialogContent')
-      .contains('Category')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('not.has.attr', 'disabled');
-
-    cy.get('@dialogContent')
-      .contains('Optional Inputs')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('has.attr', 'disabled');
-
-    cy.get('@dialogContent')
-      .contains('Required Inputs')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('has.attr', 'disabled');
-
-    cy.get('@dialogContent')
-      .contains('Outputs')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .should('have.value', 'return_value')
-      .and('has.attr', 'disabled');
-
-    cy.get('@dialogContent')
-      .contains('Icon')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('not.has.attr', 'disabled');
-
-    // Test if the choice in Task Type is ppfport
-    cy.get('@dialogContent')
-      .contains('Task Type')
-      .should('exist')
-      .parent()
-      .click();
-
-    cy.contains('ppfport').click();
-
-    cy.get('@dialogContent')
-      .contains('Category')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .as('categoryInput')
-      .first()
-      .and('not.has.attr', 'disabled');
-
-    cy.get('@categoryInput').type('till-forever-ends');
-
-    cy.get('@dialogContent')
-      .contains('Optional Inputs')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('has.attr', 'disabled');
-
-    cy.get('@dialogContent')
-      .contains('Required Inputs')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('has.attr', 'disabled');
-
-    cy.get('@dialogContent')
-      .contains('Outputs')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .children('input')
-      .and('has.attr', 'disabled');
-
-    cy.get('@dialogContent')
-      .contains('Icon')
-      .should('exist')
-      .siblings('div')
-      .first()
-      .as('iconInput')
-      .children('input')
-
-      .and('not.has.attr', 'disabled');
-
-    cy.get('@iconInput').click();
-
-    cy.contains('default.png').click();
+    cy.findByRole('button', { name: 'Icon' }).click();
+    cy.findByRole('option', { name: 'default.png' }).click();
   });
 });

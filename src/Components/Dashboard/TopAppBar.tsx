@@ -2,9 +2,10 @@ import { AppBar, Toolbar, Typography, useTheme } from '@material-ui/core';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import useStore from '../../store/useStore';
+import { DrawerTab } from '../../types';
 import GetFromServer from '../General/GetFromServer';
 import ProgressBar from '../General/ProgressBar';
-import MoreMenuButton from '../TopNavBar/menu/MoreMenuButton';
+import OpenActionMenuButton from '../TopNavBar/menu/OpenActionMenuButton';
 import SaveToServerButton from '../TopNavBar/SaveToServerButton';
 import SettingsInfoDrawer from '../TopNavBar/SettingsInfoDrawer';
 import TopNavbarLabel from '../TopNavBar/TopNavbarLabel';
@@ -31,19 +32,19 @@ function TopAppBar(props: Props) {
   useEffect(() => {
     if (!openDrawers) {
       setOpenSettings(false);
-      setOpenSettingsDrawer('Workflows');
+      setOpenSettingsDrawer(DrawerTab.Workflows);
     }
   }, [openDrawers, openSettings, setOpenSettingsDrawer]);
 
   useEffect(() => {
-    if (openSettingsDrawer === 'Executions') {
+    if (openSettingsDrawer === DrawerTab.Executions) {
       setOpenInfo(false);
       setOpenDrawers(true);
       setOpenSettings(true);
       return;
     }
 
-    if (openSettingsDrawer === 'close') {
+    if (openSettingsDrawer === DrawerTab.Closed) {
       setOpenInfo(false);
       setOpenDrawers(false);
       setOpenSettings(false);
@@ -80,7 +81,7 @@ function TopAppBar(props: Props) {
 
         <SaveToServerButton />
         <div>
-          <MoreMenuButton
+          <OpenActionMenuButton
             checkAndNewGraph={() => checkAndNewGraph(false)}
             handleOpenSettings={handleOpenSettings}
           />
