@@ -10,7 +10,7 @@ import { textForError } from 'utils';
 import FormDialog from '../General/FormDialog';
 import { useGetTasks } from '../TopNavBar/hooks';
 import { Delete, Edit, LibraryAdd } from '@material-ui/icons';
-import styles from './AddNodes.module.css';
+import styles from './TaskButtonGroup.module.css';
 
 function TaskButtonGroup() {
   const [elementToEdit, setElementToEdit] = useState<Task>({});
@@ -78,8 +78,9 @@ function TaskButtonGroup() {
   };
 
   return (
-    <div className={styles.taskButtonsContainer}>
+    <div className={styles.container}>
       <IconButton
+        className={styles.edit}
         aria-label="Edit task details"
         onClick={() =>
           onAction(FormAction.editTask, selectedTask.task_identifier)
@@ -89,16 +90,9 @@ function TaskButtonGroup() {
       >
         <Edit fontSize="small" />
       </IconButton>
-      <IconButton
-        onClick={deleteTaskDialog}
-        aria-label="Delete task"
-        color="secondary"
-        size="small"
-      >
-        <Delete fontSize="small" />
-      </IconButton>
 
       <IconButton
+        className={styles.clone}
         onClick={() =>
           onAction(FormAction.cloneTask, selectedTask.task_identifier)
         }
@@ -123,6 +117,16 @@ function TaskButtonGroup() {
         open={openSaveDialog}
         setOpenSaveDialog={setOpenSaveDialog}
       />
+
+      <IconButton
+        className={styles.delete}
+        onClick={deleteTaskDialog}
+        aria-label="Delete task"
+        color="secondary"
+        size="small"
+      >
+        <Delete fontSize="small" />
+      </IconButton>
     </div>
   );
 }

@@ -60,7 +60,6 @@ function AddNodes(props: AddNodesProps) {
                   .filter((nod) => nod.category === categoryName)
                   .map((elem) => (
                     <TaskItem
-                      className={styles.item}
                       key={elem.task_identifier}
                       task={elem}
                       onClick={() => setSelectedTask(elem)}
