@@ -545,7 +545,6 @@ export type SidebarLayout = 'grid' | 'list';
 
 export enum DrawerTab {
   Workflows,
-  Tasks,
   Icons,
   Executions,
   Settings,

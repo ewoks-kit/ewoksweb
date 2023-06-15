@@ -6,7 +6,6 @@ import { Box } from '@material-ui/core';
 
 import ManageIcons from './ManageIcons';
 import ManageWorkflows from './ManageWorkflows';
-import ManageTasks from './ManageTasks';
 import ExecutionTable from '../Execution/ExecutionTable';
 import useStore from '../../store/useStore';
 import IconBoundary from '../../IconBoundary';
@@ -65,11 +64,6 @@ export default function BasicTabs() {
         >
           <Tab label="Workflows" {...a11yProps(DrawerTab.Workflows)} />
           <Tab
-            label="Tasks"
-            data-cy="tasksTab"
-            {...a11yProps(DrawerTab.Tasks)}
-          />
-          <Tab
             label="Icons"
             data-cy="iconsTab"
             {...a11yProps(DrawerTab.Icons)}
@@ -81,9 +75,6 @@ export default function BasicTabs() {
       </Box>
       <TabPanel value={value} index={DrawerTab.Workflows}>
         <ManageWorkflows />
-      </TabPanel>
-      <TabPanel value={value} index={DrawerTab.Tasks}>
-        <ManageTasks />
       </TabPanel>
       <TabPanel value={value} index={DrawerTab.Icons}>
         <IconBoundary>

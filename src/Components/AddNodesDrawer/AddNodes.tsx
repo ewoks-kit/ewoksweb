@@ -15,13 +15,8 @@ import { ViewModule, ViewList } from '@material-ui/icons';
 import useConfigStore from '../../store/useConfigStore';
 import CreateTaskButton from './CreateTaskButton';
 
-interface AddNodesProps {
-  sidebar?: boolean;
-}
 // DOC: Hosts the nodes-tasks in their categories to drag and drop them into canvas
-function AddNodes(props: AddNodesProps) {
-  const { sidebar: isSidebar } = props;
-
+function AddNodes() {
   const tasks = useStore((state) => state.tasks);
   const selectedTask = useStore((state) => state.selectedTask);
   const setSelectedTask = useStore((state) => state.setSelectedTask);
@@ -70,7 +65,7 @@ function AddNodes(props: AddNodesProps) {
                     }
                   />
                 ))}
-              {isSidebar && category === 'General' && (
+              {category === 'General' && (
                 <>
                   <AddNoteButton />
                   <AddSubgraphButton />
