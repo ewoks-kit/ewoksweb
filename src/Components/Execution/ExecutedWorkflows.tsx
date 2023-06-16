@@ -4,7 +4,8 @@ import styles from './Execution.module.css';
 import ExecutionFilters from './ExecutionFilters';
 import useStore from '../../store/useStore';
 import { getExecutionEvents } from '../../api/api';
-import type { ExecutedJobsResponse } from '../../types';
+import type { ExecutedJobsResponse, filterParams } from '../../types';
+import { formatDate } from './utils';
 
 const headers = ['Workflow name', 'Start time', 'End time', 'status'];
 
@@ -13,10 +14,13 @@ function ExecutedWorkflows() {
   const [showDialog, setShowDialog] = useState(false);
   const executedWorkflows = useStore((state) => state.executedWorkflows);
   const setExecutedWorkflows = useStore((state) => state.setExecutedWorkflows);
+  const [filters] = useState<filterParams>({
+    starttime: '2020-06-13',
+  });
 
   useEffect(() => {
     async function fetchEvents() {
-      const response = await getExecutionEvents({ starttime: '2020-06-13' });
+      const response = await getExecutionEvents(filters);
       if (response.data) {
         const execJobs = response.data as ExecutedJobsResponse;
         setExecutedWorkflows(execJobs.jobs, false);
@@ -25,8 +29,18 @@ function ExecutedWorkflows() {
         console.log('no response data');
       }
     }
+
     fetchEvents();
-  }, [setExecutedWorkflows]);
+
+    const interval = setInterval(() => {
+      fetchEvents();
+    }, 30_000);
+
+    return () => {
+      clearInterval(interval);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleRowClick = (rowId: string) => {
     if (selectedRow === rowId) {
@@ -77,7 +91,9 @@ function ExecutedWorkflows() {
           <div className={styles.executionCell}>
             {workflowEvents[1].workflow_id}
           </div>
-          <div className={styles.executionCell}>{workflowEvents[1].time}</div>
+          <div className={styles.executionCell}>
+            {formatDate(workflowEvents[1].time || '')}
+          </div>
           <div className={styles.executionCell}>
             {workflowEvents[1].executing}
           </div>

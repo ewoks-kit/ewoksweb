@@ -12,22 +12,13 @@ function ExecutionMenuItem() {
   const recentGraphs = useStore((state) => state.recentGraphs);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  // const setInExecutionMode = useStore((state) => state.setInExecutionMode);
-  // const setExecutedEvents = useStore((state) => state.setExecutedEvents);
-  // const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
   const setCanvasGraphChanged = useStore(
     (state) => state.setCanvasGraphChanged
   );
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
-  // const undoIndex = useStore((state) => state.undoIndex);
   const workingGraph = useStore((state) => state.workingGraph);
 
   function checkAndExecute() {
-    // if (canvasGraphChanged && undoIndex !== 0) {
-    //   setOpenAgreeDialog(true);
-    //   return;
-    // }
-
     execute();
     setOpenAgreeDialog(false);
     setCanvasGraphChanged(false);
@@ -37,6 +28,7 @@ function ExecutionMenuItem() {
     if (recentGraphs.length > 0) {
       try {
         await executeWorkflow(workingGraph.graph.id);
+        window.open('/#/monitor-workflows', '_blank');
         navigate('/monitor-workflows');
       } catch (error) {
         // Keep logging in console for debugging when talking with a user

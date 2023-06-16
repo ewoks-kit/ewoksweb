@@ -52,7 +52,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
           row.value.toString()
         : 'null'
     );
-  }, [row.value, row.type]);
+  }, [row]);
 
   function onChangeBool(
     e: ChangeEvent<HTMLInputElement>,
@@ -70,11 +70,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
     onChange(event, changedRow, rowIndex);
   }
 
-  if (name === 'value' && usedIn !== 'DataMapping' && row.type !== 'null') {
-    if (row.type && ['dict', 'list', 'object'].includes(row.type)) {
-      return <span>{JSON.stringify(row[name])}</span>;
-    }
-
+  if (name === 'value' && usedIn !== 'DataMapping') {
     if (row.type === 'bool' || row.type === 'boolean') {
       return (
         <RadioGroup
@@ -100,18 +96,20 @@ function TableCellInEditMode(props: CustomTableCellProps) {
       );
     }
 
-    return (
-      <FormControl fullWidth style={{ marginLeft: '5px' }}>
-        <Input
-          value={row[name]}
-          type="number"
-          name={name}
-          onChange={(e) => onChange(e, row, index)}
-          className={classes.input}
-          data-cy="inputInEditableCell"
-        />
-      </FormControl>
-    );
+    if (row.type === 'number') {
+      return (
+        <FormControl fullWidth style={{ marginLeft: '5px' }}>
+          <Input
+            value={row[name]}
+            type="number"
+            name={name}
+            onChange={(e) => onChange(e, row, index)}
+            className={classes.input}
+            data-cy="inputInEditableCell"
+          />
+        </FormControl>
+      );
+    }
   }
 
   if (typeOfValues?.typeOfInput && typeOfValues.typeOfInput === 'select') {
