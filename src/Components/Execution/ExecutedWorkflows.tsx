@@ -85,6 +85,10 @@ function ExecutedWorkflows() {
           }`}
           className={`${styles.executionRow} ${
             selectedRow === workflowEvents[0].job_id ? styles.highlighted : ''
+          } ${
+            (workflowEvents[workflowEvents.length - 1].error &&
+              styles.workflowErrorRow) ||
+            ''
           }`}
           onClick={() => handleRowClick(workflowEvents[0].job_id || '')}
           onKeyDown={(event) => handleKeyDown(event, workflowEvents[0].job_id)}
@@ -92,15 +96,19 @@ function ExecutedWorkflows() {
           role="button"
         >
           <div className={styles.executionCell}>
-            {workflowEvents[1].workflow_id}
+            {workflowEvents[1]?.workflow_id ||
+              workflowEvents[0]?.workflow_id ||
+              'No id'}
           </div>
           <div className={styles.executionCell}>
-            {formatDate(workflowEvents[1].time || '')}
+            {formatDate(workflowEvents[1]?.time || '')}
           </div>
           <div className={styles.executionCell}>
-            {workflowEvents[1].executing}
+            {workflowEvents[1]?.executing || ''}
           </div>
-          <div className={styles.executionCell}>{workflowEvents[1].status}</div>
+          <div className={styles.executionCell}>
+            {workflowEvents[1]?.status || ''}
+          </div>
           {showDialog && (
             <div className={styles.dialogOverlay}>
               <div className={styles.dialog}>

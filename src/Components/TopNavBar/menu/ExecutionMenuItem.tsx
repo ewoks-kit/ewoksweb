@@ -3,11 +3,11 @@ import SendIcon from '@material-ui/icons/Send';
 import { useState } from 'react';
 import { executeWorkflow } from '../../../api/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import ActionMenuItem from './ActionMenuItem';
 
 function ExecutionMenuItem() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const recentGraphs = useStore((state) => state.recentGraphs);
 
@@ -29,7 +29,7 @@ function ExecutionMenuItem() {
       try {
         await executeWorkflow(workingGraph.graph.id);
         window.open('/#/monitor-workflows', '_blank');
-        navigate('/monitor-workflows');
+        // navigate('/monitor-workflows');
       } catch (error) {
         // Keep logging in console for debugging when talking with a user
         /* eslint-disable no-console */

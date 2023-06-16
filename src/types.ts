@@ -123,7 +123,7 @@ export interface Event {
   workflow_id?: string;
   type?: string;
   time?: string;
-  error?: string;
+  error?: boolean;
   error_message?: string;
   error_traceback?: string;
   node_id?: string;

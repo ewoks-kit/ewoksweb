@@ -28,6 +28,10 @@ body {
   cursor: pointer;
 }
 
+.workflowErrorRow {
+  border-color: red;
+}
+
 .executionRow:hover {
   background-color: #f5f5f5;
 }
