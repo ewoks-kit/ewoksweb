@@ -58,30 +58,38 @@ function ExecutedWorkflows() {
       <ExecutionFilters />
       <div className={styles.executionRow}>
         {headers.map((header) => (
-          <div className={styles.executionCell}>{header}</div>
+          <div className={styles.executionCell} key={header}>
+            {header}
+          </div>
         ))}
       </div>
-      {executedWorkflows.map((item, index) => (
+      {executedWorkflows.map((workflowEvents) => (
         <div
-          key={item[0].id}
+          key={workflowEvents[0].job_id}
           className={`${styles.executionRow} ${
-            selectedRow === item[0].id ? styles.highlighted : ''
+            selectedRow === workflowEvents[0].job_id ? styles.highlighted : ''
           }`}
-          onClick={() => handleRowClick(item[0].id)}
-          onKeyDown={(event) => handleKeyDown(event, item[0].id)}
+          onClick={() => handleRowClick(workflowEvents[0].job_id || '')}
+          onKeyDown={(event) => handleKeyDown(event, workflowEvents[0].job_id)}
           tabIndex={0}
           role="button"
         >
-          <div className={styles.executionCell}>{item[0].workflow_id}</div>
-          <div className={styles.executionCell}>{item[0].time}</div>
-          <div className={styles.executionCell}>{item[0].executing}</div>
-          <div className={styles.executionCell}>{item[0].status}</div>
+          <div className={styles.executionCell}>
+            {workflowEvents[1].workflow_id}
+          </div>
+          <div className={styles.executionCell}>{workflowEvents[1].time}</div>
+          <div className={styles.executionCell}>
+            {workflowEvents[1].executing}
+          </div>
+          <div className={styles.executionCell}>{workflowEvents[1].status}</div>
           {showDialog && (
             <div className={styles.dialogOverlay}>
               <div className={styles.dialog}>
                 <div className={styles.dialogContent}>
                   All workflow Events in details
-                  <button onClick={handleCloseDialog}>Close</button>
+                  <button onClick={handleCloseDialog} type="submit">
+                    Close
+                  </button>
                 </div>
               </div>
             </div>
