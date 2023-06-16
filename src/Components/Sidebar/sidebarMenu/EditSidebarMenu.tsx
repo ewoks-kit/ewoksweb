@@ -27,13 +27,11 @@ export default function EditSidebarMenu({
     <>
       <Tooltip title="Delete, Clone" arrow>
         <Button
-          style={{
-            margin: '2px 8px',
-          }}
           color="primary"
           onClick={handleClick}
           size="small"
           aria-controls="editSidebar-dropdown-menu"
+          aria-label="Open edit actions menu"
         >
           <MenuIcon />
         </Button>
