@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { FormControl, TextField } from '@material-ui/core';
-import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import SidebarTooltip from '../SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
 import TextButtonSave from './TextButtonSave';
@@ -15,10 +14,10 @@ import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { useSelectedElement } from '../../../store/graph-hooks';
 import type { EwoksRFLink } from '../../../types';
 
+import styles from './Details.module.css';
+
 // DOC: the label and comment for links when selected
 export default function EdgeLabelComment() {
-  const classes = useDashboardStyles();
-
   const { getEdges, setEdges } = useReactFlow();
   const element = useSelectedElement();
   assertElementIsEdge(element);
@@ -83,7 +82,7 @@ export default function EdgeLabelComment() {
   }
 
   return (
-    <div className={classes.detailsLabels}>
+    <div className={styles.entry}>
       {Object.keys(element).includes('source') && (
         <SidebarTooltip text="Use Conditions or Data Mapping as label.">
           <FormControl

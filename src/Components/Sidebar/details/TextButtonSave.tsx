@@ -1,5 +1,6 @@
 import { FormControl, TextField } from '@material-ui/core';
-import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
+
+import styles from './Details.module.css';
 
 interface TextButtonSaveProps {
   label: string;
@@ -8,12 +9,10 @@ interface TextButtonSaveProps {
 }
 
 export default function TextButtonSave(props: TextButtonSaveProps) {
-  const classes = useDashboardStyles();
-
   const { label, defaultValue } = props;
 
   return (
-    <div className={classes.detailsLabels}>
+    <div className={styles.entry}>
       <FormControl fullWidth size="small">
         <TextField
           label={label}
