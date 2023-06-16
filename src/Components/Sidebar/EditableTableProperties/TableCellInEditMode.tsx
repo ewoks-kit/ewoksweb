@@ -52,7 +52,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
           row.value.toString()
         : 'null'
     );
-  }, [row.value, row.type]);
+  }, [row]);
 
   function onChangeBool(
     e: ChangeEvent<HTMLInputElement>,

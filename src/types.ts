@@ -396,6 +396,16 @@ export interface EditableTableRow {
   name?: string;
   value?: unknown;
   type?: string;
+  // TODO
+  // export type AllowedTypesOfValues =
+  // 'string'
+  // | 'bool'
+  // | 'number'
+  // | 'boolean'
+  // | 'null'
+  // | 'list'
+  // | 'dict'
+  // | undefined;
 }
 
 export interface TypeOfValues {
