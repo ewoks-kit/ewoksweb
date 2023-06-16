@@ -1,4 +1,4 @@
-import type { KeyboardEvent } from 'react';
+import type { KeyboardEvent, MouseEvent } from 'react';
 import { useEffect, useState } from 'react';
 import styles from './Execution.module.css';
 import ExecutionFilters from './ExecutionFilters';
@@ -42,7 +42,7 @@ function ExecutedWorkflows() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleRowClick = (rowId: string) => {
+  function handleRowClick(rowId: string) {
     if (selectedRow === rowId) {
       setSelectedRow('');
       setShowDialog(false);
@@ -50,22 +50,23 @@ function ExecutedWorkflows() {
       setSelectedRow(rowId);
       setShowDialog(true);
     }
-  };
+  }
 
-  const handleCloseDialog = () => {
-    setSelectedRow('');
+  function handleCloseDialog(event: MouseEvent<HTMLButtonElement>) {
+    event.stopPropagation();
+    console.log(showDialog);
     setShowDialog(false);
-  };
+  }
 
-  const handleKeyDown = (
+  function handleKeyDown(
     event: KeyboardEvent<HTMLDivElement>,
     rowId: string | undefined
-  ) => {
+  ) {
     if (event.key === 'Enter' && rowId) {
       event.preventDefault();
       handleRowClick(rowId);
     }
-  };
+  }
 
   return (
     <div className={styles.executionTable}>
@@ -79,7 +80,9 @@ function ExecutedWorkflows() {
       </div>
       {executedWorkflows.map((workflowEvents) => (
         <div
-          key={workflowEvents[0].job_id}
+          key={`${workflowEvents[0].job_id || ''} ${
+            workflowEvents[0].time || 'time'
+          }`}
           className={`${styles.executionRow} ${
             selectedRow === workflowEvents[0].job_id ? styles.highlighted : ''
           }`}
@@ -103,7 +106,10 @@ function ExecutedWorkflows() {
               <div className={styles.dialog}>
                 <div className={styles.dialogContent}>
                   All workflow Events in details
-                  <button onClick={handleCloseDialog} type="submit">
+                  <button
+                    onClick={(event) => handleCloseDialog(event)}
+                    type="submit"
+                  >
                     Close
                   </button>
                 </div>
