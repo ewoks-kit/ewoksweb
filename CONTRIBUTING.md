@@ -14,7 +14,7 @@ port 5000.
 Such an instance can be installed and run by running
 
 ```bash
-pip install ewoks-server
+pip install ewoksserver
 ewoks-server
 ```
 
