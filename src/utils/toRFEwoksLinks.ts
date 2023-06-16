@@ -1,6 +1,5 @@
 import type {
   Condition,
-  ConditionEwoks,
   DataMappingEwoks,
   EwoksRFLink,
   GraphEwoks,
@@ -47,7 +46,8 @@ export function toRFEwoksLinks(
         tasks
       );
       const color = uiProps.style?.stroke || 'rgb(60, 81, 202)';
-      const conditionsSourceToString = conditions.map<Condition>((con) => {
+
+      const conditionsForFront = conditions.map<Condition>((con) => {
         return {
           name: con.source_output?.toString(),
           value: con.value,
@@ -58,7 +58,7 @@ export function toRFEwoksLinks(
         id: `${source}:${uiProps.sourceHandle ?? ''}->${target}:${
           uiProps.targetHandle ?? ''
         }_${id++}`,
-        label: calcLabel(uiProps, conditionsSourceToString, data_mapping),
+        label: calcLabel(uiProps, conditionsForFront, data_mapping),
         source: source.toString(),
         target: target.toString(),
 
@@ -101,7 +101,7 @@ export function toRFEwoksLinks(
           required,
           sub_target,
           sub_source,
-          conditions: conditionsSourceToString,
+          conditions: conditionsForFront,
           map_all_data:
             map_all_data === undefined
               ? data_mapping.length === 0
@@ -117,7 +117,7 @@ export function toRFEwoksLinks(
 
 function calcLabel(
   uiProps: UiPropsLinks,
-  conditions: ConditionEwoks[],
+  conditions: Condition[],
   data_mapping: DataMappingEwoks[]
 ): string {
   if (uiProps.label) {
@@ -126,7 +126,7 @@ function calcLabel(
 
   if (conditions.length > 0) {
     return conditions
-      .map((el) => `${el.source_output || ''}->${(el.value as string) || ''}`)
+      .map((el) => `${el.name || ''}: ${JSON.stringify(el.value) || ''}`)
       .join(', ');
   }
 
