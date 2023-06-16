@@ -5,6 +5,7 @@ import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import type { Node } from 'reactflow';
 import { nanoid } from 'nanoid';
+import { isClass } from './utils';
 
 export default function DefaultInputs(element: Node) {
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
@@ -26,9 +27,6 @@ export default function DefaultInputs(element: Node) {
   }
 
   const defaultInputsChanged = (table: EditableTableRow[]) => {
-    // mergeNodeData(element.id, {
-    //   ewoks_props: { default_inputs: table as Inputs[] },
-    // });
     const newNodeData = {
       ...nodeData,
       ewoks_props: {
@@ -38,6 +36,7 @@ export default function DefaultInputs(element: Node) {
             id: dval.id,
             name: dval.name || '',
             value: dval.value,
+            type: dval.type,
           };
         }),
       },
@@ -63,14 +62,14 @@ export default function DefaultInputs(element: Node) {
         onRowAdd={(rows) => addDefaultInputs(rows)}
         typeOfValues={[
           {
-            type: 'select',
+            typeOfInput: isClass(nodeData) ? 'select' : 'input',
             values: [
               ...(nodeData.task_props.required_input_names || []),
               ...(nodeData.task_props.optional_input_names || []),
             ],
             requiredValues: nodeData.task_props.required_input_names || [],
           },
-          { type: 'input' },
+          { typeOfInput: 'input' },
         ]}
       />
     </div>

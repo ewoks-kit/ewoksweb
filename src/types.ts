@@ -224,6 +224,7 @@ export interface Inputs {
   id?: string;
   name: string | number;
   value: unknown;
+  type?: string;
 }
 
 export interface InputsEwoks extends Omit<Inputs, 'id'> {}
@@ -277,6 +278,7 @@ export interface Condition {
   value: unknown;
   id?: string;
   name?: string;
+  type?: string;
 }
 
 export interface DefaultErrorAttributes<T = DataMapping | DataMappingEwoks> {
@@ -394,10 +396,20 @@ export interface EditableTableRow {
   name?: string;
   value?: unknown;
   type?: string;
+  // TODO
+  // export type AllowedTypesOfValues =
+  // 'string'
+  // | 'bool'
+  // | 'number'
+  // | 'boolean'
+  // | 'null'
+  // | 'list'
+  // | 'dict'
+  // | undefined;
 }
 
 export interface TypeOfValues {
-  type: string;
+  typeOfInput: 'select' | 'input';
   values?: string[];
   requiredValues?: string[];
 }
@@ -407,8 +419,7 @@ export interface CustomTableCellProps {
   row: EditableTableRow;
   rowsNames?: string[];
   name: 'name' | 'value';
-  type?: string;
-  typeOfValues: TypeOfValues;
+  typeOfValues?: TypeOfValues;
   usedIn?: 'DataMapping' | 'DefaultInputs' | 'Conditions';
   onEdit?: () => void;
   onChange(

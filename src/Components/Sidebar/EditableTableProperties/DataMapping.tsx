@@ -1,5 +1,5 @@
 import type { DataMapping } from 'types';
-import { isClass } from './utils';
+import { calcTypeOfValues } from './utils';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
@@ -46,18 +46,8 @@ export default function DataMappingComponent(element: Edge) {
         values={edgeData.data_mapping || []}
         valuesChanged={dataMappingValuesChanged}
         typeOfValues={[
-          {
-            type: isClass(sourceNodeData) ? 'select' : 'input',
-            values: edgeData.links_input_names || [],
-          },
-          {
-            type: isClass(targetNodeData) ? 'select' : 'input',
-            values: [
-              ...(edgeData.links_required_output_names || []),
-              ...(edgeData.links_optional_output_names || []),
-            ],
-            requiredValues: edgeData.links_required_output_names || [],
-          },
+          calcTypeOfValues('inputs', sourceNodeData, edgeData),
+          calcTypeOfValues('outputs', targetNodeData, edgeData),
         ]}
       />
     </div>

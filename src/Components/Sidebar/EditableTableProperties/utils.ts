@@ -1,20 +1,22 @@
 import type {
   Condition,
-  DataMapping,
   EditableTableRow,
+  EwoksRFLinkData,
   EwoksRFNodeData,
   Inputs,
+  TypeOfValues,
 } from '../../../types';
 
 export const INPUT_TYPES = ['bool', 'number', 'string', 'list', 'dict', 'null'];
 
 export function createData(pair: Condition | Inputs): EditableTableRow {
   const type =
-    pair.value === 'true' || pair.value === 'false'
+    pair.type ??
+    (pair.value === 'true' || pair.value === 'false'
       ? 'boolean'
       : pair.value === null
       ? 'null'
-      : typeof pair.value;
+      : typeof pair.value);
 
   if ('source_output' in pair) {
     return {
@@ -33,8 +35,12 @@ export function createData(pair: Condition | Inputs): EditableTableRow {
   };
 }
 
-export function getType(val: DataMapping | Condition | Inputs) {
+export function getType(val: Condition | Inputs) {
   const { value } = val;
+
+  if ('type' in val && val.type) {
+    return val.type;
+  }
 
   if (typeof value === 'boolean' || value === 'true' || value === 'false') {
     return 'boolean';
@@ -61,4 +67,26 @@ export function getType(val: DataMapping | Condition | Inputs) {
 
 export function isClass(edgeData: EwoksRFNodeData | undefined): boolean {
   return edgeData?.task_props.task_type === 'class';
+}
+
+export function calcTypeOfValues(
+  inOrOut: 'inputs' | 'outputs',
+  nodeData: EwoksRFNodeData | undefined,
+  edgeDataL: EwoksRFLinkData
+): TypeOfValues {
+  return {
+    typeOfInput: isClass(nodeData) ? 'select' : 'input',
+    values: isClass(nodeData)
+      ? inOrOut === 'outputs'
+        ? [
+            ...(edgeDataL.links_required_output_names || []),
+            ...(edgeDataL.links_optional_output_names || []),
+          ]
+        : edgeDataL.links_input_names || []
+      : undefined,
+    requiredValues:
+      isClass(nodeData) && inOrOut === 'outputs'
+        ? edgeDataL.links_required_output_names
+        : undefined,
+  };
 }

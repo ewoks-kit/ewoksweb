@@ -36,7 +36,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 function TableCellInEditMode(props: CustomTableCellProps) {
-  const { index, row, name, onChange, type, typeOfValues } = props;
+  const { index, row, name, onChange, typeOfValues, usedIn } = props;
 
   const classes = useStyles();
 
@@ -44,14 +44,15 @@ function TableCellInEditMode(props: CustomTableCellProps) {
 
   useEffect(() => {
     setValueToString(
-      row.value !== null && row.value !== undefined
-        ? // I need to show as string any kind of (value: unknown) it gets
-          // value can be any type in the dropdown
+      row.value === undefined
+        ? ''
+        : row.value !== null
+        ? // Need to show as string any kind of (value: unknown) it gets
           // eslint-disable-next-line @typescript-eslint/no-base-to-string
           row.value.toString()
         : 'null'
     );
-  }, [row.value, row]);
+  }, [row]);
 
   function onChangeBool(
     e: ChangeEvent<HTMLInputElement>,
@@ -69,44 +70,59 @@ function TableCellInEditMode(props: CustomTableCellProps) {
     onChange(event, changedRow, rowIndex);
   }
 
-  if (type && ['dict', 'list', 'object'].includes(type)) {
-    return <span>{JSON.stringify(row[name])}</span>;
-  }
+  if (name === 'value' && usedIn !== 'DataMapping' && row.type !== 'null') {
+    if (row.type && ['dict', 'list', 'object'].includes(row.type)) {
+      return <span>{JSON.stringify(row[name])}</span>;
+    }
 
-  if (typeOfValues.type === 'select') {
-    return <SelectNameValue {...props} />;
-  }
+    if (row.type === 'bool' || row.type === 'boolean') {
+      return (
+        <RadioGroup
+          name="value"
+          value={valueToString}
+          onChange={(e) => onChangeBool(e, row, index)}
+          data-cy="radioInEditableCell"
+        >
+          <FormControlLabel
+            value="true"
+            control={<Radio />}
+            label="true"
+            className={classes.smallRadio}
+            color="primary"
+          />
+          <FormControlLabel
+            value="false"
+            control={<Radio />}
+            label="false"
+            className={classes.smallRadio}
+          />
+        </RadioGroup>
+      );
+    }
 
-  if (type === 'bool' || type === 'boolean') {
     return (
-      <RadioGroup
-        name="value"
-        value={valueToString}
-        onChange={(e) => onChangeBool(e, row, index)}
-        data-cy="radioInEditableCell"
-      >
-        <FormControlLabel
-          value="true"
-          control={<Radio />}
-          label="true"
-          className={classes.smallRadio}
-          color="primary"
+      <FormControl fullWidth style={{ marginLeft: '5px' }}>
+        <Input
+          value={row[name]}
+          type="number"
+          name={name}
+          onChange={(e) => onChange(e, row, index)}
+          className={classes.input}
+          data-cy="inputInEditableCell"
         />
-        <FormControlLabel
-          value="false"
-          control={<Radio />}
-          label="false"
-          className={classes.smallRadio}
-        />
-      </RadioGroup>
+      </FormControl>
     );
+  }
+
+  if (typeOfValues?.typeOfInput && typeOfValues.typeOfInput === 'select') {
+    return <SelectNameValue {...props} />;
   }
 
   return (
     <FormControl fullWidth style={{ marginLeft: '5px' }}>
       <Input
-        value={row[name] || ''}
-        type={type === 'number' ? 'number' : 'text'}
+        value={row[name]}
+        type="text"
         name={name}
         onChange={(e) => onChange(e, row, index)}
         className={classes.input}

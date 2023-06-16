@@ -4,11 +4,17 @@ import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import type { Edge } from 'reactflow';
 import { nanoid } from 'nanoid';
+import { calcTypeOfValues } from './utils';
+import useNodeDataStore from '../../../store/useNodeDataStore';
 
 // DOC: The conditions for a link are being set in this component
 export default function Conditions(element: Edge) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
+
+  const sourceNodeData = useNodeDataStore((state) =>
+    state.nodesData.get(element.source)
+  );
 
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
@@ -24,16 +30,14 @@ export default function Conditions(element: Edge) {
   }
 
   function conditionsValuesChanged(table: EditableTableRow[]) {
-    // mergeEdgeData(element.id, {
-    //   conditions: [...(table as EdgeConditions[])],
-    // });
     const newEdgeData = {
       ...edgeData,
-      conditions: table.map((con1) => {
+      conditions: table.map((con) => {
         return {
-          id: con1.id,
-          name: con1.name,
-          value: con1.value,
+          id: con.id,
+          name: con.name,
+          value: con.value,
+          type: con.type,
         };
       }),
     };
@@ -48,12 +52,9 @@ export default function Conditions(element: Edge) {
         valuesChanged={conditionsValuesChanged}
         onRowAdd={(rows) => addConditions(rows)}
         typeOfValues={[
+          calcTypeOfValues('inputs', sourceNodeData, edgeData),
           {
-            type: 'select',
-            values: edgeData.links_input_names || [],
-          },
-          {
-            type: 'input',
+            typeOfInput: 'input',
           },
         ]}
       />
