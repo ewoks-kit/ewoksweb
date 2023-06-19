@@ -10,6 +10,8 @@ import type { Node, Edge } from 'reactflow';
 import { isNodeRF } from '../../../utils/typeGuards';
 import type { SelectedElementRF } from '../../../types';
 
+import styles from '../EditSidebar.module.css';
+
 interface Content {
   title: string;
   EditComponent: () => JSX.Element;
@@ -45,7 +47,7 @@ export default function EditElementStyle({
   const { title, EditComponent } = getAccordionContent(selectedElement);
 
   return (
-    <Accordion className="Accordions-sidebar">
+    <Accordion className={styles.accordion}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"

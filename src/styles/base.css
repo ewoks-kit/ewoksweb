@@ -82,16 +82,6 @@ abbr[title] {
   padding: 4px;
 }
 
-.Accordions-sidebar {
-  margin: 10px 6px 0 0;
-  border-radius: 10px 0 0 10px;
-}
-.add-nodes-accordion {
-  width: 100%;
-  /* margin-left: 2px; */
-  border-radius: 10px 0 0 10px;
-}
-
 .btnClean {
   margin: 0;
   padding: 0;

@@ -26,6 +26,8 @@ import { useNodesIds } from '../../../store/graph-hooks';
 import type { Node } from 'reactflow';
 import NodeDataMapping from '../EditableTableProperties/NodeDataMapping';
 
+import styles from '../EditSidebar.module.css';
+
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(selectedElement: Node) {
   const classes = useDashboardStyles();
@@ -261,7 +263,7 @@ export default function NodeDetails(selectedElement: Node) {
         specific node is based on. If you need to have them create a new Task
         with the appropriate properties and use it.`}
       >
-        <Accordion className="Accordions-sidebar">
+        <Accordion className={styles.accordion}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
