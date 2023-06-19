@@ -76,7 +76,7 @@ function NodeInfo(props: Props) {
 
   return (
     <SidebarTooltip text="These are properties of the task on which the node is based. They can only be changed by editing the relevant task.">
-      <Accordion className={styles.accordion}>
+      <Accordion className={styles.accordion} data-cy="node_info">
         <AccordionSummary
           expandIcon={<ExpandMore />}
           aria-controls="panel1a-content"
