@@ -9,7 +9,6 @@ import ManageWorkflows from './ManageWorkflows';
 import useStore from '../../store/useStore';
 import IconBoundary from '../../IconBoundary';
 import { DrawerTab } from '../../types';
-import ExecutedWorkflows from '../Execution/ExecutedWorkflows';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -68,9 +67,6 @@ export default function BasicTabs() {
             data-cy="iconsTab"
             {...a11yProps(DrawerTab.Icons)}
           />
-          {/* TODO: commented for onlyEditRelease */}
-          {/* <Tab label="Executions" {...a11yProps(3)} /> */}
-          {/* <Tab label="Settings" {...a11yProps(4)} /> */}
         </Tabs>
       </Box>
       <TabPanel value={value} index={DrawerTab.Workflows}>
@@ -80,9 +76,6 @@ export default function BasicTabs() {
         <IconBoundary>
           <ManageIcons />
         </IconBoundary>
-      </TabPanel>
-      <TabPanel value={value} index={DrawerTab.Executions}>
-        <ExecutedWorkflows />
       </TabPanel>
     </Box>
   );

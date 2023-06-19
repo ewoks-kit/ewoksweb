@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import 'normalize.css';
 import './styles/index.css';
@@ -10,13 +10,13 @@ import ExecutedWorkflows from '../src/Components/Execution/ExecutedWorkflows';
 
 ReactDOM.render(
   <StrictMode>
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/edit-workflows" element={<Navigate to="/" replace />} />
         <Route path="/monitor-workflows" element={<ExecutedWorkflows />} />
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   </StrictMode>,
   document.querySelector('#root')
 );
