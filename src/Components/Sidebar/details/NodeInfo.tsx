@@ -75,11 +75,7 @@ function NodeInfo(props: Props) {
   ];
 
   return (
-    <SidebarTooltip
-      text={`These properties are being populated by the task the
-    specific node is based on. If you need to have them create a new Task
-    with the appropriate properties and use it.`}
-    >
+    <SidebarTooltip text="These are properties of the task on which the node is based. They can only be changed by editing the relevant task.">
       <Accordion className={styles.accordion}>
         <AccordionSummary
           expandIcon={<ExpandMore />}
