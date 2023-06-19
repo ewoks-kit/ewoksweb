@@ -15,30 +15,12 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { Fab, IconButton } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import ewoksUI from 'assets/ewoksUI.png';
-import type { Theme } from '@material-ui/core/styles';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import ImageList from '@material-ui/core/ImageList';
 import ImageListItem from '@material-ui/core/ImageListItem';
-// import itemData from './itemData';
 
-// const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-//   event.preventDefault();
-//   // const data = new FormData(event.currentTarget);
-// };
-
-// const linkStyle = {
-//   textDecoration: 'none',
-//   color: 'rgb(63, 81, 181)',
-// };
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
-    root: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
-      overflow: 'hidden',
-      backgroundColor: theme.palette.background.paper,
-    },
     linkStyle: {
       textDecoration: 'none',
       color: 'rgb(63, 81, 181)',

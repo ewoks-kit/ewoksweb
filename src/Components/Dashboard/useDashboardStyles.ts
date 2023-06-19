@@ -20,28 +20,12 @@ export const useDashboardStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
-  toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-    backgroundColor: '#3f51b5',
-    height: '7vh',
-  },
   appBar: {
     minHeight: '64px',
   },
 
   title: {
     flexGrow: 1,
-  },
-
-  icon: {
-    marginTop: theme.spacing(1.5),
-    marginRight: theme.spacing(0.5),
-    width: 20,
-    height: 20,
   },
 
   isDisabled: {
@@ -52,35 +36,9 @@ export const useDashboardStyles = makeStyles((theme) => ({
     color: 'red',
   },
 
-  appBarSpacer: theme.mixins.toolbar,
   content: {
     display: 'flex',
     height: '100%',
-  },
-  container: {
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-  },
-  paper: {
-    padding: theme.spacing(0),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-  fixedHeight: {
-    height: '93vh',
-    padding_top: '7vh',
-  },
-
-  detailsLabels: {
-    padding: '2px 0px',
-    wordBreak: 'break-word',
-  },
-
-  executionSide: {
-    margin: '8px 5px',
-    wordBreak: 'break-word',
-    width: '98%',
   },
 
   styleLinkDropdowns: {
@@ -102,15 +60,6 @@ export const useDashboardStyles = makeStyles((theme) => ({
   reflexContainer: {
     display: 'flex',
     minHeight: 0,
-  },
-
-  nodeDetails: {
-    backgroundColor: '#e9ebf7',
-    borderRadius: '10px 0 0 10px',
-    border: '#96a5f9',
-    borderStyle: 'solid none solid solid',
-    padding: '4px',
-    marginBottom: '10px',
   },
 
   mainArea: {
