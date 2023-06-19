@@ -9,6 +9,7 @@ declare global {
       loadApp(): void;
       loadGraph(name: string): void;
       loadAppWithoutGraph(): void;
+      dragNodeInCanvas(task_identifier: string): void;
     }
   }
 }

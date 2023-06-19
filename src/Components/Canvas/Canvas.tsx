@@ -180,6 +180,7 @@ function Canvas() {
       task_props: {
         task_type,
         task_identifier,
+        task_category: task.category,
         optional_input_names: task.optional_input_names,
         output_names: task.output_names,
         required_input_names: task.required_input_names,
