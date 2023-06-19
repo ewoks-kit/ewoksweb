@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import TextButtonSave from './TextButtonSave';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import {
@@ -8,15 +7,15 @@ import {
 } from '../../../utils/typeGuards';
 import type { Node } from 'reactflow';
 
-interface LabelCommentProps {
+import styles from './Details.module.css';
+
+interface Props {
   showComment: boolean;
   selectedElement: Node;
 }
 
 // DOC: the label and comment for nodes-links when selected
-export default function NodeLabelComment(props: LabelCommentProps) {
-  const classes = useDashboardStyles();
-
+export default function NodeLabelComment(props: Props) {
   const { showComment, selectedElement } = props;
   assertElementIsNodeType(selectedElement);
 
@@ -37,7 +36,7 @@ export default function NodeLabelComment(props: LabelCommentProps) {
     setComment(nodeData.comment || '');
   }, [nodeData.ewoks_props.label, nodeData.comment]);
 
-  function handelSaveLabel(labelLocal: string) {
+  function handleSaveLabel(labelLocal: string) {
     mergeNodeData(selectedElement.id, { ewoks_props: { label: labelLocal } });
   }
 
@@ -46,11 +45,11 @@ export default function NodeLabelComment(props: LabelCommentProps) {
   }
 
   return (
-    <div className={classes.detailsLabels}>
+    <div className={styles.entry}>
       <TextButtonSave
         label="Label"
         defaultValue={label}
-        onValueSave={handelSaveLabel}
+        onValueSave={handleSaveLabel}
       />
       <div style={{ display: showComment ? 'block' : 'none' }}>
         <TextButtonSave
