@@ -3,14 +3,12 @@ import { IconButton } from '@material-ui/core';
 
 import { FormAction } from '../../types';
 import type { Task } from '../../types';
-import useStore from 'store/useStore';
-import ConfirmDialog from 'Components/General/ConfirmDialog';
-import { deleteTask } from 'api/tasks';
-import { textForError } from 'utils';
 import FormDialog from '../General/FormDialog';
-import { useGetTasks } from '../TopNavBar/hooks';
-import { Delete, Edit, LibraryAdd } from '@material-ui/icons';
+import { Edit, LibraryAdd } from '@material-ui/icons';
 import styles from './TaskButtonGroup.module.css';
+import DeleteTaskButton from './DeleteTaskButton';
+
+type ActionType = FormAction.cloneTask | FormAction.editTask;
 
 interface Props {
   task: Task;
@@ -20,51 +18,12 @@ function TaskButtonGroup(props: Props) {
   const { task } = props;
 
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
-  const [action, setAction] = useState<
-    FormAction.cloneTask | FormAction.editTask
-  >();
-  const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
+  const [action, setAction] = useState<ActionType>();
 
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-
-  function onEditOrClone(
-    actionType: FormAction.cloneTask | FormAction.editTask
-  ) {
+  function onEditOrClone(actionType: ActionType) {
     setAction(actionType);
     setOpenSaveDialog(true);
   }
-
-  const getTasks = useGetTasks();
-
-  const onAgreeDeleteTask = async () => {
-    setOpenAgreeDialog(false);
-    if (!task.task_identifier) {
-      return;
-    }
-
-    try {
-      await deleteTask(task.task_identifier);
-      setOpenSnackbar({
-        open: true,
-        text: `Task was successfully deleted!`,
-        severity: 'success',
-      });
-      getTasks();
-    } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(
-          error,
-          'Error in task deletion. Please check connectivity with the server'
-        ),
-        severity: 'error',
-      });
-    }
-  };
-
-  const onDisagreeDeleteTask = () => {
-    setOpenAgreeDialog(false);
-  };
 
   return (
     <div className={styles.container}>
@@ -87,31 +46,15 @@ function TaskButtonGroup(props: Props) {
       >
         <LibraryAdd fontSize="small" />
       </IconButton>
-      <ConfirmDialog
-        title={`Delete "${task.task_identifier || ''}" task?`}
-        content={`You are about to delete a task.
-                    Please make sure that it is not used in any workflow!
-                    Do you agree to continue?`}
-        open={openAgreeDialog}
-        agreeCallback={onAgreeDeleteTask}
-        disagreeCallback={onDisagreeDeleteTask}
-      />
+
+      <DeleteTaskButton task={task} />
+
       <FormDialog
         elementToEdit={task}
         action={action || FormAction.undefined}
         open={openSaveDialog}
         setOpenSaveDialog={setOpenSaveDialog}
       />
-
-      <IconButton
-        className={styles.delete}
-        onClick={() => setOpenAgreeDialog(true)}
-        aria-label="Delete task"
-        color="secondary"
-        size="small"
-      >
-        <Delete fontSize="small" />
-      </IconButton>
     </div>
   );
 }
