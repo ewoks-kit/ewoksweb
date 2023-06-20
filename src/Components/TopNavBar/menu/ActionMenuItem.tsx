@@ -10,7 +10,7 @@ interface Props {
   onClick: () => void;
 }
 
-function MoreMenuItem(props: PropsWithChildren<Props>) {
+function ActionMenuItem(props: PropsWithChildren<Props>) {
   const { icon, label, onClick, children } = props;
 
   const { onClose } = useActionMenuContext();
@@ -30,4 +30,4 @@ function MoreMenuItem(props: PropsWithChildren<Props>) {
   );
 }
 
-export default MoreMenuItem;
+export default ActionMenuItem;

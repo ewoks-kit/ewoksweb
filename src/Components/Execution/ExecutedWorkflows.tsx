@@ -1,11 +1,15 @@
 import type { KeyboardEvent, MouseEvent } from 'react';
 import { useEffect, useState } from 'react';
 import styles from './Execution.module.css';
-import ExecutionFilters from './ExecutionFilters';
 import useStore from '../../store/useStore';
-import { getExecutionEvents } from '../../api/api';
-import type { ExecutedJobsResponse, filterParams } from '../../types';
+import {
+  getExecutionEvents,
+  // useExecutionEvents,
+  // useMutateExecutionEvents,
+} from '../../api/events';
+import type { filterParams } from '../../types';
 import { formatDate } from './utils';
+import EventBoundary from '../../EventBoundary';
 
 const headers = ['Workflow name', 'Start time', 'End time', 'status'];
 
@@ -18,16 +22,15 @@ function ExecutedWorkflows() {
     starttime: '2020-06-13',
   });
 
+  // const { executionEvents } = useExecutionEvents(filters);
+  // const mutateExecutionEvents = useMutateExecutionEvents();
+
   useEffect(() => {
     async function fetchEvents() {
       const response = await getExecutionEvents(filters);
-      if (response.data) {
-        const execJobs = response.data as ExecutedJobsResponse;
-        setExecutedWorkflows(execJobs.jobs, false);
-      } else {
-        /* eslint-disable no-console */
-        console.log('no response data');
-      }
+
+      const execJobs = response.jobs;
+      setExecutedWorkflows(execJobs, false);
     }
 
     fetchEvents();
@@ -42,6 +45,18 @@ function ExecutedWorkflows() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // useEffect(() => {
+  //   setExecutedWorkflows(executionEvents.jobs, false);
+
+  //   const interval = setInterval(() => {
+  //     mutateExecutionEvents(filters);
+  //   }, 30_000);
+
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, [executionEvents, filters, mutateExecutionEvents, setExecutedWorkflows]);
+
   function handleRowClick(rowId: string) {
     if (selectedRow === rowId) {
       setSelectedRow('');
@@ -54,79 +69,68 @@ function ExecutedWorkflows() {
 
   function handleCloseDialog(event: MouseEvent<HTMLButtonElement>) {
     event.stopPropagation();
-    console.log(showDialog);
     setShowDialog(false);
   }
 
-  function handleKeyDown(
-    event: KeyboardEvent<HTMLDivElement>,
-    rowId: string | undefined
-  ) {
-    if (event.key === 'Enter' && rowId) {
-      event.preventDefault();
-      handleRowClick(rowId);
-    }
-  }
-
   return (
-    <div className={styles.executionTable}>
-      <ExecutionFilters />
-      <div className={styles.executionRow}>
-        {headers.map((header) => (
-          <div className={styles.executionCell} key={header}>
-            {header}
-          </div>
-        ))}
-      </div>
-      {executedWorkflows.map((workflowEvents) => (
-        <div
-          key={`${workflowEvents[0].job_id || ''} ${
-            workflowEvents[0].time || 'time'
-          }`}
-          className={`${styles.executionRow} ${
-            selectedRow === workflowEvents[0].job_id ? styles.highlighted : ''
-          } ${
-            (workflowEvents[workflowEvents.length - 1].error &&
-              styles.workflowErrorRow) ||
-            ''
-          }`}
-          onClick={() => handleRowClick(workflowEvents[0].job_id || '')}
-          onKeyDown={(event) => handleKeyDown(event, workflowEvents[0].job_id)}
-          tabIndex={0}
-          role="button"
-        >
-          <div className={styles.executionCell}>
-            {workflowEvents[1]?.workflow_id ||
-              workflowEvents[0]?.workflow_id ||
-              'No id'}
-          </div>
-          <div className={styles.executionCell}>
-            {formatDate(workflowEvents[1]?.time || '')}
-          </div>
-          <div className={styles.executionCell}>
-            {workflowEvents[1]?.executing || ''}
-          </div>
-          <div className={styles.executionCell}>
-            {workflowEvents[1]?.status || ''}
-          </div>
-          {showDialog && (
-            <div className={styles.dialogOverlay}>
-              <div className={styles.dialog}>
-                <div className={styles.dialogContent}>
-                  All workflow Events in details
-                  <button
-                    onClick={(event) => handleCloseDialog(event)}
-                    type="submit"
-                  >
-                    Close
-                  </button>
+    <EventBoundary>
+      <div className={styles.executionTable}>
+        {/* <div className={styles.executionRow}>
+          {headers.map((header) => (
+            <div className={styles.executionCell} key={header}>
+              {header}
+            </div>
+          ))}
+        </div> */}
+        {executedWorkflows.map((workflowEvents) => (
+          <button
+            key={workflowEvents[0].job_id}
+            className={styles.executionItem}
+            data-highlight={
+              selectedRow === workflowEvents[0].job_id || undefined
+            }
+            data-error={
+              workflowEvents[workflowEvents.length - 1].error === true ||
+              undefined
+            }
+            onClick={() => handleRowClick(workflowEvents[0].job_id || '')}
+            tabIndex={0}
+            type="button"
+          >
+            <label className={styles.executionCell}>
+              {workflowEvents[1]?.workflow_id ||
+                workflowEvents[0]?.workflow_id ||
+                'No id'}
+            </label>
+            <label className={styles.executionCell}>
+              {formatDate(workflowEvents[1]?.time || '')}
+            </label>
+            <label className={styles.executionCell}>
+              {workflowEvents[1]?.executing || ''}
+            </label>
+            <label className={styles.executionCell}>
+              {workflowEvents[1]?.status || ''}
+              {workflowEvents[workflowEvents.length - 1].error?.toString()}
+            </label>
+            {showDialog && (
+              <div className={styles.dialogOverlay}>
+                <div className={styles.dialog}>
+                  <div className={styles.dialogContent}>
+                    All workflow Events in details
+                    <button
+                      onClick={(event) => handleCloseDialog(event)}
+                      type="submit"
+                    >
+                      Close
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
+            )}
+          </button>
+        ))}
+      </div>
+    </EventBoundary>
   );
 }
 

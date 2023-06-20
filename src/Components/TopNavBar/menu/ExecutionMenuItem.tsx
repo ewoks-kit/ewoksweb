@@ -44,7 +44,7 @@ function ExecutionMenuItem() {
       <ActionMenuItem
         icon={SendIcon}
         label="Execute workflow"
-        onClick={checkAndExecute}
+        onClick={execute}
       />
       <ConfirmDialog
         title="There are unsaved changes"
