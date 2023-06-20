@@ -4,6 +4,7 @@ import type {
   GraphEwoks,
   GraphRF,
   Icon,
+  Task,
   WorkflowDescription,
 } from './types';
 import type { AxiosError, AxiosResponse } from 'axios';
@@ -154,4 +155,20 @@ export function getEdgesData(): Map<string, EwoksRFLinkData> {
 
 export function getEdgeData(id: string): EwoksRFLinkData | undefined {
   return useEdgeDataStore.getState().edgesData.get(id);
+}
+
+export function getTaskName(task: Task): string {
+  const { task_identifier } = task;
+
+  if (!task_identifier) {
+    return '';
+  }
+
+  const task_members = task_identifier.split('.');
+
+  if (task_members.length === 0) {
+    return task_identifier;
+  }
+
+  return task_members[task_members.length - 1];
 }
