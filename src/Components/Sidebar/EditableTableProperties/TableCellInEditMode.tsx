@@ -104,7 +104,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
       <FormControl fullWidth style={{ marginLeft: '5px' }}>
         <Input
           value={row[name]}
-          type="number"
+          type={row.type}
           name={name}
           onChange={(e) => onChange(e, row, index)}
           className={classes.input}
