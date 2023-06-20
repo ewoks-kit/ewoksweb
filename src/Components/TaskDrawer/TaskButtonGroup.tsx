@@ -12,49 +12,38 @@ import { useGetTasks } from '../TopNavBar/hooks';
 import { Delete, Edit, LibraryAdd } from '@material-ui/icons';
 import styles from './TaskButtonGroup.module.css';
 
-function TaskButtonGroup() {
-  const [elementToEdit, setElementToEdit] = useState<Task>({});
+interface Props {
+  task: Task;
+}
+
+function TaskButtonGroup(props: Props) {
+  const { task } = props;
+
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
-  const [doAction, setDoAction] = useState<FormAction>();
+  const [action, setAction] = useState<
+    FormAction.cloneTask | FormAction.editTask
+  >();
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
 
-  const initializedTask = useStore((state) => state.initializedTask);
-  const selectedTask = useStore((state) => state.selectedTask);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const tasks = useStore((state) => state.tasks);
 
-  function onAction(action: FormAction, element?: string) {
-    setDoAction(action);
-
-    if (['cloneTask', 'editTask'].includes(action)) {
-      const task = tasks.find((tas) => tas.task_identifier === element);
-      if (task) {
-        setElementToEdit(task);
-        setOpenSaveDialog(true);
-        return;
-      }
-    }
-
-    if (action === 'newTask') {
-      setElementToEdit(initializedTask);
-      setOpenSaveDialog(true);
-    }
+  function onEditOrClone(
+    actionType: FormAction.cloneTask | FormAction.editTask
+  ) {
+    setAction(actionType);
+    setOpenSaveDialog(true);
   }
-
-  const deleteTaskDialog = () => {
-    setOpenAgreeDialog(true);
-  };
 
   const getTasks = useGetTasks();
 
-  const agreeDeleteTask = async () => {
+  const onAgreeDeleteTask = async () => {
     setOpenAgreeDialog(false);
-    if (!selectedTask.task_identifier) {
+    if (!task.task_identifier) {
       return;
     }
 
     try {
-      await deleteTask(selectedTask.task_identifier);
+      await deleteTask(task.task_identifier);
       setOpenSnackbar({
         open: true,
         text: `Task was successfully deleted!`,
@@ -73,7 +62,7 @@ function TaskButtonGroup() {
     }
   };
 
-  const disAgreeDeleteTask = () => {
+  const onDisagreeDeleteTask = () => {
     setOpenAgreeDialog(false);
   };
 
@@ -82,9 +71,7 @@ function TaskButtonGroup() {
       <IconButton
         className={styles.edit}
         aria-label="Edit task details"
-        onClick={() =>
-          onAction(FormAction.editTask, selectedTask.task_identifier)
-        }
+        onClick={() => onEditOrClone(FormAction.editTask)}
         color="primary"
         size="small"
       >
@@ -93,9 +80,7 @@ function TaskButtonGroup() {
 
       <IconButton
         className={styles.clone}
-        onClick={() =>
-          onAction(FormAction.cloneTask, selectedTask.task_identifier)
-        }
+        onClick={() => onEditOrClone(FormAction.cloneTask)}
         aria-label="Clone task"
         color="primary"
         size="small"
@@ -103,24 +88,24 @@ function TaskButtonGroup() {
         <LibraryAdd fontSize="small" />
       </IconButton>
       <ConfirmDialog
-        title={`Delete "${selectedTask.task_identifier || ''}" task?`}
+        title={`Delete "${task.task_identifier || ''}" task?`}
         content={`You are about to delete a task.
                     Please make sure that it is not used in any workflow!
                     Do you agree to continue?`}
         open={openAgreeDialog}
-        agreeCallback={agreeDeleteTask}
-        disagreeCallback={disAgreeDeleteTask}
+        agreeCallback={onAgreeDeleteTask}
+        disagreeCallback={onDisagreeDeleteTask}
       />
       <FormDialog
-        elementToEdit={elementToEdit}
-        action={doAction || FormAction.undefined}
+        elementToEdit={task}
+        action={action || FormAction.undefined}
         open={openSaveDialog}
         setOpenSaveDialog={setOpenSaveDialog}
       />
 
       <IconButton
         className={styles.delete}
-        onClick={deleteTaskDialog}
+        onClick={() => setOpenAgreeDialog(true)}
         aria-label="Delete task"
         color="secondary"
         size="small"
