@@ -24,7 +24,7 @@ it('gets to editing when the appropriate button is pressed', () => {
   cy.contains('tutorial_Graph').should('not.exist');
 
   cy.location().should((loc) => {
-    expect(loc.hash).to.eq('#/edit-workflows');
+    expect(loc.hash).to.eq('/edit-workflows');
     expect(loc.host).to.eq('localhost:3000');
   });
 
@@ -38,7 +38,7 @@ it('gets to editing when the appropriate button is pressed', () => {
 //   cy.get('h1').should('include.text', 'tutorial_Graph');
 
 //   cy.location().should((loc) => {
-//     expect(loc.hash).to.eq('#/edit-workflows');
+//     expect(loc.hash).to.eq('/edit-workflows');
 //     expect(loc.host).to.eq('localhost:3000');
 //   });
 // });

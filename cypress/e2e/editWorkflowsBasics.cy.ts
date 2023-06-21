@@ -1,12 +1,12 @@
 describe('structure and basics for edit-workflows', () => {
   before(() => {
-    cy.visit('http://localhost:3000/#/edit-workflows');
+    cy.visit('http://localhost:3000/edit-workflows');
   });
 
   it('should be in the right page', () => {
     cy.location().should((loc) => {
-      // expect(loc.hash).to.eq('#/edit-workflows');
-      // expect(loc.hash).not.to.eq('#/monitor-workflows');
+      // expect(loc.hash).to.eq('/edit-workflows');
+      // expect(loc.hash).not.to.eq('/monitor-workflows');
       expect(loc.host).to.eq('localhost:3000');
     });
   });

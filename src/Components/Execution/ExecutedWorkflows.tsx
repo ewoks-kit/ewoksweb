@@ -7,8 +7,6 @@ import { formatDate } from './utils';
 import EventBoundary from '../../EventBoundary';
 
 function ExecutedWorkflows() {
-  const [selectedRow, setSelectedRow] = useState<string>();
-  const [showDialog, setShowDialog] = useState(false);
   const executedWorkflows = useStore((state) => state.executedWorkflows);
   const setExecutedWorkflows = useStore((state) => state.setExecutedWorkflows);
   const [filters] = useState<filterParams>({
@@ -30,16 +28,6 @@ function ExecutedWorkflows() {
     };
   }, [executionEvents, filters, mutateExecutionEvents, setExecutedWorkflows]);
 
-  function handleRowClick(rowId: string) {
-    if (selectedRow === rowId) {
-      setSelectedRow('');
-      setShowDialog(false);
-    } else {
-      setSelectedRow(rowId);
-      setShowDialog(true);
-    }
-  }
-
   return (
     <EventBoundary>
       <div className={styles.executionTable}>
@@ -47,14 +35,10 @@ function ExecutedWorkflows() {
           <button
             key={workflowEvents[0].job_id}
             className={styles.executionItem}
-            data-highlight={
-              selectedRow === workflowEvents[0].job_id || undefined
-            }
             data-error={
               workflowEvents[workflowEvents.length - 1].error === true ||
               undefined
             }
-            onClick={() => handleRowClick(workflowEvents[0].job_id || '')}
             tabIndex={0}
             type="button"
           >
@@ -73,24 +57,6 @@ function ExecutedWorkflows() {
               {workflowEvents[1]?.status || ''}
               {workflowEvents[workflowEvents.length - 1].error?.toString()}
             </label>
-            {showDialog && (
-              <div className={styles.dialogOverlay}>
-                <div className={styles.dialog}>
-                  <div className={styles.dialogContent}>
-                    All workflow Events in details
-                    <button
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        setShowDialog(false);
-                      }}
-                      type="submit"
-                    >
-                      Close
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
           </button>
         ))}
       </div>
