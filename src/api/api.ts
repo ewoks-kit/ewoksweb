@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { GraphEwoks, WorkflowDescription, filterParams } from '../types';
+import type { GraphEwoks, WorkflowDescription } from '../types';
 
 export const axiosRequest = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URL,

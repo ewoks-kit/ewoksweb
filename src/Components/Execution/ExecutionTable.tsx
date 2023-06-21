@@ -22,7 +22,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import ExecutionFilters from './ExecutionFilters';
 import useStore from '../../store/useStore';
-import type { Event, ExecutedJobsResponse } from '../../types';
+import type { Event } from '../../types';
 import { Link } from 'react-router-dom';
 import { Fab, makeStyles } from '@material-ui/core';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';

@@ -14,7 +14,6 @@ import {
 import { getExecutionEvents } from '../../api/events';
 import useStore from '../../store/useStore';
 import type {
-  ExecutedJobsResponse,
   WorkflowDescription,
   filterParams,
   PropertyChangedEvent,
@@ -108,7 +107,8 @@ export default function ExecutionFilters() {
       const execJobs = response.jobs;
       setExecutedWorkflows(execJobs, false);
     } catch (error) {
-      console.log(error);
+      // eslint-disable-next-line no-console
+      console.warn(error);
     }
   }
 

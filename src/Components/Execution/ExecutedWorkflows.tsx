@@ -1,4 +1,3 @@
-import type { KeyboardEvent, MouseEvent } from 'react';
 import { useEffect, useState } from 'react';
 import styles from './Execution.module.css';
 import useStore from '../../store/useStore';
@@ -10,8 +9,6 @@ import {
 import type { filterParams } from '../../types';
 import { formatDate } from './utils';
 import EventBoundary from '../../EventBoundary';
-
-const headers = ['Workflow name', 'Start time', 'End time', 'status'];
 
 function ExecutedWorkflows() {
   const [selectedRow, setSelectedRow] = useState<string>();
@@ -67,21 +64,9 @@ function ExecutedWorkflows() {
     }
   }
 
-  function handleCloseDialog(event: MouseEvent<HTMLButtonElement>) {
-    event.stopPropagation();
-    setShowDialog(false);
-  }
-
   return (
     <EventBoundary>
       <div className={styles.executionTable}>
-        {/* <div className={styles.executionRow}>
-          {headers.map((header) => (
-            <div className={styles.executionCell} key={header}>
-              {header}
-            </div>
-          ))}
-        </div> */}
         {executedWorkflows.map((workflowEvents) => (
           <button
             key={workflowEvents[0].job_id}
@@ -97,18 +82,18 @@ function ExecutedWorkflows() {
             tabIndex={0}
             type="button"
           >
-            <label className={styles.executionCell}>
+            <label className={styles.executionData}>
               {workflowEvents[1]?.workflow_id ||
                 workflowEvents[0]?.workflow_id ||
                 'No id'}
             </label>
-            <label className={styles.executionCell}>
+            <label className={styles.executionData}>
               {formatDate(workflowEvents[1]?.time || '')}
             </label>
-            <label className={styles.executionCell}>
+            <label className={styles.executionData}>
               {workflowEvents[1]?.executing || ''}
             </label>
-            <label className={styles.executionCell}>
+            <label className={styles.executionData}>
               {workflowEvents[1]?.status || ''}
               {workflowEvents[workflowEvents.length - 1].error?.toString()}
             </label>
@@ -118,7 +103,10 @@ function ExecutedWorkflows() {
                   <div className={styles.dialogContent}>
                     All workflow Events in details
                     <button
-                      onClick={(event) => handleCloseDialog(event)}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setShowDialog(false);
+                      }}
                       type="submit"
                     >
                       Close
