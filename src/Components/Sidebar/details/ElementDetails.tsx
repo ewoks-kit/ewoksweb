@@ -12,7 +12,7 @@ function ElementDetails({ selectedElement }: SelectedElementRF) {
       ) : isNodeRF(selectedElement) &&
         selectedElement.type !== 'graphInput' &&
         selectedElement.type !== 'graphOutput' ? (
-        <NodeDetails key={selectedElement.id} {...selectedElement} />
+        <NodeDetails {...selectedElement} />
       ) : (
         isEdgeRF(selectedElement) && (
           <LinkDetails key={selectedElement.id} {...selectedElement} />

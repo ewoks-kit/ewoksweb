@@ -1,5 +1,5 @@
 import useStore from '../../../store/useStore';
-import TextButtonSave from './TextButtonSave';
+import TextAutosave from './TextAutosave';
 
 export default function GraphDetails() {
   const graphInfo = useStore((state) => state.graphInfo);
@@ -21,17 +21,17 @@ export default function GraphDetails() {
 
   return (
     <>
-      <TextButtonSave
+      <TextAutosave
         label="Label"
         defaultValue={graphInfo.label || ''}
         onValueSave={handleSaveLabel}
       />
-      <TextButtonSave
+      <TextAutosave
         label="Comment"
         defaultValue={graphInfo.uiProps?.comment || ''}
         onValueSave={handleSaveComment}
       />
-      <TextButtonSave
+      <TextAutosave
         label="Category"
         defaultValue={graphInfo.category || ''}
         onValueSave={handleSaveCategory}

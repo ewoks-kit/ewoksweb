@@ -14,18 +14,17 @@ import styles from '../EditSidebar.module.css';
 interface Props {
   nodeId: string;
   nodeData: EwoksRFNodeData;
-  onPropChange: (
+  handlePropChange: (
     propKeyValue: {
       task_identifier?: string;
       node_icon?: string;
     },
     nodeData: EwoksRFNodeData
   ) => void;
-  entryClassName?: string;
 }
 
 function NodeInfo(props: Props) {
-  const { nodeId, nodeData, entryClassName, onPropChange } = props;
+  const { nodeId, nodeData, handlePropChange } = props;
 
   const editableTaskProperties = [
     {
@@ -94,19 +93,18 @@ function NodeInfo(props: Props) {
                   id={id}
                   label={label}
                   value={value || ''}
-                  propChanged={(propKeyValue) =>
-                    onPropChange(propKeyValue, nodeData)
+                  onPropChange={(propKeyValue) =>
+                    handlePropChange(propKeyValue, nodeData)
                   }
-                  editProps
                 />
               ) : (
-                <div key={id} className={entryClassName}>
+                <div key={id}>
                   <b>{label}:</b> {value}
                 </div>
               )
             )}
             {NonEditableTaskProperties.map(({ id, label, value }) => (
-              <div key={id} className={entryClassName}>
+              <div key={id}>
                 <b>{label}:</b>{' '}
                 {Array.isArray(value) ? value.join(', ') : value}
               </div>
