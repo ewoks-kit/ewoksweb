@@ -70,15 +70,16 @@ export function addConnectionToGraph(
     type: 'default',
     animated: false,
     markerEnd: { type: MarkerType.ArrowClosed },
-    style: { stroke: '#96a5f9', strokeWidth: '2.5' },
-    labelBgStyle: {
-      fill: 'rgb(223, 226, 247)',
-      color: 'rgb(50, 130, 219)',
-      fillOpacity: 1,
-    },
+    style: { stroke: '#96a5f9', strokeWidth: '3px' },
     labelBgPadding: [8, 4],
     labelBgBorderRadius: 4,
-    labelStyle: { fill: 'blue', fontWeight: 500, fontSize: 14 },
+    labelStyle: { fill: 'rgb(150, 165, 249)', fontWeight: 500, fontSize: 14 },
+    labelBgStyle: {
+      fill: 'rgb(223, 226, 247)',
+      fillOpacity: 1,
+      strokeWidth: '3px',
+      stroke: 'rgb(150, 165, 249)',
+    },
   };
 
   return link;
