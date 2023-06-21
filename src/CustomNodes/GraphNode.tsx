@@ -11,7 +11,7 @@ import useNodeDataStore from '../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../utils/typeGuards';
 import { getNodesData } from '../utils';
 
-function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
+function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   const { getNodes, getEdges } = useReactFlow();
 
   const { selected, id } = props;
@@ -156,4 +156,4 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
   );
 }
 
-export default memo(FunctionNode);
+export default memo(GraphNode);
