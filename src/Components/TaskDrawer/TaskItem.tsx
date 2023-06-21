@@ -44,7 +44,7 @@ function TaskItem(props: Props) {
           </IconBoundary>
           <label className={styles.itemLabel}>{getTaskName(task)}</label>
         </button>
-        {isSelected && <TaskButtonGroup />}
+        {isSelected && <TaskButtonGroup task={task} />}
       </div>
     </Tooltip>
   );
