@@ -1,6 +1,7 @@
 import { Tooltip } from '@material-ui/core';
 import IconBoundary from '../../IconBoundary';
 import type { Task } from '../../types';
+import { getTaskName } from '../../utils';
 import { attachTaskInfo } from '../Canvas/utils';
 import TaskIcon from '../Sidebar/TaskIcon';
 import TaskButtonGroup from './TaskButtonGroup';
@@ -41,11 +42,9 @@ function TaskItem(props: Props) {
           <IconBoundary>
             <TaskIcon name={icon} alt={task_identifier} />
           </IconBoundary>
-          <label className={styles.itemLabel}>
-            {task_identifier.split('.').pop()}
-          </label>
+          <label className={styles.itemLabel}>{getTaskName(task)}</label>
         </button>
-        {isSelected && <TaskButtonGroup />}
+        {isSelected && <TaskButtonGroup task={task} />}
       </div>
     </Tooltip>
   );

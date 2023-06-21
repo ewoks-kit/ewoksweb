@@ -47,7 +47,7 @@ export function toRFEwoksLinks(
       );
       const color = uiProps.style?.stroke || 'rgb(60, 81, 202)';
 
-      const conditionsToRF = conditions.map<Condition>((con) => {
+      const conditionsForFront = conditions.map<Condition>((con) => {
         return {
           name: con.source_output?.toString(),
           value: con.value,
@@ -58,7 +58,7 @@ export function toRFEwoksLinks(
         id: `${source}:${uiProps.sourceHandle ?? ''}->${target}:${
           uiProps.targetHandle ?? ''
         }_${id++}`,
-        label: calcLabel(uiProps, conditionsToRF, data_mapping),
+        label: calcLabel(uiProps, conditionsForFront, data_mapping),
         source: source.toString(),
         target: target.toString(),
 
@@ -101,7 +101,7 @@ export function toRFEwoksLinks(
           required,
           sub_target,
           sub_source,
-          conditions: conditionsToRF,
+          conditions: conditionsForFront,
           map_all_data:
             map_all_data === undefined
               ? data_mapping.length === 0

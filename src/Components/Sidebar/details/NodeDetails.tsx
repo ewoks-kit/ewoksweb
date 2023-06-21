@@ -1,19 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { EwoksRFNodeData } from '../../../types';
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Checkbox,
-  Grid,
-  Switch,
-  Typography,
-} from '@material-ui/core';
-import EditTaskProp from './EditTaskProp';
-import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
+import { Box, Checkbox, Grid, Switch, Typography } from '@material-ui/core';
 import SidebarTooltip from '../SidebarTooltip';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import NodeLabelComment from './NodeLabelComment';
 import DefaultInputs from '../EditableTableProperties/DefaultInputs';
 import { useReactFlow } from 'reactflow';
@@ -25,11 +13,10 @@ import {
 import { useNodesIds } from '../../../store/graph-hooks';
 import type { Node } from 'reactflow';
 import NodeDataMapping from '../EditableTableProperties/NodeDataMapping';
+import NodeInfo from './NodeInfo';
 
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(selectedElement: Node) {
-  const classes = useDashboardStyles();
-
   const nodeData = useNodeDataStore((state) =>
     state.nodesData.get(selectedElement.id)
   );
@@ -48,59 +35,12 @@ export default function NodeDetails(selectedElement: Node) {
     !nodeData.ewoks_props.default_error_attributes?.map_all_data
   );
 
-  const NonEditableTaskProperties = [
-    { id: 'id', label: 'Id', value: selectedElement.id },
-    {
-      id: 'task_type',
-      label: 'Type',
-      value: nodeData.task_props.task_type || '',
-    },
-    {
-      id: 'task_generator',
-      label: 'Generator',
-      value: nodeData.ewoks_props.task_generator || '',
-    },
-    {
-      id: 'task_category',
-      label: 'Category',
-      value: nodeData.task_props.task_category || '',
-    },
-    {
-      id: 'optional_input_names',
-      label: 'Optional Inputs',
-      value: nodeData.task_props.optional_input_names || [],
-    },
-    {
-      id: 'required_input_names',
-      label: 'Required Inputs',
-      value: nodeData.task_props.required_input_names || [],
-    },
-    {
-      id: 'output_names',
-      label: 'Outputs',
-      value: nodeData.task_props.output_names || [],
-    },
-  ];
-
-  const editableTaskProperties = [
-    {
-      id: 'task_identifier',
-      label: 'Task identifier',
-      value: nodeData.task_props.task_identifier || '',
-    },
-    {
-      id: 'node_icon',
-      label: 'Icon',
-      value: nodeData.ui_props.icon || 'default',
-    },
-  ];
-
   useEffect(() => {
     setInputsComplete(nodeData.ewoks_props.inputs_complete || false);
     setDefaultErrorNode(nodeData.ewoks_props.default_error_node || false);
   }, [nodeData]);
 
-  function propChanged(
+  function handlePropChange(
     propKeyValue: {
       task_identifier?: string;
       node_icon?: string;
@@ -175,7 +115,7 @@ export default function NodeDetails(selectedElement: Node) {
     });
   }
 
-  function defaulErrortNodeChanged(checked: boolean) {
+  function defaultErrorNodeChanged(checked: boolean) {
     mergeNodeData(selectedElement.id, {
       ewoks_props: {
         default_error_node: checked,
@@ -221,7 +161,7 @@ export default function NodeDetails(selectedElement: Node) {
         <div>
           <Checkbox
             checked={defaultErrorNode}
-            onChange={(event) => defaulErrortNodeChanged(event.target.checked)}
+            onChange={(event) => defaultErrorNodeChanged(event.target.checked)}
             inputProps={{ 'aria-label': 'controlled' }}
             color="primary"
           />
@@ -256,50 +196,11 @@ export default function NodeDetails(selectedElement: Node) {
         </div>
       )}
 
-      <SidebarTooltip
-        text={`These properties are being populated by the task the
-        specific node is based on. If you need to have them create a new Task
-        with the appropriate properties and use it.`}
-      >
-        <Accordion className="Accordions-sidebar">
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-          >
-            <Typography>Node Info</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <div style={{ width: '100%' }}>
-              {editableTaskProperties.map(({ id, label, value }) =>
-                ['ppfmethod', 'method', 'script'].includes(
-                  nodeData.task_props.task_type || ''
-                ) ? (
-                  <EditTaskProp
-                    key={id}
-                    id={id}
-                    label={label}
-                    value={value || ''}
-                    propChanged={(propKeyValue) =>
-                      propChanged(propKeyValue, nodeData)
-                    }
-                    editProps
-                  />
-                ) : (
-                  <div key={id} className={classes.detailsLabels}>
-                    <b>{label}:</b> {value}
-                  </div>
-                )
-              )}
-              {NonEditableTaskProperties.map(({ id, label, value }) => (
-                <div key={id} className={classes.detailsLabels}>
-                  <b>{label}:</b>{' '}
-                  {typeof value === 'object' ? value.join(', ') : value}
-                </div>
-              ))}
-            </div>
-          </AccordionDetails>
-        </Accordion>
-      </SidebarTooltip>
+      <NodeInfo
+        nodeId={selectedElement.id}
+        nodeData={nodeData}
+        onPropChange={handlePropChange}
+      />
     </Box>
   );
 }

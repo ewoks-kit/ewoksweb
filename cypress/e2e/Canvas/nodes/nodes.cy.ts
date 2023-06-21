@@ -13,9 +13,7 @@ it('selects a default node', () => {
 });
 
 it('changes label of node', () => {
-  cy.get('[data-cy="node-edge-label"]')
-    .first()
-    .should('be.visible')
+  cy.findByRole('textbox', { name: 'Edit label' })
     .click()
     .type('Always and forever...');
 
@@ -23,9 +21,7 @@ it('changes label of node', () => {
 });
 
 it('changes comment of node', () => {
-  cy.get('[data-cy="node-edge-label"]')
-    .last()
-    .should('be.visible')
+  cy.findByRole('textbox', { name: 'Edit comment' })
     .click()
     .type('Always and forever comment...');
 
@@ -155,32 +151,9 @@ it('deletes a node by button and keyboard', () => {
 it('clones a node by button', () => {
   cy.get('.react-flow__node').first().click({ force: true });
 
-  cy.get('[aria-controls="editSidebar-dropdown-menu"]').click();
-
   cy.get('#editSidebar-dropdown-menu').within(() => {
     cy.contains('[role="sidebarMenuItem"]', 'Clone Node').click();
   });
 
   cy.get('.react-flow__node').should('have.length', 16);
 });
-
-// TODO: find a way to set a color from the firefox color picker
-// TODO: changing the state with setState wont show on the canvas border attr???
-// it('changes color of node', () => {
-//   cy.get('.react-flow').contains('Always and forever...').parent().as('node');
-
-//   cy.contains('Color').siblings().first().click();
-//   cy.contains('custom').should('be.visible');
-//   cy.get('input[type=color]').invoke('val', '#ff0000').trigger('change');
-
-//   cy.get('@node')
-//     .parent()
-//     .should('have.attr', 'style')
-//     .and('include', 'border: 2px solid rgb(233, 235, 247)');
-
-//   cy.get('@node')
-//     .parent()
-//     .should('have.attr', 'style')
-//     .and('include', 'border: 2px solid rgb(0, 0, 0)');
-
-// });

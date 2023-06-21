@@ -27,4 +27,18 @@ Cypress.Commands.add('loadApp', () => {
   cy.loadGraph('tutorial_Graph');
 });
 
+Cypress.Commands.add('dragNodeInCanvas', (task_identifier: string) => {
+  const dataTransfer = new DataTransfer();
+
+  cy.findByRole('button', {
+    name: task_identifier,
+  }).trigger('dragstart', {
+    dataTransfer,
+  });
+
+  cy.get('.react-flow').trigger('drop', {
+    dataTransfer,
+  });
+});
+
 addWaitForStableDomCommand({ pollInterval: 300, timeout: 1000 });

@@ -6,19 +6,9 @@ describe('drag and drop nodes', () => {
   it('should drag and drop a node from add nodes into canvas', () => {
     cy.get('.react-flow__node').should('have.length', 17);
 
-    const dataTransfer = new DataTransfer();
-
     cy.findByRole('button', { name: 'ewokscore' }).click();
 
-    cy.findByRole('button', {
-      name: 'ewokscore.tests.examples.tasks.sumtask.SumTask',
-    }).trigger('dragstart', {
-      dataTransfer,
-    });
-
-    cy.get('.react-flow').trigger('drop', {
-      dataTransfer,
-    });
+    cy.dragNodeInCanvas('ewokscore.tests.examples.tasks.sumtask.SumTask');
 
     cy.get('.react-flow__node').should('have.length', 18);
   });

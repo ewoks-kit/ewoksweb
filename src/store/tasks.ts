@@ -1,5 +1,6 @@
 import type { Task, State } from '../types';
 import type { SetState } from 'zustand';
+import { getTaskName } from '../utils';
 
 export interface TasksSlice {
   tasks: Task[];
@@ -11,7 +12,9 @@ const tasks = (set: SetState<State>): TasksSlice => ({
   setTasks: (allTasks) => {
     set((state) => ({
       ...state,
-      tasks: allTasks,
+      tasks: allTasks.sort((a, b) => {
+        return getTaskName(a).localeCompare(getTaskName(b));
+      }),
     }));
   },
 });

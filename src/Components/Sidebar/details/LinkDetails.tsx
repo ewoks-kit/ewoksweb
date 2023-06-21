@@ -2,7 +2,6 @@ import type { ChangeEvent } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { Checkbox, Grid, Switch, Typography } from '@material-ui/core';
-import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
 import DataMappingComponent from '../EditableTableProperties/DataMapping';
 import Conditions from '../EditableTableProperties/Conditions';
 import SidebarTooltip from '../SidebarTooltip';
@@ -11,9 +10,9 @@ import { assertEdgeDataDefined, isEdgeRF } from '../../../utils/typeGuards';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import type { Edge } from 'reactflow';
 
-export default function LinkDetails(selectedElement: Edge) {
-  const classes = useDashboardStyles();
+import styles from './Details.module.css';
 
+export default function LinkDetails(selectedElement: Edge) {
   const edgeData = useEdgeDataStore((state) =>
     state.edgesData.get(selectedElement.id)
   );
@@ -125,19 +124,19 @@ export default function LinkDetails(selectedElement: Edge) {
           />
           <b>Required</b>
         </div>
-        <div className={classes.detailsLabels}>
+        <div className={styles.entry}>
           <b>Source:</b> {selectedElement.source}
         </div>
-        <div className={classes.detailsLabels}>
+        <div className={styles.entry}>
           <b>Target:</b> {selectedElement.target}
         </div>
         {edgeData.sub_target && (
-          <div className={classes.detailsLabels}>
+          <div className={styles.entry}>
             <b>Sub_target:</b> {edgeData.sub_target}
           </div>
         )}
         {edgeData.sub_target_attributes && (
-          <div className={classes.detailsLabels}>
+          <div className={styles.entry}>
             <b>Sub_target_attributes:</b>
             {edgeData.sub_target_attributes}
           </div>
