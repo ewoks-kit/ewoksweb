@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './Execution.module.css';
 import useStore from '../../store/useStore';
-import {
-  getExecutionEvents,
-  // useExecutionEvents,
-  // useMutateExecutionEvents,
-} from '../../api/events';
+import { useExecutionEvents, useMutateExecutionEvents } from '../../api/events';
 import type { filterParams } from '../../types';
 import { formatDate } from './utils';
 import EventBoundary from '../../EventBoundary';
@@ -19,40 +15,20 @@ function ExecutedWorkflows() {
     starttime: '2020-06-13',
   });
 
-  // const { executionEvents } = useExecutionEvents(filters);
-  // const mutateExecutionEvents = useMutateExecutionEvents();
+  const { executionEvents } = useExecutionEvents(filters);
+  const mutateExecutionEvents = useMutateExecutionEvents();
 
   useEffect(() => {
-    async function fetchEvents() {
-      const response = await getExecutionEvents(filters);
-
-      const execJobs = response.jobs;
-      setExecutedWorkflows(execJobs, false);
-    }
-
-    fetchEvents();
+    setExecutedWorkflows(executionEvents.jobs, false);
 
     const interval = setInterval(() => {
-      fetchEvents();
+      mutateExecutionEvents(filters);
     }, 30_000);
 
     return () => {
       clearInterval(interval);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // useEffect(() => {
-  //   setExecutedWorkflows(executionEvents.jobs, false);
-
-  //   const interval = setInterval(() => {
-  //     mutateExecutionEvents(filters);
-  //   }, 30_000);
-
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // }, [executionEvents, filters, mutateExecutionEvents, setExecutedWorkflows]);
+  }, [executionEvents, filters, mutateExecutionEvents, setExecutedWorkflows]);
 
   function handleRowClick(rowId: string) {
     if (selectedRow === rowId) {
