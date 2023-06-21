@@ -17,12 +17,12 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import type {
   Task,
-  FormAction,
   PropertyChangedEvent,
   GraphDetails,
   EwoksRFNodeData,
   EwoksRFLinkData,
 } from '../../types';
+import { FormAction } from '../../types';
 import { rfToEwoks, textForError } from '../../utils';
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import useStore from '../../store/useStore';
@@ -34,6 +34,7 @@ import { assertStr } from '../../utils/typeGuards';
 import IconBoundary from '../../IconBoundary';
 import { useReactFlow } from 'reactflow';
 import { getNodesData, getEdgesData } from '../../utils';
+import TaskForm from './taskform/TaskForm';
 
 interface FormDialogProps {
   elementToEdit: Task | GraphDetails;
@@ -388,6 +389,16 @@ export default function FormDialog(props: FormDialogProps) {
     setOverwrite(event.target.checked);
   };
 
+  if (action === FormAction.newTask) {
+    return (
+      <TaskForm
+        isOpen={isOpen}
+        onClose={handleClose}
+        elementToEdit={elementToEdit as Task}
+      />
+    );
+  }
+
   return (
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>
@@ -434,7 +445,6 @@ export default function FormDialog(props: FormDialogProps) {
                   <Select
                     labelId="taskTypeInFormDialog"
                     value={field.value}
-                    label="Task Type"
                     onChange={field.handleChange}
                   >
                     {task_types.map((type) => (
