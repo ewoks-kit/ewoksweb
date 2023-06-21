@@ -20,17 +20,15 @@ function TaskButtonGroup(props: Props) {
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
   const [action, setAction] = useState<ActionType>();
 
-  function onEditOrClone(actionType: ActionType) {
-    setAction(actionType);
-    setOpenSaveDialog(true);
-  }
-
   return (
     <div className={styles.container}>
       <IconButton
         className={styles.edit}
         aria-label="Edit task details"
-        onClick={() => onEditOrClone(FormAction.editTask)}
+        onClick={() => {
+          setAction(FormAction.editTask);
+          setOpenSaveDialog(true);
+        }}
         color="primary"
         size="small"
       >
@@ -39,7 +37,10 @@ function TaskButtonGroup(props: Props) {
 
       <IconButton
         className={styles.clone}
-        onClick={() => onEditOrClone(FormAction.cloneTask)}
+        onClick={() => {
+          setAction(FormAction.cloneTask);
+          setOpenSaveDialog(true);
+        }}
         aria-label="Clone task"
         color="primary"
         size="small"

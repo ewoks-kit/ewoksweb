@@ -1,7 +1,7 @@
 import { IconButton } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
 import { useState } from 'react';
-import { deleteTask } from '../../api/tasks';
+import { deleteTask as deleteTaskOnServer } from '../../api/tasks';
 import useStore from '../../store/useStore';
 import type { Task } from '../../types';
 import { textForError } from '../../utils';
@@ -17,25 +17,25 @@ interface Props {
 function DeleteTaskButton(props: Props) {
   const { task } = props;
 
-  const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
+  const [isDialogOpen, setOpenDialog] = useState(false);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const getTasks = useGetTasks();
 
-  const onAgreeDeleteTask = async () => {
-    setOpenAgreeDialog(false);
+  async function deleteTask() {
     if (!task.task_identifier) {
       return;
     }
 
     try {
-      await deleteTask(task.task_identifier);
+      await deleteTaskOnServer(task.task_identifier);
       setOpenSnackbar({
         open: true,
         text: `Task was successfully deleted!`,
         severity: 'success',
       });
+      // Update task list
       getTasks();
     } catch (error) {
       setOpenSnackbar({
@@ -47,11 +47,7 @@ function DeleteTaskButton(props: Props) {
         severity: 'error',
       });
     }
-  };
-
-  const onDisagreeDeleteTask = () => {
-    setOpenAgreeDialog(false);
-  };
+  }
 
   return (
     <>
@@ -60,14 +56,17 @@ function DeleteTaskButton(props: Props) {
         content={`You are about to delete a task.
               Please make sure that it is not used in any workflow!
               Do you agree to continue?`}
-        open={openAgreeDialog}
-        agreeCallback={onAgreeDeleteTask}
-        disagreeCallback={onDisagreeDeleteTask}
+        open={isDialogOpen}
+        agreeCallback={async () => {
+          setOpenDialog(false);
+          await deleteTask();
+        }}
+        disagreeCallback={() => setOpenDialog(false)}
       />
 
       <IconButton
         className={styles.delete}
-        onClick={() => setOpenAgreeDialog(true)}
+        onClick={() => setOpenDialog(true)}
         aria-label="Delete task"
         color="secondary"
         size="small"
