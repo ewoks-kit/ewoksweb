@@ -55,7 +55,8 @@ const nodeTypes = {
   ppfmethod: DataNode,
   graphInput: DataNode,
   graphOutput: DataNode,
-  class: DiscreteInputOutputNode,
+  class: DataNode,
+  discreteInputOutput: DiscreteInputOutputNode,
 };
 
 function Canvas() {

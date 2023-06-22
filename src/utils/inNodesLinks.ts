@@ -25,6 +25,8 @@ export function inNodesLinks(
           id: inNod.id,
           label: inNod.uiProps?.label ?? inNod.id,
           task_type: 'graphInput',
+          // TODO: This Start-End shouldn't be used to make decisions
+          // as it is user-edited in custom Tasks
           task_identifier: 'Start-End',
           uiProps: {
             type: 'input',

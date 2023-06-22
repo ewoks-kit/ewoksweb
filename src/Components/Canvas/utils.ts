@@ -67,6 +67,7 @@ export function addConnectionToGraph(
     target,
     sourceHandle: sourceHandle ?? undefined,
     targetHandle: targetHandle ?? undefined,
+    // This is the default edge supported by react-flow
     type: 'default',
     animated: false,
     markerEnd: { type: MarkerType.ArrowClosed },

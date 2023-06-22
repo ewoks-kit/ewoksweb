@@ -22,6 +22,7 @@ import type {
   GraphDetails,
   EwoksRFNodeData,
   EwoksRFLinkData,
+  TaskType,
 } from '../../types';
 import { rfToEwoks, textForError } from '../../utils';
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
@@ -289,7 +290,7 @@ export default function FormDialog(props: FormDialogProps) {
   }
 
   function taskTypeChanged(event: PropertyChangedEvent) {
-    const val = event.target.value as string;
+    const val = event.target.value as TaskType;
     setTaskType(val);
     setElement({
       ...element,
