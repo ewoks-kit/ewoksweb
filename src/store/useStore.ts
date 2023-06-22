@@ -23,7 +23,6 @@ import executedWorkflows from './executedWorkflows';
 import watchedWorkflows from './watchedWorkflows';
 import canvasGraphChanged from './canvasGraphChanged';
 import {
-  initializedTask,
   initializedGraph,
   initializedRFGraph,
 } from '../utils/InitializedEntities';
@@ -52,7 +51,6 @@ const useStore = create<State>((set, get) => ({
   ...undoIndex(set, get),
   ...undoRedo(set, get),
   ...workingGraph(set, get),
-  initializedTask,
   initializedGraph,
   initializedRFGraph,
 }));

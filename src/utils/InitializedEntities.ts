@@ -1,14 +1,4 @@
-import type { GraphEwoks, GraphRF, Task } from '../types';
-
-export const initializedTask: Task = {
-  task_identifier: '',
-  task_type: 'class',
-  icon: '',
-  category: '',
-  optional_input_names: [],
-  output_names: [],
-  required_input_names: [],
-};
+import type { GraphEwoks, GraphRF } from '../types';
 
 export const initializedGraph: GraphEwoks = {
   graph: {
