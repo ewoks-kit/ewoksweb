@@ -1,9 +1,7 @@
 import { Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import { useState } from 'react';
-import FormDialog from '../General/FormDialog';
-import { initializedTask } from '../../utils/InitializedEntities';
-import { FormAction } from '../../types';
+import TaskForm from '../General/taskform/TaskForm';
 
 function CreateTaskButton() {
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
@@ -19,11 +17,9 @@ function CreateTaskButton() {
       >
         New task
       </Button>
-      <FormDialog
-        elementToEdit={initializedTask}
-        action={FormAction.newTask}
-        open={openSaveDialog}
-        setOpenSaveDialog={setOpenSaveDialog}
+      <TaskForm
+        isOpen={openSaveDialog}
+        onClose={() => setOpenSaveDialog(false)}
       />
     </>
   );
