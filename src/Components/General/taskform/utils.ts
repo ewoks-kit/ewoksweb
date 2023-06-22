@@ -1,10 +1,11 @@
-import { postTask } from '../../../api/tasks';
+import { postTask, putTask } from '../../../api/tasks';
 import type { Task } from '../../../types';
 import type { TaskFields } from './models';
 
 export async function submitFormData(
   formData: TaskFields,
-  initial_task?: Task
+  initial_task?: Task,
+  editExisting?: boolean
 ) {
   const parsedData = {
     ...initial_task,
@@ -27,7 +28,9 @@ export async function submitFormData(
     throw new Error('A task cannot have multiple outputs of the same name!');
   }
 
-  await postTask(parsedData);
+  const saveTask = editExisting ? putTask : postTask;
+
+  await saveTask(parsedData);
 }
 
 export function hasDuplicates(arr: string[]): boolean {
