@@ -7,9 +7,7 @@ describe('new Task form', () => {
     cy.findByRole('button', { name: 'New task' }).click();
     cy.waitForStableDOM();
 
-    cy.findByRole('textbox', { name: 'New Name - Identifier' }).type(
-      'Always-and-forever'
-    );
+    cy.findByRole('textbox', { name: 'Identifier' }).type('Always-and-forever');
 
     cy.findByRole('textbox', { name: 'Category' }).should('be.enabled');
 

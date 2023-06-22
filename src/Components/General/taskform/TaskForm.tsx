@@ -30,11 +30,12 @@ import FormField from './FormField';
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  elementToEdit: Task | undefined;
+  elementToEdit?: Task;
+  editExistingTask?: boolean;
 }
 
 function TaskForm(props: Props) {
-  const { isOpen, onClose, elementToEdit } = props;
+  const { isOpen, onClose, elementToEdit, editExistingTask } = props;
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const refreshTasks = useGetTasks();
 
@@ -58,7 +59,7 @@ function TaskForm(props: Props) {
   });
   const onSubmit = handleSubmit(async (data: TaskFields) => {
     try {
-      await submitFormData(data, elementToEdit);
+      await submitFormData(data, elementToEdit, editExistingTask);
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -92,16 +93,18 @@ function TaskForm(props: Props) {
     <Dialog open={isOpen} onClose={onClose}>
       {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <form onSubmit={onSubmit}>
-        <DialogTitle>Give the new Task details</DialogTitle>
+        <DialogTitle>
+          {`${editExistingTask ? `Edit` : `Create`} task`}
+        </DialogTitle>
         <DialogContent>
           {formState.errors.task_identifier && (
-            <Alert severity="error">Please give a task name !</Alert>
+            <Alert severity="error">Please give a task identifier !</Alert>
           )}
           {formState.errors.task_type && (
             <Alert severity="error">Please give a task type !</Alert>
           )}
           <DialogContentText>
-            The Task will be saved to file with the name-identifier you will
+            The Task will be saved to the server with the identifier you
             provide.
           </DialogContentText>
           <Controller
@@ -109,7 +112,11 @@ function TaskForm(props: Props) {
             control={control}
             rules={{ required: true }}
             render={({ field }) => (
-              <FormField label="New Name - Identifier" {...field} />
+              <FormField
+                disabled={editExistingTask}
+                label="Identifier"
+                {...field}
+              />
             )}
           />
           <Controller
