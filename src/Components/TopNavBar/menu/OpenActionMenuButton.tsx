@@ -9,6 +9,7 @@ import DownloadMenuItem from './DownloadMenuItem';
 import UploadMenuItem from './UploadMenuItem';
 
 import styles from './ActionMenu.module.css';
+import ExecutionMenuItem from './ExecutionMenuItem';
 
 interface Props {
   checkAndNewGraph: () => void;
@@ -66,6 +67,7 @@ export default function OpenActionMenuButton(props: Props) {
           <UploadMenuItem />
           <DownloadMenuItem />
           <DiscoverMenuItem />
+          <ExecutionMenuItem />
           <ActionMenuItem
             icon={Settings}
             label="Settings"

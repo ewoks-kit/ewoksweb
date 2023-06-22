@@ -1,7 +1,7 @@
-import { GetApp } from '@material-ui/icons';
-import { useReactFlow } from 'reactflow';
 import useStore from '../../../store/useStore';
 import type { EwoksRFLinkData, EwoksRFNodeData, GraphRF } from '../../../types';
+import { useReactFlow } from 'reactflow';
+import { GetApp } from '@material-ui/icons';
 import { getEdgesData, getNodesData, rfToEwoks } from '../../../utils';
 import curateGraph from '../utils/curateGraph';
 import ActionMenuItem from './ActionMenuItem';
@@ -48,6 +48,7 @@ function DownloadMenuItem() {
       );
     }
   }
+
   return <ActionMenuItem icon={GetApp} label="Download" onClick={saveToDisk} />;
 }
 

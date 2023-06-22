@@ -10,7 +10,7 @@ Cypress.on('uncaught:exception', (err) => {
 });
 
 Cypress.Commands.add('loadAppWithoutGraph', () => {
-  cy.visit('http://localhost:3000/#/edit-workflows');
+  cy.visit('http://localhost:3000/edit-workflows');
 });
 
 Cypress.Commands.add('loadGraph', (name: string) => {
