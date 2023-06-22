@@ -13,19 +13,16 @@ describe('new Task form', () => {
 
     cy.findByRole('textbox', { name: 'Category' }).should('be.enabled');
 
-    cy.findByRole('textbox', { name: 'Optional Inputs' })
-      .should('be.disabled')
-      .as('optionalInputsBox');
-    cy.findByRole('textbox', { name: 'Required Inputs' })
-      .should('be.disabled')
-      .as('requiredInputsBox');
-    cy.findByRole('textbox', { name: 'Outputs' })
-      .should('be.disabled')
-      .as('outputsBox');
-    cy.findByRole('button', { name: 'Icon' }).should('not.be.disabled');
+    cy.findByRole('textbox', { name: 'Optional inputs' }).as(
+      'optionalInputsBox'
+    );
+    cy.findByRole('textbox', { name: 'Required inputs' }).as(
+      'requiredInputsBox'
+    );
+    cy.findByRole('textbox', { name: 'Outputs' }).as('outputsBox');
 
     // Test `class` Task type
-    cy.findByRole('button', { name: 'Task Type' }).click();
+    cy.findByRole('button', { name: /^Task type/ }).click();
     cy.findByRole('option', { name: 'class' }).click();
 
     cy.get('@optionalInputsBox').should('be.enabled');
@@ -33,23 +30,25 @@ describe('new Task form', () => {
     cy.get('@outputsBox').should('be.enabled');
 
     // Test `method` Task type
-    cy.findByRole('button', { name: 'Task Type' }).click();
+    cy.findByRole('button', { name: /^Task type/ }).click();
     cy.findByRole('option', { name: 'method' }).click();
 
     cy.get('@optionalInputsBox').should('be.disabled');
     cy.get('@requiredInputsBox').should('be.disabled');
     cy.get('@outputsBox').should('be.disabled');
+    cy.get('@outputsBox').should('have.value', 'return_value');
 
     // Test `script` Task type
-    cy.findByRole('button', { name: 'Task Type' }).click();
+    cy.findByRole('button', { name: /^Task type/ }).click();
     cy.findByRole('option', { name: 'script' }).click();
 
     cy.get('@optionalInputsBox').should('be.disabled');
     cy.get('@requiredInputsBox').should('be.disabled');
     cy.get('@outputsBox').should('be.disabled');
+    cy.get('@outputsBox').should('have.value', 'return_code');
 
     // Test `ppfmethod` Task type
-    cy.findByRole('button', { name: 'Task Type' }).click();
+    cy.findByRole('button', { name: /^Task type/ }).click();
     cy.findByRole('option', { name: 'ppfport' }).click();
 
     cy.get('@optionalInputsBox').should('be.disabled');
@@ -58,7 +57,7 @@ describe('new Task form', () => {
 
     cy.findByRole('textbox', { name: 'Category' }).type('till-forever-ends');
 
-    cy.findByRole('button', { name: 'Icon' }).click();
+    cy.findByRole('button', { name: /^Icon/ }).click();
     cy.findByRole('option', { name: 'default.png' }).click();
   });
 });
