@@ -9,7 +9,7 @@ describe('select visualize links', () => {
       .should(
         'have.attr',
         'style',
-        'color: rgb(206, 92, 0); fill: rgb(206, 92, 0); font-weight: 500; font-size: 14px;'
+        'fill: rgb(206, 92, 0); font-weight: 500; font-size: 14px; color: rgb(206, 92, 0);'
       )
       .siblings('rect')
       .should(
