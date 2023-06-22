@@ -10,6 +10,7 @@ import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import { calcTasksForLink } from './calcTasksForLink';
 import { createDataMappingData } from './utils';
+import { defaultLinkStyle } from '../Components/Canvas/utils';
 
 // DOC: from GraphEwoks get EwoksRFLinks
 // - tempGraph: the graph to transform its links
@@ -45,7 +46,7 @@ export function toRFEwoksLinks(
         newNodeSubgraphs,
         tasks
       );
-      const color = uiProps.style?.stroke || 'rgb(60, 81, 202)';
+      const color = uiProps.style?.stroke || '#96a5f9';
 
       const conditionsForFront = conditions.map<Condition>((con) => {
         return {
@@ -67,23 +68,19 @@ export function toRFEwoksLinks(
         type: uiProps.type || '',
         markerEnd: uiProps.markerEnd ?? '',
         animated: uiProps.animated ?? false,
+        ...defaultLinkStyle,
         style: {
-          stroke: uiProps.style?.stroke || '#96a5f9',
-          strokeWidth: '3px',
-        },
-        labelBgStyle: {
-          fill: 'rgb(223, 226, 247)',
-          fillOpacity: 1,
-          strokeWidth: '3px',
+          ...defaultLinkStyle.style,
           stroke: color,
         },
-        labelBgPadding: [8, 4],
-        labelBgBorderRadius: 4,
+        labelBgStyle: {
+          ...defaultLinkStyle.labelBgStyle,
+          stroke: color,
+        },
         labelStyle: {
+          ...defaultLinkStyle.labelStyle,
           color,
           fill: color,
-          fontWeight: 500,
-          fontSize: 14,
         },
         data: {
           startEnd: startEnd || false,
