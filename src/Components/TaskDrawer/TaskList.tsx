@@ -7,6 +7,7 @@ import {
 import Typography from '@material-ui/core/Typography';
 import { ViewList, ViewModule } from '@material-ui/icons';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { useState } from 'react';
 import useStore from 'store/useStore';
 import useConfigStore from '../../store/useConfigStore';
 import AddNoteButton from './AddNoteButton';
@@ -19,8 +20,7 @@ import styles from './TaskList.module.css';
 // DOC: Hosts the nodes-tasks in their categories to drag and drop them into canvas
 function TaskList() {
   const tasks = useStore((state) => state.tasks);
-  const selectedTask = useStore((state) => state.selectedTask);
-  const setSelectedTask = useStore((state) => state.setSelectedTask);
+  const [selectedTaskId, setSelectTaskId] = useState<string>();
   const { sidebarLayout, setSidebarLayout } = useConfigStore();
 
   return (
@@ -60,10 +60,8 @@ function TaskList() {
                   <TaskItem
                     key={task.task_identifier}
                     task={task}
-                    onClick={() => setSelectedTask(task)}
-                    isSelected={
-                      task.task_identifier === selectedTask.task_identifier
-                    }
+                    onClick={() => setSelectTaskId(task.task_identifier)}
+                    isSelected={task.task_identifier === selectedTaskId}
                   />
                 ))}
               {category === 'General' && (

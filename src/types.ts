@@ -11,7 +11,6 @@ import type { GettingFromServerSlice } from './store/gettingFromServer';
 import type { GraphOrSubgraphSlice } from './store/graphOrSubgraph';
 import type { OpenSettingsDrawerSlice } from './store/openSettingsDrawer';
 import type { OpenSnackbarSlice } from './store/openSnackbar';
-import type { SelectedTaskSlice } from './store/selectedTask';
 import type { SubgraphsStackSlice } from './store/subgraphsStack';
 import type { SubGraphSlice } from './store/subGraph';
 import type { TasksSlice } from './store/tasks';
@@ -168,7 +167,6 @@ export interface State
     GraphOrSubgraphSlice,
     OpenSettingsDrawerSlice,
     OpenSnackbarSlice,
-    SelectedTaskSlice,
     SubgraphsStackSlice,
     SubGraphSlice,
     TasksSlice,
