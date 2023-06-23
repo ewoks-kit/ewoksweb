@@ -88,30 +88,16 @@ function calcInOutNodes(
             (link) => link.source === nod.id && link.target === nodConnected.id
           );
 
-    if (nodConnected.data.task_props.task_type === 'graph') {
-      // find the link and get the sub_node it is connected to in the graph
-      nodes.push(
-        calcNodeProps(
-          true,
-          nod,
-          nodConnected,
-          graph_links,
-          link_index,
-          inputOrOutput
-        )
-      );
-    } else {
-      nodes.push(
-        calcNodeProps(
-          false,
-          nod,
-          nodConnected,
-          graph_links,
-          link_index,
-          inputOrOutput
-        )
-      );
-    }
+    nodes.push(
+      calcNodeProps(
+        nodConnected.data.task_props.task_type === 'graph',
+        nod,
+        nodConnected,
+        graph_links,
+        link_index,
+        inputOrOutput
+      )
+    );
   });
 
   if (nodeObjConnectedTo.length === 0) {

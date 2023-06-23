@@ -187,6 +187,11 @@ export interface Action {
   graph: GraphRF;
 }
 
+// These types are being calculated when opening a workflow
+// for using them in validation.
+// They are not recalculated though wjilw editing the graph.
+// Keeping them until we re-implement the graph-validation
+// No need to be saved on the server.
 export type NodeInGraphType =
   | 'input_output'
   | 'input'
@@ -200,8 +205,7 @@ export interface NodeProps {
   withImage?: boolean;
   withLabel?: boolean;
   moreHandles?: boolean;
-  isGraph: boolean;
-  type: NodeInGraphType;
+  type: TaskType;
   label: string;
   selected: boolean;
   color?: string;

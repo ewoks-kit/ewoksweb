@@ -24,7 +24,6 @@ function Node({
   moreHandles,
   withImage,
   withLabel,
-  isGraph,
   type,
   label,
   color,
@@ -86,7 +85,7 @@ function Node({
         arrow
       >
         <span style={displayNode} className="icons">
-          {!isGraph && type !== 'graphOutput' && (
+          {!['graphOutput', 'graph'].includes(type) && (
             <Handle
               type="source"
               position={Position.Right}
@@ -96,9 +95,7 @@ function Node({
               isConnectable
             />
           )}
-          {!isGraph &&
-            type !== 'graphOutput' &&
-            type !== 'graphInput' &&
+          {!['graphOutput', 'graphInput', 'graph'].includes(type) &&
             moreHandles && (
               <div id="choice" role="button" tabIndex={0}>
                 {/* TODO: break the handles */}
@@ -154,7 +151,7 @@ function Node({
               />
             </IconBoundary>
           )}
-          {!isGraph && type !== 'graphInput' && (
+          {!['graphInput', 'graph'].includes(type) && (
             <Handle
               type="target"
               position={Position.Left}
@@ -167,9 +164,7 @@ function Node({
               isValidConnection={isValidConnection}
             />
           )}
-          {!isGraph &&
-            type !== 'graphOutput' &&
-            type !== 'graphInput' &&
+          {!['graphOutput', 'graphInput', 'graph'].includes(type) &&
             moreHandles && (
               <>
                 <Handle
@@ -198,7 +193,9 @@ function Node({
                 />
               </>
             )}
-          {isGraph && <span style={style.contentWrapper}>{content}</span>}
+          {type === 'graph' && (
+            <span style={style.contentWrapper}>{content}</span>
+          )}
         </span>
       </Tooltip>
     </div>

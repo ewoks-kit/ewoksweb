@@ -4,7 +4,7 @@ import Node from './Node';
 import { contentStyle as style } from './nodeStyles';
 import { assertNodeDataDefined } from '../utils/typeGuards';
 import useNodeDataStore from '../store/useNodeDataStore';
-import type { NodeInGraphType } from '../types';
+import type { TaskType } from '../types';
 
 function DataNode(args: NodeProps) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
@@ -14,8 +14,7 @@ function DataNode(args: NodeProps) {
 
   return (
     <Node
-      isGraph={false}
-      type={args.type as NodeInGraphType}
+      type={args.type as TaskType}
       label={nodeData.ewoks_props.label || ''}
       selected={args.selected}
       color="#ced3ee"
