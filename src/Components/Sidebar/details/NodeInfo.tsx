@@ -7,9 +7,10 @@ import {
 import { ExpandMore } from '@material-ui/icons';
 import type { EwoksRFNodeData } from '../../../types';
 import SidebarTooltip from '../SidebarTooltip';
-import EditTaskProp from './EditTaskProp';
+import TaskProperty from './TaskProperty';
 
 import styles from '../EditSidebar.module.css';
+import { useEffect, useState } from 'react';
 
 interface Props {
   nodeId: string;
@@ -26,18 +27,44 @@ interface Props {
 function NodeInfo(props: Props) {
   const { nodeId, nodeData, handlePropChange } = props;
 
-  const editableTaskProperties = [
-    {
-      id: 'task_identifier',
-      label: 'Task identifier',
-      value: nodeData.task_props.task_identifier,
-    },
-    {
-      id: 'node_icon',
-      label: 'Icon',
-      value: nodeData.ui_props.icon || 'default',
-    },
-  ];
+  const [tIdent, setTIdent] = useState<string>(
+    nodeData.task_props.task_identifier
+  );
+
+  useEffect(() => {
+    console.log(nodeData.task_props.task_identifier);
+
+    setTIdent(nodeData.task_props.task_identifier);
+  }, [nodeData.task_props.task_identifier, nodeId]);
+
+  const editableTaskProperties = () => {
+    console.log([
+      {
+        id: 'task_identifier',
+        label: 'Task identifier',
+        value: tIdent,
+      },
+      {
+        id: 'node_icon',
+        label: 'Icon',
+        value: nodeData.ui_props.icon || 'default',
+      },
+    ]);
+
+    const ti = tIdent;
+    return [
+      {
+        id: 'task_identifier',
+        label: 'Task identifier',
+        value: ti,
+      },
+      {
+        id: 'node_icon',
+        label: 'Icon',
+        value: nodeData.ui_props.icon || 'default',
+      },
+    ];
+  };
 
   const NonEditableTaskProperties = [
     { id: 'id', label: 'Id', value: nodeId },
@@ -73,6 +100,10 @@ function NodeInfo(props: Props) {
     },
   ];
 
+  const isEditable = ['ppfmethod', 'method', 'script'].includes(
+    nodeData.task_props.task_type
+  );
+
   return (
     <SidebarTooltip text="These are properties of the task on which the node is based. They can only be changed by editing the relevant task.">
       <Accordion className={styles.accordion} data-cy="node_info">
@@ -84,30 +115,29 @@ function NodeInfo(props: Props) {
         </AccordionSummary>
         <AccordionDetails>
           <div style={{ width: '100%' }}>
-            {editableTaskProperties.map(({ id, label, value }) =>
-              ['ppfmethod', 'method', 'script'].includes(
-                nodeData.task_props.task_type
-              ) ? (
-                <EditTaskProp
-                  key={id}
-                  id={id}
-                  label={label}
-                  value={value || ''}
-                  onPropChange={(propKeyValue) =>
-                    handlePropChange(propKeyValue, nodeData)
-                  }
-                />
-              ) : (
-                <div key={id}>
-                  <b>{label}:</b> {value}
-                </div>
-              )
-            )}
+            {editableTaskProperties().map(({ id, label, value }) => (
+              <TaskProperty
+                editable={isEditable}
+                key={id}
+                id={id}
+                label={label}
+                value={value || ''}
+                onPropChange={(propKeyValue) =>
+                  handlePropChange(propKeyValue, nodeData)
+                }
+              />
+            ))}
             {NonEditableTaskProperties.map(({ id, label, value }) => (
-              <div key={id}>
-                <b>{label}:</b>{' '}
-                {Array.isArray(value) ? value.join(', ') : value}
-              </div>
+              <TaskProperty
+                editable={false}
+                key={id}
+                id={id}
+                label={label}
+                value={value || ''}
+                onPropChange={(propKeyValue) =>
+                  handlePropChange(propKeyValue, nodeData)
+                }
+              />
             ))}
           </div>
         </AccordionDetails>
