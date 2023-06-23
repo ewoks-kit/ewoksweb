@@ -11,7 +11,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import bendingText from 'CustomEdges/BendingTextEdge';
 import multilineText from 'CustomEdges/MultilineTextEdge';
 import getAround from 'CustomEdges/GetAroundEdge';
-import FunctionNode from 'CustomNodes/FunctionNode';
+import GraphNode from 'CustomNodes/GraphNode';
 import NoteNode from 'CustomNodes/NoteNode';
 import ExecutionStepsNode from 'CustomNodes/ExecutionStepsNode';
 import DataNode from 'CustomNodes/DataNode';
@@ -49,7 +49,7 @@ const edgeTypes = {
 const nodeTypes = {
   executionSteps: ExecutionStepsNode,
   note: NoteNode,
-  graph: FunctionNode,
+  graph: GraphNode,
   method: DataNode,
   ppfmethod: DataNode,
   graphInput: DataNode,

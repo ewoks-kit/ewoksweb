@@ -40,15 +40,7 @@ function Node({
   const graphInfo = useStore((state) => state.graphInfo);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const displayNode = {
-    textAlign: 'center' as const,
-    width: `${nodeWidth || 100}px`,
-    minWidth: '60px', // for standard width
-    maxWidth: '300px',
-    display: ['graphInput', 'graphOutput'].includes(type) ? 'flex' : 'inline',
-    margin: '2px',
-    padding: '2px',
-  };
+  const nodWidth = { width: `${nodeWidth || 100}px` };
 
   const isValidConnection = (connection: Connection) => {
     const graphRf: GraphRF = {
@@ -84,7 +76,7 @@ function Node({
         enterDelay={800}
         arrow
       >
-        <span style={displayNode} className="icons">
+        <span style={{ ...style.displayNode, ...nodWidth }} className="icons">
           {!['graphOutput', 'graph'].includes(type) && (
             <Handle
               type="source"
