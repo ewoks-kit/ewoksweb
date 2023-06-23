@@ -59,7 +59,6 @@ function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
 export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
   const tempNodes: EwoksRFNode[] = [...nodes].filter(
     (nod) =>
-      nod.data.task_props.task_type &&
       !['graphInput', 'graphOutput', 'note'].includes(
         nod.data.task_props.task_type
       )

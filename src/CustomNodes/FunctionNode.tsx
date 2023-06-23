@@ -53,7 +53,7 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
       withLabel={uiProps.withLabel}
       colorBorder={uiProps.colorBorder}
       // type is calculated in calcNodeType for subgraphs-inNodes-outNodes
-      type={uiProps.type || ''}
+      type={uiProps.type || 'internal'}
       label={nodeData.ewoks_props.label || ''}
       selected={selected}
       color={uiProps.exists ? '#ced3ee' : 'red'}

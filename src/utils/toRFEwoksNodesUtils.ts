@@ -1,4 +1,10 @@
-import type { EwoksRFNode, GraphEwoks, GraphNodes, Task } from '../types';
+import type {
+  EwoksRFNode,
+  GraphEwoks,
+  GraphNodes,
+  NodeInGraphType,
+  Task,
+} from '../types';
 
 export function inputsAll(tempGraph: GraphEwoks): string[] {
   return tempGraph.graph.input_nodes?.map((nod) => nod.node) || [];
@@ -14,7 +20,7 @@ export function calcNodeType(
   outputs: string[],
   task_type: string,
   id: string
-): string {
+): NodeInGraphType {
   const isInput = inputs.includes(id);
   const isOutput = outputs.includes(id);
   if (isInput && isOutput) {

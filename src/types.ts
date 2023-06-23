@@ -187,13 +187,21 @@ export interface Action {
   graph: GraphRF;
 }
 
+export type NodeInGraphType =
+  | 'input_output'
+  | 'input'
+  | 'output'
+  | 'graphInput'
+  | 'graphOutput'
+  | 'internal';
+
 export interface NodeProps {
   nodeWidth?: number;
   withImage?: boolean;
   withLabel?: boolean;
   moreHandles?: boolean;
   isGraph: boolean;
-  type: string;
+  type: NodeInGraphType;
   label: string;
   selected: boolean;
   color?: string;
@@ -205,11 +213,21 @@ export interface NodeProps {
   details?: boolean;
 }
 
+export type TaskType =
+  | 'graphInput'
+  | 'graph'
+  | 'method'
+  | 'ppfmethod'
+  | 'graphInput'
+  | 'graphOutput'
+  | 'class'
+  | 'note'
+  | 'executionSteps'
+  | 'script';
+
 export interface Task {
-  task_type?: string;
+  task_type?: TaskType;
   task_identifier?: string;
-  default_inputs?: Inputs[];
-  inputs_complete?: boolean;
   task_generator?: string;
   optional_input_names?: string[];
   output_names?: string[];
@@ -288,7 +306,7 @@ export interface EwoksNode {
   id: string;
   label?: string;
   category?: string;
-  task_type: string;
+  task_type: TaskType;
   task_identifier: string;
   default_inputs?: Inputs[];
   inputs_complete?: boolean;
@@ -341,7 +359,7 @@ export interface outputsInputsSub {
 }
 
 export interface RFNodeUiProps {
-  type?: string;
+  type?: NodeInGraphType;
   icon?: string;
   style?: CSSProperties;
   withImage?: boolean;
@@ -359,7 +377,7 @@ export interface RFNodeUiProps {
 }
 
 export interface RFNodeTaskProperties {
-  task_type: string;
+  task_type: TaskType;
   task_identifier: string;
   task_icon?: string;
   task_category?: string;
