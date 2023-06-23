@@ -28,7 +28,6 @@ function Node({
   label,
   color,
   colorBorder: borderColor,
-  content,
   image,
   comment,
   executing,
@@ -185,9 +184,6 @@ function Node({
                 />
               </>
             )}
-          {type === 'graph' && (
-            <span style={style.contentWrapper}>{content}</span>
-          )}
         </span>
       </Tooltip>
     </div>

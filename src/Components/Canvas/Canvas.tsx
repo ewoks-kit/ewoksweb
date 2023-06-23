@@ -31,6 +31,7 @@ import {
   assertNodeDefined,
 } from '../../utils/typeGuards';
 import FallbackMessage from './FallbackMessage';
+import GraphInOutNode from '../../CustomNodes/GraphInOutNode';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -52,8 +53,8 @@ const nodeTypes = {
   graph: GraphNode,
   method: DataNode,
   ppfmethod: DataNode,
-  graphInput: DataNode,
-  graphOutput: DataNode,
+  graphInput: GraphInOutNode,
+  graphOutput: GraphInOutNode,
   class: DataNode,
 };
 
