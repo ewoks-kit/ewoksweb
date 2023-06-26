@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { GraphEwoks, WorkflowDescription, filterParams } from '../types';
+import type { GraphEwoks, WorkflowDescription } from '../types';
 
 export const axiosRequest = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URL,
@@ -45,11 +45,4 @@ export function putWorkflow(workflow: GraphEwoks) {
 // Delete
 export function deleteWorkflow(id: string) {
   return axiosRequest.delete<{ identifier: string }>(`/workflow/${id}`);
-}
-
-// TODO: types for execution API
-// Get executed workflows
-export function getExecutionEvents(queryParams: filterParams) {
-  const query = new URLSearchParams(Object.entries(queryParams));
-  return axiosRequest.get(`/execution/events?${query.toString()}`);
 }

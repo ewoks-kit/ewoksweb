@@ -11,7 +11,6 @@ import type { GettingFromServerSlice } from './store/gettingFromServer';
 import type { GraphOrSubgraphSlice } from './store/graphOrSubgraph';
 import type { OpenSettingsDrawerSlice } from './store/openSettingsDrawer';
 import type { OpenSnackbarSlice } from './store/openSnackbar';
-import type { SelectedTaskSlice } from './store/selectedTask';
 import type { SubgraphsStackSlice } from './store/subgraphsStack';
 import type { SubGraphSlice } from './store/subGraph';
 import type { TasksSlice } from './store/tasks';
@@ -123,7 +122,7 @@ export interface Event {
   workflow_id?: string;
   type?: string;
   time?: string;
-  error?: string;
+  error?: boolean;
   error_message?: string;
   error_traceback?: string;
   node_id?: string;
@@ -168,7 +167,6 @@ export interface State
     GraphOrSubgraphSlice,
     OpenSettingsDrawerSlice,
     OpenSnackbarSlice,
-    SelectedTaskSlice,
     SubgraphsStackSlice,
     SubGraphSlice,
     TasksSlice,
@@ -189,6 +187,11 @@ export interface Action {
   graph: GraphRF;
 }
 
+// These types are being calculated when opening a workflow
+// for using them in validation.
+// They are not recalculated though wjilw editing the graph.
+// Keeping them until we re-implement the graph-validation
+// No need to be saved on the server.
 export type NodeInGraphType =
   | 'input_output'
   | 'input'
@@ -202,12 +205,8 @@ export interface NodeProps {
   withImage?: boolean;
   withLabel?: boolean;
   moreHandles?: boolean;
-  // The following is not needed? type: graph is not taken into account?
-  isGraph: boolean;
-  // the possible types should be given:
-  type: NodeInGraphType;
+  type: TaskType;
   label: string;
-  selected: boolean;
   color?: string;
   colorBorder?: string;
   content: ReactNode;
@@ -227,13 +226,12 @@ export type TaskType =
   | 'class'
   | 'note'
   | 'executionSteps'
-  | 'discreteInputOutput';
+  | 'discreteInputOutput'
+  | 'script';
 
 export interface Task {
   task_type?: TaskType;
   task_identifier?: string;
-  default_inputs?: Inputs[];
-  inputs_complete?: boolean;
   task_generator?: string;
   optional_input_names?: string[];
   output_names?: string[];

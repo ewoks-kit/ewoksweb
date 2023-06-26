@@ -14,10 +14,8 @@ function DataNode(args: NodeProps) {
 
   return (
     <Node
-      isGraph={false}
-      type={args.type as NodeInGraphType}
+      type={nodeData.task_props.task_type}
       label={nodeData.ewoks_props.label || ''}
-      selected={args.selected}
       color="#ced3ee"
       image={uiProps.icon || ''}
       comment={nodeData.comment || ''}

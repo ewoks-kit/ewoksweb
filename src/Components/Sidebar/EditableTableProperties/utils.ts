@@ -10,13 +10,7 @@ import type {
 export const INPUT_TYPES = ['bool', 'number', 'string', 'list', 'dict', 'null'];
 
 export function createData(pair: Condition | Inputs): EditableTableRow {
-  const type =
-    pair.type ??
-    (pair.value === 'true' || pair.value === 'false'
-      ? 'boolean'
-      : pair.value === null
-      ? 'null'
-      : typeof pair.value);
+  const type = getType(pair);
 
   if ('source_output' in pair) {
     return {

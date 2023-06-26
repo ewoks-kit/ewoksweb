@@ -95,7 +95,7 @@ const subGraph = (
       sourcePosition: Position.Right,
       targetPosition: Position.Left,
       id: graphId,
-      // Is this the same with task_props.task_type? Is it used?
+      // TODO: Is this type the same with task_props.task_type? Is it used?
       type: 'graph',
       position: calcCoordinatesFirstNode(nodes),
       data: {

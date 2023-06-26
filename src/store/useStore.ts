@@ -4,7 +4,6 @@ import type { State } from '../types';
 import currentExecutionEvent from './currentExecutionEvent';
 import gettingFromServer from './gettingFromServer';
 import undoRedo from './undoRedo';
-import selectedTask from './selectedTask';
 import workingGraph from './workingGraph';
 import graphRF from './graphRF';
 import allWorkflows from './allWorkflows';
@@ -52,7 +51,6 @@ const useStore = create<State>((set, get) => ({
   ...tasks(set),
   ...undoIndex(set, get),
   ...undoRedo(set, get),
-  ...selectedTask(set),
   ...workingGraph(set, get),
   initializedTask,
   initializedGraph,

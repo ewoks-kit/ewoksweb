@@ -35,7 +35,7 @@ function NoteNode(args: NoteProps) {
   };
 
   const save = () => {
-    // TODO: remove the following onNode editing functionality
+    // TODO: this will be removed as on-node editing is not available
     const newNodeData: EwoksRFNodeData = {
       task_props: { task_type: 'note', task_identifier: args.id },
       ewoks_props: { label: nodeData.ewoks_props.label },

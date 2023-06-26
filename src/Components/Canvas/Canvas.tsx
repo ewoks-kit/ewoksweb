@@ -32,6 +32,7 @@ import {
 } from '../../utils/typeGuards';
 import FallbackMessage from './FallbackMessage';
 import DiscreteInputOutputNode from '../../CustomNodes/DiscreteInputOutputNode';
+import GraphInOutNode from '../../CustomNodes/GraphInOutNode';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -53,8 +54,8 @@ const nodeTypes = {
   graph: GraphNode,
   method: DataNode,
   ppfmethod: DataNode,
-  graphInput: DataNode,
-  graphOutput: DataNode,
+  graphInput: GraphInOutNode,
+  graphOutput: GraphInOutNode,
   class: DataNode,
   discreteInputOutput: DiscreteInputOutputNode,
 };
@@ -202,6 +203,8 @@ function Canvas() {
         icon,
         moreHandles: false,
         nodeWidth: 100,
+        withImage: true,
+        withLabel: true,
       },
     });
     addNodes(newNode);

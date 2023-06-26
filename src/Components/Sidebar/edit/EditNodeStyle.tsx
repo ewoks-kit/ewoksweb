@@ -114,7 +114,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
         </>
       )}
       {!['graphInput', 'graphOutput', 'note'].includes(
-        nodeData.task_props.task_type || ''
+        nodeData.task_props.task_type
       ) && (
         <div>
           <div>
