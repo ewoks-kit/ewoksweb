@@ -4,13 +4,17 @@ import Node from './Node';
 import { contentStyle as style } from './nodeStyles';
 import { assertNodeDataDefined } from '../utils/typeGuards';
 import useNodeDataStore from '../store/useNodeDataStore';
-import type { NodeInGraphType } from '../types';
+import DiscreteInputOutputNode from './DiscreteInputOutputNode';
 
 function DataNode(args: NodeProps) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
   assertNodeDataDefined(nodeData, args.id);
 
   const uiProps = nodeData.ui_props;
+
+  if (uiProps.discreteInputsOutputs) {
+    return <DiscreteInputOutputNode id={args.id} />;
+  }
 
   return (
     <Node

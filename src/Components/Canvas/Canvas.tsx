@@ -205,6 +205,7 @@ function Canvas() {
         nodeWidth: 100,
         withImage: true,
         withLabel: true,
+        discreteInputsOutputs: false,
       },
     });
     addNodes(newNode);

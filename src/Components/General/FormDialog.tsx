@@ -11,7 +11,6 @@ import type {
   GraphDetails,
   EwoksRFNodeData,
   EwoksRFLinkData,
-  TaskType,
 } from '../../types';
 import { FormAction } from '../../types';
 import { rfToEwoks, textForError } from '../../utils';

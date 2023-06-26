@@ -17,7 +17,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const updateNodeInternals = useUpdateNodeInternals();
 
-  function withImageChanged(checked: boolean) {
+  function handleWithImageChange(checked: boolean) {
     mergeNodeData(nodeId, {
       ui_props: {
         withImage: checked,
@@ -25,7 +25,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     });
   }
 
-  function withLabelChanged(checked: boolean) {
+  function handleWithLabelChange(checked: boolean) {
     mergeNodeData(nodeId, {
       ui_props: {
         withLabel: checked,
@@ -33,7 +33,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     });
   }
 
-  const colorBorderChanged = (value: string) => {
+  const handleColorBorderChange = (value: string) => {
     mergeNodeData(nodeId, {
       ui_props: {
         colorBorder: value,
@@ -41,11 +41,20 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     });
   };
 
-  const moreHandlesChanged = (checked: boolean) => {
+  const handleMoreHandlesChange = (checked: boolean) => {
     updateNodeInternals(nodeId);
     mergeNodeData(nodeId, {
       ui_props: {
         moreHandles: checked,
+      },
+    });
+  };
+
+  const handleDiscreteInputsOutputsChange = (checked: boolean) => {
+    updateNodeInternals(nodeId);
+    mergeNodeData(nodeId, {
+      ui_props: {
+        discreteInputsOutputs: checked,
       },
     });
   };
@@ -83,7 +92,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
                   ? true
                   : !!nodeData.ui_props.withImage
               }
-              onChange={(event) => withImageChanged(event.target.checked)}
+              onChange={(event) => handleWithImageChange(event.target.checked)}
               inputProps={{ 'aria-label': 'controlled' }}
             />
             <label htmlFor="withLabel">With Label</label>
@@ -94,7 +103,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
                   ? true
                   : !!nodeData.ui_props.withLabel
               }
-              onChange={(event) => withLabelChanged(event.target.checked)}
+              onChange={(event) => handleWithLabelChange(event.target.checked)}
               inputProps={{ 'aria-label': 'controlled' }}
             />
           </div>
@@ -107,7 +116,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
               id="head"
               name="head"
               value={nodeData.ui_props.colorBorder || ''}
-              onChange={(event) => colorBorderChanged(event.target.value)}
+              onChange={(event) => handleColorBorderChange(event.target.value)}
               style={{ margin: '10px' }}
             />
           </div>
@@ -116,17 +125,32 @@ export default function EditNodeStyle(props: { nodeId: string }) {
       {!['graphInput', 'graphOutput', 'note'].includes(
         nodeData.task_props.task_type
       ) && (
-        <div>
+        <>
           <div>
             <label htmlFor="moreHandles">More handles</label>
             <Checkbox
               name="moreHandles"
               checked={!!nodeData.ui_props.moreHandles}
-              onChange={(event) => moreHandlesChanged(event.target.checked)}
+              onChange={(event) =>
+                handleMoreHandlesChange(event.target.checked)
+              }
               inputProps={{ 'aria-label': 'controlled' }}
             />
           </div>
-        </div>
+          <div>
+            <label htmlFor="discreteInputsOutputs">
+              Discrete Inputs-Outputs
+            </label>
+            <Checkbox
+              name="discreteInputsOutputs"
+              checked={!!nodeData.ui_props.discreteInputsOutputs}
+              onChange={(event) =>
+                handleDiscreteInputsOutputsChange(event.target.checked)
+              }
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </div>
+        </>
       )}
       <div style={{ minWidth: '200px' }}>
         <label htmlFor="nodeSize">Node Size</label>

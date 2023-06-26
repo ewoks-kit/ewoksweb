@@ -205,6 +205,7 @@ export interface NodeProps {
   withImage?: boolean;
   withLabel?: boolean;
   moreHandles?: boolean;
+  discreteInputsOutputs?: boolean;
   type: TaskType;
   label: string;
   color?: string;
@@ -226,7 +227,6 @@ export type TaskType =
   | 'class'
   | 'note'
   | 'executionSteps'
-  | 'discreteInputOutput'
   | 'script';
 
 export interface Task {
@@ -334,6 +334,7 @@ export interface EwoksNodeUiProps {
   task_icon?: string;
   task_category?: string;
   moreHandles?: boolean;
+  discreteInputsOutputs?: boolean;
   details?: boolean;
   executing?: boolean;
   exists?: boolean;
@@ -372,6 +373,7 @@ export interface RFNodeUiProps {
   nodeWidth?: number;
   node_icon?: string;
   moreHandles?: boolean;
+  discreteInputsOutputs?: boolean;
   details?: boolean;
   executing?: boolean;
   exists?: boolean;
