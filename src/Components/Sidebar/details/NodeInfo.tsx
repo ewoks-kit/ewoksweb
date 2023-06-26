@@ -61,7 +61,7 @@ function NodeInfo(props: Props) {
               editable={false}
               id="task_generator"
               label="Generator"
-              value={nodeData.ewoks_props.task_generator || 'None'}
+              value={nodeData.ewoks_props.task_generator}
             />
             <TaskProperty
               editable={false}
@@ -82,7 +82,7 @@ function NodeInfo(props: Props) {
               editable={false}
               id="outputs"
               label="Outputs"
-              value={nodeData.task_props.output_names || 'None'}
+              value={nodeData.task_props.output_names}
             />
           </div>
         </AccordionDetails>

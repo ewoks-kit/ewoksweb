@@ -1,9 +1,17 @@
 import { useState } from 'react';
-import { Checkbox, FormControl, Slider } from '@material-ui/core';
+import {
+  Checkbox,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Slider,
+} from '@material-ui/core';
 import type { ChangeEvent } from 'react';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import { useUpdateNodeInternals } from 'reactflow';
+import { useIcons } from 'api/icons';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(props: { nodeId: string }) {
@@ -14,6 +22,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   const [nodeSize, setNodeSize] = useState<number>(
     nodeData.ui_props.nodeWidth || 100
   );
+  const { icons } = useIcons();
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const updateNodeInternals = useUpdateNodeInternals();
 
@@ -69,6 +78,17 @@ export default function EditNodeStyle(props: { nodeId: string }) {
       });
     }
   }
+
+  const arrowTypeChanged = (event) => {
+    // const type = event.target.value;
+    // if (!isString(type)) {
+    //   return;
+    // }
+    // const newEdge = isMarkerType(type)
+    //   ? { ...element, markerEnd: { type } }
+    //   : { ...element, markerEnd: undefined };
+    // setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+  };
 
   return (
     <FormControl variant="filled" fullWidth>
@@ -143,6 +163,26 @@ export default function EditNodeStyle(props: { nodeId: string }) {
           valueLabelDisplay="on"
         />
       </div>
+      <FormControl
+        variant="outlined"
+        fullWidth
+        // style={{ ...sidebarStyle.formstyleflex }}
+      >
+        <InputLabel id="replace-node-icon">Replace Node Icon</InputLabel>
+        <Select
+          labelId="replace-node-icon"
+          // className={classes.styleLinkDropdowns}
+          value={nodeData.ui_props.node_icon}
+          label="Override Task Icon"
+          onChange={arrowTypeChanged}
+        >
+          {icons.map((icon) => (
+            <MenuItem value={icon.name} key={icon.name}>
+              {icon.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </FormControl>
   );
 }
