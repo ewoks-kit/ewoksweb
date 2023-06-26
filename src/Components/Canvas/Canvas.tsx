@@ -151,8 +151,8 @@ function Canvas() {
     const { task_type, icon, task_identifier } = taskInfo;
 
     const position = rfInstance.project({
-      x: event.clientX - reactFlowBounds.left,
-      y: event.clientY - reactFlowBounds.top,
+      x: event.clientX - reactFlowBounds.left - 100,
+      y: event.clientY - reactFlowBounds.top - 60,
     });
 
     const task = tasks.find(
