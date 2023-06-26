@@ -201,6 +201,8 @@ function Canvas() {
         icon,
         moreHandles: false,
         nodeWidth: 100,
+        withImage: true,
+        withLabel: true,
       },
     });
     addNodes(newNode);

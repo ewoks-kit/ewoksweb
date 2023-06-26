@@ -13,36 +13,20 @@ import NodeLabel from './NodeLabel';
 import useNodeDataStore from '../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../utils/typeGuards';
 
-function GraphInOutNode(
-  //   {
-  //   data: {
-  //     comment,
-  //     ui_props: {
-  //       withImage,
-  //       withLabel,
-  //       type,
-  //       colorBorder: borderColor,
-  //       icon: image,
-  //       executing,
-  //       nodeWidth,
-  //     },
-  //     ewoks_props: { label },
-  //   },
-  // }
-  args: NodeProps<EwoksRFNodeData>
-) {
+function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
   assertNodeDataDefined(nodeData, args.id);
 
   const {
     withImage,
     withLabel,
-    type,
     colorBorder: borderColor,
     icon: image,
     executing,
     nodeWidth,
   } = nodeData.ui_props;
+
+  const { task_type } = nodeData.task_props;
 
   const { getNodes, getEdges } = useReactFlow();
 
@@ -92,8 +76,11 @@ function GraphInOutNode(
         enterDelay={800}
         arrow
       >
-        <span style={{ ...style.displayNode, ...nodWidth }} className="icons">
-          {type === 'graphInput' && (
+        <span
+          style={{ ...style.displayNode, ...nodWidth, display: 'flex' }}
+          className="icons"
+        >
+          {task_type === 'graphInput' && (
             <Handle
               type="source"
               position={Position.Right}
@@ -104,7 +91,7 @@ function GraphInOutNode(
             />
           )}
           <NodeLabel
-            label={args.data.ewoks_props.label || ''}
+            label={nodeData.ewoks_props.label || ''}
             showFull={withLabel}
             showCropped={!withLabel && !withImage}
             color="#ced3ee"
@@ -115,8 +102,8 @@ function GraphInOutNode(
                 image={image}
                 hasSpinner={
                   inExecutionMode &&
-                  type !== 'graphOutput' &&
-                  type !== 'graphInput'
+                  task_type !== 'graphOutput' &&
+                  task_type !== 'graphInput'
                 }
                 spinnerProps={{
                   getting: executing,
@@ -127,7 +114,7 @@ function GraphInOutNode(
               />
             </IconBoundary>
           )}
-          {type === 'graphOutput' && (
+          {task_type === 'graphOutput' && (
             <Handle
               type="target"
               position={Position.Left}

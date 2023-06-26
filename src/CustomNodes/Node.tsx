@@ -14,11 +14,6 @@ import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../utils';
 import NodeLabel from './NodeLabel';
 
-// TODO: examine usage when execution in main
-const execution = () => {
-  return true;
-};
-
 // The basic Node component
 function Node({
   moreHandles,
@@ -76,48 +71,46 @@ function Node({
         arrow
       >
         <span style={{ ...style.displayNode, ...nodWidth }} className="icons">
-          {!['graphOutput', 'graph'].includes(type) && (
-            <Handle
-              type="source"
-              position={Position.Right}
-              id="sr"
-              style={{ ...contentStyle.handle, ...contentStyle.handleSource }}
-              isValidConnection={isValidConnection}
-              isConnectable
-            />
+          <Handle
+            type="source"
+            position={Position.Right}
+            id="sr"
+            style={{ ...contentStyle.handle, ...contentStyle.handleSource }}
+            isValidConnection={isValidConnection}
+            isConnectable
+          />
+
+          {moreHandles && (
+            <div id="choice" role="button" tabIndex={0}>
+              {/* TODO: break the handles */}
+              <Handle
+                type="source"
+                position={Position.Top}
+                id="st"
+                style={{
+                  right: 10,
+                  left: 'auto',
+                  ...contentStyle.handleSource,
+                  ...contentStyle.handleUpDown,
+                }}
+                isConnectable
+                isValidConnection={isValidConnection}
+              />
+              <Handle
+                type="source"
+                position={Position.Bottom}
+                id="sb"
+                style={{
+                  right: 10,
+                  left: 'auto',
+                  ...contentStyle.handleSource,
+                  ...contentStyle.handleUpDown,
+                }}
+                isConnectable
+                isValidConnection={isValidConnection}
+              />
+            </div>
           )}
-          {!['graphOutput', 'graphInput', 'graph'].includes(type) &&
-            moreHandles && (
-              <div id="choice" role="button" tabIndex={0}>
-                {/* TODO: break the handles */}
-                <Handle
-                  type="source"
-                  position={Position.Top}
-                  id="st"
-                  style={{
-                    right: 10,
-                    left: 'auto',
-                    ...contentStyle.handleSource,
-                    ...contentStyle.handleUpDown,
-                  }}
-                  isConnectable
-                  isValidConnection={isValidConnection}
-                />
-                <Handle
-                  type="source"
-                  position={Position.Bottom}
-                  id="sb"
-                  style={{
-                    right: 10,
-                    left: 'auto',
-                    ...contentStyle.handleSource,
-                    ...contentStyle.handleUpDown,
-                  }}
-                  isConnectable
-                  isValidConnection={isValidConnection}
-                />
-              </div>
-            )}
           <NodeLabel
             label={label}
             showFull={withLabel}
@@ -136,54 +129,53 @@ function Node({
                 spinnerProps={{
                   getting: executing,
                   tooltip: 'Execution',
-                  action: execution,
+                  action: () => true,
                 }}
                 onDragStart={(e) => e.preventDefault()}
               />
             </IconBoundary>
           )}
-          {!['graphInput', 'graph'].includes(type) && (
-            <Handle
-              type="target"
-              position={Position.Left}
-              id="tl"
-              style={{
-                ...contentStyle.handle,
-                ...contentStyle.handleTarget,
-              }}
-              isConnectable
-              isValidConnection={isValidConnection}
-            />
+
+          <Handle
+            type="target"
+            position={Position.Left}
+            id="tl"
+            style={{
+              ...contentStyle.handle,
+              ...contentStyle.handleTarget,
+            }}
+            isConnectable
+            isValidConnection={isValidConnection}
+          />
+
+          {moreHandles && (
+            <>
+              <Handle
+                type="target"
+                position={Position.Bottom}
+                id="tb"
+                style={{
+                  left: 20,
+                  ...contentStyle.handleTarget,
+                  ...contentStyle.handleUpDown,
+                }}
+                isConnectable
+                isValidConnection={isValidConnection}
+              />
+              <Handle
+                type="target"
+                position={Position.Top}
+                id="tt"
+                style={{
+                  left: 20,
+                  ...contentStyle.handleTarget,
+                  ...contentStyle.handleUpDown,
+                }}
+                isConnectable
+                isValidConnection={isValidConnection}
+              />
+            </>
           )}
-          {!['graphOutput', 'graphInput', 'graph'].includes(type) &&
-            moreHandles && (
-              <>
-                <Handle
-                  type="target"
-                  position={Position.Bottom}
-                  id="tb"
-                  style={{
-                    left: 20,
-                    ...contentStyle.handleTarget,
-                    ...contentStyle.handleUpDown,
-                  }}
-                  isConnectable
-                  isValidConnection={isValidConnection}
-                />
-                <Handle
-                  type="target"
-                  position={Position.Top}
-                  id="tt"
-                  style={{
-                    left: 20,
-                    ...contentStyle.handleTarget,
-                    ...contentStyle.handleUpDown,
-                  }}
-                  isConnectable
-                  isValidConnection={isValidConnection}
-                />
-              </>
-            )}
         </span>
       </Tooltip>
     </div>
