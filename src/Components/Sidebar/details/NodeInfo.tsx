@@ -10,12 +10,11 @@ import SidebarTooltip from '../SidebarTooltip';
 import TaskProperty from './TaskProperty';
 
 import styles from '../EditSidebar.module.css';
-import { useEffect, useState } from 'react';
 
 interface Props {
   nodeId: string;
   nodeData: EwoksRFNodeData;
-  handlePropChange: (
+  onPropChange: (
     propKeyValue: {
       task_identifier?: string;
       node_icon?: string;
@@ -25,80 +24,7 @@ interface Props {
 }
 
 function NodeInfo(props: Props) {
-  const { nodeId, nodeData, handlePropChange } = props;
-
-  const [tIdent, setTIdent] = useState<string>(
-    nodeData.task_props.task_identifier
-  );
-
-  useEffect(() => {
-    console.log(nodeData.task_props.task_identifier);
-
-    setTIdent(nodeData.task_props.task_identifier);
-  }, [nodeData.task_props.task_identifier, nodeId]);
-
-  const editableTaskProperties = () => {
-    console.log([
-      {
-        id: 'task_identifier',
-        label: 'Task identifier',
-        value: tIdent,
-      },
-      {
-        id: 'node_icon',
-        label: 'Icon',
-        value: nodeData.ui_props.icon || 'default',
-      },
-    ]);
-
-    const ti = tIdent;
-    return [
-      {
-        id: 'task_identifier',
-        label: 'Task identifier',
-        value: ti,
-      },
-      {
-        id: 'node_icon',
-        label: 'Icon',
-        value: nodeData.ui_props.icon || 'default',
-      },
-    ];
-  };
-
-  const NonEditableTaskProperties = [
-    { id: 'id', label: 'Id', value: nodeId },
-    {
-      id: 'task_type',
-      label: 'Type',
-      value: nodeData.task_props.task_type,
-    },
-    {
-      id: 'task_generator',
-      label: 'Generator',
-      value: nodeData.ewoks_props.task_generator || 'None',
-    },
-    {
-      id: 'task_category',
-      label: 'Category',
-      value: nodeData.task_props.task_category || 'No category',
-    },
-    {
-      id: 'required_input_names',
-      label: 'Required inputs',
-      value: nodeData.task_props.required_input_names || 'None',
-    },
-    {
-      id: 'optional_input_names',
-      label: 'Optional inputs',
-      value: nodeData.task_props.optional_input_names || 'None',
-    },
-    {
-      id: 'output_names',
-      label: 'Outputs',
-      value: nodeData.task_props.output_names || 'None',
-    },
-  ];
+  const { nodeId, nodeData, onPropChange } = props;
 
   const isEditable = ['ppfmethod', 'method', 'script'].includes(
     nodeData.task_props.task_type
@@ -115,30 +41,49 @@ function NodeInfo(props: Props) {
         </AccordionSummary>
         <AccordionDetails>
           <div style={{ width: '100%' }}>
-            {editableTaskProperties().map(({ id, label, value }) => (
-              <TaskProperty
-                editable={isEditable}
-                key={id}
-                id={id}
-                label={label}
-                value={value || ''}
-                onPropChange={(propKeyValue) =>
-                  handlePropChange(propKeyValue, nodeData)
-                }
-              />
-            ))}
-            {NonEditableTaskProperties.map(({ id, label, value }) => (
-              <TaskProperty
-                editable={false}
-                key={id}
-                id={id}
-                label={label}
-                value={value || ''}
-                onPropChange={(propKeyValue) =>
-                  handlePropChange(propKeyValue, nodeData)
-                }
-              />
-            ))}
+            <TaskProperty
+              editable={isEditable}
+              id="task_identifier"
+              label="Task Identifier"
+              value={nodeData.task_props.task_identifier || ''}
+              onPropChange={(propKeyValue) =>
+                onPropChange(propKeyValue, nodeData)
+              }
+            />
+            <TaskProperty editable={false} id="id" label="Id" value={nodeId} />
+            <TaskProperty
+              editable={false}
+              id="task_type"
+              label="Task Type"
+              value={nodeData.task_props.task_type}
+            />
+            <TaskProperty
+              editable={false}
+              id="task_generator"
+              label="Generator"
+              value={nodeData.ewoks_props.task_generator || 'None'}
+            />
+            <TaskProperty
+              editable={false}
+              id="task_category"
+              label="Category"
+              value={nodeData.task_props.task_category}
+            />
+            <TaskProperty
+              editable={false}
+              id="inputs"
+              label="Inputs"
+              value={[
+                ...(nodeData.task_props.required_input_names ?? []),
+                ...(nodeData.task_props.optional_input_names ?? []),
+              ]}
+            />
+            <TaskProperty
+              editable={false}
+              id="outputs"
+              label="Outputs"
+              value={nodeData.task_props.output_names || 'None'}
+            />
           </div>
         </AccordionDetails>
       </Accordion>

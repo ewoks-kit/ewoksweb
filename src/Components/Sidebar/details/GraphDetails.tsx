@@ -1,5 +1,5 @@
 import useStore from '../../../store/useStore';
-import TextAutosave from './TextAutosave';
+import InputTextField from './InputTextField';
 
 export default function GraphDetails() {
   const graphInfo = useStore((state) => state.graphInfo);
@@ -20,22 +20,22 @@ export default function GraphDetails() {
   }
 
   return (
-    <>
-      <TextAutosave
+    <div key={graphInfo.id}>
+      <InputTextField
         label="Label"
         defaultValue={graphInfo.label || ''}
         onValueSave={handleSaveLabel}
       />
-      <TextAutosave
+      <InputTextField
         label="Comment"
         defaultValue={graphInfo.uiProps?.comment || ''}
         onValueSave={handleSaveComment}
       />
-      <TextAutosave
+      <InputTextField
         label="Category"
         defaultValue={graphInfo.category || ''}
         onValueSave={handleSaveCategory}
       />
-    </>
+    </div>
   );
 }

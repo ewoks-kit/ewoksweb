@@ -1,14 +1,12 @@
-import TextAutosave from './TextAutosave';
-
 import styles from './Details.module.css';
-import { useEffect, useState } from 'react';
+import { EditOutlined as EditIcon } from '@material-ui/icons';
 
 interface TaskPropertyProps {
   id: string;
   label: string;
-  value: string | string[];
-  editable: boolean;
-  onPropChange(props: editableNodeProps): void;
+  value?: string | string[];
+  editable?: boolean;
+  onPropChange?(props: editableNodeProps): void;
 }
 interface editableNodeProps {
   task_identifier?: string;
@@ -18,32 +16,22 @@ interface editableNodeProps {
 // DOC: For editing Node properties related to the Task it is based on
 function TaskProperty(props: TaskPropertyProps) {
   const { id, label, value, editable } = props;
-  // console.log(id, label, value, editable);
 
-  const [val, setVal] = useState(value);
-
-  useEffect(() => {
-    console.log(value);
-
-    setVal(value);
-  }, [value]);
-
+  // TODO: To be used by a dialog in the next MR
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function handleTaskPropChange(taskP: string) {
-    props.onPropChange({ [id]: taskP });
+    if (props.onPropChange) {
+      props.onPropChange({ [id]: taskP });
+    }
   }
 
-  return editable ? (
-    <div className={styles.entry}>
-      <TextAutosave
-        label={label}
-        defaultValue={val || ''}
-        onValueSave={(val) => handleTaskPropChange(val)}
-      />
-    </div>
-  ) : (
-    <div key={id}>
-      <b>{label}:</b> {Array.isArray(value) ? value.join(', ') : value}
-    </div>
+  return (
+    <span className={styles.entry}>
+      <div key={id}>
+        <b>{label}:</b> {Array.isArray(value) ? value.join(', ') : value}
+        {editable && <EditIcon fontSize="small" />}
+      </div>
+    </span>
   );
 }
 export default TaskProperty;

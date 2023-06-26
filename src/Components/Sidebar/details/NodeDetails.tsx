@@ -136,7 +136,7 @@ export default function NodeDetails(selectedElement: Node) {
 
   return (
     <Box>
-      <span key={selectedElement.id}>
+      <span>
         <NodeLabelComment showComment selectedElement={selectedElement} />
         <DefaultInputs {...selectedElement} />
 
@@ -202,7 +202,7 @@ export default function NodeDetails(selectedElement: Node) {
       <NodeInfo
         nodeId={selectedElement.id}
         nodeData={nodeData}
-        handlePropChange={handlePropChange}
+        onPropChange={handlePropChange}
       />
     </Box>
   );

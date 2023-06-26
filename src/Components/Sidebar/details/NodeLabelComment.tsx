@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import TextAutosave from './TextAutosave';
+import InputTextField from './InputTextField';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import {
   assertNodeDataDefined,
@@ -46,13 +46,13 @@ export default function NodeLabelComment(props: Props) {
 
   return (
     <div className={styles.entry}>
-      <TextAutosave
+      <InputTextField
         label="Label"
         defaultValue={label}
         onValueSave={handleSaveLabel}
       />
       <div style={{ display: showComment ? 'block' : 'none' }}>
-        <TextAutosave
+        <InputTextField
           label="Comment"
           defaultValue={comment}
           onValueSave={handleSaveComment}

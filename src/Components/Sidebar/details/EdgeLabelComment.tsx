@@ -3,7 +3,7 @@ import type { ChangeEvent } from 'react';
 import { FormControl, TextField } from '@material-ui/core';
 import SidebarTooltip from '../SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
-import TextAutosave from './TextAutosave';
+import InputTextField from './InputTextField';
 import sidebarStyle from '../sidebarStyle';
 import {
   assertEdgeDataDefined,
@@ -124,7 +124,7 @@ export default function EdgeLabelComment() {
       )}
 
       <div style={{ display: 'block' }}>
-        <TextAutosave
+        <InputTextField
           label="Comment"
           defaultValue={edgeData.comment}
           onValueSave={(newComment) => {
