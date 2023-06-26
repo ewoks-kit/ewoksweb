@@ -19,6 +19,7 @@ function DataNode(args: NodeProps) {
       selected={args.selected}
       color="#ced3ee"
       image={uiProps.icon || ''}
+      node_icon={uiProps.node_icon}
       comment={nodeData.comment || ''}
       moreHandles={uiProps.moreHandles}
       details={uiProps.details}

@@ -9,9 +9,10 @@ import {
 } from '@material-ui/core';
 import type { ChangeEvent } from 'react';
 import useNodeDataStore from '../../../store/useNodeDataStore';
-import { assertNodeDataDefined } from '../../../utils/typeGuards';
+import { assertNodeDataDefined, isString } from '../../../utils/typeGuards';
 import { useUpdateNodeInternals } from 'reactflow';
 import { useIcons } from 'api/icons';
+import type { PropertyChangedEvent } from '../../../types';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(props: { nodeId: string }) {
@@ -79,15 +80,16 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     }
   }
 
-  const arrowTypeChanged = (event) => {
-    // const type = event.target.value;
-    // if (!isString(type)) {
-    //   return;
-    // }
-    // const newEdge = isMarkerType(type)
-    //   ? { ...element, markerEnd: { type } }
-    //   : { ...element, markerEnd: undefined };
-    // setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+  const handleNodeIconChange = (event: PropertyChangedEvent) => {
+    updateNodeInternals(nodeId);
+    const iconName = event.target.value;
+    if (!isString(iconName)) {
+      return;
+    }
+
+    mergeNodeData(nodeId, {
+      ui_props: { node_icon: iconName },
+    });
   };
 
   return (
@@ -118,7 +120,6 @@ export default function EditNodeStyle(props: { nodeId: string }) {
               inputProps={{ 'aria-label': 'controlled' }}
             />
           </div>
-
           <div>
             <label htmlFor="head">Color</label>
             <input
@@ -168,13 +169,13 @@ export default function EditNodeStyle(props: { nodeId: string }) {
         fullWidth
         // style={{ ...sidebarStyle.formstyleflex }}
       >
-        <InputLabel id="replace-node-icon">Replace Node Icon</InputLabel>
+        <InputLabel id="replace-node-icon">Node Icon</InputLabel>
         <Select
           labelId="replace-node-icon"
           // className={classes.styleLinkDropdowns}
-          value={nodeData.ui_props.node_icon}
+          value={nodeData.ui_props.node_icon ?? nodeData.ui_props.icon}
           label="Override Task Icon"
-          onChange={arrowTypeChanged}
+          onChange={handleNodeIconChange}
         >
           {icons.map((icon) => (
             <MenuItem value={icon.name} key={icon.name}>
