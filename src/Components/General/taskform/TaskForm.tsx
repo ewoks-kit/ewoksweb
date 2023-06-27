@@ -49,7 +49,7 @@ function TaskForm(props: Props) {
   } = useForm<TaskFields>({
     defaultValues: {
       task_identifier: elementToEdit?.task_identifier || '',
-      task_type: elementToEdit?.task_type || '',
+      task_type: elementToEdit?.task_type,
       category: elementToEdit?.category || '',
       required_input_names: String(elementToEdit?.required_input_names || []),
       optional_input_names: String(elementToEdit?.optional_input_names || []),

@@ -7,7 +7,7 @@ export async function submitFormData(
   initial_task?: Task,
   editExisting?: boolean
 ) {
-  const parsedData = {
+  const parsedData: Task = {
     ...initial_task,
     ...formData,
     required_input_names: formData.required_input_names?.split(','),

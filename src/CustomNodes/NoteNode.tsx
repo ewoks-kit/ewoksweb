@@ -35,11 +35,12 @@ function NoteNode(args: NoteProps) {
   };
 
   const save = () => {
-    // TBD: If permenant put it in undo-redo and make title editable
-    const newNodeData = {
+    // TODO: this will be removed as on-node editing is not available
+    const newNodeData: EwoksRFNodeData = {
       task_props: { task_type: 'note', task_identifier: args.id },
       ewoks_props: { label: nodeData.ewoks_props.label },
       comment,
+      ui_props: {},
     };
 
     mergeNodeData(args.id, newNodeData);
