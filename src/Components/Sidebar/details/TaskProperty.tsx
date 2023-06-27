@@ -32,7 +32,7 @@ function TaskProperty(props: TaskPropertyProps) {
 
   return (
     <>
-      <div key={id} className={styles.entry}>
+      <div key={id} className={styles.entry} data-cy="task_props">
         <b>{label}:</b> {Array.isArray(value) ? value.join(', ') : value}
         {editable && (
           <IconButton

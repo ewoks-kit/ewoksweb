@@ -2,15 +2,13 @@ before(() => {
   cy.loadAppWithoutGraph();
 });
 
-it('should display correct node info', () => {
+it('should display correct task info', () => {
   cy.findByRole('button', { name: 'ewokscore' }).click();
   cy.dragNodeInCanvas('ewokscore.tests.examples.tasks.sumlist.SumList');
 
   cy.get('.react-flow__node').click();
 
-  cy.findByRole('button', { name: 'Node Info' }).click();
-
-  cy.get('[data-cy="node_info"]')
+  cy.get('[data-cy="task_props"]')
     .should(
       'contain.text',
       'Task Identifier: ewokscore.tests.examples.tasks.sumlist.SumList'
