@@ -46,8 +46,8 @@ export function enrichWithData<T extends Node | Edge>(
   element: T,
   dataContainer: Map<string, T extends Node ? EwoksRFNodeData : EwoksRFLinkData>
 ) {
-  const element_data = dataContainer.get(element.id);
-  assertDefined(element_data);
+  const data = dataContainer.get(element.id);
+  assertDefined(data);
 
-  return { ...element, data: element_data };
+  return { ...element, data };
 }

@@ -58,8 +58,8 @@ export default function WorkflowSidebarMenu() {
       <GraphFormDialog
         elementToEdit={graphInfo}
         action={GraphFormAction.cloneGraph}
-        open={openSaveDialog}
-        setOpenSaveDialog={setOpenSaveDialog}
+        isOpen={openSaveDialog}
+        onClose={() => setOpenSaveDialog(false)}
       />
 
       <MenuItem

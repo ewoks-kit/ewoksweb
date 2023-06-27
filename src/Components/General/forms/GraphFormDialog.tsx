@@ -8,7 +8,6 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import type { Dispatch, SetStateAction } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useReactFlow } from 'reactflow';
 
@@ -29,13 +28,13 @@ import { enrichWithData } from './utils';
 interface Props {
   elementToEdit: GraphDetails;
   action: GraphFormAction;
-  open: boolean;
-  setOpenSaveDialog: Dispatch<SetStateAction<boolean>>;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export default function GraphFormDialog(props: Props) {
   const rfInstance = useReactFlow();
-  const { open: isOpen, setOpenSaveDialog, action, elementToEdit } = props;
+  const { isOpen, onClose, action, elementToEdit } = props;
 
   const { handleSubmit, reset, control, formState } = useForm<GraphFields>({
     defaultValues: { identifier: elementToEdit.label },
@@ -48,7 +47,7 @@ export default function GraphFormDialog(props: Props) {
   const setGettingFromServer = useStore((st) => st.setGettingFromServer);
 
   function handleClose() {
-    setOpenSaveDialog(false);
+    onClose();
     setGettingFromServer(false);
   }
 
