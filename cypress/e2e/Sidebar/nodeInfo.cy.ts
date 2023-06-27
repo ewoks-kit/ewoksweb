@@ -13,10 +13,9 @@ it('should display correct node info', () => {
   cy.get('[data-cy="node_info"]')
     .should(
       'contain.text',
-      'Task identifier: ewokscore.tests.examples.tasks.sumlist.SumList'
+      'Task Identifier: ewokscore.tests.examples.tasks.sumlist.SumList'
     )
-    .should('contain.text', 'Category: ewokscore')
-    .should('contain.text', 'Required inputs: list')
-    .should('contain.text', 'Optional inputs: delay')
+    .should('contain.text', 'Category: tutorial')
+    .should('contain.text', 'Inputs: list, delay')
     .should('contain.text', 'Outputs: sum');
 });
