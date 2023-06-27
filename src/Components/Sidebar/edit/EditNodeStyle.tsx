@@ -10,9 +10,7 @@ import {
 import type { ChangeEvent } from 'react';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined, isString } from '../../../utils/typeGuards';
-import { useUpdateNodeInternals } from 'reactflow';
 import { useIcons } from 'api/icons';
-import type { PropertyChangedEvent } from '../../../types';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(props: { nodeId: string }) {
@@ -25,7 +23,6 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   );
   const { icons } = useIcons();
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
-  const updateNodeInternals = useUpdateNodeInternals();
 
   function withImageChanged(checked: boolean) {
     mergeNodeData(nodeId, {
@@ -52,7 +49,6 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   };
 
   const moreHandlesChanged = (checked: boolean) => {
-    updateNodeInternals(nodeId);
     mergeNodeData(nodeId, {
       ui_props: {
         moreHandles: checked,
@@ -80,8 +76,12 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     }
   }
 
-  const handleNodeIconChange = (event: PropertyChangedEvent) => {
-    updateNodeInternals(nodeId);
+  const handleNodeIconChange = (
+    event: ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+    }>
+  ) => {
     const iconName = event.target.value;
     if (!isString(iconName)) {
       return;
@@ -164,15 +164,10 @@ export default function EditNodeStyle(props: { nodeId: string }) {
           valueLabelDisplay="on"
         />
       </div>
-      <FormControl
-        variant="outlined"
-        fullWidth
-        // style={{ ...sidebarStyle.formstyleflex }}
-      >
+      <FormControl variant="outlined" fullWidth>
         <InputLabel id="replace-node-icon">Node Icon</InputLabel>
         <Select
           labelId="replace-node-icon"
-          // className={classes.styleLinkDropdowns}
           value={nodeData.ui_props.node_icon ?? nodeData.ui_props.icon}
           label="Override Task Icon"
           onChange={handleNodeIconChange}
