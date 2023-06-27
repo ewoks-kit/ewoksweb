@@ -11,3 +11,8 @@ export interface TaskFields {
 }
 
 export const TASK_TYPES = ['class', 'method', 'script', 'ppfmethod', 'ppfport'];
+
+export interface GraphFields {
+  identifier: string;
+  overwrite?: boolean;
+}

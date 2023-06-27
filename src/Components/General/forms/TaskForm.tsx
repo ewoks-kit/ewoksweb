@@ -24,7 +24,7 @@ import { TASK_TYPES } from './models';
 import commonStrings from '../../../commonStrings.json';
 
 import styles from './TaskForm.module.css';
-import { submitFormData } from './utils';
+import { submitTaskFormData } from './utils';
 import FormField from './FormField';
 
 interface Props {
@@ -59,7 +59,7 @@ function TaskForm(props: Props) {
   });
   const onSubmit = handleSubmit(async (data: TaskFields) => {
     try {
-      await submitFormData(data, elementToEdit, editExistingTask);
+      await submitTaskFormData(data, elementToEdit, editExistingTask);
     } catch (error) {
       setOpenSnackbar({
         open: true,

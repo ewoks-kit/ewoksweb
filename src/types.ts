@@ -26,7 +26,6 @@ import type { Node } from 'reactflow';
 import type { GraphInfoSlice } from './store/graphInfo';
 
 export enum GraphFormAction {
-  undefined = 'undefined',
   cloneGraph = 'cloneGraph',
   newGraph = 'newGraph',
   newGraphOrOverwrite = 'newGraphOrOverwrite',
