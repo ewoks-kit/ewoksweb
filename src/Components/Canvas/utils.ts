@@ -12,6 +12,19 @@ export function trimLabel(label: string) {
   return label.split('.').pop();
 }
 
+export const defaultLinkStyle = {
+  style: { stroke: '#96a5f9', strokeWidth: '3px' },
+  labelBgPadding: [8, 4] as [number, number],
+  labelBgBorderRadius: 4,
+  labelStyle: { fill: 'rgb(150, 165, 249)', fontWeight: 500, fontSize: 14 },
+  labelBgStyle: {
+    fill: 'rgb(223, 226, 247)',
+    fillOpacity: 1,
+    strokeWidth: '3px',
+    stroke: 'rgb(150, 165, 249)',
+  },
+};
+
 export function addConnectionToGraph(
   connection: Connection,
   nodesData: Map<string, EwoksRFNodeData>
@@ -70,15 +83,7 @@ export function addConnectionToGraph(
     type: 'default',
     animated: false,
     markerEnd: { type: MarkerType.ArrowClosed },
-    style: { stroke: '#96a5f9', strokeWidth: '2.5' },
-    labelBgStyle: {
-      fill: 'rgb(223, 226, 247)',
-      color: 'rgb(50, 130, 219)',
-      fillOpacity: 1,
-    },
-    labelBgPadding: [8, 4],
-    labelBgBorderRadius: 4,
-    labelStyle: { fill: 'blue', fontWeight: 500, fontSize: 14 },
+    ...defaultLinkStyle,
   };
 
   return link;

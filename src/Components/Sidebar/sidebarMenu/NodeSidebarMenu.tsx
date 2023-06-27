@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import FormDialog from '../../General/FormDialog';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import { FormAction } from '../../../types';
-import type { EwoksRFNode, GraphDetails, Task } from '../../../types';
+import type { EwoksRFNode, Task } from '../../../types';
 import useStore from '../../../store/useStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import { getNodeData } from '../../../utils';
@@ -17,6 +15,7 @@ import { calcNewId } from 'utils/calcNewId';
 import { useNodesIds } from '../../../store/graph-hooks';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import type { Node } from 'reactflow';
+import TaskForm from '../../General/taskform/TaskForm';
 
 export default function NodeSidebarMenu(selectedElement: Node) {
   const rfInstance = useReactFlow();
@@ -31,7 +30,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
   const workingGraph = useStore((state) => state.workingGraph);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
-  const [elementToEdit, setElementToEdit] = useState<Task | GraphDetails>({});
+  const [elementToEdit, setElementToEdit] = useState<Task>();
 
   function cloneAsTask() {
     const nodeData = getNodeData(selectedElement.id);
@@ -97,11 +96,10 @@ export default function NodeSidebarMenu(selectedElement: Node) {
 
   return (
     <>
-      <FormDialog
+      <TaskForm
+        isOpen={openSaveDialog}
+        onClose={() => setOpenSaveDialog(false)}
         elementToEdit={elementToEdit}
-        action={FormAction.cloneTask}
-        open={openSaveDialog}
-        setOpenSaveDialog={setOpenSaveDialog}
       />
       <MenuItem
         onClick={cloneNode}

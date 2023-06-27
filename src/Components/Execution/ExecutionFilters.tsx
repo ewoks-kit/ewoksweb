@@ -11,10 +11,9 @@ import {
   FormControlLabel,
   Switch,
 } from '@material-ui/core';
-import { getExecutionEvents } from '../../api/api';
+import { getExecutionEvents } from '../../api/events';
 import useStore from '../../store/useStore';
 import type {
-  ExecutedJobsResponse,
   WorkflowDescription,
   filterParams,
   PropertyChangedEvent,
@@ -104,15 +103,12 @@ export default function ExecutionFilters() {
         filterParams.job_id = jobId;
       }
       const response = await getExecutionEvents(filterParams);
-      if (response.data) {
-        const execJobs = response.data as ExecutedJobsResponse;
-        setExecutedWorkflows(execJobs.jobs, false);
-      } else {
-        /* eslint-disable no-console */
-        console.log('no response data');
-      }
+
+      const execJobs = response.jobs;
+      setExecutedWorkflows(execJobs, false);
     } catch (error) {
-      console.log(error);
+      // eslint-disable-next-line no-console
+      console.warn(error);
     }
   }
 

@@ -4,9 +4,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import FormDialog from '../../General/FormDialog';
+import GraphFormDialog from '../../General/GraphFormDialog';
 import useStore from '../../../store/useStore';
-import { FormAction } from '../../../types';
+import { GraphFormAction } from '../../../types';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import { useReactFlow } from 'reactflow';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
@@ -55,9 +55,9 @@ export default function WorkflowSidebarMenu() {
 
   return (
     <>
-      <FormDialog
+      <GraphFormDialog
         elementToEdit={graphInfo}
-        action={FormAction.cloneGraph}
+        action={GraphFormAction.cloneGraph}
         open={openSaveDialog}
         setOpenSaveDialog={setOpenSaveDialog}
       />

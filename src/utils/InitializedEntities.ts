@@ -2,7 +2,7 @@ import type { GraphEwoks, GraphRF, Task } from '../types';
 
 export const initializedTask: Task = {
   task_identifier: '',
-  task_type: '',
+  task_type: 'class',
   icon: '',
   category: '',
   optional_input_names: [],

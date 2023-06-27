@@ -22,14 +22,14 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
 import ExecutionFilters from './ExecutionFilters';
 import useStore from '../../store/useStore';
-import type { Event, ExecutedJobsResponse } from '../../types';
+import type { Event } from '../../types';
 import { Link } from 'react-router-dom';
 import { Fab, makeStyles } from '@material-ui/core';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import Collapse from '@material-ui/core/Collapse';
-import { getExecutionEvents } from '../../api/api';
+import { getExecutionEvents } from '../../api/events';
 
 function descendingComparator(a: Event[], b: Event[], orderBy: keyof Event) {
   // TODO: compare time start-end
@@ -396,13 +396,9 @@ export default function EnhancedTable() {
     if (expandRow === '' || expandRow !== job_id) {
       try {
         const response = await getExecutionEvents({ job_id });
-        if (response.data) {
-          const execJobs = response.data as ExecutedJobsResponse;
-          setEventsForWorflow(execJobs.jobs[0]);
-        } else {
-          /* eslint-disable no-console */
-          console.log('no response data');
-        }
+
+        const execJobs = response.jobs;
+        setEventsForWorflow(execJobs[0]);
       } catch (error) {
         /* eslint-disable no-console */
         console.log(error);

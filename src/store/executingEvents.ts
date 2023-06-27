@@ -132,7 +132,7 @@ const executingEvents = (
       // If not in execution dont affect the canvas
       // TODO: if not the specific job_id dont affect the canvas in case of viewing
       // the same workflow_id but another job while some others are being executed
-      const nodess = [
+      const nodess: EwoksRFNode[] = [
         ...execNodes.filter(
           (nod) =>
             !(
@@ -153,7 +153,7 @@ const executingEvents = (
               task_identifier: execEvent.id?.toString() || '',
             },
             ui_props: {},
-            event: execEvent,
+            // event: execEvent,
           },
           id: execEvent.time || '',
 

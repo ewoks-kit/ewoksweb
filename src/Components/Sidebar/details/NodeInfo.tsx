@@ -17,7 +17,6 @@ interface Props {
   onPropChange: (
     propKeyValue: {
       task_identifier?: string;
-      node_icon?: string;
     },
     nodeData: EwoksRFNodeData
   ) => void;
@@ -50,27 +49,23 @@ function NodeInfo(props: Props) {
                 onPropChange(propKeyValue, nodeData)
               }
             />
-            <TaskProperty editable={false} id="id" label="Id" value={nodeId} />
+            <TaskProperty id="id" label="Id" value={nodeId} />
             <TaskProperty
-              editable={false}
               id="task_type"
               label="Task Type"
               value={nodeData.task_props.task_type}
             />
             <TaskProperty
-              editable={false}
               id="task_generator"
               label="Generator"
               value={nodeData.ewoks_props.task_generator}
             />
             <TaskProperty
-              editable={false}
               id="task_category"
               label="Category"
               value={nodeData.task_props.task_category}
             />
             <TaskProperty
-              editable={false}
               id="inputs"
               label="Inputs"
               value={[
@@ -79,7 +74,6 @@ function NodeInfo(props: Props) {
               ]}
             />
             <TaskProperty
-              editable={false}
               id="outputs"
               label="Outputs"
               value={nodeData.task_props.output_names}

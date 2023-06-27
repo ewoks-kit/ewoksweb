@@ -57,7 +57,7 @@ describe('sidebar menu', () => {
       .parent()
       .click();
 
-    cy.contains('Give the new Task details')
+    cy.contains('Create task')
       .parent()
       .should('have.class', 'MuiDialogTitle-root')
       .siblings()

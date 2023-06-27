@@ -5,7 +5,7 @@ import Node from './Node';
 import { contentStyle as style } from './nodeStyles';
 import isValidLink from '../utils/IsValidLink';
 import useStore from '../store/useStore';
-import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../types';
+import type { EwoksRFLink, EwoksRFNodeData, GraphRF, TaskType } from '../types';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../utils/typeGuards';
@@ -46,14 +46,13 @@ function FunctionNode(props: NodeProps<EwoksRFNodeData>) {
 
   return (
     <Node
-      isGraph
       moreHandles={uiProps.moreHandles || false}
       withImage={uiProps.withImage}
       nodeWidth={uiProps.nodeWidth || 120}
       withLabel={uiProps.withLabel}
       colorBorder={uiProps.colorBorder}
       // type is calculated in calcNodeType for subgraphs-inNodes-outNodes
-      type={uiProps.type || ''}
+      type={props.type as TaskType}
       label={nodeData.ewoks_props.label || ''}
       selected={selected}
       color={uiProps.exists ? '#ced3ee' : 'red'}

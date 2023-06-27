@@ -74,6 +74,7 @@ test:
   image: cypress/base:16.18.0
   stage: test
   extends: .pnpm-base
+  timeout: 15m
   before_script:
     # https://github.com/cypress-io/cypress-docker-images/issues/642 and https://github.com/cypress-io/cypress-docker-images/issues/649
     - apt-get update && apt-get install curl -y
@@ -115,6 +116,7 @@ pages:
   stage: deploy
   variables:
     REACT_APP_SERVER_URL: https://bosquet.silx.org/ewoks/
+    REACT_APP_ROUTER_BASE_DIR: ewoks/ewoksweb/
   extends: .pnpm-base-build
   script:
     - CI=false pnpm build # Don't let eslint warnings fail the build
