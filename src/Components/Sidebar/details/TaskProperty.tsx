@@ -6,22 +6,20 @@ interface TaskPropertyProps {
   label: string;
   value?: string | string[];
   editable?: boolean;
-  onPropChange?(props: editableNodeProps): void;
+  onPropChange?(props: EditableNodeProps): void;
 }
-interface editableNodeProps {
+interface EditableNodeProps {
   task_identifier?: string;
-  task_type?: string;
-  task_generator?: string;
 }
 // DOC: For editing Node properties related to the Task it is based on
 function TaskProperty(props: TaskPropertyProps) {
-  const { id, label, value, editable } = props;
+  const { id, label, value, editable = false } = props;
 
   // TODO: To be used by a dialog in the next MR
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function handleTaskPropChange(taskP: string) {
+  function handleTaskPropChange(propertyValue: string) {
     if (props.onPropChange) {
-      props.onPropChange({ [id]: taskP });
+      props.onPropChange({ [id]: propertyValue });
     }
   }
 

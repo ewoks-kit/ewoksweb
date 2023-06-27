@@ -15,7 +15,7 @@ it('should display correct node info', () => {
       'contain.text',
       'Task Identifier: ewokscore.tests.examples.tasks.sumlist.SumList'
     )
-    .should('contain.text', 'Category: tutorial')
+    .should('contain.text', 'Category: ewokscore')
     .should('contain.text', 'Inputs: list, delay')
     .should('contain.text', 'Outputs: sum');
 });
