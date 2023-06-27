@@ -1,7 +1,7 @@
 import IntegratedSpinner from '../General/IntegratedSpinner';
 import SaveIcon from '@material-ui/icons/Save';
 import useStore from '../../store/useStore';
-import GraphFormDialog from '../General/GraphFormDialog';
+import GraphFormDialog from '../General/forms/GraphFormDialog';
 import { useState } from 'react';
 import { GraphFormAction } from '../../types';
 import { useKeyboardEvent } from '@react-hookz/web';

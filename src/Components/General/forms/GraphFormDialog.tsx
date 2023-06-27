@@ -10,15 +10,15 @@ import type {
   GraphDetails,
   EwoksRFNodeData,
   EwoksRFLinkData,
-} from '../../types';
-import type { GraphFormAction } from '../../types';
-import { rfToEwoks, textForError } from '../../utils';
+} from '../../../types';
+import type { GraphFormAction } from '../../../types';
+import { rfToEwoks, textForError } from '../../../utils';
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
-import useStore from '../../store/useStore';
-import commonStrings from '../../commonStrings.json';
-import { postWorkflow, putWorkflow } from '../../api/api';
+import useStore from '../../../store/useStore';
+import commonStrings from '../../../commonStrings.json';
+import { postWorkflow, putWorkflow } from '../../../api/api';
 import { useReactFlow } from 'reactflow';
-import { getNodesData, getEdgesData } from '../../utils';
+import { getNodesData, getEdgesData } from '../../../utils';
 
 interface Props {
   elementToEdit: GraphDetails;
