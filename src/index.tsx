@@ -12,7 +12,7 @@ import ExecutedWorkflows from '../src/Components/Execution/ExecutedWorkflows';
 ReactDOM.render(
   <StrictMode>
     <CacheProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE_DIR}>
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/edit-workflows" element={<Navigate to="/" replace />} />
