@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import TextButtonSave from './TextButtonSave';
+import InputTextField from './InputTextField';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import {
   assertNodeDataDefined,
@@ -27,7 +27,7 @@ export default function NodeLabelComment(props: Props) {
   const nodeData = useNodeDataStore((state) =>
     state.nodesData.get(selectedElement.id)
   );
-  // TBD: the props seem to be ok but an undefined appears in TextButtonSave
+  // TBD: the props seem to be ok but an undefined appears in TextAutosave
   // console.log(selectedElement.id, nodeData?.ewoks_props.label);
   assertNodeDataDefined(nodeData, selectedElement.id);
 
@@ -46,13 +46,13 @@ export default function NodeLabelComment(props: Props) {
 
   return (
     <div className={styles.entry}>
-      <TextButtonSave
+      <InputTextField
         label="Label"
         defaultValue={label}
         onValueSave={handleSaveLabel}
       />
       <div style={{ display: showComment ? 'block' : 'none' }}>
-        <TextButtonSave
+        <InputTextField
           label="Comment"
           defaultValue={comment}
           onValueSave={handleSaveComment}

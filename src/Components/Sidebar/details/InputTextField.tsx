@@ -2,13 +2,13 @@ import { FormControl, TextField } from '@material-ui/core';
 
 import styles from './Details.module.css';
 
-interface TextButtonSaveProps {
+interface InputTextFieldProps {
   label: string;
   defaultValue: string | undefined;
   onValueSave(value: string): void;
 }
 
-export default function TextButtonSave(props: TextButtonSaveProps) {
+export default function InputTextField(props: InputTextFieldProps) {
   const { label, defaultValue } = props;
 
   return (

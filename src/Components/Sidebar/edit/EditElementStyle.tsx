@@ -9,7 +9,6 @@ import EditGraphStyle from './EditGraphStyle';
 import type { Node, Edge } from 'reactflow';
 import { isNodeRF } from '../../../utils/typeGuards';
 import type { SelectedElementRF } from '../../../types';
-
 import styles from '../EditSidebar.module.css';
 
 interface Content {

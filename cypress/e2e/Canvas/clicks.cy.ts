@@ -32,7 +32,7 @@ describe('clicks on canvas and elements', () => {
     cy.contains('on_error').should('not.exist');
     cy.contains('Conditions').should('not.exist');
     cy.contains('Map all data').should('not.exist');
-    cy.contains('Required').should('not.be.visible');
+    cy.contains('Required').should('not.exist');
     cy.contains('Source').should('not.exist');
     cy.contains('Target').should('not.exist');
 

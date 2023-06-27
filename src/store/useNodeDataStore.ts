@@ -28,7 +28,7 @@ const useNodeDataStore = create<NodeDataState>((set) => ({
       );
 
       return {
-        nodesData: new Map(nodesData).set(nodeId, newData),
+        nodesData: new Map(nodesData).set(nodeId, { ...newData }),
       };
     });
   },

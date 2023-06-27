@@ -43,7 +43,6 @@ export default function NodeDetails(selectedElement: Node) {
   function handlePropChange(
     propKeyValue: {
       task_identifier?: string;
-      node_icon?: string;
     },
     nodeDataL: EwoksRFNodeData
   ) {
@@ -195,7 +194,6 @@ export default function NodeDetails(selectedElement: Node) {
           <NodeDataMapping {...selectedElement} />
         </div>
       )}
-
       <NodeInfo
         nodeId={selectedElement.id}
         nodeData={nodeData}
