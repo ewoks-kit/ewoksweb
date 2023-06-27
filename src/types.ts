@@ -25,14 +25,11 @@ import type { ChangeEvent, CSSProperties, ReactNode } from 'react';
 import type { Node } from 'reactflow';
 import type { GraphInfoSlice } from './store/graphInfo';
 
-export enum FormAction {
+export enum GraphFormAction {
   undefined = 'undefined',
   cloneGraph = 'cloneGraph',
   newGraph = 'newGraph',
   newGraphOrOverwrite = 'newGraphOrOverwrite',
-  cloneTask = 'cloneTask',
-  newTask = 'newTask',
-  editTask = 'editTask',
 }
 
 export interface GraphNodes {

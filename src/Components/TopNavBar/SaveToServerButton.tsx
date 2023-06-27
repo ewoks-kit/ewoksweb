@@ -1,9 +1,9 @@
 import IntegratedSpinner from '../General/IntegratedSpinner';
 import SaveIcon from '@material-ui/icons/Save';
 import useStore from '../../store/useStore';
-import FormDialog from '../General/FormDialog';
+import GraphFormDialog from '../General/GraphFormDialog';
 import { useState } from 'react';
-import { FormAction } from '../../types';
+import { GraphFormAction } from '../../types';
 import { useKeyboardEvent } from '@react-hookz/web';
 import type { EwoksRFLinkData, EwoksRFNodeData } from '../../types';
 import { getWorkflowsIds, putWorkflow } from '../../api/api';
@@ -23,7 +23,9 @@ export default function SaveToServerButton() {
   const setGettingFromServer = useStore((state) => state.setGettingFromServer);
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const [action, setAction] = useState<FormAction>(FormAction.newGraph);
+  const [action, setAction] = useState<GraphFormAction>(
+    GraphFormAction.newGraph
+  );
 
   async function handleSave() {
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
@@ -35,7 +37,7 @@ export default function SaveToServerButton() {
     setGettingFromServer(true);
 
     if (!workflowsIds.identifiers.includes(graphInfo.id)) {
-      setAction(FormAction.newGraph);
+      setAction(GraphFormAction.newGraph);
       setDialogOpen(true);
       return;
     }
@@ -98,7 +100,7 @@ export default function SaveToServerButton() {
     }
 
     if (graphInfo.uiProps?.source !== 'fromServer') {
-      setAction(FormAction.newGraphOrOverwrite);
+      setAction(GraphFormAction.newGraphOrOverwrite);
       setDialogOpen(true);
       return;
     }
@@ -122,7 +124,7 @@ export default function SaveToServerButton() {
 
   return (
     <>
-      <FormDialog
+      <GraphFormDialog
         elementToEdit={graphInfo}
         action={action}
         open={isDialogOpen}

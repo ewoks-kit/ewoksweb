@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { IconButton } from '@material-ui/core';
 
-import { FormAction } from '../../types';
 import type { Task } from '../../types';
-import FormDialog from '../General/FormDialog';
 import { Edit, LibraryAdd } from '@material-ui/icons';
 import styles from './TaskButtonGroup.module.css';
 import DeleteTaskButton from './DeleteTaskButton';
+import TaskForm from '../General/taskform/TaskForm';
 
-type ActionType = FormAction.cloneTask | FormAction.editTask;
+type ActionType = 'clone' | 'edit';
 
 interface Props {
   task: Task;
@@ -17,18 +16,14 @@ interface Props {
 function TaskButtonGroup(props: Props) {
   const { task } = props;
 
-  const [openSaveDialog, setOpenSaveDialog] = useState(false);
   const [action, setAction] = useState<ActionType>();
 
   return (
     <div className={styles.container}>
       <IconButton
         className={styles.edit}
-        aria-label="Edit task details"
-        onClick={() => {
-          setAction(FormAction.editTask);
-          setOpenSaveDialog(true);
-        }}
+        onClick={() => setAction('edit')}
+        aria-label="Edit task"
         color="primary"
         size="small"
       >
@@ -37,10 +32,7 @@ function TaskButtonGroup(props: Props) {
 
       <IconButton
         className={styles.clone}
-        onClick={() => {
-          setAction(FormAction.cloneTask);
-          setOpenSaveDialog(true);
-        }}
+        onClick={() => setAction('clone')}
         aria-label="Clone task"
         color="primary"
         size="small"
@@ -50,11 +42,11 @@ function TaskButtonGroup(props: Props) {
 
       <DeleteTaskButton task={task} />
 
-      <FormDialog
+      <TaskForm
+        isOpen={action !== undefined}
+        onClose={() => setAction(undefined)}
         elementToEdit={task}
-        action={action || FormAction.undefined}
-        open={openSaveDialog}
-        setOpenSaveDialog={setOpenSaveDialog}
+        editExistingTask={action === 'edit'}
       />
     </div>
   );
