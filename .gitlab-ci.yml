@@ -115,6 +115,7 @@ pages:
   stage: deploy
   variables:
     REACT_APP_SERVER_URL: https://bosquet.silx.org/ewoks/
+    PUBLIC_URL: https://workflow.gitlab-pages.esrf.fr/ewoks/ewoksweb/
   extends: .pnpm-base-build
   script:
     - CI=false pnpm build # Don't let eslint warnings fail the build
