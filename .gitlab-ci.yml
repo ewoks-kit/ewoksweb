@@ -74,6 +74,7 @@ test:
   image: cypress/base:16.18.0
   stage: test
   extends: .pnpm-base
+  timeout: 15m
   before_script:
     # https://github.com/cypress-io/cypress-docker-images/issues/642 and https://github.com/cypress-io/cypress-docker-images/issues/649
     - apt-get update && apt-get install curl -y
