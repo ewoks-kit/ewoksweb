@@ -34,7 +34,7 @@ describe('sidebar menu', () => {
 
     cy.waitForStableDOM();
 
-    cy.contains('Give the new Workflow name')
+    cy.contains('Give the new workflow identifier')
       .parent()
       .should('have.class', 'MuiDialogTitle-root')
       .siblings()
