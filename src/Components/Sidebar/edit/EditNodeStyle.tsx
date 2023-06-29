@@ -1,9 +1,16 @@
 import { useState } from 'react';
-import { Checkbox, FormControl, Slider } from '@material-ui/core';
+import {
+  Checkbox,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Slider,
+} from '@material-ui/core';
 import type { ChangeEvent } from 'react';
 import useNodeDataStore from '../../../store/useNodeDataStore';
-import { assertNodeDataDefined } from '../../../utils/typeGuards';
-import { useUpdateNodeInternals } from 'reactflow';
+import { assertNodeDataDefined, isString } from '../../../utils/typeGuards';
+import { useIcons } from 'api/icons';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(props: { nodeId: string }) {
@@ -14,8 +21,8 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   const [nodeSize, setNodeSize] = useState<number>(
     nodeData.ui_props.nodeWidth || 100
   );
+  const { icons } = useIcons();
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
-  const updateNodeInternals = useUpdateNodeInternals();
 
   function withImageChanged(checked: boolean) {
     mergeNodeData(nodeId, {
@@ -42,7 +49,6 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   };
 
   const moreHandlesChanged = (checked: boolean) => {
-    updateNodeInternals(nodeId);
     mergeNodeData(nodeId, {
       ui_props: {
         moreHandles: checked,
@@ -69,6 +75,22 @@ export default function EditNodeStyle(props: { nodeId: string }) {
       });
     }
   }
+
+  const handleNodeIconChange = (
+    event: ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+    }>
+  ) => {
+    const iconName = event.target.value;
+    if (!isString(iconName)) {
+      return;
+    }
+
+    mergeNodeData(nodeId, {
+      ui_props: { node_icon: iconName },
+    });
+  };
 
   return (
     <FormControl variant="filled" fullWidth>
@@ -98,7 +120,6 @@ export default function EditNodeStyle(props: { nodeId: string }) {
               inputProps={{ 'aria-label': 'controlled' }}
             />
           </div>
-
           <div>
             <label htmlFor="head">Color</label>
             <input
@@ -143,6 +164,21 @@ export default function EditNodeStyle(props: { nodeId: string }) {
           valueLabelDisplay="on"
         />
       </div>
+      <FormControl variant="outlined" fullWidth>
+        <InputLabel id="replace-node-icon">Node Icon</InputLabel>
+        <Select
+          labelId="replace-node-icon"
+          value={nodeData.ui_props.node_icon ?? nodeData.ui_props.icon}
+          label="Override Task Icon"
+          onChange={handleNodeIconChange}
+        >
+          {icons.map((icon) => (
+            <MenuItem value={icon.name} key={icon.name}>
+              {icon.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </FormControl>
   );
 }

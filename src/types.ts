@@ -209,6 +209,7 @@ export interface NodeProps {
   colorBorder?: string;
   content: ReactNode;
   image?: string;
+  node_icon?: string;
   comment?: string;
   executing?: boolean;
   details?: boolean;

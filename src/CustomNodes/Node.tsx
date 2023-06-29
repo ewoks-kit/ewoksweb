@@ -30,6 +30,7 @@ function Node({
   colorBorder: borderColor,
   content,
   image,
+  node_icon,
   comment,
   executing,
   nodeWidth,
@@ -136,7 +137,7 @@ function Node({
           {(withImage || inExecutionMode) && (
             <IconBoundary>
               <NodeIcon
-                image={image}
+                image={node_icon ?? image}
                 hasSpinner={
                   inExecutionMode &&
                   type !== 'graphOutput' &&
