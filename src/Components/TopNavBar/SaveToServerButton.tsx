@@ -1,7 +1,7 @@
 import IntegratedSpinner from '../General/IntegratedSpinner';
 import SaveIcon from '@material-ui/icons/Save';
 import useStore from '../../store/useStore';
-import GraphFormDialog from '../General/GraphFormDialog';
+import GraphFormDialog from '../General/forms/GraphFormDialog';
 import { useState } from 'react';
 import { GraphFormAction } from '../../types';
 import { useKeyboardEvent } from '@react-hookz/web';
@@ -23,9 +23,9 @@ export default function SaveToServerButton() {
   const setGettingFromServer = useStore((state) => state.setGettingFromServer);
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const [action, setAction] = useState<GraphFormAction>(
-    GraphFormAction.newGraph
-  );
+  const [action, setAction] = useState<
+    GraphFormAction.newGraph | GraphFormAction.newGraphOrOverwrite
+  >(GraphFormAction.newGraph);
 
   async function handleSave() {
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
@@ -127,8 +127,8 @@ export default function SaveToServerButton() {
       <GraphFormDialog
         elementToEdit={graphInfo}
         action={action}
-        open={isDialogOpen}
-        setOpenSaveDialog={setDialogOpen}
+        isOpen={isDialogOpen}
+        onClose={() => setDialogOpen(false)}
       />
       <IntegratedSpinner
         tooltip="Save to Server"
