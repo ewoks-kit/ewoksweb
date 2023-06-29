@@ -204,7 +204,6 @@ export interface NodeProps {
   moreHandles?: boolean;
   type: TaskType;
   label: string;
-  selected: boolean;
   color?: string;
   colorBorder?: string;
   content: ReactNode;

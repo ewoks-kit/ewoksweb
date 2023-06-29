@@ -4,7 +4,6 @@ import Node from './Node';
 import { contentStyle as style } from './nodeStyles';
 import { assertNodeDataDefined } from '../utils/typeGuards';
 import useNodeDataStore from '../store/useNodeDataStore';
-import type { TaskType } from '../types';
 
 function DataNode(args: NodeProps) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
@@ -14,9 +13,8 @@ function DataNode(args: NodeProps) {
 
   return (
     <Node
-      type={args.type as TaskType}
+      type={nodeData.task_props.task_type}
       label={nodeData.ewoks_props.label || ''}
-      selected={args.selected}
       color="#ced3ee"
       image={uiProps.icon || ''}
       node_icon={uiProps.node_icon}

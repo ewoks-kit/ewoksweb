@@ -74,4 +74,12 @@ export const style = {
     fontWeight: 300,
     lineHeight: '1.13',
   },
+  displayNode: {
+    textAlign: 'center' as const,
+    minWidth: '60px', // for standard width
+    maxWidth: '300px',
+    display: 'inline',
+    margin: '2px',
+    padding: '2px',
+  },
 } as const;

@@ -11,7 +11,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import bendingText from 'CustomEdges/BendingTextEdge';
 import multilineText from 'CustomEdges/MultilineTextEdge';
 import getAround from 'CustomEdges/GetAroundEdge';
-import FunctionNode from 'CustomNodes/FunctionNode';
+import GraphNode from 'CustomNodes/GraphNode';
 import NoteNode from 'CustomNodes/NoteNode';
 import ExecutionStepsNode from 'CustomNodes/ExecutionStepsNode';
 import DataNode from 'CustomNodes/DataNode';
@@ -31,6 +31,7 @@ import {
   assertNodeDefined,
 } from '../../utils/typeGuards';
 import FallbackMessage from './FallbackMessage';
+import GraphInOutNode from '../../CustomNodes/GraphInOutNode';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -49,11 +50,11 @@ const edgeTypes = {
 const nodeTypes = {
   executionSteps: ExecutionStepsNode,
   note: NoteNode,
-  graph: FunctionNode,
+  graph: GraphNode,
   method: DataNode,
   ppfmethod: DataNode,
-  graphInput: DataNode,
-  graphOutput: DataNode,
+  graphInput: GraphInOutNode,
+  graphOutput: GraphInOutNode,
   class: DataNode,
 };
 
@@ -200,6 +201,8 @@ function Canvas() {
         icon,
         moreHandles: false,
         nodeWidth: 100,
+        withImage: true,
+        withLabel: true,
       },
     });
     addNodes(newNode);
