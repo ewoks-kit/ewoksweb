@@ -21,14 +21,12 @@ const graphRF = (set: SetState<State>, get: GetState<State>): GraphRFSlice => ({
       graphRF: graphRFL,
     }));
 
-    if (isChangeToCanvasGraph && !get().inExecutionMode) {
+    if (isChangeToCanvasGraph) {
       get().setCanvasGraphChanged(true);
       return;
     }
 
-    if (!isChangeToCanvasGraph) {
-      get().setCanvasGraphChanged(false);
-    }
+    get().setCanvasGraphChanged(false);
   },
 });
 

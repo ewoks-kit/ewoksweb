@@ -5,7 +5,6 @@ import CheckIcon from '@material-ui/icons/Check';
 import Tooltip from '@material-ui/core/Tooltip';
 import tooltipText from './TooltipText';
 import { useDashboardStyles } from '../Dashboard/useDashboardStyles';
-import useStore from '../../store/useStore';
 import { IconButton } from '@material-ui/core';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
@@ -24,8 +23,6 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-
-  const inExecutionMode = useStore((state) => state.inExecutionMode);
 
   const timer = useRef<number>();
 
@@ -75,13 +72,7 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
             color="inherit"
             onClick={handleButtonClick}
             aria-label={tooltip}
-            disabled={
-              loading
-                ? true
-                : tooltip === 'Execute Workflow and exit Execution mode'
-                ? false
-                : inExecutionMode
-            }
+            disabled={loading}
           >
             {/* {children} */}
             {success ? (

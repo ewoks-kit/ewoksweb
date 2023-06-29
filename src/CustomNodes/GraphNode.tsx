@@ -21,7 +21,6 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   const graphInfo = useStore((state) => state.graphInfo);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
-  const inExecutionMode = useStore((state) => state.inExecutionMode);
 
   assertNodeDataDefined(nodeData, id);
 
@@ -78,16 +77,10 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
             showCropped={!uiProps.withLabel && !uiProps.withImage}
             color={uiProps.exists ? '#ced3ee' : 'red'}
           />
-          {(uiProps.withImage || inExecutionMode) && (
+          {uiProps.withImage && (
             <IconBoundary>
               <NodeIcon
                 image={uiProps.icon}
-                hasSpinner={inExecutionMode}
-                spinnerProps={{
-                  getting: uiProps.executing,
-                  tooltip: 'Execution',
-                  action: () => true,
-                }}
                 onDragStart={(e) => e.preventDefault()}
               />
             </IconBoundary>

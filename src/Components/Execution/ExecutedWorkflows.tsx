@@ -51,9 +51,6 @@ function ExecutedWorkflows() {
               {formatDate(workflowEvents[1]?.time || '')}
             </label>
             <label className={styles.executionData}>
-              {workflowEvents[1]?.executing || ''}
-            </label>
-            <label className={styles.executionData}>
               {workflowEvents[1]?.status || ''}
               {workflowEvents[workflowEvents.length - 1].error?.toString()}
             </label>

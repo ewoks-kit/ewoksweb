@@ -26,7 +26,6 @@ function DataNode(args: NodeProps) {
       withLabel={'withLabel' in uiProps ? uiProps.withLabel : true}
       colorBorder={'colorBorder' in uiProps ? uiProps.colorBorder : ''}
       content={<div style={style.io} />}
-      executing={uiProps.executing || false}
     />
   );
 }

@@ -50,7 +50,6 @@ function Upload(props: { children?: ReactNode } | undefined) {
   const initGraph = useStore((state) => state.initGraph);
   const setSubGraph = useStore((state) => state.setSubGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const inExecutionMode = useStore((state) => state.inExecutionMode);
 
   async function fileNameChanged(event: ChangeEvent<HTMLInputElement>) {
     if (workingGraph.graph.id === graphInfo.id) {
@@ -111,7 +110,6 @@ function Upload(props: { children?: ReactNode } | undefined) {
           size="small"
           component="span"
           aria-label="upload"
-          disabled={inExecutionMode}
         >
           {props?.children || ''}
         </Fab>

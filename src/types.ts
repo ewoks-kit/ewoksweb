@@ -1,11 +1,8 @@
 import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
 import type { CanvasGraphChangedSlice } from './store/canvasGraphChanged';
 import type { AllWorkflowsSlice } from './store/allWorkflows';
-import type { CurrentExecutionEventSlice } from './store/currentExecutionEvent';
-import type { ExecutedEventsSlice } from './store/executedEvents';
 import type { GraphRFSlice } from './store/graphRF';
 import type { ExecutedWorkflowsSlice } from './store/executedWorkflows';
-import type { InExecutionModeSlice } from './store/inExecutionMode';
 import type { OpenDraggableDialogSlice } from './store/openDraggableDialog';
 import type { GettingFromServerSlice } from './store/gettingFromServer';
 import type { GraphOrSubgraphSlice } from './store/graphOrSubgraph';
@@ -16,9 +13,7 @@ import type { SubGraphSlice } from './store/subGraph';
 import type { TasksSlice } from './store/tasks';
 import type { UndoIndexSlice } from './store/undoIndex';
 import type { UndoRedoSlice } from './store/undoRedo';
-import type { WatchedWorkflowsSlice } from './store/watchedWorkflows';
 import type { WorkingGraphSlice } from './store/workingGraph';
-import type { ExecutingEventsSlice } from './store/executingEvents';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
 import type { ChangeEvent, CSSProperties, ReactNode } from 'react';
@@ -87,24 +82,6 @@ export interface DialogParams {
   content: any;
 }
 
-// I need the EVENTS=[{nodeId, start/end, values: {}}] somewhere and the
-// execGraphRF = a graph upon graphRF structure that builds the execution-timeline
-// this line has what happened and when = state is in execGraphRF
-// Not play it from the beggining to view the state in a specific time-instanse
-// for a time-instanse we need
-// 1. what nodes were being executing and
-// 2. the results until now for the executed
-// 3. the way things happened in a timely manner?
-
-// to draw them on links we need to know where it came from? Not possible
-// so draw them on node input/output
-// stop for one is not the start of another which can wait for other inputs!
-// so draw on link on each side the events in a timely manner.
-
-export interface ExecutedWorkflowEvent extends Event {
-  status: string;
-}
-
 export interface ExecutedJobsResponse {
   jobs: Event[][];
 }
@@ -133,21 +110,6 @@ export interface Event {
   status?: string;
   event_type: string; // start/stop/progress events
   values: Record<string, unknown>; // all values entering or exiting a node
-  // for now put static executing here
-  executing?: string[];
-}
-
-export interface ExecutingState {
-  executingNodes: string[];
-  executed: [NodeExecutionHistory];
-  eventId: string; // the point on the timeline of events is the unique id in this entity
-}
-
-// For visuaization
-export interface NodeExecutionHistory {
-  id: string; // the unique number on the graph 1,2,3
-  eventId: string; // find the event for that time-point
-  // the ExecutingState can be found through the eventId again
 }
 
 export interface State
@@ -155,10 +117,7 @@ export interface State
     AllWorkflowsSlice,
     GraphRFSlice,
     GraphInfoSlice,
-    CurrentExecutionEventSlice,
-    ExecutedEventsSlice,
     ExecutedWorkflowsSlice,
-    InExecutionModeSlice,
     OpenDraggableDialogSlice,
     GettingFromServerSlice,
     GraphOrSubgraphSlice,
@@ -170,9 +129,7 @@ export interface State
     UndoIndexSlice,
     // TODO: check if index above can be merged with undoRedo below
     UndoRedoSlice,
-    WatchedWorkflowsSlice,
     WorkingGraphSlice,
-    ExecutingEventsSlice,
     RecentGraphsSlice {
   initializedGraph: GraphEwoks;
   initializedRFGraph: GraphRF;
@@ -210,7 +167,6 @@ export interface NodeProps {
   image?: string;
   node_icon?: string;
   comment?: string;
-  executing?: boolean;
   details?: boolean;
 }
 
@@ -223,7 +179,6 @@ export type TaskType =
   | 'graphOutput'
   | 'class'
   | 'note'
-  | 'executionSteps'
   | 'script';
 
 export interface Task {
@@ -332,7 +287,6 @@ export interface EwoksNodeUiProps {
   task_category?: string;
   moreHandles?: boolean;
   details?: boolean;
-  executing?: boolean;
   exists?: boolean;
   inputs?: outputsInputsSub[];
   outputs?: outputsInputsSub[];
@@ -370,7 +324,6 @@ export interface RFNodeUiProps {
   node_icon?: string;
   moreHandles?: boolean;
   details?: boolean;
-  executing?: boolean;
   exists?: boolean;
   // To position inputs-outputs of subgraphs in a graph
   inputs?: outputsInputsSub[];
@@ -574,7 +527,6 @@ export type SidebarLayout = 'grid' | 'list';
 export enum DrawerTab {
   Workflows,
   Icons,
-  Executions,
   Settings,
   Closed,
 }

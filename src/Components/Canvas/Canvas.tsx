@@ -13,7 +13,6 @@ import multilineText from 'CustomEdges/MultilineTextEdge';
 import getAround from 'CustomEdges/GetAroundEdge';
 import GraphNode from 'CustomNodes/GraphNode';
 import NoteNode from 'CustomNodes/NoteNode';
-import ExecutionStepsNode from 'CustomNodes/ExecutionStepsNode';
 import DataNode from 'CustomNodes/DataNode';
 import type { EwoksRFNode, EwoksRFLink, EwoksRFNodeData } from 'types';
 import useStore from 'store/useStore';
@@ -48,7 +47,6 @@ const edgeTypes = {
 };
 
 const nodeTypes = {
-  executionSteps: ExecutionStepsNode,
   note: NoteNode,
   graph: GraphNode,
   method: DataNode,

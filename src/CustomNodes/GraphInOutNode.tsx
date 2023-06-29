@@ -22,7 +22,6 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
     withLabel,
     colorBorder: borderColor,
     icon: image,
-    executing,
     nodeWidth,
   } = nodeData.ui_props;
 
@@ -30,7 +29,6 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
 
   const { getNodes, getEdges } = useReactFlow();
 
-  const inExecutionMode = useStore((state) => state.inExecutionMode);
   const graphInfo = useStore((state) => state.graphInfo);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
@@ -96,22 +94,9 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
             showCropped={!withLabel && !withImage}
             color="#ced3ee"
           />
-          {(withImage || inExecutionMode) && (
+          {withImage && (
             <IconBoundary>
-              <NodeIcon
-                image={image}
-                hasSpinner={
-                  inExecutionMode &&
-                  task_type !== 'graphOutput' &&
-                  task_type !== 'graphInput'
-                }
-                spinnerProps={{
-                  getting: executing,
-                  tooltip: 'Execution',
-                  action: () => true,
-                }}
-                onDragStart={(e) => e.preventDefault()}
-              />
+              <NodeIcon image={image} onDragStart={(e) => e.preventDefault()} />
             </IconBoundary>
           )}
           {task_type === 'graphOutput' && (

@@ -19,19 +19,16 @@ function Node({
   moreHandles,
   withImage,
   withLabel,
-  type,
   label,
   color,
   colorBorder: borderColor,
   image,
   node_icon,
   comment,
-  executing,
   nodeWidth,
 }: NodeProps) {
   const { getNodes, getEdges } = useReactFlow();
 
-  const inExecutionMode = useStore((state) => state.inExecutionMode);
   const graphInfo = useStore((state) => state.graphInfo);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
@@ -118,20 +115,10 @@ function Node({
             showCropped={!withLabel && !withImage}
             color={color}
           />
-          {(withImage || inExecutionMode) && (
+          {withImage && (
             <IconBoundary>
               <NodeIcon
                 image={node_icon ?? image}
-                hasSpinner={
-                  inExecutionMode &&
-                  type !== 'graphOutput' &&
-                  type !== 'graphInput'
-                }
-                spinnerProps={{
-                  getting: executing,
-                  tooltip: 'Execution',
-                  action: () => true,
-                }}
                 onDragStart={(e) => e.preventDefault()}
               />
             </IconBoundary>
