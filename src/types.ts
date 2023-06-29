@@ -175,7 +175,6 @@ export interface State
     RecentGraphsSlice {
   initializedGraph: GraphEwoks;
   initializedRFGraph: GraphRF;
-  initializedTask: Task;
 }
 
 export interface Action {
