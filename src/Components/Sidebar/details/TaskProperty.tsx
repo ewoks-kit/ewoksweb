@@ -1,5 +1,8 @@
 import styles from './Details.module.css';
 import { EditOutlined as EditIcon } from '@material-ui/icons';
+import { useState } from 'react';
+import IdentifierEditDialog from './IdentifierEditDialog';
+import { IconButton } from '@material-ui/core';
 
 interface TaskPropertyProps {
   id: string;
@@ -15,21 +18,40 @@ interface EditableNodeProps {
 function TaskProperty(props: TaskPropertyProps) {
   const { id, label, value, editable = false } = props;
 
-  // TODO: To be used by a dialog in the next MR
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function handleTaskPropChange(propertyValue: string) {
+  const [open, setOpen] = useState(false);
+
+  function handlePropSave(propertyValue: string) {
     if (props.onPropChange) {
       props.onPropChange({ [id]: propertyValue });
     }
   }
 
+  function handleDialogClose() {
+    setOpen(false);
+  }
+
   return (
-    <span className={styles.entry}>
-      <div key={id}>
+    <>
+      <div key={id} className={styles.entry} data-cy="task_props">
         <b>{label}:</b> {Array.isArray(value) ? value.join(', ') : value}
-        {editable && <EditIcon fontSize="small" />}
+        {editable && (
+          <IconButton
+            size="small"
+            aria-label="edit"
+            onClick={() => setOpen(true)}
+            color="primary"
+          >
+            <EditIcon fontSize="small" />
+          </IconButton>
+        )}
       </div>
-    </span>
+      <IdentifierEditDialog
+        task_identifier={value as string}
+        open={open}
+        onDialogClose={handleDialogClose}
+        onPropSave={handlePropSave}
+      />
+    </>
   );
 }
 export default TaskProperty;

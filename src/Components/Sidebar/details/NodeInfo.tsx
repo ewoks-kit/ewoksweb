@@ -1,15 +1,9 @@
-import {
-  Accordion,
-  AccordionSummary,
-  Typography,
-  AccordionDetails,
-} from '@material-ui/core';
-import { ExpandMore } from '@material-ui/icons';
-import type { EwoksRFNodeData } from '../../../types';
-import SidebarTooltip from '../SidebarTooltip';
-import TaskProperty from './TaskProperty';
+import { IconButton, Typography } from '@material-ui/core';
 
-import styles from '../EditSidebar.module.css';
+import type { EwoksRFNodeData } from '../../../types';
+import TaskProperty from './TaskProperty';
+import InfoIcon from '@material-ui/icons/Info';
+import SidebarTooltip from '../SidebarTooltip';
 
 interface Props {
   nodeId: string;
@@ -30,58 +24,57 @@ function NodeInfo(props: Props) {
   );
 
   return (
-    <SidebarTooltip text="These are properties of the task on which the node is based. They can only be changed by editing the relevant task.">
-      <Accordion className={styles.accordion} data-cy="node_info">
-        <AccordionSummary
-          expandIcon={<ExpandMore />}
-          aria-controls="panel1a-content"
+    <div>
+      <Typography style={{ display: 'flex', justifyContent: 'center' }}>
+        <span style={{ padding: '5px 0px 0px' }}>Task Info</span>
+        <SidebarTooltip
+          text="These are properties of the task on which the node
+          is based. They can only be changed by editing the relevant task except
+          the task identifier which appoints another task to the node"
         >
-          <Typography>Node Info</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <div style={{ width: '100%' }}>
-            <TaskProperty
-              editable={isEditable}
-              id="task_identifier"
-              label="Task Identifier"
-              value={nodeData.task_props.task_identifier || ''}
-              onPropChange={(propKeyValue) =>
-                onPropChange(propKeyValue, nodeData)
-              }
-            />
-            <TaskProperty id="id" label="Id" value={nodeId} />
-            <TaskProperty
-              id="task_type"
-              label="Task Type"
-              value={nodeData.task_props.task_type}
-            />
-            <TaskProperty
-              id="task_generator"
-              label="Generator"
-              value={nodeData.ewoks_props.task_generator}
-            />
-            <TaskProperty
-              id="task_category"
-              label="Category"
-              value={nodeData.task_props.task_category}
-            />
-            <TaskProperty
-              id="inputs"
-              label="Inputs"
-              value={[
-                ...(nodeData.task_props.required_input_names ?? []),
-                ...(nodeData.task_props.optional_input_names ?? []),
-              ]}
-            />
-            <TaskProperty
-              id="outputs"
-              label="Outputs"
-              value={nodeData.task_props.output_names}
-            />
-          </div>
-        </AccordionDetails>
-      </Accordion>
-    </SidebarTooltip>
+          <IconButton size="small">
+            <InfoIcon fontSize="small" />
+          </IconButton>
+        </SidebarTooltip>
+      </Typography>
+
+      <TaskProperty
+        editable={isEditable}
+        id="task_identifier"
+        label="Task Identifier"
+        value={nodeData.task_props.task_identifier || ''}
+        onPropChange={(propKeyValue) => onPropChange(propKeyValue, nodeData)}
+      />
+      <TaskProperty id="id" label="Node Id" value={nodeId} />
+      <TaskProperty
+        id="task_type"
+        label="Task Type"
+        value={nodeData.task_props.task_type}
+      />
+      <TaskProperty
+        id="task_generator"
+        label="Generator"
+        value={nodeData.ewoks_props.task_generator}
+      />
+      <TaskProperty
+        id="task_category"
+        label="Category"
+        value={nodeData.task_props.task_category}
+      />
+      <TaskProperty
+        id="inputs"
+        label="Inputs"
+        value={[
+          ...(nodeData.task_props.required_input_names ?? []),
+          ...(nodeData.task_props.optional_input_names ?? []),
+        ]}
+      />
+      <TaskProperty
+        id="outputs"
+        label="Outputs"
+        value={nodeData.task_props.output_names}
+      />
+    </div>
   );
 }
 
