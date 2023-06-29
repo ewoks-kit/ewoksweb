@@ -122,7 +122,7 @@ function TaskForm(props: Props) {
           <Controller
             name="task_type"
             control={control}
-            rules={{ required: true }}
+            rules={{ required: true, minLength: 4 }}
             render={({ field }) => {
               const { onChange, ...restField } = field;
 

@@ -1,11 +1,14 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { Controller, useForm } from 'react-hook-form';
+import FormField from '../../General/taskform/FormField';
+import type { TaskFields } from '../../General/taskform/models';
+import { Alert } from '@material-ui/lab';
 
 interface EditingDialogProps {
   task_identifier: string;
@@ -17,50 +20,53 @@ interface EditingDialogProps {
 export default function IdentifierEditDialog(props: EditingDialogProps) {
   const { task_identifier, open, onDialogClose, onPropSave } = props;
 
-  const [taskIdentifier, setTaskIdentifier] = useState('');
+  const { control, handleSubmit, formState, reset } = useForm<TaskFields>({
+    defaultValues: {
+      task_identifier: task_identifier || '',
+    },
+  });
 
-  useEffect(() => {
-    setTaskIdentifier(task_identifier);
-  }, [task_identifier]);
-
-  const handleClose = () => {
-    props.onDialogClose();
-  };
+  const onSubmit = handleSubmit(async (data: Partial<TaskFields>) => {
+    onPropSave(data.task_identifier || '');
+    reset();
+    onDialogClose();
+  });
 
   return (
-    <div>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
+    <Dialog
+      open={open}
+      onClose={onDialogClose}
+      aria-labelledby="form-dialog-title"
+    >
+      <form onSubmit={onSubmit}>
         <DialogTitle id="form-dialog-title">
           Change the Task this Node is based on
         </DialogTitle>
         <DialogContent>
+          {formState.errors.task_identifier && (
+            <Alert severity="error">Please give a task identifier !</Alert>
+          )}
           <DialogContentText>
             The given task identifier will replace the existing in this node and
             change his behavior as well as the links attached to this node.
           </DialogContentText>
-          <TextField
-            margin="dense"
-            id="task_identifier"
-            label="Task Identifier"
-            type="text"
-            fullWidth
-            value={taskIdentifier}
-            onChange={(event) => setTaskIdentifier(event.target.value)}
+
+          <Controller
+            name="task_identifier"
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => <FormField label="Identifier" {...field} />}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={onDialogClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => onPropSave(taskIdentifier)} color="primary">
+          <Button type="submit" color="primary">
             Save
           </Button>
         </DialogActions>
-      </Dialog>
-    </div>
+      </form>
+    </Dialog>
   );
 }
