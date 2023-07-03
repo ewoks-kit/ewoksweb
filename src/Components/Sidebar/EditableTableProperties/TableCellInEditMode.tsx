@@ -54,6 +54,15 @@ function TableCellInEditMode(props: CustomTableCellProps) {
     );
   }, [row]);
 
+  function onChangeNumber(
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
+    // eslint-disable-next-line require-unicode-regexp
+    if (/^-?\d*\.?\d*$/.test(event.target.value)) {
+      onChange(event, row, index);
+    }
+  }
+
   function onChangeBool(
     e: ChangeEvent<HTMLInputElement>,
     changedRow: EditableTableRow,
@@ -101,9 +110,9 @@ function TableCellInEditMode(props: CustomTableCellProps) {
         <FormControl fullWidth style={{ marginLeft: '5px' }}>
           <Input
             value={row[name]}
-            type="number"
+            type="text"
             name={name}
-            onChange={(e) => onChange(e, row, index)}
+            onChange={(event) => onChangeNumber(event)}
             className={classes.input}
             data-cy="inputInEditableCell"
           />

@@ -6,6 +6,7 @@ import type {
   EwoksRFNode,
   Inputs,
 } from '../types';
+import { isString } from './typeGuards';
 import { calcDataMapping, stringOrNumber } from './utils';
 
 function cleanDefaultInputs(default_inputs: Inputs[]) {
@@ -47,10 +48,14 @@ function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
   if (!default_inputs) {
     return [];
   }
-  return default_inputs.map(({ name, value }) => {
+  return default_inputs.map(({ name, value, type }) => {
     return {
       name: stringOrNumber(name),
-      value,
+      value:
+        // eslint-disable-next-line require-unicode-regexp
+        type === 'number' && isString(value) && /^-?\d*\.?\d*$/.test(value)
+          ? Number(value)
+          : value,
     };
   });
 }

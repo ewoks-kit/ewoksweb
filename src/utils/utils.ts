@@ -1,6 +1,7 @@
 /* eslint-disable require-unicode-regexp */
 import { nanoid } from 'nanoid';
 import type { Condition, DataMapping, DataMappingEwoks } from '../types';
+import { isString } from './typeGuards';
 
 export function createDataMappingData(pair: DataMappingEwoks): DataMapping {
   return {
@@ -17,6 +18,10 @@ export function calcConditionValue(condition: Condition): unknown {
     ? false
     : condition.value === 'null'
     ? null
+    : condition.type === 'number' &&
+      isString(condition.value) &&
+      /^-?\d*\.?\d*$/.test(condition.value)
+    ? Number(condition.value)
     : condition.value;
 }
 
