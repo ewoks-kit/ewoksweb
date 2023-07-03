@@ -20,15 +20,6 @@ function NoteNode(args: NoteProps) {
     setComment(nodeData.comment || '');
   }, [args.id, nodeData]);
 
-  const customTitle = {
-    ...style.title,
-    wordWrap: 'break-word',
-    borderRadius: '10px',
-    backgroundColor: '#ced3ee',
-    textAlign: 'center',
-    padding: '1px',
-  } as const;
-
   return (
     <div
       className="node-content"
@@ -39,16 +30,16 @@ function NoteNode(args: NoteProps) {
       role="button"
       tabIndex={0}
     >
-      <span
-        style={{ maxWidth: `${nodeData.ui_props.nodeWidth || 100}px` }}
+      <div
+        style={{ maxWidth: `${uiProps.nodeWidth || 100}px` }}
         className="icons"
       >
         {nodeData.ewoks_props.label &&
           nodeData.ewoks_props.label.length > 0 && (
-            <div style={customTitle}>{nodeData.ewoks_props.label}</div>
+            <div style={style.noteTitle}>{nodeData.ewoks_props.label}</div>
           )}
         <div style={{ wordWrap: 'break-word' }}>{comment}</div>
-      </span>
+      </div>
     </div>
   );
 }
