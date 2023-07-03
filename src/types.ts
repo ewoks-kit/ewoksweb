@@ -267,10 +267,10 @@ export interface LinkStyle {
 export interface Note {
   id: string;
   label?: string;
-  comment: string;
+  comment?: string;
   position: XYPosition;
   nodeWidth?: number;
-  colorBorder: string;
+  colorBorder?: string;
 }
 
 export interface DataMappingEwoks {

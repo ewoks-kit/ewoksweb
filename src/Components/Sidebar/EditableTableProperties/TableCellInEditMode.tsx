@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import type { CustomTableCellProps, EditableTableRow } from '../../../types';
 import SelectNameValue from './SelectNameValue';
+import { isDecimalNumber } from '../../../utils/utils';
 
 const useStyles = makeStyles(() => ({
   input: {
@@ -53,6 +54,14 @@ function TableCellInEditMode(props: CustomTableCellProps) {
         : 'null'
     );
   }, [row]);
+
+  function onChangeNumber(
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
+    if (isDecimalNumber(event.target.value)) {
+      onChange(event, row, index);
+    }
+  }
 
   function onChangeBool(
     e: ChangeEvent<HTMLInputElement>,
@@ -101,9 +110,9 @@ function TableCellInEditMode(props: CustomTableCellProps) {
         <FormControl fullWidth style={{ marginLeft: '5px' }}>
           <Input
             value={row[name]}
-            type="number"
+            type="text"
             name={name}
-            onChange={(e) => onChange(e, row, index)}
+            onChange={(event) => onChangeNumber(event)}
             className={classes.input}
             data-cy="inputInEditableCell"
           />

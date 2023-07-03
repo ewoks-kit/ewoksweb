@@ -8,10 +8,10 @@ export function calcNoteNodes(graph: GraphRF): Note[] {
       return {
         id: noteNod.id,
         label: noteNod.data.ewoks_props.label,
-        comment: noteNod.data.comment,
+        comment: noteNod.data.comment || '',
         position: noteNod.position,
         nodeWidth: noteNod.data.ui_props.nodeWidth,
         colorBorder: noteNod.data.ui_props.colorBorder,
-      } as Note;
+      };
     });
 }

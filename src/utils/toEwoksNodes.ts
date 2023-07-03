@@ -6,7 +6,8 @@ import type {
   EwoksRFNode,
   Inputs,
 } from '../types';
-import { calcDataMapping, stringOrNumber } from './utils';
+import { isString } from './typeGuards';
+import { calcDataMapping, isDecimalNumber, stringOrNumber } from './utils';
 
 function cleanDefaultInputs(default_inputs: Inputs[]) {
   return default_inputs.map((dIn) => {
@@ -47,10 +48,13 @@ function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
   if (!default_inputs) {
     return [];
   }
-  return default_inputs.map(({ name, value }) => {
+  return default_inputs.map(({ name, value, type }) => {
     return {
       name: stringOrNumber(name),
-      value,
+      value:
+        type === 'number' && isString(value) && isDecimalNumber(value)
+          ? Number(value)
+          : value,
     };
   });
 }
