@@ -27,10 +27,10 @@ describe('create workflow and save', () => {
     const id = nanoid();
 
     cy.findByRole('textbox', {
-      name: 'New Name - Identifier',
+      name: 'Identifier',
     }).type(id);
 
-    cy.findByRole('button', { name: 'Save Workflow' }).click();
+    cy.findByRole('button', { name: 'Save workflow' }).click();
 
     cy.get('.react-flow__edge').should('have.length', 0);
     cy.get('.react-flow__node').should('have.length', 0);

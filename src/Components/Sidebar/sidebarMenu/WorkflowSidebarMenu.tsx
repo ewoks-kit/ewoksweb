@@ -4,7 +4,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import GraphFormDialog from '../../General/GraphFormDialog';
+import GraphFormDialog from '../../General/forms/GraphFormDialog';
 import useStore from '../../../store/useStore';
 import { GraphFormAction } from '../../../types';
 import { Delete as DeleteIcon } from '@material-ui/icons';
@@ -58,8 +58,8 @@ export default function WorkflowSidebarMenu() {
       <GraphFormDialog
         elementToEdit={graphInfo}
         action={GraphFormAction.cloneGraph}
-        open={openSaveDialog}
-        setOpenSaveDialog={setOpenSaveDialog}
+        isOpen={openSaveDialog}
+        onClose={() => setOpenSaveDialog(false)}
       />
 
       <MenuItem
