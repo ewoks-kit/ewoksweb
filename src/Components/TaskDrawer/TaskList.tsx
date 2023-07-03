@@ -23,7 +23,11 @@ function TaskList() {
 
   return (
     <>
-      <TaskListToolbar onLayoutChange={setSidebarLayout} />
+      <TaskListToolbar
+        layout={sidebarLayout}
+        onLayoutChange={setSidebarLayout}
+      />
+
       {[...new Set(tasks.map((m) => m.category)).values()].map((category) => (
         <Accordion key={category} className="add-nodes-accordion">
           <AccordionSummary
