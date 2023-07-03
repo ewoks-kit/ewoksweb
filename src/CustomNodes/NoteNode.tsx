@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react';
 import { style } from './nodeStyles';
-import SaveIcon from '@material-ui/icons/Save';
-import type { ChangeEvent } from 'react';
-import { IconButton, TextField } from '@material-ui/core';
 import type { NodeProps } from 'reactflow';
 import type { EwoksRFNodeData } from '../types';
 import useNodeDataStore from '../store/useNodeDataStore';
@@ -13,78 +10,36 @@ type NoteProps = NodeProps<EwoksRFNodeData>;
 function NoteNode(args: NoteProps) {
   const [comment, setComment] = useState('');
 
-  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
   assertNodeDataDefined(nodeData, args.id);
+
+  const uiProps = nodeData.ui_props;
+  const borderColor = 'colorBorder' in uiProps ? uiProps.colorBorder : '';
 
   useEffect(() => {
     setComment(nodeData.comment || '');
   }, [args.id, nodeData]);
-
-  const customTitle = {
-    ...style.title,
-    wordWrap: 'break-word',
-    borderRadius: '10px',
-    backgroundColor: '#ced3ee',
-    textAlign: 'center',
-    padding: '1px',
-  } as const;
-
-  const commentChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setComment(event.target.value);
-  };
-
-  const save = () => {
-    // TODO: this will be removed as on-node editing is not available
-    const newNodeData: EwoksRFNodeData = {
-      task_props: { task_type: 'note', task_identifier: args.id },
-      ewoks_props: { label: nodeData.ewoks_props.label },
-      comment,
-      ui_props: {},
-    };
-
-    mergeNodeData(args.id, newNodeData);
-  };
 
   return (
     <div
       className="node-content"
       style={{
         padding: '10px',
+        borderColor,
       }}
       role="button"
       tabIndex={0}
     >
-      <span
-        style={{ maxWidth: `${nodeData.ui_props.nodeWidth || 100}px` }}
+      <div
+        style={{ maxWidth: `${uiProps.nodeWidth || 100}px` }}
         className="icons"
       >
         {nodeData.ewoks_props.label &&
           nodeData.ewoks_props.label.length > 0 && (
-            <div style={customTitle}>{nodeData.ewoks_props.label}</div>
+            <div style={style.noteTitle}>{nodeData.ewoks_props.label}</div>
           )}
-        {nodeData.ui_props.details ? (
-          <TextField
-            label="edit comment"
-            multiline
-            maxRows={4}
-            value={comment}
-            onChange={commentChanged}
-            variant="standard"
-          />
-        ) : (
-          <div style={{ wordWrap: 'break-word' }}>{comment}</div>
-        )}
-        {nodeData.ui_props.details && (
-          <IconButton
-            style={{ margin: '0px 2px', padding: '0px' }}
-            aria-label="edit"
-            onClick={save}
-          >
-            <SaveIcon color="primary" />
-          </IconButton>
-        )}
-      </span>
+        <div style={{ wordWrap: 'break-word' }}>{comment}</div>
+      </div>
     </div>
   );
 }

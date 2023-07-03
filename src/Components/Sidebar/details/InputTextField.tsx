@@ -17,7 +17,7 @@ export default function InputTextField(props: InputTextFieldProps) {
         <TextField
           label={label}
           variant="outlined"
-          defaultValue={defaultValue || ''}
+          value={defaultValue || ''}
           margin="dense"
           onChange={(event) => props.onValueSave(event.target.value)}
           multiline

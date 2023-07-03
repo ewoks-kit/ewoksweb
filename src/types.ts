@@ -165,7 +165,6 @@ export interface NodeProps {
   image?: string;
   node_icon?: string;
   comment?: string;
-  details?: boolean;
 }
 
 export type TaskType =
@@ -226,6 +225,7 @@ export interface Note {
   comment: string;
   position: XYPosition;
   nodeWidth?: number;
+  colorBorder: string;
 }
 
 export interface DataMappingEwoks {
@@ -284,7 +284,6 @@ export interface EwoksNodeUiProps {
   task_icon?: string;
   task_category?: string;
   moreHandles?: boolean;
-  details?: boolean;
   exists?: boolean;
   inputs?: outputsInputsSub[];
   outputs?: outputsInputsSub[];
@@ -321,7 +320,6 @@ export interface RFNodeUiProps {
   nodeWidth?: number;
   node_icon?: string;
   moreHandles?: boolean;
-  details?: boolean;
   exists?: boolean;
   // To position inputs-outputs of subgraphs in a graph
   inputs?: outputsInputsSub[];

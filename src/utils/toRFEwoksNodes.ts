@@ -84,7 +84,6 @@ export function toRFEwoksNodes(
             type: nodeType,
             icon: uiProps?.node_icon ?? uiProps?.icon ?? '',
             moreHandles: uiProps?.moreHandles ?? false,
-            details: uiProps?.details ?? false,
             withImage: uiProps?.withImage ?? true,
             withLabel: uiProps?.withLabel ?? true,
             colorBorder: uiProps?.colorBorder ?? '',

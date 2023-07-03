@@ -20,7 +20,6 @@ function DataNode(args: NodeProps) {
       node_icon={uiProps.node_icon}
       comment={nodeData.comment || ''}
       moreHandles={uiProps.moreHandles}
-      details={uiProps.details}
       withImage={'withImage' in uiProps ? uiProps.withImage : true}
       nodeWidth={'nodeWidth' in uiProps ? uiProps.nodeWidth : 100}
       withLabel={'withLabel' in uiProps ? uiProps.withLabel : true}
