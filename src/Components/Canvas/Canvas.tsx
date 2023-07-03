@@ -1,6 +1,7 @@
 import type { DragEventHandler, MouseEvent } from 'react';
 import { useEffect, useRef } from 'react';
 import type { Node, Edge, Connection, NodeChange, EdgeChange } from 'reactflow';
+import { updateEdge } from 'reactflow';
 import ReactFlow, {
   Controls,
   useReactFlow,
@@ -220,6 +221,7 @@ function Canvas() {
         severity: 'warning',
       });
     }
+    setEdges((els) => updateEdge(oldEdge, newConnection, els));
   };
 
   const onConnect = (params: Connection) => {
