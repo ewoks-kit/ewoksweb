@@ -270,6 +270,7 @@ export interface Note {
   comment: string;
   position: XYPosition;
   nodeWidth?: number;
+  colorBorder: string;
 }
 
 export interface DataMappingEwoks {
