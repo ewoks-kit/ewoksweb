@@ -46,18 +46,15 @@ export default function EditElementStyle({
   const { title, EditComponent } = getAccordionContent(selectedElement);
 
   return (
-    <Accordion className={styles.accordion}>
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-      >
-        <Typography>{title}</Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <form noValidate autoComplete="off">
-          <EditComponent />
-        </form>
-      </AccordionDetails>
-    </Accordion>
+    <>
+      <Typography style={{ display: 'flex', justifyContent: 'center' }}>
+        <span style={{ padding: '5px 0px 0px' }}>{title}</span>
+      </Typography>
+      {/* <Typography>{title}</Typography> */}
+
+      <form noValidate autoComplete="off">
+        <EditComponent />
+      </form>
+    </>
   );
 }
