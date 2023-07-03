@@ -74,8 +74,43 @@ function TopAppBar(props: Props) {
           color="inherit"
           noWrap
           className={classes.title}
+          style={{ display: 'flex', alignItems: 'center' }}
         >
-          <TopNavbarLabel />
+          <span
+            style={{
+              flexBasis: '40%',
+            }}
+          >
+            <b
+              style={{
+                fontSize: '18px',
+                letterSpacing: '2px',
+              }}
+            >
+              EwoksWeb
+            </b>
+            <span
+              style={{
+                fontSize: '14px',
+                padding: '5px',
+              }}
+            >
+              Edit
+            </span>
+            |
+            <span
+              style={{
+                fontSize: '14px',
+                padding: '5px',
+              }}
+            >
+              Monitor
+            </span>
+          </span>
+
+          <span style={{ flexBasis: '50%' }}>
+            <TopNavbarLabel />
+          </span>
         </Typography>
         <GetFromServer />
 
