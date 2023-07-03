@@ -95,45 +95,43 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   return (
     <FormControl variant="filled" fullWidth>
       {nodeData.task_props.task_type !== 'note' && (
-        <>
-          <div>
-            <label htmlFor="withImage">With Image</label>
-            <Checkbox
-              name="withImage"
-              checked={
-                nodeData.ui_props.withImage === undefined
-                  ? true
-                  : !!nodeData.ui_props.withImage
-              }
-              onChange={(event) => withImageChanged(event.target.checked)}
-              inputProps={{ 'aria-label': 'controlled' }}
-            />
-            <label htmlFor="withLabel">With Label</label>
-            <Checkbox
-              name="withLabel"
-              checked={
-                nodeData.ui_props.withLabel === undefined
-                  ? true
-                  : !!nodeData.ui_props.withLabel
-              }
-              onChange={(event) => withLabelChanged(event.target.checked)}
-              inputProps={{ 'aria-label': 'controlled' }}
-            />
-          </div>
-          <div>
-            <label htmlFor="head">Color</label>
-            <input
-              aria-label="Color"
-              type="color"
-              id="head"
-              name="head"
-              value={nodeData.ui_props.colorBorder || ''}
-              onChange={(event) => colorBorderChanged(event.target.value)}
-              style={{ margin: '10px' }}
-            />
-          </div>
-        </>
+        <div>
+          <label htmlFor="withImage">With Image</label>
+          <Checkbox
+            name="withImage"
+            checked={
+              nodeData.ui_props.withImage === undefined
+                ? true
+                : !!nodeData.ui_props.withImage
+            }
+            onChange={(event) => withImageChanged(event.target.checked)}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
+          <label htmlFor="withLabel">With Label</label>
+          <Checkbox
+            name="withLabel"
+            checked={
+              nodeData.ui_props.withLabel === undefined
+                ? true
+                : !!nodeData.ui_props.withLabel
+            }
+            onChange={(event) => withLabelChanged(event.target.checked)}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
+        </div>
       )}
+      <div>
+        <label htmlFor="head">Color</label>
+        <input
+          aria-label="Color"
+          type="color"
+          id="head"
+          name="head"
+          value={nodeData.ui_props.colorBorder || ''}
+          onChange={(event) => colorBorderChanged(event.target.value)}
+          style={{ margin: '10px' }}
+        />
+      </div>
       {!['graphInput', 'graphOutput', 'note'].includes(
         nodeData.task_props.task_type
       ) && (
@@ -164,21 +162,25 @@ export default function EditNodeStyle(props: { nodeId: string }) {
           valueLabelDisplay="on"
         />
       </div>
-      <FormControl variant="outlined" fullWidth>
-        <InputLabel id="replace-node-icon">Node Icon</InputLabel>
-        <Select
-          labelId="replace-node-icon"
-          value={nodeData.ui_props.node_icon ?? nodeData.ui_props.icon}
-          label="Override Task Icon"
-          onChange={handleNodeIconChange}
-        >
-          {icons.map((icon) => (
-            <MenuItem value={icon.name} key={icon.name}>
-              {icon.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      {!['graphInput', 'graphOutput', 'note'].includes(
+        nodeData.task_props.task_type
+      ) && (
+        <FormControl variant="outlined" fullWidth>
+          <InputLabel id="replace-node-icon">Node Icon</InputLabel>
+          <Select
+            labelId="replace-node-icon"
+            value={nodeData.ui_props.node_icon ?? nodeData.ui_props.icon}
+            label="Override Task Icon"
+            onChange={handleNodeIconChange}
+          >
+            {icons.map((icon) => (
+              <MenuItem value={icon.name} key={icon.name}>
+                {icon.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
     </FormControl>
   );
 }

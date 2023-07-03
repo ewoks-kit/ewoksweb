@@ -136,69 +136,82 @@ export default function NodeDetails(selectedElement: Node) {
   return (
     <Box>
       <NodeLabelComment showComment selectedElement={selectedElement} />
-      <DefaultInputs {...selectedElement} />
+      {selectedElement.type !== 'note' && (
+        <>
+          <DefaultInputs {...selectedElement} />
 
-      <SidebarTooltip
-        text={`Set to True when the default input covers all required input
+          <SidebarTooltip
+            text={`Set to True when the default input covers all required input
               (used for method and script as the required inputs are unknown).`}
-      >
-        <div>
-          <Checkbox
-            checked={inputsComplete}
-            onChange={(event) => inputsCompleteChanged(event.target.checked)}
-            inputProps={{ 'aria-label': 'controlled' }}
-            color="primary"
-          />
-          <b>Inputs Complete</b>
-        </div>
-      </SidebarTooltip>
+          >
+            <div>
+              <Checkbox
+                checked={inputsComplete}
+                onChange={(event) =>
+                  inputsCompleteChanged(event.target.checked)
+                }
+                inputProps={{ 'aria-label': 'controlled' }}
+                color="primary"
+              />
+              <b>Inputs Complete</b>
+            </div>
+          </SidebarTooltip>
 
-      <SidebarTooltip
-        text={`When set to True all nodes without error handler
+          <SidebarTooltip
+            text={`When set to True all nodes without error handler
               will be linked to this node. ONLY for one node in its graph`}
-      >
-        <div>
-          <Checkbox
-            checked={defaultErrorNode}
-            onChange={(event) => defaultErrorNodeChanged(event.target.checked)}
-            inputProps={{ 'aria-label': 'controlled' }}
-            color="primary"
-          />
-          <b>Default Error Node</b>
-        </div>
-      </SidebarTooltip>
+          >
+            <div>
+              <Checkbox
+                checked={defaultErrorNode}
+                onChange={(event) =>
+                  defaultErrorNodeChanged(event.target.checked)
+                }
+                inputProps={{ 'aria-label': 'controlled' }}
+                color="primary"
+              />
+              <b>Default Error Node</b>
+            </div>
+          </SidebarTooltip>
 
-      {defaultErrorNode && (
-        <div>
-          <Typography component="div" style={{ fontSize: '15px' }}>
-            <Grid component="label" container alignItems="center" spacing={1}>
-              <Grid item>
-                {!showDataMapping ? <b>Map all data</b> : 'Map all data'}
-              </Grid>
-              <Grid item>
-                <Switch
-                  checked={showDataMapping}
-                  onChange={handleChangeShowDataMapping}
-                  name="dataMappingSwitch"
-                />
-              </Grid>
-              <Grid item>
-                {showDataMapping ? <b>Data Mapping</b> : 'Data Mapping'}
-              </Grid>
-            </Grid>
-          </Typography>
-        </div>
+          {defaultErrorNode && (
+            <div>
+              <Typography component="div" style={{ fontSize: '15px' }}>
+                <Grid
+                  component="label"
+                  container
+                  alignItems="center"
+                  spacing={1}
+                >
+                  <Grid item>
+                    {!showDataMapping ? <b>Map all data</b> : 'Map all data'}
+                  </Grid>
+                  <Grid item>
+                    <Switch
+                      checked={showDataMapping}
+                      onChange={handleChangeShowDataMapping}
+                      name="dataMappingSwitch"
+                    />
+                  </Grid>
+                  <Grid item>
+                    {showDataMapping ? <b>Data Mapping</b> : 'Data Mapping'}
+                  </Grid>
+                </Grid>
+              </Typography>
+            </div>
+          )}
+          {defaultErrorNode && showDataMapping && (
+            <div>
+              <NodeDataMapping {...selectedElement} />
+            </div>
+          )}
+          <NodeInfo
+            nodeId={selectedElement.id}
+            nodeData={nodeData}
+            onPropChange={handlePropChange}
+          />
+        </>
       )}
-      {defaultErrorNode && showDataMapping && (
-        <div>
-          <NodeDataMapping {...selectedElement} />
-        </div>
-      )}
-      <NodeInfo
-        nodeId={selectedElement.id}
-        nodeData={nodeData}
-        onPropChange={handlePropChange}
-      />
     </Box>
   );
 }

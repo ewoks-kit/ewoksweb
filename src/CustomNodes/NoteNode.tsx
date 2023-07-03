@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react';
 import { style } from './nodeStyles';
-import SaveIcon from '@material-ui/icons/Save';
-import type { ChangeEvent } from 'react';
-import { IconButton, TextField } from '@material-ui/core';
 import type { NodeProps } from 'reactflow';
 import type { EwoksRFNodeData } from '../types';
 import useNodeDataStore from '../store/useNodeDataStore';
@@ -13,9 +10,11 @@ type NoteProps = NodeProps<EwoksRFNodeData>;
 function NoteNode(args: NoteProps) {
   const [comment, setComment] = useState('');
 
-  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
   assertNodeDataDefined(nodeData, args.id);
+
+  const uiProps = nodeData.ui_props;
+  const borderColor = 'colorBorder' in uiProps ? uiProps.colorBorder : '';
 
   useEffect(() => {
     setComment(nodeData.comment || '');
@@ -30,27 +29,12 @@ function NoteNode(args: NoteProps) {
     padding: '1px',
   } as const;
 
-  const commentChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setComment(event.target.value);
-  };
-
-  const save = () => {
-    // TODO: this will be removed as on-node editing is not available
-    const newNodeData: EwoksRFNodeData = {
-      task_props: { task_type: 'note', task_identifier: args.id },
-      ewoks_props: { label: nodeData.ewoks_props.label },
-      comment,
-      ui_props: {},
-    };
-
-    mergeNodeData(args.id, newNodeData);
-  };
-
   return (
     <div
       className="node-content"
       style={{
         padding: '10px',
+        borderColor,
       }}
       role="button"
       tabIndex={0}
@@ -63,27 +47,7 @@ function NoteNode(args: NoteProps) {
           nodeData.ewoks_props.label.length > 0 && (
             <div style={customTitle}>{nodeData.ewoks_props.label}</div>
           )}
-        {nodeData.ui_props.details ? (
-          <TextField
-            label="edit comment"
-            multiline
-            maxRows={4}
-            value={comment}
-            onChange={commentChanged}
-            variant="standard"
-          />
-        ) : (
-          <div style={{ wordWrap: 'break-word' }}>{comment}</div>
-        )}
-        {nodeData.ui_props.details && (
-          <IconButton
-            style={{ margin: '0px 2px', padding: '0px' }}
-            aria-label="edit"
-            onClick={save}
-          >
-            <SaveIcon color="primary" />
-          </IconButton>
-        )}
+        <div style={{ wordWrap: 'break-word' }}>{comment}</div>
       </span>
     </div>
   );
