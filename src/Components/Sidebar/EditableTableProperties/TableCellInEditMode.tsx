@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import type { CustomTableCellProps, EditableTableRow } from '../../../types';
 import SelectNameValue from './SelectNameValue';
+import { isDecimalNumber } from '../../../utils/utils';
 
 const useStyles = makeStyles(() => ({
   input: {
@@ -57,8 +58,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
   function onChangeNumber(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
-    // eslint-disable-next-line require-unicode-regexp
-    if (/^-?\d*\.?\d*$/.test(event.target.value)) {
+    if (isDecimalNumber(event.target.value)) {
       onChange(event, row, index);
     }
   }

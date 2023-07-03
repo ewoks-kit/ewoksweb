@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { style } from './nodeStyles';
 import type { NodeProps } from 'reactflow';
 import type { EwoksRFNodeData } from '../types';
@@ -8,24 +7,17 @@ import { assertNodeDataDefined } from '../utils/typeGuards';
 type NoteProps = NodeProps<EwoksRFNodeData>;
 
 function NoteNode(args: NoteProps) {
-  const [comment, setComment] = useState('');
-
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
   assertNodeDataDefined(nodeData, args.id);
 
   const uiProps = nodeData.ui_props;
-  const borderColor = 'colorBorder' in uiProps ? uiProps.colorBorder : '';
-
-  useEffect(() => {
-    setComment(nodeData.comment || '');
-  }, [args.id, nodeData]);
 
   return (
     <div
       className="node-content"
       style={{
         padding: '10px',
-        borderColor,
+        borderColor: uiProps.colorBorder,
       }}
       role="button"
       tabIndex={0}
@@ -38,7 +30,7 @@ function NoteNode(args: NoteProps) {
           nodeData.ewoks_props.label.length > 0 && (
             <div style={style.noteTitle}>{nodeData.ewoks_props.label}</div>
           )}
-        <div style={{ wordWrap: 'break-word' }}>{comment}</div>
+        <div style={{ wordWrap: 'break-word' }}>{nodeData.comment}</div>
       </div>
     </div>
   );

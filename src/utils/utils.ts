@@ -20,7 +20,7 @@ export function calcConditionValue(condition: Condition): unknown {
     ? null
     : condition.type === 'number' &&
       isString(condition.value) &&
-      /^-?\d*\.?\d*$/.test(condition.value)
+      isDecimalNumber(condition.value)
     ? Number(condition.value)
     : condition.value;
 }
@@ -54,4 +54,8 @@ export function stringOrNumber(
     : value && /^\d+$/.test(value)
     ? Number.parseInt(value, 10)
     : value;
+}
+
+export function isDecimalNumber(value: string) {
+  return /^-?\d*\.?\d*$/u.test(value);
 }

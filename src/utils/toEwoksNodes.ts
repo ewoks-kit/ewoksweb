@@ -7,7 +7,7 @@ import type {
   Inputs,
 } from '../types';
 import { isString } from './typeGuards';
-import { calcDataMapping, stringOrNumber } from './utils';
+import { calcDataMapping, isDecimalNumber, stringOrNumber } from './utils';
 
 function cleanDefaultInputs(default_inputs: Inputs[]) {
   return default_inputs.map((dIn) => {
@@ -52,8 +52,7 @@ function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
     return {
       name: stringOrNumber(name),
       value:
-        // eslint-disable-next-line require-unicode-regexp
-        type === 'number' && isString(value) && /^-?\d*\.?\d*$/.test(value)
+        type === 'number' && isString(value) && isDecimalNumber(value)
           ? Number(value)
           : value,
     };

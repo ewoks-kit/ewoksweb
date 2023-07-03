@@ -164,8 +164,7 @@ function EditableTable(props: EditableTableProps) {
         typeOfInputs[index]
       )
     ) {
-      const { value } = e.target;
-      const { name } = e.target;
+      const { value, name } = e.target;
 
       const newRows = rows.map((rowe) => {
         if (rowe.id === id) {
