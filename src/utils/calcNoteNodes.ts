@@ -11,6 +11,7 @@ export function calcNoteNodes(graph: GraphRF): Note[] {
         comment: noteNod.data.comment,
         position: noteNod.position,
         nodeWidth: noteNod.data.ui_props.nodeWidth,
+        colorBorder: noteNod.data.ui_props.colorBorder,
       } as Note;
     });
 }

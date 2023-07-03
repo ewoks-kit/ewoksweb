@@ -1,6 +1,7 @@
 import type { DragEventHandler, MouseEvent } from 'react';
 import { useEffect, useRef } from 'react';
 import type { Node, Edge, Connection, NodeChange, EdgeChange } from 'reactflow';
+import { updateEdge } from 'reactflow';
 import ReactFlow, {
   Controls,
   useReactFlow,
@@ -77,7 +78,6 @@ function Canvas() {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setNodesData = useNodeDataStore((state) => state.setNodesData);
-  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
   const graphId = useGraphId();
@@ -106,17 +106,6 @@ function Canvas() {
     const newEdges = applyEdgeChanges(changes, getEdges());
     storeRF.getState().setEdges(newEdges);
   }
-
-  const onPaneClick = () => {
-    getNodesData().forEach((nodData, id) => {
-      if (nodData.ui_props.details === true) {
-        setNodeData(id, {
-          ...nodData,
-          ui_props: { ...nodData.ui_props, details: false },
-        });
-      }
-    });
-  };
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
   const onDragOver: DragEventHandler<HTMLDivElement> = (event) => {
@@ -232,6 +221,7 @@ function Canvas() {
         severity: 'warning',
       });
     }
+    setEdges((els) => updateEdge(oldEdge, newConnection, els));
   };
 
   const onConnect = (params: Connection) => {
@@ -316,8 +306,6 @@ function Canvas() {
           severity: 'error',
         });
       }
-    } else {
-      mergeNodeData(node.id, { ui_props: { details: true } });
     }
   };
 
@@ -378,7 +366,6 @@ function Canvas() {
           attributionPosition="bottom-right"
           minZoom={0.2}
           snapToGrid
-          onPaneClick={() => onPaneClick()}
           onDrop={onDrop}
           onConnect={onConnect}
           onEdgeUpdate={onEdgeUpdate}
