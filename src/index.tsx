@@ -8,6 +8,7 @@ import './styles/index.css';
 
 import App from './App';
 import ExecutedWorkflows from '../src/Components/Execution/ExecutedWorkflows';
+import SuspenseBoundary from './Components/Suspense/SuspenseBoundary';
 
 ReactDOM.render(
   <StrictMode>
@@ -16,7 +17,14 @@ ReactDOM.render(
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/edit-workflows" element={<Navigate to="/" replace />} />
-          <Route path="/monitor-workflows" element={<ExecutedWorkflows />} />
+          <Route
+            path="/monitor-workflows"
+            element={
+              <SuspenseBoundary>
+                <ExecutedWorkflows />
+              </SuspenseBoundary>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </CacheProvider>

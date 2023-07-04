@@ -1,5 +1,5 @@
 import { Tooltip } from '@material-ui/core';
-import IconBoundary from '../../IconBoundary';
+import SuspenseBoundary from '../Suspense/SuspenseBoundary';
 import type { Task } from '../../types';
 import { getTaskName } from '../../utils';
 import { attachTaskInfo } from '../Canvas/utils';
@@ -39,9 +39,9 @@ function TaskItem(props: Props) {
           aria-label={task_identifier}
           draggable
         >
-          <IconBoundary>
+          <SuspenseBoundary>
             <TaskIcon name={icon} alt={task_identifier} />
-          </IconBoundary>
+          </SuspenseBoundary>
           <label className={styles.itemLabel}>{getTaskName(task)}</label>
         </button>
         {isSelected && <TaskButtonGroup task={task} />}

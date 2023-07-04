@@ -1,0 +1,38 @@
+@keyframes spin {
+  0% {
+    transform: rotate(0turn) scale(1);
+  }
+
+  25% {
+    transform: rotate(1turn);
+  }
+
+  50% {
+    transform: scale(1.5);
+  }
+
+  75% {
+    transform: scale(0.5);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+  color: gray;
+  font-size: 1rem;
+}
+
+.spinner {
+  animation: spin 2000ms;
+  animation-iteration-count: infinite;
+  width: 50px;
+  height: 50px;
+  fill: gray;
+}

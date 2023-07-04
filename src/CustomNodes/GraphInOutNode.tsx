@@ -5,7 +5,7 @@ import isValidLink from '../utils/IsValidLink';
 import useStore from '../store/useStore';
 import type { Connection, NodeProps } from 'reactflow';
 import NodeIcon from './NodeIcon';
-import IconBoundary from '../IconBoundary';
+import SuspenseBoundary from '../Components/Suspense/SuspenseBoundary';
 import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../types';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../utils';
@@ -95,9 +95,9 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
             color="#ced3ee"
           />
           {withImage && (
-            <IconBoundary>
+            <SuspenseBoundary>
               <NodeIcon image={image} onDragStart={(e) => e.preventDefault()} />
-            </IconBoundary>
+            </SuspenseBoundary>
           )}
           {task_type === 'graphOutput' && (
             <Handle
