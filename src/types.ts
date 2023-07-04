@@ -2,7 +2,6 @@ import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
 import type { CanvasGraphChangedSlice } from './store/canvasGraphChanged';
 import type { AllWorkflowsSlice } from './store/allWorkflows';
 import type { GraphRFSlice } from './store/graphRF';
-import type { ExecutedWorkflowsSlice } from './store/executedWorkflows';
 import type { OpenDraggableDialogSlice } from './store/openDraggableDialog';
 import type { GettingFromServerSlice } from './store/gettingFromServer';
 import type { GraphOrSubgraphSlice } from './store/graphOrSubgraph';
@@ -116,7 +115,6 @@ export interface State
     AllWorkflowsSlice,
     GraphRFSlice,
     GraphInfoSlice,
-    ExecutedWorkflowsSlice,
     OpenDraggableDialogSlice,
     GettingFromServerSlice,
     GraphOrSubgraphSlice,

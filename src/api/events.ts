@@ -4,19 +4,21 @@ import { useController, useSuspense } from '@rest-hooks/react';
 import type { ExecutedJobsResponse, filterParams } from '../types';
 
 export async function getExecutionEvents(
-  queryParams: filterParams
+  queryParams?: filterParams
 ): Promise<ExecutedJobsResponse> {
-  const query = new URLSearchParams(Object.entries(queryParams));
+  const queryString = queryParams
+    ? `?${new URLSearchParams(Object.entries(queryParams)).toString()}`
+    : '';
   const { data } = await axiosRequest.get<ExecutedJobsResponse>(
-    `/execution/events?${query.toString()}`
+    `/execution/events${queryString}`
   );
   return data;
 }
 
 const getExecutionEventsEndpoint = new Endpoint(getExecutionEvents);
 
-export function useExecutionEvents(queryParams: filterParams) {
-  const executionEvents = useSuspense(getExecutionEventsEndpoint, queryParams);
+export function useExecutionEvents() {
+  const executionEvents = useSuspense(getExecutionEventsEndpoint);
 
   return { executionEvents };
 }
@@ -24,6 +26,5 @@ export function useExecutionEvents(queryParams: filterParams) {
 export function useMutateExecutionEvents() {
   const controller = useController();
 
-  return (queryParams: filterParams) =>
-    controller.invalidate(getExecutionEventsEndpoint, queryParams);
+  return () => controller.invalidate(getExecutionEventsEndpoint);
 }
