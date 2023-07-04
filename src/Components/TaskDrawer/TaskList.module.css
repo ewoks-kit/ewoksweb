@@ -48,3 +48,17 @@
   white-space: nowrap;
   cursor: grab;
 }
+
+.toolbar {
+  display: flex;
+  padding: 0.5rem 0;
+  align-items: center;
+}
+
+.layoutBtnContainer {
+  margin-left: 1.5rem;
+}
+
+.layoutBtnContainer button {
+  padding: 0.25rem;
+}
