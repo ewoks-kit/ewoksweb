@@ -3,12 +3,11 @@ import { Handle, Position } from 'reactflow';
 import { contentStyle, style } from './nodeStyles';
 import Tooltip from '@material-ui/core/Tooltip';
 import isValidLink from '../utils/IsValidLink';
-// import SaveIcon from '@material-ui/icons/Save';
 
 import useStore from '../store/useStore';
 import type { Connection } from 'reactflow';
 import NodeIcon from './NodeIcon';
-import IconBoundary from '../IconBoundary';
+import IconBoundary from '../Components/Suspense/IconBoundary';
 import type { NodeProps, EwoksRFLink, GraphRF } from '../types';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../utils';

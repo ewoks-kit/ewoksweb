@@ -7,7 +7,7 @@ import { Box } from '@material-ui/core';
 import ManageIcons from './ManageIcons';
 import ManageWorkflows from './ManageWorkflows';
 import useStore from '../../store/useStore';
-import IconBoundary from '../../IconBoundary';
+import IconBoundary from '../Suspense/IconBoundary';
 import { DrawerTab } from '../../types';
 
 interface TabPanelProps {

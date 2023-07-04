@@ -1,5 +1,5 @@
 import { Tooltip } from '@material-ui/core';
-import IconBoundary from '../../IconBoundary';
+import IconBoundary from '../Suspense/IconBoundary';
 import type { Task } from '../../types';
 import { getTaskName } from '../../utils';
 import { attachTaskInfo } from '../Canvas/utils';

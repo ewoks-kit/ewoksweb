@@ -11,7 +11,7 @@ import { assertNodeDataDefined } from '../utils/typeGuards';
 import { getNodesData } from '../utils';
 import { Tooltip } from '@material-ui/core';
 import NodeLabel from './NodeLabel';
-import IconBoundary from '../IconBoundary';
+import IconBoundary from '../Components/Suspense/IconBoundary';
 import NodeIcon from './NodeIcon';
 
 function GraphNode(props: NodeProps<EwoksRFNodeData>) {

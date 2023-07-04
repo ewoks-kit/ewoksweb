@@ -8,7 +8,7 @@ import './styles/index.css';
 
 import App from './App';
 import ExecutedWorkflows from '../src/Components/Execution/ExecutedWorkflows';
-import EventBoundary from './EventBoundary';
+import EventBoundary from './Components/Suspense/EventBoundary';
 
 ReactDOM.render(
   <StrictMode>
