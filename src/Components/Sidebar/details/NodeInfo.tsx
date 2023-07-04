@@ -1,9 +1,10 @@
-import { IconButton, Typography } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 
 import type { EwoksRFNodeData } from '../../../types';
 import TaskProperty from './TaskProperty';
 import InfoIcon from '@material-ui/icons/Info';
 import SidebarTooltip from '../SidebarTooltip';
+import SidebarSection from '../SidebarSection';
 
 interface Props {
   nodeId: string;
@@ -24,20 +25,22 @@ function NodeInfo(props: Props) {
   );
 
   return (
-    <div>
-      <Typography style={{ display: 'flex', justifyContent: 'center' }}>
-        <span style={{ padding: '5px 0px 0px' }}>Task Info</span>
-        <SidebarTooltip
-          text="These are properties of the task on which the node
-          is based. They can only be changed by editing the relevant task except
-          the task identifier which appoints another task to the node"
-        >
-          <IconButton size="small">
-            <InfoIcon fontSize="small" />
-          </IconButton>
-        </SidebarTooltip>
-      </Typography>
-
+    <SidebarSection
+      title={
+        <>
+          <span>Task Info</span>
+          <SidebarTooltip
+            text="These are properties of the task on which the node
+      is based. They can only be changed by editing the relevant task except
+      the task identifier which appoints another task to the node"
+          >
+            <IconButton size="small">
+              <InfoIcon fontSize="small" />
+            </IconButton>
+          </SidebarTooltip>
+        </>
+      }
+    >
       <TaskProperty
         editable={isEditable}
         id="task_identifier"
@@ -74,7 +77,7 @@ function NodeInfo(props: Props) {
         label="Outputs"
         value={nodeData.task_props.output_names}
       />
-    </div>
+    </SidebarSection>
   );
 }
 

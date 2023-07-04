@@ -1,4 +1,3 @@
-import Typography from '@material-ui/core/Typography';
 import EditNodeStyle from './EditNodeStyle';
 import EditLinkStyle from './EditLinkStyle';
 import EditGraphStyle from './EditGraphStyle';
@@ -6,17 +5,16 @@ import type { Node, Edge } from 'reactflow';
 import { isNodeRF } from '../../../utils/typeGuards';
 import type { SelectedElementRF } from '../../../types';
 
+import SidebarSection from '../SidebarSection';
+
 interface Content {
-  title: string;
+  title?: string;
   EditComponent: () => JSX.Element;
 }
 
-function getAccordionContent(
-  selectedElement: Node | Edge | undefined
-): Content {
+function getSectionContent(selectedElement: Node | Edge | undefined): Content {
   if (!selectedElement) {
     return {
-      title: '',
       EditComponent: EditGraphStyle,
     };
   }
@@ -38,16 +36,13 @@ function getAccordionContent(
 export default function EditElementStyle({
   selectedElement,
 }: SelectedElementRF) {
-  const { title, EditComponent } = getAccordionContent(selectedElement);
+  const { title, EditComponent } = getSectionContent(selectedElement);
 
   return (
-    <>
-      <Typography style={{ display: 'flex', justifyContent: 'center' }}>
-        <span style={{ padding: '5px 0px 0px' }}>{title}</span>
-      </Typography>
+    <SidebarSection title={title}>
       <form noValidate autoComplete="off">
         <EditComponent />
       </form>
-    </>
+    </SidebarSection>
   );
 }
