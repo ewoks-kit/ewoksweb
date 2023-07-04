@@ -6,11 +6,6 @@ export interface ExecutedWorkflowsSlice {
   setExecutedWorkflows: (execEvent: Event[][], live?: boolean) => void;
 }
 
-// GET /execution/events gets events with filters for nodes, workflows etc
-// use this to fetch events for a workflow, a job etc
-
-// TODO: It would help to have a intermediate type:
-// type Workflow = Event[] so that executedWorkflows have the type Workflow[]
 const executedWorkflows = (set: SetState<State>): ExecutedWorkflowsSlice => ({
   executedWorkflows: [],
 

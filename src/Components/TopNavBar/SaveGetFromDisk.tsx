@@ -27,7 +27,6 @@ export default function SaveGetFromDisk() {
 
   const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
   const graphInfo = useStore((state) => state.graphInfo);
-  const inExecutionMode = useStore((state) => state.inExecutionMode);
 
   function loadFromDisk() {
     setGraphOrSubgraph(true);
@@ -86,11 +85,7 @@ export default function SaveGetFromDisk() {
         arrow
       >
         <span>
-          <IconButton
-            color="inherit"
-            disabled={inExecutionMode}
-            onClick={loadFromDisk}
-          >
+          <IconButton color="inherit" onClick={loadFromDisk}>
             <Upload>
               <FolderOpenIcon />
             </Upload>

@@ -2,8 +2,8 @@ import useStore from '../../store/useStore';
 import SendIcon from '@material-ui/icons/Send';
 import IntegratedSpinner from '../General/IntegratedSpinner';
 import io from 'socket.io-client';
-import { useEffect, useState } from 'react';
-import type { Event } from '../../types';
+import { useState } from 'react';
+
 import { executeWorkflow } from '../../api/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { useNavigate } from 'react-router-dom';
@@ -16,9 +16,6 @@ export default function ExecuteWorkflow(props: { id: string }) {
   const recentGraphs = useStore((state) => state.recentGraphs);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const inExecutionMode = useStore((state) => state.inExecutionMode);
-  const setInExecutionMode = useStore((state) => state.setInExecutionMode);
-  const setExecutedEvents = useStore((state) => state.setExecutedEvents);
   const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
   const setCanvasGraphChanged = useStore(
     (state) => state.setCanvasGraphChanged
@@ -26,18 +23,6 @@ export default function ExecuteWorkflow(props: { id: string }) {
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const undoIndex = useStore((state) => state.undoIndex);
 
-  useEffect(() => {
-    // DOC: when execution begins it has to listen to incoming from the socket events
-    socket.on('Executing', (data: Event) => {
-      setExecutedEvents(data);
-    });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, [setExecutedEvents]);
-
-  // TODO: check and execute same on ExecutionDetails... merge
   function checkAndExecute() {
     if (canvasGraphChanged && undoIndex !== 0) {
       setOpenAgreeDialog(true);
@@ -50,8 +35,7 @@ export default function ExecuteWorkflow(props: { id: string }) {
   }
 
   async function execute() {
-    if (recentGraphs.length > 0 && !inExecutionMode) {
-      setInExecutionMode(true);
+    if (recentGraphs.length > 0) {
       try {
         await executeWorkflow(props.id);
         navigate('/monitor-workflows');
@@ -65,10 +49,6 @@ export default function ExecuteWorkflow(props: { id: string }) {
           severity: 'error',
         });
       }
-    } else if (inExecutionMode) {
-      setInExecutionMode(false);
-      // DOC: when exiting the execution to show the graph as selected
-      // and not a numbered execution node that the user might have clicked
     } else {
       setOpenSnackbar({
         open: true,

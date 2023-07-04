@@ -37,13 +37,6 @@ function TopAppBar(props: Props) {
   }, [openDrawers, openSettings, setOpenSettingsDrawer]);
 
   useEffect(() => {
-    if (openSettingsDrawer === DrawerTab.Executions) {
-      setOpenInfo(false);
-      setOpenDrawers(true);
-      setOpenSettings(true);
-      return;
-    }
-
     if (openSettingsDrawer === DrawerTab.Closed) {
       setOpenInfo(false);
       setOpenDrawers(false);

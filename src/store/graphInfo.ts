@@ -29,14 +29,12 @@ const graphInfo = (
       graphInfo: graphRFD,
     }));
 
-    if (isChangeToCanvasGraph && !get().inExecutionMode) {
+    if (isChangeToCanvasGraph) {
       get().setCanvasGraphChanged(true);
       return;
     }
 
-    if (!isChangeToCanvasGraph) {
-      get().setCanvasGraphChanged(false);
-    }
+    get().setCanvasGraphChanged(false);
   },
   mergeGraphInfo: (graphRFD) => {
     set((state) => {
