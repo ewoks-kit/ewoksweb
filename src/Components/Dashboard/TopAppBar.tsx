@@ -9,14 +9,16 @@ import OpenActionMenuButton from '../TopNavBar/menu/OpenActionMenuButton';
 import SaveToServerButton from '../TopNavBar/SaveToServerButton';
 import SettingsInfoDrawer from '../TopNavBar/SettingsInfoDrawer';
 import TopNavbarLabel from '../TopNavBar/TopNavbarLabel';
+import EditMonitorSwitch from '../TopNavBar/EditMonitorSwitch';
 
 interface Props {
   classes: { appBar: string; toolbar: string; title: string };
-  checkAndNewGraph: (notSave: boolean) => void;
+  checkAndNewGraph?: (notSave: boolean) => void;
+  onPage?: 'edit' | 'monitor';
 }
 
 function TopAppBar(props: Props) {
-  const { classes, checkAndNewGraph } = props;
+  const { classes, checkAndNewGraph, onPage } = props;
 
   const { zIndex } = useTheme();
 
@@ -76,57 +78,37 @@ function TopAppBar(props: Props) {
           className={classes.title}
           style={{ display: 'flex', alignItems: 'center' }}
         >
-          <span
-            style={{
-              flexBasis: '40%',
-            }}
-          >
-            <b
-              style={{
-                fontSize: '18px',
-                letterSpacing: '2px',
-              }}
-            >
-              EwoksWeb
-            </b>
-            <span
-              style={{
-                fontSize: '14px',
-                padding: '5px',
-              }}
-            >
-              Edit
+          <EditMonitorSwitch onPage={onPage} />
+          {onPage === 'edit' && (
+            <span style={{ flexBasis: '50%' }}>
+              <TopNavbarLabel />
             </span>
-            |
-            <span
-              style={{
-                fontSize: '14px',
-                padding: '5px',
-              }}
-            >
-              Monitor
-            </span>
-          </span>
-
-          <span style={{ flexBasis: '50%' }}>
-            <TopNavbarLabel />
-          </span>
+          )}
         </Typography>
-        <GetFromServer />
+        {onPage === 'edit' && (
+          <>
+            <GetFromServer />
 
-        <SaveToServerButton />
-        <div>
-          <OpenActionMenuButton
-            checkAndNewGraph={() => checkAndNewGraph(false)}
-            handleOpenSettings={handleOpenSettings}
-          />
-        </div>
-        <SettingsInfoDrawer
-          handleOpenDrawers={handleOpenDrawers}
-          openDrawers={openDrawers}
-          openInfo={openInfo}
-          openSettings={openSettings}
-        />
+            <SaveToServerButton />
+            <div>
+              <OpenActionMenuButton
+                checkAndNewGraph={() => {
+                  if (checkAndNewGraph) {
+                    checkAndNewGraph(false);
+                  }
+                  return undefined;
+                }}
+                handleOpenSettings={handleOpenSettings}
+              />
+            </div>
+            <SettingsInfoDrawer
+              handleOpenDrawers={handleOpenDrawers}
+              openDrawers={openDrawers}
+              openInfo={openInfo}
+              openSettings={openSettings}
+            />
+          </>
+        )}
       </Toolbar>
       <ProgressBar />
     </AppBar>

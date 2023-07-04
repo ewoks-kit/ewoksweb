@@ -116,7 +116,11 @@ export default function Dashboard() {
       />
       <CssBaseline />
       <SimpleSnackbar />
-      <TopAppBar classes={classes} checkAndNewGraph={checkAndNewGraph} />
+      <TopAppBar
+        classes={classes}
+        checkAndNewGraph={checkAndNewGraph}
+        onPage="edit"
+      />
       <div className={classes.mainArea}>
         <OverflowDrawer />
         <ReflexContainer
