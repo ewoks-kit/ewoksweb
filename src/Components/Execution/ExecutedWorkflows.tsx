@@ -3,7 +3,7 @@ import styles from './Execution.module.css';
 import useStore from '../../store/useStore';
 import { useExecutionEvents, useMutateExecutionEvents } from '../../api/events';
 import type { filterParams } from '../../types';
-import { formatDate } from './utils';
+import ExecutedWorkflowItem from './ExecutedWorkflowItem';
 
 function ExecutedWorkflows() {
   const executedWorkflows = useStore((state) => state.executedWorkflows);
@@ -30,29 +30,10 @@ function ExecutedWorkflows() {
   return (
     <div className={styles.executionTable}>
       {executedWorkflows.map((workflowEvents) => (
-        <button
+        <ExecutedWorkflowItem
+          workflowEvents={workflowEvents}
           key={workflowEvents[0].job_id}
-          className={styles.executionItem}
-          data-error={
-            workflowEvents[workflowEvents.length - 1].error === true ||
-            undefined
-          }
-          tabIndex={0}
-          type="button"
-        >
-          <label className={styles.executionData}>
-            {workflowEvents[1]?.workflow_id ||
-              workflowEvents[0]?.workflow_id ||
-              'No id'}
-          </label>
-          <label className={styles.executionData}>
-            {formatDate(workflowEvents[1]?.time || '')}
-          </label>
-          <label className={styles.executionData}>
-            {workflowEvents[1]?.status || ''}
-            {workflowEvents[workflowEvents.length - 1].error?.toString()}
-          </label>
-        </button>
+        />
       ))}
     </div>
   );
