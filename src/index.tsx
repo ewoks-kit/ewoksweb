@@ -8,6 +8,7 @@ import './styles/index.css';
 
 import App from './App';
 import ExecutedWorkflows from '../src/Components/Execution/ExecutedWorkflows';
+import EventBoundary from './EventBoundary';
 
 ReactDOM.render(
   <StrictMode>
@@ -16,7 +17,14 @@ ReactDOM.render(
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/edit-workflows" element={<Navigate to="/" replace />} />
-          <Route path="/monitor-workflows" element={<ExecutedWorkflows />} />
+          <Route
+            path="/monitor-workflows"
+            element={
+              <EventBoundary>
+                <ExecutedWorkflows />
+              </EventBoundary>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </CacheProvider>
