@@ -7,7 +7,7 @@ import { Box } from '@material-ui/core';
 import ManageIcons from './ManageIcons';
 import ManageWorkflows from './ManageWorkflows';
 import useStore from '../../store/useStore';
-import IconBoundary from '../Suspense/IconBoundary';
+import SuspenseBoundary from '../Suspense/SuspenseBoundary';
 import { DrawerTab } from '../../types';
 
 interface TabPanelProps {
@@ -73,9 +73,9 @@ export default function BasicTabs() {
         <ManageWorkflows />
       </TabPanel>
       <TabPanel value={value} index={DrawerTab.Icons}>
-        <IconBoundary>
+        <SuspenseBoundary>
           <ManageIcons />
-        </IconBoundary>
+        </SuspenseBoundary>
       </TabPanel>
     </Box>
   );

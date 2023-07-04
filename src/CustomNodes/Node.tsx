@@ -7,7 +7,7 @@ import isValidLink from '../utils/IsValidLink';
 import useStore from '../store/useStore';
 import type { Connection } from 'reactflow';
 import NodeIcon from './NodeIcon';
-import IconBoundary from '../Components/Suspense/IconBoundary';
+import SuspenseBoundary from '../Components/Suspense/SuspenseBoundary';
 import type { NodeProps, EwoksRFLink, GraphRF } from '../types';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../utils';
@@ -115,12 +115,12 @@ function Node({
             color={color}
           />
           {withImage && (
-            <IconBoundary>
+            <SuspenseBoundary>
               <NodeIcon
                 image={node_icon ?? image}
                 onDragStart={(e) => e.preventDefault()}
               />
-            </IconBoundary>
+            </SuspenseBoundary>
           )}
 
           <Handle

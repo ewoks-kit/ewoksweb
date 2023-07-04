@@ -8,7 +8,7 @@ import './styles/index.css';
 
 import App from './App';
 import ExecutedWorkflows from '../src/Components/Execution/ExecutedWorkflows';
-import EventBoundary from './Components/Suspense/EventBoundary';
+import SuspenseBoundary from './Components/Suspense/SuspenseBoundary';
 
 ReactDOM.render(
   <StrictMode>
@@ -20,9 +20,9 @@ ReactDOM.render(
           <Route
             path="/monitor-workflows"
             element={
-              <EventBoundary>
+              <SuspenseBoundary>
                 <ExecutedWorkflows />
-              </EventBoundary>
+              </SuspenseBoundary>
             }
           />
         </Routes>

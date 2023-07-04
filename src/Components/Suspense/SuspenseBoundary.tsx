@@ -8,7 +8,7 @@ interface Props {
   children?: ReactNode;
 }
 
-function IconBoundary(props: Props) {
+function SuspenseBoundary(props: Props) {
   const { children } = props;
 
   return (
@@ -18,4 +18,4 @@ function IconBoundary(props: Props) {
   );
 }
 
-export default IconBoundary;
+export default SuspenseBoundary;

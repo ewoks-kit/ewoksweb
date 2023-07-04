@@ -11,7 +11,7 @@ import { assertNodeDataDefined } from '../utils/typeGuards';
 import { getNodesData } from '../utils';
 import { Tooltip } from '@material-ui/core';
 import NodeLabel from './NodeLabel';
-import IconBoundary from '../Components/Suspense/IconBoundary';
+import SuspenseBoundary from '../Components/Suspense/SuspenseBoundary';
 import NodeIcon from './NodeIcon';
 
 function GraphNode(props: NodeProps<EwoksRFNodeData>) {
@@ -78,12 +78,12 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
             color={uiProps.exists ? '#ced3ee' : 'red'}
           />
           {uiProps.withImage && (
-            <IconBoundary>
+            <SuspenseBoundary>
               <NodeIcon
                 image={uiProps.icon}
                 onDragStart={(e) => e.preventDefault()}
               />
-            </IconBoundary>
+            </SuspenseBoundary>
           )}
           <span style={style.contentWrapper}>
             {uiProps.inputs
