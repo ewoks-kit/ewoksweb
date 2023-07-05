@@ -1,4 +1,4 @@
-import { useDashboardStyles } from '../Dashboard/useDashboardStyles';
+import { useEditPageStyles } from '../edition/useEditPageStyles';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Fab, IconButton } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
@@ -21,7 +21,7 @@ function download(content: BlobPart, fileName: string, contentType: string) {
 }
 
 export default function SaveGetFromDisk() {
-  const classes = useDashboardStyles();
+  const classes = useEditPageStyles();
 
   const { getNodes, getEdges } = useReactFlow();
 

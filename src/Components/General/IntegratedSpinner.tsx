@@ -4,7 +4,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckIcon from '@material-ui/icons/Check';
 import Tooltip from '@material-ui/core/Tooltip';
 import tooltipText from './TooltipText';
-import { useDashboardStyles } from '../Dashboard/useDashboardStyles';
+import { useEditPageStyles } from '../edition/useEditPageStyles';
 import { IconButton } from '@material-ui/core';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
@@ -26,7 +26,7 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
 
   const timer = useRef<number>();
 
-  const classes = useDashboardStyles();
+  const classes = useEditPageStyles();
 
   // TODO: synd with the real time the call makes using getting
   useEffect(() => {

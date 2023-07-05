@@ -1,12 +1,12 @@
 import { Tooltip } from '@material-ui/core';
 import type { ReactElement } from 'react';
-import { useDashboardStyles } from '../Dashboard/useDashboardStyles';
+import { useEditPageStyles } from '../edition/useEditPageStyles';
 
 export default function SidebarTooltip(props: {
   text: string;
   children: ReactElement;
 }) {
-  const classes = useDashboardStyles();
+  const classes = useEditPageStyles();
 
   const styleInfo = (title: string) => {
     return (
