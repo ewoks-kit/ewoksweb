@@ -4,10 +4,6 @@ describe('edit links dataMapping', () => {
   });
 
   it('change the canvas color', () => {
-    cy.findByRole('button', { name: 'Styling Graph' })
-      .should('be.visible')
-      .click();
-
     cy.findByLabelText('Canvas Background Color').should(
       'have.attr',
       'value',
