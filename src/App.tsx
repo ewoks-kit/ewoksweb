@@ -3,13 +3,16 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import EditRoute from './EditRoute';
 import MonitorRoute from './MonitorRoute';
 
+import NavBar from './Navbar';
+
 function App() {
   return (
     <CacheProvider>
       <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE_DIR}>
+        <NavBar />
         <Routes>
-          <Route path="/" element={<EditRoute />} />
-          <Route path="/edit" element={<Navigate to="/" replace />} />
+          <Route path="/" element={<Navigate to="/edit" replace />} />
+          <Route path="/edit" element={<EditRoute />} />
           <Route path="/monitor" element={<MonitorRoute />} />
         </Routes>
       </BrowserRouter>

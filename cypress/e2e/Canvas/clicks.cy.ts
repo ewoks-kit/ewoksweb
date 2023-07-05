@@ -4,13 +4,6 @@ describe('clicks on canvas and elements', () => {
     cy.findByRole('button', { name: 'Close task drawer' }).click();
   });
 
-  // TODO: rightClick? Must click on backround and not on a node
-  // it('displays the rightClick message', () => {
-  //   cy.get('.reactflow-wrapper').rightclick();
-  //   cy.contains('Open a graph and click on nodes and links on this Canvas!');
-  // });
-
-  // select a node with click
   it('selects a node with click', () => {
     cy.get('.react-flow__node')
       .first()
@@ -25,7 +18,7 @@ describe('clicks on canvas and elements', () => {
     cy.contains('Default Error Node').should('exist').should('be.visible');
     cy.contains('Inputs Complete').should('exist').should('be.visible');
     cy.contains('Task Info').should('exist').should('be.visible');
-    cy.contains('Styling Node').should('exist').should('be.visible');
+    cy.contains('Styling Node').should('exist');
   });
 
   it('selects a link with click', () => {
