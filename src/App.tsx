@@ -1,13 +1,19 @@
-import Dashboard from './Components/Dashboard/Dashboard';
-import 'react-reflex/styles.css';
-import 'reactflow/dist/style.css';
-import { ReactFlowProvider } from 'reactflow';
+import { CacheProvider } from '@rest-hooks/react';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import EditRoute from './EditRoute';
+import MonitorRoute from './MonitorRoute';
 
 function App() {
   return (
-    <ReactFlowProvider>
-      <Dashboard />
-    </ReactFlowProvider>
+    <CacheProvider>
+      <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE_DIR}>
+        <Routes>
+          <Route path="/" element={<EditRoute />} />
+          <Route path="/edit-workflows" element={<Navigate to="/" replace />} />
+          <Route path="/monitor-workflows" element={<MonitorRoute />} />
+        </Routes>
+      </BrowserRouter>
+    </CacheProvider>
   );
 }
 
