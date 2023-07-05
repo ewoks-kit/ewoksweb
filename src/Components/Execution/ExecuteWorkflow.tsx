@@ -38,7 +38,7 @@ export default function ExecuteWorkflow(props: { id: string }) {
     if (recentGraphs.length > 0) {
       try {
         await executeWorkflow(props.id);
-        navigate('/monitor-workflows');
+        navigate('/monitor');
       } catch (error) {
         // Keep logging in console for debugging when talking with a user
         /* eslint-disable no-console */

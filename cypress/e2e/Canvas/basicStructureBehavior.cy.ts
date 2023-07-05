@@ -1,4 +1,4 @@
-describe('structure and basics for edit-workflows', () => {
+describe('structure and basics for edit workflows', () => {
   before(() => {
     cy.loadApp();
   });
