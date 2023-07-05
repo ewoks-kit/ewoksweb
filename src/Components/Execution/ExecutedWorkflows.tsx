@@ -28,7 +28,7 @@ function ExecutedWorkflows() {
   }, [executionEvents, filters, mutateExecutionEvents, setExecutedWorkflows]);
 
   return (
-    <div className={styles.executionTable}>
+    <div className={styles.container}>
       {executedWorkflows.map((workflowEvents) => (
         <ExecutedWorkflowItem
           workflowEvents={workflowEvents}

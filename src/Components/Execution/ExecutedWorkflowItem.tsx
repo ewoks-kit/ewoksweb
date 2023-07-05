@@ -9,27 +9,25 @@ interface ExecutedWorkflowItemProps {
 function ExecutedWorkflowItem(props: ExecutedWorkflowItemProps) {
   const { workflowEvents } = props;
   return (
-    <button
-      className={styles.executionItem}
+    <div
+      className={styles.item}
       data-error={
         workflowEvents[workflowEvents.length - 1].error === true || undefined
       }
-      tabIndex={0}
-      type="button"
     >
-      <label className={styles.executionData}>
+      <div className={styles.field}>
         {workflowEvents[1]?.workflow_id ||
           workflowEvents[0]?.workflow_id ||
           'No id'}
-      </label>
-      <label className={styles.executionData}>
+      </div>
+      <div className={styles.field}>
         {formatDate(workflowEvents[1]?.time || '')}
-      </label>
-      <label className={styles.executionData}>
+      </div>
+      <div className={styles.field}>
         {workflowEvents[1]?.status || ''}
-        {workflowEvents[workflowEvents.length - 1].error?.toString()}
-      </label>
-    </button>
+        {workflowEvents[workflowEvents.length - 1].error ? 'FAILED' : 'SUCCESS'}
+      </div>
+    </div>
   );
 }
 
