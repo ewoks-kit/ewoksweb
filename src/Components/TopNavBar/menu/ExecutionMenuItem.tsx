@@ -4,10 +4,13 @@ import { useState } from 'react';
 import { executeWorkflow } from '../../../api/api';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import ActionMenuItem from './ActionMenuItem';
+import { useNavigate } from 'react-router-dom';
 
 function ExecutionMenuItem() {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
+
+  const navigate = useNavigate();
 
   function checkAndExecute() {
     execute();
@@ -26,7 +29,7 @@ function ExecutionMenuItem() {
     }
     try {
       await executeWorkflow(workingGraph.graph.id);
-      window.open('/monitor', '_blank');
+      navigate('/monitor');
     } catch (error) {
       // Keep logging in console for debugging when talking with a user
       /* eslint-disable no-console */
