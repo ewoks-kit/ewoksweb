@@ -11,6 +11,7 @@ export const useEditPageStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     flex: '1 1 0',
+    minHeight: 0,
   },
   toolbar: {
     display: 'flex',
