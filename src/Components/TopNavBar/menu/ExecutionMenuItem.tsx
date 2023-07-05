@@ -26,7 +26,7 @@ function ExecutionMenuItem() {
     }
     try {
       await executeWorkflow(workingGraph.graph.id);
-      window.open('/monitor-workflows', '_blank');
+      window.open('/monitor', '_blank');
     } catch (error) {
       // Keep logging in console for debugging when talking with a user
       /* eslint-disable no-console */

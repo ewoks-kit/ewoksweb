@@ -1,7 +1,7 @@
 // TODO: Skip for onlyEditRelease
-describe.skip('structure and basics for edit-workflows', () => {
+describe.skip('structure and basics for edit workflows', () => {
   before(() => {
-    cy.visit('http://localhost:3000/edit-workflows');
+    cy.visit('http://localhost:3000/edit');
   });
 
   it('displays the Execution History', () => {

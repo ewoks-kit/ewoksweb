@@ -9,8 +9,8 @@ function App() {
       <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE_DIR}>
         <Routes>
           <Route path="/" element={<EditRoute />} />
-          <Route path="/edit-workflows" element={<Navigate to="/" replace />} />
-          <Route path="/monitor-workflows" element={<MonitorRoute />} />
+          <Route path="/edit" element={<Navigate to="/" replace />} />
+          <Route path="/monitor" element={<MonitorRoute />} />
         </Routes>
       </BrowserRouter>
     </CacheProvider>
