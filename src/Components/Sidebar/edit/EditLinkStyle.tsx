@@ -9,7 +9,7 @@ import {
   Slider,
 } from '@material-ui/core';
 
-import { useDashboardStyles } from '../../Dashboard/useDashboardStyles';
+import { useEditPageStyles } from '../../edition/useEditPageStyles';
 import useStore from '../../../store/useStore';
 import type { PropertyChangedEvent } from '../../../types';
 import sidebarStyle from '../sidebarStyle';
@@ -26,7 +26,7 @@ import useEdgeDataStore from '../../../store/useEdgeDataStore';
 
 // DOC: Edit the link style
 export default function EditLinkStyle(element: Edge) {
-  const classes = useDashboardStyles();
+  const classes = useEditPageStyles();
   // const element = useSelectedElement() as EwoksRFLink;
   const { setEdges, getEdges } = useReactFlow();
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));

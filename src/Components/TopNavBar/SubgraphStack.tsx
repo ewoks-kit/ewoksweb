@@ -1,4 +1,4 @@
-import { useDashboardStyles } from '../Dashboard/useDashboardStyles';
+import { useEditPageStyles } from '../edition/useEditPageStyles';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 
 import Link from '@material-ui/core/Link';
@@ -8,7 +8,7 @@ import useNodeDataStore from '../../store/useNodeDataStore';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 
 export default function SubgraphStack() {
-  const classes = useDashboardStyles();
+  const classes = useEditPageStyles();
 
   const { setNodes, setEdges, fitView } = useReactFlow();
 

@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export const useDashboardStyles = makeStyles((theme) => ({
+export const useEditPageStyles = makeStyles((theme) => ({
   openFileButton: {
     '&:hover': {
       backgroundColor: '#303f9f',

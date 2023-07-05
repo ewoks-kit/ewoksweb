@@ -3,7 +3,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import EditSidebar from 'Components/Sidebar/EditSidebar';
 import Canvas from '../Canvas/Canvas';
 import SimpleSnackbar from '../General/Snackbar';
-import { useDashboardStyles } from './useDashboardStyles';
+import { useEditPageStyles } from './useEditPageStyles';
 import useStore from 'store/useStore';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -18,8 +18,8 @@ import TopAppBar from './TopAppBar';
 
 const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
 
-export default function Dashboard() {
-  const classes = useDashboardStyles();
+export default function EditPage() {
+  const classes = useEditPageStyles();
 
   const rfInstance = useReactFlow();
 
