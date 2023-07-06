@@ -3,7 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import EditRoute from './EditRoute';
 import MonitorRoute from './MonitorRoute';
 
-import NavBar from './Navbar';
+import NavBar from './navbar/Navbar';
 
 function App() {
   return (
