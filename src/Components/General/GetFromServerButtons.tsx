@@ -118,7 +118,7 @@ export default function GetFromServerButtons(props: GetFromServerButtonsProps) {
         <IntegratedSpinner
           getting={gettingFromServer}
           tooltip="Open from Server"
-          action={checkAndGetFromServer}
+          action={() => checkAndGetFromServer('')}
           onClick={() => {
             // Keep logging in console for debugging when talking with a user
             /* eslint-disable no-console */

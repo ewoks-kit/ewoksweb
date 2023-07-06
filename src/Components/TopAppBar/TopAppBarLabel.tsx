@@ -1,7 +1,7 @@
 import useStore from '../../store/useStore';
 import SubgraphStack from './SubgraphStack';
 
-export default function TopNavbarLabel() {
+export default function TopAppBarLabel() {
   const subgraphsStack = useStore((state) => {
     return state.subgraphsStack;
   });

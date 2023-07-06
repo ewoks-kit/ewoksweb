@@ -1,22 +1,23 @@
-import { AppBar, Toolbar, Typography, useTheme } from '@material-ui/core';
+import { AppBar, Typography, useTheme } from '@material-ui/core';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import useStore from '../../store/useStore';
 import { DrawerTab } from '../../types';
 import GetFromServer from '../General/GetFromServer';
 import ProgressBar from '../General/ProgressBar';
-import OpenActionMenuButton from '../TopNavBar/menu/OpenActionMenuButton';
-import SaveToServerButton from '../TopNavBar/SaveToServerButton';
-import SettingsInfoDrawer from '../TopNavBar/SettingsInfoDrawer';
-import TopNavbarLabel from '../TopNavBar/TopNavbarLabel';
+import OpenActionMenuButton from './menu/OpenActionMenuButton';
+import SaveToServerButton from './SaveToServerButton';
+import SettingsInfoDrawer from './SettingsInfoDrawer';
+import TopAppBarLabel from './TopAppBarLabel';
+
+import styles from '../edition/EditPage.module.css';
 
 interface Props {
-  classes: { appBar: string; toolbar: string; title: string };
   checkAndNewGraph: (notSave: boolean) => void;
 }
 
 function TopAppBar(props: Props) {
-  const { classes, checkAndNewGraph } = props;
+  const { checkAndNewGraph } = props;
 
   const { zIndex } = useTheme();
 
@@ -56,36 +57,29 @@ function TopAppBar(props: Props) {
 
   return (
     <AppBar
-      className={classes.appBar}
+      className={styles.appBar}
       position="static"
       style={{ zIndex: zIndex.drawer + 1 }}
     >
-      <Toolbar className={classes.toolbar}>
-        <Typography
-          component="h1"
-          variant="h6"
-          color="inherit"
-          noWrap
-          className={classes.title}
-        >
-          <TopNavbarLabel />
-        </Typography>
-        <GetFromServer />
+      <Typography component="h1" variant="h6" color="inherit" noWrap>
+        <TopAppBarLabel />
+      </Typography>
 
+      <div className={styles.toolbar}>
+        <GetFromServer />
         <SaveToServerButton />
-        <div>
-          <OpenActionMenuButton
-            checkAndNewGraph={() => checkAndNewGraph(false)}
-            handleOpenSettings={handleOpenSettings}
-          />
-        </div>
+        <OpenActionMenuButton
+          checkAndNewGraph={() => checkAndNewGraph(false)}
+          handleOpenSettings={handleOpenSettings}
+        />
+
         <SettingsInfoDrawer
           handleOpenDrawers={handleOpenDrawers}
           openDrawers={openDrawers}
           openInfo={openInfo}
           openSettings={openSettings}
         />
-      </Toolbar>
+      </div>
       <ProgressBar />
     </AppBar>
   );

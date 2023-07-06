@@ -1,4 +1,3 @@
-import { useEditPageStyles } from '../edition/useEditPageStyles';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 
 import Link from '@material-ui/core/Link';
@@ -7,9 +6,9 @@ import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 
-export default function SubgraphStack() {
-  const classes = useEditPageStyles();
+import styles from './TopAppBar.module.css';
 
+export default function SubgraphStack() {
   const { setNodes, setEdges, fitView } = useReactFlow();
 
   const recentGraphs = useStore((state) => state.recentGraphs);
@@ -63,7 +62,7 @@ export default function SubgraphStack() {
               key={gr.id}
               className={
                 index === subgraphsStack.length - 1
-                  ? classes.isDisabled
+                  ? styles.disabledCrumb
                   : undefined
               }
               onClick={goToGraph}

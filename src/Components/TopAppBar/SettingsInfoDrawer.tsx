@@ -62,7 +62,7 @@ export default function SettingsInfoDrawer(props: SettingsInfoDrawerProps) {
   );
 
   return (
-    <div>
+    <>
       {(['left', 'top', 'right', 'bottom'] as const).map((anchor) => (
         <React.Fragment key={anchor}>
           {/* <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button> */}
@@ -76,6 +76,6 @@ export default function SettingsInfoDrawer(props: SettingsInfoDrawerProps) {
           </Drawer>
         </React.Fragment>
       ))}
-    </div>
+    </>
   );
 }

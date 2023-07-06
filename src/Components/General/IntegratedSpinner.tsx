@@ -4,7 +4,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckIcon from '@material-ui/icons/Check';
 import Tooltip from '@material-ui/core/Tooltip';
 import tooltipText from './TooltipText';
-import { useEditPageStyles } from '../edition/useEditPageStyles';
 import { IconButton } from '@material-ui/core';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
@@ -12,21 +11,20 @@ interface IntegratedSpinnerProps {
   children: JSX.Element;
   tooltip: string;
   getting: boolean;
-  action(isSubgraph?: string): void;
-  onClick?(): void;
+  action: () => void;
+  onClick?: () => void;
+  className?: string;
 }
 
 // DOC: create the round spin effect changing from loading state
 // to success and then to the wait state using the image passed as children.
 export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
-  const { children, tooltip, getting } = props;
+  const { children, tooltip, getting, className } = props;
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const timer = useRef<number>();
-
-  const classes = useEditPageStyles();
 
   // TODO: synd with the real time the call makes using getting
   useEffect(() => {
@@ -68,7 +66,7 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Box sx={{ m: 1, position: 'relative' }}>
           <IconButton
-            className={classes.openFileButton}
+            className={className}
             color="inherit"
             onClick={handleButtonClick}
             aria-label={tooltip}

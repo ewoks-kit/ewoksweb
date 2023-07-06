@@ -6,6 +6,9 @@ const sidebarStyle = {
     alignContent: 'flex-start',
     padding: '0px',
   },
+  dropdown: {
+    minWidth: '150px',
+  },
 };
 
 export default sidebarStyle;

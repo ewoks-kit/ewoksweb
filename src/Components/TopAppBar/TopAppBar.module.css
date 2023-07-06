@@ -1,0 +1,12 @@
+.disabledCrumb {
+  cursor: default;
+  color: red;
+}
+
+.disabledCrumb:hover {
+  text-decoration: none;
+}
+
+.button:hover {
+  background-color: #303f9f;
+}
