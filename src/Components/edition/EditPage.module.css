@@ -12,11 +12,12 @@
 }
 
 .appBar {
+  display: flex;
+  flex-direction: row !important;
+  align-items: center;
+  justify-content: space-between;
   min-height: 64px;
-}
-
-.title {
-  flex-grow: 1;
+  padding: 0 1rem;
 }
 
 .reflexContainer {
@@ -30,19 +31,13 @@
 }
 
 .reflexSplitter {
-  display: flex;
-  align-items: center;
   width: 0.325rem !important;
   background-color: rgb(233, 235, 247) !important;
   border-left-color: #cfcfe1 !important;
   border-right-color: #cfcfe1 !important;
-  color: #777;
-  cursor: col-resize !important;
-  transition: none;
 }
 
 .toolbar {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
 }

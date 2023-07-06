@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Typography, useTheme } from '@material-ui/core';
+import { AppBar, Typography, useTheme } from '@material-ui/core';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import useStore from '../../store/useStore';
@@ -61,18 +61,12 @@ function TopAppBar(props: Props) {
       position="static"
       style={{ zIndex: zIndex.drawer + 1 }}
     >
-      <Toolbar className={styles.toolbar}>
-        <Typography
-          component="h1"
-          variant="h6"
-          color="inherit"
-          noWrap
-          className={styles.title}
-        >
-          <TopNavbarLabel />
-        </Typography>
-        <GetFromServer />
+      <Typography component="h1" variant="h6" color="inherit" noWrap>
+        <TopNavbarLabel />
+      </Typography>
 
+      <div className={styles.toolbar}>
+        <GetFromServer />
         <SaveToServerButton />
         <OpenActionMenuButton
           checkAndNewGraph={() => checkAndNewGraph(false)}
@@ -85,7 +79,7 @@ function TopAppBar(props: Props) {
           openInfo={openInfo}
           openSettings={openSettings}
         />
-      </Toolbar>
+      </div>
       <ProgressBar />
     </AppBar>
   );
