@@ -9,7 +9,6 @@ import {
   Slider,
 } from '@material-ui/core';
 
-import { useEditPageStyles } from '../../edition/useEditPageStyles';
 import useStore from '../../../store/useStore';
 import type { PropertyChangedEvent } from '../../../types';
 import sidebarStyle from '../sidebarStyle';
@@ -26,8 +25,6 @@ import useEdgeDataStore from '../../../store/useEdgeDataStore';
 
 // DOC: Edit the link style
 export default function EditLinkStyle(element: Edge) {
-  const classes = useEditPageStyles();
-  // const element = useSelectedElement() as EwoksRFLink;
   const { setEdges, getEdges } = useReactFlow();
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
@@ -158,15 +155,15 @@ export default function EditLinkStyle(element: Edge) {
       <FormControl
         variant="filled"
         fullWidth
-        style={{ ...sidebarStyle.formstyleflex }}
+        style={sidebarStyle.formstyleflex}
       >
         <InputLabel id="linkTypeLabel">Link type</InputLabel>
         <Select
-          className={classes.styleLinkDropdowns}
           labelId="linkTypeLabel"
           value={linkType}
           label="Link type"
           onChange={linkTypeChanged}
+          style={sidebarStyle.dropdown}
         >
           {[
             'straight',
@@ -195,14 +192,14 @@ export default function EditLinkStyle(element: Edge) {
       <FormControl
         variant="filled"
         fullWidth
-        style={{ ...sidebarStyle.formstyleflex }}
+        style={sidebarStyle.formstyleflex}
       >
         <InputLabel id="markerEnd">Arrow Head</InputLabel>
         <Select
-          className={classes.styleLinkDropdowns}
           value={arrowType}
           label="Arrow head"
           onChange={arrowTypeChanged}
+          style={sidebarStyle.dropdown}
         >
           {[...Object.values(MarkerType), 'none'].map((tex) => (
             <MenuItem value={tex} key={tex}>

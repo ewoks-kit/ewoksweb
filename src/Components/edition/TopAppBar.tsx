@@ -10,13 +10,14 @@ import SaveToServerButton from '../TopNavBar/SaveToServerButton';
 import SettingsInfoDrawer from '../TopNavBar/SettingsInfoDrawer';
 import TopNavbarLabel from '../TopNavBar/TopNavbarLabel';
 
+import styles from './EditPage.module.css';
+
 interface Props {
-  classes: { appBar: string; toolbar: string; title: string };
   checkAndNewGraph: (notSave: boolean) => void;
 }
 
 function TopAppBar(props: Props) {
-  const { classes, checkAndNewGraph } = props;
+  const { checkAndNewGraph } = props;
 
   const { zIndex } = useTheme();
 
@@ -56,29 +57,28 @@ function TopAppBar(props: Props) {
 
   return (
     <AppBar
-      className={classes.appBar}
+      className={styles.appBar}
       position="static"
       style={{ zIndex: zIndex.drawer + 1 }}
     >
-      <Toolbar className={classes.toolbar}>
+      <Toolbar className={styles.toolbar}>
         <Typography
           component="h1"
           variant="h6"
           color="inherit"
           noWrap
-          className={classes.title}
+          className={styles.title}
         >
           <TopNavbarLabel />
         </Typography>
         <GetFromServer />
 
         <SaveToServerButton />
-        <div>
-          <OpenActionMenuButton
-            checkAndNewGraph={() => checkAndNewGraph(false)}
-            handleOpenSettings={handleOpenSettings}
-          />
-        </div>
+        <OpenActionMenuButton
+          checkAndNewGraph={() => checkAndNewGraph(false)}
+          handleOpenSettings={handleOpenSettings}
+        />
+
         <SettingsInfoDrawer
           handleOpenDrawers={handleOpenDrawers}
           openDrawers={openDrawers}

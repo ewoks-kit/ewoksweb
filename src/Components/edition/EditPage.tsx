@@ -3,7 +3,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import EditSidebar from 'Components/Sidebar/EditSidebar';
 import Canvas from '../Canvas/Canvas';
 import SimpleSnackbar from '../General/Snackbar';
-import { useEditPageStyles } from './useEditPageStyles';
 import useStore from 'store/useStore';
 import ConfirmDialog from 'Components/General/ConfirmDialog';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -16,11 +15,11 @@ import useTaskDrawerState from '../../store/taskDrawerState';
 import { useGetTasks } from '../TopNavBar/hooks';
 import TopAppBar from './TopAppBar';
 
+import styles from './EditPage.module.css';
+
 const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
 
 export default function EditPage() {
-  const classes = useEditPageStyles();
-
   const rfInstance = useReactFlow();
 
   const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
@@ -102,7 +101,7 @@ export default function EditPage() {
 
   return (
     <div
-      className={classes.root}
+      className={styles.root}
       onKeyDown={handleKeyDown}
       tabIndex={0}
       role="button"
@@ -116,15 +115,15 @@ export default function EditPage() {
       />
       <CssBaseline />
       <SimpleSnackbar />
-      <TopAppBar classes={classes} checkAndNewGraph={checkAndNewGraph} />
-      <div className={classes.mainArea}>
+      <TopAppBar checkAndNewGraph={checkAndNewGraph} />
+      <div className={styles.mainArea}>
         <OverflowDrawer />
         <ReflexContainer
           orientation="vertical"
-          className={classes.reflexContainer}
+          className={styles.reflexContainer}
         >
           <ReflexElement>
-            <main className={classes.content}>
+            <main className={styles.content}>
               <ErrorBoundary
                 FallbackComponent={(fallbackProps) => (
                   <ErrorFallback {...fallbackProps} />
@@ -134,7 +133,7 @@ export default function EditPage() {
               </ErrorBoundary>
             </main>
           </ReflexElement>
-          <ReflexSplitter propagate className={classes.reflexSplitter} />
+          <ReflexSplitter propagate className={styles.reflexSplitter} />
           <ReflexElement minSize={100} maxSize={500} size={350}>
             <EditSidebar />
           </ReflexElement>

@@ -1,0 +1,8 @@
+.disabledCrumb {
+  cursor: default;
+  color: red;
+}
+
+.disabledCrumb:hover {
+  text-decoration: none;
+}

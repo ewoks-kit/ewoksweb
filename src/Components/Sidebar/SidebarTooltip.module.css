@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+}
+
+.text {
+  border-radius: 5px;
+  border: 3px solid rgb(150, 165, 249);
+  padding: 10px;
+  background-color: rgb(233, 235, 247);
+  color: rgb(57, 65, 111);
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.13;
+}
