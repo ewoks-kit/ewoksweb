@@ -6,7 +6,7 @@ import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 
-import styles from './TopNavBar.module.css';
+import styles from './TopAppBar.module.css';
 
 export default function SubgraphStack() {
   const { setNodes, setEdges, fitView } = useReactFlow();

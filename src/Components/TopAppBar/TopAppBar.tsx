@@ -5,12 +5,12 @@ import useStore from '../../store/useStore';
 import { DrawerTab } from '../../types';
 import GetFromServer from '../General/GetFromServer';
 import ProgressBar from '../General/ProgressBar';
-import OpenActionMenuButton from '../TopNavBar/menu/OpenActionMenuButton';
-import SaveToServerButton from '../TopNavBar/SaveToServerButton';
-import SettingsInfoDrawer from '../TopNavBar/SettingsInfoDrawer';
-import TopNavbarLabel from '../TopNavBar/TopNavbarLabel';
+import OpenActionMenuButton from './menu/OpenActionMenuButton';
+import SaveToServerButton from './SaveToServerButton';
+import SettingsInfoDrawer from './SettingsInfoDrawer';
+import TopAppBarLabel from './TopAppBarLabel';
 
-import styles from './EditPage.module.css';
+import styles from '../edition/EditPage.module.css';
 
 interface Props {
   checkAndNewGraph: (notSave: boolean) => void;
@@ -62,7 +62,7 @@ function TopAppBar(props: Props) {
       style={{ zIndex: zIndex.drawer + 1 }}
     >
       <Typography component="h1" variant="h6" color="inherit" noWrap>
-        <TopNavbarLabel />
+        <TopAppBarLabel />
       </Typography>
 
       <div className={styles.toolbar}>
