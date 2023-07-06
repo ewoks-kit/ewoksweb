@@ -13,6 +13,8 @@ import curateGraph from './utils/curateGraph';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
 
+import styles from './TopAppBar.module.css';
+
 // DOC: Save to server button with its spinner
 export default function SaveToServerButton() {
   const graphInfo = useStore((state) => state.graphInfo);
@@ -131,6 +133,7 @@ export default function SaveToServerButton() {
         onClose={() => setDialogOpen(false)}
       />
       <IntegratedSpinner
+        className={styles.button}
         tooltip="Save to Server"
         action={() => null}
         getting={false}

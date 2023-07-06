@@ -2,8 +2,9 @@ import RedoIcon from '@material-ui/icons/Redo';
 import UndoIcon from '@material-ui/icons/Undo';
 
 import { Fab, IconButton, Tooltip } from '@material-ui/core';
-import { useEditPageStyles } from '../edition/useEditPageStyles';
 import tooltipText from '../General/TooltipText';
+
+import styles from './TopAppBar.module.css';
 
 interface undoRedoProps {
   undo: () => void;
@@ -11,14 +12,12 @@ interface undoRedoProps {
 }
 
 export default function UndoRedo({ undo, redo }: undoRedoProps) {
-  const classes = useEditPageStyles();
-
   return (
     <>
       <Tooltip title={tooltipText('Undo')} enterDelay={800} arrow>
         <IconButton color="inherit" onClick={undo} data-cy="undoButton">
           <Fab
-            className={classes.openFileButton}
+            className={styles.button}
             color="primary"
             size="small"
             component="span"
@@ -31,7 +30,7 @@ export default function UndoRedo({ undo, redo }: undoRedoProps) {
       <Tooltip title={tooltipText('Redo')} enterDelay={800} arrow>
         <IconButton color="inherit" onClick={redo} data-cy="redoButton">
           <Fab
-            className={classes.openFileButton}
+            className={styles.button}
             color="primary"
             size="small"
             component="span"
