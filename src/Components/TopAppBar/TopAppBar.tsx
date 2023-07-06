@@ -1,4 +1,4 @@
-import { AppBar, Typography, useTheme } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import useStore from '../../store/useStore';
@@ -11,6 +11,8 @@ import SettingsInfoDrawer from './SettingsInfoDrawer';
 import TopAppBarLabel from './TopAppBarLabel';
 
 import styles from '../edition/EditPage.module.css';
+import { createPortal } from 'react-dom';
+import useNavBarElementStore from '../../navbar/useNavBarElementStore';
 
 interface Props {
   checkAndNewGraph: (notSave: boolean) => void;
@@ -19,7 +21,7 @@ interface Props {
 function TopAppBar(props: Props) {
   const { checkAndNewGraph } = props;
 
-  const { zIndex } = useTheme();
+  const navBarElement = useNavBarElementStore((state) => state.element);
 
   const [openDrawers, setOpenDrawers] = useState(true);
   const [openSettings, setOpenSettings] = useState(false);
@@ -55,16 +57,15 @@ function TopAppBar(props: Props) {
     setOpenDrawers(!openDrawers);
   }
 
-  return (
-    <AppBar
-      className={styles.appBar}
-      position="static"
-      style={{ zIndex: zIndex.drawer + 1 }}
-    >
+  if (!navBarElement) {
+    return null;
+  }
+
+  return createPortal(
+    <>
       <Typography component="h1" variant="h6" color="inherit" noWrap>
         <TopAppBarLabel />
       </Typography>
-
       <div className={styles.toolbar}>
         <GetFromServer />
         <SaveToServerButton />
@@ -81,7 +82,8 @@ function TopAppBar(props: Props) {
         />
       </div>
       <ProgressBar />
-    </AppBar>
+    </>,
+    navBarElement
   );
 }
 
