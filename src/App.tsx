@@ -4,7 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import EditRoute from './EditRoute';
 import MonitorRoute from './MonitorRoute';
 
-import NavBar from './navbar/Navbar';
+import NavBar from './navbar/NavBar';
 
 function App() {
   return (
