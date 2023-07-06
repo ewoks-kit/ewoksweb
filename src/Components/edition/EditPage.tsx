@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import EditSidebar from 'Components/Sidebar/EditSidebar';
 import Canvas from '../Canvas/Canvas';
 import SimpleSnackbar from '../General/Snackbar';
@@ -113,7 +112,6 @@ export default function EditPage() {
         agreeCallback={() => checkAndNewGraph(true)}
         disagreeCallback={disAgreeSaveWithout}
       />
-      <CssBaseline />
       <SimpleSnackbar />
       <TopAppBar checkAndNewGraph={checkAndNewGraph} />
       <div className={styles.mainArea}>
