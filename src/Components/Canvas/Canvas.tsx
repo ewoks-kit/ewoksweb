@@ -378,7 +378,6 @@ function Canvas() {
         >
           <CanvasBackground />
           <Controls position="bottom-right" />
-          {/* <CanvasMiniMap /> */}
         </ReactFlow>
       </div>
     </div>
