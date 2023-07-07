@@ -8,7 +8,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import CustomTableCell from './CustomTableCell';
-import DraggableDialog from 'Components/General/DraggableDialog';
+import DraggableDialog from 'edition/General/DraggableDialog';
 import useStore from 'store/useStore';
 import type { Condition, EditableTableRow, Inputs, TypeOfValues } from 'types';
 import type { ChangeEvent } from 'react';

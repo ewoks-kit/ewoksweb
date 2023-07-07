@@ -4,7 +4,7 @@ import FormControl from '@material-ui/core/FormControl';
 import useStore from '../../store/useStore';
 import type { WorkflowDescription } from '../../types';
 import { getWorkflow } from '../../api/api';
-import ConfirmDialog from 'Components/General/ConfirmDialog';
+import ConfirmDialog from 'edition/General/ConfirmDialog';
 import { validateEwoksGraph } from '../../utils/EwoksValidator';
 import WorkflowDropdown from './dropdown/WorkflowDropdown';
 import { textForError } from '../../utils';

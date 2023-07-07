@@ -7,7 +7,7 @@ import type {
   EwoksRFNodeData,
   GraphDetails,
 } from '../types';
-import type { TaskInfo } from '../Components/Canvas/models';
+import type { TaskInfo } from '../edition/Canvas/models';
 
 export interface EwoksServerErrorResponse {
   response: { data: { message: string } };

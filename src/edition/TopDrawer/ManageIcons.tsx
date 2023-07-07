@@ -5,7 +5,7 @@ import { Button, Box, Grid, Paper, styled, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import useStore from 'store/useStore';
-import ConfirmDialog from 'Components/General/ConfirmDialog';
+import ConfirmDialog from 'edition/General/ConfirmDialog';
 import { getTaskDescription } from 'api/tasks';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import commonStrings from 'commonStrings.json';

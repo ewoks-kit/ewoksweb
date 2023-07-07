@@ -10,7 +10,7 @@ import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import { calcTasksForLink } from './calcTasksForLink';
 import { createDataMappingData } from './utils';
-import { defaultLinkStyle } from '../Components/Canvas/utils';
+import { defaultLinkStyle } from '../edition/Canvas/utils';
 
 // DOC: from GraphEwoks get EwoksRFLinks
 // - tempGraph: the graph to transform its links

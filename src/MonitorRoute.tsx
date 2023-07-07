@@ -1,5 +1,5 @@
-import ExecutedWorkflows from './Components/Execution/ExecutedWorkflows';
-import SuspenseBoundary from './Components/Suspense/SuspenseBoundary';
+import ExecutedWorkflows from './edition/Execution/ExecutedWorkflows';
+import SuspenseBoundary from './edition/Suspense/SuspenseBoundary';
 
 function MonitorRoute() {
   return (

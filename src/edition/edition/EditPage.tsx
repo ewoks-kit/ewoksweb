@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import EditSidebar from 'Components/Sidebar/EditSidebar';
+import EditSidebar from 'edition/Sidebar/EditSidebar';
 import Canvas from '../Canvas/Canvas';
 import SimpleSnackbar from '../General/Snackbar';
 import useStore from 'store/useStore';
-import ConfirmDialog from 'Components/General/ConfirmDialog';
+import ConfirmDialog from 'edition/General/ConfirmDialog';
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from '../General/ErrorFallback';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
