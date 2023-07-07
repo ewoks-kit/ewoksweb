@@ -14,11 +14,10 @@ import OpenDrawerMenuItem from './OpenDrawerMenuItem';
 
 interface Props {
   checkAndNewGraph: () => void;
-  handleOpenSettings: () => void;
 }
 
 export default function OpenActionMenuButton(props: Props) {
-  const { checkAndNewGraph, handleOpenSettings } = props;
+  const { checkAndNewGraph } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -71,7 +70,7 @@ export default function OpenActionMenuButton(props: Props) {
           <DownloadMenuItem />
           <DiscoverMenuItem />
           <ExecutionMenuItem />
-          <OpenDrawerMenuItem handleOpenSettings={handleOpenSettings} />
+          <OpenDrawerMenuItem />
         </ActionMenuContext.Provider>
       </Menu>
     </div>
