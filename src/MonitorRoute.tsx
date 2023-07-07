@@ -1,9 +1,10 @@
 import ExecutedWorkflows from './execution/ExecutedWorkflows';
+import MonitorPageFallback from './suspense/MonitorPageFallback';
 import SuspenseBoundary from './suspense/SuspenseBoundary';
 
 function MonitorRoute() {
   return (
-    <SuspenseBoundary>
+    <SuspenseBoundary FallbackComponent={MonitorPageFallback}>
       <ExecutedWorkflows />
     </SuspenseBoundary>
   );
