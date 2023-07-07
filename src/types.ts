@@ -5,7 +5,6 @@ import type { GraphRFSlice } from './store/graphRF';
 import type { OpenDraggableDialogSlice } from './store/openDraggableDialog';
 import type { GettingFromServerSlice } from './store/gettingFromServer';
 import type { GraphOrSubgraphSlice } from './store/graphOrSubgraph';
-import type { OpenSettingsDrawerSlice } from './store/openSettingsDrawer';
 import type { OpenSnackbarSlice } from './store/openSnackbar';
 import type { SubgraphsStackSlice } from './store/subgraphsStack';
 import type { SubGraphSlice } from './store/subGraph';
@@ -118,7 +117,6 @@ export interface State
     OpenDraggableDialogSlice,
     GettingFromServerSlice,
     GraphOrSubgraphSlice,
-    OpenSettingsDrawerSlice,
     OpenSnackbarSlice,
     SubgraphsStackSlice,
     SubGraphSlice,

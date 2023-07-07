@@ -1,45 +1,27 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import BasicTabs from '../TopDrawer/BasicTabs';
+import { DrawerTab } from '../../types';
 
 interface SettingsInfoDrawerProps {
-  openDrawers: boolean;
-  openSettings: boolean;
-  handleOpenDrawers: () => void;
+  drawerTab: DrawerTab;
+  setDrawerTab: (drawerTab: DrawerTab) => void;
 }
 
 export default function SettingsInfoDrawer(props: SettingsInfoDrawerProps) {
-  const [isOpen, setOpen] = React.useState(false);
-
-  useEffect(() => {
-    setOpen(props.openDrawers && props.openSettings);
-  }, [props.openSettings, props.openDrawers]);
-
-  const toggleDrawer = (open: boolean) => (
-    event: React.KeyboardEvent | React.MouseEvent
-  ) => {
-    if (
-      event.type === 'keydown' &&
-      ((event as React.KeyboardEvent).key === 'Tab' ||
-        (event as React.KeyboardEvent).key === 'Shift')
-    ) {
-      return;
-    }
-    props.handleOpenDrawers();
-    setOpen(open); // left: open , for opening both-active 1
-  };
+  const { drawerTab, setDrawerTab } = props;
 
   return (
     <Drawer
       style={{ alignItems: 'center', display: 'flex' }}
       anchor="top"
-      open={isOpen}
-      onClose={toggleDrawer(false)}
+      open={drawerTab !== DrawerTab.Closed}
+      onClose={() => setDrawerTab(DrawerTab.Closed)}
     >
       <Box sx={{ width: 'auto' }} role="presentation">
-        <BasicTabs />
+        <BasicTabs tab={drawerTab} setDrawerTab={setDrawerTab} />
         <Divider />
       </Box>
     </Drawer>

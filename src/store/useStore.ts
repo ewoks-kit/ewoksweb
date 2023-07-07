@@ -7,7 +7,6 @@ import graphRF from './graphRF';
 import allWorkflows from './allWorkflows';
 import graphOrSubgraph from './graphOrSubgraph';
 import openDraggableDialog from './openDraggableDialog';
-import openSettingsDrawer from './openSettingsDrawer';
 import openSnackbar from './openSnackbar';
 import recentGraphs from './recentGraphs';
 import subGraph from './subGraph';
@@ -29,7 +28,6 @@ const useStore = create<State>((set, get) => ({
   ...graphInfo(set, get),
   ...canvasGraphChanged(set),
   ...openDraggableDialog(set),
-  ...openSettingsDrawer(set),
   ...openSnackbar(set),
   ...recentGraphs(set, get),
   ...subGraph(set, get),

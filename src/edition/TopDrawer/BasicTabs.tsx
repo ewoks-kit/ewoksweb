@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
@@ -6,7 +5,6 @@ import { Box } from '@material-ui/core';
 
 import ManageIcons from './ManageIcons';
 import ManageWorkflows from './ManageWorkflows';
-import useStore from '../../store/useStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import { DrawerTab } from '../../types';
 
@@ -43,13 +41,13 @@ function a11yProps(index: number) {
   };
 }
 
-export default function BasicTabs() {
-  const [value, setValue] = React.useState<DrawerTab>(DrawerTab.Workflows);
-  const openSettingsDrawer = useStore((state) => state.openSettingsDrawer);
+interface Props {
+  tab: DrawerTab;
+  setDrawerTab: (tab: DrawerTab) => void;
+}
 
-  useEffect(() => {
-    setValue(openSettingsDrawer);
-  }, [openSettingsDrawer]);
+export default function BasicTabs(props: Props) {
+  const { tab: value, setDrawerTab } = props;
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -57,7 +55,7 @@ export default function BasicTabs() {
         <Tabs
           value={value}
           onChange={(e, newValue: number) => {
-            setValue(newValue);
+            setDrawerTab(newValue);
           }}
           aria-label="basic tabs example"
         >
