@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f6f8f9;
+}
+
+.iconList {
+  padding: 0.25rem;
+  margin: 0.25rem 0;
+}
+
+.controlList {
+  padding: 0.25rem;
+  margin: 0.25rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.icon {
+  composes: btnClean from global;
+  margin: 0.25rem;
+  border: solid 2px transparent;
+  border-radius: 10px;
+}
+
+.icon[data-selected='true'] {
+  border-color: #3f51b5;
+}
+
+.iconImg {
+  height: 60px;
+}

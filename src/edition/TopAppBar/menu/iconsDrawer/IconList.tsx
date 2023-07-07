@@ -1,43 +1,39 @@
-import { Tooltip } from '@material-ui/core';
+import { Paper, Tooltip } from '@material-ui/core';
 import type { Icon } from '../../../../types';
+
+import styles from './ManageIcons.module.css';
 
 interface Props {
   icons: Icon[];
   selectedIcon: string;
   setSelectedIcon: (name: string) => void;
-  imgHolderClassName?: string;
 }
 
 function IconList(props: Props) {
-  const { icons, selectedIcon, setSelectedIcon, imgHolderClassName } = props;
+  const { icons, selectedIcon, setSelectedIcon } = props;
 
   return (
-    <span className="dndflow">
+    <Paper className={styles.iconList}>
       {icons
         .filter((icon) => icon.image?.data_url)
         .map((icon) => (
-          <span
+          <button
+            className={styles.icon}
             onClick={() => setSelectedIcon(icon.name)}
-            aria-hidden="true"
-            role="button"
-            tabIndex={0}
             key={icon.name}
-            className={`dndnode ${
-              selectedIcon === icon.name ? 'selectedTask' : ''
-            }`}
+            type="button"
+            data-selected={icon.name === selectedIcon || undefined}
           >
             <Tooltip title={icon.name} arrow>
-              <span role="button" tabIndex={0} className={imgHolderClassName}>
-                <img
-                  src={icon.image?.data_url}
-                  alt={icon.name}
-                  key={icon.name}
-                />
-              </span>
+              <img
+                className={styles.iconImg}
+                src={icon.image?.data_url}
+                alt={icon.name}
+              />
             </Tooltip>
-          </span>
+          </button>
         ))}
-    </span>
+    </Paper>
   );
 }
 

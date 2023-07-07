@@ -9,15 +9,18 @@ import useStore from '../../../../store/useStore';
 import { textForError } from '../../../../utils';
 import commonStrings from '../../../../commonStrings.json';
 
+import styles from './ManageIcons.module.css';
+
 interface Props {
   selectedIcon: string;
-  buttonClassName?: string;
 }
 
 function IconControls(props: Props) {
-  const { selectedIcon, buttonClassName } = props;
-  const [fileToBeSent, setFileToBeSent] = useState<string | ArrayBuffer>('');
-  const [fileNameToBeSent, setFileNameToBeSent] = useState('');
+  const { selectedIcon } = props;
+  const [iconContentToUpload, setIconContentToUpload] = useState<
+    string | ArrayBuffer
+  >('');
+  const [iconNameToUpload, setIconNameToUpload] = useState('');
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const mutateIcons = useMutateIcons();
@@ -41,10 +44,6 @@ function IconControls(props: Props) {
         severity: 'error',
       });
     }
-  }
-
-  function disAgreeDeleteIcon() {
-    setOpenAgreeDialog(false);
   }
 
   async function handleDeleteIcon() {
@@ -80,20 +79,20 @@ function IconControls(props: Props) {
     }
   }
 
-  async function uploadFile(event: SyntheticEvent<Element, Event>) {
+  async function uploadIcon(event: SyntheticEvent<Element, Event>) {
     event.preventDefault();
 
     try {
-      await postIcon(fileNameToBeSent, fileToBeSent);
+      await postIcon(iconNameToUpload, iconContentToUpload);
 
       setOpenSnackbar({
         open: true,
-        text: `Icon ${fileNameToBeSent} was successfully uploaded`,
+        text: `Icon ${iconNameToUpload} was successfully uploaded`,
         severity: 'success',
       });
 
       mutateIcons();
-      setFileNameToBeSent('');
+      setIconNameToUpload('');
     } catch (error) {
       setOpenSnackbar({
         open: true,
@@ -106,7 +105,7 @@ function IconControls(props: Props) {
     }
   }
 
-  function inputNew(ne: ChangeEvent<HTMLInputElement>) {
+  function handleIconFilePicked(ne: ChangeEvent<HTMLInputElement>) {
     const { files } = ne.target;
     const inputFile = files?.[0];
 
@@ -134,8 +133,8 @@ function IconControls(props: Props) {
 
     fileReader.addEventListener('load', (event) => {
       if (event.target?.result) {
-        setFileToBeSent(event.target.result);
-        setFileNameToBeSent(inputFile.name);
+        setIconContentToUpload(event.target.result);
+        setIconNameToUpload(inputFile.name);
       }
     });
 
@@ -147,7 +146,7 @@ function IconControls(props: Props) {
   }
 
   return (
-    <>
+    <div className={styles.controlList}>
       <ConfirmDialog
         title={`Delete "${selectedIcon}" icon?`}
         content={`You are about to delete an icon.
@@ -155,16 +154,15 @@ function IconControls(props: Props) {
               Do you agree to continue?`}
         open={openAgreeDialog}
         agreeCallback={agreeDeleteIcon}
-        disagreeCallback={disAgreeDeleteIcon}
+        disagreeCallback={() => setOpenAgreeDialog(false)}
       />
       <form
         onSubmit={(e: React.SyntheticEvent) => {
-          uploadFile(e);
+          uploadIcon(e);
         }}
       >
         <Button
           startIcon={<Delete />}
-          className={buttonClassName}
           variant="outlined"
           color="secondary"
           onClick={() => {
@@ -181,7 +179,7 @@ function IconControls(props: Props) {
           type="submit"
           color="primary"
           size="small"
-          disabled={fileNameToBeSent === ''}
+          disabled={iconNameToUpload === ''}
         >
           Upload
         </Button>
@@ -197,14 +195,14 @@ function IconControls(props: Props) {
                 aria-labelledby="upload-icon"
                 name="upload-icon"
                 accept="image/*"
-                onChange={inputNew}
+                onChange={handleIconFilePicked}
                 aria-label="Select Icon"
               />
             </div>
           </label>
         </div>
       </form>
-    </>
+    </div>
   );
 }
 
