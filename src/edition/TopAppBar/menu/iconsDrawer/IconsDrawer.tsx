@@ -1,6 +1,9 @@
 import Drawer from '@material-ui/core/Drawer';
-import ManageIcons from './ManageIcons';
 import SuspenseBoundary from '../../../../suspense/SuspenseBoundary';
+import IconList from './IconList';
+import UploadIconControl from './UploadIconControl';
+
+import styles from './IconsDrawer.module.css';
 
 interface Props {
   isOpen: boolean;
@@ -12,14 +15,19 @@ export default function IconDrawer(props: Props) {
 
   return (
     <Drawer
-      style={{ alignItems: 'center', display: 'flex' }}
+      className={styles.drawer}
       anchor="top"
       open={isOpen}
       onClose={onClose}
     >
-      <SuspenseBoundary>
-        <ManageIcons />
-      </SuspenseBoundary>
+      <div className={styles.content}>
+        <div>
+          <SuspenseBoundary>
+            <IconList />
+          </SuspenseBoundary>
+          <UploadIconControl />
+        </div>
+      </div>
     </Drawer>
   );
 }

@@ -1,17 +1,14 @@
 import { Paper, Tooltip } from '@material-ui/core';
-import type { Icon } from '../../../../types';
+import { useState } from 'react';
+import { useIcons } from '../../../../api/icons';
 import DeleteIconButton from './DeleteIconButton';
 
-import styles from './ManageIcons.module.css';
+import styles from './IconsDrawer.module.css';
 
-interface Props {
-  icons: Icon[];
-  selectedIcon: string;
-  setSelectedIcon: (name: string) => void;
-}
+function IconList() {
+  const { icons } = useIcons();
 
-function IconList(props: Props) {
-  const { icons, selectedIcon, setSelectedIcon } = props;
+  const [selectedIcon, setSelectedIcon] = useState<string>();
 
   return (
     <Paper className={styles.iconList}>

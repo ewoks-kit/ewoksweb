@@ -1,4 +1,9 @@
-.container {
+.drawer {
+  display: flex;
+  align-items: center;
+}
+
+.content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,7 +15,7 @@
   margin: 0.25rem 0;
 }
 
-.controlList {
+.upload {
   padding: 0.25rem;
   margin: 0.25rem 0;
   display: flex;

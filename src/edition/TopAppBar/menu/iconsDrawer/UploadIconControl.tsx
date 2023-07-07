@@ -6,9 +6,9 @@ import { postIcon, useMutateIcons } from '../../../../api/icons';
 import useStore from '../../../../store/useStore';
 import { textForError } from '../../../../utils';
 
-import styles from './ManageIcons.module.css';
+import styles from './IconsDrawer.module.css';
 
-function IconControls() {
+function UploadIconControl() {
   const [iconContentToUpload, setIconContentToUpload] = useState<
     string | ArrayBuffer
   >('');
@@ -83,24 +83,12 @@ function IconControls() {
   }
 
   return (
-    <div className={styles.controlList}>
+    <div className={styles.upload}>
       <form
         onSubmit={(e: React.SyntheticEvent) => {
           uploadIcon(e);
         }}
       >
-        <Button
-          startIcon={<CloudUpload />}
-          variant="outlined"
-          type="submit"
-          color="primary"
-          size="small"
-          disabled={iconNameToUpload === ''}
-        >
-          Upload
-        </Button>
-        <hr />
-
         <div>
           <label htmlFor="upload-icon" id="upload-icon">
             Select an Icon to Upload
@@ -117,9 +105,21 @@ function IconControls() {
             </div>
           </label>
         </div>
+        <hr />
+
+        <Button
+          startIcon={<CloudUpload />}
+          variant="outlined"
+          type="submit"
+          color="primary"
+          size="small"
+          disabled={iconNameToUpload === ''}
+        >
+          Upload
+        </Button>
       </form>
     </div>
   );
 }
 
-export default IconControls;
+export default UploadIconControl;
