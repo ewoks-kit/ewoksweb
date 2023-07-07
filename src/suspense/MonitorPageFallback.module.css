@@ -1,0 +1,12 @@
+.fallback {
+  color: darkred;
+  margin: auto;
+  border: solid 1px darkred;
+  border-radius: 0.25rem;
+  padding: 1rem;
+  font-size: 1.25rem;
+}
+
+.fallback a {
+  font-weight: 600;
+}

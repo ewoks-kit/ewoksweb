@@ -1,3 +1,4 @@
+import type { ErrorBoundaryProps } from 'react-error-boundary';
 import { ErrorBoundary } from 'react-error-boundary';
 import type { ReactNode } from 'react';
 import { Suspense } from 'react';
@@ -6,13 +7,16 @@ import SnackbarErrorFallback from './SnackbarErrorFallback';
 
 interface Props {
   children?: ReactNode;
+  FallbackComponent?: ErrorBoundaryProps['FallbackComponent'];
 }
 
 function SuspenseBoundary(props: Props) {
-  const { children } = props;
+  const { children, FallbackComponent } = props;
 
   return (
-    <ErrorBoundary FallbackComponent={SnackbarErrorFallback}>
+    <ErrorBoundary
+      FallbackComponent={FallbackComponent || SnackbarErrorFallback}
+    >
       <Suspense fallback={<Spinner />}>{children}</Suspense>
     </ErrorBoundary>
   );
