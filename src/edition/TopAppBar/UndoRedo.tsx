@@ -1,0 +1,47 @@
+import RedoIcon from '@material-ui/icons/Redo';
+import UndoIcon from '@material-ui/icons/Undo';
+
+import { Fab, IconButton, Tooltip } from '@material-ui/core';
+import tooltipText from '../../general/TooltipText';
+
+import styles from './TopAppBar.module.css';
+
+interface undoRedoProps {
+  undo: () => void;
+  redo: () => void;
+}
+
+export default function UndoRedo({ undo, redo }: undoRedoProps) {
+  return (
+    <>
+      <Tooltip title={tooltipText('Undo')} enterDelay={800} arrow>
+        <IconButton color="inherit" onClick={undo} data-cy="undoButton">
+          <Fab
+            className={styles.button}
+            color="primary"
+            size="small"
+            component="span"
+            aria-label="undo"
+          >
+            <UndoIcon />
+          </Fab>
+        </IconButton>
+      </Tooltip>
+      <Tooltip title={tooltipText('Redo')} enterDelay={800} arrow>
+        <IconButton color="inherit" onClick={redo} data-cy="redoButton">
+          <Fab
+            className={styles.button}
+            color="primary"
+            size="small"
+            component="span"
+            aria-label="redo"
+          >
+            <RedoIcon />
+          </Fab>
+        </IconButton>
+      </Tooltip>
+    </>
+  );
+}
+
+// testing have a graphRF and test redo-undo functionality on a change...

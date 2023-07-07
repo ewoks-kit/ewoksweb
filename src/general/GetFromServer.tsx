@@ -1,0 +1,106 @@
+import { useState } from 'react';
+
+import FormControl from '@material-ui/core/FormControl';
+import useStore from '../store/useStore';
+import type { WorkflowDescription } from '../types';
+import { getWorkflow } from '../api/api';
+import ConfirmDialog from './ConfirmDialog';
+import { validateEwoksGraph } from '../utils/EwoksValidator';
+import WorkflowDropdown from './dropdown/WorkflowDropdown';
+import { textForError } from '../utils';
+import { useReactFlow } from 'reactflow';
+
+export default function GetFromServer() {
+  const [workflowId, setWorkflowId] = useState('');
+  const initGraph = useStore((state) => state.initGraph);
+  const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const setCanvasGraphChanged = useStore(
+    (state) => state.setCanvasGraphChanged
+  );
+  const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
+  const undoIndex = useStore((state) => state.undoIndex);
+
+  const rfInstance = useReactFlow();
+
+  async function setInputValue(workflowDetails: WorkflowDescription) {
+    if (workflowDetails.id) {
+      setWorkflowId(workflowDetails.id || '');
+    }
+
+    setOpenAgreeDialog(false);
+
+    if (workflowDetails.id) {
+      if (canvasGraphChanged && undoIndex !== 0) {
+        setOpenAgreeDialog(true);
+      } else {
+        getFromServer(workflowDetails.id);
+      }
+    }
+  }
+
+  async function getFromServer(workflowIdparam: string) {
+    if (workflowIdparam) {
+      try {
+        const response = await getWorkflow(workflowIdparam);
+
+        const graph = response.data;
+        setOpenSnackbar({
+          open: true,
+          text: `Workflow ${
+            graph.graph.label || 'without Label!!!'
+          } was downloaded successfully`,
+          severity: 'success',
+        });
+        setCanvasGraphChanged(false);
+        initGraph(graph, 'fromServer', rfInstance);
+        validateEwoksGraph(graph);
+      } catch (error) {
+        setOpenSnackbar({
+          open: true,
+          text: textForError(
+            error,
+            'Error in retrieving workflow. Please check connectivity with the server!'
+          ),
+          severity: 'error',
+        });
+      }
+    } else {
+      setOpenSnackbar({
+        open: true,
+        text: 'Please select a graph to fetch and re-click!',
+        severity: 'warning',
+      });
+    }
+  }
+
+  const disAgreeSaveWithout = () => {
+    setOpenAgreeDialog(false);
+  };
+
+  return (
+    <>
+      <ConfirmDialog
+        title="There are unsaved changes"
+        content="Continue without saving?"
+        open={openAgreeDialog}
+        agreeCallback={() => getFromServer(workflowId)}
+        disagreeCallback={disAgreeSaveWithout}
+      />
+      <FormControl
+        variant="standard"
+        style={{
+          minWidth: '220px',
+          backgroundColor: '#7685dd',
+          borderRadius: '4px',
+        }}
+      >
+        <WorkflowDropdown
+          onChange={(workflowDetails) => {
+            setInputValue(workflowDetails);
+          }}
+        />
+      </FormControl>
+    </>
+  );
+}

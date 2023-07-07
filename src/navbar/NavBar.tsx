@@ -10,10 +10,10 @@ function NavBar() {
 
   return (
     <div
-      className={styles.topbar}
+      className={styles.navbar}
       ref={(elem) => setElement(elem ?? undefined)}
     >
-      <nav className={styles.navbar}>
+      <nav className={styles.navlinks}>
         <div className={styles.title}>
           <Link to="/">EwoksWeb</Link>
         </div>

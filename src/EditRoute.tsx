@@ -1,4 +1,4 @@
-import EditPage from './Components/edition/EditPage';
+import EditPage from './edition/EditPage';
 import 'react-reflex/styles.css';
 import 'reactflow/dist/style.css';
 import { ReactFlowProvider } from 'reactflow';
