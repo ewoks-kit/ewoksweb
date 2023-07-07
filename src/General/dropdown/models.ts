@@ -1,4 +1,4 @@
-import type { WorkflowDescription } from '../../../types';
+import type { WorkflowDescription } from '../../types';
 
 export enum FetchStatus {
   ToDo = 'To Do',

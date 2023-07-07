@@ -1,7 +1,7 @@
 import type { Edge, Node } from 'reactflow';
-import { postTask, putTask } from '../../../api/tasks';
-import type { EwoksRFLinkData, EwoksRFNodeData, Task } from '../../../types';
-import { assertDefined } from '../../../utils/typeGuards';
+import { postTask, putTask } from '../../api/tasks';
+import type { EwoksRFLinkData, EwoksRFNodeData, Task } from '../../types';
+import { assertDefined } from '../../utils/typeGuards';
 import type { TaskFields } from './models';
 
 export async function submitTaskFormData(

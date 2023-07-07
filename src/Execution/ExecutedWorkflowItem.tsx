@@ -1,4 +1,4 @@
-import type { Event } from '../../types';
+import type { Event } from '../types';
 import styles from './Execution.module.css';
 import { formatDate } from './utils';
 

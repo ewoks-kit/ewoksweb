@@ -6,7 +6,7 @@ import {
   MenuItem,
   FormHelperText,
 } from '@material-ui/core';
-import { useIcons } from '../../api/icons';
+import { useIcons } from '../api/icons';
 
 interface Props {
   value: string;

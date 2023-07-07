@@ -1,5 +1,5 @@
 import { InputLabel, Select, MenuItem, FormControl } from '@material-ui/core';
-import { useIcons } from '../../../api/icons';
+import { useIcons } from '../../api/icons';
 import type { Control } from 'react-hook-form';
 
 import styles from './TaskForm.module.css';

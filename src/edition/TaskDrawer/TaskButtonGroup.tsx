@@ -5,7 +5,7 @@ import type { Task } from '../../types';
 import { Edit, LibraryAdd } from '@material-ui/icons';
 import styles from './TaskButtonGroup.module.css';
 import DeleteTaskButton from './DeleteTaskButton';
-import TaskForm from '../General/forms/TaskForm';
+import TaskForm from '../../General/forms/TaskForm';
 
 type ActionType = 'clone' | 'edit';
 

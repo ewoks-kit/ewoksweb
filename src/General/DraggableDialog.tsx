@@ -18,7 +18,7 @@ import type {
   EwoksRFLinkData,
   EwoksRFNodeData,
   GraphRF,
-} from '../../types';
+} from '../types';
 import { useReactFlow } from 'reactflow';
 
 function PaperComponent(props: PaperProps) {

@@ -15,7 +15,7 @@ import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 import { getWorkflow } from 'api/api';
 import useStore from 'store/useStore';
 import type { GraphEwoks } from 'types';
-import { textForError } from '../../utils';
+import { textForError } from '../utils';
 
 interface EwoksUiInfoProps {
   closeDialog?(event?: React.KeyboardEvent | React.MouseEvent): void;

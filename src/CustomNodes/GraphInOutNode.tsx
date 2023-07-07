@@ -5,7 +5,7 @@ import isValidLink from '../utils/IsValidLink';
 import useStore from '../store/useStore';
 import type { Connection, NodeProps } from 'reactflow';
 import NodeIcon from './NodeIcon';
-import SuspenseBoundary from '../edition/Suspense/SuspenseBoundary';
+import SuspenseBoundary from '../Suspense/SuspenseBoundary';
 import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../types';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../utils';

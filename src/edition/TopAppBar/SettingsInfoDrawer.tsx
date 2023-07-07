@@ -3,7 +3,7 @@ import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import BasicTabs from '../TopDrawer/BasicTabs';
-import EwoksUiInfo from '../Frontpage/EwoksUiInfo';
+import EwoksUiInfo from '../../Frontpage/EwoksUiInfo';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 

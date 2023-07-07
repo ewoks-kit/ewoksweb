@@ -1,4 +1,4 @@
-import Upload from '../General/Upload';
+import Upload from '../../General/Upload';
 import { Add } from '@material-ui/icons';
 import Tooltip from '@material-ui/core/Tooltip';
 import useStore from '../../store/useStore';

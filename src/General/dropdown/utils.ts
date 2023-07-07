@@ -1,6 +1,6 @@
-import type { WorkflowDescription } from '../../../types';
+import type { WorkflowDescription } from '../../types';
 import commonStrings from 'commonStrings.json';
-import { getWorkflows } from '../../../utils';
+import { getWorkflows } from '../../utils';
 import type { FetchResult } from './models';
 
 export async function fetchWorkflows(): Promise<FetchResult> {

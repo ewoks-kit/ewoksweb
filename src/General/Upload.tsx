@@ -4,10 +4,10 @@ import { Fab } from '@material-ui/core';
 import type { ChangeEvent, ReactNode } from 'react';
 
 // import { validateEwoksGraph } from '../utils/EwoksValidator';
-import useStore from '../../store/useStore';
-import type { GraphEwoks, GraphRF } from '../../types';
+import useStore from '../store/useStore';
+import type { GraphEwoks, GraphRF } from '../types';
 import { useReactFlow } from 'reactflow';
-import useNodeDataStore from '../../store/useNodeDataStore';
+import useNodeDataStore from '../store/useNodeDataStore';
 
 const useStyles = makeStyles(() =>
   createStyles({

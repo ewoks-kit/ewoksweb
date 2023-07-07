@@ -11,16 +11,16 @@ import { Alert } from '@material-ui/lab';
 import { Controller, useForm } from 'react-hook-form';
 import { useReactFlow } from 'reactflow';
 
-import { postWorkflow, putWorkflow } from '../../../api/api';
-import commonStrings from '../../../commonStrings.json';
-import useStore from '../../../store/useStore';
-import type { GraphDetails, GraphFormAction } from '../../../types';
+import { postWorkflow, putWorkflow } from '../../api/api';
+import commonStrings from '../../commonStrings.json';
+import useStore from '../../store/useStore';
+import type { GraphDetails, GraphFormAction } from '../../types';
 import {
   getEdgesData,
   getNodesData,
   rfToEwoks,
   textForError,
-} from '../../../utils';
+} from '../../utils';
 import FormField from './FormField';
 import type { GraphFields } from './models';
 import { enrichWithData } from './utils';

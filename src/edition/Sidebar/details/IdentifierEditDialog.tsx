@@ -6,8 +6,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Controller, useForm } from 'react-hook-form';
-import FormField from '../../General/forms/FormField';
-import type { TaskFields } from '../../General/forms/models';
+import FormField from '../../../General/forms/FormField';
+import type { TaskFields } from '../../../General/forms/models';
 import { Alert } from '@material-ui/lab';
 
 interface EditingDialogProps {

@@ -3,12 +3,12 @@ import { useState } from 'react';
 import IntegratedSpinner from './IntegratedSpinner';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import useStore from '../../store/useStore';
-import { getWorkflow } from '../../api/api';
-import ConfirmDialog from 'edition/General/ConfirmDialog';
-import { textForError } from '../../utils';
+import useStore from '../store/useStore';
+import { getWorkflow } from '../api/api';
+import ConfirmDialog from './ConfirmDialog';
+import { textForError } from '../utils';
 import { useReactFlow } from 'reactflow';
-import useNodeDataStore from '../../store/useNodeDataStore';
+import useNodeDataStore from '../store/useNodeDataStore';
 
 interface GetFromServerButtonsProps {
   workflowId: string;

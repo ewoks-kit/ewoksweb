@@ -5,7 +5,7 @@ import { deleteTask as deleteTaskOnServer } from '../../api/tasks';
 import useStore from '../../store/useStore';
 import type { Task } from '../../types';
 import { textForError } from '../../utils';
-import ConfirmDialog from '../General/ConfirmDialog';
+import ConfirmDialog from '../../General/ConfirmDialog';
 import { useGetTasks } from '../TopAppBar/hooks';
 
 import styles from './TaskButtonGroup.module.css';

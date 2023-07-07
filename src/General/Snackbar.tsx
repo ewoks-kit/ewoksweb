@@ -2,7 +2,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { Alert } from '@material-ui/lab';
-import useStore from '../../store/useStore';
+import useStore from '../store/useStore';
 
 function SimpleSnackbar() {
   const openSnackbar = useStore((state) => state.openSnackbar);

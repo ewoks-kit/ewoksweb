@@ -1,4 +1,4 @@
-import type { TaskType } from '../../../types';
+import type { TaskType } from '../../types';
 
 export interface TaskFields {
   task_type: TaskType;

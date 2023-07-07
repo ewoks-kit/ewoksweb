@@ -15,7 +15,7 @@ import { calcNewId } from 'utils/calcNewId';
 import { useNodesIds } from '../../../store/graph-hooks';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import type { Node } from 'reactflow';
-import TaskForm from '../../General/forms/TaskForm';
+import TaskForm from '../../../General/forms/TaskForm';
 
 export default function NodeSidebarMenu(selectedElement: Node) {
   const rfInstance = useReactFlow();

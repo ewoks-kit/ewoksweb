@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
 import FormControl from '@material-ui/core/FormControl';
-import useStore from '../../store/useStore';
-import type { WorkflowDescription } from '../../types';
-import { getWorkflow } from '../../api/api';
-import ConfirmDialog from 'edition/General/ConfirmDialog';
-import { validateEwoksGraph } from '../../utils/EwoksValidator';
+import useStore from '../store/useStore';
+import type { WorkflowDescription } from '../types';
+import { getWorkflow } from '../api/api';
+import ConfirmDialog from './ConfirmDialog';
+import { validateEwoksGraph } from '../utils/EwoksValidator';
 import WorkflowDropdown from './dropdown/WorkflowDropdown';
-import { textForError } from '../../utils';
+import { textForError } from '../utils';
 import { useReactFlow } from 'reactflow';
 
 export default function GetFromServer() {

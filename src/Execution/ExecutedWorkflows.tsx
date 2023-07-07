@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import styles from './Execution.module.css';
-import useStore from '../../store/useStore';
-import { useExecutionEvents, useMutateExecutionEvents } from '../../api/events';
-import type { filterParams } from '../../types';
+import useStore from '../store/useStore';
+import { useExecutionEvents, useMutateExecutionEvents } from '../api/events';
+import type { filterParams } from '../types';
 import ExecutedWorkflowItem from './ExecutedWorkflowItem';
 
 function ExecutedWorkflows() {
