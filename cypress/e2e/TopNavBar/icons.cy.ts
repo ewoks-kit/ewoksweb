@@ -20,11 +20,8 @@ describe('Icons:', () => {
   it('should upload-fail-delete-upload down.svg and appear-disappear on the icon list', () => {
     cy.get('[aria-controls="navbar-dropdown-menu"]').click();
 
-    cy.findByRole('menuitem', { name: 'Settings' }).click();
+    cy.findByRole('menuitem', { name: 'Manage icons' }).click();
 
-    cy.contains('Categories');
-
-    cy.get('[data-cy="iconsTab"]').click();
     cy.findByLabelText('Select an Icon to Upload').selectFile(
       'cypress/fixtures/down.svg'
     );
@@ -51,7 +48,6 @@ describe('Icons:', () => {
     cy.findByRole('button', { name: 'Yes' }).click();
     cy.get('[alt="down.svg"]').should('not.be.visible');
 
-    cy.get('[data-cy="iconsTab"]').click();
     cy.findByLabelText('Select an Icon to Upload').selectFile(
       'cypress/fixtures/down.svg'
     );

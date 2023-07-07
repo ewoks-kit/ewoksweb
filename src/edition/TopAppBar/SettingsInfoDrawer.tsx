@@ -1,29 +1,25 @@
-import React from 'react';
-import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
-import Divider from '@material-ui/core/Divider';
-import BasicTabs from '../TopDrawer/BasicTabs';
-import { DrawerTab } from '../../types';
+import ManageIcons from '../TopDrawer/ManageIcons';
+import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 
 interface SettingsInfoDrawerProps {
-  drawerTab: DrawerTab;
-  setDrawerTab: (drawerTab: DrawerTab) => void;
+  isOpen: boolean;
+  onClose: (open: boolean) => void;
 }
 
 export default function SettingsInfoDrawer(props: SettingsInfoDrawerProps) {
-  const { drawerTab, setDrawerTab } = props;
+  const { isOpen, onClose } = props;
 
   return (
     <Drawer
       style={{ alignItems: 'center', display: 'flex' }}
       anchor="top"
-      open={drawerTab !== DrawerTab.Closed}
-      onClose={() => setDrawerTab(DrawerTab.Closed)}
+      open={isOpen}
+      onClose={onClose}
     >
-      <Box sx={{ width: 'auto' }} role="presentation">
-        <BasicTabs tab={drawerTab} setDrawerTab={setDrawerTab} />
-        <Divider />
-      </Box>
+      <SuspenseBoundary>
+        <ManageIcons />
+      </SuspenseBoundary>
     </Drawer>
   );
 }
