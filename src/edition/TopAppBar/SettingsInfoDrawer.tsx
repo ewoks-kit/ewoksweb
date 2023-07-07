@@ -3,14 +3,12 @@ import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import BasicTabs from '../TopDrawer/BasicTabs';
-import EwoksUiInfo from '../../frontpage/EwoksUiInfo';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 interface SettingsInfoDrawerProps {
   openDrawers: boolean;
   openSettings: boolean;
-  openInfo: boolean;
   handleOpenDrawers: () => void;
 }
 // TODO: to decide if only top is needed and local state of the drawer
@@ -26,10 +24,10 @@ export default function SettingsInfoDrawer(props: SettingsInfoDrawerProps) {
     setDrawerPositions({
       top: props.openDrawers && props.openSettings,
       left: false,
-      bottom: props.openDrawers && props.openInfo,
+      bottom: false,
       right: false,
     });
-  }, [props.openSettings, props.openInfo, props.openDrawers]);
+  }, [props.openSettings, props.openDrawers]);
 
   const toggleDrawer = (anchor: Anchor, open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent
@@ -50,13 +48,7 @@ export default function SettingsInfoDrawer(props: SettingsInfoDrawerProps) {
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 350 }}
       role="presentation"
     >
-      {props.openInfo ? (
-        <div className="infoAccordion">
-          <EwoksUiInfo closeDialog={toggleDrawer('bottom', false)} />
-        </div>
-      ) : (
-        <BasicTabs />
-      )}
+      <BasicTabs />
       <Divider />
     </Box>
   );

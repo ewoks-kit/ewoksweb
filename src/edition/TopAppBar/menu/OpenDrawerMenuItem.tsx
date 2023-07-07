@@ -8,7 +8,6 @@ import ActionMenuItem from './ActionMenuItem';
 function OpenDrawerMenuItem() {
   const [openDrawers, setOpenDrawers] = useState(true);
   const [openSettings, setOpenSettings] = useState(false);
-  const [openInfo, setOpenInfo] = useState(false);
 
   const openSettingsDrawer = useStore((state) => state.openSettingsDrawer);
   const setOpenSettingsDrawer = useStore(
@@ -24,14 +23,12 @@ function OpenDrawerMenuItem() {
 
   useEffect(() => {
     if (openSettingsDrawer === DrawerTab.Closed) {
-      setOpenInfo(false);
       setOpenDrawers(false);
       setOpenSettings(false);
     }
   }, [openSettingsDrawer]);
 
   function handleOpenSettings() {
-    setOpenInfo(false);
     setOpenSettings(true);
     setOpenDrawers(true);
   }
@@ -50,7 +47,6 @@ function OpenDrawerMenuItem() {
       <SettingsInfoDrawer
         handleOpenDrawers={handleOpenDrawers}
         openDrawers={openDrawers}
-        openInfo={openInfo}
         openSettings={openSettings}
       />
     </>
