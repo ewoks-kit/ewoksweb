@@ -1,0 +1,53 @@
+.drawer {
+  display: flex;
+  align-items: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f6f8f9;
+}
+
+.iconList {
+  padding: 0.25rem;
+  margin: 0.25rem 0;
+}
+
+.upload {
+  padding: 0.25rem;
+  margin: 0.25rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.icon {
+  margin: 0.25rem;
+  border: solid 2px transparent;
+  border-radius: 10px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 0.125rem;
+  padding-right: 0.125rem;
+  padding-bottom: 2rem;
+}
+
+.icon[data-selected='true'] {
+  border-color: #3f51b5;
+  padding-bottom: 0rem;
+}
+
+.iconButton {
+  composes: btnClean from global;
+}
+
+.iconImg {
+  height: 60px;
+}
+
+.iconName {
+  font-size: 0.75rem;
+  color: gray;
+}

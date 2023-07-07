@@ -18,7 +18,7 @@ describe('Icons:', () => {
 
   // Assumes down.svg is on the server
   it('should upload-fail-delete-upload down.svg and appear-disappear on the icon list', () => {
-    cy.get('[aria-controls="navbar-dropdown-menu"]').click();
+    cy.findByRole('button', { name: 'Open menu with more actions' }).click();
 
     cy.findByRole('menuitem', { name: 'Manage icons' }).click();
 
@@ -30,23 +30,18 @@ describe('Icons:', () => {
     cy.findByRole('button', { name: 'Upload' }).click();
     cy.contains("Icon 'down.svg' already exists");
 
-    cy.get('[alt="down.svg"]').click();
-    cy.findByRole('button', { name: 'Delete' }).click();
+    cy.findByRole('button', { name: 'down.svg' }).click();
+    cy.findByRole('button', { name: 'Delete icon' }).click();
     cy.contains('Delete "down.svg" icon?').should('be.visible');
-    cy.contains('Icon can be deleted since it is not used in any Task!').should(
-      'be.visible'
-    );
 
     cy.findByRole('button', { name: 'No' }).click();
-    cy.get('[alt="down.svg"]').should('be.visible');
+    cy.findByRole('button', { name: 'down.svg' }).should('be.visible');
 
-    cy.findByRole('button', { name: 'Delete' }).click();
+    cy.findByRole('button', { name: 'Delete icon' }).click();
     cy.contains('Delete "down.svg" icon?').should('be.visible');
-    cy.contains('Icon can be deleted since it is not used in any Task!').should(
-      'be.visible'
-    );
+
     cy.findByRole('button', { name: 'Yes' }).click();
-    cy.get('[alt="down.svg"]').should('not.be.visible');
+    cy.findByRole('button', { name: 'down.svg' }).should('not.exist');
 
     cy.findByLabelText('Select an Icon to Upload').selectFile(
       'cypress/fixtures/down.svg'
@@ -54,6 +49,6 @@ describe('Icons:', () => {
     cy.contains('File ready to be uploaded as an icon');
 
     cy.findByRole('button', { name: 'Upload' }).click();
-    cy.get('[alt="down.svg"]').should('be.visible');
+    cy.findByRole('button', { name: 'down.svg' }).should('be.visible');
   });
 });
