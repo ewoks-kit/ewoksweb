@@ -1,5 +1,5 @@
 import { Tooltip } from '@material-ui/core';
-import SuspenseBoundary from '../../Suspense/SuspenseBoundary';
+import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import type { Task } from '../../types';
 import { getTaskName } from '../../utils';
 import { attachTaskInfo } from '../Canvas/utils';

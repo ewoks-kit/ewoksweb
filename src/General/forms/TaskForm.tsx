@@ -13,7 +13,7 @@ import {
 import { Alert } from '@material-ui/lab';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import SuspenseBoundary from '../../Suspense/SuspenseBoundary';
+import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import useStore from '../../store/useStore';
 import type { Task } from '../../types';
 import { textForError } from '../../utils';
