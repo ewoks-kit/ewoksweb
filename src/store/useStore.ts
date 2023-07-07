@@ -14,7 +14,6 @@ import subGraph from './subGraph';
 import subgraphsStack from './subgraphsStack';
 import tasks from './tasks';
 import undoIndex from './undoIndex';
-import executedWorkflows from './executedWorkflows';
 import canvasGraphChanged from './canvasGraphChanged';
 import {
   initializedGraph,
@@ -24,7 +23,6 @@ import graphInfo from './graphInfo';
 
 const useStore = create<State>((set, get) => ({
   ...allWorkflows(set),
-  ...executedWorkflows(set),
   ...gettingFromServer(set),
   ...graphOrSubgraph(set),
   ...graphRF(set, get),
