@@ -8,5 +8,5 @@
 }
 
 .button:hover {
-  background-color: #303f9f;
+  background-color: #303f9f !important;
 }

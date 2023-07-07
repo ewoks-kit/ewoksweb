@@ -72,7 +72,6 @@ export default function IntegratedSpinner(props: IntegratedSpinnerProps) {
             aria-label={tooltip}
             disabled={loading}
           >
-            {/* {children} */}
             {success ? (
               <CheckIcon />
             ) : loading ? (
