@@ -9,6 +9,8 @@
   justify-content: space-between;
   padding: 0 0.5rem;
   min-height: 64px;
+  position: sticky;
+  top: 0;
 }
 
 .navlinks {
