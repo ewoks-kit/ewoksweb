@@ -1,6 +1,6 @@
 import { PermMedia } from '@material-ui/icons';
 import { useState } from 'react';
-import SettingsInfoDrawer from '../SettingsInfoDrawer';
+import IconsDrawer from './iconsDrawer/IconsDrawer';
 import ActionMenuItem from './ActionMenuItem';
 
 function OpenDrawerMenuItem() {
@@ -13,7 +13,7 @@ function OpenDrawerMenuItem() {
         label="Manage icons"
         onClick={() => setOpen(true)}
       />
-      <SettingsInfoDrawer isOpen={isOpen} onClose={() => setOpen(false)} />
+      <IconsDrawer isOpen={isOpen} onClose={() => setOpen(false)} />
     </>
   );
 }

@@ -1,13 +1,13 @@
 import Drawer from '@material-ui/core/Drawer';
-import ManageIcons from '../TopDrawer/ManageIcons';
-import SuspenseBoundary from '../../suspense/SuspenseBoundary';
+import ManageIcons from './ManageIcons';
+import SuspenseBoundary from '../../../../suspense/SuspenseBoundary';
 
-interface SettingsInfoDrawerProps {
+interface Props {
   isOpen: boolean;
   onClose: (open: boolean) => void;
 }
 
-export default function SettingsInfoDrawer(props: SettingsInfoDrawerProps) {
+export default function IconDrawer(props: Props) {
   const { isOpen, onClose } = props;
 
   return (
