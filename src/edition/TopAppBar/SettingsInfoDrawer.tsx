@@ -4,32 +4,20 @@ import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import BasicTabs from '../TopDrawer/BasicTabs';
 
-type Anchor = 'top' | 'left' | 'bottom' | 'right';
-
 interface SettingsInfoDrawerProps {
   openDrawers: boolean;
   openSettings: boolean;
   handleOpenDrawers: () => void;
 }
-// TODO: to decide if only top is needed and local state of the drawer
+
 export default function SettingsInfoDrawer(props: SettingsInfoDrawerProps) {
-  const [drawerPositions, setDrawerPositions] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
+  const [isOpen, setOpen] = React.useState(false);
 
   useEffect(() => {
-    setDrawerPositions({
-      top: props.openDrawers && props.openSettings,
-      left: false,
-      bottom: false,
-      right: false,
-    });
+    setOpen(props.openDrawers && props.openSettings);
   }, [props.openSettings, props.openDrawers]);
 
-  const toggleDrawer = (anchor: Anchor, open: boolean) => (
+  const toggleDrawer = (open: boolean) => (
     event: React.KeyboardEvent | React.MouseEvent
   ) => {
     if (
@@ -40,34 +28,20 @@ export default function SettingsInfoDrawer(props: SettingsInfoDrawerProps) {
       return;
     }
     props.handleOpenDrawers();
-    setDrawerPositions({ ...drawerPositions, [anchor]: open }); // left: open , for opening both-active 1
+    setOpen(open); // left: open , for opening both-active 1
   };
 
-  const list = (anchor: Anchor) => (
-    <Box
-      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 350 }}
-      role="presentation"
-    >
-      <BasicTabs />
-      <Divider />
-    </Box>
-  );
-
   return (
-    <>
-      {(['left', 'top', 'right', 'bottom'] as const).map((anchor) => (
-        <React.Fragment key={anchor}>
-          {/* <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button> */}
-          <Drawer
-            style={{ alignItems: 'center', display: 'flex' }}
-            anchor={anchor}
-            open={drawerPositions[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-          >
-            {list(anchor)}
-          </Drawer>
-        </React.Fragment>
-      ))}
-    </>
+    <Drawer
+      style={{ alignItems: 'center', display: 'flex' }}
+      anchor="top"
+      open={isOpen}
+      onClose={toggleDrawer(false)}
+    >
+      <Box sx={{ width: 'auto' }} role="presentation">
+        <BasicTabs />
+        <Divider />
+      </Box>
+    </Drawer>
   );
 }
