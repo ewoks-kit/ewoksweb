@@ -58,6 +58,8 @@ export default function OpenActionMenuButton(props: Props) {
           vertical: 'top',
           horizontal: 'center',
         }}
+        // https://github.com/mui/material-ui/issues/10804#issuecomment-376266662
+        getContentAnchorEl={null}
       >
         <ActionMenuContext.Provider value={{ open, onClose }}>
           <ActionMenuItem
