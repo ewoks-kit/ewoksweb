@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import EditSidebar from '../Sidebar/EditSidebar';
-import Canvas from '../Canvas/Canvas';
-import SimpleSnackbar from '../../General/Snackbar';
+import EditSidebar from './Sidebar/EditSidebar';
+import Canvas from './Canvas/Canvas';
+import SimpleSnackbar from '../General/Snackbar';
 import useStore from 'store/useStore';
-import ConfirmDialog from '../../General/ConfirmDialog';
+import ConfirmDialog from '../General/ConfirmDialog';
 import { ErrorBoundary } from 'react-error-boundary';
-import ErrorFallback from '../../General/ErrorFallback';
+import ErrorFallback from '../General/ErrorFallback';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
-import { getWorkflow } from '../../api/api';
+import { getWorkflow } from '../api/api';
 import { useReactFlow } from 'reactflow';
-import OverflowDrawer from '../TaskDrawer/TaskDrawer';
-import useTaskDrawerState from '../../store/taskDrawerState';
-import { useGetTasks } from '../TopAppBar/hooks';
-import TopAppBar from '../TopAppBar/TopAppBar';
+import OverflowDrawer from './TaskDrawer/TaskDrawer';
+import useTaskDrawerState from '../store/taskDrawerState';
+import { useGetTasks } from './TopAppBar/hooks';
+import TopAppBar from './TopAppBar/TopAppBar';
 
 import styles from './EditPage.module.css';
 

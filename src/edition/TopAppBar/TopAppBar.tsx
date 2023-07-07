@@ -10,7 +10,7 @@ import SaveToServerButton from './SaveToServerButton';
 import SettingsInfoDrawer from './SettingsInfoDrawer';
 import TopAppBarLabel from './TopAppBarLabel';
 
-import styles from '../edition/EditPage.module.css';
+import styles from '../EditPage.module.css';
 import { createPortal } from 'react-dom';
 import useNavBarElementStore from '../../navbar/useNavBarElementStore';
 
