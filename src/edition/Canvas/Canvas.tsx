@@ -9,12 +9,12 @@ import ReactFlow, {
   applyEdgeChanges,
 } from 'reactflow';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import bendingText from 'CustomEdges/BendingTextEdge';
-import multilineText from 'CustomEdges/MultilineTextEdge';
-import getAround from 'CustomEdges/GetAroundEdge';
-import GraphNode from 'CustomNodes/GraphNode';
-import NoteNode from 'CustomNodes/NoteNode';
-import DataNode from 'CustomNodes/DataNode';
+import bendingText from '../CustomEdges/BendingTextEdge';
+import multilineText from '../CustomEdges/MultilineTextEdge';
+import getAround from '../CustomEdges/GetAroundEdge';
+import GraphNode from '../CustomNodes/GraphNode';
+import NoteNode from '../CustomNodes/NoteNode';
+import DataNode from '../CustomNodes/DataNode';
 import type { EwoksRFNode, EwoksRFLink, EwoksRFNodeData } from 'types';
 import useStore from 'store/useStore';
 import { calcNewId } from 'utils/calcNewId';
@@ -31,7 +31,7 @@ import {
   assertNodeDefined,
 } from '../../utils/typeGuards';
 import FallbackMessage from './FallbackMessage';
-import GraphInOutNode from '../../CustomNodes/GraphInOutNode';
+import GraphInOutNode from '../CustomNodes/GraphInOutNode';
 
 const useStyles = makeStyles(() =>
   createStyles({

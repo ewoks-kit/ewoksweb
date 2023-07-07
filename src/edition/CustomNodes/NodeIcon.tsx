@@ -1,5 +1,5 @@
-import { useIcons } from '../api/icons';
-import { findImage } from '../utils';
+import { useIcons } from '../../api/icons';
+import { findImage } from '../../utils';
 import { contentStyle } from './nodeStyles';
 
 interface Props {

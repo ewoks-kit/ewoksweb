@@ -1,17 +1,17 @@
 import { Handle, Position } from 'reactflow';
 import { contentStyle, style } from './nodeStyles';
 import Tooltip from '@material-ui/core/Tooltip';
-import isValidLink from '../utils/IsValidLink';
-import useStore from '../store/useStore';
+import isValidLink from '../../utils/IsValidLink';
+import useStore from '../../store/useStore';
 import type { Connection, NodeProps } from 'reactflow';
 import NodeIcon from './NodeIcon';
-import SuspenseBoundary from '../Suspense/SuspenseBoundary';
-import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../types';
+import SuspenseBoundary from '../../Suspense/SuspenseBoundary';
+import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../../types';
 import { useReactFlow } from 'reactflow';
-import { getNodesData } from '../utils';
+import { getNodesData } from '../../utils';
 import NodeLabel from './NodeLabel';
-import useNodeDataStore from '../store/useNodeDataStore';
-import { assertNodeDataDefined } from '../utils/typeGuards';
+import useNodeDataStore from '../../store/useNodeDataStore';
+import { assertNodeDataDefined } from '../../utils/typeGuards';
 
 function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));

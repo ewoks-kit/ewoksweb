@@ -2,15 +2,15 @@ import { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 import { contentStyle, style } from './nodeStyles';
 import Tooltip from '@material-ui/core/Tooltip';
-import isValidLink from '../utils/IsValidLink';
+import isValidLink from '../../utils/IsValidLink';
 
-import useStore from '../store/useStore';
+import useStore from '../../store/useStore';
 import type { Connection } from 'reactflow';
 import NodeIcon from './NodeIcon';
-import SuspenseBoundary from '../Suspense/SuspenseBoundary';
-import type { NodeProps, EwoksRFLink, GraphRF } from '../types';
+import SuspenseBoundary from '../../Suspense/SuspenseBoundary';
+import type { NodeProps, EwoksRFLink, GraphRF } from '../../types';
 import { useReactFlow } from 'reactflow';
-import { getNodesData } from '../utils';
+import { getNodesData } from '../../utils';
 import NodeLabel from './NodeLabel';
 
 // The basic Node component

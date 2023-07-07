@@ -1,7 +1,7 @@
 import type { EdgeProps } from 'reactflow';
 import { getBezierPath } from 'reactflow';
-import useEdgeDataStore from '../store/useEdgeDataStore';
-import { assertEdgeDataDefined } from '../utils/typeGuards';
+import useEdgeDataStore from '../../store/useEdgeDataStore';
+import { assertEdgeDataDefined } from '../../utils/typeGuards';
 import InteractionHelper from './InteractionHelper';
 import type { SmoothStepData, SmoothStepParams } from './models';
 
