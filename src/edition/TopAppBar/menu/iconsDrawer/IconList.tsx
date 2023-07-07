@@ -1,5 +1,6 @@
 import { Paper, Tooltip } from '@material-ui/core';
 import type { Icon } from '../../../../types';
+import DeleteIconButton from './DeleteIconButton';
 
 import styles from './ManageIcons.module.css';
 
@@ -17,21 +18,32 @@ function IconList(props: Props) {
       {icons
         .filter((icon) => icon.image?.data_url)
         .map((icon) => (
-          <button
-            className={styles.icon}
-            onClick={() => setSelectedIcon(icon.name)}
+          <div
             key={icon.name}
-            type="button"
+            className={styles.icon}
             data-selected={icon.name === selectedIcon || undefined}
           >
-            <Tooltip title={icon.name} arrow>
-              <img
-                className={styles.iconImg}
-                src={icon.image?.data_url}
-                alt={icon.name}
-              />
-            </Tooltip>
-          </button>
+            <button
+              className={styles.iconButton}
+              onClick={() => setSelectedIcon(icon.name)}
+              type="button"
+              aria-label={icon.name}
+            >
+              <Tooltip title={icon.name} arrow>
+                <img
+                  className={styles.iconImg}
+                  src={icon.image?.data_url}
+                  alt={icon.name}
+                />
+              </Tooltip>
+            </button>
+            {icon.name === selectedIcon && (
+              <div>
+                <span className={styles.iconName}>{icon.name}</span>
+                <DeleteIconButton iconName={icon.name} />
+              </div>
+            )}
+          </div>
         ))}
     </Paper>
   );

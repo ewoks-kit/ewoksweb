@@ -18,16 +18,31 @@
 }
 
 .icon {
-  composes: btnClean from global;
   margin: 0.25rem;
   border: solid 2px transparent;
   border-radius: 10px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 0.125rem;
+  padding-right: 0.125rem;
+  padding-bottom: 2rem;
 }
 
 .icon[data-selected='true'] {
   border-color: #3f51b5;
+  padding-bottom: 0rem;
+}
+
+.iconButton {
+  composes: btnClean from global;
 }
 
 .iconImg {
   height: 60px;
+}
+
+.iconName {
+  font-size: 0.75rem;
+  color: gray;
 }

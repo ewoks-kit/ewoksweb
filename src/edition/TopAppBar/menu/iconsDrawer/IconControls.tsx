@@ -1,83 +1,20 @@
 import { Button } from '@material-ui/core';
-import { CloudUpload, Delete } from '@material-ui/icons';
+import { CloudUpload } from '@material-ui/icons';
 import type { ChangeEvent, SyntheticEvent } from 'react';
 import { useState } from 'react';
-import { deleteIcon, postIcon, useMutateIcons } from '../../../../api/icons';
-import { getTaskDescription } from '../../../../api/tasks';
-import ConfirmDialog from '../../../../general/ConfirmDialog';
+import { postIcon, useMutateIcons } from '../../../../api/icons';
 import useStore from '../../../../store/useStore';
 import { textForError } from '../../../../utils';
-import commonStrings from '../../../../commonStrings.json';
 
 import styles from './ManageIcons.module.css';
 
-interface Props {
-  selectedIcon: string;
-}
-
-function IconControls(props: Props) {
-  const { selectedIcon } = props;
+function IconControls() {
   const [iconContentToUpload, setIconContentToUpload] = useState<
     string | ArrayBuffer
   >('');
   const [iconNameToUpload, setIconNameToUpload] = useState('');
-  const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const mutateIcons = useMutateIcons();
-
-  async function agreeDeleteIcon() {
-    setOpenAgreeDialog(false);
-    try {
-      await deleteIcon(selectedIcon);
-
-      setOpenSnackbar({
-        open: true,
-        text: `Icon was successfully deleted!`,
-        severity: 'success',
-      });
-
-      mutateIcons();
-    } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(error, 'Error in deleting Icon'),
-        severity: 'error',
-      });
-    }
-  }
-
-  async function handleDeleteIcon() {
-    try {
-      const tasksData = await getTaskDescription();
-      if (tasksData.data.items.length > 0) {
-        const allTasks = tasksData.data.items;
-
-        if (allTasks.some((task) => task.icon === selectedIcon)) {
-          setOpenSnackbar({
-            open: true,
-            text: `Icon cannot be deleted since it is used in one or more Tasks!`,
-            severity: 'warning',
-          });
-          return;
-        }
-
-        setOpenSnackbar({
-          open: true,
-          text: `Icon can be deleted since it is not used in any Task!`,
-          severity: 'success',
-        });
-
-        setOpenAgreeDialog(true);
-      }
-    } catch (error) {
-      // TODO: general error handling for all cases like workflows?
-      setOpenSnackbar({
-        open: true,
-        text: textForError(error, commonStrings.retrieveTasksError),
-        severity: 'error',
-      });
-    }
-  }
 
   async function uploadIcon(event: SyntheticEvent<Element, Event>) {
     event.preventDefault();
@@ -147,32 +84,11 @@ function IconControls(props: Props) {
 
   return (
     <div className={styles.controlList}>
-      <ConfirmDialog
-        title={`Delete "${selectedIcon}" icon?`}
-        content={`You are about to delete an icon.
-              After deletion it will not be available to be used in any Task description!
-              Do you agree to continue?`}
-        open={openAgreeDialog}
-        agreeCallback={agreeDeleteIcon}
-        disagreeCallback={() => setOpenAgreeDialog(false)}
-      />
       <form
         onSubmit={(e: React.SyntheticEvent) => {
           uploadIcon(e);
         }}
       >
-        <Button
-          startIcon={<Delete />}
-          variant="outlined"
-          color="secondary"
-          onClick={() => {
-            handleDeleteIcon();
-          }}
-          size="small"
-          disabled={selectedIcon === ''}
-        >
-          Delete
-        </Button>
         <Button
           startIcon={<CloudUpload />}
           variant="outlined"

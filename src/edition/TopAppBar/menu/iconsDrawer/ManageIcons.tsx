@@ -19,7 +19,7 @@ export default function ManageIcons() {
           setSelectedIcon={setSelectedIcon}
         />
 
-        <IconControls selectedIcon={selectedIcon} />
+        <IconControls />
       </div>
     </div>
   );

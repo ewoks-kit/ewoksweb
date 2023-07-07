@@ -37,6 +37,7 @@ export default function OpenActionMenuButton(props: Props) {
         aria-haspopup="true"
         color="inherit"
         onClick={handleClick}
+        aria-label="Open menu with more actions"
       >
         <MoreVertIcon />
       </IconButton>
