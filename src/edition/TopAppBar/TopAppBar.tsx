@@ -1,13 +1,8 @@
 import { Typography } from '@material-ui/core';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import useStore from '../../store/useStore';
-import { DrawerTab } from '../../types';
 import GetFromServer from '../../general/GetFromServer';
 import ProgressBar from '../../general/ProgressBar';
 import OpenActionMenuButton from './menu/OpenActionMenuButton';
 import SaveToServerButton from './SaveToServerButton';
-import SettingsInfoDrawer from './SettingsInfoDrawer';
 import TopAppBarLabel from './TopAppBarLabel';
 
 import styles from '../EditPage.module.css';
@@ -23,40 +18,6 @@ function TopAppBar(props: Props) {
 
   const navBarElement = useNavBarElementStore((state) => state.element);
 
-  const [openDrawers, setOpenDrawers] = useState(true);
-  const [openSettings, setOpenSettings] = useState(false);
-  const [openInfo, setOpenInfo] = useState(false);
-
-  const openSettingsDrawer = useStore((state) => state.openSettingsDrawer);
-  const setOpenSettingsDrawer = useStore(
-    (state) => state.setOpenSettingsDrawer
-  );
-
-  useEffect(() => {
-    if (!openDrawers) {
-      setOpenSettings(false);
-      setOpenSettingsDrawer(DrawerTab.Workflows);
-    }
-  }, [openDrawers, openSettings, setOpenSettingsDrawer]);
-
-  useEffect(() => {
-    if (openSettingsDrawer === DrawerTab.Closed) {
-      setOpenInfo(false);
-      setOpenDrawers(false);
-      setOpenSettings(false);
-    }
-  }, [openSettingsDrawer]);
-
-  function handleOpenSettings() {
-    setOpenInfo(false);
-    setOpenSettings(true);
-    setOpenDrawers(true);
-  }
-
-  function handleOpenDrawers() {
-    setOpenDrawers(!openDrawers);
-  }
-
   if (!navBarElement) {
     return null;
   }
@@ -71,14 +32,6 @@ function TopAppBar(props: Props) {
         <SaveToServerButton />
         <OpenActionMenuButton
           checkAndNewGraph={() => checkAndNewGraph(false)}
-          handleOpenSettings={handleOpenSettings}
-        />
-
-        <SettingsInfoDrawer
-          handleOpenDrawers={handleOpenDrawers}
-          openDrawers={openDrawers}
-          openInfo={openInfo}
-          openSettings={openSettings}
         />
       </div>
       <ProgressBar />

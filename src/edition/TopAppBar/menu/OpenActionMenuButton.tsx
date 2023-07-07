@@ -1,5 +1,5 @@
 import { IconButton, Menu } from '@material-ui/core';
-import { FiberNew, Settings } from '@material-ui/icons';
+import { FiberNew } from '@material-ui/icons';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import React from 'react';
 import { ActionMenuContext } from './ActionMenuContext';
@@ -10,14 +10,14 @@ import UploadMenuItem from './UploadMenuItem';
 
 import styles from './ActionMenu.module.css';
 import ExecutionMenuItem from './ExecutionMenuItem';
+import OpenDrawerMenuItem from './OpenDrawerMenuItem';
 
 interface Props {
   checkAndNewGraph: () => void;
-  handleOpenSettings: () => void;
 }
 
 export default function OpenActionMenuButton(props: Props) {
-  const { checkAndNewGraph, handleOpenSettings } = props;
+  const { checkAndNewGraph } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -57,6 +57,8 @@ export default function OpenActionMenuButton(props: Props) {
           vertical: 'top',
           horizontal: 'center',
         }}
+        // https://github.com/mui/material-ui/issues/10804#issuecomment-376266662
+        getContentAnchorEl={null}
       >
         <ActionMenuContext.Provider value={{ open, onClose }}>
           <ActionMenuItem
@@ -68,11 +70,7 @@ export default function OpenActionMenuButton(props: Props) {
           <DownloadMenuItem />
           <DiscoverMenuItem />
           <ExecutionMenuItem />
-          <ActionMenuItem
-            icon={Settings}
-            label="Settings"
-            onClick={handleOpenSettings}
-          />
+          <OpenDrawerMenuItem />
         </ActionMenuContext.Provider>
       </Menu>
     </div>
