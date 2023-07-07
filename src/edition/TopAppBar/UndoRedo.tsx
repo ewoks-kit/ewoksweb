@@ -2,7 +2,7 @@ import RedoIcon from '@material-ui/icons/Redo';
 import UndoIcon from '@material-ui/icons/Undo';
 
 import { Fab, IconButton, Tooltip } from '@material-ui/core';
-import tooltipText from '../../General/TooltipText';
+import tooltipText from '../../general/TooltipText';
 
 import styles from './TopAppBar.module.css';
 

@@ -1,7 +1,7 @@
 import { ErrorBoundary } from 'react-error-boundary';
 import type { ReactNode } from 'react';
 import { Suspense } from 'react';
-import Spinner from '../General/Spinner';
+import Spinner from '../general/Spinner';
 import SnackbarErrorFallback from './SnackbarErrorFallback';
 
 interface Props {

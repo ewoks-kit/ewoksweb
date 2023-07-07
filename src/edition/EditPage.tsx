@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import EditSidebar from './Sidebar/EditSidebar';
 import Canvas from './Canvas/Canvas';
-import SimpleSnackbar from '../General/Snackbar';
+import SimpleSnackbar from '../general/Snackbar';
 import useStore from 'store/useStore';
-import ConfirmDialog from '../General/ConfirmDialog';
+import ConfirmDialog from '../general/ConfirmDialog';
 import { ErrorBoundary } from 'react-error-boundary';
-import ErrorFallback from '../General/ErrorFallback';
+import ErrorFallback from '../general/ErrorFallback';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
 import { getWorkflow } from '../api/api';
 import { useReactFlow } from 'reactflow';

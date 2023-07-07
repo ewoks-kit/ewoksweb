@@ -1,12 +1,12 @@
 import { Box, FormControl, Grid, Paper, styled } from '@material-ui/core';
-import WorkflowDropdown from '../../General/dropdown/WorkflowDropdown';
+import WorkflowDropdown from '../../general/dropdown/WorkflowDropdown';
 import ReactJson from 'react-json-view';
 import { useState } from 'react';
 import { getWorkflow } from 'api/api';
-import GetFromServerButtons from '../../General/GetFromServerButtons';
+import GetFromServerButtons from '../../general/GetFromServerButtons';
 import type { GraphEwoks, WorkflowDescription } from 'types';
 import useStore from 'store/useStore';
-import CategoryDropdown from '../../General/dropdown/CategoryDropdown';
+import CategoryDropdown from '../../general/dropdown/CategoryDropdown';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
