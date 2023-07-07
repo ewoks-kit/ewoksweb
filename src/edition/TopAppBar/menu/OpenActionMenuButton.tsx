@@ -1,5 +1,5 @@
 import { IconButton, Menu } from '@material-ui/core';
-import { FiberNew, Settings } from '@material-ui/icons';
+import { FiberNew } from '@material-ui/icons';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import React from 'react';
 import { ActionMenuContext } from './ActionMenuContext';
@@ -10,6 +10,7 @@ import UploadMenuItem from './UploadMenuItem';
 
 import styles from './ActionMenu.module.css';
 import ExecutionMenuItem from './ExecutionMenuItem';
+import OpenDrawerMenuItem from './OpenDrawerMenuItem';
 
 interface Props {
   checkAndNewGraph: () => void;
@@ -68,11 +69,7 @@ export default function OpenActionMenuButton(props: Props) {
           <DownloadMenuItem />
           <DiscoverMenuItem />
           <ExecutionMenuItem />
-          <ActionMenuItem
-            icon={Settings}
-            label="Settings"
-            onClick={handleOpenSettings}
-          />
+          <OpenDrawerMenuItem handleOpenSettings={handleOpenSettings} />
         </ActionMenuContext.Provider>
       </Menu>
     </div>
