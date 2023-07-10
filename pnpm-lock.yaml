@@ -26,12 +26,18 @@ dependencies:
   '@rest-hooks/rest':
     specifier: 6.3.3
     version: 6.3.3
+  '@types/d3-format':
+    specifier: 3.0.1
+    version: 3.0.1
   '@types/path-browserify':
     specifier: 1.0.0
     version: 1.0.0
   axios:
     specifier: ^0.23.0
     version: 0.23.0
+  d3-format:
+    specifier: 3.1.0
+    version: 3.1.0
   elkjs:
     specifier: 0.8.2
     version: 0.8.2
@@ -5668,6 +5674,11 @@ packages:
 
   /d3-ease@3.0.1:
     resolution: {integrity: sha512-wR/XK3D3XcLIZwpbvQwQ5fK+8Ykds1ip7A2Txe0yxncXSdq1L9skcG7blcedkOX+ZcgxGAmLX1FrRGbADwzi0w==}
+    engines: {node: '>=12'}
+    dev: false
+
+  /d3-format@3.1.0:
+    resolution: {integrity: sha512-YyUI6AEuY/Wpt8KWLgZHsIU86atmikuoOmCfommt0LYHiQSPjvX2AcFc38PX0CBpr2RCyZhjex+NS/LPOv6YqA==}
     engines: {node: '>=12'}
     dev: false
 

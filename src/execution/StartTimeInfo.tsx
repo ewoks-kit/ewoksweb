@@ -1,5 +1,7 @@
+import { Event as EventIcon } from '@material-ui/icons';
 import ReactTimeago from 'react-timeago';
-import { formatDate } from './utils';
+
+import styles from './WorkflowItem.module.css';
 
 interface Props {
   time: string;
@@ -7,17 +9,22 @@ interface Props {
 
 const ONE_DAY_IN_MS = 24 * 3600 * 1000;
 
-function StartDateInfo(props: Props) {
+function StartTimeInfo(props: Props) {
   const { time } = props;
 
   const startDate = new Date(time);
   const now = new Date(Date.now());
 
-  if (now.valueOf() - startDate.valueOf() < ONE_DAY_IN_MS) {
-    return <ReactTimeago date={startDate.toString()} />;
-  }
-
-  return <div>Started on {formatDate(time)}</div>;
+  return (
+    <div className={styles.time}>
+      <EventIcon fontSize="small" />
+      {now.valueOf() - startDate.valueOf() < ONE_DAY_IN_MS ? (
+        <ReactTimeago date={startDate.toString()} />
+      ) : (
+        startDate.toString()
+      )}
+    </div>
+  );
 }
 
-export default StartDateInfo;
+export default StartTimeInfo;

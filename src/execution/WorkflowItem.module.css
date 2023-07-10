@@ -24,10 +24,17 @@
 
 .title {
   color: var(--primary);
-  margin: 0;
+  margin-bottom: 0.25rem;
 }
 
-.jobId {
+.time {
   font-size: 0.75rem;
   color: var(--primary);
+  display: flex;
+  align-items: center;
+  margin-left: 0.5rem;
+}
+
+.time svg {
+  margin-right: 0.25rem;
 }
