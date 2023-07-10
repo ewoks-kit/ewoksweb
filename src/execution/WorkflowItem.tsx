@@ -1,9 +1,10 @@
 import type { EwoksEvent } from '../types';
 import { assertDefined } from '../utils/typeGuards';
 import StatusBadge from './StatusBadge';
-import { formatDate } from './utils';
+import StartTimeInfo from './StartTimeInfo';
 
 import styles from './WorkflowItem.module.css';
+import Duration from './Duration';
 
 interface Props {
   events: EwoksEvent[];
@@ -38,9 +39,15 @@ function WorkflowItem(props: Props) {
           <h3 className={styles.title}>
             {startWorkflowEvent?.workflow_id || idFallback}
           </h3>
-          <span className={styles.jobId}>Job id: {startJobEvent.job_id}</span>
+          <StartTimeInfo time={startJobEvent.time} />
+          {endJobEvent && (
+            <Duration
+              startTime={startJobEvent.time}
+              endTime={endJobEvent.time}
+            />
+          )}
         </div>
-        <div>Started on {formatDate(startJobEvent.time)}</div>
+        <span>Job id: {startJobEvent.job_id}</span>
       </div>
 
       <div className={styles.description}>
