@@ -1,7 +1,7 @@
 import type { EwoksEvent } from '../types';
 import { assertDefined } from '../utils/typeGuards';
 import StatusBadge from './StatusBadge';
-import { formatDate } from './utils';
+import Date from './Date';
 
 import styles from './WorkflowItem.module.css';
 
@@ -40,7 +40,7 @@ function WorkflowItem(props: Props) {
           </h3>
           <span className={styles.jobId}>Job id: {startJobEvent.job_id}</span>
         </div>
-        <div>Started on {formatDate(startJobEvent.time)}</div>
+        <Date date={startJobEvent.time} />
       </div>
 
       <div className={styles.description}>
