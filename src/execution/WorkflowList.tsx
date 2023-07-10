@@ -1,9 +1,9 @@
 import { useExecutionEvents } from '../api/events';
-import ExecutedWorkflowItem from './ExecutedWorkflowItem';
+import WorkflowItem from './WorkflowItem';
 
-import styles from './ExecutedWorkflows.module.css';
+import styles from './WorkflowList.module.css';
 
-function ExecutedWorkflows() {
+function WorkflowList() {
   const { executionEvents } = useExecutionEvents();
 
   return (
@@ -14,14 +14,11 @@ function ExecutedWorkflows() {
           (a, b) =>
             new Date(b[0].time).valueOf() - new Date(a[0].time).valueOf()
         )
-        .map((workflowEvents) => (
-          <ExecutedWorkflowItem
-            key={workflowEvents[0].job_id}
-            workflowEvents={workflowEvents}
-          />
+        .map((events) => (
+          <WorkflowItem key={events[0].job_id} events={events} />
         ))}
     </div>
   );
 }
 
-export default ExecutedWorkflows;
+export default WorkflowList;

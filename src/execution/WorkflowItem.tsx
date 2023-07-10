@@ -3,23 +3,23 @@ import { assertDefined } from '../utils/typeGuards';
 import StatusBadge from './StatusBadge';
 import { formatDate } from './utils';
 
-import styles from './ExecutedWorkflowItem.module.css';
+import styles from './WorkflowItem.module.css';
 
-interface ExecutedWorkflowItemProps {
-  workflowEvents: EwoksEvent[];
+interface Props {
+  events: EwoksEvent[];
 }
 
-function ExecutedWorkflowItem(props: ExecutedWorkflowItemProps) {
-  const { workflowEvents } = props;
+function WorkflowItem(props: Props) {
+  const { events } = props;
 
-  const startJobEvent = workflowEvents.find(
+  const startJobEvent = events.find(
     (e) => e.context === 'job' && e.type === 'start'
   );
   assertDefined(startJobEvent);
-  const startWorkflowEvent = workflowEvents.find(
+  const startWorkflowEvent = events.find(
     (e) => e.context === 'workflow' && e.type === 'start'
   );
-  const endJobEvent = workflowEvents.find(
+  const endJobEvent = events.find(
     (e) => e.context === 'job' && e.type === 'end'
   );
   const hasFinished = !!endJobEvent;
@@ -56,4 +56,4 @@ function ExecutedWorkflowItem(props: ExecutedWorkflowItemProps) {
   );
 }
 
-export default ExecutedWorkflowItem;
+export default WorkflowItem;
