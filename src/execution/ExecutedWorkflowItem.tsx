@@ -1,9 +1,9 @@
-import type { Event } from '../types';
+import type { EwoksEvent } from '../types';
 import styles from './Execution.module.css';
 import { formatDate } from './utils';
 
 interface ExecutedWorkflowItemProps {
-  workflowEvents: Event[];
+  workflowEvents: EwoksEvent[];
 }
 
 function ExecutedWorkflowItem(props: ExecutedWorkflowItemProps) {
@@ -24,7 +24,6 @@ function ExecutedWorkflowItem(props: ExecutedWorkflowItemProps) {
         {formatDate(workflowEvents[1]?.time || '')}
       </div>
       <div className={styles.field}>
-        {workflowEvents[1]?.status || ''}
         {workflowEvents[workflowEvents.length - 1].error ? 'FAILED' : 'SUCCESS'}
       </div>
     </div>

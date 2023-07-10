@@ -9,8 +9,8 @@ function ExecutedWorkflows() {
     <div className={styles.container}>
       {executionEvents.jobs.map((workflowEvents) => (
         <ExecutedWorkflowItem
-          workflowEvents={workflowEvents}
           key={workflowEvents[0].job_id}
+          workflowEvents={workflowEvents}
         />
       ))}
     </div>
