@@ -1,7 +1,11 @@
 import { axiosRequest } from './api';
 import { Endpoint } from '@rest-hooks/rest';
 import { useController, useSuspense } from '@rest-hooks/react';
-import type { ExecutedJobsResponse, filterParams } from '../types';
+import type { EwoksEvent, filterParams } from '../types';
+
+interface ExecutedJobsResponse {
+  jobs: EwoksEvent[][];
+}
 
 export async function getExecutionEvents(
   queryParams?: filterParams

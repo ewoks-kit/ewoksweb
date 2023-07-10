@@ -79,34 +79,25 @@ export interface DialogParams {
   content: any;
 }
 
-export interface ExecutedJobsResponse {
-  jobs: Event[][];
-}
-
-export interface Event {
-  host_name?: string;
-  process_id?: string;
-  user_name?: string;
-  job_id?: string;
-  binding?: string;
-  context?: string;
+export interface EwoksEvent {
+  context: string;
+  host_name: string;
+  job_id: string;
+  process_id: string;
+  time: string;
+  type: string;
+  user_name: string;
   workflow_id?: string;
-  type?: string;
-  time?: string;
-  error?: boolean;
   error_message?: string;
+  output_uris?: unknown[];
+  error?: boolean;
   error_traceback?: string;
-  node_id?: string;
-  task_id?: string;
-  progress?: string;
   task_uri?: string;
-  input_uris?: [];
-  output_uris?: [];
-  id?: number;
-  nodeId: string;
-  status?: string;
-  event_type: string; // start/stop/progress events
-  values: Record<string, unknown>; // all values entering or exiting a node
+  task_id?: string;
+  input_uris?: unknown[];
+  binding?: string;
+  progress?: string;
+  node_id?: string;
 }
 
 export interface State
