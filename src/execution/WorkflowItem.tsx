@@ -5,6 +5,7 @@ import StartTimeInfo from './StartTimeInfo';
 
 import styles from './WorkflowItem.module.css';
 import Duration from './Duration';
+import Traceback from './Traceback';
 
 interface Props {
   events: EwoksEvent[];
@@ -52,11 +53,8 @@ function WorkflowItem(props: Props) {
 
       <div className={styles.description}>
         <StatusBadge status={status} />
-        {hasError && (
-          <details className={styles.traceback}>
-            <summary>Traceback</summary>
-            <pre>{endJobEvent.error_traceback}</pre>
-          </details>
+        {hasError && endJobEvent.error_traceback && (
+          <Traceback traceback={endJobEvent.error_traceback} />
         )}
       </div>
     </div>
