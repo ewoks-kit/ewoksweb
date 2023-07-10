@@ -1,4 +1,5 @@
 import type { EwoksEvent } from '../types';
+import { assertDefined } from '../utils/typeGuards';
 import styles from './Execution.module.css';
 import { formatDate } from './utils';
 
@@ -8,24 +9,30 @@ interface ExecutedWorkflowItemProps {
 
 function ExecutedWorkflowItem(props: ExecutedWorkflowItemProps) {
   const { workflowEvents } = props;
+
+  const startJobEvent = workflowEvents.find(
+    (e) => e.context === 'job' && e.type === 'start'
+  );
+  assertDefined(startJobEvent);
+  const startWorkflowEvent = workflowEvents.find(
+    (e) => e.context === 'workflow' && e.type === 'start'
+  );
+  const endJobEvent = workflowEvents.find(
+    (e) => e.context === 'job' && e.type === 'end'
+  );
+  const hasError = endJobEvent?.error === true;
+
+  const idFallback = hasError
+    ? "Workflow couldn't start!"
+    : 'Workflow starting...';
+
   return (
-    <div
-      className={styles.item}
-      data-error={
-        workflowEvents[workflowEvents.length - 1].error === true || undefined
-      }
-    >
+    <div className={styles.item} data-error={hasError || undefined}>
       <div className={styles.field}>
-        {workflowEvents[1]?.workflow_id ||
-          workflowEvents[0]?.workflow_id ||
-          'No id'}
+        {startWorkflowEvent?.workflow_id || idFallback}
       </div>
-      <div className={styles.field}>
-        {formatDate(workflowEvents[1]?.time || '')}
-      </div>
-      <div className={styles.field}>
-        {workflowEvents[workflowEvents.length - 1].error ? 'FAILED' : 'SUCCESS'}
-      </div>
+      <div className={styles.field}>{formatDate(startJobEvent.time)}</div>
+      <div className={styles.field}>{hasError ? 'FAILED' : 'SUCCESS'}</div>
     </div>
   );
 }
