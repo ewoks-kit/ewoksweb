@@ -20,33 +20,31 @@ function DownloadMenuItem() {
   const graphInfo = useStore((state) => state.graphInfo);
 
   function saveToDisk() {
-    if (graphInfo.label) {
-      const { newNodesData, newEdgesData } = curateGraph(
-        getNodesData(),
-        getEdgesData()
-      );
+    const { newNodesData, newEdgesData } = curateGraph(
+      getNodesData(),
+      getEdgesData()
+    );
 
-      const graphRf: GraphRF = {
-        graph: graphInfo,
-        nodes: getNodes().map((nod) => {
-          return {
-            ...nod,
-            data: newNodesData.get(nod.id) as EwoksRFNodeData,
-          };
-        }),
-        links: getEdges().map((edge) => {
-          return {
-            ...edge,
-            data: newEdgesData.get(edge.id) as EwoksRFLinkData,
-          };
-        }),
-      };
-      download(
-        JSON.stringify(rfToEwoks(graphRf), null, 2),
-        `${graphInfo.label}.json`,
-        'text/plain'
-      );
-    }
+    const graphRf: GraphRF = {
+      graph: graphInfo,
+      nodes: getNodes().map((nod) => {
+        return {
+          ...nod,
+          data: newNodesData.get(nod.id) as EwoksRFNodeData,
+        };
+      }),
+      links: getEdges().map((edge) => {
+        return {
+          ...edge,
+          data: newEdgesData.get(edge.id) as EwoksRFLinkData,
+        };
+      }),
+    };
+    download(
+      JSON.stringify(rfToEwoks(graphRf), null, 2),
+      `${graphInfo.label || 'Untitled'}.json`,
+      'text/plain'
+    );
   }
 
   return <ActionMenuItem icon={GetApp} label="Download" onClick={saveToDisk} />;
