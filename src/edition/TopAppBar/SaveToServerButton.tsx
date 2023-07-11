@@ -22,7 +22,6 @@ export default function SaveToServerButton() {
 
   const [isDialogOpen, setDialogOpen] = useState(false);
 
-  const setGettingFromServer = useStore((state) => state.setGettingFromServer);
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const [action, setAction] = useState<
@@ -36,7 +35,6 @@ export default function SaveToServerButton() {
     // 2. If exists and you took it from the server UPDATE without asking
     // 3. If exists and you took it from elseware open dialog for new name OR OVERWRITE
     const { data: workflowsIds } = await getWorkflowsIds();
-    setGettingFromServer(true);
 
     if (!workflowsIds.identifiers.includes(graphInfo.id)) {
       setAction(GraphFormAction.newGraph);
@@ -45,7 +43,6 @@ export default function SaveToServerButton() {
     }
 
     if (workingGraph.graph.id !== graphInfo.id) {
-      setGettingFromServer(false);
       setOpenSnackbar({
         open: true,
         text:
@@ -95,8 +92,6 @@ export default function SaveToServerButton() {
           text: textForError(error, commonStrings.savingError),
           severity: 'error',
         });
-      } finally {
-        setGettingFromServer(false);
       }
       return;
     }
@@ -107,7 +102,6 @@ export default function SaveToServerButton() {
       return;
     }
 
-    setGettingFromServer(false);
     setOpenSnackbar({
       open: true,
       text: 'No graph exists to save!',

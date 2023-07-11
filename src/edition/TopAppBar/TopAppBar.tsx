@@ -2,7 +2,6 @@ import { Typography } from '@material-ui/core';
 import { createPortal } from 'react-dom';
 
 import GetFromServer from '../../general/GetFromServer';
-import ProgressBar from '../../general/ProgressBar';
 import OpenActionMenuButton from './menu/OpenActionMenuButton';
 import SaveToServerButton from './SaveToServerButton';
 import TopAppBarLabel from './TopAppBarLabel';
@@ -35,7 +34,6 @@ function TopAppBar(props: Props) {
           checkAndNewGraph={() => checkAndNewGraph(false)}
         />
       </div>
-      <ProgressBar />
     </>,
     navBarElement
   );

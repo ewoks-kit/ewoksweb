@@ -44,11 +44,9 @@ export default function GraphFormDialog(props: Props) {
   const initGraph = useStore((state) => state.initGraph);
   const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const setGettingFromServer = useStore((st) => st.setGettingFromServer);
 
   function handleClose() {
     onClose();
-    setGettingFromServer(false);
   }
 
   const onSubmit = handleSubmit(async (data: GraphFields) => {
@@ -86,7 +84,6 @@ export default function GraphFormDialog(props: Props) {
         text: textForError(error, commonStrings.savingError),
         severity: 'error',
       });
-      setGettingFromServer(false);
     }
   });
 
