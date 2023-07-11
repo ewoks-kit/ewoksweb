@@ -2,9 +2,8 @@ import useStore from '../../store/useStore';
 import SubgraphStack from './SubgraphStack';
 
 export default function TopAppBarLabel() {
-  const subgraphsStack = useStore((state) => {
-    return state.subgraphsStack;
-  });
+  const subgraphsStack = useStore((state) => state.subgraphsStack);
+  const graphInfo = useStore((state) => state.graphInfo);
 
   if (subgraphsStack.length === 0 || !subgraphsStack[0].label) {
     return (
@@ -27,7 +26,5 @@ export default function TopAppBarLabel() {
     return <SubgraphStack />;
   }
 
-  return (
-    <span data-cy={subgraphsStack[0].label}>{subgraphsStack[0].label}</span>
-  );
+  return <span data-cy={graphInfo.label}>{graphInfo.label}</span>;
 }
