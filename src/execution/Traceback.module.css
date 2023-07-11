@@ -1,0 +1,17 @@
+.container {
+  margin-left: 2rem;
+}
+
+.excerpt {
+  color: darkred;
+  font-weight: 600;
+}
+
+.summary {
+  cursor: pointer;
+}
+
+.pre {
+  padding-left: 0.5rem;
+  border-left: solid 1px var(--primary);
+}
