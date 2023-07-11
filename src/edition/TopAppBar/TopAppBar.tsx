@@ -1,13 +1,14 @@
 import { Typography } from '@material-ui/core';
+import { createPortal } from 'react-dom';
+
 import GetFromServer from '../../general/GetFromServer';
 import ProgressBar from '../../general/ProgressBar';
 import OpenActionMenuButton from './menu/OpenActionMenuButton';
 import SaveToServerButton from './SaveToServerButton';
 import TopAppBarLabel from './TopAppBarLabel';
-
-import styles from '../EditPage.module.css';
-import { createPortal } from 'react-dom';
 import useNavBarElementStore from '../../navbar/useNavBarElementStore';
+
+import styles from './TopAppBar.module.css';
 
 interface Props {
   checkAndNewGraph: (notSave: boolean) => void;
