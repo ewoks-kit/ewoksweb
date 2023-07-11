@@ -16,6 +16,11 @@
   background-color: #303f9f !important;
 }
 
+.saveButton {
+  composes: button;
+  margin-left: 0.25rem;
+}
+
 .labelHint {
   font-weight: lighter;
   font-style: italic;

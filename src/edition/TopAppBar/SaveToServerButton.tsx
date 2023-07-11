@@ -1,4 +1,3 @@
-import IntegratedSpinner from '../../general/IntegratedSpinner';
 import SaveIcon from '@material-ui/icons/Save';
 import useStore from '../../store/useStore';
 import GraphFormDialog from '../../general/forms/GraphFormDialog';
@@ -14,6 +13,8 @@ import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
 
 import styles from './TopAppBar.module.css';
+import { IconButton, Tooltip } from '@material-ui/core';
+import tooltipText from '../../general/TooltipText';
 
 // DOC: Save to server button with its spinner
 export default function SaveToServerButton() {
@@ -126,17 +127,18 @@ export default function SaveToServerButton() {
         isOpen={isDialogOpen}
         onClose={() => setDialogOpen(false)}
       />
-      <IntegratedSpinner
-        className={styles.button}
-        tooltip="Save to Server"
-        action={() => null}
-        getting={false}
-        onClick={() => {
-          void handleSave();
-        }}
-      >
-        <SaveIcon data-cy="saveToServer" />
-      </IntegratedSpinner>
+      <Tooltip title={tooltipText('Save to server')} enterDelay={500} arrow>
+        <IconButton
+          className={styles.saveButton}
+          onClick={() => {
+            void handleSave();
+          }}
+          aria-label="Save workflow to server"
+          color="inherit"
+        >
+          <SaveIcon />
+        </IconButton>
+      </Tooltip>
     </>
   );
 }
