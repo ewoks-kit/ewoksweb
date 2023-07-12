@@ -1,6 +1,7 @@
 import { CssBaseline } from '@material-ui/core';
 import { CacheProvider } from '@rest-hooks/react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { baseUrl } from './api/url';
 import EditRoute from './EditRoute';
 import MonitorRoute from './MonitorRoute';
 
@@ -10,7 +11,7 @@ import SocketClientProvider from './SocketClientProvider';
 function App() {
   return (
     <CacheProvider>
-      <SocketClientProvider serverUrl={process.env.REACT_APP_SERVER_URL || ''}>
+      <SocketClientProvider serverUrl={baseUrl}>
         <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE_DIR}>
           <CssBaseline />
           <NavBar />
