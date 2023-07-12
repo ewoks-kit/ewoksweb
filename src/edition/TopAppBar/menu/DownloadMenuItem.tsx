@@ -3,7 +3,7 @@ import type { EwoksRFLinkData, EwoksRFNodeData, GraphRF } from '../../../types';
 import { useReactFlow } from 'reactflow';
 import { GetApp } from '@material-ui/icons';
 import { getEdgesData, getNodesData, rfToEwoks } from '../../../utils';
-import curateGraph from '../utils/curateGraph';
+import { curateGraph } from '../utils';
 import ActionMenuItem from './ActionMenuItem';
 
 function download(content: BlobPart, fileName: string, contentType: string) {
