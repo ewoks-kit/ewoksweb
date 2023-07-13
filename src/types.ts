@@ -448,8 +448,7 @@ export interface IconsNames {
 
 export interface Icon {
   name: string;
-  type?: string;
-  image?: { data_url?: string };
+  data_url: string;
 }
 
 export interface WorkflowDescription {

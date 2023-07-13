@@ -20,19 +20,15 @@ async function fetchIcons() {
   return data;
 }
 
-interface IconInfo extends GetIconResponse {
-  url: string;
-}
-
-async function fetchIcon(name: string): Promise<IconInfo> {
+async function fetchIcon(name: string): Promise<Icon> {
   const { config, data } = await axiosRequest.get<GetIconResponse>(
     `/icon/${name}`
   );
   const { url } = config;
   assertDefined(url);
   return {
-    ...data,
-    url,
+    data_url: data.data_url,
+    name: path.basename(url),
   };
 }
 
@@ -61,13 +57,7 @@ export async function deleteIcon(name: string) {
 async function getIcons(): Promise<Icon[]> {
   const { identifiers: iconNames } = await fetchIcons();
 
-  const iconInfos = await Promise.all(iconNames.map(fetchIcon));
-
-  return iconInfos.map<Icon>((info) => ({
-    name: path.basename(info.url),
-    image: info,
-    type: path.extname(info.url),
-  }));
+  return Promise.all(iconNames.map(fetchIcon));
 }
 
 const getIconsEndpoint = new Endpoint(getIcons);
