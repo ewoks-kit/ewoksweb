@@ -1,12 +1,16 @@
 import type { ChangeEvent, ForwardedRef } from 'react';
 import { forwardRef } from 'react';
+import type { GraphEwoks } from '../types';
 import { useLoadGraph } from './hooks';
 
-interface Props {}
+interface Props {
+  onGraphLoad: (graph: GraphEwoks) => void;
+}
 
 const OpenGraphInput = forwardRef(
   (props: Props, ref: ForwardedRef<HTMLInputElement>) => {
-    const loadGraph = useLoadGraph();
+    const { onGraphLoad } = props;
+    const loadGraph = useLoadGraph(onGraphLoad);
 
     return (
       <input

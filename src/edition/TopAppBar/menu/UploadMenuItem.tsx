@@ -4,22 +4,27 @@ import { FolderOpen } from '@material-ui/icons';
 import useStore from '../../../store/useStore';
 import ActionMenuItem from './ActionMenuItem';
 import OpenGraphInput from '../../../general/OpenGraphInput';
+import { useReactFlow } from 'reactflow';
 
 function UploadMenuItem() {
   const ref = useRef<HTMLInputElement>(null);
-
-  const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
+  const rfInstance = useReactFlow();
+  const initGraph = useStore((state) => state.initGraph);
 
   return (
     <ActionMenuItem
       onClick={() => {
-        setGraphOrSubgraph(true);
         ref.current?.click();
       }}
       icon={FolderOpen}
       label="Open from disk"
     >
-      <OpenGraphInput ref={ref} />
+      <OpenGraphInput
+        ref={ref}
+        onGraphLoad={(graph) => {
+          initGraph(graph, 'fromDisk', rfInstance);
+        }}
+      />
     </ActionMenuItem>
   );
 }

@@ -1,5 +1,3 @@
-import { useReactFlow } from 'reactflow';
-import useNodeDataStore from '../store/useNodeDataStore';
 import type { GraphEwoks } from '../types';
 import useStore from '../store/useStore';
 import { isString } from '../utils/typeGuards';
@@ -20,19 +18,9 @@ function tryJSONparse(str: string | ArrayBuffer | null): unknown {
   }
 }
 
-export function useLoadGraph() {
-  const rfInstance = useReactFlow();
-  const setNodeData = useNodeDataStore((state) => state.setNodeData);
-
+export function useLoadGraph(onGraphLoad: (graph: GraphEwoks) => void) {
   return async (file: File) => {
-    const {
-      graphInfo,
-      workingGraph,
-      graphOrSubgraph,
-      initGraph,
-      setSubGraph,
-      setOpenSnackbar,
-    } = useStore.getState();
+    const { graphInfo, workingGraph, setOpenSnackbar } = useStore.getState();
 
     if (workingGraph.graph.id !== graphInfo.id) {
       setOpenSnackbar({
@@ -44,7 +32,7 @@ export function useLoadGraph() {
     }
 
     const reader = new FileReader();
-    // eslint-disable-next-line require-atomic-updates
+
     reader.onloadend = async () => {
       const { result } = reader;
 
@@ -58,18 +46,7 @@ export function useLoadGraph() {
         return;
       }
 
-      if (graphOrSubgraph) {
-        await initGraph(newGraph as GraphEwoks, 'fromDisk', rfInstance);
-      } else {
-        const nodes = rfInstance.getNodes();
-        const { nodeWithoutData, data } = await setSubGraph(
-          newGraph as GraphEwoks,
-          nodes,
-          rfInstance.getEdges()
-        );
-        rfInstance.setNodes([...nodes, nodeWithoutData]);
-        setNodeData(nodeWithoutData.id, data);
-      }
+      onGraphLoad(newGraph as GraphEwoks);
     };
     reader.readAsText(file);
   };

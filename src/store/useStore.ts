@@ -4,7 +4,6 @@ import undoRedo from './undoRedo';
 import workingGraph from './workingGraph';
 import graphRF from './graphRF';
 import allWorkflows from './allWorkflows';
-import graphOrSubgraph from './graphOrSubgraph';
 import openDraggableDialog from './openDraggableDialog';
 import openSnackbar from './openSnackbar';
 import recentGraphs from './recentGraphs';
@@ -21,7 +20,6 @@ import graphInfo from './graphInfo';
 
 const useStore = create<State>((set, get) => ({
   ...allWorkflows(set),
-  ...graphOrSubgraph(set),
   ...graphRF(set, get),
   ...graphInfo(set, get),
   ...canvasGraphChanged(set),
