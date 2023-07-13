@@ -13,7 +13,7 @@ import { discoverTasks } from '../../../api/tasks';
 import commonStrings from '../../../commonStrings.json';
 import type { SnackbarParams } from '../../../types';
 import { textForError } from '../../../utils';
-import { useGetTasks } from '../hooks';
+import { useGetTasks } from '../../../general/hooks';
 
 interface Props {
   open: boolean;

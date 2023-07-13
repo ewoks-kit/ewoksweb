@@ -6,7 +6,7 @@ import useStore from '../../store/useStore';
 import type { Task } from '../../types';
 import { textForError } from '../../utils';
 import ConfirmDialog from '../../general/ConfirmDialog';
-import { useGetTasks } from '../TopAppBar/hooks';
+import { useGetTasks } from '../../general/hooks';
 
 import styles from './TaskButtonGroup.module.css';
 

@@ -1,11 +1,11 @@
 import { useReactFlow } from 'reactflow';
-import useNodeDataStore from '../../store/useNodeDataStore';
-import type { GraphEwoks } from '../../types';
-import useStore from '../../store/useStore';
-import { isString } from '../../utils/typeGuards';
-import { getTaskDescription } from '../../api/tasks';
-import { textForError } from '../../utils';
-import commonStrings from '../../commonStrings.json';
+import useNodeDataStore from '../store/useNodeDataStore';
+import type { GraphEwoks } from '../types';
+import useStore from '../store/useStore';
+import { isString } from '../utils/typeGuards';
+import { getTaskDescription } from '../api/tasks';
+import { textForError } from '../utils';
+import commonStrings from '../commonStrings.json';
 
 function tryJSONparse(str: string | ArrayBuffer | null): unknown {
   if (!isString(str)) {

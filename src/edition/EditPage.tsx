@@ -11,7 +11,7 @@ import { getWorkflow } from '../api/api';
 import { useReactFlow } from 'reactflow';
 import OverflowDrawer from './TaskDrawer/TaskDrawer';
 import useTaskDrawerState from '../store/taskDrawerState';
-import { useGetTasks } from './TopAppBar/hooks';
+import { useGetTasks } from '../general/hooks';
 import TopAppBar from './TopAppBar/TopAppBar';
 
 import styles from './EditPage.module.css';
