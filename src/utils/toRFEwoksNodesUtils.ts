@@ -45,16 +45,11 @@ export function calcNodeType(
 // DOC: locate the task and add required+optional-inputs + outputs
 export function calcTask(tasks: Task[], task_identifier: string): Task {
   const tempTask = tasks.find((tas) => tas.task_identifier === task_identifier);
-
-  if (tempTask) {
-    return tempTask;
+  if (!tempTask) {
+    return { task_type: 'class', task_identifier };
   }
 
-  return {
-    optional_input_names: [],
-    output_names: [],
-    required_input_names: [],
-  };
+  return tempTask;
 }
 
 interface calcInOutForSubgraphOutput {

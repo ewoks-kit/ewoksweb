@@ -1,37 +1,39 @@
 import type { EwoksNode, GraphEwoks, Task } from '../types';
 
-// find the outputs-inputs from the connected nodes
-export function calcTasksForLink(
-  tempGraph: GraphEwoks,
-  source: string,
-  target: string,
+export function findLinkInputs(
+  nodes: EwoksNode[],
+  sourceNodeId: string,
   newNodeSubgraphs: GraphEwoks[],
   tasks: Task[]
-): Task[] {
-  const sourceTmp = tempGraph.nodes.find((nod) => nod.id === source);
-  const targetTmp = tempGraph.nodes.find((nod) => nod.id === target);
+): string[] {
+  const sourceNode = nodes.find((nod) => nod.id === sourceNodeId);
 
-  let sourceTask: Task | undefined;
-  let targetTask: Task | undefined;
-
-  if (sourceTmp) {
-    sourceTask = calcTask('source', sourceTmp, tasks, newNodeSubgraphs);
+  if (!sourceNode) {
+    return [];
   }
 
-  if (targetTmp) {
-    targetTask = calcTask('target', targetTmp, tasks, newNodeSubgraphs);
+  const sourceTask = calcTask('source', sourceNode, tasks, newNodeSubgraphs);
+  return sourceTask?.output_names || [];
+}
+
+export function findLinkOutputs(
+  nodes: EwoksNode[],
+  targetNodeId: string,
+  newNodeSubgraphs: GraphEwoks[],
+  tasks: Task[]
+): { required: string[]; optional: string[] } {
+  const targetNode = nodes.find((nod) => nod.id === targetNodeId);
+
+  if (!targetNode) {
+    return { required: [], optional: [] };
   }
 
-  // if not found app does not break, put an empty skeleton
-  sourceTask = sourceTask || {
-    output_names: [],
-  };
-  targetTask = targetTask || {
-    optional_input_names: [],
-    required_input_names: [],
-  };
+  const targetTask = calcTask('target', targetNode, tasks, newNodeSubgraphs);
 
-  return [sourceTask, targetTask];
+  return {
+    required: targetTask?.required_input_names || [],
+    optional: targetTask?.optional_input_names || [],
+  };
 }
 
 function calcTask(

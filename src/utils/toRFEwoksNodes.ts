@@ -72,12 +72,12 @@ export function toRFEwoksNodes(
             default_error_attributes: calcDefaultErrorAttributes(
               default_error_attributes
             ),
-            task_generator: task_generator || '',
+            task_generator,
           },
           task_props: {
             task_type,
             task_identifier,
-            task_icon: uiProps?.task_icon || '',
+            task_icon: uiProps?.task_icon,
           },
           ui_props: {
             nodeWidth: uiProps?.nodeWidth ?? 120,

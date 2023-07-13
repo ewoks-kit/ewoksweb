@@ -8,7 +8,7 @@ import type {
 } from '../types';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
-import { calcTasksForLink } from './calcTasksForLink';
+import { findLinkInputs, findLinkOutputs } from './calcTasksForLink';
 import { createDataMappingData } from './utils';
 import { defaultLinkStyle } from '../edition/Canvas/utils';
 
@@ -39,13 +39,6 @@ export function toRFEwoksLinks(
       uiProps = {},
       startEnd,
     }) => {
-      const [sourceTask, targetTask] = calcTasksForLink(
-        tempGraph,
-        source,
-        target,
-        newNodeSubgraphs,
-        tasks
-      );
       const color = uiProps.style?.stroke || '#96a5f9';
 
       const conditionsForFront = conditions.map<Condition>((con) => {
@@ -54,6 +47,19 @@ export function toRFEwoksLinks(
           value: con.value,
         };
       });
+
+      const linkInputNames = findLinkInputs(
+        tempGraph.nodes,
+        source,
+        newNodeSubgraphs,
+        tasks
+      );
+      const linkOutputNames = findLinkOutputs(
+        tempGraph.nodes,
+        target,
+        newNodeSubgraphs,
+        tasks
+      );
 
       const link: EwoksRFLink = {
         id: `${source}:${uiProps.sourceHandle ?? ''}->${target}:${
@@ -88,12 +94,9 @@ export function toRFEwoksLinks(
             x: 0,
             y: 0,
           },
-          // DOC: node optional_input_names are link's optional_output_names
-          links_optional_output_names: targetTask.optional_input_names || [],
-          // DOC: node required_input_names are link's required_output_names
-          links_required_output_names: targetTask.required_input_names || [],
-          // DOC: node output_names are link's input_names
-          links_input_names: sourceTask.output_names || [],
+          links_optional_output_names: linkOutputNames.optional,
+          links_required_output_names: linkOutputNames.required,
+          links_input_names: linkInputNames,
           data_mapping: data_mapping.map(createDataMappingData),
           required,
           sub_target,
