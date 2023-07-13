@@ -136,6 +136,7 @@ export type NodeInGraphType =
   | 'internal';
 
 export interface NodeProps {
+  id: string;
   nodeWidth?: number;
   withImage?: boolean;
   withLabel?: boolean;
@@ -145,8 +146,6 @@ export interface NodeProps {
   color?: string;
   colorBorder?: string;
   content: ReactNode;
-  image?: string;
-  node_icon?: string;
   comment?: string;
 }
 

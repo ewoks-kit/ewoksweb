@@ -15,14 +15,13 @@ import NodeLabel from './NodeLabel';
 
 // The basic Node component
 function Node({
+  id,
   moreHandles,
   withImage,
   withLabel,
   label,
   color,
   colorBorder: borderColor,
-  image,
-  node_icon,
   comment,
   nodeWidth,
 }: NodeProps) {
@@ -116,10 +115,7 @@ function Node({
           />
           {withImage && (
             <SuspenseBoundary>
-              <NodeIcon
-                image={node_icon ?? image}
-                onDragStart={(e) => e.preventDefault()}
-              />
+              <NodeIcon nodeId={id} onDragStart={(e) => e.preventDefault()} />
             </SuspenseBoundary>
           )}
 
