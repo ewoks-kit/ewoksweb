@@ -15,8 +15,7 @@ import { useGetTasks } from '../general/hooks';
 import TopAppBar from './TopAppBar/TopAppBar';
 
 import styles from './EditPage.module.css';
-
-const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
+import useCurrentWorkflowIdStore from '../store/useCurrentWorkflowId';
 
 export default function EditPage() {
   const rfInstance = useReactFlow();
@@ -33,21 +32,19 @@ export default function EditPage() {
   const initializedGraph = useStore((state) => state.initializedGraph);
   const initGraph = useStore((state) => state.initGraph);
 
+  const currentWorkflowId = useCurrentWorkflowIdStore((state) => state.id);
+
   useEffect(() => {
-    if (initialWorkflowId) {
+    if (currentWorkflowId) {
       const loadGraph = async () => {
-        const { data: graph } = await getWorkflow(initialWorkflowId);
+        const { data: graph } = await getWorkflow(currentWorkflowId);
         initGraph(graph, 'fromServer', rfInstance);
       };
       loadGraph();
+    } else {
+      initGraph(initializedGraph, undefined, rfInstance);
     }
-  }, [initGraph, rfInstance]);
-
-  useEffect(() => {
-    initGraph(initializedGraph, undefined, rfInstance);
-    // Only run once on initial render
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [initializedGraph, initGraph, rfInstance, currentWorkflowId]);
 
   const getTasks = useGetTasks();
   useEffect(() => {

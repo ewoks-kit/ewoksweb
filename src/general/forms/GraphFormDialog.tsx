@@ -13,6 +13,7 @@ import { useReactFlow } from 'reactflow';
 
 import { postWorkflow, putWorkflow } from '../../api/api';
 import commonStrings from '../../commonStrings.json';
+import useCurrentWorkflowIdStore from '../../store/useCurrentWorkflowId';
 import useStore from '../../store/useStore';
 import type { GraphDetails, GraphFormAction } from '../../types';
 import {
@@ -41,9 +42,12 @@ export default function GraphFormDialog(props: Props) {
   });
 
   const setCanvasGraphChanged = useStore((st) => st.setCanvasGraphChanged);
-  const initGraph = useStore((state) => state.initGraph);
   const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+
+  const setCurrentWorkflowId = useCurrentWorkflowIdStore(
+    (state) => state.setId
+  );
 
   function handleClose() {
     onClose();
@@ -66,7 +70,7 @@ export default function GraphFormDialog(props: Props) {
         setCanvasGraphChanged(false);
       } else {
         const { data: newGraph } = await postWorkflow(ewoksGraph);
-        initGraph(newGraph, 'fromServer', rfInstance);
+        setCurrentWorkflowId(newGraph.graph.id);
         resetRecentGraphs();
       }
 

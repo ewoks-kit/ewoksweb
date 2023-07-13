@@ -3,16 +3,13 @@ import { useState } from 'react';
 import FormControl from '@material-ui/core/FormControl';
 import useStore from '../store/useStore';
 import type { WorkflowDescription } from '../types';
-import { getWorkflow } from '../api/api';
 import ConfirmDialog from './ConfirmDialog';
-import { validateEwoksGraph } from '../utils/EwoksValidator';
 import WorkflowDropdown from './dropdown/WorkflowDropdown';
 import { textForError } from '../utils';
-import { useReactFlow } from 'reactflow';
+import useCurrentWorkflowIdStore from '../store/useCurrentWorkflowId';
 
 export default function GetFromServer() {
   const [workflowId, setWorkflowId] = useState('');
-  const initGraph = useStore((state) => state.initGraph);
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setCanvasGraphChanged = useStore(
@@ -21,7 +18,9 @@ export default function GetFromServer() {
   const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
   const undoIndex = useStore((state) => state.undoIndex);
 
-  const rfInstance = useReactFlow();
+  const setCurrentWorkflowId = useCurrentWorkflowIdStore(
+    (state) => state.setId
+  );
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails.id) {
@@ -42,19 +41,8 @@ export default function GetFromServer() {
   async function getFromServer(workflowIdparam: string) {
     if (workflowIdparam) {
       try {
-        const response = await getWorkflow(workflowIdparam);
-
-        const graph = response.data;
-        setOpenSnackbar({
-          open: true,
-          text: `Workflow ${
-            graph.graph.label || 'without Label!!!'
-          } was downloaded successfully`,
-          severity: 'success',
-        });
+        setCurrentWorkflowId(workflowIdparam);
         setCanvasGraphChanged(false);
-        initGraph(graph, 'fromServer', rfInstance);
-        validateEwoksGraph(graph);
       } catch (error) {
         setOpenSnackbar({
           open: true,
@@ -74,10 +62,6 @@ export default function GetFromServer() {
     }
   }
 
-  const disAgreeSaveWithout = () => {
-    setOpenAgreeDialog(false);
-  };
-
   return (
     <>
       <ConfirmDialog
@@ -85,7 +69,7 @@ export default function GetFromServer() {
         content="Continue without saving?"
         open={openAgreeDialog}
         agreeCallback={() => getFromServer(workflowId)}
-        disagreeCallback={disAgreeSaveWithout}
+        disagreeCallback={() => setOpenAgreeDialog(false)}
       />
       <FormControl
         variant="standard"
