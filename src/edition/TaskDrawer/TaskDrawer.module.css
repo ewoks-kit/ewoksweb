@@ -17,3 +17,15 @@
 .openButton:hover {
   transform: scale(1.1);
 }
+
+.subgraphButton {
+  composes: btnClean from global;
+  background-color: #96a5f9;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 50%;
+}
+
+.subgraphButton:hover {
+  background-color: #3f51b5;
+}
