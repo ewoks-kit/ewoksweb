@@ -1,5 +1,5 @@
-.openMenuButton:hover {
-  background-color: #303f9f !important;
+.openMenuButton {
+  composes: button from '../TopAppBar.module.css';
 }
 
 .paper {

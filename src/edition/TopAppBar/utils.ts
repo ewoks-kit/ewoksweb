@@ -1,12 +1,25 @@
+import { getWorkflowsIds } from '../../api/api';
 import type {
   Condition,
   DataMapping,
   Inputs,
   EwoksRFNodeData,
   EwoksRFLinkData,
-} from '../../../types';
+} from '../../types';
 
-function curateGraph(
+export async function getWorkflowIdsFromServer(): Promise<{
+  data: string[];
+  error: unknown;
+}> {
+  try {
+    const { data: response } = await getWorkflowsIds();
+    return { data: response.identifiers, error: null };
+  } catch (error) {
+    return { data: [], error };
+  }
+}
+
+export function curateGraph(
   nodesData: Map<string, EwoksRFNodeData>,
   edgesData: Map<string, EwoksRFLinkData>
 ): {
@@ -61,5 +74,3 @@ function deleteEmptyLines<T extends DataMapping | Condition | Inputs>(
     (obj: DataMapping | Condition | Inputs) => obj.name !== ''
   );
 }
-
-export default curateGraph;

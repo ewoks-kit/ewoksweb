@@ -1,24 +1,16 @@
 import useStore from '../../store/useStore';
 import SubgraphStack from './SubgraphStack';
 
+import styles from './TopAppBar.module.css';
+
 export default function TopAppBarLabel() {
-  const subgraphsStack = useStore((state) => {
-    return state.subgraphsStack;
-  });
+  const subgraphsStack = useStore((state) => state.subgraphsStack);
+  const graphInfo = useStore((state) => state.graphInfo);
 
   if (subgraphsStack.length === 0 || !subgraphsStack[0].label) {
     return (
       <span data-cy="untitled_workflow">
-        untitled_workflow{' '}
-        <span
-          style={{
-            fontWeight: 'lighter',
-            fontStyle: 'italic',
-            fontSize: '1rem',
-          }}
-        >
-          (unsaved)
-        </span>
+        Untitled_workflow <span className={styles.labelHint}>(unsaved)</span>
       </span>
     );
   }
@@ -27,7 +19,5 @@ export default function TopAppBarLabel() {
     return <SubgraphStack />;
   }
 
-  return (
-    <span data-cy={subgraphsStack[0].label}>{subgraphsStack[0].label}</span>
-  );
+  return <span data-cy={graphInfo.label}>{graphInfo.label}</span>;
 }

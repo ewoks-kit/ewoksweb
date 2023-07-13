@@ -20,7 +20,7 @@ describe('create workflow and save', () => {
   });
 
   it('gives a new unique name creates and deletes workflow', () => {
-    cy.get('[data-cy="saveToServer"]').click();
+    cy.findByRole('button', { name: 'Save workflow to server' }).click();
 
     cy.findByRole('dialog').should('be.visible');
 

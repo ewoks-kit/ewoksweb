@@ -1,6 +1,5 @@
 import create from 'zustand';
 import type { State } from '../types';
-import gettingFromServer from './gettingFromServer';
 import undoRedo from './undoRedo';
 import workingGraph from './workingGraph';
 import graphRF from './graphRF';
@@ -22,7 +21,6 @@ import graphInfo from './graphInfo';
 
 const useStore = create<State>((set, get) => ({
   ...allWorkflows(set),
-  ...gettingFromServer(set),
   ...graphOrSubgraph(set),
   ...graphRF(set, get),
   ...graphInfo(set, get),

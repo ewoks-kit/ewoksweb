@@ -1,19 +1,21 @@
-import IntegratedSpinner from '../../general/IntegratedSpinner';
-import SaveIcon from '@material-ui/icons/Save';
 import useStore from '../../store/useStore';
 import GraphFormDialog from '../../general/forms/GraphFormDialog';
 import { useState } from 'react';
 import { GraphFormAction } from '../../types';
 import { useKeyboardEvent } from '@react-hookz/web';
 import type { EwoksRFLinkData, EwoksRFNodeData } from '../../types';
-import { getWorkflowsIds, putWorkflow } from '../../api/api';
+import { putWorkflow } from '../../api/api';
 import { getEdgesData, rfToEwoks, textForError } from '../../utils';
 import commonStrings from '../../commonStrings.json';
-import curateGraph from './utils/curateGraph';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
+import { getWorkflowIdsFromServer, curateGraph } from './utils';
 
 import styles from './TopAppBar.module.css';
+import { IconButton, Tooltip } from '@material-ui/core';
+import tooltipText from '../../general/TooltipText';
+import type { Status } from './models';
+import StatusIcon from './StatusButton';
 
 // DOC: Save to server button with its spinner
 export default function SaveToServerButton() {
@@ -22,12 +24,22 @@ export default function SaveToServerButton() {
 
   const [isDialogOpen, setDialogOpen] = useState(false);
 
-  const setGettingFromServer = useStore((state) => state.setGettingFromServer);
+  const [status, setStatus] = useState<Status>('idle');
+
   const workingGraph = useStore((state) => state.workingGraph);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const [action, setAction] = useState<
     GraphFormAction.newGraph | GraphFormAction.newGraphOrOverwrite
   >(GraphFormAction.newGraph);
+
+  function handleError(text: string) {
+    setOpenSnackbar({
+      open: true,
+      text,
+      severity: 'error',
+    });
+    setStatus('error');
+  }
 
   async function handleSave() {
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
@@ -35,84 +47,79 @@ export default function SaveToServerButton() {
     // 1. If notExists open dialog for NEW NAME.
     // 2. If exists and you took it from the server UPDATE without asking
     // 3. If exists and you took it from elseware open dialog for new name OR OVERWRITE
-    const { data: workflowsIds } = await getWorkflowsIds();
-    setGettingFromServer(true);
 
-    if (!workflowsIds.identifiers.includes(graphInfo.id)) {
+    const response = await getWorkflowIdsFromServer();
+    if (response.error) {
+      handleError(
+        textForError(response.error, commonStrings.retrieveWorkflowsError)
+      );
+      return;
+    }
+
+    const workflowsIds = response.data;
+
+    if (!workflowsIds.includes(graphInfo.id)) {
       setAction(GraphFormAction.newGraph);
       setDialogOpen(true);
       return;
     }
 
     if (workingGraph.graph.id !== graphInfo.id) {
-      setGettingFromServer(false);
-      setOpenSnackbar({
-        open: true,
-        text:
-          'Cannot save any changes to subgraphs! Open it as the main graph to make changes.',
-        severity: 'warning',
-      });
+      handleError(
+        'Cannot save any changes to subgraphs! Open it as the main graph to make changes.'
+      );
       return;
     }
 
-    if (graphInfo.uiProps?.source === 'fromServer') {
-      try {
-        const { newNodesData, newEdgesData } = curateGraph(
-          getNodesData(),
-          getEdgesData()
-        );
-
-        const nodesWithData = [...rfInstance.getNodes()].map((node) => {
-          return {
-            ...node,
-            data: newNodesData.get(node.id) as EwoksRFNodeData,
-          };
-        });
-
-        const edgesWithData = [...rfInstance.getEdges()].map((edge) => {
-          return {
-            ...edge,
-            data: newEdgesData.get(edge.id) as EwoksRFLinkData,
-          };
-        });
-
-        await putWorkflow(
-          rfToEwoks({
-            graph: graphInfo,
-            nodes: nodesWithData,
-            links: edgesWithData,
-          })
-        );
-
-        setOpenSnackbar({
-          open: true,
-          text: 'Graph saved successfully!',
-          severity: 'success',
-        });
-      } catch (error) {
-        setOpenSnackbar({
-          open: true,
-          text: textForError(error, commonStrings.savingError),
-          severity: 'error',
-        });
-      } finally {
-        setGettingFromServer(false);
-      }
+    const { uiProps } = graphInfo;
+    if (!uiProps?.source) {
+      handleError('No graph exists to save!');
       return;
     }
 
-    if (graphInfo.uiProps?.source !== 'fromServer') {
+    if (uiProps.source !== 'fromServer') {
       setAction(GraphFormAction.newGraphOrOverwrite);
       setDialogOpen(true);
       return;
     }
 
-    setGettingFromServer(false);
-    setOpenSnackbar({
-      open: true,
-      text: 'No graph exists to save!',
-      severity: 'warning',
-    });
+    try {
+      const { newNodesData, newEdgesData } = curateGraph(
+        getNodesData(),
+        getEdgesData()
+      );
+
+      const nodesWithData = [...rfInstance.getNodes()].map((node) => {
+        return {
+          ...node,
+          data: newNodesData.get(node.id) as EwoksRFNodeData,
+        };
+      });
+
+      const edgesWithData = [...rfInstance.getEdges()].map((edge) => {
+        return {
+          ...edge,
+          data: newEdgesData.get(edge.id) as EwoksRFLinkData,
+        };
+      });
+
+      await putWorkflow(
+        rfToEwoks({
+          graph: graphInfo,
+          nodes: nodesWithData,
+          links: edgesWithData,
+        })
+      );
+
+      setOpenSnackbar({
+        open: true,
+        text: 'Graph saved successfully!',
+        severity: 'success',
+      });
+      setStatus('success');
+    } catch (error) {
+      handleError(textForError(error, commonStrings.savingError));
+    }
   }
 
   useKeyboardEvent(
@@ -132,17 +139,18 @@ export default function SaveToServerButton() {
         isOpen={isDialogOpen}
         onClose={() => setDialogOpen(false)}
       />
-      <IntegratedSpinner
-        className={styles.button}
-        tooltip="Save to Server"
-        action={() => null}
-        getting={false}
-        onClick={() => {
-          void handleSave();
-        }}
-      >
-        <SaveIcon data-cy="saveToServer" />
-      </IntegratedSpinner>
+      <Tooltip title={tooltipText('Save to server')} enterDelay={500} arrow>
+        <IconButton
+          className={styles.saveButton}
+          onClick={() => {
+            void handleSave();
+          }}
+          aria-label="Save workflow to server"
+          color="inherit"
+        >
+          <StatusIcon status={status} setStatus={setStatus} />
+        </IconButton>
+      </Tooltip>
     </>
   );
 }
