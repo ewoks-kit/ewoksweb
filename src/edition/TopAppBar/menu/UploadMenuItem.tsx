@@ -5,11 +5,15 @@ import useStore from '../../../store/useStore';
 import ActionMenuItem from './ActionMenuItem';
 import OpenGraphInput from '../../../general/OpenGraphInput';
 import { useReactFlow } from 'reactflow';
+import useCurrentWorkflowIdStore from '../../../store/useCurrentWorkflowId';
 
 function UploadMenuItem() {
   const ref = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
   const initGraph = useStore((state) => state.initGraph);
+  const resetCurrentWorkflowId = useCurrentWorkflowIdStore(
+    (state) => state.resetId
+  );
 
   return (
     <ActionMenuItem
@@ -22,6 +26,7 @@ function UploadMenuItem() {
       <OpenGraphInput
         ref={ref}
         onGraphLoad={(graph) => {
+          resetCurrentWorkflowId();
           initGraph(graph, 'fromDisk', rfInstance);
         }}
       />

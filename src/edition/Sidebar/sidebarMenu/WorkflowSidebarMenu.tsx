@@ -8,19 +8,17 @@ import GraphFormDialog from '../../../general/forms/GraphFormDialog';
 import useStore from '../../../store/useStore';
 import { GraphFormAction } from '../../../types';
 import { Delete as DeleteIcon } from '@material-ui/icons';
-import { useReactFlow } from 'reactflow';
 import ConfirmDialog from '../../../general/ConfirmDialog';
 import { deleteWorkflow } from 'api/api';
 import commonStrings from 'commonStrings.json';
 import { textForError } from '../../../utils';
+import useCurrentWorkflowIdStore from '../../../store/useCurrentWorkflowId';
 
 export default function WorkflowSidebarMenu() {
-  const rfInstance = useReactFlow();
-
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
-  const initializedGraph = useStore((state) => state.initializedGraph);
-  const initGraph = useStore((state) => state.initGraph);
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
+
+  const resetWorkflowId = useCurrentWorkflowIdStore((state) => state.resetId);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
@@ -46,7 +44,7 @@ export default function WorkflowSidebarMenu() {
       }
     }
 
-    initGraph(initializedGraph, undefined, rfInstance);
+    resetWorkflowId();
   }
 
   function disAgreeCallback() {
