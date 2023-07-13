@@ -3,7 +3,6 @@ import type { CanvasGraphChangedSlice } from './store/canvasGraphChanged';
 import type { AllWorkflowsSlice } from './store/allWorkflows';
 import type { GraphRFSlice } from './store/graphRF';
 import type { OpenDraggableDialogSlice } from './store/openDraggableDialog';
-import type { GraphOrSubgraphSlice } from './store/graphOrSubgraph';
 import type { OpenSnackbarSlice } from './store/openSnackbar';
 import type { SubgraphsStackSlice } from './store/subgraphsStack';
 import type { SubGraphSlice } from './store/subGraph';
@@ -105,7 +104,6 @@ export interface State
     GraphRFSlice,
     GraphInfoSlice,
     OpenDraggableDialogSlice,
-    GraphOrSubgraphSlice,
     OpenSnackbarSlice,
     SubgraphsStackSlice,
     SubGraphSlice,

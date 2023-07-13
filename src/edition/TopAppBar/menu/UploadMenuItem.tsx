@@ -1,40 +1,28 @@
-import type { ChangeEvent } from 'react';
 import { useRef } from 'react';
 import { FolderOpen } from '@material-ui/icons';
 
-import { useLoadGraph } from '../hooks';
 import useStore from '../../../store/useStore';
 import ActionMenuItem from './ActionMenuItem';
+import OpenGraphInput from '../../../general/OpenGraphInput';
+import { useReactFlow } from 'reactflow';
 
 function UploadMenuItem() {
-  const loadGraph = useLoadGraph();
   const ref = useRef<HTMLInputElement>(null);
-
-  const setGraphOrSubgraph = useStore((state) => state.setGraphOrSubgraph);
+  const rfInstance = useReactFlow();
+  const initGraph = useStore((state) => state.initGraph);
 
   return (
     <ActionMenuItem
       onClick={() => {
-        setGraphOrSubgraph(true);
         ref.current?.click();
       }}
       icon={FolderOpen}
       label="Open from disk"
     >
-      <input
+      <OpenGraphInput
         ref={ref}
-        style={{ display: 'none' }}
-        aria-label="Open from disk"
-        name="load-graph"
-        id="load-graph"
-        type="file"
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          const file = e.target.files?.[0];
-          if (!file) {
-            return;
-          }
-
-          loadGraph(file);
+        onGraphLoad={(graph) => {
+          initGraph(graph, 'fromDisk', rfInstance);
         }}
       />
     </ActionMenuItem>

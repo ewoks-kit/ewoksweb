@@ -17,7 +17,7 @@ import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import useStore from '../../store/useStore';
 import type { Task } from '../../types';
 import { textForError } from '../../utils';
-import { useGetTasks } from '../../edition/TopAppBar/hooks';
+import { useGetTasks } from '../hooks';
 import IconDropdown from './IconDropdown';
 import type { TaskFields } from './models';
 import { TASK_TYPES } from './models';
