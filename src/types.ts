@@ -162,14 +162,13 @@ export type TaskType =
   | 'script';
 
 export interface Task {
-  task_type?: TaskType;
-  task_identifier?: string;
-  task_generator?: string;
+  task_type: TaskType;
+  task_identifier: string;
+  category?: string;
+  icon?: string;
+  required_input_names?: string[];
   optional_input_names?: string[];
   output_names?: string[];
-  required_input_names?: string[];
-  icon?: string;
-  category?: string;
 }
 
 export interface Inputs {

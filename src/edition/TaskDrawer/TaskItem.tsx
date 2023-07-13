@@ -31,7 +31,7 @@ function TaskItem(props: Props) {
           onClick={onClick}
           onDragStart={(event) =>
             attachTaskInfo(event.dataTransfer, {
-              task_type: task_type || 'class',
+              task_type,
               task_identifier,
               icon,
             })

@@ -140,13 +140,11 @@ function Canvas() {
       y: event.clientY - reactFlowBounds.top,
     });
 
-    const task = tasks.find(
-      (tas) => tas.task_identifier === task_identifier
-    ) || {
-      optional_input_names: [],
-      output_names: [],
-      required_input_names: [],
-    };
+    const task = tasks.find((tas) => tas.task_identifier === task_identifier);
+
+    if (!task) {
+      return;
+    }
 
     const nodesIds = [...stateRF.nodeInternals.keys()];
     const newId =
@@ -175,7 +173,6 @@ function Canvas() {
       },
       ewoks_props: {
         label: trimLabel(task_identifier),
-        task_generator: '',
         default_inputs: [],
         inputs_complete: false,
         default_error_node: false,

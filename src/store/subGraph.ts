@@ -116,7 +116,6 @@ const subGraph = (
         ewoks_props: {
           label: subToAdd.graph.label,
           default_inputs: [],
-          task_generator: '',
           inputs_complete: false,
           default_error_node: false,
           default_error_attributes: {

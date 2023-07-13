@@ -160,10 +160,6 @@ export function getEdgeData(id: string): EwoksRFLinkData | undefined {
 export function getTaskName(task: Task): string {
   const { task_identifier } = task;
 
-  if (!task_identifier) {
-    return '';
-  }
-
   const task_members = task_identifier.split('.');
 
   if (task_members.length === 0) {
