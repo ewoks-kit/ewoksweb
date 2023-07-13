@@ -21,7 +21,6 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
     withImage,
     withLabel,
     colorBorder: borderColor,
-    icon: image,
     nodeWidth,
   } = nodeData.ui_props;
 
@@ -96,7 +95,10 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
           />
           {withImage && (
             <SuspenseBoundary>
-              <NodeIcon image={image} onDragStart={(e) => e.preventDefault()} />
+              <NodeIcon
+                nodeId={args.id}
+                onDragStart={(e) => e.preventDefault()}
+              />
             </SuspenseBoundary>
           )}
           {task_type === 'graphOutput' && (

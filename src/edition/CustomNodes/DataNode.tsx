@@ -13,11 +13,10 @@ function DataNode(args: NodeProps) {
 
   return (
     <Node
+      id={args.id}
       type={nodeData.task_props.task_type}
       label={nodeData.ewoks_props.label || ''}
       color="#ced3ee"
-      image={uiProps.icon || ''}
-      node_icon={uiProps.node_icon}
       comment={nodeData.comment || ''}
       moreHandles={uiProps.moreHandles}
       withImage={'withImage' in uiProps ? uiProps.withImage : true}
