@@ -125,8 +125,11 @@ export function findImage(img: string | undefined, allIcons: Icon[]): string {
   }
 
   const icon = allIcons.find((ico) => ico.name === img);
+  if (!icon) {
+    return DEFAULT_ICON;
+  }
 
-  return icon?.image?.data_url || DEFAULT_ICON;
+  return icon.data_url;
 }
 
 export function textForError(error: unknown, alternative: string): string {

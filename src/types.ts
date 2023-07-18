@@ -62,7 +62,7 @@ export interface GraphDetails {
   category?: string;
   input_nodes?: GraphNodes[];
   output_nodes?: GraphNodes[];
-  uiProps?: UiPropsGraph;
+  uiProps?: GraphUiProps;
 }
 
 export interface SnackbarParams {
@@ -185,7 +185,7 @@ export interface stackGraph {
   resetStack?: boolean;
 }
 
-export interface UiPropsGraph {
+export interface GraphUiProps {
   label?: string;
   type?: string;
   comment?: string;
@@ -240,15 +240,14 @@ export interface DefaultErrorAttributes<T = DataMapping | DataMappingEwoks> {
 export interface EwoksNode {
   id: string;
   label?: string;
-  category?: string;
-  task_type: TaskType;
   task_identifier: string;
+  task_type: TaskType;
+  task_generator?: string;
   default_inputs?: Inputs[];
   inputs_complete?: boolean;
-  task_generator?: string;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes<DataMappingEwoks>;
-  uiProps?: EwoksNodeUiProps;
+  uiProps?: EwoksNodeUiProps; // NOT PART OF SPEC
 }
 
 export interface EwoksNodeUiProps {
@@ -271,18 +270,17 @@ export interface EwoksNodeUiProps {
 }
 
 export interface EwoksLink {
-  id?: string;
   source: string;
-  target: string;
-  map_all_data?: boolean;
-  required?: boolean;
-  data_mapping?: DataMappingEwoks[];
-  conditions?: ConditionEwoks[];
-  on_error?: boolean;
-  sub_target?: string;
   sub_source?: string;
-  startEnd?: boolean;
-  uiProps?: UiPropsLinks;
+  target: string;
+  sub_target?: string;
+  data_mapping?: DataMappingEwoks[];
+  map_all_data?: boolean;
+  conditions?: ConditionEwoks[];
+  required?: boolean;
+  on_error?: boolean;
+  uiProps?: UiPropsLinks; // NOT PART OF SPEC
+  startEnd?: boolean; // NOT PART OF SPEC
 }
 
 export interface outputsInputsSub {
@@ -448,8 +446,7 @@ export interface IconsNames {
 
 export interface Icon {
   name: string;
-  type?: string;
-  image?: { data_url?: string };
+  data_url: string;
 }
 
 export interface WorkflowDescription {
