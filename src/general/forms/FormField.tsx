@@ -1,6 +1,7 @@
 import type { StandardTextFieldProps } from '@material-ui/core';
 import { TextField, Tooltip } from '@material-ui/core';
 import type { ReactElement } from 'react';
+import { useMemo } from 'react';
 import { forwardRef, Fragment } from 'react';
 
 interface Props extends StandardTextFieldProps {
@@ -10,13 +11,17 @@ interface Props extends StandardTextFieldProps {
 const FormField = forwardRef<HTMLDivElement, Props>((props, ref) => {
   const { tooltip, ...textFieldProps } = props;
 
-  const Wrapper = tooltip
-    ? ({ children }: { children: ReactElement }) => (
-        <Tooltip arrow title={tooltip}>
-          {children}
-        </Tooltip>
-      )
-    : Fragment;
+  const Wrapper = useMemo(
+    () =>
+      tooltip
+        ? ({ children }: { children: ReactElement }) => (
+            <Tooltip arrow title={tooltip}>
+              {children}
+            </Tooltip>
+          )
+        : Fragment,
+    [tooltip]
+  );
 
   return (
     <Wrapper>
