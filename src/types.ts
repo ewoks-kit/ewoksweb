@@ -247,7 +247,7 @@ export interface EwoksNode {
   inputs_complete?: boolean;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes<DataMappingEwoks>;
-  uiProps?: EwoksNodeUiProps; // NOT PART OF SPEC
+  uiProps?: EwoksNodeUiProps;
 }
 
 export interface EwoksNodeUiProps {
@@ -279,8 +279,8 @@ export interface EwoksLink {
   conditions?: ConditionEwoks[];
   required?: boolean;
   on_error?: boolean;
-  uiProps?: UiPropsLinks; // NOT PART OF SPEC
-  startEnd?: boolean; // NOT PART OF SPEC
+  uiProps?: UiPropsLinks;
+  startEnd?: boolean;
 }
 
 export interface outputsInputsSub {
@@ -438,10 +438,6 @@ export interface GraphEwoks {
   graph: GraphDetails;
   nodes: EwoksNode[];
   links: EwoksLink[];
-}
-
-export interface IconsNames {
-  identifiers: string[];
 }
 
 export interface Icon {

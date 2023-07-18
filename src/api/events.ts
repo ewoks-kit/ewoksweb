@@ -1,11 +1,8 @@
 import { axiosRequest } from './api';
 import { Endpoint } from '@rest-hooks/rest';
 import { useController, useSuspense } from '@rest-hooks/react';
-import type { EwoksEvent, filterParams } from '../types';
-
-interface ExecutedJobsResponse {
-  jobs: EwoksEvent[][];
-}
+import type { filterParams } from '../types';
+import type { ExecutedJobsResponse } from './models';
 
 export async function getExecutionEvents(
   queryParams?: filterParams
@@ -30,5 +27,5 @@ export function useExecutionEvents() {
 export function useMutateExecutionEvents() {
   const controller = useController();
 
-  return () => controller.invalidate(getExecutionEventsEndpoint);
+  return async () => controller.invalidate(getExecutionEventsEndpoint);
 }

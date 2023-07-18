@@ -1,7 +1,7 @@
 import type { GraphEwoks } from '../types';
 import useStore from '../store/useStore';
 import { isString } from '../utils/typeGuards';
-import { getTaskDescription } from '../api/tasks';
+import { getTaskDescriptions } from '../api/tasks';
 import { textForError } from '../utils';
 import commonStrings from '../commonStrings.json';
 
@@ -57,7 +57,7 @@ export function useGetTasks() {
     const { setOpenSnackbar, setTasks } = useStore.getState();
 
     try {
-      const tasksData = await getTaskDescription();
+      const tasksData = await getTaskDescriptions();
       if (tasksData.data.items.length > 0) {
         const allTasks = tasksData.data.items;
         setTasks(allTasks);

@@ -1,27 +1,18 @@
 import { assertDefined } from '../utils/typeGuards';
-import type { Icon, IconsNames } from '../types';
+import type { Icon } from '../types';
 import { axiosRequest } from './api';
 import path from 'path-browserify';
 import { Endpoint } from '@rest-hooks/rest';
 import { useController, useSuspense } from '@rest-hooks/react';
-
-interface GetIconResponse {
-  data_url: string;
-}
-
-type UpdateIconResponse = GetIconResponse;
-
-interface DeleteIconResponse {
-  identifier: string;
-}
+import type { DeleteResponse, IconResponse, ListResponse } from './models';
 
 async function fetchIcons() {
-  const { data } = await axiosRequest.get<IconsNames>(`/icons`);
+  const { data } = await axiosRequest.get<ListResponse>(`/icons`);
   return data;
 }
 
 async function fetchIcon(name: string): Promise<Icon> {
-  const { config, data } = await axiosRequest.get<GetIconResponse>(
+  const { config, data } = await axiosRequest.get<IconResponse>(
     `/icon/${name}`
   );
   const { url } = config;
@@ -36,20 +27,15 @@ export async function postIcon(
   iconName: string,
   iconData: string | ArrayBuffer
 ) {
-  const { data } = await axiosRequest.post<UpdateIconResponse>(
-    `/icon/${iconName}`,
-    {
-      data_url: iconData,
-    }
-  );
+  const { data } = await axiosRequest.post<IconResponse>(`/icon/${iconName}`, {
+    data_url: iconData,
+  });
 
   return data;
 }
 
 export async function deleteIcon(name: string) {
-  const { data } = await axiosRequest.delete<DeleteIconResponse>(
-    `/icon/${name}`
-  );
+  const { data } = await axiosRequest.delete<DeleteResponse>(`/icon/${name}`);
 
   return data;
 }
@@ -71,5 +57,5 @@ export function useIcons() {
 export function useMutateIcons() {
   const ctrl = useController();
 
-  return () => ctrl.invalidate(getIconsEndpoint);
+  return async () => ctrl.invalidate(getIconsEndpoint);
 }
