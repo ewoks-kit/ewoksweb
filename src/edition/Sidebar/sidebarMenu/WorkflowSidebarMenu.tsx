@@ -9,7 +9,7 @@ import useStore from '../../../store/useStore';
 import { GraphFormAction } from '../../../types';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import ConfirmDialog from '../../../general/ConfirmDialog';
-import { deleteWorkflow } from 'api/api';
+import { deleteWorkflow } from 'api/workflows';
 import commonStrings from 'commonStrings.json';
 import { textForError } from '../../../utils';
 import useCurrentWorkflowIdStore from '../../../store/useCurrentWorkflowId';
