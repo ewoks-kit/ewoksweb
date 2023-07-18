@@ -13,7 +13,7 @@ import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
 import { calcNoteNodes } from './utils/calcNoteNodes';
-import { getWorkflowsDescriptions, getWorkflow } from './api/api';
+import { fetchWorkflowsDescriptions, fetchWorkflow } from './api/workflows';
 import orange3 from 'images/orange3.png';
 import { isEwoksServerErrorResponse } from './utils/typeGuards';
 import useNodeDataStore from './store/useNodeDataStore';
@@ -24,7 +24,7 @@ const DEFAULT_ICON = orange3;
 export async function getWorkflows(): Promise<WorkflowDescription[]> {
   let res: WorkflowDescription[] = [];
   try {
-    const workflows = await getWorkflowsDescriptions();
+    const workflows = await fetchWorkflowsDescriptions();
     const workf: { items: WorkflowDescription[] } = workflows.data;
     res = workf.items;
   } catch (error) {
@@ -80,7 +80,7 @@ export async function getSubgraphs(
     });
     // For those that are not in recent get them from the server
     results = await axios
-      .all(notInRecent.map((id: string) => getWorkflow(id)))
+      .all(notInRecent.map((id: string) => fetchWorkflow(id)))
       .then(
         axios.spread((...res: AxiosResponse<GraphEwoks | null, unknown>[]) => {
           const graphs: (GraphEwoks | null)[] = [...res].map((re) => re.data);

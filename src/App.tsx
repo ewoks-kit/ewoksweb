@@ -1,7 +1,7 @@
 import { CssBaseline } from '@material-ui/core';
 import { CacheProvider } from '@rest-hooks/react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { baseUrl } from './api/url';
+import { baseUrl } from './api/client';
 import EditRoute from './EditRoute';
 import MonitorRoute from './MonitorRoute';
 

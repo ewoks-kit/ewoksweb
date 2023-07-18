@@ -1,7 +1,7 @@
 import useStore from '../../../store/useStore';
 import SendIcon from '@material-ui/icons/Send';
 import { useState } from 'react';
-import { executeWorkflow } from '../../../api/api';
+import { executeWorkflow } from '../../../api/workflows';
 import ConfirmDialog from '../../../general/ConfirmDialog';
 import ActionMenuItem from './ActionMenuItem';
 import { useNavigate } from 'react-router-dom';

@@ -11,7 +11,7 @@ import { Alert } from '@material-ui/lab';
 import { Controller, useForm } from 'react-hook-form';
 import { useReactFlow } from 'reactflow';
 
-import { postWorkflow, putWorkflow } from '../../api/api';
+import { postWorkflow, putWorkflow } from '../../api/workflows';
 import commonStrings from '../../commonStrings.json';
 import useCurrentWorkflowIdStore from '../../store/useCurrentWorkflowId';
 import useStore from '../../store/useStore';

@@ -1,4 +1,4 @@
-import { getWorkflowsIds } from '../../api/api';
+import { fetchWorkflowsIds } from '../../api/workflows';
 import type {
   Condition,
   DataMapping,
@@ -12,7 +12,7 @@ export async function getWorkflowIdsFromServer(): Promise<{
   error: unknown;
 }> {
   try {
-    const { data: response } = await getWorkflowsIds();
+    const { data: response } = await fetchWorkflowsIds();
     return { data: response.identifiers, error: null };
   } catch (error) {
     return { data: [], error };

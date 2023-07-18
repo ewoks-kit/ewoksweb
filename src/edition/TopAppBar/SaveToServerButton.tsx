@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { GraphFormAction } from '../../types';
 import { useKeyboardEvent } from '@react-hookz/web';
 import type { EwoksRFLinkData, EwoksRFNodeData } from '../../types';
-import { putWorkflow } from '../../api/api';
+import { putWorkflow } from '../../api/workflows';
 import { getEdgesData, rfToEwoks, textForError } from '../../utils';
 import commonStrings from '../../commonStrings.json';
 import { useReactFlow } from 'reactflow';
