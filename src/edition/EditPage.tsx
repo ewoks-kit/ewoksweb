@@ -7,7 +7,7 @@ import ConfirmDialog from '../general/ConfirmDialog';
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from '../general/ErrorFallback';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
-import { getWorkflow } from '../api/workflows';
+import { fetchWorkflow } from '../api/workflows';
 import { useReactFlow } from 'reactflow';
 import OverflowDrawer from './TaskDrawer/TaskDrawer';
 import useTaskDrawerState from '../store/taskDrawerState';
@@ -37,7 +37,7 @@ export default function EditPage() {
   useEffect(() => {
     if (currentWorkflowId) {
       const loadGraph = async () => {
-        const { data: graph } = await getWorkflow(currentWorkflowId);
+        const { data: graph } = await fetchWorkflow(currentWorkflowId);
         initGraph(graph, 'fromServer', rfInstance);
       };
       loadGraph();

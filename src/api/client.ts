@@ -5,6 +5,6 @@ const isProd = process.env.NODE_ENV === 'production';
 
 export const baseUrl = customUrl || (isProd ? '/' : 'http://localhost:5000');
 
-export const axiosRequest = axios.create({
+export const client = axios.create({
   baseURL: baseUrl,
 });

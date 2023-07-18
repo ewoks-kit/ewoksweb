@@ -1,5 +1,5 @@
 import type { GraphEwoks } from '../types';
-import { axiosRequest } from './api';
+import { client } from './client';
 import type {
   DeleteResponse,
   ExecuteWorkflowResponse,
@@ -8,37 +8,35 @@ import type {
   WorkflowResponse,
 } from './models';
 
-export async function getWorkflowsDescriptions() {
-  return axiosRequest.get<WorkflowDescriptionsResponse>(
-    `/workflows/descriptions`
-  );
+export async function fetchWorkflowsDescriptions() {
+  return client.get<WorkflowDescriptionsResponse>(`/workflows/descriptions`);
 }
 
-export async function getWorkflowsIds() {
-  return axiosRequest.get<ListResponse>(`/workflows`);
+export async function fetchWorkflowsIds() {
+  return client.get<ListResponse>(`/workflows`);
 }
 
-export async function getWorkflow(id: string) {
-  return axiosRequest.get<WorkflowResponse>(`/workflow/${id}`);
+export async function fetchWorkflow(id: string) {
+  return client.get<WorkflowResponse>(`/workflow/${id}`);
 }
 
 export async function postWorkflow(workflow: GraphEwoks) {
-  return axiosRequest.post<WorkflowResponse>(`/workflows`, workflow);
+  return client.post<WorkflowResponse>(`/workflows`, workflow);
 }
 
 export async function putWorkflow(workflow: GraphEwoks) {
-  return axiosRequest.put<WorkflowResponse>(
+  return client.put<WorkflowResponse>(
     `/workflow/${workflow.graph.id}`,
     workflow
   );
 }
 
 export async function deleteWorkflow(id: string) {
-  return axiosRequest.delete<DeleteResponse>(`/workflow/${id}`);
+  return client.delete<DeleteResponse>(`/workflow/${id}`);
 }
 
 export async function executeWorkflow(workflowId: string) {
-  return axiosRequest.post<ExecuteWorkflowResponse>(
+  return client.post<ExecuteWorkflowResponse>(
     `/execute/${workflowId}`,
     workflowId
   );

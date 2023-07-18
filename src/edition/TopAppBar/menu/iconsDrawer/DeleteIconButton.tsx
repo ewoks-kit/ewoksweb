@@ -2,7 +2,7 @@ import { IconButton } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
 import { useState } from 'react';
 import { deleteIcon, useMutateIcons } from '../../../../api/icons';
-import { getTaskDescriptions } from '../../../../api/tasks';
+import { fetchTaskDescriptions } from '../../../../api/tasks';
 import ConfirmDialog from '../../../../general/ConfirmDialog';
 import { textForError } from '../../../../utils';
 
@@ -24,10 +24,10 @@ function DeleteIconButton(props: Props) {
     setOpenDialog(false);
 
     try {
-      const tasksData = await getTaskDescriptions();
+      const { data: taskDescriptions } = await fetchTaskDescriptions();
 
-      if (tasksData.data.items.length > 0) {
-        const allTasks = tasksData.data.items;
+      if (taskDescriptions.items.length > 0) {
+        const allTasks = taskDescriptions.items;
 
         if (allTasks.some((task) => task.icon === iconName)) {
           setOpenSnackbar({
