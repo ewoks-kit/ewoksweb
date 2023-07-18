@@ -7,7 +7,7 @@ import ConfirmDialog from '../general/ConfirmDialog';
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from '../general/ErrorFallback';
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
-import { getWorkflow } from '../api/api';
+import { getWorkflow } from '../api/workflows';
 import { useReactFlow } from 'reactflow';
 import OverflowDrawer from './TaskDrawer/TaskDrawer';
 import useTaskDrawerState from '../store/taskDrawerState';

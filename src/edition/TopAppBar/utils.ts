@@ -1,4 +1,4 @@
-import { getWorkflowsIds } from '../../api/api';
+import { getWorkflowsIds } from '../../api/workflows';
 import type {
   Condition,
   DataMapping,
