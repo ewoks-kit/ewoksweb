@@ -1,7 +1,7 @@
 import type { TaskType } from '../../types';
 
 export interface TaskFields {
-  task_type: TaskType;
+  task_type: TaskType | '';
   task_identifier: string;
   optional_input_names?: string;
   output_names?: string;

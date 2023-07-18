@@ -9,9 +9,16 @@ export async function submitTaskFormData(
   initial_task?: Task,
   editExisting?: boolean
 ) {
+  const { task_type, ...restFormData } = formData;
+
+  if (task_type === '') {
+    throw new Error('Please give a task type');
+  }
+
   const parsedData: Task = {
     ...initial_task,
-    ...formData,
+    ...restFormData,
+    task_type,
     required_input_names: formData.required_input_names?.split(','),
     optional_input_names: formData.optional_input_names?.split(','),
     output_names: formData.output_names?.split(','),
