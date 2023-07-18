@@ -29,10 +29,16 @@ export function postWorkflow(workflow: GraphEwoks) {
   return axiosRequest.post<GraphEwoks>(`/workflows`, workflow);
 }
 
-// TODO add return types for execution api and move it in another file
+interface ExecutionResponse {
+  job_id: string;
+}
+
 // Post execute
 export function executeWorkflow(workflowId: string) {
-  return axiosRequest.post(`/execute/${workflowId}`, workflowId);
+  return axiosRequest.post<ExecutionResponse>(
+    `/execute/${workflowId}`,
+    workflowId
+  );
 }
 
 // Put
