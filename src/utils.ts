@@ -6,8 +6,6 @@ import type {
   Icon,
   Task,
 } from './types';
-import type { AxiosResponse } from 'axios';
-import axios from 'axios';
 import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
@@ -24,40 +22,29 @@ export async function getSubgraphs(
   graph: GraphEwoks,
   recentGraphIds: string[]
 ): Promise<GraphEwoks[]> {
-  const existingNodeSubgraphs = graph.nodes.filter(
-    (nod) => nod.task_type === 'graph'
-  );
-  let results: GraphEwoks[] = [];
-  if (existingNodeSubgraphs.length > 0) {
-    // there are subgraphs -> first search in the recentGraphs for them
-    const notInRecent: string[] = [];
-    existingNodeSubgraphs.forEach((graphL) => {
-      if (!recentGraphIds.some((id) => id === graphL.task_identifier)) {
-        // add them in an array to request them from the server
-        notInRecent.push(graphL.task_identifier);
-      }
-    });
-    // For those that are not in recent get them from the server
-    results = await axios
-      .all(notInRecent.map((id: string) => fetchWorkflow(id)))
-      .then(
-        axios.spread((...res: AxiosResponse<GraphEwoks | null, unknown>[]) => {
-          const graphs: (GraphEwoks | null)[] = [...res].map((re) => re.data);
-          // all requests are now complete in an array
-          // if there is a null means the subgraph was not found
-          // and it should show up in red
-          return graphs.reduce<GraphEwoks[]>((acc, data) => {
-            return data !== null ? [...acc, data] : acc;
-          }, []);
-        })
-      )
-      .catch((error) => {
-        // TODO: remove after handling the error
-        console.log('AXIOS ERROR', error);
-        return [];
-      });
+  const subgraphIds = graph.nodes
+    .filter((nod) => nod.task_type === 'graph')
+    .map((nod) => nod.task_identifier);
+
+  if (subgraphIds.length === 0) {
+    return [];
   }
-  return results;
+
+  const graphIdsToFetch = subgraphIds.filter(
+    (id) => id && !recentGraphIds.some((recentGraphId) => id === recentGraphId)
+  );
+
+  try {
+    const subgraphResponses = await Promise.all(
+      graphIdsToFetch.map(fetchWorkflow)
+    );
+    return subgraphResponses.map((resp) => resp.data);
+  } catch (error) {
+    // TODO: remove after handling the error
+    // eslint-disable-next-line no-console
+    console.log('AXIOS ERROR', error);
+    return [];
+  }
 }
 
 export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
