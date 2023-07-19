@@ -3,10 +3,13 @@ import TextField from '@material-ui/core/TextField';
 import type { AutocompleteProps } from '@material-ui/lab/Autocomplete';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import commonStrings from 'commonStrings.json';
+import axios from 'axios';
 
 import useStore from 'store/useStore';
 import { FetchStatus } from './models';
-import { fetchWorkflows } from './utils';
+import { getWorkflows } from './utils';
+import { textForError } from '../../utils';
 
 // DOC: A dropdown that fetches workflow descriptions on opening
 function FetchingDropdown<T, D extends boolean>(
@@ -19,11 +22,19 @@ function FetchingDropdown<T, D extends boolean>(
 
   async function onOpenDropdown() {
     setFetchStatusOpen(FetchStatus.Pending);
-    const { workflows, error } = await fetchWorkflows();
-    setFetchStatusOpen(FetchStatus.Done);
-    setAllWorkflows(workflows);
-    if (error) {
-      setOpenSnackbar({ open: true, text: error, severity: 'error' });
+    try {
+      const workflows = await getWorkflows();
+      setAllWorkflows(workflows);
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: axios.isAxiosError(error)
+          ? 'Something went wrong when contacting the server!'
+          : textForError(error, commonStrings.retrieveWorkflowsError),
+        severity: 'error',
+      });
+    } finally {
+      setFetchStatusOpen(FetchStatus.Done);
     }
   }
 
