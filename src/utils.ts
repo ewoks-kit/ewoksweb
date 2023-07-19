@@ -5,61 +5,20 @@ import type {
   GraphRF,
   Icon,
   Task,
-  WorkflowDescription,
 } from './types';
-import type { AxiosError, AxiosResponse } from 'axios';
+import type { AxiosResponse } from 'axios';
 import axios from 'axios';
 import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
 import { calcNoteNodes } from './utils/calcNoteNodes';
-import { fetchWorkflowsDescriptions, fetchWorkflow } from './api/workflows';
+import { fetchWorkflow } from './api/workflows';
 import orange3 from 'images/orange3.png';
 import { isEwoksServerErrorResponse } from './utils/typeGuards';
 import useNodeDataStore from './store/useNodeDataStore';
 import useEdgeDataStore from './store/useEdgeDataStore';
 
 const DEFAULT_ICON = orange3;
-
-export async function getWorkflows(): Promise<WorkflowDescription[]> {
-  let res: WorkflowDescription[] = [];
-  try {
-    const workflows = await fetchWorkflowsDescriptions();
-    const workf: { items: WorkflowDescription[] } = workflows.data;
-    res = workf.items;
-  } catch (error) {
-    const err = error as AxiosError;
-    if (err.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      // Keep logging in console for debugging when talking with a user
-      /* eslint-disable no-console */
-      console.log(err.response.data, err.response.status, err.response.headers);
-    } else if (err.request) {
-      // The request was made but no response was received
-      /* eslint-disable no-console */
-      console.log(err.request);
-    } else {
-      // Something happened in setting up the request that triggered an Error
-      /* eslint-disable no-console */
-      console.log('Error', err.message);
-    }
-    /* eslint-disable no-console */
-    console.log(error);
-    // This is used to be able to use the Snackbar and inform the user
-    // since it cannot be done from a ts file (?). A custom Hook maybe to remove it?
-    // TODO: pass an onError callback to the function or return an error field in the
-    // result that would be checked by the consumer as in !95
-    res = [
-      {
-        id: 'network error',
-        label: 'network error',
-        category: err.response?.status.toString(),
-      },
-    ];
-  }
-  return res;
-}
 
 export async function getSubgraphs(
   graph: GraphEwoks,
@@ -137,7 +96,12 @@ export function textForError(error: unknown, alternative: string): string {
     return error.response.data.message;
   }
 
-  if (axios.isAxiosError(error)) {
+  if (
+    error &&
+    typeof error === 'object' &&
+    'message' in error &&
+    typeof error.message === 'string'
+  ) {
     return error.message;
   }
 

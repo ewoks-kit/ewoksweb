@@ -1,33 +1,15 @@
 import type { WorkflowDescription } from '../../types';
-import commonStrings from 'commonStrings.json';
-import { getWorkflows } from '../../utils';
-import type { FetchResult } from './models';
+import { fetchWorkflowsDescriptions } from '../../api/workflows';
 
-export async function fetchWorkflows(): Promise<FetchResult> {
-  // DOC: getWorkflows will fetch {label, category} not just label
-  // depending on props.placeholder will show categories of workflows
-  // after selecting a category workflows will be filtered for this category
-  // TODO: error handling with try catch
-  const workF: WorkflowDescription[] = await getWorkflows();
+export async function getWorkflows(): Promise<WorkflowDescription[]> {
+  const response = await fetchWorkflowsDescriptions();
+  const workflows = response.data.items;
 
-  if (workF.length === 0) {
-    return {
-      workflows: [],
-      error: 'It seems you have no workflows to work with!',
-    };
+  if (workflows.length === 0) {
+    throw new Error('It seems you have no workflows to work with!');
   }
 
-  if (workF[0].label === 'network error') {
-    return {
-      workflows: [],
-      error: `Something went wrong when contacting the server!
-        Error status: ${
-          workF[0].category || commonStrings.retrieveWorkflowsError
-        }`,
-    };
-  }
-
-  return { workflows: workF };
+  return workflows;
 }
 
 export function getFilterableCategories(workflows: WorkflowDescription[]) {
