@@ -1,6 +1,5 @@
 import type {
   Condition,
-  DataMappingEwoks,
   EwoksRFLink,
   GraphEwoks,
   Task,
@@ -65,7 +64,7 @@ export function toRFEwoksLinks(
         id: `${source}:${uiProps.sourceHandle ?? ''}->${target}:${
           uiProps.targetHandle ?? ''
         }_${id++}`,
-        label: calcLabel(uiProps, conditionsForFront, data_mapping),
+        label: uiProps.label,
         source: source.toString(),
         target: target.toString(),
 
@@ -113,30 +112,6 @@ export function toRFEwoksLinks(
       return link;
     }
   );
-}
-
-function calcLabel(
-  uiProps: UiPropsLinks,
-  conditions: Condition[],
-  data_mapping: DataMappingEwoks[]
-): string {
-  if (uiProps.label) {
-    return uiProps.label;
-  }
-
-  if (conditions.length > 0) {
-    return conditions
-      .map((el) => `${el.name || ''}: ${JSON.stringify(el.value) || ''}`)
-      .join(', ');
-  }
-
-  if (data_mapping.length > 0) {
-    return data_mapping
-      .map((el) => `${el.source_output || ''}->${el.target_input || ''}`)
-      .join(', ');
-  }
-
-  return '';
 }
 
 function calcTargetHandle(
