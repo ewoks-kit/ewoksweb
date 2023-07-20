@@ -6,7 +6,7 @@ import DataMappingComponent from '../EditableTableProperties/DataMapping';
 import Conditions from '../EditableTableProperties/Conditions';
 import SidebarTooltip from '../SidebarTooltip';
 import EdgeLabelComment from './EdgeLabelComment';
-import { assertEdgeDataDefined, isEdgeRF } from '../../../utils/typeGuards';
+import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import type { Edge } from 'reactflow';
 
@@ -51,7 +51,7 @@ export default function LinkDetails(selectedElement: Edge) {
 
   return (
     <>
-      <EdgeLabelComment />
+      <EdgeLabelComment element={selectedElement} />
       <SidebarTooltip
         text={`Setting this to True is equivalent to Data Mapping
         being the identity mapping for all input names.
@@ -80,7 +80,7 @@ export default function LinkDetails(selectedElement: Edge) {
           </Typography>
         </div>
       </SidebarTooltip>
-      {showDataMapping && isEdgeRF(selectedElement) && (
+      {showDataMapping && (
         <div>
           <DataMappingComponent {...selectedElement} />
         </div>
@@ -110,7 +110,7 @@ export default function LinkDetails(selectedElement: Edge) {
           </Typography>
         </div>
       </SidebarTooltip>
-      {showConditions && isEdgeRF(selectedElement) && (
+      {showConditions && (
         <div>
           <Conditions {...selectedElement} />
         </div>

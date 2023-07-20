@@ -1,84 +1,37 @@
-import { useEffect, useState } from 'react';
-import type { ChangeEvent } from 'react';
 import { FormControl, TextField } from '@material-ui/core';
 import SidebarTooltip from '../SidebarTooltip';
 import { Autocomplete } from '@material-ui/lab';
 import InputTextField from './InputTextField';
 import sidebarStyle from '../sidebarStyle';
-import {
-  assertEdgeDataDefined,
-  assertElementIsEdge,
-} from '../../../utils/typeGuards';
+import { assertEdgeDataDefined, isDefined } from '../../../utils/typeGuards';
+import type { Edge } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
-import { useSelectedElement } from '../../../store/graph-hooks';
-import type { EwoksRFLink } from '../../../types';
 
 import styles from './Details.module.css';
+import { conditionsToLabel, mappingToLabel } from './utils';
+
+interface Props {
+  element: Edge;
+}
 
 // DOC: the label and comment for links when selected
-export default function EdgeLabelComment() {
+export default function EdgeLabelComment(props: Props) {
+  const { element } = props;
   const { getEdges, setEdges } = useReactFlow();
-  const element = useSelectedElement();
-  assertElementIsEdge(element);
-
-  const [labelChoices, setLabelChoices] = useState([
-    'use mappings',
-    'use conditions',
-  ]);
-
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
+
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
-  useEffect(() => {
-    const mappings =
-      edgeData.data_mapping && edgeData.data_mapping.length > 0
-        ? edgeData.data_mapping
-            .map(
-              (con) =>
-                `${con.name?.toString() || ''}->${con.value?.toString() || ''}`
-            )
-            .join(', ')
-        : '';
-    const conditions =
-      edgeData.conditions && edgeData.conditions.length > 0
-        ? edgeData.conditions
-            .map((con) => `${con.name || ''}: ${JSON.stringify(con.value)}`)
-            .join(', ')
-        : '';
-
-    setLabelChoices([mappings, conditions, 'text...']);
-  }, [element, edgeData]);
-
-  function saveLabel(labelLocal: string, elementL: EwoksRFLink) {
+  function saveLabel(label: string) {
     setEdges([
-      ...getEdges().filter((edge) => edge.id !== elementL.id),
+      ...getEdges().filter((edge) => element.id !== edge.id),
       {
-        ...elementL,
-        label: labelLocal,
+        ...element,
+        label,
       },
     ]);
-  }
-
-  function handleValueSelectedChange(
-    event: ChangeEvent<HTMLInputElement>,
-    elementL: EwoksRFLink
-  ) {
-    if (event.target.textContent !== null && event.target.value !== '') {
-      saveLabel(event.target.textContent, elementL);
-    }
-  }
-
-  function handleValueChange(
-    event: ChangeEvent<HTMLInputElement> | undefined,
-    elementL: EwoksRFLink
-  ) {
-    if (!event) {
-      return;
-    }
-
-    saveLabel(event.target.value, elementL);
   }
 
   return (
@@ -92,24 +45,20 @@ export default function EdgeLabelComment() {
           >
             <Autocomplete
               freeSolo
-              options={labelChoices}
+              options={[
+                mappingToLabel(edgeData.data_mapping),
+                conditionsToLabel(edgeData.conditions),
+              ].filter(isDefined)}
               value={element.label}
-              onChange={(event) =>
-                handleValueSelectedChange(
-                  event as ChangeEvent<HTMLInputElement>,
-                  element
-                )
-              }
-              onInputChange={(event) =>
-                handleValueChange(
-                  event as ChangeEvent<HTMLInputElement>,
-                  element
-                )
-              }
+              onChange={(e, value) => {
+                if (typeof value === 'string') {
+                  saveLabel(value);
+                }
+              }}
+              onInputChange={(e, value) => saveLabel(value)}
               style={{ width: '98%' }}
               renderInput={(params) => (
                 <TextField
-                  // onBlur={() => saveLabel(element.label, element)}
                   variant="outlined"
                   margin="dense"
                   style={{ margin: '0 0 8px 0', paddingTop: '2px' }}
