@@ -5,12 +5,13 @@ import { Checkbox, Grid, Switch, Typography } from '@material-ui/core';
 import DataMappingComponent from '../EditableTableProperties/DataMapping';
 import Conditions from '../EditableTableProperties/Conditions';
 import SidebarTooltip from '../SidebarTooltip';
-import EdgeLabelComment from './EdgeLabelComment';
-import { assertEdgeDataDefined, isEdgeRF } from '../../../utils/typeGuards';
+import EdgeLabelInput from './EdgeLabelInput';
+import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import type { Edge } from 'reactflow';
 
 import styles from './Details.module.css';
+import InputTextField from './InputTextField';
 
 export default function LinkDetails(selectedElement: Edge) {
   const edgeData = useEdgeDataStore((state) =>
@@ -51,7 +52,15 @@ export default function LinkDetails(selectedElement: Edge) {
 
   return (
     <>
-      <EdgeLabelComment />
+      <EdgeLabelInput element={selectedElement} />
+      <InputTextField
+        label="Comment"
+        defaultValue={edgeData.comment}
+        onValueSave={(newComment) => {
+          mergeEdgeData(selectedElement.id, { comment: newComment });
+        }}
+      />
+
       <SidebarTooltip
         text={`Setting this to True is equivalent to Data Mapping
         being the identity mapping for all input names.
@@ -80,7 +89,7 @@ export default function LinkDetails(selectedElement: Edge) {
           </Typography>
         </div>
       </SidebarTooltip>
-      {showDataMapping && isEdgeRF(selectedElement) && (
+      {showDataMapping && (
         <div>
           <DataMappingComponent {...selectedElement} />
         </div>
@@ -110,7 +119,7 @@ export default function LinkDetails(selectedElement: Edge) {
           </Typography>
         </div>
       </SidebarTooltip>
-      {showConditions && isEdgeRF(selectedElement) && (
+      {showConditions && (
         <div>
           <Conditions {...selectedElement} />
         </div>

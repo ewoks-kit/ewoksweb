@@ -103,10 +103,7 @@ export function calcInOutForSubgraph(
   return [inputsSub, outputsSub];
 }
 
-export function calcLabel(
-  inOut: GraphNodes,
-  allInOutputsIds: string[]
-): string {
+function calcLabel(inOut: GraphNodes, allInOutputsIds: string[]): string {
   return `${inOut.uiProps?.label || inOut.id}${
     allInOutputsIds.includes(inOut.id) ? '_' : ':'
   } ${inOut.node} ${inOut.sub_node ? `  -> ${inOut.sub_node}` : ''}`;
