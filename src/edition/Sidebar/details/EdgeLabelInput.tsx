@@ -1,6 +1,5 @@
 import { FormControl, TextField } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
-import InputTextField from './InputTextField';
 import { assertEdgeDataDefined, isDefined } from '../../../utils/typeGuards';
 import type { Edge } from 'reactflow';
 import { useReactFlow } from 'reactflow';
@@ -13,14 +12,11 @@ interface Props {
   element: Edge;
 }
 
-// DOC: the label and comment for links when selected
-export default function EdgeLabelComment(props: Props) {
+export default function EgdeLabelInput(props: Props) {
   const { element } = props;
   const { getEdges, setEdges } = useReactFlow();
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
-
-  const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   function saveLabel(label: string) {
     setEdges([
@@ -59,14 +55,6 @@ export default function EdgeLabelComment(props: Props) {
           )}
         />
       </FormControl>
-
-      <InputTextField
-        label="Comment"
-        defaultValue={edgeData.comment}
-        onValueSave={(newComment) => {
-          mergeEdgeData(element.id, { comment: newComment });
-        }}
-      />
     </div>
   );
 }
