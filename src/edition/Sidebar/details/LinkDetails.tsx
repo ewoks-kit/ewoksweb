@@ -53,15 +53,13 @@ export default function LinkDetails(selectedElement: Edge) {
   return (
     <>
       <EdgeLabelInput element={selectedElement} />
-      <div className={styles.entry}>
-        <InputTextField
-          label="Comment"
-          defaultValue={edgeData.comment}
-          onValueSave={(newComment) => {
-            mergeEdgeData(selectedElement.id, { comment: newComment });
-          }}
-        />
-      </div>
+      <InputTextField
+        label="Comment"
+        defaultValue={edgeData.comment}
+        onValueSave={(newComment) => {
+          mergeEdgeData(selectedElement.id, { comment: newComment });
+        }}
+      />
 
       <SidebarTooltip
         text={`Setting this to True is equivalent to Data Mapping
