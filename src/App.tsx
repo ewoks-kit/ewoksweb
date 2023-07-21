@@ -1,7 +1,7 @@
 import { CssBaseline } from '@material-ui/core';
-import { CacheProvider } from '@rest-hooks/react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { baseUrl } from './api/client';
+import EwoksCacheProvider from './EwoksCacheProvider';
 import EditRoute from './EditRoute';
 import MonitorRoute from './MonitorRoute';
 
@@ -10,8 +10,8 @@ import SocketClientProvider from './SocketClientProvider';
 
 function App() {
   return (
-    <CacheProvider>
-      <SocketClientProvider serverUrl={baseUrl}>
+    <SocketClientProvider serverUrl={baseUrl}>
+      <EwoksCacheProvider>
         <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE_DIR}>
           <CssBaseline />
           <NavBar />
@@ -21,8 +21,8 @@ function App() {
             <Route path="/monitor" element={<MonitorRoute />} />
           </Routes>
         </BrowserRouter>
-      </SocketClientProvider>
-    </CacheProvider>
+      </EwoksCacheProvider>
+    </SocketClientProvider>
   );
 }
 
