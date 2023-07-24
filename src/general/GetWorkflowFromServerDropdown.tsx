@@ -4,11 +4,11 @@ import FormControl from '@material-ui/core/FormControl';
 import useStore from '../store/useStore';
 import type { WorkflowDescription } from '../types';
 import ConfirmDialog from './ConfirmDialog';
-import WorkflowDropdown from './dropdown/WorkflowDropdown';
+import WorkflowDropdown from './WorkflowDropdown';
 import { textForError } from '../utils';
 import useCurrentWorkflowIdStore from '../store/useCurrentWorkflowId';
 
-export default function GetFromServer() {
+export default function GetWorkflowFromServerDropdown() {
   const [workflowId, setWorkflowId] = useState('');
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);

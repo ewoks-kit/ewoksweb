@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core';
 import { createPortal } from 'react-dom';
 
-import GetFromServer from '../../general/GetFromServer';
+import GetWorkflowFromServerDropdown from '../../general/GetWorkflowFromServerDropdown';
 import OpenActionMenuButton from './menu/OpenActionMenuButton';
 import SaveToServerButton from './SaveToServerButton';
 import TopAppBarLabel from './TopAppBarLabel';
@@ -28,7 +28,7 @@ function TopAppBar(props: Props) {
         <TopAppBarLabel />
       </Typography>
       <div className={styles.toolbar}>
-        <GetFromServer />
+        <GetWorkflowFromServerDropdown />
         <SaveToServerButton />
         <OpenActionMenuButton
           checkAndNewGraph={() => checkAndNewGraph(false)}

@@ -4,10 +4,10 @@ import useStore from 'store/useStore';
 import { useEffect, useState } from 'react';
 import { Autocomplete } from '@material-ui/lab';
 import { CircularProgress, TextField } from '@material-ui/core';
-import { textForError } from '../../utils';
+import { textForError } from '../utils';
 import commonStrings from 'commonStrings.json';
 import axios from 'axios';
-import { useWorkflowsDLE } from '../../api/workflows';
+import { useWorkflowsDLE } from '../api/workflows';
 
 interface Props {
   onChange: (input: WorkflowDescription) => void;
@@ -33,11 +33,7 @@ function sortByCategory(
 function WorkflowDropdown(props: Props) {
   const { onChange, category } = props;
 
-  const [value, setValue] = useState<WorkflowDescription>({
-    id: '',
-    label: '',
-    category: '',
-  });
+  const [value, setValue] = useState<WorkflowDescription>();
   const [open, setOpen] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
@@ -64,7 +60,6 @@ function WorkflowDropdown(props: Props) {
   return (
     <Autocomplete
       value={value}
-      data-testid="async-autocomplete-drop"
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
