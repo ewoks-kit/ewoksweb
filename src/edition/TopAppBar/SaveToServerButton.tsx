@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { GraphFormAction } from '../../types';
 import { useKeyboardEvent } from '@react-hookz/web';
 import type { EwoksRFLinkData, EwoksRFNodeData } from '../../types';
-import { putWorkflow } from '../../api/workflows';
+import { putWorkflow, useMutateWorkflows } from '../../api/workflows';
 import { getEdgesData, rfToEwoks, textForError } from '../../utils';
 import commonStrings from '../../commonStrings.json';
 import { useReactFlow } from 'reactflow';
@@ -21,6 +21,7 @@ import StatusIcon from './StatusButton';
 export default function SaveToServerButton() {
   const graphInfo = useStore((state) => state.graphInfo);
   const rfInstance = useReactFlow();
+  const mutateWorkflows = useMutateWorkflows();
 
   const [isDialogOpen, setDialogOpen] = useState(false);
 
@@ -110,6 +111,7 @@ export default function SaveToServerButton() {
           links: edgesWithData,
         })
       );
+      mutateWorkflows();
 
       setOpenSnackbar({
         open: true,

@@ -1,4 +1,6 @@
-import type { GraphEwoks } from '../types';
+import { useDLE, useSuspense, useController } from '@rest-hooks/react';
+import { Endpoint } from '@rest-hooks/rest';
+import type { GraphEwoks, WorkflowDescription } from '../types';
 import { client } from './client';
 import type {
   DeleteResponse,
@@ -40,4 +42,31 @@ export async function executeWorkflow(workflowId: string) {
     `/execute/${workflowId}`,
     workflowId
   );
+}
+
+export async function getWorkflows(): Promise<WorkflowDescription[]> {
+  const response = await fetchWorkflowsDescriptions();
+  const workflows = response.data.items;
+
+  if (workflows.length === 0) {
+    throw new Error('It seems you have no workflows to work with!');
+  }
+
+  return workflows;
+}
+
+const getWorkflowsEndpoint = new Endpoint(getWorkflows);
+
+export function useWorkflows() {
+  return useSuspense(getWorkflowsEndpoint);
+}
+
+export function useWorkflowsDLE() {
+  return useDLE(getWorkflowsEndpoint);
+}
+
+export function useMutateWorkflows() {
+  const ctrl = useController();
+
+  return async () => ctrl.invalidate(getWorkflowsEndpoint);
 }
