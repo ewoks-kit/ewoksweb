@@ -11,10 +11,6 @@ export default function GetWorkflowFromServerDropdown() {
   const [workflowId, setWorkflowId] = useState('');
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const setCanvasGraphChanged = useStore(
-    (state) => state.setCanvasGraphChanged
-  );
-  const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
 
   const setCurrentWorkflowId = useCurrentWorkflowIdStore(
     (state) => state.setId
@@ -28,18 +24,13 @@ export default function GetWorkflowFromServerDropdown() {
     setOpenAgreeDialog(false);
 
     if (workflowDetails.id) {
-      if (canvasGraphChanged) {
-        setOpenAgreeDialog(true);
-      } else {
-        getFromServer(workflowDetails.id);
-      }
+      getFromServer(workflowDetails.id);
     }
   }
 
   async function getFromServer(workflowIdparam: string) {
     if (workflowIdparam) {
       setCurrentWorkflowId(workflowIdparam);
-      setCanvasGraphChanged(false);
     } else {
       setOpenSnackbar({
         open: true,

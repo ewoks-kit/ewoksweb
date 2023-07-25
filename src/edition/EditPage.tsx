@@ -20,10 +20,6 @@ import { textForError } from '../utils';
 export default function EditPage() {
   const rfInstance = useReactFlow();
 
-  const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
-  const setCanvasGraphChanged = useStore(
-    (state) => state.setCanvasGraphChanged
-  );
   const tasks = useStore((state) => state.tasks);
   const setTaskDrawerOpen = useTaskDrawerState((state) => state.setOpen);
 
@@ -71,12 +67,11 @@ export default function EditPage() {
   });
 
   function checkAndNewGraph(notSave: boolean) {
-    if (canvasGraphChanged && !notSave) {
+    if (!notSave) {
       setOpenAgreeDialog(true);
     } else {
       initGraph(initializedGraph, undefined, rfInstance);
       setOpenAgreeDialog(false);
-      setCanvasGraphChanged(false);
       setTaskDrawerOpen(true);
     }
   }

@@ -1,24 +1,18 @@
 import type { GraphDetails, State } from '../types';
 import { initializedRFGraph } from '../utils/InitializedEntities';
-import type { GetState, SetState } from 'zustand';
+import type { SetState } from 'zustand';
 import { merge } from 'lodash';
 
 export interface GraphInfoSlice {
   graphInfo: GraphDetails;
-  setGraphInfo: (
-    graphInfo: GraphDetails,
-    isChangeToCanvasGraph?: boolean
-  ) => void;
+  setGraphInfo: (graphInfo: GraphDetails) => void;
   mergeGraphInfo: (graphInfo: Partial<GraphDetails>) => void;
 }
 
-const graphInfo = (
-  set: SetState<State>,
-  get: GetState<State>
-): GraphInfoSlice => ({
+const graphInfo = (set: SetState<State>): GraphInfoSlice => ({
   graphInfo: initializedRFGraph.graph,
 
-  setGraphInfo: (graphRFD, isChangeToCanvasGraph) => {
+  setGraphInfo: (graphRFD) => {
     // DOC: If missing uiProps or other fill it here
     if (!graphRFD.uiProps) {
       graphRFD.uiProps = {};
@@ -28,13 +22,6 @@ const graphInfo = (
       ...state,
       graphInfo: graphRFD,
     }));
-
-    if (isChangeToCanvasGraph) {
-      get().setCanvasGraphChanged(true);
-      return;
-    }
-
-    get().setCanvasGraphChanged(false);
   },
   mergeGraphInfo: (graphRFD) => {
     set((state) => {

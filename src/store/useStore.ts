@@ -7,7 +7,6 @@ import recentGraphs from './recentGraphs';
 import subGraph from './subGraph';
 import subgraphsStack from './subgraphsStack';
 import tasks from './tasks';
-import canvasGraphChanged from './canvasGraphChanged';
 import {
   initializedGraph,
   initializedRFGraph,
@@ -15,8 +14,7 @@ import {
 import graphInfo from './graphInfo';
 
 const useStore = create<State>((set, get) => ({
-  ...graphInfo(set, get),
-  ...canvasGraphChanged(set),
+  ...graphInfo(set),
   ...openDraggableDialog(set),
   ...openSnackbar(set),
   ...recentGraphs(set, get),
