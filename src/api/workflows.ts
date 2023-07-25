@@ -55,7 +55,9 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
   return workflows;
 }
 
-const getWorkflowsEndpoint = new Endpoint(getWorkflows);
+const getWorkflowsEndpoint = new Endpoint(getWorkflows, {
+  name: 'getWorkflows',
+});
 
 export function useWorkflows() {
   return useSuspense(getWorkflowsEndpoint);
