@@ -5,7 +5,6 @@ import useStore from '../store/useStore';
 import type { WorkflowDescription } from '../types';
 import ConfirmDialog from './ConfirmDialog';
 import WorkflowDropdown from './WorkflowDropdown';
-import { textForError } from '../utils';
 import useCurrentWorkflowIdStore from '../store/useCurrentWorkflowId';
 
 export default function GetWorkflowFromServerDropdown() {
@@ -40,19 +39,8 @@ export default function GetWorkflowFromServerDropdown() {
 
   async function getFromServer(workflowIdparam: string) {
     if (workflowIdparam) {
-      try {
-        setCurrentWorkflowId(workflowIdparam);
-        setCanvasGraphChanged(false);
-      } catch (error) {
-        setOpenSnackbar({
-          open: true,
-          text: textForError(
-            error,
-            'Error in retrieving workflow. Please check connectivity with the server!'
-          ),
-          severity: 'error',
-        });
-      }
+      setCurrentWorkflowId(workflowIdparam);
+      setCanvasGraphChanged(false);
     } else {
       setOpenSnackbar({
         open: true,

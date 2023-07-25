@@ -16,6 +16,7 @@ import TopAppBar from './TopAppBar/TopAppBar';
 
 import styles from './EditPage.module.css';
 import useCurrentWorkflowIdStore from '../store/useCurrentWorkflowId';
+import { textForError } from '../utils';
 
 export default function EditPage() {
   const rfInstance = useReactFlow();
@@ -29,6 +30,7 @@ export default function EditPage() {
 
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const undoIndex = useStore((state) => state.undoIndex);
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const initializedGraph = useStore((state) => state.initializedGraph);
   const initGraph = useStore((state) => state.initGraph);
 
@@ -37,14 +39,31 @@ export default function EditPage() {
   useEffect(() => {
     if (currentWorkflowId) {
       const loadGraph = async () => {
-        const { data: graph } = await fetchWorkflow(currentWorkflowId);
-        initGraph(graph, 'fromServer', rfInstance);
+        try {
+          const { data: graph } = await fetchWorkflow(currentWorkflowId);
+          initGraph(graph, 'fromServer', rfInstance);
+        } catch (error) {
+          setOpenSnackbar({
+            open: true,
+            text: textForError(
+              error,
+              'Error in retrieving workflow. Please check connectivity with the server!'
+            ),
+            severity: 'error',
+          });
+        }
       };
       loadGraph();
     } else {
       initGraph(initializedGraph, undefined, rfInstance);
     }
-  }, [initializedGraph, initGraph, rfInstance, currentWorkflowId]);
+  }, [
+    initializedGraph,
+    setOpenSnackbar,
+    initGraph,
+    rfInstance,
+    currentWorkflowId,
+  ]);
 
   const getTasks = useGetTasks();
   useEffect(() => {
