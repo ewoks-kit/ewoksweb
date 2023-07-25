@@ -39,6 +39,8 @@ export interface ExecuteWorkflowResponse {
   job_id: string;
 }
 
+export type EwoksJob = EwoksEvent[];
+
 export interface ExecutedJobsResponse {
-  jobs: EwoksEvent[][];
+  jobs: EwoksJob[];
 }

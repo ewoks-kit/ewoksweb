@@ -1,15 +1,15 @@
-import { useExecutionEvents } from '../api/events';
+import { useExecutedJobs } from '../api/events';
 import WorkflowItem from './WorkflowItem';
 
 import styles from './WorkflowList.module.css';
 
 function WorkflowList() {
-  const { executionEvents } = useExecutionEvents();
+  const jobs = useExecutedJobs();
 
   return (
     <div className={styles.container}>
       <h2>Executed workflows</h2>
-      {executionEvents.jobs
+      {[...jobs.values()]
         .sort(
           (a, b) =>
             new Date(b[0].time).valueOf() - new Date(a[0].time).valueOf()

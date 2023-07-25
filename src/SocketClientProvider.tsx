@@ -1,8 +1,8 @@
 import type { PropsWithChildren } from 'react';
-import { createContext, useContext, useEffect } from 'react';
+import { useEffect } from 'react';
+import { createContext, useContext } from 'react';
 import type { Socket } from 'socket.io-client';
 import { io } from 'socket.io-client';
-import { useMutateExecutionEvents } from './api/events';
 
 export const SocketClientContext = createContext({} as Socket);
 
@@ -17,17 +17,13 @@ interface Props {
 function SocketClientProvider(props: PropsWithChildren<Props>) {
   const { children, serverUrl } = props;
   const socket = io(serverUrl);
-  const mutateExecutionEvents = useMutateExecutionEvents();
 
+  // Close the socket when unmounting the component
   useEffect(() => {
-    socket.on('Executing', () => {
-      mutateExecutionEvents();
-    });
-
     return () => {
-      socket.disconnect();
+      socket.close();
     };
-  }, [mutateExecutionEvents, socket]);
+  }, [socket]);
 
   return (
     <SocketClientContext.Provider value={socket}>
