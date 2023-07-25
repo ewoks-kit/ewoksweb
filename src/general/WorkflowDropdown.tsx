@@ -1,13 +1,9 @@
 import type { WorkflowDescription } from 'types';
 
-import useStore from 'store/useStore';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Autocomplete } from '@material-ui/lab';
-import { CircularProgress, TextField } from '@material-ui/core';
-import { textForError } from '../utils';
-import commonStrings from 'commonStrings.json';
-import axios from 'axios';
-import { useWorkflowsDLE } from '../api/workflows';
+import { TextField } from '@material-ui/core';
+import { useWorkflows } from '../api/workflows';
 
 interface Props {
   onChange: (input: WorkflowDescription) => void;
@@ -35,9 +31,8 @@ function WorkflowDropdown(props: Props) {
 
   const [value, setValue] = useState<WorkflowDescription>();
   const [open, setOpen] = useState(false);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const { data: workflows = [], loading, error } = useWorkflowsDLE();
+  const workflows = useWorkflows();
   const sortedWorkflows = sortByCategory(workflows);
 
   const options =
@@ -45,25 +40,12 @@ function WorkflowDropdown(props: Props) {
       ? sortedWorkflows
       : sortedWorkflows.filter((w) => w.category === category);
 
-  useEffect(() => {
-    if (error) {
-      setOpenSnackbar({
-        open: true,
-        text: axios.isAxiosError(error)
-          ? 'Something went wrong when contacting the server!'
-          : textForError(error, commonStrings.retrieveWorkflowsError),
-        severity: 'error',
-      });
-    }
-  }, [setOpenSnackbar, error]);
-
   return (
     <Autocomplete
       value={value}
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
-      loading={loading}
       renderInput={(params) => (
         <TextField
           variant="filled"
@@ -71,14 +53,6 @@ function WorkflowDropdown(props: Props) {
           label="Quick open"
           InputProps={{
             ...params.InputProps,
-            endAdornment: (
-              <>
-                {loading ? (
-                  <CircularProgress color="inherit" size={20} />
-                ) : null}
-                {params.InputProps.endAdornment}
-              </>
-            ),
           }}
           inputProps={{ ...params.inputProps, 'aria-label': 'Quick open' }}
         />

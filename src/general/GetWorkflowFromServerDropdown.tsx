@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 
 import FormControl from '@material-ui/core/FormControl';
 import useStore from '../store/useStore';
@@ -79,11 +79,13 @@ export default function GetWorkflowFromServerDropdown() {
           borderRadius: '4px',
         }}
       >
-        <WorkflowDropdown
-          onChange={(workflowDetails) => {
-            setInputValue(workflowDetails);
-          }}
-        />
+        <Suspense fallback={null}>
+          <WorkflowDropdown
+            onChange={(workflowDetails) => {
+              setInputValue(workflowDetails);
+            }}
+          />
+        </Suspense>
       </FormControl>
     </>
   );
