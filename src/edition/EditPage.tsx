@@ -28,7 +28,6 @@ export default function EditPage() {
   const setTaskDrawerOpen = useTaskDrawerState((state) => state.setOpen);
 
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
-  const undoIndex = useStore((state) => state.undoIndex);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const initializedGraph = useStore((state) => state.initializedGraph);
   const initGraph = useStore((state) => state.initGraph);
@@ -72,7 +71,7 @@ export default function EditPage() {
   });
 
   function checkAndNewGraph(notSave: boolean) {
-    if (canvasGraphChanged && undoIndex !== 0 && !notSave) {
+    if (canvasGraphChanged && !notSave) {
       setOpenAgreeDialog(true);
     } else {
       initGraph(initializedGraph, undefined, rfInstance);
@@ -89,19 +88,6 @@ export default function EditPage() {
     }
 
     const charCode = String.fromCodePoint(event.which).toLowerCase();
-    // Comment until undo-redo is back
-    // if (charCode === 'z') {
-    //   event.preventDefault();
-    //   event.stopPropagation();
-    //   undo();
-    //   return;
-    // }
-    // if (charCode === 'y') {
-    //   event.preventDefault();
-    //   event.stopPropagation();
-    //   redo();
-    //   return;
-    // }
     if (event.shiftKey && charCode === 'n') {
       event.preventDefault();
       event.stopPropagation();

@@ -15,7 +15,6 @@ export default function GetWorkflowFromServerDropdown() {
     (state) => state.setCanvasGraphChanged
   );
   const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
-  const undoIndex = useStore((state) => state.undoIndex);
 
   const setCurrentWorkflowId = useCurrentWorkflowIdStore(
     (state) => state.setId
@@ -29,7 +28,7 @@ export default function GetWorkflowFromServerDropdown() {
     setOpenAgreeDialog(false);
 
     if (workflowDetails.id) {
-      if (canvasGraphChanged && undoIndex !== 0) {
+      if (canvasGraphChanged) {
         setOpenAgreeDialog(true);
       } else {
         getFromServer(workflowDetails.id);
