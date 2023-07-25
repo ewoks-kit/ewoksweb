@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { WorkflowDescription } from 'types';
 
 import { useState } from 'react';
@@ -6,6 +7,7 @@ import { TextField } from '@material-ui/core';
 import { useWorkflows } from '../api/workflows';
 
 interface Props {
+  // eslint-disable-next-line react/no-unused-prop-types
   onChange: (input: WorkflowDescription) => void;
   category?: string;
 }
@@ -27,51 +29,15 @@ function sortByCategory(
 
 // DOC: A dropdown that can be an input as well
 function WorkflowDropdown(props: Props) {
-  const { onChange, category } = props;
+  const { category } = props;
 
-  const [value, setValue] = useState<WorkflowDescription>();
+  const [value] = useState<WorkflowDescription>();
   const [open, setOpen] = useState(false);
 
   const workflows = useWorkflows();
   const sortedWorkflows = sortByCategory(workflows);
 
-  const options =
-    !category || category === 'All'
-      ? sortedWorkflows
-      : sortedWorkflows.filter((w) => w.category === category);
-
-  return (
-    <Autocomplete
-      value={value}
-      open={open}
-      onOpen={() => setOpen(true)}
-      onClose={() => setOpen(false)}
-      renderInput={(params) => (
-        <TextField
-          variant="filled"
-          {...params}
-          label="Quick open"
-          InputProps={{
-            ...params.InputProps,
-          }}
-          inputProps={{ ...params.inputProps, 'aria-label': 'Quick open' }}
-        />
-      )}
-      options={options}
-      getOptionSelected={(option, valueSelect) => option.id === valueSelect.id}
-      groupBy={(option) => option.category || ''}
-      onChange={(event, newValue) => {
-        onChange(newValue);
-
-        setTimeout(() => {
-          setValue({ id: '', label: '', category: '' });
-        }, 200);
-      }}
-      getOptionLabel={(option) => option.label || ''}
-      placeholder="Quick open"
-      disableClearable
-    />
-  );
+  return null;
 }
 
 export default WorkflowDropdown;
