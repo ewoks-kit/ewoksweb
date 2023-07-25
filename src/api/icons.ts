@@ -44,7 +44,9 @@ async function getIcons(): Promise<Icon[]> {
   return Promise.all(iconNames.map(fetchIcon));
 }
 
-const getIconsEndpoint = new Endpoint(getIcons);
+const getIconsEndpoint = new Endpoint(getIcons, {
+  name: 'getIcons',
+});
 
 export function useIcons() {
   const icons = useSuspense(getIconsEndpoint);

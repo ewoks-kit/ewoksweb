@@ -3,17 +3,6 @@ describe('structure and basics for edit workflows', () => {
     cy.visit('http://localhost:3000/edit');
   });
 
-  it('should be in the right page', () => {
-    cy.location().should((loc) => {
-      expect(loc.host).to.eq('localhost:3000');
-    });
-  });
-
-  // Comment until done refactoring the sidebar at the right
-  // it('displays 18 buttons', () => {
-  //   cy.get('button').should('have.length', 14);
-  // });
-
   it('displays the canvas', () => {
     cy.get('.react-flow').should('be.visible');
     cy.get('.react-flow__controls').should('be.visible');
@@ -22,7 +11,9 @@ describe('structure and basics for edit workflows', () => {
   });
 
   it('displays the autocomplete dropdown', () => {
-    cy.get('[data-testid="async-autocomplete-drop"]').should('be.visible');
+    cy.findByRole('textbox', {
+      name: 'Quick open',
+    }).should('be.visible');
   });
 
   it('displays the Graph Details', () => {

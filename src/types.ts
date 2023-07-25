@@ -1,6 +1,5 @@
 import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
 import type { CanvasGraphChangedSlice } from './store/canvasGraphChanged';
-import type { AllWorkflowsSlice } from './store/allWorkflows';
 import type { GraphRFSlice } from './store/graphRF';
 import type { OpenDraggableDialogSlice } from './store/openDraggableDialog';
 import type { OpenSnackbarSlice } from './store/openSnackbar';
@@ -100,7 +99,6 @@ export interface EwoksEvent {
 
 export interface State
   extends CanvasGraphChangedSlice,
-    AllWorkflowsSlice,
     GraphRFSlice,
     GraphInfoSlice,
     OpenDraggableDialogSlice,

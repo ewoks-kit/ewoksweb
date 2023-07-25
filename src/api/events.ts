@@ -16,7 +16,9 @@ export async function fetchExecutionEvents(
   return data;
 }
 
-const getExecutionEventsEndpoint = new Endpoint(fetchExecutionEvents);
+const getExecutionEventsEndpoint = new Endpoint(fetchExecutionEvents, {
+  name: 'fetchExecutionEvents',
+});
 
 export function useExecutionEvents() {
   const executionEvents = useSuspense(getExecutionEventsEndpoint);

@@ -11,7 +11,11 @@ import { Alert } from '@material-ui/lab';
 import { Controller, useForm } from 'react-hook-form';
 import { useReactFlow } from 'reactflow';
 
-import { postWorkflow, putWorkflow } from '../../api/workflows';
+import {
+  postWorkflow,
+  putWorkflow,
+  useMutateWorkflows,
+} from '../../api/workflows';
 import commonStrings from '../../commonStrings.json';
 import useCurrentWorkflowIdStore from '../../store/useCurrentWorkflowId';
 import useStore from '../../store/useStore';
@@ -44,6 +48,7 @@ export default function GraphFormDialog(props: Props) {
   const setCanvasGraphChanged = useStore((st) => st.setCanvasGraphChanged);
   const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const mutateWorkflows = useMutateWorkflows();
 
   const setCurrentWorkflowId = useCurrentWorkflowIdStore(
     (state) => state.setId
@@ -73,6 +78,7 @@ export default function GraphFormDialog(props: Props) {
         setCurrentWorkflowId(newGraph.graph.id);
         resetRecentGraphs();
       }
+      mutateWorkflows();
 
       setOpenSnackbar({
         open: true,
