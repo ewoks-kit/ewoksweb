@@ -1,7 +1,6 @@
 import create from 'zustand';
 import type { State } from '../types';
 import workingGraph from './workingGraph';
-import graphRF from './graphRF';
 import openDraggableDialog from './openDraggableDialog';
 import openSnackbar from './openSnackbar';
 import recentGraphs from './recentGraphs';
@@ -16,7 +15,6 @@ import {
 import graphInfo from './graphInfo';
 
 const useStore = create<State>((set, get) => ({
-  ...graphRF(set, get),
   ...graphInfo(set, get),
   ...canvasGraphChanged(set),
   ...openDraggableDialog(set),
