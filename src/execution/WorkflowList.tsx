@@ -23,7 +23,7 @@ function WorkflowList(props: Props) {
   }
 
   return (
-    <>
+    <div role="list">
       {jobs
         .sort(
           (a, b) =>
@@ -32,7 +32,7 @@ function WorkflowList(props: Props) {
         .map((events) => (
           <WorkflowItem key={events[0].job_id} events={events} />
         ))}
-    </>
+    </div>
   );
 }
 

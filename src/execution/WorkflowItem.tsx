@@ -34,7 +34,11 @@ function WorkflowItem(props: Props) {
     : 'Workflow starting...';
 
   return (
-    <div className={styles.item}>
+    <div
+      className={styles.item}
+      role="listitem"
+      aria-label={startWorkflowEvent?.workflow_id}
+    >
       <div className={styles.header}>
         <div>
           <h3 className={styles.title}>

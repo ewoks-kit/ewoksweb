@@ -24,3 +24,4 @@ Thumbs.db
 # tests
 /cypress/screenshots/
 /cypress/videos/
+/pysrc/ewoksweb/tests/resources/ewoks_events.db
