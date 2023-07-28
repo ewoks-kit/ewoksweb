@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import EditSidebar from './Sidebar/EditSidebar';
 import Canvas from './Canvas/Canvas';
-import SimpleSnackbar from '../general/Snackbar';
 import useStore from 'store/useStore';
 import ConfirmDialog from '../general/ConfirmDialog';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -128,7 +127,6 @@ export default function EditPage() {
         agreeCallback={() => checkAndNewGraph(true)}
         disagreeCallback={disAgreeSaveWithout}
       />
-      <SimpleSnackbar />
       <TopAppBar checkAndNewGraph={checkAndNewGraph} />
       <div className={styles.mainArea}>
         <OverflowDrawer />
