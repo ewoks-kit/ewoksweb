@@ -1,9 +1,9 @@
 import { useExecutedJobs } from '../api/events';
 import WorkflowItem from './WorkflowItem';
 
-import styles from './WorkflowList.module.css';
+import styles from './MonitorPage.module.css';
 
-function WorkflowList() {
+function MonitorPage() {
   const jobs = useExecutedJobs();
 
   return (
@@ -21,4 +21,4 @@ function WorkflowList() {
   );
 }
 
-export default WorkflowList;
+export default MonitorPage;
