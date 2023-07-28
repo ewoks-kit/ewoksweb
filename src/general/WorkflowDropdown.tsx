@@ -6,7 +6,6 @@ import { Autocomplete } from '@material-ui/lab';
 import { CircularProgress, TextField } from '@material-ui/core';
 import { textForError } from '../utils';
 import commonStrings from 'commonStrings.json';
-import axios from 'axios';
 import { useWorkflowsDLE } from '../api/workflows';
 
 interface Props {
@@ -33,7 +32,7 @@ function sortByCategory(
 function WorkflowDropdown(props: Props) {
   const { onChange, category } = props;
 
-  const [value, setValue] = useState<WorkflowDescription>();
+  const [value, setValue] = useState<Required<WorkflowDescription>>();
   const [open, setOpen] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
@@ -49,9 +48,7 @@ function WorkflowDropdown(props: Props) {
     if (error) {
       setOpenSnackbar({
         open: true,
-        text: axios.isAxiosError(error)
-          ? 'Something went wrong when contacting the server!'
-          : textForError(error, commonStrings.retrieveWorkflowsError),
+        text: textForError(error, commonStrings.retrieveWorkflowsError),
         severity: 'error',
       });
     }
@@ -85,7 +82,7 @@ function WorkflowDropdown(props: Props) {
       )}
       options={options}
       getOptionSelected={(option, valueSelect) => option.id === valueSelect.id}
-      groupBy={(option) => option.category || ''}
+      groupBy={(option) => option.category}
       onChange={(event, newValue) => {
         onChange(newValue);
 
@@ -93,7 +90,7 @@ function WorkflowDropdown(props: Props) {
           setValue({ id: '', label: '', category: '' });
         }, 200);
       }}
-      getOptionLabel={(option) => option.label || ''}
+      getOptionLabel={(option) => option.label}
       placeholder="Quick open"
       disableClearable
     />
