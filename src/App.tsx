@@ -7,12 +7,14 @@ import MonitorRoute from './MonitorRoute';
 
 import NavBar from './navbar/NavBar';
 import SocketClientProvider from './SocketClientProvider';
+import SimpleSnackbar from './general/Snackbar';
 
 function App() {
   return (
     <SocketClientProvider serverUrl={baseUrl}>
       <EwoksCacheProvider>
         <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE_DIR}>
+          <SimpleSnackbar />
           <CssBaseline />
           <NavBar />
           <Routes>

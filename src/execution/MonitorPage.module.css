@@ -1,0 +1,18 @@
+.container {
+  --primary: rgb(47, 79, 79);
+  display: flex;
+  flex: 1 1;
+  flex-direction: column;
+  padding: 1rem;
+  min-height: 0;
+  overflow: scroll;
+}
+
+.message {
+  font-size: 1rem;
+  margin: 0 auto;
+  border: solid 1px var(--primary);
+  border-radius: 0.25rem;
+  padding: 1rem;
+  color: var(--primary);
+}
