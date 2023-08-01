@@ -1,23 +1,17 @@
 import { IconButton, Menu } from '@material-ui/core';
-import { FiberNew } from '@material-ui/icons';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import React from 'react';
-import { ActionMenuContext } from './ActionMenuContext';
-import ActionMenuItem from './ActionMenuItem';
-import DiscoverMenuItem from './DiscoverMenuItem';
-import DownloadMenuItem from './DownloadMenuItem';
-import UploadMenuItem from './UploadMenuItem';
 
 import styles from './ActionMenu.module.css';
+import { ActionMenuContext } from './ActionMenuContext';
+import DiscoverMenuItem from './DiscoverMenuItem';
+import DownloadMenuItem from './DownloadMenuItem';
 import ExecutionMenuItem from './ExecutionMenuItem';
 import OpenDrawerMenuItem from './OpenDrawerMenuItem';
+import OpenNewWorkflowMenuItem from './OpenNewWorkflowMenuItem';
+import UploadMenuItem from './UploadMenuItem';
 
-interface Props {
-  checkAndNewGraph: () => void;
-}
-
-export default function OpenActionMenuButton(props: Props) {
-  const { checkAndNewGraph } = props;
+export default function OpenActionMenuButton() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -62,11 +56,7 @@ export default function OpenActionMenuButton(props: Props) {
         getContentAnchorEl={null}
       >
         <ActionMenuContext.Provider value={{ open, onClose }}>
-          <ActionMenuItem
-            icon={FiberNew}
-            label="New workflow"
-            onClick={checkAndNewGraph}
-          />
+          <OpenNewWorkflowMenuItem />
           <UploadMenuItem />
           <DownloadMenuItem />
           <DiscoverMenuItem />
