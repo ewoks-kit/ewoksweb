@@ -88,7 +88,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     }
 
     mergeNodeData(nodeId, {
-      ui_props: { node_icon: iconName },
+      ui_props: { icon: iconName },
     });
   };
 
@@ -169,7 +169,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
           <InputLabel id="replace-node-icon">Node Icon</InputLabel>
           <Select
             labelId="replace-node-icon"
-            value={nodeData.ui_props.node_icon ?? nodeData.ui_props.icon}
+            value={nodeData.ui_props.icon}
             label="Override Task Icon"
             onChange={handleNodeIconChange}
           >

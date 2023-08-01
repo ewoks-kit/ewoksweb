@@ -83,7 +83,6 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         task_props: { task_type, task_identifier },
         ui_props: {
           nodeWidth,
-          node_icon,
           type,
           icon,
           moreHandles,
@@ -112,7 +111,6 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           default_inputs: cleanDefaultInputs(calcDefaultInputs(default_inputs)),
           uiProps: {
             nodeWidth,
-            node_icon,
             type,
             icon,
             comment,

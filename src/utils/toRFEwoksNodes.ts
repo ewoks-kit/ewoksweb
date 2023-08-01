@@ -82,7 +82,7 @@ export function toRFEwoksNodes(
           ui_props: {
             nodeWidth: uiProps?.nodeWidth ?? 120,
             type: nodeType,
-            icon: uiProps?.node_icon ?? uiProps?.icon ?? '',
+            icon: uiProps?.icon,
             moreHandles: uiProps?.moreHandles ?? false,
             withImage: uiProps?.withImage ?? true,
             withLabel: uiProps?.withLabel ?? true,
