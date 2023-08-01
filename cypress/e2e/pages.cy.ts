@@ -27,8 +27,9 @@ it('should restore an opened workflow when switching pages', () => {
   cy.get('.react-flow__node').should('have.length', 17);
 
   cy.findByRole('link', { name: 'Monitor' }).click();
-  cy.findByRole('link', { name: 'Edit' }).click();
+  cy.waitForStableDOM();
 
+  cy.findByRole('link', { name: 'Edit' }).click();
   cy.waitForStableDOM();
   cy.findByRole('heading', { name: 'tutorial_Graph' }).should('be.visible');
   cy.get('.react-flow__node').should('have.length', 17);
