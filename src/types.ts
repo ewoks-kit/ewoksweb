@@ -177,7 +177,6 @@ export interface GraphUiProps {
   comment?: string;
   notes?: Note[];
   style?: LinkStyle;
-  source?: string;
   icon?: string;
 }
 

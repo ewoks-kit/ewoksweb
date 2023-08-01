@@ -10,7 +10,7 @@ import useCurrentWorkflowIdStore from '../../../store/useCurrentWorkflowId';
 function UploadMenuItem() {
   const ref = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
-  const initGraph = useStore((state) => state.initGraph);
+  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
   const resetCurrentWorkflowId = useCurrentWorkflowIdStore(
     (state) => state.resetId
   );
@@ -27,7 +27,7 @@ function UploadMenuItem() {
         ref={ref}
         onGraphLoad={(graph) => {
           resetCurrentWorkflowId();
-          initGraph(graph, 'fromDisk', rfInstance);
+          setWorkingGraph(graph, rfInstance, 'fromDisk');
         }}
       />
     </ActionMenuItem>
