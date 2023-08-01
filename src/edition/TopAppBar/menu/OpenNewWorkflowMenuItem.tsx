@@ -5,6 +5,7 @@ import { useReactFlow } from 'reactflow';
 
 import ConfirmDialog from '../../../general/ConfirmDialog';
 import useStore from '../../../store/useStore';
+import { initializedGraph } from '../../../utils/InitializedEntities';
 import ActionMenuItem from './ActionMenuItem';
 
 function OpenNewWorkflowMenuItem() {
@@ -12,11 +13,10 @@ function OpenNewWorkflowMenuItem() {
 
   const rfInstance = useReactFlow();
   const initGraph = useStore((state) => state.initGraph);
-  const initializedGraph = useStore((state) => state.initializedGraph);
 
   const openEmptyWorkflow = useCallback(() => {
     initGraph(initializedGraph, undefined, rfInstance);
-  }, [initGraph, initializedGraph, rfInstance]);
+  }, [initGraph, rfInstance]);
 
   useKeyboardEvent(
     (e) =>

@@ -101,10 +101,7 @@ export interface State
     SubGraphSlice,
     TasksSlice,
     WorkingGraphSlice,
-    RecentGraphsSlice {
-  initializedGraph: GraphEwoks;
-  initializedRFGraph: GraphRF;
-}
+    RecentGraphsSlice {}
 
 export interface Action {
   action: string;

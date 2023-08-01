@@ -9,6 +9,7 @@ import { useGetTasks } from '../general/hooks';
 import useCurrentWorkflowIdStore from '../store/useCurrentWorkflowId';
 import useStore from '../store/useStore';
 import { textForError } from '../utils';
+import { initializedGraph } from '../utils/InitializedEntities';
 import Canvas from './Canvas/Canvas';
 import styles from './EditPage.module.css';
 import EditSidebar from './Sidebar/EditSidebar';
@@ -21,7 +22,6 @@ export default function EditPage() {
   const tasks = useStore((state) => state.tasks);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const initializedGraph = useStore((state) => state.initializedGraph);
   const initGraph = useStore((state) => state.initGraph);
 
   const currentWorkflowId = useCurrentWorkflowIdStore((state) => state.id);
@@ -47,13 +47,7 @@ export default function EditPage() {
     } else {
       initGraph(initializedGraph, undefined, rfInstance);
     }
-  }, [
-    setOpenSnackbar,
-    initGraph,
-    rfInstance,
-    currentWorkflowId,
-    initializedGraph,
-  ]);
+  }, [setOpenSnackbar, initGraph, rfInstance, currentWorkflowId]);
 
   const getTasks = useGetTasks();
   useEffect(() => {
