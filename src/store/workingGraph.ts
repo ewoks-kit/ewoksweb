@@ -18,11 +18,11 @@ import layoutNewGraph from '../utils/layoutNewGraph';
 
 export interface WorkingGraphSlice {
   workingGraph: GraphRF;
-  initGraph: (
+  setWorkingGraph: (
     workingGraphObject: GraphEwoks,
-    source?: string,
-    rfInstance?: ReactFlowInstance
-  ) => Promise<GraphRF>;
+    rfInstance: ReactFlowInstance,
+    source?: string
+  ) => Promise<void>;
 }
 
 const workingGraph = (
@@ -31,11 +31,7 @@ const workingGraph = (
 ): WorkingGraphSlice => ({
   workingGraph: initializedRFGraph,
 
-  initGraph: async (
-    workingGraphObject,
-    source,
-    rfInstance
-  ): Promise<GraphRF> => {
+  setWorkingGraph: async (inputGraph, rfInstance, source): Promise<void> => {
     // 1. Initialize the canvas while working on the new graph
     get().setSubgraphsStack({
       id: '',
@@ -46,7 +42,7 @@ const workingGraph = (
 
     // 2. Get node-subgraphs for the graph
     const newNodeSubgraphs = await findAllSubgraphs(
-      workingGraphObject,
+      inputGraph,
       get().recentGraphs
     );
 
@@ -62,15 +58,11 @@ const workingGraph = (
     });
 
     // 4. Calculate the new graph given the subgraphs
-    let grfNodes = toRFEwoksNodes(
-      workingGraphObject,
-      newNodeSubgraphs,
-      get().tasks
-    );
+    let grfNodes = toRFEwoksNodes(inputGraph, newNodeSubgraphs, get().tasks);
 
     // 5. Calculate notes nodes
     const notes: EwoksRFNode[] =
-      workingGraphObject.graph.uiProps?.notes?.map((note) => {
+      inputGraph.graph.uiProps?.notes?.map((note) => {
         return {
           data: {
             ewoks_props: { label: note.label },
@@ -88,35 +80,29 @@ const workingGraph = (
       }) || [];
 
     grfNodes = [...grfNodes, ...notes];
-    const rfLinks = toRFEwoksLinks(
-      workingGraphObject,
-      newNodeSubgraphs,
-      get().tasks
-    );
-    const graph = {
+    const rfLinks = toRFEwoksLinks(inputGraph, newNodeSubgraphs, get().tasks);
+    const resultGraph: GraphRF = {
       graph: {
-        ...workingGraphObject.graph,
-        uiProps: { ...workingGraphObject.graph.uiProps, source },
+        ...inputGraph.graph,
+        uiProps: { ...inputGraph.graph.uiProps },
       },
       nodes: grfNodes,
       links: rfLinks,
     };
     // DOC: reset RF nodes and edges before setting new nodes/edges data
     // Better solution?
-    if (rfInstance) {
-      rfInstance.setNodes([]);
-      rfInstance.setEdges([]);
-    }
+    rfInstance.setNodes([]);
+    rfInstance.setEdges([]);
 
-    useNodeDataStore.getState().setNodesData(graph.nodes);
-    useEdgeDataStore.getState().setEdgesData(graph.links);
+    useNodeDataStore.getState().setNodesData(resultGraph.nodes);
+    useEdgeDataStore.getState().setEdgesData(resultGraph.links);
 
-    get().addRecentGraph(graph as GraphRF);
+    get().addRecentGraph(resultGraph);
 
-    get().setGraphInfo(graph.graph);
+    get().setGraphInfo(resultGraph.graph);
 
     const newGraphNoData = {
-      graph: graph.graph,
+      graph: resultGraph.graph,
       nodes: grfNodes.map((nod) => {
         return { ...nod, data: {} as EwoksRFNodeData };
       }),
@@ -126,32 +112,28 @@ const workingGraph = (
     };
     // add the new graph to the recent graphs if not already there
     get().addRecentGraph({
-      graph: workingGraphObject.graph,
+      graph: inputGraph.graph,
       nodes: grfNodes,
-      links: toRFEwoksLinks(workingGraphObject, newNodeSubgraphs, get().tasks),
+      links: toRFEwoksLinks(inputGraph, newNodeSubgraphs, get().tasks),
     });
     get().setSubgraphsStack({
-      id: workingGraphObject.graph.id,
-      label: workingGraphObject.graph.label,
+      id: inputGraph.graph.id,
+      label: inputGraph.graph.label,
     });
     set((state) => ({
       ...state,
       workingGraph: newGraphNoData,
     }));
 
-    if (rfInstance) {
-      if (!newGraphNoData.nodes.some((nod) => nod.position.x !== 100)) {
-        rfInstance.setNodes(
-          await layoutNewGraph(newGraphNoData.nodes, newGraphNoData.links)
-        );
-        rfInstance.setEdges(newGraphNoData.links);
-      } else {
-        rfInstance.setNodes(newGraphNoData.nodes);
-        rfInstance.setEdges(newGraphNoData.links);
-      }
+    if (!newGraphNoData.nodes.some((nod) => nod.position.x !== 100)) {
+      rfInstance.setNodes(
+        await layoutNewGraph(newGraphNoData.nodes, newGraphNoData.links)
+      );
+      rfInstance.setEdges(newGraphNoData.links);
+    } else {
+      rfInstance.setNodes(newGraphNoData.nodes);
+      rfInstance.setEdges(newGraphNoData.links);
     }
-
-    return graph;
   },
 });
 export default workingGraph;
