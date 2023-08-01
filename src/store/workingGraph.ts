@@ -18,6 +18,7 @@ import layoutNewGraph from '../utils/layoutNewGraph';
 
 export interface WorkingGraphSlice {
   workingGraph: GraphRF;
+  workingGraphSource: string | undefined;
   setWorkingGraph: (
     workingGraphObject: GraphEwoks,
     rfInstance: ReactFlowInstance,
@@ -30,6 +31,7 @@ const workingGraph = (
   get: GetState<State>
 ): WorkingGraphSlice => ({
   workingGraph: initializedRFGraph,
+  workingGraphSource: undefined,
 
   setWorkingGraph: async (inputGraph, rfInstance, source): Promise<void> => {
     // 1. Initialize the canvas while working on the new graph
@@ -82,10 +84,7 @@ const workingGraph = (
     grfNodes = [...grfNodes, ...notes];
     const rfLinks = toRFEwoksLinks(inputGraph, newNodeSubgraphs, get().tasks);
     const resultGraph: GraphRF = {
-      graph: {
-        ...inputGraph.graph,
-        uiProps: { ...inputGraph.graph.uiProps },
-      },
+      graph: inputGraph.graph,
       nodes: grfNodes,
       links: rfLinks,
     };
@@ -123,6 +122,7 @@ const workingGraph = (
     set((state) => ({
       ...state,
       workingGraph: newGraphNoData,
+      workingGraphSource: source,
     }));
 
     if (!newGraphNoData.nodes.some((nod) => nod.position.x !== 100)) {

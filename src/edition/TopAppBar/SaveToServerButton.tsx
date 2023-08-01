@@ -28,6 +28,7 @@ export default function SaveToServerButton() {
   const [status, setStatus] = useState<Status>('idle');
 
   const workingGraph = useStore((state) => state.workingGraph);
+  const workingGraphSource = useStore((state) => state.workingGraphSource);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const [action, setAction] = useState<
     GraphFormAction.newGraph | GraphFormAction.newGraphOrOverwrite
@@ -43,7 +44,6 @@ export default function SaveToServerButton() {
   }
 
   async function handleSave() {
-    // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     // DOC: search if id exists.
     // 1. If notExists open dialog for NEW NAME.
     // 2. If exists and you took it from the server UPDATE without asking
@@ -72,18 +72,18 @@ export default function SaveToServerButton() {
       return;
     }
 
-    const { uiProps } = graphInfo;
-    if (!uiProps?.source) {
+    if (!workingGraphSource) {
       handleError('No graph exists to save!');
       return;
     }
 
-    if (uiProps.source !== 'fromServer') {
+    if (workingGraphSource !== 'fromServer') {
       setAction(GraphFormAction.newGraphOrOverwrite);
       setDialogOpen(true);
       return;
     }
 
+    // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     try {
       const { newNodesData, newEdgesData } = curateGraph(
         getNodesData(),

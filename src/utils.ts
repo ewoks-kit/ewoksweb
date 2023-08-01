@@ -53,11 +53,6 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
   const noteNodes = calcNoteNodes(tempGraph);
   graph = { ...graph, uiProps: { ...graph.uiProps, notes: noteNodes } };
 
-  // DOC: remove "fromServer" which is for UIs internal use
-  if (graph.uiProps?.source) {
-    delete graph.uiProps.source;
-  }
-
   return {
     graph,
     nodes: toEwoksNodes(tempGraph.nodes),
