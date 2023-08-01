@@ -9,13 +9,7 @@ import useNavBarElementStore from '../../navbar/useNavBarElementStore';
 
 import styles from './TopAppBar.module.css';
 
-interface Props {
-  checkAndNewGraph: (notSave: boolean) => void;
-}
-
-function TopAppBar(props: Props) {
-  const { checkAndNewGraph } = props;
-
+function TopAppBar() {
   const navBarElement = useNavBarElementStore((state) => state.element);
 
   if (!navBarElement) {
@@ -30,9 +24,7 @@ function TopAppBar(props: Props) {
       <div className={styles.toolbar}>
         <GetWorkflowFromServerDropdown />
         <SaveToServerButton />
-        <OpenActionMenuButton
-          checkAndNewGraph={() => checkAndNewGraph(false)}
-        />
+        <OpenActionMenuButton />
       </div>
     </>,
     navBarElement

@@ -1,29 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import EditSidebar from './Sidebar/EditSidebar';
-import Canvas from './Canvas/Canvas';
-import useStore from 'store/useStore';
-import ConfirmDialog from '../general/ConfirmDialog';
+import { useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import ErrorFallback from '../general/ErrorFallback';
-import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex';
-import { fetchWorkflow } from '../api/workflows';
+import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import { useReactFlow } from 'reactflow';
-import OverflowDrawer from './TaskDrawer/TaskDrawer';
-import useTaskDrawerState from '../store/taskDrawerState';
-import { useGetTasks } from '../general/hooks';
-import TopAppBar from './TopAppBar/TopAppBar';
 
-import styles from './EditPage.module.css';
+import { fetchWorkflow } from '../api/workflows';
+import ErrorFallback from '../general/ErrorFallback';
+import { useGetTasks } from '../general/hooks';
 import useCurrentWorkflowIdStore from '../store/useCurrentWorkflowId';
+import useStore from '../store/useStore';
 import { textForError } from '../utils';
+import Canvas from './Canvas/Canvas';
+import styles from './EditPage.module.css';
+import EditSidebar from './Sidebar/EditSidebar';
+import OverflowDrawer from './TaskDrawer/TaskDrawer';
+import TopAppBar from './TopAppBar/TopAppBar';
 
 export default function EditPage() {
   const rfInstance = useReactFlow();
 
   const tasks = useStore((state) => state.tasks);
-  const setTaskDrawerOpen = useTaskDrawerState((state) => state.setOpen);
 
-  const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const initializedGraph = useStore((state) => state.initializedGraph);
   const initGraph = useStore((state) => state.initGraph);
@@ -52,11 +48,11 @@ export default function EditPage() {
       initGraph(initializedGraph, undefined, rfInstance);
     }
   }, [
-    initializedGraph,
     setOpenSnackbar,
     initGraph,
     rfInstance,
     currentWorkflowId,
+    initializedGraph,
   ]);
 
   const getTasks = useGetTasks();
@@ -66,45 +62,9 @@ export default function EditPage() {
     }
   });
 
-  function checkAndNewGraph(notSave: boolean) {
-    if (!notSave) {
-      setOpenAgreeDialog(true);
-    } else {
-      initGraph(initializedGraph, undefined, rfInstance);
-      setOpenAgreeDialog(false);
-      setTaskDrawerOpen(true);
-    }
-  }
-
-  function handleKeyDown(event: React.KeyboardEvent<HTMLImageElement>) {
-    const controlKey = event.ctrlKey || event.metaKey;
-    if (!controlKey) {
-      return;
-    }
-
-    const charCode = String.fromCodePoint(event.which).toLowerCase();
-    if (event.shiftKey && charCode === 'n') {
-      event.preventDefault();
-      event.stopPropagation();
-      checkAndNewGraph(false);
-    }
-  }
-
   return (
-    <div
-      className={styles.root}
-      onKeyDown={handleKeyDown}
-      tabIndex={0}
-      role="button"
-    >
-      <ConfirmDialog
-        title="Open another workflow"
-        content="All unsaved modifications will be lost. Continue?"
-        open={openAgreeDialog}
-        agreeCallback={() => checkAndNewGraph(true)}
-        disagreeCallback={() => setOpenAgreeDialog(false)}
-      />
-      <TopAppBar checkAndNewGraph={checkAndNewGraph} />
+    <div className={styles.root}>
+      <TopAppBar />
       <div className={styles.mainArea}>
         <OverflowDrawer />
         <ReflexContainer
@@ -113,11 +73,7 @@ export default function EditPage() {
         >
           <ReflexElement>
             <main className={styles.content}>
-              <ErrorBoundary
-                FallbackComponent={(fallbackProps) => (
-                  <ErrorFallback {...fallbackProps} />
-                )}
-              >
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <Canvas />
               </ErrorBoundary>
             </main>
