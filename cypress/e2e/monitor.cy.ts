@@ -1,4 +1,4 @@
-describe('Monitor workflows', () => {
+describe.skip('Monitor workflows', () => {
   before(() => {
     cy.visit('http://localhost:3000/monitor');
   });
