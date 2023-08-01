@@ -12,11 +12,11 @@ function OpenNewWorkflowMenuItem() {
   const [openDialog, setOpenDialog] = useState(false);
 
   const rfInstance = useReactFlow();
-  const initGraph = useStore((state) => state.initGraph);
+  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
   const openEmptyWorkflow = useCallback(() => {
-    initGraph(initializedGraph, undefined, rfInstance);
-  }, [initGraph, rfInstance]);
+    setWorkingGraph(initializedGraph, rfInstance);
+  }, [setWorkingGraph, rfInstance]);
 
   useKeyboardEvent(
     (e) =>

@@ -95,38 +95,8 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
       },
       position,
     }) => {
-      if (task_type !== 'graph') {
-        return {
-          id: id.toString() || '',
-          label,
-          task_type,
-          task_identifier,
-          inputs_complete,
-          task_generator,
-          default_error_node,
-          default_error_attributes: calcDefaultErrorAttributes(
-            default_error_attributes,
-            default_error_node
-          ),
-          default_inputs: cleanDefaultInputs(calcDefaultInputs(default_inputs)),
-          uiProps: {
-            nodeWidth,
-            type,
-            icon,
-            comment,
-            position,
-            moreHandles,
-            withImage,
-            withLabel,
-            colorBorder,
-          },
-        };
-      }
-      // TODO: return the same for graphs and non-graphs
-      // node-icon is not in graphs? ok? Graphs have no editable Node Info where the node_icon is
-      // all the rest are the same... merge 2 returns?
       return {
-        id: id.toString() || '',
+        id,
         label,
         task_type,
         task_identifier,

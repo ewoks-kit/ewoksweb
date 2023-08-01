@@ -22,7 +22,7 @@ export default function EditPage() {
   const tasks = useStore((state) => state.tasks);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const initGraph = useStore((state) => state.initGraph);
+  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
   const currentWorkflowId = useCurrentWorkflowIdStore((state) => state.id);
 
@@ -31,7 +31,7 @@ export default function EditPage() {
       const loadGraph = async () => {
         try {
           const { data: graph } = await fetchWorkflow(currentWorkflowId);
-          initGraph(graph, 'fromServer', rfInstance);
+          setWorkingGraph(graph, rfInstance, 'fromServer');
         } catch (error) {
           setOpenSnackbar({
             open: true,
@@ -45,9 +45,9 @@ export default function EditPage() {
       };
       loadGraph();
     } else {
-      initGraph(initializedGraph, undefined, rfInstance);
+      setWorkingGraph(initializedGraph, rfInstance);
     }
-  }, [setOpenSnackbar, initGraph, rfInstance, currentWorkflowId]);
+  }, [setOpenSnackbar, setWorkingGraph, rfInstance, currentWorkflowId]);
 
   const getTasks = useGetTasks();
   useEffect(() => {
