@@ -15,6 +15,7 @@ import type { State } from '../types';
 import { Position } from 'reactflow';
 import type { Node, Edge } from 'reactflow';
 import useNodeDataStore from './useNodeDataStore';
+import { initializedRFGraph } from '../utils/InitializedEntities';
 
 export interface SubGraphSlice {
   subGraph: GraphRF;
@@ -130,7 +131,7 @@ const subGraph = (
     get().addRecentGraph(subToAdd);
 
     const newWorkingGraph = {
-      graph: get().graphRF.graph,
+      graph: initializedRFGraph.graph,
       nodes: [...nodes, newNode] as EwoksRFNode[],
       links: links as EwoksRFLink[],
     };

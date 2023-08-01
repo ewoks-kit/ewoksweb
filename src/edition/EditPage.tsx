@@ -20,15 +20,10 @@ import { textForError } from '../utils';
 export default function EditPage() {
   const rfInstance = useReactFlow();
 
-  const canvasGraphChanged = useStore((state) => state.canvasGraphChanged);
-  const setCanvasGraphChanged = useStore(
-    (state) => state.setCanvasGraphChanged
-  );
   const tasks = useStore((state) => state.tasks);
   const setTaskDrawerOpen = useTaskDrawerState((state) => state.setOpen);
 
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
-  const undoIndex = useStore((state) => state.undoIndex);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const initializedGraph = useStore((state) => state.initializedGraph);
   const initGraph = useStore((state) => state.initGraph);
@@ -72,12 +67,11 @@ export default function EditPage() {
   });
 
   function checkAndNewGraph(notSave: boolean) {
-    if (canvasGraphChanged && undoIndex !== 0 && !notSave) {
+    if (!notSave) {
       setOpenAgreeDialog(true);
     } else {
       initGraph(initializedGraph, undefined, rfInstance);
       setOpenAgreeDialog(false);
-      setCanvasGraphChanged(false);
       setTaskDrawerOpen(true);
     }
   }
@@ -89,29 +83,12 @@ export default function EditPage() {
     }
 
     const charCode = String.fromCodePoint(event.which).toLowerCase();
-    // Comment until undo-redo is back
-    // if (charCode === 'z') {
-    //   event.preventDefault();
-    //   event.stopPropagation();
-    //   undo();
-    //   return;
-    // }
-    // if (charCode === 'y') {
-    //   event.preventDefault();
-    //   event.stopPropagation();
-    //   redo();
-    //   return;
-    // }
     if (event.shiftKey && charCode === 'n') {
       event.preventDefault();
       event.stopPropagation();
       checkAndNewGraph(false);
     }
   }
-
-  const disAgreeSaveWithout = () => {
-    setOpenAgreeDialog(false);
-  };
 
   return (
     <div
@@ -121,11 +98,11 @@ export default function EditPage() {
       role="button"
     >
       <ConfirmDialog
-        title="There are unsaved changes"
-        content="Continue without saving?"
+        title="Open another workflow"
+        content="All unsaved modifications will be lost. Continue?"
         open={openAgreeDialog}
         agreeCallback={() => checkAndNewGraph(true)}
-        disagreeCallback={disAgreeSaveWithout}
+        disagreeCallback={() => setOpenAgreeDialog(false)}
       />
       <TopAppBar checkAndNewGraph={checkAndNewGraph} />
       <div className={styles.mainArea}>

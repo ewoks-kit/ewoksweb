@@ -45,7 +45,6 @@ export default function GraphFormDialog(props: Props) {
     defaultValues: { identifier: elementToEdit.label },
   });
 
-  const setCanvasGraphChanged = useStore((st) => st.setCanvasGraphChanged);
   const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const mutateWorkflows = useMutateWorkflows();
@@ -72,7 +71,6 @@ export default function GraphFormDialog(props: Props) {
     try {
       if (overwrite) {
         await putWorkflow(ewoksGraph);
-        setCanvasGraphChanged(false);
       } else {
         const { data: newGraph } = await postWorkflow(ewoksGraph);
         setCurrentWorkflowId(newGraph.graph.id);

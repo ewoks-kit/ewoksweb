@@ -1,13 +1,9 @@
 import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
-import type { CanvasGraphChangedSlice } from './store/canvasGraphChanged';
-import type { GraphRFSlice } from './store/graphRF';
 import type { OpenDraggableDialogSlice } from './store/openDraggableDialog';
 import type { OpenSnackbarSlice } from './store/openSnackbar';
 import type { SubgraphsStackSlice } from './store/subgraphsStack';
 import type { SubGraphSlice } from './store/subGraph';
 import type { TasksSlice } from './store/tasks';
-import type { UndoIndexSlice } from './store/undoIndex';
-import type { UndoRedoSlice } from './store/undoRedo';
 import type { WorkingGraphSlice } from './store/workingGraph';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
@@ -98,17 +94,12 @@ export interface EwoksEvent {
 }
 
 export interface State
-  extends CanvasGraphChangedSlice,
-    GraphRFSlice,
-    GraphInfoSlice,
+  extends GraphInfoSlice,
     OpenDraggableDialogSlice,
     OpenSnackbarSlice,
     SubgraphsStackSlice,
     SubGraphSlice,
     TasksSlice,
-    UndoIndexSlice,
-    // TODO: check if index above can be merged with undoRedo below
-    UndoRedoSlice,
     WorkingGraphSlice,
     RecentGraphsSlice {
   initializedGraph: GraphEwoks;
