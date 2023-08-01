@@ -258,7 +258,6 @@ export interface EwoksNodeUiProps {
   withLabel?: boolean;
   colorBorder?: string;
   nodeWidth?: number;
-  node_icon?: string;
   task_icon?: string;
   task_category?: string;
   moreHandles?: boolean;
@@ -295,7 +294,6 @@ export interface RFNodeUiProps {
   withLabel?: boolean;
   colorBorder?: string;
   nodeWidth?: number;
-  node_icon?: string;
   moreHandles?: boolean;
   exists?: boolean;
   // To position inputs-outputs of subgraphs in a graph

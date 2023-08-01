@@ -99,7 +99,7 @@ export default function NodeDetails(selectedElement: Node) {
       return;
     }
 
-    if (Object.keys(propKeyValue)[0] === 'node_icon') {
+    if (Object.keys(propKeyValue)[0] === 'icon') {
       mergeNodeData(selectedElement.id, {
         ui_props: { icon: Object.values(propKeyValue)[0] },
       });
