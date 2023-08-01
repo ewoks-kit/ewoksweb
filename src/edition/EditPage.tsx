@@ -90,10 +90,6 @@ export default function EditPage() {
     }
   }
 
-  const disAgreeSaveWithout = () => {
-    setOpenAgreeDialog(false);
-  };
-
   return (
     <div
       className={styles.root}
@@ -102,11 +98,11 @@ export default function EditPage() {
       role="button"
     >
       <ConfirmDialog
-        title="There are unsaved changes"
-        content="Continue without saving?"
+        title="Open another workflow"
+        content="All unsaved modifications will be lost. Continue?"
         open={openAgreeDialog}
         agreeCallback={() => checkAndNewGraph(true)}
-        disagreeCallback={disAgreeSaveWithout}
+        disagreeCallback={() => setOpenAgreeDialog(false)}
       />
       <TopAppBar checkAndNewGraph={checkAndNewGraph} />
       <div className={styles.mainArea}>
