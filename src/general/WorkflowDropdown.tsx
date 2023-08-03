@@ -32,7 +32,7 @@ function sortByCategory(
 function WorkflowDropdown(props: Props) {
   const { onChange, category } = props;
 
-  const [value, setValue] = useState<Required<WorkflowDescription>>();
+  const [inputValue, setInputValue] = useState<string>('');
   const [open, setOpen] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
@@ -56,7 +56,6 @@ function WorkflowDropdown(props: Props) {
 
   return (
     <Autocomplete
-      value={value}
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
@@ -83,16 +82,21 @@ function WorkflowDropdown(props: Props) {
       options={options}
       getOptionSelected={(option, valueSelect) => option.id === valueSelect.id}
       groupBy={(option) => option.category}
+      inputValue={inputValue}
+      onInputChange={(event, value) => {
+        setInputValue(value);
+      }}
       onChange={(event, newValue) => {
         onChange(newValue);
 
         setTimeout(() => {
-          setValue({ id: '', label: '', category: '' });
+          setInputValue('');
         }, 200);
       }}
       getOptionLabel={(option) => option.label}
       placeholder="Quick open"
       disableClearable
+      blurOnSelect
     />
   );
 }
