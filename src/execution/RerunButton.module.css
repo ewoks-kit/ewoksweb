@@ -1,0 +1,13 @@
+.button {
+  composes: btnClean from global;
+  display: flex;
+  border: solid 1px var(--primary);
+  margin-left: auto;
+  align-self: start;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.button:hover {
+  background-color: var(--primary-light);
+}

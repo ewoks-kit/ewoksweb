@@ -6,6 +6,7 @@ import StartTimeInfo from './StartTimeInfo';
 import styles from './WorkflowItem.module.css';
 import Duration from './Duration';
 import Traceback from './Traceback';
+import RerunButton from './RerunButton';
 
 interface Props {
   events: EwoksEvent[];
@@ -33,17 +34,13 @@ function WorkflowItem(props: Props) {
     ? "Workflow couldn't start!"
     : 'Workflow starting...';
 
+  const id = startWorkflowEvent?.workflow_id;
+
   return (
-    <div
-      className={styles.item}
-      role="listitem"
-      aria-label={startWorkflowEvent?.workflow_id}
-    >
+    <div className={styles.item} role="listitem" aria-label={id}>
       <div className={styles.header}>
         <div>
-          <h3 className={styles.title}>
-            {startWorkflowEvent?.workflow_id || idFallback}
-          </h3>
+          <h3 className={styles.title}>{id || idFallback}</h3>
           <StartTimeInfo time={startJobEvent.time} />
           {endJobEvent && (
             <Duration
@@ -60,6 +57,7 @@ function WorkflowItem(props: Props) {
         {hasError && endJobEvent.error_traceback && (
           <Traceback traceback={endJobEvent.error_traceback} />
         )}
+        {id && <RerunButton id={id} />}
       </div>
     </div>
   );
