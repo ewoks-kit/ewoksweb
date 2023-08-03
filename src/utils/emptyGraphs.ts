@@ -1,6 +1,6 @@
 import type { GraphEwoks, GraphRF } from '../types';
 
-export const initializedGraph: GraphEwoks = {
+export const EMPTY_GRAPH: GraphEwoks = {
   graph: {
     id: '',
     label: '',
@@ -12,7 +12,7 @@ export const initializedGraph: GraphEwoks = {
   links: [],
 };
 
-export const initializedRFGraph: GraphRF = {
+export const EMPTY_RF_GRAPH: GraphRF = {
   graph: {
     id: '',
     label: '',

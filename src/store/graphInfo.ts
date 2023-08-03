@@ -1,5 +1,5 @@
 import type { GraphDetails, State } from '../types';
-import { initializedRFGraph } from '../utils/InitializedEntities';
+import { EMPTY_RF_GRAPH } from '../utils/emptyGraphs';
 import type { SetState } from 'zustand';
 import { merge } from 'lodash';
 
@@ -10,7 +10,7 @@ export interface GraphInfoSlice {
 }
 
 const graphInfo = (set: SetState<State>): GraphInfoSlice => ({
-  graphInfo: initializedRFGraph.graph,
+  graphInfo: EMPTY_RF_GRAPH.graph,
 
   setGraphInfo: (graphRFD) => {
     // DOC: If missing uiProps or other fill it here
