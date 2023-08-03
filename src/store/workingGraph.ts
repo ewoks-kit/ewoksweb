@@ -10,7 +10,7 @@ import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
 import type { GetState, SetState } from 'zustand';
-import { initializedRFGraph } from '../utils/InitializedEntities';
+import { EMPTY_RF_GRAPH } from '../utils/emptyGraphs';
 import useNodeDataStore from './useNodeDataStore';
 import useEdgeDataStore from './useEdgeDataStore';
 import type { ReactFlowInstance } from 'reactflow';
@@ -30,7 +30,7 @@ const workingGraph = (
   set: SetState<State>,
   get: GetState<State>
 ): WorkingGraphSlice => ({
-  workingGraph: initializedRFGraph,
+  workingGraph: EMPTY_RF_GRAPH,
   workingGraphSource: undefined,
 
   setWorkingGraph: async (inputGraph, rfInstance, source): Promise<void> => {
