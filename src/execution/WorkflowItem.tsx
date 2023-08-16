@@ -1,5 +1,5 @@
 import type { EwoksEvent } from '../types';
-import { assertDefined } from '../utils/typeGuards';
+// import { assertDefined } from '../utils/typeGuards';
 import StatusBadge from './StatusBadge';
 import StartTimeInfo from './StartTimeInfo';
 
@@ -18,7 +18,7 @@ function WorkflowItem(props: Props) {
   const startJobEvent = events.find(
     (e) => e.context === 'job' && e.type === 'start'
   );
-  assertDefined(startJobEvent);
+  // assertDefined(startJobEvent);
   const startWorkflowEvent = events.find(
     (e) => e.context === 'workflow' && e.type === 'start'
   );
@@ -35,21 +35,22 @@ function WorkflowItem(props: Props) {
     : 'Workflow starting...';
 
   const id = startWorkflowEvent?.workflow_id;
+  const noInfo = 'No information provided';
 
   return (
     <div className={styles.item} role="listitem" aria-label={id}>
       <div className={styles.header}>
         <div>
           <h3 className={styles.title}>{id || idFallback}</h3>
-          <StartTimeInfo time={startJobEvent.time} />
+          <StartTimeInfo time={startJobEvent?.time || noInfo} />
           {endJobEvent && (
             <Duration
-              startTime={startJobEvent.time}
+              startTime={startJobEvent?.time || noInfo}
               endTime={endJobEvent.time}
             />
           )}
         </div>
-        <span>Job id: {startJobEvent.job_id}</span>
+        <span>Job id: {startJobEvent?.job_id || noInfo}</span>
       </div>
 
       <div className={styles.description}>
