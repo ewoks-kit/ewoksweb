@@ -29,7 +29,7 @@ export default function EditPage() {
 
   useEffect(() => {
     if (!currentWorkflowId && workingGraphSource !== 'fromDisk') {
-      setWorkingGraph(EMPTY_GRAPH, rfInstance);
+      setWorkingGraph(EMPTY_GRAPH, rfInstance.setNodes, rfInstance.setEdges);
       return;
     }
 
@@ -37,7 +37,12 @@ export default function EditPage() {
       const loadGraph = async () => {
         try {
           const { data: graph } = await fetchWorkflow(currentWorkflowId);
-          setWorkingGraph(graph, rfInstance, 'fromServer');
+          setWorkingGraph(
+            graph,
+            rfInstance.setNodes,
+            rfInstance.setEdges,
+            'fromServer'
+          );
         } catch (error) {
           setOpenSnackbar({
             open: true,
@@ -54,7 +59,8 @@ export default function EditPage() {
   }, [
     setOpenSnackbar,
     setWorkingGraph,
-    rfInstance,
+    rfInstance.setNodes,
+    rfInstance.setEdges,
     currentWorkflowId,
     workingGraphSource,
   ]);

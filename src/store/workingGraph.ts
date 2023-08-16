@@ -13,7 +13,7 @@ import type { GetState, SetState } from 'zustand';
 import { EMPTY_RF_GRAPH } from '../utils/emptyGraphs';
 import useNodeDataStore from './useNodeDataStore';
 import useEdgeDataStore from './useEdgeDataStore';
-import type { ReactFlowInstance } from 'reactflow';
+import type { Edge, Node } from 'reactflow';
 import layoutNewGraph from '../utils/layoutNewGraph';
 
 export interface WorkingGraphSlice {
@@ -21,7 +21,8 @@ export interface WorkingGraphSlice {
   workingGraphSource: string | undefined;
   setWorkingGraph: (
     workingGraphObject: GraphEwoks,
-    rfInstance: ReactFlowInstance,
+    setNodes: (nodes: Node[]) => void,
+    setEdges: (edges: Edge[]) => void,
     source?: string
   ) => Promise<void>;
 }
@@ -33,7 +34,12 @@ const workingGraph = (
   workingGraph: EMPTY_RF_GRAPH,
   workingGraphSource: undefined,
 
-  setWorkingGraph: async (inputGraph, rfInstance, source): Promise<void> => {
+  setWorkingGraph: async (
+    inputGraph,
+    setNodes,
+    setEdges,
+    source
+  ): Promise<void> => {
     // 1. Initialize the canvas while working on the new graph
     get().setSubgraphsStack({
       id: '',
@@ -90,8 +96,8 @@ const workingGraph = (
     };
     // DOC: reset RF nodes and edges before setting new nodes/edges data
     // Better solution?
-    rfInstance.setNodes([]);
-    rfInstance.setEdges([]);
+    setNodes([]);
+    setEdges([]);
 
     useNodeDataStore.getState().setNodesData(resultGraph.nodes);
     useEdgeDataStore.getState().setEdgesData(resultGraph.links);
@@ -126,13 +132,13 @@ const workingGraph = (
     }));
 
     if (!newGraphNoData.nodes.some((nod) => nod.position.x !== 100)) {
-      rfInstance.setNodes(
+      setNodes(
         await layoutNewGraph(newGraphNoData.nodes, newGraphNoData.links)
       );
-      rfInstance.setEdges(newGraphNoData.links);
+      setEdges(newGraphNoData.links);
     } else {
-      rfInstance.setNodes(newGraphNoData.nodes);
-      rfInstance.setEdges(newGraphNoData.links);
+      setNodes(newGraphNoData.nodes);
+      setEdges(newGraphNoData.links);
     }
   },
 });

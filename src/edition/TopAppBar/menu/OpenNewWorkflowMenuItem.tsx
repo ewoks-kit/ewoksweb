@@ -15,7 +15,7 @@ function OpenNewWorkflowMenuItem() {
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
   const openEmptyWorkflow = useCallback(() => {
-    setWorkingGraph(EMPTY_GRAPH, rfInstance);
+    setWorkingGraph(EMPTY_GRAPH, rfInstance.setNodes, rfInstance.setEdges);
   }, [setWorkingGraph, rfInstance]);
 
   useKeyboardEvent(
