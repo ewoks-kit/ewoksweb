@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react';
 import { useReactFlow } from 'reactflow';
 
 import ConfirmDialog from '../../../general/ConfirmDialog';
+import useCurrentWorkflowIdStore from '../../../store/useCurrentWorkflowId';
 import useStore from '../../../store/useStore';
 import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';
 import ActionMenuItem from './ActionMenuItem';
@@ -13,10 +14,14 @@ function OpenNewWorkflowMenuItem() {
 
   const rfInstance = useReactFlow();
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const resetCurrentWorkflowId = useCurrentWorkflowIdStore(
+    (state) => state.resetId
+  );
 
   const openEmptyWorkflow = useCallback(() => {
+    resetCurrentWorkflowId();
     setWorkingGraph(EMPTY_GRAPH, rfInstance.setNodes, rfInstance.setEdges);
-  }, [setWorkingGraph, rfInstance]);
+  }, [setWorkingGraph, rfInstance, resetCurrentWorkflowId]);
 
   useKeyboardEvent(
     (e) =>
