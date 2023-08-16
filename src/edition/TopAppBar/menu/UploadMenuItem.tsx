@@ -27,7 +27,12 @@ function UploadMenuItem() {
         ref={ref}
         onGraphLoad={(graph) => {
           resetCurrentWorkflowId();
-          setWorkingGraph(graph, rfInstance, 'fromDisk');
+          setWorkingGraph(
+            graph,
+            rfInstance.setNodes,
+            rfInstance.setEdges,
+            'fromDisk'
+          );
         }}
       />
     </ActionMenuItem>
