@@ -1,6 +1,6 @@
 import { FiberNew } from '@material-ui/icons';
 import { useKeyboardEvent } from '@react-hookz/web';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useReactFlow } from 'reactflow';
 
 import ConfirmDialog from '../../../general/ConfirmDialog';
@@ -18,10 +18,11 @@ function OpenNewWorkflowMenuItem() {
     (state) => state.resetId
   );
 
-  const openEmptyWorkflow = useCallback(() => {
+  function openEmptyWorkflow() {
+    setOpenDialog(false);
     resetCurrentWorkflowId();
     setWorkingGraph(EMPTY_GRAPH, rfInstance.setNodes, rfInstance.setEdges);
-  }, [setWorkingGraph, rfInstance, resetCurrentWorkflowId]);
+  }
 
   useKeyboardEvent(
     (e) =>
