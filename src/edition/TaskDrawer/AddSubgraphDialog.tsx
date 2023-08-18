@@ -19,12 +19,11 @@ import { textForError } from '../../utils';
 
 export interface ConfirmationDialogRawProps {
   open: boolean;
-  setOpen: (open: boolean) => void;
   onClose: (value?: string) => void;
 }
 
 export default function AddSubgraphDialog(props: ConfirmationDialogRawProps) {
-  const { onClose, open, setOpen } = props;
+  const { onClose, open } = props;
   const ref = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
 

@@ -43,7 +43,7 @@ function AddSubgraphButton() {
         }}
       />
 
-      <AddSubgraphDialog open={open} setOpen={setOpen} onClose={handleClose} />
+      <AddSubgraphDialog open={open} onClose={handleClose} />
 
       <Tooltip title="Add a subgraph" arrow>
         <button
