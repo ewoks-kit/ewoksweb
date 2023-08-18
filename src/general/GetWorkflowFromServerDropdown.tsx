@@ -7,7 +7,13 @@ import ConfirmDialog from './ConfirmDialog';
 import WorkflowDropdown from './WorkflowDropdown';
 import useCurrentWorkflowIdStore from '../store/useCurrentWorkflowId';
 
-export default function GetWorkflowFromServerDropdown() {
+interface Props {
+  getSubgraph?: boolean | undefined;
+  setSubgraphId?: (id: string) => void;
+}
+
+export default function GetWorkflowFromServerDropdown(props: Props) {
+  const { getSubgraph, setSubgraphId } = props;
   const [workflowId, setWorkflowId] = useState('');
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
@@ -17,15 +23,17 @@ export default function GetWorkflowFromServerDropdown() {
   );
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
+    if (getSubgraph && setSubgraphId) {
+      setSubgraphId(workflowDetails.id);
+      return;
+    }
+
     if (workflowDetails.id) {
       setWorkflowId(workflowDetails.id || '');
+      getFromServer(workflowDetails.id);
     }
 
     setOpenAgreeDialog(false);
-
-    if (workflowDetails.id) {
-      getFromServer(workflowDetails.id);
-    }
   }
 
   async function getFromServer(workflowIdparam: string) {
@@ -58,6 +66,7 @@ export default function GetWorkflowFromServerDropdown() {
         }}
       >
         <WorkflowDropdown
+          getSubgraph={getSubgraph}
           onChange={(workflowDetails) => {
             setInputValue(workflowDetails);
           }}

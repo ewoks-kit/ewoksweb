@@ -30,6 +30,10 @@ function AddSubgraphButton() {
     setNodeData(nodeWithoutData.id, data);
   }
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       <OpenGraphInput
@@ -39,15 +43,12 @@ function AddSubgraphButton() {
         }}
       />
 
-      <AddSubgraphDialog open={open} setOpen={setOpen} />
+      <AddSubgraphDialog open={open} setOpen={setOpen} onClose={handleClose} />
 
-      <Tooltip title="Add a subgraph from disk" arrow>
+      <Tooltip title="Add a subgraph" arrow>
         <button
           className={styles.subgraphButton}
-          aria-label="Add a subgraph from disk"
-          // onClick={() => {
-          //   ref.current?.click();
-          // }}
+          aria-label="Add a subgraph"
           onClick={() => setOpen(!open)}
           type="button"
         >

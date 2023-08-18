@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -13,20 +13,24 @@ import useStore from '../../store/useStore';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import GetWorkflowFromServerDropdown from '../../general/GetWorkflowFromServerDropdown';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import { fetchWorkflow } from '../../api/workflows';
+import { textForError } from '../../utils';
 
 export interface ConfirmationDialogRawProps {
-  id: string;
-  keepMounted: boolean;
-  value: string;
   open: boolean;
+  setOpen: (open: boolean) => void;
   onClose: (value?: string) => void;
 }
 
-function ConfirmationDialogRaw(props: ConfirmationDialogRawProps) {
-  const { onClose, value: valueProp, open, ...other } = props;
+export default function AddSubgraphDialog(props: ConfirmationDialogRawProps) {
+  const { onClose, open, setOpen } = props;
   const ref = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
 
+  const [subgraphWorkflowId, setSubgraphWorkflowId] = useState('');
+
+  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSubGraph = useStore((state) => state.setSubGraph);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
@@ -45,14 +49,36 @@ function ConfirmationDialogRaw(props: ConfirmationDialogRawProps) {
     onClose();
   };
 
-  const handleOk = () => {
+  const handleClose = () => {
     onClose('');
   };
 
-  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setValue((event.target as HTMLInputElement).value);
-  // };
-
+  async function addSubgraph() {
+    if (!subgraphWorkflowId) {
+      return;
+    }
+    try {
+      const { data: subgraph } = await fetchWorkflow(subgraphWorkflowId);
+      const nodes = rfInstance.getNodes();
+      const { nodeWithoutData, data } = await setSubGraph(
+        subgraph,
+        nodes,
+        rfInstance.getEdges()
+      );
+      rfInstance.setNodes([...nodes, nodeWithoutData]);
+      setNodeData(nodeWithoutData.id, data);
+      handleClose();
+    } catch (error) {
+      setOpenSnackbar({
+        open: true,
+        text: textForError(
+          error,
+          'Error in retrieving workflow. Please check connectivity with the server!'
+        ),
+        severity: 'error',
+      });
+    }
+  }
   return (
     <>
       <OpenGraphInput
@@ -63,18 +89,34 @@ function ConfirmationDialogRaw(props: ConfirmationDialogRawProps) {
       />
 
       <Dialog
-        maxWidth="xs"
-        // onEntering={handleEntering}
-        aria-labelledby="confirmation-dialog-title"
+        maxWidth="xl"
+        aria-labelledby="add-subgraph-dialog"
         open={open}
-        {...other}
+        onClose={handleClose}
       >
-        <DialogTitle id="confirmation-dialog-title">Add Subgraph</DialogTitle>
-        <DialogContent dividers>
+        <DialogTitle id="add-subgraph-dialog-title">Add Subgraph</DialogTitle>
+        <DialogContent>
           <List component="div" role="list">
             <ListItem button divider role="listitem">
               <ListItemText primary="From Server" />
-              <GetWorkflowFromServerDropdown />
+              <span style={{ marginLeft: '20px', display: 'flex' }}>
+                <GetWorkflowFromServerDropdown
+                  getSubgraph
+                  setSubgraphId={(id) => setSubgraphWorkflowId(id)}
+                />
+                <Button
+                  color="primary"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    addSubgraph();
+                  }}
+                  size="small"
+                  aria-controls="editSidebar-dropdown-menu"
+                  aria-label="Open edit actions menu"
+                >
+                  <CloudDownloadIcon />
+                </Button>
+              </span>
             </ListItem>
             <ListItem
               button
@@ -83,6 +125,7 @@ function ConfirmationDialogRaw(props: ConfirmationDialogRawProps) {
               aria-label="phone ringtone"
               onClick={() => {
                 ref.current?.click();
+                handleClose();
               }}
               role="listitem"
             >
@@ -97,35 +140,5 @@ function ConfirmationDialogRaw(props: ConfirmationDialogRawProps) {
         </DialogActions>
       </Dialog>
     </>
-  );
-}
-
-export default function AddSubgraphDialog(props: {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}) {
-  const { open, setOpen } = props;
-  const [value, setValue] = React.useState('Dione');
-
-  const handleClickListItem = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (newValue?: string) => {
-    setOpen(false);
-
-    if (newValue) {
-      setValue(newValue);
-    }
-  };
-
-  return (
-    <ConfirmationDialogRaw
-      id="ringtone-menu"
-      keepMounted
-      open={open}
-      onClose={handleClose}
-      value={value}
-    />
   );
 }
