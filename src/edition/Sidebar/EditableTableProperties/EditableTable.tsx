@@ -51,6 +51,7 @@ interface EditableTableProps {
   headers: string[];
   defaultValues: Condition[] | Inputs[];
   typeOfValues: TypeOfValues[];
+  graphDefaultInputs?: boolean;
   valuesChanged: (rows: EditableTableRow[]) => void;
   onRowAdd?: (rows?: EditableTableRow[]) => void;
 }
@@ -70,7 +71,7 @@ function EditableTable(props: EditableTableProps) {
   const [dialogContent, setDialogContent] = React.useState<DialogContent>();
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const { defaultValues, headers, onRowAdd } = props;
+  const { defaultValues, headers, graphDefaultInputs, onRowAdd } = props;
 
   useEffect(() => {
     setTypeOfInputs(defaultValues.map(getType));
@@ -294,11 +295,13 @@ function EditableTable(props: EditableTableProps) {
                   onEdit={() => onEditRow(row.id || '', index)}
                 />
 
-                <ToolsCell onDelete={() => onDelete(row.id || '')} />
+                {!graphDefaultInputs && (
+                  <ToolsCell onDelete={() => onDelete(row.id || '')} />
+                )}
               </TableRow>
             </React.Fragment>
           ))}
-          {onRowAdd && (
+          {onRowAdd && !graphDefaultInputs && (
             <TableRow>
               <TableCell align="left" className={classes.plusButtonTableCell} />
               <TableCell align="left" className={classes.plusButtonTableCell}>
