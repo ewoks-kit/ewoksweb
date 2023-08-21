@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -87,16 +87,11 @@ export default function AddSubgraphDialog(props: ConfirmationDialogRawProps) {
         }}
       />
 
-      <Dialog
-        maxWidth="xl"
-        aria-labelledby="add-subgraph-dialog"
-        open={open}
-        onClose={handleClose}
-      >
-        <DialogTitle id="add-subgraph-dialog-title">Add Subgraph</DialogTitle>
+      <Dialog maxWidth="xl" open={open} onClose={handleClose}>
+        <DialogTitle>Add Subgraph</DialogTitle>
         <DialogContent>
           <List component="div" role="list">
-            <ListItem button divider role="listitem">
+            <ListItem divider role="listitem">
               <ListItemText primary="From Server" />
               <span style={{ marginLeft: '20px', display: 'flex' }}>
                 <GetWorkflowFromServerDropdown
@@ -110,7 +105,6 @@ export default function AddSubgraphDialog(props: ConfirmationDialogRawProps) {
                     addSubgraph();
                   }}
                   size="small"
-                  aria-controls="editSidebar-dropdown-menu"
                   aria-label="Open edit actions menu"
                 >
                   <CloudDownloadIcon />
@@ -120,8 +114,6 @@ export default function AddSubgraphDialog(props: ConfirmationDialogRawProps) {
             <ListItem
               button
               divider
-              aria-controls="ringtone-menu"
-              aria-label="phone ringtone"
               onClick={() => {
                 ref.current?.click();
                 handleClose();
