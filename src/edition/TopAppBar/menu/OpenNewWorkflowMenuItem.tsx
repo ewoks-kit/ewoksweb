@@ -23,10 +23,9 @@ function OpenNewWorkflowMenuItem() {
       (e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'n',
     (e) => {
       e.preventDefault();
-      e.stopPropagation();
       setOpenDialog(true);
     },
-    [openEmptyWorkflow]
+    []
   );
 
   return (
@@ -35,7 +34,7 @@ function OpenNewWorkflowMenuItem() {
         title="Open a new workflow"
         content="All unsaved modifications will be lost. Continue?"
         open={openDialog}
-        agreeCallback={() => openEmptyWorkflow()}
+        agreeCallback={openEmptyWorkflow}
         disagreeCallback={() => setOpenDialog(false)}
       />
       <ActionMenuItem
