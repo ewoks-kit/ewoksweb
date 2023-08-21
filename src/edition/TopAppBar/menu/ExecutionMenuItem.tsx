@@ -5,16 +5,18 @@ import { executeWorkflow } from '../../../api/workflows';
 import ConfirmDialog from '../../../general/ConfirmDialog';
 import ActionMenuItem from './ActionMenuItem';
 import { useNavigate } from 'react-router-dom';
+import ExecuteParametersDialog from '../ExecuteParametersDialog';
 
 function ExecutionMenuItem() {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
 
+  const [open, setOpen] = useState(false);
+
   const navigate = useNavigate();
 
   function checkAndExecute() {
-    execute();
-    setOpenAgreeDialog(false);
+    setOpenAgreeDialog(true);
   }
 
   async function execute() {
@@ -42,8 +44,17 @@ function ExecutionMenuItem() {
     }
   }
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
+      <ExecuteParametersDialog
+        open={open}
+        onClose={handleClose}
+        executeWorkflow={execute}
+      />
       <ActionMenuItem
         icon={SendIcon}
         label="Execute workflow"
@@ -53,7 +64,7 @@ function ExecutionMenuItem() {
         title="There are unsaved changes"
         content="Continue without saving?"
         open={openAgreeDialog}
-        agreeCallback={execute}
+        agreeCallback={() => setOpen(true)} // execute
         disagreeCallback={() => setOpenAgreeDialog(false)}
       />
     </>
