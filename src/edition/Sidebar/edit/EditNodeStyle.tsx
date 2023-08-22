@@ -92,46 +92,70 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     });
   };
 
+  const [showBorderColor, setShowBorderColor] = useState(
+    !!nodeData.ui_props.colorBorder
+  );
+
   return (
     <FormControl variant="filled" fullWidth>
-      {nodeData.task_props.task_type !== 'note' && (
+      <div>
+        {nodeData.task_props.task_type !== 'note' && (
+          <>
+            <label htmlFor="withImage">With image</label>
+            <Checkbox
+              name="withImage"
+              checked={
+                nodeData.ui_props.withImage === undefined
+                  ? true
+                  : !!nodeData.ui_props.withImage
+              }
+              onChange={(event) => withImageChanged(event.target.checked)}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+            <label htmlFor="withLabel">With label</label>
+            <Checkbox
+              name="withLabel"
+              checked={
+                nodeData.ui_props.withLabel === undefined
+                  ? true
+                  : !!nodeData.ui_props.withLabel
+              }
+              onChange={(event) => withLabelChanged(event.target.checked)}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </>
+        )}
+        <label id="borderCheckboxLabel" htmlFor="borderCheckbox">
+          With border
+        </label>
+        <Checkbox
+          name="borderCheckbox"
+          checked={showBorderColor}
+          onChange={() => {
+            if (showBorderColor) {
+              setShowBorderColor(false);
+              colorBorderChanged('');
+            } else {
+              setShowBorderColor(true);
+              colorBorderChanged('#000000');
+            }
+          }}
+        />
+      </div>
+      {showBorderColor && (
         <div>
-          <label htmlFor="withImage">With Image</label>
-          <Checkbox
-            name="withImage"
-            checked={
-              nodeData.ui_props.withImage === undefined
-                ? true
-                : !!nodeData.ui_props.withImage
-            }
-            onChange={(event) => withImageChanged(event.target.checked)}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
-          <label htmlFor="withLabel">With Label</label>
-          <Checkbox
-            name="withLabel"
-            checked={
-              nodeData.ui_props.withLabel === undefined
-                ? true
-                : !!nodeData.ui_props.withLabel
-            }
-            onChange={(event) => withLabelChanged(event.target.checked)}
-            inputProps={{ 'aria-label': 'controlled' }}
+          <label htmlFor="head">Border color</label>
+          <input
+            aria-label="Color"
+            type="color"
+            id="head"
+            name="head"
+            value={nodeData.ui_props.colorBorder || ''}
+            onChange={(event) => colorBorderChanged(event.target.value)}
+            style={{ margin: '10px' }}
           />
         </div>
       )}
-      <div>
-        <label htmlFor="head">Color</label>
-        <input
-          aria-label="Color"
-          type="color"
-          id="head"
-          name="head"
-          value={nodeData.ui_props.colorBorder || ''}
-          onChange={(event) => colorBorderChanged(event.target.value)}
-          style={{ margin: '10px' }}
-        />
-      </div>
       {!['graphInput', 'graphOutput', 'note'].includes(
         nodeData.task_props.task_type
       ) && (
@@ -148,7 +172,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
         </div>
       )}
       <div style={{ minWidth: '200px' }}>
-        <label htmlFor="nodeSize">Node Size</label>
+        <label htmlFor="nodeSize">Node size</label>
         <Slider
           id="nodeSize"
           color="primary"
