@@ -115,10 +115,13 @@ const workingGraph = (
       nodes: grfNodes,
       links: toRFEwoksLinks(inputGraph, newNodeSubgraphs, get().tasks),
     });
-    get().setSubgraphsStack({
-      id: inputGraph.graph.id,
-      label: inputGraph.graph.label,
-    });
+
+    if (inputGraph.graph.id !== '') {
+      get().setSubgraphsStack({
+        id: inputGraph.graph.id,
+        label: inputGraph.graph.label,
+      });
+    }
     set((state) => ({
       ...state,
       workingGraph: newGraphNoData,

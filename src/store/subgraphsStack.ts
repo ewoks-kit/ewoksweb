@@ -14,10 +14,7 @@ const subgraphsStack = (
 
   setSubgraphsStack: (stackGraph) => {
     let stack: stackGraph[] = [];
-    let subStack = get().subgraphsStack;
-    if (subStack.length === 1 && subStack[0].id === '') {
-      subStack = [];
-    }
+    const subStack = get().subgraphsStack;
     const exists: number = subStack.map((gr) => gr.id).indexOf(stackGraph.id);
     if (stackGraph.resetStack) {
       stack = [];
