@@ -25,6 +25,7 @@ import {
   rfToEwoks,
   textForError,
 } from '../../utils';
+import { useTasks } from '../hooks';
 import FormField from './FormField';
 import type { GraphFields } from './models';
 import { enrichWithData } from './utils';
@@ -47,7 +48,7 @@ export default function GraphFormDialog(props: Props) {
   const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
-  const tasks = useStore((state) => state.tasks);
+  const tasks = useTasks();
 
   const mutateWorkflows = useMutateWorkflows();
 

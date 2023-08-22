@@ -5,7 +5,7 @@ import { useReactFlow } from 'reactflow';
 
 import { fetchWorkflow } from '../api/workflows';
 import ErrorFallback from '../general/ErrorFallback';
-import { useGetTasks } from '../general/hooks';
+import { useGetTasks, useTasks } from '../general/hooks';
 import useStore from '../store/useStore';
 import { textForError } from '../utils';
 import Canvas from './Canvas/Canvas';
@@ -19,7 +19,7 @@ const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
 export default function EditPage() {
   const rfInstance = useReactFlow();
 
-  const tasks = useStore((state) => state.tasks);
+  const tasks = useTasks();
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);

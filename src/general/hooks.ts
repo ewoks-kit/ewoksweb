@@ -71,3 +71,7 @@ export function useGetTasks() {
     }
   };
 }
+
+export function useTasks() {
+  return useStore((state) => state.tasks);
+}

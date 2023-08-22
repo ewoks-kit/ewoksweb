@@ -4,13 +4,14 @@ import { useCallback, useState } from 'react';
 import { useReactFlow } from 'reactflow';
 
 import ConfirmDialog from '../../../general/ConfirmDialog';
+import { useTasks } from '../../../general/hooks';
 import useStore from '../../../store/useStore';
 import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';
 import ActionMenuItem from './ActionMenuItem';
 
 function OpenNewWorkflowMenuItem() {
   const [openDialog, setOpenDialog] = useState(false);
-  const tasks = useStore((state) => state.tasks);
+  const tasks = useTasks();
 
   const rfInstance = useReactFlow();
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);

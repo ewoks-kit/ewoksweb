@@ -14,6 +14,7 @@ import commonStrings from 'commonStrings.json';
 import { textForError } from '../../../utils';
 import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';
 import { useReactFlow } from 'reactflow';
+import { useTasks } from '../../../general/hooks';
 
 export default function WorkflowSidebarMenu() {
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
@@ -21,7 +22,7 @@ export default function WorkflowSidebarMenu() {
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const rfInstance = useReactFlow();
-  const tasks = useStore((state) => state.tasks);
+  const tasks = useTasks();
 
   const graphInfo = useStore((state) => state.graphInfo);
   const workingGraph = useStore((state) => state.workingGraph);
