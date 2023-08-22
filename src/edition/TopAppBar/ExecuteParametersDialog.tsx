@@ -11,12 +11,12 @@ import {
   CardContent,
   FormControl,
   InputLabel,
-  MenuItem,
   Select,
 } from '@material-ui/core';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import AddRowButton from '../Sidebar/EditableTableProperties/AddRowButton';
 import ToolsCell from '../Sidebar/EditableTableProperties/ToolsCell';
+import { nanoid } from 'nanoid';
 
 export interface ExecuteParametersDialogProps {
   open: boolean;
@@ -24,8 +24,10 @@ export interface ExecuteParametersDialogProps {
   executeWorkflow: (params?: string[]) => Promise<void>;
 }
 
-interface DefaultInput extends Inputs {
-  node: string;
+interface DefaultInputRow extends Inputs {
+  rowId: string;
+  nodeLabel: string;
+  nodeId?: string;
 }
 
 export default function ExecuteParametersDialog(
@@ -36,7 +38,7 @@ export default function ExecuteParametersDialog(
   const nodesData = useNodeDataStore();
 
   const [executeParams, setExecuteParams] = useState([]);
-  const [defaultInputs, setDefaultInputs] = useState<DefaultInput[]>([]);
+  const [defaultInputs, setDefaultInputs] = useState<DefaultInputRow[]>([]);
 
   function handleCancel() {
     onClose();
@@ -58,22 +60,22 @@ export default function ExecuteParametersDialog(
     console.log(rows);
   }
 
-  function handleChangeSpecificTarget(input: DefaultInput, targetNode: string) {
+  function handleChangeTarget(input: DefaultInputRow, targetNode: string) {
     console.log(input, targetNode, defaultInputs);
 
-    const newInputs = defaultInputs.filter(
-      (inp) => inp.node !== input.node && inp.name !== input.name
+    const newInputRow = {
+      ...input,
+      nodeLabel: targetNode,
+      nodeId: ['All nodes', 'All input nodes'].includes(targetNode)
+        ? ''
+        : targetNode,
+    };
+
+    const otherInputs = defaultInputs.filter(
+      (inp) => inp.rowId !== input.rowId
     );
 
-    setDefaultInputs([
-      ...newInputs,
-      {
-        node: targetNode,
-        name: input.name,
-        value: input.value,
-        type: input.type,
-      },
-    ]);
+    setDefaultInputs([...otherInputs, newInputRow]);
   }
 
   function handleRowAddition() {
@@ -81,13 +83,20 @@ export default function ExecuteParametersDialog(
 
     setDefaultInputs([
       ...defaultInputs,
-      { node: '', id: '', name: '', value: '' },
+      {
+        rowId: nanoid(),
+        nodeLabel: '',
+        nodeId: '',
+        id: '',
+        name: '',
+        value: '',
+      },
     ]);
   }
 
   function handleRowDelete(input: DefaultInput) {
     const newInputs = defaultInputs.filter(
-      (inp) => inp.node !== input.node && inp.name !== input.name
+      (inp) => inp.nodeId !== input.nodeId && inp.name !== input.name
     );
 
     setDefaultInputs(newInputs);
@@ -108,10 +117,7 @@ export default function ExecuteParametersDialog(
           <CardContent>
             <h4>Default Inputs</h4>
             {defaultInputs.map((input) => (
-              <div
-                style={{ display: 'flex' }}
-                key={`${input.node} - ${input.name}`}
-              >
+              <div style={{ display: 'flex' }} key={input.nodeId}>
                 <FormControl
                   style={{ minWidth: '180px', margin: '5px' }}
                   variant="filled"
@@ -119,12 +125,9 @@ export default function ExecuteParametersDialog(
                   <InputLabel>Node/s</InputLabel>
                   <Select
                     native
-                    defaultValue={input.node}
+                    defaultValue={input.nodeLabel}
                     onChange={(ev) =>
-                      handleChangeSpecificTarget(
-                        input,
-                        ev.target.value as string
-                      )
+                      handleChangeTarget(input, ev.target.value as string)
                     }
                   >
                     <option value="All nodes">All nodes</option>
@@ -146,11 +149,15 @@ export default function ExecuteParametersDialog(
                     { id: '1', name: '2', value: '1', type: 'string' },
                   ]}
                   valuesChanged={defaultInputsChanged}
-                  onRowAdd={(rows) => addDefaultInputs(rows)}
+                  // onRowAdd={(rows) => addDefaultInputs(rows)}
                   typeOfValues={[
                     {
                       typeOfInput: 'select',
-                      values: ['1', '2'],
+                      values: [
+                        ...(nodesData.nodesData.get(input).task_props
+                          .required_input_names || []),
+                        ...(nodeData.task_props.optional_input_names || []),
+                      ],
                       // requiredValues:
                       //   nodeData.task_props.required_input_names || [],
                     },
