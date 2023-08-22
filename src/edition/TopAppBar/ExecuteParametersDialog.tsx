@@ -5,7 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Dialog from '@material-ui/core/Dialog';
 import EditableTable from '../Sidebar/EditableTableProperties/EditableTable';
-import type { EditableTableRow, Inputs } from 'types';
+import type { EditableTableRow } from 'types';
 import {
   Card,
   CardContent,
@@ -18,14 +18,28 @@ import AddRowButton from '../Sidebar/EditableTableProperties/AddRowButton';
 import ToolsCell from '../Sidebar/EditableTableProperties/ToolsCell';
 import { nanoid } from 'nanoid';
 
+interface ExecutionDefaultInputs {
+  name: string;
+  value: unknown;
+  id?: string;
+  label?: string;
+  taskIdentifier?: string;
+  all?: boolean;
+}
+
+export interface ExecutionParams {
+  defaultInputs?: ExecutionDefaultInputs[];
+  workerOptions?: string[];
+  queue?: string;
+}
+
 export interface ExecuteParametersDialogProps {
   open: boolean;
   onClose: (value?: string) => void;
-  executeWorkflow: (params?: string[]) => Promise<void>;
+  executeWorkflow: (params?: ExecutionParams) => Promise<ExecutionParams>;
 }
 
-interface DefaultInputRow extends Inputs {
-  rowId: string;
+interface DefaultInputRow extends EditableTableRow {
   nodeLabel: string;
   nodeId?: string;
 }
@@ -37,7 +51,6 @@ export default function ExecuteParametersDialog(
 
   const nodesData = useNodeDataStore();
 
-  const [executeParams, setExecuteParams] = useState([]);
   const [defaultInputs, setDefaultInputs] = useState<DefaultInputRow[]>([]);
 
   function handleCancel() {
@@ -45,59 +58,67 @@ export default function ExecuteParametersDialog(
   }
 
   function handleClose() {
-    onClose('');
+    onClose();
   }
 
   function handleExecute() {
-    executeWorkflow(executeParams);
+    const execDefaultInputs: ExecutionDefaultInputs[] = defaultInputs.map(
+      (input) => {
+        return {
+          name: input.name || '',
+          value: input.value,
+          id: ['All nodes', 'All input nodes'].includes(input.nodeLabel)
+            ? ''
+            : input.nodeId,
+        };
+      }
+    );
+
+    executeWorkflow({ defaultInputs: execDefaultInputs });
   }
 
-  function defaultInputsChanged() {
-    console.log('input changed');
-  }
-
-  function addDefaultInputs(rows: EditableTableRow[] | undefined) {
-    console.log(rows);
-  }
-
-  function handleChangeTarget(input: DefaultInputRow, targetNode: string) {
-    console.log(input, targetNode, defaultInputs);
-
+  function defaultInputChanged(input: DefaultInputRow, row: EditableTableRow) {
     const newInputRow = {
       ...input,
-      nodeLabel: targetNode,
-      nodeId: ['All nodes', 'All input nodes'].includes(targetNode)
-        ? ''
-        : targetNode,
+      name: row.name,
+      type: row.type,
+      value: row.value,
     };
 
-    const otherInputs = defaultInputs.filter(
-      (inp) => inp.rowId !== input.rowId
-    );
+    const otherInputs = defaultInputs.filter((inp) => inp.id !== input.id);
+
+    setDefaultInputs([...otherInputs, newInputRow]);
+  }
+
+  function handleChangeTarget(input: DefaultInputRow, targetNodeId: string) {
+    const newInputRow = {
+      ...input,
+      nodeLabel: nodesData.nodesData.get(targetNodeId)?.ewoks_props.label || '',
+      nodeId: ['All nodes', 'All input nodes'].includes(targetNodeId)
+        ? ''
+        : targetNodeId,
+    };
+
+    const otherInputs = defaultInputs.filter((inp) => inp.id !== input.id);
 
     setDefaultInputs([...otherInputs, newInputRow]);
   }
 
   function handleRowAddition() {
-    console.log(defaultInputs);
-
     setDefaultInputs([
       ...defaultInputs,
       {
-        rowId: nanoid(),
-        nodeLabel: '',
+        id: nanoid(),
+        nodeLabel: 'All nodes',
         nodeId: '',
-        id: '',
         name: '',
         value: '',
       },
     ]);
   }
 
-  function handleRowDelete(input: DefaultInput) {
-    const newInputs = defaultInputs.filter(
-      (inp) => inp.nodeId !== input.nodeId && inp.name !== input.name
-    );
+  function handleRowDelete(input: DefaultInputRow) {
+    const newInputs = defaultInputs.filter((inp) => inp.id !== input.id);
 
     setDefaultInputs(newInputs);
   }
@@ -109,15 +130,13 @@ export default function ExecuteParametersDialog(
       open={open}
       onClose={handleClose}
     >
-      <DialogTitle id="add-subgraph-dialog-title">
-        Execution Parameters
-      </DialogTitle>
+      <DialogTitle>Execution Parameters</DialogTitle>
       <DialogContent>
         <Card variant="outlined" style={{ margin: '2px' }}>
           <CardContent>
             <h4>Default Inputs</h4>
             {defaultInputs.map((input) => (
-              <div style={{ display: 'flex' }} key={input.nodeId}>
+              <span style={{ display: 'flex' }} key={input.id}>
                 <FormControl
                   style={{ minWidth: '180px', margin: '5px' }}
                   variant="filled"
@@ -126,9 +145,11 @@ export default function ExecuteParametersDialog(
                   <Select
                     native
                     defaultValue={input.nodeLabel}
-                    onChange={(ev) =>
-                      handleChangeTarget(input, ev.target.value as string)
-                    }
+                    onChange={(ev) => {
+                      console.log(ev);
+
+                      handleChangeTarget(input, ev.target.value as string);
+                    }}
                   >
                     <option value="All nodes">All nodes</option>
                     <option value="All input nodes">All input nodes</option>
@@ -144,19 +165,30 @@ export default function ExecuteParametersDialog(
                 </FormControl>
                 <EditableTable
                   graphDefaultInputs
-                  headers={['Name', 'Value']}
+                  headers={['Input Name', 'Value']}
                   defaultValues={[
-                    { id: '1', name: '2', value: '1', type: 'string' },
+                    {
+                      id: input.id,
+                      name: input.name,
+                      value: input.value,
+                      type: input.type,
+                    },
                   ]}
-                  valuesChanged={defaultInputsChanged}
-                  // onRowAdd={(rows) => addDefaultInputs(rows)}
+                  valuesChanged={(rows: EditableTableRow[]) =>
+                    defaultInputChanged(input, rows[0])
+                  }
                   typeOfValues={[
                     {
                       typeOfInput: 'select',
                       values: [
-                        ...(nodesData.nodesData.get(input).task_props
-                          .required_input_names || []),
-                        ...(nodeData.task_props.optional_input_names || []),
+                        ...((input.nodeId &&
+                          nodesData.nodesData.get(input.nodeId)?.task_props
+                            .required_input_names) ||
+                          []),
+                        ...((input.nodeId &&
+                          nodesData.nodesData.get(input.nodeId)?.task_props
+                            .optional_input_names) ||
+                          []),
                       ],
                       // requiredValues:
                       //   nodeData.task_props.required_input_names || [],
@@ -165,7 +197,7 @@ export default function ExecuteParametersDialog(
                   ]}
                 />
                 <ToolsCell onDelete={() => handleRowDelete(input)} />
-              </div>
+              </span>
             ))}
             <AddRowButton onClick={() => handleRowAddition()} />
           </CardContent>
@@ -183,7 +215,7 @@ export default function ExecuteParametersDialog(
       </DialogContent>
       <DialogActions>
         <Button onClick={handleExecute} color="primary">
-          Cancel
+          Execute
         </Button>
         <Button onClick={handleCancel} color="primary">
           Cancel

@@ -6,6 +6,7 @@ import ConfirmDialog from '../../../general/ConfirmDialog';
 import ActionMenuItem from './ActionMenuItem';
 import { useNavigate } from 'react-router-dom';
 import ExecuteParametersDialog from '../ExecuteParametersDialog';
+import type { ExecutionParams } from '../ExecuteParametersDialog';
 
 function ExecutionMenuItem() {
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
@@ -19,7 +20,7 @@ function ExecutionMenuItem() {
     setOpenAgreeDialog(true);
   }
 
-  async function execute() {
+  async function execute(params: ExecutionParams) {
     const { recentGraphs, workingGraph } = useStore.getState();
     if (recentGraphs.length === 0) {
       setOpenSnackbar({
@@ -44,9 +45,14 @@ function ExecutionMenuItem() {
     }
   }
 
-  const handleClose = () => {
+  function handleClose() {
     setOpen(false);
-  };
+  }
+
+  function handleAgree() {
+    setOpenAgreeDialog(false);
+    setOpen(true);
+  }
 
   return (
     <>
@@ -64,7 +70,7 @@ function ExecutionMenuItem() {
         title="There are unsaved changes"
         content="Continue without saving?"
         open={openAgreeDialog}
-        agreeCallback={() => setOpen(true)} // execute
+        agreeCallback={handleAgree}
         disagreeCallback={() => setOpenAgreeDialog(false)}
       />
     </>

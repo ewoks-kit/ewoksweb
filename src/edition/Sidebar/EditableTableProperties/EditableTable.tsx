@@ -295,9 +295,9 @@ function EditableTable(props: EditableTableProps) {
                   onEdit={() => onEditRow(row.id || '', index)}
                 />
 
-                {!graphDefaultInputs && (
+                {/* {!graphDefaultInputs && (
                   <ToolsCell onDelete={() => onDelete(row.id || '')} />
-                )}
+                )} */}
               </TableRow>
             </React.Fragment>
           ))}
