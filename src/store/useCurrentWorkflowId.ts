@@ -12,7 +12,7 @@ const useCurrentWorkflowIdStore = create<CurrentWorkflowIdState>((set) => ({
     set({
       id,
     }),
-  resetId: () => set({ id: undefined }),
+  resetId: () => set({ id: '' }),
 }));
 
 export default useCurrentWorkflowIdStore;

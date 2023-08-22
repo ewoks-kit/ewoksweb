@@ -34,6 +34,8 @@ const workingGraph = (
   workingGraphSource: undefined,
 
   setWorkingGraph: async (inputGraph, rfInstance, source): Promise<void> => {
+    console.log(inputGraph);
+
     // 1. Initialize the canvas while working on the new graph
     get().setSubgraphsStack({
       id: '',

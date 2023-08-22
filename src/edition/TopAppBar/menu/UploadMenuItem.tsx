@@ -26,7 +26,7 @@ function UploadMenuItem() {
       <OpenGraphInput
         ref={ref}
         onGraphLoad={(graph) => {
-          resetCurrentWorkflowId();
+          // resetCurrentWorkflowId();
           setWorkingGraph(graph, rfInstance, 'fromDisk');
         }}
       />

@@ -22,13 +22,15 @@ export default function EditPage() {
   const tasks = useStore((state) => state.tasks);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const workingGraphSource = useStore((state) => state.workingGraphSource);
+  // const workingGraphSource = useStore((state) => state.workingGraphSource);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
   const currentWorkflowId = useCurrentWorkflowIdStore((state) => state.id);
 
   useEffect(() => {
-    if (!currentWorkflowId && workingGraphSource !== 'fromDisk') {
+    console.log(currentWorkflowId);
+
+    if (currentWorkflowId === '') {
       setWorkingGraph(EMPTY_GRAPH, rfInstance);
       return;
     }
@@ -56,7 +58,7 @@ export default function EditPage() {
     setWorkingGraph,
     rfInstance,
     currentWorkflowId,
-    workingGraphSource,
+    // workingGraphSource,
   ]);
 
   const getTasks = useGetTasks();
