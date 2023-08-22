@@ -32,7 +32,7 @@ function sortByCategory(
 function WorkflowDropdown(props: Props) {
   const { onChange, category } = props;
 
-  const [inputValue, setInputValue] = useState<string>('');
+  const [inputValue, setInputValue] = useState('');
   const [open, setOpen] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
