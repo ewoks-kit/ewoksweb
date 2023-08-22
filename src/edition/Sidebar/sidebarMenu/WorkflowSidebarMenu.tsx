@@ -14,7 +14,8 @@ import commonStrings from 'commonStrings.json';
 import { textForError } from '../../../utils';
 import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';
 import { useReactFlow } from 'reactflow';
-import { useTasks } from '../../../general/hooks';
+import { useTasks } from '../../../api/tasks';
+import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 
 export default function WorkflowSidebarMenu() {
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
@@ -55,12 +56,14 @@ export default function WorkflowSidebarMenu() {
 
   return (
     <>
-      <GraphFormDialog
-        elementToEdit={graphInfo}
-        action={GraphFormAction.cloneGraph}
-        isOpen={openSaveDialog}
-        onClose={() => setOpenSaveDialog(false)}
-      />
+      <SuspenseBoundary>
+        <GraphFormDialog
+          elementToEdit={graphInfo}
+          action={GraphFormAction.cloneGraph}
+          isOpen={openSaveDialog}
+          onClose={() => setOpenSaveDialog(false)}
+        />
+      </SuspenseBoundary>
 
       <MenuItem
         onClick={() => setOpenSaveDialog(true)}

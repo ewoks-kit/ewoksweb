@@ -6,7 +6,7 @@ import {
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { useState } from 'react';
-import { useTasks } from '../../general/hooks';
+import { useTasks } from '../../api/tasks';
 import useConfigStore from '../../store/useConfigStore';
 import AddNoteButton from './AddNoteButton';
 import AddSubgraphButton from './AddSubgraphButton';

@@ -7,7 +7,7 @@ import ConfirmDialog from './ConfirmDialog';
 import WorkflowDropdown from './WorkflowDropdown';
 import { fetchWorkflow } from '../api/workflows';
 import { useReactFlow } from 'reactflow';
-import { useTasks } from './hooks';
+import { useTasks } from '../api/tasks';
 
 export default function GetWorkflowFromServerDropdown() {
   const [workflowId, setWorkflowId] = useState('');

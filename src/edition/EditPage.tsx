@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import { useReactFlow } from 'reactflow';
+import { useTasks } from '../api/tasks';
 
 import { fetchWorkflow } from '../api/workflows';
 import ErrorFallback from '../general/ErrorFallback';
-import { useGetTasks, useTasks } from '../general/hooks';
 import useStore from '../store/useStore';
+import SuspenseBoundary from '../suspense/SuspenseBoundary';
 import { textForError } from '../utils';
 import Canvas from './Canvas/Canvas';
 import styles from './EditPage.module.css';
@@ -18,7 +18,6 @@ const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
 
 export default function EditPage() {
   const rfInstance = useReactFlow();
-
   const tasks = useTasks();
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
@@ -45,13 +44,6 @@ export default function EditPage() {
     }
   }, [setWorkingGraph, rfInstance, tasks, setOpenSnackbar]);
 
-  const getTasks = useGetTasks();
-  useEffect(() => {
-    if (tasks.length === 0) {
-      getTasks();
-    }
-  });
-
   return (
     <div className={styles.root}>
       <TopAppBar />
@@ -63,9 +55,9 @@ export default function EditPage() {
         >
           <ReflexElement>
             <main className={styles.content}>
-              <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <SuspenseBoundary FallbackComponent={ErrorFallback}>
                 <Canvas />
-              </ErrorBoundary>
+              </SuspenseBoundary>
             </main>
           </ReflexElement>
           <ReflexSplitter propagate className={styles.reflexSplitter} />

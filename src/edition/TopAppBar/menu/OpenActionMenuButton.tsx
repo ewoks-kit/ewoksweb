@@ -1,6 +1,7 @@
 import { IconButton, Menu } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import React from 'react';
+import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 
 import styles from './ActionMenu.module.css';
 import { ActionMenuContext } from './ActionMenuContext';
@@ -56,8 +57,12 @@ export default function OpenActionMenuButton() {
         getContentAnchorEl={null}
       >
         <ActionMenuContext.Provider value={{ open, onClose }}>
-          <OpenNewWorkflowMenuItem />
-          <UploadMenuItem />
+          <SuspenseBoundary>
+            <OpenNewWorkflowMenuItem />
+          </SuspenseBoundary>
+          <SuspenseBoundary>
+            <UploadMenuItem />
+          </SuspenseBoundary>
           <DownloadMenuItem />
           <DiscoverMenuItem />
           <ExecutionMenuItem />

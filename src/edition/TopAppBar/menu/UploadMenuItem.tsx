@@ -5,7 +5,7 @@ import useStore from '../../../store/useStore';
 import ActionMenuItem from './ActionMenuItem';
 import OpenGraphInput from '../../../general/OpenGraphInput';
 import { useReactFlow } from 'reactflow';
-import { useTasks } from '../../../general/hooks';
+import { useTasks } from '../../../api/tasks';
 
 function UploadMenuItem() {
   const ref = useRef<HTMLInputElement>(null);

@@ -7,6 +7,7 @@ import useTaskDrawerState from '../../store/taskDrawerState';
 import { useDrawerStyles } from './hooks';
 
 import styles from './TaskDrawer.module.css';
+import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 
 function OverflowDrawer() {
   const { open, setOpen } = useTaskDrawerState();
@@ -28,9 +29,9 @@ function OverflowDrawer() {
           ...drawerStyles,
         }}
       >
-        <aside className="dndflow">
+        <SuspenseBoundary>
           <TaskList />
-        </aside>
+        </SuspenseBoundary>
       </Drawer>
       <Fab
         className={styles.openButton}

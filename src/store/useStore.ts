@@ -6,7 +6,6 @@ import openSnackbar from './openSnackbar';
 import recentGraphs from './recentGraphs';
 import subGraph from './subGraph';
 import subgraphsStack from './subgraphsStack';
-import tasks from './tasks';
 import graphInfo from './graphInfo';
 
 const useStore = create<State>((set, get) => ({
@@ -16,7 +15,6 @@ const useStore = create<State>((set, get) => ({
   ...recentGraphs(set, get),
   ...subGraph(set, get),
   ...subgraphsStack(set, get),
-  ...tasks(set),
   ...workingGraph(set, get),
 }));
 

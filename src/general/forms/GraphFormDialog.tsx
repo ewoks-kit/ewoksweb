@@ -25,7 +25,7 @@ import {
   rfToEwoks,
   textForError,
 } from '../../utils';
-import { useTasks } from '../hooks';
+import { useTasks } from '../../api/tasks';
 import FormField from './FormField';
 import type { GraphFields } from './models';
 import { enrichWithData } from './utils';

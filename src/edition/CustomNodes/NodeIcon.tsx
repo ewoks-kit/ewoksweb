@@ -1,5 +1,5 @@
 import { useIcons } from '../../api/icons';
-import { useTasks } from '../../general/hooks';
+import { useTasks } from '../../api/tasks';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import { findImage } from '../../utils';
 import { assertNodeDataDefined } from '../../utils/typeGuards';

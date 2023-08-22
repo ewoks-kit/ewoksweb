@@ -32,7 +32,7 @@ import {
 } from '../../utils/typeGuards';
 import FallbackMessage from './FallbackMessage';
 import GraphInOutNode from '../CustomNodes/GraphInOutNode';
-import { useTasks } from '../../general/hooks';
+import { useTasks } from '../../api/tasks';
 
 const useStyles = makeStyles(() =>
   createStyles({
