@@ -54,7 +54,7 @@ function TaskList() {
               {category === 'General' && (
                 <>
                   <AddNoteButton />
-                  <AddSubgraphButton />
+                  <AddSubgraphButton tasks={tasks} />
                 </>
               )}
             </div>

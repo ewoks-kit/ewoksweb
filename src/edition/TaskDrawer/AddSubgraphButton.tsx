@@ -5,11 +5,16 @@ import OpenGraphInput from '../../general/OpenGraphInput';
 import { useRef } from 'react';
 
 import styles from './TaskDrawer.module.css';
-import type { GraphEwoks } from '../../types';
+import type { GraphEwoks, Task } from '../../types';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
 
-function AddSubgraphButton() {
+interface Props {
+  tasks: Task[];
+}
+
+function AddSubgraphButton(props: Props) {
+  const { tasks } = props;
   const ref = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
 
@@ -21,7 +26,8 @@ function AddSubgraphButton() {
     const { nodeWithoutData, data } = await setSubGraph(
       subgraph,
       nodes,
-      rfInstance.getEdges()
+      rfInstance.getEdges(),
+      tasks
     );
     rfInstance.setNodes([...nodes, nodeWithoutData]);
     setNodeData(nodeWithoutData.id, data);

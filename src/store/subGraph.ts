@@ -5,6 +5,7 @@ import type {
   GraphNodes,
   EwoksRFLink,
   EwoksRFNodeData,
+  Task,
 } from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
@@ -22,7 +23,8 @@ export interface SubGraphSlice {
   setSubGraph: (
     graph: GraphEwoks,
     nodes: Node[],
-    links: Edge[]
+    links: Edge[],
+    tasks: Task[]
   ) => Promise<{ nodeWithoutData: Node; data: EwoksRFNodeData }>;
 }
 
@@ -37,7 +39,7 @@ const subGraph = (
   },
 
   // DOC: takes a GraphEwoks and transform it to graphRF
-  setSubGraph: async (subGraphL, nodes, links) => {
+  setSubGraph: async (subGraphL, nodes, links, tasks) => {
     // 1. input the graphEwoks from server or file-system
     // 2. search for all subgraphs in it (async)
     const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(
@@ -51,22 +53,22 @@ const subGraph = (
       const rfNodes: EwoksRFNode[] = toRFEwoksNodes(
         gr,
         newNodeSubgraphs,
-        get().tasks
+        tasks
       );
 
       get().addRecentGraph({
         graph: gr.graph,
         nodes: rfNodes,
-        links: toRFEwoksLinks(gr, newNodeSubgraphs, get().tasks),
+        links: toRFEwoksLinks(gr, newNodeSubgraphs, tasks),
       });
     });
     // 4. Calculate the new graph given the subgraphs
-    const grfNodes = toRFEwoksNodes(subGraphL, newNodeSubgraphs, get().tasks);
+    const grfNodes = toRFEwoksNodes(subGraphL, newNodeSubgraphs, tasks);
 
     const graph = {
       graph: subGraphL.graph,
       nodes: grfNodes,
-      links: toRFEwoksLinks(subGraphL, newNodeSubgraphs, get().tasks),
+      links: toRFEwoksLinks(subGraphL, newNodeSubgraphs, tasks),
     };
     // Adding a subgraph to an existing workingGraph:
     // save the workingGraph in the recent graphs and add a new graph node to it
