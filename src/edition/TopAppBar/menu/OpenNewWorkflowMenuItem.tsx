@@ -10,13 +10,14 @@ import ActionMenuItem from './ActionMenuItem';
 
 function OpenNewWorkflowMenuItem() {
   const [openDialog, setOpenDialog] = useState(false);
+  const tasks = useStore((state) => state.tasks);
 
   const rfInstance = useReactFlow();
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
   const openEmptyWorkflow = useCallback(() => {
-    setWorkingGraph(EMPTY_GRAPH, rfInstance);
-  }, [setWorkingGraph, rfInstance]);
+    setWorkingGraph(EMPTY_GRAPH, rfInstance, tasks);
+  }, [setWorkingGraph, rfInstance, tasks]);
 
   useKeyboardEvent(
     (e) =>
