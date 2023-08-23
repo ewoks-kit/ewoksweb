@@ -18,7 +18,7 @@ function WorkflowItem(props: Props) {
   const startJobEvent = events.find(
     (e) => e.context === 'job' && e.type === 'start'
   );
-  assertDefined(startJobEvent);
+  assertDefined(startJobEvent, 'No start job event');
   const startWorkflowEvent = events.find(
     (e) => e.context === 'workflow' && e.type === 'start'
   );

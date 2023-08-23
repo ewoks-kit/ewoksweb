@@ -1,0 +1,13 @@
+.item {
+  display: flex;
+  flex-direction: column;
+  border: solid 2px darkred;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin: 0.5rem 1rem;
+  background-color: #ff0000a0;
+}
+
+.error {
+  font-weight: 600;
+}

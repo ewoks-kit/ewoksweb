@@ -2,6 +2,8 @@ import type { EwoksJob } from '../api/models';
 import WorkflowItem from './WorkflowItem';
 import styles from './MonitorPage.module.css';
 import { Link } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
+import WorkflowItemErrorFallback from './WorkflowItemErrorFallback';
 
 interface Props {
   jobs: EwoksJob[];
@@ -30,7 +32,12 @@ function WorkflowList(props: Props) {
             new Date(b[0].time).valueOf() - new Date(a[0].time).valueOf()
         )
         .map((events) => (
-          <WorkflowItem key={events[0].job_id} events={events} />
+          <ErrorBoundary
+            key={events[0].job_id}
+            FallbackComponent={WorkflowItemErrorFallback}
+          >
+            <WorkflowItem events={events} />
+          </ErrorBoundary>
         ))}
     </div>
   );
