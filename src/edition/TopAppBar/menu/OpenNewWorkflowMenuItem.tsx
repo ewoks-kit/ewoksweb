@@ -16,6 +16,7 @@ function OpenNewWorkflowMenuItem() {
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
   const openEmptyWorkflow = useCallback(() => {
+    setOpenDialog(false);
     setWorkingGraph(EMPTY_GRAPH, rfInstance, tasks);
   }, [setWorkingGraph, rfInstance, tasks]);
 
