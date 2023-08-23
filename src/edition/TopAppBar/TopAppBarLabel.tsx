@@ -7,7 +7,11 @@ export default function TopAppBarLabel() {
   const subgraphsStack = useStore((state) => state.subgraphsStack);
   const graphInfo = useStore((state) => state.graphInfo);
 
-  if (subgraphsStack.length === 0 || !subgraphsStack[0].label) {
+  if (subgraphsStack.length === 0) {
+    return <span />;
+  }
+
+  if (!subgraphsStack[0].label) {
     return (
       <span data-cy="untitled_workflow">
         Untitled_workflow <span className={styles.labelHint}>(unsaved)</span>

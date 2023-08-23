@@ -1,23 +1,17 @@
 import { FiberNew } from '@material-ui/icons';
 import { useKeyboardEvent } from '@react-hookz/web';
 import { useCallback, useState } from 'react';
-import { useReactFlow } from 'reactflow';
 
 import ConfirmDialog from '../../../general/ConfirmDialog';
 import useCurrentWorkflowIdStore from '../../../store/useCurrentWorkflowId';
-import useStore from '../../../store/useStore';
-import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';
 import ActionMenuItem from './ActionMenuItem';
 
 function OpenNewWorkflowMenuItem() {
   const [openDialog, setOpenDialog] = useState(false);
 
-  // const rfInstance = useReactFlow();
-  // const setWorkingGraph = useStore((state) => state.setWorkingGraph);
   const resetWorkflowId = useCurrentWorkflowIdStore((state) => state.resetId);
 
   const openEmptyWorkflow = useCallback(() => {
-    // setWorkingGraph(EMPTY_GRAPH, rfInstance);
     resetWorkflowId();
   }, [resetWorkflowId]);
 

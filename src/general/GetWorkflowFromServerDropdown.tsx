@@ -29,10 +29,8 @@ export default function GetWorkflowFromServerDropdown() {
   }
 
   async function getFromServer(workflowIdparam: string) {
-    console.log(workflowIdparam);
-
     if (workflowIdparam) {
-      setCurrentWorkflowId(workflowIdparam);
+      setCurrentWorkflowId(workflowIdparam, 'fromServer');
     } else {
       setOpenSnackbar({
         open: true,

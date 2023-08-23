@@ -11,8 +11,8 @@ function UploadMenuItem() {
   const ref = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
-  const resetCurrentWorkflowId = useCurrentWorkflowIdStore(
-    (state) => state.resetId
+  const setCurrentWorkflowId = useCurrentWorkflowIdStore(
+    (state) => state.setId
   );
 
   return (
@@ -26,8 +26,8 @@ function UploadMenuItem() {
       <OpenGraphInput
         ref={ref}
         onGraphLoad={(graph) => {
-          // resetCurrentWorkflowId();
-          setWorkingGraph(graph, rfInstance, 'fromDisk');
+          setCurrentWorkflowId(graph.graph.id, 'fromDisk');
+          setWorkingGraph(graph, rfInstance);
         }}
       />
     </ActionMenuItem>

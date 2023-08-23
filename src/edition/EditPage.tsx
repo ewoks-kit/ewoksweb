@@ -22,13 +22,17 @@ export default function EditPage() {
   const tasks = useStore((state) => state.tasks);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  // const workingGraphSource = useStore((state) => state.workingGraphSource);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
   const currentWorkflowId = useCurrentWorkflowIdStore((state) => state.id);
+  const workingGraphSource = useCurrentWorkflowIdStore(
+    (state) => state.workingGraphSource
+  );
 
   useEffect(() => {
-    console.log(currentWorkflowId);
+    if (workingGraphSource === 'fromDisk') {
+      return;
+    }
 
     if (currentWorkflowId === '') {
       setWorkingGraph(EMPTY_GRAPH, rfInstance);
@@ -39,7 +43,7 @@ export default function EditPage() {
       const loadGraph = async () => {
         try {
           const { data: graph } = await fetchWorkflow(currentWorkflowId);
-          setWorkingGraph(graph, rfInstance, 'fromServer');
+          setWorkingGraph(graph, rfInstance);
         } catch (error) {
           setOpenSnackbar({
             open: true,
@@ -58,7 +62,7 @@ export default function EditPage() {
     setWorkingGraph,
     rfInstance,
     currentWorkflowId,
-    // workingGraphSource,
+    workingGraphSource,
   ]);
 
   const getTasks = useGetTasks();

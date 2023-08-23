@@ -16,6 +16,7 @@ import { IconButton, Tooltip } from '@material-ui/core';
 import tooltipText from '../../general/TooltipText';
 import type { Status } from './models';
 import StatusIcon from './StatusButton';
+import useCurrentWorkflowIdStore from '../../store/useCurrentWorkflowId';
 
 // DOC: Save to server button with its spinner
 export default function SaveToServerButton() {
@@ -28,7 +29,9 @@ export default function SaveToServerButton() {
   const [status, setStatus] = useState<Status>('idle');
 
   const workingGraph = useStore((state) => state.workingGraph);
-  const workingGraphSource = useStore((state) => state.workingGraphSource);
+  const workingGraphSource = useCurrentWorkflowIdStore(
+    (state) => state.workingGraphSource
+  );
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const [action, setAction] = useState<
     GraphFormAction.newGraph | GraphFormAction.newGraphOrOverwrite
