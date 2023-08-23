@@ -12,6 +12,7 @@ function OpenNewWorkflowMenuItem() {
   const resetWorkflowId = useCurrentWorkflowIdStore((state) => state.resetId);
 
   const openEmptyWorkflow = useCallback(() => {
+    setOpenDialog(false);
     resetWorkflowId();
   }, [resetWorkflowId]);
 
