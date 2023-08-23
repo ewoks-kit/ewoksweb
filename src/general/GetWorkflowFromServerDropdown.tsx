@@ -5,16 +5,17 @@ import useStore from '../store/useStore';
 import type { WorkflowDescription } from '../types';
 import ConfirmDialog from './ConfirmDialog';
 import WorkflowDropdown from './WorkflowDropdown';
-import useCurrentWorkflowIdStore from '../store/useCurrentWorkflowId';
+import { fetchWorkflow } from '../api/workflows';
+import { useReactFlow } from 'reactflow';
 
 export default function GetWorkflowFromServerDropdown() {
   const [workflowId, setWorkflowId] = useState('');
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
-  const setCurrentWorkflowId = useCurrentWorkflowIdStore(
-    (state) => state.setId
-  );
+  const rfInstance = useReactFlow();
+  const tasks = useStore((state) => state.tasks);
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails.id) {
@@ -30,7 +31,8 @@ export default function GetWorkflowFromServerDropdown() {
 
   async function getFromServer(workflowIdparam: string) {
     if (workflowIdparam) {
-      setCurrentWorkflowId(workflowIdparam);
+      const { data: graph } = await fetchWorkflow(workflowIdparam);
+      setWorkingGraph(graph, rfInstance, tasks, 'fromServer');
     } else {
       setOpenSnackbar({
         open: true,

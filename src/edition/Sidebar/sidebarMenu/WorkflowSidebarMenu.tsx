@@ -12,18 +12,20 @@ import ConfirmDialog from '../../../general/ConfirmDialog';
 import { deleteWorkflow } from 'api/workflows';
 import commonStrings from 'commonStrings.json';
 import { textForError } from '../../../utils';
-import useCurrentWorkflowIdStore from '../../../store/useCurrentWorkflowId';
+import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';
+import { useReactFlow } from 'reactflow';
 
 export default function WorkflowSidebarMenu() {
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
 
-  const resetWorkflowId = useCurrentWorkflowIdStore((state) => state.resetId);
-
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const rfInstance = useReactFlow();
+  const tasks = useStore((state) => state.tasks);
 
   const graphInfo = useStore((state) => state.graphInfo);
   const workingGraph = useStore((state) => state.workingGraph);
+  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
   async function agreeCallback() {
     setOpenAgreeDialog(false);
@@ -35,6 +37,7 @@ export default function WorkflowSidebarMenu() {
           text: `Workflow ${graphInfo.id} successfully deleted!`,
           severity: 'success',
         });
+        setWorkingGraph(EMPTY_GRAPH, rfInstance, tasks);
       } catch (error) {
         setOpenSnackbar({
           open: true,
@@ -43,11 +46,9 @@ export default function WorkflowSidebarMenu() {
         });
       }
     }
-
-    resetWorkflowId();
   }
 
-  function disAgreeCallback() {
+  function disagreeCallback() {
     setOpenAgreeDialog(false);
   }
 
@@ -94,7 +95,7 @@ export default function WorkflowSidebarMenu() {
               Do you agree to continue?`}
         open={openAgreeDialog}
         agreeCallback={agreeCallback}
-        disagreeCallback={disAgreeCallback}
+        disagreeCallback={disagreeCallback}
       />
     </>
   );

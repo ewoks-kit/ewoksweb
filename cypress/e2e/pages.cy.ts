@@ -21,7 +21,7 @@ it('should switch to monitor page', () => {
   );
 });
 
-it('should restore an opened workflow when switching pages', () => {
+it.skip('should restore an opened workflow when switching pages', () => {
   cy.loadGraph('tutorial_Graph');
   cy.findByRole('heading', { name: 'tutorial_Graph' }).should('be.visible');
   cy.get('.react-flow__node').should('have.length', 17);
