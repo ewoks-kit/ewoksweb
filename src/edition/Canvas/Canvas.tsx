@@ -1,4 +1,5 @@
 import type { DragEventHandler, MouseEvent } from 'react';
+import { useState } from 'react';
 import { useEffect, useRef } from 'react';
 import type { Node, Edge, Connection, NodeChange, EdgeChange } from 'reactflow';
 import { updateEdge } from 'reactflow';
@@ -32,6 +33,7 @@ import {
 } from '../../utils/typeGuards';
 import FallbackMessage from './FallbackMessage';
 import GraphInOutNode from '../CustomNodes/GraphInOutNode';
+import AddSubgraph from './AddSubgraph';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -64,6 +66,8 @@ function Canvas() {
   const rfInstance = useReactFlow();
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
+
+  const [openAddSubgraph, setOpenAddSubgraph] = useState(false);
 
   const graphInfo = useStore((state) => state.graphInfo);
   const setGraphInfo = useStore((state) => state.setGraphInfo);
@@ -134,6 +138,10 @@ function Canvas() {
       return;
     }
     const { task_type, icon, task_identifier } = taskInfo;
+    if (task_type === 'addSubgraph') {
+      setOpenAddSubgraph(true);
+      return;
+    }
 
     const position = rfInstance.project({
       x: event.clientX - reactFlowBounds.left,
@@ -142,9 +150,9 @@ function Canvas() {
 
     const task = tasks.find((tas) => tas.task_identifier === task_identifier);
 
-    if (!task) {
-      return;
-    }
+    // if (!task) {
+    //   return;
+    // }
 
     const nodesIds = [...stateRF.nodeInternals.keys()];
     const newId =
@@ -166,10 +174,10 @@ function Canvas() {
       task_props: {
         task_type,
         task_identifier,
-        task_category: task.category,
-        optional_input_names: task.optional_input_names,
-        output_names: task.output_names,
-        required_input_names: task.required_input_names,
+        task_category: task?.category || 'General',
+        optional_input_names: task?.optional_input_names || [],
+        output_names: task?.output_names || [],
+        required_input_names: task?.required_input_names || [],
       },
       ewoks_props: {
         label: trimLabel(task_identifier),
@@ -346,38 +354,44 @@ function Canvas() {
   };
 
   return (
-    <div
-      className={classes.root}
-      onKeyDown={handleKeyDown}
-      role="button"
-      tabIndex={0}
-    >
-      <FallbackMessage />
-      <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-        <ReactFlow
-          fitView
-          connectOnClick
-          nodesDraggable
-          attributionPosition="bottom-right"
-          minZoom={0.2}
-          snapToGrid
-          onDrop={onDrop}
-          onConnect={onConnect}
-          onEdgeUpdate={onEdgeUpdate}
-          onDragOver={onDragOver}
-          onPaneContextMenu={onPaneContextMenu}
-          onNodeDoubleClick={onNodeDoubleClick}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          edgeTypes={edgeTypes}
-          nodeTypes={nodeTypes}
-          deleteKeyCode="Delete"
-        >
-          <CanvasBackground />
-          <Controls position="bottom-right" />
-        </ReactFlow>
+    <>
+      <AddSubgraph
+        openAddSubgraph={openAddSubgraph}
+        setOpenAddSubgraph={setOpenAddSubgraph}
+      />
+      <div
+        className={classes.root}
+        onKeyDown={handleKeyDown}
+        role="button"
+        tabIndex={0}
+      >
+        <FallbackMessage />
+        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+          <ReactFlow
+            fitView
+            connectOnClick
+            nodesDraggable
+            attributionPosition="bottom-right"
+            minZoom={0.2}
+            snapToGrid
+            onDrop={onDrop}
+            onConnect={onConnect}
+            onEdgeUpdate={onEdgeUpdate}
+            onDragOver={onDragOver}
+            onPaneContextMenu={onPaneContextMenu}
+            onNodeDoubleClick={onNodeDoubleClick}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            edgeTypes={edgeTypes}
+            nodeTypes={nodeTypes}
+            deleteKeyCode="Delete"
+          >
+            <CanvasBackground />
+            <Controls position="bottom-right" />
+          </ReactFlow>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

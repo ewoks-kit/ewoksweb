@@ -144,7 +144,8 @@ export type TaskType =
   | 'graphOutput'
   | 'class'
   | 'note'
-  | 'script';
+  | 'script'
+  | 'addSubgraph';
 
 export interface Task {
   task_type: TaskType;
