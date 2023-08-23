@@ -17,7 +17,6 @@ import {
   useMutateWorkflows,
 } from '../../api/workflows';
 import commonStrings from '../../commonStrings.json';
-import useCurrentWorkflowIdStore from '../../store/useCurrentWorkflowId';
 import useStore from '../../store/useStore';
 import type { GraphDetails, GraphFormAction } from '../../types';
 import {
@@ -47,11 +46,10 @@ export default function GraphFormDialog(props: Props) {
 
   const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const mutateWorkflows = useMutateWorkflows();
+  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const tasks = useStore((state) => state.tasks);
 
-  const setCurrentWorkflowId = useCurrentWorkflowIdStore(
-    (state) => state.setId
-  );
+  const mutateWorkflows = useMutateWorkflows();
 
   function handleClose() {
     onClose();
@@ -73,7 +71,7 @@ export default function GraphFormDialog(props: Props) {
         await putWorkflow(ewoksGraph);
       } else {
         const { data: newGraph } = await postWorkflow(ewoksGraph);
-        setCurrentWorkflowId(newGraph.graph.id);
+        setWorkingGraph(newGraph, rfInstance, tasks, 'fromServer');
         resetRecentGraphs();
       }
       mutateWorkflows();
