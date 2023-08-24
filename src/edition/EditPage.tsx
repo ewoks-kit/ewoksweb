@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import { useReactFlow } from 'reactflow';
 import { useTasks } from '../api/tasks';
 
 import { fetchWorkflow } from '../api/workflows';
 import ErrorFallback from '../general/ErrorFallback';
+import useWorkflowToRestoreId from '../store/useWorkflowToRestoreId';
 import useStore from '../store/useStore';
 import SuspenseBoundary from '../suspense/SuspenseBoundary';
 import { textForError } from '../utils';
@@ -14,35 +14,38 @@ import EditSidebar from './Sidebar/EditSidebar';
 import OverflowDrawer from './TaskDrawer/TaskDrawer';
 import TopAppBar from './TopAppBar/TopAppBar';
 
-const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
-
 export default function EditPage() {
   const rfInstance = useReactFlow();
   const tasks = useTasks();
 
+  const workflowToRestoreId = useWorkflowToRestoreId((state) => state.id);
+  const resetWorkflowToRestoreId = useWorkflowToRestoreId(
+    (state) => state.resetId
+  );
+
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
-  useEffect(() => {
-    if (initialWorkflowId) {
-      const loadGraph = async () => {
-        try {
-          const { data: graph } = await fetchWorkflow(initialWorkflowId);
-          setWorkingGraph(graph, rfInstance, tasks, 'fromServer');
-        } catch (error) {
-          setOpenSnackbar({
-            open: true,
-            text: textForError(
-              error,
-              'Error in retrieving workflow. Please check connectivity with the server!'
-            ),
-            severity: 'error',
-          });
-        }
-      };
-      loadGraph();
-    }
-  }, [setWorkingGraph, rfInstance, tasks, setOpenSnackbar]);
+  if (workflowToRestoreId) {
+    const restoreWorkflow = async () => {
+      try {
+        const { data: graph } = await fetchWorkflow(workflowToRestoreId);
+        setWorkingGraph(graph, rfInstance, tasks, 'fromServer');
+      } catch (error) {
+        setOpenSnackbar({
+          open: true,
+          text: textForError(
+            error,
+            'Error in retrieving workflow. Please check connectivity with the server!'
+          ),
+          severity: 'error',
+        });
+      } finally {
+        resetWorkflowToRestoreId();
+      }
+    };
+    restoreWorkflow();
+  }
 
   return (
     <div className={styles.root}>
