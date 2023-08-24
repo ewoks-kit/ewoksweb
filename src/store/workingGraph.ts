@@ -5,6 +5,7 @@ import type {
   GraphEwoks,
   GraphRF,
   State,
+  Task,
 } from '../types';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
@@ -22,6 +23,7 @@ export interface WorkingGraphSlice {
   setWorkingGraph: (
     workingGraphObject: GraphEwoks,
     rfInstance: ReactFlowInstance,
+    tasks: Task[],
     source?: string
   ) => Promise<void>;
 }
@@ -33,7 +35,12 @@ const workingGraph = (
   workingGraph: EMPTY_RF_GRAPH,
   workingGraphSource: undefined,
 
-  setWorkingGraph: async (inputGraph, rfInstance, source): Promise<void> => {
+  setWorkingGraph: async (
+    inputGraph,
+    rfInstance,
+    tasks,
+    source
+  ): Promise<void> => {
     // 1. Initialize the canvas while working on the new graph
     get().setSubgraphsStack({
       id: '',
@@ -54,13 +61,13 @@ const workingGraph = (
       // nodes and edges stored with their data as EwoksRFNodes-Links
       get().addRecentGraph({
         graph: gr.graph,
-        nodes: toRFEwoksNodes(gr, newNodeSubgraphs, get().tasks),
-        links: toRFEwoksLinks(gr, newNodeSubgraphs, get().tasks),
+        nodes: toRFEwoksNodes(gr, newNodeSubgraphs, tasks),
+        links: toRFEwoksLinks(gr, newNodeSubgraphs, tasks),
       });
     });
 
     // 4. Calculate the new graph given the subgraphs
-    let grfNodes = toRFEwoksNodes(inputGraph, newNodeSubgraphs, get().tasks);
+    let grfNodes = toRFEwoksNodes(inputGraph, newNodeSubgraphs, tasks);
 
     // 5. Calculate notes nodes
     const notes: EwoksRFNode[] =
@@ -82,7 +89,7 @@ const workingGraph = (
       }) || [];
 
     grfNodes = [...grfNodes, ...notes];
-    const rfLinks = toRFEwoksLinks(inputGraph, newNodeSubgraphs, get().tasks);
+    const rfLinks = toRFEwoksLinks(inputGraph, newNodeSubgraphs, tasks);
     const resultGraph: GraphRF = {
       graph: inputGraph.graph,
       nodes: grfNodes,
@@ -113,7 +120,7 @@ const workingGraph = (
     get().addRecentGraph({
       graph: inputGraph.graph,
       nodes: grfNodes,
-      links: toRFEwoksLinks(inputGraph, newNodeSubgraphs, get().tasks),
+      links: toRFEwoksLinks(inputGraph, newNodeSubgraphs, tasks),
     });
     get().setSubgraphsStack({
       id: inputGraph.graph.id,

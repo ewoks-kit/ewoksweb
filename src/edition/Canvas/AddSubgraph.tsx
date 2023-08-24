@@ -21,6 +21,7 @@ function AddSubgraph(props: Props) {
 
   const setSubGraph = useStore((state) => state.setSubGraph);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const tasks = useStore((state) => state.tasks);
 
   async function handleSubgraphLoad(subgraph: GraphEwoks) {
     const nodes = rfInstance.getNodes();
@@ -28,7 +29,8 @@ function AddSubgraph(props: Props) {
       subgraph,
       nodes,
       rfInstance.getEdges(),
-      subgraphPosition
+      subgraphPosition,
+      tasks
     );
     rfInstance.setNodes([...nodes, nodeWithoutData]);
     setNodeData(nodeWithoutData.id, data);

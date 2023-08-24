@@ -33,6 +33,7 @@ export default function AddSubgraphDialog(props: ConfirmationDialogRawProps) {
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSubGraph = useStore((state) => state.setSubGraph);
+  const tasks = useStore((state) => state.tasks);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   async function handleSubgraphLoad(subgraph: GraphEwoks) {
@@ -41,7 +42,8 @@ export default function AddSubgraphDialog(props: ConfirmationDialogRawProps) {
       subgraph,
       nodes,
       rfInstance.getEdges(),
-      subgraphPosition
+      subgraphPosition,
+      tasks
     );
     rfInstance.setNodes([...nodes, nodeWithoutData]);
     setNodeData(nodeWithoutData.id, data);
@@ -66,7 +68,8 @@ export default function AddSubgraphDialog(props: ConfirmationDialogRawProps) {
         subgraph,
         nodes,
         rfInstance.getEdges(),
-        subgraphPosition
+        subgraphPosition,
+        tasks
       );
       rfInstance.setNodes([...nodes, nodeWithoutData]);
       setNodeData(nodeWithoutData.id, data);

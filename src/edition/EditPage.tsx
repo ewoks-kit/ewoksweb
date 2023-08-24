@@ -6,15 +6,15 @@ import { useReactFlow } from 'reactflow';
 import { fetchWorkflow } from '../api/workflows';
 import ErrorFallback from '../general/ErrorFallback';
 import { useGetTasks } from '../general/hooks';
-import useCurrentWorkflowIdStore from '../store/useCurrentWorkflowId';
 import useStore from '../store/useStore';
 import { textForError } from '../utils';
-import { EMPTY_GRAPH } from '../utils/emptyGraphs';
 import Canvas from './Canvas/Canvas';
 import styles from './EditPage.module.css';
 import EditSidebar from './Sidebar/EditSidebar';
 import OverflowDrawer from './TaskDrawer/TaskDrawer';
 import TopAppBar from './TopAppBar/TopAppBar';
+
+const initialWorkflowId = process.env.REACT_APP_INITIAL_WORKFLOW_ID;
 
 export default function EditPage() {
   const rfInstance = useReactFlow();
@@ -22,22 +22,14 @@ export default function EditPage() {
   const tasks = useStore((state) => state.tasks);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const workingGraphSource = useStore((state) => state.workingGraphSource);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
-  const currentWorkflowId = useCurrentWorkflowIdStore((state) => state.id);
-
   useEffect(() => {
-    if (!currentWorkflowId && workingGraphSource !== 'fromDisk') {
-      setWorkingGraph(EMPTY_GRAPH, rfInstance);
-      return;
-    }
-
-    if (currentWorkflowId) {
+    if (initialWorkflowId) {
       const loadGraph = async () => {
         try {
-          const { data: graph } = await fetchWorkflow(currentWorkflowId);
-          setWorkingGraph(graph, rfInstance, 'fromServer');
+          const { data: graph } = await fetchWorkflow(initialWorkflowId);
+          setWorkingGraph(graph, rfInstance, tasks, 'fromServer');
         } catch (error) {
           setOpenSnackbar({
             open: true,
@@ -51,13 +43,7 @@ export default function EditPage() {
       };
       loadGraph();
     }
-  }, [
-    setOpenSnackbar,
-    setWorkingGraph,
-    rfInstance,
-    currentWorkflowId,
-    workingGraphSource,
-  ]);
+  }, [setWorkingGraph, rfInstance, tasks, setOpenSnackbar]);
 
   const getTasks = useGetTasks();
   useEffect(() => {

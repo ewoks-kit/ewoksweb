@@ -10,23 +10,24 @@ import ActionMenuItem from './ActionMenuItem';
 
 function OpenNewWorkflowMenuItem() {
   const [openDialog, setOpenDialog] = useState(false);
+  const tasks = useStore((state) => state.tasks);
 
   const rfInstance = useReactFlow();
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
   const openEmptyWorkflow = useCallback(() => {
-    setWorkingGraph(EMPTY_GRAPH, rfInstance);
-  }, [setWorkingGraph, rfInstance]);
+    setOpenDialog(false);
+    setWorkingGraph(EMPTY_GRAPH, rfInstance, tasks);
+  }, [setWorkingGraph, rfInstance, tasks]);
 
   useKeyboardEvent(
     (e) =>
       (e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'n',
     (e) => {
       e.preventDefault();
-      e.stopPropagation();
       setOpenDialog(true);
     },
-    [openEmptyWorkflow]
+    []
   );
 
   return (
@@ -35,7 +36,7 @@ function OpenNewWorkflowMenuItem() {
         title="Open a new workflow"
         content="All unsaved modifications will be lost. Continue?"
         open={openDialog}
-        agreeCallback={() => openEmptyWorkflow()}
+        agreeCallback={openEmptyWorkflow}
         disagreeCallback={() => setOpenDialog(false)}
       />
       <ActionMenuItem
