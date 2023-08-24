@@ -39,7 +39,7 @@ const subGraph = (
   },
 
   // DOC: takes a GraphEwoks and transform it to graphRF
-  setSubGraph: async (subGraphL, nodes, links, subgraphPosition, tasks) => {
+  setSubGraph: async (subGraphL, nodes, links, position, tasks) => {
     // 1. input the graphEwoks from server or file-system
     // 2. search for all subgraphs in it (async)
     const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(
@@ -100,7 +100,7 @@ const subGraph = (
       id: graphId,
       // TODO: Is this type the same with task_props.task_type? Is it used?
       type: 'graph',
-      position: subgraphPosition,
+      position,
       data: {
         task_props: {
           task_type: 'graph',

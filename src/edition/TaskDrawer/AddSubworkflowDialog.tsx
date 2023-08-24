@@ -22,11 +22,11 @@ interface Props {
   open: boolean;
   tasks: Task[];
   onClose: () => void;
-  subgraphPosition?: XYPosition;
+  subworkflowPosition?: XYPosition;
 }
 
-export default function AddSubgraphDialog(props: Props) {
-  const { onClose: handleClose, open, subgraphPosition, tasks } = props;
+export default function AddSubworkflowDialog(props: Props) {
+  const { onClose: handleClose, open, subworkflowPosition, tasks } = props;
   const fromDiskInputRef = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
 
@@ -40,7 +40,7 @@ export default function AddSubgraphDialog(props: Props) {
       subgraph,
       nodes,
       rfInstance.getEdges(),
-      subgraphPosition || { x: 0, y: 0 },
+      subworkflowPosition || { x: 0, y: 0 },
       tasks
     );
     rfInstance.setNodes([...nodes, nodeWithoutData]);

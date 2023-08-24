@@ -40,7 +40,7 @@ import {
 } from '../../utils/typeGuards';
 import FallbackMessage from './FallbackMessage';
 import GraphInOutNode from '../CustomNodes/GraphInOutNode';
-import AddSubgraphDialog from '../TaskDrawer/AddSubgraphDialog';
+import AddSubworkflowDialog from '../TaskDrawer/AddSubworkflowDialog';
 import { useTasks } from '../../api/tasks';
 
 const useStyles = makeStyles(() =>
@@ -75,8 +75,10 @@ function Canvas() {
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
-  const [openAddSubgraph, setOpenAddSubgraph] = useState(false);
-  const [subgraphPosition, setSubgraphPosition] = useState<XYPosition>();
+  const [subgraphDrop, setSubgraphDrop] = useState<{
+    openAddSubworkflow?: boolean;
+    subworkflowPosition?: XYPosition;
+  }>();
 
   const graphInfo = useStore((state) => state.graphInfo);
   const setGraphInfo = useStore((state) => state.setGraphInfo);
@@ -153,9 +155,11 @@ function Canvas() {
       y: event.clientY - reactFlowBounds.top,
     });
 
-    if (task_type === 'addSubgraph') {
-      setSubgraphPosition(position);
-      setOpenAddSubgraph(true);
+    if (task_type === 'subworkflow') {
+      setSubgraphDrop({
+        openAddSubworkflow: true,
+        subworkflowPosition: position,
+      });
       return;
     }
 
@@ -376,17 +380,15 @@ function Canvas() {
     }
   };
 
-  const handleClose = () => {
-    setOpenAddSubgraph(false);
-  };
-
   return (
     <>
-      <AddSubgraphDialog
-        open={openAddSubgraph}
-        subgraphPosition={subgraphPosition}
+      <AddSubworkflowDialog
+        open={subgraphDrop?.openAddSubworkflow || false}
+        subworkflowPosition={
+          subgraphDrop?.subworkflowPosition || { x: 0, y: 0 }
+        }
         tasks={tasks}
-        onClose={handleClose}
+        onClose={() => setSubgraphDrop({ openAddSubworkflow: false })}
       />
       <div
         className={classes.root}

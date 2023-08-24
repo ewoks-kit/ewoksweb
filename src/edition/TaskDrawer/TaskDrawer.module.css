@@ -18,8 +18,7 @@
   transform: scale(1.1);
 }
 
-.subgraphButton {
-  composes: btnClean from global;
+.subgraph {
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
