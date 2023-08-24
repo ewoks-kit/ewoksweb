@@ -6,7 +6,7 @@ import useStore from '../../store/useStore';
 import type { Task } from '../../types';
 import { textForError } from '../../utils';
 import ConfirmDialog from '../../general/ConfirmDialog';
-import { useGetTasks } from '../../general/hooks';
+import { useInvalidateTasks } from '../../api/tasks';
 
 import styles from './TaskButtonGroup.module.css';
 
@@ -20,8 +20,7 @@ function DeleteTaskButton(props: Props) {
   const [isDialogOpen, setOpenDialog] = useState(false);
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-
-  const getTasks = useGetTasks();
+  const invalidateTasks = useInvalidateTasks();
 
   async function deleteTask() {
     if (!task.task_identifier) {
@@ -36,7 +35,7 @@ function DeleteTaskButton(props: Props) {
         severity: 'success',
       });
       // Update task list
-      getTasks();
+      invalidateTasks();
     } catch (error) {
       setOpenSnackbar({
         open: true,

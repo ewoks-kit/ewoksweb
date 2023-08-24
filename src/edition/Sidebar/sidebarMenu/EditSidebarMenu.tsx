@@ -8,6 +8,7 @@ import { isNodeRF } from '../../../utils/typeGuards';
 import NodeSidebarMenu from './NodeSidebarMenu';
 import WorkflowSidebarMenu from './WorkflowSidebarMenu';
 import LinkSidebarMenu from './LinkSidebarMenu';
+import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 
 export default function EditSidebarMenu({
   selectedElement,
@@ -44,9 +45,13 @@ export default function EditSidebarMenu({
       >
         <MenuList>
           {!selectedElement ? (
-            <WorkflowSidebarMenu />
+            <SuspenseBoundary>
+              <WorkflowSidebarMenu />
+            </SuspenseBoundary>
           ) : isNodeRF(selectedElement) ? (
-            <NodeSidebarMenu {...selectedElement} />
+            <SuspenseBoundary>
+              <NodeSidebarMenu {...selectedElement} />
+            </SuspenseBoundary>
           ) : (
             <LinkSidebarMenu {...selectedElement} />
           )}

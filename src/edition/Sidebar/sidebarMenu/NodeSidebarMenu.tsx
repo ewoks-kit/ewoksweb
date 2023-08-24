@@ -16,6 +16,7 @@ import { useNodesIds } from '../../../store/graph-hooks';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import type { Node } from 'reactflow';
 import TaskForm from '../../../general/forms/TaskForm';
+import { useTasks } from '../../../api/tasks';
 
 export default function NodeSidebarMenu(selectedElement: Node) {
   const rfInstance = useReactFlow();
@@ -23,7 +24,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
   const nodesIds = useNodesIds();
 
   const graphInfo = useStore((state) => state.graphInfo);
-  const tasks = useStore((state) => state.tasks);
+  const tasks = useTasks();
   const workingGraph = useStore((state) => state.workingGraph);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const [openSaveDialog, setOpenSaveDialog] = useState(false);

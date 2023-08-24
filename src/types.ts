@@ -3,7 +3,6 @@ import type { OpenDraggableDialogSlice } from './store/openDraggableDialog';
 import type { OpenSnackbarSlice } from './store/openSnackbar';
 import type { SubgraphsStackSlice } from './store/subgraphsStack';
 import type { SubGraphSlice } from './store/subGraph';
-import type { TasksSlice } from './store/tasks';
 import type { WorkingGraphSlice } from './store/workingGraph';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
@@ -99,7 +98,6 @@ export interface State
     OpenSnackbarSlice,
     SubgraphsStackSlice,
     SubGraphSlice,
-    TasksSlice,
     WorkingGraphSlice,
     RecentGraphsSlice {}
 

@@ -13,7 +13,7 @@ import { discoverTasks } from '../../../api/tasks';
 import commonStrings from '../../../commonStrings.json';
 import type { SnackbarParams } from '../../../types';
 import { textForError } from '../../../utils';
-import { useGetTasks } from '../../../general/hooks';
+import { useInvalidateTasks } from '../../../api/tasks';
 
 interface Props {
   open: boolean;
@@ -27,7 +27,7 @@ export default function DiscoverTasksDialog(props: Props) {
   );
   const [textValue, setTextValue] = useState<string>('');
 
-  const getTasks = useGetTasks();
+  const invalidateTasks = useInvalidateTasks();
 
   async function discover() {
     if (!textValue) {
@@ -56,7 +56,7 @@ export default function DiscoverTasksDialog(props: Props) {
         text: `${identifiers.length} tasks imported.`,
         severity: 'success',
       });
-      getTasks();
+      invalidateTasks();
     } catch (error) {
       setOpenSnackbar({
         open: true,
