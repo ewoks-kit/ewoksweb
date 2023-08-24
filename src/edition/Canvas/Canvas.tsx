@@ -23,7 +23,7 @@ import getAround from '../CustomEdges/GetAroundEdge';
 import GraphNode from '../CustomNodes/GraphNode';
 import NoteNode from '../CustomNodes/NoteNode';
 import DataNode from '../CustomNodes/DataNode';
-import type { EwoksRFNode, EwoksRFLink, EwoksRFNodeData } from 'types';
+import type { EwoksRFNode, EwoksRFLink, EwoksRFNodeData, Task } from 'types';
 import useStore from 'store/useStore';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
@@ -161,11 +161,23 @@ function Canvas() {
       return;
     }
 
-    const task = tasks.find((tas) => tas.task_identifier === task_identifier);
+    let task: Task | undefined;
 
-    // if (!task) {
-    //   return;
-    // }
+    if (task_type !== 'note') {
+      task = tasks.find((tas) => tas.task_identifier === task_identifier);
+
+      if (!task) {
+        return;
+      }
+    } else {
+      task = {
+        ...taskInfo,
+        category: 'General',
+        optional_input_names: undefined,
+        output_names: undefined,
+        required_input_names: undefined,
+      };
+    }
 
     const nodesIds = [...stateRF.nodeInternals.keys()];
     const newId =
@@ -187,10 +199,10 @@ function Canvas() {
       task_props: {
         task_type,
         task_identifier,
-        task_category: task?.category || 'General',
-        optional_input_names: task?.optional_input_names || [],
-        output_names: task?.output_names || [],
-        required_input_names: task?.required_input_names || [],
+        task_category: task.category,
+        optional_input_names: task.optional_input_names,
+        output_names: task.output_names,
+        required_input_names: task.required_input_names,
       },
       ewoks_props: {
         label: trimLabel(task_identifier),
