@@ -14,7 +14,7 @@ import { useReactFlow } from 'reactflow';
 import {
   postWorkflow,
   putWorkflow,
-  useMutateWorkflows,
+  useInvalidateWorkflows,
 } from '../../api/workflows';
 import commonStrings from '../../commonStrings.json';
 import useStore from '../../store/useStore';
@@ -51,7 +51,7 @@ export default function GraphFormDialog(props: Props) {
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
   const tasks = useTasks();
 
-  const mutateWorkflows = useMutateWorkflows();
+  const invalidateWorkflows = useInvalidateWorkflows();
 
   function handleClose() {
     onClose();
@@ -76,7 +76,7 @@ export default function GraphFormDialog(props: Props) {
         setRootWorkflow(newGraph, rfInstance, tasks, 'fromServer');
         resetRecentGraphs();
       }
-      mutateWorkflows();
+      invalidateWorkflows();
 
       setOpenSnackbar({
         open: true,
