@@ -20,12 +20,9 @@
 
 .subgraphButton {
   composes: btnClean from global;
-  background-color: #96a5f9;
-  color: white;
-  padding: 0.5rem;
-  border-radius: 50%;
-}
-
-.subgraphButton:hover {
-  background-color: #3f51b5;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  color: black;
 }

@@ -40,7 +40,7 @@ import {
 } from '../../utils/typeGuards';
 import FallbackMessage from './FallbackMessage';
 import GraphInOutNode from '../CustomNodes/GraphInOutNode';
-import AddSubgraph from './AddSubgraph';
+import AddSubgraphDialog from '../TaskDrawer/AddSubgraphDialog';
 import { useTasks } from '../../api/tasks';
 
 const useStyles = makeStyles(() =>
@@ -76,10 +76,7 @@ function Canvas() {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
   const [openAddSubgraph, setOpenAddSubgraph] = useState(false);
-  const [subgraphPosition, setSubgraphPosition] = useState<XYPosition>({
-    x: 100,
-    y: 100,
-  });
+  const [subgraphPosition, setSubgraphPosition] = useState<XYPosition>();
 
   const graphInfo = useStore((state) => state.graphInfo);
   const setGraphInfo = useStore((state) => state.setGraphInfo);
@@ -379,12 +376,17 @@ function Canvas() {
     }
   };
 
+  const handleClose = () => {
+    setOpenAddSubgraph(false);
+  };
+
   return (
     <>
-      <AddSubgraph
-        openAddSubgraph={openAddSubgraph}
-        subgraphPosition={subgraphPosition}
-        setOpenAddSubgraph={setOpenAddSubgraph}
+      <AddSubgraphDialog
+        open={openAddSubgraph}
+        subgraphPosition={subgraphPosition as XYPosition}
+        tasks={tasks}
+        onClose={handleClose}
       />
       <div
         className={classes.root}

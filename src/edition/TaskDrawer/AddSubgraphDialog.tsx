@@ -8,7 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Dialog from '@material-ui/core/Dialog';
 import OpenGraphInput from '../../general/OpenGraphInput';
-import type { GraphEwoks } from '../../types';
+import type { GraphEwoks, Task } from '../../types';
 import useStore from '../../store/useStore';
 import type { XYPosition } from 'reactflow';
 import { useReactFlow } from 'reactflow';
@@ -17,23 +17,24 @@ import GetWorkflowFromServerDropdown from '../../general/GetWorkflowFromServerDr
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import { fetchWorkflow } from '../../api/workflows';
 import { textForError } from '../../utils';
+import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 
-export interface ConfirmationDialogRawProps {
+interface Props {
   open: boolean;
   subgraphPosition: XYPosition;
-  onClose: (value?: string) => void;
+  tasks: Task[];
+  onClose: () => void;
 }
 
-export default function AddSubgraphDialog(props: ConfirmationDialogRawProps) {
-  const { onClose, open, subgraphPosition } = props;
+export default function AddSubgraphDialog(props: Props) {
+  const { onClose, open, subgraphPosition, tasks } = props;
   const ref = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
 
-  const [subgraphWorkflowId, setSubgraphWorkflowId] = useState('');
+  const [subWorkflowId, setSubWorkflowId] = useState('');
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSubGraph = useStore((state) => state.setSubGraph);
-  const tasks = useStore((state) => state.tasks);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   async function handleSubgraphLoad(subgraph: GraphEwoks) {
@@ -54,15 +55,15 @@ export default function AddSubgraphDialog(props: ConfirmationDialogRawProps) {
   };
 
   const handleClose = () => {
-    onClose('');
+    onClose();
   };
 
   async function addSubgraph() {
-    if (!subgraphWorkflowId) {
+    if (!subWorkflowId) {
       return;
     }
     try {
-      const { data: subgraph } = await fetchWorkflow(subgraphWorkflowId);
+      const { data: subgraph } = await fetchWorkflow(subWorkflowId);
       const nodes = rfInstance.getNodes();
       const { nodeWithoutData, data } = await setSubGraph(
         subgraph,
@@ -101,10 +102,12 @@ export default function AddSubgraphDialog(props: ConfirmationDialogRawProps) {
             <ListItem divider role="listitem">
               <ListItemText primary="From Server" />
               <span style={{ marginLeft: '20px', display: 'flex' }}>
-                <GetWorkflowFromServerDropdown
-                  getSubgraph
-                  setSubgraphId={(id) => setSubgraphWorkflowId(id)}
-                />
+                <SuspenseBoundary>
+                  <GetWorkflowFromServerDropdown
+                    getAsSubworkflow
+                    setSubWorkflowId={(id) => setSubWorkflowId(id)}
+                  />
+                </SuspenseBoundary>
                 <Button
                   color="primary"
                   onClick={(event) => {
@@ -112,7 +115,6 @@ export default function AddSubgraphDialog(props: ConfirmationDialogRawProps) {
                     addSubgraph();
                   }}
                   size="small"
-                  aria-label="Open edit actions menu"
                 >
                   <CloudDownloadIcon />
                 </Button>

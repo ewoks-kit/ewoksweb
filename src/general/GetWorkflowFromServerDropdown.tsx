@@ -10,12 +10,12 @@ import { useReactFlow } from 'reactflow';
 import { useTasks } from '../api/tasks';
 
 interface Props {
-  getSubgraph?: boolean | undefined;
-  setSubgraphId?: (id: string) => void;
+  getAsSubworkflow?: boolean | undefined;
+  setSubWorkflowId?: (id: string) => void;
 }
 
 export default function GetWorkflowFromServerDropdown(props: Props) {
-  const { getSubgraph, setSubgraphId } = props;
+  const { getAsSubworkflow, setSubWorkflowId } = props;
   const [workflowId, setWorkflowId] = useState('');
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
@@ -25,8 +25,8 @@ export default function GetWorkflowFromServerDropdown(props: Props) {
   const tasks = useTasks();
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
-    if (getSubgraph && setSubgraphId) {
-      setSubgraphId(workflowDetails.id);
+    if (getAsSubworkflow && setSubWorkflowId) {
+      setSubWorkflowId(workflowDetails.id);
       return;
     }
 
@@ -69,7 +69,7 @@ export default function GetWorkflowFromServerDropdown(props: Props) {
         }}
       >
         <WorkflowDropdown
-          getSubgraph={getSubgraph}
+          getAsSubworkflow={getAsSubworkflow}
           onChange={(workflowDetails) => {
             setInputValue(workflowDetails);
           }}

@@ -1,14 +1,15 @@
 import Tooltip from '@material-ui/core/Tooltip';
 import styles from './TaskDrawer.module.css';
 import { attachTaskInfo } from '../Canvas/utils';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 
-function AddSubgraphButton() {
+function AddSubgraph() {
   return (
     <Tooltip title="Add a subgraph" arrow>
       <span
         role="button"
         tabIndex={0}
-        key="addNote"
+        key="addSubgraph"
         className={styles.subgraphButton}
         onDragStart={(event) => {
           attachTaskInfo(event.dataTransfer, {
@@ -18,10 +19,12 @@ function AddSubgraphButton() {
         }}
         draggable
       >
-        add subgraph
+        <AddBoxIcon color="primary" />
+        sub
+        <div>Workflow</div>
       </span>
     </Tooltip>
   );
 }
 
-export default AddSubgraphButton;
+export default AddSubgraph;
