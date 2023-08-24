@@ -1,7 +1,14 @@
 import type { DragEventHandler, MouseEvent } from 'react';
 import { useState } from 'react';
 import { useEffect, useRef } from 'react';
-import type { Node, Edge, Connection, NodeChange, EdgeChange } from 'reactflow';
+import type {
+  Node,
+  Edge,
+  Connection,
+  NodeChange,
+  EdgeChange,
+  XYPosition,
+} from 'reactflow';
 import { updateEdge } from 'reactflow';
 import ReactFlow, {
   Controls,
@@ -68,6 +75,10 @@ function Canvas() {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
   const [openAddSubgraph, setOpenAddSubgraph] = useState(false);
+  const [subgraphPosition, setSubgraphPosition] = useState<XYPosition>({
+    x: 100,
+    y: 100,
+  });
 
   const graphInfo = useStore((state) => state.graphInfo);
   const setGraphInfo = useStore((state) => state.setGraphInfo);
@@ -138,15 +149,17 @@ function Canvas() {
       return;
     }
     const { task_type, icon, task_identifier } = taskInfo;
-    if (task_type === 'addSubgraph') {
-      setOpenAddSubgraph(true);
-      return;
-    }
 
     const position = rfInstance.project({
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
     });
+
+    if (task_type === 'addSubgraph') {
+      setSubgraphPosition(position);
+      setOpenAddSubgraph(true);
+      return;
+    }
 
     const task = tasks.find((tas) => tas.task_identifier === task_identifier);
 
@@ -357,6 +370,7 @@ function Canvas() {
     <>
       <AddSubgraph
         openAddSubgraph={openAddSubgraph}
+        subgraphPosition={subgraphPosition}
         setOpenAddSubgraph={setOpenAddSubgraph}
       />
       <div

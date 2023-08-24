@@ -9,11 +9,10 @@ import type {
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
-import { calcCoordinatesFirstNode } from './storeUtils/CalcCoordinatesFirstNode';
 import type { GetState, SetState } from 'zustand';
 import type { State } from '../types';
 import { Position } from 'reactflow';
-import type { Node, Edge } from 'reactflow';
+import type { Node, Edge, XYPosition } from 'reactflow';
 import useNodeDataStore from './useNodeDataStore';
 import { EMPTY_RF_GRAPH } from '../utils/emptyGraphs';
 
@@ -22,7 +21,8 @@ export interface SubGraphSlice {
   setSubGraph: (
     graph: GraphEwoks,
     nodes: Node[],
-    links: Edge[]
+    links: Edge[],
+    subgraphPosition: XYPosition
   ) => Promise<{ nodeWithoutData: Node; data: EwoksRFNodeData }>;
 }
 
@@ -37,7 +37,7 @@ const subGraph = (
   },
 
   // DOC: takes a GraphEwoks and transform it to graphRF
-  setSubGraph: async (subGraphL, nodes, links) => {
+  setSubGraph: async (subGraphL, nodes, links, subgraphPosition) => {
     // 1. input the graphEwoks from server or file-system
     // 2. search for all subgraphs in it (async)
     const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(
@@ -98,7 +98,7 @@ const subGraph = (
       id: graphId,
       // TODO: Is this type the same with task_props.task_type? Is it used?
       type: 'graph',
-      position: calcCoordinatesFirstNode(nodes),
+      position: subgraphPosition,
       data: {
         task_props: {
           task_type: 'graph',

@@ -1,23 +1,23 @@
 import useStore from '../../store/useStore';
 import OpenGraphInput from '../../general/OpenGraphInput';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
 import type { GraphEwoks } from '../../types';
+import type { XYPosition } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import AddSubgraphDialog from '../TaskDrawer/AddSubgraphDialog';
 
 interface Props {
   openAddSubgraph: boolean;
+  subgraphPosition: XYPosition;
   setOpenAddSubgraph: (open: boolean) => void;
 }
 
 function AddSubgraph(props: Props) {
-  const { openAddSubgraph, setOpenAddSubgraph } = props;
+  const { openAddSubgraph, subgraphPosition, setOpenAddSubgraph } = props;
   const ref = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
-
-  // const [open, setOpen] = useState(false);
 
   const setSubGraph = useStore((state) => state.setSubGraph);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
@@ -27,7 +27,8 @@ function AddSubgraph(props: Props) {
     const { nodeWithoutData, data } = await setSubGraph(
       subgraph,
       nodes,
-      rfInstance.getEdges()
+      rfInstance.getEdges(),
+      subgraphPosition
     );
     rfInstance.setNodes([...nodes, nodeWithoutData]);
     setNodeData(nodeWithoutData.id, data);
@@ -46,7 +47,11 @@ function AddSubgraph(props: Props) {
         }}
       />
 
-      <AddSubgraphDialog open={openAddSubgraph} onClose={handleClose} />
+      <AddSubgraphDialog
+        open={openAddSubgraph}
+        onClose={handleClose}
+        subgraphPosition={subgraphPosition}
+      />
     </>
   );
 }

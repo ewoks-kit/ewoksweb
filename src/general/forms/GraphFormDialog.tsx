@@ -19,7 +19,8 @@ import {
 import commonStrings from '../../commonStrings.json';
 import useCurrentWorkflowIdStore from '../../store/useCurrentWorkflowId';
 import useStore from '../../store/useStore';
-import type { GraphDetails, GraphFormAction } from '../../types';
+import type { GraphDetails } from '../../types';
+import { GraphFormAction } from '../../types';
 import {
   getEdgesData,
   getNodesData,
@@ -114,7 +115,10 @@ export default function GraphFormDialog(props: Props) {
             rules={{ required: true }}
             render={({ field }) => <FormField label="Identifier" {...field} />}
           />
-          {['newGraphOrOverwrite', 'cloneGraph'].includes(action) && (
+          {[
+            GraphFormAction.newGraphOrOverwrite,
+            GraphFormAction.cloneGraph,
+          ].includes(action) && (
             <Controller
               name="overwrite"
               control={control}

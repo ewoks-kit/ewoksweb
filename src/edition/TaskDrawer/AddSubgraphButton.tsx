@@ -1,70 +1,26 @@
-import { Add } from '@material-ui/icons';
 import Tooltip from '@material-ui/core/Tooltip';
-import useStore from '../../store/useStore';
-import OpenGraphInput from '../../general/OpenGraphInput';
-import { useRef, useState } from 'react';
-
 import styles from './TaskDrawer.module.css';
-import type { GraphEwoks } from '../../types';
-import { useReactFlow } from 'reactflow';
-import useNodeDataStore from '../../store/useNodeDataStore';
-import AddSubgraphDialog from './AddSubgraphDialog';
 import { attachTaskInfo } from '../Canvas/utils';
 
 function AddSubgraphButton() {
-  const ref = useRef<HTMLInputElement>(null);
-  const rfInstance = useReactFlow();
-
-  const [open, setOpen] = useState(false);
-
-  const setSubGraph = useStore((state) => state.setSubGraph);
-  const setNodeData = useNodeDataStore((state) => state.setNodeData);
-
-  async function handleSubgraphLoad(subgraph: GraphEwoks) {
-    const nodes = rfInstance.getNodes();
-    const { nodeWithoutData, data } = await setSubGraph(
-      subgraph,
-      nodes,
-      rfInstance.getEdges()
-    );
-    rfInstance.setNodes([...nodes, nodeWithoutData]);
-    setNodeData(nodeWithoutData.id, data);
-  }
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
-    <>
-      <OpenGraphInput
-        ref={ref}
-        onGraphLoad={(subgraph) => {
-          handleSubgraphLoad(subgraph);
+    <Tooltip title="Add a subgraph" arrow>
+      <span
+        role="button"
+        tabIndex={0}
+        key="addNote"
+        className={styles.subgraphButton}
+        onDragStart={(event) => {
+          attachTaskInfo(event.dataTransfer, {
+            task_identifier: 'addSubgraph',
+            task_type: 'addSubgraph',
+          });
         }}
-      />
-
-      <AddSubgraphDialog open={open} onClose={handleClose} />
-
-      <Tooltip title="Add a subgraph" arrow>
-        <span
-          role="button"
-          tabIndex={0}
-          key="addNote"
-          className={styles.subgraphButton}
-          onDragStart={(event) => {
-            attachTaskInfo(event.dataTransfer, {
-              task_identifier: 'addSubgraph',
-              task_type: 'addSubgraph',
-            });
-          }}
-          draggable
-        >
-          {/* <Add /> */}
-          add subgraph
-        </span>
-      </Tooltip>
-    </>
+        draggable
+      >
+        add subgraph
+      </span>
+    </Tooltip>
   );
 }
 

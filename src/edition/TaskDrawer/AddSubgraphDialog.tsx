@@ -10,6 +10,7 @@ import Dialog from '@material-ui/core/Dialog';
 import OpenGraphInput from '../../general/OpenGraphInput';
 import type { GraphEwoks } from '../../types';
 import useStore from '../../store/useStore';
+import type { XYPosition } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import GetWorkflowFromServerDropdown from '../../general/GetWorkflowFromServerDropdown';
@@ -19,11 +20,12 @@ import { textForError } from '../../utils';
 
 export interface ConfirmationDialogRawProps {
   open: boolean;
+  subgraphPosition: XYPosition;
   onClose: (value?: string) => void;
 }
 
 export default function AddSubgraphDialog(props: ConfirmationDialogRawProps) {
-  const { onClose, open } = props;
+  const { onClose, open, subgraphPosition } = props;
   const ref = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
 
@@ -38,7 +40,8 @@ export default function AddSubgraphDialog(props: ConfirmationDialogRawProps) {
     const { nodeWithoutData, data } = await setSubGraph(
       subgraph,
       nodes,
-      rfInstance.getEdges()
+      rfInstance.getEdges(),
+      subgraphPosition
     );
     rfInstance.setNodes([...nodes, nodeWithoutData]);
     setNodeData(nodeWithoutData.id, data);
@@ -62,7 +65,8 @@ export default function AddSubgraphDialog(props: ConfirmationDialogRawProps) {
       const { nodeWithoutData, data } = await setSubGraph(
         subgraph,
         nodes,
-        rfInstance.getEdges()
+        rfInstance.getEdges(),
+        subgraphPosition
       );
       rfInstance.setNodes([...nodes, nodeWithoutData]);
       setNodeData(nodeWithoutData.id, data);
