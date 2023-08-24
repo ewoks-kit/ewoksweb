@@ -1,17 +1,24 @@
 .drawer {
-  position: static;
-  top: 0;
-  left: 0;
+  width: 0;
+  flex-shrink: 0;
+  overflow: hidden;
 }
 
-.paper {
-  position: static !important;
+.drawer[data-open] {
+  display: block;
+  width: 250px;
+  padding-left: 0.25rem;
 }
 
 .openButton {
   position: absolute !important;
-  top: 72px;
   transition: transform 0.3s ease-in-out !important;
+  left: 10px;
+  top: 72px;
+}
+
+.openButton[data-open] {
+  left: 230px;
 }
 
 .openButton:hover {
