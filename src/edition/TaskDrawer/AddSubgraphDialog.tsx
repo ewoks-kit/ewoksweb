@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -13,67 +13,44 @@ import useStore from '../../store/useStore';
 import type { XYPosition } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
-import GetWorkflowFromServerDropdown from '../../general/GetWorkflowFromServerDropdown';
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import { fetchWorkflow } from '../../api/workflows';
 import { textForError } from '../../utils';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
+import WorkflowDropdown from '../../general/WorkflowDropdown';
 
 interface Props {
   open: boolean;
-  subgraphPosition: XYPosition;
   tasks: Task[];
   onClose: () => void;
+  subgraphPosition?: XYPosition;
 }
 
 export default function AddSubgraphDialog(props: Props) {
-  const { onClose, open, subgraphPosition, tasks } = props;
-  const ref = useRef<HTMLInputElement>(null);
+  const { onClose: handleClose, open, subgraphPosition, tasks } = props;
+  const fromDiskInputRef = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
-
-  const [subWorkflowId, setSubWorkflowId] = useState('');
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setSubGraph = useStore((state) => state.setSubGraph);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
-  async function handleSubgraphLoad(subgraph: GraphEwoks) {
+  async function loadSubgraphAsNode(subgraph: GraphEwoks) {
     const nodes = rfInstance.getNodes();
     const { nodeWithoutData, data } = await setSubGraph(
       subgraph,
       nodes,
       rfInstance.getEdges(),
-      subgraphPosition,
+      subgraphPosition || { x: 0, y: 0 },
       tasks
     );
     rfInstance.setNodes([...nodes, nodeWithoutData]);
     setNodeData(nodeWithoutData.id, data);
   }
 
-  const handleCancel = () => {
-    onClose();
-  };
-
-  const handleClose = () => {
-    onClose();
-  };
-
-  async function addSubgraph() {
-    if (!subWorkflowId) {
-      return;
-    }
+  async function addSubgraph(id: string) {
     try {
-      const { data: subgraph } = await fetchWorkflow(subWorkflowId);
-      const nodes = rfInstance.getNodes();
-      const { nodeWithoutData, data } = await setSubGraph(
-        subgraph,
-        nodes,
-        rfInstance.getEdges(),
-        subgraphPosition,
-        tasks
-      );
-      rfInstance.setNodes([...nodes, nodeWithoutData]);
-      setNodeData(nodeWithoutData.id, data);
+      const { data: subgraph } = await fetchWorkflow(id);
+      loadSubgraphAsNode(subgraph);
       handleClose();
     } catch (error) {
       setOpenSnackbar({
@@ -89,9 +66,9 @@ export default function AddSubgraphDialog(props: Props) {
   return (
     <>
       <OpenGraphInput
-        ref={ref}
+        ref={fromDiskInputRef}
         onGraphLoad={(subgraph) => {
-          handleSubgraphLoad(subgraph);
+          loadSubgraphAsNode(subgraph);
         }}
       />
 
@@ -101,30 +78,21 @@ export default function AddSubgraphDialog(props: Props) {
           <List component="div" role="list">
             <ListItem divider role="listitem">
               <ListItemText primary="From Server" />
-              <span style={{ marginLeft: '20px', display: 'flex' }}>
+              <div style={{ width: '20rem', marginLeft: '0.5rem' }}>
                 <SuspenseBoundary>
-                  <GetWorkflowFromServerDropdown
-                    getAsSubworkflow
-                    setSubWorkflowId={(id) => setSubWorkflowId(id)}
+                  <WorkflowDropdown
+                    onChange={(workflowDetails) => {
+                      addSubgraph(workflowDetails.id);
+                    }}
                   />
                 </SuspenseBoundary>
-                <Button
-                  color="primary"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    addSubgraph();
-                  }}
-                  size="small"
-                >
-                  <CloudDownloadIcon />
-                </Button>
-              </span>
+              </div>
             </ListItem>
             <ListItem
               button
               divider
               onClick={() => {
-                ref.current?.click();
+                fromDiskInputRef.current?.click();
                 handleClose();
               }}
               role="listitem"
@@ -134,7 +102,7 @@ export default function AddSubgraphDialog(props: Props) {
           </List>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancel} color="primary">
+          <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
         </DialogActions>

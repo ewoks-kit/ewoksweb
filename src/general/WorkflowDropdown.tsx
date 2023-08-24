@@ -11,7 +11,6 @@ import { useWorkflowsDLE } from '../api/workflows';
 interface Props {
   onChange: (input: WorkflowDescription) => void;
   category?: string;
-  getAsSubworkflow?: boolean | undefined;
 }
 
 function sortByCategory(
@@ -31,7 +30,7 @@ function sortByCategory(
 
 // DOC: A dropdown that can be an input as well
 function WorkflowDropdown(props: Props) {
-  const { onChange, category, getAsSubworkflow } = props;
+  const { onChange, category } = props;
 
   const [inputValue, setInputValue] = useState('');
   const [open, setOpen] = useState(false);
@@ -89,11 +88,9 @@ function WorkflowDropdown(props: Props) {
       }}
       onChange={(event, newValue) => {
         onChange(newValue);
-        if (!getAsSubworkflow) {
-          setTimeout(() => {
-            setInputValue('');
-          }, 200);
-        }
+        setTimeout(() => {
+          setInputValue('');
+        }, 200);
       }}
       getOptionLabel={(option) => option.label}
       placeholder="Quick open"

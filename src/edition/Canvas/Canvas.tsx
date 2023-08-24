@@ -384,7 +384,7 @@ function Canvas() {
     <>
       <AddSubgraphDialog
         open={openAddSubgraph}
-        subgraphPosition={subgraphPosition as XYPosition}
+        subgraphPosition={subgraphPosition}
         tasks={tasks}
         onClose={handleClose}
       />
