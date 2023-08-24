@@ -10,7 +10,7 @@ function AddSubworkflow() {
         role="button"
         tabIndex={0}
         key="addWorkflow"
-        className="dndnode subgraph"
+        className={`${styles.subgraph} dndnode`}
         onDragStart={(event) => {
           attachTaskInfo(event.dataTransfer, {
             task_identifier: 'subworkflow',
