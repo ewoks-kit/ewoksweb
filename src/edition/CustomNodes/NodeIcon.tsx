@@ -1,6 +1,6 @@
 import { useIcons } from '../../api/icons';
+import { useTasks } from '../../api/tasks';
 import useNodeDataStore from '../../store/useNodeDataStore';
-import useStore from '../../store/useStore';
 import { findImage } from '../../utils';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
 import { contentStyle } from './nodeStyles';
@@ -13,7 +13,7 @@ interface Props {
 function NodeIcon(props: Props) {
   const { nodeId, onDragStart } = props;
   const nodeData = useNodeDataStore((state) => state.nodesData.get(nodeId));
-  const tasks = useStore((state) => state.tasks);
+  const tasks = useTasks();
   assertNodeDataDefined(nodeData, nodeId);
 
   const nodeTask = tasks.find(

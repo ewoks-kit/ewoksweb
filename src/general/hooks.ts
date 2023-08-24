@@ -1,9 +1,6 @@
 import type { GraphEwoks } from '../types';
 import useStore from '../store/useStore';
 import { isString } from '../utils/typeGuards';
-import { fetchTaskDescriptions } from '../api/tasks';
-import { textForError } from '../utils';
-import commonStrings from '../commonStrings.json';
 
 function tryJSONparse(str: string | ArrayBuffer | null): unknown {
   if (!isString(str)) {
@@ -49,25 +46,5 @@ export function useLoadGraph(onGraphLoad: (graph: GraphEwoks) => void) {
       onGraphLoad(newGraph as GraphEwoks);
     };
     reader.readAsText(file);
-  };
-}
-
-export function useGetTasks() {
-  return async () => {
-    const { setOpenSnackbar, setTasks } = useStore.getState();
-
-    try {
-      const tasksData = await fetchTaskDescriptions();
-      if (tasksData.data.items.length > 0) {
-        const allTasks = tasksData.data.items;
-        setTasks(allTasks);
-      }
-    } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(error, commonStrings.retrieveTasksError),
-        severity: 'error',
-      });
-    }
   };
 }

@@ -6,7 +6,7 @@ import {
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { useState } from 'react';
-import useStore from 'store/useStore';
+import { useTasks } from '../../api/tasks';
 import useConfigStore from '../../store/useConfigStore';
 import AddNoteButton from './AddNoteButton';
 import AddSubgraphButton from './AddSubgraphButton';
@@ -17,7 +17,7 @@ import TaskListToolbar from './TaskListToolbar';
 
 // DOC: Hosts the nodes-tasks in their categories to drag and drop them into canvas
 function TaskList() {
-  const tasks = useStore((state) => state.tasks);
+  const tasks = useTasks();
   const [selectedTaskId, setSelectTaskId] = useState<string>();
   const { sidebarLayout, setSidebarLayout } = useConfigStore();
 

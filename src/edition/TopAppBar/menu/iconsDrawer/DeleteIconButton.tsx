@@ -1,13 +1,12 @@
 import { IconButton } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
 import { useState } from 'react';
-import { deleteIcon, useMutateIcons } from '../../../../api/icons';
-import { fetchTaskDescriptions } from '../../../../api/tasks';
-import ConfirmDialog from '../../../../general/ConfirmDialog';
-import { textForError } from '../../../../utils';
 
-import commonStrings from '../../../../commonStrings.json';
+import { deleteIcon, useMutateIcons } from '../../../../api/icons';
+import { useTasks } from '../../../../api/tasks';
+import ConfirmDialog from '../../../../general/ConfirmDialog';
 import useStore from '../../../../store/useStore';
+import { textForError } from '../../../../utils';
 
 interface Props {
   iconName: string;
@@ -15,6 +14,7 @@ interface Props {
 
 function DeleteIconButton(props: Props) {
   const { iconName } = props;
+  const tasks = useTasks();
 
   const [isDialogOpen, setOpenDialog] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
@@ -23,28 +23,13 @@ function DeleteIconButton(props: Props) {
   async function agreeDeleteIcon() {
     setOpenDialog(false);
 
-    try {
-      const { data: taskDescriptions } = await fetchTaskDescriptions();
-
-      if (taskDescriptions.items.length > 0) {
-        const allTasks = taskDescriptions.items;
-
-        if (allTasks.some((task) => task.icon === iconName)) {
-          setOpenSnackbar({
-            open: true,
-            text: `${iconName} cannot be deleted since it is used in one or more Tasks!`,
-            severity: 'warning',
-          });
-          return;
-        }
-      }
-    } catch (error) {
-      // TODO: general error handling for all cases like workflows?
+    if (tasks.some((task) => task.icon === iconName)) {
       setOpenSnackbar({
         open: true,
-        text: textForError(error, commonStrings.retrieveTasksError),
-        severity: 'error',
+        text: `${iconName} cannot be deleted since it is used in one or more Tasks!`,
+        severity: 'warning',
       });
+      return;
     }
 
     try {

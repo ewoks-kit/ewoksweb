@@ -16,6 +16,7 @@ import { IconButton, Tooltip } from '@material-ui/core';
 import tooltipText from '../../general/TooltipText';
 import type { Status } from './models';
 import StatusIcon from './StatusButton';
+import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 
 // DOC: Save to server button with its spinner
 export default function SaveToServerButton() {
@@ -135,12 +136,14 @@ export default function SaveToServerButton() {
 
   return (
     <>
-      <GraphFormDialog
-        elementToEdit={graphInfo}
-        action={action}
-        isOpen={isDialogOpen}
-        onClose={() => setDialogOpen(false)}
-      />
+      <SuspenseBoundary>
+        <GraphFormDialog
+          elementToEdit={graphInfo}
+          action={action}
+          isOpen={isDialogOpen}
+          onClose={() => setDialogOpen(false)}
+        />
+      </SuspenseBoundary>
       <Tooltip title={tooltipText('Save to server')} enterDelay={500} arrow>
         <IconButton
           className={styles.saveButton}

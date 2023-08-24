@@ -5,11 +5,12 @@ import useStore from '../../../store/useStore';
 import ActionMenuItem from './ActionMenuItem';
 import OpenGraphInput from '../../../general/OpenGraphInput';
 import { useReactFlow } from 'reactflow';
+import { useTasks } from '../../../api/tasks';
 
 function UploadMenuItem() {
   const ref = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
-  const tasks = useStore((state) => state.tasks);
+  const tasks = useTasks();
 
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 

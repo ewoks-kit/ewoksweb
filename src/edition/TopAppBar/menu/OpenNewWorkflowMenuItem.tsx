@@ -2,6 +2,7 @@ import { FiberNew } from '@material-ui/icons';
 import { useKeyboardEvent } from '@react-hookz/web';
 import { useCallback, useState } from 'react';
 import { useReactFlow } from 'reactflow';
+import { useTasks } from '../../../api/tasks';
 
 import ConfirmDialog from '../../../general/ConfirmDialog';
 import useStore from '../../../store/useStore';
@@ -10,7 +11,7 @@ import ActionMenuItem from './ActionMenuItem';
 
 function OpenNewWorkflowMenuItem() {
   const [openDialog, setOpenDialog] = useState(false);
-  const tasks = useStore((state) => state.tasks);
+  const tasks = useTasks();
 
   const rfInstance = useReactFlow();
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);

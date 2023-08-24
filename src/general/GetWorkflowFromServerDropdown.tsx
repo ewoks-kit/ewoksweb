@@ -7,6 +7,7 @@ import ConfirmDialog from './ConfirmDialog';
 import WorkflowDropdown from './WorkflowDropdown';
 import { fetchWorkflow } from '../api/workflows';
 import { useReactFlow } from 'reactflow';
+import { useTasks } from '../api/tasks';
 
 interface Props {
   getSubgraph?: boolean | undefined;
@@ -21,7 +22,7 @@ export default function GetWorkflowFromServerDropdown(props: Props) {
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
 
   const rfInstance = useReactFlow();
-  const tasks = useStore((state) => state.tasks);
+  const tasks = useTasks();
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
     if (getSubgraph && setSubgraphId) {

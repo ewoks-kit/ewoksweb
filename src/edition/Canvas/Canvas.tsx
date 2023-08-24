@@ -41,6 +41,7 @@ import {
 import FallbackMessage from './FallbackMessage';
 import GraphInOutNode from '../CustomNodes/GraphInOutNode';
 import AddSubgraph from './AddSubgraph';
+import { useTasks } from '../../api/tasks';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -85,7 +86,7 @@ function Canvas() {
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const addRecentGraph = useStore((state) => state.addRecentGraph);
 
-  const tasks = useStore((state) => state.tasks);
+  const tasks = useTasks();
   const recentGraphs = useStore((state) => state.recentGraphs);
   const workingGraphId = useStore((state) => state.workingGraph.graph.id);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
