@@ -2,7 +2,6 @@ import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
 import type { OpenDraggableDialogSlice } from './store/openDraggableDialog';
 import type { OpenSnackbarSlice } from './store/openSnackbar';
 import type { SubgraphsStackSlice } from './store/subgraphsStack';
-import type { SubGraphSlice } from './store/subGraph';
 import type { WorkingGraphSlice } from './store/workingGraph';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
@@ -97,7 +96,6 @@ export interface State
     OpenDraggableDialogSlice,
     OpenSnackbarSlice,
     SubgraphsStackSlice,
-    SubGraphSlice,
     WorkingGraphSlice,
     RecentGraphsSlice {}
 
