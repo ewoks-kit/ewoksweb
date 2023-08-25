@@ -20,14 +20,11 @@ export default function GetWorkflowFromServerDropdown() {
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails.id) {
-      setWorkflowId(workflowDetails.id || '');
+      setWorkflowId(workflowDetails.id);
+      getFromServer(workflowDetails.id);
     }
 
     setOpenAgreeDialog(false);
-
-    if (workflowDetails.id) {
-      getFromServer(workflowDetails.id);
-    }
   }
 
   async function getFromServer(workflowIdparam: string) {

@@ -1,6 +1,14 @@
 import type { DragEventHandler, MouseEvent } from 'react';
+import { useState } from 'react';
 import { useEffect, useRef } from 'react';
-import type { Node, Edge, Connection, NodeChange, EdgeChange } from 'reactflow';
+import type {
+  Node,
+  Edge,
+  Connection,
+  NodeChange,
+  EdgeChange,
+  XYPosition,
+} from 'reactflow';
 import { updateEdge } from 'reactflow';
 import ReactFlow, {
   Controls,
@@ -15,7 +23,7 @@ import getAround from '../CustomEdges/GetAroundEdge';
 import GraphNode from '../CustomNodes/GraphNode';
 import NoteNode from '../CustomNodes/NoteNode';
 import DataNode from '../CustomNodes/DataNode';
-import type { EwoksRFNode, EwoksRFLink, EwoksRFNodeData } from 'types';
+import type { EwoksRFNode, EwoksRFLink, EwoksRFNodeData, Task } from 'types';
 import useStore from 'store/useStore';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
@@ -32,6 +40,7 @@ import {
 } from '../../utils/typeGuards';
 import FallbackMessage from './FallbackMessage';
 import GraphInOutNode from '../CustomNodes/GraphInOutNode';
+import AddSubworkflowDialog from '../TaskDrawer/AddSubworkflowDialog';
 import { useTasks } from '../../api/tasks';
 
 const useStyles = makeStyles(() =>
@@ -65,6 +74,10 @@ function Canvas() {
   const rfInstance = useReactFlow();
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
+
+  const [addSubworkflowEvent, setSubworkflowEvent] = useState<{
+    position: XYPosition;
+  }>();
 
   const graphInfo = useStore((state) => state.graphInfo);
   const setGraphInfo = useStore((state) => state.setGraphInfo);
@@ -141,10 +154,29 @@ function Canvas() {
       y: event.clientY - reactFlowBounds.top,
     });
 
-    const task = tasks.find((tas) => tas.task_identifier === task_identifier);
-
-    if (!task) {
+    if (task_type === 'subworkflow') {
+      setSubworkflowEvent({
+        position,
+      });
       return;
+    }
+
+    let task: Task | undefined;
+
+    if (task_type !== 'note') {
+      task = tasks.find((tas) => tas.task_identifier === task_identifier);
+
+      if (!task) {
+        return;
+      }
+    } else {
+      task = {
+        ...taskInfo,
+        category: 'General',
+        optional_input_names: undefined,
+        output_names: undefined,
+        required_input_names: undefined,
+      };
     }
 
     const nodesIds = [...stateRF.nodeInternals.keys()];
@@ -347,38 +379,46 @@ function Canvas() {
   };
 
   return (
-    <div
-      className={classes.root}
-      onKeyDown={handleKeyDown}
-      role="button"
-      tabIndex={0}
-    >
-      <FallbackMessage />
-      <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-        <ReactFlow
-          fitView
-          connectOnClick
-          nodesDraggable
-          attributionPosition="bottom-right"
-          minZoom={0.2}
-          snapToGrid
-          onDrop={onDrop}
-          onConnect={onConnect}
-          onEdgeUpdate={onEdgeUpdate}
-          onDragOver={onDragOver}
-          onPaneContextMenu={onPaneContextMenu}
-          onNodeDoubleClick={onNodeDoubleClick}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          edgeTypes={edgeTypes}
-          nodeTypes={nodeTypes}
-          deleteKeyCode="Delete"
-        >
-          <CanvasBackground />
-          <Controls position="bottom-right" />
-        </ReactFlow>
+    <>
+      <AddSubworkflowDialog
+        open={!!addSubworkflowEvent}
+        position={addSubworkflowEvent?.position}
+        tasks={tasks}
+        onClose={() => setSubworkflowEvent(undefined)}
+      />
+      <div
+        className={classes.root}
+        onKeyDown={handleKeyDown}
+        role="button"
+        tabIndex={0}
+      >
+        <FallbackMessage />
+        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+          <ReactFlow
+            fitView
+            connectOnClick
+            nodesDraggable
+            attributionPosition="bottom-right"
+            minZoom={0.2}
+            snapToGrid
+            onDrop={onDrop}
+            onConnect={onConnect}
+            onEdgeUpdate={onEdgeUpdate}
+            onDragOver={onDragOver}
+            onPaneContextMenu={onPaneContextMenu}
+            onNodeDoubleClick={onNodeDoubleClick}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            edgeTypes={edgeTypes}
+            nodeTypes={nodeTypes}
+            deleteKeyCode="Delete"
+          >
+            <CanvasBackground />
+            <Controls position="bottom-right" />
+          </ReactFlow>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

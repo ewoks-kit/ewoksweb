@@ -88,7 +88,6 @@ function WorkflowDropdown(props: Props) {
       }}
       onChange={(event, newValue) => {
         onChange(newValue);
-
         setTimeout(() => {
           setInputValue('');
         }, 200);

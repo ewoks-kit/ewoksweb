@@ -142,7 +142,8 @@ export type TaskType =
   | 'graphOutput'
   | 'class'
   | 'note'
-  | 'script';
+  | 'script'
+  | 'subworkflow';
 
 export interface Task {
   task_type: TaskType;

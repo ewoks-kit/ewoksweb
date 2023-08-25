@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { useTasks } from '../../api/tasks';
 import useConfigStore from '../../store/useConfigStore';
 import AddNoteButton from './AddNoteButton';
-import AddSubgraphButton from './AddSubgraphButton';
+import AddSubworkflow from './AddSubworkflow';
 import TaskItem from './TaskItem';
 
 import styles from './TaskList.module.css';
@@ -54,7 +54,7 @@ function TaskList() {
               {category === 'General' && (
                 <>
                   <AddNoteButton />
-                  <AddSubgraphButton tasks={tasks} />
+                  <AddSubworkflow />
                 </>
               )}
             </div>
