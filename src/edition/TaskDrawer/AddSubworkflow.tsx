@@ -1,28 +1,22 @@
 import Tooltip from '@material-ui/core/Tooltip';
-import styles from './TaskDrawer.module.css';
-import { attachTaskInfo } from '../Canvas/utils';
-import GrainIcon from '@material-ui/icons/Grain';
+import { DynamicFeed } from '@material-ui/icons';
+import TaskButton from './TaskButton';
+
+import styles from './TaskList.module.css';
 
 function AddSubworkflow() {
   return (
-    <Tooltip title="Add a subgworkflow" arrow>
-      <span
-        role="button"
-        tabIndex={0}
-        key="addWorkflow"
-        className={`${styles.subgraph} dndnode`}
-        onDragStart={(event) => {
-          attachTaskInfo(event.dataTransfer, {
-            task_identifier: 'subworkflow',
+    <Tooltip title="Drag to the canvas to add a subworkflow node" arrow>
+      <div className={styles.item}>
+        <TaskButton
+          taskInfo={{
             task_type: 'subworkflow',
-          });
-        }}
-        draggable
-      >
-        <GrainIcon color="primary" />
-        Add sub-
-        <div>Workflow</div>
-      </span>
+            task_identifier: 'subworkflow',
+          }}
+          label="Subworkflow"
+          icon={() => <DynamicFeed fontSize="large" />}
+        />
+      </div>
     </Tooltip>
   );
 }
