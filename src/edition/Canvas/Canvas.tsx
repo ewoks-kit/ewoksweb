@@ -75,9 +75,8 @@ function Canvas() {
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
-  const [subgraphDrop, setSubgraphDrop] = useState<{
-    openAddSubworkflow?: boolean;
-    subworkflowPosition?: XYPosition;
+  const [addSubworkflowEvent, setSubworkflowEvent] = useState<{
+    position: XYPosition;
   }>();
 
   const graphInfo = useStore((state) => state.graphInfo);
@@ -156,9 +155,8 @@ function Canvas() {
     });
 
     if (task_type === 'subworkflow') {
-      setSubgraphDrop({
-        openAddSubworkflow: true,
-        subworkflowPosition: position,
+      setSubworkflowEvent({
+        position,
       });
       return;
     }
@@ -383,12 +381,10 @@ function Canvas() {
   return (
     <>
       <AddSubworkflowDialog
-        open={subgraphDrop?.openAddSubworkflow || false}
-        subworkflowPosition={
-          subgraphDrop?.subworkflowPosition || { x: 0, y: 0 }
-        }
+        open={!!addSubworkflowEvent}
+        position={addSubworkflowEvent?.position}
         tasks={tasks}
-        onClose={() => setSubgraphDrop({ openAddSubworkflow: false })}
+        onClose={() => setSubworkflowEvent(undefined)}
       />
       <div
         className={classes.root}
