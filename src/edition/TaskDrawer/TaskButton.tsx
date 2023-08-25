@@ -1,6 +1,7 @@
-import styles from './TaskList.module.css';
 import { attachTaskInfo } from '../Canvas/utils';
 import type { TaskInfo } from '../Canvas/models';
+
+import styles from './TaskButton.module.css';
 
 interface Props {
   taskInfo: TaskInfo;
@@ -14,15 +15,17 @@ function TaskButton(props: Props) {
 
   return (
     <button
-      className={styles.itemBtn}
+      className={styles.btn}
       type="button"
       onClick={onClick}
       onDragStart={(event) => attachTaskInfo(event.dataTransfer, taskInfo)}
       aria-label={taskInfo.task_identifier}
       draggable
     >
-      <Icon />
-      <label className={styles.itemLabel}>{label}</label>
+      <div className={styles.icon}>
+        <Icon />
+      </div>
+      <label className={styles.label}>{label}</label>
     </button>
   );
 }

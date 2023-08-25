@@ -33,22 +33,6 @@
   border-color: #3f51b5;
 }
 
-.itemBtn {
-  composes: btnClean from global;
-  display: flex;
-  align-items: center;
-  cursor: grab;
-  overflow: hidden;
-}
-
-.itemLabel {
-  margin-left: 0.5rem;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  cursor: grab;
-}
-
 .toolbar {
   display: flex;
   padding: 0.5rem 0;
