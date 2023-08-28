@@ -3,22 +3,15 @@ import type { SetState } from 'zustand';
 
 export interface OpenSnackbarSlice {
   openSnackbar: SnackbarParams;
-  setOpenSnackbar: (params: SnackbarParams) => void;
   showSuccessMsg: (text: string) => void;
   showWarningMsg: (text: string) => void;
   showErrorMsg: (text: string) => void;
   showInfoMsg: (text: string) => void;
+  closeSnackbar: () => void;
 }
 
 const openSnackbar = (set: SetState<State>): OpenSnackbarSlice => ({
   openSnackbar: { open: false, text: '', severity: 'success' },
-
-  setOpenSnackbar: (setOpen) => {
-    set((state) => ({
-      ...state,
-      openSnackbar: setOpen,
-    }));
-  },
 
   showSuccessMsg: (text: string) => {
     set((state) => ({
@@ -63,6 +56,12 @@ const openSnackbar = (set: SetState<State>): OpenSnackbarSlice => ({
       },
     }));
   },
+
+  closeSnackbar: () =>
+    set((state) => ({
+      ...state,
+      openSnackbar: { open: false, text: '', severity: 'success' },
+    })),
 });
 
 export default openSnackbar;

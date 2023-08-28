@@ -5,8 +5,8 @@ import { Alert } from '@material-ui/lab';
 import useStore from '../store/useStore';
 
 function SimpleSnackbar() {
-  const openSnackbar = useStore((state) => state.openSnackbar);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const { open, text, severity } = useStore((state) => state.openSnackbar);
+  const closeSnackbar = useStore((state) => state.closeSnackbar);
 
   const handleClose = (
     event: React.SyntheticEvent | React.MouseEvent,
@@ -16,11 +16,7 @@ function SimpleSnackbar() {
       return;
     }
 
-    setOpenSnackbar({
-      open: false,
-      text: '',
-      severity: 'success',
-    });
+    closeSnackbar();
   };
 
   const action = (
@@ -36,14 +32,14 @@ function SimpleSnackbar() {
 
   return (
     <Snackbar
-      open={openSnackbar.open}
+      open={open}
       autoHideDuration={6000}
       onClose={handleClose}
-      message={openSnackbar.text}
+      message={text}
       action={action}
     >
-      <Alert onClose={handleClose} severity={openSnackbar.severity}>
-        {openSnackbar.text}
+      <Alert onClose={handleClose} severity={severity}>
+        {text}
       </Alert>
     </Snackbar>
   );
