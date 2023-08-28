@@ -2,7 +2,7 @@ import { CircularProgress } from '@material-ui/core';
 import { Replay } from '@material-ui/icons';
 import { useState } from 'react';
 import { executeWorkflow } from '../api/workflows';
-import useStore from '../store/useStore';
+import useSnackbarStore from '../store/useSnackbarStore';
 
 import styles from './RerunButton.module.css';
 
@@ -13,7 +13,7 @@ interface Props {
 function RerunButton(props: Props) {
   const { id } = props;
 
-  const showErrorMsg = useStore((state) => state.showErrorMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const [loading, setLoading] = useState(false);
 
   return (

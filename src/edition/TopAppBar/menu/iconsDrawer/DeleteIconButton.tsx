@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { deleteIcon, useInvalidateIcons } from '../../../../api/icons';
 import { useTasks } from '../../../../api/tasks';
 import ConfirmDialog from '../../../../general/ConfirmDialog';
-import useStore from '../../../../store/useStore';
+import useSnackbarStore from '../../../../store/useSnackbarStore';
 import { textForError } from '../../../../utils';
 
 interface Props {
@@ -17,9 +17,9 @@ function DeleteIconButton(props: Props) {
   const tasks = useTasks();
 
   const [isDialogOpen, setOpenDialog] = useState(false);
-  const showSuccessMsg = useStore((state) => state.showSuccessMsg);
-  const showWarningMsg = useStore((state) => state.showWarningMsg);
-  const showErrorMsg = useStore((state) => state.showErrorMsg);
+  const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
+  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const invalidateIcons = useInvalidateIcons();
 
   async function agreeDeleteIcon() {

@@ -18,6 +18,7 @@ import {
 } from '../../api/workflows';
 import commonStrings from '../../commonStrings.json';
 import useStore from '../../store/useStore';
+import useSnackbarStore from '../../store/useSnackbarStore';
 import type { GraphDetails } from '../../types';
 import { GraphFormAction } from '../../types';
 import {
@@ -48,8 +49,8 @@ export default function GraphFormDialog(props: Props) {
 
   const resetLoadedGraphs = useStore((state) => state.resetLoadedGraphs);
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
-  const showSuccessMsg = useStore((state) => state.showSuccessMsg);
-  const showErrorMsg = useStore((state) => state.showErrorMsg);
+  const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const tasks = useTasks();
 
   const invalidateWorkflows = useInvalidateWorkflows();

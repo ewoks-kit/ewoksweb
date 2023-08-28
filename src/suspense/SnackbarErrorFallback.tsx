@@ -1,11 +1,11 @@
 import type { FallbackProps } from 'react-error-boundary';
-import useStore from '../store/useStore';
+import useSnackbarStore from '../store/useSnackbarStore';
 import { textForError } from '../utils';
 
 function SnackbarErrorFallback(props: FallbackProps) {
   const { error } = props;
 
-  const showErrorMsg = useStore((state) => state.showErrorMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
   const text = textForError(error, 'Error when contacting the server.');
   showErrorMsg(text);

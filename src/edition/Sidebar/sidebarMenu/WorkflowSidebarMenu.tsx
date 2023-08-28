@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import GraphFormDialog from '../../../general/forms/GraphFormDialog';
 import useStore from '../../../store/useStore';
+import useSnackbarStore from '../../../store/useSnackbarStore';
 import { GraphFormAction } from '../../../types';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import ConfirmDialog from '../../../general/ConfirmDialog';
@@ -21,8 +22,8 @@ export default function WorkflowSidebarMenu() {
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
 
-  const showSuccessMsg = useStore((state) => state.showSuccessMsg);
-  const showErrorMsg = useStore((state) => state.showErrorMsg);
+  const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const rfInstance = useReactFlow();
   const tasks = useTasks();
 

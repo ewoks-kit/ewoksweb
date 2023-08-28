@@ -3,7 +3,7 @@ import { CloudUpload } from '@material-ui/icons';
 import type { ChangeEvent, SyntheticEvent } from 'react';
 import { useState } from 'react';
 import { postIcon, useInvalidateIcons } from '../../../../api/icons';
-import useStore from '../../../../store/useStore';
+import useSnackbarStore from '../../../../store/useSnackbarStore';
 import { textForError } from '../../../../utils';
 
 import styles from './IconsDrawer.module.css';
@@ -13,9 +13,9 @@ function UploadIconControl() {
     string | ArrayBuffer
   >('');
   const [iconNameToUpload, setIconNameToUpload] = useState('');
-  const showSuccessMsg = useStore((state) => state.showSuccessMsg);
-  const showWarningMsg = useStore((state) => state.showWarningMsg);
-  const showErrorMsg = useStore((state) => state.showErrorMsg);
+  const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
+  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const invalidateIcons = useInvalidateIcons();
 
   async function uploadIcon(event: SyntheticEvent<Element, Event>) {

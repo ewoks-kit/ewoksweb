@@ -9,7 +9,7 @@ import {
   Slider,
 } from '@material-ui/core';
 
-import useStore from '../../../store/useStore';
+import useSnackbarStore from '../../../store/useSnackbarStore';
 import type { PropertyChangedEvent } from '../../../types';
 import sidebarStyle from '../sidebarStyle';
 import type { ChangeEvent } from 'react';
@@ -30,7 +30,7 @@ export default function EditLinkStyle(element: Edge) {
   assertEdgeDataDefined(edgeData, element.id);
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
-  const showInfoMsg = useStore((state) => state.showInfoMsg);
+  const showInfoMsg = useSnackbarStore((state) => state.showInfoMsg);
 
   const [linkType, setLinkType] = useState('default');
   const [arrowType, setArrowType] = useState<MarkerType | 'none'>(

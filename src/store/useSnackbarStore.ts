@@ -1,7 +1,13 @@
-import type { SnackbarParams, State } from '../types';
-import type { SetState } from 'zustand';
+import type { Color } from '@material-ui/lab';
+import create from 'zustand';
 
-export interface OpenSnackbarSlice {
+interface SnackbarParams {
+  open: boolean;
+  text: string;
+  severity: Color;
+}
+
+interface State {
   openSnackbar: SnackbarParams;
   showSuccessMsg: (text: string) => void;
   showWarningMsg: (text: string) => void;
@@ -10,7 +16,7 @@ export interface OpenSnackbarSlice {
   closeSnackbar: () => void;
 }
 
-const openSnackbar = (set: SetState<State>): OpenSnackbarSlice => ({
+const useSnackbarStore = create<State>((set) => ({
   openSnackbar: { open: false, text: '', severity: 'success' },
 
   showSuccessMsg: (text: string) => {
@@ -62,6 +68,6 @@ const openSnackbar = (set: SetState<State>): OpenSnackbarSlice => ({
       ...state,
       openSnackbar: { open: false, text: '', severity: 'success' },
     })),
-});
+}));
 
-export default openSnackbar;
+export default useSnackbarStore;

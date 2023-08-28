@@ -2,7 +2,7 @@ import { IconButton } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
 import { useState } from 'react';
 import { deleteTask as deleteTaskOnServer } from '../../api/tasks';
-import useStore from '../../store/useStore';
+import useSnackbarStore from '../../store/useSnackbarStore';
 import type { Task } from '../../types';
 import { textForError } from '../../utils';
 import ConfirmDialog from '../../general/ConfirmDialog';
@@ -19,8 +19,8 @@ function DeleteTaskButton(props: Props) {
 
   const [isDialogOpen, setOpenDialog] = useState(false);
 
-  const showSuccessMsg = useStore((state) => state.showSuccessMsg);
-  const showErrorMsg = useStore((state) => state.showErrorMsg);
+  const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const invalidateTasks = useInvalidateTasks();
 
   async function deleteTask() {

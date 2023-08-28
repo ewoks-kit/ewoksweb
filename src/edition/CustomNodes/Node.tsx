@@ -5,6 +5,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import isValidLink from '../../utils/IsValidLink';
 
 import useStore from '../../store/useStore';
+import useSnackbarStore from '../../store/useSnackbarStore';
 import type { Connection } from 'reactflow';
 import NodeIcon from './NodeIcon';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
@@ -30,7 +31,7 @@ function Node({
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo
   );
-  const showWarningMsg = useStore((state) => state.showWarningMsg);
+  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
 
   const nodWidth = { width: `${nodeWidth || 100}px` };
 

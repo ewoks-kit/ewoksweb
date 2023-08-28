@@ -7,7 +7,7 @@ import {
   DialogTitle,
   TextField,
 } from '@material-ui/core';
-import useStore from '../../../store/useStore';
+import useSnackbarStore from '../../../store/useSnackbarStore';
 import { useState } from 'react';
 import { discoverTasks } from '../../../api/tasks';
 import commonStrings from '../../../commonStrings.json';
@@ -21,8 +21,8 @@ interface Props {
 
 export default function DiscoverTasksDialog(props: Props) {
   const { open, onClose } = props;
-  const showSuccessMsg = useStore((state) => state.showSuccessMsg);
-  const showWarningMsg = useStore((state) => state.showWarningMsg);
+  const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
+  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
   const [textValue, setTextValue] = useState<string>('');
 
   const invalidateTasks = useInvalidateTasks();

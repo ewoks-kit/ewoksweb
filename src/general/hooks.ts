@@ -1,5 +1,6 @@
 import type { GraphEwoks } from '../types';
 import useStore from '../store/useStore';
+import useSnackbarStore from '../store/useSnackbarStore';
 import { isString } from '../utils/typeGuards';
 
 function tryJSONparse(str: string | ArrayBuffer | null): unknown {
@@ -17,11 +18,8 @@ function tryJSONparse(str: string | ArrayBuffer | null): unknown {
 
 export function useLoadGraph(onGraphLoad: (graph: GraphEwoks) => void) {
   return async (file: File) => {
-    const {
-      displayedWorkflowInfo,
-      rootWorkflowId,
-      showErrorMsg,
-    } = useStore.getState();
+    const { displayedWorkflowInfo, rootWorkflowId } = useStore.getState();
+    const { showErrorMsg } = useSnackbarStore.getState();
 
     if (rootWorkflowId !== displayedWorkflowInfo.id) {
       showErrorMsg('Not allowed to add a new node-graph to any sub-graph!');

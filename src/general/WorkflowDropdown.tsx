@@ -1,6 +1,6 @@
 import type { WorkflowDescription } from 'types';
 
-import useStore from 'store/useStore';
+import useSnackbarStore from 'store/useSnackbarStore';
 import { useEffect, useState } from 'react';
 import { Autocomplete } from '@material-ui/lab';
 import { CircularProgress, TextField } from '@material-ui/core';
@@ -34,7 +34,7 @@ function WorkflowDropdown(props: Props) {
 
   const [inputValue, setInputValue] = useState('');
   const [open, setOpen] = useState(false);
-  const showErrorMsg = useStore((state) => state.showErrorMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
   const { data: workflows, isLoading: loading, error } = useWorkflowsDLE();
   const sortedWorkflows = sortByCategory(workflows ?? []);

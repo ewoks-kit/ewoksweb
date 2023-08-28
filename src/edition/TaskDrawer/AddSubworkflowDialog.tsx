@@ -9,7 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Dialog from '@material-ui/core/Dialog';
 import OpenGraphInput from '../../general/OpenGraphInput';
 import type { GraphEwoks, Task } from '../../types';
-import useStore from '../../store/useStore';
+import useSnackbarStore from '../../store/useSnackbarStore';
 import type { XYPosition } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
@@ -31,7 +31,7 @@ export default function AddSubworkflowDialog(props: Props) {
   const fromDiskInputRef = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
 
-  const showErrorMsg = useStore((state) => state.showErrorMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   async function loadSubgraphAsNode(subgraph: GraphEwoks) {

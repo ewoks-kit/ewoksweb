@@ -6,6 +6,7 @@ import { fetchWorkflow } from '../api/workflows';
 import ErrorFallback from '../general/ErrorFallback';
 import useWorkflowToRestoreId from '../store/useWorkflowToRestoreId';
 import useStore from '../store/useStore';
+import useSnackbarStore from '../store/useSnackbarStore';
 import SuspenseBoundary from '../suspense/SuspenseBoundary';
 import { textForError } from '../utils';
 import Canvas from './Canvas/Canvas';
@@ -24,7 +25,7 @@ export default function EditPage() {
   );
 
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
-  const showErrorMsg = useStore((state) => state.showErrorMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
   if (workflowToRestoreId) {
     const restoreWorkflow = async () => {
