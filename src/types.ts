@@ -171,11 +171,9 @@ export interface stackGraph {
 }
 
 export interface GraphUiProps {
-  label?: string;
   type?: string;
   comment?: string;
   notes?: Note[];
-  style?: LinkStyle;
   icon?: string;
 }
 
