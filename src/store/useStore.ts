@@ -6,10 +6,10 @@ import openSnackbar from './openSnackbar';
 import recentGraphs from './recentGraphs';
 import subGraph from './subGraph';
 import subgraphsStack from './subgraphsStack';
-import graphInfo from './graphInfo';
+import displayedWorkflowInfo from './displayedWorkflowInfo';
 
 const useStore = create<State>((set, get) => ({
-  ...graphInfo(set),
+  ...displayedWorkflowInfo(set),
   ...openDraggableDialog(set),
   ...openSnackbar(set),
   ...recentGraphs(set, get),

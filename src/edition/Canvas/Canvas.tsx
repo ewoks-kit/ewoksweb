@@ -79,8 +79,12 @@ function Canvas() {
     position: XYPosition;
   }>();
 
-  const graphInfo = useStore((state) => state.graphInfo);
-  const setGraphInfo = useStore((state) => state.setGraphInfo);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
+  const setDisplayedWorkflowInfo = useStore(
+    (state) => state.setDisplayedWorkflowInfo
+  );
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const addRecentGraph = useStore((state) => state.addRecentGraph);
 
@@ -237,7 +241,7 @@ function Canvas() {
       {
         nodes: nodesRF,
         links: edgesRF as EwoksRFLink[],
-        graph: graphInfo,
+        graph: displayedWorkflowInfo,
       },
       getNodesData(),
       oldEdge
@@ -292,7 +296,7 @@ function Canvas() {
         severity: 'warning',
       });
       addRecentGraph({
-        graph: graphInfo,
+        graph: displayedWorkflowInfo,
         nodes: getNodes().map((nod) => {
           return {
             ...nod,
@@ -319,7 +323,7 @@ function Canvas() {
 
         setEdges(subgraph.links);
 
-        setGraphInfo(subgraph.graph);
+        setDisplayedWorkflowInfo(subgraph.graph);
         setTimeout(() => {
           fitView({ duration: 500 });
         }, 300);

@@ -12,7 +12,9 @@ export default function SubgraphStack() {
   const { setNodes, setEdges, fitView } = useReactFlow();
 
   const recentGraphs = useStore((state) => state.recentGraphs);
-  const setGraphInfo = useStore((state) => state.setGraphInfo);
+  const setDisplayedWorkflowInfo = useStore(
+    (state) => state.setDisplayedWorkflowInfo
+  );
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const subgraphsStack = useStore((state) => {
     return state.subgraphsStack;
@@ -42,7 +44,7 @@ export default function SubgraphStack() {
       setNodesData(subgraph.nodes);
       setEdges(subgraph.links);
       setEdgesData(subgraph.links);
-      setGraphInfo(subgraph.graph);
+      setDisplayedWorkflowInfo(subgraph.graph);
       setTimeout(() => {
         fitView({ duration: 500 });
       }, 300);

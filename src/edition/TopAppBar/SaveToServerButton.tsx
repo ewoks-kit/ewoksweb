@@ -20,7 +20,9 @@ import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 
 // DOC: Save to server button with its spinner
 export default function SaveToServerButton() {
-  const graphInfo = useStore((state) => state.graphInfo);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
   const rfInstance = useReactFlow();
   const mutateWorkflows = useMutateWorkflows();
 
@@ -60,13 +62,13 @@ export default function SaveToServerButton() {
 
     const workflowsIds = response.data;
 
-    if (!workflowsIds.includes(graphInfo.id)) {
+    if (!workflowsIds.includes(displayedWorkflowInfo.id)) {
       setAction(GraphFormAction.newGraph);
       setDialogOpen(true);
       return;
     }
 
-    if (workingGraph.graph.id !== graphInfo.id) {
+    if (workingGraph.graph.id !== displayedWorkflowInfo.id) {
       handleError(
         'Cannot save any changes to subgraphs! Open it as the main graph to make changes.'
       );
@@ -107,7 +109,7 @@ export default function SaveToServerButton() {
 
       await putWorkflow(
         rfToEwoks({
-          graph: graphInfo,
+          graph: displayedWorkflowInfo,
           nodes: nodesWithData,
           links: edgesWithData,
         })
@@ -138,7 +140,7 @@ export default function SaveToServerButton() {
     <>
       <SuspenseBoundary>
         <GraphFormDialog
-          elementToEdit={graphInfo}
+          elementToEdit={displayedWorkflowInfo}
           action={action}
           isOpen={isDialogOpen}
           onClose={() => setDialogOpen(false)}

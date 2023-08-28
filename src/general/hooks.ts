@@ -17,9 +17,13 @@ function tryJSONparse(str: string | ArrayBuffer | null): unknown {
 
 export function useLoadGraph(onGraphLoad: (graph: GraphEwoks) => void) {
   return async (file: File) => {
-    const { graphInfo, workingGraph, setOpenSnackbar } = useStore.getState();
+    const {
+      displayedWorkflowInfo,
+      workingGraph,
+      setOpenSnackbar,
+    } = useStore.getState();
 
-    if (workingGraph.graph.id !== graphInfo.id) {
+    if (workingGraph.graph.id !== displayedWorkflowInfo.id) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to add a new node-graph to any sub-graph!',

@@ -63,7 +63,9 @@ export default function DraggableDialog(props: Props) {
     id: '',
     rows: [],
   });
-  const graphInfo = useStore((state) => state.graphInfo);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
 
   const [selection, setSelection] = useState('ewoks');
 
@@ -94,7 +96,7 @@ export default function DraggableDialog(props: Props) {
     newSelection: string
   ) => {
     const graphRf: GraphRF = {
-      graph: graphInfo,
+      graph: displayedWorkflowInfo,
       nodes: getNodes().map((nod) => {
         return { ...nod, data: getNodesData().get(nod.id) as EwoksRFNodeData };
       }),

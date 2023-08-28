@@ -7,13 +7,15 @@ import { useEffect } from 'react';
 
 function MonitorRoute() {
   const setWorkflowToRestoreId = useWorkflowToRestoreId((state) => state.setId);
-  const graphInfo = useStore((state) => state.graphInfo);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
 
   useEffect(() => {
-    if (graphInfo.id) {
-      setWorkflowToRestoreId(graphInfo.id);
+    if (displayedWorkflowInfo.id) {
+      setWorkflowToRestoreId(displayedWorkflowInfo.id);
     }
-  }, [graphInfo.id, setWorkflowToRestoreId]);
+  }, [displayedWorkflowInfo.id, setWorkflowToRestoreId]);
 
   return (
     <SuspenseBoundary FallbackComponent={MonitorPageFallback}>

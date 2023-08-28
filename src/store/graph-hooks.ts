@@ -14,7 +14,7 @@ export function useNodesLength() {
 }
 
 export function useGraphId() {
-  return useStore((state) => state.graphInfo.id);
+  return useStore((state) => state.displayedWorkflowInfo.id);
 }
 
 export function useNode(id: string) {

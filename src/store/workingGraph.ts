@@ -105,7 +105,7 @@ const workingGraph = (
 
     get().addRecentGraph(resultGraph);
 
-    get().setGraphInfo(resultGraph.graph);
+    get().setDisplayedWorkflowInfo(resultGraph.graph);
 
     const newGraphNoData = {
       graph: resultGraph.graph,
