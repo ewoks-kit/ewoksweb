@@ -60,8 +60,6 @@ function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
 
 // EwoksRFNode --> EwoksNode for saving
 export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
-  console.log(nodes);
-
   const tempNodes: EwoksRFNode[] = [...nodes].filter(
     (nod) =>
       !['graphInput', 'graphOutput', 'note'].includes(
@@ -98,8 +96,6 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
       const nodeDefaultInputs = cleanDefaultInputs(
         calcDefaultInputs(default_inputs)
       );
-      console.log(nodeDefaultInputs);
-
       return {
         id,
         label,
