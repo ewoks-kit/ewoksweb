@@ -4,7 +4,7 @@ import type { OpenSnackbarSlice } from './store/openSnackbar';
 import type { SubgraphsStackSlice } from './store/subgraphsStack';
 import type { SubGraphSlice } from './store/subGraph';
 import type { WorkingGraphSlice } from './store/workingGraph';
-import type { RecentGraphsSlice } from './store/recentGraphs';
+import type { RfWorkflowsSlice } from './store/rfWorkflows';
 import type { Color } from '@material-ui/lab';
 import type { ChangeEvent, CSSProperties, ReactNode } from 'react';
 import type { Node } from 'reactflow';
@@ -99,7 +99,7 @@ export interface State
     SubgraphsStackSlice,
     SubGraphSlice,
     WorkingGraphSlice,
-    RecentGraphsSlice {}
+    RfWorkflowsSlice {}
 
 export interface Action {
   action: string;

@@ -47,19 +47,18 @@ const workingGraph = (
       label: '',
       resetStack: true,
     });
-    get().resetRecentGraphs();
+    get().resetRFWorkflows();
 
     // 2. Get node-subgraphs for the graph
-    const newNodeSubgraphs = await findAllSubgraphs(
-      inputGraph,
-      get().recentGraphs
-    );
+    const newNodeSubgraphs = await findAllSubgraphs(inputGraph, [
+      ...get().rfWorkflows.values(),
+    ]);
 
     // 3. Put the newNodeSubgraphs into recent in their graphRF form (sync)
     newNodeSubgraphs.forEach((gr) => {
       // calculate the rfNodes using the fetched subgraphs
       // nodes and edges stored with their data as EwoksRFNodes-Links
-      get().addRecentGraph({
+      get().addRFWorkflow({
         graph: gr.graph,
         nodes: toRFEwoksNodes(gr, newNodeSubgraphs, tasks),
         links: toRFEwoksLinks(gr, newNodeSubgraphs, tasks),
@@ -103,7 +102,7 @@ const workingGraph = (
     useNodeDataStore.getState().setNodesData(resultGraph.nodes);
     useEdgeDataStore.getState().setEdgesData(resultGraph.links);
 
-    get().addRecentGraph(resultGraph);
+    get().addRFWorkflow(resultGraph);
 
     get().setGraphInfo(resultGraph.graph);
 
@@ -117,7 +116,7 @@ const workingGraph = (
       }),
     };
     // add the new graph to the recent graphs if not already there
-    get().addRecentGraph({
+    get().addRFWorkflow({
       graph: inputGraph.graph,
       nodes: grfNodes,
       links: toRFEwoksLinks(inputGraph, newNodeSubgraphs, tasks),

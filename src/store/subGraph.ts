@@ -42,10 +42,9 @@ const subGraph = (
   setSubGraph: async (subGraphL, nodes, links, position, tasks) => {
     // 1. input the graphEwoks from server or file-system
     // 2. search for all subgraphs in it (async)
-    const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(
-      subGraphL,
-      get().recentGraphs
-    );
+    const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(subGraphL, [
+      ...get().rfWorkflows.values(),
+    ]);
 
     // 3. Put the newNodeSubgraphs into recent in their graphRF form (sync)
     newNodeSubgraphs.forEach((gr) => {
@@ -56,7 +55,7 @@ const subGraph = (
         tasks
       );
 
-      get().addRecentGraph({
+      get().addRFWorkflow({
         graph: gr.graph,
         nodes: rfNodes,
         links: toRFEwoksLinks(gr, newNodeSubgraphs, tasks),
@@ -130,7 +129,7 @@ const subGraph = (
       },
     };
 
-    get().addRecentGraph(subToAdd);
+    get().addRFWorkflow(subToAdd);
 
     const newWorkingGraph = {
       graph: EMPTY_RF_GRAPH.graph,
@@ -140,7 +139,7 @@ const subGraph = (
 
     useNodeDataStore.getState().setNodeData(newNode.id, newNode.data);
 
-    get().addRecentGraph(newWorkingGraph);
+    get().addRFWorkflow(newWorkingGraph);
     const { data, ...nodeWithoutData } = newNode;
     return { nodeWithoutData: nodeWithoutData as Node, data };
   },

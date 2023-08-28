@@ -46,7 +46,7 @@ export default function GraphFormDialog(props: Props) {
     defaultValues: { identifier: elementToEdit.label },
   });
 
-  const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
+  const resetRecentGraphs = useStore((state) => state.resetRFWorkflows);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setWorkingGraph = useStore((state) => state.setWorkingGraph);
   const tasks = useTasks();
