@@ -3,7 +3,7 @@ import type { OpenDraggableDialogSlice } from './store/openDraggableDialog';
 import type { OpenSnackbarSlice } from './store/openSnackbar';
 import type { SubgraphsStackSlice } from './store/subgraphsStack';
 import type { SubGraphSlice } from './store/subGraph';
-import type { WorkingGraphSlice } from './store/workingGraph';
+import type { RootWorkflowSlice } from './store/rootWorkflow';
 import type { RecentGraphsSlice } from './store/recentGraphs';
 import type { Color } from '@material-ui/lab';
 import type { ChangeEvent, CSSProperties, ReactNode } from 'react';
@@ -98,7 +98,7 @@ export interface State
     OpenSnackbarSlice,
     SubgraphsStackSlice,
     SubGraphSlice,
-    WorkingGraphSlice,
+    RootWorkflowSlice,
     RecentGraphsSlice {}
 
 export interface Action {

@@ -48,7 +48,7 @@ export default function GraphFormDialog(props: Props) {
 
   const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
   const tasks = useTasks();
 
   const mutateWorkflows = useMutateWorkflows();
@@ -73,7 +73,7 @@ export default function GraphFormDialog(props: Props) {
         await putWorkflow(ewoksGraph);
       } else {
         const { data: newGraph } = await postWorkflow(ewoksGraph);
-        setWorkingGraph(newGraph, rfInstance, tasks, 'fromServer');
+        setRootWorkflow(newGraph, rfInstance, tasks, 'fromServer');
         resetRecentGraphs();
       }
       mutateWorkflows();

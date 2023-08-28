@@ -24,13 +24,13 @@ export default function EditPage() {
   );
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
 
   if (workflowToRestoreId) {
     const restoreWorkflow = async () => {
       try {
         const { data: graph } = await fetchWorkflow(workflowToRestoreId);
-        setWorkingGraph(graph, rfInstance, tasks, 'fromServer');
+        setRootWorkflow(graph, rfInstance, tasks, 'fromServer');
       } catch (error) {
         setOpenSnackbar({
           open: true,

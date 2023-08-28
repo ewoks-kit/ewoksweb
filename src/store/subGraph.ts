@@ -70,8 +70,8 @@ const subGraph = (
       nodes: grfNodes,
       links: toRFEwoksLinks(subGraphL, newNodeSubgraphs, tasks),
     };
-    // Adding a subgraph to an existing workingGraph:
-    // save the workingGraph in the recent graphs and add a new graph node to it
+    // Adding a subgraph to an existing rootWorkflow:
+    // update the rootWorkflow in the recent graphs after adding a new graph node to it
 
     const subToAdd = graph as GraphRF;
 
@@ -132,7 +132,7 @@ const subGraph = (
 
     get().addRecentGraph(subToAdd);
 
-    const newWorkingGraph = {
+    const newRootWorkflow = {
       graph: EMPTY_RF_GRAPH.graph,
       nodes: [...nodes, newNode] as EwoksRFNode[],
       links: links as EwoksRFLink[],
@@ -140,7 +140,7 @@ const subGraph = (
 
     useNodeDataStore.getState().setNodeData(newNode.id, newNode.data);
 
-    get().addRecentGraph(newWorkingGraph);
+    get().addRecentGraph(newRootWorkflow);
     const { data, ...nodeWithoutData } = newNode;
     return { nodeWithoutData: nodeWithoutData as Node, data };
   },
