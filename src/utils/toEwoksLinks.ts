@@ -25,29 +25,45 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
       style,
       animated,
     }) => {
+      const datamapping =
+        data.data_mapping && calcDataMapping(data.data_mapping);
+
+      const conditionsValue = data.conditions?.map((con) => {
+        return {
+          source_output: calcConditionName(con),
+          value: calcConditionValue(con),
+        };
+      });
+
       const link: EwoksLink = {
         source,
         target,
-        data_mapping: data.data_mapping && calcDataMapping(data.data_mapping),
-        conditions: data.conditions?.map((con) => {
-          return {
-            source_output: calcConditionName(con),
-            value: calcConditionValue(con),
-          };
-        }),
+        ...(datamapping &&
+          datamapping.length > 0 && {
+            data_mapping: datamapping,
+          }),
+        ...(conditionsValue &&
+          conditionsValue.length > 0 && {
+            conditions: conditionsValue,
+          }),
         on_error: data.on_error,
         map_all_data: data.map_all_data,
         required: data.required,
         uiProps: {
-          label: isString(label) ? label : undefined,
-          comment: data.comment,
+          ...(label &&
+            isString(label) && {
+              label,
+            }),
+          ...(data.comment && { comment: data.comment }),
           type,
           markerEnd,
           style: { stroke: style?.stroke },
           animated,
           sourceHandle,
           targetHandle,
-          getAroundProps: data.getAroundProps,
+          ...(type === 'getAround' && {
+            getAroundProps: data.getAroundProps,
+          }),
         },
       };
       if (data.sub_source) {

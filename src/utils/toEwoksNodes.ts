@@ -98,6 +98,8 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
       const nodeDefaultInputs = cleanDefaultInputs(
         calcDefaultInputs(default_inputs)
       );
+      console.log(nodeDefaultInputs);
+
       return {
         id,
         label,
@@ -106,11 +108,11 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         ...(typeof inputs_complete === 'boolean' && {
           inputs_complete,
         }),
-        // The following is no longer in the UI
         task_generator,
-        ...(nodeDefaultInputs && {
-          default_inputs: nodeDefaultInputs,
-        }),
+        ...(nodeDefaultInputs &&
+          nodeDefaultInputs.length > 0 && {
+            default_inputs: nodeDefaultInputs,
+          }),
         ...(typeof default_error_node === 'boolean' && {
           default_error_node,
         }),
@@ -124,7 +126,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           ...(comment && { comment }),
           position,
           moreHandles,
-          colorBorder,
+          ...(colorBorder && { colorBorder }),
           withImage,
           withLabel,
           nodeWidth,
