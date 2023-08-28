@@ -47,8 +47,9 @@ export default function GraphFormDialog(props: Props) {
   });
 
   const resetLoadedGraphs = useStore((state) => state.resetLoadedGraphs);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
+  const showSuccessMsg = useStore((state) => state.showSuccessMsg);
+  const showErrorMsg = useStore((state) => state.showErrorMsg);
   const tasks = useTasks();
 
   const invalidateWorkflows = useInvalidateWorkflows();
@@ -78,20 +79,12 @@ export default function GraphFormDialog(props: Props) {
       }
       invalidateWorkflows();
 
-      setOpenSnackbar({
-        open: true,
-        text: 'Graph saved successfully!',
-        severity: 'success',
-      });
+      showSuccessMsg('Graph saved successfully!');
 
       reset();
       handleClose();
     } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(error, commonStrings.savingError),
-        severity: 'error',
-      });
+      showErrorMsg(textForError(error, commonStrings.savingError));
     }
   });
 

@@ -68,7 +68,7 @@ function EditableTable(props: EditableTableProps) {
   const [typeOfInputs, setTypeOfInputs] = React.useState<string[]>([]);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<DialogContent>();
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showErrorMsg = useStore((state) => state.showErrorMsg);
 
   const { defaultValues, headers, onRowAdd } = props;
 
@@ -152,11 +152,7 @@ function EditableTable(props: EditableTableProps) {
       e.target.name === 'name' &&
       oldRows.map((r) => r.name).includes(e.target.value as string)
     ) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Not allowed to assign the same property TWICE!',
-        severity: 'error',
-      });
+      showErrorMsg('Not allowed to assign the same property TWICE!');
       // return;
     }
     if (

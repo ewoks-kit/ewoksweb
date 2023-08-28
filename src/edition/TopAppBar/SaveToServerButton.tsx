@@ -32,17 +32,14 @@ export default function SaveToServerButton() {
 
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const rootWorkflowSource = useStore((state) => state.rootWorkflowSource);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showSuccessMsg = useStore((state) => state.showSuccessMsg);
+  const showErrorMsg = useStore((state) => state.showErrorMsg);
   const [action, setAction] = useState<
     GraphFormAction.newGraph | GraphFormAction.newGraphOrOverwrite
   >(GraphFormAction.newGraph);
 
   function handleError(text: string) {
-    setOpenSnackbar({
-      open: true,
-      text,
-      severity: 'error',
-    });
+    showErrorMsg(text);
     setStatus('error');
   }
 
@@ -116,11 +113,7 @@ export default function SaveToServerButton() {
       );
       invalidateWorkflows();
 
-      setOpenSnackbar({
-        open: true,
-        text: 'Graph saved successfully!',
-        severity: 'success',
-      });
+      showSuccessMsg('Graph saved successfully!');
       setStatus('success');
     } catch (error) {
       handleError(textForError(error, commonStrings.savingError));

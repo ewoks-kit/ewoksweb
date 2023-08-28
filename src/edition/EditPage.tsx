@@ -23,8 +23,8 @@ export default function EditPage() {
     (state) => state.resetId
   );
 
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
+  const showErrorMsg = useStore((state) => state.showErrorMsg);
 
   if (workflowToRestoreId) {
     const restoreWorkflow = async () => {
@@ -32,14 +32,12 @@ export default function EditPage() {
         const { data: graph } = await fetchWorkflow(workflowToRestoreId);
         setRootWorkflow(graph, rfInstance, tasks, 'fromServer');
       } catch (error) {
-        setOpenSnackbar({
-          open: true,
-          text: textForError(
+        showErrorMsg(
+          textForError(
             error,
             'Error in retrieving workflow. Please check connectivity with the server!'
-          ),
-          severity: 'error',
-        });
+          )
+        );
       } finally {
         resetWorkflowToRestoreId();
       }

@@ -21,7 +21,8 @@ export default function WorkflowSidebarMenu() {
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
 
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showSuccessMsg = useStore((state) => state.showSuccessMsg);
+  const showErrorMsg = useStore((state) => state.showErrorMsg);
   const rfInstance = useReactFlow();
   const tasks = useTasks();
 
@@ -36,18 +37,12 @@ export default function WorkflowSidebarMenu() {
     if (displayedWorkflowInfo.id) {
       try {
         await deleteWorkflow(displayedWorkflowInfo.id);
-        setOpenSnackbar({
-          open: true,
-          text: `Workflow ${displayedWorkflowInfo.id} successfully deleted!`,
-          severity: 'success',
-        });
         setRootWorkflow(EMPTY_GRAPH, rfInstance, tasks);
+        showSuccessMsg(
+          `Workflow ${displayedWorkflowInfo.id} successfully deleted!`
+        );
       } catch (error) {
-        setOpenSnackbar({
-          open: true,
-          text: textForError(error, commonStrings.deletingError),
-          severity: 'error',
-        });
+        showErrorMsg(textForError(error, commonStrings.deletingError));
       }
     }
   }

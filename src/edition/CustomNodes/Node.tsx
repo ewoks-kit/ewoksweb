@@ -30,7 +30,7 @@ function Node({
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo
   );
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showWarningMsg = useStore((state) => state.showWarningMsg);
 
   const nodWidth = { width: `${nodeWidth || 100}px` };
 
@@ -46,11 +46,7 @@ function Node({
       getNodesData()
     );
     if (!isValid) {
-      setOpenSnackbar({
-        open: true,
-        text: reason,
-        severity: 'warning',
-      });
+      showWarningMsg(reason);
     }
     return isValid;
   };

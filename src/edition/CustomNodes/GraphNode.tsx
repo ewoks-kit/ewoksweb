@@ -21,7 +21,7 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo
   );
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showWarningMsg = useStore((state) => state.showWarningMsg);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
 
   assertNodeDataDefined(nodeData, id);
@@ -40,11 +40,7 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
       getNodesData()
     );
     if (!isValid) {
-      setOpenSnackbar({
-        open: true,
-        text: reason,
-        severity: 'warning',
-      });
+      showWarningMsg(reason);
     }
     return isValid;
   };

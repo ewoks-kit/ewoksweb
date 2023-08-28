@@ -31,7 +31,7 @@ export default function AddSubworkflowDialog(props: Props) {
   const fromDiskInputRef = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
 
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showErrorMsg = useStore((state) => state.showErrorMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   async function loadSubgraphAsNode(subgraph: GraphEwoks) {
@@ -53,14 +53,12 @@ export default function AddSubworkflowDialog(props: Props) {
       loadSubgraphAsNode(subgraph);
       handleClose();
     } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(
+      showErrorMsg(
+        textForError(
           error,
           'Error in retrieving workflow. Please check connectivity with the server!'
-        ),
-        severity: 'error',
-      });
+        )
+      );
     }
   }
   return (

@@ -12,8 +12,8 @@ import { useTasks } from '../api/tasks';
 export default function GetWorkflowFromServerDropdown() {
   const [workflowId, setWorkflowId] = useState('');
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
+  const showWarningMsg = useStore((state) => state.showWarningMsg);
 
   const rfInstance = useReactFlow();
   const tasks = useTasks();
@@ -32,11 +32,7 @@ export default function GetWorkflowFromServerDropdown() {
       const { data: graph } = await fetchWorkflow(workflowIdparam);
       setRootWorkflow(graph, rfInstance, tasks, 'fromServer');
     } else {
-      setOpenSnackbar({
-        open: true,
-        text: 'Please select a graph to fetch and re-click!',
-        severity: 'warning',
-      });
+      showWarningMsg('Please select a graph to fetch and re-click!');
     }
   }
 

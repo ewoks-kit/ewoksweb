@@ -36,7 +36,7 @@ interface Props {
 
 function TaskForm(props: Props) {
   const { isOpen, onClose, elementToEdit, editExistingTask } = props;
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showErrorMsg = useStore((state) => state.showErrorMsg);
   const invalidateTasks = useInvalidateTasks();
 
   const {
@@ -61,11 +61,7 @@ function TaskForm(props: Props) {
     try {
       await submitTaskFormData(data, elementToEdit, editExistingTask);
     } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(error, commonStrings.savingError),
-        severity: 'warning',
-      });
+      showErrorMsg(textForError(error, commonStrings.savingError));
       return;
     }
 

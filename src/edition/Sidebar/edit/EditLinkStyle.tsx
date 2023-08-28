@@ -30,7 +30,7 @@ export default function EditLinkStyle(element: Edge) {
   assertEdgeDataDefined(edgeData, element.id);
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showInfoMsg = useStore((state) => state.showInfoMsg);
 
   const [linkType, setLinkType] = useState('default');
   const [arrowType, setArrowType] = useState<MarkerType | 'none'>(
@@ -67,11 +67,9 @@ export default function EditLinkStyle(element: Edge) {
   function linkTypeChanged(event: PropertyChangedEvent) {
     const val = event.target.value as string;
     if (['multilineText', 'getAround'].includes(val)) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Insert commas (,) in the label to break into multiple lines!',
-        severity: 'success',
-      });
+      showInfoMsg(
+        'Insert commas (,) in the label to break into multiple lines!'
+      );
     }
     const newEdge = {
       ...element,

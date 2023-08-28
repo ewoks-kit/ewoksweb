@@ -13,7 +13,7 @@ interface Props {
 function RerunButton(props: Props) {
   const { id } = props;
 
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showErrorMsg = useStore((state) => state.showErrorMsg);
   const [loading, setLoading] = useState(false);
 
   return (
@@ -26,11 +26,7 @@ function RerunButton(props: Props) {
         try {
           await executeWorkflow(id);
         } catch {
-          setOpenSnackbar({
-            open: true,
-            text: 'Execution could not start!',
-            severity: 'error',
-          });
+          showErrorMsg('Execution could not start!');
         } finally {
           setLoading(false);
         }

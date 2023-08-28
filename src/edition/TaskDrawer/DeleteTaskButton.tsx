@@ -19,7 +19,8 @@ function DeleteTaskButton(props: Props) {
 
   const [isDialogOpen, setOpenDialog] = useState(false);
 
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showSuccessMsg = useStore((state) => state.showSuccessMsg);
+  const showErrorMsg = useStore((state) => state.showErrorMsg);
   const invalidateTasks = useInvalidateTasks();
 
   async function deleteTask() {
@@ -29,22 +30,16 @@ function DeleteTaskButton(props: Props) {
 
     try {
       await deleteTaskOnServer(task.task_identifier);
-      setOpenSnackbar({
-        open: true,
-        text: `Task was successfully deleted!`,
-        severity: 'success',
-      });
+      showSuccessMsg('Task was successfully deleted!');
       // Update task list
       invalidateTasks();
     } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(
+      showErrorMsg(
+        textForError(
           error,
           'Error in task deletion. Please check connectivity with the server'
-        ),
-        severity: 'error',
-      });
+        )
+      );
     }
   }
 

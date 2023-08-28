@@ -17,37 +17,29 @@ function DeleteIconButton(props: Props) {
   const tasks = useTasks();
 
   const [isDialogOpen, setOpenDialog] = useState(false);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showSuccessMsg = useStore((state) => state.showSuccessMsg);
+  const showWarningMsg = useStore((state) => state.showWarningMsg);
+  const showErrorMsg = useStore((state) => state.showErrorMsg);
   const invalidateIcons = useInvalidateIcons();
 
   async function agreeDeleteIcon() {
     setOpenDialog(false);
 
     if (tasks.some((task) => task.icon === iconName)) {
-      setOpenSnackbar({
-        open: true,
-        text: `${iconName} cannot be deleted since it is used in one or more Tasks!`,
-        severity: 'warning',
-      });
+      showWarningMsg(
+        `${iconName} cannot be deleted since it is used in one or more Tasks!`
+      );
       return;
     }
 
     try {
       await deleteIcon(iconName);
 
-      setOpenSnackbar({
-        open: true,
-        text: `${iconName} was successfully deleted!`,
-        severity: 'success',
-      });
+      showSuccessMsg(`${iconName} was successfully deleted!`);
 
       invalidateIcons();
     } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(error, `Error in deleting ${iconName}`),
-        severity: 'error',
-      });
+      showErrorMsg(textForError(error, `Error in deleting ${iconName}`));
     }
   }
 

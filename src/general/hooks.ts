@@ -20,15 +20,11 @@ export function useLoadGraph(onGraphLoad: (graph: GraphEwoks) => void) {
     const {
       displayedWorkflowInfo,
       rootWorkflowId,
-      setOpenSnackbar,
+      showErrorMsg,
     } = useStore.getState();
 
     if (rootWorkflowId !== displayedWorkflowInfo.id) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Not allowed to add a new node-graph to any sub-graph!',
-        severity: 'error',
-      });
+      showErrorMsg('Not allowed to add a new node-graph to any sub-graph!');
       return;
     }
 
@@ -39,11 +35,9 @@ export function useLoadGraph(onGraphLoad: (graph: GraphEwoks) => void) {
 
       const newGraph = tryJSONparse(result);
       if (!newGraph) {
-        setOpenSnackbar({
-          open: true,
-          text: 'Error in JSON structure. Please correct input file and retry!',
-          severity: 'error',
-        });
+        showErrorMsg(
+          'Error in JSON structure. Please correct input file and retry!'
+        );
         return;
       }
 

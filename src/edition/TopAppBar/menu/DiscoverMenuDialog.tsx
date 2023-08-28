@@ -11,7 +11,6 @@ import useStore from '../../../store/useStore';
 import { useState } from 'react';
 import { discoverTasks } from '../../../api/tasks';
 import commonStrings from '../../../commonStrings.json';
-import type { SnackbarParams } from '../../../types';
 import { textForError } from '../../../utils';
 import { useInvalidateTasks } from '../../../api/tasks';
 
@@ -22,20 +21,15 @@ interface Props {
 
 export default function DiscoverTasksDialog(props: Props) {
   const { open, onClose } = props;
-  const setOpenSnackbar = useStore<(params: SnackbarParams) => void>(
-    (state) => state.setOpenSnackbar
-  );
+  const showSuccessMsg = useStore((state) => state.showSuccessMsg);
+  const showWarningMsg = useStore((state) => state.showWarningMsg);
   const [textValue, setTextValue] = useState<string>('');
 
   const invalidateTasks = useInvalidateTasks();
 
   async function discover() {
     if (!textValue) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Please provide a module name',
-        severity: 'warning',
-      });
+      showWarningMsg('Please provide a module name');
       return;
     }
     try {
@@ -43,26 +37,14 @@ export default function DiscoverTasksDialog(props: Props) {
       const { identifiers } = data;
 
       if (identifiers.length === 0) {
-        setOpenSnackbar({
-          open: true,
-          text: 'No tasks found in this module',
-          severity: 'warning',
-        });
+        showWarningMsg('No tasks found in this module');
         return;
       }
 
-      setOpenSnackbar({
-        open: true,
-        text: `${identifiers.length} tasks imported.`,
-        severity: 'success',
-      });
+      showSuccessMsg(`${identifiers.length} tasks imported.`);
       invalidateTasks();
     } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(error, commonStrings.savingError),
-        severity: 'warning',
-      });
+      showWarningMsg(textForError(error, commonStrings.savingError));
     }
   }
 
