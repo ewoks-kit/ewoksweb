@@ -5,10 +5,7 @@ import { Alert } from '@material-ui/lab';
 import useSnackbarStore from '../store/useSnackbarStore';
 
 function SimpleSnackbar() {
-  const { open, text, severity } = useSnackbarStore(
-    (state) => state.openSnackbar
-  );
-  const closeSnackbar = useSnackbarStore((state) => state.closeSnackbar);
+  const { open, text, severity, closeSnackbar } = useSnackbarStore();
 
   const handleClose = (
     event: React.SyntheticEvent | React.MouseEvent,
