@@ -25,7 +25,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
 
   const graphInfo = useStore((state) => state.graphInfo);
   const tasks = useTasks();
-  const workingGraph = useStore((state) => state.workingGraph);
+  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
 
@@ -64,7 +64,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
       <MenuItem
         onClick={cloneNode}
         role="sidebarMenuItem"
-        disabled={workingGraph.graph.id !== graphInfo.id}
+        disabled={rootWorkflowId !== graphInfo.id}
       >
         <ListItemIcon>
           <LibraryAdd fontSize="small" />
@@ -76,7 +76,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
         <MenuItem
           onClick={() => setOpenSaveDialog(true)}
           role="sidebarMenuItem"
-          disabled={workingGraph.graph.id !== graphInfo.id}
+          disabled={rootWorkflowId !== graphInfo.id}
         >
           <ListItemIcon>
             <FileCopy fontSize="small" />
@@ -90,7 +90,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
           rfInstance.deleteElements({ nodes: [selectedElement] });
         }}
         role="sidebarMenuItem"
-        disabled={workingGraph.graph.id !== graphInfo.id}
+        disabled={rootWorkflowId !== graphInfo.id}
       >
         <ListItemIcon>
           <Delete fontSize="small" />

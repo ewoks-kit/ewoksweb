@@ -13,7 +13,7 @@ export default function GetWorkflowFromServerDropdown() {
   const [workflowId, setWorkflowId] = useState('');
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
 
   const rfInstance = useReactFlow();
   const tasks = useTasks();
@@ -30,7 +30,7 @@ export default function GetWorkflowFromServerDropdown() {
   async function getFromServer(workflowIdparam: string) {
     if (workflowIdparam) {
       const { data: graph } = await fetchWorkflow(workflowIdparam);
-      setWorkingGraph(graph, rfInstance, tasks, 'fromServer');
+      setRootWorkflow(graph, rfInstance, tasks, 'fromServer');
     } else {
       setOpenSnackbar({
         open: true,

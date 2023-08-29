@@ -11,7 +11,7 @@ export default function LinkSidebarMenu(selectedElement: Edge) {
   const rfInstance = useReactFlow();
 
   const graphInfo = useStore((state) => state.graphInfo);
-  const workingGraph = useStore((state) => state.workingGraph);
+  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
 
   async function deleteLink(islink: Edge) {
     const edge: Edge | undefined = rfInstance
@@ -27,7 +27,7 @@ export default function LinkSidebarMenu(selectedElement: Edge) {
         deleteLink(selectedElement);
       }}
       role="sidebarMenuItem"
-      disabled={workingGraph.graph.id !== graphInfo.id}
+      disabled={rootWorkflowId !== graphInfo.id}
     >
       <ListItemIcon>
         <DeleteIcon fontSize="small" />

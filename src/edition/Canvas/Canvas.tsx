@@ -86,7 +86,7 @@ function Canvas() {
 
   const tasks = useTasks();
   const recentGraphs = useStore((state) => state.recentGraphs);
-  const workingGraphId = useStore((state) => state.workingGraph.graph.id);
+  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setNodesData = useNodeDataStore((state) => state.setNodesData);
@@ -107,7 +107,7 @@ function Canvas() {
     setTimeout(() => {
       fitView({ duration: 500 });
     }, 300);
-  }, [workingGraphId, fitView]);
+  }, [rootWorkflowId, fitView]);
 
   function onNodesChange(changes: NodeChange[]) {
     const newNodes = applyNodeChanges(changes, getNodes());
@@ -128,7 +128,7 @@ function Canvas() {
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
 
-    if (workingGraphId !== graphId) {
+    if (rootWorkflowId !== graphId) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to add a new node to any sub-graph!',
@@ -248,7 +248,7 @@ function Canvas() {
   };
 
   const onConnect = (params: Connection) => {
-    if (workingGraphId !== graphId) {
+    if (rootWorkflowId !== graphId) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to create new links to any sub-graph!',

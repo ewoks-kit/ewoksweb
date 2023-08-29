@@ -12,7 +12,7 @@ function UploadMenuItem() {
   const rfInstance = useReactFlow();
   const tasks = useTasks();
 
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
 
   return (
     <ActionMenuItem
@@ -25,7 +25,7 @@ function UploadMenuItem() {
       <OpenGraphInput
         ref={ref}
         onGraphLoad={(graph) => {
-          setWorkingGraph(graph, rfInstance, tasks, 'fromDisk');
+          setRootWorkflow(graph, rfInstance, tasks, 'fromDisk');
         }}
       />
     </ActionMenuItem>
