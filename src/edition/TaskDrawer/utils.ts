@@ -51,8 +51,6 @@ export async function loadSubworkflow(
     links: toRFEwoksLinks(subGraphL, newNodeSubgraphs, tasks),
   };
   // Adding a subgraph to the rootWorkflow:
-  // save the rootWorkflow in the rfWorkflows after adding a new graph node to it
-
   const subToAdd = graph as GraphRF;
 
   let newNode = {} as EwoksRFNode;
