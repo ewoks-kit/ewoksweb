@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { EwoksRFNodeData } from '../../../types';
-import { Box, Checkbox, Grid, Switch, Typography } from '@material-ui/core';
+import { Box, Checkbox } from '@material-ui/core';
 import SidebarTooltip from '../SidebarTooltip';
 import NodeLabelComment from './NodeLabelComment';
 import DefaultInputs from '../EditableTableProperties/DefaultInputs';
@@ -12,8 +12,8 @@ import {
 } from '../../../utils/typeGuards';
 import { useNodesIds } from '../../../store/graph-hooks';
 import type { Node } from 'reactflow';
-import NodeDataMapping from '../EditableTableProperties/NodeDataMapping';
 import NodeInfo from './NodeInfo';
+import DefaultErrorNode from './DefaultErrorNode';
 
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(selectedElement: Node) {
@@ -30,14 +30,9 @@ export default function NodeDetails(selectedElement: Node) {
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   const [inputsComplete, setInputsComplete] = useState(false);
-  const [defaultErrorNode, setDefaultErrorNode] = useState(false);
-  const [showDataMapping, setShowDataMapping] = useState(
-    !nodeData.ewoks_props.default_error_attributes?.map_all_data
-  );
 
   useEffect(() => {
     setInputsComplete(nodeData.ewoks_props.inputs_complete || false);
-    setDefaultErrorNode(nodeData.ewoks_props.default_error_node || false);
   }, [nodeData]);
 
   function handlePropChange(
@@ -114,25 +109,6 @@ export default function NodeDetails(selectedElement: Node) {
     });
   }
 
-  function defaultErrorNodeChanged(checked: boolean) {
-    mergeNodeData(selectedElement.id, {
-      ewoks_props: {
-        default_error_node: checked,
-      },
-    });
-  }
-
-  const handleChangeShowDataMapping = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setShowDataMapping(event.target.checked);
-    mergeNodeData(selectedElement.id, {
-      ewoks_props: {
-        default_error_attributes: { map_all_data: !event.target.checked },
-      },
-    });
-  };
-
   return (
     <Box>
       <NodeLabelComment showComment selectedElement={selectedElement} />
@@ -156,55 +132,7 @@ export default function NodeDetails(selectedElement: Node) {
               <b>Inputs Complete</b>
             </div>
           </SidebarTooltip>
-
-          <SidebarTooltip
-            text={`When set to True all nodes without error handler
-              will be linked to this node. ONLY for one node in its graph`}
-          >
-            <div>
-              <Checkbox
-                checked={defaultErrorNode}
-                onChange={(event) =>
-                  defaultErrorNodeChanged(event.target.checked)
-                }
-                inputProps={{ 'aria-label': 'controlled' }}
-                color="primary"
-              />
-              <b>Default Error Node</b>
-            </div>
-          </SidebarTooltip>
-
-          {defaultErrorNode && (
-            <div>
-              <Typography component="div" style={{ fontSize: '15px' }}>
-                <Grid
-                  component="label"
-                  container
-                  alignItems="center"
-                  spacing={1}
-                >
-                  <Grid item>
-                    {!showDataMapping ? <b>Map all data</b> : 'Map all data'}
-                  </Grid>
-                  <Grid item>
-                    <Switch
-                      checked={showDataMapping}
-                      onChange={handleChangeShowDataMapping}
-                      name="dataMappingSwitch"
-                    />
-                  </Grid>
-                  <Grid item>
-                    {showDataMapping ? <b>Data Mapping</b> : 'Data Mapping'}
-                  </Grid>
-                </Grid>
-              </Typography>
-            </div>
-          )}
-          {defaultErrorNode && showDataMapping && (
-            <div>
-              <NodeDataMapping {...selectedElement} />
-            </div>
-          )}
+          <DefaultErrorNode {...selectedElement} />
           <NodeInfo
             nodeId={selectedElement.id}
             nodeData={nodeData}
