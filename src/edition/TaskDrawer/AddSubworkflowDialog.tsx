@@ -17,6 +17,7 @@ import { fetchWorkflow } from '../../api/workflows';
 import { textForError } from '../../utils';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import WorkflowDropdown from '../../general/WorkflowDropdown';
+import { loadSubworkflow } from './utils';
 
 interface Props {
   open: boolean;
@@ -31,12 +32,11 @@ export default function AddSubworkflowDialog(props: Props) {
   const rfInstance = useReactFlow();
 
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const setSubGraph = useStore((state) => state.setSubGraph);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   async function loadSubgraphAsNode(subgraph: GraphEwoks) {
     const nodes = rfInstance.getNodes();
-    const { nodeWithoutData, data } = await setSubGraph(
+    const { nodeWithoutData, data } = await loadSubworkflow(
       subgraph,
       nodes,
       rfInstance.getEdges(),

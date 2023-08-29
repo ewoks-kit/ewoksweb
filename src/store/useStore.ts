@@ -4,7 +4,6 @@ import workingGraph from './workingGraph';
 import openDraggableDialog from './openDraggableDialog';
 import openSnackbar from './openSnackbar';
 import rfWorkflows from './rfWorkflows';
-import subGraph from './subGraph';
 import subgraphsStack from './subgraphsStack';
 import graphInfo from './graphInfo';
 
@@ -13,7 +12,6 @@ const useStore = create<State>((set, get) => ({
   ...openDraggableDialog(set),
   ...openSnackbar(set),
   ...rfWorkflows(set, get),
-  ...subGraph(set, get),
   ...subgraphsStack(set, get),
   ...workingGraph(set, get),
 }));
