@@ -11,7 +11,6 @@ import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
 import type { GetState, SetState } from 'zustand';
-// import { EMPTY_RF_GRAPH } from '../utils/emptyGraphs';
 import useNodeDataStore from './useNodeDataStore';
 import useEdgeDataStore from './useEdgeDataStore';
 import type { ReactFlowInstance } from 'reactflow';
@@ -19,10 +18,9 @@ import layoutNewGraph from '../utils/layoutNewGraph';
 
 export interface RootWorkflowSlice {
   rootWorkflowId: string;
-  // Also change the following to rootWorkflowSource?
   rootWorkflowSource: string | undefined;
   setRootWorkflow: (
-    rootWorkflowObject: GraphEwoks,
+    ewoksWorkflow: GraphEwoks,
     rfInstance: ReactFlowInstance,
     tasks: Task[],
     source?: string
@@ -37,7 +35,7 @@ const rootWorkflow = (
   rootWorkflowSource: undefined,
 
   setRootWorkflow: async (
-    inputGraph,
+    ewoksWorkflow,
     rfInstance,
     tasks,
     source
@@ -51,7 +49,7 @@ const rootWorkflow = (
     get().resetRFWorkflows();
 
     // 2. Get node-subgraphs for the graph
-    const newNodeSubgraphs = await findAllSubgraphs(inputGraph, [
+    const newNodeSubgraphs = await findAllSubgraphs(ewoksWorkflow, [
       ...get().rfWorkflows.values(),
     ]);
 
@@ -67,11 +65,11 @@ const rootWorkflow = (
     });
 
     // 4. Calculate the new graph given the subgraphs
-    let grfNodes = toRFEwoksNodes(inputGraph, newNodeSubgraphs, tasks);
+    let grfNodes = toRFEwoksNodes(ewoksWorkflow, newNodeSubgraphs, tasks);
 
     // 5. Calculate notes nodes
     const notes: EwoksRFNode[] =
-      inputGraph.graph.uiProps?.notes?.map((note) => {
+      ewoksWorkflow.graph.uiProps?.notes?.map((note) => {
         return {
           data: {
             ewoks_props: { label: note.label },
@@ -89,9 +87,9 @@ const rootWorkflow = (
       }) || [];
 
     grfNodes = [...grfNodes, ...notes];
-    const rfLinks = toRFEwoksLinks(inputGraph, newNodeSubgraphs, tasks);
+    const rfLinks = toRFEwoksLinks(ewoksWorkflow, newNodeSubgraphs, tasks);
     const resultGraph: GraphRF = {
-      graph: inputGraph.graph,
+      graph: ewoksWorkflow.graph,
       nodes: grfNodes,
       links: rfLinks,
     };
@@ -118,13 +116,13 @@ const rootWorkflow = (
     };
     // add the new graph to the recent graphs if not already there
     get().addRFWorkflow({
-      graph: inputGraph.graph,
+      graph: ewoksWorkflow.graph,
       nodes: grfNodes,
-      links: toRFEwoksLinks(inputGraph, newNodeSubgraphs, tasks),
+      links: toRFEwoksLinks(ewoksWorkflow, newNodeSubgraphs, tasks),
     });
     get().setSubgraphsStack({
-      id: inputGraph.graph.id,
-      label: inputGraph.graph.label,
+      id: ewoksWorkflow.graph.id,
+      label: ewoksWorkflow.graph.label,
     });
     set((state) => ({
       ...state,
