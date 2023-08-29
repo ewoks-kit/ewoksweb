@@ -11,31 +11,32 @@ import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
 import type { GetState, SetState } from 'zustand';
-import { EMPTY_RF_GRAPH } from '../utils/emptyGraphs';
+// import { EMPTY_RF_GRAPH } from '../utils/emptyGraphs';
 import useNodeDataStore from './useNodeDataStore';
 import useEdgeDataStore from './useEdgeDataStore';
 import type { ReactFlowInstance } from 'reactflow';
 import layoutNewGraph from '../utils/layoutNewGraph';
 
-export interface WorkingGraphSlice {
-  workingGraph: GraphRF;
-  workingGraphSource: string | undefined;
-  setWorkingGraph: (
-    workingGraphObject: GraphEwoks,
+export interface RootWorkflowSlice {
+  rootWorkflowId: string;
+  // Also change the following to rootWorkflowSource?
+  rootWorkflowSource: string | undefined;
+  setRootWorkflow: (
+    rootWorkflowObject: GraphEwoks,
     rfInstance: ReactFlowInstance,
     tasks: Task[],
     source?: string
   ) => Promise<void>;
 }
 
-const workingGraph = (
+const rootWorkflow = (
   set: SetState<State>,
   get: GetState<State>
-): WorkingGraphSlice => ({
-  workingGraph: EMPTY_RF_GRAPH,
-  workingGraphSource: undefined,
+): RootWorkflowSlice => ({
+  rootWorkflowId: '',
+  rootWorkflowSource: undefined,
 
-  setWorkingGraph: async (
+  setRootWorkflow: async (
     inputGraph,
     rfInstance,
     tasks,
@@ -127,8 +128,8 @@ const workingGraph = (
     });
     set((state) => ({
       ...state,
-      workingGraph: newGraphNoData,
-      workingGraphSource: source,
+      rootWorkflowId: newGraphNoData.graph.id,
+      rootWorkflowSource: source,
     }));
 
     if (!newGraphNoData.nodes.some((nod) => nod.position.x !== 100)) {
@@ -142,4 +143,4 @@ const workingGraph = (
     }
   },
 });
-export default workingGraph;
+export default rootWorkflow;

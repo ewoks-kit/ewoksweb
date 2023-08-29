@@ -18,7 +18,7 @@ function ExecutionMenuItem() {
   }
 
   async function execute() {
-    const { rfWorkflows, workingGraph } = useStore.getState();
+    const { rfWorkflows, rootWorkflowId } = useStore.getState();
     if (rfWorkflows.size === 0) {
       setOpenSnackbar({
         open: true,
@@ -28,7 +28,7 @@ function ExecutionMenuItem() {
       return;
     }
     try {
-      await executeWorkflow(workingGraph.graph.id);
+      await executeWorkflow(rootWorkflowId);
       navigate('/monitor');
     } catch (error) {
       // Keep logging in console for debugging when talking with a user
