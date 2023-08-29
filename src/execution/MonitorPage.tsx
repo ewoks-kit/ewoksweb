@@ -1,7 +1,6 @@
 import { useExecutedJobs } from '../api/events';
-import WorkflowList from './WorkflowList';
-
 import styles from './MonitorPage.module.css';
+import WorkflowList from './WorkflowList';
 
 function MonitorPage() {
   const jobs = useExecutedJobs();

@@ -1,32 +1,10 @@
-import type { Manager, Middleware } from '@rest-hooks/react';
 import { CacheProvider } from '@rest-hooks/react';
+import { useQueryClient } from '@tanstack/react-query';
 import type { PropsWithChildren } from 'react';
-import type { Socket } from 'socket.io-client';
-import { addEventToEndpointCache } from './api/events';
+import { useEffect } from 'react';
+import type { EwoksJob } from './api/models';
 import { useSocketClientContext } from './SocketClientProvider';
 import type { EwoksEvent } from './types';
-
-class EwoksEventManager implements Manager {
-  protected middleware: Middleware;
-
-  public constructor(protected socket: Socket) {
-    this.middleware = (controller) => {
-      this.socket.on('Executing', (e: EwoksEvent) => {
-        addEventToEndpointCache(e, controller);
-      });
-
-      return (next) => async (action) => next(action);
-    };
-  }
-
-  public getMiddleware() {
-    return this.middleware;
-  }
-
-  public cleanup() {
-    this.socket.off('Executing');
-  }
-}
 
 interface Props {}
 
@@ -34,13 +12,29 @@ function EwoksCacheProvider(props: PropsWithChildren<Props>) {
   const { children } = props;
   const socket = useSocketClientContext();
 
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    socket.on('Executing', (e: EwoksEvent) => {
+      queryClient.setQueryData(
+        ['jobs'],
+        (oldJobs: Map<string, EwoksJob> | undefined) => {
+          if (!oldJobs) {
+            return new Map<string, EwoksJob>();
+          }
+          const job = oldJobs.get(e.job_id) || [];
+          return new Map(oldJobs).set(e.job_id, [...job, e]);
+        }
+      );
+    });
+
+    return () => {
+      socket.off('Executing');
+    };
+  }, [socket, queryClient]);
+
   return (
-    <CacheProvider
-      managers={[
-        ...CacheProvider.defaultProps.managers,
-        new EwoksEventManager(socket),
-      ]}
-    >
+    <CacheProvider managers={[...CacheProvider.defaultProps.managers]}>
       {children}
     </CacheProvider>
   );
