@@ -23,11 +23,11 @@ interface Props {
   open: boolean;
   tasks: Task[];
   onClose: () => void;
-  subworkflowPosition?: XYPosition;
+  position?: XYPosition;
 }
 
 export default function AddSubworkflowDialog(props: Props) {
-  const { onClose: handleClose, open, subworkflowPosition, tasks } = props;
+  const { onClose: handleClose, open, position, tasks } = props;
   const fromDiskInputRef = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
 
@@ -40,7 +40,7 @@ export default function AddSubworkflowDialog(props: Props) {
       subgraph,
       nodes,
       rfInstance.getEdges(),
-      subworkflowPosition || { x: 0, y: 0 },
+      position || { x: 0, y: 0 },
       tasks
     );
     rfInstance.setNodes([...nodes, nodeWithoutData]);
@@ -69,6 +69,7 @@ export default function AddSubworkflowDialog(props: Props) {
         ref={fromDiskInputRef}
         onGraphLoad={(subgraph) => {
           loadSubgraphAsNode(subgraph);
+          handleClose();
         }}
       />
 
@@ -93,7 +94,6 @@ export default function AddSubworkflowDialog(props: Props) {
               divider
               onClick={() => {
                 fromDiskInputRef.current?.click();
-                handleClose();
               }}
               role="listitem"
             >

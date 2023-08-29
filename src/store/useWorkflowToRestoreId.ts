@@ -1,12 +1,12 @@
 import create from 'zustand';
 
-export interface CurrentWorkflowIdState {
+interface State {
   id: string | undefined;
   setId: (id: string) => void;
   resetId: () => void;
 }
 
-const useCurrentWorkflowIdStore = create<CurrentWorkflowIdState>((set) => ({
+const useWorkflowToRestoreId = create<State>((set) => ({
   id: process.env.REACT_APP_INITIAL_WORKFLOW_ID,
   setId: (id: string) =>
     set({
@@ -15,4 +15,4 @@ const useCurrentWorkflowIdStore = create<CurrentWorkflowIdState>((set) => ({
   resetId: () => set({ id: undefined }),
 }));
 
-export default useCurrentWorkflowIdStore;
+export default useWorkflowToRestoreId;
