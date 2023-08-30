@@ -1,5 +1,5 @@
 import type { GraphRF, State } from '../types';
-import type { GetState, SetState } from 'zustand';
+import type { SetState } from 'zustand';
 
 export interface LoadedGraphsSlice {
   loadedGraphs: Map<string, GraphRF>;
@@ -7,16 +7,16 @@ export interface LoadedGraphsSlice {
   resetLoadedGraphs: () => void;
 }
 
-const loadedGraphs = (
-  set: SetState<State>,
-  get: GetState<State>
-): LoadedGraphsSlice => ({
+const loadedGraphs = (set: SetState<State>): LoadedGraphsSlice => ({
   loadedGraphs: new Map(),
 
   addLoadedGraph: (newGraph) => {
     set((state) => ({
       ...state,
-      loadedGraphs: get().loadedGraphs.set(newGraph.graph.id, newGraph),
+      loadedGraphs: new Map(state.loadedGraphs).set(
+        newGraph.graph.id,
+        newGraph
+      ),
     }));
   },
 

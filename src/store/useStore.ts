@@ -11,7 +11,7 @@ const useStore = create<State>((set, get) => ({
   ...graphInfo(set),
   ...openDraggableDialog(set),
   ...openSnackbar(set),
-  ...loadedGraphs(set, get),
+  ...loadedGraphs(set),
   ...subgraphsStack(set, get),
   ...rootWorkflow(set, get),
 }));
