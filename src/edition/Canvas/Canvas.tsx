@@ -82,10 +82,10 @@ function Canvas() {
   const graphInfo = useStore((state) => state.graphInfo);
   const setGraphInfo = useStore((state) => state.setGraphInfo);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
-  const addRFWorkflow = useStore((state) => state.addRFWorkflow);
+  const addRFWorkflow = useStore((state) => state.addLoadedGraph);
 
   const tasks = useTasks();
-  const rfWorkflows = useStore((state) => state.rfWorkflows);
+  const rfWorkflows = useStore((state) => state.loadedGraphs);
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);

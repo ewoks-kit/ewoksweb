@@ -18,7 +18,7 @@ function ExecutionMenuItem() {
   }
 
   async function execute() {
-    const { rfWorkflows, rootWorkflowId } = useStore.getState();
+    const { loadedGraphs: rfWorkflows, rootWorkflowId } = useStore.getState();
     if (rfWorkflows.size === 0) {
       setOpenSnackbar({
         open: true,

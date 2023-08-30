@@ -11,7 +11,7 @@ import styles from './TopAppBar.module.css';
 export default function SubgraphStack() {
   const { setNodes, setEdges, fitView } = useReactFlow();
 
-  const rfWorkflows = useStore((state) => state.rfWorkflows);
+  const rfWorkflows = useStore((state) => state.loadedGraphs);
   const setGraphInfo = useStore((state) => state.setGraphInfo);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const subgraphsStack = useStore((state) => {

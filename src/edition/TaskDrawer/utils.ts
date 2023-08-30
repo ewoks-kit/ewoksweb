@@ -23,7 +23,10 @@ export async function loadSubworkflow(
   position: XYPosition,
   tasks: Task[]
 ): Promise<{ nodeWithoutData: Node; data: EwoksRFNodeData }> {
-  const { rfWorkflows, addRFWorkflow } = useStore.getState();
+  const {
+    loadedGraphs: rfWorkflows,
+    addLoadedGraph: addRFWorkflow,
+  } = useStore.getState();
 
   // 1. input the graphEwoks from server or file-system
   // 2. search for all subgraphs in it (async)
