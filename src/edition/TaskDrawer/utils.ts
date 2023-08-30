@@ -23,15 +23,12 @@ export async function loadSubworkflow(
   position: XYPosition,
   tasks: Task[]
 ): Promise<{ nodeWithoutData: Node; data: EwoksRFNodeData }> {
-  const {
-    loadedGraphs: rfWorkflows,
-    addLoadedGraph: addRFWorkflow,
-  } = useStore.getState();
+  const { loadedGraphs, addLoadedGraph } = useStore.getState();
 
   // 1. input the graphEwoks from server or file-system
   // 2. search for all subgraphs in it (async)
   const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(subGraphL, [
-    ...rfWorkflows.values(),
+    ...loadedGraphs.values(),
   ]);
 
   // 3. Put the newNodeSubgraphs into recent in their graphRF form (sync)
@@ -39,7 +36,7 @@ export async function loadSubworkflow(
     // calculate the rfNodes using the fetched subgraphs
     const rfNodes: EwoksRFNode[] = toRFEwoksNodes(gr, newNodeSubgraphs, tasks);
 
-    addRFWorkflow({
+    addLoadedGraph({
       graph: gr.graph,
       nodes: rfNodes,
       links: toRFEwoksLinks(gr, newNodeSubgraphs, tasks),
@@ -111,7 +108,7 @@ export async function loadSubworkflow(
     },
   };
 
-  addRFWorkflow(subToAdd);
+  addLoadedGraph(subToAdd);
 
   const newWorkingGraph = {
     graph: EMPTY_RF_GRAPH.graph,
@@ -121,7 +118,7 @@ export async function loadSubworkflow(
 
   useNodeDataStore.getState().setNodeData(newNode.id, newNode.data);
 
-  addRFWorkflow(newWorkingGraph);
+  addLoadedGraph(newWorkingGraph);
   const { data, ...nodeWithoutData } = newNode;
   return { nodeWithoutData: nodeWithoutData as Node, data };
 }

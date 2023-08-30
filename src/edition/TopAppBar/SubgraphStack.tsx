@@ -11,7 +11,7 @@ import styles from './TopAppBar.module.css';
 export default function SubgraphStack() {
   const { setNodes, setEdges, fitView } = useReactFlow();
 
-  const rfWorkflows = useStore((state) => state.loadedGraphs);
+  const loadedGraphs = useStore((state) => state.loadedGraphs);
   const setGraphInfo = useStore((state) => state.setGraphInfo);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const subgraphsStack = useStore((state) => {
@@ -34,7 +34,7 @@ export default function SubgraphStack() {
       label: (target as HTMLInputElement).value,
     });
 
-    const subgraph = rfWorkflows.get(target.id);
+    const subgraph = loadedGraphs.get(target.id);
 
     if (subgraph) {
       // Both stay
