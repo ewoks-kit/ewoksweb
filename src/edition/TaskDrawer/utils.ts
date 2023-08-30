@@ -15,6 +15,7 @@ import { toRFEwoksNodes } from '../../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../../utils/toRFEwoksLinks';
 import { EMPTY_RF_GRAPH } from '../../utils/emptyGraphs';
 import useNodeDataStore from '../../store/useNodeDataStore';
+import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 
 export async function loadSubworkflow(
   subGraphL: GraphEwoks,
@@ -75,6 +76,14 @@ export async function loadSubworkflow(
   while (nodes.some((nod) => nod.id === graphId)) {
     graphId += id++;
   }
+
+  const {
+    default_inputs,
+    inputs_complete,
+    default_error_node,
+    default_error_attributes,
+  } = DEFAULT_NODE_VALUES;
+
   newNode = {
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
@@ -88,24 +97,20 @@ export async function loadSubworkflow(
         task_identifier: subToAdd.graph.id,
       },
       ui_props: {
+        ...DEFAULT_NODE_VALUES.uiProps,
         exists: true,
         type: 'internal',
         icon: subToAdd.graph.uiProps?.icon,
         inputs: inputsSub,
         outputs: outputsSub,
-        withImage: true,
-        withLabel: true,
       },
 
       ewoks_props: {
         label: subToAdd.graph.label,
-        default_inputs: [],
-        inputs_complete: false,
-        default_error_node: false,
-        default_error_attributes: {
-          map_all_data: true,
-          data_mapping: [],
-        },
+        default_inputs,
+        inputs_complete,
+        default_error_node,
+        default_error_attributes,
       },
       comment: '',
     },

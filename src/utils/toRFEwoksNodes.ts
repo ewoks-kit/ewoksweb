@@ -6,6 +6,7 @@ import type {
   GraphEwoks,
   Task,
 } from '../types';
+import { DEFAULT_NODE_VALUES } from './defaultValues';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import {
@@ -55,6 +56,13 @@ export function toRFEwoksNodes(
     }) => {
       const nodeType = calcNodeType(inputsAl, outputsAl, task_type, id);
 
+      const {
+        moreHandles,
+        nodeWidth,
+        withImage,
+        withLabel,
+      } = DEFAULT_NODE_VALUES.uiProps;
+
       const node: EwoksRFNode = {
         id: id.toString(),
         type: task_type,
@@ -67,8 +75,10 @@ export function toRFEwoksNodes(
                 value: dIn.value,
               };
             }),
-            inputs_complete: inputs_complete || false,
-            default_error_node: default_error_node || false,
+            inputs_complete:
+              inputs_complete || DEFAULT_NODE_VALUES.inputs_complete,
+            default_error_node:
+              default_error_node || DEFAULT_NODE_VALUES.default_error_node,
             default_error_attributes: calcDefaultErrorAttributes(
               default_error_attributes
             ),
@@ -80,12 +90,12 @@ export function toRFEwoksNodes(
             task_icon: uiProps?.task_icon,
           },
           ui_props: {
-            nodeWidth: uiProps?.nodeWidth ?? 120,
+            nodeWidth: uiProps?.nodeWidth ?? nodeWidth,
             type: nodeType,
             icon: uiProps?.icon,
-            moreHandles: uiProps?.moreHandles ?? false,
-            withImage: uiProps?.withImage ?? true,
-            withLabel: uiProps?.withLabel ?? true,
+            moreHandles: uiProps?.moreHandles ?? moreHandles,
+            withImage: uiProps?.withImage ?? withImage,
+            withLabel: uiProps?.withLabel ?? withLabel,
             colorBorder: uiProps?.colorBorder ?? '',
           },
           comment: uiProps?.comment ?? '',

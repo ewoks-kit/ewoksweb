@@ -5,6 +5,7 @@ import {
   calcConditionValue,
   calcDataMapping,
 } from './utils';
+import { DEFAULT_LINK_VALUES } from './defaultValues';
 
 // EwoksRFLinks --> EwoksLinks for saving
 export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
@@ -35,6 +36,7 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
         };
       });
 
+      const { required, on_error } = DEFAULT_LINK_VALUES;
       const link: EwoksLink = {
         source,
         target,
@@ -46,19 +48,31 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
           conditionsValue.length > 0 && {
             conditions: conditionsValue,
           }),
-        on_error: data.on_error,
+        ...(data.on_error !== on_error && {
+          on_error: data.on_error,
+        }),
         map_all_data: data.map_all_data,
-        required: data.required,
+        ...(data.required !== required && {
+          required: data.required,
+        }),
         uiProps: {
           ...(label &&
             isString(label) && {
               label,
             }),
           ...(data.comment && { comment: data.comment }),
-          type,
-          markerEnd,
-          style: { stroke: style?.stroke },
-          animated,
+          ...(type && type !== DEFAULT_LINK_VALUES.uiProps.type && { type }),
+          ...(markerEnd &&
+            typeof markerEnd !== 'string' &&
+            markerEnd.type !== DEFAULT_LINK_VALUES.uiProps.markerEnd.type && {
+              markerEnd,
+            }),
+          ...(style?.stroke !== '#96a5f9' && {
+            style: { stroke: style?.stroke },
+          }),
+          ...(animated !== DEFAULT_LINK_VALUES.uiProps.animated && {
+            animated,
+          }),
           sourceHandle,
           targetHandle,
           ...(type === 'getAround' && {

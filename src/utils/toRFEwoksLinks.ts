@@ -10,6 +10,7 @@ import { outNodesLinks } from './outNodesLinks';
 import { findLinkInputs, findLinkOutputs } from './calcTasksForLink';
 import { createDataMappingData } from './utils';
 import { defaultLinkStyle } from '../edition/Canvas/utils';
+import { DEFAULT_LINK_VALUES } from './defaultValues';
 
 // DOC: from GraphEwoks get EwoksRFLinks
 // - tempGraph: the graph to transform its links
@@ -71,7 +72,7 @@ export function toRFEwoksLinks(
         targetHandle: calcTargetHandle(uiProps, sub_target),
         sourceHandle: calcSourceHandle(uiProps, sub_source),
         type: uiProps.type || '',
-        markerEnd: uiProps.markerEnd ?? '',
+        markerEnd: uiProps.markerEnd ?? DEFAULT_LINK_VALUES.uiProps.markerEnd,
         animated: uiProps.animated ?? false,
         ...defaultLinkStyle,
         style: {
