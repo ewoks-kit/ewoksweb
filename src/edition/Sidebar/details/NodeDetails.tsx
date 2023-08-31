@@ -132,7 +132,7 @@ export default function NodeDetails(selectedElement: Node) {
               <b>Inputs Complete</b>
             </div>
           </SidebarTooltip>
-          <DefaultErrorNode {...selectedElement} />
+          <DefaultErrorNode nodeId={selectedElement.id} />
           <NodeInfo
             nodeId={selectedElement.id}
             nodeData={nodeData}

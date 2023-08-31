@@ -1,23 +1,18 @@
-import { useEffect, useState } from 'react';
 import { Checkbox, Grid, Switch, Typography } from '@material-ui/core';
 import SidebarTooltip from '../SidebarTooltip';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
-import type { Node } from 'reactflow';
 import NodeDataMapping from '../EditableTableProperties/NodeDataMapping';
 
-// DOC: selectedNode details in sidebar
-export default function DefaultErrorNode(selectedElement: Node) {
-  const nodeData = useNodeDataStore((state) =>
-    state.nodesData.get(selectedElement.id)
-  );
-  assertNodeDataDefined(nodeData, selectedElement.id);
+export default function DefaultErrorNode({ nodeId }: { nodeId: string }) {
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(nodeId));
+  assertNodeDataDefined(nodeData, nodeId);
   const { default_error_node, default_error_attributes } = nodeData.ewoks_props;
 
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
   function handleDefaultErrorNodeChanged(checked: boolean) {
-    mergeNodeData(selectedElement.id, {
+    mergeNodeData(nodeId, {
       ewoks_props: {
         default_error_node: checked,
       },
@@ -27,7 +22,7 @@ export default function DefaultErrorNode(selectedElement: Node) {
   const handleChangeShowDataMapping = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    mergeNodeData(selectedElement.id, {
+    mergeNodeData(nodeId, {
       ewoks_props: {
         default_error_attributes: { map_all_data: !event.target.checked },
       },
@@ -84,7 +79,7 @@ export default function DefaultErrorNode(selectedElement: Node) {
       )}
       {default_error_node && !default_error_attributes?.map_all_data && (
         <div>
-          <NodeDataMapping {...selectedElement} />
+          <NodeDataMapping nodeId={nodeId} />
         </div>
       )}
     </>
