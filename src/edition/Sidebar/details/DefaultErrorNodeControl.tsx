@@ -4,11 +4,8 @@ import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import NodeDataMapping from '../EditableTableProperties/NodeDataMapping';
 
-export default function DefaultErrorNodeControl({
-  nodeId,
-}: {
-  nodeId: string;
-}) {
+export default function DefaultErrorNodeControl(props: { nodeId: string }) {
+  const { nodeId } = props;
   const nodeData = useNodeDataStore((state) => state.nodesData.get(nodeId));
   assertNodeDataDefined(nodeData, nodeId);
   const { default_error_node, default_error_attributes } = nodeData.ewoks_props;
