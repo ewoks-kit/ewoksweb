@@ -1,6 +1,5 @@
 import type { Node, Edge, ReactFlowState } from 'reactflow';
 import { useStore as useRFStore } from 'reactflow';
-import useStore from 'store/useStore';
 import shallow from 'zustand/shallow';
 
 export function useNodesIds() {
