@@ -12,20 +12,11 @@ export default function DefaultErrorNode(selectedElement: Node) {
     state.nodesData.get(selectedElement.id)
   );
   assertNodeDataDefined(nodeData, selectedElement.id);
+  const { default_error_node, default_error_attributes } = nodeData.ewoks_props;
 
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
-  const [defaultErrorNode, setDefaultErrorNode] = useState(false);
-
-  const [showDataMapping, setShowDataMapping] = useState(
-    !nodeData.ewoks_props.default_error_attributes?.map_all_data
-  );
-
-  useEffect(() => {
-    setDefaultErrorNode(nodeData.ewoks_props.default_error_node || false);
-  }, [nodeData]);
-
-  function defaultErrorNodeChanged(checked: boolean) {
+  function handleDefaultErrorNodeChanged(checked: boolean) {
     mergeNodeData(selectedElement.id, {
       ewoks_props: {
         default_error_node: checked,
@@ -36,7 +27,6 @@ export default function DefaultErrorNode(selectedElement: Node) {
   const handleChangeShowDataMapping = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setShowDataMapping(event.target.checked);
     mergeNodeData(selectedElement.id, {
       ewoks_props: {
         default_error_attributes: { map_all_data: !event.target.checked },
@@ -52,8 +42,10 @@ export default function DefaultErrorNode(selectedElement: Node) {
       >
         <div>
           <Checkbox
-            checked={defaultErrorNode}
-            onChange={(event) => defaultErrorNodeChanged(event.target.checked)}
+            checked={default_error_node}
+            onChange={(event) =>
+              handleDefaultErrorNodeChanged(event.target.checked)
+            }
             inputProps={{ 'aria-label': 'controlled' }}
             color="primary"
           />
@@ -61,28 +53,36 @@ export default function DefaultErrorNode(selectedElement: Node) {
         </div>
       </SidebarTooltip>
 
-      {defaultErrorNode && (
+      {default_error_node && (
         <div>
           <Typography component="div" style={{ fontSize: '15px' }}>
             <Grid component="label" container alignItems="center" spacing={1}>
               <Grid item>
-                {!showDataMapping ? <b>Map all data</b> : 'Map all data'}
+                {default_error_attributes?.map_all_data ? (
+                  <b>Map all data</b>
+                ) : (
+                  'Map all data'
+                )}
               </Grid>
               <Grid item>
                 <Switch
-                  checked={showDataMapping}
+                  checked={!default_error_attributes?.map_all_data}
                   onChange={handleChangeShowDataMapping}
                   name="dataMappingSwitch"
                 />
               </Grid>
               <Grid item>
-                {showDataMapping ? <b>Data Mapping</b> : 'Data Mapping'}
+                {!default_error_attributes?.map_all_data ? (
+                  <b>Data Mapping</b>
+                ) : (
+                  'Data Mapping'
+                )}
               </Grid>
             </Grid>
           </Typography>
         </div>
       )}
-      {defaultErrorNode && showDataMapping && (
+      {default_error_node && !default_error_attributes?.map_all_data && (
         <div>
           <NodeDataMapping {...selectedElement} />
         </div>
