@@ -75,8 +75,9 @@ export function toRFEwoksNodes(
                 value: dIn.value,
               };
             }),
-            inputs_complete:
-              inputs_complete || DEFAULT_NODE_VALUES.inputs_complete,
+            ...(inputs_complete && {
+              inputs_complete,
+            }),
             default_error_node:
               default_error_node || DEFAULT_NODE_VALUES.default_error_node,
             default_error_attributes: calcDefaultErrorAttributes(

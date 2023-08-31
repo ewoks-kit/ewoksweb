@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import type { EwoksRFNodeData } from '../../../types';
 import { Box, Checkbox, Grid, Switch, Typography } from '@material-ui/core';
 import SidebarTooltip from '../SidebarTooltip';
@@ -21,24 +20,13 @@ export default function NodeDetails(selectedElement: Node) {
     state.nodesData.get(selectedElement.id)
   );
   assertNodeDataDefined(nodeData, selectedElement.id);
-
+  console.log(nodeData);
   const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
 
   const nodesIds = useNodesIds();
 
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
-
-  const [inputsComplete, setInputsComplete] = useState(false);
-  const [defaultErrorNode, setDefaultErrorNode] = useState(false);
-  const [showDataMapping, setShowDataMapping] = useState(
-    !nodeData.ewoks_props.default_error_attributes?.map_all_data
-  );
-
-  useEffect(() => {
-    setInputsComplete(nodeData.ewoks_props.inputs_complete || false);
-    setDefaultErrorNode(nodeData.ewoks_props.default_error_node || false);
-  }, [nodeData]);
 
   function handlePropChange(
     propKeyValue: {
@@ -107,6 +95,8 @@ export default function NodeDetails(selectedElement: Node) {
   }
 
   function inputsCompleteChanged(checked: boolean) {
+    console.log(checked);
+
     mergeNodeData(selectedElement.id, {
       ewoks_props: {
         inputs_complete: checked,
@@ -125,7 +115,7 @@ export default function NodeDetails(selectedElement: Node) {
   const handleChangeShowDataMapping = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setShowDataMapping(event.target.checked);
+    // setShowDataMapping(event.target.checked);
     mergeNodeData(selectedElement.id, {
       ewoks_props: {
         default_error_attributes: { map_all_data: !event.target.checked },
@@ -146,7 +136,7 @@ export default function NodeDetails(selectedElement: Node) {
           >
             <div>
               <Checkbox
-                checked={inputsComplete}
+                checked={nodeData.ewoks_props.inputs_complete || false}
                 onChange={(event) =>
                   inputsCompleteChanged(event.target.checked)
                 }
@@ -163,7 +153,7 @@ export default function NodeDetails(selectedElement: Node) {
           >
             <div>
               <Checkbox
-                checked={defaultErrorNode}
+                checked={nodeData.ewoks_props.default_error_node || false}
                 onChange={(event) =>
                   defaultErrorNodeChanged(event.target.checked)
                 }
@@ -174,7 +164,7 @@ export default function NodeDetails(selectedElement: Node) {
             </div>
           </SidebarTooltip>
 
-          {defaultErrorNode && (
+          {nodeData.ewoks_props.default_error_node && (
             <div>
               <Typography component="div" style={{ fontSize: '15px' }}>
                 <Grid
@@ -184,27 +174,41 @@ export default function NodeDetails(selectedElement: Node) {
                   spacing={1}
                 >
                   <Grid item>
-                    {!showDataMapping ? <b>Map all data</b> : 'Map all data'}
+                    {nodeData.ewoks_props.default_error_attributes
+                      ?.map_all_data ? (
+                      <b>Map all data</b>
+                    ) : (
+                      'Map all data'
+                    )}
                   </Grid>
                   <Grid item>
                     <Switch
-                      checked={showDataMapping}
+                      checked={
+                        !nodeData.ewoks_props.default_error_attributes
+                          ?.map_all_data
+                      }
                       onChange={handleChangeShowDataMapping}
                       name="dataMappingSwitch"
                     />
                   </Grid>
                   <Grid item>
-                    {showDataMapping ? <b>Data Mapping</b> : 'Data Mapping'}
+                    {!nodeData.ewoks_props.default_error_attributes
+                      ?.map_all_data ? (
+                      <b>Data Mapping</b>
+                    ) : (
+                      'Data Mapping'
+                    )}
                   </Grid>
                 </Grid>
               </Typography>
             </div>
           )}
-          {defaultErrorNode && showDataMapping && (
-            <div>
-              <NodeDataMapping {...selectedElement} />
-            </div>
-          )}
+          {nodeData.ewoks_props.default_error_node &&
+            !nodeData.ewoks_props.default_error_attributes?.map_all_data && (
+              <div>
+                <NodeDataMapping {...selectedElement} />
+              </div>
+            )}
           <NodeInfo
             nodeId={selectedElement.id}
             nodeData={nodeData}

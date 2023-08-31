@@ -102,7 +102,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         label,
         task_type,
         task_identifier,
-        ...(inputs_complete !== DEFAULT_NODE_VALUES.inputs_complete && {
+        ...(inputs_complete && {
           inputs_complete,
         }),
         task_generator,
