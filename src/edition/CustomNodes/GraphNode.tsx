@@ -4,6 +4,7 @@ import type { Connection, NodeProps } from 'reactflow';
 import { contentStyle, style } from './nodeStyles';
 import isValidLink from '../../utils/IsValidLink';
 import useStore from '../../store/useStore';
+import useSnackbarStore from '../../store/useSnackbarStore';
 import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../../types';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
@@ -21,7 +22,7 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo
   );
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
 
   assertNodeDataDefined(nodeData, id);
@@ -40,11 +41,7 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
       getNodesData()
     );
     if (!isValid) {
-      setOpenSnackbar({
-        open: true,
-        text: reason,
-        severity: 'warning',
-      });
+      showWarningMsg(reason);
     }
     return isValid;
   };

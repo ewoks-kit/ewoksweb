@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import GraphFormDialog from '../../../general/forms/GraphFormDialog';
 import useStore from '../../../store/useStore';
+import useSnackbarStore from '../../../store/useSnackbarStore';
 import { GraphFormAction } from '../../../types';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import ConfirmDialog from '../../../general/ConfirmDialog';
@@ -21,7 +22,8 @@ export default function WorkflowSidebarMenu() {
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
 
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const rfInstance = useReactFlow();
   const tasks = useTasks();
 
@@ -36,18 +38,12 @@ export default function WorkflowSidebarMenu() {
     if (displayedWorkflowInfo.id) {
       try {
         await deleteWorkflow(displayedWorkflowInfo.id);
-        setOpenSnackbar({
-          open: true,
-          text: `Workflow ${displayedWorkflowInfo.id} successfully deleted!`,
-          severity: 'success',
-        });
         setRootWorkflow(EMPTY_GRAPH, rfInstance, tasks);
+        showSuccessMsg(
+          `Workflow ${displayedWorkflowInfo.id} successfully deleted!`
+        );
       } catch (error) {
-        setOpenSnackbar({
-          open: true,
-          text: textForError(error, commonStrings.deletingError),
-          severity: 'error',
-        });
+        showErrorMsg(textForError(error, commonStrings.deletingError));
       }
     }
   }

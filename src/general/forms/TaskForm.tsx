@@ -14,7 +14,7 @@ import { Alert } from '@material-ui/lab';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import useStore from '../../store/useStore';
+import useSnackbarStore from '../../store/useSnackbarStore';
 import type { Task } from '../../types';
 import { textForError } from '../../utils';
 import { useInvalidateTasks } from '../../api/tasks';
@@ -36,7 +36,7 @@ interface Props {
 
 function TaskForm(props: Props) {
   const { isOpen, onClose, elementToEdit, editExistingTask } = props;
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const invalidateTasks = useInvalidateTasks();
 
   const {
@@ -61,11 +61,7 @@ function TaskForm(props: Props) {
     try {
       await submitTaskFormData(data, elementToEdit, editExistingTask);
     } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(error, commonStrings.savingError),
-        severity: 'warning',
-      });
+      showErrorMsg(textForError(error, commonStrings.savingError));
       return;
     }
 
