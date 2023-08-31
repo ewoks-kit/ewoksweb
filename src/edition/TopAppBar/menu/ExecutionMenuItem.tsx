@@ -18,8 +18,8 @@ function ExecutionMenuItem() {
   }
 
   async function execute() {
-    const { recentGraphs, rootWorkflowId } = useStore.getState();
-    if (recentGraphs.length === 0) {
+    const { loadedGraphs, rootWorkflowId } = useStore.getState();
+    if (loadedGraphs.size === 0) {
       setOpenSnackbar({
         open: true,
         text: 'Please open a workflow in the canvas to execute',

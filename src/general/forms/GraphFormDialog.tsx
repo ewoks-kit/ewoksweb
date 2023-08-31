@@ -46,7 +46,7 @@ export default function GraphFormDialog(props: Props) {
     defaultValues: { identifier: elementToEdit.label },
   });
 
-  const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
+  const resetLoadedGraphs = useStore((state) => state.resetLoadedGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
   const tasks = useTasks();
@@ -74,7 +74,7 @@ export default function GraphFormDialog(props: Props) {
       } else {
         const { data: newGraph } = await postWorkflow(ewoksGraph);
         setRootWorkflow(newGraph, rfInstance, tasks, 'fromServer');
-        resetRecentGraphs();
+        resetLoadedGraphs();
       }
       invalidateWorkflows();
 
