@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { GraphFormAction } from '../../types';
 import { useKeyboardEvent } from '@react-hookz/web';
 import type { EwoksRFLinkData, EwoksRFNodeData } from '../../types';
-import { putWorkflow, useMutateWorkflows } from '../../api/workflows';
+import { putWorkflow, useInvalidateWorkflows } from '../../api/workflows';
 import { getEdgesData, rfToEwoks, textForError } from '../../utils';
 import commonStrings from '../../commonStrings.json';
 import { useReactFlow } from 'reactflow';
@@ -24,14 +24,14 @@ export default function SaveToServerButton() {
     (state) => state.displayedWorkflowInfo
   );
   const rfInstance = useReactFlow();
-  const mutateWorkflows = useMutateWorkflows();
+  const invalidateWorkflows = useInvalidateWorkflows();
 
   const [isDialogOpen, setDialogOpen] = useState(false);
 
   const [status, setStatus] = useState<Status>('idle');
 
-  const workingGraph = useStore((state) => state.workingGraph);
-  const workingGraphSource = useStore((state) => state.workingGraphSource);
+  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
+  const rootWorkflowSource = useStore((state) => state.rootWorkflowSource);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const [action, setAction] = useState<
     GraphFormAction.newGraph | GraphFormAction.newGraphOrOverwrite
@@ -68,19 +68,19 @@ export default function SaveToServerButton() {
       return;
     }
 
-    if (workingGraph.graph.id !== displayedWorkflowInfo.id) {
+    if (rootWorkflowId !== displayedWorkflowInfo.id) {
       handleError(
         'Cannot save any changes to subgraphs! Open it as the main graph to make changes.'
       );
       return;
     }
 
-    if (!workingGraphSource) {
+    if (!rootWorkflowSource) {
       handleError('No graph exists to save!');
       return;
     }
 
-    if (workingGraphSource !== 'fromServer') {
+    if (rootWorkflowSource !== 'fromServer') {
       setAction(GraphFormAction.newGraphOrOverwrite);
       setDialogOpen(true);
       return;
@@ -114,7 +114,7 @@ export default function SaveToServerButton() {
           links: edgesWithData,
         })
       );
-      mutateWorkflows();
+      invalidateWorkflows();
 
       setOpenSnackbar({
         open: true,

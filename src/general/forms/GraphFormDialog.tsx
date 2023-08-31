@@ -14,7 +14,7 @@ import { useReactFlow } from 'reactflow';
 import {
   postWorkflow,
   putWorkflow,
-  useMutateWorkflows,
+  useInvalidateWorkflows,
 } from '../../api/workflows';
 import commonStrings from '../../commonStrings.json';
 import useStore from '../../store/useStore';
@@ -46,12 +46,12 @@ export default function GraphFormDialog(props: Props) {
     defaultValues: { identifier: elementToEdit.label },
   });
 
-  const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
+  const resetLoadedGraphs = useStore((state) => state.resetLoadedGraphs);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
   const tasks = useTasks();
 
-  const mutateWorkflows = useMutateWorkflows();
+  const invalidateWorkflows = useInvalidateWorkflows();
 
   function handleClose() {
     onClose();
@@ -73,10 +73,10 @@ export default function GraphFormDialog(props: Props) {
         await putWorkflow(ewoksGraph);
       } else {
         const { data: newGraph } = await postWorkflow(ewoksGraph);
-        setWorkingGraph(newGraph, rfInstance, tasks, 'fromServer');
-        resetRecentGraphs();
+        setRootWorkflow(newGraph, rfInstance, tasks, 'fromServer');
+        resetLoadedGraphs();
       }
-      mutateWorkflows();
+      invalidateWorkflows();
 
       setOpenSnackbar({
         open: true,

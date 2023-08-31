@@ -86,11 +86,11 @@ function Canvas() {
     (state) => state.setDisplayedWorkflowInfo
   );
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
-  const addRecentGraph = useStore((state) => state.addRecentGraph);
+  const addLoadedGraph = useStore((state) => state.addLoadedGraph);
 
   const tasks = useTasks();
-  const recentGraphs = useStore((state) => state.recentGraphs);
-  const workingGraphId = useStore((state) => state.workingGraph.graph.id);
+  const loadedGraphs = useStore((state) => state.loadedGraphs);
+  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setNodesData = useNodeDataStore((state) => state.setNodesData);
@@ -111,7 +111,7 @@ function Canvas() {
     setTimeout(() => {
       fitView({ duration: 500 });
     }, 300);
-  }, [workingGraphId, fitView]);
+  }, [rootWorkflowId, fitView]);
 
   function onNodesChange(changes: NodeChange[]) {
     const newNodes = applyNodeChanges(changes, getNodes());
@@ -132,7 +132,7 @@ function Canvas() {
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
 
-    if (workingGraphId !== graphId) {
+    if (rootWorkflowId !== graphId) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to add a new node to any sub-graph!',
@@ -210,13 +210,8 @@ function Canvas() {
       },
       ewoks_props: {
         label: trimLabel(task_identifier),
-        default_inputs: [],
         inputs_complete: false,
         default_error_node: false,
-        default_error_attributes: {
-          map_all_data: true,
-          data_mapping: [],
-        },
       },
       ui_props: {
         icon,
@@ -257,7 +252,7 @@ function Canvas() {
   };
 
   const onConnect = (params: Connection) => {
-    if (workingGraphId !== graphId) {
+    if (rootWorkflowId !== graphId) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to create new links to any sub-graph!',
@@ -295,7 +290,8 @@ function Canvas() {
         text: 'Any link changes in any subgraph will not be saved!',
         severity: 'warning',
       });
-      addRecentGraph({
+
+      addLoadedGraph({
         graph: displayedWorkflowInfo,
         nodes: getNodes().map((nod) => {
           return {
@@ -311,9 +307,7 @@ function Canvas() {
         }),
       });
 
-      const subgraph = recentGraphs.find(
-        (gr) => gr.graph.id === nodeData.task_props.task_identifier
-      );
+      const subgraph = loadedGraphs.get(nodeData.task_props.task_identifier);
 
       if (subgraph?.graph.id) {
         setNodes(subgraph.nodes);

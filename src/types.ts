@@ -2,9 +2,8 @@ import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
 import type { OpenDraggableDialogSlice } from './store/openDraggableDialog';
 import type { OpenSnackbarSlice } from './store/openSnackbar';
 import type { SubgraphsStackSlice } from './store/subgraphsStack';
-import type { SubGraphSlice } from './store/subGraph';
-import type { WorkingGraphSlice } from './store/workingGraph';
-import type { RecentGraphsSlice } from './store/recentGraphs';
+import type { LoadedGraphsSlice } from './store/loadedGraphs';
+import type { RootWorkflowSlice } from './store/rootWorkflow';
 import type { Color } from '@material-ui/lab';
 import type { ChangeEvent, CSSProperties, ReactNode } from 'react';
 import type { Node } from 'reactflow';
@@ -97,9 +96,8 @@ export interface State
     OpenDraggableDialogSlice,
     OpenSnackbarSlice,
     SubgraphsStackSlice,
-    SubGraphSlice,
-    WorkingGraphSlice,
-    RecentGraphsSlice {}
+    LoadedGraphsSlice,
+    RootWorkflowSlice {}
 
 export interface Action {
   action: string;
@@ -171,11 +169,9 @@ export interface stackGraph {
 }
 
 export interface GraphUiProps {
-  label?: string;
   type?: string;
   comment?: string;
   notes?: Note[];
-  style?: LinkStyle;
   icon?: string;
 }
 

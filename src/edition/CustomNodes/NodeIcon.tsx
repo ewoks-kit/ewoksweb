@@ -24,7 +24,7 @@ function NodeIcon(props: Props) {
   const uiProps = nodeData.ui_props;
   const image = uiProps.icon || taskIcon;
 
-  const { icons } = useIcons();
+  const icons = useIcons();
 
   return (
     <img

@@ -18,8 +18,8 @@ function ExecutionMenuItem() {
   }
 
   async function execute() {
-    const { recentGraphs, workingGraph } = useStore.getState();
-    if (recentGraphs.length === 0) {
+    const { loadedGraphs, rootWorkflowId } = useStore.getState();
+    if (loadedGraphs.size === 0) {
       setOpenSnackbar({
         open: true,
         text: 'Please open a workflow in the canvas to execute',
@@ -28,7 +28,7 @@ function ExecutionMenuItem() {
       return;
     }
     try {
-      await executeWorkflow(workingGraph.graph.id);
+      await executeWorkflow(rootWorkflowId);
       navigate('/monitor');
     } catch (error) {
       // Keep logging in console for debugging when talking with a user

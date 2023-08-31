@@ -22,11 +22,11 @@ export default function FallbackMessage() {
   const classes = useStyles();
 
   const nodesCount = useNodesLength();
-  const workingGraphId = useStore((state) => state.workingGraph.graph.id);
+  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
 
   return (
     <div className={classes.noWorkflowMessage}>
-      {nodesCount === 0 && workingGraphId === '' && (
+      {nodesCount === 0 && rootWorkflowId === '' && (
         <p>
           <strong>Drag and drop</strong> tasks here to start building your
           workflow,

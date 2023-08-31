@@ -5,6 +5,7 @@ import type {
   GraphDetails,
   GraphNodes,
   GraphRF,
+  GraphUiProps,
 } from '../types';
 import {
   calcConditionName,
@@ -38,11 +39,31 @@ export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
   return {
     id: graph.graph.id,
     label: graph.graph.label || graph.graph.id,
-    category: graph.graph.category || '',
-    input_nodes,
-    output_nodes,
-    uiProps: { ...graph.graph.uiProps },
+    ...(graph.graph.category && {
+      category: graph.graph.category,
+    }),
+    ...(input_nodes.length > 0 && {
+      input_nodes,
+    }),
+    ...(output_nodes.length > 0 && {
+      output_nodes,
+    }),
+    ...(graph.graph.uiProps &&
+      !uipropsEmpty(graph.graph.uiProps) && {
+        uiProps: { ...graph.graph.uiProps },
+      }),
   };
+}
+
+export function uipropsEmpty(uiprops: GraphUiProps) {
+  let isEmpty = true;
+  for (const [, value] of Object.entries(uiprops)) {
+    if ((Array.isArray(value) && value.length > 0) || value) {
+      isEmpty = false;
+      break;
+    }
+  }
+  return isEmpty;
 }
 
 function calcInOutNodes(

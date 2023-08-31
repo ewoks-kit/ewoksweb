@@ -9,7 +9,10 @@ import type {
 import { isString } from './typeGuards';
 import { calcDataMapping, isDecimalNumber, stringOrNumber } from './utils';
 
-function cleanDefaultInputs(default_inputs: Inputs[]) {
+function cleanDefaultInputs(default_inputs: Inputs[] | undefined) {
+  if (!default_inputs) {
+    return undefined;
+  }
   return default_inputs.map((dIn) => {
     return {
       name: dIn.name,
@@ -25,28 +28,24 @@ function cleanDefaultInputs(default_inputs: Inputs[]) {
   });
 }
 function calcDefaultErrorAttributes(
-  default_error_attributes: DefaultErrorAttributes<DataMapping> | undefined,
-  default_error_node?: boolean
+  default_error_attributes: DefaultErrorAttributes<DataMapping> | undefined
 ): DefaultErrorAttributes<DataMappingEwoks> | undefined {
-  if (!default_error_node) {
-    return undefined;
-  }
-
   if (default_error_attributes?.map_all_data) {
-    return { map_all_data: true, data_mapping: [] };
+    return { map_all_data: true };
   }
 
   return {
     map_all_data: false,
-    data_mapping: default_error_attributes?.data_mapping
-      ? calcDataMapping(default_error_attributes.data_mapping)
-      : [],
+    ...(default_error_attributes?.data_mapping &&
+      default_error_attributes.data_mapping.length > 0 && {
+        data_mapping: calcDataMapping(default_error_attributes.data_mapping),
+      }),
   };
 }
 
 function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
   if (!default_inputs) {
-    return [];
+    return undefined;
   }
   return default_inputs.map(({ name, value, type }) => {
     return {
@@ -83,7 +82,6 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         task_props: { task_type, task_identifier },
         ui_props: {
           nodeWidth,
-          type,
           icon,
           moreHandles,
           withImage,
@@ -95,27 +93,36 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
       },
       position,
     }) => {
+      const nodeDefaultInputs = cleanDefaultInputs(
+        calcDefaultInputs(default_inputs)
+      );
       return {
         id,
         label,
         task_type,
         task_identifier,
-        inputs_complete,
+        ...(typeof inputs_complete === 'boolean' && {
+          inputs_complete,
+        }),
         task_generator,
-        default_inputs: cleanDefaultInputs(calcDefaultInputs(default_inputs)),
-        default_error_node,
-        default_error_attributes: calcDefaultErrorAttributes(
-          default_error_attributes,
-          default_error_node
-        ),
+        ...(nodeDefaultInputs &&
+          nodeDefaultInputs.length > 0 && {
+            default_inputs: nodeDefaultInputs,
+          }),
+        ...(typeof default_error_node === 'boolean' && {
+          default_error_node,
+        }),
+        ...(default_error_node && {
+          default_error_attributes: calcDefaultErrorAttributes(
+            default_error_attributes
+          ),
+        }),
         uiProps: {
-          label,
-          type,
           icon,
-          comment,
+          ...(comment && { comment }),
           position,
           moreHandles,
-          colorBorder,
+          ...(colorBorder && { colorBorder }),
           withImage,
           withLabel,
           nodeWidth,

@@ -11,32 +11,31 @@ import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
 import type { GetState, SetState } from 'zustand';
-import { EMPTY_RF_GRAPH } from '../utils/emptyGraphs';
 import useNodeDataStore from './useNodeDataStore';
 import useEdgeDataStore from './useEdgeDataStore';
 import type { ReactFlowInstance } from 'reactflow';
 import layoutNewGraph from '../utils/layoutNewGraph';
 
-export interface WorkingGraphSlice {
-  workingGraph: GraphRF;
-  workingGraphSource: string | undefined;
-  setWorkingGraph: (
-    workingGraphObject: GraphEwoks,
+export interface RootWorkflowSlice {
+  rootWorkflowId: string;
+  rootWorkflowSource: string | undefined;
+  setRootWorkflow: (
+    ewoksWorkflow: GraphEwoks,
     rfInstance: ReactFlowInstance,
     tasks: Task[],
     source?: string
   ) => Promise<void>;
 }
 
-const workingGraph = (
+const rootWorkflow = (
   set: SetState<State>,
   get: GetState<State>
-): WorkingGraphSlice => ({
-  workingGraph: EMPTY_RF_GRAPH,
-  workingGraphSource: undefined,
+): RootWorkflowSlice => ({
+  rootWorkflowId: '',
+  rootWorkflowSource: undefined,
 
-  setWorkingGraph: async (
-    inputGraph,
+  setRootWorkflow: async (
+    ewoksWorkflow,
     rfInstance,
     tasks,
     source
@@ -47,19 +46,18 @@ const workingGraph = (
       label: '',
       resetStack: true,
     });
-    get().resetRecentGraphs();
+    get().resetLoadedGraphs();
 
     // 2. Get node-subgraphs for the graph
-    const newNodeSubgraphs = await findAllSubgraphs(
-      inputGraph,
-      get().recentGraphs
-    );
+    const newNodeSubgraphs = await findAllSubgraphs(ewoksWorkflow, [
+      ...get().loadedGraphs.values(),
+    ]);
 
     // 3. Put the newNodeSubgraphs into recent in their graphRF form (sync)
     newNodeSubgraphs.forEach((gr) => {
       // calculate the rfNodes using the fetched subgraphs
       // nodes and edges stored with their data as EwoksRFNodes-Links
-      get().addRecentGraph({
+      get().addLoadedGraph({
         graph: gr.graph,
         nodes: toRFEwoksNodes(gr, newNodeSubgraphs, tasks),
         links: toRFEwoksLinks(gr, newNodeSubgraphs, tasks),
@@ -67,11 +65,11 @@ const workingGraph = (
     });
 
     // 4. Calculate the new graph given the subgraphs
-    let grfNodes = toRFEwoksNodes(inputGraph, newNodeSubgraphs, tasks);
+    let grfNodes = toRFEwoksNodes(ewoksWorkflow, newNodeSubgraphs, tasks);
 
     // 5. Calculate notes nodes
     const notes: EwoksRFNode[] =
-      inputGraph.graph.uiProps?.notes?.map((note) => {
+      ewoksWorkflow.graph.uiProps?.notes?.map((note) => {
         return {
           data: {
             ewoks_props: { label: note.label },
@@ -89,9 +87,9 @@ const workingGraph = (
       }) || [];
 
     grfNodes = [...grfNodes, ...notes];
-    const rfLinks = toRFEwoksLinks(inputGraph, newNodeSubgraphs, tasks);
+    const rfLinks = toRFEwoksLinks(ewoksWorkflow, newNodeSubgraphs, tasks);
     const resultGraph: GraphRF = {
-      graph: inputGraph.graph,
+      graph: ewoksWorkflow.graph,
       nodes: grfNodes,
       links: rfLinks,
     };
@@ -103,7 +101,7 @@ const workingGraph = (
     useNodeDataStore.getState().setNodesData(resultGraph.nodes);
     useEdgeDataStore.getState().setEdgesData(resultGraph.links);
 
-    get().addRecentGraph(resultGraph);
+    get().addLoadedGraph(resultGraph);
 
     get().setDisplayedWorkflowInfo(resultGraph.graph);
 
@@ -117,19 +115,19 @@ const workingGraph = (
       }),
     };
     // add the new graph to the recent graphs if not already there
-    get().addRecentGraph({
-      graph: inputGraph.graph,
+    get().addLoadedGraph({
+      graph: ewoksWorkflow.graph,
       nodes: grfNodes,
-      links: toRFEwoksLinks(inputGraph, newNodeSubgraphs, tasks),
+      links: toRFEwoksLinks(ewoksWorkflow, newNodeSubgraphs, tasks),
     });
     get().setSubgraphsStack({
-      id: inputGraph.graph.id,
-      label: inputGraph.graph.label,
+      id: ewoksWorkflow.graph.id,
+      label: ewoksWorkflow.graph.label,
     });
     set((state) => ({
       ...state,
-      workingGraph: newGraphNoData,
-      workingGraphSource: source,
+      rootWorkflowId: newGraphNoData.graph.id,
+      rootWorkflowSource: source,
     }));
 
     if (!newGraphNoData.nodes.some((nod) => nod.position.x !== 100)) {
@@ -143,4 +141,4 @@ const workingGraph = (
     }
   },
 });
-export default workingGraph;
+export default rootWorkflow;

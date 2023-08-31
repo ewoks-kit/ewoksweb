@@ -28,8 +28,8 @@ export default function WorkflowSidebarMenu() {
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo
   );
-  const workingGraph = useStore((state) => state.workingGraph);
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
+  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
+  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
 
   async function agreeCallback() {
     setOpenAgreeDialog(false);
@@ -41,7 +41,7 @@ export default function WorkflowSidebarMenu() {
           text: `Workflow ${displayedWorkflowInfo.id} successfully deleted!`,
           severity: 'success',
         });
-        setWorkingGraph(EMPTY_GRAPH, rfInstance, tasks);
+        setRootWorkflow(EMPTY_GRAPH, rfInstance, tasks);
       } catch (error) {
         setOpenSnackbar({
           open: true,
@@ -71,8 +71,7 @@ export default function WorkflowSidebarMenu() {
         onClick={() => setOpenSaveDialog(true)}
         role="sidebarMenuItem"
         disabled={
-          !workingGraph.graph.id ||
-          workingGraph.graph.id !== displayedWorkflowInfo.id
+          !rootWorkflowId || rootWorkflowId !== displayedWorkflowInfo.id
         }
       >
         <ListItemIcon>
@@ -85,8 +84,7 @@ export default function WorkflowSidebarMenu() {
         onClick={() => setOpenAgreeDialog(true)}
         role="sidebarMenuItem"
         disabled={
-          !workingGraph.graph.id ||
-          workingGraph.graph.id !== displayedWorkflowInfo.id
+          !rootWorkflowId || rootWorkflowId !== displayedWorkflowInfo.id
         }
       >
         <ListItemIcon>

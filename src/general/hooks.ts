@@ -19,11 +19,11 @@ export function useLoadGraph(onGraphLoad: (graph: GraphEwoks) => void) {
   return async (file: File) => {
     const {
       displayedWorkflowInfo,
-      workingGraph,
+      rootWorkflowId,
       setOpenSnackbar,
     } = useStore.getState();
 
-    if (workingGraph.graph.id !== displayedWorkflowInfo.id) {
+    if (rootWorkflowId !== displayedWorkflowInfo.id) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to add a new node-graph to any sub-graph!',

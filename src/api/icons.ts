@@ -2,9 +2,8 @@ import { assertDefined } from '../utils/typeGuards';
 import type { Icon } from '../types';
 import { client } from './client';
 import path from 'path-browserify';
-import { Endpoint } from '@rest-hooks/rest';
-import { useController, useSuspense } from '@rest-hooks/react';
 import type { DeleteResponse, IconResponse, ListResponse } from './models';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 async function fetchIconIds() {
   const { data } = await client.get<ListResponse>(`/icons`);
@@ -44,18 +43,20 @@ async function getIcons(): Promise<Icon[]> {
   return Promise.all(iconNames.map(fetchIcon));
 }
 
-const getIconsEndpoint = new Endpoint(getIcons, {
-  name: 'getIcons',
-});
-
 export function useIcons() {
-  const icons = useSuspense(getIconsEndpoint);
+  const { data: icons } = useQuery({
+    queryKey: ['icons'],
+    queryFn: getIcons,
+    suspense: true,
+  });
 
-  return { icons };
+  assertDefined(icons);
+
+  return icons;
 }
 
-export function useMutateIcons() {
-  const ctrl = useController();
+export function useInvalidateIcons() {
+  const queryClient = useQueryClient();
 
-  return async () => ctrl.invalidate(getIconsEndpoint);
+  return () => queryClient.invalidateQueries({ queryKey: ['icons'] });
 }

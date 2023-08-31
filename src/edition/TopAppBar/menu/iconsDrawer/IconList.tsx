@@ -7,7 +7,7 @@ import DeleteIconButton from './DeleteIconButton';
 import styles from './IconsDrawer.module.css';
 
 function IconList() {
-  const { icons } = useIcons();
+  const icons = useIcons();
 
   const [selectedIcon, setSelectedIcon] = useState<string>();
 
