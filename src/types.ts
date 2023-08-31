@@ -7,7 +7,7 @@ import type { RootWorkflowSlice } from './store/rootWorkflow';
 import type { Color } from '@material-ui/lab';
 import type { ChangeEvent, CSSProperties, ReactNode } from 'react';
 import type { Node } from 'reactflow';
-import type { GraphInfoSlice } from './store/graphInfo';
+import type { DisplayedWorkflowInfoSlice } from './store/displayedWorkflowInfo';
 
 export enum GraphFormAction {
   cloneGraph = 'cloneGraph',
@@ -92,7 +92,7 @@ export interface EwoksEvent {
 }
 
 export interface State
-  extends GraphInfoSlice,
+  extends DisplayedWorkflowInfoSlice,
     OpenDraggableDialogSlice,
     OpenSnackbarSlice,
     SubgraphsStackSlice,

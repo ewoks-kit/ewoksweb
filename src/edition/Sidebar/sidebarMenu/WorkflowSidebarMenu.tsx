@@ -25,18 +25,20 @@ export default function WorkflowSidebarMenu() {
   const rfInstance = useReactFlow();
   const tasks = useTasks();
 
-  const graphInfo = useStore((state) => state.graphInfo);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
 
   async function agreeCallback() {
     setOpenAgreeDialog(false);
-    if (graphInfo.id) {
+    if (displayedWorkflowInfo.id) {
       try {
-        await deleteWorkflow(graphInfo.id);
+        await deleteWorkflow(displayedWorkflowInfo.id);
         setOpenSnackbar({
           open: true,
-          text: `Workflow ${graphInfo.id} successfully deleted!`,
+          text: `Workflow ${displayedWorkflowInfo.id} successfully deleted!`,
           severity: 'success',
         });
         setRootWorkflow(EMPTY_GRAPH, rfInstance, tasks);
@@ -58,7 +60,7 @@ export default function WorkflowSidebarMenu() {
     <>
       <SuspenseBoundary>
         <GraphFormDialog
-          elementToEdit={graphInfo}
+          elementToEdit={displayedWorkflowInfo}
           action={GraphFormAction.cloneGraph}
           isOpen={openSaveDialog}
           onClose={() => setOpenSaveDialog(false)}
@@ -68,7 +70,9 @@ export default function WorkflowSidebarMenu() {
       <MenuItem
         onClick={() => setOpenSaveDialog(true)}
         role="sidebarMenuItem"
-        disabled={!rootWorkflowId || rootWorkflowId !== graphInfo.id}
+        disabled={
+          !rootWorkflowId || rootWorkflowId !== displayedWorkflowInfo.id
+        }
       >
         <ListItemIcon>
           <FileCopyIcon fontSize="small" />
@@ -79,7 +83,9 @@ export default function WorkflowSidebarMenu() {
       <MenuItem
         onClick={() => setOpenAgreeDialog(true)}
         role="sidebarMenuItem"
-        disabled={!rootWorkflowId || rootWorkflowId !== graphInfo.id}
+        disabled={
+          !rootWorkflowId || rootWorkflowId !== displayedWorkflowInfo.id
+        }
       >
         <ListItemIcon>
           <DeleteIcon fontSize="small" />
@@ -89,8 +95,8 @@ export default function WorkflowSidebarMenu() {
       </MenuItem>
 
       <ConfirmDialog
-        title={`Delete workflow with id: "${graphInfo.id}"?`}
-        content={`You are about to delete the workflow with id: "${graphInfo.id}".
+        title={`Delete workflow with id: "${displayedWorkflowInfo.id}"?`}
+        content={`You are about to delete the workflow with id: "${displayedWorkflowInfo.id}".
               Please make sure that it is not used as a sub-workflow in other workflows!
               Do you agree to continue?`}
         open={openAgreeDialog}

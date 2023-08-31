@@ -17,7 +17,9 @@ function download(content: BlobPart, fileName: string, contentType: string) {
 function DownloadMenuItem() {
   const { getNodes, getEdges } = useReactFlow();
 
-  const graphInfo = useStore((state) => state.graphInfo);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
 
   function saveToDisk() {
     const { newNodesData, newEdgesData } = curateGraph(
@@ -26,7 +28,7 @@ function DownloadMenuItem() {
     );
 
     const graphRf: GraphRF = {
-      graph: graphInfo,
+      graph: displayedWorkflowInfo,
       nodes: getNodes().map((nod) => {
         return {
           ...nod,
@@ -42,7 +44,7 @@ function DownloadMenuItem() {
     };
     download(
       JSON.stringify(rfToEwoks(graphRf), null, 2),
-      `${graphInfo.label || 'Untitled'}.json`,
+      `${displayedWorkflowInfo.label || 'Untitled'}.json`,
       'text/plain'
     );
   }

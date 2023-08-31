@@ -2,38 +2,42 @@ import useStore from '../../../store/useStore';
 import InputTextField from './InputTextField';
 
 export default function GraphDetails() {
-  const graphInfo = useStore((state) => state.graphInfo);
-  const mergeGraphInfo = useStore((state) => state.mergeGraphInfo);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
+  const mergeDisplayedWorkflowInfo = useStore(
+    (state) => state.mergeDisplayedWorkflowInfo
+  );
 
   function handleSaveCategory(category: string) {
-    mergeGraphInfo({ category });
+    mergeDisplayedWorkflowInfo({ category });
   }
 
   function handleSaveLabel(label: string) {
-    mergeGraphInfo({ label });
+    mergeDisplayedWorkflowInfo({ label });
   }
 
   function handleSaveComment(comment: string) {
-    mergeGraphInfo({
+    mergeDisplayedWorkflowInfo({
       uiProps: { comment },
     });
   }
 
   return (
-    <div key={graphInfo.id}>
+    <div key={displayedWorkflowInfo.id}>
       <InputTextField
         label="Label"
-        defaultValue={graphInfo.label || ''}
+        defaultValue={displayedWorkflowInfo.label || ''}
         onValueSave={handleSaveLabel}
       />
       <InputTextField
         label="Comment"
-        defaultValue={graphInfo.uiProps?.comment || ''}
+        defaultValue={displayedWorkflowInfo.uiProps?.comment || ''}
         onValueSave={handleSaveComment}
       />
       <InputTextField
         label="Category"
-        defaultValue={graphInfo.category || ''}
+        defaultValue={displayedWorkflowInfo.category || ''}
         onValueSave={handleSaveCategory}
       />
     </div>

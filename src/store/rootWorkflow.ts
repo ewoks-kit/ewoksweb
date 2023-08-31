@@ -103,7 +103,7 @@ const rootWorkflow = (
 
     get().addLoadedGraph(resultGraph);
 
-    get().setGraphInfo(resultGraph.graph);
+    get().setDisplayedWorkflowInfo(resultGraph.graph);
 
     const newGraphNoData = {
       graph: resultGraph.graph,

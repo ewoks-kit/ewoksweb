@@ -30,7 +30,6 @@ import isValidLink from 'utils/IsValidLink';
 import CanvasBackground from './CanvasBackground';
 import { addConnectionToGraph, retrieveTaskInfo, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
-import { useGraphId } from '../../store/graph-hooks';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 import { getEdgesData, getNodeData, getNodesData } from '../../utils';
@@ -79,8 +78,12 @@ function Canvas() {
     position: XYPosition;
   }>();
 
-  const graphInfo = useStore((state) => state.graphInfo);
-  const setGraphInfo = useStore((state) => state.setGraphInfo);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
+  const setDisplayedWorkflowInfo = useStore(
+    (state) => state.setDisplayedWorkflowInfo
+  );
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const addLoadedGraph = useStore((state) => state.addLoadedGraph);
 
@@ -92,7 +95,6 @@ function Canvas() {
   const setNodesData = useNodeDataStore((state) => state.setNodesData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
-  const graphId = useGraphId();
   const {
     fitView,
     setNodes,
@@ -128,7 +130,7 @@ function Canvas() {
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
 
-    if (rootWorkflowId !== graphId) {
+    if (rootWorkflowId !== displayedWorkflowInfo.id) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to add a new node to any sub-graph!',
@@ -232,7 +234,7 @@ function Canvas() {
       {
         nodes: nodesRF,
         links: edgesRF as EwoksRFLink[],
-        graph: graphInfo,
+        graph: displayedWorkflowInfo,
       },
       getNodesData(),
       oldEdge
@@ -248,7 +250,7 @@ function Canvas() {
   };
 
   const onConnect = (params: Connection) => {
-    if (rootWorkflowId !== graphId) {
+    if (rootWorkflowId !== displayedWorkflowInfo.id) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to create new links to any sub-graph!',
@@ -286,8 +288,9 @@ function Canvas() {
         text: 'Any link changes in any subgraph will not be saved!',
         severity: 'warning',
       });
+
       addLoadedGraph({
-        graph: graphInfo,
+        graph: displayedWorkflowInfo,
         nodes: getNodes().map((nod) => {
           return {
             ...nod,
@@ -312,7 +315,7 @@ function Canvas() {
 
         setEdges(subgraph.links);
 
-        setGraphInfo(subgraph.graph);
+        setDisplayedWorkflowInfo(subgraph.graph);
         setTimeout(() => {
           fitView({ duration: 500 });
         }, 300);

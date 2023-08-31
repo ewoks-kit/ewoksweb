@@ -18,7 +18,9 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   const { getNodes, getEdges } = useReactFlow();
 
   const { id } = props;
-  const graphInfo = useStore((state) => state.graphInfo);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
 
@@ -28,7 +30,7 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
 
   const isValidConnection = (connection: Connection) => {
     const graphRf: GraphRF = {
-      graph: graphInfo,
+      graph: displayedWorkflowInfo,
       nodes: getNodes(),
       links: getEdges() as EwoksRFLink[],
     };

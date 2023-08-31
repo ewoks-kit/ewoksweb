@@ -28,14 +28,16 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
 
   const { getNodes, getEdges } = useReactFlow();
 
-  const graphInfo = useStore((state) => state.graphInfo);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
   const nodWidth = { width: `${nodeWidth || 100}px` };
 
   const isValidConnection = (connection: Connection) => {
     const graphRf: GraphRF = {
-      graph: graphInfo,
+      graph: displayedWorkflowInfo,
       nodes: getNodes(),
       links: getEdges() as EwoksRFLink[],
     };
