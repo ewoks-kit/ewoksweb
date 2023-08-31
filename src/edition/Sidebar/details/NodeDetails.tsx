@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import type { EwoksRFNodeData } from '../../../types';
 import { Box, Checkbox } from '@material-ui/core';
 import SidebarTooltip from '../SidebarTooltip';
@@ -28,12 +27,6 @@ export default function NodeDetails(selectedElement: Node) {
 
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
-
-  // const [inputsComplete, setInputsComplete] = useState(false);
-
-  // useEffect(() => {
-  //   setInputsComplete(nodeData.ewoks_props.inputs_complete || false);
-  // }, [nodeData]);
 
   function handlePropChange(
     propKeyValue: {
