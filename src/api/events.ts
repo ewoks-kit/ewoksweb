@@ -2,6 +2,7 @@ import { client } from './client';
 import { useQuery } from '@tanstack/react-query';
 import type { filterParams } from '../types';
 import type { ExecutedJobsResponse, EwoksJob } from './models';
+import { QueryKey } from './models';
 import { assertDefined } from '../utils/typeGuards';
 
 async function fetchExecutionEvents(
@@ -24,7 +25,7 @@ async function getJobs(): Promise<Map<string, EwoksJob>> {
 
 export function useExecutedJobs() {
   const { data } = useQuery({
-    queryKey: ['jobs'],
+    queryKey: [QueryKey.Jobs],
     queryFn: getJobs,
     suspense: true,
     staleTime: 5 * 60 * 1000, // 5mn

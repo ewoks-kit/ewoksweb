@@ -9,6 +9,7 @@ import type {
   WorkflowDescriptionsResponse,
   WorkflowResponse,
 } from './models';
+import { QueryKey } from './models';
 
 export async function fetchWorkflowsDescriptions() {
   return client.get<WorkflowDescriptionsResponse>(`/workflows/descriptions`);
@@ -56,11 +57,12 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
 }
 
 export function useWorkflowsDLE() {
-  return useQuery({ queryKey: ['workflows'], queryFn: getWorkflows });
+  return useQuery({ queryKey: [QueryKey.Workflows], queryFn: getWorkflows });
 }
 
 export function useInvalidateWorkflows() {
   const queryClient = useQueryClient();
 
-  return () => queryClient.invalidateQueries({ queryKey: ['workflows'] });
+  return () =>
+    queryClient.invalidateQueries({ queryKey: [QueryKey.Workflows] });
 }
