@@ -83,10 +83,10 @@ function Canvas() {
   const graphInfo = useStore((state) => state.graphInfo);
   const setGraphInfo = useStore((state) => state.setGraphInfo);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
-  const addRecentGraph = useStore((state) => state.addRecentGraph);
+  const addLoadedGraph = useStore((state) => state.addLoadedGraph);
 
   const tasks = useTasks();
-  const recentGraphs = useStore((state) => state.recentGraphs);
+  const loadedGraphs = useStore((state) => state.loadedGraphs);
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
@@ -294,7 +294,7 @@ function Canvas() {
         text: 'Any link changes in any subgraph will not be saved!',
         severity: 'warning',
       });
-      addRecentGraph({
+      addLoadedGraph({
         graph: graphInfo,
         nodes: getNodes().map((nod) => {
           return {
@@ -310,9 +310,7 @@ function Canvas() {
         }),
       });
 
-      const subgraph = recentGraphs.find(
-        (gr) => gr.graph.id === nodeData.task_props.task_identifier
-      );
+      const subgraph = loadedGraphs.get(nodeData.task_props.task_identifier);
 
       if (subgraph?.graph.id) {
         setNodes(subgraph.nodes);

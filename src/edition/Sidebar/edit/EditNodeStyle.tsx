@@ -21,7 +21,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   const [nodeSize, setNodeSize] = useState<number>(
     nodeData.ui_props.nodeWidth || 100
   );
-  const { icons } = useIcons();
+  const icons = useIcons();
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
   function withImageChanged(checked: boolean) {

@@ -36,7 +36,7 @@ function WorkflowDropdown(props: Props) {
   const [open, setOpen] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
 
-  const { data: workflows, loading, error } = useWorkflowsDLE();
+  const { data: workflows, isLoading: loading, error } = useWorkflowsDLE();
   const sortedWorkflows = sortByCategory(workflows ?? []);
 
   const options =

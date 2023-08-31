@@ -23,7 +23,7 @@ const DEFAULT_ICON = orange3;
 
 export async function getSubgraphs(
   graph: GraphEwoks,
-  recentGraphIds: string[]
+  loadedGraphsIds: string[]
 ): Promise<GraphEwoks[]> {
   const subgraphIds = graph.nodes
     .filter((nod) => nod.task_type === 'graph')
@@ -34,7 +34,8 @@ export async function getSubgraphs(
   }
 
   const graphIdsToFetch = subgraphIds.filter(
-    (id) => id && !recentGraphIds.some((recentGraphId) => id === recentGraphId)
+    (id) =>
+      id && !loadedGraphsIds.some((loadedGraphsId) => id === loadedGraphsId)
   );
 
   try {

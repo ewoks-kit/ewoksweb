@@ -9,7 +9,7 @@ interface Props {
 
 function TaskIcon(props: Props) {
   const { className, name, alt } = props;
-  const { icons } = useIcons();
+  const icons = useIcons();
 
   return <img className={className} src={findImage(name, icons)} alt={alt} />;
 }

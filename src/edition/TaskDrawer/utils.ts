@@ -24,21 +24,20 @@ export async function loadSubworkflow(
   position: XYPosition,
   tasks: Task[]
 ): Promise<{ nodeWithoutData: Node; data: EwoksRFNodeData }> {
-  const { recentGraphs, addRecentGraph } = useStore.getState();
+  const { loadedGraphs, addLoadedGraph } = useStore.getState();
 
   // 1. input the graphEwoks from server or file-system
   // 2. search for all subgraphs in it (async)
-  const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(
-    subGraphL,
-    recentGraphs
-  );
+  const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(subGraphL, [
+    ...loadedGraphs.values(),
+  ]);
 
   // 3. Put the newNodeSubgraphs into recent in their graphRF form (sync)
   newNodeSubgraphs.forEach((gr) => {
     // calculate the rfNodes using the fetched subgraphs
     const rfNodes: EwoksRFNode[] = toRFEwoksNodes(gr, newNodeSubgraphs, tasks);
 
-    addRecentGraph({
+    addLoadedGraph({
       graph: gr.graph,
       nodes: rfNodes,
       links: toRFEwoksLinks(gr, newNodeSubgraphs, tasks),
@@ -52,9 +51,7 @@ export async function loadSubworkflow(
     nodes: grfNodes,
     links: toRFEwoksLinks(subGraphL, newNodeSubgraphs, tasks),
   };
-  // Adding a subgraph to an existing workingGraph:
-  // save the workingGraph in the recent graphs and add a new graph node to it
-
+  // Adding a subgraph to the rootWorkflow:
   const subToAdd = graph as GraphRF;
 
   let newNode = {} as EwoksRFNode;
@@ -116,7 +113,7 @@ export async function loadSubworkflow(
     },
   };
 
-  addRecentGraph(subToAdd);
+  addLoadedGraph(subToAdd);
 
   const newWorkingGraph = {
     graph: EMPTY_RF_GRAPH.graph,
@@ -126,7 +123,7 @@ export async function loadSubworkflow(
 
   useNodeDataStore.getState().setNodeData(newNode.id, newNode.data);
 
-  addRecentGraph(newWorkingGraph);
+  addLoadedGraph(newWorkingGraph);
   const { data, ...nodeWithoutData } = newNode;
   return { nodeWithoutData: nodeWithoutData as Node, data };
 }

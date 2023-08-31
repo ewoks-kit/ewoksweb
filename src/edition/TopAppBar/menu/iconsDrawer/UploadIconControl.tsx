@@ -2,7 +2,7 @@ import { Button } from '@material-ui/core';
 import { CloudUpload } from '@material-ui/icons';
 import type { ChangeEvent, SyntheticEvent } from 'react';
 import { useState } from 'react';
-import { postIcon, useMutateIcons } from '../../../../api/icons';
+import { postIcon, useInvalidateIcons } from '../../../../api/icons';
 import useStore from '../../../../store/useStore';
 import { textForError } from '../../../../utils';
 
@@ -14,7 +14,7 @@ function UploadIconControl() {
   >('');
   const [iconNameToUpload, setIconNameToUpload] = useState('');
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const mutateIcons = useMutateIcons();
+  const invalidateIcons = useInvalidateIcons();
 
   async function uploadIcon(event: SyntheticEvent<Element, Event>) {
     event.preventDefault();
@@ -28,7 +28,7 @@ function UploadIconControl() {
         severity: 'success',
       });
 
-      mutateIcons();
+      invalidateIcons();
       setIconNameToUpload('');
     } catch (error) {
       setOpenSnackbar({

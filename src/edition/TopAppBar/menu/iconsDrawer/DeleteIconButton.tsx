@@ -2,7 +2,7 @@ import { IconButton } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
 import { useState } from 'react';
 
-import { deleteIcon, useMutateIcons } from '../../../../api/icons';
+import { deleteIcon, useInvalidateIcons } from '../../../../api/icons';
 import { useTasks } from '../../../../api/tasks';
 import ConfirmDialog from '../../../../general/ConfirmDialog';
 import useStore from '../../../../store/useStore';
@@ -18,7 +18,7 @@ function DeleteIconButton(props: Props) {
 
   const [isDialogOpen, setOpenDialog] = useState(false);
   const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const mutateIcons = useMutateIcons();
+  const invalidateIcons = useInvalidateIcons();
 
   async function agreeDeleteIcon() {
     setOpenDialog(false);
@@ -41,7 +41,7 @@ function DeleteIconButton(props: Props) {
         severity: 'success',
       });
 
-      mutateIcons();
+      invalidateIcons();
     } catch (error) {
       setOpenSnackbar({
         open: true,
