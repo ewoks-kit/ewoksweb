@@ -16,12 +16,9 @@ function EwoksCacheProvider(props: PropsWithChildren<Props>) {
 
   useEffect(() => {
     socket.on('Executing', (e: EwoksEvent) => {
-      queryClient.setQueryData(
+      queryClient.setQueryData<Map<string, EwoksJob>>(
         ['jobs'],
-        (oldJobs: Map<string, EwoksJob> | undefined) => {
-          if (!oldJobs) {
-            return new Map<string, EwoksJob>();
-          }
+        (oldJobs = new Map<string, EwoksJob>()) => {
           const job = oldJobs.get(e.job_id) || [];
           return new Map(oldJobs).set(e.job_id, [...job, e]);
         }
