@@ -44,3 +44,10 @@ export type EwoksJob = EwoksEvent[];
 export interface ExecutedJobsResponse {
   jobs: EwoksJob[];
 }
+
+export enum QueryKey {
+  Jobs = 'jobs',
+  Icons = 'icons',
+  Tasks = 'tasks',
+  Workflows = 'workflows',
+}

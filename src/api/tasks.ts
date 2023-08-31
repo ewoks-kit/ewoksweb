@@ -9,6 +9,7 @@ import type {
   TaskDescriptionsResponse,
   TaskResponse,
 } from './models';
+import { QueryKey } from './models';
 
 // Get '/tasks/descriptions'
 export async function fetchTaskDescriptions() {
@@ -42,7 +43,7 @@ export async function discoverTasks(moduleNames: string[]) {
 
 export function useTasks(): Task[] {
   const query = useQuery({
-    queryKey: ['tasks'],
+    queryKey: [QueryKey.Tasks],
     queryFn: fetchTaskDescriptions,
     suspense: true,
   });
@@ -57,5 +58,5 @@ export function useTasks(): Task[] {
 export function useInvalidateTasks() {
   const queryClient = useQueryClient();
 
-  return () => queryClient.invalidateQueries({ queryKey: ['tasks'] });
+  return () => queryClient.invalidateQueries({ queryKey: [QueryKey.Tasks] });
 }
