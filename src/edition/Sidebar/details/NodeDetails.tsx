@@ -13,7 +13,7 @@ import {
 import { useNodesIds } from '../../../store/graph-hooks';
 import type { Node } from 'reactflow';
 import NodeInfo from './NodeInfo';
-import DefaultErrorNode from './DefaultErrorNode';
+import DefaultErrorNodeControl from './DefaultErrorNodeControl';
 
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(selectedElement: Node) {
@@ -29,11 +29,11 @@ export default function NodeDetails(selectedElement: Node) {
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
-  const [inputsComplete, setInputsComplete] = useState(false);
+  // const [inputsComplete, setInputsComplete] = useState(false);
 
-  useEffect(() => {
-    setInputsComplete(nodeData.ewoks_props.inputs_complete || false);
-  }, [nodeData]);
+  // useEffect(() => {
+  //   setInputsComplete(nodeData.ewoks_props.inputs_complete || false);
+  // }, [nodeData]);
 
   function handlePropChange(
     propKeyValue: {
@@ -122,7 +122,7 @@ export default function NodeDetails(selectedElement: Node) {
           >
             <div>
               <Checkbox
-                checked={inputsComplete}
+                checked={nodeData.ewoks_props.inputs_complete || false}
                 onChange={(event) =>
                   inputsCompleteChanged(event.target.checked)
                 }
@@ -132,7 +132,7 @@ export default function NodeDetails(selectedElement: Node) {
               <b>Inputs Complete</b>
             </div>
           </SidebarTooltip>
-          <DefaultErrorNode nodeId={selectedElement.id} />
+          <DefaultErrorNodeControl nodeId={selectedElement.id} />
           <NodeInfo
             nodeId={selectedElement.id}
             nodeData={nodeData}
