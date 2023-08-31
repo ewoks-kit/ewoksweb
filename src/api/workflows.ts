@@ -1,5 +1,5 @@
-import { useDLE, useSuspense, useController } from '@rest-hooks/react';
-import { Endpoint } from '@rest-hooks/rest';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+
 import type { GraphEwoks, WorkflowDescription } from '../types';
 import { client } from './client';
 import type {
@@ -55,20 +55,12 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
   return workflows;
 }
 
-const getWorkflowsEndpoint = new Endpoint(getWorkflows, {
-  name: 'getWorkflows',
-});
-
-export function useWorkflows() {
-  return useSuspense(getWorkflowsEndpoint);
-}
-
 export function useWorkflowsDLE() {
-  return useDLE(getWorkflowsEndpoint);
+  return useQuery({ queryKey: ['workflows'], queryFn: getWorkflows });
 }
 
-export function useMutateWorkflows() {
-  const ctrl = useController();
+export function useInvalidateWorkflows() {
+  const queryClient = useQueryClient();
 
-  return async () => ctrl.invalidate(getWorkflowsEndpoint);
+  return () => queryClient.invalidateQueries({ queryKey: ['workflows'] });
 }
