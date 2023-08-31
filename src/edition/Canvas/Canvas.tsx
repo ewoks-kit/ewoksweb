@@ -30,7 +30,6 @@ import isValidLink from 'utils/IsValidLink';
 import CanvasBackground from './CanvasBackground';
 import { addConnectionToGraph, retrieveTaskInfo, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
-import { useGraphId } from '../../store/graph-hooks';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 import { getEdgesData, getNodeData, getNodesData } from '../../utils';
@@ -96,7 +95,6 @@ function Canvas() {
   const setNodesData = useNodeDataStore((state) => state.setNodesData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
-  const graphId = useGraphId();
   const {
     fitView,
     setNodes,
@@ -132,7 +130,7 @@ function Canvas() {
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
 
-    if (rootWorkflowId !== graphId) {
+    if (rootWorkflowId !== displayedWorkflowInfo.id) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to add a new node to any sub-graph!',
@@ -252,7 +250,7 @@ function Canvas() {
   };
 
   const onConnect = (params: Connection) => {
-    if (rootWorkflowId !== graphId) {
+    if (rootWorkflowId !== displayedWorkflowInfo.id) {
       setOpenSnackbar({
         open: true,
         text: 'Not allowed to create new links to any sub-graph!',

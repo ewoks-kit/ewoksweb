@@ -13,10 +13,6 @@ export function useNodesLength() {
   return useRFStore((state) => [...state.nodeInternals.keys()].length);
 }
 
-export function useGraphId() {
-  return useStore((state) => state.displayedWorkflowInfo.id);
-}
-
 export function useNode(id: string) {
   return useRFStore((state) => state.nodeInternals.get(id));
 }
