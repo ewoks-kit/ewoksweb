@@ -3,6 +3,7 @@ import { contentStyle, style } from './nodeStyles';
 import Tooltip from '@material-ui/core/Tooltip';
 import isValidLink from '../../utils/IsValidLink';
 import useStore from '../../store/useStore';
+import useSnackbarStore from '../../store/useSnackbarStore';
 import type { Connection, NodeProps } from 'reactflow';
 import NodeIcon from './NodeIcon';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
@@ -31,7 +32,7 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo
   );
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
 
   const nodWidth = { width: `${nodeWidth || 100}px` };
 
@@ -47,11 +48,7 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
       getNodesData()
     );
     if (!isValid) {
-      setOpenSnackbar({
-        open: true,
-        text: reason,
-        severity: 'warning',
-      });
+      showWarningMsg(reason);
     }
     return isValid;
   };

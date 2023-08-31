@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import FormControl from '@material-ui/core/FormControl';
 import useStore from '../store/useStore';
+import useSnackbarStore from '../store/useSnackbarStore';
 import type { WorkflowDescription } from '../types';
 import ConfirmDialog from './ConfirmDialog';
 import WorkflowDropdown from './WorkflowDropdown';
@@ -12,8 +13,8 @@ import { useTasks } from '../api/tasks';
 export default function GetWorkflowFromServerDropdown() {
   const [workflowId, setWorkflowId] = useState('');
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
+  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
 
   const rfInstance = useReactFlow();
   const tasks = useTasks();
@@ -32,11 +33,7 @@ export default function GetWorkflowFromServerDropdown() {
       const { data: graph } = await fetchWorkflow(workflowIdparam);
       setRootWorkflow(graph, rfInstance, tasks, 'fromServer');
     } else {
-      setOpenSnackbar({
-        open: true,
-        text: 'Please select a graph to fetch and re-click!',
-        severity: 'warning',
-      });
+      showWarningMsg('Please select a graph to fetch and re-click!');
     }
   }
 

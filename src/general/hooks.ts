@@ -1,5 +1,6 @@
 import type { GraphEwoks } from '../types';
 import useStore from '../store/useStore';
+import useSnackbarStore from '../store/useSnackbarStore';
 import { isString } from '../utils/typeGuards';
 
 function tryJSONparse(str: string | ArrayBuffer | null): unknown {
@@ -17,18 +18,11 @@ function tryJSONparse(str: string | ArrayBuffer | null): unknown {
 
 export function useLoadGraph(onGraphLoad: (graph: GraphEwoks) => void) {
   return async (file: File) => {
-    const {
-      displayedWorkflowInfo,
-      rootWorkflowId,
-      setOpenSnackbar,
-    } = useStore.getState();
+    const { displayedWorkflowInfo, rootWorkflowId } = useStore.getState();
+    const { showErrorMsg } = useSnackbarStore.getState();
 
     if (rootWorkflowId !== displayedWorkflowInfo.id) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Not allowed to add a new node-graph to any sub-graph!',
-        severity: 'error',
-      });
+      showErrorMsg('Not allowed to add a new node-graph to any sub-graph!');
       return;
     }
 
@@ -39,11 +33,9 @@ export function useLoadGraph(onGraphLoad: (graph: GraphEwoks) => void) {
 
       const newGraph = tryJSONparse(result);
       if (!newGraph) {
-        setOpenSnackbar({
-          open: true,
-          text: 'Error in JSON structure. Please correct input file and retry!',
-          severity: 'error',
-        });
+        showErrorMsg(
+          'Error in JSON structure. Please correct input file and retry!'
+        );
         return;
       }
 

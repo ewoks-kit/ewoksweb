@@ -1,3 +1,4 @@
+import useSnackbarStore from '../../../store/useSnackbarStore';
 import useStore from '../../../store/useStore';
 import SendIcon from '@material-ui/icons/Send';
 import { useState } from 'react';
@@ -7,7 +8,8 @@ import ActionMenuItem from './ActionMenuItem';
 import { useNavigate } from 'react-router-dom';
 
 function ExecutionMenuItem() {
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
 
   const navigate = useNavigate();
@@ -20,11 +22,7 @@ function ExecutionMenuItem() {
   async function execute() {
     const { loadedGraphs, rootWorkflowId } = useStore.getState();
     if (loadedGraphs.size === 0) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Please open a workflow in the canvas to execute',
-        severity: 'warning',
-      });
+      showWarningMsg('Please open a workflow in the canvas to execute');
       return;
     }
     try {
@@ -34,11 +32,7 @@ function ExecutionMenuItem() {
       // Keep logging in console for debugging when talking with a user
       /* eslint-disable no-console */
       console.log(error);
-      setOpenSnackbar({
-        open: true,
-        text: 'Execution could not start!',
-        severity: 'error',
-      });
+      showErrorMsg('Execution could not start!');
     }
   }
 
