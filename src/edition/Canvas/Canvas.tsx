@@ -42,6 +42,7 @@ import FallbackMessage from './FallbackMessage';
 import GraphInOutNode from '../CustomNodes/GraphInOutNode';
 import AddSubworkflowDialog from '../TaskDrawer/AddSubworkflowDialog';
 import { useTasks } from '../../api/tasks';
+import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -196,6 +197,13 @@ function Canvas() {
       position,
       data: {} as EwoksRFNodeData,
     };
+
+    const {
+      default_inputs,
+      default_error_node,
+      default_error_attributes,
+    } = DEFAULT_NODE_VALUES;
+
     setNodeData(newId, {
       task_props: {
         task_type,
@@ -207,15 +215,13 @@ function Canvas() {
       },
       ewoks_props: {
         label: trimLabel(task_identifier),
-        inputs_complete: false,
-        default_error_node: false,
+        default_inputs,
+        default_error_node,
+        default_error_attributes,
       },
       ui_props: {
+        ...DEFAULT_NODE_VALUES.uiProps,
         icon,
-        moreHandles: false,
-        nodeWidth: 100,
-        withImage: true,
-        withLabel: true,
       },
     });
     addNodes(newNode);

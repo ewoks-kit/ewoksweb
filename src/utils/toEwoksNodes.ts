@@ -6,6 +6,7 @@ import type {
   EwoksRFNode,
   Inputs,
 } from '../types';
+import { DEFAULT_NODE_VALUES } from './defaultValues';
 import { isString } from './typeGuards';
 import { calcDataMapping, isDecimalNumber, stringOrNumber } from './utils';
 
@@ -101,31 +102,37 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         label,
         task_type,
         task_identifier,
-        ...(typeof inputs_complete === 'boolean' && {
-          inputs_complete,
-        }),
+        inputs_complete,
         task_generator,
         ...(nodeDefaultInputs &&
           nodeDefaultInputs.length > 0 && {
             default_inputs: nodeDefaultInputs,
           }),
-        ...(typeof default_error_node === 'boolean' && {
+        ...(default_error_node !== DEFAULT_NODE_VALUES.default_error_node && {
           default_error_node,
         }),
-        ...(default_error_node && {
+        ...(default_error_node !== DEFAULT_NODE_VALUES.default_error_node && {
           default_error_attributes: calcDefaultErrorAttributes(
             default_error_attributes
           ),
         }),
         uiProps: {
-          icon,
+          ...(icon && { icon }),
           ...(comment && { comment }),
           position,
-          moreHandles,
+          ...(moreHandles !== DEFAULT_NODE_VALUES.uiProps.moreHandles && {
+            moreHandles,
+          }),
           ...(colorBorder && { colorBorder }),
-          withImage,
-          withLabel,
-          nodeWidth,
+          ...(withImage !== DEFAULT_NODE_VALUES.uiProps.withImage && {
+            withImage,
+          }),
+          ...(withLabel !== DEFAULT_NODE_VALUES.uiProps.withLabel && {
+            withLabel,
+          }),
+          ...(nodeWidth !== DEFAULT_NODE_VALUES.uiProps.nodeWidth && {
+            nodeWidth,
+          }),
         },
       };
     }

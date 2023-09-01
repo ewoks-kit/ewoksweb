@@ -1,6 +1,6 @@
 import type { Connection } from 'reactflow';
-import { MarkerType } from 'reactflow';
 import type { EwoksRFLink, EwoksRFNodeData } from '../../types';
+import { DEFAULT_LINK_VALUES } from '../../utils/defaultValues';
 import { assertTaskInfo } from '../../utils/typeGuards';
 import type { TaskInfo } from './models';
 
@@ -82,7 +82,7 @@ export function addConnectionToGraph(
     targetHandle: targetHandle ?? undefined,
     type: 'default',
     animated: false,
-    markerEnd: { type: MarkerType.ArrowClosed },
+    markerEnd: DEFAULT_LINK_VALUES.uiProps.markerEnd,
     ...defaultLinkStyle,
   };
 
