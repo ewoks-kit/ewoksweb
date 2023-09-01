@@ -2,15 +2,13 @@ import create from 'zustand';
 import type { State } from '../types';
 import rootWorkflow from './rootWorkflow';
 import openDraggableDialog from './openDraggableDialog';
-import openSnackbar from './openSnackbar';
 import loadedGraphs from './loadedGraphs';
 import subgraphsStack from './subgraphsStack';
-import graphInfo from './graphInfo';
+import displayedWorkflowInfo from './displayedWorkflowInfo';
 
 const useStore = create<State>((set, get) => ({
-  ...graphInfo(set),
+  ...displayedWorkflowInfo(set),
   ...openDraggableDialog(set),
-  ...openSnackbar(set),
   ...loadedGraphs(set),
   ...subgraphsStack(set, get),
   ...rootWorkflow(set, get),

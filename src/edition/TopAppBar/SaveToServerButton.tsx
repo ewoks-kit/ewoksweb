@@ -1,4 +1,5 @@
 import useStore from '../../store/useStore';
+import useSnackbarStore from '../../store/useSnackbarStore';
 import GraphFormDialog from '../../general/forms/GraphFormDialog';
 import { useState } from 'react';
 import { GraphFormAction } from '../../types';
@@ -20,7 +21,9 @@ import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 
 // DOC: Save to server button with its spinner
 export default function SaveToServerButton() {
-  const graphInfo = useStore((state) => state.graphInfo);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
   const rfInstance = useReactFlow();
   const invalidateWorkflows = useInvalidateWorkflows();
 
@@ -30,17 +33,14 @@ export default function SaveToServerButton() {
 
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const rootWorkflowSource = useStore((state) => state.rootWorkflowSource);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const [action, setAction] = useState<
     GraphFormAction.newGraph | GraphFormAction.newGraphOrOverwrite
   >(GraphFormAction.newGraph);
 
   function handleError(text: string) {
-    setOpenSnackbar({
-      open: true,
-      text,
-      severity: 'error',
-    });
+    showErrorMsg(text);
     setStatus('error');
   }
 
@@ -60,13 +60,13 @@ export default function SaveToServerButton() {
 
     const workflowsIds = response.data;
 
-    if (!workflowsIds.includes(graphInfo.id)) {
+    if (!workflowsIds.includes(displayedWorkflowInfo.id)) {
       setAction(GraphFormAction.newGraph);
       setDialogOpen(true);
       return;
     }
 
-    if (rootWorkflowId !== graphInfo.id) {
+    if (rootWorkflowId !== displayedWorkflowInfo.id) {
       handleError(
         'Cannot save any changes to subgraphs! Open it as the main graph to make changes.'
       );
@@ -107,18 +107,14 @@ export default function SaveToServerButton() {
 
       await putWorkflow(
         rfToEwoks({
-          graph: graphInfo,
+          graph: displayedWorkflowInfo,
           nodes: nodesWithData,
           links: edgesWithData,
         })
       );
       invalidateWorkflows();
 
-      setOpenSnackbar({
-        open: true,
-        text: 'Graph saved successfully!',
-        severity: 'success',
-      });
+      showSuccessMsg('Graph saved successfully!');
       setStatus('success');
     } catch (error) {
       handleError(textForError(error, commonStrings.savingError));
@@ -138,7 +134,7 @@ export default function SaveToServerButton() {
     <>
       <SuspenseBoundary>
         <GraphFormDialog
-          elementToEdit={graphInfo}
+          elementToEdit={displayedWorkflowInfo}
           action={action}
           isOpen={isDialogOpen}
           onClose={() => setDialogOpen(false)}

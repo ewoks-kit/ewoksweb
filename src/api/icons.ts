@@ -3,6 +3,7 @@ import type { Icon } from '../types';
 import { client } from './client';
 import path from 'path-browserify';
 import type { DeleteResponse, IconResponse, ListResponse } from './models';
+import { QueryKey } from './models';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 async function fetchIconIds() {
@@ -45,7 +46,7 @@ async function getIcons(): Promise<Icon[]> {
 
 export function useIcons() {
   const { data: icons } = useQuery({
-    queryKey: ['icons'],
+    queryKey: [QueryKey.Icons],
     queryFn: getIcons,
     suspense: true,
   });
@@ -58,5 +59,5 @@ export function useIcons() {
 export function useInvalidateIcons() {
   const queryClient = useQueryClient();
 
-  return () => queryClient.invalidateQueries({ queryKey: ['icons'] });
+  return () => queryClient.invalidateQueries({ queryKey: [QueryKey.Icons] });
 }

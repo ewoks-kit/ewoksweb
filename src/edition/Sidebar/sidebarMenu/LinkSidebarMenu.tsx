@@ -10,7 +10,9 @@ import type { Edge } from 'reactflow';
 export default function LinkSidebarMenu(selectedElement: Edge) {
   const rfInstance = useReactFlow();
 
-  const graphInfo = useStore((state) => state.graphInfo);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
 
   async function deleteLink(islink: Edge) {
@@ -27,7 +29,7 @@ export default function LinkSidebarMenu(selectedElement: Edge) {
         deleteLink(selectedElement);
       }}
       role="sidebarMenuItem"
-      disabled={rootWorkflowId !== graphInfo.id}
+      disabled={rootWorkflowId !== displayedWorkflowInfo.id}
     >
       <ListItemIcon>
         <DeleteIcon fontSize="small" />

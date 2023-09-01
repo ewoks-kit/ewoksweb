@@ -25,12 +25,12 @@ import NoteNode from '../CustomNodes/NoteNode';
 import DataNode from '../CustomNodes/DataNode';
 import type { EwoksRFNode, EwoksRFLink, EwoksRFNodeData, Task } from 'types';
 import useStore from 'store/useStore';
+import useSnackbarStore from 'store/useSnackbarStore';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
 import CanvasBackground from './CanvasBackground';
 import { addConnectionToGraph, retrieveTaskInfo, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
-import { useGraphId } from '../../store/graph-hooks';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 import { getEdgesData, getNodeData, getNodesData } from '../../utils';
@@ -80,20 +80,25 @@ function Canvas() {
     position: XYPosition;
   }>();
 
-  const graphInfo = useStore((state) => state.graphInfo);
-  const setGraphInfo = useStore((state) => state.setGraphInfo);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
+  const setDisplayedWorkflowInfo = useStore(
+    (state) => state.setDisplayedWorkflowInfo
+  );
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const addLoadedGraph = useStore((state) => state.addLoadedGraph);
 
   const tasks = useTasks();
   const loadedGraphs = useStore((state) => state.loadedGraphs);
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
+  const showInfoMsg = useSnackbarStore((state) => state.showInfoMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setNodesData = useNodeDataStore((state) => state.setNodesData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
-  const graphId = useGraphId();
   const {
     fitView,
     setNodes,
@@ -129,12 +134,8 @@ function Canvas() {
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
 
-    if (rootWorkflowId !== graphId) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Not allowed to add a new node to any sub-graph!',
-        severity: 'success',
-      });
+    if (rootWorkflowId !== displayedWorkflowInfo.id) {
+      showWarningMsg('Not allowed to add a new node to any sub-graph!');
       return;
     }
 
@@ -238,28 +239,20 @@ function Canvas() {
       {
         nodes: nodesRF,
         links: edgesRF as EwoksRFLink[],
-        graph: graphInfo,
+        graph: displayedWorkflowInfo,
       },
       getNodesData(),
       oldEdge
     );
     if (!isValid) {
-      setOpenSnackbar({
-        open: true,
-        text: reason,
-        severity: 'warning',
-      });
+      showWarningMsg(reason);
     }
     setEdges((els) => updateEdge(oldEdge, newConnection, els));
   };
 
   const onConnect = (params: Connection) => {
-    if (rootWorkflowId !== graphId) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Not allowed to create new links to any sub-graph!',
-        severity: 'success',
-      });
+    if (rootWorkflowId !== displayedWorkflowInfo.id) {
+      showWarningMsg('Not allowed to create new links to any sub-graph!');
       return;
     }
     const newLink = addConnectionToGraph(params, getNodesData());
@@ -272,11 +265,7 @@ function Canvas() {
 
   const onPaneContextMenu = (event: MouseEvent) => {
     event.preventDefault();
-    setOpenSnackbar({
-      open: true,
-      text: 'Open a graph and click on nodes and links on this Canvas!',
-      severity: 'success',
-    });
+    showInfoMsg('Open a graph and click on nodes and links on this Canvas!');
   };
 
   const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
@@ -287,13 +276,9 @@ function Canvas() {
       return;
     }
     if (nodeData.task_props.task_type === 'graph') {
-      setOpenSnackbar({
-        open: true,
-        text: 'Any link changes in any subgraph will not be saved!',
-        severity: 'warning',
-      });
+      showWarningMsg('Any link changes in any subgraph will not be saved!');
       addLoadedGraph({
-        graph: graphInfo,
+        graph: displayedWorkflowInfo,
         nodes: getNodes().map((nod) => {
           return {
             ...nod,
@@ -318,7 +303,7 @@ function Canvas() {
 
         setEdges(subgraph.links);
 
-        setGraphInfo(subgraph.graph);
+        setDisplayedWorkflowInfo(subgraph.graph);
         setTimeout(() => {
           fitView({ duration: 500 });
         }, 300);
@@ -327,11 +312,9 @@ function Canvas() {
           label: subgraph.graph.label,
         });
       } else {
-        setOpenSnackbar({
-          open: true,
-          text: 'Seems the specific subgraph cannot be located!',
-          severity: 'error',
-        });
+        showErrorMsg(
+          `The subgraph ${nodeData.task_props.task_identifier} cannot be located!`
+        );
       }
     }
   };
@@ -345,11 +328,7 @@ function Canvas() {
       event.stopPropagation();
       const selectedNode = getNodes().find((nod) => nod.selected);
       if (!selectedNode) {
-        setOpenSnackbar({
-          open: true,
-          text: 'First select a node to clone!',
-          severity: 'error',
-        });
+        showErrorMsg('First select a node to clone!');
         return;
       }
 

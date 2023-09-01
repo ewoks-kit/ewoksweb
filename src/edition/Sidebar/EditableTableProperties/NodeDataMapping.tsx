@@ -1,18 +1,17 @@
 import type { DataMapping, EditableTableRow } from 'types';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
-import type { Node } from 'reactflow';
 import TableDataMapping from './TableDataMapping';
 import { nanoid } from 'nanoid';
 
-export default function NodeDataMapping(element: Node) {
-  const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
-  assertNodeDataDefined(nodeData, element.id);
+export default function NodeDataMapping({ nodeId }: { nodeId: string }) {
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(nodeId));
+  assertNodeDataDefined(nodeData, nodeId);
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   function addDataMapping(rows: EditableTableRow[] | undefined) {
-    mergeNodeData(element.id, {
+    mergeNodeData(nodeId, {
       ewoks_props: {
         default_error_attributes: {
           data_mapping: [
@@ -25,7 +24,7 @@ export default function NodeDataMapping(element: Node) {
   }
 
   const dataMappingValuesChanged = (table: DataMapping[]) => {
-    setNodeData(element.id, {
+    setNodeData(nodeId, {
       ...nodeData,
       ewoks_props: {
         ...nodeData.ewoks_props,

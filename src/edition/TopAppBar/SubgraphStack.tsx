@@ -11,8 +11,10 @@ import styles from './TopAppBar.module.css';
 export default function SubgraphStack() {
   const { setNodes, setEdges, fitView } = useReactFlow();
 
+  const setDisplayedWorkflowInfo = useStore(
+    (state) => state.setDisplayedWorkflowInfo
+  );
   const loadedGraphs = useStore((state) => state.loadedGraphs);
-  const setGraphInfo = useStore((state) => state.setGraphInfo);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const subgraphsStack = useStore((state) => {
     return state.subgraphsStack;
@@ -42,7 +44,7 @@ export default function SubgraphStack() {
       setNodesData(subgraph.nodes);
       setEdges(subgraph.links);
       setEdgesData(subgraph.links);
-      setGraphInfo(subgraph.graph);
+      setDisplayedWorkflowInfo(subgraph.graph);
       setTimeout(() => {
         fitView({ duration: 500 });
       }, 300);

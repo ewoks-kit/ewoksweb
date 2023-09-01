@@ -9,7 +9,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import CustomTableCell from './CustomTableCell';
 import DraggableDialog from '../../../general/DraggableDialog';
-import useStore from 'store/useStore';
+import useSnackbarStore from 'store/useSnackbarStore';
 import type { Condition, EditableTableRow, Inputs, TypeOfValues } from 'types';
 import type { ChangeEvent } from 'react';
 import { createData, getType } from './utils';
@@ -68,7 +68,7 @@ function EditableTable(props: EditableTableProps) {
   const [typeOfInputs, setTypeOfInputs] = React.useState<string[]>([]);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<DialogContent>();
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
   const { defaultValues, headers, onRowAdd } = props;
 
@@ -152,11 +152,7 @@ function EditableTable(props: EditableTableProps) {
       e.target.name === 'name' &&
       oldRows.map((r) => r.name).includes(e.target.value as string)
     ) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Not allowed to assign the same property TWICE!',
-        severity: 'error',
-      });
+      showErrorMsg('Not allowed to assign the same property TWICE!');
       // return;
     }
     if (

@@ -1,13 +1,11 @@
 import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
 import type { OpenDraggableDialogSlice } from './store/openDraggableDialog';
-import type { OpenSnackbarSlice } from './store/openSnackbar';
 import type { SubgraphsStackSlice } from './store/subgraphsStack';
 import type { LoadedGraphsSlice } from './store/loadedGraphs';
 import type { RootWorkflowSlice } from './store/rootWorkflow';
-import type { Color } from '@material-ui/lab';
 import type { ChangeEvent, CSSProperties, ReactNode } from 'react';
 import type { Node } from 'reactflow';
-import type { GraphInfoSlice } from './store/graphInfo';
+import type { DisplayedWorkflowInfoSlice } from './store/displayedWorkflowInfo';
 
 export enum GraphFormAction {
   cloneGraph = 'cloneGraph',
@@ -58,12 +56,6 @@ export interface GraphDetails {
   uiProps?: GraphUiProps;
 }
 
-export interface SnackbarParams {
-  open: boolean;
-  text: string;
-  severity: Color;
-}
-
 export interface DialogParams {
   open: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -92,9 +84,8 @@ export interface EwoksEvent {
 }
 
 export interface State
-  extends GraphInfoSlice,
+  extends DisplayedWorkflowInfoSlice,
     OpenDraggableDialogSlice,
-    OpenSnackbarSlice,
     SubgraphsStackSlice,
     LoadedGraphsSlice,
     RootWorkflowSlice {}
