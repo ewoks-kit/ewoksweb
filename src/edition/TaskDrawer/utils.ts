@@ -76,7 +76,6 @@ export async function loadSubworkflow(
 
   const {
     default_inputs,
-    // inputs_complete,
     default_error_node,
     default_error_attributes,
   } = DEFAULT_NODE_VALUES;
@@ -105,7 +104,6 @@ export async function loadSubworkflow(
       ewoks_props: {
         label: subToAdd.graph.label,
         default_inputs,
-        // inputs_complete,
         default_error_node,
         default_error_attributes,
       },

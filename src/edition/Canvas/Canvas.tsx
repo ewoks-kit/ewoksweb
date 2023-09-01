@@ -199,7 +199,6 @@ function Canvas() {
 
     const {
       default_inputs,
-      // inputs_complete,
       default_error_node,
       default_error_attributes,
     } = DEFAULT_NODE_VALUES;
@@ -216,7 +215,6 @@ function Canvas() {
       ewoks_props: {
         label: trimLabel(task_identifier),
         default_inputs,
-        // inputs_complete,
         default_error_node,
         default_error_attributes,
       },
