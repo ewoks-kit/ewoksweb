@@ -20,7 +20,7 @@ export default function NodeDetails(selectedElement: Node) {
     state.nodesData.get(selectedElement.id)
   );
   assertNodeDataDefined(nodeData, selectedElement.id);
-  console.log(nodeData);
+
   const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
 
   const nodesIds = useNodesIds();
@@ -95,8 +95,6 @@ export default function NodeDetails(selectedElement: Node) {
   }
 
   function inputsCompleteChanged(checked: boolean) {
-    console.log(checked);
-
     mergeNodeData(selectedElement.id, {
       ewoks_props: {
         inputs_complete: checked,
@@ -115,7 +113,6 @@ export default function NodeDetails(selectedElement: Node) {
   const handleChangeShowDataMapping = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    // setShowDataMapping(event.target.checked);
     mergeNodeData(selectedElement.id, {
       ewoks_props: {
         default_error_attributes: { map_all_data: !event.target.checked },
