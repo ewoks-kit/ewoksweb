@@ -75,7 +75,7 @@ export function toRFEwoksNodes(
                 value: dIn.value,
               };
             }),
-            ...(inputs_complete && {
+            ...(inputs_complete !== undefined && {
               inputs_complete,
             }),
             default_error_node:
