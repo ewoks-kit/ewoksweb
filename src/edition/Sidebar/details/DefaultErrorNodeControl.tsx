@@ -38,7 +38,7 @@ export default function DefaultErrorNodeControl(props: { nodeId: string }) {
       >
         <div>
           <Checkbox
-            checked={default_error_node}
+            checked={default_error_node || false}
             onChange={(event) =>
               handleDefaultErrorNodeChanged(event.target.checked)
             }

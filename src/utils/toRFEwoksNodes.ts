@@ -6,7 +6,6 @@ import type {
   GraphEwoks,
   Task,
 } from '../types';
-import { DEFAULT_NODE_VALUES } from './defaultValues';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import {
@@ -56,30 +55,27 @@ export function toRFEwoksNodes(
     }) => {
       const nodeType = calcNodeType(inputsAl, outputsAl, task_type, id);
 
-      const {
-        moreHandles,
-        nodeWidth,
-        withImage,
-        withLabel,
-      } = DEFAULT_NODE_VALUES.uiProps;
-
       const node: EwoksRFNode = {
         id: id.toString(),
         type: task_type,
         data: {
           ewoks_props: {
             label: label ?? task_identifier,
-            default_inputs: default_inputs?.map((dIn) => {
-              return {
-                name: dIn.name.toString(),
-                value: dIn.value,
-              };
-            }),
+            ...(default_inputs &&
+              default_inputs.length > 0 && {
+                default_inputs: default_inputs.map((dIn) => {
+                  return {
+                    name: dIn.name.toString(),
+                    value: dIn.value,
+                  };
+                }),
+              }),
             ...(inputs_complete !== undefined && {
               inputs_complete,
             }),
-            default_error_node:
-              default_error_node || DEFAULT_NODE_VALUES.default_error_node,
+            ...(default_error_node !== undefined && {
+              default_error_node,
+            }),
             default_error_attributes: calcDefaultErrorAttributes(
               default_error_attributes
             ),
@@ -91,15 +87,27 @@ export function toRFEwoksNodes(
             task_icon: uiProps?.task_icon,
           },
           ui_props: {
-            nodeWidth: uiProps?.nodeWidth ?? nodeWidth,
+            ...(uiProps?.nodeWidth !== undefined && {
+              nodeWidth: uiProps.nodeWidth,
+            }),
             type: nodeType,
             icon: uiProps?.icon,
-            moreHandles: uiProps?.moreHandles ?? moreHandles,
-            withImage: uiProps?.withImage ?? withImage,
-            withLabel: uiProps?.withLabel ?? withLabel,
-            colorBorder: uiProps?.colorBorder ?? '',
+            ...(uiProps?.moreHandles !== undefined && {
+              moreHandles: uiProps.moreHandles,
+            }),
+            ...(uiProps?.withImage !== undefined && {
+              withImage: uiProps.withImage,
+            }),
+            ...(uiProps?.withLabel !== undefined && {
+              withLabel: uiProps.withLabel,
+            }),
+            ...(uiProps?.colorBorder !== undefined && {
+              colorBorder: uiProps.colorBorder,
+            }),
           },
-          comment: uiProps?.comment ?? '',
+          ...(uiProps?.comment !== undefined && {
+            comment: uiProps.comment,
+          }),
         },
         position: uiProps?.position ?? { x: 100, y: 100 },
       };

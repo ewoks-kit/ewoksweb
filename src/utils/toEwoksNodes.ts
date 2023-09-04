@@ -89,7 +89,6 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           withLabel,
           colorBorder,
         },
-
         comment,
       },
       position,
@@ -108,28 +107,20 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           nodeDefaultInputs.length > 0 && {
             default_inputs: nodeDefaultInputs,
           }),
-        ...(default_error_node !== DEFAULT_NODE_VALUES.default_error_node && {
-          default_error_node,
-        }),
-        ...(default_error_node !== DEFAULT_NODE_VALUES.default_error_node && {
+        default_error_node,
+        ...(default_error_node && {
           default_error_attributes: calcDefaultErrorAttributes(
             default_error_attributes
           ),
         }),
         uiProps: {
-          ...(icon && { icon }),
-          ...(comment && { comment }),
+          icon,
+          comment,
           position,
-          ...(moreHandles !== DEFAULT_NODE_VALUES.uiProps.moreHandles && {
-            moreHandles,
-          }),
-          ...(colorBorder && { colorBorder }),
-          ...(withImage !== DEFAULT_NODE_VALUES.uiProps.withImage && {
-            withImage,
-          }),
-          ...(withLabel !== DEFAULT_NODE_VALUES.uiProps.withLabel && {
-            withLabel,
-          }),
+          moreHandles,
+          colorBorder,
+          withImage,
+          withLabel,
           ...(nodeWidth !== DEFAULT_NODE_VALUES.uiProps.nodeWidth && {
             nodeWidth,
           }),

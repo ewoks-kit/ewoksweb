@@ -29,7 +29,7 @@ export function toRFEwoksLinks(
     ({
       source,
       target,
-      data_mapping = [],
+      data_mapping,
       sub_target,
       sub_source,
       on_error = false,
@@ -65,15 +65,15 @@ export function toRFEwoksLinks(
         id: `${source}:${uiProps.sourceHandle ?? ''}->${target}:${
           uiProps.targetHandle ?? ''
         }_${id++}`,
-        label: uiProps.label,
+        ...(uiProps.label && { label: uiProps.label }),
         source: source.toString(),
         target: target.toString(),
 
         targetHandle: calcTargetHandle(uiProps, sub_target),
         sourceHandle: calcSourceHandle(uiProps, sub_source),
-        type: uiProps.type || '',
+        type: uiProps.type,
         markerEnd: uiProps.markerEnd ?? DEFAULT_LINK_VALUES.uiProps.markerEnd,
-        animated: uiProps.animated ?? false,
+        ...(uiProps.animated && { animated: uiProps.animated }),
         ...defaultLinkStyle,
         style: {
           ...defaultLinkStyle.style,
@@ -90,24 +90,25 @@ export function toRFEwoksLinks(
         },
         data: {
           startEnd: startEnd || false,
-          getAroundProps: uiProps.getAroundProps || {
-            x: 0,
-            y: 0,
-          },
+          ...(uiProps.getAroundProps && {
+            getAroundProps: uiProps.getAroundProps,
+          }),
           links_optional_output_names: linkOutputNames.optional,
           links_required_output_names: linkOutputNames.required,
           links_input_names: linkInputNames,
-          data_mapping: data_mapping.map(createDataMappingData),
-          required,
+          ...(data_mapping &&
+            data_mapping.length > 0 && {
+              data_mapping: data_mapping.map(createDataMappingData),
+            }),
+          ...(required && { required }),
           sub_target,
           sub_source,
-          conditions: conditionsForFront,
-          map_all_data:
-            map_all_data === undefined
-              ? data_mapping.length === 0
-              : map_all_data,
-          on_error,
-          comment: uiProps.comment ?? '',
+          ...(conditionsForFront.length > 0 && {
+            conditions: conditionsForFront,
+          }),
+          map_all_data,
+          ...(on_error && { on_error }),
+          ...(uiProps.comment && { comment: uiProps.comment }),
         },
       };
       return link;

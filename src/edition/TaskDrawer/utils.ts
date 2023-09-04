@@ -74,12 +74,6 @@ export async function loadSubworkflow(
     graphId += id++;
   }
 
-  const {
-    default_inputs,
-    default_error_node,
-    default_error_attributes,
-  } = DEFAULT_NODE_VALUES;
-
   newNode = {
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
@@ -103,9 +97,6 @@ export async function loadSubworkflow(
 
       ewoks_props: {
         label: subToAdd.graph.label,
-        default_inputs,
-        default_error_node,
-        default_error_attributes,
       },
       comment: '',
     },

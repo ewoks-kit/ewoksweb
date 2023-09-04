@@ -47,9 +47,6 @@ export function addConnectionToGraph(
       startEnd:
         sourceTaskData.task_props.task_type === 'graphInput' ||
         targetTaskData.task_props.task_type === 'graphOutput',
-      getAroundProps: { x: 0, y: 0 },
-      on_error: false,
-      comment: '',
       // DOC: node optional_input_names are link's optional_output_names
       links_optional_output_names:
         targetTaskData.task_props.optional_input_names || [],
@@ -58,8 +55,6 @@ export function addConnectionToGraph(
         targetTaskData.task_props.required_input_names || [],
       // DOC: node output_names are link's input_names
       links_input_names: sourceTaskData.task_props.output_names || [],
-      conditions: [],
-      data_mapping: [],
       map_all_data:
         ['ppfmethod', 'ppfport'].includes(
           sourceTaskData.task_props.task_type
@@ -80,8 +75,6 @@ export function addConnectionToGraph(
     target,
     sourceHandle: sourceHandle ?? undefined,
     targetHandle: targetHandle ?? undefined,
-    type: 'default',
-    animated: false,
     markerEnd: DEFAULT_LINK_VALUES.uiProps.markerEnd,
     ...defaultLinkStyle,
   };
