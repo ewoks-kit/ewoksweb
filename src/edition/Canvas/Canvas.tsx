@@ -245,6 +245,7 @@ function Canvas() {
       return;
     }
     const newLink = addConnectionToGraph(params, getNodesData());
+    console.log(newLink);
 
     if (newLink) {
       setEdgeData(newLink.id, newLink.data);

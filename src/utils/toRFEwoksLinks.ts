@@ -32,16 +32,16 @@ export function toRFEwoksLinks(
       data_mapping,
       sub_target,
       sub_source,
-      on_error = false,
-      conditions = [],
+      on_error,
+      conditions,
       map_all_data,
-      required = false,
-      uiProps = {},
+      required,
+      uiProps,
       startEnd,
     }) => {
-      const color = uiProps.style?.stroke || '#96a5f9';
+      const color = uiProps?.style?.stroke || '#96a5f9';
 
-      const conditionsForFront = conditions.map<Condition>((con) => {
+      const conditionsForFront = conditions?.map<Condition>((con) => {
         return {
           name: con.source_output?.toString(),
           value: con.value,
@@ -62,18 +62,18 @@ export function toRFEwoksLinks(
       );
 
       const link: EwoksRFLink = {
-        id: `${source}:${uiProps.sourceHandle ?? ''}->${target}:${
-          uiProps.targetHandle ?? ''
+        id: `${source}:${uiProps?.sourceHandle ?? ''}->${target}:${
+          uiProps?.targetHandle ?? ''
         }_${id++}`,
-        ...(uiProps.label && { label: uiProps.label }),
+        ...(uiProps?.label && { label: uiProps.label }),
         source: source.toString(),
         target: target.toString(),
 
         targetHandle: calcTargetHandle(uiProps, sub_target),
         sourceHandle: calcSourceHandle(uiProps, sub_source),
-        type: uiProps.type,
-        markerEnd: uiProps.markerEnd ?? DEFAULT_LINK_VALUES.uiProps.markerEnd,
-        ...(uiProps.animated && { animated: uiProps.animated }),
+        ...(uiProps?.type && { type: uiProps.type }),
+        markerEnd: uiProps?.markerEnd ?? DEFAULT_LINK_VALUES.uiProps.markerEnd,
+        ...(uiProps?.animated && { animated: uiProps.animated }),
         ...defaultLinkStyle,
         style: {
           ...defaultLinkStyle.style,
@@ -89,10 +89,11 @@ export function toRFEwoksLinks(
           fill: color,
         },
         data: {
-          startEnd: startEnd || false,
-          ...(uiProps.getAroundProps && {
-            getAroundProps: uiProps.getAroundProps,
-          }),
+          startEnd: !!startEnd,
+          ...(uiProps?.type === 'getAround' &&
+            uiProps.getAroundProps && {
+              getAroundProps: uiProps.getAroundProps,
+            }),
           links_optional_output_names: linkOutputNames.optional,
           links_required_output_names: linkOutputNames.required,
           links_input_names: linkInputNames,
@@ -103,12 +104,13 @@ export function toRFEwoksLinks(
           ...(required && { required }),
           sub_target,
           sub_source,
-          ...(conditionsForFront.length > 0 && {
-            conditions: conditionsForFront,
-          }),
+          ...(conditionsForFront &&
+            conditionsForFront.length > 0 && {
+              conditions: conditionsForFront,
+            }),
           map_all_data,
           ...(on_error && { on_error }),
-          ...(uiProps.comment && { comment: uiProps.comment }),
+          ...(uiProps?.comment && { comment: uiProps.comment }),
         },
       };
       return link;

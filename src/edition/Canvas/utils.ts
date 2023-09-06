@@ -49,12 +49,12 @@ export function addConnectionToGraph(
         targetTaskData.task_props.task_type === 'graphOutput',
       // DOC: node optional_input_names are link's optional_output_names
       links_optional_output_names:
-        targetTaskData.task_props.optional_input_names || [],
+        targetTaskData.task_props.optional_input_names,
       // DOC: node required_input_names are link's required_output_names
       links_required_output_names:
-        targetTaskData.task_props.required_input_names || [],
+        targetTaskData.task_props.required_input_names,
       // DOC: node output_names are link's input_names
-      links_input_names: sourceTaskData.task_props.output_names || [],
+      links_input_names: sourceTaskData.task_props.output_names,
       map_all_data:
         ['ppfmethod', 'ppfport'].includes(
           sourceTaskData.task_props.task_type
@@ -63,14 +63,14 @@ export function addConnectionToGraph(
       sub_source:
         sourceTaskData.task_props.task_type === 'graph' && sourceHandle
           ? sourceHandle
-          : '',
+          : undefined,
       sub_target:
         targetTaskData.task_props.task_type === 'graph' && targetHandle
           ? targetHandle
-          : '',
+          : undefined,
     },
     id: `${source}:${sourceHandle || ''}->${target}:${targetHandle || ''}`,
-    label: '',
+    label: undefined,
     source,
     target,
     sourceHandle: sourceHandle ?? undefined,
