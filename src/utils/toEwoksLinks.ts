@@ -46,11 +46,11 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
       });
 
       const linkUiProps = {
-        ...(label &&
-          isString(label) && {
-            label,
-          }),
-        comment,
+        ...(isString(label) && {
+          label,
+        }),
+        ...(comment && { comment }),
+        ...(type && { type }),
         type,
         ...(markerEnd &&
           typeof markerEnd !== 'string' &&
@@ -60,7 +60,7 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
         ...(style?.stroke !== '#96a5f9' && {
           style: { stroke: style?.stroke },
         }),
-        animated,
+        ...(animated && { animated }),
         ...(sourceHandle && sourceHandle !== 'sr' && { sourceHandle }),
         ...(targetHandle && targetHandle !== 'tl' && { targetHandle }),
         ...(type === 'getAround' && {
@@ -79,9 +79,9 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
         ...(conditionsValue && {
           conditions: conditionsValue,
         }),
-        on_error,
+        ...(on_error && { on_error }),
+        ...(required && { required }),
         map_all_data,
-        required,
         ...(!uipropsEmpty(linkUiProps) && { uiProps: linkUiProps }),
       };
     }

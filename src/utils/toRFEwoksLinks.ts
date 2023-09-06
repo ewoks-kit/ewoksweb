@@ -89,6 +89,8 @@ export function toRFEwoksLinks(
           fill: color,
         },
         data: {
+          // DOC: startEnd is not in EwoksLink on the server but needed for calculating
+          // the in-out nodes-links.
           startEnd: !!startEnd,
           ...(uiProps?.type === 'getAround' &&
             uiProps.getAroundProps && {
@@ -101,15 +103,15 @@ export function toRFEwoksLinks(
             data_mapping.length > 0 && {
               data_mapping: data_mapping.map(createDataMappingData),
             }),
-          ...(required && { required }),
-          sub_target,
-          sub_source,
+          ...(required !== undefined && { required }),
+          ...(sub_target && { sub_target }),
+          ...(sub_source && { sub_source }),
           ...(conditionsForFront &&
             conditionsForFront.length > 0 && {
               conditions: conditionsForFront,
             }),
-          map_all_data,
-          ...(on_error && { on_error }),
+          ...(map_all_data !== undefined && { map_all_data }),
+          ...(on_error !== undefined && { on_error }),
           ...(uiProps?.comment && { comment: uiProps.comment }),
         },
       };
