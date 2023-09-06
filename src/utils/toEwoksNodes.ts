@@ -103,10 +103,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         task_identifier,
         inputs_complete,
         task_generator,
-        ...(nodeDefaultInputs &&
-          nodeDefaultInputs.length > 0 && {
-            default_inputs: nodeDefaultInputs,
-          }),
+        default_inputs: nodeDefaultInputs,
         default_error_node,
         ...(default_error_node && {
           default_error_attributes: calcDefaultErrorAttributes(
@@ -121,9 +118,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           colorBorder,
           withImage,
           withLabel,
-          ...(nodeWidth !== DEFAULT_NODE_VALUES.uiProps.nodeWidth && {
-            nodeWidth,
-          }),
+          nodeWidth,
         },
       };
     }

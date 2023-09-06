@@ -87,7 +87,7 @@ export async function loadSubworkflow(
         task_identifier: subToAdd.graph.id,
       },
       ui_props: {
-        ...DEFAULT_NODE_VALUES.uiProps,
+        // ...DEFAULT_NODE_VALUES.uiProps,
         exists: true,
         type: 'internal',
         icon: subToAdd.graph.uiProps?.icon,
@@ -98,7 +98,6 @@ export async function loadSubworkflow(
       ewoks_props: {
         label: subToAdd.graph.label,
       },
-      comment: '',
     },
   };
 

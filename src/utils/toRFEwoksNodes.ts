@@ -76,14 +76,20 @@ export function toRFEwoksNodes(
             ...(default_error_node !== undefined && {
               default_error_node,
             }),
-            default_error_attributes: calcDefaultErrorAttributes(
-              default_error_attributes
-            ),
-            task_generator,
+            ...(default_error_node &&
+              default_error_attributes && {
+                default_error_attributes: calcDefaultErrorAttributes(
+                  default_error_attributes
+                ),
+              }),
+            ...(task_generator !== undefined && {
+              task_generator,
+            }),
           },
           task_props: {
             task_type,
             task_identifier,
+            // TODO: to be examined task_icon vs icon in uiProps
             task_icon: uiProps?.task_icon,
           },
           ui_props: {
@@ -91,7 +97,7 @@ export function toRFEwoksNodes(
               nodeWidth: uiProps.nodeWidth,
             }),
             type: nodeType,
-            icon: uiProps?.icon,
+            ...(uiProps?.icon && { icon: uiProps.icon }),
             ...(uiProps?.moreHandles !== undefined && {
               moreHandles: uiProps.moreHandles,
             }),

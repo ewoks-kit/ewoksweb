@@ -47,7 +47,8 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   };
 
   const nodeWidth = { width: `${uiProps.nodeWidth || 100}px` };
-
+  const withImage = uiProps.withImage || uiProps.withImage === undefined;
+  const withLabel = uiProps.withLabel || uiProps.withLabel === undefined;
   const borderColor = uiProps.colorBorder;
 
   return (
@@ -72,11 +73,11 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
         <span style={{ ...style.displayNode, ...nodeWidth }} className="icons">
           <NodeLabel
             label={nodeData.ewoks_props.label || ''}
-            showFull={uiProps.withLabel}
-            showCropped={!uiProps.withLabel && !uiProps.withImage}
+            showFull={withLabel}
+            showCropped={!withLabel && !withImage}
             color={uiProps.exists ? '#ced3ee' : 'red'}
           />
-          {uiProps.withImage && (
+          {withImage && (
             <SuspenseBoundary>
               <NodeIcon nodeId={id} onDragStart={(e) => e.preventDefault()} />
             </SuspenseBoundary>

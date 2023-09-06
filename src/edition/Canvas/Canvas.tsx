@@ -210,7 +210,7 @@ function Canvas() {
         label: trimLabel(task_identifier),
       },
       ui_props: {
-        icon,
+        ...(icon && { icon }),
       },
     });
     addNodes(newNode);
