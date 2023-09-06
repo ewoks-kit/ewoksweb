@@ -1,4 +1,4 @@
-import type { EwoksRFNode, GraphRF, Note } from '../types';
+import type { EwoksRFNode, Note } from '../types';
 
 // EwoksRFNode --> EwoksNode for saving
 export function calcNoteNodes(nodes: EwoksRFNode[]): Note[] {

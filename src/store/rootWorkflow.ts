@@ -93,6 +93,7 @@ const rootWorkflow = (
       nodes: grfNodes,
       links: rfLinks,
     };
+    get().addLoadedGraph(resultGraph);
     // DOC: reset RF nodes and edges before setting new nodes/edges data
     // Better solution?
     rfInstance.setNodes([]);
@@ -100,8 +101,6 @@ const rootWorkflow = (
 
     useNodeDataStore.getState().setNodesData(resultGraph.nodes);
     useEdgeDataStore.getState().setEdgesData(resultGraph.links);
-
-    get().addLoadedGraph(resultGraph);
 
     get().setDisplayedWorkflowInfo(resultGraph.graph);
 

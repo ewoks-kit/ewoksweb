@@ -1,5 +1,4 @@
 import type {
-  EwoksRFLink,
   EwoksRFNode,
   EwoksRFNodeData,
   GraphEwoks,
@@ -12,8 +11,6 @@ import { Position } from 'reactflow';
 import { findAllSubgraphs } from '../../store/storeUtils/FindAllSubgraphs';
 import { toRFEwoksNodes } from '../../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../../utils/toRFEwoksLinks';
-import { EMPTY_RF_GRAPH } from '../../utils/emptyGraphs';
-import useNodeDataStore from '../../store/useNodeDataStore';
 import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 
 export async function loadSubworkflow(
@@ -40,7 +37,7 @@ export async function loadSubworkflow(
     });
   });
 
-  // 3. Adding a subgraph to the rootWorkflow:
+  // 3. Create a new node that is a subgraph
   let newNode = {} as EwoksRFNode;
 
   const inputsSub = subGraph.graph.input_nodes?.map((input) => {
@@ -105,15 +102,6 @@ export async function loadSubworkflow(
     links: toRFEwoksLinks(subGraph, newNodeSubgraphs, tasks),
   });
 
-  const newWorkingGraph = {
-    graph: EMPTY_RF_GRAPH.graph, // why empty_Graph?
-    nodes: [...nodes, newNode] as EwoksRFNode[],
-    links: links as EwoksRFLink[],
-  };
-
-  useNodeDataStore.getState().setNodeData(newNode.id, newNode.data);
-
-  addLoadedGraph(newWorkingGraph);
   const { data, ...nodeWithoutData } = newNode;
   return { nodeWithoutData: nodeWithoutData as Node, data };
 }
