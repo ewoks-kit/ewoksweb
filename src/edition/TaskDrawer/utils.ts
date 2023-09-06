@@ -4,7 +4,6 @@ import type {
   EwoksRFNodeData,
   GraphEwoks,
   GraphNodes,
-  GraphRF,
   Task,
 } from '../../types';
 import useStore from '../../store/useStore';
@@ -18,7 +17,7 @@ import useNodeDataStore from '../../store/useNodeDataStore';
 import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 
 export async function loadSubworkflow(
-  subGraphL: GraphEwoks,
+  subGraph: GraphEwoks,
   nodes: Node[],
   links: Edge[],
   position: XYPosition,
@@ -26,50 +25,38 @@ export async function loadSubworkflow(
 ): Promise<{ nodeWithoutData: Node; data: EwoksRFNodeData }> {
   const { loadedGraphs, addLoadedGraph } = useStore.getState();
 
-  // 1. input the graphEwoks from server or file-system
-  // 2. search for all subgraphs in it (async)
-  const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(subGraphL, [
+  // 1. search for all subgraphs in the added subgraph (async)
+  const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(subGraph, [
     ...loadedGraphs.values(),
   ]);
 
-  // 3. Put the newNodeSubgraphs into recent in their graphRF form (sync)
+  // 2. Put the newNodeSubgraphs into recent in their graphRF form (sync)
   newNodeSubgraphs.forEach((gr) => {
     // calculate the rfNodes using the fetched subgraphs
-    const rfNodes: EwoksRFNode[] = toRFEwoksNodes(gr, newNodeSubgraphs, tasks);
-
     addLoadedGraph({
       graph: gr.graph,
-      nodes: rfNodes,
+      nodes: toRFEwoksNodes(gr, newNodeSubgraphs, tasks),
       links: toRFEwoksLinks(gr, newNodeSubgraphs, tasks),
     });
   });
-  // 4. Calculate the new graph given the subgraphs
-  const grfNodes = toRFEwoksNodes(subGraphL, newNodeSubgraphs, tasks);
 
-  const graph = {
-    graph: subGraphL.graph,
-    nodes: grfNodes,
-    links: toRFEwoksLinks(subGraphL, newNodeSubgraphs, tasks),
-  };
-  // Adding a subgraph to the rootWorkflow:
-  const subToAdd = graph as GraphRF;
-
+  // 3. Adding a subgraph to the rootWorkflow:
   let newNode = {} as EwoksRFNode;
 
-  const inputsSub = subToAdd.graph.input_nodes?.map((input) => {
+  const inputsSub = subGraph.graph.input_nodes?.map((input) => {
     return {
       label: calcLabel(input),
       type: 'data ',
     };
   });
-  const outputsSub = subToAdd.graph.output_nodes?.map((output) => {
+  const outputsSub = subGraph.graph.output_nodes?.map((output) => {
     return {
       label: calcLabel(output),
       type: 'data ',
     };
   });
   let id = 0;
-  let graphId = subToAdd.graph.label || '';
+  let graphId = subGraph.graph.label || '';
   while (nodes.some((nod) => nod.id === graphId)) {
     graphId += id++;
   }
@@ -90,19 +77,19 @@ export async function loadSubworkflow(
     data: {
       task_props: {
         task_type: 'graph',
-        task_identifier: subToAdd.graph.id,
+        task_identifier: subGraph.graph.id,
       },
       ui_props: {
         ...DEFAULT_NODE_VALUES.uiProps,
         exists: true,
         type: 'internal',
-        icon: subToAdd.graph.uiProps?.icon,
+        icon: subGraph.graph.uiProps?.icon,
         inputs: inputsSub,
         outputs: outputsSub,
       },
 
       ewoks_props: {
-        label: subToAdd.graph.label,
+        label: subGraph.graph.label,
         default_inputs,
         default_error_node,
         default_error_attributes,
@@ -111,10 +98,15 @@ export async function loadSubworkflow(
     },
   };
 
-  addLoadedGraph(subToAdd);
+  // 4. Calculate the new graph given the subgraphs and added to loadedGraphs
+  addLoadedGraph({
+    graph: subGraph.graph,
+    nodes: toRFEwoksNodes(subGraph, newNodeSubgraphs, tasks),
+    links: toRFEwoksLinks(subGraph, newNodeSubgraphs, tasks),
+  });
 
   const newWorkingGraph = {
-    graph: EMPTY_RF_GRAPH.graph,
+    graph: EMPTY_RF_GRAPH.graph, // why empty_Graph?
     nodes: [...nodes, newNode] as EwoksRFNode[],
     links: links as EwoksRFLink[],
   };
