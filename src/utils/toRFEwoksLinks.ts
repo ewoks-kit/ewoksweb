@@ -68,7 +68,6 @@ export function toRFEwoksLinks(
         ...(uiProps?.label && { label: uiProps.label }),
         source: source.toString(),
         target: target.toString(),
-
         targetHandle: calcTargetHandle(uiProps, sub_target),
         sourceHandle: calcSourceHandle(uiProps, sub_source),
         ...(uiProps?.type && { type: uiProps.type }),

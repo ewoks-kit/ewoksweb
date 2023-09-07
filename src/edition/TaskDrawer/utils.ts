@@ -86,11 +86,13 @@ export async function loadSubworkflow(
         task_identifier: subToAdd.graph.id,
       },
       ui_props: {
-        // ...DEFAULT_NODE_VALUES.uiProps,
         exists: true,
         type: 'internal',
-        icon: subToAdd.graph.uiProps?.icon,
-        inputs: inputsSub,
+        ...(subToAdd.graph.uiProps?.icon && {
+          icon: subToAdd.graph.uiProps.icon,
+        }),
+        ...(inputsSub && inputsSub.length > 0 && { inputs: inputsSub }),
+        ...(outputsSub && outputsSub.length > 0 && { inputs: outputsSub }),
         outputs: outputsSub,
       },
 
