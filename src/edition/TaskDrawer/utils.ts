@@ -15,7 +15,6 @@ import { toRFEwoksNodes } from '../../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../../utils/toRFEwoksLinks';
 import { EMPTY_RF_GRAPH } from '../../utils/emptyGraphs';
 import useNodeDataStore from '../../store/useNodeDataStore';
-import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 
 export async function loadSubworkflow(
   subGraphL: GraphEwoks,
@@ -87,10 +86,8 @@ export async function loadSubworkflow(
         task_identifier: subToAdd.graph.id,
       },
       ui_props: {
-        // ...DEFAULT_NODE_VALUES.uiProps,
         exists: true,
         type: 'internal',
-        icon: subToAdd.graph.uiProps?.icon,
         inputs: inputsSub,
         outputs: outputsSub,
       },

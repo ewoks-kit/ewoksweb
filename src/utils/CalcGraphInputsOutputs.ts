@@ -142,7 +142,7 @@ function calcNodeProps(
 
   return {
     id: nod.id,
-    node: nodConnected.id,
+    ...(nodConnected.id && { node: nodConnected.id }),
 
     sub_node: isGraph
       ? (graph_links[link_index] && inputOrOutput === 'graphOutput'

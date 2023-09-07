@@ -6,18 +6,26 @@ import type {
   Task,
 } from '../types';
 
-export function inputsAll(tempGraph: GraphEwoks): string[] {
-  return tempGraph.graph.input_nodes?.map((nod) => nod.node) || [];
+export function inputsAll(tempGraph: GraphEwoks): (string | undefined)[] {
+  return (
+    tempGraph.graph.input_nodes
+      ?.filter((nod) => nod.node)
+      .map((nod) => nod.node) || []
+  );
 }
 
-export function outputsAll(tempGraph: GraphEwoks): string[] {
-  return tempGraph.graph.output_nodes?.map((nod) => nod.node) || [];
+export function outputsAll(tempGraph: GraphEwoks): (string | undefined)[] {
+  return (
+    tempGraph.graph.output_nodes
+      ?.filter((nod) => nod.node)
+      .map((nod) => nod.node) || []
+  );
 }
 
 // DOC: calculate if node in a graph is input and/or output or internal
 export function calcNodeType(
-  inputs: string[],
-  outputs: string[],
+  inputs: (string | undefined)[],
+  outputs: (string | undefined)[],
   task_type: string,
   id: string
 ): NodeInGraphType {

@@ -15,7 +15,7 @@ export enum GraphFormAction {
 
 export interface GraphNodes {
   id: string;
-  node: string;
+  node?: string;
   sub_node?: string;
   link_attributes?: InOutLinkAttributes;
   uiProps?: InOutNodesUiProps;

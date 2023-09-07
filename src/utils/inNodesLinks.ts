@@ -1,4 +1,5 @@
 import type { EwoksLink, EwoksNode, GraphEwoks } from '../types';
+import { uipropsEmpty } from './CalcGraphInputsOutputs';
 
 // TODO: merge with outNodesLinks if possible when stable
 // DOC: calc the input nodes and links that need to be added to the graph from
@@ -15,7 +16,9 @@ export function inNodesLinks(
     graph.graph.input_nodes.forEach((inNod) => {
       const nodeTarget = graph.nodes.find((no) => no.id === inNod.node);
 
-      const temPosition = inNod.uiProps?.position ?? {
+      const uIProps = inNod.uiProps;
+
+      const temPosition = uIProps?.position ?? {
         x: 50,
         y: 50,
       };
@@ -23,41 +26,68 @@ export function inNodesLinks(
       if (!inNodesInputed.includes(inNod.id)) {
         inputs.nodes.push({
           id: inNod.id,
-          label: inNod.uiProps?.label ?? inNod.id,
+          label: uIProps?.label ?? inNod.id,
           task_type: 'graphInput',
           task_identifier: 'Start-End',
           uiProps: {
             type: 'input',
             position: temPosition,
             icon: 'graphInput.svg',
-            withImage: inNod.uiProps?.withImage ?? true,
-            withLabel: inNod.uiProps?.withLabel ?? true,
-            colorBorder: inNod.uiProps?.colorBorder ?? '',
-            nodeWidth: inNod.uiProps?.nodeWidth ?? 110,
+            ...(uIProps?.withImage && { withImage: uIProps.withImage }),
+            ...(uIProps?.withLabel && { withLabel: uIProps.withLabel }),
+            ...(uIProps?.colorBorder && { colorBorder: uIProps.colorBorder }),
+            ...(uIProps?.nodeWidth && { nodeWidth: uIProps.nodeWidth }),
           },
         });
         inNodesInputed.push(inNod.id);
       }
 
-      inputs.links.push({
-        startEnd: true,
-        source: inNod.id,
-        target: inNod.node,
-        sub_target: nodeTarget?.task_type !== 'graph' ? '' : inNod.sub_node,
-        conditions: inNod.link_attributes?.conditions ?? [],
-        data_mapping: inNod.link_attributes?.data_mapping ?? [],
-        on_error: inNod.link_attributes?.on_error ?? false,
-        map_all_data: inNod.link_attributes?.map_all_data ?? false,
-        required: inNod.link_attributes?.required,
-        uiProps: {
-          label: inNod.link_attributes?.label ?? '',
-          comment: inNod.link_attributes?.comment ?? '',
-          style: { stroke: inNod.uiProps?.style?.stroke ?? '' },
-          type: inNod.uiProps?.linkStyle ?? 'default',
-          markerEnd: inNod.uiProps?.markerEnd,
-          animated: inNod.uiProps?.animated ?? false,
-        },
-      });
+      if (inNod.node) {
+        const linkAttr = inNod.link_attributes;
+
+        const linksUiProps = {
+          ...(linkAttr?.label && { label: linkAttr.label }),
+          ...(linkAttr?.comment && { comment: linkAttr.comment }),
+          ...(uIProps?.style?.stroke && {
+            style: { stroke: uIProps.style.stroke },
+          }),
+          ...(uIProps?.linkStyle && { type: uIProps.linkStyle }),
+          ...(uIProps?.markerEnd &&
+            typeof uIProps.markerEnd !== 'string' &&
+            uIProps.markerEnd.type !== 'arrowclosed' && {
+              markerEnd: uIProps.markerEnd,
+            }),
+          ...(uIProps?.animated && { animated: uIProps.animated }),
+        };
+
+        inputs.links.push({
+          startEnd: true,
+          source: inNod.id,
+          target: inNod.node,
+          ...(nodeTarget?.task_type === 'graph' &&
+            inNod.sub_node && { sub_target: inNod.sub_node }),
+          ...(linkAttr?.conditions &&
+            linkAttr.conditions.length > 0 && {
+              conditions: linkAttr.conditions,
+            }),
+          ...(linkAttr?.data_mapping &&
+            linkAttr.data_mapping.length > 0 && {
+              data_mapping: linkAttr.data_mapping,
+            }),
+          ...(linkAttr?.on_error && {
+            on_error: linkAttr.on_error,
+          }),
+          ...(linkAttr?.map_all_data && {
+            map_all_data: linkAttr.map_all_data,
+          }),
+          ...(linkAttr?.required && {
+            required: linkAttr.required,
+          }),
+          ...(uipropsEmpty(linksUiProps) && {
+            uiProps: linksUiProps,
+          }),
+        });
+      }
     });
   }
   return inputs;

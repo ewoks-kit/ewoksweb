@@ -25,6 +25,9 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
     nodeWidth,
   } = nodeData.ui_props;
 
+  const hasImage = withImage || withImage === undefined;
+  const hasLabel = withLabel || withLabel === undefined;
+
   const { task_type } = nodeData.task_props;
 
   const { getNodes, getEdges } = useReactFlow();
@@ -88,11 +91,11 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
           )}
           <NodeLabel
             label={nodeData.ewoks_props.label || ''}
-            showFull={withLabel}
-            showCropped={!withLabel && !withImage}
+            showFull={hasLabel}
+            showCropped={!hasLabel && !hasImage}
             color="#ced3ee"
           />
-          {withImage && (
+          {hasImage && (
             <SuspenseBoundary>
               <NodeIcon
                 nodeId={args.id}
