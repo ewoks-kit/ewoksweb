@@ -6,7 +6,6 @@ import type {
   EwoksRFNode,
   Inputs,
 } from '../types';
-import { DEFAULT_NODE_VALUES } from './defaultValues';
 import { isString } from './typeGuards';
 import { calcDataMapping, isDecimalNumber, stringOrNumber } from './utils';
 

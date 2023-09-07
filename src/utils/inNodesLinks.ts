@@ -1,5 +1,6 @@
 import type { EwoksLink, EwoksNode, GraphEwoks } from '../types';
-import { uipropsEmpty } from './CalcGraphInputsOutputs';
+import { propIsEmpty } from './CalcGraphInputsOutputs';
+import { DEFAULT_LINK_VALUES } from './defaultValues';
 
 // TODO: merge with outNodesLinks if possible when stable
 // DOC: calc the input nodes and links that need to be added to the graph from
@@ -14,6 +15,8 @@ export function inNodesLinks(
   if (graph.graph.input_nodes && graph.graph.input_nodes.length > 0) {
     const inNodesInputed: string[] = [];
     graph.graph.input_nodes.forEach((inNod) => {
+      console.log(inNod);
+
       const nodeTarget = graph.nodes.find((no) => no.id === inNod.node);
 
       const uIProps = inNod.uiProps;
@@ -54,7 +57,8 @@ export function inNodesLinks(
           ...(uIProps?.linkStyle && { type: uIProps.linkStyle }),
           ...(uIProps?.markerEnd &&
             typeof uIProps.markerEnd !== 'string' &&
-            uIProps.markerEnd.type !== 'arrowclosed' && {
+            uIProps.markerEnd.type !==
+              DEFAULT_LINK_VALUES.uiProps.markerEnd.type && {
               markerEnd: uIProps.markerEnd,
             }),
           ...(uIProps?.animated && { animated: uIProps.animated }),
@@ -83,7 +87,7 @@ export function inNodesLinks(
           ...(linkAttr?.required && {
             required: linkAttr.required,
           }),
-          ...(uipropsEmpty(linksUiProps) && {
+          ...(propIsEmpty(linksUiProps) && {
             uiProps: linksUiProps,
           }),
         });

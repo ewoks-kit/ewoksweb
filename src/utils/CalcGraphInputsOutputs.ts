@@ -12,6 +12,7 @@ import {
   calcConditionValue,
   calcDataMapping,
 } from './utils';
+import { DEFAULT_LINK_VALUES } from './defaultValues';
 
 // Calculate the ewoks input_nodes and output_nodes within the graph
 // from the nodes of the graphRF model with types graphInput, graphOutput
@@ -49,13 +50,13 @@ export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
       output_nodes,
     }),
     ...(graph.graph.uiProps &&
-      !uipropsEmpty(graph.graph.uiProps) && {
+      !propIsEmpty(graph.graph.uiProps) && {
         uiProps: { ...graph.graph.uiProps },
       }),
   };
 }
 
-export function uipropsEmpty(uiprops: GraphUiProps) {
+export function propIsEmpty(uiprops: GraphUiProps) {
   let isEmpty = true;
   for (const [, value] of Object.entries(uiprops)) {
     if ((Array.isArray(value) && value.length > 0) || value) {
@@ -86,9 +87,10 @@ function calcInOutNodes(
   if (inputOrOutput === 'graphOutput') {
     // find those nodes this OUTPUT node is connected to
     nodesNamesConnectedTo = graph.links
-      .filter((link) => link.target === nod.id) // !!
-      .map((link) => link.source); // !!
+      .filter((link) => link.target === nod.id)
+      .map((link) => link.source);
   }
+  console.log(nod, graph_links);
 
   const nodeObjConnectedTo: EwoksRFNode[] = [];
   for (const nodesNames of nodesNamesConnectedTo) {
@@ -121,11 +123,12 @@ function calcInOutNodes(
     );
   });
 
-  if (nodeObjConnectedTo.length === 0) {
-    nodes.push(
-      calcNodeProps(false, nod, { id: '' } as EwoksRFNode, [], 0, inputOrOutput)
-    );
-  }
+  // if (nodeObjConnectedTo.length === 0) {
+  //   nodes.push(
+  //     calcNodeProps(false, nod, { id: '' } as EwoksRFNode, [], 0, inputOrOutput)
+  //   );
+  // }
+  console.log(nodes);
 
   return nodes;
 }
@@ -138,50 +141,75 @@ function calcNodeProps(
   link_index: number,
   inputOrOutput: string
 ): GraphNodes {
-  const label = graph_links[link_index]?.label;
+  const link = graph_links[link_index];
+  const lData = link.data;
+  const nData = nod.data;
+  const nUiprops = nData.ui_props;
+  console.log(nod);
 
-  return {
-    id: nod.id,
-    ...(nodConnected.id && { node: nodConnected.id }),
-
-    sub_node: isGraph
-      ? (graph_links[link_index] && inputOrOutput === 'graphOutput'
-          ? graph_links[link_index].data.sub_source
-          : graph_links[link_index].data.sub_target) || undefined
-      : undefined,
-    link_attributes: {
-      label: isString(label) ? label : '',
-      comment: graph_links[link_index]?.data.comment ?? '',
-      conditions:
-        graph_links[link_index]?.data.conditions?.map((con) => {
+  const linkAttributes = {
+    ...(isString(link.label) && { label: link.label }),
+    ...(lData.comment && { comment: lData.comment }),
+    ...(lData.conditions &&
+      lData.conditions.length > 0 && {
+        conditions: lData.conditions.map((con) => {
           return {
             source_output: calcConditionName(con),
             value: calcConditionValue(con),
           };
-        }) || [],
-      data_mapping: calcDataMapping(
-        graph_links[link_index]?.data.data_mapping || []
-      ),
-      map_all_data: graph_links[link_index]?.data.map_all_data || false,
-      on_error: graph_links[link_index]?.data.on_error || false,
-      required: graph_links[link_index]?.data.required || false,
-    },
+        }),
+      }),
+    ...(lData.data_mapping &&
+      lData.data_mapping.length > 0 && {
+        data_mapping: calcDataMapping(lData.data_mapping),
+      }),
+    ...(lData.map_all_data && { map_all_data: lData.map_all_data }),
+    ...(lData.on_error && { on_error: lData.on_error }),
+    ...(lData.required && { required: lData.required }),
+  };
+
+  return {
+    id: nod.id,
+    node: nodConnected.id,
+
+    sub_node: isGraph
+      ? (inputOrOutput === 'graphOutput'
+          ? lData.sub_source
+          : lData.sub_target) || undefined
+      : undefined,
+
+    ...(nodConnected.id &&
+      !propIsEmpty(linkAttributes) && { link_attributes: linkAttributes }),
+
     uiProps: {
       position: nod.position,
-      label: nod.data.ewoks_props.label,
-      linkStyle: graph_links[link_index]?.type || 'default',
-      style: {
-        stroke: graph_links[link_index]?.style?.stroke || '',
-        strokeWidth: '3px',
-      },
-      markerEnd: graph_links[link_index]?.markerEnd || '',
-      animated: graph_links[link_index]?.animated || false,
-      withImage:
-        'withImage' in nod.data.ui_props ? nod.data.ui_props.withImage : true,
-      withLabel:
-        'withLabel' in nod.data.ui_props ? nod.data.ui_props.withLabel : true,
-      colorBorder: nod.data.ui_props.colorBorder,
-      nodeWidth: nod.data.ui_props.nodeWidth,
+      ...(nData.ewoks_props.label && { label: nData.ewoks_props.label }),
+      ...(link.type && { linkStyle: link.type }),
+      ...(link.style?.stroke &&
+        link.style.stroke !== DEFAULT_LINK_VALUES.uiProps.stroke && {
+          style: {
+            stroke: link.style.stroke,
+            strokeWidth: '3px',
+          },
+        }),
+      ...(link.markerEnd &&
+        typeof link.markerEnd !== 'string' &&
+        link.markerEnd.type !== DEFAULT_LINK_VALUES.uiProps.markerEnd.type && {
+          markerEnd: link.markerEnd,
+        }),
+      ...(link.animated && { animated: link.animated }),
+      ...(nUiprops.withImage && {
+        withImage: nUiprops.withImage,
+      }),
+      ...(nUiprops.withLabel && {
+        withLabel: nUiprops.withLabel,
+      }),
+      ...(nUiprops.colorBorder && {
+        colorBorder: nUiprops.colorBorder,
+      }),
+      ...(nUiprops.nodeWidth && {
+        nodeWidth: nUiprops.nodeWidth,
+      }),
     },
   };
 }

@@ -1,5 +1,6 @@
 import type { EwoksLink, EwoksNode, GraphEwoks } from '../types';
-import { uipropsEmpty } from './CalcGraphInputsOutputs';
+import { propIsEmpty } from './CalcGraphInputsOutputs';
+import { DEFAULT_LINK_VALUES } from './defaultValues';
 
 // DOC: calc the output nodes and links that need to be added to
 // the graph from the output_nodes
@@ -53,7 +54,8 @@ export function outNodesLinks(
           ...(uIProps?.linkStyle && { type: uIProps.linkStyle }),
           ...(uIProps?.markerEnd &&
             typeof uIProps.markerEnd !== 'string' &&
-            uIProps.markerEnd.type !== 'arrowclosed' && {
+            uIProps.markerEnd.type !==
+              DEFAULT_LINK_VALUES.uiProps.markerEnd.type && {
               markerEnd: uIProps.markerEnd,
             }),
           ...(uIProps?.animated && { animated: uIProps.animated }),
@@ -61,8 +63,8 @@ export function outNodesLinks(
 
         outputs.links.push({
           startEnd: true,
-          source: outNod.id,
-          target: outNod.node,
+          source: outNod.node,
+          target: outNod.id,
           ...(nodeSource?.task_type === 'graph' &&
             outNod.sub_node && { sub_target: outNod.sub_node }),
           ...(linkAttr?.conditions &&
@@ -82,7 +84,7 @@ export function outNodesLinks(
           ...(linkAttr?.required && {
             required: linkAttr.required,
           }),
-          ...(uipropsEmpty(linksUiProps) && {
+          ...(propIsEmpty(linksUiProps) && {
             uiProps: linksUiProps,
           }),
         });

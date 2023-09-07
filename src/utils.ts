@@ -8,7 +8,7 @@ import type {
 } from './types';
 import {
   calcGraphInputsOutputs,
-  uipropsEmpty,
+  propIsEmpty,
 } from './utils/CalcGraphInputsOutputs';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
@@ -59,7 +59,7 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
 
   graph = {
     ...graph,
-    ...(uipropsEmpty(uiprops) && {
+    ...(propIsEmpty(uiprops) && {
       uiProps: uiprops,
     }),
   };
