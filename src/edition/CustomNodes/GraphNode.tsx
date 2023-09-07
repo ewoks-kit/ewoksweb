@@ -14,6 +14,7 @@ import { Tooltip } from '@material-ui/core';
 import NodeLabel from './NodeLabel';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import NodeIcon from './NodeIcon';
+import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 
 function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   const { getNodes, getEdges } = useReactFlow();
@@ -47,8 +48,12 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   };
 
   const nodeWidth = { width: `${uiProps.nodeWidth || 100}px` };
-  const withImage = uiProps.withImage || uiProps.withImage === undefined;
-  const withLabel = uiProps.withLabel || uiProps.withLabel === undefined;
+  const withImage = [DEFAULT_NODE_VALUES.uiProps.withImage, undefined].includes(
+    uiProps.withImage
+  );
+  const withLabel = [DEFAULT_NODE_VALUES.uiProps.withLabel, undefined].includes(
+    uiProps.withImage
+  );
   const borderColor = uiProps.colorBorder;
 
   return (

@@ -66,11 +66,10 @@ export function addConnectionToGraph(
         targetHandle && { sub_target: targetHandle }),
     },
     id: `${source}:${sourceHandle || ''}->${target}:${targetHandle || ''}`,
-    label: undefined,
     source,
     target,
-    sourceHandle: sourceHandle ?? undefined,
-    targetHandle: targetHandle ?? undefined,
+    ...(sourceHandle && { sourceHandle }),
+    ...(targetHandle && { targetHandle }),
     markerEnd: DEFAULT_LINK_VALUES.uiProps.markerEnd,
     ...defaultLinkStyle,
   };
