@@ -76,7 +76,7 @@ export async function loadSubworkflow(
           icon: subGraph.graph.uiProps.icon,
         }),
         ...(inputsSub && inputsSub.length > 0 && { inputs: inputsSub }),
-        ...(outputsSub && outputsSub.length > 0 && { inputs: outputsSub }),
+        ...(outputsSub && outputsSub.length > 0 && { outputs: outputsSub }),
       },
 
       ewoks_props: {

@@ -43,8 +43,8 @@ export default function AddSubworkflowDialog(props: Props) {
       position || { x: 0, y: 0 },
       tasks
     );
-    rfInstance.setNodes([...nodes, nodeWithoutData]);
     setNodeData(nodeWithoutData.id, data);
+    rfInstance.setNodes([...nodes, nodeWithoutData]);
   }
 
   async function addSubgraph(id: string) {
