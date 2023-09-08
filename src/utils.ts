@@ -8,7 +8,7 @@ import type {
 } from './types';
 import {
   calcGraphInputsOutputs,
-  uipropsEmpty,
+  uipropsIsEmpty,
 } from './utils/CalcGraphInputsOutputs';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
@@ -54,12 +54,12 @@ export async function getSubgraphs(
 export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
   // calculate input_nodes-output_nodes nodes from graphInput-graphOutput
   let graph = calcGraphInputsOutputs(tempGraph);
-  const noteNodes = calcNoteNodes(tempGraph);
+  const noteNodes = calcNoteNodes(tempGraph.nodes);
   const uiprops = { ...graph.uiProps, notes: noteNodes };
 
   graph = {
     ...graph,
-    ...(uipropsEmpty(uiprops) && {
+    ...(!uipropsIsEmpty(uiprops) && {
       uiProps: uiprops,
     }),
   };

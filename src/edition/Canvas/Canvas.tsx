@@ -23,7 +23,7 @@ import getAround from '../CustomEdges/GetAroundEdge';
 import GraphNode from '../CustomNodes/GraphNode';
 import NoteNode from '../CustomNodes/NoteNode';
 import DataNode from '../CustomNodes/DataNode';
-import type { EwoksRFNode, EwoksRFLink, EwoksRFNodeData, Task } from 'types';
+import type { EwoksRFNode, EwoksRFNodeData, Task } from 'types';
 import useStore from 'store/useStore';
 import useSnackbarStore from 'store/useSnackbarStore';
 import { calcNewId } from 'utils/calcNewId';
@@ -225,11 +225,8 @@ function Canvas() {
     const edgesRF = getEdges();
     const { isValid, reason } = isValidLink(
       newConnection,
-      {
-        nodes: nodesRF,
-        links: edgesRF as EwoksRFLink[],
-        graph: displayedWorkflowInfo,
-      },
+      nodesRF,
+      edgesRF,
       getNodesData(),
       oldEdge
     );

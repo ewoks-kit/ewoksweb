@@ -2,12 +2,11 @@ import { Handle, Position } from 'reactflow';
 import { contentStyle, style } from './nodeStyles';
 import Tooltip from '@material-ui/core/Tooltip';
 import isValidLink from '../../utils/IsValidLink';
-import useStore from '../../store/useStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import type { Connection, NodeProps } from 'reactflow';
 import NodeIcon from './NodeIcon';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../../types';
+import type { EwoksRFNodeData } from '../../types';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
 import NodeLabel from './NodeLabel';
@@ -29,22 +28,15 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
 
   const { getNodes, getEdges } = useReactFlow();
 
-  const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
-  );
   const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
 
   const nodWidth = { width: `${nodeWidth || 100}px` };
 
   const isValidConnection = (connection: Connection) => {
-    const graphRf: GraphRF = {
-      graph: displayedWorkflowInfo,
-      nodes: getNodes(),
-      links: getEdges() as EwoksRFLink[],
-    };
     const { isValid, reason } = isValidLink(
       connection,
-      graphRf,
+      getNodes(),
+      getEdges(),
       getNodesData()
     );
     if (!isValid) {
