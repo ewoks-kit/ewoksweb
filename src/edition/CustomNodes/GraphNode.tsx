@@ -3,9 +3,8 @@ import { Handle, Position } from 'reactflow';
 import type { Connection, NodeProps } from 'reactflow';
 import { contentStyle, style } from './nodeStyles';
 import isValidLink from '../../utils/IsValidLink';
-import useStore from '../../store/useStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
-import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../../types';
+import type { EwoksRFNodeData } from '../../types';
 import { useReactFlow } from 'reactflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
@@ -14,14 +13,12 @@ import { Tooltip } from '@material-ui/core';
 import NodeLabel from './NodeLabel';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import NodeIcon from './NodeIcon';
+import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 
 function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   const { getNodes, getEdges } = useReactFlow();
 
   const { id } = props;
-  const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
-  );
   const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
 
@@ -30,14 +27,10 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   const { ui_props: uiProps } = nodeData;
 
   const isValidConnection = (connection: Connection) => {
-    const graphRf: GraphRF = {
-      graph: displayedWorkflowInfo,
-      nodes: getNodes(),
-      links: getEdges() as EwoksRFLink[],
-    };
     const { isValid, reason } = isValidLink(
       connection,
-      graphRf,
+      getNodes(),
+      getEdges(),
       getNodesData()
     );
     if (!isValid) {
@@ -47,8 +40,12 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   };
 
   const nodeWidth = { width: `${uiProps.nodeWidth || 100}px` };
-  const withImage = uiProps.withImage || uiProps.withImage === undefined;
-  const withLabel = uiProps.withLabel || uiProps.withLabel === undefined;
+  const withImage = [DEFAULT_NODE_VALUES.uiProps.withImage, undefined].includes(
+    uiProps.withImage
+  );
+  const withLabel = [DEFAULT_NODE_VALUES.uiProps.withLabel, undefined].includes(
+    uiProps.withImage
+  );
   const borderColor = uiProps.colorBorder;
 
   return (

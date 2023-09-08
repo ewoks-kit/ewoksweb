@@ -52,7 +52,6 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
         }),
         ...(comment && { comment }),
         ...(type && { type }),
-        type,
         ...(markerEnd &&
           typeof markerEnd !== 'string' &&
           markerEnd.type !== DEFAULT_LINK_VALUES.uiProps.markerEnd.type && {

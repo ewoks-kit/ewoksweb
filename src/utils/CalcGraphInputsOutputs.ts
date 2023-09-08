@@ -17,7 +17,6 @@ import { DEFAULT_LINK_VALUES } from './defaultValues';
 // Calculate the ewoks input_nodes and output_nodes within the graph
 // from the nodes of the graphRF model with types graphInput, graphOutput
 export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
-  const graph_links = [...graph.links];
   let input_nodes: GraphNodes[] = [];
   let output_nodes: GraphNodes[] = [];
 
@@ -25,14 +24,24 @@ export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
     if (nod.data.task_props.task_type === 'graphInput') {
       input_nodes = [
         ...input_nodes,
-        ...calcInOutNodes('graphInput', graph, nod, graph_links),
+        ...calcInOutNodes(
+          'graphInput',
+          nod,
+          [...graph.nodes],
+          [...graph.links]
+        ),
       ];
     }
 
     if (nod.data.task_props.task_type === 'graphOutput') {
       output_nodes = [
         ...output_nodes,
-        ...calcInOutNodes('graphOutput', graph, nod, graph_links),
+        ...calcInOutNodes(
+          'graphOutput',
+          nod,
+          [...graph.nodes],
+          [...graph.links]
+        ),
       ];
     }
   });
@@ -69,8 +78,8 @@ export function propIsEmpty(uiprops: GraphUiProps) {
 
 function calcInOutNodes(
   inputOrOutput: string,
-  graph: GraphRF,
   nod: EwoksRFNode,
+  graph_nodes: EwoksRFNode[],
   graph_links: EwoksRFLink[]
 ): GraphNodes[] {
   const nodes: GraphNodes[] = [];
@@ -79,21 +88,21 @@ function calcInOutNodes(
 
   if (inputOrOutput === 'graphInput') {
     // find those nodes this INPUT node is connected to
-    nodesNamesConnectedTo = graph.links
+    nodesNamesConnectedTo = graph_links
       .filter((link) => link.source === nod.id)
       .map((link) => link.target);
   }
 
   if (inputOrOutput === 'graphOutput') {
     // find those nodes this OUTPUT node is connected to
-    nodesNamesConnectedTo = graph.links
+    nodesNamesConnectedTo = graph_links
       .filter((link) => link.target === nod.id)
       .map((link) => link.source);
   }
 
   const nodeObjConnectedTo: EwoksRFNode[] = [];
   for (const nodesNames of nodesNamesConnectedTo) {
-    const nodeInGraph = graph.nodes.find((node) => nodesNames === node.id);
+    const nodeInGraph = graph_nodes.find((node) => nodesNames === node.id);
     if (nodeInGraph) {
       nodeObjConnectedTo.push(nodeInGraph);
     }

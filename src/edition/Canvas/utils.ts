@@ -60,21 +60,16 @@ export function addConnectionToGraph(
           sourceTaskData.task_props.task_type
         ) ||
         ['ppfmethod', 'ppfport'].includes(targetTaskData.task_props.task_type),
-      sub_source:
-        sourceTaskData.task_props.task_type === 'graph' && sourceHandle
-          ? sourceHandle
-          : undefined,
-      sub_target:
-        targetTaskData.task_props.task_type === 'graph' && targetHandle
-          ? targetHandle
-          : undefined,
+      ...(sourceTaskData.task_props.task_type === 'graph' &&
+        sourceHandle && { sub_source: sourceHandle }),
+      ...(targetTaskData.task_props.task_type === 'graph' &&
+        targetHandle && { sub_target: targetHandle }),
     },
     id: `${source}:${sourceHandle || ''}->${target}:${targetHandle || ''}`,
-    label: undefined,
     source,
     target,
-    sourceHandle: sourceHandle ?? undefined,
-    targetHandle: targetHandle ?? undefined,
+    ...(sourceHandle && { sourceHandle }),
+    ...(targetHandle && { targetHandle }),
     markerEnd: DEFAULT_LINK_VALUES.uiProps.markerEnd,
     ...defaultLinkStyle,
   };
