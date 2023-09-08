@@ -14,7 +14,7 @@ import {
 } from './utils';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 
-// Calculate the ewoks input_nodes and output_nodes within the graph
+// DOC: Calculate the ewoks input_nodes and output_nodes within the graph
 // from the nodes of the graphRF model with types graphInput, graphOutput
 export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
   let input_nodes: GraphNodes[] = [];
@@ -87,19 +87,21 @@ function calcInOutNodes(
   let nodesNamesConnectedTo: string[] = [];
 
   if (inputOrOutput === 'graphInput') {
-    // find those nodes this INPUT node is connected to
+    // DOC: Find those nodes this INPUT node is connected to
+    // In the current ewoks spec only one node can be connected to input-output node
     nodesNamesConnectedTo = graph_links
       .filter((link) => link.source === nod.id)
       .map((link) => link.target);
   }
 
   if (inputOrOutput === 'graphOutput') {
-    // find those nodes this OUTPUT node is connected to
+    // DOC: Find those nodes this OUTPUT node is connected to
     nodesNamesConnectedTo = graph_links
       .filter((link) => link.target === nod.id)
       .map((link) => link.source);
   }
 
+  // DOC: use an array for all nodes although ewoks allows only one for now
   const nodeObjConnectedTo: EwoksRFNode[] = [];
   for (const nodesNames of nodesNamesConnectedTo) {
     const nodeInGraph = graph_nodes.find((node) => nodesNames === node.id);
@@ -108,7 +110,7 @@ function calcInOutNodes(
     }
   }
 
-  // iterate the nodes to create the new input_nodes
+  // DOC: Iterate the nodes to create the new input_nodes
   nodeObjConnectedTo.forEach((nodConnected) => {
     const link_index =
       inputOrOutput === 'graphOutput'
@@ -130,12 +132,6 @@ function calcInOutNodes(
       )
     );
   });
-  // why initialize this?
-  // if (nodeObjConnectedTo.length === 0) {
-  //   nodes.push(
-  //     calcNodeProps(false, nod, { id: '' } as EwoksRFNode, [], 0, inputOrOutput)
-  //   );
-  // }
   return nodes;
 }
 

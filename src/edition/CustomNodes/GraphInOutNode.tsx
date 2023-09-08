@@ -12,6 +12,7 @@ import { getNodesData } from '../../utils';
 import NodeLabel from './NodeLabel';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
+import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 
 function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
@@ -24,8 +25,12 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
     nodeWidth,
   } = nodeData.ui_props;
 
-  const hasImage = withImage || withImage === undefined;
-  const hasLabel = withLabel || withLabel === undefined;
+  const hasImage =
+    withImage === DEFAULT_NODE_VALUES.uiProps.withImage ||
+    withImage === undefined;
+  const hasLabel =
+    withLabel === DEFAULT_NODE_VALUES.uiProps.withLabel ||
+    withLabel === undefined;
 
   const { task_type } = nodeData.task_props;
 
