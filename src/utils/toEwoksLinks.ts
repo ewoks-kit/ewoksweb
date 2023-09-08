@@ -5,7 +5,7 @@ import {
   calcConditionValue,
   calcDataMapping,
 } from './utils';
-import { uipropsEmpty } from '../utils/CalcGraphInputsOutputs';
+import { uipropsIsEmpty } from '../utils/CalcGraphInputsOutputs';
 
 // EwoksRFLinks --> EwoksLinks for saving
 export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
@@ -81,7 +81,7 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
         ...(on_error && { on_error }),
         ...(required && { required }),
         map_all_data,
-        ...(!uipropsEmpty(linkUiProps) && { uiProps: linkUiProps }),
+        ...(!uipropsIsEmpty(linkUiProps) && { uiProps: linkUiProps }),
       };
     }
   );
