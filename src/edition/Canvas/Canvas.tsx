@@ -213,7 +213,6 @@ function Canvas() {
         ...(icon && { icon }),
       },
     });
-
     addNodes(newNode);
   };
 
