@@ -53,7 +53,7 @@ const rootWorkflow = (
       ...get().loadedGraphs.values(),
     ]);
 
-    // 3. Put the newNodeSubgraphs into recent in their graphRF form (sync)
+    // 3. Put the newNodeSubgraphs into loadedGraphs in their graphRF form (sync)
     newNodeSubgraphs.forEach((gr) => {
       // calculate the rfNodes using the fetched subgraphs
       // nodes and edges stored with their data as EwoksRFNodes-Links
@@ -67,7 +67,6 @@ const rootWorkflow = (
     // 4. Calculate the new graph given the subgraphs
     let grfNodes = toRFEwoksNodes(ewoksWorkflow, newNodeSubgraphs, tasks);
 
-    // 5. Calculate notes nodes
     const notes: EwoksRFNode[] =
       ewoksWorkflow.graph.uiProps?.notes?.map((note) => {
         return {
@@ -87,12 +86,14 @@ const rootWorkflow = (
       }) || [];
 
     grfNodes = [...grfNodes, ...notes];
+
     const rfLinks = toRFEwoksLinks(ewoksWorkflow, newNodeSubgraphs, tasks);
     const resultGraph: GraphRF = {
       graph: ewoksWorkflow.graph,
       nodes: grfNodes,
       links: rfLinks,
     };
+    get().addLoadedGraph(resultGraph);
     // DOC: reset RF nodes and edges before setting new nodes/edges data
     // Better solution?
     rfInstance.setNodes([]);
@@ -100,8 +101,6 @@ const rootWorkflow = (
 
     useNodeDataStore.getState().setNodesData(resultGraph.nodes);
     useEdgeDataStore.getState().setEdgesData(resultGraph.links);
-
-    get().addLoadedGraph(resultGraph);
 
     get().setDisplayedWorkflowInfo(resultGraph.graph);
 
@@ -114,12 +113,7 @@ const rootWorkflow = (
         return { ...lin, data: {} as EwoksRFLinkData };
       }),
     };
-    // add the new graph to the recent graphs if not already there
-    get().addLoadedGraph({
-      graph: ewoksWorkflow.graph,
-      nodes: grfNodes,
-      links: toRFEwoksLinks(ewoksWorkflow, newNodeSubgraphs, tasks),
-    });
+
     get().setSubgraphsStack({
       id: ewoksWorkflow.graph.id,
       label: ewoksWorkflow.graph.label,
