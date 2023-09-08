@@ -49,9 +49,8 @@ export function outNodesLinks(
           ...(linkAttr?.label && { label: linkAttr.label }),
           ...(linkAttr?.comment && { comment: linkAttr.comment }),
           ...(uIProps?.style?.stroke && {
-            style: { stroke: uIProps.style.stroke },
+            style: { stroke: uIProps.style.stroke, strokeWidth: '3px' },
           }),
-          ...(uIProps?.linkStyle && { type: uIProps.linkStyle }),
           ...(uIProps?.markerEnd &&
             typeof uIProps.markerEnd !== 'string' &&
             uIProps.markerEnd.type !==

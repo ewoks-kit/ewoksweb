@@ -35,7 +35,6 @@ export interface InOutLinkAttributes {
 export interface InOutNodesUiProps {
   label?: string;
   position?: XYPosition;
-  linkStyle?: string;
   style?: LinkStyle;
   animated?: boolean;
   markerEnd?: EdgeMarkerType;

@@ -164,9 +164,11 @@ function calcNodeProps(
       lData.data_mapping.length > 0 && {
         data_mapping: calcDataMapping(lData.data_mapping),
       }),
-    ...(lData.map_all_data && { map_all_data: lData.map_all_data }),
-    ...(lData.on_error && { on_error: lData.on_error }),
-    ...(lData.required && { required: lData.required }),
+    ...(lData.map_all_data !== undefined && {
+      map_all_data: lData.map_all_data,
+    }),
+    ...(lData.on_error !== undefined && { on_error: lData.on_error }),
+    ...(lData.required !== undefined && { required: lData.required }),
   };
 
   return {
@@ -199,10 +201,10 @@ function calcNodeProps(
           markerEnd: link.markerEnd,
         }),
       ...(link.animated && { animated: link.animated }),
-      ...(nUiprops.withImage && {
+      ...(nUiprops.withImage !== undefined && {
         withImage: nUiprops.withImage,
       }),
-      ...(nUiprops.withLabel && {
+      ...(nUiprops.withLabel !== undefined && {
         withLabel: nUiprops.withLabel,
       }),
       ...(nUiprops.colorBorder && {
