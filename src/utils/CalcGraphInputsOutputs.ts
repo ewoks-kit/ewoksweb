@@ -90,7 +90,6 @@ function calcInOutNodes(
       .filter((link) => link.target === nod.id)
       .map((link) => link.source);
   }
-  console.log(nod, graph_links);
 
   const nodeObjConnectedTo: EwoksRFNode[] = [];
   for (const nodesNames of nodesNamesConnectedTo) {
@@ -122,14 +121,12 @@ function calcInOutNodes(
       )
     );
   });
-
+  // why initialize this?
   // if (nodeObjConnectedTo.length === 0) {
   //   nodes.push(
   //     calcNodeProps(false, nod, { id: '' } as EwoksRFNode, [], 0, inputOrOutput)
   //   );
   // }
-  console.log(nodes);
-
   return nodes;
 }
 
@@ -145,7 +142,6 @@ function calcNodeProps(
   const lData = link.data;
   const nData = nod.data;
   const nUiprops = nData.ui_props;
-  console.log(nod);
 
   const linkAttributes = {
     ...(isString(link.label) && { label: link.label }),

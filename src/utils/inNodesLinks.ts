@@ -15,8 +15,6 @@ export function inNodesLinks(
   if (graph.graph.input_nodes && graph.graph.input_nodes.length > 0) {
     const inNodesInputed: string[] = [];
     graph.graph.input_nodes.forEach((inNod) => {
-      console.log(inNod);
-
       const nodeTarget = graph.nodes.find((no) => no.id === inNod.node);
 
       const uIProps = inNod.uiProps;
