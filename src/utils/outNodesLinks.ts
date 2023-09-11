@@ -65,7 +65,7 @@ export function outNodesLinks(
           source: outNod.node,
           target: outNod.id,
           ...(nodeSource?.task_type === 'graph' &&
-            outNod.sub_node && { sub_target: outNod.sub_node }),
+            outNod.sub_node && { sub_source: outNod.sub_node }),
           ...(linkAttr?.conditions &&
             linkAttr.conditions.length > 0 && {
               conditions: linkAttr.conditions,

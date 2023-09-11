@@ -6,6 +6,7 @@ import type {
   GraphEwoks,
   Task,
 } from '../types';
+import { inNodesLinks } from './inNodesLinks';
 import { inOutNodesLinks } from './inOutNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import {
@@ -27,16 +28,18 @@ export function toRFEwoksNodes(
 
   const outputsAl = outputsAll(tempGraph);
 
-  const inNodeLinks = inOutNodesLinks(
-    tempGraph.graph.input_nodes,
-    tempGraph.nodes,
-    'inNodesLinks'
-  );
-  const outNodeLinks = inOutNodesLinks(
-    tempGraph.graph.input_nodes,
-    tempGraph.nodes,
-    'outNodesLinks'
-  );
+  const inNodeLinks = inNodesLinks(tempGraph);
+  const outNodeLinks = outNodesLinks(tempGraph);
+  // const inNodeLinks = inOutNodesLinks(
+  //   tempGraph.graph.input_nodes,
+  //   tempGraph.nodes,
+  //   'inNodesLinks'
+  // );
+  // const outNodeLinks = inOutNodesLinks(
+  //   tempGraph.graph.input_nodes,
+  //   tempGraph.nodes,
+  //   'outNodesLinks'
+  // );
 
   const inOutTempGraph = { ...tempGraph };
 

@@ -85,11 +85,17 @@ export function inOutNodesLinks(
                 target: inOutNod.id,
               };
 
+        const subSourceOrTarget =
+          sourceOrTargetNode?.task_type === 'graph'
+            ? undefined
+            : inOrOut === 'inNodesLinks'
+            ? { sub_target: inOutNod.sub_node }
+            : { sub_source: inOutNod.sub_node };
+
         inputsOutputs.links.push({
           startEnd: true,
           ...sourceTargetProps,
-          ...(sourceOrTargetNode?.task_type === 'graph' &&
-            inOutNod.sub_node && { sub_target: inOutNod.sub_node }),
+          ...subSourceOrTarget,
           ...(linkAttr?.conditions &&
             linkAttr.conditions.length > 0 && {
               conditions: linkAttr.conditions,

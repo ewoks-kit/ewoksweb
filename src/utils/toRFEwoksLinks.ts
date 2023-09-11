@@ -11,6 +11,7 @@ import { findLinkInputs, findLinkOutputs } from './calcTasksForLink';
 import { createDataMappingData, notUndefinedValue } from './utils';
 import { defaultLinkStyle } from '../edition/Canvas/utils';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
+import { inNodesLinks } from './inNodesLinks';
 
 // DOC: from GraphEwoks get EwoksRFLinks
 // - tempGraph: the graph to transform its links
@@ -135,16 +136,19 @@ function calcSourceHandle(
 
 function calcInOutLinks(tempGraph: GraphEwoks): GraphEwoks {
   // DOC: calculate the links from inputs-outputs of the Ewoks graph
-  const inNodeLinks = inOutNodesLinks(
-    tempGraph.graph.input_nodes,
-    tempGraph.nodes,
-    'inNodesLinks'
-  );
-  const outNodeLinks = inOutNodesLinks(
-    tempGraph.graph.input_nodes,
-    tempGraph.nodes,
-    'outNodesLinks'
-  );
+  const inNodeLinks = inNodesLinks(tempGraph);
+  const outNodeLinks = outNodesLinks(tempGraph);
+
+  // const inNodeLinks = inOutNodesLinks(
+  //   tempGraph.graph.input_nodes,
+  //   tempGraph.nodes,
+  //   'inNodesLinks'
+  // );
+  // const outNodeLinks = inOutNodesLinks(
+  //   tempGraph.graph.input_nodes,
+  //   tempGraph.nodes,
+  //   'outNodesLinks'
+  // );
 
   // DOC: accumulate all links inOutTempGraph
   const inOutTempGraph: GraphEwoks = { ...tempGraph };

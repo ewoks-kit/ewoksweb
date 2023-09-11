@@ -15,7 +15,7 @@ export enum GraphFormAction {
 
 export interface GraphNodes {
   id: string;
-  node?: string;
+  node: string;
   sub_node?: string;
   link_attributes?: InOutLinkAttributes;
   uiProps?: InOutNodesUiProps;
@@ -44,6 +44,7 @@ export interface InOutNodesUiProps {
   withLabel?: boolean;
   colorBorder?: string;
   nodeWidth?: number;
+  linkType?: string;
 }
 
 export interface GraphDetails {
