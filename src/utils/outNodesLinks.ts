@@ -83,7 +83,7 @@ export function outNodesLinks(
           ...(linkAttr?.required && {
             required: linkAttr.required,
           }),
-          ...(propIsEmpty(linksUiProps) && {
+          ...(!propIsEmpty(linksUiProps) && {
             uiProps: linksUiProps,
           }),
         });

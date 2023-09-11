@@ -65,7 +65,7 @@ export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
   };
 }
 
-export function propIsEmpty(uiprops: GraphUiProps) {
+export function propIsEmpty(uiprops: object) {
   let isEmpty = true;
   for (const [, value] of Object.entries(uiprops)) {
     if ((Array.isArray(value) && value.length > 0) || value) {
@@ -144,6 +144,8 @@ function calcNodeProps(
   inputOrOutput: string
 ): GraphNodes {
   const link = graph_links[link_index];
+  console.log(link, graph_links);
+
   const lData = link.data;
   const nData = nod.data;
   const nUiprops = nData.ui_props;

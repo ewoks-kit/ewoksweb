@@ -9,7 +9,7 @@ import type {
   EdgeChange,
   XYPosition,
 } from 'reactflow';
-import { updateEdge } from 'reactflow';
+import { updateEdge, addEdge } from 'reactflow';
 import ReactFlow, {
   Controls,
   useReactFlow,
@@ -221,19 +221,27 @@ function Canvas() {
     // 1. attached to a node-handle where there is already a link or
     // 2. is attached to an input-output already connected to a node then
     // edgeUpdate should not happen and a message informs it is not ewoks-compatible
-    const nodesRF = getNodes();
-    const edgesRF = getEdges();
     const { isValid, reason } = isValidLink(
       newConnection,
-      nodesRF,
-      edgesRF,
+      getNodes(),
+      getEdges(),
       getNodesData(),
       oldEdge
     );
     if (!isValid) {
       showWarningMsg(reason);
     }
-    setEdges((els) => updateEdge(oldEdge, newConnection, els));
+    // console.log(
+    //   oldEdge,
+    //   newConnection,
+    //   updateEdge(oldEdge, newConnection, getEdges())
+    // );
+    const newEdges = addEdge(
+      { ...oldEdge, ...newConnection },
+      getEdges().filter((edge) => edge.id !== oldEdge.id)
+    );
+    setEdges(newEdges);
+    // setEdges((els) => updateEdge(oldEdge, newConnection, els));
   };
 
   const onConnect = (params: Connection) => {
@@ -242,6 +250,7 @@ function Canvas() {
       return;
     }
     const newLink = addConnectionToGraph(params, getNodesData());
+    console.log(newLink);
 
     if (newLink) {
       setEdgeData(newLink.id, newLink.data);
