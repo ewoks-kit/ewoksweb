@@ -116,7 +116,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         }),
         uiProps: {
           icon,
-          comment,
+          ...(comment && { comment }),
           position,
           ...notUndefinedValue(moreHandles, 'moreHandles'),
           colorBorder,
