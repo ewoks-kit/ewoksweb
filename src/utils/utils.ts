@@ -59,3 +59,13 @@ export function stringOrNumber(
 export function isDecimalNumber(value: string) {
   return /^-?\d*\.?\d*$/u.test(value);
 }
+
+export function notUndefinedValue(
+  value: unknown,
+  propName: string
+): object | undefined {
+  if (value !== undefined) {
+    return { [propName]: value };
+  }
+  return undefined;
+}

@@ -14,7 +14,7 @@ import {
   calcNodeType,
   addNodeProperties,
 } from './toRFEwoksNodesUtils';
-import { createDataMappingData } from './utils';
+import { createDataMappingData, notUndefinedValue } from './utils';
 
 // Accepts a GraphEwoks and returns an EwoksRFNode[]
 export function toRFEwoksNodes(
@@ -78,50 +78,31 @@ export function toRFEwoksNodes(
                   };
                 }),
               }),
-            ...(inputs_complete !== undefined && {
-              inputs_complete,
-            }),
-            ...(default_error_node !== undefined && {
-              default_error_node,
-            }),
+            ...notUndefinedValue(inputs_complete, 'inputs_complete'),
+            ...notUndefinedValue(default_error_node, 'default_error_node'),
             ...(default_error_node &&
               default_error_attributes && {
                 default_error_attributes: calcDefaultErrorAttributes(
                   default_error_attributes
                 ),
               }),
-            ...(task_generator !== undefined && {
-              task_generator,
-            }),
+            ...notUndefinedValue(task_generator, 'task_generator'),
           },
           task_props: {
             task_type,
             task_identifier,
-            // TODO: to be examined task_icon vs icon in uiProps
             task_icon: uiProps?.task_icon,
           },
           ui_props: {
-            ...(uiProps?.nodeWidth !== undefined && {
-              nodeWidth: uiProps.nodeWidth,
-            }),
+            ...notUndefinedValue(uiProps?.nodeWidth, 'nodeWidth'),
             type: nodeType,
             ...(uiProps?.icon && { icon: uiProps.icon }),
-            ...(uiProps?.moreHandles !== undefined && {
-              moreHandles: uiProps.moreHandles,
-            }),
-            ...(uiProps?.withImage !== undefined && {
-              withImage: uiProps.withImage,
-            }),
-            ...(uiProps?.withLabel !== undefined && {
-              withLabel: uiProps.withLabel,
-            }),
-            ...(uiProps?.colorBorder !== undefined && {
-              colorBorder: uiProps.colorBorder,
-            }),
+            ...notUndefinedValue(uiProps?.moreHandles, 'moreHandles'),
+            ...notUndefinedValue(uiProps?.withImage, 'withImage'),
+            ...notUndefinedValue(uiProps?.withLabel, 'withLabel'),
+            ...notUndefinedValue(uiProps?.colorBorder, 'colorBorder'),
           },
-          ...(uiProps?.comment !== undefined && {
-            comment: uiProps.comment,
-          }),
+          ...notUndefinedValue(uiProps?.comment, 'comment'),
         },
         position: uiProps?.position ?? { x: 100, y: 100 },
       };
