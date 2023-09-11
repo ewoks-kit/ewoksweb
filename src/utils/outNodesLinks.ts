@@ -1,6 +1,7 @@
 import type { EwoksLink, EwoksNode, GraphEwoks } from '../types';
 import { propIsEmpty } from './CalcGraphInputsOutputs';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
+import { notUndefinedValue } from './utils';
 
 // DOC: calc the output nodes and links that need to be added to
 // the graph from the output_nodes
@@ -33,8 +34,8 @@ export function outNodesLinks(
             type: 'output',
             position: temPosition,
             icon: 'graphOutput.svg',
-            ...(uIProps?.withImage && { withImage: uIProps.withImage }),
-            ...(uIProps?.withLabel && { withLabel: uIProps.withLabel }),
+            ...notUndefinedValue(uIProps?.withImage, 'withImage'),
+            ...notUndefinedValue(uIProps?.withLabel, 'withLabel'),
             ...(uIProps?.colorBorder && { colorBorder: uIProps.colorBorder }),
             ...(uIProps?.nodeWidth && { nodeWidth: uIProps.nodeWidth }),
           },
@@ -74,15 +75,9 @@ export function outNodesLinks(
             linkAttr.data_mapping.length > 0 && {
               data_mapping: linkAttr.data_mapping,
             }),
-          ...(linkAttr?.on_error && {
-            on_error: linkAttr.on_error,
-          }),
-          ...(linkAttr?.map_all_data && {
-            map_all_data: linkAttr.map_all_data,
-          }),
-          ...(linkAttr?.required && {
-            required: linkAttr.required,
-          }),
+          ...notUndefinedValue(linkAttr?.on_error, 'on_error'),
+          ...notUndefinedValue(linkAttr?.map_all_data, 'map_all_data'),
+          ...notUndefinedValue(linkAttr?.required, 'required'),
           ...(!propIsEmpty(linksUiProps) && {
             uiProps: linksUiProps,
           }),

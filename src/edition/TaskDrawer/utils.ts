@@ -98,6 +98,6 @@ export async function loadSubworkflow(
 
 function calcLabel(inputOutput: GraphNodes): string {
   return `${inputOutput.uiProps?.label ?? inputOutput.id}: ${
-    inputOutput.node || ''
+    inputOutput.node
   } ${inputOutput.sub_node ? ` -> ${inputOutput.sub_node}` : ''}`;
 }

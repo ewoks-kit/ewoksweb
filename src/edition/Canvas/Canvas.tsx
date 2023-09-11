@@ -9,7 +9,7 @@ import type {
   EdgeChange,
   XYPosition,
 } from 'reactflow';
-import { updateEdge, addEdge } from 'reactflow';
+import { addEdge } from 'reactflow';
 import ReactFlow, {
   Controls,
   useReactFlow,
@@ -231,17 +231,13 @@ function Canvas() {
     if (!isValid) {
       showWarningMsg(reason);
     }
-    // console.log(
-    //   oldEdge,
-    //   newConnection,
-    //   updateEdge(oldEdge, newConnection, getEdges())
-    // );
+
     const newEdges = addEdge(
       { ...oldEdge, ...newConnection },
       getEdges().filter((edge) => edge.id !== oldEdge.id)
     );
+
     setEdges(newEdges);
-    // setEdges((els) => updateEdge(oldEdge, newConnection, els));
   };
 
   const onConnect = (params: Connection) => {
@@ -250,7 +246,6 @@ function Canvas() {
       return;
     }
     const newLink = addConnectionToGraph(params, getNodesData());
-    console.log(newLink);
 
     if (newLink) {
       setEdgeData(newLink.id, newLink.data);

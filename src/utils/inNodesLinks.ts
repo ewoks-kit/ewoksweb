@@ -1,6 +1,7 @@
 import type { EwoksLink, EwoksNode, GraphEwoks } from '../types';
 import { propIsEmpty } from './CalcGraphInputsOutputs';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
+import { notUndefinedValue } from './utils';
 
 // TODO: merge with outNodesLinks if possible when stable
 // DOC: calc the input nodes and links that need to be added to the graph from
@@ -34,8 +35,8 @@ export function inNodesLinks(
             type: 'input',
             position: temPosition,
             icon: 'graphInput.svg',
-            ...(uIProps?.withImage && { withImage: uIProps.withImage }),
-            ...(uIProps?.withLabel && { withLabel: uIProps.withLabel }),
+            ...notUndefinedValue(uIProps?.withImage, 'withImage'),
+            ...notUndefinedValue(uIProps?.withLabel, 'withLabel'),
             ...(uIProps?.colorBorder && { colorBorder: uIProps.colorBorder }),
             ...(uIProps?.nodeWidth && { nodeWidth: uIProps.nodeWidth }),
           },
@@ -58,14 +59,15 @@ export function inNodesLinks(
               DEFAULT_LINK_VALUES.uiProps.markerEnd.type && {
               markerEnd: uIProps.markerEnd,
             }),
-          ...(uIProps?.animated && { animated: uIProps.animated }),
+          ...notUndefinedValue(uIProps?.animated, 'animated'),
         };
 
         inputs.links.push({
           startEnd: true,
           source: inNod.id,
           target: inNod.node,
-          sub_target: nodeTarget?.task_type !== 'graph' ? '' : inNod.sub_node,
+          ...(nodeTarget?.task_type === 'graph' &&
+            inNod.sub_node && { sub_target: inNod.sub_node }),
           ...(linkAttr?.conditions &&
             linkAttr.conditions.length > 0 && {
               conditions: linkAttr.conditions,
@@ -74,15 +76,9 @@ export function inNodesLinks(
             linkAttr.data_mapping.length > 0 && {
               data_mapping: linkAttr.data_mapping,
             }),
-          ...(linkAttr?.on_error && {
-            on_error: linkAttr.on_error,
-          }),
-          ...(linkAttr?.map_all_data && {
-            map_all_data: linkAttr.map_all_data,
-          }),
-          ...(linkAttr?.required && {
-            required: linkAttr.required,
-          }),
+          ...notUndefinedValue(linkAttr?.on_error, 'on_error'),
+          ...notUndefinedValue(linkAttr?.map_all_data, 'map_all_data'),
+          ...notUndefinedValue(linkAttr?.required, 'required'),
           ...(!propIsEmpty(linksUiProps) && {
             uiProps: linksUiProps,
           }),

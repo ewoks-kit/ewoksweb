@@ -5,12 +5,12 @@ import type {
   GraphDetails,
   GraphNodes,
   GraphRF,
-  GraphUiProps,
 } from '../types';
 import {
   calcConditionName,
   calcConditionValue,
   calcDataMapping,
+  notUndefinedValue,
 } from './utils';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 
@@ -87,7 +87,7 @@ function calcInOutNodes(
   let nodesNamesConnectedTo: string[] = [];
 
   if (inputOrOutput === 'graphInput') {
-    // DOC: Find those nodes this INPUT node is connected to
+    // DOC: Find the nodes, this INPUT node is connected to
     // In the current ewoks spec only one node can be connected to input-output node
     nodesNamesConnectedTo = graph_links
       .filter((link) => link.source === nod.id)
@@ -95,7 +95,7 @@ function calcInOutNodes(
   }
 
   if (inputOrOutput === 'graphOutput') {
-    // DOC: Find those nodes this OUTPUT node is connected to
+    // DOC: Find the nodes this OUTPUT node is connected to
     nodesNamesConnectedTo = graph_links
       .filter((link) => link.target === nod.id)
       .map((link) => link.source);
@@ -144,7 +144,6 @@ function calcNodeProps(
   inputOrOutput: string
 ): GraphNodes {
   const link = graph_links[link_index];
-  console.log(link, graph_links);
 
   const lData = link.data;
   const nData = nod.data;
@@ -166,35 +165,29 @@ function calcNodeProps(
       lData.data_mapping.length > 0 && {
         data_mapping: calcDataMapping(lData.data_mapping),
       }),
-    ...(lData.map_all_data !== undefined && {
-      map_all_data: lData.map_all_data,
-    }),
-    ...(lData.on_error !== undefined && { on_error: lData.on_error }),
-    ...(lData.required !== undefined && { required: lData.required }),
+    ...notUndefinedValue(lData.map_all_data, 'map_all_data'),
+    ...notUndefinedValue(lData.on_error, 'on_error'),
+    ...notUndefinedValue(lData.required, 'required'),
   };
 
   return {
     id: nod.id,
     node: nodConnected.id,
-
     sub_node: isGraph
       ? (inputOrOutput === 'graphOutput'
           ? lData.sub_source
           : lData.sub_target) || undefined
       : undefined,
-
     ...(nodConnected.id &&
       !propIsEmpty(linkAttributes) && { link_attributes: linkAttributes }),
-
     uiProps: {
       position: nod.position,
-      ...(nData.ewoks_props.label && { label: nData.ewoks_props.label }),
-      ...(link.type && { linkStyle: link.type }),
+      ...notUndefinedValue(nData.ewoks_props.label, 'label'),
+      ...notUndefinedValue(link.type, 'type'),
       ...(link.style?.stroke &&
         link.style.stroke !== DEFAULT_LINK_VALUES.uiProps.stroke && {
           style: {
             stroke: link.style.stroke,
-            strokeWidth: '3px',
           },
         }),
       ...(link.markerEnd &&
@@ -202,13 +195,9 @@ function calcNodeProps(
         link.markerEnd.type !== DEFAULT_LINK_VALUES.uiProps.markerEnd.type && {
           markerEnd: link.markerEnd,
         }),
-      ...(link.animated && { animated: link.animated }),
-      ...(nUiprops.withImage !== undefined && {
-        withImage: nUiprops.withImage,
-      }),
-      ...(nUiprops.withLabel !== undefined && {
-        withLabel: nUiprops.withLabel,
-      }),
+      ...notUndefinedValue(link.animated, 'animated'),
+      ...notUndefinedValue(nUiprops.withImage, 'withImage'),
+      ...notUndefinedValue(nUiprops.withLabel, 'withLabel'),
       ...(nUiprops.colorBorder && {
         colorBorder: nUiprops.colorBorder,
       }),

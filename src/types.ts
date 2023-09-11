@@ -44,7 +44,6 @@ export interface InOutNodesUiProps {
   withLabel?: boolean;
   colorBorder?: string;
   nodeWidth?: number;
-  linkType?: string;
 }
 
 export interface GraphDetails {

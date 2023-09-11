@@ -18,19 +18,14 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
   assertNodeDataDefined(nodeData, args.id);
 
-  const {
-    withImage,
-    withLabel,
-    colorBorder: borderColor,
-    nodeWidth,
-  } = nodeData.ui_props;
+  const { colorBorder: borderColor, nodeWidth } = nodeData.ui_props;
 
-  const hasImage =
-    withImage === DEFAULT_NODE_VALUES.uiProps.withImage ||
-    withImage === undefined;
-  const hasLabel =
-    withLabel === DEFAULT_NODE_VALUES.uiProps.withLabel ||
-    withLabel === undefined;
+  const {
+    withImage = DEFAULT_NODE_VALUES.uiProps.withImage,
+  } = nodeData.ui_props;
+  const {
+    withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel,
+  } = nodeData.ui_props;
 
   const { task_type } = nodeData.task_props;
 
@@ -88,11 +83,11 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
           )}
           <NodeLabel
             label={nodeData.ewoks_props.label || ''}
-            showFull={hasLabel}
-            showCropped={!hasLabel && !hasImage}
+            showFull={withLabel}
+            showCropped={!withLabel && !withImage}
             color="#ced3ee"
           />
-          {hasImage && (
+          {withImage && (
             <SuspenseBoundary>
               <NodeIcon
                 nodeId={args.id}
