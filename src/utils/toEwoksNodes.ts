@@ -119,7 +119,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           ...(comment && { comment }),
           position,
           ...notUndefinedValue(moreHandles, 'moreHandles'),
-          colorBorder,
+          ...(colorBorder && { colorBorder }),
           ...notUndefinedValue(withImage, 'withImage'),
           ...notUndefinedValue(withLabel, 'withLabel'),
           nodeWidth,

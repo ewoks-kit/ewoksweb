@@ -40,12 +40,9 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   };
 
   const nodeWidth = { width: `${uiProps.nodeWidth || 100}px` };
-  const withImage = [DEFAULT_NODE_VALUES.uiProps.withImage, undefined].includes(
-    uiProps.withImage
-  );
-  const withLabel = [DEFAULT_NODE_VALUES.uiProps.withLabel, undefined].includes(
-    uiProps.withImage
-  );
+  const { withImage = DEFAULT_NODE_VALUES.uiProps.withImage } = uiProps;
+  const { withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel } = uiProps;
+
   const borderColor = uiProps.colorBorder;
 
   return (
