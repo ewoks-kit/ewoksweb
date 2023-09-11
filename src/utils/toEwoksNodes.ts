@@ -7,7 +7,12 @@ import type {
   Inputs,
 } from '../types';
 import { isString } from './typeGuards';
-import { calcDataMapping, isDecimalNumber, stringOrNumber } from './utils';
+import {
+  calcDataMapping,
+  isDecimalNumber,
+  notUndefinedValue,
+  stringOrNumber,
+} from './utils';
 
 function cleanDefaultInputs(default_inputs: Inputs[] | undefined) {
   if (!default_inputs) {
@@ -100,7 +105,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         label,
         task_type,
         task_identifier,
-        inputs_complete,
+        ...notUndefinedValue(inputs_complete, 'inputs_complete'),
         task_generator,
         default_inputs: nodeDefaultInputs,
         default_error_node,
@@ -113,10 +118,10 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           icon,
           comment,
           position,
-          moreHandles,
+          ...notUndefinedValue(moreHandles, 'moreHandles'),
           colorBorder,
-          withImage,
-          withLabel,
+          ...notUndefinedValue(withImage, 'withImage'),
+          ...notUndefinedValue(withLabel, 'withLabel'),
           nodeWidth,
         },
       };

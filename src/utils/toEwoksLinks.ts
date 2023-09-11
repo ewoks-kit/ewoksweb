@@ -4,6 +4,7 @@ import {
   calcConditionName,
   calcConditionValue,
   calcDataMapping,
+  notUndefinedValue,
 } from './utils';
 import { uipropsIsEmpty } from '../utils/CalcGraphInputsOutputs';
 
@@ -59,7 +60,7 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
         ...(style?.stroke !== '#96a5f9' && {
           style: { stroke: style?.stroke },
         }),
-        ...(animated && { animated }),
+        ...notUndefinedValue(animated, 'animated'),
         ...(sourceHandle && sourceHandle !== 'sr' && { sourceHandle }),
         ...(targetHandle && targetHandle !== 'tl' && { targetHandle }),
         ...(type === 'getAround' && {
@@ -78,8 +79,8 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
         ...(conditionsValue && {
           conditions: conditionsValue,
         }),
-        ...(on_error && { on_error }),
-        ...(required && { required }),
+        ...notUndefinedValue(on_error, 'on_error'),
+        ...notUndefinedValue(required, 'required'),
         map_all_data,
         ...(!uipropsIsEmpty(linkUiProps) && { uiProps: linkUiProps }),
       };

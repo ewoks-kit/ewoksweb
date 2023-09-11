@@ -8,7 +8,7 @@ import type {
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import { findLinkInputs, findLinkOutputs } from './calcTasksForLink';
-import { createDataMappingData } from './utils';
+import { createDataMappingData, notUndefinedValue } from './utils';
 import { defaultLinkStyle } from '../edition/Canvas/utils';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 
@@ -70,9 +70,9 @@ export function toRFEwoksLinks(
         target: target.toString(),
         targetHandle: calcTargetHandle(uiProps, sub_target),
         sourceHandle: calcSourceHandle(uiProps, sub_source),
-        ...(uiProps?.type && { type: uiProps.type }),
+        ...notUndefinedValue(uiProps?.type, 'type'),
+        ...notUndefinedValue(uiProps?.animated, 'animated'),
         markerEnd: uiProps?.markerEnd ?? DEFAULT_LINK_VALUES.uiProps.markerEnd,
-        ...(uiProps?.animated && { animated: uiProps.animated }),
         ...defaultLinkStyle,
         style: {
           ...defaultLinkStyle.style,
@@ -102,16 +102,16 @@ export function toRFEwoksLinks(
             data_mapping.length > 0 && {
               data_mapping: data_mapping.map(createDataMappingData),
             }),
-          ...(required !== undefined && { required }),
-          ...(sub_target && { sub_target }),
-          ...(sub_source && { sub_source }),
+          ...notUndefinedValue(required, 'required'),
+          ...notUndefinedValue(sub_target, 'sub_target'),
+          ...notUndefinedValue(sub_source, 'sub_source'),
           ...(conditionsForFront &&
             conditionsForFront.length > 0 && {
               conditions: conditionsForFront,
             }),
-          ...(map_all_data !== undefined && { map_all_data }),
-          ...(on_error !== undefined && { on_error }),
-          ...(uiProps?.comment && { comment: uiProps.comment }),
+          ...notUndefinedValue(map_all_data, 'map_all_data'),
+          ...notUndefinedValue(uiProps?.comment, 'comment'),
+          ...notUndefinedValue(on_error, 'on_error'),
         },
       };
       return link;
