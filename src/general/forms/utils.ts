@@ -19,13 +19,9 @@ export async function submitTaskFormData(
     ...initial_task,
     ...restFormData,
     task_type,
-    required_input_names: formData.required_input_names
-      ? formData.required_input_names.split(',')
-      : [],
-    optional_input_names: formData.optional_input_names
-      ? formData.optional_input_names.split(',')
-      : [],
-    output_names: formData.output_names ? formData.output_names.split(',') : [],
+    required_input_names: formData.required_input_names?.split(',') || [],
+    optional_input_names: formData.optional_input_names?.split(',') || [],
+    output_names: formData.output_names?.split(',') || [],
   };
 
   if (
