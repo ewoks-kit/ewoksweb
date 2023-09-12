@@ -233,7 +233,6 @@ export interface EwoksNodeUiProps {
   task_icon?: string;
   task_category?: string;
   moreHandles?: boolean;
-  exists?: boolean;
   inputs?: outputsInputsSub[];
   outputs?: outputsInputsSub[];
 }

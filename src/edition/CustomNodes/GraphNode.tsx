@@ -14,6 +14,7 @@ import NodeLabel from './NodeLabel';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import NodeIcon from './NodeIcon';
 import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
+import useStore from '../../store/useStore';
 
 function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   const { getNodes, getEdges } = useReactFlow();
@@ -21,10 +22,14 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   const { id } = props;
   const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
+  const { loadedGraphs } = useStore.getState();
 
   assertNodeDataDefined(nodeData, id);
 
   const { ui_props: uiProps } = nodeData;
+  const isOnServer = loadedGraphs.has(id);
+  // The id in the props seems to be the label....
+  console.log(loadedGraphs, id, nodeData.ewoks_props.label, isOnServer);
 
   const isValidConnection = (connection: Connection) => {
     const { isValid, reason } = isValidLink(
