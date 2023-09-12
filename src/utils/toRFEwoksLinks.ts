@@ -8,7 +8,7 @@ import type {
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import { findLinkInputs, findLinkOutputs } from './calcTasksForLink';
-import { createDataMappingData } from './utils';
+import { createDataMappingData, notUndefinedValue } from './utils';
 import { defaultLinkStyle } from '../edition/Canvas/utils';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 
@@ -29,19 +29,19 @@ export function toRFEwoksLinks(
     ({
       source,
       target,
-      data_mapping = [],
+      data_mapping,
       sub_target,
       sub_source,
-      on_error = false,
-      conditions = [],
+      on_error,
+      conditions,
       map_all_data,
-      required = false,
-      uiProps = {},
+      required,
+      uiProps,
       startEnd,
     }) => {
-      const color = uiProps.style?.stroke || '#96a5f9';
+      const color = uiProps?.style?.stroke || '#96a5f9';
 
-      const conditionsForFront = conditions.map<Condition>((con) => {
+      const conditionsForFront = conditions?.map<Condition>((con) => {
         return {
           name: con.source_output?.toString(),
           value: con.value,
@@ -62,18 +62,17 @@ export function toRFEwoksLinks(
       );
 
       const link: EwoksRFLink = {
-        id: `${source}:${uiProps.sourceHandle ?? ''}->${target}:${
-          uiProps.targetHandle ?? ''
+        id: `${source}:${uiProps?.sourceHandle ?? ''}->${target}:${
+          uiProps?.targetHandle ?? ''
         }_${id++}`,
-        label: uiProps.label,
+        ...(uiProps?.label && { label: uiProps.label }),
         source: source.toString(),
         target: target.toString(),
-
         targetHandle: calcTargetHandle(uiProps, sub_target),
         sourceHandle: calcSourceHandle(uiProps, sub_source),
-        type: uiProps.type || '',
-        markerEnd: uiProps.markerEnd ?? DEFAULT_LINK_VALUES.uiProps.markerEnd,
-        animated: uiProps.animated ?? false,
+        ...notUndefinedValue(uiProps?.type, 'type'),
+        ...notUndefinedValue(uiProps?.animated, 'animated'),
+        markerEnd: uiProps?.markerEnd ?? DEFAULT_LINK_VALUES.uiProps.markerEnd,
         ...defaultLinkStyle,
         style: {
           ...defaultLinkStyle.style,
@@ -89,25 +88,30 @@ export function toRFEwoksLinks(
           fill: color,
         },
         data: {
-          startEnd: startEnd || false,
-          getAroundProps: uiProps.getAroundProps || {
-            x: 0,
-            y: 0,
-          },
+          // DOC: startEnd is not in EwoksLink on the server but needed for calculating
+          // the in-out nodes-links.
+          startEnd: !!startEnd,
+          ...(uiProps?.type === 'getAround' &&
+            uiProps.getAroundProps && {
+              getAroundProps: uiProps.getAroundProps,
+            }),
           links_optional_output_names: linkOutputNames.optional,
           links_required_output_names: linkOutputNames.required,
           links_input_names: linkInputNames,
-          data_mapping: data_mapping.map(createDataMappingData),
-          required,
-          sub_target,
-          sub_source,
-          conditions: conditionsForFront,
-          map_all_data:
-            map_all_data === undefined
-              ? data_mapping.length === 0
-              : map_all_data,
-          on_error,
-          comment: uiProps.comment ?? '',
+          ...(data_mapping &&
+            data_mapping.length > 0 && {
+              data_mapping: data_mapping.map(createDataMappingData),
+            }),
+          ...notUndefinedValue(required, 'required'),
+          ...notUndefinedValue(sub_target, 'sub_target'),
+          ...notUndefinedValue(sub_source, 'sub_source'),
+          ...(conditionsForFront &&
+            conditionsForFront.length > 0 && {
+              conditions: conditionsForFront,
+            }),
+          ...notUndefinedValue(map_all_data, 'map_all_data'),
+          ...notUndefinedValue(uiProps?.comment, 'comment'),
+          ...notUndefinedValue(on_error, 'on_error'),
         },
       };
       return link;

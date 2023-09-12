@@ -66,9 +66,9 @@ export function curateGraph(
 
 function deleteEmptyLines<T extends DataMapping | Condition | Inputs>(
   arrayObjId: T[] | undefined
-): T[] {
+): T[] | undefined {
   if (!arrayObjId) {
-    return [];
+    return undefined;
   }
   return arrayObjId.filter(
     (obj: DataMapping | Condition | Inputs) => obj.name !== ''

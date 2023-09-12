@@ -6,9 +6,13 @@ import type {
   EwoksRFNode,
   Inputs,
 } from '../types';
-import { DEFAULT_NODE_VALUES } from './defaultValues';
 import { isString } from './typeGuards';
-import { calcDataMapping, isDecimalNumber, stringOrNumber } from './utils';
+import {
+  calcDataMapping,
+  isDecimalNumber,
+  notUndefinedValue,
+  stringOrNumber,
+} from './utils';
 
 function cleanDefaultInputs(default_inputs: Inputs[] | undefined) {
   if (!default_inputs) {
@@ -89,7 +93,6 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           withLabel,
           colorBorder,
         },
-
         comment,
       },
       position,
@@ -102,37 +105,24 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         label,
         task_type,
         task_identifier,
-        inputs_complete,
+        ...notUndefinedValue(inputs_complete, 'inputs_complete'),
         task_generator,
-        ...(nodeDefaultInputs &&
-          nodeDefaultInputs.length > 0 && {
-            default_inputs: nodeDefaultInputs,
-          }),
-        ...(default_error_node !== DEFAULT_NODE_VALUES.default_error_node && {
-          default_error_node,
-        }),
-        ...(default_error_node !== DEFAULT_NODE_VALUES.default_error_node && {
+        default_inputs: nodeDefaultInputs,
+        default_error_node,
+        ...(default_error_node && {
           default_error_attributes: calcDefaultErrorAttributes(
             default_error_attributes
           ),
         }),
         uiProps: {
-          ...(icon && { icon }),
+          icon,
           ...(comment && { comment }),
           position,
-          ...(moreHandles !== DEFAULT_NODE_VALUES.uiProps.moreHandles && {
-            moreHandles,
-          }),
+          ...notUndefinedValue(moreHandles, 'moreHandles'),
           ...(colorBorder && { colorBorder }),
-          ...(withImage !== DEFAULT_NODE_VALUES.uiProps.withImage && {
-            withImage,
-          }),
-          ...(withLabel !== DEFAULT_NODE_VALUES.uiProps.withLabel && {
-            withLabel,
-          }),
-          ...(nodeWidth !== DEFAULT_NODE_VALUES.uiProps.nodeWidth && {
-            nodeWidth,
-          }),
+          ...notUndefinedValue(withImage, 'withImage'),
+          ...notUndefinedValue(withLabel, 'withLabel'),
+          nodeWidth,
         },
       };
     }

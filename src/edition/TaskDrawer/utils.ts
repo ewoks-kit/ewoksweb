@@ -11,7 +11,6 @@ import { Position } from 'reactflow';
 import { findAllSubgraphs } from '../../store/storeUtils/FindAllSubgraphs';
 import { toRFEwoksNodes } from '../../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../../utils/toRFEwoksLinks';
-import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 
 export async function loadSubworkflow(
   subGraph: GraphEwoks,
@@ -58,12 +57,6 @@ export async function loadSubworkflow(
     graphId += id++;
   }
 
-  const {
-    default_inputs,
-    default_error_node,
-    default_error_attributes,
-  } = DEFAULT_NODE_VALUES;
-
   newNode = {
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
@@ -77,21 +70,18 @@ export async function loadSubworkflow(
         task_identifier: subGraph.graph.id,
       },
       ui_props: {
-        ...DEFAULT_NODE_VALUES.uiProps,
         exists: true,
         type: 'internal',
-        icon: subGraph.graph.uiProps?.icon,
-        inputs: inputsSub,
-        outputs: outputsSub,
+        ...(subGraph.graph.uiProps?.icon && {
+          icon: subGraph.graph.uiProps.icon,
+        }),
+        ...(inputsSub && inputsSub.length > 0 && { inputs: inputsSub }),
+        ...(outputsSub && outputsSub.length > 0 && { outputs: outputsSub }),
       },
 
       ewoks_props: {
         label: subGraph.graph.label,
-        default_inputs,
-        default_error_node,
-        default_error_attributes,
       },
-      comment: '',
     },
   };
 

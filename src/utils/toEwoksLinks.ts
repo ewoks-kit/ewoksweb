@@ -4,8 +4,9 @@ import {
   calcConditionName,
   calcConditionValue,
   calcDataMapping,
+  notUndefinedValue,
 } from './utils';
-import { DEFAULT_LINK_VALUES } from './defaultValues';
+import { uipropsIsEmpty } from '../utils/CalcGraphInputsOutputs';
 
 // EwoksRFLinks --> EwoksLinks for saving
 export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
@@ -20,73 +21,69 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
       sourceHandle,
       target,
       targetHandle,
-      data,
+      data: {
+        on_error,
+        map_all_data,
+        required,
+        comment,
+        getAroundProps,
+        sub_source,
+        sub_target,
+        data_mapping,
+        conditions,
+      },
       type,
       markerEnd,
       style,
       animated,
     }) => {
-      const datamapping =
-        data.data_mapping && calcDataMapping(data.data_mapping);
+      const datamapping = data_mapping && calcDataMapping(data_mapping);
 
-      const conditionsValue = data.conditions?.map((con) => {
+      const conditionsValue = conditions?.map((con) => {
         return {
           source_output: calcConditionName(con),
           value: calcConditionValue(con),
         };
       });
 
-      const { required, on_error } = DEFAULT_LINK_VALUES;
-      const link: EwoksLink = {
+      const linkUiProps = {
+        ...(isString(label) && {
+          label,
+        }),
+        ...(comment && { comment }),
+        ...(type && { type }),
+        ...(markerEnd &&
+          typeof markerEnd !== 'string' &&
+          markerEnd.type !== 'arrowclosed' && {
+            markerEnd,
+          }),
+        ...(style?.stroke !== '#96a5f9' && {
+          style: { stroke: style?.stroke },
+        }),
+        ...notUndefinedValue(animated, 'animated'),
+        ...(sourceHandle && sourceHandle !== 'sr' && { sourceHandle }),
+        ...(targetHandle && targetHandle !== 'tl' && { targetHandle }),
+        ...(type === 'getAround' && {
+          getAroundProps,
+        }),
+      };
+
+      return {
         source,
         target,
-        ...(datamapping &&
-          datamapping.length > 0 && {
-            data_mapping: datamapping,
-          }),
-        ...(conditionsValue &&
-          conditionsValue.length > 0 && {
-            conditions: conditionsValue,
-          }),
-        ...(data.on_error !== on_error && {
-          on_error: data.on_error,
+        ...(sub_source && { sub_source }),
+        ...(sub_target && { sub_target }),
+        ...(datamapping && {
+          data_mapping: datamapping,
         }),
-        map_all_data: data.map_all_data,
-        ...(data.required !== required && {
-          required: data.required,
+        ...(conditionsValue && {
+          conditions: conditionsValue,
         }),
-        uiProps: {
-          ...(label &&
-            isString(label) && {
-              label,
-            }),
-          ...(data.comment && { comment: data.comment }),
-          ...(type && type !== DEFAULT_LINK_VALUES.uiProps.type && { type }),
-          ...(markerEnd &&
-            typeof markerEnd !== 'string' &&
-            markerEnd.type !== DEFAULT_LINK_VALUES.uiProps.markerEnd.type && {
-              markerEnd,
-            }),
-          ...(style?.stroke !== '#96a5f9' && {
-            style: { stroke: style?.stroke },
-          }),
-          ...(animated !== DEFAULT_LINK_VALUES.uiProps.animated && {
-            animated,
-          }),
-          sourceHandle,
-          targetHandle,
-          ...(type === 'getAround' && {
-            getAroundProps: data.getAroundProps,
-          }),
-        },
+        ...notUndefinedValue(on_error, 'on_error'),
+        ...notUndefinedValue(required, 'required'),
+        map_all_data,
+        ...(!uipropsIsEmpty(linkUiProps) && { uiProps: linkUiProps }),
       };
-      if (data.sub_source) {
-        link.sub_source = data.sub_source;
-      }
-      if (data.sub_target) {
-        link.sub_target = data.sub_target;
-      }
-      return link;
     }
   );
 }

@@ -6,7 +6,6 @@ import type {
   GraphEwoks,
   Task,
 } from '../types';
-import { DEFAULT_NODE_VALUES } from './defaultValues';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import {
@@ -15,7 +14,7 @@ import {
   calcNodeType,
   addNodeProperties,
 } from './toRFEwoksNodesUtils';
-import { createDataMappingData } from './utils';
+import { createDataMappingData, notUndefinedValue } from './utils';
 
 // Accepts a GraphEwoks and returns an EwoksRFNode[]
 export function toRFEwoksNodes(
@@ -56,34 +55,30 @@ export function toRFEwoksNodes(
     }) => {
       const nodeType = calcNodeType(inputsAl, outputsAl, task_type, id);
 
-      const {
-        moreHandles,
-        nodeWidth,
-        withImage,
-        withLabel,
-      } = DEFAULT_NODE_VALUES.uiProps;
-
       const node: EwoksRFNode = {
         id: id.toString(),
         type: task_type,
         data: {
           ewoks_props: {
             label: label ?? task_identifier,
-            default_inputs: default_inputs?.map((dIn) => {
-              return {
-                name: dIn.name.toString(),
-                value: dIn.value,
-              };
-            }),
-            ...(inputs_complete !== undefined && {
-              inputs_complete,
-            }),
-            default_error_node:
-              default_error_node || DEFAULT_NODE_VALUES.default_error_node,
-            default_error_attributes: calcDefaultErrorAttributes(
-              default_error_attributes
-            ),
-            task_generator,
+            ...(default_inputs &&
+              default_inputs.length > 0 && {
+                default_inputs: default_inputs.map((dIn) => {
+                  return {
+                    name: dIn.name.toString(),
+                    value: dIn.value,
+                  };
+                }),
+              }),
+            ...notUndefinedValue(inputs_complete, 'inputs_complete'),
+            ...notUndefinedValue(default_error_node, 'default_error_node'),
+            ...(default_error_node &&
+              default_error_attributes && {
+                default_error_attributes: calcDefaultErrorAttributes(
+                  default_error_attributes
+                ),
+              }),
+            ...notUndefinedValue(task_generator, 'task_generator'),
           },
           task_props: {
             task_type,
@@ -91,15 +86,15 @@ export function toRFEwoksNodes(
             task_icon: uiProps?.task_icon,
           },
           ui_props: {
-            nodeWidth: uiProps?.nodeWidth ?? nodeWidth,
+            ...notUndefinedValue(uiProps?.nodeWidth, 'nodeWidth'),
             type: nodeType,
-            icon: uiProps?.icon,
-            moreHandles: uiProps?.moreHandles ?? moreHandles,
-            withImage: uiProps?.withImage ?? withImage,
-            withLabel: uiProps?.withLabel ?? withLabel,
-            colorBorder: uiProps?.colorBorder ?? '',
+            ...(uiProps?.icon && { icon: uiProps.icon }),
+            ...notUndefinedValue(uiProps?.moreHandles, 'moreHandles'),
+            ...notUndefinedValue(uiProps?.withImage, 'withImage'),
+            ...notUndefinedValue(uiProps?.withLabel, 'withLabel'),
+            ...notUndefinedValue(uiProps?.colorBorder, 'colorBorder'),
           },
-          comment: uiProps?.comment ?? '',
+          ...notUndefinedValue(uiProps?.comment, 'comment'),
         },
         position: uiProps?.position ?? { x: 100, y: 100 },
       };

@@ -13,6 +13,7 @@ import { Tooltip } from '@material-ui/core';
 import NodeLabel from './NodeLabel';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import NodeIcon from './NodeIcon';
+import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 
 function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   const { getNodes, getEdges } = useReactFlow();
@@ -39,6 +40,8 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   };
 
   const nodeWidth = { width: `${uiProps.nodeWidth || 100}px` };
+  const { withImage = DEFAULT_NODE_VALUES.uiProps.withImage } = uiProps;
+  const { withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel } = uiProps;
 
   const borderColor = uiProps.colorBorder;
 
@@ -64,11 +67,11 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
         <span style={{ ...style.displayNode, ...nodeWidth }} className="icons">
           <NodeLabel
             label={nodeData.ewoks_props.label || ''}
-            showFull={uiProps.withLabel}
-            showCropped={!uiProps.withLabel && !uiProps.withImage}
+            showFull={withLabel}
+            showCropped={!withLabel && !withImage}
             color={uiProps.exists ? '#ced3ee' : 'red'}
           />
-          {uiProps.withImage && (
+          {withImage && (
             <SuspenseBoundary>
               <NodeIcon nodeId={id} onDragStart={(e) => e.preventDefault()} />
             </SuspenseBoundary>
