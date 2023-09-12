@@ -12,16 +12,19 @@ import { getNodesData } from '../../utils';
 import NodeLabel from './NodeLabel';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
+import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 
 function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
   assertNodeDataDefined(nodeData, args.id);
 
+  const { colorBorder: borderColor, nodeWidth } = nodeData.ui_props;
+
   const {
-    withImage,
-    withLabel,
-    colorBorder: borderColor,
-    nodeWidth,
+    withImage = DEFAULT_NODE_VALUES.uiProps.withImage,
+  } = nodeData.ui_props;
+  const {
+    withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel,
   } = nodeData.ui_props;
 
   const { task_type } = nodeData.task_props;

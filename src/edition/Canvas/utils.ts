@@ -65,7 +65,7 @@ export function addConnectionToGraph(
       ...(targetTaskData.task_props.task_type === 'graph' &&
         targetHandle && { sub_target: targetHandle }),
     },
-    id: `${source}:${sourceHandle || ''}->${target}:${targetHandle || ''}`,
+    id: `${source}:${sourceHandle || 'sr'}->${target}:${targetHandle || 'tl'}`,
     source,
     target,
     ...(sourceHandle && { sourceHandle }),

@@ -5,15 +5,16 @@ import type {
   GraphDetails,
   GraphNodes,
   GraphRF,
-  GraphUiProps,
 } from '../types';
 import {
   calcConditionName,
   calcConditionValue,
   calcDataMapping,
+  notUndefinedValue,
 } from './utils';
+import { DEFAULT_LINK_VALUES } from './defaultValues';
 
-// Calculate the ewoks input_nodes and output_nodes within the graph
+// DOC: Calculate the ewoks input_nodes and output_nodes within the graph
 // from the nodes of the graphRF model with types graphInput, graphOutput
 export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
   let input_nodes: GraphNodes[] = [];
@@ -58,13 +59,13 @@ export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
       output_nodes,
     }),
     ...(graph.graph.uiProps &&
-      !uipropsIsEmpty(graph.graph.uiProps) && {
+      !propIsEmpty(graph.graph.uiProps) && {
         uiProps: { ...graph.graph.uiProps },
       }),
   };
 }
 
-export function uipropsIsEmpty(uiprops: GraphUiProps) {
+export function propIsEmpty(uiprops: object) {
   let isEmpty = true;
   for (const [, value] of Object.entries(uiprops)) {
     if ((Array.isArray(value) && value.length > 0) || value) {
@@ -86,19 +87,21 @@ function calcInOutNodes(
   let nodesNamesConnectedTo: string[] = [];
 
   if (inputOrOutput === 'graphInput') {
-    // find those nodes this INPUT node is connected to
+    // DOC: Find the nodes, this INPUT node is connected to
+    // In the current ewoks spec only one node can be connected to input-output node
     nodesNamesConnectedTo = graph_links
       .filter((link) => link.source === nod.id)
       .map((link) => link.target);
   }
 
   if (inputOrOutput === 'graphOutput') {
-    // find those nodes this OUTPUT node is connected to
+    // DOC: Find the nodes this OUTPUT node is connected to
     nodesNamesConnectedTo = graph_links
-      .filter((link) => link.target === nod.id) // !!
-      .map((link) => link.source); // !!
+      .filter((link) => link.target === nod.id)
+      .map((link) => link.source);
   }
 
+  // DOC: use an array for all nodes although ewoks allows only one for now
   const nodeObjConnectedTo: EwoksRFNode[] = [];
   for (const nodesNames of nodesNamesConnectedTo) {
     const nodeInGraph = graph_nodes.find((node) => nodesNames === node.id);
@@ -107,7 +110,7 @@ function calcInOutNodes(
     }
   }
 
-  // iterate the nodes to create the new input_nodes
+  // DOC: Iterate the nodes to create the new input_nodes
   nodeObjConnectedTo.forEach((nodConnected) => {
     const link_index =
       inputOrOutput === 'graphOutput'
@@ -129,13 +132,6 @@ function calcInOutNodes(
       )
     );
   });
-
-  if (nodeObjConnectedTo.length === 0) {
-    nodes.push(
-      calcNodeProps(false, nod, { id: '' } as EwoksRFNode, [], 0, inputOrOutput)
-    );
-  }
-
   return nodes;
 }
 
@@ -147,50 +143,67 @@ function calcNodeProps(
   link_index: number,
   inputOrOutput: string
 ): GraphNodes {
-  const label = graph_links[link_index]?.label;
+  const link = graph_links[link_index];
 
-  return {
-    id: nod.id,
-    node: nodConnected.id,
+  const lData = link.data;
+  const nData = nod.data;
+  const nUiprops = nData.ui_props;
 
-    sub_node: isGraph
-      ? (graph_links[link_index] && inputOrOutput === 'graphOutput'
-          ? graph_links[link_index].data.sub_source
-          : graph_links[link_index].data.sub_target) || undefined
-      : undefined,
-    link_attributes: {
-      label: isString(label) ? label : '',
-      comment: graph_links[link_index]?.data.comment ?? '',
-      conditions:
-        graph_links[link_index]?.data.conditions?.map((con) => {
+  const linkAttributes = {
+    ...(isString(link.label) && { label: link.label }),
+    ...(lData.comment && { comment: lData.comment }),
+    ...(lData.conditions &&
+      lData.conditions.length > 0 && {
+        conditions: lData.conditions.map((con) => {
           return {
             source_output: calcConditionName(con),
             value: calcConditionValue(con),
           };
-        }) || [],
-      data_mapping: calcDataMapping(
-        graph_links[link_index]?.data.data_mapping || []
-      ),
-      map_all_data: graph_links[link_index]?.data.map_all_data || false,
-      on_error: graph_links[link_index]?.data.on_error || false,
-      required: graph_links[link_index]?.data.required || false,
-    },
+        }),
+      }),
+    ...(lData.data_mapping &&
+      lData.data_mapping.length > 0 && {
+        data_mapping: calcDataMapping(lData.data_mapping),
+      }),
+    ...notUndefinedValue(lData.map_all_data, 'map_all_data'),
+    ...notUndefinedValue(lData.on_error, 'on_error'),
+    ...notUndefinedValue(lData.required, 'required'),
+  };
+
+  return {
+    id: nod.id,
+    node: nodConnected.id,
+    sub_node: isGraph
+      ? (inputOrOutput === 'graphOutput'
+          ? lData.sub_source
+          : lData.sub_target) || undefined
+      : undefined,
+    ...(nodConnected.id &&
+      !propIsEmpty(linkAttributes) && { link_attributes: linkAttributes }),
     uiProps: {
       position: nod.position,
-      label: nod.data.ewoks_props.label,
-      linkStyle: graph_links[link_index]?.type || 'default',
-      style: {
-        stroke: graph_links[link_index]?.style?.stroke || '',
-        strokeWidth: '3px',
-      },
-      markerEnd: graph_links[link_index]?.markerEnd || '',
-      animated: graph_links[link_index]?.animated || false,
-      withImage:
-        'withImage' in nod.data.ui_props ? nod.data.ui_props.withImage : true,
-      withLabel:
-        'withLabel' in nod.data.ui_props ? nod.data.ui_props.withLabel : true,
-      colorBorder: nod.data.ui_props.colorBorder,
-      nodeWidth: nod.data.ui_props.nodeWidth,
+      ...notUndefinedValue(nData.ewoks_props.label, 'label'),
+      ...notUndefinedValue(link.type, 'type'),
+      ...(link.style?.stroke &&
+        link.style.stroke !== DEFAULT_LINK_VALUES.uiProps.stroke && {
+          style: {
+            stroke: link.style.stroke,
+          },
+        }),
+      ...(link.markerEnd &&
+        typeof link.markerEnd !== 'string' &&
+        link.markerEnd.type !== DEFAULT_LINK_VALUES.uiProps.markerEnd.type && {
+          markerEnd: link.markerEnd,
+        }),
+      ...notUndefinedValue(link.animated, 'animated'),
+      ...notUndefinedValue(nUiprops.withImage, 'withImage'),
+      ...notUndefinedValue(nUiprops.withLabel, 'withLabel'),
+      ...(nUiprops.colorBorder && {
+        colorBorder: nUiprops.colorBorder,
+      }),
+      ...(nUiprops.nodeWidth && {
+        nodeWidth: nUiprops.nodeWidth,
+      }),
     },
   };
 }

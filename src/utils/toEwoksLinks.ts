@@ -6,7 +6,8 @@ import {
   calcDataMapping,
   notUndefinedValue,
 } from './utils';
-import { uipropsIsEmpty } from '../utils/CalcGraphInputsOutputs';
+import { propIsEmpty } from '../utils/CalcGraphInputsOutputs';
+import { DEFAULT_LINK_VALUES } from './defaultValues';
 
 // EwoksRFLinks --> EwoksLinks for saving
 export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
@@ -54,7 +55,7 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
         ...(type && { type }),
         ...(markerEnd &&
           typeof markerEnd !== 'string' &&
-          markerEnd.type !== 'arrowclosed' && {
+          markerEnd.type !== DEFAULT_LINK_VALUES.uiProps.markerEnd.type && {
             markerEnd,
           }),
         ...(style?.stroke !== '#96a5f9' && {
@@ -82,7 +83,7 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
         ...notUndefinedValue(on_error, 'on_error'),
         ...notUndefinedValue(required, 'required'),
         map_all_data,
-        ...(!uipropsIsEmpty(linkUiProps) && { uiProps: linkUiProps }),
+        ...(!propIsEmpty(linkUiProps) && { uiProps: linkUiProps }),
       };
     }
   );

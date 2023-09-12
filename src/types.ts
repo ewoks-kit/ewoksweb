@@ -23,19 +23,18 @@ export interface GraphNodes {
 
 // TODO: examine with ewoks if all the following are needed in an InOutLink
 export interface InOutLinkAttributes {
-  label: string;
-  comment: string;
-  conditions: ConditionEwoks[];
-  data_mapping: DataMappingEwoks[];
-  map_all_data: boolean;
-  on_error: boolean;
-  required: boolean;
+  label?: string;
+  comment?: string;
+  conditions?: ConditionEwoks[];
+  data_mapping?: DataMappingEwoks[];
+  map_all_data?: boolean;
+  on_error?: boolean;
+  required?: boolean;
 }
 
 export interface InOutNodesUiProps {
   label?: string;
   position?: XYPosition;
-  linkStyle?: string;
   style?: LinkStyle;
   animated?: boolean;
   markerEnd?: EdgeMarkerType;
