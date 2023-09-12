@@ -1,5 +1,4 @@
 import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
-import type { OpenDraggableDialogSlice } from './store/openDraggableDialog';
 import type { SubgraphsStackSlice } from './store/subgraphsStack';
 import type { LoadedGraphsSlice } from './store/loadedGraphs';
 import type { RootWorkflowSlice } from './store/rootWorkflow';
@@ -84,7 +83,6 @@ export interface EwoksEvent {
 
 export interface State
   extends DisplayedWorkflowInfoSlice,
-    OpenDraggableDialogSlice,
     SubgraphsStackSlice,
     LoadedGraphsSlice,
     RootWorkflowSlice {}
