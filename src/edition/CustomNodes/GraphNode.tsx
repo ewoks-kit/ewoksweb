@@ -27,9 +27,11 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   assertNodeDataDefined(nodeData, id);
 
   const { ui_props: uiProps } = nodeData;
-  const isOnServer = loadedGraphs.has(id);
-  // The id in the props seems to be the label....
-  console.log(loadedGraphs, id, nodeData.ewoks_props.label, isOnServer);
+  // DOC: the subgraph is connected to the original graph through the task_identifier like
+  // simple nodes and not through the id which is the unique in the current graph nodeId
+  const subgraphExistsOnServer = loadedGraphs.has(
+    nodeData.task_props.task_identifier
+  );
 
   const isValidConnection = (connection: Connection) => {
     const { isValid, reason } = isValidLink(
@@ -74,7 +76,7 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
             label={nodeData.ewoks_props.label || ''}
             showFull={withLabel}
             showCropped={!withLabel && !withImage}
-            color={isOnServer ? '#ced3ee' : 'red'}
+            color={subgraphExistsOnServer ? '#ced3ee' : 'red'}
           />
           {withImage && (
             <SuspenseBoundary>

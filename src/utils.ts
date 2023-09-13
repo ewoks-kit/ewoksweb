@@ -37,7 +37,6 @@ export async function getSubgraphs(
     (id) =>
       id && !loadedGraphsIds.some((loadedGraphsId) => id === loadedGraphsId)
   );
-  console.log(graphIdsToFetch);
 
   try {
     const subgraphResponses = await Promise.all(

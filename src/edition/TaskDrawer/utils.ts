@@ -52,8 +52,7 @@ export async function loadSubworkflow(
     };
   });
   let id = 0;
-  let graphId = subGraph.graph.label || ''; //
-  console.log(subGraph.graph.label, subGraph.graph.id);
+  let graphId = subGraph.graph.label || '';
 
   while (nodes.some((nod) => nod.id === graphId)) {
     graphId += id++;
