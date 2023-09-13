@@ -55,6 +55,8 @@ const rootWorkflow = (
 
     // 3. Put the newNodeSubgraphs into loadedGraphs in their graphRF form (sync)
     newNodeSubgraphs.forEach((gr) => {
+      console.log(gr);
+
       // calculate the rfNodes using the fetched subgraphs
       // nodes and edges stored with their data as EwoksRFNodes-Links
       get().addLoadedGraph({
