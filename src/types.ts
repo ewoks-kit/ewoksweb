@@ -266,7 +266,6 @@ export interface RFNodeUiProps {
   colorBorder?: string;
   nodeWidth?: number;
   moreHandles?: boolean;
-  exists?: boolean;
   // To position inputs-outputs of subgraphs in a graph
   inputs?: outputsInputsSub[];
   outputs?: outputsInputsSub[];

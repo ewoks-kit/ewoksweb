@@ -74,7 +74,7 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
             label={nodeData.ewoks_props.label || ''}
             showFull={withLabel}
             showCropped={!withLabel && !withImage}
-            color={uiProps.exists ? '#ced3ee' : 'red'}
+            color={isOnServer ? '#ced3ee' : 'red'}
           />
           {withImage && (
             <SuspenseBoundary>
