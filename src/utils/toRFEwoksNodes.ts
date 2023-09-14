@@ -8,12 +8,7 @@ import type {
 } from '../types';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
-import {
-  inputsAll,
-  outputsAll,
-  calcNodeType,
-  addNodeProperties,
-} from './toRFEwoksNodesUtils';
+import { addNodeProperties } from './toRFEwoksNodesUtils';
 import { createDataMappingData, notUndefinedValue } from './utils';
 
 // Accepts a GraphEwoks and returns an EwoksRFNode[]
@@ -22,11 +17,6 @@ export function toRFEwoksNodes(
   newNodeSubgraphs: GraphEwoks[],
   tasks: Task[]
 ): EwoksRFNode[] {
-  // Find input and output nodes of the graph
-  const inputsAl = inputsAll(tempGraph);
-
-  const outputsAl = outputsAll(tempGraph);
-
   const inNodeLinks = inNodesLinks(
     tempGraph.graph.input_nodes,
     tempGraph.nodes
@@ -59,8 +49,6 @@ export function toRFEwoksNodes(
       task_generator,
       uiProps,
     }) => {
-      const nodeType = calcNodeType(inputsAl, outputsAl, task_type, id);
-
       const node: EwoksRFNode = {
         id: id.toString(),
         type: task_type,
@@ -93,7 +81,6 @@ export function toRFEwoksNodes(
           },
           ui_props: {
             ...notUndefinedValue(uiProps?.nodeWidth, 'nodeWidth'),
-            type: nodeType,
             ...(uiProps?.icon && { icon: uiProps.icon }),
             ...notUndefinedValue(uiProps?.moreHandles, 'moreHandles'),
             ...notUndefinedValue(uiProps?.withImage, 'withImage'),

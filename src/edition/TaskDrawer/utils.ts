@@ -71,7 +71,6 @@ export async function loadSubworkflow(
       },
       ui_props: {
         exists: true,
-        type: 'internal',
         ...(subGraph.graph.uiProps?.icon && {
           icon: subGraph.graph.uiProps.icon,
         }),
