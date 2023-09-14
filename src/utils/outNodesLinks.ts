@@ -31,7 +31,6 @@ export function outNodesLinks(
           task_type: 'graphOutput',
           task_identifier: 'Start-End',
           uiProps: {
-            type: 'output',
             position: temPosition,
             icon: 'graphOutput.svg',
             ...notUndefinedValue(uIProps?.withImage, 'withImage'),
