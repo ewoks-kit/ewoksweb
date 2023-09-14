@@ -135,8 +135,14 @@ function calcSourceHandle(
 
 function calcInOutLinks(tempGraph: GraphEwoks): GraphEwoks {
   // DOC: calculate the links from inputs-outputs of the Ewoks graph
-  const inNodeLinks = inNodesLinks(tempGraph);
-  const outNodeLinks = outNodesLinks(tempGraph);
+  const inNodeLinks = inNodesLinks(
+    tempGraph.graph.input_nodes,
+    tempGraph.nodes
+  );
+  const outNodeLinks = outNodesLinks(
+    tempGraph.graph.output_nodes,
+    tempGraph.nodes
+  );
 
   // DOC: accumulate all links inOutTempGraph
   const inOutTempGraph: GraphEwoks = { ...tempGraph };
