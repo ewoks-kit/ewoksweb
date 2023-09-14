@@ -27,8 +27,14 @@ export function toRFEwoksNodes(
 
   const outputsAl = outputsAll(tempGraph);
 
-  const inNodeLinks = inNodesLinks(tempGraph);
-  const outNodeLinks = outNodesLinks(tempGraph);
+  const inNodeLinks = inNodesLinks(
+    tempGraph.graph.input_nodes,
+    tempGraph.nodes
+  );
+  const outNodeLinks = outNodesLinks(
+    tempGraph.graph.output_nodes,
+    tempGraph.nodes
+  );
 
   const inOutTempGraph = { ...tempGraph };
 
