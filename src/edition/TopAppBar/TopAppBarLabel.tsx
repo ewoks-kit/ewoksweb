@@ -8,8 +8,9 @@ export default function TopAppBarLabel() {
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo
   );
+  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
 
-  if (subgraphsStack.length === 0 || !subgraphsStack[0].label) {
+  if (!rootWorkflowId) {
     return (
       <span data-cy="untitled_workflow">
         Untitled_workflow <span className={styles.labelHint}>(unsaved)</span>
