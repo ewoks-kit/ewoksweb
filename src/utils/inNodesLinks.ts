@@ -36,7 +36,6 @@ export function inNodesLinks(
           task_type: 'graphInput',
           task_identifier: 'Start-End',
           uiProps: {
-            type: 'input',
             position: temPosition,
             icon: 'graphInput.svg',
             ...(uIProps && { ...calcCommonNodeUiProps(uIProps) }),

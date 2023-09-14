@@ -92,19 +92,6 @@ export interface Action {
   graph: GraphRF;
 }
 
-// These types are being calculated when opening a workflow
-// for using them in validation.
-// They are not recalculated though wjilw editing the graph.
-// Keeping them until we re-implement the graph-validation
-// No need to be saved on the server.
-export type NodeInGraphType =
-  | 'input_output'
-  | 'input'
-  | 'output'
-  | 'graphInput'
-  | 'graphOutput'
-  | 'internal';
-
 export interface NodeProps {
   id: string;
   nodeWidth?: number;
@@ -124,7 +111,6 @@ export type TaskType =
   | 'graph'
   | 'method'
   | 'ppfmethod'
-  | 'graphInput'
   | 'graphOutput'
   | 'class'
   | 'note'
@@ -218,7 +204,6 @@ export interface EwoksNode {
 }
 
 export interface EwoksNodeUiProps {
-  type?: string;
   icon?: string;
   comment?: string;
   position?: XYPosition;
@@ -253,7 +238,6 @@ export interface OutputsInputsSub {
 }
 
 export interface RFNodeUiProps {
-  type?: NodeInGraphType;
   icon?: string;
   style?: CSSProperties;
   withImage?: boolean;

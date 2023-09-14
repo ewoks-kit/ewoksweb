@@ -71,7 +71,6 @@ export async function loadSubworkflow(
         task_identifier: subGraph.graph.id,
       },
       ui_props: {
-        type: 'internal',
         ...(inputsSub && inputsSub.length > 0 && { inputs: inputsSub }),
         ...(outputsSub && outputsSub.length > 0 && { outputs: outputsSub }),
       },
