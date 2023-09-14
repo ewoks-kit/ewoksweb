@@ -89,11 +89,15 @@ export function toRFEwoksNodes(
           task_props: {
             task_type,
             task_identifier,
+            // gets this from the uiProps and not from the task?
+            // Maybe this is not needed since the node will initially take the
+            // tasks icon or the default and will save it in uiProps...
             task_icon: uiProps?.task_icon,
           },
           ui_props: {
             ...notUndefinedValue(uiProps?.nodeWidth, 'nodeWidth'),
             type: nodeType,
+            // same icon is taken from uiProps
             ...(uiProps?.icon && { icon: uiProps.icon }),
             ...notUndefinedValue(uiProps?.moreHandles, 'moreHandles'),
             ...notUndefinedValue(uiProps?.withImage, 'withImage'),

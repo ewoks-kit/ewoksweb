@@ -73,6 +73,7 @@ export async function loadSubworkflow(
         exists: true,
         type: 'internal',
         ...(subGraph.graph.uiProps?.icon && {
+          // For loading a subgraph we use the icon defined in graph uiProps
           icon: subGraph.graph.uiProps.icon,
         }),
         ...(inputsSub && inputsSub.length > 0 && { inputs: inputsSub }),

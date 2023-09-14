@@ -86,7 +86,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     if (!isString(iconName)) {
       return;
     }
-
+    // saves the selected icon in uiProps
     mergeNodeData(nodeId, {
       ui_props: { icon: iconName },
     });
