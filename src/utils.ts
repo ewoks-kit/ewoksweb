@@ -19,7 +19,7 @@ import { isEwoksServerErrorResponse } from './utils/typeGuards';
 import useNodeDataStore from './store/useNodeDataStore';
 import useEdgeDataStore from './store/useEdgeDataStore';
 
-const DEFAULT_ICON = orange3;
+export const DEFAULT_ICON: Icon = { name: 'orange3.png', data_url: orange3 };
 
 export async function getSubgraphs(
   graph: GraphEwoks,
@@ -73,12 +73,12 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
 
 export function findImage(img: string | undefined, allIcons: Icon[]): string {
   if (!img) {
-    return DEFAULT_ICON;
+    return DEFAULT_ICON.data_url;
   }
 
   const icon = allIcons.find((ico) => ico.name === img);
   if (!icon) {
-    return DEFAULT_ICON;
+    return DEFAULT_ICON.data_url;
   }
 
   return icon.data_url;
