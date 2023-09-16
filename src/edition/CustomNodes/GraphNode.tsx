@@ -14,6 +14,7 @@ import NodeLabel from './NodeLabel';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import NodeIcon from './NodeIcon';
 import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
+import useStore from '../../store/useStore';
 
 function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   const { getNodes, getEdges } = useReactFlow();
@@ -21,10 +22,16 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   const { id } = props;
   const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
+  const { loadedGraphs } = useStore.getState();
 
   assertNodeDataDefined(nodeData, id);
 
   const { ui_props: uiProps } = nodeData;
+  // DOC: the subgraph is connected to the original graph through the task_identifier like
+  // simple nodes and not through the id which is the unique in the current graph nodeId
+  const subgraphExistsOnServer = loadedGraphs.has(
+    nodeData.task_props.task_identifier
+  );
 
   const isValidConnection = (connection: Connection) => {
     const { isValid, reason } = isValidLink(
@@ -69,7 +76,7 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
             label={nodeData.ewoks_props.label || ''}
             showFull={withLabel}
             showCropped={!withLabel && !withImage}
-            color={uiProps.exists ? '#ced3ee' : 'red'}
+            color={subgraphExistsOnServer ? '#ced3ee' : 'red'}
           />
           {withImage && (
             <SuspenseBoundary>

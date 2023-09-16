@@ -53,6 +53,7 @@ export async function loadSubworkflow(
   });
   let id = 0;
   let graphId = subGraph.graph.label || '';
+
   while (nodes.some((nod) => nod.id === graphId)) {
     graphId += id++;
   }
@@ -70,7 +71,6 @@ export async function loadSubworkflow(
         task_identifier: subGraph.graph.id,
       },
       ui_props: {
-        exists: true,
         type: 'internal',
         ...(subGraph.graph.uiProps?.icon && {
           icon: subGraph.graph.uiProps.icon,

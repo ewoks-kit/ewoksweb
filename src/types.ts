@@ -231,7 +231,6 @@ export interface EwoksNodeUiProps {
   task_icon?: string;
   task_category?: string;
   moreHandles?: boolean;
-  exists?: boolean;
   inputs?: outputsInputsSub[];
   outputs?: outputsInputsSub[];
 }
@@ -265,7 +264,6 @@ export interface RFNodeUiProps {
   colorBorder?: string;
   nodeWidth?: number;
   moreHandles?: boolean;
-  exists?: boolean;
   // To position inputs-outputs of subgraphs in a graph
   inputs?: outputsInputsSub[];
   outputs?: outputsInputsSub[];
