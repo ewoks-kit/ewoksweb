@@ -160,7 +160,6 @@ export interface GraphUiProps {
   type?: string;
   comment?: string;
   notes?: Note[];
-  icon?: string;
 }
 
 export interface LinkStyle {
@@ -228,7 +227,6 @@ export interface EwoksNodeUiProps {
   withLabel?: boolean;
   colorBorder?: string;
   nodeWidth?: number;
-  task_icon?: string;
   task_category?: string;
   moreHandles?: boolean;
   inputs?: outputsInputsSub[];
@@ -272,7 +270,6 @@ export interface RFNodeUiProps {
 export interface RFNodeTaskProperties {
   task_type: TaskType;
   task_identifier: string;
-  task_icon?: string;
   task_category?: string;
   optional_input_names?: string[];
   output_names?: string[];

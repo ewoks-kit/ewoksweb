@@ -11,6 +11,7 @@ import type { ChangeEvent } from 'react';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined, isString } from '../../../utils/typeGuards';
 import { useIcons } from 'api/icons';
+import { DEFAULT_ICON } from '../../../utils';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(props: { nodeId: string }) {
@@ -86,7 +87,6 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     if (!isString(iconName)) {
       return;
     }
-
     mergeNodeData(nodeId, {
       ui_props: { icon: iconName },
     });
@@ -193,7 +193,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
           <InputLabel id="replace-node-icon">Node Icon</InputLabel>
           <Select
             labelId="replace-node-icon"
-            value={nodeData.ui_props.icon}
+            value={nodeData.ui_props.icon || DEFAULT_ICON.name}
             label="Override Task Icon"
             onChange={handleNodeIconChange}
           >

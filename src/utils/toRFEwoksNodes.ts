@@ -89,7 +89,6 @@ export function toRFEwoksNodes(
           task_props: {
             task_type,
             task_identifier,
-            task_icon: uiProps?.task_icon,
           },
           ui_props: {
             ...notUndefinedValue(uiProps?.nodeWidth, 'nodeWidth'),
