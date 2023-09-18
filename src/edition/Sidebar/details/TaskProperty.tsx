@@ -3,6 +3,7 @@ import { EditOutlined as EditIcon } from '@material-ui/icons';
 import { useState } from 'react';
 import IdentifierEditDialog from './IdentifierEditDialog';
 import { IconButton } from '@material-ui/core';
+import { isArray } from 'lodash';
 
 interface TaskPropertyProps {
   id: string;
@@ -30,10 +31,11 @@ function TaskProperty(props: TaskPropertyProps) {
     setOpen(false);
   }
 
-  return (
+  return (typeof value === 'string' && value) ||
+    (isArray(value) && value.length > 0) ? (
     <>
       <div key={id} className={styles.entry} data-cy="task_props">
-        <b>{label}:</b> {Array.isArray(value) ? value.join(', ') : value}
+        <span>{label}:</span> {Array.isArray(value) ? value.join(', ') : value}
         {editable && (
           <IconButton
             size="small"
@@ -52,6 +54,8 @@ function TaskProperty(props: TaskPropertyProps) {
         onPropSave={handlePropSave}
       />
     </>
+  ) : (
+    <span />
   );
 }
 export default TaskProperty;

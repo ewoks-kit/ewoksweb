@@ -5,8 +5,6 @@ import type { Node, Edge } from 'reactflow';
 import { isNodeRF } from '../../../utils/typeGuards';
 import type { SelectedElementRF } from '../../../types';
 
-import SidebarSection from '../SidebarSection';
-
 interface Content {
   title?: string;
   EditComponent: () => JSX.Element;
@@ -21,13 +19,13 @@ function getSectionContent(selectedElement: Node | Edge | undefined): Content {
 
   if (isNodeRF(selectedElement)) {
     return {
-      title: 'Styling Node',
+      title: 'Appearance',
       EditComponent: () => <EditNodeStyle nodeId={selectedElement.id} />,
     };
   }
 
   return {
-    title: 'Styling Link',
+    title: 'Appearance',
     EditComponent: () => <EditLinkStyle {...selectedElement} />,
   };
 }
@@ -39,10 +37,11 @@ export default function EditElementStyle({
   const { title, EditComponent } = getSectionContent(selectedElement);
 
   return (
-    <SidebarSection title={title}>
-      <form noValidate autoComplete="off">
-        <EditComponent />
-      </form>
-    </SidebarSection>
+    <>
+      <div style={{ marginTop: '15px', fontSize: '16px' }}>
+        <b>{title}</b>
+      </div>
+      <EditComponent />
+    </>
   );
 }
