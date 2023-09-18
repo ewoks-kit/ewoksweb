@@ -2,54 +2,9 @@ import type {
   EwoksRFNode,
   GraphEwoks,
   GraphNodes,
-  NodeInGraphType,
-  OutputsInputsSub,
   Task,
+  OutputsInputsSub,
 } from '../types';
-
-export function inputsAll(tempGraph: GraphEwoks): (string | undefined)[] {
-  return (
-    tempGraph.graph.input_nodes
-      ?.filter((nod) => nod.node)
-      .map((nod) => nod.node) || []
-  );
-}
-
-export function outputsAll(tempGraph: GraphEwoks): (string | undefined)[] {
-  return (
-    tempGraph.graph.output_nodes
-      ?.filter((nod) => nod.node)
-      .map((nod) => nod.node) || []
-  );
-}
-
-// DOC: calculate if node in a graph is input and/or output or internal
-export function calcNodeType(
-  inputs: (string | undefined)[],
-  outputs: (string | undefined)[],
-  task_type: string,
-  id: string
-): NodeInGraphType {
-  const isInput = inputs.includes(id);
-  const isOutput = outputs.includes(id);
-  if (isInput && isOutput) {
-    return 'input_output';
-  }
-  if (isInput) {
-    return 'input';
-  }
-  if (isOutput) {
-    return 'output';
-  }
-  if (task_type === 'graphInput') {
-    return 'graphInput';
-  }
-  if (task_type === 'graphOutput') {
-    return 'graphOutput';
-  }
-
-  return 'internal';
-}
 
 // DOC: locate the task and add required+optional-inputs + outputs
 export function calcTask(tasks: Task[], task_identifier: string): Task {
