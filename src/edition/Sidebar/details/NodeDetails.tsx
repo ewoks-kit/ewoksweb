@@ -105,34 +105,37 @@ export default function NodeDetails(selectedElement: Node) {
   return (
     <Box>
       <NodeLabelComment showComment selectedElement={selectedElement} />
-      {selectedElement.type !== 'note' && (
-        <>
-          <DefaultInputs {...selectedElement} />
+      {selectedElement.type &&
+        !['graphInput', 'graphOutput', 'note'].includes(
+          selectedElement.type
+        ) && (
+          <>
+            <DefaultInputs {...selectedElement} />
 
-          <SidebarTooltip
-            text={`Set to True when the default input covers all required input
+            <SidebarTooltip
+              text={`Set to True when the default input covers all required input
               (used for method and script as the required inputs are unknown).`}
-          >
-            <div>
-              <Checkbox
-                checked={nodeData.ewoks_props.inputs_complete || false}
-                onChange={(event) =>
-                  inputsCompleteChanged(event.target.checked)
-                }
-                inputProps={{ 'aria-label': 'controlled' }}
-                color="primary"
-              />
-              <b>Inputs Complete</b>
-            </div>
-          </SidebarTooltip>
-          <DefaultErrorNodeControl nodeId={selectedElement.id} />
-          <NodeInfo
-            nodeId={selectedElement.id}
-            nodeData={nodeData}
-            onPropChange={handlePropChange}
-          />
-        </>
-      )}
+            >
+              <div>
+                <Checkbox
+                  checked={nodeData.ewoks_props.inputs_complete || false}
+                  onChange={(event) =>
+                    inputsCompleteChanged(event.target.checked)
+                  }
+                  inputProps={{ 'aria-label': 'controlled' }}
+                  color="primary"
+                />
+                <b>Inputs Complete</b>
+              </div>
+            </SidebarTooltip>
+            <DefaultErrorNodeControl nodeId={selectedElement.id} />
+            <NodeInfo
+              nodeId={selectedElement.id}
+              nodeData={nodeData}
+              onPropChange={handlePropChange}
+            />
+          </>
+        )}
     </Box>
   );
 }

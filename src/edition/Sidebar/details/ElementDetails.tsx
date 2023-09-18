@@ -9,9 +9,7 @@ function ElementDetails({ selectedElement }: SelectedElementRF) {
     <form noValidate autoComplete="off" style={{ width: '100%' }}>
       {!selectedElement ? (
         <GraphDetails />
-      ) : isNodeRF(selectedElement) &&
-        selectedElement.type !== 'graphInput' &&
-        selectedElement.type !== 'graphOutput' ? (
+      ) : isNodeRF(selectedElement) ? (
         <NodeDetails key={selectedElement.id} {...selectedElement} />
       ) : (
         isEdgeRF(selectedElement) && (
