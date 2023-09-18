@@ -21,6 +21,7 @@ export default function LinkDetails(selectedElement: Edge) {
   assertEdgeDataDefined(edgeData, selectedElement.id);
 
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
+  const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
 
   const [showDataMapping, setShowDataMapping] = useState(
     !edgeData.map_all_data
@@ -47,7 +48,12 @@ export default function LinkDetails(selectedElement: Edge) {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setShowConditions(event.target.checked);
-    mergeEdgeData(selectedElement.id, { on_error: !event.target.checked });
+    const newEdgeData = {
+      ...edgeData,
+      on_error: !event.target.checked,
+      ...(!event.target.checked && { conditions: [] }),
+    };
+    setEdgeData(selectedElement.id, newEdgeData);
   };
 
   return (
