@@ -24,7 +24,7 @@ export default function TopAppBarLabel() {
 
   return (
     <span data-cy={displayedWorkflowInfo.label}>
-      {displayedWorkflowInfo.label}
+      {displayedWorkflowInfo.label || displayedWorkflowInfo.id}
     </span>
   );
 }
