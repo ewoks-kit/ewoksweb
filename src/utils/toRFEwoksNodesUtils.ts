@@ -3,6 +3,7 @@ import type {
   GraphEwoks,
   GraphNodes,
   NodeInGraphType,
+  OutputsInputsSub,
   Task,
 } from '../types';
 
@@ -60,54 +61,37 @@ export function calcTask(tasks: Task[], task_identifier: string): Task {
   return tempTask;
 }
 
-interface calcInOutForSubgraphOutput {
-  id: string;
-  label: string;
-  type: string;
-  positionY?: number;
-}
-
 export function calcInOutForSubgraph(
   subgraphNode: GraphEwoks | undefined
-): calcInOutForSubgraphOutput[][] {
-  let inputsSub: calcInOutForSubgraphOutput[] = [];
-  let outputsSub: calcInOutForSubgraphOutput[] = [];
+): OutputsInputsSub[][] {
+  let inputsSub: OutputsInputsSub[] = [];
+  let outputsSub: OutputsInputsSub[] = [];
 
-  if (subgraphNode?.graph.id) {
-    if (subgraphNode.graph.output_nodes) {
-      const allOutputsIds = subgraphNode.graph.output_nodes.map(
-        (nod) => nod.id
-      );
-      outputsSub = subgraphNode.graph.output_nodes.map((output) => {
-        allOutputsIds.shift();
+  if (subgraphNode?.graph.input_nodes) {
+    const allInputsIds = subgraphNode.graph.input_nodes.map((nod) => nod.id);
 
-        return {
-          id: output.id,
-          label: calcLabel(output, allOutputsIds),
-          type: 'data ',
-          positionY: output.uiProps?.position?.y || 100,
-        };
-      });
-    }
+    inputsSub = subgraphNode.graph.input_nodes.map((input) => {
+      allInputsIds.shift();
 
-    if (subgraphNode.graph.input_nodes) {
-      const allInputsIds = subgraphNode.graph.input_nodes.map((nod) => nod.id);
-
-      inputsSub = subgraphNode.graph.input_nodes.map((input) => {
-        allInputsIds.shift();
-
-        return {
-          id: input.id,
-          label: calcLabel(input, allInputsIds),
-          type: 'data ',
-          positionY: input.uiProps?.position?.y || 100,
-        };
-      });
-    }
-  } else {
-    inputsSub = [{ id: '', label: 'unknown_input', type: 'data' }];
-    outputsSub = [{ id: '', label: 'unknown_output', type: 'data' }];
+      return {
+        label: calcLabel(input, allInputsIds),
+        positionY: input.uiProps?.position?.y || 100,
+      };
+    });
   }
+
+  if (subgraphNode?.graph.output_nodes) {
+    const allOutputsIds = subgraphNode.graph.output_nodes.map((nod) => nod.id);
+    outputsSub = subgraphNode.graph.output_nodes.map((output) => {
+      allOutputsIds.shift();
+
+      return {
+        label: calcLabel(output, allOutputsIds),
+        positionY: output.uiProps?.position?.y || 100,
+      };
+    });
+  }
+
   return [inputsSub, outputsSub];
 }
 

@@ -229,8 +229,8 @@ export interface EwoksNodeUiProps {
   nodeWidth?: number;
   task_category?: string;
   moreHandles?: boolean;
-  inputs?: outputsInputsSub[];
-  outputs?: outputsInputsSub[];
+  inputs?: OutputsInputsSub[];
+  outputs?: OutputsInputsSub[];
 }
 
 export interface EwoksLink {
@@ -247,9 +247,8 @@ export interface EwoksLink {
   startEnd?: boolean;
 }
 
-export interface outputsInputsSub {
+export interface OutputsInputsSub {
   label: string;
-  type: string;
   positionY?: number;
 }
 
@@ -263,8 +262,8 @@ export interface RFNodeUiProps {
   nodeWidth?: number;
   moreHandles?: boolean;
   // To position inputs-outputs of subgraphs in a graph
-  inputs?: outputsInputsSub[];
-  outputs?: outputsInputsSub[];
+  inputs?: OutputsInputsSub[];
+  outputs?: OutputsInputsSub[];
 }
 
 export interface RFNodeTaskProperties {
@@ -426,13 +425,6 @@ export interface filterParams {
   job_id?: string;
   // type: string;
   error?: boolean;
-}
-
-export interface calcInOutForSubgraphOutput {
-  id: string;
-  label: string;
-  type: string;
-  positionY?: number;
 }
 
 export interface SelectedElement {

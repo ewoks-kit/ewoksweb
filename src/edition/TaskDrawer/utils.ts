@@ -42,13 +42,13 @@ export async function loadSubworkflow(
   const inputsSub = subGraph.graph.input_nodes?.map((input) => {
     return {
       label: calcLabel(input),
-      type: 'data ',
+      positionY: input.uiProps?.position?.y || 100,
     };
   });
   const outputsSub = subGraph.graph.output_nodes?.map((output) => {
     return {
       label: calcLabel(output),
-      type: 'data ',
+      positionY: output.uiProps?.position?.y || 100,
     };
   });
   let id = 0;
