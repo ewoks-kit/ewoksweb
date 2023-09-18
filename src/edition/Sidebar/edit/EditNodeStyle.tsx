@@ -101,49 +101,58 @@ export default function EditNodeStyle(props: { nodeId: string }) {
       <div>
         {nodeData.task_props.task_type !== 'note' && (
           <>
-            <label htmlFor="withImage">With image</label>
-            <Checkbox
-              name="withImage"
-              checked={
-                nodeData.ui_props.withImage === undefined
-                  ? true
-                  : !!nodeData.ui_props.withImage
-              }
-              onChange={(event) => withImageChanged(event.target.checked)}
-              inputProps={{ 'aria-label': 'controlled' }}
-            />
-            <label htmlFor="withLabel">With label</label>
-            <Checkbox
-              name="withLabel"
-              checked={
-                nodeData.ui_props.withLabel === undefined
-                  ? true
-                  : !!nodeData.ui_props.withLabel
-              }
-              onChange={(event) => withLabelChanged(event.target.checked)}
-              inputProps={{ 'aria-label': 'controlled' }}
-            />
+            <span style={{ whiteSpace: 'nowrap' }}>
+              <Checkbox
+                name="withImage"
+                color="primary"
+                checked={
+                  nodeData.ui_props.withImage === undefined
+                    ? true
+                    : !!nodeData.ui_props.withImage
+                }
+                onChange={(event) => withImageChanged(event.target.checked)}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />
+              <label htmlFor="withImage">With image</label>
+            </span>
+            <span style={{ whiteSpace: 'nowrap' }}>
+              <Checkbox
+                name="withLabel"
+                color="primary"
+                checked={
+                  nodeData.ui_props.withLabel === undefined
+                    ? true
+                    : !!nodeData.ui_props.withLabel
+                }
+                onChange={(event) => withLabelChanged(event.target.checked)}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />
+              <label htmlFor="withLabel">With label</label>
+            </span>
           </>
         )}
-        <label id="borderCheckboxLabel" htmlFor="borderCheckbox">
-          With border
-        </label>
-        <Checkbox
-          name="borderCheckbox"
-          checked={showBorderColor}
-          onChange={() => {
-            if (showBorderColor) {
-              setShowBorderColor(false);
-              colorBorderChanged('');
-            } else {
-              setShowBorderColor(true);
-              colorBorderChanged('#000000');
-            }
-          }}
-        />
+        <div style={{ whiteSpace: 'nowrap' }}>
+          <Checkbox
+            name="borderCheckbox"
+            color="primary"
+            checked={showBorderColor}
+            onChange={() => {
+              if (showBorderColor) {
+                setShowBorderColor(false);
+                colorBorderChanged('');
+              } else {
+                setShowBorderColor(true);
+                colorBorderChanged('#000000');
+              }
+            }}
+          />
+          <label id="borderCheckboxLabel" htmlFor="borderCheckbox">
+            With border
+          </label>
+        </div>
       </div>
       {showBorderColor && (
-        <div>
+        <div style={{ marginLeft: '10px' }}>
           <label htmlFor="head">Border color</label>
           <input
             aria-label="Color"
@@ -160,18 +169,21 @@ export default function EditNodeStyle(props: { nodeId: string }) {
         nodeData.task_props.task_type
       ) && (
         <div>
-          <div>
-            <label htmlFor="moreHandles">More handles</label>
+          <div style={{ whiteSpace: 'nowrap' }}>
             <Checkbox
               name="moreHandles"
+              color="primary"
               checked={!!nodeData.ui_props.moreHandles}
               onChange={(event) => moreHandlesChanged(event.target.checked)}
               inputProps={{ 'aria-label': 'controlled' }}
             />
+            <label htmlFor="moreHandles">More handles</label>
           </div>
         </div>
       )}
-      <div style={{ minWidth: '200px' }}>
+      <div
+        style={{ minWidth: '200px', maxWidth: '250px', paddingLeft: '10px' }}
+      >
         <label htmlFor="nodeSize">Node size</label>
         <Slider
           id="nodeSize"
@@ -182,29 +194,30 @@ export default function EditNodeStyle(props: { nodeId: string }) {
           onChangeCommitted={onChangeCommitted}
           min={40}
           max={300}
-          style={{ width: '100%', paddingTop: '45px' }}
+          style={{ width: '70%', paddingTop: '22px', marginLeft: '80px' }}
           valueLabelDisplay="on"
         />
+
+        {!['graphInput', 'graphOutput', 'note'].includes(
+          nodeData.task_props.task_type
+        ) && (
+          <FormControl variant="outlined">
+            <InputLabel id="replace-node-icon">Node Icon</InputLabel>
+            <Select
+              labelId="replace-node-icon"
+              value={nodeData.ui_props.icon || DEFAULT_ICON.name}
+              label="Override Task Icon"
+              onChange={handleNodeIconChange}
+            >
+              {icons.map((icon) => (
+                <MenuItem value={icon.name} key={icon.name}>
+                  {icon.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        )}
       </div>
-      {!['graphInput', 'graphOutput', 'note'].includes(
-        nodeData.task_props.task_type
-      ) && (
-        <FormControl variant="outlined" fullWidth>
-          <InputLabel id="replace-node-icon">Node Icon</InputLabel>
-          <Select
-            labelId="replace-node-icon"
-            value={nodeData.ui_props.icon || DEFAULT_ICON.name}
-            label="Override Task Icon"
-            onChange={handleNodeIconChange}
-          >
-            {icons.map((icon) => (
-              <MenuItem value={icon.name} key={icon.name}>
-                {icon.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      )}
     </FormControl>
   );
 }

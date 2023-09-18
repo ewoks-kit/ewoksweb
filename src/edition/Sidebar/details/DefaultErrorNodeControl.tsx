@@ -1,5 +1,4 @@
 import { Checkbox, Grid, Switch, Typography } from '@material-ui/core';
-import SidebarTooltip from '../SidebarTooltip';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import NodeDataMapping from '../EditableTableProperties/NodeDataMapping';
@@ -33,28 +32,24 @@ export default function DefaultErrorNodeControl(props: { nodeId: string }) {
 
   return (
     <>
-      <SidebarTooltip
-        text={`When set to True all nodes without error handler
-              will be linked to this node. ONLY for one node in its graph`}
-      >
-        <div>
-          <Checkbox
-            checked={
-              default_error_node || DEFAULT_NODE_VALUES.default_error_node
-            }
-            onChange={(event) =>
-              handleDefaultErrorNodeChanged(event.target.checked)
-            }
-            inputProps={{ 'aria-label': 'controlled' }}
-            color="primary"
-          />
-          <b>Default Error Node</b>
-        </div>
-      </SidebarTooltip>
+      <div>
+        <Checkbox
+          checked={default_error_node || DEFAULT_NODE_VALUES.default_error_node}
+          onChange={(event) =>
+            handleDefaultErrorNodeChanged(event.target.checked)
+          }
+          inputProps={{ 'aria-label': 'controlled' }}
+          color="primary"
+        />
+        <span>Default Error Node</span>
+      </div>
 
       {default_error_node && (
         <div>
-          <Typography component="div" style={{ fontSize: '15px' }}>
+          <Typography
+            component="div"
+            style={{ fontSize: '15px', marginLeft: '10px' }}
+          >
             <Grid component="label" container alignItems="center" spacing={1}>
               <Grid item>
                 {default_error_attributes?.map_all_data ? (
@@ -68,6 +63,7 @@ export default function DefaultErrorNodeControl(props: { nodeId: string }) {
                   checked={!default_error_attributes?.map_all_data}
                   onChange={handleChangeShowDataMapping}
                   name="dataMappingSwitch"
+                  color="primary"
                 />
               </Grid>
               <Grid item>

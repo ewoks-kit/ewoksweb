@@ -6,6 +6,8 @@ import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import type { Node } from 'reactflow';
 import { nanoid } from 'nanoid';
 import { isClass } from './utils';
+import { IconButton } from '@material-ui/core';
+import InfoIcon from '@material-ui/icons/Info';
 
 export default function DefaultInputs(element: Node) {
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
@@ -46,15 +48,17 @@ export default function DefaultInputs(element: Node) {
 
   return (
     <div>
-      <SidebarTooltip
-        text={`Used to create an input when not provided
-              by the output of other connected nodes(tasks).`}
-      >
-        <div style={{ marginTop: '5px', fontSize: '16px' }}>
-          <b>Default Inputs </b>
-        </div>
-      </SidebarTooltip>
-
+      <div style={{ marginTop: '15px', fontSize: '16px' }}>
+        <b>Default Inputs </b>
+        <SidebarTooltip
+          text={`Used to create an input when not provided
+            by the output of other connected nodes(tasks).`}
+        >
+          <IconButton size="small">
+            <InfoIcon fontSize="small" />
+          </IconButton>
+        </SidebarTooltip>
+      </div>
       <EditableTable
         headers={['Name', 'Value']}
         defaultValues={nodeData.ewoks_props.default_inputs || []}
