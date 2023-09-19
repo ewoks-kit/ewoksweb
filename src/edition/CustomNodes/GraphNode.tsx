@@ -74,7 +74,9 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
       >
         <span style={{ ...style.displayNode, ...nodeWidth }} className="icons">
           <NodeLabel
-            label={nodeData.ewoks_props.label || ''}
+            label={
+              nodeData.ewoks_props.label || nodeData.task_props.task_identifier
+            }
             showFull={withLabel}
             showCropped={!withLabel && !withImage}
             color={subgraphExistsOnServer ? '#ced3ee' : 'red'}
