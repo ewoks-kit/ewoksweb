@@ -1,61 +1,60 @@
-describe('new Task form', () => {
-  before(() => {
-    cy.loadAppWithoutGraph();
-  });
+import { nanoid } from 'nanoid';
 
-  it('creates new task', () => {
+describe('new Task form', () => {
+  beforeEach(() => {
+    cy.loadAppWithoutGraph();
+
     cy.findByRole('button', { name: 'New task' }).click();
     cy.waitForStableDOM();
+  });
 
-    cy.findByRole('textbox', { name: 'Identifier' }).type('Always-and-forever');
+  it('prevents creating new task without id or type', () => {
+    cy.findByRole('button', { name: 'Save Task' }).click();
 
-    cy.findByRole('textbox', { name: 'Category' }).should('be.enabled');
+    cy.findByText('Please give a task identifier !').should('be.visible');
 
-    cy.findByRole('textbox', { name: 'Optional inputs' }).as(
-      'optionalInputsBox'
-    );
-    cy.findByRole('textbox', { name: 'Required inputs' }).as(
-      'requiredInputsBox'
-    );
-    cy.findByRole('textbox', { name: 'Outputs' }).as('outputsBox');
+    cy.findByRole('textbox', { name: 'Identifier' }).type('My_new_task');
 
-    // Test `class` Task type
+    cy.findByRole('button', { name: 'Save Task' }).click();
+
+    cy.findByText('Please give a task type !').should('be.visible');
+  });
+
+  it('creates a new class task with no inputs/outputs', () => {
+    const id = nanoid();
+    cy.findByRole('textbox', { name: 'Identifier' }).type(id);
+
     cy.findByRole('button', { name: /^Task type/ }).click();
     cy.findByRole('option', { name: 'class' }).click();
 
-    cy.get('@optionalInputsBox').should('be.enabled');
-    cy.get('@requiredInputsBox').should('be.enabled');
-    cy.get('@outputsBox').should('be.enabled');
+    cy.findByRole('textbox', { name: 'Category' }).type('Cypress_test');
 
-    // Test `method` Task type
+    cy.findByRole('button', { name: 'Save Task' }).click();
+
+    cy.findByRole('button', { name: 'Cypress_test' }).click();
+    cy.findByRole('button', { name: id }).should('be.visible');
+  });
+
+  it('creates a new class task with inputs and outputs', () => {
+    const id = nanoid();
+    cy.findByRole('textbox', { name: 'Identifier' }).type(id);
+
     cy.findByRole('button', { name: /^Task type/ }).click();
-    cy.findByRole('option', { name: 'method' }).click();
+    cy.findByRole('option', { name: 'class' }).click();
 
-    cy.get('@optionalInputsBox').should('be.disabled');
-    cy.get('@requiredInputsBox').should('be.disabled');
-    cy.get('@outputsBox').should('be.disabled');
-    cy.get('@outputsBox').should('have.value', 'return_value');
+    cy.findByRole('textbox', { name: 'Category' }).type('Cypress_test');
 
-    // Test `script` Task type
-    cy.findByRole('button', { name: /^Task type/ }).click();
-    cy.findByRole('option', { name: 'script' }).click();
+    cy.findByRole('textbox', { name: 'Required inputs' }).type(
+      'arg0, arg1, arg2'
+    );
+    cy.findByRole('textbox', { name: 'Optional inputs' }).type(
+      'opt_arg0, opt_arg1'
+    );
+    cy.findByRole('textbox', { name: 'Outputs' }).type('results');
 
-    cy.get('@optionalInputsBox').should('be.disabled');
-    cy.get('@requiredInputsBox').should('be.disabled');
-    cy.get('@outputsBox').should('be.disabled');
-    cy.get('@outputsBox').should('have.value', 'return_code');
+    cy.findByRole('button', { name: 'Save Task' }).click();
 
-    // Test `ppfmethod` Task type
-    cy.findByRole('button', { name: /^Task type/ }).click();
-    cy.findByRole('option', { name: 'ppfport' }).click();
-
-    cy.get('@optionalInputsBox').should('be.disabled');
-    cy.get('@requiredInputsBox').should('be.disabled');
-    cy.get('@outputsBox').should('be.disabled');
-
-    cy.findByRole('textbox', { name: 'Category' }).type('till-forever-ends');
-
-    cy.findByRole('button', { name: /^Icon/ }).click();
-    cy.findByRole('option', { name: 'default.png' }).click();
+    cy.findByRole('button', { name: 'Cypress_test' }).click();
+    cy.findByRole('button', { name: id }).should('be.visible');
   });
 });
