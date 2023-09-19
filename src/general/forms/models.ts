@@ -6,7 +6,7 @@ export interface TaskFields {
   optional_input_names?: string;
   output_names?: string;
   required_input_names?: string;
-  icon: string;
+  icon?: string;
   category?: string;
 }
 

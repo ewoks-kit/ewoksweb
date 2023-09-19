@@ -59,7 +59,10 @@ function TaskForm(props: Props) {
   });
   const onSubmit = handleSubmit(async (data: TaskFields) => {
     try {
-      await submitTaskFormData(data, elementToEdit, editExistingTask);
+      const cleanedData = Object.fromEntries(
+        Object.entries(data).filter(([, value]) => value !== '')
+      );
+      await submitTaskFormData(cleanedData, elementToEdit, editExistingTask);
     } catch (error) {
       showErrorMsg(textForError(error, commonStrings.savingError));
       return;

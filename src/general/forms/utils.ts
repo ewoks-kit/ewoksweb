@@ -5,23 +5,31 @@ import { assertDefined } from '../../utils/typeGuards';
 import type { TaskFields } from './models';
 
 export async function submitTaskFormData(
-  formData: TaskFields,
+  formData: Partial<TaskFields>,
   initial_task?: Task,
   editExisting?: boolean
 ) {
-  const { task_type, ...restFormData } = formData;
+  const {
+    task_type,
+    task_identifier,
+    required_input_names,
+    optional_input_names,
+    output_names,
+    ...restFormData
+  } = formData;
 
-  if (task_type === '') {
-    throw new Error('Please give a task type');
+  if (!task_type || !task_identifier) {
+    throw new Error('Please give a task type and a task identifier');
   }
 
   const parsedData: Task = {
     ...initial_task,
     ...restFormData,
+    task_identifier,
     task_type,
-    required_input_names: formData.required_input_names?.split(',') || [],
-    optional_input_names: formData.optional_input_names?.split(',') || [],
-    output_names: formData.output_names?.split(',') || [],
+    required_input_names: required_input_names?.split(',') || [],
+    optional_input_names: optional_input_names?.split(',') || [],
+    output_names: output_names?.split(',') || [],
   };
 
   if (
