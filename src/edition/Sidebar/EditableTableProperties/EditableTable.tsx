@@ -52,6 +52,7 @@ interface EditableTableProps {
   headers: string[];
   defaultValues: Condition[] | Inputs[];
   typeOfValues: TypeOfValues[];
+  inactive?: boolean | undefined;
   valuesChanged: (rows: EditableTableRow[]) => void;
   onRowAdd?: (rows?: EditableTableRow[]) => void;
 }
@@ -71,7 +72,7 @@ function EditableTable(props: EditableTableProps) {
   const [dialogContent, setDialogContent] = React.useState<DialogContent>();
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
-  const { defaultValues, headers, onRowAdd } = props;
+  const { defaultValues, headers, inactive, onRowAdd } = props;
 
   useEffect(() => {
     setTypeOfInputs(defaultValues.map(getType));
@@ -252,6 +253,7 @@ function EditableTable(props: EditableTableProps) {
         />
       )}
       <Table
+        style={{ opacity: inactive ? '0.2' : '1' }}
         className={classes.table}
         aria-label="editable table"
         size="small"
@@ -288,12 +290,14 @@ function EditableTable(props: EditableTableProps) {
                   onChange={onChange}
                   onEdit={() => onEditRow(row.id || '', index)}
                 />
-
-                <ToolsCell onDelete={() => onDelete(row.id || '')} />
+                <ToolsCell
+                  inactive={inactive}
+                  onDelete={() => onDelete(row.id || '')}
+                />
               </TableRow>
             </React.Fragment>
           ))}
-          {onRowAdd && (
+          {onRowAdd && !inactive && (
             <TableRow>
               <TableCell align="left" className={classes.plusButtonTableCell} />
               <TableCell align="left" className={classes.plusButtonTableCell}>
@@ -304,6 +308,11 @@ function EditableTable(props: EditableTableProps) {
           )}
         </TableBody>
       </Table>
+      {inactive && (
+        <div style={{ backgroundColor: '#f9f9e2', marginLeft: '10px' }}>
+          Conditions will be deleted if on Error condition is selected
+        </div>
+      )}
     </>
   );
 }

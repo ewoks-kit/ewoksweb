@@ -225,7 +225,7 @@ export default function EditLinkStyle(element: Edge) {
         />
         <label htmlFor="animated">Animated</label>
       </div>
-      <div>
+      <div style={{ marginLeft: '10px' }}>
         <label htmlFor="head">Color</label>
         <input
           aria-label="Color"
@@ -238,7 +238,7 @@ export default function EditLinkStyle(element: Edge) {
         />
       </div>
       {linkType === 'getAround' && (
-        <div>
+        <div style={{ marginLeft: '10px' }}>
           Size of Link
           <div>X</div>
           <Slider

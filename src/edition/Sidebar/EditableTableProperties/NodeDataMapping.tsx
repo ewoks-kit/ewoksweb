@@ -39,6 +39,7 @@ export default function NodeDataMapping({ nodeId }: { nodeId: string }) {
   return (
     <div>
       <TableDataMapping
+        inactive={false}
         onRowAdd={(rows) => addDataMapping(rows)}
         headers={['Source', 'Target']}
         values={

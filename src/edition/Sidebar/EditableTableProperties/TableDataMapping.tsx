@@ -13,13 +13,23 @@ import ToolsCell from './ToolsCell';
 import { TableCell } from '@material-ui/core';
 import AddRowButton from './AddRowButton';
 
-export const useStyles = makeStyles(() => ({
-  table: {
+interface TableDataMappingProps {
+  inactive: boolean | undefined;
+  headers: string[];
+  values: DataMapping[];
+  typeOfValues: TypeOfValues[];
+  valuesChanged: (rows: DataMapping[]) => void;
+  onRowAdd?: (rows?: DataMapping[]) => void;
+}
+
+const useStyles = makeStyles(() => ({
+  table: (props: { inactive: boolean | undefined }) => ({
     padding: '1px',
     minWidth: 160,
     wordBreak: 'break-all',
     marginLeft: '10px',
-  },
+    opacity: props.inactive ? '0.2' : '1',
+  }),
   tableCell: {
     textAlign: 'end',
     width: '50%',
@@ -28,23 +38,16 @@ export const useStyles = makeStyles(() => ({
   },
 }));
 
-interface TableDataMappingProps {
-  headers: string[];
-  values: DataMapping[];
-  typeOfValues: TypeOfValues[];
-  valuesChanged: (rows: DataMapping[]) => void;
-  onRowAdd?: (rows?: DataMapping[]) => void;
-}
-
 function TableDataMapping(props: TableDataMappingProps) {
   const [rows, setRows] = React.useState<DataMapping[]>([]);
 
-  const { values, headers, onRowAdd } = props;
+  const { values, headers, inactive, onRowAdd } = props;
 
   useEffect(() => {
     setRows(values);
   }, [values]);
-  const classes = useStyles();
+
+  const classes = useStyles({ inactive });
 
   function onChange(
     e: { target: { name: string; value: string | number } },
@@ -79,46 +82,56 @@ function TableDataMapping(props: TableDataMappingProps) {
   }
 
   return (
-    <Table className={classes.table} aria-label="data-mapping-table">
-      <TableHeader headers={headers} />
-      <TableBody>
-        {rows.map((row, index) => (
-          <React.Fragment key={row.id}>
+    <>
+      <Table className={classes.table} aria-label="data-mapping-table">
+        <TableHeader headers={headers} />
+        <TableBody>
+          {rows.map((row, index) => (
+            <React.Fragment key={row.id}>
+              <TableRow>
+                <CustomTableCell
+                  index={index}
+                  row={row}
+                  rowsNames={rows.map((ro) => ro.name || '')}
+                  name="name"
+                  onChange={onChange}
+                  typeOfValues={props.typeOfValues[0]}
+                  usedIn="DataMapping"
+                />
+                <CustomTableCell
+                  index={index}
+                  row={row}
+                  name="value"
+                  onChange={onChange}
+                  typeOfValues={props.typeOfValues[1]}
+                  usedIn="DataMapping"
+                />
+                <ToolsCell
+                  inactive={inactive}
+                  onDelete={() => onDelete(row.id || '')}
+                />
+              </TableRow>
+            </React.Fragment>
+          ))}
+          {onRowAdd && !inactive && (
             <TableRow>
-              <CustomTableCell
-                index={index}
-                row={row}
-                rowsNames={rows.map((ro) => ro.name || '')}
-                name="name"
-                onChange={onChange}
-                typeOfValues={props.typeOfValues[0]}
-                usedIn="DataMapping"
-              />
-              <CustomTableCell
-                index={index}
-                row={row}
-                name="value"
-                onChange={onChange}
-                typeOfValues={props.typeOfValues[1]}
-                usedIn="DataMapping"
-              />
-              <ToolsCell onDelete={() => onDelete(row.id || '')} />
+              <TableCell align="left" className={classes.tableCell}>
+                <AddRowButton
+                  onClick={() => onRowAdd(rows)}
+                  ariaLabel="Add data mapping entry"
+                />
+              </TableCell>
+              <TableCell />
             </TableRow>
-          </React.Fragment>
-        ))}
-        {onRowAdd && (
-          <TableRow>
-            <TableCell align="left" className={classes.tableCell}>
-              <AddRowButton
-                onClick={() => onRowAdd(rows)}
-                ariaLabel="Add data mapping entry"
-              />
-            </TableCell>
-            <TableCell />
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+          )}
+        </TableBody>
+      </Table>
+      {inactive && (
+        <div style={{ backgroundColor: '#f9f9e2', marginLeft: '10px' }}>
+          Data Mappings will be deleted if Map all Data is selected
+        </div>
+      )}
+    </>
   );
 }
 

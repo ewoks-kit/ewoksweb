@@ -47,11 +47,12 @@ function CustomTableCell(props: CustomTableCellProps) {
       align="left"
       className={classes.tableCell}
       style={{
+        padding: '0 4px',
         borderBottom: isRowContentInvalid(row, rowsNames, name, usedIn)
           ? 'solid'
           : 'none',
         borderColor: isRowContentInvalid(row, rowsNames, name, usedIn)
-          ? 'rgb(249, 81, 81)'
+          ? '#f7d7d7'
           : 'white',
       }}
     >
