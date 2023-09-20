@@ -12,6 +12,7 @@ import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined, isString } from '../../../utils/typeGuards';
 import { useIcons } from 'api/icons';
 import { DEFAULT_ICON } from '../../../utils';
+import sidebarStyle from '../sidebarStyle';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(props: { nodeId: string }) {
@@ -100,9 +101,10 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     <FormControl variant="filled" fullWidth>
       <div>
         {nodeData.task_props.task_type !== 'note' && (
-          <>
-            <span style={{ whiteSpace: 'nowrap' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div style={{ marginRight: '20px' }}>
               <Checkbox
+                style={sidebarStyle.checkbox}
                 name="withImage"
                 color="primary"
                 checked={
@@ -114,9 +116,10 @@ export default function EditNodeStyle(props: { nodeId: string }) {
                 inputProps={{ 'aria-label': 'controlled' }}
               />
               <label htmlFor="withImage">With image</label>
-            </span>
-            <span style={{ whiteSpace: 'nowrap' }}>
+            </div>
+            <div>
               <Checkbox
+                style={sidebarStyle.checkbox}
                 name="withLabel"
                 color="primary"
                 checked={
@@ -128,11 +131,12 @@ export default function EditNodeStyle(props: { nodeId: string }) {
                 inputProps={{ 'aria-label': 'controlled' }}
               />
               <label htmlFor="withLabel">With label</label>
-            </span>
-          </>
+            </div>
+          </div>
         )}
-        <div style={{ whiteSpace: 'nowrap' }}>
+        <div>
           <Checkbox
+            style={sidebarStyle.checkbox}
             name="borderCheckbox"
             color="primary"
             checked={showBorderColor}
@@ -152,7 +156,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
         </div>
       </div>
       {showBorderColor && (
-        <div style={{ marginLeft: '10px' }}>
+        <div>
           <label htmlFor="head">Border color</label>
           <input
             aria-label="Color"
@@ -161,7 +165,6 @@ export default function EditNodeStyle(props: { nodeId: string }) {
             name="head"
             value={nodeData.ui_props.colorBorder || ''}
             onChange={(event) => colorBorderChanged(event.target.value)}
-            style={{ margin: '10px' }}
           />
         </div>
       )}
@@ -169,8 +172,9 @@ export default function EditNodeStyle(props: { nodeId: string }) {
         nodeData.task_props.task_type
       ) && (
         <div>
-          <div style={{ whiteSpace: 'nowrap' }}>
+          <div>
             <Checkbox
+              style={sidebarStyle.checkbox}
               name="moreHandles"
               color="primary"
               checked={!!nodeData.ui_props.moreHandles}
@@ -181,10 +185,10 @@ export default function EditNodeStyle(props: { nodeId: string }) {
           </div>
         </div>
       )}
-      <div
-        style={{ minWidth: '200px', maxWidth: '250px', paddingLeft: '10px' }}
-      >
-        <label htmlFor="nodeSize">Node size</label>
+      <div style={{ display: 'flex' }}>
+        <label htmlFor="nodeSize" style={{ margin: '10px 20px 0px 0px' }}>
+          Node size
+        </label>
         <Slider
           id="nodeSize"
           color="primary"
@@ -194,14 +198,15 @@ export default function EditNodeStyle(props: { nodeId: string }) {
           onChangeCommitted={onChangeCommitted}
           min={40}
           max={300}
-          style={{ width: '70%', paddingTop: '22px', marginLeft: '80px' }}
+          style={{ margin: '32px 5px 15px 0px' }}
           valueLabelDisplay="on"
         />
-
+      </div>
+      <div>
         {!['graphInput', 'graphOutput', 'note'].includes(
           nodeData.task_props.task_type
         ) && (
-          <FormControl variant="outlined">
+          <FormControl variant="outlined" fullWidth>
             <InputLabel id="replace-node-icon">Node Icon</InputLabel>
             <Select
               labelId="replace-node-icon"

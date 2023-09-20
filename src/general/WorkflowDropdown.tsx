@@ -88,7 +88,7 @@ function WorkflowDropdown(props: Props) {
           setInputValue('');
         }, 200);
       }}
-      getOptionLabel={(option) => option.label}
+      getOptionLabel={(option) => option.label || option.id}
       placeholder="Quick open"
       disableClearable
       blurOnSelect

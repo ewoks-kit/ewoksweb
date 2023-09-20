@@ -27,7 +27,6 @@ const useStyles = makeStyles(() => ({
     padding: '1px',
     minWidth: 160,
     wordBreak: 'break-all',
-    marginLeft: '10px',
     opacity: props.inactive ? '0.2' : '1',
   }),
   tableCell: {

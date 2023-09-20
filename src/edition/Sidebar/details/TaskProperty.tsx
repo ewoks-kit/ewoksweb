@@ -31,8 +31,15 @@ function TaskProperty(props: TaskPropertyProps) {
     setOpen(false);
   }
 
-  return (typeof value === 'string' && value) ||
-    (isArray(value) && value.length > 0) ? (
+  const hasValue =
+    (typeof value === 'string' && value) ||
+    (isArray(value) && value.length > 0);
+
+  if (!hasValue) {
+    return <span />;
+  }
+
+  return (
     <>
       <div key={id} className={styles.entry} data-cy="task_props">
         <span>{label}:</span> {Array.isArray(value) ? value.join(', ') : value}
@@ -54,8 +61,6 @@ function TaskProperty(props: TaskPropertyProps) {
         onPropSave={handlePropSave}
       />
     </>
-  ) : (
-    <span />
   );
 }
 export default TaskProperty;

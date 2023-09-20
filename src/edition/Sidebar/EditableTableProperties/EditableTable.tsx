@@ -29,7 +29,6 @@ export const useStyles = makeStyles(() => ({
     padding: '1px',
     minWidth: 160,
     wordBreak: 'break-all',
-    marginLeft: '10px',
   },
   selectTableCell: {
     width: 28,

@@ -14,6 +14,7 @@ import type { Node } from 'reactflow';
 import NodeInfo from './NodeInfo';
 import DefaultErrorNodeControl from './DefaultErrorNodeControl';
 import InfoIcon from '@material-ui/icons/Info';
+import sidebarStyle from '../sidebarStyle';
 
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(selectedElement: Node) {
@@ -106,42 +107,48 @@ export default function NodeDetails(selectedElement: Node) {
   return (
     <Box>
       <NodeLabelComment showComment selectedElement={selectedElement} />
-      {selectedElement.type !== 'note' && (
-        <>
-          <DefaultInputs {...selectedElement} />
+      {selectedElement.type &&
+        !['graphInput', 'graphOutput', 'note'].includes(
+          selectedElement.type
+        ) && (
+          <>
+            <DefaultInputs {...selectedElement} />
 
-          <div style={{ marginTop: '15px', fontSize: '16px' }}>
-            <b>Advanced</b>
-            <SidebarTooltip
-              text={`--Inputs Complete: Set to True when the default input covers all required input
+            <h3 style={sidebarStyle.sectionHeader}>
+              Advanced
+              <SidebarTooltip
+                text={`--Inputs Complete: Set to True when the default input covers all required input
               (used for method and script as the required inputs are unknown).
 
               --Default Error Node: When set to True all nodes without error handler
               will be linked to this node. ONLY for one node in its graph`}
-            >
-              <IconButton size="small">
-                <InfoIcon fontSize="small" />
-              </IconButton>
-            </SidebarTooltip>
-          </div>
+              >
+                <IconButton size="small">
+                  <InfoIcon fontSize="small" />
+                </IconButton>
+              </SidebarTooltip>
+            </h3>
 
-          <div>
-            <Checkbox
-              checked={nodeData.ewoks_props.inputs_complete || false}
-              onChange={(event) => inputsCompleteChanged(event.target.checked)}
-              inputProps={{ 'aria-label': 'controlled' }}
-              color="primary"
+            <div>
+              <Checkbox
+                style={sidebarStyle.checkbox}
+                checked={nodeData.ewoks_props.inputs_complete || false}
+                onChange={(event) =>
+                  inputsCompleteChanged(event.target.checked)
+                }
+                inputProps={{ 'aria-label': 'controlled' }}
+                color="primary"
+              />
+              <span>Inputs Complete</span>
+            </div>
+            <DefaultErrorNodeControl nodeId={selectedElement.id} />
+            <NodeInfo
+              nodeId={selectedElement.id}
+              nodeData={nodeData}
+              onPropChange={handlePropChange}
             />
-            <span>Inputs Complete</span>
-          </div>
-          <DefaultErrorNodeControl nodeId={selectedElement.id} />
-          <NodeInfo
-            nodeId={selectedElement.id}
-            nodeData={nodeData}
-            onPropChange={handlePropChange}
-          />
-        </>
-      )}
+          </>
+        )}
     </Box>
   );
 }
