@@ -31,18 +31,16 @@ function TaskProperty(props: TaskPropertyProps) {
     setOpen(false);
   }
 
-  const hasValue =
-    (typeof value === 'string' && value) ||
-    (isArray(value) && value.length > 0);
+  const valueAsStr = Array.isArray(value) ? value.join(', ') : value;
 
-  if (!hasValue) {
+  if (!valueAsStr) {
     return <span />;
   }
 
   return (
     <>
-      <div key={id} className={styles.entry} data-cy="task_props">
-        <span>{label}:</span> {Array.isArray(value) ? value.join(', ') : value}
+      <div className={styles.entry} data-cy="task_props">
+        <span>{label}:</span> {valueAsStr}
         {editable && (
           <IconButton
             size="small"

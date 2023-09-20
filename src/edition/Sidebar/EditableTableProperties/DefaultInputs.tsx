@@ -51,10 +51,7 @@ export default function DefaultInputs(element: Node) {
     <div>
       <h3 style={sidebarStyle.sectionHeader}>
         Default Inputs
-        <SidebarTooltip
-          text={`Used to create an input when not provided
-            by the output of other connected nodes(tasks).`}
-        >
+        <SidebarTooltip text="Inputs used when no value is provided by the input nodes.">
           <IconButton size="small">
             <InfoIcon fontSize="small" />
           </IconButton>

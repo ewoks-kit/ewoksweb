@@ -185,10 +185,8 @@ export default function EditNodeStyle(props: { nodeId: string }) {
           </div>
         </div>
       )}
-      <div style={{ display: 'flex' }}>
-        <label htmlFor="nodeSize" style={{ margin: '10px 20px 0px 0px' }}>
-          Node size
-        </label>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <label htmlFor="nodeSize">Node size</label>
         <Slider
           id="nodeSize"
           color="primary"
@@ -198,7 +196,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
           onChangeCommitted={onChangeCommitted}
           min={40}
           max={300}
-          style={{ margin: '32px 5px 15px 0px' }}
+          style={{ paddingTop: '45px' }}
           valueLabelDisplay="on"
         />
       </div>
