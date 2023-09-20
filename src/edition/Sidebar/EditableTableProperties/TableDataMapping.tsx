@@ -126,7 +126,7 @@ function TableDataMapping(props: TableDataMappingProps) {
         </TableBody>
       </Table>
       {inactive && (
-        <div style={{ backgroundColor: '#f9f9e2', marginLeft: '10px' }}>
+        <div style={{ backgroundColor: '#f9f9e2' }}>
           Data Mappings will be deleted if Map all Data is selected
         </div>
       )}

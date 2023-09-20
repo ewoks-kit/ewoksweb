@@ -308,7 +308,7 @@ function EditableTable(props: EditableTableProps) {
         </TableBody>
       </Table>
       {inactive && (
-        <div style={{ backgroundColor: '#f9f9e2', marginLeft: '10px' }}>
+        <div style={{ backgroundColor: '#f9f9e2' }}>
           Conditions will be deleted if on Error condition is selected
         </div>
       )}

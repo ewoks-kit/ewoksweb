@@ -217,6 +217,7 @@ export default function EditLinkStyle(element: Edge) {
       </FormControl>
       <div>
         <Checkbox
+          style={sidebarStyle.checkbox}
           name="animated"
           checked={animated}
           onChange={animatedChanged}
@@ -225,7 +226,7 @@ export default function EditLinkStyle(element: Edge) {
         />
         <label htmlFor="animated">Animated</label>
       </div>
-      <div style={{ marginLeft: '10px' }}>
+      <div>
         <label htmlFor="head">Color</label>
         <input
           aria-label="Color"
@@ -234,11 +235,11 @@ export default function EditLinkStyle(element: Edge) {
           name="head"
           value={colorLine}
           onChange={colorLineChanged}
-          style={{ margin: '10px' }}
+          style={{ margin: '0 0 0 0.3rem' }}
         />
       </div>
       {linkType === 'getAround' && (
-        <div style={{ marginLeft: '10px' }}>
+        <div>
           Size of Link
           <div>X</div>
           <Slider
