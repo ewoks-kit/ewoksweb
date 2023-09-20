@@ -3,6 +3,7 @@ import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import NodeDataMapping from '../EditableTableProperties/NodeDataMapping';
 import { DEFAULT_NODE_VALUES } from '../../../utils/defaultValues';
+import sidebarStyle from '../sidebarStyle';
 
 export default function DefaultErrorNodeControl(props: { nodeId: string }) {
   const { nodeId } = props;
@@ -34,6 +35,7 @@ export default function DefaultErrorNodeControl(props: { nodeId: string }) {
     <>
       <div>
         <Checkbox
+          style={sidebarStyle.checkbox}
           checked={default_error_node || DEFAULT_NODE_VALUES.default_error_node}
           onChange={(event) =>
             handleDefaultErrorNodeChanged(event.target.checked)
@@ -46,10 +48,7 @@ export default function DefaultErrorNodeControl(props: { nodeId: string }) {
 
       {default_error_node && (
         <div>
-          <Typography
-            component="div"
-            style={{ fontSize: '15px', marginLeft: '10px' }}
-          >
+          <Typography component="div" style={{ fontSize: '15px' }}>
             <Grid component="label" container alignItems="center" spacing={1}>
               <Grid item>
                 {default_error_attributes?.map_all_data ? (

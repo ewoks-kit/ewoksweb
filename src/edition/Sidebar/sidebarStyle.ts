@@ -9,6 +9,9 @@ const sidebarStyle = {
   dropdown: {
     minWidth: '150px',
   },
+  checkbox: {
+    padding: '4px 0px 4px 0px',
+  },
 };
 
 export default sidebarStyle;

@@ -14,6 +14,7 @@ import type { Node } from 'reactflow';
 import NodeInfo from './NodeInfo';
 import DefaultErrorNodeControl from './DefaultErrorNodeControl';
 import InfoIcon from '@material-ui/icons/Info';
+import sidebarStyle from '../sidebarStyle';
 
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(selectedElement: Node) {
@@ -130,6 +131,7 @@ export default function NodeDetails(selectedElement: Node) {
 
             <div>
               <Checkbox
+                style={sidebarStyle.checkbox}
                 checked={nodeData.ewoks_props.inputs_complete || false}
                 onChange={(event) =>
                   inputsCompleteChanged(event.target.checked)
