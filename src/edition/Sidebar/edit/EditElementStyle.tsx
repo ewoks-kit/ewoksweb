@@ -4,6 +4,7 @@ import EditGraphStyle from './EditGraphStyle';
 import type { Node, Edge } from 'reactflow';
 import { isNodeRF } from '../../../utils/typeGuards';
 import type { SelectedElementRF } from '../../../types';
+import sidebarStyle from '../sidebarStyle';
 
 interface Content {
   title?: string;
@@ -38,9 +39,7 @@ export default function EditElementStyle({
 
   return (
     <>
-      <div style={{ marginTop: '15px', fontSize: '16px' }}>
-        <b>{title}</b>
-      </div>
+      <h3 style={sidebarStyle.sectionHeader}>{title}</h3>
       <EditComponent />
     </>
   );

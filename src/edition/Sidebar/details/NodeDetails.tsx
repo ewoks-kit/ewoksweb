@@ -114,8 +114,8 @@ export default function NodeDetails(selectedElement: Node) {
           <>
             <DefaultInputs {...selectedElement} />
 
-            <div style={{ marginTop: '15px', fontSize: '16px' }}>
-              <b>Advanced</b>
+            <h3 style={sidebarStyle.sectionHeader}>
+              Advanced
               <SidebarTooltip
                 text={`--Inputs Complete: Set to True when the default input covers all required input
               (used for method and script as the required inputs are unknown).
@@ -127,7 +127,7 @@ export default function NodeDetails(selectedElement: Node) {
                   <InfoIcon fontSize="small" />
                 </IconButton>
               </SidebarTooltip>
-            </div>
+            </h3>
 
             <div>
               <Checkbox

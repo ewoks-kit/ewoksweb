@@ -102,7 +102,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
       <div>
         {nodeData.task_props.task_type !== 'note' && (
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            <div style={{ whiteSpace: 'nowrap', marginRight: '20px' }}>
+            <div style={{ marginRight: '20px' }}>
               <Checkbox
                 style={sidebarStyle.checkbox}
                 name="withImage"
@@ -117,7 +117,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
               />
               <label htmlFor="withImage">With image</label>
             </div>
-            <div style={{ whiteSpace: 'nowrap' }}>
+            <div>
               <Checkbox
                 style={sidebarStyle.checkbox}
                 name="withLabel"
@@ -134,7 +134,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
             </div>
           </div>
         )}
-        <div style={{ whiteSpace: 'nowrap' }}>
+        <div>
           <Checkbox
             style={sidebarStyle.checkbox}
             name="borderCheckbox"
@@ -172,7 +172,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
         nodeData.task_props.task_type
       ) && (
         <div>
-          <div style={{ whiteSpace: 'nowrap' }}>
+          <div>
             <Checkbox
               style={sidebarStyle.checkbox}
               name="moreHandles"
@@ -185,8 +185,8 @@ export default function EditNodeStyle(props: { nodeId: string }) {
           </div>
         </div>
       )}
-      <div style={{ marginTop: '10px', display: 'flex' }}>
-        <label htmlFor="nodeSize" style={{ margin: '20px 20px 0px 0px' }}>
+      <div style={{ display: 'flex' }}>
+        <label htmlFor="nodeSize" style={{ margin: '10px 20px 0px 0px' }}>
           Node size
         </label>
         <Slider
@@ -198,7 +198,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
           onChangeCommitted={onChangeCommitted}
           min={40}
           max={300}
-          style={{ margin: '42px 5px 15px 0px' }}
+          style={{ margin: '32px 5px 15px 0px' }}
           valueLabelDisplay="on"
         />
       </div>

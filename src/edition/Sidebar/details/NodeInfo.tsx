@@ -4,6 +4,7 @@ import type { EwoksRFNodeData } from '../../../types';
 import TaskProperty from './TaskProperty';
 import InfoIcon from '@material-ui/icons/Info';
 import SidebarTooltip from '../SidebarTooltip';
+import sidebarStyle from '../sidebarStyle';
 
 interface Props {
   nodeId: string;
@@ -25,8 +26,8 @@ function NodeInfo(props: Props) {
 
   return (
     <>
-      <div style={{ marginTop: '15px', fontSize: '16px' }}>
-        <b>Task Info</b>
+      <h3 style={sidebarStyle.sectionHeader}>
+        Task Info
         <SidebarTooltip
           text="These are properties of the task on which the node
       is based. They can only be changed by editing the relevant task except
@@ -36,7 +37,7 @@ function NodeInfo(props: Props) {
             <InfoIcon fontSize="small" />
           </IconButton>
         </SidebarTooltip>
-      </div>
+      </h3>
       <TaskProperty
         editable={isEditable}
         id="task_identifier"

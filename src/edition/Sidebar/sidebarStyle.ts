@@ -12,6 +12,9 @@ const sidebarStyle = {
   checkbox: {
     padding: '4px 0px 4px 0px',
   },
+  sectionHeader: {
+    margin: '0.7rem 0 0 0',
+  },
 };
 
 export default sidebarStyle;
