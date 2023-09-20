@@ -48,39 +48,39 @@ export default function LinkDetails(selectedElement: Edge) {
           mergeEdgeData(selectedElement.id, { comment: newComment });
         }}
       />
-
-      <h3 style={sidebarStyle.sectionHeader}>
-        Data Mapping
-        <SidebarTooltip text="Map data between outputs of source node and inputs of target node">
-          <IconButton size="small">
-            <InfoIcon fontSize="small" />
-          </IconButton>
-        </SidebarTooltip>
-      </h3>
       <div>
+        <h3 style={sidebarStyle.sectionHeader}>
+          Data Mapping
+          <SidebarTooltip text="Map data between outputs of source node and inputs of target node">
+            <IconButton size="small">
+              <InfoIcon fontSize="small" />
+            </IconButton>
+          </SidebarTooltip>
+        </h3>
         <DataMappingComponent
           element={selectedElement}
           mapAllData={edgeData.map_all_data}
         />
       </div>
-      <h3 style={sidebarStyle.sectionHeader}>
-        Conditions
-        <SidebarTooltip text="Map data between outputs of source node and inputs of target node">
-          <IconButton size="small">
-            <InfoIcon fontSize="small" />
-          </IconButton>
-        </SidebarTooltip>
-      </h3>
       <div>
+        <h3 style={sidebarStyle.sectionHeader}>
+          Conditions
+          <SidebarTooltip text="Map data between outputs of source node and inputs of target node">
+            <IconButton size="small">
+              <InfoIcon fontSize="small" />
+            </IconButton>
+          </SidebarTooltip>
+        </h3>
         <Conditions
           element={selectedElement}
           enableOnError={edgeData.on_error}
         />
       </div>
-      <h3 style={sidebarStyle.sectionHeader}>
-        Advanced
-        <SidebarTooltip
-          text={`-- Required: setting this to True marks the link as required.
+      <div>
+        <h3 style={sidebarStyle.sectionHeader}>
+          Advanced
+          <SidebarTooltip
+            text={`-- Required: setting this to True marks the link as required.
           When a target receives multiple links, it will be executed
           (perhaps multiple times) when all the sources connected to the target
           with required links have been executed. A link is required when it is
@@ -93,13 +93,13 @@ export default function LinkDetails(selectedElement: Edge) {
           -- On Error condition: A special condition where
           the task raises an exception.
           Cannot be used in combination with conditions.`}
-        >
-          <IconButton size="small">
-            <InfoIcon fontSize="small" />
-          </IconButton>
-        </SidebarTooltip>
-      </h3>
-      <div>
+          >
+            <IconButton size="small">
+              <InfoIcon fontSize="small" />
+            </IconButton>
+          </SidebarTooltip>
+        </h3>
+
         <div>
           <Checkbox
             style={sidebarStyle.checkbox}

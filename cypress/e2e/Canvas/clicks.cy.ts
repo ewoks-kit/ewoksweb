@@ -24,7 +24,7 @@ describe('clicks on canvas and elements', () => {
   it('selects a link with click', () => {
     cy.contains('on_error').should('not.exist');
     cy.contains('Conditions').should('not.exist');
-    cy.contains('Map all data').should('not.exist');
+    cy.contains('Map all Data').should('not.exist');
     cy.contains('Required').should('not.exist');
     cy.contains('Source').should('not.exist');
     cy.contains('Target').should('not.exist');
@@ -34,8 +34,8 @@ describe('clicks on canvas and elements', () => {
       .click({ force: true })
       .should('include.class', 'selected');
 
-    cy.contains('Map all data').should('exist').should('be.visible');
-    cy.contains('on_error').should('exist').should('be.visible');
+    cy.contains('Map all Data').should('exist').should('be.visible');
+    cy.contains('On Error condition').should('exist').should('be.visible');
     cy.contains('Conditions').should('exist').should('be.visible');
     cy.contains('Required').should('exist').should('be.visible');
     cy.contains('Comment').should('exist').should('be.visible');
