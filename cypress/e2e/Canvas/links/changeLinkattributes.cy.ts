@@ -18,7 +18,7 @@ describe('change link attributes', () => {
   });
 
   it('changes links animated property to true and is shown on the canvas', () => {
-    cy.contains('Styling Link').click({ force: true });
+    cy.contains('Appearance').click({ force: true });
 
     cy.contains('Animated').siblings().click();
 
