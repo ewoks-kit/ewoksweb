@@ -4,7 +4,8 @@ describe('new Task form', () => {
   beforeEach(() => {
     cy.loadAppWithoutGraph();
 
-    cy.findByRole('button', { name: 'New task' }).click();
+    cy.findByRole('button', { name: 'Open menu with more actions' }).click();
+    cy.findByRole('menuitem', { name: 'Create new task' }).click();
     cy.waitForStableDOM();
   });
 

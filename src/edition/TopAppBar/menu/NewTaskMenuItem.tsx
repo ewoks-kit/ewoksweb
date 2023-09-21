@@ -1,22 +1,18 @@
-import { Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import { useState } from 'react';
-import TaskForm from '../../general/forms/TaskForm';
+import TaskForm from '../../../general/forms/TaskForm';
+import ActionMenuItem from './ActionMenuItem';
 
-function CreateTaskButton() {
+function NewTaskMenuItem() {
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
 
   return (
     <>
-      <Button
-        startIcon={<Add />}
-        variant="outlined"
-        color="primary"
+      <ActionMenuItem
+        icon={Add}
+        label="Create new task"
         onClick={() => setOpenSaveDialog(true)}
-        size="small"
-      >
-        New task
-      </Button>
+      />
       <TaskForm
         isOpen={openSaveDialog}
         onClose={() => setOpenSaveDialog(false)}
@@ -25,4 +21,4 @@ function CreateTaskButton() {
   );
 }
 
-export default CreateTaskButton;
+export default NewTaskMenuItem;

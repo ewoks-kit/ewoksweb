@@ -5,9 +5,9 @@ import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 
 import styles from './ActionMenu.module.css';
 import { ActionMenuContext } from './ActionMenuContext';
-import DiscoverMenuItem from './DiscoverMenuItem';
 import DownloadMenuItem from './DownloadMenuItem';
 import ExecutionMenuItem from './ExecutionMenuItem';
+import NewTaskMenuItem from './NewTaskMenuItem';
 import OpenDrawerMenuItem from './OpenDrawerMenuItem';
 import OpenNewWorkflowMenuItem from './OpenNewWorkflowMenuItem';
 import UploadMenuItem from './UploadMenuItem';
@@ -64,9 +64,9 @@ export default function OpenActionMenuButton() {
             <UploadMenuItem />
           </SuspenseBoundary>
           <DownloadMenuItem />
-          <DiscoverMenuItem />
           <ExecutionMenuItem />
           <OpenDrawerMenuItem />
+          <NewTaskMenuItem />
         </ActionMenuContext.Provider>
       </Menu>
     </div>
