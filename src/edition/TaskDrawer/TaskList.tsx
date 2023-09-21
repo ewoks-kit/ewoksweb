@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { useState } from 'react';
 import { useTasks } from '../../api/tasks';
-import useConfigStore from '../../store/useConfigStore';
 import AddNoteButton from './AddNoteButton';
 import AddSubworkflow from './AddSubworkflow';
 import TaskItem from './TaskItem';
@@ -19,14 +18,10 @@ import TaskListToolbar from './TaskListToolbar';
 function TaskList() {
   const tasks = useTasks();
   const [selectedTaskId, setSelectTaskId] = useState<string>();
-  const { sidebarLayout, setSidebarLayout } = useConfigStore();
 
   return (
     <>
-      <TaskListToolbar
-        layout={sidebarLayout}
-        onLayoutChange={setSidebarLayout}
-      />
+      <TaskListToolbar />
 
       {[...new Set(tasks.map((m) => m.category)).values()].map((category) => (
         <Accordion key={category} className="add-nodes-accordion">
@@ -37,10 +32,7 @@ function TaskList() {
             <Typography>{category}</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <div
-              className={styles.itemContainer}
-              data-gridlayout={sidebarLayout === 'grid' || undefined}
-            >
+            <div className={styles.itemContainer}>
               {tasks
                 .filter((nod) => nod.category === category)
                 .map((task) => (
