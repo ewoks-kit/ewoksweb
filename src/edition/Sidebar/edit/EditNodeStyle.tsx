@@ -16,6 +16,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     nodeData.ui_props.nodeWidth || 100
   );
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   function withImageChanged(checked: boolean) {
     mergeNodeData(nodeId, {
@@ -73,6 +74,16 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     mergeNodeData(nodeId, {
       ui_props: { icon: value },
     });
+  }
+
+  function handleNodeIconRemoval() {
+    if (!nodeData) {
+      return;
+    }
+    const newData = { ...nodeData };
+    newData.ui_props.icon = undefined;
+    // Cannot use mergeNodeData since it ignores `undefined` values when merging
+    setNodeData(nodeId, newData);
   }
 
   const [showBorderColor, setShowBorderColor] = useState(
@@ -188,6 +199,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
         <NodeIconControl
           value={nodeData.ui_props.icon}
           onChange={handleNodeIconChange}
+          onRemove={handleNodeIconRemoval}
         />
       )}
     </FormControl>

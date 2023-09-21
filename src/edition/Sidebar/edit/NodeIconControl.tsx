@@ -1,17 +1,20 @@
 import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import { isString } from 'lodash';
 import { useIcons } from '../../../api/icons';
-import { DEFAULT_ICON } from '../../../utils';
 
 interface Props {
   value?: string;
   onChange: (v: string) => void;
+  onRemove: () => void;
 }
 
+const DEFAULT_VALUE = 'Use default';
+
 function NodeIconControl(props: Props) {
-  const { value = DEFAULT_ICON.name, onChange } = props;
+  const { value, onChange, onRemove } = props;
 
   const icons = useIcons();
+  const iconNames = icons.map((icon) => icon.name);
 
   return (
     <div>
@@ -19,19 +22,25 @@ function NodeIconControl(props: Props) {
         <InputLabel id="replace-node-icon">Node Icon</InputLabel>
         <Select
           labelId="replace-node-icon"
-          value={value || DEFAULT_ICON.name}
+          value={value && iconNames.includes(value) ? value : DEFAULT_VALUE}
           label="Override Task Icon"
           onChange={(event) => {
             const iconName = event.target.value;
             if (!isString(iconName)) {
               return;
             }
-            onChange(iconName);
+
+            if (iconName === DEFAULT_VALUE) {
+              onRemove();
+            } else {
+              onChange(iconName);
+            }
           }}
         >
-          {icons.map((icon) => (
-            <MenuItem value={icon.name} key={icon.name}>
-              {icon.name}
+          <MenuItem value={DEFAULT_VALUE}>{DEFAULT_VALUE}</MenuItem>
+          {iconNames.map((name) => (
+            <MenuItem value={name} key={name}>
+              {name}
             </MenuItem>
           ))}
         </Select>
