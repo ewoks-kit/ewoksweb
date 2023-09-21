@@ -106,7 +106,7 @@ function Node({
           />
           {withImage && (
             <SuspenseBoundary>
-              <NodeIcon nodeId={id} onDragStart={(e) => e.preventDefault()} />
+              <NodeIcon nodeId={id} />
             </SuspenseBoundary>
           )}
 

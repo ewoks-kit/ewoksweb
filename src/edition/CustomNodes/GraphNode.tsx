@@ -83,7 +83,7 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
           />
           {withImage && (
             <SuspenseBoundary>
-              <NodeIcon nodeId={id} onDragStart={(e) => e.preventDefault()} />
+              <NodeIcon nodeId={id} />
             </SuspenseBoundary>
           )}
           <span style={style.contentWrapper}>
