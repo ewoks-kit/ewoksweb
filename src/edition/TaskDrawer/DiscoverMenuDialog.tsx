@@ -68,6 +68,7 @@ export default function DiscoverTasksDialog(props: Props) {
               discover();
             }
           }}
+          inputProps={{ 'aria-label': 'Module name' }}
         />
       </DialogContent>
       <DialogActions>
