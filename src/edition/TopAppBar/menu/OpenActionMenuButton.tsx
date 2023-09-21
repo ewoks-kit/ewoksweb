@@ -8,6 +8,7 @@ import { ActionMenuContext } from './ActionMenuContext';
 import DiscoverMenuItem from './DiscoverMenuItem';
 import DownloadMenuItem from './DownloadMenuItem';
 import ExecutionMenuItem from './ExecutionMenuItem';
+import NewTaskMenuItem from './NewTaskMenuItem';
 import OpenDrawerMenuItem from './OpenDrawerMenuItem';
 import OpenNewWorkflowMenuItem from './OpenNewWorkflowMenuItem';
 import UploadMenuItem from './UploadMenuItem';
@@ -67,6 +68,7 @@ export default function OpenActionMenuButton() {
           <DiscoverMenuItem />
           <ExecutionMenuItem />
           <OpenDrawerMenuItem />
+          <NewTaskMenuItem />
         </ActionMenuContext.Provider>
       </Menu>
     </div>
