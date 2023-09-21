@@ -157,3 +157,55 @@ it('clones a node by button', () => {
 
   cy.get('.react-flow__node').should('have.length', 16);
 });
+
+it('changes the icon', () => {
+  cy.loadApp();
+
+  cy.get('.react-flow__nodes')
+    .children()
+    .filter('.react-flow__node-ppfmethod')
+    .last()
+    .as('node');
+
+  // Can be underneath another node
+  cy.get('@node').click({ force: true });
+
+  cy.findByRole('button', { name: 'Node Icon' }).should(
+    'contain.text',
+    'Use default'
+  );
+  cy.get('@node').within(() => {
+    cy.findByRole('img')
+      .should('have.attr', 'src')
+      .should(
+        'include',
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFC0lEQVR4nO2a308UVx'
+      );
+  });
+
+  cy.findByRole('button', { name: 'Node Icon' }).click();
+  cy.waitForStableDOM();
+  cy.findByRole('option', { name: 'down.svg' }).click();
+
+  cy.get('@node').within(() => {
+    cy.findByRole('img')
+      .should('have.attr', 'src')
+      .should(
+        'include',
+        'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHR'
+      );
+  });
+
+  cy.findByRole('button', { name: 'Node Icon' }).click();
+  cy.waitForStableDOM();
+  cy.findByRole('option', { name: 'Use default' }).click();
+
+  cy.get('@node').within(() => {
+    cy.findByRole('img')
+      .should('have.attr', 'src')
+      .should(
+        'include',
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFC0lEQVR4nO2a308UVx'
+      );
+  });
+});

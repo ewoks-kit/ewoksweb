@@ -89,10 +89,7 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
           />
           {withImage && (
             <SuspenseBoundary>
-              <NodeIcon
-                nodeId={args.id}
-                onDragStart={(e) => e.preventDefault()}
-              />
+              <NodeIcon nodeId={args.id} />
             </SuspenseBoundary>
           )}
           {task_type === 'graphOutput' && (

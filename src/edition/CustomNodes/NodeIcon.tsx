@@ -7,11 +7,10 @@ import { contentStyle } from './nodeStyles';
 
 interface Props {
   nodeId: string;
-  onDragStart: (e: React.DragEvent<HTMLImageElement>) => void;
 }
 
 function NodeIcon(props: Props) {
-  const { nodeId, onDragStart } = props;
+  const { nodeId } = props;
   const nodeData = useNodeDataStore((state) => state.nodesData.get(nodeId));
   const tasks = useTasks();
   assertNodeDataDefined(nodeData, nodeId);
@@ -29,11 +28,9 @@ function NodeIcon(props: Props) {
   return (
     <img
       style={contentStyle.imgPadding}
-      role="presentation"
       draggable="false"
-      onDragStart={onDragStart}
       src={findImage(image, icons)}
-      alt="icon"
+      alt=""
     />
   );
 }
