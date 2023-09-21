@@ -217,6 +217,7 @@ export default function EditLinkStyle(element: Edge) {
       </FormControl>
       <div>
         <Checkbox
+          style={sidebarStyle.checkbox}
           name="animated"
           checked={animated}
           onChange={animatedChanged}
@@ -234,7 +235,7 @@ export default function EditLinkStyle(element: Edge) {
           name="head"
           value={colorLine}
           onChange={colorLineChanged}
-          style={{ margin: '10px' }}
+          style={{ margin: '0 0 0 0.3rem' }}
         />
       </div>
       {linkType === 'getAround' && (

@@ -129,7 +129,7 @@ export default function NodeDetails(selectedElement: Node) {
               </SidebarTooltip>
             </h3>
 
-            <div>
+            <section>
               <Checkbox
                 style={sidebarStyle.checkbox}
                 checked={nodeData.ewoks_props.inputs_complete || false}
@@ -140,7 +140,7 @@ export default function NodeDetails(selectedElement: Node) {
                 color="primary"
               />
               <span>Inputs Complete</span>
-            </div>
+            </section>
             <DefaultErrorNodeControl nodeId={selectedElement.id} />
             <NodeInfo
               nodeId={selectedElement.id}

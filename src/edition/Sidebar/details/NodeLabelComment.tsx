@@ -41,7 +41,7 @@ export default function NodeLabelComment(props: Props) {
   }
 
   return (
-    <div>
+    <section>
       <InputTextField
         label="Label"
         defaultValue={label}
@@ -54,6 +54,6 @@ export default function NodeLabelComment(props: Props) {
           onValueSave={handleSaveComment}
         />
       </div>
-    </div>
+    </section>
   );
 }

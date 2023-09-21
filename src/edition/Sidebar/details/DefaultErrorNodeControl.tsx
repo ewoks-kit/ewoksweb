@@ -33,7 +33,7 @@ export default function DefaultErrorNodeControl(props: { nodeId: string }) {
 
   return (
     <>
-      <div>
+      <section>
         <Checkbox
           style={sidebarStyle.checkbox}
           checked={default_error_node || DEFAULT_NODE_VALUES.default_error_node}
@@ -44,10 +44,10 @@ export default function DefaultErrorNodeControl(props: { nodeId: string }) {
           color="primary"
         />
         <span>Default Error Node</span>
-      </div>
+      </section>
 
       {default_error_node && (
-        <div>
+        <section>
           <Typography component="div" style={{ fontSize: '15px' }}>
             <Grid component="label" container alignItems="center" spacing={1}>
               <Grid item>
@@ -74,12 +74,12 @@ export default function DefaultErrorNodeControl(props: { nodeId: string }) {
               </Grid>
             </Grid>
           </Typography>
-        </div>
+        </section>
       )}
       {default_error_node && !default_error_attributes?.map_all_data && (
-        <div>
+        <section>
           <NodeDataMapping nodeId={nodeId} />
-        </div>
+        </section>
       )}
     </>
   );

@@ -15,7 +15,7 @@ export default function EditGraphStyle() {
   };
 
   return (
-    <div>
+    <section>
       <label id="canvas-background-color-label" htmlFor="head">
         Canvas Background Color
       </label>
@@ -27,6 +27,6 @@ export default function EditGraphStyle() {
         style={{ margin: '10px' }}
         onInput={colorLineChanged}
       />
-    </div>
+    </section>
   );
 }

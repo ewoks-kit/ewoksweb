@@ -310,6 +310,7 @@ export interface CustomTableCellProps {
   name: 'name' | 'value';
   typeOfValues?: TypeOfValues;
   usedIn?: 'DataMapping' | 'DefaultInputs' | 'Conditions';
+  inactive?: boolean;
   onEdit?: () => void;
   onChange(
     e: { target: { name: string; value: string | number } },
