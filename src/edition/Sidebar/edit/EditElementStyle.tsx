@@ -4,8 +4,7 @@ import EditGraphStyle from './EditGraphStyle';
 import type { Node, Edge } from 'reactflow';
 import { isNodeRF } from '../../../utils/typeGuards';
 import type { SelectedElementRF } from '../../../types';
-
-import SidebarSection from '../SidebarSection';
+import sidebarStyle from '../sidebarStyle';
 
 interface Content {
   title?: string;
@@ -21,13 +20,13 @@ function getSectionContent(selectedElement: Node | Edge | undefined): Content {
 
   if (isNodeRF(selectedElement)) {
     return {
-      title: 'Styling Node',
+      title: 'Appearance',
       EditComponent: () => <EditNodeStyle nodeId={selectedElement.id} />,
     };
   }
 
   return {
-    title: 'Styling Link',
+    title: 'Appearance',
     EditComponent: () => <EditLinkStyle {...selectedElement} />,
   };
 }
@@ -39,10 +38,9 @@ export default function EditElementStyle({
   const { title, EditComponent } = getSectionContent(selectedElement);
 
   return (
-    <SidebarSection title={title}>
-      <form noValidate autoComplete="off">
-        <EditComponent />
-      </form>
-    </SidebarSection>
+    <>
+      <h3 style={sidebarStyle.sectionHeader}>{title}</h3>
+      <EditComponent />
+    </>
   );
 }

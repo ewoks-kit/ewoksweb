@@ -1,5 +1,5 @@
 import type { EwoksRFNodeData } from '../../../types';
-import { Box, Checkbox } from '@material-ui/core';
+import { Box, Checkbox, IconButton } from '@material-ui/core';
 import SidebarTooltip from '../SidebarTooltip';
 import NodeLabelComment from './NodeLabelComment';
 import DefaultInputs from '../EditableTableProperties/DefaultInputs';
@@ -13,6 +13,8 @@ import { useNodesIds } from '../../../store/graph-hooks';
 import type { Node } from 'reactflow';
 import NodeInfo from './NodeInfo';
 import DefaultErrorNodeControl from './DefaultErrorNodeControl';
+import InfoIcon from '@material-ui/icons/Info';
+import sidebarStyle from '../sidebarStyle';
 
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(selectedElement: Node) {
@@ -112,22 +114,33 @@ export default function NodeDetails(selectedElement: Node) {
           <>
             <DefaultInputs {...selectedElement} />
 
-            <SidebarTooltip
-              text={`Set to True when the default input covers all required input
-              (used for method and script as the required inputs are unknown).`}
-            >
-              <div>
-                <Checkbox
-                  checked={nodeData.ewoks_props.inputs_complete || false}
-                  onChange={(event) =>
-                    inputsCompleteChanged(event.target.checked)
-                  }
-                  inputProps={{ 'aria-label': 'controlled' }}
-                  color="primary"
-                />
-                <b>Inputs Complete</b>
-              </div>
-            </SidebarTooltip>
+            <h3 style={sidebarStyle.sectionHeader}>
+              Advanced
+              <SidebarTooltip
+                text={`--Inputs Complete: Set to True when the default input covers all required input
+              (used for method and script as the required inputs are unknown).
+
+              --Default Error Node: When set to True all nodes without error handler
+              will be linked to this node. ONLY for one node in its graph`}
+              >
+                <IconButton size="small">
+                  <InfoIcon fontSize="small" />
+                </IconButton>
+              </SidebarTooltip>
+            </h3>
+
+            <div>
+              <Checkbox
+                style={sidebarStyle.checkbox}
+                checked={nodeData.ewoks_props.inputs_complete || false}
+                onChange={(event) =>
+                  inputsCompleteChanged(event.target.checked)
+                }
+                inputProps={{ 'aria-label': 'controlled' }}
+                color="primary"
+              />
+              <span>Inputs Complete</span>
+            </div>
             <DefaultErrorNodeControl nodeId={selectedElement.id} />
             <NodeInfo
               nodeId={selectedElement.id}

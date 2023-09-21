@@ -248,8 +248,6 @@ function EditableTable(props: EditableTableProps) {
           open={openDialog}
           content={dialogContent}
           setValue={setRowValue}
-          // TODO: examine the usage of the following
-          // typeOfValues={props.typeOfValues[0]}
         />
       )}
       <Table
