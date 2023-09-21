@@ -1,18 +1,10 @@
 import { useState } from 'react';
-import {
-  Checkbox,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Slider,
-} from '@material-ui/core';
+import { Checkbox, FormControl, Slider } from '@material-ui/core';
 import type { ChangeEvent } from 'react';
 import useNodeDataStore from '../../../store/useNodeDataStore';
-import { assertNodeDataDefined, isString } from '../../../utils/typeGuards';
-import { useIcons } from 'api/icons';
-import { DEFAULT_ICON } from '../../../utils';
+import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import sidebarStyle from '../sidebarStyle';
+import NodeIconControl from './NodeIconControl';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(props: { nodeId: string }) {
@@ -23,7 +15,6 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   const [nodeSize, setNodeSize] = useState<number>(
     nodeData.ui_props.nodeWidth || 100
   );
-  const icons = useIcons();
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
   function withImageChanged(checked: boolean) {
@@ -78,23 +69,18 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     }
   }
 
-  const handleNodeIconChange = (
-    event: ChangeEvent<{
-      name?: string | undefined;
-      value: unknown;
-    }>
-  ) => {
-    const iconName = event.target.value;
-    if (!isString(iconName)) {
-      return;
-    }
+  function handleNodeIconChange(value: string) {
     mergeNodeData(nodeId, {
-      ui_props: { icon: iconName },
+      ui_props: { icon: value },
     });
-  };
+  }
 
   const [showBorderColor, setShowBorderColor] = useState(
     !!nodeData.ui_props.colorBorder
+  );
+
+  const isRegularNode = !['graphInput', 'graphOutput', 'note'].includes(
+    nodeData.task_props.task_type
   );
 
   return (
@@ -168,9 +154,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
           />
         </div>
       )}
-      {!['graphInput', 'graphOutput', 'note'].includes(
-        nodeData.task_props.task_type
-      ) && (
+      {isRegularNode && (
         <div>
           <div>
             <Checkbox
@@ -200,27 +184,12 @@ export default function EditNodeStyle(props: { nodeId: string }) {
           valueLabelDisplay="on"
         />
       </div>
-      <div>
-        {!['graphInput', 'graphOutput', 'note'].includes(
-          nodeData.task_props.task_type
-        ) && (
-          <FormControl variant="outlined" fullWidth>
-            <InputLabel id="replace-node-icon">Node Icon</InputLabel>
-            <Select
-              labelId="replace-node-icon"
-              value={nodeData.ui_props.icon || DEFAULT_ICON.name}
-              label="Override Task Icon"
-              onChange={handleNodeIconChange}
-            >
-              {icons.map((icon) => (
-                <MenuItem value={icon.name} key={icon.name}>
-                  {icon.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        )}
-      </div>
+      {isRegularNode && (
+        <NodeIconControl
+          value={nodeData.ui_props.icon}
+          onChange={handleNodeIconChange}
+        />
+      )}
     </FormControl>
   );
 }
