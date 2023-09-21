@@ -5,20 +5,19 @@ import { useLoadGraph } from './hooks';
 
 interface Props {
   onGraphLoad: (graph: GraphEwoks) => void;
+  label: string;
 }
 
 const OpenGraphInput = forwardRef(
   (props: Props, ref: ForwardedRef<HTMLInputElement>) => {
-    const { onGraphLoad } = props;
+    const { onGraphLoad, label } = props;
     const loadGraph = useLoadGraph(onGraphLoad);
 
     return (
       <input
         ref={ref}
         style={{ display: 'none' }}
-        aria-label="Open from disk"
-        name="load-graph"
-        id="load-graph"
+        aria-label={label}
         type="file"
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           const file = e.target.files?.[0];

@@ -27,6 +27,7 @@ function UploadMenuItem() {
         onGraphLoad={(graph) => {
           setRootWorkflow(graph, rfInstance, tasks, 'fromDisk');
         }}
+        label="Load workflow from disk"
       />
     </ActionMenuItem>
   );

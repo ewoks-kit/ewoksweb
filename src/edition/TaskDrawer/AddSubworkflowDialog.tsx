@@ -69,6 +69,7 @@ export default function AddSubworkflowDialog(props: Props) {
           loadSubgraphAsNode(subgraph);
           handleClose();
         }}
+        label="Load sub-workflow from disk"
       />
 
       <Dialog maxWidth="xl" open={open} onClose={handleClose}>
