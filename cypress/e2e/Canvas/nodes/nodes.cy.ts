@@ -34,7 +34,7 @@ it('changes comment of node', () => {
 });
 
 it('changes withImage of node true->false->true', () => {
-  cy.contains('Appearance').click();
+  cy.findByRole('heading', { name: 'Appearance' }).click();
 
   cy.get('.react-flow')
     .contains('Always and forever...')

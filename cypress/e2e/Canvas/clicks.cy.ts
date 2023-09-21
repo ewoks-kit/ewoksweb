@@ -14,11 +14,13 @@ describe('clicks on canvas and elements', () => {
 
     cy.contains('Label').should('exist').should('be.visible');
     cy.contains('Comment').should('exist').should('be.visible');
-    cy.contains('Default Inputs').should('exist').should('be.visible');
+    cy.findByRole('heading', { name: 'Default Inputs' }).should('be.visible');
     cy.contains('Default Error Node').should('exist').should('be.visible');
     cy.contains('Inputs Complete').should('exist').should('be.visible');
-    cy.contains('Task Info').should('exist').should('be.visible');
-    cy.contains('Appearance').should('exist');
+    cy.findByRole('heading', { name: 'Task Info' })
+      .should('exist')
+      .should('be.visible');
+    cy.findByRole('heading', { name: 'Appearance' }).should('exist');
   });
 
   it('selects a link with click', () => {

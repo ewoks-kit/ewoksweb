@@ -3,7 +3,6 @@ import { EditOutlined as EditIcon } from '@material-ui/icons';
 import { useState } from 'react';
 import IdentifierEditDialog from './IdentifierEditDialog';
 import { IconButton } from '@material-ui/core';
-import { isArray } from 'lodash';
 
 interface TaskPropertyProps {
   id: string;
