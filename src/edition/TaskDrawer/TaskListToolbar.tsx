@@ -1,7 +1,7 @@
 import { ViewModule, ViewList } from '@material-ui/icons';
 import { ToggleButtonGroup, ToggleButton } from '@material-ui/lab';
 import type { SidebarLayout } from '../../types';
-import CreateTaskButton from './CreateTaskButton';
+import DiscoverTasksButton from './DiscoverTasksButton';
 
 import styles from './TaskList.module.css';
 
@@ -15,7 +15,7 @@ function TaskListToolbar(props: Props) {
 
   return (
     <div className={styles.toolbar}>
-      <CreateTaskButton />
+      <DiscoverTasksButton />
 
       <ToggleButtonGroup
         className={styles.layoutBtnContainer}
