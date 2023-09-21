@@ -51,7 +51,7 @@ interface EditableTableProps {
   headers: string[];
   defaultValues: Condition[] | Inputs[];
   typeOfValues: TypeOfValues[];
-  inactive?: boolean | undefined;
+  inactive?: boolean;
   valuesChanged: (rows: EditableTableRow[]) => void;
   onRowAdd?: (rows?: EditableTableRow[]) => void;
 }
@@ -270,6 +270,7 @@ function EditableTable(props: EditableTableProps) {
                   name="name"
                   onChange={onChange}
                   typeOfValues={props.typeOfValues[0]}
+                  inactive={inactive}
                 />
 
                 <TypeSelectCell
@@ -280,6 +281,7 @@ function EditableTable(props: EditableTableProps) {
                       : 'bool'
                   }
                   onChange={(e) => changedTypeOfInputs(e, row, index)}
+                  inactive={inactive}
                 />
 
                 <CustomTableCell
@@ -288,6 +290,7 @@ function EditableTable(props: EditableTableProps) {
                   name="value"
                   onChange={onChange}
                   onEdit={() => onEditRow(row.id || '', index)}
+                  inactive={inactive}
                 />
                 <ToolsCell
                   inactive={inactive}
@@ -309,7 +312,8 @@ function EditableTable(props: EditableTableProps) {
       </Table>
       {inactive && (
         <div style={{ backgroundColor: '#f9f9e2' }}>
-          Conditions will be deleted if on Error condition is selected
+          Conditions have no effect when On Error condition is enabled. They
+          will be removed when saving the workflow.
         </div>
       )}
     </>

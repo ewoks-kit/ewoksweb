@@ -1,7 +1,7 @@
 /*
   The table that is used to pass parameters for data-mapping.
 */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -14,7 +14,7 @@ import { TableCell } from '@material-ui/core';
 import AddRowButton from './AddRowButton';
 
 interface TableDataMappingProps {
-  inactive: boolean | undefined;
+  inactive?: boolean;
   headers: string[];
   values: DataMapping[];
   typeOfValues: TypeOfValues[];
@@ -38,13 +38,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 function TableDataMapping(props: TableDataMappingProps) {
-  const [rows, setRows] = React.useState<DataMapping[]>([]);
-
   const { values, headers, inactive, onRowAdd } = props;
-
-  useEffect(() => {
-    setRows(values);
-  }, [values]);
 
   const classes = useStyles({ inactive });
 
@@ -60,23 +54,21 @@ function TableDataMapping(props: TableDataMappingProps) {
       value = typeof value === 'number' ? Number(value) : value;
     }
 
-    const newRows = rows.map((rowe) => {
+    const newRows = values.map((rowe) => {
       if (rowe.id === id) {
         return { ...rowe, [name]: value };
       }
       return rowe;
     });
 
-    setRows(newRows);
     props.valuesChanged(newRows);
   }
 
   function onDelete(id: string) {
-    const newRows = rows.filter((row) => {
+    const newRows = values.filter((row) => {
       return row.id !== id;
     });
 
-    setRows(newRows);
     props.valuesChanged(newRows);
   }
 
@@ -85,17 +77,18 @@ function TableDataMapping(props: TableDataMappingProps) {
       <Table className={classes.table} aria-label="data-mapping-table">
         <TableHeader headers={headers} />
         <TableBody>
-          {rows.map((row, index) => (
+          {values.map((row, index) => (
             <React.Fragment key={row.id}>
               <TableRow>
                 <CustomTableCell
                   index={index}
                   row={row}
-                  rowsNames={rows.map((ro) => ro.name || '')}
+                  rowsNames={values.map((ro) => ro.name || '')}
                   name="name"
                   onChange={onChange}
                   typeOfValues={props.typeOfValues[0]}
                   usedIn="DataMapping"
+                  inactive={inactive}
                 />
                 <CustomTableCell
                   index={index}
@@ -104,6 +97,7 @@ function TableDataMapping(props: TableDataMappingProps) {
                   onChange={onChange}
                   typeOfValues={props.typeOfValues[1]}
                   usedIn="DataMapping"
+                  inactive={inactive}
                 />
                 <ToolsCell
                   inactive={inactive}
@@ -116,7 +110,7 @@ function TableDataMapping(props: TableDataMappingProps) {
             <TableRow>
               <TableCell align="left" className={classes.tableCell}>
                 <AddRowButton
-                  onClick={() => onRowAdd(rows)}
+                  onClick={() => onRowAdd(values)}
                   ariaLabel="Add data mapping entry"
                 />
               </TableCell>
@@ -127,7 +121,8 @@ function TableDataMapping(props: TableDataMappingProps) {
       </Table>
       {inactive && (
         <div style={{ backgroundColor: '#f9f9e2' }}>
-          Data Mappings will be deleted if Map all Data is selected
+          Data Mappings have no effect when Map all Data is enabled. They will
+          be removed when saving the workflow.
         </div>
       )}
     </>

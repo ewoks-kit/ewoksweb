@@ -25,7 +25,7 @@ function isRowContentInvalid(
 
 // DOC: Used as an app-wide dialog when confirmation is needed. Open is a prop
 function CustomTableCell(props: CustomTableCellProps) {
-  const { row, rowsNames, name, usedIn } = props;
+  const { row, rowsNames, name, usedIn, inactive } = props;
 
   const useStyles = makeStyles(() => ({
     tableCell: {
@@ -48,11 +48,12 @@ function CustomTableCell(props: CustomTableCellProps) {
       className={classes.tableCell}
       style={{
         padding: '0 4px',
+        ...(inactive && { pointerEvents: 'none' }),
         borderBottom: isRowContentInvalid(row, rowsNames, name, usedIn)
           ? 'solid'
           : 'none',
         borderColor: isRowContentInvalid(row, rowsNames, name, usedIn)
-          ? '#f7d7d7'
+          ? 'rgb(249, 81, 81)'
           : 'white',
       }}
     >
@@ -65,6 +66,7 @@ function CustomTableCell(props: CustomTableCellProps) {
             : ''}
 
           <IconButton
+            disabled={inactive}
             size="small"
             aria-label="edit"
             onClick={() => {

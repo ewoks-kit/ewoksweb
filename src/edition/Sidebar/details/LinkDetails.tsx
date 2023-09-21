@@ -48,7 +48,7 @@ export default function LinkDetails(selectedElement: Edge) {
           mergeEdgeData(selectedElement.id, { comment: newComment });
         }}
       />
-      <div>
+      <section>
         <h3 style={sidebarStyle.sectionHeader}>
           Data Mapping
           <SidebarTooltip text="Map data between outputs of source node and inputs of target node">
@@ -61,8 +61,8 @@ export default function LinkDetails(selectedElement: Edge) {
           element={selectedElement}
           mapAllData={edgeData.map_all_data}
         />
-      </div>
-      <div>
+      </section>
+      <section>
         <h3 style={sidebarStyle.sectionHeader}>
           Conditions
           <SidebarTooltip text="Map data between outputs of source node and inputs of target node">
@@ -75,8 +75,8 @@ export default function LinkDetails(selectedElement: Edge) {
           element={selectedElement}
           enableOnError={edgeData.on_error}
         />
-      </div>
-      <div>
+      </section>
+      <section>
         <h3 style={sidebarStyle.sectionHeader}>
           Advanced
           <SidebarTooltip
@@ -99,8 +99,27 @@ export default function LinkDetails(selectedElement: Edge) {
             </IconButton>
           </SidebarTooltip>
         </h3>
-
-        <div>
+        <section>
+          <Checkbox
+            style={sidebarStyle.checkbox}
+            checked={edgeData.map_all_data}
+            onChange={handleChangeShowDataMapping}
+            inputProps={{ 'aria-label': 'Map all Data' }}
+            color="primary"
+          />
+          <span>Map all Data</span>
+        </section>
+        <section>
+          <Checkbox
+            style={sidebarStyle.checkbox}
+            checked={edgeData.on_error}
+            onChange={handleChangeShowConditions}
+            inputProps={{ 'aria-label': 'On Error condition' }}
+            color="primary"
+          />
+          <span>On Error condition</span>
+        </section>
+        <section>
           <Checkbox
             style={sidebarStyle.checkbox}
             checked={edgeData.required}
@@ -108,39 +127,24 @@ export default function LinkDetails(selectedElement: Edge) {
             color="primary"
           />
           <span>Required</span>
-        </div>
-        <div>
-          <Checkbox
-            style={sidebarStyle.checkbox}
-            checked={edgeData.map_all_data}
-            onChange={handleChangeShowDataMapping}
-            inputProps={{ 'aria-label': 'controlled' }}
-            color="primary"
-          />
-          <span>Map all Data</span>
-        </div>
-        <div>
-          <Checkbox
-            style={sidebarStyle.checkbox}
-            checked={edgeData.on_error}
-            onChange={handleChangeShowConditions}
-            inputProps={{ 'aria-label': 'controlled' }}
-            color="primary"
-          />
-          <span>On Error condition</span>
-        </div>
-        <div className={styles.entry}>Source:{selectedElement.source}</div>
-        <div className={styles.entry}>Target: {selectedElement.target}</div>
-        {edgeData.sub_target && (
-          <div className={styles.entry}>Sub_target: {edgeData.sub_target}</div>
-        )}
-        {edgeData.sub_target_attributes && (
-          <div className={styles.entry}>
-            Sub_target_attributes:
-            {edgeData.sub_target_attributes}
-          </div>
-        )}
-      </div>
+        </section>
+        <section>
+          <h3 style={sidebarStyle.sectionHeader}>Link properties</h3>
+          <div className={styles.entry}>Source:{selectedElement.source}</div>
+          <div className={styles.entry}>Target: {selectedElement.target}</div>
+          {edgeData.sub_target && (
+            <div className={styles.entry}>
+              Sub_target: {edgeData.sub_target}
+            </div>
+          )}
+          {edgeData.sub_target_attributes && (
+            <div className={styles.entry}>
+              Sub_target_attributes:
+              {edgeData.sub_target_attributes}
+            </div>
+          )}
+        </section>
+      </section>
     </>
   );
 }

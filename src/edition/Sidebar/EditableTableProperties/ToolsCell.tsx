@@ -3,7 +3,7 @@ import { RemoveCircleOutline } from '@material-ui/icons';
 import { useStyles } from './EditableTable';
 
 interface Props {
-  inactive?: boolean | undefined;
+  inactive?: boolean;
   onDelete: () => void;
 }
 

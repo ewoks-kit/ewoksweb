@@ -1,103 +1,123 @@
-describe('edit links conditions', () => {
-  before(() => {
-    cy.loadApp();
+before(() => {
+  cy.loadApp();
+});
+
+it('click on a link and see its details in the sidebar ', () => {
+  cy.get('.react-flow').contains('web app?').parent().click({ force: true });
+
+  cy.findByRole('complementary').within(() => {
+    cy.contains('On Error condition').should('be.visible');
+    cy.contains('Conditions').should('be.visible');
+    cy.contains('Data Mapping').should('be.visible');
+    cy.contains('Required').should('be.visible');
+    cy.contains('Source').should('be.visible');
+    cy.contains('Target').should('be.visible');
+    cy.contains('Output').scrollIntoView().should('be.visible');
+    cy.contains('Type').scrollIntoView().should('be.visible');
+    cy.contains('Value').scrollIntoView().should('be.visible');
+    cy.contains('Advanced').scrollIntoView().should('be.visible');
+    cy.contains('Appearance').scrollIntoView().should('be.visible');
+    cy.contains('Link type').scrollIntoView().should('be.visible');
+    cy.contains('Arrow Head').scrollIntoView().should('be.visible');
+    cy.contains('Animated').scrollIntoView().should('be.visible');
+    cy.contains('Color').scrollIntoView().should('be.visible');
   });
+});
 
-  it('click on a link and see its details in the sidebar ', () => {
-    cy.get('.react-flow').contains('web app?').parent().click({ force: true });
+it('disables the data mapping when checking map all Data', () => {
+  cy.findByRole('complementary').within(() => {
+    cy.contains('Data Mapping')
+      .siblings()
+      .within(() => {
+        cy.contains('Add').should('not.exist');
+      });
 
-    cy.get('[data-cy="rightSidebar"]').within(() => {
-      cy.contains('On Error condition').should('be.visible');
-      cy.contains('Conditions').should('be.visible');
-      cy.contains('Data Mapping').should('be.visible');
-      cy.contains('Required').should('be.visible');
-      cy.contains('Source').should('be.visible');
-      cy.contains('Target').should('be.visible');
-      cy.contains('Output').should('be.visible');
-      cy.contains('Type').should('be.visible');
-      cy.contains('Value').should('be.visible');
-      cy.contains('Advanced').should('be.visible');
-      cy.contains('Appearance').should('be.visible');
-      cy.contains('Link type').scrollIntoView().should('be.visible');
-      cy.contains('Arrow Head').scrollIntoView().should('be.visible');
-      cy.contains('Animated').scrollIntoView().should('be.visible');
-      cy.contains('Color').scrollIntoView().should('be.visible');
-      cy.contains('Add').should('be.visible').should('have.length', 1);
-    });
+    cy.findByRole('checkbox', { name: 'Map all Data' }).click();
+
+    cy.contains('Data Mapping')
+      .siblings()
+      .within(() => {
+        cy.contains('Add').should('have.length', 1);
+      });
   });
+});
 
-  it('interacts with Map all Data and see results on Data Mapping', () => {
-    cy.get('[data-cy="rightSidebar"]').within(() => {
-      cy.contains('Data Mapping')
-        .siblings()
-        .within(() => {
-          cy.contains('Add').should('not.exist');
-        });
+it('disables the Conditions when checking On Error condition', () => {
+  cy.findByRole('complementary').within(() => {
+    cy.contains('Conditions')
+      .siblings()
+      .within(() => {
+        cy.contains('Add').should('have.length', 1);
+      });
 
-      cy.contains('Advanced')
-        .siblings()
-        .within(() => {
-          cy.contains('Map all Data').siblings().click();
-        });
+    cy.findByRole('checkbox', { name: 'On Error condition' }).click();
 
-      cy.contains('Data Mapping')
-        .siblings()
-        .within(() => {
-          cy.contains('Add').should('have.length', 1);
-        });
-    });
+    cy.contains('Conditions')
+      .siblings()
+      .within(() => {
+        cy.contains('Add').should('not.exist');
+      });
   });
+});
 
-  it('interacts with On Error condition and see results on Conditions', () => {
-    cy.get('[data-cy="rightSidebar"]').within(() => {
-      cy.contains('Conditions')
-        .siblings()
-        .within(() => {
-          cy.contains('Add').should('have.length', 1);
-        });
+it('insert a new Data Mapping entry', () => {
+  cy.findByRole('complementary').within(() => {
+    cy.contains('Data Mapping')
+      .siblings()
+      .within(() => {
+        cy.contains('Add').should('have.length', 1).click();
+        cy.get('[data-cy="inputInEditableCell"]').first().type('Always');
+        cy.get('[data-cy="inputInEditableCell"]').last().type('and forever');
+      });
 
-      cy.contains('Advanced')
-        .siblings()
-        .within(() => {
-          cy.contains('On Error condition').siblings().click();
-        });
-
-      cy.contains('Conditions')
-        .siblings()
-        .within(() => {
-          cy.contains('Add').should('not.exist');
-        });
-    });
+    cy.get('[data-cy="inputInEditableCell"]').should('have.length', 2);
   });
+});
 
-  it('insert a new Data Mapping', () => {
-    cy.get('[data-cy="rightSidebar"]').within(() => {
-      cy.contains('Data Mapping')
-        .siblings()
-        .within(() => {
-          cy.contains('Add').should('have.length', 1).click();
-          cy.get('[data-cy="inputInEditableCell"]').first().type('Always');
-          cy.get('[data-cy="inputInEditableCell"]').last().type('and forever');
-        });
-      cy.get('[data-cy="inputInEditableCell"]').should('have.length', 2);
-    });
+it('not able to edit the Data Mapping when Map all Data is checked', () => {
+  cy.findByRole('complementary').within(() => {
+    cy.findByRole('checkbox', { name: 'Map all Data' }).click();
+
+    cy.contains('Data Mapping')
+      .siblings()
+      .within(() => {
+        cy.contains('Add').should('have.length', 0);
+        cy.get('[data-cy="inputInEditableCell"]')
+          .children()
+          .each(($input) => {
+            cy.wrap($input).should('be.disabled');
+          });
+      });
   });
+});
 
-  it('insert a new Condition', () => {
-    cy.get('[data-cy="rightSidebar"]').within(() => {
-      cy.contains('Advanced')
-        .siblings()
-        .within(() => {
-          cy.contains('On Error condition').siblings().click();
-        });
+it('insert a new Condition', () => {
+  cy.findByRole('complementary').within(() => {
+    cy.findByRole('checkbox', { name: 'On Error condition' }).click();
 
-      cy.contains('Conditions')
-        .siblings()
-        .within(() => {
-          cy.contains('Add').should('have.length', 1).click();
-          cy.get('[data-cy="inputInEditableCell"]').first().type('Always');
-        });
-      cy.get('[data-cy="inputInEditableCell"]').should('have.length', 3);
-    });
+    cy.contains('Conditions')
+      .siblings()
+      .within(() => {
+        cy.contains('Add').should('have.length', 1).click();
+        cy.get('[data-cy="inputInEditableCell"]').first().type('Always');
+      });
+    cy.get('[data-cy="inputInEditableCell"]').should('have.length', 3);
+  });
+});
+
+it('not able to edit the Conditions when on Error condition is checked', () => {
+  cy.findByRole('complementary').within(() => {
+    cy.findByRole('checkbox', { name: 'On Error condition' }).click();
+
+    cy.contains('Conditions')
+      .siblings()
+      .within(() => {
+        cy.contains('Add').should('have.length', 0);
+        cy.get('[data-cy="inputInEditableCell"]')
+          .children()
+          .each(($input) => {
+            cy.wrap($input).should('be.disabled');
+          });
+      });
   });
 });
