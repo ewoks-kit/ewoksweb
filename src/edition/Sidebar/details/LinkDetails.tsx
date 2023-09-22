@@ -73,7 +73,7 @@ export default function LinkDetails(selectedElement: Edge) {
         </h3>
         <Conditions
           element={selectedElement}
-          enableOnError={edgeData.on_error}
+          isOnErrorSelected={edgeData.on_error}
         />
       </section>
       <section>
@@ -130,7 +130,7 @@ export default function LinkDetails(selectedElement: Edge) {
         </section>
         <section>
           <h3 style={sidebarStyle.sectionHeader}>Link properties</h3>
-          <div className={styles.entry}>Source:{selectedElement.source}</div>
+          <div className={styles.entry}>Source: {selectedElement.source}</div>
           <div className={styles.entry}>Target: {selectedElement.target}</div>
           {edgeData.sub_target && (
             <div className={styles.entry}>

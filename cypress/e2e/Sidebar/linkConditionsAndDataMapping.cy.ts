@@ -32,7 +32,7 @@ it('disables the data mapping when checking map all Data', () => {
         cy.contains('Add').should('not.exist');
       });
 
-    cy.findByRole('checkbox', { name: 'Map all Data' }).click();
+    cy.findByLabelText('Map all Data').click();
 
     cy.contains('Data Mapping')
       .siblings()
@@ -50,7 +50,7 @@ it('disables the Conditions when checking On Error condition', () => {
         cy.contains('Add').should('have.length', 1);
       });
 
-    cy.findByRole('checkbox', { name: 'On Error condition' }).click();
+    cy.findByLabelText('On Error condition').click();
 
     cy.contains('Conditions')
       .siblings()
@@ -76,7 +76,7 @@ it('insert a new Data Mapping entry', () => {
 
 it('not able to edit the Data Mapping when Map all Data is checked', () => {
   cy.findByRole('complementary').within(() => {
-    cy.findByRole('checkbox', { name: 'Map all Data' }).click();
+    cy.findByLabelText('Map all Data').click();
 
     cy.contains('Data Mapping')
       .siblings()
@@ -93,7 +93,7 @@ it('not able to edit the Data Mapping when Map all Data is checked', () => {
 
 it('insert a new Condition', () => {
   cy.findByRole('complementary').within(() => {
-    cy.findByRole('checkbox', { name: 'On Error condition' }).click();
+    cy.findByLabelText('On Error condition').click();
 
     cy.contains('Conditions')
       .siblings()
@@ -107,7 +107,7 @@ it('insert a new Condition', () => {
 
 it('not able to edit the Conditions when on Error condition is checked', () => {
   cy.findByRole('complementary').within(() => {
-    cy.findByRole('checkbox', { name: 'On Error condition' }).click();
+    cy.findByLabelText('On Error condition').click();
 
     cy.contains('Conditions')
       .siblings()
