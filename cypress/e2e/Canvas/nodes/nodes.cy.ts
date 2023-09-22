@@ -196,6 +196,7 @@ it('changes the icon', () => {
       );
   });
 
+  cy.waitForStableDOM();
   cy.findByRole('button', { name: 'Node Icon' }).click();
   cy.waitForStableDOM();
   cy.findByRole('option', { name: 'Use default' }).click();
