@@ -10,7 +10,11 @@ import { getEdgesData, rfToEwoks, textForError } from '../../utils';
 import commonStrings from '../../commonStrings.json';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
-import { getWorkflowIdsFromServer, curateGraph } from './utils';
+import {
+  getWorkflowIdsFromServer,
+  curateNodeData,
+  curateEdgeData,
+} from './utils';
 
 import styles from './TopAppBar.module.css';
 import { IconButton, Tooltip } from '@material-ui/core';
@@ -18,6 +22,8 @@ import tooltipText from '../../general/TooltipText';
 import type { Status } from './models';
 import StatusIcon from './StatusButton';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
+import useNodeDataStore from '../../store/useNodeDataStore';
+import useEdgeDataStore from '../../store/useEdgeDataStore';
 
 // DOC: Save to server button with its spinner
 export default function SaveToServerButton() {
@@ -38,6 +44,9 @@ export default function SaveToServerButton() {
   const [action, setAction] = useState<
     GraphFormAction.newGraph | GraphFormAction.newGraphOrOverwrite
   >(GraphFormAction.newGraph);
+
+  const setNodesData = useNodeDataStore((state) => state.setNodesData);
+  const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
 
   function handleError(text: string) {
     showErrorMsg(text);
@@ -86,10 +95,10 @@ export default function SaveToServerButton() {
 
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     try {
-      const { newNodesData, newEdgesData } = curateGraph(
-        getNodesData(),
-        getEdgesData()
-      );
+      const newNodesData = curateNodeData(getNodesData());
+      const newEdgesData = curateEdgeData(getEdgesData());
+      setNodesData(newNodesData);
+      setEdgesData(newEdgesData);
 
       const nodesWithData = [...rfInstance.getNodes()].map((node) => {
         return {
