@@ -99,8 +99,8 @@ const rootWorkflow = (
     rfInstance.setNodes([]);
     rfInstance.setEdges([]);
 
-    useNodeDataStore.getState().setNodesData(resultGraph.nodes);
-    useEdgeDataStore.getState().setEdgesData(resultGraph.links);
+    useNodeDataStore.getState().setDataFromNodes(resultGraph.nodes);
+    useEdgeDataStore.getState().setDataFromEdges(resultGraph.links);
 
     get().setDisplayedWorkflowInfo(resultGraph.graph);
 

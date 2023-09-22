@@ -6,7 +6,8 @@ export interface NodeDataState {
   nodesData: Map<string, EwoksRFNodeData>;
   setNodeData: (nodeId: string, nodeData: EwoksRFNodeData) => void;
   mergeNodeData: (nodeId: string, nodeData: Partial<EwoksRFNodeData>) => void;
-  setNodesData: (nodes: EwoksRFNode[]) => void;
+  setNodesData: (nodesData: Map<string, EwoksRFNodeData>) => void;
+  setDataFromNodes: (nodes: EwoksRFNode[]) => void;
   resetNodesData: () => void;
 }
 
@@ -32,7 +33,8 @@ const useNodeDataStore = create<NodeDataState>((set) => ({
       };
     });
   },
-  setNodesData: (nodes) => {
+  setNodesData: (nodesData) => set({ nodesData }),
+  setDataFromNodes: (nodes) => {
     set(() => ({
       nodesData: new Map(nodes.map((nod) => [nod.id, nod.data])),
     }));

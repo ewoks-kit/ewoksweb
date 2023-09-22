@@ -20,8 +20,8 @@ export default function SubgraphStack() {
     return state.subgraphsStack;
   });
 
-  const setNodesData = useNodeDataStore((state) => state.setNodesData);
-  const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
+  const setDataFromNodes = useNodeDataStore((state) => state.setDataFromNodes);
+  const setDataFromEdges = useEdgeDataStore((state) => state.setDataFromEdges);
   const goToGraph = (e: React.MouseEvent) => {
     e.preventDefault();
 
@@ -41,9 +41,9 @@ export default function SubgraphStack() {
     if (subgraph) {
       // Both stay
       setNodes(subgraph.nodes);
-      setNodesData(subgraph.nodes);
+      setDataFromNodes(subgraph.nodes);
       setEdges(subgraph.links);
-      setEdgesData(subgraph.links);
+      setDataFromEdges(subgraph.links);
       setDisplayedWorkflowInfo(subgraph.graph);
       setTimeout(() => {
         fitView({ duration: 500 });

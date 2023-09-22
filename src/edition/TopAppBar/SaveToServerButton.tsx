@@ -22,6 +22,8 @@ import tooltipText from '../../general/TooltipText';
 import type { Status } from './models';
 import StatusIcon from './StatusButton';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
+import useNodeDataStore from '../../store/useNodeDataStore';
+import useEdgeDataStore from '../../store/useEdgeDataStore';
 
 // DOC: Save to server button with its spinner
 export default function SaveToServerButton() {
@@ -42,6 +44,9 @@ export default function SaveToServerButton() {
   const [action, setAction] = useState<
     GraphFormAction.newGraph | GraphFormAction.newGraphOrOverwrite
   >(GraphFormAction.newGraph);
+
+  const setNodesData = useNodeDataStore((state) => state.setNodesData);
+  const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
 
   function handleError(text: string) {
     showErrorMsg(text);
@@ -92,6 +97,8 @@ export default function SaveToServerButton() {
     try {
       const newNodesData = curateNodeData(getNodesData());
       const newEdgesData = curateEdgeData(getEdgesData());
+      setNodesData(newNodesData);
+      setEdgesData(newEdgesData);
 
       const nodesWithData = [...rfInstance.getNodes()].map((node) => {
         return {

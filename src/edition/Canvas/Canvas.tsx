@@ -95,9 +95,9 @@ function Canvas() {
   const showInfoMsg = useSnackbarStore((state) => state.showInfoMsg);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
-  const setNodesData = useNodeDataStore((state) => state.setNodesData);
+  const setDataFromNodes = useNodeDataStore((state) => state.setDataFromNodes);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
-  const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
+  const setDataFromEdges = useEdgeDataStore((state) => state.setDataFromEdges);
   const {
     fitView,
     setNodes,
@@ -288,8 +288,8 @@ function Canvas() {
       if (subgraph?.graph.id) {
         setNodes(subgraph.nodes);
 
-        setNodesData(subgraph.nodes);
-        setEdgesData(subgraph.links);
+        setDataFromNodes(subgraph.nodes);
+        setDataFromEdges(subgraph.links);
 
         setEdges(subgraph.links);
 
