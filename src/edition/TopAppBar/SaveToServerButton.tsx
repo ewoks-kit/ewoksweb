@@ -10,7 +10,11 @@ import { getEdgesData, rfToEwoks, textForError } from '../../utils';
 import commonStrings from '../../commonStrings.json';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
-import { getWorkflowIdsFromServer, curateGraph } from './utils';
+import {
+  getWorkflowIdsFromServer,
+  curateNodeData,
+  curateEdgeData,
+} from './utils';
 
 import styles from './TopAppBar.module.css';
 import { IconButton, Tooltip } from '@material-ui/core';
@@ -86,10 +90,8 @@ export default function SaveToServerButton() {
 
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     try {
-      const { newNodesData, newEdgesData } = curateGraph(
-        getNodesData(),
-        getEdgesData()
-      );
+      const newNodesData = curateNodeData(getNodesData());
+      const newEdgesData = curateEdgeData(getEdgesData());
 
       const nodesWithData = [...rfInstance.getNodes()].map((node) => {
         return {
