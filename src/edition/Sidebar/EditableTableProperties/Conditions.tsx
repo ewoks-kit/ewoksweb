@@ -52,7 +52,7 @@ export default function Conditions({ element, isOnErrorSelected }: Props) {
   return (
     <div>
       <EditableTable
-        inactive={isOnErrorSelected}
+        disable={isOnErrorSelected}
         headers={['Output', 'Value']}
         defaultValues={edgeData.conditions || []}
         valuesChanged={conditionsValuesChanged}

@@ -37,7 +37,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 function TableCellInEditMode(props: CustomTableCellProps) {
-  const { index, row, name, onChange, typeOfValues, usedIn, inactive } = props;
+  const { index, row, name, onChange, typeOfValues, usedIn, disable } = props;
 
   const classes = useStyles();
 
@@ -89,7 +89,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
           data-cy="radioInEditableCell"
         >
           <FormControlLabel
-            disabled={inactive}
+            disabled={disable}
             value="true"
             control={<Radio />}
             label="true"
@@ -97,7 +97,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
             color="primary"
           />
           <FormControlLabel
-            disabled={inactive}
+            disabled={disable}
             value="false"
             control={<Radio />}
             label="false"
@@ -111,7 +111,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
       return (
         <FormControl fullWidth style={{ marginLeft: '5px' }}>
           <Input
-            disabled={inactive}
+            disabled={disable}
             value={row[name]}
             type="text"
             name={name}
@@ -131,7 +131,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
   return (
     <FormControl fullWidth style={{ marginLeft: '5px' }}>
       <Input
-        disabled={inactive}
+        disabled={disable}
         value={row[name]}
         type="text"
         name={name}

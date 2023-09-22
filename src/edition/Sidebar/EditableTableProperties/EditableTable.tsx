@@ -51,7 +51,7 @@ interface EditableTableProps {
   headers: string[];
   defaultValues: Condition[] | Inputs[];
   typeOfValues: TypeOfValues[];
-  inactive?: boolean;
+  disable?: boolean;
   valuesChanged: (rows: EditableTableRow[]) => void;
   onRowAdd?: (rows?: EditableTableRow[]) => void;
 }
@@ -71,7 +71,7 @@ function EditableTable(props: EditableTableProps) {
   const [dialogContent, setDialogContent] = React.useState<DialogContent>();
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
-  const { defaultValues, headers, inactive, onRowAdd } = props;
+  const { defaultValues, headers, disable, onRowAdd } = props;
 
   useEffect(() => {
     setTypeOfInputs(defaultValues.map(getType));
@@ -252,7 +252,7 @@ function EditableTable(props: EditableTableProps) {
         />
       )}
       <Table
-        style={{ opacity: inactive ? '0.2' : '1' }}
+        style={{ opacity: disable ? '0.2' : '1' }}
         className={classes.table}
         aria-label="editable table"
         size="small"
@@ -270,7 +270,7 @@ function EditableTable(props: EditableTableProps) {
                   name="name"
                   onChange={onChange}
                   typeOfValues={props.typeOfValues[0]}
-                  inactive={inactive}
+                  disable={disable}
                 />
 
                 <TypeSelectCell
@@ -281,7 +281,7 @@ function EditableTable(props: EditableTableProps) {
                       : 'bool'
                   }
                   onChange={(e) => changedTypeOfInputs(e, row, index)}
-                  inactive={inactive}
+                  disable={disable}
                 />
 
                 <CustomTableCell
@@ -290,16 +290,16 @@ function EditableTable(props: EditableTableProps) {
                   name="value"
                   onChange={onChange}
                   onEdit={() => onEditRow(row.id || '', index)}
-                  inactive={inactive}
+                  disable={disable}
                 />
                 <ToolsCell
-                  inactive={inactive}
+                  disable={disable}
                   onDelete={() => onDelete(row.id || '')}
                 />
               </TableRow>
             </React.Fragment>
           ))}
-          {onRowAdd && !inactive && (
+          {onRowAdd && !disable && (
             <TableRow>
               <TableCell align="left" className={classes.plusButtonTableCell} />
               <TableCell align="left" className={classes.plusButtonTableCell}>
@@ -310,7 +310,7 @@ function EditableTable(props: EditableTableProps) {
           )}
         </TableBody>
       </Table>
-      {inactive && (
+      {disable && (
         <div style={{ backgroundColor: '#f9f9e2' }}>
           Conditions have no effect when On Error condition is enabled. They
           will be removed when saving the workflow.

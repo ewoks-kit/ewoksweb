@@ -3,12 +3,12 @@ import { RemoveCircleOutline } from '@material-ui/icons';
 import { useStyles } from './EditableTable';
 
 interface Props {
-  inactive?: boolean;
+  disable?: boolean;
   onDelete: () => void;
 }
 
 function ToolsCell(props: Props) {
-  const { inactive, onDelete } = props;
+  const { disable, onDelete } = props;
   const classes = useStyles();
 
   return (
@@ -20,7 +20,7 @@ function ToolsCell(props: Props) {
         style={{
           minWidth: '15px',
         }}
-        disabled={inactive}
+        disabled={disable}
         aria-label="Remove row"
         onClick={() => onDelete()}
         endIcon={

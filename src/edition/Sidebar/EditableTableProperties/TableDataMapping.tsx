@@ -14,7 +14,7 @@ import { TableCell } from '@material-ui/core';
 import AddRowButton from './AddRowButton';
 
 interface TableDataMappingProps {
-  inactive?: boolean;
+  disable?: boolean;
   headers: string[];
   values: DataMapping[];
   typeOfValues: TypeOfValues[];
@@ -23,11 +23,11 @@ interface TableDataMappingProps {
 }
 
 const useStyles = makeStyles(() => ({
-  table: (props: { inactive: boolean | undefined }) => ({
+  table: (props: { disable: boolean | undefined }) => ({
     padding: '1px',
     minWidth: 160,
     wordBreak: 'break-all',
-    opacity: props.inactive ? '0.2' : '1',
+    opacity: props.disable ? '0.2' : '1',
   }),
   tableCell: {
     textAlign: 'end',
@@ -38,9 +38,9 @@ const useStyles = makeStyles(() => ({
 }));
 
 function TableDataMapping(props: TableDataMappingProps) {
-  const { values, headers, inactive, onRowAdd } = props;
+  const { values, headers, disable, onRowAdd } = props;
 
-  const classes = useStyles({ inactive });
+  const classes = useStyles({ disable });
 
   function onChange(
     e: { target: { name: string; value: string | number } },
@@ -88,7 +88,7 @@ function TableDataMapping(props: TableDataMappingProps) {
                   onChange={onChange}
                   typeOfValues={props.typeOfValues[0]}
                   usedIn="DataMapping"
-                  inactive={inactive}
+                  disable={disable}
                 />
                 <CustomTableCell
                   index={index}
@@ -97,16 +97,16 @@ function TableDataMapping(props: TableDataMappingProps) {
                   onChange={onChange}
                   typeOfValues={props.typeOfValues[1]}
                   usedIn="DataMapping"
-                  inactive={inactive}
+                  disable={disable}
                 />
                 <ToolsCell
-                  inactive={inactive}
+                  disable={disable}
                   onDelete={() => onDelete(row.id || '')}
                 />
               </TableRow>
             </React.Fragment>
           ))}
-          {onRowAdd && !inactive && (
+          {onRowAdd && !disable && (
             <TableRow>
               <TableCell align="left" className={classes.tableCell}>
                 <AddRowButton
@@ -119,7 +119,7 @@ function TableDataMapping(props: TableDataMappingProps) {
           )}
         </TableBody>
       </Table>
-      {inactive && (
+      {disable && (
         <div style={{ backgroundColor: '#f9f9e2' }}>
           Data Mappings have no effect when Map all Data is enabled. They will
           be removed when saving the workflow.

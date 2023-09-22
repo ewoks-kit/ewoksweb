@@ -46,7 +46,7 @@ export default function DataMappingComponent({ element, mapAllData }: Props) {
   return (
     <div>
       <TableDataMapping
-        inactive={mapAllData}
+        disable={mapAllData}
         onRowAdd={(rows) => addDataMapping(rows)}
         headers={['Source', 'Target']}
         values={edgeData.data_mapping || []}

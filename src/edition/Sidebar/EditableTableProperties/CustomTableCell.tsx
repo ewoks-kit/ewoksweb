@@ -25,7 +25,7 @@ function isRowContentInvalid(
 
 // DOC: Used as an app-wide dialog when confirmation is needed. Open is a prop
 function CustomTableCell(props: CustomTableCellProps) {
-  const { row, rowsNames, name, usedIn, inactive } = props;
+  const { row, rowsNames, name, usedIn, disable: inactive } = props;
 
   const useStyles = makeStyles(() => ({
     tableCell: {
