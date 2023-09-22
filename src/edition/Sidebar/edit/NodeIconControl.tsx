@@ -1,6 +1,6 @@
-import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import { isString } from 'lodash';
 import { useIcons } from '../../../api/icons';
+import styles from './NodeIconControl.module.css';
 
 interface Props {
   value?: string;
@@ -17,34 +17,30 @@ function NodeIconControl(props: Props) {
   const iconNames = icons.map((icon) => icon.name);
 
   return (
-    <div>
-      <FormControl variant="outlined" fullWidth>
-        <InputLabel id="replace-node-icon">Node Icon</InputLabel>
-        <Select
-          labelId="replace-node-icon"
-          value={value && iconNames.includes(value) ? value : DEFAULT_VALUE}
-          label="Override Task Icon"
-          onChange={(event) => {
-            const iconName = event.target.value;
-            if (!isString(iconName)) {
-              return;
-            }
+    <div className={styles.container}>
+      <span>Icon</span>
+      <select
+        aria-label="Change node icon"
+        className={styles.select}
+        value={value && iconNames.includes(value) ? value : DEFAULT_VALUE}
+        onChange={(event) => {
+          const iconName = event.target.value;
+          if (!isString(iconName)) {
+            return;
+          }
 
-            if (iconName === DEFAULT_VALUE) {
-              onRemove();
-            } else {
-              onChange(iconName);
-            }
-          }}
-        >
-          <MenuItem value={DEFAULT_VALUE}>{DEFAULT_VALUE}</MenuItem>
-          {iconNames.map((name) => (
-            <MenuItem value={name} key={name}>
-              {name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          if (iconName === DEFAULT_VALUE) {
+            onRemove();
+          } else {
+            onChange(iconName);
+          }
+        }}
+      >
+        <option>{DEFAULT_VALUE}</option>
+        {iconNames.map((name) => (
+          <option key={name}>{name}</option>
+        ))}
+      </select>
     </div>
   );
 }

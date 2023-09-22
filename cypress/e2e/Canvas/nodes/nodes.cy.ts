@@ -158,7 +158,7 @@ it('clones a node by button', () => {
   cy.get('.react-flow__node').should('have.length', 16);
 });
 
-it.skip('changes the icon', () => {
+it('changes the icon', () => {
   cy.loadApp();
 
   cy.get('.react-flow__nodes')
@@ -170,8 +170,8 @@ it.skip('changes the icon', () => {
   // Can be underneath another node
   cy.get('@node').click({ force: true });
 
-  cy.findByRole('button', { name: 'Node Icon' }).should(
-    'contain.text',
+  cy.findByRole('combobox', { name: 'Change node icon' }).should(
+    'have.value',
     'Use default'
   );
   cy.get('@node').within(() => {
@@ -183,9 +183,8 @@ it.skip('changes the icon', () => {
       );
   });
 
-  cy.findByRole('button', { name: 'Node Icon' }).click();
+  cy.findByRole('combobox', { name: 'Change node icon' }).select('down.svg');
   cy.waitForStableDOM();
-  cy.findByRole('option', { name: 'down.svg' }).click();
 
   cy.get('@node').within(() => {
     cy.findByRole('img')
@@ -196,10 +195,10 @@ it.skip('changes the icon', () => {
       );
   });
 
+  cy.findByRole('combobox', { name: 'Change node icon' })
+    .should('be.enabled') // Needed to wait the combobox to be ready again after selection
+    .select('Use default');
   cy.waitForStableDOM();
-  cy.findByRole('button', { name: 'Node Icon' }).click();
-  cy.waitForStableDOM();
-  cy.findByRole('option', { name: 'Use default' }).click();
 
   cy.get('@node').within(() => {
     cy.findByRole('img')
