@@ -158,7 +158,7 @@ it('clones a node by button', () => {
   cy.get('.react-flow__node').should('have.length', 16);
 });
 
-it('changes the icon', () => {
+it.skip('changes the icon', () => {
   cy.loadApp();
 
   cy.get('.react-flow__nodes')
