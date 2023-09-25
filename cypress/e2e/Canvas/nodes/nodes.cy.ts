@@ -196,7 +196,7 @@ it('changes the icon', () => {
   });
 
   cy.findByRole('combobox', { name: 'Change node icon' })
-    .should('be.enabled') // Needed to wait the combobox to be ready again after selection
+    .should('not.be.disabled') // Needed to wait the combobox to be ready again after selection
     .select('Use default');
   cy.waitForStableDOM();
 
