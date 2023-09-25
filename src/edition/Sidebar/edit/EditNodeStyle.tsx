@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Checkbox, FormControl, Slider } from '@material-ui/core';
+import { Checkbox, FormControl } from '@material-ui/core';
 import type { ChangeEvent } from 'react';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import sidebarStyle from '../sidebarStyle';
 import NodeIconControl from './NodeIconControl';
+import NodeWidthControl from './NodeWidthControl';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(props: { nodeId: string }) {
@@ -12,9 +13,6 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(nodeId));
   assertNodeDataDefined(nodeData, nodeId);
 
-  const [nodeSize, setNodeSize] = useState<number>(
-    nodeData.ui_props.nodeWidth || 100
-  );
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
@@ -50,16 +48,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     });
   };
 
-  const changeNodeSize = (
-    _event: ChangeEvent<unknown>,
-    value: number | number[]
-  ) => {
-    if (typeof value === 'number') {
-      setNodeSize(value);
-    }
-  };
-
-  function onChangeCommitted(
+  function handleNodeWidthChange(
     _event: ChangeEvent<unknown>,
     value: number | number[]
   ) {
@@ -180,21 +169,10 @@ export default function EditNodeStyle(props: { nodeId: string }) {
           </div>
         </div>
       )}
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <label htmlFor="nodeSize">Node size</label>
-        <Slider
-          id="nodeSize"
-          color="primary"
-          defaultValue={nodeSize}
-          value={nodeSize}
-          onChange={changeNodeSize}
-          onChangeCommitted={onChangeCommitted}
-          min={40}
-          max={300}
-          style={{ paddingTop: '45px' }}
-          valueLabelDisplay="on"
-        />
-      </div>
+      <NodeWidthControl
+        nodeWidth={nodeData.ui_props.nodeWidth}
+        onChangeCommitted={handleNodeWidthChange}
+      />
       {isRegularNode && (
         <NodeIconControl
           value={nodeData.ui_props.icon}
