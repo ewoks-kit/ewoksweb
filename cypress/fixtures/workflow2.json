@@ -1,9 +1,6 @@
 {
-  "directed": true,
-  "multigraph": false,
   "graph": {
-    "id": "workflow2",
-    "schema_version": "1.0"
+    "id": "workflow2"
   },
   "nodes": [
     {
@@ -19,7 +16,13 @@
           "value": 1
         }
       ],
-      "id": "node1"
+      "id": "node1",
+      "uiProps": {
+        "position": {
+          "x": 10,
+          "y": 200
+        }
+      }
     },
     {
       "task_type": "class",
@@ -34,17 +37,35 @@
           "value": 1
         }
       ],
-      "id": "node2"
+      "id": "node2",
+      "uiProps": {
+        "position": {
+          "x": 10,
+          "y": 10
+        }
+      }
     },
     {
       "task_type": "class",
       "task_identifier": "results.tasks.Add",
-      "id": "node3"
+      "id": "node3",
+      "uiProps": {
+        "position": {
+          "x": 200,
+          "y": 100
+        }
+      }
     },
     {
       "task_type": "class",
       "task_identifier": "results.tasks.Linspace2",
-      "id": "node4"
+      "id": "node4",
+      "uiProps": {
+        "position": {
+          "x": 400,
+          "y": 100
+        }
+      }
     }
   ],
   "links": [
