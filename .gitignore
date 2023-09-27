@@ -25,3 +25,5 @@ Thumbs.db
 /cypress/videos/
 /pysrc/ewoksweb/tests/resources/ewoks_events.db
 /pysrc/ewoksweb/tests/resources/tasks
+/pysrc/ewoksweb/tests/resources/icons
+/pysrc/ewoksweb/tests/resources/workflows/demo.json
