@@ -17,6 +17,7 @@ import TaskListToolbar from './TaskListToolbar';
 // DOC: Hosts the nodes-tasks in their categories to drag and drop them into canvas
 function TaskList() {
   const tasks = useTasks();
+
   const [selectedTaskId, setSelectTaskId] = useState<string>();
 
   return (
@@ -29,7 +30,7 @@ function TaskList() {
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
           >
-            <Typography>{category}</Typography>
+            <Typography>{category || 'No category defined'}</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <div className={styles.itemContainer}>

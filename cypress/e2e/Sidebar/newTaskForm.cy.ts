@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
 
 describe('new Task form', () => {
+  let selectedButton: JQuery<HTMLElement>; // Declare a local variable for the button reference
   beforeEach(() => {
     cy.loadAppWithoutGraph();
 
@@ -33,7 +34,11 @@ describe('new Task form', () => {
     cy.findByRole('button', { name: 'Save Task' }).click();
 
     cy.findByRole('button', { name: 'Cypress_test' }).click();
-    cy.findByRole('button', { name: id }).should('be.visible');
+    cy.findByRole('button', { name: id })
+      .should('be.visible')
+      .then(($button) => {
+        selectedButton = $button;
+      });
   });
 
   it('creates a new class task with inputs and outputs', () => {
@@ -56,6 +61,38 @@ describe('new Task form', () => {
     cy.findByRole('button', { name: 'Save Task' }).click();
 
     cy.findByRole('button', { name: 'Cypress_test' }).click();
-    cy.findByRole('button', { name: id }).should('be.visible');
+    cy.findByRole('button', { name: id })
+      .scrollIntoView()
+      .should('be.visible')
+      .then(($button) => {
+        selectedButton = $button;
+      });
+  });
+
+  it('creates a new class task with no category', () => {
+    const id = nanoid();
+    cy.findByRole('textbox', { name: 'Identifier' }).type(id);
+
+    cy.findByRole('button', { name: /^Task type/ }).click();
+    cy.findByRole('option', { name: 'class' }).click();
+
+    cy.findByRole('button', { name: 'Save Task' }).click();
+
+    cy.findByRole('button', { name: 'No category defined' }).click();
+    cy.findByRole('button', { name: id })
+      .should('be.visible')
+      .then(($button) => {
+        selectedButton = $button;
+      });
+  });
+
+  afterEach(() => {
+    if (selectedButton) {
+      cy.wrap(selectedButton).should('be.visible').click();
+
+      cy.findByRole('button', { name: 'Delete task' }).click();
+      cy.findByRole('button', { name: 'Yes' }).should('be.visible').click();
+      cy.wrap(selectedButton).should('not.exist');
+    }
   });
 });
