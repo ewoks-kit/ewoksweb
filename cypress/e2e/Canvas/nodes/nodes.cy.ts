@@ -183,7 +183,7 @@ it('changes the icon', () => {
       );
   });
 
-  cy.findByRole('combobox', { name: 'Change node icon' }).select('down.svg');
+  cy.findByRole('combobox', { name: 'Change node icon' }).select('sum.png');
   cy.waitForStableDOM();
 
   cy.get('@node').within(() => {
@@ -191,7 +191,7 @@ it('changes the icon', () => {
       .should('have.attr', 'src')
       .should(
         'include',
-        'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHR'
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAA7DAAA'
       );
   });
 
