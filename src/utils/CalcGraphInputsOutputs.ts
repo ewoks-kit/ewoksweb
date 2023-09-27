@@ -11,12 +11,13 @@ import {
   calcConditionValue,
   calcDataMapping,
   notUndefinedValue,
+  propIsEmpty,
 } from './utils';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 
 // DOC: Calculate the ewoks input_nodes and output_nodes within the graph
 // from the nodes of the graphRF model with types graphInput, graphOutput
-export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
+export function calcEwoksGraphProp(graph: GraphRF): GraphDetails {
   let input_nodes: GraphNodes[] = [];
   let output_nodes: GraphNodes[] = [];
 
@@ -49,6 +50,18 @@ export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
   return {
     id: graph.graph.id,
     label: graph.graph.label || graph.graph.id,
+    ...(!propIsEmpty(graph.graph.keywords) && {
+      keywords: graph.graph.keywords,
+    }),
+    ...(!propIsEmpty(graph.graph.input_schema) && {
+      input_schema: graph.graph.input_schema,
+    }),
+    ...(!propIsEmpty(graph.graph.execute_arguments) && {
+      execute_arguments: graph.graph.execute_arguments,
+    }),
+    ...(!propIsEmpty(graph.graph.worker_options) && {
+      worker_options: graph.graph.worker_options,
+    }),
     ...(graph.graph.category && {
       category: graph.graph.category,
     }),
@@ -58,22 +71,10 @@ export function calcGraphInputsOutputs(graph: GraphRF): GraphDetails {
     ...(output_nodes.length > 0 && {
       output_nodes,
     }),
-    ...(graph.graph.uiProps &&
-      !propIsEmpty(graph.graph.uiProps) && {
-        uiProps: { ...graph.graph.uiProps },
-      }),
+    ...(!propIsEmpty(graph.graph.uiProps) && {
+      uiProps: { ...graph.graph.uiProps },
+    }),
   };
-}
-
-export function propIsEmpty(uiprops: object) {
-  let isEmpty = true;
-  for (const [, value] of Object.entries(uiprops)) {
-    if ((Array.isArray(value) && value.length > 0) || value) {
-      isEmpty = false;
-      break;
-    }
-  }
-  return isEmpty;
 }
 
 function calcInOutNodes(

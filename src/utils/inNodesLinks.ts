@@ -1,5 +1,5 @@
 import type { EwoksLink, EwoksNode, GraphNodes } from '../types';
-import { propIsEmpty } from './CalcGraphInputsOutputs';
+import { propIsEmpty } from './utils';
 import {
   calcCommonNodeUiProps,
   calcLinkCommonProps,

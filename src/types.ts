@@ -52,6 +52,10 @@ export interface GraphDetails {
   input_nodes?: GraphNodes[];
   output_nodes?: GraphNodes[];
   uiProps?: GraphUiProps;
+  keywords?: object;
+  input_schema?: object;
+  execute_arguments?: object;
+  worker_options?: object;
 }
 
 export interface DialogParams {
