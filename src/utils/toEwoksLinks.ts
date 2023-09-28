@@ -6,7 +6,7 @@ import {
   calcDataMapping,
   notUndefinedValue,
 } from './utils';
-import { propIsEmpty } from '../utils/CalcGraphInputsOutputs';
+import { propIsEmpty } from '../utils/utils';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 
 // EwoksRFLinks --> EwoksLinks for saving

@@ -120,3 +120,17 @@ export function calcLinkCommonProps(linkAttr: InOutLinkAttributes) {
     ...notUndefinedValue(linkAttr.required, 'required'),
   };
 }
+
+export function propIsEmpty(uiprops: object | undefined) {
+  let isEmpty = true;
+  if (uiprops === undefined) {
+    return isEmpty;
+  }
+  for (const [, value] of Object.entries(uiprops)) {
+    if ((Array.isArray(value) && value.length > 0) || value) {
+      isEmpty = false;
+      break;
+    }
+  }
+  return isEmpty;
+}
