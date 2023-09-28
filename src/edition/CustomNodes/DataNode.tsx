@@ -5,19 +5,19 @@ import { contentStyle as style } from './nodeStyles';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
 import useNodeDataStore from '../../store/useNodeDataStore';
 
-function DataNode(args: NodeProps) {
-  const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
-  assertNodeDataDefined(nodeData, args.id);
+function DataNode(props: NodeProps) {
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(props.id));
+  assertNodeDataDefined(nodeData, props.id);
 
   const uiProps = nodeData.ui_props;
 
   return (
     <Node
-      id={args.id}
+      id={props.id}
       type={nodeData.task_props.task_type}
-      label={nodeData.ewoks_props.label || ''}
+      label={nodeData.ewoks_props.label || props.id}
       color="#ced3ee"
-      comment={nodeData.comment || ''}
+      comment={nodeData.comment}
       moreHandles={uiProps.moreHandles}
       withImage={'withImage' in uiProps ? uiProps.withImage : true}
       nodeWidth={'nodeWidth' in uiProps ? uiProps.nodeWidth : 100}

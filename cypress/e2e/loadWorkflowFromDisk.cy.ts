@@ -20,8 +20,7 @@ it('loads workflow from disk', () => {
   cy.get('.react-flow__edge').should('have.length', 3);
 });
 
-// Skipped until `label` of nodes and graph are no longer populated
-it.skip('leaves the original JSON untouched when saving on the server', () => {
+it('leaves the original JSON untouched when saving on the server', () => {
   cy.findByRole('button', { name: 'Open menu with more actions' }).click();
   cy.findByRole('menuitem', { name: 'Open from disk' }).click();
 

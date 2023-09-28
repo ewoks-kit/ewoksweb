@@ -1,15 +1,11 @@
-before(() => {
+beforeEach(() => {
   cy.loadApp();
-});
-
-it('selects a default node', () => {
   cy.findByRole('button', { name: 'Close task drawer' }).click();
   cy.waitForStableDOM();
-  cy.get('.react-flow__nodes')
-    .children()
-    .filter('.react-flow__node-ppfmethod')
-    .first()
-    .click({ force: true });
+  cy.findAllByRole('button', { name: 'ewoksweb' })
+    .filter('.react-flow__node')
+    .as('node')
+    .click();
 });
 
 it('changes label of node', () => {
@@ -20,67 +16,55 @@ it('changes label of node', () => {
   cy.get('.react-flow').contains('Always and forever...').should('be.visible');
 });
 
+it('fallbacks on id when there is no label', () => {
+  cy.findByRole('textbox', { name: 'Edit label' }).click().clear();
+
+  cy.get('@node').within(() => {
+    cy.contains('taskSkeleton0');
+  });
+});
+
 it('changes comment of node', () => {
   cy.findByRole('textbox', { name: 'Edit comment' })
     .click()
     .type('Always and forever comment...');
 
-  cy.get('.react-flow')
-    .contains('Always and forever...')
-    .should('be.visible')
-    .click();
-
-  cy.contains('Always and forever comment...');
+  cy.get('@node').click();
+  cy.findByRole('textbox', { name: 'Edit comment' }).should(
+    'have.value',
+    'Always and forever comment...'
+  );
 });
 
-it('changes withImage of node true->false->true', () => {
-  cy.findByRole('heading', { name: 'Appearance' }).click();
+it('shows/hides the node icon/label', () => {
+  cy.findByLabelText('With label').should('be.checked');
+  cy.findByLabelText('With image').should('be.checked');
+  cy.get('@node').within(() => {
+    cy.findByRole('img').should('be.visible');
+    cy.findByText('ewoksweb').should('be.visible');
+  });
 
-  cy.get('.react-flow')
-    .contains('Always and forever...')
-    .should('be.visible')
-    .siblings()
-    .should('have.length', 3);
+  cy.findByLabelText('With label').uncheck();
+  cy.get('@node').within(() => {
+    cy.findByRole('img').should('be.visible');
+    cy.findByText('ewoksweb').should('not.exist');
+  });
 
-  cy.get('input[name="withImage"]').click();
+  cy.findByLabelText('With image').uncheck();
+  cy.get('@node').within(() => {
+    cy.findByRole('img').should('not.exist');
+    cy.findByText('e').should('be.visible'); // label is cropped
+  });
 
-  cy.get('.react-flow')
-    .contains('Always and forever...')
-    .should('be.visible')
-    .siblings()
-    .should('have.length', 2);
-
-  cy.get('input[name="withImage"]').click();
-
-  cy.get('.react-flow')
-    .contains('Always and forever...')
-    .should('be.visible')
-    .siblings()
-    .should('have.length', 3);
-});
-
-it('changes withLabel of node true->false->true', () => {
-  cy.get('.react-flow').contains('Always and forever...').parent().as('node');
-
-  cy.get('input[name="withLabel"]').click();
-
-  cy.get('@node').children().should('have.length', 3);
-
-  cy.get('input[name="withLabel"]').click();
-
-  cy.get('@node').children().should('have.length', 4);
-
-  cy.get('.react-flow')
-    .contains('Always and forever...')
-    .should('be.visible')
-    .siblings()
-    .should('have.length', 3);
+  cy.findByLabelText('With label').check();
+  cy.get('@node').within(() => {
+    cy.findByRole('img').should('not.exist');
+    cy.findByText('ewoksweb').should('be.visible');
+  });
 });
 
 it('changes width of node', () => {
-  cy.get('.react-flow').contains('Always and forever...').parent().as('node');
-
-  cy.get('span[role="slider"]').as('sliderThumb');
+  cy.findByRole('slider').as('sliderThumb');
 
   cy.get('@sliderThumb').should('have.attr', 'aria-valuenow').and('eq', '100');
 
@@ -89,9 +73,7 @@ it('changes width of node', () => {
   cy.get('@sliderThumb').should('have.attr', 'aria-valuemax').and('eq', '300');
 
   cy.get('@sliderThumb').then(($slider) => {
-    const slider = $slider[0] as HTMLInputElement;
-
-    const { left, right, top, bottom } = $slider[0].getBoundingClientRect();
+    const { top, bottom } = $slider[0].getBoundingClientRect();
     const yPos = (top + bottom) / 2;
 
     cy.get('@sliderThumb')
@@ -110,52 +92,47 @@ it('changes width of node', () => {
 });
 
 it('changes moreHandles of node true->false->true', () => {
-  cy.get('.react-flow').contains('Always and forever...').parent().as('node');
+  cy.findByRole('checkbox', { name: 'More handles' })
+    .as('handleCheckbox')
+    .should('not.be.checked');
 
-  cy.get('@node').children('.react-flow__handle').should('have.length', 2);
+  cy.get('@node').within(() => {
+    cy.get('.react-flow__handle').should('have.length', 2);
+  });
 
-  cy.contains('More handles').siblings('span').click();
+  cy.get('@handleCheckbox').check();
+  cy.get('@node').within(() => {
+    cy.get('.react-flow__handle').should('have.length', 6);
+  });
 
-  cy.get('@node').children('.react-flow__handle').should('have.length', 4);
-
-  cy.get('@node')
-    .children('#choice')
-    .should('have.length', 1)
-    .children('.react-flow__handle')
-    .should('have.length', 2);
-
-  cy.contains('More handles').siblings('span').click();
-
-  cy.get('@node').children('.react-flow__handle').should('have.length', 2);
+  cy.get('@handleCheckbox').uncheck();
+  cy.get('@node').within(() => {
+    cy.get('.react-flow__handle').should('have.length', 2);
+  });
 });
 
 it('deletes a node by button and keyboard', () => {
   cy.get('.react-flow__node').should('have.length', 17);
 
-  cy.get('.react-flow')
-    .contains('Always and forever...')
-    .parent()
-    .should('have.length', 1)
-    .click()
-    .type('{del}');
+  cy.get('@node').click().type('{del}');
 
   cy.get('.react-flow__node').should('have.length', 16);
 
   cy.get('.react-flow__node').first().click();
-  cy.get('[aria-controls="editSidebar-dropdown-menu"]').click();
-  cy.contains('Delete Node').click();
+
+  cy.findByRole('button', { name: 'Open edit actions menu' }).click();
+  cy.findByRole('menuitem', { name: 'Delete Node' }).click();
 
   cy.get('.react-flow__node').should('have.length', 15);
 });
 
 it('clones a node by button', () => {
-  cy.get('.react-flow__node').first().click({ force: true });
+  cy.get('.react-flow__node').should('have.length', 17);
 
-  cy.get('#editSidebar-dropdown-menu').within(() => {
-    cy.contains('[role="sidebarMenuItem"]', 'Clone Node').click();
-  });
+  cy.findByRole('button', { name: 'Open edit actions menu' }).click();
+  cy.findByRole('menuitem', { name: 'Clone Node' }).click();
 
-  cy.get('.react-flow__node').should('have.length', 16);
+  cy.get('.react-flow__node').should('have.length', 18);
 });
 
 it('changes the icon', () => {
