@@ -99,7 +99,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
                     : !!nodeData.ui_props.withImage
                 }
                 onChange={(event) => withImageChanged(event.target.checked)}
-                inputProps={{ 'aria-label': 'controlled' }}
+                inputProps={{ 'aria-label': 'With image' }}
               />
               <label htmlFor="withImage">With image</label>
             </div>
@@ -114,7 +114,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
                     : !!nodeData.ui_props.withLabel
                 }
                 onChange={(event) => withLabelChanged(event.target.checked)}
-                inputProps={{ 'aria-label': 'controlled' }}
+                inputProps={{ 'aria-label': 'With label' }}
               />
               <label htmlFor="withLabel">With label</label>
             </div>
@@ -163,7 +163,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
               color="primary"
               checked={!!nodeData.ui_props.moreHandles}
               onChange={(event) => moreHandlesChanged(event.target.checked)}
-              inputProps={{ 'aria-label': 'controlled' }}
+              inputProps={{ 'aria-label': 'More handles' }}
             />
             <label htmlFor="moreHandles">More handles</label>
           </div>

@@ -65,7 +65,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
       />
       <MenuItem
         onClick={cloneNode}
-        role="sidebarMenuItem"
+        role="menuitem"
         disabled={rootWorkflowId !== displayedWorkflowInfo.id}
       >
         <ListItemIcon>
@@ -77,7 +77,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
       {nodeData.task_props.task_type !== 'graph' && (
         <MenuItem
           onClick={() => setOpenSaveDialog(true)}
-          role="sidebarMenuItem"
+          role="menuitem"
           disabled={rootWorkflowId !== displayedWorkflowInfo.id}
         >
           <ListItemIcon>
@@ -91,7 +91,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
         onClick={() => {
           rfInstance.deleteElements({ nodes: [selectedElement] });
         }}
-        role="sidebarMenuItem"
+        role="menuitem"
         disabled={rootWorkflowId !== displayedWorkflowInfo.id}
       >
         <ListItemIcon>

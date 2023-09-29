@@ -54,7 +54,7 @@ export function toRFEwoksNodes(
         type: task_type,
         data: {
           ewoks_props: {
-            label: label ?? task_identifier,
+            label,
             ...(default_inputs &&
               default_inputs.length > 0 && {
                 default_inputs: default_inputs.map((dIn) => {
