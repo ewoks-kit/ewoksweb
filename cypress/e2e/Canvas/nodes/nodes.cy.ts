@@ -45,18 +45,21 @@ it('shows/hides the node icon/label', () => {
   });
 
   cy.findByLabelText('With label').uncheck();
+  cy.waitForStableDOM();
   cy.get('@node').within(() => {
     cy.findByRole('img').should('be.visible');
     cy.findByText('ewoksweb').should('not.exist');
   });
 
   cy.findByLabelText('With image').uncheck();
+  cy.waitForStableDOM();
   cy.get('@node').within(() => {
     cy.findByRole('img').should('not.exist');
     cy.findByText('e').should('be.visible'); // label is cropped
   });
 
   cy.findByLabelText('With label').check();
+  cy.waitForStableDOM();
   cy.get('@node').within(() => {
     cy.findByRole('img').should('not.exist');
     cy.findByText('ewoksweb').should('be.visible');
