@@ -41,11 +41,7 @@ const rootWorkflow = (
     source
   ): Promise<void> => {
     // 1. Initialize the canvas while working on the new graph
-    get().setSubgraphsStack({
-      id: '',
-      label: '',
-      resetStack: true,
-    });
+    get().resetSubgraphsStack();
     get().resetLoadedGraphs();
 
     // 2. Get node-subgraphs for the graph

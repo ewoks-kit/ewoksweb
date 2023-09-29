@@ -1,9 +1,10 @@
-import type { stackGraph, State } from '../types';
+import type { State, WorkflowDescription } from '../types';
 import type { GetState, SetState } from 'zustand';
 
 export interface SubgraphsStackSlice {
-  subgraphsStack: stackGraph[];
-  setSubgraphsStack: (stackGraph: stackGraph) => void;
+  subgraphsStack: WorkflowDescription[];
+  setSubgraphsStack: (workflowDesc: WorkflowDescription) => void;
+  resetSubgraphsStack: () => void;
 }
 
 const subgraphsStack = (
@@ -12,32 +13,28 @@ const subgraphsStack = (
 ): SubgraphsStackSlice => ({
   subgraphsStack: [],
 
-  setSubgraphsStack: (stackGraph) => {
-    let stack: stackGraph[] = [];
-    const subStack = get().subgraphsStack;
-    const exists: number = subStack.map((gr) => gr.id).indexOf(stackGraph.id);
-    if (stackGraph.resetStack) {
-      stack = [];
-    } else if (exists === -1) {
-      stack = [...subStack, stackGraph];
-    } else if (exists === subStack.length - 1) {
-      // TODO: if user insert the same 'graph' and is the first then stack is not updated
-      // Not applicable so left as is and it just wont be able to doubleClick
-      stack = subStack;
-    } else {
-      // TODO: if the same graph is inserted again lower in the subgraphs this is activated
-      // and resets the stack without adding. If it is an addition this stack needs to know it
-      // subStack.length = exists + 1;
-      // Not applicable so stays as is for now
-      stack = subStack.slice(0, exists + 1);
-      // stack = ['graph'];
+  setSubgraphsStack: (workflowDesc) => {
+    const oldStack = get().subgraphsStack;
+    const workflowIndexInStack: number = oldStack
+      .map((gr) => gr.id)
+      .indexOf(workflowDesc.id);
+
+    if (workflowIndexInStack === -1) {
+      set({ subgraphsStack: [...oldStack, workflowDesc] });
+      return;
     }
 
-    set((state) => ({
-      ...state,
-      subgraphsStack: stack,
-    }));
+    if (workflowIndexInStack === oldStack.length - 1) {
+      // TODO: if user insert the same 'graph' and is the first then stack is not updated
+      // Not applicable so left as is and it just wont be able to doubleClick
+      set({ subgraphsStack: oldStack });
+      return;
+    }
+
+    set({ subgraphsStack: oldStack.slice(0, workflowIndexInStack + 1) });
   },
+
+  resetSubgraphsStack: () => set({ subgraphsStack: [] }),
 });
 
 export default subgraphsStack;

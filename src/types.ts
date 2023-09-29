@@ -126,12 +126,6 @@ export interface Inputs {
 
 export interface InputsEwoks extends Omit<Inputs, 'id'> {}
 
-export interface stackGraph {
-  id: string;
-  label?: string;
-  resetStack?: boolean;
-}
-
 export interface GraphUiProps {
   type?: string;
   comment?: string;
