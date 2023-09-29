@@ -1,5 +1,4 @@
 import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
-import type { SubgraphsStackSlice } from './store/subgraphsStack';
 import type { LoadedGraphsSlice } from './store/loadedGraphs';
 import type { RootWorkflowSlice } from './store/rootWorkflow';
 import type { ChangeEvent, CSSProperties } from 'react';
@@ -87,7 +86,6 @@ export interface EwoksEvent {
 
 export interface State
   extends DisplayedWorkflowInfoSlice,
-    SubgraphsStackSlice,
     LoadedGraphsSlice,
     RootWorkflowSlice {}
 

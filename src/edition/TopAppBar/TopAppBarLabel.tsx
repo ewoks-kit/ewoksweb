@@ -1,13 +1,9 @@
 import useStore from '../../store/useStore';
-import SubgraphStack from './SubgraphStack';
+import SubgraphBreadcrumbs from './SubgraphBreadcrumbs';
 
 import styles from './TopAppBar.module.css';
 
 export default function TopAppBarLabel() {
-  const subgraphsStack = useStore((state) => state.subgraphsStack);
-  const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
-  );
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
 
   if (!rootWorkflowId) {
@@ -18,13 +14,5 @@ export default function TopAppBarLabel() {
     );
   }
 
-  if (subgraphsStack.length > 1) {
-    return <SubgraphStack />;
-  }
-
-  return (
-    <span data-cy={displayedWorkflowInfo.label}>
-      {displayedWorkflowInfo.label || displayedWorkflowInfo.id}
-    </span>
-  );
+  return <SubgraphBreadcrumbs />;
 }

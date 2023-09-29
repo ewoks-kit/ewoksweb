@@ -85,7 +85,6 @@ function Canvas() {
   const setDisplayedWorkflowInfo = useStore(
     (state) => state.setDisplayedWorkflowInfo
   );
-  const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const addLoadedGraph = useStore((state) => state.addLoadedGraph);
 
   const tasks = useTasks();
@@ -297,10 +296,6 @@ function Canvas() {
         setTimeout(() => {
           fitView({ duration: 500 });
         }, 300);
-        setSubgraphsStack({
-          id: subgraph.graph.id,
-          label: subgraph.graph.label,
-        });
       } else {
         showErrorMsg(
           `The subgraph ${nodeData.task_props.task_identifier} cannot be located!`

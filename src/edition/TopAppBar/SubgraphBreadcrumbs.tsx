@@ -8,20 +8,29 @@ import useEdgeDataStore from '../../store/useEdgeDataStore';
 
 import styles from './TopAppBar.module.css';
 
-export default function SubgraphStack() {
+export default function SubgraphBreadcrumbs() {
   const { setNodes, setEdges, fitView } = useReactFlow();
 
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
   const setDisplayedWorkflowInfo = useStore(
     (state) => state.setDisplayedWorkflowInfo
   );
   const loadedGraphs = useStore((state) => state.loadedGraphs);
-  const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
-  const subgraphsStack = useStore((state) => {
-    return state.subgraphsStack;
-  });
+  const subgraphsStack = useStore((state) => state.displayedWorkflowHierarchy);
 
   const setDataFromNodes = useNodeDataStore((state) => state.setDataFromNodes);
   const setDataFromEdges = useEdgeDataStore((state) => state.setDataFromEdges);
+
+  if (subgraphsStack.length === 1) {
+    return (
+      <span data-cy={displayedWorkflowInfo.label}>
+        {displayedWorkflowInfo.label || displayedWorkflowInfo.id}
+      </span>
+    );
+  }
+
   const goToGraph = (e: React.MouseEvent) => {
     e.preventDefault();
 
@@ -31,15 +40,9 @@ export default function SubgraphStack() {
       return;
     }
 
-    setSubgraphsStack({
-      id: target.id,
-      label: (target as HTMLInputElement).value,
-    });
-
     const subgraph = loadedGraphs.get(target.id);
 
     if (subgraph) {
-      // Both stay
       setNodes(subgraph.nodes);
       setDataFromNodes(subgraph.nodes);
       setEdges(subgraph.links);
@@ -53,27 +56,29 @@ export default function SubgraphStack() {
 
   return (
     <Breadcrumbs aria-label="breadcrumb" color="inherit">
-      {subgraphsStack.length > 1 &&
-        subgraphsStack.map((gr, index) => (
-          <span key={gr.id}>
+      {subgraphsStack.map((graphId, index) => {
+        const graphLabel = loadedGraphs.get(graphId)?.graph.label || graphId;
+        return (
+          <span key={graphId}>
             <Link
               underline="hover"
               style={{ color: 'inherit', fontSize: '18px' }}
               href="/"
-              id={gr.id}
-              key={gr.id}
+              id={graphId}
+              key={graphId}
               className={
                 index === subgraphsStack.length - 1
                   ? styles.disabledCrumb
                   : undefined
               }
               onClick={goToGraph}
-              data-cy={gr.id}
+              data-cy={graphLabel}
             >
-              {gr.label}
+              {graphLabel}
             </Link>
           </span>
-        ))}
+        );
+      })}
     </Breadcrumbs>
   );
 }
