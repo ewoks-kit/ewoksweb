@@ -6,65 +6,68 @@ import Typography from '@material-ui/core/Typography';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import GraphFormDialog from '../../../general/forms/GraphFormDialog';
 import useStore from '../../../store/useStore';
+import useSnackbarStore from '../../../store/useSnackbarStore';
 import { GraphFormAction } from '../../../types';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import ConfirmDialog from '../../../general/ConfirmDialog';
 import { deleteWorkflow } from 'api/workflows';
 import commonStrings from 'commonStrings.json';
 import { textForError } from '../../../utils';
-import useCurrentWorkflowIdStore from '../../../store/useCurrentWorkflowId';
+import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';
+import { useReactFlow } from 'reactflow';
+import { useTasks } from '../../../api/tasks';
+import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 
 export default function WorkflowSidebarMenu() {
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
 
-  const resetWorkflowId = useCurrentWorkflowIdStore((state) => state.resetId);
+  const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
+  const rfInstance = useReactFlow();
+  const tasks = useTasks();
 
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-
-  const graphInfo = useStore((state) => state.graphInfo);
-  const workingGraph = useStore((state) => state.workingGraph);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
+  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
+  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
 
   async function agreeCallback() {
     setOpenAgreeDialog(false);
-    if (graphInfo.id) {
+    if (displayedWorkflowInfo.id) {
       try {
-        await deleteWorkflow(graphInfo.id);
-        setOpenSnackbar({
-          open: true,
-          text: `Workflow ${graphInfo.id} successfully deleted!`,
-          severity: 'success',
-        });
+        await deleteWorkflow(displayedWorkflowInfo.id);
+        setRootWorkflow(EMPTY_GRAPH, rfInstance, tasks);
+        showSuccessMsg(
+          `Workflow ${displayedWorkflowInfo.id} successfully deleted!`
+        );
       } catch (error) {
-        setOpenSnackbar({
-          open: true,
-          text: textForError(error, commonStrings.deletingError),
-          severity: 'error',
-        });
+        showErrorMsg(textForError(error, commonStrings.deletingError));
       }
     }
-
-    resetWorkflowId();
   }
 
-  function disAgreeCallback() {
+  function disagreeCallback() {
     setOpenAgreeDialog(false);
   }
 
   return (
     <>
-      <GraphFormDialog
-        elementToEdit={graphInfo}
-        action={GraphFormAction.cloneGraph}
-        isOpen={openSaveDialog}
-        onClose={() => setOpenSaveDialog(false)}
-      />
+      <SuspenseBoundary>
+        <GraphFormDialog
+          elementToEdit={displayedWorkflowInfo}
+          action={GraphFormAction.cloneGraph}
+          isOpen={openSaveDialog}
+          onClose={() => setOpenSaveDialog(false)}
+        />
+      </SuspenseBoundary>
 
       <MenuItem
         onClick={() => setOpenSaveDialog(true)}
         role="sidebarMenuItem"
         disabled={
-          !workingGraph.graph.id || workingGraph.graph.id !== graphInfo.id
+          !rootWorkflowId || rootWorkflowId !== displayedWorkflowInfo.id
         }
       >
         <ListItemIcon>
@@ -77,7 +80,7 @@ export default function WorkflowSidebarMenu() {
         onClick={() => setOpenAgreeDialog(true)}
         role="sidebarMenuItem"
         disabled={
-          !workingGraph.graph.id || workingGraph.graph.id !== graphInfo.id
+          !rootWorkflowId || rootWorkflowId !== displayedWorkflowInfo.id
         }
       >
         <ListItemIcon>
@@ -88,13 +91,13 @@ export default function WorkflowSidebarMenu() {
       </MenuItem>
 
       <ConfirmDialog
-        title={`Delete workflow with id: "${graphInfo.id}"?`}
-        content={`You are about to delete the workflow with id: "${graphInfo.id}".
+        title={`Delete workflow with id: "${displayedWorkflowInfo.id}"?`}
+        content={`You are about to delete the workflow with id: "${displayedWorkflowInfo.id}".
               Please make sure that it is not used as a sub-workflow in other workflows!
               Do you agree to continue?`}
         open={openAgreeDialog}
         agreeCallback={agreeCallback}
-        disagreeCallback={disAgreeCallback}
+        disagreeCallback={disagreeCallback}
       />
     </>
   );

@@ -3,7 +3,7 @@ import type { EwoksRFLinkData, EwoksRFNodeData, GraphRF } from '../../../types';
 import { useReactFlow } from 'reactflow';
 import { GetApp } from '@material-ui/icons';
 import { getEdgesData, getNodesData, rfToEwoks } from '../../../utils';
-import { curateGraph } from '../utils';
+import { curateNodeData, curateEdgeData } from '../utils';
 import ActionMenuItem from './ActionMenuItem';
 
 function download(content: BlobPart, fileName: string, contentType: string) {
@@ -17,16 +17,16 @@ function download(content: BlobPart, fileName: string, contentType: string) {
 function DownloadMenuItem() {
   const { getNodes, getEdges } = useReactFlow();
 
-  const graphInfo = useStore((state) => state.graphInfo);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
 
   function saveToDisk() {
-    const { newNodesData, newEdgesData } = curateGraph(
-      getNodesData(),
-      getEdgesData()
-    );
+    const newNodesData = curateNodeData(getNodesData());
+    const newEdgesData = curateEdgeData(getEdgesData());
 
     const graphRf: GraphRF = {
-      graph: graphInfo,
+      graph: displayedWorkflowInfo,
       nodes: getNodes().map((nod) => {
         return {
           ...nod,
@@ -42,7 +42,7 @@ function DownloadMenuItem() {
     };
     download(
       JSON.stringify(rfToEwoks(graphRf), null, 2),
-      `${graphInfo.label || 'Untitled'}.json`,
+      `${displayedWorkflowInfo.label || 'Untitled'}.json`,
       'text/plain'
     );
   }

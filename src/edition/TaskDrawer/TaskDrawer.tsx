@@ -1,4 +1,3 @@
-import Drawer from '@material-ui/core/Drawer';
 import AddIcon from '@material-ui/icons/Add';
 import { Fab } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
@@ -7,6 +6,7 @@ import useTaskDrawerState from '../../store/taskDrawerState';
 import { useDrawerStyles } from './hooks';
 
 import styles from './TaskDrawer.module.css';
+import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 
 function OverflowDrawer() {
   const { open, setOpen } = useTaskDrawerState();
@@ -15,23 +15,17 @@ function OverflowDrawer() {
 
   return (
     <>
-      <Drawer
-        variant="permanent"
-        anchor="left"
-        classes={{
-          root: styles.drawer,
-          paper: styles.paper,
-        }}
-        open={open}
+      <div
+        className={styles.drawer}
+        data-open={open || undefined}
         style={{
-          width: open ? '250px' : '0px',
           ...drawerStyles,
         }}
       >
-        <aside className="dndflow">
+        <SuspenseBoundary>
           <TaskList />
-        </aside>
-      </Drawer>
+        </SuspenseBoundary>
+      </div>
       <Fab
         className={styles.openButton}
         size="small"
@@ -39,9 +33,9 @@ function OverflowDrawer() {
         aria-label={`${open ? 'Close' : 'Open'} task drawer`}
         onClick={() => setOpen(!open)}
         style={{
-          left: open ? '230px' : '10px',
           zIndex: drawerStyles.zIndex + 1,
         }}
+        data-open={open || undefined}
       >
         {open ? (
           <ArrowBackIosIcon style={{ marginLeft: '8px' }} />

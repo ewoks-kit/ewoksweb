@@ -2,54 +2,48 @@ import { Handle, Position } from 'reactflow';
 import { contentStyle, style } from './nodeStyles';
 import Tooltip from '@material-ui/core/Tooltip';
 import isValidLink from '../../utils/IsValidLink';
-import useStore from '../../store/useStore';
+import useSnackbarStore from '../../store/useSnackbarStore';
 import type { Connection, NodeProps } from 'reactflow';
 import NodeIcon from './NodeIcon';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import type { EwoksRFLink, EwoksRFNodeData, GraphRF } from '../../types';
+import type { EwoksRFNodeData } from '../../types';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
 import NodeLabel from './NodeLabel';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
+import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 
 function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
   assertNodeDataDefined(nodeData, args.id);
 
+  const { colorBorder: borderColor, nodeWidth } = nodeData.ui_props;
+
   const {
-    withImage,
-    withLabel,
-    colorBorder: borderColor,
-    nodeWidth,
+    withImage = DEFAULT_NODE_VALUES.uiProps.withImage,
+  } = nodeData.ui_props;
+  const {
+    withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel,
   } = nodeData.ui_props;
 
   const { task_type } = nodeData.task_props;
 
   const { getNodes, getEdges } = useReactFlow();
 
-  const graphInfo = useStore((state) => state.graphInfo);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
 
   const nodWidth = { width: `${nodeWidth || 100}px` };
 
   const isValidConnection = (connection: Connection) => {
-    const graphRf: GraphRF = {
-      graph: graphInfo,
-      nodes: getNodes(),
-      links: getEdges() as EwoksRFLink[],
-    };
     const { isValid, reason } = isValidLink(
       connection,
-      graphRf,
+      getNodes(),
+      getEdges(),
       getNodesData()
     );
     if (!isValid) {
-      setOpenSnackbar({
-        open: true,
-        text: reason,
-        severity: 'warning',
-      });
+      showWarningMsg(reason);
     }
     return isValid;
   };
@@ -95,10 +89,7 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
           />
           {withImage && (
             <SuspenseBoundary>
-              <NodeIcon
-                nodeId={args.id}
-                onDragStart={(e) => e.preventDefault()}
-              />
+              <NodeIcon nodeId={args.id} />
             </SuspenseBoundary>
           )}
           {task_type === 'graphOutput' && (

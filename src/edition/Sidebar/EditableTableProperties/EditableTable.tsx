@@ -9,7 +9,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import CustomTableCell from './CustomTableCell';
 import DraggableDialog from '../../../general/DraggableDialog';
-import useStore from 'store/useStore';
+import useSnackbarStore from 'store/useSnackbarStore';
 import type { Condition, EditableTableRow, Inputs, TypeOfValues } from 'types';
 import type { ChangeEvent } from 'react';
 import { createData, getType } from './utils';
@@ -52,6 +52,7 @@ interface EditableTableProps {
   defaultValues: Condition[] | Inputs[];
   typeOfValues: TypeOfValues[];
   graphDefaultInputs?: boolean;
+  disable?: boolean;
   valuesChanged: (rows: EditableTableRow[]) => void;
   onRowAdd?: (rows?: EditableTableRow[]) => void;
 }
@@ -69,9 +70,15 @@ function EditableTable(props: EditableTableProps) {
   const [typeOfInputs, setTypeOfInputs] = React.useState<string[]>([]);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<DialogContent>();
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
-  const { defaultValues, headers, graphDefaultInputs, onRowAdd } = props;
+  const {
+    defaultValues,
+    headers,
+    graphDefaultInputs,
+    disable,
+    onRowAdd,
+  } = props;
 
   useEffect(() => {
     setTypeOfInputs(defaultValues.map(getType));
@@ -153,11 +160,7 @@ function EditableTable(props: EditableTableProps) {
       e.target.name === 'name' &&
       oldRows.map((r) => r.name).includes(e.target.value as string)
     ) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Not allowed to assign the same property TWICE!',
-        severity: 'error',
-      });
+      showErrorMsg('Not allowed to assign the same property TWICE!');
       // return;
     }
     if (
@@ -253,11 +256,10 @@ function EditableTable(props: EditableTableProps) {
           open={openDialog}
           content={dialogContent}
           setValue={setRowValue}
-          // TODO: examine the usage of the following
-          // typeOfValues={props.typeOfValues[0]}
         />
       )}
       <Table
+        style={{ opacity: disable ? '0.2' : '1' }}
         className={classes.table}
         aria-label="editable table"
         size="small"
@@ -275,6 +277,7 @@ function EditableTable(props: EditableTableProps) {
                   name="name"
                   onChange={onChange}
                   typeOfValues={props.typeOfValues[0]}
+                  disable={disable}
                 />
 
                 <TypeSelectCell
@@ -285,6 +288,7 @@ function EditableTable(props: EditableTableProps) {
                       : 'bool'
                   }
                   onChange={(e) => changedTypeOfInputs(e, row, index)}
+                  disable={disable}
                 />
 
                 <CustomTableCell
@@ -293,6 +297,11 @@ function EditableTable(props: EditableTableProps) {
                   name="value"
                   onChange={onChange}
                   onEdit={() => onEditRow(row.id || '', index)}
+                  disable={disable}
+                />
+                <ToolsCell
+                  disable={disable}
+                  onDelete={() => onDelete(row.id || '')}
                 />
 
                 {/* {!graphDefaultInputs && (
@@ -301,7 +310,7 @@ function EditableTable(props: EditableTableProps) {
               </TableRow>
             </React.Fragment>
           ))}
-          {onRowAdd && !graphDefaultInputs && (
+          {onRowAdd && !graphDefaultInputs && !disable && (
             <TableRow>
               <TableCell align="left" className={classes.plusButtonTableCell} />
               <TableCell align="left" className={classes.plusButtonTableCell}>
@@ -312,6 +321,12 @@ function EditableTable(props: EditableTableProps) {
           )}
         </TableBody>
       </Table>
+      {disable && (
+        <div style={{ backgroundColor: '#f9f9e2' }}>
+          Conditions have no effect when On Error condition is enabled. They
+          will be removed when saving the workflow.
+        </div>
+      )}
     </>
   );
 }

@@ -13,7 +13,7 @@ interface Props {
 
 function IconDropdown(props: Props) {
   const { control } = props;
-  const { icons } = useIcons();
+  const icons = useIcons();
 
   return (
     <Controller

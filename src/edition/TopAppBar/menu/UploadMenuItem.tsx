@@ -5,15 +5,14 @@ import useStore from '../../../store/useStore';
 import ActionMenuItem from './ActionMenuItem';
 import OpenGraphInput from '../../../general/OpenGraphInput';
 import { useReactFlow } from 'reactflow';
-import useCurrentWorkflowIdStore from '../../../store/useCurrentWorkflowId';
+import { useTasks } from '../../../api/tasks';
 
 function UploadMenuItem() {
   const ref = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
-  const setWorkingGraph = useStore((state) => state.setWorkingGraph);
-  const resetCurrentWorkflowId = useCurrentWorkflowIdStore(
-    (state) => state.resetId
-  );
+  const tasks = useTasks();
+
+  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
 
   return (
     <ActionMenuItem
@@ -26,9 +25,9 @@ function UploadMenuItem() {
       <OpenGraphInput
         ref={ref}
         onGraphLoad={(graph) => {
-          resetCurrentWorkflowId();
-          setWorkingGraph(graph, rfInstance, 'fromDisk');
+          setRootWorkflow(graph, rfInstance, tasks, 'fromDisk');
         }}
+        label="Load workflow from disk"
       />
     </ActionMenuItem>
   );

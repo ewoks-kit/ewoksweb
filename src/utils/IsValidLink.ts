@@ -1,25 +1,23 @@
 import type { Connection, Edge } from 'reactflow';
-import type { EwoksRFNodeData, GraphRF } from '../types';
+import type { EwoksRFNode, EwoksRFNodeData } from '../types';
 
 export default function isValidLink(
   connection: Connection,
-  graphRF: GraphRF,
+  nodes: EwoksRFNode[],
+  graphLinks: Edge[],
   nodesData?: Map<string, EwoksRFNodeData>,
   oldEdge?: Edge
 ): { isValid: boolean; reason: string } {
   let isValid = true;
   let reason = '';
-  let graphRFL: GraphRF = { ...graphRF };
 
-  if (oldEdge?.id) {
-    graphRFL = {
-      ...graphRFL,
-      links: graphRFL.links.filter((link) => link.id !== oldEdge.id),
-    };
-  }
+  // DOC: if an old edge was dragged remove it before validating the new edge
+  const links = oldEdge?.id
+    ? graphLinks.filter((link) => link.id !== oldEdge.id)
+    : graphLinks;
 
-  const source = graphRFL.nodes.find((nod) => nod.id === connection.source);
-  const target = graphRFL.nodes.find((nod) => nod.id === connection.target);
+  const source = nodes.find((nod) => nod.id === connection.source);
+  const target = nodes.find((nod) => nod.id === connection.target);
 
   if (!source || !target) {
     return { isValid: false, reason: 'One of the link end is not defined' };
@@ -27,7 +25,7 @@ export default function isValidLink(
 
   if (nodesData?.get(source.id)?.task_props.task_type === 'graphInput') {
     // check if there is already a link using this graph-input
-    if (graphRFL.links.some((link) => link.source === source.id)) {
+    if (links.some((link) => link.source === source.id)) {
       isValid = false;
       reason = 'Cannot connect an input with more than one node';
     }
@@ -36,7 +34,7 @@ export default function isValidLink(
     // else compare only the node id
     if (target.type === 'graph') {
       if (
-        graphRFL.links.some((link) => {
+        links.some((link) => {
           return (
             link.target === target.id &&
             link.targetHandle === connection.targetHandle
@@ -49,7 +47,7 @@ export default function isValidLink(
       }
     } else {
       if (
-        graphRFL.links.some((link) => {
+        links.some((link) => {
           return link.target === target.id;
         })
       ) {
@@ -61,7 +59,7 @@ export default function isValidLink(
 
   if (nodesData?.get(target.id)?.task_props.task_type === 'graphOutput') {
     // DOC: check if there is already a link using this graph-output
-    if (graphRFL.links.some((link) => link.target === target.id)) {
+    if (links.some((link) => link.target === target.id)) {
       isValid = false;
       reason = 'Cannot connect an output with more than one node';
     }
@@ -69,7 +67,7 @@ export default function isValidLink(
     if (source.type === 'graph') {
       // DOC: if connected with a graph take the sourceHandle into account
       if (
-        graphRFL.links.some((link) => {
+        links.some((link) => {
           return (
             link.source === source.id &&
             link.sourceHandle === connection.sourceHandle
@@ -82,7 +80,7 @@ export default function isValidLink(
       }
     } else {
       if (
-        graphRFL.links.some((link) => {
+        links.some((link) => {
           return link.source === source.id;
         })
       ) {
@@ -100,13 +98,13 @@ export default function isValidLink(
   if (
     (source.type !== 'graph' &&
       target.type !== 'graph' &&
-      graphRFL.links.some(
+      links.some(
         (link) =>
           link.source === connection.source && link.target === connection.target
       )) ||
     (source.type === 'graph' &&
       target.type !== 'graph' &&
-      graphRFL.links.some(
+      links.some(
         (link) =>
           link.source === connection.source &&
           link.target === connection.target &&
@@ -116,7 +114,7 @@ export default function isValidLink(
       )) ||
     (source.type !== 'graph' &&
       target.type === 'graph' &&
-      graphRFL.links.some(
+      links.some(
         (link) =>
           link.source === connection.source &&
           link.target === connection.target &&
@@ -126,7 +124,7 @@ export default function isValidLink(
       )) ||
     (source.type === 'graph' &&
       target.type === 'graph' &&
-      graphRFL.links.some(
+      links.some(
         (link) =>
           link.source === connection.source &&
           link.target === connection.target &&

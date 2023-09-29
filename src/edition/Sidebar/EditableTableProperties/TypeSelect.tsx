@@ -6,11 +6,12 @@ import { INPUT_TYPES } from './utils';
 interface Props {
   value: string;
   className?: string;
+  disable?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 function TypeSelectCell(props: Props) {
-  const { value, className, onChange } = props;
+  const { value, className, disable, onChange } = props;
 
   function onChangeLocal(event: PropertyChangedEvent) {
     if (onChange) {
@@ -27,6 +28,7 @@ function TypeSelectCell(props: Props) {
     >
       <FormControl fullWidth>
         <Select
+          disabled={disable}
           value={value}
           label="Task type"
           onChange={onChangeLocal}

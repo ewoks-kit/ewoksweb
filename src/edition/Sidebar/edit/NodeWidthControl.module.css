@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  align-items: flex-end;
+}
+
+.slider {
+  padding-top: 45px !important;
+  flex: 1;
+  margin-left: 0.5rem;
+  padding-bottom: 15px !important;
+}
+
+.label {
+  padding-bottom: calc(15px - 0.5em);
+}

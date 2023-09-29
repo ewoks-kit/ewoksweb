@@ -1,31 +1,34 @@
 .drawer {
-  position: static;
-  top: 0;
-  left: 0;
+  width: 0;
+  flex-shrink: 0;
+  overflow: scroll;
 }
 
-.paper {
-  position: static !important;
+.drawer[data-open] {
+  display: block;
+  width: 250px;
+  padding-left: 0.25rem;
 }
 
 .openButton {
   position: absolute !important;
-  top: 72px;
   transition: transform 0.3s ease-in-out !important;
+  left: 10px;
+  top: 72px;
+}
+
+.openButton[data-open] {
+  left: 230px;
 }
 
 .openButton:hover {
   transform: scale(1.1);
 }
 
-.subgraphButton {
-  composes: btnClean from global;
-  background-color: #96a5f9;
-  color: white;
-  padding: 0.5rem;
-  border-radius: 50%;
-}
-
-.subgraphButton:hover {
-  background-color: #3f51b5;
+.subgraph {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  color: black;
 }

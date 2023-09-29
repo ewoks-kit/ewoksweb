@@ -1,12 +1,13 @@
 import { Paper, Tooltip } from '@material-ui/core';
 import { useState } from 'react';
 import { useIcons } from '../../../../api/icons';
+import SuspenseBoundary from '../../../../suspense/SuspenseBoundary';
 import DeleteIconButton from './DeleteIconButton';
 
 import styles from './IconsDrawer.module.css';
 
 function IconList() {
-  const { icons } = useIcons();
+  const icons = useIcons();
 
   const [selectedIcon, setSelectedIcon] = useState<string>();
 
@@ -35,7 +36,9 @@ function IconList() {
           {icon.name === selectedIcon && (
             <div>
               <span className={styles.iconName}>{icon.name}</span>
-              <DeleteIconButton iconName={icon.name} />
+              <SuspenseBoundary>
+                <DeleteIconButton iconName={icon.name} />
+              </SuspenseBoundary>
             </div>
           )}
         </div>

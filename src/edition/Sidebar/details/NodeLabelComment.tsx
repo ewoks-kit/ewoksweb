@@ -7,8 +7,6 @@ import {
 } from '../../../utils/typeGuards';
 import type { Node } from 'reactflow';
 
-import styles from './Details.module.css';
-
 interface Props {
   showComment: boolean;
   selectedElement: Node;
@@ -27,8 +25,6 @@ export default function NodeLabelComment(props: Props) {
   const nodeData = useNodeDataStore((state) =>
     state.nodesData.get(selectedElement.id)
   );
-  // TBD: the props seem to be ok but an undefined appears in TextAutosave
-  // console.log(selectedElement.id, nodeData?.ewoks_props.label);
   assertNodeDataDefined(nodeData, selectedElement.id);
 
   useEffect(() => {
@@ -45,7 +41,7 @@ export default function NodeLabelComment(props: Props) {
   }
 
   return (
-    <div className={styles.entry}>
+    <section>
       <InputTextField
         label="Label"
         defaultValue={label}
@@ -58,6 +54,6 @@ export default function NodeLabelComment(props: Props) {
           onValueSave={handleSaveComment}
         />
       </div>
-    </div>
+    </section>
   );
 }

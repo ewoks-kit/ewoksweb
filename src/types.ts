@@ -1,15 +1,10 @@
 import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
-import type { OpenDraggableDialogSlice } from './store/openDraggableDialog';
-import type { OpenSnackbarSlice } from './store/openSnackbar';
 import type { SubgraphsStackSlice } from './store/subgraphsStack';
-import type { SubGraphSlice } from './store/subGraph';
-import type { TasksSlice } from './store/tasks';
-import type { WorkingGraphSlice } from './store/workingGraph';
-import type { RecentGraphsSlice } from './store/recentGraphs';
-import type { Color } from '@material-ui/lab';
+import type { LoadedGraphsSlice } from './store/loadedGraphs';
+import type { RootWorkflowSlice } from './store/rootWorkflow';
 import type { ChangeEvent, CSSProperties, ReactNode } from 'react';
 import type { Node } from 'reactflow';
-import type { GraphInfoSlice } from './store/graphInfo';
+import type { DisplayedWorkflowInfoSlice } from './store/displayedWorkflowInfo';
 
 export enum GraphFormAction {
   cloneGraph = 'cloneGraph',
@@ -27,19 +22,18 @@ export interface GraphNodes {
 
 // TODO: examine with ewoks if all the following are needed in an InOutLink
 export interface InOutLinkAttributes {
-  label: string;
-  comment: string;
-  conditions: ConditionEwoks[];
-  data_mapping: DataMappingEwoks[];
-  map_all_data: boolean;
-  on_error: boolean;
-  required: boolean;
+  label?: string;
+  comment?: string;
+  conditions?: ConditionEwoks[];
+  data_mapping?: DataMappingEwoks[];
+  map_all_data?: boolean;
+  on_error?: boolean;
+  required?: boolean;
 }
 
 export interface InOutNodesUiProps {
   label?: string;
   position?: XYPosition;
-  linkStyle?: string;
   style?: LinkStyle;
   animated?: boolean;
   markerEnd?: EdgeMarkerType;
@@ -58,12 +52,10 @@ export interface GraphDetails {
   input_nodes?: GraphNodes[];
   output_nodes?: GraphNodes[];
   uiProps?: GraphUiProps;
-}
-
-export interface SnackbarParams {
-  open: boolean;
-  text: string;
-  severity: Color;
+  keywords?: object;
+  input_schema?: object;
+  execute_arguments?: object;
+  worker_options?: object;
 }
 
 export interface DialogParams {
@@ -94,32 +86,15 @@ export interface EwoksEvent {
 }
 
 export interface State
-  extends GraphInfoSlice,
-    OpenDraggableDialogSlice,
-    OpenSnackbarSlice,
+  extends DisplayedWorkflowInfoSlice,
     SubgraphsStackSlice,
-    SubGraphSlice,
-    TasksSlice,
-    WorkingGraphSlice,
-    RecentGraphsSlice {}
+    LoadedGraphsSlice,
+    RootWorkflowSlice {}
 
 export interface Action {
   action: string;
   graph: GraphRF;
 }
-
-// These types are being calculated when opening a workflow
-// for using them in validation.
-// They are not recalculated though wjilw editing the graph.
-// Keeping them until we re-implement the graph-validation
-// No need to be saved on the server.
-export type NodeInGraphType =
-  | 'input_output'
-  | 'input'
-  | 'output'
-  | 'graphInput'
-  | 'graphOutput'
-  | 'internal';
 
 export interface NodeProps {
   id: string;
@@ -140,11 +115,11 @@ export type TaskType =
   | 'graph'
   | 'method'
   | 'ppfmethod'
-  | 'graphInput'
   | 'graphOutput'
   | 'class'
   | 'note'
-  | 'script';
+  | 'script'
+  | 'subworkflow';
 
 export interface Task {
   task_type: TaskType;
@@ -172,12 +147,9 @@ export interface stackGraph {
 }
 
 export interface GraphUiProps {
-  label?: string;
   type?: string;
   comment?: string;
   notes?: Note[];
-  style?: LinkStyle;
-  icon?: string;
 }
 
 export interface LinkStyle {
@@ -236,7 +208,6 @@ export interface EwoksNode {
 }
 
 export interface EwoksNodeUiProps {
-  type?: string;
   icon?: string;
   comment?: string;
   position?: XYPosition;
@@ -245,12 +216,10 @@ export interface EwoksNodeUiProps {
   withLabel?: boolean;
   colorBorder?: string;
   nodeWidth?: number;
-  task_icon?: string;
   task_category?: string;
   moreHandles?: boolean;
-  exists?: boolean;
-  inputs?: outputsInputsSub[];
-  outputs?: outputsInputsSub[];
+  inputs?: OutputsInputsSub[];
+  outputs?: OutputsInputsSub[];
 }
 
 export interface EwoksLink {
@@ -267,14 +236,12 @@ export interface EwoksLink {
   startEnd?: boolean;
 }
 
-export interface outputsInputsSub {
+export interface OutputsInputsSub {
   label: string;
-  type: string;
   positionY?: number;
 }
 
 export interface RFNodeUiProps {
-  type?: NodeInGraphType;
   icon?: string;
   style?: CSSProperties;
   withImage?: boolean;
@@ -282,16 +249,14 @@ export interface RFNodeUiProps {
   colorBorder?: string;
   nodeWidth?: number;
   moreHandles?: boolean;
-  exists?: boolean;
   // To position inputs-outputs of subgraphs in a graph
-  inputs?: outputsInputsSub[];
-  outputs?: outputsInputsSub[];
+  inputs?: OutputsInputsSub[];
+  outputs?: OutputsInputsSub[];
 }
 
 export interface RFNodeTaskProperties {
   task_type: TaskType;
   task_identifier: string;
-  task_icon?: string;
   task_category?: string;
   optional_input_names?: string[];
   output_names?: string[];
@@ -349,6 +314,7 @@ export interface CustomTableCellProps {
   name: 'name' | 'value';
   typeOfValues?: TypeOfValues;
   usedIn?: 'DataMapping' | 'DefaultInputs' | 'Conditions';
+  disable?: boolean;
   onEdit?: () => void;
   onChange(
     e: { target: { name: string; value: string | number } },
@@ -450,13 +416,6 @@ export interface filterParams {
   error?: boolean;
 }
 
-export interface calcInOutForSubgraphOutput {
-  id: string;
-  label: string;
-  type: string;
-  positionY?: number;
-}
-
 export interface SelectedElement {
   type: 'graph' | 'node' | 'edge';
   id: string;
@@ -474,5 +433,3 @@ export type PropertyChangedEvent = ChangeEvent<{
 export interface SelectedElementRF {
   selectedElement: Node | Edge | undefined;
 }
-
-export type SidebarLayout = 'grid' | 'list';

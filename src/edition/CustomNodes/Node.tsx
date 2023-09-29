@@ -4,11 +4,11 @@ import { contentStyle, style } from './nodeStyles';
 import Tooltip from '@material-ui/core/Tooltip';
 import isValidLink from '../../utils/IsValidLink';
 
-import useStore from '../../store/useStore';
+import useSnackbarStore from '../../store/useSnackbarStore';
 import type { Connection } from 'reactflow';
 import NodeIcon from './NodeIcon';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import type { NodeProps, EwoksRFLink, GraphRF } from '../../types';
+import type { NodeProps } from '../../types';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
 import NodeLabel from './NodeLabel';
@@ -27,28 +27,19 @@ function Node({
 }: NodeProps) {
   const { getNodes, getEdges } = useReactFlow();
 
-  const graphInfo = useStore((state) => state.graphInfo);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
 
   const nodWidth = { width: `${nodeWidth || 100}px` };
 
   const isValidConnection = (connection: Connection) => {
-    const graphRf: GraphRF = {
-      graph: graphInfo,
-      nodes: getNodes(),
-      links: getEdges() as EwoksRFLink[],
-    };
     const { isValid, reason } = isValidLink(
       connection,
-      graphRf,
+      getNodes(),
+      getEdges(),
       getNodesData()
     );
     if (!isValid) {
-      setOpenSnackbar({
-        open: true,
-        text: reason,
-        severity: 'warning',
-      });
+      showWarningMsg(reason);
     }
     return isValid;
   };
@@ -115,7 +106,7 @@ function Node({
           />
           {withImage && (
             <SuspenseBoundary>
-              <NodeIcon nodeId={id} onDragStart={(e) => e.preventDefault()} />
+              <NodeIcon nodeId={id} />
             </SuspenseBoundary>
           )}
 

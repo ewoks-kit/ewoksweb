@@ -16,15 +16,18 @@ import { useNodesIds } from '../../../store/graph-hooks';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import type { Node } from 'reactflow';
 import TaskForm from '../../../general/forms/TaskForm';
+import { useTasks } from '../../../api/tasks';
 
 export default function NodeSidebarMenu(selectedElement: Node) {
   const rfInstance = useReactFlow();
 
   const nodesIds = useNodesIds();
 
-  const graphInfo = useStore((state) => state.graphInfo);
-  const tasks = useStore((state) => state.tasks);
-  const workingGraph = useStore((state) => state.workingGraph);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
+  const tasks = useTasks();
+  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
 
@@ -62,8 +65,8 @@ export default function NodeSidebarMenu(selectedElement: Node) {
       />
       <MenuItem
         onClick={cloneNode}
-        role="sidebarMenuItem"
-        disabled={workingGraph.graph.id !== graphInfo.id}
+        role="menuitem"
+        disabled={rootWorkflowId !== displayedWorkflowInfo.id}
       >
         <ListItemIcon>
           <LibraryAdd fontSize="small" />
@@ -74,8 +77,8 @@ export default function NodeSidebarMenu(selectedElement: Node) {
       {nodeData.task_props.task_type !== 'graph' && (
         <MenuItem
           onClick={() => setOpenSaveDialog(true)}
-          role="sidebarMenuItem"
-          disabled={workingGraph.graph.id !== graphInfo.id}
+          role="menuitem"
+          disabled={rootWorkflowId !== displayedWorkflowInfo.id}
         >
           <ListItemIcon>
             <FileCopy fontSize="small" />
@@ -88,8 +91,8 @@ export default function NodeSidebarMenu(selectedElement: Node) {
         onClick={() => {
           rfInstance.deleteElements({ nodes: [selectedElement] });
         }}
-        role="sidebarMenuItem"
-        disabled={workingGraph.graph.id !== graphInfo.id}
+        role="menuitem"
+        disabled={rootWorkflowId !== displayedWorkflowInfo.id}
       >
         <ListItemIcon>
           <Delete fontSize="small" />

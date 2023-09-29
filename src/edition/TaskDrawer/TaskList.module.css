@@ -3,20 +3,6 @@
   width: 100%;
 }
 
-.itemContainer[data-gridlayout] {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.itemContainer[data-gridlayout] .itemBtn {
-  flex-direction: column;
-  width: 60px;
-}
-
-.itemContainer[data-gridlayout] label {
-  margin-left: 0;
-}
-
 .item {
   text-align: center;
   color: black;
@@ -33,32 +19,8 @@
   border-color: #3f51b5;
 }
 
-.itemBtn {
-  composes: btnClean from global;
-  display: flex;
-  align-items: center;
-  cursor: grab;
-  overflow: hidden;
-}
-
-.itemLabel {
-  margin-left: 0.5rem;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  cursor: grab;
-}
-
 .toolbar {
   display: flex;
   padding: 0.5rem 0;
   align-items: center;
-}
-
-.layoutBtnContainer {
-  margin-left: 1.5rem;
-}
-
-.layoutBtnContainer button {
-  padding: 0.25rem;
 }

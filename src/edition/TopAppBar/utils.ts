@@ -19,14 +19,10 @@ export async function getWorkflowIdsFromServer(): Promise<{
   }
 }
 
-export function curateGraph(
-  nodesData: Map<string, EwoksRFNodeData>,
-  edgesData: Map<string, EwoksRFLinkData>
-): {
-  newNodesData: Map<string, EwoksRFNodeData>;
-  newEdgesData: Map<string, EwoksRFLinkData>;
-} {
-  const newNodesData: Map<string, EwoksRFNodeData> = new Map(
+export function curateNodeData(
+  nodesData: Map<string, EwoksRFNodeData>
+): Map<string, EwoksRFNodeData> {
+  return new Map(
     [...nodesData.entries()].map(([nodeId, nodeData]) => {
       return [
         nodeId,
@@ -44,31 +40,44 @@ export function curateGraph(
       ];
     })
   );
+}
 
-  const newEdgesData: Map<string, EwoksRFLinkData> = new Map(
+export function curateEdgeData(
+  edgesData: Map<string, EwoksRFLinkData>
+): Map<string, EwoksRFLinkData> {
+  return new Map(
     [...edgesData.entries()].map(([edgeId, edgeData]) => {
+      const {
+        data_mapping: rawDataMapping,
+        conditions: rawConditions,
+        ...restEdgeData
+      } = edgeData;
+      const conditions = deleteEmptyLines(rawConditions);
+      const data_mapping = deleteEmptyLines(rawDataMapping);
+
+      const hasDataMapping =
+        !edgeData.map_all_data && data_mapping && data_mapping.length > 0;
+
+      const hasConditions =
+        !edgeData.on_error && conditions && conditions.length > 0;
+
       return [
         edgeId,
         {
-          ...edgeData,
-          conditions: deleteEmptyLines(edgeData.conditions),
-          data_mapping: deleteEmptyLines(edgeData.data_mapping),
+          ...restEdgeData,
+          ...(hasConditions ? { conditions } : {}),
+          ...(hasDataMapping ? { data_mapping } : {}),
         },
       ];
     })
   );
-
-  return {
-    newNodesData,
-    newEdgesData,
-  };
 }
 
 function deleteEmptyLines<T extends DataMapping | Condition | Inputs>(
   arrayObjId: T[] | undefined
-): T[] {
+): T[] | undefined {
   if (!arrayObjId) {
-    return [];
+    return undefined;
   }
   return arrayObjId.filter(
     (obj: DataMapping | Condition | Inputs) => obj.name !== ''

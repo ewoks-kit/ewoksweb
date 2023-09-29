@@ -1,63 +1,66 @@
-import type { EwoksLink, EwoksNode, GraphEwoks } from '../types';
+import type { EwoksLink, EwoksNode, GraphNodes } from '../types';
+import { propIsEmpty } from './utils';
+import {
+  calcCommonNodeUiProps,
+  calcLinkCommonProps,
+  calcLinkUiProps,
+} from './utils';
 
 // TODO: merge with outNodesLinks if possible when stable
 // DOC: calc the input nodes and links that need to be added to the graph from
 // the input_nodes in the Ewoks graph model
 export function inNodesLinks(
-  graph: GraphEwoks
+  inputNodes: GraphNodes[] | undefined,
+  nodes: EwoksNode[]
 ): { nodes: EwoksNode[]; links: EwoksLink[] } {
   const inputs: { nodes: EwoksNode[]; links: EwoksLink[] } = {
     nodes: [],
     links: [],
   };
-  if (graph.graph.input_nodes && graph.graph.input_nodes.length > 0) {
+  if (inputNodes && inputNodes.length > 0) {
     const inNodesInputed: string[] = [];
-    graph.graph.input_nodes.forEach((inNod) => {
-      const nodeTarget = graph.nodes.find((no) => no.id === inNod.node);
+    inputNodes.forEach((inNod) => {
+      const nodeTarget = nodes.find((no) => no.id === inNod.node);
 
-      const temPosition = inNod.uiProps?.position ?? {
-        x: 50,
-        y: 50,
-      };
+      const uIProps = inNod.uiProps;
 
       if (!inNodesInputed.includes(inNod.id)) {
+        const temPosition = inNod.uiProps?.position ?? {
+          x: 50,
+          y: 50,
+        };
+
         inputs.nodes.push({
           id: inNod.id,
           label: inNod.uiProps?.label ?? inNod.id,
           task_type: 'graphInput',
           task_identifier: 'Start-End',
           uiProps: {
-            type: 'input',
             position: temPosition,
             icon: 'graphInput.svg',
-            withImage: inNod.uiProps?.withImage ?? true,
-            withLabel: inNod.uiProps?.withLabel ?? true,
-            colorBorder: inNod.uiProps?.colorBorder ?? '',
-            nodeWidth: inNod.uiProps?.nodeWidth ?? 110,
+            ...(uIProps && { ...calcCommonNodeUiProps(uIProps) }),
           },
         });
         inNodesInputed.push(inNod.id);
       }
 
-      inputs.links.push({
-        startEnd: true,
-        source: inNod.id,
-        target: inNod.node,
-        sub_target: nodeTarget?.task_type !== 'graph' ? '' : inNod.sub_node,
-        conditions: inNod.link_attributes?.conditions ?? [],
-        data_mapping: inNod.link_attributes?.data_mapping ?? [],
-        on_error: inNod.link_attributes?.on_error ?? false,
-        map_all_data: inNod.link_attributes?.map_all_data ?? false,
-        required: inNod.link_attributes?.required,
-        uiProps: {
-          label: inNod.link_attributes?.label ?? '',
-          comment: inNod.link_attributes?.comment ?? '',
-          style: { stroke: inNod.uiProps?.style?.stroke ?? '' },
-          type: inNod.uiProps?.linkStyle ?? 'default',
-          markerEnd: inNod.uiProps?.markerEnd,
-          animated: inNod.uiProps?.animated ?? false,
-        },
-      });
+      if (inNod.node) {
+        const linkAttr = inNod.link_attributes;
+
+        const linksUiProps = calcLinkUiProps(uIProps, linkAttr);
+
+        inputs.links.push({
+          startEnd: true,
+          source: inNod.id,
+          target: inNod.node,
+          ...(nodeTarget?.task_type === 'graph' &&
+            inNod.sub_node && { sub_target: inNod.sub_node }),
+          ...(linkAttr && { ...calcLinkCommonProps(linkAttr) }),
+          ...(!propIsEmpty(linksUiProps) && {
+            uiProps: linksUiProps,
+          }),
+        });
+      }
     });
   }
   return inputs;

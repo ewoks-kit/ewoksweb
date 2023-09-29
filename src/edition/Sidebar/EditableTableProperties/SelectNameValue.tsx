@@ -3,7 +3,7 @@ import { Autocomplete } from '@material-ui/lab';
 import type { CustomTableCellProps } from '../../../types';
 
 function SelectNameValue(props: CustomTableCellProps) {
-  const { index, row, name, onChange, typeOfValues } = props;
+  const { index, row, name, onChange, typeOfValues, disable } = props;
 
   const renderOption = (option: string) => {
     const valueIsRequired = typeOfValues?.requiredValues?.includes(option);
@@ -20,6 +20,7 @@ function SelectNameValue(props: CustomTableCellProps) {
   return (
     <FormControl fullWidth>
       <Autocomplete
+        disabled={disable}
         disableClearable
         freeSolo={options.length === 0}
         options={options}

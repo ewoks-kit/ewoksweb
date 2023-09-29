@@ -2,8 +2,8 @@ import { Button } from '@material-ui/core';
 import { CloudUpload } from '@material-ui/icons';
 import type { ChangeEvent, SyntheticEvent } from 'react';
 import { useState } from 'react';
-import { postIcon, useMutateIcons } from '../../../../api/icons';
-import useStore from '../../../../store/useStore';
+import { postIcon, useInvalidateIcons } from '../../../../api/icons';
+import useSnackbarStore from '../../../../store/useSnackbarStore';
 import { textForError } from '../../../../utils';
 
 import styles from './IconsDrawer.module.css';
@@ -13,8 +13,10 @@ function UploadIconControl() {
     string | ArrayBuffer
   >('');
   const [iconNameToUpload, setIconNameToUpload] = useState('');
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const mutateIcons = useMutateIcons();
+  const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
+  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
+  const invalidateIcons = useInvalidateIcons();
 
   async function uploadIcon(event: SyntheticEvent<Element, Event>) {
     event.preventDefault();
@@ -22,23 +24,17 @@ function UploadIconControl() {
     try {
       await postIcon(iconNameToUpload, iconContentToUpload);
 
-      setOpenSnackbar({
-        open: true,
-        text: `Icon ${iconNameToUpload} was successfully uploaded`,
-        severity: 'success',
-      });
+      showSuccessMsg(`Icon ${iconNameToUpload} was successfully uploaded`);
 
-      mutateIcons();
+      invalidateIcons();
       setIconNameToUpload('');
     } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(
+      showErrorMsg(
+        textForError(
           error,
           'Error in uploading the Icon. Please check connectivity with the server!'
-        ),
-        severity: 'error',
-      });
+        )
+      );
     }
   }
 
@@ -47,20 +43,12 @@ function UploadIconControl() {
     const inputFile = files?.[0];
 
     if (!inputFile) {
-      setOpenSnackbar({
-        open: true,
-        text: 'No file was selected',
-        severity: 'warning',
-      });
+      showWarningMsg('No file was selected');
       return;
     }
 
     if (inputFile.size > 10_000) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Files more than 10Kb are not acceptable for icons',
-        severity: 'warning',
-      });
+      showWarningMsg('Files more than 10Kb are not acceptable for icons');
       return;
     }
 
@@ -75,11 +63,7 @@ function UploadIconControl() {
       }
     });
 
-    setOpenSnackbar({
-      open: true,
-      text: 'File ready to be uploaded as an icon',
-      severity: 'success',
-    });
+    showSuccessMsg('File ready to be uploaded as an icon');
   }
 
   return (

@@ -7,7 +7,12 @@ import type { Edge } from 'reactflow';
 import TableDataMapping from './TableDataMapping';
 import { nanoid } from 'nanoid';
 
-export default function DataMappingComponent(element: Edge) {
+interface Props {
+  element: Edge;
+  mapAllData?: boolean | undefined;
+}
+
+export default function DataMappingComponent({ element, mapAllData }: Props) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
 
   assertEdgeDataDefined(edgeData, element.id);
@@ -41,6 +46,7 @@ export default function DataMappingComponent(element: Edge) {
   return (
     <div>
       <TableDataMapping
+        disable={mapAllData}
         onRowAdd={(rows) => addDataMapping(rows)}
         headers={['Source', 'Target']}
         values={edgeData.data_mapping || []}

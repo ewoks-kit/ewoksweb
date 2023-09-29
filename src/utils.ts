@@ -6,7 +6,8 @@ import type {
   Icon,
   Task,
 } from './types';
-import { calcGraphInputsOutputs } from './utils/CalcGraphInputsOutputs';
+import { calcEwoksGraphProp } from './utils/CalcGraphInputsOutputs';
+import { propIsEmpty } from './utils/utils';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
 import { calcNoteNodes } from './utils/calcNoteNodes';
@@ -16,11 +17,11 @@ import { isEwoksServerErrorResponse } from './utils/typeGuards';
 import useNodeDataStore from './store/useNodeDataStore';
 import useEdgeDataStore from './store/useEdgeDataStore';
 
-const DEFAULT_ICON = orange3;
+export const DEFAULT_ICON: Icon = { name: 'orange3.png', data_url: orange3 };
 
 export async function getSubgraphs(
   graph: GraphEwoks,
-  recentGraphIds: string[]
+  loadedGraphsIds: string[]
 ): Promise<GraphEwoks[]> {
   const subgraphIds = graph.nodes
     .filter((nod) => nod.task_type === 'graph')
@@ -31,7 +32,8 @@ export async function getSubgraphs(
   }
 
   const graphIdsToFetch = subgraphIds.filter(
-    (id) => id && !recentGraphIds.some((recentGraphId) => id === recentGraphId)
+    (id) =>
+      id && !loadedGraphsIds.some((loadedGraphsId) => id === loadedGraphsId)
   );
 
   try {
@@ -49,9 +51,16 @@ export async function getSubgraphs(
 
 export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
   // calculate input_nodes-output_nodes nodes from graphInput-graphOutput
-  let graph = calcGraphInputsOutputs(tempGraph);
-  const noteNodes = calcNoteNodes(tempGraph);
-  graph = { ...graph, uiProps: { ...graph.uiProps, notes: noteNodes } };
+  let graph = calcEwoksGraphProp(tempGraph);
+  const noteNodes = calcNoteNodes(tempGraph.nodes);
+  const uiprops = { ...graph.uiProps, notes: noteNodes };
+
+  graph = {
+    ...graph,
+    ...(propIsEmpty(uiprops) && {
+      uiProps: uiprops,
+    }),
+  };
 
   return {
     graph,
@@ -62,12 +71,12 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
 
 export function findImage(img: string | undefined, allIcons: Icon[]): string {
   if (!img) {
-    return DEFAULT_ICON;
+    return DEFAULT_ICON.data_url;
   }
 
   const icon = allIcons.find((ico) => ico.name === img);
   if (!icon) {
-    return DEFAULT_ICON;
+    return DEFAULT_ICON.data_url;
   }
 
   return icon.data_url;

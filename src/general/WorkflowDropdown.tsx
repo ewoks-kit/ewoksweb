@@ -1,6 +1,6 @@
 import type { WorkflowDescription } from 'types';
 
-import useStore from 'store/useStore';
+import useSnackbarStore from 'store/useSnackbarStore';
 import { useEffect, useState } from 'react';
 import { Autocomplete } from '@material-ui/lab';
 import { CircularProgress, TextField } from '@material-ui/core';
@@ -32,11 +32,11 @@ function sortByCategory(
 function WorkflowDropdown(props: Props) {
   const { onChange, category } = props;
 
-  const [inputValue, setInputValue] = useState<string>('');
+  const [inputValue, setInputValue] = useState('');
   const [open, setOpen] = useState(false);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
-  const { data: workflows, loading, error } = useWorkflowsDLE();
+  const { data: workflows, isLoading: loading, error } = useWorkflowsDLE();
   const sortedWorkflows = sortByCategory(workflows ?? []);
 
   const options =
@@ -46,13 +46,9 @@ function WorkflowDropdown(props: Props) {
 
   useEffect(() => {
     if (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(error, commonStrings.retrieveWorkflowsError),
-        severity: 'error',
-      });
+      showErrorMsg(textForError(error, commonStrings.retrieveWorkflowsError));
     }
-  }, [setOpenSnackbar, error]);
+  }, [showErrorMsg, error]);
 
   return (
     <Autocomplete
@@ -88,12 +84,11 @@ function WorkflowDropdown(props: Props) {
       }}
       onChange={(event, newValue) => {
         onChange(newValue);
-
         setTimeout(() => {
           setInputValue('');
         }, 200);
       }}
-      getOptionLabel={(option) => option.label}
+      getOptionLabel={(option) => option.label || option.id}
       placeholder="Quick open"
       disableClearable
       blurOnSelect

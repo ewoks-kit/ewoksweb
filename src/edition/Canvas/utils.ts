@@ -1,6 +1,6 @@
 import type { Connection } from 'reactflow';
-import { MarkerType } from 'reactflow';
 import type { EwoksRFLink, EwoksRFNodeData } from '../../types';
+import { DEFAULT_LINK_VALUES } from '../../utils/defaultValues';
 import { assertTaskInfo } from '../../utils/typeGuards';
 import type { TaskInfo } from './models';
 
@@ -47,42 +47,30 @@ export function addConnectionToGraph(
       startEnd:
         sourceTaskData.task_props.task_type === 'graphInput' ||
         targetTaskData.task_props.task_type === 'graphOutput',
-      getAroundProps: { x: 0, y: 0 },
-      on_error: false,
-      comment: '',
       // DOC: node optional_input_names are link's optional_output_names
       links_optional_output_names:
-        targetTaskData.task_props.optional_input_names || [],
+        targetTaskData.task_props.optional_input_names,
       // DOC: node required_input_names are link's required_output_names
       links_required_output_names:
-        targetTaskData.task_props.required_input_names || [],
+        targetTaskData.task_props.required_input_names,
       // DOC: node output_names are link's input_names
-      links_input_names: sourceTaskData.task_props.output_names || [],
-      conditions: [],
-      data_mapping: [],
+      links_input_names: sourceTaskData.task_props.output_names,
       map_all_data:
         ['ppfmethod', 'ppfport'].includes(
           sourceTaskData.task_props.task_type
         ) ||
         ['ppfmethod', 'ppfport'].includes(targetTaskData.task_props.task_type),
-      sub_source:
-        sourceTaskData.task_props.task_type === 'graph' && sourceHandle
-          ? sourceHandle
-          : '',
-      sub_target:
-        targetTaskData.task_props.task_type === 'graph' && targetHandle
-          ? targetHandle
-          : '',
+      ...(sourceTaskData.task_props.task_type === 'graph' &&
+        sourceHandle && { sub_source: sourceHandle }),
+      ...(targetTaskData.task_props.task_type === 'graph' &&
+        targetHandle && { sub_target: targetHandle }),
     },
-    id: `${source}:${sourceHandle || ''}->${target}:${targetHandle || ''}`,
-    label: '',
+    id: `${source}:${sourceHandle || 'sr'}->${target}:${targetHandle || 'tl'}`,
     source,
     target,
-    sourceHandle: sourceHandle ?? undefined,
-    targetHandle: targetHandle ?? undefined,
-    type: 'default',
-    animated: false,
-    markerEnd: { type: MarkerType.ArrowClosed },
+    ...(sourceHandle && { sourceHandle }),
+    ...(targetHandle && { targetHandle }),
+    markerEnd: DEFAULT_LINK_VALUES.uiProps.markerEnd,
     ...defaultLinkStyle,
   };
 

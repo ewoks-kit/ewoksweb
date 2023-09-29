@@ -2,41 +2,38 @@ import { useState } from 'react';
 
 import FormControl from '@material-ui/core/FormControl';
 import useStore from '../store/useStore';
+import useSnackbarStore from '../store/useSnackbarStore';
 import type { WorkflowDescription } from '../types';
 import ConfirmDialog from './ConfirmDialog';
 import WorkflowDropdown from './WorkflowDropdown';
-import useCurrentWorkflowIdStore from '../store/useCurrentWorkflowId';
+import { fetchWorkflow } from '../api/workflows';
+import { useReactFlow } from 'reactflow';
+import { useTasks } from '../api/tasks';
 
 export default function GetWorkflowFromServerDropdown() {
   const [workflowId, setWorkflowId] = useState('');
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
+  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
 
-  const setCurrentWorkflowId = useCurrentWorkflowIdStore(
-    (state) => state.setId
-  );
+  const rfInstance = useReactFlow();
+  const tasks = useTasks();
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails.id) {
-      setWorkflowId(workflowDetails.id || '');
+      setWorkflowId(workflowDetails.id);
+      getFromServer(workflowDetails.id);
     }
 
     setOpenAgreeDialog(false);
-
-    if (workflowDetails.id) {
-      getFromServer(workflowDetails.id);
-    }
   }
 
   async function getFromServer(workflowIdparam: string) {
     if (workflowIdparam) {
-      setCurrentWorkflowId(workflowIdparam);
+      const { data: graph } = await fetchWorkflow(workflowIdparam);
+      setRootWorkflow(graph, rfInstance, tasks, 'fromServer');
     } else {
-      setOpenSnackbar({
-        open: true,
-        text: 'Please select a graph to fetch and re-click!',
-        severity: 'warning',
-      });
+      showWarningMsg('Please select a graph to fetch and re-click!');
     }
   }
 

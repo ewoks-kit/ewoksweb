@@ -7,8 +7,13 @@ import { nanoid } from 'nanoid';
 import { calcTypeOfValues } from './utils';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 
+interface Props {
+  element: Edge;
+  isOnErrorSelected: boolean | undefined;
+}
+
 // DOC: The conditions for a link are being set in this component
-export default function Conditions(element: Edge) {
+export default function Conditions({ element, isOnErrorSelected }: Props) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
 
@@ -47,6 +52,7 @@ export default function Conditions(element: Edge) {
   return (
     <div>
       <EditableTable
+        disable={isOnErrorSelected}
         headers={['Output', 'Value']}
         defaultValues={edgeData.conditions || []}
         valuesChanged={conditionsValuesChanged}

@@ -8,6 +8,7 @@ import TopAppBarLabel from './TopAppBarLabel';
 import useNavBarElementStore from '../../navbar/useNavBarElementStore';
 
 import styles from './TopAppBar.module.css';
+import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 
 function TopAppBar() {
   const navBarElement = useNavBarElementStore((state) => state.element);
@@ -22,7 +23,9 @@ function TopAppBar() {
         <TopAppBarLabel />
       </Typography>
       <div className={styles.toolbar}>
-        <GetWorkflowFromServerDropdown />
+        <SuspenseBoundary>
+          <GetWorkflowFromServerDropdown />
+        </SuspenseBoundary>
         <SaveToServerButton />
         <OpenActionMenuButton />
       </div>

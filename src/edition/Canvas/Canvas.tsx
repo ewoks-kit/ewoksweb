@@ -1,7 +1,15 @@
 import type { DragEventHandler, MouseEvent } from 'react';
+import { useState } from 'react';
 import { useEffect, useRef } from 'react';
-import type { Node, Edge, Connection, NodeChange, EdgeChange } from 'reactflow';
-import { updateEdge } from 'reactflow';
+import type {
+  Node,
+  Edge,
+  Connection,
+  NodeChange,
+  EdgeChange,
+  XYPosition,
+} from 'reactflow';
+import { addEdge } from 'reactflow';
 import ReactFlow, {
   Controls,
   useReactFlow,
@@ -15,14 +23,14 @@ import getAround from '../CustomEdges/GetAroundEdge';
 import GraphNode from '../CustomNodes/GraphNode';
 import NoteNode from '../CustomNodes/NoteNode';
 import DataNode from '../CustomNodes/DataNode';
-import type { EwoksRFNode, EwoksRFLink, EwoksRFNodeData } from 'types';
+import type { EwoksRFNode, EwoksRFNodeData, Task } from 'types';
 import useStore from 'store/useStore';
+import useSnackbarStore from 'store/useSnackbarStore';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
 import CanvasBackground from './CanvasBackground';
 import { addConnectionToGraph, retrieveTaskInfo, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
-import { useGraphId } from '../../store/graph-hooks';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 import { getEdgesData, getNodeData, getNodesData } from '../../utils';
@@ -32,6 +40,8 @@ import {
 } from '../../utils/typeGuards';
 import FallbackMessage from './FallbackMessage';
 import GraphInOutNode from '../CustomNodes/GraphInOutNode';
+import AddSubworkflowDialog from '../TaskDrawer/AddSubworkflowDialog';
+import { useTasks } from '../../api/tasks';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -65,20 +75,29 @@ function Canvas() {
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
-  const graphInfo = useStore((state) => state.graphInfo);
-  const setGraphInfo = useStore((state) => state.setGraphInfo);
-  const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
-  const addRecentGraph = useStore((state) => state.addRecentGraph);
+  const [addSubworkflowEvent, setSubworkflowEvent] = useState<{
+    position: XYPosition;
+  }>();
 
-  const tasks = useStore((state) => state.tasks);
-  const recentGraphs = useStore((state) => state.recentGraphs);
-  const workingGraphId = useStore((state) => state.workingGraph.graph.id);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
+  const setDisplayedWorkflowInfo = useStore(
+    (state) => state.setDisplayedWorkflowInfo
+  );
+  const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
+  const addLoadedGraph = useStore((state) => state.addLoadedGraph);
+
+  const tasks = useTasks();
+  const loadedGraphs = useStore((state) => state.loadedGraphs);
+  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
+  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
+  const showInfoMsg = useSnackbarStore((state) => state.showInfoMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
-  const setNodesData = useNodeDataStore((state) => state.setNodesData);
+  const setDataFromNodes = useNodeDataStore((state) => state.setDataFromNodes);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
-  const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
-  const graphId = useGraphId();
+  const setDataFromEdges = useEdgeDataStore((state) => state.setDataFromEdges);
   const {
     fitView,
     setNodes,
@@ -93,7 +112,7 @@ function Canvas() {
     setTimeout(() => {
       fitView({ duration: 500 });
     }, 300);
-  }, [workingGraphId, fitView]);
+  }, [rootWorkflowId, fitView]);
 
   function onNodesChange(changes: NodeChange[]) {
     const newNodes = applyNodeChanges(changes, getNodes());
@@ -114,12 +133,8 @@ function Canvas() {
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
 
-    if (workingGraphId !== graphId) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Not allowed to add a new node to any sub-graph!',
-        severity: 'success',
-      });
+    if (rootWorkflowId !== displayedWorkflowInfo.id) {
+      showWarningMsg('Not allowed to add a new node to any sub-graph!');
       return;
     }
 
@@ -140,10 +155,29 @@ function Canvas() {
       y: event.clientY - reactFlowBounds.top,
     });
 
-    const task = tasks.find((tas) => tas.task_identifier === task_identifier);
-
-    if (!task) {
+    if (task_type === 'subworkflow') {
+      setSubworkflowEvent({
+        position,
+      });
       return;
+    }
+
+    let task: Task | undefined;
+
+    if (task_type !== 'note') {
+      task = tasks.find((tas) => tas.task_identifier === task_identifier);
+
+      if (!task) {
+        return;
+      }
+    } else {
+      task = {
+        ...taskInfo,
+        category: 'General',
+        optional_input_names: undefined,
+        output_names: undefined,
+        required_input_names: undefined,
+      };
     }
 
     const nodesIds = [...stateRF.nodeInternals.keys()];
@@ -162,6 +196,7 @@ function Canvas() {
       position,
       data: {} as EwoksRFNodeData,
     };
+
     setNodeData(newId, {
       task_props: {
         task_type,
@@ -173,20 +208,9 @@ function Canvas() {
       },
       ewoks_props: {
         label: trimLabel(task_identifier),
-        default_inputs: [],
-        inputs_complete: false,
-        default_error_node: false,
-        default_error_attributes: {
-          map_all_data: true,
-          data_mapping: [],
-        },
       },
       ui_props: {
-        icon,
-        moreHandles: false,
-        nodeWidth: 100,
-        withImage: true,
-        withLabel: true,
+        ...(icon && { icon }),
       },
     });
     addNodes(newNode);
@@ -197,35 +221,28 @@ function Canvas() {
     // 1. attached to a node-handle where there is already a link or
     // 2. is attached to an input-output already connected to a node then
     // edgeUpdate should not happen and a message informs it is not ewoks-compatible
-    const nodesRF = getNodes();
-    const edgesRF = getEdges();
     const { isValid, reason } = isValidLink(
       newConnection,
-      {
-        nodes: nodesRF,
-        links: edgesRF as EwoksRFLink[],
-        graph: graphInfo,
-      },
+      getNodes(),
+      getEdges(),
       getNodesData(),
       oldEdge
     );
     if (!isValid) {
-      setOpenSnackbar({
-        open: true,
-        text: reason,
-        severity: 'warning',
-      });
+      showWarningMsg(reason);
     }
-    setEdges((els) => updateEdge(oldEdge, newConnection, els));
+
+    const newEdges = addEdge(
+      { ...oldEdge, ...newConnection },
+      getEdges().filter((edge) => edge.id !== oldEdge.id)
+    );
+
+    setEdges(newEdges);
   };
 
   const onConnect = (params: Connection) => {
-    if (workingGraphId !== graphId) {
-      setOpenSnackbar({
-        open: true,
-        text: 'Not allowed to create new links to any sub-graph!',
-        severity: 'success',
-      });
+    if (rootWorkflowId !== displayedWorkflowInfo.id) {
+      showWarningMsg('Not allowed to create new links to any sub-graph!');
       return;
     }
     const newLink = addConnectionToGraph(params, getNodesData());
@@ -238,11 +255,7 @@ function Canvas() {
 
   const onPaneContextMenu = (event: MouseEvent) => {
     event.preventDefault();
-    setOpenSnackbar({
-      open: true,
-      text: 'Open a graph and click on nodes and links on this Canvas!',
-      severity: 'success',
-    });
+    showInfoMsg('Open a graph and click on nodes and links on this Canvas!');
   };
 
   const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
@@ -253,13 +266,9 @@ function Canvas() {
       return;
     }
     if (nodeData.task_props.task_type === 'graph') {
-      setOpenSnackbar({
-        open: true,
-        text: 'Any link changes in any subgraph will not be saved!',
-        severity: 'warning',
-      });
-      addRecentGraph({
-        graph: graphInfo,
+      showWarningMsg('Any link changes in any subgraph will not be saved!');
+      addLoadedGraph({
+        graph: displayedWorkflowInfo,
         nodes: getNodes().map((nod) => {
           return {
             ...nod,
@@ -274,19 +283,17 @@ function Canvas() {
         }),
       });
 
-      const subgraph = recentGraphs.find(
-        (gr) => gr.graph.id === nodeData.task_props.task_identifier
-      );
+      const subgraph = loadedGraphs.get(nodeData.task_props.task_identifier);
 
       if (subgraph?.graph.id) {
         setNodes(subgraph.nodes);
 
-        setNodesData(subgraph.nodes);
-        setEdgesData(subgraph.links);
+        setDataFromNodes(subgraph.nodes);
+        setDataFromEdges(subgraph.links);
 
         setEdges(subgraph.links);
 
-        setGraphInfo(subgraph.graph);
+        setDisplayedWorkflowInfo(subgraph.graph);
         setTimeout(() => {
           fitView({ duration: 500 });
         }, 300);
@@ -295,11 +302,9 @@ function Canvas() {
           label: subgraph.graph.label,
         });
       } else {
-        setOpenSnackbar({
-          open: true,
-          text: 'Seems the specific subgraph cannot be located!',
-          severity: 'error',
-        });
+        showErrorMsg(
+          `The subgraph ${nodeData.task_props.task_identifier} cannot be located!`
+        );
       }
     }
   };
@@ -313,11 +318,7 @@ function Canvas() {
       event.stopPropagation();
       const selectedNode = getNodes().find((nod) => nod.selected);
       if (!selectedNode) {
-        setOpenSnackbar({
-          open: true,
-          text: 'First select a node to clone!',
-          severity: 'error',
-        });
+        showErrorMsg('First select a node to clone!');
         return;
       }
 
@@ -346,38 +347,46 @@ function Canvas() {
   };
 
   return (
-    <div
-      className={classes.root}
-      onKeyDown={handleKeyDown}
-      role="button"
-      tabIndex={0}
-    >
-      <FallbackMessage />
-      <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-        <ReactFlow
-          fitView
-          connectOnClick
-          nodesDraggable
-          attributionPosition="bottom-right"
-          minZoom={0.2}
-          snapToGrid
-          onDrop={onDrop}
-          onConnect={onConnect}
-          onEdgeUpdate={onEdgeUpdate}
-          onDragOver={onDragOver}
-          onPaneContextMenu={onPaneContextMenu}
-          onNodeDoubleClick={onNodeDoubleClick}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          edgeTypes={edgeTypes}
-          nodeTypes={nodeTypes}
-          deleteKeyCode="Delete"
-        >
-          <CanvasBackground />
-          <Controls position="bottom-right" />
-        </ReactFlow>
+    <>
+      <AddSubworkflowDialog
+        open={!!addSubworkflowEvent}
+        position={addSubworkflowEvent?.position}
+        tasks={tasks}
+        onClose={() => setSubworkflowEvent(undefined)}
+      />
+      <div
+        className={classes.root}
+        onKeyDown={handleKeyDown}
+        role="button"
+        tabIndex={0}
+      >
+        <FallbackMessage />
+        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+          <ReactFlow
+            fitView
+            connectOnClick
+            nodesDraggable
+            attributionPosition="bottom-right"
+            minZoom={0.2}
+            snapToGrid
+            onDrop={onDrop}
+            onConnect={onConnect}
+            onEdgeUpdate={onEdgeUpdate}
+            onDragOver={onDragOver}
+            onPaneContextMenu={onPaneContextMenu}
+            onNodeDoubleClick={onNodeDoubleClick}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            edgeTypes={edgeTypes}
+            nodeTypes={nodeTypes}
+            deleteKeyCode="Delete"
+          >
+            <CanvasBackground />
+            <Controls position="bottom-right" />
+          </ReactFlow>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

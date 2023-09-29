@@ -1,26 +1,20 @@
 import { Tooltip } from '@material-ui/core';
 import { Textsms } from '@material-ui/icons';
-import { attachTaskInfo } from '../Canvas/utils';
+import TaskButton from './TaskButton';
+
+import styles from './TaskList.module.css';
 
 function AddNoteButton() {
   return (
-    <span
-      role="button"
-      tabIndex={0}
-      key="addNote"
-      className="dndnode"
-      onDragStart={(event) => {
-        attachTaskInfo(event.dataTransfer, {
-          task_identifier: 'note',
-          task_type: 'note',
-        });
-      }}
-      draggable
-    >
-      <Tooltip title="add note" arrow>
-        <Textsms fontSize="large" />
-      </Tooltip>
-    </span>
+    <Tooltip title="Drag to the canvas to add a note node" arrow>
+      <div className={styles.item}>
+        <TaskButton
+          taskInfo={{ task_type: 'note', task_identifier: 'note' }}
+          label="Note"
+          icon={() => <Textsms fontSize="large" />}
+        />
+      </div>
+    </Tooltip>
   );
 }
 

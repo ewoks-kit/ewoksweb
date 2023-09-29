@@ -11,15 +11,17 @@ import styles from './TopAppBar.module.css';
 export default function SubgraphStack() {
   const { setNodes, setEdges, fitView } = useReactFlow();
 
-  const recentGraphs = useStore((state) => state.recentGraphs);
-  const setGraphInfo = useStore((state) => state.setGraphInfo);
+  const setDisplayedWorkflowInfo = useStore(
+    (state) => state.setDisplayedWorkflowInfo
+  );
+  const loadedGraphs = useStore((state) => state.loadedGraphs);
   const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const subgraphsStack = useStore((state) => {
     return state.subgraphsStack;
   });
 
-  const setNodesData = useNodeDataStore((state) => state.setNodesData);
-  const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
+  const setDataFromNodes = useNodeDataStore((state) => state.setDataFromNodes);
+  const setDataFromEdges = useEdgeDataStore((state) => state.setDataFromEdges);
   const goToGraph = (e: React.MouseEvent) => {
     e.preventDefault();
 
@@ -34,15 +36,15 @@ export default function SubgraphStack() {
       label: (target as HTMLInputElement).value,
     });
 
-    const subgraph = recentGraphs.find((gr) => gr.graph.id === target.id);
+    const subgraph = loadedGraphs.get(target.id);
 
     if (subgraph) {
       // Both stay
       setNodes(subgraph.nodes);
-      setNodesData(subgraph.nodes);
+      setDataFromNodes(subgraph.nodes);
       setEdges(subgraph.links);
-      setEdgesData(subgraph.links);
-      setGraphInfo(subgraph.graph);
+      setDataFromEdges(subgraph.links);
+      setDisplayedWorkflowInfo(subgraph.graph);
       setTimeout(() => {
         fitView({ duration: 500 });
       }, 300);

@@ -1,16 +1,11 @@
 import { useState } from 'react';
-import {
-  Checkbox,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Slider,
-} from '@material-ui/core';
+import { Checkbox, FormControl } from '@material-ui/core';
 import type { ChangeEvent } from 'react';
 import useNodeDataStore from '../../../store/useNodeDataStore';
-import { assertNodeDataDefined, isString } from '../../../utils/typeGuards';
-import { useIcons } from 'api/icons';
+import { assertNodeDataDefined } from '../../../utils/typeGuards';
+import sidebarStyle from '../sidebarStyle';
+import NodeIconControl from './NodeIconControl';
+import NodeWidthControl from './NodeWidthControl';
 
 // DOC: Edit the node style
 export default function EditNodeStyle(props: { nodeId: string }) {
@@ -18,11 +13,8 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(nodeId));
   assertNodeDataDefined(nodeData, nodeId);
 
-  const [nodeSize, setNodeSize] = useState<number>(
-    nodeData.ui_props.nodeWidth || 100
-  );
-  const { icons } = useIcons();
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
   function withImageChanged(checked: boolean) {
     mergeNodeData(nodeId, {
@@ -56,16 +48,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     });
   };
 
-  const changeNodeSize = (
-    _event: ChangeEvent<unknown>,
-    value: number | number[]
-  ) => {
-    if (typeof value === 'number') {
-      setNodeSize(value);
-    }
-  };
-
-  function onChangeCommitted(
+  function handleNodeWidthChange(
     _event: ChangeEvent<unknown>,
     value: number | number[]
   ) {
@@ -76,110 +59,126 @@ export default function EditNodeStyle(props: { nodeId: string }) {
     }
   }
 
-  const handleNodeIconChange = (
-    event: ChangeEvent<{
-      name?: string | undefined;
-      value: unknown;
-    }>
-  ) => {
-    const iconName = event.target.value;
-    if (!isString(iconName)) {
+  function handleNodeIconChange(value: string) {
+    mergeNodeData(nodeId, {
+      ui_props: { icon: value },
+    });
+  }
+
+  function handleNodeIconRemoval() {
+    if (!nodeData) {
       return;
     }
+    const newData = { ...nodeData };
+    newData.ui_props.icon = undefined;
+    // Cannot use mergeNodeData since it ignores `undefined` values when merging
+    setNodeData(nodeId, newData);
+  }
 
-    mergeNodeData(nodeId, {
-      ui_props: { icon: iconName },
-    });
-  };
+  const [showBorderColor, setShowBorderColor] = useState(
+    !!nodeData.ui_props.colorBorder
+  );
+
+  const isRegularNode = !['graphInput', 'graphOutput', 'note'].includes(
+    nodeData.task_props.task_type
+  );
 
   return (
     <FormControl variant="filled" fullWidth>
-      {nodeData.task_props.task_type !== 'note' && (
+      <div>
+        {nodeData.task_props.task_type !== 'note' && (
+          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div style={{ marginRight: '20px' }}>
+              <Checkbox
+                style={sidebarStyle.checkbox}
+                name="withImage"
+                color="primary"
+                checked={
+                  nodeData.ui_props.withImage === undefined
+                    ? true
+                    : !!nodeData.ui_props.withImage
+                }
+                onChange={(event) => withImageChanged(event.target.checked)}
+                inputProps={{ 'aria-label': 'With image' }}
+              />
+              <label htmlFor="withImage">With image</label>
+            </div>
+            <div>
+              <Checkbox
+                style={sidebarStyle.checkbox}
+                name="withLabel"
+                color="primary"
+                checked={
+                  nodeData.ui_props.withLabel === undefined
+                    ? true
+                    : !!nodeData.ui_props.withLabel
+                }
+                onChange={(event) => withLabelChanged(event.target.checked)}
+                inputProps={{ 'aria-label': 'With label' }}
+              />
+              <label htmlFor="withLabel">With label</label>
+            </div>
+          </div>
+        )}
         <div>
-          <label htmlFor="withImage">With Image</label>
           <Checkbox
-            name="withImage"
-            checked={
-              nodeData.ui_props.withImage === undefined
-                ? true
-                : !!nodeData.ui_props.withImage
-            }
-            onChange={(event) => withImageChanged(event.target.checked)}
-            inputProps={{ 'aria-label': 'controlled' }}
+            style={sidebarStyle.checkbox}
+            name="borderCheckbox"
+            color="primary"
+            checked={showBorderColor}
+            onChange={() => {
+              if (showBorderColor) {
+                setShowBorderColor(false);
+                colorBorderChanged('');
+              } else {
+                setShowBorderColor(true);
+                colorBorderChanged('#000000');
+              }
+            }}
           />
-          <label htmlFor="withLabel">With Label</label>
-          <Checkbox
-            name="withLabel"
-            checked={
-              nodeData.ui_props.withLabel === undefined
-                ? true
-                : !!nodeData.ui_props.withLabel
-            }
-            onChange={(event) => withLabelChanged(event.target.checked)}
-            inputProps={{ 'aria-label': 'controlled' }}
+          <label id="borderCheckboxLabel" htmlFor="borderCheckbox">
+            With border
+          </label>
+        </div>
+      </div>
+      {showBorderColor && (
+        <div>
+          <label htmlFor="head">Border color</label>
+          <input
+            aria-label="Color"
+            type="color"
+            id="head"
+            name="head"
+            value={nodeData.ui_props.colorBorder || ''}
+            onChange={(event) => colorBorderChanged(event.target.value)}
           />
         </div>
       )}
-      <div>
-        <label htmlFor="head">Color</label>
-        <input
-          aria-label="Color"
-          type="color"
-          id="head"
-          name="head"
-          value={nodeData.ui_props.colorBorder || ''}
-          onChange={(event) => colorBorderChanged(event.target.value)}
-          style={{ margin: '10px' }}
-        />
-      </div>
-      {!['graphInput', 'graphOutput', 'note'].includes(
-        nodeData.task_props.task_type
-      ) && (
+      {isRegularNode && (
         <div>
           <div>
-            <label htmlFor="moreHandles">More handles</label>
             <Checkbox
+              style={sidebarStyle.checkbox}
               name="moreHandles"
+              color="primary"
               checked={!!nodeData.ui_props.moreHandles}
               onChange={(event) => moreHandlesChanged(event.target.checked)}
-              inputProps={{ 'aria-label': 'controlled' }}
+              inputProps={{ 'aria-label': 'More handles' }}
             />
+            <label htmlFor="moreHandles">More handles</label>
           </div>
         </div>
       )}
-      <div style={{ minWidth: '200px' }}>
-        <label htmlFor="nodeSize">Node Size</label>
-        <Slider
-          id="nodeSize"
-          color="primary"
-          defaultValue={nodeSize}
-          value={nodeSize}
-          onChange={changeNodeSize}
-          onChangeCommitted={onChangeCommitted}
-          min={40}
-          max={300}
-          style={{ width: '100%', paddingTop: '45px' }}
-          valueLabelDisplay="on"
+      <NodeWidthControl
+        nodeWidth={nodeData.ui_props.nodeWidth}
+        onChangeCommitted={handleNodeWidthChange}
+      />
+      {isRegularNode && (
+        <NodeIconControl
+          value={nodeData.ui_props.icon}
+          onChange={handleNodeIconChange}
+          onRemove={handleNodeIconRemoval}
         />
-      </div>
-      {!['graphInput', 'graphOutput', 'note'].includes(
-        nodeData.task_props.task_type
-      ) && (
-        <FormControl variant="outlined" fullWidth>
-          <InputLabel id="replace-node-icon">Node Icon</InputLabel>
-          <Select
-            labelId="replace-node-icon"
-            value={nodeData.ui_props.icon}
-            label="Override Task Icon"
-            onChange={handleNodeIconChange}
-          >
-            {icons.map((icon) => (
-              <MenuItem value={icon.name} key={icon.name}>
-                {icon.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
       )}
     </FormControl>
   );

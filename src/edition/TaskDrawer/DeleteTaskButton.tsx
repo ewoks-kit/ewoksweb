@@ -2,11 +2,11 @@ import { IconButton } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
 import { useState } from 'react';
 import { deleteTask as deleteTaskOnServer } from '../../api/tasks';
-import useStore from '../../store/useStore';
+import useSnackbarStore from '../../store/useSnackbarStore';
 import type { Task } from '../../types';
 import { textForError } from '../../utils';
 import ConfirmDialog from '../../general/ConfirmDialog';
-import { useGetTasks } from '../../general/hooks';
+import { useInvalidateTasks } from '../../api/tasks';
 
 import styles from './TaskButtonGroup.module.css';
 
@@ -19,9 +19,9 @@ function DeleteTaskButton(props: Props) {
 
   const [isDialogOpen, setOpenDialog] = useState(false);
 
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-
-  const getTasks = useGetTasks();
+  const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
+  const invalidateTasks = useInvalidateTasks();
 
   async function deleteTask() {
     if (!task.task_identifier) {
@@ -30,22 +30,16 @@ function DeleteTaskButton(props: Props) {
 
     try {
       await deleteTaskOnServer(task.task_identifier);
-      setOpenSnackbar({
-        open: true,
-        text: `Task was successfully deleted!`,
-        severity: 'success',
-      });
+      showSuccessMsg('Task was successfully deleted!');
       // Update task list
-      getTasks();
+      invalidateTasks();
     } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(
+      showErrorMsg(
+        textForError(
           error,
           'Error in task deletion. Please check connectivity with the server'
-        ),
-        severity: 'error',
-      });
+        )
+      );
     }
   }
 

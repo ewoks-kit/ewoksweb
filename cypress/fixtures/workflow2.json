@@ -1,0 +1,104 @@
+{
+  "graph": {
+    "id": "workflow2",
+    "label": "workflow2"
+  },
+  "nodes": [
+    {
+      "task_type": "class",
+      "task_identifier": "results.tasks.Add",
+      "default_inputs": [
+        {
+          "name": "a",
+          "value": 1
+        },
+        {
+          "name": "b",
+          "value": 1
+        }
+      ],
+      "id": "node1",
+      "uiProps": {
+        "position": {
+          "x": 10,
+          "y": 200
+        }
+      }
+    },
+    {
+      "task_type": "class",
+      "task_identifier": "results.tasks.Add",
+      "default_inputs": [
+        {
+          "name": "a",
+          "value": 1
+        },
+        {
+          "name": "b",
+          "value": 1
+        }
+      ],
+      "id": "node2",
+      "uiProps": {
+        "position": {
+          "x": 10,
+          "y": 10
+        }
+      }
+    },
+    {
+      "task_type": "class",
+      "task_identifier": "results.tasks.Add",
+      "id": "node3",
+      "uiProps": {
+        "position": {
+          "x": 200,
+          "y": 100
+        }
+      }
+    },
+    {
+      "task_type": "class",
+      "task_identifier": "results.tasks.Linspace2",
+      "id": "node4",
+      "uiProps": {
+        "position": {
+          "x": 400,
+          "y": 100
+        }
+      }
+    }
+  ],
+  "links": [
+    {
+      "data_mapping": [
+        {
+          "source_output": "sum",
+          "target_input": "a"
+        }
+      ],
+      "source": "node1",
+      "target": "node3"
+    },
+    {
+      "data_mapping": [
+        {
+          "source_output": "sum",
+          "target_input": "b"
+        }
+      ],
+      "source": "node2",
+      "target": "node3"
+    },
+    {
+      "data_mapping": [
+        {
+          "source_output": "sum",
+          "target_input": "num"
+        }
+      ],
+      "source": "node3",
+      "target": "node4"
+    }
+  ]
+}

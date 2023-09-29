@@ -1,7 +1,5 @@
 import type { ChangeEvent } from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { Checkbox, Grid, Switch, Typography } from '@material-ui/core';
+import { Checkbox, IconButton } from '@material-ui/core';
 import DataMappingComponent from '../EditableTableProperties/DataMapping';
 import Conditions from '../EditableTableProperties/Conditions';
 import SidebarTooltip from '../SidebarTooltip';
@@ -12,6 +10,8 @@ import type { Edge } from 'reactflow';
 
 import styles from './Details.module.css';
 import InputTextField from './InputTextField';
+import InfoIcon from '@material-ui/icons/Info';
+import sidebarStyle from '../sidebarStyle';
 
 export default function LinkDetails(selectedElement: Edge) {
   const edgeData = useEdgeDataStore((state) =>
@@ -22,16 +22,6 @@ export default function LinkDetails(selectedElement: Edge) {
 
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
-  const [showDataMapping, setShowDataMapping] = useState(
-    !edgeData.map_all_data
-  );
-  const [showConditions, setShowConditions] = useState(!edgeData.map_all_data);
-
-  useEffect(() => {
-    setShowDataMapping(!edgeData.map_all_data);
-    setShowConditions(!edgeData.on_error);
-  }, [edgeData.map_all_data, edgeData.on_error]);
-
   const requiredChanged = (event: ChangeEvent<HTMLInputElement>) => {
     mergeEdgeData(selectedElement.id, { required: event.target.checked });
   };
@@ -39,15 +29,13 @@ export default function LinkDetails(selectedElement: Edge) {
   const handleChangeShowDataMapping = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setShowDataMapping(event.target.checked);
-    mergeEdgeData(selectedElement.id, { map_all_data: !event.target.checked });
+    mergeEdgeData(selectedElement.id, { map_all_data: event.target.checked });
   };
 
   const handleChangeShowConditions = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setShowConditions(event.target.checked);
-    mergeEdgeData(selectedElement.id, { on_error: !event.target.checked });
+    mergeEdgeData(selectedElement.id, { on_error: event.target.checked });
   };
 
   return (
@@ -60,97 +48,103 @@ export default function LinkDetails(selectedElement: Edge) {
           mergeEdgeData(selectedElement.id, { comment: newComment });
         }}
       />
-
-      <SidebarTooltip
-        text={`Setting this to True is equivalent to Data Mapping
-        being the identity mapping for all input names.
-        Cannot be used in combination with data_mapping.`}
-      >
-        <div
-          style={{ marginTop: '5px', display: 'grid', placeItems: 'center' }}
-        >
-          <Typography component="div" style={{ fontSize: '16px' }}>
-            <Grid component="label" container alignItems="center" spacing={1}>
-              <Grid item>
-                {!showDataMapping ? <b>Map all data</b> : 'Map all data'}
-              </Grid>
-              <Grid item>
-                <Switch
-                  checked={showDataMapping}
-                  onChange={handleChangeShowDataMapping}
-                  name="dataMappingSwitch"
-                  color="primary"
-                />
-              </Grid>
-              <Grid item>
-                {showDataMapping ? <b>Data Mapping</b> : 'Data Mapping'}
-              </Grid>
-            </Grid>
-          </Typography>
-        </div>
-      </SidebarTooltip>
-      {showDataMapping && (
-        <div>
-          <DataMappingComponent {...selectedElement} />
-        </div>
-      )}
-      <SidebarTooltip
-        text={`A special condition where the task raises an exception.
-        Cannot be used in combination with conditions.`}
-      >
-        <div
-          style={{ marginTop: '5px', display: 'grid', placeItems: 'center' }}
-        >
-          <Typography component="div" style={{ fontSize: '16px' }}>
-            <Grid component="label" container alignItems="center" spacing={1}>
-              <Grid item>{!showConditions ? <b>on_error</b> : 'on_error'}</Grid>
-              <Grid item>
-                <Switch
-                  checked={showConditions}
-                  onChange={handleChangeShowConditions}
-                  name="conditionsSwitch"
-                  color="primary"
-                />
-              </Grid>
-              <Grid item>
-                {showConditions ? <b>Conditions</b> : 'Conditions'}
-              </Grid>
-            </Grid>
-          </Typography>
-        </div>
-      </SidebarTooltip>
-      {showConditions && (
-        <div>
-          <Conditions {...selectedElement} />
-        </div>
-      )}
-      <div>
-        <div style={{ marginTop: '5px', fontSize: '16px' }}>
+      <section>
+        <h3 style={sidebarStyle.sectionHeader}>
+          Data Mapping
+          <SidebarTooltip text="Map data between outputs of source node and inputs of target node">
+            <IconButton size="small">
+              <InfoIcon fontSize="small" />
+            </IconButton>
+          </SidebarTooltip>
+        </h3>
+        <DataMappingComponent
+          element={selectedElement}
+          mapAllData={edgeData.map_all_data}
+        />
+      </section>
+      <section>
+        <h3 style={sidebarStyle.sectionHeader}>
+          Conditions
+          <SidebarTooltip text="Map data between outputs of source node and inputs of target node">
+            <IconButton size="small">
+              <InfoIcon fontSize="small" />
+            </IconButton>
+          </SidebarTooltip>
+        </h3>
+        <Conditions
+          element={selectedElement}
+          isOnErrorSelected={edgeData.on_error}
+        />
+      </section>
+      <section>
+        <h3 style={sidebarStyle.sectionHeader}>
+          Advanced
+          <SidebarTooltip
+            text={`-- Required: setting this to True marks the link as required.
+          When a target receives multiple links, it will be executed
+          (perhaps multiple times) when all the sources connected to the target
+          with required links have been executed. A link is required when it is
+          either “marked as required” (link attribute required=True) or
+          “unconditional and all ancestors of the source node are required”.
+          -- Map all Data: Setting this to True is
+          equivalent to Data Mapping
+          being the identity mapping for all input names.
+          Cannot be used in combination with data_mapping.
+          -- On Error condition: A special condition where
+          the task raises an exception.
+          Cannot be used in combination with conditions.`}
+          >
+            <IconButton size="small">
+              <InfoIcon fontSize="small" />
+            </IconButton>
+          </SidebarTooltip>
+        </h3>
+        <section>
           <Checkbox
+            style={sidebarStyle.checkbox}
+            checked={edgeData.map_all_data}
+            onChange={handleChangeShowDataMapping}
+            inputProps={{ 'aria-label': 'Map all Data' }}
+            color="primary"
+          />
+          <span>Map all Data</span>
+        </section>
+        <section>
+          <Checkbox
+            style={sidebarStyle.checkbox}
+            checked={edgeData.on_error}
+            onChange={handleChangeShowConditions}
+            inputProps={{ 'aria-label': 'On Error condition' }}
+            color="primary"
+          />
+          <span>On Error condition</span>
+        </section>
+        <section>
+          <Checkbox
+            style={sidebarStyle.checkbox}
             checked={edgeData.required}
             onChange={requiredChanged}
             color="primary"
           />
-          <b>Required</b>
-        </div>
-        <div className={styles.entry}>
-          <b>Source:</b> {selectedElement.source}
-        </div>
-        <div className={styles.entry}>
-          <b>Target:</b> {selectedElement.target}
-        </div>
-        {edgeData.sub_target && (
-          <div className={styles.entry}>
-            <b>Sub_target:</b> {edgeData.sub_target}
-          </div>
-        )}
-        {edgeData.sub_target_attributes && (
-          <div className={styles.entry}>
-            <b>Sub_target_attributes:</b>
-            {edgeData.sub_target_attributes}
-          </div>
-        )}
-      </div>
+          <span>Required</span>
+        </section>
+        <section>
+          <h3 style={sidebarStyle.sectionHeader}>Link properties</h3>
+          <div className={styles.entry}>Source: {selectedElement.source}</div>
+          <div className={styles.entry}>Target: {selectedElement.target}</div>
+          {edgeData.sub_target && (
+            <div className={styles.entry}>
+              Sub_target: {edgeData.sub_target}
+            </div>
+          )}
+          {edgeData.sub_target_attributes && (
+            <div className={styles.entry}>
+              Sub_target_attributes:
+              {edgeData.sub_target_attributes}
+            </div>
+          )}
+        </section>
+      </section>
     </>
   );
 }

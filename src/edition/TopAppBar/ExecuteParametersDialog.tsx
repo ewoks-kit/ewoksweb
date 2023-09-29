@@ -36,7 +36,7 @@ export interface ExecutionParams {
 export interface ExecuteParametersDialogProps {
   open: boolean;
   onClose: (value?: string) => void;
-  executeWorkflow: (params?: ExecutionParams) => Promise<ExecutionParams>;
+  executeWorkflow: (params?: ExecutionParams) => Promise<void>;
 }
 
 interface DefaultInputRow extends EditableTableRow {
@@ -134,7 +134,7 @@ export default function ExecuteParametersDialog(
       <DialogContent>
         <Card variant="outlined" style={{ margin: '2px' }}>
           <CardContent>
-            <h4>Default Inputs</h4>
+            <h4>Workflow Inputs</h4>
             {defaultInputs.map((input) => (
               <span style={{ display: 'flex' }} key={input.id}>
                 <FormControl
@@ -204,12 +204,17 @@ export default function ExecuteParametersDialog(
         </Card>
         <Card variant="outlined" style={{ margin: '2px' }}>
           <CardContent>
+            <h4>Executions Arguments</h4>
+          </CardContent>
+        </Card>
+        <Card variant="outlined" style={{ margin: '2px' }}>
+          <CardContent>
             <h4>Worker options</h4>
           </CardContent>
         </Card>
         <Card variant="outlined" style={{ margin: '2px' }}>
           <CardContent>
-            <h4>Specify queue</h4>
+            <h4>Parameters (keywords)</h4>
           </CardContent>
         </Card>
       </DialogContent>

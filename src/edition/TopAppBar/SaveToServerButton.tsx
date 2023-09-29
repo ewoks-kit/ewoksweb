@@ -1,45 +1,55 @@
 import useStore from '../../store/useStore';
+import useSnackbarStore from '../../store/useSnackbarStore';
 import GraphFormDialog from '../../general/forms/GraphFormDialog';
 import { useState } from 'react';
 import { GraphFormAction } from '../../types';
 import { useKeyboardEvent } from '@react-hookz/web';
 import type { EwoksRFLinkData, EwoksRFNodeData } from '../../types';
-import { putWorkflow, useMutateWorkflows } from '../../api/workflows';
+import { putWorkflow, useInvalidateWorkflows } from '../../api/workflows';
 import { getEdgesData, rfToEwoks, textForError } from '../../utils';
 import commonStrings from '../../commonStrings.json';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
-import { getWorkflowIdsFromServer, curateGraph } from './utils';
+import {
+  getWorkflowIdsFromServer,
+  curateNodeData,
+  curateEdgeData,
+} from './utils';
 
 import styles from './TopAppBar.module.css';
 import { IconButton, Tooltip } from '@material-ui/core';
 import tooltipText from '../../general/TooltipText';
 import type { Status } from './models';
 import StatusIcon from './StatusButton';
+import SuspenseBoundary from '../../suspense/SuspenseBoundary';
+import useNodeDataStore from '../../store/useNodeDataStore';
+import useEdgeDataStore from '../../store/useEdgeDataStore';
 
 // DOC: Save to server button with its spinner
 export default function SaveToServerButton() {
-  const graphInfo = useStore((state) => state.graphInfo);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
   const rfInstance = useReactFlow();
-  const mutateWorkflows = useMutateWorkflows();
+  const invalidateWorkflows = useInvalidateWorkflows();
 
   const [isDialogOpen, setDialogOpen] = useState(false);
 
   const [status, setStatus] = useState<Status>('idle');
 
-  const workingGraph = useStore((state) => state.workingGraph);
-  const workingGraphSource = useStore((state) => state.workingGraphSource);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
+  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
+  const rootWorkflowSource = useStore((state) => state.rootWorkflowSource);
+  const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const [action, setAction] = useState<
     GraphFormAction.newGraph | GraphFormAction.newGraphOrOverwrite
   >(GraphFormAction.newGraph);
 
+  const setNodesData = useNodeDataStore((state) => state.setNodesData);
+  const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
+
   function handleError(text: string) {
-    setOpenSnackbar({
-      open: true,
-      text,
-      severity: 'error',
-    });
+    showErrorMsg(text);
     setStatus('error');
   }
 
@@ -59,25 +69,25 @@ export default function SaveToServerButton() {
 
     const workflowsIds = response.data;
 
-    if (!workflowsIds.includes(graphInfo.id)) {
+    if (!workflowsIds.includes(displayedWorkflowInfo.id)) {
       setAction(GraphFormAction.newGraph);
       setDialogOpen(true);
       return;
     }
 
-    if (workingGraph.graph.id !== graphInfo.id) {
+    if (rootWorkflowId !== displayedWorkflowInfo.id) {
       handleError(
         'Cannot save any changes to subgraphs! Open it as the main graph to make changes.'
       );
       return;
     }
 
-    if (!workingGraphSource) {
+    if (!rootWorkflowSource) {
       handleError('No graph exists to save!');
       return;
     }
 
-    if (workingGraphSource !== 'fromServer') {
+    if (rootWorkflowSource !== 'fromServer') {
       setAction(GraphFormAction.newGraphOrOverwrite);
       setDialogOpen(true);
       return;
@@ -85,10 +95,10 @@ export default function SaveToServerButton() {
 
     // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     try {
-      const { newNodesData, newEdgesData } = curateGraph(
-        getNodesData(),
-        getEdgesData()
-      );
+      const newNodesData = curateNodeData(getNodesData());
+      const newEdgesData = curateEdgeData(getEdgesData());
+      setNodesData(newNodesData);
+      setEdgesData(newEdgesData);
 
       const nodesWithData = [...rfInstance.getNodes()].map((node) => {
         return {
@@ -106,18 +116,14 @@ export default function SaveToServerButton() {
 
       await putWorkflow(
         rfToEwoks({
-          graph: graphInfo,
+          graph: displayedWorkflowInfo,
           nodes: nodesWithData,
           links: edgesWithData,
         })
       );
-      mutateWorkflows();
+      invalidateWorkflows();
 
-      setOpenSnackbar({
-        open: true,
-        text: 'Graph saved successfully!',
-        severity: 'success',
-      });
+      showSuccessMsg('Graph saved successfully!');
       setStatus('success');
     } catch (error) {
       handleError(textForError(error, commonStrings.savingError));
@@ -135,12 +141,14 @@ export default function SaveToServerButton() {
 
   return (
     <>
-      <GraphFormDialog
-        elementToEdit={graphInfo}
-        action={action}
-        isOpen={isDialogOpen}
-        onClose={() => setDialogOpen(false)}
-      />
+      <SuspenseBoundary>
+        <GraphFormDialog
+          elementToEdit={displayedWorkflowInfo}
+          action={action}
+          isOpen={isDialogOpen}
+          onClose={() => setDialogOpen(false)}
+        />
+      </SuspenseBoundary>
       <Tooltip title={tooltipText('Save to server')} enterDelay={500} arrow>
         <IconButton
           className={styles.saveButton}

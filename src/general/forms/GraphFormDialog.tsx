@@ -14,18 +14,20 @@ import { useReactFlow } from 'reactflow';
 import {
   postWorkflow,
   putWorkflow,
-  useMutateWorkflows,
+  useInvalidateWorkflows,
 } from '../../api/workflows';
 import commonStrings from '../../commonStrings.json';
-import useCurrentWorkflowIdStore from '../../store/useCurrentWorkflowId';
 import useStore from '../../store/useStore';
-import type { GraphDetails, GraphFormAction } from '../../types';
+import useSnackbarStore from '../../store/useSnackbarStore';
+import type { GraphDetails } from '../../types';
+import { GraphFormAction } from '../../types';
 import {
   getEdgesData,
   getNodesData,
   rfToEwoks,
   textForError,
 } from '../../utils';
+import { useTasks } from '../../api/tasks';
 import FormField from './FormField';
 import type { GraphFields } from './models';
 import { enrichWithData } from './utils';
@@ -45,13 +47,13 @@ export default function GraphFormDialog(props: Props) {
     defaultValues: { identifier: elementToEdit.label },
   });
 
-  const resetRecentGraphs = useStore((state) => state.resetRecentGraphs);
-  const setOpenSnackbar = useStore((state) => state.setOpenSnackbar);
-  const mutateWorkflows = useMutateWorkflows();
+  const resetLoadedGraphs = useStore((state) => state.resetLoadedGraphs);
+  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
+  const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
+  const tasks = useTasks();
 
-  const setCurrentWorkflowId = useCurrentWorkflowIdStore(
-    (state) => state.setId
-  );
+  const invalidateWorkflows = useInvalidateWorkflows();
 
   function handleClose() {
     onClose();
@@ -73,25 +75,17 @@ export default function GraphFormDialog(props: Props) {
         await putWorkflow(ewoksGraph);
       } else {
         const { data: newGraph } = await postWorkflow(ewoksGraph);
-        setCurrentWorkflowId(newGraph.graph.id);
-        resetRecentGraphs();
+        setRootWorkflow(newGraph, rfInstance, tasks, 'fromServer');
+        resetLoadedGraphs();
       }
-      mutateWorkflows();
+      invalidateWorkflows();
 
-      setOpenSnackbar({
-        open: true,
-        text: 'Graph saved successfully!',
-        severity: 'success',
-      });
+      showSuccessMsg('Graph saved successfully!');
 
       reset();
       handleClose();
     } catch (error) {
-      setOpenSnackbar({
-        open: true,
-        text: textForError(error, commonStrings.savingError),
-        severity: 'error',
-      });
+      showErrorMsg(textForError(error, commonStrings.savingError));
     }
   });
 
@@ -114,7 +108,10 @@ export default function GraphFormDialog(props: Props) {
             rules={{ required: true }}
             render={({ field }) => <FormField label="Identifier" {...field} />}
           />
-          {['newGraphOrOverwrite', 'cloneGraph'].includes(action) && (
+          {[
+            GraphFormAction.newGraphOrOverwrite,
+            GraphFormAction.cloneGraph,
+          ].includes(action) && (
             <Controller
               name="overwrite"
               control={control}

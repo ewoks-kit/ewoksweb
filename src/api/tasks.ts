@@ -1,4 +1,7 @@
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { Task } from '../types';
+import { getTaskName } from '../utils';
+import { assertDefined } from '../utils/typeGuards';
 import { client } from './client';
 import type {
   DeleteResponse,
@@ -6,6 +9,7 @@ import type {
   TaskDescriptionsResponse,
   TaskResponse,
 } from './models';
+import { QueryKey } from './models';
 
 // Get '/tasks/descriptions'
 export async function fetchTaskDescriptions() {
@@ -35,4 +39,24 @@ export async function discoverTasks(moduleNames: string[]) {
   return client.post<ListResponse>(`/tasks/discover`, {
     modules: moduleNames,
   });
+}
+
+export function useTasks(): Task[] {
+  const query = useQuery({
+    queryKey: [QueryKey.Tasks],
+    queryFn: fetchTaskDescriptions,
+    suspense: true,
+  });
+
+  const { data: axiosResponse } = query;
+  assertDefined(axiosResponse);
+  return axiosResponse.data.items.sort((a, b) =>
+    getTaskName(a).localeCompare(getTaskName(b))
+  );
+}
+
+export function useInvalidateTasks() {
+  const queryClient = useQueryClient();
+
+  return () => queryClient.invalidateQueries({ queryKey: [QueryKey.Tasks] });
 }

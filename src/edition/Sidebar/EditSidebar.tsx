@@ -10,7 +10,7 @@ export default function EditSidebar() {
   const selected = useSelectedElement();
 
   return (
-    <aside className={styles.container}>
+    <aside className={styles.container} data-cy="rightSidebar">
       <div className={styles.titleBar}>
         <span className={styles.title}>
           {!selected ? 'Workflow' : isNodeRF(selected) ? 'Node' : 'Link'}

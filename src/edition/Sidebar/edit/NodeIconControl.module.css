@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.select {
+  composes: btnClean from global;
+  padding: 0.5rem;
+  border: solid 1px #c0c0c0;
+  border-radius: 0.25rem;
+  flex: 1;
+  margin-left: 0.5rem;
+}

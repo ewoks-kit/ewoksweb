@@ -5,9 +5,12 @@ import styles from './TopAppBar.module.css';
 
 export default function TopAppBarLabel() {
   const subgraphsStack = useStore((state) => state.subgraphsStack);
-  const graphInfo = useStore((state) => state.graphInfo);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo
+  );
+  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
 
-  if (subgraphsStack.length === 0 || !subgraphsStack[0].label) {
+  if (!rootWorkflowId) {
     return (
       <span data-cy="untitled_workflow">
         Untitled_workflow <span className={styles.labelHint}>(unsaved)</span>
@@ -19,5 +22,9 @@ export default function TopAppBarLabel() {
     return <SubgraphStack />;
   }
 
-  return <span data-cy={graphInfo.label}>{graphInfo.label}</span>;
+  return (
+    <span data-cy={displayedWorkflowInfo.label}>
+      {displayedWorkflowInfo.label || displayedWorkflowInfo.id}
+    </span>
+  );
 }

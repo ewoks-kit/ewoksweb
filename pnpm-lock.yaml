@@ -17,15 +17,9 @@ dependencies:
   '@react-hookz/web':
     specifier: 23.0.0
     version: 23.0.0(react-dom@17.0.2)(react@17.0.2)
-  '@rest-hooks/hooks':
-    specifier: 3.1.7
-    version: 3.1.7(@types/react@17.0.3)(react@17.0.2)
-  '@rest-hooks/react':
-    specifier: 7.2.1
-    version: 7.2.1(@types/react@17.0.3)(react@17.0.2)
-  '@rest-hooks/rest':
-    specifier: 6.3.3
-    version: 6.3.3
+  '@tanstack/react-query':
+    specifier: 4.33.0
+    version: 4.33.0(react-dom@17.0.2)(react@17.0.2)
   '@types/d3-format':
     specifier: 3.0.1
     version: 3.0.1
@@ -2715,86 +2709,6 @@ packages:
     engines: {node: '>=14'}
     dev: false
 
-  /@rest-hooks/core@4.2.1:
-    resolution: {integrity: sha512-oNc4v9nzipg9VwkcBWiI/o//YM1xTW5RtWU8RVfw0hX2FKMk7rTqQclfBs1dk92rdfzjzO9EJjBv/Co1F1/mBg==}
-    engines: {node: ^12.17 || ^13.7 || >=14}
-    dependencies:
-      '@babel/runtime': 7.20.6
-      '@rest-hooks/normalizr': 9.4.1
-      flux-standard-action: 2.1.2
-    dev: false
-
-  /@rest-hooks/endpoint@3.4.1:
-    resolution: {integrity: sha512-hUAKUOaoxMVTU/Y6ojskwyZsgoRX3ADk6CuKdP6G8duDepalVIO8E6ogYMaLpHDmaR86eEKNgql7NODEkRmbGw==}
-    engines: {node: ^12.17 || ^13.7 || >=14}
-    dependencies:
-      '@babel/runtime': 7.20.6
-    dev: false
-
-  /@rest-hooks/hooks@3.1.7(@types/react@17.0.3)(react@17.0.2):
-    resolution: {integrity: sha512-SNXm6ELeFJ6rCRNIbTWCVBteXShH8gaCRCHFXacFZKoU51xd8QfPp9T6AsM5zDvl6DfKDOZ9etvIsIEVZGjXPQ==}
-    peerDependencies:
-      '@types/react': ^16.8.4 || ^17.0.0 || ^18.0.0-0
-      react: ^16.8.4 || ^17.0.0 || ^18.0.0-0
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-    dependencies:
-      '@babel/runtime': 7.20.6
-      '@rest-hooks/normalizr': 9.4.1
-      '@types/react': 17.0.3
-      react: 17.0.2
-    dev: false
-
-  /@rest-hooks/normalizr@9.4.1:
-    resolution: {integrity: sha512-QTYqI0eicncIQch1Dmq7/0fEEGJissMyt+d8axgtikjSn7tIZ93HxrwzmqdGn6w6rd1Mz6AMabmvqsYZSk/+hA==}
-    engines: {node: ^12.17 || ^13.7 || >=14}
-    dependencies:
-      '@babel/runtime': 7.20.6
-    dev: false
-
-  /@rest-hooks/react@7.2.1(@types/react@17.0.3)(react@17.0.2):
-    resolution: {integrity: sha512-dlpRLil9nr6ZpM8thD2RfIcnuWBiWr+Q2a/zUIC3QzPOcvSWeXWXXYK+ILV/uG6El/kHWjGcENxGJPuc8zHtlA==}
-    engines: {node: ^12.17 || ^13.7 || >=14}
-    peerDependencies:
-      '@react-navigation/native': ^6.0.0
-      '@types/react': ^16.8.4 || ^17.0.0 || ^18.0.0
-      react: ^16.8.4 || ^17.0.0 || ^18.0.0
-    peerDependenciesMeta:
-      '@react-navigation/native':
-        optional: true
-      '@types/react':
-        optional: true
-    dependencies:
-      '@babel/runtime': 7.20.6
-      '@rest-hooks/core': 4.2.1
-      '@rest-hooks/use-enhanced-reducer': 1.2.5(@types/react@17.0.3)(react@17.0.2)
-      '@types/react': 17.0.3
-      react: 17.0.2
-    dev: false
-
-  /@rest-hooks/rest@6.3.3:
-    resolution: {integrity: sha512-c1+nemNQP6iG9eCOgmL8Y88UoxrnIpj/6H+fNwGO3EmNysBKBj1ky9wyKKfsSBfJPdhcNSAfbptEsfNShwUssA==}
-    engines: {node: ^12.17 || ^13.7 || >=14}
-    dependencies:
-      '@babel/runtime': 7.20.6
-      '@rest-hooks/endpoint': 3.4.1
-      path-to-regexp: 6.2.1
-    dev: false
-
-  /@rest-hooks/use-enhanced-reducer@1.2.5(@types/react@17.0.3)(react@17.0.2):
-    resolution: {integrity: sha512-gGH1gky3h8wcFhAzPcXusgaBkeaWZ0+aHSHYxC0yIjl3ntw9IYyVBht7AG3w9Jad2w5XJLwGdBXrldNbwt2OCQ==}
-    peerDependencies:
-      '@types/react': ^16.8.4 || ^17.0.0 || ^18.0.0-0
-      react: ^16.8.4 || ^17.0.0 || ^18.0.0-0
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-    dependencies:
-      '@types/react': 17.0.3
-      react: 17.0.2
-    dev: false
-
   /@rollup/plugin-babel@5.3.1(@babel/core@7.20.5)(rollup@2.79.1):
     resolution: {integrity: sha512-WFfdLWU/xVWKeRQnKmIAQULUI7Il0gZnBIH/ZFO069wYIfPu+8zrfp/KMW0atmELoRDq8FbiP3VCss9MhCut7Q==}
     engines: {node: '>= 10.0.0'}
@@ -3000,6 +2914,28 @@ packages:
       loader-utils: 2.0.4
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /@tanstack/query-core@4.33.0:
+    resolution: {integrity: sha512-qYu73ptvnzRh6se2nyBIDHGBQvPY1XXl3yR769B7B6mIDD7s+EZhdlWHQ67JI6UOTFRaI7wupnTnwJ3gE0Mr/g==}
+    dev: false
+
+  /@tanstack/react-query@4.33.0(react-dom@17.0.2)(react@17.0.2):
+    resolution: {integrity: sha512-97nGbmDK0/m0B86BdiXzx3EW9RcDYKpnyL2+WwyuLHEgpfThYAnXFaMMmnTDuAO4bQJXEhflumIEUfKmP7ESGA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      '@tanstack/query-core': 4.33.0
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      use-sync-external-store: 1.2.0(react@17.0.2)
     dev: false
 
   /@testing-library/cypress@8.0.7(cypress@11.0.0):
@@ -7194,13 +7130,6 @@ packages:
   /flatted@3.1.1:
     resolution: {integrity: sha512-zAoAQiudy+r5SvnSw3KJy5os/oRJYHzrzja/tBDqrZtNhUw8bt6y8OBzMWcjWr+8liV8Eb6yOhw8WZ7VFZ5ZzA==}
 
-  /flux-standard-action@2.1.2:
-    resolution: {integrity: sha512-7vdgawlphCjzaMLdpZv8hlGC/FJCXu6sqE3Wuqe3HLZ22KcDiO4IFplxLDePDhEt6hgCrugt45RoUObuzZP6Kg==}
-    dependencies:
-      lodash.isplainobject: 4.0.6
-      lodash.isstring: 4.0.1
-    dev: false
-
   /flux@4.0.3(react@17.0.2):
     resolution: {integrity: sha512-yKAbrp7JhZhj6uiT1FTuVMlIAT1J4jqEyBpFApi1kxpGZCvacMVc/t1pMQyotqHhAgvoE3bNvAykhCo2CLjnYw==}
     peerDependencies:
@@ -9619,14 +9548,6 @@ packages:
     resolution: {integrity: sha512-ff3BX/tSioo+XojX4MOsOMhJw0nZoUEF011LX8g8d3gvjVbxd89cCio4BCXronjxcTUIJUoqKEUA+n4CqvvRPw==}
     dev: false
 
-  /lodash.isplainobject@4.0.6:
-    resolution: {integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==}
-    dev: false
-
-  /lodash.isstring@4.0.1:
-    resolution: {integrity: sha512-0wJxfxH1wgO3GrbuP+dTTk7op+6L41QCXbGINEmD+ny/G/eCqGzxyCsh7159S+mgDDcoarnBw6PC1PS5+wUGgw==}
-    dev: false
-
   /lodash.memoize@4.1.2:
     resolution: {integrity: sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==}
     dev: false
@@ -10353,10 +10274,6 @@ packages:
 
   /path-to-regexp@0.1.7:
     resolution: {integrity: sha512-5DFkuoqlv1uYQKxy8omFBeJPQcdoE07Kv2sferDCrAq1ohOU+MSDswDIbnx3YAM60qIOnYa53wBhXW0EbMonrQ==}
-    dev: false
-
-  /path-to-regexp@6.2.1:
-    resolution: {integrity: sha512-JLyh7xT1kizaEvcaXOQwOc2/Yhw6KZOvPf1S8401UyLk86CU79LN3vl7ztXGm/pZ+YjoyAJ4rxmHwbkBXJX+yw==}
     dev: false
 
   /path-type@3.0.0:
