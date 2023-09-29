@@ -5,14 +5,17 @@ before(() => {
 it('makes icons appear on tasks correctly', () => {
   cy.findByRole('button', { name: 'ewokscore' }).click();
 
-  cy.findByRole('img', {
-    name: 'ewokscore.tests.examples.tasks.sumtask.SumTask',
-  })
-    .should('have.attr', 'src')
-    .should(
-      'include',
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAA7D'
-    );
+  cy.readFile(
+    'pysrc/ewoksweb/tests/resources/icons/default.png',
+    'base64'
+  ).then((imgData) => {
+    console.log(imgData);
+    cy.findByRole('img', {
+      name: 'ewokscore.tests.examples.tasks.sumlist.SumList',
+    })
+      .should('have.attr', 'src')
+      .should('eq', `data:image/png;base64,${imgData}`);
+  });
 });
 
 it('should upload and delete icons', () => {
