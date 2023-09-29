@@ -2,7 +2,7 @@ import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
 import type { SubgraphsStackSlice } from './store/subgraphsStack';
 import type { LoadedGraphsSlice } from './store/loadedGraphs';
 import type { RootWorkflowSlice } from './store/rootWorkflow';
-import type { ChangeEvent, CSSProperties, ReactNode } from 'react';
+import type { ChangeEvent, CSSProperties } from 'react';
 import type { Node } from 'reactflow';
 import type { DisplayedWorkflowInfoSlice } from './store/displayedWorkflowInfo';
 
@@ -94,20 +94,6 @@ export interface State
 export interface Action {
   action: string;
   graph: GraphRF;
-}
-
-export interface NodeProps {
-  id: string;
-  nodeWidth?: number;
-  withImage?: boolean;
-  withLabel?: boolean;
-  moreHandles?: boolean;
-  type: TaskType;
-  label: string;
-  color?: string;
-  colorBorder?: string;
-  content: ReactNode;
-  comment?: string;
 }
 
 export type TaskType =

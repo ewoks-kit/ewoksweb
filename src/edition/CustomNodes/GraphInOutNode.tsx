@@ -49,13 +49,7 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
   };
 
   return (
-    <div
-      className="node-content"
-      style={borderColor ? { borderColor } : undefined}
-      id="choice"
-      role="button"
-      tabIndex={0}
-    >
+    <div className="node-content" style={{ borderColor }}>
       <Tooltip
         title={
           args.data.comment ? (

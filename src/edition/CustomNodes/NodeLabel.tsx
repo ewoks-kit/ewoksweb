@@ -2,8 +2,8 @@ import { style } from './nodeStyles';
 
 interface Props {
   label: string;
-  showFull?: boolean;
-  showCropped?: boolean;
+  showFull: boolean;
+  showCropped: boolean;
   color?: string;
 }
 
