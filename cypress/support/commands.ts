@@ -10,7 +10,11 @@ Cypress.on('uncaught:exception', (err) => {
 });
 
 Cypress.Commands.add('loadAppWithoutGraph', () => {
-  cy.visit('http://localhost:3000/edit');
+  cy.visit('http://localhost:3000');
+  cy.findByRole('navigation').within(() =>
+    cy.findByRole('link', { name: 'Edit' }).click()
+  );
+  cy.waitForStableDOM();
 });
 
 Cypress.Commands.add('loadGraph', (name: string) => {
