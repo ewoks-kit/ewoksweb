@@ -19,8 +19,6 @@ function NoteNode(args: NoteProps) {
         padding: '10px',
         borderColor: uiProps.colorBorder,
       }}
-      role="button"
-      tabIndex={0}
     >
       <div
         style={{ maxWidth: `${uiProps.nodeWidth || 100}px` }}

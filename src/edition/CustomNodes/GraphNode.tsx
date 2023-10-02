@@ -51,16 +51,8 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   const { withImage = DEFAULT_NODE_VALUES.uiProps.withImage } = uiProps;
   const { withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel } = uiProps;
 
-  const borderColor = uiProps.colorBorder;
-
   return (
-    <div
-      className="node-content"
-      style={borderColor ? { borderColor } : undefined}
-      id="choice"
-      role="button"
-      tabIndex={0}
-    >
+    <div className="node-content" style={{ borderColor: uiProps.colorBorder }}>
       <Tooltip
         title={
           nodeData.comment ? (

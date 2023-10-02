@@ -8,28 +8,35 @@ import useSnackbarStore from '../../store/useSnackbarStore';
 import type { Connection } from 'reactflow';
 import NodeIcon from './NodeIcon';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import type { NodeProps } from '../../types';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
 import NodeLabel from './NodeLabel';
+
+interface Props {
+  id: string;
+  label: string;
+  width?: number;
+  withImage?: boolean;
+  withLabel?: boolean;
+  borderColor?: string;
+  comment?: string;
+  moreHandles?: boolean;
+}
 
 // The basic Node component
 function Node({
   id,
   moreHandles,
-  withImage,
-  withLabel,
+  withImage = true,
+  withLabel = true,
   label,
-  color,
-  colorBorder: borderColor,
+  borderColor,
   comment,
-  nodeWidth,
-}: NodeProps) {
+  width = 100,
+}: Props) {
   const { getNodes, getEdges } = useReactFlow();
 
   const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
-
-  const nodWidth = { width: `${nodeWidth || 100}px` };
 
   const isValidConnection = (connection: Connection) => {
     const { isValid, reason } = isValidLink(
@@ -45,19 +52,13 @@ function Node({
   };
 
   return (
-    <div
-      className="node-content"
-      style={borderColor ? { borderColor } : undefined}
-      id="choice"
-      role="button"
-      tabIndex={0}
-    >
+    <div className="node-content" style={{ borderColor }}>
       <Tooltip
         title={comment ? <span style={style.comment}>{comment}</span> : ''}
         enterDelay={800}
         arrow
       >
-        <span style={{ ...style.displayNode, ...nodWidth }} className="icons">
+        <span style={{ ...style.displayNode, width }} className="icons">
           <Handle
             type="source"
             position={Position.Right}
@@ -102,7 +103,7 @@ function Node({
             label={label}
             showFull={withLabel}
             showCropped={!withLabel && !withImage}
-            color={color}
+            color="#ced3ee"
           />
           {withImage && (
             <SuspenseBoundary>
