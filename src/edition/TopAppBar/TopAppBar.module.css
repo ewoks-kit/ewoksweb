@@ -3,13 +3,17 @@
   align-items: center;
 }
 
-.disabledCrumb {
-  cursor: default;
-  color: red;
+.crumbs {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.disabledCrumb:hover {
-  text-decoration: none;
+.crumb {
+  color: inherit !important;
 }
 
 .button:hover {

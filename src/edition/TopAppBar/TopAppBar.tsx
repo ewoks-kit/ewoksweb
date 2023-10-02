@@ -1,10 +1,9 @@
-import { Typography } from '@material-ui/core';
 import { createPortal } from 'react-dom';
 
 import GetWorkflowFromServerDropdown from '../../general/GetWorkflowFromServerDropdown';
 import OpenActionMenuButton from './menu/OpenActionMenuButton';
 import SaveToServerButton from './SaveToServerButton';
-import TopAppBarLabel from './TopAppBarLabel';
+import Breadcrumbs from './Breadcrumbs';
 import useNavBarElementStore from '../../navbar/useNavBarElementStore';
 
 import styles from './TopAppBar.module.css';
@@ -19,9 +18,9 @@ function TopAppBar() {
 
   return createPortal(
     <>
-      <Typography component="h1" variant="h6" color="inherit" noWrap>
-        <TopAppBarLabel />
-      </Typography>
+      <h1 className={styles.crumbs}>
+        <Breadcrumbs />
+      </h1>
       <div className={styles.toolbar}>
         <SuspenseBoundary>
           <GetWorkflowFromServerDropdown />
