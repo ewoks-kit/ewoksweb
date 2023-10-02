@@ -15,7 +15,6 @@ export const EMPTY_GRAPH: GraphEwoks = {
 export const EMPTY_RF_GRAPH: GraphRF = {
   graph: {
     id: '',
-    label: '',
   },
   nodes: [],
   links: [],

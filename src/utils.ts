@@ -1,8 +1,8 @@
 import type {
   EwoksRFLinkData,
   EwoksRFNodeData,
+  GraphDetails,
   GraphEwoks,
-  GraphRF,
   Icon,
   Task,
 } from './types';
@@ -16,6 +16,9 @@ import orange3 from 'images/orange3.png';
 import { isEwoksServerErrorResponse } from './utils/typeGuards';
 import useNodeDataStore from './store/useNodeDataStore';
 import useEdgeDataStore from './store/useEdgeDataStore';
+import type { Edge, Node } from 'reactflow';
+import { curateEdgeData, curateNodeData } from './edition/TopAppBar/utils';
+import { enrichWithData } from './general/forms/utils';
 
 export const DEFAULT_ICON: Icon = { name: 'orange3.png', data_url: orange3 };
 
@@ -49,11 +52,25 @@ export async function getSubgraphs(
   }
 }
 
-export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
-  // calculate input_nodes-output_nodes nodes from graphInput-graphOutput
-  let graph = calcEwoksGraphProp(tempGraph);
-  const noteNodes = calcNoteNodes(tempGraph.nodes);
-  const uiprops = { ...graph.uiProps, notes: noteNodes };
+export function prepareEwoksGraph(
+  graphInfo: GraphDetails,
+  nodesWithoutData: Node[],
+  edgesWithoutData: Edge[],
+  rawNodeData: Map<string, EwoksRFNodeData>,
+  rawLinkData: Map<string, EwoksRFLinkData>
+): GraphEwoks {
+  const nodeData = curateNodeData(rawNodeData);
+  const nodes = nodesWithoutData.map((node) => enrichWithData(node, nodeData));
+
+  const linkData = curateEdgeData(rawLinkData);
+  const links = edgesWithoutData.map((edge) => enrichWithData(edge, linkData));
+
+  let graph = calcEwoksGraphProp({ graph: graphInfo, nodes, links });
+  const noteNodes = calcNoteNodes(nodes);
+  const uiprops =
+    noteNodes.length > 0
+      ? { ...graph.uiProps, notes: noteNodes }
+      : graph.uiProps;
 
   graph = {
     ...graph,
@@ -64,8 +81,8 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
 
   return {
     graph,
-    nodes: toEwoksNodes(tempGraph.nodes),
-    links: toEwoksLinks(tempGraph.links),
+    nodes: toEwoksNodes(nodes),
+    links: toEwoksLinks(links),
   };
 }
 

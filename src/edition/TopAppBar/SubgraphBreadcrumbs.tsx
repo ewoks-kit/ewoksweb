@@ -24,11 +24,8 @@ export default function SubgraphBreadcrumbs() {
   const setDataFromEdges = useEdgeDataStore((state) => state.setDataFromEdges);
 
   if (subgraphsStack.length === 1) {
-    return (
-      <span data-cy={displayedWorkflowInfo.label}>
-        {displayedWorkflowInfo.label || displayedWorkflowInfo.id}
-      </span>
-    );
+    const { id, label = id } = displayedWorkflowInfo;
+    return <span data-cy={label}>{label}</span>;
   }
 
   const goToGraph = (e: React.MouseEvent) => {

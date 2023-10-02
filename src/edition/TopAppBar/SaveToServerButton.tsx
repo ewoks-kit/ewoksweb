@@ -4,17 +4,12 @@ import GraphFormDialog from '../../general/forms/GraphFormDialog';
 import { useState } from 'react';
 import { GraphFormAction } from '../../types';
 import { useKeyboardEvent } from '@react-hookz/web';
-import type { EwoksRFLinkData, EwoksRFNodeData } from '../../types';
 import { putWorkflow, useInvalidateWorkflows } from '../../api/workflows';
-import { getEdgesData, rfToEwoks, textForError } from '../../utils';
+import { getEdgesData, prepareEwoksGraph, textForError } from '../../utils';
 import commonStrings from '../../commonStrings.json';
 import { useReactFlow } from 'reactflow';
 import { getNodesData } from '../../utils';
-import {
-  getWorkflowIdsFromServer,
-  curateNodeData,
-  curateEdgeData,
-} from './utils';
+import { getWorkflowIdsFromServer } from './utils';
 
 import styles from './TopAppBar.module.css';
 import { IconButton, Tooltip } from '@material-ui/core';
@@ -22,8 +17,6 @@ import tooltipText from '../../general/TooltipText';
 import type { Status } from './models';
 import StatusIcon from './StatusButton';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import useNodeDataStore from '../../store/useNodeDataStore';
-import useEdgeDataStore from '../../store/useEdgeDataStore';
 
 // DOC: Save to server button with its spinner
 export default function SaveToServerButton() {
@@ -44,9 +37,6 @@ export default function SaveToServerButton() {
   const [action, setAction] = useState<
     GraphFormAction.newGraph | GraphFormAction.newGraphOrOverwrite
   >(GraphFormAction.newGraph);
-
-  const setNodesData = useNodeDataStore((state) => state.setNodesData);
-  const setEdgesData = useEdgeDataStore((state) => state.setEdgesData);
 
   function handleError(text: string) {
     showErrorMsg(text);
@@ -93,33 +83,15 @@ export default function SaveToServerButton() {
       return;
     }
 
-    // DOC: Remove empty lines if any in DataMapping, Conditions, DefaultValues
     try {
-      const newNodesData = curateNodeData(getNodesData());
-      const newEdgesData = curateEdgeData(getEdgesData());
-      setNodesData(newNodesData);
-      setEdgesData(newEdgesData);
-
-      const nodesWithData = [...rfInstance.getNodes()].map((node) => {
-        return {
-          ...node,
-          data: newNodesData.get(node.id) as EwoksRFNodeData,
-        };
-      });
-
-      const edgesWithData = [...rfInstance.getEdges()].map((edge) => {
-        return {
-          ...edge,
-          data: newEdgesData.get(edge.id) as EwoksRFLinkData,
-        };
-      });
-
       await putWorkflow(
-        rfToEwoks({
-          graph: displayedWorkflowInfo,
-          nodes: nodesWithData,
-          links: edgesWithData,
-        })
+        prepareEwoksGraph(
+          displayedWorkflowInfo,
+          rfInstance.getNodes(),
+          rfInstance.getEdges(),
+          getNodesData(),
+          getEdgesData()
+        )
       );
       invalidateWorkflows();
 
