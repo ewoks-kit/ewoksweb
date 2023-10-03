@@ -49,7 +49,7 @@ export function calcEwoksGraphProp(graph: GraphRF): GraphDetails {
 
   return {
     id: graph.graph.id,
-    label: graph.graph.label || graph.graph.id,
+    label: graph.graph.label,
     ...(!propIsEmpty(graph.graph.keywords) && {
       keywords: graph.graph.keywords,
     }),

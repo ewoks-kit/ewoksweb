@@ -39,7 +39,9 @@ it.skip('will not open the dialog for name after clicking new', () => {
   cy.waitForStableDOM();
 });
 
-it('gives a new unique name creates and deletes workflow', () => {
+it('saves an empty workflow on the server and deletes it', () => {
+  cy.get('.react-flow__edge').should('have.length', 0);
+  cy.get('.react-flow__node').should('have.length', 0);
   cy.findByRole('button', { name: 'Save workflow to server' }).click();
 
   cy.findByRole('dialog').should('be.visible');
@@ -51,9 +53,6 @@ it('gives a new unique name creates and deletes workflow', () => {
   }).type(id);
 
   cy.findByRole('button', { name: 'Save workflow' }).click();
-
-  cy.get('.react-flow__edge').should('have.length', 0);
-  cy.get('.react-flow__node').should('have.length', 0);
 
   cy.loadGraph(id);
 
