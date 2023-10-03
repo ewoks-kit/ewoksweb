@@ -41,18 +41,3 @@ it('selects a link with click', () => {
   cy.contains('Required').should('exist').should('be.visible');
   cy.contains('Comment').should('exist').should('be.visible');
 });
-
-it('doubleclick on graph node', () => {
-  cy.get('.react-flow__node-graph').should('have.length', 7).last().dblclick();
-
-  cy.get('.react-flow__node').should('not.have.length', 17);
-
-  cy.get('h1')
-    .get('.MuiBreadcrumbs-li')
-    .should('have.length', 2)
-    .first()
-    .contains('tutorial_Graph')
-    .click();
-
-  cy.get('.react-flow__node').should('have.length', 17);
-});

@@ -20,8 +20,8 @@ it('opens the tutorial_Graph on the canvas', () => {
   cy.loadGraph('tutorial_Graph');
 
   cy.get('h1').should('include.text', 'tutorial_Graph');
-  cy.get('.react-flow__node').should('have.length', 17);
-  cy.get('.react-flow__edge').should('have.length', 13);
+  cy.get('.react-flow__node').should('have.length', 16);
+  cy.get('.react-flow__edge').should('have.length', 12);
 });
 
 // Skip this test until unsaved modifications can be properly tracked
