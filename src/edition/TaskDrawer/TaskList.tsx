@@ -40,7 +40,11 @@ function TaskList() {
                   <TaskItem
                     key={task.task_identifier}
                     task={task}
-                    onClick={() => setSelectTaskId(task.task_identifier)}
+                    onClick={() => {
+                      if (task.category !== 'General') {
+                        setSelectTaskId(task.task_identifier);
+                      }
+                    }}
                     isSelected={task.task_identifier === selectedTaskId}
                   />
                 ))}
