@@ -115,27 +115,27 @@ it('changes moreHandles of node true->false->true', () => {
 });
 
 it('deletes a node by button and keyboard', () => {
-  cy.get('.react-flow__node').should('have.length', 17);
+  cy.get('.react-flow__node').should('have.length', 16);
 
   cy.get('@node').click().type('{del}');
 
-  cy.get('.react-flow__node').should('have.length', 16);
+  cy.get('.react-flow__node').should('have.length', 15);
 
   cy.get('.react-flow__node').first().click();
 
   cy.findByRole('button', { name: 'Open edit actions menu' }).click();
   cy.findByRole('menuitem', { name: 'Delete Node' }).click();
 
-  cy.get('.react-flow__node').should('have.length', 15);
+  cy.get('.react-flow__node').should('have.length', 14);
 });
 
 it('clones a node by button', () => {
-  cy.get('.react-flow__node').should('have.length', 17);
+  cy.get('.react-flow__node').should('have.length', 16);
 
   cy.findByRole('button', { name: 'Open edit actions menu' }).click();
   cy.findByRole('menuitem', { name: 'Clone Node' }).click();
 
-  cy.get('.react-flow__node').should('have.length', 18);
+  cy.get('.react-flow__node').should('have.length', 17);
 });
 
 it('changes the icon', () => {
@@ -192,13 +192,13 @@ it('changes the icon', () => {
 });
 
 it('should drag and drop a node from add nodes into canvas', () => {
-  cy.get('.react-flow__node').should('have.length', 17);
+  cy.get('.react-flow__node').should('have.length', 16);
 
   cy.findByRole('button', { name: 'Open task drawer' }).click();
   cy.findByRole('button', { name: 'ewokscore' }).click();
   cy.dragNodeInCanvas('ewokscore.tests.examples.tasks.sumtask.SumTask');
 
-  cy.get('.react-flow__node').should('have.length', 18);
+  cy.get('.react-flow__node').should('have.length', 17);
 });
 
 it('adds and delete a new default input', () => {

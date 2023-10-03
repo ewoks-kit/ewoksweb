@@ -41,11 +41,7 @@ const rootWorkflow = (
     source
   ): Promise<void> => {
     // 1. Initialize the canvas while working on the new graph
-    get().setSubgraphsStack({
-      id: '',
-      label: '',
-      resetStack: true,
-    });
+    get().resetDisplayedWorkflowInfo();
     get().resetLoadedGraphs();
 
     // 2. Get node-subgraphs for the graph
@@ -114,10 +110,6 @@ const rootWorkflow = (
       }),
     };
 
-    get().setSubgraphsStack({
-      id: ewoksWorkflow.graph.id,
-      label: ewoksWorkflow.graph.label,
-    });
     set((state) => ({
       ...state,
       rootWorkflowId: newGraphNoData.graph.id,
