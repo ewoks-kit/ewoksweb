@@ -3,7 +3,7 @@ beforeEach(() => {
 });
 
 it('navigates to a subgraph, a subsubgraph and back', () => {
-  cy.findByRole('heading', { name: 'tutorial_Graph' }).should('be.visible');
+  cy.hasBreadcrumbs(['tutorial_Graph']);
   cy.get('.react-flow__node').should('have.length', 16);
   cy.get('.react-flow__edge').should('have.length', 12);
 
@@ -13,12 +13,7 @@ it('navigates to a subgraph, a subsubgraph and back', () => {
   }).dblclick();
   cy.waitForStableDOM();
 
-  cy.findByRole('heading', { name: 'breadcrumb' }).within(() => {
-    cy.findByRole('link', { name: 'tutorial_Graph' }).should('be.visible');
-    cy.findByRole('link', { name: 'Editing-Graph-Node-Link' }).should(
-      'be.visible'
-    );
-  });
+  cy.hasBreadcrumbs(['tutorial_Graph', 'Editing-Graph-Node-Link']);
   cy.get('.react-flow__node').should('have.length', 21);
   cy.get('.react-flow__edge').should('have.length', 17);
 
@@ -28,13 +23,11 @@ it('navigates to a subgraph, a subsubgraph and back', () => {
   }).dblclick();
   cy.waitForStableDOM();
 
-  cy.findByRole('heading', { name: 'breadcrumb' }).within(() => {
-    cy.findByRole('link', { name: 'tutorial_Graph' }).should('be.visible');
-    cy.findByRole('link', { name: 'Editing-Graph-Node-Link' }).should(
-      'be.visible'
-    );
-    cy.findByRole('link', { name: 'Styling-Nodes-Links' }).should('be.visible');
-  });
+  cy.hasBreadcrumbs([
+    'tutorial_Graph',
+    'Editing-Graph-Node-Link',
+    'Styling-Nodes-Links',
+  ]);
   cy.get('.react-flow__node').should('have.length', 3);
   cy.get('.react-flow__edge').should('have.length', 2);
 
@@ -42,13 +35,13 @@ it('navigates to a subgraph, a subsubgraph and back', () => {
   cy.findByRole('link', { name: 'tutorial_Graph' }).click();
   cy.waitForStableDOM();
 
-  cy.findByRole('heading', { name: 'tutorial_Graph' }).should('be.visible');
+  cy.hasBreadcrumbs(['tutorial_Graph']);
   cy.get('.react-flow__node').should('have.length', 16);
   cy.get('.react-flow__edge').should('have.length', 12);
 });
 
 it('loads a different workflow even if inside a subgraph', () => {
-  cy.findByRole('heading', { name: 'tutorial_Graph' }).should('be.visible');
+  cy.hasBreadcrumbs(['tutorial_Graph']);
 
   // Navigate to Editing-Graph-Node-Link subgraph
   cy.findByRole('button', {
@@ -56,16 +49,13 @@ it('loads a different workflow even if inside a subgraph', () => {
   }).dblclick();
   cy.waitForStableDOM();
 
-  cy.findByRole('heading', { name: 'breadcrumb' }).within(() => {
-    cy.findByRole('link', { name: 'tutorial_Graph' }).should('be.visible');
-    cy.findByRole('link', { name: 'Editing-Graph-Node-Link' }).should(
-      'be.visible'
-    );
-  });
+  cy.hasBreadcrumbs(['tutorial_Graph', 'Editing-Graph-Node-Link']);
 
   // Load an unrelated workflow
   cy.loadGraph('WhatIsEwoks');
 
-  cy.findByRole('heading', { name: 'WhatIsEwoks' }).should('be.visible');
-  cy.findByLabelText('tutorial_Graph').should('not.exist');
+  cy.hasBreadcrumbs(['WhatIsEwoks']);
+  cy.findByRole('heading', { name: 'breadcrumb' }).within(() => {
+    cy.contains('tutorial_Graph').should('not.exist');
+  });
 });

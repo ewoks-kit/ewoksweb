@@ -15,7 +15,7 @@ it('loads workflow from disk', () => {
   );
   cy.waitForStableDOM();
 
-  cy.findByRole('heading', { name: 'workflow2' }).should('be.visible');
+  cy.hasBreadcrumbs(['workflow2']);
   cy.get('.react-flow__node').should('have.length', 4);
   cy.get('.react-flow__edge').should('have.length', 3);
 });
@@ -33,7 +33,7 @@ it('leaves the original JSON untouched when saving on the server', () => {
   );
   cy.waitForStableDOM();
 
-  cy.findByRole('heading', { name: 'workflow2' }).should('be.visible');
+  cy.hasBreadcrumbs(['workflow2']);
   cy.findByRole('button', { name: 'Save workflow to server' }).click();
   cy.findByRole('textbox', {
     name: 'Identifier',

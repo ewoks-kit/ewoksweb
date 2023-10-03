@@ -65,7 +65,7 @@ export default function WorkflowSidebarMenu() {
 
       <MenuItem
         onClick={() => setOpenSaveDialog(true)}
-        role="sidebarMenuItem"
+        role="menuitem"
         disabled={
           !rootWorkflowId || rootWorkflowId !== displayedWorkflowInfo.id
         }
@@ -78,7 +78,7 @@ export default function WorkflowSidebarMenu() {
       </MenuItem>
       <MenuItem
         onClick={() => setOpenAgreeDialog(true)}
-        role="sidebarMenuItem"
+        role="menuitem"
         disabled={
           !rootWorkflowId || rootWorkflowId !== displayedWorkflowInfo.id
         }
