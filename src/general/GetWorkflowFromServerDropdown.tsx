@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import FormControl from '@material-ui/core/FormControl';
 import useStore from '../store/useStore';
 import useSnackbarStore from '../store/useSnackbarStore';
 import type { WorkflowDescription } from '../types';
@@ -46,20 +45,16 @@ export default function GetWorkflowFromServerDropdown() {
         agreeCallback={() => getFromServer(workflowId)}
         disagreeCallback={() => setOpenAgreeDialog(false)}
       />
-      <FormControl
-        variant="standard"
+      <WorkflowDropdown
+        onChange={(workflowDetails) => {
+          setInputValue(workflowDetails);
+        }}
         style={{
           minWidth: '220px',
           backgroundColor: '#7685dd',
           borderRadius: '4px',
         }}
-      >
-        <WorkflowDropdown
-          onChange={(workflowDetails) => {
-            setInputValue(workflowDetails);
-          }}
-        />
-      </FormControl>
+      />
     </>
   );
 }

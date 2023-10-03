@@ -73,20 +73,19 @@ export default function AddSubworkflowDialog(props: Props) {
       />
 
       <Dialog maxWidth="xl" open={open} onClose={handleClose}>
-        <DialogTitle>Add Subgraph</DialogTitle>
+        <DialogTitle>Add subworkflow</DialogTitle>
         <DialogContent>
           <List component="div" role="list">
             <ListItem divider role="listitem">
               <ListItemText primary="From Server" />
-              <div style={{ width: '20rem', marginLeft: '0.5rem' }}>
-                <SuspenseBoundary>
-                  <WorkflowDropdown
-                    onChange={(workflowDetails) => {
-                      addSubgraph(workflowDetails.id);
-                    }}
-                  />
-                </SuspenseBoundary>
-              </div>
+              <SuspenseBoundary>
+                <WorkflowDropdown
+                  onChange={(workflowDetails) => {
+                    addSubgraph(workflowDetails.id);
+                  }}
+                  style={{ width: '20rem', marginLeft: '2rem' }}
+                />
+              </SuspenseBoundary>
             </ListItem>
             <ListItem
               button

@@ -1,6 +1,7 @@
 import type { WorkflowDescription } from 'types';
 
 import useSnackbarStore from 'store/useSnackbarStore';
+import type { CSSProperties } from 'react';
 import { useEffect, useState } from 'react';
 import { Autocomplete } from '@material-ui/lab';
 import { CircularProgress, TextField } from '@material-ui/core';
@@ -11,6 +12,7 @@ import { useWorkflowsDLE } from '../api/workflows';
 interface Props {
   onChange: (input: WorkflowDescription) => void;
   category?: string;
+  style?: CSSProperties;
 }
 
 function sortByCategory(
@@ -30,7 +32,7 @@ function sortByCategory(
 
 // DOC: A dropdown that can be an input as well
 function WorkflowDropdown(props: Props) {
-  const { onChange, category } = props;
+  const { onChange, category, style } = props;
 
   const [inputValue, setInputValue] = useState('');
   const [open, setOpen] = useState(false);
@@ -52,6 +54,7 @@ function WorkflowDropdown(props: Props) {
 
   return (
     <Autocomplete
+      style={style}
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
