@@ -56,6 +56,9 @@ export function calcEwoksGraphProp(graph: GraphRF): GraphDetails {
     ...(!propIsEmpty(graph.graph.input_schema) && {
       input_schema: graph.graph.input_schema,
     }),
+    ...(!propIsEmpty(graph.graph.ui_schema) && {
+      ui_schema: graph.graph.ui_schema,
+    }),
     ...(!propIsEmpty(graph.graph.execute_arguments) && {
       execute_arguments: graph.graph.execute_arguments,
     }),
