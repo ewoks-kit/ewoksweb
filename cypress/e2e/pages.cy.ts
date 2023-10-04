@@ -23,7 +23,7 @@ it('should switch to monitor page', () => {
 
 it('should restore an opened workflow when switching pages', () => {
   cy.loadGraph('tutorial_Graph');
-  cy.findByRole('heading', { name: 'tutorial_Graph' }).should('be.visible');
+  cy.hasBreadcrumbs(['tutorial_Graph']);
   cy.get('.react-flow__node').should('have.length', 16);
 
   cy.findByRole('link', { name: 'Monitor' }).click();
@@ -34,6 +34,7 @@ it('should restore an opened workflow when switching pages', () => {
     cy.findByRole('link', { name: 'Edit' }).click()
   );
   cy.waitForStableDOM();
-  cy.findByRole('heading', { name: 'tutorial_Graph' }).should('be.visible');
+  cy.hasBreadcrumbs(['tutorial_Graph']);
+
   cy.get('.react-flow__node').should('have.length', 16);
 });

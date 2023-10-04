@@ -45,4 +45,16 @@ Cypress.Commands.add('dragNodeInCanvas', (task_identifier: string) => {
   });
 });
 
+Cypress.Commands.add('hasBreadcrumbs', (crumbs: string[]) => {
+  const linkCrumbs = crumbs.slice(0, crumbs.length - 1);
+  const lastCrumb = crumbs[crumbs.length - 1];
+
+  cy.findByLabelText('breadcrumb').within(() => {
+    linkCrumbs.forEach((name) =>
+      cy.findByRole('link', { name }).should('be.visible')
+    );
+    cy.contains(lastCrumb).should('be.visible');
+  });
+});
+
 addWaitForStableDomCommand({ pollInterval: 300, timeout: 1000 });

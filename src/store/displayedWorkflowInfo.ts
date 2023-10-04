@@ -3,30 +3,26 @@ import { EMPTY_RF_GRAPH } from '../utils/emptyGraphs';
 import type { SetState } from 'zustand';
 import { merge } from 'lodash';
 
-function getNewHierarchy(
-  newWorkflowInfo: GraphDetails,
-  oldHierarchy: string[]
+function getParentsOfNextWorkflow(
+  nextWorkflowId: string,
+  prevWorkflowId: string,
+  prevParents: string[]
 ) {
-  const workflowIndexInHierarchy: number = oldHierarchy.indexOf(
-    newWorkflowInfo.id
-  );
-
-  if (workflowIndexInHierarchy === -1) {
-    return [...oldHierarchy, newWorkflowInfo.id];
+  if (prevWorkflowId === '') {
+    return prevParents;
   }
 
-  if (workflowIndexInHierarchy === oldHierarchy.length - 1) {
-    // TODO: if user insert the same 'graph' and is the first then stack is not updated
-    // Not applicable so left as is and it just wont be able to doubleClick
-    return oldHierarchy;
+  if (prevParents.includes(nextWorkflowId)) {
+    const nextWorkflowIndex = prevParents.indexOf(nextWorkflowId);
+    return prevParents.slice(0, nextWorkflowIndex);
   }
 
-  return oldHierarchy.slice(0, workflowIndexInHierarchy + 1);
+  return [...prevParents, prevWorkflowId];
 }
 
 export interface DisplayedWorkflowInfoSlice {
   displayedWorkflowInfo: GraphDetails;
-  displayedWorkflowHierarchy: string[];
+  displayedWorkflowParents: string[];
   setDisplayedWorkflowInfo: (displayedWorkflowInfo: GraphDetails) => void;
   mergeDisplayedWorkflowInfo: (
     displayedWorkflowInfo: Partial<GraphDetails>
@@ -38,22 +34,24 @@ const displayedWorkflowInfo = (
   set: SetState<State>
 ): DisplayedWorkflowInfoSlice => ({
   displayedWorkflowInfo: EMPTY_RF_GRAPH.graph,
-  displayedWorkflowHierarchy: [],
+  displayedWorkflowParents: [],
 
-  setDisplayedWorkflowInfo: (newWorkflowInfo) => {
-    // DOC: If missing uiProps or other fill it here
-    if (!newWorkflowInfo.uiProps) {
-      newWorkflowInfo.uiProps = {};
-    }
+  setDisplayedWorkflowInfo: (nextWorkflowInfo) => {
+    set((prev) => {
+      const prevWorkflowId = prev.displayedWorkflowInfo.id;
+      if (nextWorkflowInfo.id === prevWorkflowId) {
+        return prev;
+      }
 
-    set((state) => ({
-      ...state,
-      displayedWorkflowInfo: newWorkflowInfo,
-      displayedWorkflowHierarchy: getNewHierarchy(
-        newWorkflowInfo,
-        state.displayedWorkflowHierarchy
-      ),
-    }));
+      return {
+        displayedWorkflowInfo: nextWorkflowInfo,
+        displayedWorkflowParents: getParentsOfNextWorkflow(
+          nextWorkflowInfo.id,
+          prevWorkflowId,
+          prev.displayedWorkflowParents
+        ),
+      };
+    });
   },
 
   mergeDisplayedWorkflowInfo: (graphRFD) => {
@@ -67,7 +65,7 @@ const displayedWorkflowInfo = (
   resetDisplayedWorkflowInfo: () =>
     set({
       displayedWorkflowInfo: EMPTY_RF_GRAPH.graph,
-      displayedWorkflowHierarchy: [],
+      displayedWorkflowParents: [],
     }),
 });
 
