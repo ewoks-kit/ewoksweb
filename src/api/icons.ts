@@ -5,8 +5,6 @@ import path from 'path-browserify';
 import type { DeleteResponse, IconResponse, ListResponse } from './models';
 import { QueryKey } from './models';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import graphInput from 'images/graphInput.svg';
-import graphOutput from 'images/graphOutput.svg';
 
 async function fetchIconIds() {
   const { data } = await client.get<ListResponse>(`/icons`);
@@ -55,11 +53,7 @@ export function useIcons() {
 
   assertDefined(icons);
 
-  return [
-    ...icons,
-    { name: 'graphInput.svg', data_url: graphInput },
-    { name: 'graphOutput.svg', data_url: graphOutput },
-  ];
+  return icons;
 }
 
 export function useInvalidateIcons() {

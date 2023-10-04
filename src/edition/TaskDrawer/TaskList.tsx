@@ -6,6 +6,7 @@ import {
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { useState } from 'react';
+import { generalTasks } from '../../api/generalTasks';
 import { useTasks } from '../../api/tasks';
 import AddNoteButton from './AddNoteButton';
 import AddSubworkflow from './AddSubworkflow';
@@ -24,40 +25,42 @@ function TaskList() {
     <>
       <TaskListToolbar />
 
-      {[...new Set(tasks.map((m) => m.category)).values()].map((category) => (
-        <Accordion key={category} className="add-nodes-accordion">
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-          >
-            <Typography>{category || 'No category defined'}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <div className={styles.itemContainer}>
-              {tasks
-                .filter((nod) => nod.category === category)
-                .map((task) => (
-                  <TaskItem
-                    key={task.task_identifier}
-                    task={task}
-                    onClick={() => {
-                      if (task.category !== 'General') {
-                        setSelectTaskId(task.task_identifier);
-                      }
-                    }}
-                    isSelected={task.task_identifier === selectedTaskId}
-                  />
-                ))}
-              {category === 'General' && (
-                <>
-                  <AddNoteButton />
-                  <AddSubworkflow />
-                </>
-              )}
-            </div>
-          </AccordionDetails>
-        </Accordion>
-      ))}
+      {[...new Set(tasks.map((m) => m.category)).values(), 'General'].map(
+        (category) => (
+          <Accordion key={category} className="add-nodes-accordion">
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+            >
+              <Typography>{category || 'No category defined'}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <div className={styles.itemContainer}>
+                {[...tasks, ...generalTasks]
+                  .filter((nod) => nod.category === category)
+                  .map((task) => (
+                    <TaskItem
+                      key={task.task_identifier}
+                      task={task}
+                      onClick={() => {
+                        if (task.category !== 'General') {
+                          setSelectTaskId(task.task_identifier);
+                        }
+                      }}
+                      isSelected={task.task_identifier === selectedTaskId}
+                    />
+                  ))}
+                {category === 'General' && (
+                  <>
+                    <AddNoteButton />
+                    <AddSubworkflow />
+                  </>
+                )}
+              </div>
+            </AccordionDetails>
+          </Accordion>
+        )
+      )}
     </>
   );
 }

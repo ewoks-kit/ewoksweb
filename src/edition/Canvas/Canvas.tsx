@@ -164,7 +164,11 @@ function Canvas() {
 
     let task: Task | undefined;
 
-    if (task_type !== 'note') {
+    if (
+      !['note', 'graphInput', 'graphOutput', 'taskSkeleton'].includes(
+        task_identifier
+      )
+    ) {
       task = tasks.find((tas) => tas.task_identifier === task_identifier);
 
       if (!task) {

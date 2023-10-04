@@ -3,7 +3,6 @@ import type { Task } from '../types';
 import { getTaskName } from '../utils';
 import { assertDefined } from '../utils/typeGuards';
 import { client } from './client';
-import { generalTasks } from './generalTasks';
 import type {
   DeleteResponse,
   ListResponse,
@@ -51,11 +50,10 @@ export function useTasks(): Task[] {
 
   const { data: axiosResponse } = query;
   assertDefined(axiosResponse);
-  const tasks = [
-    ...axiosResponse.data.items.filter((task) => task.category !== 'General'),
-    ...generalTasks,
-  ];
-  return tasks.sort((a, b) => getTaskName(a).localeCompare(getTaskName(b)));
+
+  return axiosResponse.data.items.sort((a, b) =>
+    getTaskName(a).localeCompare(getTaskName(b))
+  );
 }
 
 export function useInvalidateTasks() {

@@ -4,12 +4,15 @@ import TaskButton from './TaskButton';
 
 import styles from './TaskList.module.css';
 
-function AddNoteButton() {
+function AddGeneralNodeButton() {
   return (
-    <Tooltip title="Drag to the canvas to add a note node" arrow>
+    <Tooltip title="Drag to the canvas to add an note node" arrow>
       <div className={styles.item}>
         <TaskButton
-          taskInfo={{ task_type: 'note', task_identifier: 'note' }}
+          taskInfo={{
+            task_type: 'note',
+            task_identifier: 'note',
+          }}
           label="Note"
           icon={() => <Textsms fontSize="large" />}
         />
@@ -18,4 +21,4 @@ function AddNoteButton() {
   );
 }
 
-export default AddNoteButton;
+export default AddGeneralNodeButton;
