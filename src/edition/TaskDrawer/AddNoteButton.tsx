@@ -4,7 +4,7 @@ import TaskButton from './TaskButton';
 
 import styles from './TaskList.module.css';
 
-function AddGeneralNodeButton() {
+function AddNoteButton() {
   return (
     <Tooltip title="Drag to the canvas to add a note node" arrow>
       <div className={styles.item}>
@@ -22,4 +22,4 @@ function AddGeneralNodeButton() {
   );
 }
 
-export default AddGeneralNodeButton;
+export default AddNoteButton;
