@@ -16,7 +16,6 @@ import ReactFlow, {
   applyNodeChanges,
   applyEdgeChanges,
 } from 'reactflow';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
 import bendingText from '../CustomEdges/BendingTextEdge';
 import multilineText from '../CustomEdges/MultilineTextEdge';
 import getAround from '../CustomEdges/GetAroundEdge';
@@ -43,13 +42,7 @@ import GraphInOutNode from '../CustomNodes/GraphInOutNode';
 import AddSubworkflowDialog from '../TaskDrawer/AddSubworkflowDialog';
 import { useTasks } from '../../api/tasks';
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-  })
-);
+import styles from './Canvas.module.css';
 
 const edgeTypes = {
   bendingText,
@@ -68,8 +61,6 @@ const nodeTypes = {
 };
 
 function Canvas() {
-  const classes = useStyles();
-
   const storeRF = useStoreApi();
   const rfInstance = useReactFlow();
 
@@ -350,13 +341,13 @@ function Canvas() {
         onClose={() => setSubworkflowEvent(undefined)}
       />
       <div
-        className={classes.root}
+        className={styles.root}
         onKeyDown={handleKeyDown}
         role="button"
         tabIndex={0}
       >
         <FallbackMessage />
-        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+        <div className={styles.wrapper} ref={reactFlowWrapper}>
           <ReactFlow
             fitView
             connectOnClick
