@@ -16,7 +16,7 @@ interface Props {
 
 function TaskItem(props: Props) {
   const { task, isSelected, onClick } = props;
-  const { task_identifier, icon, task_type } = task;
+  const { task_identifier, icon, task_type, category } = task;
 
   if (!task_identifier) {
     return null;
@@ -26,7 +26,7 @@ function TaskItem(props: Props) {
     <Tooltip title={task_identifier} arrow>
       <div className={styles.item} data-selected={isSelected || undefined}>
         <TaskButton
-          taskInfo={{ task_type, task_identifier, icon }}
+          taskInfo={{ task_type, task_identifier, icon, category }}
           label={getTaskName(task)}
           onClick={onClick}
           icon={() => (

@@ -62,6 +62,7 @@ export function useTasks(): Task[] {
 
   const { data: axiosResponse } = query;
   assertDefined(axiosResponse);
+
   return axiosResponse.data.items.sort((a, b) =>
     getTaskName(a).localeCompare(getTaskName(b))
   );

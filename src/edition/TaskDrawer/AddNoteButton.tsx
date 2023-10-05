@@ -9,7 +9,11 @@ function AddNoteButton() {
     <Tooltip title="Drag to the canvas to add a note node" arrow>
       <div className={styles.item}>
         <TaskButton
-          taskInfo={{ task_type: 'note', task_identifier: 'note' }}
+          taskInfo={{
+            task_type: 'note',
+            task_identifier: 'note',
+            category: 'General',
+          }}
           label="Note"
           icon={() => <Textsms fontSize="large" />}
         />

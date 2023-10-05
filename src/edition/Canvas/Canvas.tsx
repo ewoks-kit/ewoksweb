@@ -147,7 +147,7 @@ function Canvas() {
     if (!taskInfo) {
       return;
     }
-    const { task_type, icon, task_identifier } = taskInfo;
+    const { task_type, icon, task_identifier, category } = taskInfo;
 
     const position = rfInstance.project({
       x: event.clientX - reactFlowBounds.left,
@@ -163,13 +163,7 @@ function Canvas() {
 
     let task: Task | undefined;
 
-    if (task_type !== 'note') {
-      task = tasks.find((tas) => tas.task_identifier === task_identifier);
-
-      if (!task) {
-        return;
-      }
-    } else {
+    if (category === 'General') {
       task = {
         ...taskInfo,
         category: 'General',
@@ -177,6 +171,12 @@ function Canvas() {
         output_names: undefined,
         required_input_names: undefined,
       };
+    } else {
+      task = tasks.find((tas) => tas.task_identifier === task_identifier);
+
+      if (!task) {
+        return;
+      }
     }
 
     const nodesIds = [...stateRF.nodeInternals.keys()];

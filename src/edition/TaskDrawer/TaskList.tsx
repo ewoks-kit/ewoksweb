@@ -7,8 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { useState } from 'react';
 import { useTasks } from '../../api/tasks';
-import AddNoteButton from './AddNoteButton';
-import AddSubworkflow from './AddSubworkflow';
+import GeneralTasksList from './GeneralTasksList';
 import TaskItem from './TaskItem';
 
 import styles from './TaskList.module.css';
@@ -40,20 +39,17 @@ function TaskList() {
                   <TaskItem
                     key={task.task_identifier}
                     task={task}
-                    onClick={() => setSelectTaskId(task.task_identifier)}
+                    onClick={() => {
+                      setSelectTaskId(task.task_identifier);
+                    }}
                     isSelected={task.task_identifier === selectedTaskId}
                   />
                 ))}
-              {category === 'General' && (
-                <>
-                  <AddNoteButton />
-                  <AddSubworkflow />
-                </>
-              )}
             </div>
           </AccordionDetails>
         </Accordion>
       ))}
+      <GeneralTasksList />
     </>
   );
 }
