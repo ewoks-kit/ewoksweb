@@ -2,9 +2,9 @@ import { fetchWorkflowsIds } from '../../api/workflows';
 import type {
   Condition,
   DataMapping,
-  Inputs,
-  EwoksRFNodeData,
   EwoksRFLinkData,
+  EwoksRFNodeData,
+  Inputs,
 } from '../../types';
 
 export async function getWorkflowIdsFromServer(): Promise<{

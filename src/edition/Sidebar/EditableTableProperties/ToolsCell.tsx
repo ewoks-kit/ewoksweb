@@ -1,5 +1,6 @@
 import { Button, TableCell } from '@material-ui/core';
 import { RemoveCircleOutline } from '@material-ui/icons';
+
 import { useStyles } from './EditableTable';
 
 interface Props {

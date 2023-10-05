@@ -1,5 +1,5 @@
 import type { Color } from '@material-ui/lab';
-import create from 'zustand';
+import { create } from 'zustand';
 
 interface State {
   open: boolean;

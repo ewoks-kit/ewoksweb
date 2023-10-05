@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -7,9 +6,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import type { PaperProps } from '@material-ui/core/Paper';
 import Paper from '@material-ui/core/Paper';
+import { useEffect, useState } from 'react';
 import Draggable from 'react-draggable';
-
 import ReactJson from 'react-json-view';
+
 import type { EditableTableRow } from '../types';
 
 function PaperComponent(props: PaperProps) {

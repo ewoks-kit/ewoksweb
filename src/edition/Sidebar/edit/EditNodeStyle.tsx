@@ -1,6 +1,7 @@
-import { useState } from 'react';
 import { Checkbox, FormControl } from '@material-ui/core';
 import type { ChangeEvent } from 'react';
+import { useState } from 'react';
+
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import sidebarStyle from '../sidebarStyle';

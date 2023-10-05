@@ -2,8 +2,8 @@ import type {
   EwoksRFNode,
   GraphEwoks,
   GraphNodes,
-  Task,
   OutputsInputsSub,
+  Task,
 } from '../types';
 
 // DOC: locate the task and add required+optional-inputs + outputs

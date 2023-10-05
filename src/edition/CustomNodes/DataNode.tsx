@@ -1,8 +1,9 @@
 import { memo } from 'react';
 import type { NodeProps } from 'reactflow';
-import Node from './Node';
-import { assertNodeDataDefined } from '../../utils/typeGuards';
+
 import useNodeDataStore from '../../store/useNodeDataStore';
+import { assertNodeDataDefined } from '../../utils/typeGuards';
+import Node from './Node';
 
 function DataNode(props: NodeProps) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(props.id));

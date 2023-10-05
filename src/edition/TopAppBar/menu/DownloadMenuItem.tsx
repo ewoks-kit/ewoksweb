@@ -1,6 +1,7 @@
-import useStore from '../../../store/useStore';
-import { useReactFlow } from 'reactflow';
 import { GetApp } from '@material-ui/icons';
+import { useReactFlow } from 'reactflow';
+
+import useStore from '../../../store/useStore';
 import { getEdgesData, getNodesData, prepareEwoksGraph } from '../../../utils';
 import ActionMenuItem from './ActionMenuItem';
 

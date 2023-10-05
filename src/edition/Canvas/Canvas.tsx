@@ -2,47 +2,47 @@ import type { DragEventHandler, MouseEvent } from 'react';
 import { useState } from 'react';
 import { useEffect, useRef } from 'react';
 import type {
-  Node,
-  Edge,
   Connection,
-  NodeChange,
+  Edge,
   EdgeChange,
+  Node,
+  NodeChange,
   XYPosition,
 } from 'reactflow';
 import { addEdge } from 'reactflow';
 import ReactFlow, {
+  applyEdgeChanges,
+  applyNodeChanges,
   Controls,
   useReactFlow,
-  applyNodeChanges,
-  applyEdgeChanges,
 } from 'reactflow';
-import bendingText from '../CustomEdges/BendingTextEdge';
-import multilineText from '../CustomEdges/MultilineTextEdge';
-import getAround from '../CustomEdges/GetAroundEdge';
-import GraphNode from '../CustomNodes/GraphNode';
-import NoteNode from '../CustomNodes/NoteNode';
-import DataNode from '../CustomNodes/DataNode';
-import type { EwoksRFNode, EwoksRFNodeData, Task } from 'types';
-import useStore from 'store/useStore';
+import { useStoreApi } from 'reactflow';
 import useSnackbarStore from 'store/useSnackbarStore';
+import useStore from 'store/useStore';
+import type { EwoksRFNode, EwoksRFNodeData, Task } from 'types';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
-import CanvasBackground from './CanvasBackground';
-import { addConnectionToGraph, retrieveTaskInfo, trimLabel } from './utils';
-import { useStoreApi } from 'reactflow';
-import useNodeDataStore from '../../store/useNodeDataStore';
+
+import { useTasks } from '../../api/tasks';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
+import useNodeDataStore from '../../store/useNodeDataStore';
 import { getEdgesData, getNodeData, getNodesData } from '../../utils';
 import {
   assertNodeDataDefined,
   assertNodeDefined,
 } from '../../utils/typeGuards';
-import FallbackMessage from './FallbackMessage';
+import bendingText from '../CustomEdges/BendingTextEdge';
+import getAround from '../CustomEdges/GetAroundEdge';
+import multilineText from '../CustomEdges/MultilineTextEdge';
+import DataNode from '../CustomNodes/DataNode';
 import GraphInOutNode from '../CustomNodes/GraphInOutNode';
+import GraphNode from '../CustomNodes/GraphNode';
+import NoteNode from '../CustomNodes/NoteNode';
 import AddSubworkflowDialog from '../TaskDrawer/AddSubworkflowDialog';
-import { useTasks } from '../../api/tasks';
-
 import styles from './Canvas.module.css';
+import CanvasBackground from './CanvasBackground';
+import FallbackMessage from './FallbackMessage';
+import { addConnectionToGraph, retrieveTaskInfo, trimLabel } from './utils';
 
 const edgeTypes = {
   bendingText,
@@ -332,6 +332,19 @@ function Canvas() {
     }
   };
 
+  const isValidConnection = (connection: Connection) => {
+    const { isValid, reason } = isValidLink(
+      connection,
+      getNodes(),
+      getEdges(),
+      getNodesData()
+    );
+    if (!isValid) {
+      showWarningMsg(reason);
+    }
+    return isValid;
+  };
+
   return (
     <>
       <AddSubworkflowDialog
@@ -340,12 +353,8 @@ function Canvas() {
         tasks={tasks}
         onClose={() => setSubworkflowEvent(undefined)}
       />
-      <div
-        className={styles.root}
-        onKeyDown={handleKeyDown}
-        role="button"
-        tabIndex={0}
-      >
+      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions*/}
+      <div className={styles.root} onKeyDown={handleKeyDown}>
         <FallbackMessage />
         <div className={styles.wrapper} ref={reactFlowWrapper}>
           <ReactFlow
@@ -366,6 +375,7 @@ function Canvas() {
             edgeTypes={edgeTypes}
             nodeTypes={nodeTypes}
             deleteKeyCode="Delete"
+            isValidConnection={isValidConnection}
           >
             <CanvasBackground />
             <Controls position="bottom-right" />

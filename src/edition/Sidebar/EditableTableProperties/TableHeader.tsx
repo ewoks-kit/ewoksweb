@@ -1,4 +1,5 @@
 import { TableCell, TableHead, TableRow } from '@material-ui/core';
+
 import { useStyles } from './EditableTable';
 
 interface Props {

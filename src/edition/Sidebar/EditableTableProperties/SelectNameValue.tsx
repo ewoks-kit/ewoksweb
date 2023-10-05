@@ -1,5 +1,6 @@
 import { FormControl, TextField, Typography } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
+
 import type { CustomTableCellProps } from '../../../types';
 
 function SelectNameValue(props: CustomTableCellProps) {

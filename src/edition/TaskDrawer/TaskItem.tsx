@@ -1,12 +1,12 @@
 import type { SvgIcon } from '@material-ui/core';
 import { Tooltip } from '@material-ui/core';
+
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import type { Task } from '../../types';
 import { getTaskName } from '../../utils';
 import TaskIcon from '../Sidebar/TaskIcon';
 import TaskButton from './TaskButton';
 import TaskButtonGroup from './TaskButtonGroup';
-
 import styles from './TaskList.module.css';
 
 interface Props {

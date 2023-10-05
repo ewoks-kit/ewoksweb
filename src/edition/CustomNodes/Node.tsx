@@ -1,16 +1,11 @@
+import Tooltip from '@material-ui/core/Tooltip';
 import { memo } from 'react';
 import { Handle, Position } from 'reactflow';
-import { contentStyle, style } from './nodeStyles';
-import Tooltip from '@material-ui/core/Tooltip';
-import isValidLink from '../../utils/IsValidLink';
 
-import useSnackbarStore from '../../store/useSnackbarStore';
-import type { Connection } from 'reactflow';
-import NodeIcon from './NodeIcon';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import { useReactFlow } from 'reactflow';
-import { getNodesData } from '../../utils';
+import NodeIcon from './NodeIcon';
 import NodeLabel from './NodeLabel';
+import { contentStyle, style } from './nodeStyles';
 
 interface Props {
   id: string;
@@ -34,23 +29,6 @@ function Node({
   comment,
   width = 100,
 }: Props) {
-  const { getNodes, getEdges } = useReactFlow();
-
-  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
-
-  const isValidConnection = (connection: Connection) => {
-    const { isValid, reason } = isValidLink(
-      connection,
-      getNodes(),
-      getEdges(),
-      getNodesData()
-    );
-    if (!isValid) {
-      showWarningMsg(reason);
-    }
-    return isValid;
-  };
-
   return (
     <div className="node-content" style={{ borderColor }}>
       <Tooltip
@@ -64,12 +42,11 @@ function Node({
             position={Position.Right}
             id="sr"
             style={{ ...contentStyle.handle, ...contentStyle.handleSource }}
-            isValidConnection={isValidConnection}
             isConnectable
           />
 
           {moreHandles && (
-            <div id="choice" role="button" tabIndex={0}>
+            <div id="choice">
               {/* TODO: break the handles */}
               <Handle
                 type="source"
@@ -82,7 +59,6 @@ function Node({
                   ...contentStyle.handleUpDown,
                 }}
                 isConnectable
-                isValidConnection={isValidConnection}
               />
               <Handle
                 type="source"
@@ -95,7 +71,6 @@ function Node({
                   ...contentStyle.handleUpDown,
                 }}
                 isConnectable
-                isValidConnection={isValidConnection}
               />
             </div>
           )}
@@ -120,7 +95,6 @@ function Node({
               ...contentStyle.handleTarget,
             }}
             isConnectable
-            isValidConnection={isValidConnection}
           />
 
           {moreHandles && (
@@ -135,7 +109,6 @@ function Node({
                   ...contentStyle.handleUpDown,
                 }}
                 isConnectable
-                isValidConnection={isValidConnection}
               />
               <Handle
                 type="target"
@@ -147,7 +120,6 @@ function Node({
                   ...contentStyle.handleUpDown,
                 }}
                 isConnectable
-                isValidConnection={isValidConnection}
               />
             </>
           )}

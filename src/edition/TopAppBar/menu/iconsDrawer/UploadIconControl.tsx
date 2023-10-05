@@ -2,10 +2,10 @@ import { Button } from '@material-ui/core';
 import { CloudUpload } from '@material-ui/icons';
 import type { ChangeEvent, SyntheticEvent } from 'react';
 import { useState } from 'react';
+
 import { postIcon, useInvalidateIcons } from '../../../../api/icons';
 import useSnackbarStore from '../../../../store/useSnackbarStore';
 import { textForError } from '../../../../utils';
-
 import styles from './IconsDrawer.module.css';
 
 function UploadIconControl() {

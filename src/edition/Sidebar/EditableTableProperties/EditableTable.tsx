@@ -2,22 +2,23 @@
   The table that is used to pass parameters for default-values, conditions and data-mapping.
   Its cells can change depending on the kind of input and the parent-component params.
 */
-import React, { useEffect } from 'react';
+import { TableCell } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
-import CustomTableCell from './CustomTableCell';
-import DraggableDialog from '../../../general/DraggableDialog';
+import type { ChangeEvent } from 'react';
+import React, { useEffect } from 'react';
 import useSnackbarStore from 'store/useSnackbarStore';
 import type { Condition, EditableTableRow, Inputs, TypeOfValues } from 'types';
-import type { ChangeEvent } from 'react';
-import { createData, getType } from './utils';
-import TableHeader from './TableHeader';
-import TypeSelectCell from './TypeSelect';
-import ToolsCell from './ToolsCell';
+
+import DraggableDialog from '../../../general/DraggableDialog';
 import AddRowButton from './AddRowButton';
-import { TableCell } from '@material-ui/core';
+import CustomTableCell from './CustomTableCell';
+import TableHeader from './TableHeader';
+import ToolsCell from './ToolsCell';
+import TypeSelectCell from './TypeSelect';
+import { createData, getType } from './utils';
 
 export const useStyles = makeStyles(() => ({
   root: {

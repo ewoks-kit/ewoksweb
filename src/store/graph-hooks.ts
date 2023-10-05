@@ -1,4 +1,4 @@
-import type { Node, Edge, ReactFlowState } from 'reactflow';
+import type { Edge, Node, ReactFlowState } from 'reactflow';
 import { useStore as useRFStore } from 'reactflow';
 import shallow from 'zustand/shallow';
 

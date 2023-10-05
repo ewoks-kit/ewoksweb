@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import {
   Button,
   Checkbox,
@@ -8,20 +7,21 @@ import {
   Select,
   Slider,
 } from '@material-ui/core';
+import type { ChangeEvent } from 'react';
+import { useEffect, useState } from 'react';
+import type { Edge } from 'reactflow';
+import { MarkerType } from 'reactflow';
+import { useReactFlow } from 'reactflow';
 
+import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import type { PropertyChangedEvent } from '../../../types';
-import sidebarStyle from '../sidebarStyle';
-import type { ChangeEvent } from 'react';
 import {
   assertEdgeDataDefined,
   isMarkerType,
   isString,
 } from '../../../utils/typeGuards';
-import type { Edge } from 'reactflow';
-import { MarkerType } from 'reactflow';
-import { useReactFlow } from 'reactflow';
-import useEdgeDataStore from '../../../store/useEdgeDataStore';
+import sidebarStyle from '../sidebarStyle';
 
 // DOC: Edit the link style
 export default function EditLinkStyle(element: Edge) {

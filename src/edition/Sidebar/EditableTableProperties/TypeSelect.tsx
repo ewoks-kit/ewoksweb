@@ -1,5 +1,6 @@
 import { FormControl, MenuItem, Select, TableCell } from '@material-ui/core';
 import type { ChangeEvent } from 'react';
+
 import type { PropertyChangedEvent } from '../../../types';
 import { INPUT_TYPES } from './utils';
 

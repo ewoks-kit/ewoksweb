@@ -1,6 +1,7 @@
-import create from 'zustand';
-import type { EwoksRFLink, EwoksRFLinkData } from '../types';
 import { merge } from 'lodash';
+import { create } from 'zustand';
+
+import type { EwoksRFLink, EwoksRFLinkData } from '../types';
 
 export interface EdgeDataState {
   edgesData: Map<string, EwoksRFLinkData>;

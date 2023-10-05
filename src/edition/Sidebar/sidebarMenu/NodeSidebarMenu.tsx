@@ -1,22 +1,23 @@
-import { useState } from 'react';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import type { EwoksRFNode } from '../../../types';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
+import { Delete, FileCopy, LibraryAdd } from '@material-ui/icons';
+import { useState } from 'react';
+import type { Node } from 'reactflow';
+import { useReactFlow } from 'reactflow';
+import { calcNewId } from 'utils/calcNewId';
+
+import { useTasks } from '../../../api/tasks';
+import TaskForm from '../../../general/forms/TaskForm';
+import { useNodesIds } from '../../../store/graph-hooks';
+import useNodeDataStore from '../../../store/useNodeDataStore';
 import useStore from '../../../store/useStore';
+import type { EwoksRFNode } from '../../../types';
+import { getNodeData } from '../../../utils';
 import {
   assertDefined,
   assertNodeDataDefined,
 } from '../../../utils/typeGuards';
-import { getNodeData } from '../../../utils';
-import { Delete, FileCopy, LibraryAdd } from '@material-ui/icons';
-import { useReactFlow } from 'reactflow';
-import { calcNewId } from 'utils/calcNewId';
-import { useNodesIds } from '../../../store/graph-hooks';
-import useNodeDataStore from '../../../store/useNodeDataStore';
-import type { Node } from 'reactflow';
-import TaskForm from '../../../general/forms/TaskForm';
-import { useTasks } from '../../../api/tasks';
 
 export default function NodeSidebarMenu(selectedElement: Node) {
   const rfInstance = useReactFlow();

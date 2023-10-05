@@ -8,13 +8,14 @@ import {
   DialogTitle,
   TextField,
 } from '@material-ui/core';
-import useSnackbarStore from '../../store/useSnackbarStore';
 import { useState } from 'react';
+
 import { discoverTasks } from '../../api/tasks';
-import commonStrings from '../../commonStrings.json';
-import { textForError } from '../../utils';
 import { useInvalidateTasks } from '../../api/tasks';
+import commonStrings from '../../commonStrings.json';
 import Spinner from '../../general/Spinner';
+import useSnackbarStore from '../../store/useSnackbarStore';
+import { textForError } from '../../utils';
 
 interface Props {
   open: boolean;

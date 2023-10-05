@@ -1,17 +1,17 @@
-import type { ChangeEvent } from 'react';
 import { Checkbox, IconButton } from '@material-ui/core';
-import DataMappingComponent from '../EditableTableProperties/DataMapping';
-import Conditions from '../EditableTableProperties/Conditions';
-import SidebarTooltip from '../SidebarTooltip';
-import EdgeLabelInput from './EdgeLabelInput';
-import { assertEdgeDataDefined } from '../../../utils/typeGuards';
-import useEdgeDataStore from '../../../store/useEdgeDataStore';
+import InfoIcon from '@material-ui/icons/Info';
+import type { ChangeEvent } from 'react';
 import type { Edge } from 'reactflow';
 
-import styles from './Details.module.css';
-import InputTextField from './InputTextField';
-import InfoIcon from '@material-ui/icons/Info';
+import useEdgeDataStore from '../../../store/useEdgeDataStore';
+import { assertEdgeDataDefined } from '../../../utils/typeGuards';
+import Conditions from '../EditableTableProperties/Conditions';
+import DataMappingComponent from '../EditableTableProperties/DataMapping';
 import sidebarStyle from '../sidebarStyle';
+import SidebarTooltip from '../SidebarTooltip';
+import styles from './Details.module.css';
+import EdgeLabelInput from './EdgeLabelInput';
+import InputTextField from './InputTextField';
 
 export default function LinkDetails(selectedElement: Edge) {
   const edgeData = useEdgeDataStore((state) =>

@@ -1,10 +1,11 @@
-import { assertDefined } from '../utils/typeGuards';
-import type { Icon } from '../types';
-import { client } from './client';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import path from 'path-browserify';
+
+import type { Icon } from '../types';
+import { assertDefined } from '../utils/typeGuards';
+import { client } from './client';
 import type { DeleteResponse, IconResponse, ListResponse } from './models';
 import { QueryKey } from './models';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 async function fetchIconIds() {
   const { data } = await client.get<ListResponse>(`/icons`);

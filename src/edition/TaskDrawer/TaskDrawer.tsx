@@ -1,12 +1,12 @@
-import AddIcon from '@material-ui/icons/Add';
 import { Fab } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import TaskList from './TaskList';
-import useTaskDrawerState from '../../store/taskDrawerState';
-import { useDrawerStyles } from './hooks';
 
-import styles from './TaskDrawer.module.css';
+import useTaskDrawerState from '../../store/taskDrawerState';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
+import { useDrawerStyles } from './hooks';
+import styles from './TaskDrawer.module.css';
+import TaskList from './TaskList';
 
 function OverflowDrawer() {
   const { open, setOpen } = useTaskDrawerState();

@@ -1,10 +1,10 @@
 import { FormControl, TextField } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
-import { assertEdgeDataDefined, isDefined } from '../../../utils/typeGuards';
 import type { Edge } from 'reactflow';
 import { useReactFlow } from 'reactflow';
-import useEdgeDataStore from '../../../store/useEdgeDataStore';
 
+import useEdgeDataStore from '../../../store/useEdgeDataStore';
+import { assertEdgeDataDefined, isDefined } from '../../../utils/typeGuards';
 import styles from './Details.module.css';
 import { conditionsToLabel, mappingToLabel } from './utils';
 

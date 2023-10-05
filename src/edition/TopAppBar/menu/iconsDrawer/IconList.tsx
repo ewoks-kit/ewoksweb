@@ -1,9 +1,9 @@
 import { Paper, Tooltip } from '@material-ui/core';
 import { useState } from 'react';
+
 import { useIcons } from '../../../../api/icons';
 import SuspenseBoundary from '../../../../suspense/SuspenseBoundary';
 import DeleteIconButton from './DeleteIconButton';
-
 import styles from './IconsDrawer.module.css';
 
 function IconList() {

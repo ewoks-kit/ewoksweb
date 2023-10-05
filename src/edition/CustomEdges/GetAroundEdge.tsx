@@ -1,5 +1,6 @@
 import type { EdgeProps } from 'reactflow';
 import { getBezierPath } from 'reactflow';
+
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 import { assertEdgeDataDefined } from '../../utils/typeGuards';
 import InteractionHelper from './InteractionHelper';
@@ -89,7 +90,7 @@ export default function GetAroundEdge({
   sourceY,
   targetX,
   targetY,
-  style = {},
+  style,
   label,
   markerEnd,
   interactionWidth,
@@ -129,7 +130,7 @@ export default function GetAroundEdge({
           // @ts-expect-error
           side={sourceX > targetX ? 'right' : 'left'}
           textAnchor="middle"
-          fill={style.stroke}
+          fill={style?.stroke}
         >
           {typeof label === 'string' &&
             label.split(',').map((mp, index) => (

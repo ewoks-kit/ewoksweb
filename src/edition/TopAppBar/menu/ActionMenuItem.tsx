@@ -1,8 +1,9 @@
-import { ListItemText, MenuItem } from '@material-ui/core';
 import type { SvgIcon } from '@material-ui/core';
-import ActionMenuIcon from './ActionMenuIcon';
-import { useActionMenuContext } from './ActionMenuContext';
+import { ListItemText, MenuItem } from '@material-ui/core';
 import type { PropsWithChildren } from 'react';
+
+import { useActionMenuContext } from './ActionMenuContext';
+import ActionMenuIcon from './ActionMenuIcon';
 
 interface Props {
   icon: typeof SvgIcon;

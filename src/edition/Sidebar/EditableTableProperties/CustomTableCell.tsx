@@ -1,10 +1,10 @@
+import { IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
+import { EditOutlined as EditIcon } from '@material-ui/icons';
+import type { CustomTableCellProps, EditableTableRow } from 'types';
 
 import TableCellInEditMode from './TableCellInEditMode';
-import type { CustomTableCellProps, EditableTableRow } from 'types';
-import { IconButton } from '@material-ui/core';
-import { EditOutlined as EditIcon } from '@material-ui/icons';
 
 function isRowContentInvalid(
   row: EditableTableRow,

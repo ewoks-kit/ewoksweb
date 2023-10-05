@@ -1,4 +1,5 @@
 import type { FallbackProps } from 'react-error-boundary';
+
 import styles from './WorkflowItemErrorFallback.module.css';
 
 function WorkflowItemErrorFallback(props: FallbackProps) {

@@ -1,3 +1,4 @@
+import { defaultLinkStyle } from '../edition/Canvas/utils';
 import type {
   Condition,
   EwoksRFLink,
@@ -5,12 +6,11 @@ import type {
   Task,
   UiPropsLinks,
 } from '../types';
+import { findLinkInputs, findLinkOutputs } from './calcTasksForLink';
+import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
-import { findLinkInputs, findLinkOutputs } from './calcTasksForLink';
 import { createDataMappingData, notUndefinedValue } from './utils';
-import { defaultLinkStyle } from '../edition/Canvas/utils';
-import { DEFAULT_LINK_VALUES } from './defaultValues';
 
 // DOC: from GraphEwoks get EwoksRFLinks
 // - tempGraph: the graph to transform its links

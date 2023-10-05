@@ -1,5 +1,5 @@
-import type { FallbackProps } from 'react-error-boundary';
 import axios from 'axios';
+import type { FallbackProps } from 'react-error-boundary';
 
 import styles from './MonitorPageFallback.module.css';
 

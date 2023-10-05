@@ -1,5 +1,4 @@
 import DiscoverTasksButton from './DiscoverTasksButton';
-
 import styles from './TaskList.module.css';
 
 function TaskListToolbar() {

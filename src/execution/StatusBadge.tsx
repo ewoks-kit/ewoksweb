@@ -3,6 +3,7 @@ import {
   CheckCircleOutline,
   QueryBuilderOutlined,
 } from '@material-ui/icons';
+
 import styles from './StatusBadge.module.css';
 
 interface Props {

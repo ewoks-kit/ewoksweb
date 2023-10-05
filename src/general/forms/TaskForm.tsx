@@ -13,19 +13,19 @@ import {
 import { Alert } from '@material-ui/lab';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import SuspenseBoundary from '../../suspense/SuspenseBoundary';
+
+import { useInvalidateTasks } from '../../api/tasks';
+import commonStrings from '../../commonStrings.json';
 import useSnackbarStore from '../../store/useSnackbarStore';
+import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import type { Task } from '../../types';
 import { textForError } from '../../utils';
-import { useInvalidateTasks } from '../../api/tasks';
+import FormField from './FormField';
 import IconDropdown from './IconDropdown';
 import type { TaskFields } from './models';
 import { TASK_TYPES } from './models';
-import commonStrings from '../../commonStrings.json';
-
 import styles from './TaskForm.module.css';
 import { submitTaskFormData } from './utils';
-import FormField from './FormField';
 
 interface Props {
   isOpen: boolean;
@@ -127,7 +127,6 @@ function TaskForm(props: Props) {
                   <InputLabel id="taskTypeInFormDialog">Task type</InputLabel>
                   <Select
                     labelId="taskTypeInFormDialog"
-                    // @ts-expect-error
                     onChange={onChange}
                     {...restField}
                   >

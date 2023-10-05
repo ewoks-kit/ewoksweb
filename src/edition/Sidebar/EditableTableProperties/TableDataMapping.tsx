@@ -1,17 +1,18 @@
 /*
   The table that is used to pass parameters for data-mapping.
 */
-import React from 'react';
+import { TableCell } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
-import CustomTableCell from './CustomTableCell';
+import React from 'react';
 import type { DataMapping, TypeOfValues } from 'types';
+
+import AddRowButton from './AddRowButton';
+import CustomTableCell from './CustomTableCell';
 import TableHeader from './TableHeader';
 import ToolsCell from './ToolsCell';
-import { TableCell } from '@material-ui/core';
-import AddRowButton from './AddRowButton';
 
 interface TableDataMappingProps {
   disable?: boolean;

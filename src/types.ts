@@ -1,9 +1,10 @@
+import type { ChangeEvent, CSSProperties } from 'react';
 import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
+import type { Node } from 'reactflow';
+
+import type { DisplayedWorkflowInfoSlice } from './store/displayedWorkflowInfo';
 import type { LoadedGraphsSlice } from './store/loadedGraphs';
 import type { RootWorkflowSlice } from './store/rootWorkflow';
-import type { ChangeEvent, CSSProperties } from 'react';
-import type { Node } from 'reactflow';
-import type { DisplayedWorkflowInfoSlice } from './store/displayedWorkflowInfo';
 
 export enum GraphFormAction {
   cloneGraph = 'cloneGraph',

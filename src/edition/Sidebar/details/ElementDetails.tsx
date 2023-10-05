@@ -1,8 +1,8 @@
+import type { SelectedElementRF } from '../../../types';
+import { isEdgeRF, isNodeRF } from '../../../utils/typeGuards';
+import GraphDetails from './GraphDetails';
 import LinkDetails from './LinkDetails';
 import NodeDetails from './NodeDetails';
-import GraphDetails from './GraphDetails';
-import { isEdgeRF, isNodeRF } from '../../../utils/typeGuards';
-import type { SelectedElementRF } from '../../../types';
 
 function ElementDetails({ selectedElement }: SelectedElementRF) {
   return (

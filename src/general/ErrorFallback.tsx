@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
 import { Button } from '@material-ui/core';
+import type { ReactNode } from 'react';
 import type { FallbackProps } from 'react-error-boundary';
 
 function prepareReport(message: string): string {

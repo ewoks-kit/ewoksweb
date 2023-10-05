@@ -1,4 +1,3 @@
-import { isString } from './typeGuards';
 import type {
   EwoksRFLink,
   EwoksRFNode,
@@ -6,6 +5,8 @@ import type {
   GraphNodes,
   GraphRF,
 } from '../types';
+import { DEFAULT_LINK_VALUES } from './defaultValues';
+import { isString } from './typeGuards';
 import {
   calcConditionName,
   calcConditionValue,
@@ -13,7 +14,6 @@ import {
   notUndefinedValue,
   propIsEmpty,
 } from './utils';
-import { DEFAULT_LINK_VALUES } from './defaultValues';
 
 // DOC: Calculate the ewoks input_nodes and output_nodes within the graph
 // from the nodes of the graphRF model with types graphInput, graphOutput

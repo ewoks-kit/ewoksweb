@@ -1,22 +1,23 @@
-import { useState } from 'react';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import GraphFormDialog from '../../../general/forms/GraphFormDialog';
-import useStore from '../../../store/useStore';
-import useSnackbarStore from '../../../store/useSnackbarStore';
-import { GraphFormAction } from '../../../types';
 import { Delete as DeleteIcon } from '@material-ui/icons';
-import ConfirmDialog from '../../../general/ConfirmDialog';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { deleteWorkflow } from 'api/workflows';
 import commonStrings from 'commonStrings.json';
+import { useState } from 'react';
+import { useReactFlow } from 'reactflow';
+
+import { useTasks } from '../../../api/tasks';
+import ConfirmDialog from '../../../general/ConfirmDialog';
+import GraphFormDialog from '../../../general/forms/GraphFormDialog';
+import useSnackbarStore from '../../../store/useSnackbarStore';
+import useStore from '../../../store/useStore';
+import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
+import { GraphFormAction } from '../../../types';
 import { textForError } from '../../../utils';
 import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';
-import { useReactFlow } from 'reactflow';
-import { useTasks } from '../../../api/tasks';
-import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 
 export default function WorkflowSidebarMenu() {
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
