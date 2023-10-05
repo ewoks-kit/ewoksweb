@@ -1,3 +1,4 @@
+import type { SvgIcon } from '@material-ui/core';
 import { Tooltip } from '@material-ui/core';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import type { Task } from '../../types';
@@ -10,32 +11,48 @@ import styles from './TaskList.module.css';
 
 interface Props {
   task: Task;
-  isSelected?: boolean;
-  onClick?: () => void;
+  selectedTaskId: string | undefined;
+  onTaskSelection: (id: string | undefined) => void;
+  tooltip?: string;
+  customIcon?: typeof SvgIcon;
 }
 
 function TaskItem(props: Props) {
-  const { task, isSelected, onClick } = props;
+  const {
+    task,
+    selectedTaskId,
+    onTaskSelection,
+    tooltip,
+    customIcon: CustomIcon,
+  } = props;
   const { task_identifier, icon, task_type, category } = task;
 
-  if (!task_identifier) {
-    return null;
-  }
+  const isSelected = selectedTaskId === task.task_identifier;
+  const isEditable = category !== 'General';
 
   return (
-    <Tooltip title={task_identifier} arrow>
+    <Tooltip title={tooltip || task_identifier} arrow>
       <div className={styles.item} data-selected={isSelected || undefined}>
         <TaskButton
-          taskInfo={{ task_type, task_identifier, icon, category }}
-          label={getTaskName(task)}
-          onClick={onClick}
-          icon={() => (
-            <SuspenseBoundary>
-              <TaskIcon name={icon} alt={task_identifier} />
-            </SuspenseBoundary>
-          )}
+          taskInfo={{
+            task_type,
+            task_identifier,
+            category,
+            icon,
+          }}
+          label={getTaskName(task.task_identifier)}
+          onClick={() => onTaskSelection(task.task_identifier)}
+          icon={() =>
+            CustomIcon ? (
+              <CustomIcon fontSize="large" />
+            ) : (
+              <SuspenseBoundary>
+                <TaskIcon name={icon} />
+              </SuspenseBoundary>
+            )
+          }
         />
-        {isSelected && <TaskButtonGroup task={task} />}
+        {isEditable && isSelected && <TaskButtonGroup task={task} />}
       </div>
     </Tooltip>
   );

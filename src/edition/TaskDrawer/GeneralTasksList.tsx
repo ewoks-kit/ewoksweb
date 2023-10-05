@@ -4,37 +4,21 @@ import {
   AccordionSummary,
 } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import { DynamicFeed, Textsms } from '@material-ui/icons';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import type { Task } from '../../types';
-import AddNoteButton from './AddNoteButton';
-import AddSubworkflow from './AddSubworkflow';
 import TaskItem from './TaskItem';
 import styles from './TaskList.module.css';
 
-const generalTasks: Task[] = [
-  {
-    icon: 'graphInput.svg',
-    task_type: 'graphInput',
-    task_identifier: 'graphInput',
-    category: 'General',
-  },
-  {
-    icon: 'graphOutput.svg',
-    task_type: 'graphOutput',
-    task_identifier: 'graphOutput',
-    category: 'General',
-  },
-  {
-    category: 'General',
-    task_identifier: 'taskSkeleton',
-    task_type: 'ppfmethod',
-    icon: 'orange2.png',
-  },
-];
+interface Props {
+  selectedTaskId: string | undefined;
+  onTaskSelection: (id: string | undefined) => void;
+}
 
-function GeneralTasksList() {
+function GeneralTasksList(props: Props) {
+  const { selectedTaskId, onTaskSelection } = props;
+
   return (
-    <Accordion className="add-nodes-accordion">
+    <Accordion>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"
@@ -43,12 +27,57 @@ function GeneralTasksList() {
       </AccordionSummary>
       <AccordionDetails>
         <div className={styles.itemContainer}>
-          {generalTasks.map((task) => (
-            <TaskItem key={task.task_identifier} task={task} />
-          ))}
-
-          <AddNoteButton />
-          <AddSubworkflow />
+          <TaskItem
+            task={{
+              task_type: 'graphInput',
+              task_identifier: 'graphInput',
+              icon: 'graphInput.svg',
+              category: 'General',
+            }}
+            selectedTaskId={selectedTaskId}
+            onTaskSelection={onTaskSelection}
+          />
+          <TaskItem
+            task={{
+              task_type: 'graphOutput',
+              task_identifier: 'graphOutput',
+              icon: 'graphOutput.svg',
+              category: 'General',
+            }}
+            selectedTaskId={selectedTaskId}
+            onTaskSelection={onTaskSelection}
+          />
+          <TaskItem
+            task={{
+              task_type: 'ppfmethod',
+              task_identifier: 'taskSkeleton',
+              category: 'General',
+            }}
+            selectedTaskId={selectedTaskId}
+            onTaskSelection={onTaskSelection}
+          />
+          <TaskItem
+            task={{
+              task_type: 'note',
+              task_identifier: 'note',
+              category: 'General',
+            }}
+            selectedTaskId={selectedTaskId}
+            onTaskSelection={onTaskSelection}
+            tooltip="Drag to the canvas to add a note node"
+            customIcon={Textsms}
+          />
+          <TaskItem
+            task={{
+              task_type: 'subworkflow',
+              task_identifier: 'subworkflow',
+              category: 'General',
+            }}
+            selectedTaskId={selectedTaskId}
+            onTaskSelection={onTaskSelection}
+            tooltip="Drag to the canvas to add a subworkflow node"
+            customIcon={DynamicFeed}
+          />
         </div>
       </AccordionDetails>
     </Accordion>
