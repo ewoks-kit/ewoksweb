@@ -1,0 +1,9 @@
+.root {
+  flex: 1;
+  display: flex;
+}
+
+.wrapper {
+  flex: 1;
+  background-color: rgb(233, 235, 247);
+}
