@@ -39,10 +39,10 @@
     "normalize.css": "^8.0.1",
     "path-browserify": "1.0.1",
     "react": "17.0.2",
-    "react-app-polyfill": "2.0.0",
+    "react-app-polyfill": "3.0.0",
     "react-dom": "17.0.2",
     "react-draggable": "4.4.6",
-    "react-error-boundary": "3.1.4",
+    "react-error-boundary": "4.0.11",
     "react-hook-form": "7.47.0",
     "react-json-view": "latest",
     "react-reflex": "4.1.0",
@@ -51,7 +51,7 @@
     "react-timeago": "7.2.0",
     "reactflow": "11.9.2",
     "socket.io-client": "4.7.2",
-    "zustand": "4.4.2"
+    "zustand": "4.4.3"
   },
   "devDependencies": {
     "@testing-library/cypress": "10.0.1",

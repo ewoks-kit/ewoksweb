@@ -17,7 +17,7 @@ import { calcEwoksGraphProp } from './utils/CalcGraphInputsOutputs';
 import { calcNoteNodes } from './utils/calcNoteNodes';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
-import { isEwoksServerErrorResponse } from './utils/typeGuards';
+import { hasMessage, isEwoksServerErrorResponse } from './utils/typeGuards';
 import { propIsEmpty } from './utils/utils';
 
 export const DEFAULT_ICON: Icon = { name: 'orange3.png', data_url: orange3 };
@@ -104,12 +104,7 @@ export function textForError(error: unknown, alternative: string): string {
     return error.response.data.message;
   }
 
-  if (
-    error &&
-    typeof error === 'object' &&
-    'message' in error &&
-    typeof error.message === 'string'
-  ) {
+  if (hasMessage(error)) {
     return error.message;
   }
 

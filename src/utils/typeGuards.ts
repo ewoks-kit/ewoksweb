@@ -142,3 +142,16 @@ export function assertTaskInfo(
     assertStr(taskInfo.icon);
   }
 }
+
+interface ObjectWithMessage {
+  message: string;
+}
+
+export function hasMessage(error: unknown): error is ObjectWithMessage {
+  return (
+    !!error &&
+    typeof error === 'object' &&
+    'message' in error &&
+    typeof error.message === 'string'
+  );
+}
