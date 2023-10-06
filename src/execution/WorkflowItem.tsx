@@ -36,7 +36,7 @@ function WorkflowItem(props: Props) {
   const id = startWorkflowEvent?.workflow_id;
 
   return (
-    <div className={styles.item} role="listitem" aria-label={id}>
+    <li className={styles.item} aria-label={id}>
       <div className={styles.header}>
         <div>
           <h3 className={styles.title}>{id || idFallback}</h3>
@@ -58,7 +58,7 @@ function WorkflowItem(props: Props) {
         )}
         {id && <RerunButton id={id} />}
       </div>
-    </div>
+    </li>
   );
 }
 

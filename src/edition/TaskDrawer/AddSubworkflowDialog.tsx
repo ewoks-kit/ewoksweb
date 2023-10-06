@@ -76,8 +76,8 @@ export default function AddSubworkflowDialog(props: Props) {
       <Dialog maxWidth="xl" open={open} onClose={handleClose}>
         <DialogTitle>Add subworkflow</DialogTitle>
         <DialogContent>
-          <List component="div" role="list">
-            <ListItem divider role="listitem">
+          <List>
+            <ListItem divider>
               <ListItemText primary="From Server" />
               <SuspenseBoundary>
                 <WorkflowDropdown
@@ -94,7 +94,6 @@ export default function AddSubworkflowDialog(props: Props) {
               onClick={() => {
                 fromDiskInputRef.current?.click();
               }}
-              role="listitem"
             >
               <ListItemText primary="From Disk" />
             </ListItem>

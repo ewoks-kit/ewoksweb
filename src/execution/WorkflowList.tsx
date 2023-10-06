@@ -26,7 +26,7 @@ function WorkflowList(props: Props) {
   }
 
   return (
-    <div role="list">
+    <ul className={styles.list}>
       {jobs
         .sort(
           (a, b) =>
@@ -40,7 +40,7 @@ function WorkflowList(props: Props) {
             <WorkflowItem events={events} />
           </ErrorBoundary>
         ))}
-    </div>
+    </ul>
   );
 }
 

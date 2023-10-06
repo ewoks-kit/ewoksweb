@@ -6,14 +6,14 @@ function WorkflowItemErrorFallback(props: FallbackProps) {
   const { error } = props;
 
   return (
-    <div className={styles.item} role="listitem">
+    <li className={styles.item}>
       <h3>Job cannot be displayed!</h3>
       <p className={styles.error}>Error: {error.message}</p>
       <span>
         Check that the ewoks packages are up-to-date and/or if the event
         database is corrupted.
       </span>
-    </div>
+    </li>
   );
 }
 
