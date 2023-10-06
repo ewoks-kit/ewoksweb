@@ -40,9 +40,19 @@ it('leaves the original JSON untouched when saving on the server', () => {
   }).type('workflow2');
   cy.findByRole('button', { name: 'Save workflow' }).click();
 
+  cy.findByRole('alert', { hidden: true }).should(
+    'contain.text',
+    'Graph saved successfully',
+  );
+
   cy.readFile('cypress/fixtures/workflow2.json').then((originalJson) => {
     cy.readFile(
       'pysrc/ewoksweb/tests/resources/workflows/workflow2.json',
     ).should('deep.equal', originalJson);
   });
+
+  // Clean-up by deleting the saved workflow
+  cy.findByRole('button', { name: 'Open edit actions menu' }).click();
+  cy.findByRole('menuitem', { name: 'Delete Workflow' }).click();
+  cy.findByRole('button', { name: 'Yes' }).click();
 });
