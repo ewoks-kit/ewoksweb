@@ -24,7 +24,7 @@ function TaskList() {
       <TaskListToolbar />
 
       {[...new Set(tasks.map((m) => m.category)).values()].map((category) => (
-        <Accordion key={category} className="add-nodes-accordion">
+        <Accordion key={category}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
@@ -39,17 +39,18 @@ function TaskList() {
                   <TaskItem
                     key={task.task_identifier}
                     task={task}
-                    onClick={() => {
-                      setSelectTaskId(task.task_identifier);
-                    }}
-                    isSelected={task.task_identifier === selectedTaskId}
+                    selectedTaskId={selectedTaskId}
+                    onTaskSelection={setSelectTaskId}
                   />
                 ))}
             </div>
           </AccordionDetails>
         </Accordion>
       ))}
-      <GeneralTasksList />
+      <GeneralTasksList
+        selectedTaskId={selectedTaskId}
+        onTaskSelection={setSelectTaskId}
+      />
     </>
   );
 }

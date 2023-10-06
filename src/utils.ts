@@ -4,7 +4,6 @@ import type {
   GraphDetails,
   GraphEwoks,
   Icon,
-  Task,
 } from './types';
 import { calcEwoksGraphProp } from './utils/CalcGraphInputsOutputs';
 import { propIsEmpty } from './utils/utils';
@@ -132,9 +131,7 @@ export function getEdgeData(id: string): EwoksRFLinkData | undefined {
   return useEdgeDataStore.getState().edgesData.get(id);
 }
 
-export function getTaskName(task: Task): string {
-  const { task_identifier } = task;
-
+export function getTaskName(task_identifier: string): string {
   const task_members = task_identifier.split('.');
 
   if (task_members.length === 0) {
