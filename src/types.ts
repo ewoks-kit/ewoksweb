@@ -104,7 +104,8 @@ export type TaskType =
   | 'class'
   | 'note'
   | 'script'
-  | 'subworkflow';
+  | 'subworkflow'
+  | 'generated';
 
 export interface Task {
   task_type: TaskType;
@@ -298,7 +299,7 @@ export interface CustomTableCellProps {
   onChange(
     e: { target: { name: string; value: string | number } },
     row: EditableTableRow,
-    index: number,
+    index: number
   ): void;
 }
 
