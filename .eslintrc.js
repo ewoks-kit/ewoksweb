@@ -41,7 +41,6 @@ module.exports = createConfig({
       ...dependencies,
       rules: {
         'react/jsx-no-constructed-context-values': 'off', // too strict
-        'jsx-a11y/prefer-tag-over-role': 'off', // To be fixed
       },
     }),
     createTypeScriptOverride({
