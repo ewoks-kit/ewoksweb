@@ -4,7 +4,7 @@ beforeEach(() => {
   cy.waitForStableDOM();
   cy.findAllByRole('button', { name: 'ewoksweb' })
     .filter('.react-flow__node')
-    .as('node')
+    .as('node', { type: 'static' })
     .click();
 });
 

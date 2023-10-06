@@ -1,4 +1,4 @@
-before(() => {
+beforeEach(() => {
   cy.loadApp();
 
   cy.get('.react-flow').contains('if you do then...').parent().click();
@@ -60,7 +60,7 @@ it('changes links animated property to true and is shown on the canvas', () => {
 
 it('changes links arrowHead property to arrowclosed and is shown on the canvas', () => {
   cy.get('.react-flow')
-    .contains('if you do then...Always and forever...')
+    .contains('if you do then...')
     .parent()
     .siblings()
     .should('have.attr', 'marker-end', 'url(#)');
@@ -69,7 +69,7 @@ it('changes links arrowHead property to arrowclosed and is shown on the canvas',
   cy.contains('arrowclosed').click({ force: true });
 
   cy.get('.react-flow')
-    .contains('if you do then...Always and forever...')
+    .contains('if you do then...')
     .parent()
     .siblings()
     .should('have.attr', 'marker-end', 'url(#1__type=arrowclosed)');

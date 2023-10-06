@@ -1,4 +1,4 @@
-before(() => {
+beforeEach(() => {
   cy.loadAppWithoutGraph();
 });
 
