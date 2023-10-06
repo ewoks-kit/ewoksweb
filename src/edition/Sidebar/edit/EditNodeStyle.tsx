@@ -51,7 +51,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
 
   function handleNodeWidthChange(
     _event: ChangeEvent<unknown>,
-    value: number | number[]
+    value: number | number[],
   ) {
     if (typeof value === 'number') {
       mergeNodeData(nodeId, {
@@ -77,11 +77,11 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   }
 
   const [showBorderColor, setShowBorderColor] = useState(
-    !!nodeData.ui_props.colorBorder
+    !!nodeData.ui_props.colorBorder,
   );
 
   const isRegularNode = !['graphInput', 'graphOutput', 'note'].includes(
-    nodeData.task_props.task_type
+    nodeData.task_props.task_type,
   );
 
   return (

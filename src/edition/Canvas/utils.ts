@@ -28,7 +28,7 @@ export const defaultLinkStyle = {
 
 export function addConnectionToGraph(
   connection: Connection,
-  nodesData: Map<string, EwoksRFNodeData>
+  nodesData: Map<string, EwoksRFNodeData>,
 ): EwoksRFLink | undefined {
   const { source, target, sourceHandle, targetHandle } = connection;
 
@@ -58,7 +58,7 @@ export function addConnectionToGraph(
       links_input_names: sourceTaskData.task_props.output_names,
       map_all_data:
         ['ppfmethod', 'ppfport'].includes(
-          sourceTaskData.task_props.task_type
+          sourceTaskData.task_props.task_type,
         ) ||
         ['ppfmethod', 'ppfport'].includes(targetTaskData.task_props.task_type),
       ...(sourceTaskData.task_props.task_type === 'graph' &&
@@ -87,7 +87,7 @@ export function attachTaskInfo(dataTransfer: DataTransfer, taskInfo: TaskInfo) {
 
 export function retrieveTaskInfo(
   dataTransfer: DataTransfer,
-  onError?: () => void
+  onError?: () => void,
 ): TaskInfo | undefined {
   try {
     const taskInfo = JSON.parse(dataTransfer.getData(DATA_TRANSFER_TASK_TYPE));

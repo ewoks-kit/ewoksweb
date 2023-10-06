@@ -26,7 +26,7 @@ export function useSelectedElement(): Node | Edge | undefined {
 
 const nodeEdgeSelectedSelector = (state: ReactFlowState) => {
   const nodeSelected = [...state.nodeInternals.values()].find(
-    (node) => node.selected
+    (node) => node.selected,
   );
   if (nodeSelected) {
     return nodeSelected;

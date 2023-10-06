@@ -10,7 +10,7 @@ import {
 // the graph from the output_nodes
 export function outNodesLinks(
   outputNodes: GraphNodes[] | undefined,
-  nodes: EwoksNode[]
+  nodes: EwoksNode[],
 ): { nodes: EwoksNode[]; links: EwoksLink[] } {
   const outputs: { nodes: EwoksNode[]; links: EwoksLink[] } = {
     nodes: [],

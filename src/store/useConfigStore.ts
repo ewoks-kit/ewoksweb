@@ -18,8 +18,8 @@ const useConfigStore = create<ConfigState>()(
     {
       name: 'ewoksweb:config',
       version: 1,
-    }
-  )
+    },
+  ),
 );
 
 export default useConfigStore;

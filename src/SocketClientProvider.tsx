@@ -32,7 +32,7 @@ function SocketClientProvider(props: PropsWithChildren<Props>) {
         (oldJobs = new Map<string, EwoksJob>()) => {
           const job = oldJobs.get(e.job_id) || [];
           return new Map(oldJobs).set(e.job_id, [...job, e]);
-        }
+        },
       );
     });
 

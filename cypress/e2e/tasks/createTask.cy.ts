@@ -51,10 +51,10 @@ describe('new Task form', () => {
     cy.findByRole('textbox', { name: 'Category' }).type('Cypress_test');
 
     cy.findByRole('textbox', { name: 'Required inputs' }).type(
-      'arg0, arg1, arg2'
+      'arg0, arg1, arg2',
     );
     cy.findByRole('textbox', { name: 'Optional inputs' }).type(
-      'opt_arg0, opt_arg1'
+      'opt_arg0, opt_arg1',
     );
     cy.findByRole('textbox', { name: 'Outputs' }).type('results');
 

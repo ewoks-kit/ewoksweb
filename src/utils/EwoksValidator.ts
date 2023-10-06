@@ -41,14 +41,14 @@ export function validateEwoksGraph(graph: GraphEwoks) {
       'graph',
       'nodes',
       'links',
-    ])
+    ]),
   );
   result.push(
     includes(graph.graph, `graph.graph: ${graph.graph.id}`, [
       'id',
       'input_nodes',
       'output_nodes',
-    ])
+    ]),
   );
   result.push(
     graph.nodes.forEach((nod) =>
@@ -57,14 +57,14 @@ export function validateEwoksGraph(graph: GraphEwoks) {
         'task_type',
         'task_identifier',
         'uiProps',
-      ])
-    )
+      ]),
+    ),
   );
   // not uiProps position warn
   result.push(
     graph.links.forEach((link) =>
-      includes(link, `Link from: ${link.source}`, ['source', 'target'])
-    )
+      includes(link, `Link from: ${link.source}`, ['source', 'target']),
+    ),
   );
 
   // type of some properties

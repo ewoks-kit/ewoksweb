@@ -18,7 +18,7 @@ export async function loadSubworkflow(
   nodes: Node[],
   links: Edge[],
   position: XYPosition,
-  tasks: Task[]
+  tasks: Task[],
 ): Promise<{ nodeWithoutData: Node; data: EwoksRFNodeData }> {
   const { loadedGraphs, addLoadedGraph } = useStore.getState();
 

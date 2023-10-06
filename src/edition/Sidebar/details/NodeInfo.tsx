@@ -13,7 +13,7 @@ interface Props {
     propKeyValue: {
       task_identifier?: string;
     },
-    nodeData: EwoksRFNodeData
+    nodeData: EwoksRFNodeData,
   ) => void;
 }
 
@@ -21,7 +21,7 @@ function NodeInfo(props: Props) {
   const { nodeId, nodeData, onPropChange } = props;
 
   const isEditable = ['ppfmethod', 'method', 'script'].includes(
-    nodeData.task_props.task_type
+    nodeData.task_props.task_type,
   );
 
   return (

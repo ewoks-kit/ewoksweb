@@ -9,7 +9,7 @@ import SuspenseBoundary from './suspense/SuspenseBoundary';
 function MonitorRoute() {
   const setWorkflowToRestoreId = useWorkflowToRestoreId((state) => state.setId);
   const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
+    (state) => state.displayedWorkflowInfo,
   );
 
   useEffect(() => {

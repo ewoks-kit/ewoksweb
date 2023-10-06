@@ -7,7 +7,7 @@ export default function isValidLink(
   nodes: EwoksRFNode[],
   graphLinks: Edge[],
   nodesData?: Map<string, EwoksRFNodeData>,
-  oldEdge?: Edge
+  oldEdge?: Edge,
 ): { isValid: boolean; reason: string } {
   let isValid = true;
   let reason = '';
@@ -101,7 +101,8 @@ export default function isValidLink(
       target.type !== 'graph' &&
       links.some(
         (link) =>
-          link.source === connection.source && link.target === connection.target
+          link.source === connection.source &&
+          link.target === connection.target,
       )) ||
     (source.type === 'graph' &&
       target.type !== 'graph' &&
@@ -111,7 +112,7 @@ export default function isValidLink(
           link.target === connection.target &&
           (link.sourceHandle?.slice(0, -5) === connection.sourceHandle ||
             link.sourceHandle === connection.sourceHandle?.slice(0, -5) ||
-            link.sourceHandle === connection.sourceHandle)
+            link.sourceHandle === connection.sourceHandle),
       )) ||
     (source.type !== 'graph' &&
       target.type === 'graph' &&
@@ -121,7 +122,7 @@ export default function isValidLink(
           link.target === connection.target &&
           (link.targetHandle?.slice(0, -6) === connection.targetHandle ||
             link.targetHandle === connection.targetHandle?.slice(0, -6) ||
-            link.targetHandle === connection.targetHandle)
+            link.targetHandle === connection.targetHandle),
       )) ||
     (source.type === 'graph' &&
       target.type === 'graph' &&
@@ -134,7 +135,7 @@ export default function isValidLink(
             link.targetHandle === connection.targetHandle) &&
           (link.sourceHandle?.slice(0, -5) === connection.sourceHandle ||
             link.sourceHandle === connection.sourceHandle?.slice(0, -5) ||
-            link.sourceHandle === connection.sourceHandle)
+            link.sourceHandle === connection.sourceHandle),
       ))
   ) {
     isValid = false;

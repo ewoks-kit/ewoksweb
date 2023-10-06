@@ -15,7 +15,7 @@ import InputTextField from './InputTextField';
 
 export default function LinkDetails(selectedElement: Edge) {
   const edgeData = useEdgeDataStore((state) =>
-    state.edgesData.get(selectedElement.id)
+    state.edgesData.get(selectedElement.id),
   );
 
   assertEdgeDataDefined(edgeData, selectedElement.id);
@@ -27,13 +27,13 @@ export default function LinkDetails(selectedElement: Edge) {
   };
 
   const handleChangeShowDataMapping = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     mergeEdgeData(selectedElement.id, { map_all_data: event.target.checked });
   };
 
   const handleChangeShowConditions = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     mergeEdgeData(selectedElement.id, { on_error: event.target.checked });
   };

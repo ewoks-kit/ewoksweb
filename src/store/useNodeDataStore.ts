@@ -26,7 +26,7 @@ const useNodeDataStore = create<NodeDataState>((set) => ({
       const newData: EwoksRFNodeData = merge(
         {},
         nodesData.get(nodeId),
-        nodeData
+        nodeData,
       );
 
       return {

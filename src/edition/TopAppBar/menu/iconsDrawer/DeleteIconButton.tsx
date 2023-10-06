@@ -27,7 +27,7 @@ function DeleteIconButton(props: Props) {
 
     if (tasks.some((task) => task.icon === iconName)) {
       showWarningMsg(
-        `${iconName} cannot be deleted since it is used in one or more Tasks!`
+        `${iconName} cannot be deleted since it is used in one or more Tasks!`,
       );
       return;
     }

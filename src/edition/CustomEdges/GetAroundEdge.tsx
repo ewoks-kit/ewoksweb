@@ -48,7 +48,7 @@ function getSmoothStepPathC({
       ? bottomRightCorner(
           sourceX + getAroundProps.x,
           cY + getAroundProps.y,
-          cornerSize
+          cornerSize,
         )
       : topRightCorner(sourceX + getAroundProps.x, cY + 120, cornerSize);
 
@@ -57,12 +57,12 @@ function getSmoothStepPathC({
       ? leftTopCorner(
           targetX - getAroundProps.x,
           cY + getAroundProps.y,
-          cornerSize
+          cornerSize,
         )
       : leftBottomCorner(
           targetX - getAroundProps.x,
           cY + getAroundProps.y,
-          cornerSize
+          cornerSize,
         );
 
   if (sourceY >= targetY) {
@@ -70,12 +70,12 @@ function getSmoothStepPathC({
     const firstStop = bottomRightCorner(
       sourceX + getAroundProps.x,
       sourceY + getAroundProps.y,
-      cornerSize
+      cornerSize,
     );
     const secondStop = leftBottomCorner(
       cornerX - getAroundProps.x,
       sourceY + getAroundProps.y,
-      cornerSize
+      cornerSize,
     );
 
     return `M ${sourceX},${sourceY}${firstStop}${secondStop}L ${targetX},${targetY}`;

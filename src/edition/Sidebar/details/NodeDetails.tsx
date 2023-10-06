@@ -20,7 +20,7 @@ import NodeLabelComment from './NodeLabelComment';
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(selectedElement: Node) {
   const nodeData = useNodeDataStore((state) =>
-    state.nodesData.get(selectedElement.id)
+    state.nodesData.get(selectedElement.id),
   );
   assertNodeDataDefined(nodeData, selectedElement.id);
 
@@ -35,7 +35,7 @@ export default function NodeDetails(selectedElement: Node) {
     propKeyValue: {
       task_identifier?: string;
     },
-    nodeDataL: EwoksRFNodeData
+    nodeDataL: EwoksRFNodeData,
   ) {
     // DOC: if the task_identifier changes (ppfmethod, ppfport, script case) then the id
     // of the node needs to change for a coherent json. Links to/from this node also change!
@@ -110,7 +110,7 @@ export default function NodeDetails(selectedElement: Node) {
       <NodeLabelComment showComment selectedElement={selectedElement} />
       {selectedElement.type &&
         !['graphInput', 'graphOutput', 'note'].includes(
-          selectedElement.type
+          selectedElement.type,
         ) && (
           <>
             <DefaultInputs {...selectedElement} />

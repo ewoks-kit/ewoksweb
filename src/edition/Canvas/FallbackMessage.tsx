@@ -16,7 +16,7 @@ const useStyles = makeStyles(() =>
       textAlign: 'center',
       pointerEvents: 'none', // Let RF events go through the message
     },
-  })
+  }),
 );
 
 export default function FallbackMessage() {

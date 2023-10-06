@@ -1,6 +1,8 @@
 import { Button } from '@material-ui/core';
-import type { ReactNode } from 'react';
+import type { PropsWithChildren } from 'react';
 import type { FallbackProps } from 'react-error-boundary';
+
+import { hasMessage } from '../utils/typeGuards';
 
 function prepareReport(message: string): string {
   return `Hi,
@@ -18,18 +20,15 @@ function prepareReport(message: string): string {
   << Name >>`;
 }
 
-interface Props extends FallbackProps {
-  // path?: string;
-  children?: ReactNode;
-}
-
-function ErrorFallback(props: Props) {
+function ErrorFallback(props: PropsWithChildren<FallbackProps>) {
   const { error, resetErrorBoundary, children } = props;
+
+  const message = hasMessage(error) ? error.message : 'Unknown error';
 
   return (
     <div role="alert" style={{ padding: '1.5rem' }}>
       <p>Something went wrong:</p>
-      <pre style={{ color: 'var(--bs-danger)' }}>{error.message}</pre>
+      <pre style={{ color: 'var(--bs-danger)' }}>{message}</pre>
       <p>
         <Button
           style={{ margin: '4px' }}
@@ -40,28 +39,17 @@ function ErrorFallback(props: Props) {
           Try again
         </Button>{' '}
         <Button
-          // startIcon={<BookmarksIcon />}
           style={{ margin: '4px' }}
           variant="outlined"
           color="primary"
           target="_blank"
           href={`mailto:data-analysis@esrf.fr?subject=Error%20report&body=${encodeURIComponent(
-            prepareReport(error.message)
+            prepareReport(message),
           )}`}
-          // onClick={sendReport}
           size="small"
         >
           Report issue
         </Button>
-        {/* <Button
-          variant="dark"
-          target="_blank"
-          href={`mailto:braggy@esrf.fr?subject=Error%20report&body=${encodeURIComponent(
-            prepareReport(error.message, path)
-          )}`}
-        >
-          Report issue
-        </Button> */}
       </p>
       {children}
     </div>

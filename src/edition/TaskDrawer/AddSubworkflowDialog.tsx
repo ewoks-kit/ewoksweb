@@ -42,7 +42,7 @@ export default function AddSubworkflowDialog(props: Props) {
       nodes,
       rfInstance.getEdges(),
       position || { x: 0, y: 0 },
-      tasks
+      tasks,
     );
     setNodeData(nodeWithoutData.id, data);
     rfInstance.setNodes([...nodes, nodeWithoutData]);
@@ -57,8 +57,8 @@ export default function AddSubworkflowDialog(props: Props) {
       showErrorMsg(
         textForError(
           error,
-          'Error in retrieving workflow. Please check connectivity with the server!'
-        )
+          'Error in retrieving workflow. Please check connectivity with the server!',
+        ),
       );
     }
   }

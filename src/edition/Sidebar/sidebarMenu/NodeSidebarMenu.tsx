@@ -25,7 +25,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
   const nodesIds = useNodesIds();
 
   const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
+    (state) => state.displayedWorkflowInfo,
   );
   const tasks = useTasks();
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
@@ -35,7 +35,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
   const nodeData = getNodeData(selectedElement.id);
   assertNodeDataDefined(nodeData, selectedElement.id);
   const nodeTask = tasks.find(
-    (tas) => tas.task_identifier === nodeData.task_props.task_identifier
+    (tas) => tas.task_identifier === nodeData.task_props.task_identifier,
   );
 
   function cloneNode() {

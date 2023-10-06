@@ -11,7 +11,7 @@ it('loads workflow from disk', () => {
     {
       // needed since the input is hidden
       force: true,
-    }
+    },
   );
   cy.waitForStableDOM();
 
@@ -29,7 +29,7 @@ it('leaves the original JSON untouched when saving on the server', () => {
     {
       // needed since the input is hidden
       force: true,
-    }
+    },
   );
   cy.waitForStableDOM();
 
@@ -42,7 +42,7 @@ it('leaves the original JSON untouched when saving on the server', () => {
 
   cy.readFile('cypress/fixtures/workflow2.json').then((originalJson) => {
     cy.readFile(
-      'pysrc/ewoksweb/tests/resources/workflows/workflow2.json'
+      'pysrc/ewoksweb/tests/resources/workflows/workflow2.json',
     ).should('deep.equal', originalJson);
   });
 });

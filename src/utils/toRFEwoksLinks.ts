@@ -18,7 +18,7 @@ import { createDataMappingData, notUndefinedValue } from './utils';
 export function toRFEwoksLinks(
   tempGraph: GraphEwoks,
   newNodeSubgraphs: GraphEwoks[],
-  tasks: Task[]
+  tasks: Task[],
 ): EwoksRFLink[] {
   let id = 0;
 
@@ -52,13 +52,13 @@ export function toRFEwoksLinks(
         tempGraph.nodes,
         source,
         newNodeSubgraphs,
-        tasks
+        tasks,
       );
       const linkOutputNames = findLinkOutputs(
         tempGraph.nodes,
         target,
         newNodeSubgraphs,
-        tasks
+        tasks,
       );
 
       const link: EwoksRFLink = {
@@ -115,20 +115,20 @@ export function toRFEwoksLinks(
         },
       };
       return link;
-    }
+    },
   );
 }
 
 function calcTargetHandle(
   uiProps: UiPropsLinks | undefined,
-  sub_target: string | undefined
+  sub_target: string | undefined,
 ): string {
   return uiProps?.targetHandle ?? sub_target ?? 'tl';
 }
 
 function calcSourceHandle(
   uiProps: UiPropsLinks | undefined,
-  sub_source: string | undefined
+  sub_source: string | undefined,
 ): string {
   return uiProps?.sourceHandle ?? sub_source ?? 'sr';
 }
@@ -137,11 +137,11 @@ function calcInOutLinks(tempGraph: GraphEwoks): GraphEwoks {
   // DOC: calculate the links from inputs-outputs of the Ewoks graph
   const inNodeLinks = inNodesLinks(
     tempGraph.graph.input_nodes,
-    tempGraph.nodes
+    tempGraph.nodes,
   );
   const outNodeLinks = outNodesLinks(
     tempGraph.graph.output_nodes,
-    tempGraph.nodes
+    tempGraph.nodes,
   );
 
   // DOC: accumulate all links inOutTempGraph

@@ -4,7 +4,7 @@ beforeEach(() => {
   cy.waitForStableDOM();
   cy.findAllByRole('button', { name: 'ewoksweb' })
     .filter('.react-flow__node')
-    .as('node')
+    .as('node', { type: 'static' })
     .click();
 });
 
@@ -32,7 +32,7 @@ it('changes comment of node', () => {
   cy.get('@node').click();
   cy.findByRole('textbox', { name: 'Edit comment' }).should(
     'have.value',
-    'Always and forever comment...'
+    'Always and forever comment...',
   );
 });
 
@@ -152,14 +152,14 @@ it('changes the icon', () => {
 
   cy.findByRole('combobox', { name: 'Change node icon' }).should(
     'have.value',
-    'Use default'
+    'Use default',
   );
   cy.get('@node').within(() => {
     cy.findByRole('img')
       .should('have.attr', 'src')
       .should(
         'include',
-        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFC0lEQVR4nO2a308UVx'
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFC0lEQVR4nO2a308UVx',
       );
   });
 
@@ -171,7 +171,7 @@ it('changes the icon', () => {
       .should('have.attr', 'src')
       .should(
         'include',
-        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAA7DAAA'
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAA7DAAA',
       );
   });
 
@@ -186,7 +186,7 @@ it('changes the icon', () => {
       .should('have.attr', 'src')
       .should(
         'include',
-        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFC0lEQVR4nO2a308UVx'
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFC0lEQVR4nO2a308UVx',
       );
   });
 });

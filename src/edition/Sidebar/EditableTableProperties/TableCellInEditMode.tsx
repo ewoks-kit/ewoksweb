@@ -52,12 +52,12 @@ function TableCellInEditMode(props: CustomTableCellProps) {
         ? // Need to show as string any kind of (value: unknown) it gets
           // eslint-disable-next-line @typescript-eslint/no-base-to-string
           row.value.toString()
-        : 'null'
+        : 'null',
     );
   }, [row]);
 
   function onChangeNumber(
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) {
     if (isDecimalNumber(event.target.value)) {
       onChange(event, row, index);
@@ -67,7 +67,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
   function onChangeBool(
     e: ChangeEvent<HTMLInputElement>,
     changedRow: EditableTableRow,
-    rowIndex: number
+    rowIndex: number,
   ) {
     const event = {
       ...e,

@@ -3,10 +3,10 @@ import InputTextField from './InputTextField';
 
 export default function GraphDetails() {
   const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
+    (state) => state.displayedWorkflowInfo,
   );
   const mergeDisplayedWorkflowInfo = useStore(
-    (state) => state.mergeDisplayedWorkflowInfo
+    (state) => state.mergeDisplayedWorkflowInfo,
   );
 
   function handleSaveCategory(category: string) {

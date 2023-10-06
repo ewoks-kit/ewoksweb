@@ -29,7 +29,7 @@ export default function WorkflowSidebarMenu() {
   const tasks = useTasks();
 
   const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
+    (state) => state.displayedWorkflowInfo,
   );
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
@@ -41,7 +41,7 @@ export default function WorkflowSidebarMenu() {
         await deleteWorkflow(displayedWorkflowInfo.id);
         setRootWorkflow(EMPTY_GRAPH, rfInstance, tasks);
         showSuccessMsg(
-          `Workflow ${displayedWorkflowInfo.id} successfully deleted!`
+          `Workflow ${displayedWorkflowInfo.id} successfully deleted!`,
         );
       } catch (error) {
         showErrorMsg(textForError(error, commonStrings.deletingError));

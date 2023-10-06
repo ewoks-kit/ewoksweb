@@ -34,7 +34,7 @@ export function useLoadGraph(onGraphLoad: (graph: GraphEwoks) => void) {
       const newGraph = tryJSONparse(result);
       if (!newGraph) {
         showErrorMsg(
-          'Error in JSON structure. Please correct input file and retry!'
+          'Error in JSON structure. Please correct input file and retry!',
         );
         return;
       }

@@ -32,8 +32,8 @@ function UploadIconControl() {
       showErrorMsg(
         textForError(
           error,
-          'Error in uploading the Icon. Please check connectivity with the server!'
-        )
+          'Error in uploading the Icon. Please check connectivity with the server!',
+        ),
       );
     }
   }

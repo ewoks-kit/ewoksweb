@@ -21,7 +21,7 @@ export default function EditPage() {
 
   const workflowToRestoreId = useWorkflowToRestoreId((state) => state.id);
   const resetWorkflowToRestoreId = useWorkflowToRestoreId(
-    (state) => state.resetId
+    (state) => state.resetId,
   );
 
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
@@ -36,8 +36,8 @@ export default function EditPage() {
         showErrorMsg(
           textForError(
             error,
-            'Error in retrieving workflow. Please check connectivity with the server!'
-          )
+            'Error in retrieving workflow. Please check connectivity with the server!',
+          ),
         );
       } finally {
         resetWorkflowToRestoreId();

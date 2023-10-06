@@ -12,7 +12,7 @@ Cypress.on('uncaught:exception', (err) => {
 Cypress.Commands.add('loadAppWithoutGraph', () => {
   cy.visit('http://localhost:3000');
   cy.findByRole('navigation').within(() =>
-    cy.findByRole('link', { name: 'Edit' }).click()
+    cy.findByRole('link', { name: 'Edit' }).click(),
   );
   cy.waitForStableDOM();
 });
@@ -51,7 +51,7 @@ Cypress.Commands.add('hasBreadcrumbs', (crumbs: string[]) => {
 
   cy.findByLabelText('breadcrumb').within(() => {
     linkCrumbs.forEach((name) =>
-      cy.findByRole('link', { name }).should('be.visible')
+      cy.findByRole('link', { name }).should('be.visible'),
     );
     cy.contains(lastCrumb).should('be.visible');
   });

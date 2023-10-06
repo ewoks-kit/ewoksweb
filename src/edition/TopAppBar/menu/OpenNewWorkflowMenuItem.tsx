@@ -28,7 +28,7 @@ function OpenNewWorkflowMenuItem() {
       e.preventDefault();
       setOpenDialog(true);
     },
-    []
+    [],
   );
 
   return (

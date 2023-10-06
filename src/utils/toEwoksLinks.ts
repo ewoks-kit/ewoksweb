@@ -12,7 +12,7 @@ import {
 // EwoksRFLinks --> EwoksLinks for saving
 export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
   const tempLinks: EwoksRFLink[] = [...links].filter(
-    (link) => !link.data.startEnd
+    (link) => !link.data.startEnd,
   );
 
   return tempLinks.map(
@@ -85,6 +85,6 @@ export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {
         map_all_data,
         ...(!propIsEmpty(linkUiProps) && { uiProps: linkUiProps }),
       };
-    }
+    },
   );
 }

@@ -34,7 +34,7 @@ export default function EditLinkStyle(element: Edge) {
 
   const [linkType, setLinkType] = useState('default');
   const [arrowType, setArrowType] = useState<MarkerType | 'none'>(
-    MarkerType.Arrow
+    MarkerType.Arrow,
   );
   const [animated, setAnimated] = useState(false);
   const [colorLine, setColorLine] = useState('');
@@ -68,7 +68,7 @@ export default function EditLinkStyle(element: Edge) {
     const val = event.target.value as string;
     if (['multilineText', 'getAround'].includes(val)) {
       showInfoMsg(
-        'Insert commas (,) in the label to break into multiple lines!'
+        'Insert commas (,) in the label to break into multiple lines!',
       );
     }
     const newEdge = {

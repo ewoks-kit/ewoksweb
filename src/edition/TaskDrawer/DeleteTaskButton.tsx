@@ -37,8 +37,8 @@ function DeleteTaskButton(props: Props) {
       showErrorMsg(
         textForError(
           error,
-          'Error in task deletion. Please check connectivity with the server'
-        )
+          'Error in task deletion. Please check connectivity with the server',
+        ),
       );
     }
   }

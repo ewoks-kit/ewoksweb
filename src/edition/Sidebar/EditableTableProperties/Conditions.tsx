@@ -19,7 +19,7 @@ export default function Conditions({ element, isOnErrorSelected }: Props) {
   assertEdgeDataDefined(edgeData, element.id);
 
   const sourceNodeData = useNodeDataStore((state) =>
-    state.nodesData.get(element.source)
+    state.nodesData.get(element.source),
   );
 
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);

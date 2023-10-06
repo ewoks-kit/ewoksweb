@@ -17,14 +17,14 @@ import { calcEwoksGraphProp } from './utils/CalcGraphInputsOutputs';
 import { calcNoteNodes } from './utils/calcNoteNodes';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
-import { isEwoksServerErrorResponse } from './utils/typeGuards';
+import { hasMessage, isEwoksServerErrorResponse } from './utils/typeGuards';
 import { propIsEmpty } from './utils/utils';
 
 export const DEFAULT_ICON: Icon = { name: 'orange3.png', data_url: orange3 };
 
 export async function getSubgraphs(
   graph: GraphEwoks,
-  loadedGraphsIds: string[]
+  loadedGraphsIds: string[],
 ): Promise<GraphEwoks[]> {
   const subgraphIds = graph.nodes
     .filter((nod) => nod.task_type === 'graph')
@@ -36,12 +36,12 @@ export async function getSubgraphs(
 
   const graphIdsToFetch = subgraphIds.filter(
     (id) =>
-      id && !loadedGraphsIds.some((loadedGraphsId) => id === loadedGraphsId)
+      id && !loadedGraphsIds.some((loadedGraphsId) => id === loadedGraphsId),
   );
 
   try {
     const subgraphResponses = await Promise.all(
-      graphIdsToFetch.map(fetchWorkflow)
+      graphIdsToFetch.map(fetchWorkflow),
     );
     return subgraphResponses.map((resp) => resp.data);
   } catch (error) {
@@ -57,7 +57,7 @@ export function prepareEwoksGraph(
   nodesWithoutData: Node[],
   edgesWithoutData: Edge[],
   rawNodeData: Map<string, EwoksRFNodeData>,
-  rawLinkData: Map<string, EwoksRFLinkData>
+  rawLinkData: Map<string, EwoksRFLinkData>,
 ): GraphEwoks {
   const nodeData = curateNodeData(rawNodeData);
   const nodes = nodesWithoutData.map((node) => enrichWithData(node, nodeData));
@@ -104,12 +104,7 @@ export function textForError(error: unknown, alternative: string): string {
     return error.response.data.message;
   }
 
-  if (
-    error &&
-    typeof error === 'object' &&
-    'message' in error &&
-    typeof error.message === 'string'
-  ) {
+  if (hasMessage(error)) {
     return error.message;
   }
 

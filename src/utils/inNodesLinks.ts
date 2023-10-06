@@ -11,7 +11,7 @@ import {
 // the input_nodes in the Ewoks graph model
 export function inNodesLinks(
   inputNodes: GraphNodes[] | undefined,
-  nodes: EwoksNode[]
+  nodes: EwoksNode[],
 ): { nodes: EwoksNode[]; links: EwoksLink[] } {
   const inputs: { nodes: EwoksNode[]; links: EwoksLink[] } = {
     nodes: [],

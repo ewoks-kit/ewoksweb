@@ -66,7 +66,7 @@ export default function GraphFormDialog(props: Props) {
       rfInstance.getNodes(),
       rfInstance.getEdges(),
       getNodesData(),
-      getEdgesData()
+      getEdgesData(),
     );
 
     try {

@@ -85,7 +85,7 @@ function EditableTable(props: EditableTableProps) {
     id: string,
     title: string,
     graph: unknown,
-    callbackProps: { rows: EditableTableRow[]; id: string }
+    callbackProps: { rows: EditableTableRow[]; id: string },
   ) {
     if (typeof graph !== 'object' || graph === null) {
       return;
@@ -135,7 +135,7 @@ function EditableTable(props: EditableTableProps) {
         id,
         typeOfInputs[index] === 'list' ? 'Edit list' : 'Edit dict',
         onListOrDict(id, index),
-        { rows, id }
+        { rows, id },
       );
     }
 
@@ -145,7 +145,7 @@ function EditableTable(props: EditableTableProps) {
   function onChange(
     e: { target: { name: string; value: string | number } },
     row: EditableTableRow,
-    index: number
+    index: number,
   ) {
     const { id } = row;
     const oldRows = [...rows].filter((_row, i) => index !== i);
@@ -159,7 +159,7 @@ function EditableTable(props: EditableTableProps) {
     }
     if (
       ['string', 'bool', 'number', 'boolean', 'null'].includes(
-        typeOfInputs[index]
+        typeOfInputs[index],
       )
     ) {
       const { value, name } = e.target;
@@ -203,7 +203,7 @@ function EditableTable(props: EditableTableProps) {
   const changedTypeOfInputs = (
     e: ChangeEvent<HTMLInputElement>,
     row: EditableTableRow,
-    index: number
+    index: number,
   ) => {
     const { id: rowId = '' } = row;
 
@@ -229,7 +229,7 @@ function EditableTable(props: EditableTableProps) {
   function setRowValue(
     name: string,
     val: unknown, // can be a user defined list or dict
-    callbackProps: { id: string; rows: EditableTableRow[] }
+    callbackProps: { id: string; rows: EditableTableRow[] },
   ) {
     const newRows = callbackProps.rows.map((row) => {
       if (row.id === callbackProps.id) {

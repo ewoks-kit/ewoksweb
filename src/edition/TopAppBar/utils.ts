@@ -20,7 +20,7 @@ export async function getWorkflowIdsFromServer(): Promise<{
 }
 
 export function curateNodeData(
-  nodesData: Map<string, EwoksRFNodeData>
+  nodesData: Map<string, EwoksRFNodeData>,
 ): Map<string, EwoksRFNodeData> {
   return new Map(
     [...nodesData.entries()].map(([nodeId, nodeData]) => {
@@ -31,19 +31,19 @@ export function curateNodeData(
           ewoks_props: {
             ...nodeData.ewoks_props,
             default_inputs: deleteEmptyLines(
-              nodeData.ewoks_props.default_inputs
+              nodeData.ewoks_props.default_inputs,
             ),
             default_error_attributes:
               nodeData.ewoks_props.default_error_attributes,
           },
         },
       ];
-    })
+    }),
   );
 }
 
 export function curateEdgeData(
-  edgesData: Map<string, EwoksRFLinkData>
+  edgesData: Map<string, EwoksRFLinkData>,
 ): Map<string, EwoksRFLinkData> {
   return new Map(
     [...edgesData.entries()].map(([edgeId, edgeData]) => {
@@ -69,17 +69,17 @@ export function curateEdgeData(
           ...(hasDataMapping ? { data_mapping } : {}),
         },
       ];
-    })
+    }),
   );
 }
 
 function deleteEmptyLines<T extends DataMapping | Condition | Inputs>(
-  arrayObjId: T[] | undefined
+  arrayObjId: T[] | undefined,
 ): T[] | undefined {
   if (!arrayObjId) {
     return undefined;
   }
   return arrayObjId.filter(
-    (obj: DataMapping | Condition | Inputs) => obj.name !== ''
+    (obj: DataMapping | Condition | Inputs) => obj.name !== '',
   );
 }

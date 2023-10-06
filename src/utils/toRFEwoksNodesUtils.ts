@@ -17,7 +17,7 @@ export function calcTask(tasks: Task[], task_identifier: string): Task {
 }
 
 export function calcInOutForSubgraph(
-  subgraphNode: GraphEwoks | undefined
+  subgraphNode: GraphEwoks | undefined,
 ): OutputsInputsSub[][] {
   let inputsSub: OutputsInputsSub[] = [];
   let outputsSub: OutputsInputsSub[] = [];
@@ -62,12 +62,12 @@ export function addNodeProperties(
   task_identifier: string,
   node: EwoksRFNode,
   tasks: Task[],
-  task_category: string
+  task_category: string,
 ): EwoksRFNode {
   let tempNode = { ...node };
   if (task_type === 'graph') {
     const subgraphNode: GraphEwoks | undefined = newNodeSubgraphs.find(
-      (subGr) => subGr.graph.id === task_identifier
+      (subGr) => subGr.graph.id === task_identifier,
     );
 
     const [inputsSub, outputsSub] = calcInOutForSubgraph(subgraphNode);

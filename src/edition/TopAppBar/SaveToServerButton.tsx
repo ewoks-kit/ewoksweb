@@ -21,7 +21,7 @@ import { getWorkflowIdsFromServer } from './utils';
 // DOC: Save to server button with its spinner
 export default function SaveToServerButton() {
   const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
+    (state) => state.displayedWorkflowInfo,
   );
   const rfInstance = useReactFlow();
   const invalidateWorkflows = useInvalidateWorkflows();
@@ -52,7 +52,7 @@ export default function SaveToServerButton() {
     const response = await getWorkflowIdsFromServer();
     if (response.error) {
       handleError(
-        textForError(response.error, commonStrings.retrieveWorkflowsError)
+        textForError(response.error, commonStrings.retrieveWorkflowsError),
       );
       return;
     }
@@ -67,7 +67,7 @@ export default function SaveToServerButton() {
 
     if (rootWorkflowId !== displayedWorkflowInfo.id) {
       handleError(
-        'Cannot save any changes to subgraphs! Open it as the main graph to make changes.'
+        'Cannot save any changes to subgraphs! Open it as the main graph to make changes.',
       );
       return;
     }
@@ -90,8 +90,8 @@ export default function SaveToServerButton() {
           rfInstance.getNodes(),
           rfInstance.getEdges(),
           getNodesData(),
-          getEdgesData()
-        )
+          getEdgesData(),
+        ),
       );
       invalidateWorkflows();
 
@@ -108,7 +108,7 @@ export default function SaveToServerButton() {
       e.preventDefault();
       void handleSave();
     },
-    []
+    [],
   );
 
   return (
