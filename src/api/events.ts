@@ -9,11 +9,9 @@ import { QueryKey } from './models';
 async function fetchExecutionEvents(
   queryParams: filterParams | undefined,
 ): Promise<ExecutedJobsResponse> {
-  const queryString = queryParams
-    ? `?${new URLSearchParams(Object.entries(queryParams)).toString()}`
-    : '';
   const { data } = await client.get<ExecutedJobsResponse>(
-    `/execution/events${queryString}`,
+    `/execution/events`,
+    { params: queryParams}
   );
   return data;
 }
