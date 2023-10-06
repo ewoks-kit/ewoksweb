@@ -1,9 +1,6 @@
 const { createConfig } = require('eslint-config-galex/dist/createConfig');
 const { getDependencies } = require('eslint-config-galex/dist/getDependencies');
 const {
-  createJestOverride,
-} = require('eslint-config-galex/dist/overrides/jest');
-const {
   createReactOverride,
 } = require('eslint-config-galex/dist/overrides/react');
 const {
@@ -97,16 +94,6 @@ module.exports = createConfig({
 
         // Chaining array operations after mutations is handy and do not hamper readability
         'etc/no-assign-mutated-array': 'off',
-      },
-    }),
-    createJestOverride({
-      ...dependencies,
-      rules: {
-        'jest/no-focused-tests': 'warn', // warning instead of error
-        'jest/prefer-strict-equal': 'off', // `toEqual` is shorter and sufficient in most cases
-        'jest-formatting/padding-around-all': 'off', // allow writing concise two-line tests
-        'jest/require-top-level-describe': 'off', // filename should already be meaningful, extra nesting is unnecessary
-        'jest/no-conditional-in-test': 'off', // false positives in E2E tests (snapshots), and too strict (disallows using `||` for convenience)
       },
     }),
     {
