@@ -23,7 +23,7 @@ export default function DefaultErrorNodeControl(props: { nodeId: string }) {
   }
 
   const handleChangeShowDataMapping = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     mergeNodeData(nodeId, {
       ewoks_props: {

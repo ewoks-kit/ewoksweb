@@ -3,7 +3,7 @@ import useConfigStore from 'store/useConfigStore';
 
 function CanvasBackground() {
   const canvasBackgroundColor = useConfigStore(
-    (state) => state.canvasBackgroundColor
+    (state) => state.canvasBackgroundColor,
   );
 
   return (

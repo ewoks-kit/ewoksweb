@@ -16,7 +16,7 @@ interface Props {
 }
 
 function sortByCategory(
-  descriptions: WorkflowDescription[]
+  descriptions: WorkflowDescription[],
 ): Required<WorkflowDescription>[] {
   return descriptions
     .map((desc) => ({
@@ -26,7 +26,7 @@ function sortByCategory(
     }))
     .sort(
       (a, b) =>
-        a.category.localeCompare(b.category) || a.label.localeCompare(b.label)
+        a.category.localeCompare(b.category) || a.label.localeCompare(b.label),
     );
 }
 

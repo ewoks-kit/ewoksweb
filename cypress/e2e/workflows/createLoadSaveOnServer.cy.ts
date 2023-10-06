@@ -12,7 +12,7 @@ it('displays the canvas', () => {
 
   cy.get('p').should(
     'include.text',
-    'Drag and drop tasks here to start building your workflow,or use Quick Open to open an existing workflow.'
+    'Drag and drop tasks here to start building your workflow,or use Quick Open to open an existing workflow.',
   );
 });
 
@@ -66,7 +66,7 @@ it('saves an empty workflow on the server and deletes it', () => {
 
   cy.findByRole('dialog').should(
     'include.text',
-    `Delete workflow with id: "${id}"?`
+    `Delete workflow with id: "${id}"?`,
   );
 
   cy.findByRole('button', { name: 'Yes' }).click();
@@ -74,17 +74,17 @@ it('saves an empty workflow on the server and deletes it', () => {
   cy.contains(id).should('not.exist');
   cy.get('p').should(
     'include.text',
-    'Drag and drop tasks here to start building your workflow,or use Quick Open to open an existing workflow.'
+    'Drag and drop tasks here to start building your workflow,or use Quick Open to open an existing workflow.',
   );
 });
 
 it('cannot delete or clone a workflow with an empty canvas', () => {
   cy.findByRole('button', { name: 'Open edit actions menu' }).click();
   cy.findByRole('menuitem', { name: 'Clone Workflow' }).should(
-    'not.be.enabled'
+    'not.be.enabled',
   );
   cy.findByRole('menuitem', { name: 'Delete Workflow' }).should(
-    'not.be.enabled'
+    'not.be.enabled',
   );
 });
 

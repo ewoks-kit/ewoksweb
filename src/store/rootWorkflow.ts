@@ -24,13 +24,13 @@ export interface RootWorkflowSlice {
     ewoksWorkflow: GraphEwoks,
     rfInstance: ReactFlowInstance,
     tasks: Task[],
-    source?: string
+    source?: string,
   ) => Promise<void>;
 }
 
 const rootWorkflow = (
   set: SetState<State>,
-  get: GetState<State>
+  get: GetState<State>,
 ): RootWorkflowSlice => ({
   rootWorkflowId: '',
   rootWorkflowSource: undefined,
@@ -39,7 +39,7 @@ const rootWorkflow = (
     ewoksWorkflow,
     rfInstance,
     tasks,
-    source
+    source,
   ): Promise<void> => {
     // 1. Initialize the canvas while working on the new graph
     get().resetDisplayedWorkflowInfo();
@@ -119,7 +119,7 @@ const rootWorkflow = (
 
     if (!newGraphNoData.nodes.some((nod) => nod.position.x !== 100)) {
       rfInstance.setNodes(
-        await layoutNewGraph(newGraphNoData.nodes, newGraphNoData.links)
+        await layoutNewGraph(newGraphNoData.nodes, newGraphNoData.links),
       );
       rfInstance.setEdges(newGraphNoData.links);
     } else {

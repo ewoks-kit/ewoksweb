@@ -28,7 +28,7 @@ function TopAppBar() {
         <OpenActionMenuButton />
       </div>
     </>,
-    navBarElement
+    navBarElement,
   );
 }
 

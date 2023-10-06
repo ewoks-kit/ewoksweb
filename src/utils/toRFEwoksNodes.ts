@@ -15,15 +15,15 @@ import { createDataMappingData, notUndefinedValue } from './utils';
 export function toRFEwoksNodes(
   tempGraph: GraphEwoks,
   newNodeSubgraphs: GraphEwoks[],
-  tasks: Task[]
+  tasks: Task[],
 ): EwoksRFNode[] {
   const inNodeLinks = inNodesLinks(
     tempGraph.graph.input_nodes,
-    tempGraph.nodes
+    tempGraph.nodes,
   );
   const outNodeLinks = outNodesLinks(
     tempGraph.graph.output_nodes,
-    tempGraph.nodes
+    tempGraph.nodes,
   );
 
   const inOutTempGraph = { ...tempGraph };
@@ -69,7 +69,7 @@ export function toRFEwoksNodes(
             ...(default_error_node &&
               default_error_attributes && {
                 default_error_attributes: calcDefaultErrorAttributes(
-                  default_error_attributes
+                  default_error_attributes,
                 ),
               }),
             ...notUndefinedValue(task_generator, 'task_generator'),
@@ -97,19 +97,21 @@ export function toRFEwoksNodes(
         task_identifier,
         node,
         tasks,
-        uiProps?.task_category || ''
+        uiProps?.task_category || '',
       );
-    }
+    },
   );
 }
 
 function calcDefaultErrorAttributes(
-  default_error_attributes: DefaultErrorAttributes<DataMappingEwoks> | undefined
+  default_error_attributes:
+    | DefaultErrorAttributes<DataMappingEwoks>
+    | undefined,
 ): DefaultErrorAttributes<DataMapping> | undefined {
   return {
     map_all_data: default_error_attributes?.map_all_data,
     data_mapping: default_error_attributes?.data_mapping?.map(
-      createDataMappingData
+      createDataMappingData,
     ),
   };
 }

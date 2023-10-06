@@ -30,7 +30,7 @@ const OpenGraphInput = forwardRef(
         }}
       />
     );
-  }
+  },
 );
 
 export default OpenGraphInput;

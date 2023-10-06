@@ -25,7 +25,7 @@ const useEdgeDataStore = create<EdgeDataState>((set) => ({
       const newData: EwoksRFLinkData = merge(
         {},
         edgesData.get(edgeId),
-        edgeData
+        edgeData,
       );
 
       return {

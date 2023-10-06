@@ -29,7 +29,7 @@ export function calcEwoksGraphProp(graph: GraphRF): GraphDetails {
           'graphInput',
           nod,
           [...graph.nodes],
-          [...graph.links]
+          [...graph.links],
         ),
       ];
     }
@@ -41,7 +41,7 @@ export function calcEwoksGraphProp(graph: GraphRF): GraphDetails {
           'graphOutput',
           nod,
           [...graph.nodes],
-          [...graph.links]
+          [...graph.links],
         ),
       ];
     }
@@ -81,7 +81,7 @@ function calcInOutNodes(
   inputOrOutput: string,
   nod: EwoksRFNode,
   graph_nodes: EwoksRFNode[],
-  graph_links: EwoksRFLink[]
+  graph_links: EwoksRFLink[],
 ): GraphNodes[] {
   const nodes: GraphNodes[] = [];
 
@@ -116,10 +116,10 @@ function calcInOutNodes(
     const link_index =
       inputOrOutput === 'graphOutput'
         ? graph_links.findIndex(
-            (link) => link.target === nod.id && link.source === nodConnected.id
+            (link) => link.target === nod.id && link.source === nodConnected.id,
           )
         : graph_links.findIndex(
-            (link) => link.source === nod.id && link.target === nodConnected.id
+            (link) => link.source === nod.id && link.target === nodConnected.id,
           );
 
     nodes.push(
@@ -129,8 +129,8 @@ function calcInOutNodes(
         nodConnected,
         graph_links,
         link_index,
-        inputOrOutput
-      )
+        inputOrOutput,
+      ),
     );
   });
   return nodes;
@@ -142,7 +142,7 @@ function calcNodeProps(
   nodConnected: EwoksRFNode,
   graph_links: EwoksRFLink[],
   link_index: number,
-  inputOrOutput: string
+  inputOrOutput: string,
 ): GraphNodes {
   const link = graph_links[link_index];
 

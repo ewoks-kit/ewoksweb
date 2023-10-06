@@ -30,7 +30,7 @@ function WorkflowList(props: Props) {
       {jobs
         .sort(
           (a, b) =>
-            new Date(b[0].time).valueOf() - new Date(a[0].time).valueOf()
+            new Date(b[0].time).valueOf() - new Date(a[0].time).valueOf(),
         )
         .map((events) => (
           <ErrorBoundary

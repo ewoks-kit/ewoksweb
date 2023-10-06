@@ -17,7 +17,7 @@ it('should switch to monitor page', () => {
   });
   cy.findByRole('link', { name: 'Monitor' }).should(
     'have.attr',
-    'data-selected'
+    'data-selected',
   );
 });
 
@@ -31,7 +31,7 @@ it('should restore an opened workflow when switching pages', () => {
 
   // The monitor page has another 'Edit' link if no workflow is executed.
   cy.findByRole('navigation').within(() =>
-    cy.findByRole('link', { name: 'Edit' }).click()
+    cy.findByRole('link', { name: 'Edit' }).click(),
   );
   cy.waitForStableDOM();
   cy.hasBreadcrumbs(['tutorial_Graph']);

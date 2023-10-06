@@ -7,7 +7,7 @@ it('discovers tasks from an existing module', () => {
 
   cy.findByRole('textbox', { name: 'Module name' }).type('ewokscore');
   cy.findByRole('checkbox', { name: /^Discover from all modules/ }).should(
-    'not.be.checked'
+    'not.be.checked',
   );
   cy.findByRole('button', { name: 'Discover' }).click();
 
@@ -35,14 +35,14 @@ it('shows a warning when discovering tasks from an non-existing module', () => {
 
   cy.findByRole('textbox', { name: 'Module name' }).type('not_a_module');
   cy.findByRole('checkbox', { name: /^Discover from all modules/ }).should(
-    'not.be.checked'
+    'not.be.checked',
   );
   cy.findByRole('button', { name: 'Discover' }).click();
 
   // Need "hidden: true" because MUI puts Snackbars into a hidden div
   cy.findByRole('alert', { hidden: true }).should(
     'contain.text',
-    "No module named 'not_a_module'"
+    "No module named 'not_a_module'",
   );
 });
 
@@ -53,6 +53,6 @@ it('discovers tasks from the current Python env', () => {
 
   cy.findByRole('alert', { hidden: true }).should(
     'contain.text',
-    '7 tasks imported.'
+    '7 tasks imported.',
   );
 });

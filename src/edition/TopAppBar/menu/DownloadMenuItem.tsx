@@ -17,7 +17,7 @@ function DownloadMenuItem() {
   const { getNodes, getEdges } = useReactFlow();
 
   const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
+    (state) => state.displayedWorkflowInfo,
   );
 
   function saveToDisk() {
@@ -26,12 +26,12 @@ function DownloadMenuItem() {
       getNodes(),
       getEdges(),
       getNodesData(),
-      getEdgesData()
+      getEdgesData(),
     );
     download(
       JSON.stringify(ewoksGraph, null, 2),
       `${displayedWorkflowInfo.label || 'Untitled'}.json`,
-      'text/plain'
+      'text/plain',
     );
   }
 

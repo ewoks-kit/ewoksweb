@@ -24,7 +24,7 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   // DOC: the subgraph is connected to the original graph through the task_identifier like
   // simple nodes and not through the id which is the unique in the current graph nodeId
   const subgraphExistsOnServer = loadedGraphs.has(
-    nodeData.task_props.task_identifier
+    nodeData.task_props.task_identifier,
   );
   const { inputs = [], outputs = [] } = uiProps;
 
@@ -101,7 +101,7 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
                         position={Position.Right}
                         id={`${input.label.slice(
                           0,
-                          input.label.indexOf(':')
+                          input.label.indexOf(':'),
                         )} right`}
                         style={{
                           ...contentStyle.handle,
@@ -153,7 +153,7 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
                         position={Position.Left}
                         id={`${output.label.slice(
                           0,
-                          output.label.indexOf(':')
+                          output.label.indexOf(':'),
                         )} left`}
                         style={{
                           ...contentStyle.handle,

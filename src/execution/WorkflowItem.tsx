@@ -15,14 +15,14 @@ function WorkflowItem(props: Props) {
   const { events } = props;
 
   const startJobEvent = events.find(
-    (e) => e.context === 'job' && e.type === 'start'
+    (e) => e.context === 'job' && e.type === 'start',
   );
   assertDefined(startJobEvent, 'No start job event');
   const startWorkflowEvent = events.find(
-    (e) => e.context === 'workflow' && e.type === 'start'
+    (e) => e.context === 'workflow' && e.type === 'start',
   );
   const endJobEvent = events.find(
-    (e) => e.context === 'job' && e.type === 'end'
+    (e) => e.context === 'job' && e.type === 'end',
   );
   const hasFinished = !!endJobEvent;
   const hasError = endJobEvent?.error === true;

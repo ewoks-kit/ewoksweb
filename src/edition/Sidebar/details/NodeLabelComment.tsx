@@ -24,7 +24,7 @@ export default function NodeLabelComment(props: Props) {
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
   const nodeData = useNodeDataStore((state) =>
-    state.nodesData.get(selectedElement.id)
+    state.nodesData.get(selectedElement.id),
   );
   assertNodeDataDefined(nodeData, selectedElement.id);
 

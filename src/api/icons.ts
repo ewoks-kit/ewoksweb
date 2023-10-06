@@ -24,7 +24,7 @@ async function fetchIcon(name: string): Promise<Icon> {
 
 export async function postIcon(
   iconName: string,
-  iconData: string | ArrayBuffer
+  iconData: string | ArrayBuffer,
 ) {
   const { data } = await client.post<IconResponse>(`/icon/${iconName}`, {
     data_url: iconData,

@@ -45,7 +45,7 @@ function TableDataMapping(props: TableDataMappingProps) {
 
   function onChange(
     e: { target: { name: string; value: string | number } },
-    row: DataMapping
+    row: DataMapping,
   ) {
     const { id } = row;
     let { value } = e.target;

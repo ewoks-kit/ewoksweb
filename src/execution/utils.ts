@@ -18,6 +18,6 @@ export function formatDuration(duration: Date): string {
   const seconds = Math.floor(durationMinusHoursAndMinutes / 1000);
 
   return `${formatDurationMembers(hours)}:${formatDurationMembers(
-    minutes
+    minutes,
   )}:${formatDurationMembers(seconds)}`;
 }

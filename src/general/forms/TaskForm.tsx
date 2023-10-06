@@ -39,24 +39,18 @@ function TaskForm(props: Props) {
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const invalidateTasks = useInvalidateTasks();
 
-  const {
-    control,
-    handleSubmit,
-    watch,
-    formState,
-    reset,
-    setValue,
-  } = useForm<TaskFields>({
-    defaultValues: {
-      task_identifier: elementToEdit?.task_identifier || '',
-      task_type: elementToEdit?.task_type || '',
-      category: elementToEdit?.category || '',
-      required_input_names: String(elementToEdit?.required_input_names || []),
-      optional_input_names: String(elementToEdit?.optional_input_names || []),
-      output_names: String(elementToEdit?.output_names || []),
-      icon: elementToEdit?.icon || '',
-    },
-  });
+  const { control, handleSubmit, watch, formState, reset, setValue } =
+    useForm<TaskFields>({
+      defaultValues: {
+        task_identifier: elementToEdit?.task_identifier || '',
+        task_type: elementToEdit?.task_type || '',
+        category: elementToEdit?.category || '',
+        required_input_names: String(elementToEdit?.required_input_names || []),
+        optional_input_names: String(elementToEdit?.optional_input_names || []),
+        output_names: String(elementToEdit?.output_names || []),
+        icon: elementToEdit?.icon || '',
+      },
+    });
   const onSubmit = handleSubmit(async (data: TaskFields) => {
     try {
       await submitTaskFormData(data, elementToEdit, editExistingTask);

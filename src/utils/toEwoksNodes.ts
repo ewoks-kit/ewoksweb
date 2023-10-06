@@ -33,7 +33,7 @@ function cleanDefaultInputs(default_inputs: Inputs[] | undefined) {
   });
 }
 function calcDefaultErrorAttributes(
-  default_error_attributes: DefaultErrorAttributes<DataMapping> | undefined
+  default_error_attributes: DefaultErrorAttributes<DataMapping> | undefined,
 ): DefaultErrorAttributes<DataMappingEwoks> | undefined {
   if (default_error_attributes?.map_all_data) {
     return { map_all_data: true };
@@ -68,8 +68,8 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
   const tempNodes: EwoksRFNode[] = [...nodes].filter(
     (nod) =>
       !['graphInput', 'graphOutput', 'note'].includes(
-        nod.data.task_props.task_type
-      )
+        nod.data.task_props.task_type,
+      ),
   );
 
   return tempNodes.map(
@@ -98,7 +98,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
       position,
     }) => {
       const nodeDefaultInputs = cleanDefaultInputs(
-        calcDefaultInputs(default_inputs)
+        calcDefaultInputs(default_inputs),
       );
       return {
         id,
@@ -111,7 +111,7 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
         default_error_node,
         ...(default_error_node && {
           default_error_attributes: calcDefaultErrorAttributes(
-            default_error_attributes
+            default_error_attributes,
           ),
         }),
         uiProps: {
@@ -125,6 +125,6 @@ export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
           nodeWidth,
         },
       };
-    }
+    },
   );
 }

@@ -7,7 +7,7 @@ import { EMPTY_RF_GRAPH } from '../utils/emptyGraphs';
 function getParentsOfNextWorkflow(
   nextWorkflowId: string,
   prevWorkflowId: string,
-  prevParents: string[]
+  prevParents: string[],
 ) {
   if (prevWorkflowId === '') {
     return prevParents;
@@ -26,13 +26,13 @@ export interface DisplayedWorkflowInfoSlice {
   displayedWorkflowParents: string[];
   setDisplayedWorkflowInfo: (displayedWorkflowInfo: GraphDetails) => void;
   mergeDisplayedWorkflowInfo: (
-    displayedWorkflowInfo: Partial<GraphDetails>
+    displayedWorkflowInfo: Partial<GraphDetails>,
   ) => void;
   resetDisplayedWorkflowInfo: () => void;
 }
 
 const displayedWorkflowInfo = (
-  set: SetState<State>
+  set: SetState<State>,
 ): DisplayedWorkflowInfoSlice => ({
   displayedWorkflowInfo: EMPTY_RF_GRAPH.graph,
   displayedWorkflowParents: [],
@@ -49,7 +49,7 @@ const displayedWorkflowInfo = (
         displayedWorkflowParents: getParentsOfNextWorkflow(
           nextWorkflowInfo.id,
           prevWorkflowId,
-          prev.displayedWorkflowParents
+          prev.displayedWorkflowParents,
         ),
       };
     });

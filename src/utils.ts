@@ -24,7 +24,7 @@ export const DEFAULT_ICON: Icon = { name: 'orange3.png', data_url: orange3 };
 
 export async function getSubgraphs(
   graph: GraphEwoks,
-  loadedGraphsIds: string[]
+  loadedGraphsIds: string[],
 ): Promise<GraphEwoks[]> {
   const subgraphIds = graph.nodes
     .filter((nod) => nod.task_type === 'graph')
@@ -36,12 +36,12 @@ export async function getSubgraphs(
 
   const graphIdsToFetch = subgraphIds.filter(
     (id) =>
-      id && !loadedGraphsIds.some((loadedGraphsId) => id === loadedGraphsId)
+      id && !loadedGraphsIds.some((loadedGraphsId) => id === loadedGraphsId),
   );
 
   try {
     const subgraphResponses = await Promise.all(
-      graphIdsToFetch.map(fetchWorkflow)
+      graphIdsToFetch.map(fetchWorkflow),
     );
     return subgraphResponses.map((resp) => resp.data);
   } catch (error) {
@@ -57,7 +57,7 @@ export function prepareEwoksGraph(
   nodesWithoutData: Node[],
   edgesWithoutData: Edge[],
   rawNodeData: Map<string, EwoksRFNodeData>,
-  rawLinkData: Map<string, EwoksRFLinkData>
+  rawLinkData: Map<string, EwoksRFLinkData>,
 ): GraphEwoks {
   const nodeData = curateNodeData(rawNodeData);
   const nodes = nodesWithoutData.map((node) => enrichWithData(node, nodeData));

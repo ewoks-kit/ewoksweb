@@ -46,7 +46,7 @@ function ErrorFallback(props: Props) {
           color="primary"
           target="_blank"
           href={`mailto:data-analysis@esrf.fr?subject=Error%20report&body=${encodeURIComponent(
-            prepareReport(error.message)
+            prepareReport(error.message),
           )}`}
           // onClick={sendReport}
           size="small"

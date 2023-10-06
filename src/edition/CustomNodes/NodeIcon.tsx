@@ -16,7 +16,7 @@ function NodeIcon(props: Props) {
   assertNodeDataDefined(nodeData, nodeId);
 
   const nodeTask = tasks.find(
-    (task) => task.task_identifier === nodeData.task_props.task_identifier
+    (task) => task.task_identifier === nodeData.task_props.task_identifier,
   );
   const taskIcon = nodeTask?.icon;
 

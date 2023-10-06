@@ -10,7 +10,7 @@ function isRowContentInvalid(
   row: EditableTableRow,
   rowNames: string[] | undefined,
   name: string,
-  usedIn?: 'DataMapping' | 'DefaultInputs' | 'Conditions'
+  usedIn?: 'DataMapping' | 'DefaultInputs' | 'Conditions',
 ) {
   const hasInvalidValue = row.value === undefined || row.value === '';
 

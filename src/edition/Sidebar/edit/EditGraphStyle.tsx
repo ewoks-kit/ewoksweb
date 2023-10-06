@@ -5,10 +5,10 @@ import useConfigStore from '../../../store/useConfigStore';
 // DOC: Edit the graph style
 export default function EditGraphStyle() {
   const setCanvasBackgroundColor = useConfigStore(
-    (state) => state.setCanvasBackgroundColor
+    (state) => state.setCanvasBackgroundColor,
   );
   const canvasBackgroundColor = useConfigStore(
-    (state) => state.canvasBackgroundColor
+    (state) => state.canvasBackgroundColor,
   );
 
   const colorLineChanged = (event: ChangeEvent<HTMLInputElement>) => {

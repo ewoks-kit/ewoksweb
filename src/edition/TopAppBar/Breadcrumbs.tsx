@@ -11,10 +11,10 @@ export default function Breadcrumbs() {
   const { setNodes, setEdges, fitView } = useReactFlow();
 
   const { id: displayedWorkflowId } = useStore(
-    (state) => state.displayedWorkflowInfo
+    (state) => state.displayedWorkflowInfo,
   );
   const setDisplayedWorkflowInfo = useStore(
-    (state) => state.setDisplayedWorkflowInfo
+    (state) => state.setDisplayedWorkflowInfo,
   );
   const loadedGraphs = useStore((state) => state.loadedGraphs);
   function getGraphLabel(id: string) {
@@ -22,7 +22,7 @@ export default function Breadcrumbs() {
   }
 
   const displayedWorkflowParents = useStore(
-    (state) => state.displayedWorkflowParents
+    (state) => state.displayedWorkflowParents,
   );
 
   const setDataFromNodes = useNodeDataStore((state) => state.setDataFromNodes);

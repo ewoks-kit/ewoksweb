@@ -16,7 +16,7 @@ const loadedGraphs = (set: SetState<State>): LoadedGraphsSlice => ({
       ...state,
       loadedGraphs: new Map(state.loadedGraphs).set(
         newGraph.graph.id,
-        newGraph
+        newGraph,
       ),
     }));
   },

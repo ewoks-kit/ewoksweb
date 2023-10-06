@@ -6,7 +6,7 @@ it('changes the canvas color', () => {
   cy.findByLabelText('Canvas Background Color').should(
     'have.attr',
     'value',
-    '#e9ebf7'
+    '#e9ebf7',
   );
 
   cy.get('.react-flow__background')

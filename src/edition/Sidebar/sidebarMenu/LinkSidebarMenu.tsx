@@ -12,7 +12,7 @@ export default function LinkSidebarMenu(selectedElement: Edge) {
   const rfInstance = useReactFlow();
 
   const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
+    (state) => state.displayedWorkflowInfo,
   );
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
 

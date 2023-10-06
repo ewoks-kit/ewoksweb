@@ -21,11 +21,11 @@ export default function DataMappingComponent({ element, mapAllData }: Props) {
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   const sourceNodeData = useNodeDataStore((state) =>
-    state.nodesData.get(element.source)
+    state.nodesData.get(element.source),
   );
 
   const targetNodeData = useNodeDataStore((state) =>
-    state.nodesData.get(element.target)
+    state.nodesData.get(element.target),
   );
 
   function addDataMapping(rows?: DataMapping[]) {

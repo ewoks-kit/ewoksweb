@@ -20,7 +20,7 @@ const FormField = forwardRef<HTMLDivElement, Props>((props, ref) => {
             </Tooltip>
           )
         : Fragment,
-    [tooltip]
+    [tooltip],
   );
 
   return (

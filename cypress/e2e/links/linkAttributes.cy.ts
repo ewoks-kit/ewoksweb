@@ -10,13 +10,13 @@ it('link has the default style', () => {
     .should(
       'have.attr',
       'style',
-      'fill: rgb(206, 92, 0); font-weight: 500; font-size: 14px; color: rgb(206, 92, 0);'
+      'fill: rgb(206, 92, 0); font-weight: 500; font-size: 14px; color: rgb(206, 92, 0);',
     )
     .siblings('rect')
     .should(
       'have.attr',
       'style',
-      'fill: rgb(223, 226, 247); fill-opacity: 1; stroke-width: 3px; stroke: rgb(206, 92, 0);'
+      'fill: rgb(223, 226, 247); fill-opacity: 1; stroke-width: 3px; stroke: rgb(206, 92, 0);',
     );
 });
 
