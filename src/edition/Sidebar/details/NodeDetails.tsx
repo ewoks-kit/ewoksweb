@@ -1,20 +1,21 @@
-import type { EwoksRFNodeData } from '../../../types';
 import { Box, Checkbox, IconButton } from '@material-ui/core';
-import SidebarTooltip from '../SidebarTooltip';
-import NodeLabelComment from './NodeLabelComment';
-import DefaultInputs from '../EditableTableProperties/DefaultInputs';
+import InfoIcon from '@material-ui/icons/Info';
+import type { Node } from 'reactflow';
 import { useReactFlow } from 'reactflow';
+
+import { useNodesIds } from '../../../store/graph-hooks';
 import useNodeDataStore from '../../../store/useNodeDataStore';
+import type { EwoksRFNodeData } from '../../../types';
 import {
   assertNodeDataDefined,
   assertNodeDefined,
 } from '../../../utils/typeGuards';
-import { useNodesIds } from '../../../store/graph-hooks';
-import type { Node } from 'reactflow';
-import NodeInfo from './NodeInfo';
-import DefaultErrorNodeControl from './DefaultErrorNodeControl';
-import InfoIcon from '@material-ui/icons/Info';
+import DefaultInputs from '../EditableTableProperties/DefaultInputs';
 import sidebarStyle from '../sidebarStyle';
+import SidebarTooltip from '../SidebarTooltip';
+import DefaultErrorNodeControl from './DefaultErrorNodeControl';
+import NodeInfo from './NodeInfo';
+import NodeLabelComment from './NodeLabelComment';
 
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(selectedElement: Node) {

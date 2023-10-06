@@ -1,12 +1,11 @@
 import type { EwoksEvent } from '../types';
 import { assertDefined } from '../utils/typeGuards';
-import StatusBadge from './StatusBadge';
-import StartTimeInfo from './StartTimeInfo';
-
-import styles from './WorkflowItem.module.css';
 import Duration from './Duration';
-import Traceback from './Traceback';
 import RerunButton from './RerunButton';
+import StartTimeInfo from './StartTimeInfo';
+import StatusBadge from './StatusBadge';
+import Traceback from './Traceback';
+import styles from './WorkflowItem.module.css';
 
 interface Props {
   events: EwoksEvent[];

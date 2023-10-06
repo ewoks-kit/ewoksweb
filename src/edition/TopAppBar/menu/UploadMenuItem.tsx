@@ -1,11 +1,11 @@
-import { useRef } from 'react';
 import { FolderOpen } from '@material-ui/icons';
+import { useRef } from 'react';
+import { useReactFlow } from 'reactflow';
 
+import { useTasks } from '../../../api/tasks';
+import OpenGraphInput from '../../../general/OpenGraphInput';
 import useStore from '../../../store/useStore';
 import ActionMenuItem from './ActionMenuItem';
-import OpenGraphInput from '../../../general/OpenGraphInput';
-import { useReactFlow } from 'reactflow';
-import { useTasks } from '../../../api/tasks';
 
 function UploadMenuItem() {
   const ref = useRef<HTMLInputElement>(null);

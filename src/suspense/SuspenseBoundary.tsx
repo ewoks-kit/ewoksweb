@@ -1,7 +1,8 @@
-import type { ErrorBoundaryProps } from 'react-error-boundary';
-import { ErrorBoundary } from 'react-error-boundary';
 import type { ReactNode } from 'react';
 import { Suspense } from 'react';
+import type { ErrorBoundaryProps } from 'react-error-boundary';
+import { ErrorBoundary } from 'react-error-boundary';
+
 import Spinner from '../general/Spinner';
 import SnackbarErrorFallback from './SnackbarErrorFallback';
 

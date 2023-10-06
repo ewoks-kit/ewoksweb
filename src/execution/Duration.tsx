@@ -1,6 +1,6 @@
 import { AccessTime } from '@material-ui/icons';
-import { formatDuration } from './utils';
 
+import { formatDuration } from './utils';
 import styles from './WorkflowItem.module.css';
 
 interface Props {

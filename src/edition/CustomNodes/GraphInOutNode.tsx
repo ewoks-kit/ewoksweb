@@ -1,18 +1,15 @@
-import { Handle, Position } from 'reactflow';
-import { contentStyle, style } from './nodeStyles';
 import Tooltip from '@material-ui/core/Tooltip';
-import isValidLink from '../../utils/IsValidLink';
-import useSnackbarStore from '../../store/useSnackbarStore';
-import type { Connection, NodeProps } from 'reactflow';
-import NodeIcon from './NodeIcon';
+import type { NodeProps } from 'reactflow';
+import { Handle, Position } from 'reactflow';
+
+import useNodeDataStore from '../../store/useNodeDataStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import type { EwoksRFNodeData } from '../../types';
-import { useReactFlow } from 'reactflow';
-import { getNodesData } from '../../utils';
-import NodeLabel from './NodeLabel';
-import useNodeDataStore from '../../store/useNodeDataStore';
-import { assertNodeDataDefined } from '../../utils/typeGuards';
 import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
+import { assertNodeDataDefined } from '../../utils/typeGuards';
+import NodeIcon from './NodeIcon';
+import NodeLabel from './NodeLabel';
+import { contentStyle, style } from './nodeStyles';
 
 function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
@@ -29,24 +26,7 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
 
   const { task_type } = nodeData.task_props;
 
-  const { getNodes, getEdges } = useReactFlow();
-
-  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
-
   const nodWidth = { width: `${nodeWidth || 100}px` };
-
-  const isValidConnection = (connection: Connection) => {
-    const { isValid, reason } = isValidLink(
-      connection,
-      getNodes(),
-      getEdges(),
-      getNodesData()
-    );
-    if (!isValid) {
-      showWarningMsg(reason);
-    }
-    return isValid;
-  };
 
   return (
     <div className="node-content" style={{ borderColor }}>
@@ -71,7 +51,6 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
               position={Position.Right}
               id="sr"
               style={{ ...contentStyle.handle, ...contentStyle.handleSource }}
-              isValidConnection={isValidConnection}
               isConnectable
             />
           )}
@@ -96,7 +75,6 @@ function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
                 ...contentStyle.handleTarget,
               }}
               isConnectable
-              isValidConnection={isValidConnection}
             />
           )}
         </span>

@@ -1,13 +1,13 @@
-import type { WorkflowDescription } from 'types';
-
-import useSnackbarStore from 'store/useSnackbarStore';
+import { CircularProgress, TextField } from '@material-ui/core';
+import { Autocomplete } from '@material-ui/lab';
+import commonStrings from 'commonStrings.json';
 import type { CSSProperties } from 'react';
 import { useEffect, useState } from 'react';
-import { Autocomplete } from '@material-ui/lab';
-import { CircularProgress, TextField } from '@material-ui/core';
-import { textForError } from '../utils';
-import commonStrings from 'commonStrings.json';
+import useSnackbarStore from 'store/useSnackbarStore';
+import type { WorkflowDescription } from 'types';
+
 import { useWorkflowsDLE } from '../api/workflows';
+import { textForError } from '../utils';
 
 interface Props {
   onChange: (input: WorkflowDescription) => void;

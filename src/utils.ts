@@ -1,3 +1,11 @@
+import orange3 from 'images/orange3.png';
+import type { Edge, Node } from 'reactflow';
+
+import { fetchWorkflow } from './api/workflows';
+import { curateEdgeData, curateNodeData } from './edition/TopAppBar/utils';
+import { enrichWithData } from './general/forms/utils';
+import useEdgeDataStore from './store/useEdgeDataStore';
+import useNodeDataStore from './store/useNodeDataStore';
 import type {
   EwoksRFLinkData,
   EwoksRFNodeData,
@@ -6,18 +14,11 @@ import type {
   Icon,
 } from './types';
 import { calcEwoksGraphProp } from './utils/CalcGraphInputsOutputs';
-import { propIsEmpty } from './utils/utils';
+import { calcNoteNodes } from './utils/calcNoteNodes';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
-import { calcNoteNodes } from './utils/calcNoteNodes';
-import { fetchWorkflow } from './api/workflows';
-import orange3 from 'images/orange3.png';
 import { isEwoksServerErrorResponse } from './utils/typeGuards';
-import useNodeDataStore from './store/useNodeDataStore';
-import useEdgeDataStore from './store/useEdgeDataStore';
-import type { Edge, Node } from 'reactflow';
-import { curateEdgeData, curateNodeData } from './edition/TopAppBar/utils';
-import { enrichWithData } from './general/forms/utils';
+import { propIsEmpty } from './utils/utils';
 
 export const DEFAULT_ICON: Icon = { name: 'orange3.png', data_url: orange3 };
 

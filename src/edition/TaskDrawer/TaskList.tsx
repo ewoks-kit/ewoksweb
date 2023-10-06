@@ -6,10 +6,10 @@ import {
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { useState } from 'react';
+
 import { useTasks } from '../../api/tasks';
 import GeneralTasksList from './GeneralTasksList';
 import TaskItem from './TaskItem';
-
 import styles from './TaskList.module.css';
 import TaskListToolbar from './TaskListToolbar';
 

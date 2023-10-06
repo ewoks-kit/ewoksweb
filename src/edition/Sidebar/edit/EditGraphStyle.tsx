@@ -1,5 +1,6 @@
-import useConfigStore from '../../../store/useConfigStore';
 import type { ChangeEvent } from 'react';
+
+import useConfigStore from '../../../store/useConfigStore';
 
 // DOC: Edit the graph style
 export default function EditGraphStyle() {

@@ -1,8 +1,8 @@
 import { IconButton, Menu } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import React from 'react';
-import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 
+import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 import styles from './ActionMenu.module.css';
 import { ActionMenuContext } from './ActionMenuContext';
 import DownloadMenuItem from './DownloadMenuItem';

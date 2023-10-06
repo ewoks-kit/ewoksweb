@@ -1,14 +1,15 @@
-import type { EditableTableRow, Inputs } from 'types';
-import EditableTable from './EditableTable';
-import SidebarTooltip from '../SidebarTooltip';
-import useNodeDataStore from '../../../store/useNodeDataStore';
-import { assertNodeDataDefined } from '../../../utils/typeGuards';
-import type { Node } from 'reactflow';
-import { nanoid } from 'nanoid';
-import { isClass } from './utils';
 import { IconButton } from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
+import { nanoid } from 'nanoid';
+import type { Node } from 'reactflow';
+import type { EditableTableRow, Inputs } from 'types';
+
+import useNodeDataStore from '../../../store/useNodeDataStore';
+import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import sidebarStyle from '../sidebarStyle';
+import SidebarTooltip from '../SidebarTooltip';
+import EditableTable from './EditableTable';
+import { isClass } from './utils';
 
 export default function DefaultInputs(element: Node) {
   const setNodeData = useNodeDataStore((state) => state.setNodeData);

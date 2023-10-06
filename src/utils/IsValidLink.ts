@@ -1,4 +1,5 @@
 import type { Connection, Edge } from 'reactflow';
+
 import type { EwoksRFNode, EwoksRFNodeData } from '../types';
 
 export default function isValidLink(

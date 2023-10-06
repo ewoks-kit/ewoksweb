@@ -1,4 +1,5 @@
 import type { Connection } from 'reactflow';
+
 import type { EwoksRFLink, EwoksRFNodeData } from '../../types';
 import { DEFAULT_LINK_VALUES } from '../../utils/defaultValues';
 import { assertTaskInfo } from '../../utils/typeGuards';

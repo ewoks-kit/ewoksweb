@@ -1,5 +1,5 @@
-import type { EwoksRFNode } from 'types';
 import type { XYPosition } from 'reactflow';
+import type { EwoksRFNode } from 'types';
 
 export function calcCoordinatesFirstNode(nodes: EwoksRFNode[]) {
   const boundaries = nodes.reduce<XYPosition>(

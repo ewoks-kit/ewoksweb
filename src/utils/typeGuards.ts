@@ -1,5 +1,7 @@
+import type { Edge, Node } from 'reactflow';
 import { MarkerType } from 'reactflow';
-import type { Node, Edge } from 'reactflow';
+
+import type { TaskInfo } from '../edition/Canvas/models';
 import type {
   EwoksRFLink,
   EwoksRFLinkData,
@@ -7,7 +9,6 @@ import type {
   EwoksRFNodeData,
   GraphDetails,
 } from '../types';
-import type { TaskInfo } from '../edition/Canvas/models';
 
 export interface EwoksServerErrorResponse {
   response: { data: { message: string } };

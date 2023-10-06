@@ -2,19 +2,20 @@
   The cell within a table when the row is in edit mode.
   Provides different input for any selected type (number, string, list etc)
 */
-import type { ChangeEvent } from 'react';
-import React, { useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
 import {
   FormControl,
   FormControlLabel,
   Radio,
   RadioGroup,
 } from '@material-ui/core';
+import Input from '@material-ui/core/Input';
+import { makeStyles } from '@material-ui/core/styles';
+import type { ChangeEvent } from 'react';
+import React, { useEffect } from 'react';
+
 import type { CustomTableCellProps, EditableTableRow } from '../../../types';
-import SelectNameValue from './SelectNameValue';
 import { isDecimalNumber } from '../../../utils/utils';
+import SelectNameValue from './SelectNameValue';
 
 const useStyles = makeStyles(() => ({
   input: {

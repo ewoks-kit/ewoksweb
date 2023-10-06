@@ -1,9 +1,9 @@
 import { CircularProgress } from '@material-ui/core';
 import { Replay } from '@material-ui/icons';
 import { useState } from 'react';
+
 import { executeWorkflow } from '../api/workflows';
 import useSnackbarStore from '../store/useSnackbarStore';
-
 import styles from './RerunButton.module.css';
 
 interface Props {

@@ -1,11 +1,12 @@
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
-import useStore from '../../../store/useStore';
 import { Delete as DeleteIcon } from '@material-ui/icons';
-import { useReactFlow } from 'reactflow';
 import type { Edge } from 'reactflow';
+import { useReactFlow } from 'reactflow';
+
+import useStore from '../../../store/useStore';
 
 export default function LinkSidebarMenu(selectedElement: Edge) {
   const rfInstance = useReactFlow();

@@ -1,13 +1,13 @@
-import { isString } from './typeGuards';
 import type { EwoksLink, EwoksRFLink } from '../types';
+import { propIsEmpty } from '../utils/utils';
+import { DEFAULT_LINK_VALUES } from './defaultValues';
+import { isString } from './typeGuards';
 import {
   calcConditionName,
   calcConditionValue,
   calcDataMapping,
   notUndefinedValue,
 } from './utils';
-import { propIsEmpty } from '../utils/utils';
-import { DEFAULT_LINK_VALUES } from './defaultValues';
 
 // EwoksRFLinks --> EwoksLinks for saving
 export function toEwoksLinks(links: EwoksRFLink[]): EwoksLink[] {

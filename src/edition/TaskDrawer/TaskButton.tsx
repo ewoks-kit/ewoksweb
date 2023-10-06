@@ -1,6 +1,5 @@
-import { attachTaskInfo } from '../Canvas/utils';
 import type { TaskInfo } from '../Canvas/models';
-
+import { attachTaskInfo } from '../Canvas/utils';
 import styles from './TaskButton.module.css';
 
 interface Props {

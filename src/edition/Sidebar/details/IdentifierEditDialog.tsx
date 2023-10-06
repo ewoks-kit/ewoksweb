@@ -5,10 +5,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { Alert } from '@material-ui/lab';
 import { Controller, useForm } from 'react-hook-form';
+
 import FormField from '../../../general/forms/FormField';
 import type { TaskFields } from '../../../general/forms/models';
-import { Alert } from '@material-ui/lab';
 
 interface EditingDialogProps {
   task_identifier: string;

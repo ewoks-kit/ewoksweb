@@ -1,5 +1,6 @@
-import { ListItemIcon } from '@material-ui/core';
 import type { SvgIcon } from '@material-ui/core';
+import { ListItemIcon } from '@material-ui/core';
+
 import styles from './ActionMenu.module.css';
 
 interface Props {

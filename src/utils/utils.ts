@@ -1,5 +1,6 @@
 /* eslint-disable require-unicode-regexp */
 import { nanoid } from 'nanoid';
+
 import type {
   Condition,
   DataMapping,

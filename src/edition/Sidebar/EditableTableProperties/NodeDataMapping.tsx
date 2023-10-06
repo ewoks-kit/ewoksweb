@@ -1,8 +1,9 @@
+import { nanoid } from 'nanoid';
 import type { DataMapping, EditableTableRow } from 'types';
+
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import TableDataMapping from './TableDataMapping';
-import { nanoid } from 'nanoid';
 
 export default function NodeDataMapping({ nodeId }: { nodeId: string }) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(nodeId));

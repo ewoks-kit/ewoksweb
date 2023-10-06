@@ -20,7 +20,10 @@ module.exports = createConfig({
     'dot-notation': 'off',
     'sort-keys-fix/sort-keys-fix': 'off', // keys should be sorted based on significance
     'import/no-default-export': 'off', // default exports are common in React
-    'no-negated-condition': 'off', // ternaries are sometimes more readable when `true` branch is most significant branch
+
+    // ternaries are sometimes more readable when `true` branch is most significant branch
+    'no-negated-condition': 'off',
+    'unicorn/no-negated-condition': 'off',
 
     // Prefer explicit, consistent return - e.g. `return undefined;`
     'unicorn/no-useless-undefined': 'off',
@@ -31,12 +34,17 @@ module.exports = createConfig({
 
     // To be re-enabled after refactoring
     'sonarjs/cognitive-complexity': 'off',
+
+    // `import { type Foo }` requires TS 5.0's `verbatimModuleSyntax`, which causes issues with Jest
+    // Sticking with `importsNotUsedAsValues` and `import type { Foo }` for now...
+    'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
   },
   overrides: [
     createReactOverride({
       ...dependencies,
       rules: {
         'react/jsx-no-constructed-context-values': 'off', // too strict
+        'jsx-a11y/prefer-tag-over-role': 'off', // To be fixed
       },
     }),
     createTypeScriptOverride({
@@ -86,6 +94,9 @@ module.exports = createConfig({
 
         // Catch unnecessary checks to ease readability
         '@typescript-eslint/no-unnecessary-condition': 'warn',
+
+        // Chaining array operations after mutations is handy and do not hamper readability
+        'etc/no-assign-mutated-array': 'off',
       },
     }),
     createJestOverride({

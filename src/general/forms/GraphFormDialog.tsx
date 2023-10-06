@@ -11,14 +11,15 @@ import { Alert } from '@material-ui/lab';
 import { Controller, useForm } from 'react-hook-form';
 import { useReactFlow } from 'reactflow';
 
+import { useTasks } from '../../api/tasks';
 import {
   postWorkflow,
   putWorkflow,
   useInvalidateWorkflows,
 } from '../../api/workflows';
 import commonStrings from '../../commonStrings.json';
-import useStore from '../../store/useStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
+import useStore from '../../store/useStore';
 import type { GraphDetails } from '../../types';
 import { GraphFormAction } from '../../types';
 import {
@@ -27,7 +28,6 @@ import {
   prepareEwoksGraph,
   textForError,
 } from '../../utils';
-import { useTasks } from '../../api/tasks';
 import FormField from './FormField';
 import type { GraphFields } from './models';
 

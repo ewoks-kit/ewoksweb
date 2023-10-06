@@ -1,4 +1,5 @@
 import { isString } from 'lodash';
+
 import { useIcons } from '../../../api/icons';
 import styles from './NodeIconControl.module.css';
 

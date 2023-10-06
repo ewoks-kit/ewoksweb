@@ -1,8 +1,9 @@
-import { style } from './nodeStyles';
 import type { NodeProps } from 'reactflow';
-import type { EwoksRFNodeData } from '../../types';
+
 import useNodeDataStore from '../../store/useNodeDataStore';
+import type { EwoksRFNodeData } from '../../types';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
+import { style } from './nodeStyles';
 
 type NoteProps = NodeProps<EwoksRFNodeData>;
 

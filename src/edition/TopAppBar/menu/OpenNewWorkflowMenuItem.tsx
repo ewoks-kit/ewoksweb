@@ -2,8 +2,8 @@ import { FiberNew } from '@material-ui/icons';
 import { useKeyboardEvent } from '@react-hookz/web';
 import { useCallback, useState } from 'react';
 import { useReactFlow } from 'reactflow';
-import { useTasks } from '../../../api/tasks';
 
+import { useTasks } from '../../../api/tasks';
 import ConfirmDialog from '../../../general/ConfirmDialog';
 import useStore from '../../../store/useStore';
 import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';

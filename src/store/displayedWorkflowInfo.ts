@@ -1,7 +1,8 @@
+import { merge } from 'lodash';
+import type { SetState } from 'zustand';
+
 import type { GraphDetails, State } from '../types';
 import { EMPTY_RF_GRAPH } from '../utils/emptyGraphs';
-import type { SetState } from 'zustand';
-import { merge } from 'lodash';
 
 function getParentsOfNextWorkflow(
   nextWorkflowId: string,

@@ -1,7 +1,8 @@
 import { PermMedia } from '@material-ui/icons';
 import { useState } from 'react';
-import IconsDrawer from './iconsDrawer/IconsDrawer';
+
 import ActionMenuItem from './ActionMenuItem';
+import IconsDrawer from './iconsDrawer/IconsDrawer';
 
 function OpenDrawerMenuItem() {
   const [isOpen, setOpen] = useState(false);

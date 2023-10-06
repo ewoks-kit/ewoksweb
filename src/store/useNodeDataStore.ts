@@ -1,6 +1,7 @@
-import create from 'zustand';
-import type { EwoksRFNode, EwoksRFNodeData } from '../types';
 import { merge } from 'lodash';
+import { create } from 'zustand';
+
+import type { EwoksRFNode, EwoksRFNodeData } from '../types';
 
 export interface NodeDataState {
   nodesData: Map<string, EwoksRFNodeData>;
