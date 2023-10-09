@@ -72,10 +72,10 @@ function Canvas() {
   }>();
 
   const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
+    (state) => state.displayedWorkflowInfo,
   );
   const setDisplayedWorkflowInfo = useStore(
-    (state) => state.setDisplayedWorkflowInfo
+    (state) => state.setDisplayedWorkflowInfo,
   );
   const addLoadedGraph = useStore((state) => state.addLoadedGraph);
 
@@ -89,15 +89,8 @@ function Canvas() {
   const setDataFromNodes = useNodeDataStore((state) => state.setDataFromNodes);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const setDataFromEdges = useEdgeDataStore((state) => state.setDataFromEdges);
-  const {
-    fitView,
-    setNodes,
-    setEdges,
-    getNodes,
-    getEdges,
-    addNodes,
-    getNode,
-  } = rfInstance;
+  const { fitView, setNodes, setEdges, getNodes, getEdges, addNodes, getNode } =
+    rfInstance;
 
   useEffect(() => {
     setTimeout(() => {
@@ -130,10 +123,11 @@ function Canvas() {
     }
 
     const stateRF = storeRF.getState();
-    const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect() || {
-      left: 0,
-      top: 0,
-    };
+    const reactFlowBounds =
+      reactFlowWrapper.current?.getBoundingClientRect() || {
+        left: 0,
+        top: 0,
+      };
 
     const taskInfo = retrieveTaskInfo(event.dataTransfer);
     if (!taskInfo) {
@@ -217,7 +211,7 @@ function Canvas() {
       getNodes(),
       getEdges(),
       getNodesData(),
-      oldEdge
+      oldEdge,
     );
     if (!isValid) {
       showWarningMsg(reason);
@@ -225,7 +219,7 @@ function Canvas() {
 
     const newEdges = addEdge(
       { ...oldEdge, ...newConnection },
-      getEdges().filter((edge) => edge.id !== oldEdge.id)
+      getEdges().filter((edge) => edge.id !== oldEdge.id),
     );
 
     setEdges(newEdges);
@@ -290,7 +284,7 @@ function Canvas() {
         }, 300);
       } else {
         showErrorMsg(
-          `The subgraph ${nodeData.task_props.task_identifier} cannot be located!`
+          `The subgraph ${nodeData.task_props.task_identifier} cannot be located!`,
         );
       }
     }
@@ -338,7 +332,7 @@ function Canvas() {
       connection,
       getNodes(),
       getEdges(),
-      getNodesData()
+      getNodesData(),
     );
     if (!isValid) {
       showWarningMsg(reason);

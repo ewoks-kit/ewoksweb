@@ -299,7 +299,7 @@ export interface CustomTableCellProps {
   onChange(
     e: { target: { name: string; value: string | number } },
     row: EditableTableRow,
-    index: number
+    index: number,
   ): void;
 }
 
