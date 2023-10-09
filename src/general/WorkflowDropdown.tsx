@@ -79,7 +79,7 @@ function WorkflowDropdown(props: Props) {
         />
       )}
       options={options}
-      getOptionSelected={(option, valueSelect) => option.id === valueSelect.id}
+      isOptionEqualToValue={(option, valueSelect) => option.id === valueSelect.id}
       groupBy={(option) => option.category}
       inputValue={inputValue}
       onInputChange={(event, value) => {

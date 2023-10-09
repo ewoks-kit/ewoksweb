@@ -33,7 +33,7 @@ export default function OpenActionMenuButton() {
         color="inherit"
         onClick={handleClick}
         aria-label="Open menu with more actions"
-      >
+        size="large">
         <MoreVertIcon />
       </IconButton>
 

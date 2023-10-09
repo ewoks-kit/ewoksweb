@@ -18,7 +18,7 @@ function ToolsCell(props: Props) {
         disabled={disable}
         aria-label="Remove row"
         onClick={() => onDelete()}
-      >
+        size="large">
         <RemoveCircleOutline
           className={styles.icon}
           htmlColor="#rgb(108, 128, 236)"

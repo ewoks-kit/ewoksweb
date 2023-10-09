@@ -1,19 +1,25 @@
 import 'normalize.css';
 import './styles/index.css';
 
-import { createMuiTheme, ThemeProvider } from '@mui/material';
+import {
+  createTheme,
+  StyledEngineProvider,
+  ThemeProvider,
+} from '@mui/material';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 
 import App from './App';
 
-const theme = createMuiTheme();
+const theme = createTheme();
 
 ReactDOM.render(
   <StrictMode>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </StyledEngineProvider>
   </StrictMode>,
   document.querySelector('#root'),
 );
