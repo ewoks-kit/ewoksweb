@@ -35,7 +35,6 @@ function SelectNameValue(props: CustomTableCellProps) {
         renderInput={(params) => (
           <TextField variant="standard" {...params} margin="normal" />
         )}
-        data-cy="autocompleteInputInEditableCell"
       />
     </FormControl>
   );

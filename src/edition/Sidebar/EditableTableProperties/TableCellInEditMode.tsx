@@ -65,7 +65,6 @@ function TableCellInEditMode(props: CustomTableCellProps) {
           name="value"
           value={valueToString}
           onChange={(e) => onChangeBool(e, row, index)}
-          data-cy="radioInEditableCell"
         >
           <FormControlLabel
             disabled={disable}

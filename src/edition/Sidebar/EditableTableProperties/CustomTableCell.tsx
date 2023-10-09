@@ -57,7 +57,6 @@ function CustomTableCell(props: CustomTableCellProps) {
               onEdit?.();
             }}
             color="primary"
-            data-cy="editButtonEditableTable"
           >
             <EditIcon fontSize="small" />
           </IconButton>
