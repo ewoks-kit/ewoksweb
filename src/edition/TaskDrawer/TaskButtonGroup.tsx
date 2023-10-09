@@ -1,4 +1,4 @@
-import { Edit, LibraryAdd } from '@material-ui/icons';
+import { Edit, LibraryAdd } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { useState } from 'react';
 

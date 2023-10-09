@@ -10,7 +10,7 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
-import { Alert } from '@material-ui/lab';
+import { Alert } from '@mui/lab';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 

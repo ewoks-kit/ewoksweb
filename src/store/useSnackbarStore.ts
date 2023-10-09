@@ -1,4 +1,4 @@
-import type { Color } from '@material-ui/lab';
+import type { Color } from '@mui/lab';
 import { create } from 'zustand';
 
 interface State {

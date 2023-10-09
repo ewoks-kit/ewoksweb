@@ -1,5 +1,5 @@
-import AddIcon from '@material-ui/icons/Add';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import AddIcon from '@mui/icons-material/Add';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { Fab } from '@mui/material';
 
 import useTaskDrawerState from '../../store/taskDrawerState';

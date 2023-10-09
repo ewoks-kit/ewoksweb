@@ -1,4 +1,4 @@
-import SendIcon from '@material-ui/icons/Send';
+import SendIcon from '@mui/icons-material/Send';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

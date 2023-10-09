@@ -1,4 +1,4 @@
-import { EditOutlined as EditIcon } from '@material-ui/icons';
+import { EditOutlined as EditIcon } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { useState } from 'react';
 

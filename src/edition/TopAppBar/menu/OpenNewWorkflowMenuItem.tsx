@@ -1,4 +1,4 @@
-import { FiberNew } from '@material-ui/icons';
+import { FiberNew } from '@mui/icons-material';
 import { useKeyboardEvent } from '@react-hookz/web';
 import { useCallback, useState } from 'react';
 import { useReactFlow } from 'reactflow';

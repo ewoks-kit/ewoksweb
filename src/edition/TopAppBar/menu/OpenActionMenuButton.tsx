@@ -1,5 +1,5 @@
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { IconButton, Menu } from '@mui/material';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import React from 'react';
 
 import SuspenseBoundary from '../../../suspense/SuspenseBoundary';

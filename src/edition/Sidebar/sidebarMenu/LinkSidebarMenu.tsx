@@ -1,4 +1,4 @@
-import { Delete as DeleteIcon } from '@material-ui/icons';
+import { Delete as DeleteIcon } from '@mui/icons-material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';

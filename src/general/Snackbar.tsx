@@ -1,7 +1,7 @@
 import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
-import CloseIcon from '@material-ui/icons/Close';
-import { Alert } from '@material-ui/lab';
+import CloseIcon from '@mui/icons-material/Close';
+import { Alert } from '@mui/lab';
 
 import useSnackbarStore from '../store/useSnackbarStore';
 
