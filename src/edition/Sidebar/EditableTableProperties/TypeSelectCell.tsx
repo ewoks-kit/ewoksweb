@@ -22,8 +22,9 @@ function TypeSelectCell(props: Props) {
 
   return (
     <TableCell className={styles.cell} align="left" size="small">
-      <FormControl fullWidth>
+      <FormControl variant="standard" fullWidth>
         <Select
+          variant="standard"
           disabled={disable}
           value={value}
           label="Task type"

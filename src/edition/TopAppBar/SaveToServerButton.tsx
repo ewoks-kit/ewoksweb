@@ -111,26 +111,29 @@ export default function SaveToServerButton() {
     [],
   );
 
-  return <>
-    <SuspenseBoundary>
-      <GraphFormDialog
-        elementToEdit={displayedWorkflowInfo}
-        action={action}
-        isOpen={isDialogOpen}
-        onClose={() => setDialogOpen(false)}
-      />
-    </SuspenseBoundary>
-    <Tooltip title={tooltipText('Save to server')} enterDelay={500} arrow>
-      <IconButton
-        className={styles.saveButton}
-        onClick={() => {
-          void handleSave();
-        }}
-        aria-label="Save workflow to server"
-        color="inherit"
-        size="large">
-        <StatusIcon status={status} setStatus={setStatus} />
-      </IconButton>
-    </Tooltip>
-  </>;
+  return (
+    <>
+      <SuspenseBoundary>
+        <GraphFormDialog
+          elementToEdit={displayedWorkflowInfo}
+          action={action}
+          isOpen={isDialogOpen}
+          onClose={() => setDialogOpen(false)}
+        />
+      </SuspenseBoundary>
+      <Tooltip title={tooltipText('Save to server')} enterDelay={500} arrow>
+        <IconButton
+          className={styles.saveButton}
+          onClick={() => {
+            void handleSave();
+          }}
+          aria-label="Save workflow to server"
+          color="inherit"
+          size="large"
+        >
+          <StatusIcon status={status} setStatus={setStatus} />
+        </IconButton>
+      </Tooltip>
+    </>
+  );
 }

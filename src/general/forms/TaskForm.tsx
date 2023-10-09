@@ -117,9 +117,10 @@ function TaskForm(props: Props) {
               const { onChange, ...restField } = field;
 
               return (
-                <FormControl className={styles.dropdown}>
+                <FormControl variant="standard" className={styles.dropdown}>
                   <InputLabel id="taskTypeInFormDialog">Task type</InputLabel>
                   <Select
+                    variant="standard"
                     labelId="taskTypeInFormDialog"
                     onChange={onChange}
                     {...restField}

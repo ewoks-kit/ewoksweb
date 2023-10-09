@@ -88,7 +88,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
 
     if (row.type === 'number') {
       return (
-        <FormControl fullWidth>
+        <FormControl variant="standard" fullWidth>
           <Input
             disabled={disable}
             value={row[name]}
@@ -108,7 +108,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
   }
 
   return (
-    <FormControl fullWidth>
+    <FormControl variant="standard" fullWidth>
       <Input
         disabled={disable}
         value={row[name]}

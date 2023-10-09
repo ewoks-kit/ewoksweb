@@ -157,6 +157,7 @@ export default function EditLinkStyle(element: Edge) {
       >
         <InputLabel id="linkTypeLabel">Link type</InputLabel>
         <Select
+          variant="standard"
           labelId="linkTypeLabel"
           value={linkType}
           label="Link type"
@@ -194,6 +195,7 @@ export default function EditLinkStyle(element: Edge) {
       >
         <InputLabel id="markerEnd">Arrow Head</InputLabel>
         <Select
+          variant="standard"
           value={arrowType}
           label="Arrow head"
           onChange={arrowTypeChanged}

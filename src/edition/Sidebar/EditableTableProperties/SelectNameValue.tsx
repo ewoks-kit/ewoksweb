@@ -8,7 +8,7 @@ function SelectNameValue(props: CustomTableCellProps) {
 
   const options = typeOfValues?.values || [''];
   return (
-    <FormControl fullWidth>
+    <FormControl variant="standard" fullWidth>
       <Autocomplete
         disabled={disable}
         disableClearable

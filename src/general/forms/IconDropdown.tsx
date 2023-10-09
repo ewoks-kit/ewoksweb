@@ -22,9 +22,10 @@ function IconDropdown(props: Props) {
         const { onChange, ...restField } = field;
 
         return (
-          <FormControl className={styles.dropdown}>
+          <FormControl variant="standard" className={styles.dropdown}>
             <InputLabel id="iconNameInFormDialog">Icon</InputLabel>
             <Select
+              variant="standard"
               labelId="iconNameInFormDialog"
               onChange={onChange}
               {...restField}

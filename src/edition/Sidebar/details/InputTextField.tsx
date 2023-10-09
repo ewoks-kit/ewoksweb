@@ -13,7 +13,7 @@ export default function InputTextField(props: InputTextFieldProps) {
 
   return (
     <div className={styles.entry}>
-      <FormControl fullWidth size="small">
+      <FormControl variant="standard" fullWidth size="small">
         <TextField
           label={label}
           variant="outlined"
