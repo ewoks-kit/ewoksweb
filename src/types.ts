@@ -54,6 +54,7 @@ export interface GraphDetails {
   uiProps?: GraphUiProps;
   keywords?: object;
   input_schema?: object;
+  ui_schema?: object;
   execute_arguments?: object;
   worker_options?: object;
 }

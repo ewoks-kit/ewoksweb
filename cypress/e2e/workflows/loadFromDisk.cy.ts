@@ -56,3 +56,43 @@ it('leaves the original JSON untouched when saving on the server', () => {
   cy.findByRole('menuitem', { name: 'Delete Workflow' }).click();
   cy.findByRole('button', { name: 'Yes' }).click();
 });
+
+it('saves optional fields of the workflow to the server', () => {
+  cy.findByRole('button', { name: 'Open menu with more actions' }).click();
+  cy.findByRole('menuitem', { name: 'Open from disk' }).click();
+
+  cy.findByLabelText('Load workflow from disk').selectFile(
+    'cypress/fixtures/workflowAllValues.json',
+    {
+      // needed since the input is hidden
+      force: true,
+    },
+  );
+  cy.waitForStableDOM();
+
+  cy.hasBreadcrumbs(['workflowAllValues']);
+
+  cy.findByRole('button', { name: 'Save workflow to server' }).click();
+  cy.findByRole('textbox', {
+    name: 'Identifier',
+  }).type('workflowAllValues');
+  cy.findByRole('button', { name: 'Save workflow' }).click();
+
+  cy.findByRole('alert', { hidden: true }).should(
+    'contain.text',
+    'Graph saved successfully',
+  );
+
+  cy.readFile('cypress/fixtures/workflowAllValues.json').then(
+    (originalJson) => {
+      cy.readFile(
+        'pysrc/ewoksweb/tests/resources/workflows/workflowAllValues.json',
+      ).should('deep.equal', originalJson);
+    },
+  );
+
+  // Clean-up by deleting the saved workflow
+  cy.findByRole('button', { name: 'Open edit actions menu' }).click();
+  cy.findByRole('menuitem', { name: 'Delete Workflow' }).click();
+  cy.findByRole('button', { name: 'Yes' }).click();
+});
