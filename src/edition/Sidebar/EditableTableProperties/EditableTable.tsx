@@ -2,8 +2,6 @@
   The table that is used to pass parameters for default-values, conditions and data-mapping.
   Its cells can change depending on the kind of input and the parent-component params.
 */
-import { TableCell } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
@@ -13,40 +11,13 @@ import useSnackbarStore from 'store/useSnackbarStore';
 import type { Condition, EditableTableRow, Inputs, TypeOfValues } from 'types';
 
 import DraggableDialog from '../../../general/DraggableDialog';
-import AddRowButton from './AddRowButton';
+import AddEntryRow from './AddEntryRow';
 import CustomTableCell from './CustomTableCell';
+import styles from './Table.module.css';
 import TableHeader from './TableHeader';
 import ToolsCell from './ToolsCell';
-import TypeSelectCell from './TypeSelect';
+import TypeSelectCell from './TypeSelectCell';
 import { createData, getType } from './utils';
-
-export const useStyles = makeStyles(() => ({
-  root: {
-    width: '100%',
-    padding: '1px',
-    overflowX: 'auto',
-  },
-  table: {
-    padding: '1px',
-    minWidth: 160,
-    wordBreak: 'break-all',
-  },
-  selectTableCell: {
-    width: 28,
-    padding: '1px',
-  },
-  tableCell: {
-    width: 120,
-    height: 20,
-    padding: '1px',
-  },
-  plusButtonTableCell: {
-    textAlign: 'end',
-    width: '20%',
-    height: 15,
-    padding: '0 5px 0 0',
-  },
-}));
 
 interface EditableTableProps {
   headers: string[];
@@ -78,8 +49,6 @@ function EditableTable(props: EditableTableProps) {
     setTypeOfInputs(defaultValues.map(getType));
     setRows(defaultValues.map(createData));
   }, [defaultValues]);
-
-  const classes = useStyles();
 
   function showEditableDialog(
     id: string,
@@ -254,7 +223,7 @@ function EditableTable(props: EditableTableProps) {
       )}
       <Table
         style={{ opacity: disable ? '0.2' : '1' }}
-        className={classes.table}
+        className={styles.table}
         aria-label="editable table"
         size="small"
         padding="none"
@@ -275,7 +244,6 @@ function EditableTable(props: EditableTableProps) {
                 />
 
                 <TypeSelectCell
-                  className={classes.tableCell}
                   value={
                     typeOfInputs[index] !== 'boolean'
                       ? typeOfInputs[index]
@@ -301,18 +269,12 @@ function EditableTable(props: EditableTableProps) {
             </React.Fragment>
           ))}
           {onRowAdd && !disable && (
-            <TableRow>
-              <TableCell align="left" className={classes.plusButtonTableCell} />
-              <TableCell align="left" className={classes.plusButtonTableCell}>
-                <AddRowButton onClick={() => onRowAdd(rows)} />
-              </TableCell>
-              <TableCell />
-            </TableRow>
+            <AddEntryRow onClick={() => onRowAdd(rows)} colSpan={4} />
           )}
         </TableBody>
       </Table>
       {disable && (
-        <div style={{ backgroundColor: '#f9f9e2' }}>
+        <div className={styles.warning}>
           Conditions have no effect when On Error condition is enabled. They
           will be removed when saving the workflow.
         </div>

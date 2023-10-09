@@ -1,16 +1,15 @@
 /*
   The table that is used to pass parameters for data-mapping.
 */
-import { TableCell } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import React from 'react';
 import type { DataMapping, TypeOfValues } from 'types';
 
-import AddRowButton from './AddRowButton';
+import AddEntryRow from './AddEntryRow';
 import CustomTableCell from './CustomTableCell';
+import styles from './Table.module.css';
 import TableHeader from './TableHeader';
 import ToolsCell from './ToolsCell';
 
@@ -23,25 +22,8 @@ interface TableDataMappingProps {
   onRowAdd?: (rows?: DataMapping[]) => void;
 }
 
-const useStyles = makeStyles(() => ({
-  table: (props: { disable: boolean | undefined }) => ({
-    padding: '1px',
-    minWidth: 160,
-    wordBreak: 'break-all',
-    opacity: props.disable ? '0.2' : '1',
-  }),
-  tableCell: {
-    textAlign: 'end',
-    width: '50%',
-    height: 15,
-    padding: '0 5px 0 0',
-  },
-}));
-
 function TableDataMapping(props: TableDataMappingProps) {
   const { values, headers, disable, onRowAdd } = props;
-
-  const classes = useStyles({ disable });
 
   function onChange(
     e: { target: { name: string; value: string | number } },
@@ -75,7 +57,11 @@ function TableDataMapping(props: TableDataMappingProps) {
 
   return (
     <>
-      <Table className={classes.table} aria-label="data-mapping-table">
+      <Table
+        className={styles.table}
+        aria-label="data-mapping-table"
+        style={{ opacity: disable ? '0.2' : '1' }}
+      >
         <TableHeader headers={headers} />
         <TableBody>
           {values.map((row, index) => (
@@ -108,20 +94,12 @@ function TableDataMapping(props: TableDataMappingProps) {
             </React.Fragment>
           ))}
           {onRowAdd && !disable && (
-            <TableRow>
-              <TableCell align="left" className={classes.tableCell}>
-                <AddRowButton
-                  onClick={() => onRowAdd(values)}
-                  ariaLabel="Add data mapping entry"
-                />
-              </TableCell>
-              <TableCell />
-            </TableRow>
+            <AddEntryRow onClick={() => onRowAdd(values)} colSpan={3} />
           )}
         </TableBody>
       </Table>
       {disable && (
-        <div style={{ backgroundColor: '#f9f9e2' }}>
+        <div className={styles.warning}>
           Data Mappings have no effect when Map all Data is enabled. They will
           be removed when saving the workflow.
         </div>

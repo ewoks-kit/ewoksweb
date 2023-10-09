@@ -1,6 +1,6 @@
 import { TableCell, TableHead, TableRow } from '@material-ui/core';
 
-import { useStyles } from './EditableTable';
+import styles from './TableHeader.module.css';
 
 interface Props {
   headers: string[];
@@ -9,20 +9,18 @@ interface Props {
 function TableHeader(props: Props) {
   const { headers } = props;
 
-  const classes = useStyles();
-
   return (
     <TableHead>
       <TableRow>
-        <TableCell align="left" className={classes.tableCell}>
+        <TableCell align="left" className={styles.cell}>
           <b>{headers[0]}</b>
         </TableCell>
         {!headers[0].startsWith('Source') && (
-          <TableCell align="left" className={classes.tableCell}>
+          <TableCell align="left" className={styles.cell}>
             <b>Type</b>
           </TableCell>
         )}
-        <TableCell align="left" className={classes.tableCell}>
+        <TableCell align="left" className={styles.cell}>
           <b>{headers[1]}</b>
         </TableCell>
       </TableRow>

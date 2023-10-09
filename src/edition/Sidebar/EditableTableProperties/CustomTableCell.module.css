@@ -1,0 +1,12 @@
+.cell {
+  composes: cell from './Table.module.css';
+  padding: 0 4px !important;
+}
+
+.cell :global .MuiFormControl-marginNormal {
+  margin: 0 !important;
+}
+
+.icon {
+  padding-left: 8px;
+}

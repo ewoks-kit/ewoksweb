@@ -2,17 +2,17 @@ import { FormControl, MenuItem, Select, TableCell } from '@material-ui/core';
 import type { ChangeEvent } from 'react';
 
 import type { PropertyChangedEvent } from '../../../types';
+import styles from './TypeSelectCell.module.css';
 import { INPUT_TYPES } from './utils';
 
 interface Props {
   value: string;
-  className?: string;
   disable?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 function TypeSelectCell(props: Props) {
-  const { value, className, disable, onChange } = props;
+  const { value, disable, onChange } = props;
 
   function onChangeLocal(event: PropertyChangedEvent) {
     if (onChange) {
@@ -21,19 +21,13 @@ function TypeSelectCell(props: Props) {
   }
 
   return (
-    <TableCell
-      align="left"
-      size="small"
-      className={className}
-      style={{ borderBottom: 'none' }}
-    >
+    <TableCell className={styles.cell} align="left" size="small">
       <FormControl fullWidth>
         <Select
           disabled={disable}
           value={value}
           label="Task type"
           onChange={onChangeLocal}
-          style={{ fontSize: '14px' }}
         >
           {INPUT_TYPES.map((type) => (
             <MenuItem key={type} value={type}>

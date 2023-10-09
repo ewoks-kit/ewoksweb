@@ -9,38 +9,16 @@ import {
   RadioGroup,
 } from '@material-ui/core';
 import Input from '@material-ui/core/Input';
-import { makeStyles } from '@material-ui/core/styles';
 import type { ChangeEvent } from 'react';
 import React, { useEffect } from 'react';
 
 import type { CustomTableCellProps, EditableTableRow } from '../../../types';
 import { isDecimalNumber } from '../../../utils/utils';
 import SelectNameValue from './SelectNameValue';
-
-const useStyles = makeStyles(() => ({
-  input: {
-    fontSize: '12px',
-  },
-  smallRadio: {
-    '& span': {
-      padding: '0px 8px',
-      margin: '0px',
-    },
-    '& svg': {
-      width: '0.7em',
-      height: '0.7em',
-      color: 'blue',
-    },
-    '& .MuiFormControlLabel-label': {
-      fontSize: '14px',
-    },
-  },
-}));
+import styles from './TableCellInEditMode.module.css';
 
 function TableCellInEditMode(props: CustomTableCellProps) {
   const { index, row, name, onChange, typeOfValues, usedIn, disable } = props;
-
-  const classes = useStyles();
 
   const [valueToString, setValueToString] = React.useState<string>('true');
 
@@ -94,7 +72,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
             value="true"
             control={<Radio />}
             label="true"
-            className={classes.smallRadio}
+            className={styles.smallRadio}
             color="primary"
           />
           <FormControlLabel
@@ -102,7 +80,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
             value="false"
             control={<Radio />}
             label="false"
-            className={classes.smallRadio}
+            className={styles.smallRadio}
           />
         </RadioGroup>
       );
@@ -110,14 +88,14 @@ function TableCellInEditMode(props: CustomTableCellProps) {
 
     if (row.type === 'number') {
       return (
-        <FormControl fullWidth style={{ marginLeft: '5px' }}>
+        <FormControl fullWidth>
           <Input
             disabled={disable}
             value={row[name]}
             type="text"
             name={name}
             onChange={(event) => onChangeNumber(event)}
-            className={classes.input}
+            className={styles.input}
             data-cy="inputInEditableCell"
           />
         </FormControl>
@@ -130,14 +108,14 @@ function TableCellInEditMode(props: CustomTableCellProps) {
   }
 
   return (
-    <FormControl fullWidth style={{ marginLeft: '5px' }}>
+    <FormControl fullWidth>
       <Input
         disabled={disable}
         value={row[name]}
         type="text"
         name={name}
         onChange={(e) => onChange(e, row, index)}
-        className={classes.input}
+        className={styles.input}
         data-cy="inputInEditableCell"
       />
     </FormControl>
