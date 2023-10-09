@@ -1,4 +1,4 @@
-import type { ChangeEvent, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
 import type { Node } from 'reactflow';
 
@@ -405,11 +405,6 @@ export interface SelectedElement {
 export interface SelectedElementNode extends SelectedElement {
   type: 'node';
 }
-
-export type PropertyChangedEvent = ChangeEvent<{
-  name?: string | undefined;
-  value: unknown;
-}>;
 
 export interface SelectedElementRF {
   selectedElement: Node | Edge | undefined;

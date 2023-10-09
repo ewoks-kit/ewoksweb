@@ -6,17 +6,6 @@ import type { CustomTableCellProps } from '../../../types';
 function SelectNameValue(props: CustomTableCellProps) {
   const { index, row, name, onChange, typeOfValues, disable } = props;
 
-  const renderOption = (option: string) => {
-    const valueIsRequired = typeOfValues?.requiredValues?.includes(option);
-
-    return (
-      <Typography component="div" variant="body1">
-        {option}
-        {valueIsRequired && <span style={{ color: 'red' }}>*</span>}
-      </Typography>
-    );
-  };
-
   const options = typeOfValues?.values || [''];
   return (
     <FormControl fullWidth>
@@ -25,7 +14,17 @@ function SelectNameValue(props: CustomTableCellProps) {
         disableClearable
         freeSolo={options.length === 0}
         options={options}
-        renderOption={renderOption}
+        renderOption={(_, option) => {
+          const valueIsRequired =
+            typeOfValues?.requiredValues?.includes(option);
+
+          return (
+            <Typography component="div" variant="body1">
+              {option}
+              {valueIsRequired && <span style={{ color: 'red' }}>*</span>}
+            </Typography>
+          );
+        }}
         value={(row[name] as string) || ''}
         onChange={(e, val) =>
           onChange({ target: { value: val, name } }, row, index)
@@ -33,7 +32,9 @@ function SelectNameValue(props: CustomTableCellProps) {
         onInputChange={(e, val) =>
           onChange({ target: { value: val, name } }, row, index)
         }
-        renderInput={(params) => <TextField {...params} margin="normal" />}
+        renderInput={(params) => (
+          <TextField variant="standard" {...params} margin="normal" />
+        )}
         data-cy="autocompleteInputInEditableCell"
       />
     </FormControl>

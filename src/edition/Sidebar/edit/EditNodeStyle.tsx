@@ -1,5 +1,5 @@
 import { Checkbox, FormControl } from '@mui/material';
-import type { ChangeEvent } from 'react';
+import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
@@ -50,7 +50,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   };
 
   function handleNodeWidthChange(
-    _event: ChangeEvent<unknown>,
+    _event: SyntheticEvent | Event,
     value: number | number[],
   ) {
     if (typeof value === 'number') {

@@ -1,7 +1,7 @@
-import IconButton from '@mui/material/IconButton';
-import Snackbar from '@mui/material/Snackbar';
 import CloseIcon from '@mui/icons-material/Close';
 import { Alert } from '@mui/lab';
+import IconButton from '@mui/material/IconButton';
+import Snackbar from '@mui/material/Snackbar';
 
 import useSnackbarStore from '../store/useSnackbarStore';
 
@@ -9,7 +9,7 @@ function SimpleSnackbar() {
   const { open, text, severity, closeSnackbar } = useSnackbarStore();
 
   const handleClose = (
-    event: React.SyntheticEvent | React.MouseEvent,
+    event: Event | React.SyntheticEvent,
     reason?: string,
   ) => {
     if (reason === 'clickaway') {

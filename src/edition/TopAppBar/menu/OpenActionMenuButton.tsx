@@ -33,7 +33,8 @@ export default function OpenActionMenuButton() {
         color="inherit"
         onClick={handleClick}
         aria-label="Open menu with more actions"
-        size="large">
+        size="large"
+      >
         <MoreVertIcon />
       </IconButton>
 
@@ -53,8 +54,6 @@ export default function OpenActionMenuButton() {
           vertical: 'top',
           horizontal: 'center',
         }}
-        // https://github.com/mui/material-ui/issues/10804#issuecomment-376266662
-        getContentAnchorEl={null}
       >
         <ActionMenuContext.Provider value={{ open, onClose }}>
           <SuspenseBoundary>

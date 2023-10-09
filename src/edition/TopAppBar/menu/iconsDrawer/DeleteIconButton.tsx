@@ -1,5 +1,5 @@
-import { IconButton } from '@mui/material';
 import { Delete } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 import { useState } from 'react';
 
 import { deleteIcon, useInvalidateIcons } from '../../../../api/icons';

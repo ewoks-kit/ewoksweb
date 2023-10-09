@@ -1,7 +1,7 @@
+import type { SelectChangeEvent } from '@mui/material';
 import { FormControl, MenuItem, Select, TableCell } from '@mui/material';
 import type { ChangeEvent } from 'react';
 
-import type { PropertyChangedEvent } from '../../../types';
 import styles from './TypeSelectCell.module.css';
 import { INPUT_TYPES } from './utils';
 
@@ -14,7 +14,7 @@ interface Props {
 function TypeSelectCell(props: Props) {
   const { value, disable, onChange } = props;
 
-  function onChangeLocal(event: PropertyChangedEvent) {
+  function onChangeLocal(event: SelectChangeEvent) {
     if (onChange) {
       onChange(event as ChangeEvent<HTMLInputElement>);
     }
