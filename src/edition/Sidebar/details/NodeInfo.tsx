@@ -1,19 +1,19 @@
 import { IconButton } from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
 
-import type { EwoksRFNodeData } from '../../../types';
+import type { NodeData } from '../../../types';
 import sidebarStyle from '../sidebarStyle';
 import SidebarTooltip from '../SidebarTooltip';
 import TaskProperty from './TaskProperty';
 
 interface Props {
   nodeId: string;
-  nodeData: EwoksRFNodeData;
+  nodeData: NodeData;
   onPropChange: (
     propKeyValue: {
       task_identifier?: string;
     },
-    nodeData: EwoksRFNodeData,
+    nodeData: NodeData,
   ) => void;
 }
 

@@ -12,7 +12,7 @@ import TaskForm from '../../../general/forms/TaskForm';
 import { useNodesIds } from '../../../store/graph-hooks';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import useStore from '../../../store/useStore';
-import type { EwoksRFNode } from '../../../types';
+import type { NodeRF } from '../../../types';
 import { getNodeData } from '../../../utils';
 import {
   assertDefined,
@@ -42,7 +42,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
     const nodeToClone = rfInstance.getNode(selectedElement.id);
     assertDefined(nodeToClone);
 
-    const clone: EwoksRFNode = {
+    const clone: NodeRF = {
       ...nodeToClone,
       id: calcNewId(selectedElement.id, nodesIds),
       selected: false,

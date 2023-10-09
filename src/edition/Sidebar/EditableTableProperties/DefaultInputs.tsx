@@ -2,7 +2,7 @@ import { IconButton } from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
 import { nanoid } from 'nanoid';
 import type { Node } from 'reactflow';
-import type { EditableTableRow, Inputs } from 'types';
+import type { DefaultInputRF, EditableTableRow } from 'types';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
@@ -21,7 +21,7 @@ export default function DefaultInputs(element: Node) {
     const newNodeData = {
       ewoks_props: {
         default_inputs: [
-          ...(rows as Inputs[]),
+          ...(rows as DefaultInputRF[]),
           { id: nanoid(), name: '', value: '' },
         ],
       },

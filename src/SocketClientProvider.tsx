@@ -7,7 +7,7 @@ import { io } from 'socket.io-client';
 
 import type { EwoksJob } from './api/models';
 import { QueryKey } from './api/models';
-import type { EwoksEvent } from './types';
+import type { EventEwoks } from './types';
 
 export const SocketClientContext = createContext({} as Socket);
 
@@ -26,7 +26,7 @@ function SocketClientProvider(props: PropsWithChildren<Props>) {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    socket.on('Executing', (e: EwoksEvent) => {
+    socket.on('Executing', (e: EventEwoks) => {
       queryClient.setQueryData<Map<string, EwoksJob>>(
         [QueryKey.Jobs],
         (oldJobs = new Map<string, EwoksJob>()) => {

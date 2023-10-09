@@ -8,7 +8,12 @@ import TableRow from '@material-ui/core/TableRow';
 import type { ChangeEvent } from 'react';
 import React, { useEffect } from 'react';
 import useSnackbarStore from 'store/useSnackbarStore';
-import type { Condition, EditableTableRow, Inputs, TypeOfValues } from 'types';
+import type {
+  Condition,
+  DefaultInputRF,
+  EditableTableRow,
+  TypeOfValues,
+} from 'types';
 
 import DraggableDialog from '../../../general/DraggableDialog';
 import AddEntryRow from './AddEntryRow';
@@ -21,7 +26,7 @@ import { createData, getType } from './utils';
 
 interface EditableTableProps {
   headers: string[];
-  defaultValues: Condition[] | Inputs[];
+  defaultValues: Condition[] | DefaultInputRF[];
   typeOfValues: TypeOfValues[];
   disable?: boolean;
   valuesChanged: (rows: EditableTableRow[]) => void;

@@ -19,7 +19,7 @@ import ReactFlow, {
 import { useStoreApi } from 'reactflow';
 import useSnackbarStore from 'store/useSnackbarStore';
 import useStore from 'store/useStore';
-import type { EwoksRFNode, EwoksRFNodeData, Task } from 'types';
+import type { NodeData, NodeRF, Task } from 'types';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
 
@@ -174,11 +174,11 @@ function Canvas() {
         ? calcNewId('Note', nodesIds)
         : calcNewId(task_identifier || 'Node', nodesIds);
 
-    const newNode: EwoksRFNode = {
+    const newNode: NodeRF = {
       id: newId,
       type: task_type,
       position,
-      data: {} as EwoksRFNodeData,
+      data: {} as NodeData,
     };
 
     setNodeData(newId, {
@@ -310,7 +310,7 @@ function Canvas() {
       const nodeData = getNodeData(selectedNode.id);
       assertNodeDataDefined(nodeData, selectedNode.id);
 
-      const newClone: EwoksRFNode = {
+      const newClone: NodeRF = {
         ...node,
         data: nodeData,
         id: calcNewId(selectedNode.id, nodesIds),

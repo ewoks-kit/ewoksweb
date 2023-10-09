@@ -1,8 +1,8 @@
 import type {
-  EwoksEvent,
-  EwoksLink,
-  EwoksNode,
+  EventEwoks,
   GraphDetails,
+  LinkEwoks,
+  NodeEwoks,
   Task,
   WorkflowDescription,
 } from '../types';
@@ -27,8 +27,8 @@ export interface TaskDescriptionsResponse {
 
 export interface WorkflowResponse {
   graph: GraphDetails;
-  nodes: Omit<EwoksNode, 'uiProps'>[];
-  links: Omit<EwoksLink, 'uiProps' | 'startEnd'>[];
+  nodes: Omit<NodeEwoks, 'uiProps'>[];
+  links: Omit<LinkEwoks, 'uiProps' | 'startEnd'>[];
 }
 
 export interface WorkflowDescriptionsResponse {
@@ -39,7 +39,7 @@ export interface ExecuteWorkflowResponse {
   job_id: string;
 }
 
-export type EwoksJob = EwoksEvent[];
+export type EwoksJob = EventEwoks[];
 
 export interface ExecutedJobsResponse {
   jobs: EwoksJob[];

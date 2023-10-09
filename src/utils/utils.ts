@@ -5,8 +5,8 @@ import type {
   Condition,
   DataMapping,
   DataMappingEwoks,
-  InOutLinkAttributes,
-  InOutNodesUiProps,
+  LinkAttributesInputOutput,
+  UiPropsInputOutputNodeAndLink,
 } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { isString } from './typeGuards';
@@ -78,7 +78,7 @@ export function notUndefinedValue(
   return undefined;
 }
 
-export function calcCommonNodeUiProps(uiProps: InOutNodesUiProps) {
+export function calcCommonNodeUiProps(uiProps: UiPropsInputOutputNodeAndLink) {
   return {
     ...notUndefinedValue(uiProps.withImage, 'withImage'),
     ...notUndefinedValue(uiProps.withLabel, 'withLabel'),
@@ -88,8 +88,8 @@ export function calcCommonNodeUiProps(uiProps: InOutNodesUiProps) {
 }
 
 export function calcLinkUiProps(
-  uiProps: InOutNodesUiProps | undefined,
-  linkAttr?: InOutLinkAttributes | undefined,
+  uiProps: UiPropsInputOutputNodeAndLink | undefined,
+  linkAttr?: LinkAttributesInputOutput | undefined,
 ) {
   return {
     ...(linkAttr?.label && { label: linkAttr.label }),
@@ -106,7 +106,7 @@ export function calcLinkUiProps(
   };
 }
 
-export function calcLinkCommonProps(linkAttr: InOutLinkAttributes) {
+export function calcLinkCommonProps(linkAttr: LinkAttributesInputOutput) {
   return {
     ...(linkAttr.conditions &&
       linkAttr.conditions.length > 0 && {

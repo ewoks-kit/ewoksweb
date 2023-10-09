@@ -2,9 +2,9 @@ import type {
   DataMapping,
   DataMappingEwoks,
   DefaultErrorAttributes,
-  EwoksNode,
-  EwoksRFNode,
-  Inputs,
+  DefaultInputRF,
+  NodeEwoks,
+  NodeRF,
 } from '../types';
 import { isString } from './typeGuards';
 import {
@@ -14,7 +14,7 @@ import {
   stringOrNumber,
 } from './utils';
 
-function cleanDefaultInputs(default_inputs: Inputs[] | undefined) {
+function cleanDefaultInputs(default_inputs: DefaultInputRF[] | undefined) {
   if (!default_inputs) {
     return undefined;
   }
@@ -48,7 +48,7 @@ function calcDefaultErrorAttributes(
   };
 }
 
-function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
+function calcDefaultInputs(default_inputs: DefaultInputRF[] | undefined) {
   if (!default_inputs) {
     return undefined;
   }
@@ -64,8 +64,8 @@ function calcDefaultInputs(default_inputs: Inputs[] | undefined) {
 }
 
 // EwoksRFNode --> EwoksNode for saving
-export function toEwoksNodes(nodes: EwoksRFNode[]): EwoksNode[] {
-  const tempNodes: EwoksRFNode[] = [...nodes].filter(
+export function toEwoksNodes(nodes: NodeRF[]): NodeEwoks[] {
+  const tempNodes: NodeRF[] = [...nodes].filter(
     (nod) =>
       !['graphInput', 'graphOutput', 'note'].includes(
         nod.data.task_props.task_type,

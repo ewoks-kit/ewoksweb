@@ -5,7 +5,7 @@ import { useReactFlow } from 'reactflow';
 
 import { useNodesIds } from '../../../store/graph-hooks';
 import useNodeDataStore from '../../../store/useNodeDataStore';
-import type { EwoksRFNodeData } from '../../../types';
+import type { NodeData } from '../../../types';
 import {
   assertNodeDataDefined,
   assertNodeDefined,
@@ -35,7 +35,7 @@ export default function NodeDetails(selectedElement: Node) {
     propKeyValue: {
       task_identifier?: string;
     },
-    nodeDataL: EwoksRFNodeData,
+    nodeDataL: NodeData,
   ) {
     // DOC: if the task_identifier changes (ppfmethod, ppfport, script case) then the id
     // of the node needs to change for a coherent json. Links to/from this node also change!

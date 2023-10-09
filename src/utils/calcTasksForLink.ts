@@ -1,7 +1,7 @@
-import type { EwoksNode, GraphEwoks, Task } from '../types';
+import type { GraphEwoks, NodeEwoks, Task } from '../types';
 
 export function findLinkInputs(
-  nodes: EwoksNode[],
+  nodes: NodeEwoks[],
   sourceNodeId: string,
   newNodeSubgraphs: GraphEwoks[],
   tasks: Task[],
@@ -17,7 +17,7 @@ export function findLinkInputs(
 }
 
 export function findLinkOutputs(
-  nodes: EwoksNode[],
+  nodes: NodeEwoks[],
   targetNodeId: string,
   newNodeSubgraphs: GraphEwoks[],
   tasks: Task[],
@@ -38,7 +38,7 @@ export function findLinkOutputs(
 
 function calcTask(
   sourceOrTarget: 'source' | 'target',
-  node: EwoksNode,
+  node: NodeEwoks,
   tasks: Task[],
   newNodeSubgraphs: GraphEwoks[],
 ): Task | undefined {

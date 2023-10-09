@@ -2,11 +2,11 @@ import type { ReactFlowInstance } from 'reactflow';
 import type { GetState, SetState } from 'zustand';
 
 import type {
-  EwoksRFLinkData,
-  EwoksRFNode,
-  EwoksRFNodeData,
   GraphEwoks,
   GraphRF,
+  LinkData,
+  NodeData,
+  NodeRF,
   State,
   Task,
 } from '../types';
@@ -64,7 +64,7 @@ const rootWorkflow = (
     // 4. Calculate the new graph given the subgraphs
     let grfNodes = toRFEwoksNodes(ewoksWorkflow, newNodeSubgraphs, tasks);
 
-    const notes: EwoksRFNode[] =
+    const notes: NodeRF[] =
       ewoksWorkflow.graph.uiProps?.notes?.map((note) => {
         return {
           data: {
@@ -104,10 +104,10 @@ const rootWorkflow = (
     const newGraphNoData = {
       graph: resultGraph.graph,
       nodes: grfNodes.map((nod) => {
-        return { ...nod, data: {} as EwoksRFNodeData };
+        return { ...nod, data: {} as NodeData };
       }),
       links: rfLinks.map((lin) => {
-        return { ...lin, data: {} as EwoksRFLinkData };
+        return { ...lin, data: {} as LinkData };
       }),
     };
 

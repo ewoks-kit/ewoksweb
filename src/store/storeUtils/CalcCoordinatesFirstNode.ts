@@ -1,7 +1,7 @@
 import type { XYPosition } from 'reactflow';
-import type { EwoksRFNode } from 'types';
+import type { NodeRF } from 'types';
 
-export function calcCoordinatesFirstNode(nodes: EwoksRFNode[]) {
+export function calcCoordinatesFirstNode(nodes: NodeRF[]) {
   const boundaries = nodes.reduce<XYPosition>(
     (result, { position }) => {
       const x = position.x < result.x ? position.x : result.x;

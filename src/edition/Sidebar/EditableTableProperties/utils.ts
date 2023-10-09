@@ -1,15 +1,15 @@
 import type {
   Condition,
+  DefaultInputRF,
   EditableTableRow,
-  EwoksRFLinkData,
-  EwoksRFNodeData,
-  Inputs,
+  LinkData,
+  NodeData,
   TypeOfValues,
 } from '../../../types';
 
 export const INPUT_TYPES = ['bool', 'number', 'string', 'list', 'dict', 'null'];
 
-export function createData(pair: Condition | Inputs): EditableTableRow {
+export function createData(pair: Condition | DefaultInputRF): EditableTableRow {
   const type = getType(pair);
 
   if ('source_output' in pair) {
@@ -29,7 +29,7 @@ export function createData(pair: Condition | Inputs): EditableTableRow {
   };
 }
 
-export function getType(val: Condition | Inputs) {
+export function getType(val: Condition | DefaultInputRF) {
   const { value } = val;
 
   if ('type' in val && val.type) {
@@ -59,14 +59,14 @@ export function getType(val: Condition | Inputs) {
   return 'string';
 }
 
-export function isClass(edgeData: EwoksRFNodeData | undefined): boolean {
+export function isClass(edgeData: NodeData | undefined): boolean {
   return edgeData?.task_props.task_type === 'class';
 }
 
 export function calcTypeOfValues(
   inOrOut: 'inputs' | 'outputs',
-  nodeData: EwoksRFNodeData | undefined,
-  edgeDataL: EwoksRFLinkData,
+  nodeData: NodeData | undefined,
+  edgeDataL: LinkData,
 ): TypeOfValues {
   return {
     typeOfInput: isClass(nodeData) ? 'select' : 'input',

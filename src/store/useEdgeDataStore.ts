@@ -1,14 +1,14 @@
 import { merge } from 'lodash';
 import { create } from 'zustand';
 
-import type { EwoksRFLink, EwoksRFLinkData } from '../types';
+import type { LinkData, LinkRF } from '../types';
 
 export interface EdgeDataState {
-  edgesData: Map<string, EwoksRFLinkData>;
-  setEdgeData: (edgeId: string, edgeData: EwoksRFLinkData) => void;
-  mergeEdgeData: (edgeId: string, edgeData: Partial<EwoksRFLinkData>) => void;
-  setEdgesData: (edgesData: Map<string, EwoksRFLinkData>) => void;
-  setDataFromEdges: (edges: EwoksRFLink[]) => void;
+  edgesData: Map<string, LinkData>;
+  setEdgeData: (edgeId: string, edgeData: LinkData) => void;
+  mergeEdgeData: (edgeId: string, edgeData: Partial<LinkData>) => void;
+  setEdgesData: (edgesData: Map<string, LinkData>) => void;
+  setDataFromEdges: (edges: LinkRF[]) => void;
   resetEdgesData: () => void;
 }
 
@@ -22,11 +22,7 @@ const useEdgeDataStore = create<EdgeDataState>((set) => ({
   },
   mergeEdgeData: (edgeId, edgeData) => {
     set(({ edgesData }) => {
-      const newData: EwoksRFLinkData = merge(
-        {},
-        edgesData.get(edgeId),
-        edgeData,
-      );
+      const newData: LinkData = merge({}, edgesData.get(edgeId), edgeData);
 
       return {
         edgesData: new Map(edgesData).set(edgeId, { ...newData }),

@@ -1,10 +1,10 @@
 import { defaultLinkStyle } from '../edition/Canvas/utils';
 import type {
   Condition,
-  EwoksRFLink,
   GraphEwoks,
+  LinkRF,
   Task,
-  UiPropsLinks,
+  UiPropsLink,
 } from '../types';
 import { findLinkInputs, findLinkOutputs } from './calcTasksForLink';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
@@ -19,7 +19,7 @@ export function toRFEwoksLinks(
   tempGraph: GraphEwoks,
   newNodeSubgraphs: GraphEwoks[],
   tasks: Task[],
-): EwoksRFLink[] {
+): LinkRF[] {
   let id = 0;
 
   // DOC: calculate the links from inputs-outputs of the Ewoks graph
@@ -61,7 +61,7 @@ export function toRFEwoksLinks(
         tasks,
       );
 
-      const link: EwoksRFLink = {
+      const link: LinkRF = {
         id: `${source}:${uiProps?.sourceHandle ?? ''}->${target}:${
           uiProps?.targetHandle ?? ''
         }_${id++}`,
@@ -120,14 +120,14 @@ export function toRFEwoksLinks(
 }
 
 function calcTargetHandle(
-  uiProps: UiPropsLinks | undefined,
+  uiProps: UiPropsLink | undefined,
   sub_target: string | undefined,
 ): string {
   return uiProps?.targetHandle ?? sub_target ?? 'tl';
 }
 
 function calcSourceHandle(
-  uiProps: UiPropsLinks | undefined,
+  uiProps: UiPropsLink | undefined,
   sub_source: string | undefined,
 ): string {
   return uiProps?.sourceHandle ?? sub_source ?? 'sr';

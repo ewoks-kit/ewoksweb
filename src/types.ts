@@ -12,16 +12,16 @@ export enum GraphFormAction {
   newGraphOrOverwrite = 'newGraphOrOverwrite',
 }
 
-export interface GraphNodes {
+export interface InputOutputNodeAndLink {
   id: string;
   node: string;
   sub_node?: string;
-  link_attributes?: InOutLinkAttributes;
-  uiProps?: InOutNodesUiProps;
+  link_attributes?: LinkAttributesInputOutput;
+  uiProps?: UiPropsInputOutputNodeAndLink;
 }
 
 // TODO: examine with ewoks if all the following are needed in an InOutLink
-export interface InOutLinkAttributes {
+export interface LinkAttributesInputOutput {
   label?: string;
   comment?: string;
   conditions?: ConditionEwoks[];
@@ -31,7 +31,7 @@ export interface InOutLinkAttributes {
   required?: boolean;
 }
 
-export interface InOutNodesUiProps {
+export interface UiPropsInputOutputNodeAndLink {
   label?: string;
   position?: XYPosition;
   style?: LinkStyle;
@@ -49,8 +49,8 @@ export interface GraphDetails {
   id: string;
   label?: string;
   category?: string;
-  input_nodes?: GraphNodes[];
-  output_nodes?: GraphNodes[];
+  input_nodes?: InputOutputNodeAndLink[];
+  output_nodes?: InputOutputNodeAndLink[];
   uiProps?: GraphUiProps;
   keywords?: object;
   input_schema?: object;
@@ -59,13 +59,7 @@ export interface GraphDetails {
   worker_options?: object;
 }
 
-export interface DialogParams {
-  open: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  content: any;
-}
-
-export interface EwoksEvent {
+export interface EventEwoks {
   context: string;
   host_name: string;
   job_id: string;
@@ -117,17 +111,17 @@ export interface Task {
   output_names?: string[];
 }
 
-export interface Inputs {
+export interface DefaultInputRF {
   id?: string;
   name: string | number;
   value: unknown;
   type?: string;
 }
 
-export interface InputsEwoks extends Omit<Inputs, 'id'> {}
+export interface DefaultInputsEwoks
+  extends Omit<DefaultInputRF, 'id' | 'type'> {}
 
 export interface GraphUiProps {
-  type?: string;
   comment?: string;
   notes?: Note[];
 }
@@ -174,20 +168,20 @@ export interface DefaultErrorAttributes<T = DataMapping | DataMappingEwoks> {
   data_mapping?: T[];
 }
 
-export interface EwoksNode {
+export interface NodeEwoks {
   id: string;
   label?: string;
   task_identifier: string;
   task_type: TaskType;
   task_generator?: string;
-  default_inputs?: Inputs[];
+  default_inputs?: DefaultInputsEwoks[];
   inputs_complete?: boolean;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes<DataMappingEwoks>;
-  uiProps?: EwoksNodeUiProps;
+  uiProps?: UiPropsNodeEwoks;
 }
 
-export interface EwoksNodeUiProps {
+export interface UiPropsNodeEwoks {
   icon?: string;
   comment?: string;
   position?: XYPosition;
@@ -198,11 +192,11 @@ export interface EwoksNodeUiProps {
   nodeWidth?: number;
   task_category?: string;
   moreHandles?: boolean;
-  inputs?: OutputsInputsSub[];
-  outputs?: OutputsInputsSub[];
+  inputs?: OutputsInputsSubgraph[];
+  outputs?: OutputsInputsSubgraph[];
 }
 
-export interface EwoksLink {
+export interface LinkEwoks {
   source: string;
   sub_source?: string;
   target: string;
@@ -212,16 +206,16 @@ export interface EwoksLink {
   conditions?: ConditionEwoks[];
   required?: boolean;
   on_error?: boolean;
-  uiProps?: UiPropsLinks;
+  uiProps?: UiPropsLink;
   startEnd?: boolean;
 }
 
-export interface OutputsInputsSub {
+export interface OutputsInputsSubgraph {
   label: string;
   positionY?: number;
 }
 
-export interface RFNodeUiProps {
+export interface UiPropsNodeRF {
   icon?: string;
   style?: CSSProperties;
   withImage?: boolean;
@@ -230,11 +224,11 @@ export interface RFNodeUiProps {
   nodeWidth?: number;
   moreHandles?: boolean;
   // To position inputs-outputs of subgraphs in a graph
-  inputs?: OutputsInputsSub[];
-  outputs?: OutputsInputsSub[];
+  inputs?: OutputsInputsSubgraph[];
+  outputs?: OutputsInputsSubgraph[];
 }
 
-export interface RFNodeTaskProperties {
+export interface NodeTaskProperties {
   task_type: TaskType;
   task_identifier: string;
   task_category?: string;
@@ -243,23 +237,23 @@ export interface RFNodeTaskProperties {
   required_input_names?: string[];
 }
 
-export interface RFNodeEwoksProperties {
+export interface NodeEwoksProperties {
   label?: string;
-  default_inputs?: Inputs[];
+  default_inputs?: DefaultInputRF[];
   inputs_complete?: boolean;
   task_generator?: string;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes<DataMapping>;
 }
 
-export interface EwoksRFNodeData {
-  task_props: RFNodeTaskProperties;
-  ewoks_props: RFNodeEwoksProperties;
-  ui_props: RFNodeUiProps;
+export interface NodeData {
+  task_props: NodeTaskProperties;
+  ewoks_props: NodeEwoksProperties;
+  ui_props: UiPropsNodeRF;
   comment?: string;
 }
 
-export type EwoksRFNode = Node<EwoksRFNodeData>;
+export type NodeRF = Node<NodeData>;
 // From new reactFlow11:
 // width?: number | null; // what is their functionality?
 // height?: number | null;
@@ -303,7 +297,7 @@ export interface CustomTableCellProps {
   ): void;
 }
 
-export interface EwoksRFLinkData {
+export interface LinkData {
   data_mapping?: DataMapping[];
   comment?: string;
   conditions?: Condition[];
@@ -323,8 +317,9 @@ export interface EwoksRFLinkData {
 // For data still being optional in Edge
 // https://github.com/wbkd/react-flow/issues/1679#issuecomment-1438743754
 type NoDataEdge = Omit<Edge, 'data'>;
-export interface EwoksRFLink extends NoDataEdge {
-  data: EwoksRFLinkData;
+
+export interface LinkRF extends NoDataEdge {
+  data: LinkData;
 }
 
 export interface LabelBgStyle {
@@ -342,7 +337,7 @@ export interface LabelStyle {
   fontSize?: number;
 }
 
-export interface UiPropsLinks {
+export interface UiPropsLink {
   label?: string;
   type?: string;
   comment?: string;
@@ -359,14 +354,14 @@ export interface UiPropsLinks {
 
 export interface GraphRF {
   graph: GraphDetails;
-  nodes: EwoksRFNode[];
-  links: EwoksRFLink[];
+  nodes: NodeRF[];
+  links: LinkRF[];
 }
 
 export interface GraphEwoks {
   graph: GraphDetails;
-  nodes: EwoksNode[];
-  links: EwoksLink[];
+  nodes: NodeEwoks[];
+  links: LinkEwoks[];
 }
 
 export interface Icon {
