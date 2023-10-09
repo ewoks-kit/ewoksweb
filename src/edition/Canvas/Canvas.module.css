@@ -7,3 +7,15 @@
   flex: 1;
   background-color: rgb(233, 235, 247);
 }
+
+.noWorkflowMessage {
+  position: fixed;
+  top: 50%;
+  transform: translateY(calc(-50% - 1rem));
+  left: 30%;
+  z-index: 1000;
+  color: #3f51b5;
+  opacity: 0.5;
+  text-align: center;
+  pointer-events: none; /* Let RF events go through the message */
+}

@@ -1,0 +1,23 @@
+.cell {
+  padding: 0 !important;
+}
+
+.button {
+  composes: btnClean from global;
+  margin: auto;
+  display: flex;
+  text-transform: uppercase;
+  padding: 0.25rem;
+  align-items: center;
+  color: #7c7c7c;
+}
+
+.button:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.button svg {
+  margin-left: 0.25rem;
+  position: relative;
+  bottom: 0.2rem; /* Fix alignment with text */
+}

@@ -210,7 +210,7 @@ it('adds and delete a new default input', () => {
 
   cy.get('@defaultInputsSection').within(() => {
     cy.findAllByRole('row').should('have.length', 2); // Header + Button
-    cy.findByRole('button', { name: 'Add row' }).click();
+    cy.findByRole('button', { name: 'Add entry' }).click();
     cy.findAllByRole('row').should('have.length', 3); // Header + New Row + Button
   });
 
