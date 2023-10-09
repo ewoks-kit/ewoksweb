@@ -1,4 +1,4 @@
-import { Tooltip } from '@material-ui/core';
+import { Tooltip } from '@mui/material';
 import type { ReactElement } from 'react';
 
 import styles from './SidebarTooltip.module.css';

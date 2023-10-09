@@ -1,8 +1,8 @@
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
 import { Delete as DeleteIcon } from '@material-ui/icons';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
 import type { Edge } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 

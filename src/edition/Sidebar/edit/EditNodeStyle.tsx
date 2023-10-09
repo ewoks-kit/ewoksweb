@@ -1,4 +1,4 @@
-import { Checkbox, FormControl } from '@material-ui/core';
+import { Checkbox, FormControl } from '@mui/material';
 import type { ChangeEvent } from 'react';
 import { useState } from 'react';
 

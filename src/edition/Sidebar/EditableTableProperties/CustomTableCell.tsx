@@ -1,6 +1,6 @@
-import { IconButton } from '@material-ui/core';
-import TableCell from '@material-ui/core/TableCell';
 import { EditOutlined as EditIcon } from '@material-ui/icons';
+import { IconButton } from '@mui/material';
+import TableCell from '@mui/material/TableCell';
 import type { CustomTableCellProps, EditableTableRow } from 'types';
 
 import styles from './CustomTableCell.module.css';

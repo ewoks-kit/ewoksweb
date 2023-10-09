@@ -1,4 +1,4 @@
-import { IconButton, Tooltip } from '@material-ui/core';
+import { IconButton, Tooltip } from '@mui/material';
 import { useKeyboardEvent } from '@react-hookz/web';
 import { useState } from 'react';
 import { useReactFlow } from 'reactflow';

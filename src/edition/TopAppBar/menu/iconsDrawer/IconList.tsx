@@ -1,4 +1,4 @@
-import { Paper, Tooltip } from '@material-ui/core';
+import { Paper, Tooltip } from '@mui/material';
 import { useState } from 'react';
 
 import { useIcons } from '../../../../api/icons';

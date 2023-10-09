@@ -1,5 +1,5 @@
-import { CircularProgress } from '@material-ui/core';
 import { Replay } from '@material-ui/icons';
+import { CircularProgress } from '@mui/material';
 import { useState } from 'react';
 
 import { executeWorkflow } from '../api/workflows';

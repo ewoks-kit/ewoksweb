@@ -1,5 +1,5 @@
-import { Checkbox, IconButton } from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
+import { Checkbox, IconButton } from '@mui/material';
 import type { ChangeEvent } from 'react';
 import type { Edge } from 'reactflow';
 

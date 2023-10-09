@@ -1,4 +1,4 @@
-import { FormControl, MenuItem, Select, TableCell } from '@material-ui/core';
+import { FormControl, MenuItem, Select, TableCell } from '@mui/material';
 import type { ChangeEvent } from 'react';
 
 import type { PropertyChangedEvent } from '../../../types';

@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import { CloudUpload } from '@material-ui/icons';
 import type { ChangeEvent, SyntheticEvent } from 'react';
 import { useState } from 'react';

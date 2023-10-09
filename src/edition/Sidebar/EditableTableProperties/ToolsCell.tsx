@@ -1,5 +1,5 @@
-import { IconButton, TableCell } from '@material-ui/core';
 import { RemoveCircleOutline } from '@material-ui/icons';
+import { IconButton, TableCell } from '@mui/material';
 
 import styles from './ToolsCell.module.css';
 

@@ -1,5 +1,5 @@
-import { TableCell, TableRow } from '@material-ui/core';
 import { AddCircleOutline } from '@material-ui/icons';
+import { TableCell, TableRow } from '@mui/material';
 
 import styles from './AddEntryRow.module.css';
 

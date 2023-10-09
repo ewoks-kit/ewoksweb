@@ -1,5 +1,5 @@
-import type { SvgIcon } from '@material-ui/core';
-import { Tooltip } from '@material-ui/core';
+import type { SvgIcon } from '@mui/material';
+import { Tooltip } from '@mui/material';
 
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import type { Task } from '../../types';

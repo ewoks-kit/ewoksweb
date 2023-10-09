@@ -1,5 +1,5 @@
-import { FormControl, TextField, Typography } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
+import { FormControl, TextField, Typography } from '@mui/material';
 
 import type { CustomTableCellProps } from '../../../types';
 

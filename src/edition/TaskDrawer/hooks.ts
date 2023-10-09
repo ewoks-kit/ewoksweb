@@ -1,4 +1,4 @@
-import { useTheme } from '@material-ui/core';
+import { useTheme } from '@mui/material';
 
 export function useDrawerStyles(): { zIndex: number; transition: string } {
   const { zIndex, transitions } = useTheme();

@@ -1,5 +1,5 @@
-import { FormControl } from '@material-ui/core';
-import { InputLabel } from '@material-ui/core';
+import { FormControl } from '@mui/material';
+import { InputLabel } from '@mui/material';
 import {
   Button,
   Dialog,
@@ -9,7 +9,7 @@ import {
   DialogTitle,
   MenuItem,
   Select,
-} from '@material-ui/core';
+} from '@mui/material';
 import { Alert } from '@material-ui/lab';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';

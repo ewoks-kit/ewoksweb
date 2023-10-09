@@ -6,7 +6,7 @@ import {
   MenuItem,
   Select,
   Slider,
-} from '@material-ui/core';
+} from '@mui/material';
 import type { ChangeEvent } from 'react';
 import { useEffect, useState } from 'react';
 import type { Edge } from 'reactflow';

@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-} from '@material-ui/core';
+} from '@mui/material';
 import { Alert } from '@material-ui/lab';
 import { Controller, useForm } from 'react-hook-form';
 import { useReactFlow } from 'reactflow';

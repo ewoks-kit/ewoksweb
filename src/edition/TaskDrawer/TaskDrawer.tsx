@@ -1,6 +1,6 @@
-import { Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import { Fab } from '@mui/material';
 
 import useTaskDrawerState from '../../store/taskDrawerState';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';

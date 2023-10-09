@@ -1,5 +1,5 @@
-import IconButton from '@material-ui/core/IconButton';
-import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import Snackbar from '@mui/material/Snackbar';
 import CloseIcon from '@material-ui/icons/Close';
 import { Alert } from '@material-ui/lab';
 

@@ -1,5 +1,5 @@
-import { IconButton } from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
+import { IconButton } from '@mui/material';
 import { nanoid } from 'nanoid';
 import type { Node } from 'reactflow';
 import type { EditableTableRow, Inputs } from 'types';

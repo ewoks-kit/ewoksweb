@@ -1,6 +1,6 @@
-import { Button, Menu, Tooltip } from '@material-ui/core';
-import MenuList from '@material-ui/core/MenuList';
 import MenuIcon from '@material-ui/icons/Menu';
+import { Button, Menu, Tooltip } from '@mui/material';
+import MenuList from '@mui/material/MenuList';
 import { useState } from 'react';
 
 import SuspenseBoundary from '../../../suspense/SuspenseBoundary';

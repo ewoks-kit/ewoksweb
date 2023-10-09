@@ -1,4 +1,4 @@
-import Drawer from '@material-ui/core/Drawer';
+import Drawer from '@mui/material/Drawer';
 
 import SuspenseBoundary from '../../../../suspense/SuspenseBoundary';
 import IconList from './IconList';

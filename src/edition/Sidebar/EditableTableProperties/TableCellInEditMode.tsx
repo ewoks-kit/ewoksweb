@@ -7,8 +7,8 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
-} from '@material-ui/core';
-import Input from '@material-ui/core/Input';
+} from '@mui/material';
+import Input from '@mui/material/Input';
 import type { ChangeEvent } from 'react';
 import React, { useEffect } from 'react';
 
