@@ -1,5 +1,5 @@
 import { Autocomplete } from '@mui/lab';
-import { FormControl, TextField, Typography } from '@mui/material';
+import { FormControl, TextField } from '@mui/material';
 
 import type { CustomTableCellProps } from '../../../types';
 
@@ -14,15 +14,15 @@ function SelectNameValue(props: CustomTableCellProps) {
         disableClearable
         freeSolo={options.length === 0}
         options={options}
-        renderOption={(_, option) => {
+        renderOption={(liProps, option) => {
           const valueIsRequired =
             typeOfValues?.requiredValues?.includes(option);
 
           return (
-            <Typography component="div" variant="body1">
+            <li {...liProps}>
               {option}
               {valueIsRequired && <span style={{ color: 'red' }}>*</span>}
-            </Typography>
+            </li>
           );
         }}
         value={(row[name] as string) || ''}
