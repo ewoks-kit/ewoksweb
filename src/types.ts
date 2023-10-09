@@ -105,7 +105,8 @@ export type TaskType =
   | 'class'
   | 'note'
   | 'script'
-  | 'subworkflow';
+  | 'subworkflow'
+  | 'generated';
 
 export interface Task {
   task_type: TaskType;
