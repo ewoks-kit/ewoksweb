@@ -1,5 +1,6 @@
-import { FormControl } from '@material-ui/core';
-import { InputLabel } from '@material-ui/core';
+import { Alert } from '@mui/lab';
+import { FormControl } from '@mui/material';
+import { InputLabel } from '@mui/material';
 import {
   Button,
   Dialog,
@@ -9,8 +10,7 @@ import {
   DialogTitle,
   MenuItem,
   Select,
-} from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+} from '@mui/material';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -117,9 +117,10 @@ function TaskForm(props: Props) {
               const { onChange, ...restField } = field;
 
               return (
-                <FormControl className={styles.dropdown}>
+                <FormControl variant="standard" className={styles.dropdown}>
                   <InputLabel id="taskTypeInFormDialog">Task type</InputLabel>
                   <Select
+                    variant="standard"
                     labelId="taskTypeInFormDialog"
                     onChange={onChange}
                     {...restField}

@@ -1,3 +1,4 @@
+import { Alert } from '@mui/lab';
 import {
   Button,
   Checkbox,
@@ -6,8 +7,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-} from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+} from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useReactFlow } from 'reactflow';
 

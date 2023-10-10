@@ -1,4 +1,4 @@
-import { FolderOpen } from '@material-ui/icons';
+import { FolderOpen } from '@mui/icons-material';
 import { useRef } from 'react';
 import { useReactFlow } from 'reactflow';
 

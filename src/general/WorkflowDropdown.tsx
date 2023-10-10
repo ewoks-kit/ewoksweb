@@ -1,5 +1,5 @@
-import { CircularProgress, TextField } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
+import { Autocomplete } from '@mui/lab';
+import { CircularProgress, TextField } from '@mui/material';
 import commonStrings from 'commonStrings.json';
 import type { CSSProperties } from 'react';
 import { useEffect, useState } from 'react';
@@ -79,7 +79,9 @@ function WorkflowDropdown(props: Props) {
         />
       )}
       options={options}
-      getOptionSelected={(option, valueSelect) => option.id === valueSelect.id}
+      isOptionEqualToValue={(option, valueSelect) =>
+        option.id === valueSelect.id
+      }
       groupBy={(option) => option.category}
       inputValue={inputValue}
       onInputChange={(event, value) => {

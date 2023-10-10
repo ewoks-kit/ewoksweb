@@ -1,5 +1,5 @@
-import { FormControl, TextField } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
+import { Autocomplete } from '@mui/lab';
+import { FormControl, TextField } from '@mui/material';
 import type { Edge } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 

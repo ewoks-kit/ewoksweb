@@ -7,7 +7,7 @@ import {
   DialogContentText,
   DialogTitle,
   TextField,
-} from '@material-ui/core';
+} from '@mui/material';
 import { useState } from 'react';
 
 import { discoverTasks } from '../../api/tasks';

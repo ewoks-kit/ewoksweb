@@ -25,9 +25,12 @@
     "cypress:run": "cypress run --e2e"
   },
   "dependencies": {
-    "@material-ui/core": "4.12.4",
-    "@material-ui/icons": "4.11.3",
-    "@material-ui/lab": "4.0.0-alpha.61",
+    "@emotion/react": "11.11.1",
+    "@emotion/styled": "11.11.0",
+    "@mui/icons-material": "5.14.12",
+    "@mui/lab": "5.0.0-alpha.147",
+    "@mui/material": "5.14.12",
+    "@mui/styles": "5.14.12",
     "@react-hookz/web": "23.1.0",
     "@tanstack/react-query": "4.35.7",
     "@types/d3-format": "3.0.2",

@@ -1,6 +1,6 @@
-import { IconButton } from '@material-ui/core';
-import TableCell from '@material-ui/core/TableCell';
-import { EditOutlined as EditIcon } from '@material-ui/icons';
+import { EditOutlined as EditIcon } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
+import TableCell from '@mui/material/TableCell';
 import type { CustomTableCellProps, EditableTableRow } from 'types';
 
 import styles from './CustomTableCell.module.css';
@@ -57,7 +57,6 @@ function CustomTableCell(props: CustomTableCellProps) {
               onEdit?.();
             }}
             color="primary"
-            data-cy="editButtonEditableTable"
           >
             <EditIcon fontSize="small" />
           </IconButton>

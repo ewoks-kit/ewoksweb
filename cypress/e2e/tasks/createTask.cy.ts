@@ -26,7 +26,7 @@ describe('new Task form', () => {
     const id = nanoid();
     cy.findByRole('textbox', { name: 'Identifier' }).type(id);
 
-    cy.findByRole('button', { name: /^Task type/ }).click();
+    cy.findByRole('combobox', { name: /^Task type/ }).click();
     cy.findByRole('option', { name: 'class' }).click();
 
     cy.findByRole('textbox', { name: 'Category' }).type('Cypress_test');
@@ -45,7 +45,7 @@ describe('new Task form', () => {
     const id = nanoid();
     cy.findByRole('textbox', { name: 'Identifier' }).type(id);
 
-    cy.findByRole('button', { name: /^Task type/ }).click();
+    cy.findByRole('combobox', { name: /^Task type/ }).click();
     cy.findByRole('option', { name: 'class' }).click();
 
     cy.findByRole('textbox', { name: 'Category' }).type('Cypress_test');
@@ -55,8 +55,11 @@ describe('new Task form', () => {
     );
     cy.findByRole('textbox', { name: 'Optional inputs' }).type(
       'opt_arg0, opt_arg1',
+      { force: true },
     );
-    cy.findByRole('textbox', { name: 'Outputs' }).type('results');
+    cy.findByRole('textbox', { name: 'Outputs' }).type('results', {
+      force: true,
+    });
 
     cy.findByRole('button', { name: 'Save Task' }).click();
 
@@ -73,7 +76,7 @@ describe('new Task form', () => {
     const id = nanoid();
     cy.findByRole('textbox', { name: 'Identifier' }).type(id);
 
-    cy.findByRole('button', { name: /^Task type/ }).click();
+    cy.findByRole('combobox', { name: /^Task type/ }).click();
     cy.findByRole('option', { name: 'class' }).click();
 
     cy.findByRole('button', { name: 'Save Task' }).click();

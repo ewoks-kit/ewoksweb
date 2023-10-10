@@ -1,5 +1,5 @@
-import { IconButton } from '@material-ui/core';
-import { EditOutlined as EditIcon } from '@material-ui/icons';
+import { EditOutlined as EditIcon } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 import { useState } from 'react';
 
 import styles from './Details.module.css';

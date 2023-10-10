@@ -1,5 +1,5 @@
-import type { StandardTextFieldProps } from '@material-ui/core';
-import { TextField, Tooltip } from '@material-ui/core';
+import type { StandardTextFieldProps } from '@mui/material';
+import { TextField, Tooltip } from '@mui/material';
 import type { ReactElement } from 'react';
 import { useMemo } from 'react';
 import { forwardRef, Fragment } from 'react';
