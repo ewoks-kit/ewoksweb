@@ -7,11 +7,11 @@ import TableRow from '@mui/material/TableRow';
 import React from 'react';
 import type { DataMapping, TypeOfValues } from 'types';
 
-import AddEntryRow from './AddEntryRow';
+import AddEntryRow from './controls/AddEntryRow';
+import RemoveRowCell from './controls/RemoveRowCell';
 import CustomTableCell from './CustomTableCell';
 import styles from './Table.module.css';
 import TableHeader from './TableHeader';
-import ToolsCell from './ToolsCell';
 
 interface TableDataMappingProps {
   disable?: boolean;
@@ -86,7 +86,7 @@ function TableDataMapping(props: TableDataMappingProps) {
                   usedIn="DataMapping"
                   disable={disable}
                 />
-                <ToolsCell
+                <RemoveRowCell
                   disable={disable}
                   onDelete={() => onDelete(row.id || '')}
                 />

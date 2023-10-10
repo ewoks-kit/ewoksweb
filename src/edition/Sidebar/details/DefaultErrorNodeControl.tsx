@@ -3,8 +3,8 @@ import { Checkbox, Grid, Switch, Typography } from '@mui/material';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { DEFAULT_NODE_VALUES } from '../../../utils/defaultValues';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
-import NodeDataMapping from '../EditableTableProperties/NodeDataMapping';
 import sidebarStyle from '../sidebarStyle';
+import NodeDataMapping from '../table/NodeDataMapping';
 
 export default function DefaultErrorNodeControl(props: { nodeId: string }) {
   const { nodeId } = props;

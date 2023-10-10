@@ -1,9 +1,9 @@
 import { Autocomplete } from '@mui/lab';
 import { FormControl, TextField } from '@mui/material';
 
-import type { CustomTableCellProps } from '../../../types';
+import type { CustomTableCellProps } from '../../../../types';
 
-function SelectNameValue(props: CustomTableCellProps) {
+function AutocompleteSelect(props: CustomTableCellProps) {
   const { index, row, name, onChange, typeOfValues, disable } = props;
 
   const options = typeOfValues?.values || [''];
@@ -40,4 +40,4 @@ function SelectNameValue(props: CustomTableCellProps) {
   );
 }
 
-export default SelectNameValue;
+export default AutocompleteSelect;

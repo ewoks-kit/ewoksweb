@@ -11,12 +11,12 @@ import useSnackbarStore from 'store/useSnackbarStore';
 import type { Condition, EditableTableRow, Inputs, TypeOfValues } from 'types';
 
 import DraggableDialog from '../../../general/DraggableDialog';
-import AddEntryRow from './AddEntryRow';
+import AddEntryRow from './controls/AddEntryRow';
+import RemoveRowCell from './controls/RemoveRowCell';
+import TypeSelectCell from './controls/TypeSelectCell';
 import CustomTableCell from './CustomTableCell';
 import styles from './Table.module.css';
 import TableHeader from './TableHeader';
-import ToolsCell from './ToolsCell';
-import TypeSelectCell from './TypeSelectCell';
 import { createData, getType } from './utils';
 
 interface EditableTableProps {
@@ -261,7 +261,7 @@ function EditableTable(props: EditableTableProps) {
                   onEdit={() => onEditRow(row.id || '', index)}
                   disable={disable}
                 />
-                <ToolsCell
+                <RemoveRowCell
                   disable={disable}
                   onDelete={() => onDelete(row.id || '')}
                 />
