@@ -5,10 +5,10 @@ import type { Edge } from 'reactflow';
 
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
-import Conditions from '../EditableTableProperties/Conditions';
-import DataMappingComponent from '../EditableTableProperties/DataMapping';
 import sidebarStyle from '../sidebarStyle';
 import SidebarTooltip from '../SidebarTooltip';
+import Conditions from '../table/Conditions';
+import DataMappingComponent from '../table/DataMapping';
 import styles from './Details.module.css';
 import EdgeLabelInput from './EdgeLabelInput';
 import InputTextField from './InputTextField';

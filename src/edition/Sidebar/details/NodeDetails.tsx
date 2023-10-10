@@ -10,9 +10,9 @@ import {
   assertNodeDataDefined,
   assertNodeDefined,
 } from '../../../utils/typeGuards';
-import DefaultInputs from '../EditableTableProperties/DefaultInputs';
 import sidebarStyle from '../sidebarStyle';
 import SidebarTooltip from '../SidebarTooltip';
+import DefaultInputs from '../table/DefaultInputs';
 import DefaultErrorNodeControl from './DefaultErrorNodeControl';
 import NodeInfo from './NodeInfo';
 import NodeLabelComment from './NodeLabelComment';
