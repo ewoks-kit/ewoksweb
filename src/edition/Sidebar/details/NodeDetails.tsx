@@ -1,5 +1,5 @@
-import { Box, Checkbox, IconButton } from '@material-ui/core';
-import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from '@mui/icons-material/Info';
+import { Box, Checkbox, IconButton } from '@mui/material';
 import type { Node } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 

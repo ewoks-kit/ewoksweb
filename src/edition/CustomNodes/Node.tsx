@@ -1,4 +1,4 @@
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from '@mui/material/Tooltip';
 import { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 

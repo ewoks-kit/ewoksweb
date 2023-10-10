@@ -1,5 +1,5 @@
-import { IconButton, TableCell } from '@material-ui/core';
-import { RemoveCircleOutline } from '@material-ui/icons';
+import { RemoveCircleOutline } from '@mui/icons-material';
+import { IconButton, TableCell } from '@mui/material';
 
 import styles from './ToolsCell.module.css';
 
@@ -18,6 +18,7 @@ function ToolsCell(props: Props) {
         disabled={disable}
         aria-label="Remove row"
         onClick={() => onDelete()}
+        size="large"
       >
         <RemoveCircleOutline
           className={styles.icon}

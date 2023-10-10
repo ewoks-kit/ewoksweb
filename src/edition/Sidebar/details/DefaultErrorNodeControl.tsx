@@ -1,4 +1,4 @@
-import { Checkbox, Grid, Switch, Typography } from '@material-ui/core';
+import { Checkbox, Grid, Switch, Typography } from '@mui/material';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { DEFAULT_NODE_VALUES } from '../../../utils/defaultValues';

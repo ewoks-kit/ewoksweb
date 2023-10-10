@@ -80,8 +80,8 @@ it('changes width of node', () => {
     const yPos = (top + bottom) / 2;
 
     cy.get('@sliderThumb')
-      .trigger('mousedown', { button: 0 })
-      .trigger('mousemove', { clientX: 1000, clientY: yPos })
+      .trigger('mousedown', { button: 0, force: true })
+      .trigger('mousemove', { clientX: 1000, clientY: yPos, force: true })
       .trigger('mouseup', { force: true });
 
     cy.get('@sliderThumb')
@@ -235,23 +235,12 @@ it('opens the clone Task form when node is selected', () => {
 
   cy.waitForStableDOM();
 
-  cy.get('[aria-controls="editSidebar-dropdown-menu"]').click();
+  cy.findByRole('button', { name: 'Open edit actions menu' }).click();
+  cy.findByRole('menuitem', { name: 'Create Task from Node' }).click();
 
-  cy.get('.MuiListItem-button')
-    .contains('Create Task from Node')
-    .parent()
-    .click();
-
-  cy.contains('Create task')
-    .parent()
-    .should('have.class', 'MuiDialogTitle-root')
-    .siblings()
-    .first()
-    .as('dialogContent')
-    .should('have.class', 'MuiDialogContent-root');
+  cy.findByRole('dialog', { name: 'Create task' }).should('be.visible');
 
   cy.findByRole('button', { name: 'Cancel' }).click({ force: true });
-  cy.get('body').click();
 });
 
 // TODO: move node - dragstart seems to grasp the inner and creates a ghost

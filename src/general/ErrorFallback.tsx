@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import type { PropsWithChildren } from 'react';
 import type { FallbackProps } from 'react-error-boundary';
 

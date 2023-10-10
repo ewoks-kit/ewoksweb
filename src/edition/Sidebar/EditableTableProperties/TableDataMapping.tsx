@@ -1,9 +1,9 @@
 /*
   The table that is used to pass parameters for data-mapping.
 */
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableRow from '@mui/material/TableRow';
 import React from 'react';
 import type { DataMapping, TypeOfValues } from 'types';
 

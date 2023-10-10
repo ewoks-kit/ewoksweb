@@ -57,7 +57,7 @@ it('adds a subworkflow node by dragging the subworkflow task', () => {
     .should('be.visible')
     .should('contain.text', 'Add subworkflow');
   cy.findByRole('dialog').within(() => {
-    cy.findByRole('textbox', {
+    cy.findByRole('combobox', {
       name: 'Quick open',
     }).type('Adding-Tasks');
   });

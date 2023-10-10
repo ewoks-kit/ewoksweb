@@ -7,8 +7,8 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
-} from '@material-ui/core';
-import Input from '@material-ui/core/Input';
+} from '@mui/material';
+import Input from '@mui/material/Input';
 import type { ChangeEvent } from 'react';
 import React, { useEffect } from 'react';
 
@@ -65,7 +65,6 @@ function TableCellInEditMode(props: CustomTableCellProps) {
           name="value"
           value={valueToString}
           onChange={(e) => onChangeBool(e, row, index)}
-          data-cy="radioInEditableCell"
         >
           <FormControlLabel
             disabled={disable}
@@ -88,7 +87,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
 
     if (row.type === 'number') {
       return (
-        <FormControl fullWidth>
+        <FormControl variant="standard" fullWidth>
           <Input
             disabled={disable}
             value={row[name]}
@@ -108,7 +107,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
   }
 
   return (
-    <FormControl fullWidth>
+    <FormControl variant="standard" fullWidth>
       <Input
         disabled={disable}
         value={row[name]}

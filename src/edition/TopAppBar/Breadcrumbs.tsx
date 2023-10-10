@@ -1,5 +1,5 @@
-import { Breadcrumbs as MuiBreadcrumbs } from '@material-ui/core';
-import Link from '@material-ui/core/Link';
+import { Breadcrumbs as MuiBreadcrumbs } from '@mui/material';
+import Link from '@mui/material/Link';
 import { useReactFlow } from 'reactflow';
 
 import useEdgeDataStore from '../../store/useEdgeDataStore';

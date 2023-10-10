@@ -1,4 +1,4 @@
-import { FormControl, TextField } from '@material-ui/core';
+import { FormControl, TextField } from '@mui/material';
 
 import styles from './Details.module.css';
 
@@ -13,7 +13,7 @@ export default function InputTextField(props: InputTextFieldProps) {
 
   return (
     <div className={styles.entry}>
-      <FormControl fullWidth size="small">
+      <FormControl variant="standard" fullWidth size="small">
         <TextField
           label={label}
           variant="outlined"

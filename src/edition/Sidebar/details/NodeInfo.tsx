@@ -1,5 +1,5 @@
-import { IconButton } from '@material-ui/core';
-import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from '@mui/icons-material/Info';
+import { IconButton } from '@mui/material';
 
 import type { EwoksRFNodeData } from '../../../types';
 import sidebarStyle from '../sidebarStyle';
