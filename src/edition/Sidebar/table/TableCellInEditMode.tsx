@@ -8,8 +8,8 @@ import type { ChangeEvent } from 'react';
 
 import type { CustomTableCellProps } from '../../../types';
 import { isDecimalNumber } from '../../../utils/utils';
-import BooleanControl from './BooleanControl';
-import SelectNameValue from './SelectNameValue';
+import AutocompleteSelect from './controls/AutocompleteSelect';
+import BooleanControl from './controls/BooleanControl';
 import styles from './TableCellInEditMode.module.css';
 
 function TableCellInEditMode(props: CustomTableCellProps) {
@@ -54,7 +54,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
   }
 
   if (typeOfValues?.typeOfInput && typeOfValues.typeOfInput === 'select') {
-    return <SelectNameValue {...props} />;
+    return <AutocompleteSelect {...props} />;
   }
 
   return (
