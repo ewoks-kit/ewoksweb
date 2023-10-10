@@ -89,29 +89,35 @@ it('inserts a new Data Mapping entry and disables it when "Map all data" is chec
   });
 });
 
-it('inserts a new Condition and disables it when "On Error condition" is checked', () => {
-  cy.findByRole('complementary').within(() => {
-    cy.contains('Conditions')
-      .siblings()
-      .within(() => {
-        cy.contains('Add').should('have.length', 1).click();
-        cy.get('[data-cy="inputInEditableCell"]').first().type('Always');
-      });
+it('inserts a new Condition, changes it and disables it when "On Error condition" is checked', () => {
+  cy.findByRole('table', { name: 'editable table' }).within(() => {
+    cy.contains('Add').should('have.length', 1).click();
+
     cy.get('[data-cy="inputInEditableCell"]').should('have.length', 1);
+    cy.get('[data-cy="inputInEditableCell"]').first().type('Always');
+
+    cy.findByRole('combobox').should('have.text', 'bool');
+
+    cy.findByRole('radio', { name: 'false' }).should('be.checked');
+
+    cy.findByRole('radio', { name: 'true' }).click();
+    cy.findByRole('radio', { name: 'true' }).should('be.checked');
   });
 
-  cy.findByRole('complementary').within(() => {
-    cy.findByLabelText('On Error condition').click();
+  cy.findByLabelText('On Error condition').click();
 
-    cy.contains('Conditions')
-      .siblings()
-      .within(() => {
-        cy.contains('Add').should('have.length', 0);
-        cy.get('[data-cy="inputInEditableCell"]')
-          .children()
-          .each(($input) => {
-            cy.wrap($input).should('be.disabled');
-          });
+  cy.findByRole('table', { name: 'editable table' }).within(() => {
+    cy.contains('Add').should('have.length', 0);
+    cy.get('[data-cy="inputInEditableCell"]')
+      .children()
+      .each(($input) => {
+        cy.wrap($input).should('be.disabled');
       });
+
+    cy.waitForStableDOM();
+    cy.findByRole('combobox').should('not.be.enabled');
+
+    cy.findByRole('radio', { name: 'false' }).should('be.disabled');
+    cy.findByRole('radio', { name: 'true' }).should('be.disabled');
   });
 });

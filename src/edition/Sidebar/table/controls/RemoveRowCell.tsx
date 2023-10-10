@@ -1,14 +1,14 @@
 import { RemoveCircleOutline } from '@mui/icons-material';
 import { IconButton, TableCell } from '@mui/material';
 
-import styles from './ToolsCell.module.css';
+import styles from './RemoveRowCell.module.css';
 
 interface Props {
   disable?: boolean;
   onDelete: () => void;
 }
 
-function ToolsCell(props: Props) {
+function RemoveRowCell(props: Props) {
   const { disable, onDelete } = props;
 
   return (
@@ -29,4 +29,4 @@ function ToolsCell(props: Props) {
   );
 }
 
-export default ToolsCell;
+export default RemoveRowCell;
