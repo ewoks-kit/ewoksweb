@@ -1,3 +1,4 @@
+import ReactJson from '@microlink/react-json-view';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -8,7 +9,6 @@ import type { PaperProps } from '@mui/material/Paper';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from 'react';
 import Draggable from 'react-draggable';
-import ReactJson from 'react-json-view';
 
 import type { EditableTableRow } from '../types';
 

@@ -139,8 +139,8 @@ export default function LinkDetails(selectedElement: Edge) {
           )}
           {edgeData.sub_target_attributes && (
             <div className={styles.entry}>
-              Sub_target_attributes:
-              {edgeData.sub_target_attributes}
+              Sub_target_attributes:{' '}
+              {JSON.stringify(edgeData.sub_target_attributes)}
             </div>
           )}
         </section>
