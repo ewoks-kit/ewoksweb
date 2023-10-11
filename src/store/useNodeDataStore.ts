@@ -1,14 +1,14 @@
 import { merge } from 'lodash';
 import { create } from 'zustand';
 
-import type { NodeData, NodeRF } from '../types';
+import type { NodeData, RFNode } from '../types';
 
 export interface NodeDataState {
   nodesData: Map<string, NodeData>;
   setNodeData: (nodeId: string, nodeData: NodeData) => void;
   mergeNodeData: (nodeId: string, nodeData: Partial<NodeData>) => void;
   setNodesData: (nodesData: Map<string, NodeData>) => void;
-  setDataFromNodes: (nodes: NodeRF[]) => void;
+  setDataFromNodes: (nodes: RFNode[]) => void;
   resetNodesData: () => void;
 }
 

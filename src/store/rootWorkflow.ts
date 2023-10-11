@@ -2,13 +2,13 @@ import type { ReactFlowInstance } from 'reactflow';
 import type { GetState, SetState } from 'zustand';
 
 import type {
-  GraphEwoks,
-  GraphRF,
+  Graph,
   LinkData,
   NodeData,
-  NodeRF,
+  RFNode,
   State,
   Task,
+  Workflow,
 } from '../types';
 import layoutNewGraph from '../utils/layoutNewGraph';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
@@ -21,7 +21,7 @@ export interface RootWorkflowSlice {
   rootWorkflowId: string;
   rootWorkflowSource: string | undefined;
   setRootWorkflow: (
-    ewoksWorkflow: GraphEwoks,
+    ewoksWorkflow: Workflow,
     rfInstance: ReactFlowInstance,
     tasks: Task[],
     source?: string,
@@ -50,9 +50,9 @@ const rootWorkflow = (
       ...get().loadedGraphs.values(),
     ]);
 
-    // 3. Put the newNodeSubgraphs into loadedGraphs in their graphRF form (sync)
+    // 3. Put the newNodeSubgraphs into loadedGraphs in their Graph form (sync)
     newNodeSubgraphs.forEach((gr) => {
-      // calculate the rfNodes using the fetched subgraphs
+      // calculate the RFNodes using the fetched subgraphs
       // nodes and edges stored with their data as EwoksRFNodes-Links
       get().addLoadedGraph({
         graph: gr.graph,
@@ -64,7 +64,7 @@ const rootWorkflow = (
     // 4. Calculate the new graph given the subgraphs
     let grfNodes = toRFEwoksNodes(ewoksWorkflow, newNodeSubgraphs, tasks);
 
-    const notes: NodeRF[] =
+    const notes: RFNode[] =
       ewoksWorkflow.graph.uiProps?.notes?.map((note) => {
         return {
           data: {
@@ -85,7 +85,7 @@ const rootWorkflow = (
     grfNodes = [...grfNodes, ...notes];
 
     const rfLinks = toRFEwoksLinks(ewoksWorkflow, newNodeSubgraphs, tasks);
-    const resultGraph: GraphRF = {
+    const resultGraph: Graph = {
       graph: ewoksWorkflow.graph,
       nodes: grfNodes,
       links: rfLinks,

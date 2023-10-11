@@ -6,13 +6,7 @@ import { curateEdgeData, curateNodeData } from './edition/TopAppBar/utils';
 import { enrichWithData } from './general/forms/utils';
 import useEdgeDataStore from './store/useEdgeDataStore';
 import useNodeDataStore from './store/useNodeDataStore';
-import type {
-  GraphDetails,
-  GraphEwoks,
-  Icon,
-  LinkData,
-  NodeData,
-} from './types';
+import type { GraphDetails, Icon, LinkData, NodeData, Workflow } from './types';
 import { calcEwoksGraphProp } from './utils/CalcGraphInputsOutputs';
 import { calcNoteNodes } from './utils/calcNoteNodes';
 import { toEwoksLinks } from './utils/toEwoksLinks';
@@ -23,9 +17,9 @@ import { propIsEmpty } from './utils/utils';
 export const DEFAULT_ICON: Icon = { name: 'orange3.png', data_url: orange3 };
 
 export async function getSubgraphs(
-  graph: GraphEwoks,
+  graph: Workflow,
   loadedGraphsIds: string[],
-): Promise<GraphEwoks[]> {
+): Promise<Workflow[]> {
   const subgraphIds = graph.nodes
     .filter((nod) => nod.task_type === 'graph')
     .map((nod) => nod.task_identifier);
@@ -58,7 +52,7 @@ export function prepareEwoksGraph(
   edgesWithoutData: Edge[],
   rawNodeData: Map<string, NodeData>,
   rawLinkData: Map<string, LinkData>,
-): GraphEwoks {
+): Workflow {
   const nodeData = curateNodeData(rawNodeData);
   const nodes = nodesWithoutData.map((node) => enrichWithData(node, nodeData));
 

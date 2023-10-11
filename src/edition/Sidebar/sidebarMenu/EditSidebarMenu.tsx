@@ -4,15 +4,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { useState } from 'react';
 
 import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
-import type { SelectedElementRF } from '../../../types';
+import type { SelectedElement } from '../../../types';
 import { isNodeRF } from '../../../utils/typeGuards';
 import LinkSidebarMenu from './LinkSidebarMenu';
 import NodeSidebarMenu from './NodeSidebarMenu';
 import WorkflowSidebarMenu from './WorkflowSidebarMenu';
 
-export default function EditSidebarMenu({
-  selectedElement,
-}: SelectedElementRF) {
+export default function EditSidebarMenu({ selectedElement }: SelectedElement) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 

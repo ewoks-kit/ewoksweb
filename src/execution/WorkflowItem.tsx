@@ -1,4 +1,4 @@
-import type { EventEwoks } from '../types';
+import type { EwoksEvent } from '../types';
 import { assertDefined } from '../utils/typeGuards';
 import Duration from './Duration';
 import RerunButton from './RerunButton';
@@ -8,7 +8,7 @@ import Traceback from './Traceback';
 import styles from './WorkflowItem.module.css';
 
 interface Props {
-  events: EventEwoks[];
+  events: EwoksEvent[];
 }
 
 function WorkflowItem(props: Props) {

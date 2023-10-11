@@ -1,9 +1,9 @@
 import type {
-  GraphEwoks,
   InputOutputNodeAndLink,
-  NodeRF,
-  OutputsInputsSubgraph,
+  RFNode,
+  SubgraphOutputsInputs,
   Task,
+  Workflow,
 } from '../types';
 
 // DOC: locate the task and add required+optional-inputs + outputs
@@ -17,10 +17,10 @@ export function calcTask(tasks: Task[], task_identifier: string): Task {
 }
 
 export function calcInOutForSubgraph(
-  subgraphNode: GraphEwoks | undefined,
-): OutputsInputsSubgraph[][] {
-  let inputsSub: OutputsInputsSubgraph[] = [];
-  let outputsSub: OutputsInputsSubgraph[] = [];
+  subgraphNode: Workflow | undefined,
+): SubgraphOutputsInputs[][] {
+  let inputsSub: SubgraphOutputsInputs[] = [];
+  let outputsSub: SubgraphOutputsInputs[] = [];
 
   if (subgraphNode?.graph.input_nodes) {
     const allInputsIds = subgraphNode.graph.input_nodes.map((nod) => nod.id);
@@ -61,15 +61,15 @@ function calcLabel(
 
 export function addNodeProperties(
   task_type: string,
-  newNodeSubgraphs: GraphEwoks[],
+  newNodeSubgraphs: Workflow[],
   task_identifier: string,
-  node: NodeRF,
+  node: RFNode,
   tasks: Task[],
   task_category: string,
-): NodeRF {
+): RFNode {
   let tempNode = { ...node };
   if (task_type === 'graph') {
-    const subgraphNode: GraphEwoks | undefined = newNodeSubgraphs.find(
+    const subgraphNode: Workflow | undefined = newNodeSubgraphs.find(
       (subGr) => subGr.graph.id === task_identifier,
     );
 

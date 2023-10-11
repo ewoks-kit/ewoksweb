@@ -1,6 +1,6 @@
 import type { Connection } from 'reactflow';
 
-import type { LinkRF, NodeData } from '../../types';
+import type { Link, NodeData } from '../../types';
 import { DEFAULT_LINK_VALUES } from '../../utils/defaultValues';
 import { assertTaskInfo } from '../../utils/typeGuards';
 import type { TaskInfo } from './models';
@@ -29,7 +29,7 @@ export const defaultLinkStyle = {
 export function addConnectionToGraph(
   connection: Connection,
   nodesData: Map<string, NodeData>,
-): LinkRF | undefined {
+): Link | undefined {
   const { source, target, sourceHandle, targetHandle } = connection;
 
   if (!source || !target) {
@@ -43,7 +43,7 @@ export function addConnectionToGraph(
     return undefined;
   }
 
-  const link: LinkRF = {
+  const link: Link = {
     data: {
       startEnd:
         sourceTaskData.task_props.task_type === 'graphInput' ||

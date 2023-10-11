@@ -1,10 +1,10 @@
 import type { Connection, Edge } from 'reactflow';
 
-import type { NodeData, NodeRF } from '../types';
+import type { NodeData, RFNode } from '../types';
 
 export default function isValidLink(
   connection: Connection,
-  nodes: NodeRF[],
+  nodes: RFNode[],
   graphLinks: Edge[],
   nodesData?: Map<string, NodeData>,
   oldEdge?: Edge,

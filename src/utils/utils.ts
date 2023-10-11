@@ -4,14 +4,14 @@ import { nanoid } from 'nanoid';
 import type {
   Condition,
   DataMapping,
-  DataMappingEwoks,
-  LinkAttributesInputOutput,
-  UiPropsInputOutputNodeAndLink,
+  EwoksDataMapping,
+  InputOutputLinkAttributes,
+  InputOutputUiProps,
 } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { isString } from './typeGuards';
 
-export function createDataMappingData(pair: DataMappingEwoks): DataMapping {
+export function createDataMappingData(pair: EwoksDataMapping): DataMapping {
   return {
     id: nanoid(),
     name: pair.source_output ? pair.source_output.toString() : '',
@@ -43,7 +43,7 @@ export function calcConditionName(
 
 export function calcDataMapping(
   dataMappings: DataMapping[],
-): DataMappingEwoks[] {
+): EwoksDataMapping[] {
   return dataMappings.map(({ value, name }) => {
     return {
       source_output: stringOrNumber(name),
@@ -78,7 +78,7 @@ export function notUndefinedValue(
   return undefined;
 }
 
-export function calcCommonNodeUiProps(uiProps: UiPropsInputOutputNodeAndLink) {
+export function calcCommonNodeUiProps(uiProps: InputOutputUiProps) {
   return {
     ...notUndefinedValue(uiProps.withImage, 'withImage'),
     ...notUndefinedValue(uiProps.withLabel, 'withLabel'),
@@ -88,8 +88,8 @@ export function calcCommonNodeUiProps(uiProps: UiPropsInputOutputNodeAndLink) {
 }
 
 export function calcLinkUiProps(
-  uiProps: UiPropsInputOutputNodeAndLink | undefined,
-  linkAttr?: LinkAttributesInputOutput | undefined,
+  uiProps: InputOutputUiProps | undefined,
+  linkAttr?: InputOutputLinkAttributes | undefined,
 ) {
   return {
     ...(linkAttr?.label && { label: linkAttr.label }),
@@ -106,7 +106,7 @@ export function calcLinkUiProps(
   };
 }
 
-export function calcLinkCommonProps(linkAttr: LinkAttributesInputOutput) {
+export function calcLinkCommonProps(linkAttr: InputOutputLinkAttributes) {
   return {
     ...(linkAttr.conditions &&
       linkAttr.conditions.length > 0 && {

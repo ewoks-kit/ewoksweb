@@ -1,6 +1,6 @@
 import type {
   Condition,
-  DefaultInputRF,
+  DefaultInput,
   EditableTableRow,
   LinkData,
   NodeData,
@@ -9,7 +9,7 @@ import type {
 
 export const INPUT_TYPES = ['bool', 'number', 'string', 'list', 'dict', 'null'];
 
-export function createData(pair: Condition | DefaultInputRF): EditableTableRow {
+export function createData(pair: Condition | DefaultInput): EditableTableRow {
   const type = getType(pair);
 
   if ('source_output' in pair) {
@@ -29,7 +29,7 @@ export function createData(pair: Condition | DefaultInputRF): EditableTableRow {
   };
 }
 
-export function getType(val: Condition | DefaultInputRF) {
+export function getType(val: Condition | DefaultInput) {
   const { value } = val;
 
   if ('type' in val && val.type) {

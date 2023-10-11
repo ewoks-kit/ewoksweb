@@ -1,14 +1,14 @@
 import { merge } from 'lodash';
 import { create } from 'zustand';
 
-import type { LinkData, LinkRF } from '../types';
+import type { Link, LinkData } from '../types';
 
 export interface EdgeDataState {
   edgesData: Map<string, LinkData>;
   setEdgeData: (edgeId: string, edgeData: LinkData) => void;
   mergeEdgeData: (edgeId: string, edgeData: Partial<LinkData>) => void;
   setEdgesData: (edgesData: Map<string, LinkData>) => void;
-  setDataFromEdges: (edges: LinkRF[]) => void;
+  setDataFromEdges: (edges: Link[]) => void;
   resetEdgesData: () => void;
 }
 

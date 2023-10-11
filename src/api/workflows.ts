@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import type { GraphEwoks, WorkflowDescription } from '../types';
+import type { Workflow, WorkflowDescription } from '../types';
 import { client } from './client';
 import type {
   DeleteResponse,
@@ -23,11 +23,11 @@ export async function fetchWorkflow(id: string) {
   return client.get<WorkflowResponse>(`/workflow/${id}`);
 }
 
-export async function postWorkflow(workflow: GraphEwoks) {
+export async function postWorkflow(workflow: Workflow) {
   return client.post<WorkflowResponse>(`/workflows`, workflow);
 }
 
-export async function putWorkflow(workflow: GraphEwoks) {
+export async function putWorkflow(workflow: Workflow) {
   return client.put<WorkflowResponse>(
     `/workflow/${workflow.graph.id}`,
     workflow,

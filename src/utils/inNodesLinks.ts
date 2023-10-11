@@ -1,4 +1,4 @@
-import type { InputOutputNodeAndLink, LinkEwoks, NodeEwoks } from '../types';
+import type { EwoksLink, EwoksNode, InputOutputNodeAndLink } from '../types';
 import { propIsEmpty } from './utils';
 import {
   calcCommonNodeUiProps,
@@ -11,9 +11,9 @@ import {
 // the input_nodes in the Ewoks graph model
 export function inNodesLinks(
   inputNodes: InputOutputNodeAndLink[] | undefined,
-  nodes: NodeEwoks[],
-): { nodes: NodeEwoks[]; links: LinkEwoks[] } {
-  const inputs: { nodes: NodeEwoks[]; links: LinkEwoks[] } = {
+  nodes: EwoksNode[],
+): { nodes: EwoksNode[]; links: EwoksLink[] } {
+  const inputs: { nodes: EwoksNode[]; links: EwoksLink[] } = {
     nodes: [],
     links: [],
   };

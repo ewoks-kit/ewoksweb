@@ -2,21 +2,15 @@ import type { Edge, Node } from 'reactflow';
 import { MarkerType } from 'reactflow';
 
 import type { TaskInfo } from '../edition/Canvas/models';
-import type {
-  GraphDetails,
-  LinkData,
-  LinkRF,
-  NodeData,
-  NodeRF,
-} from '../types';
+import type { GraphDetails, Link, LinkData, NodeData, RFNode } from '../types';
 
 export interface EwoksServerErrorResponse {
   response: { data: { message: string } };
 }
 
 export function isNode(
-  entity: NodeRF | LinkRF | GraphDetails | undefined,
-): entity is NodeRF {
+  entity: RFNode | Link | GraphDetails | undefined,
+): entity is RFNode {
   return !!entity && 'position' in entity;
 }
 
@@ -29,13 +23,13 @@ export function isEdgeRF(entity: Node | Edge | undefined): entity is Edge {
 }
 
 export function isLink(
-  entity: NodeRF | LinkRF | GraphDetails | undefined,
-): entity is LinkRF {
+  entity: RFNode | Link | GraphDetails | undefined,
+): entity is Link {
   return !!entity && 'source' in entity;
 }
 
 export function isGraphDetails(
-  entity: NodeRF | LinkRF | GraphDetails | undefined,
+  entity: RFNode | Link | GraphDetails | undefined,
 ): entity is GraphDetails {
   return !!entity && 'input_nodes' in entity;
 }
@@ -96,9 +90,9 @@ export function assertNodeDataDefined(
 }
 
 export function assertNodeDefined(
-  node: NodeRF | undefined,
+  node: RFNode | undefined,
   nodeId: string,
-): asserts node is NodeRF extends undefined ? never : NodeRF {
+): asserts node is RFNode extends undefined ? never : RFNode {
   assertDefined(node, `Node with id ${nodeId} has undefined data!`);
 }
 
@@ -116,8 +110,8 @@ export function assertElementIsNodeType(
 }
 
 export function assertElementIsEdge(
-  entity: NodeRF | LinkRF | Edge | Node | GraphDetails | undefined,
-): asserts entity is LinkRF extends undefined ? never : LinkRF {
+  entity: RFNode | Link | Edge | Node | GraphDetails | undefined,
+): asserts entity is Link extends undefined ? never : Link {
   assertDefined(!!entity && 'source' in entity, `Edge is possibly undefined!`);
 }
 

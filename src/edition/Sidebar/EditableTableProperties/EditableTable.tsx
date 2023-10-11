@@ -10,7 +10,7 @@ import React, { useEffect } from 'react';
 import useSnackbarStore from 'store/useSnackbarStore';
 import type {
   Condition,
-  DefaultInputRF,
+  DefaultInput,
   EditableTableRow,
   TypeOfValues,
 } from 'types';
@@ -26,7 +26,7 @@ import { createData, getType } from './utils';
 
 interface EditableTableProps {
   headers: string[];
-  defaultValues: Condition[] | DefaultInputRF[];
+  defaultValues: Condition[] | DefaultInput[];
   typeOfValues: TypeOfValues[];
   disable?: boolean;
   valuesChanged: (rows: EditableTableRow[]) => void;

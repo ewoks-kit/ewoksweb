@@ -1,9 +1,9 @@
 import type {
+  Graph,
   GraphDetails,
-  GraphRF,
   InputOutputNodeAndLink,
-  LinkRF,
-  NodeRF,
+  Link,
+  RFNode,
 } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { isString } from './typeGuards';
@@ -17,7 +17,7 @@ import {
 
 // DOC: Calculate the ewoks input_nodes and output_nodes within the graph
 // from the nodes of the graphRF model with types graphInput, graphOutput
-export function calcEwoksGraphProp(graph: GraphRF): GraphDetails {
+export function calcEwoksGraphProp(graph: Graph): GraphDetails {
   let input_nodes: InputOutputNodeAndLink[] = [];
   let output_nodes: InputOutputNodeAndLink[] = [];
 
@@ -82,9 +82,9 @@ export function calcEwoksGraphProp(graph: GraphRF): GraphDetails {
 
 function calcInOutNodes(
   inputOrOutput: string,
-  nod: NodeRF,
-  graph_nodes: NodeRF[],
-  graph_links: LinkRF[],
+  nod: RFNode,
+  graph_nodes: RFNode[],
+  graph_links: Link[],
 ): InputOutputNodeAndLink[] {
   const nodes: InputOutputNodeAndLink[] = [];
 
@@ -106,7 +106,7 @@ function calcInOutNodes(
   }
 
   // DOC: use an array for all nodes although ewoks allows only one for now
-  const nodeObjConnectedTo: NodeRF[] = [];
+  const nodeObjConnectedTo: RFNode[] = [];
   for (const nodesNames of nodesNamesConnectedTo) {
     const nodeInGraph = graph_nodes.find((node) => nodesNames === node.id);
     if (nodeInGraph) {
@@ -141,9 +141,9 @@ function calcInOutNodes(
 
 function calcNodeProps(
   isGraph: boolean,
-  nod: NodeRF,
-  nodConnected: NodeRF,
-  graph_links: LinkRF[],
+  nod: RFNode,
+  nodConnected: RFNode,
+  graph_links: Link[],
   link_index: number,
   inputOrOutput: string,
 ): InputOutputNodeAndLink {

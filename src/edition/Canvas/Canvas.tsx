@@ -19,7 +19,7 @@ import ReactFlow, {
 import { useStoreApi } from 'reactflow';
 import useSnackbarStore from 'store/useSnackbarStore';
 import useStore from 'store/useStore';
-import type { NodeData, NodeRF, Task } from 'types';
+import type { NodeData, RFNode, Task } from 'types';
 import { calcNewId } from 'utils/calcNewId';
 import isValidLink from 'utils/IsValidLink';
 
@@ -174,7 +174,7 @@ function Canvas() {
         ? calcNewId('Note', nodesIds)
         : calcNewId(task_identifier || 'Node', nodesIds);
 
-    const newNode: NodeRF = {
+    const newNode: RFNode = {
       id: newId,
       type: task_type,
       position,
@@ -310,7 +310,7 @@ function Canvas() {
       const nodeData = getNodeData(selectedNode.id);
       assertNodeDataDefined(nodeData, selectedNode.id);
 
-      const newClone: NodeRF = {
+      const newClone: RFNode = {
         ...node,
         data: nodeData,
         id: calcNewId(selectedNode.id, nodesIds),

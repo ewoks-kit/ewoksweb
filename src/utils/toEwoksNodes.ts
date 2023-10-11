@@ -1,10 +1,10 @@
 import type {
   DataMapping,
-  DataMappingEwoks,
   DefaultErrorAttributes,
-  DefaultInputRF,
-  NodeEwoks,
-  NodeRF,
+  DefaultInput,
+  EwoksDataMapping,
+  EwoksNode,
+  RFNode,
 } from '../types';
 import { isString } from './typeGuards';
 import {
@@ -14,7 +14,7 @@ import {
   stringOrNumber,
 } from './utils';
 
-function cleanDefaultInputs(default_inputs: DefaultInputRF[] | undefined) {
+function cleanDefaultInputs(default_inputs: DefaultInput[] | undefined) {
   if (!default_inputs) {
     return undefined;
   }
@@ -34,7 +34,7 @@ function cleanDefaultInputs(default_inputs: DefaultInputRF[] | undefined) {
 }
 function calcDefaultErrorAttributes(
   default_error_attributes: DefaultErrorAttributes<DataMapping> | undefined,
-): DefaultErrorAttributes<DataMappingEwoks> | undefined {
+): DefaultErrorAttributes<EwoksDataMapping> | undefined {
   if (default_error_attributes?.map_all_data) {
     return { map_all_data: true };
   }
@@ -48,7 +48,7 @@ function calcDefaultErrorAttributes(
   };
 }
 
-function calcDefaultInputs(default_inputs: DefaultInputRF[] | undefined) {
+function calcDefaultInputs(default_inputs: DefaultInput[] | undefined) {
   if (!default_inputs) {
     return undefined;
   }
@@ -64,8 +64,8 @@ function calcDefaultInputs(default_inputs: DefaultInputRF[] | undefined) {
 }
 
 // EwoksRFNode --> EwoksNode for saving
-export function toEwoksNodes(nodes: NodeRF[]): NodeEwoks[] {
-  const tempNodes: NodeRF[] = [...nodes].filter(
+export function toEwoksNodes(nodes: RFNode[]): EwoksNode[] {
+  const tempNodes: RFNode[] = [...nodes].filter(
     (nod) =>
       !['graphInput', 'graphOutput', 'note'].includes(
         nod.data.task_props.task_type,

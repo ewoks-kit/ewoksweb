@@ -1,4 +1,4 @@
-import type { GraphEwoks } from '../types';
+import type { Workflow } from '../types';
 
 function assertLog(statement: string, severity = 'info') {
   // severity can be error, warning, info
@@ -31,7 +31,7 @@ function includes(entity: {}, label: string, properties: string[]) {
   return result;
 }
 
-export function validateEwoksGraph(graph: GraphEwoks) {
+export function validateEwoksGraph(graph: Workflow) {
   const result = [];
 
   result.push(isJsonString(JSON.stringify(graph)));

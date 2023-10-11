@@ -2,7 +2,7 @@ import { fetchWorkflowsIds } from '../../api/workflows';
 import type {
   Condition,
   DataMapping,
-  DefaultInputRF,
+  DefaultInput,
   LinkData,
   NodeData,
 } from '../../types';
@@ -73,13 +73,13 @@ export function curateEdgeData(
   );
 }
 
-function deleteEmptyLines<T extends DataMapping | Condition | DefaultInputRF>(
+function deleteEmptyLines<T extends DataMapping | Condition | DefaultInput>(
   arrayObjId: T[] | undefined,
 ): T[] | undefined {
   if (!arrayObjId) {
     return undefined;
   }
   return arrayObjId.filter(
-    (obj: DataMapping | Condition | DefaultInputRF) => obj.name !== '',
+    (obj: DataMapping | Condition | DefaultInput) => obj.name !== '',
   );
 }
