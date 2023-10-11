@@ -5,7 +5,6 @@ import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
 import type { Node } from 'reactflow';
 import { useReactFlow } from 'reactflow';
-import { calcNewId } from 'utils/calcNewId';
 
 import { useTasks } from '../../../api/tasks';
 import TaskForm from '../../../general/forms/TaskForm';
@@ -14,6 +13,7 @@ import useNodeDataStore from '../../../store/useNodeDataStore';
 import useStore from '../../../store/useStore';
 import type { EwoksRFNode } from '../../../types';
 import { getNodeData } from '../../../utils';
+import { calcNewId } from '../../../utils/calcNewId';
 import {
   assertDefined,
   assertNodeDataDefined,

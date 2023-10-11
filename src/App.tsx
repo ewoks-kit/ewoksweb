@@ -15,7 +15,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <SocketClientProvider serverUrl={baseUrl}>
-        <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE_DIR}>
+        <BrowserRouter basename={import.meta.env.VITE_ROUTER_BASE_DIR}>
           <SimpleSnackbar />
           <CssBaseline />
           <NavBar />

@@ -1,12 +1,12 @@
 import { Autocomplete } from '@mui/lab';
 import { CircularProgress, TextField } from '@mui/material';
-import commonStrings from 'commonStrings.json';
 import type { CSSProperties } from 'react';
 import { useEffect, useState } from 'react';
-import useSnackbarStore from 'store/useSnackbarStore';
 import type { WorkflowDescription } from 'types';
 
 import { useWorkflowsDLE } from '../api/workflows';
+import commonStrings from '../commonStrings.json';
+import useSnackbarStore from '../store/useSnackbarStore';
 import { textForError } from '../utils';
 
 interface Props {
