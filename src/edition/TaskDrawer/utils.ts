@@ -12,6 +12,7 @@ import type {
 } from '../../types';
 import { toRFEwoksLinks } from '../../utils/toRFEwoksLinks';
 import { toRFEwoksNodes } from '../../utils/toRFEwoksNodes';
+import { generateUniqueNodeId } from '../../utils/utils';
 
 export async function loadSubworkflow(
   subGraph: GraphEwoks,
@@ -52,12 +53,11 @@ export async function loadSubworkflow(
       positionY: output.uiProps?.position?.y || 100,
     };
   });
-  let id = 0;
-  let graphId = subGraph.graph.label || '';
 
-  while (nodes.some((nod) => nod.id === graphId)) {
-    graphId += id++;
-  }
+  const graphId = generateUniqueNodeId(
+    nodes.map((node) => node.id),
+    subGraph.graph.label,
+  );
 
   newNode = {
     sourcePosition: Position.Right,
