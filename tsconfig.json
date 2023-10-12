@@ -18,5 +18,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", ".eslintrc.js", "cypress.config.ts"]
+  "include": ["src", ".eslintrc.js", "cypress.config.ts", "vite.config.ts"]
 }

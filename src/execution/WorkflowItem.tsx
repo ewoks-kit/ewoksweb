@@ -25,7 +25,7 @@ function WorkflowItem(props: Props) {
     (e) => e.context === 'job' && e.type === 'end',
   );
   const hasFinished = !!endJobEvent;
-  const hasError = endJobEvent?.error === true;
+  const hasError = !!endJobEvent?.error;
 
   const status = hasFinished ? (hasError ? 'Failed' : 'Success') : 'Running';
 

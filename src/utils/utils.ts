@@ -135,3 +135,16 @@ export function propIsEmpty(uiprops: object | undefined) {
   }
   return isEmpty;
 }
+
+export function generateUniqueNodeId(
+  nodesIds: string[],
+  tentativePrefix = '',
+  tentativeSuffix = 0,
+): string {
+  const tentativeId = `${tentativePrefix}_${tentativeSuffix}`;
+  if (nodesIds.includes(tentativeId)) {
+    return generateUniqueNodeId(nodesIds, tentativePrefix, tentativeSuffix + 1);
+  }
+
+  return tentativeId;
+}
