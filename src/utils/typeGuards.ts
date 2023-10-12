@@ -145,3 +145,16 @@ export function hasMessage(error: unknown): error is ObjectWithMessage {
     typeof error.message === 'string'
   );
 }
+
+function isNonNull<T>(val: T): val is T extends null ? never : T {
+  return val !== null;
+}
+
+export function assertNonNull<T>(
+  val: T,
+  message = 'Expected value to not be null',
+): asserts val is T extends null ? never : T {
+  if (!isNonNull(val)) {
+    throw new TypeError(message);
+  }
+}

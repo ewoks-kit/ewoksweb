@@ -29,13 +29,13 @@ it('selects a link and adds selected class and sidebar shows details', () => {
 
   cy.contains('Map all Data').should('be.visible');
 
-  cy.findByRole('textbox', { name: 'Label' })
+  cy.findByRole('combobox', { name: 'Label' })
     .contains('if you do then...')
     .should('have.value', 'if you do then...');
 });
 
 it('changes links label and is reflected on the canvas', () => {
-  cy.findByRole('textbox', { name: 'Label' })
+  cy.findByRole('combobox', { name: 'Label' })
     .contains('if you do then...')
     .should('have.value', 'if you do then...')
     .click()

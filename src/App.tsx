@@ -1,4 +1,4 @@
-import { CssBaseline } from '@material-ui/core';
+import { CssBaseline } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 

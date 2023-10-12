@@ -55,6 +55,7 @@ const nodeTypes = {
   graph: GraphNode,
   method: DataNode,
   ppfmethod: DataNode,
+  generated: DataNode,
   graphInput: GraphInOutNode,
   graphOutput: GraphInOutNode,
   class: DataNode,

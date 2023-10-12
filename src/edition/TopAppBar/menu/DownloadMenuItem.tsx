@@ -1,4 +1,4 @@
-import { GetApp } from '@material-ui/icons';
+import { GetApp } from '@mui/icons-material';
 import { useReactFlow } from 'reactflow';
 
 import useStore from '../../../store/useStore';

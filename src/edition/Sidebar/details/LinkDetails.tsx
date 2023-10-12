@@ -1,14 +1,14 @@
-import { Checkbox, IconButton } from '@material-ui/core';
-import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from '@mui/icons-material/Info';
+import { Checkbox, IconButton } from '@mui/material';
 import type { ChangeEvent } from 'react';
 import type { Edge } from 'reactflow';
 
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
-import Conditions from '../EditableTableProperties/Conditions';
-import DataMappingComponent from '../EditableTableProperties/DataMapping';
 import sidebarStyle from '../sidebarStyle';
 import SidebarTooltip from '../SidebarTooltip';
+import Conditions from '../table/Conditions';
+import DataMappingComponent from '../table/DataMapping';
 import styles from './Details.module.css';
 import EdgeLabelInput from './EdgeLabelInput';
 import InputTextField from './InputTextField';
@@ -139,8 +139,8 @@ export default function LinkDetails(selectedElement: Edge) {
           )}
           {edgeData.sub_target_attributes && (
             <div className={styles.entry}>
-              Sub_target_attributes:
-              {edgeData.sub_target_attributes}
+              Sub_target_attributes:{' '}
+              {JSON.stringify(edgeData.sub_target_attributes)}
             </div>
           )}
         </section>

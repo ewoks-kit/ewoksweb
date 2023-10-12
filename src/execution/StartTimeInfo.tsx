@@ -1,4 +1,4 @@
-import { Event as EventIcon } from '@material-ui/icons';
+import { Event as EventIcon } from '@mui/icons-material';
 import ReactTimeago from 'react-timeago';
 
 import styles from './WorkflowItem.module.css';

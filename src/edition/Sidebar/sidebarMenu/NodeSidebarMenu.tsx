@@ -1,7 +1,7 @@
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import { Delete, FileCopy, LibraryAdd } from '@material-ui/icons';
+import { Delete, FileCopy, LibraryAdd } from '@mui/icons-material';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
 import type { Node } from 'reactflow';
 import { useReactFlow } from 'reactflow';

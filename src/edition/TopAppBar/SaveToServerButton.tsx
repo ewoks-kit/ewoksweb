@@ -1,4 +1,4 @@
-import { IconButton, Tooltip } from '@material-ui/core';
+import { IconButton, Tooltip } from '@mui/material';
 import { useKeyboardEvent } from '@react-hookz/web';
 import { useState } from 'react';
 import { useReactFlow } from 'reactflow';
@@ -129,6 +129,7 @@ export default function SaveToServerButton() {
           }}
           aria-label="Save workflow to server"
           color="inherit"
+          size="large"
         >
           <StatusIcon status={status} setStatus={setStatus} />
         </IconButton>

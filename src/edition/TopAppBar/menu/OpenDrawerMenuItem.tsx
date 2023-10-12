@@ -1,4 +1,4 @@
-import { PermMedia } from '@material-ui/icons';
+import { PermMedia } from '@mui/icons-material';
 import { useState } from 'react';
 
 import ActionMenuItem from './ActionMenuItem';

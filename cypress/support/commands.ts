@@ -18,7 +18,7 @@ Cypress.Commands.add('loadAppWithoutGraph', () => {
 });
 
 Cypress.Commands.add('loadGraph', (name: string) => {
-  cy.findByRole('textbox', {
+  cy.findByRole('combobox', {
     name: 'Quick open',
   }).type(name);
 
@@ -57,4 +57,4 @@ Cypress.Commands.add('hasBreadcrumbs', (crumbs: string[]) => {
   });
 });
 
-addWaitForStableDomCommand({ pollInterval: 300, timeout: 1000 });
+addWaitForStableDomCommand({ pollInterval: 300, timeout: 5000 });

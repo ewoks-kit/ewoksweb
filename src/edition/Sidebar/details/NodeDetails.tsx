@@ -1,5 +1,5 @@
-import { Box, Checkbox, IconButton } from '@material-ui/core';
-import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from '@mui/icons-material/Info';
+import { Box, Checkbox, IconButton } from '@mui/material';
 import type { Node } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 
@@ -10,9 +10,9 @@ import {
   assertNodeDataDefined,
   assertNodeDefined,
 } from '../../../utils/typeGuards';
-import DefaultInputs from '../EditableTableProperties/DefaultInputs';
 import sidebarStyle from '../sidebarStyle';
 import SidebarTooltip from '../SidebarTooltip';
+import DefaultInputs from '../table/DefaultInputs';
 import DefaultErrorNodeControl from './DefaultErrorNodeControl';
 import NodeInfo from './NodeInfo';
 import NodeLabelComment from './NodeLabelComment';

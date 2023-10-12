@@ -1,4 +1,4 @@
-import { Paper, Tooltip } from '@material-ui/core';
+import { Paper, Tooltip } from '@mui/material';
 import { useState } from 'react';
 
 import { useIcons } from '../../../../api/icons';
@@ -25,7 +25,7 @@ function IconList() {
             type="button"
             aria-label={icon.name}
           >
-            <Tooltip title={icon.name} arrow>
+            <Tooltip title={icon.name} arrow placement="left">
               <img
                 className={styles.iconImg}
                 src={icon.data_url}

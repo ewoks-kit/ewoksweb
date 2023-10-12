@@ -1,4 +1,4 @@
-import type { ChangeEvent, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
 import type { Node } from 'reactflow';
 
@@ -99,7 +99,8 @@ export type TaskType =
   | 'class'
   | 'note'
   | 'script'
-  | 'subworkflow';
+  | 'subworkflow'
+  | 'generated';
 
 export interface Task {
   task_type: TaskType;
@@ -389,11 +390,6 @@ export interface filterParams {
   // type: string;
   error?: boolean;
 }
-
-export type PropertyChangedEvent = ChangeEvent<{
-  name?: string | undefined;
-  value: unknown;
-}>;
 
 export interface SelectedElement {
   selectedElement: Node | Edge | undefined;

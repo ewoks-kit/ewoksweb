@@ -2,9 +2,9 @@
   The table that is used to pass parameters for default-values, conditions and data-mapping.
   Its cells can change depending on the kind of input and the parent-component params.
 */
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableRow from '@mui/material/TableRow';
 import type { ChangeEvent } from 'react';
 import React, { useEffect } from 'react';
 import useSnackbarStore from 'store/useSnackbarStore';
@@ -16,12 +16,12 @@ import type {
 } from 'types';
 
 import DraggableDialog from '../../../general/DraggableDialog';
-import AddEntryRow from './AddEntryRow';
+import AddEntryRow from './controls/AddEntryRow';
+import RemoveRowCell from './controls/RemoveRowCell';
+import TypeSelectCell from './controls/TypeSelectCell';
 import CustomTableCell from './CustomTableCell';
 import styles from './Table.module.css';
 import TableHeader from './TableHeader';
-import ToolsCell from './ToolsCell';
-import TypeSelectCell from './TypeSelectCell';
 import { createData, getType } from './utils';
 
 interface EditableTableProps {
@@ -266,7 +266,7 @@ function EditableTable(props: EditableTableProps) {
                   onEdit={() => onEditRow(row.id || '', index)}
                   disable={disable}
                 />
-                <ToolsCell
+                <RemoveRowCell
                   disable={disable}
                   onDelete={() => onDelete(row.id || '')}
                 />

@@ -1,5 +1,5 @@
-import type { SliderTypeMap } from '@material-ui/core';
-import { Slider } from '@material-ui/core';
+import type { SliderTypeMap } from '@mui/material';
+import { Slider } from '@mui/material';
 import { useState } from 'react';
 
 import styles from './NodeWidthControl.module.css';

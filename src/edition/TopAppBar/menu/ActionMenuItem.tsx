@@ -1,5 +1,5 @@
-import type { SvgIcon } from '@material-ui/core';
-import { ListItemText, MenuItem } from '@material-ui/core';
+import type { SvgIcon } from '@mui/material';
+import { ListItemText, MenuItem } from '@mui/material';
 import type { PropsWithChildren } from 'react';
 
 import { useActionMenuContext } from './ActionMenuContext';
