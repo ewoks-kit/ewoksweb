@@ -1,4 +1,4 @@
-import { Autocomplete } from '@mui/lab';
+import { Autocomplete } from '@mui/material';
 import { CircularProgress, TextField } from '@mui/material';
 import type { CSSProperties } from 'react';
 import { useEffect, useState } from 'react';
