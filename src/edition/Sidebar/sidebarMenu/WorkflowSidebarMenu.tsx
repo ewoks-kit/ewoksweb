@@ -4,12 +4,12 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
-import { deleteWorkflow } from 'api/workflows';
-import commonStrings from 'commonStrings.json';
 import { useState } from 'react';
 import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../../../api/tasks';
+import { deleteWorkflow } from '../../../api/workflows';
+import commonStrings from '../../../commonStrings.json';
 import ConfirmDialog from '../../../general/ConfirmDialog';
 import GraphFormDialog from '../../../general/forms/GraphFormDialog';
 import useSnackbarStore from '../../../store/useSnackbarStore';
