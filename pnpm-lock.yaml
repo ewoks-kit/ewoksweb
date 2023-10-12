@@ -32,12 +32,6 @@ dependencies:
   '@tanstack/react-query':
     specifier: 4.35.7
     version: 4.35.7(react-dom@18.2.0)(react@18.2.0)
-  '@types/d3-format':
-    specifier: 3.0.2
-    version: 3.0.2
-  '@types/path-browserify':
-    specifier: 1.0.0
-    version: 1.0.0
   axios:
     specifier: 1.5.1
     version: 1.5.1
@@ -50,6 +44,9 @@ dependencies:
   lodash:
     specifier: 4.17.21
     version: 4.17.21
+  nanoid:
+    specifier: 4.0.2
+    version: 4.0.2
   normalize.css:
     specifier: ^8.0.1
     version: 8.0.1
@@ -94,12 +91,18 @@ devDependencies:
   '@testing-library/cypress':
     specifier: 10.0.1
     version: 10.0.1(cypress@13.3.0)
+  '@types/d3-format':
+    specifier: 3.0.2
+    version: 3.0.2
   '@types/lodash':
     specifier: ^4.14.199
     version: 4.14.199
   '@types/node':
     specifier: ^16.18.0
     version: 16.18.0
+  '@types/path-browserify':
+    specifier: 1.0.0
+    version: 1.0.0
   '@types/react':
     specifier: ^18.2.27
     version: 18.2.27
@@ -124,9 +127,6 @@ devDependencies:
   eslint-config-galex:
     specifier: 4.5.2
     version: 4.5.2(eslint@8.50.0)(tailwindcss@3.3.3)
-  nanoid:
-    specifier: 4.0.2
-    version: 4.0.2
   npm-run-all:
     specifier: 4.1.5
     version: 4.1.5
@@ -1595,7 +1595,6 @@ packages:
 
   /@types/d3-format@3.0.2:
     resolution: {integrity: sha512-9oQWvKk2qVBo49FQq8yD/et8Lx0W5Ac2FdGSOUecqOFKqh0wkpyHqf9Qc7A06ftTR+Lz13Pi3jHIQis0aCueOA==}
-    dev: false
 
   /@types/d3-geo@3.0.5:
     resolution: {integrity: sha512-ysEEU93Wv9p2UZBxTK3kUP7veHgyhTA0qYtI7bxK5EMXb3JxGv0D4IH54PxprAF26n+uHci24McVmzwIdLgvgQ==}
@@ -1743,7 +1742,7 @@ packages:
 
   /@types/path-browserify@1.0.0:
     resolution: {integrity: sha512-XMCcyhSvxcch8b7rZAtFAaierBYdeHXVvg2iYnxOV0MCQHmPuRRmGZPFDRzPayxcGiiSL1Te9UIO+f3cuj0tfw==}
-    dev: false
+    dev: true
 
   /@types/prop-types@15.7.8:
     resolution: {integrity: sha512-kMpQpfZKSCBqltAJwskgePRaYRFukDkm1oItcAbC3gNELR20XIBcN9VRgg4+m8DKsTfkWeA4m4Imp4DDuWy7FQ==}
@@ -4816,7 +4815,7 @@ packages:
     resolution: {integrity: sha512-7ZtY5KTCNheRGfEFxnedV5zFiORN1+Y1N6zvPTnHQd8ENUvfaDBeuJDZb2bN/oXwXxu3qkTXDzy57W5vAmDTBw==}
     engines: {node: ^14 || ^16 || >=18}
     hasBin: true
-    dev: true
+    dev: false
 
   /natural-compare-lite@1.4.0:
     resolution: {integrity: sha512-Tj+HTDSJJKaZnfiuw+iaF9skdPpTo2GtEly5JHnWV/hfv2Qj/9RKsGISQtLh2ox3l5EAGw487hnBee0sIJ6v2g==}
