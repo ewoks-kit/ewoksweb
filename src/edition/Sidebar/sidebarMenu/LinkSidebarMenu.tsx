@@ -1,17 +1,18 @@
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Typography from '@material-ui/core/Typography';
-import useStore from '../../../store/useStore';
-import { Delete as DeleteIcon } from '@material-ui/icons';
-import { useReactFlow } from 'reactflow';
+import { Delete as DeleteIcon } from '@mui/icons-material';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
 import type { Edge } from 'reactflow';
+import { useReactFlow } from 'reactflow';
+
+import useStore from '../../../store/useStore';
 
 export default function LinkSidebarMenu(selectedElement: Edge) {
   const rfInstance = useReactFlow();
 
   const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
+    (state) => state.displayedWorkflowInfo,
   );
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
 

@@ -1,11 +1,12 @@
-import type { EditableTableRow, Condition as EdgeConditions } from 'types';
-import EditableTable from './EditableTable';
-import useEdgeDataStore from '../../../store/useEdgeDataStore';
-import { assertEdgeDataDefined } from '../../../utils/typeGuards';
-import type { Edge } from 'reactflow';
 import { nanoid } from 'nanoid';
-import { calcTypeOfValues } from './utils';
+import type { Edge } from 'reactflow';
+import type { Condition as EdgeConditions, EditableTableRow } from 'types';
+
+import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
+import { assertEdgeDataDefined } from '../../../utils/typeGuards';
+import EditableTable from './EditableTable';
+import { calcTypeOfValues } from './utils';
 
 interface Props {
   element: Edge;
@@ -18,7 +19,7 @@ export default function Conditions({ element, isOnErrorSelected }: Props) {
   assertEdgeDataDefined(edgeData, element.id);
 
   const sourceNodeData = useNodeDataStore((state) =>
-    state.nodesData.get(element.source)
+    state.nodesData.get(element.source),
   );
 
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);

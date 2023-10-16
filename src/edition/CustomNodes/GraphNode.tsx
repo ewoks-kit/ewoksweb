@@ -1,26 +1,20 @@
+import { Tooltip } from '@mui/material';
 import { memo } from 'react';
+import type { NodeProps } from 'reactflow';
 import { Handle, Position } from 'reactflow';
-import type { Connection, NodeProps } from 'reactflow';
-import { contentStyle, style } from './nodeStyles';
-import isValidLink from '../../utils/IsValidLink';
-import useSnackbarStore from '../../store/useSnackbarStore';
-import type { EwoksRFNodeData } from '../../types';
-import { useReactFlow } from 'reactflow';
+
 import useNodeDataStore from '../../store/useNodeDataStore';
-import { assertNodeDataDefined } from '../../utils/typeGuards';
-import { getNodesData } from '../../utils';
-import { Tooltip } from '@material-ui/core';
-import NodeLabel from './NodeLabel';
-import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import NodeIcon from './NodeIcon';
-import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 import useStore from '../../store/useStore';
+import SuspenseBoundary from '../../suspense/SuspenseBoundary';
+import type { EwoksRFNodeData } from '../../types';
+import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
+import { assertNodeDataDefined } from '../../utils/typeGuards';
+import NodeIcon from './NodeIcon';
+import NodeLabel from './NodeLabel';
+import { contentStyle, style } from './nodeStyles';
 
 function GraphNode(props: NodeProps<EwoksRFNodeData>) {
-  const { getNodes, getEdges } = useReactFlow();
-
   const { id } = props;
-  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
   const { loadedGraphs } = useStore.getState();
 
@@ -30,37 +24,16 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
   // DOC: the subgraph is connected to the original graph through the task_identifier like
   // simple nodes and not through the id which is the unique in the current graph nodeId
   const subgraphExistsOnServer = loadedGraphs.has(
-    nodeData.task_props.task_identifier
+    nodeData.task_props.task_identifier,
   );
   const { inputs = [], outputs = [] } = uiProps;
-
-  const isValidConnection = (connection: Connection) => {
-    const { isValid, reason } = isValidLink(
-      connection,
-      getNodes(),
-      getEdges(),
-      getNodesData()
-    );
-    if (!isValid) {
-      showWarningMsg(reason);
-    }
-    return isValid;
-  };
 
   const nodeWidth = { width: `${uiProps.nodeWidth || 100}px` };
   const { withImage = DEFAULT_NODE_VALUES.uiProps.withImage } = uiProps;
   const { withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel } = uiProps;
 
-  const borderColor = uiProps.colorBorder;
-
   return (
-    <div
-      className="node-content"
-      style={borderColor ? { borderColor } : undefined}
-      id="choice"
-      role="button"
-      tabIndex={0}
-    >
+    <div className="node-content" style={{ borderColor: uiProps.colorBorder }}>
       <Tooltip
         title={
           nodeData.comment ? (
@@ -120,7 +93,6 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
                         ...contentStyle.left,
                         ...contentStyle.handleTarget,
                       }}
-                      isValidConnection={isValidConnection}
                     />
                     {uiProps.moreHandles && (
                       <Handle
@@ -129,14 +101,13 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
                         position={Position.Right}
                         id={`${input.label.slice(
                           0,
-                          input.label.indexOf(':')
+                          input.label.indexOf(':'),
                         )} right`}
                         style={{
                           ...contentStyle.handle,
                           ...contentStyle.right,
                           ...contentStyle.handleTarget,
                         }}
-                        isValidConnection={isValidConnection}
                       />
                     )}
                   </div>
@@ -174,7 +145,6 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
                         ...contentStyle.right,
                         ...contentStyle.handleSource,
                       }}
-                      isValidConnection={isValidConnection}
                     />
                     {uiProps.moreHandles && (
                       <Handle
@@ -183,14 +153,13 @@ function GraphNode(props: NodeProps<EwoksRFNodeData>) {
                         position={Position.Left}
                         id={`${output.label.slice(
                           0,
-                          output.label.indexOf(':')
+                          output.label.indexOf(':'),
                         )} left`}
                         style={{
                           ...contentStyle.handle,
                           ...contentStyle.left,
                           ...contentStyle.handleSource,
                         }}
-                        isValidConnection={isValidConnection}
                       />
                     )}
                   </div>

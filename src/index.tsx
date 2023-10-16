@@ -1,14 +1,12 @@
-import { StrictMode } from 'react';
-import ReactDOM from 'react-dom';
-
 import 'normalize.css';
 import './styles/index.css';
 
-import App from './App';
+import { createRoot } from 'react-dom/client';
 
-ReactDOM.render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-  document.querySelector('#root')
-);
+import App from './App';
+import { assertNonNull } from './utils/typeGuards';
+
+const container = document.querySelector('#root');
+assertNonNull(container);
+const root = createRoot(container);
+root.render(<App />);

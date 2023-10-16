@@ -1,12 +1,11 @@
 import type { EwoksEvent } from '../types';
 import { assertDefined } from '../utils/typeGuards';
-import StatusBadge from './StatusBadge';
-import StartTimeInfo from './StartTimeInfo';
-
-import styles from './WorkflowItem.module.css';
 import Duration from './Duration';
-import Traceback from './Traceback';
 import RerunButton from './RerunButton';
+import StartTimeInfo from './StartTimeInfo';
+import StatusBadge from './StatusBadge';
+import Traceback from './Traceback';
+import styles from './WorkflowItem.module.css';
 
 interface Props {
   events: EwoksEvent[];
@@ -16,17 +15,17 @@ function WorkflowItem(props: Props) {
   const { events } = props;
 
   const startJobEvent = events.find(
-    (e) => e.context === 'job' && e.type === 'start'
+    (e) => e.context === 'job' && e.type === 'start',
   );
   assertDefined(startJobEvent, 'No start job event');
   const startWorkflowEvent = events.find(
-    (e) => e.context === 'workflow' && e.type === 'start'
+    (e) => e.context === 'workflow' && e.type === 'start',
   );
   const endJobEvent = events.find(
-    (e) => e.context === 'job' && e.type === 'end'
+    (e) => e.context === 'job' && e.type === 'end',
   );
   const hasFinished = !!endJobEvent;
-  const hasError = endJobEvent?.error === true;
+  const hasError = !!endJobEvent?.error;
 
   const status = hasFinished ? (hasError ? 'Failed' : 'Success') : 'Running';
 
@@ -37,7 +36,7 @@ function WorkflowItem(props: Props) {
   const id = startWorkflowEvent?.workflow_id;
 
   return (
-    <div className={styles.item} role="listitem" aria-label={id}>
+    <li className={styles.item} aria-label={id}>
       <div className={styles.header}>
         <div>
           <h3 className={styles.title}>{id || idFallback}</h3>
@@ -59,7 +58,7 @@ function WorkflowItem(props: Props) {
         )}
         {id && <RerunButton id={id} />}
       </div>
-    </div>
+    </li>
   );
 }
 

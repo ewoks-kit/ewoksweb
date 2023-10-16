@@ -1,11 +1,11 @@
+import { Edit, LibraryAdd } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 import { useState } from 'react';
-import { IconButton } from '@material-ui/core';
 
-import type { Task } from '../../types';
-import { Edit, LibraryAdd } from '@material-ui/icons';
-import styles from './TaskButtonGroup.module.css';
-import DeleteTaskButton from './DeleteTaskButton';
 import TaskForm from '../../general/forms/TaskForm';
+import type { Task } from '../../types';
+import DeleteTaskButton from './DeleteTaskButton';
+import styles from './TaskButtonGroup.module.css';
 
 type ActionType = 'clone' | 'edit';
 

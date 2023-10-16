@@ -1,0 +1,4 @@
+.cell {
+  composes: cell from '../Table.module.css';
+  border-bottom: none;
+}

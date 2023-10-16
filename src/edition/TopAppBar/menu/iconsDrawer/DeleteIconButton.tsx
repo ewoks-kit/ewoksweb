@@ -1,5 +1,5 @@
-import { IconButton } from '@material-ui/core';
-import { Delete } from '@material-ui/icons';
+import { Delete } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 import { useState } from 'react';
 
 import { deleteIcon, useInvalidateIcons } from '../../../../api/icons';
@@ -27,7 +27,7 @@ function DeleteIconButton(props: Props) {
 
     if (tasks.some((task) => task.icon === iconName)) {
       showWarningMsg(
-        `${iconName} cannot be deleted since it is used in one or more Tasks!`
+        `${iconName} cannot be deleted since it is used in one or more Tasks!`,
       );
       return;
     }

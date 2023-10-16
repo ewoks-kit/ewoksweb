@@ -1,14 +1,13 @@
 import { useState } from 'react';
+import { useReactFlow } from 'reactflow';
 
-import FormControl from '@material-ui/core/FormControl';
-import useStore from '../store/useStore';
+import { useTasks } from '../api/tasks';
+import { fetchWorkflow } from '../api/workflows';
 import useSnackbarStore from '../store/useSnackbarStore';
+import useStore from '../store/useStore';
 import type { WorkflowDescription } from '../types';
 import ConfirmDialog from './ConfirmDialog';
 import WorkflowDropdown from './WorkflowDropdown';
-import { fetchWorkflow } from '../api/workflows';
-import { useReactFlow } from 'reactflow';
-import { useTasks } from '../api/tasks';
 
 export default function GetWorkflowFromServerDropdown() {
   const [workflowId, setWorkflowId] = useState('');
@@ -46,20 +45,16 @@ export default function GetWorkflowFromServerDropdown() {
         agreeCallback={() => getFromServer(workflowId)}
         disagreeCallback={() => setOpenAgreeDialog(false)}
       />
-      <FormControl
-        variant="standard"
+      <WorkflowDropdown
+        onChange={(workflowDetails) => {
+          setInputValue(workflowDetails);
+        }}
         style={{
           minWidth: '220px',
           backgroundColor: '#7685dd',
           borderRadius: '4px',
         }}
-      >
-        <WorkflowDropdown
-          onChange={(workflowDetails) => {
-            setInputValue(workflowDetails);
-          }}
-        />
-      </FormControl>
+      />
     </>
   );
 }

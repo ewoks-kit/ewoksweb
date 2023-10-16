@@ -1,10 +1,11 @@
-import EditNodeStyle from './EditNodeStyle';
-import EditLinkStyle from './EditLinkStyle';
-import EditGraphStyle from './EditGraphStyle';
-import type { Node, Edge } from 'reactflow';
-import { isNodeRF } from '../../../utils/typeGuards';
+import type { Edge, Node } from 'reactflow';
+
 import type { SelectedElementRF } from '../../../types';
+import { isNodeRF } from '../../../utils/typeGuards';
 import sidebarStyle from '../sidebarStyle';
+import EditGraphStyle from './EditGraphStyle';
+import EditLinkStyle from './EditLinkStyle';
+import EditNodeStyle from './EditNodeStyle';
 
 interface Content {
   title?: string;

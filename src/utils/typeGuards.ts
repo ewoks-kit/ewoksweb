@@ -1,5 +1,7 @@
+import type { Edge, Node } from 'reactflow';
 import { MarkerType } from 'reactflow';
-import type { Node, Edge } from 'reactflow';
+
+import type { TaskInfo } from '../edition/Canvas/models';
 import type {
   EwoksRFLink,
   EwoksRFLinkData,
@@ -7,14 +9,13 @@ import type {
   EwoksRFNodeData,
   GraphDetails,
 } from '../types';
-import type { TaskInfo } from '../edition/Canvas/models';
 
 export interface EwoksServerErrorResponse {
   response: { data: { message: string } };
 }
 
 export function isNode(
-  entity: EwoksRFNode | EwoksRFLink | GraphDetails | undefined
+  entity: EwoksRFNode | EwoksRFLink | GraphDetails | undefined,
 ): entity is EwoksRFNode {
   return !!entity && 'position' in entity;
 }
@@ -28,19 +29,19 @@ export function isEdgeRF(entity: Node | Edge | undefined): entity is Edge {
 }
 
 export function isLink(
-  entity: EwoksRFNode | EwoksRFLink | GraphDetails | undefined
+  entity: EwoksRFNode | EwoksRFLink | GraphDetails | undefined,
 ): entity is EwoksRFLink {
   return !!entity && 'source' in entity;
 }
 
 export function isGraphDetails(
-  entity: EwoksRFNode | EwoksRFLink | GraphDetails | undefined
+  entity: EwoksRFNode | EwoksRFLink | GraphDetails | undefined,
 ): entity is GraphDetails {
   return !!entity && 'input_nodes' in entity;
 }
 
 export function isEwoksServerErrorResponse(
-  error: unknown
+  error: unknown,
 ): error is EwoksServerErrorResponse {
   return (
     objNotNullWithProp(error, 'response') &&
@@ -52,7 +53,7 @@ export function isEwoksServerErrorResponse(
 
 function objNotNullWithProp<X, Y extends PropertyKey>(
   obj: X,
-  prop: Y
+  prop: Y,
 ): obj is X & Record<Y, unknown> {
   return typeof obj === 'object' && obj !== null && prop in obj;
 }
@@ -63,7 +64,7 @@ export function isDefined<T>(val: T): val is T extends undefined ? never : T {
 
 export function assertDefined<T>(
   val: T,
-  message = 'Expected some value'
+  message = 'Expected some value',
 ): asserts val is T extends undefined ? never : T {
   if (!isDefined(val)) {
     throw new TypeError(message);
@@ -76,7 +77,7 @@ export function isString(val: unknown): val is string {
 
 export function assertStr(
   val: unknown,
-  message = 'Expected string'
+  message = 'Expected string',
 ): asserts val is string {
   if (!isString(val)) {
     throw new TypeError(message);
@@ -89,7 +90,7 @@ export function isMarkerType(val: string): val is MarkerType {
 
 export function assertNodeDataDefined(
   nodeData: EwoksRFNodeData | undefined,
-  nodeId: string
+  nodeId: string,
 ): asserts nodeData is EwoksRFNodeData extends undefined
   ? never
   : EwoksRFNodeData {
@@ -98,14 +99,14 @@ export function assertNodeDataDefined(
 
 export function assertNodeDefined(
   node: EwoksRFNode | undefined,
-  nodeId: string
+  nodeId: string,
 ): asserts node is EwoksRFNode extends undefined ? never : EwoksRFNode {
   assertDefined(node, `Node with id ${nodeId} has undefined data!`);
 }
 
 export function assertEdgeDataDefined(
   edgeData: EwoksRFLinkData | undefined,
-  edgeId: string
+  edgeId: string,
 ): asserts edgeData is EwoksRFLinkData extends undefined
   ? never
   : EwoksRFLinkData {
@@ -113,19 +114,19 @@ export function assertEdgeDataDefined(
 }
 
 export function assertElementIsNodeType(
-  entity: Node | undefined
+  entity: Node | undefined,
 ): asserts entity is Node {
   assertDefined(!!entity && 'position' in entity, `Node is not defined!`);
 }
 
 export function assertElementIsEdge(
-  entity: EwoksRFNode | EwoksRFLink | Edge | Node | GraphDetails | undefined
+  entity: EwoksRFNode | EwoksRFLink | Edge | Node | GraphDetails | undefined,
 ): asserts entity is EwoksRFLink extends undefined ? never : EwoksRFLink {
   assertDefined(!!entity && 'source' in entity, `Edge is possibly undefined!`);
 }
 
 export function assertTaskInfo(
-  taskInfo: unknown
+  taskInfo: unknown,
 ): asserts taskInfo is TaskInfo {
   if (
     !taskInfo ||
@@ -139,5 +140,31 @@ export function assertTaskInfo(
   assertStr(taskInfo.task_type);
   if ('icon' in taskInfo && taskInfo.icon) {
     assertStr(taskInfo.icon);
+  }
+}
+
+interface ObjectWithMessage {
+  message: string;
+}
+
+export function hasMessage(error: unknown): error is ObjectWithMessage {
+  return (
+    !!error &&
+    typeof error === 'object' &&
+    'message' in error &&
+    typeof error.message === 'string'
+  );
+}
+
+function isNonNull<T>(val: T): val is T extends null ? never : T {
+  return val !== null;
+}
+
+export function assertNonNull<T>(
+  val: T,
+  message = 'Expected value to not be null',
+): asserts val is T extends null ? never : T {
+  if (!isNonNull(val)) {
+    throw new TypeError(message);
   }
 }

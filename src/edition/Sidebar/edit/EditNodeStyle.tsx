@@ -1,6 +1,7 @@
+import { Checkbox, FormControl } from '@mui/material';
+import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
-import { Checkbox, FormControl } from '@material-ui/core';
-import type { ChangeEvent } from 'react';
+
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import sidebarStyle from '../sidebarStyle';
@@ -49,8 +50,8 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   };
 
   function handleNodeWidthChange(
-    _event: ChangeEvent<unknown>,
-    value: number | number[]
+    _event: SyntheticEvent | Event,
+    value: number | number[],
   ) {
     if (typeof value === 'number') {
       mergeNodeData(nodeId, {
@@ -76,11 +77,11 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   }
 
   const [showBorderColor, setShowBorderColor] = useState(
-    !!nodeData.ui_props.colorBorder
+    !!nodeData.ui_props.colorBorder,
   );
 
   const isRegularNode = !['graphInput', 'graphOutput', 'note'].includes(
-    nodeData.task_props.task_type
+    nodeData.task_props.task_type,
   );
 
   return (

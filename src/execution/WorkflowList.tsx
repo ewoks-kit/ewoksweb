@@ -1,8 +1,9 @@
-import type { EwoksJob } from '../api/models';
-import WorkflowItem from './WorkflowItem';
-import styles from './MonitorPage.module.css';
-import { Link } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
+import { Link } from 'react-router-dom';
+
+import type { EwoksJob } from '../api/models';
+import styles from './MonitorPage.module.css';
+import WorkflowItem from './WorkflowItem';
 import WorkflowItemErrorFallback from './WorkflowItemErrorFallback';
 
 interface Props {
@@ -25,11 +26,11 @@ function WorkflowList(props: Props) {
   }
 
   return (
-    <div role="list">
+    <ul className={styles.list}>
       {jobs
         .sort(
           (a, b) =>
-            new Date(b[0].time).valueOf() - new Date(a[0].time).valueOf()
+            new Date(b[0].time).valueOf() - new Date(a[0].time).valueOf(),
         )
         .map((events) => (
           <ErrorBoundary
@@ -39,7 +40,7 @@ function WorkflowList(props: Props) {
             <WorkflowItem events={events} />
           </ErrorBoundary>
         ))}
-    </div>
+    </ul>
   );
 }
 

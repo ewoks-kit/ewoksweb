@@ -1,22 +1,23 @@
+import { Delete as DeleteIcon } from '@mui/icons-material';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Typography from '@material-ui/core/Typography';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import GraphFormDialog from '../../../general/forms/GraphFormDialog';
-import useStore from '../../../store/useStore';
-import useSnackbarStore from '../../../store/useSnackbarStore';
-import { GraphFormAction } from '../../../types';
-import { Delete as DeleteIcon } from '@material-ui/icons';
+import { useReactFlow } from 'reactflow';
+
+import { useTasks } from '../../../api/tasks';
+import { deleteWorkflow } from '../../../api/workflows';
+import commonStrings from '../../../commonStrings.json';
 import ConfirmDialog from '../../../general/ConfirmDialog';
-import { deleteWorkflow } from 'api/workflows';
-import commonStrings from 'commonStrings.json';
+import GraphFormDialog from '../../../general/forms/GraphFormDialog';
+import useSnackbarStore from '../../../store/useSnackbarStore';
+import useStore from '../../../store/useStore';
+import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
+import { GraphFormAction } from '../../../types';
 import { textForError } from '../../../utils';
 import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';
-import { useReactFlow } from 'reactflow';
-import { useTasks } from '../../../api/tasks';
-import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 
 export default function WorkflowSidebarMenu() {
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
@@ -28,7 +29,7 @@ export default function WorkflowSidebarMenu() {
   const tasks = useTasks();
 
   const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
+    (state) => state.displayedWorkflowInfo,
   );
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
@@ -40,7 +41,7 @@ export default function WorkflowSidebarMenu() {
         await deleteWorkflow(displayedWorkflowInfo.id);
         setRootWorkflow(EMPTY_GRAPH, rfInstance, tasks);
         showSuccessMsg(
-          `Workflow ${displayedWorkflowInfo.id} successfully deleted!`
+          `Workflow ${displayedWorkflowInfo.id} successfully deleted!`,
         );
       } catch (error) {
         showErrorMsg(textForError(error, commonStrings.deletingError));
@@ -65,7 +66,7 @@ export default function WorkflowSidebarMenu() {
 
       <MenuItem
         onClick={() => setOpenSaveDialog(true)}
-        role="sidebarMenuItem"
+        role="menuitem"
         disabled={
           !rootWorkflowId || rootWorkflowId !== displayedWorkflowInfo.id
         }
@@ -78,7 +79,7 @@ export default function WorkflowSidebarMenu() {
       </MenuItem>
       <MenuItem
         onClick={() => setOpenAgreeDialog(true)}
-        role="sidebarMenuItem"
+        role="menuitem"
         disabled={
           !rootWorkflowId || rootWorkflowId !== displayedWorkflowInfo.id
         }

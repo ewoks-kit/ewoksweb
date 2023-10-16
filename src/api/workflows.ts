@@ -30,7 +30,7 @@ export async function postWorkflow(workflow: GraphEwoks) {
 export async function putWorkflow(workflow: GraphEwoks) {
   return client.put<WorkflowResponse>(
     `/workflow/${workflow.graph.id}`,
-    workflow
+    workflow,
   );
 }
 
@@ -41,7 +41,7 @@ export async function deleteWorkflow(id: string) {
 export async function executeWorkflow(workflowId: string) {
   return client.post<ExecuteWorkflowResponse>(
     `/execute/${workflowId}`,
-    workflowId
+    workflowId,
   );
 }
 

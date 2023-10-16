@@ -7,7 +7,7 @@ export function mappingToLabel(dataMapping: DataMapping[] | undefined) {
 
   return dataMapping
     .map(
-      (mapping) => `${mapping.name || ''}->${mapping.value?.toString() || ''}`
+      (mapping) => `${mapping.name || ''}->${mapping.value?.toString() || ''}`,
     )
     .join(', ');
 }
@@ -20,7 +20,7 @@ export function conditionsToLabel(conditions: Condition[] | undefined) {
   return conditions
     .map(
       (condition) =>
-        `${condition.name || ''}: ${JSON.stringify(condition.value)}`
+        `${condition.name || ''}: ${JSON.stringify(condition.value)}`,
     )
     .join(', ');
 }

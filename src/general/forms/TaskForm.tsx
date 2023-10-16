@@ -1,5 +1,6 @@
-import { FormControl } from '@material-ui/core';
-import { InputLabel } from '@material-ui/core';
+import { Alert } from '@mui/lab';
+import { FormControl } from '@mui/material';
+import { InputLabel } from '@mui/material';
 import {
   Button,
   Dialog,
@@ -9,23 +10,22 @@ import {
   DialogTitle,
   MenuItem,
   Select,
-} from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+} from '@mui/material';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import SuspenseBoundary from '../../suspense/SuspenseBoundary';
+
+import { useInvalidateTasks } from '../../api/tasks';
+import commonStrings from '../../commonStrings.json';
 import useSnackbarStore from '../../store/useSnackbarStore';
+import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import type { Task } from '../../types';
 import { textForError } from '../../utils';
-import { useInvalidateTasks } from '../../api/tasks';
+import FormField from './FormField';
 import IconDropdown from './IconDropdown';
 import type { TaskFields } from './models';
 import { TASK_TYPES } from './models';
-import commonStrings from '../../commonStrings.json';
-
 import styles from './TaskForm.module.css';
 import { submitTaskFormData } from './utils';
-import FormField from './FormField';
 
 interface Props {
   isOpen: boolean;
@@ -39,24 +39,18 @@ function TaskForm(props: Props) {
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const invalidateTasks = useInvalidateTasks();
 
-  const {
-    control,
-    handleSubmit,
-    watch,
-    formState,
-    reset,
-    setValue,
-  } = useForm<TaskFields>({
-    defaultValues: {
-      task_identifier: elementToEdit?.task_identifier || '',
-      task_type: elementToEdit?.task_type || '',
-      category: elementToEdit?.category || '',
-      required_input_names: String(elementToEdit?.required_input_names || []),
-      optional_input_names: String(elementToEdit?.optional_input_names || []),
-      output_names: String(elementToEdit?.output_names || []),
-      icon: elementToEdit?.icon || '',
-    },
-  });
+  const { control, handleSubmit, watch, formState, reset, setValue } =
+    useForm<TaskFields>({
+      defaultValues: {
+        task_identifier: elementToEdit?.task_identifier || '',
+        task_type: elementToEdit?.task_type || '',
+        category: elementToEdit?.category || '',
+        required_input_names: String(elementToEdit?.required_input_names || []),
+        optional_input_names: String(elementToEdit?.optional_input_names || []),
+        output_names: String(elementToEdit?.output_names || []),
+        icon: elementToEdit?.icon || '',
+      },
+    });
   const onSubmit = handleSubmit(async (data: TaskFields) => {
     try {
       await submitTaskFormData(data, elementToEdit, editExistingTask);
@@ -123,11 +117,11 @@ function TaskForm(props: Props) {
               const { onChange, ...restField } = field;
 
               return (
-                <FormControl className={styles.dropdown}>
+                <FormControl variant="standard" className={styles.dropdown}>
                   <InputLabel id="taskTypeInFormDialog">Task type</InputLabel>
                   <Select
+                    variant="standard"
                     labelId="taskTypeInFormDialog"
-                    // @ts-expect-error
                     onChange={onChange}
                     {...restField}
                   >

@@ -1,19 +1,17 @@
-import { client } from './client';
 import { useQuery } from '@tanstack/react-query';
+
 import type { filterParams } from '../types';
-import type { ExecutedJobsResponse, EwoksJob } from './models';
-import { QueryKey } from './models';
 import { assertDefined } from '../utils/typeGuards';
+import { client } from './client';
+import type { EwoksJob, ExecutedJobsResponse } from './models';
+import { QueryKey } from './models';
 
 async function fetchExecutionEvents(
-  queryParams: filterParams | undefined
+  queryParams: filterParams | undefined,
 ): Promise<ExecutedJobsResponse> {
-  const queryString = queryParams
-    ? `?${new URLSearchParams(Object.entries(queryParams)).toString()}`
-    : '';
-  const { data } = await client.get<ExecutedJobsResponse>(
-    `/execution/events${queryString}`
-  );
+  const { data } = await client.get<ExecutedJobsResponse>(`/execution/events`, {
+    params: queryParams,
+  });
   return data;
 }
 

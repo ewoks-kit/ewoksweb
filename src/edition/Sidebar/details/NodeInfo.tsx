@@ -1,10 +1,10 @@
-import { IconButton } from '@material-ui/core';
+import InfoIcon from '@mui/icons-material/Info';
+import { IconButton } from '@mui/material';
 
 import type { EwoksRFNodeData } from '../../../types';
-import TaskProperty from './TaskProperty';
-import InfoIcon from '@material-ui/icons/Info';
-import SidebarTooltip from '../SidebarTooltip';
 import sidebarStyle from '../sidebarStyle';
+import SidebarTooltip from '../SidebarTooltip';
+import TaskProperty from './TaskProperty';
 
 interface Props {
   nodeId: string;
@@ -13,7 +13,7 @@ interface Props {
     propKeyValue: {
       task_identifier?: string;
     },
-    nodeData: EwoksRFNodeData
+    nodeData: EwoksRFNodeData,
   ) => void;
 }
 
@@ -21,7 +21,7 @@ function NodeInfo(props: Props) {
   const { nodeId, nodeData, onPropChange } = props;
 
   const isEditable = ['ppfmethod', 'method', 'script'].includes(
-    nodeData.task_props.task_type
+    nodeData.task_props.task_type,
   );
 
   return (

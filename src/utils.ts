@@ -1,27 +1,30 @@
+import type { Edge, Node } from 'reactflow';
+
+import { fetchWorkflow } from './api/workflows';
+import { curateEdgeData, curateNodeData } from './edition/TopAppBar/utils';
+import { enrichWithData } from './general/forms/utils';
+import orange3 from './images/orange3.png';
+import useEdgeDataStore from './store/useEdgeDataStore';
+import useNodeDataStore from './store/useNodeDataStore';
 import type {
   EwoksRFLinkData,
   EwoksRFNodeData,
+  GraphDetails,
   GraphEwoks,
-  GraphRF,
   Icon,
-  Task,
 } from './types';
 import { calcEwoksGraphProp } from './utils/CalcGraphInputsOutputs';
-import { propIsEmpty } from './utils/utils';
+import { calcNoteNodes } from './utils/calcNoteNodes';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
-import { calcNoteNodes } from './utils/calcNoteNodes';
-import { fetchWorkflow } from './api/workflows';
-import orange3 from 'images/orange3.png';
-import { isEwoksServerErrorResponse } from './utils/typeGuards';
-import useNodeDataStore from './store/useNodeDataStore';
-import useEdgeDataStore from './store/useEdgeDataStore';
+import { hasMessage, isEwoksServerErrorResponse } from './utils/typeGuards';
+import { propIsEmpty } from './utils/utils';
 
 export const DEFAULT_ICON: Icon = { name: 'orange3.png', data_url: orange3 };
 
 export async function getSubgraphs(
   graph: GraphEwoks,
-  loadedGraphsIds: string[]
+  loadedGraphsIds: string[],
 ): Promise<GraphEwoks[]> {
   const subgraphIds = graph.nodes
     .filter((nod) => nod.task_type === 'graph')
@@ -33,12 +36,12 @@ export async function getSubgraphs(
 
   const graphIdsToFetch = subgraphIds.filter(
     (id) =>
-      id && !loadedGraphsIds.some((loadedGraphsId) => id === loadedGraphsId)
+      id && !loadedGraphsIds.some((loadedGraphsId) => id === loadedGraphsId),
   );
 
   try {
     const subgraphResponses = await Promise.all(
-      graphIdsToFetch.map(fetchWorkflow)
+      graphIdsToFetch.map(fetchWorkflow),
     );
     return subgraphResponses.map((resp) => resp.data);
   } catch (error) {
@@ -49,11 +52,25 @@ export async function getSubgraphs(
   }
 }
 
-export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
-  // calculate input_nodes-output_nodes nodes from graphInput-graphOutput
-  let graph = calcEwoksGraphProp(tempGraph);
-  const noteNodes = calcNoteNodes(tempGraph.nodes);
-  const uiprops = { ...graph.uiProps, notes: noteNodes };
+export function prepareEwoksGraph(
+  graphInfo: GraphDetails,
+  nodesWithoutData: Node[],
+  edgesWithoutData: Edge[],
+  rawNodeData: Map<string, EwoksRFNodeData>,
+  rawLinkData: Map<string, EwoksRFLinkData>,
+): GraphEwoks {
+  const nodeData = curateNodeData(rawNodeData);
+  const nodes = nodesWithoutData.map((node) => enrichWithData(node, nodeData));
+
+  const linkData = curateEdgeData(rawLinkData);
+  const links = edgesWithoutData.map((edge) => enrichWithData(edge, linkData));
+
+  let graph = calcEwoksGraphProp({ graph: graphInfo, nodes, links });
+  const noteNodes = calcNoteNodes(nodes);
+  const uiprops =
+    noteNodes.length > 0
+      ? { ...graph.uiProps, notes: noteNodes }
+      : graph.uiProps;
 
   graph = {
     ...graph,
@@ -64,8 +81,8 @@ export function rfToEwoks(tempGraph: GraphRF): GraphEwoks {
 
   return {
     graph,
-    nodes: toEwoksNodes(tempGraph.nodes),
-    links: toEwoksLinks(tempGraph.links),
+    nodes: toEwoksNodes(nodes),
+    links: toEwoksLinks(links),
   };
 }
 
@@ -87,12 +104,7 @@ export function textForError(error: unknown, alternative: string): string {
     return error.response.data.message;
   }
 
-  if (
-    error &&
-    typeof error === 'object' &&
-    'message' in error &&
-    typeof error.message === 'string'
-  ) {
+  if (hasMessage(error)) {
     return error.message;
   }
 
@@ -115,9 +127,7 @@ export function getEdgeData(id: string): EwoksRFLinkData | undefined {
   return useEdgeDataStore.getState().edgesData.get(id);
 }
 
-export function getTaskName(task: Task): string {
-  const { task_identifier } = task;
-
+export function getTaskName(task_identifier: string): string {
   const task_members = task_identifier.split('.');
 
   if (task_members.length === 0) {

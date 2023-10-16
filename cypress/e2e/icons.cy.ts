@@ -1,4 +1,4 @@
-before(() => {
+beforeEach(() => {
   cy.loadAppWithoutGraph();
 });
 
@@ -7,14 +7,15 @@ it('makes icons appear on tasks correctly', () => {
 
   cy.readFile(
     'pysrc/ewoksweb/tests/resources/icons/default.png',
-    'base64'
+    'base64',
   ).then((imgData) => {
-    console.log(imgData);
-    cy.findByRole('img', {
+    cy.findByRole('button', {
       name: 'ewokscore.tests.examples.tasks.sumlist.SumList',
-    })
-      .should('have.attr', 'src')
-      .should('eq', `data:image/png;base64,${imgData}`);
+    }).within(() => {
+      cy.findByRole('img')
+        .should('have.attr', 'src')
+        .should('eq', `data:image/png;base64,${imgData}`);
+    });
   });
 });
 
@@ -26,7 +27,7 @@ it('should upload and delete icons', () => {
 
   // Upload non-existing
   cy.findByLabelText('Select an Icon to Upload').selectFile(
-    'cypress/fixtures/down.svg'
+    'cypress/fixtures/down.svg',
   );
   cy.contains('File ready to be uploaded as an icon');
   cy.findByRole('button', { name: 'Upload' }).click();
@@ -35,7 +36,7 @@ it('should upload and delete icons', () => {
 
   // Upload existing
   cy.findByLabelText('Select an Icon to Upload').selectFile(
-    'cypress/fixtures/down.svg'
+    'cypress/fixtures/down.svg',
   );
   cy.findByRole('button', { name: 'Upload' }).click();
   cy.contains("Icon 'down.svg' already exists");

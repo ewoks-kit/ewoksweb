@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import InputTextField from './InputTextField';
+import type { Node } from 'reactflow';
+
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import {
-  assertNodeDataDefined,
   assertElementIsNodeType,
+  assertNodeDataDefined,
 } from '../../../utils/typeGuards';
-import type { Node } from 'reactflow';
+import InputTextField from './InputTextField';
 
 interface Props {
   showComment: boolean;
@@ -23,7 +24,7 @@ export default function NodeLabelComment(props: Props) {
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
   const nodeData = useNodeDataStore((state) =>
-    state.nodesData.get(selectedElement.id)
+    state.nodesData.get(selectedElement.id),
   );
   assertNodeDataDefined(nodeData, selectedElement.id);
 

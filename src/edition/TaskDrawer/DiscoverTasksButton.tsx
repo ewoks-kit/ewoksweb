@@ -1,7 +1,8 @@
-import { Button } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
+import { Add } from '@mui/icons-material';
+import { Button } from '@mui/material';
 import { useState } from 'react';
-import DiscoverTasksDialog from './DiscoverMenuDialog';
+
+import DiscoverTasksDialog from './DiscoverTasksDialog';
 
 function DiscoverTasksButton() {
   const [isOpen, setOpen] = useState(false);

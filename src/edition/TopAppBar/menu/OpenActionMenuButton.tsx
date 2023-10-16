@@ -1,8 +1,8 @@
-import { IconButton, Menu } from '@material-ui/core';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { IconButton, Menu } from '@mui/material';
 import React from 'react';
-import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 
+import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 import styles from './ActionMenu.module.css';
 import { ActionMenuContext } from './ActionMenuContext';
 import DownloadMenuItem from './DownloadMenuItem';
@@ -33,6 +33,7 @@ export default function OpenActionMenuButton() {
         color="inherit"
         onClick={handleClick}
         aria-label="Open menu with more actions"
+        size="large"
       >
         <MoreVertIcon />
       </IconButton>
@@ -53,8 +54,6 @@ export default function OpenActionMenuButton() {
           vertical: 'top',
           horizontal: 'center',
         }}
-        // https://github.com/mui/material-ui/issues/10804#issuecomment-376266662
-        getContentAnchorEl={null}
       >
         <ActionMenuContext.Provider value={{ open, onClose }}>
           <SuspenseBoundary>

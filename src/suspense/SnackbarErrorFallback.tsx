@@ -1,4 +1,5 @@
 import type { FallbackProps } from 'react-error-boundary';
+
 import useSnackbarStore from '../store/useSnackbarStore';
 import { textForError } from '../utils';
 

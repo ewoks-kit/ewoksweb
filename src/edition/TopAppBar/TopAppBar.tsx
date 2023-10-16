@@ -1,14 +1,12 @@
-import { Typography } from '@material-ui/core';
 import { createPortal } from 'react-dom';
 
 import GetWorkflowFromServerDropdown from '../../general/GetWorkflowFromServerDropdown';
+import useNavBarElementStore from '../../navbar/useNavBarElementStore';
+import SuspenseBoundary from '../../suspense/SuspenseBoundary';
+import Breadcrumbs from './Breadcrumbs';
 import OpenActionMenuButton from './menu/OpenActionMenuButton';
 import SaveToServerButton from './SaveToServerButton';
-import TopAppBarLabel from './TopAppBarLabel';
-import useNavBarElementStore from '../../navbar/useNavBarElementStore';
-
 import styles from './TopAppBar.module.css';
-import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 
 function TopAppBar() {
   const navBarElement = useNavBarElementStore((state) => state.element);
@@ -19,9 +17,9 @@ function TopAppBar() {
 
   return createPortal(
     <>
-      <Typography component="h1" variant="h6" color="inherit" noWrap>
-        <TopAppBarLabel />
-      </Typography>
+      <h1 className={styles.crumbs}>
+        <Breadcrumbs />
+      </h1>
       <div className={styles.toolbar}>
         <SuspenseBoundary>
           <GetWorkflowFromServerDropdown />
@@ -30,7 +28,7 @@ function TopAppBar() {
         <OpenActionMenuButton />
       </div>
     </>,
-    navBarElement
+    navBarElement,
   );
 }
 

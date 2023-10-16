@@ -3,30 +3,28 @@
     "id": "tutorial_Graph",
     "label": "tutorial_Graph",
     "category": "tutorial",
-    "input_nodes": [],
-    "output_nodes": [],
     "uiProps": {
       "comment": "A graph to describe ewoksweb!",
       "notes": [
         {
+          "comment": "Use mouse scrolling for ZOOM IN-OUT or the first two buttons on the left. The third button fits the whole graph into view and the last locks the graph so as no node can be dragged",
           "id": "Note0",
           "label": "FIT VIEW and ZOOM IN-OUT by scrolling or with the buttons on the left",
-          "comment": "Use mouse scrolling for ZOOM IN-OUT or the first two buttons on the left. The third button fits the whole graph into view and the last locks the graph so as no node can be dragged",
+          "nodeWidth": 247,
           "position": {
             "x": -675,
             "y": -525
-          },
-          "nodeWidth": 247
+          }
         },
         {
+          "comment": "tutorial_Graph is a graph that quickly introduces you to ewoksweb",
           "id": "Note1",
           "label": "Introduction to ewoksweb",
-          "comment": "tutorial_Graph is a graph that quickly introduces you to ewoksweb",
+          "nodeWidth": 159,
           "position": {
             "x": -675,
             "y": -1230
-          },
-          "nodeWidth": 159
+          }
         }
       ]
     }
@@ -40,12 +38,8 @@
       "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
-      "default_inputs": [],
       "uiProps": {
-        "nodeWidth": 100,
-        "type": "internal",
         "icon": "orange2.svg",
-        "comment": "",
         "position": {
           "x": -690,
           "y": -960
@@ -53,7 +47,7 @@
         "moreHandles": false,
         "withImage": true,
         "withLabel": true,
-        "colorBorder": ""
+        "nodeWidth": 100
       }
     },
     {
@@ -63,19 +57,13 @@
       "task_identifier": "WhatIsEwoks",
       "inputs_complete": false,
       "task_generator": "",
-      "default_inputs": [],
       "default_error_node": false,
       "uiProps": {
-        "label": "Double-click for Ewoks",
-        "type": "internal",
-        "icon": "",
-        "comment": "",
         "position": {
           "x": -55,
           "y": -1280
         },
         "moreHandles": false,
-        "colorBorder": "",
         "withImage": true,
         "withLabel": true,
         "nodeWidth": 186
@@ -89,12 +77,8 @@
       "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
-      "default_inputs": [],
       "uiProps": {
-        "nodeWidth": 142,
-        "type": "internal",
         "icon": "orange2.svg",
-        "comment": "",
         "position": {
           "x": -380,
           "y": -1160
@@ -102,7 +86,7 @@
         "moreHandles": false,
         "withImage": true,
         "withLabel": true,
-        "colorBorder": ""
+        "nodeWidth": 142
       }
     },
     {
@@ -113,12 +97,8 @@
       "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
-      "default_inputs": [],
       "uiProps": {
-        "nodeWidth": 180,
-        "type": "internal",
         "icon": "orange2.svg",
-        "comment": "",
         "position": {
           "x": -395,
           "y": -980
@@ -126,7 +106,7 @@
         "moreHandles": false,
         "withImage": true,
         "withLabel": true,
-        "colorBorder": ""
+        "nodeWidth": 180
       }
     },
     {
@@ -137,12 +117,8 @@
       "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
-      "default_inputs": [],
       "uiProps": {
-        "nodeWidth": 189,
-        "type": "internal",
         "icon": "orange2.svg",
-        "comment": "",
         "position": {
           "x": -55,
           "y": -1075
@@ -150,7 +126,7 @@
         "moreHandles": false,
         "withImage": true,
         "withLabel": true,
-        "colorBorder": ""
+        "nodeWidth": 189
       }
     },
     {
@@ -161,20 +137,17 @@
       "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
-      "default_inputs": [],
       "uiProps": {
-        "nodeWidth": 180,
-        "type": "internal",
         "icon": "orange1",
-        "comment": "",
         "position": {
           "x": 705,
           "y": -840
         },
         "moreHandles": false,
+        "colorBorder": "#d69442",
         "withImage": true,
         "withLabel": true,
-        "colorBorder": "#d69442"
+        "nodeWidth": 180
       }
     },
     {
@@ -184,13 +157,8 @@
       "task_identifier": "Adding-Tasks",
       "inputs_complete": false,
       "task_generator": "",
-      "default_inputs": [],
       "default_error_node": false,
       "uiProps": {
-        "label": "doubleClick to see how to add your Tasks",
-        "type": "internal",
-        "icon": "",
-        "comment": "",
         "position": {
           "x": 695,
           "y": -1060
@@ -209,13 +177,8 @@
       "task_identifier": "Ewoks-Tasks",
       "inputs_complete": false,
       "task_generator": "",
-      "default_inputs": [],
       "default_error_node": false,
       "uiProps": {
-        "label": "DoubleClick me to see important existing Tasks within Ewoks",
-        "type": "internal",
-        "icon": "",
-        "comment": "",
         "position": {
           "x": 665,
           "y": -670
@@ -235,12 +198,8 @@
       "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
-      "default_inputs": [],
       "uiProps": {
-        "nodeWidth": 269,
-        "type": "internal",
         "icon": "orange2.svg",
-        "comment": "",
         "position": {
           "x": 240,
           "y": -1110
@@ -248,7 +207,7 @@
         "moreHandles": false,
         "withImage": true,
         "withLabel": true,
-        "colorBorder": ""
+        "nodeWidth": 269
       }
     },
     {
@@ -259,12 +218,8 @@
       "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
-      "default_inputs": [],
       "uiProps": {
-        "nodeWidth": 196,
-        "type": "internal",
         "icon": "orange2.svg",
-        "comment": "",
         "position": {
           "x": -25,
           "y": -925
@@ -272,7 +227,7 @@
         "moreHandles": false,
         "withImage": true,
         "withLabel": true,
-        "colorBorder": ""
+        "nodeWidth": 196
       }
     },
     {
@@ -283,12 +238,8 @@
       "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
-      "default_inputs": [],
       "uiProps": {
-        "nodeWidth": 205,
-        "type": "internal",
         "icon": "orange2.svg",
-        "comment": "",
         "position": {
           "x": 270,
           "y": -885
@@ -296,7 +247,7 @@
         "moreHandles": false,
         "withImage": true,
         "withLabel": true,
-        "colorBorder": ""
+        "nodeWidth": 205
       }
     },
     {
@@ -306,47 +257,16 @@
       "task_identifier": "Subgraphs-Loops",
       "inputs_complete": false,
       "task_generator": "",
-      "default_inputs": [],
       "default_error_node": false,
       "uiProps": {
-        "label": "SUBGRAPHS and LOOPS within graphs",
-        "type": "internal",
-        "icon": "",
-        "comment": "",
         "position": {
           "x": -460,
           "y": -745
         },
         "moreHandles": false,
-        "colorBorder": "",
         "withImage": true,
         "withLabel": true,
         "nodeWidth": 171
-      }
-    },
-    {
-      "id": "Styling-Nodes-Links",
-      "label": "Double-click for Stylink NODES and LINKS",
-      "task_type": "graph",
-      "task_identifier": "Styling-Nodes-Links",
-      "inputs_complete": false,
-      "task_generator": "",
-      "default_inputs": [],
-      "default_error_node": false,
-      "uiProps": {
-        "label": "Double-click for Stylink NODES and LINKS",
-        "type": "internal",
-        "icon": "",
-        "comment": "",
-        "position": {
-          "x": -205,
-          "y": -565
-        },
-        "moreHandles": false,
-        "colorBorder": "",
-        "withImage": true,
-        "withLabel": true,
-        "nodeWidth": 165
       }
     },
     {
@@ -356,19 +276,14 @@
       "task_identifier": "Editing-Graph-Node-Link",
       "inputs_complete": false,
       "task_generator": "",
-      "default_inputs": [],
       "default_error_node": false,
       "uiProps": {
-        "label": "Double-click for editing Graph-Node-Link",
-        "type": "internal",
-        "icon": "",
         "comment": "Double-click to learn how to Inspect and EDIT details for the GRAPH, NODES and LINKS",
         "position": {
           "x": 95,
           "y": -605
         },
         "moreHandles": false,
-        "colorBorder": "",
         "withImage": true,
         "withLabel": true,
         "nodeWidth": 178
@@ -381,13 +296,8 @@
       "task_identifier": "Buttons_Explanation",
       "inputs_complete": false,
       "task_generator": "",
-      "default_inputs": [],
       "default_error_node": false,
       "uiProps": {
-        "label": "Double-click for an explanation of the buttons in the upper bar and sidebar",
-        "type": "internal",
-        "icon": "",
-        "comment": "",
         "position": {
           "x": 575,
           "y": -1280
@@ -404,356 +314,86 @@
     {
       "source": "taskSkeleton0",
       "target": "taskSkeleton00",
-      "data_mapping": [],
-      "conditions": [],
       "on_error": false,
-      "map_all_data": true,
       "required": false,
+      "map_all_data": true,
       "uiProps": {
         "label": "is",
-        "comment": "",
         "type": "default",
         "markerEnd": "",
-        "labelBgStyle": {
-          "fill": "rgb(223, 226, 247)",
-          "fillOpacity": 1,
-          "strokeWidth": "3px",
-          "stroke": "#96a5f9"
-        },
-        "labelStyle": {
-          "color": "#96a5f9",
-          "fill": "#96a5f9",
-          "fontWeight": 500,
-          "fontSize": 14
-        },
-        "style": {
-          "stroke": "#96a5f9",
-          "strokeWidth": "3px"
-        },
-        "animated": false,
-        "sourceHandle": "sr",
-        "targetHandle": "tl",
-        "getAroundProps": {
-          "x": 0,
-          "y": 0
-        }
+        "animated": false
       }
     },
     {
       "source": "taskSkeleton00",
       "target": "WhatIsEwoks",
-      "data_mapping": [],
-      "conditions": [],
+      "sub_target": "What",
       "on_error": false,
-      "map_all_data": true,
       "required": false,
+      "map_all_data": true,
       "uiProps": {
         "label": "ewoks?",
-        "comment": "",
         "type": "default",
         "markerEnd": "",
-        "labelBgStyle": {
-          "fill": "rgb(223, 226, 247)",
-          "fillOpacity": 1,
-          "strokeWidth": "3px",
-          "stroke": "#96a5f9"
-        },
-        "labelStyle": {
-          "color": "#96a5f9",
-          "fill": "#96a5f9",
-          "fontWeight": 500,
-          "fontSize": 14
-        },
-        "style": {
-          "stroke": "#96a5f9",
-          "strokeWidth": "3px"
-        },
         "animated": false,
-        "sourceHandle": "sr",
-        "targetHandle": "What",
-        "getAroundProps": {
-          "x": 0,
-          "y": 0
-        }
-      },
-      "sub_target": "What"
+        "targetHandle": "What"
+      }
     },
     {
       "source": "taskSkeleton0",
       "target": "taskSkeleton01",
-      "data_mapping": [],
-      "conditions": [],
       "on_error": false,
-      "map_all_data": true,
       "required": false,
+      "map_all_data": true,
       "uiProps": {
         "label": "can",
-        "comment": "",
         "type": "default",
         "markerEnd": "",
-        "labelBgStyle": {
-          "fill": "rgb(223, 226, 247)",
-          "fillOpacity": 1,
-          "strokeWidth": "3px",
-          "stroke": "#96a5f9"
-        },
-        "labelStyle": {
-          "color": "#96a5f9",
-          "fill": "#96a5f9",
-          "fontWeight": 500,
-          "fontSize": 14
-        },
-        "style": {
-          "stroke": "#96a5f9",
-          "strokeWidth": "3px"
-        },
-        "animated": false,
-        "sourceHandle": "sr",
-        "targetHandle": "tl",
-        "getAroundProps": {
-          "x": 0,
-          "y": 0
-        }
+        "animated": false
       }
     },
     {
       "source": "taskSkeleton00",
       "target": "taskSkeleton010",
-      "data_mapping": [],
-      "conditions": [],
       "on_error": false,
-      "map_all_data": true,
       "required": false,
+      "map_all_data": true,
       "uiProps": {
         "label": "web app?",
-        "comment": "",
         "type": "default",
         "markerEnd": "",
-        "labelBgStyle": {
-          "fill": "rgb(223, 226, 247)",
-          "fillOpacity": 1,
-          "strokeWidth": "3px",
-          "stroke": "#96a5f9"
-        },
-        "labelStyle": {
-          "color": "#96a5f9",
-          "fill": "#96a5f9",
-          "fontWeight": 500,
-          "fontSize": 14
-        },
-        "style": {
-          "stroke": "#96a5f9",
-          "strokeWidth": "3px"
-        },
-        "animated": false,
-        "sourceHandle": "sr",
-        "targetHandle": "tl",
-        "getAroundProps": {
-          "x": 0,
-          "y": 0
-        }
+        "animated": false
       }
     },
     {
       "source": "taskSkeleton011",
       "target": "taskSkeleton0110",
-      "data_mapping": [],
-      "conditions": [],
       "on_error": false,
-      "map_all_data": true,
       "required": false,
+      "map_all_data": true,
       "uiProps": {
         "label": "tasks?",
-        "comment": "",
         "type": "default",
         "markerEnd": "",
-        "labelBgStyle": {
-          "fill": "rgb(223, 226, 247)",
-          "fillOpacity": 1,
-          "strokeWidth": "3px",
-          "stroke": "#96a5f9"
-        },
-        "labelStyle": {
-          "color": "#96a5f9",
-          "fill": "#96a5f9",
-          "fontWeight": 500,
-          "fontSize": 14
-        },
-        "style": {
-          "stroke": "#96a5f9",
-          "strokeWidth": "3px"
-        },
-        "animated": false,
-        "sourceHandle": "sr",
-        "targetHandle": "tl",
-        "getAroundProps": {
-          "x": 0,
-          "y": 0
-        }
+        "animated": false
       }
-    },
-    {
-      "source": "taskSkeleton01",
-      "target": "Editing-Graph-Node-Link",
-      "data_mapping": [],
-      "conditions": [],
-      "on_error": false,
-      "map_all_data": true,
-      "required": false,
-      "uiProps": {
-        "label": "edit?",
-        "comment": "",
-        "type": "default",
-        "markerEnd": "",
-        "labelBgStyle": {
-          "fill": "rgb(223, 226, 247)",
-          "fillOpacity": 1,
-          "strokeWidth": "3px",
-          "stroke": "#96a5f9"
-        },
-        "labelStyle": {
-          "color": "#96a5f9",
-          "fill": "#96a5f9",
-          "fontWeight": 500,
-          "fontSize": 14
-        },
-        "style": {
-          "stroke": "#96a5f9",
-          "strokeWidth": "3px"
-        },
-        "animated": false,
-        "sourceHandle": "sr",
-        "targetHandle": "Edit a Link",
-        "getAroundProps": {
-          "x": 0,
-          "y": 0
-        }
-      },
-      "sub_target": "Edit a Graph"
     },
     {
       "source": "taskSkeleton010",
       "target": "taskSkeleton0100",
-      "data_mapping": [],
-      "conditions": [],
       "on_error": false,
-      "map_all_data": true,
       "required": false,
+      "map_all_data": true,
       "uiProps": {
         "label": "code?",
-        "comment": "",
         "type": "default",
         "markerEnd": "",
-        "labelBgStyle": {
-          "fill": "rgb(223, 226, 247)",
-          "fillOpacity": 1,
-          "strokeWidth": "3px",
-          "stroke": "#96a5f9"
-        },
-        "labelStyle": {
-          "color": "#96a5f9",
-          "fill": "#96a5f9",
-          "fontWeight": 500,
-          "fontSize": 14
-        },
-        "style": {
-          "stroke": "#96a5f9",
-          "strokeWidth": "3px"
-        },
-        "animated": false,
-        "sourceHandle": "sr",
-        "targetHandle": "tl",
-        "getAroundProps": {
-          "x": 0,
-          "y": 0
-        }
-      }
-    },
-    {
-      "source": "taskSkeleton0110",
-      "target": "taskSkeleton_17",
-      "data_mapping": [],
-      "conditions": [
-        {
-          "source_output": "haveTasks",
-          "value": true
-        }
-      ],
-      "on_error": false,
-      "map_all_data": true,
-      "required": false,
-      "uiProps": {
-        "label": "if you do then...",
-        "comment": "",
-        "type": "default",
-        "markerEnd": "",
-        "labelBgStyle": {
-          "fill": "rgb(223, 226, 247)",
-          "fillOpacity": 1,
-          "strokeWidth": "3px",
-          "stroke": "#ce5c00"
-        },
-        "labelStyle": {
-          "color": "#ce5c00",
-          "fill": "#ce5c00",
-          "fontWeight": 500,
-          "fontSize": 14
-        },
-        "style": {
-          "stroke": "#ce5c00",
-          "strokeWidth": "3px"
-        },
-        "animated": false,
-        "sourceHandle": "sr",
-        "targetHandle": "tl",
-        "getAroundProps": {
-          "x": 0,
-          "y": 0
-        }
-      }
-    },
-    {
-      "source": "taskSkeleton0110",
-      "target": "Ewoks-Tasks",
-      "data_mapping": [],
-      "conditions": [],
-      "on_error": false,
-      "map_all_data": true,
-      "required": false,
-      "uiProps": {
-        "label": "to Ewoks tasks",
-        "comment": "",
-        "type": "default",
-        "markerEnd": "",
-        "labelBgStyle": {
-          "fill": "rgb(223, 226, 247)",
-          "fillOpacity": 1,
-          "strokeWidth": "3px",
-          "stroke": "#d2a4a0"
-        },
-        "labelStyle": {
-          "color": "#d2a4a0",
-          "fill": "#d2a4a0",
-          "fontWeight": 500,
-          "fontSize": 14
-        },
-        "style": {
-          "stroke": "#d2a4a0",
-          "strokeWidth": "3px"
-        },
-        "animated": false,
-        "sourceHandle": "sr",
-        "targetHandle": "graphInput",
-        "getAroundProps": {
-          "x": 0,
-          "y": 0
-        }
+        "animated": false
       }
     },
     {
       "source": "taskSkeleton0110",
       "target": "Adding-Tasks",
-      "data_mapping": [],
       "conditions": [
         {
           "source_output": "haveTasks",
@@ -761,150 +401,99 @@
         }
       ],
       "on_error": false,
-      "map_all_data": true,
       "required": false,
+      "map_all_data": true,
       "uiProps": {
         "label": "if you dont have tasks, (click me and see my conditions)",
         "comment": "You can see in my conditions that a bool condition exists",
         "type": "multilineText",
         "markerEnd": "",
-        "labelBgStyle": {
-          "fill": "rgb(223, 226, 247)",
-          "fillOpacity": 1,
-          "strokeWidth": "3px",
+        "style": {
           "stroke": "#f99c96"
         },
-        "labelStyle": {
-          "color": "#f99c96",
-          "fill": "#f99c96",
-          "fontWeight": 500,
-          "fontSize": 14
-        },
+        "animated": false,
+        "targetHandle": "graphInput"
+      }
+    },
+    {
+      "source": "taskSkeleton0110",
+      "target": "Ewoks-Tasks",
+      "on_error": false,
+      "required": false,
+      "map_all_data": true,
+      "uiProps": {
+        "label": "to Ewoks tasks",
+        "type": "default",
+        "markerEnd": "",
         "style": {
-          "stroke": "#f99c96",
-          "strokeWidth": "3px"
+          "stroke": "#d2a4a0"
         },
         "animated": false,
-        "sourceHandle": "sr",
-        "targetHandle": "graphInput",
-        "getAroundProps": {
-          "x": 0,
-          "y": 0
+        "targetHandle": "graphInput"
+      }
+    },
+    {
+      "source": "taskSkeleton0110",
+      "target": "taskSkeleton_17",
+      "conditions": [
+        {
+          "source_output": "haveTasks",
+          "value": true
         }
+      ],
+      "on_error": false,
+      "required": false,
+      "map_all_data": true,
+      "uiProps": {
+        "label": "if you do then...",
+        "type": "default",
+        "markerEnd": "",
+        "style": {
+          "stroke": "#ce5c00"
+        },
+        "animated": false
       }
     },
     {
       "source": "taskSkeleton01",
-      "target": "Styling-Nodes-Links",
-      "data_mapping": [],
-      "conditions": [],
+      "target": "Editing-Graph-Node-Link",
+      "sub_target": "Edit a Graph",
       "on_error": false,
-      "map_all_data": true,
       "required": false,
+      "map_all_data": true,
       "uiProps": {
-        "label": "edit style?",
-        "comment": "",
+        "label": "edit?",
         "type": "default",
         "markerEnd": "",
-        "labelBgStyle": {
-          "fill": "rgb(223, 226, 247)",
-          "fillOpacity": 1,
-          "strokeWidth": "3px",
-          "stroke": "#96a5f9"
-        },
-        "labelStyle": {
-          "color": "#96a5f9",
-          "fill": "#96a5f9",
-          "fontWeight": 500,
-          "fontSize": 14
-        },
-        "style": {
-          "stroke": "#96a5f9",
-          "strokeWidth": "3px"
-        },
         "animated": false,
-        "sourceHandle": "sr",
-        "targetHandle": "graphInput",
-        "getAroundProps": {
-          "x": 0,
-          "y": 0
-        }
-      }
-    },
-    {
-      "source": "taskSkeleton0",
-      "target": "Subgraphs-Loops",
-      "data_mapping": [],
-      "conditions": [],
-      "on_error": false,
-      "map_all_data": true,
-      "required": false,
-      "uiProps": {
-        "label": "supports",
-        "comment": "",
-        "type": "default",
-        "markerEnd": "",
-        "labelBgStyle": {
-          "fill": "rgb(223, 226, 247)",
-          "fillOpacity": 1,
-          "strokeWidth": "3px",
-          "stroke": "#96a5f9"
-        },
-        "labelStyle": {
-          "color": "#96a5f9",
-          "fill": "#96a5f9",
-          "fontWeight": 500,
-          "fontSize": 14
-        },
-        "style": {
-          "stroke": "#96a5f9",
-          "strokeWidth": "3px"
-        },
-        "animated": false,
-        "sourceHandle": "sr",
-        "targetHandle": "graphInput",
-        "getAroundProps": {
-          "x": 0,
-          "y": 0
-        }
+        "targetHandle": "Edit a Link"
       }
     },
     {
       "source": "taskSkeleton01",
       "target": "taskSkeleton011",
-      "data_mapping": [],
-      "conditions": [],
       "on_error": false,
-      "map_all_data": true,
       "required": false,
+      "map_all_data": true,
       "uiProps": {
         "label": "nodes?",
-        "comment": "",
         "type": "default",
         "markerEnd": "",
-        "labelBgStyle": {
-          "fill": "rgb(223, 226, 247)",
-          "fillOpacity": 1,
-          "strokeWidth": "3px",
-          "stroke": "#96a5f9"
-        },
-        "labelStyle": {
-          "color": "#96a5f9",
-          "fill": "#96a5f9",
-          "fontWeight": 500,
-          "fontSize": 14
-        },
-        "style": {
-          "stroke": "#96a5f9",
-          "strokeWidth": "3px"
-        },
+        "animated": false
+      }
+    },
+    {
+      "source": "taskSkeleton0",
+      "target": "Subgraphs-Loops",
+      "on_error": false,
+      "required": false,
+      "map_all_data": true,
+      "uiProps": {
+        "label": "supports",
+        "type": "default",
+        "markerEnd": "",
         "animated": false,
-        "sourceHandle": "sr",
-        "targetHandle": "tl",
-        "getAroundProps": {
-          "x": 0,
-          "y": 0
-        }
+        "targetHandle": "graphInput"
       }
     }
   ]

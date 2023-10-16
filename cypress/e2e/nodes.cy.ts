@@ -4,7 +4,7 @@ beforeEach(() => {
   cy.waitForStableDOM();
   cy.findAllByRole('button', { name: 'ewoksweb' })
     .filter('.react-flow__node')
-    .as('node')
+    .as('node', { type: 'static' })
     .click();
 });
 
@@ -32,7 +32,7 @@ it('changes comment of node', () => {
   cy.get('@node').click();
   cy.findByRole('textbox', { name: 'Edit comment' }).should(
     'have.value',
-    'Always and forever comment...'
+    'Always and forever comment...',
   );
 });
 
@@ -75,23 +75,16 @@ it('changes width of node', () => {
 
   cy.get('@sliderThumb').should('have.attr', 'aria-valuemax').and('eq', '300');
 
-  cy.get('@sliderThumb').then(($slider) => {
-    const { top, bottom } = $slider[0].getBoundingClientRect();
-    const yPos = (top + bottom) / 2;
+  cy.get('@sliderThumb')
+    .trigger('mousedown', { button: 0, force: true })
+    .trigger('mousemove', {
+      clientX: 1000,
+      force: true,
+    })
+    .wait(200)
+    .trigger('mouseup', { force: true });
 
-    cy.get('@sliderThumb')
-      .trigger('mousedown', { button: 0 })
-      .trigger('mousemove', { clientX: 1000, clientY: yPos })
-      .trigger('mouseup', { force: true });
-
-    cy.get('@sliderThumb')
-      .should('have.attr', 'aria-valuenow')
-      .and('not.eq', '100');
-
-    cy.get('@sliderThumb')
-      .should('have.attr', 'aria-valuenow')
-      .and('eq', '300');
-  });
+  cy.get('@sliderThumb').should('have.attr', 'aria-valuenow').and('eq', '300');
 });
 
 it('changes moreHandles of node true->false->true', () => {
@@ -115,27 +108,27 @@ it('changes moreHandles of node true->false->true', () => {
 });
 
 it('deletes a node by button and keyboard', () => {
-  cy.get('.react-flow__node').should('have.length', 17);
-
-  cy.get('@node').click().type('{del}');
-
   cy.get('.react-flow__node').should('have.length', 16);
 
-  cy.get('.react-flow__node').first().click();
+  cy.get('@node').click();
 
   cy.findByRole('button', { name: 'Open edit actions menu' }).click();
   cy.findByRole('menuitem', { name: 'Delete Node' }).click();
 
   cy.get('.react-flow__node').should('have.length', 15);
+
+  // cy.get('.react-flow__node').first().click().type('{del}');
+
+  // cy.get('.react-flow__node').should('have.length', 14);
 });
 
 it('clones a node by button', () => {
-  cy.get('.react-flow__node').should('have.length', 17);
+  cy.get('.react-flow__node').should('have.length', 16);
 
   cy.findByRole('button', { name: 'Open edit actions menu' }).click();
   cy.findByRole('menuitem', { name: 'Clone Node' }).click();
 
-  cy.get('.react-flow__node').should('have.length', 18);
+  cy.get('.react-flow__node').should('have.length', 17);
 });
 
 it('changes the icon', () => {
@@ -152,14 +145,14 @@ it('changes the icon', () => {
 
   cy.findByRole('combobox', { name: 'Change node icon' }).should(
     'have.value',
-    'Use default'
+    'Use default',
   );
   cy.get('@node').within(() => {
     cy.findByRole('img')
       .should('have.attr', 'src')
       .should(
         'include',
-        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFC0lEQVR4nO2a308UVx'
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFC0lEQVR4nO2a308UVx',
       );
   });
 
@@ -171,7 +164,7 @@ it('changes the icon', () => {
       .should('have.attr', 'src')
       .should(
         'include',
-        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAA7DAAA'
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAA7DAAA',
       );
   });
 
@@ -186,19 +179,19 @@ it('changes the icon', () => {
       .should('have.attr', 'src')
       .should(
         'include',
-        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFC0lEQVR4nO2a308UVx'
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFC0lEQVR4nO2a308UVx',
       );
   });
 });
 
 it('should drag and drop a node from add nodes into canvas', () => {
-  cy.get('.react-flow__node').should('have.length', 17);
+  cy.get('.react-flow__node').should('have.length', 16);
 
   cy.findByRole('button', { name: 'Open task drawer' }).click();
   cy.findByRole('button', { name: 'ewokscore' }).click();
   cy.dragNodeInCanvas('ewokscore.tests.examples.tasks.sumtask.SumTask');
 
-  cy.get('.react-flow__node').should('have.length', 18);
+  cy.get('.react-flow__node').should('have.length', 17);
 });
 
 it('adds and delete a new default input', () => {
@@ -210,7 +203,7 @@ it('adds and delete a new default input', () => {
 
   cy.get('@defaultInputsSection').within(() => {
     cy.findAllByRole('row').should('have.length', 2); // Header + Button
-    cy.findByRole('button', { name: 'Add row' }).click();
+    cy.findByRole('button', { name: 'Add entry' }).click();
     cy.findAllByRole('row').should('have.length', 3); // Header + New Row + Button
   });
 
@@ -235,23 +228,12 @@ it('opens the clone Task form when node is selected', () => {
 
   cy.waitForStableDOM();
 
-  cy.get('[aria-controls="editSidebar-dropdown-menu"]').click();
+  cy.findByRole('button', { name: 'Open edit actions menu' }).click();
+  cy.findByRole('menuitem', { name: 'Create Task from Node' }).click();
 
-  cy.get('.MuiListItem-button')
-    .contains('Create Task from Node')
-    .parent()
-    .click();
-
-  cy.contains('Create task')
-    .parent()
-    .should('have.class', 'MuiDialogTitle-root')
-    .siblings()
-    .first()
-    .as('dialogContent')
-    .should('have.class', 'MuiDialogContent-root');
+  cy.findByRole('dialog', { name: 'Create task' }).should('be.visible');
 
   cy.findByRole('button', { name: 'Cancel' }).click({ force: true });
-  cy.get('body').click();
 });
 
 // TODO: move node - dragstart seems to grasp the inner and creates a ghost

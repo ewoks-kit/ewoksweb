@@ -3,15 +3,13 @@ import { findImage } from '../../utils';
 
 interface Props {
   name: string | undefined;
-  className?: string;
-  alt?: string;
 }
 
 function TaskIcon(props: Props) {
-  const { className, name, alt } = props;
+  const { name } = props;
   const icons = useIcons();
 
-  return <img className={className} src={findImage(name, icons)} alt={alt} />;
+  return <img src={findImage(name, icons)} alt="" />;
 }
 
 export default TaskIcon;

@@ -1,25 +1,27 @@
-import type { EwoksRFNodeData } from '../../../types';
-import { Box, Checkbox, IconButton } from '@material-ui/core';
-import SidebarTooltip from '../SidebarTooltip';
-import NodeLabelComment from './NodeLabelComment';
-import DefaultInputs from '../EditableTableProperties/DefaultInputs';
+import InfoIcon from '@mui/icons-material/Info';
+import { Box, Checkbox, IconButton } from '@mui/material';
+import type { Node } from 'reactflow';
 import { useReactFlow } from 'reactflow';
+
+import { useNodesIds } from '../../../store/graph-hooks';
 import useNodeDataStore from '../../../store/useNodeDataStore';
+import type { EwoksRFNodeData } from '../../../types';
 import {
   assertNodeDataDefined,
   assertNodeDefined,
 } from '../../../utils/typeGuards';
-import { useNodesIds } from '../../../store/graph-hooks';
-import type { Node } from 'reactflow';
-import NodeInfo from './NodeInfo';
-import DefaultErrorNodeControl from './DefaultErrorNodeControl';
-import InfoIcon from '@material-ui/icons/Info';
+import { generateUniqueNodeId } from '../../../utils/utils';
 import sidebarStyle from '../sidebarStyle';
+import SidebarTooltip from '../SidebarTooltip';
+import DefaultInputs from '../table/DefaultInputs';
+import DefaultErrorNodeControl from './DefaultErrorNodeControl';
+import NodeInfo from './NodeInfo';
+import NodeLabelComment from './NodeLabelComment';
 
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(selectedElement: Node) {
   const nodeData = useNodeDataStore((state) =>
-    state.nodesData.get(selectedElement.id)
+    state.nodesData.get(selectedElement.id),
   );
   assertNodeDataDefined(nodeData, selectedElement.id);
 
@@ -34,20 +36,16 @@ export default function NodeDetails(selectedElement: Node) {
     propKeyValue: {
       task_identifier?: string;
     },
-    nodeDataL: EwoksRFNodeData
+    nodeDataL: EwoksRFNodeData,
   ) {
     // DOC: if the task_identifier changes (ppfmethod, ppfport, script case) then the id
     // of the node needs to change for a coherent json. Links to/from this node also change!
     if (Object.keys(propKeyValue)[0] === 'task_identifier') {
       // DOC: find unique id based on new task_identifier
-      let uniqueId = Object.values(propKeyValue)[0];
-      let id = 0;
-      // TODO not use nodesData to calculate new id
-      // IMP TODO: by also changinh the id of a node we make the previous one disappear and
-      // assertDefined where the old id is used complains. Solution
-      while (nodesIds.some((nodeId) => nodeId === uniqueId)) {
-        uniqueId += id++;
-      }
+      const uniqueId = generateUniqueNodeId(
+        nodesIds,
+        propKeyValue.task_identifier,
+      );
 
       const newNode = getNodes().find((nod) => nod.id === selectedElement.id);
       assertNodeDefined(newNode, selectedElement.id);
@@ -109,7 +107,7 @@ export default function NodeDetails(selectedElement: Node) {
       <NodeLabelComment showComment selectedElement={selectedElement} />
       {selectedElement.type &&
         !['graphInput', 'graphOutput', 'note'].includes(
-          selectedElement.type
+          selectedElement.type,
         ) && (
           <>
             <DefaultInputs {...selectedElement} />

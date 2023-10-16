@@ -1,14 +1,15 @@
+import { useEffect } from 'react';
+
 import MonitorPage from './execution/MonitorPage';
-import useWorkflowToRestoreId from './store/useWorkflowToRestoreId';
 import useStore from './store/useStore';
+import useWorkflowToRestoreId from './store/useWorkflowToRestoreId';
 import MonitorPageFallback from './suspense/MonitorPageFallback';
 import SuspenseBoundary from './suspense/SuspenseBoundary';
-import { useEffect } from 'react';
 
 function MonitorRoute() {
   const setWorkflowToRestoreId = useWorkflowToRestoreId((state) => state.setId);
   const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
+    (state) => state.displayedWorkflowInfo,
   );
 
   useEffect(() => {

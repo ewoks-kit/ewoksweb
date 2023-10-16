@@ -17,23 +17,24 @@ it('should switch to monitor page', () => {
   });
   cy.findByRole('link', { name: 'Monitor' }).should(
     'have.attr',
-    'data-selected'
+    'data-selected',
   );
 });
 
 it('should restore an opened workflow when switching pages', () => {
   cy.loadGraph('tutorial_Graph');
-  cy.findByRole('heading', { name: 'tutorial_Graph' }).should('be.visible');
-  cy.get('.react-flow__node').should('have.length', 17);
+  cy.hasBreadcrumbs(['tutorial_Graph']);
+  cy.get('.react-flow__node').should('have.length', 16);
 
   cy.findByRole('link', { name: 'Monitor' }).click();
   cy.waitForStableDOM();
 
   // The monitor page has another 'Edit' link if no workflow is executed.
   cy.findByRole('navigation').within(() =>
-    cy.findByRole('link', { name: 'Edit' }).click()
+    cy.findByRole('link', { name: 'Edit' }).click(),
   );
   cy.waitForStableDOM();
-  cy.findByRole('heading', { name: 'tutorial_Graph' }).should('be.visible');
-  cy.get('.react-flow__node').should('have.length', 17);
+  cy.hasBreadcrumbs(['tutorial_Graph']);
+
+  cy.get('.react-flow__node').should('have.length', 16);
 });

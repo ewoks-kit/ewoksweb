@@ -1,11 +1,12 @@
+import { nanoid } from 'nanoid';
+import type { Edge } from 'reactflow';
 import type { DataMapping } from 'types';
-import { calcTypeOfValues } from './utils';
+
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
-import type { Edge } from 'reactflow';
 import TableDataMapping from './TableDataMapping';
-import { nanoid } from 'nanoid';
+import { calcTypeOfValues } from './utils';
 
 interface Props {
   element: Edge;
@@ -20,11 +21,11 @@ export default function DataMappingComponent({ element, mapAllData }: Props) {
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   const sourceNodeData = useNodeDataStore((state) =>
-    state.nodesData.get(element.source)
+    state.nodesData.get(element.source),
   );
 
   const targetNodeData = useNodeDataStore((state) =>
-    state.nodesData.get(element.target)
+    state.nodesData.get(element.target),
   );
 
   function addDataMapping(rows?: DataMapping[]) {

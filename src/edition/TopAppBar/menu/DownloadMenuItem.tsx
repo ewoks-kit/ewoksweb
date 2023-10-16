@@ -1,9 +1,8 @@
-import useStore from '../../../store/useStore';
-import type { EwoksRFLinkData, EwoksRFNodeData, GraphRF } from '../../../types';
+import { GetApp } from '@mui/icons-material';
 import { useReactFlow } from 'reactflow';
-import { GetApp } from '@material-ui/icons';
-import { getEdgesData, getNodesData, rfToEwoks } from '../../../utils';
-import { curateNodeData, curateEdgeData } from '../utils';
+
+import useStore from '../../../store/useStore';
+import { getEdgesData, getNodesData, prepareEwoksGraph } from '../../../utils';
 import ActionMenuItem from './ActionMenuItem';
 
 function download(content: BlobPart, fileName: string, contentType: string) {
@@ -18,32 +17,21 @@ function DownloadMenuItem() {
   const { getNodes, getEdges } = useReactFlow();
 
   const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
+    (state) => state.displayedWorkflowInfo,
   );
 
   function saveToDisk() {
-    const newNodesData = curateNodeData(getNodesData());
-    const newEdgesData = curateEdgeData(getEdgesData());
-
-    const graphRf: GraphRF = {
-      graph: displayedWorkflowInfo,
-      nodes: getNodes().map((nod) => {
-        return {
-          ...nod,
-          data: newNodesData.get(nod.id) as EwoksRFNodeData,
-        };
-      }),
-      links: getEdges().map((edge) => {
-        return {
-          ...edge,
-          data: newEdgesData.get(edge.id) as EwoksRFLinkData,
-        };
-      }),
-    };
+    const ewoksGraph = prepareEwoksGraph(
+      displayedWorkflowInfo,
+      getNodes(),
+      getEdges(),
+      getNodesData(),
+      getEdgesData(),
+    );
     download(
-      JSON.stringify(rfToEwoks(graphRf), null, 2),
+      JSON.stringify(ewoksGraph, null, 2),
       `${displayedWorkflowInfo.label || 'Untitled'}.json`,
-      'text/plain'
+      'text/plain',
     );
   }
 

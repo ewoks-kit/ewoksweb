@@ -1,20 +1,22 @@
+import { Autocomplete } from '@mui/material';
+import { CircularProgress, TextField } from '@mui/material';
+import type { CSSProperties } from 'react';
+import { useEffect, useState } from 'react';
 import type { WorkflowDescription } from 'types';
 
-import useSnackbarStore from 'store/useSnackbarStore';
-import { useEffect, useState } from 'react';
-import { Autocomplete } from '@material-ui/lab';
-import { CircularProgress, TextField } from '@material-ui/core';
-import { textForError } from '../utils';
-import commonStrings from 'commonStrings.json';
 import { useWorkflowsDLE } from '../api/workflows';
+import commonStrings from '../commonStrings.json';
+import useSnackbarStore from '../store/useSnackbarStore';
+import { textForError } from '../utils';
 
 interface Props {
   onChange: (input: WorkflowDescription) => void;
   category?: string;
+  style?: CSSProperties;
 }
 
 function sortByCategory(
-  descriptions: WorkflowDescription[]
+  descriptions: WorkflowDescription[],
 ): Required<WorkflowDescription>[] {
   return descriptions
     .map((desc) => ({
@@ -24,13 +26,13 @@ function sortByCategory(
     }))
     .sort(
       (a, b) =>
-        a.category.localeCompare(b.category) || a.label.localeCompare(b.label)
+        a.category.localeCompare(b.category) || a.label.localeCompare(b.label),
     );
 }
 
 // DOC: A dropdown that can be an input as well
 function WorkflowDropdown(props: Props) {
-  const { onChange, category } = props;
+  const { onChange, category, style } = props;
 
   const [inputValue, setInputValue] = useState('');
   const [open, setOpen] = useState(false);
@@ -52,6 +54,7 @@ function WorkflowDropdown(props: Props) {
 
   return (
     <Autocomplete
+      style={style}
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
@@ -76,7 +79,9 @@ function WorkflowDropdown(props: Props) {
         />
       )}
       options={options}
-      getOptionSelected={(option, valueSelect) => option.id === valueSelect.id}
+      isOptionEqualToValue={(option, valueSelect) =>
+        option.id === valueSelect.id
+      }
       groupBy={(option) => option.category}
       inputValue={inputValue}
       onInputChange={(event, value) => {

@@ -1,38 +1,34 @@
-import { FormControl, MenuItem, Select, TableCell } from '@material-ui/core';
+import type { SelectChangeEvent } from '@mui/material';
+import { FormControl, MenuItem, Select, TableCell } from '@mui/material';
 import type { ChangeEvent } from 'react';
-import type { PropertyChangedEvent } from '../../../types';
-import { INPUT_TYPES } from './utils';
+
+import { INPUT_TYPES } from '../utils';
+import styles from './TypeSelectCell.module.css';
 
 interface Props {
   value: string;
-  className?: string;
   disable?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 function TypeSelectCell(props: Props) {
-  const { value, className, disable, onChange } = props;
+  const { value, disable, onChange } = props;
 
-  function onChangeLocal(event: PropertyChangedEvent) {
+  function onChangeLocal(event: SelectChangeEvent) {
     if (onChange) {
       onChange(event as ChangeEvent<HTMLInputElement>);
     }
   }
 
   return (
-    <TableCell
-      align="left"
-      size="small"
-      className={className}
-      style={{ borderBottom: 'none' }}
-    >
-      <FormControl fullWidth>
+    <TableCell className={styles.cell} align="left" size="small">
+      <FormControl variant="standard" fullWidth>
         <Select
+          variant="standard"
           disabled={disable}
           value={value}
           label="Task type"
           onChange={onChangeLocal}
-          style={{ fontSize: '14px' }}
         >
           {INPUT_TYPES.map((type) => (
             <MenuItem key={type} value={type}>

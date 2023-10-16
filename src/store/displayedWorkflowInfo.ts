@@ -1,32 +1,60 @@
+import { merge } from 'lodash';
+import type { SetState } from 'zustand';
+
 import type { GraphDetails, State } from '../types';
 import { EMPTY_RF_GRAPH } from '../utils/emptyGraphs';
-import type { SetState } from 'zustand';
-import { merge } from 'lodash';
+
+function getParentsOfNextWorkflow(
+  nextWorkflowId: string,
+  prevWorkflowId: string,
+  prevParents: string[],
+) {
+  if (prevWorkflowId === '') {
+    return prevParents;
+  }
+
+  if (prevParents.includes(nextWorkflowId)) {
+    const nextWorkflowIndex = prevParents.indexOf(nextWorkflowId);
+    return prevParents.slice(0, nextWorkflowIndex);
+  }
+
+  return [...prevParents, prevWorkflowId];
+}
 
 export interface DisplayedWorkflowInfoSlice {
   displayedWorkflowInfo: GraphDetails;
+  displayedWorkflowParents: string[];
   setDisplayedWorkflowInfo: (displayedWorkflowInfo: GraphDetails) => void;
   mergeDisplayedWorkflowInfo: (
-    displayedWorkflowInfo: Partial<GraphDetails>
+    displayedWorkflowInfo: Partial<GraphDetails>,
   ) => void;
+  resetDisplayedWorkflowInfo: () => void;
 }
 
 const displayedWorkflowInfo = (
-  set: SetState<State>
+  set: SetState<State>,
 ): DisplayedWorkflowInfoSlice => ({
   displayedWorkflowInfo: EMPTY_RF_GRAPH.graph,
+  displayedWorkflowParents: [],
 
-  setDisplayedWorkflowInfo: (graphRFD) => {
-    // DOC: If missing uiProps or other fill it here
-    if (!graphRFD.uiProps) {
-      graphRFD.uiProps = {};
-    }
+  setDisplayedWorkflowInfo: (nextWorkflowInfo) => {
+    set((prev) => {
+      const prevWorkflowId = prev.displayedWorkflowInfo.id;
+      if (nextWorkflowInfo.id === prevWorkflowId) {
+        return prev;
+      }
 
-    set((state) => ({
-      ...state,
-      displayedWorkflowInfo: graphRFD,
-    }));
+      return {
+        displayedWorkflowInfo: nextWorkflowInfo,
+        displayedWorkflowParents: getParentsOfNextWorkflow(
+          nextWorkflowInfo.id,
+          prevWorkflowId,
+          prev.displayedWorkflowParents,
+        ),
+      };
+    });
   },
+
   mergeDisplayedWorkflowInfo: (graphRFD) => {
     set((state) => {
       return {
@@ -35,6 +63,11 @@ const displayedWorkflowInfo = (
       };
     });
   },
+  resetDisplayedWorkflowInfo: () =>
+    set({
+      displayedWorkflowInfo: EMPTY_RF_GRAPH.graph,
+      displayedWorkflowParents: [],
+    }),
 });
 
 export default displayedWorkflowInfo;

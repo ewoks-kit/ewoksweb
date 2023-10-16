@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export interface ConfigState {
@@ -6,7 +6,7 @@ export interface ConfigState {
   setCanvasBackgroundColor: (color: string) => void;
 }
 
-const useConfigStore = create<ConfigState>(
+const useConfigStore = create<ConfigState>()(
   persist(
     (set) => ({
       canvasBackgroundColor: '#e9ebf7',
@@ -18,8 +18,8 @@ const useConfigStore = create<ConfigState>(
     {
       name: 'ewoksweb:config',
       version: 1,
-    }
-  )
+    },
+  ),
 );
 
 export default useConfigStore;

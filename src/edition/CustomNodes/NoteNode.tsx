@@ -1,8 +1,9 @@
-import { style } from './nodeStyles';
 import type { NodeProps } from 'reactflow';
-import type { EwoksRFNodeData } from '../../types';
+
 import useNodeDataStore from '../../store/useNodeDataStore';
+import type { EwoksRFNodeData } from '../../types';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
+import { style } from './nodeStyles';
 
 type NoteProps = NodeProps<EwoksRFNodeData>;
 
@@ -19,8 +20,6 @@ function NoteNode(args: NoteProps) {
         padding: '10px',
         borderColor: uiProps.colorBorder,
       }}
-      role="button"
-      tabIndex={0}
     >
       <div
         style={{ maxWidth: `${uiProps.nodeWidth || 100}px` }}

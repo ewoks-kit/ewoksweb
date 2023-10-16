@@ -1,3 +1,6 @@
+import type { ReactFlowInstance } from 'reactflow';
+import type { GetState, SetState } from 'zustand';
+
 import type {
   EwoksRFLinkData,
   EwoksRFNode,
@@ -7,14 +10,12 @@ import type {
   State,
   Task,
 } from '../types';
-import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
-import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
-import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
-import type { GetState, SetState } from 'zustand';
-import useNodeDataStore from './useNodeDataStore';
-import useEdgeDataStore from './useEdgeDataStore';
-import type { ReactFlowInstance } from 'reactflow';
 import layoutNewGraph from '../utils/layoutNewGraph';
+import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
+import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
+import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
+import useEdgeDataStore from './useEdgeDataStore';
+import useNodeDataStore from './useNodeDataStore';
 
 export interface RootWorkflowSlice {
   rootWorkflowId: string;
@@ -23,13 +24,13 @@ export interface RootWorkflowSlice {
     ewoksWorkflow: GraphEwoks,
     rfInstance: ReactFlowInstance,
     tasks: Task[],
-    source?: string
+    source?: string,
   ) => Promise<void>;
 }
 
 const rootWorkflow = (
   set: SetState<State>,
-  get: GetState<State>
+  get: GetState<State>,
 ): RootWorkflowSlice => ({
   rootWorkflowId: '',
   rootWorkflowSource: undefined,
@@ -38,14 +39,10 @@ const rootWorkflow = (
     ewoksWorkflow,
     rfInstance,
     tasks,
-    source
+    source,
   ): Promise<void> => {
     // 1. Initialize the canvas while working on the new graph
-    get().setSubgraphsStack({
-      id: '',
-      label: '',
-      resetStack: true,
-    });
+    get().resetDisplayedWorkflowInfo();
     get().resetLoadedGraphs();
 
     // 2. Get node-subgraphs for the graph
@@ -114,10 +111,6 @@ const rootWorkflow = (
       }),
     };
 
-    get().setSubgraphsStack({
-      id: ewoksWorkflow.graph.id,
-      label: ewoksWorkflow.graph.label,
-    });
     set((state) => ({
       ...state,
       rootWorkflowId: newGraphNoData.graph.id,
@@ -126,7 +119,7 @@ const rootWorkflow = (
 
     if (!newGraphNoData.nodes.some((nod) => nod.position.x !== 100)) {
       rfInstance.setNodes(
-        await layoutNewGraph(newGraphNoData.nodes, newGraphNoData.links)
+        await layoutNewGraph(newGraphNoData.nodes, newGraphNoData.links),
       );
       rfInstance.setEdges(newGraphNoData.links);
     } else {

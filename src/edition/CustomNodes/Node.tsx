@@ -1,74 +1,52 @@
+import Tooltip from '@mui/material/Tooltip';
 import { memo } from 'react';
 import { Handle, Position } from 'reactflow';
-import { contentStyle, style } from './nodeStyles';
-import Tooltip from '@material-ui/core/Tooltip';
-import isValidLink from '../../utils/IsValidLink';
 
-import useSnackbarStore from '../../store/useSnackbarStore';
-import type { Connection } from 'reactflow';
-import NodeIcon from './NodeIcon';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import type { NodeProps } from '../../types';
-import { useReactFlow } from 'reactflow';
-import { getNodesData } from '../../utils';
+import NodeIcon from './NodeIcon';
 import NodeLabel from './NodeLabel';
+import { contentStyle, style } from './nodeStyles';
+
+interface Props {
+  id: string;
+  label: string;
+  width?: number;
+  withImage?: boolean;
+  withLabel?: boolean;
+  borderColor?: string;
+  comment?: string;
+  moreHandles?: boolean;
+}
 
 // The basic Node component
 function Node({
   id,
   moreHandles,
-  withImage,
-  withLabel,
+  withImage = true,
+  withLabel = true,
   label,
-  color,
-  colorBorder: borderColor,
+  borderColor,
   comment,
-  nodeWidth,
-}: NodeProps) {
-  const { getNodes, getEdges } = useReactFlow();
-
-  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
-
-  const nodWidth = { width: `${nodeWidth || 100}px` };
-
-  const isValidConnection = (connection: Connection) => {
-    const { isValid, reason } = isValidLink(
-      connection,
-      getNodes(),
-      getEdges(),
-      getNodesData()
-    );
-    if (!isValid) {
-      showWarningMsg(reason);
-    }
-    return isValid;
-  };
-
+  width = 100,
+}: Props) {
   return (
-    <div
-      className="node-content"
-      style={borderColor ? { borderColor } : undefined}
-      id="choice"
-      role="button"
-      tabIndex={0}
-    >
+    <div className="node-content" style={{ borderColor }}>
       <Tooltip
         title={comment ? <span style={style.comment}>{comment}</span> : ''}
         enterDelay={800}
         arrow
       >
-        <span style={{ ...style.displayNode, ...nodWidth }} className="icons">
+        <span style={{ ...style.displayNode, width }} className="icons">
           <Handle
             type="source"
             position={Position.Right}
             id="sr"
             style={{ ...contentStyle.handle, ...contentStyle.handleSource }}
-            isValidConnection={isValidConnection}
             isConnectable
           />
 
           {moreHandles && (
-            <div id="choice" role="button" tabIndex={0}>
+            <div id="choice">
               {/* TODO: break the handles */}
               <Handle
                 type="source"
@@ -81,7 +59,6 @@ function Node({
                   ...contentStyle.handleUpDown,
                 }}
                 isConnectable
-                isValidConnection={isValidConnection}
               />
               <Handle
                 type="source"
@@ -94,7 +71,6 @@ function Node({
                   ...contentStyle.handleUpDown,
                 }}
                 isConnectable
-                isValidConnection={isValidConnection}
               />
             </div>
           )}
@@ -102,7 +78,7 @@ function Node({
             label={label}
             showFull={withLabel}
             showCropped={!withLabel && !withImage}
-            color={color}
+            color="#ced3ee"
           />
           {withImage && (
             <SuspenseBoundary>
@@ -119,7 +95,6 @@ function Node({
               ...contentStyle.handleTarget,
             }}
             isConnectable
-            isValidConnection={isValidConnection}
           />
 
           {moreHandles && (
@@ -134,7 +109,6 @@ function Node({
                   ...contentStyle.handleUpDown,
                 }}
                 isConnectable
-                isValidConnection={isValidConnection}
               />
               <Handle
                 type="target"
@@ -146,7 +120,6 @@ function Node({
                   ...contentStyle.handleUpDown,
                 }}
                 isConnectable
-                isValidConnection={isValidConnection}
               />
             </>
           )}

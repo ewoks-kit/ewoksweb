@@ -1,0 +1,18 @@
+.input {
+  font-size: 12px;
+}
+
+.smallRadio span {
+  padding: 0 8px;
+  margin: 0;
+}
+
+.smallRadio svg {
+  width: 0.7em;
+  height: 0.7em;
+  color: #3f51b5;
+}
+
+.smallRadio :global .MuiFormControlLabel-label {
+  font-size: 14px;
+}

@@ -1,13 +1,13 @@
-import { IconButton } from '@material-ui/core';
-import { Delete } from '@material-ui/icons';
+import { Delete } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 import { useState } from 'react';
+
 import { deleteTask as deleteTaskOnServer } from '../../api/tasks';
+import { useInvalidateTasks } from '../../api/tasks';
+import ConfirmDialog from '../../general/ConfirmDialog';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import type { Task } from '../../types';
 import { textForError } from '../../utils';
-import ConfirmDialog from '../../general/ConfirmDialog';
-import { useInvalidateTasks } from '../../api/tasks';
-
 import styles from './TaskButtonGroup.module.css';
 
 interface Props {
@@ -37,8 +37,8 @@ function DeleteTaskButton(props: Props) {
       showErrorMsg(
         textForError(
           error,
-          'Error in task deletion. Please check connectivity with the server'
-        )
+          'Error in task deletion. Please check connectivity with the server',
+        ),
       );
     }
   }

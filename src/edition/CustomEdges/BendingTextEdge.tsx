@@ -1,5 +1,6 @@
 import type { EdgeProps } from 'reactflow';
 import { getBezierPath } from 'reactflow';
+
 import InteractionHelper from './InteractionHelper';
 
 function bendingText({

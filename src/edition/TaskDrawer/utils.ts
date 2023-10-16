@@ -1,3 +1,8 @@
+import type { Edge, Node, XYPosition } from 'reactflow';
+import { Position } from 'reactflow';
+
+import { findAllSubgraphs } from '../../store/storeUtils/FindAllSubgraphs';
+import useStore from '../../store/useStore';
 import type {
   EwoksRFNode,
   EwoksRFNodeData,
@@ -5,19 +10,16 @@ import type {
   GraphNodes,
   Task,
 } from '../../types';
-import useStore from '../../store/useStore';
-import type { Node, Edge, XYPosition } from 'reactflow';
-import { Position } from 'reactflow';
-import { findAllSubgraphs } from '../../store/storeUtils/FindAllSubgraphs';
-import { toRFEwoksNodes } from '../../utils/toRFEwoksNodes';
 import { toRFEwoksLinks } from '../../utils/toRFEwoksLinks';
+import { toRFEwoksNodes } from '../../utils/toRFEwoksNodes';
+import { generateUniqueNodeId } from '../../utils/utils';
 
 export async function loadSubworkflow(
   subGraph: GraphEwoks,
   nodes: Node[],
   links: Edge[],
   position: XYPosition,
-  tasks: Task[]
+  tasks: Task[],
 ): Promise<{ nodeWithoutData: Node; data: EwoksRFNodeData }> {
   const { loadedGraphs, addLoadedGraph } = useStore.getState();
 
@@ -51,12 +53,11 @@ export async function loadSubworkflow(
       positionY: output.uiProps?.position?.y || 100,
     };
   });
-  let id = 0;
-  let graphId = subGraph.graph.label || '';
 
-  while (nodes.some((nod) => nod.id === graphId)) {
-    graphId += id++;
-  }
+  const graphId = generateUniqueNodeId(
+    nodes.map((node) => node.id),
+    subGraph.graph.label,
+  );
 
   newNode = {
     sourcePosition: Position.Right,

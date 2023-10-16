@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+
 import type { Task } from '../types';
 import { getTaskName } from '../utils';
 import { assertDefined } from '../utils/typeGuards';
@@ -10,6 +11,11 @@ import type {
   TaskResponse,
 } from './models';
 import { QueryKey } from './models';
+
+const TEST_TASKS = new Set([
+  'ewokscore.tests.examples.tasks.sumlist.SumList',
+  'ewokscore.tests.examples.tasks.sumlist.SumTask',
+]);
 
 // Get '/tasks/descriptions'
 export async function fetchTaskDescriptions() {
@@ -35,10 +41,17 @@ export function putTask(task: Task) {
 }
 
 // Discover tasks
-export async function discoverTasks(moduleNames: string[]) {
-  return client.post<ListResponse>(`/tasks/discover`, {
+export async function discoverTasks(moduleNames?: string[]): Promise<string[]> {
+  const { data } = await client.post<ListResponse>(`/tasks/discover`, {
     modules: moduleNames,
   });
+  const { identifiers } = data;
+
+  if (identifiers.length === 0) {
+    throw new Error('No tasks found in this module');
+  }
+
+  return identifiers.filter((id) => !TEST_TASKS.has(id));
 }
 
 export function useTasks(): Task[] {
@@ -50,8 +63,11 @@ export function useTasks(): Task[] {
 
   const { data: axiosResponse } = query;
   assertDefined(axiosResponse);
+
   return axiosResponse.data.items.sort((a, b) =>
-    getTaskName(a).localeCompare(getTaskName(b))
+    getTaskName(a.task_identifier).localeCompare(
+      getTaskName(b.task_identifier),
+    ),
   );
 }
 

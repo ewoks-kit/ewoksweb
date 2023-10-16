@@ -1,9 +1,10 @@
-import { Checkbox, Grid, Switch, Typography } from '@material-ui/core';
+import { Checkbox, Grid, Switch, Typography } from '@mui/material';
+
 import useNodeDataStore from '../../../store/useNodeDataStore';
-import { assertNodeDataDefined } from '../../../utils/typeGuards';
-import NodeDataMapping from '../EditableTableProperties/NodeDataMapping';
 import { DEFAULT_NODE_VALUES } from '../../../utils/defaultValues';
+import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import sidebarStyle from '../sidebarStyle';
+import NodeDataMapping from '../table/NodeDataMapping';
 
 export default function DefaultErrorNodeControl(props: { nodeId: string }) {
   const { nodeId } = props;
@@ -22,7 +23,7 @@ export default function DefaultErrorNodeControl(props: { nodeId: string }) {
   }
 
   const handleChangeShowDataMapping = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     mergeNodeData(nodeId, {
       ewoks_props: {

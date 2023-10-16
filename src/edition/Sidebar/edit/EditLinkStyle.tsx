@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import type { SelectChangeEvent } from '@mui/material';
 import {
   Button,
   Checkbox,
@@ -7,21 +7,21 @@ import {
   MenuItem,
   Select,
   Slider,
-} from '@material-ui/core';
-
-import useSnackbarStore from '../../../store/useSnackbarStore';
-import type { PropertyChangedEvent } from '../../../types';
-import sidebarStyle from '../sidebarStyle';
+} from '@mui/material';
 import type { ChangeEvent } from 'react';
+import { useEffect, useState } from 'react';
+import type { Edge } from 'reactflow';
+import { MarkerType } from 'reactflow';
+import { useReactFlow } from 'reactflow';
+
+import useEdgeDataStore from '../../../store/useEdgeDataStore';
+import useSnackbarStore from '../../../store/useSnackbarStore';
 import {
   assertEdgeDataDefined,
   isMarkerType,
   isString,
 } from '../../../utils/typeGuards';
-import type { Edge } from 'reactflow';
-import { MarkerType } from 'reactflow';
-import { useReactFlow } from 'reactflow';
-import useEdgeDataStore from '../../../store/useEdgeDataStore';
+import sidebarStyle from '../sidebarStyle';
 
 // DOC: Edit the link style
 export default function EditLinkStyle(element: Edge) {
@@ -34,7 +34,7 @@ export default function EditLinkStyle(element: Edge) {
 
   const [linkType, setLinkType] = useState('default');
   const [arrowType, setArrowType] = useState<MarkerType | 'none'>(
-    MarkerType.Arrow
+    MarkerType.Arrow,
   );
   const [animated, setAnimated] = useState(false);
   const [colorLine, setColorLine] = useState('');
@@ -64,11 +64,11 @@ export default function EditLinkStyle(element: Edge) {
     setColorLine(element.style?.stroke || '#96a5f9');
   }, [element, edgeData]);
 
-  function linkTypeChanged(event: PropertyChangedEvent) {
-    const val = event.target.value as string;
+  function linkTypeChanged(event: SelectChangeEvent) {
+    const val = event.target.value;
     if (['multilineText', 'getAround'].includes(val)) {
       showInfoMsg(
-        'Insert commas (,) in the label to break into multiple lines!'
+        'Insert commas (,) in the label to break into multiple lines!',
       );
     }
     const newEdge = {
@@ -78,7 +78,7 @@ export default function EditLinkStyle(element: Edge) {
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
   }
 
-  const arrowTypeChanged = (event: PropertyChangedEvent) => {
+  const arrowTypeChanged = (event: SelectChangeEvent) => {
     const type = event.target.value;
     if (!isString(type)) {
       return;
@@ -108,7 +108,7 @@ export default function EditLinkStyle(element: Edge) {
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
   };
 
-  function changeX(_event: ChangeEvent<unknown>, value: number | number[]) {
+  function changeX(_event: Event, value: number | number[]) {
     const newX = value as number;
     const newEdgeData = {
       getAroundProps: {
@@ -119,7 +119,7 @@ export default function EditLinkStyle(element: Edge) {
     setX(newX);
   }
 
-  function changeY(_event: ChangeEvent<unknown>, value: number | number[]) {
+  function changeY(_event: Event, value: number | number[]) {
     const newY = value as number;
     const newEdgeData = {
       getAroundProps: {
@@ -157,6 +157,7 @@ export default function EditLinkStyle(element: Edge) {
       >
         <InputLabel id="linkTypeLabel">Link type</InputLabel>
         <Select
+          variant="standard"
           labelId="linkTypeLabel"
           value={linkType}
           label="Link type"
@@ -194,6 +195,7 @@ export default function EditLinkStyle(element: Edge) {
       >
         <InputLabel id="markerEnd">Arrow Head</InputLabel>
         <Select
+          variant="standard"
           value={arrowType}
           label="Arrow head"
           onChange={arrowTypeChanged}

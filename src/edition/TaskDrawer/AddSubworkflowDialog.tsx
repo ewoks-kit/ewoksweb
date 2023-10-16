@@ -1,22 +1,23 @@
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import { useRef } from 'react';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import Dialog from '@material-ui/core/Dialog';
-import OpenGraphInput from '../../general/OpenGraphInput';
-import type { GraphEwoks, Task } from '../../types';
-import useSnackbarStore from '../../store/useSnackbarStore';
 import type { XYPosition } from 'reactflow';
 import { useReactFlow } from 'reactflow';
-import useNodeDataStore from '../../store/useNodeDataStore';
+
 import { fetchWorkflow } from '../../api/workflows';
-import { textForError } from '../../utils';
-import SuspenseBoundary from '../../suspense/SuspenseBoundary';
+import OpenGraphInput from '../../general/OpenGraphInput';
 import WorkflowDropdown from '../../general/WorkflowDropdown';
+import useNodeDataStore from '../../store/useNodeDataStore';
+import useSnackbarStore from '../../store/useSnackbarStore';
+import SuspenseBoundary from '../../suspense/SuspenseBoundary';
+import type { GraphEwoks, Task } from '../../types';
+import { textForError } from '../../utils';
 import { loadSubworkflow } from './utils';
 
 interface Props {
@@ -41,7 +42,7 @@ export default function AddSubworkflowDialog(props: Props) {
       nodes,
       rfInstance.getEdges(),
       position || { x: 0, y: 0 },
-      tasks
+      tasks,
     );
     setNodeData(nodeWithoutData.id, data);
     rfInstance.setNodes([...nodes, nodeWithoutData]);
@@ -56,8 +57,8 @@ export default function AddSubworkflowDialog(props: Props) {
       showErrorMsg(
         textForError(
           error,
-          'Error in retrieving workflow. Please check connectivity with the server!'
-        )
+          'Error in retrieving workflow. Please check connectivity with the server!',
+        ),
       );
     }
   }
@@ -73,20 +74,19 @@ export default function AddSubworkflowDialog(props: Props) {
       />
 
       <Dialog maxWidth="xl" open={open} onClose={handleClose}>
-        <DialogTitle>Add Subgraph</DialogTitle>
+        <DialogTitle>Add subworkflow</DialogTitle>
         <DialogContent>
-          <List component="div" role="list">
-            <ListItem divider role="listitem">
+          <List>
+            <ListItem divider>
               <ListItemText primary="From Server" />
-              <div style={{ width: '20rem', marginLeft: '0.5rem' }}>
-                <SuspenseBoundary>
-                  <WorkflowDropdown
-                    onChange={(workflowDetails) => {
-                      addSubgraph(workflowDetails.id);
-                    }}
-                  />
-                </SuspenseBoundary>
-              </div>
+              <SuspenseBoundary>
+                <WorkflowDropdown
+                  onChange={(workflowDetails) => {
+                    addSubgraph(workflowDetails.id);
+                  }}
+                  style={{ width: '20rem', marginLeft: '2rem' }}
+                />
+              </SuspenseBoundary>
             </ListItem>
             <ListItem
               button
@@ -94,7 +94,6 @@ export default function AddSubworkflowDialog(props: Props) {
               onClick={() => {
                 fromDiskInputRef.current?.click();
               }}
-              role="listitem"
             >
               <ListItemText primary="From Disk" />
             </ListItem>

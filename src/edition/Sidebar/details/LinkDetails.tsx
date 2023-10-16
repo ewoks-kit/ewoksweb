@@ -1,21 +1,21 @@
+import InfoIcon from '@mui/icons-material/Info';
+import { Checkbox, IconButton } from '@mui/material';
 import type { ChangeEvent } from 'react';
-import { Checkbox, IconButton } from '@material-ui/core';
-import DataMappingComponent from '../EditableTableProperties/DataMapping';
-import Conditions from '../EditableTableProperties/Conditions';
-import SidebarTooltip from '../SidebarTooltip';
-import EdgeLabelInput from './EdgeLabelInput';
-import { assertEdgeDataDefined } from '../../../utils/typeGuards';
-import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import type { Edge } from 'reactflow';
 
-import styles from './Details.module.css';
-import InputTextField from './InputTextField';
-import InfoIcon from '@material-ui/icons/Info';
+import useEdgeDataStore from '../../../store/useEdgeDataStore';
+import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import sidebarStyle from '../sidebarStyle';
+import SidebarTooltip from '../SidebarTooltip';
+import Conditions from '../table/Conditions';
+import DataMappingComponent from '../table/DataMapping';
+import styles from './Details.module.css';
+import EdgeLabelInput from './EdgeLabelInput';
+import InputTextField from './InputTextField';
 
 export default function LinkDetails(selectedElement: Edge) {
   const edgeData = useEdgeDataStore((state) =>
-    state.edgesData.get(selectedElement.id)
+    state.edgesData.get(selectedElement.id),
   );
 
   assertEdgeDataDefined(edgeData, selectedElement.id);
@@ -27,13 +27,13 @@ export default function LinkDetails(selectedElement: Edge) {
   };
 
   const handleChangeShowDataMapping = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     mergeEdgeData(selectedElement.id, { map_all_data: event.target.checked });
   };
 
   const handleChangeShowConditions = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     mergeEdgeData(selectedElement.id, { on_error: event.target.checked });
   };
@@ -139,8 +139,8 @@ export default function LinkDetails(selectedElement: Edge) {
           )}
           {edgeData.sub_target_attributes && (
             <div className={styles.entry}>
-              Sub_target_attributes:
-              {edgeData.sub_target_attributes}
+              Sub_target_attributes:{' '}
+              {JSON.stringify(edgeData.sub_target_attributes)}
             </div>
           )}
         </section>

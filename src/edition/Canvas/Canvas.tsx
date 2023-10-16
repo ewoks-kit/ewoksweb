@@ -2,54 +2,47 @@ import type { DragEventHandler, MouseEvent } from 'react';
 import { useState } from 'react';
 import { useEffect, useRef } from 'react';
 import type {
-  Node,
-  Edge,
   Connection,
-  NodeChange,
+  Edge,
   EdgeChange,
+  Node,
+  NodeChange,
   XYPosition,
 } from 'reactflow';
 import { addEdge } from 'reactflow';
 import ReactFlow, {
+  applyEdgeChanges,
+  applyNodeChanges,
   Controls,
   useReactFlow,
-  applyNodeChanges,
-  applyEdgeChanges,
 } from 'reactflow';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
-import bendingText from '../CustomEdges/BendingTextEdge';
-import multilineText from '../CustomEdges/MultilineTextEdge';
-import getAround from '../CustomEdges/GetAroundEdge';
-import GraphNode from '../CustomNodes/GraphNode';
-import NoteNode from '../CustomNodes/NoteNode';
-import DataNode from '../CustomNodes/DataNode';
-import type { EwoksRFNode, EwoksRFNodeData, Task } from 'types';
-import useStore from 'store/useStore';
-import useSnackbarStore from 'store/useSnackbarStore';
-import { calcNewId } from 'utils/calcNewId';
-import isValidLink from 'utils/IsValidLink';
-import CanvasBackground from './CanvasBackground';
-import { addConnectionToGraph, retrieveTaskInfo, trimLabel } from './utils';
 import { useStoreApi } from 'reactflow';
-import useNodeDataStore from '../../store/useNodeDataStore';
+import type { EwoksRFNode, EwoksRFNodeData, Task } from 'types';
+
+import { useTasks } from '../../api/tasks';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
+import useNodeDataStore from '../../store/useNodeDataStore';
+import useSnackbarStore from '../../store/useSnackbarStore';
+import useStore from '../../store/useStore';
 import { getEdgesData, getNodeData, getNodesData } from '../../utils';
+import { calcNewId } from '../../utils/calcNewId';
+import isValidLink from '../../utils/IsValidLink';
 import {
   assertNodeDataDefined,
   assertNodeDefined,
 } from '../../utils/typeGuards';
-import FallbackMessage from './FallbackMessage';
+import bendingText from '../CustomEdges/BendingTextEdge';
+import getAround from '../CustomEdges/GetAroundEdge';
+import multilineText from '../CustomEdges/MultilineTextEdge';
+import DataNode from '../CustomNodes/DataNode';
 import GraphInOutNode from '../CustomNodes/GraphInOutNode';
+import GraphNode from '../CustomNodes/GraphNode';
+import NoteNode from '../CustomNodes/NoteNode';
 import AddSubworkflowDialog from '../TaskDrawer/AddSubworkflowDialog';
-import { useTasks } from '../../api/tasks';
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-  })
-);
+import styles from './Canvas.module.css';
+import CanvasBackground from './CanvasBackground';
+import FallbackMessage from './FallbackMessage';
+import { addConnectionToGraph, retrieveTaskInfo, trimLabel } from './utils';
 
 const edgeTypes = {
   bendingText,
@@ -62,14 +55,13 @@ const nodeTypes = {
   graph: GraphNode,
   method: DataNode,
   ppfmethod: DataNode,
+  generated: DataNode,
   graphInput: GraphInOutNode,
   graphOutput: GraphInOutNode,
   class: DataNode,
 };
 
 function Canvas() {
-  const classes = useStyles();
-
   const storeRF = useStoreApi();
   const rfInstance = useReactFlow();
 
@@ -80,12 +72,11 @@ function Canvas() {
   }>();
 
   const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
+    (state) => state.displayedWorkflowInfo,
   );
   const setDisplayedWorkflowInfo = useStore(
-    (state) => state.setDisplayedWorkflowInfo
+    (state) => state.setDisplayedWorkflowInfo,
   );
-  const setSubgraphsStack = useStore((state) => state.setSubgraphsStack);
   const addLoadedGraph = useStore((state) => state.addLoadedGraph);
 
   const tasks = useTasks();
@@ -98,15 +89,8 @@ function Canvas() {
   const setDataFromNodes = useNodeDataStore((state) => state.setDataFromNodes);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const setDataFromEdges = useEdgeDataStore((state) => state.setDataFromEdges);
-  const {
-    fitView,
-    setNodes,
-    setEdges,
-    getNodes,
-    getEdges,
-    addNodes,
-    getNode,
-  } = rfInstance;
+  const { fitView, setNodes, setEdges, getNodes, getEdges, addNodes, getNode } =
+    rfInstance;
 
   useEffect(() => {
     setTimeout(() => {
@@ -139,16 +123,17 @@ function Canvas() {
     }
 
     const stateRF = storeRF.getState();
-    const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect() || {
-      left: 0,
-      top: 0,
-    };
+    const reactFlowBounds =
+      reactFlowWrapper.current?.getBoundingClientRect() || {
+        left: 0,
+        top: 0,
+      };
 
     const taskInfo = retrieveTaskInfo(event.dataTransfer);
     if (!taskInfo) {
       return;
     }
-    const { task_type, icon, task_identifier } = taskInfo;
+    const { task_type, icon, task_identifier, category } = taskInfo;
 
     const position = rfInstance.project({
       x: event.clientX - reactFlowBounds.left,
@@ -164,13 +149,7 @@ function Canvas() {
 
     let task: Task | undefined;
 
-    if (task_type !== 'note') {
-      task = tasks.find((tas) => tas.task_identifier === task_identifier);
-
-      if (!task) {
-        return;
-      }
-    } else {
+    if (category === 'General') {
       task = {
         ...taskInfo,
         category: 'General',
@@ -178,6 +157,12 @@ function Canvas() {
         output_names: undefined,
         required_input_names: undefined,
       };
+    } else {
+      task = tasks.find((tas) => tas.task_identifier === task_identifier);
+
+      if (!task) {
+        return;
+      }
     }
 
     const nodesIds = [...stateRF.nodeInternals.keys()];
@@ -226,7 +211,7 @@ function Canvas() {
       getNodes(),
       getEdges(),
       getNodesData(),
-      oldEdge
+      oldEdge,
     );
     if (!isValid) {
       showWarningMsg(reason);
@@ -234,7 +219,7 @@ function Canvas() {
 
     const newEdges = addEdge(
       { ...oldEdge, ...newConnection },
-      getEdges().filter((edge) => edge.id !== oldEdge.id)
+      getEdges().filter((edge) => edge.id !== oldEdge.id),
     );
 
     setEdges(newEdges);
@@ -297,13 +282,9 @@ function Canvas() {
         setTimeout(() => {
           fitView({ duration: 500 });
         }, 300);
-        setSubgraphsStack({
-          id: subgraph.graph.id,
-          label: subgraph.graph.label,
-        });
       } else {
         showErrorMsg(
-          `The subgraph ${nodeData.task_props.task_identifier} cannot be located!`
+          `The subgraph ${nodeData.task_props.task_identifier} cannot be located!`,
         );
       }
     }
@@ -346,6 +327,19 @@ function Canvas() {
     }
   };
 
+  const isValidConnection = (connection: Connection) => {
+    const { isValid, reason } = isValidLink(
+      connection,
+      getNodes(),
+      getEdges(),
+      getNodesData(),
+    );
+    if (!isValid) {
+      showWarningMsg(reason);
+    }
+    return isValid;
+  };
+
   return (
     <>
       <AddSubworkflowDialog
@@ -354,14 +348,10 @@ function Canvas() {
         tasks={tasks}
         onClose={() => setSubworkflowEvent(undefined)}
       />
-      <div
-        className={classes.root}
-        onKeyDown={handleKeyDown}
-        role="button"
-        tabIndex={0}
-      >
+      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions*/}
+      <div className={styles.root} onKeyDown={handleKeyDown}>
         <FallbackMessage />
-        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+        <div className={styles.wrapper} ref={reactFlowWrapper}>
           <ReactFlow
             fitView
             connectOnClick
@@ -380,6 +370,7 @@ function Canvas() {
             edgeTypes={edgeTypes}
             nodeTypes={nodeTypes}
             deleteKeyCode="Delete"
+            isValidConnection={isValidConnection}
           >
             <CanvasBackground />
             <Controls position="bottom-right" />

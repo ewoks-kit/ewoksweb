@@ -1,22 +1,23 @@
+import { Delete, FileCopy, LibraryAdd } from '@mui/icons-material';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import type { EwoksRFNode } from '../../../types';
+import type { Node } from 'reactflow';
+import { useReactFlow } from 'reactflow';
+
+import { useTasks } from '../../../api/tasks';
+import TaskForm from '../../../general/forms/TaskForm';
+import { useNodesIds } from '../../../store/graph-hooks';
+import useNodeDataStore from '../../../store/useNodeDataStore';
 import useStore from '../../../store/useStore';
+import type { EwoksRFNode } from '../../../types';
+import { getNodeData } from '../../../utils';
+import { calcNewId } from '../../../utils/calcNewId';
 import {
   assertDefined,
   assertNodeDataDefined,
 } from '../../../utils/typeGuards';
-import { getNodeData } from '../../../utils';
-import { Delete, FileCopy, LibraryAdd } from '@material-ui/icons';
-import { useReactFlow } from 'reactflow';
-import { calcNewId } from 'utils/calcNewId';
-import { useNodesIds } from '../../../store/graph-hooks';
-import useNodeDataStore from '../../../store/useNodeDataStore';
-import type { Node } from 'reactflow';
-import TaskForm from '../../../general/forms/TaskForm';
-import { useTasks } from '../../../api/tasks';
 
 export default function NodeSidebarMenu(selectedElement: Node) {
   const rfInstance = useReactFlow();
@@ -24,7 +25,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
   const nodesIds = useNodesIds();
 
   const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
+    (state) => state.displayedWorkflowInfo,
   );
   const tasks = useTasks();
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
@@ -34,7 +35,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
   const nodeData = getNodeData(selectedElement.id);
   assertNodeDataDefined(nodeData, selectedElement.id);
   const nodeTask = tasks.find(
-    (tas) => tas.task_identifier === nodeData.task_props.task_identifier
+    (tas) => tas.task_identifier === nodeData.task_props.task_identifier,
   );
 
   function cloneNode() {

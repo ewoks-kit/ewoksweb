@@ -1,4 +1,5 @@
 import type { Edge, Node } from 'reactflow';
+
 import { postTask, putTask } from '../../api/tasks';
 import type { EwoksRFLinkData, EwoksRFNodeData, Task } from '../../types';
 import { assertDefined } from '../../utils/typeGuards';
@@ -7,7 +8,7 @@ import type { TaskFields } from './models';
 export async function submitTaskFormData(
   formData: TaskFields,
   initial_task?: Task,
-  editExisting?: boolean
+  editExisting?: boolean,
 ) {
   const {
     task_type,
@@ -61,7 +62,10 @@ export function hasDuplicates(arr: string[]): boolean {
 
 export function enrichWithData<T extends Node | Edge>(
   element: T,
-  dataContainer: Map<string, T extends Node ? EwoksRFNodeData : EwoksRFLinkData>
+  dataContainer: Map<
+    string,
+    T extends Node ? EwoksRFNodeData : EwoksRFLinkData
+  >,
 ) {
   const data = dataContainer.get(element.id);
   assertDefined(data);

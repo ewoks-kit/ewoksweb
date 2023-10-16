@@ -1,14 +1,14 @@
+import MenuIcon from '@mui/icons-material/Menu';
+import { Button, Menu, Tooltip } from '@mui/material';
+import MenuList from '@mui/material/MenuList';
 import { useState } from 'react';
 
-import MenuList from '@material-ui/core/MenuList';
-import { Button, Menu, Tooltip } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
+import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 import type { SelectedElementRF } from '../../../types';
 import { isNodeRF } from '../../../utils/typeGuards';
+import LinkSidebarMenu from './LinkSidebarMenu';
 import NodeSidebarMenu from './NodeSidebarMenu';
 import WorkflowSidebarMenu from './WorkflowSidebarMenu';
-import LinkSidebarMenu from './LinkSidebarMenu';
-import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 
 export default function EditSidebarMenu({
   selectedElement,

@@ -1,6 +1,7 @@
-import create from 'zustand';
-import type { EwoksRFNode, EwoksRFNodeData } from '../types';
 import { merge } from 'lodash';
+import { create } from 'zustand';
+
+import type { EwoksRFNode, EwoksRFNodeData } from '../types';
 
 export interface NodeDataState {
   nodesData: Map<string, EwoksRFNodeData>;
@@ -25,7 +26,7 @@ const useNodeDataStore = create<NodeDataState>((set) => ({
       const newData: EwoksRFNodeData = merge(
         {},
         nodesData.get(nodeId),
-        nodeData
+        nodeData,
       );
 
       return {

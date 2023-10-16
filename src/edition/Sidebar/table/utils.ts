@@ -66,7 +66,7 @@ export function isClass(edgeData: EwoksRFNodeData | undefined): boolean {
 export function calcTypeOfValues(
   inOrOut: 'inputs' | 'outputs',
   nodeData: EwoksRFNodeData | undefined,
-  edgeDataL: EwoksRFLinkData
+  edgeDataL: EwoksRFLinkData,
 ): TypeOfValues {
   return {
     typeOfInput: isClass(nodeData) ? 'select' : 'input',

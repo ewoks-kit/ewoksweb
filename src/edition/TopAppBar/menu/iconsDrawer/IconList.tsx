@@ -1,9 +1,9 @@
-import { Paper, Tooltip } from '@material-ui/core';
+import { Paper, Tooltip } from '@mui/material';
 import { useState } from 'react';
+
 import { useIcons } from '../../../../api/icons';
 import SuspenseBoundary from '../../../../suspense/SuspenseBoundary';
 import DeleteIconButton from './DeleteIconButton';
-
 import styles from './IconsDrawer.module.css';
 
 function IconList() {
@@ -25,7 +25,7 @@ function IconList() {
             type="button"
             aria-label={icon.name}
           >
-            <Tooltip title={icon.name} arrow>
+            <Tooltip title={icon.name} arrow placement="left">
               <img
                 className={styles.iconImg}
                 src={icon.data_url}

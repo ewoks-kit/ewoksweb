@@ -1,9 +1,9 @@
-import Drawer from '@material-ui/core/Drawer';
+import Drawer from '@mui/material/Drawer';
+
 import SuspenseBoundary from '../../../../suspense/SuspenseBoundary';
 import IconList from './IconList';
-import UploadIconControl from './UploadIconControl';
-
 import styles from './IconsDrawer.module.css';
+import UploadIconControl from './UploadIconControl';
 
 interface Props {
   isOpen: boolean;

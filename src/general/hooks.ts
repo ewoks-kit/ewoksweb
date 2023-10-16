@@ -1,6 +1,6 @@
-import type { GraphEwoks } from '../types';
-import useStore from '../store/useStore';
 import useSnackbarStore from '../store/useSnackbarStore';
+import useStore from '../store/useStore';
+import type { GraphEwoks } from '../types';
 import { isString } from '../utils/typeGuards';
 
 function tryJSONparse(str: string | ArrayBuffer | null): unknown {
@@ -34,7 +34,7 @@ export function useLoadGraph(onGraphLoad: (graph: GraphEwoks) => void) {
       const newGraph = tryJSONparse(result);
       if (!newGraph) {
         showErrorMsg(
-          'Error in JSON structure. Please correct input file and retry!'
+          'Error in JSON structure. Please correct input file and retry!',
         );
         return;
       }

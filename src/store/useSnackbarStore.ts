@@ -1,10 +1,10 @@
-import type { Color } from '@material-ui/lab';
-import create from 'zustand';
+import type { AlertColor } from '@mui/lab';
+import { create } from 'zustand';
 
 interface State {
   open: boolean;
   text: string;
-  severity?: Color;
+  severity?: AlertColor;
   showSuccessMsg: (text: string) => void;
   showWarningMsg: (text: string) => void;
   showErrorMsg: (text: string) => void;

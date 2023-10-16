@@ -1,15 +1,16 @@
-import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import { Alert } from '@material-ui/lab';
+import CloseIcon from '@mui/icons-material/Close';
+import { Alert } from '@mui/lab';
+import IconButton from '@mui/material/IconButton';
+import Snackbar from '@mui/material/Snackbar';
+
 import useSnackbarStore from '../store/useSnackbarStore';
 
 function SimpleSnackbar() {
   const { open, text, severity, closeSnackbar } = useSnackbarStore();
 
   const handleClose = (
-    event: React.SyntheticEvent | React.MouseEvent,
-    reason?: string
+    event: Event | React.SyntheticEvent,
+    reason?: string,
   ) => {
     if (reason === 'clickaway') {
       return;

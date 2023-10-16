@@ -1,11 +1,10 @@
-import { InputLabel, Select, MenuItem, FormControl } from '@material-ui/core';
-import { useIcons } from '../../api/icons';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import type { Control } from 'react-hook-form';
-
-import styles from './TaskForm.module.css';
-
 import { Controller } from 'react-hook-form';
+
+import { useIcons } from '../../api/icons';
 import type { TaskFields } from './models';
+import styles from './TaskForm.module.css';
 
 interface Props {
   control: Control<TaskFields>;
@@ -23,11 +22,11 @@ function IconDropdown(props: Props) {
         const { onChange, ...restField } = field;
 
         return (
-          <FormControl className={styles.dropdown}>
+          <FormControl variant="standard" className={styles.dropdown}>
             <InputLabel id="iconNameInFormDialog">Icon</InputLabel>
             <Select
+              variant="standard"
               labelId="iconNameInFormDialog"
-              // @ts-expect-error
               onChange={onChange}
               {...restField}
             >

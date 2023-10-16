@@ -12,13 +12,13 @@ Cypress.on('uncaught:exception', (err) => {
 Cypress.Commands.add('loadAppWithoutGraph', () => {
   cy.visit('http://localhost:3000');
   cy.findByRole('navigation').within(() =>
-    cy.findByRole('link', { name: 'Edit' }).click()
+    cy.findByRole('link', { name: 'Edit' }).click(),
   );
   cy.waitForStableDOM();
 });
 
 Cypress.Commands.add('loadGraph', (name: string) => {
-  cy.findByRole('textbox', {
+  cy.findByRole('combobox', {
     name: 'Quick open',
   }).type(name);
 
@@ -45,4 +45,16 @@ Cypress.Commands.add('dragNodeInCanvas', (task_identifier: string) => {
   });
 });
 
-addWaitForStableDomCommand({ pollInterval: 300, timeout: 1000 });
+Cypress.Commands.add('hasBreadcrumbs', (crumbs: string[]) => {
+  const linkCrumbs = crumbs.slice(0, crumbs.length - 1);
+  const lastCrumb = crumbs[crumbs.length - 1];
+
+  cy.findByLabelText('breadcrumb').within(() => {
+    linkCrumbs.forEach((name) =>
+      cy.findByRole('link', { name }).should('be.visible'),
+    );
+    cy.contains(lastCrumb).should('be.visible');
+  });
+});
+
+addWaitForStableDomCommand({ pollInterval: 300, timeout: 5000 });

@@ -1,3 +1,4 @@
+import { Alert } from '@mui/lab';
 import {
   Button,
   Checkbox,
@@ -6,31 +7,29 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-} from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+} from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useReactFlow } from 'reactflow';
 
+import { useTasks } from '../../api/tasks';
 import {
   postWorkflow,
   putWorkflow,
   useInvalidateWorkflows,
 } from '../../api/workflows';
 import commonStrings from '../../commonStrings.json';
-import useStore from '../../store/useStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
+import useStore from '../../store/useStore';
 import type { GraphDetails } from '../../types';
 import { GraphFormAction } from '../../types';
 import {
   getEdgesData,
   getNodesData,
-  rfToEwoks,
+  prepareEwoksGraph,
   textForError,
 } from '../../utils';
-import { useTasks } from '../../api/tasks';
 import FormField from './FormField';
 import type { GraphFields } from './models';
-import { enrichWithData } from './utils';
 
 interface Props {
   elementToEdit: GraphDetails;
@@ -61,14 +60,14 @@ export default function GraphFormDialog(props: Props) {
 
   const onSubmit = handleSubmit(async (data: GraphFields) => {
     const { identifier, overwrite } = data;
-    const nodesData = getNodesData();
-    const edgesData = getEdgesData();
 
-    const ewoksGraph = rfToEwoks({
-      graph: { ...elementToEdit, id: identifier, label: identifier },
-      nodes: rfInstance.getNodes().map((n) => enrichWithData(n, nodesData)),
-      links: rfInstance.getEdges().map((e) => enrichWithData(e, edgesData)),
-    });
+    const ewoksGraph = prepareEwoksGraph(
+      { ...elementToEdit, id: identifier },
+      rfInstance.getNodes(),
+      rfInstance.getEdges(),
+      getNodesData(),
+      getEdgesData(),
+    );
 
     try {
       if (overwrite) {

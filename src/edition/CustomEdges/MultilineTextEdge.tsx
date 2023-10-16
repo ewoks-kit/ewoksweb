@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { EdgeProps } from 'reactflow';
 import { getBezierPath } from 'reactflow';
+
 import InteractionHelper from './InteractionHelper';
 
 function getForeignObjectProps(
@@ -8,7 +9,7 @@ function getForeignObjectProps(
   sourceY: number,
   targetX: number,
   targetY: number,
-  label: ReactNode
+  label: ReactNode,
 ): React.SVGProps<SVGForeignObjectElement> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_path, labelX, labelY] = getBezierPath({

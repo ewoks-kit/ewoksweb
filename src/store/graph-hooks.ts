@@ -1,6 +1,6 @@
-import type { Node, Edge, ReactFlowState } from 'reactflow';
+import type { Edge, Node, ReactFlowState } from 'reactflow';
 import { useStore as useRFStore } from 'reactflow';
-import shallow from 'zustand/shallow';
+import { shallow } from 'zustand/shallow';
 
 export function useNodesIds() {
   return useRFStore((state) => {
@@ -26,7 +26,7 @@ export function useSelectedElement(): Node | Edge | undefined {
 
 const nodeEdgeSelectedSelector = (state: ReactFlowState) => {
   const nodeSelected = [...state.nodeInternals.values()].find(
-    (node) => node.selected
+    (node) => node.selected,
   );
   if (nodeSelected) {
     return nodeSelected;

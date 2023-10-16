@@ -1,10 +1,10 @@
+import type { CSSProperties } from 'react';
 import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
-import type { SubgraphsStackSlice } from './store/subgraphsStack';
+import type { Node } from 'reactflow';
+
+import type { DisplayedWorkflowInfoSlice } from './store/displayedWorkflowInfo';
 import type { LoadedGraphsSlice } from './store/loadedGraphs';
 import type { RootWorkflowSlice } from './store/rootWorkflow';
-import type { ChangeEvent, CSSProperties, ReactNode } from 'react';
-import type { Node } from 'reactflow';
-import type { DisplayedWorkflowInfoSlice } from './store/displayedWorkflowInfo';
 
 export enum GraphFormAction {
   cloneGraph = 'cloneGraph',
@@ -54,6 +54,7 @@ export interface GraphDetails {
   uiProps?: GraphUiProps;
   keywords?: object;
   input_schema?: object;
+  ui_schema?: object;
   execute_arguments?: object;
   worker_options?: object;
 }
@@ -87,27 +88,12 @@ export interface EwoksEvent {
 
 export interface State
   extends DisplayedWorkflowInfoSlice,
-    SubgraphsStackSlice,
     LoadedGraphsSlice,
     RootWorkflowSlice {}
 
 export interface Action {
   action: string;
   graph: GraphRF;
-}
-
-export interface NodeProps {
-  id: string;
-  nodeWidth?: number;
-  withImage?: boolean;
-  withLabel?: boolean;
-  moreHandles?: boolean;
-  type: TaskType;
-  label: string;
-  color?: string;
-  colorBorder?: string;
-  content: ReactNode;
-  comment?: string;
 }
 
 export type TaskType =
@@ -119,7 +105,8 @@ export type TaskType =
   | 'class'
   | 'note'
   | 'script'
-  | 'subworkflow';
+  | 'subworkflow'
+  | 'generated';
 
 export interface Task {
   task_type: TaskType;
@@ -139,12 +126,6 @@ export interface Inputs {
 }
 
 export interface InputsEwoks extends Omit<Inputs, 'id'> {}
-
-export interface stackGraph {
-  id: string;
-  label?: string;
-  resetStack?: boolean;
-}
 
 export interface GraphUiProps {
   type?: string;
@@ -319,7 +300,7 @@ export interface CustomTableCellProps {
   onChange(
     e: { target: { name: string; value: string | number } },
     row: EditableTableRow,
-    index: number
+    index: number,
   ): void;
 }
 
@@ -424,11 +405,6 @@ export interface SelectedElement {
 export interface SelectedElementNode extends SelectedElement {
   type: 'node';
 }
-
-export type PropertyChangedEvent = ChangeEvent<{
-  name?: string | undefined;
-  value: unknown;
-}>;
 
 export interface SelectedElementRF {
   selectedElement: Node | Edge | undefined;

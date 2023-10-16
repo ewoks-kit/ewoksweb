@@ -1,8 +1,9 @@
-import styles from './Details.module.css';
-import { EditOutlined as EditIcon } from '@material-ui/icons';
+import { EditOutlined as EditIcon } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 import { useState } from 'react';
+
+import styles from './Details.module.css';
 import IdentifierEditDialog from './IdentifierEditDialog';
-import { IconButton } from '@material-ui/core';
 
 interface TaskPropertyProps {
   id: string;

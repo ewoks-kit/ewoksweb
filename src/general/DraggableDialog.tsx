@@ -1,25 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import type { PaperProps } from '@material-ui/core/Paper';
-import Paper from '@material-ui/core/Paper';
+import ReactJson from '@microlink/react-json-view';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import type { PaperProps } from '@mui/material/Paper';
+import Paper from '@mui/material/Paper';
+import { useEffect, useState } from 'react';
 import Draggable from 'react-draggable';
-import { getEdgesData, rfToEwoks, getNodesData } from 'utils';
 
-import ReactJson from 'react-json-view';
-import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import useStore from 'store/useStore';
-import type {
-  EditableTableRow,
-  EwoksRFLinkData,
-  EwoksRFNodeData,
-  GraphRF,
-} from '../types';
-import { useReactFlow } from 'reactflow';
+import type { EditableTableRow } from '../types';
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -51,8 +42,6 @@ interface Props {
 }
 
 export default function DraggableDialog(props: Props) {
-  const { getNodes, getEdges } = useReactFlow();
-
   const [graph, setGraph] = useState<Graph>({});
   const [oldGraph, setOldGraph] = useState<Graph>({});
   const [isOpen, setIsOpen] = useState(false);
@@ -63,11 +52,6 @@ export default function DraggableDialog(props: Props) {
     id: '',
     rows: [],
   });
-  const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo
-  );
-
-  const [selection, setSelection] = useState('ewoks');
 
   const { open, content } = props;
 
@@ -91,28 +75,6 @@ export default function DraggableDialog(props: Props) {
     props.setValue(name, graph, callbackProps);
   };
 
-  const handleChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newSelection: string
-  ) => {
-    const graphRf: GraphRF = {
-      graph: displayedWorkflowInfo,
-      nodes: getNodes().map((nod) => {
-        return { ...nod, data: getNodesData().get(nod.id) as EwoksRFNodeData };
-      }),
-      links: getEdges().map((edge) => {
-        return {
-          ...edge,
-          data: getEdgesData().get(edge.id) as EwoksRFLinkData,
-        };
-      }),
-    };
-    setSelection(newSelection);
-    setTitle(newSelection === 'ewoks' ? 'Ewoks Graph' : 'RF Graph');
-    setGraph(newSelection === 'ewoks' ? rfToEwoks(graphRf) : graphRf);
-    setIsOpen(true);
-  };
-
   const graphChanged = (edit: { updated_src: Graph }) => {
     setGraph(edit.updated_src);
   };
@@ -129,17 +91,6 @@ export default function DraggableDialog(props: Props) {
       </DialogTitle>
       <DialogContent style={{ minHeight: '300px', minWidth: '380px' }}>
         <DialogContentText>
-          {['Ewoks Graph', 'RF Graph'].includes(title) && (
-            <ToggleButtonGroup
-              color="primary"
-              value={selection}
-              exclusive
-              onChange={handleChange}
-            >
-              <ToggleButton value="ewoks">Ewoks Graph</ToggleButton>
-              <ToggleButton value="rf">RF Graph</ToggleButton>
-            </ToggleButtonGroup>
-          )}
           <ReactJson
             src={graph}
             name="value"

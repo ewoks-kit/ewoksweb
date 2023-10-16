@@ -1,11 +1,11 @@
-import { Button } from '@material-ui/core';
-import { CloudUpload } from '@material-ui/icons';
+import { CloudUpload } from '@mui/icons-material';
+import { Button } from '@mui/material';
 import type { ChangeEvent, SyntheticEvent } from 'react';
 import { useState } from 'react';
+
 import { postIcon, useInvalidateIcons } from '../../../../api/icons';
 import useSnackbarStore from '../../../../store/useSnackbarStore';
 import { textForError } from '../../../../utils';
-
 import styles from './IconsDrawer.module.css';
 
 function UploadIconControl() {
@@ -32,8 +32,8 @@ function UploadIconControl() {
       showErrorMsg(
         textForError(
           error,
-          'Error in uploading the Icon. Please check connectivity with the server!'
-        )
+          'Error in uploading the Icon. Please check connectivity with the server!',
+        ),
       );
     }
   }

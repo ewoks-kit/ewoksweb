@@ -1,12 +1,12 @@
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import { useReactFlow } from 'reactflow';
-import { useTasks } from '../api/tasks';
 
+import { useTasks } from '../api/tasks';
 import { fetchWorkflow } from '../api/workflows';
 import ErrorFallback from '../general/ErrorFallback';
-import useWorkflowToRestoreId from '../store/useWorkflowToRestoreId';
-import useStore from '../store/useStore';
 import useSnackbarStore from '../store/useSnackbarStore';
+import useStore from '../store/useStore';
+import useWorkflowToRestoreId from '../store/useWorkflowToRestoreId';
 import SuspenseBoundary from '../suspense/SuspenseBoundary';
 import { textForError } from '../utils';
 import Canvas from './Canvas/Canvas';
@@ -21,7 +21,7 @@ export default function EditPage() {
 
   const workflowToRestoreId = useWorkflowToRestoreId((state) => state.id);
   const resetWorkflowToRestoreId = useWorkflowToRestoreId(
-    (state) => state.resetId
+    (state) => state.resetId,
   );
 
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
@@ -36,8 +36,8 @@ export default function EditPage() {
         showErrorMsg(
           textForError(
             error,
-            'Error in retrieving workflow. Please check connectivity with the server!'
-          )
+            'Error in retrieving workflow. Please check connectivity with the server!',
+          ),
         );
       } finally {
         resetWorkflowToRestoreId();

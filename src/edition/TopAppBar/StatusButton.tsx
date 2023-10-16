@@ -1,5 +1,6 @@
-import { Check, ErrorOutline, Save } from '@material-ui/icons';
+import { Check, ErrorOutline, Save } from '@mui/icons-material';
 import { useEffect } from 'react';
+
 import type { Status } from './models';
 
 interface Props {

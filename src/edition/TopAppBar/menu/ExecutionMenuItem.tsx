@@ -1,13 +1,14 @@
-import useSnackbarStore from '../../../store/useSnackbarStore';
-import useStore from '../../../store/useStore';
-import SendIcon from '@material-ui/icons/Send';
+import SendIcon from '@mui/icons-material/Send';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { executeWorkflow } from '../../../api/workflows';
 import ConfirmDialog from '../../../general/ConfirmDialog';
-import ActionMenuItem from './ActionMenuItem';
-import { useNavigate } from 'react-router-dom';
-import ExecuteParametersDialog from '../ExecuteParametersDialog';
+import useSnackbarStore from '../../../store/useSnackbarStore';
+import useStore from '../../../store/useStore';
 import type { ExecutionParams } from '../ExecuteParametersDialog';
+import ExecuteParametersDialog from '../ExecuteParametersDialog';
+import ActionMenuItem from './ActionMenuItem';
 
 function ExecutionMenuItem() {
   const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);

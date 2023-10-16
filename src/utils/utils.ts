@@ -1,5 +1,6 @@
 /* eslint-disable require-unicode-regexp */
 import { nanoid } from 'nanoid';
+
 import type {
   Condition,
   DataMapping,
@@ -33,7 +34,7 @@ export function calcConditionValue(condition: Condition): unknown {
 }
 
 export function calcConditionName(
-  condition: Condition
+  condition: Condition,
 ): string | number | undefined {
   const cond = condition.name;
 
@@ -41,7 +42,7 @@ export function calcConditionName(
 }
 
 export function calcDataMapping(
-  dataMappings: DataMapping[]
+  dataMappings: DataMapping[],
 ): DataMappingEwoks[] {
   return dataMappings.map(({ value, name }) => {
     return {
@@ -52,7 +53,7 @@ export function calcDataMapping(
 }
 
 export function stringOrNumber(
-  value: string | number | undefined
+  value: string | number | undefined,
 ): string | number {
   return value === undefined
     ? ''
@@ -69,7 +70,7 @@ export function isDecimalNumber(value: string) {
 
 export function notUndefinedValue(
   value: unknown,
-  propName: string
+  propName: string,
 ): object | undefined {
   if (value !== undefined) {
     return { [propName]: value };
@@ -88,7 +89,7 @@ export function calcCommonNodeUiProps(uiProps: InOutNodesUiProps) {
 
 export function calcLinkUiProps(
   uiProps: InOutNodesUiProps | undefined,
-  linkAttr?: InOutLinkAttributes | undefined
+  linkAttr?: InOutLinkAttributes | undefined,
 ) {
   return {
     ...(linkAttr?.label && { label: linkAttr.label }),
@@ -133,4 +134,17 @@ export function propIsEmpty(uiprops: object | undefined) {
     }
   }
   return isEmpty;
+}
+
+export function generateUniqueNodeId(
+  nodesIds: string[],
+  tentativePrefix = '',
+  tentativeSuffix = 0,
+): string {
+  const tentativeId = `${tentativePrefix}_${tentativeSuffix}`;
+  if (nodesIds.includes(tentativeId)) {
+    return generateUniqueNodeId(nodesIds, tentativePrefix, tentativeSuffix + 1);
+  }
+
+  return tentativeId;
 }
