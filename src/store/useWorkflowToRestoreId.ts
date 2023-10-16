@@ -7,7 +7,7 @@ interface State {
 }
 
 const useWorkflowToRestoreId = create<State>((set) => ({
-  id: process.env.REACT_APP_INITIAL_WORKFLOW_ID,
+  id: import.meta.env.VITE_INITIAL_WORKFLOW_ID,
   setId: (id: string) =>
     set({
       id,

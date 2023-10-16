@@ -7,7 +7,6 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import type { ChangeEvent } from 'react';
 import React, { useEffect } from 'react';
-import useSnackbarStore from 'store/useSnackbarStore';
 import type {
   Condition,
   DefaultInput,
@@ -16,6 +15,7 @@ import type {
 } from 'types';
 
 import DraggableDialog from '../../../general/DraggableDialog';
+import useSnackbarStore from '../../../store/useSnackbarStore';
 import AddEntryRow from './controls/AddEntryRow';
 import RemoveRowCell from './controls/RemoveRowCell';
 import TypeSelectCell from './controls/TypeSelectCell';

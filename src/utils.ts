@@ -1,9 +1,9 @@
-import orange3 from 'images/orange3.png';
 import type { Edge, Node } from 'reactflow';
 
 import { fetchWorkflow } from './api/workflows';
 import { curateEdgeData, curateNodeData } from './edition/TopAppBar/utils';
 import { enrichWithData } from './general/forms/utils';
+import orange3 from './images/orange3.png';
 import useEdgeDataStore from './store/useEdgeDataStore';
 import useNodeDataStore from './store/useNodeDataStore';
 import type { GraphDetails, Icon, LinkData, NodeData, Workflow } from './types';
