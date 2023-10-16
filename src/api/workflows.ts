@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
+import type { ExecutionParams } from '../edition/TopAppBar/ExecuteParametersDialog';
 import type { GraphEwoks, WorkflowDescription } from '../types';
 import { client } from './client';
 import type {
@@ -38,11 +39,11 @@ export async function deleteWorkflow(id: string) {
   return client.delete<DeleteResponse>(`/workflow/${id}`);
 }
 
-export async function executeWorkflow(workflowId: string) {
-  return client.post<ExecuteWorkflowResponse>(
-    `/execute/${workflowId}`,
-    workflowId,
-  );
+export async function executeWorkflow(
+  workflowId: string,
+  params?: ExecutionParams,
+) {
+  return client.post<ExecuteWorkflowResponse>(`/execute/${workflowId}`, params);
 }
 
 export async function getWorkflows(): Promise<WorkflowDescription[]> {

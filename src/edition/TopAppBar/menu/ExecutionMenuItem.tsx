@@ -30,7 +30,7 @@ function ExecutionMenuItem() {
       return;
     }
     try {
-      await executeWorkflow(rootWorkflowId);
+      await executeWorkflow(rootWorkflowId, params);
       navigate('/monitor');
     } catch (error) {
       // Keep logging in console for debugging when talking with a user

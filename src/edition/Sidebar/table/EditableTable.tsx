@@ -263,14 +263,12 @@ function EditableTable(props: EditableTableProps) {
                   onEdit={() => onEditRow(row.id || '', index)}
                   disable={disable}
                 />
-                <RemoveRowCell
-                  disable={disable}
-                  onDelete={() => onDelete(row.id || '')}
-                />
-
-                {/* {!graphDefaultInputs && (
-                  <ToolsCell onDelete={() => onDelete(row.id || '')} />
-                )} */}
+                {!graphDefaultInputs && !disable && (
+                  <RemoveRowCell
+                    disable={disable}
+                    onDelete={() => onDelete(row.id || '')}
+                  />
+                )}
               </TableRow>
             </React.Fragment>
           ))}

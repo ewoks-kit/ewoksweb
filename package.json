@@ -11,7 +11,7 @@
     "pnpm": "8.x"
   },
   "scripts": {
-    "start": "vite",
+    "start": "vite --port 3000",
     "build": "tsc && vite build",
     "postbuild": "node postbuild.js",
     "lint": "run-p lint:**",

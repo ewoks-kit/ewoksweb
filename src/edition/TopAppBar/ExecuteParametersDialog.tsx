@@ -1,22 +1,25 @@
-import { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import Dialog from '@material-ui/core/Dialog';
-import EditableTable from '../Sidebar/EditableTableProperties/EditableTable';
-import type { EditableTableRow } from 'types';
 import {
   Card,
   CardContent,
   FormControl,
   InputLabel,
   Select,
-} from '@material-ui/core';
-import useNodeDataStore from '../../store/useNodeDataStore';
-import AddRowButton from '../Sidebar/EditableTableProperties/AddRowButton';
-import ToolsCell from '../Sidebar/EditableTableProperties/ToolsCell';
+  Table,
+  TableBody,
+} from '@mui/material';
+import Button from '@mui/material//Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import { nanoid } from 'nanoid';
+import { useState } from 'react';
+import type { EditableTableRow } from 'types';
+
+import useNodeDataStore from '../../store/useNodeDataStore';
+import AddEntryRow from '../Sidebar/table/controls/AddEntryRow';
+import RemoveRowButton from '../Sidebar/table/controls/RemoveRowButton';
+import EditableTable from '../Sidebar/table/EditableTable';
 
 interface ExecutionDefaultInputs {
   name: string;
@@ -45,7 +48,7 @@ interface DefaultInputRow extends EditableTableRow {
 }
 
 export default function ExecuteParametersDialog(
-  props: ExecuteParametersDialogProps
+  props: ExecuteParametersDialogProps,
 ) {
   const { onClose, open, executeWorkflow } = props;
 
@@ -71,23 +74,31 @@ export default function ExecuteParametersDialog(
             ? ''
             : input.nodeId,
         };
-      }
+      },
     );
 
     executeWorkflow({ defaultInputs: execDefaultInputs });
   }
 
-  function defaultInputChanged(input: DefaultInputRow, row: EditableTableRow) {
+  function defaultInputChanged(
+    newInput: DefaultInputRow,
+    row: EditableTableRow,
+  ) {
     const newInputRow = {
-      ...input,
+      ...newInput,
       name: row.name,
       type: row.type,
       value: row.value,
     };
 
-    const otherInputs = defaultInputs.filter((inp) => inp.id !== input.id);
+    const newInputs = defaultInputs.map((input) => {
+      if (input.id === newInput.id) {
+        return newInputRow;
+      }
+      return input;
+    });
 
-    setDefaultInputs([...otherInputs, newInputRow]);
+    setDefaultInputs(newInputs);
   }
 
   function handleChangeTarget(input: DefaultInputRow, targetNodeId: string) {
@@ -136,7 +147,7 @@ export default function ExecuteParametersDialog(
           <CardContent>
             <h4>Workflow Inputs</h4>
             {defaultInputs.map((input) => (
-              <span style={{ display: 'flex' }} key={input.id}>
+              <div style={{ display: 'flex' }} key={input.id}>
                 <FormControl
                   style={{ minWidth: '180px', margin: '5px' }}
                   variant="filled"
@@ -146,9 +157,7 @@ export default function ExecuteParametersDialog(
                     native
                     defaultValue={input.nodeLabel}
                     onChange={(ev) => {
-                      console.log(ev);
-
-                      handleChangeTarget(input, ev.target.value as string);
+                      handleChangeTarget(input, ev.target.value);
                     }}
                   >
                     <option value="All nodes">All nodes</option>
@@ -190,31 +199,23 @@ export default function ExecuteParametersDialog(
                             .optional_input_names) ||
                           []),
                       ],
-                      // requiredValues:
-                      //   nodeData.task_props.required_input_names || [],
                     },
                     { typeOfInput: 'input' },
                   ]}
                 />
-                <ToolsCell onDelete={() => handleRowDelete(input)} />
-              </span>
+                <RemoveRowButton onDelete={() => handleRowDelete(input)} />
+              </div>
             ))}
-            <AddRowButton onClick={() => handleRowAddition()} />
-          </CardContent>
-        </Card>
-        <Card variant="outlined" style={{ margin: '2px' }}>
-          <CardContent>
-            <h4>Executions Arguments</h4>
+            <Table>
+              <TableBody>
+                <AddEntryRow onClick={() => handleRowAddition()} colSpan={4} />
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
         <Card variant="outlined" style={{ margin: '2px' }}>
           <CardContent>
             <h4>Worker options</h4>
-          </CardContent>
-        </Card>
-        <Card variant="outlined" style={{ margin: '2px' }}>
-          <CardContent>
-            <h4>Parameters (keywords)</h4>
           </CardContent>
         </Card>
       </DialogContent>
