@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import type { Node } from 'reactflow';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
@@ -9,52 +8,40 @@ import {
 import InputTextField from './InputTextField';
 
 interface Props {
-  showComment: boolean;
   selectedElement: Node;
 }
 
-// DOC: the label and comment for nodes-links when selected
 export default function NodeLabelComment(props: Props) {
-  const { showComment, selectedElement } = props;
+  const { selectedElement } = props;
   assertElementIsNodeType(selectedElement);
-
-  const [comment, setComment] = useState<string>();
-  const [label, setLabel] = useState<string>();
-
-  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
   const nodeData = useNodeDataStore((state) =>
     state.nodesData.get(selectedElement.id),
   );
   assertNodeDataDefined(nodeData, selectedElement.id);
 
-  useEffect(() => {
-    setLabel(nodeData.ewoks_props.label || '');
-    setComment(nodeData.comment || '');
-  }, [nodeData.ewoks_props.label, nodeData.comment]);
+  const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
-  function handleSaveLabel(labelLocal: string) {
-    mergeNodeData(selectedElement.id, { ewoks_props: { label: labelLocal } });
+  function handleSaveLabel(label: string) {
+    mergeNodeData(selectedElement.id, { ewoks_props: { label } });
   }
 
-  function handleSaveComment(commentLocal: string) {
-    mergeNodeData(selectedElement.id, { comment: commentLocal });
+  function handleSaveComment(comment: string) {
+    mergeNodeData(selectedElement.id, { comment });
   }
 
   return (
     <section>
       <InputTextField
         label="Label"
-        defaultValue={label}
+        defaultValue={nodeData.ewoks_props.label}
         onValueSave={handleSaveLabel}
       />
-      <div style={{ display: showComment ? 'block' : 'none' }}>
-        <InputTextField
-          label="Comment"
-          defaultValue={comment}
-          onValueSave={handleSaveComment}
-        />
-      </div>
+      <InputTextField
+        label="Comment"
+        defaultValue={nodeData.comment}
+        onValueSave={handleSaveComment}
+      />
     </section>
   );
 }

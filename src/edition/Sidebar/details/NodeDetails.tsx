@@ -104,7 +104,7 @@ export default function NodeDetails(selectedElement: Node) {
 
   return (
     <Box>
-      <NodeLabelComment showComment selectedElement={selectedElement} />
+      <NodeLabelComment selectedElement={selectedElement} />
       {selectedElement.type &&
         !['graphInput', 'graphOutput', 'note'].includes(
           selectedElement.type,
