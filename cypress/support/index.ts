@@ -11,6 +11,8 @@ declare global {
       loadAppWithoutGraph(): void;
       dragNodeInCanvas(task_identifier: string): void;
       hasBreadcrumbs(crumbs: string[]): void;
+      hasVisibleNodes(expectedNumberOfNodes: number): void;
+      hasVisibleEdges(expectedNumberOfEdges: number): void;
     }
   }
 }
