@@ -1,4 +1,4 @@
-import { Alert } from '@mui/lab';
+import { Alert } from '@mui/material';
 import { FormControl } from '@mui/material';
 import { InputLabel } from '@mui/material';
 import {
