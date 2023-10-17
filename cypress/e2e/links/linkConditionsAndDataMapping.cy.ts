@@ -23,6 +23,20 @@ it('click on a link and see its details in the sidebar ', () => {
   });
 });
 
+it('displays an existing data mapping', () => {
+  cy.loadGraph('demo');
+  cy.waitForStableDOM();
+  cy.get('.react-flow__edge').contains('sum->a').click({ force: true });
+
+  cy.findByRole('table', { name: 'data-mapping-table' }).within(() => {
+    cy.findAllByRole('combobox').should('have.length', 2);
+    // Source
+    cy.findAllByRole('combobox').first().should('have.value', 'sum');
+    // Target
+    cy.findAllByRole('combobox').last().should('have.value', 'a');
+  });
+});
+
 it('enables the data mapping when unchecking "Map all Data"', () => {
   cy.findByRole('complementary').within(() => {
     cy.contains('Data Mapping')

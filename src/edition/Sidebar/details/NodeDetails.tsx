@@ -15,8 +15,8 @@ import sidebarStyle from '../sidebarStyle';
 import SidebarTooltip from '../SidebarTooltip';
 import DefaultInputs from '../table/DefaultInputs';
 import DefaultErrorNodeControl from './DefaultErrorNodeControl';
+import InputTextField from './InputTextField';
 import NodeInfo from './NodeInfo';
-import NodeLabelComment from './NodeLabelComment';
 
 // DOC: selectedNode details in sidebar
 export default function NodeDetails(selectedElement: Node) {
@@ -104,7 +104,21 @@ export default function NodeDetails(selectedElement: Node) {
 
   return (
     <Box>
-      <NodeLabelComment selectedElement={selectedElement} />
+      <InputTextField
+        label="Label"
+        defaultValue={nodeData.ewoks_props.label || ''}
+        onValueSave={(label) => {
+          mergeNodeData(selectedElement.id, { ewoks_props: { label } });
+        }}
+      />
+      <InputTextField
+        label="Comment"
+        defaultValue={nodeData.comment || ''}
+        onValueSave={(comment) => {
+          mergeNodeData(selectedElement.id, { comment });
+        }}
+      />
+
       {selectedElement.type &&
         !['graphInput', 'graphOutput', 'note'].includes(
           selectedElement.type,

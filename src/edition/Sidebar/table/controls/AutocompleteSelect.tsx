@@ -26,6 +26,7 @@ function AutocompleteSelect(props: CustomTableCellProps) {
           );
         }}
         value={(row[name] as string) || ''}
+        inputValue={(row[name] as string) || ''}
         onChange={(e, val) =>
           onChange({ target: { value: val, name } }, row, index)
         }
