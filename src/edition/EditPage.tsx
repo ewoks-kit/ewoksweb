@@ -1,12 +1,9 @@
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import { useReactFlow } from 'reactflow';
 
-import { useTasks } from '../api/tasks';
-import { fetchWorkflow } from '../api/workflows';
 import ErrorFallback from '../general/ErrorFallback';
 import useSnackbarStore from '../store/useSnackbarStore';
-import useStore from '../store/useStore';
-import useWorkflowToRestoreId from '../store/useWorkflowToRestoreId';
+import useWorkflowToRestore from '../store/useWorkflowToRestore';
 import SuspenseBoundary from '../suspense/SuspenseBoundary';
 import { textForError } from '../utils';
 import Canvas from './Canvas/Canvas';
@@ -17,33 +14,22 @@ import TopAppBar from './TopAppBar/TopAppBar';
 
 export default function EditPage() {
   const rfInstance = useReactFlow();
-  const tasks = useTasks();
+  const workflowToRestore = useWorkflowToRestore((state) => state.graph);
 
-  const workflowToRestoreId = useWorkflowToRestoreId((state) => state.id);
-  const resetWorkflowToRestoreId = useWorkflowToRestoreId(
-    (state) => state.resetId,
-  );
-
-  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
-  if (workflowToRestoreId) {
-    const restoreWorkflow = async () => {
-      try {
-        const { data: graph } = await fetchWorkflow(workflowToRestoreId);
-        setRootWorkflow(graph, rfInstance, tasks, 'fromServer');
-      } catch (error) {
-        showErrorMsg(
-          textForError(
-            error,
-            'Error in retrieving workflow. Please check connectivity with the server!',
-          ),
-        );
-      } finally {
-        resetWorkflowToRestoreId();
-      }
-    };
-    restoreWorkflow();
+  if (workflowToRestore) {
+    try {
+      rfInstance.setNodes(workflowToRestore.nodes);
+      rfInstance.setEdges(workflowToRestore.links);
+    } catch (error) {
+      showErrorMsg(
+        textForError(
+          error,
+          'Error in retrieving workflow. Please check connectivity with the server!',
+        ),
+      );
+    }
   }
 
   return (
