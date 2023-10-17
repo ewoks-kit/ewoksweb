@@ -6,7 +6,8 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import type { ChangeEvent } from 'react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+import React from 'react';
 import type {
   Condition,
   DefaultInput,
@@ -42,13 +43,13 @@ interface DialogContent {
 
 // The table where lines can be added where type is selected and appropriate values are given to name and value.
 function EditableTable(props: EditableTableProps) {
+  const { defaultValues, headers, disable, onRowAdd } = props;
+
   const [rows, setRows] = React.useState<EditableTableRow[]>([]);
   const [typeOfInputs, setTypeOfInputs] = React.useState<string[]>([]);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<DialogContent>();
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
-
-  const { defaultValues, headers, disable, onRowAdd } = props;
 
   useEffect(() => {
     setTypeOfInputs(defaultValues.map(getType));
