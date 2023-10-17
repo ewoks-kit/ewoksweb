@@ -1,10 +1,10 @@
 import type { SetState } from 'zustand';
 
-import type { GraphRF, State } from '../types';
+import type { Graph, State } from '../types';
 
 export interface LoadedGraphsSlice {
-  loadedGraphs: Map<string, GraphRF>;
-  addLoadedGraph: (newGraph: GraphRF) => void;
+  loadedGraphs: Map<string, Graph>;
+  addLoadedGraph: (newGraph: Graph) => void;
   resetLoadedGraphs: () => void;
 }
 

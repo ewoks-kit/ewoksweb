@@ -1,6 +1,6 @@
 import type { Edge, Node } from 'reactflow';
 
-import type { SelectedElementRF } from '../../../types';
+import type { SelectedElement } from '../../../types';
 import { isNodeRF } from '../../../utils/typeGuards';
 import sidebarStyle from '../sidebarStyle';
 import EditGraphStyle from './EditGraphStyle';
@@ -33,9 +33,7 @@ function getSectionContent(selectedElement: Node | Edge | undefined): Content {
 }
 
 // DOC: For editing the style of nodes and links
-export default function EditElementStyle({
-  selectedElement,
-}: SelectedElementRF) {
+export default function EditElementStyle({ selectedElement }: SelectedElement) {
   const { title, EditComponent } = getSectionContent(selectedElement);
 
   return (

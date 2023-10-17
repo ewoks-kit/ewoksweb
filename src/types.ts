@@ -12,26 +12,26 @@ export enum GraphFormAction {
   newGraphOrOverwrite = 'newGraphOrOverwrite',
 }
 
-export interface GraphNodes {
+export interface InputOutputNodeAndLink {
   id: string;
   node: string;
   sub_node?: string;
-  link_attributes?: InOutLinkAttributes;
-  uiProps?: InOutNodesUiProps;
+  link_attributes?: InputOutputLinkAttributes;
+  uiProps?: InputOutputUiProps;
 }
 
 // TODO: examine with ewoks if all the following are needed in an InOutLink
-export interface InOutLinkAttributes {
+export interface InputOutputLinkAttributes {
   label?: string;
   comment?: string;
-  conditions?: ConditionEwoks[];
-  data_mapping?: DataMappingEwoks[];
+  conditions?: EwoksCondition[];
+  data_mapping?: EwoksDataMapping[];
   map_all_data?: boolean;
   on_error?: boolean;
   required?: boolean;
 }
 
-export interface InOutNodesUiProps {
+export interface InputOutputUiProps {
   label?: string;
   position?: XYPosition;
   style?: LinkStyle;
@@ -49,20 +49,14 @@ export interface GraphDetails {
   id: string;
   label?: string;
   category?: string;
-  input_nodes?: GraphNodes[];
-  output_nodes?: GraphNodes[];
+  input_nodes?: InputOutputNodeAndLink[];
+  output_nodes?: InputOutputNodeAndLink[];
   uiProps?: GraphUiProps;
   keywords?: object;
   input_schema?: object;
   ui_schema?: object;
   execute_arguments?: object;
   worker_options?: object;
-}
-
-export interface DialogParams {
-  open: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  content: any;
 }
 
 export interface EwoksEvent {
@@ -93,7 +87,7 @@ export interface State
 
 export interface Action {
   action: string;
-  graph: GraphRF;
+  graph: Graph;
 }
 
 export type TaskType =
@@ -118,17 +112,16 @@ export interface Task {
   output_names?: string[];
 }
 
-export interface Inputs {
+export interface DefaultInput {
   id?: string;
   name: string | number;
   value: unknown;
   type?: string;
 }
 
-export interface InputsEwoks extends Omit<Inputs, 'id'> {}
+export interface EwoksDefaultInput extends Omit<DefaultInput, 'id' | 'type'> {}
 
 export interface GraphUiProps {
-  type?: string;
   comment?: string;
   notes?: Note[];
 }
@@ -147,7 +140,7 @@ export interface Note {
   colorBorder?: string;
 }
 
-export interface DataMappingEwoks {
+export interface EwoksDataMapping {
   source_output?: string | number;
   target_input?: string | number;
 }
@@ -158,7 +151,7 @@ export interface DataMapping {
   name?: string;
 }
 
-export interface ConditionEwoks {
+export interface EwoksCondition {
   source_output?: string | number;
   value: unknown;
 }
@@ -170,7 +163,7 @@ export interface Condition {
   type?: string;
 }
 
-export interface DefaultErrorAttributes<T = DataMapping | DataMappingEwoks> {
+export interface DefaultErrorAttributes<T = DataMapping | EwoksDataMapping> {
   map_all_data?: boolean;
   data_mapping?: T[];
 }
@@ -181,10 +174,10 @@ export interface EwoksNode {
   task_identifier: string;
   task_type: TaskType;
   task_generator?: string;
-  default_inputs?: Inputs[];
+  default_inputs?: EwoksDefaultInput[];
   inputs_complete?: boolean;
   default_error_node?: boolean;
-  default_error_attributes?: DefaultErrorAttributes<DataMappingEwoks>;
+  default_error_attributes?: DefaultErrorAttributes<EwoksDataMapping>;
   uiProps?: EwoksNodeUiProps;
 }
 
@@ -199,8 +192,8 @@ export interface EwoksNodeUiProps {
   nodeWidth?: number;
   task_category?: string;
   moreHandles?: boolean;
-  inputs?: OutputsInputsSub[];
-  outputs?: OutputsInputsSub[];
+  inputs?: SubgraphOutputsInputs[];
+  outputs?: SubgraphOutputsInputs[];
 }
 
 export interface EwoksLink {
@@ -208,21 +201,21 @@ export interface EwoksLink {
   sub_source?: string;
   target: string;
   sub_target?: string;
-  data_mapping?: DataMappingEwoks[];
+  data_mapping?: EwoksDataMapping[];
   map_all_data?: boolean;
-  conditions?: ConditionEwoks[];
+  conditions?: EwoksCondition[];
   required?: boolean;
   on_error?: boolean;
-  uiProps?: UiPropsLinks;
+  uiProps?: LinkUiProps;
   startEnd?: boolean;
 }
 
-export interface OutputsInputsSub {
+export interface SubgraphOutputsInputs {
   label: string;
   positionY?: number;
 }
 
-export interface RFNodeUiProps {
+export interface NodeUiProps {
   icon?: string;
   style?: CSSProperties;
   withImage?: boolean;
@@ -231,11 +224,11 @@ export interface RFNodeUiProps {
   nodeWidth?: number;
   moreHandles?: boolean;
   // To position inputs-outputs of subgraphs in a graph
-  inputs?: OutputsInputsSub[];
-  outputs?: OutputsInputsSub[];
+  inputs?: SubgraphOutputsInputs[];
+  outputs?: SubgraphOutputsInputs[];
 }
 
-export interface RFNodeTaskProperties {
+export interface NodeTaskProperties {
   task_type: TaskType;
   task_identifier: string;
   task_category?: string;
@@ -244,23 +237,23 @@ export interface RFNodeTaskProperties {
   required_input_names?: string[];
 }
 
-export interface RFNodeEwoksProperties {
+export interface EwoksNodeProperties {
   label?: string;
-  default_inputs?: Inputs[];
+  default_inputs?: DefaultInput[];
   inputs_complete?: boolean;
   task_generator?: string;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes<DataMapping>;
 }
 
-export interface EwoksRFNodeData {
-  task_props: RFNodeTaskProperties;
-  ewoks_props: RFNodeEwoksProperties;
-  ui_props: RFNodeUiProps;
+export interface NodeData {
+  task_props: NodeTaskProperties;
+  ewoks_props: EwoksNodeProperties;
+  ui_props: NodeUiProps;
   comment?: string;
 }
 
-export type EwoksRFNode = Node<EwoksRFNodeData>;
+export type RFNode = Node<NodeData>;
 // From new reactFlow11:
 // width?: number | null; // what is their functionality?
 // height?: number | null;
@@ -304,7 +297,7 @@ export interface CustomTableCellProps {
   ): void;
 }
 
-export interface EwoksRFLinkData {
+export interface LinkData {
   data_mapping?: DataMapping[];
   comment?: string;
   conditions?: Condition[];
@@ -324,8 +317,9 @@ export interface EwoksRFLinkData {
 // For data still being optional in Edge
 // https://github.com/wbkd/react-flow/issues/1679#issuecomment-1438743754
 type NoDataEdge = Omit<Edge, 'data'>;
-export interface EwoksRFLink extends NoDataEdge {
-  data: EwoksRFLinkData;
+
+export interface Link extends NoDataEdge {
+  data: LinkData;
 }
 
 export interface LabelBgStyle {
@@ -343,7 +337,7 @@ export interface LabelStyle {
   fontSize?: number;
 }
 
-export interface UiPropsLinks {
+export interface LinkUiProps {
   label?: string;
   type?: string;
   comment?: string;
@@ -358,13 +352,13 @@ export interface UiPropsLinks {
   getAroundProps?: { x?: number; y?: number };
 }
 
-export interface GraphRF {
+export interface Graph {
   graph: GraphDetails;
-  nodes: EwoksRFNode[];
-  links: EwoksRFLink[];
+  nodes: RFNode[];
+  links: Link[];
 }
 
-export interface GraphEwoks {
+export interface Workflow {
   graph: GraphDetails;
   nodes: EwoksNode[];
   links: EwoksLink[];
@@ -398,14 +392,5 @@ export interface filterParams {
 }
 
 export interface SelectedElement {
-  type: 'graph' | 'node' | 'edge';
-  id: string;
-}
-
-export interface SelectedElementNode extends SelectedElement {
-  type: 'node';
-}
-
-export interface SelectedElementRF {
   selectedElement: Node | Edge | undefined;
 }

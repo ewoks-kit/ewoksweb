@@ -1,9 +1,9 @@
 import type {
-  EwoksRFLink,
-  EwoksRFNode,
+  Graph,
   GraphDetails,
-  GraphNodes,
-  GraphRF,
+  InputOutputNodeAndLink,
+  Link,
+  RFNode,
 } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { isString } from './typeGuards';
@@ -17,9 +17,9 @@ import {
 
 // DOC: Calculate the ewoks input_nodes and output_nodes within the graph
 // from the nodes of the graphRF model with types graphInput, graphOutput
-export function calcEwoksGraphProp(graph: GraphRF): GraphDetails {
-  let input_nodes: GraphNodes[] = [];
-  let output_nodes: GraphNodes[] = [];
+export function calcEwoksGraphProp(graph: Graph): GraphDetails {
+  let input_nodes: InputOutputNodeAndLink[] = [];
+  let output_nodes: InputOutputNodeAndLink[] = [];
 
   graph.nodes.forEach((nod) => {
     if (nod.data.task_props.task_type === 'graphInput') {
@@ -82,11 +82,11 @@ export function calcEwoksGraphProp(graph: GraphRF): GraphDetails {
 
 function calcInOutNodes(
   inputOrOutput: string,
-  nod: EwoksRFNode,
-  graph_nodes: EwoksRFNode[],
-  graph_links: EwoksRFLink[],
-): GraphNodes[] {
-  const nodes: GraphNodes[] = [];
+  nod: RFNode,
+  graph_nodes: RFNode[],
+  graph_links: Link[],
+): InputOutputNodeAndLink[] {
+  const nodes: InputOutputNodeAndLink[] = [];
 
   let nodesNamesConnectedTo: string[] = [];
 
@@ -106,7 +106,7 @@ function calcInOutNodes(
   }
 
   // DOC: use an array for all nodes although ewoks allows only one for now
-  const nodeObjConnectedTo: EwoksRFNode[] = [];
+  const nodeObjConnectedTo: RFNode[] = [];
   for (const nodesNames of nodesNamesConnectedTo) {
     const nodeInGraph = graph_nodes.find((node) => nodesNames === node.id);
     if (nodeInGraph) {
@@ -141,12 +141,12 @@ function calcInOutNodes(
 
 function calcNodeProps(
   isGraph: boolean,
-  nod: EwoksRFNode,
-  nodConnected: EwoksRFNode,
-  graph_links: EwoksRFLink[],
+  nod: RFNode,
+  nodConnected: RFNode,
+  graph_links: Link[],
   link_index: number,
   inputOrOutput: string,
-): GraphNodes {
+): InputOutputNodeAndLink {
   const link = graph_links[link_index];
 
   const lData = link.data;

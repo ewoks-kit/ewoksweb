@@ -1,12 +1,12 @@
 import type { Connection, Edge } from 'reactflow';
 
-import type { EwoksRFNode, EwoksRFNodeData } from '../types';
+import type { NodeData, RFNode } from '../types';
 
 export default function isValidLink(
   connection: Connection,
-  nodes: EwoksRFNode[],
+  nodes: RFNode[],
   graphLinks: Edge[],
-  nodesData?: Map<string, EwoksRFNodeData>,
+  nodesData?: Map<string, NodeData>,
   oldEdge?: Edge,
 ): { isValid: boolean; reason: string } {
   let isValid = true;

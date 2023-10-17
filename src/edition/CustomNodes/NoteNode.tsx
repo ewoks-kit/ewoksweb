@@ -1,11 +1,11 @@
 import type { NodeProps } from 'reactflow';
 
 import useNodeDataStore from '../../store/useNodeDataStore';
-import type { EwoksRFNodeData } from '../../types';
+import type { NodeData } from '../../types';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
 import { style } from './nodeStyles';
 
-type NoteProps = NodeProps<EwoksRFNodeData>;
+type NoteProps = NodeProps<NodeData>;
 
 function NoteNode(args: NoteProps) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));

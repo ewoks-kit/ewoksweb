@@ -4,14 +4,14 @@ import { Handle, Position } from 'reactflow';
 
 import useNodeDataStore from '../../store/useNodeDataStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import type { EwoksRFNodeData } from '../../types';
+import type { NodeData } from '../../types';
 import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
 import NodeIcon from './NodeIcon';
 import NodeLabel from './NodeLabel';
 import { contentStyle, style } from './nodeStyles';
 
-function GraphInOutNode(args: NodeProps<EwoksRFNodeData>) {
+function GraphInOutNode(args: NodeProps<NodeData>) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
   assertNodeDataDefined(nodeData, args.id);
 

@@ -1,10 +1,10 @@
-import type { SelectedElementRF } from '../../../types';
+import type { SelectedElement } from '../../../types';
 import { isEdgeRF, isNodeRF } from '../../../utils/typeGuards';
 import GraphDetails from './GraphDetails';
 import LinkDetails from './LinkDetails';
 import NodeDetails from './NodeDetails';
 
-function ElementDetails({ selectedElement }: SelectedElementRF) {
+function ElementDetails({ selectedElement }: SelectedElement) {
   return (
     <form noValidate autoComplete="off" style={{ width: '100%' }}>
       {!selectedElement ? (

@@ -6,13 +6,7 @@ import { enrichWithData } from './general/forms/utils';
 import orange3 from './images/orange3.png';
 import useEdgeDataStore from './store/useEdgeDataStore';
 import useNodeDataStore from './store/useNodeDataStore';
-import type {
-  EwoksRFLinkData,
-  EwoksRFNodeData,
-  GraphDetails,
-  GraphEwoks,
-  Icon,
-} from './types';
+import type { GraphDetails, Icon, LinkData, NodeData, Workflow } from './types';
 import { calcEwoksGraphProp } from './utils/CalcGraphInputsOutputs';
 import { calcNoteNodes } from './utils/calcNoteNodes';
 import { toEwoksLinks } from './utils/toEwoksLinks';
@@ -23,9 +17,9 @@ import { propIsEmpty } from './utils/utils';
 export const DEFAULT_ICON: Icon = { name: 'orange3.png', data_url: orange3 };
 
 export async function getSubgraphs(
-  graph: GraphEwoks,
+  graph: Workflow,
   loadedGraphsIds: string[],
-): Promise<GraphEwoks[]> {
+): Promise<Workflow[]> {
   const subgraphIds = graph.nodes
     .filter((nod) => nod.task_type === 'graph')
     .map((nod) => nod.task_identifier);
@@ -56,9 +50,9 @@ export function prepareEwoksGraph(
   graphInfo: GraphDetails,
   nodesWithoutData: Node[],
   edgesWithoutData: Edge[],
-  rawNodeData: Map<string, EwoksRFNodeData>,
-  rawLinkData: Map<string, EwoksRFLinkData>,
-): GraphEwoks {
+  rawNodeData: Map<string, NodeData>,
+  rawLinkData: Map<string, LinkData>,
+): Workflow {
   const nodeData = curateNodeData(rawNodeData);
   const nodes = nodesWithoutData.map((node) => enrichWithData(node, nodeData));
 
@@ -111,19 +105,19 @@ export function textForError(error: unknown, alternative: string): string {
   return alternative;
 }
 
-export function getNodesData(): Map<string, EwoksRFNodeData> {
+export function getNodesData(): Map<string, NodeData> {
   return useNodeDataStore.getState().nodesData;
 }
 
-export function getNodeData(id: string): EwoksRFNodeData | undefined {
+export function getNodeData(id: string): NodeData | undefined {
   return useNodeDataStore.getState().nodesData.get(id);
 }
 
-export function getEdgesData(): Map<string, EwoksRFLinkData> {
+export function getEdgesData(): Map<string, LinkData> {
   return useEdgeDataStore.getState().edgesData;
 }
 
-export function getEdgeData(id: string): EwoksRFLinkData | undefined {
+export function getEdgeData(id: string): LinkData | undefined {
   return useEdgeDataStore.getState().edgesData.get(id);
 }
 

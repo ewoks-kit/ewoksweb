@@ -1,10 +1,10 @@
 import type {
   DataMapping,
-  DataMappingEwoks,
   DefaultErrorAttributes,
-  EwoksRFNode,
-  GraphEwoks,
+  EwoksDataMapping,
+  RFNode,
   Task,
+  Workflow,
 } from '../types';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
@@ -13,10 +13,10 @@ import { createDataMappingData, notUndefinedValue } from './utils';
 
 // Accepts a GraphEwoks and returns an EwoksRFNode[]
 export function toRFEwoksNodes(
-  tempGraph: GraphEwoks,
-  newNodeSubgraphs: GraphEwoks[],
+  tempGraph: Workflow,
+  newNodeSubgraphs: Workflow[],
   tasks: Task[],
-): EwoksRFNode[] {
+): RFNode[] {
   const inNodeLinks = inNodesLinks(
     tempGraph.graph.input_nodes,
     tempGraph.nodes,
@@ -49,7 +49,7 @@ export function toRFEwoksNodes(
       task_generator,
       uiProps,
     }) => {
-      const node: EwoksRFNode = {
+      const node: RFNode = {
         id: id.toString(),
         type: task_type,
         data: {
@@ -105,7 +105,7 @@ export function toRFEwoksNodes(
 
 function calcDefaultErrorAttributes(
   default_error_attributes:
-    | DefaultErrorAttributes<DataMappingEwoks>
+    | DefaultErrorAttributes<EwoksDataMapping>
     | undefined,
 ): DefaultErrorAttributes<DataMapping> | undefined {
   return {

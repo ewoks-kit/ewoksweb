@@ -2,21 +2,15 @@ import type { Edge, Node } from 'reactflow';
 import { MarkerType } from 'reactflow';
 
 import type { TaskInfo } from '../edition/Canvas/models';
-import type {
-  EwoksRFLink,
-  EwoksRFLinkData,
-  EwoksRFNode,
-  EwoksRFNodeData,
-  GraphDetails,
-} from '../types';
+import type { GraphDetails, Link, LinkData, NodeData, RFNode } from '../types';
 
 export interface EwoksServerErrorResponse {
   response: { data: { message: string } };
 }
 
 export function isNode(
-  entity: EwoksRFNode | EwoksRFLink | GraphDetails | undefined,
-): entity is EwoksRFNode {
+  entity: RFNode | Link | GraphDetails | undefined,
+): entity is RFNode {
   return !!entity && 'position' in entity;
 }
 
@@ -29,13 +23,13 @@ export function isEdgeRF(entity: Node | Edge | undefined): entity is Edge {
 }
 
 export function isLink(
-  entity: EwoksRFNode | EwoksRFLink | GraphDetails | undefined,
-): entity is EwoksRFLink {
+  entity: RFNode | Link | GraphDetails | undefined,
+): entity is Link {
   return !!entity && 'source' in entity;
 }
 
 export function isGraphDetails(
-  entity: EwoksRFNode | EwoksRFLink | GraphDetails | undefined,
+  entity: RFNode | Link | GraphDetails | undefined,
 ): entity is GraphDetails {
   return !!entity && 'input_nodes' in entity;
 }
@@ -89,27 +83,23 @@ export function isMarkerType(val: string): val is MarkerType {
 }
 
 export function assertNodeDataDefined(
-  nodeData: EwoksRFNodeData | undefined,
+  nodeData: NodeData | undefined,
   nodeId: string,
-): asserts nodeData is EwoksRFNodeData extends undefined
-  ? never
-  : EwoksRFNodeData {
+): asserts nodeData is NodeData extends undefined ? never : NodeData {
   assertDefined(nodeData, `Node with id ${nodeId} has undefined data!`);
 }
 
 export function assertNodeDefined(
-  node: EwoksRFNode | undefined,
+  node: RFNode | undefined,
   nodeId: string,
-): asserts node is EwoksRFNode extends undefined ? never : EwoksRFNode {
+): asserts node is RFNode extends undefined ? never : RFNode {
   assertDefined(node, `Node with id ${nodeId} has undefined data!`);
 }
 
 export function assertEdgeDataDefined(
-  edgeData: EwoksRFLinkData | undefined,
+  edgeData: LinkData | undefined,
   edgeId: string,
-): asserts edgeData is EwoksRFLinkData extends undefined
-  ? never
-  : EwoksRFLinkData {
+): asserts edgeData is LinkData extends undefined ? never : LinkData {
   assertDefined(edgeData, `Edge with id ${edgeId} has undefined data!`);
 }
 
@@ -120,8 +110,8 @@ export function assertElementIsNodeType(
 }
 
 export function assertElementIsEdge(
-  entity: EwoksRFNode | EwoksRFLink | Edge | Node | GraphDetails | undefined,
-): asserts entity is EwoksRFLink extends undefined ? never : EwoksRFLink {
+  entity: RFNode | Link | Edge | Node | GraphDetails | undefined,
+): asserts entity is Link extends undefined ? never : Link {
   assertDefined(!!entity && 'source' in entity, `Edge is possibly undefined!`);
 }
 

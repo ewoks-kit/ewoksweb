@@ -1,9 +1,9 @@
 import type {
-  EwoksRFNode,
-  GraphEwoks,
-  GraphNodes,
-  OutputsInputsSub,
+  InputOutputNodeAndLink,
+  RFNode,
+  SubgraphOutputsInputs,
   Task,
+  Workflow,
 } from '../types';
 
 // DOC: locate the task and add required+optional-inputs + outputs
@@ -17,10 +17,10 @@ export function calcTask(tasks: Task[], task_identifier: string): Task {
 }
 
 export function calcInOutForSubgraph(
-  subgraphNode: GraphEwoks | undefined,
-): OutputsInputsSub[][] {
-  let inputsSub: OutputsInputsSub[] = [];
-  let outputsSub: OutputsInputsSub[] = [];
+  subgraphNode: Workflow | undefined,
+): SubgraphOutputsInputs[][] {
+  let inputsSub: SubgraphOutputsInputs[] = [];
+  let outputsSub: SubgraphOutputsInputs[] = [];
 
   if (subgraphNode?.graph.input_nodes) {
     const allInputsIds = subgraphNode.graph.input_nodes.map((nod) => nod.id);
@@ -50,7 +50,10 @@ export function calcInOutForSubgraph(
   return [inputsSub, outputsSub];
 }
 
-function calcLabel(inOut: GraphNodes, allInOutputsIds: string[]): string {
+function calcLabel(
+  inOut: InputOutputNodeAndLink,
+  allInOutputsIds: string[],
+): string {
   return `${inOut.uiProps?.label || inOut.id}${
     allInOutputsIds.includes(inOut.id) ? '_' : ':'
   } ${inOut.node || ''} ${inOut.sub_node ? `  -> ${inOut.sub_node}` : ''}`;
@@ -58,15 +61,15 @@ function calcLabel(inOut: GraphNodes, allInOutputsIds: string[]): string {
 
 export function addNodeProperties(
   task_type: string,
-  newNodeSubgraphs: GraphEwoks[],
+  newNodeSubgraphs: Workflow[],
   task_identifier: string,
-  node: EwoksRFNode,
+  node: RFNode,
   tasks: Task[],
   task_category: string,
-): EwoksRFNode {
+): RFNode {
   let tempNode = { ...node };
   if (task_type === 'graph') {
-    const subgraphNode: GraphEwoks | undefined = newNodeSubgraphs.find(
+    const subgraphNode: Workflow | undefined = newNodeSubgraphs.find(
       (subGr) => subGr.graph.id === task_identifier,
     );
 

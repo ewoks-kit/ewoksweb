@@ -16,7 +16,7 @@ import WorkflowDropdown from '../../general/WorkflowDropdown';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import type { GraphEwoks, Task } from '../../types';
+import type { Task, Workflow } from '../../types';
 import { textForError } from '../../utils';
 import { loadSubworkflow } from './utils';
 
@@ -35,7 +35,7 @@ export default function AddSubworkflowDialog(props: Props) {
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
-  async function loadSubgraphAsNode(subgraph: GraphEwoks) {
+  async function loadSubgraphAsNode(subgraph: Workflow) {
     const nodes = rfInstance.getNodes();
     const { nodeWithoutData, data } = await loadSubworkflow(
       subgraph,

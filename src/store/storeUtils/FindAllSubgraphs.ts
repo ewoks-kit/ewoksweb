@@ -1,14 +1,14 @@
-import type { GraphEwoks, GraphRF } from '../../types';
+import type { Graph, Workflow } from '../../types';
 import { getSubgraphs } from '../../utils';
 
 export async function findAllSubgraphs(
-  graphToSearch: GraphEwoks,
-  loadedGraphs: GraphRF[],
-): Promise<GraphEwoks[]> {
+  graphToSearch: Workflow,
+  loadedGraphs: Graph[],
+): Promise<Workflow[]> {
   // TODO: examine functionality because it seems to get again previously
   // fetched graphs. Also goes one by one awaiting. Promise.all better??
   let subsToGet = [graphToSearch];
-  const newNodeSubgraphs: GraphEwoks[] = [];
+  const newNodeSubgraphs: Workflow[] = [];
 
   const loadedGraphsIds = loadedGraphs.map((graph) => graph.graph.id);
 
@@ -16,7 +16,7 @@ export async function findAllSubgraphs(
   while (subsToGet.length > 0) {
     // Get for the first in subsToGet all subgraphs
     // eslint-disable-next-line no-await-in-loop
-    const allGraphSubs: GraphEwoks[] = await getSubgraphs(
+    const allGraphSubs: Workflow[] = await getSubgraphs(
       subsToGet[0],
       loadedGraphsIds,
     );

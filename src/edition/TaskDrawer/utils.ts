@@ -4,27 +4,27 @@ import { Position } from 'reactflow';
 import { findAllSubgraphs } from '../../store/storeUtils/FindAllSubgraphs';
 import useStore from '../../store/useStore';
 import type {
-  EwoksRFNode,
-  EwoksRFNodeData,
-  GraphEwoks,
-  GraphNodes,
+  InputOutputNodeAndLink,
+  NodeData,
+  RFNode,
   Task,
+  Workflow,
 } from '../../types';
 import { toRFEwoksLinks } from '../../utils/toRFEwoksLinks';
 import { toRFEwoksNodes } from '../../utils/toRFEwoksNodes';
 import { generateUniqueNodeId } from '../../utils/utils';
 
 export async function loadSubworkflow(
-  subGraph: GraphEwoks,
+  subGraph: Workflow,
   nodes: Node[],
   links: Edge[],
   position: XYPosition,
   tasks: Task[],
-): Promise<{ nodeWithoutData: Node; data: EwoksRFNodeData }> {
+): Promise<{ nodeWithoutData: Node; data: NodeData }> {
   const { loadedGraphs, addLoadedGraph } = useStore.getState();
 
   // 1. search for all subgraphs in the added subgraph (async)
-  const newNodeSubgraphs: GraphEwoks[] = await findAllSubgraphs(subGraph, [
+  const newNodeSubgraphs: Workflow[] = await findAllSubgraphs(subGraph, [
     ...loadedGraphs.values(),
   ]);
 
@@ -39,7 +39,7 @@ export async function loadSubworkflow(
   });
 
   // 3. Create a new node that is a subgraph
-  let newNode = {} as EwoksRFNode;
+  let newNode = {} as RFNode;
 
   const inputsSub = subGraph.graph.input_nodes?.map((input) => {
     return {
@@ -93,7 +93,7 @@ export async function loadSubworkflow(
   return { nodeWithoutData: nodeWithoutData as Node, data };
 }
 
-function calcLabel(inputOutput: GraphNodes): string {
+function calcLabel(inputOutput: InputOutputNodeAndLink): string {
   return `${inputOutput.uiProps?.label ?? inputOutput.id}: ${
     inputOutput.node
   } ${inputOutput.sub_node ? ` -> ${inputOutput.sub_node}` : ''}`;

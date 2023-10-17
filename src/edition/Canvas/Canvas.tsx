@@ -17,7 +17,7 @@ import ReactFlow, {
   useReactFlow,
 } from 'reactflow';
 import { useStoreApi } from 'reactflow';
-import type { EwoksRFNode, EwoksRFNodeData, Task } from 'types';
+import type { NodeData, RFNode, Task } from 'types';
 
 import { useTasks } from '../../api/tasks';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
@@ -175,11 +175,11 @@ function Canvas() {
         ? calcNewId('Note', nodesIds)
         : calcNewId(task_identifier || 'Node', nodesIds);
 
-    const newNode: EwoksRFNode = {
+    const newNode: RFNode = {
       id: newId,
       type: task_type,
       position,
-      data: {} as EwoksRFNodeData,
+      data: {} as NodeData,
     };
 
     setNodeData(newId, {
@@ -311,7 +311,7 @@ function Canvas() {
       const nodeData = getNodeData(selectedNode.id);
       assertNodeDataDefined(nodeData, selectedNode.id);
 
-      const newClone: EwoksRFNode = {
+      const newClone: RFNode = {
         ...node,
         data: nodeData,
         id: calcNewId(selectedNode.id, nodesIds),
