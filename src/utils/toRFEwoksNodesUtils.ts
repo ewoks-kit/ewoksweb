@@ -1,6 +1,6 @@
 import type {
   InputOutputNodeAndLink,
-  RFNode,
+  NodeWithData,
   SubgraphOutputsInputs,
   Task,
   Workflow,
@@ -63,10 +63,10 @@ export function addNodeProperties(
   task_type: string,
   newNodeSubgraphs: Workflow[],
   task_identifier: string,
-  node: RFNode,
+  node: NodeWithData,
   tasks: Task[],
   task_category: string,
-): RFNode {
+): NodeWithData {
   let tempNode = { ...node };
   if (task_type === 'graph') {
     const subgraphNode: Workflow | undefined = newNodeSubgraphs.find(
