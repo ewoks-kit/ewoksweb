@@ -17,7 +17,7 @@ import ReactFlow, {
   useReactFlow,
 } from 'reactflow';
 import { useStoreApi } from 'reactflow';
-import type { NodeData, RFNode, Task } from 'types';
+import type { NodeData, Task } from 'types';
 
 import { useTasks } from '../../api/tasks';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
@@ -175,7 +175,7 @@ function Canvas() {
         ? calcNewId('Note', nodesIds)
         : calcNewId(task_identifier || 'Node', nodesIds);
 
-    const newNode: RFNode = {
+    const newNode: Node = {
       id: newId,
       type: task_type,
       position,
@@ -233,7 +233,7 @@ function Canvas() {
     const newLink = addConnectionToGraph(params, getNodesData());
 
     if (newLink) {
-      setEdgeData(newLink.id, newLink.data);
+      setEdgeData(newLink.id, newLink.data || {});
       setEdges([...getEdges(), newLink]);
     }
   };
@@ -311,9 +311,9 @@ function Canvas() {
       const nodeData = getNodeData(selectedNode.id);
       assertNodeDataDefined(nodeData, selectedNode.id);
 
-      const newClone: RFNode = {
+      const newClone: Node = {
         ...node,
-        data: nodeData,
+        data: {},
         id: calcNewId(selectedNode.id, nodesIds),
         selected: false,
         position: {
@@ -323,7 +323,7 @@ function Canvas() {
       };
 
       setNodes([...getNodes(), newClone]);
-      setNodeData(newClone.id, newClone.data);
+      setNodeData(newClone.id, nodeData);
     }
   };
 

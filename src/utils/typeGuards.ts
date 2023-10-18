@@ -2,15 +2,21 @@ import type { Edge, Node } from 'reactflow';
 import { MarkerType } from 'reactflow';
 
 import type { TaskInfo } from '../edition/Canvas/models';
-import type { GraphDetails, Link, LinkData, NodeData, RFNode } from '../types';
+import type {
+  GraphDetails,
+  LinkData,
+  LinkWithData,
+  NodeData,
+  NodeWithData,
+} from '../types';
 
 export interface EwoksServerErrorResponse {
   response: { data: { message: string } };
 }
 
 export function isNode(
-  entity: RFNode | Link | GraphDetails | undefined,
-): entity is RFNode {
+  entity: NodeWithData | LinkWithData | GraphDetails | undefined,
+): entity is NodeWithData {
   return !!entity && 'position' in entity;
 }
 
@@ -23,13 +29,13 @@ export function isEdgeRF(entity: Node | Edge | undefined): entity is Edge {
 }
 
 export function isLink(
-  entity: RFNode | Link | GraphDetails | undefined,
-): entity is Link {
+  entity: NodeWithData | LinkWithData | GraphDetails | undefined,
+): entity is LinkWithData {
   return !!entity && 'source' in entity;
 }
 
 export function isGraphDetails(
-  entity: RFNode | Link | GraphDetails | undefined,
+  entity: NodeWithData | LinkWithData | GraphDetails | undefined,
 ): entity is GraphDetails {
   return !!entity && 'input_nodes' in entity;
 }
@@ -90,9 +96,9 @@ export function assertNodeDataDefined(
 }
 
 export function assertNodeDefined(
-  node: RFNode | undefined,
+  node: NodeWithData | undefined,
   nodeId: string,
-): asserts node is RFNode extends undefined ? never : RFNode {
+): asserts node is NodeWithData extends undefined ? never : NodeWithData {
   assertDefined(node, `Node with id ${nodeId} has undefined data!`);
 }
 
@@ -110,8 +116,8 @@ export function assertElementIsNodeType(
 }
 
 export function assertElementIsEdge(
-  entity: RFNode | Link | Edge | Node | GraphDetails | undefined,
-): asserts entity is Link extends undefined ? never : Link {
+  entity: NodeWithData | LinkWithData | Edge | Node | GraphDetails | undefined,
+): asserts entity is LinkWithData extends undefined ? never : LinkWithData {
   assertDefined(!!entity && 'source' in entity, `Edge is possibly undefined!`);
 }
 

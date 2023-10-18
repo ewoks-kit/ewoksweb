@@ -1,5 +1,11 @@
 import { defaultLinkStyle } from '../edition/Canvas/utils';
-import type { Condition, Link, LinkUiProps, Task, Workflow } from '../types';
+import type {
+  Condition,
+  LinkUiProps,
+  LinkWithData,
+  Task,
+  Workflow,
+} from '../types';
 import { findLinkInputs, findLinkOutputs } from './calcTasksForLink';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { inNodesLinks } from './inNodesLinks';
@@ -13,7 +19,7 @@ export function toRFEwoksLinks(
   tempGraph: Workflow,
   newNodeSubgraphs: Workflow[],
   tasks: Task[],
-): Link[] {
+): LinkWithData[] {
   let id = 0;
 
   // DOC: calculate the links from inputs-outputs of the Ewoks graph
@@ -55,7 +61,7 @@ export function toRFEwoksLinks(
         tasks,
       );
 
-      const link: Link = {
+      const link: LinkWithData = {
         id: `${source}:${uiProps?.sourceHandle ?? ''}->${target}:${
           uiProps?.targetHandle ?? ''
         }_${id++}`,

@@ -1,4 +1,4 @@
-import type { EwoksLink, Link } from '../types';
+import type { EwoksLink, LinkWithData } from '../types';
 import { propIsEmpty } from '../utils/utils';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { isString } from './typeGuards';
@@ -10,8 +10,10 @@ import {
 } from './utils';
 
 // EwoksRFLinks --> EwoksLinks for saving
-export function toEwoksLinks(links: Link[]): EwoksLink[] {
-  const tempLinks: Link[] = [...links].filter((link) => !link.data.startEnd);
+export function toEwoksLinks(links: LinkWithData[]): EwoksLink[] {
+  const tempLinks: LinkWithData[] = [...links].filter(
+    (link) => !link.data.startEnd,
+  );
 
   return tempLinks.map(
     ({

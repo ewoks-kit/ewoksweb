@@ -6,7 +6,6 @@ import useStore from '../../store/useStore';
 import type {
   InputOutputNodeAndLink,
   NodeData,
-  RFNode,
   Task,
   Workflow,
 } from '../../types';
@@ -39,8 +38,6 @@ export async function loadSubworkflow(
   });
 
   // 3. Create a new node that is a subgraph
-  let newNode = {} as RFNode;
-
   const inputsSub = subGraph.graph.input_nodes?.map((input) => {
     return {
       label: calcLabel(input),
@@ -59,26 +56,27 @@ export async function loadSubworkflow(
     subGraph.graph.label,
   );
 
-  newNode = {
+  const newNode: Node = {
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
     id: graphId,
     // TODO: Is this type the same with task_props.task_type? Is it used?
     type: 'graph',
     position,
-    data: {
-      task_props: {
-        task_type: 'graph',
-        task_identifier: subGraph.graph.id,
-      },
-      ui_props: {
-        ...(inputsSub && inputsSub.length > 0 && { inputs: inputsSub }),
-        ...(outputsSub && outputsSub.length > 0 && { outputs: outputsSub }),
-      },
+    data: {},
+  };
+  const nodeData: NodeData = {
+    task_props: {
+      task_type: 'graph',
+      task_identifier: subGraph.graph.id,
+    },
+    ui_props: {
+      ...(inputsSub && inputsSub.length > 0 && { inputs: inputsSub }),
+      ...(outputsSub && outputsSub.length > 0 && { outputs: outputsSub }),
+    },
 
-      ewoks_props: {
-        label: subGraph.graph.label,
-      },
+    ewoks_props: {
+      label: subGraph.graph.label,
     },
   };
 
@@ -89,8 +87,7 @@ export async function loadSubworkflow(
     links: toRFEwoksLinks(subGraph, newNodeSubgraphs, tasks),
   });
 
-  const { data, ...nodeWithoutData } = newNode;
-  return { nodeWithoutData: nodeWithoutData as Node, data };
+  return { nodeWithoutData: newNode, data: nodeData };
 }
 
 function calcLabel(inputOutput: InputOutputNodeAndLink): string {
