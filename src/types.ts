@@ -253,7 +253,7 @@ export interface NodeData {
   comment?: string;
 }
 
-export type NodeWithData = Node<NodeData>;
+export type NodeWithData = Node<NodeData> & { data: NodeData };
 export type RFNode = Omit<Node, 'data'>;
 // From new reactFlow11:
 // width?: number | null; // what is their functionality?
@@ -318,11 +318,7 @@ export interface LinkData {
 // For data still being optional in Edge
 // https://github.com/wbkd/react-flow/issues/1679#issuecomment-1438743754
 export type Link = Omit<Edge, 'data'>;
-export type LinkWithData = Edge<LinkData>;
-
-// export interface LinkWithData extends NoDataEdge {
-//   data: LinkData;
-// }
+export type LinkWithData = Edge<LinkData> & { data: LinkData };
 
 export interface LabelBgStyle {
   fill?: string;

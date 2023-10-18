@@ -57,4 +57,16 @@ Cypress.Commands.add('hasBreadcrumbs', (crumbs: string[]) => {
   });
 });
 
+Cypress.Commands.add('hasVisibleNodes', (expectedNumberOfNodes: number) => {
+  cy.findAllByTestId(/^rf__node/)
+    .should('have.length', expectedNumberOfNodes)
+    .should('be.visible');
+});
+
+Cypress.Commands.add('hasVisibleEdges', (expectedNumberOfEdges: number) => {
+  cy.findAllByTestId(/^rf__edge/)
+    .should('have.length', expectedNumberOfEdges)
+    .should('be.visible');
+});
+
 addWaitForStableDomCommand({ pollInterval: 300, timeout: 5000 });

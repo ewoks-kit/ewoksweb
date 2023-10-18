@@ -20,8 +20,8 @@ it('opens the tutorial_Graph on the canvas', () => {
   cy.loadGraph('tutorial_Graph');
 
   cy.hasBreadcrumbs(['tutorial_Graph']);
-  cy.get('.react-flow__node').should('have.length', 16);
-  cy.get('.react-flow__edge').should('have.length', 12);
+  cy.hasVisibleNodes(16);
+  cy.hasVisibleEdges(12);
 });
 
 // Skip this test until unsaved modifications can be properly tracked

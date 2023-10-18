@@ -1,4 +1,4 @@
-import type { Edge, Node, XYPosition } from 'reactflow';
+import type { Node, XYPosition } from 'reactflow';
 import { Position } from 'reactflow';
 
 import { findAllSubgraphs } from '../../store/storeUtils/FindAllSubgraphs';
@@ -6,6 +6,7 @@ import useStore from '../../store/useStore';
 import type {
   InputOutputNodeAndLink,
   NodeData,
+  RFNode,
   Task,
   Workflow,
 } from '../../types';
@@ -16,10 +17,9 @@ import { generateUniqueNodeId } from '../../utils/utils';
 export async function loadSubworkflow(
   subGraph: Workflow,
   nodes: Node[],
-  links: Edge[],
   position: XYPosition,
   tasks: Task[],
-): Promise<{ nodeWithoutData: Node; data: NodeData }> {
+): Promise<{ nodeWithoutData: RFNode; data: NodeData }> {
   const { loadedGraphs, addLoadedGraph } = useStore.getState();
 
   // 1. search for all subgraphs in the added subgraph (async)
@@ -56,14 +56,13 @@ export async function loadSubworkflow(
     subGraph.graph.label,
   );
 
-  const newNode: Node = {
+  const newNode: RFNode = {
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
     id: graphId,
     // TODO: Is this type the same with task_props.task_type? Is it used?
     type: 'graph',
     position,
-    data: {},
   };
   const nodeData: NodeData = {
     task_props: {

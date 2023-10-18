@@ -30,8 +30,8 @@ function GraphInOutNode(args: NodeProps<NodeData>) {
     <div className="node-content" style={{ borderColor }}>
       <Tooltip
         title={
-          args.data.comment ? (
-            <span style={style.comment}>{args.data.comment}</span>
+          nodeData.comment ? (
+            <span style={style.comment}>{nodeData.comment}</span>
           ) : (
             ''
           )

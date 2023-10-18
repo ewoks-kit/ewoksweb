@@ -17,7 +17,7 @@ import ReactFlow, {
   useReactFlow,
 } from 'reactflow';
 import { useStoreApi } from 'reactflow';
-import type { NodeData, Task } from 'types';
+import type { RFNode, Task } from 'types';
 
 import { useTasks } from '../../api/tasks';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
@@ -153,9 +153,6 @@ function Canvas() {
       task = {
         ...taskInfo,
         category: 'General',
-        optional_input_names: undefined,
-        output_names: undefined,
-        required_input_names: undefined,
       };
     } else {
       task = tasks.find((tas) => tas.task_identifier === task_identifier);
@@ -175,11 +172,10 @@ function Canvas() {
         ? calcNewId('Note', nodesIds)
         : calcNewId(task_identifier || 'Node', nodesIds);
 
-    const newNode: Node = {
+    const newNode: RFNode = {
       id: newId,
       type: task_type,
       position,
-      data: {} as NodeData,
     };
 
     setNodeData(newId, {
@@ -198,7 +194,7 @@ function Canvas() {
         ...(icon && { icon }),
       },
     });
-    addNodes(newNode);
+    addNodes(newNode as Node);
   };
 
   const onEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => {
@@ -233,7 +229,7 @@ function Canvas() {
     const newLink = addConnectionToGraph(params, getNodesData());
 
     if (newLink) {
-      setEdgeData(newLink.id, newLink.data || {});
+      setEdgeData(newLink.id, newLink.data);
       setEdges([...getEdges(), newLink]);
     }
   };
@@ -311,9 +307,8 @@ function Canvas() {
       const nodeData = getNodeData(selectedNode.id);
       assertNodeDataDefined(nodeData, selectedNode.id);
 
-      const newClone: Node = {
+      const newClone: RFNode = {
         ...node,
-        data: {},
         id: calcNewId(selectedNode.id, nodesIds),
         selected: false,
         position: {
@@ -322,7 +317,7 @@ function Canvas() {
         },
       };
 
-      setNodes([...getNodes(), newClone]);
+      setNodes([...getNodes(), newClone as Node]);
       setNodeData(newClone.id, nodeData);
     }
   };

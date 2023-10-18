@@ -149,7 +149,7 @@ function calcNodeProps(
 ): InputOutputNodeAndLink {
   const link = graph_links[link_index];
 
-  const lData = link.data || {};
+  const lData = link.data;
   const nData = nod.data;
   const nUiprops = nData.ui_props;
 
