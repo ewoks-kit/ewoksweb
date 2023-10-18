@@ -4,8 +4,8 @@ beforeEach(() => {
 
 it('navigates to a subgraph, a subsubgraph and back', () => {
   cy.hasBreadcrumbs(['tutorial_Graph']);
-  cy.get('.react-flow__node').should('have.length', 16);
-  cy.get('.react-flow__edge').should('have.length', 12);
+  cy.hasVisibleNodes(16);
+  cy.hasVisibleEdges(12);
 
   // Navigate to Editing-Graph-Node-Link subgraph
   cy.findByRole('button', {
@@ -14,8 +14,8 @@ it('navigates to a subgraph, a subsubgraph and back', () => {
   cy.waitForStableDOM();
 
   cy.hasBreadcrumbs(['tutorial_Graph', 'Editing-Graph-Node-Link']);
-  cy.get('.react-flow__node').should('have.length', 21);
-  cy.get('.react-flow__edge').should('have.length', 17);
+  cy.hasVisibleNodes(21);
+  cy.hasVisibleEdges(17);
 
   // Navigate to Styling-Nodes-Links subgraph
   cy.findByRole('button', {
@@ -28,16 +28,16 @@ it('navigates to a subgraph, a subsubgraph and back', () => {
     'Editing-Graph-Node-Link',
     'Styling-Nodes-Links',
   ]);
-  cy.get('.react-flow__node').should('have.length', 3);
-  cy.get('.react-flow__edge').should('have.length', 2);
+  cy.hasVisibleNodes(3);
+  cy.hasVisibleEdges(2);
 
   // Go back to tutorial graph
   cy.findByRole('link', { name: 'tutorial_Graph' }).click();
   cy.waitForStableDOM();
 
   cy.hasBreadcrumbs(['tutorial_Graph']);
-  cy.get('.react-flow__node').should('have.length', 16);
-  cy.get('.react-flow__edge').should('have.length', 12);
+  cy.hasVisibleNodes(16);
+  cy.hasVisibleEdges(12);
 });
 
 it('loads a different workflow even if inside a subgraph', () => {

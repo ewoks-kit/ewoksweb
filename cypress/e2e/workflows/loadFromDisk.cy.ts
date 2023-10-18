@@ -16,8 +16,8 @@ it('loads workflow from disk', () => {
   cy.waitForStableDOM();
 
   cy.hasBreadcrumbs(['workflow2']);
-  cy.get('.react-flow__node').should('have.length', 4);
-  cy.get('.react-flow__edge').should('have.length', 3);
+  cy.hasVisibleNodes(4);
+  cy.hasVisibleEdges(3);
 });
 
 it('leaves the original JSON untouched when saving on the server', () => {
