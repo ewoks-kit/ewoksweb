@@ -26,24 +26,31 @@ export default function EditPage() {
 
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
+  const queryParams = new URLSearchParams(window.location.search);
+  const workflowId = queryParams.get('workflow');
+
+  const restoreWorkflow = async (workflow: string) => {
+    try {
+      const { data: graph } = await fetchWorkflow(workflow);
+      setRootWorkflow(graph, rfInstance, tasks, 'fromServer');
+    } catch (error) {
+      showErrorMsg(
+        textForError(
+          error,
+          'Error in retrieving workflow. Please check connectivity with the server!',
+        ),
+      );
+    } finally {
+      resetWorkflowToRestoreId();
+    }
+  };
 
   if (workflowToRestoreId) {
-    const restoreWorkflow = async () => {
-      try {
-        const { data: graph } = await fetchWorkflow(workflowToRestoreId);
-        setRootWorkflow(graph, rfInstance, tasks, 'fromServer');
-      } catch (error) {
-        showErrorMsg(
-          textForError(
-            error,
-            'Error in retrieving workflow. Please check connectivity with the server!',
-          ),
-        );
-      } finally {
-        resetWorkflowToRestoreId();
-      }
-    };
-    restoreWorkflow();
+    restoreWorkflow(workflowToRestoreId);
+  }
+
+  if (workflowId) {
+    restoreWorkflow(workflowId);
   }
 
   return (
