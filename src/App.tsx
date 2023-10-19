@@ -20,9 +20,10 @@ function App() {
           <CssBaseline />
           <NavBar />
           <Routes>
-            <Route path="/" element={<Navigate to="/edit" replace />} />
+            <Route path="/edit?workflow=*" element={<EditRoute />} />
             <Route path="/edit" element={<EditRoute />} />
             <Route path="/monitor" element={<MonitorRoute />} />
+            <Route path="/*" element={<Navigate to="/edit" replace />} />
           </Routes>
         </BrowserRouter>
       </SocketClientProvider>

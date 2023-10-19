@@ -251,6 +251,12 @@ function Canvas() {
       return;
     }
     if (nodeData.task_props.task_type === 'graph') {
+      const newTabURL = `${window.location.origin}/edit?workflow=${node.id}`;
+      const newTab = window.open(newTabURL, '_blank');
+      if (newTab) {
+        newTab.focus();
+      }
+
       showWarningMsg('Any link changes in any subgraph will not be saved!');
       addLoadedGraph({
         graph: displayedWorkflowInfo,
