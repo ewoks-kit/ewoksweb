@@ -16,10 +16,7 @@ import { propIsEmpty } from './utils/utils';
 
 export const DEFAULT_ICON: Icon = { name: 'orange3.png', data_url: orange3 };
 
-export async function getSubgraphs(
-  graph: Workflow,
-  loadedGraphsIds: string[],
-): Promise<Workflow[]> {
+export async function getSubgraphs(graph: Workflow): Promise<Workflow[]> {
   const subgraphIds = graph.nodes
     .filter((nod) => nod.task_type === 'graph')
     .map((nod) => nod.task_identifier);
@@ -28,15 +25,13 @@ export async function getSubgraphs(
     return [];
   }
 
-  const graphIdsToFetch = subgraphIds.filter(
-    (id) =>
-      id && !loadedGraphsIds.some((loadedGraphsId) => id === loadedGraphsId),
-  );
+  // const graphIdsToFetch = subgraphIds.filter(
+  //   (id) =>
+  //     id && !loadedGraphsIds.some((loadedGraphsId) => id === loadedGraphsId),
+  // );
 
   try {
-    const subgraphResponses = await Promise.all(
-      graphIdsToFetch.map(fetchWorkflow),
-    );
+    const subgraphResponses = await Promise.all(subgraphIds.map(fetchWorkflow));
     return subgraphResponses.map((resp) => resp.data);
   } catch (error) {
     // TODO: remove after handling the error

@@ -1,7 +1,6 @@
 import type { Edge, Node, XYPosition } from 'reactflow';
 import { Position } from 'reactflow';
 
-import { findAllSubgraphs } from '../../store/storeUtils/FindAllSubgraphs';
 import useStore from '../../store/useStore';
 import type {
   InputOutputNodeAndLink,
@@ -10,6 +9,7 @@ import type {
   Task,
   Workflow,
 } from '../../types';
+import { getSubgraphs } from '../../utils';
 import { toRFEwoksLinks } from '../../utils/toRFEwoksLinks';
 import { toRFEwoksNodes } from '../../utils/toRFEwoksNodes';
 import { generateUniqueNodeId } from '../../utils/utils';
@@ -21,12 +21,10 @@ export async function loadSubworkflow(
   position: XYPosition,
   tasks: Task[],
 ): Promise<{ nodeWithoutData: Node; data: NodeData }> {
-  const { loadedGraphs, addLoadedGraph } = useStore.getState();
+  const { addLoadedGraph } = useStore.getState();
 
   // 1. search for all subgraphs in the added subgraph (async)
-  const newNodeSubgraphs: Workflow[] = await findAllSubgraphs(subGraph, [
-    ...loadedGraphs.values(),
-  ]);
+  const newNodeSubgraphs: Workflow[] = await getSubgraphs(subGraph);
 
   // 2. Put the newNodeSubgraphs into recent in their graphRF form (sync)
   newNodeSubgraphs.forEach((gr) => {
@@ -82,12 +80,7 @@ export async function loadSubworkflow(
     },
   };
 
-  // 4. Calculate the new graph given the subgraphs and added to loadedGraphs
-  addLoadedGraph({
-    graph: subGraph.graph,
-    nodes: toRFEwoksNodes(subGraph, newNodeSubgraphs, tasks),
-    links: toRFEwoksLinks(subGraph, newNodeSubgraphs, tasks),
-  });
+  // 4. Calculate the new graph given the subgraphs
 
   const { data, ...nodeWithoutData } = newNode;
   return { nodeWithoutData: nodeWithoutData as Node, data };
