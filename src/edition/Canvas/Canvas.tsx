@@ -307,7 +307,6 @@ function Canvas() {
       <AddSubworkflowDialog
         open={!!addSubworkflowEvent}
         position={addSubworkflowEvent?.position}
-        tasks={tasks}
         onClose={() => setSubworkflowEvent(undefined)}
       />
       {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions*/}

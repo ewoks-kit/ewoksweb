@@ -15,9 +15,5 @@ export default function TopWorkflowLabel() {
     );
   }
 
-  return (
-    <span className={styles.crumb}>
-      {displayedWorkflowInfo.label || displayedWorkflowInfo.id}
-    </span>
-  );
+  return <span>{displayedWorkflowInfo.label || displayedWorkflowInfo.id}</span>;
 }

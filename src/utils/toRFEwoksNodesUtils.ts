@@ -22,10 +22,11 @@ export function calcInOutForSubgraph(
   let inputsSub: SubgraphOutputsInputs[] = [];
   let outputsSub: SubgraphOutputsInputs[] = [];
 
-  if (subgraphNode?.graph.input_nodes) {
-    const allInputsIds = subgraphNode.graph.input_nodes.map((nod) => nod.id);
+  const inputNodes = subgraphNode?.graph.input_nodes;
+  if (inputNodes) {
+    const allInputsIds = inputNodes.map((nod) => nod.id);
 
-    inputsSub = subgraphNode.graph.input_nodes.map((input) => {
+    inputsSub = inputNodes.map((input) => {
       allInputsIds.shift();
 
       return {
@@ -35,9 +36,10 @@ export function calcInOutForSubgraph(
     });
   }
 
-  if (subgraphNode?.graph.output_nodes) {
-    const allOutputsIds = subgraphNode.graph.output_nodes.map((nod) => nod.id);
-    outputsSub = subgraphNode.graph.output_nodes.map((output) => {
+  const outputNodes = subgraphNode?.graph.output_nodes;
+  if (outputNodes) {
+    const allOutputsIds = outputNodes.map((nod) => nod.id);
+    outputsSub = outputNodes.map((output) => {
       allOutputsIds.shift();
 
       return {

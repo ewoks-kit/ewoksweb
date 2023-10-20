@@ -21,8 +21,8 @@ function ExecutionMenuItem() {
   }
 
   async function execute() {
-    const { loadedGraphs, rootWorkflowId } = useStore.getState();
-    if (loadedGraphs.size === 0) {
+    const { rootWorkflowId } = useStore.getState();
+    if (!rootWorkflowId) {
       showWarningMsg('Please open a workflow in the canvas to execute');
       return;
     }

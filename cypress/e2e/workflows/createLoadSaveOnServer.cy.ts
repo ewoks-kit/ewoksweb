@@ -19,7 +19,7 @@ it('displays the canvas', () => {
 it('opens the tutorial_Graph on the canvas', () => {
   cy.loadGraph('tutorial_Graph');
 
-  cy.hasBreadcrumbs(['tutorial_Graph']);
+  cy.hasNavBarLabel('tutorial_Graph');
   cy.hasVisibleNodes(16);
   cy.hasVisibleEdges(12);
 });
@@ -56,8 +56,8 @@ it('saves an empty workflow on the server and deletes it', () => {
 
   cy.loadGraph(id);
 
-  cy.hasBreadcrumbs([id]);
-  cy.findByLabelText('breadcrumb').within(() => {
+  cy.hasNavBarLabel(id);
+  cy.findByLabelText('Workflow title').within(() => {
     cy.contains('tutorial_Graph').should('not.exist');
   });
 

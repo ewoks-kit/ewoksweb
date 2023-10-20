@@ -2,7 +2,6 @@ import type { ReactFlowInstance } from 'reactflow';
 import type { GetState, SetState } from 'zustand';
 
 import type {
-  Graph,
   LinkData,
   NodeData,
   RFNode,

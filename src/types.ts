@@ -3,7 +3,6 @@ import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
 import type { Node } from 'reactflow';
 
 import type { DisplayedWorkflowInfoSlice } from './store/displayedWorkflowInfo';
-import type { LoadedGraphsSlice } from './store/loadedGraphs';
 import type { RootWorkflowSlice } from './store/rootWorkflow';
 
 export enum GraphFormAction {
@@ -80,10 +79,7 @@ export interface EwoksEvent {
   node_id?: string;
 }
 
-export interface State
-  extends DisplayedWorkflowInfoSlice,
-    LoadedGraphsSlice,
-    RootWorkflowSlice {}
+export interface State extends DisplayedWorkflowInfoSlice, RootWorkflowSlice {}
 
 export interface Action {
   action: string;

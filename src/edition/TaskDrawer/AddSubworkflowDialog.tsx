@@ -16,19 +16,18 @@ import WorkflowDropdown from '../../general/WorkflowDropdown';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import type { Task, Workflow } from '../../types';
+import type { Workflow } from '../../types';
 import { textForError } from '../../utils';
 import { loadSubworkflow } from './utils';
 
 interface Props {
   open: boolean;
-  tasks: Task[];
   onClose: () => void;
   position?: XYPosition;
 }
 
 export default function AddSubworkflowDialog(props: Props) {
-  const { onClose: handleClose, open, position, tasks } = props;
+  const { onClose: handleClose, open, position } = props;
   const fromDiskInputRef = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
 
@@ -42,8 +41,8 @@ export default function AddSubworkflowDialog(props: Props) {
       nodes,
       rfInstance.getEdges(),
       position || { x: 0, y: 0 },
-      tasks,
     );
+
     setNodeData(nodeWithoutData.id, data);
     rfInstance.setNodes([...nodes, nodeWithoutData]);
   }

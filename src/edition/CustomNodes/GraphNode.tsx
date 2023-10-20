@@ -4,7 +4,6 @@ import type { NodeProps } from 'reactflow';
 import { Handle, Position } from 'reactflow';
 
 import useNodeDataStore from '../../store/useNodeDataStore';
-import useStore from '../../store/useStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import type { NodeData } from '../../types';
 import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
@@ -23,7 +22,8 @@ function GraphNode(props: NodeProps<NodeData>) {
   // DOC: the subgraph is connected to the original graph through the task_identifier like
   // simple nodes and not through the id which is the unique in the current graph nodeId
 
-  // Find another way to see if it exists
+  // IMP: Find another way to see if it exists, probably when fetching the subgraphs
+  // and creating the node also attach the exists
   // const subgraphExistsOnServer = loadedGraphs.has(
   //   nodeData.task_props.task_identifier,
   // );

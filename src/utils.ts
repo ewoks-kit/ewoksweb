@@ -25,11 +25,6 @@ export async function getSubgraphs(graph: Workflow): Promise<Workflow[]> {
     return [];
   }
 
-  // const graphIdsToFetch = subgraphIds.filter(
-  //   (id) =>
-  //     id && !loadedGraphsIds.some((loadedGraphsId) => id === loadedGraphsId),
-  // );
-
   try {
     const subgraphResponses = await Promise.all(subgraphIds.map(fetchWorkflow));
     return subgraphResponses.map((resp) => resp.data);

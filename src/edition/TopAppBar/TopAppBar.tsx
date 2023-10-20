@@ -17,7 +17,7 @@ function TopAppBar() {
 
   return createPortal(
     <>
-      <h1 className={styles.crumbs}>
+      <h1 className={styles.crumbs} aria-label="Workflow title">
         <TopWorkflowLabel />
       </h1>
       <div className={styles.toolbar}>

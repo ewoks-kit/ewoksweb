@@ -23,7 +23,7 @@ it('should switch to monitor page', () => {
 
 it.skip('should restore an opened workflow when switching pages', () => {
   cy.loadGraph('tutorial_Graph');
-  cy.hasBreadcrumbs(['tutorial_Graph']);
+  cy.hasNavBarLabel('tutorial_Graph');
   cy.hasVisibleNodes(16);
   cy.hasVisibleEdges(12);
 
@@ -35,7 +35,7 @@ it.skip('should restore an opened workflow when switching pages', () => {
     cy.findByRole('link', { name: 'Edit' }).click(),
   );
   cy.waitForStableDOM();
-  cy.hasBreadcrumbs(['tutorial_Graph']);
+  cy.hasNavBarLabel('tutorial_Graph');
 
   cy.hasVisibleNodes(16);
   cy.hasVisibleEdges(12);
