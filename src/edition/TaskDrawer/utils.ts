@@ -6,6 +6,7 @@ import useStore from '../../store/useStore';
 import type {
   InputOutputNodeAndLink,
   NodeData,
+  RFNode,
   Task,
   Workflow,
 } from '../../types';
@@ -55,21 +56,13 @@ export async function loadSubworkflow(
     subGraph.graph.label,
   );
 
-<<<<<<< HEAD
-  const newNode: Node = {
-=======
   const newNode: RFNode = {
->>>>>>> ccb581eefa3cb7e8e50d92feed5f87611648f93e
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
     id: graphId,
     // TODO: Is this type the same with task_props.task_type? Is it used?
     type: 'graph',
     position,
-<<<<<<< HEAD
-    data: {},
-=======
->>>>>>> ccb581eefa3cb7e8e50d92feed5f87611648f93e
   };
   const nodeData: NodeData = {
     task_props: {

@@ -17,11 +17,7 @@ import ReactFlow, {
   useReactFlow,
 } from 'reactflow';
 import { useStoreApi } from 'reactflow';
-<<<<<<< HEAD
-import type { NodeData, Task } from 'types';
-=======
 import type { RFNode, Task } from 'types';
->>>>>>> ccb581eefa3cb7e8e50d92feed5f87611648f93e
 
 import { useTasks } from '../../api/tasks';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
@@ -176,7 +172,7 @@ function Canvas() {
         ? calcNewId('Note', nodesIds)
         : calcNewId(task_identifier || 'Node', nodesIds);
 
-    const newNode: Node = {
+    const newNode: RFNode = {
       id: newId,
       type: task_type,
       position,
@@ -233,7 +229,7 @@ function Canvas() {
     const newLink = addConnectionToGraph(params, getNodesData());
 
     if (newLink) {
-      setEdgeData(newLink.id, newLink.data || {});
+      setEdgeData(newLink.id, newLink.data);
       setEdges([...getEdges(), newLink]);
     }
   };
@@ -313,10 +309,6 @@ function Canvas() {
 
       const newClone: Node = {
         ...node,
-<<<<<<< HEAD
-        data: {},
-=======
->>>>>>> ccb581eefa3cb7e8e50d92feed5f87611648f93e
         id: calcNewId(selectedNode.id, nodesIds),
         selected: false,
         position: {
@@ -325,11 +317,7 @@ function Canvas() {
         },
       };
 
-<<<<<<< HEAD
       setNodes([...getNodes(), newClone]);
-=======
-      setNodes([...getNodes(), newClone as Node]);
->>>>>>> ccb581eefa3cb7e8e50d92feed5f87611648f93e
       setNodeData(newClone.id, nodeData);
     }
   };

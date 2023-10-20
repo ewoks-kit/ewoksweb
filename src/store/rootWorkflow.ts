@@ -4,15 +4,9 @@ import type { GetState, SetState } from 'zustand';
 
 import type {
   Graph,
-<<<<<<< HEAD
-  LinkData,
-  NodeData,
-  NodeWithData,
-=======
   Link,
   NodeWithData,
   RFNode,
->>>>>>> ccb581eefa3cb7e8e50d92feed5f87611648f93e
   State,
   Task,
   Workflow,
@@ -104,8 +98,6 @@ const rootWorkflow = (
       links: linksWithData,
     };
     get().addLoadedGraph(resultGraph);
-<<<<<<< HEAD
-=======
 
     const nodes: RFNode[] = nodesWithData.map((nod) => {
       const { data, ...nodeNoData } = nod;
@@ -116,7 +108,6 @@ const rootWorkflow = (
       const { data, ...linkNoData } = lin;
       return linkNoData;
     });
->>>>>>> ccb581eefa3cb7e8e50d92feed5f87611648f93e
 
     useNodeDataStore.getState().setDataFromNodes(resultGraph.nodes);
     useEdgeDataStore.getState().setDataFromEdges(resultGraph.links);

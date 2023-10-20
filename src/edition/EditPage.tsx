@@ -26,13 +26,11 @@ export default function EditPage() {
 
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
-  console.log(rfInstance, rfInstance.getNodes());
 
   if (workflowToRestoreId) {
     const restoreWorkflow = async () => {
       try {
         const { data: graph } = await fetchWorkflow(workflowToRestoreId);
-        console.log(workflowToRestoreId, graph);
         setRootWorkflow(graph, rfInstance, tasks, 'fromServer');
       } catch (error) {
         showErrorMsg(
