@@ -7,7 +7,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { useRef } from 'react';
-import type { XYPosition } from 'reactflow';
+import type { Node, XYPosition } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 
 import { fetchWorkflow } from '../../api/workflows';
@@ -40,12 +40,11 @@ export default function AddSubworkflowDialog(props: Props) {
     const { nodeWithoutData, data } = await loadSubworkflow(
       subgraph,
       nodes,
-      rfInstance.getEdges(),
       position || { x: 0, y: 0 },
       tasks,
     );
     setNodeData(nodeWithoutData.id, data);
-    rfInstance.setNodes([...nodes, nodeWithoutData]);
+    rfInstance.setNodes([...nodes, nodeWithoutData as Node]);
   }
 
   async function addSubgraph(id: string) {
