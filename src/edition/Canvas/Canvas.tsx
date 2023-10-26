@@ -26,7 +26,11 @@ import useSnackbarStore from '../../store/useSnackbarStore';
 import useStore from '../../store/useStore';
 import { getEdgesData, getNodeData, getNodesData } from '../../utils';
 import { calcNewId } from '../../utils/calcNewId';
-import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
+import {
+  DEFAULT_NODE_HEIGHT,
+  DEFAULT_NODE_VALUES,
+  DEFAULT_NODE_WIDTH,
+} from '../../utils/defaultValues';
 import isValidLink from '../../utils/IsValidLink';
 import {
   assertNodeDataDefined,
@@ -129,6 +133,8 @@ function Canvas() {
         left: 0,
         top: 0,
       };
+    const { left, top } = reactFlowBounds;
+    const { clientX, clientY } = event;
 
     const taskInfo = retrieveTaskInfo(event.dataTransfer);
     if (!taskInfo) {
@@ -137,11 +143,8 @@ function Canvas() {
     const { task_type, icon, task_identifier, category } = taskInfo;
 
     const position = rfInstance.project({
-      x:
-        event.clientX -
-        reactFlowBounds.left -
-        (DEFAULT_NODE_VALUES.uiProps.nodeWidth * rfInstance.getZoom()) / 2,
-      y: event.clientY - reactFlowBounds.top - (80 * rfInstance.getZoom()) / 2,
+      x: clientX - left - (DEFAULT_NODE_WIDTH * rfInstance.getZoom()) / 2,
+      y: clientY - top - (DEFAULT_NODE_HEIGHT * rfInstance.getZoom()) / 2,
     });
 
     if (task_type === 'subworkflow') {
