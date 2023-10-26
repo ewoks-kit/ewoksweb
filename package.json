@@ -13,6 +13,9 @@
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
+    "build:pages": "tsc && vite build --base=/ewoks/ewoksweb/",
+    "build:package": "VITE_SERVER_URL='/' pnpm build",
+    "preview": "vite preview",
     "postbuild": "node postbuild.js",
     "lint": "run-p lint:**",
     "lint:eslint": "eslint \"**/*.{ts,tsx,js,jsx}\" --max-warnings=0",

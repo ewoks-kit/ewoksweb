@@ -14,8 +14,10 @@ import layoutNewGraph from '../utils/layoutNewGraph';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
+import { validateWorkflow } from './storeUtils/validateWorkflow';
 import useEdgeDataStore from './useEdgeDataStore';
 import useNodeDataStore from './useNodeDataStore';
+import useSnackbarStore from './useSnackbarStore';
 
 export interface RootWorkflowSlice {
   rootWorkflowId: string;
@@ -41,6 +43,19 @@ const rootWorkflow = (
     tasks,
     source,
   ): Promise<void> => {
+    const { showErrorMsg } = useSnackbarStore.getState();
+
+    const validWorkflow = validateWorkflow(ewoksWorkflow);
+
+    if (!validWorkflow.valid) {
+      showErrorMsg(
+        `Error in workflow JSON description: ${
+          validWorkflow.invalidReason || ''
+        }`,
+      );
+      return;
+    }
+
     // 1. Initialize the canvas while working on the new graph
     get().resetDisplayedWorkflowInfo();
     get().resetLoadedGraphs();
@@ -92,8 +107,10 @@ const rootWorkflow = (
     };
     get().addLoadedGraph(resultGraph);
 
-    useNodeDataStore.getState().setDataFromNodes(resultGraph.nodes);
-    useEdgeDataStore.getState().setDataFromEdges(resultGraph.links);
+    if (resultGraph.nodes.length > 0) {
+      useNodeDataStore.getState().setDataFromNodes(resultGraph.nodes);
+      useEdgeDataStore.getState().setDataFromEdges(resultGraph.links);
+    }
 
     get().setDisplayedWorkflowInfo(resultGraph.graph);
 
