@@ -21,7 +21,7 @@ it('should switch to monitor page', () => {
   );
 });
 
-it.skip('should restore an opened workflow when switching pages', () => {
+it('should restore an opened workflow when switching pages', () => {
   cy.loadGraph('tutorial_Graph');
   cy.hasBreadcrumbs(['tutorial_Graph']);
   cy.hasVisibleNodes(16);
