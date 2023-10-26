@@ -96,13 +96,13 @@ test:
     - timeout 10s bash -c "while ! curl http://127.0.0.1:3000 -m1 -o/dev/null -s;do sleep 0.3;done"
     - pnpm cypress:run
 
-build:
+build-package:
   extends: .pnpm-base-build
   script:
     - python3 --version
     - python3 -m pip install --upgrade pip
     - python3 -m pip install --upgrade setuptools
-    - pnpm build
+    - pnpm build:package
     - python3 setup.py sdist
     - mv dist sdist
   after_script:
@@ -120,7 +120,7 @@ pages:
     VITE_ROUTER_BASE_DIR: ewoks/ewoksweb/
   extends: .pnpm-base-build
   script:
-    - pnpm build
+    - pnpm build:pages
     - rm -rf public
     - mv build public
   artifacts:
