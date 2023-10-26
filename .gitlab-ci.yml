@@ -120,7 +120,7 @@ pages:
     VITE_ROUTER_BASE_DIR: ewoks/ewoksweb/
   extends: .pnpm-base-build
   script:
-    - pnpm build
+    - pnpm build:pages
     - rm -rf public
     - mv build public
   artifacts:
