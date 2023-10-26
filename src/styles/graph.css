@@ -78,11 +78,11 @@
   padding: 1px;
 }
 
-.react-flow__arrowhead[id$='arrow'] polyline {
-  stroke: context-stroke;
+.react-flow__arrowhead[id$='1__type=arrow'] polyline {
+  stroke: context-stroke !important;
 }
 
-.react-flow__arrowhead[id$='arrowclosed'] polyline {
-  stroke: context-stroke;
-  fill: context-stroke;
+.react-flow__arrowhead[id$='1__type=arrowclosed'] polyline {
+  stroke: context-stroke !important;
+  fill: context-stroke !important;
 }
