@@ -28,7 +28,6 @@ import { getEdgesData, getNodeData, getNodesData } from '../../utils';
 import { calcNewId } from '../../utils/calcNewId';
 import {
   DEFAULT_NODE_HEIGHT,
-  DEFAULT_NODE_VALUES,
   DEFAULT_NODE_WIDTH,
 } from '../../utils/defaultValues';
 import isValidLink from '../../utils/IsValidLink';
@@ -133,8 +132,6 @@ function Canvas() {
         left: 0,
         top: 0,
       };
-    const { left, top } = reactFlowBounds;
-    const { clientX, clientY } = event;
 
     const taskInfo = retrieveTaskInfo(event.dataTransfer);
     if (!taskInfo) {
@@ -142,6 +139,8 @@ function Canvas() {
     }
     const { task_type, icon, task_identifier, category } = taskInfo;
 
+    const { left, top } = reactFlowBounds;
+    const { clientX, clientY } = event;
     const position = rfInstance.project({
       x: clientX - left - (DEFAULT_NODE_WIDTH * rfInstance.getZoom()) / 2,
       y: clientY - top - (DEFAULT_NODE_HEIGHT * rfInstance.getZoom()) / 2,
