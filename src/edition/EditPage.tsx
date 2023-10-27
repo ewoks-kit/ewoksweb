@@ -1,5 +1,5 @@
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../api/tasks';
@@ -20,6 +20,7 @@ export default function EditPage() {
   const rfInstance = useReactFlow();
   const tasks = useTasks();
   const [queryParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const workflowToRestoreId = useWorkflowToRestoreId((state) => state.id);
   const resetWorkflowToRestoreId = useWorkflowToRestoreId(
@@ -52,6 +53,7 @@ export default function EditPage() {
 
   if (workflowId) {
     restoreWorkflow(workflowId);
+    navigate(window.location.pathname, { replace: true });
   }
 
   return (
