@@ -21,7 +21,7 @@ function sortByCategory(
   return descriptions
     .map((desc) => ({
       ...desc,
-      category: desc.category || 'NoCategory',
+      category: desc.category || 'No category',
       label: desc.label || '',
     }))
     .sort(
@@ -34,7 +34,6 @@ function sortByCategory(
 function WorkflowDropdown(props: Props) {
   const { onChange, category, style } = props;
 
-  const [inputValue, setInputValue] = useState('');
   const [open, setOpen] = useState(false);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
@@ -83,15 +82,8 @@ function WorkflowDropdown(props: Props) {
         option.id === valueSelect.id
       }
       groupBy={(option) => option.category}
-      inputValue={inputValue}
-      onInputChange={(event, value) => {
-        setInputValue(value);
-      }}
       onChange={(event, newValue) => {
         onChange(newValue);
-        setTimeout(() => {
-          setInputValue('');
-        }, 200);
       }}
       getOptionLabel={(option) => option.label || option.id}
       placeholder="Quick open"
