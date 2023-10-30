@@ -50,11 +50,6 @@ export default function GetWorkflowFromServerDropdown() {
         onChange={(workflowDetails) => {
           setInputValue(workflowDetails);
         }}
-        style={{
-          minWidth: '220px',
-          backgroundColor: '#7685dd',
-          borderRadius: '4px',
-        }}
       />
     </>
   );
