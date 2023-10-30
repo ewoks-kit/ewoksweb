@@ -51,6 +51,7 @@ stages:
 
 flake8:
   stage: style
+  needs: []
   extends: .base
   before_script:
     - python3 -m pip install flake8
@@ -59,6 +60,7 @@ flake8:
 
 black:
   stage: style
+  needs: []
   extends: .base
   before_script:
     - python3 -m pip install black
@@ -67,6 +69,7 @@ black:
 
 lint:
   stage: style
+  needs: []
   extends: .pnpm-base
   script:
     - pnpm run lint
@@ -75,6 +78,7 @@ test:
   image: cypress/base:16.18.0
   stage: test
   extends: .pnpm-base
+  needs: []
   timeout: 15m
   before_script:
     # https://github.com/cypress-io/cypress-docker-images/issues/642 and https://github.com/cypress-io/cypress-docker-images/issues/649
@@ -87,13 +91,13 @@ test:
     - python3 -m pip install --upgrade setuptools
     - python3 -m pip install ewoksserver
     - python3 -m pip install --upgrade --pre ewoksserver
+    - pnpm build
     - ewoks-server -p 5000 -c ./pysrc/ewoksweb/tests/resources/config.py &
-    - VITE_SERVER_URL=http://127.0.0.1:5000 pnpm build
-    # Try to connect to server for 10s. If not, `timeout` will return non-zero so the CI fails.
-    - timeout 10s bash -c "while ! curl http://127.0.0.1:5000 -m1 -o/dev/null -s;do sleep 0.3;done"
+    # Try to connect to server for 20s. If not, `timeout` will return non-zero so the CI fails.
+    - timeout 20s bash -c "while ! curl http://127.0.0.1:5000 -m1 -o/dev/null -s;do sleep 0.3;done"
     # https://github.com/vercel/serve/issues/751
-    - pnpm dlx serve@13.0.4 --no-port-switching -s build -l 3000 &
-    - timeout 10s bash -c "while ! curl http://127.0.0.1:3000 -m1 -o/dev/null -s;do sleep 0.3;done"
+    - pnpm preview &
+    - timeout 20s bash -c "while ! curl http://127.0.0.1:3000 -m1 -o/dev/null -s;do sleep 0.3;done"
     - pnpm cypress:run
 
 build-package:
