@@ -92,7 +92,7 @@ test:
     - python3 -m pip install ewoksserver
     - python3 -m pip install --upgrade --pre ewoksserver
     - ewoks-server -p 5000 -c ./pysrc/ewoksweb/tests/resources/config.py &
-    - VITE_SERVER_URL=http://127.0.0.1:5000 pnpm build
+    - pnpm build
     # Try to connect to server for 10s. If not, `timeout` will return non-zero so the CI fails.
     - timeout 10s bash -c "while ! curl http://127.0.0.1:5000 -m1 -o/dev/null -s;do sleep 0.3;done"
     # https://github.com/vercel/serve/issues/751
