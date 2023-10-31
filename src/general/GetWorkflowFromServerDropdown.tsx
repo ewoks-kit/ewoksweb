@@ -46,6 +46,7 @@ export default function GetWorkflowFromServerDropdown() {
         disagreeCallback={() => setOpenAgreeDialog(false)}
       />
       <WorkflowDropdown
+        key={workflowId}
         onChange={(workflowDetails) => {
           setInputValue(workflowDetails);
         }}
