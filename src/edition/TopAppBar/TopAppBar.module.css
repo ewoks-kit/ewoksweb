@@ -16,10 +16,6 @@
   white-space: nowrap;
 }
 
-.crumb {
-  color: inherit !important;
-}
-
 .button:hover {
   background-color: #303f9f !important;
 }

@@ -1,17 +1,12 @@
 import type { Edge, Node, XYPosition } from 'reactflow';
 import { Position } from 'reactflow';
 
-import { findAllSubgraphs } from '../../store/storeUtils/FindAllSubgraphs';
-import useStore from '../../store/useStore';
 import type {
   InputOutputNodeAndLink,
   NodeData,
   RFNode,
-  Task,
   Workflow,
 } from '../../types';
-import { toRFEwoksLinks } from '../../utils/toRFEwoksLinks';
-import { toRFEwoksNodes } from '../../utils/toRFEwoksNodes';
 import { generateUniqueNodeId } from '../../utils/utils';
 
 export async function loadSubworkflow(
@@ -19,28 +14,7 @@ export async function loadSubworkflow(
   nodes: Node[],
   links: Edge[],
   position: XYPosition,
-  tasks: Task[],
 ): Promise<{ nodeWithoutData: Node; data: NodeData }> {
-  const { loadedGraphs, addLoadedGraph } = useStore.getState();
-
-  // 1. search for all subgraphs in the added subgraph (async)
-  const newNodeSubgraphs: Workflow[] = await findAllSubgraphs(subGraph, [
-    ...loadedGraphs.values(),
-  ]);
-
-  // 2. Put the newNodeSubgraphs into recent in their graphRF form (sync)
-  newNodeSubgraphs.forEach((gr) => {
-    // calculate the rfNodes using the fetched subgraphs
-    addLoadedGraph({
-      graph: gr.graph,
-      nodes: toRFEwoksNodes(gr, newNodeSubgraphs, tasks),
-      links: toRFEwoksLinks(gr, newNodeSubgraphs, tasks),
-    });
-  });
-
-  // 3. Create a new node that is a subgraph
-  let newNode = {} as RFNode;
-
   const inputsSub = subGraph.graph.input_nodes?.map((input) => {
     return {
       label: calcLabel(input),
@@ -59,7 +33,7 @@ export async function loadSubworkflow(
     subGraph.graph.label,
   );
 
-  newNode = {
+  const newNode: RFNode = {
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
     id: graphId,
@@ -81,13 +55,6 @@ export async function loadSubworkflow(
       },
     },
   };
-
-  // 4. Calculate the new graph given the subgraphs and added to loadedGraphs
-  addLoadedGraph({
-    graph: subGraph.graph,
-    nodes: toRFEwoksNodes(subGraph, newNodeSubgraphs, tasks),
-    links: toRFEwoksLinks(subGraph, newNodeSubgraphs, tasks),
-  });
 
   const { data, ...nodeWithoutData } = newNode;
   return { nodeWithoutData: nodeWithoutData as Node, data };

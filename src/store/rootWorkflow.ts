@@ -2,7 +2,6 @@ import type { ReactFlowInstance } from 'reactflow';
 import type { GetState, SetState } from 'zustand';
 
 import type {
-  Graph,
   LinkData,
   NodeData,
   RFNode,
@@ -10,10 +9,10 @@ import type {
   Task,
   Workflow,
 } from '../types';
+import { getSubgraphs } from '../utils';
 import layoutNewGraph from '../utils/layoutNewGraph';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
-import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
 import { validateWorkflow } from './storeUtils/validateWorkflow';
 import useEdgeDataStore from './useEdgeDataStore';
 import useNodeDataStore from './useNodeDataStore';
@@ -58,25 +57,11 @@ const rootWorkflow = (
 
     // 1. Initialize the canvas while working on the new graph
     get().resetDisplayedWorkflowInfo();
-    get().resetLoadedGraphs();
 
     // 2. Get node-subgraphs for the graph
-    const newNodeSubgraphs = await findAllSubgraphs(ewoksWorkflow, [
-      ...get().loadedGraphs.values(),
-    ]);
+    const newNodeSubgraphs = await getSubgraphs(ewoksWorkflow);
 
-    // 3. Put the newNodeSubgraphs into loadedGraphs in their Graph form (sync)
-    newNodeSubgraphs.forEach((gr) => {
-      // calculate the RFNodes using the fetched subgraphs
-      // nodes and edges stored with their data as EwoksRFNodes-Links
-      get().addLoadedGraph({
-        graph: gr.graph,
-        nodes: toRFEwoksNodes(gr, newNodeSubgraphs, tasks),
-        links: toRFEwoksLinks(gr, newNodeSubgraphs, tasks),
-      });
-    });
-
-    // 4. Calculate the new graph given the subgraphs
+    // 3. Calculate the new graph given the subgraphs
     let grfNodes = toRFEwoksNodes(ewoksWorkflow, newNodeSubgraphs, tasks);
 
     const notes: RFNode[] =
@@ -100,22 +85,16 @@ const rootWorkflow = (
     grfNodes = [...grfNodes, ...notes];
 
     const rfLinks = toRFEwoksLinks(ewoksWorkflow, newNodeSubgraphs, tasks);
-    const resultGraph: Graph = {
-      graph: ewoksWorkflow.graph,
-      nodes: grfNodes,
-      links: rfLinks,
-    };
-    get().addLoadedGraph(resultGraph);
 
-    if (resultGraph.nodes.length > 0) {
-      useNodeDataStore.getState().setDataFromNodes(resultGraph.nodes);
-      useEdgeDataStore.getState().setDataFromEdges(resultGraph.links);
+    if (grfNodes.length > 0) {
+      useNodeDataStore.getState().setDataFromNodes(grfNodes);
+      useEdgeDataStore.getState().setDataFromEdges(rfLinks);
     }
 
-    get().setDisplayedWorkflowInfo(resultGraph.graph);
+    get().setDisplayedWorkflowInfo(ewoksWorkflow.graph);
 
     const newGraphNoData = {
-      graph: resultGraph.graph,
+      graph: ewoksWorkflow.graph,
       nodes: grfNodes.map((nod) => {
         return { ...nod, data: {} as NodeData };
       }),
