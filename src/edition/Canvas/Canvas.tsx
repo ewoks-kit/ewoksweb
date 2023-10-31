@@ -26,6 +26,10 @@ import useSnackbarStore from '../../store/useSnackbarStore';
 import useStore from '../../store/useStore';
 import { getEdgesData, getNodeData, getNodesData } from '../../utils';
 import { calcNewId } from '../../utils/calcNewId';
+import {
+  DEFAULT_NODE_HEIGHT,
+  DEFAULT_NODE_WIDTH,
+} from '../../utils/defaultValues';
 import isValidLink from '../../utils/IsValidLink';
 import {
   assertNodeDataDefined,
@@ -135,9 +139,11 @@ function Canvas() {
     }
     const { task_type, icon, task_identifier, category } = taskInfo;
 
+    const { left, top } = reactFlowBounds;
+    const { clientX, clientY } = event;
     const position = rfInstance.project({
-      x: event.clientX - reactFlowBounds.left,
-      y: event.clientY - reactFlowBounds.top,
+      x: clientX - left - (DEFAULT_NODE_WIDTH * rfInstance.getZoom()) / 2,
+      y: clientY - top - (DEFAULT_NODE_HEIGHT * rfInstance.getZoom()) / 2,
     });
 
     if (task_type === 'subworkflow') {
