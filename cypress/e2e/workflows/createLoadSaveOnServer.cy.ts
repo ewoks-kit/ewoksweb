@@ -104,7 +104,7 @@ it('opens a "New workflow" dialog when asking to clone the workflow', () => {
 
 it('opens an empty workflow when clicking on New Workflow after a workflow was loaded', () => {
   cy.loadGraph('tutorial_Graph');
-  cy.hasBreadcrumbs(['tutorial_Graph']);
+  cy.hasNavBarLabel('tutorial_Graph');
   cy.hasVisibleNodes(16);
   cy.hasVisibleEdges(12);
 
@@ -117,7 +117,7 @@ it('opens an empty workflow when clicking on New Workflow after a workflow was l
     }).click();
   });
 
-  cy.findByRole('heading', { name: 'Untitled workflow (unsaved)' });
+  cy.hasNavBarLabel('Untitled workflow (unsaved)');
   cy.get('.react-flow__edge').should('have.length', 0);
   cy.get('.react-flow__node').should('have.length', 0);
   cy.contains('tutorial_Graph').should('not.exist');

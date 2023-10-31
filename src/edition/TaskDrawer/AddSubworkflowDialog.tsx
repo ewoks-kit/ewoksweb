@@ -80,10 +80,10 @@ export default function AddSubworkflowDialog(props: Props) {
               <ListItemText primary="From Server" />
               <SuspenseBoundary>
                 <WorkflowDropdown
+                  label="Select workflow"
                   onChange={(workflowDetails) => {
                     addSubgraph(workflowDetails.id);
                   }}
-                  style={{ width: '20rem', marginLeft: '2rem' }}
                 />
               </SuspenseBoundary>
             </ListItem>
