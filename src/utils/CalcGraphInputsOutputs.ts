@@ -1,8 +1,8 @@
 import type {
+  EdgeWithData,
   Graph,
   GraphDetails,
   InputOutputNodeAndLink,
-  LinkWithData,
   NodeWithData,
 } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
@@ -84,7 +84,7 @@ function calcInOutNodes(
   inputOrOutput: string,
   nod: NodeWithData,
   graph_nodes: NodeWithData[],
-  graph_links: LinkWithData[],
+  graph_links: EdgeWithData[],
 ): InputOutputNodeAndLink[] {
   const nodes: InputOutputNodeAndLink[] = [];
 
@@ -143,7 +143,7 @@ function calcNodeProps(
   isGraph: boolean,
   nod: NodeWithData,
   nodConnected: NodeWithData,
-  graph_links: LinkWithData[],
+  graph_links: EdgeWithData[],
   link_index: number,
   inputOrOutput: string,
 ): InputOutputNodeAndLink {

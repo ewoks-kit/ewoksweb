@@ -1,10 +1,10 @@
 import ELK from 'elkjs';
 
-import type { Link, RFNode } from '../types';
+import type { RFEdge, RFNode } from '../types';
 
 export default async function layoutNewGraph(
   nodes: RFNode[],
-  links: Link[],
+  links: RFEdge[],
 ): Promise<RFNode[]> {
   const elk = new ELK();
 

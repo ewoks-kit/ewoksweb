@@ -24,8 +24,12 @@ import useEdgeDataStore from '../../store/useEdgeDataStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import useStore from '../../store/useStore';
-import { getEdgesData, getNodeData, getNodesData } from '../../utils';
+import { getNodeData, getNodesData } from '../../utils';
 import { calcNewId } from '../../utils/calcNewId';
+import {
+  DEFAULT_NODE_HEIGHT,
+  DEFAULT_NODE_WIDTH,
+} from '../../utils/defaultValues';
 import isValidLink from '../../utils/IsValidLink';
 import {
   assertNodeDataDefined,
@@ -61,6 +65,22 @@ const nodeTypes = {
   class: DataNode,
 };
 
+const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
+  event.preventDefault();
+
+  const nodeData = getNodesData().get(node.id);
+  if (!nodeData) {
+    return;
+  }
+  if (nodeData.task_props.task_type === 'graph') {
+    const newTabURL = `${window.location.origin}/edit?workflow=${node.id}`;
+    const newTab = window.open(newTabURL, '_blank');
+    if (newTab) {
+      newTab.focus();
+    }
+  }
+};
+
 function Canvas() {
   const storeRF = useStoreApi();
   const rfInstance = useReactFlow();
@@ -74,21 +94,14 @@ function Canvas() {
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo,
   );
-  const setDisplayedWorkflowInfo = useStore(
-    (state) => state.setDisplayedWorkflowInfo,
-  );
-  const addLoadedGraph = useStore((state) => state.addLoadedGraph);
 
   const tasks = useTasks();
-  const loadedGraphs = useStore((state) => state.loadedGraphs);
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
   const showInfoMsg = useSnackbarStore((state) => state.showInfoMsg);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
-  const setDataFromNodes = useNodeDataStore((state) => state.setDataFromNodes);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
-  const setDataFromEdges = useEdgeDataStore((state) => state.setDataFromEdges);
   const { fitView, setNodes, setEdges, getNodes, getEdges, addNodes, getNode } =
     rfInstance;
 
@@ -135,9 +148,11 @@ function Canvas() {
     }
     const { task_type, icon, task_identifier, category } = taskInfo;
 
+    const { left, top } = reactFlowBounds;
+    const { clientX, clientY } = event;
     const position = rfInstance.project({
-      x: event.clientX - reactFlowBounds.left,
-      y: event.clientY - reactFlowBounds.top,
+      x: clientX - left - (DEFAULT_NODE_WIDTH * rfInstance.getZoom()) / 2,
+      y: clientY - top - (DEFAULT_NODE_HEIGHT * rfInstance.getZoom()) / 2,
     });
 
     if (task_type === 'subworkflow') {
@@ -176,6 +191,7 @@ function Canvas() {
       id: newId,
       type: task_type,
       position,
+      data: {},
     };
 
     setNodeData(newId, {
@@ -194,7 +210,7 @@ function Canvas() {
         ...(icon && { icon }),
       },
     });
-    addNodes(newNode as Node);
+    addNodes(newNode);
   };
 
   const onEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => {
@@ -239,53 +255,6 @@ function Canvas() {
     showInfoMsg('Open a graph and click on nodes and links on this Canvas!');
   };
 
-  const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
-    event.preventDefault();
-
-    const nodeData = getNodesData().get(node.id);
-    if (!nodeData) {
-      return;
-    }
-    if (nodeData.task_props.task_type === 'graph') {
-      showWarningMsg('Any link changes in any subgraph will not be saved!');
-      addLoadedGraph({
-        graph: displayedWorkflowInfo,
-        nodes: getNodes().map((nod) => {
-          return {
-            ...nod,
-            data: { ...nod.data, ...getNodesData().get(nod.id) },
-          };
-        }),
-        links: getEdges().map((edge) => {
-          return {
-            ...edge,
-            data: { ...edge.data, ...getEdgesData().get(edge.id) },
-          };
-        }),
-      });
-
-      const subgraph = loadedGraphs.get(nodeData.task_props.task_identifier);
-
-      if (subgraph?.graph.id) {
-        setNodes(subgraph.nodes);
-
-        setDataFromNodes(subgraph.nodes);
-        setDataFromEdges(subgraph.links);
-
-        setEdges(subgraph.links);
-
-        setDisplayedWorkflowInfo(subgraph.graph);
-        setTimeout(() => {
-          fitView({ duration: 500 });
-        }, 300);
-      } else {
-        showErrorMsg(
-          `The subgraph ${nodeData.task_props.task_identifier} cannot be located!`,
-        );
-      }
-    }
-  };
-
   const handleKeyDown = (event: React.KeyboardEvent<HTMLImageElement>) => {
     const charCode = String.fromCodePoint(event.which).toLowerCase();
 
@@ -307,7 +276,7 @@ function Canvas() {
       const nodeData = getNodeData(selectedNode.id);
       assertNodeDataDefined(nodeData, selectedNode.id);
 
-      const newClone: Node = {
+      const newClone: RFNode = {
         ...node,
         id: calcNewId(selectedNode.id, nodesIds),
         selected: false,
@@ -315,6 +284,7 @@ function Canvas() {
           x: (node.position.x || 0) + 100,
           y: (node.position.y || 0) + 100,
         },
+        data: {},
       };
 
       setNodes([...getNodes(), newClone]);
@@ -340,7 +310,6 @@ function Canvas() {
       <AddSubworkflowDialog
         open={!!addSubworkflowEvent}
         position={addSubworkflowEvent?.position}
-        tasks={tasks}
         onClose={() => setSubworkflowEvent(undefined)}
       />
       {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions*/}

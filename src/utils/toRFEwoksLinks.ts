@@ -1,8 +1,8 @@
 import { defaultLinkStyle } from '../edition/Canvas/utils';
 import type {
   Condition,
+  EdgeWithData,
   LinkUiProps,
-  LinkWithData,
   Task,
   Workflow,
 } from '../types';
@@ -19,7 +19,7 @@ export function toRFEwoksLinks(
   tempGraph: Workflow,
   newNodeSubgraphs: Workflow[],
   tasks: Task[],
-): LinkWithData[] {
+): EdgeWithData[] {
   let id = 0;
 
   // DOC: calculate the links from inputs-outputs of the Ewoks graph
@@ -61,7 +61,7 @@ export function toRFEwoksLinks(
         tasks,
       );
 
-      const link: LinkWithData = {
+      const link: EdgeWithData = {
         id: `${source}:${uiProps?.sourceHandle ?? ''}->${target}:${
           uiProps?.targetHandle ?? ''
         }_${id++}`,

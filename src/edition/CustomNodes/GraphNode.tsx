@@ -4,7 +4,6 @@ import type { NodeProps } from 'reactflow';
 import { Handle, Position } from 'reactflow';
 
 import useNodeDataStore from '../../store/useNodeDataStore';
-import useStore from '../../store/useStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import type { NodeData } from '../../types';
 import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
@@ -16,16 +15,18 @@ import { contentStyle, style } from './nodeStyles';
 function GraphNode(props: NodeProps<NodeData>) {
   const { id } = props;
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
-  const { loadedGraphs } = useStore.getState();
 
   assertNodeDataDefined(nodeData, id);
 
   const { ui_props: uiProps } = nodeData;
   // DOC: the subgraph is connected to the original graph through the task_identifier like
   // simple nodes and not through the id which is the unique in the current graph nodeId
-  const subgraphExistsOnServer = loadedGraphs.has(
-    nodeData.task_props.task_identifier,
-  );
+
+  // IMP: Find another way to see if it exists, probably when fetching the subgraphs
+  // and creating the node also attach the exists
+  // const subgraphExistsOnServer = loadedGraphs.has(
+  //   nodeData.task_props.task_identifier,
+  // );
   const { inputs = [], outputs = [] } = uiProps;
 
   const nodeWidth = { width: `${uiProps.nodeWidth || 100}px` };
@@ -52,7 +53,7 @@ function GraphNode(props: NodeProps<NodeData>) {
             }
             showFull={withLabel}
             showCropped={!withLabel && !withImage}
-            color={subgraphExistsOnServer ? '#ced3ee' : 'red'}
+            // color={subgraphExistsOnServer ? '#ced3ee' : 'red'}
           />
           {withImage && (
             <SuspenseBoundary>

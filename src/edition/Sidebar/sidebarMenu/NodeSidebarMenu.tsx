@@ -11,6 +11,7 @@ import TaskForm from '../../../general/forms/TaskForm';
 import { useNodesIds } from '../../../store/graph-hooks';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import useStore from '../../../store/useStore';
+import type { RFNode } from '../../../types';
 import { getNodeData } from '../../../utils';
 import { calcNewId } from '../../../utils/calcNewId';
 import {
@@ -41,7 +42,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
     const nodeToClone = rfInstance.getNode(selectedElement.id);
     assertDefined(nodeToClone);
 
-    const clone: Node = {
+    const clone: RFNode = {
       ...nodeToClone,
       id: calcNewId(selectedElement.id, nodesIds),
       selected: false,
@@ -49,6 +50,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
         x: nodeToClone.position.x + 100,
         y: nodeToClone.position.y + 100,
       },
+      data: {},
     };
 
     rfInstance.addNodes(clone);

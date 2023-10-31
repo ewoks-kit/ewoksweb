@@ -3,7 +3,6 @@ import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
 import type { Node } from 'reactflow';
 
 import type { DisplayedWorkflowInfoSlice } from './store/displayedWorkflowInfo';
-import type { LoadedGraphsSlice } from './store/loadedGraphs';
 import type { RootWorkflowSlice } from './store/rootWorkflow';
 
 export enum GraphFormAction {
@@ -80,10 +79,7 @@ export interface EwoksEvent {
   node_id?: string;
 }
 
-export interface State
-  extends DisplayedWorkflowInfoSlice,
-    LoadedGraphsSlice,
-    RootWorkflowSlice {}
+export interface State extends DisplayedWorkflowInfoSlice, RootWorkflowSlice {}
 
 export interface Action {
   action: string;
@@ -253,8 +249,8 @@ export interface NodeData {
   comment?: string;
 }
 
-export type NodeWithData = Node<NodeData> & { data: NodeData };
-export type RFNode = Omit<Node, 'data'>;
+export type NodeWithData = Node<NodeData>;
+export type RFNode = Node<Record<string, never>>;
 // From new reactFlow11:
 // width?: number | null; // what is their functionality?
 // height?: number | null;
@@ -317,8 +313,8 @@ export interface LinkData {
 
 // For data still being optional in Edge
 // https://github.com/wbkd/react-flow/issues/1679#issuecomment-1438743754
-export type Link = Omit<Edge, 'data'>;
-export type LinkWithData = Edge<LinkData> & { data: LinkData };
+export type RFEdge = Edge<Record<string, never>>;
+export type EdgeWithData = Edge<LinkData> & { data: LinkData };
 
 export interface LabelBgStyle {
   fill?: string;
@@ -353,7 +349,7 @@ export interface LinkUiProps {
 export interface Graph {
   graph: GraphDetails;
   nodes: NodeWithData[];
-  links: LinkWithData[];
+  links: EdgeWithData[];
 }
 
 export interface Workflow {
