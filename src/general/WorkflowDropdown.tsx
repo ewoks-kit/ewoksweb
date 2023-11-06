@@ -60,6 +60,13 @@ function WorkflowDropdown(props: Props) {
       groupBy={(option) => option.category}
       disableClearable
       blurOnSelect
+      renderOption={(AutocompleteProps, option) => {
+        return (
+          <li {...AutocompleteProps} key={option.id}>
+            {option.label || option.id}
+          </li>
+        );
+      }}
       renderInput={(params) => (
         <TextField
           {...params}
