@@ -249,7 +249,8 @@ export interface NodeData {
   comment?: string;
 }
 
-export type RFNode = Node<NodeData>;
+export type NodeWithData = Node<NodeData>;
+export type RFNode = Node<Record<string, never>>;
 // From new reactFlow11:
 // width?: number | null; // what is their functionality?
 // height?: number | null;
@@ -312,11 +313,8 @@ export interface LinkData {
 
 // For data still being optional in Edge
 // https://github.com/wbkd/react-flow/issues/1679#issuecomment-1438743754
-type NoDataEdge = Omit<Edge, 'data'>;
-
-export interface Link extends NoDataEdge {
-  data: LinkData;
-}
+export type RFEdge = Edge<Record<string, never>>;
+export type EdgeWithData = Edge<LinkData> & { data: LinkData };
 
 export interface LabelBgStyle {
   fill?: string;
@@ -350,8 +348,8 @@ export interface LinkUiProps {
 
 export interface Graph {
   graph: GraphDetails;
-  nodes: RFNode[];
-  links: Link[];
+  nodes: NodeWithData[];
+  links: EdgeWithData[];
 }
 
 export interface Workflow {

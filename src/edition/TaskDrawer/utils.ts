@@ -1,4 +1,4 @@
-import type { Edge, Node, XYPosition } from 'reactflow';
+import type { Node, XYPosition } from 'reactflow';
 import { Position } from 'reactflow';
 
 import type {
@@ -12,7 +12,6 @@ import { generateUniqueNodeId } from '../../utils/utils';
 export async function loadSubworkflow(
   subGraph: Workflow,
   nodes: Node[],
-  links: Edge[],
   position: XYPosition,
 ): Promise<{ nodeWithoutData: Node; data: NodeData }> {
   const inputsSub = subGraph.graph.input_nodes?.map((input) => {
@@ -33,31 +32,31 @@ export async function loadSubworkflow(
     subGraph.graph.label,
   );
 
-  const newNode: RFNode = {
+  const nodeWithoutData: RFNode = {
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
     id: graphId,
     // TODO: Is this type the same with task_props.task_type? Is it used?
     type: 'graph',
     position,
-    data: {
-      task_props: {
-        task_type: 'graph',
-        task_identifier: subGraph.graph.id,
-      },
-      ui_props: {
-        ...(inputsSub && inputsSub.length > 0 && { inputs: inputsSub }),
-        ...(outputsSub && outputsSub.length > 0 && { outputs: outputsSub }),
-      },
+    data: {},
+  };
+  const nodeData: NodeData = {
+    task_props: {
+      task_type: 'graph',
+      task_identifier: subGraph.graph.id,
+    },
+    ui_props: {
+      ...(inputsSub && inputsSub.length > 0 && { inputs: inputsSub }),
+      ...(outputsSub && outputsSub.length > 0 && { outputs: outputsSub }),
+    },
 
-      ewoks_props: {
-        label: subGraph.graph.label,
-      },
+    ewoks_props: {
+      label: subGraph.graph.label,
     },
   };
 
-  const { data, ...nodeWithoutData } = newNode;
-  return { nodeWithoutData: nodeWithoutData as Node, data };
+  return { nodeWithoutData, data: nodeData };
 }
 
 function calcLabel(inputOutput: InputOutputNodeAndLink): string {

@@ -17,7 +17,7 @@ import ReactFlow, {
   useReactFlow,
 } from 'reactflow';
 import { useStoreApi } from 'reactflow';
-import type { NodeData, RFNode, Task } from 'types';
+import type { RFNode, Task } from 'types';
 
 import { useTasks } from '../../api/tasks';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
@@ -168,9 +168,6 @@ function Canvas() {
       task = {
         ...taskInfo,
         category: 'General',
-        optional_input_names: undefined,
-        output_names: undefined,
-        required_input_names: undefined,
       };
     } else {
       task = tasks.find((tas) => tas.task_identifier === task_identifier);
@@ -194,7 +191,7 @@ function Canvas() {
       id: newId,
       type: task_type,
       position,
-      data: {} as NodeData,
+      data: {},
     };
 
     setNodeData(newId, {
@@ -281,17 +278,17 @@ function Canvas() {
 
       const newClone: RFNode = {
         ...node,
-        data: nodeData,
         id: calcNewId(selectedNode.id, nodesIds),
         selected: false,
         position: {
           x: (node.position.x || 0) + 100,
           y: (node.position.y || 0) + 100,
         },
+        data: {},
       };
 
       setNodes([...getNodes(), newClone]);
-      setNodeData(newClone.id, newClone.data);
+      setNodeData(newClone.id, nodeData);
     }
   };
 

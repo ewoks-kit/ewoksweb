@@ -1,14 +1,7 @@
 import type { ReactFlowInstance } from 'reactflow';
 import type { GetState, SetState } from 'zustand';
 
-import type {
-  LinkData,
-  NodeData,
-  RFNode,
-  State,
-  Task,
-  Workflow,
-} from '../types';
+import type { NodeWithData, State, Task, Workflow } from '../types';
 import { getSubgraphs } from '../utils';
 import layoutNewGraph from '../utils/layoutNewGraph';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
@@ -64,7 +57,7 @@ const rootWorkflow = (
     // 3. Calculate the new graph given the subgraphs
     let grfNodes = toRFEwoksNodes(ewoksWorkflow, newNodeSubgraphs, tasks);
 
-    const notes: RFNode[] =
+    const notes: NodeWithData[] =
       ewoksWorkflow.graph.uiProps?.notes?.map((note) => {
         return {
           data: {
@@ -93,30 +86,27 @@ const rootWorkflow = (
 
     get().setDisplayedWorkflowInfo(ewoksWorkflow.graph);
 
-    const newGraphNoData = {
-      graph: ewoksWorkflow.graph,
-      nodes: grfNodes.map((nod) => {
-        return { ...nod, data: {} as NodeData };
-      }),
-      links: rfLinks.map((lin) => {
-        return { ...lin, data: {} as LinkData };
-      }),
-    };
-
     set((state) => ({
       ...state,
-      rootWorkflowId: newGraphNoData.graph.id,
+      rootWorkflowId: ewoksWorkflow.graph.id,
       rootWorkflowSource: source,
     }));
 
-    if (!newGraphNoData.nodes.some((nod) => nod.position.x !== 100)) {
+    const nodesWithoutData = grfNodes.map((node) => {
+      return { ...node, data: {} };
+    });
+    const edgesWithoutData = rfLinks.map((edge) => {
+      return { ...edge, data: {} };
+    });
+
+    if (!grfNodes.some((nod) => nod.position.x !== 100)) {
       rfInstance.setNodes(
-        await layoutNewGraph(newGraphNoData.nodes, newGraphNoData.links),
+        await layoutNewGraph(nodesWithoutData, edgesWithoutData),
       );
-      rfInstance.setEdges(newGraphNoData.links);
+      rfInstance.setEdges(rfLinks);
     } else {
-      rfInstance.setNodes(newGraphNoData.nodes);
-      rfInstance.setEdges(newGraphNoData.links);
+      rfInstance.setNodes(nodesWithoutData);
+      rfInstance.setEdges(edgesWithoutData);
     }
   },
 });

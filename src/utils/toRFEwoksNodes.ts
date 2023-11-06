@@ -2,7 +2,7 @@ import type {
   DataMapping,
   DefaultErrorAttributes,
   EwoksDataMapping,
-  RFNode,
+  NodeWithData,
   Task,
   Workflow,
 } from '../types';
@@ -16,7 +16,7 @@ export function toRFEwoksNodes(
   tempGraph: Workflow,
   newNodeSubgraphs: Workflow[],
   tasks: Task[],
-): RFNode[] {
+): NodeWithData[] {
   const inNodeLinks = inNodesLinks(
     tempGraph.graph.input_nodes,
     tempGraph.nodes,
@@ -49,7 +49,7 @@ export function toRFEwoksNodes(
       task_generator,
       uiProps,
     }) => {
-      const node: RFNode = {
+      const node: NodeWithData = {
         id: id.toString(),
         type: task_type,
         data: {

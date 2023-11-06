@@ -39,7 +39,6 @@ export default function AddSubworkflowDialog(props: Props) {
     const { nodeWithoutData, data } = await loadSubworkflow(
       subgraph,
       nodes,
-      rfInstance.getEdges(),
       position || { x: 0, y: 0 },
     );
 
