@@ -390,3 +390,8 @@ export interface filterParams {
 export interface SelectedElement {
   selectedElement: Node | Edge | undefined;
 }
+
+export interface ExecuteWorkflowRequest {
+  execute_arguments?: object; // Replace with the exact type
+  worker_options?: object; // Replace with the exact type
+}
