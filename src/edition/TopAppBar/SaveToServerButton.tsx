@@ -30,7 +30,6 @@ export default function SaveToServerButton() {
 
   const [status, setStatus] = useState<Status>('idle');
 
-  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const rootWorkflowSource = useStore((state) => state.rootWorkflowSource);
   const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
@@ -62,13 +61,6 @@ export default function SaveToServerButton() {
     if (!workflowsIds.includes(displayedWorkflowInfo.id)) {
       setAction(GraphFormAction.newGraph);
       setDialogOpen(true);
-      return;
-    }
-
-    if (rootWorkflowId !== displayedWorkflowInfo.id) {
-      handleError(
-        'Cannot save any changes to subgraphs! Open it as the main graph to make changes.',
-      );
       return;
     }
 
