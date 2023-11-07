@@ -60,6 +60,15 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
   return workflows;
 }
 
+export async function getWorkflow(id: string): Promise<Workflow> {
+  const response = await fetchWorkflow(id);
+  return response.data;
+}
+
+export function useWorkflowDLE(id: string) {
+  return useQuery({ queryKey: [QueryKey.Workflow], queryFn: getWorkflow(id) });
+}
+
 export function useWorkflowsDLE() {
   return useQuery({ queryKey: [QueryKey.Workflows], queryFn: getWorkflows });
 }

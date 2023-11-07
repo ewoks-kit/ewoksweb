@@ -3,7 +3,7 @@ import { Autocomplete, CircularProgress, TextField } from '@mui/material';
 import { useEffect } from 'react';
 import type { WorkflowDescription } from 'types';
 
-import { useWorkflowsDLE } from '../api/workflows';
+import { useWorkflowDLE, useWorkflowsDLE } from '../api/workflows';
 import commonStrings from '../commonStrings.json';
 import useSnackbarStore from '../store/useSnackbarStore';
 import { textForError } from '../utils';
@@ -36,6 +36,7 @@ function WorkflowDropdown(props: Props) {
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
   const { data: workflows, isLoading, error } = useWorkflowsDLE();
+  const { isLoading: isLoadingWorkflow } = useWorkflowDLE('demo');
   const sortedWorkflows = sortByCategory(workflows ?? []);
 
   const options =
@@ -53,7 +54,7 @@ function WorkflowDropdown(props: Props) {
     <Autocomplete
       className={styles.quickOpen}
       autoHighlight
-      loading={isLoading}
+      loading={isLoading || isLoadingWorkflow}
       options={options}
       isOptionEqualToValue={(option, selected) => option.id === selected.id}
       getOptionLabel={(option) => option.label || option.id}
@@ -74,15 +75,16 @@ function WorkflowDropdown(props: Props) {
           InputProps={{
             ...params.InputProps,
             startAdornment: <CloudDownloadIcon className={styles.icon} />,
-            endAdornment: isLoading ? (
-              <CircularProgress
-                className={styles.loader}
-                color="inherit"
-                size={20}
-              />
-            ) : (
-              params.InputProps.endAdornment
-            ),
+            endAdornment:
+              isLoading || isLoadingWorkflow ? (
+                <CircularProgress
+                  className={styles.loader}
+                  color="inherit"
+                  size={20}
+                />
+              ) : (
+                params.InputProps.endAdornment
+              ),
           }}
           inputProps={{
             ...params.inputProps,
