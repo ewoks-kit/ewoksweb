@@ -1,10 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import type {
-  ExecuteWorkflowRequest,
-  Workflow,
-  WorkflowDescription,
-} from '../types';
+import type { Workflow, WorkflowDescription } from '../types';
 import { client } from './client';
 import type {
   DeleteResponse,
@@ -44,12 +40,13 @@ export async function deleteWorkflow(id: string) {
 
 export async function executeWorkflow(
   workflowId: string,
-  requestBody?: ExecuteWorkflowRequest | undefined,
+  executeArgs?: Record<string, unknown>,
+  workerOptions?: Record<string, unknown>,
 ) {
-  return client.post<ExecuteWorkflowResponse>(
-    `/execute/${workflowId}`,
-    requestBody,
-  );
+  return client.post<ExecuteWorkflowResponse>(`/execute/${workflowId}`, {
+    execute_arguments: executeArgs,
+    worker_options: workerOptions,
+  });
 }
 
 export async function getWorkflows(): Promise<WorkflowDescription[]> {
