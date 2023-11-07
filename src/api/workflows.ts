@@ -38,11 +38,15 @@ export async function deleteWorkflow(id: string) {
   return client.delete<DeleteResponse>(`/workflow/${id}`);
 }
 
-export async function executeWorkflow(workflowId: string) {
-  return client.post<ExecuteWorkflowResponse>(
-    `/execute/${workflowId}`,
-    workflowId,
-  );
+export async function executeWorkflow(
+  workflowId: string,
+  executeArgs?: Record<string, unknown>,
+  workerOptions?: Record<string, unknown>,
+) {
+  return client.post<ExecuteWorkflowResponse>(`/execute/${workflowId}`, {
+    execute_arguments: executeArgs,
+    worker_options: workerOptions,
+  });
 }
 
 export async function getWorkflows(): Promise<WorkflowDescription[]> {
