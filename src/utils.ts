@@ -89,6 +89,9 @@ export function textForError(error: unknown, alternative: string): string {
   }
 
   if (hasMessage(error)) {
+    if (error.message === 'Network Error') {
+      return 'Server cannot be accessed. Make sure the server is up and then try again';
+    }
     return error.message;
   }
 
