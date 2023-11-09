@@ -40,7 +40,7 @@ export async function deleteWorkflow(id: string) {
 
 export async function executeWorkflow(
   workflowId: string,
-  executeArgs?: Record<string, unknown>,
+  executeArgs?: { engine?: string },
   workerOptions?: Record<string, unknown>,
 ) {
   return client.post<ExecuteWorkflowResponse>(`/execute/${workflowId}`, {

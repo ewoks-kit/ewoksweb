@@ -19,7 +19,6 @@ it('should redirect to monitor page and display "Success" when successfully exec
   cy.findByRole('button', { name: 'Execute' }).click();
 
   // Temporarely comment the test until the server can accept the new call
-  cy.findByText('Execution could not start!').should('exist');
   // cy.location().should((loc) => {
   //   expect(loc.pathname).to.eq('/monitor');
   // });

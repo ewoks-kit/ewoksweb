@@ -3,6 +3,7 @@ import {
   CardContent,
   FormControl,
   InputLabel,
+  MenuItem,
   Select,
   Table,
   TableBody,
@@ -21,7 +22,7 @@ import AddEntryRow from '../Sidebar/table/controls/AddEntryRow';
 import RemoveRowButton from '../Sidebar/table/controls/RemoveRowButton';
 import EditableTable from '../Sidebar/table/EditableTable';
 
-interface ExecutionDefaultInputs {
+interface ExecutionPerNodeInputs {
   name: string;
   value: unknown;
   id?: string;
@@ -31,13 +32,11 @@ interface ExecutionDefaultInputs {
 }
 
 export interface ExecutionParams {
-  defaultInputs?: ExecutionDefaultInputs[];
   workerOptions?: Record<string, unknown>;
-  queue?: string;
-  executeArgs?: Record<string, unknown>;
+  executeArgs?: { perNodeInputs?: ExecutionPerNodeInputs[]; engine?: string };
 }
 
-export interface ExecuteParametersDialogProps {
+export interface ExecuteDialogProps {
   open: boolean;
   onClose: (value?: string) => void;
   executeWorkflow: (params?: ExecutionParams) => Promise<void>;
@@ -48,25 +47,16 @@ interface DefaultInputRow extends EditableTableRow {
   nodeId?: string;
 }
 
-export default function ExecuteParametersDialog(
-  props: ExecuteParametersDialogProps,
-) {
+export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
   const { onClose, open, executeWorkflow } = props;
 
   const nodesData = useNodeDataStore();
 
-  const [defaultInputs, setDefaultInputs] = useState<DefaultInputRow[]>([]);
-
-  function handleCancel() {
-    onClose();
-  }
-
-  function handleClose() {
-    onClose();
-  }
+  const [perNodeInputs, setPerNodeInputs] = useState<DefaultInputRow[]>([]);
+  const [engine, setEngine] = useState('default');
 
   function handleExecute() {
-    const execDefaultInputs: ExecutionDefaultInputs[] = defaultInputs.map(
+    const execDefaultInputs: ExecutionPerNodeInputs[] = perNodeInputs.map(
       (input) => {
         return {
           name: input.name || '',
@@ -78,10 +68,13 @@ export default function ExecuteParametersDialog(
       },
     );
 
-    executeWorkflow({ defaultInputs: execDefaultInputs });
+    executeWorkflow({
+      executeArgs: { engine, perNodeInputs: execDefaultInputs },
+      workerOptions: {},
+    });
   }
 
-  function defaultInputChanged(
+  function perNodeInputChanged(
     newInput: DefaultInputRow,
     row: EditableTableRow,
   ) {
@@ -92,14 +85,14 @@ export default function ExecuteParametersDialog(
       value: row.value,
     };
 
-    const newInputs = defaultInputs.map((input) => {
+    const newInputs = perNodeInputs.map((input) => {
       if (input.id === newInput.id) {
         return newInputRow;
       }
       return input;
     });
 
-    setDefaultInputs(newInputs);
+    setPerNodeInputs(newInputs);
   }
 
   function handleChangeTarget(input: DefaultInputRow, targetNodeId: string) {
@@ -111,14 +104,14 @@ export default function ExecuteParametersDialog(
         : targetNodeId,
     };
 
-    const otherInputs = defaultInputs.filter((inp) => inp.id !== input.id);
+    const otherInputs = perNodeInputs.filter((inp) => inp.id !== input.id);
 
-    setDefaultInputs([...otherInputs, newInputRow]);
+    setPerNodeInputs([...otherInputs, newInputRow]);
   }
 
   function handleRowAddition() {
-    setDefaultInputs([
-      ...defaultInputs,
+    setPerNodeInputs([
+      ...perNodeInputs,
       {
         id: nanoid(),
         nodeLabel: 'All nodes',
@@ -130,9 +123,9 @@ export default function ExecuteParametersDialog(
   }
 
   function handleRowDelete(input: DefaultInputRow) {
-    const newInputs = defaultInputs.filter((inp) => inp.id !== input.id);
+    const newInputs = perNodeInputs.filter((inp) => inp.id !== input.id);
 
-    setDefaultInputs(newInputs);
+    setPerNodeInputs(newInputs);
   }
 
   return (
@@ -140,14 +133,14 @@ export default function ExecuteParametersDialog(
       maxWidth="xl"
       aria-labelledby="add-subgraph-dialog"
       open={open}
-      onClose={handleClose}
+      onClose={() => onClose()}
     >
       <DialogTitle>Execution Parameters</DialogTitle>
       <DialogContent>
         <Card variant="outlined" style={{ margin: '2px' }}>
           <CardContent>
             <h4>Workflow Inputs</h4>
-            {defaultInputs.map((input) => (
+            {perNodeInputs.map((input) => (
               <div style={{ display: 'flex' }} key={input.id}>
                 <FormControl
                   style={{ minWidth: '180px', margin: '5px' }}
@@ -185,7 +178,7 @@ export default function ExecuteParametersDialog(
                     },
                   ]}
                   valuesChanged={(rows: EditableTableRow[]) =>
-                    defaultInputChanged(input, rows[0])
+                    perNodeInputChanged(input, rows[0])
                   }
                   typeOfValues={[
                     {
@@ -216,7 +209,22 @@ export default function ExecuteParametersDialog(
         </Card>
         <Card variant="outlined" style={{ margin: '2px' }}>
           <CardContent>
-            <h4>Worker options</h4>
+            <FormControl style={{ display: 'flex', flexDirection: 'row' }}>
+              <b style={{ marginTop: '16px' }}>Execution engine</b>
+              {/* <InputLabel id="demo-simple-select-label"></InputLabel> */}
+              <Select
+                value={engine}
+                onChange={(event) => setEngine(event.target.value)}
+                style={{
+                  minWidth: '150px',
+                  marginLeft: '15px',
+                }}
+              >
+                <MenuItem value="default">default</MenuItem>
+                <MenuItem value="pypushflow">pypushflow</MenuItem>
+                <MenuItem value="dask">dask</MenuItem>
+              </Select>
+            </FormControl>
           </CardContent>
         </Card>
       </DialogContent>
@@ -224,7 +232,7 @@ export default function ExecuteParametersDialog(
         <Button onClick={handleExecute} color="primary">
           Execute
         </Button>
-        <Button onClick={handleCancel} color="primary">
+        <Button onClick={() => onClose()} color="primary">
           Cancel
         </Button>
       </DialogActions>
