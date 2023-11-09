@@ -6,8 +6,14 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import type { ChangeEvent } from 'react';
-import React, { useEffect } from 'react';
-import type { Condition, EditableTableRow, Inputs, TypeOfValues } from 'types';
+import { useEffect } from 'react';
+import React from 'react';
+import type {
+  Condition,
+  DefaultInput,
+  EditableTableRow,
+  TypeOfValues,
+} from 'types';
 
 import DraggableDialog from '../../../general/DraggableDialog';
 import useSnackbarStore from '../../../store/useSnackbarStore';
@@ -21,7 +27,7 @@ import { createData, getType } from './utils';
 
 interface EditableTableProps {
   headers: string[];
-  defaultValues: Condition[] | Inputs[];
+  defaultValues: Condition[] | DefaultInput[];
   typeOfValues: TypeOfValues[];
   graphDefaultInputs?: boolean;
   disable?: boolean;

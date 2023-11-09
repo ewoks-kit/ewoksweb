@@ -45,16 +45,22 @@ Cypress.Commands.add('dragNodeInCanvas', (task_identifier: string) => {
   });
 });
 
-Cypress.Commands.add('hasBreadcrumbs', (crumbs: string[]) => {
-  const linkCrumbs = crumbs.slice(0, crumbs.length - 1);
-  const lastCrumb = crumbs[crumbs.length - 1];
-
-  cy.findByLabelText('breadcrumb').within(() => {
-    linkCrumbs.forEach((name) =>
-      cy.findByRole('link', { name }).should('be.visible'),
-    );
-    cy.contains(lastCrumb).should('be.visible');
+Cypress.Commands.add('hasNavBarLabel', (label: string) => {
+  cy.findByLabelText('Workflow title').within(() => {
+    cy.contains(label).should('be.visible');
   });
+});
+
+Cypress.Commands.add('hasVisibleNodes', (expectedNumberOfNodes: number) => {
+  cy.findAllByTestId(/^rf__node/)
+    .should('have.length', expectedNumberOfNodes)
+    .should('be.visible');
+});
+
+Cypress.Commands.add('hasVisibleEdges', (expectedNumberOfEdges: number) => {
+  cy.findAllByTestId(/^rf__edge/)
+    .should('have.length', expectedNumberOfEdges)
+    .should('be.visible');
 });
 
 addWaitForStableDomCommand({ pollInterval: 300, timeout: 5000 });

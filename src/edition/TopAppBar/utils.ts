@@ -2,9 +2,9 @@ import { fetchWorkflowsIds } from '../../api/workflows';
 import type {
   Condition,
   DataMapping,
-  EwoksRFLinkData,
-  EwoksRFNodeData,
-  Inputs,
+  DefaultInput,
+  LinkData,
+  NodeData,
 } from '../../types';
 
 export async function getWorkflowIdsFromServer(): Promise<{
@@ -20,8 +20,8 @@ export async function getWorkflowIdsFromServer(): Promise<{
 }
 
 export function curateNodeData(
-  nodesData: Map<string, EwoksRFNodeData>,
-): Map<string, EwoksRFNodeData> {
+  nodesData: Map<string, NodeData>,
+): Map<string, NodeData> {
   return new Map(
     [...nodesData.entries()].map(([nodeId, nodeData]) => {
       return [
@@ -43,8 +43,8 @@ export function curateNodeData(
 }
 
 export function curateEdgeData(
-  edgesData: Map<string, EwoksRFLinkData>,
-): Map<string, EwoksRFLinkData> {
+  edgesData: Map<string, LinkData>,
+): Map<string, LinkData> {
   return new Map(
     [...edgesData.entries()].map(([edgeId, edgeData]) => {
       const {
@@ -73,13 +73,13 @@ export function curateEdgeData(
   );
 }
 
-function deleteEmptyLines<T extends DataMapping | Condition | Inputs>(
+function deleteEmptyLines<T extends DataMapping | Condition | DefaultInput>(
   arrayObjId: T[] | undefined,
 ): T[] | undefined {
   if (!arrayObjId) {
     return undefined;
   }
   return arrayObjId.filter(
-    (obj: DataMapping | Condition | Inputs) => obj.name !== '',
+    (obj: DataMapping | Condition | DefaultInput) => obj.name !== '',
   );
 }

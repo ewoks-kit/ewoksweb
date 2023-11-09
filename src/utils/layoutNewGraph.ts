@@ -1,7 +1,11 @@
 import ELK from 'elkjs';
-import type { Edge, Node } from 'reactflow';
 
-export default async function layoutNewGraph(nodes: Node[], links: Edge[]) {
+import type { RFEdge, RFNode } from '../types';
+
+export default async function layoutNewGraph(
+  nodes: RFNode[],
+  links: RFEdge[],
+): Promise<RFNode[]> {
   const elk = new ELK();
 
   const layoutOptions = {

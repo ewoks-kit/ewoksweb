@@ -1,10 +1,10 @@
 import { defaultLinkStyle } from '../edition/Canvas/utils';
 import type {
   Condition,
-  EwoksRFLink,
-  GraphEwoks,
+  EdgeWithData,
+  LinkUiProps,
   Task,
-  UiPropsLinks,
+  Workflow,
 } from '../types';
 import { findLinkInputs, findLinkOutputs } from './calcTasksForLink';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
@@ -16,10 +16,10 @@ import { createDataMappingData, notUndefinedValue } from './utils';
 // - tempGraph: the graph to transform its links
 // - newNodeSubgraphs: the subgraphs located in the supergraph.
 export function toRFEwoksLinks(
-  tempGraph: GraphEwoks,
-  newNodeSubgraphs: GraphEwoks[],
+  tempGraph: Workflow,
+  newNodeSubgraphs: Workflow[],
   tasks: Task[],
-): EwoksRFLink[] {
+): EdgeWithData[] {
   let id = 0;
 
   // DOC: calculate the links from inputs-outputs of the Ewoks graph
@@ -61,7 +61,7 @@ export function toRFEwoksLinks(
         tasks,
       );
 
-      const link: EwoksRFLink = {
+      const link: EdgeWithData = {
         id: `${source}:${uiProps?.sourceHandle ?? ''}->${target}:${
           uiProps?.targetHandle ?? ''
         }_${id++}`,
@@ -120,20 +120,20 @@ export function toRFEwoksLinks(
 }
 
 function calcTargetHandle(
-  uiProps: UiPropsLinks | undefined,
+  uiProps: LinkUiProps | undefined,
   sub_target: string | undefined,
 ): string {
   return uiProps?.targetHandle ?? sub_target ?? 'tl';
 }
 
 function calcSourceHandle(
-  uiProps: UiPropsLinks | undefined,
+  uiProps: LinkUiProps | undefined,
   sub_source: string | undefined,
 ): string {
   return uiProps?.sourceHandle ?? sub_source ?? 'sr';
 }
 
-function calcInOutLinks(tempGraph: GraphEwoks): GraphEwoks {
+function calcInOutLinks(tempGraph: Workflow): Workflow {
   // DOC: calculate the links from inputs-outputs of the Ewoks graph
   const inNodeLinks = inNodesLinks(
     tempGraph.graph.input_nodes,
@@ -145,7 +145,7 @@ function calcInOutLinks(tempGraph: GraphEwoks): GraphEwoks {
   );
 
   // DOC: accumulate all links inOutTempGraph
-  const inOutTempGraph: GraphEwoks = { ...tempGraph };
+  const inOutTempGraph: Workflow = { ...tempGraph };
   if (inNodeLinks.links.length > 0) {
     inOutTempGraph.links = [...inOutTempGraph.links, ...inNodeLinks.links];
   }

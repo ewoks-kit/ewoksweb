@@ -1,0 +1,57 @@
+.quickOpen {
+  width: 16em;
+  margin-right: 2rem;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.quickOpen:global(.Mui-expanded) {
+  border-radius: 4px 4px 0 0; /* remove radius beween field and popup (1/2) */
+}
+
+:global(.MuiAutocomplete-popper .MuiPaper-root) {
+  border-radius: 0 0 4px 4px; /* remove radius beween field and popup (2/2) */
+}
+
+.quickOpen:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.quickOpen :global(.MuiInputBase-root) {
+  padding-bottom: 8px !important; /* slight vertical alignment tweak */
+  color: currentColor !important;
+}
+
+.quickOpen :global(.MuiButtonBase-root) {
+  color: currentColor !important;
+  opacity: 0.8;
+  transition: transform 0.3s ease-out;
+}
+
+.quickOpen:global(.Mui-expanded .MuiButtonBase-root) {
+  transform: rotate(-180deg); /* rotate the other way during animation */
+}
+
+.quickOpen fieldset {
+  border: none !important;
+}
+
+.icon {
+  position: absolute;
+  left: 0.875rem;
+}
+
+.loader {
+  position: absolute;
+  right: 0.875rem;
+}
+
+.input {
+  padding: 0 0 0 2.5rem !important;
+  position: relative;
+  top: 3px;
+}
+
+.input::placeholder {
+  opacity: 0.6 !important; /* a bit less opaque than the default */
+}

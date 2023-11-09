@@ -24,13 +24,17 @@ function ExecutionMenuItem() {
   }
 
   async function execute(params?: ExecutionParams) {
-    const { loadedGraphs, rootWorkflowId } = useStore.getState();
-    if (loadedGraphs.size === 0) {
+    const { rootWorkflowId } = useStore.getState();
+    if (!rootWorkflowId) {
       showWarningMsg('Please open a workflow in the canvas to execute');
       return;
     }
     try {
-      await executeWorkflow(rootWorkflowId, params);
+      await executeWorkflow(
+        rootWorkflowId,
+        params?.executeArgs,
+        params?.workerOptions,
+      );
       navigate('/monitor');
     } catch (error) {
       // Keep logging in console for debugging when talking with a user

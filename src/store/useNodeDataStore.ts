@@ -1,14 +1,14 @@
 import { merge } from 'lodash';
 import { create } from 'zustand';
 
-import type { EwoksRFNode, EwoksRFNodeData } from '../types';
+import type { NodeData, NodeWithData } from '../types';
 
 export interface NodeDataState {
-  nodesData: Map<string, EwoksRFNodeData>;
-  setNodeData: (nodeId: string, nodeData: EwoksRFNodeData) => void;
-  mergeNodeData: (nodeId: string, nodeData: Partial<EwoksRFNodeData>) => void;
-  setNodesData: (nodesData: Map<string, EwoksRFNodeData>) => void;
-  setDataFromNodes: (nodes: EwoksRFNode[]) => void;
+  nodesData: Map<string, NodeData>;
+  setNodeData: (nodeId: string, nodeData: NodeData) => void;
+  mergeNodeData: (nodeId: string, nodeData: Partial<NodeData>) => void;
+  setNodesData: (nodesData: Map<string, NodeData>) => void;
+  setDataFromNodes: (nodes: NodeWithData[]) => void;
   resetNodesData: () => void;
 }
 
@@ -23,11 +23,7 @@ const useNodeDataStore = create<NodeDataState>((set) => ({
 
   mergeNodeData: (nodeId, nodeData) => {
     set(({ nodesData }) => {
-      const newData: EwoksRFNodeData = merge(
-        {},
-        nodesData.get(nodeId),
-        nodeData,
-      );
+      const newData: NodeData = merge({}, nodesData.get(nodeId), nodeData);
 
       return {
         nodesData: new Map(nodesData).set(nodeId, { ...newData }),

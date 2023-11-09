@@ -10,7 +10,9 @@ declare global {
       loadGraph(name: string): void;
       loadAppWithoutGraph(): void;
       dragNodeInCanvas(task_identifier: string): void;
-      hasBreadcrumbs(crumbs: string[]): void;
+      hasNavBarLabel(label: string): void;
+      hasVisibleNodes(expectedNumberOfNodes: number): void;
+      hasVisibleEdges(expectedNumberOfEdges: number): void;
     }
   }
 }

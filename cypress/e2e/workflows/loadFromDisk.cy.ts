@@ -15,9 +15,9 @@ it('loads workflow from disk', () => {
   );
   cy.waitForStableDOM();
 
-  cy.hasBreadcrumbs(['workflow2']);
-  cy.get('.react-flow__node').should('have.length', 4);
-  cy.get('.react-flow__edge').should('have.length', 3);
+  cy.hasNavBarLabel('workflow2');
+  cy.hasVisibleNodes(4);
+  cy.hasVisibleEdges(3);
 });
 
 it('leaves the original JSON untouched when saving on the server', () => {
@@ -33,7 +33,7 @@ it('leaves the original JSON untouched when saving on the server', () => {
   );
   cy.waitForStableDOM();
 
-  cy.hasBreadcrumbs(['workflow2']);
+  cy.hasNavBarLabel('workflow2');
   cy.findByRole('button', { name: 'Save workflow to server' }).click();
   cy.findByRole('textbox', {
     name: 'Identifier',
@@ -70,7 +70,7 @@ it('saves optional fields of the workflow to the server', () => {
   );
   cy.waitForStableDOM();
 
-  cy.hasBreadcrumbs(['workflowAllValues']);
+  cy.hasNavBarLabel('workflowAllValues');
 
   cy.findByRole('button', { name: 'Save workflow to server' }).click();
   cy.findByRole('textbox', {

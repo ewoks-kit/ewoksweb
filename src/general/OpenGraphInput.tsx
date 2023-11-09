@@ -1,11 +1,11 @@
 import type { ChangeEvent, ForwardedRef } from 'react';
 import { forwardRef } from 'react';
 
-import type { GraphEwoks } from '../types';
+import type { Workflow } from '../types';
 import { useLoadGraph } from './hooks';
 
 interface Props {
-  onGraphLoad: (graph: GraphEwoks) => void;
+  onGraphLoad: (graph: Workflow) => void;
   label: string;
 }
 

@@ -16,34 +16,32 @@ import WorkflowDropdown from '../../general/WorkflowDropdown';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import type { GraphEwoks, Task } from '../../types';
+import type { Workflow } from '../../types';
 import { textForError } from '../../utils';
 import { loadSubworkflow } from './utils';
 
 interface Props {
   open: boolean;
-  tasks: Task[];
   onClose: () => void;
   position?: XYPosition;
 }
 
 export default function AddSubworkflowDialog(props: Props) {
-  const { onClose: handleClose, open, position, tasks } = props;
+  const { onClose: handleClose, open, position } = props;
   const fromDiskInputRef = useRef<HTMLInputElement>(null);
   const rfInstance = useReactFlow();
 
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
-  async function loadSubgraphAsNode(subgraph: GraphEwoks) {
+  async function loadSubgraphAsNode(subgraph: Workflow) {
     const nodes = rfInstance.getNodes();
     const { nodeWithoutData, data } = await loadSubworkflow(
       subgraph,
       nodes,
-      rfInstance.getEdges(),
       position || { x: 0, y: 0 },
-      tasks,
     );
+
     setNodeData(nodeWithoutData.id, data);
     rfInstance.setNodes([...nodes, nodeWithoutData]);
   }
@@ -81,10 +79,10 @@ export default function AddSubworkflowDialog(props: Props) {
               <ListItemText primary="From Server" />
               <SuspenseBoundary>
                 <WorkflowDropdown
+                  label="Select workflow"
                   onChange={(workflowDetails) => {
                     addSubgraph(workflowDetails.id);
                   }}
-                  style={{ width: '20rem', marginLeft: '2rem' }}
                 />
               </SuspenseBoundary>
             </ListItem>

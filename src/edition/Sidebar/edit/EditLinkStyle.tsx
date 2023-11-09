@@ -9,8 +9,7 @@ import {
   Slider,
 } from '@mui/material';
 import type { ChangeEvent } from 'react';
-import { useEffect, useState } from 'react';
-import type { Edge } from 'reactflow';
+import type { Edge, EdgeMarkerType } from 'reactflow';
 import { MarkerType } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 
@@ -23,48 +22,37 @@ import {
 } from '../../../utils/typeGuards';
 import sidebarStyle from '../sidebarStyle';
 
+function getArrowType(
+  markerEnd: EdgeMarkerType | undefined,
+): MarkerType | 'none' {
+  if (!markerEnd) {
+    return 'none';
+  }
+
+  if (isString(markerEnd)) {
+    return isMarkerType(markerEnd) ? markerEnd : 'none';
+  }
+
+  return markerEnd.type;
+}
+
 // DOC: Edit the link style
 export default function EditLinkStyle(element: Edge) {
   const { setEdges, getEdges } = useReactFlow();
+
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   const showInfoMsg = useSnackbarStore((state) => state.showInfoMsg);
 
-  const [linkType, setLinkType] = useState('default');
-  const [arrowType, setArrowType] = useState<MarkerType | 'none'>(
-    MarkerType.Arrow,
-  );
-  const [animated, setAnimated] = useState(false);
-  const [colorLine, setColorLine] = useState('');
-  const [x, setX] = useState(80);
-  const [y, setY] = useState(80);
+  const linkType = element.type || 'default';
+  const arrowType = getArrowType(element.markerEnd);
+  const animated = !!element.animated;
+  const colorLine = element.style?.stroke || '#96a5f9';
+  const { x = 80, y = 80 } = edgeData.getAroundProps || {};
 
-  useEffect(() => {
-    if (element.type) {
-      setLinkType(element.type);
-    }
-
-    if (element.type === 'getAround') {
-      setX(edgeData.getAroundProps?.x || 80);
-      setY(edgeData.getAroundProps?.y || 80);
-    }
-
-    const { markerEnd } = element;
-    if (!markerEnd) {
-      setArrowType('none');
-    } else if (isString(markerEnd)) {
-      setArrowType(isMarkerType(markerEnd) ? markerEnd : 'none');
-    } else {
-      setArrowType(markerEnd.type);
-    }
-
-    setAnimated(!!element.animated);
-    setColorLine(element.style?.stroke || '#96a5f9');
-  }, [element, edgeData]);
-
-  function linkTypeChanged(event: SelectChangeEvent) {
+  function handleLinkTypeChange(event: SelectChangeEvent) {
     const val = event.target.value;
     if (['multilineText', 'getAround'].includes(val)) {
       showInfoMsg(
@@ -78,7 +66,7 @@ export default function EditLinkStyle(element: Edge) {
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
   }
 
-  const arrowTypeChanged = (event: SelectChangeEvent) => {
+  function handleArrowTypeChange(event: SelectChangeEvent) {
     const type = event.target.value;
     if (!isString(type)) {
       return;
@@ -88,9 +76,9 @@ export default function EditLinkStyle(element: Edge) {
       : { ...element, markerEnd: undefined };
 
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-  };
+  }
 
-  const colorLineChanged = (event: ChangeEvent<HTMLInputElement>) => {
+  function handleColorLineChange(event: ChangeEvent<HTMLInputElement>) {
     const newEdge = {
       ...element,
       style: { ...element.style, stroke: event.target.value },
@@ -98,17 +86,17 @@ export default function EditLinkStyle(element: Edge) {
       labelBgStyle: { ...element.labelBgStyle, stroke: event.target.value },
     };
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-  };
+  }
 
-  const animatedChanged = (event: ChangeEvent<HTMLInputElement>) => {
+  function handleAnimatedChange(event: ChangeEvent<HTMLInputElement>) {
     const newEdge = {
       ...element,
       animated: event.target.checked,
     };
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-  };
+  }
 
-  function changeX(_event: Event, value: number | number[]) {
+  function handleXChange(_event: Event, value: number | number[]) {
     const newX = value as number;
     const newEdgeData = {
       getAroundProps: {
@@ -116,10 +104,9 @@ export default function EditLinkStyle(element: Edge) {
       },
     };
     mergeEdgeData(element.id, newEdgeData);
-    setX(newX);
   }
 
-  function changeY(_event: Event, value: number | number[]) {
+  function handleYChange(_event: Event, value: number | number[]) {
     const newY = value as number;
     const newEdgeData = {
       getAroundProps: {
@@ -127,7 +114,6 @@ export default function EditLinkStyle(element: Edge) {
       },
     };
     mergeEdgeData(element.id, newEdgeData);
-    setY(newY);
   }
 
   function applyLinkTypeToAll() {
@@ -161,7 +147,7 @@ export default function EditLinkStyle(element: Edge) {
           labelId="linkTypeLabel"
           value={linkType}
           label="Link type"
-          onChange={linkTypeChanged}
+          onChange={handleLinkTypeChange}
           style={sidebarStyle.dropdown}
         >
           {[
@@ -182,7 +168,7 @@ export default function EditLinkStyle(element: Edge) {
           style={{ margin: '8px' }}
           variant="outlined"
           color="primary"
-          onClick={applyLinkTypeToAll}
+          onClick={() => applyLinkTypeToAll()}
           size="small"
         >
           Apply to all
@@ -198,7 +184,7 @@ export default function EditLinkStyle(element: Edge) {
           variant="standard"
           value={arrowType}
           label="Arrow head"
-          onChange={arrowTypeChanged}
+          onChange={handleArrowTypeChange}
           style={sidebarStyle.dropdown}
         >
           {[...Object.values(MarkerType), 'none'].map((tex) => (
@@ -211,7 +197,7 @@ export default function EditLinkStyle(element: Edge) {
           style={{ margin: '8px' }}
           variant="outlined"
           color="primary"
-          onClick={applyArrowTypeToAll}
+          onClick={() => applyArrowTypeToAll()}
           size="small"
         >
           Apply to all
@@ -222,7 +208,7 @@ export default function EditLinkStyle(element: Edge) {
           style={sidebarStyle.checkbox}
           name="animated"
           checked={animated}
-          onChange={animatedChanged}
+          onChange={handleAnimatedChange}
           inputProps={{ 'aria-label': 'controlled' }}
           color="primary"
         />
@@ -236,7 +222,7 @@ export default function EditLinkStyle(element: Edge) {
           id="head"
           name="head"
           value={colorLine}
-          onChange={colorLineChanged}
+          onChange={handleColorLineChange}
           style={{ margin: '0 0 0 0.3rem' }}
         />
       </div>
@@ -249,7 +235,7 @@ export default function EditLinkStyle(element: Edge) {
             color="primary"
             defaultValue={x}
             value={x}
-            onChange={changeX}
+            onChange={handleXChange}
             min={-200}
             max={200}
             style={{ width: '90%' }}
@@ -260,7 +246,7 @@ export default function EditLinkStyle(element: Edge) {
             color="primary"
             defaultValue={y}
             value={y}
-            onChange={changeY}
+            onChange={handleYChange}
             min={-200}
             max={200}
             style={{ width: '90%' }}

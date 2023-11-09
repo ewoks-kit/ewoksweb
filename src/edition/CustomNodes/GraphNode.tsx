@@ -3,28 +3,29 @@ import { memo } from 'react';
 import type { NodeProps } from 'reactflow';
 import { Handle, Position } from 'reactflow';
 
+import { useWorkflowsDLE } from '../../api/workflows';
 import useNodeDataStore from '../../store/useNodeDataStore';
-import useStore from '../../store/useStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import type { EwoksRFNodeData } from '../../types';
+import type { NodeData } from '../../types';
 import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
 import NodeIcon from './NodeIcon';
 import NodeLabel from './NodeLabel';
 import { contentStyle, style } from './nodeStyles';
 
-function GraphNode(props: NodeProps<EwoksRFNodeData>) {
+function GraphNode(props: NodeProps<NodeData>) {
   const { id } = props;
+  const { data: workflows } = useWorkflowsDLE();
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
-  const { loadedGraphs } = useStore.getState();
 
   assertNodeDataDefined(nodeData, id);
 
   const { ui_props: uiProps } = nodeData;
   // DOC: the subgraph is connected to the original graph through the task_identifier like
   // simple nodes and not through the id which is the unique in the current graph nodeId
-  const subgraphExistsOnServer = loadedGraphs.has(
-    nodeData.task_props.task_identifier,
+
+  const subgraphExistsOnServer = workflows?.some(
+    (workflow) => workflow.id === nodeData.task_props.task_identifier,
   );
   const { inputs = [], outputs = [] } = uiProps;
 

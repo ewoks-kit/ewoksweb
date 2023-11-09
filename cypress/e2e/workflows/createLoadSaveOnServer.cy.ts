@@ -19,9 +19,9 @@ it('displays the canvas', () => {
 it('opens the tutorial_Graph on the canvas', () => {
   cy.loadGraph('tutorial_Graph');
 
-  cy.hasBreadcrumbs(['tutorial_Graph']);
-  cy.get('.react-flow__node').should('have.length', 16);
-  cy.get('.react-flow__edge').should('have.length', 12);
+  cy.hasNavBarLabel('tutorial_Graph');
+  cy.hasVisibleNodes(16);
+  cy.hasVisibleEdges(12);
 });
 
 // Skip this test until unsaved modifications can be properly tracked
@@ -56,8 +56,8 @@ it('saves an empty workflow on the server and deletes it', () => {
 
   cy.loadGraph(id);
 
-  cy.hasBreadcrumbs([id]);
-  cy.findByLabelText('breadcrumb').within(() => {
+  cy.hasNavBarLabel(id);
+  cy.findByLabelText('Workflow title').within(() => {
     cy.contains('tutorial_Graph').should('not.exist');
   });
 
@@ -100,4 +100,25 @@ it('opens a "New workflow" dialog when asking to clone the workflow', () => {
       name: 'Give the new workflow identifier',
     }).should('be.visible');
   });
+});
+
+it('opens an empty workflow when clicking on New Workflow after a workflow was loaded', () => {
+  cy.loadGraph('tutorial_Graph');
+  cy.hasNavBarLabel('tutorial_Graph');
+  cy.hasVisibleNodes(16);
+  cy.hasVisibleEdges(12);
+
+  cy.findByRole('button', { name: 'Open menu with more actions' }).click();
+  cy.findByRole('menuitem', { name: 'New workflow' }).click();
+
+  cy.findByRole('dialog').within(() => {
+    cy.findByRole('button', {
+      name: 'Yes',
+    }).click();
+  });
+
+  cy.hasNavBarLabel('Untitled workflow (unsaved)');
+  cy.get('.react-flow__edge').should('have.length', 0);
+  cy.get('.react-flow__node').should('have.length', 0);
+  cy.contains('tutorial_Graph').should('not.exist');
 });

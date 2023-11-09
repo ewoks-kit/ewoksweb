@@ -1,9 +1,9 @@
-import type { EwoksNode, GraphEwoks, Task } from '../types';
+import type { EwoksNode, Task, Workflow } from '../types';
 
 export function findLinkInputs(
   nodes: EwoksNode[],
   sourceNodeId: string,
-  newNodeSubgraphs: GraphEwoks[],
+  newNodeSubgraphs: Workflow[],
   tasks: Task[],
 ): string[] {
   const sourceNode = nodes.find((nod) => nod.id === sourceNodeId);
@@ -19,7 +19,7 @@ export function findLinkInputs(
 export function findLinkOutputs(
   nodes: EwoksNode[],
   targetNodeId: string,
-  newNodeSubgraphs: GraphEwoks[],
+  newNodeSubgraphs: Workflow[],
   tasks: Task[],
 ): { required: string[]; optional: string[] } {
   const targetNode = nodes.find((nod) => nod.id === targetNodeId);
@@ -40,7 +40,7 @@ function calcTask(
   sourceOrTarget: 'source' | 'target',
   node: EwoksNode,
   tasks: Task[],
-  newNodeSubgraphs: GraphEwoks[],
+  newNodeSubgraphs: Workflow[],
 ): Task | undefined {
   if (node.task_type !== 'graph') {
     return tasks.find((tas) => tas.task_identifier === node.task_identifier);

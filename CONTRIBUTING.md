@@ -20,7 +20,7 @@ ewoks-server
 
 Another `ewoksserver` instance (remote for example) can be used instead by
 setting its URL through the env variable `VITE_SERVER_URL` in `.env.local`
-(default: `http://localhost:5000`).
+(default: `http://127.0.0.1:5000`).
 
 ## Cypress tests
 

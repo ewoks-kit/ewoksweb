@@ -1,4 +1,4 @@
-import { Alert } from '@mui/lab';
+import { Alert } from '@mui/material';
 import {
   Button,
   Checkbox,
@@ -46,7 +46,6 @@ export default function GraphFormDialog(props: Props) {
     defaultValues: { identifier: elementToEdit.label },
   });
 
-  const resetLoadedGraphs = useStore((state) => state.resetLoadedGraphs);
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
   const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
@@ -75,7 +74,6 @@ export default function GraphFormDialog(props: Props) {
       } else {
         const { data: newGraph } = await postWorkflow(ewoksGraph);
         setRootWorkflow(newGraph, rfInstance, tasks, 'fromServer');
-        resetLoadedGraphs();
       }
       invalidateWorkflows();
 

@@ -1,6 +1,6 @@
 import useSnackbarStore from '../store/useSnackbarStore';
 import useStore from '../store/useStore';
-import type { GraphEwoks } from '../types';
+import type { Workflow } from '../types';
 import { isString } from '../utils/typeGuards';
 
 function tryJSONparse(str: string | ArrayBuffer | null): unknown {
@@ -16,7 +16,7 @@ function tryJSONparse(str: string | ArrayBuffer | null): unknown {
   }
 }
 
-export function useLoadGraph(onGraphLoad: (graph: GraphEwoks) => void) {
+export function useLoadGraph(onGraphLoad: (graph: Workflow) => void) {
   return async (file: File) => {
     const { displayedWorkflowInfo, rootWorkflowId } = useStore.getState();
     const { showErrorMsg } = useSnackbarStore.getState();
@@ -39,7 +39,7 @@ export function useLoadGraph(onGraphLoad: (graph: GraphEwoks) => void) {
         return;
       }
 
-      onGraphLoad(newGraph as GraphEwoks);
+      onGraphLoad(newGraph as Workflow);
     };
     reader.readAsText(file);
   };

@@ -1,7 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import type { ExecutionParams } from '../edition/TopAppBar/ExecuteParametersDialog';
-import type { GraphEwoks, WorkflowDescription } from '../types';
+import type { Workflow, WorkflowDescription } from '../types';
 import { client } from './client';
 import type {
   DeleteResponse,
@@ -24,11 +23,11 @@ export async function fetchWorkflow(id: string) {
   return client.get<WorkflowResponse>(`/workflow/${id}`);
 }
 
-export async function postWorkflow(workflow: GraphEwoks) {
+export async function postWorkflow(workflow: Workflow) {
   return client.post<WorkflowResponse>(`/workflows`, workflow);
 }
 
-export async function putWorkflow(workflow: GraphEwoks) {
+export async function putWorkflow(workflow: Workflow) {
   return client.put<WorkflowResponse>(
     `/workflow/${workflow.graph.id}`,
     workflow,
@@ -41,9 +40,13 @@ export async function deleteWorkflow(id: string) {
 
 export async function executeWorkflow(
   workflowId: string,
-  params?: ExecutionParams,
+  executeArgs?: Record<string, unknown>,
+  workerOptions?: Record<string, unknown>,
 ) {
-  return client.post<ExecuteWorkflowResponse>(`/execute/${workflowId}`, params);
+  return client.post<ExecuteWorkflowResponse>(`/execute/${workflowId}`, {
+    execute_arguments: executeArgs,
+    worker_options: workerOptions,
+  });
 }
 
 export async function getWorkflows(): Promise<WorkflowDescription[]> {
@@ -58,7 +61,11 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
 }
 
 export function useWorkflowsDLE() {
-  return useQuery({ queryKey: [QueryKey.Workflows], queryFn: getWorkflows });
+  return useQuery({
+    queryKey: [QueryKey.Workflows],
+    queryFn: getWorkflows,
+    staleTime: Infinity,
+  });
 }
 
 export function useInvalidateWorkflows() {

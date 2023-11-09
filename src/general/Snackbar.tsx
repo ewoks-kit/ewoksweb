@@ -1,5 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Alert } from '@mui/lab';
+import { Alert } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
 

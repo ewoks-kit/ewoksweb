@@ -1,27 +1,21 @@
 import type { ReactFlowInstance } from 'reactflow';
 import type { GetState, SetState } from 'zustand';
 
-import type {
-  EwoksRFLinkData,
-  EwoksRFNode,
-  EwoksRFNodeData,
-  GraphEwoks,
-  GraphRF,
-  State,
-  Task,
-} from '../types';
+import type { NodeWithData, State, Task, Workflow } from '../types';
+import { getSubgraphs } from '../utils';
 import layoutNewGraph from '../utils/layoutNewGraph';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
-import { findAllSubgraphs } from './storeUtils/FindAllSubgraphs';
+import { validateWorkflow } from './storeUtils/validateWorkflow';
 import useEdgeDataStore from './useEdgeDataStore';
 import useNodeDataStore from './useNodeDataStore';
+import useSnackbarStore from './useSnackbarStore';
 
 export interface RootWorkflowSlice {
   rootWorkflowId: string;
   rootWorkflowSource: string | undefined;
   setRootWorkflow: (
-    ewoksWorkflow: GraphEwoks,
+    ewoksWorkflow: Workflow,
     rfInstance: ReactFlowInstance,
     tasks: Task[],
     source?: string,
@@ -41,30 +35,29 @@ const rootWorkflow = (
     tasks,
     source,
   ): Promise<void> => {
+    const { showErrorMsg } = useSnackbarStore.getState();
+
+    const validWorkflow = validateWorkflow(ewoksWorkflow);
+
+    if (!validWorkflow.valid) {
+      showErrorMsg(
+        `Error in workflow JSON description: ${
+          validWorkflow.invalidReason || ''
+        }`,
+      );
+      return;
+    }
+
     // 1. Initialize the canvas while working on the new graph
     get().resetDisplayedWorkflowInfo();
-    get().resetLoadedGraphs();
 
     // 2. Get node-subgraphs for the graph
-    const newNodeSubgraphs = await findAllSubgraphs(ewoksWorkflow, [
-      ...get().loadedGraphs.values(),
-    ]);
+    const newNodeSubgraphs = await getSubgraphs(ewoksWorkflow);
 
-    // 3. Put the newNodeSubgraphs into loadedGraphs in their graphRF form (sync)
-    newNodeSubgraphs.forEach((gr) => {
-      // calculate the rfNodes using the fetched subgraphs
-      // nodes and edges stored with their data as EwoksRFNodes-Links
-      get().addLoadedGraph({
-        graph: gr.graph,
-        nodes: toRFEwoksNodes(gr, newNodeSubgraphs, tasks),
-        links: toRFEwoksLinks(gr, newNodeSubgraphs, tasks),
-      });
-    });
-
-    // 4. Calculate the new graph given the subgraphs
+    // 3. Calculate the new graph given the subgraphs
     let grfNodes = toRFEwoksNodes(ewoksWorkflow, newNodeSubgraphs, tasks);
 
-    const notes: EwoksRFNode[] =
+    const notes: NodeWithData[] =
       ewoksWorkflow.graph.uiProps?.notes?.map((note) => {
         return {
           data: {
@@ -85,46 +78,35 @@ const rootWorkflow = (
     grfNodes = [...grfNodes, ...notes];
 
     const rfLinks = toRFEwoksLinks(ewoksWorkflow, newNodeSubgraphs, tasks);
-    const resultGraph: GraphRF = {
-      graph: ewoksWorkflow.graph,
-      nodes: grfNodes,
-      links: rfLinks,
-    };
-    get().addLoadedGraph(resultGraph);
-    // DOC: reset RF nodes and edges before setting new nodes/edges data
-    // Better solution?
-    rfInstance.setNodes([]);
-    rfInstance.setEdges([]);
 
-    useNodeDataStore.getState().setDataFromNodes(resultGraph.nodes);
-    useEdgeDataStore.getState().setDataFromEdges(resultGraph.links);
+    if (grfNodes.length > 0) {
+      useNodeDataStore.getState().setDataFromNodes(grfNodes);
+      useEdgeDataStore.getState().setDataFromEdges(rfLinks);
+    }
 
-    get().setDisplayedWorkflowInfo(resultGraph.graph);
-
-    const newGraphNoData = {
-      graph: resultGraph.graph,
-      nodes: grfNodes.map((nod) => {
-        return { ...nod, data: {} as EwoksRFNodeData };
-      }),
-      links: rfLinks.map((lin) => {
-        return { ...lin, data: {} as EwoksRFLinkData };
-      }),
-    };
+    get().setDisplayedWorkflowInfo(ewoksWorkflow.graph);
 
     set((state) => ({
       ...state,
-      rootWorkflowId: newGraphNoData.graph.id,
+      rootWorkflowId: ewoksWorkflow.graph.id,
       rootWorkflowSource: source,
     }));
 
-    if (!newGraphNoData.nodes.some((nod) => nod.position.x !== 100)) {
+    const nodesWithoutData = grfNodes.map((node) => {
+      return { ...node, data: {} };
+    });
+    const edgesWithoutData = rfLinks.map((edge) => {
+      return { ...edge, data: {} };
+    });
+
+    if (!grfNodes.some((nod) => nod.position.x !== 100)) {
       rfInstance.setNodes(
-        await layoutNewGraph(newGraphNoData.nodes, newGraphNoData.links),
+        await layoutNewGraph(nodesWithoutData, edgesWithoutData),
       );
-      rfInstance.setEdges(newGraphNoData.links);
+      rfInstance.setEdges(rfLinks);
     } else {
-      rfInstance.setNodes(newGraphNoData.nodes);
-      rfInstance.setEdges(newGraphNoData.links);
+      rfInstance.setNodes(nodesWithoutData);
+      rfInstance.setEdges(edgesWithoutData);
     }
   },
 });
