@@ -1,3 +1,4 @@
+import { useWorkflowsDLE } from '../api/workflows';
 import useSnackbarStore from '../store/useSnackbarStore';
 import useStore from '../store/useStore';
 import type { Workflow } from '../types';
@@ -43,4 +44,22 @@ export function useLoadGraph(onGraphLoad: (graph: Workflow) => void) {
     };
     reader.readAsText(file);
   };
+}
+
+export function useWorkflowExistsOnServerMessage(workflowId: string) {
+  const { data: workflows } = useWorkflowsDLE();
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
+
+  const subgraphExistsOnServer = workflows?.some(
+    (workflow) => workflow.id === workflowId,
+  );
+
+  if (!subgraphExistsOnServer) {
+    showErrorMsg(
+      `Workflow with id: ${workflowId} is not available in the list of workflows.
+      Please provide the workflow (create new or import from disk) by saving it to the server.
+      Then the workflow will be complete, able to be executed and correctly visualized on the canvas.`,
+      60_000,
+    );
+  }
 }

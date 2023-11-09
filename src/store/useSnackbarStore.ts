@@ -1,14 +1,19 @@
 import type { AlertColor } from '@mui/lab';
 import { create } from 'zustand';
 
+interface MesssageParams {
+  text: string;
+  autoHideDuration?: number;
+}
 interface State {
   open: boolean;
   text: string;
   severity?: AlertColor;
-  showSuccessMsg: (text: string) => void;
-  showWarningMsg: (text: string) => void;
-  showErrorMsg: (text: string) => void;
-  showInfoMsg: (text: string) => void;
+  autoHideDuration: number;
+  showSuccessMsg: (text: string, autoHideDuration?: number) => void;
+  showWarningMsg: (text: string, autoHideDuration?: number) => void;
+  showErrorMsg: (text: string, autoHideDuration?: number) => void;
+  showInfoMsg: (text: string, autoHideDuration?: number) => void;
   closeSnackbar: () => void;
 }
 
@@ -16,40 +21,45 @@ const useSnackbarStore = create<State>((set) => ({
   open: false,
   text: '',
   severity: undefined,
+  autoHideDuration: 6000,
 
-  showSuccessMsg: (text: string) => {
+  showSuccessMsg: (text: string, autoHideDuration?: number) => {
     set((state) => ({
       ...state,
       open: true,
       text,
       severity: 'success',
+      ...(autoHideDuration && { autoHideDuration }),
     }));
   },
 
-  showWarningMsg: (text: string) => {
+  showWarningMsg: (text: string, autoHideDuration?: number) => {
     set((state) => ({
       ...state,
       open: true,
       text,
       severity: 'warning',
+      ...(autoHideDuration && { autoHideDuration }),
     }));
   },
 
-  showErrorMsg: (text: string) => {
+  showErrorMsg: (text: string, autoHideDuration?: number) => {
     set((state) => ({
       ...state,
       open: true,
       text,
       severity: 'error',
+      ...(autoHideDuration && { autoHideDuration }),
     }));
   },
 
-  showInfoMsg: (text: string) => {
+  showInfoMsg: (text: string, autoHideDuration?: number) => {
     set((state) => ({
       ...state,
       open: true,
       text,
       severity: 'info',
+      ...(autoHideDuration && { autoHideDuration }),
     }));
   },
 
