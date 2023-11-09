@@ -4,13 +4,13 @@ import type { NodeProps } from 'reactflow';
 import { Handle, Position } from 'reactflow';
 
 import { useWorkflowsDLE } from '../../api/workflows';
-import { useWorkflowExistsOnServerMessage } from '../../general/hooks';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import type { NodeData } from '../../types';
 import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
+import { workflowExistsOnServerMessage } from '../../utils/workflowExistsOnServerMessage';
 import NodeIcon from './NodeIcon';
 import NodeLabel from './NodeLabel';
 import { contentStyle, style } from './nodeStyles';
@@ -27,22 +27,12 @@ function GraphNode(props: NodeProps<NodeData>) {
   // DOC: the subgraph is connected to the original graph through the task_identifier like
   // simple nodes and not through the id which is the unique in the current graph nodeId
 
-  const subgraphExistsOnServer = useWorkflowExistsOnServerMessage(
+  const subgraphExistsOnServer = workflowExistsOnServerMessage(
     nodeData.task_props.task_identifier,
+    workflows,
+    showErrorMsg,
   );
 
-  // const subgraphExistsOnServer = workflows?.some(
-  //   (workflow) => workflow.id === nodeData.task_props.task_identifier,
-  // );
-
-  // if (!subgraphExistsOnServer) {
-  //   showErrorMsg(
-  //     `Workflow with id: ${nodeData.task_props.task_identifier} is not available in the list of workflows.
-  //     Please provide the workflow (create new or import from disk) by saving it to the server.
-  //     Then the workflow will be complete, able to be executed and correctly visualized on the canvas.`,
-  //     60_000,
-  //   );
-  // }
   const { inputs = [], outputs = [] } = uiProps;
 
   const nodeWidth = { width: `${uiProps.nodeWidth || 100}px` };

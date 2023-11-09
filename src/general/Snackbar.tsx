@@ -34,7 +34,7 @@ function SimpleSnackbar() {
   return (
     <Snackbar
       open={open}
-      autoHideDuration={autoHideDuration || 6000}
+      autoHideDuration={autoHideDuration}
       onClose={handleClose}
       message={text}
       action={action}

@@ -25,7 +25,7 @@ const useSnackbarStore = create<State>((set) => ({
       open: true,
       text,
       severity: 'success',
-      ...(autoHideDuration && { autoHideDuration }),
+      autoHideDuration: autoHideDuration || 6000,
     }));
   },
 
@@ -35,7 +35,7 @@ const useSnackbarStore = create<State>((set) => ({
       open: true,
       text,
       severity: 'warning',
-      ...(autoHideDuration && { autoHideDuration }),
+      autoHideDuration: autoHideDuration || 6000,
     }));
   },
 
@@ -45,7 +45,7 @@ const useSnackbarStore = create<State>((set) => ({
       open: true,
       text,
       severity: 'error',
-      ...(autoHideDuration && { autoHideDuration }),
+      autoHideDuration: autoHideDuration || 6000,
     }));
   },
 
@@ -55,7 +55,7 @@ const useSnackbarStore = create<State>((set) => ({
       open: true,
       text,
       severity: 'info',
-      ...(autoHideDuration && { autoHideDuration }),
+      autoHideDuration: autoHideDuration || 6000,
     }));
   },
 

@@ -1,11 +1,9 @@
-// import { useWorkflowsDLE } from '../api/workflows';
-// import useSnackbarStore from '../store/useSnackbarStore';
 import type { WorkflowDescription } from '../types';
 
 export function workflowExistsOnServerMessage(
   workflowId: string,
   workflows: WorkflowDescription[] | undefined,
-  showErrorMsg: (message: string, time: number) => void,
+  showErrorMsg: (message: string, autoHideDuration: number) => void,
 ): boolean {
   if (workflows) {
     const subgraphExistsOnServer = workflows.some(

@@ -21,7 +21,6 @@ import type { RFNode, Task } from 'types';
 
 import { useTasks } from '../../api/tasks';
 import { useWorkflowsDLE } from '../../api/workflows';
-import { useWorkflowExistsOnServerMessage } from '../../general/hooks';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
@@ -116,19 +115,6 @@ function Canvas() {
         return;
       }
 
-      // const subgraphExistsOnServer = workflows?.some(
-      //   (workflow) => workflow.id === nodeData.task_props.task_identifier,
-      // );
-
-      // if (!subgraphExistsOnServer) {
-      //   showErrorMsg(
-      //     `Workflow with id: ${nodeData.task_props.task_identifier} is not available in the list of workflows.
-      //       Please provide the workflow (create new or import from disk) by saving it to the server.
-      //       Then the workflow will be complete, able to be executed and correctly visualized on the canvas.`,
-      //     60_000,
-      //   );
-      //   return;
-      // }
       const newTabURL = `${window.location.origin}/edit?workflow=${node.id}`;
       const newTab = window.open(newTabURL, '_blank');
       if (newTab) {
