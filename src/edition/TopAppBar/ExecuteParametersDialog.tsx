@@ -32,8 +32,9 @@ interface ExecutionDefaultInputs {
 
 export interface ExecutionParams {
   defaultInputs?: ExecutionDefaultInputs[];
-  workerOptions?: string[];
+  workerOptions?: Record<string, unknown>;
   queue?: string;
+  executeArgs?: Record<string, unknown>;
 }
 
 export interface ExecuteParametersDialogProps {
