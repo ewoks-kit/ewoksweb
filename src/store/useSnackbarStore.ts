@@ -1,10 +1,6 @@
 import type { AlertColor } from '@mui/lab';
 import { create } from 'zustand';
 
-interface MesssageParams {
-  text: string;
-  autoHideDuration?: number;
-}
 interface State {
   open: boolean;
   text: string;

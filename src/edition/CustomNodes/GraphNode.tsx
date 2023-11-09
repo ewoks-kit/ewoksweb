@@ -27,7 +27,7 @@ function GraphNode(props: NodeProps<NodeData>) {
   // DOC: the subgraph is connected to the original graph through the task_identifier like
   // simple nodes and not through the id which is the unique in the current graph nodeId
 
-  const notExists = useWorkflowExistsOnServerMessage(
+  const subgraphExistsOnServer = useWorkflowExistsOnServerMessage(
     nodeData.task_props.task_identifier,
   );
 
@@ -69,7 +69,7 @@ function GraphNode(props: NodeProps<NodeData>) {
             }
             showFull={withLabel}
             showCropped={!withLabel && !withImage}
-            color={notExists ? '#ced3ee' : 'red'}
+            color={subgraphExistsOnServer ? '#ced3ee' : 'red'}
           />
           {withImage && (
             <SuspenseBoundary>

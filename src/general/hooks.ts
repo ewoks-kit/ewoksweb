@@ -46,7 +46,7 @@ export function useLoadGraph(onGraphLoad: (graph: Workflow) => void) {
   };
 }
 
-export function useWorkflowExistsOnServerMessage(workflowId: string) {
+export function useWorkflowExistsOnServerMessage(workflowId: string): boolean {
   const { data: workflows } = useWorkflowsDLE();
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
@@ -59,7 +59,9 @@ export function useWorkflowExistsOnServerMessage(workflowId: string) {
       `Workflow with id: ${workflowId} is not available in the list of workflows.
       Please provide the workflow (create new or import from disk) by saving it to the server.
       Then the workflow will be complete, able to be executed and correctly visualized on the canvas.`,
-      60_000,
+      30_000,
     );
+    return false;
   }
+  return true;
 }

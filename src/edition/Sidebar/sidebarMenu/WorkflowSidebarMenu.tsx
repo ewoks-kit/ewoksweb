@@ -9,6 +9,7 @@ import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../../../api/tasks';
 import { deleteWorkflow } from '../../../api/workflows';
+import { useInvalidateWorkflows } from '../../../api/workflows';
 import commonStrings from '../../../commonStrings.json';
 import ConfirmDialog from '../../../general/ConfirmDialog';
 import GraphFormDialog from '../../../general/forms/GraphFormDialog';
@@ -27,6 +28,7 @@ export default function WorkflowSidebarMenu() {
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const rfInstance = useReactFlow();
   const tasks = useTasks();
+  const invalidateWorkflows = useInvalidateWorkflows();
 
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo,
@@ -43,6 +45,7 @@ export default function WorkflowSidebarMenu() {
         showSuccessMsg(
           `Workflow ${displayedWorkflowInfo.id} successfully deleted!`,
         );
+        invalidateWorkflows();
       } catch (error) {
         showErrorMsg(textForError(error, commonStrings.deletingError));
       }
