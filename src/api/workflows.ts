@@ -65,6 +65,7 @@ export function useWorkflowsDLE() {
     queryKey: [QueryKey.Workflows],
     queryFn: getWorkflows,
     staleTime: Infinity,
+    suspense: true,
   });
 }
 

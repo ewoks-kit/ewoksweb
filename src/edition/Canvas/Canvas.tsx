@@ -20,7 +20,6 @@ import { useStoreApi } from 'reactflow';
 import type { RFNode, Task } from 'types';
 
 import { useTasks } from '../../api/tasks';
-import { useWorkflowsDLE } from '../../api/workflows';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
@@ -36,7 +35,6 @@ import {
   assertNodeDataDefined,
   assertNodeDefined,
 } from '../../utils/typeGuards';
-import { workflowExistsOnServerMessage } from '../../utils/workflowExistsOnServerMessage';
 import bendingText from '../CustomEdges/BendingTextEdge';
 import getAround from '../CustomEdges/GetAroundEdge';
 import multilineText from '../CustomEdges/MultilineTextEdge';
@@ -67,10 +65,25 @@ const nodeTypes = {
   class: DataNode,
 };
 
+const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
+  event.preventDefault();
+
+  const nodeData = getNodesData().get(node.id);
+  if (!nodeData) {
+    return;
+  }
+  if (nodeData.task_props.task_type === 'graph') {
+    const newTabURL = `${window.location.origin}/edit?workflow=${node.id}`;
+    const newTab = window.open(newTabURL, '_blank');
+    if (newTab) {
+      newTab.focus();
+    }
+  }
+};
+
 function Canvas() {
   const storeRF = useStoreApi();
   const rfInstance = useReactFlow();
-  const { data: workflows } = useWorkflowsDLE();
 
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
@@ -97,31 +110,6 @@ function Canvas() {
       fitView({ duration: 500 });
     }, 300);
   }, [rootWorkflowId, fitView]);
-
-  const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
-    event.preventDefault();
-
-    const nodeData = getNodesData().get(node.id);
-    if (!nodeData) {
-      return;
-    }
-    if (nodeData.task_props.task_type === 'graph') {
-      const subgraphExistsOnServer = workflowExistsOnServerMessage(
-        nodeData.task_props.task_identifier,
-        workflows,
-        showErrorMsg,
-      );
-      if (!subgraphExistsOnServer) {
-        return;
-      }
-
-      const newTabURL = `${window.location.origin}/edit?workflow=${node.id}`;
-      const newTab = window.open(newTabURL, '_blank');
-      if (newTab) {
-        newTab.focus();
-      }
-    }
-  };
 
   function onNodesChange(changes: NodeChange[]) {
     const newNodes = applyNodeChanges(changes, getNodes());

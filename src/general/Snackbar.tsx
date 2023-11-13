@@ -6,8 +6,13 @@ import Snackbar from '@mui/material/Snackbar';
 import useSnackbarStore from '../store/useSnackbarStore';
 
 function SimpleSnackbar() {
-  const { open, text, severity, autoHideDuration, closeSnackbar } =
-    useSnackbarStore();
+  const {
+    open,
+    text,
+    severity,
+    autoHideDuration = 6000,
+    closeSnackbar,
+  } = useSnackbarStore();
 
   const handleClose = (
     event: Event | React.SyntheticEvent,
