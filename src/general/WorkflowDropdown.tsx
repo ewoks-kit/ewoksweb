@@ -3,7 +3,7 @@ import { Autocomplete, CircularProgress, TextField } from '@mui/material';
 import { useEffect } from 'react';
 import type { WorkflowDescription } from 'types';
 
-import { useWorkflowDLE, useWorkflowsDLE } from '../api/workflows';
+import { useWorkflowsDLE } from '../api/workflows';
 import commonStrings from '../commonStrings.json';
 import useSnackbarStore from '../store/useSnackbarStore';
 import { textForError } from '../utils';
@@ -13,6 +13,7 @@ interface Props {
   onChange: (input: WorkflowDescription) => void;
   category?: string;
   label?: string;
+  isFetchingWorkflow?: boolean;
 }
 
 function sortByCategory(
@@ -31,12 +32,17 @@ function sortByCategory(
 }
 
 function WorkflowDropdown(props: Props) {
-  const { onChange, category, label = 'Quick open' } = props;
+  const {
+    onChange,
+    category,
+    label = 'Quick open',
+    isFetchingWorkflow,
+  } = props;
 
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
   const { data: workflows, isLoading, error } = useWorkflowsDLE();
-  const { isLoading: isLoadingWorkflow } = useWorkflowDLE('demo');
+
   const sortedWorkflows = sortByCategory(workflows ?? []);
 
   const options =
@@ -54,7 +60,7 @@ function WorkflowDropdown(props: Props) {
     <Autocomplete
       className={styles.quickOpen}
       autoHighlight
-      loading={isLoading || isLoadingWorkflow}
+      loading={isLoading}
       options={options}
       isOptionEqualToValue={(option, selected) => option.id === selected.id}
       getOptionLabel={(option) => option.label || option.id}
@@ -76,7 +82,7 @@ function WorkflowDropdown(props: Props) {
             ...params.InputProps,
             startAdornment: <CloudDownloadIcon className={styles.icon} />,
             endAdornment:
-              isLoading || isLoadingWorkflow ? (
+              isLoading || isFetchingWorkflow ? (
                 <CircularProgress
                   className={styles.loader}
                   color="inherit"

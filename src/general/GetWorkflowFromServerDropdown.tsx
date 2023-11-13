@@ -3,6 +3,7 @@ import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../api/tasks';
 import { fetchWorkflow } from '../api/workflows';
+import { useWorkflowDLE } from '../api/workflows';
 import useSnackbarStore from '../store/useSnackbarStore';
 import useStore from '../store/useStore';
 import type { WorkflowDescription } from '../types';
@@ -18,10 +19,13 @@ export default function GetWorkflowFromServerDropdown() {
   const rfInstance = useReactFlow();
   const tasks = useTasks();
 
+  const { refetch, isFetching } = useWorkflowDLE();
+
   async function setInputValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails.id) {
       setWorkflowId(workflowDetails.id);
       getFromServer(workflowDetails.id);
+      refetch({ queryKey: ['workflow', workflowDetails.id] });
     }
 
     setOpenAgreeDialog(false);
@@ -46,6 +50,7 @@ export default function GetWorkflowFromServerDropdown() {
         disagreeCallback={() => setOpenAgreeDialog(false)}
       />
       <WorkflowDropdown
+        isFetchingWorkflow={isFetching}
         key={workflowId}
         onChange={(workflowDetails) => {
           setInputValue(workflowDetails);
