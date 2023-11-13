@@ -143,6 +143,10 @@ interface ObjectWithMessage {
   message: string;
 }
 
+interface ObjectWithRequest {
+  message: string;
+}
+
 export function hasMessage(error: unknown): error is ObjectWithMessage {
   return (
     !!error &&
@@ -150,6 +154,10 @@ export function hasMessage(error: unknown): error is ObjectWithMessage {
     'message' in error &&
     typeof error.message === 'string'
   );
+}
+
+export function hasRequest(error: unknown): error is ObjectWithRequest {
+  return !!error && typeof error === 'object' && 'request' in error;
 }
 
 function isNonNull<T>(val: T): val is T extends null ? never : T {
