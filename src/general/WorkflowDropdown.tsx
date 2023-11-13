@@ -13,7 +13,6 @@ interface Props {
   onChange: (input: WorkflowDescription) => void;
   category?: string;
   label?: string;
-  isFetchingWorkflow?: boolean;
 }
 
 function sortByCategory(
@@ -32,12 +31,7 @@ function sortByCategory(
 }
 
 function WorkflowDropdown(props: Props) {
-  const {
-    onChange,
-    category,
-    label = 'Quick open',
-    isFetchingWorkflow,
-  } = props;
+  const { onChange, category, label = 'Quick open' } = props;
 
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
@@ -81,16 +75,15 @@ function WorkflowDropdown(props: Props) {
           InputProps={{
             ...params.InputProps,
             startAdornment: <CloudDownloadIcon className={styles.icon} />,
-            endAdornment:
-              isLoading || isFetchingWorkflow ? (
-                <CircularProgress
-                  className={styles.loader}
-                  color="inherit"
-                  size={20}
-                />
-              ) : (
-                params.InputProps.endAdornment
-              ),
+            endAdornment: isLoading ? (
+              <CircularProgress
+                className={styles.loader}
+                color="inherit"
+                size={20}
+              />
+            ) : (
+              params.InputProps.endAdornment
+            ),
           }}
           inputProps={{
             ...params.inputProps,

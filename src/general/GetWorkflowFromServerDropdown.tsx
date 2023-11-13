@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../api/tasks';
-import { fetchWorkflow } from '../api/workflows';
 import { useWorkflowDLE } from '../api/workflows';
+import useFetchingWorkflow from '../store/useFetchingWorkflow';
 import useSnackbarStore from '../store/useSnackbarStore';
 import useStore from '../store/useStore';
 import type { WorkflowDescription } from '../types';
@@ -18,14 +18,14 @@ export default function GetWorkflowFromServerDropdown() {
 
   const rfInstance = useReactFlow();
   const tasks = useTasks();
+  const { setFetching } = useFetchingWorkflow();
 
-  const { refetch, isFetching } = useWorkflowDLE();
+  const { data, refetch } = useWorkflowDLE();
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails.id) {
       setWorkflowId(workflowDetails.id);
       getFromServer(workflowDetails.id);
-      refetch({ queryKey: ['workflow', workflowDetails.id] });
     }
 
     setOpenAgreeDialog(false);
@@ -33,8 +33,20 @@ export default function GetWorkflowFromServerDropdown() {
 
   async function getFromServer(workflowIdparam: string) {
     if (workflowIdparam) {
-      const { data: graph } = await fetchWorkflow(workflowIdparam);
-      setRootWorkflow(graph, rfInstance, tasks, 'fromServer');
+      setFetching(true);
+      await refetch({
+        queryKey: ['workflow', workflowIdparam],
+      });
+
+      if (data) {
+        setRootWorkflow(
+          await data(workflowIdparam),
+          rfInstance,
+          tasks,
+          'fromServer',
+        );
+      }
+      setFetching(false);
     } else {
       showWarningMsg('Please select a graph to fetch and re-click!');
     }
@@ -50,7 +62,6 @@ export default function GetWorkflowFromServerDropdown() {
         disagreeCallback={() => setOpenAgreeDialog(false)}
       />
       <WorkflowDropdown
-        isFetchingWorkflow={isFetching}
         key={workflowId}
         onChange={(workflowDetails) => {
           setInputValue(workflowDetails);
