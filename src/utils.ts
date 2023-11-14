@@ -11,7 +11,11 @@ import { calcEwoksGraphProp } from './utils/CalcGraphInputsOutputs';
 import { calcNoteNodes } from './utils/calcNoteNodes';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
-import { hasMessage, isEwoksServerErrorResponse } from './utils/typeGuards';
+import {
+  hasMessage,
+  hasRequest,
+  isEwoksServerErrorResponse,
+} from './utils/typeGuards';
 import { propIsEmpty } from './utils/utils';
 
 export const DEFAULT_ICON: Icon = { name: 'orange3.png', data_url: orange3 };
@@ -86,6 +90,12 @@ export function findImage(img: string | undefined, allIcons: Icon[]): string {
 export function textForError(error: unknown, alternative: string): string {
   if (isEwoksServerErrorResponse(error)) {
     return error.response.data.message;
+  }
+
+  // The request was made but no response was received
+  // See https://github.com/axios/axios#handling-errors
+  if (hasRequest(error)) {
+    return 'Server is unreachable! Make sure ewoksserver is up and accessible before trying again.';
   }
 
   if (hasMessage(error)) {
