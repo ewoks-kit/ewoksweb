@@ -65,9 +65,9 @@ export async function getWorkflow(id: string): Promise<Workflow> {
   return response.data;
 }
 
-export function useWorkflowDLE() {
+export function useWorkflowDLE(id?: string) {
   return useQuery({
-    queryKey: [QueryKey.Workflow],
+    queryKey: [QueryKey.Workflow, id],
     queryFn: () => getWorkflow,
     enabled: false,
   });

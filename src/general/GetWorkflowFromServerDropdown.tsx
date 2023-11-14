@@ -20,7 +20,7 @@ export default function GetWorkflowFromServerDropdown() {
   const tasks = useTasks();
   const { setFetching } = useFetchingWorkflow();
 
-  const { data, refetch } = useWorkflowDLE();
+  const { refetch } = useWorkflowDLE();
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails.id) {
@@ -34,17 +34,14 @@ export default function GetWorkflowFromServerDropdown() {
   async function getFromServer(workflowIdparam: string) {
     if (workflowIdparam) {
       setFetching(true);
-      await refetch({
+      // const workflow = await getWorkflow(workflowIdparam);
+      // setRootWorkflow(workflow, rfInstance, tasks, 'fromServer');
+      const { data: inData } = await refetch({
         queryKey: ['workflow', workflowIdparam],
       });
-
-      if (data) {
-        setRootWorkflow(
-          await data(workflowIdparam),
-          rfInstance,
-          tasks,
-          'fromServer',
-        );
+      if (inData) {
+        const workflow = await inData(workflowIdparam);
+        setRootWorkflow(workflow, rfInstance, tasks, 'fromServer');
       }
       setFetching(false);
     } else {
