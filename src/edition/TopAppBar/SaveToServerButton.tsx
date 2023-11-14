@@ -1,7 +1,7 @@
 import { IconButton, Tooltip } from '@mui/material';
 import { useKeyboardEvent } from '@react-hookz/web';
 import { useState } from 'react';
-import { useReactFlow } from 'reactflow';
+import { useReactFlow, useStore as useRFStore } from 'reactflow';
 
 import { putWorkflow, useInvalidateWorkflows } from '../../api/workflows';
 import commonStrings from '../../commonStrings.json';
@@ -36,6 +36,13 @@ export default function SaveToServerButton() {
   const [action, setAction] = useState<
     GraphFormAction.newGraph | GraphFormAction.newGraphOrOverwrite
   >(GraphFormAction.newGraph);
+  const [buttonColor, setButtonColor] = useState('inherit');
+
+  function setButtonColo() {
+    setButtonColor('red');
+  }
+
+  const unsubStore = useStore.subscribe(setButtonColo);
 
   function handleError(text: string) {
     showErrorMsg(text);
@@ -115,6 +122,7 @@ export default function SaveToServerButton() {
       </SuspenseBoundary>
       <Tooltip title={tooltipText('Save to server')} enterDelay={500} arrow>
         <IconButton
+          style={{ backgroundColor: buttonColor }}
           className={styles.saveButton}
           onClick={() => {
             void handleSave();

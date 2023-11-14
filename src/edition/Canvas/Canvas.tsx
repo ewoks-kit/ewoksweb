@@ -112,11 +112,15 @@ function Canvas() {
   }, [rootWorkflowId, fitView]);
 
   function onNodesChange(changes: NodeChange[]) {
+    console.log(changes);
+
     const newNodes = applyNodeChanges(changes, getNodes());
     storeRF.getState().setNodes(newNodes);
   }
 
   function onEdgesChange(changes: EdgeChange[]) {
+    console.log(changes);
+
     const newEdges = applyEdgeChanges(changes, getEdges());
     storeRF.getState().setEdges(newEdges);
   }
