@@ -36,7 +36,6 @@ function WorkflowDropdown(props: Props) {
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
   const { data: workflows, isLoading, error } = useWorkflowsDLE();
-
   const sortedWorkflows = sortByCategory(workflows ?? []);
 
   const options =
