@@ -91,9 +91,11 @@ export function textForError(error: unknown, alternative: string): string {
   if (isEwoksServerErrorResponse(error)) {
     return error.response.data.message;
   }
-  // https://github.com/axios/axios#handling-errors
+
+  // The request was made but no response was received
+  // See https://github.com/axios/axios#handling-errors
   if (hasRequest(error)) {
-    return 'Server cannot be accessed! Make sure the server is up and accessible before trying again.';
+    return 'Server is unreachable! Make sure ewoksserver is up and accessible before trying again.';
   }
 
   if (hasMessage(error)) {

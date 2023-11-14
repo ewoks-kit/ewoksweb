@@ -144,7 +144,7 @@ interface ObjectWithMessage {
 }
 
 interface ObjectWithRequest {
-  message: string;
+  request: string;
 }
 
 export function hasMessage(error: unknown): error is ObjectWithMessage {
