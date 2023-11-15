@@ -6,10 +6,10 @@ interface State {
   text: string;
   severity?: AlertColor;
   autoHideDuration: number | undefined;
-  showSuccessMsg: (text: string, autoHideDuration?: number) => void;
-  showWarningMsg: (text: string, autoHideDuration?: number) => void;
+  showSuccessMsg: (text: string) => void;
+  showWarningMsg: (text: string) => void;
   showErrorMsg: (text: string, autoHideDuration?: number) => void;
-  showInfoMsg: (text: string, autoHideDuration?: number) => void;
+  showInfoMsg: (text: string) => void;
   closeSnackbar: () => void;
 }
 
@@ -19,23 +19,21 @@ const useSnackbarStore = create<State>((set) => ({
   severity: undefined,
   autoHideDuration: undefined,
 
-  showSuccessMsg: (text: string, autoHideDuration?: number) => {
+  showSuccessMsg: (text: string) => {
     set((state) => ({
       ...state,
       open: true,
       text,
       severity: 'success',
-      autoHideDuration,
     }));
   },
 
-  showWarningMsg: (text: string, autoHideDuration?: number) => {
+  showWarningMsg: (text: string) => {
     set((state) => ({
       ...state,
       open: true,
       text,
       severity: 'warning',
-      autoHideDuration,
     }));
   },
 
@@ -49,13 +47,12 @@ const useSnackbarStore = create<State>((set) => ({
     }));
   },
 
-  showInfoMsg: (text: string, autoHideDuration?: number) => {
+  showInfoMsg: (text: string) => {
     set((state) => ({
       ...state,
       open: true,
       text,
       severity: 'info',
-      autoHideDuration,
     }));
   },
 

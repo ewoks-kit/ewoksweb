@@ -24,6 +24,7 @@ import useEdgeDataStore from '../../store/useEdgeDataStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import useStore from '../../store/useStore';
+import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import { getNodeData, getNodesData } from '../../utils';
 import { calcNewId } from '../../utils/calcNewId';
 import {
@@ -316,29 +317,31 @@ function Canvas() {
       <div className={styles.root} onKeyDown={handleKeyDown}>
         <FallbackMessage />
         <div className={styles.wrapper} ref={reactFlowWrapper}>
-          <ReactFlow
-            fitView
-            connectOnClick
-            nodesDraggable
-            attributionPosition="bottom-right"
-            minZoom={0.2}
-            snapToGrid
-            onDrop={onDrop}
-            onConnect={onConnect}
-            onEdgeUpdate={onEdgeUpdate}
-            onDragOver={onDragOver}
-            onPaneContextMenu={onPaneContextMenu}
-            onNodeDoubleClick={onNodeDoubleClick}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            edgeTypes={edgeTypes}
-            nodeTypes={nodeTypes}
-            deleteKeyCode="Delete"
-            isValidConnection={isValidConnection}
-          >
-            <CanvasBackground />
-            <Controls position="bottom-right" />
-          </ReactFlow>
+          <SuspenseBoundary>
+            <ReactFlow
+              fitView
+              connectOnClick
+              nodesDraggable
+              attributionPosition="bottom-right"
+              minZoom={0.2}
+              snapToGrid
+              onDrop={onDrop}
+              onConnect={onConnect}
+              onEdgeUpdate={onEdgeUpdate}
+              onDragOver={onDragOver}
+              onPaneContextMenu={onPaneContextMenu}
+              onNodeDoubleClick={onNodeDoubleClick}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              edgeTypes={edgeTypes}
+              nodeTypes={nodeTypes}
+              deleteKeyCode="Delete"
+              isValidConnection={isValidConnection}
+            >
+              <CanvasBackground />
+              <Controls position="bottom-right" />
+            </ReactFlow>
+          </SuspenseBoundary>
         </div>
       </div>
     </>

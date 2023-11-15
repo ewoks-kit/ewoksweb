@@ -31,6 +31,44 @@ Cypress.Commands.add('loadApp', () => {
   cy.loadGraph('tutorial_Graph');
 });
 
+Cypress.Commands.add('saveEmptyWorkflow', (id: string) => {
+  cy.findByRole('button', { name: 'Save workflow to server' }).click();
+
+  cy.findByRole('dialog').should('be.visible');
+
+  cy.findByRole('textbox', {
+    name: 'Identifier',
+  })
+    .clear()
+    .type(id);
+
+  cy.findByRole('button', { name: 'Save workflow' }).click();
+});
+
+Cypress.Commands.add('openNewWorkflow', () => {
+  cy.findByRole('button', { name: 'Open menu with more actions' }).click();
+  cy.findByRole('menuitem', { name: 'New workflow' }).click();
+
+  cy.findByRole('dialog').within(() => {
+    cy.findByRole('button', {
+      name: 'Yes',
+    }).click();
+  });
+});
+
+Cypress.Commands.add('deleteWorkflow', (id: string) => {
+  cy.loadGraph(id);
+  cy.findByRole('button', { name: 'Open edit actions menu' }).click();
+  cy.findByRole('menuitem', { name: 'Delete Workflow' }).click();
+
+  cy.findByRole('dialog').should(
+    'include.text',
+    `Delete workflow with id: "${id}"?`,
+  );
+
+  cy.findByRole('button', { name: 'Yes' }).click();
+});
+
 Cypress.Commands.add('dragNodeInCanvas', (task_identifier: string) => {
   const dataTransfer = new DataTransfer();
 
