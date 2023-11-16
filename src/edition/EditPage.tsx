@@ -51,6 +51,14 @@ export default function EditPage() {
 
   if (workflowId) {
     restoreWorkflow(workflowId);
+
+    const currentUrl = window.location.href;
+
+    const updatedUrl = currentUrl.replace(/(\?|&)workflow=demo/u, '');
+
+    setTimeout(() => {
+      window.history.replaceState({}, document.title, updatedUrl);
+    }, 3000);
   }
 
   return (

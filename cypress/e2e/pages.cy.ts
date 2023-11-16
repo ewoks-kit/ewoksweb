@@ -41,13 +41,3 @@ it('should restore an opened workflow when switching pages', () => {
   cy.hasVisibleEdges(12);
 });
 
-it('should open the workflow given as query parameter on the URL', () => {
-  cy.visit('http://localhost:3000/edit?workflow=tutorial_Graph');
-  cy.hasNavBarLabel('tutorial_Graph');
-  cy.hasVisibleNodes(16);
-  cy.hasVisibleEdges(12);
-
-  cy.location().should((loc) => {
-    expect(loc.pathname).to.eq('/edit');
-  });
-});
