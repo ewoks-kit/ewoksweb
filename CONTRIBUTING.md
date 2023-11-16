@@ -20,7 +20,14 @@ ewoks-server
 
 Another `ewoksserver` instance (remote for example) can be used instead by
 setting its URL through the env variable `VITE_SERVER_URL` in `.env.local`
-(default: `http://127.0.0.1:5000`).
+(default: `http://127.0.0.1:8000`).
+
+Similarly, the env variable `VITE_SERVER_API_SUFFIX` can be changed to request a
+different version of the `ewoksserver` API. Ex:
+
+- `/api` (default): requests the latest version
+- `/api/v1`: requests the latest v1.x version
+- `/api/v1.0.0`: requests a specific version (`1.0.0` in this case)
 
 ## Cypress tests
 
