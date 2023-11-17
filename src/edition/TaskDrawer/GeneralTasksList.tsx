@@ -20,7 +20,7 @@ function GeneralTasksList(props: Props) {
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"
       >
-        <Typography>General</Typography>
+        <Typography aria-label="General category">General</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <div className={styles.itemContainer}>
