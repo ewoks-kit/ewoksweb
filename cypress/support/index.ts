@@ -9,6 +9,9 @@ declare global {
       loadApp(): void;
       loadGraph(name: string): void;
       loadAppWithoutGraph(): void;
+      saveEmptyWorkflow(name: string): void;
+      openNewWorkflow(): void;
+      deleteWorkflow(name: string): void;
       dragNodeInCanvas(task_identifier: string): void;
       hasNavBarLabel(label: string): void;
       hasVisibleNodes(expectedNumberOfNodes: number): void;

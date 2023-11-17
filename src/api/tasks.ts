@@ -59,6 +59,7 @@ export function useTasks(): Task[] {
     queryKey: [QueryKey.Tasks],
     queryFn: fetchTaskDescriptions,
     suspense: true,
+    staleTime: Infinity,
   });
 
   const { data: axiosResponse } = query;

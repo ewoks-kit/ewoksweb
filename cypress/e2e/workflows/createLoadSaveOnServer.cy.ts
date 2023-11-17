@@ -42,17 +42,9 @@ it.skip('will not open the dialog for name after clicking new', () => {
 it('saves an empty workflow on the server and deletes it', () => {
   cy.get('.react-flow__edge').should('have.length', 0);
   cy.get('.react-flow__node').should('have.length', 0);
-  cy.findByRole('button', { name: 'Save workflow to server' }).click();
-
-  cy.findByRole('dialog').should('be.visible');
-
   const id = nanoid();
 
-  cy.findByRole('textbox', {
-    name: 'Identifier',
-  }).type(id);
-
-  cy.findByRole('button', { name: 'Save workflow' }).click();
+  cy.saveEmptyWorkflow(id);
 
   cy.loadGraph(id);
 
@@ -61,15 +53,7 @@ it('saves an empty workflow on the server and deletes it', () => {
     cy.contains('tutorial_Graph').should('not.exist');
   });
 
-  cy.findByRole('button', { name: 'Open edit actions menu' }).click();
-  cy.findByRole('menuitem', { name: 'Delete Workflow' }).click();
-
-  cy.findByRole('dialog').should(
-    'include.text',
-    `Delete workflow with id: "${id}"?`,
-  );
-
-  cy.findByRole('button', { name: 'Yes' }).click();
+  cy.deleteWorkflow(id);
 
   cy.contains(id).should('not.exist');
   cy.get('p').should(
@@ -108,14 +92,7 @@ it('opens an empty workflow when clicking on New Workflow after a workflow was l
   cy.hasVisibleNodes(16);
   cy.hasVisibleEdges(12);
 
-  cy.findByRole('button', { name: 'Open menu with more actions' }).click();
-  cy.findByRole('menuitem', { name: 'New workflow' }).click();
-
-  cy.findByRole('dialog').within(() => {
-    cy.findByRole('button', {
-      name: 'Yes',
-    }).click();
-  });
+  cy.openNewWorkflow();
 
   cy.hasNavBarLabel('Untitled workflow (unsaved)');
   cy.get('.react-flow__edge').should('have.length', 0);

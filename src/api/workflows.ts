@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import type { Workflow, WorkflowDescription } from '../types';
+import { assertDefined } from '../utils/typeGuards';
 import { client } from './client';
 import type {
   DeleteResponse,
@@ -74,7 +75,25 @@ export function useWorkflowDLE(id?: string) {
 }
 
 export function useWorkflowsDLE() {
-  return useQuery({ queryKey: [QueryKey.Workflows], queryFn: getWorkflows });
+  return useQuery({
+    queryKey: [QueryKey.Workflows],
+    queryFn: getWorkflows,
+    staleTime: Infinity,
+  });
+}
+
+export function useWorkflows(): WorkflowDescription[] {
+  const query = useQuery({
+    queryKey: [QueryKey.Workflows],
+    queryFn: getWorkflows,
+    staleTime: Infinity,
+    suspense: true,
+  });
+
+  const { data: workflowDescriptions } = query;
+  assertDefined(workflowDescriptions);
+
+  return workflowDescriptions;
 }
 
 export function useInvalidateWorkflows() {
