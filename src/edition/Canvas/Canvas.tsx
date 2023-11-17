@@ -41,7 +41,7 @@ import getAround from '../CustomEdges/GetAroundEdge';
 import multilineText from '../CustomEdges/MultilineTextEdge';
 import DataNode from '../CustomNodes/DataNode';
 import GraphInOutNode from '../CustomNodes/GraphInOutNode';
-import GraphNode from '../CustomNodes/GraphNode';
+import GraphNode from '../CustomNodes/GraphNodeContent';
 import NoteNode from '../CustomNodes/NoteNode';
 import AddSubworkflowDialog from '../TaskDrawer/AddSubworkflowDialog';
 import styles from './Canvas.module.css';
@@ -317,31 +317,29 @@ function Canvas() {
       <div className={styles.root} onKeyDown={handleKeyDown}>
         <FallbackMessage />
         <div className={styles.wrapper} ref={reactFlowWrapper}>
-          <SuspenseBoundary>
-            <ReactFlow
-              fitView
-              connectOnClick
-              nodesDraggable
-              attributionPosition="bottom-right"
-              minZoom={0.2}
-              snapToGrid
-              onDrop={onDrop}
-              onConnect={onConnect}
-              onEdgeUpdate={onEdgeUpdate}
-              onDragOver={onDragOver}
-              onPaneContextMenu={onPaneContextMenu}
-              onNodeDoubleClick={onNodeDoubleClick}
-              onNodesChange={onNodesChange}
-              onEdgesChange={onEdgesChange}
-              edgeTypes={edgeTypes}
-              nodeTypes={nodeTypes}
-              deleteKeyCode="Delete"
-              isValidConnection={isValidConnection}
-            >
-              <CanvasBackground />
-              <Controls position="bottom-right" />
-            </ReactFlow>
-          </SuspenseBoundary>
+          <ReactFlow
+            fitView
+            connectOnClick
+            nodesDraggable
+            attributionPosition="bottom-right"
+            minZoom={0.2}
+            snapToGrid
+            onDrop={onDrop}
+            onConnect={onConnect}
+            onEdgeUpdate={onEdgeUpdate}
+            onDragOver={onDragOver}
+            onPaneContextMenu={onPaneContextMenu}
+            onNodeDoubleClick={onNodeDoubleClick}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            edgeTypes={edgeTypes}
+            nodeTypes={nodeTypes}
+            deleteKeyCode="Delete"
+            isValidConnection={isValidConnection}
+          >
+            <CanvasBackground />
+            <Controls position="bottom-right" />
+          </ReactFlow>
         </div>
       </div>
     </>
