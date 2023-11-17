@@ -4,7 +4,7 @@ import type {
   DefaultInput,
   EwoksDataMapping,
   EwoksNode,
-  RFNode,
+  NodeWithData,
 } from '../types';
 import { isString } from './typeGuards';
 import {
@@ -64,8 +64,8 @@ function calcDefaultInputs(default_inputs: DefaultInput[] | undefined) {
 }
 
 // EwoksRFNode --> EwoksNode for saving
-export function toEwoksNodes(nodes: RFNode[]): EwoksNode[] {
-  const tempNodes: RFNode[] = [...nodes].filter(
+export function toEwoksNodes(nodes: NodeWithData[]): EwoksNode[] {
+  const tempNodes: NodeWithData[] = [...nodes].filter(
     (nod) =>
       !['graphInput', 'graphOutput', 'note'].includes(
         nod.data.task_props.task_type,

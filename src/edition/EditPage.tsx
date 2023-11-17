@@ -1,4 +1,5 @@
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../api/tasks';
@@ -18,6 +19,8 @@ import TopAppBar from './TopAppBar/TopAppBar';
 export default function EditPage() {
   const rfInstance = useReactFlow();
   const tasks = useTasks();
+  const [queryParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const workflowToRestoreId = useWorkflowToRestoreId((state) => state.id);
   const resetWorkflowToRestoreId = useWorkflowToRestoreId(
@@ -26,7 +29,6 @@ export default function EditPage() {
 
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
-  const queryParams = new URLSearchParams(window.location.search);
   const workflowId = queryParams.get('workflow');
 
   const restoreWorkflow = async (workflow: string) => {
@@ -51,14 +53,7 @@ export default function EditPage() {
 
   if (workflowId) {
     restoreWorkflow(workflowId);
-
-    const currentUrl = window.location.href;
-
-    const updatedUrl = currentUrl.replace(/(\?|&)workflow=demo/u, '');
-
-    setTimeout(() => {
-      window.history.replaceState({}, document.title, updatedUrl);
-    }, 3000);
+    navigate(window.location.pathname, { replace: true });
   }
 
   return (

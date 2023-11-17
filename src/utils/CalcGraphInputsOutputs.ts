@@ -1,9 +1,9 @@
 import type {
+  EdgeWithData,
   Graph,
   GraphDetails,
   InputOutputNodeAndLink,
-  Link,
-  RFNode,
+  NodeWithData,
 } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { isString } from './typeGuards';
@@ -82,9 +82,9 @@ export function calcEwoksGraphProp(graph: Graph): GraphDetails {
 
 function calcInOutNodes(
   inputOrOutput: string,
-  nod: RFNode,
-  graph_nodes: RFNode[],
-  graph_links: Link[],
+  nod: NodeWithData,
+  graph_nodes: NodeWithData[],
+  graph_links: EdgeWithData[],
 ): InputOutputNodeAndLink[] {
   const nodes: InputOutputNodeAndLink[] = [];
 
@@ -106,7 +106,7 @@ function calcInOutNodes(
   }
 
   // DOC: use an array for all nodes although ewoks allows only one for now
-  const nodeObjConnectedTo: RFNode[] = [];
+  const nodeObjConnectedTo: NodeWithData[] = [];
   for (const nodesNames of nodesNamesConnectedTo) {
     const nodeInGraph = graph_nodes.find((node) => nodesNames === node.id);
     if (nodeInGraph) {
@@ -141,9 +141,9 @@ function calcInOutNodes(
 
 function calcNodeProps(
   isGraph: boolean,
-  nod: RFNode,
-  nodConnected: RFNode,
-  graph_links: Link[],
+  nod: NodeWithData,
+  nodConnected: NodeWithData,
+  graph_links: EdgeWithData[],
   link_index: number,
   inputOrOutput: string,
 ): InputOutputNodeAndLink {

@@ -50,6 +50,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
         x: nodeToClone.position.x + 100,
         y: nodeToClone.position.y + 100,
       },
+      data: {},
     };
 
     rfInstance.addNodes(clone);

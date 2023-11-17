@@ -17,6 +17,8 @@ function OpenNewWorkflowMenuItem() {
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
 
   const openEmptyWorkflow = useCallback(() => {
+    rfInstance.setNodes([]);
+    rfInstance.setEdges([]);
     setOpenDialog(false);
     setRootWorkflow(EMPTY_GRAPH, rfInstance, tasks);
   }, [setRootWorkflow, rfInstance, tasks]);

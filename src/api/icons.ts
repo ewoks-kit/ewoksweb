@@ -50,6 +50,7 @@ export function useIcons() {
     queryKey: [QueryKey.Icons],
     queryFn: getIcons,
     suspense: true,
+    staleTime: Infinity,
   });
 
   assertDefined(icons);

@@ -39,7 +39,6 @@ export default function AddSubworkflowDialog(props: Props) {
     const { nodeWithoutData, data } = await loadSubworkflow(
       subgraph,
       nodes,
-      rfInstance.getEdges(),
       position || { x: 0, y: 0 },
     );
 
@@ -80,10 +79,10 @@ export default function AddSubworkflowDialog(props: Props) {
               <ListItemText primary="From Server" />
               <SuspenseBoundary>
                 <WorkflowDropdown
+                  label="Select workflow"
                   onChange={(workflowDetails) => {
                     addSubgraph(workflowDetails.id);
                   }}
-                  style={{ width: '20rem', marginLeft: '2rem' }}
                 />
               </SuspenseBoundary>
             </ListItem>

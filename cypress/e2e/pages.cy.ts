@@ -40,4 +40,3 @@ it('should restore an opened workflow when switching pages', () => {
   cy.hasVisibleNodes(16);
   cy.hasVisibleEdges(12);
 });
-
