@@ -46,6 +46,7 @@ function OpenNewWorkflowMenuItem() {
         icon={FiberNew}
         label="New workflow"
         onClick={() => setOpenDialog(true)}
+        keyShortcut="ctrl+shift+n"
       />
     </>
   );

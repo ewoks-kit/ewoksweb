@@ -43,6 +43,7 @@ function ExecutionMenuItem() {
         icon={SendIcon}
         label="Execute workflow"
         onClick={checkAndExecute}
+        keyShortcut="ctrl+E"
       />
       <ConfirmDialog
         title="There are unsaved changes"
