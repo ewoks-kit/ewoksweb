@@ -47,8 +47,6 @@ it('changes links label and is reflected on the canvas', () => {
 });
 
 it('changes links animated property to true and is shown on the canvas', () => {
-  cy.findByRole('heading', { name: 'Appearance' }).click({ force: true });
-
   cy.contains('Animated').siblings().click();
 
   cy.get('.react-flow')
