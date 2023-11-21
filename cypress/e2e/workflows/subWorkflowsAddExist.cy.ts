@@ -25,13 +25,11 @@ it('saves two empty workflows and uses the one as a subworkflow to the other ', 
   cy.findByRole('option', { name: id1 }).click();
   cy.waitForStableDOM();
   cy.findByRole('button', { name: 'Save workflow to server' }).click();
-});
 
-it('Deletes the workflow used as a subworkflow', () => {
+  // Deletes the workflow used as a subworkflow
   cy.deleteWorkflow(id1);
-});
 
-it('Opens the workflow containing a non-existent subworkflow', () => {
+  // Opens the workflow containing a non-existent subworkflow and sees the error message
   cy.loadGraph(id2);
 
   cy.get('.react-flow__node').should('have.length', 1);
