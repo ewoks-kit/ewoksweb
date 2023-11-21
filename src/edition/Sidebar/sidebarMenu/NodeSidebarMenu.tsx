@@ -8,28 +8,19 @@ import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../../../api/tasks';
 import TaskForm from '../../../general/forms/TaskForm';
-import { useNodesIds } from '../../../store/graph-hooks';
-import useNodeDataStore from '../../../store/useNodeDataStore';
+import { useCloneNode } from '../../../general/hooks';
 import useStore from '../../../store/useStore';
-import type { RFNode } from '../../../types';
 import { getNodeData } from '../../../utils';
-import { calcNewId } from '../../../utils/calcNewId';
-import {
-  assertDefined,
-  assertNodeDataDefined,
-} from '../../../utils/typeGuards';
+import { assertNodeDataDefined } from '../../../utils/typeGuards';
 
 export default function NodeSidebarMenu(selectedElement: Node) {
   const rfInstance = useReactFlow();
-
-  const nodesIds = useNodesIds();
 
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo,
   );
   const tasks = useTasks();
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
-  const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
 
   const nodeData = getNodeData(selectedElement.id);
@@ -37,26 +28,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
   const nodeTask = tasks.find(
     (tas) => tas.task_identifier === nodeData.task_props.task_identifier,
   );
-
-  function cloneNode() {
-    const nodeToClone = rfInstance.getNode(selectedElement.id);
-    assertDefined(nodeToClone);
-
-    const clone: RFNode = {
-      ...nodeToClone,
-      id: calcNewId(selectedElement.id, nodesIds),
-      selected: false,
-      position: {
-        x: nodeToClone.position.x + 100,
-        y: nodeToClone.position.y + 100,
-      },
-      data: {},
-    };
-
-    rfInstance.addNodes(clone);
-    assertNodeDataDefined(nodeData, selectedElement.id);
-    setNodeData(clone.id, nodeData);
-  }
+  const { cloneNode } = useCloneNode();
 
   return (
     <>
@@ -66,7 +38,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
         elementToEdit={nodeTask}
       />
       <MenuItem
-        onClick={cloneNode}
+        onClick={() => cloneNode(selectedElement.id)}
         role="menuitem"
         disabled={rootWorkflowId !== displayedWorkflowInfo.id}
       >

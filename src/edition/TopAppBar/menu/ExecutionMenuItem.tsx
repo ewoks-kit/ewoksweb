@@ -1,4 +1,5 @@
 import SendIcon from '@mui/icons-material/Send';
+import { useKeyboardEvent } from '@react-hookz/web';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -37,13 +38,22 @@ function ExecutionMenuItem() {
     }
   }
 
+  useKeyboardEvent(
+    (e) => (e.ctrlKey || e.metaKey) && e.key === 'r',
+    (e) => {
+      e.preventDefault();
+      execute();
+    },
+    [],
+  );
+
   return (
     <>
       <ActionMenuItem
         icon={SendIcon}
         label="Execute workflow"
         onClick={checkAndExecute}
-        keyShortcut="ctrl+E"
+        keyShortcut="ctrl+r"
       />
       <ConfirmDialog
         title="There are unsaved changes"

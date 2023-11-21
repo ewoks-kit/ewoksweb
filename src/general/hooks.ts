@@ -1,6 +1,13 @@
+import { useReactFlow } from 'reactflow';
+
+import { useNodesIds } from '../store/graph-hooks';
+import useNodeDataStore from '../store/useNodeDataStore';
 import useSnackbarStore from '../store/useSnackbarStore';
 import useStore from '../store/useStore';
-import type { Workflow } from '../types';
+import type { RFNode, Workflow } from '../types';
+import { getNodeData } from '../utils';
+import { calcNewId } from '../utils/calcNewId';
+import { assertDefined, assertNodeDataDefined } from '../utils/typeGuards';
 import { isString } from '../utils/typeGuards';
 
 function tryJSONparse(str: string | ArrayBuffer | null): unknown {
@@ -44,3 +51,33 @@ export function useLoadGraph(onGraphLoad: (graph: Workflow) => void) {
     reader.readAsText(file);
   };
 }
+
+export const useCloneNode = () => {
+  const rfInstance = useReactFlow();
+  const nodesIds = useNodesIds();
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
+
+  const cloneNode = (id: string) => {
+    const nodeData = getNodeData(id);
+    assertNodeDataDefined(nodeData, id);
+    const nodeToClone = rfInstance.getNode(id);
+    assertDefined(nodeToClone);
+
+    const clone: RFNode = {
+      ...nodeToClone,
+      id: calcNewId(id, nodesIds),
+      selected: false,
+      position: {
+        x: nodeToClone.position.x + 100,
+        y: nodeToClone.position.y + 100,
+      },
+      data: {},
+    };
+
+    rfInstance.addNodes(clone);
+    assertNodeDataDefined(nodeData, id);
+    setNodeData(clone.id, nodeData);
+  };
+
+  return { cloneNode };
+};
