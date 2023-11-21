@@ -3,7 +3,6 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useReactFlow } from 'reactflow';
 
@@ -18,6 +17,7 @@ import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 import { GraphFormAction } from '../../../types';
 import { textForError } from '../../../utils';
 import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';
+import KeyStrokeHint from '../../keyStrokeHint';
 
 export default function WorkflowSidebarMenu() {
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
@@ -49,10 +49,6 @@ export default function WorkflowSidebarMenu() {
     }
   }
 
-  function disagreeCallback() {
-    setOpenAgreeDialog(false);
-  }
-
   return (
     <>
       <SuspenseBoundary>
@@ -74,8 +70,8 @@ export default function WorkflowSidebarMenu() {
         <ListItemIcon>
           <FileCopyIcon fontSize="small" />
         </ListItemIcon>
-        <ListItemText>Clone Workflow</ListItemText>
-        <Typography variant="body2" color="primary" />
+        <ListItemText>Save as...</ListItemText>
+        <KeyStrokeHint text="ctrl+a" />
       </MenuItem>
       <MenuItem
         onClick={() => setOpenAgreeDialog(true)}
@@ -88,7 +84,6 @@ export default function WorkflowSidebarMenu() {
           <DeleteIcon fontSize="small" />
         </ListItemIcon>
         <ListItemText>Delete Workflow</ListItemText>
-        <Typography variant="body2" color="primary" />
       </MenuItem>
 
       <ConfirmDialog
@@ -98,7 +93,7 @@ export default function WorkflowSidebarMenu() {
               Do you agree to continue?`}
         open={openAgreeDialog}
         agreeCallback={agreeCallback}
-        disagreeCallback={disagreeCallback}
+        disagreeCallback={() => setOpenAgreeDialog(false)}
       />
     </>
   );
