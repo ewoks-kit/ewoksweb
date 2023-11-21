@@ -18,9 +18,9 @@ Cypress.Commands.add('loadAppWithoutGraph', () => {
 });
 
 Cypress.Commands.add('loadGraph', (name: string) => {
-  cy.findByRole('combobox', {
-    name: 'Quick open',
-  }).type(name);
+  cy.findByPlaceholderText('Quick open')
+    .click({ force: true })
+    .type(name, { force: true });
 
   cy.findByRole('option', { name }).click();
   cy.waitForStableDOM();

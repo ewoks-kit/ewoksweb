@@ -25,6 +25,7 @@ const useSnackbarStore = create<State>((set) => ({
       open: true,
       text,
       severity: 'success',
+      autoHideDuration: undefined,
     }));
   },
 
@@ -34,6 +35,7 @@ const useSnackbarStore = create<State>((set) => ({
       open: true,
       text,
       severity: 'warning',
+      autoHideDuration: undefined,
     }));
   },
 
@@ -53,6 +55,7 @@ const useSnackbarStore = create<State>((set) => ({
       open: true,
       text,
       severity: 'info',
+      autoHideDuration: undefined,
     }));
   },
 
