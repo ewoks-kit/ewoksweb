@@ -74,7 +74,11 @@ export function useWorkflowDLE(id?: string) {
 }
 
 export function useWorkflowsDLE() {
-  return useQuery({ queryKey: [QueryKey.Workflows], queryFn: getWorkflows });
+  return useQuery({
+    queryKey: [QueryKey.Workflows],
+    queryFn: getWorkflows,
+    staleTime: Infinity,
+  });
 }
 
 export function useInvalidateWorkflows() {
