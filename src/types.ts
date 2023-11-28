@@ -4,6 +4,7 @@ import type { Node } from 'reactflow';
 
 import type { DisplayedWorkflowInfoSlice } from './store/displayedWorkflowInfo';
 import type { RootWorkflowSlice } from './store/rootWorkflow';
+import type { WorkflowIsChangedSlice } from './store/workflowIsChanged';
 
 export enum GraphFormAction {
   cloneGraph = 'cloneGraph',
@@ -79,7 +80,10 @@ export interface EwoksEvent {
   node_id?: string;
 }
 
-export interface State extends DisplayedWorkflowInfoSlice, RootWorkflowSlice {}
+export interface State
+  extends DisplayedWorkflowInfoSlice,
+    RootWorkflowSlice,
+    WorkflowIsChangedSlice {}
 
 export interface Action {
   action: string;

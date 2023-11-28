@@ -1,6 +1,7 @@
 import { merge } from 'lodash';
 import { create } from 'zustand';
 
+import useStore from '../store/useStore';
 import type { NodeData, NodeWithData } from '../types';
 
 export interface NodeDataState {
@@ -22,6 +23,8 @@ const useNodeDataStore = create<NodeDataState>((set) => ({
   },
 
   mergeNodeData: (nodeId, nodeData) => {
+    const { setWorkflowIsChanged } = useStore.getState();
+    setWorkflowIsChanged(true);
     set(({ nodesData }) => {
       const newData: NodeData = merge({}, nodesData.get(nodeId), nodeData);
 

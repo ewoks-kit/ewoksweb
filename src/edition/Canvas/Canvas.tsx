@@ -82,6 +82,7 @@ const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
 };
 
 function Canvas() {
+  // why use both?
   const storeRF = useStoreApi();
   const rfInstance = useReactFlow();
 
@@ -104,6 +105,7 @@ function Canvas() {
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const { fitView, setNodes, setEdges, getNodes, getEdges, addNodes, getNode } =
     rfInstance;
+  const setWorkflowIsChanged = useStore((state) => state.setWorkflowIsChanged);
 
   useEffect(() => {
     setTimeout(() => {
@@ -113,14 +115,14 @@ function Canvas() {
 
   function onNodesChange(changes: NodeChange[]) {
     console.log(changes);
-
+    setWorkflowIsChanged(true);
     const newNodes = applyNodeChanges(changes, getNodes());
     storeRF.getState().setNodes(newNodes);
   }
 
   function onEdgesChange(changes: EdgeChange[]) {
     console.log(changes);
-
+    setWorkflowIsChanged(true);
     const newEdges = applyEdgeChanges(changes, getEdges());
     storeRF.getState().setEdges(newEdges);
   }

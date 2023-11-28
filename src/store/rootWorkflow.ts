@@ -107,6 +107,7 @@ const rootWorkflow = (
     } else {
       rfInstance.setNodes(nodesWithoutData);
       rfInstance.setEdges(edgesWithoutData);
+      get().setWorkflowIsChanged(false);
     }
   },
 });
