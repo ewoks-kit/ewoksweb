@@ -29,7 +29,7 @@ Cypress.Commands.add('loadApp', () => {
   cy.loadGraph('tutorial_Graph');
 });
 
-Cypress.Commands.add('saveEmptyWorkflow', (id: string) => {
+Cypress.Commands.add('saveWorkflow', (id: string) => {
   cy.findByRole('button', { name: 'Save workflow to server' }).click();
 
   cy.findByRole('dialog').should('be.visible');

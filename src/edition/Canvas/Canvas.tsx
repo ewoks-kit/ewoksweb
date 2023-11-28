@@ -40,7 +40,7 @@ import getAround from '../CustomEdges/GetAroundEdge';
 import multilineText from '../CustomEdges/MultilineTextEdge';
 import DataNode from '../CustomNodes/DataNode';
 import GraphInOutNode from '../CustomNodes/GraphInOutNode';
-import GraphNode from '../CustomNodes/GraphNodeContent';
+import GraphNode from '../CustomNodes/GraphNode';
 import NoteNode from '../CustomNodes/NoteNode';
 import AddSubworkflowDialog from '../TaskDrawer/AddSubworkflowDialog';
 import styles from './Canvas.module.css';

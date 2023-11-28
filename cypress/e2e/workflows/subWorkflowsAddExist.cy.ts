@@ -4,13 +4,12 @@ beforeEach(() => {
   cy.loadAppWithoutGraph();
 });
 
-const id1 = nanoid();
-const id2 = nanoid();
-
 it('saves two empty workflows and uses the one as a subworkflow to the other ', () => {
-  cy.saveEmptyWorkflow(id1);
+  const id1 = nanoid();
+  const id2 = nanoid();
+  cy.saveWorkflow(id1);
   cy.openNewWorkflow();
-  cy.saveEmptyWorkflow(id2);
+  cy.saveWorkflow(id2);
 
   cy.findByRole('button', { name: 'General' }).should('be.visible');
   cy.findByRole('button', { name: 'General' }).click();
