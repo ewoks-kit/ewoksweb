@@ -14,7 +14,13 @@ import { getNodeData } from '../../../utils';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import KeyStrokeHint from '../../keyStrokeHint';
 
-export default function NodeSidebarMenu(selectedElement: Node) {
+interface Props {
+  selectedElement: Node;
+  onSelection: () => void;
+}
+
+export default function NodeSidebarMenu(props: Props) {
+  const { selectedElement, onSelection } = props;
   const rfInstance = useReactFlow();
 
   const displayedWorkflowInfo = useStore(
@@ -39,7 +45,10 @@ export default function NodeSidebarMenu(selectedElement: Node) {
         elementToEdit={nodeTask}
       />
       <MenuItem
-        onClick={() => cloneNode(selectedElement.id)}
+        onClick={() => {
+          cloneNode(selectedElement.id);
+          onSelection();
+        }}
         role="menuitem"
         disabled={rootWorkflowId !== displayedWorkflowInfo.id}
       >
@@ -66,6 +75,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
       <MenuItem
         onClick={() => {
           rfInstance.deleteElements({ nodes: [selectedElement] });
+          onSelection();
         }}
         role="menuitem"
         disabled={rootWorkflowId !== displayedWorkflowInfo.id}

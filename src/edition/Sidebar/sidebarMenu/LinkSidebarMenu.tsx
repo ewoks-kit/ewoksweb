@@ -8,7 +8,14 @@ import { useReactFlow } from 'reactflow';
 import useStore from '../../../store/useStore';
 import KeyStrokeHint from '../../keyStrokeHint';
 
-export default function LinkSidebarMenu(selectedElement: Edge) {
+interface Props {
+  selectedElement: Edge;
+  onSelection: () => void;
+}
+
+export default function LinkSidebarMenu(props: Props) {
+  const { selectedElement, onSelection } = props;
+
   const rfInstance = useReactFlow();
 
   const displayedWorkflowInfo = useStore(
@@ -28,6 +35,7 @@ export default function LinkSidebarMenu(selectedElement: Edge) {
     <MenuItem
       onClick={() => {
         deleteLink(selectedElement);
+        onSelection();
       }}
       role="sidebarMenuItem"
       disabled={rootWorkflowId !== displayedWorkflowInfo.id}
