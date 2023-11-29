@@ -33,7 +33,7 @@ export default function GetWorkflowFromServerDropdown() {
 
   async function getFromServer(workflowIdparam: string) {
     if (workflowIdparam) {
-      setFetching(true);
+      // setFetching(true);
       // const workflow = await getWorkflow(workflowIdparam);
       // setRootWorkflow(workflow, rfInstance, tasks, 'fromServer');
       const { data: inData } = await refetch({
@@ -43,7 +43,7 @@ export default function GetWorkflowFromServerDropdown() {
         const workflow = await inData(workflowIdparam);
         setRootWorkflow(workflow, rfInstance, tasks, 'fromServer');
       }
-      setFetching(false);
+      // setFetching(false);
     } else {
       showWarningMsg('Please select a graph to fetch and re-click!');
     }
