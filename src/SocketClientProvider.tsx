@@ -16,13 +16,13 @@ export function useSocketClientContext() {
 }
 
 interface Props {
-  serverUrl: string;
+  baseUrl: string;
+  apiSuffix: string;
 }
 
 function SocketClientProvider(props: PropsWithChildren<Props>) {
-  const { children, serverUrl } = props;
-  const socket = io(serverUrl);
-
+  const { children, baseUrl, apiSuffix } = props;
+  const socket = io(baseUrl, { path: `${apiSuffix}/socket.io` });
   const queryClient = useQueryClient();
 
   useEffect(() => {

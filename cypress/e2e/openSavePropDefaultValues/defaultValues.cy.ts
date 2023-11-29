@@ -19,7 +19,7 @@ it('Saves an empty workflow', () => {
   cy.intercept('POST', '/workflows', (req) => {
     expect(req.body).to.deep.equal(emptyWorkflow(id));
   });
-  cy.saveEmptyWorkflow(id);
+  cy.saveNewWorkflow(id);
 });
 
 it('Saves an empty existing workflow', () => {

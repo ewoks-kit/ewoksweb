@@ -26,7 +26,6 @@ import useFetchingWorkflow from '../../store/useFetchingWorkflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import useStore from '../../store/useStore';
-import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import { getNodeData, getNodesData } from '../../utils';
 import { calcNewId } from '../../utils/calcNewId';
 import {
@@ -43,7 +42,7 @@ import getAround from '../CustomEdges/GetAroundEdge';
 import multilineText from '../CustomEdges/MultilineTextEdge';
 import DataNode from '../CustomNodes/DataNode';
 import GraphInOutNode from '../CustomNodes/GraphInOutNode';
-import GraphNode from '../CustomNodes/GraphNodeContent';
+import GraphNode from '../CustomNodes/GraphNode';
 import NoteNode from '../CustomNodes/NoteNode';
 import AddSubworkflowDialog from '../TaskDrawer/AddSubworkflowDialog';
 import styles from './Canvas.module.css';

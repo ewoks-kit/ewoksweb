@@ -18,9 +18,7 @@ Cypress.Commands.add('loadAppWithoutGraph', () => {
 });
 
 Cypress.Commands.add('loadGraph', (name: string) => {
-  cy.findByRole('combobox', {
-    name: 'Quick open',
-  }).type(name);
+  cy.findByPlaceholderText('Quick open').type(name);
 
   cy.findByRole('option', { name }).click();
   cy.waitForStableDOM();
@@ -31,7 +29,7 @@ Cypress.Commands.add('loadApp', () => {
   cy.loadGraph('tutorial_Graph');
 });
 
-Cypress.Commands.add('saveEmptyWorkflow', (id: string) => {
+Cypress.Commands.add('saveNewWorkflow', (id: string) => {
   cy.findByRole('button', { name: 'Save workflow to server' }).click();
 
   cy.findByRole('dialog').should('be.visible');

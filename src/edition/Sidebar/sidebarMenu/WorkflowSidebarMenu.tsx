@@ -20,7 +20,12 @@ import { GraphFormAction } from '../../../types';
 import { textForError } from '../../../utils';
 import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';
 
-export default function WorkflowSidebarMenu() {
+interface Props {
+  onSelection: () => void;
+}
+
+export default function WorkflowSidebarMenu(props: Props) {
+  const { onSelection } = props;
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
 
@@ -100,8 +105,14 @@ export default function WorkflowSidebarMenu() {
               Please make sure that it is not used as a sub-workflow in other workflows!
               Do you agree to continue?`}
         open={openAgreeDialog}
-        agreeCallback={agreeCallback}
-        disagreeCallback={disagreeCallback}
+        agreeCallback={() => {
+          agreeCallback();
+          onSelection();
+        }}
+        disagreeCallback={() => {
+          disagreeCallback();
+          onSelection();
+        }}
       />
     </>
   );
