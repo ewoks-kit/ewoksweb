@@ -8,13 +8,13 @@ import { useReactFlow } from 'reactflow';
 
 import useStore from '../../../store/useStore';
 
-interface LinkSidebarMenuProps {
+interface Props {
   selectedElement: Edge;
-  onClose: () => void;
+  onSelection: () => void;
 }
 
-export default function LinkSidebarMenu(props: LinkSidebarMenuProps) {
-  const { selectedElement, onClose } = props;
+export default function LinkSidebarMenu(props: Props) {
+  const { selectedElement, onSelection } = props;
 
   const rfInstance = useReactFlow();
 
@@ -29,13 +29,13 @@ export default function LinkSidebarMenu(props: LinkSidebarMenuProps) {
       .find((edg) => edg.id === islink.id);
 
     rfInstance.deleteElements({ edges: [edge] as Edge[] });
-    onClose();
   }
 
   return (
     <MenuItem
       onClick={() => {
         deleteLink(selectedElement);
+        onSelection();
       }}
       role="sidebarMenuItem"
       disabled={rootWorkflowId !== displayedWorkflowInfo.id}

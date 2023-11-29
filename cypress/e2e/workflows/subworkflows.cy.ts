@@ -33,9 +33,8 @@ it('saves two empty workflows and uses the one as a subworkflow to the other ', 
   cy.loadAppWithoutGraph();
   const subworkflow = nanoid();
   const rootWorkflow = nanoid();
-  cy.saveWorkflow(subworkflow);
+  cy.saveNewWorkflow(subworkflow);
   cy.openNewWorkflow();
-  cy.saveWorkflow(rootWorkflow);
 
   cy.findByRole('button', { name: 'General' }).should('be.visible');
   cy.findByRole('button', { name: 'General' }).click();
@@ -50,11 +49,10 @@ it('saves two empty workflows and uses the one as a subworkflow to the other ', 
   cy.findByRole('option', { name: subworkflow }).click();
   cy.waitForStableDOM();
 
-  cy.findAllByRole('button', { name: subworkflow })
-    .filter('.react-flow__node')
-    .as('node', { type: 'static' });
+  cy.get('.react-flow__node').should('have.length', 1);
+  cy.get('.react-flow__node-graph').should('have.length', 1);
 
-  cy.findByRole('button', { name: 'Save workflow to server' }).click();
+  cy.saveNewWorkflow(rootWorkflow);
 
   cy.deleteWorkflow(subworkflow);
 
