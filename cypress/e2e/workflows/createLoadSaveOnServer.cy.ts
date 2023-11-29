@@ -44,7 +44,7 @@ it('saves an empty workflow on the server and deletes it', () => {
   cy.get('.react-flow__node').should('have.length', 0);
   const id = nanoid();
 
-  cy.saveEmptyWorkflow(id);
+  cy.saveWorkflow(id);
 
   cy.loadGraph(id);
 

@@ -44,14 +44,20 @@ export default function EditSidebarMenu({ selectedElement }: SelectedElement) {
         <MenuList>
           {!selectedElement ? (
             <SuspenseBoundary>
-              <WorkflowSidebarMenu />
+              <WorkflowSidebarMenu onClose={handleClose} />
             </SuspenseBoundary>
           ) : isNodeRF(selectedElement) ? (
             <SuspenseBoundary>
-              <NodeSidebarMenu {...selectedElement} />
+              <NodeSidebarMenu
+                selectedElement={selectedElement}
+                onClose={handleClose}
+              />
             </SuspenseBoundary>
           ) : (
-            <LinkSidebarMenu {...selectedElement} />
+            <LinkSidebarMenu
+              selectedElement={selectedElement}
+              onClose={handleClose}
+            />
           )}
         </MenuList>
       </Menu>
