@@ -39,12 +39,12 @@ it.skip('will not open the dialog for name after clicking new', () => {
   cy.waitForStableDOM();
 });
 
-it('saves an empty workflow on the server and deletes it', () => {
+it('saves an empty workflow on the server, reloads and deletes it', () => {
   cy.get('.react-flow__edge').should('have.length', 0);
   cy.get('.react-flow__node').should('have.length', 0);
   const id = nanoid();
 
-  cy.saveEmptyWorkflow(id);
+  cy.saveNewWorkflow(id);
 
   cy.loadGraph(id);
 

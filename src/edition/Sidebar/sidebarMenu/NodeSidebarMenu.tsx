@@ -19,7 +19,13 @@ import {
   assertNodeDataDefined,
 } from '../../../utils/typeGuards';
 
-export default function NodeSidebarMenu(selectedElement: Node) {
+interface Props {
+  selectedElement: Node;
+  onSelection: () => void;
+}
+
+export default function NodeSidebarMenu(props: Props) {
+  const { selectedElement, onSelection } = props;
   const rfInstance = useReactFlow();
 
   const nodesIds = useNodesIds();
@@ -66,7 +72,10 @@ export default function NodeSidebarMenu(selectedElement: Node) {
         elementToEdit={nodeTask}
       />
       <MenuItem
-        onClick={cloneNode}
+        onClick={() => {
+          cloneNode();
+          onSelection();
+        }}
         role="menuitem"
         disabled={rootWorkflowId !== displayedWorkflowInfo.id}
       >
@@ -92,6 +101,7 @@ export default function NodeSidebarMenu(selectedElement: Node) {
       <MenuItem
         onClick={() => {
           rfInstance.deleteElements({ nodes: [selectedElement] });
+          onSelection();
         }}
         role="menuitem"
         disabled={rootWorkflowId !== displayedWorkflowInfo.id}
