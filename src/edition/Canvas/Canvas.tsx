@@ -23,7 +23,6 @@ import { useTasks } from '../../api/tasks';
 import { useWorkflowDLE } from '../../api/workflows';
 import Spinner from '../../general/Spinner';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
-import useFetchingWorkflow from '../../store/useFetchingWorkflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import useStore from '../../store/useStore';
@@ -105,11 +104,8 @@ function Canvas() {
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
-  const { fetching } = useFetchingWorkflow();
-  const { isFetching, isRefetching, isLoading } =
-    useWorkflowDLE(rootWorkflowId);
 
-  console.log(fetching, isFetching, isRefetching, isLoading);
+  const { isFetching } = useWorkflowDLE(rootWorkflowId);
 
   const { fitView, setNodes, setEdges, getNodes, getEdges, addNodes, getNode } =
     rfInstance;
@@ -325,33 +321,34 @@ function Canvas() {
       <div className={styles.root} onKeyDown={handleKeyDown}>
         <FallbackMessage />
         <div className={styles.wrapper} ref={reactFlowWrapper}>
-          {fetching ? (
-            <Spinner />
-          ) : (
-            <ReactFlow
-              fitView
-              connectOnClick
-              nodesDraggable
-              attributionPosition="bottom-right"
-              minZoom={0.2}
-              snapToGrid
-              onDrop={onDrop}
-              onConnect={onConnect}
-              onEdgeUpdate={onEdgeUpdate}
-              onDragOver={onDragOver}
-              onPaneContextMenu={onPaneContextMenu}
-              onNodeDoubleClick={onNodeDoubleClick}
-              onNodesChange={onNodesChange}
-              onEdgesChange={onEdgesChange}
-              edgeTypes={edgeTypes}
-              nodeTypes={nodeTypes}
-              deleteKeyCode="Delete"
-              isValidConnection={isValidConnection}
-            >
-              <CanvasBackground />
-              <Controls position="bottom-right" />
-            </ReactFlow>
+          {isFetching && (
+            <div className={styles.spinner}>
+              <Spinner />
+            </div>
           )}
+          <ReactFlow
+            fitView
+            connectOnClick
+            nodesDraggable
+            attributionPosition="bottom-right"
+            minZoom={0.2}
+            snapToGrid
+            onDrop={onDrop}
+            onConnect={onConnect}
+            onEdgeUpdate={onEdgeUpdate}
+            onDragOver={onDragOver}
+            onPaneContextMenu={onPaneContextMenu}
+            onNodeDoubleClick={onNodeDoubleClick}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            edgeTypes={edgeTypes}
+            nodeTypes={nodeTypes}
+            deleteKeyCode="Delete"
+            isValidConnection={isValidConnection}
+          >
+            <CanvasBackground />
+            <Controls position="bottom-right" />
+          </ReactFlow>
         </div>
       </div>
     </>

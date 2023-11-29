@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../api/tasks';
-import { fetchWorkflow, getWorkflow, useWorkflowDLE } from '../api/workflows';
-import useFetchingWorkflow from '../store/useFetchingWorkflow';
+import { useWorkflowDLE } from '../api/workflows';
 import useSnackbarStore from '../store/useSnackbarStore';
 import useStore from '../store/useStore';
 import type { WorkflowDescription } from '../types';
@@ -18,9 +17,8 @@ export default function GetWorkflowFromServerDropdown() {
 
   const rfInstance = useReactFlow();
   const tasks = useTasks();
-  const { setFetching } = useFetchingWorkflow();
 
-  const { refetch } = useWorkflowDLE();
+  const { refetch } = useWorkflowDLE(workflowId);
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails.id) {
@@ -33,17 +31,18 @@ export default function GetWorkflowFromServerDropdown() {
 
   async function getFromServer(workflowIdparam: string) {
     if (workflowIdparam) {
-      // setFetching(true);
-      // const workflow = await getWorkflow(workflowIdparam);
-      // setRootWorkflow(workflow, rfInstance, tasks, 'fromServer');
       const { data: inData } = await refetch({
         queryKey: ['workflow', workflowIdparam],
       });
+
       if (inData) {
-        const workflow = await inData(workflowIdparam);
-        setRootWorkflow(workflow, rfInstance, tasks, 'fromServer');
+        setRootWorkflow(
+          await inData(workflowIdparam),
+          rfInstance,
+          tasks,
+          'fromServer',
+        );
       }
-      // setFetching(false);
     } else {
       showWarningMsg('Please select a graph to fetch and re-click!');
     }
