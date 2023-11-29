@@ -71,7 +71,6 @@ export default function WorkflowSidebarMenu() {
           <FileCopyIcon fontSize="small" />
         </ListItemIcon>
         <ListItemText>Save as...</ListItemText>
-        <KeyStrokeHint text="ctrl+a" />
       </MenuItem>
       <MenuItem
         onClick={() => setOpenAgreeDialog(true)}
