@@ -1,10 +1,8 @@
-import { useState } from 'react';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../api/tasks';
-import { fetchWorkflow } from '../api/workflows';
 import { useWorkflowDLE } from '../api/workflows';
 import ErrorFallback from '../general/ErrorFallback';
 import useSnackbarStore from '../store/useSnackbarStore';
@@ -28,20 +26,24 @@ export default function EditPage() {
   const resetWorkflowToRestoreId = useWorkflowToRestoreId(
     (state) => state.resetId,
   );
-  const [workflowIdparam, setWorkflowIdparam] = useState<string>('');
 
-  const { refetch } = useWorkflowDLE(workflowIdparam);
+  const { refetch } = useWorkflowDLE('');
 
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const workflowId = queryParams.get('workflow');
 
-  const restoreWorkflow = async (workflow: string) => {
+  const restoreWorkflow = async (workflowid: string) => {
     try {
-      const { data: graph } = await refetch();
-      console.log(graph);
-
-      setRootWorkflow(graph, rfInstance, tasks, 'fromServer');
+      const { data: inData } = await refetch();
+      if (inData) {
+        setRootWorkflow(
+          await inData(workflowid),
+          rfInstance,
+          tasks,
+          'fromServer',
+        );
+      }
     } catch (error) {
       showErrorMsg(
         textForError(
@@ -55,12 +57,10 @@ export default function EditPage() {
   };
 
   if (workflowToRestoreId) {
-    setWorkflowIdparam(workflowToRestoreId);
     restoreWorkflow(workflowToRestoreId);
   }
 
   if (workflowId) {
-    setWorkflowIdparam(workflowId);
     restoreWorkflow(workflowId);
     navigate(window.location.pathname, { replace: true });
   }

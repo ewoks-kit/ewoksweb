@@ -18,22 +18,19 @@ export default function GetWorkflowFromServerDropdown() {
   const rfInstance = useReactFlow();
   const tasks = useTasks();
 
-  const { refetch } = useWorkflowDLE(workflowId);
+  const { refetch } = useWorkflowDLE('');
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails.id) {
       setWorkflowId(workflowDetails.id);
       getFromServer(workflowDetails.id);
     }
-
     setOpenAgreeDialog(false);
   }
 
   async function getFromServer(workflowIdparam: string) {
     if (workflowIdparam) {
-      const { data: inData } = await refetch({
-        queryKey: ['workflow', workflowIdparam],
-      });
+      const { data: inData } = await refetch();
 
       if (inData) {
         setRootWorkflow(
