@@ -1,11 +1,8 @@
-import type { Workflow } from '../../../src/types';
-import { MarkerType } from 'reactflow';
-
-export function emptyWorkflow(id: string): Workflow {
+export function emptyWorkflow(id: string) {
   return { graph: { id }, nodes: [], links: [] };
 }
 
-export function withCategoryCommentLabelWorkflow(id: string): Workflow {
+export function withCategoryCommentLabelWorkflow(id: string) {
   return {
     ...emptyWorkflow(id),
     graph: {
@@ -17,7 +14,7 @@ export function withCategoryCommentLabelWorkflow(id: string): Workflow {
   };
 }
 
-export function simpleNodeWorkflow(id: string): Workflow {
+export function simpleNodeWorkflow(id: string) {
   return {
     ...emptyWorkflow(id),
     nodes: [
@@ -32,7 +29,7 @@ export function simpleNodeWorkflow(id: string): Workflow {
   };
 }
 
-export function populatedNodeWorkflow(id: string): Workflow {
+export function populatedNodeWorkflow(id: string) {
   return {
     ...emptyWorkflow(id),
     nodes: [
@@ -52,7 +49,7 @@ export function populatedNodeWorkflow(id: string): Workflow {
   };
 }
 
-export function simpleLinkWorkflow(id: string): Workflow {
+export function simpleLinkWorkflow(id: string) {
   return {
     graph: { id },
     nodes: [
@@ -82,7 +79,7 @@ export function simpleLinkWorkflow(id: string): Workflow {
   };
 }
 
-export function populatedLinkWorkflow(id: string): Workflow {
+export function populatedLinkWorkflow(id: string) {
   return {
     ...simpleLinkWorkflow(id),
     links: [
