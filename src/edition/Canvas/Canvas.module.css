@@ -6,6 +6,9 @@
 .wrapper {
   flex: 1;
   background-color: rgb(233, 235, 247);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .noWorkflowMessage {
@@ -18,11 +21,4 @@
   opacity: 0.5;
   text-align: center;
   pointer-events: none; /* Let RF events go through the message */
-}
-
-.spinner {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }

@@ -321,12 +321,9 @@ function Canvas() {
       <div className={styles.root} onKeyDown={handleKeyDown}>
         <FallbackMessage />
         <div className={styles.wrapper} ref={reactFlowWrapper}>
-          {isFetching && (
-            <div className={styles.spinner}>
-              <Spinner />
-            </div>
-          )}
+          {isFetching && <Spinner />}
           <ReactFlow
+            style={isFetching ? { display: 'none' } : {}}
             fitView
             connectOnClick
             nodesDraggable
