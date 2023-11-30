@@ -105,9 +105,7 @@ function Canvas() {
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
 
-  const { isFetching, isRefetching, isLoading } = useWorkflowDLE();
-
-  console.log(isFetching, isRefetching, isLoading);
+  const { isFetching } = useWorkflowDLE(rootWorkflowId);
 
   const { fitView, setNodes, setEdges, getNodes, getEdges, addNodes, getNode } =
     rfInstance;
@@ -323,33 +321,34 @@ function Canvas() {
       <div className={styles.root} onKeyDown={handleKeyDown}>
         <FallbackMessage />
         <div className={styles.wrapper} ref={reactFlowWrapper}>
-          {isFetching ? (
-            <Spinner />
-          ) : (
-            <ReactFlow
-              fitView
-              connectOnClick
-              nodesDraggable
-              attributionPosition="bottom-right"
-              minZoom={0.2}
-              snapToGrid
-              onDrop={onDrop}
-              onConnect={onConnect}
-              onEdgeUpdate={onEdgeUpdate}
-              onDragOver={onDragOver}
-              onPaneContextMenu={onPaneContextMenu}
-              onNodeDoubleClick={onNodeDoubleClick}
-              onNodesChange={onNodesChange}
-              onEdgesChange={onEdgesChange}
-              edgeTypes={edgeTypes}
-              nodeTypes={nodeTypes}
-              deleteKeyCode="Delete"
-              isValidConnection={isValidConnection}
-            >
-              <CanvasBackground />
-              <Controls position="bottom-right" />
-            </ReactFlow>
+          {isFetching && (
+            <div className={styles.spinner}>
+              <Spinner />
+            </div>
           )}
+          <ReactFlow
+            fitView
+            connectOnClick
+            nodesDraggable
+            attributionPosition="bottom-right"
+            minZoom={0.2}
+            snapToGrid
+            onDrop={onDrop}
+            onConnect={onConnect}
+            onEdgeUpdate={onEdgeUpdate}
+            onDragOver={onDragOver}
+            onPaneContextMenu={onPaneContextMenu}
+            onNodeDoubleClick={onNodeDoubleClick}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            edgeTypes={edgeTypes}
+            nodeTypes={nodeTypes}
+            deleteKeyCode="Delete"
+            isValidConnection={isValidConnection}
+          >
+            <CanvasBackground />
+            <Controls position="bottom-right" />
+          </ReactFlow>
         </div>
       </div>
     </>

@@ -18,7 +18,7 @@ export default function GetWorkflowFromServerDropdown() {
   const rfInstance = useReactFlow();
   const tasks = useTasks();
 
-  const { refetch } = useWorkflowDLE();
+  const { refetch } = useWorkflowDLE(workflowId);
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails.id) {
@@ -34,9 +34,14 @@ export default function GetWorkflowFromServerDropdown() {
       const { data: inData } = await refetch({
         queryKey: ['workflow', workflowIdparam],
       });
+
       if (inData) {
-        // const workflow = inData(workflowIdparam);
-        setRootWorkflow(inData, rfInstance, tasks, 'fromServer');
+        setRootWorkflow(
+          await inData(workflowIdparam),
+          rfInstance,
+          tasks,
+          'fromServer',
+        );
       }
     } else {
       showWarningMsg('Please select a graph to fetch and re-click!');

@@ -67,13 +67,11 @@ export async function getWorkflow(id: string): Promise<Workflow> {
   return response.data;
 }
 
-export function useWorkflowDLE(id: string) {
-  console.log(id);
-
+export function useWorkflowDLE(id?: string) {
   return useQuery({
     queryKey: [QueryKey.Workflow, id],
-    queryFn: () => getWorkflow(id),
-    enabled: false,
+    queryFn: () => getWorkflow,
+    enabled: !!id,
   });
 }
 
