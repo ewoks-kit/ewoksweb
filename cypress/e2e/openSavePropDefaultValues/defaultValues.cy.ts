@@ -1,5 +1,4 @@
 import { nanoid } from 'nanoid';
-import type { Workflow } from '../../../src/types';
 import {
   emptyWorkflow,
   populatedLinkWorkflow,
@@ -16,7 +15,7 @@ beforeEach(() => {
 const id = nanoid();
 
 it('Saves an empty workflow', () => {
-  cy.intercept('POST', '/workflows', (req) => {
+  cy.intercept('POST', 'api/workflows', (req) => {
     expect(req.body).to.deep.equal(emptyWorkflow(id));
   });
   cy.saveEmptyWorkflow(id);
@@ -24,7 +23,7 @@ it('Saves an empty workflow', () => {
 
 it('Saves an empty existing workflow', () => {
   cy.loadGraph(id);
-  cy.intercept('PUT', `/workflow/${id}`, (req) => {
+  cy.intercept('PUT', `api/workflow/${id}`, (req) => {
     expect(req.body).to.deep.equal(emptyWorkflow(id));
   });
 
@@ -33,7 +32,7 @@ it('Saves an empty existing workflow', () => {
 
 it('Saves workflow comment, category and label', () => {
   cy.loadGraph(id);
-  cy.intercept('PUT', `/workflow/${id}`, (req) => {
+  cy.intercept('PUT', `api/workflow/${id}`, (req) => {
     expect(req.body).to.deep.equal(withCategoryCommentLabelWorkflow(id));
   });
   cy.findByRole('textbox', { name: 'Edit label' }).click().type(id);
@@ -48,7 +47,7 @@ it('Saves workflow comment, category and label', () => {
 });
 
 it('Opens and saves workflow after deleting comment, category and label', () => {
-  cy.intercept('GET', `/workflow/${id}`).as('workflowRequest');
+  cy.intercept('GET', `api/workflow/${id}`).as('workflowRequest');
 
   cy.loadGraph(id);
 
@@ -59,7 +58,7 @@ it('Opens and saves workflow after deleting comment, category and label', () => 
     );
   });
 
-  cy.intercept('PUT', `/workflow/${id}`, (req) => {
+  cy.intercept('PUT', `api/workflow/${id}`, (req) => {
     expect(req.body).to.deep.equal({ graph: { id }, nodes: [], links: [] });
   });
 
@@ -71,7 +70,7 @@ it('Opens and saves workflow after deleting comment, category and label', () => 
 });
 
 it('Opens and saves a skeleton node right after dropping it on canvas', () => {
-  cy.intercept('GET', `/workflow/${id}`).as('workflowRequest');
+  cy.intercept('GET', `api/workflow/${id}`).as('workflowRequest');
 
   cy.loadGraph(id);
 
@@ -93,7 +92,7 @@ it('Opens and saves a skeleton node right after dropping it on canvas', () => {
 });
 
 it('Opens and saves a skeleton node after populating it', () => {
-  cy.intercept('GET', `/workflow/${id}`).as('workflowRequest');
+  cy.intercept('GET', `api/workflow/${id}`).as('workflowRequest');
 
   cy.loadGraph(id);
 
@@ -142,7 +141,7 @@ it('Opens and saves a skeleton node after populating it', () => {
 });
 
 it('Creates a link and saves it', () => {
-  cy.intercept('GET', `/workflow/${id}`).as('workflowRequest');
+  cy.intercept('GET', `api/workflow/${id}`).as('workflowRequest');
 
   cy.loadGraph(id);
 
@@ -187,7 +186,7 @@ it('Creates a link and saves it', () => {
 });
 
 it('Saves a populated link', () => {
-  cy.intercept('GET', `/workflow/${id}`).as('workflowRequest');
+  cy.intercept('GET', `api/workflow/${id}`).as('workflowRequest');
 
   cy.loadGraph(id);
 
@@ -261,8 +260,8 @@ it('Saves a populated link', () => {
   cy.findByRole('button', { name: 'Save workflow to server' }).click();
 });
 
-function addPUTInterceptor(id: string, expectedWorkflow: Workflow) {
-  cy.intercept('PUT', `/workflow/${id}`, (req) => {
+function addPUTInterceptor(id: string, expectedWorkflow: any) {
+  cy.intercept('PUT', `api/workflow/${id}`, (req) => {
     const removedPositionworkflow = Cypress._.cloneDeep(req.body);
     Cypress._.each(removedPositionworkflow.nodes, (node) => {
       if (node.uiProps && node.uiProps.position) {

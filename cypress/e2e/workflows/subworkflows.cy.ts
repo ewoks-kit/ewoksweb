@@ -22,8 +22,8 @@ it('saves two empty workflows and uses the one as a subworkflow to the other ', 
   cy.saveNewWorkflow(subworkflow);
   cy.openNewWorkflow();
 
-  cy.findByRole('button', { name: 'General' }).should('be.visible');
-  cy.findByRole('button', { name: 'General' }).click();
+  cy.findByRole('button', { name: 'General category' }).should('be.visible');
+  cy.findByRole('button', { name: 'General category' }).click();
   cy.findByRole('button', { name: 'subworkflow' }).should('be.visible');
   cy.dragNodeInCanvas('subworkflow');
 
