@@ -11,26 +11,12 @@ it('should open the workflow given its id as query parameter', () => {
   });
 });
 
-it('opens a new tab when doubleclick on a subworkflow', () => {
-  cy.loadApp();
-  cy.findByRole('button', { name: 'Close task drawer' }).click();
-  cy.waitForStableDOM();
-
+it('saves two empty workflows and uses the one as a subworkflow to the other ', () => {
+  cy.loadAppWithoutGraph();
   cy.window().then((window) => {
     cy.stub(window, 'open').as('open');
   });
 
-  cy.get('[data-id="Editing-Graph-Node-Link"]').dblclick();
-
-  cy.get('@open').should(
-    'have.been.calledOnceWithExactly',
-    'http://localhost:3000/edit?workflow=Editing-Graph-Node-Link',
-    '_blank',
-  );
-});
-
-it('saves two empty workflows and uses the one as a subworkflow to the other ', () => {
-  cy.loadAppWithoutGraph();
   const subworkflow = nanoid();
   const rootWorkflow = nanoid();
   cy.saveNewWorkflow(subworkflow);
@@ -48,6 +34,14 @@ it('saves two empty workflows and uses the one as a subworkflow to the other ', 
 
   cy.findByRole('option', { name: subworkflow }).click();
   cy.waitForStableDOM();
+
+  // Try to open the subworkflow
+  cy.findByRole('button', { name: new RegExp(`^${subworkflow}`) }).dblclick();
+  cy.get('@open').should(
+    'have.been.calledOnceWithExactly',
+    `http://localhost:3000/edit?workflow=${subworkflow}`,
+    '_blank',
+  );
 
   cy.get('.react-flow__node').should('have.length', 1);
   cy.get('.react-flow__node-graph').should('have.length', 1);
