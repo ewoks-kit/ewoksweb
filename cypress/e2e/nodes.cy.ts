@@ -113,7 +113,7 @@ it('deletes a node by button and keyboard', () => {
   cy.get('@node').click();
 
   cy.findByRole('button', { name: 'Open edit actions menu' }).click();
-  cy.findByRole('menuitem', { name: 'Delete Node' }).click();
+  cy.findByRole('menuitem', { name: 'Delete Node delete' }).click();
 
   cy.get('.react-flow__node').should('have.length', 15);
 
@@ -126,7 +126,7 @@ it('clones a node by button', () => {
   cy.get('.react-flow__node').should('have.length', 16);
 
   cy.findByRole('button', { name: 'Open edit actions menu' }).click();
-  cy.findByRole('menuitem', { name: 'Clone Node' }).click();
+  cy.findByRole('menuitem', { name: 'Clone Node ctrl+v' }).click();
 
   cy.get('.react-flow__node').should('have.length', 17);
 });

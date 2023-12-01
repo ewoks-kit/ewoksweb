@@ -15,6 +15,9 @@ function OpenNewWorkflowMenuItem() {
 
   const rfInstance = useReactFlow();
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo,
+  );
 
   const openEmptyWorkflow = useCallback(() => {
     rfInstance.setNodes([]);
@@ -45,7 +48,7 @@ function OpenNewWorkflowMenuItem() {
       <ActionMenuItem
         icon={FiberNew}
         label="New workflow"
-        onClick={() => setOpenDialog(true)}
+        onClick={() => displayedWorkflowInfo.id && setOpenDialog(true)}
         keyShortcut="ctrl+shift+n"
       />
     </>
