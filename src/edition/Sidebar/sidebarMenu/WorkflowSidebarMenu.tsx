@@ -18,7 +18,6 @@ import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 import { GraphFormAction } from '../../../types';
 import { textForError } from '../../../utils';
 import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';
-import KeyStrokeHint from '../../keyStrokeHint';
 
 interface Props {
   onSelection: () => void;
