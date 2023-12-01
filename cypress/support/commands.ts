@@ -18,9 +18,7 @@ Cypress.Commands.add('loadAppWithoutGraph', () => {
 });
 
 Cypress.Commands.add('loadGraph', (name: string) => {
-  cy.findByRole('combobox', {
-    name: 'Quick open',
-  }).type(name);
+  cy.findByPlaceholderText('Quick open').type(name);
 
   cy.findByRole('option', { name }).click();
   cy.waitForStableDOM();
@@ -29,6 +27,44 @@ Cypress.Commands.add('loadGraph', (name: string) => {
 Cypress.Commands.add('loadApp', () => {
   cy.loadAppWithoutGraph();
   cy.loadGraph('tutorial_Graph');
+});
+
+Cypress.Commands.add('saveNewWorkflow', (id: string) => {
+  cy.findByRole('button', { name: 'Save workflow to server' }).click();
+
+  cy.findByRole('dialog').should('be.visible');
+
+  cy.findByRole('textbox', {
+    name: 'Identifier',
+  })
+    .clear()
+    .type(id);
+
+  cy.findByRole('button', { name: 'Save workflow' }).click();
+});
+
+Cypress.Commands.add('openNewWorkflow', () => {
+  cy.findByRole('button', { name: 'Open menu with more actions' }).click();
+  cy.findByRole('menuitem', { name: 'New workflow' }).click();
+
+  cy.findByRole('dialog').within(() => {
+    cy.findByRole('button', {
+      name: 'Yes',
+    }).click();
+  });
+});
+
+Cypress.Commands.add('deleteWorkflow', (id: string) => {
+  cy.loadGraph(id);
+  cy.findByRole('button', { name: 'Open edit actions menu' }).click();
+  cy.findByRole('menuitem', { name: 'Delete Workflow' }).click();
+
+  cy.findByRole('dialog').should(
+    'include.text',
+    `Delete workflow with id: "${id}"?`,
+  );
+
+  cy.findByRole('button', { name: 'Yes' }).click();
 });
 
 Cypress.Commands.add('dragNodeInCanvas', (task_identifier: string) => {
