@@ -1,15 +1,11 @@
 import { Typography } from '@mui/material';
 
+import styles from './EditPage.module.css';
+
 function KeyStrokeHint({ text }: { text: string }) {
   return (
     <Typography
-      style={{
-        marginLeft: '20px',
-        borderRadius: '10px',
-        backgroundColor: 'rgb(243, 244, 249)',
-        padding: '0 0.4em',
-        border: 'medium',
-      }}
+      className={styles.keyStrokeHint}
       variant="body2"
       color="text.secondary"
     >

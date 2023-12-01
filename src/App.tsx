@@ -2,7 +2,7 @@ import { CssBaseline } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
-import { baseUrl } from './api/client';
+import { apiSuffix, baseUrl } from './api/client';
 import EditRoute from './EditRoute';
 import SimpleSnackbar from './general/Snackbar';
 import MonitorRoute from './MonitorRoute';
@@ -14,7 +14,7 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <SocketClientProvider serverUrl={baseUrl}>
+      <SocketClientProvider baseUrl={baseUrl} apiSuffix={apiSuffix}>
         <BrowserRouter basename={import.meta.env.VITE_ROUTER_BASE_DIR}>
           <SimpleSnackbar />
           <CssBaseline />

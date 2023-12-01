@@ -8,6 +8,7 @@ import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../../../api/tasks';
 import { deleteWorkflow } from '../../../api/workflows';
+import { useInvalidateWorkflows } from '../../../api/workflows';
 import commonStrings from '../../../commonStrings.json';
 import ConfirmDialog from '../../../general/ConfirmDialog';
 import GraphFormDialog from '../../../general/forms/GraphFormDialog';
@@ -19,7 +20,12 @@ import { textForError } from '../../../utils';
 import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';
 import KeyStrokeHint from '../../keyStrokeHint';
 
-export default function WorkflowSidebarMenu() {
+interface Props {
+  onSelection: () => void;
+}
+
+export default function WorkflowSidebarMenu(props: Props) {
+  const { onSelection } = props;
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
 
@@ -27,6 +33,7 @@ export default function WorkflowSidebarMenu() {
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const rfInstance = useReactFlow();
   const tasks = useTasks();
+  const invalidateWorkflows = useInvalidateWorkflows();
 
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo,
@@ -43,6 +50,7 @@ export default function WorkflowSidebarMenu() {
         showSuccessMsg(
           `Workflow ${displayedWorkflowInfo.id} successfully deleted!`,
         );
+        invalidateWorkflows();
       } catch (error) {
         showErrorMsg(textForError(error, commonStrings.deletingError));
       }
@@ -70,8 +78,7 @@ export default function WorkflowSidebarMenu() {
         <ListItemIcon>
           <FileCopyIcon fontSize="small" />
         </ListItemIcon>
-        <ListItemText>Clone Workflow</ListItemText>
-        <KeyStrokeHint text="ctrl+a" />
+        <ListItemText>Save as...</ListItemText>
       </MenuItem>
       <MenuItem
         onClick={() => setOpenAgreeDialog(true)}
@@ -92,8 +99,14 @@ export default function WorkflowSidebarMenu() {
               Please make sure that it is not used as a sub-workflow in other workflows!
               Do you agree to continue?`}
         open={openAgreeDialog}
-        agreeCallback={agreeCallback}
-        disagreeCallback={() => setOpenAgreeDialog(false)}
+        agreeCallback={() => {
+          agreeCallback();
+          onSelection();
+        }}
+        disagreeCallback={() => {
+          setOpenAgreeDialog(false);
+          onSelection();
+        }}
       />
     </>
   );

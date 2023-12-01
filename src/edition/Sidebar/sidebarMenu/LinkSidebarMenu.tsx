@@ -2,13 +2,20 @@ import { Delete as DeleteIcon } from '@mui/icons-material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
 import type { Edge } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 
 import useStore from '../../../store/useStore';
+import KeyStrokeHint from '../../keyStrokeHint';
 
-export default function LinkSidebarMenu(selectedElement: Edge) {
+interface Props {
+  selectedElement: Edge;
+  onSelection: () => void;
+}
+
+export default function LinkSidebarMenu(props: Props) {
+  const { selectedElement, onSelection } = props;
+
   const rfInstance = useReactFlow();
 
   const displayedWorkflowInfo = useStore(
@@ -28,6 +35,7 @@ export default function LinkSidebarMenu(selectedElement: Edge) {
     <MenuItem
       onClick={() => {
         deleteLink(selectedElement);
+        onSelection();
       }}
       role="sidebarMenuItem"
       disabled={rootWorkflowId !== displayedWorkflowInfo.id}
@@ -36,7 +44,7 @@ export default function LinkSidebarMenu(selectedElement: Edge) {
         <DeleteIcon fontSize="small" />
       </ListItemIcon>
       <ListItemText>Delete Link</ListItemText>
-      <Typography variant="body2" color="primary" />
+      <KeyStrokeHint text="delete" />
     </MenuItem>
   );
 }
