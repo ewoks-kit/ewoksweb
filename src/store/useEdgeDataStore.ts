@@ -1,6 +1,7 @@
 import { merge } from 'lodash';
 import { create } from 'zustand';
 
+import useStore from '../store/useStore';
 import type { EdgeWithData, LinkData } from '../types';
 
 export interface EdgeDataState {
@@ -16,11 +17,17 @@ const useEdgeDataStore = create<EdgeDataState>((set) => ({
   edgesData: new Map(),
 
   setEdgeData: (edgeId, edgeData) => {
+    console.log(edgeId, edgeData);
+    const { setWorkflowIsChanged } = useStore.getState();
+    setWorkflowIsChanged(true);
     set(({ edgesData }) => ({
       edgesData: new Map(edgesData).set(edgeId, edgeData),
     }));
   },
   mergeEdgeData: (edgeId, edgeData) => {
+    console.log(edgeId, edgeData);
+    const { setWorkflowIsChanged } = useStore.getState();
+    setWorkflowIsChanged(true);
     set(({ edgesData }) => {
       const newData: LinkData = merge({}, edgesData.get(edgeId), edgeData);
 
@@ -29,7 +36,12 @@ const useEdgeDataStore = create<EdgeDataState>((set) => ({
       };
     });
   },
-  setEdgesData: (edgesData) => set({ edgesData }),
+  setEdgesData: (edgesData) => {
+    console.log(edgesData);
+    const { setWorkflowIsChanged } = useStore.getState();
+    setWorkflowIsChanged(true);
+    set({ edgesData });
+  },
   setDataFromEdges: (edges) => {
     set(() => ({
       edgesData: new Map(edges.map((edg) => [edg.id, edg.data])),

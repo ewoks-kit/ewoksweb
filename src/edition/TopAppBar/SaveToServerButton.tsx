@@ -30,6 +30,7 @@ export default function SaveToServerButton() {
 
   const [status, setStatus] = useState<Status>('idle');
 
+  const setWorkflowIsChanged = useStore((state) => state.setWorkflowIsChanged);
   const rootWorkflowSource = useStore((state) => state.rootWorkflowSource);
   const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
@@ -91,6 +92,8 @@ export default function SaveToServerButton() {
 
       showSuccessMsg('Graph saved successfully!');
       setStatus('success');
+
+      setWorkflowIsChanged(false);
     } catch (error) {
       handleError(textForError(error, commonStrings.savingError));
     }

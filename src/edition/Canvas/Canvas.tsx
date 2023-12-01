@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import type { DragEventHandler, MouseEvent } from 'react';
 import { useState } from 'react';
 import { useEffect, useRef } from 'react';
@@ -82,7 +83,7 @@ const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
 };
 
 function Canvas() {
-  // why use both?
+  // We need both beacause if only the useReactFlow is being used we enter a loop.
   const storeRF = useStoreApi();
   const rfInstance = useReactFlow();
 
@@ -113,16 +114,42 @@ function Canvas() {
     }, 300);
   }, [rootWorkflowId, fitView]);
 
+  function handleNodeDragStop(
+    event: React.MouseEvent,
+    node: Node,
+    nodes: Node[],
+  ) {
+    console.log(event, node, nodes);
+    // activated on node click too!!! But dragging is false
+    if (!node.dragging) {
+      return;
+    }
+    setWorkflowIsChanged(true);
+  }
+
   function onNodesChange(changes: NodeChange[]) {
     console.log(changes);
-    setWorkflowIsChanged(true);
+    // catch  node add/remove/reset here and send new node/s
+    const traceableChanges = changes.filter((change) =>
+      ['add', 'remove', 'reset'].includes(change.type),
+    );
+    if (traceableChanges.length > 0) {
+      setWorkflowIsChanged(true);
+    }
+
     const newNodes = applyNodeChanges(changes, getNodes());
     storeRF.getState().setNodes(newNodes);
   }
 
   function onEdgesChange(changes: EdgeChange[]) {
+    // captures remove
     console.log(changes);
-    setWorkflowIsChanged(true);
+    const traceableChanges = changes.filter((change) =>
+      ['add', 'remove', 'reset'].includes(change.type),
+    );
+    if (traceableChanges.length > 0) {
+      setWorkflowIsChanged(true);
+    }
     const newEdges = applyEdgeChanges(changes, getEdges());
     storeRF.getState().setEdges(newEdges);
   }
@@ -220,6 +247,8 @@ function Canvas() {
   };
 
   const onEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => {
+    console.log(oldEdge, newConnection);
+
     // DOC: if the new link is:
     // 1. attached to a node-handle where there is already a link or
     // 2. is attached to an input-output already connected to a node then
@@ -244,6 +273,8 @@ function Canvas() {
   };
 
   const onConnect = (params: Connection) => {
+    console.log(params);
+
     if (rootWorkflowId !== displayedWorkflowInfo.id) {
       showWarningMsg('Not allowed to create new links to any sub-graph!');
       return;
@@ -341,6 +372,7 @@ function Canvas() {
             nodeTypes={nodeTypes}
             deleteKeyCode="Delete"
             isValidConnection={isValidConnection}
+            onNodeDragStop={handleNodeDragStop}
           >
             <CanvasBackground />
             <Controls position="bottom-right" />

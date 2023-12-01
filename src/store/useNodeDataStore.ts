@@ -17,12 +17,16 @@ const useNodeDataStore = create<NodeDataState>((set) => ({
   nodesData: new Map(),
 
   setNodeData: (nodeId, nodeData) => {
+    console.log(nodeId, nodeData);
+    const { setWorkflowIsChanged } = useStore.getState();
+    setWorkflowIsChanged(true);
     set(({ nodesData }) => ({
       nodesData: new Map(nodesData).set(nodeId, nodeData),
     }));
   },
 
   mergeNodeData: (nodeId, nodeData) => {
+    console.log(nodeId, nodeData);
     const { setWorkflowIsChanged } = useStore.getState();
     setWorkflowIsChanged(true);
     set(({ nodesData }) => {
@@ -33,7 +37,12 @@ const useNodeDataStore = create<NodeDataState>((set) => ({
       };
     });
   },
-  setNodesData: (nodesData) => set({ nodesData }),
+  setNodesData: (nodesData) => {
+    console.log(nodesData);
+    const { setWorkflowIsChanged } = useStore.getState();
+    setWorkflowIsChanged(true);
+    set({ nodesData });
+  },
   setDataFromNodes: (nodes) => {
     set(() => ({
       nodesData: new Map(nodes.map((nod) => [nod.id, nod.data])),
