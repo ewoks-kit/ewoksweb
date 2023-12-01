@@ -10,7 +10,7 @@ import { useRef } from 'react';
 import type { XYPosition } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 
-import { fetchWorkflow } from '../../api/workflows';
+import { useWorkflowDLE } from '../../api/workflows';
 import OpenGraphInput from '../../general/OpenGraphInput';
 import WorkflowDropdown from '../../general/WorkflowDropdown';
 import useNodeDataStore from '../../store/useNodeDataStore';
@@ -33,6 +33,9 @@ export default function AddSubworkflowDialog(props: Props) {
 
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
+  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
+
+  const { refetch } = useWorkflowDLE('');
 
   async function loadSubgraphAsNode(subgraph: Workflow) {
     const nodes = rfInstance.getNodes();
@@ -48,7 +51,12 @@ export default function AddSubworkflowDialog(props: Props) {
 
   async function addSubgraph(id: string) {
     try {
-      const { data: subgraph } = await fetchWorkflow(id);
+      const { data: inData } = await refetch();
+      if (!inData) {
+        showWarningMsg('Please select a graph to fetch and re-click!');
+        return;
+      }
+      const subgraph = await inData(id);
       loadSubgraphAsNode(subgraph);
       handleClose();
     } catch (error) {

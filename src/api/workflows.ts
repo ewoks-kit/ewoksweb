@@ -62,13 +62,11 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
 }
 
 export async function getWorkflow(id: string): Promise<Workflow> {
-  console.log(id);
-
   const response = await fetchWorkflow(id);
   return response.data;
 }
 
-export function useWorkflowDLE(id?: string) {
+export function useWorkflowDLE(id: string) {
   return useQuery({
     queryKey: [QueryKey.Workflow, id],
     queryFn: () => getWorkflow,

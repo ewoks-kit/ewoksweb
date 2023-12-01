@@ -32,16 +32,16 @@ export default function GetWorkflowFromServerDropdown() {
     if (workflowIdparam) {
       const { data: inData } = await refetch();
 
-      if (inData) {
-        setRootWorkflow(
-          await inData(workflowIdparam),
-          rfInstance,
-          tasks,
-          'fromServer',
-        );
+      if (!inData) {
+        showWarningMsg('Please select a graph to fetch and re-click!');
+        return;
       }
-    } else {
-      showWarningMsg('Please select a graph to fetch and re-click!');
+      setRootWorkflow(
+        await inData(workflowIdparam),
+        rfInstance,
+        tasks,
+        'fromServer',
+      );
     }
   }
 
