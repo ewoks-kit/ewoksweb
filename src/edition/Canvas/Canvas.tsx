@@ -73,7 +73,7 @@ const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
     return;
   }
   if (nodeData.task_props.task_type === 'graph') {
-    const newTabURL = `${window.location.origin}/edit?workflow=${node.id}`;
+    const newTabURL = `${window.location.origin}/edit?workflow=${nodeData.task_props.task_identifier}`;
     const newTab = window.open(newTabURL, '_blank');
     if (newTab) {
       newTab.focus();
