@@ -2,11 +2,15 @@ import {
   Card,
   CardContent,
   FormControl,
+  Input,
   InputLabel,
   MenuItem,
   Select,
   Table,
   TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
 } from '@mui/material';
 import Button from '@mui/material//Button';
 import Dialog from '@mui/material/Dialog';
@@ -14,21 +18,31 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { nanoid } from 'nanoid';
+import type { ChangeEvent } from 'react';
 import { useState } from 'react';
 import type { EditableTableRow } from 'types';
 
 import useNodeDataStore from '../../store/useNodeDataStore';
 import AddEntryRow from '../Sidebar/table/controls/AddEntryRow';
 import RemoveRowButton from '../Sidebar/table/controls/RemoveRowButton';
-import EditableTable from '../Sidebar/table/EditableTable';
+import TypeSelectCell from '../Sidebar/table/controls/TypeSelectCell';
+import CustomTableCell from '../Sidebar/table/CustomTableCell';
+import TableCellInEditMode from '../Sidebar/table/TableCellInEditMode';
+// import EditableTable from '../Sidebar/table/EditableTable';
+// import TableHeader from '../Sidebar/table/TableHeader';
+// import TableHeader from '../Sidebar/table/TableHeader';
+// import styles from './Table.module.css';
+import styles from '../Sidebar/table/TableHeader.module.css';
+import { isClass } from '../Sidebar/table/utils';
 
 interface ExecutionPerNodeInputs {
-  name: string;
+  name: string | number;
+  type?: string;
   value: unknown;
   id?: string;
   label?: string;
   taskIdentifier?: string;
-  all?: boolean;
+  nodeId?: string;
 }
 
 export interface ExecutionParams {
@@ -50,9 +64,11 @@ interface DefaultInputRow extends EditableTableRow {
 export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
   const { onClose, open, executeWorkflow } = props;
 
-  const nodesData = useNodeDataStore();
+  const nodesData = useNodeDataStore((state) => state.nodesData);
 
-  const [perNodeInputs, setPerNodeInputs] = useState<DefaultInputRow[]>([]);
+  const [perNodeInputs, setPerNodeInputs] = useState<ExecutionPerNodeInputs[]>(
+    [],
+  );
   const [engine, setEngine] = useState('default');
 
   function handleExecute() {
@@ -60,10 +76,13 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
       (input) => {
         return {
           name: input.name || '',
+          type: input.type || 'string',
           value: input.value,
-          id: ['All nodes', 'All input nodes'].includes(input.nodeLabel)
-            ? ''
-            : input.nodeId,
+          id:
+            input.label &&
+            ['All nodes', 'All input nodes'].includes(input.label)
+              ? ''
+              : input.id,
         };
       },
     );
@@ -74,31 +93,13 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     });
   }
 
-  function perNodeInputChanged(
-    newInput: DefaultInputRow,
-    row: EditableTableRow,
+  function handleChangeTarget(
+    input: ExecutionPerNodeInputs,
+    targetNodeId: string,
   ) {
     const newInputRow = {
-      ...newInput,
-      name: row.name,
-      type: row.type,
-      value: row.value,
-    };
-
-    const newInputs = perNodeInputs.map((input) => {
-      if (input.id === newInput.id) {
-        return newInputRow;
-      }
-      return input;
-    });
-
-    setPerNodeInputs(newInputs);
-  }
-
-  function handleChangeTarget(input: DefaultInputRow, targetNodeId: string) {
-    const newInputRow = {
       ...input,
-      nodeLabel: nodesData.nodesData.get(targetNodeId)?.ewoks_props.label || '',
+      nodeLabel: nodesData.get(targetNodeId)?.ewoks_props.label || '',
       nodeId: ['All nodes', 'All input nodes'].includes(targetNodeId)
         ? ''
         : targetNodeId,
@@ -114,7 +115,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
       ...perNodeInputs,
       {
         id: nanoid(),
-        nodeLabel: 'All nodes',
+        label: 'All nodes',
         nodeId: '',
         name: '',
         value: '',
@@ -122,10 +123,105 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     ]);
   }
 
-  function handleRowDelete(input: DefaultInputRow) {
+  function handleRowDelete(input: ExecutionPerNodeInputs) {
+    // only one row to delete with the select node dropdown
     const newInputs = perNodeInputs.filter((inp) => inp.id !== input.id);
 
     setPerNodeInputs(newInputs);
+  }
+
+  function onChangeName(
+    e: { target: { name: string; value: string | number } },
+    row: EditableTableRow,
+    index: number,
+  ) {
+    console.log(e, row, index, perNodeInputs);
+
+    const newRows = perNodeInputs.map((inputRow) => {
+      if (inputRow.id === row.id) {
+        return {
+          ...inputRow,
+          name: e.target.value,
+        };
+      }
+      return inputRow;
+    });
+
+    setPerNodeInputs(newRows);
+  }
+
+  function onChangeValue(
+    e: { target: { name: string; value: string | number } },
+    row: EditableTableRow,
+    index: number,
+  ) {
+    console.log(e, row, index, perNodeInputs);
+
+    const { id } = row;
+  }
+
+  const changedTypeOfInput = (
+    e: ChangeEvent<HTMLInputElement>,
+    row: ExecutionPerNodeInputs,
+    index: number,
+  ) => {
+    console.log(e.target.value, row, index, perNodeInputs);
+
+    const { id: rowId = '' } = row;
+    const newRows = perNodeInputs.map((inputRow) => {
+      if (inputRow.id === rowId) {
+        return {
+          ...inputRow,
+          value: e.target.value === 'null' ? e.target.value : '',
+          type: e.target.value,
+        };
+      }
+      return inputRow;
+    });
+
+    setPerNodeInputs(newRows);
+  };
+
+  function handleEdit(row: ExecutionPerNodeInputs, index: number) {
+    console.log(row, index, perNodeInputs);
+
+    // if (['list', 'dict'].includes(typeOfInputs[index])) {
+    //   showEditableDialog(
+    //     id,
+    //     typeOfInputs[index] === 'list' ? 'Edit list' : 'Edit dict',
+    //     onListOrDict(id, index),
+    //     { rows, id },
+    //   );
+    // }
+
+    // setRows(calcNewRows(id));
+
+    // const { id: rowId = '' } = row;
+    // const newRows = perNodeInputs.map((inputRow) => {
+    //   if (inputRow.id === rowId) {
+    //     return {
+    //       ...inputRow,
+    //       value: e.target.value === 'null' ? e.target.value : '',
+    //     };
+    //   }
+    //   return inputRow;
+    // });
+
+    // setPerNodeInputs(newRows);
+  }
+
+  function calcTypeAndValues(nodeId: string | undefined) {
+    return {
+      // calc the type and values from the node selected in the dropdown
+      typeOfInput:
+        nodeId && isClass(nodesData.get(nodeId)) ? 'select' : 'input',
+      values: [
+        ...(nodesData.get(nodeId || '')?.task_props.required_input_names || []),
+        ...(nodesData.get(nodeId || '')?.task_props.optional_input_names || []),
+      ],
+      requiredValues:
+        nodesData.get(nodeId || '')?.task_props.required_input_names || [],
+    };
   }
 
   return (
@@ -140,63 +236,82 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
         <Card variant="outlined" style={{ margin: '2px' }}>
           <CardContent>
             <h4>Workflow Inputs</h4>
-            {perNodeInputs.map((input) => (
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center" className={styles.cell}>
+                    <b>Node/s</b>
+                  </TableCell>
+                  <TableCell align="left" className={styles.cell}>
+                    <b>Type</b>
+                  </TableCell>
+                  <TableCell align="left" className={styles.cell}>
+                    <b>Name</b>
+                  </TableCell>
+                  <TableCell align="left" className={styles.cell}>
+                    <b>Value</b>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+            </Table>
+
+            {perNodeInputs.map((input, index) => (
               <div style={{ display: 'flex' }} key={input.id}>
-                <FormControl
-                  style={{ minWidth: '180px', margin: '5px' }}
-                  variant="filled"
+                <Select
+                  variant="standard"
+                  native
+                  defaultValue={input.label}
+                  onChange={(ev) => {
+                    handleChangeTarget(input, ev.target.value);
+                  }}
                 >
-                  <InputLabel>Node/s</InputLabel>
-                  <Select
-                    native
-                    defaultValue={input.nodeLabel}
-                    onChange={(ev) => {
-                      handleChangeTarget(input, ev.target.value);
-                    }}
-                  >
-                    <option value="All nodes">All nodes</option>
-                    <option value="All input nodes">All input nodes</option>
-                    <optgroup label="Specific Nodes">
-                      {[...nodesData.nodesData].map(([key, value]) => (
-                        <option value={key} key={key}>
-                          {value.ewoks_props.label}
-                          {/* id: {key}- label: {value.ewoks_props.label} */}
-                        </option>
-                      ))}
-                    </optgroup>
-                  </Select>
-                </FormControl>
-                <EditableTable
-                  graphDefaultInputs
-                  headers={['Input Name', 'Value']}
-                  defaultValues={[
-                    {
-                      id: input.id,
-                      name: input.name,
-                      value: input.value,
-                      type: input.type,
-                    },
-                  ]}
-                  valuesChanged={(rows: EditableTableRow[]) =>
-                    perNodeInputChanged(input, rows[0])
-                  }
-                  typeOfValues={[
-                    {
-                      typeOfInput: 'select',
-                      values: [
-                        ...((input.nodeId &&
-                          nodesData.nodesData.get(input.nodeId)?.task_props
-                            .required_input_names) ||
-                          []),
-                        ...((input.nodeId &&
-                          nodesData.nodesData.get(input.nodeId)?.task_props
-                            .optional_input_names) ||
-                          []),
-                      ],
-                    },
-                    { typeOfInput: 'input' },
-                  ]}
-                />
+                  <option value="All nodes">All nodes</option>
+                  <option value="All input nodes">All input nodes</option>
+                  <optgroup label="Specific Nodes">
+                    {[...nodesData].map(([key, value]) => (
+                      <option value={key} key={key}>
+                        {value.ewoks_props.label}
+                        {/* id: {key}- label: {value.ewoks_props.label} */}
+                      </option>
+                    ))}
+                  </optgroup>
+                </Select>
+                <Table
+                  className={styles.table}
+                  aria-label="editable table"
+                  size="small"
+                  padding="none"
+                >
+                  <TableBody>
+                    <TableRow>
+                      <TypeSelectCell
+                        value={
+                          perNodeInputs[index].type === 'boolean'
+                            ? 'bool'
+                            : perNodeInputs[index].type || 'string'
+                        }
+                        onChange={(e) => changedTypeOfInput(e, input, index)}
+                      />
+                      <TableCellInEditMode
+                        index={0}
+                        name="name"
+                        onChange={onChangeName}
+                        {...props}
+                        row={perNodeInputs[index] as EditableTableRow}
+                        typeOfValues={calcTypeAndValues(input.nodeId)}
+                      />
+
+                      <CustomTableCell
+                        index={index}
+                        row={input as EditableTableRow}
+                        name="value"
+                        onChange={onChangeValue}
+                        onEdit={handleEdit(input, index)}
+                        // disable={disable}
+                      />
+                    </TableRow>
+                  </TableBody>
+                </Table>
                 <RemoveRowButton onDelete={() => handleRowDelete(input)} />
               </div>
             ))}
