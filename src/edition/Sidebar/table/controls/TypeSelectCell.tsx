@@ -6,7 +6,7 @@ import { INPUT_TYPES } from '../utils';
 import styles from './TypeSelectCell.module.css';
 
 interface Props {
-  value: string;
+  value?: string;
   disable?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
