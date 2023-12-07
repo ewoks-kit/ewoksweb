@@ -1,10 +1,7 @@
 import { useState } from 'react';
-import { useReactFlow } from 'reactflow';
+import { useSearchParams } from 'react-router-dom';
 
-import { useTasks } from '../api/tasks';
-import { fetchWorkflow } from '../api/workflows';
 import useSnackbarStore from '../store/useSnackbarStore';
-import useStore from '../store/useStore';
 import type { WorkflowDescription } from '../types';
 import ConfirmDialog from './ConfirmDialog';
 import WorkflowDropdown from './WorkflowDropdown';
@@ -12,11 +9,9 @@ import WorkflowDropdown from './WorkflowDropdown';
 export default function GetWorkflowFromServerDropdown() {
   const [workflowId, setWorkflowId] = useState('');
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
-  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
   const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
 
-  const rfInstance = useReactFlow();
-  const tasks = useTasks();
+  const [, setQueryParams] = useSearchParams();
 
   async function setInputValue(workflowDetails: WorkflowDescription) {
     if (workflowDetails.id) {
@@ -27,10 +22,9 @@ export default function GetWorkflowFromServerDropdown() {
     setOpenAgreeDialog(false);
   }
 
-  async function getFromServer(workflowIdparam: string) {
-    if (workflowIdparam) {
-      const { data: graph } = await fetchWorkflow(workflowIdparam);
-      setRootWorkflow(graph, rfInstance, tasks, 'fromServer');
+  async function getFromServer(workflowIdParam: string) {
+    if (workflowIdParam) {
+      setQueryParams({ workflow: workflowIdParam });
     } else {
       showWarningMsg('Please select a graph to fetch and re-click!');
     }

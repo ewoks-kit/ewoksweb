@@ -1,5 +1,5 @@
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../api/tasks';
@@ -20,7 +20,6 @@ export default function EditPage() {
   const rfInstance = useReactFlow();
   const tasks = useTasks();
   const [queryParams] = useSearchParams();
-  const navigate = useNavigate();
 
   const workflowToRestoreId = useWorkflowToRestoreId((state) => state.id);
   const resetWorkflowToRestoreId = useWorkflowToRestoreId(
@@ -33,7 +32,7 @@ export default function EditPage() {
 
   const restoreWorkflow = async (workflow: string) => {
     try {
-      const { data: graph } = await fetchWorkflow(workflow);
+      const graph = await fetchWorkflow(workflow);
       setRootWorkflow(graph, rfInstance, tasks, 'fromServer');
     } catch (error) {
       showErrorMsg(
@@ -51,11 +50,6 @@ export default function EditPage() {
     restoreWorkflow(workflowToRestoreId);
   }
 
-  if (workflowId) {
-    restoreWorkflow(workflowId);
-    navigate(window.location.pathname, { replace: true });
-  }
-
   return (
     <div className={styles.root}>
       <TopAppBar />
@@ -68,7 +62,7 @@ export default function EditPage() {
           <ReflexElement>
             <main className={styles.content}>
               <SuspenseBoundary FallbackComponent={ErrorFallback}>
-                <Canvas />
+                <Canvas key={workflowId} workflowId={workflowId || undefined} />
               </SuspenseBoundary>
             </main>
           </ReflexElement>

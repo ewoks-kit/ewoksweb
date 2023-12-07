@@ -1,6 +1,6 @@
 import type { DragEventHandler, MouseEvent } from 'react';
 import { useState } from 'react';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import type {
   Connection,
   Edge,
@@ -20,6 +20,7 @@ import { useStoreApi } from 'reactflow';
 import type { RFNode, Task } from 'types';
 
 import { useTasks } from '../../api/tasks';
+import { useWorkflow } from '../../api/workflows';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
@@ -30,6 +31,7 @@ import {
   DEFAULT_NODE_HEIGHT,
   DEFAULT_NODE_WIDTH,
 } from '../../utils/defaultValues';
+import { EMPTY_GRAPH } from '../../utils/emptyGraphs';
 import isValidLink from '../../utils/IsValidLink';
 import {
   assertNodeDataDefined,
@@ -81,7 +83,15 @@ const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
   }
 };
 
-function Canvas() {
+interface Props {
+  workflowId: string | undefined;
+}
+
+function Canvas(props: Props) {
+  const { workflowId } = props;
+
+  const workflow = useWorkflow(workflowId);
+
   const storeRF = useStoreApi();
   const rfInstance = useReactFlow();
 
@@ -91,6 +101,7 @@ function Canvas() {
     position: XYPosition;
   }>();
 
+  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo,
   );
@@ -102,14 +113,8 @@ function Canvas() {
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
-  const { fitView, setNodes, setEdges, getNodes, getEdges, addNodes, getNode } =
+  const { setNodes, setEdges, getNodes, getEdges, addNodes, getNode } =
     rfInstance;
-
-  useEffect(() => {
-    setTimeout(() => {
-      fitView({ duration: 500 });
-    }, 300);
-  }, [rootWorkflowId, fitView]);
 
   function onNodesChange(changes: NodeChange[]) {
     const newNodes = applyNodeChanges(changes, getNodes());
@@ -314,7 +319,7 @@ function Canvas() {
       />
       {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions*/}
       <div className={styles.root} onKeyDown={handleKeyDown}>
-        <FallbackMessage />
+        {!workflow && <FallbackMessage />}
         <div className={styles.wrapper} ref={reactFlowWrapper}>
           <ReactFlow
             fitView
@@ -335,6 +340,15 @@ function Canvas() {
             nodeTypes={nodeTypes}
             deleteKeyCode="Delete"
             isValidConnection={isValidConnection}
+            onInit={() => {
+              setRootWorkflow(
+                workflow || EMPTY_GRAPH,
+                rfInstance,
+                tasks,
+                workflow ? 'fromServer' : undefined,
+              );
+              // fitView({ duration: 500 });
+            }}
           >
             <CanvasBackground />
             <Controls position="bottom-right" />
