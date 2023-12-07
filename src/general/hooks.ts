@@ -57,7 +57,7 @@ export const useCloneNode = () => {
   const nodesIds = useNodesIds();
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
-  const cloneNode = (id: string) => {
+  return (id: string) => {
     const nodeData = getNodeData(id);
     assertNodeDataDefined(nodeData, id);
     const nodeToClone = rfInstance.getNode(id);
@@ -78,6 +78,4 @@ export const useCloneNode = () => {
     assertNodeDataDefined(nodeData, id);
     setNodeData(clone.id, nodeData);
   };
-
-  return { cloneNode };
 };

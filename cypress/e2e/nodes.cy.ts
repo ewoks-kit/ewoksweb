@@ -126,7 +126,7 @@ it('Dublicates a node by button', () => {
   cy.get('.react-flow__node').should('have.length', 16);
 
   cy.findByRole('button', { name: 'Open edit actions menu' }).click();
-  cy.findByRole('menuitem', { name: 'Dublicate Node ctrl+d' }).click();
+  cy.findByRole('menuitem', { name: '/^Dublicate Node/' }).click();
 
   cy.get('.react-flow__node').should('have.length', 17);
 });

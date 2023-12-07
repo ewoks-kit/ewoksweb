@@ -16,11 +16,6 @@ function ExecutionMenuItem() {
 
   const navigate = useNavigate();
 
-  function checkAndExecute() {
-    execute();
-    setOpenAgreeDialog(false);
-  }
-
   async function execute() {
     const { rootWorkflowId } = useStore.getState();
     if (!rootWorkflowId) {
@@ -39,12 +34,10 @@ function ExecutionMenuItem() {
   }
 
   useKeyboardEvent(
-    (e) => (e.ctrlKey || e.metaKey) && e.key === 'x',
+    (e) => e.shiftKey && e.key.toLowerCase() === 'x',
     (e) => {
-      console.log('execute');
-
       e.preventDefault();
-      execute();
+      setOpenAgreeDialog(true);
     },
     [],
   );
@@ -54,8 +47,8 @@ function ExecutionMenuItem() {
       <ActionMenuItem
         icon={SendIcon}
         label="Execute workflow"
-        onClick={checkAndExecute}
-        keyShortcut="ctrl+x"
+        onClick={() => setOpenAgreeDialog(true)}
+        keyShortcut="Shift+X"
       />
       <ConfirmDialog
         title="There are unsaved changes"

@@ -2,7 +2,7 @@ import type { SvgIcon } from '@mui/material';
 import { ListItemText, MenuItem } from '@mui/material';
 import type { PropsWithChildren } from 'react';
 
-import KeyStrokeHint from '../../keyStrokeHint';
+import KeyStrokeHint from '../../KeyStrokeHint';
 import { useActionMenuContext } from './ActionMenuContext';
 import ActionMenuIcon from './ActionMenuIcon';
 
