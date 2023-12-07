@@ -29,7 +29,6 @@ interface EditableTableProps {
   headers: string[];
   defaultValues: Condition[] | DefaultInput[];
   typeOfValues: TypeOfValues[];
-  graphDefaultInputs?: boolean;
   disable?: boolean;
   valuesChanged: (rows: EditableTableRow[]) => void;
   onRowAdd?: (rows?: EditableTableRow[]) => void;
@@ -44,14 +43,13 @@ interface DialogContent {
 
 // The table where lines can be added where type is selected and appropriate values are given to name and value.
 function EditableTable(props: EditableTableProps) {
+  const { defaultValues, headers, disable, onRowAdd } = props;
+
   const [rows, setRows] = React.useState<EditableTableRow[]>([]);
   const [typeOfInputs, setTypeOfInputs] = React.useState<string[]>([]);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<DialogContent>();
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
-
-  const { defaultValues, headers, graphDefaultInputs, disable, onRowAdd } =
-    props;
 
   useEffect(() => {
     setTypeOfInputs(defaultValues.map(getType));
@@ -269,16 +267,15 @@ function EditableTable(props: EditableTableProps) {
                   onEdit={() => onEditRow(row.id || '', index)}
                   disable={disable}
                 />
-                {!graphDefaultInputs && !disable && (
-                  <RemoveRowCell
-                    disable={disable}
-                    onDelete={() => onDelete(row.id || '')}
-                  />
-                )}
+
+                <RemoveRowCell
+                  disable={disable}
+                  onDelete={() => onDelete(row.id || '')}
+                />
               </TableRow>
             </React.Fragment>
           ))}
-          {onRowAdd && !graphDefaultInputs && !disable && (
+          {onRowAdd && !disable && (
             <AddEntryRow onClick={() => onRowAdd(rows)} colSpan={4} />
           )}
         </TableBody>

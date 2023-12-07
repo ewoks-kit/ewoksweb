@@ -1,8 +1,12 @@
 import { RemoveCircleOutline } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 
-import type { Props } from './RemoveRowCell';
 import styles from './RemoveRowCell.module.css';
+
+interface Props {
+  disable?: boolean;
+  onDelete: () => void;
+}
 
 function RemoveRowButton(props: Props) {
   const { disable, onDelete } = props;

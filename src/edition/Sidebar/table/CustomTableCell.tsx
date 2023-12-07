@@ -10,7 +10,7 @@ function isRowContentInvalid(
   row: EditableTableRow,
   rowNames: string[] | undefined,
   name: string,
-  // Editable table is not used in Data mapping anymore. Remove usedIn?
+  // TODO: Editable table is not used in Data mapping anymore. Remove usedIn?
   usedIn?: 'DataMapping' | 'DefaultInputs' | 'Conditions',
 ) {
   const hasInvalidValue = row.value === undefined || row.value === '';
@@ -26,7 +26,6 @@ function isRowContentInvalid(
 
 function CustomTableCell(props: CustomTableCellProps) {
   const { row, rowsNames, name, usedIn, disable: inactive, onEdit } = props;
-  console.log(row, rowsNames, name, usedIn, inactive, onEdit);
 
   return (
     <TableCell

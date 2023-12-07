@@ -2,7 +2,6 @@ import {
   Card,
   CardContent,
   FormControl,
-  MenuItem,
   Select,
   Table,
   TableBody,
@@ -29,6 +28,7 @@ import CustomTableCell from '../Sidebar/table/CustomTableCell';
 import TableCellInEditMode from '../Sidebar/table/TableCellInEditMode';
 import styles from '../Sidebar/table/TableHeader.module.css';
 import { isClass } from '../Sidebar/table/utils';
+import ExecutionEngine from './ExecutionEngine';
 
 interface ObjectEditDialogContent {
   id?: string;
@@ -81,6 +81,8 @@ function hasDefinedProperties(
   );
 }
 
+type EngineOptions = 'default' | 'dask' | 'ppf';
+
 export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
   const { onClose, open, executeWorkflow } = props;
 
@@ -92,7 +94,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogContent, setDialogContent] = useState<ObjectEditDialogContent>();
 
-  const [engine, setEngine] = useState('default');
+  const [engine, setEngine] = useState<EngineOptions>('default');
 
   function showEditableDialog(
     id: string,
@@ -134,7 +136,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     });
   }
 
-  function handleChangeTarget(
+  function handleChangeNodeTarget(
     input: ExecutionPerNodeInputs,
     targetNodeId: string,
   ) {
@@ -143,10 +145,12 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
       label: nodesData.get(targetNodeId)?.ewoks_props.label || '',
       nodeId: targetNodeId,
     };
-    // This might change the order of the rows in the table!
-    const otherInputs = perNodeInputs.filter((inp) => inp.id !== input.id);
 
-    setPerNodeInputs([...otherInputs, newInputRow]);
+    const updatedInputs = perNodeInputs.map((inp) =>
+      inp.id === input.id ? newInputRow : inp,
+    );
+
+    setPerNodeInputs(updatedInputs);
   }
 
   function handleRowAddition() {
@@ -172,15 +176,14 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     e: { target: { name: string; value: string | number } },
     row: EditableTableRow,
   ) {
-    const newRows = perNodeInputs.map((inputRow) => {
-      if (inputRow.id === row.id) {
-        return {
-          ...inputRow,
-          name: e.target.value,
-        };
-      }
-      return inputRow;
-    });
+    const newRows = perNodeInputs.map((inputRow) =>
+      inputRow.id === row.id
+        ? {
+            ...inputRow,
+            name: e.target.value,
+          }
+        : inputRow,
+    );
 
     setPerNodeInputs(newRows);
   }
@@ -190,15 +193,14 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     row: EditableTableRow,
   ) {
     const { id: rowId = '' } = row;
-    const newRows = perNodeInputs.map((inputRow) => {
-      if (inputRow.id === rowId) {
-        return {
-          ...inputRow,
-          value: e.target.value,
-        };
-      }
-      return inputRow;
-    });
+    const newRows = perNodeInputs.map((inputRow) =>
+      inputRow.id === rowId
+        ? {
+            ...inputRow,
+            value: e.target.value,
+          }
+        : inputRow,
+    );
 
     setPerNodeInputs(newRows);
   }
@@ -208,16 +210,15 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     row: ExecutionPerNodeInputs,
   ) => {
     const { id: rowId = '' } = row;
-    const newRows = perNodeInputs.map((inputRow) => {
-      if (inputRow.id === rowId) {
-        return {
-          ...inputRow,
-          value: e.target.value === 'null' ? e.target.value : '',
-          type: e.target.value,
-        };
-      }
-      return inputRow;
-    });
+    const newRows = perNodeInputs.map((inputRow) =>
+      inputRow.id === rowId
+        ? {
+            ...inputRow,
+            value: e.target.value === 'null' ? e.target.value : '',
+            type: e.target.value,
+          }
+        : inputRow,
+    );
 
     setPerNodeInputs(newRows);
   };
@@ -305,33 +306,33 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
                   className={styles.table}
                   aria-label="editable table"
                   size="small"
-                  padding="none"
+                  padding="normal"
                 >
                   <TableHead>
                     <TableRow>
                       <TableCell
-                        align="left"
+                        align="center"
                         className={styles.cell}
                         style={{ width: '25%' }}
                       >
                         <b>Node/s</b>
                       </TableCell>
                       <TableCell
-                        align="left"
+                        align="center"
                         className={styles.cell}
                         style={{ width: '15%' }}
                       >
                         <b>Type</b>
                       </TableCell>
                       <TableCell
-                        align="left"
+                        align="center"
                         className={styles.cell}
                         style={{ width: '30%' }}
                       >
                         <b>Name</b>
                       </TableCell>
                       <TableCell
-                        align="left"
+                        align="center"
                         className={styles.cell}
                         style={{ width: '30%' }}
                       >
@@ -343,31 +344,33 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
                     {perNodeInputs.map((input, index) => (
                       <TableRow key={input.id}>
                         <TableCell
-                          style={{ width: '25%', marginRight: '8px' }}
+                          style={{ width: '25%' }}
                           className={styles.cell}
                           align="left"
                           size="small"
                         >
-                          <Select
-                            variant="standard"
-                            native
-                            defaultValue={input.label}
-                            onChange={(ev) => {
-                              handleChangeTarget(input, ev.target.value);
-                            }}
-                          >
-                            <option value="All nodes">All nodes</option>
-                            <option value="All input nodes">
-                              All input nodes
-                            </option>
-                            <optgroup label="Specific Nodes">
-                              {[...nodesData].map(([key, value]) => (
-                                <option value={key} key={key}>
-                                  {value.ewoks_props.label}
-                                </option>
-                              ))}
-                            </optgroup>
-                          </Select>
+                          <FormControl sx={{ m: 1, width: '100%' }}>
+                            <Select
+                              variant="standard"
+                              native
+                              defaultValue={input.label}
+                              onChange={(ev) => {
+                                handleChangeNodeTarget(input, ev.target.value);
+                              }}
+                            >
+                              <option value="All nodes">All nodes</option>
+                              <option value="All input nodes">
+                                All input nodes
+                              </option>
+                              <optgroup label="Specific Nodes">
+                                {[...nodesData].map(([key, value]) => (
+                                  <option value={key} key={key}>
+                                    {value.ewoks_props.label}
+                                  </option>
+                                ))}
+                              </optgroup>
+                            </Select>
+                          </FormControl>
                         </TableCell>
                         <TypeSelectCell
                           value={
@@ -424,26 +427,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
               </Table>
             </CardContent>
           </Card>
-          <Card variant="outlined" style={{ margin: '2px' }}>
-            <CardContent>
-              <FormControl style={{ display: 'flex', flexDirection: 'row' }}>
-                <b style={{ marginTop: '16px' }}>Execution engine</b>
-                {/* <InputLabel id="demo-simple-select-label"></InputLabel> */}
-                <Select
-                  value={engine}
-                  onChange={(event) => setEngine(event.target.value)}
-                  style={{
-                    minWidth: '150px',
-                    marginLeft: '15px',
-                  }}
-                >
-                  <MenuItem value="default">default</MenuItem>
-                  <MenuItem value="pypushflow">pypushflow</MenuItem>
-                  <MenuItem value="dask">dask</MenuItem>
-                </Select>
-              </FormControl>
-            </CardContent>
-          </Card>
+          <ExecutionEngine engine={engine} setEngine={setEngine} />
           The workflow will be saved before excution.
         </DialogContent>
         <DialogActions>

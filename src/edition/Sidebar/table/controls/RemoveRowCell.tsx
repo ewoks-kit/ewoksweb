@@ -3,7 +3,7 @@ import { TableCell } from '@mui/material';
 import RemoveRowButton from './RemoveRowButton';
 import styles from './RemoveRowCell.module.css';
 
-export interface Props {
+interface Props {
   disable?: boolean;
   onDelete: () => void;
 }

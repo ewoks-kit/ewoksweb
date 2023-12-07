@@ -24,11 +24,7 @@ function ExecutionMenuItem() {
       return;
     }
     try {
-      await executeWorkflow(
-        rootWorkflowId,
-        params?.executeArgs,
-        params?.workerOptions,
-      );
+      await executeWorkflow(rootWorkflowId, params);
       navigate('/monitor');
     } catch (error) {
       // Keep logging in console for debugging when talking with a user

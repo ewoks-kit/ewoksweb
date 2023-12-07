@@ -14,7 +14,6 @@ import styles from './TableCellInEditMode.module.css';
 
 function TableCellInEditMode(props: CustomTableCellProps) {
   const { index, row, name, onChange, typeOfValues, usedIn, disable } = props;
-  console.log(index, row, name, onChange, typeOfValues, usedIn, disable);
 
   function onChangeNumber(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

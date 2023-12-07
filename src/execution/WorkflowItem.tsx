@@ -36,7 +36,7 @@ function WorkflowItem(props: Props) {
   const id = startWorkflowEvent?.workflow_id;
 
   return (
-    <li className={styles.item} aria-label={id}>
+    <li className={styles.item} aria-label={id || idFallback}>
       <div className={styles.header}>
         <div>
           <h3 className={styles.title}>{id || idFallback}</h3>

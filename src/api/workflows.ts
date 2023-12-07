@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
+import type { ExecutionParams } from '../edition/TopAppBar/ExecuteParametersDialog';
 import type { Workflow, WorkflowDescription } from '../types';
 import { assertDefined } from '../utils/typeGuards';
 import { client } from './client';
@@ -41,12 +42,11 @@ export async function deleteWorkflow(id: string) {
 
 export async function executeWorkflow(
   workflowId: string,
-  executeArgs?: { engine?: string },
-  workerOptions?: Record<string, unknown>,
+  params?: ExecutionParams,
 ) {
   return client.post<ExecuteWorkflowResponse>(`/execute/${workflowId}`, {
-    execute_arguments: executeArgs,
-    worker_options: workerOptions,
+    execute_arguments: params?.executeArgs,
+    worker_options: params?.workerOptions,
   });
 }
 
