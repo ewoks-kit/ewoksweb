@@ -253,13 +253,13 @@ function Canvas() {
   };
 
   useKeyboardEvent(
-    (e) => (e.ctrlKey || e.metaKey) && e.key === 'v',
+    (e) => (e.ctrlKey || e.metaKey) && e.key === 'd',
     (e) => {
       e.preventDefault();
       const selectedNode = getNodes().find((nod) => nod.selected);
       if (!selectedNode) {
         showWarningMsg(
-          'Ctrl+v clones a node in the existing workflow. First select a node to clone!',
+          'Ctrl+d dublicates a node in the existing workflow. First select a node to dublicate!',
         );
         return;
       }

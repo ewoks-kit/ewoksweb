@@ -39,8 +39,10 @@ function ExecutionMenuItem() {
   }
 
   useKeyboardEvent(
-    (e) => (e.ctrlKey || e.metaKey) && e.key === 'r',
+    (e) => (e.ctrlKey || e.metaKey) && e.key === 'x',
     (e) => {
+      console.log('execute');
+
       e.preventDefault();
       execute();
     },
@@ -53,7 +55,7 @@ function ExecutionMenuItem() {
         icon={SendIcon}
         label="Execute workflow"
         onClick={checkAndExecute}
-        keyShortcut="ctrl+r"
+        keyShortcut="ctrl+x"
       />
       <ConfirmDialog
         title="There are unsaved changes"

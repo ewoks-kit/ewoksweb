@@ -55,8 +55,8 @@ export default function NodeSidebarMenu(props: Props) {
         <ListItemIcon>
           <LibraryAdd fontSize="small" />
         </ListItemIcon>
-        <ListItemText>Clone Node</ListItemText>
-        <KeyStrokeHint text="ctrl+v" />
+        <ListItemText>Dublicate Node</ListItemText>
+        <KeyStrokeHint text="ctrl+d" />
       </MenuItem>
 
       {nodeData.task_props.task_type !== 'graph' && (
