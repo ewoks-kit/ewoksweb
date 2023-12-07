@@ -6,7 +6,7 @@ import type { Edge } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 
 import useStore from '../../../store/useStore';
-import KeyStrokeHint from '../../keyStrokeHint';
+import KeyStrokeHint from '../../KeyStrokeHint';
 
 interface Props {
   selectedElement: Edge;

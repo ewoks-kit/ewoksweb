@@ -24,7 +24,6 @@ it('opens the tutorial_Graph on the canvas', () => {
   cy.hasVisibleEdges(12);
 });
 
-// Skip this test until unsaved modifications can be properly tracked
 it('will not open the dialog for name after clicking new', () => {
   cy.findByRole('dialog').should('not.exist');
 

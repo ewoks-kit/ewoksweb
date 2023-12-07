@@ -12,7 +12,7 @@ import { useCloneNode } from '../../../general/hooks';
 import useStore from '../../../store/useStore';
 import { getNodeData } from '../../../utils';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
-import KeyStrokeHint from '../../keyStrokeHint';
+import KeyStrokeHint from '../../KeyStrokeHint';
 
 interface Props {
   selectedElement: Node;
@@ -35,7 +35,7 @@ export default function NodeSidebarMenu(props: Props) {
   const nodeTask = tasks.find(
     (tas) => tas.task_identifier === nodeData.task_props.task_identifier,
   );
-  const { cloneNode } = useCloneNode();
+  const cloneNode = useCloneNode();
 
   return (
     <>
@@ -55,8 +55,8 @@ export default function NodeSidebarMenu(props: Props) {
         <ListItemIcon>
           <LibraryAdd fontSize="small" />
         </ListItemIcon>
-        <ListItemText>Dublicate Node</ListItemText>
-        <KeyStrokeHint text="ctrl+d" />
+        <ListItemText>Duplicate Node</ListItemText>
+        <KeyStrokeHint text="Ctrl+D" />
       </MenuItem>
 
       {nodeData.task_props.task_type !== 'graph' && (

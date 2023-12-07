@@ -100,7 +100,7 @@ function Canvas() {
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const { fitView, setEdges, getNodes, getEdges, addNodes } = rfInstance;
-  const { cloneNode } = useCloneNode();
+  const cloneNode = useCloneNode();
 
   useEffect(() => {
     setTimeout(() => {
@@ -259,7 +259,7 @@ function Canvas() {
       const selectedNode = getNodes().find((nod) => nod.selected);
       if (!selectedNode) {
         showWarningMsg(
-          'Ctrl+d dublicates a node in the existing workflow. First select a node to dublicate!',
+          'Ctrl+d duplicates a node in the existing workflow. First select a node to duplicate!',
         );
         return;
       }
