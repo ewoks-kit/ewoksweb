@@ -20,14 +20,14 @@ function ExecutionEngine(props: Props) {
     <Card variant="outlined">
       <CardContent>
         <FormControl className={styles.engineForm}>
-          <b className={styles.engineSelectLabel}>Execution engine</b>
+          <span className={styles.engineSelectLabel}>Execution engine</span>
           <Select
             variant="standard"
             value={engine}
             onChange={(event) => setEngine(event.target.value as EngineOptions)}
             className={styles.engineSelect}
           >
-            <MenuItem value="default">default</MenuItem>
+            <MenuItem value="">default</MenuItem>
             <MenuItem value="pypushflow">pypushflow</MenuItem>
             <MenuItem value="dask">dask</MenuItem>
           </Select>

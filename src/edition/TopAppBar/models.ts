@@ -1,3 +1,3 @@
 export type Status = 'idle' | 'success' | 'error';
 
-export type EngineOptions = 'default' | 'dask' | 'ppf';
+export type EngineOptions = 'default' | 'dask' | 'ppf' | '';

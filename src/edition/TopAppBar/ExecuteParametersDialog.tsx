@@ -24,7 +24,7 @@ import type {
   ObjectEditDialogContent,
 } from '../../api/models';
 import DraggableDialog from '../../general/DraggableDialog';
-import useSaveWorkflow from '../../general/hooks';
+import { useSaveWorkflow } from '../../general/hooks';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import { textForError } from '../../utils';
@@ -48,7 +48,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogContent, setDialogContent] = useState<ObjectEditDialogContent>();
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
-  const [engine, setEngine] = useState<EngineOptions>('default');
+  const [engine, setEngine] = useState<EngineOptions>('');
   const { handleSave } = useSaveWorkflow();
 
   function showInputEditDialog(
@@ -72,6 +72,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
   async function handleSaveExecute() {
     try {
       await handleSave();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const Inputs: NodeExecutionInput[] = perNodeInputs
         .filter(hasDefinedProperties)
         .map((input) => {
@@ -88,7 +89,8 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
         });
 
       executeWorkflow({
-        executeArgs: { engine, perNodeInputs: Inputs },
+        // comment until it is clear what the backend expects
+        // executeArgs: { engine, perNodeInputs: Inputs },
       });
     } catch (error) {
       showErrorMsg(
@@ -351,8 +353,8 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={async () => {
-              await handleSaveExecute();
+            onClick={() => {
+              void handleSaveExecute();
             }}
             color="primary"
           >
