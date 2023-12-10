@@ -6,7 +6,8 @@ import {
   Select,
 } from '@mui/material';
 
-type EngineOptions = 'default' | 'dask' | 'ppf';
+import styles from './ExecutionDialog.module.css';
+import type { EngineOptions } from './models';
 
 interface Props {
   engine: EngineOptions;
@@ -16,18 +17,15 @@ function ExecutionEngine(props: Props) {
   const { engine, setEngine } = props;
 
   return (
-    <Card variant="outlined" style={{ margin: '2px' }}>
+    <Card variant="outlined">
       <CardContent>
-        <FormControl style={{ display: 'flex', flexDirection: 'row' }}>
-          <b style={{ marginTop: '16px' }}>Execution engine</b>
-          {/* <InputLabel id="demo-simple-select-label"></InputLabel> */}
+        <FormControl className={styles.engineForm}>
+          <b className={styles.engineSelectLabel}>Execution engine</b>
           <Select
+            variant="standard"
             value={engine}
             onChange={(event) => setEngine(event.target.value as EngineOptions)}
-            style={{
-              minWidth: '150px',
-              marginLeft: '15px',
-            }}
+            className={styles.engineSelect}
           >
             <MenuItem value="default">default</MenuItem>
             <MenuItem value="pypushflow">pypushflow</MenuItem>

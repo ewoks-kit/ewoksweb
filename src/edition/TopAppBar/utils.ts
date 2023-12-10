@@ -1,3 +1,4 @@
+import type { ExecutionParameters, NodeExecutionInput } from '../../api/models';
 import { fetchWorkflowsIds } from '../../api/workflows';
 import type {
   Condition,
@@ -81,5 +82,21 @@ function deleteEmptyLines<T extends DataMapping | Condition | DefaultInput>(
   }
   return arrayObjId.filter(
     (obj: DataMapping | Condition | DefaultInput) => obj.name !== '',
+  );
+}
+
+export function hasDefinedProperties(
+  item: NodeExecutionInput,
+): item is ExecutionParameters & {
+  nodeId: string;
+  name: string;
+  value: unknown;
+  label: string;
+} {
+  return (
+    item.nodeId !== undefined &&
+    item.name !== undefined &&
+    item.value !== undefined &&
+    item.label !== undefined
   );
 }

@@ -6,7 +6,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableRow,
 } from '@mui/material';
 import Button from '@mui/material//Button';
@@ -17,90 +16,46 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { nanoid } from 'nanoid';
 import type { ChangeEvent } from 'react';
 import { useState } from 'react';
-import type { EditableTableRow, TypeOfValues } from 'types';
+import type { InputTableRow, TypeOfValues } from 'types';
 
+import type {
+  ExecuteDialogProps,
+  NodeExecutionInput,
+  ObjectEditDialogContent,
+} from '../../api/models';
 import DraggableDialog from '../../general/DraggableDialog';
+import useSaveWorkflow from '../../general/hooks';
 import useNodeDataStore from '../../store/useNodeDataStore';
+import useSnackbarStore from '../../store/useSnackbarStore';
+import { textForError } from '../../utils';
 import AddEntryRow from '../Sidebar/table/controls/AddEntryRow';
 import RemoveRowButton from '../Sidebar/table/controls/RemoveRowButton';
 import TypeSelectCell from '../Sidebar/table/controls/TypeSelectCell';
 import CustomTableCell from '../Sidebar/table/CustomTableCell';
 import TableCellInEditMode from '../Sidebar/table/TableCellInEditMode';
-import styles from '../Sidebar/table/TableHeader.module.css';
 import { isClass } from '../Sidebar/table/utils';
+import ExecuteParamsTableHeader from './ExecuteParamsTableHeader';
 import ExecutionEngine from './ExecutionEngine';
-
-interface ObjectEditDialogContent {
-  id?: string;
-  title?: string;
-  object?: object;
-  callbackProps: { rows: EditableTableRow[]; id: string };
-}
-
-interface ExecutionPerNodeInputs {
-  name?: string | number;
-  type?: string;
-  value?: unknown;
-  id: string;
-  label?: string;
-  taskIdentifier?: string;
-  nodeId?: string;
-}
-
-interface ExecutionParameters {
-  name: string | number;
-  type?: string;
-  value: unknown;
-  id: string;
-}
-
-export interface ExecutionParams {
-  workerOptions?: Record<string, unknown>;
-  executeArgs?: { perNodeInputs?: ExecutionPerNodeInputs[]; engine?: string };
-}
-
-export interface ExecuteDialogProps {
-  open: boolean;
-  onClose: (value?: string) => void;
-  executeWorkflow: (params?: ExecutionParams) => Promise<void>;
-}
-
-function hasDefinedProperties(
-  item: ExecutionPerNodeInputs,
-): item is ExecutionParameters & {
-  nodeId: string;
-  name: string;
-  value: unknown;
-  label: string;
-} {
-  return (
-    item.nodeId !== undefined &&
-    item.name !== undefined &&
-    item.value !== undefined &&
-    item.label !== undefined
-  );
-}
-
-type EngineOptions = 'default' | 'dask' | 'ppf';
+import type { EngineOptions } from './models';
+import { hasDefinedProperties } from './utils';
 
 export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
   const { onClose, open, executeWorkflow } = props;
 
   const nodesData = useNodeDataStore((state) => state.nodesData);
 
-  const [perNodeInputs, setPerNodeInputs] = useState<ExecutionPerNodeInputs[]>(
-    [],
-  );
+  const [perNodeInputs, setPerNodeInputs] = useState<NodeExecutionInput[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogContent, setDialogContent] = useState<ObjectEditDialogContent>();
-
+  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const [engine, setEngine] = useState<EngineOptions>('default');
+  const { handleSave } = useSaveWorkflow();
 
-  function showEditableDialog(
+  function showInputEditDialog(
     id: string,
     title: string,
     graph: unknown,
-    callbackProps: { rows: EditableTableRow[]; id: string },
+    callbackProps: { rows: InputTableRow[]; id: string },
   ) {
     if (typeof graph !== 'object' || graph === null) {
       return;
@@ -114,30 +69,39 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     });
   }
 
-  function handleExecute() {
-    const execDefaultInputs: ExecutionPerNodeInputs[] = perNodeInputs
-      .filter(hasDefinedProperties)
-      .map((input) => {
-        return {
-          name: input.name,
-          type: input.type,
-          value: input.value,
-          id:
-            input.label &&
-            ['All nodes', 'All input nodes'].includes(input.label)
-              ? input.label
-              : input.nodeId,
-        };
-      });
+  async function handleSaveExecute() {
+    try {
+      await handleSave();
+      const Inputs: NodeExecutionInput[] = perNodeInputs
+        .filter(hasDefinedProperties)
+        .map((input) => {
+          return {
+            name: input.name,
+            type: input.type,
+            value: input.value,
+            id:
+              input.label &&
+              ['All nodes', 'All input nodes'].includes(input.label)
+                ? input.label
+                : input.nodeId,
+          };
+        });
 
-    executeWorkflow({
-      executeArgs: { engine, perNodeInputs: execDefaultInputs },
-      workerOptions: {},
-    });
+      executeWorkflow({
+        executeArgs: { engine, perNodeInputs: Inputs },
+      });
+    } catch (error) {
+      showErrorMsg(
+        textForError(
+          error,
+          'Error in retrieving workflow. Please check connectivity with the server!',
+        ),
+      );
+    }
   }
 
   function handleChangeNodeTarget(
-    input: ExecutionPerNodeInputs,
+    input: NodeExecutionInput,
     targetNodeId: string,
   ) {
     const newInputRow = {
@@ -167,14 +131,14 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     ]);
   }
 
-  function handleRowDelete(input: ExecutionPerNodeInputs) {
+  function handleRowDelete(input: NodeExecutionInput) {
     const newInputs = perNodeInputs.filter((inp) => inp.id !== input.id);
     setPerNodeInputs(newInputs);
   }
 
   function handleNameChange(
     e: { target: { name: string; value: string | number } },
-    row: EditableTableRow,
+    row: InputTableRow,
   ) {
     const newRows = perNodeInputs.map((inputRow) =>
       inputRow.id === row.id
@@ -190,7 +154,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
 
   function handleValueChange(
     e: { target: { name: string; value: string | number } },
-    row: EditableTableRow,
+    row: InputTableRow,
   ) {
     const { id: rowId = '' } = row;
     const newRows = perNodeInputs.map((inputRow) =>
@@ -207,7 +171,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
 
   const changedTypeOfInput = (
     e: ChangeEvent<HTMLInputElement>,
-    row: ExecutionPerNodeInputs,
+    row: NodeExecutionInput,
   ) => {
     const { id: rowId = '' } = row;
     const newRows = perNodeInputs.map((inputRow) =>
@@ -240,13 +204,13 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     return {};
   }
 
-  function handleValueEdit(inputRow: ExecutionPerNodeInputs, index: number) {
+  function handleValueEdit(inputRow: NodeExecutionInput, index: number) {
     if (inputRow.type && ['list', 'dict'].includes(inputRow.type)) {
-      showEditableDialog(
+      showInputEditDialog(
         inputRow.id || '',
         inputRow.type === 'list' ? 'Edit list' : 'Edit dict',
         onListOrDict(inputRow.id || '', index),
-        { rows: perNodeInputs as EditableTableRow[], id: inputRow.id },
+        { rows: perNodeInputs as InputTableRow[], id: inputRow.id },
       );
     }
   }
@@ -254,7 +218,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
   function setRowValue(
     name: string,
     val: unknown,
-    callbackProps: { id: string; rows: EditableTableRow[] },
+    callbackProps: { id: string; rows: InputTableRow[] },
   ) {
     const newRows = callbackProps.rows.map((row) => {
       if (row.id === callbackProps.id) {
@@ -264,7 +228,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
       }
       return row;
     });
-    setPerNodeInputs(newRows as ExecutionPerNodeInputs[]);
+    setPerNodeInputs(newRows as NodeExecutionInput[]);
   }
 
   function calcTypeAndValues(nodeId: string | undefined): TypeOfValues {
@@ -282,6 +246,13 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
 
   return (
     <>
+      {/* TODO: Handle open from disk before opening the execution window for better user experience*/}
+      {/* <GraphFormDialog
+        elementToEdit={displayedWorkflowInfo}
+        action={action}
+        isOpen={isDialogOpen}
+        onClose={() => setDialogOpen(false)}
+      /> */}
       {dialogContent && (
         <DraggableDialog
           open={openDialog}
@@ -289,67 +260,24 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
           setValue={setRowValue}
         />
       )}
-      <Dialog
-        maxWidth="xl"
-        fullWidth
-        aria-labelledby="execute-arguments-dialog"
-        open={open}
-        onClose={() => onClose()}
-      >
+      <Dialog maxWidth="xl" fullWidth open={open} onClose={() => onClose()}>
         <DialogTitle>Execution Parameters</DialogTitle>
         <DialogContent>
-          <Card variant="outlined" style={{ margin: '2px' }}>
+          <Card variant="outlined">
             <CardContent>
               <h4>Workflow Inputs</h4>
-              <div style={{ display: 'flex' }}>
+              <div>
                 <Table
-                  className={styles.table}
-                  aria-label="editable table"
+                  aria-label="Execution parameters table"
                   size="small"
                   padding="normal"
                 >
-                  <TableHead>
-                    <TableRow>
-                      <TableCell
-                        align="center"
-                        className={styles.cell}
-                        style={{ width: '25%' }}
-                      >
-                        <b>Node/s</b>
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        className={styles.cell}
-                        style={{ width: '15%' }}
-                      >
-                        <b>Type</b>
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        className={styles.cell}
-                        style={{ width: '30%' }}
-                      >
-                        <b>Name</b>
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        className={styles.cell}
-                        style={{ width: '30%' }}
-                      >
-                        <b>Value</b>
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
+                  <ExecuteParamsTableHeader />
                   <TableBody>
                     {perNodeInputs.map((input, index) => (
                       <TableRow key={input.id}>
-                        <TableCell
-                          style={{ width: '25%' }}
-                          className={styles.cell}
-                          align="left"
-                          size="small"
-                        >
-                          <FormControl sx={{ m: 1, width: '100%' }}>
+                        <TableCell align="left" size="small">
+                          <FormControl>
                             <Select
                               variant="standard"
                               native
@@ -380,36 +308,27 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
                           }
                           onChange={(e) => changedTypeOfInput(e, input)}
                         />
-                        <TableCell
-                          style={{ width: '30%' }}
-                          className={styles.cell}
-                          align="left"
-                          size="small"
-                        >
+                        <TableCell align="left" size="small">
                           <TableCellInEditMode
                             index={0}
                             name="name"
                             onChange={handleNameChange}
                             {...props}
-                            row={perNodeInputs[index] as EditableTableRow}
+                            row={perNodeInputs[index] as InputTableRow}
                             typeOfValues={calcTypeAndValues(input.nodeId)}
                           />
                         </TableCell>
 
                         <CustomTableCell
                           index={index}
-                          row={input as EditableTableRow}
+                          row={input as InputTableRow}
                           name="value"
                           onChange={handleValueChange}
                           onEdit={() => handleValueEdit(input, index)}
                         />
-                        <TableCell
-                          className={styles.cell}
-                          align="left"
-                          size="small"
-                        >
+                        <TableCell align="left" size="small">
                           <RemoveRowButton
-                            onDelete={() => handleRowDelete(input)}
+                            onClick={() => handleRowDelete(input)}
                           />
                         </TableCell>
                       </TableRow>
@@ -431,7 +350,12 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
           The workflow will be saved before excution.
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleExecute} color="primary">
+          <Button
+            onClick={async () => {
+              await handleSaveExecute();
+            }}
+            color="primary"
+          >
             Save & Execute
           </Button>
           <Button onClick={() => onClose()} color="primary">

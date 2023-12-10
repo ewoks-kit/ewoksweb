@@ -1,0 +1,28 @@
+.engineForm {
+  flex-direction: row !important;
+}
+
+.engineSelectLabel {
+  margin-top: 4px;
+}
+
+.engineSelect {
+  min-width: 150px;
+  margin-left: 15px;
+}
+
+.nodesTableCell {
+  width: 25%;
+}
+
+.typeTableCell {
+  width: 15%;
+}
+
+.nameTableCell {
+  width: 20%;
+}
+
+.valueTableCell {
+  width: 40%;
+}

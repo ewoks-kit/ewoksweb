@@ -13,7 +13,7 @@ function RemoveRowCell(props: Props) {
 
   return (
     <TableCell className={styles.cell}>
-      <RemoveRowButton disable={disable} onDelete={onDelete} />
+      <RemoveRowButton disable={disable} onClick={onDelete} />
     </TableCell>
   );
 }

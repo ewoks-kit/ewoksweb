@@ -255,7 +255,7 @@ export type RFNode = Node<Record<string, never>>;
 // width?: number | null; // what is their functionality?
 // height?: number | null;
 
-export interface EditableTableRow {
+export interface InputTableRow {
   id?: string;
   name?: string;
   value?: unknown;
@@ -280,7 +280,7 @@ export interface TypeOfValues {
 
 export interface CustomTableCellProps {
   index: number;
-  row: EditableTableRow;
+  row: InputTableRow;
   rowsNames?: string[];
   name: 'name' | 'value';
   typeOfValues?: TypeOfValues;
@@ -289,7 +289,7 @@ export interface CustomTableCellProps {
   onEdit?: () => void;
   onChange(
     e: { target: { name: string; value: string | number } },
-    row: EditableTableRow,
+    row: InputTableRow,
     index: number,
   ): void;
 }

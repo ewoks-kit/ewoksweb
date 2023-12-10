@@ -3,6 +3,7 @@ import type {
   EwoksLink,
   EwoksNode,
   GraphDetails,
+  InputTableRow,
   Task,
   WorkflowDescription,
 } from '../types';
@@ -50,4 +51,38 @@ export enum QueryKey {
   Icons = 'icons',
   Tasks = 'tasks',
   Workflows = 'workflows',
+}
+
+export interface ObjectEditDialogContent {
+  id?: string;
+  title?: string;
+  object?: object;
+  callbackProps: { rows: InputTableRow[]; id: string };
+}
+
+export interface NodeExecutionInput {
+  name?: string | number;
+  type: string;
+  value?: unknown;
+  id: string;
+  label?: string;
+  taskIdentifier?: string;
+  nodeId?: string;
+}
+
+export interface ExecutionParameters {
+  name: string | number;
+  type: string;
+  value: unknown;
+  id: string;
+}
+
+export interface ExecutionParams {
+  executeArgs?: { perNodeInputs?: NodeExecutionInput[]; engine?: string };
+}
+
+export interface ExecuteDialogProps {
+  open: boolean;
+  onClose: (value?: string) => void;
+  executeWorkflow: (params?: ExecutionParams) => Promise<void>;
 }

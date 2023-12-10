@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import type { DataMapping, EditableTableRow } from 'types';
+import type { DataMapping, InputTableRow } from 'types';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
@@ -11,7 +11,7 @@ export default function NodeDataMapping({ nodeId }: { nodeId: string }) {
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
-  function addDataMapping(rows: EditableTableRow[] | undefined) {
+  function addDataMapping(rows: InputTableRow[] | undefined) {
     mergeNodeData(nodeId, {
       ewoks_props: {
         default_error_attributes: {

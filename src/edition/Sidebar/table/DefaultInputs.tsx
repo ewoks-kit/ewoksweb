@@ -2,7 +2,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import { IconButton } from '@mui/material';
 import { nanoid } from 'nanoid';
 import type { Node } from 'reactflow';
-import type { DefaultInput, EditableTableRow } from 'types';
+import type { DefaultInput, InputTableRow } from 'types';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
@@ -17,7 +17,7 @@ export default function DefaultInputs(element: Node) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
   assertNodeDataDefined(nodeData, element.id);
 
-  function addDefaultInputs(rows: EditableTableRow[] | undefined) {
+  function addDefaultInputs(rows: InputTableRow[] | undefined) {
     const newNodeData = {
       ewoks_props: {
         default_inputs: [
@@ -30,7 +30,7 @@ export default function DefaultInputs(element: Node) {
     mergeNodeData(element.id, newNodeData);
   }
 
-  const defaultInputsChanged = (table: EditableTableRow[]) => {
+  const defaultInputsChanged = (table: InputTableRow[]) => {
     const newNodeData = {
       ...nodeData,
       ewoks_props: {

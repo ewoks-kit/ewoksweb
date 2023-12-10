@@ -11,7 +11,7 @@ import React from 'react';
 import type {
   Condition,
   DefaultInput,
-  EditableTableRow,
+  InputTableRow,
   TypeOfValues,
 } from 'types';
 
@@ -30,22 +30,22 @@ interface EditableTableProps {
   defaultValues: Condition[] | DefaultInput[];
   typeOfValues: TypeOfValues[];
   disable?: boolean;
-  valuesChanged: (rows: EditableTableRow[]) => void;
-  onRowAdd?: (rows?: EditableTableRow[]) => void;
+  valuesChanged: (rows: InputTableRow[]) => void;
+  onRowAdd?: (rows?: InputTableRow[]) => void;
 }
 
 interface DialogContent {
   id: string;
   title: string;
   object: object;
-  callbackProps: { rows: EditableTableRow[]; id: string };
+  callbackProps: { rows: InputTableRow[]; id: string };
 }
 
 // The table where lines can be added where type is selected and appropriate values are given to name and value.
 function EditableTable(props: EditableTableProps) {
   const { defaultValues, headers, disable, onRowAdd } = props;
 
-  const [rows, setRows] = React.useState<EditableTableRow[]>([]);
+  const [rows, setRows] = React.useState<InputTableRow[]>([]);
   const [typeOfInputs, setTypeOfInputs] = React.useState<string[]>([]);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<DialogContent>();
@@ -60,7 +60,7 @@ function EditableTable(props: EditableTableProps) {
     id: string,
     title: string,
     graph: unknown,
-    callbackProps: { rows: EditableTableRow[]; id: string },
+    callbackProps: { rows: InputTableRow[]; id: string },
   ) {
     if (typeof graph !== 'object' || graph === null) {
       return;
@@ -74,7 +74,7 @@ function EditableTable(props: EditableTableProps) {
     });
   }
 
-  function calcNewRows(rowId: string | undefined): EditableTableRow[] {
+  function calcNewRows(rowId: string | undefined): InputTableRow[] {
     return rows.map((row) => {
       if (row.id === rowId) {
         return {
@@ -119,7 +119,7 @@ function EditableTable(props: EditableTableProps) {
 
   function onChange(
     e: { target: { name: string; value: string | number } },
-    row: EditableTableRow,
+    row: InputTableRow,
     index: number,
   ) {
     const { id } = row;
@@ -177,7 +177,7 @@ function EditableTable(props: EditableTableProps) {
 
   const changedTypeOfInputs = (
     e: ChangeEvent<HTMLInputElement>,
-    row: EditableTableRow,
+    row: InputTableRow,
     index: number,
   ) => {
     const { id: rowId = '' } = row;
@@ -204,7 +204,7 @@ function EditableTable(props: EditableTableProps) {
   function setRowValue(
     name: string,
     val: unknown, // can be a user defined list or dict
-    callbackProps: { id: string; rows: EditableTableRow[] },
+    callbackProps: { id: string; rows: InputTableRow[] },
   ) {
     const newRows = callbackProps.rows.map((row) => {
       if (row.id === callbackProps.id) {

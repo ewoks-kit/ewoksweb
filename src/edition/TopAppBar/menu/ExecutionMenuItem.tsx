@@ -2,10 +2,10 @@ import SendIcon from '@mui/icons-material/Send';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import type { ExecutionParams } from '../../../api/models';
 import { executeWorkflow } from '../../../api/workflows';
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import useStore from '../../../store/useStore';
-import type { ExecutionParams } from '../ExecuteParametersDialog';
 import ExecuteParametersDialog from '../ExecuteParametersDialog';
 import ActionMenuItem from './ActionMenuItem';
 

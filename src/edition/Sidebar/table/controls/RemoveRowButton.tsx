@@ -5,18 +5,18 @@ import styles from './RemoveRowCell.module.css';
 
 interface Props {
   disable?: boolean;
-  onDelete: () => void;
+  onClick: () => void;
 }
 
 function RemoveRowButton(props: Props) {
-  const { disable, onDelete } = props;
+  const { disable, onClick } = props;
 
   return (
     <IconButton
       className={styles.button}
       disabled={disable}
       aria-label="Remove row"
-      onClick={() => onDelete()}
+      onClick={() => onClick()}
       size="large"
     >
       <RemoveCircleOutline

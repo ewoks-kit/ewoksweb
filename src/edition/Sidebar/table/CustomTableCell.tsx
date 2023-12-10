@@ -1,16 +1,15 @@
 import { EditOutlined as EditIcon } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import TableCell from '@mui/material/TableCell';
-import type { CustomTableCellProps, EditableTableRow } from 'types';
+import type { CustomTableCellProps, InputTableRow } from 'types';
 
 import styles from './CustomTableCell.module.css';
 import TableCellInEditMode from './TableCellInEditMode';
 
 function isRowContentInvalid(
-  row: EditableTableRow,
+  row: InputTableRow,
   rowNames: string[] | undefined,
   name: string,
-  // TODO: Editable table is not used in Data mapping anymore. Remove usedIn?
   usedIn?: 'DataMapping' | 'DefaultInputs' | 'Conditions',
 ) {
   const hasInvalidValue = row.value === undefined || row.value === '';
