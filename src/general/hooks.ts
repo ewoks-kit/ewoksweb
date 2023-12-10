@@ -59,7 +59,7 @@ export function useLoadGraph(onGraphLoad: (graph: Workflow) => void) {
   };
 }
 
-function useSaveWorkflow() {
+export function useSaveWorkflow() {
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo,
   );
@@ -84,6 +84,7 @@ function useSaveWorkflow() {
     // 1. If notExists open dialog for NEW NAME.
     // 2. If exists and you took it from the server UPDATE without asking
     // 3. If exists and you took it from elseware open dialog for new name OR OVERWRITE
+    console.log(rootWorkflowSource);
 
     const response = await getWorkflowIdsFromServer();
     if (response.error) {
@@ -107,6 +108,8 @@ function useSaveWorkflow() {
     }
 
     if (rootWorkflowSource !== 'fromServer') {
+      console.log('not from server');
+
       setAction(GraphFormAction.newGraphOrOverwrite);
       setDialogOpen(true);
       return;
@@ -140,5 +143,3 @@ function useSaveWorkflow() {
     handleSave,
   };
 }
-
-export default useSaveWorkflow;
