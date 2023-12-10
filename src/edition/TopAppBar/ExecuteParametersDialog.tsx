@@ -24,7 +24,7 @@ import type {
   ObjectEditDialogContent,
 } from '../../api/models';
 import DraggableDialog from '../../general/DraggableDialog';
-import useSaveWorkflow from '../../general/hooks';
+import { useSaveWorkflow } from '../../general/hooks';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import { textForError } from '../../utils';
@@ -351,8 +351,8 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={async () => {
-              await handleSaveExecute();
+            onClick={() => {
+              void handleSaveExecute();
             }}
             color="primary"
           >

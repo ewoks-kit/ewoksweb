@@ -20,7 +20,7 @@ function ExecutionEngine(props: Props) {
     <Card variant="outlined">
       <CardContent>
         <FormControl className={styles.engineForm}>
-          <b className={styles.engineSelectLabel}>Execution engine</b>
+          <span className={styles.engineSelectLabel}>Execution engine</span>
           <Select
             variant="standard"
             value={engine}
