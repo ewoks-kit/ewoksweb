@@ -44,7 +44,7 @@ export default function LinkSidebarMenu(props: Props) {
         <DeleteIcon fontSize="small" />
       </ListItemIcon>
       <ListItemText>Delete Link</ListItemText>
-      <KeyStrokeHint text="delete" />
+      <KeyStrokeHint text="Del" />
     </MenuItem>
   );
 }

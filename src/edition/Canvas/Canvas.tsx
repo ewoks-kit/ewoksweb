@@ -259,7 +259,7 @@ function Canvas() {
       const selectedNode = getNodes().find((nod) => nod.selected);
       if (!selectedNode) {
         showWarningMsg(
-          'Ctrl+d duplicates a node in the existing workflow. First select a node to duplicate!',
+          'Ctrl+D duplicates a node in the existing workflow. First select a node to duplicate!',
         );
         return;
       }
