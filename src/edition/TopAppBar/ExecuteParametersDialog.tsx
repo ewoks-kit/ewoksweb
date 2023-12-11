@@ -24,9 +24,11 @@ import type {
   ObjectEditDialogContent,
 } from '../../api/models';
 import DraggableDialog from '../../general/DraggableDialog';
+import GraphFormDialog from '../../general/forms/GraphFormDialog';
 import { useSaveWorkflow } from '../../general/hooks';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
+import useStore from '../../store/useStore';
 import { textForError } from '../../utils';
 import AddEntryRow from '../Sidebar/table/controls/AddEntryRow';
 import RemoveRowButton from '../Sidebar/table/controls/RemoveRowButton';
@@ -48,8 +50,11 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogContent, setDialogContent] = useState<ObjectEditDialogContent>();
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo,
+  );
   const [engine, setEngine] = useState<EngineOptions>('default');
-  const { handleSave } = useSaveWorkflow();
+  const { isDialogOpen, setDialogOpen, action, handleSave } = useSaveWorkflow();
 
   function showInputEditDialog(
     id: string,
@@ -71,25 +76,27 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
 
   async function handleSaveExecute() {
     try {
-      await handleSave();
-      const Inputs: NodeExecutionInput[] = perNodeInputs
-        .filter(hasDefinedProperties)
-        .map((input) => {
-          return {
-            name: input.name,
-            type: input.type,
-            value: input.value,
-            id:
-              input.label &&
-              ['All nodes', 'All input nodes'].includes(input.label)
-                ? input.label
-                : input.nodeId,
-          };
-        });
+      const saved = await handleSave();
+      if (saved) {
+        const Inputs: NodeExecutionInput[] = perNodeInputs
+          .filter(hasDefinedProperties)
+          .map((input) => {
+            return {
+              name: input.name,
+              type: input.type,
+              value: input.value,
+              id:
+                input.label &&
+                ['All nodes', 'All input nodes'].includes(input.label)
+                  ? input.label
+                  : input.nodeId,
+            };
+          });
 
-      executeWorkflow({
-        executeArgs: { engine, perNodeInputs: Inputs },
-      });
+        executeWorkflow({
+          executeArgs: { engine, perNodeInputs: Inputs },
+        });
+      }
     } catch (error) {
       showErrorMsg(
         textForError(
@@ -246,13 +253,12 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
 
   return (
     <>
-      {/* TODO: Handle open from disk before opening the execution window for better user experience*/}
-      {/* <GraphFormDialog
+      <GraphFormDialog
         elementToEdit={displayedWorkflowInfo}
         action={action}
         isOpen={isDialogOpen}
         onClose={() => setDialogOpen(false)}
-      /> */}
+      />
       {dialogContent && (
         <DraggableDialog
           open={openDialog}
@@ -351,8 +357,8 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={async () => {
-              await handleSaveExecute();
+            onClick={() => {
+              handleSaveExecute();
             }}
             color="primary"
           >
