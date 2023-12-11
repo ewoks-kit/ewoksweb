@@ -34,7 +34,8 @@ function ExecutionMenuItem() {
   }
 
   useKeyboardEvent(
-    (e) => e.shiftKey && e.key.toLowerCase() === 'x',
+    (e) =>
+      (e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'x',
     (e) => {
       e.preventDefault();
       setOpenAgreeDialog(true);
@@ -48,7 +49,7 @@ function ExecutionMenuItem() {
         icon={SendIcon}
         label="Execute workflow"
         onClick={() => setOpenAgreeDialog(true)}
-        keyShortcut="Shift+X"
+        keyShortcut="Ctrl+Shift+X"
       />
       <ConfirmDialog
         title="There are unsaved changes"

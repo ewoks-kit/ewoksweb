@@ -55,7 +55,7 @@ export default function NodeSidebarMenu(props: Props) {
         <ListItemIcon>
           <LibraryAdd fontSize="small" />
         </ListItemIcon>
-        <ListItemText>Dublicate Node</ListItemText>
+        <ListItemText>Duplicate Node</ListItemText>
         <KeyStrokeHint text="Ctrl+D" />
       </MenuItem>
 
