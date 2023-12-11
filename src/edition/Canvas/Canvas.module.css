@@ -10,15 +10,3 @@
   flex: 1;
   background-color: rgb(233, 235, 247);
 }
-
-.noWorkflowMessage {
-  position: absolute;
-  z-index: 1000;
-  color: #939dd5;
-  text-align: center;
-  pointer-events: none; /* Let RF events go through the message */
-}
-
-.noWorkflowMessage p {
-  margin: 0;
-}
