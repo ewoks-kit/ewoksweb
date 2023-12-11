@@ -1,12 +1,12 @@
-import useQuickOpenDropdownState from '../../general/useQuickOpenDropdownState';
+import useQuickOpenStore from '../../general/useQuickOpenStore';
 import { useNodesLength } from '../../store/graph-hooks';
 import styles from './FallbackMessage.module.css';
 
 export default function FallbackMessage() {
   const nodesCount = useNodesLength();
-  const quickOpenDropdown = useQuickOpenDropdownState((state) => state.element);
+  const quickOpenElement = useQuickOpenStore((state) => state.element);
 
-  if (!quickOpenDropdown || nodesCount !== 0) {
+  if (!quickOpenElement || nodesCount !== 0) {
     return null;
   }
 
@@ -19,7 +19,7 @@ export default function FallbackMessage() {
         <button
           className={styles.btn}
           onClick={() => {
-            quickOpenDropdown.click();
+            quickOpenElement.click();
           }}
           type="button"
         >

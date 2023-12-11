@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 import type { ElementState } from '../types';
 
-const useQuickOpenDropdownState = create<ElementState>((set) => ({
+const useQuickOpenStore = create<ElementState>((set) => ({
   element: undefined,
   setElement: (element: HTMLElement | undefined) =>
     set({
@@ -10,4 +10,4 @@ const useQuickOpenDropdownState = create<ElementState>((set) => ({
     }),
 }));
 
-export default useQuickOpenDropdownState;
+export default useQuickOpenStore;
