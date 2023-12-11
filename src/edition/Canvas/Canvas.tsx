@@ -314,8 +314,8 @@ function Canvas() {
       />
       {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions*/}
       <div className={styles.root} onKeyDown={handleKeyDown}>
-        <FallbackMessage />
         <div className={styles.wrapper} ref={reactFlowWrapper}>
+          {!rootWorkflowId && <FallbackMessage />}
           <ReactFlow
             fitView
             connectOnClick

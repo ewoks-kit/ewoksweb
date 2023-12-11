@@ -4,18 +4,21 @@
 }
 
 .wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex: 1;
   background-color: rgb(233, 235, 247);
 }
 
 .noWorkflowMessage {
-  position: fixed;
-  top: 50%;
-  transform: translateY(calc(-50% - 1rem));
-  left: 30%;
+  position: absolute;
   z-index: 1000;
-  color: #3f51b5;
-  opacity: 0.5;
+  color: #939dd5;
   text-align: center;
   pointer-events: none; /* Let RF events go through the message */
+}
+
+.noWorkflowMessage p {
+  margin: 0;
 }
