@@ -2,8 +2,8 @@
 """
 
 project = "ewoksweb"
-version = "0.1"
-copyright = "2022, ESRF"
+version = "1.0"
+copyright = "2023, ESRF"
 author = "ESRF"
 
 extensions = ["sphinx.ext.autodoc", "sphinx.ext.autosummary", "sphinx.ext.viewcode"]

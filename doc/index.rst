@@ -5,8 +5,9 @@ ewoksweb |version|
 
 ewoksweb has been developed by the `Software group <http://www.esrf.eu/Instrumentation/software>`_ of the `European Synchrotron <https://www.esrf.eu/>`_.
 
+The documentation is inspired by the `diataxis <https://diataxis.fr>`_ approach.
 
-Getting started
+Install locally
 ---------------
 
 Install the `ewoksserver <https://ewoksserver.readthedocs.io>`_ python package
@@ -21,15 +22,38 @@ Start the server and open the frontend in a web browser
 
     ewoks-server
 
-Documentation
--------------
+Tutorials
+---------
+
+Follow the learning-oriented tutorials that will help accomplish a sequense of steps in order to:
 
 .. toctree::
     :maxdepth: 2
 
-    editor_basics
+    create_your_first_workflow
+    create_a_task
+
+
+How-to guides
+-------------
+
+The how-to guides are descriptions targeting the following tasks:
+
+.. toctree::
+    :maxdepth: 2
+
     create_graph
     node_editing
     link_editing
     execution
     manage_graphs_tasks_icons
+
+Explanations
+------------
+
+General useful information regarding:
+
+.. toctree::
+    :maxdepth: 2
+
+    editor_basics
