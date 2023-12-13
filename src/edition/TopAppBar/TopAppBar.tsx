@@ -1,6 +1,6 @@
 import { createPortal } from 'react-dom';
 
-import GetWorkflowFromServerDropdown from '../../general/GetWorkflowFromServerDropdown';
+import QuickOpen from '../../general/QuickOpen';
 import useNavBarElementStore from '../../navbar/useNavBarElementStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import OpenActionMenuButton from './menu/OpenActionMenuButton';
@@ -22,7 +22,7 @@ function TopAppBar() {
       </h1>
       <div className={styles.toolbar}>
         <SuspenseBoundary>
-          <GetWorkflowFromServerDropdown />
+          <QuickOpen />
         </SuspenseBoundary>
         <SaveToServerButton />
         <OpenActionMenuButton />

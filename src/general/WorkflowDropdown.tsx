@@ -1,6 +1,7 @@
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { Autocomplete, CircularProgress, TextField } from '@mui/material';
-import { useEffect } from 'react';
+import type { Ref } from 'react';
+import { forwardRef, useEffect } from 'react';
 import type { WorkflowDescription } from 'types';
 
 import { useWorkflowsDLE } from '../api/workflows';
@@ -30,7 +31,7 @@ function sortByCategory(
     );
 }
 
-function WorkflowDropdown(props: Props) {
+function WorkflowDropdown(props: Props, ref: Ref<HTMLElement>) {
   const { onChange, category, label = 'Quick open' } = props;
 
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
@@ -51,7 +52,9 @@ function WorkflowDropdown(props: Props) {
 
   return (
     <Autocomplete
+      ref={ref}
       className={styles.quickOpen}
+      openOnFocus
       autoHighlight
       loading={isLoading}
       options={options}
@@ -98,4 +101,4 @@ function WorkflowDropdown(props: Props) {
   );
 }
 
-export default WorkflowDropdown;
+export default forwardRef(WorkflowDropdown);
