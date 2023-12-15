@@ -89,6 +89,7 @@ interface Props {
 
 function Canvas(props: Props) {
   const { workflowId } = props;
+  console.log(workflowId);
 
   const workflow = useWorkflow(workflowId);
 
@@ -113,7 +114,7 @@ function Canvas(props: Props) {
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
-  const { setNodes, setEdges, getNodes, getEdges, addNodes, getNode } =
+  const { fitView, setNodes, setEdges, getNodes, getEdges, addNodes, getNode } =
     rfInstance;
 
   function onNodesChange(changes: NodeChange[]) {
@@ -341,13 +342,16 @@ function Canvas(props: Props) {
             deleteKeyCode="Delete"
             isValidConnection={isValidConnection}
             onInit={() => {
+              console.log(workflow);
+
               setRootWorkflow(
                 workflow || EMPTY_GRAPH,
                 rfInstance,
                 tasks,
                 workflow ? 'fromServer' : undefined,
               );
-              // fitView({ duration: 500 });
+              // TODO: does not seem to do anything. The graph appears fitted instantly!
+              // fitView({ duration: 3500 });
             }}
           >
             <CanvasBackground />

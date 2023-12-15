@@ -28,26 +28,39 @@ export default function EditPage() {
 
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
-  const workflowId = queryParams.get('workflow');
+  let workflowId;
+  const [, setQueryParams] = useSearchParams();
 
-  const restoreWorkflow = async (workflow: string) => {
-    try {
-      const graph = await fetchWorkflow(workflow);
-      setRootWorkflow(graph, rfInstance, tasks, 'fromServer');
-    } catch (error) {
-      showErrorMsg(
-        textForError(
-          error,
-          'Error in retrieving workflow. Please check connectivity with the server!',
-        ),
-      );
-    } finally {
-      resetWorkflowToRestoreId();
-    }
-  };
+  // const restoreWorkflow = async (workflow: string) => {
+  //   try {
+  //     const graph = await fetchWorkflow(workflow);
+  //     setRootWorkflow(graph, rfInstance, tasks, 'fromServer');
+  //   } catch (error) {
+  //     showErrorMsg(
+  //       textForError(
+  //         error,
+  //         'Error in retrieving workflow. Please check connectivity with the server!',
+  //       ),
+  //     );
+  //   } finally {
+  //     resetWorkflowToRestoreId();
+  //   }
+  // };
 
-  if (workflowToRestoreId) {
-    restoreWorkflow(workflowToRestoreId);
+  console.log(workflowToRestoreId, queryParams);
+
+  if (
+    workflowToRestoreId &&
+    queryParams.get('workflow') !== workflowToRestoreId
+  ) {
+    console.log('restore');
+
+    setQueryParams({ workflow: workflowToRestoreId });
+    // resetWorkflowToRestoreId();
+    // restoreWorkflow(workflowToRestoreId);
+  } else {
+    workflowId = queryParams.get('workflow');
+    console.log('not restore', workflowId, queryParams.get('workflow'));
   }
 
   return (

@@ -8,12 +8,14 @@ import ActionMenuItem from './ActionMenuItem';
 
 function OpenNewWorkflowMenuItem() {
   const [openDialog, setOpenDialog] = useState(false);
-  const [, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const openEmptyWorkflow = useCallback(() => {
-    setOpenDialog(false);
+  const openEmptyWorkflow = () => {
+    console.log(searchParams);
+
     setSearchParams({});
-  }, [setSearchParams]);
+    setOpenDialog(false);
+  };
 
   useKeyboardEvent(
     (e) =>
