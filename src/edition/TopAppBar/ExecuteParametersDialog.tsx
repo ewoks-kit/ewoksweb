@@ -24,7 +24,6 @@ import type {
   ObjectEditDialogContent,
 } from '../../api/models';
 import DraggableDialog from '../../general/DraggableDialog';
-import GraphFormDialog from '../../general/forms/GraphFormDialog';
 import { useSaveWorkflow } from '../../general/hooks';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
@@ -253,12 +252,6 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
 
   return (
     <>
-      <GraphFormDialog
-        elementToEdit={displayedWorkflowInfo}
-        action={action}
-        isOpen={isDialogOpen}
-        onClose={() => setDialogOpen(false)}
-      />
       {dialogContent && (
         <DraggableDialog
           open={openDialog}
@@ -358,7 +351,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
         <DialogActions>
           <Button
             onClick={() => {
-              handleSaveExecute();
+              void handleSaveExecute();
             }}
             color="primary"
           >

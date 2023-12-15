@@ -26,9 +26,9 @@ it('should redirect to monitor page and display "Success" when successfully exec
   cy.findAllByRole('listitem').should('have.length', 1);
 
   // Comment since workflows keep crashing in the backend and no workflow_id is assigned
-  // cy.findByRole('listitem', { name: 'demo' }).within(() => {
-  //   cy.findByText('Success').should('exist');
-  // });
+  cy.findByRole('listitem', { name: 'demo' }).within(() => {
+    cy.findByText('Success').should('exist');
+  });
 });
 
 it('should be able to display the status of another workflow (even if it cannot be executed)', () => {
@@ -50,7 +50,7 @@ it('should be able to display the status of another workflow (even if it cannot 
   cy.findAllByRole('listitem').should('have.length', 2);
 
   // Comment till backend is fixed
-  // cy.findByRole('listitem', { name: 'Ewoks-Tasks' }).within(() => {
-  //   cy.findByText('Failed').should('exist');
-  // });
+  cy.findByRole('listitem', { name: 'Ewoks-Tasks' }).within(() => {
+    cy.findByText('Failed').should('exist');
+  });
 });
