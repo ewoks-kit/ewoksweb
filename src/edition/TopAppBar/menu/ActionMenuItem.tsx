@@ -2,17 +2,19 @@ import type { SvgIcon } from '@mui/material';
 import { ListItemText, MenuItem } from '@mui/material';
 import type { PropsWithChildren } from 'react';
 
+import KeyStrokeHint from '../../KeyStrokeHint';
 import { useActionMenuContext } from './ActionMenuContext';
 import ActionMenuIcon from './ActionMenuIcon';
 
 interface Props {
   icon: typeof SvgIcon;
   label: string;
+  keyShortcut?: string;
   onClick: () => void;
 }
 
 function ActionMenuItem(props: PropsWithChildren<Props>) {
-  const { icon, label, onClick, children } = props;
+  const { icon, label, keyShortcut, onClick, children } = props;
 
   const { onClose } = useActionMenuContext();
 
@@ -27,6 +29,7 @@ function ActionMenuItem(props: PropsWithChildren<Props>) {
       <ActionMenuIcon icon={icon} />
       <ListItemText primary={label} />
       {children}
+      {keyShortcut && <KeyStrokeHint text={keyShortcut} />}
     </MenuItem>
   );
 }
