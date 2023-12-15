@@ -1,0 +1,21 @@
+.container {
+  position: absolute;
+  z-index: 1000;
+  color: #939dd5;
+  text-align: center;
+  pointer-events: none; /* Let RF events go through the message */
+}
+
+.container p {
+  margin: 0;
+}
+
+.btn {
+  composes: btnClean from global;
+  display: inline-flex;
+  pointer-events: all;
+  font-weight: 600;
+  justify-content: center;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}

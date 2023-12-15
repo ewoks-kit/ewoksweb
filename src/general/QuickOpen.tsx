@@ -8,9 +8,10 @@ import useSnackbarStore from '../store/useSnackbarStore';
 import useStore from '../store/useStore';
 import type { WorkflowDescription } from '../types';
 import ConfirmDialog from './ConfirmDialog';
+import useQuickOpenStore from './useQuickOpenStore';
 import WorkflowDropdown from './WorkflowDropdown';
 
-export default function GetWorkflowFromServerDropdown() {
+export default function QuickOpen() {
   const [workflowId, setWorkflowId] = useState('');
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
@@ -49,6 +50,8 @@ export default function GetWorkflowFromServerDropdown() {
     }
   }
 
+  const setElement = useQuickOpenStore((state) => state.setElement);
+
   return (
     <>
       <ConfirmDialog
@@ -59,6 +62,7 @@ export default function GetWorkflowFromServerDropdown() {
         disagreeCallback={() => setOpenAgreeDialog(false)}
       />
       <WorkflowDropdown
+        ref={(elem) => setElement(elem ?? undefined)}
         key={workflowId}
         onChange={(workflowDetails) => {
           setInputValue(workflowDetails);
