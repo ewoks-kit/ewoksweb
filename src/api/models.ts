@@ -50,5 +50,4 @@ export enum QueryKey {
   Icons = 'icons',
   Tasks = 'tasks',
   Workflows = 'workflows',
-  Workflow = 'workflow',
 }

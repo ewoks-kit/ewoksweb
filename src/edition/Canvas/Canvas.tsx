@@ -20,9 +20,7 @@ import { useStoreApi } from 'reactflow';
 import type { RFNode, Task } from 'types';
 
 import { useTasks } from '../../api/tasks';
-import Spinner from '../../general/Spinner';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
-import useFetchingWorkflow from '../../store/useFetchingWorkflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import useStore from '../../store/useStore';
@@ -104,8 +102,6 @@ function Canvas() {
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
-  const { fetching } = useFetchingWorkflow();
-  // const { isLoading } = useWorkflowDLE();
   const { fitView, setNodes, setEdges, getNodes, getEdges, addNodes, getNode } =
     rfInstance;
 
