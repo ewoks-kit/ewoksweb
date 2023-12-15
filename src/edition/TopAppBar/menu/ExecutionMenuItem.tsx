@@ -18,6 +18,7 @@ function ExecutionMenuItem() {
 
   async function execute() {
     const { rootWorkflowId } = useStore.getState();
+    setOpenAgreeDialog(false);
     if (!rootWorkflowId) {
       showWarningMsg('Please open a workflow in the canvas to execute');
       return;
