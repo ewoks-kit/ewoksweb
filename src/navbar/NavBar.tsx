@@ -19,14 +19,14 @@ function NavBar() {
         </div>
         <Link
           className={styles.link}
-          data-selected={pathname === '/edit' || undefined}
+          data-selected={pathname.startsWith('/edit') || undefined}
           to="/edit"
         >
           Edit
         </Link>
         <Link
           className={styles.link}
-          data-selected={pathname === '/monitor' || undefined}
+          data-selected={pathname.startsWith('/monitor') || undefined}
           to="/monitor"
         >
           Monitor
