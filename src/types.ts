@@ -143,7 +143,7 @@ export interface EwoksDataMapping {
 
 export interface DataMapping {
   value?: string | number;
-  id?: string;
+  id: string;
   name?: string;
 }
 

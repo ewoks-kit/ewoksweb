@@ -76,7 +76,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     try {
       await handleSave();
 
-      const Inputs: NodeExecutionInput[] = perNodeInputs
+      const inputs: NodeExecutionInput[] = perNodeInputs
         .filter(hasDefinedProperties)
         .map((input) => {
           return {
@@ -84,15 +84,16 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
             type: input.type,
             value: input.value,
             id:
+              // define what the endpoint expects in every case
               input.label &&
               ['All nodes', 'All input nodes'].includes(input.label)
-                ? input.label
+                ? null
                 : input.nodeId,
           };
         });
 
       executeWorkflow({
-        executeArgs: { engine: engine ?? null, Inputs },
+        executeArgs: { engine: engine ?? null, inputs },
       });
     } catch (error) {
       showErrorMsg(
@@ -294,13 +295,14 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
                                   </option>
                                 ))}
                               </optgroup>
-                              <optgroup label="Nodes by task identifier">
+                              {/* Should we need to have in the same dropdown other selections */}
+                              {/* <optgroup label="Nodes by task identifier">
                                 {[...nodesData].map(([key, value]) => (
                                   <option value={key} key={key}>
                                     {value.task_props.task_identifier}
                                   </option>
                                 ))}
-                              </optgroup>
+                              </optgroup> */}
                             </Select>
                           </FormControl>
                         </TableCell>

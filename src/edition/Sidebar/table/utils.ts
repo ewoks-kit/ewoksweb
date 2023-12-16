@@ -14,7 +14,7 @@ export function createData(pair: Condition | DefaultInput): InputTableRow {
 
   if ('source_output' in pair) {
     return {
-      id: pair.id?.toString() || pair.source_output?.toString(),
+      id: pair.id?.toString() || pair.source_output?.toString() || '',
       name: pair.source_output?.toString(),
       value: pair.value !== null ? pair.value : 'null',
       type,
@@ -22,7 +22,7 @@ export function createData(pair: Condition | DefaultInput): InputTableRow {
   }
 
   return {
-    id: pair.id?.toString() || pair.name?.toString(),
+    id: pair.id?.toString() || pair.name?.toString() || '',
     name: pair.name?.toString(),
     value: pair.value,
     type,

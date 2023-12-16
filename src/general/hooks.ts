@@ -79,7 +79,7 @@ export function useSaveWorkflow() {
     setStatus('error');
   }
 
-  async function handleSave() {
+  async function handleSave(): Promise<boolean> {
     // DOC: search if id exists.
     // 1. If notExists open dialog for NEW NAME.
     // 2. If exists and you took it from the server UPDATE without asking
@@ -89,7 +89,7 @@ export function useSaveWorkflow() {
       handleError(
         textForError(response.error, commonStrings.retrieveWorkflowsError),
       );
-      return;
+      return false;
     }
 
     const workflowsIds = response.data;
@@ -97,18 +97,18 @@ export function useSaveWorkflow() {
     if (!workflowsIds.includes(displayedWorkflowInfo.id)) {
       setAction(GraphFormAction.newGraph);
       setDialogOpen(true);
-      return;
+      return false;
     }
 
     if (!rootWorkflowSource) {
       handleError('No graph exists to save!');
-      return;
+      return false;
     }
 
     if (rootWorkflowSource !== 'fromServer') {
       setAction(GraphFormAction.newGraphOrOverwrite);
       setDialogOpen(true);
-      return;
+      return false;
     }
 
     try {
@@ -125,8 +125,10 @@ export function useSaveWorkflow() {
 
       showSuccessMsg('Graph saved successfully!');
       setStatus('success');
+      return true;
     } catch (error) {
       handleError(textForError(error, commonStrings.savingError));
+      return false;
     }
   }
 

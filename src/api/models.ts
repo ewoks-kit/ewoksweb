@@ -82,7 +82,7 @@ export interface ExecutionParameters {
 }
 
 export interface ExecutionParams {
-  executeArgs?: { Inputs?: NodeExecutionInput[]; engine?: string | null };
+  executeArgs?: { inputs?: NodeExecutionInput[]; engine?: string | null };
 }
 
 export interface ExecuteDialogProps {
