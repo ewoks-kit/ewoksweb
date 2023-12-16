@@ -256,7 +256,7 @@ export type RFNode = Node<Record<string, never>>;
 // height?: number | null;
 
 export interface InputTableRow {
-  id?: string;
+  id: string;
   name?: string;
   value?: unknown;
   type?: string;

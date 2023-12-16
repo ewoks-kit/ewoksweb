@@ -60,14 +60,18 @@ export interface ObjectEditDialogContent {
   callbackProps: { rows: InputTableRow[]; id: string };
 }
 
+export interface ExecutionInputTableRow extends NodeExecutionInput {
+  type?: string;
+  id: string;
+}
+
 export interface NodeExecutionInput {
   name?: string | number;
-  type: string;
   value?: unknown;
-  id: string;
   label?: string;
-  taskIdentifier?: string;
-  nodeId?: string;
+  taskIdentifier?: string; // all nodes with the same taskIdentifier
+  nodeId?: string; // if null all input nodes get the input
+  all?: boolean; // if true all nodes in the graph get the input
 }
 
 export interface ExecutionParameters {
@@ -78,7 +82,7 @@ export interface ExecutionParameters {
 }
 
 export interface ExecutionParams {
-  executeArgs?: { perNodeInputs?: NodeExecutionInput[]; engine?: string };
+  executeArgs?: { Inputs?: NodeExecutionInput[]; engine?: string | null };
 }
 
 export interface ExecuteDialogProps {

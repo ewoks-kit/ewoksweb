@@ -20,6 +20,7 @@ import type { InputTableRow, TypeOfValues } from 'types';
 
 import type {
   ExecuteDialogProps,
+  ExecutionInputTableRow,
   NodeExecutionInput,
   ObjectEditDialogContent,
 } from '../../api/models';
@@ -44,11 +45,13 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
 
   const nodesData = useNodeDataStore((state) => state.nodesData);
 
-  const [perNodeInputs, setPerNodeInputs] = useState<NodeExecutionInput[]>([]);
+  const [perNodeInputs, setPerNodeInputs] = useState<ExecutionInputTableRow[]>(
+    [],
+  );
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogContent, setDialogContent] = useState<ObjectEditDialogContent>();
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
-  const [engine, setEngine] = useState<EngineOptions>('');
+  const [engine, setEngine] = useState<EngineOptions>(null);
   const { handleSave } = useSaveWorkflow();
 
   function showInputEditDialog(
@@ -72,7 +75,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
   async function handleSaveExecute() {
     try {
       await handleSave();
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       const Inputs: NodeExecutionInput[] = perNodeInputs
         .filter(hasDefinedProperties)
         .map((input) => {
@@ -89,8 +92,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
         });
 
       executeWorkflow({
-        // comment until it is clear what the backend expects
-        // executeArgs: { engine, perNodeInputs: Inputs },
+        executeArgs: { engine: engine ?? null, Inputs },
       });
     } catch (error) {
       showErrorMsg(
@@ -103,7 +105,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
   }
 
   function handleChangeNodeTarget(
-    input: NodeExecutionInput,
+    input: ExecutionInputTableRow,
     targetNodeId: string,
   ) {
     const newInputRow = {
@@ -133,7 +135,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     ]);
   }
 
-  function handleRowDelete(input: NodeExecutionInput) {
+  function handleRowDelete(input: ExecutionInputTableRow) {
     const newInputs = perNodeInputs.filter((inp) => inp.id !== input.id);
     setPerNodeInputs(newInputs);
   }
@@ -173,7 +175,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
 
   const changedTypeOfInput = (
     e: ChangeEvent<HTMLInputElement>,
-    row: NodeExecutionInput,
+    row: ExecutionInputTableRow,
   ) => {
     const { id: rowId = '' } = row;
     const newRows = perNodeInputs.map((inputRow) =>
@@ -206,7 +208,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     return {};
   }
 
-  function handleValueEdit(inputRow: NodeExecutionInput, index: number) {
+  function handleValueEdit(inputRow: ExecutionInputTableRow, index: number) {
     if (inputRow.type && ['list', 'dict'].includes(inputRow.type)) {
       showInputEditDialog(
         inputRow.id || '',
@@ -222,7 +224,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     val: unknown,
     callbackProps: { id: string; rows: InputTableRow[] },
   ) {
-    const newRows = callbackProps.rows.map((row) => {
+    const newRows: ExecutionInputTableRow[] = callbackProps.rows.map((row) => {
       if (row.id === callbackProps.id) {
         return name !== ''
           ? { ...row, id: name, value: val }
@@ -230,7 +232,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
       }
       return row;
     });
-    setPerNodeInputs(newRows as NodeExecutionInput[]);
+    setPerNodeInputs(newRows);
   }
 
   function calcTypeAndValues(nodeId: string | undefined): TypeOfValues {
@@ -248,13 +250,6 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
 
   return (
     <>
-      {/* TODO: Handle open from disk before opening the execution window for better user experience*/}
-      {/* <GraphFormDialog
-        elementToEdit={displayedWorkflowInfo}
-        action={action}
-        isOpen={isDialogOpen}
-        onClose={() => setDialogOpen(false)}
-      /> */}
       {dialogContent && (
         <DraggableDialog
           open={openDialog}
@@ -292,10 +287,17 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
                               <option value="All input nodes">
                                 All input nodes
                               </option>
-                              <optgroup label="Specific Nodes">
+                              <optgroup label="Nodes by label">
                                 {[...nodesData].map(([key, value]) => (
                                   <option value={key} key={key}>
                                     {value.ewoks_props.label}
+                                  </option>
+                                ))}
+                              </optgroup>
+                              <optgroup label="Nodes by task identifier">
+                                {[...nodesData].map(([key, value]) => (
+                                  <option value={key} key={key}>
+                                    {value.task_props.task_identifier}
                                   </option>
                                 ))}
                               </optgroup>
@@ -306,7 +308,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
                           value={
                             perNodeInputs[index].type === 'boolean'
                               ? 'bool'
-                              : perNodeInputs[index].type
+                              : perNodeInputs[index].type || 'string'
                           }
                           onChange={(e) => changedTypeOfInput(e, input)}
                         />
