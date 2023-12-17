@@ -85,7 +85,7 @@ it('Opens and saves a skeleton node right after dropping it on canvas', () => {
 
   cy.get('.react-flow__node').should('have.length', 0);
 
-  cy.findByRole('button', { name: 'General category' }).click();
+  cy.findByRole('button', { name: 'General' }).click();
   cy.dragNodeInCanvas('taskSkeleton');
 
   cy.get('.react-flow__node').should('have.length', 1);
@@ -165,7 +165,7 @@ it('Creates a link and saves it', () => {
 
   cy.get('.react-flow__node').should('have.length', 1);
 
-  cy.findByRole('button', { name: 'General category' }).click();
+  cy.findByRole('button', { name: 'General' }).click();
   cy.dragNodeInCanvas('taskSkeleton');
 
   cy.get('.react-flow__node').should('have.length', 2);

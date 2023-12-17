@@ -3,8 +3,8 @@ beforeEach(() => {
 });
 
 it('displays the general category with the general tasks inside', () => {
-  cy.findByRole('button', { name: 'General category' }).should('be.visible');
-  cy.findByRole('button', { name: 'General category' }).click();
+  cy.findByRole('button', { name: 'General' }).should('be.visible');
+  cy.findByRole('button', { name: 'General' }).click();
 
   cy.findByRole('button', { name: 'graphInput' }).should('be.visible');
   cy.findByRole('button', { name: 'graphOutput' }).should('be.visible');
@@ -14,7 +14,7 @@ it('displays the general category with the general tasks inside', () => {
 });
 
 it('does not allow to edit general tasks', () => {
-  cy.findByRole('button', { name: 'General category' }).click();
+  cy.findByRole('button', { name: 'General' }).click();
 
   cy.findByRole('button', { name: 'graphInput' }).click();
   cy.findByRole('button', { name: 'Edit task' }).should('not.exist');
@@ -25,14 +25,14 @@ it('does not allow to edit general tasks', () => {
 it('drags general tasks in the canvas', () => {
   cy.get('.react-flow__node').should('have.length', 0);
 
-  cy.findByRole('button', { name: 'General category' }).click();
+  cy.findByRole('button', { name: 'General' }).click();
   cy.dragNodeInCanvas('graphInput');
 
   cy.get('.react-flow__node').should('have.length', 1);
 });
 
 it('does not allow to edit node inputs or task info for graph input, graph output and note tasks', () => {
-  cy.findByRole('button', { name: 'General category' }).click();
+  cy.findByRole('button', { name: 'General' }).click();
 
   ['graphInput', 'graphOutput', 'note'].forEach((task) => {
     cy.dragNodeInCanvas(task);
@@ -49,7 +49,7 @@ it('does not allow to edit node inputs or task info for graph input, graph outpu
 });
 
 it('adds a subworkflow node by dragging the subworkflow task', () => {
-  cy.findByRole('button', { name: 'General category' }).click();
+  cy.findByRole('button', { name: 'General' }).click();
 
   cy.dragNodeInCanvas('subworkflow');
 
