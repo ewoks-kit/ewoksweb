@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid';
 import {
+  addPUTInterceptor,
   emptyWorkflow,
   populatedLinkWorkflow,
   populatedNodeWorkflow,
@@ -261,16 +262,3 @@ it('Saves a populated link', () => {
 
   cy.findByRole('button', { name: 'Save workflow to server' }).click();
 });
-
-function addPUTInterceptor(id: string, expectedWorkflow: any) {
-  cy.intercept('PUT', `api/workflow/${id}`, (req) => {
-    const removedPositionworkflow = Cypress._.cloneDeep(req.body);
-    Cypress._.each(removedPositionworkflow.nodes, (node) => {
-      if (node.uiProps && node.uiProps.position) {
-        delete node.uiProps.position;
-      }
-    });
-
-    expect(removedPositionworkflow).to.deep.equal(expectedWorkflow);
-  });
-}

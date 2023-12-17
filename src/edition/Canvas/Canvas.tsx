@@ -1,3 +1,4 @@
+import { useKeyboardEvent } from '@react-hookz/web';
 import type { DragEventHandler, MouseEvent } from 'react';
 import { useState } from 'react';
 import { useEffect, useRef } from 'react';
@@ -20,23 +21,18 @@ import { useStoreApi } from 'reactflow';
 import type { RFNode, Task } from 'types';
 
 import { useTasks } from '../../api/tasks';
-import Spinner from '../../general/Spinner';
+import { useCloneNode } from '../../general/hooks';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
-import useFetchingWorkflow from '../../store/useFetchingWorkflow';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import useStore from '../../store/useStore';
-import { getNodeData, getNodesData } from '../../utils';
+import { getNodesData } from '../../utils';
 import { calcNewId } from '../../utils/calcNewId';
 import {
   DEFAULT_NODE_HEIGHT,
   DEFAULT_NODE_WIDTH,
 } from '../../utils/defaultValues';
 import isValidLink from '../../utils/IsValidLink';
-import {
-  assertNodeDataDefined,
-  assertNodeDefined,
-} from '../../utils/typeGuards';
 import bendingText from '../CustomEdges/BendingTextEdge';
 import getAround from '../CustomEdges/GetAroundEdge';
 import multilineText from '../CustomEdges/MultilineTextEdge';
@@ -75,7 +71,7 @@ const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
     return;
   }
   if (nodeData.task_props.task_type === 'graph') {
-    const newTabURL = `${window.location.origin}/edit?workflow=${node.id}`;
+    const newTabURL = `${window.location.origin}/edit?workflow=${nodeData.task_props.task_identifier}`;
     const newTab = window.open(newTabURL, '_blank');
     if (newTab) {
       newTab.focus();
@@ -101,13 +97,10 @@ function Canvas() {
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
   const showInfoMsg = useSnackbarStore((state) => state.showInfoMsg);
-  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
-  const { fetching } = useFetchingWorkflow();
-  // const { isLoading } = useWorkflowDLE();
-  const { fitView, setNodes, setEdges, getNodes, getEdges, addNodes, getNode } =
-    rfInstance;
+  const { fitView, setEdges, getNodes, getEdges, addNodes } = rfInstance;
+  const cloneNode = useCloneNode();
 
   useEffect(() => {
     setTimeout(() => {
@@ -259,42 +252,21 @@ function Canvas() {
     showInfoMsg('Open a graph and click on nodes and links on this Canvas!');
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLImageElement>) => {
-    const charCode = String.fromCodePoint(event.which).toLowerCase();
-
-    const keys = event.ctrlKey || event.metaKey;
-    if (keys && charCode === 'v') {
-      event.preventDefault();
-      event.stopPropagation();
+  useKeyboardEvent(
+    (e) => (e.ctrlKey || e.metaKey) && e.key === 'd',
+    (e) => {
+      e.preventDefault();
       const selectedNode = getNodes().find((nod) => nod.selected);
       if (!selectedNode) {
-        showErrorMsg('First select a node to clone!');
+        showWarningMsg(
+          'Ctrl+d duplicates a node in the existing workflow. First select a node to duplicate!',
+        );
         return;
       }
-
-      const nodesIds = [...storeRF.getState().nodeInternals.keys()];
-
-      const node = getNode(selectedNode.id);
-      assertNodeDefined(node, selectedNode.id);
-
-      const nodeData = getNodeData(selectedNode.id);
-      assertNodeDataDefined(nodeData, selectedNode.id);
-
-      const newClone: RFNode = {
-        ...node,
-        id: calcNewId(selectedNode.id, nodesIds),
-        selected: false,
-        position: {
-          x: (node.position.x || 0) + 100,
-          y: (node.position.y || 0) + 100,
-        },
-        data: {},
-      };
-
-      setNodes([...getNodes(), newClone]);
-      setNodeData(newClone.id, nodeData);
-    }
-  };
+      cloneNode(selectedNode.id);
+    },
+    [],
+  );
 
   const isValidConnection = (connection: Connection) => {
     const { isValid, reason } = isValidLink(
@@ -316,11 +288,9 @@ function Canvas() {
         position={addSubworkflowEvent?.position}
         onClose={() => setSubworkflowEvent(undefined)}
       />
-      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions*/}
-      <div className={styles.root} onKeyDown={handleKeyDown}>
-        <FallbackMessage />
+      <div className={styles.root}>
         <div className={styles.wrapper} ref={reactFlowWrapper}>
-          {fetching && <Spinner />}
+          {!rootWorkflowId && <FallbackMessage />}
           <ReactFlow
             fitView
             connectOnClick

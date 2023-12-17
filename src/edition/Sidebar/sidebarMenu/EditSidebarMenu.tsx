@@ -14,20 +14,12 @@ export default function EditSidebarMenu({ selectedElement }: SelectedElement) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
-    setAnchorEl(event.currentTarget);
-  }
-
-  function handleClose() {
-    setAnchorEl(null);
-  }
-
   return (
     <>
       <Tooltip title="Delete, Clone" arrow>
         <Button
           color="primary"
-          onClick={handleClick}
+          onClick={(event) => setAnchorEl(event.currentTarget)}
           size="small"
           aria-controls="editSidebar-dropdown-menu"
           aria-label="Open edit actions menu"
@@ -39,24 +31,24 @@ export default function EditSidebarMenu({ selectedElement }: SelectedElement) {
         id="editSidebar-dropdown-menu"
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={() => setAnchorEl(null)}
       >
         <MenuList>
           {!selectedElement ? (
             <SuspenseBoundary>
-              <WorkflowSidebarMenu onSelection={handleClose} />
+              <WorkflowSidebarMenu onSelection={() => setAnchorEl(null)} />
             </SuspenseBoundary>
           ) : isNodeRF(selectedElement) ? (
             <SuspenseBoundary>
               <NodeSidebarMenu
                 selectedElement={selectedElement}
-                onSelection={handleClose}
+                onSelection={() => setAnchorEl(null)}
               />
             </SuspenseBoundary>
           ) : (
             <LinkSidebarMenu
               selectedElement={selectedElement}
-              onSelection={handleClose}
+              onSelection={() => setAnchorEl(null)}
             />
           )}
         </MenuList>

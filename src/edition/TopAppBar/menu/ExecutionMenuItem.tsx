@@ -1,4 +1,5 @@
 import SendIcon from '@mui/icons-material/Send';
+import { useKeyboardEvent } from '@react-hookz/web';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,13 +16,9 @@ function ExecutionMenuItem() {
 
   const navigate = useNavigate();
 
-  function checkAndExecute() {
-    execute();
-    setOpenAgreeDialog(false);
-  }
-
   async function execute() {
     const { rootWorkflowId } = useStore.getState();
+    setOpenAgreeDialog(false);
     if (!rootWorkflowId) {
       showWarningMsg('Please open a workflow in the canvas to execute');
       return;
@@ -37,12 +34,23 @@ function ExecutionMenuItem() {
     }
   }
 
+  useKeyboardEvent(
+    (e) =>
+      (e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'x',
+    (e) => {
+      e.preventDefault();
+      setOpenAgreeDialog(true);
+    },
+    [],
+  );
+
   return (
     <>
       <ActionMenuItem
         icon={SendIcon}
         label="Execute workflow"
-        onClick={checkAndExecute}
+        onClick={() => setOpenAgreeDialog(true)}
+        keyShortcut="Ctrl+Shift+X"
       />
       <ConfirmDialog
         title="There are unsaved changes"

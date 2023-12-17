@@ -388,3 +388,8 @@ export interface filterParams {
 export interface SelectedElement {
   selectedElement: Node | Edge | undefined;
 }
+
+export interface ElementState {
+  element: HTMLElement | undefined;
+  setElement: (element: HTMLElement | undefined) => void;
+}

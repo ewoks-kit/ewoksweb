@@ -1,6 +1,7 @@
 import { Checkbox, FormControl } from '@mui/material';
 import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
+import { useUpdateNodeInternals } from 'reactflow';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
@@ -16,6 +17,8 @@ export default function EditNodeStyle(props: { nodeId: string }) {
 
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
+
+  const updateNodeInternals = useUpdateNodeInternals();
 
   function withImageChanged(checked: boolean) {
     mergeNodeData(nodeId, {
@@ -42,6 +45,7 @@ export default function EditNodeStyle(props: { nodeId: string }) {
   };
 
   const moreHandlesChanged = (checked: boolean) => {
+    updateNodeInternals(nodeId);
     mergeNodeData(nodeId, {
       ui_props: {
         moreHandles: checked,

@@ -2,6 +2,19 @@ export function emptyWorkflow(id: string) {
   return { graph: { id }, nodes: [], links: [] };
 }
 
+export function addPUTInterceptor(id: string, expectedWorkflow: any) {
+  cy.intercept('PUT', `api/workflow/${id}`, (req) => {
+    const removedPositionworkflow = Cypress._.cloneDeep(req.body);
+    Cypress._.each(removedPositionworkflow.nodes, (node) => {
+      if (node.uiProps && node.uiProps.position) {
+        delete node.uiProps.position;
+      }
+    });
+
+    expect(removedPositionworkflow).to.deep.equal(expectedWorkflow);
+  });
+}
+
 export function withCategoryCommentLabelWorkflow(id: string) {
   return {
     ...emptyWorkflow(id),
