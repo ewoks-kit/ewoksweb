@@ -24,8 +24,7 @@ it('opens the tutorial_Graph on the canvas', () => {
   cy.hasVisibleEdges(12);
 });
 
-// Skip this test until unsaved modifications can be properly tracked
-it.skip('will not open the dialog for name after clicking new', () => {
+it('will not open the dialog for name after clicking new', () => {
   cy.findByRole('dialog').should('not.exist');
 
   cy.get('[aria-controls="navbar-dropdown-menu"]').click();
@@ -62,21 +61,19 @@ it('saves an empty workflow on the server, reloads and deletes it', () => {
   );
 });
 
-it('cannot delete or clone a workflow with an empty canvas', () => {
+it('cannot delete or save_as a workflow with an empty canvas', () => {
   cy.findByRole('button', { name: 'Open edit actions menu' }).click();
-  cy.findByRole('menuitem', { name: 'Clone Workflow' }).should(
-    'not.be.enabled',
-  );
+  cy.findByRole('menuitem', { name: 'Save as...' }).should('not.be.enabled');
   cy.findByRole('menuitem', { name: 'Delete Workflow' }).should(
     'not.be.enabled',
   );
 });
 
-it('opens a "New workflow" dialog when asking to clone the workflow', () => {
+it('opens a "New workflow" dialog when asking to save_as the workflow', () => {
   cy.loadGraph('tutorial_Graph');
 
   cy.findByRole('button', { name: 'Open edit actions menu' }).click();
-  cy.findByRole('menuitem', { name: 'Clone Workflow' }).click();
+  cy.findByRole('menuitem', { name: 'Save as...' }).click();
   cy.waitForStableDOM();
 
   cy.findByRole('dialog').within(() => {

@@ -2,11 +2,11 @@ import { Delete as DeleteIcon } from '@mui/icons-material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
 import type { Edge } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 
 import useStore from '../../../store/useStore';
+import KeyStrokeHint from '../../KeyStrokeHint';
 
 interface Props {
   selectedElement: Edge;
@@ -44,7 +44,7 @@ export default function LinkSidebarMenu(props: Props) {
         <DeleteIcon fontSize="small" />
       </ListItemIcon>
       <ListItemText>Delete Link</ListItemText>
-      <Typography variant="body2" color="primary" />
+      <KeyStrokeHint text="delete" />
     </MenuItem>
   );
 }
