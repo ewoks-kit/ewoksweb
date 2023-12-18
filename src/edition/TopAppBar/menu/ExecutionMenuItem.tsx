@@ -1,4 +1,5 @@
 import SendIcon from '@mui/icons-material/Send';
+import { useKeyboardEvent } from '@react-hookz/web';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -34,15 +35,21 @@ function ExecutionMenuItem() {
     }
   }
 
-  function handleClose() {
-    setOpen(false);
-  }
+  useKeyboardEvent(
+    (e) =>
+      (e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'x',
+    (e) => {
+      e.preventDefault();
+      setOpen(true);
+    },
+    [],
+  );
 
   return (
     <>
       <ExecuteParametersDialog
         open={open}
-        onClose={handleClose}
+        onClose={() => setOpen(false)}
         executeWorkflow={execute}
       />
       <ActionMenuItem

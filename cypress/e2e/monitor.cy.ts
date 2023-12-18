@@ -12,7 +12,8 @@ it('should redirect to monitor page and display "Success" when successfully exec
   cy.loadGraph('demo');
 
   cy.findByRole('button', { name: 'Open menu with more actions' }).click();
-  cy.findByRole('menuitem', { name: 'Execute workflow' }).click();
+
+  cy.findByRole('menuitem', { name: /^Execute workflow/ }).click();
   cy.findByRole('button', { name: 'Save & Execute' }).click();
   cy.waitForStableDOM();
 
@@ -36,9 +37,9 @@ it('should be able to display the status of another workflow (even if it cannot 
   cy.loadGraph('Ewoks-Tasks');
 
   cy.findByRole('button', { name: 'Open menu with more actions' }).click();
-  cy.findByRole('menuitem', { name: 'Execute workflow' }).click();
-  cy.waitForStableDOM();
+  cy.findByRole('menuitem', { name: /^Execute workflow/ }).click();
   cy.findByRole('button', { name: 'Save & Execute' }).click();
+  cy.waitForStableDOM();
 
   cy.location().should((loc) => {
     expect(loc.pathname).to.eq('/monitor');

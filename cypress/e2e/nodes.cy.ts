@@ -113,7 +113,7 @@ it('deletes a node by button and keyboard', () => {
   cy.get('@node').click();
 
   cy.findByRole('button', { name: 'Open edit actions menu' }).click();
-  cy.findByRole('menuitem', { name: 'Delete Node' }).click();
+  cy.findByRole('menuitem', { name: 'Delete Node delete' }).click();
 
   cy.get('.react-flow__node').should('have.length', 15);
 
@@ -122,11 +122,11 @@ it('deletes a node by button and keyboard', () => {
   // cy.get('.react-flow__node').should('have.length', 14);
 });
 
-it('clones a node by button', () => {
+it('Duplicates a node by button', () => {
   cy.get('.react-flow__node').should('have.length', 16);
 
   cy.findByRole('button', { name: 'Open edit actions menu' }).click();
-  cy.findByRole('menuitem', { name: 'Clone Node' }).click();
+  cy.findByRole('menuitem', { name: /^Duplicate Node/ }).click();
 
   cy.get('.react-flow__node').should('have.length', 17);
 });
@@ -223,7 +223,7 @@ it('adds and delete a new default input', () => {
   });
 });
 
-it('opens the clone Task form when node is selected', () => {
+it('opens the duplicates Task form when node is selected', () => {
   cy.get('.react-flow').contains('ewoksweb').parent().click({ force: true });
 
   cy.waitForStableDOM();

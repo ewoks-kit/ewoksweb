@@ -36,3 +36,9 @@
   border-left-color: #cfcfe1 !important;
   border-right-color: #cfcfe1 !important;
 }
+
+.keyStrokeHint {
+  margin-left: 20px;
+  padding: 0 0.4em;
+  color: rgb(169, 169, 169);
+}

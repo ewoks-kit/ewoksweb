@@ -22,7 +22,7 @@ export default function SaveToServerButton() {
     (e) => (e.ctrlKey || e.metaKey) && e.key === 's',
     (e) => {
       e.preventDefault();
-      void handleSave();
+      handleSave();
     },
     [],
   );
@@ -37,7 +37,11 @@ export default function SaveToServerButton() {
           onClose={() => setDialogOpen(false)}
         />
       </SuspenseBoundary>
-      <Tooltip title={tooltipText('Save to server')} enterDelay={500} arrow>
+      <Tooltip
+        title={tooltipText('Save to server ctrl+s')}
+        enterDelay={500}
+        arrow
+      >
         <IconButton
           className={styles.saveButton}
           onClick={() => {
