@@ -224,6 +224,7 @@ function Canvas() {
     );
     if (!isValid) {
       showWarningMsg(reason);
+      return;
     }
 
     const newEdges = addEdge(
@@ -234,12 +235,18 @@ function Canvas() {
     setEdges(newEdges);
   };
 
-  const onConnect = (params: Connection) => {
-    if (rootWorkflowId !== displayedWorkflowInfo.id) {
-      showWarningMsg('Not allowed to create new links to any sub-graph!');
+  const onConnect = (connection: Connection) => {
+    const { isValid, reason } = isValidLink(
+      connection,
+      getNodes(),
+      getEdges(),
+      getNodesData(),
+    );
+    if (!isValid) {
+      showWarningMsg(reason);
       return;
     }
-    const newLink = addConnectionToGraph(params, getNodesData());
+    const newLink = addConnectionToGraph(connection, getNodesData());
 
     if (newLink) {
       setEdgeData(newLink.id, newLink.data);
@@ -267,19 +274,6 @@ function Canvas() {
     },
     [],
   );
-
-  const isValidConnection = (connection: Connection) => {
-    const { isValid, reason } = isValidLink(
-      connection,
-      getNodes(),
-      getEdges(),
-      getNodesData(),
-    );
-    if (!isValid) {
-      showWarningMsg(reason);
-    }
-    return isValid;
-  };
 
   return (
     <>
@@ -309,7 +303,6 @@ function Canvas() {
             edgeTypes={edgeTypes}
             nodeTypes={nodeTypes}
             deleteKeyCode="Delete"
-            isValidConnection={isValidConnection}
           >
             <CanvasBackground />
             <Controls position="bottom-right" />
