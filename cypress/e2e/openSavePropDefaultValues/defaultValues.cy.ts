@@ -99,16 +99,16 @@ it('Opens and saves a skeleton node after populating it', () => {
   cy.loadGraph(id);
 
   cy.wait('@workflowRequest').then((interception) => {
-    const removedPositionworkflow = Cypress._.cloneDeep(
+    const emptyPositionsWorkflow = Cypress._.cloneDeep(
       interception.response?.body,
     );
-    Cypress._.each(removedPositionworkflow.nodes, (node) => {
+    Cypress._.each(emptyPositionsWorkflow.nodes, (node) => {
       if (node.uiProps && node.uiProps.position) {
-        delete node.uiProps.position;
+        node.uiProps.position = {};
       }
     });
 
-    cy.wrap(removedPositionworkflow).should(
+    cy.wrap(emptyPositionsWorkflow).should(
       'deep.equal',
       simpleNodeWorkflow(id),
     );
@@ -148,16 +148,16 @@ it('Creates a link and saves it', () => {
   cy.loadGraph(id);
 
   cy.wait('@workflowRequest').then((interception) => {
-    const removedPositionworkflow = Cypress._.cloneDeep(
+    const emptyPositionsWorkflow = Cypress._.cloneDeep(
       interception.response?.body,
     );
-    Cypress._.each(removedPositionworkflow.nodes, (node) => {
+    Cypress._.each(emptyPositionsWorkflow.nodes, (node) => {
       if (node.uiProps && node.uiProps.position) {
-        delete node.uiProps.position;
+        node.uiProps.position = {};
       }
     });
 
-    cy.wrap(removedPositionworkflow).should(
+    cy.wrap(emptyPositionsWorkflow).should(
       'deep.equal',
       populatedNodeWorkflow(id),
     );
@@ -193,16 +193,16 @@ it('Saves a populated link', () => {
   cy.loadGraph(id);
 
   cy.wait('@workflowRequest').then((interception) => {
-    const removedPositionworkflow = Cypress._.cloneDeep(
+    const emptyPositionsWorkflow = Cypress._.cloneDeep(
       interception.response?.body,
     );
-    Cypress._.each(removedPositionworkflow.nodes, (node) => {
+    Cypress._.each(emptyPositionsWorkflow.nodes, (node) => {
       if (node.uiProps && node.uiProps.position) {
-        delete node.uiProps.position;
+        node.uiProps.position = {};
       }
     });
 
-    cy.wrap(removedPositionworkflow).should(
+    cy.wrap(emptyPositionsWorkflow).should(
       'deep.equal',
       simpleLinkWorkflow(id),
     );

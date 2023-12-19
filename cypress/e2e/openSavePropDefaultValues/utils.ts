@@ -7,7 +7,7 @@ export function addPUTInterceptor(id: string, expectedWorkflow: any) {
     const removedPositionworkflow = Cypress._.cloneDeep(req.body);
     Cypress._.each(removedPositionworkflow.nodes, (node) => {
       if (node.uiProps && node.uiProps.position) {
-        delete node.uiProps.position;
+        node.uiProps.position = {};
       }
     });
 
@@ -36,7 +36,7 @@ export function simpleNodeWorkflow(id: string) {
         label: 'taskSkeleton',
         task_type: 'ppfmethod',
         task_identifier: 'taskSkeleton',
-        uiProps: {},
+        uiProps: { position: {} },
       },
     ],
   };
@@ -56,6 +56,7 @@ export function populatedNodeWorkflow(id: string) {
           comment: 'node comment',
           moreHandles: true,
           withImage: false,
+          position: {},
         },
       },
     ],
@@ -71,7 +72,7 @@ export function simpleLinkWorkflow(id: string) {
         label: 'taskSkeleton',
         task_type: 'ppfmethod',
         task_identifier: 'taskSkeleton',
-        uiProps: {},
+        uiProps: { position: {} },
       },
       {
         id: 'taskSkeleton0',
@@ -83,6 +84,7 @@ export function simpleLinkWorkflow(id: string) {
           comment: 'node comment',
           moreHandles: true,
           withImage: false,
+          position: {},
         },
       },
     ],
