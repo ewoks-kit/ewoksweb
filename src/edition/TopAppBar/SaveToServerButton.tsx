@@ -114,7 +114,7 @@ export default function SaveToServerButton() {
         />
       </SuspenseBoundary>
       <Tooltip
-        title={tooltipText('Save to server ctrl+s')}
+        title={tooltipText('Save to server (Ctrl+S)')}
         enterDelay={500}
         arrow
       >

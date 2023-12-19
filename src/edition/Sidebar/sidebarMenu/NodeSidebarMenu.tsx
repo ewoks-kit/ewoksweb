@@ -84,7 +84,7 @@ export default function NodeSidebarMenu(props: Props) {
           <Delete fontSize="small" />
         </ListItemIcon>
         <ListItemText>Delete Node</ListItemText>
-        <KeyStrokeHint text="delete" />
+        <KeyStrokeHint text="Del" />
       </MenuItem>
     </>
   );

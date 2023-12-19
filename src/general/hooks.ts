@@ -75,7 +75,6 @@ export const useCloneNode = () => {
     };
 
     rfInstance.addNodes(clone);
-    assertNodeDataDefined(nodeData, id);
     setNodeData(clone.id, nodeData);
   };
 };
