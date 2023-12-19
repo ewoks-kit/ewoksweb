@@ -37,18 +37,6 @@ const rootWorkflow = (
   ): Promise<void> => {
     const { showErrorMsg } = useSnackbarStore.getState();
 
-    if (ewoksWorkflow.graph.id === '') {
-      get().setDisplayedWorkflowInfo(ewoksWorkflow.graph);
-      set((state) => ({
-        ...state,
-        rootWorkflowId: ewoksWorkflow.graph.id,
-        rootWorkflowSource: source,
-      }));
-      rfInstance.setNodes([]);
-      rfInstance.setEdges([]);
-      return;
-    }
-
     const validWorkflow = validateWorkflow(ewoksWorkflow);
 
     if (!validWorkflow.valid) {
@@ -65,7 +53,6 @@ const rootWorkflow = (
 
     // 2. Get node-subgraphs for the graph
     const newNodeSubgraphs = await getSubgraphs(ewoksWorkflow);
-    console.log(ewoksWorkflow, newNodeSubgraphs);
 
     // 3. Calculate the new graph given the subgraphs
     let grfNodes = toRFEwoksNodes(ewoksWorkflow, newNodeSubgraphs, tasks);
