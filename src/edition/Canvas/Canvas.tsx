@@ -89,7 +89,6 @@ interface Props {
 
 function Canvas(props: Props) {
   const { workflowId } = props;
-  console.log(workflowId);
 
   const workflow = useWorkflow(workflowId);
 
@@ -342,8 +341,6 @@ function Canvas(props: Props) {
             deleteKeyCode="Delete"
             isValidConnection={isValidConnection}
             onInit={() => {
-              console.log(workflow);
-
               setRootWorkflow(
                 workflow || EMPTY_GRAPH,
                 rfInstance,
@@ -351,7 +348,7 @@ function Canvas(props: Props) {
                 workflow ? 'fromServer' : undefined,
               );
               // TODO: does not seem to do anything. The graph appears fitted instantly!
-              // fitView({ duration: 3500 });
+              fitView({ duration: 3500 });
             }}
           >
             <CanvasBackground />

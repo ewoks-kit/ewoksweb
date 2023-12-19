@@ -1,6 +1,6 @@
 import { FiberNew } from '@mui/icons-material';
 import { useKeyboardEvent } from '@react-hookz/web';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import ConfirmDialog from '../../../general/ConfirmDialog';
@@ -8,11 +8,9 @@ import ActionMenuItem from './ActionMenuItem';
 
 function OpenNewWorkflowMenuItem() {
   const [openDialog, setOpenDialog] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   const openEmptyWorkflow = () => {
-    console.log(searchParams);
-
     setSearchParams({});
     setOpenDialog(false);
   };
