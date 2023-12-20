@@ -62,31 +62,27 @@ export interface ObjectEditDialogContent {
 
 export interface ExecutionInputTableRow extends NodeExecutionInput {
   type?: string;
-  id: string;
+  rowId: string;
 }
 
+// https://ewokscore.readthedocs.io/en/latest/execute_io.html
 export interface NodeExecutionInput {
-  name?: string | number;
-  value?: unknown;
-  label?: string;
-  taskIdentifier?: string; // all nodes with the same taskIdentifier
-  nodeId?: string; // if null all input nodes get the input
-  all?: boolean; // if true all nodes in the graph get the input
-}
-
-export interface ExecutionParameters {
   name: string | number;
-  type: string;
   value: unknown;
-  id: string;
+  label?: string;
+  task_identifier?: string;
+  id?: string;
+  all?: boolean;
 }
 
 export interface ExecutionParams {
-  executeArgs?: { inputs?: NodeExecutionInput[]; engine?: string | null };
+  inputs?: NodeExecutionInput[];
+  engine?: string | null;
 }
 
 export interface ExecuteDialogProps {
   open: boolean;
   onClose: (value?: string) => void;
-  executeWorkflow: (params?: ExecutionParams) => Promise<void>;
 }
+
+export type Engine = null | 'dask' | 'ppf';

@@ -16,18 +16,22 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { nanoid } from 'nanoid';
 import type { ChangeEvent } from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { InputTableRow, TypeOfValues } from 'types';
 
 import type {
   ExecuteDialogProps,
   ExecutionInputTableRow,
+  ExecutionParams,
   NodeExecutionInput,
   ObjectEditDialogContent,
 } from '../../api/models';
+import { executeWorkflow } from '../../api/workflows';
 import DraggableDialog from '../../general/DraggableDialog';
 import { useSaveWorkflow } from '../../general/hooks';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
+import useStore from '../../store/useStore';
 import { textForError } from '../../utils';
 import AddEntryRow from '../Sidebar/table/controls/AddEntryRow';
 import RemoveRowButton from '../Sidebar/table/controls/RemoveRowButton';
@@ -37,11 +41,17 @@ import TableCellInEditMode from '../Sidebar/table/TableCellInEditMode';
 import { isClass } from '../Sidebar/table/utils';
 import ExecuteParamsTableHeader from './ExecuteParamsTableHeader';
 import ExecutionEngine from './ExecutionEngine';
-import type { EngineOptions } from './models';
+import type { EngineDropdownOption } from './models';
 import { hasDefinedProperties } from './utils';
 
+export const DROPDOWN_TO_SERVER_ENGINE = {
+  dask: 'dask',
+  default: null,
+  pypushflow: 'ppf',
+};
+
 export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
-  const { onClose, open, executeWorkflow } = props;
+  const { onClose, open } = props;
 
   const nodesData = useNodeDataStore((state) => state.nodesData);
 
@@ -51,8 +61,10 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogContent, setDialogContent] = useState<ObjectEditDialogContent>();
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
-  const [engine, setEngine] = useState<EngineOptions>(null);
+  const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
+  const [engine, setEngine] = useState<EngineDropdownOption>('default');
   const { handleSave } = useSaveWorkflow();
+  const navigate = useNavigate();
 
   function showInputEditDialog(
     id: string,
@@ -72,34 +84,53 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     });
   }
 
+  async function execute(params?: ExecutionParams) {
+    const { rootWorkflowId } = useStore.getState();
+    if (!rootWorkflowId) {
+      showWarningMsg('Please open a workflow in the canvas to execute');
+      return;
+    }
+    try {
+      await executeWorkflow(rootWorkflowId, params);
+      navigate('/monitor');
+    } catch (error) {
+      // Keep logging in console for debugging when talking with a user
+      /* eslint-disable no-console */
+      console.log(error);
+      showErrorMsg('Execution could not start!');
+    }
+  }
+
   async function handleSaveExecute() {
     try {
       await handleSave();
+      // Only execute if handleSave is successful
+      try {
+        const inputs: NodeExecutionInput[] = perNodeInputs
+          .filter(hasDefinedProperties)
+          .map((input) => {
+            return {
+              name: input.name,
+              value: input.value,
+              ...(input.label &&
+                !['All nodes', 'All input nodes'].includes(input.label) && {
+                  id: input.id,
+                }),
+              ...(input.label === 'All nodes' && { all: true }),
+            };
+          });
 
-      const inputs: NodeExecutionInput[] = perNodeInputs
-        .filter(hasDefinedProperties)
-        .map((input) => {
-          return {
-            name: input.name,
-            type: input.type,
-            value: input.value,
-            id:
-              // define what the endpoint expects in every case
-              input.label &&
-              ['All nodes', 'All input nodes'].includes(input.label)
-                ? null
-                : input.nodeId,
-          };
-        });
-
-      executeWorkflow({
-        executeArgs: { engine: engine ?? null, inputs },
-      });
-    } catch (error) {
+        execute({ engine: DROPDOWN_TO_SERVER_ENGINE[engine], inputs });
+      } catch (executeError) {
+        showErrorMsg(
+          textForError(executeError, 'Error in executing workflow.'),
+        );
+      }
+    } catch (saveError) {
       showErrorMsg(
         textForError(
-          error,
-          'Error in retrieving workflow. Please check connectivity with the server!',
+          saveError,
+          'Error in saving workflow. Please check connectivity with the server!',
         ),
       );
     }
@@ -126,9 +157,9 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     setPerNodeInputs([
       ...perNodeInputs,
       {
-        id: nanoid(),
+        rowId: nanoid(),
         label: 'All nodes',
-        nodeId: '',
+        id: '',
         name: '',
         value: '',
         type: 'string',
@@ -272,16 +303,16 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
                 >
                   <ExecuteParamsTableHeader />
                   <TableBody>
-                    {perNodeInputs.map((input, index) => (
-                      <TableRow key={input.id}>
+                    {perNodeInputs.map((id, inputData) => (
+                      <TableRow key={id.id}>
                         <TableCell align="left" size="small">
                           <FormControl>
                             <Select
                               variant="standard"
                               native
-                              defaultValue={input.label}
+                              defaultValue={id.label}
                               onChange={(ev) => {
-                                handleChangeNodeTarget(input, ev.target.value);
+                                handleChangeNodeTarget(id, ev.target.value);
                               }}
                             >
                               <option value="All nodes">All nodes</option>
@@ -289,30 +320,22 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
                                 All input nodes
                               </option>
                               <optgroup label="Nodes by label">
-                                {[...nodesData].map(([key, value]) => (
-                                  <option value={key} key={key}>
-                                    {value.ewoks_props.label}
+                                {[...nodesData].map(([nodeId, nodeData]) => (
+                                  <option value={nodeId} key={nodeId}>
+                                    {nodeData.ewoks_props.label} ({nodeId})
                                   </option>
                                 ))}
                               </optgroup>
-                              {/* Should we need to have in the same dropdown other selections */}
-                              {/* <optgroup label="Nodes by task identifier">
-                                {[...nodesData].map(([key, value]) => (
-                                  <option value={key} key={key}>
-                                    {value.task_props.task_identifier}
-                                  </option>
-                                ))}
-                              </optgroup> */}
                             </Select>
                           </FormControl>
                         </TableCell>
                         <TypeSelectCell
                           value={
-                            perNodeInputs[index].type === 'boolean'
+                            perNodeInputs[inputData].type === 'boolean'
                               ? 'bool'
-                              : perNodeInputs[index].type || 'string'
+                              : perNodeInputs[inputData].type || 'string'
                           }
-                          onChange={(e) => changedTypeOfInput(e, input)}
+                          onChange={(e) => changedTypeOfInput(e, id)}
                         />
                         <TableCell align="left" size="small">
                           <TableCellInEditMode
@@ -320,21 +343,21 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
                             name="name"
                             onChange={handleNameChange}
                             {...props}
-                            row={perNodeInputs[index] as InputTableRow}
-                            typeOfValues={calcTypeAndValues(input.nodeId)}
+                            row={perNodeInputs[inputData] as InputTableRow}
+                            typeOfValues={calcTypeAndValues(id.nodeId)}
                           />
                         </TableCell>
 
                         <CustomTableCell
-                          index={index}
-                          row={input as InputTableRow}
+                          index={inputData}
+                          row={id as InputTableRow}
                           name="value"
                           onChange={handleValueChange}
-                          onEdit={() => handleValueEdit(input, index)}
+                          onEdit={() => handleValueEdit(id, inputData)}
                         />
                         <TableCell align="left" size="small">
                           <RemoveRowButton
-                            onClick={() => handleRowDelete(input)}
+                            onClick={() => handleRowDelete(id)}
                           />
                         </TableCell>
                       </TableRow>

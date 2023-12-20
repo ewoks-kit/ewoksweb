@@ -7,11 +7,11 @@ import {
 } from '@mui/material';
 
 import styles from './ExecutionDialog.module.css';
-import type { EngineOptions } from './models';
+import type { EngineDropdownOption } from './models';
 
 interface Props {
-  engine: EngineOptions;
-  setEngine: (engine: EngineOptions) => void;
+  engine: EngineDropdownOption;
+  setEngine: (engine: EngineDropdownOption) => void;
 }
 function ExecutionEngine(props: Props) {
   const { engine, setEngine } = props;
@@ -24,10 +24,13 @@ function ExecutionEngine(props: Props) {
           <Select
             variant="standard"
             value={engine}
-            onChange={(event) => setEngine(event.target.value as EngineOptions)}
+            onChange={(event) => {
+              const { value } = event.target;
+              setEngine(value as EngineDropdownOption);
+            }}
             className={styles.engineSelect}
           >
-            <MenuItem value="">default</MenuItem>
+            <MenuItem value="default">default</MenuItem>
             <MenuItem value="pypushflow">pypushflow</MenuItem>
             <MenuItem value="dask">dask</MenuItem>
           </Select>

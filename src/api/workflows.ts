@@ -45,7 +45,7 @@ export async function executeWorkflow(
   params?: ExecutionParams,
 ) {
   return client.post<ExecuteWorkflowResponse>(`/execute/${workflowId}`, {
-    execute_arguments: params?.executeArgs,
+    execute_arguments: params,
   });
 }
 

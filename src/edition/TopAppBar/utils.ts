@@ -1,4 +1,4 @@
-import type { ExecutionParameters, NodeExecutionInput } from '../../api/models';
+import type { NodeExecutionInput } from '../../api/models';
 import { fetchWorkflowsIds } from '../../api/workflows';
 import type {
   Condition,
@@ -7,6 +7,13 @@ import type {
   LinkData,
   NodeData,
 } from '../../types';
+
+interface ExecutionParameters {
+  name: string | number;
+  type: string;
+  value: unknown;
+  id: string;
+}
 
 export async function getWorkflowIdsFromServer(): Promise<{
   data: string[];
