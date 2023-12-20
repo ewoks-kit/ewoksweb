@@ -14,10 +14,6 @@
   min-width: 0;
 }
 
-.item button {
-  cursor: grab;
-}
-
 .item[data-selected] {
   border-color: #3f51b5;
 }
