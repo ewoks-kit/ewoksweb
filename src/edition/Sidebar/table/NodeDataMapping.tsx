@@ -17,7 +17,7 @@ export default function NodeDataMapping({ nodeId }: { nodeId: string }) {
         default_error_attributes: {
           data_mapping: [
             ...(rows as DataMapping[]),
-            { id: nanoid(), name: '', value: '' },
+            { rowId: nanoid(), name: '', value: '' },
           ],
         },
       },

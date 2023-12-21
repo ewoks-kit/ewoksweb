@@ -95,14 +95,13 @@ function deleteEmptyLines<T extends DataMapping | Condition | DefaultInput>(
 export function hasDefinedProperties(
   item: NodeExecutionInput,
 ): item is ExecutionParameters & {
-  nodeId: string;
+  id: string;
   name: string;
   value: unknown;
   label: string;
 } {
   return (
-    item.nodeId !== undefined &&
-    item.name !== undefined &&
+    item.id !== undefined &&
     item.value !== undefined &&
     item.label !== undefined
   );

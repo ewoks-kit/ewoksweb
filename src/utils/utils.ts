@@ -13,7 +13,7 @@ import { isString } from './typeGuards';
 
 export function createDataMappingData(pair: EwoksDataMapping): DataMapping {
   return {
-    id: nanoid(),
+    rowId: nanoid(),
     name: pair.source_output ? pair.source_output.toString() : '',
     value: pair.target_input ?? '',
   };

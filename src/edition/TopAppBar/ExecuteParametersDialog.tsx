@@ -70,17 +70,28 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     id: string,
     title: string,
     graph: unknown,
-    callbackProps: { rows: InputTableRow[]; id: string },
+    callbackProps: { rows: ExecutionInputTableRow[]; id: string },
   ) {
     if (typeof graph !== 'object' || graph === null) {
       return;
     }
+
     setOpenDialog(true);
     setDialogContent({
       id,
       title,
       object: graph,
-      callbackProps,
+      callbackProps: {
+        id: callbackProps.id,
+        rows: callbackProps.rows.map((row) => {
+          return {
+            rowId: row.rowId,
+            name: row.name,
+            value: row.value,
+            type: row.type,
+          };
+        }),
+      },
     });
   }
 
@@ -143,7 +154,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     const newInputRow = {
       ...input,
       label: nodesData.get(targetNodeId)?.ewoks_props.label || '',
-      nodeId: targetNodeId,
+      id: targetNodeId,
     };
 
     const updatedInputs = perNodeInputs.map((inp) =>
@@ -168,7 +179,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
   }
 
   function handleRowDelete(input: ExecutionInputTableRow) {
-    const newInputs = perNodeInputs.filter((inp) => inp.id !== input.id);
+    const newInputs = perNodeInputs.filter((inp) => inp.rowId !== input.rowId);
     setPerNodeInputs(newInputs);
   }
 
@@ -177,7 +188,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     row: InputTableRow,
   ) {
     const newRows = perNodeInputs.map((inputRow) =>
-      inputRow.id === row.id
+      inputRow.rowId === row.rowId
         ? {
             ...inputRow,
             name: e.target.value,
@@ -192,9 +203,9 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     e: { target: { name: string; value: string | number } },
     row: InputTableRow,
   ) {
-    const { id: rowId = '' } = row;
+    const { rowId = '' } = row;
     const newRows = perNodeInputs.map((inputRow) =>
-      inputRow.id === rowId
+      inputRow.rowId === rowId
         ? {
             ...inputRow,
             value: e.target.value,
@@ -209,9 +220,9 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     e: ChangeEvent<HTMLInputElement>,
     row: ExecutionInputTableRow,
   ) => {
-    const { id: rowId = '' } = row;
+    const { rowId } = row;
     const newRows = perNodeInputs.map((inputRow) =>
-      inputRow.id === rowId
+      inputRow.rowId === rowId
         ? {
             ...inputRow,
             value: e.target.value === 'null' ? e.target.value : '',
@@ -219,7 +230,6 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
           }
         : inputRow,
     );
-
     setPerNodeInputs(newRows);
   };
 
@@ -243,10 +253,10 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
   function handleValueEdit(inputRow: ExecutionInputTableRow, index: number) {
     if (inputRow.type && ['list', 'dict'].includes(inputRow.type)) {
       showInputEditDialog(
-        inputRow.id || '',
+        inputRow.rowId,
         inputRow.type === 'list' ? 'Edit list' : 'Edit dict',
-        onListOrDict(inputRow.id || '', index),
-        { rows: perNodeInputs as InputTableRow[], id: inputRow.id },
+        onListOrDict(inputRow.rowId || '', index),
+        { rows: perNodeInputs, id: inputRow.rowId },
       );
     }
   }
@@ -256,11 +266,9 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     val: unknown,
     callbackProps: { id: string; rows: InputTableRow[] },
   ) {
-    const newRows: ExecutionInputTableRow[] = callbackProps.rows.map((row) => {
-      if (row.id === callbackProps.id) {
-        return name !== ''
-          ? { ...row, id: name, value: val }
-          : { ...row, value: val };
+    const newRows: ExecutionInputTableRow[] = perNodeInputs.map((row) => {
+      if (row.rowId === callbackProps.id) {
+        return { ...row, value: val };
       }
       return row;
     });
@@ -303,16 +311,19 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
                 >
                   <ExecuteParamsTableHeader />
                   <TableBody>
-                    {perNodeInputs.map((id, inputData) => (
-                      <TableRow key={id.id}>
+                    {perNodeInputs.map((inputData, index) => (
+                      <TableRow key={inputData.rowId}>
                         <TableCell align="left" size="small">
                           <FormControl>
                             <Select
                               variant="standard"
                               native
-                              defaultValue={id.label}
+                              defaultValue={inputData.label}
                               onChange={(ev) => {
-                                handleChangeNodeTarget(id, ev.target.value);
+                                handleChangeNodeTarget(
+                                  inputData,
+                                  ev.target.value,
+                                );
                               }}
                             >
                               <option value="All nodes">All nodes</option>
@@ -331,11 +342,11 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
                         </TableCell>
                         <TypeSelectCell
                           value={
-                            perNodeInputs[inputData].type === 'boolean'
+                            inputData.type === 'boolean'
                               ? 'bool'
-                              : perNodeInputs[inputData].type || 'string'
+                              : inputData.type || 'string'
                           }
-                          onChange={(e) => changedTypeOfInput(e, id)}
+                          onChange={(e) => changedTypeOfInput(e, inputData)}
                         />
                         <TableCell align="left" size="small">
                           <TableCellInEditMode
@@ -343,21 +354,24 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
                             name="name"
                             onChange={handleNameChange}
                             {...props}
-                            row={perNodeInputs[inputData] as InputTableRow}
-                            typeOfValues={calcTypeAndValues(id.nodeId)}
+                            row={{
+                              ...inputData,
+                              rowId: inputData.rowId,
+                            }}
+                            typeOfValues={calcTypeAndValues(inputData.id)}
                           />
                         </TableCell>
 
                         <CustomTableCell
-                          index={inputData}
-                          row={id as InputTableRow}
+                          index={index}
+                          row={{ ...inputData, rowId: inputData.rowId }}
                           name="value"
                           onChange={handleValueChange}
-                          onEdit={() => handleValueEdit(id, inputData)}
+                          onEdit={() => handleValueEdit(inputData, index)}
                         />
                         <TableCell align="left" size="small">
                           <RemoveRowButton
-                            onClick={() => handleRowDelete(id)}
+                            onClick={() => handleRowDelete(inputData)}
                           />
                         </TableCell>
                       </TableRow>

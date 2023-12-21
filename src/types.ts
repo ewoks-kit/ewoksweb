@@ -109,7 +109,7 @@ export interface Task {
 }
 
 export interface DefaultInput {
-  id?: string;
+  rowId?: string;
   name: string | number;
   value: unknown;
   type?: string;
@@ -143,7 +143,7 @@ export interface EwoksDataMapping {
 
 export interface DataMapping {
   value?: string | number;
-  id: string;
+  rowId: string;
   name?: string;
 }
 
@@ -154,8 +154,8 @@ export interface EwoksCondition {
 
 export interface Condition {
   value: unknown;
-  id?: string;
-  name?: string;
+  rowId?: string;
+  name?: string | number;
   type?: string;
 }
 
@@ -256,8 +256,8 @@ export type RFNode = Node<Record<string, never>>;
 // height?: number | null;
 
 export interface InputTableRow {
-  id: string;
-  name?: string;
+  rowId: string;
+  name?: string | number;
   value?: unknown;
   type?: string;
   // TODO

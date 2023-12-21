@@ -30,7 +30,7 @@ export default function Conditions({ element, isOnErrorSelected }: Props) {
 
     const newEdgeData = {
       on_error: false,
-      conditions: [...elCon, { id: nanoid(), name: '', value: false }],
+      conditions: [...elCon, { rowId: nanoid(), name: '', value: false }],
     };
     mergeEdgeData(element.id, newEdgeData);
   }
@@ -40,7 +40,7 @@ export default function Conditions({ element, isOnErrorSelected }: Props) {
       ...edgeData,
       conditions: table.map((con) => {
         return {
-          id: con.id,
+          rowId: con.rowId,
           name: con.name,
           value: con.value,
           type: con.type,

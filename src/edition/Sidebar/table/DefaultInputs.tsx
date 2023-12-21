@@ -22,7 +22,7 @@ export default function DefaultInputs(element: Node) {
       ewoks_props: {
         default_inputs: [
           ...(rows as DefaultInput[]),
-          { id: nanoid(), name: '', value: '' },
+          { rowId: nanoid(), name: '', value: '' },
         ],
       },
     };
@@ -37,7 +37,7 @@ export default function DefaultInputs(element: Node) {
         ...nodeData.ewoks_props,
         default_inputs: table.map((dval) => {
           return {
-            id: dval.id,
+            rowId: dval.rowId,
             name: dval.name || '',
             value: dval.value,
             type: dval.type,
