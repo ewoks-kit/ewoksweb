@@ -60,11 +60,6 @@ export interface ObjectEditDialogContent {
   callbackProps: { rows: InputTableRow[]; id: string };
 }
 
-export interface ExecutionInputTableRow extends NodeExecutionInput {
-  type?: string;
-  rowId: string;
-}
-
 // https://ewokscore.readthedocs.io/en/latest/execute_io.html
 export interface NodeExecutionInput {
   name: string | number;
@@ -77,12 +72,7 @@ export interface NodeExecutionInput {
 
 export interface ExecutionParams {
   inputs?: NodeExecutionInput[];
-  engine?: string | null;
-}
-
-export interface ExecuteDialogProps {
-  open: boolean;
-  onClose: (value?: string) => void;
+  engine?: Engine;
 }
 
 export type Engine = null | 'dask' | 'ppf';

@@ -27,3 +27,10 @@
 .valueTableCell {
   width: 40%;
 }
+
+.saveWarning {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 20px;
+  color: #5298dd;
+}

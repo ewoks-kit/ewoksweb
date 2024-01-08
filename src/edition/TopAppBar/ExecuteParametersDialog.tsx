@@ -1,3 +1,4 @@
+import InfoIcon from '@mui/icons-material/Info';
 import {
   Card,
   CardContent,
@@ -20,8 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import type { InputTableRow, TypeOfValues } from 'types';
 
 import type {
-  ExecuteDialogProps,
-  ExecutionInputTableRow,
+  Engine,
   ExecutionParams,
   NodeExecutionInput,
   ObjectEditDialogContent,
@@ -40,9 +40,20 @@ import CustomTableCell from '../Sidebar/table/CustomTableCell';
 import TableCellInEditMode from '../Sidebar/table/TableCellInEditMode';
 import { isClass } from '../Sidebar/table/utils';
 import ExecuteParamsTableHeader from './ExecuteParamsTableHeader';
+import styles from './ExecutionDialog.module.css';
 import ExecutionEngine from './ExecutionEngine';
 import type { EngineDropdownOption } from './models';
 import { hasDefinedProperties } from './utils';
+
+interface ExecuteDialogProps {
+  open: boolean;
+  onClose: (value?: string) => void;
+}
+
+export interface ExecutionInputTableRow extends NodeExecutionInput {
+  type?: string;
+  rowId: string;
+}
 
 export const DROPDOWN_TO_SERVER_ENGINE = {
   dask: 'dask',
@@ -131,7 +142,10 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
             };
           });
 
-        execute({ engine: DROPDOWN_TO_SERVER_ENGINE[engine], inputs });
+        execute({
+          engine: DROPDOWN_TO_SERVER_ENGINE[engine] as Engine,
+          inputs,
+        });
       } catch (executeError) {
         showErrorMsg(
           textForError(executeError, 'Error in executing workflow.'),
@@ -390,12 +404,15 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
             </CardContent>
           </Card>
           <ExecutionEngine engine={engine} setEngine={setEngine} />
-          The workflow will be saved before excution.
         </DialogContent>
+        <div className={styles.saveWarning}>
+          <InfoIcon fontSize="small" />
+          The workflow will be saved before excution.
+        </div>
         <DialogActions>
           <Button
             onClick={() => {
-              void handleSaveExecute();
+              handleSaveExecute();
             }}
             color="primary"
           >
