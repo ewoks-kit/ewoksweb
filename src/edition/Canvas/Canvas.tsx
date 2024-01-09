@@ -113,7 +113,7 @@ function Canvas(props: Props) {
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
-  const { fitView, setNodes, setEdges, getNodes, getEdges, addNodes, getNode } =
+  const { setNodes, setEdges, getNodes, getEdges, addNodes, getNode } =
     rfInstance;
 
   function onNodesChange(changes: NodeChange[]) {
@@ -347,8 +347,6 @@ function Canvas(props: Props) {
                 tasks,
                 workflow ? 'fromServer' : undefined,
               );
-              // TODO: does not seem to do anything. The graph appears fitted instantly!
-              fitView({ duration: 3500 });
             }}
           >
             <CanvasBackground />
