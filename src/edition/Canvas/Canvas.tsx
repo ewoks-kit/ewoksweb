@@ -210,13 +210,9 @@ function Canvas() {
     addNodes(newNode);
   };
 
-  const onEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => {
-    // DOC: if the new link is:
-    // 1. attached to a node-handle where there is already a link or
-    // 2. is attached to an input-output already connected to a node then
-    // edgeUpdate should not happen and a message informs it is not ewoks-compatible
+  function isValidConnection(connection: Connection, oldEdge?: Edge): boolean {
     const { isValid, reason } = isValidLink(
-      newConnection,
+      connection,
       getNodes(),
       getEdges(),
       getNodesData(),
@@ -224,11 +220,18 @@ function Canvas() {
     );
     if (!isValid) {
       showWarningMsg(reason);
+      return false;
+    }
+    return true;
+  }
+
+  const onEdgeUpdate = (oldEdge: Edge, connection: Connection) => {
+    if (!isValidConnection(connection, oldEdge)) {
       return;
     }
 
     const newEdges = addEdge(
-      { ...oldEdge, ...newConnection },
+      { ...oldEdge, ...connection },
       getEdges().filter((edge) => edge.id !== oldEdge.id),
     );
 
@@ -236,14 +239,7 @@ function Canvas() {
   };
 
   const onConnect = (connection: Connection) => {
-    const { isValid, reason } = isValidLink(
-      connection,
-      getNodes(),
-      getEdges(),
-      getNodesData(),
-    );
-    if (!isValid) {
-      showWarningMsg(reason);
+    if (!isValidConnection(connection)) {
       return;
     }
     const newLink = addConnectionToGraph(connection, getNodesData());
