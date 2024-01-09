@@ -10,7 +10,10 @@ extensions = ["sphinx.ext.autodoc", "sphinx.ext.autosummary", "sphinx.ext.viewco
 templates_path = []
 exclude_patterns = []
 
-html_theme = "classic"
+html_theme = "pydata_sphinx_theme"
+html_theme_options = {
+  "show_nav_level": 2
+}
 html_static_path = []
 
 autosummary_generate = True
