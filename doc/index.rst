@@ -28,7 +28,7 @@ Tutorials
 Follow the learning-oriented tutorials that will help accomplish a sequense of steps in order to:
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
 
     create_your_first_workflow
     create_a_task
@@ -40,12 +40,13 @@ How-to guides
 The how-to guides are descriptions targeting the following tasks:
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
 
-    create_graph
+    new_open_save
     node_editing
     link_editing
-    execution
+    executing_a_workflow
+    monitoring_executed_workflows
     manage_graphs_tasks_icons
 
 Explanations
@@ -54,6 +55,8 @@ Explanations
 General useful information regarding:
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
 
     editor_basics
+    embedded_nodes
+    link_validation

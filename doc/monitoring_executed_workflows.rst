@@ -1,6 +1,8 @@
-Executing workflows
-===================
-The concept *execute a workflow* is used when a workflow is being send to the `ewoksServer <https://ewoksserver.readthedocs.io/en/latest/>` for each tasks to be executed.
+Monitoring executed workflows
+=============================
+
+The concept *execute a workflow* is used when a workflow is being send to the
+`ewoksServer <https://ewoksserver.readthedocs.io/en/latest/>` for each tasks to be executed.
 
 In order for a workflow to be executed it needs:
 

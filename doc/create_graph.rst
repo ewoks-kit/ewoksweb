@@ -4,7 +4,11 @@ Create and Edit a Workflow
 New Workflow
 ------------
 
-By clicking the **New** button with the tooltip *start a new workflow* on the upper bar a dialog appears requesting the new workflow **name**. By inserting a unique name and pressing **SAVE WORKFLOW** the dialog disappears and the canvas is available with the name entered appearing in the upper bar left side. If the given name is already used a message warns the user for providing another name.
+By clicking the **New** button with the tooltip *start a new workflow* on the upper
+bar a dialog appears requesting the new workflow **name**. By inserting a unique
+name and pressing **SAVE WORKFLOW** the dialog disappears and the canvas is available
+with the name entered appearing in the upper bar left side. If the given name is already
+used a message warns the user for providing another name.
 
 Open a Workflow
 ---------------

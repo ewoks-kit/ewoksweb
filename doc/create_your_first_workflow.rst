@@ -1,4 +1,4 @@
-Create and Edit a Workflow
+Create your first Workflow
 ==========================
 
 New Workflow
