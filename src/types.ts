@@ -148,14 +148,14 @@ export interface DataMapping {
 }
 
 export interface EwoksCondition {
-  source_output?: string | number;
+  source_output: string | number;
   value: unknown;
 }
 
 export interface Condition {
   value: unknown;
   rowId?: string;
-  name?: string | number;
+  name: string | number;
   type?: string;
 }
 

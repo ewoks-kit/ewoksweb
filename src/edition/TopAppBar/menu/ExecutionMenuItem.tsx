@@ -2,11 +2,13 @@ import SendIcon from '@mui/icons-material/Send';
 import { useKeyboardEvent } from '@react-hookz/web';
 import { useState } from 'react';
 
+import useStore from '../../../store/useStore';
 import ExecuteParametersDialog from '../ExecuteParametersDialog';
 import ActionMenuItem from './ActionMenuItem';
 
 function ExecutionMenuItem() {
   const [open, setOpen] = useState(false);
+  const { rootWorkflowId } = useStore.getState();
 
   useKeyboardEvent(
     (e) =>
@@ -25,6 +27,8 @@ function ExecutionMenuItem() {
         icon={SendIcon}
         label="Execute workflow"
         onClick={() => setOpen(true)}
+        keyShortcut="Ctrl+Shift+X"
+        disabled={!rootWorkflowId}
       />
     </>
   );

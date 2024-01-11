@@ -43,7 +43,7 @@ export function toRFEwoksLinks(
 
       const conditionsForFront = conditions?.map<Condition>((con) => {
         return {
-          name: con.source_output?.toString(),
+          name: con.source_output.toString(),
           value: con.value,
         };
       });

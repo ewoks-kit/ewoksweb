@@ -10,11 +10,12 @@ interface Props {
   icon: typeof SvgIcon;
   label: string;
   keyShortcut?: string;
+  disabled?: boolean;
   onClick: () => void;
 }
 
 function ActionMenuItem(props: PropsWithChildren<Props>) {
-  const { icon, label, keyShortcut, onClick, children } = props;
+  const { icon, label, keyShortcut, onClick, disabled, children } = props;
 
   const { onClose } = useActionMenuContext();
 
@@ -25,6 +26,7 @@ function ActionMenuItem(props: PropsWithChildren<Props>) {
         onClose();
       }}
       role="menuitem"
+      disabled={disabled ?? false}
     >
       <ActionMenuIcon icon={icon} />
       <ListItemText primary={label} />
