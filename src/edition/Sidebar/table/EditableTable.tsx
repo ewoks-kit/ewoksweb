@@ -11,7 +11,7 @@ import React from 'react';
 import type {
   Condition,
   DefaultInput,
-  EditableTableRow,
+  InputTableRow,
   TypeOfValues,
 } from 'types';
 
@@ -30,22 +30,22 @@ interface EditableTableProps {
   defaultValues: Condition[] | DefaultInput[];
   typeOfValues: TypeOfValues[];
   disable?: boolean;
-  valuesChanged: (rows: EditableTableRow[]) => void;
-  onRowAdd?: (rows?: EditableTableRow[]) => void;
+  valuesChanged: (rows: InputTableRow[]) => void;
+  onRowAdd?: (rows?: InputTableRow[]) => void;
 }
 
 interface DialogContent {
   id: string;
   title: string;
   object: object;
-  callbackProps: { rows: EditableTableRow[]; id: string };
+  callbackProps: { rows: InputTableRow[]; id: string };
 }
 
 // The table where lines can be added where type is selected and appropriate values are given to name and value.
 function EditableTable(props: EditableTableProps) {
   const { defaultValues, headers, disable, onRowAdd } = props;
 
-  const [rows, setRows] = React.useState<EditableTableRow[]>([]);
+  const [rows, setRows] = React.useState<InputTableRow[]>([]);
   const [typeOfInputs, setTypeOfInputs] = React.useState<string[]>([]);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<DialogContent>();
@@ -60,7 +60,7 @@ function EditableTable(props: EditableTableProps) {
     id: string,
     title: string,
     graph: unknown,
-    callbackProps: { rows: EditableTableRow[]; id: string },
+    callbackProps: { rows: InputTableRow[]; id: string },
   ) {
     if (typeof graph !== 'object' || graph === null) {
       return;
@@ -74,12 +74,12 @@ function EditableTable(props: EditableTableProps) {
     });
   }
 
-  function calcNewRows(rowId: string | undefined): EditableTableRow[] {
+  function calcNewRows(rowId: string | undefined): InputTableRow[] {
     return rows.map((row) => {
-      if (row.id === rowId) {
+      if (row.rowId === rowId) {
         return {
           ...row,
-          id: row.name || '',
+          rowId: row.name?.toString() || '',
         };
       }
 
@@ -119,10 +119,10 @@ function EditableTable(props: EditableTableProps) {
 
   function onChange(
     e: { target: { name: string; value: string | number } },
-    row: EditableTableRow,
+    row: InputTableRow,
     index: number,
   ) {
-    const { id } = row;
+    const { rowId: id } = row;
     const oldRows = [...rows].filter((_row, i) => index !== i);
 
     if (
@@ -140,7 +140,7 @@ function EditableTable(props: EditableTableProps) {
       const { value, name } = e.target;
 
       const newRows = rows.map((rowe) => {
-        if (rowe.id === id) {
+        if (rowe.rowId === id) {
           return { ...rowe, [name]: value };
         }
         return rowe;
@@ -153,7 +153,7 @@ function EditableTable(props: EditableTableProps) {
     const name = e.target.name === 'name' ? e.target.name : 'value';
 
     const newRows = rows.map((rowTable) => {
-      if (rowTable.id === id) {
+      if (rowTable.rowId === id) {
         return {
           ...rowTable,
           // TODO: if not to use the local editing the e.target.name is always a 'name'
@@ -168,7 +168,7 @@ function EditableTable(props: EditableTableProps) {
 
   function onDelete(id: string) {
     const newRows = rows.filter((row) => {
-      return row.id !== id;
+      return row.rowId !== id;
     });
 
     setRows(newRows);
@@ -177,13 +177,13 @@ function EditableTable(props: EditableTableProps) {
 
   const changedTypeOfInputs = (
     e: ChangeEvent<HTMLInputElement>,
-    row: EditableTableRow,
+    row: InputTableRow,
     index: number,
   ) => {
-    const { id: rowId = '' } = row;
+    const { rowId = '' } = row;
 
     const newRows = rows.map((rowe) => {
-      if (rowe.id === rowId) {
+      if (rowe.rowId === rowId) {
         return {
           ...rowe,
           value: e.target.value === 'null' ? e.target.value : '',
@@ -204,12 +204,12 @@ function EditableTable(props: EditableTableProps) {
   function setRowValue(
     name: string,
     val: unknown, // can be a user defined list or dict
-    callbackProps: { id: string; rows: EditableTableRow[] },
+    callbackProps: { id: string; rows: InputTableRow[] },
   ) {
     const newRows = callbackProps.rows.map((row) => {
-      if (row.id === callbackProps.id) {
+      if (row.rowId === callbackProps.id) {
         return name !== ''
-          ? { ...row, id: name, value: val }
+          ? { ...row, rowId: name, value: val }
           : { ...row, value: val };
       }
       return row;
@@ -237,12 +237,12 @@ function EditableTable(props: EditableTableProps) {
         <TableHeader headers={headers} />
         <TableBody>
           {rows.map((row, index) => (
-            <React.Fragment key={row.id}>
+            <React.Fragment key={row.rowId}>
               <TableRow>
                 <CustomTableCell
                   index={index}
                   row={row}
-                  rowsNames={rows.map((ro) => ro.name || '')}
+                  rowsNames={rows.map((ro) => ro.name?.toString() || '')}
                   name="name"
                   onChange={onChange}
                   typeOfValues={props.typeOfValues[0]}
@@ -264,12 +264,13 @@ function EditableTable(props: EditableTableProps) {
                   row={row}
                   name="value"
                   onChange={onChange}
-                  onEdit={() => onEditRow(row.id || '', index)}
+                  onEdit={() => onEditRow(row.rowId || '', index)}
                   disable={disable}
                 />
+
                 <RemoveRowCell
                   disable={disable}
-                  onDelete={() => onDelete(row.id || '')}
+                  onDelete={() => onDelete(row.rowId || '')}
                 />
               </TableRow>
             </React.Fragment>

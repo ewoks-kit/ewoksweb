@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import type { Edge } from 'reactflow';
-import type { Condition as EdgeConditions, EditableTableRow } from 'types';
+import type { Condition as EdgeConditions, InputTableRow } from 'types';
 
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
@@ -25,22 +25,22 @@ export default function Conditions({ element, isOnErrorSelected }: Props) {
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
 
-  function addConditions(rows: EditableTableRow[] | undefined) {
+  function addConditions(rows: InputTableRow[] | undefined) {
     const elCon = rows as EdgeConditions[];
 
     const newEdgeData = {
       on_error: false,
-      conditions: [...elCon, { id: nanoid(), name: '', value: false }],
+      conditions: [...elCon, { rowId: nanoid(), name: '', value: false }],
     };
     mergeEdgeData(element.id, newEdgeData);
   }
 
-  function conditionsValuesChanged(table: EditableTableRow[]) {
+  function conditionsValuesChanged(table: InputTableRow[]) {
     const newEdgeData = {
       ...edgeData,
       conditions: table.map((con) => {
         return {
-          id: con.id,
+          rowId: con.rowId,
           name: con.name,
           value: con.value,
           type: con.type,

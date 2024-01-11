@@ -1,3 +1,4 @@
+import type { NodeExecutionInput } from '../../api/models';
 import { fetchWorkflowsIds } from '../../api/workflows';
 import type {
   Condition,
@@ -6,6 +7,13 @@ import type {
   LinkData,
   NodeData,
 } from '../../types';
+
+interface ExecutionParameters {
+  name: string | number;
+  type: string;
+  value: unknown;
+  id: string;
+}
 
 export async function getWorkflowIdsFromServer(): Promise<{
   data: string[];
@@ -81,5 +89,20 @@ function deleteEmptyLines<T extends DataMapping | Condition | DefaultInput>(
   }
   return arrayObjId.filter(
     (obj: DataMapping | Condition | DefaultInput) => obj.name !== '',
+  );
+}
+
+export function hasDefinedProperties(
+  item: NodeExecutionInput,
+): item is ExecutionParameters & {
+  id: string;
+  name: string;
+  value: unknown;
+  label: string;
+} {
+  return (
+    item.id !== undefined &&
+    item.value !== undefined &&
+    item.label !== undefined
   );
 }

@@ -29,7 +29,7 @@ function TableDataMapping(props: TableDataMappingProps) {
     e: { target: { name: string; value: string | number } },
     row: DataMapping,
   ) {
-    const { id } = row;
+    const { rowId: id } = row;
     let { value } = e.target;
     const { name } = e.target;
 
@@ -38,7 +38,7 @@ function TableDataMapping(props: TableDataMappingProps) {
     }
 
     const newRows = values.map((rowe) => {
-      if (rowe.id === id) {
+      if (rowe.rowId === id) {
         return { ...rowe, [name]: value };
       }
       return rowe;
@@ -49,7 +49,7 @@ function TableDataMapping(props: TableDataMappingProps) {
 
   function onDelete(id: string) {
     const newRows = values.filter((row) => {
-      return row.id !== id;
+      return row.rowId !== id;
     });
 
     props.valuesChanged(newRows);
@@ -65,7 +65,7 @@ function TableDataMapping(props: TableDataMappingProps) {
         <TableHeader headers={headers} />
         <TableBody>
           {values.map((row, index) => (
-            <React.Fragment key={row.id}>
+            <React.Fragment key={row.rowId}>
               <TableRow>
                 <CustomTableCell
                   index={index}
@@ -88,7 +88,7 @@ function TableDataMapping(props: TableDataMappingProps) {
                 />
                 <RemoveRowCell
                   disable={disable}
-                  onDelete={() => onDelete(row.id || '')}
+                  onDelete={() => onDelete(row.rowId || '')}
                 />
               </TableRow>
             </React.Fragment>
