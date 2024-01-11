@@ -1,6 +1,10 @@
 import { nanoid } from 'nanoid';
 import type { Edge } from 'reactflow';
-import type { Condition as EdgeConditions, InputTableRow } from 'types';
+import type {
+  Condition as EdgeConditions,
+  InputTableRow,
+  LinkData,
+} from 'types';
 
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
@@ -36,7 +40,7 @@ export default function Conditions({ element, isOnErrorSelected }: Props) {
   }
 
   function conditionsValuesChanged(table: InputTableRow[]) {
-    const newEdgeData = {
+    const newEdgeData: LinkData = {
       ...edgeData,
       conditions: table.map((con) => {
         return {

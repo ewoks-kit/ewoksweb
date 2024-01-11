@@ -8,13 +8,6 @@ import type {
   NodeData,
 } from '../../types';
 
-interface ExecutionParameters {
-  name: string | number;
-  type: string;
-  value: unknown;
-  id: string;
-}
-
 export async function getWorkflowIdsFromServer(): Promise<{
   data: string[];
   error: unknown;
@@ -92,14 +85,7 @@ function deleteEmptyLines<T extends DataMapping | Condition | DefaultInput>(
   );
 }
 
-export function hasDefinedProperties(
-  item: NodeExecutionInput,
-): item is ExecutionParameters & {
-  id: string;
-  name: string;
-  value: unknown;
-  label: string;
-} {
+export function hasDefinedProperties(item: NodeExecutionInput) {
   return (
     item.id !== undefined &&
     item.value !== undefined &&

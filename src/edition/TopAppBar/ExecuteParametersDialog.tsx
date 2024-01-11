@@ -55,7 +55,7 @@ export interface ExecutionInputTableRow extends NodeExecutionInput {
   rowId: string;
 }
 
-export const DROPDOWN_TO_SERVER_ENGINE = {
+export const DROPDOWN_TO_SERVER_ENGINE: Record<EngineDropdownOption, Engine> = {
   dask: 'dask',
   default: null,
   pypushflow: 'ppf',
@@ -126,31 +126,6 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
   async function handleSaveExecute() {
     try {
       await handleSave();
-      // Only execute if handleSave is successful
-      try {
-        const inputs: NodeExecutionInput[] = perNodeInputs
-          .filter(hasDefinedProperties)
-          .map((input) => {
-            return {
-              name: input.name,
-              value: input.value,
-              ...(input.label &&
-                !['All nodes', 'All input nodes'].includes(input.label) && {
-                  id: input.id,
-                }),
-              ...(input.label === 'All nodes' && { all: true }),
-            };
-          });
-
-        execute({
-          engine: DROPDOWN_TO_SERVER_ENGINE[engine] as Engine,
-          inputs,
-        });
-      } catch (executeError) {
-        showErrorMsg(
-          textForError(executeError, 'Error in executing workflow.'),
-        );
-      }
     } catch (saveError) {
       showErrorMsg(
         textForError(
@@ -158,6 +133,30 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
           'Error in saving workflow. Please check connectivity with the server!',
         ),
       );
+    }
+
+    // Only execute if handleSave is successful
+    try {
+      const inputs: NodeExecutionInput[] = perNodeInputs
+        .filter(hasDefinedProperties)
+        .map((input) => {
+          return {
+            name: input.name,
+            value: input.value,
+            ...(input.label &&
+              !['All nodes', 'All input nodes'].includes(input.label) && {
+                id: input.id,
+              }),
+            ...(input.label === 'All nodes' && { all: true }),
+          };
+        });
+
+      execute({
+        engine: DROPDOWN_TO_SERVER_ENGINE[engine],
+        inputs,
+      });
+    } catch (executeError) {
+      showErrorMsg(textForError(executeError, 'Error in executing workflow.'));
     }
   }
 
@@ -290,15 +289,18 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
   }
 
   function calcTypeAndValues(nodeId: string | undefined): TypeOfValues {
+    if (!nodeId) {
+      return { typeOfInput: 'input', values: [], requiredValues: [] };
+    }
+
     return {
-      typeOfInput:
-        nodeId && isClass(nodesData.get(nodeId)) ? 'select' : 'input',
+      typeOfInput: isClass(nodesData.get(nodeId)) ? 'select' : 'input',
       values: [
-        ...(nodesData.get(nodeId || '')?.task_props.required_input_names || []),
-        ...(nodesData.get(nodeId || '')?.task_props.optional_input_names || []),
+        ...(nodesData.get(nodeId)?.task_props.required_input_names || []),
+        ...(nodesData.get(nodeId)?.task_props.optional_input_names || []),
       ],
       requiredValues:
-        nodesData.get(nodeId || '')?.task_props.required_input_names || [],
+        nodesData.get(nodeId)?.task_props.required_input_names || [],
     };
   }
 

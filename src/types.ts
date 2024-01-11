@@ -148,7 +148,7 @@ export interface DataMapping {
 }
 
 export interface EwoksCondition {
-  source_output?: string | number;
+  source_output: string | number;
   value: unknown;
 }
 
