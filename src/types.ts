@@ -155,7 +155,7 @@ export interface EwoksCondition {
 export interface Condition {
   value: unknown;
   rowId?: string;
-  name: string | number;
+  name?: string | number;
   type?: string;
 }
 

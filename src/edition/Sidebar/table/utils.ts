@@ -6,15 +6,18 @@ import type {
   NodeData,
   TypeOfValues,
 } from '../../../types';
+import { assertDefined } from '../../../utils/typeGuards';
 
 export const INPUT_TYPES = ['bool', 'number', 'string', 'list', 'dict', 'null'];
 
 export function createData(pair: Condition | DefaultInput): InputTableRow {
   const type = getType(pair);
+  const rowId = pair.rowId || pair.name?.toString();
+  assertDefined(rowId);
 
   return {
-    rowId: pair.rowId?.toString() || pair.name.toString(),
-    name: pair.name.toString(),
+    rowId,
+    name: pair.name?.toString(),
     value: pair.value,
     type,
   };
