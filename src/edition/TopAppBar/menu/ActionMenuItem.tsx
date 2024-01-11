@@ -26,7 +26,7 @@ function ActionMenuItem(props: PropsWithChildren<Props>) {
         onClose();
       }}
       role="menuitem"
-      disabled={disabled ?? false}
+      disabled={disabled}
     >
       <ActionMenuIcon icon={icon} />
       <ListItemText primary={label} />
