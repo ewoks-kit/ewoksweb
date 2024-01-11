@@ -8,6 +8,7 @@ npm-debug.log*
 
 # Distribution / packaging
 /build/
+/ewoksenv/
 /pybuild/
 /pysrc/ewoksweb/static/
 /dist/
