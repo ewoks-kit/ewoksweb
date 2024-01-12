@@ -1,34 +1,52 @@
 Node editing
 ============
 
-Node editing is hosted on the left-sidebar under the **Edit Node** dropdown when a node on the canvas is selected. If no node is selected the dropdown is:
+Node editing is accessible on the right-sidebar when a node on the canvas is selected.
 
- - empty if no graph is under editing or
- - depicts the attributes of the graph if a graph is under editing and no node or link is selected or
- - depicts the attributes of a link if a link is selected.
+Each node has several attributes that follow the  `ewokscore <https://ewokscore.readthedocs.io/en/latest/definitions.html#node-attributes>`_
+specification. When a node is selected the following items are being depicted.
 
-Each node has several attributes that follow the  `ewokscore <https://ewokscore.readthedocs.io/en/latest/definitions.html#node-attributes>`_specification. On a new node three items are being depicted:
+Label-Comment
+-------------
 
- - **Label** which is the user-friendly name of a node that the user can always change. Label will initially take the name of the task the specific node is referred to.
- - **Default Inputs** where the user can define inputs for any given node representing a task or a subgraph.
- - **Advanced** that reveals more attributes when checked.
+ - **Label** which is the user-friendly name of a node that the user can always change.
+   Label will initially take the name of the task the specific node is referred to.
+ - **Comment** where the user can save any kind of text like a description of the node functionallity
+   in the graph.
 
- The properties that are revealed when Advanced is checked are:
+Default Inputs
+--------------
 
- - **Comment** that allows the user to keep some notes of interest.
- - **Inputs-complete** when the default input covers all required input.
- - **Default Error Node** that makes the node to be the default-error-node. Each graph can have zero to one such nodes.
- - **Node Info** which holds read-only information about the selected node.
+Where the user can define the default-inputs for any given node representing a task or a subgraph.
 
- When **Default Error Node** is checked the **Map all Data** appears already ticked which means that no extra Data Mapping is needed for the Default Error Node. If unchecked the Map all Data reveals the **Data Mapping** where manual mapping can take place.
+Advanced
+--------
 
-Node styling
-------------
+    - **Inputs-complete** when the default input covers all required input. ...
+    - **Default Error Node** that makes the node to be the default-error-node.
+      Each graph can have zero to one such nodes. When **Default Error Node**
+      is checked the **Map all Data** appears already ticked which means that no
+      extra Data Mapping is needed for the Default Error Node. If unchecked the
+      Map all Data reveals the **Data Mapping** where manual mapping can take place.
 
-Nodes can be styled in the dropdown under Edit Node when a node is selected on the canvas. The node style attributed include:
+Task Info
+---------
 
- - **With Image** which if checked depicts the image associated with the task on the canvas and if not checked removes it.
- - **With Label** which if checked depicts the label of the node on the canvas and if not checked removes it.
- - **Color** which adds a surrounding frame and colors it with the selected color.
- - **More handles** which provides additional handles to the node on the top and on the bottom.
- - **Node Size** slider which modifies the size of the node.
+    - **Task identifier** that is the id of the task this node is based on.
+    - **Node id** that is a read-only string with the unique id the node has in the workflow.
+    - **Task type** that is the type of the task the node is based on. ...
+
+Appearance
+----------
+
+The following parameters can adjust the way the nodes are being depicted on the canvas:
+
+  - **With image** to control the appearance of the image/icon selected for the node to be visible.
+  - **With label** to control the appearance of the label of the node.
+  - **With border** to add thicker border for the node. When checked a color selector appears with the label
+    **Border color** to select a color for the added border.
+  - **More handles** to add more input and output handles to the node at its top and bottom. Used when
+    rearranging of the nodes in the graph is needed to make it easier to depict and understand.
+  - **Size** that employs a slider to control the size of the node on the canvas.
+  - **Icon** where a dropdown provides all the alternatives for changing the icon appearing at
+    the middle of each node
