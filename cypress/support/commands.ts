@@ -12,7 +12,7 @@ Cypress.on('uncaught:exception', (err) => {
 Cypress.Commands.add('loadAppWithoutGraph', () => {
   cy.visit('http://localhost:3000');
   cy.findByRole('navigation').within(() =>
-    cy.get('span[data-selected="true"]').should('have.text', 'Edit'),
+    cy.findByRole('link', { name: 'Edit' }).click(),
   );
   cy.waitForStableDOM();
 });
