@@ -1,8 +1,6 @@
 .btn {
   composes: btnClean from global;
   display: flex;
-  align-items: center;
-  cursor: grab;
   overflow: hidden;
 }
 
@@ -17,4 +15,11 @@
 .icon > img,
 .icon > svg {
   width: 60px;
+}
+
+.draggableContent {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  cursor: grab;
 }

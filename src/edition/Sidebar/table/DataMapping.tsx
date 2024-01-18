@@ -32,7 +32,7 @@ export default function DataMappingComponent({ element, mapAllData }: Props) {
     mergeEdgeData(element.id, {
       data_mapping: [
         ...(rows as DataMapping[]),
-        { id: nanoid(), name: '', value: '' },
+        { rowId: nanoid(), name: '', value: '' },
       ],
     });
   }

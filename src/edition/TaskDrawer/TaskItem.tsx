@@ -31,7 +31,7 @@ function TaskItem(props: Props) {
   const isEditable = category !== 'General';
 
   return (
-    <Tooltip title={tooltip || task_identifier} arrow>
+    <Tooltip title={tooltip || task_identifier} arrow placement="right">
       <div className={styles.item} data-selected={isSelected || undefined}>
         <TaskButton
           taskInfo={{

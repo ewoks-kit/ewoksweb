@@ -8,16 +8,11 @@ import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../../../api/tasks';
 import TaskForm from '../../../general/forms/TaskForm';
-import { useNodesIds } from '../../../store/graph-hooks';
-import useNodeDataStore from '../../../store/useNodeDataStore';
+import { useCloneNode } from '../../../general/hooks';
 import useStore from '../../../store/useStore';
-import type { RFNode } from '../../../types';
 import { getNodeData } from '../../../utils';
-import { calcNewId } from '../../../utils/calcNewId';
-import {
-  assertDefined,
-  assertNodeDataDefined,
-} from '../../../utils/typeGuards';
+import { assertNodeDataDefined } from '../../../utils/typeGuards';
+import KeyStrokeHint from '../../KeyStrokeHint';
 
 interface Props {
   selectedElement: Node;
@@ -28,14 +23,11 @@ export default function NodeSidebarMenu(props: Props) {
   const { selectedElement, onSelection } = props;
   const rfInstance = useReactFlow();
 
-  const nodesIds = useNodesIds();
-
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo,
   );
   const tasks = useTasks();
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
-  const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
 
   const nodeData = getNodeData(selectedElement.id);
@@ -43,26 +35,7 @@ export default function NodeSidebarMenu(props: Props) {
   const nodeTask = tasks.find(
     (tas) => tas.task_identifier === nodeData.task_props.task_identifier,
   );
-
-  function cloneNode() {
-    const nodeToClone = rfInstance.getNode(selectedElement.id);
-    assertDefined(nodeToClone);
-
-    const clone: RFNode = {
-      ...nodeToClone,
-      id: calcNewId(selectedElement.id, nodesIds),
-      selected: false,
-      position: {
-        x: nodeToClone.position.x + 100,
-        y: nodeToClone.position.y + 100,
-      },
-      data: {},
-    };
-
-    rfInstance.addNodes(clone);
-    assertNodeDataDefined(nodeData, selectedElement.id);
-    setNodeData(clone.id, nodeData);
-  }
+  const cloneNode = useCloneNode();
 
   return (
     <>
@@ -73,7 +46,7 @@ export default function NodeSidebarMenu(props: Props) {
       />
       <MenuItem
         onClick={() => {
-          cloneNode();
+          cloneNode(selectedElement.id);
           onSelection();
         }}
         role="menuitem"
@@ -82,7 +55,8 @@ export default function NodeSidebarMenu(props: Props) {
         <ListItemIcon>
           <LibraryAdd fontSize="small" />
         </ListItemIcon>
-        <ListItemText>Clone Node</ListItemText>
+        <ListItemText>Duplicate Node</ListItemText>
+        <KeyStrokeHint text="Ctrl+D" />
       </MenuItem>
 
       {nodeData.task_props.task_type !== 'graph' && (
@@ -110,6 +84,7 @@ export default function NodeSidebarMenu(props: Props) {
           <Delete fontSize="small" />
         </ListItemIcon>
         <ListItemText>Delete Node</ListItemText>
+        <KeyStrokeHint text="Del" />
       </MenuItem>
     </>
   );

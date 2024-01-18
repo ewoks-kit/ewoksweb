@@ -10,7 +10,7 @@ import Paper from '@mui/material/Paper';
 import { useEffect, useState } from 'react';
 import Draggable from 'react-draggable';
 
-import type { EditableTableRow } from '../types';
+import type { InputTableRow } from '../types';
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -27,7 +27,7 @@ function PaperComponent(props: PaperProps) {
 type Graph = object;
 interface CallbackProps {
   id: string;
-  rows: EditableTableRow[];
+  rows: InputTableRow[];
 }
 
 interface Props {

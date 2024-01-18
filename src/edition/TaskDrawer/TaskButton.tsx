@@ -21,10 +21,16 @@ function TaskButton(props: Props) {
       aria-label={taskInfo.task_identifier}
       draggable
     >
-      <div className={styles.icon}>
-        <Icon />
+      {/* Subtle bug in Firefox (https://bugzilla.mozilla.org/show_bug.cgi?id=568313):
+      It is actually the **content** of the button that is draggable.
+      This draggableContent div ensures that the draggable area takes the full dimensions of the button.
+      */}
+      <div className={styles.draggableContent}>
+        <div className={styles.icon}>
+          <Icon />
+        </div>
+        <label className={styles.label}>{label}</label>
       </div>
-      <label className={styles.label}>{label}</label>
     </button>
   );
 }

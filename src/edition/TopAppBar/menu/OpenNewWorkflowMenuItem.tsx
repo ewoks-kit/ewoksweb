@@ -4,16 +4,21 @@ import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import ConfirmDialog from '../../../general/ConfirmDialog';
+import useStore from '../../../store/useStore';
 import ActionMenuItem from './ActionMenuItem';
 
 function OpenNewWorkflowMenuItem() {
   const [openDialog, setOpenDialog] = useState(false);
   const [, setSearchParams] = useSearchParams();
 
-  const openEmptyWorkflow = () => {
+  const displayedWorkflowInfo = useStore(
+    (state) => state.displayedWorkflowInfo,
+  );
+
+  function openEmptyWorkflow() {
     setSearchParams({});
     setOpenDialog(false);
-  };
+  }
 
   useKeyboardEvent(
     (e) =>
@@ -37,7 +42,8 @@ function OpenNewWorkflowMenuItem() {
       <ActionMenuItem
         icon={FiberNew}
         label="New workflow"
-        onClick={() => setOpenDialog(true)}
+        onClick={() => displayedWorkflowInfo.id && setOpenDialog(true)}
+        keyShortcut="Ctrl+Shift+N"
       />
     </>
   );

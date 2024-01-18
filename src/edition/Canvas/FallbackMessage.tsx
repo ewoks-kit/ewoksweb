@@ -1,22 +1,32 @@
+import useQuickOpenStore from '../../general/useQuickOpenStore';
 import { useNodesLength } from '../../store/graph-hooks';
-import useStore from '../../store/useStore';
-import styles from './Canvas.module.css';
+import styles from './FallbackMessage.module.css';
 
 export default function FallbackMessage() {
   const nodesCount = useNodesLength();
-  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
+  const quickOpenElement = useQuickOpenStore((state) => state.element);
+
+  if (!quickOpenElement || nodesCount !== 0) {
+    return null;
+  }
 
   return (
-    <div className={styles.noWorkflowMessage}>
-      {nodesCount === 0 && rootWorkflowId === '' && (
-        <p>
-          <strong>Drag and drop</strong> tasks here to start building your
-          workflow,
-          <br />
-          or use <em>Quick Open</em> to <strong>open</strong> an existing
-          workflow.
-        </p>
-      )}
+    <div className={styles.container}>
+      <p>
+        Drag and drop tasks here to start building your workflow,
+        <br />
+        or use{' '}
+        <button
+          className={styles.btn}
+          onClick={() => {
+            quickOpenElement.click();
+          }}
+          type="button"
+        >
+          Quick Open
+        </button>{' '}
+        to open an existing workflow.
+      </p>
     </div>
   );
 }

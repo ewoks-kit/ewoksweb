@@ -3,7 +3,6 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useReactFlow } from 'reactflow';
@@ -60,10 +59,6 @@ export default function WorkflowSidebarMenu(props: Props) {
     }
   }
 
-  function disagreeCallback() {
-    setOpenAgreeDialog(false);
-  }
-
   return (
     <>
       <SuspenseBoundary>
@@ -85,8 +80,7 @@ export default function WorkflowSidebarMenu(props: Props) {
         <ListItemIcon>
           <FileCopyIcon fontSize="small" />
         </ListItemIcon>
-        <ListItemText>Clone Workflow</ListItemText>
-        <Typography variant="body2" color="primary" />
+        <ListItemText>Save as...</ListItemText>
       </MenuItem>
       <MenuItem
         onClick={() => setOpenAgreeDialog(true)}
@@ -99,7 +93,6 @@ export default function WorkflowSidebarMenu(props: Props) {
           <DeleteIcon fontSize="small" />
         </ListItemIcon>
         <ListItemText>Delete Workflow</ListItemText>
-        <Typography variant="body2" color="primary" />
       </MenuItem>
 
       <ConfirmDialog
@@ -113,7 +106,7 @@ export default function WorkflowSidebarMenu(props: Props) {
           onSelection();
         }}
         disagreeCallback={() => {
-          disagreeCallback();
+          setOpenAgreeDialog(false);
           onSelection();
         }}
       />

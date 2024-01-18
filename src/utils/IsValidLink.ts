@@ -95,7 +95,6 @@ export default function isValidLink(
   // Take into account if one or both nodes that need connection are graphs
   // if graph take into account the exact sourceHandle or targetHandle
   // if not.a.graph dont take into account the Handlers
-  // TODO: string comparing with slice() is error-prone... Solution
   if (
     (source.type !== 'graph' &&
       target.type !== 'graph' &&
@@ -110,9 +109,7 @@ export default function isValidLink(
         (link) =>
           link.source === connection.source &&
           link.target === connection.target &&
-          (link.sourceHandle?.slice(0, -5) === connection.sourceHandle ||
-            link.sourceHandle === connection.sourceHandle?.slice(0, -5) ||
-            link.sourceHandle === connection.sourceHandle),
+          link.sourceHandle === connection.sourceHandle,
       )) ||
     (source.type !== 'graph' &&
       target.type === 'graph' &&
@@ -120,9 +117,7 @@ export default function isValidLink(
         (link) =>
           link.source === connection.source &&
           link.target === connection.target &&
-          (link.targetHandle?.slice(0, -6) === connection.targetHandle ||
-            link.targetHandle === connection.targetHandle?.slice(0, -6) ||
-            link.targetHandle === connection.targetHandle),
+          link.targetHandle === connection.targetHandle,
       )) ||
     (source.type === 'graph' &&
       target.type === 'graph' &&
@@ -130,12 +125,8 @@ export default function isValidLink(
         (link) =>
           link.source === connection.source &&
           link.target === connection.target &&
-          (link.targetHandle?.slice(0, -6) === connection.targetHandle ||
-            link.targetHandle === connection.targetHandle?.slice(0, -6) ||
-            link.targetHandle === connection.targetHandle) &&
-          (link.sourceHandle?.slice(0, -5) === connection.sourceHandle ||
-            link.sourceHandle === connection.sourceHandle?.slice(0, -5) ||
-            link.sourceHandle === connection.sourceHandle),
+          link.targetHandle === connection.targetHandle &&
+          link.sourceHandle === connection.sourceHandle,
       ))
   ) {
     isValid = false;

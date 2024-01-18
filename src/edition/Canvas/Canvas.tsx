@@ -1,3 +1,4 @@
+import { useKeyboardEvent } from '@react-hookz/web';
 import type { DragEventHandler, MouseEvent } from 'react';
 import { useState } from 'react';
 import { useRef } from 'react';
@@ -21,11 +22,12 @@ import type { RFNode, Task } from 'types';
 
 import { useTasks } from '../../api/tasks';
 import { useWorkflow } from '../../api/workflows';
+import { useCloneNode } from '../../general/hooks';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import useStore from '../../store/useStore';
-import { getNodeData, getNodesData } from '../../utils';
+import { getNodesData } from '../../utils';
 import { calcNewId } from '../../utils/calcNewId';
 import {
   DEFAULT_NODE_HEIGHT,
@@ -33,10 +35,6 @@ import {
 } from '../../utils/defaultValues';
 import { EMPTY_GRAPH } from '../../utils/emptyGraphs';
 import isValidLink from '../../utils/IsValidLink';
-import {
-  assertNodeDataDefined,
-  assertNodeDefined,
-} from '../../utils/typeGuards';
 import bendingText from '../CustomEdges/BendingTextEdge';
 import getAround from '../CustomEdges/GetAroundEdge';
 import multilineText from '../CustomEdges/MultilineTextEdge';
@@ -110,11 +108,10 @@ function Canvas(props: Props) {
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
   const showInfoMsg = useSnackbarStore((state) => state.showInfoMsg);
-  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
-  const { setNodes, setEdges, getNodes, getEdges, addNodes, getNode } =
-    rfInstance;
+  const { setEdges, getNodes, getEdges, addNodes } = rfInstance;
+  const cloneNode = useCloneNode();
 
   function onNodesChange(changes: NodeChange[]) {
     const newNodes = applyNodeChanges(changes, getNodes());
@@ -218,13 +215,9 @@ function Canvas(props: Props) {
     addNodes(newNode);
   };
 
-  const onEdgeUpdate = (oldEdge: Edge, newConnection: Connection) => {
-    // DOC: if the new link is:
-    // 1. attached to a node-handle where there is already a link or
-    // 2. is attached to an input-output already connected to a node then
-    // edgeUpdate should not happen and a message informs it is not ewoks-compatible
+  function isValidConnection(connection: Connection, oldEdge?: Edge): boolean {
     const { isValid, reason } = isValidLink(
-      newConnection,
+      connection,
       getNodes(),
       getEdges(),
       getNodesData(),
@@ -232,22 +225,29 @@ function Canvas(props: Props) {
     );
     if (!isValid) {
       showWarningMsg(reason);
+      return false;
+    }
+    return true;
+  }
+
+  const onEdgeUpdate = (oldEdge: Edge, connection: Connection) => {
+    if (!isValidConnection(connection, oldEdge)) {
+      return;
     }
 
     const newEdges = addEdge(
-      { ...oldEdge, ...newConnection },
+      { ...oldEdge, ...connection },
       getEdges().filter((edge) => edge.id !== oldEdge.id),
     );
 
     setEdges(newEdges);
   };
 
-  const onConnect = (params: Connection) => {
-    if (rootWorkflowId !== displayedWorkflowInfo.id) {
-      showWarningMsg('Not allowed to create new links to any sub-graph!');
+  const onConnect = (connection: Connection) => {
+    if (!isValidConnection(connection)) {
       return;
     }
-    const newLink = addConnectionToGraph(params, getNodesData());
+    const newLink = addConnectionToGraph(connection, getNodesData());
 
     if (newLink) {
       setEdgeData(newLink.id, newLink.data);
@@ -260,55 +260,21 @@ function Canvas(props: Props) {
     showInfoMsg('Open a graph and click on nodes and links on this Canvas!');
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLImageElement>) => {
-    const charCode = String.fromCodePoint(event.which).toLowerCase();
-
-    const keys = event.ctrlKey || event.metaKey;
-    if (keys && charCode === 'v') {
-      event.preventDefault();
-      event.stopPropagation();
+  useKeyboardEvent(
+    (e) => (e.ctrlKey || e.metaKey) && e.key === 'd',
+    (e) => {
+      e.preventDefault();
       const selectedNode = getNodes().find((nod) => nod.selected);
       if (!selectedNode) {
-        showErrorMsg('First select a node to clone!');
+        showWarningMsg(
+          'Ctrl+D duplicates a node in the existing workflow. First select a node to duplicate!',
+        );
         return;
       }
-
-      const nodesIds = [...storeRF.getState().nodeInternals.keys()];
-
-      const node = getNode(selectedNode.id);
-      assertNodeDefined(node, selectedNode.id);
-
-      const nodeData = getNodeData(selectedNode.id);
-      assertNodeDataDefined(nodeData, selectedNode.id);
-
-      const newClone: RFNode = {
-        ...node,
-        id: calcNewId(selectedNode.id, nodesIds),
-        selected: false,
-        position: {
-          x: (node.position.x || 0) + 100,
-          y: (node.position.y || 0) + 100,
-        },
-        data: {},
-      };
-
-      setNodes([...getNodes(), newClone]);
-      setNodeData(newClone.id, nodeData);
-    }
-  };
-
-  const isValidConnection = (connection: Connection) => {
-    const { isValid, reason } = isValidLink(
-      connection,
-      getNodes(),
-      getEdges(),
-      getNodesData(),
-    );
-    if (!isValid) {
-      showWarningMsg(reason);
-    }
-    return isValid;
-  };
+      cloneNode(selectedNode.id);
+    },
+    [],
+  );
 
   return (
     <>
@@ -317,10 +283,9 @@ function Canvas(props: Props) {
         position={addSubworkflowEvent?.position}
         onClose={() => setSubworkflowEvent(undefined)}
       />
-      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions*/}
-      <div className={styles.root} onKeyDown={handleKeyDown}>
-        {!workflow && <FallbackMessage />}
+      <div className={styles.root}>
         <div className={styles.wrapper} ref={reactFlowWrapper}>
+          {!rootWorkflowId && <FallbackMessage />}
           <ReactFlow
             fitView
             connectOnClick

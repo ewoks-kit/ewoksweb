@@ -109,7 +109,7 @@ export interface Task {
 }
 
 export interface DefaultInput {
-  id?: string;
+  rowId?: string;
   name: string | number;
   value: unknown;
   type?: string;
@@ -143,19 +143,19 @@ export interface EwoksDataMapping {
 
 export interface DataMapping {
   value?: string | number;
-  id?: string;
+  rowId: string;
   name?: string;
 }
 
 export interface EwoksCondition {
-  source_output?: string | number;
+  source_output: string | number;
   value: unknown;
 }
 
 export interface Condition {
   value: unknown;
-  id?: string;
-  name?: string;
+  rowId?: string;
+  name?: string | number;
   type?: string;
 }
 
@@ -255,9 +255,9 @@ export type RFNode = Node<Record<string, never>>;
 // width?: number | null; // what is their functionality?
 // height?: number | null;
 
-export interface EditableTableRow {
-  id?: string;
-  name?: string;
+export interface InputTableRow {
+  rowId: string;
+  name?: string | number;
   value?: unknown;
   type?: string;
   // TODO
@@ -280,7 +280,7 @@ export interface TypeOfValues {
 
 export interface CustomTableCellProps {
   index: number;
-  row: EditableTableRow;
+  row: InputTableRow;
   rowsNames?: string[];
   name: 'name' | 'value';
   typeOfValues?: TypeOfValues;
@@ -289,7 +289,7 @@ export interface CustomTableCellProps {
   onEdit?: () => void;
   onChange(
     e: { target: { name: string; value: string | number } },
-    row: EditableTableRow,
+    row: InputTableRow,
     index: number,
   ): void;
 }
@@ -387,4 +387,9 @@ export interface filterParams {
 
 export interface SelectedElement {
   selectedElement: Node | Edge | undefined;
+}
+
+export interface ElementState {
+  element: HTMLElement | undefined;
+  setElement: (element: HTMLElement | undefined) => void;
 }

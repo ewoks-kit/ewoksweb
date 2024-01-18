@@ -13,7 +13,7 @@ import { isString } from './typeGuards';
 
 export function createDataMappingData(pair: EwoksDataMapping): DataMapping {
   return {
-    id: nanoid(),
+    rowId: nanoid(),
     name: pair.source_output ? pair.source_output.toString() : '',
     value: pair.target_input ?? '',
   };
@@ -33,9 +33,7 @@ export function calcConditionValue(condition: Condition): unknown {
     : condition.value;
 }
 
-export function calcConditionName(
-  condition: Condition,
-): string | number | undefined {
+export function calcConditionName(condition: Condition): string | number {
   const cond = condition.name;
 
   return stringOrNumber(cond);

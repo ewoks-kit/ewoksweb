@@ -45,7 +45,7 @@ Cypress.Commands.add('saveNewWorkflow', (id: string) => {
 
 Cypress.Commands.add('openNewWorkflow', () => {
   cy.findByRole('button', { name: 'Open menu with more actions' }).click();
-  cy.findByRole('menuitem', { name: 'New workflow' }).click();
+  cy.findByRole('menuitem', { name: /^New workflow/ }).click();
 
   cy.findByRole('dialog').within(() => {
     cy.findByRole('button', {

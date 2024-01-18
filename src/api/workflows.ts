@@ -6,6 +6,7 @@ import { client } from './client';
 import type {
   DeleteResponse,
   ExecuteWorkflowResponse,
+  ExecutionParams,
   ListResponse,
   WorkflowDescriptionsResponse,
   WorkflowResponse,
@@ -42,12 +43,10 @@ export async function deleteWorkflow(id: string) {
 
 export async function executeWorkflow(
   workflowId: string,
-  executeArgs?: Record<string, unknown>,
-  workerOptions?: Record<string, unknown>,
+  params?: ExecutionParams,
 ) {
   return client.post<ExecuteWorkflowResponse>(`/execute/${workflowId}`, {
-    execute_arguments: executeArgs,
-    worker_options: workerOptions,
+    execute_arguments: params,
   });
 }
 
