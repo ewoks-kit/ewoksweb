@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
+import { useSearchParams } from 'react-router-dom';
 import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../../api/tasks';
@@ -39,6 +40,7 @@ interface Props {
 }
 
 export default function GraphFormDialog(props: Props) {
+  const [_, setSearchParams] = useSearchParams();
   const rfInstance = useReactFlow();
   const { isOpen, onClose, action, elementToEdit } = props;
 
@@ -81,6 +83,7 @@ export default function GraphFormDialog(props: Props) {
 
       reset();
       handleClose();
+      setSearchParams({ workflow: identifier });
     } catch (error) {
       showErrorMsg(textForError(error, commonStrings.savingError));
     }
