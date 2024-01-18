@@ -32,66 +32,47 @@ export default function NodeDetails(selectedElement: Node) {
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
-  function handlePropChange(
-    propKeyValue: {
-      task_identifier?: string;
-    },
-    nodeDataL: NodeData,
-  ) {
+  function handleTaskIdChange(newTaskId: string, oldNodeData: NodeData) {
     // DOC: if the task_identifier changes (ppfmethod, ppfport, script case) then the id
     // of the node needs to change for a coherent json. Links to/from this node also change!
-    if (Object.keys(propKeyValue)[0] === 'task_identifier') {
-      // DOC: find unique id based on new task_identifier
-      const uniqueId = generateUniqueNodeId(
-        nodesIds,
-        propKeyValue.task_identifier,
-      );
+    const uniqueId = generateUniqueNodeId(nodesIds, newTaskId);
 
-      const newNode = getNodes().find((nod) => nod.id === selectedElement.id);
-      assertNodeDefined(newNode, selectedElement.id);
+    const newNode = getNodes().find((nod) => nod.id === selectedElement.id);
+    assertNodeDefined(newNode, selectedElement.id);
 
-      newNode.id = uniqueId;
+    newNode.id = uniqueId;
 
-      const newLinks = getEdges().map((link) => {
-        if (link.source === selectedElement.id) {
-          return {
-            ...link,
-            source: uniqueId,
-          };
-        }
+    const newLinks = getEdges().map((link) => {
+      if (link.source === selectedElement.id) {
+        return {
+          ...link,
+          source: uniqueId,
+        };
+      }
 
-        if (link.target === selectedElement.id) {
-          return {
-            ...link,
-            target: uniqueId,
-          };
-        }
+      if (link.target === selectedElement.id) {
+        return {
+          ...link,
+          target: uniqueId,
+        };
+      }
 
-        return link;
-      });
+      return link;
+    });
 
-      setNodeData(uniqueId, {
-        ...nodeDataL,
-        task_props: {
-          ...nodeDataL.task_props,
-          task_identifier: propKeyValue.task_identifier || '',
-        },
-      });
+    setNodeData(uniqueId, {
+      ...oldNodeData,
+      task_props: {
+        ...oldNodeData.task_props,
+        task_identifier: newTaskId,
+      },
+    });
 
-      setNodes([
-        ...getNodes().filter((nod) => nod.id !== selectedElement.id),
-        newNode,
-      ]);
-      setEdges(newLinks);
-
-      return;
-    }
-
-    if (Object.keys(propKeyValue)[0] === 'icon') {
-      mergeNodeData(selectedElement.id, {
-        ui_props: { icon: Object.values(propKeyValue)[0] },
-      });
-    }
+    setNodes([
+      ...getNodes().filter((nod) => nod.id !== selectedElement.id),
+      newNode,
+    ]);
+    setEdges(newLinks);
   }
 
   function inputsCompleteChanged(checked: boolean) {
@@ -157,7 +138,7 @@ export default function NodeDetails(selectedElement: Node) {
             <NodeInfo
               nodeId={selectedElement.id}
               nodeData={nodeData}
-              onPropChange={handlePropChange}
+              onTaskIdChange={handleTaskIdChange}
             />
           </>
         )}

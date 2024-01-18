@@ -8,11 +8,12 @@ it('should display correct task info', () => {
 
   cy.get('.react-flow__node').click();
 
+  cy.get('[data-cy="task_identifier"]').should(
+    'contain.text',
+    'Task Identifier: ewokscore.tests.examples.tasks.sumlist.SumList',
+  );
+
   cy.get('[data-cy="task_props"]')
-    .should(
-      'contain.text',
-      'Task Identifier: ewokscore.tests.examples.tasks.sumlist.SumList',
-    )
     .should('contain.text', 'Category: ewokscore')
     .should('contain.text', 'Inputs: list, delay')
     .should('contain.text', 'Outputs: sum');

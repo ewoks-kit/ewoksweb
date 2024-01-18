@@ -1,0 +1,7 @@
+.entry {
+  composes: entry from './Details.module.css';
+}
+
+.label {
+  font-weight: 600;
+}
