@@ -15,6 +15,7 @@ it('should display correct task info', () => {
 
   cy.get('[data-cy="task_props"]')
     .should('contain.text', 'Category: ewokscore')
-    .should('contain.text', 'Inputs: list, delay')
+    .should('contain.text', 'Required Inputs: list')
+    .should('contain.text', 'Optional Inputs: delay')
     .should('contain.text', 'Outputs: sum');
 });

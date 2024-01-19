@@ -2,17 +2,13 @@ import styles from './TaskProperty.module.css';
 
 interface Props {
   label: string;
-  value?: string | string[];
+  value: string | string[];
 }
 
 function TaskProperty(props: Props) {
   const { label, value } = props;
 
   const valueAsStr = Array.isArray(value) ? value.join(', ') : value;
-
-  if (!valueAsStr) {
-    return null;
-  }
 
   return (
     <div className={styles.entry} data-cy="task_props">

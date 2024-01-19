@@ -15,6 +15,7 @@ interface Props {
 
 function NodeInfo(props: Props) {
   const { nodeId, nodeData, onTaskIdChange } = props;
+  const { task_props, ewoks_props } = nodeData;
 
   return (
     <>
@@ -33,21 +34,22 @@ function NodeInfo(props: Props) {
       <TaskIdentifier nodeData={nodeData} onTaskIdChange={onTaskIdChange} />
       <TaskProperty label="Node Id" value={nodeId} />
       <TaskProperty label="Task Type" value={nodeData.task_props.task_type} />
+      {ewoks_props.task_generator && (
+        <TaskProperty label="Generator" value={ewoks_props.task_generator} />
+      )}
+      {task_props.task_category && (
+        <TaskProperty label="Category" value={task_props.task_category} />
+      )}
       <TaskProperty
-        label="Generator"
-        value={nodeData.ewoks_props.task_generator}
+        label="Required Inputs"
+        value={task_props.required_input_names ?? []}
       />
-      <TaskProperty
-        label="Category"
-        value={nodeData.task_props.task_category}
-      />
-      <TaskProperty
-        label="Inputs"
-        value={[
-          ...(nodeData.task_props.required_input_names ?? []),
-          ...(nodeData.task_props.optional_input_names ?? []),
-        ]}
-      />
+      {task_props.optional_input_names && (
+        <TaskProperty
+          label="Optional Inputs"
+          value={task_props.optional_input_names}
+        />
+      )}
       <TaskProperty
         label="Outputs"
         value={nodeData.task_props.output_names ?? []}
