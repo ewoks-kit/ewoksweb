@@ -10,11 +10,10 @@ import TaskProperty from './TaskProperty';
 interface Props {
   nodeId: string;
   nodeData: NodeData;
-  onTaskIdChange: (newTaskId: string, nodeData: NodeData) => void;
 }
 
 function NodeInfo(props: Props) {
-  const { nodeId, nodeData, onTaskIdChange } = props;
+  const { nodeId, nodeData } = props;
   const { task_props, ewoks_props } = nodeData;
 
   return (
@@ -31,7 +30,7 @@ function NodeInfo(props: Props) {
           </IconButton>
         </SidebarTooltip>
       </h3>
-      <TaskIdentifier nodeData={nodeData} onTaskIdChange={onTaskIdChange} />
+      <TaskIdentifier nodeData={nodeData} nodeId={nodeId} />
       <TaskProperty label="Node Id" value={nodeId} />
       <TaskProperty label="Task Type" value={nodeData.task_props.task_type} />
       {ewoks_props.task_generator && (

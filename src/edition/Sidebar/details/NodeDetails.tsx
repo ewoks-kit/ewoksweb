@@ -1,16 +1,9 @@
 import InfoIcon from '@mui/icons-material/Info';
 import { Box, Checkbox, IconButton } from '@mui/material';
 import type { Node } from 'reactflow';
-import { useReactFlow } from 'reactflow';
 
-import { useNodesIds } from '../../../store/graph-hooks';
 import useNodeDataStore from '../../../store/useNodeDataStore';
-import type { NodeData } from '../../../types';
-import {
-  assertNodeDataDefined,
-  assertNodeDefined,
-} from '../../../utils/typeGuards';
-import { generateUniqueNodeId } from '../../../utils/utils';
+import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import sidebarStyle from '../sidebarStyle';
 import SidebarTooltip from '../SidebarTooltip';
 import DefaultInputs from '../table/DefaultInputs';
@@ -25,55 +18,7 @@ export default function NodeDetails(selectedElement: Node) {
   );
   assertNodeDataDefined(nodeData, selectedElement.id);
 
-  const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
-
-  const nodesIds = useNodesIds();
-
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
-  const setNodeData = useNodeDataStore((state) => state.setNodeData);
-
-  function handleTaskIdChange(newTaskId: string, oldNodeData: NodeData) {
-    // DOC: if the task_identifier changes (ppfmethod, ppfport, script case) then the id
-    // of the node needs to change for a coherent json. Links to/from this node also change!
-    const uniqueId = generateUniqueNodeId(nodesIds, newTaskId);
-
-    const newNode = getNodes().find((nod) => nod.id === selectedElement.id);
-    assertNodeDefined(newNode, selectedElement.id);
-
-    newNode.id = uniqueId;
-
-    const newLinks = getEdges().map((link) => {
-      if (link.source === selectedElement.id) {
-        return {
-          ...link,
-          source: uniqueId,
-        };
-      }
-
-      if (link.target === selectedElement.id) {
-        return {
-          ...link,
-          target: uniqueId,
-        };
-      }
-
-      return link;
-    });
-
-    setNodeData(uniqueId, {
-      ...oldNodeData,
-      task_props: {
-        ...oldNodeData.task_props,
-        task_identifier: newTaskId,
-      },
-    });
-
-    setNodes([
-      ...getNodes().filter((nod) => nod.id !== selectedElement.id),
-      newNode,
-    ]);
-    setEdges(newLinks);
-  }
 
   function inputsCompleteChanged(checked: boolean) {
     mergeNodeData(selectedElement.id, {
@@ -135,11 +80,7 @@ export default function NodeDetails(selectedElement: Node) {
               <span>Inputs Complete</span>
             </section>
             <DefaultErrorNodeControl nodeId={selectedElement.id} />
-            <NodeInfo
-              nodeId={selectedElement.id}
-              nodeData={nodeData}
-              onTaskIdChange={handleTaskIdChange}
-            />
+            <NodeInfo nodeId={selectedElement.id} nodeData={nodeData} />
           </>
         )}
     </Box>
