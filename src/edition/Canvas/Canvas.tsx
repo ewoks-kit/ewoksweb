@@ -304,7 +304,6 @@ function Canvas(props: Props) {
             edgeTypes={edgeTypes}
             nodeTypes={nodeTypes}
             deleteKeyCode="Delete"
-            isValidConnection={isValidConnection}
             onInit={() => {
               setRootWorkflow(
                 workflow || EMPTY_GRAPH,

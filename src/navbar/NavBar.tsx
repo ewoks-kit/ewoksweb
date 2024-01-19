@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
 
 import useStore from '../store/useStore';
@@ -6,13 +6,14 @@ import styles from './NavBar.module.css';
 import useNavBarElementStore from './useNavBarElementStore';
 
 function NavBar() {
-  const { pathname } = useLocation();
+  const { state } = useLocation();
   const [searchParams] = useSearchParams();
 
-  const setElement = useNavBarElementStore((state) => state.setElement);
-  const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo,
-  );
+  const setElement = useNavBarElementStore((st) => st.setElement);
+  const displayedWorkflowInfo = useStore((st) => st.displayedWorkflowInfo);
+
+  const linkIsActive = (isActive: boolean) =>
+    isActive ? `${styles.link} ${styles.active}` : styles.link;
 
   return (
     <div
@@ -21,33 +22,30 @@ function NavBar() {
     >
       <nav className={styles.navlinks}>
         <div className={styles.title}>
-          <Link to="/">EwoksWeb</Link>
+          <NavLink to="/">EwoksWeb</NavLink>
         </div>
 
-        <Link
-          className={styles.link}
-          data-selected={pathname.startsWith('/edit') || undefined}
-          to={
-            window.history.state?.usr?.workflow
-              ? `/edit?workflow=${
-                  window.history.state?.usr?.workflow as string
-                }`
+        <NavLink
+          className={({ isActive }) => linkIsActive(isActive)}
+          to={{
+            pathname: '/edit',
+            search: state?.workflow
+              ? `?workflow=${state.workflow as string}`
               : searchParams.get('workflow')
-              ? `/edit?workflow=${searchParams.get('workflow') as string}`
-              : '/edit'
-          }
+              ? `?workflow=${searchParams.get('workflow') as string}`
+              : '',
+          }}
         >
           Edit
-        </Link>
+        </NavLink>
 
-        <Link
-          className={styles.link}
-          data-selected={pathname.startsWith('/monitor') || undefined}
+        <NavLink
+          className={({ isActive }) => linkIsActive(isActive)}
           to="/monitor"
           state={{ workflow: displayedWorkflowInfo.id }}
         >
           Monitor
-        </Link>
+        </NavLink>
       </nav>
     </div>
   );
