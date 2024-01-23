@@ -17,7 +17,9 @@ it('selects a node with click', () => {
   cy.contains('Default Error Node').should('be.visible');
   cy.contains('Inputs Complete').should('be.visible');
   cy.findByRole('heading', { name: 'Task Info' }).should('be.visible');
-  cy.findByRole('heading', { name: 'Appearance' }).should('be.visible');
+  cy.findByRole('heading', { name: 'Appearance' })
+    .scrollIntoView()
+    .should('be.visible');
 });
 
 it('selects a link with click', () => {
