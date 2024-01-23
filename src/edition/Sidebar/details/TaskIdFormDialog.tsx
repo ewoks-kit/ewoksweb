@@ -9,26 +9,27 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Controller, useForm } from 'react-hook-form';
 
 import FormField from '../../../general/forms/FormField';
-import type { TaskFields } from '../../../general/forms/models';
 
-interface EditingDialogProps {
-  task_identifier: string;
+interface Props {
+  taskId: string;
   open: boolean;
   onDialogClose: () => void;
-  onPropSave: (value: string) => void;
+  onTaskIdChange: (value: string) => void;
 }
 
-export default function IdentifierEditDialog(props: EditingDialogProps) {
-  const { task_identifier, open, onDialogClose, onPropSave } = props;
+export default function TaskIdFormDialog(props: Props) {
+  const { taskId, open, onDialogClose, onTaskIdChange } = props;
 
-  const { control, handleSubmit, formState, reset } = useForm<TaskFields>({
+  const { control, handleSubmit, formState, reset } = useForm<{
+    taskId: string;
+  }>({
     defaultValues: {
-      task_identifier: task_identifier || '',
+      taskId,
     },
   });
 
-  const onSubmit = handleSubmit(async (data: Partial<TaskFields>) => {
-    onPropSave(data.task_identifier || '');
+  const onSubmit = handleSubmit(async (data) => {
+    onTaskIdChange(data.taskId);
     reset();
     onDialogClose();
   });
@@ -41,19 +42,18 @@ export default function IdentifierEditDialog(props: EditingDialogProps) {
     >
       <form onSubmit={onSubmit}>
         <DialogTitle id="form-dialog-title">
-          Change the Task this Node is based on
+          Change the task this node is based on
         </DialogTitle>
         <DialogContent>
-          {formState.errors.task_identifier && (
+          {formState.errors.taskId && (
             <Alert severity="error">Please give a task identifier !</Alert>
           )}
           <DialogContentText>
-            The given task identifier will replace the existing in this node and
-            change his behavior as well as the links attached to this node.
+            Please give a new task identifier
           </DialogContentText>
 
           <Controller
-            name="task_identifier"
+            name="taskId"
             control={control}
             rules={{ required: true }}
             render={({ field }) => <FormField label="Identifier" {...field} />}

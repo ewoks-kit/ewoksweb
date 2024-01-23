@@ -212,10 +212,12 @@ it('adds and delete a new default input', () => {
   });
 
   cy.get('[data-cy="inputInEditableCell"]')
-    .should('exist')
-    .should('be.visible');
+    .should('have.length', 2)
+    .each((e) =>
+      cy.wrap(e).scrollIntoView().should('exist').should('be.visible'),
+    );
 
-  cy.get('[data-cy="inputInEditableCell"]').should('have.length', 2);
+  cy.get('[data-cy="inputInEditableCell"]');
 
   cy.get('[data-cy="inputInEditableCell"]').first().type('Always');
   cy.get('[data-cy="inputInEditableCell"]').last().type('and forever');
