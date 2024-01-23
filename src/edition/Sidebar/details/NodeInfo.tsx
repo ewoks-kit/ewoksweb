@@ -4,6 +4,7 @@ import { IconButton } from '@mui/material';
 import type { NodeData } from '../../../types';
 import sidebarStyle from '../sidebarStyle';
 import SidebarTooltip from '../SidebarTooltip';
+import TaskArrayProperty from './TaskArrayProperty';
 import TaskIdentifier from './TaskIdentifier';
 import TaskProperty from './TaskProperty';
 
@@ -39,19 +40,21 @@ function NodeInfo(props: Props) {
       {task_props.task_category && (
         <TaskProperty label="Category" value={task_props.task_category} />
       )}
-      <TaskProperty
+      <TaskArrayProperty
         label="Required Inputs"
-        value={task_props.required_input_names ?? []}
+        value={task_props.required_input_names}
+        unknown={task_props.task_type !== 'class'}
       />
-      {task_props.optional_input_names && (
-        <TaskProperty
-          label="Optional Inputs"
-          value={task_props.optional_input_names}
-        />
-      )}
-      <TaskProperty
+      <TaskArrayProperty
+        label="Optional Inputs"
+        value={task_props.optional_input_names}
+        unknown={task_props.task_type !== 'class'}
+      />
+
+      <TaskArrayProperty
         label="Outputs"
-        value={nodeData.task_props.output_names ?? []}
+        value={task_props.output_names}
+        unknown={!['class', 'method', 'script'].includes(task_props.task_type)}
       />
     </>
   );
