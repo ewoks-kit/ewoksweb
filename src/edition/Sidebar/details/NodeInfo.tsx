@@ -4,25 +4,18 @@ import { IconButton } from '@mui/material';
 import type { NodeData } from '../../../types';
 import sidebarStyle from '../sidebarStyle';
 import SidebarTooltip from '../SidebarTooltip';
+import TaskArrayProperty from './TaskArrayProperty';
+import TaskIdentifier from './TaskIdentifier';
 import TaskProperty from './TaskProperty';
 
 interface Props {
   nodeId: string;
   nodeData: NodeData;
-  onPropChange: (
-    propKeyValue: {
-      task_identifier?: string;
-    },
-    nodeData: NodeData,
-  ) => void;
 }
 
 function NodeInfo(props: Props) {
-  const { nodeId, nodeData, onPropChange } = props;
-
-  const isEditable = ['ppfmethod', 'method', 'script'].includes(
-    nodeData.task_props.task_type,
-  );
+  const { nodeId, nodeData } = props;
+  const { task_props, ewoks_props } = nodeData;
 
   return (
     <>
@@ -38,41 +31,30 @@ function NodeInfo(props: Props) {
           </IconButton>
         </SidebarTooltip>
       </h3>
-      <TaskProperty
-        editable={isEditable}
-        id="task_identifier"
-        label="Task Identifier"
-        value={nodeData.task_props.task_identifier || ''}
-        onPropChange={(propKeyValue) => onPropChange(propKeyValue, nodeData)}
+      <TaskIdentifier nodeData={nodeData} nodeId={nodeId} />
+      <TaskProperty label="Node Id" value={nodeId} />
+      <TaskProperty label="Task Type" value={nodeData.task_props.task_type} />
+      {ewoks_props.task_generator && (
+        <TaskProperty label="Generator" value={ewoks_props.task_generator} />
+      )}
+      {task_props.task_category && (
+        <TaskProperty label="Category" value={task_props.task_category} />
+      )}
+      <TaskArrayProperty
+        label="Required Inputs"
+        value={task_props.required_input_names}
+        unknown={task_props.task_type !== 'class'}
       />
-      <TaskProperty id="id" label="Node Id" value={nodeId} />
-      <TaskProperty
-        id="task_type"
-        label="Task Type"
-        value={nodeData.task_props.task_type}
+      <TaskArrayProperty
+        label="Optional Inputs"
+        value={task_props.optional_input_names}
+        unknown={task_props.task_type !== 'class'}
       />
-      <TaskProperty
-        id="task_generator"
-        label="Generator"
-        value={nodeData.ewoks_props.task_generator}
-      />
-      <TaskProperty
-        id="task_category"
-        label="Category"
-        value={nodeData.task_props.task_category}
-      />
-      <TaskProperty
-        id="inputs"
-        label="Inputs"
-        value={[
-          ...(nodeData.task_props.required_input_names ?? []),
-          ...(nodeData.task_props.optional_input_names ?? []),
-        ]}
-      />
-      <TaskProperty
-        id="outputs"
+
+      <TaskArrayProperty
         label="Outputs"
-        value={nodeData.task_props.output_names}
+        value={task_props.output_names}
+        unknown={!['class', 'method', 'script'].includes(task_props.task_type)}
       />
     </>
   );
