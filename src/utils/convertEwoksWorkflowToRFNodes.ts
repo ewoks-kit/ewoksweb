@@ -149,7 +149,7 @@ function calcLabel(
   } ${inOut.node || ''} ${inOut.sub_node ? `  -> ${inOut.sub_node}` : ''}`;
 }
 
-function calcTaskProps(
+export function calcTaskProps(
   task_identifier: string,
   tasks: Task[],
 ): NodeTaskProperties | undefined {

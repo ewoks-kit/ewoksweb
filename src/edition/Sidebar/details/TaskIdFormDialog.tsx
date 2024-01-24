@@ -6,21 +6,36 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import { useReactFlow } from 'reactflow';
 
-import FormField from '../../../general/forms/FormField';
+import { useTasks } from '../../../api/tasks';
+import { useNodesIds } from '../../../store/graph-hooks';
+import useNodeDataStore from '../../../store/useNodeDataStore';
+import type { NodeData } from '../../../types';
+import { calcTaskProps } from '../../../utils/convertEwoksWorkflowToRFNodes';
+import { assertNodeDefined } from '../../../utils/typeGuards';
+import { generateUniqueNodeId } from '../../../utils/utils';
+import styles from './TaskIdFormDialog.module.css';
 
 interface Props {
   taskId: string;
+  nodeId: string;
+  nodeData: NodeData;
   open: boolean;
   onDialogClose: () => void;
-  onTaskIdChange: (value: string) => void;
 }
 
 export default function TaskIdFormDialog(props: Props) {
-  const { taskId, open, onDialogClose, onTaskIdChange } = props;
+  const { taskId, nodeId, nodeData, open, onDialogClose } = props;
 
-  const { control, handleSubmit, formState, reset } = useForm<{
+  const tasks = useTasks();
+
+  const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
+  const nodesIds = useNodesIds();
+  const setNodeData = useNodeDataStore((state) => state.setNodeData);
+
+  const { handleSubmit, formState, register, reset, setError } = useForm<{
     taskId: string;
   }>({
     defaultValues: {
@@ -29,7 +44,46 @@ export default function TaskIdFormDialog(props: Props) {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    onTaskIdChange(data.taskId);
+    // DOC: if the task_identifier changes (ppfmethod, ppfport, script case) then the id
+    // of the node needs to change for a coherent json. Links to/from this node also change!
+    const { taskId: newTaskId } = data;
+    const newNodeId = generateUniqueNodeId(nodesIds, newTaskId);
+    const newNode = getNodes().find((nod) => nod.id === nodeId);
+    assertNodeDefined(newNode, nodeId);
+    newNode.id = newNodeId;
+    setNodes([...getNodes().filter((nod) => nod.id !== nodeId), newNode]);
+
+    const newLinks = getEdges().map((link) => {
+      if (link.source === nodeId) {
+        return {
+          ...link,
+          source: newNodeId,
+        };
+      }
+
+      if (link.target === nodeId) {
+        return {
+          ...link,
+          target: newNodeId,
+        };
+      }
+
+      return link;
+    });
+    setEdges(newLinks);
+
+    const newTaskProps = calcTaskProps(newTaskId, tasks);
+    if (!newTaskProps) {
+      setError('taskId', {
+        type: 'custom',
+        message: `The task ${newTaskId} does not exist`,
+      });
+      return;
+    }
+    setNodeData(newNodeId, {
+      ...nodeData,
+      task_props: newTaskProps,
+    });
     reset();
     onDialogClose();
   });
@@ -49,15 +103,19 @@ export default function TaskIdFormDialog(props: Props) {
             <Alert severity="error">Please give a task identifier !</Alert>
           )}
           <DialogContentText>
-            Please give a new task identifier
+            Please select a new task identifier
           </DialogContentText>
 
-          <Controller
-            name="taskId"
-            control={control}
-            rules={{ required: true }}
-            render={({ field }) => <FormField label="Identifier" {...field} />}
-          />
+          <select
+            {...register('taskId', { required: true })}
+            className={styles.select}
+          >
+            {tasks.map(({ task_identifier }) => (
+              <option value={task_identifier} key={task_identifier}>
+                {task_identifier}
+              </option>
+            ))}
+          </select>
         </DialogContent>
         <DialogActions>
           <Button onClick={onDialogClose} color="primary">
