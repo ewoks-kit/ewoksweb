@@ -67,7 +67,6 @@ export function addNodeProperties(
   task_identifier: string,
   node: NodeWithData,
   tasks: Task[],
-  task_category: string,
 ): NodeWithData {
   let tempNode = { ...node };
   if (task_type === 'graph') {
@@ -97,7 +96,7 @@ export function addNodeProperties(
         ...tempNode.data,
         task_props: {
           ...tempNode.data.task_props,
-          task_category: task_category || '',
+          category: tempTask.category,
           optional_input_names: tempTask.optional_input_names,
           output_names: tempTask.output_names,
           required_input_names: tempTask.required_input_names,

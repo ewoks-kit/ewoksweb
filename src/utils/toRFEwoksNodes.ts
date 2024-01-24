@@ -97,7 +97,6 @@ export function toRFEwoksNodes(
         task_identifier,
         node,
         tasks,
-        uiProps?.task_category || '',
       );
     },
   );

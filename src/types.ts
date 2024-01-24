@@ -186,7 +186,6 @@ export interface EwoksNodeUiProps {
   withLabel?: boolean;
   colorBorder?: string;
   nodeWidth?: number;
-  task_category?: string;
   moreHandles?: boolean;
   inputs?: SubgraphOutputsInputs[];
   outputs?: SubgraphOutputsInputs[];
@@ -224,14 +223,7 @@ export interface NodeUiProps {
   outputs?: SubgraphOutputsInputs[];
 }
 
-export interface NodeTaskProperties {
-  task_type: TaskType;
-  task_identifier: string;
-  task_category?: string;
-  optional_input_names?: string[];
-  output_names?: string[];
-  required_input_names?: string[];
-}
+export type NodeTaskProperties = Omit<Task, 'icon'>;
 
 export interface EwoksNodeProperties {
   label?: string;
