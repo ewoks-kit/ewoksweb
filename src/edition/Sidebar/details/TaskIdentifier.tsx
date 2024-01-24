@@ -33,7 +33,7 @@ function TaskIdentifier(props: Props) {
         {editable && (
           <IconButton
             size="small"
-            aria-label="edit"
+            aria-label="Edit task identifier"
             onClick={() => setOpen(true)}
             color="primary"
           >

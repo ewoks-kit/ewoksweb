@@ -107,6 +107,7 @@ export default function TaskIdFormDialog(props: Props) {
           </DialogContentText>
 
           <select
+            aria-label="Change task identifier"
             {...register('taskId', { required: true })}
             className={styles.select}
           >
