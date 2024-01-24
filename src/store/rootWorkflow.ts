@@ -3,9 +3,9 @@ import type { GetState, SetState } from 'zustand';
 
 import type { NodeWithData, State, Task, Workflow } from '../types';
 import { getSubgraphs } from '../utils';
+import { convertEwoksWorkflowToRFNodes } from '../utils/convertEwoksWorkflowToRFNodes';
 import layoutNewGraph from '../utils/layoutNewGraph';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
-import { convertEwoksWorkflowToRFNodes } from '../utils/toRFEwoksNodes';
 import { validateWorkflow } from './storeUtils/validateWorkflow';
 import useEdgeDataStore from './useEdgeDataStore';
 import useNodeDataStore from './useNodeDataStore';
