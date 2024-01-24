@@ -37,8 +37,8 @@ function NodeInfo(props: Props) {
       {ewoks_props.task_generator && (
         <TaskProperty label="Generator" value={ewoks_props.task_generator} />
       )}
-      {task_props.task_category && (
-        <TaskProperty label="Category" value={task_props.task_category} />
+      {task_props.category && (
+        <TaskProperty label="Category" value={task_props.category} />
       )}
       <TaskArrayProperty
         label="Required Inputs"
