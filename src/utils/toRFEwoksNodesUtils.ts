@@ -1,6 +1,6 @@
 import type {
   InputOutputNodeAndLink,
-  NodeWithData,
+  NodeTaskProperties,
   SubgraphOutputsInputs,
   Task,
   Workflow,
@@ -61,32 +61,18 @@ function calcLabel(
   } ${inOut.node || ''} ${inOut.sub_node ? `  -> ${inOut.sub_node}` : ''}`;
 }
 
-export function addNodeProperties(
-  task_type: string,
+export function calcTaskProps(
   task_identifier: string,
-  node: NodeWithData,
   tasks: Task[],
-): NodeWithData {
-  let tempNode = { ...node };
-  if (task_type === 'graph') {
-    return tempNode;
+): NodeTaskProperties | undefined {
+  const task = tasks.find((tas) => tas.task_identifier === task_identifier);
+
+  if (!task) {
+    return undefined;
   }
 
-  const tempTask = calcTask(tasks, task_identifier);
-
-  tempNode = {
-    ...tempNode,
-    data: {
-      ...tempNode.data,
-      task_props: {
-        ...tempNode.data.task_props,
-        optional_input_names: tempTask.optional_input_names,
-        output_names: tempTask.output_names,
-        required_input_names: tempTask.required_input_names,
-      },
-    },
-  };
-  return tempNode;
+  const { icon, ...taskProps } = task;
+  return taskProps;
 }
 
 export function calcSubgraphIO(

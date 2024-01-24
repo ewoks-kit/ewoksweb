@@ -8,7 +8,7 @@ import type {
 } from '../types';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
-import { addNodeProperties, calcSubgraphIO } from './toRFEwoksNodesUtils';
+import { calcSubgraphIO, calcTaskProps } from './toRFEwoksNodesUtils';
 import { createDataMappingData, notUndefinedValue } from './utils';
 
 // Accepts a GraphEwoks and returns an EwoksRFNode[]
@@ -74,9 +74,9 @@ export function toRFEwoksNodes(
               }),
             ...notUndefinedValue(task_generator, 'task_generator'),
           },
-          task_props: {
-            task_type,
+          task_props: calcTaskProps(task_identifier, tasks) || {
             task_identifier,
+            task_type,
           },
           ui_props: {
             ...notUndefinedValue(uiProps?.nodeWidth, 'nodeWidth'),
@@ -94,7 +94,7 @@ export function toRFEwoksNodes(
         position: uiProps?.position ?? { x: 100, y: 100 },
       };
 
-      return addNodeProperties(task_type, task_identifier, node, tasks);
+      return node;
     },
   );
 }
