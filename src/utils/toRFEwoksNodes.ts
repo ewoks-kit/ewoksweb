@@ -8,7 +8,7 @@ import type {
 } from '../types';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
-import { addNodeProperties } from './toRFEwoksNodesUtils';
+import { addNodeProperties, calcSubgraphIO } from './toRFEwoksNodesUtils';
 import { createDataMappingData, notUndefinedValue } from './utils';
 
 // Accepts a GraphEwoks and returns an EwoksRFNode[]
@@ -85,19 +85,16 @@ export function toRFEwoksNodes(
             ...notUndefinedValue(uiProps?.withImage, 'withImage'),
             ...notUndefinedValue(uiProps?.withLabel, 'withLabel'),
             ...notUndefinedValue(uiProps?.colorBorder, 'colorBorder'),
+            ...(task_type === 'graph'
+              ? calcSubgraphIO(newNodeSubgraphs, task_identifier)
+              : {}),
           },
           ...notUndefinedValue(uiProps?.comment, 'comment'),
         },
         position: uiProps?.position ?? { x: 100, y: 100 },
       };
 
-      return addNodeProperties(
-        task_type,
-        newNodeSubgraphs,
-        task_identifier,
-        node,
-        tasks,
-      );
+      return addNodeProperties(task_type, task_identifier, node, tasks);
     },
   );
 }

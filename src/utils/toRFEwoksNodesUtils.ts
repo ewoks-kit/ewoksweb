@@ -63,46 +63,44 @@ function calcLabel(
 
 export function addNodeProperties(
   task_type: string,
-  newNodeSubgraphs: Workflow[],
   task_identifier: string,
   node: NodeWithData,
   tasks: Task[],
 ): NodeWithData {
   let tempNode = { ...node };
   if (task_type === 'graph') {
-    const subgraphNode: Workflow | undefined = newNodeSubgraphs.find(
-      (subGr) => subGr.graph.id === task_identifier,
-    );
-
-    const [inputsSub, outputsSub] = calcInOutForSubgraph(subgraphNode);
-
-    tempNode = {
-      ...tempNode,
-      data: {
-        ...tempNode.data,
-        ui_props: {
-          ...tempNode.data.ui_props,
-          inputs: inputsSub,
-          outputs: outputsSub,
-        },
-      },
-    };
-  } else {
-    const tempTask = calcTask(tasks, task_identifier);
-
-    tempNode = {
-      ...tempNode,
-      data: {
-        ...tempNode.data,
-        task_props: {
-          ...tempNode.data.task_props,
-          category: tempTask.category,
-          optional_input_names: tempTask.optional_input_names,
-          output_names: tempTask.output_names,
-          required_input_names: tempTask.required_input_names,
-        },
-      },
-    };
+    return tempNode;
   }
+
+  const tempTask = calcTask(tasks, task_identifier);
+
+  tempNode = {
+    ...tempNode,
+    data: {
+      ...tempNode.data,
+      task_props: {
+        ...tempNode.data.task_props,
+        optional_input_names: tempTask.optional_input_names,
+        output_names: tempTask.output_names,
+        required_input_names: tempTask.required_input_names,
+      },
+    },
+  };
   return tempNode;
+}
+
+export function calcSubgraphIO(
+  newNodeSubgraphs: Workflow[],
+  task_identifier: string,
+): { inputs: SubgraphOutputsInputs[]; outputs: SubgraphOutputsInputs[] } {
+  const subgraphNode: Workflow | undefined = newNodeSubgraphs.find(
+    (subGr) => subGr.graph.id === task_identifier,
+  );
+
+  const [inputs, outputs] = calcInOutForSubgraph(subgraphNode);
+
+  return {
+    inputs,
+    outputs,
+  };
 }
