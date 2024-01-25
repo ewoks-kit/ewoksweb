@@ -1,0 +1,5 @@
+.select {
+  composes: btnClean from global;
+  padding: 0.5rem;
+  border-bottom: solid 1px #c0c0c0;
+}
