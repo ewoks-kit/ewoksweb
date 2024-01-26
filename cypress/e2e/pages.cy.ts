@@ -6,7 +6,10 @@ it('should land on the edit page', () => {
   cy.location().should((loc) => {
     expect(loc.pathname).to.eq('/edit');
   });
-  cy.findByRole('link', { name: 'Edit' }).should('have.attr', 'data-selected');
+  cy.findByRole('link', { name: 'Edit' }).should(($link) => {
+    const classes = $link.attr('class');
+    expect(classes).to.include('active');
+  });
   cy.get('.react-flow').should('be.visible');
 });
 
@@ -15,10 +18,10 @@ it('should switch to monitor page', () => {
   cy.location().should((loc) => {
     expect(loc.pathname).to.eq('/monitor');
   });
-  cy.findByRole('link', { name: 'Monitor' }).should(
-    'have.attr',
-    'data-selected',
-  );
+  cy.findByRole('link', { name: 'Monitor' }).should(($link) => {
+    const classes = $link.attr('class');
+    expect(classes).to.include('active');
+  });
 });
 
 it('should restore an opened workflow when switching pages', () => {

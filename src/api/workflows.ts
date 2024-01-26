@@ -22,7 +22,8 @@ export async function fetchWorkflowsIds() {
 }
 
 export async function fetchWorkflow(id: string) {
-  return client.get<WorkflowResponse>(`/workflow/${id}`);
+  const { data } = await client.get<WorkflowResponse>(`/workflow/${id}`);
+  return data;
 }
 
 export async function postWorkflow(workflow: Workflow) {
@@ -58,6 +59,20 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
   }
 
   return workflows;
+}
+
+export function useWorkflow(id: string | undefined) {
+  const { data } = useQuery({
+    queryKey: [QueryKey.Workflow, id],
+    queryFn: () => {
+      assertDefined(id);
+      return fetchWorkflow(id);
+    },
+    enabled: !!id,
+    staleTime: Infinity,
+    suspense: true,
+  });
+  return data;
 }
 
 export function useWorkflowsDLE() {

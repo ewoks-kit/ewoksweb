@@ -1,30 +1,24 @@
 import { FiberNew } from '@mui/icons-material';
 import { useKeyboardEvent } from '@react-hookz/web';
-import { useCallback, useState } from 'react';
-import { useReactFlow } from 'reactflow';
+import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-import { useTasks } from '../../../api/tasks';
 import ConfirmDialog from '../../../general/ConfirmDialog';
 import useStore from '../../../store/useStore';
-import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';
 import ActionMenuItem from './ActionMenuItem';
 
 function OpenNewWorkflowMenuItem() {
   const [openDialog, setOpenDialog] = useState(false);
-  const tasks = useTasks();
+  const [, setSearchParams] = useSearchParams();
 
-  const rfInstance = useReactFlow();
-  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo,
   );
 
-  const openEmptyWorkflow = useCallback(() => {
-    rfInstance.setNodes([]);
-    rfInstance.setEdges([]);
+  function openEmptyWorkflow() {
+    setSearchParams({});
     setOpenDialog(false);
-    setRootWorkflow(EMPTY_GRAPH, rfInstance, tasks);
-  }, [setRootWorkflow, rfInstance, tasks]);
+  }
 
   useKeyboardEvent(
     (e) =>

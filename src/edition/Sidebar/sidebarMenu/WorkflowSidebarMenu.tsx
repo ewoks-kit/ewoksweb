@@ -4,6 +4,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../../../api/tasks';
@@ -39,6 +40,7 @@ export default function WorkflowSidebarMenu(props: Props) {
   );
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
+  const [, setSearchParams] = useSearchParams();
 
   async function agreeCallback() {
     setOpenAgreeDialog(false);
@@ -50,6 +52,7 @@ export default function WorkflowSidebarMenu(props: Props) {
           `Workflow ${displayedWorkflowInfo.id} successfully deleted!`,
         );
         invalidateWorkflows();
+        setSearchParams({});
       } catch (error) {
         showErrorMsg(textForError(error, commonStrings.deletingError));
       }

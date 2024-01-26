@@ -9,9 +9,9 @@ import {
   DialogTitle,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
+import { useSearchParams } from 'react-router-dom';
 import { useReactFlow } from 'reactflow';
 
-import { useTasks } from '../../api/tasks';
 import {
   postWorkflow,
   putWorkflow,
@@ -19,7 +19,6 @@ import {
 } from '../../api/workflows';
 import commonStrings from '../../commonStrings.json';
 import useSnackbarStore from '../../store/useSnackbarStore';
-import useStore from '../../store/useStore';
 import type { GraphDetails } from '../../types';
 import { GraphFormAction } from '../../types';
 import {
@@ -39,6 +38,7 @@ interface Props {
 }
 
 export default function GraphFormDialog(props: Props) {
+  const [, setSearchParams] = useSearchParams();
   const rfInstance = useReactFlow();
   const { isOpen, onClose, action, elementToEdit } = props;
 
@@ -46,10 +46,8 @@ export default function GraphFormDialog(props: Props) {
     defaultValues: { identifier: elementToEdit.label },
   });
 
-  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
   const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
-  const tasks = useTasks();
 
   const invalidateWorkflows = useInvalidateWorkflows();
 
@@ -72,15 +70,15 @@ export default function GraphFormDialog(props: Props) {
       if (overwrite) {
         await putWorkflow(ewoksGraph);
       } else {
-        const { data: newGraph } = await postWorkflow(ewoksGraph);
-        setRootWorkflow(newGraph, rfInstance, tasks, 'fromServer');
+        await postWorkflow(ewoksGraph);
       }
-      invalidateWorkflows();
+      await invalidateWorkflows();
 
       showSuccessMsg('Graph saved successfully!');
 
       reset();
       handleClose();
+      setSearchParams({ workflow: identifier });
     } catch (error) {
       showErrorMsg(textForError(error, commonStrings.savingError));
     }
