@@ -20,11 +20,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { InputTableRow, TypeOfValues } from 'types';
 
-import type {
-  NodeExecutionInput,
-  ObjectEditDialogContent,
-} from '../../../api/models';
-import { executeWorkflow } from '../../../api/workflows';
+import type { ObjectEditDialogContent } from '../../../api/models';
 import DraggableDialog from '../../../general/DraggableDialog';
 import { useSaveWorkflow } from '../../../general/hooks';
 import useNodeDataStore from '../../../store/useNodeDataStore';
@@ -38,12 +34,11 @@ import CustomTableCell from '../../Sidebar/table/CustomTableCell';
 import TableCellInEditMode from '../../Sidebar/table/TableCellInEditMode';
 import { isClass } from '../../Sidebar/table/utils';
 import type { EngineDropdownOption } from '../models';
-import { hasDefinedProperties } from '../utils';
 import ExecuteParamsTableHeader from './ExecuteParamsTableHeader';
 import styles from './ExecutionDialog.module.css';
 import ExecutionEngine from './ExecutionEngine';
 import type { ExecutionInputTableRow } from './models';
-import { DROPDOWN_TO_SERVER_ENGINE } from './models';
+import { execute } from './utils';
 
 interface Props {
   open: boolean;
@@ -105,33 +100,16 @@ export default function ExecuteParametersDialog(props: Props) {
           'Error in saving workflow. Please check connectivity with the server!',
         ),
       );
+      return;
     }
 
-    // Only execute if handleSave is successful
+    const { rootWorkflowId } = useStore.getState();
+    if (!rootWorkflowId) {
+      showWarningMsg('Please open a workflow in the canvas to execute');
+      return;
+    }
     try {
-      const inputs: NodeExecutionInput[] = perNodeInputs
-        .filter(hasDefinedProperties)
-        .map((input) => {
-          return {
-            name: input.name,
-            value: input.value,
-            ...(input.label &&
-              !['All nodes', 'All input nodes'].includes(input.label) && {
-                id: input.id,
-              }),
-            ...(input.label === 'All nodes' && { all: true }),
-          };
-        });
-
-      const { rootWorkflowId } = useStore.getState();
-      if (!rootWorkflowId) {
-        showWarningMsg('Please open a workflow in the canvas to execute');
-        return;
-      }
-      await executeWorkflow(rootWorkflowId, {
-        engine: DROPDOWN_TO_SERVER_ENGINE[engine],
-        inputs,
-      });
+      execute(rootWorkflowId, perNodeInputs, engine);
       navigate('/monitor');
     } catch (executeError) {
       showErrorMsg(textForError(executeError, 'Error in executing workflow.'));
@@ -387,7 +365,7 @@ export default function ExecuteParametersDialog(props: Props) {
         </DialogContent>
         <div className={styles.saveWarning}>
           <InfoIcon fontSize="small" />
-          The workflow will be saved before excution.
+          The workflow will be saved before execution.
         </div>
         <DialogActions>
           <Button
