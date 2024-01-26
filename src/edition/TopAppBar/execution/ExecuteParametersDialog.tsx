@@ -21,8 +21,6 @@ import { useNavigate } from 'react-router-dom';
 import type { InputTableRow, TypeOfValues } from 'types';
 
 import type {
-  Engine,
-  ExecutionParams,
   NodeExecutionInput,
   ObjectEditDialogContent,
 } from '../../../api/models';
@@ -44,24 +42,15 @@ import { hasDefinedProperties } from '../utils';
 import ExecuteParamsTableHeader from './ExecuteParamsTableHeader';
 import styles from './ExecutionDialog.module.css';
 import ExecutionEngine from './ExecutionEngine';
+import type { ExecutionInputTableRow } from './models';
+import { DROPDOWN_TO_SERVER_ENGINE } from './models';
 
-interface ExecuteDialogProps {
+interface Props {
   open: boolean;
   onClose: (value?: string) => void;
 }
 
-export interface ExecutionInputTableRow extends NodeExecutionInput {
-  type?: string;
-  rowId: string;
-}
-
-export const DROPDOWN_TO_SERVER_ENGINE: Record<EngineDropdownOption, Engine> = {
-  dask: 'dask',
-  default: null,
-  pypushflow: 'ppf',
-};
-
-export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
+export default function ExecuteParametersDialog(props: Props) {
   const { onClose, open } = props;
 
   const nodesData = useNodeDataStore((state) => state.nodesData);
@@ -106,23 +95,6 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     });
   }
 
-  async function execute(params?: ExecutionParams) {
-    const { rootWorkflowId } = useStore.getState();
-    if (!rootWorkflowId) {
-      showWarningMsg('Please open a workflow in the canvas to execute');
-      return;
-    }
-    try {
-      await executeWorkflow(rootWorkflowId, params);
-      navigate('/monitor');
-    } catch (error) {
-      // Keep logging in console for debugging when talking with a user
-      /* eslint-disable no-console */
-      console.log(error);
-      showErrorMsg('Execution could not start!');
-    }
-  }
-
   async function handleSaveExecute() {
     try {
       await handleSave();
@@ -151,10 +123,16 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
           };
         });
 
-      execute({
+      const { rootWorkflowId } = useStore.getState();
+      if (!rootWorkflowId) {
+        showWarningMsg('Please open a workflow in the canvas to execute');
+        return;
+      }
+      await executeWorkflow(rootWorkflowId, {
         engine: DROPDOWN_TO_SERVER_ENGINE[engine],
         inputs,
       });
+      navigate('/monitor');
     } catch (executeError) {
       showErrorMsg(textForError(executeError, 'Error in executing workflow.'));
     }
