@@ -25,25 +25,25 @@ import type {
   ExecutionParams,
   NodeExecutionInput,
   ObjectEditDialogContent,
-} from '../../api/models';
-import { executeWorkflow } from '../../api/workflows';
-import DraggableDialog from '../../general/DraggableDialog';
-import { useSaveWorkflow } from '../../general/hooks';
-import useNodeDataStore from '../../store/useNodeDataStore';
-import useSnackbarStore from '../../store/useSnackbarStore';
-import useStore from '../../store/useStore';
-import { textForError } from '../../utils';
-import AddEntryRow from '../Sidebar/table/controls/AddEntryRow';
-import RemoveRowButton from '../Sidebar/table/controls/RemoveRowButton';
-import TypeSelectCell from '../Sidebar/table/controls/TypeSelectCell';
-import CustomTableCell from '../Sidebar/table/CustomTableCell';
-import TableCellInEditMode from '../Sidebar/table/TableCellInEditMode';
-import { isClass } from '../Sidebar/table/utils';
+} from '../../../api/models';
+import { executeWorkflow } from '../../../api/workflows';
+import DraggableDialog from '../../../general/DraggableDialog';
+import { useSaveWorkflow } from '../../../general/hooks';
+import useNodeDataStore from '../../../store/useNodeDataStore';
+import useSnackbarStore from '../../../store/useSnackbarStore';
+import useStore from '../../../store/useStore';
+import { textForError } from '../../../utils';
+import AddEntryRow from '../../Sidebar/table/controls/AddEntryRow';
+import RemoveRowButton from '../../Sidebar/table/controls/RemoveRowButton';
+import TypeSelectCell from '../../Sidebar/table/controls/TypeSelectCell';
+import CustomTableCell from '../../Sidebar/table/CustomTableCell';
+import TableCellInEditMode from '../../Sidebar/table/TableCellInEditMode';
+import { isClass } from '../../Sidebar/table/utils';
+import type { EngineDropdownOption } from '../models';
+import { hasDefinedProperties } from '../utils';
 import ExecuteParamsTableHeader from './ExecuteParamsTableHeader';
 import styles from './ExecutionDialog.module.css';
 import ExecutionEngine from './ExecutionEngine';
-import type { EngineDropdownOption } from './models';
-import { hasDefinedProperties } from './utils';
 
 interface ExecuteDialogProps {
   open: boolean;

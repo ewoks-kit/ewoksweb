@@ -6,8 +6,8 @@ import {
   Select,
 } from '@mui/material';
 
+import type { EngineDropdownOption } from '../models';
 import styles from './ExecutionDialog.module.css';
-import type { EngineDropdownOption } from './models';
 
 interface Props {
   engine: EngineDropdownOption;

@@ -3,7 +3,7 @@ import { useKeyboardEvent } from '@react-hookz/web';
 import { useState } from 'react';
 
 import useStore from '../../../store/useStore';
-import ExecuteParametersDialog from '../ExecuteParametersDialog';
+import ExecuteParametersDialog from '../execution/ExecuteParametersDialog';
 import ActionMenuItem from './ActionMenuItem';
 
 function ExecutionMenuItem() {
