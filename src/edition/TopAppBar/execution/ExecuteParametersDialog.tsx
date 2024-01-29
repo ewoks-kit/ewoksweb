@@ -305,18 +305,14 @@ export default function ExecuteParametersDialog(props: Props) {
                             index={0}
                             name="name"
                             onChange={handleNameChange}
-                            {...props}
-                            row={{
-                              ...inputData,
-                              rowId: inputData.rowId,
-                            }}
+                            row={inputData}
                             typeOfValues={calcTypeAndValues(inputData.target)}
                           />
                         </TableCell>
 
                         <CustomTableCell
                           index={index}
-                          row={{ ...inputData, rowId: inputData.rowId }}
+                          row={inputData}
                           name="value"
                           onChange={handleValueChange}
                           onEdit={() => handleValueEdit(inputData, index)}

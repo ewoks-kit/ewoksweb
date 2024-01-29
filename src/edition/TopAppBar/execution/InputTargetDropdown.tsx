@@ -25,6 +25,7 @@ function InputTargetDropdown(props: Props) {
 
         if (newValue === 'All nodes' || newValue === 'All input nodes') {
           onTargetChange(row, newValue);
+          return;
         }
 
         onTargetChange(row, { id: newValue });
