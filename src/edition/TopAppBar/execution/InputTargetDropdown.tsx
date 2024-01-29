@@ -30,6 +30,7 @@ function InputTargetDropdown(props: Props) {
 
         onTargetChange(row, { id: newValue });
       }}
+      inputProps={{ 'aria-label': 'Change target nodes' }}
     >
       <option value="All nodes">All nodes</option>
       <option value="All input nodes">All input nodes</option>

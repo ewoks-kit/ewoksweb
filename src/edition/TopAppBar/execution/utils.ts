@@ -10,7 +10,7 @@ function hasDefinedProperties(item: ExecutionInputTableRow) {
 export async function execute(
   workflowId: string,
   inputsRows: ExecutionInputTableRow[],
-  engine: EngineDropdownOption,
+  engineOption: EngineDropdownOption,
 ) {
   const inputs = inputsRows
     .filter(hasDefinedProperties)
@@ -26,8 +26,10 @@ export async function execute(
       return { name, value, id: target.id };
     });
 
+  const engine = DROPDOWN_TO_SERVER_ENGINE[engineOption];
+
   await executeWorkflow(workflowId, {
-    engine: DROPDOWN_TO_SERVER_ENGINE[engine],
-    inputs,
+    ...(inputs.length > 0 ? { inputs } : {}),
+    ...(engine ? { engine } : {}),
   });
 }
