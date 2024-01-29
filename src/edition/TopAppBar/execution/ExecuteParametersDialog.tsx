@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   FormControl,
-  Select,
   Table,
   TableBody,
   TableCell,
@@ -37,6 +36,7 @@ import type { EngineDropdownOption } from '../models';
 import ExecuteParamsTableHeader from './ExecuteParamsTableHeader';
 import styles from './ExecutionDialog.module.css';
 import ExecutionEngine from './ExecutionEngine';
+import InputTargetDropdown from './InputTargetDropdown';
 import type { ExecutionInputTableRow } from './models';
 import { execute } from './utils';
 
@@ -287,29 +287,10 @@ export default function ExecuteParametersDialog(props: Props) {
                       <TableRow key={inputData.rowId}>
                         <TableCell align="left" size="small">
                           <FormControl>
-                            <Select
-                              variant="standard"
-                              native
-                              defaultValue={inputData.label}
-                              onChange={(ev) => {
-                                handleChangeNodeTarget(
-                                  inputData,
-                                  ev.target.value,
-                                );
-                              }}
-                            >
-                              <option value="All nodes">All nodes</option>
-                              <option value="All input nodes">
-                                All input nodes
-                              </option>
-                              <optgroup label="Nodes by label">
-                                {[...nodesData].map(([nodeId, nodeData]) => (
-                                  <option value={nodeId} key={nodeId}>
-                                    {nodeData.ewoks_props.label} ({nodeId})
-                                  </option>
-                                ))}
-                              </optgroup>
-                            </Select>
+                            <InputTargetDropdown
+                              row={inputData}
+                              onTargetChange={handleChangeNodeTarget}
+                            />
                           </FormControl>
                         </TableCell>
                         <TypeSelectCell
