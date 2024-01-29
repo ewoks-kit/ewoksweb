@@ -1,4 +1,3 @@
-import type { NodeExecutionInput } from '../../api/models';
 import { fetchWorkflowsIds } from '../../api/workflows';
 import type {
   Condition,
@@ -82,13 +81,5 @@ function deleteEmptyLines<T extends DataMapping | Condition | DefaultInput>(
   }
   return arrayObjId.filter(
     (obj: DataMapping | Condition | DefaultInput) => obj.name !== '',
-  );
-}
-
-export function hasDefinedProperties(item: NodeExecutionInput) {
-  return (
-    item.id !== undefined &&
-    item.value !== undefined &&
-    item.label !== undefined
   );
 }

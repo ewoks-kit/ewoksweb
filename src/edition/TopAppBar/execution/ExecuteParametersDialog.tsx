@@ -37,7 +37,7 @@ import ExecuteParamsTableHeader from './ExecuteParamsTableHeader';
 import styles from './ExecutionDialog.module.css';
 import ExecutionEngine from './ExecutionEngine';
 import InputTargetDropdown from './InputTargetDropdown';
-import type { ExecutionInputTableRow } from './models';
+import type { ExecutionInputTableRow, InputTarget } from './models';
 import { execute } from './utils';
 
 interface Props {
@@ -118,16 +118,15 @@ export default function ExecuteParametersDialog(props: Props) {
 
   function handleChangeNodeTarget(
     input: ExecutionInputTableRow,
-    targetNodeId: string,
+    target: InputTarget,
   ) {
     const newInputRow = {
       ...input,
-      label: nodesData.get(targetNodeId)?.ewoks_props.label || '',
-      id: targetNodeId,
+      target,
     };
 
     const updatedInputs = perNodeInputs.map((inp) =>
-      inp.id === input.id ? newInputRow : inp,
+      inp.rowId === input.rowId ? newInputRow : inp,
     );
 
     setPerNodeInputs(updatedInputs);
@@ -138,8 +137,7 @@ export default function ExecuteParametersDialog(props: Props) {
       ...perNodeInputs,
       {
         rowId: nanoid(),
-        label: 'All nodes',
-        id: '',
+        target: 'All nodes',
         name: '',
         value: '',
         type: 'string',
@@ -244,19 +242,20 @@ export default function ExecuteParametersDialog(props: Props) {
     setPerNodeInputs(newRows);
   }
 
-  function calcTypeAndValues(nodeId: string | undefined): TypeOfValues {
-    if (!nodeId) {
+  function calcTypeAndValues(target: InputTarget): TypeOfValues {
+    if (typeof target === 'string') {
       return { typeOfInput: 'input', values: [], requiredValues: [] };
     }
 
+    const nodeData = nodesData.get(target.id);
+
     return {
-      typeOfInput: isClass(nodesData.get(nodeId)) ? 'select' : 'input',
+      typeOfInput: isClass(nodeData) ? 'select' : 'input',
       values: [
-        ...(nodesData.get(nodeId)?.task_props.required_input_names || []),
-        ...(nodesData.get(nodeId)?.task_props.optional_input_names || []),
+        ...(nodeData?.task_props.required_input_names || []),
+        ...(nodeData?.task_props.optional_input_names || []),
       ],
-      requiredValues:
-        nodesData.get(nodeId)?.task_props.required_input_names || [],
+      requiredValues: nodeData?.task_props.required_input_names || [],
     };
   }
 
@@ -311,7 +310,7 @@ export default function ExecuteParametersDialog(props: Props) {
                               ...inputData,
                               rowId: inputData.rowId,
                             }}
-                            typeOfValues={calcTypeAndValues(inputData.id)}
+                            typeOfValues={calcTypeAndValues(inputData.target)}
                           />
                         </TableCell>
 

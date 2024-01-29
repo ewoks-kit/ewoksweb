@@ -1,11 +1,12 @@
 import { Select } from '@mui/material';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
-import type { ExecutionInputTableRow } from './models';
+import { assertStr } from '../../../utils/typeGuards';
+import type { ExecutionInputTableRow, InputTarget } from './models';
 
 interface Props {
   row: ExecutionInputTableRow;
-  onTargetChange: (row: ExecutionInputTableRow, newTarget: string) => void;
+  onTargetChange: (row: ExecutionInputTableRow, newTarget: InputTarget) => void;
 }
 
 function InputTargetDropdown(props: Props) {
@@ -17,9 +18,16 @@ function InputTargetDropdown(props: Props) {
     <Select
       variant="standard"
       native
-      defaultValue={row.label}
+      defaultValue={typeof row.target === 'string' ? row.target : row.target.id}
       onChange={(ev) => {
-        onTargetChange(row, ev.target.value);
+        const newValue = ev.target.value;
+        assertStr(newValue);
+
+        if (newValue === 'All nodes' || newValue === 'All input nodes') {
+          onTargetChange(row, newValue);
+        }
+
+        onTargetChange(row, { id: newValue });
       }}
     >
       <option value="All nodes">All nodes</option>

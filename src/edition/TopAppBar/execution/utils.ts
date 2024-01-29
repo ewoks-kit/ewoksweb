@@ -1,27 +1,29 @@
-import type { NodeExecutionInput } from '../../../api/models';
 import { executeWorkflow } from '../../../api/workflows';
 import type { EngineDropdownOption } from '../models';
-import { hasDefinedProperties } from '../utils';
 import type { ExecutionInputTableRow } from './models';
 import { DROPDOWN_TO_SERVER_ENGINE } from './models';
+
+function hasDefinedProperties(item: ExecutionInputTableRow) {
+  return item.name !== '' && item.value !== '' && item.value !== undefined;
+}
 
 export async function execute(
   workflowId: string,
   inputsRows: ExecutionInputTableRow[],
   engine: EngineDropdownOption,
 ) {
-  const inputs: NodeExecutionInput[] = inputsRows
+  const inputs = inputsRows
     .filter(hasDefinedProperties)
-    .map((row) => {
-      return {
-        name: row.name,
-        value: row.value,
-        ...(row.label &&
-          !['All nodes', 'All input nodes'].includes(row.label) && {
-            id: row.id,
-          }),
-        ...(row.label === 'All nodes' && { all: true }),
-      };
+    .map(({ name, value, target }) => {
+      if (target === 'All nodes') {
+        return { name, value, all: true };
+      }
+
+      if (target === 'All input nodes') {
+        return { name, value };
+      }
+
+      return { name, value, id: target.id };
     });
 
   await executeWorkflow(workflowId, {

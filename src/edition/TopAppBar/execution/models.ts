@@ -1,8 +1,13 @@
-import type { Engine, NodeExecutionInput } from '../../../api/models';
+import type { Engine } from '../../../api/models';
 import type { EngineDropdownOption } from '../models';
 
-export interface ExecutionInputTableRow extends NodeExecutionInput {
-  type?: string;
+export type InputTarget = { id: string } | 'All nodes' | 'All input nodes';
+
+export interface ExecutionInputTableRow {
+  name: string | number;
+  value: unknown;
+  target: InputTarget;
+  type: string;
   rowId: string;
 }
 
