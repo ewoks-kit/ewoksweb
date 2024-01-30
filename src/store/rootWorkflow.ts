@@ -3,9 +3,9 @@ import type { GetState, SetState } from 'zustand';
 
 import type { NodeWithData, State, Task, Workflow } from '../types';
 import { getSubgraphs } from '../utils';
+import { convertEwoksWorkflowToRFNodes } from '../utils/convertEwoksWorkflowToRFNodes';
 import layoutNewGraph from '../utils/layoutNewGraph';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
-import { toRFEwoksNodes } from '../utils/toRFEwoksNodes';
 import { validateWorkflow } from './storeUtils/validateWorkflow';
 import useEdgeDataStore from './useEdgeDataStore';
 import useNodeDataStore from './useNodeDataStore';
@@ -55,7 +55,11 @@ const rootWorkflow = (
     const newNodeSubgraphs = await getSubgraphs(ewoksWorkflow);
 
     // 3. Calculate the new graph given the subgraphs
-    let grfNodes = toRFEwoksNodes(ewoksWorkflow, newNodeSubgraphs, tasks);
+    let rfNodes = convertEwoksWorkflowToRFNodes(
+      ewoksWorkflow,
+      newNodeSubgraphs,
+      tasks,
+    );
 
     const notes: NodeWithData[] =
       ewoksWorkflow.graph.uiProps?.notes?.map((note) => {
@@ -75,12 +79,12 @@ const rootWorkflow = (
         };
       }) || [];
 
-    grfNodes = [...grfNodes, ...notes];
+    rfNodes = [...rfNodes, ...notes];
 
     const rfLinks = toRFEwoksLinks(ewoksWorkflow, newNodeSubgraphs, tasks);
 
-    if (grfNodes.length > 0) {
-      useNodeDataStore.getState().setDataFromNodes(grfNodes);
+    if (rfNodes.length > 0) {
+      useNodeDataStore.getState().setDataFromNodes(rfNodes);
       useEdgeDataStore.getState().setDataFromEdges(rfLinks);
     }
 
@@ -92,14 +96,14 @@ const rootWorkflow = (
       rootWorkflowSource: source,
     }));
 
-    const nodesWithoutData = grfNodes.map((node) => {
+    const nodesWithoutData = rfNodes.map((node) => {
       return { ...node, data: {} };
     });
     const edgesWithoutData = rfLinks.map((edge) => {
       return { ...edge, data: {} };
     });
 
-    if (!grfNodes.some((nod) => nod.position.x !== 100)) {
+    if (!rfNodes.some((nod) => nod.position.x !== 100)) {
       rfInstance.setNodes(
         await layoutNewGraph(nodesWithoutData, edgesWithoutData),
       );

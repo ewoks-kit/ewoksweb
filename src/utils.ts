@@ -30,8 +30,7 @@ export async function getSubgraphs(graph: Workflow): Promise<Workflow[]> {
   }
 
   try {
-    const subgraphResponses = await Promise.all(subgraphIds.map(fetchWorkflow));
-    return subgraphResponses.map((resp) => resp.data);
+    return await Promise.all(subgraphIds.map(fetchWorkflow));
   } catch (error) {
     // TODO: remove after handling the error
     // eslint-disable-next-line no-console

@@ -48,7 +48,7 @@ export default function AddSubworkflowDialog(props: Props) {
 
   async function addSubgraph(id: string) {
     try {
-      const { data: subgraph } = await fetchWorkflow(id);
+      const subgraph = await fetchWorkflow(id);
       loadSubgraphAsNode(subgraph);
       handleClose();
     } catch (error) {

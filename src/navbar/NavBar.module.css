@@ -39,6 +39,6 @@
   border-bottom-color: var(--hoverColor);
 }
 
-.link[data-selected='true'] {
+.active {
   border-bottom-color: var(--selectedColor);
 }
