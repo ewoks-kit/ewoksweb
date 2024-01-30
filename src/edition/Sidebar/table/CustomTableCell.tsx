@@ -1,8 +1,12 @@
 import { EditOutlined as EditIcon } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import TableCell from '@mui/material/TableCell';
-import type { CustomTableCellProps, InputTableRow } from 'types';
 
+import type {
+  InputTableRow,
+  RowChangeEvent,
+  TypeOfValues,
+} from '../../../types';
 import styles from './CustomTableCell.module.css';
 import TableCellInEditMode from './TableCellInEditMode';
 
@@ -23,8 +27,19 @@ function isRowContentInvalid(
   return !row.name || hasInvalidValue || forEditableTableDuplicateName;
 }
 
-function CustomTableCell(props: CustomTableCellProps) {
-  const { row, rowsNames, name, usedIn, disable: inactive, onEdit } = props;
+interface Props {
+  row: InputTableRow;
+  rowsNames?: string[];
+  name: 'name' | 'value';
+  typeOfValues?: TypeOfValues;
+  usedIn?: 'DataMapping' | 'DefaultInputs' | 'Conditions';
+  disable?: boolean;
+  onEdit?: () => void;
+  onChange: (e: RowChangeEvent) => void;
+}
+
+function CustomTableCell(props: Props) {
+  const { row, rowsNames, name, usedIn, disable, onEdit } = props;
 
   return (
     <TableCell
@@ -32,7 +47,7 @@ function CustomTableCell(props: CustomTableCellProps) {
       className={styles.cell}
       style={{
         width: name === 'value' || usedIn === 'DataMapping' ? '50%' : '30%',
-        ...(inactive && { pointerEvents: 'none' }),
+        ...(disable && { pointerEvents: 'none' }),
         borderBottom: isRowContentInvalid(row, rowsNames, name, usedIn)
           ? 'solid'
           : 'none',
@@ -50,7 +65,7 @@ function CustomTableCell(props: CustomTableCellProps) {
             : ''}
 
           <IconButton
-            disabled={inactive}
+            disabled={disable}
             size="small"
             aria-label="edit"
             onClick={() => {

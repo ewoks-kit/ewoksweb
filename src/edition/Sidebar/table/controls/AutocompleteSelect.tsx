@@ -1,10 +1,22 @@
 import { Autocomplete } from '@mui/material';
 import { FormControl, TextField } from '@mui/material';
 
-import type { CustomTableCellProps } from '../../../../types';
+import type {
+  InputTableRow,
+  RowChangeEvent,
+  TypeOfValues,
+} from '../../../../types';
 
-function AutocompleteSelect(props: CustomTableCellProps) {
-  const { index, row, name, onChange, typeOfValues, disable } = props;
+interface Props {
+  row: InputTableRow;
+  name: 'name' | 'value';
+  onChange: (e: RowChangeEvent) => void;
+  typeOfValues?: TypeOfValues;
+  disable?: boolean;
+}
+
+function AutocompleteSelect(props: Props) {
+  const { row, name, onChange, typeOfValues, disable } = props;
 
   const options = typeOfValues?.values || [''];
   return (
@@ -27,12 +39,8 @@ function AutocompleteSelect(props: CustomTableCellProps) {
         }}
         value={(row[name] as string) || ''}
         inputValue={(row[name] as string) || ''}
-        onChange={(e, val) =>
-          onChange({ target: { value: val, name } }, row, index)
-        }
-        onInputChange={(e, val) =>
-          onChange({ target: { value: val, name } }, row, index)
-        }
+        onChange={(e, val) => onChange({ target: { value: val, name } })}
+        onInputChange={(e, val) => onChange({ target: { value: val, name } })}
         renderInput={(params) => (
           <TextField
             variant="standard"

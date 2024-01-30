@@ -200,29 +200,31 @@ export default function ExecuteParametersDialog(props: Props) {
     setPerNodeInputs(newRows);
   };
 
-  function onListOrDict(id: string, index: number): unknown {
-    if (perNodeInputs[index].type === 'list') {
-      if (Array.isArray(perNodeInputs[index].value)) {
-        return perNodeInputs[index].value;
+  function onListOrDict(rowId: string): unknown {
+    const row = perNodeInputs.find((input) => input.rowId === rowId);
+    if (!row) {
+      return {};
+    }
+
+    if (row.type === 'list') {
+      if (Array.isArray(row.value)) {
+        return row.value;
       }
       return [];
     }
 
-    if (
-      typeof perNodeInputs[index].value === 'object' &&
-      !Array.isArray(perNodeInputs[index].value)
-    ) {
-      return perNodeInputs[index].value;
+    if (typeof row.value === 'object' && !Array.isArray(row.value)) {
+      return row.value;
     }
     return {};
   }
 
-  function handleValueEdit(inputRow: ExecutionInputTableRow, index: number) {
+  function handleValueEdit(inputRow: ExecutionInputTableRow) {
     if (inputRow.type && ['list', 'dict'].includes(inputRow.type)) {
       showInputEditDialog(
         inputRow.rowId,
         inputRow.type === 'list' ? 'Edit list' : 'Edit dict',
-        onListOrDict(inputRow.rowId || '', index),
+        onListOrDict(inputRow.rowId),
         { rows: perNodeInputs, id: inputRow.rowId },
       );
     }
@@ -282,7 +284,7 @@ export default function ExecuteParametersDialog(props: Props) {
                 >
                   <ExecuteParamsTableHeader />
                   <TableBody>
-                    {perNodeInputs.map((inputData, index) => (
+                    {perNodeInputs.map((inputData) => (
                       <TableRow key={inputData.rowId}>
                         <TableCell align="left" size="small">
                           <FormControl>
@@ -302,20 +304,18 @@ export default function ExecuteParametersDialog(props: Props) {
                         />
                         <TableCell align="left" size="small">
                           <TableCellInEditMode
-                            index={0}
                             name="name"
-                            onChange={handleNameChange}
+                            onChange={(e) => handleNameChange(e, inputData)}
                             row={inputData}
                             typeOfValues={calcTypeAndValues(inputData.target)}
                           />
                         </TableCell>
 
                         <CustomTableCell
-                          index={index}
                           row={inputData}
                           name="value"
-                          onChange={handleValueChange}
-                          onEdit={() => handleValueEdit(inputData, index)}
+                          onChange={(e) => handleValueChange(e, inputData)}
+                          onEdit={() => handleValueEdit(inputData)}
                         />
                         <TableCell align="left" size="small">
                           <RemoveRowButton

@@ -6,20 +6,34 @@ import { FormControl } from '@mui/material';
 import Input from '@mui/material/Input';
 import type { ChangeEvent } from 'react';
 
-import type { CustomTableCellProps } from '../../../types';
+import type {
+  InputTableRow,
+  RowChangeEvent,
+  TypeOfValues,
+} from '../../../types';
 import { isDecimalNumber } from '../../../utils/utils';
 import AutocompleteSelect from './controls/AutocompleteSelect';
 import BooleanControl from './controls/BooleanControl';
 import styles from './TableCellInEditMode.module.css';
 
-function TableCellInEditMode(props: CustomTableCellProps) {
-  const { index, row, name, onChange, typeOfValues, usedIn, disable } = props;
+interface Props {
+  row: InputTableRow;
+  name: 'name' | 'value';
+  onChange: (e: RowChangeEvent) => void;
+  typeOfValues?: TypeOfValues;
+  usedIn?: 'DataMapping' | 'DefaultInputs' | 'Conditions';
+  disable?: boolean;
+  onEdit?: () => void;
+}
+
+function TableCellInEditMode(props: Props) {
+  const { row, name, onChange, typeOfValues, usedIn, disable } = props;
 
   function onChangeNumber(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) {
     if (isDecimalNumber(event.target.value)) {
-      onChange(event, row, index);
+      onChange(event);
     }
   }
 
@@ -29,7 +43,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
         <BooleanControl
           value={row.value}
           onChange={(e) => {
-            onChange(e, row, index);
+            onChange(e);
           }}
           disabled={disable}
         />
@@ -64,7 +78,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
         value={row[name]}
         type="text"
         name={name}
-        onChange={(e) => onChange(e, row, index)}
+        onChange={(e) => onChange(e)}
         className={styles.input}
         inputProps={{ 'aria-label': `Edit input ${name}` }}
       />
