@@ -29,9 +29,9 @@ import { textForError } from '../../../utils';
 import AddEntryRow from '../../Sidebar/table/controls/AddEntryRow';
 import RemoveRowButton from '../../Sidebar/table/controls/RemoveRowButton';
 import TypeSelectCell from '../../Sidebar/table/controls/TypeSelectCell';
-import CustomTableCell from '../../Sidebar/table/CustomTableCell';
-import TableCellInEditMode from '../../Sidebar/table/TableCellInEditMode';
+import NameTableCell from '../../Sidebar/table/NameTableCell';
 import { isClass } from '../../Sidebar/table/utils';
+import ValueTableCell from '../../Sidebar/table/ValueTableCell';
 import type { EngineDropdownOption } from '../models';
 import ExecuteParamsTableHeader from './ExecuteParamsTableHeader';
 import styles from './ExecutionDialog.module.css';
@@ -302,18 +302,14 @@ export default function ExecuteParametersDialog(props: Props) {
                           }
                           onChange={(e) => changedTypeOfInput(e, inputData)}
                         />
-                        <TableCell align="left" size="small">
-                          <TableCellInEditMode
-                            name="name"
-                            onChange={(e) => handleNameChange(e, inputData)}
-                            row={inputData}
-                            typeOfValues={calcTypeAndValues(inputData.target)}
-                          />
-                        </TableCell>
-
-                        <CustomTableCell
+                        <NameTableCell
                           row={inputData}
-                          name="value"
+                          onChange={(e) => handleNameChange(e, inputData)}
+                          typeOfValues={calcTypeAndValues(inputData.target)}
+                        />
+
+                        <ValueTableCell
+                          row={inputData}
                           onChange={(e) => handleValueChange(e, inputData)}
                           onEdit={() => handleValueEdit(inputData)}
                         />

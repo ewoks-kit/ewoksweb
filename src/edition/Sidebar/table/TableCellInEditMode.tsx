@@ -23,7 +23,6 @@ interface Props {
   typeOfValues?: TypeOfValues;
   usedIn?: 'DataMapping' | 'DefaultInputs' | 'Conditions';
   disable?: boolean;
-  onEdit?: () => void;
 }
 
 function TableCellInEditMode(props: Props) {
@@ -68,7 +67,15 @@ function TableCellInEditMode(props: Props) {
   }
 
   if (typeOfValues?.typeOfInput && typeOfValues.typeOfInput === 'select') {
-    return <AutocompleteSelect {...props} />;
+    return (
+      <AutocompleteSelect
+        row={row}
+        name={name}
+        onChange={onChange}
+        typeOfValues={typeOfValues}
+        disable={disable}
+      />
+    );
   }
 
   return (
