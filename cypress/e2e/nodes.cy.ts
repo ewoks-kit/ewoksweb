@@ -211,16 +211,8 @@ it('adds and delete a new default input', () => {
     cy.findAllByRole('row').should('have.length', 3); // Header + New Row + Button
   });
 
-  cy.get('[data-cy="inputInEditableCell"]')
-    .should('have.length', 2)
-    .each((e) =>
-      cy.wrap(e).scrollIntoView().should('exist').should('be.visible'),
-    );
-
-  cy.get('[data-cy="inputInEditableCell"]');
-
-  cy.get('[data-cy="inputInEditableCell"]').first().type('Always');
-  cy.get('[data-cy="inputInEditableCell"]').last().type('and forever');
+  cy.findByRole('textbox', { name: 'Edit input name' }).type('Always');
+  cy.findByRole('textbox', { name: 'Edit input value' }).type('and forever');
 
   cy.get('@defaultInputsSection').within(() => {
     cy.findAllByRole('row').should('have.length', 3);

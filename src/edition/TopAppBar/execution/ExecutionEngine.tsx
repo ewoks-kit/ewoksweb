@@ -6,8 +6,8 @@ import {
   Select,
 } from '@mui/material';
 
+import type { EngineDropdownOption } from '../models';
 import styles from './ExecutionDialog.module.css';
-import type { EngineDropdownOption } from './models';
 
 interface Props {
   engine: EngineDropdownOption;
@@ -29,6 +29,7 @@ function ExecutionEngine(props: Props) {
               setEngine(value as EngineDropdownOption);
             }}
             className={styles.engineSelect}
+            inputProps={{ 'aria-label': 'Change execution engine' }}
           >
             <MenuItem value="default">default</MenuItem>
             <MenuItem value="pypushflow">pypushflow</MenuItem>

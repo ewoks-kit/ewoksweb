@@ -134,8 +134,10 @@ it('Opens and saves a skeleton node after populating it', () => {
   cy.get('@defaultInputsSection').within(() => {
     cy.findByRole('button', { name: 'Add entry' }).click();
   });
-  cy.get('[data-cy="inputInEditableCell"]').first().type('default_input');
-  cy.get('[data-cy="inputInEditableCell"]').last().type('isaString');
+
+  cy.findByRole('textbox', { name: 'Edit input name' }).type('default_input');
+  cy.findByRole('textbox', { name: 'Edit input value' }).type('isaString');
+
   cy.findByRole('checkbox', { name: 'More handles' }).check();
   cy.findByRole('checkbox', { name: 'With image' }).uncheck();
 
@@ -225,22 +227,21 @@ it('Saves a populated link', () => {
       .siblings()
       .within(() => {
         cy.contains('Add').should('have.length', 1).click();
-        cy.get('[data-cy="inputInEditableCell"]')
-          .first()
-          .type('sourceDataMapping');
-        cy.get('[data-cy="inputInEditableCell"]')
-          .last()
-          .type('targetDataMapping');
+        cy.findByRole('textbox', { name: 'Edit input name' }).type(
+          'sourceDataMapping',
+        );
+        cy.findByRole('textbox', { name: 'Edit input value' }).type(
+          'targetDataMapping',
+        );
       });
-
-    cy.get('[data-cy="inputInEditableCell"]').should('have.length', 2);
   });
 
   cy.findByRole('table', { name: 'editable table' }).within(() => {
     cy.contains('Add').should('have.length', 1).click();
 
-    cy.get('[data-cy="inputInEditableCell"]').should('have.length', 1);
-    cy.get('[data-cy="inputInEditableCell"]').first().type('outputConditions');
+    cy.findByRole('textbox', { name: 'Edit input name' }).type(
+      'outputConditions',
+    );
 
     cy.findByRole('combobox').should('have.text', 'bool');
 

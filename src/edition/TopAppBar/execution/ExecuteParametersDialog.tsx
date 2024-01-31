@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   FormControl,
-  Select,
   Table,
   TableBody,
   TableCell,
@@ -20,48 +19,33 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { InputTableRow, TypeOfValues } from 'types';
 
-import type {
-  Engine,
-  ExecutionParams,
-  NodeExecutionInput,
-  ObjectEditDialogContent,
-} from '../../api/models';
-import { executeWorkflow } from '../../api/workflows';
-import DraggableDialog from '../../general/DraggableDialog';
-import { useSaveWorkflow } from '../../general/hooks';
-import useNodeDataStore from '../../store/useNodeDataStore';
-import useSnackbarStore from '../../store/useSnackbarStore';
-import useStore from '../../store/useStore';
-import { textForError } from '../../utils';
-import AddEntryRow from '../Sidebar/table/controls/AddEntryRow';
-import RemoveRowButton from '../Sidebar/table/controls/RemoveRowButton';
-import TypeSelectCell from '../Sidebar/table/controls/TypeSelectCell';
-import CustomTableCell from '../Sidebar/table/CustomTableCell';
-import TableCellInEditMode from '../Sidebar/table/TableCellInEditMode';
-import { isClass } from '../Sidebar/table/utils';
+import type { ObjectEditDialogContent } from '../../../api/models';
+import DraggableDialog from '../../../general/DraggableDialog';
+import { useSaveWorkflow } from '../../../general/hooks';
+import useNodeDataStore from '../../../store/useNodeDataStore';
+import useSnackbarStore from '../../../store/useSnackbarStore';
+import useStore from '../../../store/useStore';
+import { textForError } from '../../../utils';
+import AddEntryRow from '../../Sidebar/table/controls/AddEntryRow';
+import RemoveRowButton from '../../Sidebar/table/controls/RemoveRowButton';
+import TypeSelectCell from '../../Sidebar/table/controls/TypeSelectCell';
+import CustomTableCell from '../../Sidebar/table/CustomTableCell';
+import TableCellInEditMode from '../../Sidebar/table/TableCellInEditMode';
+import { isClass } from '../../Sidebar/table/utils';
+import type { EngineDropdownOption } from '../models';
 import ExecuteParamsTableHeader from './ExecuteParamsTableHeader';
 import styles from './ExecutionDialog.module.css';
 import ExecutionEngine from './ExecutionEngine';
-import type { EngineDropdownOption } from './models';
-import { hasDefinedProperties } from './utils';
+import InputTargetDropdown from './InputTargetDropdown';
+import type { ExecutionInputTableRow, InputTarget } from './models';
+import { execute } from './utils';
 
-interface ExecuteDialogProps {
+interface Props {
   open: boolean;
   onClose: (value?: string) => void;
 }
 
-export interface ExecutionInputTableRow extends NodeExecutionInput {
-  type?: string;
-  rowId: string;
-}
-
-export const DROPDOWN_TO_SERVER_ENGINE: Record<EngineDropdownOption, Engine> = {
-  dask: 'dask',
-  default: null,
-  pypushflow: 'ppf',
-};
-
-export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
+export default function ExecuteParametersDialog(props: Props) {
   const { onClose, open } = props;
 
   const nodesData = useNodeDataStore((state) => state.nodesData);
@@ -106,23 +90,6 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     });
   }
 
-  async function execute(params?: ExecutionParams) {
-    const { rootWorkflowId } = useStore.getState();
-    if (!rootWorkflowId) {
-      showWarningMsg('Please open a workflow in the canvas to execute');
-      return;
-    }
-    try {
-      await executeWorkflow(rootWorkflowId, params);
-      navigate('/monitor');
-    } catch (error) {
-      // Keep logging in console for debugging when talking with a user
-      /* eslint-disable no-console */
-      console.log(error);
-      showErrorMsg('Execution could not start!');
-    }
-  }
-
   async function handleSaveExecute() {
     try {
       await handleSave();
@@ -133,28 +100,17 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
           'Error in saving workflow. Please check connectivity with the server!',
         ),
       );
+      return;
     }
 
-    // Only execute if handleSave is successful
+    const { rootWorkflowId } = useStore.getState();
+    if (!rootWorkflowId) {
+      showWarningMsg('Please open a workflow in the canvas to execute');
+      return;
+    }
     try {
-      const inputs: NodeExecutionInput[] = perNodeInputs
-        .filter(hasDefinedProperties)
-        .map((input) => {
-          return {
-            name: input.name,
-            value: input.value,
-            ...(input.label &&
-              !['All nodes', 'All input nodes'].includes(input.label) && {
-                id: input.id,
-              }),
-            ...(input.label === 'All nodes' && { all: true }),
-          };
-        });
-
-      execute({
-        engine: DROPDOWN_TO_SERVER_ENGINE[engine],
-        inputs,
-      });
+      execute(rootWorkflowId, perNodeInputs, engine);
+      navigate('/monitor');
     } catch (executeError) {
       showErrorMsg(textForError(executeError, 'Error in executing workflow.'));
     }
@@ -162,16 +118,15 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
 
   function handleChangeNodeTarget(
     input: ExecutionInputTableRow,
-    targetNodeId: string,
+    target: InputTarget,
   ) {
     const newInputRow = {
       ...input,
-      label: nodesData.get(targetNodeId)?.ewoks_props.label || '',
-      id: targetNodeId,
+      target,
     };
 
     const updatedInputs = perNodeInputs.map((inp) =>
-      inp.id === input.id ? newInputRow : inp,
+      inp.rowId === input.rowId ? newInputRow : inp,
     );
 
     setPerNodeInputs(updatedInputs);
@@ -182,8 +137,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
       ...perNodeInputs,
       {
         rowId: nanoid(),
-        label: 'All nodes',
-        id: '',
+        target: 'All nodes',
         name: '',
         value: '',
         type: 'string',
@@ -288,19 +242,20 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
     setPerNodeInputs(newRows);
   }
 
-  function calcTypeAndValues(nodeId: string | undefined): TypeOfValues {
-    if (!nodeId) {
+  function calcTypeAndValues(target: InputTarget): TypeOfValues {
+    if (typeof target === 'string') {
       return { typeOfInput: 'input', values: [], requiredValues: [] };
     }
 
+    const nodeData = nodesData.get(target.id);
+
     return {
-      typeOfInput: isClass(nodesData.get(nodeId)) ? 'select' : 'input',
+      typeOfInput: isClass(nodeData) ? 'select' : 'input',
       values: [
-        ...(nodesData.get(nodeId)?.task_props.required_input_names || []),
-        ...(nodesData.get(nodeId)?.task_props.optional_input_names || []),
+        ...(nodeData?.task_props.required_input_names || []),
+        ...(nodeData?.task_props.optional_input_names || []),
       ],
-      requiredValues:
-        nodesData.get(nodeId)?.task_props.required_input_names || [],
+      requiredValues: nodeData?.task_props.required_input_names || [],
     };
   }
 
@@ -331,29 +286,10 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
                       <TableRow key={inputData.rowId}>
                         <TableCell align="left" size="small">
                           <FormControl>
-                            <Select
-                              variant="standard"
-                              native
-                              defaultValue={inputData.label}
-                              onChange={(ev) => {
-                                handleChangeNodeTarget(
-                                  inputData,
-                                  ev.target.value,
-                                );
-                              }}
-                            >
-                              <option value="All nodes">All nodes</option>
-                              <option value="All input nodes">
-                                All input nodes
-                              </option>
-                              <optgroup label="Nodes by label">
-                                {[...nodesData].map(([nodeId, nodeData]) => (
-                                  <option value={nodeId} key={nodeId}>
-                                    {nodeData.ewoks_props.label} ({nodeId})
-                                  </option>
-                                ))}
-                              </optgroup>
-                            </Select>
+                            <InputTargetDropdown
+                              row={inputData}
+                              onTargetChange={handleChangeNodeTarget}
+                            />
                           </FormControl>
                         </TableCell>
                         <TypeSelectCell
@@ -369,18 +305,14 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
                             index={0}
                             name="name"
                             onChange={handleNameChange}
-                            {...props}
-                            row={{
-                              ...inputData,
-                              rowId: inputData.rowId,
-                            }}
-                            typeOfValues={calcTypeAndValues(inputData.id)}
+                            row={inputData}
+                            typeOfValues={calcTypeAndValues(inputData.target)}
                           />
                         </TableCell>
 
                         <CustomTableCell
                           index={index}
-                          row={{ ...inputData, rowId: inputData.rowId }}
+                          row={inputData}
                           name="value"
                           onChange={handleValueChange}
                           onEdit={() => handleValueEdit(inputData, index)}
@@ -409,7 +341,7 @@ export default function ExecuteParametersDialog(props: ExecuteDialogProps) {
         </DialogContent>
         <div className={styles.saveWarning}>
           <InfoIcon fontSize="small" />
-          The workflow will be saved before excution.
+          The workflow will be saved before execution.
         </div>
         <DialogActions>
           <Button

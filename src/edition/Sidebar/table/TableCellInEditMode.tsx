@@ -46,7 +46,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
             name={name}
             onChange={(event) => onChangeNumber(event)}
             className={styles.input}
-            data-cy="inputInEditableCell"
+            inputProps={{ 'aria-label': `Edit input ${name}` }}
           />
         </FormControl>
       );
@@ -66,7 +66,7 @@ function TableCellInEditMode(props: CustomTableCellProps) {
         name={name}
         onChange={(e) => onChange(e, row, index)}
         className={styles.input}
-        data-cy="inputInEditableCell"
+        inputProps={{ 'aria-label': `Edit input ${name}` }}
       />
     </FormControl>
   );
