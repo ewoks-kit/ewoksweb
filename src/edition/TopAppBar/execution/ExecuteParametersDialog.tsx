@@ -117,14 +117,11 @@ export default function ExecuteParametersDialog(props: Props) {
     }
   }
 
-  function handleChangeNodeTarget(
-    input: ExecutionInputTableRow,
-    target: InputTarget,
-  ) {
-    const oldInput = inputRows.get(input.rowId);
+  function handleTargetChange(rowId: string, newTarget: InputTarget) {
+    const oldInput = inputRows.get(rowId);
     assertDefined(oldInput);
 
-    inputRows.set(input.rowId, { ...oldInput, target });
+    inputRows.set(rowId, { ...oldInput, target: newTarget });
   }
 
   function handleNameChange(e: RowChangeEvent, rowId: string) {
@@ -234,8 +231,10 @@ export default function ExecuteParametersDialog(props: Props) {
                         <TableCell align="left" size="small">
                           <FormControl>
                             <InputTargetDropdown
-                              row={inputData}
-                              onTargetChange={handleChangeNodeTarget}
+                              defaultValue={inputData.target}
+                              onTargetChange={(newTarget) =>
+                                handleTargetChange(rowId, newTarget)
+                              }
                             />
                           </FormControl>
                         </TableCell>
