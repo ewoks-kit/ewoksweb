@@ -237,12 +237,14 @@ function EditableTable(props: EditableTableProps) {
           {rows.map((row, index) => {
             const handleChange = (evt: RowChangeEvent) =>
               onChange(evt, row, index);
+            const hasDuplicateName =
+              rows.filter((ro) => ro.name === row.name).length > 1;
             return (
               <React.Fragment key={row.rowId}>
                 <TableRow>
                   <NameTableCell
                     row={row}
-                    rowsNames={rows.map((ro) => ro.name?.toString() || '')}
+                    isInvalid={hasDuplicateName}
                     onChange={handleChange}
                     typeOfValues={props.typeOfValues[0]}
                     disable={disable}
@@ -264,6 +266,7 @@ function EditableTable(props: EditableTableProps) {
                     onChange={handleChange}
                     onEdit={() => onEditRow(row.rowId || '', index)}
                     disable={disable}
+                    allowBoolAndNumberInputs
                   />
 
                   <RemoveRowCell

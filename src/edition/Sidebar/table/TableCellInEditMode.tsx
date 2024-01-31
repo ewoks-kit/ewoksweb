@@ -21,12 +21,19 @@ interface Props {
   name: 'name' | 'value';
   onChange: (e: RowChangeEvent) => void;
   typeOfValues?: TypeOfValues;
-  usedIn?: 'DataMapping' | 'DefaultInputs' | 'Conditions';
+  allowBoolAndNumberInputs?: boolean;
   disable?: boolean;
 }
 
 function TableCellInEditMode(props: Props) {
-  const { row, name, onChange, typeOfValues, usedIn, disable } = props;
+  const {
+    row,
+    name,
+    onChange,
+    typeOfValues,
+    allowBoolAndNumberInputs,
+    disable,
+  } = props;
 
   function onChangeNumber(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -36,7 +43,7 @@ function TableCellInEditMode(props: Props) {
     }
   }
 
-  if (name === 'value' && usedIn !== 'DataMapping') {
+  if (allowBoolAndNumberInputs) {
     if (row.type === 'bool' || row.type === 'boolean') {
       return (
         <BooleanControl

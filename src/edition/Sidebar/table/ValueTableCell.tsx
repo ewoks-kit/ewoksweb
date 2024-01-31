@@ -13,14 +13,21 @@ import TableCellInEditMode from './TableCellInEditMode';
 interface Props {
   row: InputTableRow;
   typeOfValues?: TypeOfValues;
-  usedIn?: 'DataMapping' | 'DefaultInputs' | 'Conditions';
   disable?: boolean;
   onEdit?: () => void;
   onChange: (e: RowChangeEvent) => void;
+  allowBoolAndNumberInputs?: boolean;
 }
 
 function ValueTableCell(props: Props) {
-  const { row, disable, onEdit, onChange, usedIn, typeOfValues } = props;
+  const {
+    row,
+    disable,
+    onEdit,
+    onChange,
+    typeOfValues,
+    allowBoolAndNumberInputs,
+  } = props;
 
   const { value } = row;
 
@@ -56,8 +63,8 @@ function ValueTableCell(props: Props) {
           name="value"
           onChange={onChange}
           typeOfValues={typeOfValues}
-          usedIn={usedIn}
           disable={disable}
+          allowBoolAndNumberInputs={allowBoolAndNumberInputs}
         />
       )}
     </TableCell>

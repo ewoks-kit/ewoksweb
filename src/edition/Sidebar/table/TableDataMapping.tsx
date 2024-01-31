@@ -72,10 +72,8 @@ function TableDataMapping(props: TableDataMappingProps) {
                 <TableRow>
                   <NameTableCell
                     row={row}
-                    rowsNames={values.map((ro) => ro.name || '')}
                     onChange={handleChange}
                     typeOfValues={props.typeOfValues[0]}
-                    usedIn="DataMapping"
                     disable={disable}
                     width="50%"
                   />
@@ -83,7 +81,6 @@ function TableDataMapping(props: TableDataMappingProps) {
                     row={row}
                     onChange={handleChange}
                     typeOfValues={props.typeOfValues[1]}
-                    usedIn="DataMapping"
                     disable={disable}
                   />
                   <RemoveRowCell

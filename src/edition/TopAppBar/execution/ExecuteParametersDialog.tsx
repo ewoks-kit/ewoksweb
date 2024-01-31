@@ -312,6 +312,7 @@ export default function ExecuteParametersDialog(props: Props) {
                           row={inputData}
                           onChange={(e) => handleValueChange(e, inputData)}
                           onEdit={() => handleValueEdit(inputData)}
+                          allowBoolAndNumberInputs
                         />
                         <TableCell align="left" size="small">
                           <RemoveRowButton
