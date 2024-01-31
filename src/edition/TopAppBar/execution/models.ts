@@ -16,3 +16,10 @@ export const DROPDOWN_TO_SERVER_ENGINE: Record<EngineDropdownOption, Engine> = {
   default: null,
   pypushflow: 'ppf',
 };
+
+export const EMPTY_INPUT: Omit<ExecutionInputTableRow, 'rowId'> = {
+  target: 'All nodes',
+  name: '',
+  value: '',
+  type: 'string',
+};

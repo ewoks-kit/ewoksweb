@@ -13,11 +13,12 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import { useMap } from '@react-hookz/web';
 import { nanoid } from 'nanoid';
 import type { ChangeEvent } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { InputTableRow, TypeOfValues } from 'types';
+import type { InputTableRow, RowChangeEvent, TypeOfValues } from 'types';
 
 import type { ObjectEditDialogContent } from '../../../api/models';
 import DraggableDialog from '../../../general/DraggableDialog';
@@ -26,6 +27,7 @@ import useNodeDataStore from '../../../store/useNodeDataStore';
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import useStore from '../../../store/useStore';
 import { textForError } from '../../../utils';
+import { assertDefined } from '../../../utils/typeGuards';
 import AddEntryRow from '../../Sidebar/table/controls/AddEntryRow';
 import RemoveRowButton from '../../Sidebar/table/controls/RemoveRowButton';
 import TypeSelectCell from '../../Sidebar/table/controls/TypeSelectCell';
@@ -38,6 +40,7 @@ import styles from './ExecutionDialog.module.css';
 import ExecutionEngine from './ExecutionEngine';
 import InputTargetDropdown from './InputTargetDropdown';
 import type { ExecutionInputTableRow, InputTarget } from './models';
+import { EMPTY_INPUT } from './models';
 import { execute } from './utils';
 
 interface Props {
@@ -50,9 +53,7 @@ export default function ExecuteParametersDialog(props: Props) {
 
   const nodesData = useNodeDataStore((state) => state.nodesData);
 
-  const [perNodeInputs, setPerNodeInputs] = useState<ExecutionInputTableRow[]>(
-    [],
-  );
+  const inputRows = useMap<string, ExecutionInputTableRow>();
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogContent, setDialogContent] = useState<ObjectEditDialogContent>();
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
@@ -109,7 +110,7 @@ export default function ExecuteParametersDialog(props: Props) {
       return;
     }
     try {
-      execute(rootWorkflowId, perNodeInputs, engine);
+      execute(rootWorkflowId, [...inputRows.values()], engine);
       navigate('/monitor');
     } catch (executeError) {
       showErrorMsg(textForError(executeError, 'Error in executing workflow.'));
@@ -120,88 +121,36 @@ export default function ExecuteParametersDialog(props: Props) {
     input: ExecutionInputTableRow,
     target: InputTarget,
   ) {
-    const newInputRow = {
-      ...input,
-      target,
-    };
+    const oldInput = inputRows.get(input.rowId);
+    assertDefined(oldInput);
 
-    const updatedInputs = perNodeInputs.map((inp) =>
-      inp.rowId === input.rowId ? newInputRow : inp,
-    );
-
-    setPerNodeInputs(updatedInputs);
+    inputRows.set(input.rowId, { ...oldInput, target });
   }
 
-  function handleRowAddition() {
-    setPerNodeInputs([
-      ...perNodeInputs,
-      {
-        rowId: nanoid(),
-        target: 'All nodes',
-        name: '',
-        value: '',
-        type: 'string',
-      },
-    ]);
+  function handleNameChange(e: RowChangeEvent, rowId: string) {
+    const oldInput = inputRows.get(rowId);
+    assertDefined(oldInput);
+    inputRows.set(rowId, { ...oldInput, name: e.target.value });
   }
 
-  function handleRowDelete(input: ExecutionInputTableRow) {
-    const newInputs = perNodeInputs.filter((inp) => inp.rowId !== input.rowId);
-    setPerNodeInputs(newInputs);
+  function handleValueChange(e: RowChangeEvent, rowId: string) {
+    const oldInput = inputRows.get(rowId);
+    assertDefined(oldInput);
+    inputRows.set(rowId, { ...oldInput, value: e.target.value });
   }
 
-  function handleNameChange(
-    e: { target: { name: string; value: string | number } },
-    row: InputTableRow,
-  ) {
-    const newRows = perNodeInputs.map((inputRow) =>
-      inputRow.rowId === row.rowId
-        ? {
-            ...inputRow,
-            name: e.target.value,
-          }
-        : inputRow,
-    );
-
-    setPerNodeInputs(newRows);
+  function changedTypeOfInput(e: ChangeEvent<HTMLInputElement>, rowId: string) {
+    const oldInput = inputRows.get(rowId);
+    assertDefined(oldInput);
+    inputRows.set(rowId, {
+      ...oldInput,
+      value: e.target.value === 'null' ? e.target.value : '',
+      type: e.target.value,
+    });
   }
-
-  function handleValueChange(
-    e: { target: { name: string; value: string | number } },
-    row: InputTableRow,
-  ) {
-    const { rowId = '' } = row;
-    const newRows = perNodeInputs.map((inputRow) =>
-      inputRow.rowId === rowId
-        ? {
-            ...inputRow,
-            value: e.target.value,
-          }
-        : inputRow,
-    );
-
-    setPerNodeInputs(newRows);
-  }
-
-  const changedTypeOfInput = (
-    e: ChangeEvent<HTMLInputElement>,
-    row: ExecutionInputTableRow,
-  ) => {
-    const { rowId } = row;
-    const newRows = perNodeInputs.map((inputRow) =>
-      inputRow.rowId === rowId
-        ? {
-            ...inputRow,
-            value: e.target.value === 'null' ? e.target.value : '',
-            type: e.target.value,
-          }
-        : inputRow,
-    );
-    setPerNodeInputs(newRows);
-  };
 
   function onListOrDict(rowId: string): unknown {
-    const row = perNodeInputs.find((input) => input.rowId === rowId);
+    const row = inputRows.get(rowId);
     if (!row) {
       return {};
     }
@@ -225,23 +174,19 @@ export default function ExecuteParametersDialog(props: Props) {
         inputRow.rowId,
         inputRow.type === 'list' ? 'Edit list' : 'Edit dict',
         onListOrDict(inputRow.rowId),
-        { rows: perNodeInputs, id: inputRow.rowId },
+        { rows: [...inputRows.values()], id: inputRow.rowId },
       );
     }
   }
 
   function setRowValue(
     name: string,
-    val: unknown,
+    newValue: unknown,
     callbackProps: { id: string; rows: InputTableRow[] },
   ) {
-    const newRows: ExecutionInputTableRow[] = perNodeInputs.map((row) => {
-      if (row.rowId === callbackProps.id) {
-        return { ...row, value: val };
-      }
-      return row;
-    });
-    setPerNodeInputs(newRows);
+    const oldInput = inputRows.get(callbackProps.id);
+    assertDefined(oldInput);
+    inputRows.set(callbackProps.id, { ...oldInput, value: newValue });
   }
 
   function calcTypeAndValues(target: InputTarget): TypeOfValues {
@@ -284,8 +229,8 @@ export default function ExecuteParametersDialog(props: Props) {
                 >
                   <ExecuteParamsTableHeader />
                   <TableBody>
-                    {perNodeInputs.map((inputData) => (
-                      <TableRow key={inputData.rowId}>
+                    {[...inputRows.entries()].map(([rowId, inputData]) => (
+                      <TableRow key={rowId}>
                         <TableCell align="left" size="small">
                           <FormControl>
                             <InputTargetDropdown
@@ -300,23 +245,23 @@ export default function ExecuteParametersDialog(props: Props) {
                               ? 'bool'
                               : inputData.type || 'string'
                           }
-                          onChange={(e) => changedTypeOfInput(e, inputData)}
+                          onChange={(e) => changedTypeOfInput(e, rowId)}
                         />
                         <NameTableCell
                           row={inputData}
-                          onChange={(e) => handleNameChange(e, inputData)}
+                          onChange={(e) => handleNameChange(e, rowId)}
                           typeOfValues={calcTypeAndValues(inputData.target)}
                         />
 
                         <ValueTableCell
                           row={inputData}
-                          onChange={(e) => handleValueChange(e, inputData)}
+                          onChange={(e) => handleValueChange(e, rowId)}
                           onEdit={() => handleValueEdit(inputData)}
                           allowBoolAndNumberInputs
                         />
                         <TableCell align="left" size="small">
                           <RemoveRowButton
-                            onClick={() => handleRowDelete(inputData)}
+                            onClick={() => inputRows.delete(rowId)}
                           />
                         </TableCell>
                       </TableRow>
@@ -327,7 +272,13 @@ export default function ExecuteParametersDialog(props: Props) {
               <Table>
                 <TableBody>
                   <AddEntryRow
-                    onClick={() => handleRowAddition()}
+                    onClick={() => {
+                      const rowId = nanoid();
+                      inputRows.set(rowId, {
+                        rowId,
+                        ...EMPTY_INPUT,
+                      });
+                    }}
                     colSpan={4}
                   />
                 </TableBody>
