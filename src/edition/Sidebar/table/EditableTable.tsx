@@ -12,6 +12,7 @@ import type {
   Condition,
   DefaultInput,
   InputTableRow,
+  RowChangeEvent,
   TypeOfValues,
 } from 'types';
 
@@ -117,11 +118,7 @@ function EditableTable(props: EditableTableProps) {
     setRows(calcNewRows(id));
   }
 
-  function onChange(
-    e: { target: { name: string; value: string | number } },
-    row: InputTableRow,
-    index: number,
-  ) {
+  function onChange(e: RowChangeEvent, row: InputTableRow, index: number) {
     const { rowId: id } = row;
     const oldRows = [...rows].filter((_row, i) => index !== i);
 
@@ -236,45 +233,47 @@ function EditableTable(props: EditableTableProps) {
       >
         <TableHeader headers={headers} />
         <TableBody>
-          {rows.map((row, index) => (
-            <React.Fragment key={row.rowId}>
-              <TableRow>
-                <CustomTableCell
-                  index={index}
-                  row={row}
-                  rowsNames={rows.map((ro) => ro.name?.toString() || '')}
-                  name="name"
-                  onChange={onChange}
-                  typeOfValues={props.typeOfValues[0]}
-                  disable={disable}
-                />
+          {rows.map((row, index) => {
+            const handleChange = (evt: RowChangeEvent) =>
+              onChange(evt, row, index);
+            return (
+              <React.Fragment key={row.rowId}>
+                <TableRow>
+                  <CustomTableCell
+                    row={row}
+                    rowsNames={rows.map((ro) => ro.name?.toString() || '')}
+                    name="name"
+                    onChange={handleChange}
+                    typeOfValues={props.typeOfValues[0]}
+                    disable={disable}
+                  />
 
-                <TypeSelectCell
-                  value={
-                    typeOfInputs[index] !== 'boolean'
-                      ? typeOfInputs[index]
-                      : 'bool'
-                  }
-                  onChange={(e) => changedTypeOfInputs(e, row, index)}
-                  disable={disable}
-                />
+                  <TypeSelectCell
+                    value={
+                      typeOfInputs[index] !== 'boolean'
+                        ? typeOfInputs[index]
+                        : 'bool'
+                    }
+                    onChange={(e) => changedTypeOfInputs(e, row, index)}
+                    disable={disable}
+                  />
 
-                <CustomTableCell
-                  index={index}
-                  row={row}
-                  name="value"
-                  onChange={onChange}
-                  onEdit={() => onEditRow(row.rowId || '', index)}
-                  disable={disable}
-                />
+                  <CustomTableCell
+                    row={row}
+                    name="value"
+                    onChange={handleChange}
+                    onEdit={() => onEditRow(row.rowId || '', index)}
+                    disable={disable}
+                  />
 
-                <RemoveRowCell
-                  disable={disable}
-                  onDelete={() => onDelete(row.rowId || '')}
-                />
-              </TableRow>
-            </React.Fragment>
-          ))}
+                  <RemoveRowCell
+                    disable={disable}
+                    onDelete={() => onDelete(row.rowId || '')}
+                  />
+                </TableRow>
+              </React.Fragment>
+            );
+          })}
           {onRowAdd && !disable && (
             <AddEntryRow onClick={() => onRowAdd(rows)} colSpan={4} />
           )}

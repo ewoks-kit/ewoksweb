@@ -270,20 +270,8 @@ export interface TypeOfValues {
   requiredValues?: string[];
 }
 
-export interface CustomTableCellProps {
-  index: number;
-  row: InputTableRow;
-  rowsNames?: string[];
-  name: 'name' | 'value';
-  typeOfValues?: TypeOfValues;
-  usedIn?: 'DataMapping' | 'DefaultInputs' | 'Conditions';
-  disable?: boolean;
-  onEdit?: () => void;
-  onChange(
-    e: { target: { name: string; value: string | number } },
-    row: InputTableRow,
-    index: number,
-  ): void;
+export interface RowChangeEvent {
+  target: { name: string; value: string | number };
 }
 
 export interface LinkData {

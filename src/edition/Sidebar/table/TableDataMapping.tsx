@@ -5,7 +5,7 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
-import type { DataMapping, TypeOfValues } from 'types';
+import type { DataMapping, RowChangeEvent, TypeOfValues } from 'types';
 
 import AddEntryRow from './controls/AddEntryRow';
 import RemoveRowCell from './controls/RemoveRowCell';
@@ -64,35 +64,36 @@ function TableDataMapping(props: TableDataMappingProps) {
       >
         <TableHeader headers={headers} />
         <TableBody>
-          {values.map((row, index) => (
-            <React.Fragment key={row.rowId}>
-              <TableRow>
-                <CustomTableCell
-                  index={index}
-                  row={row}
-                  rowsNames={values.map((ro) => ro.name || '')}
-                  name="name"
-                  onChange={onChange}
-                  typeOfValues={props.typeOfValues[0]}
-                  usedIn="DataMapping"
-                  disable={disable}
-                />
-                <CustomTableCell
-                  index={index}
-                  row={row}
-                  name="value"
-                  onChange={onChange}
-                  typeOfValues={props.typeOfValues[1]}
-                  usedIn="DataMapping"
-                  disable={disable}
-                />
-                <RemoveRowCell
-                  disable={disable}
-                  onDelete={() => onDelete(row.rowId || '')}
-                />
-              </TableRow>
-            </React.Fragment>
-          ))}
+          {values.map((row) => {
+            const handleChange = (evt: RowChangeEvent) => onChange(evt, row);
+            return (
+              <React.Fragment key={row.rowId}>
+                <TableRow>
+                  <CustomTableCell
+                    row={row}
+                    rowsNames={values.map((ro) => ro.name || '')}
+                    name="name"
+                    onChange={handleChange}
+                    typeOfValues={props.typeOfValues[0]}
+                    usedIn="DataMapping"
+                    disable={disable}
+                  />
+                  <CustomTableCell
+                    row={row}
+                    name="value"
+                    onChange={handleChange}
+                    typeOfValues={props.typeOfValues[1]}
+                    usedIn="DataMapping"
+                    disable={disable}
+                  />
+                  <RemoveRowCell
+                    disable={disable}
+                    onDelete={() => onDelete(row.rowId || '')}
+                  />
+                </TableRow>
+              </React.Fragment>
+            );
+          })}
           {onRowAdd && !disable && (
             <AddEntryRow onClick={() => onRowAdd(values)} colSpan={3} />
           )}
