@@ -19,6 +19,8 @@ import EditSidebar from './Sidebar/EditSidebar';
 import OverflowDrawer from './TaskDrawer/TaskDrawer';
 import TopAppBar from './TopAppBar/TopAppBar';
 
+export interface PartialWorkflowChange extends Partial<workflowChange> {}
+
 export default function EditPage() {
   const [searchParams] = useSearchParams();
 
@@ -30,7 +32,7 @@ export default function EditPage() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const saveChange = useCallback(
-    debounce((change: workflowChange) => {
+    debounce((change: PartialWorkflowChange) => {
       const { nodesData, edgesData, workflowInfo, rfNodesEdges } = change;
 
       setWorkflowChange({
@@ -38,6 +40,8 @@ export default function EditPage() {
         edgesData: edgesData || useEdgeDataStore.getState().edgesData,
         workflowInfo:
           workflowInfo || useWorkflowInfoStore.getState().displayedWorkflowInfo,
+        // the getState is not exposed for usage
+        // @ts-expect-error
         rfNodesEdges: rfNodesEdges || useRFStore.getState(),
       });
     }, 500),
