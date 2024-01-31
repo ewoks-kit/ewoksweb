@@ -27,8 +27,8 @@ function TypeSelectCell(props: Props) {
           variant="standard"
           disabled={disable}
           value={value}
-          label="Task type"
           onChange={onChangeLocal}
+          inputProps={{ 'aria-label': 'Change input type' }}
         >
           {INPUT_TYPES.map((type) => (
             <MenuItem key={type} value={type}>

@@ -34,7 +34,15 @@ function AutocompleteSelect(props: CustomTableCellProps) {
           onChange({ target: { value: val, name } }, row, index)
         }
         renderInput={(params) => (
-          <TextField variant="standard" {...params} margin="normal" />
+          <TextField
+            variant="standard"
+            {...params}
+            margin="normal"
+            inputProps={{
+              ...params.inputProps,
+              'aria-label': `Edit input ${name}`,
+            }}
+          />
         )}
       />
     </FormControl>

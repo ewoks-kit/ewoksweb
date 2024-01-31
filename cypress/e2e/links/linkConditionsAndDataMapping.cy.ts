@@ -81,11 +81,11 @@ it('inserts a new Data Mapping entry and disables it when "Map all data" is chec
       .siblings()
       .within(() => {
         cy.contains('Add').should('have.length', 1).click();
-        cy.get('[data-cy="inputInEditableCell"]').first().type('Always');
-        cy.get('[data-cy="inputInEditableCell"]').last().type('and forever');
+        cy.findByRole('textbox', { name: 'Edit input name' }).type('Always');
+        cy.findByRole('textbox', { name: 'Edit input value' }).type(
+          'and forever',
+        );
       });
-
-    cy.get('[data-cy="inputInEditableCell"]').should('have.length', 2);
   });
 
   cy.findByLabelText('Map all Data').check();
@@ -94,11 +94,12 @@ it('inserts a new Data Mapping entry and disables it when "Map all data" is chec
       .siblings()
       .within(() => {
         cy.contains('Add').should('have.length', 0);
-        cy.get('[data-cy="inputInEditableCell"]')
-          .children()
-          .each(($input) => {
-            cy.wrap($input).should('be.disabled');
-          });
+        cy.findByRole('textbox', { name: 'Edit input name' }).should(
+          'be.disabled',
+        );
+        cy.findByRole('textbox', { name: 'Edit input value' }).should(
+          'be.disabled',
+        );
       });
   });
 });
@@ -107,8 +108,7 @@ it('inserts a new Condition, changes it and disables it when "On Error condition
   cy.findByRole('table', { name: 'editable table' }).within(() => {
     cy.contains('Add').should('have.length', 1).click();
 
-    cy.get('[data-cy="inputInEditableCell"]').should('have.length', 1);
-    cy.get('[data-cy="inputInEditableCell"]').first().type('Always');
+    cy.findByRole('textbox', { name: 'Edit input name' }).type('Always');
 
     cy.findByRole('combobox').should('have.text', 'bool');
 
@@ -122,11 +122,7 @@ it('inserts a new Condition, changes it and disables it when "On Error condition
 
   cy.findByRole('table', { name: 'editable table' }).within(() => {
     cy.contains('Add').should('have.length', 0);
-    cy.get('[data-cy="inputInEditableCell"]')
-      .children()
-      .each(($input) => {
-        cy.wrap($input).should('be.disabled');
-      });
+    cy.findByRole('textbox', { name: 'Edit input name' }).should('be.disabled');
 
     cy.waitForStableDOM();
     cy.findByRole('combobox').should('not.be.enabled');
