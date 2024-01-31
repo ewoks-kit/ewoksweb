@@ -21,10 +21,11 @@ import useSnackbarStore from '../../../store/useSnackbarStore';
 import AddEntryRow from './controls/AddEntryRow';
 import RemoveRowCell from './controls/RemoveRowCell';
 import TypeSelectCell from './controls/TypeSelectCell';
-import CustomTableCell from './CustomTableCell';
+import NameTableCell from './NameTableCell';
 import styles from './Table.module.css';
 import TableHeader from './TableHeader';
 import { createData, getType } from './utils';
+import ValueTableCell from './ValueTableCell';
 
 interface EditableTableProps {
   headers: string[];
@@ -236,16 +237,18 @@ function EditableTable(props: EditableTableProps) {
           {rows.map((row, index) => {
             const handleChange = (evt: RowChangeEvent) =>
               onChange(evt, row, index);
+            const hasDuplicateName =
+              rows.filter((ro) => ro.name === row.name).length > 1;
             return (
               <React.Fragment key={row.rowId}>
                 <TableRow>
-                  <CustomTableCell
+                  <NameTableCell
                     row={row}
-                    rowsNames={rows.map((ro) => ro.name?.toString() || '')}
-                    name="name"
+                    isInvalid={hasDuplicateName}
                     onChange={handleChange}
                     typeOfValues={props.typeOfValues[0]}
                     disable={disable}
+                    width="30%"
                   />
 
                   <TypeSelectCell
@@ -258,12 +261,12 @@ function EditableTable(props: EditableTableProps) {
                     disable={disable}
                   />
 
-                  <CustomTableCell
+                  <ValueTableCell
                     row={row}
-                    name="value"
                     onChange={handleChange}
                     onEdit={() => onEditRow(row.rowId || '', index)}
                     disable={disable}
+                    allowBoolAndNumberInputs
                   />
 
                   <RemoveRowCell

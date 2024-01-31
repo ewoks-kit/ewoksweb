@@ -1,10 +1,19 @@
 .cell {
   composes: cell from './Table.module.css';
   padding: 0 4px !important;
+  border-bottom: none !important;
 }
 
 .cell :global .MuiFormControl-marginNormal {
   margin: 0 !important;
+}
+
+.cell[data-disabled] {
+  pointer-events: none;
+}
+
+.cell[data-invalid] {
+  border-bottom: solid rgb(249, 81, 81) !important;
 }
 
 .icon {
