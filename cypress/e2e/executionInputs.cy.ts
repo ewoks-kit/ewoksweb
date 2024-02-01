@@ -24,9 +24,10 @@ it('should not add inputs by default', () => {
     expectRequestBodyToDeepEqual({
       execute_arguments: {},
     }),
-  );
+  ).as('executeRequest');
 
   cy.findByRole('button', { name: 'Save & Execute' }).click();
+  cy.wait('@executeRequest');
 });
 
 it('should change the engine', () => {
@@ -38,9 +39,10 @@ it('should change the engine', () => {
     expectRequestBodyToDeepEqual({
       execute_arguments: { engine: 'ppf' },
     }),
-  );
+  ).as('executeRequest');
 
   cy.findByRole('button', { name: 'Save & Execute' }).click();
+  cy.wait('@executeRequest');
 });
 
 it('should add inputs for all nodes', () => {
@@ -59,9 +61,10 @@ it('should add inputs for all nodes', () => {
         inputs: [{ name: 'filename', value: '/data/test.h5', all: true }],
       },
     }),
-  );
+  ).as('executeRequest');
 
   cy.findByRole('button', { name: 'Save & Execute' }).click();
+  cy.wait('@executeRequest');
 });
 
 it('should add inputs for all input nodes', () => {
@@ -80,9 +83,10 @@ it('should add inputs for all input nodes', () => {
         inputs: [{ name: 'filename', value: '/data/test.h5' }],
       },
     }),
-  );
+  ).as('executeRequest');
 
   cy.findByRole('button', { name: 'Save & Execute' }).click();
+  cy.wait('@executeRequest');
 });
 
 // TODO: VALUE SHOULD NOT BE SERIALIZED AS STRING
@@ -106,7 +110,8 @@ it.skip('should add inputs for a specific node', () => {
         inputs: [{ name: 'delay', value: 6, id: 'task1' }],
       },
     }),
-  );
+  ).as('executeRequest');
 
   cy.findByRole('button', { name: 'Save & Execute' }).click();
+  cy.wait('@executeRequest');
 });
