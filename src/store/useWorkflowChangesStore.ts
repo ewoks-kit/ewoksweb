@@ -7,56 +7,51 @@ import { prepareEwoksGraph } from '../utils';
 
 interface State {
   workflowChanges: (Workflow | undefined)[];
-  currentIndex: number;
-  setWorkflowChange: (change: workflowChange) => void;
+  setWorkflowChange: (change: WorkflowChange) => void;
 }
 
-export interface workflowChange {
+export interface WorkflowChange {
   nodesData: Map<string, NodeData>;
   edgesData: Map<string, LinkData>;
   workflowInfo: GraphDetails;
-  rfNodesEdges: { nodes: Node[]; edges: Edge[] };
+  rfNodes: Node[];
+  rfEdges: Edge[];
 }
 
 const useWorkflowChanges = create<State>((set, get) => ({
   workflowChanges: [],
-  currentIndex: 0,
-  setWorkflowChange: (change: workflowChange) => {
-    const { nodesData, edgesData, workflowInfo, rfNodesEdges } = change;
+  setWorkflowChange: (change: WorkflowChange) => {
+    const { nodesData, edgesData, workflowInfo, rfNodes, rfEdges } = change;
 
     const ewoksWorkflow = prepareEwoksGraph(
       workflowInfo,
-      rfNodesEdges.nodes,
-      rfNodesEdges.edges,
+      rfNodes,
+      rfEdges,
       nodesData,
       edgesData,
     );
 
-    const workflowStack = get().workflowChanges;
-    const index = get().currentIndex;
+    const { workflowChanges } = get();
 
-    const firstWorkflow = workflowStack[0];
     const isNewWorkflow =
-      firstWorkflow === undefined ||
-      change.workflowInfo.id !== firstWorkflow.graph.id;
+      change.workflowInfo.id !== workflowChanges[0]?.graph.id;
 
     if (isNewWorkflow) {
-      set((state) => ({
-        ...state,
-        currentIndex: 0,
+      set({
         workflowChanges: [ewoksWorkflow],
-      }));
+      });
       return;
     }
 
-    const isChanged = !isEqual(workflowStack[index], ewoksWorkflow);
+    const isChanged = !isEqual(
+      workflowChanges[workflowChanges.length - 1],
+      ewoksWorkflow,
+    );
 
     if (isChanged) {
-      set((state) => ({
-        ...state,
-        currentIndex: get().currentIndex + 1,
-        workflowChanges: [...workflowStack, ewoksWorkflow],
-      }));
+      set({
+        workflowChanges: [...workflowChanges, ewoksWorkflow],
+      });
     }
   },
 }));

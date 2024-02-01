@@ -10,7 +10,7 @@ import useEdgeDataStore from '../store/useEdgeDataStore';
 import useNodeDataStore from '../store/useNodeDataStore';
 import displayedWorkflowInfo from '../store/useStore';
 import useWorkflowInfoStore from '../store/useStore';
-import type { workflowChange } from '../store/useWorkflowChangesStore';
+import type { WorkflowChange } from '../store/useWorkflowChangesStore';
 import useWorkflowChanges from '../store/useWorkflowChangesStore';
 import SuspenseBoundary from '../suspense/SuspenseBoundary';
 import Canvas from './Canvas/Canvas';
@@ -19,7 +19,7 @@ import EditSidebar from './Sidebar/EditSidebar';
 import OverflowDrawer from './TaskDrawer/TaskDrawer';
 import TopAppBar from './TopAppBar/TopAppBar';
 
-export interface PartialWorkflowChange extends Partial<workflowChange> {}
+export interface PartialWorkflowChange extends Partial<WorkflowChange> {}
 
 export default function EditPage() {
   const [searchParams] = useSearchParams();
@@ -33,7 +33,7 @@ export default function EditPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const saveChange = useCallback(
     debounce((change: PartialWorkflowChange) => {
-      const { nodesData, edgesData, workflowInfo, rfNodesEdges } = change;
+      const { nodesData, edgesData, workflowInfo, rfNodes, rfEdges } = change;
 
       setWorkflowChange({
         nodesData: nodesData || useNodeDataStore.getState().nodesData,
@@ -42,7 +42,9 @@ export default function EditPage() {
           workflowInfo || useWorkflowInfoStore.getState().displayedWorkflowInfo,
         // the getState is not exposed for usage
         // @ts-expect-error
-        rfNodesEdges: rfNodesEdges || useRFStore.getState(),
+        rfNodes: rfNodes || useRFStore.getState().getNodes(),
+        // @ts-expect-error
+        rfEdges: rfEdges || useRFStore.getState().edges(),
       });
     }, 500),
     [setWorkflowChange],
@@ -57,7 +59,7 @@ export default function EditPage() {
         saveChange({ workflowInfo: workflowDetails.displayedWorkflowInfo }),
       ),
       subscribeRFStore(({ edges, getNodes }) =>
-        saveChange({ rfNodesEdges: { edges, nodes: getNodes() } }),
+        saveChange({ rfEdges: edges, rfNodes: getNodes() }),
       ),
     ];
 
