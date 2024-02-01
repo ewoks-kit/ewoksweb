@@ -54,10 +54,6 @@ export async function getWorkflows(): Promise<WorkflowDescription[]> {
   const response = await fetchWorkflowsDescriptions();
   const workflows = response.data.items;
 
-  if (workflows.length === 0) {
-    throw new Error('It seems you have no workflows to work with!');
-  }
-
   return workflows;
 }
 
@@ -83,7 +79,7 @@ export function useWorkflowsDLE() {
   });
 }
 
-export function useWorkflows(): WorkflowDescription[] {
+export function useWorkflowDescriptions(): WorkflowDescription[] {
   const query = useQuery({
     queryKey: [QueryKey.Workflows],
     queryFn: getWorkflows,
@@ -97,11 +93,18 @@ export function useWorkflows(): WorkflowDescription[] {
   return workflowDescriptions;
 }
 
-export function useInvalidateWorkflows() {
+export function useInvalidateWorkflowDescriptions() {
   const queryClient = useQueryClient();
 
   return () => {
     queryClient.invalidateQueries({ queryKey: [QueryKey.Workflows] });
+  };
+}
+
+export function useInvalidateWorkflow() {
+  const queryClient = useQueryClient();
+
+  return () => {
     queryClient.invalidateQueries({ queryKey: [QueryKey.Workflow] });
   };
 }
