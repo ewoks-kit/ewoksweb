@@ -11,6 +11,7 @@ import type {
   RowChangeEvent,
   TypeOfValues,
 } from '../../../types';
+import { RowType } from '../../../types';
 import { isDecimalNumber } from '../../../utils/utils';
 import AutocompleteSelect from './controls/AutocompleteSelect';
 import BooleanControl from './controls/BooleanControl';
@@ -44,7 +45,7 @@ function TableCellInEditMode(props: Props) {
   }
 
   if (allowBoolAndNumberInputs) {
-    if (row.type === 'bool' || row.type === 'boolean') {
+    if (row.type === RowType.Bool) {
       return (
         <BooleanControl
           value={row.value}
@@ -56,7 +57,7 @@ function TableCellInEditMode(props: Props) {
       );
     }
 
-    if (row.type === 'number') {
+    if (row.type === RowType.Number) {
       return (
         <FormControl variant="standard" fullWidth>
           <Input

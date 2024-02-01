@@ -15,15 +15,15 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useMap } from '@react-hookz/web';
 import { nanoid } from 'nanoid';
-import type { ChangeEvent } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { RowChangeEvent, TypeOfValues } from 'types';
 
 import { useSaveWorkflow } from '../../../general/hooks';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import useStore from '../../../store/useStore';
+import type { RowChangeEvent, TypeOfValues } from '../../../types';
+import { RowType } from '../../../types';
 import { textForError } from '../../../utils';
 import { assertDefined } from '../../../utils/typeGuards';
 import AddEntryRow from '../../Sidebar/table/controls/AddEntryRow';
@@ -103,13 +103,13 @@ export default function ExecuteParametersDialog(props: Props) {
     inputRows.set(rowId, { ...oldInput, value: e.target.value });
   }
 
-  function changedTypeOfInput(e: ChangeEvent<HTMLInputElement>, rowId: string) {
+  function handleTypeChange(newType: RowType, rowId: string) {
     const oldInput = inputRows.get(rowId);
     assertDefined(oldInput);
     inputRows.set(rowId, {
       ...oldInput,
-      value: e.target.value === 'null' ? e.target.value : '',
-      type: e.target.value,
+      value: newType === RowType.Null ? 'null' : '',
+      type: newType,
     });
   }
 
@@ -158,12 +158,8 @@ export default function ExecuteParametersDialog(props: Props) {
                         </FormControl>
                       </TableCell>
                       <TypeSelectCell
-                        value={
-                          inputData.type === 'boolean'
-                            ? 'bool'
-                            : inputData.type || 'string'
-                        }
-                        onChange={(e) => changedTypeOfInput(e, rowId)}
+                        value={inputData.type}
+                        onChange={(newType) => handleTypeChange(newType, rowId)}
                       />
                       <NameTableCell
                         row={inputData}

@@ -5,18 +5,18 @@
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
-import type { ChangeEvent } from 'react';
 import { useEffect } from 'react';
 import React from 'react';
+
+import useSnackbarStore from '../../../store/useSnackbarStore';
 import type {
   Condition,
   DefaultInput,
   InputTableRow,
   RowChangeEvent,
   TypeOfValues,
-} from 'types';
-
-import useSnackbarStore from '../../../store/useSnackbarStore';
+} from '../../../types';
+import { RowType } from '../../../types';
 import AddEntryRow from './controls/AddEntryRow';
 import RemoveRowCell from './controls/RemoveRowCell';
 import TypeSelectCell from './controls/TypeSelectCell';
@@ -40,7 +40,7 @@ function EditableTable(props: EditableTableProps) {
   const { defaultValues, headers, disable, onRowAdd } = props;
 
   const [rows, setRows] = React.useState<InputTableRow[]>([]);
-  const [typeOfInputs, setTypeOfInputs] = React.useState<string[]>([]);
+  const [typeOfInputs, setTypeOfInputs] = React.useState<RowType[]>([]);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
   useEffect(() => {
@@ -81,19 +81,19 @@ function EditableTable(props: EditableTableProps) {
     props.valuesChanged(newRows);
   }
 
-  const changedTypeOfInputs = (
-    e: ChangeEvent<HTMLInputElement>,
+  function handleRowTypeChange(
+    newType: RowType,
     row: InputTableRow,
     index: number,
-  ) => {
+  ) {
     const { rowId = '' } = row;
 
     const newRows = rows.map((rowe) => {
       if (rowe.rowId === rowId) {
         return {
           ...rowe,
-          value: e.target.value === 'null' ? e.target.value : '',
-          type: e.target.value,
+          value: newType === RowType.Null ? 'null' : '',
+          type: newType,
         };
       }
       return rowe;
@@ -103,9 +103,9 @@ function EditableTable(props: EditableTableProps) {
     props.valuesChanged(newRows);
 
     const tOfI = [...typeOfInputs];
-    tOfI[index] = e.target.value;
+    tOfI[index] = newType;
     setTypeOfInputs(tOfI);
-  };
+  }
 
   return (
     <>
@@ -136,12 +136,8 @@ function EditableTable(props: EditableTableProps) {
                   />
 
                   <TypeSelectCell
-                    value={
-                      typeOfInputs[index] !== 'boolean'
-                        ? typeOfInputs[index]
-                        : 'bool'
-                    }
-                    onChange={(e) => changedTypeOfInputs(e, row, index)}
+                    value={row.type || RowType.String}
+                    onChange={(e) => handleRowTypeChange(e, row, index)}
                     disable={disable}
                   />
 
