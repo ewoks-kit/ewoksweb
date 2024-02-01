@@ -2,15 +2,15 @@ import { Select } from '@mui/material';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertStr } from '../../../utils/typeGuards';
-import type { ExecutionInputTableRow, InputTarget } from './models';
+import type { InputTarget } from './models';
 
 interface Props {
-  row: ExecutionInputTableRow;
-  onTargetChange: (row: ExecutionInputTableRow, newTarget: InputTarget) => void;
+  defaultValue: InputTarget;
+  onTargetChange: (newTarget: InputTarget) => void;
 }
 
 function InputTargetDropdown(props: Props) {
-  const { row, onTargetChange } = props;
+  const { defaultValue, onTargetChange } = props;
 
   const nodesData = useNodeDataStore((state) => state.nodesData);
 
@@ -18,17 +18,19 @@ function InputTargetDropdown(props: Props) {
     <Select
       variant="standard"
       native
-      defaultValue={typeof row.target === 'string' ? row.target : row.target.id}
+      defaultValue={
+        typeof defaultValue === 'string' ? defaultValue : defaultValue.id
+      }
       onChange={(ev) => {
         const newValue = ev.target.value;
         assertStr(newValue);
 
         if (newValue === 'All nodes' || newValue === 'All input nodes') {
-          onTargetChange(row, newValue);
+          onTargetChange(newValue);
           return;
         }
 
-        onTargetChange(row, { id: newValue });
+        onTargetChange({ id: newValue });
       }}
       inputProps={{ 'aria-label': 'Change target nodes' }}
     >
