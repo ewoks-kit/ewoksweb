@@ -18,10 +18,8 @@ import { nanoid } from 'nanoid';
 import type { ChangeEvent } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { InputTableRow, RowChangeEvent, TypeOfValues } from 'types';
+import type { RowChangeEvent, TypeOfValues } from 'types';
 
-import type { ObjectEditDialogContent } from '../../../api/models';
-import DraggableDialog from '../../../general/DraggableDialog';
 import { useSaveWorkflow } from '../../../general/hooks';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import useSnackbarStore from '../../../store/useSnackbarStore';
@@ -54,42 +52,11 @@ export default function ExecuteParametersDialog(props: Props) {
   const nodesData = useNodeDataStore((state) => state.nodesData);
 
   const inputRows = useMap<string, ExecutionInputTableRow>();
-  const [openDialog, setOpenDialog] = useState(false);
-  const [dialogContent, setDialogContent] = useState<ObjectEditDialogContent>();
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
   const [engine, setEngine] = useState<EngineDropdownOption>('default');
   const { handleSave } = useSaveWorkflow();
   const navigate = useNavigate();
-
-  function showInputEditDialog(
-    id: string,
-    title: string,
-    graph: unknown,
-    callbackProps: { rows: ExecutionInputTableRow[]; id: string },
-  ) {
-    if (typeof graph !== 'object' || graph === null) {
-      return;
-    }
-
-    setOpenDialog(true);
-    setDialogContent({
-      id,
-      title,
-      object: graph,
-      callbackProps: {
-        id: callbackProps.id,
-        rows: callbackProps.rows.map((row) => {
-          return {
-            rowId: row.rowId,
-            name: row.name,
-            value: row.value,
-            type: row.type,
-          };
-        }),
-      },
-    });
-  }
 
   async function handleSaveExecute() {
     try {
@@ -146,46 +113,6 @@ export default function ExecuteParametersDialog(props: Props) {
     });
   }
 
-  function onListOrDict(rowId: string): unknown {
-    const row = inputRows.get(rowId);
-    if (!row) {
-      return {};
-    }
-
-    if (row.type === 'list') {
-      if (Array.isArray(row.value)) {
-        return row.value;
-      }
-      return [];
-    }
-
-    if (typeof row.value === 'object' && !Array.isArray(row.value)) {
-      return row.value;
-    }
-    return {};
-  }
-
-  function handleValueEdit(inputRow: ExecutionInputTableRow) {
-    if (inputRow.type && ['list', 'dict'].includes(inputRow.type)) {
-      showInputEditDialog(
-        inputRow.rowId,
-        inputRow.type === 'list' ? 'Edit list' : 'Edit dict',
-        onListOrDict(inputRow.rowId),
-        { rows: [...inputRows.values()], id: inputRow.rowId },
-      );
-    }
-  }
-
-  function setRowValue(
-    name: string,
-    newValue: unknown,
-    callbackProps: { id: string; rows: InputTableRow[] },
-  ) {
-    const oldInput = inputRows.get(callbackProps.id);
-    assertDefined(oldInput);
-    inputRows.set(callbackProps.id, { ...oldInput, value: newValue });
-  }
-
   function calcTypeAndValues(target: InputTarget): TypeOfValues {
     if (typeof target === 'string') {
       return { typeOfInput: 'input', values: [], requiredValues: [] };
@@ -204,106 +131,96 @@ export default function ExecuteParametersDialog(props: Props) {
   }
 
   return (
-    <>
-      {dialogContent && (
-        <DraggableDialog
-          open={openDialog}
-          content={dialogContent}
-          setValue={setRowValue}
-        />
-      )}
-      <Dialog maxWidth="xl" fullWidth open={open} onClose={() => onClose()}>
-        <DialogTitle>Execution Parameters</DialogTitle>
-        <DialogContent>
-          <Card variant="outlined">
-            <CardContent>
-              <h4>Workflow Inputs</h4>
-              <div>
-                <Table
-                  aria-label="Execution parameters table"
-                  size="small"
-                  padding="normal"
-                >
-                  <ExecuteParamsTableHeader />
-                  <TableBody>
-                    {[...inputRows.entries()].map(([rowId, inputData]) => (
-                      <TableRow key={rowId}>
-                        <TableCell align="left" size="small">
-                          <FormControl>
-                            <InputTargetDropdown
-                              defaultValue={inputData.target}
-                              onTargetChange={(newTarget) =>
-                                handleTargetChange(rowId, newTarget)
-                              }
-                            />
-                          </FormControl>
-                        </TableCell>
-                        <TypeSelectCell
-                          value={
-                            inputData.type === 'boolean'
-                              ? 'bool'
-                              : inputData.type || 'string'
-                          }
-                          onChange={(e) => changedTypeOfInput(e, rowId)}
-                        />
-                        <NameTableCell
-                          row={inputData}
-                          onChange={(e) => handleNameChange(e, rowId)}
-                          typeOfValues={calcTypeAndValues(inputData.target)}
-                        />
-
-                        <ValueTableCell
-                          row={inputData}
-                          onChange={(e) => handleValueChange(e, rowId)}
-                          onEdit={() => handleValueEdit(inputData)}
-                          allowBoolAndNumberInputs
-                        />
-                        <TableCell align="left" size="small">
-                          <RemoveRowButton
-                            onClick={() => inputRows.delete(rowId)}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-              <Table>
+    <Dialog maxWidth="xl" fullWidth open={open} onClose={() => onClose()}>
+      <DialogTitle>Execution Parameters</DialogTitle>
+      <DialogContent>
+        <Card variant="outlined">
+          <CardContent>
+            <h4>Workflow Inputs</h4>
+            <div>
+              <Table
+                aria-label="Execution parameters table"
+                size="small"
+                padding="normal"
+              >
+                <ExecuteParamsTableHeader />
                 <TableBody>
-                  <AddEntryRow
-                    onClick={() => {
-                      const rowId = nanoid();
-                      inputRows.set(rowId, {
-                        rowId,
-                        ...EMPTY_INPUT,
-                      });
-                    }}
-                    colSpan={4}
-                  />
+                  {[...inputRows.entries()].map(([rowId, inputData]) => (
+                    <TableRow key={rowId}>
+                      <TableCell align="left" size="small">
+                        <FormControl>
+                          <InputTargetDropdown
+                            defaultValue={inputData.target}
+                            onTargetChange={(newTarget) =>
+                              handleTargetChange(rowId, newTarget)
+                            }
+                          />
+                        </FormControl>
+                      </TableCell>
+                      <TypeSelectCell
+                        value={
+                          inputData.type === 'boolean'
+                            ? 'bool'
+                            : inputData.type || 'string'
+                        }
+                        onChange={(e) => changedTypeOfInput(e, rowId)}
+                      />
+                      <NameTableCell
+                        row={inputData}
+                        onChange={(e) => handleNameChange(e, rowId)}
+                        typeOfValues={calcTypeAndValues(inputData.target)}
+                      />
+
+                      <ValueTableCell
+                        row={inputData}
+                        onChange={(e) => handleValueChange(e, rowId)}
+                        allowBoolAndNumberInputs
+                      />
+                      <TableCell align="left" size="small">
+                        <RemoveRowButton
+                          onClick={() => inputRows.delete(rowId)}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
-            </CardContent>
-          </Card>
-          <ExecutionEngine engine={engine} setEngine={setEngine} />
-        </DialogContent>
-        <div className={styles.saveWarning}>
-          <InfoIcon fontSize="small" />
-          The workflow will be saved before execution.
-        </div>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              handleSaveExecute();
-            }}
-            color="primary"
-          >
-            Save & Execute
-          </Button>
-          <Button onClick={() => onClose()} color="primary">
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+            </div>
+            <Table>
+              <TableBody>
+                <AddEntryRow
+                  onClick={() => {
+                    const rowId = nanoid();
+                    inputRows.set(rowId, {
+                      rowId,
+                      ...EMPTY_INPUT,
+                    });
+                  }}
+                  colSpan={4}
+                />
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+        <ExecutionEngine engine={engine} setEngine={setEngine} />
+      </DialogContent>
+      <div className={styles.saveWarning}>
+        <InfoIcon fontSize="small" />
+        The workflow will be saved before execution.
+      </div>
+      <DialogActions>
+        <Button
+          onClick={() => {
+            handleSaveExecute();
+          }}
+          color="primary"
+        >
+          Save & Execute
+        </Button>
+        <Button onClick={() => onClose()} color="primary">
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }

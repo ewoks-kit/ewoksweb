@@ -3,7 +3,6 @@ import type {
   EwoksLink,
   EwoksNode,
   GraphDetails,
-  InputTableRow,
   Task,
   WorkflowDescription,
 } from '../types';
@@ -54,15 +53,8 @@ export enum QueryKey {
   Workflows = 'workflows',
 }
 
-export interface ObjectEditDialogContent {
-  id?: string;
-  title?: string;
-  object?: object;
-  callbackProps: { rows: InputTableRow[]; id: string };
-}
-
 // https://ewokscore.readthedocs.io/en/latest/execute_io.html
-export interface NodeExecutionInput {
+interface NodeExecutionInput {
   name: string | number;
   value: unknown;
   label?: string;
