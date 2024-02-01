@@ -100,6 +100,8 @@ export function useWorkflows(): WorkflowDescription[] {
 export function useInvalidateWorkflows() {
   const queryClient = useQueryClient();
 
-  return () =>
+  return () => {
     queryClient.invalidateQueries({ queryKey: [QueryKey.Workflows] });
+    queryClient.invalidateQueries({ queryKey: [QueryKey.Workflow] });
+  };
 }
