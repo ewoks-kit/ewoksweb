@@ -2,8 +2,10 @@ import isEqual from 'lodash/isEqual';
 import type { Edge, Node } from 'reactflow';
 import { create } from 'zustand';
 
-import type { GraphDetails, LinkData, NodeData, Workflow } from '../types';
+import type { GraphDetails, Workflow } from '../types';
 import { prepareEwoksGraph } from '../utils';
+import type { EdgeDataState } from './useEdgeDataStore';
+import type { NodeDataState } from './useNodeDataStore';
 
 interface State {
   workflowChanges: (Workflow | undefined)[];
@@ -11,8 +13,8 @@ interface State {
 }
 
 export interface WorkflowChange {
-  nodesData: Map<string, NodeData>;
-  edgesData: Map<string, LinkData>;
+  nodesData: NodeDataState['nodesData'];
+  edgesData: EdgeDataState['edgesData'];
   workflowInfo: GraphDetails;
   rfNodes: Node[];
   rfEdges: Edge[];
