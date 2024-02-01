@@ -51,6 +51,7 @@ function DeleteTaskButton(props: Props) {
               Please make sure that it is not used in any workflow!
               Do you agree to continue?`}
         open={isDialogOpen}
+        setOpen={setOpenDialog}
         agreeCallback={async () => {
           setOpenDialog(false);
           await deleteTask();
