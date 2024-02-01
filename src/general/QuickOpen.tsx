@@ -39,6 +39,7 @@ export default function QuickOpen() {
         title="There are unsaved changes"
         content="Continue without saving?"
         open={openAgreeDialog}
+        setOpen={setOpenAgreeDialog}
         agreeCallback={() => getFromServer(workflowId)}
         disagreeCallback={() => setOpenAgreeDialog(false)}
       />

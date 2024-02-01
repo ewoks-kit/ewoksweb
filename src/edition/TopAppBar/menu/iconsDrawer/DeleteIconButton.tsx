@@ -49,6 +49,7 @@ function DeleteIconButton(props: Props) {
         title={`Delete "${iconName}" icon?`}
         content="Are you sure to delete this icon ?"
         open={isDialogOpen}
+        setOpen={setOpenDialog}
         agreeCallback={agreeDeleteIcon}
         disagreeCallback={() => setOpenDialog(false)}
       />

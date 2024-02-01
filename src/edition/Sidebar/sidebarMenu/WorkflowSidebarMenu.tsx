@@ -101,6 +101,7 @@ export default function WorkflowSidebarMenu(props: Props) {
               Please make sure that it is not used as a sub-workflow in other workflows!
               Do you agree to continue?`}
         open={openAgreeDialog}
+        setOpen={setOpenAgreeDialog}
         agreeCallback={() => {
           agreeCallback();
           onSelection();
