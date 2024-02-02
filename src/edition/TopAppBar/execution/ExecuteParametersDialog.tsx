@@ -29,7 +29,7 @@ import { assertDefined } from '../../../utils/typeGuards';
 import AddEntryRow from '../../Sidebar/table/controls/AddEntryRow';
 import RemoveRowButton from '../../Sidebar/table/controls/RemoveRowButton';
 import TypeSelectCell from '../../Sidebar/table/controls/TypeSelectCell';
-import NameTableCell from '../../Sidebar/table/NameTableCell';
+import StrEditCell from '../../Sidebar/table/StrEditCell';
 import { isClass } from '../../Sidebar/table/utils';
 import ValueTableCell from '../../Sidebar/table/ValueTableCell';
 import type { EngineDropdownOption } from '../models';
@@ -161,8 +161,9 @@ export default function ExecuteParametersDialog(props: Props) {
                         value={inputData.type}
                         onChange={(newType) => handleTypeChange(newType, rowId)}
                       />
-                      <NameTableCell
+                      <StrEditCell
                         row={inputData}
+                        name="name"
                         onChange={(e) => handleNameChange(e, rowId)}
                         typeOfValues={calcTypeAndValues(inputData.target)}
                       />

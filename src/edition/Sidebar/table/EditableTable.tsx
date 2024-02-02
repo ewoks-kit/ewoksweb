@@ -20,7 +20,7 @@ import { RowType } from '../../../types';
 import AddEntryRow from './controls/AddEntryRow';
 import RemoveRowCell from './controls/RemoveRowCell';
 import TypeSelectCell from './controls/TypeSelectCell';
-import NameTableCell from './NameTableCell';
+import StrEditCell from './StrEditCell';
 import styles from './Table.module.css';
 import TableHeader from './TableHeader';
 import { createData, getType } from './utils';
@@ -126,8 +126,9 @@ function EditableTable(props: EditableTableProps) {
             return (
               <React.Fragment key={row.rowId}>
                 <TableRow>
-                  <NameTableCell
+                  <StrEditCell
                     row={row}
+                    name="name"
                     isInvalid={hasDuplicateName}
                     onChange={handleChange}
                     typeOfValues={props.typeOfValues[0]}
