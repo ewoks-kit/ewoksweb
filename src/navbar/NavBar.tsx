@@ -2,13 +2,13 @@ import { useState } from 'react';
 import {
   NavLink,
   useLocation,
-  useSearchParams,
   useNavigate,
+  useSearchParams,
 } from 'react-router-dom';
-import ConfirmDialog from '../general/ConfirmDialog';
-import useWorkflowChanges from '../store/useWorkflowChangesStore';
 
+import ConfirmDialog from '../general/ConfirmDialog';
 import useStore from '../store/useStore';
+import useWorkflowChanges from '../store/useWorkflowChangesStore';
 import styles from './NavBar.module.css';
 import useNavBarElementStore from './useNavBarElementStore';
 
@@ -16,9 +16,9 @@ function NavBar() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const [searchParams] = useSearchParams();
+
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
-  const [isEditActive, setIsEditActive] = useState(true);
-  const workflowChanges = useWorkflowChanges((state) => state.workflowChanges);
+  const workflowChanges = useWorkflowChanges((st) => st.workflowChanges);
 
   const setElement = useNavBarElementStore((st) => st.setElement);
   const displayedWorkflowInfo = useStore((st) => st.displayedWorkflowInfo);
@@ -32,7 +32,8 @@ function NavBar() {
     });
   }
 
-  function handleClickMonitor() {
+  function handleClickMonitor(e: React.MouseEvent<HTMLElement>) {
+    e.preventDefault();
     if (workflowChanges.length > 1) {
       setOpenAgreeDialog(true);
       return;
@@ -40,6 +41,7 @@ function NavBar() {
 
     goToMonitor();
   }
+
   return (
     <>
       <ConfirmDialog
@@ -61,10 +63,8 @@ function NavBar() {
           <div className={styles.title}>
             <NavLink to="/">EwoksWeb</NavLink>
           </div>
-          {/* this has to be a span as well */}
           <NavLink
             className={({ isActive }) => {
-              setIsEditActive(isActive);
               return linkIsActive(isActive);
             }}
             to={{
@@ -78,12 +78,15 @@ function NavBar() {
           >
             Edit
           </NavLink>
-          <span
-            className={linkIsActive(!isEditActive)}
+          <NavLink
+            className={({ isActive }) => {
+              return linkIsActive(isActive);
+            }}
+            to="/monitor"
             onClick={handleClickMonitor}
           >
             Monitor
-          </span>
+          </NavLink>
         </nav>
       </div>
     </>
