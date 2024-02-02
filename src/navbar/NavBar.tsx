@@ -7,8 +7,8 @@ import {
 } from 'react-router-dom';
 
 import ConfirmDialog from '../general/ConfirmDialog';
+import { useIsChanged } from '../store/graph-hooks';
 import useStore from '../store/useStore';
-import useWorkflowChanges from '../store/useWorkflowChangesStore';
 import styles from './NavBar.module.css';
 import useNavBarElementStore from './useNavBarElementStore';
 
@@ -18,7 +18,7 @@ function NavBar() {
   const [searchParams] = useSearchParams();
 
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
-  const workflowChanges = useWorkflowChanges((st) => st.workflowChanges);
+  const isChanged = useIsChanged();
 
   const setElement = useNavBarElementStore((st) => st.setElement);
   const displayedWorkflowInfo = useStore((st) => st.displayedWorkflowInfo);
@@ -34,7 +34,7 @@ function NavBar() {
 
   function handleClickMonitor(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
-    if (workflowChanges.length > 1) {
+    if (isChanged) {
       setOpenAgreeDialog(true);
       return;
     }
