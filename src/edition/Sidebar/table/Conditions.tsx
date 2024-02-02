@@ -10,11 +10,12 @@ import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import EditableTable from './EditableTable';
+import styles from './Table.module.css';
 import { calcTypeOfValues } from './utils';
 
 interface Props {
   element: Edge;
-  isOnErrorSelected: boolean | undefined;
+  isOnErrorSelected?: boolean;
 }
 
 // DOC: The conditions for a link are being set in this component
@@ -29,7 +30,7 @@ export default function Conditions({ element, isOnErrorSelected }: Props) {
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
 
-  function addConditions(rows: InputTableRow[] | undefined) {
+  function addConditions(rows: InputTableRow[]) {
     const elCon = rows as EdgeConditions[];
 
     const newEdgeData = {
@@ -69,6 +70,12 @@ export default function Conditions({ element, isOnErrorSelected }: Props) {
           },
         ]}
       />
+      {isOnErrorSelected && (
+        <div className={styles.warning}>
+          Conditions have no effect when On Error condition is enabled. They
+          will be removed when saving the workflow.
+        </div>
+      )}
     </div>
   );
 }

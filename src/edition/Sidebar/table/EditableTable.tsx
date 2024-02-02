@@ -26,7 +26,7 @@ interface EditableTableProps {
   typeOfValues: TypeOfValues[];
   valuesChanged: (rows: InputTableRow[]) => void;
   disable?: boolean;
-  onRowAdd?: (rows?: InputTableRow[]) => void;
+  onRowAdd?: (rows: InputTableRow[]) => void;
 }
 
 // The table where lines can be added where type is selected and appropriate values are given to name and value.
@@ -85,63 +85,55 @@ function EditableTable(props: EditableTableProps) {
   }
 
   return (
-    <>
-      <Table
-        style={{ opacity: disable ? '0.2' : '1' }}
-        className={styles.table}
-        aria-label="editable table"
-        size="small"
-        padding="none"
-      >
-        <TableHeader headers={headers} />
-        <TableBody>
-          {rows.map((row) => {
-            const handleChange = (evt: RowChangeEvent) => onChange(evt, row);
-            const hasDuplicateName =
-              rows.filter((ro) => ro.name === row.name).length > 1;
-            return (
-              <TableRow key={row.rowId}>
-                <StrEditCell
-                  row={row}
-                  name="name"
-                  isInvalid={hasDuplicateName}
-                  onChange={handleChange}
-                  typeOfValues={props.typeOfValues[0]}
-                  disable={disable}
-                  width="30%"
-                />
+    <Table
+      style={{ opacity: disable ? '0.2' : '1' }}
+      className={styles.table}
+      aria-label="editable table"
+      size="small"
+      padding="none"
+    >
+      <TableHeader headers={headers} />
+      <TableBody>
+        {rows.map((row) => {
+          const handleChange = (evt: RowChangeEvent) => onChange(evt, row);
+          const hasDuplicateName =
+            rows.filter((ro) => ro.name === row.name).length > 1;
+          return (
+            <TableRow key={row.rowId}>
+              <StrEditCell
+                row={row}
+                name="name"
+                isInvalid={hasDuplicateName}
+                onChange={handleChange}
+                typeOfValues={props.typeOfValues[0]}
+                disable={disable}
+                width="30%"
+              />
 
-                <TypeSelectCell
-                  value={row.type || RowType.String}
-                  onChange={(e) => handleRowTypeChange(e, row)}
-                  disable={disable}
-                />
+              <TypeSelectCell
+                value={row.type || RowType.String}
+                onChange={(e) => handleRowTypeChange(e, row)}
+                disable={disable}
+              />
 
-                <MultiTypeEditCell
-                  row={row}
-                  onChange={handleChange}
-                  disable={disable}
-                />
+              <MultiTypeEditCell
+                row={row}
+                onChange={handleChange}
+                disable={disable}
+              />
 
-                <RemoveRowCell
-                  disable={disable}
-                  onDelete={() => onDelete(row.rowId)}
-                />
-              </TableRow>
-            );
-          })}
-          {onRowAdd && !disable && (
-            <AddEntryRow onClick={() => onRowAdd(rows)} colSpan={4} />
-          )}
-        </TableBody>
-      </Table>
-      {disable && (
-        <div className={styles.warning}>
-          Conditions have no effect when On Error condition is enabled. They
-          will be removed when saving the workflow.
-        </div>
-      )}
-    </>
+              <RemoveRowCell
+                disable={disable}
+                onDelete={() => onDelete(row.rowId)}
+              />
+            </TableRow>
+          );
+        })}
+        {onRowAdd && !disable && (
+          <AddEntryRow onClick={() => onRowAdd(rows)} colSpan={4} />
+        )}
+      </TableBody>
+    </Table>
   );
 }
 
