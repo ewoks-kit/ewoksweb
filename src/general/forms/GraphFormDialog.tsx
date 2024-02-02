@@ -71,11 +71,11 @@ export default function GraphFormDialog(props: Props) {
     try {
       if (overwrite) {
         await putWorkflow(ewoksGraph);
+        invalidateWorkflow(identifier);
       } else {
         await postWorkflow(ewoksGraph);
       }
       invalidateWorkflowDescriptions();
-      invalidateWorkflow();
 
       showSuccessMsg('Graph saved successfully!');
 

@@ -51,7 +51,7 @@ export enum QueryKey {
   Icons = 'icons',
   Tasks = 'tasks',
   Workflow = 'workflow',
-  Workflows = 'workflows',
+  WorkflowDescriptions = 'workflows',
 }
 
 export interface ObjectEditDialogContent {

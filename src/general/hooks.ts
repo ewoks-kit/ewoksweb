@@ -132,7 +132,7 @@ export function useSaveWorkflow() {
         ),
       );
       invalidateWorkflowDescriptions();
-      invalidateWorkflow();
+      invalidateWorkflow(displayedWorkflowInfo.id);
 
       showSuccessMsg('Graph saved successfully!');
       setStatus('success');

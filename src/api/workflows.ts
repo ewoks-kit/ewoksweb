@@ -52,7 +52,13 @@ export async function executeWorkflow(
 
 export async function getWorkflows(): Promise<WorkflowDescription[]> {
   const response = await fetchWorkflowsDescriptions();
-  return response.data.items;
+  const workflows = response.data.items;
+
+  if (workflows.length === 0) {
+    throw new Error('It seems you have no workflows to work with!');
+  }
+
+  return workflows;
 }
 
 export function useWorkflow(id: string | undefined) {
@@ -71,7 +77,7 @@ export function useWorkflow(id: string | undefined) {
 
 export function useWorkflowsDLE() {
   return useQuery({
-    queryKey: [QueryKey.Workflows],
+    queryKey: [QueryKey.WorkflowDescriptions],
     queryFn: getWorkflows,
     staleTime: Infinity,
   });
@@ -79,7 +85,7 @@ export function useWorkflowsDLE() {
 
 export function useWorkflowDescriptions(): WorkflowDescription[] {
   const query = useQuery({
-    queryKey: [QueryKey.Workflows],
+    queryKey: [QueryKey.WorkflowDescriptions],
     queryFn: getWorkflows,
     staleTime: Infinity,
     suspense: true,
@@ -94,10 +100,16 @@ export function useWorkflowDescriptions(): WorkflowDescription[] {
 export function useInvalidateWorkflowDescriptions() {
   const queryClient = useQueryClient();
   return () =>
-    queryClient.invalidateQueries({ queryKey: [QueryKey.Workflows] });
+    queryClient.invalidateQueries({
+      queryKey: [QueryKey.WorkflowDescriptions],
+    });
 }
 
 export function useInvalidateWorkflow() {
   const queryClient = useQueryClient();
-  return () => queryClient.invalidateQueries({ queryKey: [QueryKey.Workflow] });
+  return (workflowId: string) => {
+    queryClient.invalidateQueries({
+      queryKey: [QueryKey.Workflow, workflowId],
+    });
+  };
 }
