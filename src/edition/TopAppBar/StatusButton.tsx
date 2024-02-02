@@ -1,7 +1,9 @@
 import { Check, ErrorOutline, Save } from '@mui/icons-material';
 import { useEffect } from 'react';
 
+import { useIsChanged } from '../../store/graph-hooks';
 import type { Status } from './models';
+import styles from './TopAppBar.module.css';
 
 interface Props {
   status: Status;
@@ -28,7 +30,12 @@ function StatusIcon(props: Props) {
   }, [status, setStatus]);
 
   const Icon = ICONS[status];
-  return <Icon />;
+  return (
+    <div className={styles.container}>
+      <Icon />
+      {useIsChanged() && <div className={styles.saveRedDot} />}
+    </div>
+  );
 }
 
 export default StatusIcon;

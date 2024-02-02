@@ -4,7 +4,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useEffect, useState } from 'react';
 
 interface ConfirmDialogProps {
   open: boolean;
@@ -25,8 +24,16 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
         <DialogContentText>{content}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.disagreeCallback}>No</Button>
-        <Button onClick={props.agreeCallback}>Yes</Button>
+        <Button onClick={() => props.disagreeCallback()}>No</Button>
+        <Button
+          onClick={() => {
+            void (async () => {
+              props.agreeCallback();
+            })();
+          }}
+        >
+          Yes
+        </Button>
       </DialogActions>
     </Dialog>
   );
