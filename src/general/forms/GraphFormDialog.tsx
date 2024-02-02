@@ -15,8 +15,8 @@ import { useReactFlow } from 'reactflow';
 import {
   postWorkflow,
   putWorkflow,
-  useInvalidateWorkflowDescriptions,
   useInvalidateWorkflow,
+  useInvalidateWorkflowDescriptions,
 } from '../../api/workflows';
 import commonStrings from '../../commonStrings.json';
 import useSnackbarStore from '../../store/useSnackbarStore';
@@ -74,8 +74,8 @@ export default function GraphFormDialog(props: Props) {
       } else {
         await postWorkflow(ewoksGraph);
       }
-      await invalidateWorkflowDescriptions();
-      await invalidateWorkflow();
+      invalidateWorkflowDescriptions();
+      invalidateWorkflow();
 
       showSuccessMsg('Graph saved successfully!');
 

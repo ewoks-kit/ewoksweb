@@ -47,7 +47,7 @@ export default function WorkflowSidebarMenu(props: Props) {
     if (displayedWorkflowInfo.id) {
       try {
         await deleteWorkflow(displayedWorkflowInfo.id);
-        await invalidateWorkflowDescriptions();
+        invalidateWorkflowDescriptions();
         setRootWorkflow(EMPTY_GRAPH, rfInstance, tasks);
         showSuccessMsg(
           `Workflow ${displayedWorkflowInfo.id} successfully deleted!`,

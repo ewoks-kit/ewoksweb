@@ -3,8 +3,8 @@ import { useReactFlow } from 'reactflow';
 
 import {
   putWorkflow,
-  useInvalidateWorkflowDescriptions,
   useInvalidateWorkflow,
+  useInvalidateWorkflowDescriptions,
 } from '../api/workflows';
 import commonStrings from '../commonStrings.json';
 import type { Status } from '../edition/TopAppBar/models';
@@ -131,8 +131,8 @@ export function useSaveWorkflow() {
           getEdgesData(),
         ),
       );
-      await invalidateWorkflowDescriptions();
-      await invalidateWorkflow();
+      invalidateWorkflowDescriptions();
+      invalidateWorkflow();
 
       showSuccessMsg('Graph saved successfully!');
       setStatus('success');

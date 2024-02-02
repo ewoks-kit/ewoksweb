@@ -52,9 +52,7 @@ export async function executeWorkflow(
 
 export async function getWorkflows(): Promise<WorkflowDescription[]> {
   const response = await fetchWorkflowsDescriptions();
-  const workflows = response.data.items;
-
-  return workflows;
+  return response.data.items;
 }
 
 export function useWorkflow(id: string | undefined) {
@@ -95,16 +93,11 @@ export function useWorkflowDescriptions(): WorkflowDescription[] {
 
 export function useInvalidateWorkflowDescriptions() {
   const queryClient = useQueryClient();
-
-  return () => {
+  return () =>
     queryClient.invalidateQueries({ queryKey: [QueryKey.Workflows] });
-  };
 }
 
 export function useInvalidateWorkflow() {
   const queryClient = useQueryClient();
-
-  return () => {
-    queryClient.invalidateQueries({ queryKey: [QueryKey.Workflow] });
-  };
+  return () => queryClient.invalidateQueries({ queryKey: [QueryKey.Workflow] });
 }
