@@ -15,7 +15,3 @@
 .cell[data-invalid] {
   border-bottom: solid rgb(249, 81, 81) !important;
 }
-
-.icon {
-  padding-left: 8px;
-}

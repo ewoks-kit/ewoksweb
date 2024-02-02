@@ -78,3 +78,20 @@ export function calcTypeOfValues(
         : undefined,
   };
 }
+
+export function transformInObject(
+  value: unknown,
+  type: string | undefined,
+): object {
+  if (type === 'list') {
+    return Array.isArray(value) ? value : [];
+  }
+
+  if (type === 'dict') {
+    return typeof value === 'object' && !Array.isArray(value) && value
+      ? value
+      : {};
+  }
+
+  return {};
+}
