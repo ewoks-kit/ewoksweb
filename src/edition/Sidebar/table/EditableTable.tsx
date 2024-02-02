@@ -8,6 +8,7 @@ import type {
   DefaultInput,
   InputTableRow,
   RowChangeEvent,
+  RowValue,
   TypeOfValues,
 } from '../../../types';
 import { RowType } from '../../../types';
@@ -36,23 +37,31 @@ function EditableTable(props: EditableTableProps) {
   const rows = defaultValues.map(createData);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
-  function onChange(e: RowChangeEvent, row: InputTableRow) {
+  function handleNameChange(e: RowChangeEvent, row: InputTableRow) {
     const { rowId: id } = row;
     const otherRows = rows.filter((_row) => _row.rowId !== id);
 
-    if (
-      e.target.name === 'name' &&
-      otherRows.map((r) => r.name).includes(e.target.value as string)
-    ) {
+    if (otherRows.map((r) => r.name).includes(e.target.value as string)) {
       showErrorMsg('Not allowed to assign the same property TWICE!');
-      // return;
     }
 
-    const { value, name } = e.target;
+    const { value: newName } = e.target;
 
     const newRows = rows.map((rowe) => {
       if (rowe.rowId === id) {
-        return { ...rowe, [name]: value };
+        return { ...rowe, name: newName };
+      }
+      return rowe;
+    });
+    props.valuesChanged(newRows);
+  }
+
+  function handleValueChange(newValue: RowValue, row: InputTableRow) {
+    const { rowId: id } = row;
+
+    const newRows = rows.map((rowe) => {
+      if (rowe.rowId === id) {
+        return { ...rowe, value: newValue };
       }
       return rowe;
     });
@@ -95,7 +104,6 @@ function EditableTable(props: EditableTableProps) {
       <TableHeader headers={headers} />
       <TableBody>
         {rows.map((row) => {
-          const handleChange = (evt: RowChangeEvent) => onChange(evt, row);
           const hasDuplicateName =
             rows.filter((ro) => ro.name === row.name).length > 1;
           return (
@@ -104,7 +112,7 @@ function EditableTable(props: EditableTableProps) {
                 row={row}
                 name="name"
                 isInvalid={hasDuplicateName}
-                onChange={handleChange}
+                onChange={(e) => handleNameChange(e, row)}
                 typeOfValues={props.typeOfValues[0]}
                 disable={disable}
                 width="30%"
@@ -118,7 +126,7 @@ function EditableTable(props: EditableTableProps) {
 
               <MultiTypeEditCell
                 row={row}
-                onChange={handleChange}
+                onChange={(newValue) => handleValueChange(newValue, row)}
                 disable={disable}
               />
 

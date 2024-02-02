@@ -1,54 +1,55 @@
 import { FormControl } from '@mui/material';
 import Input from '@mui/material/Input';
-import type { ChangeEvent } from 'react';
 
-import type { InputTableRow, RowChangeEvent } from '../../../../types';
+import type { RowValue } from '../../../../types';
 import { RowType } from '../../../../types';
 import { isDecimalNumber } from '../../../../utils/utils';
 import BooleanControl from './BooleanControl';
+import EditJsonButton from './EditJsonButton';
 import styles from './MultiTypeEditControl.module.css';
 
 interface Props {
-  row: InputTableRow;
-  name: 'name' | 'value';
-  onChange: (e: RowChangeEvent) => void;
+  value: RowValue;
+  type: RowType;
+  onChange: (newValue: RowValue) => void;
   disable?: boolean;
 }
 
 function MultiTypeEditControl(props: Props) {
-  const { row, name, onChange, disable } = props;
+  const { value, type, onChange, disable } = props;
 
-  function onChangeNumber(
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) {
-    if (isDecimalNumber(event.target.value)) {
-      onChange(event);
-    }
-  }
-
-  if (row.type === RowType.Bool) {
+  if (type === RowType.List || type === RowType.Dict) {
     return (
-      <BooleanControl
-        value={row.value}
-        onChange={(e) => {
-          onChange(e);
-        }}
+      <EditJsonButton
+        value={value}
+        type={type}
+        onChange={onChange}
         disabled={disable}
       />
     );
   }
 
-  if (row.type === RowType.Number) {
+  if (type === RowType.Bool) {
+    return (
+      <BooleanControl value={value} onChange={onChange} disabled={disable} />
+    );
+  }
+
+  if (type === RowType.Number) {
     return (
       <FormControl variant="standard" fullWidth>
         <Input
           disabled={disable}
-          value={row[name]}
+          value={value}
           type="text"
-          name={name}
-          onChange={(event) => onChangeNumber(event)}
+          onChange={(event) => {
+            const { value: newValue } = event.target;
+            if (isDecimalNumber(newValue)) {
+              onChange(Number(newValue));
+            }
+          }}
           className={styles.input}
-          inputProps={{ 'aria-label': `Edit input ${name}` }}
+          inputProps={{ 'aria-label': `Edit input value` }}
         />
       </FormControl>
     );
@@ -58,12 +59,11 @@ function MultiTypeEditControl(props: Props) {
     <FormControl variant="standard" fullWidth>
       <Input
         disabled={disable}
-        value={row[name]}
+        value={value}
         type="text"
-        name={name}
-        onChange={(e) => onChange(e)}
+        onChange={(e) => onChange(e.target.value)}
         className={styles.input}
-        inputProps={{ 'aria-label': `Edit input ${name}` }}
+        inputProps={{ 'aria-label': `Edit input value` }}
       />
     </FormControl>
   );

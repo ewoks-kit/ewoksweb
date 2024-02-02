@@ -247,10 +247,12 @@ export type RFNode = Node<Record<string, never>>;
 // width?: number | null; // what is their functionality?
 // height?: number | null;
 
+export type RowValue = string | object | boolean | number | null;
+
 export interface InputTableRow {
   rowId: string;
   name?: string | number;
-  value?: unknown;
+  value?: unknown; // TODO: set to RowValue once Conditions/DefaultInputs types are merged with this
   type?: RowType;
 }
 
