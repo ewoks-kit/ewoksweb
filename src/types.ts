@@ -112,7 +112,7 @@ export interface DefaultInput {
   rowId?: string;
   name: string | number;
   value: unknown;
-  type?: string;
+  type?: RowType;
 }
 
 export interface EwoksDefaultInput extends Omit<DefaultInput, 'id' | 'type'> {}
@@ -156,7 +156,7 @@ export interface Condition {
   value: unknown;
   rowId?: string;
   name?: string | number;
-  type?: string;
+  type?: RowType;
 }
 
 export interface DefaultErrorAttributes<T = DataMapping | EwoksDataMapping> {
@@ -251,17 +251,16 @@ export interface InputTableRow {
   rowId: string;
   name?: string | number;
   value?: unknown;
-  type?: string;
-  // TODO
-  // export type AllowedTypesOfValues =
-  // 'string'
-  // | 'bool'
-  // | 'number'
-  // | 'boolean'
-  // | 'null'
-  // | 'list'
-  // | 'dict'
-  // | undefined;
+  type?: RowType;
+}
+
+export enum RowType {
+  Bool = 'bool',
+  Dict = 'dict',
+  Number = 'number',
+  Null = 'null',
+  List = 'list',
+  String = 'string',
 }
 
 export interface TypeOfValues {

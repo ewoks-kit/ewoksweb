@@ -1,14 +1,13 @@
 import type { Engine } from '../../../api/models';
+import type { InputTableRow } from '../../../types';
+import { RowType } from '../../../types';
 import type { EngineDropdownOption } from '../models';
 
 export type InputTarget = { id: string } | 'All nodes' | 'All input nodes';
 
-export interface ExecutionInputTableRow {
+export interface ExecutionInputTableRow extends Required<InputTableRow> {
   name: string | number;
-  value: unknown;
   target: InputTarget;
-  type: string;
-  rowId: string;
 }
 
 export const DROPDOWN_TO_SERVER_ENGINE: Record<EngineDropdownOption, Engine> = {
@@ -21,5 +20,5 @@ export const EMPTY_INPUT: Omit<ExecutionInputTableRow, 'rowId'> = {
   target: 'All nodes',
   name: '',
   value: '',
-  type: 'string',
+  type: RowType.String,
 };

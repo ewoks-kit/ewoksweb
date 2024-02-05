@@ -6,9 +6,8 @@ import type {
   NodeData,
   TypeOfValues,
 } from '../../../types';
+import { RowType } from '../../../types';
 import { assertDefined } from '../../../utils/typeGuards';
-
-export const INPUT_TYPES = ['bool', 'number', 'string', 'list', 'dict', 'null'];
 
 export function createData(pair: Condition | DefaultInput): InputTableRow {
   const type = getType(pair);
@@ -23,7 +22,7 @@ export function createData(pair: Condition | DefaultInput): InputTableRow {
   };
 }
 
-export function getType(val: Condition | DefaultInput) {
+export function getType(val: Condition | DefaultInput): RowType {
   const { value } = val;
 
   if ('type' in val && val.type) {
@@ -31,26 +30,26 @@ export function getType(val: Condition | DefaultInput) {
   }
 
   if (typeof value === 'boolean' || value === 'true' || value === 'false') {
-    return 'boolean';
+    return RowType.Bool;
   }
 
   if (Array.isArray(value)) {
-    return 'list';
+    return RowType.List;
   }
 
   if (value === 'null' || value === null) {
-    return 'null';
+    return RowType.Null;
   }
 
   if (typeof value === 'object') {
-    return 'dict';
+    return RowType.Dict;
   }
 
   if (typeof value === 'number') {
-    return 'number';
+    return RowType.Number;
   }
 
-  return 'string';
+  return RowType.String;
 }
 
 export function isClass(edgeData: NodeData | undefined): boolean {
