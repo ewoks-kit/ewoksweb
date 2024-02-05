@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid';
+
 import type {
   Condition,
   DefaultInput,
@@ -7,12 +9,10 @@ import type {
   TypeOfValues,
 } from '../../../types';
 import { RowType } from '../../../types';
-import { assertDefined } from '../../../utils/typeGuards';
 
 export function createData(pair: Condition | DefaultInput): InputTableRow {
   const type = getType(pair);
-  const rowId = pair.rowId || pair.name?.toString();
-  assertDefined(rowId);
+  const rowId = pair.rowId || nanoid();
 
   return {
     rowId,

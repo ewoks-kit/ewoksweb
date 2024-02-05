@@ -1,8 +1,6 @@
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
-import { useEffect } from 'react';
-import React from 'react';
 
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import type {
@@ -20,37 +18,31 @@ import MultiTypeEditCell from './MultiTypeEditCell';
 import StrEditCell from './StrEditCell';
 import styles from './Table.module.css';
 import TableHeader from './TableHeader';
-import { createData, getType } from './utils';
+import { createData } from './utils';
 
 interface EditableTableProps {
   headers: string[];
   defaultValues: Condition[] | DefaultInput[];
   typeOfValues: TypeOfValues[];
-  disable?: boolean;
   valuesChanged: (rows: InputTableRow[]) => void;
-  onRowAdd?: (rows?: InputTableRow[]) => void;
+  disable?: boolean;
+  onRowAdd?: (rows: InputTableRow[]) => void;
 }
 
 // The table where lines can be added where type is selected and appropriate values are given to name and value.
 function EditableTable(props: EditableTableProps) {
   const { defaultValues, headers, disable, onRowAdd } = props;
 
-  const [rows, setRows] = React.useState<InputTableRow[]>([]);
-  const [typeOfInputs, setTypeOfInputs] = React.useState<RowType[]>([]);
+  const rows = defaultValues.map(createData);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
-  useEffect(() => {
-    setTypeOfInputs(defaultValues.map(getType));
-    setRows(defaultValues.map(createData));
-  }, [defaultValues]);
-
-  function onChange(e: RowChangeEvent, row: InputTableRow, index: number) {
+  function onChange(e: RowChangeEvent, row: InputTableRow) {
     const { rowId: id } = row;
-    const oldRows = [...rows].filter((_row, i) => index !== i);
+    const otherRows = rows.filter((_row) => _row.rowId !== id);
 
     if (
       e.target.name === 'name' &&
-      oldRows.map((r) => r.name).includes(e.target.value as string)
+      otherRows.map((r) => r.name).includes(e.target.value as string)
     ) {
       showErrorMsg('Not allowed to assign the same property TWICE!');
       // return;
@@ -64,7 +56,6 @@ function EditableTable(props: EditableTableProps) {
       }
       return rowe;
     });
-    setRows(newRows);
     props.valuesChanged(newRows);
   }
 
@@ -73,16 +64,11 @@ function EditableTable(props: EditableTableProps) {
       return row.rowId !== id;
     });
 
-    setRows(newRows);
     props.valuesChanged(newRows);
   }
 
-  function handleRowTypeChange(
-    newType: RowType,
-    row: InputTableRow,
-    index: number,
-  ) {
-    const { rowId = '' } = row;
+  function handleRowTypeChange(newType: RowType, row: InputTableRow) {
+    const { rowId } = row;
 
     const newRows = rows.map((rowe) => {
       if (rowe.rowId === rowId) {
@@ -95,75 +81,59 @@ function EditableTable(props: EditableTableProps) {
       return rowe;
     });
 
-    setRows(newRows);
     props.valuesChanged(newRows);
-
-    const tOfI = [...typeOfInputs];
-    tOfI[index] = newType;
-    setTypeOfInputs(tOfI);
   }
 
   return (
-    <>
-      <Table
-        style={{ opacity: disable ? '0.2' : '1' }}
-        className={styles.table}
-        aria-label="editable table"
-        size="small"
-        padding="none"
-      >
-        <TableHeader headers={headers} />
-        <TableBody>
-          {rows.map((row, index) => {
-            const handleChange = (evt: RowChangeEvent) =>
-              onChange(evt, row, index);
-            const hasDuplicateName =
-              rows.filter((ro) => ro.name === row.name).length > 1;
-            return (
-              <React.Fragment key={row.rowId}>
-                <TableRow>
-                  <StrEditCell
-                    row={row}
-                    name="name"
-                    isInvalid={hasDuplicateName}
-                    onChange={handleChange}
-                    typeOfValues={props.typeOfValues[0]}
-                    disable={disable}
-                    width="30%"
-                  />
+    <Table
+      style={{ opacity: disable ? '0.2' : '1' }}
+      className={styles.table}
+      aria-label="editable table"
+      size="small"
+      padding="none"
+    >
+      <TableHeader headers={headers} />
+      <TableBody>
+        {rows.map((row) => {
+          const handleChange = (evt: RowChangeEvent) => onChange(evt, row);
+          const hasDuplicateName =
+            rows.filter((ro) => ro.name === row.name).length > 1;
+          return (
+            <TableRow key={row.rowId}>
+              <StrEditCell
+                row={row}
+                name="name"
+                isInvalid={hasDuplicateName}
+                onChange={handleChange}
+                typeOfValues={props.typeOfValues[0]}
+                disable={disable}
+                width="30%"
+              />
 
-                  <TypeSelectCell
-                    value={row.type || RowType.String}
-                    onChange={(e) => handleRowTypeChange(e, row, index)}
-                    disable={disable}
-                  />
+              <TypeSelectCell
+                value={row.type || RowType.String}
+                onChange={(e) => handleRowTypeChange(e, row)}
+                disable={disable}
+              />
 
-                  <MultiTypeEditCell
-                    row={row}
-                    onChange={handleChange}
-                    disable={disable}
-                  />
+              <MultiTypeEditCell
+                row={row}
+                onChange={handleChange}
+                disable={disable}
+              />
 
-                  <RemoveRowCell
-                    disable={disable}
-                    onDelete={() => onDelete(row.rowId || '')}
-                  />
-                </TableRow>
-              </React.Fragment>
-            );
-          })}
-          {onRowAdd && !disable && (
-            <AddEntryRow onClick={() => onRowAdd(rows)} colSpan={4} />
-          )}
-        </TableBody>
-      </Table>
-      {disable && (
-        <div className={styles.warning}>
-          Conditions have no effect when On Error condition is enabled. They
-          will be removed when saving the workflow.
-        </div>
-      )}
-    </>
+              <RemoveRowCell
+                disable={disable}
+                onDelete={() => onDelete(row.rowId)}
+              />
+            </TableRow>
+          );
+        })}
+        {onRowAdd && !disable && (
+          <AddEntryRow onClick={() => onRowAdd(rows)} colSpan={4} />
+        )}
+      </TableBody>
+    </Table>
   );
 }
 

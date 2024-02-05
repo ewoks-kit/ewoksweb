@@ -17,7 +17,7 @@ export default function DefaultInputs(element: Node) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
   assertNodeDataDefined(nodeData, element.id);
 
-  function addDefaultInputs(rows: InputTableRow[] | undefined) {
+  function addDefaultInputs(rows: InputTableRow[]) {
     const newNodeData = {
       ewoks_props: {
         default_inputs: [
