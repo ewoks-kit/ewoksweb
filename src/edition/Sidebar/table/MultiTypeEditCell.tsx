@@ -1,25 +1,18 @@
 import TableCell from '@mui/material/TableCell';
 
-import type {
-  InputTableRow,
-  RowChangeEvent,
-  TypeOfValues,
-} from '../../../types';
+import type { InputTableRow, RowChangeEvent } from '../../../types';
 import EditJsonButton from './controls/EditJsonButton';
+import MultiTypeEditControl from './controls/MultiTypeEditControl';
 import styles from './CustomTableCell.module.css';
-import TableCellInEditMode from './TableCellInEditMode';
 
 interface Props {
   row: InputTableRow;
-  typeOfValues?: TypeOfValues;
   disable?: boolean;
   onChange: (e: RowChangeEvent) => void;
-  allowBoolAndNumberInputs?: boolean;
 }
 
-function ValueTableCell(props: Props) {
-  const { row, disable, onChange, typeOfValues, allowBoolAndNumberInputs } =
-    props;
+function MultiTypeEditCell(props: Props) {
+  const { row, disable, onChange } = props;
 
   const { value, type } = row;
 
@@ -44,17 +37,15 @@ function ValueTableCell(props: Props) {
           disabled={disable}
         />
       ) : (
-        <TableCellInEditMode
+        <MultiTypeEditControl
           row={row}
           name="value"
           onChange={onChange}
-          typeOfValues={typeOfValues}
           disable={disable}
-          allowBoolAndNumberInputs={allowBoolAndNumberInputs}
         />
       )}
     </TableCell>
   );
 }
 
-export default ValueTableCell;
+export default MultiTypeEditCell;

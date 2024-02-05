@@ -9,12 +9,11 @@ import type { DataMapping, RowChangeEvent, TypeOfValues } from 'types';
 
 import AddEntryRow from './controls/AddEntryRow';
 import RemoveRowCell from './controls/RemoveRowCell';
-import NameTableCell from './NameTableCell';
+import StrEditCell from './StrEditCell';
 import styles from './Table.module.css';
 import TableHeader from './TableHeader';
-import ValueTableCell from './ValueTableCell';
 
-interface TableDataMappingProps {
+interface Props {
   disable?: boolean;
   headers: string[];
   values: DataMapping[];
@@ -23,7 +22,7 @@ interface TableDataMappingProps {
   onRowAdd?: (rows?: DataMapping[]) => void;
 }
 
-function TableDataMapping(props: TableDataMappingProps) {
+function TableDataMapping(props: Props) {
   const { values, headers, disable, onRowAdd } = props;
 
   function onChange(
@@ -70,18 +69,21 @@ function TableDataMapping(props: TableDataMappingProps) {
             return (
               <React.Fragment key={row.rowId}>
                 <TableRow>
-                  <NameTableCell
+                  <StrEditCell
                     row={row}
+                    name="name"
                     onChange={handleChange}
                     typeOfValues={props.typeOfValues[0]}
                     disable={disable}
                     width="50%"
                   />
-                  <ValueTableCell
+                  <StrEditCell
                     row={row}
+                    name="value"
                     onChange={handleChange}
                     typeOfValues={props.typeOfValues[1]}
                     disable={disable}
+                    width="50%"
                   />
                   <RemoveRowCell
                     disable={disable}

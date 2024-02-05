@@ -29,9 +29,9 @@ import { assertDefined } from '../../../utils/typeGuards';
 import AddEntryRow from '../../Sidebar/table/controls/AddEntryRow';
 import RemoveRowButton from '../../Sidebar/table/controls/RemoveRowButton';
 import TypeSelectCell from '../../Sidebar/table/controls/TypeSelectCell';
-import NameTableCell from '../../Sidebar/table/NameTableCell';
+import MultiTypeEditCell from '../../Sidebar/table/MultiTypeEditCell';
+import StrEditCell from '../../Sidebar/table/StrEditCell';
 import { isClass } from '../../Sidebar/table/utils';
-import ValueTableCell from '../../Sidebar/table/ValueTableCell';
 import type { EngineDropdownOption } from '../models';
 import ExecuteParamsTableHeader from './ExecuteParamsTableHeader';
 import styles from './ExecutionDialog.module.css';
@@ -161,16 +161,16 @@ export default function ExecuteParametersDialog(props: Props) {
                         value={inputData.type}
                         onChange={(newType) => handleTypeChange(newType, rowId)}
                       />
-                      <NameTableCell
+                      <StrEditCell
                         row={inputData}
+                        name="name"
                         onChange={(e) => handleNameChange(e, rowId)}
                         typeOfValues={calcTypeAndValues(inputData.target)}
                       />
 
-                      <ValueTableCell
+                      <MultiTypeEditCell
                         row={inputData}
                         onChange={(e) => handleValueChange(e, rowId)}
-                        allowBoolAndNumberInputs
                       />
                       <TableCell align="left" size="small">
                         <RemoveRowButton

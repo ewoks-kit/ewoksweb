@@ -5,11 +5,12 @@ import type {
   RowChangeEvent,
   TypeOfValues,
 } from '../../../types';
+import StrEditControl from './controls/StrEditControl';
 import styles from './CustomTableCell.module.css';
-import TableCellInEditMode from './TableCellInEditMode';
 
 interface Props {
   row: InputTableRow;
+  name: 'name' | 'value';
   onChange: (e: RowChangeEvent) => void;
   isInvalid?: boolean;
   disable?: boolean;
@@ -17,8 +18,9 @@ interface Props {
   width?: string;
 }
 
-function NameTableCell(props: Props) {
-  const { row, onChange, isInvalid, disable, typeOfValues, width } = props;
+function StrEditCell(props: Props) {
+  const { row, name, onChange, isInvalid, disable, typeOfValues, width } =
+    props;
 
   return (
     <TableCell
@@ -30,9 +32,9 @@ function NameTableCell(props: Props) {
         width,
       }}
     >
-      <TableCellInEditMode
+      <StrEditControl
         row={row}
-        name="name"
+        name={name}
         onChange={onChange}
         typeOfValues={typeOfValues}
         disable={disable}
@@ -41,4 +43,4 @@ function NameTableCell(props: Props) {
   );
 }
 
-export default NameTableCell;
+export default StrEditCell;

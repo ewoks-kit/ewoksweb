@@ -1,7 +1,3 @@
-/*
-  The table that is used to pass parameters for default-values, conditions and data-mapping.
-  Its cells can change depending on the kind of input and the parent-component params.
-*/
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
@@ -20,11 +16,11 @@ import { RowType } from '../../../types';
 import AddEntryRow from './controls/AddEntryRow';
 import RemoveRowCell from './controls/RemoveRowCell';
 import TypeSelectCell from './controls/TypeSelectCell';
-import NameTableCell from './NameTableCell';
+import MultiTypeEditCell from './MultiTypeEditCell';
+import StrEditCell from './StrEditCell';
 import styles from './Table.module.css';
 import TableHeader from './TableHeader';
 import { createData, getType } from './utils';
-import ValueTableCell from './ValueTableCell';
 
 interface EditableTableProps {
   headers: string[];
@@ -126,8 +122,9 @@ function EditableTable(props: EditableTableProps) {
             return (
               <React.Fragment key={row.rowId}>
                 <TableRow>
-                  <NameTableCell
+                  <StrEditCell
                     row={row}
+                    name="name"
                     isInvalid={hasDuplicateName}
                     onChange={handleChange}
                     typeOfValues={props.typeOfValues[0]}
@@ -141,11 +138,10 @@ function EditableTable(props: EditableTableProps) {
                     disable={disable}
                   />
 
-                  <ValueTableCell
+                  <MultiTypeEditCell
                     row={row}
                     onChange={handleChange}
                     disable={disable}
-                    allowBoolAndNumberInputs
                   />
 
                   <RemoveRowCell
