@@ -3,7 +3,7 @@ import { memo, useEffect, useMemo } from 'react';
 import type { NodeProps } from 'reactflow';
 import { Handle, Position } from 'reactflow';
 
-import { useWorkflows } from '../../api/workflows';
+import { useWorkflowDescriptions } from '../../api/workflows';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
@@ -16,7 +16,7 @@ import { contentStyle, style } from './nodeStyles';
 
 function GraphNodeContent(props: NodeProps<NodeData>) {
   const { id } = props;
-  const workflowDescriptions = useWorkflows();
+  const workflowDescriptions = useWorkflowDescriptions();
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 

@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { useReactFlow } from 'reactflow';
 
-import { putWorkflow, useInvalidateWorkflows } from '../api/workflows';
+import {
+  putWorkflow,
+  useInvalidateWorkflow,
+  useInvalidateWorkflowDescriptions,
+} from '../api/workflows';
 import commonStrings from '../commonStrings.json';
 import type { Status } from '../edition/TopAppBar/models';
 import { getWorkflowIdsFromServer } from '../edition/TopAppBar/utils';
@@ -69,7 +73,8 @@ export function useSaveWorkflow() {
     (state) => state.displayedWorkflowInfo,
   );
   const rfInstance = useReactFlow();
-  const invalidateWorkflows = useInvalidateWorkflows();
+  const invalidateWorkflowDescriptions = useInvalidateWorkflowDescriptions();
+  const invalidateWorkflow = useInvalidateWorkflow();
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [status, setStatus] = useState<Status>('idle');
   const rootWorkflowSource = useStore((state) => state.rootWorkflowSource);
@@ -126,7 +131,8 @@ export function useSaveWorkflow() {
           getEdgesData(),
         ),
       );
-      invalidateWorkflows();
+      invalidateWorkflowDescriptions();
+      invalidateWorkflow(displayedWorkflowInfo.id);
 
       showSuccessMsg('Graph saved successfully!');
       setStatus('success');

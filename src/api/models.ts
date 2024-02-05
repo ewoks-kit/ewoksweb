@@ -50,7 +50,7 @@ export enum QueryKey {
   Icons = 'icons',
   Tasks = 'tasks',
   Workflow = 'workflow',
-  Workflows = 'workflows',
+  WorkflowDescriptions = 'workflows',
 }
 
 // https://ewokscore.readthedocs.io/en/latest/execute_io.html

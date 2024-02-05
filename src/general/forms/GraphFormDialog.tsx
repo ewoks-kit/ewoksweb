@@ -15,7 +15,8 @@ import { useReactFlow } from 'reactflow';
 import {
   postWorkflow,
   putWorkflow,
-  useInvalidateWorkflows,
+  useInvalidateWorkflow,
+  useInvalidateWorkflowDescriptions,
 } from '../../api/workflows';
 import commonStrings from '../../commonStrings.json';
 import useSnackbarStore from '../../store/useSnackbarStore';
@@ -49,7 +50,8 @@ export default function GraphFormDialog(props: Props) {
   const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
-  const invalidateWorkflows = useInvalidateWorkflows();
+  const invalidateWorkflowDescriptions = useInvalidateWorkflowDescriptions();
+  const invalidateWorkflow = useInvalidateWorkflow();
 
   function handleClose() {
     onClose();
@@ -69,10 +71,11 @@ export default function GraphFormDialog(props: Props) {
     try {
       if (overwrite) {
         await putWorkflow(ewoksGraph);
+        invalidateWorkflow(identifier);
       } else {
         await postWorkflow(ewoksGraph);
       }
-      await invalidateWorkflows();
+      invalidateWorkflowDescriptions();
 
       showSuccessMsg('Graph saved successfully!');
 

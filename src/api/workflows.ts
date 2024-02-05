@@ -77,15 +77,15 @@ export function useWorkflow(id: string | undefined) {
 
 export function useWorkflowsDLE() {
   return useQuery({
-    queryKey: [QueryKey.Workflows],
+    queryKey: [QueryKey.WorkflowDescriptions],
     queryFn: getWorkflows,
     staleTime: Infinity,
   });
 }
 
-export function useWorkflows(): WorkflowDescription[] {
+export function useWorkflowDescriptions(): WorkflowDescription[] {
   const query = useQuery({
-    queryKey: [QueryKey.Workflows],
+    queryKey: [QueryKey.WorkflowDescriptions],
     queryFn: getWorkflows,
     staleTime: Infinity,
     suspense: true,
@@ -97,9 +97,19 @@ export function useWorkflows(): WorkflowDescription[] {
   return workflowDescriptions;
 }
 
-export function useInvalidateWorkflows() {
+export function useInvalidateWorkflowDescriptions() {
   const queryClient = useQueryClient();
-
   return () =>
-    queryClient.invalidateQueries({ queryKey: [QueryKey.Workflows] });
+    queryClient.invalidateQueries({
+      queryKey: [QueryKey.WorkflowDescriptions],
+    });
+}
+
+export function useInvalidateWorkflow() {
+  const queryClient = useQueryClient();
+  return (workflowId: string) => {
+    queryClient.invalidateQueries({
+      queryKey: [QueryKey.Workflow, workflowId],
+    });
+  };
 }
