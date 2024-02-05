@@ -19,20 +19,18 @@ function expectRequestBodyToDeepEqual(expectation: unknown): RouteHandler {
 }
 
 it('should not add inputs by default', () => {
-  cy.intercept(
-    `api/execute/demo`,
-    expectRequestBodyToDeepEqual({
-      execute_arguments: {},
-    }),
-  ).as('executeRequest');
+  cy.intercept(`api/execute/demo`, expectRequestBodyToDeepEqual({})).as(
+    'executeRequest',
+  );
 
   cy.findByRole('button', { name: 'Save & Execute' }).click();
   cy.wait('@executeRequest');
 });
 
 it('should change the engine', () => {
-  cy.findByRole('combobox', { name: 'Change execution engine' }).click();
-  cy.findByRole('option', { name: 'pypushflow' }).click();
+  cy.findByRole('combobox', { name: 'Change execution engine' }).select(
+    'pypushflow',
+  );
 
   cy.intercept(
     `api/execute/demo`,
