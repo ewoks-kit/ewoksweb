@@ -271,10 +271,6 @@ export interface TypeOfValues {
   requiredValues?: string[];
 }
 
-export interface RowChangeEvent {
-  target: { name: string; value: string | number };
-}
-
 export interface LinkData {
   data_mapping?: DataMapping[];
   comment?: string;

@@ -1,43 +1,46 @@
 import TableCell from '@mui/material/TableCell';
 
-import type {
-  InputTableRow,
-  RowChangeEvent,
-  TypeOfValues,
-} from '../../../types';
+import type { TypeOfValues } from '../../../types';
 import StrEditControl from './controls/StrEditControl';
 import styles from './CustomTableCell.module.css';
 
 interface Props {
-  row: InputTableRow;
-  name: 'name' | 'value';
-  onChange: (e: RowChangeEvent) => void;
+  value: string | number;
+  onChange: (newValue: string) => void;
   isInvalid?: boolean;
   disable?: boolean;
   typeOfValues?: TypeOfValues;
   width?: string;
+  ariaLabel?: string;
 }
 
 function StrEditCell(props: Props) {
-  const { row, name, onChange, isInvalid, disable, typeOfValues, width } =
-    props;
+  const {
+    value,
+    onChange,
+    isInvalid,
+    disable,
+    typeOfValues,
+    width,
+    ariaLabel,
+  } = props;
 
   return (
     <TableCell
       align="left"
       className={styles.cell}
       data-disabled={disable ? '' : undefined}
-      data-invalid={!row.name || isInvalid ? '' : undefined}
+      data-invalid={!value || isInvalid ? '' : undefined}
       style={{
         width,
       }}
     >
       <StrEditControl
-        row={row}
-        name={name}
+        value={value}
         onChange={onChange}
         typeOfValues={typeOfValues}
         disable={disable}
+        ariaLabel={ariaLabel}
       />
     </TableCell>
   );

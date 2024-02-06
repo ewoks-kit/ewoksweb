@@ -1,22 +1,20 @@
 import { Autocomplete } from '@mui/material';
 import { FormControl, TextField } from '@mui/material';
 
-import type {
-  InputTableRow,
-  RowChangeEvent,
-  TypeOfValues,
-} from '../../../../types';
+import type { TypeOfValues } from '../../../../types';
 
 interface Props {
-  row: InputTableRow;
-  name: 'name' | 'value';
-  onChange: (e: RowChangeEvent) => void;
+  value: string | number;
+  onChange: (newValue: string) => void;
   typeOfValues?: TypeOfValues;
   disable?: boolean;
+  ariaLabel?: string;
 }
 
 function AutocompleteSelect(props: Props) {
-  const { row, name, onChange, typeOfValues, disable } = props;
+  const { value: rawValue, onChange, typeOfValues, disable, ariaLabel } = props;
+
+  const value = String(rawValue);
 
   const options = typeOfValues?.values || [''];
   return (
@@ -37,10 +35,10 @@ function AutocompleteSelect(props: Props) {
             </li>
           );
         }}
-        value={(row[name] as string) || ''}
-        inputValue={(row[name] as string) || ''}
-        onChange={(e, val) => onChange({ target: { value: val, name } })}
-        onInputChange={(e, val) => onChange({ target: { value: val, name } })}
+        value={value}
+        inputValue={value}
+        onChange={(e, val) => onChange(val)}
+        onInputChange={(e, val) => onChange(val)}
         renderInput={(params) => (
           <TextField
             variant="standard"
@@ -48,7 +46,7 @@ function AutocompleteSelect(props: Props) {
             margin="normal"
             inputProps={{
               ...params.inputProps,
-              'aria-label': `Edit input ${name}`,
+              'aria-label': ariaLabel,
             }}
           />
         )}

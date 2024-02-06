@@ -7,7 +7,6 @@ import type {
   Condition,
   DefaultInput,
   InputTableRow,
-  RowChangeEvent,
   RowValue,
   TypeOfValues,
 } from '../../../types';
@@ -37,15 +36,13 @@ function EditableTable(props: EditableTableProps) {
   const rows = defaultValues.map(createData);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
-  function handleNameChange(e: RowChangeEvent, row: InputTableRow) {
+  function handleNameChange(newName: string, row: InputTableRow) {
     const { rowId: id } = row;
     const otherRows = rows.filter((_row) => _row.rowId !== id);
 
-    if (otherRows.map((r) => r.name).includes(e.target.value as string)) {
+    if (otherRows.map((r) => r.name).includes(newName)) {
       showErrorMsg('Not allowed to assign the same property TWICE!');
     }
-
-    const { value: newName } = e.target;
 
     const newRows = rows.map((rowe) => {
       if (rowe.rowId === id) {
@@ -109,13 +106,13 @@ function EditableTable(props: EditableTableProps) {
           return (
             <TableRow key={row.rowId}>
               <StrEditCell
-                row={row}
-                name="name"
+                value={row.name || ''}
                 isInvalid={hasDuplicateName}
-                onChange={(e) => handleNameChange(e, row)}
+                onChange={(newName) => handleNameChange(newName, row)}
                 typeOfValues={props.typeOfValues[0]}
                 disable={disable}
                 width="30%"
+                ariaLabel="Edit input name"
               />
 
               <TypeSelectCell

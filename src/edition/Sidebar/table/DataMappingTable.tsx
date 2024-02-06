@@ -1,12 +1,9 @@
-/*
-  The table that is used to pass parameters for data-mapping.
-*/
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
 
-import type { DataMapping, RowChangeEvent, TypeOfValues } from '../../../types';
+import type { DataMapping, TypeOfValues } from '../../../types';
 import AddEntryRow from './controls/AddEntryRow';
 import RemoveRowCell from './controls/RemoveRowCell';
 import StrEditCell from './StrEditCell';
@@ -26,21 +23,25 @@ function DataMappingTable(props: Props) {
   const { values, sourceType, targetType, onValuesChange, disable, onRowAdd } =
     props;
 
-  function onChange(
-    e: { target: { name: string; value: string | number } },
-    row: DataMapping,
-  ) {
+  function onSourceChange(newSource: string, row: DataMapping) {
     const { rowId: id } = row;
-    let { value } = e.target;
-    const { name } = e.target;
-
-    if (name === 'value') {
-      value = typeof value === 'number' ? Number(value) : value;
-    }
 
     const newRows = values.map((rowe) => {
       if (rowe.rowId === id) {
-        return { ...rowe, [name]: value };
+        return { ...rowe, name: newSource };
+      }
+      return rowe;
+    });
+
+    onValuesChange(newRows);
+  }
+
+  function onTargetChange(newTarget: string, row: DataMapping) {
+    const { rowId: id } = row;
+
+    const newRows = values.map((rowe) => {
+      if (rowe.rowId === id) {
+        return { ...rowe, value: newTarget };
       }
       return rowe;
     });
@@ -65,25 +66,26 @@ function DataMappingTable(props: Props) {
       <TableHeader headers={['Source', 'Target']} />
       <TableBody>
         {values.map((row) => {
-          const handleChange = (evt: RowChangeEvent) => onChange(evt, row);
+          const handleSourceChange = (s: string) => onSourceChange(s, row);
+          const handleTargetChange = (t: string) => onTargetChange(t, row);
           return (
             <React.Fragment key={row.rowId}>
               <TableRow>
                 <StrEditCell
-                  row={row}
-                  name="name"
-                  onChange={handleChange}
+                  value={row.name || ''}
+                  onChange={handleSourceChange}
                   typeOfValues={sourceType}
                   disable={disable}
                   width="50%"
+                  ariaLabel="Edit source"
                 />
                 <StrEditCell
-                  row={row}
-                  name="value"
-                  onChange={handleChange}
+                  value={row.value || ''}
+                  onChange={handleTargetChange}
                   typeOfValues={targetType}
                   disable={disable}
                   width="50%"
+                  ariaLabel="Edit target"
                 />
                 <RemoveRowCell
                   disable={disable}
