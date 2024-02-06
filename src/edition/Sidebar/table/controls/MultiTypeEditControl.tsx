@@ -59,7 +59,7 @@ function MultiTypeEditControl(props: Props) {
     <FormControl variant="standard" fullWidth>
       <Input
         disabled={disable}
-        value={value}
+        value={String(value)}
         type="text"
         onChange={(e) => onChange(e.target.value)}
         className={styles.input}

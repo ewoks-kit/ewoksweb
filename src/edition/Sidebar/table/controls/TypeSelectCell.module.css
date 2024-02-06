@@ -1,4 +1,18 @@
 .cell {
   composes: cell from '../Table.module.css';
-  border-bottom: none;
+  border-bottom: none !important;
+}
+
+.select {
+  composes: btnClean from global;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+  padding: 5px 4px 4px 0;
+  height: 1.4375em;
+  box-sizing: content-box;
+  width: 100%;
+}
+
+.select:hover {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.87);
+  margin-bottom: -1px;
 }

@@ -96,8 +96,7 @@ it('should add inputs for a specific node', () => {
     'ewokscore.tests.examples.tasks.sumtask.SumTask (task1)',
   );
 
-  cy.findByRole('combobox', { name: 'Change input type' }).click();
-  cy.findByRole('option', { name: 'number' }).click();
+  cy.findByRole('combobox', { name: 'Change input type' }).select('number');
 
   cy.findByRole('combobox', { name: 'Edit input name' }).type('delay');
   cy.findByRole('textbox', { name: 'Edit input value' }).type('6');

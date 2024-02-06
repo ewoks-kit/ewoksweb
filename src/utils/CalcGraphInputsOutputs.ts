@@ -9,7 +9,6 @@ import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { isString } from './typeGuards';
 import {
   calcConditionName,
-  calcConditionValue,
   calcDataMapping,
   notUndefinedValue,
   propIsEmpty,
@@ -161,7 +160,7 @@ function calcNodeProps(
         conditions: lData.conditions.map((con) => {
           return {
             source_output: calcConditionName(con),
-            value: calcConditionValue(con),
+            value: con.value,
           };
         }),
       }),

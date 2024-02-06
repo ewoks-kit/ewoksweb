@@ -108,7 +108,7 @@ export default function ExecuteParametersDialog(props: Props) {
     assertDefined(oldInput);
     inputRows.set(rowId, {
       ...oldInput,
-      value: newType === RowType.Null ? 'null' : '',
+      value: newType === RowType.Null ? null : '',
       type: newType,
     });
   }
@@ -173,6 +173,7 @@ export default function ExecuteParametersDialog(props: Props) {
                         onChange={(newValue) =>
                           handleValueChange(newValue, rowId)
                         }
+                        disable={inputData.type === RowType.Null}
                       />
                       <TableCell align="left" size="small">
                         <RemoveRowButton
