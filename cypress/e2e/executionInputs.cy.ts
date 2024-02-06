@@ -89,8 +89,7 @@ it('should add inputs for all input nodes', () => {
   cy.wait('@executeRequest');
 });
 
-// TODO: VALUE SHOULD NOT BE SERIALIZED AS STRING
-it.skip('should add inputs for a specific node', () => {
+it('should add inputs for a specific node', () => {
   cy.findByRole('button', { name: 'Add entry' }).click();
 
   cy.findByRole('combobox', { name: 'Change target nodes' }).select(

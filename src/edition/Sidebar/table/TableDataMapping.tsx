@@ -5,8 +5,8 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
-import type { DataMapping, RowChangeEvent, TypeOfValues } from 'types';
 
+import type { DataMapping, RowChangeEvent, TypeOfValues } from '../../../types';
 import AddEntryRow from './controls/AddEntryRow';
 import RemoveRowCell from './controls/RemoveRowCell';
 import StrEditCell from './StrEditCell';
