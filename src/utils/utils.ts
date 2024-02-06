@@ -47,10 +47,6 @@ export function stringOrNumber(
     : value;
 }
 
-export function isDecimalNumber(value: string) {
-  return /^-?\d*\.?\d*$/u.test(value);
-}
-
 export function notUndefinedValue(
   value: unknown,
   propName: string,

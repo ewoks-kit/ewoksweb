@@ -3,10 +3,10 @@ import Input from '@mui/material/Input';
 
 import type { RowValue } from '../../../../types';
 import { RowType } from '../../../../types';
-import { isDecimalNumber } from '../../../../utils/utils';
 import BooleanControl from './BooleanControl';
 import EditJsonButton from './EditJsonButton';
 import styles from './MultiTypeEditControl.module.css';
+import NumberInput from './NumberInput';
 
 interface Props {
   value: RowValue;
@@ -36,23 +36,7 @@ function MultiTypeEditControl(props: Props) {
   }
 
   if (type === RowType.Number) {
-    return (
-      <FormControl variant="standard" fullWidth>
-        <Input
-          disabled={disable}
-          value={value}
-          type="text"
-          onChange={(event) => {
-            const { value: newValue } = event.target;
-            if (isDecimalNumber(newValue)) {
-              onChange(Number(newValue));
-            }
-          }}
-          className={styles.input}
-          inputProps={{ 'aria-label': `Edit input value` }}
-        />
-      </FormControl>
-    );
+    return <NumberInput value={value} onChange={onChange} disabled={disable} />;
   }
 
   return (

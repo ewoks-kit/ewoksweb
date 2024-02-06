@@ -99,7 +99,7 @@ it('should add inputs for a specific node', () => {
   cy.findByRole('combobox', { name: 'Change input type' }).select('number');
 
   cy.findByRole('combobox', { name: 'Edit input name' }).type('delay');
-  cy.findByRole('textbox', { name: 'Edit input value' }).type('6');
+  cy.findByRole('spinbutton', { name: 'Edit input value' }).type('6');
 
   cy.intercept(
     `api/execute/demo`,
