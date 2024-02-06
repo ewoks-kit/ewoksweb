@@ -9,7 +9,6 @@ import type {
   InputOutputUiProps,
 } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
-import { isString } from './typeGuards';
 
 export function createDataMappingData(pair: EwoksDataMapping): DataMapping {
   return {
@@ -17,20 +16,6 @@ export function createDataMappingData(pair: EwoksDataMapping): DataMapping {
     name: pair.source_output ? pair.source_output.toString() : '',
     value: pair.target_input ?? '',
   };
-}
-
-export function calcConditionValue(condition: Condition): unknown {
-  return condition.value === 'true'
-    ? true
-    : condition.value === 'false'
-    ? false
-    : condition.value === 'null'
-    ? null
-    : condition.type === 'number' &&
-      isString(condition.value) &&
-      isDecimalNumber(condition.value)
-    ? Number(condition.value)
-    : condition.value;
 }
 
 export function calcConditionName(condition: Condition): string | number {

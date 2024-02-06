@@ -83,7 +83,7 @@ function EditableTable(props: EditableTableProps) {
       if (rowe.rowId === rowId) {
         return {
           ...rowe,
-          value: newType === RowType.Null ? 'null' : '',
+          value: newType === RowType.Null ? null : '',
           type: newType,
         };
       }
@@ -127,7 +127,7 @@ function EditableTable(props: EditableTableProps) {
               <MultiTypeEditCell
                 row={row}
                 onChange={(newValue) => handleValueChange(newValue, row)}
-                disable={disable}
+                disable={disable || row.type === RowType.Null}
               />
 
               <RemoveRowCell

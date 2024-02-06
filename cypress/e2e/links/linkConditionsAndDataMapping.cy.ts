@@ -110,7 +110,7 @@ it('inserts a new Condition, changes it and disables it when "On Error condition
 
     cy.findByRole('textbox', { name: 'Edit input name' }).type('Always');
 
-    cy.findByRole('combobox').should('have.text', 'bool');
+    cy.findByRole('combobox').should('have.value', 'bool');
 
     cy.findByRole('radio', { name: 'false' }).should('be.checked');
 

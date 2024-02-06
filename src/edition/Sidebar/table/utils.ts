@@ -29,7 +29,7 @@ export function getType(val: Condition | DefaultInput): RowType {
     return val.type;
   }
 
-  if (typeof value === 'boolean' || value === 'true' || value === 'false') {
+  if (typeof value === 'boolean') {
     return RowType.Bool;
   }
 
@@ -37,7 +37,7 @@ export function getType(val: Condition | DefaultInput): RowType {
     return RowType.List;
   }
 
-  if (value === 'null' || value === null) {
+  if (value === null) {
     return RowType.Null;
   }
 

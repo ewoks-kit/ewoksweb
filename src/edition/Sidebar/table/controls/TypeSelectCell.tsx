@@ -1,4 +1,4 @@
-import { FormControl, MenuItem, Select, TableCell } from '@mui/material';
+import { TableCell } from '@mui/material';
 
 import { RowType } from '../../../../types';
 import styles from './TypeSelectCell.module.css';
@@ -14,21 +14,19 @@ function TypeSelectCell(props: Props) {
 
   return (
     <TableCell className={styles.cell} align="left" size="small">
-      <FormControl variant="standard" fullWidth>
-        <Select
-          variant="standard"
-          disabled={disable}
-          value={value}
-          onChange={(e) => onChange(e.target.value as RowType)}
-          inputProps={{ 'aria-label': 'Change input type' }}
-        >
-          {Object.values(RowType).map((type) => (
-            <MenuItem key={type} value={type}>
-              {type}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <select
+        className={styles.select}
+        disabled={disable}
+        value={value}
+        onChange={(e) => onChange(e.target.value as RowType)}
+        aria-label="Change input type"
+      >
+        {Object.values(RowType).map((type) => (
+          <option key={type} value={type}>
+            {type}
+          </option>
+        ))}
+      </select>
     </TableCell>
   );
 }
