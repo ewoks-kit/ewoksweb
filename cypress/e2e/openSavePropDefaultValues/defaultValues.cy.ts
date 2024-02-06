@@ -275,7 +275,9 @@ it('saves default inputs with the correct type', () => {
     cy.findAllByRole('combobox', { name: 'Change input type' })
       .last()
       .select('number');
-    cy.findAllByRole('textbox', { name: 'Edit input value' }).last().type('1');
+    cy.findAllByRole('spinbutton', { name: 'Edit input value' })
+      .last()
+      .type('1.7567e2');
 
     cy.findByRole('button', { name: 'Add entry' }).click();
     cy.findAllByRole('combobox', { name: 'Edit input name' }).last().type('b');
@@ -300,7 +302,7 @@ it('saves default inputs with the correct type', () => {
 
   cy.intercept('POST', 'api/workflows', (req) => {
     expect(req.body.nodes[0].default_inputs).to.deep.equal([
-      { name: 'a', value: 1 },
+      { name: 'a', value: 175.67 },
       { name: 'b', value: '1' },
       { name: 'c', value: null },
       { name: 'd', value: true },

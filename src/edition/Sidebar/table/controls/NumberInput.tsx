@@ -1,7 +1,6 @@
 import { FormControl, Input } from '@mui/material';
 
 import type { RowValue } from '../../../../types';
-import { isDecimalNumber } from '../../../../utils/utils';
 import styles from './MultiTypeEditControl.module.css';
 
 interface Props {
@@ -18,9 +17,10 @@ function NumberInput(props: Props) {
       <Input
         disabled={disabled}
         value={value}
+        type="number"
         onChange={(event) => {
           const { value: newValue } = event.target;
-          if (isDecimalNumber(newValue)) {
+          if (newValue) {
             onChange(Number(newValue));
           }
         }}
