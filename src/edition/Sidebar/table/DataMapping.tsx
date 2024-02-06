@@ -5,8 +5,8 @@ import type { DataMapping } from 'types';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
+import DataMappingTable from './DataMappingTable';
 import styles from './Table.module.css';
-import TableDataMapping from './TableDataMapping';
 import { calcTypeOfValues } from './utils';
 
 interface Props {
@@ -44,7 +44,7 @@ export default function DataMappingComponent({ element, mapAllData }: Props) {
 
   return (
     <div>
-      <TableDataMapping
+      <DataMappingTable
         disable={mapAllData}
         onRowAdd={(rows) => addDataMapping(rows)}
         values={edgeData.data_mapping || []}

@@ -22,7 +22,7 @@ interface Props {
   disable?: boolean;
 }
 
-function TableDataMapping(props: Props) {
+function DataMappingTable(props: Props) {
   const { values, sourceType, targetType, onValuesChange, disable, onRowAdd } =
     props;
 
@@ -101,4 +101,4 @@ function TableDataMapping(props: Props) {
   );
 }
 
-export default TableDataMapping;
+export default DataMappingTable;

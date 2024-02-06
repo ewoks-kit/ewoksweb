@@ -3,7 +3,7 @@ import type { DataMapping, InputTableRow } from 'types';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
-import TableDataMapping from './TableDataMapping';
+import DataMappingTable from './DataMappingTable';
 
 export default function NodeDataMapping({ nodeId }: { nodeId: string }) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(nodeId));
@@ -39,7 +39,7 @@ export default function NodeDataMapping({ nodeId }: { nodeId: string }) {
 
   return (
     <div>
-      <TableDataMapping
+      <DataMappingTable
         onRowAdd={(rows) => addDataMapping(rows)}
         values={
           nodeData.ewoks_props.default_error_attributes?.data_mapping || []
