@@ -2,24 +2,30 @@ import { FormControl, Input } from '@mui/material';
 
 import type { TypeOfValues } from '../../../../types';
 import AutocompleteSelect from './AutocompleteSelect';
-import styles from './StrEditControl.module.css';
+import styles from './StrOrNumEditControl.module.css';
 
 interface Props {
   value: string | number;
-  onChange: (newValue: string) => void;
+  onChange: (newValue: string | number) => void;
   typeOfValues?: TypeOfValues;
   disable?: boolean;
   ariaLabel?: string;
 }
 
-function StrEditControl(props: Props) {
+function StrOrNumEditControl(props: Props) {
   const { value, typeOfValues, onChange, disable, ariaLabel } = props;
+
+  function handleChange(newValue: string) {
+    const newValueAsInt = Number.parseInt(newValue);
+
+    onChange(Number.isFinite(newValueAsInt) ? newValueAsInt : newValue);
+  }
 
   if (typeOfValues?.typeOfInput && typeOfValues.typeOfInput === 'select') {
     return (
       <AutocompleteSelect
         value={value}
-        onChange={onChange}
+        onChange={handleChange}
         typeOfValues={typeOfValues}
         disable={disable}
         ariaLabel={ariaLabel}
@@ -33,7 +39,7 @@ function StrEditControl(props: Props) {
         className={styles.input}
         value={value}
         type="text"
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => handleChange(e.target.value)}
         inputProps={{ 'aria-label': ariaLabel }}
         disabled={disable}
       />
@@ -41,4 +47,4 @@ function StrEditControl(props: Props) {
   );
 }
 
-export default StrEditControl;
+export default StrOrNumEditControl;

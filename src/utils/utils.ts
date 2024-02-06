@@ -1,8 +1,6 @@
-/* eslint-disable require-unicode-regexp */
 import { nanoid } from 'nanoid';
 
 import type {
-  Condition,
   DataMapping,
   EwoksDataMapping,
   InputOutputLinkAttributes,
@@ -18,33 +16,13 @@ export function createDataMappingData(pair: EwoksDataMapping): DataMapping {
   };
 }
 
-export function calcConditionName(condition: Condition): string | number {
-  const cond = condition.name;
-
-  return stringOrNumber(cond);
-}
-
 export function calcDataMapping(
   dataMappings: DataMapping[],
 ): EwoksDataMapping[] {
-  return dataMappings.map(({ source, target }) => {
-    return {
-      source_output: stringOrNumber(source),
-      target_input: stringOrNumber(target),
-    };
-  });
-}
-
-export function stringOrNumber(
-  value: string | number | undefined,
-): string | number {
-  return value === undefined
-    ? ''
-    : typeof value === 'number'
-    ? value
-    : value && /^\d+$/.test(value)
-    ? Number.parseInt(value, 10)
-    : value;
+  return dataMappings.map(({ source, target }) => ({
+    source_output: source,
+    target_input: target,
+  }));
 }
 
 export function notUndefinedValue(

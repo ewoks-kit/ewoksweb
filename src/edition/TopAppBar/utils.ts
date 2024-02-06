@@ -79,7 +79,9 @@ function deleteEmptyLines<T extends Condition | DefaultInput>(
   if (!arrayObjId) {
     return undefined;
   }
-  return arrayObjId.filter((obj: T) => !!obj.name);
+  return arrayObjId.filter(
+    (obj: T) => obj.name !== undefined && obj.name !== '',
+  );
 }
 
 function deleteEmptyMappings(mappings: DataMapping[] | undefined) {

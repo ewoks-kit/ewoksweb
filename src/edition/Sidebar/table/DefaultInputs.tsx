@@ -38,7 +38,7 @@ export default function DefaultInputs(element: Node) {
         default_inputs: table.map((dval) => {
           return {
             rowId: dval.rowId,
-            name: dval.name || '',
+            name: dval.name ?? '',
             value: dval.value,
             type: dval.type,
           };

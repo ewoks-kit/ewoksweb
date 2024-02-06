@@ -30,7 +30,7 @@ import AddEntryRow from '../../Sidebar/table/controls/AddEntryRow';
 import RemoveRowButton from '../../Sidebar/table/controls/RemoveRowButton';
 import TypeSelectCell from '../../Sidebar/table/controls/TypeSelectCell';
 import MultiTypeEditCell from '../../Sidebar/table/MultiTypeEditCell';
-import StrEditCell from '../../Sidebar/table/StrEditCell';
+import StrOrNumEditCell from '../../Sidebar/table/StrOrNumEditCell';
 import { isClass } from '../../Sidebar/table/utils';
 import type { EngineDropdownOption } from '../models';
 import ExecuteParamsTableHeader from './ExecuteParamsTableHeader';
@@ -92,7 +92,7 @@ export default function ExecuteParametersDialog(props: Props) {
     inputRows.set(rowId, { ...oldInput, target: newTarget });
   }
 
-  function handleNameChange(newName: string, rowId: string) {
+  function handleNameChange(newName: string | number, rowId: string) {
     const oldInput = inputRows.get(rowId);
     assertDefined(oldInput);
     inputRows.set(rowId, { ...oldInput, name: newName });
@@ -162,9 +162,9 @@ export default function ExecuteParametersDialog(props: Props) {
                         value={inputData.type}
                         onChange={(newType) => handleTypeChange(newType, rowId)}
                       />
-                      <StrEditCell
+                      <StrOrNumEditCell
                         value={inputData.name}
-                        onChange={(e) => handleNameChange(e, rowId)}
+                        onChange={(newName) => handleNameChange(newName, rowId)}
                         typeOfValues={calcTypeAndValues(inputData.target)}
                         ariaLabel="Edit input name"
                       />

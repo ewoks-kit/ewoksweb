@@ -6,7 +6,7 @@ import React from 'react';
 import type { DataMapping, TypeOfValues } from '../../../types';
 import AddEntryRow from './controls/AddEntryRow';
 import RemoveRowCell from './controls/RemoveRowCell';
-import StrEditCell from './StrEditCell';
+import StrOrNumEditCell from './StrOrNumEditCell';
 import styles from './Table.module.css';
 import TableHeader from './TableHeader';
 
@@ -23,7 +23,7 @@ function DataMappingTable(props: Props) {
   const { values, sourceType, targetType, onValuesChange, disable, onRowAdd } =
     props;
 
-  function onSourceChange(newSource: string, row: DataMapping) {
+  function handleSourceChange(newSource: string | number, row: DataMapping) {
     const { rowId } = row;
 
     const newRows = values.map((rowe) =>
@@ -33,7 +33,7 @@ function DataMappingTable(props: Props) {
     onValuesChange(newRows);
   }
 
-  function onTargetChange(newTarget: string, row: DataMapping) {
+  function handleTargetChange(newTarget: string | number, row: DataMapping) {
     const { rowId } = row;
 
     const newRows = values.map((rowe) =>
@@ -63,17 +63,17 @@ function DataMappingTable(props: Props) {
           return (
             <React.Fragment key={row.rowId}>
               <TableRow>
-                <StrEditCell
+                <StrOrNumEditCell
                   value={row.source}
-                  onChange={(s) => onSourceChange(s, row)}
+                  onChange={(newSource) => handleSourceChange(newSource, row)}
                   typeOfValues={sourceType}
                   disable={disable}
                   width="50%"
                   ariaLabel="Edit source"
                 />
-                <StrEditCell
+                <StrOrNumEditCell
                   value={row.target}
-                  onChange={(t: string) => onTargetChange(t, row)}
+                  onChange={(newTarget) => handleTargetChange(newTarget, row)}
                   typeOfValues={targetType}
                   disable={disable}
                   width="50%"
@@ -81,7 +81,7 @@ function DataMappingTable(props: Props) {
                 />
                 <RemoveRowCell
                   disable={disable}
-                  onDelete={() => onDelete(row.rowId || '')}
+                  onDelete={() => onDelete(row.rowId)}
                 />
               </TableRow>
             </React.Fragment>
