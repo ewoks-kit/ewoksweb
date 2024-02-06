@@ -14,16 +14,17 @@ import styles from './Table.module.css';
 import TableHeader from './TableHeader';
 
 interface Props {
-  disable?: boolean;
-  headers: string[];
   values: DataMapping[];
-  typeOfValues: TypeOfValues[];
-  valuesChanged: (rows: DataMapping[]) => void;
-  onRowAdd?: (rows?: DataMapping[]) => void;
+  onValuesChange: (rows: DataMapping[]) => void;
+  sourceType: TypeOfValues;
+  targetType: TypeOfValues;
+  onRowAdd: (rows?: DataMapping[]) => void;
+  disable?: boolean;
 }
 
 function TableDataMapping(props: Props) {
-  const { values, headers, disable, onRowAdd } = props;
+  const { values, sourceType, targetType, onValuesChange, disable, onRowAdd } =
+    props;
 
   function onChange(
     e: { target: { name: string; value: string | number } },
@@ -44,7 +45,7 @@ function TableDataMapping(props: Props) {
       return rowe;
     });
 
-    props.valuesChanged(newRows);
+    onValuesChange(newRows);
   }
 
   function onDelete(id: string) {
@@ -52,59 +53,51 @@ function TableDataMapping(props: Props) {
       return row.rowId !== id;
     });
 
-    props.valuesChanged(newRows);
+    onValuesChange(newRows);
   }
 
   return (
-    <>
-      <Table
-        className={styles.table}
-        aria-label="data-mapping-table"
-        style={{ opacity: disable ? '0.2' : '1' }}
-      >
-        <TableHeader headers={headers} />
-        <TableBody>
-          {values.map((row) => {
-            const handleChange = (evt: RowChangeEvent) => onChange(evt, row);
-            return (
-              <React.Fragment key={row.rowId}>
-                <TableRow>
-                  <StrEditCell
-                    row={row}
-                    name="name"
-                    onChange={handleChange}
-                    typeOfValues={props.typeOfValues[0]}
-                    disable={disable}
-                    width="50%"
-                  />
-                  <StrEditCell
-                    row={row}
-                    name="value"
-                    onChange={handleChange}
-                    typeOfValues={props.typeOfValues[1]}
-                    disable={disable}
-                    width="50%"
-                  />
-                  <RemoveRowCell
-                    disable={disable}
-                    onDelete={() => onDelete(row.rowId || '')}
-                  />
-                </TableRow>
-              </React.Fragment>
-            );
-          })}
-          {onRowAdd && !disable && (
-            <AddEntryRow onClick={() => onRowAdd(values)} colSpan={3} />
-          )}
-        </TableBody>
-      </Table>
-      {disable && (
-        <div className={styles.warning}>
-          Data Mappings have no effect when Map all Data is enabled. They will
-          be removed when saving the workflow.
-        </div>
-      )}
-    </>
+    <Table
+      className={styles.table}
+      aria-label="data-mapping-table"
+      style={{ opacity: disable ? '0.2' : '1' }}
+    >
+      <TableHeader headers={['Source', 'Target']} />
+      <TableBody>
+        {values.map((row) => {
+          const handleChange = (evt: RowChangeEvent) => onChange(evt, row);
+          return (
+            <React.Fragment key={row.rowId}>
+              <TableRow>
+                <StrEditCell
+                  row={row}
+                  name="name"
+                  onChange={handleChange}
+                  typeOfValues={sourceType}
+                  disable={disable}
+                  width="50%"
+                />
+                <StrEditCell
+                  row={row}
+                  name="value"
+                  onChange={handleChange}
+                  typeOfValues={targetType}
+                  disable={disable}
+                  width="50%"
+                />
+                <RemoveRowCell
+                  disable={disable}
+                  onDelete={() => onDelete(row.rowId || '')}
+                />
+              </TableRow>
+            </React.Fragment>
+          );
+        })}
+        {!disable && (
+          <AddEntryRow onClick={() => onRowAdd(values)} colSpan={3} />
+        )}
+      </TableBody>
+    </Table>
   );
 }
 

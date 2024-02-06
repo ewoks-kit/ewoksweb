@@ -41,12 +41,12 @@ export default function NodeDataMapping({ nodeId }: { nodeId: string }) {
     <div>
       <TableDataMapping
         onRowAdd={(rows) => addDataMapping(rows)}
-        headers={['Source', 'Target']}
         values={
           nodeData.ewoks_props.default_error_attributes?.data_mapping || []
         }
-        valuesChanged={dataMappingValuesChanged}
-        typeOfValues={[{ typeOfInput: 'input' }, { typeOfInput: 'input' }]}
+        onValuesChange={dataMappingValuesChanged}
+        sourceType={{ typeOfInput: 'input' }}
+        targetType={{ typeOfInput: 'input' }}
       />
     </div>
   );
