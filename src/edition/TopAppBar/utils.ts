@@ -53,7 +53,7 @@ export function curateEdgeData(
         ...restEdgeData
       } = edgeData;
       const conditions = deleteEmptyLines(rawConditions);
-      const data_mapping = deleteEmptyLines(rawDataMapping);
+      const data_mapping = deleteEmptyMappings(rawDataMapping);
 
       const hasDataMapping =
         !edgeData.map_all_data && data_mapping && data_mapping.length > 0;
@@ -73,13 +73,20 @@ export function curateEdgeData(
   );
 }
 
-function deleteEmptyLines<T extends DataMapping | Condition | DefaultInput>(
+function deleteEmptyLines<T extends Condition | DefaultInput>(
   arrayObjId: T[] | undefined,
 ): T[] | undefined {
   if (!arrayObjId) {
     return undefined;
   }
-  return arrayObjId.filter(
-    (obj: DataMapping | Condition | DefaultInput) => obj.name !== '',
+  return arrayObjId.filter((obj: T) => !!obj.name);
+}
+
+function deleteEmptyMappings(mappings: DataMapping[] | undefined) {
+  if (!mappings) {
+    return undefined;
+  }
+  return mappings.filter(
+    (mapping) => mapping.source !== '' && mapping.target !== '',
   );
 }

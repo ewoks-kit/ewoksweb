@@ -12,10 +12,10 @@ import TableHeader from './TableHeader';
 
 interface Props {
   values: DataMapping[];
-  onValuesChange: (rows: DataMapping[]) => void;
   sourceType: TypeOfValues;
   targetType: TypeOfValues;
-  onRowAdd: (rows?: DataMapping[]) => void;
+  onValuesChange: (rows: DataMapping[]) => void;
+  onRowAdd: (rows: DataMapping[]) => void;
   disable?: boolean;
 }
 
@@ -24,27 +24,21 @@ function DataMappingTable(props: Props) {
     props;
 
   function onSourceChange(newSource: string, row: DataMapping) {
-    const { rowId: id } = row;
+    const { rowId } = row;
 
-    const newRows = values.map((rowe) => {
-      if (rowe.rowId === id) {
-        return { ...rowe, name: newSource };
-      }
-      return rowe;
-    });
+    const newRows = values.map((rowe) =>
+      rowe.rowId === rowId ? { ...rowe, source: newSource } : rowe,
+    );
 
     onValuesChange(newRows);
   }
 
   function onTargetChange(newTarget: string, row: DataMapping) {
-    const { rowId: id } = row;
+    const { rowId } = row;
 
-    const newRows = values.map((rowe) => {
-      if (rowe.rowId === id) {
-        return { ...rowe, value: newTarget };
-      }
-      return rowe;
-    });
+    const newRows = values.map((rowe) =>
+      rowe.rowId === rowId ? { ...rowe, target: newTarget } : rowe,
+    );
 
     onValuesChange(newRows);
   }
@@ -66,22 +60,20 @@ function DataMappingTable(props: Props) {
       <TableHeader headers={['Source', 'Target']} />
       <TableBody>
         {values.map((row) => {
-          const handleSourceChange = (s: string) => onSourceChange(s, row);
-          const handleTargetChange = (t: string) => onTargetChange(t, row);
           return (
             <React.Fragment key={row.rowId}>
               <TableRow>
                 <StrEditCell
-                  value={row.name || ''}
-                  onChange={handleSourceChange}
+                  value={row.source}
+                  onChange={(s) => onSourceChange(s, row)}
                   typeOfValues={sourceType}
                   disable={disable}
                   width="50%"
                   ariaLabel="Edit source"
                 />
                 <StrEditCell
-                  value={row.value || ''}
-                  onChange={handleTargetChange}
+                  value={row.target}
+                  onChange={(t: string) => onTargetChange(t, row)}
                   typeOfValues={targetType}
                   disable={disable}
                   width="50%"

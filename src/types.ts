@@ -142,9 +142,9 @@ export interface EwoksDataMapping {
 }
 
 export interface DataMapping {
-  value?: string | number;
   rowId: string;
-  name?: string;
+  source: string | number;
+  target: string | number;
 }
 
 export interface EwoksCondition {

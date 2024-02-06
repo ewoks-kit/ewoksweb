@@ -227,10 +227,10 @@ it('Saves a populated link', () => {
       .siblings()
       .within(() => {
         cy.contains('Add').should('have.length', 1).click();
-        cy.findByRole('textbox', { name: 'Edit input name' }).type(
+        cy.findByRole('textbox', { name: 'Edit source' }).type(
           'sourceDataMapping',
         );
-        cy.findByRole('textbox', { name: 'Edit input value' }).type(
+        cy.findByRole('textbox', { name: 'Edit target' }).type(
           'targetDataMapping',
         );
       });

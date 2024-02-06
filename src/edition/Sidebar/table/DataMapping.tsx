@@ -29,9 +29,9 @@ export default function DataMappingComponent({ element, mapAllData }: Props) {
     state.nodesData.get(element.target),
   );
 
-  function addDataMapping(rows?: DataMapping[]) {
+  function addDataMapping(rows: DataMapping[]) {
     mergeEdgeData(element.id, {
-      data_mapping: [...(rows || []), { rowId: nanoid(), name: '', value: '' }],
+      data_mapping: [...rows, { rowId: nanoid(), source: '', target: '' }],
     });
   }
 
