@@ -243,7 +243,7 @@ it('Saves a populated link', () => {
       'outputConditions',
     );
 
-    cy.findByRole('combobox').should('have.text', 'bool');
+    cy.findByRole('combobox').should('have.value', 'bool');
 
     cy.findByRole('radio', { name: 'false' }).should('be.checked');
 
