@@ -14,8 +14,8 @@ It is used for quickly building graphs/workflows that can be visualized on the c
 dragging them in the canvas the user can assign specific tasks to the empty taskSkeletons using
 the right sidebar **Task Info** where **Task Identifier** is listed. When pressing the pencil
 next to the **Task Identifier** a dialog appears where the user can change the identifier of
-the task this node is based on by inputing the identifier of an existing task.
-In that way the taskSkeleton node can modify its underlying task.
+the task by selecting from the existing tasks.
+In that way the taskSkeleton node can modify its underlying task after creating a graph.
 
 graphInput - graphoutput
 ------------------------
@@ -38,7 +38,7 @@ nodes or links etc. Any note is visualized only through ewoksweb and does not al
 subworkflow
 -----------
 
-By dragging this task-like entity the user is able to add a new workflow as a subworkflow. When dragging ends a dialog
+By dragging this task-like entity the user is able to add a new workflow as a subworkflow. When dragging ends, a dialog
 appears that lets the user select a workflow from the server or the local drive to add as a subworkflow.
 The subworkflow will appear on the canvas as a node with input and output handles as it was defined when building the
 workflow. If no inputs and/or outputs are defined then the subworkflow will have no handles to be connected to other

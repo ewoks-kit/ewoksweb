@@ -1,59 +1,42 @@
 Editor basic structure
 ======================
 
-EwoksWeb is a web application where users can visually **view/create/edit** their workflows using
-the `ewoks <https://ewoks.readthedocs.io/>` abstraction model. It mainly employs a canvas where
-workflows with their Nodes and Links are being visualized and graphically edited.
+EwoksWeb is a web application where users can visually **view/edit/create/execute** their workflows.
+It mainly employs two pages:
+  - the landing page for viewing/editing workflows and
+  - the monitoring page for keeping track of the executing and executed workflows.
 
-The general structure of the EwoksWeb User Interface (UI) includes:
+Edit page
+---------
+
+In the landing edit page workflows with their Nodes and Links are being visualized and graphically edited.
+
+The general structure of the Edit page includes:
 
  - The **Canvas** for visualizing and editing graphs.
- - The left **Sidebar** for viewing and editing properties of a graph and its things it is made of: nodes and links.
- - The **upper bar** that hosts buttons for saving, opening and executing graphs.
- - Some **Dialogs** and **Drawers** for managing graphs-tasks-executions and icons.
+ - The right **Edit Sidebar** for viewing and editing properties of a graph including nodes and links.
+ - The retractable left **Task Sidebar** where tasks, that are the building blocks of workflows,
+    are presented in their categories.
+ - The upper **navigation bar** to open, save, execute workflows and navigate.
 
+ The Edit sidebar changes its content whether a workflow, a node or a link is selected to depict the
+ information for each along with the appropriete editing components according to the
+ `ewoks <https://ewoks.readthedocs.io/>`_ abstraction model.
 
+ The Task sidebar populates the tasks that the user has incorporated in their categories if certain
+ categories are specified by the user. On it's top it features a button to allow discovering new tasks or/and
+ updating the existing.
 
-Edit a Workflow
----------------
-
-On the left sidebar under the Edit Graph dropdown the following can be edited:
-
- - the **Label** of the graph,
- - the **Comment** that can keep useful user notes about the graph and
- - the **Category** the specific graph belongs. By inserting a category the user can later filter their graphs based on the categories assigned to them making it easier to locate and explore graphs.
-
-**Graph** is made up from **nodes and links** between the nodes. A node can be the representation of a:
- 1. **task**
- 2. **graph** that can be imported in a graph as a **subgraph**
-
-To **add a node** you need to drag-and-drop one *Task* from the *Add Node* section of the sidebar on the left. The **Add Node** is populated with **Tasks** within their **Categories**.
-Tasks are embedded in the system or added by the end-user. Nodes can be seen as an instance of a Task which represents a piece of code. Click for a deeper explanation of the [Ewoks concepts](https://ewokscore.readthedocs.io/en/latest/definitions.html).
-
-A **subgraph** can be added to the graph from the server or from the local storage.
-
-The embedded Tasks are in the category *General* and include: **input**, **output** and **skeleton** tasks.
-Input and output are used for declaring the input and the output of a graph respectively.
-They can be connected to ONLY ONE node in a given graph.
-The task_skeleton is given as an empty cell when the user needs to get a node in the graph without having the
-task with which is connected already defined.
-In the *General* category 2 more icons represent the icon node that can be added and a *+G* which is used
-to add a subgraph from the local storage to the graph.
-
-Adding a subgraph in the graph is done by:
- - using the **+G** from the *sidebar->Add Nodes->General* category for graphs located in our hard-disk
- - using the *down arrow* on the top-bar for graphs that exist on the server.
-
-A *subgraph* is represented in the graph as a node with multiple inputs and outputs. When *doubleclicking* on
-a subgraph the canvas shows the subgraph internals i.e. another graph. To get back on the initial graph click
-on the topbar left side where a path is created that provides the path to the upper graph.
-
-
-
-Every change you make on a graph (including the addition of nodes and links) can be undone and redone using the
-**Undo-Redo** buttons on the top-bar.
-
-Nodes and Links have **node-properties** and **link-properties** respectively that can be further edited on the sidebar.
-These properties comply to the `ewoks <https://ewoks.readthedocs.io/>` specification.
-A graph can be saved and retrieved from the local-drive or from the server using the buttons on the top-bar.
-Every button has a tooltip that appears on hover and describes its functionality.
+ The Navigation bar is shared between the edit and monitor page and includes from left to right:
+  - the logo of EwoksWeb that is also a link for the edit page
+  - the navigation to edit and monitor page
+  - the identity of the workflow, when one is opened, in the middle
+  - a quick open dropdown where all workflow identifiers are presented to the user to select and open one
+  - the save button for the workflow on the canvas
+  - a menu with the following options on the right:
+    - **New workflow** to empty the canvas allowing for the creation of a new workflow.
+    - **Open from disk** that allows opening a workflow from the computer's local file system.
+    - **Download** to save a workflow in the computer local file system.
+    - **Execute workflow** that initiates the process of executing the workflow that is depicted on the canvas.
+    - **Manage icons** that opens a top drawer for managing the icons that can be assigned to nodes in a workflow.
+    - **Create new task** that opens a dialog for providing the appropriete details for a new task.

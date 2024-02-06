@@ -3,7 +3,8 @@ Node editing
 
 Node editing is accessible on the right-sidebar when a node on the canvas is selected.
 
-Each node has several attributes that follow the  `ewokscore <https://ewokscore.readthedocs.io/en/latest/definitions.html#node-attributes>`_
+Each node has several attributes that follow the
+`ewokscore <https://ewokscore.readthedocs.io/en/latest/definitions.html#node-attributes>`_
 specification. When a node is selected the following items are being depicted.
 
 Label-Comment
