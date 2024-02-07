@@ -108,14 +108,12 @@ export interface Task {
   output_names?: string[];
 }
 
-export interface DefaultInput {
-  rowId?: string;
+export type DefaultInput = InputTableRow;
+
+export interface EwoksDefaultInput {
   name: string | number;
   value: unknown;
-  type?: RowType;
 }
-
-export interface EwoksDefaultInput extends Omit<DefaultInput, 'id' | 'type'> {}
 
 export interface GraphUiProps {
   comment?: string;
@@ -152,12 +150,7 @@ export interface EwoksCondition {
   value: unknown;
 }
 
-export interface Condition {
-  value: unknown;
-  rowId?: string;
-  name?: string | number;
-  type?: RowType;
-}
+export type Condition = InputTableRow;
 
 export interface DefaultErrorAttributes<T = DataMapping | EwoksDataMapping> {
   map_all_data?: boolean;
@@ -251,9 +244,9 @@ export type RowValue = string | object | boolean | number | null;
 
 export interface InputTableRow {
   rowId: string;
-  name?: string | number;
-  value?: unknown; // TODO: set to RowValue once Conditions/DefaultInputs types are merged with this
-  type?: RowType;
+  name: string | number;
+  value: unknown; // TODO: set to RowValue once Conditions/DefaultInputs types are merged with this
+  type: RowType;
 }
 
 export enum RowType {

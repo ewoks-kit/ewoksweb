@@ -3,13 +3,7 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 
 import useSnackbarStore from '../../../store/useSnackbarStore';
-import type {
-  Condition,
-  DefaultInput,
-  InputTableRow,
-  RowValue,
-  TypeOfValues,
-} from '../../../types';
+import type { InputTableRow, RowValue, TypeOfValues } from '../../../types';
 import { RowType } from '../../../types';
 import AddEntryRow from './controls/AddEntryRow';
 import RemoveRowCell from './controls/RemoveRowCell';
@@ -18,11 +12,10 @@ import MultiTypeEditCell from './MultiTypeEditCell';
 import StrOrNumEditCell from './StrOrNumEditCell';
 import styles from './Table.module.css';
 import TableHeader from './TableHeader';
-import { createData } from './utils';
 
 interface EditableTableProps {
   headers: string[];
-  defaultValues: Condition[] | DefaultInput[];
+  defaultValues: InputTableRow[];
   typeOfValues: TypeOfValues[];
   valuesChanged: (rows: InputTableRow[]) => void;
   disable?: boolean;
@@ -31,9 +24,8 @@ interface EditableTableProps {
 
 // The table where lines can be added where type is selected and appropriate values are given to name and value.
 function EditableTable(props: EditableTableProps) {
-  const { defaultValues, headers, disable, onRowAdd } = props;
+  const { defaultValues: rows, headers, disable, onRowAdd } = props;
 
-  const rows = defaultValues.map(createData);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
   function handleNameChange(newName: string | number, row: InputTableRow) {
@@ -106,7 +98,7 @@ function EditableTable(props: EditableTableProps) {
           return (
             <TableRow key={row.rowId}>
               <StrOrNumEditCell
-                value={row.name ?? ''}
+                value={row.name}
                 isInvalid={hasDuplicateName}
                 onChange={(newName) => handleNameChange(newName, row)}
                 typeOfValues={props.typeOfValues[0]}
@@ -116,7 +108,7 @@ function EditableTable(props: EditableTableProps) {
               />
 
               <TypeSelectCell
-                value={row.type || RowType.String}
+                value={row.type}
                 onChange={(e) => handleRowTypeChange(e, row)}
                 disable={disable}
               />

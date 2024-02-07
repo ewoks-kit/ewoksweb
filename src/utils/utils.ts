@@ -6,12 +6,13 @@ import type {
   InputOutputLinkAttributes,
   InputOutputUiProps,
 } from '../types';
+import { RowType } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 
 export function createDataMappingData(pair: EwoksDataMapping): DataMapping {
   return {
     rowId: nanoid(),
-    source: pair.source_output ? pair.source_output.toString() : '',
+    source: pair.source_output ?? '',
     target: pair.target_input ?? '',
   };
 }
@@ -104,4 +105,28 @@ export function generateUniqueNodeId(
   }
 
   return tentativeId;
+}
+
+export function getValueType(value: unknown): RowType {
+  if (typeof value === 'boolean') {
+    return RowType.Bool;
+  }
+
+  if (Array.isArray(value)) {
+    return RowType.List;
+  }
+
+  if (value === null) {
+    return RowType.Null;
+  }
+
+  if (typeof value === 'object') {
+    return RowType.Dict;
+  }
+
+  if (typeof value === 'number') {
+    return RowType.Number;
+  }
+
+  return RowType.String;
 }

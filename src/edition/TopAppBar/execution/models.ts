@@ -5,8 +5,7 @@ import type { EngineDropdownOption } from '../models';
 
 export type InputTarget = { id: string } | 'All nodes' | 'All input nodes';
 
-export interface ExecutionInputTableRow extends Required<InputTableRow> {
-  name: string | number;
+export interface ExecutionInputTableRow extends InputTableRow {
   target: InputTarget;
 }
 

@@ -1,7 +1,6 @@
 import TableCell from '@mui/material/TableCell';
 
 import type { InputTableRow, RowValue } from '../../../types';
-import { RowType } from '../../../types';
 import MultiTypeEditControl from './controls/MultiTypeEditControl';
 import styles from './CustomTableCell.module.css';
 
@@ -14,7 +13,7 @@ interface Props {
 function MultiTypeEditCell(props: Props) {
   const { row, disable, onChange } = props;
 
-  const { value = '', type = RowType.String } = row;
+  const { value, type } = row;
 
   if (
     typeof value !== 'string' &&

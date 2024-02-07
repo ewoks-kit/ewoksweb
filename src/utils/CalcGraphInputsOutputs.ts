@@ -154,7 +154,7 @@ function calcNodeProps(
       lData.conditions.length > 0 && {
         conditions: lData.conditions.map((con) => {
           return {
-            source_output: con.name ?? '',
+            source_output: con.name,
             value: con.value,
           };
         }),
