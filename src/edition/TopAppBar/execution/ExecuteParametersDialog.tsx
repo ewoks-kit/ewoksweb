@@ -22,7 +22,7 @@ import { useSaveWorkflow } from '../../../general/hooks';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import useStore from '../../../store/useStore';
-import type { RowChangeEvent, RowValue, TypeOfValues } from '../../../types';
+import type { RowValue, TypeOfValues } from '../../../types';
 import { RowType } from '../../../types';
 import { textForError } from '../../../utils';
 import { assertDefined } from '../../../utils/typeGuards';
@@ -92,10 +92,10 @@ export default function ExecuteParametersDialog(props: Props) {
     inputRows.set(rowId, { ...oldInput, target: newTarget });
   }
 
-  function handleNameChange(e: RowChangeEvent, rowId: string) {
+  function handleNameChange(newName: string, rowId: string) {
     const oldInput = inputRows.get(rowId);
     assertDefined(oldInput);
-    inputRows.set(rowId, { ...oldInput, name: e.target.value });
+    inputRows.set(rowId, { ...oldInput, name: newName });
   }
 
   function handleValueChange(newValue: RowValue, rowId: string) {
@@ -163,10 +163,10 @@ export default function ExecuteParametersDialog(props: Props) {
                         onChange={(newType) => handleTypeChange(newType, rowId)}
                       />
                       <StrEditCell
-                        row={inputData}
-                        name="name"
+                        value={inputData.name}
                         onChange={(e) => handleNameChange(e, rowId)}
                         typeOfValues={calcTypeAndValues(inputData.target)}
+                        ariaLabel="Edit input name"
                       />
 
                       <MultiTypeEditCell

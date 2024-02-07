@@ -13,8 +13,8 @@ import { DEFAULT_LINK_VALUES } from './defaultValues';
 export function createDataMappingData(pair: EwoksDataMapping): DataMapping {
   return {
     rowId: nanoid(),
-    name: pair.source_output ? pair.source_output.toString() : '',
-    value: pair.target_input ?? '',
+    source: pair.source_output ? pair.source_output.toString() : '',
+    target: pair.target_input ?? '',
   };
 }
 
@@ -27,10 +27,10 @@ export function calcConditionName(condition: Condition): string | number {
 export function calcDataMapping(
   dataMappings: DataMapping[],
 ): EwoksDataMapping[] {
-  return dataMappings.map(({ value, name }) => {
+  return dataMappings.map(({ source, target }) => {
     return {
-      source_output: stringOrNumber(name),
-      target_input: stringOrNumber(value),
+      source_output: stringOrNumber(source),
+      target_input: stringOrNumber(target),
     };
   });
 }

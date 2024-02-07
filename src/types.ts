@@ -142,9 +142,9 @@ export interface EwoksDataMapping {
 }
 
 export interface DataMapping {
-  value?: string | number;
   rowId: string;
-  name?: string;
+  source: string | number;
+  target: string | number;
 }
 
 export interface EwoksCondition {
@@ -269,10 +269,6 @@ export interface TypeOfValues {
   typeOfInput: 'select' | 'input';
   values?: string[];
   requiredValues?: string[];
-}
-
-export interface RowChangeEvent {
-  target: { name: string; value: string | number };
 }
 
 export interface LinkData {

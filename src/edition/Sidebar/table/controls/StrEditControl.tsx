@@ -1,32 +1,28 @@
 import { FormControl, Input } from '@mui/material';
 
-import type {
-  InputTableRow,
-  RowChangeEvent,
-  TypeOfValues,
-} from '../../../../types';
+import type { TypeOfValues } from '../../../../types';
 import AutocompleteSelect from './AutocompleteSelect';
 import styles from './StrEditControl.module.css';
 
 interface Props {
-  row: InputTableRow;
-  name: 'name' | 'value';
-  onChange: (e: RowChangeEvent) => void;
+  value: string | number;
+  onChange: (newValue: string) => void;
   typeOfValues?: TypeOfValues;
   disable?: boolean;
+  ariaLabel?: string;
 }
 
 function StrEditControl(props: Props) {
-  const { row, name, typeOfValues, onChange, disable } = props;
+  const { value, typeOfValues, onChange, disable, ariaLabel } = props;
 
   if (typeOfValues?.typeOfInput && typeOfValues.typeOfInput === 'select') {
     return (
       <AutocompleteSelect
-        row={row}
-        name={name}
+        value={value}
         onChange={onChange}
         typeOfValues={typeOfValues}
         disable={disable}
+        ariaLabel={ariaLabel}
       />
     );
   }
@@ -35,11 +31,10 @@ function StrEditControl(props: Props) {
     <FormControl variant="standard" fullWidth>
       <Input
         className={styles.input}
-        value={row[name]}
+        value={value}
         type="text"
-        name={name}
-        onChange={(e) => onChange(e)}
-        inputProps={{ 'aria-label': `Edit input ${name}` }}
+        onChange={(e) => onChange(e.target.value)}
+        inputProps={{ 'aria-label': ariaLabel }}
         disabled={disable}
       />
     </FormControl>

@@ -5,7 +5,8 @@ import type { DataMapping } from 'types';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
-import TableDataMapping from './TableDataMapping';
+import DataMappingTable from './DataMappingTable';
+import styles from './Table.module.css';
 import { calcTypeOfValues } from './utils';
 
 interface Props {
@@ -28,35 +29,35 @@ export default function DataMappingComponent({ element, mapAllData }: Props) {
     state.nodesData.get(element.target),
   );
 
-  function addDataMapping(rows?: DataMapping[]) {
+  function addDataMapping(rows: DataMapping[]) {
     mergeEdgeData(element.id, {
-      data_mapping: [
-        ...(rows as DataMapping[]),
-        { rowId: nanoid(), name: '', value: '' },
-      ],
+      data_mapping: [...rows, { rowId: nanoid(), source: '', target: '' }],
     });
   }
 
-  const dataMappingValuesChanged = (table: DataMapping[]) => {
+  function dataMappingValuesChanged(table: DataMapping[]) {
     setEdgeData(element.id, {
       ...edgeData,
       data_mapping: [...table],
     });
-  };
+  }
 
   return (
     <div>
-      <TableDataMapping
+      <DataMappingTable
         disable={mapAllData}
         onRowAdd={(rows) => addDataMapping(rows)}
-        headers={['Source', 'Target']}
         values={edgeData.data_mapping || []}
-        valuesChanged={dataMappingValuesChanged}
-        typeOfValues={[
-          calcTypeOfValues('inputs', sourceNodeData, edgeData),
-          calcTypeOfValues('outputs', targetNodeData, edgeData),
-        ]}
+        onValuesChange={dataMappingValuesChanged}
+        sourceType={calcTypeOfValues('inputs', sourceNodeData, edgeData)}
+        targetType={calcTypeOfValues('outputs', targetNodeData, edgeData)}
       />
+      {mapAllData && (
+        <div className={styles.warning}>
+          Data Mappings have no effect when Map all Data is enabled. They will
+          be removed when saving the workflow.
+        </div>
+      )}
     </div>
   );
 }
