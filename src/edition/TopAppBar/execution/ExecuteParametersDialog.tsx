@@ -35,7 +35,7 @@ import { isClass } from '../../Sidebar/table/utils';
 import type { EngineDropdownOption } from '../models';
 import ExecuteParamsTableHeader from './ExecuteParamsTableHeader';
 import styles from './ExecutionDialog.module.css';
-import ExecutionEngine from './ExecutionEngine';
+import ExecutionOptions from './ExecutionOptions';
 import InputTargetDropdown from './InputTargetDropdown';
 import type { ExecutionInputTableRow, InputTarget } from './models';
 import { EMPTY_INPUT } from './models';
@@ -55,6 +55,7 @@ export default function ExecuteParametersDialog(props: Props) {
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
   const [engine, setEngine] = useState<EngineDropdownOption>('default');
+  const [worker, setWorker] = useState<string>('');
   const { handleSave } = useSaveWorkflow();
   const navigate = useNavigate();
 
@@ -77,7 +78,7 @@ export default function ExecuteParametersDialog(props: Props) {
       return;
     }
     try {
-      execute(rootWorkflowId, [...inputRows.values()], engine);
+      execute(rootWorkflowId, [...inputRows.values()], engine, worker);
       navigate('/monitor');
     } catch (executeError) {
       showErrorMsg(textForError(executeError, 'Error in executing workflow.'));
@@ -132,7 +133,7 @@ export default function ExecuteParametersDialog(props: Props) {
 
   return (
     <Dialog maxWidth="xl" fullWidth open={open} onClose={() => onClose()}>
-      <DialogTitle>Execution Parameters</DialogTitle>
+      <DialogTitle>Execute a workflow</DialogTitle>
       <DialogContent>
         <Card variant="outlined">
           <CardContent>
@@ -201,7 +202,12 @@ export default function ExecuteParametersDialog(props: Props) {
             </Table>
           </CardContent>
         </Card>
-        <ExecutionEngine engine={engine} setEngine={setEngine} />
+        <ExecutionOptions
+          engine={engine}
+          setEngine={setEngine}
+          worker={worker}
+          setWorker={setWorker}
+        />
       </DialogContent>
       <div className={styles.saveWarning}>
         <InfoIcon fontSize="small" />

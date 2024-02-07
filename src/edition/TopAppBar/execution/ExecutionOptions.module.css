@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  padding: 0 1rem;
+  margin-top: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  flex-wrap: wrap;
+}
+
+.selectContainer {
+  display: flex;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-right: 2rem;
+}
+
+.label {
+  font-weight: 600;
+  margin-right: 0.75rem;
+}
+
+.select {
+  composes: btnClean from global;
+  border-bottom: 1px solid gray;
+  min-width: 150px;
+}
+
+.select:hover {
+  border-bottom-width: 2px;
+}

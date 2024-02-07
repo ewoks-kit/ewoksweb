@@ -1,4 +1,4 @@
-import { useExecutedJobs } from '../api/events';
+import { useExecutedJobs } from '../api/execution';
 import styles from './MonitorPage.module.css';
 import WorkflowList from './WorkflowList';
 

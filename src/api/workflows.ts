@@ -45,9 +45,7 @@ export async function executeWorkflow(
   workflowId: string,
   params?: ExecutionParams,
 ) {
-  return client.post<ExecuteWorkflowResponse>(`/execute/${workflowId}`, {
-    execute_arguments: params,
-  });
+  return client.post<ExecuteWorkflowResponse>(`/execute/${workflowId}`, params);
 }
 
 export async function getWorkflows(): Promise<WorkflowDescription[]> {
