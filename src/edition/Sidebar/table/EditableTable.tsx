@@ -114,7 +114,8 @@ function EditableTable(props: EditableTableProps) {
               />
 
               <MultiTypeEditCell
-                row={row}
+                value={row.value}
+                type={row.type}
                 onChange={(newValue) => handleValueChange(newValue, row)}
                 disable={disable || row.type === RowType.Null}
               />

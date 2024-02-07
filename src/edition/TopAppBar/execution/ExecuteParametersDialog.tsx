@@ -170,7 +170,8 @@ export default function ExecuteParametersDialog(props: Props) {
                       />
 
                       <MultiTypeEditCell
-                        row={inputData}
+                        value={inputData.value}
+                        type={inputData.type}
                         onChange={(newValue) =>
                           handleValueChange(newValue, rowId)
                         }
@@ -191,10 +192,7 @@ export default function ExecuteParametersDialog(props: Props) {
                 <AddEntryRow
                   onClick={() => {
                     const rowId = nanoid();
-                    inputRows.set(rowId, {
-                      rowId,
-                      ...EMPTY_INPUT,
-                    });
+                    inputRows.set(rowId, EMPTY_INPUT);
                   }}
                   colSpan={4}
                 />

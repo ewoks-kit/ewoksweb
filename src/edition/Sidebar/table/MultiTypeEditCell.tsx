@@ -1,19 +1,18 @@
 import TableCell from '@mui/material/TableCell';
 
-import type { InputTableRow, RowValue } from '../../../types';
+import type { RowType, RowValue } from '../../../types';
 import MultiTypeEditControl from './controls/MultiTypeEditControl';
 import styles from './CustomTableCell.module.css';
 
 interface Props {
-  row: InputTableRow;
+  value: unknown;
+  type: RowType;
   onChange: (newValue: RowValue) => void;
   disable?: boolean;
 }
 
 function MultiTypeEditCell(props: Props) {
-  const { row, disable, onChange } = props;
-
-  const { value, type } = row;
+  const { value, type, disable, onChange } = props;
 
   if (
     typeof value !== 'string' &&
