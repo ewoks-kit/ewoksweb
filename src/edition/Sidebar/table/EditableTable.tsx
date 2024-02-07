@@ -15,7 +15,7 @@ import AddEntryRow from './controls/AddEntryRow';
 import RemoveRowCell from './controls/RemoveRowCell';
 import TypeSelectCell from './controls/TypeSelectCell';
 import MultiTypeEditCell from './MultiTypeEditCell';
-import StrEditCell from './StrEditCell';
+import StrOrNumEditCell from './StrOrNumEditCell';
 import styles from './Table.module.css';
 import TableHeader from './TableHeader';
 import { createData } from './utils';
@@ -36,7 +36,7 @@ function EditableTable(props: EditableTableProps) {
   const rows = defaultValues.map(createData);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
-  function handleNameChange(newName: string, row: InputTableRow) {
+  function handleNameChange(newName: string | number, row: InputTableRow) {
     const { rowId: id } = row;
     const otherRows = rows.filter((_row) => _row.rowId !== id);
 
@@ -105,8 +105,8 @@ function EditableTable(props: EditableTableProps) {
             rows.filter((ro) => ro.name === row.name).length > 1;
           return (
             <TableRow key={row.rowId}>
-              <StrEditCell
-                value={row.name || ''}
+              <StrOrNumEditCell
+                value={row.name ?? ''}
                 isInvalid={hasDuplicateName}
                 onChange={(newName) => handleNameChange(newName, row)}
                 typeOfValues={props.typeOfValues[0]}

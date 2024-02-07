@@ -16,7 +16,7 @@ export function createData(pair: Condition | DefaultInput): InputTableRow {
 
   return {
     rowId,
-    name: pair.name?.toString(),
+    name: pair.name,
     value: pair.value,
     type,
   };

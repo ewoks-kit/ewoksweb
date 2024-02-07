@@ -7,12 +7,7 @@ import type {
 } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { isString } from './typeGuards';
-import {
-  calcConditionName,
-  calcDataMapping,
-  notUndefinedValue,
-  propIsEmpty,
-} from './utils';
+import { calcDataMapping, notUndefinedValue, propIsEmpty } from './utils';
 
 // DOC: Calculate the ewoks input_nodes and output_nodes within the graph
 // from the nodes of the graphRF model with types graphInput, graphOutput
@@ -159,7 +154,7 @@ function calcNodeProps(
       lData.conditions.length > 0 && {
         conditions: lData.conditions.map((con) => {
           return {
-            source_output: calcConditionName(con),
+            source_output: con.name ?? '',
             value: con.value,
           };
         }),

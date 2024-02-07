@@ -96,14 +96,14 @@ it('should add inputs for a specific node', () => {
 
   cy.findByRole('combobox', { name: 'Change input type' }).select('number');
 
-  cy.findByRole('combobox', { name: 'Edit input name' }).type('delay');
+  cy.findByRole('combobox', { name: 'Edit input name' }).type('3');
   cy.findByRole('spinbutton', { name: 'Edit input value' }).type('6');
 
   cy.intercept(
     `api/execute/demo`,
     expectRequestBodyToDeepEqual({
       execute_arguments: {
-        inputs: [{ name: 'delay', value: 6, id: 'task1' }],
+        inputs: [{ name: 3, value: 6, id: 'task1' }],
       },
     }),
   ).as('executeRequest');

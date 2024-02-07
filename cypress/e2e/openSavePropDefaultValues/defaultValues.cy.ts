@@ -298,6 +298,15 @@ it('saves default inputs with the correct type', () => {
       .last()
       .select('bool');
     cy.findByRole('radio', { name: 'true' }).click();
+
+    cy.findByRole('button', { name: 'Add entry' }).click();
+    cy.findAllByRole('combobox', { name: 'Edit input name' }).last().type('0');
+    cy.findAllByRole('combobox', { name: 'Change input type' })
+      .last()
+      .select('number');
+    cy.findAllByRole('spinbutton', { name: 'Edit input value' })
+      .last()
+      .type('0');
   });
 
   cy.intercept('POST', 'api/workflows', (req) => {
@@ -306,6 +315,7 @@ it('saves default inputs with the correct type', () => {
       { name: 'b', value: '1' },
       { name: 'c', value: null },
       { name: 'd', value: true },
+      { name: 0, value: 0 },
     ]);
 
     return req.reply({});

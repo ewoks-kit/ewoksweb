@@ -1,12 +1,11 @@
 import type {
   DataMapping,
   DefaultErrorAttributes,
-  DefaultInput,
   EwoksDataMapping,
   EwoksNode,
   NodeWithData,
 } from '../types';
-import { calcDataMapping, notUndefinedValue, stringOrNumber } from './utils';
+import { calcDataMapping, notUndefinedValue } from './utils';
 
 function calcDefaultErrorAttributes(
   default_error_attributes: DefaultErrorAttributes<DataMapping> | undefined,
@@ -22,18 +21,6 @@ function calcDefaultErrorAttributes(
         data_mapping: calcDataMapping(default_error_attributes.data_mapping),
       }),
   };
-}
-
-function calcDefaultInputs(default_inputs: DefaultInput[] | undefined) {
-  if (!default_inputs) {
-    return undefined;
-  }
-  return default_inputs.map(({ name, value }) => {
-    return {
-      name: stringOrNumber(name),
-      value,
-    };
-  });
 }
 
 // EwoksRFNode --> EwoksNode for saving
@@ -77,7 +64,10 @@ export function toEwoksNodes(nodes: NodeWithData[]): EwoksNode[] {
         task_identifier,
         ...notUndefinedValue(inputs_complete, 'inputs_complete'),
         task_generator,
-        default_inputs: calcDefaultInputs(default_inputs),
+        default_inputs: default_inputs?.map(({ name, value }) => ({
+          name,
+          value,
+        })),
         default_error_node,
         ...(default_error_node && {
           default_error_attributes: calcDefaultErrorAttributes(
