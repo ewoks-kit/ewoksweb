@@ -1,6 +1,6 @@
 import TableCell from '@mui/material/TableCell';
 
-import type { TypeOfValues } from '../../../types';
+import type { Options } from '../../../types';
 import StrOrNumEditControl from './controls/StrOrNumEditControl';
 import styles from './CustomTableCell.module.css';
 
@@ -9,21 +9,14 @@ interface Props {
   onChange: (newValue: string | number) => void;
   isInvalid?: boolean;
   disable?: boolean;
-  typeOfValues?: TypeOfValues;
+  options?: Options;
   width?: string;
   ariaLabel?: string;
 }
 
 function StrOrNumEditCell(props: Props) {
-  const {
-    value,
-    onChange,
-    isInvalid,
-    disable,
-    typeOfValues,
-    width,
-    ariaLabel,
-  } = props;
+  const { value, onChange, isInvalid, disable, options, width, ariaLabel } =
+    props;
 
   return (
     <TableCell
@@ -38,7 +31,7 @@ function StrOrNumEditCell(props: Props) {
       <StrOrNumEditControl
         value={value}
         onChange={onChange}
-        typeOfValues={typeOfValues}
+        options={options}
         disable={disable}
         ariaLabel={ariaLabel}
       />

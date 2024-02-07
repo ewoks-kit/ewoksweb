@@ -3,7 +3,7 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
 
-import type { DataMapping, TypeOfValues } from '../../../types';
+import type { DataMapping, Options } from '../../../types';
 import AddEntryRow from './controls/AddEntryRow';
 import RemoveRowCell from './controls/RemoveRowCell';
 import StrOrNumEditCell from './StrOrNumEditCell';
@@ -12,16 +12,22 @@ import TableHeader from './TableHeader';
 
 interface Props {
   values: DataMapping[];
-  sourceType: TypeOfValues;
-  targetType: TypeOfValues;
   onValuesChange: (rows: DataMapping[]) => void;
   onRowAdd: (rows: DataMapping[]) => void;
+  sourceOptions?: Options;
+  targetOptions?: Options;
   disable?: boolean;
 }
 
 function DataMappingTable(props: Props) {
-  const { values, sourceType, targetType, onValuesChange, disable, onRowAdd } =
-    props;
+  const {
+    values,
+    sourceOptions,
+    targetOptions,
+    onValuesChange,
+    disable,
+    onRowAdd,
+  } = props;
 
   function handleSourceChange(newSource: string | number, row: DataMapping) {
     const { rowId } = row;
@@ -66,7 +72,7 @@ function DataMappingTable(props: Props) {
                 <StrOrNumEditCell
                   value={row.source}
                   onChange={(newSource) => handleSourceChange(newSource, row)}
-                  typeOfValues={sourceType}
+                  options={sourceOptions}
                   disable={disable}
                   width="50%"
                   ariaLabel="Edit source"
@@ -74,7 +80,7 @@ function DataMappingTable(props: Props) {
                 <StrOrNumEditCell
                   value={row.target}
                   onChange={(newTarget) => handleTargetChange(newTarget, row)}
-                  typeOfValues={targetType}
+                  options={targetOptions}
                   disable={disable}
                   width="50%"
                   ariaLabel="Edit target"

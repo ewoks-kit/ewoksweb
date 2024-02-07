@@ -22,7 +22,7 @@ import { useSaveWorkflow } from '../../../general/hooks';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import useStore from '../../../store/useStore';
-import type { RowValue, TypeOfValues } from '../../../types';
+import type { Options, RowValue } from '../../../types';
 import { RowType } from '../../../types';
 import { textForError } from '../../../utils';
 import { assertDefined } from '../../../utils/typeGuards';
@@ -31,7 +31,7 @@ import RemoveRowButton from '../../Sidebar/table/controls/RemoveRowButton';
 import TypeSelectCell from '../../Sidebar/table/controls/TypeSelectCell';
 import MultiTypeEditCell from '../../Sidebar/table/MultiTypeEditCell';
 import StrOrNumEditCell from '../../Sidebar/table/StrOrNumEditCell';
-import { isClass } from '../../Sidebar/table/utils';
+import { calcNodeInputOptions } from '../../Sidebar/table/utils';
 import type { EngineDropdownOption } from '../models';
 import ExecuteParamsTableHeader from './ExecuteParamsTableHeader';
 import styles from './ExecutionDialog.module.css';
@@ -114,21 +114,13 @@ export default function ExecuteParametersDialog(props: Props) {
     });
   }
 
-  function calcTypeAndValues(target: InputTarget): TypeOfValues {
+  function calcOptions(target: InputTarget): Options | undefined {
     if (typeof target === 'string') {
-      return { typeOfInput: 'input', values: [], requiredValues: [] };
+      return undefined;
     }
 
     const nodeData = nodesData.get(target.id);
-
-    return {
-      typeOfInput: isClass(nodeData) ? 'select' : 'input',
-      values: [
-        ...(nodeData?.task_props.required_input_names || []),
-        ...(nodeData?.task_props.optional_input_names || []),
-      ],
-      requiredValues: nodeData?.task_props.required_input_names || [],
-    };
+    return calcNodeInputOptions(nodeData);
   }
 
   return (
@@ -165,7 +157,7 @@ export default function ExecuteParametersDialog(props: Props) {
                       <StrOrNumEditCell
                         value={inputData.name}
                         onChange={(newName) => handleNameChange(newName, rowId)}
-                        typeOfValues={calcTypeAndValues(inputData.target)}
+                        options={calcOptions(inputData.target)}
                         ariaLabel="Edit input name"
                       />
 

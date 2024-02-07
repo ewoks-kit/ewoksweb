@@ -258,10 +258,9 @@ export enum RowType {
   String = 'string',
 }
 
-export interface TypeOfValues {
-  typeOfInput: 'select' | 'input';
-  values?: string[];
-  requiredValues?: string[];
+export interface Options {
+  values: string[];
+  requiredValues: string[];
 }
 
 export interface LinkData {

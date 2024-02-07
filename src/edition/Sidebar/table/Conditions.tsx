@@ -2,13 +2,12 @@ import { nanoid } from 'nanoid';
 import type { Edge } from 'reactflow';
 
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
-import useNodeDataStore from '../../../store/useNodeDataStore';
 import type { Condition, LinkData } from '../../../types';
 import { RowType } from '../../../types';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import EditableTable from './EditableTable';
 import styles from './Table.module.css';
-import { calcTypeOfValues } from './utils';
+import { calcEdgeInputOptions } from './utils';
 
 interface Props {
   element: Edge;
@@ -19,10 +18,6 @@ interface Props {
 export default function Conditions({ element, isOnErrorSelected }: Props) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
-
-  const sourceNodeData = useNodeDataStore((state) =>
-    state.nodesData.get(element.source),
-  );
 
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
@@ -63,12 +58,7 @@ export default function Conditions({ element, isOnErrorSelected }: Props) {
         defaultValues={edgeData.conditions || []}
         valuesChanged={conditionsValuesChanged}
         onRowAdd={(rows) => addConditions(rows)}
-        typeOfValues={[
-          calcTypeOfValues('inputs', sourceNodeData, edgeData),
-          {
-            typeOfInput: 'input',
-          },
-        ]}
+        nameOptions={calcEdgeInputOptions(edgeData)}
       />
       {isOnErrorSelected && (
         <div className={styles.warning}>
