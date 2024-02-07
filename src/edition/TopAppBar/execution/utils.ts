@@ -6,7 +6,7 @@ import type { ExecutionInputTableRow } from './models';
 import { DROPDOWN_TO_SERVER_ENGINE } from './models';
 
 function hasDefinedProperties(item: ExecutionInputTableRow) {
-  return item.name !== '' && item.value !== '' && item.value !== undefined;
+  return item.name !== '' && item.value !== '';
 }
 
 export async function execute(

@@ -14,7 +14,7 @@ import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import {
   createDataMappingData,
-  getValueType,
+  getValueAndType,
   notUndefinedValue,
 } from './utils';
 
@@ -51,8 +51,7 @@ export function toRFEwoksLinks(
         return {
           rowId: nanoid(),
           name: con.source_output,
-          value: con.value,
-          type: getValueType(con.value),
+          ...getValueAndType(con.value),
         };
       });
 

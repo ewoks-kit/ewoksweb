@@ -5,7 +5,7 @@ import MultiTypeEditControl from './controls/MultiTypeEditControl';
 import styles from './CustomTableCell.module.css';
 
 interface Props {
-  value: unknown;
+  value: RowValue;
   type: RowType;
   onChange: (newValue: RowValue) => void;
   disable?: boolean;

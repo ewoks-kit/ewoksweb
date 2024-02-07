@@ -245,7 +245,7 @@ export type RowValue = string | object | boolean | number | null;
 export interface InputTableRow {
   rowId: string;
   name: string | number;
-  value: unknown; // TODO: set to RowValue once Conditions/DefaultInputs types are merged with this
+  value: RowValue;
   type: RowType;
 }
 

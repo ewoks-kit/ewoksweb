@@ -5,6 +5,7 @@ import type {
   EwoksDataMapping,
   InputOutputLinkAttributes,
   InputOutputUiProps,
+  RowValue,
 } from '../types';
 import { RowType } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
@@ -107,26 +108,29 @@ export function generateUniqueNodeId(
   return tentativeId;
 }
 
-export function getValueType(value: unknown): RowType {
+export function getValueAndType(value: unknown): {
+  type: RowType;
+  value: RowValue;
+} {
   if (typeof value === 'boolean') {
-    return RowType.Bool;
+    return { type: RowType.Bool, value };
   }
 
   if (Array.isArray(value)) {
-    return RowType.List;
+    return { type: RowType.List, value };
   }
 
   if (value === null) {
-    return RowType.Null;
+    return { type: RowType.Null, value };
   }
 
   if (typeof value === 'object') {
-    return RowType.Dict;
+    return { type: RowType.Dict, value };
   }
 
   if (typeof value === 'number') {
-    return RowType.Number;
+    return { type: RowType.Number, value };
   }
 
-  return RowType.String;
+  return { type: RowType.String, value: String(value) };
 }

@@ -15,7 +15,7 @@ import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import {
   createDataMappingData,
-  getValueType,
+  getValueAndType,
   notUndefinedValue,
 } from './utils';
 
@@ -62,8 +62,7 @@ export function convertEwoksWorkflowToRFNodes(
                 return {
                   rowId: nanoid(),
                   name: dIn.name,
-                  value: dIn.value,
-                  type: getValueType(dIn.value),
+                  ...getValueAndType(dIn.value),
                 };
               }),
             }),
