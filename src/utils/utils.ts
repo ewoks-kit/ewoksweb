@@ -5,13 +5,15 @@ import type {
   EwoksDataMapping,
   InputOutputLinkAttributes,
   InputOutputUiProps,
+  RowValue,
 } from '../types';
+import { RowType } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 
 export function createDataMappingData(pair: EwoksDataMapping): DataMapping {
   return {
     rowId: nanoid(),
-    source: pair.source_output ? pair.source_output.toString() : '',
+    source: pair.source_output ?? '',
     target: pair.target_input ?? '',
   };
 }
@@ -104,4 +106,31 @@ export function generateUniqueNodeId(
   }
 
   return tentativeId;
+}
+
+export function getValueAndType(value: unknown): {
+  type: RowType;
+  value: RowValue;
+} {
+  if (typeof value === 'boolean') {
+    return { type: RowType.Bool, value };
+  }
+
+  if (Array.isArray(value)) {
+    return { type: RowType.List, value };
+  }
+
+  if (value === null) {
+    return { type: RowType.Null, value };
+  }
+
+  if (typeof value === 'object') {
+    return { type: RowType.Dict, value };
+  }
+
+  if (typeof value === 'number') {
+    return { type: RowType.Number, value };
+  }
+
+  return { type: RowType.String, value: String(value) };
 }

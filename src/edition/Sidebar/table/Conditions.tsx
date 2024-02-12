@@ -1,13 +1,10 @@
 import { nanoid } from 'nanoid';
 import type { Edge } from 'reactflow';
-import type {
-  Condition as EdgeConditions,
-  InputTableRow,
-  LinkData,
-} from 'types';
 
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useNodeDataStore from '../../../store/useNodeDataStore';
+import type { Condition, LinkData } from '../../../types';
+import { RowType } from '../../../types';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import EditableTable from './EditableTable';
 import styles from './Table.module.css';
@@ -30,17 +27,20 @@ export default function Conditions({ element, isOnErrorSelected }: Props) {
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
 
-  function addConditions(rows: InputTableRow[]) {
-    const elCon = rows as EdgeConditions[];
+  function addConditions(rows: Condition[]) {
+    const elCon = rows;
 
     const newEdgeData = {
       on_error: false,
-      conditions: [...elCon, { rowId: nanoid(), name: '', value: false }],
+      conditions: [
+        ...elCon,
+        { rowId: nanoid(), name: '', value: false, type: RowType.Bool },
+      ],
     };
     mergeEdgeData(element.id, newEdgeData);
   }
 
-  function conditionsValuesChanged(table: InputTableRow[]) {
+  function conditionsValuesChanged(table: Condition[]) {
     const newEdgeData: LinkData = {
       ...edgeData,
       conditions: table.map((con) => {

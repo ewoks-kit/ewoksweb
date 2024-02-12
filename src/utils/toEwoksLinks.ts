@@ -37,7 +37,7 @@ export function toEwoksLinks(links: EdgeWithData[]): EwoksLink[] {
 
       const conditionsValue = conditions?.map((con) => {
         return {
-          source_output: con.name ?? '',
+          source_output: con.name,
           value: con.value,
         };
       });
