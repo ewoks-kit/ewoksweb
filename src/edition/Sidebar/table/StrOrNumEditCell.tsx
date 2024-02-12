@@ -30,7 +30,7 @@ function StrOrNumEditCell(props: Props) {
       align="left"
       className={styles.cell}
       data-disabled={disable ? '' : undefined}
-      data-invalid={!value || isInvalid ? '' : undefined}
+      data-invalid={value === '' || isInvalid ? '' : undefined}
       style={{
         width,
       }}
