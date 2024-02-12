@@ -10,7 +10,7 @@ import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import sidebarStyle from '../sidebarStyle';
 import SidebarTooltip from '../SidebarTooltip';
 import EditableTable from './EditableTable';
-import { isClass } from './utils';
+import { calcNodeInputOptions } from './utils';
 
 export default function DefaultInputs(element: Node) {
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
@@ -64,17 +64,7 @@ export default function DefaultInputs(element: Node) {
         defaultValues={nodeData.ewoks_props.default_inputs || []}
         valuesChanged={defaultInputsChanged}
         onRowAdd={(rows) => addDefaultInputs(rows)}
-        typeOfValues={[
-          {
-            typeOfInput: isClass(nodeData) ? 'select' : 'input',
-            values: [
-              ...(nodeData.task_props.required_input_names || []),
-              ...(nodeData.task_props.optional_input_names || []),
-            ],
-            requiredValues: nodeData.task_props.required_input_names || [],
-          },
-          { typeOfInput: 'input' },
-        ]}
+        nameOptions={calcNodeInputOptions(nodeData)}
       />
     </div>
   );

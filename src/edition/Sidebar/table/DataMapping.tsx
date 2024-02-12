@@ -3,11 +3,10 @@ import type { Edge } from 'reactflow';
 import type { DataMapping } from 'types';
 
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
-import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import DataMappingTable from './DataMappingTable';
 import styles from './Table.module.css';
-import { calcTypeOfValues } from './utils';
+import { calcEdgeInputOptions, calcEdgeOutputOptions } from './utils';
 
 interface Props {
   element: Edge;
@@ -20,14 +19,6 @@ export default function DataMappingComponent({ element, mapAllData }: Props) {
   assertEdgeDataDefined(edgeData, element.id);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
-
-  const sourceNodeData = useNodeDataStore((state) =>
-    state.nodesData.get(element.source),
-  );
-
-  const targetNodeData = useNodeDataStore((state) =>
-    state.nodesData.get(element.target),
-  );
 
   function addDataMapping(rows: DataMapping[]) {
     mergeEdgeData(element.id, {
@@ -49,8 +40,8 @@ export default function DataMappingComponent({ element, mapAllData }: Props) {
         onRowAdd={(rows) => addDataMapping(rows)}
         values={edgeData.data_mapping || []}
         onValuesChange={dataMappingValuesChanged}
-        sourceType={calcTypeOfValues('inputs', sourceNodeData, edgeData)}
-        targetType={calcTypeOfValues('outputs', targetNodeData, edgeData)}
+        sourceOptions={calcEdgeInputOptions(edgeData)}
+        targetOptions={calcEdgeOutputOptions(edgeData)}
       />
       {mapAllData && (
         <div className={styles.warning}>

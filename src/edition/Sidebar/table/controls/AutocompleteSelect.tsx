@@ -1,22 +1,29 @@
 import { Autocomplete } from '@mui/material';
 import { FormControl, TextField } from '@mui/material';
 
-import type { TypeOfValues } from '../../../../types';
+import type { Options } from '../../../../types';
 
 interface Props {
   value: string | number;
   onChange: (newValue: string) => void;
-  typeOfValues?: TypeOfValues;
+  options: Options;
   disable?: boolean;
   ariaLabel?: string;
 }
 
 function AutocompleteSelect(props: Props) {
-  const { value: rawValue, onChange, typeOfValues, disable, ariaLabel } = props;
+  const {
+    value: rawValue,
+    onChange,
+    options: rawOptions,
+    disable,
+    ariaLabel,
+  } = props;
+
+  const { values: options, requiredValues } = rawOptions;
 
   const value = String(rawValue);
 
-  const options = typeOfValues?.values || [''];
   return (
     <FormControl variant="standard" fullWidth>
       <Autocomplete
@@ -25,8 +32,7 @@ function AutocompleteSelect(props: Props) {
         freeSolo={options.length === 0}
         options={options}
         renderOption={(liProps, option) => {
-          const valueIsRequired =
-            typeOfValues?.requiredValues?.includes(option);
+          const valueIsRequired = requiredValues.includes(option);
 
           return (
             <li {...liProps}>

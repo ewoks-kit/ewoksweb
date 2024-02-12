@@ -3,7 +3,7 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 
 import useSnackbarStore from '../../../store/useSnackbarStore';
-import type { InputTableRow, RowValue, TypeOfValues } from '../../../types';
+import type { InputTableRow, Options, RowValue } from '../../../types';
 import { RowType } from '../../../types';
 import AddEntryRow from './controls/AddEntryRow';
 import RemoveRowCell from './controls/RemoveRowCell';
@@ -16,15 +16,21 @@ import TableHeader from './TableHeader';
 interface EditableTableProps {
   headers: string[];
   defaultValues: InputTableRow[];
-  typeOfValues: TypeOfValues[];
   valuesChanged: (rows: InputTableRow[]) => void;
+  nameOptions?: Options;
   disable?: boolean;
   onRowAdd?: (rows: InputTableRow[]) => void;
 }
 
 // The table where lines can be added where type is selected and appropriate values are given to name and value.
 function EditableTable(props: EditableTableProps) {
-  const { defaultValues: rows, headers, disable, onRowAdd } = props;
+  const {
+    defaultValues: rows,
+    headers,
+    nameOptions,
+    disable,
+    onRowAdd,
+  } = props;
 
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
@@ -101,7 +107,7 @@ function EditableTable(props: EditableTableProps) {
                 value={row.name}
                 isInvalid={hasDuplicateName}
                 onChange={(newName) => handleNameChange(newName, row)}
-                typeOfValues={props.typeOfValues[0]}
+                options={nameOptions}
                 disable={disable}
                 width="30%"
                 ariaLabel="Edit input name"

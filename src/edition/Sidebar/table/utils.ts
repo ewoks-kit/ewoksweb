@@ -1,29 +1,31 @@
-import type { LinkData, NodeData, TypeOfValues } from '../../../types';
+import type { LinkData, NodeData, Options } from '../../../types';
 
-export function isClass(edgeData: NodeData | undefined): boolean {
-  return edgeData?.task_props.task_type === 'class';
+export function calcEdgeInputOptions(linkData: LinkData): Options | undefined {
+  const { links_input_names: values = [] } = linkData;
+
+  return values.length > 0 ? { values, requiredValues: [] } : undefined;
 }
 
-export function calcTypeOfValues(
-  inOrOut: 'inputs' | 'outputs',
+export function calcEdgeOutputOptions(linkData: LinkData): Options | undefined {
+  const {
+    links_required_output_names: requiredValues = [],
+    links_optional_output_names: optionalValues = [],
+  } = linkData;
+
+  const values = [...requiredValues, ...optionalValues];
+
+  return values.length > 0 ? { values, requiredValues } : undefined;
+}
+
+export function calcNodeInputOptions(
   nodeData: NodeData | undefined,
-  edgeDataL: LinkData,
-): TypeOfValues {
-  return {
-    typeOfInput: isClass(nodeData) ? 'select' : 'input',
-    values: isClass(nodeData)
-      ? inOrOut === 'outputs'
-        ? [
-            ...(edgeDataL.links_required_output_names || []),
-            ...(edgeDataL.links_optional_output_names || []),
-          ]
-        : edgeDataL.links_input_names || []
-      : undefined,
-    requiredValues:
-      isClass(nodeData) && inOrOut === 'outputs'
-        ? edgeDataL.links_required_output_names
-        : undefined,
-  };
+): Options | undefined {
+  const requiredValues = nodeData?.task_props.required_input_names || [];
+  const optionalValues = nodeData?.task_props.optional_input_names || [];
+
+  const values = [...requiredValues, ...optionalValues];
+
+  return values.length > 0 ? { values, requiredValues } : undefined;
 }
 
 export function transformInObject(

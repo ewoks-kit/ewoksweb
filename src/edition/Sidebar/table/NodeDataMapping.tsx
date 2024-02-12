@@ -46,8 +46,6 @@ export default function NodeDataMapping({ nodeId }: { nodeId: string }) {
           nodeData.ewoks_props.default_error_attributes?.data_mapping || []
         }
         onValuesChange={dataMappingValuesChanged}
-        sourceType={{ typeOfInput: 'input' }}
-        targetType={{ typeOfInput: 'input' }}
       />
     </div>
   );
