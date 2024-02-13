@@ -13,6 +13,7 @@ import { useNodesIds } from '../store/graph-hooks';
 import useNodeDataStore from '../store/useNodeDataStore';
 import useSnackbarStore from '../store/useSnackbarStore';
 import useStore from '../store/useStore';
+import useWorkflowChanges from '../store/useWorkflowChangesStore';
 import type { RFNode, Workflow } from '../types';
 import { WorkflowSource } from '../types';
 import {
@@ -82,6 +83,10 @@ export function useSaveWorkflow() {
   const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
+  const resetWorkflowChange = useWorkflowChanges(
+    (state) => state.resetWorkflowChange,
+  );
+
   function handleError(text: string) {
     showErrorMsg(text);
     setStatus('error');
@@ -117,6 +122,8 @@ export function useSaveWorkflow() {
       );
       invalidateWorkflowDescriptions();
       invalidateWorkflow(displayedWorkflowInfo.id);
+
+      resetWorkflowChange();
 
       showSuccessMsg('Graph saved successfully!');
       setStatus('success');
