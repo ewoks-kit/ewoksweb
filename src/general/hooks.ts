@@ -21,6 +21,7 @@ import { getNodeData } from '../utils';
 import { calcNewId } from '../utils/calcNewId';
 import { assertDefined, assertNodeDataDefined } from '../utils/typeGuards';
 import { isString } from '../utils/typeGuards';
+import useWorkflowChanges from '../store/useWorkflowChangesStore';
 
 function tryJSONparse(str: string | ArrayBuffer | null): unknown {
   if (!isString(str)) {
@@ -78,6 +79,9 @@ export function useSaveWorkflow() {
   const [action, setAction] = useState<
     GraphFormAction.newGraph | GraphFormAction.newGraphOrOverwrite
   >(GraphFormAction.newGraph);
+  const resetWorkflowChange = useWorkflowChanges(
+    (state) => state.resetWorkflowChange,
+  );
 
   function handleError(text: string) {
     showErrorMsg(text);
@@ -127,6 +131,8 @@ export function useSaveWorkflow() {
         ),
       );
       invalidateWorkflows();
+
+      resetWorkflowChange();
 
       showSuccessMsg('Graph saved successfully!');
       setStatus('success');

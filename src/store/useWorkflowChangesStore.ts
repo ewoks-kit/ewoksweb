@@ -9,6 +9,7 @@ import type { NodeDataState } from './useNodeDataStore';
 
 interface State {
   workflowChanges: (Workflow | undefined)[];
+  resetWorkflowChange: () => void;
   setWorkflowChange: (change: WorkflowChange) => void;
 }
 
@@ -22,6 +23,13 @@ export interface WorkflowChange {
 
 const useWorkflowChanges = create<State>((set, get) => ({
   workflowChanges: [],
+  resetWorkflowChange: () => {
+    const { workflowChanges } = get();
+    const lastWorkflowChange = workflowChanges.slice(-1);
+    set({
+      workflowChanges: lastWorkflowChange,
+    });
+  },
   setWorkflowChange: (change: WorkflowChange) => {
     const { nodesData, edgesData, workflowInfo, rfNodes, rfEdges } = change;
 

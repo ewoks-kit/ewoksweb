@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   NavLink,
   useLocation,
   useNavigate,
   useSearchParams,
+  useBlocker,
 } from 'react-router-dom';
+import type { BlockerFunction } from 'react-router-dom';
 
 import ConfirmDialog from '../general/ConfirmDialog';
 import { useIsChanged } from '../store/graph-hooks';
@@ -17,8 +19,23 @@ function NavBar() {
   const { state } = useLocation();
   const [searchParams] = useSearchParams();
 
+  const isWorkflowEdited = useIsChanged();
+
+  const shouldBlock = useCallback<BlockerFunction>(
+    ({ currentLocation, nextLocation }) =>
+      isWorkflowEdited && currentLocation.pathname !== nextLocation.pathname,
+    [isWorkflowEdited],
+  );
+
+  const blocker = useBlocker(shouldBlock);
+
+  useEffect(() => {
+    if (blocker.state === 'blocked' && isWorkflowEdited) {
+      blocker.reset();
+    }
+  }, [blocker, isWorkflowEdited]);
+
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
-  const isChanged = useIsChanged();
 
   const setElement = useNavBarElementStore((st) => st.setElement);
   const displayedWorkflowInfo = useStore((st) => st.displayedWorkflowInfo);
@@ -34,7 +51,7 @@ function NavBar() {
 
   function handleClickMonitor(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
-    if (isChanged) {
+    if (isWorkflowEdited) {
       setOpenAgreeDialog(true);
       return;
     }
@@ -44,17 +61,19 @@ function NavBar() {
 
   return (
     <>
-      <ConfirmDialog
-        title="There are unsaved changes"
-        content="Continue without saving?"
-        open={openAgreeDialog}
-        setOpen={setOpenAgreeDialog}
-        agreeCallback={() => {
-          setOpenAgreeDialog(false);
-          goToMonitor();
-        }}
-        disagreeCallback={() => setOpenAgreeDialog(false)}
-      />
+      {blocker && (
+        <ConfirmDialog
+          title="There are unsaved changes"
+          content="Continue without saving?"
+          open={openAgreeDialog}
+          setOpen={setOpenAgreeDialog}
+          agreeCallback={() => {
+            setOpenAgreeDialog(false);
+            goToMonitor();
+          }}
+          disagreeCallback={() => setOpenAgreeDialog(false)}
+        />
+      )}
       <div
         className={styles.navbar}
         ref={(elem) => setElement(elem ?? undefined)}
