@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
+import type { BlockerFunction } from 'react-router-dom';
 import {
   NavLink,
+  useBlocker,
   useLocation,
   useNavigate,
   useSearchParams,
-  useBlocker,
 } from 'react-router-dom';
-import type { BlockerFunction } from 'react-router-dom';
 
 import ConfirmDialog from '../general/ConfirmDialog';
 import { useIsChanged } from '../store/graph-hooks';
@@ -61,17 +61,25 @@ function NavBar() {
 
   return (
     <>
-      {blocker && (
+      {blocker && ( // .state === 'blocked'
         <ConfirmDialog
           title="There are unsaved changes"
           content="Continue without saving?"
           open={openAgreeDialog}
           setOpen={setOpenAgreeDialog}
           agreeCallback={() => {
+            if (blocker.state === 'blocked') {
+              blocker.proceed();
+            }
             setOpenAgreeDialog(false);
             goToMonitor();
           }}
-          disagreeCallback={() => setOpenAgreeDialog(false)}
+          disagreeCallback={() => {
+            if (blocker.state === 'blocked') {
+              blocker.reset();
+            }
+            setOpenAgreeDialog(false);
+          }}
         />
       )}
       <div

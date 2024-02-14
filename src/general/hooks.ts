@@ -9,6 +9,7 @@ import { useNodesIds } from '../store/graph-hooks';
 import useNodeDataStore from '../store/useNodeDataStore';
 import useSnackbarStore from '../store/useSnackbarStore';
 import useStore from '../store/useStore';
+import useWorkflowChanges from '../store/useWorkflowChangesStore';
 import type { RFNode, Workflow } from '../types';
 import { GraphFormAction } from '../types';
 import {
@@ -21,7 +22,6 @@ import { getNodeData } from '../utils';
 import { calcNewId } from '../utils/calcNewId';
 import { assertDefined, assertNodeDataDefined } from '../utils/typeGuards';
 import { isString } from '../utils/typeGuards';
-import useWorkflowChanges from '../store/useWorkflowChangesStore';
 
 function tryJSONparse(str: string | ArrayBuffer | null): unknown {
   if (!isString(str)) {
