@@ -27,8 +27,12 @@ The Task sidebar populates the tasks that the user has incorporated in their cat
 categories are specified by the user. On it's top it features a button to allow discovering new tasks or/and
 updating the existing.
 
-The Navigation bar is shared between the edit and monitor page and includes from left to right:
+.. image:: ../images/navbar.png
+  :width: 1200
+  :alt: Navbar
 
+
+The Navigation bar as depicted above is shared between the edit and monitor page and includes from left to right:
   - the logo of EwoksWeb that is also a link for the edit page
   - the navigation to edit and monitor page
   - the identity of the workflow, when one is opened, in the middle
@@ -41,3 +45,7 @@ The Navigation bar is shared between the edit and monitor page and includes from
       - **Execute workflow** that initiates the process of executing the workflow that is depicted on the canvas.
       - **Manage icons** that opens a top drawer for managing the icons that can be assigned to nodes in a workflow.
       - **Create new task** that opens a dialog for providing the appropriete details for a new task.
+
+.. image:: ../images/navbar-menu.png
+  :width: 400
+  :alt: Alternative text
