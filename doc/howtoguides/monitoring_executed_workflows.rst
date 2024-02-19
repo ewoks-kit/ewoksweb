@@ -1,26 +1,19 @@
 Monitoring executed workflows
 =============================
 
-The concept **execute a workflow** is used when a workflow is being send to the
-`ewoksserver <https://gitlab.esrf.fr/workflow/ewoks/ewoksserver>`_ for each tasks to be executed.
+The user can navigate to the monitoring page, where execution events are visualized for each
+execution job, either by clicking on monitor button at the top left or by attempting to execute a
+workflow. There under the title **Executed workflows** a number of executed and executing workflows
+are presented. The difference between the two is that currently executing workflows will have a live
+counter measuring the time elapsed from their submission. The fields that are presented are:
 
-In order for a workflow to be executed it needs:
+ - the name of the workflow in bold.
+ - the time it was submitted for execution.
+ - the time it took for its execution to be completed
+ - the status which can be **Success** or **Failed**
+ - the job-id on the right.
+ - if it has a Failed status a complete error message is also prsented along with a descriptive traceback.
 
- - to be open on the canvas and
- - the button execution from the top-bar menu to be pressed.
+At the right of each entry an arrow button is accessible for enabling re-execution of the specific workflow.
 
-Then the dialog **Execute a workflow** appears where the user can provide the following parameters:
-
- - The **Workflow Inputs** for providing the input for each node in the workflow. There the user can
-    add a new input by pressing the **ADD+** button and select whether he needs to provide a specific
-    input into **All nodes**, **All input nodes** or a specific node in the workflow. These choises are
-    provided in a dropdown where all nodes in the graph are also available.
- - The **Execution engine** and **Select Worker** where the user is able to select the engine to use
-    in his execution and the worker that will perform it. Both are given as dropdowns for the user to select
-    prefilled with their default values.
-
-When the appropriete execution details are inputted the user can proceed to execution by pressing the
-**SAVE & EXECUTE** button on the dialog. By pressing it the user saves the workflow on the server as implied
-by the button name and is redirected to the monitor page. There the application starts receiving **events**
-from the server that report on the progress of the execution.
 
