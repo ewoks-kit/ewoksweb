@@ -83,7 +83,6 @@ General useful information regarding:
     explanations/link_validation
     explanations/node_editing
     explanations/link_editing
-    explanations/manage_graphs_tasks_icons
 
 
 Binding documentation:

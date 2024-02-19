@@ -2,30 +2,25 @@ Monitoring executed workflows
 =============================
 
 The concept **execute a workflow** is used when a workflow is being send to the
-`ewoksServer <https://ewoksserver.readthedocs.io/en/latest/>` for each tasks to be executed.
+`ewoksserver <https://gitlab.esrf.fr/workflow/ewoks/ewoksserver>`_ for each tasks to be executed.
 
 In order for a workflow to be executed it needs:
 
  - to be open on the canvas and
  - the button execution from the top-bar menu to be pressed.
 
-The UI enters the execution mode and starts receiving **events** from the ewoksServer
-that report on the progress of the execution. According to the events that carry the
-start and the end of a task execution the UI starts animating the nodes that are being
-executed updating the workflow graph with numbers that represent the events being received.
+Then the dialog **Execute a workflow** appears where the user can provide the following parameters:
 
-The number-events are clickable by the user and on-click the details of each event are being
-shown in the left-sidebar. In the sidebar all our current executions are being populated and
-by clicking on each they expand showing some details about the execution. If the **replay**
-button is pressed the execution as happened with all its events is being drawn on the canvas.
+ - The **Workflow Inputs** for providing the input for each node in the workflow. There the user can
+    add a new input by pressing the **ADD+** button and select whether he needs to provide a specific
+    input into **All nodes**, **All input nodes** or a specific node in the workflow. These choises are
+    provided in a dropdown where all nodes in the graph are also available.
+ - The **Execution engine** and **Select Worker** where the user is able to select the engine to use
+    in his execution and the worker that will perform it. Both are given as dropdowns for the user to select
+    prefilled with their default values.
 
-The executions can also be removed as irrelevant from the sidebar by using the **delete** button
-which is next to the replay button. By clicking on delete the executions remain on the server and
-can be retrieved at any time by pressing the **All executions** button.
-
-All Executions open a top-drawer in the execution tab where the user can manage the executions that
-are on the server. A wide list of filters is available to get the executions needed. In the table
-the user can select one or more executions and by pressing the eye-view that replaces the filters
-can move the selected executions to the left-sidebar. There the user can inspect and replay the
-executions he previously selected in the All-executions table.
+When the appropriete execution details are inputted the user can proceed to execution by pressing the
+**SAVE & EXECUTE** button on the dialog. By pressing it the user saves the workflow on the server as implied
+by the button name and is redirected to the monitor page. There the application starts receiving **events**
+from the server that report on the progress of the execution.
 
