@@ -27,14 +27,12 @@ autodoc_default_flags = [
 
 html_theme = "pydata_sphinx_theme"
 html_static_path = []
-html_sidebars = {
-    "<page_pattern>": ["list", "of", "templates"]
-}
+html_sidebars = {"<page_pattern>": ["list", "of", "templates"]}
 html_theme_options = {
     "header_links_before_dropdown": 3,
-  "navbar_align": "content",
-  "show_nav_level": 2,
-  "icon_links": [
+    "navbar_align": "content",
+    "show_nav_level": 2,
+    "icon_links": [
         {
             "name": "gitlab",
             "url": "https://gitlab.esrf.fr/workflow/ewoks/ewoksweb",
