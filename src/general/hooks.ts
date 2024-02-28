@@ -14,7 +14,6 @@ import useNodeDataStore from '../store/useNodeDataStore';
 import useSnackbarStore from '../store/useSnackbarStore';
 import useStore from '../store/useStore';
 import type { RFNode, Workflow } from '../types';
-import { GraphFormAction } from '../types';
 import {
   getEdgesData,
   getNodesData,
@@ -80,9 +79,6 @@ export function useSaveWorkflow() {
   const rootWorkflowSource = useStore((state) => state.rootWorkflowSource);
   const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
-  const [action, setAction] = useState<
-    GraphFormAction.newGraph | GraphFormAction.newGraphOrOverwrite
-  >(GraphFormAction.newGraph);
 
   function handleError(text: string) {
     showErrorMsg(text);
@@ -105,7 +101,6 @@ export function useSaveWorkflow() {
     const workflowsIds = response.data;
 
     if (!workflowsIds.includes(displayedWorkflowInfo.id)) {
-      setAction(GraphFormAction.newGraph);
       setDialogOpen(true);
       return false;
     }
@@ -116,7 +111,6 @@ export function useSaveWorkflow() {
     }
 
     if (rootWorkflowSource !== 'fromServer') {
-      setAction(GraphFormAction.newGraphOrOverwrite);
       setDialogOpen(true);
       return false;
     }
@@ -148,7 +142,6 @@ export function useSaveWorkflow() {
     setDialogOpen,
     status,
     setStatus,
-    action,
     handleSave,
   };
 }

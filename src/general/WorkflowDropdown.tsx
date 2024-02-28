@@ -59,14 +59,14 @@ function WorkflowDropdown(props: Props, ref: Ref<HTMLElement>) {
       loading={isLoading}
       options={options}
       isOptionEqualToValue={(option, selected) => option.id === selected.id}
-      getOptionLabel={(option) => option.label || option.id}
+      getOptionLabel={(option) => option.id}
       groupBy={(option) => option.category}
       disableClearable
       blurOnSelect
       renderOption={(AutocompleteProps, option) => {
         return (
           <li {...AutocompleteProps} key={option.id}>
-            {option.label || option.id}
+            {option.id}
           </li>
         );
       }}

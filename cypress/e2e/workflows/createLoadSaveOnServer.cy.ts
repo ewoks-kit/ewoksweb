@@ -48,9 +48,7 @@ it('saves an empty workflow on the server, reloads and deletes it', () => {
   cy.loadGraph(id);
 
   cy.hasNavBarLabel(id);
-  cy.findByLabelText('Workflow title').within(() => {
-    cy.contains('tutorial_Graph').should('not.exist');
-  });
+  cy.findByRole('heading', { name: 'tutorial_Graph' }).should('not.exist');
 
   cy.deleteWorkflow(id);
 
@@ -77,8 +75,8 @@ it('opens a "New workflow" dialog when asking to save_as the workflow', () => {
   cy.waitForStableDOM();
 
   cy.findByRole('dialog').within(() => {
-    cy.findAllByRole('heading', {
-      name: 'Give the new workflow identifier',
+    cy.findByRole('heading', {
+      name: 'Give the new workflow name',
     }).should('be.visible');
   });
 });
