@@ -5,13 +5,24 @@ import type { NodeWithData, State, Task, Workflow } from '../types';
 import { WorkflowSource } from '../types';
 import { getSubgraphs } from '../utils';
 import { convertEwoksWorkflowToRFNodes } from '../utils/convertEwoksWorkflowToRFNodes';
-import { EMPTY_GRAPH } from '../utils/emptyGraphs';
 import layoutNewGraph from '../utils/layoutNewGraph';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { validateWorkflow } from './storeUtils/validateWorkflow';
 import useEdgeDataStore from './useEdgeDataStore';
 import useNodeDataStore from './useNodeDataStore';
 import useSnackbarStore from './useSnackbarStore';
+
+const EMPTY_GRAPH: Workflow = {
+  graph: {
+    id: '',
+    label: '',
+    input_nodes: [],
+    output_nodes: [],
+    uiProps: {},
+  },
+  nodes: [],
+  links: [],
+};
 
 export interface RootWorkflowSlice {
   rootWorkflowId: string;
