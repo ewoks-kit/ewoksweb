@@ -1,4 +1,3 @@
-import { fetchWorkflowsIds } from '../../api/workflows';
 import type {
   Condition,
   DataMapping,
@@ -6,18 +5,6 @@ import type {
   LinkData,
   NodeData,
 } from '../../types';
-
-export async function getWorkflowIdsFromServer(): Promise<{
-  data: string[];
-  error: unknown;
-}> {
-  try {
-    const { data: response } = await fetchWorkflowsIds();
-    return { data: response.identifiers, error: null };
-  } catch (error) {
-    return { data: [], error };
-  }
-}
 
 export function curateNodeData(
   nodesData: Map<string, NodeData>,

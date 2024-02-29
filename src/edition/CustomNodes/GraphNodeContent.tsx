@@ -3,7 +3,7 @@ import { memo, useEffect, useMemo } from 'react';
 import type { NodeProps } from 'reactflow';
 import { Handle, Position } from 'reactflow';
 
-import { useWorkflowDescriptions } from '../../api/workflows';
+import { useWorkflowIds } from '../../api/workflows';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
@@ -16,7 +16,7 @@ import { contentStyle, style } from './nodeStyles';
 
 function GraphNodeContent(props: NodeProps<NodeData>) {
   const { id } = props;
-  const workflowDescriptions = useWorkflowDescriptions();
+  const workflowIds = useWorkflowIds();
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
@@ -25,10 +25,8 @@ function GraphNodeContent(props: NodeProps<NodeData>) {
   // DOC: the subgraph is connected to the original graph through the task_identifier like
   // simple nodes and not through the id which is the unique in the current graph nodeId
   const subgraphExistsOnServer = useMemo(() => {
-    return workflowDescriptions.some(
-      (workflow) => workflow.id === nodeData.task_props.task_identifier,
-    );
-  }, [workflowDescriptions, nodeData.task_props.task_identifier]);
+    return workflowIds.has(nodeData.task_props.task_identifier);
+  }, [workflowIds, nodeData.task_props.task_identifier]);
 
   const { ui_props: uiProps } = nodeData;
 
@@ -45,7 +43,6 @@ function GraphNodeContent(props: NodeProps<NodeData>) {
     nodeData.task_props.task_identifier,
     showErrorMsg,
     subgraphExistsOnServer,
-    workflowDescriptions,
   ]);
 
   const { inputs = [], outputs = [] } = uiProps;

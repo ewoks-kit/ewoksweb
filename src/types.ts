@@ -356,3 +356,9 @@ export interface ElementState {
   element: HTMLElement | undefined;
   setElement: (element: HTMLElement | undefined) => void;
 }
+
+export enum WorkflowSource {
+  Server = 'server',
+  Disk = 'disk',
+  Empty = 'empty',
+}

@@ -2,8 +2,10 @@ import type { ReactFlowInstance } from 'reactflow';
 import type { GetState, SetState } from 'zustand';
 
 import type { NodeWithData, State, Task, Workflow } from '../types';
+import { WorkflowSource } from '../types';
 import { getSubgraphs } from '../utils';
 import { convertEwoksWorkflowToRFNodes } from '../utils/convertEwoksWorkflowToRFNodes';
+import { EMPTY_GRAPH } from '../utils/emptyGraphs';
 import layoutNewGraph from '../utils/layoutNewGraph';
 import { toRFEwoksLinks } from '../utils/toRFEwoksLinks';
 import { validateWorkflow } from './storeUtils/validateWorkflow';
@@ -13,12 +15,16 @@ import useSnackbarStore from './useSnackbarStore';
 
 export interface RootWorkflowSlice {
   rootWorkflowId: string;
-  rootWorkflowSource: string | undefined;
+  rootWorkflowSource: WorkflowSource;
   setRootWorkflow: (
     ewoksWorkflow: Workflow,
     rfInstance: ReactFlowInstance,
     tasks: Task[],
-    source?: string,
+    source: WorkflowSource,
+  ) => Promise<void>;
+  resetRootWorkflow: (
+    rfInstance: ReactFlowInstance,
+    tasks: Task[],
   ) => Promise<void>;
 }
 
@@ -27,7 +33,7 @@ const rootWorkflow = (
   get: GetState<State>,
 ): RootWorkflowSlice => ({
   rootWorkflowId: '',
-  rootWorkflowSource: undefined,
+  rootWorkflowSource: WorkflowSource.Empty,
 
   setRootWorkflow: async (
     ewoksWorkflow,
@@ -112,6 +118,14 @@ const rootWorkflow = (
       rfInstance.setNodes(nodesWithoutData);
       rfInstance.setEdges(edgesWithoutData);
     }
+  },
+  resetRootWorkflow: async (rfInstance, tasks) => {
+    return get().setRootWorkflow(
+      EMPTY_GRAPH,
+      rfInstance,
+      tasks,
+      WorkflowSource.Empty,
+    );
   },
 });
 export default rootWorkflow;

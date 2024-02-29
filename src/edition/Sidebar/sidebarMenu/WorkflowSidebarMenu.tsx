@@ -17,7 +17,6 @@ import useSnackbarStore from '../../../store/useSnackbarStore';
 import useStore from '../../../store/useStore';
 import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 import { textForError } from '../../../utils';
-import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';
 
 interface Props {
   onSelection: () => void;
@@ -38,7 +37,7 @@ export default function WorkflowSidebarMenu(props: Props) {
     (state) => state.displayedWorkflowInfo,
   );
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
-  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
+  const resetRootWorkflow = useStore((state) => state.resetRootWorkflow);
   const [, setSearchParams] = useSearchParams();
 
   async function agreeCallback() {
@@ -47,7 +46,8 @@ export default function WorkflowSidebarMenu(props: Props) {
       try {
         await deleteWorkflow(displayedWorkflowInfo.id);
         invalidateWorkflowDescriptions();
-        setRootWorkflow(EMPTY_GRAPH, rfInstance, tasks);
+
+        resetRootWorkflow(rfInstance, tasks);
         showSuccessMsg(
           `Workflow ${displayedWorkflowInfo.id} successfully deleted!`,
         );
