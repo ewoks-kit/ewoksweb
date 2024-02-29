@@ -321,9 +321,7 @@ it('saves default inputs with the correct type', () => {
     return req.reply({});
   }).as('saveRequest');
 
-  cy.findByRole('button', { name: 'Save workflow to server' }).click();
-  cy.findByRole('textbox', { name: 'Identifier' }).type(nanoid());
-  cy.findByRole('button', { name: 'Save workflow' }).click();
+  cy.saveNewWorkflow(nanoid());
 
   cy.wait('@saveRequest');
 });

@@ -16,7 +16,6 @@ import GraphFormDialog from '../../../general/forms/GraphFormDialog';
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import useStore from '../../../store/useStore';
 import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
-import { GraphFormAction } from '../../../types';
 import { textForError } from '../../../utils';
 import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';
 
@@ -64,7 +63,6 @@ export default function WorkflowSidebarMenu(props: Props) {
       <SuspenseBoundary>
         <GraphFormDialog
           elementToEdit={displayedWorkflowInfo}
-          action={GraphFormAction.cloneGraph}
           isOpen={openSaveDialog}
           onClose={() => setOpenSaveDialog(false)}
         />

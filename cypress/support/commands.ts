@@ -35,7 +35,7 @@ Cypress.Commands.add('saveNewWorkflow', (id: string) => {
   cy.findByRole('dialog').should('be.visible');
 
   cy.findByRole('textbox', {
-    name: 'Identifier',
+    name: 'Name',
   })
     .clear()
     .type(id);
@@ -82,9 +82,7 @@ Cypress.Commands.add('dragNodeInCanvas', (task_identifier: string) => {
 });
 
 Cypress.Commands.add('hasNavBarLabel', (label: string) => {
-  cy.findByLabelText('Workflow title').within(() => {
-    cy.contains(label).should('be.visible');
-  });
+  cy.findByRole('heading', { name: label }).should('be.visible');
 });
 
 Cypress.Commands.add('hasVisibleNodes', (expectedNumberOfNodes: number) => {

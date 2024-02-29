@@ -1,7 +1,7 @@
 import useStore from '../../store/useStore';
 import styles from './TopAppBar.module.css';
 
-export default function TopWorkflowLabel() {
+export default function WorkflowTitle() {
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo,
   );
@@ -9,11 +9,11 @@ export default function TopWorkflowLabel() {
 
   if (!rootWorkflowId) {
     return (
-      <>
+      <h1 className={styles.crumbs}>
         Untitled workflow <span className={styles.labelHint}>(unsaved)</span>
-      </>
+      </h1>
     );
   }
 
-  return <span>{displayedWorkflowInfo.label || displayedWorkflowInfo.id}</span>;
+  return <h1 className={styles.crumbs}>{displayedWorkflowInfo.id}</h1>;
 }

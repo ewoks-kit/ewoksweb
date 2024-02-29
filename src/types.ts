@@ -5,12 +5,6 @@ import type { Node } from 'reactflow';
 import type { DisplayedWorkflowInfoSlice } from './store/displayedWorkflowInfo';
 import type { RootWorkflowSlice } from './store/rootWorkflow';
 
-export enum GraphFormAction {
-  cloneGraph = 'cloneGraph',
-  newGraph = 'newGraph',
-  newGraphOrOverwrite = 'newGraphOrOverwrite',
-}
-
 export interface InputOutputNodeAndLink {
   id: string;
   node: string;

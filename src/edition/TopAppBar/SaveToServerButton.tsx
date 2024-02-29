@@ -15,7 +15,7 @@ export default function SaveToServerButton() {
     (state) => state.displayedWorkflowInfo,
   );
 
-  const { isDialogOpen, setDialogOpen, status, setStatus, action, handleSave } =
+  const { isDialogOpen, setDialogOpen, status, setStatus, handleSave } =
     useSaveWorkflow();
 
   useKeyboardEvent(
@@ -32,7 +32,6 @@ export default function SaveToServerButton() {
       <SuspenseBoundary>
         <GraphFormDialog
           elementToEdit={displayedWorkflowInfo}
-          action={action}
           isOpen={isDialogOpen}
           onClose={() => setDialogOpen(false)}
         />
