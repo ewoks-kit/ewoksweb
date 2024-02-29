@@ -50,7 +50,7 @@ export async function executeWorkflow(
 
 export async function getWorkflows(): Promise<WorkflowDescription[]> {
   const response = await fetchWorkflowsDescriptions();
-  const workflows = response.data.items;
+  const workflows = response.data.items.filter((w) => !!w.id);
 
   if (workflows.length === 0) {
     throw new Error('It seems you have no workflows to work with!');
