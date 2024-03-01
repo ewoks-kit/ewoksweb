@@ -60,6 +60,7 @@ const nodeTypes = {
   method: DataNode,
   ppfmethod: DataNode,
   generated: DataNode,
+  notebook: DataNode,
   graphInput: GraphInOutNode,
   graphOutput: GraphInOutNode,
   class: DataNode,

@@ -90,7 +90,8 @@ export type TaskType =
   | 'note'
   | 'script'
   | 'subworkflow'
-  | 'generated';
+  | 'generated'
+  | 'notebook';
 
 export interface Task {
   task_type: TaskType;
