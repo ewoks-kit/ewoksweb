@@ -3,7 +3,7 @@ import { Autocomplete, CircularProgress, TextField } from '@mui/material';
 import type { Ref } from 'react';
 import { forwardRef, useEffect } from 'react';
 
-import { useWorkflowsDLE } from '../api/workflows';
+import { useWorkflowDescriptionsDLE } from '../api/workflows';
 import commonStrings from '../commonStrings.json';
 import useSnackbarStore from '../store/useSnackbarStore';
 import type { WorkflowDescription } from '../types';
@@ -34,7 +34,7 @@ function WorkflowDropdown(props: Props, ref: Ref<HTMLElement>) {
 
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
-  const { data: workflows, isLoading, error } = useWorkflowsDLE();
+  const { data: workflows, isLoading, error } = useWorkflowDescriptionsDLE();
   const sortedWorkflows = sortByCategory(workflows ?? []);
 
   const options =

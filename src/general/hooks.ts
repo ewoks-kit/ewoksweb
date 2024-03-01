@@ -5,15 +5,16 @@ import {
   putWorkflow,
   useInvalidateWorkflow,
   useInvalidateWorkflowDescriptions,
+  useWorkflowIds,
 } from '../api/workflows';
 import commonStrings from '../commonStrings.json';
 import type { Status } from '../edition/TopAppBar/models';
-import { getWorkflowIdsFromServer } from '../edition/TopAppBar/utils';
 import { useNodesIds } from '../store/graph-hooks';
 import useNodeDataStore from '../store/useNodeDataStore';
 import useSnackbarStore from '../store/useSnackbarStore';
 import useStore from '../store/useStore';
 import type { RFNode, Workflow } from '../types';
+import { WorkflowSource } from '../types';
 import {
   getEdgesData,
   getNodesData,
@@ -72,6 +73,7 @@ export function useSaveWorkflow() {
     (state) => state.displayedWorkflowInfo,
   );
   const rfInstance = useReactFlow();
+  const workflowIds = useWorkflowIds();
   const invalidateWorkflowDescriptions = useInvalidateWorkflowDescriptions();
   const invalidateWorkflow = useInvalidateWorkflow();
   const [isDialogOpen, setDialogOpen] = useState(false);
@@ -86,31 +88,19 @@ export function useSaveWorkflow() {
   }
 
   async function handleSave(): Promise<boolean> {
-    // DOC: search if id exists.
-    // 1. If notExists open dialog for NEW NAME.
-    // 2. If exists and you took it from the server UPDATE without asking
-    // 3. If exists and you took it from elseware open dialog for new name OR OVERWRITE
-    const response = await getWorkflowIdsFromServer();
-    if (response.error) {
-      handleError(
-        textForError(response.error, commonStrings.retrieveWorkflowsError),
-      );
-      return false;
-    }
-
-    const workflowsIds = response.data;
-
-    if (!workflowsIds.includes(displayedWorkflowInfo.id)) {
+    // If the workflow does not exist on the server, open dialog asking the user for a name
+    if (!workflowIds.has(displayedWorkflowInfo.id)) {
       setDialogOpen(true);
       return false;
     }
 
-    if (!rootWorkflowSource) {
+    if (rootWorkflowSource === WorkflowSource.Empty) {
       handleError('No graph exists to save!');
       return false;
     }
 
-    if (rootWorkflowSource !== 'fromServer') {
+    // If the workflow was imported from disk, open dialog asking the user for a name
+    if (rootWorkflowSource === WorkflowSource.Disk) {
       setDialogOpen(true);
       return false;
     }
