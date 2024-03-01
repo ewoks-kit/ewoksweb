@@ -2,12 +2,13 @@ import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { Autocomplete, CircularProgress, TextField } from '@mui/material';
 import type { Ref } from 'react';
 import { forwardRef, useEffect } from 'react';
-import type { WorkflowDescription } from 'types';
 
 import { useWorkflowsDLE } from '../api/workflows';
 import commonStrings from '../commonStrings.json';
 import useSnackbarStore from '../store/useSnackbarStore';
+import type { WorkflowDescription } from '../types';
 import { textForError } from '../utils';
+import type { WorkflowOption } from './models';
 import styles from './WorkflowDropdown.module.css';
 
 interface Props {
@@ -16,18 +17,15 @@ interface Props {
   label?: string;
 }
 
-function sortByCategory(
-  descriptions: WorkflowDescription[],
-): Required<WorkflowDescription>[] {
+function sortByCategory(descriptions: WorkflowDescription[]): WorkflowOption[] {
   return descriptions
     .map((desc) => ({
       ...desc,
       category: desc.category || 'No category',
-      label: desc.label || '',
     }))
     .sort(
       (a, b) =>
-        a.category.localeCompare(b.category) || a.label.localeCompare(b.label),
+        a.category.localeCompare(b.category) || a.id.localeCompare(b.id),
     );
 }
 

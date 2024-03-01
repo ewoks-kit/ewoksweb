@@ -30,7 +30,7 @@ function DownloadMenuItem() {
     );
     download(
       JSON.stringify(ewoksGraph, null, 2),
-      `${displayedWorkflowInfo.label || 'Untitled'}.json`,
+      `${displayedWorkflowInfo.id}.json`,
       'text/plain',
     );
   }
