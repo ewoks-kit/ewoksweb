@@ -5,9 +5,7 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useReactFlow } from 'reactflow';
 
-import { useTasks } from '../../../api/tasks';
 import { deleteWorkflow } from '../../../api/workflows';
 import { useInvalidateWorkflowDescriptions } from '../../../api/workflows';
 import commonStrings from '../../../commonStrings.json';
@@ -29,15 +27,12 @@ export default function WorkflowSidebarMenu(props: Props) {
 
   const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
-  const rfInstance = useReactFlow();
-  const tasks = useTasks();
   const invalidateWorkflowDescriptions = useInvalidateWorkflowDescriptions();
 
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo,
   );
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
-  const resetRootWorkflow = useStore((state) => state.resetRootWorkflow);
   const [, setSearchParams] = useSearchParams();
 
   async function agreeCallback() {
@@ -47,7 +42,6 @@ export default function WorkflowSidebarMenu(props: Props) {
         await deleteWorkflow(displayedWorkflowInfo.id);
         invalidateWorkflowDescriptions();
 
-        resetRootWorkflow(rfInstance, tasks);
         showSuccessMsg(
           `Workflow ${displayedWorkflowInfo.id} successfully deleted!`,
         );
