@@ -1,16 +1,16 @@
 import type { LinkData, NodeData, Options } from '../../../types';
 
 export function calcEdgeInputOptions(linkData: LinkData): Options | undefined {
-  const { links_input_names: values = [] } = linkData;
+  const { links_input_names } = linkData;
+  const values = links_input_names || [];
 
   return values.length > 0 ? { values, requiredValues: [] } : undefined;
 }
 
 export function calcEdgeOutputOptions(linkData: LinkData): Options | undefined {
-  const {
-    links_required_output_names: requiredValues = [],
-    links_optional_output_names: optionalValues = [],
-  } = linkData;
+  const { links_required_output_names, links_optional_output_names } = linkData;
+  const requiredValues = links_required_output_names || [];
+  const optionalValues = links_optional_output_names || [];
 
   const values = [...requiredValues, ...optionalValues];
 
