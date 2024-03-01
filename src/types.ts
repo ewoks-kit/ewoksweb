@@ -97,9 +97,9 @@ export interface Task {
   task_identifier: string;
   category?: string;
   icon?: string;
-  required_input_names?: string[];
-  optional_input_names?: string[];
-  output_names?: string[];
+  required_input_names?: string[] | null;
+  optional_input_names?: string[] | null;
+  output_names?: string[] | null;
 }
 
 export type DefaultInput = InputTableRow;
@@ -268,9 +268,9 @@ export interface LinkData {
   sub_target_attributes?: Record<string, unknown>;
   sub_source?: string;
   getAroundProps?: { x?: number; y?: number };
-  links_input_names?: string[];
-  links_required_output_names?: string[];
-  links_optional_output_names?: string[];
+  links_input_names?: string[] | null;
+  links_required_output_names?: string[] | null;
+  links_optional_output_names?: string[] | null;
   startEnd?: boolean;
 }
 
