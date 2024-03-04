@@ -15,5 +15,6 @@ export const TASK_TYPES: TaskType[] = [
   'method',
   'script',
   'ppfmethod',
+  'ppfport',
   'notebook',
 ];

@@ -100,7 +100,8 @@ function parseTaskIO(
       };
     }
 
-    case 'ppfmethod': {
+    case 'ppfmethod':
+    case 'ppfport': {
       return { optional_input_names: ['_ppfdict'], output_names: ['_ppfdict'] };
     }
 

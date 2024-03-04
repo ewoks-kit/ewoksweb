@@ -85,6 +85,7 @@ export type TaskType =
   | 'graph'
   | 'method'
   | 'ppfmethod'
+  | 'ppfport'
   | 'graphOutput'
   | 'class'
   | 'note'
