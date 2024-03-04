@@ -1,5 +1,4 @@
 import { Delete } from '@mui/icons-material';
-import { ListItemIcon, ListItemText, MenuItem } from '@mui/material';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -12,14 +11,9 @@ import ConfirmDialog from '../../../general/ConfirmDialog';
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import useStore from '../../../store/useStore';
 import { textForError } from '../../../utils';
+import ActionMenuItem from './ActionMenuItem';
 
-interface Props {
-  onSelection: () => void;
-}
-
-function DeleteWorkflowButton(props: Props) {
-  const { onSelection } = props;
-
+function DeleteMenuItem() {
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
 
   const [, setSearchParams] = useSearchParams();
@@ -50,18 +44,6 @@ function DeleteWorkflowButton(props: Props) {
 
   return (
     <>
-      <MenuItem
-        onClick={() => setOpenAgreeDialog(true)}
-        role="menuitem"
-        disabled={
-          !rootWorkflowId || rootWorkflowId !== displayedWorkflowInfo.id
-        }
-      >
-        <ListItemIcon>
-          <Delete fontSize="small" />
-        </ListItemIcon>
-        <ListItemText>Delete Workflow</ListItemText>
-      </MenuItem>
       <ConfirmDialog
         title={`Delete workflow with id: "${displayedWorkflowInfo.id}"?`}
         content={`You are about to delete the workflow with id: "${displayedWorkflowInfo.id}".
@@ -70,15 +52,22 @@ function DeleteWorkflowButton(props: Props) {
         open={openAgreeDialog}
         agreeCallback={() => {
           agreeCallback();
-          onSelection();
         }}
         disagreeCallback={() => {
           setOpenAgreeDialog(false);
-          onSelection();
         }}
+      />
+
+      <ActionMenuItem
+        onClick={() => setOpenAgreeDialog(true)}
+        disabled={
+          !rootWorkflowId || rootWorkflowId !== displayedWorkflowInfo.id
+        }
+        icon={Delete}
+        label="Delete Workflow"
       />
     </>
   );
 }
 
-export default DeleteWorkflowButton;
+export default DeleteMenuItem;

@@ -3,15 +3,15 @@ import { IconButton, Menu } from '@mui/material';
 import React from 'react';
 
 import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
-import DeleteWorkflowButton from '../../Sidebar/sidebarMenu/DeleteWorkflowButton';
-import SaveAsButton from '../../Sidebar/sidebarMenu/SaveAsButton';
 import styles from './ActionMenu.module.css';
 import { ActionMenuContext } from './ActionMenuContext';
+import DeleteMenuItem from './DeleteMenuItem';
 import DownloadMenuItem from './DownloadMenuItem';
 import ExecutionMenuItem from './ExecutionMenuItem';
 import NewTaskMenuItem from './NewTaskMenuItem';
 import OpenDrawerMenuItem from './OpenDrawerMenuItem';
 import OpenNewWorkflowMenuItem from './OpenNewWorkflowMenuItem';
+import SaveAsMenuItem from './SaveAsMenuItem';
 import UploadMenuItem from './UploadMenuItem';
 
 export default function OpenActionMenuButton() {
@@ -66,8 +66,8 @@ export default function OpenActionMenuButton() {
           </SuspenseBoundary>
           <DownloadMenuItem />
           <ExecutionMenuItem />
-          <SaveAsButton />
-          <DeleteWorkflowButton onSelection={onClose} />
+          <SaveAsMenuItem />
+          <DeleteMenuItem />
           <OpenDrawerMenuItem />
           <NewTaskMenuItem />
         </ActionMenuContext.Provider>

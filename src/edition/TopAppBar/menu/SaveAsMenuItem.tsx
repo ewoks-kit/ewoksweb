@@ -1,12 +1,12 @@
 import { FileCopy } from '@mui/icons-material';
-import { ListItemIcon, ListItemText, MenuItem } from '@mui/material';
 import { useState } from 'react';
 
 import GraphFormDialog from '../../../general/forms/GraphFormDialog';
 import useStore from '../../../store/useStore';
 import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
+import ActionMenuItem from './ActionMenuItem';
 
-function SaveAsButton() {
+function SaveAsMenuItem() {
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
 
   const displayedWorkflowInfo = useStore(
@@ -24,20 +24,16 @@ function SaveAsButton() {
         />
       </SuspenseBoundary>
 
-      <MenuItem
+      <ActionMenuItem
         onClick={() => setOpenSaveDialog(true)}
-        role="menuitem"
+        label="Save as..."
+        icon={FileCopy}
         disabled={
           !rootWorkflowId || rootWorkflowId !== displayedWorkflowInfo.id
         }
-      >
-        <ListItemIcon>
-          <FileCopy fontSize="small" />
-        </ListItemIcon>
-        <ListItemText>Save as...</ListItemText>
-      </MenuItem>
+      />
     </>
   );
 }
 
-export default SaveAsButton;
+export default SaveAsMenuItem;
