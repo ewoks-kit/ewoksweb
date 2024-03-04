@@ -64,7 +64,7 @@ function DeleteMenuItem() {
           !rootWorkflowId || rootWorkflowId !== displayedWorkflowInfo.id
         }
         icon={Delete}
-        label="Delete Workflow"
+        label="Delete workflow"
       />
     </>
   );

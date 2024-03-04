@@ -60,9 +60,9 @@ it('saves an empty workflow on the server, reloads and deletes it', () => {
 });
 
 it('cannot delete or save_as a workflow with an empty canvas', () => {
-  cy.findByRole('button', { name: 'Open edit actions menu' }).click();
+  cy.findByRole('button', { name: 'Open menu with more actions' }).click();
   cy.findByRole('menuitem', { name: 'Save as...' }).should('not.be.enabled');
-  cy.findByRole('menuitem', { name: 'Delete Workflow' }).should(
+  cy.findByRole('menuitem', { name: 'Delete workflow' }).should(
     'not.be.enabled',
   );
 });
@@ -70,7 +70,7 @@ it('cannot delete or save_as a workflow with an empty canvas', () => {
 it('opens a "New workflow" dialog when asking to save_as the workflow', () => {
   cy.loadGraph('tutorial_Graph');
 
-  cy.findByRole('button', { name: 'Open edit actions menu' }).click();
+  cy.findByRole('button', { name: 'Open menu with more actions' }).click();
   cy.findByRole('menuitem', { name: 'Save as...' }).click();
   cy.waitForStableDOM();
 
