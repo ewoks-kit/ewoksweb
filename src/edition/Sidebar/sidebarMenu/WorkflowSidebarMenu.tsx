@@ -1,5 +1,4 @@
 import { Delete as DeleteIcon } from '@mui/icons-material';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
@@ -10,11 +9,10 @@ import { deleteWorkflow } from '../../../api/workflows';
 import { useInvalidateWorkflowDescriptions } from '../../../api/workflows';
 import commonStrings from '../../../commonStrings.json';
 import ConfirmDialog from '../../../general/ConfirmDialog';
-import GraphFormDialog from '../../../general/forms/GraphFormDialog';
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import useStore from '../../../store/useStore';
-import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 import { textForError } from '../../../utils';
+import SaveAsButton from './SaveAsButton';
 
 interface Props {
   onSelection: () => void;
@@ -22,7 +20,6 @@ interface Props {
 
 export default function WorkflowSidebarMenu(props: Props) {
   const { onSelection } = props;
-  const [openSaveDialog, setOpenSaveDialog] = useState(false);
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
 
   const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
@@ -54,26 +51,7 @@ export default function WorkflowSidebarMenu(props: Props) {
 
   return (
     <>
-      <SuspenseBoundary>
-        <GraphFormDialog
-          elementToEdit={displayedWorkflowInfo}
-          isOpen={openSaveDialog}
-          onClose={() => setOpenSaveDialog(false)}
-        />
-      </SuspenseBoundary>
-
-      <MenuItem
-        onClick={() => setOpenSaveDialog(true)}
-        role="menuitem"
-        disabled={
-          !rootWorkflowId || rootWorkflowId !== displayedWorkflowInfo.id
-        }
-      >
-        <ListItemIcon>
-          <FileCopyIcon fontSize="small" />
-        </ListItemIcon>
-        <ListItemText>Save as...</ListItemText>
-      </MenuItem>
+      <SaveAsButton />
       <MenuItem
         onClick={() => setOpenAgreeDialog(true)}
         role="menuitem"
