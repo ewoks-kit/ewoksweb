@@ -15,12 +15,12 @@ import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import KeyStrokeHint from '../../KeyStrokeHint';
 
 interface Props {
-  selectedElement: Node;
+  node: Node;
   onSelection: () => void;
 }
 
-export default function NodeSidebarMenu(props: Props) {
-  const { selectedElement, onSelection } = props;
+export default function NodeSidebarMenuItems(props: Props) {
+  const { node, onSelection } = props;
   const rfInstance = useReactFlow();
 
   const displayedWorkflowInfo = useStore(
@@ -30,8 +30,8 @@ export default function NodeSidebarMenu(props: Props) {
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
 
-  const nodeData = getNodeData(selectedElement.id);
-  assertNodeDataDefined(nodeData, selectedElement.id);
+  const nodeData = getNodeData(node.id);
+  assertNodeDataDefined(nodeData, node.id);
   const nodeTask = tasks.find(
     (tas) => tas.task_identifier === nodeData.task_props.task_identifier,
   );
@@ -46,7 +46,7 @@ export default function NodeSidebarMenu(props: Props) {
       />
       <MenuItem
         onClick={() => {
-          cloneNode(selectedElement.id);
+          cloneNode(node.id);
           onSelection();
         }}
         role="menuitem"
@@ -74,7 +74,7 @@ export default function NodeSidebarMenu(props: Props) {
 
       <MenuItem
         onClick={() => {
-          rfInstance.deleteElements({ nodes: [selectedElement] });
+          rfInstance.deleteElements({ nodes: [node] });
           onSelection();
         }}
         role="menuitem"
