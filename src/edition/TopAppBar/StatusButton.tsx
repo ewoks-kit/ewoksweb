@@ -1,13 +1,13 @@
 import { Check, ErrorOutline, Save } from '@mui/icons-material';
 import { useEffect } from 'react';
 
-import { useIsChanged } from '../../store/graph-hooks';
 import type { Status } from './models';
 import styles from './TopAppBar.module.css';
 
 interface Props {
   status: Status;
   setStatus: (s: Status) => void;
+  children?: React.ReactNode;
 }
 
 const ICONS = {
@@ -17,7 +17,7 @@ const ICONS = {
 };
 
 function StatusIcon(props: Props) {
-  const { status, setStatus } = props;
+  const { status, setStatus, children } = props;
 
   // Restore idle status after 1s
   useEffect(() => {
@@ -33,7 +33,7 @@ function StatusIcon(props: Props) {
   return (
     <div className={styles.container}>
       <Icon />
-      {useIsChanged() && <div className={styles.saveRedDot} />}
+      {children}
     </div>
   );
 }
