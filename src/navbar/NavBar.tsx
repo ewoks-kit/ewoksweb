@@ -28,14 +28,15 @@ function NavBar() {
   );
 
   const blocker = useBlocker(shouldBlock);
-
-  useEffect(() => {
-    if (blocker.state === 'blocked' && isWorkflowEdited) {
-      blocker.reset();
-    }
-  }, [blocker, isWorkflowEdited]);
-
   const [openAgreeDialog, setOpenAgreeDialog] = useState(false);
+  // console.log(blocker.state, openAgreeDialog);
+  // useEffect(() => {
+  //   console.log(blocker.state, openAgreeDialog);
+
+  //   // if (blocker.state === 'blocked' && isWorkflowEdited) {
+  //   //   blocker.reset();
+  //   // }
+  // }, [blocker, isWorkflowEdited]);
 
   const setElement = useNavBarElementStore((st) => st.setElement);
   const displayedWorkflowInfo = useStore((st) => st.displayedWorkflowInfo);
@@ -51,6 +52,8 @@ function NavBar() {
 
   function handleClickMonitor(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
+    // console.log(blocker.state, isWorkflowEdited, openAgreeDialog);
+
     if (isWorkflowEdited) {
       setOpenAgreeDialog(true);
       return;
@@ -61,27 +64,29 @@ function NavBar() {
 
   return (
     <>
-      {blocker && ( // .state === 'blocked'
-        <ConfirmDialog
-          title="There are unsaved changes"
-          content="Continue without saving?"
-          open={openAgreeDialog}
-          setOpen={setOpenAgreeDialog}
-          agreeCallback={() => {
-            if (blocker.state === 'blocked') {
-              blocker.proceed();
-            }
-            setOpenAgreeDialog(false);
-            goToMonitor();
-          }}
-          disagreeCallback={() => {
-            if (blocker.state === 'blocked') {
-              blocker.reset();
-            }
-            setOpenAgreeDialog(false);
-          }}
-        />
-      )}
+      <ConfirmDialog
+        title="There are unsaved changes"
+        content="Continue without saving?"
+        open={openAgreeDialog}
+        setOpen={setOpenAgreeDialog}
+        agreeCallback={() => {
+          setOpenAgreeDialog(false);
+          // if (blocker.state === 'blocked') {
+          console.log(blocker.state, blocker);
+
+          blocker.proceed?.();
+          // }
+          goToMonitor();
+        }}
+        disagreeCallback={() => {
+          // if (blocker.state === 'blocked') {
+          setOpenAgreeDialog(false);
+          // if (blocker.proceed) {
+          // blocker.reset?.();
+          // }
+          // }
+        }}
+      />
       <div
         className={styles.navbar}
         ref={(elem) => setElement(elem ?? undefined)}
@@ -94,6 +99,7 @@ function NavBar() {
             className={({ isActive }) => {
               return linkIsActive(isActive);
             }}
+            onClick={() => blocker.proceed?.()}
             to={{
               pathname: '/edit',
               search: state?.workflow
