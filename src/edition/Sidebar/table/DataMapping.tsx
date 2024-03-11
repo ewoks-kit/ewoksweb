@@ -3,10 +3,10 @@ import type { Edge } from 'reactflow';
 import type { DataMapping } from 'types';
 
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
-import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
-import TableDataMapping from './TableDataMapping';
-import { calcTypeOfValues } from './utils';
+import DataMappingTable from './DataMappingTable';
+import styles from './Table.module.css';
+import { calcEdgeInputOptions, calcEdgeOutputOptions } from './utils';
 
 interface Props {
   element: Edge;
@@ -20,43 +20,35 @@ export default function DataMappingComponent({ element, mapAllData }: Props) {
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
-  const sourceNodeData = useNodeDataStore((state) =>
-    state.nodesData.get(element.source),
-  );
-
-  const targetNodeData = useNodeDataStore((state) =>
-    state.nodesData.get(element.target),
-  );
-
-  function addDataMapping(rows?: DataMapping[]) {
+  function addDataMapping(rows: DataMapping[]) {
     mergeEdgeData(element.id, {
-      data_mapping: [
-        ...(rows as DataMapping[]),
-        { rowId: nanoid(), name: '', value: '' },
-      ],
+      data_mapping: [...rows, { rowId: nanoid(), source: '', target: '' }],
     });
   }
 
-  const dataMappingValuesChanged = (table: DataMapping[]) => {
+  function dataMappingValuesChanged(table: DataMapping[]) {
     setEdgeData(element.id, {
       ...edgeData,
       data_mapping: [...table],
     });
-  };
+  }
 
   return (
     <div>
-      <TableDataMapping
+      <DataMappingTable
         disable={mapAllData}
         onRowAdd={(rows) => addDataMapping(rows)}
-        headers={['Source', 'Target']}
         values={edgeData.data_mapping || []}
-        valuesChanged={dataMappingValuesChanged}
-        typeOfValues={[
-          calcTypeOfValues('inputs', sourceNodeData, edgeData),
-          calcTypeOfValues('outputs', targetNodeData, edgeData),
-        ]}
+        onValuesChange={dataMappingValuesChanged}
+        sourceOptions={calcEdgeInputOptions(edgeData)}
+        targetOptions={calcEdgeOutputOptions(edgeData)}
       />
+      {mapAllData && (
+        <div className={styles.warning}>
+          Data Mappings have no effect when Map all Data is enabled. They will
+          be removed when saving the workflow.
+        </div>
+      )}
     </div>
   );
 }

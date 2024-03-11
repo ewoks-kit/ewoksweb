@@ -1,11 +1,9 @@
 import { Alert } from '@mui/material';
 import {
   Button,
-  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
@@ -14,13 +12,11 @@ import { useReactFlow } from 'reactflow';
 
 import {
   postWorkflow,
-  putWorkflow,
-  useInvalidateWorkflows,
+  useInvalidateWorkflowDescriptions,
 } from '../../api/workflows';
 import commonStrings from '../../commonStrings.json';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import type { GraphDetails } from '../../types';
-import { GraphFormAction } from '../../types';
 import {
   getEdgesData,
   getNodesData,
@@ -28,11 +24,9 @@ import {
   textForError,
 } from '../../utils';
 import FormField from './FormField';
-import type { GraphFields } from './models';
 
 interface Props {
   elementToEdit: GraphDetails;
-  action: GraphFormAction;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -40,26 +34,26 @@ interface Props {
 export default function GraphFormDialog(props: Props) {
   const [, setSearchParams] = useSearchParams();
   const rfInstance = useReactFlow();
-  const { isOpen, onClose, action, elementToEdit } = props;
+  const { isOpen, onClose, elementToEdit } = props;
 
-  const { handleSubmit, reset, control, formState } = useForm<GraphFields>({
-    defaultValues: { identifier: elementToEdit.label },
+  const { handleSubmit, reset, control, formState } = useForm({
+    defaultValues: { name: elementToEdit.id },
   });
 
   const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
 
-  const invalidateWorkflows = useInvalidateWorkflows();
+  const invalidateWorkflowDescriptions = useInvalidateWorkflowDescriptions();
 
   function handleClose() {
     onClose();
   }
 
-  const onSubmit = handleSubmit(async (data: GraphFields) => {
-    const { identifier, overwrite } = data;
+  const onSubmit = handleSubmit(async (data) => {
+    const { name } = data;
 
     const ewoksGraph = prepareEwoksGraph(
-      { ...elementToEdit, id: identifier },
+      { ...elementToEdit, id: name },
       rfInstance.getNodes(),
       rfInstance.getEdges(),
       getNodesData(),
@@ -67,18 +61,14 @@ export default function GraphFormDialog(props: Props) {
     );
 
     try {
-      if (overwrite) {
-        await putWorkflow(ewoksGraph);
-      } else {
-        await postWorkflow(ewoksGraph);
-      }
-      await invalidateWorkflows();
+      await postWorkflow(ewoksGraph);
+      invalidateWorkflowDescriptions();
 
       showSuccessMsg('Graph saved successfully!');
 
       reset();
       handleClose();
-      setSearchParams({ workflow: identifier });
+      setSearchParams({ workflow: name });
     } catch (error) {
       showErrorMsg(textForError(error, commonStrings.savingError));
     }
@@ -88,36 +78,17 @@ export default function GraphFormDialog(props: Props) {
     <Dialog open={isOpen} onClose={handleClose}>
       {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <form onSubmit={onSubmit}>
-        <DialogTitle>Give the new workflow identifier</DialogTitle>
+        <DialogTitle>Give the new workflow name</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            The workflow will be saved to the server with the identifier you
-            provide.
-          </DialogContentText>
-          {formState.errors.identifier && (
-            <Alert severity="error">Please give an identifier !</Alert>
+          {formState.errors.name && (
+            <Alert severity="error">Please give a name !</Alert>
           )}
           <Controller
-            name="identifier"
+            name="name"
             control={control}
             rules={{ required: true }}
-            render={({ field }) => <FormField label="Identifier" {...field} />}
+            render={({ field }) => <FormField label="Name" {...field} />}
           />
-          {[
-            GraphFormAction.newGraphOrOverwrite,
-            GraphFormAction.cloneGraph,
-          ].includes(action) && (
-            <Controller
-              name="overwrite"
-              control={control}
-              render={({ field }) => (
-                <div>
-                  <b>Overwrite existing workflow with the same identifier</b>
-                  <Checkbox {...field} />
-                </div>
-              )}
-            />
-          )}
         </DialogContent>
         <DialogActions>
           <Button

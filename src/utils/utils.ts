@@ -1,69 +1,30 @@
-/* eslint-disable require-unicode-regexp */
 import { nanoid } from 'nanoid';
 
 import type {
-  Condition,
   DataMapping,
   EwoksDataMapping,
   InputOutputLinkAttributes,
   InputOutputUiProps,
+  RowValue,
 } from '../types';
+import { RowType } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
-import { isString } from './typeGuards';
 
 export function createDataMappingData(pair: EwoksDataMapping): DataMapping {
   return {
     rowId: nanoid(),
-    name: pair.source_output ? pair.source_output.toString() : '',
-    value: pair.target_input ?? '',
+    source: pair.source_output ?? '',
+    target: pair.target_input ?? '',
   };
-}
-
-export function calcConditionValue(condition: Condition): unknown {
-  return condition.value === 'true'
-    ? true
-    : condition.value === 'false'
-    ? false
-    : condition.value === 'null'
-    ? null
-    : condition.type === 'number' &&
-      isString(condition.value) &&
-      isDecimalNumber(condition.value)
-    ? Number(condition.value)
-    : condition.value;
-}
-
-export function calcConditionName(condition: Condition): string | number {
-  const cond = condition.name;
-
-  return stringOrNumber(cond);
 }
 
 export function calcDataMapping(
   dataMappings: DataMapping[],
 ): EwoksDataMapping[] {
-  return dataMappings.map(({ value, name }) => {
-    return {
-      source_output: stringOrNumber(name),
-      target_input: stringOrNumber(value),
-    };
-  });
-}
-
-export function stringOrNumber(
-  value: string | number | undefined,
-): string | number {
-  return value === undefined
-    ? ''
-    : typeof value === 'number'
-    ? value
-    : value && /^\d+$/.test(value)
-    ? Number.parseInt(value, 10)
-    : value;
-}
-
-export function isDecimalNumber(value: string) {
-  return /^-?\d*\.?\d*$/u.test(value);
+  return dataMappings.map(({ source, target }) => ({
+    source_output: source,
+    target_input: target,
+  }));
 }
 
 export function notUndefinedValue(
@@ -145,4 +106,31 @@ export function generateUniqueNodeId(
   }
 
   return tentativeId;
+}
+
+export function getValueAndType(value: unknown): {
+  type: RowType;
+  value: RowValue;
+} {
+  if (typeof value === 'boolean') {
+    return { type: RowType.Bool, value };
+  }
+
+  if (Array.isArray(value)) {
+    return { type: RowType.List, value };
+  }
+
+  if (value === null) {
+    return { type: RowType.Null, value };
+  }
+
+  if (typeof value === 'object') {
+    return { type: RowType.Dict, value };
+  }
+
+  if (typeof value === 'number') {
+    return { type: RowType.Number, value };
+  }
+
+  return { type: RowType.String, value: String(value) };
 }

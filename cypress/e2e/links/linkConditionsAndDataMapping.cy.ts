@@ -81,10 +81,8 @@ it('inserts a new Data Mapping entry and disables it when "Map all data" is chec
       .siblings()
       .within(() => {
         cy.contains('Add').should('have.length', 1).click();
-        cy.findByRole('textbox', { name: 'Edit input name' }).type('Always');
-        cy.findByRole('textbox', { name: 'Edit input value' }).type(
-          'and forever',
-        );
+        cy.findByRole('textbox', { name: 'Edit source' }).type('Always');
+        cy.findByRole('textbox', { name: 'Edit target' }).type('and forever');
       });
   });
 
@@ -94,12 +92,8 @@ it('inserts a new Data Mapping entry and disables it when "Map all data" is chec
       .siblings()
       .within(() => {
         cy.contains('Add').should('have.length', 0);
-        cy.findByRole('textbox', { name: 'Edit input name' }).should(
-          'be.disabled',
-        );
-        cy.findByRole('textbox', { name: 'Edit input value' }).should(
-          'be.disabled',
-        );
+        cy.findByRole('textbox', { name: 'Edit source' }).should('be.disabled');
+        cy.findByRole('textbox', { name: 'Edit target' }).should('be.disabled');
       });
   });
 });
@@ -110,7 +104,7 @@ it('inserts a new Condition, changes it and disables it when "On Error condition
 
     cy.findByRole('textbox', { name: 'Edit input name' }).type('Always');
 
-    cy.findByRole('combobox').should('have.text', 'bool');
+    cy.findByRole('combobox').should('have.value', 'bool');
 
     cy.findByRole('radio', { name: 'false' }).should('be.checked');
 

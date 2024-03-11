@@ -1,14 +1,12 @@
 import type { Engine } from '../../../api/models';
+import type { InputTableRow } from '../../../types';
+import { RowType } from '../../../types';
 import type { EngineDropdownOption } from '../models';
 
 export type InputTarget = { id: string } | 'All nodes' | 'All input nodes';
 
-export interface ExecutionInputTableRow {
-  name: string | number;
-  value: unknown;
+export interface ExecutionInputTableRow extends Omit<InputTableRow, 'rowId'> {
   target: InputTarget;
-  type: string;
-  rowId: string;
 }
 
 export const DROPDOWN_TO_SERVER_ENGINE: Record<EngineDropdownOption, Engine> = {
@@ -17,9 +15,9 @@ export const DROPDOWN_TO_SERVER_ENGINE: Record<EngineDropdownOption, Engine> = {
   pypushflow: 'ppf',
 };
 
-export const EMPTY_INPUT: Omit<ExecutionInputTableRow, 'rowId'> = {
+export const EMPTY_INPUT: ExecutionInputTableRow = {
   target: 'All nodes',
   name: '',
   value: '',
-  type: 'string',
+  type: RowType.String,
 };

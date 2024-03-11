@@ -1,11 +1,10 @@
 import { isBoolean } from 'lodash';
-import type { ChangeEvent } from 'react';
 
 import styles from './BooleanControl.module.css';
 
 interface Props {
   value: unknown;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (newValue: boolean) => void;
   disabled?: boolean;
 }
 
@@ -21,10 +20,9 @@ function BooleanControl(props: Props) {
           className={styles.input}
           aria-labelledby="trueLabel"
           type="radio"
-          name="value"
           value="true"
           checked={value === 'true'}
-          onChange={onChange}
+          onChange={() => onChange(true)}
           disabled={disabled}
         />
         true
@@ -35,10 +33,9 @@ function BooleanControl(props: Props) {
           className={styles.input}
           aria-labelledby="falseLabel"
           type="radio"
-          name="value"
           value="false"
           checked={value === 'false'}
-          onChange={onChange}
+          onChange={() => onChange(false)}
           disabled={disabled}
         />
         false

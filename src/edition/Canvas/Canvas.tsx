@@ -18,7 +18,6 @@ import ReactFlow, {
   useReactFlow,
 } from 'reactflow';
 import { useStoreApi } from 'reactflow';
-import type { RFNode, Task } from 'types';
 
 import { useTasks } from '../../api/tasks';
 import { useWorkflow } from '../../api/workflows';
@@ -27,13 +26,14 @@ import useEdgeDataStore from '../../store/useEdgeDataStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import useStore from '../../store/useStore';
+import type { RFNode, Task } from '../../types';
+import { WorkflowSource } from '../../types';
 import { getNodesData } from '../../utils';
 import { calcNewId } from '../../utils/calcNewId';
 import {
   DEFAULT_NODE_HEIGHT,
   DEFAULT_NODE_WIDTH,
 } from '../../utils/defaultValues';
-import { EMPTY_GRAPH } from '../../utils/emptyGraphs';
 import isValidLink from '../../utils/IsValidLink';
 import bendingText from '../CustomEdges/BendingTextEdge';
 import getAround from '../CustomEdges/GetAroundEdge';
@@ -60,6 +60,7 @@ const nodeTypes = {
   method: DataNode,
   ppfmethod: DataNode,
   generated: DataNode,
+  notebook: DataNode,
   graphInput: GraphInOutNode,
   graphOutput: GraphInOutNode,
   class: DataNode,
@@ -100,6 +101,7 @@ function Canvas(props: Props) {
   }>();
 
   const setRootWorkflow = useStore((state) => state.setRootWorkflow);
+  const resetRootWorkflow = useStore((state) => state.resetRootWorkflow);
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo,
   );
@@ -305,12 +307,16 @@ function Canvas(props: Props) {
             nodeTypes={nodeTypes}
             deleteKeyCode="Delete"
             onInit={() => {
-              setRootWorkflow(
-                workflow || EMPTY_GRAPH,
-                rfInstance,
-                tasks,
-                workflow ? 'fromServer' : undefined,
-              );
+              if (workflow) {
+                setRootWorkflow(
+                  workflow,
+                  rfInstance,
+                  tasks,
+                  WorkflowSource.Server,
+                );
+              } else {
+                resetRootWorkflow(rfInstance, tasks);
+              }
             }}
           >
             <CanvasBackground />

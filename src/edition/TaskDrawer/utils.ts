@@ -29,7 +29,7 @@ export async function loadSubworkflow(
 
   const graphId = generateUniqueNodeId(
     nodes.map((node) => node.id),
-    subGraph.graph.label,
+    subGraph.graph.id,
   );
 
   const nodeWithoutData: RFNode = {

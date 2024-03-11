@@ -2,12 +2,14 @@ import TaskProperty from './TaskProperty';
 
 interface Props {
   label: string;
-  value: string[] | undefined;
+  value: string[] | null | undefined;
   unknown?: boolean;
 }
 
 function TaskArrayProperty(props: Props) {
-  const { label, value = [], unknown } = props;
+  const { label, value: rawValue, unknown } = props;
+
+  const value = rawValue || [];
 
   const fallback = unknown ? 'Unknown' : 'None';
 

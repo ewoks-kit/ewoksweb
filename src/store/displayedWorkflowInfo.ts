@@ -2,7 +2,10 @@ import { merge } from 'lodash';
 import type { SetState } from 'zustand';
 
 import type { GraphDetails, State } from '../types';
-import { EMPTY_RF_GRAPH } from '../utils/emptyGraphs';
+
+const EMPTY_INFO: GraphDetails = {
+  id: '',
+};
 
 export interface DisplayedWorkflowInfoSlice {
   displayedWorkflowInfo: GraphDetails;
@@ -16,7 +19,7 @@ export interface DisplayedWorkflowInfoSlice {
 const displayedWorkflowInfo = (
   set: SetState<State>,
 ): DisplayedWorkflowInfoSlice => ({
-  displayedWorkflowInfo: EMPTY_RF_GRAPH.graph,
+  displayedWorkflowInfo: EMPTY_INFO,
 
   setDisplayedWorkflowInfo: (nextWorkflowInfo) => {
     set((prev) => {
@@ -41,7 +44,7 @@ const displayedWorkflowInfo = (
   },
   resetDisplayedWorkflowInfo: () =>
     set({
-      displayedWorkflowInfo: EMPTY_RF_GRAPH.graph,
+      displayedWorkflowInfo: EMPTY_INFO,
     }),
 });
 

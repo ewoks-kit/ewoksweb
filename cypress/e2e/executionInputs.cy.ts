@@ -19,20 +19,18 @@ function expectRequestBodyToDeepEqual(expectation: unknown): RouteHandler {
 }
 
 it('should not add inputs by default', () => {
-  cy.intercept(
-    `api/execute/demo`,
-    expectRequestBodyToDeepEqual({
-      execute_arguments: {},
-    }),
-  ).as('executeRequest');
+  cy.intercept(`api/execute/demo`, expectRequestBodyToDeepEqual({})).as(
+    'executeRequest',
+  );
 
   cy.findByRole('button', { name: 'Save & Execute' }).click();
   cy.wait('@executeRequest');
 });
 
 it('should change the engine', () => {
-  cy.findByRole('combobox', { name: 'Change execution engine' }).click();
-  cy.findByRole('option', { name: 'pypushflow' }).click();
+  cy.findByRole('combobox', { name: 'Change execution engine' }).select(
+    'pypushflow',
+  );
 
   cy.intercept(
     `api/execute/demo`,
@@ -89,25 +87,23 @@ it('should add inputs for all input nodes', () => {
   cy.wait('@executeRequest');
 });
 
-// TODO: VALUE SHOULD NOT BE SERIALIZED AS STRING
-it.skip('should add inputs for a specific node', () => {
+it('should add inputs for a specific node', () => {
   cy.findByRole('button', { name: 'Add entry' }).click();
 
   cy.findByRole('combobox', { name: 'Change target nodes' }).select(
     'ewokscore.tests.examples.tasks.sumtask.SumTask (task1)',
   );
 
-  cy.findByRole('combobox', { name: 'Change input type' }).click();
-  cy.findByRole('option', { name: 'number' }).click();
+  cy.findByRole('combobox', { name: 'Change input type' }).select('number');
 
-  cy.findByRole('combobox', { name: 'Edit input name' }).type('delay');
-  cy.findByRole('textbox', { name: 'Edit input value' }).type('6');
+  cy.findByRole('combobox', { name: 'Edit input name' }).type('3');
+  cy.findByRole('spinbutton', { name: 'Edit input value' }).type('6');
 
   cy.intercept(
     `api/execute/demo`,
     expectRequestBodyToDeepEqual({
       execute_arguments: {
-        inputs: [{ name: 'delay', value: 6, id: 'task1' }],
+        inputs: [{ name: 3, value: 6, id: 'task1' }],
       },
     }),
   ).as('executeRequest');

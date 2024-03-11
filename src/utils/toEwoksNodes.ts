@@ -1,37 +1,12 @@
 import type {
   DataMapping,
   DefaultErrorAttributes,
-  DefaultInput,
   EwoksDataMapping,
   EwoksNode,
   NodeWithData,
 } from '../types';
-import { isString } from './typeGuards';
-import {
-  calcDataMapping,
-  isDecimalNumber,
-  notUndefinedValue,
-  stringOrNumber,
-} from './utils';
+import { calcDataMapping, notUndefinedValue } from './utils';
 
-function cleanDefaultInputs(default_inputs: DefaultInput[] | undefined) {
-  if (!default_inputs) {
-    return undefined;
-  }
-  return default_inputs.map((dIn) => {
-    return {
-      name: dIn.name,
-      value:
-        dIn.value === 'false'
-          ? false
-          : dIn.value === 'true'
-          ? true
-          : dIn.value === 'null'
-          ? null
-          : dIn.value,
-    };
-  });
-}
 function calcDefaultErrorAttributes(
   default_error_attributes: DefaultErrorAttributes<DataMapping> | undefined,
 ): DefaultErrorAttributes<EwoksDataMapping> | undefined {
@@ -46,21 +21,6 @@ function calcDefaultErrorAttributes(
         data_mapping: calcDataMapping(default_error_attributes.data_mapping),
       }),
   };
-}
-
-function calcDefaultInputs(default_inputs: DefaultInput[] | undefined) {
-  if (!default_inputs) {
-    return undefined;
-  }
-  return default_inputs.map(({ name, value, type }) => {
-    return {
-      name: stringOrNumber(name),
-      value:
-        type === 'number' && isString(value) && isDecimalNumber(value)
-          ? Number(value)
-          : value,
-    };
-  });
 }
 
 // EwoksRFNode --> EwoksNode for saving
@@ -97,9 +57,6 @@ export function toEwoksNodes(nodes: NodeWithData[]): EwoksNode[] {
       },
       position,
     }) => {
-      const nodeDefaultInputs = cleanDefaultInputs(
-        calcDefaultInputs(default_inputs),
-      );
       return {
         id,
         label,
@@ -107,7 +64,10 @@ export function toEwoksNodes(nodes: NodeWithData[]): EwoksNode[] {
         task_identifier,
         ...notUndefinedValue(inputs_complete, 'inputs_complete'),
         task_generator,
-        default_inputs: nodeDefaultInputs,
+        default_inputs: default_inputs?.map(({ name, value }) => ({
+          name,
+          value,
+        })),
         default_error_node,
         ...(default_error_node && {
           default_error_attributes: calcDefaultErrorAttributes(

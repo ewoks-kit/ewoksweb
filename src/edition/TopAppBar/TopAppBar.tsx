@@ -6,7 +6,7 @@ import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import OpenActionMenuButton from './menu/OpenActionMenuButton';
 import SaveToServerButton from './SaveToServerButton';
 import styles from './TopAppBar.module.css';
-import TopWorkflowLabel from './TopWorkflowLabel';
+import WorkflowTitle from './WorkflowTitle';
 
 function TopAppBar() {
   const navBarElement = useNavBarElementStore((state) => state.element);
@@ -17,9 +17,7 @@ function TopAppBar() {
 
   return createPortal(
     <>
-      <h1 className={styles.crumbs} aria-label="Workflow title">
-        <TopWorkflowLabel />
-      </h1>
+      <WorkflowTitle />
       <div className={styles.toolbar}>
         <SuspenseBoundary>
           <QuickOpen />

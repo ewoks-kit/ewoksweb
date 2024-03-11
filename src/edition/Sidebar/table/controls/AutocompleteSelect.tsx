@@ -1,24 +1,29 @@
 import { Autocomplete } from '@mui/material';
 import { FormControl, TextField } from '@mui/material';
 
-import type {
-  InputTableRow,
-  RowChangeEvent,
-  TypeOfValues,
-} from '../../../../types';
+import type { Options } from '../../../../types';
 
 interface Props {
-  row: InputTableRow;
-  name: 'name' | 'value';
-  onChange: (e: RowChangeEvent) => void;
-  typeOfValues?: TypeOfValues;
+  value: string | number;
+  onChange: (newValue: string) => void;
+  options: Options;
   disable?: boolean;
+  ariaLabel?: string;
 }
 
 function AutocompleteSelect(props: Props) {
-  const { row, name, onChange, typeOfValues, disable } = props;
+  const {
+    value: rawValue,
+    onChange,
+    options: rawOptions,
+    disable,
+    ariaLabel,
+  } = props;
 
-  const options = typeOfValues?.values || [''];
+  const { values: options, requiredValues } = rawOptions;
+
+  const value = String(rawValue);
+
   return (
     <FormControl variant="standard" fullWidth>
       <Autocomplete
@@ -27,8 +32,7 @@ function AutocompleteSelect(props: Props) {
         freeSolo={options.length === 0}
         options={options}
         renderOption={(liProps, option) => {
-          const valueIsRequired =
-            typeOfValues?.requiredValues?.includes(option);
+          const valueIsRequired = requiredValues.includes(option);
 
           return (
             <li {...liProps}>
@@ -37,10 +41,10 @@ function AutocompleteSelect(props: Props) {
             </li>
           );
         }}
-        value={(row[name] as string) || ''}
-        inputValue={(row[name] as string) || ''}
-        onChange={(e, val) => onChange({ target: { value: val, name } })}
-        onInputChange={(e, val) => onChange({ target: { value: val, name } })}
+        value={value}
+        inputValue={value}
+        onChange={(e, val) => onChange(val)}
+        onInputChange={(e, val) => onChange(val)}
         renderInput={(params) => (
           <TextField
             variant="standard"
@@ -48,7 +52,7 @@ function AutocompleteSelect(props: Props) {
             margin="normal"
             inputProps={{
               ...params.inputProps,
-              'aria-label': `Edit input ${name}`,
+              'aria-label': ariaLabel,
             }}
           />
         )}

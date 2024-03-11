@@ -1,9 +1,9 @@
 import { nanoid } from 'nanoid';
-import type { DataMapping, InputTableRow } from 'types';
+import type { DataMapping } from 'types';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
-import TableDataMapping from './TableDataMapping';
+import DataMappingTable from './DataMappingTable';
 
 export default function NodeDataMapping({ nodeId }: { nodeId: string }) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(nodeId));
@@ -11,20 +11,21 @@ export default function NodeDataMapping({ nodeId }: { nodeId: string }) {
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
-  function addDataMapping(rows: InputTableRow[] | undefined) {
+  function addDataMapping(oldDataMapping: DataMapping[]) {
     mergeNodeData(nodeId, {
       ewoks_props: {
         default_error_attributes: {
           data_mapping: [
-            ...(rows as DataMapping[]),
-            { rowId: nanoid(), name: '', value: '' },
+            ...oldDataMapping,
+            { rowId: nanoid(), source: '', target: '' },
           ],
         },
       },
     });
   }
 
-  const dataMappingValuesChanged = (table: DataMapping[]) => {
+  function dataMappingValuesChanged(table: DataMapping[]) {
+    assertNodeDataDefined(nodeData, nodeId);
     setNodeData(nodeId, {
       ...nodeData,
       ewoks_props: {
@@ -35,18 +36,16 @@ export default function NodeDataMapping({ nodeId }: { nodeId: string }) {
         },
       },
     });
-  };
+  }
 
   return (
     <div>
-      <TableDataMapping
+      <DataMappingTable
         onRowAdd={(rows) => addDataMapping(rows)}
-        headers={['Source', 'Target']}
         values={
           nodeData.ewoks_props.default_error_attributes?.data_mapping || []
         }
-        valuesChanged={dataMappingValuesChanged}
-        typeOfValues={[{ typeOfInput: 'input' }, { typeOfInput: 'input' }]}
+        onValuesChange={dataMappingValuesChanged}
       />
     </div>
   );

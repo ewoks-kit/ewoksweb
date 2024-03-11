@@ -1,42 +1,32 @@
-import type { SelectChangeEvent } from '@mui/material';
-import { FormControl, MenuItem, Select, TableCell } from '@mui/material';
-import type { ChangeEvent } from 'react';
+import { TableCell } from '@mui/material';
 
-import { INPUT_TYPES } from '../utils';
+import { RowType } from '../../../../types';
 import styles from './TypeSelectCell.module.css';
 
 interface Props {
-  value: string;
+  value: RowType;
+  onChange: (newType: RowType) => void;
   disable?: boolean;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 function TypeSelectCell(props: Props) {
   const { value, disable, onChange } = props;
 
-  function onChangeLocal(event: SelectChangeEvent) {
-    if (onChange) {
-      onChange(event as ChangeEvent<HTMLInputElement>);
-    }
-  }
-
   return (
     <TableCell className={styles.cell} align="left" size="small">
-      <FormControl variant="standard" fullWidth>
-        <Select
-          variant="standard"
-          disabled={disable}
-          value={value}
-          onChange={onChangeLocal}
-          inputProps={{ 'aria-label': 'Change input type' }}
-        >
-          {INPUT_TYPES.map((type) => (
-            <MenuItem key={type} value={type}>
-              {type}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <select
+        className={styles.select}
+        disabled={disable}
+        value={value}
+        onChange={(e) => onChange(e.target.value as RowType)}
+        aria-label="Change input type"
+      >
+        {Object.values(RowType).map((type) => (
+          <option key={type} value={type}>
+            {type}
+          </option>
+        ))}
+      </select>
     </TableCell>
   );
 }

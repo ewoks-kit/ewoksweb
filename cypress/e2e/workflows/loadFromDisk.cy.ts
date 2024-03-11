@@ -34,11 +34,8 @@ it('leaves the original JSON untouched when saving on the server', () => {
   cy.waitForStableDOM();
 
   cy.hasNavBarLabel('workflow2');
-  cy.findByRole('button', { name: 'Save workflow to server' }).click();
-  cy.findByRole('textbox', {
-    name: 'Identifier',
-  }).type('workflow2');
-  cy.findByRole('button', { name: 'Save workflow' }).click();
+
+  cy.saveNewWorkflow('workflow2');
 
   cy.findByRole('alert', { hidden: true }).should(
     'contain.text',
@@ -72,11 +69,7 @@ it('saves optional fields of the workflow to the server', () => {
 
   cy.hasNavBarLabel('workflowAllValues');
 
-  cy.findByRole('button', { name: 'Save workflow to server' }).click();
-  cy.findByRole('textbox', {
-    name: 'Identifier',
-  }).type('workflowAllValues');
-  cy.findByRole('button', { name: 'Save workflow' }).click();
+  cy.saveNewWorkflow('workflowAllValues');
 
   cy.findByRole('alert', { hidden: true }).should(
     'contain.text',

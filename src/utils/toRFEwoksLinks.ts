@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid';
+
 import { defaultLinkStyle } from '../edition/Canvas/utils';
 import type {
   Condition,
@@ -10,7 +12,11 @@ import { findLinkInputs, findLinkOutputs } from './calcTasksForLink';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
-import { createDataMappingData, notUndefinedValue } from './utils';
+import {
+  createDataMappingData,
+  getValueAndType,
+  notUndefinedValue,
+} from './utils';
 
 // DOC: from GraphEwoks get EwoksRFLinks
 // - tempGraph: the graph to transform its links
@@ -43,8 +49,9 @@ export function toRFEwoksLinks(
 
       const conditionsForFront = conditions?.map<Condition>((con) => {
         return {
-          name: con.source_output.toString(),
-          value: con.value,
+          rowId: nanoid(),
+          name: con.source_output,
+          ...getValueAndType(con.value),
         };
       });
 

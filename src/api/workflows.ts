@@ -1,24 +1,22 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import type { Workflow, WorkflowDescription } from '../types';
+import type { Workflow } from '../types';
 import { assertDefined } from '../utils/typeGuards';
 import { client } from './client';
 import type {
   DeleteResponse,
   ExecuteWorkflowResponse,
   ExecutionParams,
-  ListResponse,
   WorkflowDescriptionsResponse,
   WorkflowResponse,
 } from './models';
 import { QueryKey } from './models';
 
-export async function fetchWorkflowsDescriptions() {
-  return client.get<WorkflowDescriptionsResponse>(`/workflows/descriptions`);
-}
-
-export async function fetchWorkflowsIds() {
-  return client.get<ListResponse>(`/workflows`);
+async function fetchWorkflowDescriptions() {
+  const response = await client.get<WorkflowDescriptionsResponse>(
+    `/workflows/descriptions`,
+  );
+  return response.data.items.filter((w) => !!w.id);
 }
 
 export async function fetchWorkflow(id: string) {
@@ -45,20 +43,7 @@ export async function executeWorkflow(
   workflowId: string,
   params?: ExecutionParams,
 ) {
-  return client.post<ExecuteWorkflowResponse>(`/execute/${workflowId}`, {
-    execute_arguments: params,
-  });
-}
-
-export async function getWorkflows(): Promise<WorkflowDescription[]> {
-  const response = await fetchWorkflowsDescriptions();
-  const workflows = response.data.items;
-
-  if (workflows.length === 0) {
-    throw new Error('It seems you have no workflows to work with!');
-  }
-
-  return workflows;
+  return client.post<ExecuteWorkflowResponse>(`/execute/${workflowId}`, params);
 }
 
 export function useWorkflow(id: string | undefined) {
@@ -75,18 +60,18 @@ export function useWorkflow(id: string | undefined) {
   return data;
 }
 
-export function useWorkflowsDLE() {
+export function useWorkflowDescriptionsDLE() {
   return useQuery({
-    queryKey: [QueryKey.Workflows],
-    queryFn: getWorkflows,
+    queryKey: [QueryKey.WorkflowDescriptions],
+    queryFn: fetchWorkflowDescriptions,
     staleTime: Infinity,
   });
 }
 
-export function useWorkflows(): WorkflowDescription[] {
+export function useWorkflowIds(): Set<string> {
   const query = useQuery({
-    queryKey: [QueryKey.Workflows],
-    queryFn: getWorkflows,
+    queryKey: [QueryKey.WorkflowDescriptions],
+    queryFn: fetchWorkflowDescriptions,
     staleTime: Infinity,
     suspense: true,
   });
@@ -94,12 +79,22 @@ export function useWorkflows(): WorkflowDescription[] {
   const { data: workflowDescriptions } = query;
   assertDefined(workflowDescriptions);
 
-  return workflowDescriptions;
+  return new Set(workflowDescriptions.map((d) => d.id));
 }
 
-export function useInvalidateWorkflows() {
+export function useInvalidateWorkflowDescriptions() {
   const queryClient = useQueryClient();
-
   return () =>
-    queryClient.invalidateQueries({ queryKey: [QueryKey.Workflows] });
+    queryClient.invalidateQueries({
+      queryKey: [QueryKey.WorkflowDescriptions],
+    });
+}
+
+export function useInvalidateWorkflow() {
+  const queryClient = useQueryClient();
+  return (workflowId: string) => {
+    queryClient.invalidateQueries({
+      queryKey: [QueryKey.Workflow, workflowId],
+    });
+  };
 }

@@ -1,80 +1,46 @@
-import type {
-  Condition,
-  DefaultInput,
-  InputTableRow,
-  LinkData,
-  NodeData,
-  TypeOfValues,
-} from '../../../types';
-import { assertDefined } from '../../../utils/typeGuards';
+import type { LinkData, NodeData, Options } from '../../../types';
 
-export const INPUT_TYPES = ['bool', 'number', 'string', 'list', 'dict', 'null'];
+export function calcEdgeInputOptions(linkData: LinkData): Options | undefined {
+  const { links_input_names } = linkData;
+  const values = links_input_names || [];
 
-export function createData(pair: Condition | DefaultInput): InputTableRow {
-  const type = getType(pair);
-  const rowId = pair.rowId || pair.name?.toString();
-  assertDefined(rowId);
-
-  return {
-    rowId,
-    name: pair.name?.toString(),
-    value: pair.value,
-    type,
-  };
+  return values.length > 0 ? { values, requiredValues: [] } : undefined;
 }
 
-export function getType(val: Condition | DefaultInput) {
-  const { value } = val;
+export function calcEdgeOutputOptions(linkData: LinkData): Options | undefined {
+  const { links_required_output_names, links_optional_output_names } = linkData;
+  const requiredValues = links_required_output_names || [];
+  const optionalValues = links_optional_output_names || [];
 
-  if ('type' in val && val.type) {
-    return val.type;
-  }
+  const values = [...requiredValues, ...optionalValues];
 
-  if (typeof value === 'boolean' || value === 'true' || value === 'false') {
-    return 'boolean';
-  }
-
-  if (Array.isArray(value)) {
-    return 'list';
-  }
-
-  if (value === 'null' || value === null) {
-    return 'null';
-  }
-
-  if (typeof value === 'object') {
-    return 'dict';
-  }
-
-  if (typeof value === 'number') {
-    return 'number';
-  }
-
-  return 'string';
+  return values.length > 0 ? { values, requiredValues } : undefined;
 }
 
-export function isClass(edgeData: NodeData | undefined): boolean {
-  return edgeData?.task_props.task_type === 'class';
-}
-
-export function calcTypeOfValues(
-  inOrOut: 'inputs' | 'outputs',
+export function calcNodeInputOptions(
   nodeData: NodeData | undefined,
-  edgeDataL: LinkData,
-): TypeOfValues {
-  return {
-    typeOfInput: isClass(nodeData) ? 'select' : 'input',
-    values: isClass(nodeData)
-      ? inOrOut === 'outputs'
-        ? [
-            ...(edgeDataL.links_required_output_names || []),
-            ...(edgeDataL.links_optional_output_names || []),
-          ]
-        : edgeDataL.links_input_names || []
-      : undefined,
-    requiredValues:
-      isClass(nodeData) && inOrOut === 'outputs'
-        ? edgeDataL.links_required_output_names
-        : undefined,
-  };
+): Options | undefined {
+  const requiredValues = nodeData?.task_props.required_input_names || [];
+  const optionalValues = nodeData?.task_props.optional_input_names || [];
+
+  const values = [...requiredValues, ...optionalValues];
+
+  return values.length > 0 ? { values, requiredValues } : undefined;
+}
+
+export function transformInObject(
+  value: unknown,
+  type: string | undefined,
+): object {
+  if (type === 'list') {
+    return Array.isArray(value) ? value : [];
+  }
+
+  if (type === 'dict') {
+    return typeof value === 'object' && !Array.isArray(value) && value
+      ? value
+      : {};
+  }
+
+  return {};
 }

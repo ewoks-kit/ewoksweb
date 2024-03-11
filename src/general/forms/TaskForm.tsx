@@ -11,7 +11,6 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
-import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { useInvalidateTasks } from '../../api/tasks';
@@ -39,7 +38,7 @@ function TaskForm(props: Props) {
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const invalidateTasks = useInvalidateTasks();
 
-  const { control, handleSubmit, watch, formState, reset, setValue } =
+  const { control, handleSubmit, watch, formState, reset } =
     useForm<TaskFields>({
       defaultValues: {
         task_identifier: elementToEdit?.task_identifier || '',
@@ -64,20 +63,6 @@ function TaskForm(props: Props) {
     invalidateTasks();
   });
   const taskType = watch('task_type');
-
-  // Task type specific behaviour as described in https://gitlab.esrf.fr/workflow/ewoks/ewoksweb/-/issues/7:
-  // 1. `method` and `script` have specific output names
-  useEffect(() => {
-    if (taskType === 'method') {
-      setValue('output_names', 'return_value');
-    }
-
-    if (taskType === 'script') {
-      setValue('output_names', 'return_code');
-    }
-  }, [setValue, taskType]);
-  // 2. inputs/outputs fields should only be enabled for `class`
-  const disableIO = taskType !== 'class';
 
   return (
     <Dialog open={isOpen} onClose={onClose}>
@@ -140,42 +125,43 @@ function TaskForm(props: Props) {
             control={control}
             render={({ field }) => <FormField label="Category" {...field} />}
           />
-          <Controller
-            name="required_input_names"
-            control={control}
-            render={({ field }) => (
-              <FormField
-                label="Required inputs"
-                disabled={disableIO}
-                tooltip="Give the inputs as comma separated values eg: op1,op2..."
-                {...field}
+          {taskType === 'class' && (
+            <>
+              <Controller
+                name="required_input_names"
+                control={control}
+                render={({ field }) => (
+                  <FormField
+                    label="Required inputs"
+                    tooltip="Give the inputs as comma separated values eg: op1,op2..."
+                    {...field}
+                  />
+                )}
               />
-            )}
-          />
-          <Controller
-            name="optional_input_names"
-            control={control}
-            render={({ field }) => (
-              <FormField
-                label="Optional inputs"
-                disabled={disableIO}
-                tooltip="Give the inputs as comma separated values eg: op1,op2..."
-                {...field}
+              <Controller
+                name="optional_input_names"
+                control={control}
+                render={({ field }) => (
+                  <FormField
+                    label="Optional inputs"
+                    tooltip="Give the inputs as comma separated values eg: op1,op2..."
+                    {...field}
+                  />
+                )}
               />
-            )}
-          />
-          <Controller
-            name="output_names"
-            control={control}
-            render={({ field }) => (
-              <FormField
-                label="Outputs"
-                disabled={disableIO}
-                tooltip="Give the outputs as comma separated values eg: op1,op2..."
-                {...field}
+              <Controller
+                name="output_names"
+                control={control}
+                render={({ field }) => (
+                  <FormField
+                    label="Outputs"
+                    tooltip="Give the outputs as comma separated values eg: op1,op2..."
+                    {...field}
+                  />
+                )}
               />
-            )}
-          />
+            </>
+          )}
           <SuspenseBoundary>
             <IconDropdown control={control} />
           </SuspenseBoundary>

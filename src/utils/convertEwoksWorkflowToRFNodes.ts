@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid';
+
 import type {
   DataMapping,
   DefaultErrorAttributes,
@@ -11,7 +13,11 @@ import type {
 } from '../types';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
-import { createDataMappingData, notUndefinedValue } from './utils';
+import {
+  createDataMappingData,
+  getValueAndType,
+  notUndefinedValue,
+} from './utils';
 
 export function convertEwoksWorkflowToRFNodes(
   workflowToConvert: Workflow,
@@ -54,8 +60,9 @@ export function convertEwoksWorkflowToRFNodes(
             default_inputs.length > 0 && {
               default_inputs: default_inputs.map((dIn) => {
                 return {
-                  name: dIn.name.toString(),
-                  value: dIn.value,
+                  rowId: nanoid(),
+                  name: dIn.name,
+                  ...getValueAndType(dIn.value),
                 };
               }),
             }),

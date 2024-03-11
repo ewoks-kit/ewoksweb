@@ -2,12 +2,7 @@ import type { EdgeWithData, EwoksLink } from '../types';
 import { propIsEmpty } from '../utils/utils';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { isString } from './typeGuards';
-import {
-  calcConditionName,
-  calcConditionValue,
-  calcDataMapping,
-  notUndefinedValue,
-} from './utils';
+import { calcDataMapping, notUndefinedValue } from './utils';
 
 // EwoksRFLinks --> EwoksLinks for saving
 export function toEwoksLinks(links: EdgeWithData[]): EwoksLink[] {
@@ -42,8 +37,8 @@ export function toEwoksLinks(links: EdgeWithData[]): EwoksLink[] {
 
       const conditionsValue = conditions?.map((con) => {
         return {
-          source_output: calcConditionName(con),
-          value: calcConditionValue(con),
+          source_output: con.name,
+          value: con.value,
         };
       });
 

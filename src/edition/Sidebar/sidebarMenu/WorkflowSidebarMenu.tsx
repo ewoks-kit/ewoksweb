@@ -5,20 +5,16 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useReactFlow } from 'reactflow';
 
-import { useTasks } from '../../../api/tasks';
 import { deleteWorkflow } from '../../../api/workflows';
-import { useInvalidateWorkflows } from '../../../api/workflows';
+import { useInvalidateWorkflowDescriptions } from '../../../api/workflows';
 import commonStrings from '../../../commonStrings.json';
 import ConfirmDialog from '../../../general/ConfirmDialog';
 import GraphFormDialog from '../../../general/forms/GraphFormDialog';
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import useStore from '../../../store/useStore';
 import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
-import { GraphFormAction } from '../../../types';
 import { textForError } from '../../../utils';
-import { EMPTY_GRAPH } from '../../../utils/emptyGraphs';
 
 interface Props {
   onSelection: () => void;
@@ -31,15 +27,12 @@ export default function WorkflowSidebarMenu(props: Props) {
 
   const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
-  const rfInstance = useReactFlow();
-  const tasks = useTasks();
-  const invalidateWorkflows = useInvalidateWorkflows();
+  const invalidateWorkflowDescriptions = useInvalidateWorkflowDescriptions();
 
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo,
   );
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
-  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
   const [, setSearchParams] = useSearchParams();
 
   async function agreeCallback() {
@@ -47,11 +40,11 @@ export default function WorkflowSidebarMenu(props: Props) {
     if (displayedWorkflowInfo.id) {
       try {
         await deleteWorkflow(displayedWorkflowInfo.id);
-        setRootWorkflow(EMPTY_GRAPH, rfInstance, tasks);
+        invalidateWorkflowDescriptions();
+
         showSuccessMsg(
           `Workflow ${displayedWorkflowInfo.id} successfully deleted!`,
         );
-        invalidateWorkflows();
         setSearchParams({});
       } catch (error) {
         showErrorMsg(textForError(error, commonStrings.deletingError));
@@ -64,7 +57,6 @@ export default function WorkflowSidebarMenu(props: Props) {
       <SuspenseBoundary>
         <GraphFormDialog
           elementToEdit={displayedWorkflowInfo}
-          action={GraphFormAction.cloneGraph}
           isOpen={openSaveDialog}
           onClose={() => setOpenSaveDialog(false)}
         />

@@ -3,7 +3,6 @@ import type {
   EwoksLink,
   EwoksNode,
   GraphDetails,
-  InputTableRow,
   Task,
   WorkflowDescription,
 } from '../types';
@@ -46,23 +45,21 @@ export interface ExecutedJobsResponse {
   jobs: EwoksJob[];
 }
 
+export interface WorkersResponse {
+  workers: string[] | null;
+}
+
 export enum QueryKey {
   Jobs = 'jobs',
   Icons = 'icons',
   Tasks = 'tasks',
+  Workers = 'workers',
   Workflow = 'workflow',
-  Workflows = 'workflows',
-}
-
-export interface ObjectEditDialogContent {
-  id?: string;
-  title?: string;
-  object?: object;
-  callbackProps: { rows: InputTableRow[]; id: string };
+  WorkflowDescriptions = 'workflows',
 }
 
 // https://ewokscore.readthedocs.io/en/latest/execute_io.html
-export interface NodeExecutionInput {
+interface NodeExecutionInput {
   name: string | number;
   value: unknown;
   label?: string;
@@ -72,8 +69,17 @@ export interface NodeExecutionInput {
 }
 
 export interface ExecutionParams {
+  execute_arguments?: ExecuteArguments;
+  worker_options?: WorkerOptions;
+}
+
+interface ExecuteArguments {
   inputs?: NodeExecutionInput[];
   engine?: Engine;
+}
+
+interface WorkerOptions {
+  queue: string;
 }
 
 export type Engine = null | 'dask' | 'ppf';

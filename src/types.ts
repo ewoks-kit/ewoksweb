@@ -5,12 +5,6 @@ import type { Node } from 'reactflow';
 import type { DisplayedWorkflowInfoSlice } from './store/displayedWorkflowInfo';
 import type { RootWorkflowSlice } from './store/rootWorkflow';
 
-export enum GraphFormAction {
-  cloneGraph = 'cloneGraph',
-  newGraph = 'newGraph',
-  newGraphOrOverwrite = 'newGraphOrOverwrite',
-}
-
 export interface InputOutputNodeAndLink {
   id: string;
   node: string;
@@ -91,31 +85,31 @@ export type TaskType =
   | 'graph'
   | 'method'
   | 'ppfmethod'
+  | 'ppfport'
   | 'graphOutput'
   | 'class'
   | 'note'
   | 'script'
   | 'subworkflow'
-  | 'generated';
+  | 'generated'
+  | 'notebook';
 
 export interface Task {
   task_type: TaskType;
   task_identifier: string;
   category?: string;
   icon?: string;
-  required_input_names?: string[];
-  optional_input_names?: string[];
-  output_names?: string[];
+  required_input_names?: string[] | null;
+  optional_input_names?: string[] | null;
+  output_names?: string[] | null;
 }
 
-export interface DefaultInput {
-  rowId?: string;
+export type DefaultInput = InputTableRow;
+
+export interface EwoksDefaultInput {
   name: string | number;
   value: unknown;
-  type?: string;
 }
-
-export interface EwoksDefaultInput extends Omit<DefaultInput, 'id' | 'type'> {}
 
 export interface GraphUiProps {
   comment?: string;
@@ -142,9 +136,9 @@ export interface EwoksDataMapping {
 }
 
 export interface DataMapping {
-  value?: string | number;
   rowId: string;
-  name?: string;
+  source: string | number;
+  target: string | number;
 }
 
 export interface EwoksCondition {
@@ -152,12 +146,7 @@ export interface EwoksCondition {
   value: unknown;
 }
 
-export interface Condition {
-  value: unknown;
-  rowId?: string;
-  name?: string | number;
-  type?: string;
-}
+export type Condition = InputTableRow;
 
 export interface DefaultErrorAttributes<T = DataMapping | EwoksDataMapping> {
   map_all_data?: boolean;
@@ -247,31 +236,27 @@ export type RFNode = Node<Record<string, never>>;
 // width?: number | null; // what is their functionality?
 // height?: number | null;
 
+export type RowValue = string | object | boolean | number | null;
+
 export interface InputTableRow {
   rowId: string;
-  name?: string | number;
-  value?: unknown;
-  type?: string;
-  // TODO
-  // export type AllowedTypesOfValues =
-  // 'string'
-  // | 'bool'
-  // | 'number'
-  // | 'boolean'
-  // | 'null'
-  // | 'list'
-  // | 'dict'
-  // | undefined;
+  name: string | number;
+  value: RowValue;
+  type: RowType;
 }
 
-export interface TypeOfValues {
-  typeOfInput: 'select' | 'input';
-  values?: string[];
-  requiredValues?: string[];
+export enum RowType {
+  Bool = 'bool',
+  Dict = 'dict',
+  Number = 'number',
+  Null = 'null',
+  List = 'list',
+  String = 'string',
 }
 
-export interface RowChangeEvent {
-  target: { name: string; value: string | number };
+export interface Options {
+  values: string[];
+  requiredValues: string[];
 }
 
 export interface LinkData {
@@ -285,9 +270,9 @@ export interface LinkData {
   sub_target_attributes?: Record<string, unknown>;
   sub_source?: string;
   getAroundProps?: { x?: number; y?: number };
-  links_input_names?: string[];
-  links_required_output_names?: string[];
-  links_optional_output_names?: string[];
+  links_input_names?: string[] | null;
+  links_required_output_names?: string[] | null;
+  links_optional_output_names?: string[] | null;
   startEnd?: boolean;
 }
 
@@ -372,4 +357,10 @@ export interface SelectedElement {
 export interface ElementState {
   element: HTMLElement | undefined;
   setElement: (element: HTMLElement | undefined) => void;
+}
+
+export enum WorkflowSource {
+  Server = 'server',
+  Disk = 'disk',
+  Empty = 'empty',
 }
