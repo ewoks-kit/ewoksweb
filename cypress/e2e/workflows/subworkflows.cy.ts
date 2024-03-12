@@ -46,7 +46,7 @@ it('saves two empty workflows and uses the one as a subworkflow to the other ', 
   cy.get('.react-flow__node').should('have.length', 1);
   cy.get('.react-flow__node-graph').should('have.length', 1);
 
-  cy.saveNewWorkflow(rootWorkflow);
+  cy.saveChangedWorkflow(rootWorkflow);
 
   cy.deleteWorkflow(subworkflow);
 

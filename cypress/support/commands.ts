@@ -30,7 +30,25 @@ Cypress.Commands.add('loadApp', () => {
 });
 
 Cypress.Commands.add('saveNewWorkflow', (id: string) => {
-  cy.findByRole('button', { name: 'Save workflow to server' }).click();
+  cy.findByRole('button', {
+    name: 'Save workflow to server: no changes',
+  }).click();
+
+  cy.findByRole('dialog').should('be.visible');
+
+  cy.findByRole('textbox', {
+    name: 'Name',
+  })
+    .clear()
+    .type(id);
+
+  cy.findByRole('button', { name: 'Save workflow' }).click();
+});
+
+Cypress.Commands.add('saveChangedWorkflow', (id: string) => {
+  cy.findByRole('button', {
+    name: 'Save workflow to server: changes pending',
+  }).click();
 
   cy.findByRole('dialog').should('be.visible');
 
