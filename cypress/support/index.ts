@@ -10,6 +10,7 @@ declare global {
       loadGraph(name: string): void;
       loadAppWithoutGraph(): void;
       saveNewWorkflow(name: string): void;
+      saveChangedWorkflow(name: string): void;
       openNewWorkflow(): void;
       deleteWorkflow(name: string): void;
       dragNodeInCanvas(task_identifier: string): void;
