@@ -62,7 +62,6 @@ const rootWorkflow = (
           validWorkflow.invalidReason || ''
         }`,
       );
-      return;
     }
 
     // 1. Initialize the canvas while working on the new graph
