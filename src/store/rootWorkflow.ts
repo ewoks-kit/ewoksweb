@@ -62,7 +62,6 @@ const rootWorkflow = (
           validWorkflow.invalidReason || ''
         }`,
       );
-      return;
     }
 
     // 1. Initialize the canvas while working on the new graph
@@ -71,40 +70,6 @@ const rootWorkflow = (
     // 2. Get node-subgraphs for the graph
     const newNodeSubgraphs = await getSubgraphs(ewoksWorkflow);
 
-    // 3. Calculate the new graph given the subgraphs
-    let rfNodes = convertEwoksWorkflowToRFNodes(
-      ewoksWorkflow,
-      newNodeSubgraphs,
-      tasks,
-    );
-
-    const notes: NodeWithData[] =
-      ewoksWorkflow.graph.uiProps?.notes?.map((note) => {
-        return {
-          data: {
-            ewoks_props: { label: note.label },
-            task_props: { task_type: 'note', task_identifier: note.id },
-            ui_props: {
-              nodeWidth: note.nodeWidth ?? 180,
-              colorBorder: note.colorBorder,
-            },
-            comment: note.comment,
-          },
-          id: note.id,
-          type: 'note',
-          position: note.position,
-        };
-      }) || [];
-
-    rfNodes = [...rfNodes, ...notes];
-
-    const rfLinks = toRFEwoksLinks(ewoksWorkflow, newNodeSubgraphs, tasks);
-
-    if (rfNodes.length > 0) {
-      useNodeDataStore.getState().setDataFromNodes(rfNodes);
-      useEdgeDataStore.getState().setDataFromEdges(rfLinks);
-    }
-
     get().setDisplayedWorkflowInfo(ewoksWorkflow.graph);
 
     set((state) => ({
@@ -112,22 +77,56 @@ const rootWorkflow = (
       rootWorkflowId: ewoksWorkflow.graph.id,
       rootWorkflowSource: source,
     }));
-
-    const nodesWithoutData = rfNodes.map((node) => {
-      return { ...node, data: {} };
-    });
-    const edgesWithoutData = rfLinks.map((edge) => {
-      return { ...edge, data: {} };
-    });
-
-    if (!rfNodes.some((nod) => nod.position.x !== 100)) {
-      rfInstance.setNodes(
-        await layoutNewGraph(nodesWithoutData, edgesWithoutData),
+    // 3. Calculate the new graph given the subgraphs
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (ewoksWorkflow.nodes?.length > 0) {
+      let rfNodes = convertEwoksWorkflowToRFNodes(
+        ewoksWorkflow,
+        newNodeSubgraphs,
+        tasks,
       );
-      rfInstance.setEdges(rfLinks);
-    } else {
-      rfInstance.setNodes(nodesWithoutData);
-      rfInstance.setEdges(edgesWithoutData);
+
+      const notes: NodeWithData[] =
+        ewoksWorkflow.graph.uiProps?.notes?.map((note) => {
+          return {
+            data: {
+              ewoks_props: { label: note.label },
+              task_props: { task_type: 'note', task_identifier: note.id },
+              ui_props: {
+                nodeWidth: note.nodeWidth ?? 180,
+                colorBorder: note.colorBorder,
+              },
+              comment: note.comment,
+            },
+            id: note.id,
+            type: 'note',
+            position: note.position,
+          };
+        }) || [];
+
+      rfNodes = [...rfNodes, ...notes];
+
+      const rfLinks = toRFEwoksLinks(ewoksWorkflow, newNodeSubgraphs, tasks);
+      if (rfNodes.length > 0) {
+        useNodeDataStore.getState().setDataFromNodes(rfNodes);
+        useEdgeDataStore.getState().setDataFromEdges(rfLinks);
+      }
+      const nodesWithoutData = rfNodes.map((node) => {
+        return { ...node, data: {} };
+      });
+      const edgesWithoutData = rfLinks.map((edge) => {
+        return { ...edge, data: {} };
+      });
+
+      if (!rfNodes.some((nod) => nod.position.x !== 100)) {
+        rfInstance.setNodes(
+          await layoutNewGraph(nodesWithoutData, edgesWithoutData),
+        );
+        rfInstance.setEdges(rfLinks);
+      } else {
+        rfInstance.setNodes(nodesWithoutData);
+        rfInstance.setEdges(edgesWithoutData);
+      }
     }
   },
   resetRootWorkflow: async (rfInstance, tasks) => {
