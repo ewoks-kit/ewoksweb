@@ -62,7 +62,6 @@ const rootWorkflow = (
           validWorkflow.invalidReason || ''
         }`,
       );
-      return;
     }
 
     const { graph, nodes = [], links = [] } = ewoksWorkflow;
