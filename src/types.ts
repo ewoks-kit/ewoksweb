@@ -319,6 +319,12 @@ export interface Graph {
 
 export interface Workflow {
   graph: GraphDetails;
+  nodes?: EwoksNode[];
+  links?: EwoksLink[];
+}
+
+export interface WorkflowWithNodesLinks {
+  graph: GraphDetails;
   nodes: EwoksNode[];
   links: EwoksLink[];
 }

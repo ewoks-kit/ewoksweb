@@ -18,48 +18,40 @@ export function validateWorkflow(workflow: Workflow): {
     };
   }
   // Validate nodes in workflow
-  if (!('nodes' in workflow)) {
-    return {
-      valid: false,
-      invalidReason: 'Missing required property "nodes"',
-    };
-  }
-  if (!Array.isArray(workflow.nodes)) {
-    return {
-      valid: false,
-      invalidReason: 'Nodes are not an array in the workflow description',
-    };
-  }
-  if (workflow.nodes.some((node) => !('id' in node))) {
-    return {
-      valid: false,
-      invalidReason: 'One or more Nodes have no "id"',
-    };
+  if ('nodes' in workflow) {
+    if (!Array.isArray(workflow.nodes)) {
+      return {
+        valid: false,
+        invalidReason: 'Nodes are not an array in the workflow description',
+      };
+    }
+    if (workflow.nodes.some((node) => !('id' in node))) {
+      return {
+        valid: false,
+        invalidReason: 'One or more Nodes have no "id"',
+      };
+    }
   }
   // Validate links in workflow
-  if (!('links' in workflow)) {
-    return {
-      valid: false,
-      invalidReason: 'Missing required property "links"',
-    };
-  }
-  if (!Array.isArray(workflow.links)) {
-    return {
-      valid: false,
-      invalidReason: 'Links are not an array in the workflow description',
-    };
-  }
-  if (workflow.links.some((link) => !('source' in link))) {
-    return {
-      valid: false,
-      invalidReason: 'One or more Links have no "source"',
-    };
-  }
-  if (workflow.links.some((link) => !('target' in link))) {
-    return {
-      valid: false,
-      invalidReason: 'One or more Links have no "target"',
-    };
+  if ('links' in workflow) {
+    if (!Array.isArray(workflow.links)) {
+      return {
+        valid: false,
+        invalidReason: 'Links are not an array in the workflow description',
+      };
+    }
+    if (workflow.links.some((link) => !('source' in link))) {
+      return {
+        valid: false,
+        invalidReason: 'One or more Links have no "source"',
+      };
+    }
+    if (workflow.links.some((link) => !('target' in link))) {
+      return {
+        valid: false,
+        invalidReason: 'One or more Links have no "target"',
+      };
+    }
   }
 
   return { valid: true };

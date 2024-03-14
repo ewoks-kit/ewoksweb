@@ -7,6 +7,7 @@ import type {
   LinkUiProps,
   Task,
   Workflow,
+  WorkflowWithNodesLinks,
 } from '../types';
 import { findLinkInputs, findLinkOutputs } from './calcTasksForLink';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
@@ -22,14 +23,14 @@ import {
 // - tempGraph: the graph to transform its links
 // - newNodeSubgraphs: the subgraphs located in the supergraph.
 export function toRFEwoksLinks(
-  tempGraph: Workflow,
+  tempGraph: WorkflowWithNodesLinks,
   newNodeSubgraphs: Workflow[],
   tasks: Task[],
 ): EdgeWithData[] {
   let id = 0;
 
   // DOC: calculate the links from inputs-outputs of the Ewoks graph
-  const inOutTempGraph = calcInOutLinks(tempGraph);
+  const inOutTempGraph = calcAllLinks(tempGraph);
 
   return inOutTempGraph.links.map(
     ({
@@ -140,25 +141,17 @@ function calcSourceHandle(
   return uiProps?.sourceHandle ?? sub_source ?? 'sr';
 }
 
-function calcInOutLinks(tempGraph: Workflow): Workflow {
+function calcAllLinks({
+  graph,
+  nodes,
+  links,
+}: WorkflowWithNodesLinks): WorkflowWithNodesLinks {
   // DOC: calculate the links from inputs-outputs of the Ewoks graph
-  const inNodeLinks = inNodesLinks(
-    tempGraph.graph.input_nodes,
-    tempGraph.nodes,
-  );
-  const outNodeLinks = outNodesLinks(
-    tempGraph.graph.output_nodes,
-    tempGraph.nodes,
-  );
-
-  // DOC: accumulate all links inOutTempGraph
-  const inOutTempGraph: Workflow = { ...tempGraph };
-  if (inNodeLinks.links.length > 0) {
-    inOutTempGraph.links = [...inOutTempGraph.links, ...inNodeLinks.links];
-  }
-  if (outNodeLinks.links.length > 0) {
-    inOutTempGraph.links = [...inOutTempGraph.links, ...outNodeLinks.links];
-  }
-
-  return inOutTempGraph;
+  const inNodeLinks = inNodesLinks(graph.input_nodes, nodes);
+  const outNodeLinks = outNodesLinks(graph.output_nodes, nodes);
+  return {
+    graph,
+    nodes,
+    links: [...links, ...inNodeLinks.links, ...outNodeLinks.links],
+  };
 }

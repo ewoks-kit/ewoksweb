@@ -21,9 +21,9 @@ import { propIsEmpty } from './utils/utils';
 export const DEFAULT_ICON: Icon = { name: 'orange3.png', data_url: orange3 };
 
 export async function getSubgraphs(graph: Workflow): Promise<Workflow[]> {
-  const subgraphIds = graph.nodes
-    .filter((nod) => nod.task_type === 'graph')
-    .map((nod) => nod.task_identifier);
+  const subgraphIds = (graph.nodes || [])
+    .filter((node) => node.task_type === 'graph')
+    .map((node) => node.task_identifier);
 
   if (subgraphIds.length === 0) {
     return [];
