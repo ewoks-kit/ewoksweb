@@ -323,12 +323,6 @@ export interface Workflow {
   links?: EwoksLink[];
 }
 
-export interface WorkflowWithNodesLinks {
-  graph: GraphDetails;
-  nodes: EwoksNode[];
-  links: EwoksLink[];
-}
-
 export interface Icon {
   name: string;
   data_url: string;

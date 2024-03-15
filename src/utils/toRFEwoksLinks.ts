@@ -4,10 +4,12 @@ import { defaultLinkStyle } from '../edition/Canvas/utils';
 import type {
   Condition,
   EdgeWithData,
+  EwoksLink,
+  EwoksNode,
+  GraphDetails,
   LinkUiProps,
   Task,
   Workflow,
-  WorkflowWithNodesLinks,
 } from '../types';
 import { findLinkInputs, findLinkOutputs } from './calcTasksForLink';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
@@ -19,6 +21,11 @@ import {
   notUndefinedValue,
 } from './utils';
 
+interface WorkflowWithNodesLinks {
+  graph: GraphDetails;
+  nodes: EwoksNode[];
+  links: EwoksLink[];
+}
 // DOC: from GraphEwoks get EwoksRFLinks
 // - tempGraph: the graph to transform its links
 // - newNodeSubgraphs: the subgraphs located in the supergraph.

@@ -65,21 +65,14 @@ const rootWorkflow = (
       return;
     }
 
+    const { graph, nodes = [], links = [] } = ewoksWorkflow;
     // 1. Initialize the canvas while working on the new graph
     get().resetDisplayedWorkflowInfo();
 
     // 2. Get node-subgraphs for the graph
-    const newNodeSubgraphs = await getSubgraphs(ewoksWorkflow);
+    const newNodeSubgraphs = await getSubgraphs(nodes);
 
-    get().setDisplayedWorkflowInfo(ewoksWorkflow.graph);
-
-    set((state) => ({
-      ...state,
-      rootWorkflowId: ewoksWorkflow.graph.id,
-      rootWorkflowSource: source,
-    }));
     // 3. Calculate the new graph given the subgraphs
-    const { graph, nodes = [], links = [] } = ewoksWorkflow;
     let rfNodes = convertEwoksWorkflowToRFNodes(
       graph,
       nodes,
@@ -112,13 +105,22 @@ const rootWorkflow = (
       newNodeSubgraphs,
       tasks,
     );
-    if (rfNodes.length > 0) {
-      useNodeDataStore.getState().setDataFromNodes(rfNodes);
-      useEdgeDataStore.getState().setDataFromEdges(rfLinks);
-    }
+
+    useNodeDataStore.getState().setDataFromNodes(rfNodes);
+    useEdgeDataStore.getState().setDataFromEdges(rfLinks);
+
+    get().setDisplayedWorkflowInfo(graph);
+
+    set((state) => ({
+      ...state,
+      rootWorkflowId: graph.id,
+      rootWorkflowSource: source,
+    }));
+
     const nodesWithoutData = rfNodes.map((node) => {
       return { ...node, data: {} };
     });
+
     const edgesWithoutData = rfLinks.map((edge) => {
       return { ...edge, data: {} };
     });
