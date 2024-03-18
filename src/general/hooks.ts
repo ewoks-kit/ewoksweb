@@ -121,9 +121,7 @@ export function useSaveWorkflow() {
       );
       invalidateWorkflowDescriptions();
       invalidateWorkflow(displayedWorkflowInfo.id);
-
       resetWorkflowChange();
-
       showSuccessMsg('Graph saved successfully!');
       setStatus('success');
       return true;
