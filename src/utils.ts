@@ -6,7 +6,14 @@ import { enrichWithData } from './general/forms/utils';
 import orange3 from './images/orange3.png';
 import useEdgeDataStore from './store/useEdgeDataStore';
 import useNodeDataStore from './store/useNodeDataStore';
-import type { GraphDetails, Icon, LinkData, NodeData, Workflow } from './types';
+import type {
+  EwoksNode,
+  GraphDetails,
+  Icon,
+  LinkData,
+  NodeData,
+  Workflow,
+} from './types';
 import { calcEwoksGraphProp } from './utils/CalcGraphInputsOutputs';
 import { calcNoteNodes } from './utils/calcNoteNodes';
 import { toEwoksLinks } from './utils/toEwoksLinks';
@@ -20,10 +27,10 @@ import { propIsEmpty } from './utils/utils';
 
 export const DEFAULT_ICON: Icon = { name: 'orange3.png', data_url: orange3 };
 
-export async function getSubgraphs(graph: Workflow): Promise<Workflow[]> {
-  const subgraphIds = graph.nodes
-    .filter((nod) => nod.task_type === 'graph')
-    .map((nod) => nod.task_identifier);
+export async function getSubgraphs(nodes: EwoksNode[]): Promise<Workflow[]> {
+  const subgraphIds = nodes
+    .filter((node) => node.task_type === 'graph')
+    .map((node) => node.task_identifier);
 
   if (subgraphIds.length === 0) {
     return [];

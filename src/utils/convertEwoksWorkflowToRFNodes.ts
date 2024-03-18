@@ -4,6 +4,8 @@ import type {
   DataMapping,
   DefaultErrorAttributes,
   EwoksDataMapping,
+  EwoksNode,
+  GraphDetails,
   InputOutputNodeAndLink,
   NodeTaskProperties,
   NodeWithData,
@@ -20,20 +22,13 @@ import {
 } from './utils';
 
 export function convertEwoksWorkflowToRFNodes(
-  workflowToConvert: Workflow,
+  graph: GraphDetails,
+  nodes: EwoksNode[],
   subWorkflows: Workflow[],
   tasks: Task[],
 ): NodeWithData[] {
-  const { nodes } = workflowToConvert;
-
-  const { nodes: inputNodes } = inNodesLinks(
-    workflowToConvert.graph.input_nodes,
-    nodes,
-  );
-  const { nodes: outputNodes } = outNodesLinks(
-    workflowToConvert.graph.output_nodes,
-    nodes,
-  );
+  const { nodes: inputNodes } = inNodesLinks(graph.input_nodes, nodes);
+  const { nodes: outputNodes } = outNodesLinks(graph.output_nodes, nodes);
 
   const allNodes = [...nodes, ...inputNodes, ...outputNodes];
 

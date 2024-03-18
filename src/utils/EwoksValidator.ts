@@ -31,27 +31,27 @@ function includes(entity: {}, label: string, properties: string[]) {
   return result;
 }
 
-export function validateEwoksGraph(graph: Workflow) {
+export function validateEwoksGraph({
+  graph,
+  nodes = [],
+  links = [],
+}: Workflow) {
   const result = [];
 
   result.push(isJsonString(JSON.stringify(graph)));
   // graph structure
   result.push(
-    includes(graph, `graph: ${graph.graph && graph.graph.id}`, [
-      'graph',
-      'nodes',
-      'links',
-    ]),
+    includes(graph, `graph: ${graph.id}`, ['graph', 'nodes', 'links']),
   );
   result.push(
-    includes(graph.graph, `graph.graph: ${graph.graph.id}`, [
+    includes(graph, `graph.graph: ${graph.id}`, [
       'id',
       'input_nodes',
       'output_nodes',
     ]),
   );
   result.push(
-    graph.nodes.forEach((nod) =>
+    nodes.forEach((nod) =>
       includes(nod, `node: ${nod.id}`, [
         'id',
         'task_type',
@@ -62,7 +62,7 @@ export function validateEwoksGraph(graph: Workflow) {
   );
   // not uiProps position warn
   result.push(
-    graph.links.forEach((link) =>
+    links.forEach((link) =>
       includes(link, `Link from: ${link.source}`, ['source', 'target']),
     ),
   );
@@ -70,13 +70,12 @@ export function validateEwoksGraph(graph: Workflow) {
   // type of some properties
 
   // relationships between properties
-  const nodeIds = new Set(graph.nodes.map((nod) => nod.id));
-  if (nodeIds.size !== graph.nodes.length) {
+  const nodeIds = new Set(nodes.map((nod) => nod.id));
+  if (nodeIds.size !== nodes.length) {
     result.push(false);
-    // console.error('At least one node id is not unique');
   }
 
-  graph.links.forEach((link, index) => {
+  links.forEach((link, index) => {
     // DOC: links should have both ends attached to nodes or else delete link
     // since it is not shown on the canvas
     if (!nodeIds.has(link.source) || !nodeIds.has(link.target)) {

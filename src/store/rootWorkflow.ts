@@ -65,21 +65,23 @@ const rootWorkflow = (
       return;
     }
 
+    const { graph, nodes = [], links = [] } = ewoksWorkflow;
     // 1. Initialize the canvas while working on the new graph
     get().resetDisplayedWorkflowInfo();
 
     // 2. Get node-subgraphs for the graph
-    const newNodeSubgraphs = await getSubgraphs(ewoksWorkflow);
+    const newNodeSubgraphs = await getSubgraphs(nodes);
 
     // 3. Calculate the new graph given the subgraphs
     let rfNodes = convertEwoksWorkflowToRFNodes(
-      ewoksWorkflow,
+      graph,
+      nodes,
       newNodeSubgraphs,
       tasks,
     );
 
     const notes: NodeWithData[] =
-      ewoksWorkflow.graph.uiProps?.notes?.map((note) => {
+      graph.uiProps?.notes?.map((note) => {
         return {
           data: {
             ewoks_props: { label: note.label },
@@ -98,24 +100,27 @@ const rootWorkflow = (
 
     rfNodes = [...rfNodes, ...notes];
 
-    const rfLinks = toRFEwoksLinks(ewoksWorkflow, newNodeSubgraphs, tasks);
+    const rfLinks = toRFEwoksLinks(
+      { graph, nodes, links },
+      newNodeSubgraphs,
+      tasks,
+    );
 
-    if (rfNodes.length > 0) {
-      useNodeDataStore.getState().setDataFromNodes(rfNodes);
-      useEdgeDataStore.getState().setDataFromEdges(rfLinks);
-    }
+    useNodeDataStore.getState().setDataFromNodes(rfNodes);
+    useEdgeDataStore.getState().setDataFromEdges(rfLinks);
 
-    get().setDisplayedWorkflowInfo(ewoksWorkflow.graph);
+    get().setDisplayedWorkflowInfo(graph);
 
     set((state) => ({
       ...state,
-      rootWorkflowId: ewoksWorkflow.graph.id,
+      rootWorkflowId: graph.id,
       rootWorkflowSource: source,
     }));
 
     const nodesWithoutData = rfNodes.map((node) => {
       return { ...node, data: {} };
     });
+
     const edgesWithoutData = rfLinks.map((edge) => {
       return { ...edge, data: {} };
     });

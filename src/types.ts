@@ -319,8 +319,8 @@ export interface Graph {
 
 export interface Workflow {
   graph: GraphDetails;
-  nodes: EwoksNode[];
-  links: EwoksLink[];
+  nodes?: EwoksNode[];
+  links?: EwoksLink[];
 }
 
 export interface Icon {
