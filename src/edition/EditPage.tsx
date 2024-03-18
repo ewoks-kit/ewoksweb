@@ -3,7 +3,6 @@ import { useCallback, useEffect } from 'react';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import { useSearchParams } from 'react-router-dom';
 import { useStoreApi } from 'reactflow';
-import { useStore as useRFStore } from 'reactflow';
 
 import ErrorFallback from '../general/ErrorFallback';
 import useEdgeDataStore from '../store/useEdgeDataStore';
@@ -29,7 +28,7 @@ export default function EditPage() {
     (state) => state.setWorkflowChange,
   );
   const { subscribe: subscribeRFStore } = useStoreApi();
-
+  const storeRF = useStoreApi();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const saveChange = useCallback(
     debounce((change: PartialWorkflowChange) => {
@@ -40,11 +39,8 @@ export default function EditPage() {
         edgesData: edgesData || useEdgeDataStore.getState().edgesData,
         workflowInfo:
           workflowInfo || useWorkflowInfoStore.getState().displayedWorkflowInfo,
-        // the getState is not exposed for usage
-        // @ts-expect-error
-        rfNodes: rfNodes || useRFStore.getState().getNodes(),
-        // @ts-expect-error
-        rfEdges: rfEdges || useRFStore.getState().edges(),
+        rfNodes: rfNodes || storeRF.getState().getNodes(),
+        rfEdges: rfEdges || storeRF.getState().edges,
       });
     }, 500),
     [setWorkflowChange],
