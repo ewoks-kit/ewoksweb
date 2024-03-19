@@ -87,7 +87,10 @@ export function toRFEwoksLinks(
         sourceHandle: calcSourceHandle(uiProps, sub_source),
         ...notUndefinedValue(uiProps?.type, 'type'),
         ...notUndefinedValue(uiProps?.animated, 'animated'),
-        markerEnd: uiProps?.markerEnd ?? DEFAULT_LINK_VALUES.uiProps.markerEnd,
+        markerEnd:
+          uiProps?.markerEnd === ''
+            ? ''
+            : uiProps?.markerEnd ?? DEFAULT_LINK_VALUES.uiProps.markerEnd,
         ...defaultLinkStyle,
         style: {
           ...defaultLinkStyle.style,
@@ -129,6 +132,7 @@ export function toRFEwoksLinks(
           ...notUndefinedValue(on_error, 'on_error'),
         },
       };
+
       return link;
     },
   );

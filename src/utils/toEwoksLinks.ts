@@ -42,17 +42,30 @@ export function toEwoksLinks(links: EdgeWithData[]): EwoksLink[] {
         };
       });
 
+      const markerEndValue = () => {
+        if (markerEnd === '') {
+          return { markerEnd: '' };
+        }
+
+        if (!markerEnd) {
+          return undefined;
+        }
+
+        return (
+          typeof markerEnd !== 'string' &&
+          markerEnd.type !== DEFAULT_LINK_VALUES.uiProps.markerEnd.type && {
+            markerEnd,
+          }
+        );
+      };
+
       const linkUiProps = {
         ...(isString(label) && {
           label,
         }),
         ...(comment && { comment }),
         ...(type && { type }),
-        ...(markerEnd &&
-          typeof markerEnd !== 'string' &&
-          markerEnd.type !== DEFAULT_LINK_VALUES.uiProps.markerEnd.type && {
-            markerEnd,
-          }),
+        ...markerEndValue(),
         ...(style?.stroke !== '#96a5f9' && {
           style: { stroke: style?.stroke },
         }),

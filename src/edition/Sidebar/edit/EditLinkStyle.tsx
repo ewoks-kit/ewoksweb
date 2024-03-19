@@ -73,7 +73,7 @@ export default function EditLinkStyle(element: Edge) {
     }
     const newEdge = isMarkerType(type)
       ? { ...element, markerEnd: { type } }
-      : { ...element, markerEnd: undefined };
+      : { ...element, markerEnd: '' };
 
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
   }

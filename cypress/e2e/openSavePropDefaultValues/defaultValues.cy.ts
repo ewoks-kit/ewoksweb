@@ -5,6 +5,7 @@ import {
   populatedLinkWorkflow,
   populatedNodeWorkflow,
   simpleLinkWorkflow,
+  simpleLinkWorkflowMarkerEnd,
   simpleNodeWorkflow,
   withCategoryCommentLabelWorkflow,
 } from './utils';
