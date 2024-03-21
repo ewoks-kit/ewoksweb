@@ -56,8 +56,8 @@ Cypress.Commands.add('openNewWorkflow', () => {
 
 Cypress.Commands.add('deleteWorkflow', (id: string) => {
   cy.loadGraph(id);
-  cy.findByRole('button', { name: 'Open edit actions menu' }).click();
-  cy.findByRole('menuitem', { name: 'Delete Workflow' }).click();
+  cy.findByRole('button', { name: 'Open menu with more actions' }).click();
+  cy.findByRole('menuitem', { name: 'Delete workflow' }).click();
 
   cy.findByRole('dialog').should(
     'include.text',
