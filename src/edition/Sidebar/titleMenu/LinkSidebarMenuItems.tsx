@@ -9,12 +9,12 @@ import useStore from '../../../store/useStore';
 import KeyStrokeHint from '../../KeyStrokeHint';
 
 interface Props {
-  selectedElement: Edge;
+  link: Edge;
   onSelection: () => void;
 }
 
-export default function LinkSidebarMenu(props: Props) {
-  const { selectedElement, onSelection } = props;
+export default function LinkSidebarMenuItems(props: Props) {
+  const { link, onSelection } = props;
 
   const rfInstance = useReactFlow();
 
@@ -23,21 +23,16 @@ export default function LinkSidebarMenu(props: Props) {
   );
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
 
-  async function deleteLink(islink: Edge) {
-    const edge: Edge | undefined = rfInstance
-      .getEdges()
-      .find((edg) => edg.id === islink.id);
-
-    rfInstance.deleteElements({ edges: [edge] as Edge[] });
-  }
-
   return (
     <MenuItem
       onClick={() => {
-        deleteLink(selectedElement);
+        const edge = rfInstance.getEdges().find((edg) => edg.id === link.id);
+
+        if (edge) {
+          rfInstance.deleteElements({ edges: [edge] });
+        }
         onSelection();
       }}
-      role="sidebarMenuItem"
       disabled={rootWorkflowId !== displayedWorkflowInfo.id}
     >
       <ListItemIcon>

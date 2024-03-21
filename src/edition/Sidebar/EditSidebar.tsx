@@ -1,23 +1,22 @@
 import { useSelectedElement } from '../../store/graph-hooks';
-import { isNodeRF } from '../../utils/typeGuards';
-import ElementDetails from './details/ElementDetails';
-import EditElementStyle from './edit/EditElementStyle';
+import { isEdgeRF, isNodeRF } from '../../utils/typeGuards';
+import EditLinkSidebar from './EditLinkSidebar';
+import EditNodeSidebar from './EditNodeSidebar';
 import styles from './EditSidebar.module.css';
-import EditSidebarMenu from './sidebarMenu/EditSidebarMenu';
+import EditWorkflowSidebar from './EditWorkflowSidebar';
 
 export default function EditSidebar() {
-  const selected = useSelectedElement();
+  const selectedElement = useSelectedElement();
 
   return (
     <aside className={styles.container}>
-      <div className={styles.titleBar}>
-        <span className={styles.title}>
-          {!selected ? 'Workflow' : isNodeRF(selected) ? 'Node' : 'Link'}
-        </span>
-        {selected && <EditSidebarMenu selectedElement={selected} />}
-      </div>
-      <ElementDetails selectedElement={selected} />
-      <EditElementStyle selectedElement={selected} />
+      {!selectedElement ? (
+        <EditWorkflowSidebar />
+      ) : isNodeRF(selectedElement) ? (
+        <EditNodeSidebar key={selectedElement.id} node={selectedElement} />
+      ) : isEdgeRF(selectedElement) ? (
+        <EditLinkSidebar key={selectedElement.id} link={selectedElement} />
+      ) : null}
     </aside>
   );
 }
