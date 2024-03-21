@@ -49,8 +49,8 @@ it('leaves the original JSON untouched when saving on the server', () => {
   });
 
   // Clean-up by deleting the saved workflow
-  cy.findByRole('button', { name: 'Open edit actions menu' }).click();
-  cy.findByRole('menuitem', { name: 'Delete Workflow' }).click();
+  cy.findByRole('button', { name: 'Open menu with more actions' }).click();
+  cy.findByRole('menuitem', { name: 'Delete workflow' }).click();
   cy.findByRole('button', { name: 'Yes' }).click();
 });
 
@@ -85,7 +85,7 @@ it('saves optional fields of the workflow to the server', () => {
   );
 
   // Clean-up by deleting the saved workflow
-  cy.findByRole('button', { name: 'Open edit actions menu' }).click();
-  cy.findByRole('menuitem', { name: 'Delete Workflow' }).click();
+  cy.findByRole('button', { name: 'Open menu with more actions' }).click();
+  cy.findByRole('menuitem', { name: 'Delete workflow' }).click();
   cy.findByRole('button', { name: 'Yes' }).click();
 });

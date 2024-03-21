@@ -14,7 +14,7 @@ export default function EditSidebar() {
         <span className={styles.title}>
           {!selected ? 'Workflow' : isNodeRF(selected) ? 'Node' : 'Link'}
         </span>
-        <EditSidebarMenu selectedElement={selected} />
+        {selected && <EditSidebarMenu selectedElement={selected} />}
       </div>
       <ElementDetails selectedElement={selected} />
       <EditElementStyle selectedElement={selected} />
