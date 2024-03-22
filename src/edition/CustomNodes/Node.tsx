@@ -9,7 +9,7 @@ import { contentStyle, style } from './nodeStyles';
 
 interface Props {
   id: string;
-  label: string;
+  label?: string;
   width?: number;
   withImage?: boolean;
   withLabel?: boolean;
@@ -75,6 +75,7 @@ function Node({
             </div>
           )}
           <NodeLabel
+            id={id}
             label={label}
             showFull={withLabel}
             showCropped={!withLabel && !withImage}

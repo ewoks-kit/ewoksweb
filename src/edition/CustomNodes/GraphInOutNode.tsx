@@ -11,9 +11,9 @@ import NodeIcon from './NodeIcon';
 import NodeLabel from './NodeLabel';
 import { contentStyle, style } from './nodeStyles';
 
-function GraphInOutNode(args: NodeProps<NodeData>) {
-  const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
-  assertNodeDataDefined(nodeData, args.id);
+function GraphInOutNode(props: NodeProps<NodeData>) {
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(props.id));
+  assertNodeDataDefined(nodeData, props.id);
 
   const { colorBorder: borderColor, nodeWidth } = nodeData.ui_props;
 
@@ -53,14 +53,15 @@ function GraphInOutNode(args: NodeProps<NodeData>) {
             />
           )}
           <NodeLabel
-            label={nodeData.ewoks_props.label || ''}
+            id={props.id}
+            label={nodeData.ewoks_props.label}
             showFull={withLabel}
             showCropped={!withLabel && !withImage}
             color="#ced3ee"
           />
           {withImage && (
             <SuspenseBoundary>
-              <NodeIcon nodeId={args.id} />
+              <NodeIcon nodeId={props.id} />
             </SuspenseBoundary>
           )}
           {task_type === 'graphOutput' && (

@@ -1,9 +1,10 @@
 import { style } from './nodeStyles';
 
 interface Props {
-  label: string;
-  showFull: boolean;
-  showCropped: boolean;
+  id: string;
+  label?: string;
+  showFull?: boolean;
+  showCropped?: boolean;
   color?: string;
 }
 
@@ -15,7 +16,8 @@ const labelStyle = {
 };
 
 function NodeLabel(props: Props) {
-  const { showFull, showCropped, label, color } = props;
+  const { showFull, showCropped, color, id } = props;
+  const label = props.label || id;
 
   if (!showFull && !showCropped) {
     return null;
