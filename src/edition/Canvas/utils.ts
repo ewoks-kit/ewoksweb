@@ -5,14 +5,6 @@ import { DEFAULT_LINK_VALUES } from '../../utils/defaultValues';
 import { assertTaskInfo } from '../../utils/typeGuards';
 import type { TaskInfo } from './models';
 
-export function trimLabel(label: string) {
-  if (label.length <= 20) {
-    return label;
-  }
-
-  return label.split('.').pop();
-}
-
 export const defaultLinkStyle = {
   style: { stroke: '#96a5f9', strokeWidth: '3px' },
   labelBgPadding: [8, 4] as [number, number],
