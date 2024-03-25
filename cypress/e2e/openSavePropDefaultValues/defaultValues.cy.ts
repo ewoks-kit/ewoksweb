@@ -117,7 +117,7 @@ it('Opens and saves a skeleton node after populating it', () => {
   addPUTInterceptor(id, populatedNodeWorkflow(id));
 
   cy.get('.react-flow__node').should('have.length', 1);
-  cy.findAllByRole('button', { name: 'taskSkeleton' })
+  cy.findAllByRole('button', { name: 'taskSkeleton0' })
     .filter('.react-flow__node')
     .as('node', { type: 'static' })
     .click();

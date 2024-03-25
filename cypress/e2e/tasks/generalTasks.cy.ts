@@ -34,18 +34,28 @@ it('drags general tasks in the canvas', () => {
 it('does not allow to edit node inputs or task info for graph input, graph output and note tasks', () => {
   cy.findByRole('button', { name: 'General' }).click();
 
-  ['graphInput', 'graphOutput', 'note'].forEach((task) => {
-    cy.dragNodeInCanvas(task);
-    cy.waitForStableDOM();
+  cy.dragNodeInCanvas('graphInput');
+  cy.waitForStableDOM();
+  cy.findByRole('button', { name: 'In0' }).click();
+  cy.findByRole('heading', { name: 'Default Inputs' }).should('not.exist');
+  cy.findByRole('heading', { name: 'Task Info' }).should('not.exist');
 
-    cy.findAllByRole('button', { name: task })
-      .filter('.react-flow__node')
-      // Can be underneath another node
-      .click({ force: true });
+  cy.dragNodeInCanvas('graphOutput');
+  cy.waitForStableDOM();
+  cy.findByRole('button', { name: 'Out0' })
+    // Is under the graphInput node
+    .click({ force: true });
+  cy.findByRole('heading', { name: 'Default Inputs' }).should('not.exist');
+  cy.findByRole('heading', { name: 'Task Info' }).should('not.exist');
 
-    cy.findByRole('heading', { name: 'Default Inputs' }).should('not.exist');
-    cy.findByRole('heading', { name: 'Task Info' }).should('not.exist');
-  });
+  cy.dragNodeInCanvas('note');
+  cy.waitForStableDOM();
+  cy.findByRole('button', { name: 'Note0' })
+    // Is under the graphInput/graphOutput nodes
+    .click({ force: true });
+
+  cy.findByRole('heading', { name: 'Default Inputs' }).should('not.exist');
+  cy.findByRole('heading', { name: 'Task Info' }).should('not.exist');
 });
 
 it('adds a subworkflow node by dragging the subworkflow task', () => {

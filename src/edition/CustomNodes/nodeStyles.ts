@@ -57,12 +57,6 @@ export const style = {
   icons: {
     maxWidth: '100px',
   },
-  title: {
-    position: 'relative',
-    padding: '8px 8px',
-    flexGrow: 1,
-    backgroundColor: '#ee1',
-  },
   contentWrapper: {
     padding: '8px 0px',
   },
@@ -80,14 +74,5 @@ export const style = {
     display: 'inline',
     margin: '2px',
     padding: '2px',
-  },
-  noteTitle: {
-    position: 'relative',
-    flexGrow: 1,
-    wordWrap: 'break-word',
-    borderRadius: '10px',
-    backgroundColor: '#ced3ee',
-    textAlign: 'center',
-    padding: '1px',
   },
 } as const;

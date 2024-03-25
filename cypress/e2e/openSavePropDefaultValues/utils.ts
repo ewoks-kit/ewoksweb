@@ -33,7 +33,6 @@ export function simpleNodeWorkflow(id: string) {
     nodes: [
       {
         id: 'taskSkeleton0',
-        label: 'taskSkeleton',
         task_type: 'ppfmethod',
         task_identifier: 'taskSkeleton',
         uiProps: { position: {} },
@@ -69,7 +68,6 @@ export function simpleLinkWorkflow(id: string) {
     nodes: [
       {
         id: 'taskSkeleton1',
-        label: 'taskSkeleton',
         task_type: 'ppfmethod',
         task_identifier: 'taskSkeleton',
         uiProps: { position: {} },

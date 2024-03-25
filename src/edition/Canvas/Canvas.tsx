@@ -46,7 +46,7 @@ import AddSubworkflowDialog from '../TaskDrawer/AddSubworkflowDialog';
 import styles from './Canvas.module.css';
 import CanvasBackground from './CanvasBackground';
 import FallbackMessage from './FallbackMessage';
-import { addConnectionToGraph, retrieveTaskInfo, trimLabel } from './utils';
+import { addConnectionToGraph, retrieveTaskInfo } from './utils';
 
 const edgeTypes = {
   bendingText,
@@ -207,9 +207,7 @@ function Canvas(props: Props) {
         output_names: task.output_names,
         required_input_names: task.required_input_names,
       },
-      ewoks_props: {
-        label: trimLabel(task_identifier),
-      },
+      ewoks_props: {},
       ui_props: {
         ...(icon && { icon }),
       },

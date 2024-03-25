@@ -51,9 +51,7 @@ export async function loadSubworkflow(
       ...(outputsSub && outputsSub.length > 0 && { outputs: outputsSub }),
     },
 
-    ewoks_props: {
-      label: subGraph.graph.label,
-    },
+    ewoks_props: {},
   };
 
   return { nodeWithoutData, data: nodeData };
