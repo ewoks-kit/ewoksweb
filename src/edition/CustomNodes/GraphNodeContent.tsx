@@ -66,9 +66,8 @@ function GraphNodeContent(props: NodeProps<NodeData>) {
       >
         <span style={{ ...style.displayNode, ...nodeWidth }} className="icons">
           <NodeLabel
-            label={
-              nodeData.ewoks_props.label || nodeData.task_props.task_identifier
-            }
+            id={id}
+            label={nodeData.ewoks_props.label}
             showFull={withLabel}
             showCropped={!withLabel && !withImage}
             color={subgraphExistsOnServer ? '#ced3ee' : 'red'}

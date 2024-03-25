@@ -14,7 +14,7 @@ function DataNode(props: NodeProps) {
   return (
     <Node
       id={props.id}
-      label={nodeData.ewoks_props.label || props.id}
+      label={nodeData.ewoks_props.label}
       moreHandles={uiProps.moreHandles}
       withImage={uiProps.withImage}
       withLabel={uiProps.withLabel}
