@@ -7,7 +7,12 @@ import type {
 } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { isString } from './typeGuards';
-import { calcDataMapping, notUndefinedValue, propIsEmpty } from './utils';
+import {
+  calcDataMapping,
+  convertRFMarkerEndToEwoks,
+  notUndefinedValue,
+  propIsEmpty,
+} from './utils';
 
 // DOC: Calculate the ewoks input_nodes and output_nodes within the graph
 // from the nodes of the graphRF model with types graphInput, graphOutput
@@ -168,6 +173,7 @@ function calcNodeProps(
     ...notUndefinedValue(lData.required, 'required'),
   };
 
+  const ewoksMarkerEnd = convertRFMarkerEndToEwoks(link.markerEnd);
   return {
     id: nod.id,
     node: nodConnected.id,
@@ -188,11 +194,7 @@ function calcNodeProps(
             stroke: link.style.stroke,
           },
         }),
-      ...(link.markerEnd &&
-        typeof link.markerEnd !== 'string' &&
-        link.markerEnd.type !== DEFAULT_LINK_VALUES.uiProps.markerEnd.type && {
-          markerEnd: link.markerEnd,
-        }),
+      ...(ewoksMarkerEnd ? { markerEnd: ewoksMarkerEnd } : {}),
       ...notUndefinedValue(link.animated, 'animated'),
       ...notUndefinedValue(nUiprops.withImage, 'withImage'),
       ...notUndefinedValue(nUiprops.withLabel, 'withLabel'),

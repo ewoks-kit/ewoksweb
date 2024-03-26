@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import type { Edge, EdgeMarkerType, XYPosition } from 'reactflow';
+import type { Edge, XYPosition } from 'reactflow';
 import type { Node } from 'reactflow';
 
 import type { DisplayedWorkflowInfoSlice } from './store/displayedWorkflowInfo';
@@ -29,8 +29,7 @@ export interface InputOutputUiProps {
   position?: XYPosition;
   style?: LinkStyle;
   animated?: boolean;
-  markerEnd?: EdgeMarkerType;
-  markerStart?: EdgeMarkerType;
+  markerEnd?: EwoksMarkerEnd;
   targetHandle?: string;
   withImage?: boolean;
   withLabel?: boolean;
@@ -301,8 +300,7 @@ export interface LinkUiProps {
   type?: string;
   comment?: string;
   animated?: boolean;
-  markerEnd?: EdgeMarkerType;
-  markerStart?: EdgeMarkerType;
+  markerEnd?: EwoksMarkerEnd;
   labelStyle?: CSSProperties;
   labelBgStyle?: CSSProperties;
   sourceHandle?: string | null;
@@ -360,3 +358,7 @@ export enum WorkflowSource {
   Disk = 'disk',
   Empty = 'empty',
 }
+
+export type RFMarkerEnd = Edge['markerEnd'];
+
+export type EwoksMarkerEnd = { type: string } | string;

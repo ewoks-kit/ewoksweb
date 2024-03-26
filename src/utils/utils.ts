@@ -3,12 +3,15 @@ import { nanoid } from 'nanoid';
 import type {
   DataMapping,
   EwoksDataMapping,
+  EwoksMarkerEnd,
   InputOutputLinkAttributes,
   InputOutputUiProps,
+  RFMarkerEnd,
   RowValue,
 } from '../types';
 import { RowType } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
+import { isMarkerType } from './typeGuards';
 
 export function createDataMappingData(pair: EwoksDataMapping): DataMapping {
   return {
@@ -56,11 +59,9 @@ export function calcLinkUiProps(
     ...(uiProps?.style?.stroke && {
       style: { stroke: uiProps.style.stroke, strokeWidth: '3px' },
     }),
-    ...(uiProps?.markerEnd &&
-      typeof uiProps.markerEnd !== 'string' &&
-      uiProps.markerEnd.type !== DEFAULT_LINK_VALUES.uiProps.markerEnd.type && {
-        markerEnd: uiProps.markerEnd,
-      }),
+    ...(uiProps?.markerEnd && {
+      markerEnd: uiProps.markerEnd,
+    }),
     ...notUndefinedValue(uiProps?.animated, 'animated'),
   };
 }
@@ -133,4 +134,44 @@ export function getValueAndType(value: unknown): {
   }
 
   return { type: RowType.String, value: String(value) };
+}
+
+export function convertEwoksMarkerEndToRF(
+  markerEnd: EwoksMarkerEnd | undefined,
+): RFMarkerEnd {
+  if (typeof markerEnd === 'object') {
+    return convertEwoksMarkerEndToRF(markerEnd.type);
+  }
+
+  if (markerEnd === undefined) {
+    return DEFAULT_LINK_VALUES.uiProps.markerEnd;
+  }
+
+  if (markerEnd === 'none') {
+    return '';
+  }
+
+  if (isMarkerType(markerEnd)) {
+    return { type: markerEnd };
+  }
+
+  return DEFAULT_LINK_VALUES.uiProps.markerEnd;
+}
+
+export function convertRFMarkerEndToEwoks(
+  markerEnd: RFMarkerEnd,
+): EwoksMarkerEnd | undefined {
+  if (markerEnd === '') {
+    return 'none';
+  }
+
+  if (!markerEnd || typeof markerEnd === 'string') {
+    return undefined;
+  }
+
+  if (markerEnd === DEFAULT_LINK_VALUES.uiProps.markerEnd) {
+    return undefined;
+  }
+
+  return markerEnd.type;
 }
