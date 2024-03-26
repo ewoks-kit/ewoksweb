@@ -16,9 +16,9 @@ import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import sidebarStyle from '../sidebarStyle';
+import styles from './EditLinkStyle.module.css';
 import MarkerEndControl from './MarkerEndControl';
 
-// DOC: Edit the link style
 export default function EditLinkStyle(element: Edge) {
   const { setEdges, getEdges } = useReactFlow();
 
@@ -95,19 +95,15 @@ export default function EditLinkStyle(element: Edge) {
 
   return (
     <>
-      <FormControl
-        variant="filled"
-        fullWidth
-        style={sidebarStyle.formstyleflex}
-      >
+      <FormControl className={styles.container} variant="filled" fullWidth>
         <InputLabel id="linkTypeLabel">Link type</InputLabel>
         <Select
+          className={styles.dropdown}
           variant="standard"
           labelId="linkTypeLabel"
           value={linkType}
           label="Link type"
           onChange={handleLinkTypeChange}
-          style={sidebarStyle.dropdown}
         >
           {[
             'straight',

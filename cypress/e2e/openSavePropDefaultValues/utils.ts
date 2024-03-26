@@ -104,7 +104,7 @@ export function simpleLinkWorkflowMarkerEnd(id: string) {
         source: 'taskSkeleton0',
         target: 'taskSkeleton1',
         map_all_data: true,
-        markerEnd: '',
+        markerEnd: 'none',
       },
     ],
   };
@@ -132,7 +132,7 @@ export function populatedLinkWorkflow(id: string) {
           comment: 'linkComment',
           type: 'straight',
           animated: true,
-          markerEnd: '',
+          markerEnd: 'none',
         },
       },
     ],

@@ -6,71 +6,54 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
-import type { Edge, EdgeMarkerType } from 'reactflow';
+import type { Edge } from 'reactflow';
 import { useReactFlow } from 'reactflow';
-import { MarkerType } from 'reactflow';
 
-import { isMarkerType, isString } from '../../../utils/typeGuards';
-import sidebarStyle from '../sidebarStyle';
+import styles from './EditLinkStyle.module.css';
+import { MarkerEndOption } from './models';
+import { markerEndOptionToRF, rfMarkerEndToOption } from './utils';
 
 interface Props {
   element: Edge;
 }
 
-function getArrowType(
-  markerEnd: EdgeMarkerType | undefined,
-): MarkerType | 'none' {
-  if (!markerEnd) {
-    return 'none';
-  }
-
-  if (isString(markerEnd)) {
-    return isMarkerType(markerEnd) ? markerEnd : 'none';
-  }
-
-  return markerEnd.type;
-}
-
 function MarkerEndControl(props: Props) {
   const { element } = props;
+
   const { setEdges, getEdges } = useReactFlow();
 
-  const arrowType = getArrowType(element.markerEnd);
-
-  function handleArrowTypeChange(event: SelectChangeEvent) {
-    const type = event.target.value;
-    if (!isString(type)) {
-      return;
-    }
-    const newEdge = isMarkerType(type)
-      ? { ...element, markerEnd: { type } }
-      : { ...element, markerEnd: '' };
+  function handleChange(event: SelectChangeEvent) {
+    const { value: newValue } = event.target;
+    const newEdge = {
+      ...element,
+      markerEnd: markerEndOptionToRF(newValue as MarkerEndOption),
+    };
 
     setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
   }
 
   function applyArrowTypeToAll() {
     const newEdges: Edge[] = getEdges().map((edge) => {
-      if (arrowType === 'none') {
-        return { ...edge, markerEnd: undefined };
-      }
-      return { ...edge, markerEnd: { type: arrowType } };
+      return { ...edge, markerEnd: element.markerEnd };
     });
     setEdges(newEdges);
   }
+
+  const value = rfMarkerEndToOption(element.markerEnd);
+
   return (
-    <FormControl variant="filled" fullWidth style={sidebarStyle.formstyleflex}>
+    <FormControl variant="filled" fullWidth className={styles.container}>
       <InputLabel id="markerEnd">Arrow Head</InputLabel>
       <Select
+        className={styles.dropdown}
         variant="standard"
-        value={arrowType}
+        value={value}
         label="Arrow head"
-        onChange={handleArrowTypeChange}
-        style={sidebarStyle.dropdown}
+        onChange={handleChange}
       >
-        {[...Object.values(MarkerType), 'none'].map((tex) => (
-          <MenuItem value={tex} key={tex}>
-            {tex}
+        {Object.values(MarkerEndOption).map((option) => (
+          <MenuItem value={option} key={option}>
+            {option}
           </MenuItem>
         ))}
       </Select>
