@@ -4,6 +4,7 @@ import type {
   DataMapping,
   EwoksDataMapping,
   EwoksMarkerEnd,
+  EwoksMarkerEndLegacy,
   InputOutputLinkAttributes,
   InputOutputUiProps,
   RFMarkerEnd,
@@ -137,17 +138,8 @@ export function getValueAndType(value: unknown): {
 }
 
 export function convertEwoksMarkerEndToRF(
-  markerEnd: EwoksMarkerEnd | undefined,
+  markerEnd: EwoksMarkerEndLegacy | undefined,
 ): RFMarkerEnd {
-  // Legacy: Old link can have markerEnd of the form {type: EwoksMarkerEnd}
-  if (typeof markerEnd === 'object' && 'type' in markerEnd) {
-    return convertEwoksMarkerEndToRF(markerEnd.type);
-  }
-
-  if (markerEnd === undefined) {
-    return DEFAULT_LINK_VALUES.uiProps.markerEnd;
-  }
-
   // Legacy: Old links can have '' instead of 'none'
   if (markerEnd === 'none' || markerEnd === '') {
     return '';
@@ -155,6 +147,11 @@ export function convertEwoksMarkerEndToRF(
 
   if (isMarkerType(markerEnd)) {
     return { type: markerEnd };
+  }
+
+  // Legacy: Old link can have markerEnd of the form {type: EwoksMarkerEnd}
+  if (typeof markerEnd === 'object' && 'type' in markerEnd) {
+    return convertEwoksMarkerEndToRF(markerEnd.type);
   }
 
   return DEFAULT_LINK_VALUES.uiProps.markerEnd;

@@ -7,11 +7,12 @@ import {
   Select,
 } from '@mui/material';
 import type { Edge } from 'reactflow';
+import { MarkerType } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 
 import { useUpdateEdge } from '../../../general/hooks';
 import styles from './EditLinkStyle.module.css';
-import { MarkerEndOption } from './models';
+import type { MarkerEndOption } from './models';
 import { markerEndOptionToRF, rfMarkerEndToOption } from './utils';
 
 interface Props {
@@ -53,7 +54,7 @@ function MarkerEndControl(props: Props) {
         onChange={handleChange}
         inputProps={{ 'aria-label': 'Arrow head' }}
       >
-        {Object.values(MarkerEndOption).map((option) => (
+        {[MarkerType.Arrow, MarkerType.ArrowClosed, 'none'].map((option) => (
           <MenuItem value={option} key={option}>
             {option}
           </MenuItem>

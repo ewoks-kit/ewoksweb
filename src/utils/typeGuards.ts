@@ -84,7 +84,10 @@ export function assertStr(
   }
 }
 
-export function isMarkerType(val: string): val is MarkerType {
+export function isMarkerType(val: unknown): val is MarkerType {
+  if (typeof val !== 'string') {
+    return false;
+  }
   return Object.values<string>(MarkerType).includes(val);
 }
 

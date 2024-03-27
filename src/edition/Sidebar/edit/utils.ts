@@ -1,28 +1,18 @@
-import { MarkerType } from 'reactflow';
-
 import type { RFMarkerEnd } from '../../../types';
-import { MarkerEndOption } from './models';
+import type { MarkerEndOption } from './models';
 
 export function markerEndOptionToRF(option: MarkerEndOption): RFMarkerEnd {
-  if (option === MarkerEndOption.None) {
+  if (option === 'none') {
     return '';
   }
 
-  if (option === MarkerEndOption.Arrow) {
-    return { type: MarkerType.Arrow };
-  }
-
-  return { type: MarkerType.ArrowClosed };
+  return { type: option };
 }
 
 export function rfMarkerEndToOption(markerEnd: RFMarkerEnd): MarkerEndOption {
   if (!markerEnd || typeof markerEnd === 'string') {
-    return MarkerEndOption.None;
+    return 'none';
   }
 
-  if (markerEnd.type === MarkerType.Arrow) {
-    return MarkerEndOption.Arrow;
-  }
-
-  return MarkerEndOption.ArrowClosed;
+  return markerEnd.type;
 }

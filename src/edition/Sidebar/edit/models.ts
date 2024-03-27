@@ -1,5 +1,3 @@
-export enum MarkerEndOption {
-  Arrow = 'arrow',
-  ArrowClosed = 'arrowclosed',
-  None = 'none',
-}
+import type { MarkerType } from 'reactflow';
+
+export type MarkerEndOption = MarkerType | 'none';
