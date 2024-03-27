@@ -35,7 +35,7 @@ function MarkerEndControl(props: Props) {
   }
 
   function applyArrowTypeToAll() {
-    const newEdges: Edge[] = getEdges().map((oldEdge) => {
+    const newEdges = getEdges().map((oldEdge) => {
       return { ...oldEdge, markerEnd: edge.markerEnd };
     });
     setEdges(newEdges);
@@ -54,11 +54,11 @@ function MarkerEndControl(props: Props) {
         onChange={handleChange}
         inputProps={{ 'aria-label': 'Arrow head' }}
       >
-        {[MarkerType.Arrow, MarkerType.ArrowClosed, 'none'].map((option) => (
-          <MenuItem value={option} key={option}>
-            {option}
-          </MenuItem>
-        ))}
+        <MenuItem value={MarkerType.Arrow}>{MarkerType.Arrow}</MenuItem>
+        <MenuItem value={MarkerType.ArrowClosed}>
+          {MarkerType.ArrowClosed}
+        </MenuItem>
+        <MenuItem value="none">none</MenuItem>
       </Select>
       <Button
         style={{ margin: '8px' }}
