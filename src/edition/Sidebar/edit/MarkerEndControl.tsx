@@ -50,6 +50,7 @@ function MarkerEndControl(props: Props) {
         value={value}
         label="Arrow head"
         onChange={handleChange}
+        inputProps={{ 'aria-label': 'Arrow head' }}
       >
         {Object.values(MarkerEndOption).map((option) => (
           <MenuItem value={option} key={option}>

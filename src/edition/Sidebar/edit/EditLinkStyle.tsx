@@ -136,7 +136,7 @@ export default function EditLinkStyle(element: Edge) {
           name="animated"
           checked={animated}
           onChange={handleAnimatedChange}
-          inputProps={{ 'aria-label': 'controlled' }}
+          inputProps={{ 'aria-label': 'animated' }}
           color="primary"
         />
         <label htmlFor="animated">Animated</label>
