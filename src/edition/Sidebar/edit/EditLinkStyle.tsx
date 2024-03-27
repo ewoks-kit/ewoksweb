@@ -9,36 +9,20 @@ import {
   Slider,
 } from '@mui/material';
 import type { ChangeEvent } from 'react';
-import type { Edge, EdgeMarkerType } from 'reactflow';
-import { MarkerType } from 'reactflow';
+import type { Edge } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 
+import { useUpdateEdge } from '../../../general/hooks';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useSnackbarStore from '../../../store/useSnackbarStore';
-import {
-  assertEdgeDataDefined,
-  isMarkerType,
-  isString,
-} from '../../../utils/typeGuards';
+import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import sidebarStyle from '../sidebarStyle';
+import styles from './EditLinkStyle.module.css';
+import MarkerEndControl from './MarkerEndControl';
 
-function getArrowType(
-  markerEnd: EdgeMarkerType | undefined,
-): MarkerType | 'none' {
-  if (!markerEnd) {
-    return 'none';
-  }
-
-  if (isString(markerEnd)) {
-    return isMarkerType(markerEnd) ? markerEnd : 'none';
-  }
-
-  return markerEnd.type;
-}
-
-// DOC: Edit the link style
 export default function EditLinkStyle(element: Edge) {
   const { setEdges, getEdges } = useReactFlow();
+  const updateEdge = useUpdateEdge();
 
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
@@ -47,7 +31,6 @@ export default function EditLinkStyle(element: Edge) {
   const showInfoMsg = useSnackbarStore((state) => state.showInfoMsg);
 
   const linkType = element.type || 'default';
-  const arrowType = getArrowType(element.markerEnd);
   const animated = !!element.animated;
   const colorLine = element.style?.stroke || '#96a5f9';
   const { x = 80, y = 80 } = edgeData.getAroundProps || {};
@@ -59,23 +42,11 @@ export default function EditLinkStyle(element: Edge) {
         'Insert commas (,) in the label to break into multiple lines!',
       );
     }
-    const newEdge = {
+
+    updateEdge({
       ...element,
       type: val,
-    };
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
-  }
-
-  function handleArrowTypeChange(event: SelectChangeEvent) {
-    const type = event.target.value;
-    if (!isString(type)) {
-      return;
-    }
-    const newEdge = isMarkerType(type)
-      ? { ...element, markerEnd: { type } }
-      : { ...element, markerEnd: undefined };
-
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    });
   }
 
   function handleColorLineChange(event: ChangeEvent<HTMLInputElement>) {
@@ -85,15 +56,14 @@ export default function EditLinkStyle(element: Edge) {
       labelStyle: { ...element.labelStyle, fill: event.target.value },
       labelBgStyle: { ...element.labelBgStyle, stroke: event.target.value },
     };
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    updateEdge(newEdge);
   }
 
   function handleAnimatedChange(event: ChangeEvent<HTMLInputElement>) {
-    const newEdge = {
+    updateEdge({
       ...element,
       animated: event.target.checked,
-    };
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    });
   }
 
   function handleXChange(_event: Event, value: number | number[]) {
@@ -124,31 +94,17 @@ export default function EditLinkStyle(element: Edge) {
     setEdges(newEdges);
   }
 
-  function applyArrowTypeToAll() {
-    const newEdges: Edge[] = getEdges().map((edge) => {
-      if (arrowType === 'none') {
-        return { ...edge, markerEnd: undefined };
-      }
-      return { ...edge, markerEnd: { type: arrowType } };
-    });
-    setEdges(newEdges);
-  }
-
   return (
     <>
-      <FormControl
-        variant="filled"
-        fullWidth
-        style={sidebarStyle.formstyleflex}
-      >
+      <FormControl className={styles.container} variant="filled" fullWidth>
         <InputLabel id="linkTypeLabel">Link type</InputLabel>
         <Select
+          className={styles.dropdown}
           variant="standard"
           labelId="linkTypeLabel"
           value={linkType}
           label="Link type"
           onChange={handleLinkTypeChange}
-          style={sidebarStyle.dropdown}
         >
           {[
             'straight',
@@ -174,42 +130,14 @@ export default function EditLinkStyle(element: Edge) {
           Apply to all
         </Button>
       </FormControl>
-      <FormControl
-        variant="filled"
-        fullWidth
-        style={sidebarStyle.formstyleflex}
-      >
-        <InputLabel id="markerEnd">Arrow Head</InputLabel>
-        <Select
-          variant="standard"
-          value={arrowType}
-          label="Arrow head"
-          onChange={handleArrowTypeChange}
-          style={sidebarStyle.dropdown}
-        >
-          {[...Object.values(MarkerType), 'none'].map((tex) => (
-            <MenuItem value={tex} key={tex}>
-              {tex}
-            </MenuItem>
-          ))}
-        </Select>
-        <Button
-          style={{ margin: '8px' }}
-          variant="outlined"
-          color="primary"
-          onClick={() => applyArrowTypeToAll()}
-          size="small"
-        >
-          Apply to all
-        </Button>
-      </FormControl>
+      <MarkerEndControl edge={element} />
       <div>
         <Checkbox
           style={sidebarStyle.checkbox}
           name="animated"
           checked={animated}
           onChange={handleAnimatedChange}
-          inputProps={{ 'aria-label': 'controlled' }}
+          inputProps={{ 'aria-label': 'animated' }}
           color="primary"
         />
         <label htmlFor="animated">Animated</label>

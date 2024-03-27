@@ -4,28 +4,22 @@ import { defaultLinkStyle } from '../edition/Canvas/utils';
 import type {
   Condition,
   EdgeWithData,
-  EwoksLink,
-  EwoksNode,
-  GraphDetails,
   LinkUiProps,
   Task,
   Workflow,
 } from '../types';
 import { findLinkInputs, findLinkOutputs } from './calcTasksForLink';
-import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
 import {
+  convertEwoksMarkerEndToRF,
   createDataMappingData,
   getValueAndType,
   notUndefinedValue,
 } from './utils';
 
-interface WorkflowWithNodesLinks {
-  graph: GraphDetails;
-  nodes: EwoksNode[];
-  links: EwoksLink[];
-}
+type WorkflowWithNodesLinks = Required<Workflow>;
+
 // DOC: from GraphEwoks get EwoksRFLinks
 // - tempGraph: the graph to transform its links
 // - newNodeSubgraphs: the subgraphs located in the supergraph.
@@ -87,7 +81,7 @@ export function toRFEwoksLinks(
         sourceHandle: calcSourceHandle(uiProps, sub_source),
         ...notUndefinedValue(uiProps?.type, 'type'),
         ...notUndefinedValue(uiProps?.animated, 'animated'),
-        markerEnd: uiProps?.markerEnd ?? DEFAULT_LINK_VALUES.uiProps.markerEnd,
+        markerEnd: convertEwoksMarkerEndToRF(uiProps?.markerEnd),
         ...defaultLinkStyle,
         style: {
           ...defaultLinkStyle.style,
@@ -129,6 +123,7 @@ export function toRFEwoksLinks(
           ...notUndefinedValue(on_error, 'on_error'),
         },
       };
+
       return link;
     },
   );

@@ -87,14 +87,32 @@ export function simpleLinkWorkflow(id: string) {
       },
     ],
     links: [
-      { source: 'taskSkeleton0', target: 'taskSkeleton1', map_all_data: true },
+      {
+        source: 'taskSkeleton0',
+        target: 'taskSkeleton1',
+        map_all_data: true,
+      },
+    ],
+  };
+}
+
+export function simpleLinkWorkflowMarkerEnd(id: string) {
+  return {
+    ...simpleLinkWorkflow(id),
+    links: [
+      {
+        source: 'taskSkeleton0',
+        target: 'taskSkeleton1',
+        map_all_data: true,
+        markerEnd: 'none',
+      },
     ],
   };
 }
 
 export function populatedLinkWorkflow(id: string) {
   return {
-    ...simpleLinkWorkflow(id),
+    ...simpleLinkWorkflowMarkerEnd(id),
     links: [
       {
         source: 'taskSkeleton0',
@@ -114,6 +132,7 @@ export function populatedLinkWorkflow(id: string) {
           comment: 'linkComment',
           type: 'straight',
           animated: true,
+          markerEnd: 'none',
         },
       },
     ],
