@@ -12,6 +12,7 @@ import type { ChangeEvent } from 'react';
 import type { Edge } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 
+import { useUpdateEdge } from '../../../general/hooks';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
@@ -21,6 +22,7 @@ import MarkerEndControl from './MarkerEndControl';
 
 export default function EditLinkStyle(element: Edge) {
   const { setEdges, getEdges } = useReactFlow();
+  const updateEdge = useUpdateEdge();
 
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
@@ -40,11 +42,11 @@ export default function EditLinkStyle(element: Edge) {
         'Insert commas (,) in the label to break into multiple lines!',
       );
     }
-    const newEdge = {
+
+    updateEdge({
       ...element,
       type: val,
-    };
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    });
   }
 
   function handleColorLineChange(event: ChangeEvent<HTMLInputElement>) {
@@ -54,15 +56,14 @@ export default function EditLinkStyle(element: Edge) {
       labelStyle: { ...element.labelStyle, fill: event.target.value },
       labelBgStyle: { ...element.labelBgStyle, stroke: event.target.value },
     };
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    updateEdge(newEdge);
   }
 
   function handleAnimatedChange(event: ChangeEvent<HTMLInputElement>) {
-    const newEdge = {
+    updateEdge({
       ...element,
       animated: event.target.checked,
-    };
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    });
   }
 
   function handleXChange(_event: Event, value: number | number[]) {
@@ -129,7 +130,7 @@ export default function EditLinkStyle(element: Edge) {
           Apply to all
         </Button>
       </FormControl>
-      <MarkerEndControl element={element} />
+      <MarkerEndControl edge={element} />
       <div>
         <Checkbox
           style={sidebarStyle.checkbox}

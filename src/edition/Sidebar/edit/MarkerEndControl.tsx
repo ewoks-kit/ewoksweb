@@ -9,37 +9,38 @@ import {
 import type { Edge } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 
+import { useUpdateEdge } from '../../../general/hooks';
 import styles from './EditLinkStyle.module.css';
 import { MarkerEndOption } from './models';
 import { markerEndOptionToRF, rfMarkerEndToOption } from './utils';
 
 interface Props {
-  element: Edge;
+  edge: Edge;
 }
 
 function MarkerEndControl(props: Props) {
-  const { element } = props;
+  const { edge } = props;
 
   const { setEdges, getEdges } = useReactFlow();
+  const updateEdge = useUpdateEdge();
 
-  function handleChange(event: SelectChangeEvent) {
+  function handleChange(event: SelectChangeEvent<MarkerEndOption>) {
     const { value: newValue } = event.target;
-    const newEdge = {
-      ...element,
-      markerEnd: markerEndOptionToRF(newValue as MarkerEndOption),
-    };
 
-    setEdges([...getEdges().filter((edg) => edg.id !== element.id), newEdge]);
+    updateEdge({
+      ...edge,
+      markerEnd: markerEndOptionToRF(newValue as MarkerEndOption),
+    });
   }
 
   function applyArrowTypeToAll() {
-    const newEdges: Edge[] = getEdges().map((edge) => {
-      return { ...edge, markerEnd: element.markerEnd };
+    const newEdges: Edge[] = getEdges().map((oldEdge) => {
+      return { ...oldEdge, markerEnd: edge.markerEnd };
     });
     setEdges(newEdges);
   }
 
-  const value = rfMarkerEndToOption(element.markerEnd);
+  const value = rfMarkerEndToOption(edge.markerEnd);
 
   return (
     <FormControl variant="filled" fullWidth className={styles.container}>

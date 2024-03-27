@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { Edge } from 'reactflow';
 import { useReactFlow } from 'reactflow';
 
 import {
@@ -161,3 +162,16 @@ export const useCloneNode = () => {
     setNodeData(clone.id, nodeData);
   };
 };
+
+export function useUpdateEdge() {
+  const { setEdges, getEdges } = useReactFlow();
+
+  return (newEdge: Edge) => {
+    const newEdges = [
+      ...getEdges().filter((edge) => edge.id !== newEdge.id),
+      newEdge,
+    ];
+
+    setEdges(newEdges);
+  };
+}
