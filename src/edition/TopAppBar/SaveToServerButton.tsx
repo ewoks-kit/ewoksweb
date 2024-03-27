@@ -8,7 +8,7 @@ import { useWorkflowHasChanges } from '../../store/graph-hooks';
 import useStore from '../../store/useStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import SaveStatusIcon from './SaveStatusIcon';
-import styles from './TopAppBar.module.css';
+import styles from './SaveToServerButton.module.css';
 
 // DOC: Save to server button with its spinner
 export default function SaveToServerButton() {

@@ -2,7 +2,7 @@ import { Check, ErrorOutline, Save } from '@mui/icons-material';
 import { useEffect } from 'react';
 
 import type { Status } from './models';
-import styles from './TopAppBar.module.css';
+import styles from './SaveToServerButton.module.css';
 
 interface Props {
   status: Status;
@@ -30,7 +30,7 @@ function SaveStatusIcon(props: Props) {
 
   const Icon = ICONS[status];
   return (
-    <div className={styles.container}>
+    <div className={styles.icon}>
       <Icon />
       {children}
     </div>

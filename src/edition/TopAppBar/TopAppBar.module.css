@@ -4,45 +4,6 @@
   position: relative;
 }
 
-.crumbs {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1.25rem;
-  font-weight: 500;
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .button:hover {
   background-color: #303f9f !important;
-}
-
-.saveButton {
-  composes: button;
-  margin-left: 0.25rem !important;
-}
-
-.labelHint {
-  font-weight: lighter;
-  font-style: italic;
-  font-size: 1rem;
-}
-
-.saveRedDot {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 7px;
-  height: 7px;
-  background-color: red;
-  border-radius: 50%;
-}
-
-.container {
-  position: relative;
-  display: inline-block;
 }
