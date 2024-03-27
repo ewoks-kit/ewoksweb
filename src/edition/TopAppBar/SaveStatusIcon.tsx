@@ -16,16 +16,15 @@ const ICONS = {
   error: ErrorOutline,
 };
 
-function StatusIcon(props: Props) {
+function SaveStatusIcon(props: Props) {
   const { status, setStatus, children } = props;
 
   // Restore idle status after 1s
   useEffect(() => {
     if (status === 'idle') {
-      return;
+      return undefined;
     }
     const t = setTimeout(() => setStatus('idle'), 1000);
-    // eslint-disable-next-line consistent-return
     return () => clearTimeout(t);
   }, [status, setStatus]);
 
@@ -38,4 +37,4 @@ function StatusIcon(props: Props) {
   );
 }
 
-export default StatusIcon;
+export default SaveStatusIcon;

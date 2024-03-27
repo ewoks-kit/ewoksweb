@@ -7,7 +7,7 @@ import tooltipText from '../../general/TooltipText';
 import { useWorkflowHasChanges } from '../../store/graph-hooks';
 import useStore from '../../store/useStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import StatusIcon from './StatusButton';
+import SaveStatusIcon from './SaveStatusIcon';
 import styles from './TopAppBar.module.css';
 
 // DOC: Save to server button with its spinner
@@ -56,9 +56,9 @@ export default function SaveToServerButton() {
           color="inherit"
           size="large"
         >
-          <StatusIcon status={status} setStatus={setStatus}>
+          <SaveStatusIcon status={status} setStatus={setStatus}>
             {workflowHasChanges && <div className={styles.saveRedDot} />}
-          </StatusIcon>
+          </SaveStatusIcon>
         </IconButton>
       </Tooltip>
     </>
