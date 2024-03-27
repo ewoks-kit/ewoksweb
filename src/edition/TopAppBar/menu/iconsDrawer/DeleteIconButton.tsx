@@ -23,8 +23,6 @@ function DeleteIconButton(props: Props) {
   const invalidateIcons = useInvalidateIcons();
 
   async function agreeDeleteIcon() {
-    setOpenDialog(false);
-
     if (tasks.some((task) => task.icon === iconName)) {
       showWarningMsg(
         `${iconName} cannot be deleted since it is used in one or more Tasks!`,
@@ -49,9 +47,8 @@ function DeleteIconButton(props: Props) {
         title={`Delete "${iconName}" icon?`}
         content="Are you sure to delete this icon ?"
         open={isDialogOpen}
-        setOpen={setOpenDialog}
-        agreeCallback={agreeDeleteIcon}
-        disagreeCallback={() => setOpenDialog(false)}
+        onClose={() => setOpenDialog(false)}
+        onConfirm={agreeDeleteIcon}
       />
       <IconButton
         onClick={() => {
