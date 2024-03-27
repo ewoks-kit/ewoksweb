@@ -139,7 +139,8 @@ export function getValueAndType(value: unknown): {
 export function convertEwoksMarkerEndToRF(
   markerEnd: EwoksMarkerEnd | undefined,
 ): RFMarkerEnd {
-  if (typeof markerEnd === 'object') {
+  // Legacy: Old link can have markerEnd of the form {type: EwoksMarkerEnd}
+  if (typeof markerEnd === 'object' && 'type' in markerEnd) {
     return convertEwoksMarkerEndToRF(markerEnd.type);
   }
 
@@ -147,7 +148,8 @@ export function convertEwoksMarkerEndToRF(
     return DEFAULT_LINK_VALUES.uiProps.markerEnd;
   }
 
-  if (markerEnd === 'none') {
+  // Legacy: Old links can have '' instead of 'none'
+  if (markerEnd === 'none' || markerEnd === '') {
     return '';
   }
 
