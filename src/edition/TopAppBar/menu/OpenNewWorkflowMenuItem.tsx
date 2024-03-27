@@ -36,6 +36,7 @@ function OpenNewWorkflowMenuItem() {
         title="Open a new workflow"
         content="All unsaved modifications will be lost. Continue?"
         open={openDialog}
+        setOpen={setOpenDialog}
         agreeCallback={openEmptyWorkflow}
         disagreeCallback={() => setOpenDialog(false)}
       />

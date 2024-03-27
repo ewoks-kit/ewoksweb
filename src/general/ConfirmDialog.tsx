@@ -4,10 +4,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useEffect, useState } from 'react';
 
 interface ConfirmDialogProps {
   open: boolean;
+  setOpen: (open: boolean) => void;
   title: string;
   content: string;
   agreeCallback(): Promise<void> | void;
@@ -15,37 +15,25 @@ interface ConfirmDialogProps {
 }
 // DOC: Used as an app-wide dialog when confirmation is needed. Open is a prop
 export default function ConfirmDialog(props: ConfirmDialogProps) {
-  const { open, title, content } = props;
-
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    setIsOpen(open);
-  }, [open]);
-
-  const handleDisagree = () => {
-    setIsOpen(false);
-    props.disagreeCallback();
-  };
-
-  const handleAgree = () => {
-    setIsOpen(false);
-    props.agreeCallback();
-  };
-
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+  const { open, title, content, setOpen } = props;
 
   return (
-    <Dialog open={isOpen} onClose={handleClose}>
+    <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <DialogContentText>{content}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleDisagree}>No</Button>
-        <Button onClick={handleAgree}>Yes</Button>
+        <Button onClick={() => props.disagreeCallback()}>No</Button>
+        <Button
+          onClick={() => {
+            void (async () => {
+              props.agreeCallback();
+            })();
+          }}
+        >
+          Yes
+        </Button>
       </DialogActions>
     </Dialog>
   );

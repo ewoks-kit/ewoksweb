@@ -4,6 +4,7 @@ import { useKeyboardEvent } from '@react-hookz/web';
 import GraphFormDialog from '../../general/forms/GraphFormDialog';
 import { useSaveWorkflow } from '../../general/hooks';
 import tooltipText from '../../general/TooltipText';
+import { useWorkflowHasChanges } from '../../store/graph-hooks';
 import useStore from '../../store/useStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import StatusIcon from './StatusButton';
@@ -11,6 +12,7 @@ import styles from './TopAppBar.module.css';
 
 // DOC: Save to server button with its spinner
 export default function SaveToServerButton() {
+  const workflowHasChanges = useWorkflowHasChanges();
   const displayedWorkflowInfo = useStore(
     (state) => state.displayedWorkflowInfo,
   );
@@ -26,6 +28,10 @@ export default function SaveToServerButton() {
     },
     [],
   );
+
+  const btnLabel = `Save workflow to server: ${
+    workflowHasChanges ? ' changes pending' : ' no changes'
+  }`;
 
   return (
     <>
@@ -46,11 +52,13 @@ export default function SaveToServerButton() {
           onClick={() => {
             void handleSave();
           }}
-          aria-label="Save workflow to server"
+          aria-label={btnLabel}
           color="inherit"
           size="large"
         >
-          <StatusIcon status={status} setStatus={setStatus} />
+          <StatusIcon status={status} setStatus={setStatus}>
+            {workflowHasChanges && <div className={styles.saveRedDot} />}
+          </StatusIcon>
         </IconButton>
       </Tooltip>
     </>
