@@ -1,0 +1,10 @@
+.container {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+
+.dropdown {
+  min-width: 150px;
+}

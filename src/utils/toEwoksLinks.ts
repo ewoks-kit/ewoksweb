@@ -1,6 +1,5 @@
 import type { EdgeWithData, EwoksLink } from '../types';
-import { propIsEmpty } from '../utils/utils';
-import { DEFAULT_LINK_VALUES } from './defaultValues';
+import { convertRFMarkerEndToEwoks, propIsEmpty } from '../utils/utils';
 import { isString } from './typeGuards';
 import { calcDataMapping, notUndefinedValue } from './utils';
 
@@ -42,17 +41,15 @@ export function toEwoksLinks(links: EdgeWithData[]): EwoksLink[] {
         };
       });
 
+      const ewoksMarkerEnd = convertRFMarkerEndToEwoks(markerEnd);
+
       const linkUiProps = {
         ...(isString(label) && {
           label,
         }),
         ...(comment && { comment }),
         ...(type && { type }),
-        ...(markerEnd &&
-          typeof markerEnd !== 'string' &&
-          markerEnd.type !== DEFAULT_LINK_VALUES.uiProps.markerEnd.type && {
-            markerEnd,
-          }),
+        ...(ewoksMarkerEnd ? { markerEnd: ewoksMarkerEnd } : {}),
         ...(style?.stroke !== '#96a5f9' && {
           style: { stroke: style?.stroke },
         }),

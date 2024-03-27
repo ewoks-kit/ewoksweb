@@ -1,74 +1,66 @@
 beforeEach(() => {
-  cy.loadApp();
+  cy.loadAppWithoutGraph();
 
-  cy.get('.react-flow').contains('if you do then...').parent().click();
+  cy.findByRole('button', { name: 'ewokscore' }).click();
+  cy.dragNodeInCanvas('ewokscore.tests.examples.tasks.sumlist.SumList');
+  cy.dragNodeInCanvas('ewokscore.tests.examples.tasks.sumlist.SumList');
+  cy.waitForStableDOM();
+  cy.findByRole('button', { name: 'SumList0' })
+    .find('.react-flow__handle-right')
+    .click({ force: true });
+
+  cy.findByRole('button', { name: 'SumList1' })
+    .find('.react-flow__handle-left')
+    .click({ force: true });
+
+  cy.get('.react-flow__edge')
+    .as('link', { type: 'static' })
+    .click({ force: true });
 });
 
-it('link has the default style', () => {
-  cy.get('.react-flow')
-    .contains('if you do then...')
+it('has the default style', () => {
+  cy.get('@link')
+    .find('.react-flow__edge-path')
     .should(
       'have.attr',
       'style',
-      'fill: rgb(206, 92, 0); font-weight: 500; font-size: 14px; color: rgb(206, 92, 0);',
+      'stroke: rgb(150, 165, 249); stroke-width: 3px;',
     )
-    .siblings('rect')
-    .should(
-      'have.attr',
-      'style',
-      'fill: rgb(223, 226, 247); fill-opacity: 1; stroke-width: 3px; stroke: rgb(206, 92, 0);',
-    );
+    .should('have.attr', 'marker-end', 'url(#1__type=arrowclosed)');
 });
 
 it('selects a link and adds selected class and sidebar shows details', () => {
-  cy.get('.react-flow')
-    .contains('if you do then...')
-    .parent()
-    .parent()
-    .should('include.class', 'selected');
+  cy.get('@link').should('include.class', 'selected');
 
   cy.contains('Map all Data').should('be.visible');
 
-  cy.findByRole('combobox', { name: 'Label' })
-    .contains('if you do then...')
-    .should('have.value', 'if you do then...');
+  cy.findByRole('combobox', { name: 'Label' }).should('have.value', '');
 });
 
-it('changes links label and is reflected on the canvas', () => {
+it('changes label', () => {
   cy.findByRole('combobox', { name: 'Label' })
-    .contains('if you do then...')
-    .should('have.value', 'if you do then...')
     .click()
-    .type('Always and forever...');
+    .type('Link between sum tasks');
 
-  cy.get('.react-flow')
-    .contains('if you do then...Always and forever...')
-    .should('be.visible');
+  cy.get('@link').contains('Link between sum tasks');
 });
 
-it('changes links animated property to true and is shown on the canvas', () => {
-  cy.contains('Animated').siblings().click();
+it('changes animated property to true', () => {
+  cy.findByRole('checkbox', { name: 'animated' }).click();
 
-  cy.get('.react-flow')
-    .contains('if you do then...')
-    .parent()
-    .parent()
-    .should('include.class', 'animated');
+  cy.get('@link').should('include.class', 'animated');
 });
 
-it('changes links arrowHead property to arrowclosed and is shown on the canvas', () => {
-  cy.get('.react-flow')
-    .contains('if you do then...')
-    .parent()
-    .siblings()
+it('changes arrow head property', () => {
+  cy.findByRole('combobox', { name: 'Arrow head' }).click();
+  cy.findByRole('option', { name: 'arrow' }).click();
+  cy.get('@link')
+    .find('.react-flow__edge-path')
+    .should('have.attr', 'marker-end', 'url(#1__type=arrow)');
+
+  cy.findByRole('combobox', { name: 'Arrow head' }).click();
+  cy.findByRole('option', { name: 'none' }).click();
+  cy.get('@link')
+    .find('.react-flow__edge-path')
     .should('have.attr', 'marker-end', 'url(#)');
-
-  cy.contains('none').click({ force: true });
-  cy.contains('arrowclosed').click({ force: true });
-
-  cy.get('.react-flow')
-    .contains('if you do then...')
-    .parent()
-    .siblings()
-    .should('have.attr', 'marker-end', 'url(#1__type=arrowclosed)');
 });
