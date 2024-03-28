@@ -5,7 +5,6 @@ import {
   populatedLinkWorkflow,
   populatedNodeWorkflow,
   simpleLinkWorkflow,
-  simpleLinkWorkflowMarkerEnd,
   simpleNodeWorkflow,
   withCategoryCommentLabelWorkflow,
 } from './utils';
@@ -46,6 +45,7 @@ it('Saves workflow comment, category and label', () => {
   cy.findByRole('textbox', { name: 'Edit category' })
     .click()
     .type('graph category');
+  cy.waitForStableDOM();
 
   cy.findByRole('button', {
     name: 'Save workflow to server: changes pending',
@@ -72,6 +72,7 @@ it('Opens and saves workflow after deleting comment, category and label', () => 
   cy.findByRole('textbox', { name: 'Edit label' }).clear();
   cy.findByRole('textbox', { name: 'Edit comment' }).clear();
   cy.findByRole('textbox', { name: 'Edit category' }).clear();
+  cy.waitForStableDOM();
 
   cy.findByRole('button', {
     name: 'Save workflow to server: changes pending',

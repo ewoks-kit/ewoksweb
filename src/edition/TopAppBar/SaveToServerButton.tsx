@@ -57,7 +57,9 @@ export default function SaveToServerButton() {
           size="large"
         >
           <SaveStatusIcon status={status} setStatus={setStatus}>
-            {workflowHasChanges && <div className={styles.saveRedDot} />}
+            {workflowHasChanges && (
+              <div className={styles.saveRedDot} data-testId="saveRedDot" />
+            )}
           </SaveStatusIcon>
         </IconButton>
       </Tooltip>
