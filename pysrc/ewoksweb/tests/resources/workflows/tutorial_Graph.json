@@ -320,7 +320,7 @@
       "uiProps": {
         "label": "is",
         "type": "default",
-        "markerEnd": "",
+        "markerEnd": "none",
         "animated": false
       }
     },
@@ -334,7 +334,7 @@
       "uiProps": {
         "label": "ewoks?",
         "type": "default",
-        "markerEnd": "",
+        "markerEnd": "none",
         "animated": false,
         "targetHandle": "What"
       }
@@ -348,7 +348,7 @@
       "uiProps": {
         "label": "can",
         "type": "default",
-        "markerEnd": "",
+        "markerEnd": "none",
         "animated": false
       }
     },
@@ -361,7 +361,7 @@
       "uiProps": {
         "label": "web app?",
         "type": "default",
-        "markerEnd": "",
+        "markerEnd": "none",
         "animated": false
       }
     },
@@ -374,7 +374,7 @@
       "uiProps": {
         "label": "tasks?",
         "type": "default",
-        "markerEnd": "",
+        "markerEnd": "none",
         "animated": false
       }
     },
@@ -387,7 +387,7 @@
       "uiProps": {
         "label": "code?",
         "type": "default",
-        "markerEnd": "",
+        "markerEnd": "none",
         "animated": false
       }
     },
@@ -407,7 +407,7 @@
         "label": "if you dont have tasks, (click me and see my conditions)",
         "comment": "You can see in my conditions that a bool condition exists",
         "type": "multilineText",
-        "markerEnd": "",
+        "markerEnd": "none",
         "style": {
           "stroke": "#f99c96"
         },
@@ -424,7 +424,7 @@
       "uiProps": {
         "label": "to Ewoks tasks",
         "type": "default",
-        "markerEnd": "",
+        "markerEnd": "none",
         "style": {
           "stroke": "#d2a4a0"
         },
@@ -447,7 +447,7 @@
       "uiProps": {
         "label": "if you do then...",
         "type": "default",
-        "markerEnd": "",
+        "markerEnd": "none",
         "style": {
           "stroke": "#ce5c00"
         },
@@ -464,7 +464,7 @@
       "uiProps": {
         "label": "edit?",
         "type": "default",
-        "markerEnd": "",
+        "markerEnd": "none",
         "animated": false,
         "targetHandle": "Edit a Link"
       }
@@ -478,7 +478,7 @@
       "uiProps": {
         "label": "nodes?",
         "type": "default",
-        "markerEnd": "",
+        "markerEnd": "none",
         "animated": false
       }
     },
@@ -491,7 +491,7 @@
       "uiProps": {
         "label": "supports",
         "type": "default",
-        "markerEnd": "",
+        "markerEnd": "none",
         "animated": false,
         "targetHandle": "graphInput"
       }
