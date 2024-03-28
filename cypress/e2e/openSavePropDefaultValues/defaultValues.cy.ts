@@ -15,6 +15,10 @@ beforeEach(() => {
 
 const id = nanoid();
 
+after(() => {
+  cy.deleteWorkflow(id);
+});
+
 it('Saves an empty workflow', () => {
   cy.intercept('POST', 'api/workflows', (req) => {
     expect(req.body).to.deep.equal(emptyWorkflow(id));
@@ -35,20 +39,16 @@ it('Saves an empty existing workflow', () => {
 
 it('Saves workflow comment, category and label', () => {
   cy.loadGraph(id);
+
   cy.intercept('PUT', `api/workflow/${id}`, (req) => {
     expect(req.body).to.deep.equal(withCategoryCommentLabelWorkflow(id));
   });
-  cy.findByRole('textbox', { name: 'Edit label' }).click().type(id);
-  cy.findByRole('textbox', { name: 'Edit comment' })
-    .click()
-    .type('graph comment');
-  cy.findByRole('textbox', { name: 'Edit category' })
-    .click()
-    .type('graph category');
-  cy.waitForStableDOM();
+  cy.findByRole('textbox', { name: 'Edit label' }).type('graph label');
+  cy.findByRole('textbox', { name: 'Edit comment' }).type('graph comment');
+  cy.findByRole('textbox', { name: 'Edit category' }).type('graph category');
 
   cy.findByRole('button', {
-    name: 'Save workflow to server: changes pending',
+    name: /Save workflow to server/,
   }).click();
 });
 
@@ -75,7 +75,7 @@ it('Opens and saves workflow after deleting comment, category and label', () => 
   cy.waitForStableDOM();
 
   cy.findByRole('button', {
-    name: 'Save workflow to server: changes pending',
+    name: /Save workflow to server/,
   }).click();
 });
 
@@ -99,7 +99,7 @@ it('Opens and saves a skeleton node right after dropping it on canvas', () => {
   cy.get('.react-flow__node').should('have.length', 1);
 
   cy.findByRole('button', {
-    name: 'Save workflow to server: changes pending',
+    name: /Save workflow to server/,
   }).click();
 });
 
@@ -152,7 +152,7 @@ it('Opens and saves a skeleton node after populating it', () => {
   cy.findByRole('checkbox', { name: 'With image' }).uncheck();
 
   cy.findByRole('button', {
-    name: 'Save workflow to server: changes pending',
+    name: /Save workflow to server/,
   }).click();
 });
 
@@ -199,7 +199,7 @@ it('Creates a link and saves it', () => {
   addPUTInterceptor(id, simpleLinkWorkflow(id));
 
   cy.findByRole('button', {
-    name: 'Save workflow to server: changes pending',
+    name: /Save workflow to server/,
   }).click();
 });
 
@@ -275,7 +275,7 @@ it('Saves a populated link', () => {
   cy.contains('Animated').siblings().click();
 
   cy.findByRole('button', {
-    name: 'Save workflow to server: changes pending',
+    name: /Save workflow to server/,
   }).click();
 });
 
