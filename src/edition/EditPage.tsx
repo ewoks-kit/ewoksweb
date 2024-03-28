@@ -1,7 +1,7 @@
 import { useDebouncedCallback } from '@react-hookz/web';
 import { useEffect } from 'react';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
-import { unstable_usePrompt, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useStoreApi } from 'reactflow';
 
 import ErrorFallback from '../general/ErrorFallback';
@@ -14,6 +14,7 @@ import useWorkflowHistory from '../store/useWorkflowHistory';
 import SuspenseBoundary from '../suspense/SuspenseBoundary';
 import Canvas from './Canvas/Canvas';
 import styles from './EditPage.module.css';
+import { useWarningPrompt } from './hooks';
 import EditSidebar from './Sidebar/EditSidebar';
 import OverflowDrawer from './TaskDrawer/TaskDrawer';
 import TopAppBar from './TopAppBar/TopAppBar';
@@ -22,10 +23,7 @@ export default function EditPage() {
   const [searchParams] = useSearchParams();
   const workflowHasChanges = useWorkflowHasChanges();
 
-  unstable_usePrompt({
-    message: 'There are unsaved changes. Continue without saving?',
-    when: workflowHasChanges,
-  });
+  useWarningPrompt(workflowHasChanges);
 
   const workflowId = searchParams.get('workflow');
   const pushToWorkflowHistory = useWorkflowHistory(
