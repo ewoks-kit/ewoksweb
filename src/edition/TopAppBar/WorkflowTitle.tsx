@@ -1,5 +1,5 @@
 import useStore from '../../store/useStore';
-import styles from './TopAppBar.module.css';
+import styles from './WorkflowTitle.module.css';
 
 export default function WorkflowTitle() {
   const displayedWorkflowInfo = useStore(

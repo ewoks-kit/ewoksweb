@@ -20,7 +20,7 @@ export function withCategoryCommentLabelWorkflow(id: string) {
     ...emptyWorkflow(id),
     graph: {
       id,
-      label: id,
+      label: 'graph label',
       category: 'graph category',
       uiProps: { comment: 'graph comment' },
     },

@@ -1,0 +1,19 @@
+.saveButton {
+  composes: button from './TopAppBar.module.css';
+  margin-left: 0.25rem !important;
+}
+
+.saveRedDot {
+  content: '';
+  position: absolute;
+  right: 0;
+  width: 0.375em;
+  height: 0.375em;
+  background-color: red;
+  border-radius: 50%;
+}
+
+.icon {
+  position: relative;
+  display: flex;
+}

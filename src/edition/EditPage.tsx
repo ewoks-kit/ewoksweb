@@ -1,17 +1,16 @@
-import { debounce } from 'lodash';
-import { useCallback, useEffect } from 'react';
+import { useDebouncedCallback } from '@react-hookz/web';
+import { useEffect } from 'react';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
-import { useSearchParams } from 'react-router-dom';
+import { unstable_usePrompt, useSearchParams } from 'react-router-dom';
 import { useStoreApi } from 'reactflow';
-import { useStore as useRFStore } from 'reactflow';
 
 import ErrorFallback from '../general/ErrorFallback';
+import { useWorkflowHasChanges } from '../store/graph-hooks';
 import useEdgeDataStore from '../store/useEdgeDataStore';
 import useNodeDataStore from '../store/useNodeDataStore';
 import displayedWorkflowInfo from '../store/useStore';
 import useWorkflowInfoStore from '../store/useStore';
-import type { WorkflowChange } from '../store/useWorkflowChangesStore';
-import useWorkflowChanges from '../store/useWorkflowChangesStore';
+import useWorkflowHistory from '../store/useWorkflowHistory';
 import SuspenseBoundary from '../suspense/SuspenseBoundary';
 import Canvas from './Canvas/Canvas';
 import styles from './EditPage.module.css';
@@ -19,54 +18,48 @@ import EditSidebar from './Sidebar/EditSidebar';
 import OverflowDrawer from './TaskDrawer/TaskDrawer';
 import TopAppBar from './TopAppBar/TopAppBar';
 
-export interface PartialWorkflowChange extends Partial<WorkflowChange> {}
-
 export default function EditPage() {
   const [searchParams] = useSearchParams();
+  const workflowHasChanges = useWorkflowHasChanges();
+
+  unstable_usePrompt({
+    message: 'There are unsaved changes. Continue without saving?',
+    when: workflowHasChanges,
+  });
 
   const workflowId = searchParams.get('workflow');
-  const setWorkflowChange = useWorkflowChanges(
-    (state) => state.setWorkflowChange,
+  const pushToWorkflowHistory = useWorkflowHistory(
+    (state) => state.pushToWorkflowHistory,
   );
   const { subscribe: subscribeRFStore } = useStoreApi();
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const saveChange = useCallback(
-    debounce((change: PartialWorkflowChange) => {
-      const { nodesData, edgesData, workflowInfo, rfNodes, rfEdges } = change;
-
-      setWorkflowChange({
-        nodesData: nodesData || useNodeDataStore.getState().nodesData,
-        edgesData: edgesData || useEdgeDataStore.getState().edgesData,
-        workflowInfo:
-          workflowInfo || useWorkflowInfoStore.getState().displayedWorkflowInfo,
-        // the getState is not exposed for usage
-        // @ts-expect-error
-        rfNodes: rfNodes || useRFStore.getState().getNodes(),
-        // @ts-expect-error
-        rfEdges: rfEdges || useRFStore.getState().edges(),
-      });
-    }, 500),
-    [setWorkflowChange],
+  const storeRF = useStoreApi();
+  const handleWorkflowChange = useDebouncedCallback(
+    () => {
+      pushToWorkflowHistory(
+        useNodeDataStore.getState().nodesData,
+        useEdgeDataStore.getState().edgesData,
+        useWorkflowInfoStore.getState().displayedWorkflowInfo,
+        storeRF.getState().getNodes(),
+        storeRF.getState().edges,
+      );
+    },
+    [pushToWorkflowHistory, storeRF],
+    500,
   );
 
   useEffect(() => {
     const unsubs = [
-      useNodeDataStore.subscribe(({ nodesData }) => saveChange({ nodesData })),
-      useEdgeDataStore.subscribe(({ edgesData }) => saveChange({ edgesData })),
+      useNodeDataStore.subscribe(handleWorkflowChange),
+      useEdgeDataStore.subscribe(handleWorkflowChange),
 
-      displayedWorkflowInfo.subscribe((workflowDetails) =>
-        saveChange({ workflowInfo: workflowDetails.displayedWorkflowInfo }),
-      ),
-      subscribeRFStore(({ edges, getNodes }) =>
-        saveChange({ rfEdges: edges, rfNodes: getNodes() }),
-      ),
+      displayedWorkflowInfo.subscribe(handleWorkflowChange),
+      subscribeRFStore(handleWorkflowChange),
     ];
 
     return () => {
       unsubs.forEach((unsub) => unsub());
     };
-  }, [saveChange, subscribeRFStore]);
+  }, [handleWorkflowChange, subscribeRFStore]);
 
   return (
     <div className={styles.root}>

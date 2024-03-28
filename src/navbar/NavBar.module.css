@@ -39,6 +39,6 @@
   border-bottom-color: var(--hoverColor);
 }
 
-.active {
+.link[aria-current] {
   border-bottom-color: var(--selectedColor);
 }

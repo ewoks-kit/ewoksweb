@@ -51,11 +51,10 @@ function DeleteTaskButton(props: Props) {
               Please make sure that it is not used in any workflow!
               Do you agree to continue?`}
         open={isDialogOpen}
-        agreeCallback={async () => {
-          setOpenDialog(false);
+        onClose={() => setOpenDialog(false)}
+        onConfirm={async () => {
           await deleteTask();
         }}
-        disagreeCallback={() => setOpenDialog(false)}
       />
 
       <IconButton

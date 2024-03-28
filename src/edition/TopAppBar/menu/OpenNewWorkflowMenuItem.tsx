@@ -17,7 +17,6 @@ function OpenNewWorkflowMenuItem() {
 
   function openEmptyWorkflow() {
     setSearchParams({});
-    setOpenDialog(false);
   }
 
   useKeyboardEvent(
@@ -36,8 +35,8 @@ function OpenNewWorkflowMenuItem() {
         title="Open a new workflow"
         content="All unsaved modifications will be lost. Continue?"
         open={openDialog}
-        agreeCallback={openEmptyWorkflow}
-        disagreeCallback={() => setOpenDialog(false)}
+        onClose={() => setOpenDialog(false)}
+        onConfirm={openEmptyWorkflow}
       />
       <ActionMenuItem
         icon={FiberNew}

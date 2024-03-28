@@ -2,6 +2,8 @@ import type { Edge, Node, ReactFlowState } from 'reactflow';
 import { useStore as useRFStore } from 'reactflow';
 import { shallow } from 'zustand/shallow';
 
+import useWorkflowHistory from './useWorkflowHistory';
+
 export function useNodesIds() {
   return useRFStore((state) => {
     return [...state.nodeInternals.keys()];
@@ -37,3 +39,7 @@ const nodeEdgeSelectedSelector = (state: ReactFlowState) => {
   }
   return undefined;
 };
+
+export function useWorkflowHasChanges(): boolean {
+  return useWorkflowHistory((state) => state.workflowHistory.length > 1);
+}

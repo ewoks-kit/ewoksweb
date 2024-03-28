@@ -5,7 +5,6 @@ import {
   populatedLinkWorkflow,
   populatedNodeWorkflow,
   simpleLinkWorkflow,
-  simpleLinkWorkflowMarkerEnd,
   simpleNodeWorkflow,
   withCategoryCommentLabelWorkflow,
 } from './utils';
@@ -15,6 +14,10 @@ beforeEach(() => {
 });
 
 const id = nanoid();
+
+after(() => {
+  cy.deleteWorkflow(id);
+});
 
 it('Saves an empty workflow', () => {
   cy.intercept('POST', 'api/workflows', (req) => {
@@ -29,23 +32,24 @@ it('Saves an empty existing workflow', () => {
     expect(req.body).to.deep.equal(emptyWorkflow(id));
   });
 
-  cy.findByRole('button', { name: 'Save workflow to server' }).click();
+  cy.findByRole('button', {
+    name: 'Save workflow to server: no changes',
+  }).click();
 });
 
 it('Saves workflow comment, category and label', () => {
   cy.loadGraph(id);
+
   cy.intercept('PUT', `api/workflow/${id}`, (req) => {
     expect(req.body).to.deep.equal(withCategoryCommentLabelWorkflow(id));
   });
-  cy.findByRole('textbox', { name: 'Edit label' }).click().type(id);
-  cy.findByRole('textbox', { name: 'Edit comment' })
-    .click()
-    .type('graph comment');
-  cy.findByRole('textbox', { name: 'Edit category' })
-    .click()
-    .type('graph category');
+  cy.findByRole('textbox', { name: 'Edit label' }).type('graph label');
+  cy.findByRole('textbox', { name: 'Edit comment' }).type('graph comment');
+  cy.findByRole('textbox', { name: 'Edit category' }).type('graph category');
 
-  cy.findByRole('button', { name: 'Save workflow to server' }).click();
+  cy.findByRole('button', {
+    name: /Save workflow to server/,
+  }).click();
 });
 
 it('Opens and saves workflow after deleting comment, category and label', () => {
@@ -68,8 +72,11 @@ it('Opens and saves workflow after deleting comment, category and label', () => 
   cy.findByRole('textbox', { name: 'Edit label' }).clear();
   cy.findByRole('textbox', { name: 'Edit comment' }).clear();
   cy.findByRole('textbox', { name: 'Edit category' }).clear();
+  cy.waitForStableDOM();
 
-  cy.findByRole('button', { name: 'Save workflow to server' }).click();
+  cy.findByRole('button', {
+    name: /Save workflow to server/,
+  }).click();
 });
 
 it('Opens and saves a skeleton node right after dropping it on canvas', () => {
@@ -91,7 +98,9 @@ it('Opens and saves a skeleton node right after dropping it on canvas', () => {
 
   cy.get('.react-flow__node').should('have.length', 1);
 
-  cy.findByRole('button', { name: 'Save workflow to server' }).click();
+  cy.findByRole('button', {
+    name: /Save workflow to server/,
+  }).click();
 });
 
 it('Opens and saves a skeleton node after populating it', () => {
@@ -142,7 +151,9 @@ it('Opens and saves a skeleton node after populating it', () => {
   cy.findByRole('checkbox', { name: 'More handles' }).check();
   cy.findByRole('checkbox', { name: 'With image' }).uncheck();
 
-  cy.findByRole('button', { name: 'Save workflow to server' }).click();
+  cy.findByRole('button', {
+    name: /Save workflow to server/,
+  }).click();
 });
 
 it('Creates a link and saves it', () => {
@@ -187,7 +198,9 @@ it('Creates a link and saves it', () => {
 
   addPUTInterceptor(id, simpleLinkWorkflow(id));
 
-  cy.findByRole('button', { name: 'Save workflow to server' }).click();
+  cy.findByRole('button', {
+    name: /Save workflow to server/,
+  }).click();
 });
 
 it('Saves a populated link', () => {
@@ -261,7 +274,72 @@ it('Saves a populated link', () => {
 
   cy.contains('Animated').siblings().click();
 
-  cy.findByRole('button', { name: 'Save workflow to server' }).click();
+  cy.findByRole('button', {
+    name: /Save workflow to server/,
+  }).click();
+});
+
+it('saves default inputs with the correct type', () => {
+  cy.findByRole('button', { name: 'ewokscore' }).click();
+  cy.dragNodeInCanvas('ewokscore.tests.examples.tasks.sumtask.SumTask');
+
+  cy.get('.react-flow__node').click();
+
+  cy.findByRole('table', { name: 'editable table' }).within(() => {
+    cy.findByRole('button', { name: 'Add entry' }).click();
+    cy.findAllByRole('combobox', { name: 'Edit input name' }).last().type('a');
+    cy.findAllByRole('combobox', { name: 'Change input type' })
+      .last()
+      .select('number');
+    cy.findAllByRole('spinbutton', { name: 'Edit input value' })
+      .last()
+      .type('1.7567e2');
+
+    cy.findByRole('button', { name: 'Add entry' }).click();
+    cy.findAllByRole('combobox', { name: 'Edit input name' }).last().type('b');
+    cy.findAllByRole('combobox', { name: 'Change input type' })
+      .last()
+      .select('string');
+    cy.findAllByRole('textbox', { name: 'Edit input value' }).last().type('1');
+
+    cy.findByRole('button', { name: 'Add entry' }).click();
+    cy.findAllByRole('combobox', { name: 'Edit input name' }).last().type('c');
+    cy.findAllByRole('combobox', { name: 'Change input type' })
+      .last()
+      .select('null');
+
+    cy.findByRole('button', { name: 'Add entry' }).click();
+    cy.findAllByRole('combobox', { name: 'Edit input name' }).last().type('d');
+    cy.findAllByRole('combobox', { name: 'Change input type' })
+      .last()
+      .select('bool');
+    cy.findByRole('radio', { name: 'true' }).click();
+
+    cy.findByRole('button', { name: 'Add entry' }).click();
+    cy.findAllByRole('combobox', { name: 'Edit input name' }).last().type('0');
+    cy.findAllByRole('combobox', { name: 'Change input type' })
+      .last()
+      .select('number');
+    cy.findAllByRole('spinbutton', { name: 'Edit input value' })
+      .last()
+      .type('0');
+  });
+
+  cy.intercept('POST', 'api/workflows', (req) => {
+    expect(req.body.nodes[0].default_inputs).to.deep.equal([
+      { name: 'a', value: 175.67 },
+      { name: 'b', value: '1' },
+      { name: 'c', value: null },
+      { name: 'd', value: true },
+      { name: 0, value: 0 },
+    ]);
+
+    return req.reply({});
+  }).as('saveRequest');
+
+  cy.saveNewWorkflow(nanoid());
+
+  cy.wait('@saveRequest');
 });
 
 it('saves default inputs with the correct type', () => {

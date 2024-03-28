@@ -26,6 +26,7 @@ import useEdgeDataStore from '../../store/useEdgeDataStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import useStore from '../../store/useStore';
+import useWorkflowHistory from '../../store/useWorkflowHistory';
 import type { RFNode, Task } from '../../types';
 import { WorkflowSource } from '../../types';
 import { getNodesData } from '../../utils';
@@ -107,6 +108,9 @@ function Canvas(props: Props) {
   );
 
   const tasks = useTasks();
+  const resetWorkflowHistory = useWorkflowHistory(
+    (state) => state.resetWorkflowHistory,
+  );
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
   const showInfoMsg = useSnackbarStore((state) => state.showInfoMsg);
@@ -315,6 +319,7 @@ function Canvas(props: Props) {
               } else {
                 resetRootWorkflow(rfInstance, tasks);
               }
+              resetWorkflowHistory();
             }}
           >
             <CanvasBackground />

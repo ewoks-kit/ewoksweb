@@ -25,23 +25,6 @@ function DeleteMenuItem() {
   );
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
 
-  async function agreeCallback() {
-    setOpenAgreeDialog(false);
-    if (displayedWorkflowInfo.id) {
-      try {
-        await deleteWorkflow(displayedWorkflowInfo.id);
-        invalidateWorkflowDescriptions();
-
-        showSuccessMsg(
-          `Workflow ${displayedWorkflowInfo.id} successfully deleted!`,
-        );
-        setSearchParams({});
-      } catch (error) {
-        showErrorMsg(textForError(error, commonStrings.deletingError));
-      }
-    }
-  }
-
   return (
     <>
       <ConfirmDialog
@@ -50,11 +33,22 @@ function DeleteMenuItem() {
         Please make sure that it is not used as a sub-workflow in other workflows!
         Do you agree to continue?`}
         open={openAgreeDialog}
-        agreeCallback={() => {
-          agreeCallback();
-        }}
-        disagreeCallback={() => {
-          setOpenAgreeDialog(false);
+        onClose={() => setOpenAgreeDialog(false)}
+        onConfirm={async () => {
+          if (!displayedWorkflowInfo.id) {
+            return;
+          }
+          try {
+            await deleteWorkflow(displayedWorkflowInfo.id);
+            invalidateWorkflowDescriptions();
+
+            showSuccessMsg(
+              `Workflow ${displayedWorkflowInfo.id} successfully deleted!`,
+            );
+            setSearchParams({});
+          } catch (error) {
+            showErrorMsg(textForError(error, commonStrings.deletingError));
+          }
         }}
       />
 
