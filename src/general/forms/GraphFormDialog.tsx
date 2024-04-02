@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogTitle,
 } from '@mui/material';
+import { flushSync } from 'react-dom';
 import { Controller, useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
 import { useReactFlow } from 'reactflow';
@@ -16,6 +17,7 @@ import {
 } from '../../api/workflows';
 import commonStrings from '../../commonStrings.json';
 import useSnackbarStore from '../../store/useSnackbarStore';
+import useWorkflowHistory from '../../store/useWorkflowHistory';
 import type { GraphDetails } from '../../types';
 import {
   getEdgesData,
@@ -39,6 +41,7 @@ export default function GraphFormDialog(props: Props) {
   const { handleSubmit, reset, control, formState } = useForm({
     defaultValues: { name: elementToEdit.id },
   });
+  const { resetWorkflowHistory } = useWorkflowHistory();
 
   const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
@@ -68,6 +71,9 @@ export default function GraphFormDialog(props: Props) {
 
       reset();
       handleClose();
+      // `flushSync` forces React to reset the workflow history _before_ navigating, to make sure the user doesn't see
+      // the "unsaved changes" prompt - cf. https://gitlab.esrf.fr/workflow/ewoks/ewoksweb/-/issues/265)
+      flushSync(() => resetWorkflowHistory());
       setSearchParams({ workflow: name });
     } catch (error) {
       showErrorMsg(textForError(error, commonStrings.savingError));
