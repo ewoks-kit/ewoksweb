@@ -24,14 +24,14 @@ export function computeInputOutputNodes(
     if (node.data.task_props.task_type === 'graphInput') {
       input_nodes = [
         ...input_nodes,
-        ...calcInOutNodes('graphInput', node, [...nodes], [...links]),
+        ...computeInputNodes(node, [...nodes], [...links]),
       ];
     }
 
     if (node.data.task_props.task_type === 'graphOutput') {
       output_nodes = [
         ...output_nodes,
-        ...calcInOutNodes('graphOutput', node, [...nodes], [...links]),
+        ...computeOutputNodes(node, [...nodes], [...links]),
       ];
     }
   });
@@ -46,8 +46,7 @@ export function computeInputOutputNodes(
   };
 }
 
-function calcInOutNodes(
-  inputOrOutput: string,
+function computeInputNodes(
   nod: NodeWithData,
   graph_nodes: NodeWithData[],
   graph_links: EdgeWithData[],
@@ -56,20 +55,10 @@ function calcInOutNodes(
 
   let nodesNamesConnectedTo: string[] = [];
 
-  if (inputOrOutput === 'graphInput') {
-    // DOC: Find the nodes, this INPUT node is connected to
-    // In the current ewoks spec only one node can be connected to input-output node
-    nodesNamesConnectedTo = graph_links
-      .filter((link) => link.source === nod.id)
-      .map((link) => link.target);
-  }
-
-  if (inputOrOutput === 'graphOutput') {
-    // DOC: Find the nodes this OUTPUT node is connected to
-    nodesNamesConnectedTo = graph_links
-      .filter((link) => link.target === nod.id)
-      .map((link) => link.source);
-  }
+  // DOC: Find the nodes this INPUT node is connected to
+  nodesNamesConnectedTo = graph_links
+    .filter((link) => link.source === nod.id)
+    .map((link) => link.target);
 
   // DOC: use an array for all nodes although ewoks allows only one for now
   const nodeObjConnectedTo: NodeWithData[] = [];
@@ -82,14 +71,9 @@ function calcInOutNodes(
 
   // DOC: Iterate the nodes to create the new input_nodes
   nodeObjConnectedTo.forEach((nodConnected) => {
-    const link_index =
-      inputOrOutput === 'graphOutput'
-        ? graph_links.findIndex(
-            (link) => link.target === nod.id && link.source === nodConnected.id,
-          )
-        : graph_links.findIndex(
-            (link) => link.source === nod.id && link.target === nodConnected.id,
-          );
+    const link_index = graph_links.findIndex(
+      (link) => link.source === nod.id && link.target === nodConnected.id,
+    );
 
     nodes.push(
       calcNodeProps(
@@ -98,7 +82,47 @@ function calcInOutNodes(
         nodConnected,
         graph_links,
         link_index,
-        inputOrOutput,
+        'graphInput',
+      ),
+    );
+  });
+  return nodes;
+}
+
+function computeOutputNodes(
+  nod: NodeWithData,
+  graph_nodes: NodeWithData[],
+  graph_links: EdgeWithData[],
+): InputOutputNodeAndLink[] {
+  const nodes: InputOutputNodeAndLink[] = [];
+
+  // DOC: Find the nodes this OUTPUT node is connected to
+  const nodesNamesConnectedTo = graph_links
+    .filter((link) => link.target === nod.id)
+    .map((link) => link.source);
+
+  // DOC: use an array for all nodes although ewoks allows only one for now
+  const nodeObjConnectedTo: NodeWithData[] = [];
+  for (const nodesNames of nodesNamesConnectedTo) {
+    const nodeInGraph = graph_nodes.find((node) => nodesNames === node.id);
+    if (nodeInGraph) {
+      nodeObjConnectedTo.push(nodeInGraph);
+    }
+  }
+
+  // DOC: Iterate the nodes to create the new input_nodes
+  nodeObjConnectedTo.forEach((nodConnected) => {
+    const link_index = graph_links.findIndex(
+      (link) => link.target === nod.id && link.source === nodConnected.id,
+    );
+    nodes.push(
+      calcNodeProps(
+        nodConnected.data.task_props.task_type === 'graph',
+        nod,
+        nodConnected,
+        graph_links,
+        link_index,
+        'graphOutput',
       ),
     );
   });
@@ -111,7 +135,7 @@ function calcNodeProps(
   nodConnected: NodeWithData,
   graph_links: EdgeWithData[],
   link_index: number,
-  inputOrOutput: string,
+  inputOrOutput: 'graphInput' | 'graphOutput',
 ): InputOutputNodeAndLink {
   const link = graph_links[link_index];
 
