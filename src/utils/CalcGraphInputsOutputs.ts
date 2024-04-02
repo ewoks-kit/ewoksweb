@@ -80,8 +80,7 @@ function computeInputNodes(
         nodConnected.data.task_props.task_type === 'graph',
         nod,
         nodConnected,
-        graph_links,
-        link_index,
+        graph_links[link_index],
         'graphInput',
       ),
     );
@@ -90,55 +89,51 @@ function computeInputNodes(
 }
 
 function computeOutputNodes(
-  nod: NodeWithData,
-  graph_nodes: NodeWithData[],
-  graph_links: EdgeWithData[],
+  rawOutputNode: NodeWithData,
+  nodes: NodeWithData[],
+  links: EdgeWithData[],
 ): InputOutputNodeAndLink[] {
-  const nodes: InputOutputNodeAndLink[] = [];
+  const output_nodes: InputOutputNodeAndLink[] = [];
 
-  // DOC: Find the nodes this OUTPUT node is connected to
-  const nodesNamesConnectedTo = graph_links
-    .filter((link) => link.target === nod.id)
+  const connectedNodesIds = links
+    .filter((link) => link.target === rawOutputNode.id)
     .map((link) => link.source);
 
-  // DOC: use an array for all nodes although ewoks allows only one for now
-  const nodeObjConnectedTo: NodeWithData[] = [];
-  for (const nodesNames of nodesNamesConnectedTo) {
-    const nodeInGraph = graph_nodes.find((node) => nodesNames === node.id);
-    if (nodeInGraph) {
-      nodeObjConnectedTo.push(nodeInGraph);
-    }
-  }
+  for (const connectedNodeId of connectedNodesIds) {
+    const connectedNode = nodes.find((node) => connectedNodeId === node.id);
 
-  // DOC: Iterate the nodes to create the new input_nodes
-  nodeObjConnectedTo.forEach((nodConnected) => {
-    const link_index = graph_links.findIndex(
-      (link) => link.target === nod.id && link.source === nodConnected.id,
+    if (!connectedNode) {
+      continue;
+    }
+    const connectingLink = links.find(
+      (link) =>
+        link.target === rawOutputNode.id && link.source === connectedNodeId,
     );
-    nodes.push(
+    if (!connectingLink) {
+      continue;
+    }
+
+    output_nodes.push(
       calcNodeProps(
-        nodConnected.data.task_props.task_type === 'graph',
-        nod,
-        nodConnected,
-        graph_links,
-        link_index,
+        connectedNode.data.task_props.task_type === 'graph',
+        rawOutputNode,
+        connectedNode,
+        connectingLink,
         'graphOutput',
       ),
     );
-  });
-  return nodes;
+  }
+
+  return output_nodes;
 }
 
 function calcNodeProps(
   isGraph: boolean,
   nod: NodeWithData,
   nodConnected: NodeWithData,
-  graph_links: EdgeWithData[],
-  link_index: number,
+  link: EdgeWithData,
   inputOrOutput: 'graphInput' | 'graphOutput',
 ): InputOutputNodeAndLink {
-  const link = graph_links[link_index];
-
   const lData = link.data;
   const nData = nod.data;
   const nUiprops = nData.ui_props;
