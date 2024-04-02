@@ -68,7 +68,7 @@ export function prepareEwoksGraph(
 
   graph = {
     ...graph,
-    ...(propIsEmpty(uiprops) && {
+    ...(!propIsEmpty(uiprops) && {
       uiProps: uiprops,
     }),
   };
