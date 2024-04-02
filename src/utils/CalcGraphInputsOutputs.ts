@@ -13,13 +13,10 @@ import {
   propIsEmpty,
 } from './utils';
 
-// DOC: Calculate the ewoks input_nodes and output_nodes within the graph
-// from the nodes of the graphRF model with types graphInput, graphOutput
-export function calcEwoksGraphProp(
-  graph: GraphDetails,
+export function computeInputOutputNodes(
   nodes: NodeWithData[],
   links: EdgeWithData[],
-): GraphDetails {
+): Pick<GraphDetails, 'input_nodes' | 'output_nodes'> {
   let input_nodes: InputOutputNodeAndLink[] = [];
   let output_nodes: InputOutputNodeAndLink[] = [];
 
@@ -40,7 +37,6 @@ export function calcEwoksGraphProp(
   });
 
   return {
-    ...graph,
     ...(input_nodes.length > 0 && {
       input_nodes,
     }),

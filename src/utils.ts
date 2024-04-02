@@ -14,7 +14,7 @@ import type {
   NodeData,
   Workflow,
 } from './types';
-import { calcEwoksGraphProp } from './utils/CalcGraphInputsOutputs';
+import { computeInputOutputNodes } from './utils/CalcGraphInputsOutputs';
 import { calcNoteNodes } from './utils/calcNoteNodes';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
@@ -61,17 +61,19 @@ export function prepareEwoksGraph(
 
   const graphInfo = curateGraphInfo(rawGraphInfo);
 
-  let graph = calcEwoksGraphProp(graphInfo, nodes, links);
+  const inputOutputNodes = computeInputOutputNodes(nodes, links);
   const noteNodes = calcNoteNodes(nodes);
-  const uiprops =
-    noteNodes.length > 0
-      ? { ...graph.uiProps, notes: noteNodes }
-      : graph.uiProps;
 
-  graph = {
-    ...graph,
-    ...(!propIsEmpty(uiprops) && {
-      uiProps: uiprops,
+  const uiPropsWithNotes =
+    noteNodes.length > 0
+      ? { ...graphInfo.uiProps, notes: noteNodes }
+      : graphInfo.uiProps;
+
+  const graph = {
+    ...graphInfo,
+    ...inputOutputNodes,
+    ...(!propIsEmpty(uiPropsWithNotes) && {
+      uiProps: uiPropsWithNotes,
     }),
   };
 
@@ -139,7 +141,7 @@ export function getTaskName(task_identifier: string): string {
   return task_members[task_members.length - 1];
 }
 
-function curateGraphInfo(rawInfo: GraphDetails): GraphDetails {
+function curateGraphInfo(rawInfo: GraphDetails) {
   return {
     id: rawInfo.id,
     ...(rawInfo.label && { label: rawInfo.label }),
