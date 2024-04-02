@@ -59,7 +59,7 @@ export function prepareEwoksGraph(
   const linkData = curateEdgeData(rawLinkData);
   const links = edgesWithoutData.map((edge) => enrichWithData(edge, linkData));
 
-  let graph = calcEwoksGraphProp({ graph: graphInfo, nodes, links });
+  let graph = calcEwoksGraphProp(graphInfo, nodes, links);
   const noteNodes = calcNoteNodes(nodes);
   const uiprops =
     noteNodes.length > 0

@@ -1,6 +1,5 @@
 import type {
   EdgeWithData,
-  Graph,
   GraphDetails,
   InputOutputNodeAndLink,
   NodeWithData,
@@ -16,56 +15,50 @@ import {
 
 // DOC: Calculate the ewoks input_nodes and output_nodes within the graph
 // from the nodes of the graphRF model with types graphInput, graphOutput
-export function calcEwoksGraphProp(graph: Graph): GraphDetails {
+export function calcEwoksGraphProp(
+  graph: GraphDetails,
+  nodes: NodeWithData[],
+  links: EdgeWithData[],
+): GraphDetails {
   let input_nodes: InputOutputNodeAndLink[] = [];
   let output_nodes: InputOutputNodeAndLink[] = [];
 
-  graph.nodes.forEach((nod) => {
-    if (nod.data.task_props.task_type === 'graphInput') {
+  nodes.forEach((node) => {
+    if (node.data.task_props.task_type === 'graphInput') {
       input_nodes = [
         ...input_nodes,
-        ...calcInOutNodes(
-          'graphInput',
-          nod,
-          [...graph.nodes],
-          [...graph.links],
-        ),
+        ...calcInOutNodes('graphInput', node, [...nodes], [...links]),
       ];
     }
 
-    if (nod.data.task_props.task_type === 'graphOutput') {
+    if (node.data.task_props.task_type === 'graphOutput') {
       output_nodes = [
         ...output_nodes,
-        ...calcInOutNodes(
-          'graphOutput',
-          nod,
-          [...graph.nodes],
-          [...graph.links],
-        ),
+        ...calcInOutNodes('graphOutput', node, [...nodes], [...links]),
       ];
     }
   });
 
   return {
-    id: graph.graph.id,
-    ...(graph.graph.label && { label: graph.graph.label }),
-    ...(!propIsEmpty(graph.graph.keywords) && {
-      keywords: graph.graph.keywords,
+    id: graph.id,
+    ...(graph.label && { label: graph.label }),
+    ...(!propIsEmpty(graph.keywords) && {
+      keywords: graph.keywords,
     }),
-    ...(!propIsEmpty(graph.graph.input_schema) && {
-      input_schema: graph.graph.input_schema,
+    ...(!propIsEmpty(graph.input_schema) && {
+      input_schema: graph.input_schema,
     }),
-    ...(!propIsEmpty(graph.graph.ui_schema) && {
-      ui_schema: graph.graph.ui_schema,
+    ...(!propIsEmpty(graph.ui_schema) && {
+      ui_schema: graph.ui_schema,
     }),
-    ...(!propIsEmpty(graph.graph.execute_arguments) && {
-      execute_arguments: graph.graph.execute_arguments,
+    ...(!propIsEmpty(graph.execute_arguments) && {
+      execute_arguments: graph.execute_arguments,
     }),
-    ...(!propIsEmpty(graph.graph.worker_options) && {
-      worker_options: graph.graph.worker_options,
+    ...(!propIsEmpty(graph.worker_options) && {
+      worker_options: graph.worker_options,
     }),
-    ...(graph.graph.category && {
-      category: graph.graph.category,
+    ...(graph.category && {
+      category: graph.category,
     }),
     ...(input_nodes.length > 0 && {
       input_nodes,
@@ -73,8 +66,8 @@ export function calcEwoksGraphProp(graph: Graph): GraphDetails {
     ...(output_nodes.length > 0 && {
       output_nodes,
     }),
-    ...(!propIsEmpty(graph.graph.uiProps) && {
-      uiProps: { ...graph.graph.uiProps },
+    ...(!propIsEmpty(graph.uiProps) && {
+      uiProps: { ...graph.uiProps },
     }),
   };
 }
