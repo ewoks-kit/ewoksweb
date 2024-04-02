@@ -47,7 +47,7 @@ export async function getSubgraphs(nodes: EwoksNode[]): Promise<Workflow[]> {
 }
 
 export function prepareEwoksGraph(
-  graphInfo: GraphDetails,
+  rawGraphInfo: GraphDetails,
   nodesWithoutData: Node[],
   edgesWithoutData: Edge[],
   rawNodeData: Map<string, NodeData>,
@@ -58,6 +58,8 @@ export function prepareEwoksGraph(
 
   const linkData = curateEdgeData(rawLinkData);
   const links = edgesWithoutData.map((edge) => enrichWithData(edge, linkData));
+
+  const graphInfo = curateGraphInfo(rawGraphInfo);
 
   let graph = calcEwoksGraphProp(graphInfo, nodes, links);
   const noteNodes = calcNoteNodes(nodes);
@@ -135,4 +137,32 @@ export function getTaskName(task_identifier: string): string {
   }
 
   return task_members[task_members.length - 1];
+}
+
+function curateGraphInfo(rawInfo: GraphDetails): GraphDetails {
+  return {
+    id: rawInfo.id,
+    ...(rawInfo.label && { label: rawInfo.label }),
+    ...(!propIsEmpty(rawInfo.keywords) && {
+      keywords: rawInfo.keywords,
+    }),
+    ...(!propIsEmpty(rawInfo.input_schema) && {
+      input_schema: rawInfo.input_schema,
+    }),
+    ...(!propIsEmpty(rawInfo.ui_schema) && {
+      ui_schema: rawInfo.ui_schema,
+    }),
+    ...(!propIsEmpty(rawInfo.execute_arguments) && {
+      execute_arguments: rawInfo.execute_arguments,
+    }),
+    ...(!propIsEmpty(rawInfo.worker_options) && {
+      worker_options: rawInfo.worker_options,
+    }),
+    ...(rawInfo.category && {
+      category: rawInfo.category,
+    }),
+    ...(!propIsEmpty(rawInfo.uiProps) && {
+      uiProps: { ...rawInfo.uiProps },
+    }),
+  };
 }

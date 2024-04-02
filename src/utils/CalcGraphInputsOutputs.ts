@@ -40,34 +40,12 @@ export function calcEwoksGraphProp(
   });
 
   return {
-    id: graph.id,
-    ...(graph.label && { label: graph.label }),
-    ...(!propIsEmpty(graph.keywords) && {
-      keywords: graph.keywords,
-    }),
-    ...(!propIsEmpty(graph.input_schema) && {
-      input_schema: graph.input_schema,
-    }),
-    ...(!propIsEmpty(graph.ui_schema) && {
-      ui_schema: graph.ui_schema,
-    }),
-    ...(!propIsEmpty(graph.execute_arguments) && {
-      execute_arguments: graph.execute_arguments,
-    }),
-    ...(!propIsEmpty(graph.worker_options) && {
-      worker_options: graph.worker_options,
-    }),
-    ...(graph.category && {
-      category: graph.category,
-    }),
+    ...graph,
     ...(input_nodes.length > 0 && {
       input_nodes,
     }),
     ...(output_nodes.length > 0 && {
       output_nodes,
-    }),
-    ...(!propIsEmpty(graph.uiProps) && {
-      uiProps: { ...graph.uiProps },
     }),
   };
 }
