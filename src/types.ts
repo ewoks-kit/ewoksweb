@@ -74,11 +74,6 @@ export interface EwoksEvent {
 
 export interface State extends DisplayedWorkflowInfoSlice, RootWorkflowSlice {}
 
-export interface Action {
-  action: string;
-  graph: Graph;
-}
-
 export type TaskType =
   | 'graphInput'
   | 'graph'
@@ -307,12 +302,6 @@ export interface LinkUiProps {
   targetHandle?: string | null;
   style?: CSSProperties;
   getAroundProps?: { x?: number; y?: number };
-}
-
-export interface Graph {
-  graph: GraphDetails;
-  nodes: NodeWithData[];
-  links: EdgeWithData[];
 }
 
 export interface Workflow {
