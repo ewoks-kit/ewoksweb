@@ -14,7 +14,10 @@ import type {
   NodeData,
   Workflow,
 } from './types';
-import { computeInputOutputNodes } from './utils/CalcGraphInputsOutputs';
+import {
+  computeInputNodes,
+  computeOutputNodes,
+} from './utils/CalcGraphInputsOutputs';
 import { calcNoteNodes } from './utils/calcNoteNodes';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
@@ -59,26 +62,20 @@ export function prepareEwoksGraph(
   const linkData = curateEdgeData(rawLinkData);
   const links = edgesWithoutData.map((edge) => enrichWithData(edge, linkData));
 
-  const graphInfo = curateGraphInfo(rawGraphInfo);
-
-  const inputOutputNodes = computeInputOutputNodes(nodes, links);
   const noteNodes = calcNoteNodes(nodes);
 
-  const uiPropsWithNotes =
-    noteNodes.length > 0
-      ? { ...graphInfo.uiProps, notes: noteNodes }
-      : graphInfo.uiProps;
-
-  const graph = {
-    ...graphInfo,
-    ...inputOutputNodes,
-    ...(!propIsEmpty(uiPropsWithNotes) && {
-      uiProps: uiPropsWithNotes,
-    }),
+  const graphInfo: GraphDetails = {
+    ...rawGraphInfo,
+    input_nodes: computeInputNodes(nodes, links),
+    output_nodes: computeOutputNodes(nodes, links),
+    uiProps:
+      noteNodes.length > 0
+        ? { ...rawGraphInfo.uiProps, notes: noteNodes }
+        : rawGraphInfo.uiProps,
   };
 
   return {
-    graph,
+    graph: curateGraphInfo(graphInfo),
     nodes: toEwoksNodes(nodes),
     links: toEwoksLinks(links),
   };
@@ -145,6 +142,18 @@ function curateGraphInfo(rawInfo: GraphDetails) {
   return {
     id: rawInfo.id,
     ...(rawInfo.label && { label: rawInfo.label }),
+    ...(rawInfo.category && {
+      category: rawInfo.category,
+    }),
+    ...(!propIsEmpty(rawInfo.input_nodes) && {
+      input_nodes: rawInfo.input_nodes,
+    }),
+    ...(!propIsEmpty(rawInfo.output_nodes) && {
+      output_nodes: rawInfo.output_nodes,
+    }),
+    ...(!propIsEmpty(rawInfo.uiProps) && {
+      uiProps: { ...rawInfo.uiProps },
+    }),
     ...(!propIsEmpty(rawInfo.keywords) && {
       keywords: rawInfo.keywords,
     }),
@@ -159,12 +168,6 @@ function curateGraphInfo(rawInfo: GraphDetails) {
     }),
     ...(!propIsEmpty(rawInfo.worker_options) && {
       worker_options: rawInfo.worker_options,
-    }),
-    ...(rawInfo.category && {
-      category: rawInfo.category,
-    }),
-    ...(!propIsEmpty(rawInfo.uiProps) && {
-      uiProps: { ...rawInfo.uiProps },
     }),
   };
 }
