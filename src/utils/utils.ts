@@ -83,18 +83,16 @@ export function calcLinkCommonProps(linkAttr: EwoksIOLinkAttributes) {
   };
 }
 
-export function propIsEmpty(obj: object | undefined) {
-  let isEmpty = true;
+export function isEmpty(obj: object | undefined) {
   if (obj === undefined) {
-    return isEmpty;
+    return true;
   }
   for (const [, value] of Object.entries(obj)) {
     if ((Array.isArray(value) && value.length > 0) || value) {
-      isEmpty = false;
-      break;
+      return false;
     }
   }
-  return isEmpty;
+  return true;
 }
 
 export function generateUniqueNodeId(

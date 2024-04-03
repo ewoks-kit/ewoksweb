@@ -11,8 +11,8 @@ import { isString } from './typeGuards';
 import {
   calcDataMapping,
   convertRFMarkerEndToEwoks,
+  isEmpty,
   notUndefinedValue,
-  propIsEmpty,
 } from './utils';
 
 export function computeInputNodes(
@@ -64,7 +64,7 @@ function convertRFInputNodeToEwoks(
       id: thisNode.id,
       node: connectedNode.id,
       ...(subNode ? { sub_node: subNode } : {}),
-      ...(!propIsEmpty(linkAttributes) && { link_attributes: linkAttributes }),
+      ...(!isEmpty(linkAttributes) && { link_attributes: linkAttributes }),
       uiProps: computeUiProps(thisNode, link),
     });
   }
@@ -101,7 +101,7 @@ function convertRFOutputNodeToEwoks(
       id: rfOutputNode.id,
       node: connectedNode.id,
       ...(subNode ? { sub_node: subNode } : {}),
-      ...(!propIsEmpty(linkAttributes) && { link_attributes: linkAttributes }),
+      ...(!isEmpty(linkAttributes) && { link_attributes: linkAttributes }),
       uiProps: computeUiProps(rfOutputNode, link),
     });
   }

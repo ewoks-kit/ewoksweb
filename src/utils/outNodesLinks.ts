@@ -1,5 +1,5 @@
 import type { EwoksIONode, EwoksLink, EwoksNode } from '../types';
-import { propIsEmpty } from './utils';
+import { isEmpty } from './utils';
 import {
   calcCommonNodeUiProps,
   calcLinkCommonProps,
@@ -55,7 +55,7 @@ export function outNodesLinks(
           ...(nodeSource?.task_type === 'graph' &&
             outNod.sub_node && { sub_source: outNod.sub_node }),
           ...(linkAttr && { ...calcLinkCommonProps(linkAttr) }),
-          ...(!propIsEmpty(linksUiProps) && {
+          ...(!isEmpty(linksUiProps) && {
             uiProps: linksUiProps,
           }),
         });
