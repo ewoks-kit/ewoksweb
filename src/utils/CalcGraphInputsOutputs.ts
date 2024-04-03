@@ -1,7 +1,9 @@
 import type {
   EdgeWithData,
+  EwoksIOLinkAttributes,
+  EwoksIONode,
+  EwoksIONodeUiProps,
   GraphDetails,
-  InputOutputNodeAndLink,
   NodeWithData,
 } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
@@ -17,8 +19,8 @@ export function computeInputOutputNodes(
   nodes: NodeWithData[],
   links: EdgeWithData[],
 ): Pick<GraphDetails, 'input_nodes' | 'output_nodes'> {
-  let input_nodes: InputOutputNodeAndLink[] = [];
-  let output_nodes: InputOutputNodeAndLink[] = [];
+  let input_nodes: EwoksIONode[] = [];
+  let output_nodes: EwoksIONode[] = [];
 
   nodes.forEach((node) => {
     if (node.data.task_props.task_type === 'graphInput') {
@@ -50,8 +52,8 @@ function computeInputNodes(
   nod: NodeWithData,
   graph_nodes: NodeWithData[],
   graph_links: EdgeWithData[],
-): InputOutputNodeAndLink[] {
-  const nodes: InputOutputNodeAndLink[] = [];
+): EwoksIONode[] {
+  const nodes: EwoksIONode[] = [];
 
   let nodesNamesConnectedTo: string[] = [];
 
@@ -76,7 +78,7 @@ function computeInputNodes(
     );
 
     nodes.push(
-      calcNodeProps(
+      computeIONode(
         nodConnected.data.task_props.task_type === 'graph',
         nod,
         nodConnected,
@@ -92,8 +94,8 @@ function computeOutputNodes(
   rawOutputNode: NodeWithData,
   nodes: NodeWithData[],
   links: EdgeWithData[],
-): InputOutputNodeAndLink[] {
-  const output_nodes: InputOutputNodeAndLink[] = [];
+): EwoksIONode[] {
+  const output_nodes: EwoksIONode[] = [];
 
   const connectedNodesIds = links
     .filter((link) => link.target === rawOutputNode.id)
@@ -113,32 +115,50 @@ function computeOutputNodes(
       continue;
     }
 
-    output_nodes.push(
-      calcNodeProps(
-        connectedNode.data.task_props.task_type === 'graph',
-        rawOutputNode,
-        connectedNode,
-        connectingLink,
-        'graphOutput',
-      ),
-    );
+    const subNode =
+      connectedNode.data.task_props.task_type === 'graph' &&
+      connectingLink.data.sub_source
+        ? connectingLink.data.sub_source
+        : undefined;
+
+    const linkAttributes = computeLinkAttributes(connectingLink);
+    output_nodes.push({
+      id: rawOutputNode.id,
+      node: connectedNode.id,
+      ...(subNode ? { sub_node: subNode } : {}),
+      ...(!propIsEmpty(linkAttributes) && { link_attributes: linkAttributes }),
+      uiProps: computeUiProps(rawOutputNode, connectingLink),
+    });
   }
 
   return output_nodes;
 }
 
-function calcNodeProps(
+function computeIONode(
   isGraph: boolean,
-  nod: NodeWithData,
+  node: NodeWithData,
   nodConnected: NodeWithData,
   link: EdgeWithData,
-  inputOrOutput: 'graphInput' | 'graphOutput',
-): InputOutputNodeAndLink {
-  const lData = link.data;
-  const nData = nod.data;
-  const nUiprops = nData.ui_props;
+  inputOrOutput: 'graphInput',
+): EwoksIONode {
+  const linkAttributes = computeLinkAttributes(link);
 
-  const linkAttributes = {
+  return {
+    id: node.id,
+    node: nodConnected.id,
+    sub_node: isGraph
+      ? (inputOrOutput === 'graphOutput'
+          ? link.data.sub_source
+          : link.data.sub_target) || undefined
+      : undefined,
+    ...(!propIsEmpty(linkAttributes) && { link_attributes: linkAttributes }),
+    uiProps: computeUiProps(node, link),
+  };
+}
+
+function computeLinkAttributes(link: EdgeWithData): EwoksIOLinkAttributes {
+  const { data: lData } = link;
+  return {
     ...(isString(link.label) && { label: link.label }),
     ...(lData.comment && { comment: lData.comment }),
     ...(lData.conditions &&
@@ -158,38 +178,34 @@ function calcNodeProps(
     ...notUndefinedValue(lData.on_error, 'on_error'),
     ...notUndefinedValue(lData.required, 'required'),
   };
+}
 
+function computeUiProps(
+  node: NodeWithData,
+  link: EdgeWithData,
+): EwoksIONodeUiProps {
   const ewoksMarkerEnd = convertRFMarkerEndToEwoks(link.markerEnd);
+  const { ui_props: uiProps } = node.data;
+
   return {
-    id: nod.id,
-    node: nodConnected.id,
-    sub_node: isGraph
-      ? (inputOrOutput === 'graphOutput'
-          ? lData.sub_source
-          : lData.sub_target) || undefined
-      : undefined,
-    ...(nodConnected.id &&
-      !propIsEmpty(linkAttributes) && { link_attributes: linkAttributes }),
-    uiProps: {
-      position: nod.position,
-      ...notUndefinedValue(nData.ewoks_props.label, 'label'),
-      ...notUndefinedValue(link.type, 'type'),
-      ...(link.style?.stroke &&
-        link.style.stroke !== DEFAULT_LINK_VALUES.uiProps.stroke && {
-          style: {
-            stroke: link.style.stroke,
-          },
-        }),
-      ...(ewoksMarkerEnd ? { markerEnd: ewoksMarkerEnd } : {}),
-      ...notUndefinedValue(link.animated, 'animated'),
-      ...notUndefinedValue(nUiprops.withImage, 'withImage'),
-      ...notUndefinedValue(nUiprops.withLabel, 'withLabel'),
-      ...(nUiprops.colorBorder && {
-        colorBorder: nUiprops.colorBorder,
+    position: node.position,
+    ...notUndefinedValue(node.data.ewoks_props.label, 'label'),
+    ...notUndefinedValue(link.type, 'type'),
+    ...(link.style?.stroke &&
+      link.style.stroke !== DEFAULT_LINK_VALUES.uiProps.stroke && {
+        style: {
+          stroke: link.style.stroke,
+        },
       }),
-      ...(nUiprops.nodeWidth && {
-        nodeWidth: nUiprops.nodeWidth,
-      }),
-    },
+    ...(ewoksMarkerEnd ? { markerEnd: ewoksMarkerEnd } : {}),
+    ...notUndefinedValue(link.animated, 'animated'),
+    ...notUndefinedValue(uiProps.withImage, 'withImage'),
+    ...notUndefinedValue(uiProps.withLabel, 'withLabel'),
+    ...(uiProps.colorBorder && {
+      colorBorder: uiProps.colorBorder,
+    }),
+    ...(uiProps.nodeWidth && {
+      nodeWidth: uiProps.nodeWidth,
+    }),
   };
 }

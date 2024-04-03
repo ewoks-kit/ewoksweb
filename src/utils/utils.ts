@@ -3,10 +3,10 @@ import { nanoid } from 'nanoid';
 import type {
   DataMapping,
   EwoksDataMapping,
+  EwoksIOLinkAttributes,
+  EwoksIONodeUiProps,
   EwoksMarkerEnd,
   EwoksMarkerEndLegacy,
-  InputOutputLinkAttributes,
-  InputOutputUiProps,
   RFMarkerEnd,
   RowValue,
 } from '../types';
@@ -41,7 +41,7 @@ export function notUndefinedValue(
   return undefined;
 }
 
-export function calcCommonNodeUiProps(uiProps: InputOutputUiProps) {
+export function calcCommonNodeUiProps(uiProps: EwoksIONodeUiProps) {
   return {
     ...notUndefinedValue(uiProps.withImage, 'withImage'),
     ...notUndefinedValue(uiProps.withLabel, 'withLabel'),
@@ -51,8 +51,8 @@ export function calcCommonNodeUiProps(uiProps: InputOutputUiProps) {
 }
 
 export function calcLinkUiProps(
-  uiProps: InputOutputUiProps | undefined,
-  linkAttr?: InputOutputLinkAttributes | undefined,
+  uiProps: EwoksIONodeUiProps | undefined,
+  linkAttr?: EwoksIOLinkAttributes | undefined,
 ) {
   return {
     ...(linkAttr?.label && { label: linkAttr.label }),
@@ -67,7 +67,7 @@ export function calcLinkUiProps(
   };
 }
 
-export function calcLinkCommonProps(linkAttr: InputOutputLinkAttributes) {
+export function calcLinkCommonProps(linkAttr: EwoksIOLinkAttributes) {
   return {
     ...(linkAttr.conditions &&
       linkAttr.conditions.length > 0 && {
@@ -83,12 +83,12 @@ export function calcLinkCommonProps(linkAttr: InputOutputLinkAttributes) {
   };
 }
 
-export function propIsEmpty(uiprops: object | undefined) {
+export function propIsEmpty(obj: object | undefined) {
   let isEmpty = true;
-  if (uiprops === undefined) {
+  if (obj === undefined) {
     return isEmpty;
   }
-  for (const [, value] of Object.entries(uiprops)) {
+  for (const [, value] of Object.entries(obj)) {
     if ((Array.isArray(value) && value.length > 0) || value) {
       isEmpty = false;
       break;

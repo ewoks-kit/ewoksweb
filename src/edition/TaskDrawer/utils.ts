@@ -1,12 +1,7 @@
 import type { Node, XYPosition } from 'reactflow';
 import { Position } from 'reactflow';
 
-import type {
-  InputOutputNodeAndLink,
-  NodeData,
-  RFNode,
-  Workflow,
-} from '../../types';
+import type { EwoksIONode, NodeData, RFNode, Workflow } from '../../types';
 import { generateUniqueNodeId } from '../../utils/utils';
 
 export async function loadSubworkflow(
@@ -57,7 +52,7 @@ export async function loadSubworkflow(
   return { nodeWithoutData, data: nodeData };
 }
 
-function calcLabel(inputOutput: InputOutputNodeAndLink): string {
+function calcLabel(inputOutput: EwoksIONode): string {
   return `${inputOutput.uiProps?.label ?? inputOutput.id}: ${
     inputOutput.node
   } ${inputOutput.sub_node ? ` -> ${inputOutput.sub_node}` : ''}`;

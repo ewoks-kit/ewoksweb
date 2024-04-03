@@ -4,9 +4,9 @@ import type {
   DataMapping,
   DefaultErrorAttributes,
   EwoksDataMapping,
+  EwoksIONode,
   EwoksNode,
   GraphDetails,
-  InputOutputNodeAndLink,
   NodeTaskProperties,
   NodeWithData,
   SubgraphOutputsInputs,
@@ -142,10 +142,7 @@ function calcInOutForSubgraph(
   return [inputsSub, outputsSub];
 }
 
-function calcLabel(
-  inOut: InputOutputNodeAndLink,
-  allInOutputsIds: string[],
-): string {
+function calcLabel(inOut: EwoksIONode, allInOutputsIds: string[]): string {
   return `${inOut.uiProps?.label || inOut.id}${
     allInOutputsIds.includes(inOut.id) ? '_' : ':'
   } ${inOut.node || ''} ${inOut.sub_node ? `  -> ${inOut.sub_node}` : ''}`;
