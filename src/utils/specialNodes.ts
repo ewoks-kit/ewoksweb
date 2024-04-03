@@ -3,6 +3,7 @@ import type {
   EwoksIOLinkAttributes,
   EwoksIONode,
   EwoksIONodeUiProps,
+  GraphUiProps,
   NodeWithData,
 } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
@@ -160,4 +161,28 @@ function computeUiProps(
       nodeWidth: uiProps.nodeWidth,
     }),
   };
+}
+
+export function enrichUiPropsWithNotes(
+  uiProps: GraphUiProps | undefined,
+  nodes: NodeWithData[],
+): GraphUiProps | undefined {
+  const notes = nodes
+    .filter((nod) => nod.type === 'note')
+    .map((noteNod) => {
+      return {
+        id: noteNod.id,
+        label: noteNod.data.ewoks_props.label,
+        comment: noteNod.data.comment,
+        position: noteNod.position,
+        nodeWidth: noteNod.data.ui_props.nodeWidth,
+        colorBorder: noteNod.data.ui_props.colorBorder,
+      };
+    });
+
+  if (notes.length === 0) {
+    return uiProps;
+  }
+
+  return { ...uiProps, notes };
 }

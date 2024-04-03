@@ -17,8 +17,8 @@ import type {
 import {
   computeInputNodes,
   computeOutputNodes,
-} from './utils/CalcGraphInputsOutputs';
-import { calcNoteNodes } from './utils/calcNoteNodes';
+  enrichUiPropsWithNotes,
+} from './utils/specialNodes';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
 import {
@@ -62,16 +62,11 @@ export function prepareEwoksGraph(
   const linkData = curateEdgeData(rawLinkData);
   const links = edgesWithoutData.map((edge) => enrichWithData(edge, linkData));
 
-  const noteNodes = calcNoteNodes(nodes);
-
   const graphInfo: GraphDetails = {
     ...rawGraphInfo,
     input_nodes: computeInputNodes(nodes, links),
     output_nodes: computeOutputNodes(nodes, links),
-    uiProps:
-      noteNodes.length > 0
-        ? { ...rawGraphInfo.uiProps, notes: noteNodes }
-        : rawGraphInfo.uiProps,
+    uiProps: enrichUiPropsWithNotes(rawGraphInfo.uiProps, nodes),
   };
 
   return {
