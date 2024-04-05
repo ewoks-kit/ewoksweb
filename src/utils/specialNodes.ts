@@ -109,6 +109,7 @@ function convertRFOutputNodeToEwoks(
 
 function computeLinkAttributes(link: EdgeWithData): EwoksIOLinkAttributes {
   const { data } = link;
+
   return {
     ...(isString(link.label) && { label: link.label }),
     ...(data.comment && { comment: data.comment }),
@@ -125,7 +126,7 @@ function computeLinkAttributes(link: EdgeWithData): EwoksIOLinkAttributes {
       data.data_mapping.length > 0 && {
         data_mapping: calcDataMapping(data.data_mapping),
       }),
-    ...notUndefinedValue(data.map_all_data, 'map_all_data'),
+    ...(data.map_all_data && { map_all_data: data.map_all_data }),
     ...notUndefinedValue(data.on_error, 'on_error'),
     ...notUndefinedValue(data.required, 'required'),
   };
