@@ -20,7 +20,8 @@ it('saves two empty workflows and uses the one as a subworkflow to the other ', 
   const subworkflow = nanoid();
   const rootWorkflow = nanoid();
   cy.saveNewWorkflow(subworkflow);
-  cy.openNewWorkflow();
+  cy.findByRole('button', { name: 'Open menu with more actions' }).click();
+  cy.findByRole('menuitem', { name: /^New workflow/ }).click();
 
   cy.findByRole('button', { name: 'General' }).should('be.visible');
   cy.findByRole('button', { name: 'General' }).click();
