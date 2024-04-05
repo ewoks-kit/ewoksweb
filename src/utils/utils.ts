@@ -83,20 +83,18 @@ export function calcLinkCommonProps(linkAttr: EwoksIOLinkAttributes) {
   };
 }
 
-export function hasDefinedFields(obj: object | undefined): boolean {
-  return !isEmpty(obj);
-}
+export function hasDefinedFields(obj: object | null | undefined): boolean {
+  if (obj === undefined || obj === null) {
+    return false;
+  }
 
-function isEmpty(obj: object | undefined) {
-  if (obj === undefined) {
-    return true;
-  }
-  for (const [, value] of Object.entries(obj)) {
-    if ((Array.isArray(value) && value.length > 0) || value) {
-      return false;
-    }
-  }
-  return true;
+  return Object.entries(obj).some(([, value]: [string, unknown]) => {
+    return typeof value === 'object'
+      ? hasDefinedFields(value)
+      : typeof value === 'string'
+      ? value.length > 0
+      : true;
+  });
 }
 
 export function generateUniqueNodeId(
