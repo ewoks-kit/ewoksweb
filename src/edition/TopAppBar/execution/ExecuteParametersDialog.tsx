@@ -79,7 +79,7 @@ export default function ExecuteParametersDialog(props: Props) {
     }
     try {
       execute(rootWorkflowId, [...inputRows.values()], engine, worker);
-      navigate('/monitor');
+      navigate('/monitor', { state: { workflow: rootWorkflowId } });
     } catch (executeError) {
       showErrorMsg(textForError(executeError, 'Error in executing workflow.'));
     }
