@@ -7,17 +7,19 @@ import orange3 from './images/orange3.png';
 import useEdgeDataStore from './store/useEdgeDataStore';
 import useNodeDataStore from './store/useNodeDataStore';
 import type {
+  EdgeWithData,
   EwoksNode,
   GraphDetails,
   Icon,
   LinkData,
   NodeData,
+  NodeWithData,
   Workflow,
 } from './types';
 import {
   computeInputNodes,
+  computeNotes,
   computeOutputNodes,
-  enrichUiPropsWithNotes,
 } from './utils/specialNodes';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
@@ -49,8 +51,8 @@ export async function getSubgraphs(nodes: EwoksNode[]): Promise<Workflow[]> {
   }
 }
 
-export function prepareEwoksGraph(
-  rawGraphInfo: GraphDetails,
+export function toEwoksWorkflow(
+  graphDetails: GraphDetails,
   nodesWithoutData: Node[],
   edgesWithoutData: Edge[],
   rawNodeData: Map<string, NodeData>,
@@ -62,15 +64,8 @@ export function prepareEwoksGraph(
   const linkData = curateEdgeData(rawLinkData);
   const links = edgesWithoutData.map((edge) => enrichWithData(edge, linkData));
 
-  const graphInfo: GraphDetails = {
-    ...rawGraphInfo,
-    input_nodes: computeInputNodes(nodes, links),
-    output_nodes: computeOutputNodes(nodes, links),
-    uiProps: enrichUiPropsWithNotes(rawGraphInfo.uiProps, nodes),
-  };
-
   return {
-    graph: curateGraphInfo(graphInfo),
+    graph: toEwoksGraph(graphDetails, nodes, links),
     nodes: toEwoksNodes(nodes),
     links: toEwoksLinks(links),
   };
@@ -133,36 +128,46 @@ export function getTaskName(task_identifier: string): string {
   return task_members[task_members.length - 1];
 }
 
-function curateGraphInfo(rawInfo: GraphDetails) {
+function toEwoksGraph(
+  details: GraphDetails,
+  nodes: NodeWithData[],
+  links: EdgeWithData[],
+): GraphDetails {
+  const input_nodes = computeInputNodes(nodes, links);
+  const output_nodes = computeOutputNodes(nodes, links);
+  const notes = computeNotes(nodes);
+  const uiProps =
+    notes.length > 0 ? { ...details.uiProps, notes } : details.uiProps;
+
   return {
-    id: rawInfo.id,
-    ...(rawInfo.label && { label: rawInfo.label }),
-    ...(rawInfo.category && {
-      category: rawInfo.category,
+    id: details.id,
+    ...(details.label && { label: details.label }),
+    ...(details.category && {
+      category: details.category,
     }),
-    ...(hasDefinedFields(rawInfo.input_nodes) && {
-      input_nodes: rawInfo.input_nodes,
+    ...(hasDefinedFields(input_nodes) && {
+      input_nodes,
     }),
-    ...(hasDefinedFields(rawInfo.output_nodes) && {
-      output_nodes: rawInfo.output_nodes,
+    ...(hasDefinedFields(output_nodes) && {
+      output_nodes,
     }),
-    ...(hasDefinedFields(rawInfo.uiProps) && {
-      uiProps: { ...rawInfo.uiProps },
+    ...(hasDefinedFields(uiProps) && {
+      uiProps,
     }),
-    ...(hasDefinedFields(rawInfo.keywords) && {
-      keywords: rawInfo.keywords,
+    ...(hasDefinedFields(details.keywords) && {
+      keywords: details.keywords,
     }),
-    ...(hasDefinedFields(rawInfo.input_schema) && {
-      input_schema: rawInfo.input_schema,
+    ...(hasDefinedFields(details.input_schema) && {
+      input_schema: details.input_schema,
     }),
-    ...(hasDefinedFields(rawInfo.ui_schema) && {
-      ui_schema: rawInfo.ui_schema,
+    ...(hasDefinedFields(details.ui_schema) && {
+      ui_schema: details.ui_schema,
     }),
-    ...(hasDefinedFields(rawInfo.execute_arguments) && {
-      execute_arguments: rawInfo.execute_arguments,
+    ...(hasDefinedFields(details.execute_arguments) && {
+      execute_arguments: details.execute_arguments,
     }),
-    ...(hasDefinedFields(rawInfo.worker_options) && {
-      worker_options: rawInfo.worker_options,
+    ...(hasDefinedFields(details.worker_options) && {
+      worker_options: details.worker_options,
     }),
   };
 }

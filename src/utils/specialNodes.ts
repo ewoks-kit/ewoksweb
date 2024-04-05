@@ -3,8 +3,8 @@ import type {
   EwoksIOLinkAttributes,
   EwoksIONode,
   EwoksIONodeUiProps,
-  GraphUiProps,
   NodeWithData,
+  Note,
 } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { isString } from './typeGuards';
@@ -42,36 +42,34 @@ function convertRFInputNodeToEwoks(
   nodes: NodeWithData[],
   links: EdgeWithData[],
 ): EwoksIONode[] {
-  const inputNodes: EwoksIONode[] = [];
+  return links
+    .filter((link) => link.source === thisNode.id)
+    .flatMap<EwoksIONode>((link) => {
+      const connectedNode = nodes.find((node) => link.target === node.id);
+      const linkAttributes = computeLinkAttributes(link);
 
-  const connectedLinks = links.filter((link) => link.source === thisNode.id);
+      if (!connectedNode) {
+        return [];
+      }
 
-  for (const link of connectedLinks) {
-    const connectedNode = nodes.find((node) => link.target === node.id);
-    const linkAttributes = computeLinkAttributes(link);
+      const subNode =
+        connectedNode.data.task_props.task_type === 'graph' &&
+        link.data.sub_target
+          ? link.data.sub_target
+          : undefined;
 
-    if (!connectedNode) {
-      continue;
-    }
-
-    const subNode =
-      connectedNode.data.task_props.task_type === 'graph' &&
-      link.data.sub_target
-        ? link.data.sub_target
-        : undefined;
-
-    inputNodes.push({
-      id: thisNode.id,
-      node: connectedNode.id,
-      ...(subNode ? { sub_node: subNode } : {}),
-      ...(hasDefinedFields(linkAttributes) && {
-        link_attributes: linkAttributes,
-      }),
-      uiProps: computeUiProps(thisNode, link),
+      return [
+        {
+          id: thisNode.id,
+          node: connectedNode.id,
+          ...(subNode ? { sub_node: subNode } : {}),
+          ...(hasDefinedFields(linkAttributes) && {
+            link_attributes: linkAttributes,
+          }),
+          uiProps: computeUiProps(thisNode, link),
+        },
+      ];
     });
-  }
-
-  return inputNodes;
 }
 
 function convertRFOutputNodeToEwoks(
@@ -79,38 +77,34 @@ function convertRFOutputNodeToEwoks(
   nodes: NodeWithData[],
   links: EdgeWithData[],
 ): EwoksIONode[] {
-  const outputNodes: EwoksIONode[] = [];
+  return links
+    .filter((link) => link.target === rfOutputNode.id)
+    .flatMap<EwoksIONode>((link) => {
+      const connectedNode = nodes.find((node) => link.source === node.id);
 
-  const connectedLinks = links.filter(
-    (link) => link.target === rfOutputNode.id,
-  );
+      if (!connectedNode) {
+        return [];
+      }
 
-  for (const link of connectedLinks) {
-    const connectedNode = nodes.find((node) => link.source === node.id);
+      const subNode =
+        connectedNode.data.task_props.task_type === 'graph' &&
+        link.data.sub_source
+          ? link.data.sub_source
+          : undefined;
 
-    if (!connectedNode) {
-      continue;
-    }
-
-    const subNode =
-      connectedNode.data.task_props.task_type === 'graph' &&
-      link.data.sub_source
-        ? link.data.sub_source
-        : undefined;
-
-    const linkAttributes = computeLinkAttributes(link);
-    outputNodes.push({
-      id: rfOutputNode.id,
-      node: connectedNode.id,
-      ...(subNode ? { sub_node: subNode } : {}),
-      ...(hasDefinedFields(linkAttributes) && {
-        link_attributes: linkAttributes,
-      }),
-      uiProps: computeUiProps(rfOutputNode, link),
+      const linkAttributes = computeLinkAttributes(link);
+      return [
+        {
+          id: rfOutputNode.id,
+          node: connectedNode.id,
+          ...(subNode ? { sub_node: subNode } : {}),
+          ...(hasDefinedFields(linkAttributes) && {
+            link_attributes: linkAttributes,
+          }),
+          uiProps: computeUiProps(rfOutputNode, link),
+        },
+      ];
     });
-  }
-
-  return outputNodes;
 }
 
 function computeLinkAttributes(link: EdgeWithData): EwoksIOLinkAttributes {
@@ -167,11 +161,8 @@ function computeUiProps(
   };
 }
 
-export function enrichUiPropsWithNotes(
-  uiProps: GraphUiProps | undefined,
-  nodes: NodeWithData[],
-): GraphUiProps | undefined {
-  const notes = nodes
+export function computeNotes(nodes: NodeWithData[]): Note[] {
+  return nodes
     .filter((nod) => nod.type === 'note')
     .map((noteNod) => {
       return {
@@ -183,10 +174,4 @@ export function enrichUiPropsWithNotes(
         colorBorder: noteNod.data.ui_props.colorBorder,
       };
     });
-
-  if (notes.length === 0) {
-    return uiProps;
-  }
-
-  return { ...uiProps, notes };
 }
