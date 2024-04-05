@@ -38,38 +38,50 @@ export function computeOutputNodes(
 }
 
 function convertRFInputNodeToEwoks(
-  thisNode: NodeWithData,
+  rfInputNode: NodeWithData,
   nodes: NodeWithData[],
   links: EdgeWithData[],
 ): EwoksIONode[] {
-  return links
-    .filter((link) => link.source === thisNode.id)
-    .flatMap<EwoksIONode>((link) => {
-      const connectedNode = nodes.find((node) => link.target === node.id);
-      const linkAttributes = computeLinkAttributes(link);
+  const connectingLinks = links.filter(
+    (link) => link.source === rfInputNode.id,
+  );
 
-      if (!connectedNode) {
-        return [];
-      }
+  if (connectingLinks.length === 0) {
+    return [
+      {
+        id: rfInputNode.id,
+        node: null,
+        uiProps: computeUiProps(rfInputNode),
+      },
+    ];
+  }
 
-      const subNode =
-        connectedNode.data.task_props.task_type === 'graph' &&
-        link.data.sub_target
-          ? link.data.sub_target
-          : undefined;
+  return connectingLinks.flatMap<EwoksIONode>((link) => {
+    const connectedNode = nodes.find((node) => link.target === node.id);
 
-      return [
-        {
-          id: thisNode.id,
-          node: connectedNode.id,
-          ...(subNode ? { sub_node: subNode } : {}),
-          ...(hasDefinedFields(linkAttributes) && {
-            link_attributes: linkAttributes,
-          }),
-          uiProps: computeUiProps(thisNode, link),
-        },
-      ];
-    });
+    if (!connectedNode) {
+      return [];
+    }
+
+    const subNode =
+      connectedNode.data.task_props.task_type === 'graph' &&
+      link.data.sub_target
+        ? link.data.sub_target
+        : undefined;
+
+    const linkAttributes = computeLinkAttributes(link);
+    return [
+      {
+        id: rfInputNode.id,
+        node: connectedNode.id,
+        ...(subNode ? { sub_node: subNode } : {}),
+        ...(hasDefinedFields(linkAttributes) && {
+          link_attributes: linkAttributes,
+        }),
+        uiProps: computeUiProps(rfInputNode, link),
+      },
+    ];
+  });
 }
 
 function convertRFOutputNodeToEwoks(
@@ -77,34 +89,46 @@ function convertRFOutputNodeToEwoks(
   nodes: NodeWithData[],
   links: EdgeWithData[],
 ): EwoksIONode[] {
-  return links
-    .filter((link) => link.target === rfOutputNode.id)
-    .flatMap<EwoksIONode>((link) => {
-      const connectedNode = nodes.find((node) => link.source === node.id);
+  const connectingLinks = links.filter(
+    (link) => link.target === rfOutputNode.id,
+  );
 
-      if (!connectedNode) {
-        return [];
-      }
+  if (connectingLinks.length === 0) {
+    return [
+      {
+        id: rfOutputNode.id,
+        node: null,
+        uiProps: computeUiProps(rfOutputNode),
+      },
+    ];
+  }
 
-      const subNode =
-        connectedNode.data.task_props.task_type === 'graph' &&
-        link.data.sub_source
-          ? link.data.sub_source
-          : undefined;
+  return connectingLinks.flatMap<EwoksIONode>((link) => {
+    const connectedNode = nodes.find((node) => link.source === node.id);
 
-      const linkAttributes = computeLinkAttributes(link);
-      return [
-        {
-          id: rfOutputNode.id,
-          node: connectedNode.id,
-          ...(subNode ? { sub_node: subNode } : {}),
-          ...(hasDefinedFields(linkAttributes) && {
-            link_attributes: linkAttributes,
-          }),
-          uiProps: computeUiProps(rfOutputNode, link),
-        },
-      ];
-    });
+    if (!connectedNode) {
+      return [];
+    }
+
+    const subNode =
+      connectedNode.data.task_props.task_type === 'graph' &&
+      link.data.sub_source
+        ? link.data.sub_source
+        : undefined;
+
+    const linkAttributes = computeLinkAttributes(link);
+    return [
+      {
+        id: rfOutputNode.id,
+        node: connectedNode.id,
+        ...(subNode ? { sub_node: subNode } : {}),
+        ...(hasDefinedFields(linkAttributes) && {
+          link_attributes: linkAttributes,
+        }),
+        uiProps: computeUiProps(rfOutputNode, link),
+      },
+    ];
+  });
 }
 
 function computeLinkAttributes(link: EdgeWithData): EwoksIOLinkAttributes {
@@ -134,23 +158,23 @@ function computeLinkAttributes(link: EdgeWithData): EwoksIOLinkAttributes {
 
 function computeUiProps(
   node: NodeWithData,
-  link: EdgeWithData,
+  link?: EdgeWithData,
 ): EwoksIONodeUiProps {
-  const ewoksMarkerEnd = convertRFMarkerEndToEwoks(link.markerEnd);
+  const ewoksMarkerEnd = convertRFMarkerEndToEwoks(link?.markerEnd);
   const { ui_props: uiProps } = node.data;
 
   return {
     position: node.position,
     ...notUndefinedValue(node.data.ewoks_props.label, 'label'),
-    ...notUndefinedValue(link.type, 'type'),
-    ...(link.style?.stroke &&
+    ...notUndefinedValue(link?.type, 'type'),
+    ...(link?.style?.stroke &&
       link.style.stroke !== DEFAULT_LINK_VALUES.uiProps.stroke && {
         style: {
           stroke: link.style.stroke,
         },
       }),
     ...(ewoksMarkerEnd ? { markerEnd: ewoksMarkerEnd } : {}),
-    ...notUndefinedValue(link.animated, 'animated'),
+    ...notUndefinedValue(link?.animated, 'animated'),
     ...notUndefinedValue(uiProps.withImage, 'withImage'),
     ...notUndefinedValue(uiProps.withLabel, 'withLabel'),
     ...(uiProps.colorBorder && {

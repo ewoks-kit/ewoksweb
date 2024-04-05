@@ -23,6 +23,16 @@ const expectedWorkflow = {
     },
     input_nodes: [
       {
+        id: 'In1',
+        node: null,
+        uiProps: {
+          position: {
+            x: 0,
+            y: 0,
+          },
+        },
+      },
+      {
         id: 'In0',
         node: 'Out0',
         uiProps: {
@@ -34,6 +44,16 @@ const expectedWorkflow = {
       },
     ],
     output_nodes: [
+      {
+        id: 'Out1',
+        node: null,
+        uiProps: {
+          position: {
+            x: 0,
+            y: 0,
+          },
+        },
+      },
       {
         id: 'Out0',
         node: 'In0',
@@ -56,7 +76,12 @@ it('Saves special nodes', () => {
     const res = isEqualWith(req.body, expectedWorkflow, (_, __, key) =>
       key === 'position' ? true : undefined,
     );
-    expect(res).to.be.true;
+    try {
+      expect(res).to.be.true;
+    } catch (e) {
+      console.log(req.body, expectedWorkflow);
+      throw e;
+    }
 
     req.reply({});
   });
@@ -69,13 +94,15 @@ it('Saves special nodes', () => {
   cy.dragNodeInCanvas('graphInput');
   cy.dragNodeInCanvas('graphOutput');
   cy.waitForStableDOM();
-  // TODO: graphInput and graphOutput are only saved if they are connected to another node
   cy.findByRole('button', { name: 'In0' })
     .find('.react-flow__handle-right')
     .click({ force: true });
   cy.findByRole('button', { name: 'Out0' })
     .find('.react-flow__handle-left')
     .click({ force: true });
+
+  cy.dragNodeInCanvas('graphInput');
+  cy.dragNodeInCanvas('graphOutput');
 
   cy.saveNewWorkflow(id);
 });
