@@ -1,5 +1,5 @@
-import type { EwoksLink, EwoksNode, InputOutputNodeAndLink } from '../types';
-import { propIsEmpty } from './utils';
+import type { EwoksIONode, EwoksLink, EwoksNode } from '../types';
+import { hasDefinedFields } from './utils';
 import {
   calcCommonNodeUiProps,
   calcLinkCommonProps,
@@ -9,7 +9,7 @@ import {
 // DOC: calc the output nodes and links that need to be added to
 // the graph from the output_nodes
 export function outNodesLinks(
-  outputNodes: InputOutputNodeAndLink[] | undefined,
+  outputNodes: EwoksIONode[] | undefined,
   nodes: EwoksNode[],
 ): { nodes: EwoksNode[]; links: EwoksLink[] } {
   const outputs: { nodes: EwoksNode[]; links: EwoksLink[] } = {
@@ -55,7 +55,7 @@ export function outNodesLinks(
           ...(nodeSource?.task_type === 'graph' &&
             outNod.sub_node && { sub_source: outNod.sub_node }),
           ...(linkAttr && { ...calcLinkCommonProps(linkAttr) }),
-          ...(!propIsEmpty(linksUiProps) && {
+          ...(hasDefinedFields(linksUiProps) && {
             uiProps: linksUiProps,
           }),
         });

@@ -1,6 +1,5 @@
-import { isEmpty } from 'lodash';
-
 import { executeWorkflow } from '../../../api/workflows';
+import { hasDefinedFields } from '../../../utils/utils';
 import type { EngineDropdownOption } from '../models';
 import type { ExecutionInputTableRow } from './models';
 import { DROPDOWN_TO_SERVER_ENGINE } from './models';
@@ -37,7 +36,7 @@ export async function execute(
   };
 
   await executeWorkflow(workflowId, {
-    ...(!isEmpty(execute_arguments) ? { execute_arguments } : {}),
+    ...(hasDefinedFields(execute_arguments) ? { execute_arguments } : {}),
     ...(worker ? { worker_options: { queue: worker } } : {}),
   });
 }

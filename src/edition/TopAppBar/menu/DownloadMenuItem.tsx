@@ -2,7 +2,7 @@ import { GetApp } from '@mui/icons-material';
 import { useReactFlow } from 'reactflow';
 
 import useStore from '../../../store/useStore';
-import { getEdgesData, getNodesData, prepareEwoksGraph } from '../../../utils';
+import { getEdgesData, getNodesData, toEwoksWorkflow } from '../../../utils';
 import ActionMenuItem from './ActionMenuItem';
 
 function download(content: BlobPart, fileName: string, contentType: string) {
@@ -21,7 +21,7 @@ function DownloadMenuItem() {
   );
 
   function saveToDisk() {
-    const ewoksGraph = prepareEwoksGraph(
+    const workflow = toEwoksWorkflow(
       displayedWorkflowInfo,
       getNodes(),
       getEdges(),
@@ -29,7 +29,7 @@ function DownloadMenuItem() {
       getEdgesData(),
     );
     download(
-      JSON.stringify(ewoksGraph, null, 2),
+      JSON.stringify(workflow, null, 2),
       `${displayedWorkflowInfo.id}.json`,
       'text/plain',
     );

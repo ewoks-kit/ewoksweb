@@ -22,8 +22,8 @@ import type { GraphDetails } from '../../types';
 import {
   getEdgesData,
   getNodesData,
-  prepareEwoksGraph,
   textForError,
+  toEwoksWorkflow,
 } from '../../utils';
 import FormField from './FormField';
 
@@ -55,7 +55,7 @@ export default function GraphFormDialog(props: Props) {
   const onSubmit = handleSubmit(async (data) => {
     const { name } = data;
 
-    const ewoksGraph = prepareEwoksGraph(
+    const workflow = toEwoksWorkflow(
       { ...elementToEdit, id: name },
       rfInstance.getNodes(),
       rfInstance.getEdges(),
@@ -64,7 +64,7 @@ export default function GraphFormDialog(props: Props) {
     );
 
     try {
-      await postWorkflow(ewoksGraph);
+      await postWorkflow(workflow);
       invalidateWorkflowDescriptions();
 
       showSuccessMsg('Graph saved successfully!');

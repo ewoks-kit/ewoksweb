@@ -20,8 +20,8 @@ import { WorkflowSource } from '../types';
 import {
   getEdgesData,
   getNodesData,
-  prepareEwoksGraph,
   textForError,
+  toEwoksWorkflow,
 } from '../utils';
 import { getNodeData } from '../utils';
 import { calcNewId } from '../utils/calcNewId';
@@ -112,7 +112,7 @@ export function useSaveWorkflow() {
 
     try {
       await putWorkflow(
-        prepareEwoksGraph(
+        toEwoksWorkflow(
           displayedWorkflowInfo,
           rfInstance.getNodes(),
           rfInstance.getEdges(),
