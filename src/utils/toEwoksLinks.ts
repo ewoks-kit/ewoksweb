@@ -1,5 +1,5 @@
 import type { EdgeWithData, EwoksLink } from '../types';
-import { convertRFMarkerEndToEwoks, isEmpty } from '../utils/utils';
+import { convertRFMarkerEndToEwoks, hasDefinedFields } from '../utils/utils';
 import { isString } from './typeGuards';
 import { calcDataMapping, notUndefinedValue } from './utils';
 
@@ -75,7 +75,7 @@ export function toEwoksLinks(links: EdgeWithData[]): EwoksLink[] {
         ...notUndefinedValue(on_error, 'on_error'),
         ...notUndefinedValue(required, 'required'),
         map_all_data,
-        ...(!isEmpty(linkUiProps) && { uiProps: linkUiProps }),
+        ...(hasDefinedFields(linkUiProps) && { uiProps: linkUiProps }),
       };
     },
   );

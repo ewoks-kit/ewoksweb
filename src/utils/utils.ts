@@ -31,11 +31,11 @@ export function calcDataMapping(
   }));
 }
 
-export function notUndefinedValue(
-  value: unknown,
+export function notUndefinedValue<T>(
+  value: T,
   propName: string,
-): object | undefined {
-  if (value !== undefined) {
+): Record<string, NonNullable<T>> | undefined {
+  if (value !== undefined && value !== null) {
     return { [propName]: value };
   }
   return undefined;
@@ -83,7 +83,11 @@ export function calcLinkCommonProps(linkAttr: EwoksIOLinkAttributes) {
   };
 }
 
-export function isEmpty(obj: object | undefined) {
+export function hasDefinedFields(obj: object | undefined): boolean {
+  return !isEmpty(obj);
+}
+
+function isEmpty(obj: object | undefined) {
   if (obj === undefined) {
     return true;
   }

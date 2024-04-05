@@ -26,7 +26,7 @@ import {
   hasRequest,
   isEwoksServerErrorResponse,
 } from './utils/typeGuards';
-import { isEmpty } from './utils/utils';
+import { hasDefinedFields } from './utils/utils';
 
 export const DEFAULT_ICON: Icon = { name: 'orange3.png', data_url: orange3 };
 
@@ -140,28 +140,28 @@ function curateGraphInfo(rawInfo: GraphDetails) {
     ...(rawInfo.category && {
       category: rawInfo.category,
     }),
-    ...(!isEmpty(rawInfo.input_nodes) && {
+    ...(hasDefinedFields(rawInfo.input_nodes) && {
       input_nodes: rawInfo.input_nodes,
     }),
-    ...(!isEmpty(rawInfo.output_nodes) && {
+    ...(hasDefinedFields(rawInfo.output_nodes) && {
       output_nodes: rawInfo.output_nodes,
     }),
-    ...(!isEmpty(rawInfo.uiProps) && {
+    ...(hasDefinedFields(rawInfo.uiProps) && {
       uiProps: { ...rawInfo.uiProps },
     }),
-    ...(!isEmpty(rawInfo.keywords) && {
+    ...(hasDefinedFields(rawInfo.keywords) && {
       keywords: rawInfo.keywords,
     }),
-    ...(!isEmpty(rawInfo.input_schema) && {
+    ...(hasDefinedFields(rawInfo.input_schema) && {
       input_schema: rawInfo.input_schema,
     }),
-    ...(!isEmpty(rawInfo.ui_schema) && {
+    ...(hasDefinedFields(rawInfo.ui_schema) && {
       ui_schema: rawInfo.ui_schema,
     }),
-    ...(!isEmpty(rawInfo.execute_arguments) && {
+    ...(hasDefinedFields(rawInfo.execute_arguments) && {
       execute_arguments: rawInfo.execute_arguments,
     }),
-    ...(!isEmpty(rawInfo.worker_options) && {
+    ...(hasDefinedFields(rawInfo.worker_options) && {
       worker_options: rawInfo.worker_options,
     }),
   };
