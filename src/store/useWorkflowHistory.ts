@@ -3,7 +3,7 @@ import type { Edge, Node } from 'reactflow';
 import { create } from 'zustand';
 
 import type { GraphDetails, Workflow } from '../types';
-import { prepareEwoksGraph } from '../utils';
+import { toEwoksWorkflow } from '../utils';
 import type { EdgeDataState } from './useEdgeDataStore';
 import type { NodeDataState } from './useNodeDataStore';
 
@@ -33,7 +33,7 @@ const useWorkflowHistory = create<State>((set, get) => ({
     rfNodes,
     rfEdges,
   ) => {
-    const changedWorkflow = prepareEwoksGraph(
+    const changedWorkflow = toEwoksWorkflow(
       workflowInfo,
       rfNodes,
       rfEdges,

@@ -3,10 +3,10 @@ import { nanoid } from 'nanoid';
 import type {
   DataMapping,
   EwoksDataMapping,
+  EwoksIOLinkAttributes,
+  EwoksIONodeUiProps,
   EwoksMarkerEnd,
   EwoksMarkerEndLegacy,
-  InputOutputLinkAttributes,
-  InputOutputUiProps,
   RFMarkerEnd,
   RowValue,
 } from '../types';
@@ -31,17 +31,17 @@ export function calcDataMapping(
   }));
 }
 
-export function notUndefinedValue(
-  value: unknown,
+export function notUndefinedValue<T>(
+  value: T,
   propName: string,
-): object | undefined {
-  if (value !== undefined) {
+): Record<string, NonNullable<T>> | undefined {
+  if (value !== undefined && value !== null) {
     return { [propName]: value };
   }
   return undefined;
 }
 
-export function calcCommonNodeUiProps(uiProps: InputOutputUiProps) {
+export function calcCommonNodeUiProps(uiProps: EwoksIONodeUiProps) {
   return {
     ...notUndefinedValue(uiProps.withImage, 'withImage'),
     ...notUndefinedValue(uiProps.withLabel, 'withLabel'),
@@ -51,8 +51,8 @@ export function calcCommonNodeUiProps(uiProps: InputOutputUiProps) {
 }
 
 export function calcLinkUiProps(
-  uiProps: InputOutputUiProps | undefined,
-  linkAttr?: InputOutputLinkAttributes | undefined,
+  uiProps: EwoksIONodeUiProps | undefined,
+  linkAttr?: EwoksIOLinkAttributes | undefined,
 ) {
   return {
     ...(linkAttr?.label && { label: linkAttr.label }),
@@ -67,7 +67,7 @@ export function calcLinkUiProps(
   };
 }
 
-export function calcLinkCommonProps(linkAttr: InputOutputLinkAttributes) {
+export function calcLinkCommonProps(linkAttr: EwoksIOLinkAttributes) {
   return {
     ...(linkAttr.conditions &&
       linkAttr.conditions.length > 0 && {
@@ -83,18 +83,18 @@ export function calcLinkCommonProps(linkAttr: InputOutputLinkAttributes) {
   };
 }
 
-export function propIsEmpty(uiprops: object | undefined) {
-  let isEmpty = true;
-  if (uiprops === undefined) {
-    return isEmpty;
+export function hasDefinedFields(obj: object | null | undefined): boolean {
+  if (obj === undefined || obj === null) {
+    return false;
   }
-  for (const [, value] of Object.entries(uiprops)) {
-    if ((Array.isArray(value) && value.length > 0) || value) {
-      isEmpty = false;
-      break;
-    }
-  }
-  return isEmpty;
+
+  return Object.entries(obj).some(([, value]: [string, unknown]) => {
+    return typeof value === 'object'
+      ? hasDefinedFields(value)
+      : typeof value === 'string'
+      ? value.length > 0
+      : true;
+  });
 }
 
 export function generateUniqueNodeId(

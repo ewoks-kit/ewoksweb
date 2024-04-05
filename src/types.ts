@@ -5,16 +5,16 @@ import type { Edge, MarkerType, XYPosition } from 'reactflow';
 import type { DisplayedWorkflowInfoSlice } from './store/displayedWorkflowInfo';
 import type { RootWorkflowSlice } from './store/rootWorkflow';
 
-export interface InputOutputNodeAndLink {
+export interface EwoksIONode {
   id: string;
   node: string;
   sub_node?: string;
-  link_attributes?: InputOutputLinkAttributes;
-  uiProps?: InputOutputUiProps;
+  link_attributes?: EwoksIOLinkAttributes;
+  uiProps?: EwoksIONodeUiProps;
 }
 
 // TODO: examine with ewoks if all the following are needed in an InOutLink
-export interface InputOutputLinkAttributes {
+export interface EwoksIOLinkAttributes {
   label?: string;
   comment?: string;
   conditions?: EwoksCondition[];
@@ -24,12 +24,12 @@ export interface InputOutputLinkAttributes {
   required?: boolean;
 }
 
-export interface InputOutputUiProps {
+export interface EwoksIONodeUiProps {
   label?: string;
   position?: XYPosition;
   style?: LinkStyle;
   animated?: boolean;
-  markerEnd?: EwoksMarkerEndLegacy;
+  markerEnd?: EwoksMarkerEnd;
   targetHandle?: string;
   withImage?: boolean;
   withLabel?: boolean;
@@ -41,8 +41,8 @@ export interface GraphDetails {
   id: string;
   label?: string;
   category?: string;
-  input_nodes?: InputOutputNodeAndLink[];
-  output_nodes?: InputOutputNodeAndLink[];
+  input_nodes?: EwoksIONode[];
+  output_nodes?: EwoksIONode[];
   uiProps?: GraphUiProps;
   keywords?: object;
   input_schema?: object;
@@ -73,11 +73,6 @@ export interface EwoksEvent {
 }
 
 export interface State extends DisplayedWorkflowInfoSlice, RootWorkflowSlice {}
-
-export interface Action {
-  action: string;
-  graph: Graph;
-}
 
 export type TaskType =
   | 'graphInput'
@@ -307,12 +302,6 @@ export interface LinkUiProps {
   targetHandle?: string | null;
   style?: CSSProperties;
   getAroundProps?: { x?: number; y?: number };
-}
-
-export interface Graph {
-  graph: GraphDetails;
-  nodes: NodeWithData[];
-  links: EdgeWithData[];
 }
 
 export interface Workflow {

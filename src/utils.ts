@@ -7,15 +7,20 @@ import orange3 from './images/orange3.png';
 import useEdgeDataStore from './store/useEdgeDataStore';
 import useNodeDataStore from './store/useNodeDataStore';
 import type {
+  EdgeWithData,
   EwoksNode,
   GraphDetails,
   Icon,
   LinkData,
   NodeData,
+  NodeWithData,
   Workflow,
 } from './types';
-import { calcEwoksGraphProp } from './utils/CalcGraphInputsOutputs';
-import { calcNoteNodes } from './utils/calcNoteNodes';
+import {
+  computeInputNodes,
+  computeNotes,
+  computeOutputNodes,
+} from './utils/specialNodes';
 import { toEwoksLinks } from './utils/toEwoksLinks';
 import { toEwoksNodes } from './utils/toEwoksNodes';
 import {
@@ -23,7 +28,7 @@ import {
   hasRequest,
   isEwoksServerErrorResponse,
 } from './utils/typeGuards';
-import { propIsEmpty } from './utils/utils';
+import { hasDefinedFields } from './utils/utils';
 
 export const DEFAULT_ICON: Icon = { name: 'orange3.png', data_url: orange3 };
 
@@ -46,8 +51,8 @@ export async function getSubgraphs(nodes: EwoksNode[]): Promise<Workflow[]> {
   }
 }
 
-export function prepareEwoksGraph(
-  graphInfo: GraphDetails,
+export function toEwoksWorkflow(
+  graphDetails: GraphDetails,
   nodesWithoutData: Node[],
   edgesWithoutData: Edge[],
   rawNodeData: Map<string, NodeData>,
@@ -59,22 +64,8 @@ export function prepareEwoksGraph(
   const linkData = curateEdgeData(rawLinkData);
   const links = edgesWithoutData.map((edge) => enrichWithData(edge, linkData));
 
-  let graph = calcEwoksGraphProp({ graph: graphInfo, nodes, links });
-  const noteNodes = calcNoteNodes(nodes);
-  const uiprops =
-    noteNodes.length > 0
-      ? { ...graph.uiProps, notes: noteNodes }
-      : graph.uiProps;
-
-  graph = {
-    ...graph,
-    ...(!propIsEmpty(uiprops) && {
-      uiProps: uiprops,
-    }),
-  };
-
   return {
-    graph,
+    graph: toEwoksGraph(graphDetails, nodes, links),
     nodes: toEwoksNodes(nodes),
     links: toEwoksLinks(links),
   };
@@ -135,4 +126,48 @@ export function getTaskName(task_identifier: string): string {
   }
 
   return task_members[task_members.length - 1];
+}
+
+function toEwoksGraph(
+  details: GraphDetails,
+  nodes: NodeWithData[],
+  links: EdgeWithData[],
+): GraphDetails {
+  const input_nodes = computeInputNodes(nodes, links);
+  const output_nodes = computeOutputNodes(nodes, links);
+  const notes = computeNotes(nodes);
+  const uiProps =
+    notes.length > 0 ? { ...details.uiProps, notes } : details.uiProps;
+
+  return {
+    id: details.id,
+    ...(details.label && { label: details.label }),
+    ...(details.category && {
+      category: details.category,
+    }),
+    ...(hasDefinedFields(input_nodes) && {
+      input_nodes,
+    }),
+    ...(hasDefinedFields(output_nodes) && {
+      output_nodes,
+    }),
+    ...(hasDefinedFields(uiProps) && {
+      uiProps,
+    }),
+    ...(hasDefinedFields(details.keywords) && {
+      keywords: details.keywords,
+    }),
+    ...(hasDefinedFields(details.input_schema) && {
+      input_schema: details.input_schema,
+    }),
+    ...(hasDefinedFields(details.ui_schema) && {
+      ui_schema: details.ui_schema,
+    }),
+    ...(hasDefinedFields(details.execute_arguments) && {
+      execute_arguments: details.execute_arguments,
+    }),
+    ...(hasDefinedFields(details.worker_options) && {
+      worker_options: details.worker_options,
+    }),
+  };
 }
