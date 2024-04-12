@@ -9,17 +9,19 @@ https://workflow.gitlab-pages.esrf.fr/ewoks/ewoksweb/
 
 ## Local installation
 
-Install the [ewoksserver](https://ewoksserver.readthedocs.io) python package
+Install the [ewoksweb](https://ewoksweb.readthedocs.io) python package
 
 ```bash
-pip install ewoksserver[frontend]
+pip install ewoksweb
 ```
 
-Start the server and open the frontend in a web browser
+Start the server via
 
 ```bash
-ewoks-server
+ewoksweb
 ```
+
+See the documentation (link below) for more information.
 
 ## Documentation
 
