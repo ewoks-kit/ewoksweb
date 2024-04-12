@@ -89,10 +89,9 @@ test:
     - python3 --version
     - python3 -m pip install --upgrade pip
     - python3 -m pip install --upgrade setuptools
-    - python3 -m pip install ewoksserver
-    - python3 -m pip install --upgrade --pre ewoksserver
+    - python3 -m pip install -e .
     - pnpm build
-    - ewoks-server --config ./pysrc/ewoksweb/tests/resources/config.py &
+    - ewoksweb --config ./pysrc/ewoksweb/tests/resources/config.py &
     # Try to connect to server for 20s. If not, `timeout` will return non-zero so the CI fails.
     - timeout 20s bash -c "while ! curl http://127.0.0.1:8000 -m1 -o/dev/null -s;do sleep 0.3;done"
     # https://github.com/vercel/serve/issues/751
