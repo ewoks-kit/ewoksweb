@@ -70,7 +70,7 @@ To do a new release:
 1. After the CI succeeded, you have two choices:
 
 - Either use
-  [ewoksci deploy.sh](https://gitlab.esrf.fr/workflow/ewoksadmin/ewoksci/-/blob/main/deploy.sh)
+  [ewoksci deploy.sh](https://gitlab.esrf.fr/dau/ci/pyci/-/blob/main/scripts/deploy.sh)
   to upload the package
 - Or download manually the package from the CI artifacts of the `assets` job and
   upload it with `twine`.
