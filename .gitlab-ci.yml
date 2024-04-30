@@ -6,7 +6,7 @@ stages:
 ### Jobs templates ###
 
 .base:
-  image: "docker-registry.esrf.fr/dau/ewoks:python_3.9_node_12"
+  image: "gitlab-registry.esrf.fr/dau/ci/pyci/python_3.9_node_12":latest
   tags:
     - linux
   only:
