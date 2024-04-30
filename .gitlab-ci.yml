@@ -7,7 +7,7 @@ stages:
 ### Jobs templates ###
 
 .base:
-  image: 'gitlab-registry.esrf.fr/dau/ci/pyci/python_3.9_node_16':latest
+  image: gitlab-registry.esrf.fr/dau/ci/pyci/python_3.9_node_16:latest
   tags:
     - linux
   only:
