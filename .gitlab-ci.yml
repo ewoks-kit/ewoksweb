@@ -121,7 +121,7 @@ pages:
   variables:
     VITE_SERVER_URL: https://bosquet.silx.org
     VITE_SERVER_API_SUFFIX: /ewoks/api
-    VITE_ROUTER_BASE_DIR: ewoks/ewoksweb/
+    VITE_ROUTER_BASE_DIR: /ewoks/ewoksweb/
   extends: .pnpm-base-build
   script:
     - pnpm build:pages
