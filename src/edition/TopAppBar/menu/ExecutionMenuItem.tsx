@@ -3,7 +3,7 @@ import { useKeyboardEvent } from '@react-hookz/web';
 import { useState } from 'react';
 
 import useStore from '../../../store/useStore';
-import ExecuteParametersDialog from '../execution/ExecuteParametersDialog';
+import ExecutionDialog from '../execution/ExecutionDialog';
 import ActionMenuItem from './ActionMenuItem';
 
 function ExecutionMenuItem() {
@@ -22,7 +22,7 @@ function ExecutionMenuItem() {
 
   return (
     <>
-      <ExecuteParametersDialog open={open} onClose={() => setOpen(false)} />
+      <ExecutionDialog open={open} onClose={() => setOpen(false)} />
       <ActionMenuItem
         icon={SendIcon}
         label="Execute workflow"

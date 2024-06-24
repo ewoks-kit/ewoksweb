@@ -46,7 +46,7 @@ interface Props {
   onClose: (value?: string) => void;
 }
 
-export default function ExecuteParametersDialog(props: Props) {
+export default function ExecutionDialog(props: Props) {
   const { onClose, open } = props;
 
   const nodesData = useNodeDataStore((state) => state.nodesData);
