@@ -1,13 +1,5 @@
 import InfoIcon from '@mui/icons-material/Info';
-import {
-  Card,
-  CardContent,
-  FormControl,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from '@mui/material';
+import { Card, CardContent, Table, TableBody } from '@mui/material';
 import Button from '@mui/material//Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -18,26 +10,17 @@ import { nanoid } from 'nanoid';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import commonStrings from '../../../commonStrings.json';
 import { useSaveWorkflow } from '../../../general/hooks';
-import useNodeDataStore from '../../../store/useNodeDataStore';
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import useStore from '../../../store/useStore';
-import type { Options, RowValue } from '../../../types';
-import { RowType } from '../../../types';
 import { textForError } from '../../../utils';
-import { assertDefined } from '../../../utils/typeGuards';
 import AddEntryRow from '../../Sidebar/table/controls/AddEntryRow';
-import RemoveRowButton from '../../Sidebar/table/controls/RemoveRowButton';
-import TypeSelectCell from '../../Sidebar/table/controls/TypeSelectCell';
-import MultiTypeEditCell from '../../Sidebar/table/MultiTypeEditCell';
-import StrOrNumEditCell from '../../Sidebar/table/StrOrNumEditCell';
-import { calcNodeInputOptions } from '../../Sidebar/table/utils';
 import type { EngineDropdownOption } from '../models';
-import ExecuteParamsTableHeader from './ExecuteParamsTableHeader';
 import styles from './ExecutionDialog.module.css';
 import ExecutionOptions from './ExecutionOptions';
-import InputTargetDropdown from './InputTargetDropdown';
-import type { ExecutionInputTableRow, InputTarget } from './models';
+import InputTable from './InputTable';
+import type { ExecutionInputTableRow } from './models';
 import { EMPTY_INPUT } from './models';
 import { execute } from './utils';
 
@@ -48,8 +31,6 @@ interface Props {
 
 export default function ExecutionDialog(props: Props) {
   const { onClose, open } = props;
-
-  const nodesData = useNodeDataStore((state) => state.nodesData);
 
   const inputRows = useMap<string, ExecutionInputTableRow>();
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
@@ -63,15 +44,13 @@ export default function ExecutionDialog(props: Props) {
     try {
       await handleSave();
     } catch (saveError) {
-      showErrorMsg(
-        textForError(
-          saveError,
-          'Error in saving workflow. Please check connectivity with the server!',
-        ),
-      );
+      showErrorMsg(textForError(saveError, commonStrings.savingError));
       return;
     }
+    handleExecute();
+  }
 
+  function handleExecute() {
     const { rootWorkflowId } = useStore.getState();
     if (!rootWorkflowId) {
       showWarningMsg('Please open a workflow in the canvas to execute');
@@ -85,44 +64,6 @@ export default function ExecutionDialog(props: Props) {
     }
   }
 
-  function handleTargetChange(rowId: string, newTarget: InputTarget) {
-    const oldInput = inputRows.get(rowId);
-    assertDefined(oldInput);
-
-    inputRows.set(rowId, { ...oldInput, target: newTarget });
-  }
-
-  function handleNameChange(newName: string | number, rowId: string) {
-    const oldInput = inputRows.get(rowId);
-    assertDefined(oldInput);
-    inputRows.set(rowId, { ...oldInput, name: newName });
-  }
-
-  function handleValueChange(newValue: RowValue, rowId: string) {
-    const oldInput = inputRows.get(rowId);
-    assertDefined(oldInput);
-    inputRows.set(rowId, { ...oldInput, value: newValue });
-  }
-
-  function handleTypeChange(newType: RowType, rowId: string) {
-    const oldInput = inputRows.get(rowId);
-    assertDefined(oldInput);
-    inputRows.set(rowId, {
-      ...oldInput,
-      value: newType === RowType.Null ? null : '',
-      type: newType,
-    });
-  }
-
-  function calcOptions(target: InputTarget): Options | undefined {
-    if (typeof target === 'string') {
-      return undefined;
-    }
-
-    const nodeData = nodesData.get(target.id);
-    return calcNodeInputOptions(nodeData);
-  }
-
   return (
     <Dialog maxWidth="xl" fullWidth open={open} onClose={() => onClose()}>
       <DialogTitle>Execute a workflow</DialogTitle>
@@ -130,62 +71,11 @@ export default function ExecutionDialog(props: Props) {
         <Card variant="outlined">
           <CardContent>
             <h4>Workflow Inputs</h4>
-            <div>
-              <Table
-                aria-label="Execution parameters table"
-                size="small"
-                padding="normal"
-              >
-                <ExecuteParamsTableHeader />
-                <TableBody>
-                  {[...inputRows.entries()].map(([rowId, inputData]) => (
-                    <TableRow key={rowId}>
-                      <TableCell align="left" size="small">
-                        <FormControl>
-                          <InputTargetDropdown
-                            defaultValue={inputData.target}
-                            onTargetChange={(newTarget) =>
-                              handleTargetChange(rowId, newTarget)
-                            }
-                          />
-                        </FormControl>
-                      </TableCell>
-                      <TypeSelectCell
-                        value={inputData.type}
-                        onChange={(newType) => handleTypeChange(newType, rowId)}
-                      />
-                      <StrOrNumEditCell
-                        value={inputData.name}
-                        onChange={(newName) => handleNameChange(newName, rowId)}
-                        options={calcOptions(inputData.target)}
-                        ariaLabel="Edit input name"
-                      />
-
-                      <MultiTypeEditCell
-                        value={inputData.value}
-                        type={inputData.type}
-                        onChange={(newValue) =>
-                          handleValueChange(newValue, rowId)
-                        }
-                        disable={inputData.type === RowType.Null}
-                      />
-                      <TableCell align="left" size="small">
-                        <RemoveRowButton
-                          onClick={() => inputRows.delete(rowId)}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+            <InputTable rows={inputRows} />
             <Table>
               <TableBody>
                 <AddEntryRow
-                  onClick={() => {
-                    const rowId = nanoid();
-                    inputRows.set(rowId, EMPTY_INPUT);
-                  }}
+                  onClick={() => inputRows.set(nanoid(), EMPTY_INPUT)}
                   colSpan={4}
                 />
               </TableBody>
