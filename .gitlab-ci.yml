@@ -7,7 +7,7 @@ stages:
 ### Jobs templates ###
 
 .base:
-  image: gitlab-registry.esrf.fr/dau/ci/pyci/python_3.9_node_16:latest
+  image: gitlab-registry.esrf.fr/dau/ci/pyci/python_3.9_node_18:latest
   tags:
     - linux
   only:
@@ -22,7 +22,7 @@ stages:
     CYPRESS_CACHE_FOLDER: '$CI_PROJECT_DIR/.cypress-cache/'
   before_script:
     - corepack enable
-    - corepack prepare pnpm@latest-8 --activate
+    - corepack prepare pnpm@latest-9 --activate
     - pnpm config set store-dir .pnpm-store
     - pnpm install
   cache:
@@ -75,7 +75,7 @@ lint:
     - pnpm run lint
 
 test:
-  image: cypress/base:16.18.0
+  image: cypress/base:18.16.0
   stage: test
   extends: .pnpm-base
   needs: []

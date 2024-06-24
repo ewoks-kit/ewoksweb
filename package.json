@@ -7,8 +7,8 @@
   "author": "European Synchrotron Radiation Facility",
   "license": "MIT",
   "engines": {
-    "node": "16.18.0",
-    "pnpm": "8.x"
+    "node": "18.x",
+    "pnpm": "9.x"
   },
   "scripts": {
     "start": "vite",
