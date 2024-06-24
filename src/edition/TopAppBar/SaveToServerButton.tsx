@@ -5,7 +5,6 @@ import GraphFormDialog from '../../general/forms/GraphFormDialog';
 import { useSaveWorkflow } from '../../general/hooks';
 import tooltipText from '../../general/TooltipText';
 import { useWorkflowHasChanges } from '../../store/graph-hooks';
-import useStore from '../../store/useStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import SaveStatusIcon from './SaveStatusIcon';
 import styles from './SaveToServerButton.module.css';
@@ -13,9 +12,6 @@ import styles from './SaveToServerButton.module.css';
 // DOC: Save to server button with its spinner
 export default function SaveToServerButton() {
   const workflowHasChanges = useWorkflowHasChanges();
-  const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo,
-  );
 
   const { isDialogOpen, setDialogOpen, status, setStatus, handleSave } =
     useSaveWorkflow();
@@ -37,7 +33,6 @@ export default function SaveToServerButton() {
     <>
       <SuspenseBoundary>
         <GraphFormDialog
-          elementToEdit={displayedWorkflowInfo}
           isOpen={isDialogOpen}
           onClose={() => setDialogOpen(false)}
         />
