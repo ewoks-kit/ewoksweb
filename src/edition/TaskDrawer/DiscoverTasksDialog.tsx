@@ -52,6 +52,13 @@ export default function DiscoverTasksDialog(props: Props) {
       return;
     }
 
+    if (textValue.includes('/') || textValue.endsWith('.py')) {
+      showWarningMsg(
+        'Please provide the module identifier (as for Python imports) and not the path to the module.',
+      );
+      return;
+    }
+
     discover([textValue]);
   }
 
