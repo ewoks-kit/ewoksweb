@@ -17,8 +17,8 @@ import {
 } from '../../api/workflows';
 import commonStrings from '../../commonStrings.json';
 import useSnackbarStore from '../../store/useSnackbarStore';
+import useStore from '../../store/useStore';
 import useWorkflowHistory from '../../store/useWorkflowHistory';
-import type { GraphDetails } from '../../types';
 import {
   getEdgesData,
   getNodesData,
@@ -28,15 +28,17 @@ import {
 import FormField from './FormField';
 
 interface Props {
-  elementToEdit: GraphDetails;
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
 export default function GraphFormDialog(props: Props) {
   const [, setSearchParams] = useSearchParams();
   const rfInstance = useReactFlow();
-  const { isOpen, onClose, elementToEdit } = props;
+  const { isOpen, onClose, onSuccess } = props;
+
+  const elementToEdit = useStore((state) => state.displayedWorkflowInfo);
 
   const { handleSubmit, reset, control, formState } = useForm({
     defaultValues: { name: elementToEdit.id },
@@ -75,6 +77,7 @@ export default function GraphFormDialog(props: Props) {
       // the "unsaved changes" prompt - cf. https://gitlab.esrf.fr/workflow/ewoks/ewoksweb/-/issues/265)
       flushSync(() => resetWorkflowHistory());
       setSearchParams({ workflow: name });
+      onSuccess?.();
     } catch (error) {
       showErrorMsg(textForError(error, commonStrings.savingError));
     }

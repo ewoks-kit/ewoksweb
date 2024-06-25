@@ -11,9 +11,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import commonStrings from '../../../commonStrings.json';
+import GraphFormDialog from '../../../general/forms/GraphFormDialog';
 import { useSaveWorkflow } from '../../../general/hooks';
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import useStore from '../../../store/useStore';
+import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 import { textForError } from '../../../utils';
 import AddEntryRow from '../../Sidebar/table/controls/AddEntryRow';
 import type { EngineDropdownOption } from '../models';
@@ -37,17 +39,19 @@ export default function ExecutionDialog(props: Props) {
   const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
   const [engine, setEngine] = useState<EngineDropdownOption>('default');
   const [worker, setWorker] = useState<string>('');
-  const { handleSave } = useSaveWorkflow();
+  const { isDialogOpen, setDialogOpen, handleSave } = useSaveWorkflow();
   const navigate = useNavigate();
 
   async function handleSaveExecute() {
     try {
-      await handleSave();
+      const success = await handleSave();
+
+      if (success) {
+        handleExecute();
+      }
     } catch (saveError) {
       showErrorMsg(textForError(saveError, commonStrings.savingError));
-      return;
     }
-    handleExecute();
   }
 
   function handleExecute() {
@@ -66,6 +70,13 @@ export default function ExecutionDialog(props: Props) {
 
   return (
     <Dialog maxWidth="xl" fullWidth open={open} onClose={() => onClose()}>
+      <SuspenseBoundary>
+        <GraphFormDialog
+          isOpen={isDialogOpen}
+          onClose={() => setDialogOpen(false)}
+          onSuccess={handleExecute}
+        />
+      </SuspenseBoundary>
       <DialogTitle>Execute a workflow</DialogTitle>
       <DialogContent>
         <Card variant="outlined">

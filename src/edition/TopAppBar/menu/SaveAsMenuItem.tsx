@@ -18,7 +18,6 @@ function SaveAsMenuItem() {
     <>
       <SuspenseBoundary>
         <GraphFormDialog
-          elementToEdit={displayedWorkflowInfo}
           isOpen={openSaveDialog}
           onClose={() => setOpenSaveDialog(false)}
         />
