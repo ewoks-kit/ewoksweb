@@ -8,7 +8,6 @@ import {
   useInvalidateWorkflowDescriptions,
   useWorkflowIds,
 } from '../api/workflows';
-import commonStrings from '../commonStrings.json';
 import type { Status } from '../edition/TopAppBar/models';
 import { useNodesIds } from '../store/graph-hooks';
 import useNodeDataStore from '../store/useNodeDataStore';
@@ -17,12 +16,7 @@ import useStore from '../store/useStore';
 import useWorkflowHistory from '../store/useWorkflowHistory';
 import type { RFNode, Workflow } from '../types';
 import { WorkflowSource } from '../types';
-import {
-  getEdgesData,
-  getNodesData,
-  textForError,
-  toEwoksWorkflow,
-} from '../utils';
+import { getEdgesData, getNodesData, toEwoksWorkflow } from '../utils';
 import { getNodeData } from '../utils';
 import { calcNewId } from '../utils/calcNewId';
 import { assertDefined, assertNodeDataDefined } from '../utils/typeGuards';
@@ -82,54 +76,39 @@ export function useSaveWorkflow() {
   const [status, setStatus] = useState<Status>('idle');
   const rootWorkflowSource = useStore((state) => state.rootWorkflowSource);
   const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
-  const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const resetWorkflowHistory = useWorkflowHistory(
     (state) => state.resetWorkflowHistory,
   );
 
-  function handleError(text: string) {
-    showErrorMsg(text);
-    setStatus('error');
-  }
-
   async function handleSave(): Promise<boolean> {
-    // If the workflow does not exist on the server, open dialog asking the user for a name
-    if (!workflowIds.has(displayedWorkflowInfo.id)) {
+    // If the workflow does not exist on the server or was imported from disk, open dialog asking the user for a name
+    if (
+      rootWorkflowSource === WorkflowSource.Disk ||
+      !workflowIds.has(displayedWorkflowInfo.id)
+    ) {
       setDialogOpen(true);
       return false;
     }
 
     if (rootWorkflowSource === WorkflowSource.Empty) {
-      handleError('No graph exists to save!');
-      return false;
+      throw new Error('No graph exists to save!');
     }
 
-    // If the workflow was imported from disk, open dialog asking the user for a name
-    if (rootWorkflowSource === WorkflowSource.Disk) {
-      setDialogOpen(true);
-      return false;
-    }
-
-    try {
-      await putWorkflow(
-        toEwoksWorkflow(
-          displayedWorkflowInfo,
-          rfInstance.getNodes(),
-          rfInstance.getEdges(),
-          getNodesData(),
-          getEdgesData(),
-        ),
-      );
-      invalidateWorkflowDescriptions();
-      invalidateWorkflow(displayedWorkflowInfo.id);
-      resetWorkflowHistory();
-      showSuccessMsg('Graph saved successfully!');
-      setStatus('success');
-      return true;
-    } catch (error) {
-      handleError(textForError(error, commonStrings.savingError));
-      return false;
-    }
+    await putWorkflow(
+      toEwoksWorkflow(
+        displayedWorkflowInfo,
+        rfInstance.getNodes(),
+        rfInstance.getEdges(),
+        getNodesData(),
+        getEdgesData(),
+      ),
+    );
+    invalidateWorkflowDescriptions();
+    invalidateWorkflow(displayedWorkflowInfo.id);
+    resetWorkflowHistory();
+    showSuccessMsg('Graph saved successfully!');
+    setStatus('success');
+    return true;
   }
 
   return {
