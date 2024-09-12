@@ -9,9 +9,6 @@ const sidebarStyle = {
   dropdown: {
     minWidth: '150px',
   },
-  checkbox: {
-    padding: '4px 0px 4px 0px',
-  },
   sectionHeader: {
     margin: '0.7rem 0 0 0',
   },

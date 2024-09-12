@@ -1,10 +1,11 @@
 import InfoIcon from '@mui/icons-material/Info';
-import { Box, Checkbox, IconButton } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import type { Node } from 'reactflow';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { DEFAULT_NODE_VALUES } from '../../../utils/defaultValues';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
+import SidebarCheckbox from '../SidebarCheckbox';
 import sidebarStyle from '../sidebarStyle';
 import SidebarTooltip from '../SidebarTooltip';
 import DefaultInputs from '../table/DefaultInputs';
@@ -12,7 +13,12 @@ import DefaultErrorNodeControl from './DefaultErrorNodeControl';
 import InputTextField from './InputTextField';
 import NodeInfo from './NodeInfo';
 
-export default function NodeDetails(node: Node) {
+interface Props {
+  node: Node;
+}
+
+export default function NodeDetails(props: Props) {
+  const { node } = props;
   const nodeData = useNodeDataStore((state) => state.nodesData.get(node.id));
   assertNodeDataDefined(nodeData, node.id);
 
@@ -38,7 +44,7 @@ export default function NodeDetails(node: Node) {
       {node.type &&
         !['graphInput', 'graphOutput', 'note'].includes(node.type) && (
           <>
-            <DefaultInputs {...node} />
+            <DefaultInputs nodeId={node.id} />
 
             <h3 style={sidebarStyle.sectionHeader}>
               Advanced
@@ -54,25 +60,20 @@ export default function NodeDetails(node: Node) {
               </SidebarTooltip>
             </h3>
 
-            <section>
-              <Checkbox
-                style={sidebarStyle.checkbox}
-                checked={
-                  nodeData.ewoks_props.force_start_node ||
-                  DEFAULT_NODE_VALUES.force_start_node
-                }
-                onChange={(event, checked) => {
-                  mergeNodeData(node.id, {
-                    ewoks_props: {
-                      force_start_node: checked,
-                    },
-                  });
-                }}
-                inputProps={{ 'aria-label': 'controlled' }}
-                color="primary"
-              />
-              <span>Force start node</span>
-            </section>
+            <SidebarCheckbox
+              label="Force start node"
+              value={
+                nodeData.ewoks_props.force_start_node ||
+                DEFAULT_NODE_VALUES.force_start_node
+              }
+              onChange={(checked) => {
+                mergeNodeData(node.id, {
+                  ewoks_props: {
+                    force_start_node: checked,
+                  },
+                });
+              }}
+            />
             <DefaultErrorNodeControl nodeId={node.id} />
             <NodeInfo nodeId={node.id} nodeData={nodeData} />
           </>

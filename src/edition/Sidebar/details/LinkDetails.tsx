@@ -1,10 +1,10 @@
 import InfoIcon from '@mui/icons-material/Info';
-import { Checkbox, IconButton } from '@mui/material';
-import type { ChangeEvent } from 'react';
+import { IconButton } from '@mui/material';
 import type { Edge } from 'reactflow';
 
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
+import SidebarCheckbox from '../SidebarCheckbox';
 import sidebarStyle from '../sidebarStyle';
 import SidebarTooltip from '../SidebarTooltip';
 import Conditions from '../table/Conditions';
@@ -21,22 +21,6 @@ export default function LinkDetails(selectedElement: Edge) {
   assertEdgeDataDefined(edgeData, selectedElement.id);
 
   const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
-
-  const requiredChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    mergeEdgeData(selectedElement.id, { required: event.target.checked });
-  };
-
-  const handleChangeShowDataMapping = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    mergeEdgeData(selectedElement.id, { map_all_data: event.target.checked });
-  };
-
-  const handleChangeShowConditions = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    mergeEdgeData(selectedElement.id, { on_error: event.target.checked });
-  };
 
   return (
     <>
@@ -99,35 +83,27 @@ export default function LinkDetails(selectedElement: Edge) {
             </IconButton>
           </SidebarTooltip>
         </h3>
-        <section>
-          <Checkbox
-            style={sidebarStyle.checkbox}
-            checked={edgeData.map_all_data}
-            onChange={handleChangeShowDataMapping}
-            inputProps={{ 'aria-label': 'Map all Data' }}
-            color="primary"
-          />
-          <span>Map all Data</span>
-        </section>
-        <section>
-          <Checkbox
-            style={sidebarStyle.checkbox}
-            checked={edgeData.on_error}
-            onChange={handleChangeShowConditions}
-            inputProps={{ 'aria-label': 'On Error condition' }}
-            color="primary"
-          />
-          <span>On Error condition</span>
-        </section>
-        <section>
-          <Checkbox
-            style={sidebarStyle.checkbox}
-            checked={edgeData.required}
-            onChange={requiredChanged}
-            color="primary"
-          />
-          <span>Required</span>
-        </section>
+        <SidebarCheckbox
+          value={edgeData.map_all_data || false}
+          onChange={(checked) =>
+            mergeEdgeData(selectedElement.id, { map_all_data: checked })
+          }
+          label="Map all Data"
+        />
+        <SidebarCheckbox
+          value={edgeData.on_error}
+          onChange={(checked) =>
+            mergeEdgeData(selectedElement.id, { on_error: checked })
+          }
+          label="On Error condition"
+        />
+        <SidebarCheckbox
+          value={edgeData.required}
+          onChange={(checked) =>
+            mergeEdgeData(selectedElement.id, { required: checked })
+          }
+          label="Required"
+        />
         <section>
           <h3 style={sidebarStyle.sectionHeader}>Link properties</h3>
           <div className={styles.entry}>Source: {selectedElement.source}</div>

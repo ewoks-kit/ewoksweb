@@ -1,22 +1,27 @@
 import InfoIcon from '@mui/icons-material/Info';
 import { IconButton } from '@mui/material';
 import { nanoid } from 'nanoid';
-import type { Node } from 'reactflow';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
-import type { DefaultInput } from '../../../types';
+import type { DefaultInput, NodeData } from '../../../types';
 import { RowType } from '../../../types';
+import { DEFAULT_NODE_VALUES } from '../../../utils/defaultValues';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import sidebarStyle from '../sidebarStyle';
 import SidebarTooltip from '../SidebarTooltip';
 import EditableTable from './EditableTable';
 import { calcNodeInputOptions } from './utils';
 
-export default function DefaultInputs(element: Node) {
+interface Props {
+  nodeId: string;
+}
+
+export default function DefaultInputs(props: Props) {
+  const { nodeId } = props;
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
-  const nodeData = useNodeDataStore((state) => state.nodesData.get(element.id));
-  assertNodeDataDefined(nodeData, element.id);
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(nodeId));
+  assertNodeDataDefined(nodeData, nodeId);
 
   function addDefaultInputs(rows: DefaultInput[]) {
     const newNodeData = {
@@ -28,26 +33,22 @@ export default function DefaultInputs(element: Node) {
       },
     };
 
-    mergeNodeData(element.id, newNodeData);
+    mergeNodeData(nodeId, newNodeData);
   }
 
-  const defaultInputsChanged = (table: DefaultInput[]) => {
+  function defaultInputsChanged(
+    oldNodeData: NodeData,
+    defaultInputs: DefaultInput[],
+  ) {
     const newNodeData = {
-      ...nodeData,
+      ...oldNodeData,
       ewoks_props: {
-        ...nodeData.ewoks_props,
-        default_inputs: table.map((dval) => {
-          return {
-            rowId: dval.rowId,
-            name: dval.name,
-            value: dval.value,
-            type: dval.type,
-          };
-        }),
+        ...oldNodeData.ewoks_props,
+        default_inputs: defaultInputs,
       },
     };
-    setNodeData(element.id, newNodeData);
-  };
+    setNodeData(nodeId, newNodeData);
+  }
 
   return (
     <div>
@@ -61,8 +62,11 @@ export default function DefaultInputs(element: Node) {
       </h3>
       <EditableTable
         headers={['Name', 'Value']}
-        defaultValues={nodeData.ewoks_props.default_inputs || []}
-        valuesChanged={defaultInputsChanged}
+        defaultValues={
+          nodeData.ewoks_props.default_inputs ||
+          DEFAULT_NODE_VALUES.default_inputs
+        }
+        valuesChanged={(table) => defaultInputsChanged(nodeData, table)}
         onRowAdd={(rows) => addDefaultInputs(rows)}
         nameOptions={calcNodeInputOptions(nodeData)}
       />

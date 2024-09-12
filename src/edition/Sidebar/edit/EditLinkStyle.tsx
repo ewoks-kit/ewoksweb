@@ -1,7 +1,6 @@
 import type { SelectChangeEvent } from '@mui/material';
 import {
   Button,
-  Checkbox,
   FormControl,
   InputLabel,
   MenuItem,
@@ -16,7 +15,7 @@ import { useUpdateEdge } from '../../../general/hooks';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
-import sidebarStyle from '../sidebarStyle';
+import SidebarCheckbox from '../SidebarCheckbox';
 import styles from './EditLinkStyle.module.css';
 import MarkerEndControl from './MarkerEndControl';
 
@@ -57,13 +56,6 @@ export default function EditLinkStyle(element: Edge) {
       labelBgStyle: { ...element.labelBgStyle, stroke: event.target.value },
     };
     updateEdge(newEdge);
-  }
-
-  function handleAnimatedChange(event: ChangeEvent<HTMLInputElement>) {
-    updateEdge({
-      ...element,
-      animated: event.target.checked,
-    });
   }
 
   function handleXChange(_event: Event, value: number | number[]) {
@@ -131,17 +123,16 @@ export default function EditLinkStyle(element: Edge) {
         </Button>
       </FormControl>
       <MarkerEndControl edge={element} />
-      <div>
-        <Checkbox
-          style={sidebarStyle.checkbox}
-          name="animated"
-          checked={animated}
-          onChange={handleAnimatedChange}
-          inputProps={{ 'aria-label': 'animated' }}
-          color="primary"
-        />
-        <label htmlFor="animated">Animated</label>
-      </div>
+      <SidebarCheckbox
+        value={animated}
+        onChange={(checked) =>
+          updateEdge({
+            ...element,
+            animated: checked,
+          })
+        }
+        label="Animated"
+      />
       <div>
         <label htmlFor="head">Color</label>
         <input

@@ -25,3 +25,7 @@
   margin-bottom: 0.5rem;
   border-bottom: solid 1px rgb(192, 192, 192);
 }
+
+.checkbox {
+  padding: 4px 0 !important;
+}

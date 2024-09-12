@@ -20,7 +20,7 @@ function EditNodeSidebar(props: Props) {
           <NodeSidebarMenuItems node={node} onSelection={onClose} />
         )}
       />
-      <NodeDetails {...node} />
+      <NodeDetails node={node} />
       <h3 style={sidebarStyle.sectionHeader}>Appearance</h3>
       <EditNodeStyle nodeId={node.id} />
     </>
