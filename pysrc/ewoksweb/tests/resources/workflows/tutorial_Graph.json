@@ -35,7 +35,6 @@
       "label": "ewoksweb",
       "task_type": "ppfmethod",
       "task_identifier": "taskSkeleton",
-      "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
       "uiProps": {
@@ -55,7 +54,6 @@
       "label": "Double-click for Ewoks",
       "task_type": "graph",
       "task_identifier": "WhatIsEwoks",
-      "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
       "uiProps": {
@@ -74,7 +72,6 @@
       "label": "a web application to EDIT ewoks graphs",
       "task_type": "ppfmethod",
       "task_identifier": "taskSkeleton",
-      "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
       "uiProps": {
@@ -94,7 +91,6 @@
       "label": "create graphs from nodes connected with links",
       "task_type": "ppfmethod",
       "task_identifier": "taskSkeleton",
-      "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
       "uiProps": {
@@ -114,7 +110,6 @@
       "label": "has a web UI in React and a server side in Python-Flask",
       "task_type": "ppfmethod",
       "task_identifier": "taskSkeleton",
-      "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
       "uiProps": {
@@ -134,7 +129,6 @@
       "label": "Add Tasks to your graph by dragging them from \"Add Nodes\" on the left sidebar",
       "task_type": "ppfmethod",
       "task_identifier": "taskSkeleton",
-      "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
       "uiProps": {
@@ -155,7 +149,6 @@
       "label": "doubleClick to see how to add your Tasks",
       "task_type": "graph",
       "task_identifier": "Adding-Tasks",
-      "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
       "uiProps": {
@@ -175,7 +168,6 @@
       "label": "DoubleClick me to see important existing Tasks within Ewoks",
       "task_type": "graph",
       "task_identifier": "Ewoks-Tasks",
-      "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
       "uiProps": {
@@ -195,7 +187,6 @@
       "label": "links of the code in comment after clicking me and \"Advanced\" on the left sidebar",
       "task_type": "ppfmethod",
       "task_identifier": "taskSkeleton",
-      "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
       "uiProps": {
@@ -215,7 +206,6 @@
       "label": "nodes are processing entities based on python tasks",
       "task_type": "ppfmethod",
       "task_identifier": "taskSkeleton",
-      "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
       "uiProps": {
@@ -235,7 +225,6 @@
       "label": "tasks can be created, saved and added to graphs as nodes",
       "task_type": "ppfmethod",
       "task_identifier": "taskSkeleton",
-      "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
       "uiProps": {
@@ -255,7 +244,6 @@
       "label": "SUBGRAPHS and LOOPS within graphs",
       "task_type": "graph",
       "task_identifier": "Subgraphs-Loops",
-      "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
       "uiProps": {
@@ -274,7 +262,6 @@
       "label": "Double-click for editing Graph-Node-Link",
       "task_type": "graph",
       "task_identifier": "Editing-Graph-Node-Link",
-      "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
       "uiProps": {
@@ -294,7 +281,6 @@
       "label": "Double-click for an explanation of the buttons in the upper bar and sidebar",
       "task_type": "graph",
       "task_identifier": "Buttons_Explanation",
-      "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
       "uiProps": {

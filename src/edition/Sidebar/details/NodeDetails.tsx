@@ -3,6 +3,7 @@ import { Box, Checkbox, IconButton } from '@mui/material';
 import type { Node } from 'reactflow';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
+import { DEFAULT_NODE_VALUES } from '../../../utils/defaultValues';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import sidebarStyle from '../sidebarStyle';
 import SidebarTooltip from '../SidebarTooltip';
@@ -11,22 +12,11 @@ import DefaultErrorNodeControl from './DefaultErrorNodeControl';
 import InputTextField from './InputTextField';
 import NodeInfo from './NodeInfo';
 
-// DOC: selectedNode details in sidebar
-export default function NodeDetails(selectedElement: Node) {
-  const nodeData = useNodeDataStore((state) =>
-    state.nodesData.get(selectedElement.id),
-  );
-  assertNodeDataDefined(nodeData, selectedElement.id);
+export default function NodeDetails(node: Node) {
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(node.id));
+  assertNodeDataDefined(nodeData, node.id);
 
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
-
-  function inputsCompleteChanged(checked: boolean) {
-    mergeNodeData(selectedElement.id, {
-      ewoks_props: {
-        inputs_complete: checked,
-      },
-    });
-  }
 
   return (
     <Box>
@@ -34,32 +24,29 @@ export default function NodeDetails(selectedElement: Node) {
         label="Label"
         defaultValue={nodeData.ewoks_props.label || ''}
         onValueSave={(label) => {
-          mergeNodeData(selectedElement.id, { ewoks_props: { label } });
+          mergeNodeData(node.id, { ewoks_props: { label } });
         }}
       />
       <InputTextField
         label="Comment"
         defaultValue={nodeData.comment || ''}
         onValueSave={(comment) => {
-          mergeNodeData(selectedElement.id, { comment });
+          mergeNodeData(node.id, { comment });
         }}
       />
 
-      {selectedElement.type &&
-        !['graphInput', 'graphOutput', 'note'].includes(
-          selectedElement.type,
-        ) && (
+      {node.type &&
+        !['graphInput', 'graphOutput', 'note'].includes(node.type) && (
           <>
-            <DefaultInputs {...selectedElement} />
+            <DefaultInputs {...node} />
 
             <h3 style={sidebarStyle.sectionHeader}>
               Advanced
               <SidebarTooltip
-                text={`--Inputs Complete: Set to True when the default input covers all required input
-              (used for method and script as the required inputs are unknown).
+                text={`--Force start node: Force this node to be executed before others even if it has predecessors.
 
               --Default Error Node: When set to True all nodes without error handler
-              will be linked to this node. ONLY for one node in its graph`}
+              will be linked to this node. Only for one node in the graph`}
               >
                 <IconButton size="small">
                   <InfoIcon fontSize="small" />
@@ -70,17 +57,24 @@ export default function NodeDetails(selectedElement: Node) {
             <section>
               <Checkbox
                 style={sidebarStyle.checkbox}
-                checked={nodeData.ewoks_props.inputs_complete || false}
-                onChange={(event) =>
-                  inputsCompleteChanged(event.target.checked)
+                checked={
+                  nodeData.ewoks_props.force_start_node ||
+                  DEFAULT_NODE_VALUES.force_start_node
                 }
+                onChange={(event, checked) => {
+                  mergeNodeData(node.id, {
+                    ewoks_props: {
+                      force_start_node: checked,
+                    },
+                  });
+                }}
                 inputProps={{ 'aria-label': 'controlled' }}
                 color="primary"
               />
-              <span>Inputs Complete</span>
+              <span>Force start node</span>
             </section>
-            <DefaultErrorNodeControl nodeId={selectedElement.id} />
-            <NodeInfo nodeId={selectedElement.id} nodeData={nodeData} />
+            <DefaultErrorNodeControl nodeId={node.id} />
+            <NodeInfo nodeId={node.id} nodeData={nodeData} />
           </>
         )}
     </Box>

@@ -154,7 +154,7 @@ export interface EwoksNode {
   task_type: TaskType;
   task_generator?: string;
   default_inputs?: EwoksDefaultInput[];
-  inputs_complete?: boolean;
+  force_start_node?: boolean;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes<EwoksDataMapping>;
   uiProps?: EwoksNodeUiProps;
@@ -211,7 +211,7 @@ export type NodeTaskProperties = Omit<Task, 'icon'>;
 export interface EwoksNodeProperties {
   label?: string;
   default_inputs?: DefaultInput[];
-  inputs_complete?: boolean;
+  force_start_node?: boolean;
   task_generator?: string;
   default_error_node?: boolean;
   default_error_attributes?: DefaultErrorAttributes<DataMapping>;

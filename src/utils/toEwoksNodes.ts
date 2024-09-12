@@ -39,7 +39,7 @@ export function toEwoksNodes(nodes: NodeWithData[]): EwoksNode[] {
         ewoks_props: {
           default_inputs,
           label,
-          inputs_complete,
+          force_start_node,
           task_generator,
           default_error_node,
           default_error_attributes,
@@ -62,7 +62,7 @@ export function toEwoksNodes(nodes: NodeWithData[]): EwoksNode[] {
         label,
         task_type,
         task_identifier,
-        ...notUndefinedValue(inputs_complete, 'inputs_complete'),
+        ...(force_start_node ? { force_start_node } : {}),
         task_generator,
         default_inputs: default_inputs?.map(({ name, value }) => ({
           name,
