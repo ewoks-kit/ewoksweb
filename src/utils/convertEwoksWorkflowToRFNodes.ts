@@ -39,7 +39,7 @@ export function convertEwoksWorkflowToRFNodes(
       task_identifier,
       label,
       default_inputs,
-      inputs_complete,
+      force_start_node,
       default_error_node,
       default_error_attributes,
       task_generator,
@@ -61,7 +61,7 @@ export function convertEwoksWorkflowToRFNodes(
                 };
               }),
             }),
-          ...notUndefinedValue(inputs_complete, 'inputs_complete'),
+          ...notUndefinedValue(force_start_node, 'force_start_node'),
           ...notUndefinedValue(default_error_node, 'default_error_node'),
           ...(default_error_node &&
             default_error_attributes && {

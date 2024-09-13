@@ -1,16 +1,20 @@
-import { Checkbox, FormControl } from '@mui/material';
+import { FormControl } from '@mui/material';
 import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
 import { useUpdateNodeInternals } from 'reactflow';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
-import sidebarStyle from '../sidebarStyle';
+import SidebarCheckbox from '../SidebarCheckbox';
+import styles from './EditNodeStyle.module.css';
 import NodeIconControl from './NodeIconControl';
 import NodeWidthControl from './NodeWidthControl';
 
-// DOC: Edit the node style
-export default function EditNodeStyle(props: { nodeId: string }) {
+interface Props {
+  nodeId: string;
+}
+
+export default function EditNodeStyle(props: Props) {
   const { nodeId } = props;
   const nodeData = useNodeDataStore((state) => state.nodesData.get(nodeId));
   assertNodeDataDefined(nodeData, nodeId);
@@ -93,58 +97,40 @@ export default function EditNodeStyle(props: { nodeId: string }) {
       <div>
         {nodeData.task_props.task_type !== 'note' && (
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            <div style={{ marginRight: '20px' }}>
-              <Checkbox
-                style={sidebarStyle.checkbox}
-                name="withImage"
-                color="primary"
-                checked={
-                  nodeData.ui_props.withImage === undefined
-                    ? true
-                    : !!nodeData.ui_props.withImage
-                }
-                onChange={(event) => withImageChanged(event.target.checked)}
-                inputProps={{ 'aria-label': 'With image' }}
-              />
-              <label htmlFor="withImage">With image</label>
-            </div>
-            <div>
-              <Checkbox
-                style={sidebarStyle.checkbox}
-                name="withLabel"
-                color="primary"
-                checked={
-                  nodeData.ui_props.withLabel === undefined
-                    ? true
-                    : !!nodeData.ui_props.withLabel
-                }
-                onChange={(event) => withLabelChanged(event.target.checked)}
-                inputProps={{ 'aria-label': 'With label' }}
-              />
-              <label htmlFor="withLabel">With label</label>
-            </div>
+            <SidebarCheckbox
+              className={styles.withImage}
+              value={
+                nodeData.ui_props.withImage === undefined
+                  ? true
+                  : !!nodeData.ui_props.withImage
+              }
+              onChange={withImageChanged}
+              label="With image"
+            />
+            <SidebarCheckbox
+              value={
+                nodeData.ui_props.withLabel === undefined
+                  ? true
+                  : !!nodeData.ui_props.withLabel
+              }
+              onChange={withLabelChanged}
+              label="With label"
+            />
           </div>
         )}
-        <div>
-          <Checkbox
-            style={sidebarStyle.checkbox}
-            name="borderCheckbox"
-            color="primary"
-            checked={showBorderColor}
-            onChange={() => {
-              if (showBorderColor) {
-                setShowBorderColor(false);
-                colorBorderChanged('');
-              } else {
-                setShowBorderColor(true);
-                colorBorderChanged('#000000');
-              }
-            }}
-          />
-          <label id="borderCheckboxLabel" htmlFor="borderCheckbox">
-            With border
-          </label>
-        </div>
+        <SidebarCheckbox
+          label="With border"
+          value={showBorderColor}
+          onChange={() => {
+            if (showBorderColor) {
+              setShowBorderColor(false);
+              colorBorderChanged('');
+            } else {
+              setShowBorderColor(true);
+              colorBorderChanged('#000000');
+            }
+          }}
+        />
       </div>
       {showBorderColor && (
         <div>
@@ -160,19 +146,11 @@ export default function EditNodeStyle(props: { nodeId: string }) {
         </div>
       )}
       {isRegularNode && (
-        <div>
-          <div>
-            <Checkbox
-              style={sidebarStyle.checkbox}
-              name="moreHandles"
-              color="primary"
-              checked={!!nodeData.ui_props.moreHandles}
-              onChange={(event) => moreHandlesChanged(event.target.checked)}
-              inputProps={{ 'aria-label': 'More handles' }}
-            />
-            <label htmlFor="moreHandles">More handles</label>
-          </div>
-        </div>
+        <SidebarCheckbox
+          value={!!nodeData.ui_props.moreHandles}
+          onChange={moreHandlesChanged}
+          label="More handles"
+        />
       )}
       <NodeWidthControl
         nodeWidth={nodeData.ui_props.nodeWidth}

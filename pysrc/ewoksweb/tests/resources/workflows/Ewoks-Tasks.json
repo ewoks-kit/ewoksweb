@@ -81,7 +81,6 @@
       "label": "taskSkeleton",
       "task_type": "ppfmethod",
       "task_identifier": "taskSkeleton",
-      "inputs_complete": false,
       "task_generator": "",
       "default_error_node": false,
       "default_inputs": [],

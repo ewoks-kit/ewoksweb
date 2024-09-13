@@ -46,7 +46,7 @@ it('changes label', () => {
 });
 
 it('changes animated property to true', () => {
-  cy.findByRole('checkbox', { name: 'animated' }).click();
+  cy.findByRole('checkbox', { name: 'Animated' }).click();
 
   cy.get('@link').should('include.class', 'animated');
 });

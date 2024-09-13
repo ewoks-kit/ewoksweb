@@ -1,9 +1,9 @@
-import { Checkbox, Grid, Switch, Typography } from '@mui/material';
+import { Grid, Switch, Typography } from '@mui/material';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { DEFAULT_NODE_VALUES } from '../../../utils/defaultValues';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
-import sidebarStyle from '../sidebarStyle';
+import SidebarCheckbox from '../SidebarCheckbox';
 import NodeDataMapping from '../table/NodeDataMapping';
 
 export default function DefaultErrorNodeControl(props: { nodeId: string }) {
@@ -34,18 +34,11 @@ export default function DefaultErrorNodeControl(props: { nodeId: string }) {
 
   return (
     <>
-      <section>
-        <Checkbox
-          style={sidebarStyle.checkbox}
-          checked={default_error_node || DEFAULT_NODE_VALUES.default_error_node}
-          onChange={(event) =>
-            handleDefaultErrorNodeChanged(event.target.checked)
-          }
-          inputProps={{ 'aria-label': 'controlled' }}
-          color="primary"
-        />
-        <span>Default Error Node</span>
-      </section>
+      <SidebarCheckbox
+        value={default_error_node || DEFAULT_NODE_VALUES.default_error_node}
+        onChange={handleDefaultErrorNodeChanged}
+        label="Default Error Node"
+      />
 
       {default_error_node && (
         <section>

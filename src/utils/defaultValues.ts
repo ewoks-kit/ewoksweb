@@ -2,7 +2,7 @@ import { MarkerType } from 'reactflow';
 
 export const DEFAULT_NODE_VALUES = {
   default_inputs: [],
-  inputs_complete: false,
+  force_start_node: false,
   default_error_node: false,
   default_error_attributes: {
     map_all_data: true,

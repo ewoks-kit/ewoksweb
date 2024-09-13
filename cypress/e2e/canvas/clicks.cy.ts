@@ -15,7 +15,7 @@ it('selects a node with click', () => {
   cy.contains('Comment').should('be.visible');
   cy.findByRole('heading', { name: 'Default Inputs' }).should('be.visible');
   cy.contains('Default Error Node').should('be.visible');
-  cy.contains('Inputs Complete').should('be.visible');
+  cy.contains('Force start node').should('be.visible');
   cy.findByRole('heading', { name: 'Task Info' }).should('be.visible');
   cy.findByRole('heading', { name: 'Appearance' })
     .scrollIntoView()
