@@ -1,11 +1,11 @@
-import Tooltip from '@mui/material/Tooltip';
 import { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
+import NodeContent from './NodeContent';
 import NodeIcon from './NodeIcon';
 import NodeLabel from './NodeLabel';
-import { contentStyle, style } from './nodeStyles';
+import { contentStyle } from './nodeStyles';
 
 interface Props {
   id: string;
@@ -27,106 +27,94 @@ function Node({
   label,
   borderColor,
   comment,
-  width = 100,
+  width,
 }: Props) {
   return (
-    <div className="node-content" style={{ borderColor }}>
-      <Tooltip
-        title={comment ? <span style={style.comment}>{comment}</span> : ''}
-        enterDelay={800}
-        arrow
-      >
-        <span style={{ ...style.displayNode, width }} className="icons">
+    <NodeContent width={width} tooltip={comment} borderColor={borderColor}>
+      <Handle
+        type="source"
+        position={Position.Right}
+        id="sr"
+        style={{ ...contentStyle.handle, ...contentStyle.handleSource }}
+        isConnectable
+      />
+
+      {moreHandles && (
+        <div id="choice">
+          {/* TODO: break the handles */}
           <Handle
             type="source"
-            position={Position.Right}
-            id="sr"
-            style={{ ...contentStyle.handle, ...contentStyle.handleSource }}
+            position={Position.Top}
+            id="st"
+            style={{
+              right: 10,
+              left: 'auto',
+              ...contentStyle.handleSource,
+            }}
             isConnectable
           />
-
-          {moreHandles && (
-            <div id="choice">
-              {/* TODO: break the handles */}
-              <Handle
-                type="source"
-                position={Position.Top}
-                id="st"
-                style={{
-                  right: 10,
-                  left: 'auto',
-                  ...contentStyle.handleSource,
-                  ...contentStyle.handleUpDown,
-                }}
-                isConnectable
-              />
-              <Handle
-                type="source"
-                position={Position.Bottom}
-                id="sb"
-                style={{
-                  right: 10,
-                  left: 'auto',
-                  ...contentStyle.handleSource,
-                  ...contentStyle.handleUpDown,
-                }}
-                isConnectable
-              />
-            </div>
-          )}
-          <NodeLabel
-            id={id}
-            label={label}
-            showFull={withLabel}
-            showCropped={!withLabel && !withImage}
-            color="#ced3ee"
+          <Handle
+            type="source"
+            position={Position.Bottom}
+            id="sb"
+            style={{
+              right: 10,
+              left: 'auto',
+              ...contentStyle.handleSource,
+            }}
+            isConnectable
           />
-          {withImage && (
-            <SuspenseBoundary>
-              <NodeIcon nodeId={id} />
-            </SuspenseBoundary>
-          )}
+        </div>
+      )}
+      <NodeLabel
+        id={id}
+        label={label}
+        showFull={withLabel}
+        showCropped={!withLabel && !withImage}
+        color="#ced3ee"
+      />
+      {withImage && (
+        <SuspenseBoundary>
+          <NodeIcon nodeId={id} />
+        </SuspenseBoundary>
+      )}
 
+      <Handle
+        type="target"
+        position={Position.Left}
+        id="tl"
+        style={{
+          ...contentStyle.handle,
+          ...contentStyle.handleTarget,
+        }}
+        isConnectable
+      />
+
+      {moreHandles && (
+        <>
           <Handle
             type="target"
-            position={Position.Left}
-            id="tl"
+            position={Position.Bottom}
+            id="tb"
             style={{
-              ...contentStyle.handle,
+              left: 20,
               ...contentStyle.handleTarget,
             }}
             isConnectable
           />
-
-          {moreHandles && (
-            <>
-              <Handle
-                type="target"
-                position={Position.Bottom}
-                id="tb"
-                style={{
-                  left: 20,
-                  ...contentStyle.handleTarget,
-                  ...contentStyle.handleUpDown,
-                }}
-                isConnectable
-              />
-              <Handle
-                type="target"
-                position={Position.Top}
-                id="tt"
-                style={{
-                  left: 20,
-                  ...contentStyle.handleTarget,
-                  ...contentStyle.handleUpDown,
-                }}
-                isConnectable
-              />
-            </>
-          )}
-        </span>
-      </Tooltip>
-    </div>
+          <Handle
+            type="target"
+            position={Position.Top}
+            id="tt"
+            style={{
+              left: 20,
+              ...contentStyle.handleTarget,
+            }}
+            isConnectable
+          />
+        </>
+      )}
+    </NodeContent>
   );
 }
 
