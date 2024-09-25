@@ -1,9 +1,4 @@
 export const contentStyle = {
-  contentHeader: {
-    padding: '8px 0px',
-    flexGrow: 1,
-    backgroundColor: '#eee',
-  },
   io: {
     position: 'relative',
     padding: '8px 16px',
@@ -21,8 +16,8 @@ export const contentStyle = {
   right: { right: '-8px' },
   textRight: { textAlign: 'right' },
   handle: {
-    zIndex: 1000, // Uncomment
-    widht: '20px', // Does not work
+    zIndex: 1000,
+    width: '20px',
     height: '20px',
     margin: 'auto',
     background: '#ddd',
@@ -39,21 +34,9 @@ export const contentStyle = {
     width: '10px',
     border: '2px solid rgb(230, 190, 118)',
   },
-  handleUpDown: {
-    // height: '18px',
-    // background: 'rgb(221, 221, 221)',
-    // width: '11px',
-  },
-  iconButtons: {
-    margin: '0px 2px',
-    padding: '0px',
-  },
 } as const;
 
 export const style = {
-  icons: {
-    maxWidth: '100px',
-  },
   contentWrapper: {
     padding: '8px 0px',
   },
