@@ -44,9 +44,6 @@ export const contentStyle = {
     // background: 'rgb(221, 221, 221)',
     // width: '11px',
   },
-  imgPadding: {
-    padding: '2px',
-  },
   iconButtons: {
     margin: '0px 2px',
     padding: '0px',
