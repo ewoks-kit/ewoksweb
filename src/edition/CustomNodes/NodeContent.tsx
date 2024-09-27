@@ -10,23 +10,21 @@ interface Props {
 }
 
 function NodeContent(props: PropsWithChildren<Props>) {
-  const { width = 100, borderColor, tooltip, children: rawChildren } = props;
-
-  const children = tooltip ? (
-    <Tooltip
-      title={<span className={styles.tooltip}>{tooltip}</span>}
-      enterDelay={800}
-      arrow
-    >
-      <div className={styles.content}>{rawChildren}</div>
-    </Tooltip>
-  ) : (
-    <div className={styles.content}>{rawChildren}</div>
-  );
+  const { width = 100, borderColor, tooltip, children } = props;
 
   return (
     <div className={styles.wrapper} style={{ borderColor, width }}>
-      {children}
+      {tooltip ? (
+        <Tooltip
+          title={<span className={styles.tooltip}>{tooltip}</span>}
+          enterDelay={800}
+          arrow
+        >
+          <div className={styles.content}>{children}</div>
+        </Tooltip>
+      ) : (
+        <div className={styles.content}>{children}</div>
+      )}
     </div>
   );
 }
