@@ -16,47 +16,49 @@ function GraphInOutNode(props: NodeProps<NodeData>) {
   assertNodeDataDefined(nodeData, props.id);
   const { ui_props: uiProps, comment } = nodeData;
 
-  const { colorBorder, nodeWidth } = uiProps;
+  const { colorBorder } = uiProps;
   const { withImage = DEFAULT_NODE_VALUES.uiProps.withImage } = uiProps;
   const { withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel } = uiProps;
 
   const { task_type } = nodeData.task_props;
 
   return (
-    <NodeContent width={nodeWidth} borderColor={colorBorder} tooltip={comment}>
-      {task_type === 'graphInput' && (
-        <Handle
-          type="source"
-          position={Position.Right}
-          id="sr"
-          style={{ ...contentStyle.handle, ...contentStyle.handleSource }}
-          isConnectable
+    <NodeContent borderColor={colorBorder} tooltip={comment}>
+      <div style={{ display: 'flex' }}>
+        {task_type === 'graphInput' && (
+          <Handle
+            type="source"
+            position={Position.Right}
+            id="sr"
+            style={{ ...contentStyle.handle, ...contentStyle.handleSource }}
+            isConnectable
+          />
+        )}
+        <NodeLabel
+          id={props.id}
+          label={nodeData.ewoks_props.label}
+          showFull={withLabel}
+          showCropped={!withLabel && !withImage}
+          color="#ced3ee"
         />
-      )}
-      <NodeLabel
-        id={props.id}
-        label={nodeData.ewoks_props.label}
-        showFull={withLabel}
-        showCropped={!withLabel && !withImage}
-        color="#ced3ee"
-      />
-      {withImage && (
-        <SuspenseBoundary>
-          <NodeIcon nodeId={props.id} />
-        </SuspenseBoundary>
-      )}
-      {task_type === 'graphOutput' && (
-        <Handle
-          type="target"
-          position={Position.Left}
-          id="tl"
-          style={{
-            ...contentStyle.handle,
-            ...contentStyle.handleTarget,
-          }}
-          isConnectable
-        />
-      )}
+        {withImage && (
+          <SuspenseBoundary>
+            <NodeIcon nodeId={props.id} />
+          </SuspenseBoundary>
+        )}
+        {task_type === 'graphOutput' && (
+          <Handle
+            type="target"
+            position={Position.Left}
+            id="tl"
+            style={{
+              ...contentStyle.handle,
+              ...contentStyle.handleTarget,
+            }}
+            isConnectable
+          />
+        )}
+      </div>
     </NodeContent>
   );
 }

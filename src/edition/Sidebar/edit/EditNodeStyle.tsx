@@ -88,9 +88,11 @@ export default function EditNodeStyle(props: Props) {
     !!nodeData.ui_props.colorBorder,
   );
 
-  const isRegularNode = !['graphInput', 'graphOutput', 'note'].includes(
+  const isGraphIONode = ['graphInput', 'graphOutput'].includes(
     nodeData.task_props.task_type,
   );
+  const isNoteNode = nodeData.task_props.task_type === 'note';
+  const isRegularNode = !isGraphIONode && !isNoteNode;
 
   return (
     <FormControl variant="filled" fullWidth>
@@ -152,10 +154,12 @@ export default function EditNodeStyle(props: Props) {
           label="More handles"
         />
       )}
-      <NodeWidthControl
-        nodeWidth={nodeData.ui_props.nodeWidth}
-        onChangeCommitted={handleNodeWidthChange}
-      />
+      {!isGraphIONode && (
+        <NodeWidthControl
+          nodeWidth={nodeData.ui_props.nodeWidth}
+          onChangeCommitted={handleNodeWidthChange}
+        />
+      )}
       {isRegularNode && (
         <NodeIconControl
           value={nodeData.ui_props.icon}

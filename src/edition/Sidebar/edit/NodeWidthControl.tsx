@@ -15,9 +15,9 @@ function NodeWidthControl(props: Props) {
 
   return (
     <div className={styles.container}>
-      <span className={styles.label}>Size</span>
+      <span className={styles.label}>Width</span>
       <Slider
-        aria-label="Change node size"
+        aria-label="Change node width"
         className={styles.slider}
         color="primary"
         value={value}
