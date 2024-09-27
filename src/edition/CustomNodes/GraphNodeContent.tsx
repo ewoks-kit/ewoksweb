@@ -1,6 +1,5 @@
 import { memo, useEffect, useMemo } from 'react';
 import type { NodeProps } from 'reactflow';
-import { Handle, Position } from 'reactflow';
 
 import { useWorkflowIds } from '../../api/workflows';
 import useNodeDataStore from '../../store/useNodeDataStore';
@@ -9,10 +8,13 @@ import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import type { NodeData } from '../../types';
 import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
+import GraphInputHandle from './GraphInputHandle';
+import styles from './GraphNodeContent.module.css';
+import GraphOutputHandle from './GraphOutputHandle';
 import NodeContent from './NodeContent';
 import NodeIcon from './NodeIcon';
 import NodeLabel from './NodeLabel';
-import { contentStyle } from './nodeStyles';
+import { sortByPosition } from './utils';
 
 function GraphNodeContent(props: NodeProps<NodeData>) {
   const { id } = props;
@@ -67,113 +69,32 @@ function GraphNodeContent(props: NodeProps<NodeData>) {
           <NodeIcon nodeId={id} />
         </SuspenseBoundary>
       )}
-      <span style={{ padding: '8px 0px' }}>
-        {inputs.length === 0 ? (
-          <div
-            style={{
-              ...contentStyle.io,
-              ...contentStyle.textLeft,
-            }}
-          >
-            No input provided
-          </div>
-        ) : (
-          inputs
-            .sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
-            .map((input: { label: string }) => (
-              <div
-                key={input.label}
-                style={{
-                  ...contentStyle.io,
-                  ...contentStyle.textLeft,
-                  ...(uiProps.moreHandles ? contentStyle.borderInput : {}),
-                }}
-              >
-                {/* remove the rest of the input {input.label} for now */}
-                {input.label.slice(0, input.label.indexOf(':'))}
-                <Handle
-                  key={input.label}
-                  type="target"
-                  position={Position.Left}
-                  id={input.label.slice(0, input.label.indexOf(':'))}
-                  style={{
-                    ...contentStyle.handle,
-                    ...contentStyle.left,
-                    ...contentStyle.handleTarget,
-                  }}
-                />
-                {uiProps.moreHandles && (
-                  <Handle
-                    key={`${input.label} right`}
-                    type="target"
-                    position={Position.Right}
-                    id={`${input.label.slice(
-                      0,
-                      input.label.indexOf(':'),
-                    )} right`}
-                    style={{
-                      ...contentStyle.handle,
-                      ...contentStyle.right,
-                      ...contentStyle.handleTarget,
-                    }}
-                  />
-                )}
-              </div>
-            ))
-        )}
-        {outputs.length === 0 ? (
-          <div
-            style={{
-              ...contentStyle.io,
-              ...contentStyle.textRight,
-            }}
-          >
-            No output provided
-          </div>
-        ) : (
-          outputs
-            .sort((a, b) => (a.positionY || 0) - (b.positionY || 0))
-            .map((output: { label: string }) => (
-              <div
-                key={output.label}
-                style={{
-                  ...contentStyle.io,
-                  ...contentStyle.textRight,
-                  ...(uiProps.moreHandles ? contentStyle.borderOutput : {}),
-                }}
-              >
-                {output.label.slice(0, output.label.indexOf(':'))}
-                <Handle
-                  key={output.label}
-                  type="source"
-                  position={Position.Right}
-                  id={output.label.slice(0, output.label.indexOf(':'))}
-                  style={{
-                    ...contentStyle.handle,
-                    ...contentStyle.right,
-                    ...contentStyle.handleSource,
-                  }}
-                />
-                {uiProps.moreHandles && (
-                  <Handle
-                    key={`${output.label} left`}
-                    type="source"
-                    position={Position.Left}
-                    id={`${output.label.slice(
-                      0,
-                      output.label.indexOf(':'),
-                    )} left`}
-                    style={{
-                      ...contentStyle.handle,
-                      ...contentStyle.left,
-                      ...contentStyle.handleSource,
-                    }}
-                  />
-                )}
-              </div>
-            ))
-        )}
-      </span>
+      {inputs.length === 0 ? (
+        <div className={styles.handle}>No input provided</div>
+      ) : (
+        inputs
+          .sort(sortByPosition)
+          .map((input) => (
+            <GraphInputHandle
+              key={input.label}
+              input={input}
+              moreHandles={uiProps.moreHandles}
+            />
+          ))
+      )}
+      {outputs.length === 0 ? (
+        <div className={styles.handle}>No output provided</div>
+      ) : (
+        outputs
+          .sort(sortByPosition)
+          .map((output) => (
+            <GraphOutputHandle
+              key={output.label}
+              output={output}
+              moreHandles={uiProps.moreHandles}
+            />
+          ))
+      )}
     </NodeContent>
   );
 }

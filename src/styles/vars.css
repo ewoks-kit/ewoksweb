@@ -6,7 +6,12 @@
     'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   --node--bgColor: rgba(237, 239, 249, 0.75);
+  --nodeLabel--bgColor: rgb(206, 211, 238);
   --selected-node--bgColor: rgba(237, 239, 249, 1);
   --selected-node--color: rgb(10, 34, 78);
   --selected-edge--width: 5px;
+  --handle--width: 10px;
+  --handle--height: 10px;
+  --input-handle--borderColor: rgb(230, 190, 118);
+  --output-handle--borderColor: rgb(118, 133, 221);
 }

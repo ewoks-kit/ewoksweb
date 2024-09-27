@@ -1,0 +1,36 @@
+.handle {
+  z-index: 1000;
+  width: var(--handle--width);
+  height: var(--handle--height);
+  background: #ddd;
+}
+
+.handle[data-handlepos='left'] {
+  left: calc(var(--handle--width) / -2);
+}
+
+.handle[data-handlepos='right'] {
+  left: calc(100% - var(--handle--width) / 2);
+}
+
+.input {
+  composes: handle;
+  border: 2px solid var(--input-handle--borderColor);
+  left: calc(var(--handle--width) / -2);
+}
+
+.input[data-handlepos='top'],
+.input[data-handlepos='bottom'] {
+  left: 25%;
+}
+
+.output {
+  composes: handle;
+  border: 2px solid var(--output-handle--borderColor);
+  right: calc(var(--handle--width) / -2);
+}
+
+.output[data-handlepos='top'],
+.output[data-handlepos='bottom'] {
+  left: 75%;
+}
