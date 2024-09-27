@@ -37,18 +37,6 @@
   font-weight: bold !important;
 }
 
-.node-content {
-  display: flex;
-  flex-direction: column;
-  box-shadow:
-    0 3px 6px rgba(0, 0, 0, 0.16),
-    0 3px 6px rgba(0, 0, 0, 0.23);
-  border-radius: 15px;
-  font-size: 10pt;
-  border: 2px solid rgb(233, 235, 247);
-  background-color: var(--node--bgColor);
-}
-
 .react-flow__node {
   border: dashed 2px rgba(0, 0, 0, 0);
   border-radius: 15px;
@@ -56,11 +44,8 @@
 
 .react-flow__node.selected {
   border-color: var(--selected-node--color);
-}
-
-.react-flow__node.selected .node-content {
   background-color: var(--selected-node--bgColor);
-  color: var(--selected-node--color) !important;
+  color: var(--selected-node--color);
 }
 
 .bendingText {
