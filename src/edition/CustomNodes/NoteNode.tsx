@@ -4,11 +4,8 @@ import useNodeDataStore from '../../store/useNodeDataStore';
 import type { NodeData } from '../../types';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
 import NodeContent from './NodeContent';
-import NodeLabel from './NodeLabel';
 
-type NoteProps = NodeProps<NodeData>;
-
-function NoteNode(args: NoteProps) {
+function NoteNode(args: NodeProps<NodeData>) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
   assertNodeDataDefined(nodeData, args.id);
 
@@ -16,13 +13,9 @@ function NoteNode(args: NoteProps) {
 
   return (
     <NodeContent width={nodeWidth} borderColor={colorBorder}>
-      <NodeLabel
-        id={args.id}
-        label={nodeData.ewoks_props.label}
-        showFull
-        color="#ced3ee"
-      />
-      <div style={{ wordWrap: 'break-word' }}>{nodeData.comment}</div>
+      <div style={{ wordWrap: 'break-word' }}>
+        {nodeData.ewoks_props.label || args.id}
+      </div>
     </NodeContent>
   );
 }

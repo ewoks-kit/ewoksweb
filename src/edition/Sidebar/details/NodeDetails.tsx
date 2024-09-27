@@ -24,6 +24,12 @@ export default function NodeDetails(props: Props) {
 
   const mergeNodeData = useNodeDataStore((state) => state.mergeNodeData);
 
+  const isGraphIONode = ['graphInput', 'graphOutput'].includes(
+    nodeData.task_props.task_type,
+  );
+  const isNoteNode = nodeData.task_props.task_type === 'note';
+  const isRegularNode = !isGraphIONode && !isNoteNode;
+
   return (
     <Box>
       <InputTextField
@@ -33,51 +39,52 @@ export default function NodeDetails(props: Props) {
           mergeNodeData(node.id, { ewoks_props: { label } });
         }}
       />
-      <InputTextField
-        label="Comment"
-        defaultValue={nodeData.comment || ''}
-        onValueSave={(comment) => {
-          mergeNodeData(node.id, { comment });
-        }}
-      />
+      {!isNoteNode && (
+        <InputTextField
+          label="Comment"
+          defaultValue={nodeData.comment || ''}
+          onValueSave={(comment) => {
+            mergeNodeData(node.id, { comment });
+          }}
+        />
+      )}
 
-      {node.type &&
-        !['graphInput', 'graphOutput', 'note'].includes(node.type) && (
-          <>
-            <DefaultInputs nodeId={node.id} />
+      {isRegularNode && (
+        <>
+          <DefaultInputs nodeId={node.id} />
 
-            <h3 style={sidebarStyle.sectionHeader}>
-              Advanced
-              <SidebarTooltip
-                text={`--Force start node: Force this node to be executed before others even if it has predecessors.
+          <h3 style={sidebarStyle.sectionHeader}>
+            Advanced
+            <SidebarTooltip
+              text={`--Force start node: Force this node to be executed before others even if it has predecessors.
 
               --Default Error Node: When set to True all nodes without error handler
               will be linked to this node. Only for one node in the graph`}
-              >
-                <IconButton size="small">
-                  <InfoIcon fontSize="small" />
-                </IconButton>
-              </SidebarTooltip>
-            </h3>
+            >
+              <IconButton size="small">
+                <InfoIcon fontSize="small" />
+              </IconButton>
+            </SidebarTooltip>
+          </h3>
 
-            <SidebarCheckbox
-              label="Force start node"
-              value={
-                nodeData.ewoks_props.force_start_node ||
-                DEFAULT_NODE_VALUES.force_start_node
-              }
-              onChange={(checked) => {
-                mergeNodeData(node.id, {
-                  ewoks_props: {
-                    force_start_node: checked,
-                  },
-                });
-              }}
-            />
-            <DefaultErrorNodeControl nodeId={node.id} />
-            <NodeInfo nodeId={node.id} nodeData={nodeData} />
-          </>
-        )}
+          <SidebarCheckbox
+            label="Force start node"
+            value={
+              nodeData.ewoks_props.force_start_node ||
+              DEFAULT_NODE_VALUES.force_start_node
+            }
+            onChange={(checked) => {
+              mergeNodeData(node.id, {
+                ewoks_props: {
+                  force_start_node: checked,
+                },
+              });
+            }}
+          />
+          <DefaultErrorNodeControl nodeId={node.id} />
+          <NodeInfo nodeId={node.id} nodeData={nodeData} />
+        </>
+      )}
     </Box>
   );
 }
