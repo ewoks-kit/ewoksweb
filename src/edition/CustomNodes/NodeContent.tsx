@@ -1,7 +1,7 @@
 import { Tooltip } from '@mui/material';
 import type { PropsWithChildren } from 'react';
 
-import { style } from './nodeStyles';
+import styles from './NodeContent.module.css';
 
 interface Props {
   width?: number;
@@ -10,19 +10,23 @@ interface Props {
 }
 
 function NodeContent(props: PropsWithChildren<Props>) {
-  const { width = 100, borderColor, tooltip, children } = props;
+  const { width = 100, borderColor, tooltip, children: rawChildren } = props;
+
+  const children = tooltip ? (
+    <Tooltip
+      title={<span className={styles.tooltip}>{tooltip}</span>}
+      enterDelay={800}
+      arrow
+    >
+      <div className={styles.content}>{rawChildren}</div>
+    </Tooltip>
+  ) : (
+    <div className={styles.content}>{rawChildren}</div>
+  );
 
   return (
-    <div className="node-content" style={{ borderColor }}>
-      <Tooltip
-        title={tooltip ? <span style={style.comment}>{tooltip}</span> : ''}
-        enterDelay={800}
-        arrow
-      >
-        <span className="icons" style={{ ...style.displayNode, width }}>
-          {children}
-        </span>
-      </Tooltip>
+    <div className={styles.wrapper} style={{ borderColor, width }}>
+      {children}
     </div>
   );
 }

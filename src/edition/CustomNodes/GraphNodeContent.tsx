@@ -12,7 +12,7 @@ import { assertNodeDataDefined } from '../../utils/typeGuards';
 import NodeContent from './NodeContent';
 import NodeIcon from './NodeIcon';
 import NodeLabel from './NodeLabel';
-import { contentStyle, style } from './nodeStyles';
+import { contentStyle } from './nodeStyles';
 
 function GraphNodeContent(props: NodeProps<NodeData>) {
   const { id } = props;
@@ -67,7 +67,7 @@ function GraphNodeContent(props: NodeProps<NodeData>) {
           <NodeIcon nodeId={id} />
         </SuspenseBoundary>
       )}
-      <span style={style.contentWrapper}>
+      <span style={{ padding: '8px 0px' }}>
         {inputs.length === 0 ? (
           <div
             style={{
