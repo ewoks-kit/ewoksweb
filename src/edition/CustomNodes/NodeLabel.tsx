@@ -22,7 +22,6 @@ function NodeLabel(props: Props) {
       className={styles.content}
       style={{
         backgroundColor: color,
-        borderRadius: color ? '10px 10px 3px 3px' : '0px',
       }}
     >
       {showCropped ? label.slice(0, 1) : label}
