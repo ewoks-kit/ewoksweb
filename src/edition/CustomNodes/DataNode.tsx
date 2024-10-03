@@ -2,12 +2,15 @@ import { memo } from 'react';
 import type { NodeProps } from 'reactflow';
 
 import useNodeDataStore from '../../store/useNodeDataStore';
-import { assertNodeDataDefined } from '../../utils/typeGuards';
 import Node from './Node';
 
 function DataNode(props: NodeProps) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(props.id));
-  assertNodeDataDefined(nodeData, props.id);
+
+  // Should only be the case during the loading of another graph
+  if (!nodeData) {
+    return null;
+  }
 
   const uiProps = nodeData.ui_props;
 
