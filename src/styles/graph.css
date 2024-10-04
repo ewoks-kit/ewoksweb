@@ -38,8 +38,7 @@
 }
 
 .react-flow__node {
-  border: dashed 2px rgba(0, 0, 0, 0);
-  border-radius: 15px;
+  border: dotted 1px rgba(0, 0, 0, 0);
 }
 
 .react-flow__node.selected {
