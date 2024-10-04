@@ -6,7 +6,7 @@ import { assertTaskInfo } from '../../utils/typeGuards';
 import type { TaskInfo } from './models';
 
 export const defaultLinkStyle = {
-  style: { stroke: '#96a5f9', strokeWidth: '3px' },
+  style: { stroke: '#96a5f9', strokeWidth: '2px' },
   labelBgPadding: [8, 4] as [number, number],
   labelBgBorderRadius: 4,
   labelStyle: { fill: 'rgb(150, 165, 249)', fontWeight: 500, fontSize: 14 },

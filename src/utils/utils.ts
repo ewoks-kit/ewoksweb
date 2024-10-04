@@ -58,7 +58,7 @@ export function calcLinkUiProps(
     ...(linkAttr?.label && { label: linkAttr.label }),
     ...(linkAttr?.comment && { comment: linkAttr.comment }),
     ...(uiProps?.style?.stroke && {
-      style: { stroke: uiProps.style.stroke, strokeWidth: '3px' },
+      style: { stroke: uiProps.style.stroke, strokeWidth: '2px' },
     }),
     ...(uiProps?.markerEnd && {
       markerEnd: uiProps.markerEnd,

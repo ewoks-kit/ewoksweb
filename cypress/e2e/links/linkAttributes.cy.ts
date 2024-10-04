@@ -24,7 +24,7 @@ it('has the default style', () => {
     .should(
       'have.attr',
       'style',
-      'stroke: rgb(150, 165, 249); stroke-width: 3px;',
+      'stroke: rgb(150, 165, 249); stroke-width: 2px;',
     )
     .should('have.attr', 'marker-end', 'url(#1__type=arrowclosed)');
 });
