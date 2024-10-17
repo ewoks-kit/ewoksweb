@@ -21,7 +21,6 @@ import { useStoreApi } from 'reactflow';
 
 import { useTasks } from '../../api/tasks';
 import { useWorkflow } from '../../api/workflows';
-import { useCloneNode } from '../../general/hooks';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
@@ -30,7 +29,6 @@ import useWorkflowHistory from '../../store/useWorkflowHistory';
 import type { RFNode, Task } from '../../types';
 import { WorkflowSource } from '../../types';
 import { getNodesData } from '../../utils';
-import { calcNewId } from '../../utils/calcNewId';
 import {
   DEFAULT_NODE_HEIGHT,
   DEFAULT_NODE_WIDTH,
@@ -43,7 +41,9 @@ import DataNode from '../CustomNodes/DataNode';
 import GraphInOutNode from '../CustomNodes/GraphInOutNode';
 import GraphNode from '../CustomNodes/GraphNode';
 import NoteNode from '../CustomNodes/NoteNode';
+import { useCloneNode } from '../hooks';
 import AddSubworkflowDialog from '../TaskDrawer/AddSubworkflowDialog';
+import { generateNewNodeId } from '../utils';
 import styles from './Canvas.module.css';
 import CanvasBackground from './CanvasBackground';
 import FallbackMessage from './FallbackMessage';
@@ -186,14 +186,7 @@ function Canvas(props: Props) {
     }
 
     const nodesIds = [...stateRF.nodeInternals.keys()];
-    const newId =
-      task_type === 'graphInput'
-        ? calcNewId('In', nodesIds)
-        : task_type === 'graphOutput'
-        ? calcNewId('Out', nodesIds)
-        : task_type === 'note'
-        ? calcNewId('Note', nodesIds)
-        : calcNewId(task_identifier || 'Node', nodesIds);
+    const newId = generateNewNodeId(task, nodesIds);
 
     const newNode: RFNode = {
       id: newId,

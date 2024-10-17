@@ -40,7 +40,7 @@ function TaskItem(props: Props) {
             category,
             icon,
           }}
-          label={getTaskName(task.task_identifier)}
+          label={getTaskName(task)}
           onClick={() => onTaskSelection(task.task_identifier)}
           icon={() =>
             CustomIcon ? (
