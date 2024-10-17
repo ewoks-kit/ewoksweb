@@ -46,7 +46,7 @@ function GeneralTasksList(props: Props) {
           />
           <TaskItem
             task={{
-              task_type: 'ppfmethod',
+              task_type: 'method',
               task_identifier: 'taskSkeleton',
               category: 'General',
             }}
