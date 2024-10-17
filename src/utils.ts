@@ -14,6 +14,7 @@ import type {
   LinkData,
   NodeData,
   NodeWithData,
+  Task,
   Workflow,
 } from './types';
 import {
@@ -118,11 +119,17 @@ export function getEdgeData(id: string): LinkData | undefined {
   return useEdgeDataStore.getState().edgesData.get(id);
 }
 
-export function getTaskName(task_identifier: string): string {
+export function getTaskName(task: Task): string {
+  const { task_identifier, task_type } = task;
   const task_members = task_identifier.split('.');
 
   if (task_members.length === 0) {
     return task_identifier;
+  }
+
+  if (task_type === 'ppfmethod') {
+    // ppfmethod are all called run so we use the module name instead
+    return task_members[task_members.length - 2];
   }
 
   return task_members[task_members.length - 1];

@@ -66,9 +66,7 @@ export function useTasks(): Task[] {
   assertDefined(axiosResponse);
 
   return axiosResponse.data.items.sort((a, b) =>
-    getTaskName(a.task_identifier).localeCompare(
-      getTaskName(b.task_identifier),
-    ),
+    getTaskName(a).localeCompare(getTaskName(b)),
   );
 }
 

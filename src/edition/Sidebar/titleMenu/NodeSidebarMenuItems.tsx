@@ -8,10 +8,10 @@ import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../../../api/tasks';
 import TaskForm from '../../../general/forms/TaskForm';
-import { useCloneNode } from '../../../general/hooks';
 import useStore from '../../../store/useStore';
 import { getNodeData } from '../../../utils';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
+import { useCloneNode } from '../../hooks';
 import KeyStrokeHint from '../../KeyStrokeHint';
 
 interface Props {
