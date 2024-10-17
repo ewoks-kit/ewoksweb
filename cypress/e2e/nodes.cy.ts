@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid';
+
 beforeEach(() => {
   cy.loadApp();
   cy.findByRole('button', { name: 'Close task drawer' }).click();
