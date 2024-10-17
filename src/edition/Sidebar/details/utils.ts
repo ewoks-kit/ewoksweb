@@ -6,7 +6,7 @@ export function mappingToLabel(dataMapping: DataMapping[] | undefined) {
   }
 
   return dataMapping
-    .map((mapping) => `${mapping.source}->${mapping.target}`)
+    .map((mapping) => `${mapping.source} → ${mapping.target}`)
     .join(', ');
 }
 
