@@ -1,0 +1,14 @@
+.bendingText {
+  font-size: 16px;
+}
+
+.multiLineLabel {
+  position: absolute;
+  background-color: var(--node--bgColor);
+  color: var(--edge-color);
+  border: var(--edge-width) solid var(--edge-color);
+  border-radius: 2px;
+  overflow: hidden;
+  word-wrap: break-word;
+  padding: 1px;
+}

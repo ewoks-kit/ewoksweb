@@ -1,8 +1,5 @@
 .navbar {
-  --bgColor: #3f51b5;
-  --hoverColor: #1976d2;
-  --selectedColor: #64b5f6;
-  background-color: var(--bgColor);
+  background-color: var(--primary);
   color: white;
   display: flex;
   align-items: center;
@@ -36,9 +33,9 @@
 }
 
 .link:hover {
-  border-bottom-color: var(--hoverColor);
+  border-bottom-color: var(--primary-light);
 }
 
 .link[aria-current] {
-  border-bottom-color: var(--selectedColor);
+  border-bottom-color: var(--primary-lighter);
 }

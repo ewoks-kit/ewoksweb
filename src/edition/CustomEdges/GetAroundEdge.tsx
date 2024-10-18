@@ -3,6 +3,7 @@ import { getBezierPath } from '@xyflow/react';
 
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 import { assertEdgeDataDefined } from '../../utils/typeGuards';
+import styles from './CustomEdges.module.css';
 import InteractionHelper from './InteractionHelper';
 import type { SmoothStepParams } from './models';
 
@@ -122,7 +123,7 @@ export default function GetAroundEdge({
       />
       <text>
         <textPath
-          className="bendingText"
+          className={styles.bendingText}
           href={`#${id}`}
           startOffset="50%"
           // TODO: side works even if it is an unknown property, update textPath?

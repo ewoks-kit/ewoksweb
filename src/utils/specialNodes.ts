@@ -6,7 +6,6 @@ import type {
   NodeWithData,
   Note,
 } from '../types';
-import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { isString } from './typeGuards';
 import {
   calcDataMapping,
@@ -143,12 +142,11 @@ function computeUiProps(
     position: node.position,
     ...notUndefinedValue(node.data.ewoks_props.label, 'label'),
     ...notUndefinedValue(link.type, 'type'),
-    ...(link.style?.stroke &&
-      link.style.stroke !== DEFAULT_LINK_VALUES.uiProps.stroke && {
-        style: {
-          stroke: link.style.stroke,
-        },
-      }),
+    ...(link.style?.stroke && {
+      style: {
+        stroke: link.style.stroke,
+      },
+    }),
     ...(ewoksMarkerEnd ? { markerEnd: ewoksMarkerEnd } : {}),
     ...notUndefinedValue(link.animated, 'animated'),
     ...notUndefinedValue(uiProps.withImage, 'withImage'),

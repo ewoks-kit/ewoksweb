@@ -28,6 +28,5 @@ export const DEFAULT_LINK_VALUES = {
     animated: false,
     markerEnd: { type: MarkerType.ArrowClosed },
     type: 'default',
-    stroke: '#96a5f9',
   },
 };

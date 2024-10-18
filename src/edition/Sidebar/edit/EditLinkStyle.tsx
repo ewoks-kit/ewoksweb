@@ -15,6 +15,7 @@ import { useUpdateEdge } from '../../../general/hooks';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
+import { useCssColors } from '../../hooks';
 import SidebarCheckbox from '../SidebarCheckbox';
 import styles from './EditLinkStyle.module.css';
 import MarkerEndControl from './MarkerEndControl';
@@ -29,9 +30,11 @@ export default function EditLinkStyle(element: Edge) {
 
   const showInfoMsg = useSnackbarStore((state) => state.showInfoMsg);
 
+  const [[edgeColor], rootRef] = useCssColors(['--edge-color']);
+
+  const linkColor = element.style?.stroke || edgeColor;
   const linkType = element.type || 'default';
   const animated = !!element.animated;
-  const colorLine = element.style?.stroke || '#96a5f9';
   const { x = 80, y = 80 } = edgeData.getAroundProps || {};
 
   function handleLinkTypeChange(event: SelectChangeEvent) {
@@ -48,7 +51,7 @@ export default function EditLinkStyle(element: Edge) {
     });
   }
 
-  function handleColorLineChange(event: ChangeEvent<HTMLInputElement>) {
+  function handleColorChange(event: ChangeEvent<HTMLInputElement>) {
     const newEdge = {
       ...element,
       style: { ...element.style, stroke: event.target.value },
@@ -88,7 +91,12 @@ export default function EditLinkStyle(element: Edge) {
 
   return (
     <>
-      <FormControl className={styles.container} variant="filled" fullWidth>
+      <FormControl
+        ref={rootRef}
+        className={styles.container}
+        variant="filled"
+        fullWidth
+      >
         <InputLabel id="linkTypeLabel">Link type</InputLabel>
         <Select
           className={styles.dropdown}
@@ -133,15 +141,15 @@ export default function EditLinkStyle(element: Edge) {
         }
         label="Animated"
       />
-      <div>
+      <div className={styles.colorPicker}>
         <label htmlFor="head">Color</label>
         <input
           aria-label="Color"
           type="color"
           id="head"
           name="head"
-          value={colorLine}
-          onChange={handleColorLineChange}
+          value={linkColor}
+          onChange={handleColorChange}
           style={{ margin: '0 0 0 0.3rem' }}
         />
       </div>

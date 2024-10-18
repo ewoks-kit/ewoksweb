@@ -14,7 +14,8 @@
   position: absolute !important;
   transition: transform 0.3s ease-in-out !important;
   left: 10px;
-  top: 72px;
+  top: 67px;
+  background-color: var(--primary) !important;
 }
 
 .openButton[data-open] {

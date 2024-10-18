@@ -5,19 +5,6 @@ import { DEFAULT_LINK_VALUES } from '../../utils/defaultValues';
 import { assertTaskInfo } from '../../utils/typeGuards';
 import type { TaskInfo } from './models';
 
-export const defaultLinkStyle = {
-  style: { stroke: '#96a5f9', strokeWidth: '2px' },
-  labelBgPadding: [8, 4] as [number, number],
-  labelBgBorderRadius: 4,
-  labelStyle: { fill: 'rgb(150, 165, 249)', fontWeight: 500, fontSize: 14 },
-  labelBgStyle: {
-    fill: 'rgb(223, 226, 247)',
-    fillOpacity: 1,
-    strokeWidth: '3px',
-    stroke: 'rgb(150, 165, 249)',
-  },
-};
-
 export function addConnectionToGraph(
   connection: Connection,
   nodesData: Map<string, NodeData>,
@@ -58,13 +45,12 @@ export function addConnectionToGraph(
       ...(targetTaskData.task_props.task_type === 'graph' &&
         targetHandle && { sub_target: targetHandle }),
     },
-    id: `${source}:${sourceHandle || 'sr'}->${target}:${targetHandle || 'tl'}`,
+    id: `${source}:${sourceHandle || 'sr'} → ${target}:${targetHandle || 'tl'}`,
     source,
     target,
     ...(sourceHandle && { sourceHandle }),
     ...(targetHandle && { targetHandle }),
     markerEnd: DEFAULT_LINK_VALUES.uiProps.markerEnd,
-    ...defaultLinkStyle,
   };
 
   return link;

@@ -50,8 +50,8 @@ export function toEwoksLinks(links: EdgeWithData[]): EwoksLink[] {
         ...(comment && { comment }),
         ...(type && { type }),
         ...(ewoksMarkerEnd ? { markerEnd: ewoksMarkerEnd } : {}),
-        ...(style?.stroke !== '#96a5f9' && {
-          style: { stroke: style?.stroke },
+        ...(style?.stroke && {
+          style: { stroke: style.stroke },
         }),
         ...notUndefinedValue(animated, 'animated'),
         ...(sourceHandle && sourceHandle !== 'sr' && { sourceHandle }),

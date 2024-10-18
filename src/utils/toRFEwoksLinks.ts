@@ -1,6 +1,5 @@
 import { nanoid } from 'nanoid';
 
-import { defaultLinkStyle } from '../edition/Canvas/utils';
 import type {
   Condition,
   EdgeWithData,
@@ -47,7 +46,7 @@ export function toRFEwoksLinks(
       uiProps,
       startEnd,
     }) => {
-      const color = uiProps?.style?.stroke || '#96a5f9';
+      const stroke = uiProps?.style?.stroke;
 
       const conditionsForFront = conditions?.map<Condition>((con) => {
         return {
@@ -82,19 +81,11 @@ export function toRFEwoksLinks(
         ...notUndefinedValue(uiProps?.type, 'type'),
         ...notUndefinedValue(uiProps?.animated, 'animated'),
         markerEnd: convertEwoksMarkerEndToRF(uiProps?.markerEnd),
-        ...defaultLinkStyle,
         style: {
-          ...defaultLinkStyle.style,
-          stroke: color,
+          stroke,
         },
         labelBgStyle: {
-          ...defaultLinkStyle.labelBgStyle,
-          stroke: color,
-        },
-        labelStyle: {
-          ...defaultLinkStyle.labelStyle,
-          color,
-          fill: color,
+          stroke,
         },
         data: {
           // DOC: startEnd is not in EwoksLink on the server but needed for calculating

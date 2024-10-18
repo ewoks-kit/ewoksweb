@@ -1,0 +1,60 @@
+/* STYLES SPECIFIC TO XYFLOW */
+
+.react-flow {
+  --xy-edge-stroke: var(--edge-color);
+  --xy-edge-stroke-width: var(--edge-width);
+  --xy-edge-stroke-selected: var(--edge-color);
+}
+
+.react-flow__edge-path:hover {
+  cursor: grab;
+}
+
+.react-flow__edge-textbg:hover {
+  cursor: grab;
+}
+
+.react-flow__edge rect {
+  stroke: var(--edge-color);
+  stroke-width: var(--edge-width);
+}
+
+.react-flow__edge text {
+  font-size: 0.75rem;
+  fill: var(--edge-color);
+}
+
+.react-flow__edge.selected path.react-flow__edge-path {
+  stroke-width: var(--selected-edge--width);
+  stroke-linecap: round;
+  stroke: var(--edge-color);
+}
+
+.react-flow__edge.selected rect {
+  stroke-width: var(--selected-edge--width) !important;
+}
+
+.react-flow__edge.selected div {
+  border-width: var(--selected-edge--width) !important;
+}
+
+.react-flow__edge.selected textPath {
+  font-weight: bold;
+}
+
+.react-flow__node {
+  border: dotted 1px rgba(0, 0, 0, 0);
+}
+
+.react-flow__node.selected {
+  border-color: var(--black);
+}
+
+.react-flow__arrowhead[id$='1__type=arrow'] polyline {
+  stroke: context-stroke !important;
+}
+
+.react-flow__arrowhead[id$='1__type=arrowclosed'] polyline {
+  stroke: context-stroke !important;
+  fill: context-stroke !important;
+}

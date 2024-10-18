@@ -61,7 +61,7 @@ function GraphNodeContent(props: NodeProps) {
         label={nodeData.ewoks_props.label}
         showFull={withLabel}
         showCropped={!withLabel && !withImage}
-        color={subgraphExistsOnServer ? '#ced3ee' : 'red'}
+        color={subgraphExistsOnServer ? undefined : 'red'}
       />
       {withImage && (
         <SuspenseBoundary>
