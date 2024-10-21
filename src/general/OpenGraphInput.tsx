@@ -2,7 +2,7 @@ import type { ChangeEvent, ForwardedRef } from 'react';
 import { forwardRef } from 'react';
 
 import type { Workflow } from '../types';
-import { useLoadGraph } from './hooks';
+import { loadGraphFromFile as graphFromFileLoader } from '../utils';
 
 interface Props {
   onGraphLoad: (graph: Workflow) => void;
@@ -12,7 +12,7 @@ interface Props {
 const OpenGraphInput = forwardRef(
   (props: Props, ref: ForwardedRef<HTMLInputElement>) => {
     const { onGraphLoad, label } = props;
-    const loadGraph = useLoadGraph(onGraphLoad);
+    const loadGraph = graphFromFileLoader(onGraphLoad);
 
     return (
       <input

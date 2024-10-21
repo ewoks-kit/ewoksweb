@@ -1,13 +1,10 @@
-import useStore from '../../store/useWorkflowStore';
+import useWorkflowStore from '../../store/useWorkflowStore';
 import styles from './WorkflowTitle.module.css';
 
 export default function WorkflowTitle() {
-  const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo,
-  );
-  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
+  const workflowId = useWorkflowStore((state) => state.workflowInfo.id);
 
-  if (!rootWorkflowId) {
+  if (!workflowId) {
     return (
       <h1 className={styles.crumbs}>
         Untitled workflow <span className={styles.labelHint}>(unsaved)</span>
@@ -15,5 +12,5 @@ export default function WorkflowTitle() {
     );
   }
 
-  return <h1 className={styles.crumbs}>{displayedWorkflowInfo.id}</h1>;
+  return <h1 className={styles.crumbs}>{workflowId}</h1>;
 }

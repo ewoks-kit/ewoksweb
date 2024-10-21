@@ -11,65 +11,19 @@ import {
 import type { Status } from '../edition/TopAppBar/models';
 import useSnackbarStore from '../store/useSnackbarStore';
 import useWorkflowHistory from '../store/useWorkflowHistory';
-import useStore from '../store/useWorkflowStore';
-import type { Workflow } from '../types';
+import useWorkflowStore from '../store/useWorkflowStore';
 import { WorkflowSource } from '../types';
 import { getEdgesData, getNodesData, toEwoksWorkflow } from '../utils';
-import { isString } from '../utils/typeGuards';
-
-function tryJSONparse(str: string | ArrayBuffer | null): unknown {
-  if (!isString(str)) {
-    return null;
-  }
-  try {
-    return JSON.parse(str);
-  } catch (error) {
-    /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
-    console.warn(error);
-    return null;
-  }
-}
-
-export function useLoadGraph(onGraphLoad: (graph: Workflow) => void) {
-  return async (file: File) => {
-    const { displayedWorkflowInfo, rootWorkflowId } = useStore.getState();
-    const { showErrorMsg } = useSnackbarStore.getState();
-
-    if (rootWorkflowId !== displayedWorkflowInfo.id) {
-      showErrorMsg('Not allowed to add a new node-graph to any sub-graph!');
-      return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onloadend = async () => {
-      const { result } = reader;
-
-      const newGraph = tryJSONparse(result);
-      if (!newGraph) {
-        showErrorMsg(
-          'Error in JSON structure. Please correct input file and retry!',
-        );
-        return;
-      }
-
-      onGraphLoad(newGraph as Workflow);
-    };
-    reader.readAsText(file);
-  };
-}
 
 export function useSaveWorkflow() {
-  const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo,
-  );
+  const displayedWorkflowInfo = useWorkflowStore((state) => state.workflowInfo);
   const rfInstance = useReactFlow();
   const workflowIds = useWorkflowIds();
   const invalidateWorkflowDescriptions = useInvalidateWorkflowDescriptions();
   const invalidateWorkflow = useInvalidateWorkflow();
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [status, setStatus] = useState<Status>('idle');
-  const rootWorkflowSource = useStore((state) => state.rootWorkflowSource);
+  const rootWorkflowSource = useWorkflowStore((state) => state.workflowSource);
   const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
   const resetWorkflowHistory = useWorkflowHistory(
     (state) => state.resetWorkflowHistory,

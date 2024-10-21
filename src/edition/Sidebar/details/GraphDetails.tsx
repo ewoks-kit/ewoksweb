@@ -1,12 +1,10 @@
-import useStore from '../../../store/useWorkflowStore';
+import useWorkflowStore from '../../../store/useWorkflowStore';
 import InputTextField from './InputTextField';
 
 export default function GraphDetails() {
-  const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo,
-  );
-  const mergeDisplayedWorkflowInfo = useStore(
-    (state) => state.mergeDisplayedWorkflowInfo,
+  const displayedWorkflowInfo = useWorkflowStore((state) => state.workflowInfo);
+  const mergeDisplayedWorkflowInfo = useWorkflowStore(
+    (state) => state.mergeWorkflowInfo,
   );
 
   function handleSaveCategory(category: string) {

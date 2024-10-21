@@ -9,7 +9,7 @@ import {
 import commonStrings from '../../../commonStrings.json';
 import ConfirmDialog from '../../../general/ConfirmDialog';
 import useSnackbarStore from '../../../store/useSnackbarStore';
-import useStore from '../../../store/useWorkflowStore';
+import useWorkflowStore from '../../../store/useWorkflowStore';
 import { textForError } from '../../../utils';
 import ActionMenuItem from './ActionMenuItem';
 
@@ -20,10 +20,7 @@ function DeleteMenuItem() {
   const showSuccessMsg = useSnackbarStore((state) => state.showSuccessMsg);
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const invalidateWorkflowDescriptions = useInvalidateWorkflowDescriptions();
-  const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo,
-  );
-  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
+  const displayedWorkflowInfo = useWorkflowStore((state) => state.workflowInfo);
 
   return (
     <>
@@ -54,9 +51,7 @@ function DeleteMenuItem() {
 
       <ActionMenuItem
         onClick={() => setOpenAgreeDialog(true)}
-        disabled={
-          !rootWorkflowId || rootWorkflowId !== displayedWorkflowInfo.id
-        }
+        disabled={!displayedWorkflowInfo.id}
         icon={Delete}
         label="Delete workflow"
       />

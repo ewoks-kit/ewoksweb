@@ -10,7 +10,6 @@ import useEdgeDataStore from '../store/useEdgeDataStore';
 import useNodeDataStore from '../store/useNodeDataStore';
 import useWorkflowHistory from '../store/useWorkflowHistory';
 import useWorkflowStore from '../store/useWorkflowStore';
-import useStore from '../store/useWorkflowStore';
 import SuspenseBoundary from '../suspense/SuspenseBoundary';
 import Canvas from './Canvas/Canvas';
 import styles from './EditPage.module.css';
@@ -36,7 +35,7 @@ export default function EditPage() {
       pushToWorkflowHistory(
         useNodeDataStore.getState().nodesData,
         useEdgeDataStore.getState().edgesData,
-        useStore.getState().displayedWorkflowInfo,
+        useWorkflowStore.getState().workflowInfo,
         storeRF.getState().nodes,
         storeRF.getState().edges,
       );

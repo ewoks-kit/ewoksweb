@@ -18,7 +18,7 @@ import {
 import commonStrings from '../../commonStrings.json';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import useWorkflowHistory from '../../store/useWorkflowHistory';
-import useStore from '../../store/useWorkflowStore';
+import useWorkflowStore from '../../store/useWorkflowStore';
 import {
   getEdgesData,
   getNodesData,
@@ -38,10 +38,10 @@ export default function GraphFormDialog(props: Props) {
   const rfInstance = useReactFlow();
   const { isOpen, onClose, onSuccess } = props;
 
-  const elementToEdit = useStore((state) => state.displayedWorkflowInfo);
+  const workflowInfo = useWorkflowStore((state) => state.workflowInfo);
 
   const { handleSubmit, reset, control, formState } = useForm({
-    defaultValues: { name: elementToEdit.id },
+    defaultValues: { name: workflowInfo.id },
   });
   const { resetWorkflowHistory } = useWorkflowHistory();
 
@@ -58,7 +58,7 @@ export default function GraphFormDialog(props: Props) {
     const { name } = data;
 
     const workflow = toEwoksWorkflow(
-      { ...elementToEdit, id: name },
+      { ...workflowInfo, id: name },
       rfInstance.getNodes(),
       rfInstance.getEdges(),
       getNodesData(),

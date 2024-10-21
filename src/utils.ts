@@ -6,6 +6,7 @@ import { enrichWithData } from './general/forms/utils';
 import orange3 from './images/orange3.png';
 import useEdgeDataStore from './store/useEdgeDataStore';
 import useNodeDataStore from './store/useNodeDataStore';
+import useSnackbarStore from './store/useSnackbarStore';
 import type {
   EdgeWithData,
   EwoksNode,
@@ -28,6 +29,7 @@ import {
   hasMessage,
   hasRequest,
   isEwoksServerErrorResponse,
+  isString,
 } from './utils/typeGuards';
 import { hasDefinedFields } from './utils/utils';
 
@@ -176,5 +178,41 @@ function toEwoksGraph(
     ...(hasDefinedFields(details.worker_options) && {
       worker_options: details.worker_options,
     }),
+  };
+}
+
+function tryJSONparse(str: string | ArrayBuffer | null): unknown {
+  if (!isString(str)) {
+    return null;
+  }
+  try {
+    return JSON.parse(str);
+  } catch (error) {
+    /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
+    console.warn(error);
+    return null;
+  }
+}
+
+export function loadGraphFromFile(onGraphLoad: (graph: Workflow) => void) {
+  return async (file: File) => {
+    const { showErrorMsg } = useSnackbarStore.getState();
+
+    const reader = new FileReader();
+
+    reader.onloadend = async () => {
+      const { result } = reader;
+
+      const newGraph = tryJSONparse(result);
+      if (!newGraph) {
+        showErrorMsg(
+          'Error in JSON structure. Please correct input file and retry!',
+        );
+        return;
+      }
+
+      onGraphLoad(newGraph as Workflow);
+    };
+    reader.readAsText(file);
   };
 }

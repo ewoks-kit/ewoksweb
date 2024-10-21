@@ -1,6 +1,6 @@
 import { NavLink, useLocation, useSearchParams } from 'react-router-dom';
 
-import useStore from '../store/useWorkflowStore';
+import useWorkflowStore from '../store/useWorkflowStore';
 import styles from './NavBar.module.css';
 import useNavBarElementStore from './useNavBarElementStore';
 
@@ -9,7 +9,7 @@ function NavBar() {
   const [searchParams] = useSearchParams();
 
   const setElement = useNavBarElementStore((st) => st.setElement);
-  const displayedWorkflowInfo = useStore((st) => st.displayedWorkflowInfo);
+  const displayedWorkflowInfo = useWorkflowStore((st) => st.workflowInfo);
 
   return (
     <div

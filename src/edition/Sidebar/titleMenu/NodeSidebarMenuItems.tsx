@@ -8,7 +8,6 @@ import { useState } from 'react';
 
 import { useTasks } from '../../../api/tasks';
 import TaskForm from '../../../general/forms/TaskForm';
-import useStore from '../../../store/useWorkflowStore';
 import { getNodeData } from '../../../utils';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import { useCloneNode } from '../../hooks';
@@ -23,11 +22,7 @@ export default function NodeSidebarMenuItems(props: Props) {
   const { node, onSelection } = props;
   const rfInstance = useReactFlow();
 
-  const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo,
-  );
   const tasks = useTasks();
-  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
 
   const nodeData = getNodeData(node.id);
@@ -50,7 +45,6 @@ export default function NodeSidebarMenuItems(props: Props) {
           onSelection();
         }}
         role="menuitem"
-        disabled={rootWorkflowId !== displayedWorkflowInfo.id}
       >
         <ListItemIcon>
           <LibraryAdd fontSize="small" />
@@ -60,11 +54,7 @@ export default function NodeSidebarMenuItems(props: Props) {
       </MenuItem>
 
       {nodeData.task_props.task_type !== 'graph' && (
-        <MenuItem
-          onClick={() => setOpenSaveDialog(true)}
-          role="menuitem"
-          disabled={rootWorkflowId !== displayedWorkflowInfo.id}
-        >
+        <MenuItem onClick={() => setOpenSaveDialog(true)} role="menuitem">
           <ListItemIcon>
             <FileCopy fontSize="small" />
           </ListItemIcon>
@@ -78,7 +68,6 @@ export default function NodeSidebarMenuItems(props: Props) {
           onSelection();
         }}
         role="menuitem"
-        disabled={rootWorkflowId !== displayedWorkflowInfo.id}
       >
         <ListItemIcon>
           <Delete fontSize="small" />
