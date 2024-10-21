@@ -14,7 +14,7 @@ import commonStrings from '../../../commonStrings.json';
 import GraphFormDialog from '../../../general/forms/GraphFormDialog';
 import { useSaveWorkflow } from '../../../general/hooks';
 import useSnackbarStore from '../../../store/useSnackbarStore';
-import useStore from '../../../store/useStore';
+import useStore from '../../../store/useWorkflowStore';
 import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 import { textForError } from '../../../utils';
 import AddEntryRow from '../../Sidebar/table/controls/AddEntryRow';

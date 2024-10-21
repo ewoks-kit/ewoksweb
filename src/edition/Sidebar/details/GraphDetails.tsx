@@ -1,4 +1,4 @@
-import useStore from '../../../store/useStore';
+import useStore from '../../../store/useWorkflowStore';
 import InputTextField from './InputTextField';
 
 export default function GraphDetails() {

@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 import { useTasks } from '../../../api/tasks';
 import TaskForm from '../../../general/forms/TaskForm';
-import useStore from '../../../store/useStore';
+import useStore from '../../../store/useWorkflowStore';
 import { getNodeData } from '../../../utils';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import { useCloneNode } from '../../hooks';

@@ -17,8 +17,8 @@ import {
 } from '../../api/workflows';
 import commonStrings from '../../commonStrings.json';
 import useSnackbarStore from '../../store/useSnackbarStore';
-import useStore from '../../store/useStore';
 import useWorkflowHistory from '../../store/useWorkflowHistory';
+import useStore from '../../store/useWorkflowStore';
 import {
   getEdgesData,
   getNodesData,

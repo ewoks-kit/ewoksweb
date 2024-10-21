@@ -1,4 +1,4 @@
-import useStore from '../../store/useStore';
+import useStore from '../../store/useWorkflowStore';
 import styles from './WorkflowTitle.module.css';
 
 export default function WorkflowTitle() {

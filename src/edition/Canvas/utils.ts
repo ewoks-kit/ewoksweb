@@ -1,9 +1,13 @@
 import type { Connection } from '@xyflow/react';
 
-import type { EdgeWithData, NodeData } from '../../types';
+import type { EdgeWithData, NodeData, Task } from '../../types';
 import { DEFAULT_LINK_VALUES } from '../../utils/defaultValues';
 import { assertTaskInfo } from '../../utils/typeGuards';
 import type { TaskInfo } from './models';
+
+function isPpfTask(task: Task) {
+  return ['ppfmethod', 'ppfport'].includes(task.task_type);
+}
 
 export function addConnectionToGraph(
   connection: Connection,
@@ -15,34 +19,29 @@ export function addConnectionToGraph(
     return undefined;
   }
 
-  const sourceTaskData = nodesData.get(source);
-  const targetTaskData = nodesData.get(target);
+  const { task_props: sourceTask } = nodesData.get(source) || {
+    task_props: undefined,
+  };
+  const { task_props: targetTask } = nodesData.get(target) || {
+    task_props: undefined,
+  };
 
-  if (!sourceTaskData || !targetTaskData) {
+  if (!sourceTask || !targetTask) {
     return undefined;
   }
 
   const link: EdgeWithData = {
     data: {
       startEnd:
-        sourceTaskData.task_props.task_type === 'graphInput' ||
-        targetTaskData.task_props.task_type === 'graphOutput',
-      // DOC: node optional_input_names are link's optional_output_names
-      links_optional_output_names:
-        targetTaskData.task_props.optional_input_names,
-      // DOC: node required_input_names are link's required_output_names
-      links_required_output_names:
-        targetTaskData.task_props.required_input_names,
-      // DOC: node output_names are link's input_names
-      links_input_names: sourceTaskData.task_props.output_names,
-      map_all_data:
-        ['ppfmethod', 'ppfport'].includes(
-          sourceTaskData.task_props.task_type,
-        ) ||
-        ['ppfmethod', 'ppfport'].includes(targetTaskData.task_props.task_type),
-      ...(sourceTaskData.task_props.task_type === 'graph' &&
+        sourceTask.task_type === 'graphInput' ||
+        targetTask.task_type === 'graphOutput',
+      links_optional_output_names: targetTask.optional_input_names,
+      links_required_output_names: targetTask.required_input_names,
+      links_input_names: sourceTask.output_names,
+      map_all_data: isPpfTask(sourceTask) || isPpfTask(targetTask),
+      ...(sourceTask.task_type === 'graph' &&
         sourceHandle && { sub_source: sourceHandle }),
-      ...(targetTaskData.task_props.task_type === 'graph' &&
+      ...(targetTask.task_type === 'graph' &&
         targetHandle && { sub_target: targetHandle }),
     },
     id: `${source}:${sourceHandle || 'sr'} → ${target}:${targetHandle || 'tl'}`,

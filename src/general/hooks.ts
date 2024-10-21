@@ -10,8 +10,8 @@ import {
 } from '../api/workflows';
 import type { Status } from '../edition/TopAppBar/models';
 import useSnackbarStore from '../store/useSnackbarStore';
-import useStore from '../store/useStore';
 import useWorkflowHistory from '../store/useWorkflowHistory';
+import useStore from '../store/useWorkflowStore';
 import type { Workflow } from '../types';
 import { WorkflowSource } from '../types';
 import { getEdgesData, getNodesData, toEwoksWorkflow } from '../utils';

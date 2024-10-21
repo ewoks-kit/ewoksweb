@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import type { Edge } from '@xyflow/react';
 import { useReactFlow } from '@xyflow/react';
 
-import useStore from '../../../store/useStore';
+import useStore from '../../../store/useWorkflowStore';
 import KeyStrokeHint from '../../KeyStrokeHint';
 
 interface Props {

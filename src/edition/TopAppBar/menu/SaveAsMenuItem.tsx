@@ -2,7 +2,7 @@ import { FileCopy } from '@mui/icons-material';
 import { useState } from 'react';
 
 import GraphFormDialog from '../../../general/forms/GraphFormDialog';
-import useStore from '../../../store/useStore';
+import useStore from '../../../store/useWorkflowStore';
 import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 import ActionMenuItem from './ActionMenuItem';
 

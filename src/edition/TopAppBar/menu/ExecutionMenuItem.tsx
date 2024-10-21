@@ -2,7 +2,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { useKeyboardEvent } from '@react-hookz/web';
 import { useState } from 'react';
 
-import useStore from '../../../store/useStore';
+import useStore from '../../../store/useWorkflowStore';
 import ExecutionDialog from '../execution/ExecutionDialog';
 import ActionMenuItem from './ActionMenuItem';
 

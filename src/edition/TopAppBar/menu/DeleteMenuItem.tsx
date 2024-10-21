@@ -9,7 +9,7 @@ import {
 import commonStrings from '../../../commonStrings.json';
 import ConfirmDialog from '../../../general/ConfirmDialog';
 import useSnackbarStore from '../../../store/useSnackbarStore';
-import useStore from '../../../store/useStore';
+import useStore from '../../../store/useWorkflowStore';
 import { textForError } from '../../../utils';
 import ActionMenuItem from './ActionMenuItem';
 

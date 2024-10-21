@@ -1,7 +1,8 @@
 import type { ReactFlowInstance } from '@xyflow/react';
-import type { GetState, SetState } from 'zustand';
+import { merge } from 'lodash';
+import { create } from 'zustand';
 
-import type { NodeWithData, State, Task, Workflow } from '../types';
+import type { GraphDetails, NodeWithData, Task, Workflow } from '../types';
 import { WorkflowSource } from '../types';
 import { getSubgraphs } from '../utils';
 import { convertEwoksWorkflowToRFNodes } from '../utils/convertEwoksWorkflowToRFNodes';
@@ -11,6 +12,10 @@ import { validateWorkflow } from './storeUtils/validateWorkflow';
 import useEdgeDataStore from './useEdgeDataStore';
 import useNodeDataStore from './useNodeDataStore';
 import useSnackbarStore from './useSnackbarStore';
+
+const EMPTY_INFO: GraphDetails = {
+  id: '',
+};
 
 const EMPTY_GRAPH: Workflow = {
   graph: {
@@ -24,7 +29,13 @@ const EMPTY_GRAPH: Workflow = {
   links: [],
 };
 
-export interface RootWorkflowSlice {
+export interface State {
+  displayedWorkflowInfo: GraphDetails;
+  setDisplayedWorkflowInfo: (displayedWorkflowInfo: GraphDetails) => void;
+  mergeDisplayedWorkflowInfo: (
+    displayedWorkflowInfo: Partial<GraphDetails>,
+  ) => void;
+  resetDisplayedWorkflowInfo: () => void;
   rootWorkflowId: string;
   rootWorkflowSource: WorkflowSource;
   setRootWorkflow: (
@@ -39,10 +50,35 @@ export interface RootWorkflowSlice {
   ) => Promise<void>;
 }
 
-const rootWorkflow = (
-  set: SetState<State>,
-  get: GetState<State>,
-): RootWorkflowSlice => ({
+const useWorkflowStore = create<State>((set, get) => ({
+  displayedWorkflowInfo: EMPTY_INFO,
+
+  setDisplayedWorkflowInfo: (nextWorkflowInfo) => {
+    set((prev) => {
+      const prevWorkflowId = prev.displayedWorkflowInfo.id;
+      if (nextWorkflowInfo.id === prevWorkflowId) {
+        return prev;
+      }
+
+      return {
+        displayedWorkflowInfo: nextWorkflowInfo,
+      };
+    });
+  },
+
+  mergeDisplayedWorkflowInfo: (graphRFD) => {
+    set((state) => {
+      return {
+        ...state,
+        displayedWorkflowInfo: merge({}, state.displayedWorkflowInfo, graphRFD),
+      };
+    });
+  },
+  resetDisplayedWorkflowInfo: () =>
+    set({
+      displayedWorkflowInfo: EMPTY_INFO,
+    }),
+
   rootWorkflowId: '',
   rootWorkflowSource: WorkflowSource.Empty,
 
@@ -143,5 +179,6 @@ const rootWorkflow = (
       WorkflowSource.Empty,
     );
   },
-});
-export default rootWorkflow;
+}));
+
+export default useWorkflowStore;

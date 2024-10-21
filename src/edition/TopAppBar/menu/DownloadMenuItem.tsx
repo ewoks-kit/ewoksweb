@@ -1,7 +1,7 @@
 import { GetApp } from '@mui/icons-material';
 import { useReactFlow } from '@xyflow/react';
 
-import useStore from '../../../store/useStore';
+import useStore from '../../../store/useWorkflowStore';
 import { getEdgesData, getNodesData, toEwoksWorkflow } from '../../../utils';
 import ActionMenuItem from './ActionMenuItem';
 

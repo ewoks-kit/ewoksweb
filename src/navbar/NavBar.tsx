@@ -1,6 +1,6 @@
 import { NavLink, useLocation, useSearchParams } from 'react-router-dom';
 
-import useStore from '../store/useStore';
+import useStore from '../store/useWorkflowStore';
 import styles from './NavBar.module.css';
 import useNavBarElementStore from './useNavBarElementStore';
 

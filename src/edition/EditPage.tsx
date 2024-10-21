@@ -8,9 +8,9 @@ import ErrorFallback from '../general/ErrorFallback';
 import { useWorkflowHasChanges } from '../store/graph-hooks';
 import useEdgeDataStore from '../store/useEdgeDataStore';
 import useNodeDataStore from '../store/useNodeDataStore';
-import displayedWorkflowInfo from '../store/useStore';
-import useWorkflowInfoStore from '../store/useStore';
 import useWorkflowHistory from '../store/useWorkflowHistory';
+import useWorkflowStore from '../store/useWorkflowStore';
+import useStore from '../store/useWorkflowStore';
 import SuspenseBoundary from '../suspense/SuspenseBoundary';
 import Canvas from './Canvas/Canvas';
 import styles from './EditPage.module.css';
@@ -36,7 +36,7 @@ export default function EditPage() {
       pushToWorkflowHistory(
         useNodeDataStore.getState().nodesData,
         useEdgeDataStore.getState().edgesData,
-        useWorkflowInfoStore.getState().displayedWorkflowInfo,
+        useStore.getState().displayedWorkflowInfo,
         storeRF.getState().nodes,
         storeRF.getState().edges,
       );
@@ -50,7 +50,7 @@ export default function EditPage() {
       useNodeDataStore.subscribe(handleWorkflowChange),
       useEdgeDataStore.subscribe(handleWorkflowChange),
 
-      displayedWorkflowInfo.subscribe(handleWorkflowChange),
+      useWorkflowStore.subscribe(handleWorkflowChange),
       subscribeRFStore(handleWorkflowChange),
     ];
 

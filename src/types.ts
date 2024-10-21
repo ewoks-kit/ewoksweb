@@ -2,9 +2,6 @@ import type { Node } from '@xyflow/react';
 import type { Edge, MarkerType, XYPosition } from '@xyflow/react';
 import type { CSSProperties } from 'react';
 
-import type { DisplayedWorkflowInfoSlice } from './store/displayedWorkflowInfo';
-import type { RootWorkflowSlice } from './store/rootWorkflow';
-
 export interface EwoksIONode {
   id: string;
   node: string;
@@ -71,8 +68,6 @@ export interface EwoksEvent {
   progress?: string;
   node_id?: string;
 }
-
-export interface State extends DisplayedWorkflowInfoSlice, RootWorkflowSlice {}
 
 export type TaskType =
   | 'graphInput'
