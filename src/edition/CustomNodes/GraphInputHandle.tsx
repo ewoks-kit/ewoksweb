@@ -1,4 +1,4 @@
-import { Position } from 'reactflow';
+import { Position } from '@xyflow/react';
 
 import type { SubgraphOutputsInputs } from '../../types';
 import styles from './GraphNodeContent.module.css';

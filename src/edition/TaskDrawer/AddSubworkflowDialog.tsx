@@ -6,9 +6,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
+import type { XYPosition } from '@xyflow/react';
+import { useReactFlow } from '@xyflow/react';
 import { useRef } from 'react';
-import type { XYPosition } from 'reactflow';
-import { useReactFlow } from 'reactflow';
 
 import { fetchWorkflow } from '../../api/workflows';
 import OpenGraphInput from '../../general/OpenGraphInput';

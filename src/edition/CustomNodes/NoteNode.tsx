@@ -1,11 +1,10 @@
-import type { NodeProps } from 'reactflow';
+import type { NodeProps } from '@xyflow/react';
 
 import useNodeDataStore from '../../store/useNodeDataStore';
-import type { NodeData } from '../../types';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
 import NodeContent from './NodeContent';
 
-function NoteNode(args: NodeProps<NodeData>) {
+function NoteNode(args: NodeProps) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
   assertNodeDataDefined(nodeData, args.id);
 

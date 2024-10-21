@@ -1,5 +1,5 @@
+import type { Edge } from '@xyflow/react';
 import { nanoid } from 'nanoid';
-import type { Edge } from 'reactflow';
 import type { DataMapping } from 'types';
 
 import useEdgeDataStore from '../../../store/useEdgeDataStore';

@@ -1,5 +1,5 @@
-import type { Edge, Node } from 'reactflow';
-import { MarkerType } from 'reactflow';
+import type { Edge, Node } from '@xyflow/react';
+import { MarkerType } from '@xyflow/react';
 
 import type { TaskInfo } from '../edition/Canvas/models';
 import type {
@@ -96,13 +96,6 @@ export function assertNodeDataDefined(
   nodeId: string,
 ): asserts nodeData is NodeData extends undefined ? never : NodeData {
   assertDefined(nodeData, `Node with id ${nodeId} has undefined data!`);
-}
-
-export function assertNodeDefined(
-  node: NodeWithData | undefined,
-  nodeId: string,
-): asserts node is NodeWithData extends undefined ? never : NodeWithData {
-  assertDefined(node, `Node with id ${nodeId} has undefined data!`);
 }
 
 export function assertEdgeDataDefined(

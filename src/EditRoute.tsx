@@ -1,7 +1,7 @@
 import 'react-reflex/styles.css';
-import 'reactflow/dist/style.css';
+import '@xyflow/react/dist/style.css';
 
-import { ReactFlowProvider } from 'reactflow';
+import { ReactFlowProvider } from '@xyflow/react';
 
 import EditPage from './edition/EditPage';
 import SuspenseBoundary from './suspense/SuspenseBoundary';

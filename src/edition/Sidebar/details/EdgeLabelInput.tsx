@@ -1,7 +1,7 @@
 import { Autocomplete } from '@mui/material';
 import { FormControl, TextField } from '@mui/material';
-import type { Edge } from 'reactflow';
-import { useReactFlow } from 'reactflow';
+import type { Edge } from '@xyflow/react';
+import { useReactFlow } from '@xyflow/react';
 
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { assertEdgeDataDefined, isDefined } from '../../../utils/typeGuards';

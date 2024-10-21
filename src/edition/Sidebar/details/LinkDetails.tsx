@@ -1,6 +1,6 @@
 import InfoIcon from '@mui/icons-material/Info';
 import { IconButton } from '@mui/material';
-import type { Edge } from 'reactflow';
+import type { Edge } from '@xyflow/react';
 
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';

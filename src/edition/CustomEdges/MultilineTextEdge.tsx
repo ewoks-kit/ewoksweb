@@ -1,6 +1,6 @@
+import type { EdgeProps } from '@xyflow/react';
+import { getBezierPath } from '@xyflow/react';
 import type { ReactNode } from 'react';
-import type { EdgeProps } from 'reactflow';
-import { getBezierPath } from 'reactflow';
 
 import InteractionHelper from './InteractionHelper';
 

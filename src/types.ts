@@ -1,6 +1,6 @@
+import type { Node } from '@xyflow/react';
+import type { Edge, MarkerType, XYPosition } from '@xyflow/react';
 import type { CSSProperties } from 'react';
-import type { Node } from 'reactflow';
-import type { Edge, MarkerType, XYPosition } from 'reactflow';
 
 import type { DisplayedWorkflowInfoSlice } from './store/displayedWorkflowInfo';
 import type { RootWorkflowSlice } from './store/rootWorkflow';
@@ -224,11 +224,8 @@ export interface NodeData {
   comment?: string;
 }
 
-export type NodeWithData = Node<NodeData>;
+export type NodeWithData = Node & { data: NodeData };
 export type RFNode = Node<Record<string, never>>;
-// From new reactFlow11:
-// width?: number | null; // what is their functionality?
-// height?: number | null;
 
 export type RowValue = string | object | boolean | number | null;
 
@@ -273,7 +270,7 @@ export interface LinkData {
 // For data still being optional in Edge
 // https://github.com/wbkd/react-flow/issues/1679#issuecomment-1438743754
 export type RFEdge = Edge<Record<string, never>>;
-export type EdgeWithData = Edge<LinkData> & { data: LinkData };
+export type EdgeWithData = Edge & { data: LinkData };
 
 export interface LabelBgStyle {
   fill?: string;

@@ -1,8 +1,7 @@
-import type { NodeProps } from 'reactflow';
+import type { NodeProps } from '@xyflow/react';
 
 import useNodeDataStore from '../../store/useNodeDataStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import type { NodeData } from '../../types';
 import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
 import InputHandle from './InputHandle';
@@ -11,7 +10,7 @@ import NodeIcon from './NodeIcon';
 import NodeLabel from './NodeLabel';
 import OutputHandle from './OutputHandle';
 
-function GraphInOutNode(props: NodeProps<NodeData>) {
+function GraphInOutNode(props: NodeProps) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(props.id));
   assertNodeDataDefined(nodeData, props.id);
   const { ui_props: uiProps, comment } = nodeData;

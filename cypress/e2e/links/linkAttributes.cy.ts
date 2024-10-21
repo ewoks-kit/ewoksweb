@@ -26,7 +26,7 @@ it('has the default style', () => {
       'style',
       'stroke: rgb(150, 165, 249); stroke-width: 2px;',
     )
-    .should('have.attr', 'marker-end', 'url(#1__type=arrowclosed)');
+    .should('have.attr', 'marker-end', "url('#1__type=arrowclosed')");
 });
 
 it('selects a link and adds selected class and sidebar shows details', () => {
@@ -56,11 +56,11 @@ it('changes arrow head property', () => {
   cy.findByRole('option', { name: 'arrow' }).click();
   cy.get('@link')
     .find('.react-flow__edge-path')
-    .should('have.attr', 'marker-end', 'url(#1__type=arrow)');
+    .should('have.attr', 'marker-end', "url('#1__type=arrow')");
 
   cy.findByRole('combobox', { name: 'Arrow head' }).click();
   cy.findByRole('option', { name: 'none' }).click();
   cy.get('@link')
     .find('.react-flow__edge-path')
-    .should('have.attr', 'marker-end', 'url(#)');
+    .should('not.have.attr', 'marker-end');
 });

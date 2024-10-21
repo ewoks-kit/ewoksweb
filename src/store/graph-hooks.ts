@@ -1,25 +1,26 @@
-import type { Edge, Node, ReactFlowState } from 'reactflow';
-import { useStore as useRFStore } from 'reactflow';
+import type { Edge, Node, ReactFlowState } from '@xyflow/react';
+import { useReactFlow } from '@xyflow/react';
+import { useStore as useRFStore } from '@xyflow/react';
 import { shallow } from 'zustand/shallow';
 
 import useWorkflowHistory from './useWorkflowHistory';
 
 export function useNodesIds() {
-  return useRFStore((state) => {
-    return [...state.nodeInternals.keys()];
-  }, shallow);
+  return useRFStore((state) => [...state.nodeLookup.keys()], shallow);
 }
 
 export function useNodesLength() {
-  return useRFStore((state) => [...state.nodeInternals.keys()].length);
+  return useRFStore((state) => state.nodes.length);
 }
 
 export function useNode(id: string) {
-  return useRFStore((state) => state.nodeInternals.get(id));
+  const { getNode } = useReactFlow();
+  return getNode(id);
 }
 
 export function useEdge(id: string) {
-  return useRFStore((state) => state.edges.find((edge) => edge.id === id));
+  const { getEdge } = useReactFlow();
+  return getEdge(id);
 }
 
 export function useSelectedElement(): Node | Edge | undefined {
@@ -27,13 +28,11 @@ export function useSelectedElement(): Node | Edge | undefined {
 }
 
 const nodeEdgeSelectedSelector = (state: ReactFlowState) => {
-  const nodeSelected = [...state.nodeInternals.values()].find(
-    (node) => node.selected,
-  );
+  const nodeSelected = state.nodes.find((node) => node.selected);
   if (nodeSelected) {
     return nodeSelected;
   }
-  const edgeSelected = [...state.edges.values()].find((edge) => edge.selected);
+  const edgeSelected = state.edges.find((edge) => edge.selected);
   if (edgeSelected) {
     return edgeSelected;
   }

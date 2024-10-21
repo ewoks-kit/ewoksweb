@@ -1,11 +1,10 @@
+import type { NodeProps } from '@xyflow/react';
 import { memo, useEffect, useMemo } from 'react';
-import type { NodeProps } from 'reactflow';
 
 import { useWorkflowIds } from '../../api/workflows';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import type { NodeData } from '../../types';
 import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
 import GraphInputHandle from './GraphInputHandle';
@@ -16,7 +15,7 @@ import NodeIcon from './NodeIcon';
 import NodeLabel from './NodeLabel';
 import { sortByPosition } from './utils';
 
-function GraphNodeContent(props: NodeProps<NodeData>) {
+function GraphNodeContent(props: NodeProps) {
   const { id } = props;
   const workflowIds = useWorkflowIds();
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));

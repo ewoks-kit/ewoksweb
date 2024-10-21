@@ -1,3 +1,3 @@
-import type { MarkerType } from 'reactflow';
+import type { MarkerType } from '@xyflow/react';
 
 export type MarkerEndOption = MarkerType | 'none';

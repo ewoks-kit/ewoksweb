@@ -1,4 +1,4 @@
-import { MarkerType } from 'reactflow';
+import { MarkerType } from '@xyflow/react';
 
 export const DEFAULT_NODE_VALUES = {
   default_inputs: [],

@@ -1,6 +1,6 @@
 import { FolderOpen } from '@mui/icons-material';
+import { useReactFlow } from '@xyflow/react';
 import { useRef } from 'react';
-import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../../../api/tasks';
 import OpenGraphInput from '../../../general/OpenGraphInput';

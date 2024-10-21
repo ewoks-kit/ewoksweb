@@ -6,10 +6,10 @@ import {
   DialogContent,
   DialogTitle,
 } from '@mui/material';
+import { useReactFlow } from '@xyflow/react';
 import { flushSync } from 'react-dom';
 import { Controller, useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
-import { useReactFlow } from 'reactflow';
 
 import {
   postWorkflow,

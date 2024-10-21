@@ -1,4 +1,4 @@
-import type { Edge, Node } from 'reactflow';
+import type { Edge, Node } from '@xyflow/react';
 
 import { postTask, putTask } from '../../api/tasks';
 import type { LinkData, NodeData, Task, TaskType } from '../../types';

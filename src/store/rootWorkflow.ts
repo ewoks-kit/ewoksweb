@@ -1,4 +1,4 @@
-import type { ReactFlowInstance } from 'reactflow';
+import type { ReactFlowInstance } from '@xyflow/react';
 import type { GetState, SetState } from 'zustand';
 
 import type { NodeWithData, State, Task, Workflow } from '../types';

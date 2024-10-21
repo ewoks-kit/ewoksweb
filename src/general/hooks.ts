@@ -1,6 +1,6 @@
+import type { Edge } from '@xyflow/react';
+import { useReactFlow } from '@xyflow/react';
 import { useState } from 'react';
-import type { Edge } from 'reactflow';
-import { useReactFlow } from 'reactflow';
 
 import {
   putWorkflow,

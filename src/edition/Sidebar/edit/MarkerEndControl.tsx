@@ -6,9 +6,9 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
-import type { Edge } from 'reactflow';
-import { MarkerType } from 'reactflow';
-import { useReactFlow } from 'reactflow';
+import type { Edge } from '@xyflow/react';
+import { MarkerType } from '@xyflow/react';
+import { useReactFlow } from '@xyflow/react';
 
 import { useUpdateEdge } from '../../../general/hooks';
 import styles from './EditLinkStyle.module.css';
