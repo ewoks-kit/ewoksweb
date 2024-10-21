@@ -1,43 +1,10 @@
-import type { Edge, Node } from '@xyflow/react';
 import { MarkerType } from '@xyflow/react';
 
 import type { TaskInfo } from '../edition/Canvas/models';
-import type {
-  EdgeWithData,
-  GraphDetails,
-  LinkData,
-  NodeData,
-  NodeWithData,
-} from '../types';
+import type { LinkData, NodeData } from '../types';
 
 export interface EwoksServerErrorResponse {
   response: { data: { message: string } };
-}
-
-export function isNode(
-  entity: NodeWithData | EdgeWithData | GraphDetails | undefined,
-): entity is NodeWithData {
-  return !!entity && 'position' in entity;
-}
-
-export function isNodeRF(entity: Node | Edge): entity is Node {
-  return 'position' in entity;
-}
-
-export function isEdgeRF(entity: Node | Edge | undefined): entity is Edge {
-  return !!entity && 'source' in entity;
-}
-
-export function isLink(
-  entity: NodeWithData | EdgeWithData | GraphDetails | undefined,
-): entity is EdgeWithData {
-  return !!entity && 'source' in entity;
-}
-
-export function isGraphDetails(
-  entity: NodeWithData | EdgeWithData | GraphDetails | undefined,
-): entity is GraphDetails {
-  return !!entity && 'input_nodes' in entity;
 }
 
 export function isEwoksServerErrorResponse(
@@ -103,18 +70,6 @@ export function assertEdgeDataDefined(
   edgeId: string,
 ): asserts edgeData is LinkData extends undefined ? never : LinkData {
   assertDefined(edgeData, `Edge with id ${edgeId} has undefined data!`);
-}
-
-export function assertElementIsNodeType(
-  entity: Node | undefined,
-): asserts entity is Node {
-  assertDefined(!!entity && 'position' in entity, `Node is not defined!`);
-}
-
-export function assertElementIsEdge(
-  entity: NodeWithData | EdgeWithData | Edge | Node | GraphDetails | undefined,
-): asserts entity is EdgeWithData extends undefined ? never : EdgeWithData {
-  assertDefined(!!entity && 'source' in entity, `Edge is possibly undefined!`);
 }
 
 export function assertTaskInfo(
