@@ -5,7 +5,6 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Slider,
 } from '@mui/material';
 import type { Edge } from '@xyflow/react';
 import { useReactFlow } from '@xyflow/react';
@@ -26,7 +25,6 @@ export default function EditLinkStyle(element: Edge) {
 
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(element.id));
   assertEdgeDataDefined(edgeData, element.id);
-  const mergeEdgeData = useEdgeDataStore((state) => state.mergeEdgeData);
 
   const showInfoMsg = useSnackbarStore((state) => state.showInfoMsg);
 
@@ -35,11 +33,10 @@ export default function EditLinkStyle(element: Edge) {
   const linkColor = element.style?.stroke || edgeColor;
   const linkType = element.type || 'default';
   const animated = !!element.animated;
-  const { x = 80, y = 80 } = edgeData.getAroundProps || {};
 
   function handleLinkTypeChange(event: SelectChangeEvent) {
     const val = event.target.value;
-    if (['multilineText', 'getAround'].includes(val)) {
+    if (val === 'multilineText') {
       showInfoMsg(
         'Insert commas (,) in the label to break into multiple lines!',
       );
@@ -59,26 +56,6 @@ export default function EditLinkStyle(element: Edge) {
       labelBgStyle: { ...element.labelBgStyle, stroke: event.target.value },
     };
     updateEdge(newEdge);
-  }
-
-  function handleXChange(_event: Event, value: number | number[]) {
-    const newX = value as number;
-    const newEdgeData = {
-      getAroundProps: {
-        x: newX,
-      },
-    };
-    mergeEdgeData(element.id, newEdgeData);
-  }
-
-  function handleYChange(_event: Event, value: number | number[]) {
-    const newY = value as number;
-    const newEdgeData = {
-      getAroundProps: {
-        y: newY,
-      },
-    };
-    mergeEdgeData(element.id, newEdgeData);
   }
 
   function applyLinkTypeToAll() {
@@ -113,7 +90,6 @@ export default function EditLinkStyle(element: Edge) {
             'default',
             'bendingText',
             'multilineText',
-            'getAround',
           ].map((text) => (
             <MenuItem key={text} value={text}>
               {text}
@@ -153,33 +129,6 @@ export default function EditLinkStyle(element: Edge) {
           style={{ margin: '0 0 0 0.3rem' }}
         />
       </div>
-      {linkType === 'getAround' && (
-        <div>
-          Size of Link
-          <div>X</div>
-          <Slider
-            id="slideX"
-            color="primary"
-            defaultValue={x}
-            value={x}
-            onChange={handleXChange}
-            min={-200}
-            max={200}
-            style={{ width: '90%' }}
-          />
-          <div>Y</div>
-          <Slider
-            id="slideY"
-            color="primary"
-            defaultValue={y}
-            value={y}
-            onChange={handleYChange}
-            min={-200}
-            max={200}
-            style={{ width: '90%' }}
-          />
-        </div>
-      )}
     </>
   );
 }

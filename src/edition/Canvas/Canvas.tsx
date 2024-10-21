@@ -36,7 +36,6 @@ import {
 } from '../../utils/defaultValues';
 import isValidLink from '../../utils/IsValidLink';
 import BendingTextEdge from '../CustomEdges/BendingTextEdge';
-import getAround from '../CustomEdges/GetAroundEdge';
 import MultilineTextEdge from '../CustomEdges/MultilineTextEdge';
 import DataNode from '../CustomNodes/DataNode';
 import GraphInOutNode from '../CustomNodes/GraphInOutNode';
@@ -53,7 +52,6 @@ import { addConnectionToGraph, retrieveTaskInfo } from './utils';
 const edgeTypes = {
   bendingText: BendingTextEdge,
   multilineText: MultilineTextEdge,
-  getAround,
 };
 
 const nodeTypes = {

@@ -260,7 +260,6 @@ export interface LinkData {
   sub_target?: string;
   sub_target_attributes?: Record<string, unknown>;
   sub_source?: string;
-  getAroundProps?: { x?: number; y?: number };
   links_input_names?: string[] | null;
   links_required_output_names?: string[] | null;
   links_optional_output_names?: string[] | null;
@@ -298,7 +297,6 @@ export interface LinkUiProps {
   sourceHandle?: string | null;
   targetHandle?: string | null;
   style?: CSSProperties;
-  getAroundProps?: { x?: number; y?: number };
 }
 
 export interface Workflow {

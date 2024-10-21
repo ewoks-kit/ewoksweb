@@ -46,8 +46,6 @@ export function toRFEwoksLinks(
       uiProps,
       startEnd,
     }) => {
-      const stroke = uiProps?.style?.stroke;
-
       const conditionsForFront = conditions?.map<Condition>((con) => {
         return {
           rowId: nanoid(),
@@ -81,20 +79,13 @@ export function toRFEwoksLinks(
         ...notUndefinedValue(uiProps?.type, 'type'),
         ...notUndefinedValue(uiProps?.animated, 'animated'),
         markerEnd: convertEwoksMarkerEndToRF(uiProps?.markerEnd),
-        style: {
-          stroke,
-        },
-        labelBgStyle: {
-          stroke,
-        },
+        ...(uiProps?.style && { style: uiProps.style }),
+        ...(uiProps?.labelStyle && { labelStyle: uiProps.labelStyle }),
+        ...(uiProps?.labelBgStyle && { labelBgStyle: uiProps.labelBgStyle }),
         data: {
           // DOC: startEnd is not in EwoksLink on the server but needed for calculating
           // the in-out nodes-links.
           startEnd: !!startEnd,
-          ...(uiProps?.type === 'getAround' &&
-            uiProps.getAroundProps && {
-              getAroundProps: uiProps.getAroundProps,
-            }),
           links_optional_output_names: linkOutputNames.optional,
           links_required_output_names: linkOutputNames.required,
           links_input_names: linkInputNames,
