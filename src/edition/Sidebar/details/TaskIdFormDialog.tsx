@@ -6,15 +6,15 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { useReactFlow } from '@xyflow/react';
 import { useForm } from 'react-hook-form';
-import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../../../api/tasks';
 import { useNodesIds } from '../../../store/graph-hooks';
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import type { NodeData } from '../../../types';
 import { calcTaskProps } from '../../../utils/convertEwoksWorkflowToRFNodes';
-import { assertNodeDefined } from '../../../utils/typeGuards';
+import { assertDefined } from '../../../utils/typeGuards';
 import { generateUniqueNodeId } from '../../../utils/utils';
 import styles from './TaskIdFormDialog.module.css';
 
@@ -31,7 +31,7 @@ export default function TaskIdFormDialog(props: Props) {
 
   const tasks = useTasks();
 
-  const { getNodes, getEdges, setNodes, setEdges } = useReactFlow();
+  const { getNode, getNodes, getEdges, setNodes, setEdges } = useReactFlow();
   const nodesIds = useNodesIds();
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
 
@@ -48,8 +48,8 @@ export default function TaskIdFormDialog(props: Props) {
     // of the node needs to change for a coherent json. Links to/from this node also change!
     const { taskId: newTaskId } = data;
     const newNodeId = generateUniqueNodeId(nodesIds, newTaskId);
-    const newNode = getNodes().find((nod) => nod.id === nodeId);
-    assertNodeDefined(newNode, nodeId);
+    const newNode = getNode(nodeId);
+    assertDefined(newNode);
     newNode.id = newNodeId;
     setNodes([...getNodes().filter((nod) => nod.id !== nodeId), newNode]);
 

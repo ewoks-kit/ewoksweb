@@ -1,10 +1,10 @@
-import type { Connection, Edge } from 'reactflow';
+import type { Connection, Edge, Node } from '@xyflow/react';
 
-import type { NodeData, NodeWithData } from '../types';
+import type { NodeData } from '../types';
 
 export default function isValidLink(
   connection: Connection,
-  nodes: NodeWithData[],
+  nodes: Node[],
   graphLinks: Edge[],
   nodesData?: Map<string, NodeData>,
   oldEdge?: Edge,

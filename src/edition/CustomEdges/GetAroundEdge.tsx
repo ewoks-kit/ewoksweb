@@ -1,10 +1,10 @@
-import type { EdgeProps } from 'reactflow';
-import { getBezierPath } from 'reactflow';
+import type { EdgeProps } from '@xyflow/react';
+import { getBezierPath } from '@xyflow/react';
 
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 import { assertEdgeDataDefined } from '../../utils/typeGuards';
 import InteractionHelper from './InteractionHelper';
-import type { SmoothStepData, SmoothStepParams } from './models';
+import type { SmoothStepParams } from './models';
 
 const leftBottomCorner = (x: number, y: number, size: number) => {
   return `L ${x + size},${y}Q ${x},${y} ${x},${y - size}`;
@@ -94,7 +94,7 @@ export default function GetAroundEdge({
   label,
   markerEnd,
   interactionWidth,
-}: EdgeProps<SmoothStepData>) {
+}: EdgeProps) {
   const edgeData = useEdgeDataStore((state) => state.edgesData.get(id));
   assertEdgeDataDefined(edgeData, id);
 

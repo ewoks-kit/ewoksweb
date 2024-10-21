@@ -1,7 +1,4 @@
 import { useKeyboardEvent } from '@react-hookz/web';
-import type { DragEventHandler, MouseEvent } from 'react';
-import { useState } from 'react';
-import { useRef } from 'react';
 import type {
   Connection,
   Edge,
@@ -9,15 +6,19 @@ import type {
   Node,
   NodeChange,
   XYPosition,
-} from 'reactflow';
-import { addEdge } from 'reactflow';
-import ReactFlow, {
+} from '@xyflow/react';
+import { addEdge } from '@xyflow/react';
+import {
   applyEdgeChanges,
   applyNodeChanges,
   Controls,
+  ReactFlow,
   useReactFlow,
-} from 'reactflow';
-import { useStoreApi } from 'reactflow';
+} from '@xyflow/react';
+import { useStoreApi } from '@xyflow/react';
+import type { DragEventHandler, MouseEvent } from 'react';
+import { useState } from 'react';
+import { useRef } from 'react';
 
 import { useTasks } from '../../api/tasks';
 import { useWorkflow } from '../../api/workflows';
@@ -113,7 +114,6 @@ function Canvas(props: Props) {
   );
   const rootWorkflowId = useStore((state) => state.rootWorkflowId);
   const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
-  const showInfoMsg = useSnackbarStore((state) => state.showInfoMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
   const { setEdges, getNodes, getEdges, addNodes } = rfInstance;
@@ -144,23 +144,16 @@ function Canvas(props: Props) {
     }
 
     const stateRF = storeRF.getState();
-    const reactFlowBounds =
-      reactFlowWrapper.current?.getBoundingClientRect() || {
-        left: 0,
-        top: 0,
-      };
-
     const taskInfo = retrieveTaskInfo(event.dataTransfer);
     if (!taskInfo) {
       return;
     }
     const { task_type, icon, task_identifier, category } = taskInfo;
 
-    const { left, top } = reactFlowBounds;
     const { clientX, clientY } = event;
-    const position = rfInstance.project({
-      x: clientX - left - (DEFAULT_NODE_WIDTH * rfInstance.getZoom()) / 2,
-      y: clientY - top - (DEFAULT_NODE_HEIGHT * rfInstance.getZoom()) / 2,
+    const position = rfInstance.screenToFlowPosition({
+      x: clientX - (DEFAULT_NODE_WIDTH * rfInstance.getZoom()) / 2,
+      y: clientY - (DEFAULT_NODE_HEIGHT * rfInstance.getZoom()) / 2,
     });
 
     if (task_type === 'subworkflow') {
@@ -185,7 +178,7 @@ function Canvas(props: Props) {
       }
     }
 
-    const nodesIds = [...stateRF.nodeInternals.keys()];
+    const nodesIds = [...stateRF.nodeLookup.keys()];
     const newId = generateNewNodeId(task, nodesIds);
 
     const newNode: RFNode = {
@@ -227,7 +220,7 @@ function Canvas(props: Props) {
     return true;
   }
 
-  const onEdgeUpdate = (oldEdge: Edge, connection: Connection) => {
+  const onReconnect = (oldEdge: Edge, connection: Connection) => {
     if (!isValidConnection(connection, oldEdge)) {
       return;
     }
@@ -250,11 +243,6 @@ function Canvas(props: Props) {
       setEdgeData(newLink.id, newLink.data);
       setEdges([...getEdges(), newLink]);
     }
-  };
-
-  const onPaneContextMenu = (event: MouseEvent) => {
-    event.preventDefault();
-    showInfoMsg('Open a graph and click on nodes and links on this Canvas!');
   };
 
   useKeyboardEvent(
@@ -292,9 +280,8 @@ function Canvas(props: Props) {
             snapToGrid
             onDrop={onDrop}
             onConnect={onConnect}
-            onEdgeUpdate={onEdgeUpdate}
+            onReconnect={onReconnect}
             onDragOver={onDragOver}
-            onPaneContextMenu={onPaneContextMenu}
             onNodeDoubleClick={onNodeDoubleClick}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}

@@ -1,7 +1,7 @@
 import { FormControl } from '@mui/material';
+import { useUpdateNodeInternals } from '@xyflow/react';
 import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
-import { useUpdateNodeInternals } from 'reactflow';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';

@@ -1,4 +1,4 @@
-import type { Connection } from 'reactflow';
+import type { Connection } from '@xyflow/react';
 
 import type { EdgeWithData, NodeData } from '../../types';
 import { DEFAULT_LINK_VALUES } from '../../utils/defaultValues';

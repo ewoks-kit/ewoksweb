@@ -1,5 +1,5 @@
 import { GetApp } from '@mui/icons-material';
-import { useReactFlow } from 'reactflow';
+import { useReactFlow } from '@xyflow/react';
 
 import useStore from '../../../store/useStore';
 import { getEdgesData, getNodesData, toEwoksWorkflow } from '../../../utils';

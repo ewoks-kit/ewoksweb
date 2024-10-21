@@ -1,10 +1,9 @@
-import type { NodeProps } from 'reactflow';
+import type { NodeProps } from '@xyflow/react';
 
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import type { NodeData } from '../../types';
 import GraphNodeContent from './GraphNodeContent';
 
-function GraphNode(props: NodeProps<NodeData>) {
+function GraphNode(props: NodeProps) {
   return (
     <SuspenseBoundary>
       <GraphNodeContent {...props} />

@@ -1,5 +1,5 @@
+import type { NodeProps } from '@xyflow/react';
 import { memo } from 'react';
-import type { NodeProps } from 'reactflow';
 
 import useNodeDataStore from '../../store/useNodeDataStore';
 import Node from './Node';

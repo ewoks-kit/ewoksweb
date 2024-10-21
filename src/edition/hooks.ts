@@ -1,6 +1,6 @@
 import { useEventListener } from '@react-hookz/web';
+import { useReactFlow } from '@xyflow/react';
 import { unstable_usePrompt } from 'react-router-dom';
-import { useReactFlow } from 'reactflow';
 
 import { useNodesIds } from '../store/graph-hooks';
 import useNodeDataStore from '../store/useNodeDataStore';

@@ -221,13 +221,13 @@ it('saves a workflow with a link, and saves the workflow after populating the li
       graph: { id },
       nodes: [
         {
-          id: 'taskSkeleton1',
+          id: 'taskSkeleton0',
           task_type: 'method',
           task_identifier: 'taskSkeleton',
           uiProps: {},
         },
         {
-          id: 'taskSkeleton0',
+          id: 'taskSkeleton1',
           task_type: 'method',
           task_identifier: 'taskSkeleton',
           uiProps: {},
@@ -303,13 +303,13 @@ it('saves a workflow with a link, and saves the workflow after populating the li
       graph: { id },
       nodes: [
         {
-          id: 'taskSkeleton1',
+          id: 'taskSkeleton0',
           task_type: 'method',
           task_identifier: 'taskSkeleton',
           uiProps: {},
         },
         {
-          id: 'taskSkeleton0',
+          id: 'taskSkeleton1',
           task_type: 'method',
           task_identifier: 'taskSkeleton',
           uiProps: {},

@@ -1,5 +1,5 @@
+import type { Edge } from '@xyflow/react';
 import { nanoid } from 'nanoid';
-import type { Edge } from 'reactflow';
 
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import type { Condition, LinkData } from '../../../types';

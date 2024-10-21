@@ -2,8 +2,8 @@ import { Delete as DeleteIcon } from '@mui/icons-material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
-import type { Edge } from 'reactflow';
-import { useReactFlow } from 'reactflow';
+import type { Edge } from '@xyflow/react';
+import { useReactFlow } from '@xyflow/react';
 
 import useStore from '../../../store/useStore';
 import KeyStrokeHint from '../../KeyStrokeHint';

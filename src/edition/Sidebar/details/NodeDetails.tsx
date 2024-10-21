@@ -1,6 +1,6 @@
 import InfoIcon from '@mui/icons-material/Info';
 import { Box, IconButton } from '@mui/material';
-import type { Node } from 'reactflow';
+import type { Node } from '@xyflow/react';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { DEFAULT_NODE_VALUES } from '../../../utils/defaultValues';

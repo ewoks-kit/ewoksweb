@@ -1,5 +1,5 @@
-import type { Node, XYPosition } from 'reactflow';
-import { Position } from 'reactflow';
+import type { Node, XYPosition } from '@xyflow/react';
+import { Position } from '@xyflow/react';
 
 import type { EwoksIONode, NodeData, RFNode, Workflow } from '../../types';
 import { generateUniqueNodeId } from '../../utils/utils';

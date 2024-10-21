@@ -1,4 +1,4 @@
-import type { Edge, Node } from 'reactflow';
+import type { Edge, Node } from '@xyflow/react';
 
 import { fetchWorkflow } from './api/workflows';
 import { curateEdgeData, curateNodeData } from './edition/TopAppBar/utils';

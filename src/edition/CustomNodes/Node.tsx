@@ -1,5 +1,5 @@
+import { Position } from '@xyflow/react';
 import { memo } from 'react';
-import { Position } from 'reactflow';
 
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import InputHandle from './InputHandle';

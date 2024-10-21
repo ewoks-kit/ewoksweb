@@ -1,4 +1,4 @@
-import { Background, BackgroundVariant } from 'reactflow';
+import { Background, BackgroundVariant } from '@xyflow/react';
 
 import useConfigStore from '../../store/useConfigStore';
 

@@ -2,9 +2,9 @@ import { Delete, FileCopy, LibraryAdd } from '@mui/icons-material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
+import type { Node } from '@xyflow/react';
+import { useReactFlow } from '@xyflow/react';
 import { useState } from 'react';
-import type { Node } from 'reactflow';
-import { useReactFlow } from 'reactflow';
 
 import { useTasks } from '../../../api/tasks';
 import TaskForm from '../../../general/forms/TaskForm';

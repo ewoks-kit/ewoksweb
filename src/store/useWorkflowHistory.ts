@@ -1,5 +1,5 @@
+import type { Edge, Node } from '@xyflow/react';
 import isEqual from 'lodash/isEqual';
-import type { Edge, Node } from 'reactflow';
 import { create } from 'zustand';
 
 import type { GraphDetails, Workflow } from '../types';

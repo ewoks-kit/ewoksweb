@@ -7,9 +7,9 @@ import {
   Select,
   Slider,
 } from '@mui/material';
+import type { Edge } from '@xyflow/react';
+import { useReactFlow } from '@xyflow/react';
 import type { ChangeEvent } from 'react';
-import type { Edge } from 'reactflow';
-import { useReactFlow } from 'reactflow';
 
 import { useUpdateEdge } from '../../../general/hooks';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';

@@ -1,8 +1,8 @@
 import { useDebouncedCallback } from '@react-hookz/web';
+import { useStoreApi } from '@xyflow/react';
 import { useEffect } from 'react';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import { useSearchParams } from 'react-router-dom';
-import { useStoreApi } from 'reactflow';
 
 import ErrorFallback from '../general/ErrorFallback';
 import { useWorkflowHasChanges } from '../store/graph-hooks';
@@ -37,7 +37,7 @@ export default function EditPage() {
         useNodeDataStore.getState().nodesData,
         useEdgeDataStore.getState().edgesData,
         useWorkflowInfoStore.getState().displayedWorkflowInfo,
-        storeRF.getState().getNodes(),
+        storeRF.getState().nodes,
         storeRF.getState().edges,
       );
     },
