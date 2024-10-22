@@ -1,6 +1,5 @@
 import { nanoid } from 'nanoid';
 
-import { defaultLinkStyle } from '../edition/Canvas/utils';
 import type {
   Condition,
   EdgeWithData,
@@ -17,6 +16,8 @@ import {
   getValueAndType,
   notUndefinedValue,
 } from './utils';
+
+const EDGE_LABEL_PADDING: [number, number] = [5, 2];
 
 type WorkflowWithNodesLinks = Required<Workflow>;
 
@@ -47,8 +48,6 @@ export function toRFEwoksLinks(
       uiProps,
       startEnd,
     }) => {
-      const color = uiProps?.style?.stroke || '#96a5f9';
-
       const conditionsForFront = conditions?.map<Condition>((con) => {
         return {
           rowId: nanoid(),
@@ -82,28 +81,14 @@ export function toRFEwoksLinks(
         ...notUndefinedValue(uiProps?.type, 'type'),
         ...notUndefinedValue(uiProps?.animated, 'animated'),
         markerEnd: convertEwoksMarkerEndToRF(uiProps?.markerEnd),
-        ...defaultLinkStyle,
-        style: {
-          ...defaultLinkStyle.style,
-          stroke: color,
-        },
-        labelBgStyle: {
-          ...defaultLinkStyle.labelBgStyle,
-          stroke: color,
-        },
-        labelStyle: {
-          ...defaultLinkStyle.labelStyle,
-          color,
-          fill: color,
-        },
+        labelBgPadding: EDGE_LABEL_PADDING,
+        ...(uiProps?.style && { style: uiProps.style }),
+        ...(uiProps?.labelStyle && { labelStyle: uiProps.labelStyle }),
+        ...(uiProps?.labelBgStyle && { labelBgStyle: uiProps.labelBgStyle }),
         data: {
           // DOC: startEnd is not in EwoksLink on the server but needed for calculating
           // the in-out nodes-links.
           startEnd: !!startEnd,
-          ...(uiProps?.type === 'getAround' &&
-            uiProps.getAroundProps && {
-              getAroundProps: uiProps.getAroundProps,
-            }),
           links_optional_output_names: linkOutputNames.optional,
           links_required_output_names: linkOutputNames.required,
           links_input_names: linkInputNames,

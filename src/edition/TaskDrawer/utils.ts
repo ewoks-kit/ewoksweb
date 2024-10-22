@@ -55,5 +55,5 @@ export async function loadSubworkflow(
 function calcLabel(inputOutput: EwoksIONode): string {
   return `${inputOutput.uiProps?.label ?? inputOutput.id}: ${
     inputOutput.node
-  } ${inputOutput.sub_node ? ` -> ${inputOutput.sub_node}` : ''}`;
+  } ${inputOutput.sub_node ? ` → ${inputOutput.sub_node}` : ''}`;
 }

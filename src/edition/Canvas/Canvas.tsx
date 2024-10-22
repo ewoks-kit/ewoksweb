@@ -35,9 +35,8 @@ import {
   DEFAULT_NODE_WIDTH,
 } from '../../utils/defaultValues';
 import isValidLink from '../../utils/IsValidLink';
-import bendingText from '../CustomEdges/BendingTextEdge';
-import getAround from '../CustomEdges/GetAroundEdge';
-import multilineText from '../CustomEdges/MultilineTextEdge';
+import BendingTextEdge from '../CustomEdges/BendingTextEdge';
+import MultilineTextEdge from '../CustomEdges/MultilineTextEdge';
 import DataNode from '../CustomNodes/DataNode';
 import GraphInOutNode from '../CustomNodes/GraphInOutNode';
 import GraphNode from '../CustomNodes/GraphNode';
@@ -51,9 +50,8 @@ import FallbackMessage from './FallbackMessage';
 import { addConnectionToGraph, retrieveTaskInfo } from './utils';
 
 const edgeTypes = {
-  bendingText,
-  multilineText,
-  getAround,
+  bendingText: BendingTextEdge,
+  multilineText: MultilineTextEdge,
 };
 
 const nodeTypes = {

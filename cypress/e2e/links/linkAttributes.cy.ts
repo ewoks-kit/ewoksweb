@@ -21,11 +21,6 @@ beforeEach(() => {
 it('has the default style', () => {
   cy.get('@link')
     .find('.react-flow__edge-path')
-    .should(
-      'have.attr',
-      'style',
-      'stroke: rgb(150, 165, 249); stroke-width: 2px;',
-    )
     .should('have.attr', 'marker-end', "url('#1__type=arrowclosed')");
 });
 

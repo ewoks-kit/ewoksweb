@@ -1,21 +1,19 @@
 import type { EdgeProps } from '@xyflow/react';
-import { getBezierPath } from '@xyflow/react';
+import { BaseEdge, getBezierPath } from '@xyflow/react';
 
-import InteractionHelper from './InteractionHelper';
+import styles from './CustomEdges.module.css';
 
-function bendingText({
-  id,
-  sourceX,
-  sourceY,
-  targetX,
-  targetY,
-  sourcePosition,
-  targetPosition,
-  label = '',
-  markerEnd,
-  style = {},
-  interactionWidth,
-}: EdgeProps) {
+function BendingTextEdge(props: EdgeProps) {
+  const {
+    sourceX,
+    sourceY,
+    sourcePosition,
+    targetX,
+    targetY,
+    targetPosition,
+    label,
+    ...otherProps
+  } = props;
   const [path] = getBezierPath({
     sourceX,
     sourceY,
@@ -24,30 +22,25 @@ function bendingText({
     targetY,
     targetPosition,
   });
+  const { id, selected, style } = otherProps;
 
   return (
     <>
-      <path
-        id={id}
-        style={style}
-        className="react-flow__edge-path"
-        d={path}
-        markerEnd={markerEnd}
-      />
-      <text>
+      <BaseEdge path={path} {...otherProps} />
+      <text dy="-0.25em">
         <textPath
-          className="bendingText"
+          className={styles.bendingText}
+          data-selected={selected ? '' : undefined}
           href={`#${id}`}
           startOffset="50%"
           textAnchor="middle"
-          fill={style.stroke}
+          fill={style?.stroke}
         >
           {label}
         </textPath>
       </text>
-      <InteractionHelper path={path} interactionWidth={interactionWidth} />
     </>
   );
 }
 
-export default bendingText;
+export default BendingTextEdge;

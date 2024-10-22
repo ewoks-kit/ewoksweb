@@ -21,7 +21,6 @@ export function toEwoksLinks(links: EdgeWithData[]): EwoksLink[] {
         map_all_data,
         required,
         comment,
-        getAroundProps,
         sub_source,
         sub_target,
         data_mapping,
@@ -30,6 +29,8 @@ export function toEwoksLinks(links: EdgeWithData[]): EwoksLink[] {
       type,
       markerEnd,
       style,
+      labelStyle,
+      labelBgStyle,
       animated,
     }) => {
       const datamapping = data_mapping && calcDataMapping(data_mapping);
@@ -50,15 +51,12 @@ export function toEwoksLinks(links: EdgeWithData[]): EwoksLink[] {
         ...(comment && { comment }),
         ...(type && { type }),
         ...(ewoksMarkerEnd ? { markerEnd: ewoksMarkerEnd } : {}),
-        ...(style?.stroke !== '#96a5f9' && {
-          style: { stroke: style?.stroke },
-        }),
+        ...(style ? { style } : {}),
+        ...(labelStyle ? { labelStyle } : {}),
+        ...(labelBgStyle ? { labelBgStyle } : {}),
         ...notUndefinedValue(animated, 'animated'),
         ...(sourceHandle && sourceHandle !== 'sr' && { sourceHandle }),
         ...(targetHandle && targetHandle !== 'tl' && { targetHandle }),
-        ...(type === 'getAround' && {
-          getAroundProps,
-        }),
       };
 
       return {

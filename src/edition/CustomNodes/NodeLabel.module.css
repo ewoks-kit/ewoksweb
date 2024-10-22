@@ -1,9 +1,8 @@
 .content {
   position: relative;
   word-wrap: break-word;
-  margin: 2px;
-  padding: 2px;
+  padding: 0.5rem;
   text-align: center;
   background-color: var(--nodeLabel--bgColor);
-  border-radius: 10px 10px 3px 3px;
+  color: var(--black);
 }

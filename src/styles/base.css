@@ -8,7 +8,7 @@ body {
   margin: 0;
   font-family: var(--sans-serif);
   line-height: 1.2;
-  color: var(--text);
+  color: var(--black);
 }
 
 @media (min-width: 50em) {

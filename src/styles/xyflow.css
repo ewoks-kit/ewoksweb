@@ -1,0 +1,50 @@
+/* STYLES SPECIFIC TO XYFLOW */
+
+.react-flow {
+  --xy-edge-stroke: var(--edge-color);
+  --xy-edge-stroke-width: var(--edge-width);
+  --xy-edge-stroke-selected: var(--edge-color);
+  --xy-edge-label-color: var(--edge-color);
+}
+
+.react-flow__node {
+  border: dotted 1px rgba(0, 0, 0, 0);
+}
+
+.react-flow__node.selected {
+  border-color: var(--black);
+}
+
+.react-flow__edge-path:hover {
+  cursor: grab;
+}
+
+.react-flow__edge-textbg:hover {
+  cursor: grab;
+}
+
+.react-flow__edge rect {
+  stroke: var(--edge-color);
+  stroke-width: var(--edge-width);
+}
+
+.react-flow__edge text {
+  font-size: var(--edgeLabel--fontSize);
+}
+
+.react-flow__edge.selected path.react-flow__edge-path {
+  stroke-width: var(--selected-edge--width);
+}
+
+.react-flow__edge.selected rect {
+  stroke-width: var(--selected-edge--width) !important;
+}
+
+.react-flow__arrowhead[id$='1__type=arrow'] polyline {
+  stroke: context-stroke !important;
+}
+
+.react-flow__arrowhead[id$='1__type=arrowclosed'] polyline {
+  stroke: context-stroke !important;
+  fill: context-stroke !important;
+}

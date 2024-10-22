@@ -2,6 +2,7 @@ import { Add } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import { useState } from 'react';
 
+import styles from './DiscoverTasksButton.module.css';
 import DiscoverTasksDialog from './DiscoverTasksDialog';
 
 function DiscoverTasksButton() {
@@ -10,6 +11,7 @@ function DiscoverTasksButton() {
   return (
     <>
       <Button
+        className={styles.button}
         startIcon={<Add />}
         variant="outlined"
         color="primary"

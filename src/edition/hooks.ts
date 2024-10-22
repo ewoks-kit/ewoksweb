@@ -1,5 +1,7 @@
 import { useEventListener } from '@react-hookz/web';
 import { useReactFlow } from '@xyflow/react';
+import type { RefCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { unstable_usePrompt } from 'react-router-dom';
 
 import { useNodesIds } from '../store/graph-hooks';
@@ -50,4 +52,25 @@ export function useCloneNode() {
     rfInstance.addNodes(clone);
     setNodeData(clone.id, nodeData);
   };
+}
+
+export function useCssColors(
+  colorProperties: string[],
+): [string[], RefCallback<HTMLElement>] {
+  const [styles, setStyles] = useState<CSSStyleDeclaration>();
+
+  // https://reactjs.org/docs/hooks-faq.html#how-can-i-measure-a-dom-node
+  const refCallback: RefCallback<HTMLElement> = useCallback(
+    (elem) => setStyles(elem ? window.getComputedStyle(elem) : undefined),
+    [],
+  );
+
+  if (!styles) {
+    // Return `transparent` colors on initial render
+    return [colorProperties.map(() => 'transparent'), refCallback];
+  }
+
+  const colors = colorProperties.map((p) => styles.getPropertyValue(p).trim());
+
+  return [colors, refCallback];
 }

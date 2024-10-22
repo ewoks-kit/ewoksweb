@@ -1,17 +1,22 @@
 :root {
-  --text: #020402;
+  --black: #020402;
+  --primary: #3f51b5;
+  --primary-light: #1976d2;
+  --primary-lighter: #64b5f6;
   --monospace: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
     monospace;
   --sans-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
     'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  --node--bgColor: rgba(237, 239, 249, 0.75);
-  --nodeLabel--bgColor: rgb(206, 211, 238);
-  --selected-node--bgColor: rgba(237, 239, 249, 1);
-  --selected-node--color: rgb(10, 34, 78);
-  --selected-edge--width: 5px;
+  --canvas-bgColor: rgb(233, 235, 247);
+  --node--bgColor: rgb(245, 245, 245);
+  --nodeLabel--bgColor: rgb(245, 245, 245);
+  --edge-width: 2px;
+  --selected-edge--width: 3px;
+  --edge-color: var(--primary-light);
+  --edgeLabel--fontSize: 0.75rem;
   --handle--width: 10px;
   --handle--height: 10px;
-  --input-handle--borderColor: rgb(230, 190, 118);
-  --output-handle--borderColor: rgb(118, 133, 221);
+  --input-handle--borderColor: var(--edge-color);
+  --output-handle--borderColor: var(--edge-color);
 }

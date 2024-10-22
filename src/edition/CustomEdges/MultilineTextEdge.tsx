@@ -1,56 +1,20 @@
 import type { EdgeProps } from '@xyflow/react';
-import { getBezierPath } from '@xyflow/react';
-import type { ReactNode } from 'react';
+import { BaseEdge, EdgeLabelRenderer, getBezierPath } from '@xyflow/react';
 
-import InteractionHelper from './InteractionHelper';
+import styles from './CustomEdges.module.css';
 
-function getForeignObjectProps(
-  sourceX: number,
-  sourceY: number,
-  targetX: number,
-  targetY: number,
-  label: ReactNode,
-): React.SVGProps<SVGForeignObjectElement> {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_path, labelX, labelY] = getBezierPath({
+function MultilineTextEdge(props: EdgeProps) {
+  const {
     sourceX,
     sourceY,
+    sourcePosition,
     targetX,
     targetY,
-  });
-
-  if (typeof label !== 'string') {
-    return {
-      x: labelX,
-      y: labelY,
-    };
-  }
-
-  const width = Math.max(...label.split(',').map((mp) => mp.length)) * 8;
-  const height = label.split(',').length * 40;
-
-  return {
-    x: labelX - width / 2,
-    y: labelY - height / 2,
-    width,
-    height,
-  };
-}
-
-function multilineText({
-  id,
-  sourceX,
-  sourceY,
-  targetX,
-  targetY,
-  sourcePosition,
-  targetPosition,
-  label = '',
-  markerEnd,
-  style = {},
-  interactionWidth,
-}: EdgeProps) {
-  const [path] = getBezierPath({
+    targetPosition,
+    label,
+    ...otherProps
+  } = props;
+  const [path, labelX, labelY] = getBezierPath({
     sourceX,
     sourceY,
     sourcePosition,
@@ -58,33 +22,28 @@ function multilineText({
     targetY,
     targetPosition,
   });
+  const { selected, style } = otherProps;
 
   return (
     <>
-      <path
-        id={id}
-        style={style}
-        className="react-flow__edge-path"
-        d={path}
-        markerEnd={markerEnd}
-      />
-      <foreignObject
-        {...getForeignObjectProps(sourceX, sourceY, targetX, targetY, label)}
-      >
+      <BaseEdge path={path} {...otherProps} />
+      <EdgeLabelRenderer>
         <div
-          className="multiLineDiv"
+          className={styles.multiLineLabel}
+          data-selected={selected ? '' : undefined}
           style={{
-            borderColor: style.stroke,
-            color: style.stroke,
+            transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px) `,
+            color: style?.stroke,
+            borderColor: style?.stroke,
           }}
         >
           {typeof label === 'string' &&
-            label.split(',').map((mp) => <div key={mp}>{mp}</div>)}
+            // eslint-disable-next-line react/no-array-index-key
+            label.split(',').map((mp, i) => <div key={i}>{mp}</div>)}
         </div>
-      </foreignObject>
-      <InteractionHelper path={path} interactionWidth={interactionWidth} />
+      </EdgeLabelRenderer>
     </>
   );
 }
 
-export default multilineText;
+export default MultilineTextEdge;

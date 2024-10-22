@@ -145,7 +145,7 @@ function calcInOutForSubgraph(
 function calcLabel(inOut: EwoksIONode, allInOutputsIds: string[]): string {
   return `${inOut.uiProps?.label || inOut.id}${
     allInOutputsIds.includes(inOut.id) ? '_' : ':'
-  } ${inOut.node || ''} ${inOut.sub_node ? `  -> ${inOut.sub_node}` : ''}`;
+  } ${inOut.node || ''} ${inOut.sub_node ? `  → ${inOut.sub_node}` : ''}`;
 }
 
 export function calcTaskProps(
