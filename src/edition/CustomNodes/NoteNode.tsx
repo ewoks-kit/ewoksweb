@@ -2,7 +2,8 @@ import type { NodeProps } from '@xyflow/react';
 
 import useNodeDataStore from '../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
-import NodeContent from './NodeContent';
+import styles from './Nodes.module.css';
+import NodeWrapper from './NodeWrapper';
 
 function NoteNode(args: NodeProps) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
@@ -11,11 +12,13 @@ function NoteNode(args: NodeProps) {
   const { nodeWidth, colorBorder } = nodeData.ui_props;
 
   return (
-    <NodeContent width={nodeWidth} borderColor={colorBorder}>
-      <div style={{ wordWrap: 'break-word' }}>
-        {nodeData.ewoks_props.label || args.id}
-      </div>
-    </NodeContent>
+    <NodeWrapper
+      className={styles.noteNode}
+      width={nodeWidth}
+      borderColor={colorBorder}
+    >
+      {nodeData.ewoks_props.label || args.id}
+    </NodeWrapper>
   );
 }
 

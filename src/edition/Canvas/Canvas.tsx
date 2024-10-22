@@ -37,10 +37,11 @@ import {
 import isValidLink from '../../utils/IsValidLink';
 import BendingTextEdge from '../CustomEdges/BendingTextEdge';
 import MultilineTextEdge from '../CustomEdges/MultilineTextEdge';
-import DataNode from '../CustomNodes/DataNode';
-import GraphInOutNode from '../CustomNodes/GraphInOutNode';
 import GraphNode from '../CustomNodes/GraphNode';
+import InputNode from '../CustomNodes/InputNode';
 import NoteNode from '../CustomNodes/NoteNode';
+import OutputNode from '../CustomNodes/OutputNode';
+import RegularNode from '../CustomNodes/RegularNode';
 import { useCloneNode } from '../hooks';
 import AddSubworkflowDialog from '../TaskDrawer/AddSubworkflowDialog';
 import { generateNewNodeId } from '../utils';
@@ -57,16 +58,16 @@ const edgeTypes = {
 const nodeTypes = {
   note: NoteNode,
   graph: GraphNode,
-  method: DataNode,
-  ppfmethod: DataNode,
-  generated: DataNode,
-  notebook: DataNode,
-  graphInput: GraphInOutNode,
-  graphOutput: GraphInOutNode,
-  class: DataNode,
+  method: RegularNode,
+  ppfmethod: RegularNode,
+  generated: RegularNode,
+  notebook: RegularNode,
+  graphInput: InputNode,
+  graphOutput: OutputNode,
+  class: RegularNode,
 };
 
-const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
+function onNodeDoubleClick(event: MouseEvent, node: Node) {
   event.preventDefault();
 
   const nodeData = getNodesData().get(node.id);
@@ -80,7 +81,7 @@ const onNodeDoubleClick = (event: MouseEvent, node: Node) => {
       newTab.focus();
     }
   }
-};
+}
 
 interface Props {
   workflowId: string | undefined;

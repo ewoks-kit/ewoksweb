@@ -1,0 +1,54 @@
+.node {
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  border: 1px solid var(--node--borderColor);
+  background-color: var(--node--bgColor);
+  text-align: center;
+  display: flex;
+}
+
+.regularNode {
+  composes: node;
+  min-width: 60px; /* for standard width */
+  max-width: 300px;
+  padding: 2px;
+  flex-direction: column;
+}
+
+.regularNode img {
+  padding: 0.5rem 0;
+  margin: 0 0.5rem;
+  max-width: 100%;
+  align-self: center;
+  border-top: 1px rgba(128, 128, 128, 0.5) solid;
+}
+
+.tooltip {
+  font-size: 0.875rem;
+}
+
+.inputNode {
+  composes: node;
+  padding: 1px;
+}
+
+.inputNode img {
+  margin-right: 0.5rem;
+  max-width: 100%;
+}
+
+.outputNode {
+  composes: node;
+  padding: 1px;
+}
+
+.outputNode img {
+  margin-left: 0.5rem;
+  max-width: 100%;
+}
+
+.noteNode {
+  composes: node;
+  flex-direction: column;
+  word-break: break-all;
+}

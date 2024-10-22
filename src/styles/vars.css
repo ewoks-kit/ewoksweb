@@ -10,6 +10,7 @@
     sans-serif;
   --canvas-bgColor: rgb(233, 235, 247);
   --node--bgColor: rgb(245, 245, 245);
+  --node--borderColor: rgb(47, 79, 79);
   --nodeLabel--bgColor: rgb(245, 245, 245);
   --edge-width: 2px;
   --selected-edge--width: 3px;
