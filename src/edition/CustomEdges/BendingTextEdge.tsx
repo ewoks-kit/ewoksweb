@@ -27,7 +27,7 @@ function BendingTextEdge(props: EdgeProps) {
   return (
     <>
       <BaseEdge path={path} {...otherProps} />
-      <text>
+      <text dy="-0.25em">
         <textPath
           className={styles.bendingText}
           data-selected={selected ? '' : undefined}

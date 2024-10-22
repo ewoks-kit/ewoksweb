@@ -1,5 +1,5 @@
 .bendingText {
-  font-size: 16px;
+  font-size: var(--edgeLabel--fontSize);
 }
 
 .bendingText[data-selected] {
@@ -14,7 +14,8 @@
   border-radius: 2px;
   overflow: hidden;
   word-wrap: break-word;
-  padding: 1px;
+  padding: 2px 5px;
+  font-size: var(--edgeLabel--fontSize);
 }
 
 .multiLineLabel[data-selected] {

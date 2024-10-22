@@ -17,6 +17,8 @@ import {
   notUndefinedValue,
 } from './utils';
 
+const EDGE_LABEL_PADDING: [number, number] = [5, 2];
+
 type WorkflowWithNodesLinks = Required<Workflow>;
 
 // DOC: from GraphEwoks get EwoksRFLinks
@@ -79,6 +81,7 @@ export function toRFEwoksLinks(
         ...notUndefinedValue(uiProps?.type, 'type'),
         ...notUndefinedValue(uiProps?.animated, 'animated'),
         markerEnd: convertEwoksMarkerEndToRF(uiProps?.markerEnd),
+        labelBgPadding: EDGE_LABEL_PADDING,
         ...(uiProps?.style && { style: uiProps.style }),
         ...(uiProps?.labelStyle && { labelStyle: uiProps.labelStyle }),
         ...(uiProps?.labelBgStyle && { labelBgStyle: uiProps.labelBgStyle }),

@@ -14,6 +14,7 @@
   --edge-width: 2px;
   --selected-edge--width: 3px;
   --edge-color: var(--primary-light);
+  --edgeLabel--fontSize: 0.75rem;
   --handle--width: 10px;
   --handle--height: 10px;
   --input-handle--borderColor: var(--edge-color);
