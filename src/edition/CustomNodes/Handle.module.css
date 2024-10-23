@@ -10,9 +10,14 @@
   border: 2px solid var(--input-handle--borderColor);
 }
 
-.input[data-handlepos='top'],
+.input[data-handlepos='top'] {
+  left: 0;
+  top: 10%;
+}
+
 .input[data-handlepos='bottom'] {
-  left: 25%;
+  left: 0;
+  bottom: 10%;
 }
 
 .output {
@@ -20,7 +25,12 @@
   border: 2px solid var(--output-handle--borderColor);
 }
 
-.output[data-handlepos='top'],
+.output[data-handlepos='top'] {
+  left: 100%;
+  top: 10%;
+}
+
 .output[data-handlepos='bottom'] {
-  left: 75%;
+  left: 100%;
+  bottom: 10%;
 }

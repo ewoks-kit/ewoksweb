@@ -10,9 +10,10 @@ import { assertNodeDataDefined } from '../../utils/typeGuards';
 import GraphInputHandle from './GraphInputHandle';
 import styles from './GraphNodeContent.module.css';
 import GraphOutputHandle from './GraphOutputHandle';
-import NodeContent from './NodeContent';
 import NodeIcon from './NodeIcon';
 import NodeLabel from './NodeLabel';
+import NodeTooltip from './NodeTooltip';
+import NodeWrapper from './NodeWrapper';
 import { sortByPosition } from './utils';
 
 function GraphNodeContent(props: NodeProps) {
@@ -51,50 +52,48 @@ function GraphNodeContent(props: NodeProps) {
   const { withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel } = uiProps;
 
   return (
-    <NodeContent
-      width={nodeWidth}
-      borderColor={colorBorder}
-      tooltip={nodeData.comment}
-    >
-      <NodeLabel
-        id={id}
-        label={nodeData.ewoks_props.label}
-        showFull={withLabel}
-        showCropped={!withLabel && !withImage}
-        color={subgraphExistsOnServer ? undefined : 'red'}
-      />
-      {withImage && (
-        <SuspenseBoundary>
-          <NodeIcon nodeId={id} />
-        </SuspenseBoundary>
-      )}
-      {inputs.length === 0 ? (
-        <div className={styles.handle}>No input provided</div>
-      ) : (
-        inputs
-          .sort(sortByPosition)
-          .map((input) => (
-            <GraphInputHandle
-              key={input.label}
-              input={input}
-              moreHandles={uiProps.moreHandles}
-            />
-          ))
-      )}
-      {outputs.length === 0 ? (
-        <div className={styles.handle}>No output provided</div>
-      ) : (
-        outputs
-          .sort(sortByPosition)
-          .map((output) => (
-            <GraphOutputHandle
-              key={output.label}
-              output={output}
-              moreHandles={uiProps.moreHandles}
-            />
-          ))
-      )}
-    </NodeContent>
+    <NodeWrapper width={nodeWidth} borderColor={colorBorder}>
+      <NodeTooltip tooltip={nodeData.comment}>
+        <NodeLabel
+          id={id}
+          label={nodeData.ewoks_props.label}
+          showFull={withLabel}
+          showCropped={!withLabel && !withImage}
+          color={subgraphExistsOnServer ? undefined : 'red'}
+        />
+        {withImage && (
+          <SuspenseBoundary>
+            <NodeIcon nodeId={id} />
+          </SuspenseBoundary>
+        )}
+        {inputs.length === 0 ? (
+          <div className={styles.handle}>No input provided</div>
+        ) : (
+          inputs
+            .sort(sortByPosition)
+            .map((input) => (
+              <GraphInputHandle
+                key={input.label}
+                input={input}
+                moreHandles={uiProps.moreHandles}
+              />
+            ))
+        )}
+        {outputs.length === 0 ? (
+          <div className={styles.handle}>No output provided</div>
+        ) : (
+          outputs
+            .sort(sortByPosition)
+            .map((output) => (
+              <GraphOutputHandle
+                key={output.label}
+                output={output}
+                moreHandles={uiProps.moreHandles}
+              />
+            ))
+        )}
+      </NodeTooltip>
+    </NodeWrapper>
   );
 }
 

@@ -3,7 +3,6 @@ import { useTasks } from '../../api/tasks';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import { findImage } from '../../utils';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
-import styles from './NodeIcon.module.css';
 
 interface Props {
   nodeId: string;
@@ -25,14 +24,7 @@ function NodeIcon(props: Props) {
 
   const icons = useIcons();
 
-  return (
-    <img
-      className={styles.img}
-      draggable="false"
-      src={findImage(image, icons)}
-      alt=""
-    />
-  );
+  return <img draggable="false" src={findImage(image, icons)} alt="" />;
 }
 
 export default NodeIcon;
