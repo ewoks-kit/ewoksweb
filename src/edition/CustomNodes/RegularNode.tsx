@@ -13,7 +13,7 @@ import NodeWrapper from './NodeWrapper';
 import OutputHandle from './OutputHandle';
 
 function RegularNode(props: NodeProps) {
-  const { id } = props;
+  const { id, selected } = props;
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
 
   // Should only be the case during the loading of another graph
@@ -23,12 +23,12 @@ function RegularNode(props: NodeProps) {
 
   const { ui_props: uiProps, comment, ewoks_props: ewoksProps } = nodeData;
   const { label } = ewoksProps;
-  const { nodeWidth: width, colorBorder, moreHandles } = uiProps;
+  const { colorBorder, moreHandles } = uiProps;
   const { withImage = DEFAULT_NODE_VALUES.uiProps.withImage } = uiProps;
   const { withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel } = uiProps;
 
   return (
-    <NodeWrapper width={width} borderColor={colorBorder}>
+    <NodeWrapper borderColor={colorBorder} resizable={selected}>
       <NodeTooltip tooltip={comment}>
         <InputHandle />
         <OutputHandle />

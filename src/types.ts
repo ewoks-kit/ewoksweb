@@ -31,7 +31,6 @@ export interface EwoksIONodeUiProps {
   withImage?: boolean;
   withLabel?: boolean;
   colorBorder?: string;
-  nodeWidth?: number;
 }
 
 export interface GraphDetails {
@@ -115,8 +114,9 @@ export interface Note {
   label?: string;
   comment?: string;
   position: XYPosition;
-  nodeWidth?: number;
   colorBorder?: string;
+  width?: number;
+  height?: number;
 }
 
 export interface EwoksDataMapping {
@@ -159,11 +159,12 @@ export interface EwoksNodeUiProps {
   icon?: string;
   comment?: string;
   position?: XYPosition;
+  width?: number;
+  height?: number;
   style?: LinkStyle;
   withImage?: boolean;
   withLabel?: boolean;
   colorBorder?: string;
-  nodeWidth?: number;
   moreHandles?: boolean;
   inputs?: SubgraphOutputsInputs[];
   outputs?: SubgraphOutputsInputs[];
@@ -194,7 +195,6 @@ export interface NodeUiProps {
   withImage?: boolean;
   withLabel?: boolean;
   colorBorder?: string;
-  nodeWidth?: number;
   moreHandles?: boolean;
   // To position inputs-outputs of subgraphs in a graph
   inputs?: SubgraphOutputsInputs[];

@@ -10,14 +10,10 @@ export const DEFAULT_NODE_VALUES = {
   },
   uiProps: {
     moreHandles: false,
-    nodeWidth: 100,
     withImage: true,
     withLabel: true,
   },
 };
-
-export const DEFAULT_NODE_WIDTH = DEFAULT_NODE_VALUES.uiProps.nodeWidth;
-export const DEFAULT_NODE_HEIGHT = 80;
 
 export const DEFAULT_LINK_VALUES = {
   data_mapping: [],
