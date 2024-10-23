@@ -1,7 +1,7 @@
 import { GetApp } from '@mui/icons-material';
 import { useReactFlow } from '@xyflow/react';
 
-import useStore from '../../../store/useStore';
+import useWorkflowStore from '../../../store/useWorkflowStore';
 import { getEdgesData, getNodesData, toEwoksWorkflow } from '../../../utils';
 import ActionMenuItem from './ActionMenuItem';
 
@@ -16,9 +16,7 @@ function download(content: BlobPart, fileName: string, contentType: string) {
 function DownloadMenuItem() {
   const { getNodes, getEdges } = useReactFlow();
 
-  const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo,
-  );
+  const displayedWorkflowInfo = useWorkflowStore((state) => state.workflowInfo);
 
   function saveToDisk() {
     const workflow = toEwoksWorkflow(

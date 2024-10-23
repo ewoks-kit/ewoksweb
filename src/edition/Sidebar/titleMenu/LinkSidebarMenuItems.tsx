@@ -5,7 +5,6 @@ import MenuItem from '@mui/material/MenuItem';
 import type { Edge } from '@xyflow/react';
 import { useReactFlow } from '@xyflow/react';
 
-import useStore from '../../../store/useStore';
 import KeyStrokeHint from '../../KeyStrokeHint';
 
 interface Props {
@@ -18,11 +17,6 @@ export default function LinkSidebarMenuItems(props: Props) {
 
   const rfInstance = useReactFlow();
 
-  const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo,
-  );
-  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
-
   return (
     <MenuItem
       onClick={() => {
@@ -33,7 +27,6 @@ export default function LinkSidebarMenuItems(props: Props) {
         }
         onSelection();
       }}
-      disabled={rootWorkflowId !== displayedWorkflowInfo.id}
     >
       <ListItemIcon>
         <DeleteIcon fontSize="small" />

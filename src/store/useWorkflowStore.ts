@@ -1,7 +1,8 @@
 import type { ReactFlowInstance } from '@xyflow/react';
-import type { GetState, SetState } from 'zustand';
+import { merge } from 'lodash';
+import { create } from 'zustand';
 
-import type { NodeWithData, State, Task, Workflow } from '../types';
+import type { GraphDetails, NodeWithData, Task, Workflow } from '../types';
 import { WorkflowSource } from '../types';
 import { getSubgraphs } from '../utils';
 import { convertEwoksWorkflowToRFNodes } from '../utils/convertEwoksWorkflowToRFNodes';
@@ -11,6 +12,10 @@ import { validateWorkflow } from './storeUtils/validateWorkflow';
 import useEdgeDataStore from './useEdgeDataStore';
 import useNodeDataStore from './useNodeDataStore';
 import useSnackbarStore from './useSnackbarStore';
+
+const EMPTY_INFO: GraphDetails = {
+  id: '',
+};
 
 const EMPTY_GRAPH: Workflow = {
   graph: {
@@ -24,29 +29,36 @@ const EMPTY_GRAPH: Workflow = {
   links: [],
 };
 
-export interface RootWorkflowSlice {
-  rootWorkflowId: string;
-  rootWorkflowSource: WorkflowSource;
-  setRootWorkflow: (
+export interface State {
+  workflowInfo: GraphDetails;
+  workflowSource: WorkflowSource;
+  mergeWorkflowInfo: (displayedWorkflowInfo: Partial<GraphDetails>) => void;
+  loadWorkflow: (
     ewoksWorkflow: Workflow,
     rfInstance: ReactFlowInstance,
     tasks: Task[],
     source: WorkflowSource,
   ) => Promise<void>;
-  resetRootWorkflow: (
+  resetWorkflow: (
     rfInstance: ReactFlowInstance,
     tasks: Task[],
   ) => Promise<void>;
 }
 
-const rootWorkflow = (
-  set: SetState<State>,
-  get: GetState<State>,
-): RootWorkflowSlice => ({
-  rootWorkflowId: '',
-  rootWorkflowSource: WorkflowSource.Empty,
+const useWorkflowStore = create<State>((set, get) => ({
+  workflowInfo: EMPTY_INFO,
+  workflowSource: WorkflowSource.Empty,
 
-  setRootWorkflow: async (
+  mergeWorkflowInfo: (newWorkflowInfo) => {
+    set((state) => {
+      return {
+        ...state,
+        workflowInfo: merge({}, state.workflowInfo, newWorkflowInfo),
+      };
+    });
+  },
+
+  loadWorkflow: async (
     ewoksWorkflow,
     rfInstance,
     tasks,
@@ -67,7 +79,9 @@ const rootWorkflow = (
 
     const { graph, nodes = [], links = [] } = ewoksWorkflow;
     // 1. Initialize the canvas while working on the new graph
-    get().resetDisplayedWorkflowInfo();
+    set({
+      workflowInfo: EMPTY_INFO,
+    });
 
     // 2. Get node-subgraphs for the graph
     const newNodeSubgraphs = await getSubgraphs(nodes);
@@ -109,13 +123,10 @@ const rootWorkflow = (
     useNodeDataStore.getState().setDataFromNodes(rfNodes);
     useEdgeDataStore.getState().setDataFromEdges(rfLinks);
 
-    get().setDisplayedWorkflowInfo(graph);
-
-    set((state) => ({
-      ...state,
-      rootWorkflowId: graph.id,
-      rootWorkflowSource: source,
-    }));
+    set({
+      workflowSource: source,
+      workflowInfo: graph,
+    });
 
     const nodesWithoutData = rfNodes.map((node) => {
       return { ...node, data: {} };
@@ -135,13 +146,14 @@ const rootWorkflow = (
       rfInstance.setEdges(edgesWithoutData);
     }
   },
-  resetRootWorkflow: async (rfInstance, tasks) => {
-    return get().setRootWorkflow(
+  resetWorkflow: async (rfInstance, tasks) => {
+    return get().loadWorkflow(
       EMPTY_GRAPH,
       rfInstance,
       tasks,
       WorkflowSource.Empty,
     );
   },
-});
-export default rootWorkflow;
+}));
+
+export default useWorkflowStore;

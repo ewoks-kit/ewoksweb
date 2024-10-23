@@ -25,8 +25,8 @@ import { useWorkflow } from '../../api/workflows';
 import useEdgeDataStore from '../../store/useEdgeDataStore';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
-import useStore from '../../store/useStore';
 import useWorkflowHistory from '../../store/useWorkflowHistory';
+import useWorkflowStore from '../../store/useWorkflowStore';
 import type { RFNode, Task } from '../../types';
 import { WorkflowSource } from '../../types';
 import { getNodesData } from '../../utils';
@@ -100,17 +100,14 @@ function Canvas(props: Props) {
     position: XYPosition;
   }>();
 
-  const setRootWorkflow = useStore((state) => state.setRootWorkflow);
-  const resetRootWorkflow = useStore((state) => state.resetRootWorkflow);
-  const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo,
-  );
+  const loadWorkflow = useWorkflowStore((state) => state.loadWorkflow);
+  const resetWorkflow = useWorkflowStore((state) => state.resetWorkflow);
 
   const tasks = useTasks();
   const resetWorkflowHistory = useWorkflowHistory(
     (state) => state.resetWorkflowHistory,
   );
-  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
+  const loadedWorkflowId = useWorkflowStore((state) => state.workflowInfo.id);
   const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
   const setNodeData = useNodeDataStore((state) => state.setNodeData);
   const setEdgeData = useEdgeDataStore((state) => state.setEdgeData);
@@ -135,11 +132,6 @@ function Canvas(props: Props) {
 
   const onDrop: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
-
-    if (rootWorkflowId !== displayedWorkflowInfo.id) {
-      showWarningMsg('Not allowed to add a new node to any sub-graph!');
-      return;
-    }
 
     const stateRF = storeRF.getState();
     const taskInfo = retrieveTaskInfo(event.dataTransfer);
@@ -268,7 +260,7 @@ function Canvas(props: Props) {
       />
       <div className={styles.root}>
         <div className={styles.wrapper} ref={reactFlowWrapper}>
-          {!rootWorkflowId && <FallbackMessage />}
+          {!loadedWorkflowId && <FallbackMessage />}
           <ReactFlow
             fitView
             connectOnClick
@@ -288,14 +280,14 @@ function Canvas(props: Props) {
             deleteKeyCode="Delete"
             onInit={() => {
               if (workflow) {
-                setRootWorkflow(
+                loadWorkflow(
                   workflow,
                   rfInstance,
                   tasks,
                   WorkflowSource.Server,
                 );
               } else {
-                resetRootWorkflow(rfInstance, tasks);
+                resetWorkflow(rfInstance, tasks);
               }
               resetWorkflowHistory();
             }}

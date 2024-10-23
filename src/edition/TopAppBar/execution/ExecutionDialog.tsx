@@ -14,7 +14,7 @@ import commonStrings from '../../../commonStrings.json';
 import GraphFormDialog from '../../../general/forms/GraphFormDialog';
 import { useSaveWorkflow } from '../../../general/hooks';
 import useSnackbarStore from '../../../store/useSnackbarStore';
-import useStore from '../../../store/useStore';
+import useWorkflowStore from '../../../store/useWorkflowStore';
 import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 import { textForError } from '../../../utils';
 import AddEntryRow from '../../Sidebar/table/controls/AddEntryRow';
@@ -55,14 +55,15 @@ export default function ExecutionDialog(props: Props) {
   }
 
   function handleExecute() {
-    const { rootWorkflowId } = useStore.getState();
-    if (!rootWorkflowId) {
+    const { workflowInfo } = useWorkflowStore.getState();
+    const { id: workflowId } = workflowInfo;
+    if (!workflowId) {
       showWarningMsg('Please open a workflow in the canvas to execute');
       return;
     }
     try {
-      execute(rootWorkflowId, [...inputRows.values()], engine, worker);
-      navigate('/monitor', { state: { workflow: rootWorkflowId } });
+      execute(workflowId, [...inputRows.values()], engine, worker);
+      navigate('/monitor', { state: { workflow: workflowId } });
     } catch (executeError) {
       showErrorMsg(textForError(executeError, 'Error in executing workflow.'));
     }

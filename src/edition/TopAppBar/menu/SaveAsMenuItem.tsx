@@ -2,17 +2,14 @@ import { FileCopy } from '@mui/icons-material';
 import { useState } from 'react';
 
 import GraphFormDialog from '../../../general/forms/GraphFormDialog';
-import useStore from '../../../store/useStore';
+import useWorkflowStore from '../../../store/useWorkflowStore';
 import SuspenseBoundary from '../../../suspense/SuspenseBoundary';
 import ActionMenuItem from './ActionMenuItem';
 
 function SaveAsMenuItem() {
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
 
-  const displayedWorkflowInfo = useStore(
-    (state) => state.displayedWorkflowInfo,
-  );
-  const rootWorkflowId = useStore((state) => state.rootWorkflowId);
+  const workflowId = useWorkflowStore((state) => state.workflowInfo.id);
 
   return (
     <>
@@ -27,9 +24,7 @@ function SaveAsMenuItem() {
         onClick={() => setOpenSaveDialog(true)}
         label="Save as..."
         icon={FileCopy}
-        disabled={
-          !rootWorkflowId || rootWorkflowId !== displayedWorkflowInfo.id
-        }
+        disabled={!workflowId}
       />
     </>
   );
