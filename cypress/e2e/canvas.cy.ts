@@ -3,6 +3,34 @@ beforeEach(() => {
   cy.findByRole('button', { name: 'Close task drawer' }).click();
 });
 
+it('changes the canvas color', () => {
+  cy.findByLabelText('Canvas Background Color').should(
+    'have.attr',
+    'value',
+    '#e9ebf7',
+  );
+
+  cy.get('.react-flow__background')
+    .should('be.visible')
+    .should('have.css', 'background-color', 'rgb(233, 235, 247)');
+
+  // https://github.com/cypress-io/cypress/issues/7812#issuecomment-964403375
+  cy.findByLabelText('Canvas Background Color')
+    .invoke('val', '#ff0000')
+    .trigger('input');
+
+  cy.waitForStableDOM();
+  cy.findByLabelText('Canvas Background Color').should(
+    'have.attr',
+    'value',
+    '#ff0000',
+  );
+
+  cy.get('.react-flow__background')
+    .should('be.visible')
+    .should('have.css', 'background-color', 'rgb(255, 0, 0)');
+});
+
 it('selects a node with click', () => {
   cy.get('.react-flow__node')
     .first()

@@ -8,14 +8,13 @@ import {
 } from '@mui/material';
 import type { Edge } from '@xyflow/react';
 import { useReactFlow } from '@xyflow/react';
-import type { ChangeEvent } from 'react';
 
 import { useUpdateEdge } from '../../../general/hooks';
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
 import useSnackbarStore from '../../../store/useSnackbarStore';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
-import { useCssColors } from '../../hooks';
 import SidebarCheckbox from '../SidebarCheckbox';
+import ColorPicker from './ColorPicker';
 import styles from './EditLinkStyle.module.css';
 import MarkerEndControl from './MarkerEndControl';
 
@@ -28,9 +27,7 @@ export default function EditLinkStyle(element: Edge) {
 
   const showInfoMsg = useSnackbarStore((state) => state.showInfoMsg);
 
-  const [[edgeColor], rootRef] = useCssColors(['--edge-color']);
-
-  const linkColor = element.style?.stroke || edgeColor;
+  const linkColor = element.style?.stroke;
   const linkType = element.type || 'default';
   const animated = !!element.animated;
 
@@ -48,12 +45,12 @@ export default function EditLinkStyle(element: Edge) {
     });
   }
 
-  function handleColorChange(event: ChangeEvent<HTMLInputElement>) {
+  function handleColorChange(newValue: string | undefined) {
     const newEdge = {
       ...element,
-      style: { ...element.style, stroke: event.target.value },
-      labelStyle: { ...element.labelStyle, fill: event.target.value },
-      labelBgStyle: { ...element.labelBgStyle, stroke: event.target.value },
+      style: { ...element.style, stroke: newValue },
+      labelStyle: { ...element.labelStyle, fill: newValue },
+      labelBgStyle: { ...element.labelBgStyle, stroke: newValue },
     };
     updateEdge(newEdge);
   }
@@ -68,12 +65,26 @@ export default function EditLinkStyle(element: Edge) {
 
   return (
     <>
-      <FormControl
-        ref={rootRef}
-        className={styles.container}
-        variant="filled"
-        fullWidth
-      >
+      <div className={styles.controls}>
+        <ColorPicker
+          defaultColorVariable="--edge-color"
+          value={linkColor}
+          onChange={handleColorChange}
+          label="Color"
+        />
+        <SidebarCheckbox
+          className={styles.checkbox}
+          value={animated}
+          onChange={(checked) =>
+            updateEdge({
+              ...element,
+              animated: checked,
+            })
+          }
+          label="Animated"
+        />
+      </div>
+      <FormControl className={styles.container} variant="filled" fullWidth>
         <InputLabel id="linkTypeLabel">Link type</InputLabel>
         <Select
           className={styles.dropdown}
@@ -107,28 +118,6 @@ export default function EditLinkStyle(element: Edge) {
         </Button>
       </FormControl>
       <MarkerEndControl edge={element} />
-      <SidebarCheckbox
-        value={animated}
-        onChange={(checked) =>
-          updateEdge({
-            ...element,
-            animated: checked,
-          })
-        }
-        label="Animated"
-      />
-      <div className={styles.colorPicker}>
-        <label htmlFor="head">Color</label>
-        <input
-          aria-label="Color"
-          type="color"
-          id="head"
-          name="head"
-          value={linkColor}
-          onChange={handleColorChange}
-          style={{ margin: '0 0 0 0.3rem' }}
-        />
-      </div>
     </>
   );
 }

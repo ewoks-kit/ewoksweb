@@ -8,13 +8,15 @@
   --sans-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
     'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  --canvas-bgColor: rgb(233, 235, 247);
-  --node--bgColor: rgb(245, 245, 245);
-  --node--borderColor: rgb(47, 79, 79);
-  --nodeLabel--bgColor: rgb(245, 245, 245);
+  --canvas-bgColor: #e9ebf7; /* Needs hex syntax to be used as default value of <ColorPicker> */
+  --node--bgColor: #f5f5f5;
+  --node--borderColor: #2f4f4f; /* Needs hex syntax to be used as default value of <ColorPicker> */
+  --nodeLabel--bgColor: #f5f5f5;
   --edge-width: 2px;
   --selected-edge--width: 3px;
-  --edge-color: var(--primary-light);
+  --edge-color: var(
+    --primary-light
+  ); /* Needs hex syntax to be used as default value of <ColorPicker> */
   --edgeLabel--fontSize: 0.75rem;
   --handle--width: 10px;
   --handle--height: 10px;

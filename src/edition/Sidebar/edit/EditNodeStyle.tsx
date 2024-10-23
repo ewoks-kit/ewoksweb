@@ -1,11 +1,11 @@
 import { FormControl } from '@mui/material';
 import { useUpdateNodeInternals } from '@xyflow/react';
 import type { SyntheticEvent } from 'react';
-import { useState } from 'react';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import SidebarCheckbox from '../SidebarCheckbox';
+import ColorPicker from './ColorPicker';
 import styles from './EditNodeStyle.module.css';
 import NodeIconControl from './NodeIconControl';
 import NodeWidthControl from './NodeWidthControl';
@@ -40,22 +40,24 @@ export default function EditNodeStyle(props: Props) {
     });
   }
 
-  const colorBorderChanged = (value: string) => {
-    mergeNodeData(nodeId, {
-      ui_props: {
-        colorBorder: value,
-      },
-    });
-  };
+  function handleBorderColorChange(value: string | undefined) {
+    if (!nodeData) {
+      return;
+    }
+    const newData = { ...nodeData };
+    newData.ui_props.colorBorder = value;
+    // Cannot use mergeNodeData since it ignores `undefined` values when merging
+    setNodeData(nodeId, newData);
+  }
 
-  const moreHandlesChanged = (checked: boolean) => {
+  function moreHandlesChanged(checked: boolean) {
     updateNodeInternals(nodeId);
     mergeNodeData(nodeId, {
       ui_props: {
         moreHandles: checked,
       },
     });
-  };
+  }
 
   function handleNodeWidthChange(
     _event: SyntheticEvent | Event,
@@ -83,10 +85,6 @@ export default function EditNodeStyle(props: Props) {
     // Cannot use mergeNodeData since it ignores `undefined` values when merging
     setNodeData(nodeId, newData);
   }
-
-  const [showBorderColor, setShowBorderColor] = useState(
-    !!nodeData.ui_props.colorBorder,
-  );
 
   const isGraphIONode = ['graphInput', 'graphOutput'].includes(
     nodeData.task_props.task_type,
@@ -120,33 +118,14 @@ export default function EditNodeStyle(props: Props) {
             />
           </div>
         )}
-        <SidebarCheckbox
-          label="With border"
-          value={showBorderColor}
-          onChange={() => {
-            if (showBorderColor) {
-              setShowBorderColor(false);
-              colorBorderChanged('');
-            } else {
-              setShowBorderColor(true);
-              colorBorderChanged('#000000');
-            }
-          }}
-        />
       </div>
-      {showBorderColor && (
-        <div>
-          <label htmlFor="head">Border color</label>
-          <input
-            aria-label="Color"
-            type="color"
-            id="head"
-            name="head"
-            value={nodeData.ui_props.colorBorder || ''}
-            onChange={(event) => colorBorderChanged(event.target.value)}
-          />
-        </div>
-      )}
+
+      <ColorPicker
+        defaultColorVariable="--node--borderColor"
+        value={nodeData.ui_props.colorBorder}
+        onChange={handleBorderColorChange}
+        label="Border color"
+      />
       {isRegularNode && (
         <SidebarCheckbox
           value={!!nodeData.ui_props.moreHandles}
