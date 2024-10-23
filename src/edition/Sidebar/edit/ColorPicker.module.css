@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex: 1 1 0;
+}
+
+.input {
+  width: 2.5rem;
+  margin-left: 0.5rem;
+}
+
+.button {
+  composes: btnClean from global;
+  display: flex;
+  margin-left: 0.25rem;
+  color: rgb(128, 128, 128);
+  border-radius: 50%;
+}
+
+.button:hover {
+  background-color: rgba(80, 80, 80, 0.2);
+}

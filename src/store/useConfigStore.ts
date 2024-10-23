@@ -2,22 +2,22 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export interface ConfigState {
-  canvasBackgroundColor: string;
-  setCanvasBackgroundColor: (color: string) => void;
+  canvasBackgroundColor: string | undefined;
+  setCanvasBackgroundColor: (color: string | undefined) => void;
 }
 
 const useConfigStore = create<ConfigState>()(
   persist(
     (set) => ({
-      canvasBackgroundColor: '#e9ebf7',
-      setCanvasBackgroundColor: (canvasBackgroundColor: string) =>
+      canvasBackgroundColor: undefined,
+      setCanvasBackgroundColor: (canvasBackgroundColor: string | undefined) =>
         set({
           canvasBackgroundColor,
         }),
     }),
     {
       name: 'ewoksweb:config',
-      version: 1,
+      version: 2,
     },
   ),
 );

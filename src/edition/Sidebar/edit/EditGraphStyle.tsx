@@ -1,9 +1,7 @@
-import type { ChangeEvent } from 'react';
-
 import useConfigStore from '../../../store/useConfigStore';
+import ColorPicker from './ColorPicker';
 
-// DOC: Edit the graph style
-export default function EditGraphStyle() {
+function EditGraphStyle() {
   const setCanvasBackgroundColor = useConfigStore(
     (state) => state.setCanvasBackgroundColor,
   );
@@ -11,23 +9,16 @@ export default function EditGraphStyle() {
     (state) => state.canvasBackgroundColor,
   );
 
-  const colorLineChanged = (event: ChangeEvent<HTMLInputElement>) => {
-    setCanvasBackgroundColor(event.target.value);
-  };
-
   return (
     <section>
-      <label id="canvas-background-color-label" htmlFor="head">
-        Canvas Background Color
-      </label>
-      <input
-        aria-labelledby="canvas-background-color-label"
-        type="color"
-        name="head"
+      <ColorPicker
+        defaultColorVariable="--canvas-bgColor"
         value={canvasBackgroundColor}
-        style={{ margin: '10px' }}
-        onInput={colorLineChanged}
+        onChange={setCanvasBackgroundColor}
+        label="Canvas Background Color"
       />
     </section>
   );
 }
+
+export default EditGraphStyle;

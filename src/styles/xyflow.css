@@ -1,6 +1,7 @@
 /* STYLES SPECIFIC TO XYFLOW */
 
 .react-flow {
+  --xy-background-color: var(--canvas-bgColor);
   --xy-edge-stroke: var(--edge-color);
   --xy-edge-stroke-width: var(--edge-width);
   --xy-edge-stroke-selected: var(--edge-color);
