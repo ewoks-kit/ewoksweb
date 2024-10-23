@@ -1,5 +1,3 @@
-import { nanoid } from 'nanoid';
-
 beforeEach(() => {
   cy.loadApp();
   cy.findByRole('button', { name: 'Close task drawer' }).click();
@@ -66,27 +64,6 @@ it('shows/hides the node icon/label', () => {
     cy.findByRole('img').should('not.exist');
     cy.findByText('ewoksweb').should('be.visible');
   });
-});
-
-it('changes width of node', () => {
-  cy.findByRole('slider').as('sliderThumb');
-
-  cy.get('@sliderThumb').should('have.attr', 'aria-valuenow').and('eq', '100');
-
-  cy.get('@sliderThumb').should('have.attr', 'aria-valuemin').and('eq', '40');
-
-  cy.get('@sliderThumb').should('have.attr', 'aria-valuemax').and('eq', '300');
-
-  cy.get('@sliderThumb')
-    .trigger('mousedown', { button: 0, force: true })
-    .trigger('mousemove', {
-      clientX: 1000,
-      force: true,
-    })
-    .wait(200)
-    .trigger('mouseup', { force: true });
-
-  cy.get('@sliderThumb').should('have.attr', 'aria-valuenow').and('eq', '300');
 });
 
 it('changes moreHandles of node true->false->true', () => {
@@ -234,50 +211,4 @@ it('opens the duplicates Task form when node is selected', () => {
   cy.findByRole('dialog', { name: 'Create task' }).should('be.visible');
 
   cy.findByRole('button', { name: 'Cancel' }).click({ force: true });
-});
-
-// TODO: move node - dragstart seems to grasp the inner and creates a ghost
-it.skip('should move a node in the canvas', () => {
-  // const dataTransfer = new DataTransfer();
-
-  // cy.get('.react-flow__node-graph').last().trigger('dragstart', {
-  //   dataTransfer,
-  // });
-
-  // cy.get('.react-flow').last().trigger('drop', {
-  //   dataTransfer,
-  // });
-  cy.get('.react-flow__node-graph')
-    .last()
-    .click()
-    .trigger('mousedown', { button: 0 })
-    .wait(100)
-    .then(($node) => {
-      const initialPosition = $node.position();
-      const startX = initialPosition.left;
-      const startY = initialPosition.top;
-
-      cy.get('.react-flow__node-graph')
-        .last()
-        .trigger('mousemove', {
-          clientX: startX - 100,
-          clientY: startY - 100,
-          force: true,
-        })
-        .wait(100)
-        .trigger('mouseup', { force: true })
-        .wait(100);
-
-      cy.get('.react-flow__node-graph')
-        .last()
-        .then(($movedNode) => {
-          const newPosition = $movedNode.position();
-          const movedX = newPosition.left;
-          const movedY = newPosition.top;
-
-          expect(movedX).to.not.equal(startX);
-          expect(movedY).to.not.equal(startY);
-        });
-      cy.get('.react-flow__node').should('have.length', 19);
-    });
 });

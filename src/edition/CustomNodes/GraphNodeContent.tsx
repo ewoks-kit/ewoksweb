@@ -17,7 +17,7 @@ import NodeWrapper from './NodeWrapper';
 import { sortByPosition } from './utils';
 
 function GraphNodeContent(props: NodeProps) {
-  const { id } = props;
+  const { id, selected } = props;
   const workflowIds = useWorkflowIds();
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
@@ -47,12 +47,12 @@ function GraphNodeContent(props: NodeProps) {
     subgraphExistsOnServer,
   ]);
 
-  const { inputs = [], outputs = [], nodeWidth, colorBorder } = uiProps;
+  const { inputs = [], outputs = [], colorBorder } = uiProps;
   const { withImage = DEFAULT_NODE_VALUES.uiProps.withImage } = uiProps;
   const { withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel } = uiProps;
 
   return (
-    <NodeWrapper width={nodeWidth} borderColor={colorBorder}>
+    <NodeWrapper borderColor={colorBorder} resizable={selected}>
       <NodeTooltip tooltip={nodeData.comment}>
         <NodeLabel
           id={id}

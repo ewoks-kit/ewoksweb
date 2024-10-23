@@ -30,10 +30,6 @@ import useWorkflowStore from '../../store/useWorkflowStore';
 import type { RFNode, Task } from '../../types';
 import { WorkflowSource } from '../../types';
 import { getNodesData } from '../../utils';
-import {
-  DEFAULT_NODE_HEIGHT,
-  DEFAULT_NODE_WIDTH,
-} from '../../utils/defaultValues';
 import isValidLink from '../../utils/IsValidLink';
 import BendingTextEdge from '../CustomEdges/BendingTextEdge';
 import MultilineTextEdge from '../CustomEdges/MultilineTextEdge';
@@ -143,8 +139,8 @@ function Canvas(props: Props) {
 
     const { clientX, clientY } = event;
     const position = rfInstance.screenToFlowPosition({
-      x: clientX - (DEFAULT_NODE_WIDTH * rfInstance.getZoom()) / 2,
-      y: clientY - (DEFAULT_NODE_HEIGHT * rfInstance.getZoom()) / 2,
+      x: clientX,
+      y: clientY,
     });
 
     if (task_type === 'subworkflow') {

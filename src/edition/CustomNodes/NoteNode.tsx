@@ -5,19 +5,20 @@ import { assertNodeDataDefined } from '../../utils/typeGuards';
 import styles from './Nodes.module.css';
 import NodeWrapper from './NodeWrapper';
 
-function NoteNode(args: NodeProps) {
-  const nodeData = useNodeDataStore((state) => state.nodesData.get(args.id));
-  assertNodeDataDefined(nodeData, args.id);
+function NoteNode(props: NodeProps) {
+  const { id, selected } = props;
+  const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
+  assertNodeDataDefined(nodeData, id);
 
-  const { nodeWidth, colorBorder } = nodeData.ui_props;
+  const { colorBorder } = nodeData.ui_props;
 
   return (
     <NodeWrapper
       className={styles.noteNode}
-      width={nodeWidth}
       borderColor={colorBorder}
+      resizable={selected}
     >
-      {nodeData.ewoks_props.label || args.id}
+      {nodeData.ewoks_props.label || id}
     </NodeWrapper>
   );
 }

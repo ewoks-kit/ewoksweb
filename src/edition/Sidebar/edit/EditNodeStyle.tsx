@@ -1,6 +1,5 @@
 import { FormControl } from '@mui/material';
 import { useUpdateNodeInternals } from '@xyflow/react';
-import type { SyntheticEvent } from 'react';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
@@ -8,7 +7,6 @@ import SidebarCheckbox from '../SidebarCheckbox';
 import ColorPicker from './ColorPicker';
 import styles from './EditNodeStyle.module.css';
 import NodeIconControl from './NodeIconControl';
-import NodeWidthControl from './NodeWidthControl';
 
 interface Props {
   nodeId: string;
@@ -59,17 +57,6 @@ export default function EditNodeStyle(props: Props) {
     });
   }
 
-  function handleNodeWidthChange(
-    _event: SyntheticEvent | Event,
-    value: number | number[],
-  ) {
-    if (typeof value === 'number') {
-      mergeNodeData(nodeId, {
-        ui_props: { nodeWidth: value },
-      });
-    }
-  }
-
   function handleNodeIconChange(value: string) {
     mergeNodeData(nodeId, {
       ui_props: { icon: value },
@@ -95,7 +82,7 @@ export default function EditNodeStyle(props: Props) {
   return (
     <FormControl variant="filled" fullWidth>
       <div>
-        {nodeData.task_props.task_type !== 'note' && (
+        {!isNoteNode && (
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
             <SidebarCheckbox
               className={styles.withImage}
@@ -131,12 +118,6 @@ export default function EditNodeStyle(props: Props) {
           value={!!nodeData.ui_props.moreHandles}
           onChange={moreHandlesChanged}
           label="More handles"
-        />
-      )}
-      {!isGraphIONode && (
-        <NodeWidthControl
-          nodeWidth={nodeData.ui_props.nodeWidth}
-          onChangeCommitted={handleNodeWidthChange}
         />
       )}
       {isRegularNode && (

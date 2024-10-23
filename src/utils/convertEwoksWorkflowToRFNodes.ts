@@ -76,7 +76,6 @@ export function convertEwoksWorkflowToRFNodes(
           task_type,
         },
         ui_props: {
-          ...notUndefinedValue(uiProps?.nodeWidth, 'nodeWidth'),
           ...(uiProps?.icon && { icon: uiProps.icon }),
           ...notUndefinedValue(uiProps?.moreHandles, 'moreHandles'),
           ...notUndefinedValue(uiProps?.withImage, 'withImage'),
@@ -89,6 +88,8 @@ export function convertEwoksWorkflowToRFNodes(
         ...notUndefinedValue(uiProps?.comment, 'comment'),
       },
       position: uiProps?.position ?? { x: 100, y: 100 },
+      width: uiProps?.width,
+      height: uiProps?.height,
     };
   });
 }

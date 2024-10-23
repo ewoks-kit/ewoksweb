@@ -2,7 +2,7 @@ import type {
   EdgeWithData,
   EwoksIOLinkAttributes,
   EwoksIONode,
-  EwoksIONodeUiProps,
+  EwoksNodeUiProps,
   NodeWithData,
   Note,
 } from '../types';
@@ -134,12 +134,14 @@ function computeLinkAttributes(link: EdgeWithData): EwoksIOLinkAttributes {
 function computeUiProps(
   node: NodeWithData,
   link: EdgeWithData,
-): EwoksIONodeUiProps {
+): EwoksNodeUiProps {
   const ewoksMarkerEnd = convertRFMarkerEndToEwoks(link.markerEnd);
   const { ui_props: uiProps } = node.data;
 
   return {
     position: node.position,
+    width: node.width,
+    height: node.height,
     ...notUndefinedValue(node.data.ewoks_props.label, 'label'),
     ...notUndefinedValue(link.type, 'type'),
     ...(link.style?.stroke && {
@@ -154,23 +156,21 @@ function computeUiProps(
     ...(uiProps.colorBorder && {
       colorBorder: uiProps.colorBorder,
     }),
-    ...(uiProps.nodeWidth && {
-      nodeWidth: uiProps.nodeWidth,
-    }),
   };
 }
 
 export function computeNotes(nodes: NodeWithData[]): Note[] {
   return nodes
     .filter((nod) => nod.type === 'note')
-    .map((noteNod) => {
+    .map((node) => {
       return {
-        id: noteNod.id,
-        label: noteNod.data.ewoks_props.label,
-        comment: noteNod.data.comment,
-        position: noteNod.position,
-        nodeWidth: noteNod.data.ui_props.nodeWidth,
-        colorBorder: noteNod.data.ui_props.colorBorder,
+        id: node.id,
+        label: node.data.ewoks_props.label,
+        comment: node.data.comment,
+        position: node.position,
+        width: node.width,
+        height: node.height,
+        colorBorder: node.data.ui_props.colorBorder,
       };
     });
 }
