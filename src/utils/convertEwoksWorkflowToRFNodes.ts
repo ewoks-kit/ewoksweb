@@ -80,7 +80,7 @@ export function convertEwoksWorkflowToRFNodes(
           ...notUndefinedValue(uiProps?.moreHandles, 'moreHandles'),
           ...notUndefinedValue(uiProps?.withImage, 'withImage'),
           ...notUndefinedValue(uiProps?.withLabel, 'withLabel'),
-          ...notUndefinedValue(uiProps?.colorBorder, 'colorBorder'),
+          ...notUndefinedValue(uiProps?.borderColor, 'borderColor'),
           ...(task_type === 'graph'
             ? calcSubgraphIO(subWorkflows, task_identifier)
             : {}),

@@ -10,12 +10,12 @@ function NoteNode(props: NodeProps) {
   const nodeData = useNodeDataStore((state) => state.nodesData.get(id));
   assertNodeDataDefined(nodeData, id);
 
-  const { colorBorder } = nodeData.ui_props;
+  const { borderColor } = nodeData.ui_props;
 
   return (
     <NodeWrapper
       className={styles.noteNode}
-      borderColor={colorBorder}
+      borderColor={borderColor}
       resizable={selected}
     >
       {nodeData.ewoks_props.label || id}

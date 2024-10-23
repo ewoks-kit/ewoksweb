@@ -14,12 +14,12 @@ function OutputNode(props: NodeProps) {
   assertNodeDataDefined(nodeData, props.id);
   const { ui_props: uiProps } = nodeData;
 
-  const { colorBorder } = uiProps;
+  const { borderColor } = uiProps;
   const { withImage = DEFAULT_NODE_VALUES.uiProps.withImage } = uiProps;
   const { withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel } = uiProps;
 
   return (
-    <div className={styles.outputNode} style={{ borderColor: colorBorder }}>
+    <div className={styles.outputNode} style={{ borderColor }}>
       <InputHandle />
       {withImage && (
         <SuspenseBoundary>

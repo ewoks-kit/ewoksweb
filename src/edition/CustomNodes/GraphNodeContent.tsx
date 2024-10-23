@@ -47,12 +47,12 @@ function GraphNodeContent(props: NodeProps) {
     subgraphExistsOnServer,
   ]);
 
-  const { inputs = [], outputs = [], colorBorder } = uiProps;
+  const { inputs = [], outputs = [], borderColor } = uiProps;
   const { withImage = DEFAULT_NODE_VALUES.uiProps.withImage } = uiProps;
   const { withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel } = uiProps;
 
   return (
-    <NodeWrapper borderColor={colorBorder} resizable={selected}>
+    <NodeWrapper borderColor={borderColor} resizable={selected}>
       <NodeTooltip tooltip={nodeData.comment}>
         <NodeLabel
           id={id}
