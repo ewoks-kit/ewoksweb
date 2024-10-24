@@ -22,7 +22,7 @@ function BendingTextEdge(props: EdgeProps) {
     targetY,
     targetPosition,
   });
-  const { id, selected, style } = otherProps;
+  const { id, selected, labelStyle } = otherProps;
 
   return (
     <>
@@ -30,11 +30,11 @@ function BendingTextEdge(props: EdgeProps) {
       <text dy="-0.25em">
         <textPath
           className={styles.bendingText}
+          style={{ fill: labelStyle?.fill }}
           data-selected={selected ? '' : undefined}
           href={`#${id}`}
           startOffset="50%"
           textAnchor="middle"
-          fill={style?.stroke}
         >
           {label}
         </textPath>

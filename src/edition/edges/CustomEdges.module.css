@@ -1,5 +1,6 @@
 .bendingText {
   font-size: var(--edgeLabel--fontSize);
+  fill: var(--edge-color);
 }
 
 .bendingText[data-selected] {

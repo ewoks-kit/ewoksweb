@@ -1,7 +1,6 @@
 /* Types following the Ewoks spec. Used in server responses */
 
 import type { MarkerType, XYPosition } from '@xyflow/react';
-import type { CSSProperties } from 'react';
 
 import type {
   GraphUiProps,
@@ -134,21 +133,19 @@ export interface EwoksLink {
   conditions?: EwoksCondition[];
   required?: boolean;
   on_error?: boolean;
-  uiProps?: LinkUiProps;
+  uiProps?: EwoksLinkUiProps;
   startEnd?: boolean;
 }
 
-export interface LinkUiProps {
+export interface EwoksLinkUiProps {
   label?: string;
   type?: string;
   comment?: string;
   animated?: boolean;
   markerEnd?: EwoksMarkerEndLegacy;
-  labelStyle?: CSSProperties;
-  labelBgStyle?: CSSProperties;
   sourceHandle?: string | null;
   targetHandle?: string | null;
-  style?: CSSProperties;
+  color?: string;
 }
 
 export interface Workflow {
