@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import type { Workflow } from '../types';
+import type { Workflow } from '../ewoksTypes';
 import { assertDefined } from '../utils/typeGuards';
 import { client } from './client';
 import type {

@@ -3,9 +3,8 @@ import type {
   EwoksLink,
   EwoksNode,
   GraphDetails,
-  Task,
-  WorkflowDescription,
-} from '../types';
+} from '../ewoksTypes';
+import type { Task, WorkflowDescription } from '../types';
 
 export interface ListResponse {
   identifiers: string[];

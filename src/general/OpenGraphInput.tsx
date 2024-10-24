@@ -1,7 +1,7 @@
 import type { ChangeEvent, ForwardedRef } from 'react';
 import { forwardRef } from 'react';
 
-import type { Workflow } from '../types';
+import type { Workflow } from '../ewoksTypes';
 import { loadGraphFromFile as graphFromFileLoader } from '../utils';
 
 interface Props {

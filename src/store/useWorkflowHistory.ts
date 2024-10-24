@@ -2,7 +2,7 @@ import type { Edge, Node } from '@xyflow/react';
 import isEqual from 'lodash/isEqual';
 import { create } from 'zustand';
 
-import type { GraphDetails, Workflow } from '../types';
+import type { GraphDetails, Workflow } from '../ewoksTypes';
 import { toEwoksWorkflow } from '../utils';
 import type { EdgeDataState } from './useEdgeDataStore';
 import type { NodeDataState } from './useNodeDataStore';

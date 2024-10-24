@@ -1,4 +1,5 @@
-import type { EwoksNode, Task, Workflow } from '../types';
+import type { EwoksNode, Workflow } from '../ewoksTypes';
+import type { Task } from '../types';
 
 export function findLinkInputs(
   nodes: EwoksNode[],

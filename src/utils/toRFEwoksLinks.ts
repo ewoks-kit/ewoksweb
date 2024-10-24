@@ -1,12 +1,7 @@
 import { nanoid } from 'nanoid';
 
-import type {
-  Condition,
-  EdgeWithData,
-  LinkUiProps,
-  Task,
-  Workflow,
-} from '../types';
+import type { LinkUiProps, Workflow } from '../ewoksTypes';
+import type { Condition, EdgeWithData, Task } from '../types';
 import { findLinkInputs, findLinkOutputs } from './calcTasksForLink';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';

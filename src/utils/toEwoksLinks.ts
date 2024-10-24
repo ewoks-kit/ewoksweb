@@ -1,4 +1,5 @@
-import type { EdgeWithData, EwoksLink } from '../types';
+import type { EwoksLink } from '../ewoksTypes';
+import type { EdgeWithData } from '../types';
 import { convertRFMarkerEndToEwoks, hasDefinedFields } from '../utils/utils';
 import { isString } from './typeGuards';
 import { calcDataMapping, notUndefinedValue } from './utils';

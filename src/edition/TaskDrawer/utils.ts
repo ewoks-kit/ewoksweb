@@ -1,7 +1,8 @@
 import type { Node, XYPosition } from '@xyflow/react';
 import { Position } from '@xyflow/react';
 
-import type { EwoksIONode, NodeData, RFNode, Workflow } from '../../types';
+import type { EwoksIONode, Workflow } from '../../ewoksTypes';
+import type { NodeData, RFNode } from '../../types';
 import { generateUniqueNodeId } from '../../utils/utils';
 
 export async function loadSubworkflow(

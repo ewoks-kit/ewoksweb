@@ -2,7 +2,8 @@ import type { ReactFlowInstance } from '@xyflow/react';
 import { merge } from 'lodash';
 import { create } from 'zustand';
 
-import type { GraphDetails, NodeWithData, Task, Workflow } from '../types';
+import type { GraphDetails, Workflow } from '../ewoksTypes';
+import type { NodeWithData, Task } from '../types';
 import { WorkflowSource } from '../types';
 import { getSubgraphs } from '../utils';
 import { convertEwoksWorkflowToRFNodes } from '../utils/convertEwoksWorkflowToRFNodes';

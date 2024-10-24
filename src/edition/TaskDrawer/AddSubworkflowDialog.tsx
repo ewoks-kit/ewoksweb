@@ -11,12 +11,12 @@ import { useReactFlow } from '@xyflow/react';
 import { useRef } from 'react';
 
 import { fetchWorkflow } from '../../api/workflows';
+import type { Workflow } from '../../ewoksTypes';
 import OpenGraphInput from '../../general/OpenGraphInput';
 import WorkflowDropdown from '../../general/WorkflowDropdown';
 import useNodeDataStore from '../../store/useNodeDataStore';
 import useSnackbarStore from '../../store/useSnackbarStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
-import type { Workflow } from '../../types';
 import { textForError } from '../../utils';
 import { loadSubworkflow } from './utils';
 
