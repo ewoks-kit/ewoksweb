@@ -23,12 +23,12 @@ function RegularNode(props: NodeProps) {
 
   const { ui_props: uiProps, comment, ewoks_props: ewoksProps } = nodeData;
   const { label } = ewoksProps;
-  const { colorBorder, moreHandles } = uiProps;
+  const { borderColor, moreHandles } = uiProps;
   const { withImage = DEFAULT_NODE_VALUES.uiProps.withImage } = uiProps;
   const { withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel } = uiProps;
 
   return (
-    <NodeWrapper borderColor={colorBorder} resizable={selected}>
+    <NodeWrapper borderColor={borderColor} resizable={selected}>
       <NodeTooltip tooltip={comment}>
         <InputHandle />
         <OutputHandle />

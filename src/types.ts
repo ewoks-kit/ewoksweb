@@ -30,7 +30,7 @@ export interface EwoksIONodeUiProps {
   targetHandle?: string;
   withImage?: boolean;
   withLabel?: boolean;
-  colorBorder?: string;
+  borderColor?: string;
 }
 
 export interface GraphDetails {
@@ -114,7 +114,7 @@ export interface Note {
   label?: string;
   comment?: string;
   position: XYPosition;
-  colorBorder?: string;
+  borderColor?: string;
   width?: number;
   height?: number;
 }
@@ -164,7 +164,7 @@ export interface EwoksNodeUiProps {
   style?: LinkStyle;
   withImage?: boolean;
   withLabel?: boolean;
-  colorBorder?: string;
+  borderColor?: string;
   moreHandles?: boolean;
   inputs?: SubgraphOutputsInputs[];
   outputs?: SubgraphOutputsInputs[];
@@ -194,7 +194,7 @@ export interface NodeUiProps {
   style?: CSSProperties;
   withImage?: boolean;
   withLabel?: boolean;
-  colorBorder?: string;
+  borderColor?: string;
   moreHandles?: boolean;
   // To position inputs-outputs of subgraphs in a graph
   inputs?: SubgraphOutputsInputs[];

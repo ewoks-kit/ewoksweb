@@ -153,8 +153,8 @@ function computeUiProps(
     ...notUndefinedValue(link.animated, 'animated'),
     ...notUndefinedValue(uiProps.withImage, 'withImage'),
     ...notUndefinedValue(uiProps.withLabel, 'withLabel'),
-    ...(uiProps.colorBorder && {
-      colorBorder: uiProps.colorBorder,
+    ...(uiProps.borderColor && {
+      borderColor: uiProps.borderColor,
     }),
   };
 }
@@ -170,7 +170,7 @@ export function computeNotes(nodes: NodeWithData[]): Note[] {
         position: node.position,
         width: node.width,
         height: node.height,
-        colorBorder: node.data.ui_props.colorBorder,
+        borderColor: node.data.ui_props.borderColor,
       };
     });
 }

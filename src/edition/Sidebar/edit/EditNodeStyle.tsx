@@ -43,7 +43,7 @@ export default function EditNodeStyle(props: Props) {
       return;
     }
     const newData = { ...nodeData };
-    newData.ui_props.colorBorder = value;
+    newData.ui_props.borderColor = value;
     // Cannot use mergeNodeData since it ignores `undefined` values when merging
     setNodeData(nodeId, newData);
   }
@@ -109,7 +109,7 @@ export default function EditNodeStyle(props: Props) {
 
       <ColorPicker
         defaultColorVariable="--node--borderColor"
-        value={nodeData.ui_props.colorBorder}
+        value={nodeData.ui_props.borderColor}
         onChange={handleBorderColorChange}
         label="Border color"
       />

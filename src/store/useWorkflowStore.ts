@@ -101,7 +101,7 @@ const useWorkflowStore = create<State>((set, get) => ({
             ewoks_props: { label: note.label },
             task_props: { task_type: 'note', task_identifier: note.id },
             ui_props: {
-              colorBorder: note.colorBorder,
+              borderColor: note.borderColor,
             },
             comment: note.comment,
           },
