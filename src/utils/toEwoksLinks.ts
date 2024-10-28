@@ -30,8 +30,6 @@ export function toEwoksLinks(links: EdgeWithData[]): EwoksLink[] {
       type,
       markerEnd,
       style,
-      labelStyle,
-      labelBgStyle,
       animated,
     }) => {
       const datamapping = data_mapping && calcDataMapping(data_mapping);
@@ -52,9 +50,7 @@ export function toEwoksLinks(links: EdgeWithData[]): EwoksLink[] {
         ...(comment && { comment }),
         ...(type && { type }),
         ...(ewoksMarkerEnd ? { markerEnd: ewoksMarkerEnd } : {}),
-        ...(style ? { style } : {}),
-        ...(labelStyle ? { labelStyle } : {}),
-        ...(labelBgStyle ? { labelBgStyle } : {}),
+        ...(style?.stroke ? { color: style.stroke } : {}),
         ...notUndefinedValue(animated, 'animated'),
         ...(sourceHandle && sourceHandle !== 'sr' && { sourceHandle }),
         ...(targetHandle && targetHandle !== 'tl' && { targetHandle }),
