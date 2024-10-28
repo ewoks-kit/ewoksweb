@@ -1,17 +1,18 @@
 import { nanoid } from 'nanoid';
 
 import type {
-  DataMapping,
-  DefaultErrorAttributes,
-  EwoksDataMapping,
+  EwoksDefaultErrorAttributes,
   EwoksIONode,
   EwoksNode,
   GraphDetails,
+  Workflow,
+} from '../ewoksTypes';
+import type {
+  DefaultErrorAttributes,
   NodeTaskProperties,
   NodeWithData,
   SubgraphOutputsInputs,
   Task,
-  Workflow,
 } from '../types';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
@@ -95,10 +96,8 @@ export function convertEwoksWorkflowToRFNodes(
 }
 
 function calcDefaultErrorAttributes(
-  default_error_attributes:
-    | DefaultErrorAttributes<EwoksDataMapping>
-    | undefined,
-): DefaultErrorAttributes<DataMapping> | undefined {
+  default_error_attributes: EwoksDefaultErrorAttributes | undefined,
+): DefaultErrorAttributes | undefined {
   return {
     map_all_data: default_error_attributes?.map_all_data,
     data_mapping: default_error_attributes?.data_mapping?.map(

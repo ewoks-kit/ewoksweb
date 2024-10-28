@@ -1,12 +1,8 @@
 import { nanoid } from 'nanoid';
 
-import type {
-  Condition,
-  EdgeWithData,
-  LinkUiProps,
-  Task,
-  Workflow,
-} from '../types';
+import { colorToRFEdgeStyle } from '../edition/Sidebar/edit/utils';
+import type { EwoksLinkUiProps, Workflow } from '../ewoksTypes';
+import type { Condition, EdgeWithData, Task } from '../types';
 import { findLinkInputs, findLinkOutputs } from './calcTasksForLink';
 import { inNodesLinks } from './inNodesLinks';
 import { outNodesLinks } from './outNodesLinks';
@@ -82,9 +78,7 @@ export function toRFEwoksLinks(
         ...notUndefinedValue(uiProps?.animated, 'animated'),
         markerEnd: convertEwoksMarkerEndToRF(uiProps?.markerEnd),
         labelBgPadding: EDGE_LABEL_PADDING,
-        ...(uiProps?.style && { style: uiProps.style }),
-        ...(uiProps?.labelStyle && { labelStyle: uiProps.labelStyle }),
-        ...(uiProps?.labelBgStyle && { labelBgStyle: uiProps.labelBgStyle }),
+        ...(uiProps?.color ? colorToRFEdgeStyle(uiProps.color) : {}),
         data: {
           // DOC: startEnd is not in EwoksLink on the server but needed for calculating
           // the in-out nodes-links.
@@ -115,14 +109,14 @@ export function toRFEwoksLinks(
 }
 
 function calcTargetHandle(
-  uiProps: LinkUiProps | undefined,
+  uiProps: EwoksLinkUiProps | undefined,
   sub_target: string | undefined,
 ): string {
   return uiProps?.targetHandle ?? sub_target ?? 'tl';
 }
 
 function calcSourceHandle(
-  uiProps: LinkUiProps | undefined,
+  uiProps: EwoksLinkUiProps | undefined,
   sub_source: string | undefined,
 ): string {
   return uiProps?.sourceHandle ?? sub_source ?? 'sr';

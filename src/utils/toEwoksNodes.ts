@@ -1,15 +1,10 @@
-import type {
-  DataMapping,
-  DefaultErrorAttributes,
-  EwoksDataMapping,
-  EwoksNode,
-  NodeWithData,
-} from '../types';
+import type { EwoksDefaultErrorAttributes, EwoksNode } from '../ewoksTypes';
+import type { DefaultErrorAttributes, NodeWithData } from '../types';
 import { calcDataMapping, notUndefinedValue } from './utils';
 
 function calcDefaultErrorAttributes(
-  default_error_attributes: DefaultErrorAttributes<DataMapping> | undefined,
-): DefaultErrorAttributes<EwoksDataMapping> | undefined {
+  default_error_attributes: DefaultErrorAttributes | undefined,
+): EwoksDefaultErrorAttributes | undefined {
   if (default_error_attributes?.map_all_data) {
     return { map_all_data: true };
   }

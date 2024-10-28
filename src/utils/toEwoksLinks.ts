@@ -1,4 +1,5 @@
-import type { EdgeWithData, EwoksLink } from '../types';
+import type { EwoksLink } from '../ewoksTypes';
+import type { EdgeWithData } from '../types';
 import { convertRFMarkerEndToEwoks, hasDefinedFields } from '../utils/utils';
 import { isString } from './typeGuards';
 import { calcDataMapping, notUndefinedValue } from './utils';
@@ -29,8 +30,6 @@ export function toEwoksLinks(links: EdgeWithData[]): EwoksLink[] {
       type,
       markerEnd,
       style,
-      labelStyle,
-      labelBgStyle,
       animated,
     }) => {
       const datamapping = data_mapping && calcDataMapping(data_mapping);
@@ -51,9 +50,7 @@ export function toEwoksLinks(links: EdgeWithData[]): EwoksLink[] {
         ...(comment && { comment }),
         ...(type && { type }),
         ...(ewoksMarkerEnd ? { markerEnd: ewoksMarkerEnd } : {}),
-        ...(style ? { style } : {}),
-        ...(labelStyle ? { labelStyle } : {}),
-        ...(labelBgStyle ? { labelBgStyle } : {}),
+        ...(style?.stroke ? { color: style.stroke } : {}),
         ...notUndefinedValue(animated, 'animated'),
         ...(sourceHandle && sourceHandle !== 'sr' && { sourceHandle }),
         ...(targetHandle && targetHandle !== 'tl' && { targetHandle }),

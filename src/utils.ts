@@ -2,6 +2,7 @@ import type { Edge, Node } from '@xyflow/react';
 
 import { fetchWorkflow } from './api/workflows';
 import { curateEdgeData, curateNodeData } from './edition/TopAppBar/utils';
+import type { EwoksNode, GraphDetails, Workflow } from './ewoksTypes';
 import { enrichWithData } from './general/forms/utils';
 import orange3 from './images/orange3.png';
 import useEdgeDataStore from './store/useEdgeDataStore';
@@ -9,14 +10,11 @@ import useNodeDataStore from './store/useNodeDataStore';
 import useSnackbarStore from './store/useSnackbarStore';
 import type {
   EdgeWithData,
-  EwoksNode,
-  GraphDetails,
   Icon,
   LinkData,
   NodeData,
   NodeWithData,
   Task,
-  Workflow,
 } from './types';
 import {
   computeInputNodes,

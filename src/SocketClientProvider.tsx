@@ -7,7 +7,7 @@ import { io } from 'socket.io-client';
 
 import type { EwoksJob } from './api/models';
 import { QueryKey } from './api/models';
-import type { EwoksEvent } from './types';
+import type { EwoksEvent } from './ewoksTypes';
 
 export const SocketClientContext = createContext({} as Socket);
 

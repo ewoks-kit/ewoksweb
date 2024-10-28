@@ -17,6 +17,7 @@ import SidebarCheckbox from '../SidebarCheckbox';
 import ColorPicker from './ColorPicker';
 import styles from './EditLinkStyle.module.css';
 import MarkerEndControl from './MarkerEndControl';
+import { colorToRFEdgeStyle } from './utils';
 
 export default function EditLinkStyle(element: Edge) {
   const { setEdges, getEdges } = useReactFlow();
@@ -48,9 +49,7 @@ export default function EditLinkStyle(element: Edge) {
   function handleColorChange(newValue: string | undefined) {
     const newEdge = {
       ...element,
-      style: { ...element.style, stroke: newValue },
-      labelStyle: { ...element.labelStyle, fill: newValue },
-      labelBgStyle: { ...element.labelBgStyle, stroke: newValue },
+      ...colorToRFEdgeStyle(newValue),
     };
     updateEdge(newEdge);
   }

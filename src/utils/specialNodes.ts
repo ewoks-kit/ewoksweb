@@ -1,11 +1,9 @@
 import type {
-  EdgeWithData,
   EwoksIOLinkAttributes,
   EwoksIONode,
   EwoksNodeUiProps,
-  NodeWithData,
-  Note,
-} from '../types';
+} from '../ewoksTypes';
+import type { EdgeWithData, NodeWithData, Note } from '../types';
 import { isString } from './typeGuards';
 import {
   calcDataMapping,

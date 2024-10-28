@@ -1,4 +1,4 @@
-import type { EwoksIONode, EwoksLink, EwoksNode } from '../types';
+import type { EwoksIONode, EwoksLink, EwoksNode } from '../ewoksTypes';
 import { hasDefinedFields } from './utils';
 import {
   calcCommonNodeUiProps,

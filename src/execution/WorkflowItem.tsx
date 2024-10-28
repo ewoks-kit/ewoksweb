@@ -1,4 +1,4 @@
-import type { EwoksEvent } from '../types';
+import type { EwoksEvent } from '../ewoksTypes';
 import { assertDefined } from '../utils/typeGuards';
 import Duration from './Duration';
 import RerunButton from './RerunButton';

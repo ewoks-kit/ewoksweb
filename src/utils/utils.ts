@@ -1,15 +1,13 @@
 import { nanoid } from 'nanoid';
 
 import type {
-  DataMapping,
   EwoksDataMapping,
   EwoksIOLinkAttributes,
   EwoksIONodeUiProps,
   EwoksMarkerEnd,
   EwoksMarkerEndLegacy,
-  RFMarkerEnd,
-  RowValue,
-} from '../types';
+} from '../ewoksTypes';
+import type { DataMapping, RFMarkerEnd, RowValue } from '../types';
 import { RowType } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { isMarkerType } from './typeGuards';

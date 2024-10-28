@@ -16,3 +16,11 @@ export function rfMarkerEndToOption(markerEnd: RFMarkerEnd): MarkerEndOption {
 
   return markerEnd.type;
 }
+
+export function colorToRFEdgeStyle(color: string | undefined) {
+  return {
+    style: { stroke: color },
+    labelStyle: { fill: color },
+    labelBgStyle: { stroke: color },
+  };
+}
