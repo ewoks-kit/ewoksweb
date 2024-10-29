@@ -135,7 +135,7 @@ function Canvas(props: Props) {
     if (!taskInfo) {
       return;
     }
-    const { task_type, icon, task_identifier, category } = taskInfo;
+    const { task_type, task_identifier, category } = taskInfo;
 
     const { clientX, clientY } = event;
     const position = rfInstance.screenToFlowPosition({
@@ -185,9 +185,7 @@ function Canvas(props: Props) {
         required_input_names: task.required_input_names,
       },
       ewoks_props: {},
-      ui_props: {
-        ...(icon && { icon }),
-      },
+      ui_props: {},
     });
     addNodes(newNode);
   };
