@@ -237,7 +237,6 @@ it('saves a workflow with a link, and saves the workflow after populating the li
         {
           source: 'taskSkeleton0',
           target: 'taskSkeleton1',
-          map_all_data: false,
         },
       ],
     });
@@ -253,7 +252,6 @@ it('saves a workflow with a link, and saves the workflow after populating the li
     .click()
     .type('linkComment');
 
-  cy.findByLabelText('Map all Data').uncheck();
   cy.contains('Required').siblings().first().click();
 
   cy.findByRole('complementary').within(() => {
@@ -328,7 +326,6 @@ it('saves a workflow with a link, and saves the workflow after populating the li
           conditions: [{ source_output: 'outputConditions', value: true }],
           on_error: false,
           required: true,
-          map_all_data: false,
           uiProps: {
             label: 'linkLabel',
             comment: 'linkComment',
