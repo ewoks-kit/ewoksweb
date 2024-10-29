@@ -10,7 +10,6 @@ function calcDefaultErrorAttributes(
   }
 
   return {
-    map_all_data: false,
     ...(default_error_attributes?.data_mapping &&
       default_error_attributes.data_mapping.length > 0 && {
         data_mapping: calcDataMapping(default_error_attributes.data_mapping),

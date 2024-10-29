@@ -69,7 +69,7 @@ export function toEwoksLinks(links: EdgeWithData[]): EwoksLink[] {
         }),
         ...notUndefinedValue(on_error, 'on_error'),
         ...notUndefinedValue(required, 'required'),
-        map_all_data,
+        ...notUndefinedValue(map_all_data, 'map_all_data'),
         ...(hasDefinedFields(linkUiProps) && { uiProps: linkUiProps }),
       };
     },

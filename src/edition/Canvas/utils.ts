@@ -38,7 +38,8 @@ export function addConnectionToGraph(
       links_optional_output_names: targetTask.optional_input_names,
       links_required_output_names: targetTask.required_input_names,
       links_input_names: sourceTask.output_names,
-      map_all_data: isPpfTask(sourceTask) || isPpfTask(targetTask),
+      map_all_data:
+        isPpfTask(sourceTask) || isPpfTask(targetTask) ? true : undefined,
       ...(sourceTask.task_type === 'graph' &&
         sourceHandle && { sub_source: sourceHandle }),
       ...(targetTask.task_type === 'graph' &&
