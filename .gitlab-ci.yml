@@ -20,7 +20,9 @@ stages:
   extends: .base
   variables:
     CYPRESS_CACHE_FOLDER: '$CI_PROJECT_DIR/.cypress-cache/'
+    NODE_OPTIONS: "--dns-result-order=ipv4first"
   before_script:
+    - echo "net.ipv6.conf.all.disable_ipv6=0" | tee -a /etc/sysctl.conf
     - corepack enable
     - corepack prepare pnpm@latest-9 --activate
     - pnpm config set store-dir .pnpm-store
@@ -97,7 +99,7 @@ test:
     # https://github.com/vercel/serve/issues/751
     - pnpm preview &
     - timeout 20s bash -c "while ! curl http://127.0.0.1:3000 -m1 -o/dev/null -s;do sleep 0.3;done"
-    - pnpm cypress:run
+    - pnpm cypress:run --headless
 
 build-package:
   extends: .pnpm-base-build
