@@ -179,16 +179,18 @@ function toEwoksGraph(
   };
 }
 
-function tryJSONparse(str: string | ArrayBuffer | null): unknown {
-  if (!isString(str)) {
-    return null;
-  }
+function tryJSONparse(str: string): unknown {
   try {
     return JSON.parse(str);
   } catch (error) {
-    /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
-    console.warn(error);
-    return null;
+    try {
+      // If the error was due to a NaN/Infinity, try to replace it by strings
+      return JSON.parse(str.replaceAll(/(NaN|-?Infinity)/gu, '"$&"'));
+    } catch {
+      /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
+      console.warn(error);
+      return null;
+    }
   }
 }
 
@@ -201,10 +203,17 @@ export function loadGraphFromFile(onGraphLoad: (graph: Workflow) => void) {
     reader.onloadend = async () => {
       const { result } = reader;
 
+      if (!isString(result)) {
+        showErrorMsg(
+          'Could not read the file. Please check that the input file is a text file.',
+        );
+        return;
+      }
+
       const newGraph = tryJSONparse(result);
       if (!newGraph) {
         showErrorMsg(
-          'Error in JSON structure. Please correct input file and retry!',
+          'Error in JSON structure. See the console for more details.',
         );
         return;
       }
