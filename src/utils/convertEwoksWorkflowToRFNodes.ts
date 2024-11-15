@@ -14,8 +14,8 @@ import type {
   SubgraphOutputsInputs,
   Task,
 } from '../types';
-import { inNodesLinks } from './inNodesLinks';
-import { outNodesLinks } from './outNodesLinks';
+import { inputNodesAndLinks } from './subgraphUtils';
+import { outputNodesAndLinks } from './subgraphUtils';
 import {
   createDataMappingData,
   getValueAndType,
@@ -28,8 +28,8 @@ export function convertEwoksWorkflowToRFNodes(
   subWorkflows: Workflow[],
   tasks: Task[],
 ): NodeWithData[] {
-  const { nodes: inputNodes } = inNodesLinks(graph.input_nodes, nodes);
-  const { nodes: outputNodes } = outNodesLinks(graph.output_nodes, nodes);
+  const { nodes: inputNodes } = inputNodesAndLinks(graph.input_nodes, nodes);
+  const { nodes: outputNodes } = outputNodesAndLinks(graph.output_nodes, nodes);
 
   const allNodes = [...nodes, ...inputNodes, ...outputNodes];
 

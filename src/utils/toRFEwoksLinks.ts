@@ -4,8 +4,7 @@ import { colorToRFEdgeStyle } from '../edition/Sidebar/edit/utils';
 import type { EwoksLinkUiProps, Workflow } from '../ewoksTypes';
 import type { Condition, EdgeWithData, Task } from '../types';
 import { findLinkInputs, findLinkOutputs } from './calcTasksForLink';
-import { inNodesLinks } from './inNodesLinks';
-import { outNodesLinks } from './outNodesLinks';
+import { inputNodesAndLinks, outputNodesAndLinks } from './subgraphUtils';
 import {
   convertEwoksMarkerEndToRF,
   createDataMappingData,
@@ -17,20 +16,21 @@ const EDGE_LABEL_PADDING: [number, number] = [5, 2];
 
 type WorkflowWithNodesLinks = Required<Workflow>;
 
-// DOC: from GraphEwoks get EwoksRFLinks
-// - tempGraph: the graph to transform its links
-// - newNodeSubgraphs: the subgraphs located in the supergraph.
 export function toRFEwoksLinks(
-  tempGraph: WorkflowWithNodesLinks,
-  newNodeSubgraphs: Workflow[],
+  inputWorkflow: WorkflowWithNodesLinks,
+  subgraphs: Workflow[],
   tasks: Task[],
 ): EdgeWithData[] {
   let id = 0;
 
-  // DOC: calculate the links from inputs-outputs of the Ewoks graph
-  const inOutTempGraph = calcAllLinks(tempGraph);
+  const { graph, nodes } = inputWorkflow;
 
-  return inOutTempGraph.links.map(
+  // DOC: calculate the links from inputs-outputs of the Ewoks workflow
+  const { links: inputLinks } = inputNodesAndLinks(graph.input_nodes, nodes);
+  const { links: outputLinks } = outputNodesAndLinks(graph.output_nodes, nodes);
+  const links = [...inputWorkflow.links, ...inputLinks, ...outputLinks];
+
+  return links.map(
     ({
       source,
       target,
@@ -52,18 +52,8 @@ export function toRFEwoksLinks(
         };
       });
 
-      const linkInputNames = findLinkInputs(
-        tempGraph.nodes,
-        source,
-        newNodeSubgraphs,
-        tasks,
-      );
-      const linkOutputNames = findLinkOutputs(
-        tempGraph.nodes,
-        target,
-        newNodeSubgraphs,
-        tasks,
-      );
+      const linkInputNames = findLinkInputs(nodes, source, subgraphs, tasks);
+      const linkOutputNames = findLinkOutputs(nodes, target, subgraphs, tasks);
 
       const link: EdgeWithData = {
         id: `${source}:${uiProps?.sourceHandle ?? ''}->${target}:${
@@ -120,19 +110,4 @@ function calcSourceHandle(
   sub_source: string | undefined,
 ): string {
   return uiProps?.sourceHandle ?? sub_source ?? 'sr';
-}
-
-function calcAllLinks({
-  graph,
-  nodes,
-  links,
-}: WorkflowWithNodesLinks): WorkflowWithNodesLinks {
-  // DOC: calculate the links from inputs-outputs of the Ewoks graph
-  const inNodeLinks = inNodesLinks(graph.input_nodes, nodes);
-  const outNodeLinks = outNodesLinks(graph.output_nodes, nodes);
-  return {
-    graph,
-    nodes,
-    links: [...links, ...inNodeLinks.links, ...outNodeLinks.links],
-  };
 }

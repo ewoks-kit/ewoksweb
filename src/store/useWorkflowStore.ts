@@ -85,15 +85,10 @@ const useWorkflowStore = create<State>((set, get) => ({
     });
 
     // 2. Get node-subgraphs for the graph
-    const newNodeSubgraphs = await getSubgraphs(nodes);
+    const subgraphs = await getSubgraphs(nodes);
 
     // 3. Calculate the new graph given the subgraphs
-    let rfNodes = convertEwoksWorkflowToRFNodes(
-      graph,
-      nodes,
-      newNodeSubgraphs,
-      tasks,
-    );
+    let rfNodes = convertEwoksWorkflowToRFNodes(graph, nodes, subgraphs, tasks);
 
     const notes: NodeWithData[] =
       graph.uiProps?.notes?.map((note) => {
@@ -116,11 +111,7 @@ const useWorkflowStore = create<State>((set, get) => ({
 
     rfNodes = [...rfNodes, ...notes];
 
-    const rfLinks = toRFEwoksLinks(
-      { graph, nodes, links },
-      newNodeSubgraphs,
-      tasks,
-    );
+    const rfLinks = toRFEwoksLinks({ graph, nodes, links }, subgraphs, tasks);
 
     useNodeDataStore.getState().setDataFromNodes(rfNodes);
     useEdgeDataStore.getState().setDataFromEdges(rfLinks);

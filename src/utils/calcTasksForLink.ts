@@ -1,10 +1,11 @@
 import type { EwoksNode, Workflow } from '../ewoksTypes';
 import type { Task } from '../types';
+import { getSubgraphInputs, getSubgraphOutputs } from './subgraphUtils';
 
 export function findLinkInputs(
   nodes: EwoksNode[],
   sourceNodeId: string,
-  newNodeSubgraphs: Workflow[],
+  subgraphs: Workflow[],
   tasks: Task[],
 ): string[] {
   const sourceNode = nodes.find((nod) => nod.id === sourceNodeId);
@@ -13,14 +14,20 @@ export function findLinkInputs(
     return [];
   }
 
-  const sourceTask = calcTask('source', sourceNode, tasks, newNodeSubgraphs);
-  return sourceTask?.output_names || [];
+  if (sourceNode.task_type === 'graph') {
+    return getSubgraphOutputs(sourceNode, subgraphs);
+  }
+
+  const task = tasks.find(
+    (tas) => tas.task_identifier === sourceNode.task_identifier,
+  );
+  return task?.output_names || [];
 }
 
 export function findLinkOutputs(
   nodes: EwoksNode[],
   targetNodeId: string,
-  newNodeSubgraphs: Workflow[],
+  subgraphs: Workflow[],
   tasks: Task[],
 ): { required: string[]; optional: string[] } {
   const targetNode = nodes.find((nod) => nod.id === targetNodeId);
@@ -29,48 +36,15 @@ export function findLinkOutputs(
     return { required: [], optional: [] };
   }
 
-  const targetTask = calcTask('target', targetNode, tasks, newNodeSubgraphs);
-
-  return {
-    required: targetTask?.required_input_names || [],
-    optional: targetTask?.optional_input_names || [],
-  };
-}
-
-function calcTask(
-  sourceOrTarget: 'source' | 'target',
-  node: EwoksNode,
-  tasks: Task[],
-  newNodeSubgraphs: Workflow[],
-): Task | undefined {
-  if (node.task_type !== 'graph') {
-    return tasks.find((tas) => tas.task_identifier === node.task_identifier);
+  if (targetNode.task_type === 'graph') {
+    return getSubgraphInputs(targetNode, subgraphs);
   }
 
-  const subgraphNodeSource = newNodeSubgraphs.find(
-    (subGr) => subGr.graph.id === node.task_identifier,
+  const task = tasks.find(
+    (tas) => tas.task_identifier === targetNode.task_identifier,
   );
-
-  const outputsOrOutputs: string[] = [];
-
-  if (subgraphNodeSource?.graph.output_nodes) {
-    subgraphNodeSource.graph.output_nodes.forEach((out) =>
-      outputsOrOutputs.push(out.id),
-    );
-  }
-
-  if (sourceOrTarget === 'source') {
-    return {
-      task_type: node.task_type,
-      task_identifier: node.task_identifier,
-      output_names: outputsOrOutputs,
-    };
-  }
-
   return {
-    task_type: node.task_type,
-    task_identifier: node.task_identifier,
-    optional_input_names: outputsOrOutputs,
-    required_input_names: [],
+    required: task?.required_input_names || [],
+    optional: task?.optional_input_names || [],
   };
 }
