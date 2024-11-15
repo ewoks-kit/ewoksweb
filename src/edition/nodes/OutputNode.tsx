@@ -4,6 +4,7 @@ import useNodeDataStore from '../../store/useNodeDataStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
+import { GRAPH_OUTPUT_ICON } from '../utils';
 import InputHandle from './InputHandle';
 import NodeIcon from './NodeIcon';
 import NodeLabel from './NodeLabel';
@@ -23,7 +24,7 @@ function OutputNode(props: NodeProps) {
       <InputHandle />
       {withImage && (
         <SuspenseBoundary>
-          <NodeIcon nodeId={props.id} />
+          <NodeIcon nodeId={props.id} icon={GRAPH_OUTPUT_ICON} />
         </SuspenseBoundary>
       )}
       <NodeLabel

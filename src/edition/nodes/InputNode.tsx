@@ -4,6 +4,7 @@ import useNodeDataStore from '../../store/useNodeDataStore';
 import SuspenseBoundary from '../../suspense/SuspenseBoundary';
 import { DEFAULT_NODE_VALUES } from '../../utils/defaultValues';
 import { assertNodeDataDefined } from '../../utils/typeGuards';
+import { GRAPH_INPUT_ICON } from '../utils';
 import NodeIcon from './NodeIcon';
 import NodeLabel from './NodeLabel';
 import styles from './Nodes.module.css';
@@ -29,7 +30,7 @@ function InputNode(props: NodeProps) {
       />
       {withImage && (
         <SuspenseBoundary>
-          <NodeIcon nodeId={props.id} />
+          <NodeIcon nodeId={props.id} icon={GRAPH_INPUT_ICON} />
         </SuspenseBoundary>
       )}
     </div>
