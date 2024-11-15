@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
-import type { DataMapping } from 'types';
 
 import useNodeDataStore from '../../../store/useNodeDataStore';
+import type { DataMapping } from '../../../types';
 import { assertNodeDataDefined } from '../../../utils/typeGuards';
 import DataMappingTable from './DataMappingTable';
 
