@@ -1,8 +1,8 @@
 import type { Edge } from '@xyflow/react';
 import { nanoid } from 'nanoid';
-import type { DataMapping } from 'types';
 
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
+import type { DataMapping } from '../../../types';
 import { assertEdgeDataDefined } from '../../../utils/typeGuards';
 import DataMappingTable from './DataMappingTable';
 import styles from './Table.module.css';
