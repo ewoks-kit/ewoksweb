@@ -3,6 +3,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
+import { GRAPH_INPUT_ICON, GRAPH_OUTPUT_ICON } from '../utils';
 import TaskItem from './TaskItem';
 import styles from './TaskList.module.css';
 
@@ -28,7 +29,7 @@ function GeneralTasksList(props: Props) {
             task={{
               task_type: 'graphInput',
               task_identifier: 'graphInput',
-              icon: 'graphInput.svg',
+              icon: GRAPH_INPUT_ICON,
               category: 'General',
             }}
             selectedTaskId={selectedTaskId}
@@ -38,7 +39,7 @@ function GeneralTasksList(props: Props) {
             task={{
               task_type: 'graphOutput',
               task_identifier: 'graphOutput',
-              icon: 'graphOutput.svg',
+              icon: GRAPH_OUTPUT_ICON,
               category: 'General',
             }}
             selectedTaskId={selectedTaskId}

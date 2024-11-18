@@ -6,10 +6,11 @@ import { assertNodeDataDefined } from '../../utils/typeGuards';
 
 interface Props {
   nodeId: string;
+  icon?: string;
 }
 
 function NodeIcon(props: Props) {
-  const { nodeId } = props;
+  const { nodeId, icon } = props;
   const nodeData = useNodeDataStore((state) => state.nodesData.get(nodeId));
   const tasks = useTasks();
   assertNodeDataDefined(nodeData, nodeId);
@@ -19,8 +20,7 @@ function NodeIcon(props: Props) {
   );
   const taskIcon = nodeTask?.icon;
 
-  const uiProps = nodeData.ui_props;
-  const image = uiProps.icon || taskIcon;
+  const image = icon || taskIcon;
 
   const icons = useIcons();
 

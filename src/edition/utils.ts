@@ -1,6 +1,9 @@
 import type { Task } from '../types';
 import { getTaskName } from '../utils';
 
+export const GRAPH_INPUT_ICON = 'graphInput.svg';
+export const GRAPH_OUTPUT_ICON = 'graphOutput.svg';
+
 function getPrefix(task: Task): string {
   const { task_type } = task;
   switch (task_type) {

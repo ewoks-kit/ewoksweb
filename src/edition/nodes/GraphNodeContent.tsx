@@ -63,7 +63,7 @@ function GraphNodeContent(props: NodeProps) {
         />
         {withImage && (
           <SuspenseBoundary>
-            <NodeIcon nodeId={id} />
+            <NodeIcon nodeId={id} icon={nodeData.ui_props.icon} />
           </SuspenseBoundary>
         )}
         {inputs.length === 0 ? (
