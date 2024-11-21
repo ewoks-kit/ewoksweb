@@ -4,7 +4,7 @@ import type {
   EwoksNodeUiProps,
 } from '../ewoksTypes';
 import type { EdgeWithData, NodeWithData, Note } from '../types';
-import { isString } from './typeGuards';
+import { assertDefined, isString } from './typeGuards';
 import {
   calcDataMapping,
   convertRFMarkerEndToEwoks,
@@ -16,92 +16,92 @@ export function computeInputNodes(
   nodes: NodeWithData[],
   links: EdgeWithData[],
 ): EwoksIONode[] {
-  return nodes.flatMap((node) => {
-    return node.data.task_props.task_type === 'graphInput'
-      ? convertRFInputNodeToEwoks(node, nodes, links)
-      : [];
-  });
+  return nodes
+    .filter((node) => node.data.task_props.task_type === 'graphInput')
+    .map((node) => convertRFInputNodeToEwoks(node, nodes, links));
 }
 
 export function computeOutputNodes(
   nodes: NodeWithData[],
   links: EdgeWithData[],
 ): EwoksIONode[] {
-  return nodes.flatMap((node) => {
-    return node.data.task_props.task_type === 'graphOutput'
-      ? convertRFOutputNodeToEwoks(node, nodes, links)
-      : [];
-  });
+  return nodes
+    .filter((node) => node.data.task_props.task_type === 'graphOutput')
+    .map((node) => convertRFOutputNodeToEwoks(node, nodes, links));
 }
 
 function convertRFInputNodeToEwoks(
-  thisNode: NodeWithData,
+  inputNode: NodeWithData,
   nodes: NodeWithData[],
   links: EdgeWithData[],
-): EwoksIONode[] {
-  return links
-    .filter((link) => link.source === thisNode.id)
-    .flatMap<EwoksIONode>((link) => {
-      const connectedNode = nodes.find((node) => link.target === node.id);
-      const linkAttributes = computeLinkAttributes(link);
+): EwoksIONode {
+  const connectedLink = links.find((link) => link.source === inputNode.id);
 
-      if (!connectedNode) {
-        return [];
-      }
+  if (!connectedLink) {
+    return {
+      id: inputNode.id,
+      node: null,
+      uiProps: computeNodeUiProps(inputNode),
+    };
+  }
 
-      const subNode =
-        connectedNode.data.task_props.task_type === 'graph' &&
-        link.data.sub_target
-          ? link.data.sub_target
-          : undefined;
+  const connectedNode = nodes.find((node) => connectedLink.target === node.id);
+  // Since a link needs two nodes to be created, this assertion should never fail
+  assertDefined(connectedNode, `No node with id ${connectedLink.target}`);
 
-      return [
-        {
-          id: thisNode.id,
-          node: connectedNode.id,
-          ...(subNode ? { sub_node: subNode } : {}),
-          ...(hasDefinedFields(linkAttributes) && {
-            link_attributes: linkAttributes,
-          }),
-          uiProps: computeUiProps(thisNode, link),
-        },
-      ];
-    });
+  const linkAttributes = computeLinkAttributes(connectedLink);
+  const subNode =
+    connectedNode.data.task_props.task_type === 'graph' &&
+    connectedLink.data.sub_target
+      ? connectedLink.data.sub_target
+      : undefined;
+
+  return {
+    id: inputNode.id,
+    node: connectedNode.id,
+    ...(subNode ? { sub_node: subNode } : {}),
+    ...(hasDefinedFields(linkAttributes) && {
+      link_attributes: linkAttributes,
+    }),
+    uiProps: computeUiProps(inputNode, connectedLink),
+  };
 }
 
 function convertRFOutputNodeToEwoks(
-  rfOutputNode: NodeWithData,
+  outputNode: NodeWithData,
   nodes: NodeWithData[],
   links: EdgeWithData[],
-): EwoksIONode[] {
-  return links
-    .filter((link) => link.target === rfOutputNode.id)
-    .flatMap<EwoksIONode>((link) => {
-      const connectedNode = nodes.find((node) => link.source === node.id);
+): EwoksIONode {
+  const connectedLink = links.find((link) => link.target === outputNode.id);
 
-      if (!connectedNode) {
-        return [];
-      }
+  if (!connectedLink) {
+    return {
+      id: outputNode.id,
+      node: null,
+      uiProps: computeNodeUiProps(outputNode),
+    };
+  }
 
-      const subNode =
-        connectedNode.data.task_props.task_type === 'graph' &&
-        link.data.sub_source
-          ? link.data.sub_source
-          : undefined;
+  const connectedNode = nodes.find((node) => connectedLink.source === node.id);
+  // Since a link needs two nodes to be created, this assertion should never fail
+  assertDefined(connectedNode, `No node with id ${connectedLink.source}`);
 
-      const linkAttributes = computeLinkAttributes(link);
-      return [
-        {
-          id: rfOutputNode.id,
-          node: connectedNode.id,
-          ...(subNode ? { sub_node: subNode } : {}),
-          ...(hasDefinedFields(linkAttributes) && {
-            link_attributes: linkAttributes,
-          }),
-          uiProps: computeUiProps(rfOutputNode, link),
-        },
-      ];
-    });
+  const linkAttributes = computeLinkAttributes(connectedLink);
+  const subNode =
+    connectedNode.data.task_props.task_type === 'graph' &&
+    connectedLink.data.sub_source
+      ? connectedLink.data.sub_source
+      : undefined;
+
+  return {
+    id: outputNode.id,
+    node: connectedNode.id,
+    ...(subNode ? { sub_node: subNode } : {}),
+    ...(hasDefinedFields(linkAttributes) && {
+      link_attributes: linkAttributes,
+    }),
+    uiProps: computeUiProps(outputNode, connectedLink),
+  };
 }
 
 function computeLinkAttributes(link: EdgeWithData): EwoksIOLinkAttributes {
@@ -134,13 +134,9 @@ function computeUiProps(
   link: EdgeWithData,
 ): EwoksNodeUiProps {
   const ewoksMarkerEnd = convertRFMarkerEndToEwoks(link.markerEnd);
-  const { ui_props: uiProps } = node.data;
 
   return {
-    position: node.position,
-    width: node.width,
-    height: node.height,
-    ...notUndefinedValue(node.data.ewoks_props.label, 'label'),
+    ...computeNodeUiProps(node),
     ...notUndefinedValue(link.type, 'type'),
     ...(link.style?.stroke && {
       style: {
@@ -149,6 +145,17 @@ function computeUiProps(
     }),
     ...(ewoksMarkerEnd ? { markerEnd: ewoksMarkerEnd } : {}),
     ...notUndefinedValue(link.animated, 'animated'),
+  };
+}
+
+function computeNodeUiProps(node: NodeWithData): EwoksNodeUiProps {
+  const { ui_props: uiProps } = node.data;
+
+  return {
+    position: node.position,
+    width: node.width,
+    height: node.height,
+    ...notUndefinedValue(node.data.ewoks_props.label, 'label'),
     ...notUndefinedValue(uiProps.withImage, 'withImage'),
     ...notUndefinedValue(uiProps.withLabel, 'withLabel'),
     ...(uiProps.borderColor && {

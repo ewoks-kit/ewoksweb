@@ -32,11 +32,31 @@ const expectedWorkflow = {
           },
         },
       },
+      {
+        id: 'In1',
+        node: null,
+        uiProps: {
+          position: {
+            x: 0,
+            y: 0,
+          },
+        },
+      },
     ],
     output_nodes: [
       {
         id: 'Out0',
         node: 'In0',
+        uiProps: {
+          position: {
+            x: 0,
+            y: 0,
+          },
+        },
+      },
+      {
+        id: 'Out1',
+        node: null,
         uiProps: {
           position: {
             x: 0,
@@ -51,16 +71,6 @@ const expectedWorkflow = {
 };
 
 it('Saves special nodes', () => {
-  cy.intercept('POST', 'api/workflows', (req) => {
-    // Skip check of the `position` field since it depends on viewport
-    const res = isEqualWith(req.body, expectedWorkflow, (_, __, key) =>
-      key === 'position' ? true : undefined,
-    );
-    expect(res).to.be.true;
-
-    req.reply({});
-  });
-
   cy.findByRole('button', { name: 'General' }).click();
 
   cy.dragNodeInCanvas('note');
@@ -69,13 +79,27 @@ it('Saves special nodes', () => {
   cy.dragNodeInCanvas('graphInput');
   cy.dragNodeInCanvas('graphOutput');
   cy.waitForStableDOM();
-  // TODO: graphInput and graphOutput are only saved if they are connected to another node
   cy.findByRole('button', { name: 'In0' })
     .find('.react-flow__handle-right')
     .click({ force: true });
   cy.findByRole('button', { name: 'Out0' })
     .find('.react-flow__handle-left')
     .click({ force: true });
+
+  cy.dragNodeInCanvas('graphInput');
+  cy.dragNodeInCanvas('graphOutput');
+
+  cy.intercept('POST', 'api/workflows', (req) => {
+    // Skip check of the `position` field since it depends on viewport
+    const bodyIsEqualToExpected = isEqualWith(
+      req.body,
+      expectedWorkflow,
+      (_, __, key) => (key === 'position' ? true : undefined),
+    );
+    expect(bodyIsEqualToExpected).to.be.true;
+
+    req.reply({});
+  });
 
   cy.saveNewWorkflow(id);
 });
