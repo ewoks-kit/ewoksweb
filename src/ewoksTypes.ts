@@ -25,7 +25,7 @@ export interface GraphDetails {
 
 export interface EwoksIONode {
   id: string;
-  node: string;
+  node: string | null;
   sub_node?: string;
   link_attributes?: EwoksIOLinkAttributes;
   uiProps?: EwoksIONodeUiProps;
