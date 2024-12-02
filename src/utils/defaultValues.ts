@@ -11,7 +11,6 @@ export const DEFAULT_NODE_VALUES = {
   uiProps: {
     moreHandles: false,
     withImage: true,
-    withLabel: true,
   },
 };
 

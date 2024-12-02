@@ -17,7 +17,6 @@ function OutputNode(props: NodeProps) {
 
   const { borderColor } = uiProps;
   const { withImage = DEFAULT_NODE_VALUES.uiProps.withImage } = uiProps;
-  const { withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel } = uiProps;
 
   return (
     <div className={styles.outputNode} style={{ borderColor }}>
@@ -27,12 +26,7 @@ function OutputNode(props: NodeProps) {
           <NodeIcon nodeId={props.id} icon={GRAPH_OUTPUT_ICON} />
         </SuspenseBoundary>
       )}
-      <NodeLabel
-        id={props.id}
-        label={nodeData.ewoks_props.label}
-        showFull={withLabel}
-        showCropped={!withLabel && !withImage}
-      />
+      <NodeLabel id={props.id} label={nodeData.ewoks_props.label} />
     </div>
   );
 }

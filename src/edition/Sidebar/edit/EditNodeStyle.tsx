@@ -30,14 +30,6 @@ export default function EditNodeStyle(props: Props) {
     });
   }
 
-  function withLabelChanged(checked: boolean) {
-    mergeNodeData(nodeId, {
-      ui_props: {
-        withLabel: checked,
-      },
-    });
-  }
-
   function handleBorderColorChange(value: string | undefined) {
     if (!nodeData) {
       return;
@@ -93,15 +85,6 @@ export default function EditNodeStyle(props: Props) {
               }
               onChange={withImageChanged}
               label="With image"
-            />
-            <SidebarCheckbox
-              value={
-                nodeData.ui_props.withLabel === undefined
-                  ? true
-                  : !!nodeData.ui_props.withLabel
-              }
-              onChange={withLabelChanged}
-              label="With label"
             />
           </div>
         )}

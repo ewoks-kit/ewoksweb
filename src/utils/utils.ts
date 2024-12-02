@@ -42,7 +42,6 @@ export function notUndefinedValue<T>(
 export function calcCommonNodeUiProps(uiProps: EwoksIONodeUiProps) {
   return {
     ...notUndefinedValue(uiProps.withImage, 'withImage'),
-    ...notUndefinedValue(uiProps.withLabel, 'withLabel'),
     ...(uiProps.borderColor && { borderColor: uiProps.borderColor }),
   };
 }

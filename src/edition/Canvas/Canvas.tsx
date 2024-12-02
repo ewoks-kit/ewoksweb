@@ -3,7 +3,6 @@ import type {
   Connection,
   Edge,
   EdgeChange,
-  Node,
   NodeChange,
   XYPosition,
 } from '@xyflow/react';
@@ -16,7 +15,7 @@ import {
   useReactFlow,
 } from '@xyflow/react';
 import { useStoreApi } from '@xyflow/react';
-import type { DragEventHandler, MouseEvent } from 'react';
+import type { DragEventHandler } from 'react';
 import { useState } from 'react';
 import { useRef } from 'react';
 
@@ -62,22 +61,6 @@ const nodeTypes = {
   graphOutput: OutputNode,
   class: RegularNode,
 };
-
-function onNodeDoubleClick(event: MouseEvent, node: Node) {
-  event.preventDefault();
-
-  const nodeData = getNodesData().get(node.id);
-  if (!nodeData) {
-    return;
-  }
-  if (nodeData.task_props.task_type === 'graph') {
-    const newTabURL = `${window.location.origin}${window.location.pathname}?workflow=${nodeData.task_props.task_identifier}`;
-    const newTab = window.open(newTabURL, '_blank');
-    if (newTab) {
-      newTab.focus();
-    }
-  }
-}
 
 interface Props {
   workflowId: string | undefined;
@@ -267,7 +250,6 @@ function Canvas(props: Props) {
             onConnect={onConnect}
             onReconnect={onReconnect}
             onDragOver={onDragOver}
-            onNodeDoubleClick={onNodeDoubleClick}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             edgeTypes={edgeTypes}
