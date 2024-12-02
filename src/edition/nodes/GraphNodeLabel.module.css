@@ -1,0 +1,13 @@
+.content {
+  composes: content from './NodeLabel.module.css';
+  display: flex;
+  margin: 0 0.5em;
+}
+
+.link {
+  display: flex;
+}
+
+.icon {
+  margin-left: 0.25em;
+}

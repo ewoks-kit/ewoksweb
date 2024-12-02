@@ -13,9 +13,6 @@ it('should open the workflow given its id as query parameter', () => {
 
 it('saves two empty workflows and uses the one as a subworkflow to the other ', () => {
   cy.loadAppWithoutGraph();
-  cy.window().then((window) => {
-    cy.stub(window, 'open').as('open');
-  });
 
   const subworkflow = nanoid();
   const rootWorkflow = nanoid();
@@ -36,16 +33,13 @@ it('saves two empty workflows and uses the one as a subworkflow to the other ', 
   cy.findByRole('option', { name: subworkflow }).click();
   cy.waitForStableDOM();
 
-  // Try to open the subworkflow
-  cy.findByRole('button', { name: new RegExp(`^${subworkflow}`) }).dblclick();
-  cy.get('@open').should(
-    'have.been.calledOnceWithExactly',
-    `http://localhost:3000/edit?workflow=${subworkflow}`,
-    '_blank',
-  );
-
   cy.get('.react-flow__node').should('have.length', 1);
   cy.get('.react-flow__node-graph').should('have.length', 1);
+  cy.findByRole('link', { name: new RegExp(`^${subworkflow}`) }).should(
+    'have.attr',
+    'href',
+    `http://localhost:3000/edit?workflow=${subworkflow}`,
+  );
 
   cy.saveNewWorkflow(rootWorkflow);
 
