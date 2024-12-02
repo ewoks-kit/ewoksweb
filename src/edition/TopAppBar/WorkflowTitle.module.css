@@ -1,13 +1,11 @@
 .crumbs {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   font-size: 1.25rem;
   font-weight: 500;
-  margin: 0;
+  margin: 0 1rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  flex-shrink: 1;
 }
 
 .labelHint {
