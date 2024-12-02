@@ -25,7 +25,6 @@ function RegularNode(props: NodeProps) {
   const { label } = ewoksProps;
   const { borderColor, moreHandles } = uiProps;
   const { withImage = DEFAULT_NODE_VALUES.uiProps.withImage } = uiProps;
-  const { withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel } = uiProps;
 
   return (
     <NodeWrapper borderColor={borderColor} resizable={selected}>
@@ -42,12 +41,7 @@ function RegularNode(props: NodeProps) {
           </>
         )}
 
-        <NodeLabel
-          id={id}
-          label={label}
-          showFull={withLabel}
-          showCropped={!withLabel && !withImage}
-        />
+        <NodeLabel id={id} label={label} />
         {withImage && (
           <SuspenseBoundary>
             <NodeIcon nodeId={id} icon={nodeData.ui_props.icon} />

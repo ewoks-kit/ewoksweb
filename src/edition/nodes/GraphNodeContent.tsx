@@ -49,18 +49,11 @@ function GraphNodeContent(props: NodeProps) {
 
   const { inputs = [], outputs = [], borderColor } = uiProps;
   const { withImage = DEFAULT_NODE_VALUES.uiProps.withImage } = uiProps;
-  const { withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel } = uiProps;
 
   return (
     <NodeWrapper borderColor={borderColor} resizable={selected}>
       <NodeTooltip tooltip={nodeData.comment}>
-        <NodeLabel
-          id={id}
-          label={nodeData.ewoks_props.label}
-          showFull={withLabel}
-          showCropped={!withLabel && !withImage}
-          color={subgraphExistsOnServer ? undefined : 'red'}
-        />
+        <NodeLabel id={id} label={nodeData.ewoks_props.label} />
         {withImage && (
           <SuspenseBoundary>
             <NodeIcon nodeId={id} icon={nodeData.ui_props.icon} />

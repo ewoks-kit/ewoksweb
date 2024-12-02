@@ -50,7 +50,6 @@ export interface EwoksIONodeUiProps {
   markerEnd?: EwoksMarkerEnd;
   targetHandle?: string;
   withImage?: boolean;
-  withLabel?: boolean;
   borderColor?: string;
 }
 
@@ -116,7 +115,6 @@ export interface EwoksNodeUiProps {
   height?: number;
   style?: LinkStyle;
   withImage?: boolean;
-  withLabel?: boolean;
   borderColor?: string;
   moreHandles?: boolean;
   inputs?: SubgraphOutputsInputs[];

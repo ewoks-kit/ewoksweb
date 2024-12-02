@@ -157,7 +157,6 @@ function computeNodeUiProps(node: NodeWithData): EwoksNodeUiProps {
     height: node.height,
     ...notUndefinedValue(node.data.ewoks_props.label, 'label'),
     ...notUndefinedValue(uiProps.withImage, 'withImage'),
-    ...notUndefinedValue(uiProps.withLabel, 'withLabel'),
     ...(uiProps.borderColor && {
       borderColor: uiProps.borderColor,
     }),

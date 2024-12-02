@@ -17,17 +17,11 @@ function InputNode(props: NodeProps) {
 
   const { borderColor } = uiProps;
   const { withImage = DEFAULT_NODE_VALUES.uiProps.withImage } = uiProps;
-  const { withLabel = DEFAULT_NODE_VALUES.uiProps.withLabel } = uiProps;
 
   return (
     <div className={styles.inputNode} style={{ borderColor }}>
       <OutputHandle />
-      <NodeLabel
-        id={props.id}
-        label={nodeData.ewoks_props.label}
-        showFull={withLabel}
-        showCropped={!withLabel && !withImage}
-      />
+      <NodeLabel id={props.id} label={nodeData.ewoks_props.label} />
       {withImage && (
         <SuspenseBoundary>
           <NodeIcon nodeId={props.id} icon={GRAPH_INPUT_ICON} />

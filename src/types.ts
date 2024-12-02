@@ -70,7 +70,6 @@ export interface NodeUiProps {
   icon?: string;
   style?: CSSProperties;
   withImage?: boolean;
-  withLabel?: boolean;
   borderColor?: string;
   moreHandles?: boolean;
   // To position inputs-outputs of subgraphs in a graph
