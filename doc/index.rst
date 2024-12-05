@@ -8,22 +8,30 @@ ewoksweb |version|
     howtoguides
     explanations
 
-*ewoksweb* is a frontend to create, visualize and execute `ewoks <https://ewoks.readthedocs.io/>`_ workflows in the web.
+*ewoksweb* is a full-stack web application for creating, visualizing, and executing `ewoks <https://ewoks.readthedocs.io/>`_ workflows, powered by a REST server (`ewoksserver <https://ewoksserver.readthedocs.io/en/latest/>`_), offering a dynamic and user-friendly way to design workflows and export them as JSON files.
 
-ewoksweb has been developed by the `Software group <http://www.esrf.eu/Instrumentation/software>`_ of the `European Synchrotron <https://www.esrf.eu/>`_.
+*ewoksweb* has been developed by the `Software group <http://www.esrf.eu/Instrumentation/software>`_ of the `European Synchrotron <https://www.esrf.eu/>`_.
 
-The documentation is inspired by the `diataxis <https://diataxis.fr>`_ approach.
 
-Install locally
+Getting started
 ---------------
 
-Install the `ewoksweb <https://gitlab.esrf.fr/workflow/ewoks/ewoksweb>`_ Python package
+Access the Demo
+^^^^^^^^^^^^^^^
+
+You can explore the live demo of *ewoksweb* at:  
+`ewoksweb Demo <https://workflow.gitlab-pages.esrf.fr/ewoks/ewoksweb/>`_
+
+Access the Demo
+^^^^^^^^^^^^^^^
+
+Install the `ewoksweb <https://gitlab.esrf.fr/workflow/ewoks/ewoksweb>`_ python package locally
 
 .. code:: bash
 
     pip install ewoksweb
 
-Start the application via
+Start the app (frontend and server) via
 
 .. code:: bash
 
