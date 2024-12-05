@@ -2,30 +2,56 @@
 """
 
 from pysrc.ewoksweb import __version__ as release
+from datetime import datetime
 
 project = "ewoksweb"
 version = ".".join(release.split(".")[:2])
-copyright = "2023-2024, ESRF"
+copyright = f"2023-{datetime.now().year}, ESRF"
 author = "ESRF"
 docstitle = f"{project} {version}"
 
+# -- General configuration ---------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
+
+always_document_param_types = True
+autosummary_generate = True
+autodoc_default_flags = [
+    "members",
+    "undoc-members",
+    "show-inheritance",
+]
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.viewcode",
+    "sphinx_autodoc_typehints",
 ]
+
+# -- Options for HTML output -------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 templates_path = ["_templates"]
 exclude_patterns = []
 
 html_theme = "pydata_sphinx_theme"
+html_static_path = []
+html_template_path = ["_templates"]
+html_sidebars = {"<page_pattern>": ["list", "of", "templates"]}
 
 html_theme_options = {
+    "header_links_before_dropdown": 3,
+    "navbar_align": "content",
+    "show_nav_level": 2,
     "icon_links": [
         {
             "name": "gitlab",
             "url": "https://gitlab.esrf.fr/workflow/ewoks/ewoksweb",
             "icon": "fa-brands fa-gitlab",
+        },
+        {
+            "name": "pypi",
+            "url": "https://pypi.org/project/ewoksweb/",
+            "icon": "fa-brands fa-python",
         },
     ],
     "navbar_start": ["navbar_start"],
@@ -33,7 +59,6 @@ html_theme_options = {
     "footer_end": ["footer_end"],
 }
 
-html_static_path = []
 
 autosummary_generate = True
 autodoc_default_flags = [
