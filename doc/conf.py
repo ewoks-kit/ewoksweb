@@ -21,10 +21,8 @@ autodoc_default_flags = [
     "show-inheritance",
 ]
 extensions = [
-    "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.viewcode",
-    "sphinx_autodoc_typehints",
 ]
 
 # -- Options for HTML output -------------------------------------------------
