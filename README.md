@@ -5,8 +5,6 @@ _ewoksweb_ is a web-based frontend for creating, visualizing and executing
 
 ## Getting started
 
-Access the [ewoksweb Demo](https://workflow.gitlab-pages.esrf.fr/ewoks/ewoksweb/).
-
 Install _ewoksweb_ python package locally
 ```bash
 pip install ewoksweb
