@@ -8,7 +8,10 @@ ewoksweb |version|
     howtoguides
     explanations
 
-*ewoksweb* is a full-stack web application for creating, visualizing, and executing `ewoks <https://ewoks.readthedocs.io/>`_ workflows, powered by a REST server (`ewoksserver <https://ewoksserver.readthedocs.io/en/latest/>`_), offering a dynamic and user-friendly way to design workflows and export them as JSON files.
+
+*ewoksweb* is a full-stack web application for creating, visualizing, and executing `ewoks <https://ewoks.readthedocs.io/>`_ workflows. 
+Powered by a REST server (`ewoksserver <https://ewoksserver.readthedocs.io/en/latest/>`_), it offers a dynamic and user-friendly way to design workflows 
+and export them as JSON files.
 
 *ewoksweb* has been developed by the `Software group <http://www.esrf.eu/Instrumentation/software>`_ of the `European Synchrotron <https://www.esrf.eu/>`_.
 
