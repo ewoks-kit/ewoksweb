@@ -16,17 +16,6 @@ ewoksweb |version|
 Getting started
 ---------------
 
-Access the Demo
-^^^^^^^^^^^^^^^
-
-You can explore the live demo of *ewoksweb* at:  
-`ewoksweb Demo <https://workflow.gitlab-pages.esrf.fr/ewoks/ewoksweb/>`_
-
-Access the Demo
-^^^^^^^^^^^^^^^
-
-Install the `ewoksweb <https://gitlab.esrf.fr/workflow/ewoks/ewoksweb>`_ python package locally
-
 .. code:: bash
 
     pip install ewoksweb
