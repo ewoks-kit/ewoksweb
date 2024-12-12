@@ -1,6 +1,3 @@
-"""rm -rf doc/_generated/; sphinx-build doc build/sphinx/html -E -a
-"""
-
 from pysrc.ewoksweb import __version__ as release
 from datetime import datetime
 

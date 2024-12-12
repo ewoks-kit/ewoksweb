@@ -74,3 +74,43 @@ To do a new release:
   to upload the package
 - Or download manually the package from the CI artifacts of the `assets` job and
   upload it with `twine`.
+
+## Documentation
+
+The documentation is composed of RST files located in `doc`. You can look at the
+[Sphinx doc](https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
+for information on how to write RST files.
+
+If a new file is created, don't forget to reference it in one of the `toctree`
+directive.
+
+## Build documentation
+
+The documentation is built with [Sphinx](https://www.sphinx-doc.org/en/master/)
+that generates HTML pages out of the RST files. The configuration of Sphinx is
+in `doc/conf.py`.
+
+Requirements (including Sphinx) can be installed with
+
+```bash
+pip install [--user] .[doc]
+```
+
+Then, build the documentation with
+
+```bash
+sphinx-build doc build/sphinx/html -E -a
+```
+
+The generated HTML pages will be available in `build/sphinx/html`. You can
+browse them by opening `build/sphinx/html/index.html` in your browser.
+
+When developing/writing doc,
+[sphinx-autobuild](https://github.com/executablebooks/sphinx-autobuild) can be
+used to automatically rebuild the documentation on changes
+
+```
+sphinx-autobuild doc build/sphinx/html
+```
+
+The dynamic build will then be served on http://127.0.0.1:8000/.
