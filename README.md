@@ -1,15 +1,11 @@
 # ewoksweb
 
-_ewoksweb_ is a frontend to create, visualize and execute
-[ewoks](https://ewoks.readthedocs.io/) workflows in the web.
+_ewoksweb_ is a web-based frontend for creating, visualizing and executing
+[ewoks](https://ewoks.readthedocs.io/) workflows.
 
-## Demo
+## Getting started
 
-https://workflow.gitlab-pages.esrf.fr/ewoks/ewoksweb/
-
-## Local installation
-
-Install the [ewoksweb](https://ewoksweb.readthedocs.io) python package
+Install _ewoksweb_ python package locally
 
 ```bash
 pip install ewoksweb
@@ -20,8 +16,6 @@ Start the server via
 ```bash
 ewoksweb
 ```
-
-See the documentation (link below) for more information.
 
 ## Documentation
 
