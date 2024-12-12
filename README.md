@@ -6,10 +6,13 @@ _ewoksweb_ is a web-based frontend for creating, visualizing and executing
 ## Getting started
 
 Install _ewoksweb_ python package locally
+
 ```bash
 pip install ewoksweb
 ```
+
 Start the server via
+
 ```bash
 ewoksweb
 ```
