@@ -18,8 +18,9 @@ extensions = []
 templates_path = ["_templates"]
 
 html_theme = "pydata_sphinx_theme"
-html_static_path = []
+html_static_path = ["_static"]
 html_template_path = ["_templates"]
+html_logo = "_static/logo.png"
 
 html_theme_options = {
     "header_links_before_dropdown": 3,
@@ -37,7 +38,9 @@ html_theme_options = {
             "icon": "fa-brands fa-python",
         },
     ],
-    "navbar_start": ["navbar_start"],
+    "logo": {
+        "text": docstitle,
+    },
     "footer_start": ["copyright"],
     "footer_end": ["footer_end"],
 }
