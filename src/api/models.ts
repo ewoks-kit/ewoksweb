@@ -44,7 +44,7 @@ export interface ExecutedJobsResponse {
   jobs: EwoksJob[];
 }
 
-export interface WorkersResponse {
+export interface QueuesResponse {
   queues: string[] | null;
 }
 
@@ -52,7 +52,7 @@ export enum QueryKey {
   Jobs = 'jobs',
   Icons = 'icons',
   Tasks = 'tasks',
-  Workers = 'queues',
+  Queues = 'queues',
   Workflow = 'workflow',
   WorkflowDescriptions = 'workflows',
 }

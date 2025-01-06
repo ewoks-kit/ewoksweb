@@ -12,7 +12,7 @@ export async function execute(
   workflowId: string,
   inputsRows: ExecutionInputTableRow[],
   engineOption: EngineDropdownOption,
-  worker: string,
+  queue: string,
 ) {
   const inputs = inputsRows
     .filter(hasDefinedProperties)
@@ -37,6 +37,6 @@ export async function execute(
 
   await executeWorkflow(workflowId, {
     ...(hasDefinedFields(execute_arguments) ? { execute_arguments } : {}),
-    ...(worker ? { worker_options: { queue: worker } } : {}),
+    ...(queue ? { worker_options: { queue } } : {}),
   });
 }

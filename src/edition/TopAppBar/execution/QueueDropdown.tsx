@@ -1,4 +1,4 @@
-import { useWorkers } from '../../../api/execution';
+import { useQueues } from '../../../api/execution';
 import styles from './ExecutionOptions.module.css';
 
 interface Props {
@@ -6,27 +6,27 @@ interface Props {
   setValue: (newValue: string) => void;
 }
 
-function WorkerDropdown(props: Props) {
+function QueueDropdown(props: Props) {
   const { value, setValue } = props;
-  const workers = useWorkers();
+  const queues = useQueues();
 
-  if (workers === null) {
-    // Celery not set up: worker cannot be selected
+  if (queues === null) {
+    // Celery not set up: queue cannot be selected
     return null;
   }
 
   return (
     <div className={styles.selectContainer}>
-      <span className={styles.label}>Executing worker</span>
+      <span className={styles.label}>Job queue</span>
       <select
         className={styles.select}
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        aria-label="Change executing worker"
+        aria-label="Change job queue"
       >
-        {workers.map((worker) => (
-          <option key={worker} value={worker}>
-            {worker}
+        {queues.map((queue) => (
+          <option key={queue} value={queue}>
+            {queue}
           </option>
         ))}
       </select>
@@ -34,4 +34,4 @@ function WorkerDropdown(props: Props) {
   );
 }
 
-export default WorkerDropdown;
+export default QueueDropdown;
