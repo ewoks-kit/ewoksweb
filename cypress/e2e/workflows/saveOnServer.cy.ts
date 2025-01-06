@@ -23,7 +23,7 @@ it('saves an empty workflow on the server, reloads and deletes it', () => {
   cy.get('.react-flow__node').should('have.length', 0);
   const id = nanoid();
 
-  cy.intercept('POST', 'api/workflows', (req) => {
+  cy.intercept('POST', 'api/**/workflows', (req) => {
     expect(req.body).to.deep.equal({ graph: { id }, nodes: [], links: [] });
   });
   cy.saveNewWorkflow(id);
@@ -34,7 +34,7 @@ it('saves an empty workflow on the server, reloads and deletes it', () => {
   cy.findByRole('heading', { name: 'tutorial_Graph' }).should('not.exist');
 
   // It detects no changes when reloading
-  cy.intercept('PUT', `api/workflow/${id}`, (req) => {
+  cy.intercept('PUT', `api/**/workflow/${id}`, (req) => {
     expect(req.body).to.deep.equal({ graph: { id }, nodes: [], links: [] });
   });
   cy.findByRole('button', {
@@ -79,7 +79,7 @@ it('saves a workflow with comment, category and label and saves a clean workflow
   cy.findByRole('textbox', { name: 'Edit comment' }).type('graph comment');
   cy.findByRole('textbox', { name: 'Edit category' }).type('graph category');
 
-  cy.intercept('POST', `api/workflows`, (req) => {
+  cy.intercept('POST', `api/**/workflows`, (req) => {
     expect(req.body).to.deep.equal({
       graph: {
         id,
@@ -93,7 +93,7 @@ it('saves a workflow with comment, category and label and saves a clean workflow
   });
   cy.saveNewWorkflow(id);
 
-  cy.intercept('PUT', `api/workflow/${id}`, (req) => {
+  cy.intercept('PUT', `api/**/workflow/${id}`, (req) => {
     expect(req.body).to.deep.equal({ graph: { id }, nodes: [], links: [] });
   });
 
@@ -114,7 +114,7 @@ it('saves a workflow with an empty skeleton node, and saves the workflow after p
   cy.dragNodeInCanvas('taskSkeleton');
   cy.get('.react-flow__node').should('have.length', 1);
 
-  cy.intercept('POST', `api/workflows`, (req) => {
+  cy.intercept('POST', `api/**/workflows`, (req) => {
     // Delete unreliable position property
     delete req.body.nodes[0].uiProps.position;
 
@@ -160,7 +160,7 @@ it('saves a workflow with an empty skeleton node, and saves the workflow after p
   cy.findByRole('checkbox', { name: 'More handles' }).check();
   cy.findByRole('checkbox', { name: 'With image' }).uncheck();
 
-  cy.intercept('PUT', `api/workflow/${id}`, (req) => {
+  cy.intercept('PUT', `api/**/workflow/${id}`, (req) => {
     // Delete unreliable position property
     delete req.body.nodes[0].uiProps.position;
 
@@ -212,7 +212,7 @@ it('saves a workflow with a link, and saves the workflow after populating the li
 
   cy.get('.react-flow__edge').should('have.length', 1);
 
-  cy.intercept('POST', `api/workflows`, (req) => {
+  cy.intercept('POST', `api/**/workflows`, (req) => {
     // Delete unreliable position property
     delete req.body.nodes[0].uiProps.position;
     delete req.body.nodes[1].uiProps.position;
@@ -292,7 +292,7 @@ it('saves a workflow with a link, and saves the workflow after populating the li
 
   cy.contains('Animated').siblings().click();
 
-  cy.intercept('PUT', `api/workflow/${id}`, (req) => {
+  cy.intercept('PUT', `api/**/workflow/${id}`, (req) => {
     // Delete unreliable position property
     delete req.body.nodes[0].uiProps.position;
     delete req.body.nodes[1].uiProps.position;
@@ -388,7 +388,7 @@ it('saves default inputs with the correct type', () => {
       .type('0');
   });
 
-  cy.intercept('POST', 'api/workflows', (req) => {
+  cy.intercept('POST', 'api/**/workflows', (req) => {
     expect(req.body.nodes[0].default_inputs).to.deep.equal([
       { name: 'a', value: 175.67 },
       { name: 'b', value: '1' },

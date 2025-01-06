@@ -89,7 +89,7 @@ it('Saves special nodes', () => {
   cy.dragNodeInCanvas('graphInput');
   cy.dragNodeInCanvas('graphOutput');
 
-  cy.intercept('POST', 'api/workflows', (req) => {
+  cy.intercept('POST', 'api/**/workflows', (req) => {
     // Skip check of the `position` field since it depends on viewport
     const bodyIsEqualToExpected = isEqualWith(
       req.body,

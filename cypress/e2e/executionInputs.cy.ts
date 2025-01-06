@@ -13,13 +13,13 @@ function expectRequestBodyToDeepEqual(expectation: unknown): RouteHandler {
     expect(req.body).to.deep.equal(expectation);
 
     // Prevent request from reaching the server since we don't want execution events to be created
-    // https://docs.cypress.io/api/commands/intercept#Providing-a-stub-response-with-reqreply
+    // https://docs.cypress.io/api/**/commands/intercept#Providing-a-stub-response-with-reqreply
     req.reply({});
   };
 }
 
 it('should not add inputs by default', () => {
-  cy.intercept(`api/execute/demo`, expectRequestBodyToDeepEqual({})).as(
+  cy.intercept(`api/**/execute/demo`, expectRequestBodyToDeepEqual({})).as(
     'executeRequest',
   );
 
@@ -33,7 +33,7 @@ it('should change the engine', () => {
   );
 
   cy.intercept(
-    `api/execute/demo`,
+    `api/**/execute/demo`,
     expectRequestBodyToDeepEqual({
       execute_arguments: { engine: 'ppf' },
     }),
@@ -53,7 +53,7 @@ it('should add inputs for all nodes', () => {
   cy.findByRole('textbox', { name: 'Edit input value' }).type('/data/test.h5');
 
   cy.intercept(
-    `api/execute/demo`,
+    `api/**/execute/demo`,
     expectRequestBodyToDeepEqual({
       execute_arguments: {
         inputs: [{ name: 'filename', value: '/data/test.h5', all: true }],
@@ -75,7 +75,7 @@ it('should add inputs for all input nodes', () => {
   cy.findByRole('textbox', { name: 'Edit input value' }).type('/data/test.h5');
 
   cy.intercept(
-    `api/execute/demo`,
+    `api/**/execute/demo`,
     expectRequestBodyToDeepEqual({
       execute_arguments: {
         inputs: [{ name: 'filename', value: '/data/test.h5' }],
@@ -100,7 +100,7 @@ it('should add inputs for a specific node', () => {
   cy.findByRole('spinbutton', { name: 'Edit input value' }).type('6');
 
   cy.intercept(
-    `api/execute/demo`,
+    `api/**/execute/demo`,
     expectRequestBodyToDeepEqual({
       execute_arguments: {
         inputs: [{ name: 3, value: 6, id: 'task1' }],
