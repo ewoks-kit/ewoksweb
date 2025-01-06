@@ -36,7 +36,7 @@ export function useExecutedJobs() {
 }
 
 async function getWorkers() {
-  const { data } = await client.get<WorkersResponse>(`/execution/workers`);
+  const { data } = await client.get<WorkersResponse>(`/execution/queues`);
   return data;
 }
 
@@ -49,5 +49,5 @@ export function useWorkers() {
   });
   assertDefined(data);
 
-  return data.workers;
+  return data.queues;
 }

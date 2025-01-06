@@ -45,14 +45,14 @@ export interface ExecutedJobsResponse {
 }
 
 export interface WorkersResponse {
-  workers: string[] | null;
+  queues: string[] | null;
 }
 
 export enum QueryKey {
   Jobs = 'jobs',
   Icons = 'icons',
   Tasks = 'tasks',
-  Workers = 'workers',
+  Workers = 'queues',
   Workflow = 'workflow',
   WorkflowDescriptions = 'workflows',
 }

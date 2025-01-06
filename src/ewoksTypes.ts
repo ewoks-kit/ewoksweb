@@ -69,7 +69,7 @@ export interface EwoksEvent {
   task_uri?: string;
   task_id?: string;
   input_uris?: unknown[];
-  binding?: string;
+  engine?: string;
   progress?: string;
   node_id?: string;
 }
