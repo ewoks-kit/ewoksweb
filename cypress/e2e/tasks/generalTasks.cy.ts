@@ -5,12 +5,23 @@ beforeEach(() => {
 it('displays the general category with the general tasks inside', () => {
   cy.findByRole('button', { name: 'General' }).should('be.visible');
   cy.findByRole('button', { name: 'General' }).click();
+  cy.waitForStableDOM();
 
-  cy.findByRole('button', { name: 'graphInput' }).should('be.visible');
-  cy.findByRole('button', { name: 'graphOutput' }).should('be.visible');
-  cy.findByRole('button', { name: 'taskSkeleton' }).should('be.visible');
-  cy.findByRole('button', { name: 'note' }).should('be.visible');
-  cy.findByRole('button', { name: 'subworkflow' }).should('be.visible');
+  cy.findByRole('button', { name: 'graphInput' })
+    .scrollIntoView()
+    .should('be.visible');
+  cy.findByRole('button', { name: 'graphOutput' })
+    .scrollIntoView()
+    .should('be.visible');
+  cy.findByRole('button', { name: 'taskSkeleton' })
+    .scrollIntoView()
+    .should('be.visible');
+  cy.findByRole('button', { name: 'note' })
+    .scrollIntoView()
+    .should('be.visible');
+  cy.findByRole('button', { name: 'subworkflow' })
+    .scrollIntoView()
+    .should('be.visible');
 });
 
 it('does not allow to edit general tasks', () => {

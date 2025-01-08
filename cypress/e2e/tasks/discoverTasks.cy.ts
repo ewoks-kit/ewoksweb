@@ -10,10 +10,13 @@ it('discovers tasks from an existing module', () => {
     'not.be.checked',
   );
   cy.findByRole('button', { name: 'Discover' }).click();
-
   cy.findByRole('button', { name: 'Cancel' }).click();
 
+  // Close discover pop-up
+  cy.findByRole('button', { name: 'Close' }).click();
+
   cy.findByRole('button', { name: 'ewokscore' }).click();
+  cy.waitForStableDOM();
 
   const discoveredTasksIds = [
     'ewokscore.methodtask.MethodExecutorTask',
@@ -26,7 +29,9 @@ it('discovers tasks from an existing module', () => {
   discoveredTasksIds.forEach((identifier) => {
     cy.findByRole('button', {
       name: identifier,
-    }).should('be.visible');
+    })
+      .scrollIntoView()
+      .should('be.visible');
   });
 });
 
