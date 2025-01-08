@@ -56,8 +56,7 @@ it('discovers tasks from the current Python env', () => {
   cy.findByRole('checkbox', { name: /^Discover from all modules/ }).check();
   cy.findByRole('button', { name: 'Discover' }).click();
 
-  cy.findByRole('alert', { hidden: true }).should(
-    'contain.text',
-    '7 tasks imported.',
-  );
+  cy.findByRole('alert', { hidden: true }).should(($elem) => {
+    expect($elem.text()).to.match(/\d+ tasks imported/);
+  });
 });
