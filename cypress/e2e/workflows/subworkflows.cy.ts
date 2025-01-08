@@ -22,7 +22,10 @@ it('saves two empty workflows and uses the one as a subworkflow to the other ', 
 
   cy.findByRole('button', { name: 'General' }).should('be.visible');
   cy.findByRole('button', { name: 'General' }).click();
-  cy.findByRole('button', { name: 'subworkflow' }).should('be.visible');
+  cy.waitForStableDOM();
+  cy.findByRole('button', { name: 'subworkflow' })
+    .scrollIntoView()
+    .should('be.visible');
   cy.dragNodeInCanvas('subworkflow');
 
   cy.contains('h2.MuiDialogTitle-root', 'Add subworkflow').should('be.visible');
