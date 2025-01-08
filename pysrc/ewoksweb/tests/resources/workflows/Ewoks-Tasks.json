@@ -2,16 +2,11 @@
   "graph": {
     "id": "Ewoks-Tasks",
     "label": "Ewoks-Tasks",
-    "category": "",
     "input_nodes": [
       {
         "id": "In0",
         "node": "taskSkeleton0",
         "link_attributes": {
-          "label": "",
-          "comment": "",
-          "conditions": [],
-          "data_mapping": [],
           "map_all_data": true,
           "on_error": false
         },
@@ -21,19 +16,9 @@
             "y": -930
           },
           "label": "graphInput",
-          "linkStyle": "default",
-          "style": {
-            "stroke": "#96a5f9",
-            "strokeWidth": "3px"
-          },
-          "markerEnd": {
-            "type": "arrowclosed"
-          },
-          "animated": false,
           "withImage": true,
-          "withLabel": true,
-          "colorBorder": "",
-          "nodeWidth": 100
+          "markerEnd": "arrowclosed",
+          "animated": false
         }
       }
     ],
@@ -42,10 +27,6 @@
         "id": "Out0",
         "node": "taskSkeleton0",
         "link_attributes": {
-          "label": "",
-          "comment": "",
-          "conditions": [],
-          "data_mapping": [],
           "map_all_data": true,
           "on_error": false
         },
@@ -55,25 +36,12 @@
             "y": -795
           },
           "label": "graphOutput",
-          "linkStyle": "default",
-          "style": {
-            "stroke": "#96a5f9",
-            "strokeWidth": "3px"
-          },
-          "markerEnd": {
-            "type": "arrowclosed"
-          },
-          "animated": false,
           "withImage": true,
-          "withLabel": true,
-          "colorBorder": "",
-          "nodeWidth": 100
+          "markerEnd": "arrowclosed",
+          "animated": false
         }
       }
-    ],
-    "uiProps": {
-      "notes": []
-    }
+    ]
   },
   "nodes": [
     {
@@ -83,20 +51,14 @@
       "task_identifier": "taskSkeleton",
       "task_generator": "",
       "default_error_node": false,
-      "default_inputs": [],
       "uiProps": {
-        "nodeWidth": 100,
-        "type": "input_output",
         "icon": "orange2.svg",
-        "comment": "",
         "position": {
           "x": -180,
           "y": -825
         },
         "moreHandles": false,
-        "withImage": true,
-        "withLabel": true,
-        "colorBorder": ""
+        "withImage": true
       }
     }
   ],
