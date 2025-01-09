@@ -117,9 +117,10 @@ it('changes the icon', () => {
     cy.findByRole('img')
       .should('have.attr', 'src')
       .should(
-        'include',
-        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFC0lEQVR4nO2a308UVx',
+        'match',
+        /\/src\/images\/orange3.png|data:image\/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6\/NlyAAAFC0lEQVR4nO2a308UVx/,
       );
+    // Default icon is served by Vite as URL in dev and as base64 string in prod.
   });
 
   cy.findByRole('combobox', { name: 'Change node icon' }).select('sum.png');
@@ -144,9 +145,10 @@ it('changes the icon', () => {
     cy.findByRole('img')
       .should('have.attr', 'src')
       .should(
-        'include',
-        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAFC0lEQVR4nO2a308UVx',
+        'match',
+        /\/src\/images\/orange3.png|data:image\/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6\/NlyAAAFC0lEQVR4nO2a308UVx/,
       );
+    // Default icon is served by Vite as URL in dev and as base64 string in prod.
   });
 });
 
