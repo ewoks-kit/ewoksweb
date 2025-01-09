@@ -105,6 +105,8 @@ it('saves a workflow with comment, category and label and saves a clean workflow
   cy.findByRole('button', {
     name: /Save workflow to server/,
   }).click();
+
+  cy.deleteWorkflow(id);
 });
 
 it('saves a workflow with an empty skeleton node, and saves the workflow after populating the node', () => {
@@ -189,6 +191,8 @@ it('saves a workflow with an empty skeleton node, and saves the workflow after p
   cy.findByRole('button', {
     name: /Save workflow to server/,
   }).click();
+
+  cy.deleteWorkflow(id);
 });
 
 it('saves a workflow with a link, and saves the workflow after populating the link', () => {
@@ -340,6 +344,8 @@ it('saves a workflow with a link, and saves the workflow after populating the li
   cy.findByRole('button', {
     name: /Save workflow to server/,
   }).click();
+
+  cy.deleteWorkflow(id);
 });
 
 it('saves default inputs with the correct type', () => {
