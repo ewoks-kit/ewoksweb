@@ -2,12 +2,6 @@ include:
   - project: dau/ci/pyci
     file: .gitlab-ci-template.yml
 
-stages:
-  - test
-  - style
-  - build
-  - deploy
-
 ### Jobs templates ###
 
 .base:
@@ -86,14 +80,12 @@ build-package:
   extends: .pnpm-base-build
   script:
     - python3 --version
-    - python3 -m pip install --upgrade pip
-    - python3 -m pip install --upgrade setuptools
+    - python3 -m pip install --upgrade pip setuptools
     - pnpm build:package
-    - python3 setup.py sdist
-    - mv dist sdist
+    - !reference [.build_sdist, script]
   after_script:
-    - ls -Rl sdist
-  artifacts:
+    - !reference [.build_sdist, after_script]
+  artifacts: # Cannot use !reference [.build_sdist, artifacts] since it is unsupported: https://gitlab.com/gitlab-org/gitlab/-/issues/351169
     paths:
       - sdist/
     when: on_success
