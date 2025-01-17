@@ -20,7 +20,7 @@ export interface GraphDetails {
   input_schema?: object;
   ui_schema?: object;
   execute_arguments?: object;
-  worker_options?: object;
+  submit_arguments?: object;
 }
 
 export interface EwoksIONode {

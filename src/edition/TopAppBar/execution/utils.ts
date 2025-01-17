@@ -37,6 +37,6 @@ export async function execute(
 
   await executeWorkflow(workflowId, {
     ...(hasDefinedFields(execute_arguments) ? { execute_arguments } : {}),
-    ...(queue ? { worker_options: { queue } } : {}),
+    ...(queue ? { submit_arguments: { queue } } : {}),
   });
 }

@@ -69,7 +69,7 @@ interface NodeExecutionInput {
 
 export interface ExecutionParams {
   execute_arguments?: ExecuteArguments;
-  worker_options?: WorkerOptions;
+  submit_arguments?: SubmitArguments;
 }
 
 interface ExecuteArguments {
@@ -77,7 +77,7 @@ interface ExecuteArguments {
   engine?: Engine;
 }
 
-interface WorkerOptions {
+interface SubmitArguments {
   queue: string;
 }
 
