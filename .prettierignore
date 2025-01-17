@@ -1,6 +1,7 @@
 /build/
 /.pnpm-store/
 /pnpm-lock.yaml
+/.gitlab-ci.yml
 .cypress-cache/
 
 /ewoksserver/

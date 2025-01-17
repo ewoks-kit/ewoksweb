@@ -1,5 +1,8 @@
-from pysrc.ewoksweb import __version__ as release
 from datetime import datetime
+
+import importlib.metadata
+
+release = importlib.metadata.version("ewoksweb")
 
 project = "ewoksweb"
 version = ".".join(release.split(".")[:2])

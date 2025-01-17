@@ -1,3 +1,7 @@
+include:
+  - project: dau/ci/pyci
+    file: .gitlab-ci-template.yml
+
 stages:
   - test
   - style
@@ -7,19 +11,18 @@ stages:
 ### Jobs templates ###
 
 .base:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_MERGE_REQUEST_ID
   image: gitlab-registry.esrf.fr/dau/ci/pyci/python_3.9_node_18:latest
   tags:
     - linux
-  only:
-    refs:
-      - main
-      - merge_requests
   timeout: 10m
 
 .pnpm-base:
   extends: .base
   variables:
-    CYPRESS_CACHE_FOLDER: '$CI_PROJECT_DIR/.cypress-cache/'
+    CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/.cypress-cache/"
   before_script:
     - corepack enable
     - corepack prepare pnpm@latest-9 --activate
@@ -34,38 +37,18 @@ stages:
       - .cypress-cache
 
 .pnpm-base-build:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
   stage: build
   extends: .pnpm-base
-  only:
-    refs:
-      - main
 
 .deploy:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
   stage: deploy
   extends: .base
-  only:
-    refs:
-      - main
 
 ### Required jobs ###
-
-flake8:
-  stage: style
-  needs: []
-  extends: .base
-  before_script:
-    - python3 -m pip install flake8
-  script:
-    - flake8
-
-black:
-  stage: style
-  needs: []
-  extends: .base
-  before_script:
-    - python3 -m pip install black
-  script:
-    - LC_ALL=C.UTF-8 black --check --safe .
 
 lint:
   stage: style
@@ -134,15 +117,10 @@ pages:
     expire_in: 2h
 
 assets:
-  extends: .deploy
-  script:
-    - rm -rf assets
-    - mkdir assets
-    - mv sdist/* assets/
-  after_script:
-    - ls -Rl assets
-  artifacts:
-    paths:
-      - assets
-    when: on_success
-    expire_in: 2h
+  extends: .assets
+
+testpypi:
+  extends: .testpypi
+
+pypi:
+  extends: .pypi
