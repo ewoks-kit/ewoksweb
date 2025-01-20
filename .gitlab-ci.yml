@@ -1,25 +1,22 @@
-stages:
-  - test
-  - style
-  - build
-  - deploy
+include:
+  - project: dau/ci/pyci
+    file: .gitlab-ci-template.yml
 
 ### Jobs templates ###
 
 .base:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_MERGE_REQUEST_ID
   image: gitlab-registry.esrf.fr/dau/ci/pyci/python_3.9_node_18:latest
   tags:
     - linux
-  only:
-    refs:
-      - main
-      - merge_requests
   timeout: 10m
 
 .pnpm-base:
   extends: .base
   variables:
-    CYPRESS_CACHE_FOLDER: '$CI_PROJECT_DIR/.cypress-cache/'
+    CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/.cypress-cache/"
   before_script:
     - corepack enable
     - corepack prepare pnpm@latest-9 --activate
@@ -34,38 +31,18 @@ stages:
       - .cypress-cache
 
 .pnpm-base-build:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
   stage: build
   extends: .pnpm-base
-  only:
-    refs:
-      - main
 
 .deploy:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
   stage: deploy
   extends: .base
-  only:
-    refs:
-      - main
 
 ### Required jobs ###
-
-flake8:
-  stage: style
-  needs: []
-  extends: .base
-  before_script:
-    - python3 -m pip install flake8
-  script:
-    - flake8
-
-black:
-  stage: style
-  needs: []
-  extends: .base
-  before_script:
-    - python3 -m pip install black
-  script:
-    - LC_ALL=C.UTF-8 black --check --safe .
 
 lint:
   stage: style
@@ -103,14 +80,12 @@ build-package:
   extends: .pnpm-base-build
   script:
     - python3 --version
-    - python3 -m pip install --upgrade pip
-    - python3 -m pip install --upgrade setuptools
+    - python3 -m pip install --upgrade pip setuptools
     - pnpm build:package
-    - python3 setup.py sdist
-    - mv dist sdist
+    - !reference [.build_sdist, script]
   after_script:
-    - ls -Rl sdist
-  artifacts:
+    - !reference [.build_sdist, after_script]
+  artifacts: # Cannot use !reference [.build_sdist, artifacts] since it is unsupported: https://gitlab.com/gitlab-org/gitlab/-/issues/351169
     paths:
       - sdist/
     when: on_success
@@ -134,15 +109,10 @@ pages:
     expire_in: 2h
 
 assets:
-  extends: .deploy
-  script:
-    - rm -rf assets
-    - mkdir assets
-    - mv sdist/* assets/
-  after_script:
-    - ls -Rl assets
-  artifacts:
-    paths:
-      - assets
-    when: on_success
-    expire_in: 2h
+  extends: .assets
+
+testpypi:
+  extends: .testpypi
+
+pypi:
+  extends: .pypi
