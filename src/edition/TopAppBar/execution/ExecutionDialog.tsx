@@ -38,7 +38,7 @@ export default function ExecutionDialog(props: Props) {
   const showErrorMsg = useSnackbarStore((state) => state.showErrorMsg);
   const showWarningMsg = useSnackbarStore((state) => state.showWarningMsg);
   const [engine, setEngine] = useState<EngineDropdownOption>('default');
-  const [worker, setWorker] = useState<string>('');
+  const [queue, setQueue] = useState<string>('');
   const { isDialogOpen, setDialogOpen, handleSave } = useSaveWorkflow();
   const navigate = useNavigate();
 
@@ -62,7 +62,7 @@ export default function ExecutionDialog(props: Props) {
       return;
     }
     try {
-      execute(workflowId, [...inputRows.values()], engine, worker);
+      execute(workflowId, [...inputRows.values()], engine, queue);
       navigate('/monitor', { state: { workflow: workflowId } });
     } catch (executeError) {
       showErrorMsg(textForError(executeError, 'Error in executing workflow.'));
@@ -97,8 +97,8 @@ export default function ExecutionDialog(props: Props) {
         <ExecutionOptions
           engine={engine}
           setEngine={setEngine}
-          worker={worker}
-          setWorker={setWorker}
+          queue={queue}
+          setQueue={setQueue}
         />
       </DialogContent>
       <div className={styles.saveWarning}>

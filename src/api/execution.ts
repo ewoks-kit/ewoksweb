@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import type { filterParams } from '../types';
 import { assertDefined } from '../utils/typeGuards';
 import { client } from './client';
-import type { WorkersResponse } from './models';
+import type { QueuesResponse } from './models';
 import type { EwoksJob, ExecutedJobsResponse } from './models';
 import { QueryKey } from './models';
 
@@ -35,19 +35,19 @@ export function useExecutedJobs() {
   return data;
 }
 
-async function getWorkers() {
-  const { data } = await client.get<WorkersResponse>(`/execution/workers`);
+async function getQueues() {
+  const { data } = await client.get<QueuesResponse>(`/execution/queues`);
   return data;
 }
 
-export function useWorkers() {
+export function useQueues() {
   const { data } = useQuery({
-    queryKey: [QueryKey.Workers],
-    queryFn: getWorkers,
+    queryKey: [QueryKey.Queues],
+    queryFn: getQueues,
     suspense: true,
     staleTime: Infinity,
   });
   assertDefined(data);
 
-  return data.workers;
+  return data.queues;
 }

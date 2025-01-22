@@ -173,8 +173,8 @@ function toEwoksGraph(
     ...(hasDefinedFields(details.execute_arguments) && {
       execute_arguments: details.execute_arguments,
     }),
-    ...(hasDefinedFields(details.worker_options) && {
-      worker_options: details.worker_options,
+    ...(hasDefinedFields(details.submit_arguments) && {
+      submit_arguments: details.submit_arguments,
     }),
   };
 }
