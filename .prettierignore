@@ -3,6 +3,7 @@
 /pnpm-lock.yaml
 /.gitlab-ci.yml
 .cypress-cache/
+.gitlab-ci.yml
 
 /ewoksserver/
 /pybuild/

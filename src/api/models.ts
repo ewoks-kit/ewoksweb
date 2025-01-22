@@ -44,15 +44,15 @@ export interface ExecutedJobsResponse {
   jobs: EwoksJob[];
 }
 
-export interface WorkersResponse {
-  workers: string[] | null;
+export interface QueuesResponse {
+  queues: string[] | null;
 }
 
 export enum QueryKey {
   Jobs = 'jobs',
   Icons = 'icons',
   Tasks = 'tasks',
-  Workers = 'workers',
+  Queues = 'queues',
   Workflow = 'workflow',
   WorkflowDescriptions = 'workflows',
 }
@@ -69,7 +69,7 @@ interface NodeExecutionInput {
 
 export interface ExecutionParams {
   execute_arguments?: ExecuteArguments;
-  worker_options?: WorkerOptions;
+  submit_arguments?: SubmitArguments;
 }
 
 interface ExecuteArguments {
@@ -77,7 +77,7 @@ interface ExecuteArguments {
   engine?: Engine;
 }
 
-interface WorkerOptions {
+interface SubmitArguments {
   queue: string;
 }
 

@@ -11,7 +11,7 @@
     },
     "ui_schema": { "ui:order": ["start_image", "end_image"] },
     "execute_arguments": { "a": 1 },
-    "worker_options": {
+    "submit_arguments": {
       "parameters": { "current_working_directory": "/tmp_14_days/opid30" }
     }
   },

@@ -20,7 +20,7 @@ export interface GraphDetails {
   input_schema?: object;
   ui_schema?: object;
   execute_arguments?: object;
-  worker_options?: object;
+  submit_arguments?: object;
 }
 
 export interface EwoksIONode {
@@ -69,7 +69,7 @@ export interface EwoksEvent {
   task_uri?: string;
   task_id?: string;
   input_uris?: unknown[];
-  binding?: string;
+  engine?: string;
   progress?: string;
   node_id?: string;
 }
