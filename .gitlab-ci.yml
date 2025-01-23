@@ -111,8 +111,8 @@ pages:
 assets:
   extends: .assets
 
+release_pypi:
+  extends: .pypi
+
 testpypi:
   extends: .testpypi
-
-pypi:
-  extends: .pypi

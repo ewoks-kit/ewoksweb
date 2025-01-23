@@ -52,8 +52,9 @@ pnpm cypress:run # to run all specs in CLI
 Building the `ewoksweb` python package
 
 ```bash
-pnpm build
-python setup.py sdist
+pnpm build:package
+pip install build
+python -m build -s
 ```
 
 ## Release
@@ -65,15 +66,27 @@ To do a new release:
 
 1. Checkout `main` and verify that your working tree is clean.
 1. Edit the version in `pysrc/ewoksweb/__init__.py`
-1. Commit the change and push it to `main`
-1. The CI will trigger and build the package.
-1. After the CI succeeded, you have two choices:
+1. Commit the change and push it to `main`. The CI will trigger and build the
+   package.
 
-- Either use
-  [ewoksci deploy.sh](https://gitlab.esrf.fr/dau/ci/pyci/-/blob/main/scripts/deploy.sh)
-  to upload the package
-- Or download manually the package from the CI artifacts of the `assets` job and
-  upload it with `twine`.
+> If the CI fails, the package cannot be released. Try to relaunch it to see if
+> it was a one-off failure (can happen with Cypress). If not, fix the CI first!
+
+After the CI succeeds, go to the pipeline page: a manual CI job `release_pypi`
+will be available.
+
+1. Launch the `release_pypi` job to release the package on PyPI. A git tag will
+   automatically be created with the version number.
+1. Create a
+   [Gitlab release](https://gitlab.esrf.fr/workflow/ewoks/ewoksweb/-/releases/new)
+   out of the newly added tag
+1. Write the release notes using the
+   [Compare page](https://gitlab.esrf.fr/workflow/ewoks/ewoksweb/-/compare) to
+   gather the relevant changes since last release. Try to match the style of
+   previous release notes.
+1. Add the PyPI package link as _Release assets_ and click on _Create release_
+
+Congratulations, the release is done 😎!
 
 ## Documentation
 
