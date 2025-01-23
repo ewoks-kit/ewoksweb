@@ -65,7 +65,7 @@ Python package on [PyPI](https://pypi.org/project/ewoksweb/).
 To do a new release:
 
 1. Checkout `main` and verify that your working tree is clean.
-1. Edit the version in `pysrc/ewoksweb/__init__.py`
+1. Edit the version in `pyproject.toml`
 1. Commit the change and push it to `main`. The CI will trigger and build the
    package.
 
