@@ -72,7 +72,7 @@ To do a new release:
 > If the CI fails, the package cannot be released. Try to relaunch it to see if
 > it was a one-off failure (can happen with Cypress). If not, fix the CI first!
 
-After the CI succeeded, go to the pipeline page: a manual CI job `release_pypi`
+After the CI succeeds, go to the pipeline page: a manual CI job `release_pypi`
 will be available.
 
 1. Launch the `release_pypi` job to release the package on PyPI. A git tag will
@@ -80,7 +80,7 @@ will be available.
 1. Create a
    [Gitlab release](https://gitlab.esrf.fr/workflow/ewoks/ewoksweb/-/releases/new)
    out of the newly added tag
-1. Write release notes in this release by using the
+1. Write the release notes using the
    [Compare page](https://gitlab.esrf.fr/workflow/ewoks/ewoksweb/-/compare) to
    gather the relevant changes since last release. Try to match the style of
    previous release notes.
