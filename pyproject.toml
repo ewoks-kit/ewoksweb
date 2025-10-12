@@ -25,8 +25,15 @@ Issues = "https://gitlab.esrf.fr/workflow/ewoks/ewoksweb/issues"
 Changelog = "https://gitlab.esrf.fr/workflow/ewoks/ewoksweb/-/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
-dev = ["black >=22", "flake8 >=4"]
-doc = ["sphinx >=4.5", "pydata_sphinx_theme"]
+dev = [
+  "black >=22",
+  "flake8 >=4",
+]
+doc = [
+  "sphinx >=4.5",
+  "pydata_sphinx_theme",
+  "sphinx-copybutton",
+]
 
 [tool.setuptools]
 package-dir = { "" = "pysrc" }

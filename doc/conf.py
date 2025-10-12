@@ -1,4 +1,5 @@
-from datetime import datetime
+# -- Project information -----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 import importlib.metadata
 
@@ -6,14 +7,19 @@ release = importlib.metadata.version("ewoksweb")
 
 project = "ewoksweb"
 version = ".".join(release.split(".")[:2])
-copyright = f"2023-{datetime.now().year}, ESRF"
+copyright = "2021-2024, ESRF"
 author = "ESRF"
 docstitle = f"{project} {version}"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = []
+extensions = [
+    "sphinx_copybutton",
+]
+
+copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
+copybutton_prompt_is_regexp = True
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
