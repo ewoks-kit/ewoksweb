@@ -31,6 +31,7 @@ html_title = docstitle
 html_logo = "_static/logo.png"
 html_static_path = ["_static"]
 html_template_path = ["_templates"]
+html_css_files = ["custom.css"]
 
 html_theme_options = {
     "header_links_before_dropdown": 3,
