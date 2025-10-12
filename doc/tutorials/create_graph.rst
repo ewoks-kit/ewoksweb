@@ -18,7 +18,6 @@ The user can open a graph in the canvas from:
 - the **server** by searching using the dropdown in the upper bar and pressing the **Open from server**. The workflows management tab can also be used to open-delete a workflow. It is located in the upper drawer that open when pressing the second button from the right in the upper bar. In the workflow management bar a workflow can be selected exploiting the categories dropdown for easier search. Its details are being fetched and presented to the user after selection. Using the 2 buttons under the search boxes the user can open a workflow on the canvas or **delete** it from the server.
 - the **local storage** by pressing the button with the directory icon on the upper bar.
 
-
 Save a Workflow
 ---------------
 
@@ -53,8 +52,9 @@ In the *General* category 2 more icons represent the icon node that can be added
 to add a subgraph from the local storage to the graph.
 
 Adding a subgraph in the graph is done by:
- - using the **+G** from the *sidebar->Add Nodes->General* category for graphs located in our hard-disk
- - using the *down arrow* on the top-bar for graphs that exist on the server.
+
+- using the **+G** from the *sidebar->Add Nodes->General* category for graphs located in our hard-disk
+- using the *down arrow* on the top-bar for graphs that exist on the server.
 
 A *subgraph* is represented in the graph as a node with multiple inputs and outputs. When *doubleclicking* on
 a subgraph the canvas shows the subgraph internals i.e. another graph. To get back on the initial graph click

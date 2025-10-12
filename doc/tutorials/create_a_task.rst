@@ -10,13 +10,13 @@ workflows that contain it if any.
 Editing and cloning opens a dialog with all task properties below also described
 in `Ewokscore <https://ewokscore.readthedocs.io/en/latest/definitions.html#task-implementation/>`_:
 
- - New Name - Identifier: the Task will be saved to file with this name-identifier.
- - Task Type
- - Category
- - Optional Inputs
- - Required Inputs
- - Outputs
- - Icon which is the icon that will appear in the task and in the nodes that will be created from this task.
+- New Name - Identifier: the Task will be saved to file with this name-identifier.
+- Task Type
+- Category
+- Optional Inputs
+- Required Inputs
+- Outputs
+- Icon which is the icon that will appear in the task and in the nodes that will be created from this task.
 
 Tasks can be discovered in the server if the slider **Task Discovery** is used.
 When is set it open an input where the module name will be inserted and a button

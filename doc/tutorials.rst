@@ -7,8 +7,8 @@ run and use the web interface.
 .. toctree::
     :maxdepth: 1
 
-    getting_started
-    create_graph
-    create_your_first_workflow
-    create_a_task
-    executing_a_workflow
+    tutorials/getting_started
+    tutorials/create_graph
+    tutorials/create_your_first_workflow
+    tutorials/create_a_task
+    tutorials/executing_a_workflow
