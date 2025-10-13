@@ -28,6 +28,7 @@ Changelog = "https://gitlab.esrf.fr/workflow/ewoks/ewoksweb/-/blob/main/CHANGELO
 dev = [
   "black >=22",
   "flake8 >=4",
+  "isort",
 ]
 doc = [
   "sphinx >=4.5",
@@ -52,3 +53,7 @@ where = ["pysrc"]
 
 [project.scripts]
 ewoksweb = "ewoksserver.__main__:main"
+
+[tool.isort]
+profile = "black"
+force_single_line = "True"

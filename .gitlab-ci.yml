@@ -44,6 +44,9 @@ include:
 
 ### Required jobs ###
 
+isort:
+  extends: .isort
+
 lint:
   stage: style
   needs: []
