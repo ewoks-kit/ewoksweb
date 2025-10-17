@@ -21,7 +21,7 @@ function MonitorPageFallback(props: FallbackProps) {
         <p>
           If you set up the instance yourself, you can see how to configure{' '}
           <code>ewoksserver</code> appropriately{' '}
-          <a href="https://ewoksserver.readthedocs.io/en/latest/configuration.html#ewoks-events">
+          <a href="https://ewoksserver.readthedocs.io/en/stable/configuration.html#ewoks-events">
             here
           </a>
           .
