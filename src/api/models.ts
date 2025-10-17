@@ -57,7 +57,7 @@ export enum QueryKey {
   WorkflowDescriptions = 'workflows',
 }
 
-// https://ewokscore.readthedocs.io/en/latest/execute_io.html
+// https://ewokscore.readthedocs.io/en/stable/execute_io.html
 interface NodeExecutionInput {
   name: string | number;
   value: unknown;
