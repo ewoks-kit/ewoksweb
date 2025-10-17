@@ -3,7 +3,7 @@ Link editing
 
 Link editing is accessible on the right-sidebar when a link on the canvas is selected.
 
-Each link has several attributes that follow the `Ewokscore <https://ewokscore.readthedocs.io/en/latest/definitions.html#link-attributes/>`_
+Each link has several attributes that follow the `Ewokscore <https://ewokscore.readthedocs.io/en/stable/definitions.html#link-attributes/>`_
 specification. When a link is selected the following items are being depicted.
 
 Label-Comment

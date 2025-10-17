@@ -39,7 +39,8 @@ On the left sidebar under the Edit Graph dropdown the following can be edited:
  2. **graph** that can be imported in a graph as a **subgraph**
 
 To **add a node** you need to drag-and-drop one *Task* from the *Add Node* section of the sidebar on the left. The **Add Node** is populated with **Tasks** within their **Categories**.
-Tasks are embedded in the system or added by the end-user. Nodes can be seen as an instance of a Task which represents a piece of code. Click for a deeper explanation of the [Ewoks concepts](https://ewokscore.readthedocs.io/en/latest/definitions.html).
+Tasks are embedded in the system or added by the end-user. Nodes can be seen as an instance of a Task which represents a piece of code. Click for a deeper explanation of
+the [Ewoks concepts](https://ewokscore.readthedocs.io/en/stable/definitions.html).
 
 A **subgraph** can be added to the graph from the server or from the local storage.
 

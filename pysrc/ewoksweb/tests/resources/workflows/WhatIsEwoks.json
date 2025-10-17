@@ -179,7 +179,7 @@
         "nodeWidth": 154,
         "type": "internal",
         "icon": "default.png",
-        "comment": "Provides utilities for job scheduling of ewoks workflows.\nhttps://ewoksjob.readthedocs.io/en/latest/",
+        "comment": "Provides utilities for job scheduling of ewoks workflows.\nhttps://ewoksjob.readthedocs.io",
         "position": {
           "x": 445,
           "y": -635
@@ -202,7 +202,7 @@
         "nodeWidth": 154,
         "type": "internal",
         "icon": "default.png",
-        "comment": "A REST server to manage and execute ewoks workflows.\nhttps://ewoksserver.readthedocs.io/en/latest/",
+        "comment": "A REST server to manage and execute ewoks workflows.\nhttps://ewoksserver.readthedocs.io",
         "position": {
           "x": 425,
           "y": -580
@@ -225,7 +225,7 @@
         "nodeWidth": 154,
         "type": "internal",
         "icon": "default.png",
-        "comment": "Provides an API to define workflows and implement tasks in ewoks.\nDocumentation: https://ewokscore.readthedocs.io/en/latest/",
+        "comment": "Provides an API to define workflows and implement tasks in ewoks.\nDocumentation: https://ewokscore.readthedocs.io",
         "position": {
           "x": 375,
           "y": -870
@@ -248,7 +248,7 @@
         "nodeWidth": 100,
         "type": "input",
         "icon": "default.png",
-        "comment": "https://ewoks.readthedocs.io/en/latest/#ewoksweb-release",
+        "comment": "https://ewoks.readthedocs.io",
         "position": {
           "x": -375,
           "y": -930

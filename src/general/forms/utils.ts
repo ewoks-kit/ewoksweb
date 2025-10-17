@@ -79,7 +79,7 @@ function parseTaskIO(
   optional_input_names?: string[];
   output_names?: string[];
 } {
-  // Task type specific behaviour as described in https://ewokscore.readthedocs.io/en/latest/definitions.html#task-implementation
+  // Task type specific behaviour as described in https://ewokscore.readthedocs.io/en/stable/definitions.html#task-implementation
   switch (taskType) {
     case 'class': {
       return {

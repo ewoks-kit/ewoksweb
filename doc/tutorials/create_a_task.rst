@@ -8,7 +8,7 @@ By deleting the task it is removed from the server permanently and can affect th
 workflows that contain it if any.
 
 Editing and cloning opens a dialog with all task properties below also described
-in `Ewokscore <https://ewokscore.readthedocs.io/en/latest/definitions.html#task-implementation/>`_:
+in `Ewokscore <https://ewokscore.readthedocs.io/en/stable/definitions.html#task-implementation>`_:
 
 - New Name - Identifier: the Task will be saved to file with this name-identifier.
 - Task Type
