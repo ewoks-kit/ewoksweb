@@ -60,23 +60,60 @@ test:
   extends: .pnpm-base
   needs: []
   timeout: 15m
+
   before_script:
-    # https://github.com/cypress-io/cypress-docker-images/issues/642 and https://github.com/cypress-io/cypress-docker-images/issues/649
+    # Install missing system packages
+    # https://github.com/cypress-io/cypress-docker-images/issues/642 and
+    # https://github.com/cypress-io/cypress-docker-images/issues/649
     - apt-get update && apt-get install curl -y
     - apt-get install python3 python3-pip -y
     - !reference [.pnpm-base, before_script]
+
   script:
+    # Install API server
     - python3 --version
-    - python3 -m pip install --upgrade pip
-    - python3 -m pip install --upgrade setuptools
+    - python3 -m pip install --upgrade pip setuptools
     - python3 -m pip install -e .
+
+    # Build frontend
     - pnpm build
-    - ewoksweb --config ./pysrc/ewoksweb/tests/resources/config.py &
-    # Try to connect to server for 20s. If not, `timeout` will return non-zero so the CI fails.
-    - timeout 20s bash -c "while ! curl http://127.0.0.1:8000 -m1 -o/dev/null -s;do sleep 0.3;done"
-    # https://github.com/vercel/serve/issues/751
-    - pnpm preview &
-    - timeout 20s bash -c "while ! curl http://127.0.0.1:3000 -m1 -o/dev/null -s;do sleep 0.3;done"
+
+    # Start API server
+    - export API_PORT=$(( 20000 + RANDOM % 10000 ))
+    - echo "Using API_PORT=$API_PORT"
+    - echo "Starting ewoksweb API server..."
+    - ewoksweb --config ./pysrc/ewoksweb/tests/resources/config.py --port=$API_PORT > api.log 2>&1 &
+
+    # Wait for API server to come up
+    - echo "Waiting for API on port $API_PORT..."
+    - |
+      timeout 20s bash -c "
+        while ! curl http://127.0.0.1:$API_PORT -m1 -o/dev/null -s; do
+          sleep 0.3
+        done
+      " || (echo "API failed to start"; echo "--- API START LOG ---"; cat api.log; exit 1)
+
+    # Start Vite preview (static production server)
+    - export PREVIEW_PORT=$(( 30000 + RANDOM % 10000 ))
+    - echo "Using PREVIEW_PORT=$PREVIEW_PORT"
+    # --no-port-switching does not work: https://github.com/vercel/serve/issues/751
+    - echo "Starting Vite preview..."
+    - pnpm preview --port=$PREVIEW_PORT > preview.log 2>&1 &
+
+    # Wait for Vite preview to come up
+    - echo "Waiting for Vite preview on port $PREVIEW_PORT..."
+    - |
+      timeout 20s bash -c "
+        while ! curl http://127.0.0.1:$PREVIEW_PORT -m1 -o/dev/null -s; do
+          sleep 0.3
+        done
+      " || (echo "Vite preview failed to start"; echo "--- VITE PREVIEW START LOG ---"; cat preview.log; exit 1)
+
+    # Show logs
+    - cat api.log
+    - cat preview.log
+
+    # Run end-to-end tests
     - pnpm cypress:run
 
 build-package:
