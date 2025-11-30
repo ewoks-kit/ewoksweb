@@ -98,7 +98,7 @@ test:
     - echo "Using PREVIEW_PORT=$PREVIEW_PORT"
     # --no-port-switching does not work: https://github.com/vercel/serve/issues/751
     - echo "Starting Vite preview..."
-    - pnpm preview --port=$PREVIEW_PORT > preview.log 2>&1 &
+    - pnpm preview --host 127.0.0.1 --port=$PREVIEW_PORT > preview.log 2>&1 &
 
     # Wait for Vite preview to come up
     - echo "Waiting for Vite preview on port $PREVIEW_PORT..."
