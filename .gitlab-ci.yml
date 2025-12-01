@@ -96,7 +96,8 @@ test:
       " || (echo "API failed to start"; echo "--- API START LOG ---"; cat api.log; exit 1)
 
     # Start Vite preview (static production server)
-    - export PREVIEW_PORT=$(( 30000 + RANDOM % 10000 ))
+    # - export PREVIEW_PORT=$(( 30000 + RANDOM % 10000 ))
+    - export PREVIEW_PORT=3000
     - echo "Using PREVIEW_PORT=$PREVIEW_PORT"
     # --no-port-switching does not work: https://github.com/vercel/serve/issues/751
     - echo "Starting Vite preview..."
