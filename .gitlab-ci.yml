@@ -62,6 +62,8 @@ test:
   timeout: 15m
   tags:
     - cypress
+  variables:
+    ELECTRON_FORCE_IPV4: "1"
 
   before_script:
     # Install missing system packages
