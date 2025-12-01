@@ -60,6 +60,8 @@ test:
   extends: .pnpm-base
   needs: []
   timeout: 15m
+  tags:
+    - cypress
 
   before_script:
     # Install missing system packages
