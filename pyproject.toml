@@ -18,11 +18,11 @@ requires-python = ">=3.8"
 dependencies = ["ewoksserver[frontend] >=2.0.0rc1,<3"]
 
 [project.urls]
-Homepage = "https://gitlab.esrf.fr/workflow/ewoks/ewoksweb"
-Documentation = "https://workflow.gitlab-pages.esrf.fr/ewoks/ewoksweb"
-Repository = "https://gitlab.esrf.fr/workflow/ewoks/ewoksweb"
-Issues = "https://gitlab.esrf.fr/workflow/ewoks/ewoksweb/issues"
-Changelog = "https://gitlab.esrf.fr/workflow/ewoks/ewoksweb/-/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/ewoks-kit/ewoksweb"
+Documentation = "https://ewoksweb.readthedocs.io/en/stable/"
+Repository = "https://github.com/ewoks-kit/ewoksweb"
+Issues = "https://github.com/ewoks-kit/ewoksweb/issues"
+Changelog = "https://github.com/ewoks-kit/ewoksweb/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 dev = [

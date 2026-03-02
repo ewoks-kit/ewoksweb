@@ -2,7 +2,7 @@ Execute workflows
 =================
 
 The concept **execute a workflow** is used when a workflow is being send to the
-`ewoksserver <https://gitlab.esrf.fr/workflow/ewoks/ewoksserver>`_ for each tasks to be executed.
+`ewoksserver <https://github.com/ewoks-kit/ewoksserver>`_ for each tasks to be executed.
 
 In order for a workflow to be executed it needs:
 

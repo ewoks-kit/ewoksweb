@@ -39,9 +39,9 @@ html_theme_options = {
     "show_nav_level": 2,
     "icon_links": [
         {
-            "name": "gitlab",
-            "url": "https://gitlab.esrf.fr/workflow/ewoks/ewoksweb",
-            "icon": "fa-brands fa-gitlab",
+            "name": "github",
+            "url": "https://github.com/ewoks-kit/ewoksweb",
+            "icon": "fa-brands fa-github",
         },
         {
             "name": "pypi",

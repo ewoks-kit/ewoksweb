@@ -74,7 +74,7 @@ export default function GraphFormDialog(props: Props) {
       reset();
       handleClose();
       // `flushSync` forces React to reset the workflow history _before_ navigating, to make sure the user doesn't see
-      // the "unsaved changes" prompt - cf. https://gitlab.esrf.fr/workflow/ewoks/ewoksweb/-/issues/265)
+      // the "unsaved changes" prompt - cf. https://github.com/ewoks-kit/ewoksweb/issues/278)
       flushSync(() => resetWorkflowHistory());
       setSearchParams({ workflow: name });
       onSuccess?.();

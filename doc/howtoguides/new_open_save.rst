@@ -31,7 +31,7 @@ Save a Workflow
 
 When the user makes all th changes to a new or an existing workflow he can use the disk-button on the
 top right to save any changes in the workflow. All workflows are being saved in the backend
-`ewoksserver <https://gitlab.esrf.fr/workflow/ewoks/ewoksserver>`_ within the filesystem in their ewoks representation
+`ewoksserver <https://github.com/ewoks-kit/ewoksserver>`_ within the filesystem in their ewoks representation
 json format. The option to **Download** the workflow in their local drive is also available within the
 up-right menu next to the disk-saving button.
 
