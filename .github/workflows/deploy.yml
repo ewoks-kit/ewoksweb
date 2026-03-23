@@ -1,0 +1,69 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout 🏷️
+        uses: actions/checkout@v6
+
+      - name: Set up Node 🕹️
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: 'package.json'
+
+      - name: Install pnpm ⚙️
+        uses: pnpm/action-setup@v5
+        with:
+          version: 9
+
+      - name: Restore cache 📌
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/setup-pnpm/node_modules/.bin/store
+            ~/.cache/Cypress
+          key: cache-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-
+
+      - name: Install dependencies ⚙️
+        run: pnpm install
+
+      - name: Build 📦
+        run: pnpm build --base=/ewoksweb/
+        env:
+          VITE_SERVER_URL: https://bosquet.silx.org
+          VITE_SERVER_API_SUFFIX: /ewoks/api
+          VITE_ROUTER_BASE_DIR: /ewoksweb/
+
+      - name: Upload artifacts
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: 'build'
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Deploy 🚀
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}

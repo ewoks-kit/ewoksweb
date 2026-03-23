@@ -13,7 +13,6 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "build:pages": "vite build --base=/ewoks/ewoksweb/",
     "build:package": "VITE_SERVER_URL='/' pnpm build",
     "preview": "vite preview",
     "postbuild": "node postbuild.js",
