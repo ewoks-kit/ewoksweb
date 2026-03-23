@@ -27,8 +27,8 @@ function NavBar() {
             search: state?.workflow
               ? `?workflow=${state.workflow as string}`
               : searchParams.get('workflow')
-              ? `?workflow=${searchParams.get('workflow') as string}`
-              : '',
+                ? `?workflow=${searchParams.get('workflow') as string}`
+                : '',
           }}
         >
           Edit
