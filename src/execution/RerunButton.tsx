@@ -20,7 +20,6 @@ function RerunButton(props: Props) {
     <button
       className={styles.button}
       type="button"
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       onClick={async () => {
         setLoading(true);
         try {

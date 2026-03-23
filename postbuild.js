@@ -1,5 +1,5 @@
-const path = require('path');
-const fs = require('fs');
+import path from 'node:path';
+import fs from 'node:fs';
 
 const targetSource = './build'; // Relative path to copy files from
 const targetDestination = './pysrc/ewoksweb/static'; // Relative path to copy files to
