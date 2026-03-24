@@ -88,8 +88,8 @@ export function hasDefinedFields(obj: object | null | undefined): boolean {
     return typeof value === 'object'
       ? hasDefinedFields(value)
       : typeof value === 'string'
-      ? value.length > 0
-      : true;
+        ? value.length > 0
+        : true;
   });
 }
 
