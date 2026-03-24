@@ -7,13 +7,12 @@
   "author": "European Synchrotron Radiation Facility",
   "license": "MIT",
   "engines": {
-    "node": "18.x",
-    "pnpm": "9.x"
+    "node": "24.x",
+    "pnpm": "10.x"
   },
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "build:pages": "vite build --base=/ewoks/ewoksweb/",
     "build:package": "VITE_SERVER_URL='/' pnpm build",
     "preview": "vite preview",
     "postbuild": "node postbuild.js",
@@ -58,7 +57,7 @@
     "@testing-library/cypress": "10.0.1",
     "@types/d3-format": "3.0.2",
     "@types/lodash": "^4.14.199",
-    "@types/node": "^16.18.0",
+    "@types/node": "^24.12.0",
     "@types/path-browserify": "1.0.0",
     "@types/react": "^18.2.27",
     "@types/react-dom": "^18.2.12",
@@ -72,6 +71,7 @@
     "prettier": "3.0.3",
     "typescript": "4.9.3",
     "vite": "4.4.8",
+    "wait-on": "9.0.4",
     "web-worker": "1.2.0"
   },
   "browserslist": {

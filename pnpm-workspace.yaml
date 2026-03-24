@@ -1,0 +1,18 @@
+# Enforce Node and pnpm versions specified in `engines` field of `package.json`
+engineStrict: true
+
+# Use whichever pnpm version is available in the environment
+managePackageManagerVersions: false
+
+# Manage peer dependencies explicitly and predictibly
+# strictPeerDependencies: true
+# autoInstallPeers: false
+
+# Fail install if any dependency has unreviewed build scripts
+strictDepBuilds: true
+onlyBuiltDependencies:
+  - 'cypress'
+  - 'esbuild'
+
+# Save exact dependency versions in `package.json`
+savePrefix: ''
