@@ -104,7 +104,6 @@ function Canvas(props: Props) {
     storeRF.getState().setEdges(newEdges);
   }
 
-  // eslint-disable-next-line unicorn/consistent-function-scoping
   const onDragOver: DragEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';

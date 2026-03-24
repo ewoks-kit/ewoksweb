@@ -66,7 +66,6 @@ function TaskForm(props: Props) {
 
   return (
     <Dialog open={isOpen} onClose={onClose}>
-      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <form onSubmit={onSubmit}>
         <DialogTitle>
           {`${editExistingTask ? `Edit` : `Create`} task`}

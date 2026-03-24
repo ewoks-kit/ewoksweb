@@ -1,3 +1,5 @@
+/// <reference types="@testing-library/cypress" />
+
 import '@testing-library/cypress/add-commands';
 import { registerCommand as addWaitForStableDomCommand } from 'cypress-wait-for-stable-dom';
 
@@ -7,6 +9,7 @@ Cypress.on('uncaught:exception', (err) => {
   if (resizeObserverLoopErrRe.test(err.message)) {
     return false;
   }
+  return undefined;
 });
 
 Cypress.Commands.add('loadAppWithoutGraph', () => {

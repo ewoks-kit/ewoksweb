@@ -4,9 +4,8 @@ engineStrict: true
 # Use whichever pnpm version is available in the environment
 managePackageManagerVersions: false
 
-# Manage peer dependencies explicitly and predictibly
-# strictPeerDependencies: true
-# autoInstallPeers: false
+# Manage peer dependencies explicitly
+strictPeerDependencies: true
 
 # Fail install if any dependency has unreviewed build scripts
 strictDepBuilds: true

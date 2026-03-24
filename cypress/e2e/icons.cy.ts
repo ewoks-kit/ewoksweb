@@ -12,7 +12,7 @@ it('makes icons appear on tasks correctly', () => {
     cy.findByRole('button', {
       name: 'ewokscore.tests.examples.tasks.sumlist.SumList',
     }).within(() => {
-      cy.findByRole('img')
+      cy.findByRole('presentation')
         .should('have.attr', 'src')
         .should('eq', `data:image/png;base64,${imgData}`);
     });

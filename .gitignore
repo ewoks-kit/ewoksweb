@@ -4,6 +4,7 @@ __pycache__/
 *.so
 /doc/_generated
 *.log
+*.tsbuildinfo
 npm-debug.log*
 
 # Distribution / packaging

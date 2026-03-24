@@ -85,7 +85,6 @@ export default function GraphFormDialog(props: Props) {
 
   return (
     <Dialog open={isOpen} onClose={handleClose}>
-      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <form onSubmit={onSubmit}>
         <DialogTitle>Give the new workflow name</DialogTitle>
         <DialogContent>

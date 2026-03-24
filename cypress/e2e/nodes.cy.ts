@@ -39,13 +39,13 @@ it('changes comment of node', () => {
 it('shows/hides the node icon', () => {
   cy.findByLabelText('With image').should('be.checked');
   cy.get('@node').within(() => {
-    cy.findByRole('img').should('be.visible');
+    cy.findByRole('presentation', {}).should('be.visible');
   });
 
   cy.findByLabelText('With image').uncheck();
   cy.waitForStableDOM();
   cy.get('@node').within(() => {
-    cy.findByRole('img').should('not.exist');
+    cy.findByRole('presentation').should('not.exist');
   });
 });
 
@@ -114,7 +114,7 @@ it('changes the icon', () => {
     'Use default',
   );
   cy.get('@node').within(() => {
-    cy.findByRole('img')
+    cy.findByRole('presentation')
       .should('have.attr', 'src')
       .should(
         'match',
@@ -127,7 +127,7 @@ it('changes the icon', () => {
   cy.waitForStableDOM();
 
   cy.get('@node').within(() => {
-    cy.findByRole('img')
+    cy.findByRole('presentation')
       .should('have.attr', 'src')
       .should(
         'include',
@@ -142,7 +142,7 @@ it('changes the icon', () => {
   cy.waitForStableDOM();
 
   cy.get('@node').within(() => {
-    cy.findByRole('img')
+    cy.findByRole('presentation')
       .should('have.attr', 'src')
       .should(
         'match',
