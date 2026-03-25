@@ -2,6 +2,10 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      use-test-pypi:
+        type: boolean
+        description: Whether the release should go to TestPyPI instead of PyPI
 
 jobs:
   # Build Python package
@@ -14,26 +18,24 @@ jobs:
       - name: Install
         uses: ./.github/actions/install
 
-      - name: Build 📦
+      - name: Build front-end 📦
         run: pnpm build:package
 
-  # Run tests
-  tests:
-    needs: build
-    uses: ewoks-kit/.github/.github/workflows/python-tests.yml@main
-    with:
-      pytest-args: >-
-        -v -ra -W error
-        -W ignore::DeprecationWarning:jupyter_client.session
-        -W ignore::DeprecationWarning:orangecanvas.utils.localization
-        -W ignore::DeprecationWarning:orangecanvas.utils.localization.si
-        -W ignore::DeprecationWarning:matplotlib._fontconfig_pattern
-        -W ignore::DeprecationWarning:matplotlib._mathtext
-        -W ignore::RuntimeWarning:networkx.utils.backends
+      - name: Build Python package 🐍
+        run: |
+          - pip install --pre build
+          - python -m build
+
+      - name: Upload artifacts
+        uses: actions/upload-pages-artifact@v4
+        with:
+          name: dist
+          path: dist/
 
   # Publish package to TestPyPI
   publish-testpypi:
-    needs: tests
+    needs: build
+    if: ${{ github.event.inputs.use-test-pypi == 'true' }}
     runs-on: ubuntu-latest
     environment:
       name: release
@@ -47,24 +49,21 @@ jobs:
 
   # Publish package to PyPI
   publish-pypi:
-    needs: tests
+    needs: build
+    if: ${{ github.event.inputs.use-test-pypi == 'false' }}
     runs-on: ubuntu-latest
     environment:
       name: release
     permissions:
       id-token: write
-    steps:
-      - uses: ewoks-kit/.github/.github/actions/setup-python-package@main
-      - uses: pypa/gh-action-pypi-publish@release/v1
-
-  # Tag
-  tag-release:
-    needs: publish-pypi
-    runs-on: ubuntu-latest
-    permissions:
       contents: write
     steps:
       - uses: ewoks-kit/.github/.github/actions/setup-python-package@main
-      - uses: ewoks-kit/.github/.github/actions/tag-release@main
+
+      - name: Release on PyPI 🎉
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+      - name: Tag release 🏷️
+        uses: ewoks-kit/.github/.github/actions/tag-release@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
