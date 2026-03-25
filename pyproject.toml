@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ewoksweb"
-version = "4.0.1"
+version = "5.0.0rc0"
 authors = [{ name = "ESRF", email = "dau-pydev@esrf.fr" }]
 description = "Web-based frontend for creating, visualizing and executing ewoks workflows."
 readme = { file = "README.md", content-type = "text/markdown" }
@@ -14,8 +14,8 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
 ]
-requires-python = ">=3.8"
-dependencies = ["ewoksserver[frontend] >=2.0.0rc1,<3"]
+requires-python = ">=3.10"
+dependencies = ["ewoksserver[frontend] >=2.0.0,<3"]
 
 [project.urls]
 Homepage = "https://github.com/ewoks-kit/ewoksweb"
@@ -26,9 +26,7 @@ Changelog = "https://github.com/ewoks-kit/ewoksweb/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 dev = [
-  "black >=22",
-  "flake8 >=4",
-  "isort",
+  "ruff",
 ]
 doc = [
   "sphinx >=4.5",
@@ -54,6 +52,8 @@ where = ["pysrc"]
 [project.scripts]
 ewoksweb = "ewoksserver.__main__:main"
 
-[tool.isort]
-profile = "black"
-force_single_line = "True"
+[tool.ruff.lint]
+select = ["E", "F", "I", "S"]
+
+[tool.ruff.lint.isort]
+force-single-line = true

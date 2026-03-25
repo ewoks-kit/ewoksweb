@@ -15,13 +15,13 @@ npm-debug.log*
 /dist/
 *.egg-info/
 .eggs/
+uv.lock
 
 # Others
 node_modules/
 /.env.*
 Thumbs.db
 .DS_Store
-.gitlab-ci.yml
 !.github
 
 # tests

@@ -80,7 +80,7 @@ will be available.
 1. Create a [Github release](https://github.com/ewoks-kit/ewoksweb/releases/new)
    out of the newly added tag
 1. Write the release notes using the tags
-   [Compare page](https://github.com/ewoks-kit/ewoksweb/tags) to gather the
+   [Compare page](https://github.com/ewoks-kit/ewoksweb/compare/) to gather the
    relevant changes since last release. Try to match the style of previous
    release notes.
 1. Add the PyPI package link as _Release assets_ and click on _Create release_
