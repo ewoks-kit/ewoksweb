@@ -66,24 +66,27 @@ To do a new release:
 
 1. Checkout `main` and verify that your working tree is clean.
 1. Edit the version in `pyproject.toml`
-1. Commit the change and push it to `main`. The CI will trigger and build the
-   package.
+1. Commit the change and push it to `main`. The CI will trigger and run the
+   tests.
 
 > If the CI fails, the package cannot be released. Try to relaunch it to see if
 > it was a one-off failure (can happen with Cypress). If not, fix the CI first!
 
-After the CI succeeds, go to the pipeline page: a manual CI job `release_pypi`
-will be available.
+After the CI succeeds, go to the
+[Release workflow](https://github.com/ewoks-kit/ewoksweb/actions/workflows/release.yml)
+page
 
-1. Launch the `release_pypi` job to release the package on PyPI. A git tag will
+1. Click on "Run workflow". Leave the checkbox asking if the release should be
+   done on TestPyPI unchecked and click on "Run workflow" button below.
+2. Wait for the workflow to complete. Once it is done, a git tag will
    automatically be created with the version number.
-1. Create a [Github release](https://github.com/ewoks-kit/ewoksweb/releases/new)
+3. Create a [Github release](https://github.com/ewoks-kit/ewoksweb/releases/new)
    out of the newly added tag
-1. Write the release notes using the tags
+4. Write the release notes using the tags
    [Compare page](https://github.com/ewoks-kit/ewoksweb/compare/) to gather the
    relevant changes since last release. Try to match the style of previous
    release notes.
-1. Add the PyPI package link as _Release assets_ and click on _Create release_
+5. Click on _Publish release_
 
 Congratulations, the release is done 😎!
 

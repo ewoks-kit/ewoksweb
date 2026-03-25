@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ewoksweb"
-version = "5.0.0rc0"
+version = "5.0.0"
 authors = [{ name = "ESRF", email = "dau-pydev@esrf.fr" }]
 description = "Web-based frontend for creating, visualizing and executing ewoks workflows."
 readme = { file = "README.md", content-type = "text/markdown" }
