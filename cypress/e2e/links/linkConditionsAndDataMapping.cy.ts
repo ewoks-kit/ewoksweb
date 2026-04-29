@@ -106,10 +106,10 @@ it('inserts a new Condition, changes it and disables it when "On Error condition
 
     cy.findByRole('combobox').should('have.value', 'bool');
 
-    cy.findByRole('radio', { name: 'false' }).should('be.checked');
+    cy.findByRole('radio', { name: 'False' }).should('be.checked');
 
-    cy.findByRole('radio', { name: 'true' }).click();
-    cy.findByRole('radio', { name: 'true' }).should('be.checked');
+    cy.findByRole('radio', { name: 'True' }).click();
+    cy.findByRole('radio', { name: 'True' }).should('be.checked');
   });
 
   cy.findByLabelText('On Error condition').click();
@@ -121,7 +121,7 @@ it('inserts a new Condition, changes it and disables it when "On Error condition
     cy.waitForStableDOM();
     cy.findByRole('combobox').should('not.be.enabled');
 
-    cy.findByRole('radio', { name: 'false' }).should('be.disabled');
-    cy.findByRole('radio', { name: 'true' }).should('be.disabled');
+    cy.findByRole('radio', { name: 'False' }).should('be.disabled');
+    cy.findByRole('radio', { name: 'True' }).should('be.disabled');
   });
 });

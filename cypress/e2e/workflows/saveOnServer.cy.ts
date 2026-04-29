@@ -256,8 +256,6 @@ it('saves a workflow with a link, and saves the workflow after populating the li
     .click()
     .type('linkComment');
 
-  cy.contains('Required').siblings().first().click();
-
   cy.findByRole('complementary').within(() => {
     cy.contains('Data Mapping')
       .siblings()
@@ -281,10 +279,10 @@ it('saves a workflow with a link, and saves the workflow after populating the li
 
     cy.findByRole('combobox').should('have.value', 'bool');
 
-    cy.findByRole('radio', { name: 'false' }).should('be.checked');
+    cy.findByRole('radio', { name: 'False' }).should('be.checked');
 
-    cy.findByRole('radio', { name: 'true' }).click();
-    cy.findByRole('radio', { name: 'true' }).should('be.checked');
+    cy.findByRole('radio', { name: 'True' }).click();
+    cy.findByRole('radio', { name: 'True' }).should('be.checked');
   });
 
   cy.get('[aria-labelledby="linkTypeLabel"]').click();
@@ -329,7 +327,6 @@ it('saves a workflow with a link, and saves the workflow after populating the li
           ],
           conditions: [{ source_output: 'outputConditions', value: true }],
           on_error: false,
-          required: true,
           uiProps: {
             label: 'linkLabel',
             comment: 'linkComment',
@@ -409,4 +406,53 @@ it('saves default inputs with the correct type', () => {
   cy.saveNewWorkflow(nanoid());
 
   cy.wait('@saveRequest');
+});
+
+it('saves correctly the `required` field for a link', () => {
+  const id = nanoid();
+
+  cy.findByRole('button', { name: 'General' }).click();
+  cy.dragNodeInCanvas('taskSkeleton');
+  cy.dragNodeInCanvas('taskSkeleton');
+
+  cy.get('.react-flow__node').should('have.length', 2);
+
+  cy.waitForStableDOM();
+
+  cy.get(`[data-handleid="sr"][data-nodeid="taskSkeleton0"]`).click({
+    force: true,
+  });
+
+  cy.get(`[data-handleid="tl"][data-nodeid="taskSkeleton1"]`).click({
+    force: true,
+  });
+
+  cy.get('.react-flow__edge').should('have.length', 1);
+  cy.saveNewWorkflow(id);
+  cy.waitForStableDOM();
+
+  cy.get('.react-flow__edge').first().click({ force: true });
+
+  const tests = [
+    { radioName: 'False', expected: false },
+    { radioName: 'True', expected: true },
+    { radioName: 'Default', expected: null },
+  ];
+  cy.intercept('PUT', `api/**/workflow/${id}`).as('saveRequest');
+
+  tests.forEach(({ radioName, expected }) => {
+    cy.findByRole('radiogroup', { name: 'Required' }).within(() => {
+      cy.findByRole('radio', { name: radioName }).click();
+    });
+
+    cy.findByRole('button', {
+      name: /Save workflow to server/,
+    }).click();
+    cy.wait('@saveRequest').then((interception) => {
+      expect(interception.request.body.links[0].required).to.equal(expected);
+    });
+    cy.waitForStableDOM();
+  });
+
+  cy.deleteWorkflow(id);
 });

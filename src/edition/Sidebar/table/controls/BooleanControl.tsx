@@ -1,6 +1,5 @@
-import { isBoolean } from 'lodash';
-
 import styles from './BooleanControl.module.css';
+import BooleanRadioButtons from './BooleanRadioButtons';
 
 interface Props {
   value: unknown;
@@ -9,37 +8,16 @@ interface Props {
 }
 
 function BooleanControl(props: Props) {
-  const { value: rawValue, onChange, disabled } = props;
-
-  const value = isBoolean(rawValue) ? rawValue.toString() : rawValue;
+  const { value, onChange, disabled } = props;
 
   return (
     <div className={styles.container}>
-      <label id="trueLabel">
-        <input
-          className={styles.input}
-          aria-labelledby="trueLabel"
-          type="radio"
-          value="true"
-          checked={value === 'true'}
-          onChange={() => onChange(true)}
-          disabled={disabled}
-        />
-        true
-      </label>
-
-      <label id="falseLabel">
-        <input
-          className={styles.input}
-          aria-labelledby="falseLabel"
-          type="radio"
-          value="false"
-          checked={value === 'false'}
-          onChange={() => onChange(false)}
-          disabled={disabled}
-        />
-        false
-      </label>
+      <BooleanRadioButtons
+        className={styles.input}
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
+      />
     </div>
   );
 }

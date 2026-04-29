@@ -129,7 +129,7 @@ export interface EwoksLink {
   data_mapping?: EwoksDataMapping[];
   map_all_data?: boolean;
   conditions?: EwoksCondition[];
-  required?: boolean;
+  required?: boolean | null;
   on_error?: boolean;
   uiProps?: EwoksLinkUiProps;
   startEnd?: boolean;

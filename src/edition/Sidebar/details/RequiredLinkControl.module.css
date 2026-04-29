@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-weight: 600;
+  color: gray;
+}
+
+.buttons {
+  display: flex;
+}
+
+.input,
+.boolInput {
+  margin-right: 0.25rem;
+}
+
+.boolInput {
+  margin-left: 0.5rem;
+}
