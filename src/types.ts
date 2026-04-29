@@ -127,7 +127,7 @@ export interface LinkData {
   conditions?: Condition[];
   on_error?: boolean;
   map_all_data?: boolean;
-  required?: boolean;
+  required?: boolean | null;
   sub_target?: string;
   sub_target_attributes?: Record<string, unknown>;
   sub_source?: string;

@@ -1,5 +1,5 @@
 import InfoIcon from '@mui/icons-material/Info';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import type { Edge } from '@xyflow/react';
 
 import useEdgeDataStore from '../../../store/useEdgeDataStore';
@@ -12,6 +12,7 @@ import DataMappingComponent from '../table/DataMapping';
 import styles from './Details.module.css';
 import EdgeLabelInput from './EdgeLabelInput';
 import InputTextField from './InputTextField';
+import RequiredLinkControl from './RequiredLinkControl';
 
 export default function LinkDetails(selectedElement: Edge) {
   const edgeData = useEdgeDataStore((state) =>
@@ -64,21 +65,15 @@ export default function LinkDetails(selectedElement: Edge) {
         <h3 style={sidebarStyle.sectionHeader}>
           Advanced
           <SidebarTooltip
-            text={`-- Required: setting this to True marks the link as required.
-          When a target receives multiple links, it will be executed
-          (perhaps multiple times) when all the sources connected to the target
-          with required links have been executed. A link is required when it is
-          either “marked as required” (link attribute required=True) or
-          “unconditional and all ancestors of the source node are required”.
-          -- Map all Data: Setting this to True is
-          equivalent to Data Mapping
-          being the identity mapping for all input names.
-          Cannot be used in combination with data_mapping.
-          -- On Error condition: A special condition where
-          the task raises an exception.
-          Cannot be used in combination with conditions.`}
+            text={
+              'Open the documentation explaining the Advanced fields in a new page'
+            }
           >
-            <IconButton size="small">
+            <IconButton
+              href="https://ewokscore.readthedocs.io/en/stable/reference/specs.html#link-attributes"
+              size="small"
+              target="_blank"
+            >
               <InfoIcon fontSize="small" />
             </IconButton>
           </SidebarTooltip>
@@ -97,12 +92,11 @@ export default function LinkDetails(selectedElement: Edge) {
           }
           label="On Error condition"
         />
-        <SidebarCheckbox
+        <RequiredLinkControl
           value={edgeData.required}
           onChange={(checked) =>
             mergeEdgeData(selectedElement.id, { required: checked })
           }
-          label="Required"
         />
         <section>
           <h3 style={sidebarStyle.sectionHeader}>Link properties</h3>

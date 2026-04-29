@@ -67,8 +67,8 @@ export function toEwoksLinks(links: EdgeWithData[]): EwoksLink[] {
         ...(conditionsValue && {
           conditions: conditionsValue,
         }),
+        ...(required !== undefined && { required }),
         ...notUndefinedValue(on_error, 'on_error'),
-        ...notUndefinedValue(required, 'required'),
         ...notUndefinedValue(map_all_data, 'map_all_data'),
         ...(hasDefinedFields(linkUiProps) && { uiProps: linkUiProps }),
       };
