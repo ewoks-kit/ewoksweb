@@ -1,14 +1,17 @@
-import type { FallbackProps } from 'react-error-boundary';
+import { FallbackProps, getErrorMessage } from 'react-error-boundary';
 
 import styles from './WorkflowItemErrorFallback.module.css';
 
 function WorkflowItemErrorFallback(props: FallbackProps) {
   const { error } = props;
 
+  const errorMessage = getErrorMessage(error);
   return (
     <li className={styles.item}>
       <h3>Job cannot be displayed!</h3>
-      <p className={styles.error}>Error: {error.message}</p>
+      <p className={styles.error}>
+        {errorMessage ? `Error: ${errorMessage}` : 'Unknown error'}
+      </p>
       <span>
         Check that the ewoks packages are up-to-date and/or if the event
         database is corrupted.
