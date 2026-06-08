@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { FallbackProps } from 'react-error-boundary';
+import { getErrorMessage, type FallbackProps } from 'react-error-boundary';
 
 import styles from './MonitorPageFallback.module.css';
 
@@ -30,7 +30,11 @@ function MonitorPageFallback(props: FallbackProps) {
     );
   }
 
-  return <p className={styles.fallback}>{props.error.message}</p>;
+  return (
+    <p className={styles.fallback}>
+      {getErrorMessage(error) || 'Unknown error'}
+    </p>
+  );
 }
 
 export default MonitorPageFallback;

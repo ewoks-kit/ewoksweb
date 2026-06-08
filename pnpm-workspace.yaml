@@ -15,3 +15,6 @@ onlyBuiltDependencies:
 
 # Save exact dependency versions in `package.json`
 savePrefix: ''
+
+# Add minimum release age protection
+minimumReleaseAge: 1440

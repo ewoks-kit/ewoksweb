@@ -25,59 +25,59 @@
     "cypress:run": "cypress run --e2e"
   },
   "dependencies": {
-    "@emotion/react": "11.11.1",
-    "@emotion/styled": "11.11.0",
-    "@microlink/react-json-view": "1.22.2",
+    "@microlink/react-json-view": "1.31.20",
     "@mui/icons-material": "5.14.13",
     "@mui/lab": "5.0.0-alpha.148",
     "@mui/material": "5.14.13",
-    "@react-hookz/web": "23.1.0",
+    "@react-hookz/web": "25.2.0",
     "@tanstack/react-query": "4.35.7",
     "@xyflow/react": "12.3.2",
     "axios": "1.5.1",
-    "d3-format": "3.1.0",
-    "elkjs": "0.8.2",
-    "lodash": "4.17.21",
-    "nanoid": "4.0.2",
+    "d3-format": "3.1.2",
+    "elkjs": "0.11.1",
+    "lodash": "4.18.1",
+    "nanoid": "5.1.11",
     "normalize.css": "^8.0.1",
     "path-browserify": "1.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-draggable": "4.4.6",
-    "react-error-boundary": "4.0.11",
-    "react-hook-form": "7.47.0",
-    "react-reflex": "4.1.0",
+    "react-error-boundary": "6.1.2",
+    "react-hook-form": "7.78.0",
+    "react-reflex": "5.0.5",
     "react-router-dom": "6.22.0",
-    "react-timeago": "7.2.0",
-    "socket.io-client": "4.7.2",
+    "react-timeago": "8.3.0",
+    "socket.io-client": "4.8.3",
     "zustand": "4.4.3"
   },
   "devDependencies": {
-    "@esrf/eslint-config": "2.2.2",
-    "@testing-library/cypress": "10.1.0",
-    "@types/d3-format": "3.0.2",
-    "@types/lodash": "^4.14.199",
+    "@esrf/eslint-config": "2.3.1",
+    "@testing-library/cypress": "10.1.3",
+    "@types/d3-format": "3.0.4",
+    "@types/lodash": "^4.17.24",
     "@types/node": "^24.12.0",
-    "@types/path-browserify": "1.0.0",
-    "@types/react": "^18.2.27",
+    "@types/path-browserify": "1.0.3",
+    "@types/react": "^18.3.28",
     "@types/react-dom": "^18.2.12",
-    "@types/react-timeago": "^4.1.4",
     "@vitejs/plugin-react": "4.0.4",
-    "cypress": "15.12.0",
+    "cypress": "15.16.0",
     "cypress-wait-for-stable-dom": "0.1.0",
     "eslint": "9.39.4",
-    "prettier": "3.8.1",
+    "prettier": "3.8.3",
     "typescript": "5.9.3",
     "vite": "4.4.8",
-    "wait-on": "9.0.4",
-    "web-worker": "1.2.0"
+    "wait-on": "9.0.10",
+    "web-worker": "1.5.0"
   },
   "pnpm": {
     "peerDependencyRules": {
       "allowedVersions": {
         "flux>react": "18.x",
         "@mui/styles>react": "18.x"
-      }
+      },
+      "ignoreMissing": [
+        "storybook"
+      ]
     }
   }
 }
