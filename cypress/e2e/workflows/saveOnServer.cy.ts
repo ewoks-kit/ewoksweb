@@ -138,10 +138,7 @@ it('saves a workflow with an empty skeleton node, and saves the workflow after p
 
   cy.saveNewWorkflow(id);
 
-  cy.findAllByRole('button', { name: 'taskSkeleton0' })
-    .filter('.react-flow__node')
-    .as('node', { type: 'static' })
-    .click();
+  cy.findNode('taskSkeleton0').as('node', { type: 'static' }).click();
 
   cy.findByRole('textbox', { name: 'Edit label' }).clear().type('theNewLabel');
   cy.findByRole('textbox', { name: 'Edit comment' })

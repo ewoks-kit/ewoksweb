@@ -39,7 +39,7 @@ import NoteNode from '../nodes/NoteNode';
 import OutputNode from '../nodes/OutputNode';
 import RegularNode from '../nodes/RegularNode';
 import AddSubworkflowDialog from '../TaskDrawer/AddSubworkflowDialog';
-import { generateNewNodeId } from '../utils';
+import { getNodeWithLabel, generateNewNodeId } from '../utils';
 import styles from './Canvas.module.css';
 import CanvasBackground from './CanvasBackground';
 import FallbackMessage from './FallbackMessage';
@@ -96,7 +96,12 @@ function Canvas(props: Props) {
 
   function onNodesChange(changes: NodeChange[]) {
     const newNodes = applyNodeChanges(changes, getNodes());
-    storeRF.getState().setNodes(newNodes);
+    const nodeData = getNodesData();
+    storeRF
+      .getState()
+      .setNodes(
+        newNodes.map((node) => getNodeWithLabel(node, nodeData.get(node.id))),
+      );
   }
 
   function onEdgesChange(changes: EdgeChange[]) {

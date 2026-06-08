@@ -47,13 +47,13 @@ it('does not allow to edit node inputs or task info for graph input, graph outpu
 
   cy.dragNodeInCanvas('graphInput');
   cy.waitForStableDOM();
-  cy.findByRole('button', { name: 'In0' }).click();
+  cy.findNode('In0').click();
   cy.findByRole('heading', { name: 'Default Inputs' }).should('not.exist');
   cy.findByRole('heading', { name: 'Task Info' }).should('not.exist');
 
   cy.dragNodeInCanvas('graphOutput');
   cy.waitForStableDOM();
-  cy.findByRole('button', { name: 'Out0' })
+  cy.findNode('Out0')
     // Is under the graphInput node
     .click({ force: true });
   cy.findByRole('heading', { name: 'Default Inputs' }).should('not.exist');
@@ -61,7 +61,7 @@ it('does not allow to edit node inputs or task info for graph input, graph outpu
 
   cy.dragNodeInCanvas('note');
   cy.waitForStableDOM();
-  cy.findByRole('button', { name: 'Note0' })
+  cy.findNode('Note0')
     // Is under the graphInput/graphOutput nodes
     .click({ force: true });
 
@@ -85,7 +85,5 @@ it('adds a subworkflow node by dragging the subworkflow task', () => {
   cy.findByRole('option', { name: 'Adding-Tasks' }).click();
   cy.waitForStableDOM();
 
-  cy.findAllByRole('button', { name: /Adding-Tasks/ })
-    .filter('.react-flow__node')
-    .should('contain.text', 'graphInputgraphOutput');
+  cy.findNode(/Adding-Tasks/).should('contain.text', 'graphInputgraphOutput');
 });

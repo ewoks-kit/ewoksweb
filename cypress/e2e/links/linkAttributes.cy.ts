@@ -5,11 +5,11 @@ beforeEach(() => {
   cy.dragNodeInCanvas('ewokscore.tests.examples.tasks.sumlist.SumList');
   cy.dragNodeInCanvas('ewokscore.tests.examples.tasks.sumlist.SumList');
   cy.waitForStableDOM();
-  cy.findByRole('button', { name: 'SumList0' })
+  cy.findNode('SumList0')
     .find('.react-flow__handle-right')
     .click({ force: true });
 
-  cy.findByRole('button', { name: 'SumList1' })
+  cy.findNode('SumList1')
     .find('.react-flow__handle-left')
     .click({ force: true });
 

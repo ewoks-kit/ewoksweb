@@ -5,4 +5,5 @@ export default defineConfig({
   fixturesFolder: false,
   screenshotOnRunFailure: false,
   defaultCommandTimeout: 10_000,
+  allowCypressEnv: false,
 });

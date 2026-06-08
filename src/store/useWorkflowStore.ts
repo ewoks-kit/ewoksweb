@@ -122,7 +122,10 @@ const useWorkflowStore = create<State>((set, get) => ({
     });
 
     const nodesWithoutData = rfNodes.map((node) => {
-      return { ...node, data: {} };
+      return {
+        ...node,
+        data: {},
+      };
     });
 
     const edgesWithoutData = rfLinks.map((edge) => {

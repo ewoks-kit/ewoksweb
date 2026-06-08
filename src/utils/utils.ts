@@ -11,6 +11,7 @@ import type { DataMapping, RFMarkerEnd, RowValue } from '../types';
 import { RowType } from '../types';
 import { DEFAULT_LINK_VALUES } from './defaultValues';
 import { isMarkerType } from './typeGuards';
+import { type EdgeMarkerType, MarkerType } from '@xyflow/react';
 
 export function createDataMappingData(pair: EwoksDataMapping): DataMapping {
   return {
@@ -168,5 +169,14 @@ export function convertRFMarkerEndToEwoks(
     return undefined;
   }
 
-  return markerEnd.type;
+  const { type } = markerEnd;
+  if (type === 'arrow') {
+    return MarkerType.Arrow;
+  }
+
+  if (type === 'arrowclosed') {
+    return MarkerType.ArrowClosed;
+  }
+
+  return type;
 }

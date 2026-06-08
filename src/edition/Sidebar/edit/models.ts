@@ -1,3 +1,3 @@
-import type { MarkerType } from '@xyflow/react';
+import { type EwoksMarkerEnd } from '../../../ewoksTypes';
 
-export type MarkerEndOption = MarkerType | 'none';
+export type MarkerEndOption = EwoksMarkerEnd;

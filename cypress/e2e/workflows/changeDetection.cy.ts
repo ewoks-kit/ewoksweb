@@ -2,9 +2,7 @@ beforeEach(() => {
   cy.loadApp();
   cy.findByRole('button', { name: 'Close task drawer' }).click();
   cy.waitForStableDOM();
-  cy.findAllByRole('button', { name: 'ewoksweb' })
-    .filter('.react-flow__node')
-    .as('node', { type: 'static' });
+  cy.findNode('ewoksweb').as('node', { type: 'static' });
 });
 
 it('does not show a red dot on the save button if there are no changes', () => {
