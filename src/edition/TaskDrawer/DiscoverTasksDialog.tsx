@@ -78,12 +78,14 @@ export default function DiscoverTasksDialog(props: Props) {
           variant="standard"
           value={textValue}
           onChange={(event) => setTextValue(event.target.value)}
-          onKeyPress={(event) => {
+          onKeyDown={(event) => {
             if (event.key === 'Enter') {
               discoverFromModule();
             }
           }}
-          inputProps={{ 'aria-label': 'Module name' }}
+          slotProps={{
+            htmlInput: { 'aria-label': 'Module name' },
+          }}
         />
 
         <Checkbox

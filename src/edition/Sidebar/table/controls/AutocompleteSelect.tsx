@@ -50,9 +50,12 @@ function AutocompleteSelect(props: Props) {
             variant="standard"
             {...params}
             margin="normal"
-            inputProps={{
-              ...params.inputProps,
-              'aria-label': ariaLabel,
+            slotProps={{
+              ...params.slotProps,
+              htmlInput: {
+                ...params.slotProps.htmlInput,
+                'aria-label': ariaLabel,
+              },
             }}
           />
         )}

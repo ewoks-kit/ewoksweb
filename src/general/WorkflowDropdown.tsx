@@ -72,23 +72,26 @@ function WorkflowDropdown(props: Props, ref: Ref<HTMLElement>) {
         <TextField
           {...params}
           placeholder={label}
-          InputProps={{
-            ...params.InputProps,
-            startAdornment: <CloudDownloadIcon className={styles.icon} />,
-            endAdornment: isLoading ? (
-              <CircularProgress
-                className={styles.loader}
-                color="inherit"
-                size={20}
-              />
-            ) : (
-              params.InputProps.endAdornment
-            ),
-          }}
-          inputProps={{
-            ...params.inputProps,
-            className: styles.input,
-            'aria-label': label,
+          slotProps={{
+            ...params.slotProps,
+            input: {
+              ...params.slotProps.input,
+              startAdornment: <CloudDownloadIcon className={styles.icon} />,
+              endAdornment: isLoading ? (
+                <CircularProgress
+                  className={styles.loader}
+                  color="inherit"
+                  size={20}
+                />
+              ) : (
+                params.slotProps.input.endAdornment
+              ),
+            },
+            htmlInput: {
+              ...params.slotProps.htmlInput,
+              className: styles.input,
+              'aria-label': label,
+            },
           }}
         />
       )}

@@ -1,6 +1,6 @@
 import {
   CancelOutlined,
-  CheckCircleOutline,
+  CheckCircleOutlined,
   QueryBuilderOutlined,
 } from '@mui/icons-material';
 
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const ICONS = {
-  Success: CheckCircleOutline,
+  Success: CheckCircleOutlined,
   Running: QueryBuilderOutlined,
   Failed: CancelOutlined,
 };

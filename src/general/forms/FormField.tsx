@@ -30,12 +30,13 @@ const FormField = forwardRef<HTMLDivElement, Props>((props, ref) => {
         margin="dense"
         fullWidth
         variant="standard"
-        inputProps={
-          textFieldProps.label
-            ? { 'aria-label': textFieldProps.label as string }
-            : {}
-        }
         {...textFieldProps}
+        slotProps={{
+          ...textFieldProps.slotProps,
+          htmlInput: textFieldProps.label
+            ? { 'aria-label': textFieldProps.label as string }
+            : {},
+        }}
       />
     </Wrapper>
   );

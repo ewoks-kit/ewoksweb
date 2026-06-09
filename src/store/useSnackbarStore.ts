@@ -1,4 +1,4 @@
-import type { AlertColor } from '@mui/lab';
+import type { AlertColor } from '@mui/material';
 import { create } from 'zustand';
 
 interface State {
