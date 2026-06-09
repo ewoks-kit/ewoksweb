@@ -15,6 +15,7 @@ declare global {
       hasNavBarLabel(label: string): void;
       hasVisibleNodes(expectedNumberOfNodes: number): void;
       hasVisibleEdges(expectedNumberOfEdges: number): void;
+      findNode(nodeLabel: string | RegExp): Chainable;
     }
   }
 }

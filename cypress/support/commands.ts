@@ -91,4 +91,8 @@ Cypress.Commands.add('hasVisibleEdges', (expectedNumberOfEdges: number) => {
     .should('be.visible');
 });
 
+Cypress.Commands.add('findNode', (nodeLabel: RegExp | string) => {
+  return cy.findByRole('group', { name: nodeLabel });
+});
+
 addWaitForStableDomCommand({ pollInterval: 300, timeout: 5000 });

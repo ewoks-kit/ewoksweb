@@ -2,10 +2,7 @@ beforeEach(() => {
   cy.loadApp();
   cy.findByRole('button', { name: 'Close task drawer' }).click();
   cy.waitForStableDOM();
-  cy.findAllByRole('button', { name: 'ewoksweb' })
-    .filter('.react-flow__node')
-    .as('node', { type: 'static' })
-    .click();
+  cy.findNode('ewoksweb').as('node', { type: 'static' }).click();
 });
 
 it('changes label of node', () => {

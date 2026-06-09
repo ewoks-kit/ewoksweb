@@ -1,5 +1,7 @@
 import type { RFMarkerEnd } from '../../../types';
 import type { MarkerEndOption } from './models';
+import { convertRFMarkerEndToEwoks } from '../../../utils/utils';
+import { DEFAULT_LINK_VALUES } from '../../../utils/defaultValues';
 
 export function markerEndOptionToRF(option: MarkerEndOption): RFMarkerEnd {
   if (option === 'none') {
@@ -10,11 +12,10 @@ export function markerEndOptionToRF(option: MarkerEndOption): RFMarkerEnd {
 }
 
 export function rfMarkerEndToOption(markerEnd: RFMarkerEnd): MarkerEndOption {
-  if (!markerEnd || typeof markerEnd === 'string') {
-    return 'none';
-  }
-
-  return markerEnd.type;
+  return (
+    convertRFMarkerEndToEwoks(markerEnd) ||
+    DEFAULT_LINK_VALUES.uiProps.markerEnd.type
+  );
 }
 
 export function colorToRFEdgeStyle(color: string | undefined) {

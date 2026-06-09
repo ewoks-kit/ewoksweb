@@ -1,4 +1,5 @@
-import type { Task } from '../types';
+import { type Node } from '@xyflow/react';
+import type { NodeData, Task } from '../types';
 import { getTaskName } from '../utils';
 
 export const GRAPH_INPUT_ICON = 'graphInput.svg';
@@ -31,4 +32,8 @@ export function generateNewNodeId(task: Task, nodesIds: string[]): string {
     id++;
   }
   return `${prefix}${id}`;
+}
+
+export function getNodeWithLabel(node: Node, data: NodeData | undefined): Node {
+  return { ...node, ariaLabel: data?.ewoks_props.label || node.id };
 }

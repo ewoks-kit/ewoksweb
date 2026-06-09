@@ -74,17 +74,13 @@ it('Saves special nodes', () => {
   cy.findByRole('button', { name: 'General' }).click();
 
   cy.dragNodeInCanvas('note');
-  cy.findByRole('button', { name: 'Note0' }).click({ force: true });
+  cy.findNode('Note0').click({ force: true });
 
   cy.dragNodeInCanvas('graphInput');
   cy.dragNodeInCanvas('graphOutput');
   cy.waitForStableDOM();
-  cy.findByRole('button', { name: 'In0' })
-    .find('.react-flow__handle-right')
-    .click({ force: true });
-  cy.findByRole('button', { name: 'Out0' })
-    .find('.react-flow__handle-left')
-    .click({ force: true });
+  cy.findNode('In0').find('.react-flow__handle-right').click({ force: true });
+  cy.findNode('Out0').find('.react-flow__handle-left').click({ force: true });
 
   cy.dragNodeInCanvas('graphInput');
   cy.dragNodeInCanvas('graphOutput');
