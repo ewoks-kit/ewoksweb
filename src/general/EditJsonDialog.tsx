@@ -5,21 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import type { PaperProps } from '@mui/material/Paper';
-import Paper from '@mui/material/Paper';
 import { useState } from 'react';
-import Draggable from 'react-draggable';
-
-function PaperComponent(props: PaperProps) {
-  return (
-    <Draggable
-      handle="#draggable-dialog-title"
-      cancel={'[class*="MuiDialogContent-root"]'}
-    >
-      <Paper {...props} />
-    </Draggable>
-  );
-}
 
 interface Props {
   value: object;
@@ -40,15 +26,8 @@ export default function EditJsonDialog(props: Props) {
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      PaperComponent={PaperComponent}
-      aria-labelledby="draggable-dialog-title"
-    >
-      <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-        {title}
-      </DialogTitle>
+    <Dialog open={open} onClose={onClose} aria-labelledby="dialog-title">
+      <DialogTitle id="dialog-title">{title}</DialogTitle>
       <DialogContent style={{ minHeight: '300px', minWidth: '380px' }}>
         <DialogContentText>
           <ReactJson
