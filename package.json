@@ -41,7 +41,6 @@
     "path-browserify": "1.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-draggable": "4.4.6",
     "react-error-boundary": "6.1.2",
     "react-hook-form": "7.78.0",
     "react-reflex": "5.0.5",
@@ -64,7 +63,7 @@
     "cypress-wait-for-stable-dom": "0.1.0",
     "eslint": "9.39.4",
     "prettier": "3.8.3",
-    "typescript": "5.9.3",
+    "typescript": "6.0.3",
     "vite": "4.4.8",
     "wait-on": "9.0.10",
     "web-worker": "1.5.0"
