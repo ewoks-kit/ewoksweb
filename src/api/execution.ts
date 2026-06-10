@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 import type { filterParams } from '../types';
 import { assertDefined } from '../utils/typeGuards';
@@ -23,10 +23,9 @@ async function getJobs(): Promise<Map<string, EwoksJob>> {
 }
 
 export function useExecutedJobs() {
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [QueryKey.Jobs],
     queryFn: getJobs,
-    suspense: true,
     staleTime: 5 * 60 * 1000, // 5mn
   });
 
@@ -41,10 +40,9 @@ async function getQueues() {
 }
 
 export function useQueues() {
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [QueryKey.Queues],
     queryFn: getQueues,
-    suspense: true,
     staleTime: Infinity,
   });
   assertDefined(data);

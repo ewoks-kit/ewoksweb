@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query';
 
 import type { Task } from '../types';
 import { getTaskName } from '../utils';
@@ -55,10 +55,9 @@ export async function discoverTasks(moduleNames?: string[]): Promise<string[]> {
 }
 
 export function useTasks(): Task[] {
-  const query = useQuery({
+  const query = useSuspenseQuery({
     queryKey: [QueryKey.Tasks],
     queryFn: fetchTaskDescriptions,
-    suspense: true,
     staleTime: Infinity,
   });
 

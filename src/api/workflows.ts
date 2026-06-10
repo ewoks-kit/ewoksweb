@@ -1,4 +1,8 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useQuery,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 
 import type { Workflow } from '../ewoksTypes';
 import { assertDefined } from '../utils/typeGuards';
@@ -47,15 +51,12 @@ export async function executeWorkflow(
 }
 
 export function useWorkflow(id: string | undefined) {
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [QueryKey.Workflow, id],
     queryFn: () => {
-      assertDefined(id);
-      return fetchWorkflow(id);
+      return id ? fetchWorkflow(id) : null;
     },
-    enabled: !!id,
     staleTime: Infinity,
-    suspense: true,
   });
   return data;
 }
@@ -69,11 +70,10 @@ export function useWorkflowDescriptionsDLE() {
 }
 
 export function useWorkflowIds(): Set<string> {
-  const query = useQuery({
+  const query = useSuspenseQuery({
     queryKey: [QueryKey.WorkflowDescriptions],
     queryFn: fetchWorkflowDescriptions,
     staleTime: Infinity,
-    suspense: true,
   });
 
   const { data: workflowDescriptions } = query;

@@ -1,5 +1,5 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import path from 'path-browserify';
+import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query';
 
 import type { Icon } from '../types';
 import { assertDefined } from '../utils/typeGuards';
@@ -46,10 +46,9 @@ async function getIcons(): Promise<Icon[]> {
 }
 
 export function useIcons() {
-  const { data: icons } = useQuery({
+  const { data: icons } = useSuspenseQuery({
     queryKey: [QueryKey.Icons],
     queryFn: getIcons,
-    suspense: true,
     staleTime: Infinity,
   });
 
