@@ -13,7 +13,6 @@ import useWorkflowStore from '../store/useWorkflowStore';
 import SuspenseBoundary from '../suspense/SuspenseBoundary';
 import Canvas from './Canvas/Canvas';
 import styles from './EditPage.module.css';
-import { useWarningPrompt } from './hooks';
 import EditSidebar from './Sidebar/EditSidebar';
 import OverflowDrawer from './TaskDrawer/TaskDrawer';
 import TopAppBar from './TopAppBar/TopAppBar';
@@ -21,8 +20,6 @@ import TopAppBar from './TopAppBar/TopAppBar';
 export default function EditPage() {
   const [searchParams] = useSearchParams();
   const workflowHasChanges = useWorkflowHasChanges();
-
-  useWarningPrompt(workflowHasChanges);
 
   const workflowId = searchParams.get('workflow');
   const pushToWorkflowHistory = useWorkflowHistory(

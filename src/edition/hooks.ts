@@ -1,26 +1,42 @@
 import { useEventListener } from '@react-hookz/web';
 import { useReactFlow } from '@xyflow/react';
 import type { RefCallback } from 'react';
-import { useCallback, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
-import { useNodesIds } from '../store/graph-hooks';
+import { useNodesIds, useWorkflowHasChanges } from '../store/graph-hooks';
 import useNodeDataStore from '../store/useNodeDataStore';
 import type { RFNode } from '../types';
 import { getNodeData } from '../utils';
 import { assertDefined, assertNodeDataDefined } from '../utils/typeGuards';
 import { generateNewNodeId } from './utils';
+import { type navigate, useBrowserLocation } from 'wouter/use-browser-location';
+import { type Path } from 'wouter';
 
-export function useWarningPrompt(displayWarning: boolean) {
-  useEventListener(window, 'beforeunload', (event: BeforeUnloadEvent) => {
-    if (displayWarning) {
-      event.preventDefault();
+export function useLocationWithConfirmation(): [Path, typeof navigate] {
+  const [location, setLocation] = useBrowserLocation();
+  const workflowHasChanges = useWorkflowHasChanges();
 
-      // Included for legacy support, e.g. Chrome/Edge < 119
-      event.returnValue = true;
+  return [
+    location,
+    (newLocation, options) => {
+      if (!workflowHasChanges) {
+        setLocation(newLocation, options);
+        return;
+      }
+      // eslint-disable-next-line no-alert
+      const perfomNavigation = window.confirm('Are you sure?');
 
-      // window.confirm('There are unsaved changes. Continue without saving?');
-    }
-  });
+      if (perfomNavigation) {
+        setLocation(newLocation, options);
+      }
+    },
+  ];
 }
 
 export function useCloneNode() {
