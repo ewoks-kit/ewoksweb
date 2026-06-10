@@ -30,7 +30,7 @@ function MarkerEndControl(props: Props) {
 
     updateEdge({
       ...edge,
-      markerEnd: markerEndOptionToRF(newValue as MarkerEndOption),
+      markerEnd: markerEndOptionToRF(newValue),
     });
   }
 

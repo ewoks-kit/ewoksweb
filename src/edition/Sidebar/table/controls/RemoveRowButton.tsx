@@ -1,4 +1,4 @@
-import { RemoveCircleOutline } from '@mui/icons-material';
+import { RemoveCircleOutlined } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 
 import styles from './RemoveRowCell.module.css';
@@ -19,7 +19,7 @@ function RemoveRowButton(props: Props) {
       onClick={() => onClick()}
       size="large"
     >
-      <RemoveCircleOutline
+      <RemoveCircleOutlined
         className={styles.icon}
         htmlColor="#rgb(108, 128, 236)"
       />

@@ -1,4 +1,4 @@
-import { AddCircleOutline } from '@mui/icons-material';
+import { AddCircleOutlined } from '@mui/icons-material';
 import { TableCell, TableRow } from '@mui/material';
 
 import styles from './AddEntryRow.module.css';
@@ -21,7 +21,7 @@ function AddEntryRow(props: Props) {
           type="button"
         >
           Add
-          <AddCircleOutline />
+          <AddCircleOutlined />
         </button>
       </TableCell>
     </TableRow>

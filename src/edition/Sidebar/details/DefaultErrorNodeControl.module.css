@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+}
+
+.mapAllDataLabel[data-selected='true'] {
+  font-weight: 600;
+}
+
+.dataMappingLabel[data-selected='true'] {
+  font-weight: 600;
+}

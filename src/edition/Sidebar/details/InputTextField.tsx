@@ -21,7 +21,9 @@ export default function InputTextField(props: InputTextFieldProps) {
           margin="dense"
           onChange={(event) => props.onValueSave(event.target.value)}
           multiline
-          inputProps={{ 'aria-label': `Edit ${label.toLowerCase()}` }}
+          slotProps={{
+            htmlInput: { 'aria-label': `Edit ${label.toLowerCase()}` },
+          }}
         />
       </FormControl>
     </div>

@@ -45,7 +45,7 @@ export default function OpenActionMenuButton() {
         open={open}
         onClose={onClose}
         id="navbar-dropdown-menu"
-        PaperProps={{ className: styles.paper }}
+        slotProps={{ paper: { className: styles.paper } }}
         keepMounted
         elevation={0}
         anchorOrigin={{

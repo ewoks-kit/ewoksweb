@@ -1,4 +1,4 @@
-import { Check, ErrorOutline, Save } from '@mui/icons-material';
+import { Check, ErrorOutlined, Save } from '@mui/icons-material';
 import { useEffect } from 'react';
 
 import type { Status } from './models';
@@ -13,7 +13,7 @@ interface Props {
 const ICONS = {
   idle: Save,
   success: Check,
-  error: ErrorOutline,
+  error: ErrorOutlined,
 };
 
 function SaveStatusIcon(props: Props) {

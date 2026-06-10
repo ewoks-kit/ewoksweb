@@ -5,6 +5,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import type { XYPosition } from '@xyflow/react';
 import { useReactFlow } from '@xyflow/react';
@@ -86,15 +87,14 @@ export default function AddSubworkflowDialog(props: Props) {
                 />
               </SuspenseBoundary>
             </ListItem>
-            <ListItem
-              button
+            <ListItemButton
               divider
               onClick={() => {
                 fromDiskInputRef.current?.click();
               }}
             >
               <ListItemText primary="From Disk" />
-            </ListItem>
+            </ListItemButton>
           </List>
         </DialogContent>
         <DialogActions>
