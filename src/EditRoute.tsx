@@ -1,4 +1,3 @@
-import 'react-reflex/styles.css';
 import '@xyflow/react/dist/style.css';
 
 import { ReactFlowProvider } from '@xyflow/react';
