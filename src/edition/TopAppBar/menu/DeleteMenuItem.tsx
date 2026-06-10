@@ -1,6 +1,6 @@
 import { Delete } from '@mui/icons-material';
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'wouter';
 
 import {
   deleteWorkflow,

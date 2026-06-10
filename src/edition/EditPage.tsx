@@ -2,7 +2,7 @@ import { useDebouncedCallback } from '@react-hookz/web';
 import { useStoreApi } from '@xyflow/react';
 import { useEffect } from 'react';
 import { Group, Panel, Separator } from 'react-resizable-panels';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'wouter';
 
 import ErrorFallback from '../general/ErrorFallback';
 import { useWorkflowHasChanges } from '../store/graph-hooks';

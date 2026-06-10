@@ -36,6 +36,7 @@
   border-bottom-color: var(--primary-light);
 }
 
-.link[aria-current] {
+.activeLink {
+  composes: link;
   border-bottom-color: var(--primary-lighter);
 }

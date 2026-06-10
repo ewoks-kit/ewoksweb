@@ -1,5 +1,5 @@
 import { ErrorBoundary } from 'react-error-boundary';
-import { Link } from 'react-router-dom';
+import { Link } from 'wouter';
 
 import type { EwoksJob } from '../api/models';
 import styles from './MonitorPage.module.css';
