@@ -1,7 +1,7 @@
 import { useDebouncedCallback } from '@react-hookz/web';
 import { useStoreApi } from '@xyflow/react';
 import { useEffect } from 'react';
-import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
+import { Group, Panel, Separator } from 'react-resizable-panels';
 import { useSearchParams } from 'react-router-dom';
 
 import ErrorFallback from '../general/ErrorFallback';
@@ -63,22 +63,19 @@ export default function EditPage() {
       <TopAppBar />
       <div className={styles.mainArea}>
         <OverflowDrawer />
-        <ReflexContainer
-          orientation="vertical"
-          className={styles.reflexContainer}
-        >
-          <ReflexElement>
+        <Group>
+          <Panel>
             <main className={styles.content}>
               <SuspenseBoundary FallbackComponent={ErrorFallback}>
                 <Canvas key={workflowId} workflowId={workflowId || undefined} />
               </SuspenseBoundary>
             </main>
-          </ReflexElement>
-          <ReflexSplitter propagate className={styles.reflexSplitter} />
-          <ReflexElement minSize={100} maxSize={500} size={350}>
+          </Panel>
+          <Separator />
+          <Panel minSize={100} maxSize={500} defaultSize={350}>
             <EditSidebar />
-          </ReflexElement>
-        </ReflexContainer>
+          </Panel>
+        </Group>
       </div>
     </div>
   );
