@@ -46,7 +46,8 @@ it('should be able to display the status of another workflow (even if it cannot 
   cy.findAllByRole('listitem')
     .first()
     .within(() => {
-      cy.findByText('Ewoks-Tasks').should('exist');
+      // Text can be split over two lines
+      cy.findByText(/Ewoks-\s?Tasks/).should('exist');
       cy.findByText('Failed').should('exist');
     });
 });

@@ -11,30 +11,9 @@
   min-height: 0;
 }
 
-.appBar {
-  display: flex;
-  flex-direction: row !important;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 64px;
-  padding: 0 1rem;
-}
-
-.reflexContainer {
-  display: flex;
-  min-height: 0;
-}
-
 .content {
   display: flex;
   height: 100%;
-}
-
-.reflexSplitter {
-  width: 0.325rem !important;
-  background-color: rgb(233, 235, 247) !important;
-  border-left-color: #cfcfe1 !important;
-  border-right-color: #cfcfe1 !important;
 }
 
 .keyStrokeHint {
