@@ -25,7 +25,9 @@ export default function App() {
             <Route path="/monitor">
               <MonitorRoute />
             </Route>
-            <Redirect to="/edit" replace />
+            <Route>
+              <Redirect to="/edit" replace />
+            </Route>
           </Switch>
         </Router>
       </SocketClientProvider>

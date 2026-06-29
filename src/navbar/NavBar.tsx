@@ -5,6 +5,7 @@ import styles from './NavBar.module.css';
 import useNavBarElementStore from './useNavBarElementStore';
 import { useHistoryState } from 'wouter/use-browser-location';
 import NavLink from './NavLink';
+import { isString } from '../utils/typeGuards';
 
 function NavBar() {
   const state = useHistoryState();
@@ -12,6 +13,8 @@ function NavBar() {
 
   const setElement = useNavBarElementStore((st) => st.setElement);
   const displayedWorkflowInfo = useWorkflowStore((st) => st.workflowInfo);
+
+  const workflow = state?.workflow || searchParams.get('workflow');
 
   return (
     <div
@@ -23,17 +26,12 @@ function NavBar() {
           <Link to="/">EwoksWeb</Link>
         </div>
         <NavLink
-          to={`/edit${
-            state?.workflow
-              ? `?workflow=${state.workflow as string}`
-              : searchParams.get('workflow')
-                ? `?workflow=${searchParams.get('workflow') as string}`
-                : ''
-          }`}
+          href="/edit"
+          searchParams={isString(workflow) ? { workflow } : {}}
         >
           Edit
         </NavLink>
-        <NavLink to="/monitor" state={{ workflow: displayedWorkflowInfo.id }}>
+        <NavLink href="/monitor" state={{ workflow: displayedWorkflowInfo.id }}>
           Monitor
         </NavLink>
       </nav>

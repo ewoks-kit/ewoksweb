@@ -1,8 +1,6 @@
-import { useEventListener } from '@react-hookz/web';
 import { useReactFlow } from '@xyflow/react';
 import type { RefCallback } from 'react';
 import { useCallback, useState } from 'react';
-import { unstable_usePrompt } from 'react-router-dom';
 
 import { useNodesIds } from '../store/graph-hooks';
 import useNodeDataStore from '../store/useNodeDataStore';
@@ -10,22 +8,6 @@ import type { RFNode } from '../types';
 import { getNodeData } from '../utils';
 import { assertDefined, assertNodeDataDefined } from '../utils/typeGuards';
 import { generateNewNodeId } from './utils';
-
-export function useWarningPrompt(displayWarning: boolean) {
-  useEventListener(window, 'beforeunload', (event: BeforeUnloadEvent) => {
-    if (displayWarning) {
-      event.preventDefault();
-
-      // Included for legacy support, e.g. Chrome/Edge < 119
-      event.returnValue = true;
-    }
-  });
-
-  unstable_usePrompt({
-    message: 'There are unsaved changes. Continue without saving?',
-    when: displayWarning,
-  });
-}
 
 export function useCloneNode() {
   const rfInstance = useReactFlow();

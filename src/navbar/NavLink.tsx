@@ -3,20 +3,21 @@ import styles from './NavBar.module.css';
 import { type PropsWithChildren } from 'react';
 
 interface Props {
-  to: string;
+  href: string;
+  searchParams?: Record<string, string>;
   state?: LinkProps['state'];
 }
 
 function NavLink(props: PropsWithChildren<Props>) {
-  const { children, to, state } = props;
-  const paths = to.split('?');
-  const [isActive] = useRoute(paths[0]);
+  const { children, href, searchParams = {}, state } = props;
+  const [isActive] = useRoute(href);
+  const query = new URLSearchParams(searchParams).toString();
 
   return (
     <Link
       className={styles.link}
-      aria-current={isActive ? 'true' : undefined}
-      to={to}
+      aria-current={isActive || undefined}
+      href={query ? `${href}?${query}` : href}
       state={state}
     >
       {children}

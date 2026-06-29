@@ -7,8 +7,8 @@ it('should land on the edit page', () => {
     expect(loc.pathname).to.eq('/edit');
   });
   cy.findByRole('link', { name: 'Edit' }).should(($link) => {
-    const classes = $link.attr('class');
-    expect(classes).to.include('active');
+    const ariaCurrent = $link.attr('aria-current');
+    expect(ariaCurrent).to.equal('true');
   });
   cy.get('.react-flow').should('be.visible');
 });
@@ -19,8 +19,8 @@ it('should switch to monitor page', () => {
     expect(loc.pathname).to.eq('/monitor');
   });
   cy.findByRole('link', { name: 'Monitor' }).should(($link) => {
-    const classes = $link.attr('class');
-    expect(classes).to.include('active');
+    const ariaCurrent = $link.attr('aria-current');
+    expect(ariaCurrent).to.equal('true');
   });
 });
 
