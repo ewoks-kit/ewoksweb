@@ -1,3 +1,4 @@
+import { type ReactElement } from 'react';
 import type { TaskInfo } from '../Canvas/models';
 import { attachTaskInfo } from '../Canvas/utils';
 import styles from './TaskButton.module.css';
@@ -6,7 +7,7 @@ interface Props {
   taskInfo: TaskInfo;
   label: string;
   onClick?: () => void;
-  icon: () => JSX.Element;
+  icon: () => ReactElement | null;
 }
 
 function TaskButton(props: Props) {

@@ -46,6 +46,7 @@ Cypress.Commands.add('saveNewWorkflow', (id: string) => {
     .type(id);
 
   cy.findByRole('button', { name: 'Save workflow' }).click();
+  cy.waitForStableDOM();
 });
 
 Cypress.Commands.add('deleteWorkflow', (id: string) => {
