@@ -43,6 +43,7 @@ export function toRFEwoksLinks(
       required,
       uiProps,
       startEnd,
+      cache_if_optional,
     }) => {
       const conditionsForFront = conditions?.map<Condition>((con) => {
         return {
@@ -90,6 +91,7 @@ export function toRFEwoksLinks(
           ...notUndefinedValue(map_all_data, 'map_all_data'),
           ...notUndefinedValue(uiProps?.comment, 'comment'),
           ...notUndefinedValue(on_error, 'on_error'),
+          ...notUndefinedValue(cache_if_optional, 'cache_if_optional'),
         },
       };
 
