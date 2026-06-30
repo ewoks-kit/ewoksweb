@@ -1,5 +1,5 @@
 import ClearIcon from '@mui/icons-material/Clear';
-import type { ChangeEvent } from 'react';
+import { type SyntheticEvent } from 'react';
 
 import { useCssColors } from '../../hooks';
 import styles from './ColorPicker.module.css';
@@ -25,8 +25,8 @@ function ColorPicker(props: Props) {
         type="color"
         value={value || defaultColor}
         // https://github.com/cypress-io/cypress/issues/7812#issuecomment-964403375
-        onInput={(event: ChangeEvent<HTMLInputElement>) =>
-          onChange(event.target.value)
+        onInput={(event: SyntheticEvent<HTMLInputElement>) =>
+          onChange(event.currentTarget.value)
         }
       />
       {value && (

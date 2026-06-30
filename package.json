@@ -38,16 +38,15 @@
     "nanoid": "5.1.11",
     "normalize.css": "^8.0.1",
     "path-browserify": "1.0.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
     "react-error-boundary": "6.1.2",
     "react-hook-form": "7.78.0",
-    "react-is": "18.3.1",
     "react-resizable-panels": "4.11.2",
     "react-timeago": "8.3.0",
     "socket.io-client": "4.8.3",
     "wouter": "3.10.0",
-    "zustand": "4.4.3"
+    "zustand": "4.5.7"
   },
   "devDependencies": {
     "@esrf/eslint-config": "2.3.1",
@@ -56,8 +55,8 @@
     "@types/lodash": "^4.17.24",
     "@types/node": "^24.12.0",
     "@types/path-browserify": "1.0.3",
-    "@types/react": "^18.3.28",
-    "@types/react-dom": "^18.2.12",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "6.0.2",
     "cypress": "15.16.0",
     "cypress-wait-for-stable-dom": "0.1.0",
@@ -70,10 +69,6 @@
   },
   "pnpm": {
     "peerDependencyRules": {
-      "allowedVersions": {
-        "flux>react": "18.x",
-        "@mui/styles>react": "18.x"
-      },
       "ignoreMissing": [
         "storybook"
       ]
