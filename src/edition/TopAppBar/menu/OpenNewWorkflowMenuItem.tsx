@@ -1,6 +1,6 @@
 import { FiberNew } from '@mui/icons-material';
 import { useKeyboardEvent } from '@react-hookz/web';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'wouter';
 
 import ActionMenuItem from './ActionMenuItem';
 

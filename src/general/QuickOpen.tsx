@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'wouter';
 
 import useSnackbarStore from '../store/useSnackbarStore';
 import type { WorkflowDescription } from '../types';

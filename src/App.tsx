@@ -1,8 +1,6 @@
 import { CssBaseline } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Navigate, Outlet } from 'react-router-dom';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-
+import { Route, Router, Switch, Redirect } from 'wouter';
 import { apiSuffix, baseUrl } from './api/client';
 import EditRoute from './EditRoute';
 import SimpleSnackbar from './general/Snackbar';
@@ -12,46 +10,26 @@ import SocketClientProvider from './SocketClientProvider';
 
 const queryClient = new QueryClient();
 
-const router = createBrowserRouter(
-  [
-    {
-      path: '/',
-      element: <Layout />,
-      children: [
-        {
-          path: 'edit',
-          element: <EditRoute />,
-        },
-        {
-          path: 'monitor',
-          element: <MonitorRoute />,
-        },
-        {
-          path: '/',
-          element: <Navigate to="edit" replace />,
-        },
-      ],
-    },
-  ],
-  { basename: import.meta.env.VITE_ROUTER_BASE_DIR },
-);
-
-function Layout() {
-  return (
-    <>
-      <SimpleSnackbar />
-      <CssBaseline />
-      <NavBar />
-      <Outlet />
-    </>
-  );
-}
-
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <SocketClientProvider baseUrl={baseUrl} apiSuffix={apiSuffix}>
-        <RouterProvider router={router} />
+        <Router base={import.meta.env.VITE_ROUTER_BASE_DIR}>
+          <SimpleSnackbar />
+          <CssBaseline />
+          <NavBar />
+          <Switch>
+            <Route path="/edit">
+              <EditRoute />
+            </Route>
+            <Route path="/monitor">
+              <MonitorRoute />
+            </Route>
+            <Route>
+              <Redirect to="/edit" replace />
+            </Route>
+          </Switch>
+        </Router>
       </SocketClientProvider>
     </QueryClientProvider>
   );

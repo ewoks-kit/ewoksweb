@@ -1,15 +1,20 @@
-import { NavLink, useLocation, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'wouter';
 
 import useWorkflowStore from '../store/useWorkflowStore';
 import styles from './NavBar.module.css';
 import useNavBarElementStore from './useNavBarElementStore';
+import { useHistoryState } from 'wouter/use-browser-location';
+import NavLink from './NavLink';
+import { isString } from '../utils/typeGuards';
 
 function NavBar() {
-  const { state } = useLocation();
+  const state = useHistoryState();
   const [searchParams] = useSearchParams();
 
   const setElement = useNavBarElementStore((st) => st.setElement);
   const displayedWorkflowInfo = useWorkflowStore((st) => st.workflowInfo);
+
+  const workflow = state?.workflow || searchParams.get('workflow');
 
   return (
     <div
@@ -18,26 +23,15 @@ function NavBar() {
     >
       <nav className={styles.navlinks}>
         <div className={styles.title}>
-          <NavLink to="/">EwoksWeb</NavLink>
+          <Link to="/">EwoksWeb</Link>
         </div>
         <NavLink
-          className={styles.link}
-          to={{
-            pathname: '/edit',
-            search: state?.workflow
-              ? `?workflow=${state.workflow as string}`
-              : searchParams.get('workflow')
-                ? `?workflow=${searchParams.get('workflow') as string}`
-                : '',
-          }}
+          href="/edit"
+          searchParams={isString(workflow) ? { workflow } : {}}
         >
           Edit
         </NavLink>
-        <NavLink
-          className={styles.link}
-          to="/monitor"
-          state={{ workflow: displayedWorkflowInfo.id }}
-        >
+        <NavLink href="/monitor" state={{ workflow: displayedWorkflowInfo.id }}>
           Monitor
         </NavLink>
       </nav>

@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useMap } from '@react-hookz/web';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 
 import commonStrings from '../../../commonStrings.json';
 import GraphFormDialog from '../../../general/forms/GraphFormDialog';
@@ -40,7 +40,7 @@ export default function ExecutionDialog(props: Props) {
   const [engine, setEngine] = useState<EngineDropdownOption>('default');
   const [queue, setQueue] = useState<string>('');
   const { isDialogOpen, setDialogOpen, handleSave } = useSaveWorkflow();
-  const navigate = useNavigate();
+  const [_, navigate] = useLocation();
 
   async function handleSaveExecute() {
     try {
