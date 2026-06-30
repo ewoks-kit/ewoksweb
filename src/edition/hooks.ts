@@ -2,12 +2,46 @@ import { useReactFlow } from '@xyflow/react';
 import type { RefCallback } from 'react';
 import { useCallback, useState } from 'react';
 
-import { useNodesIds } from '../store/graph-hooks';
+import { useNodesIds, useWorkflowHasChanges } from '../store/graph-hooks';
 import useNodeDataStore from '../store/useNodeDataStore';
 import type { RFNode } from '../types';
 import { getNodeData } from '../utils';
 import { assertDefined, assertNodeDataDefined } from '../utils/typeGuards';
 import { generateNewNodeId } from './utils';
+import { type navigate, useBrowserLocation } from 'wouter/use-browser-location';
+import { type Path } from 'wouter';
+import { useEventListener } from '@react-hookz/web';
+
+export function useLocationWithWarningPrompt(): [Path, typeof navigate] {
+  const [location, setLocation] = useBrowserLocation();
+  const workflowHasChanges = useWorkflowHasChanges();
+
+  const displayWarning = location === '/edit' && workflowHasChanges;
+
+  useEventListener(window, 'beforeunload', (event: BeforeUnloadEvent) => {
+    if (displayWarning) {
+      event.preventDefault();
+    }
+  });
+
+  return [
+    location,
+    (newLocation, options) => {
+      if (!displayWarning) {
+        setLocation(newLocation, options);
+        return;
+      }
+      // eslint-disable-next-line no-alert
+      const perfomNavigation = window.confirm(
+        'There are unsaved changes that will be lost when navigating to another page. Do you want to continue?',
+      );
+
+      if (perfomNavigation) {
+        setLocation(newLocation, options);
+      }
+    },
+  ];
+}
 
 export function useCloneNode() {
   const rfInstance = useReactFlow();

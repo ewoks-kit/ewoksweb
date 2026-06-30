@@ -59,3 +59,29 @@ it('detects no changes when the workflow is saved', () => {
   }).click();
   cy.findByTestId('saveRedDot').should('not.exist');
 });
+
+it('prompts a warning when leaving an unsaved workflow', () => {
+  cy.get('@node').click();
+  cy.findByRole('textbox', { name: 'Edit label' })
+    .click()
+    .type('Always and forever...');
+
+  cy.get('@node').click();
+
+  cy.findByRole('button', {
+    name: 'Save workflow to server: changes pending',
+  }).should('exist');
+
+  cy.window().then((win) => cy.spy(win, 'confirm').as('confirm'));
+
+  cy.findByRole('link', { name: 'Monitor' }).click();
+  cy.get('@confirm').should('have.been.calledOnce');
+
+  // We should be able to navigate back without a second warning prompt
+  cy.findAllByRole('link', { name: 'Edit' }).first().click();
+  cy.location().should((loc) => {
+    expect(loc.pathname).to.eq('/edit');
+    expect(loc.search).to.eq('?workflow=tutorial_Graph');
+  });
+  cy.get('@confirm').should('have.been.calledOnce');
+});
