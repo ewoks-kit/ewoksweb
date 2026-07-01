@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ewoksweb"
-version = "5.0.0"
+version = "5.1.0"
 authors = [{ name = "ESRF", email = "dau-pydev@esrf.fr" }]
 description = "Web-based frontend for creating, visualizing and executing ewoks workflows."
 readme = { file = "README.md", content-type = "text/markdown" }
@@ -15,7 +15,7 @@ classifiers = [
   "Programming Language :: Python :: 3",
 ]
 requires-python = ">=3.10"
-dependencies = ["ewoksserver[frontend] >=2.0.0,<3"]
+dependencies = ["ewoksserver[frontend] >=2.0.0,<3", "ewokscore>=5.0.0"]
 
 [project.urls]
 Homepage = "https://github.com/ewoks-kit/ewoksweb"
